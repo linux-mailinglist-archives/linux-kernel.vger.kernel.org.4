@@ -2,60 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDA767A8AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325F567A8B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjAYCXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 21:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
+        id S233196AbjAYCXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 21:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232680AbjAYCXF (ORCPT
+        with ESMTP id S232999AbjAYCXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 21:23:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F0C460A1;
-        Tue, 24 Jan 2023 18:23:04 -0800 (PST)
+        Tue, 24 Jan 2023 21:23:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E61460A1;
+        Tue, 24 Jan 2023 18:23:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 244DB61425;
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD821B817C1;
         Wed, 25 Jan 2023 02:23:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 83D95C433D2;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6EC32C4339B;
         Wed, 25 Jan 2023 02:23:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1674613383;
-        bh=RmBWaMyaa0laTJX7aWLHIfTg4wj/shTg5ZFg8+FJ9RM=;
+        bh=C6nNJm7h8Sq2K/cSvFkKaRmoQUd4kofDbRITLVV6sRY=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=NXrcGXdS+881kce/xUMs2Fn3Mhlr43Vv7ffoeC4bp6zxpmqt6edjo5aAvuDa2x5Fe
-         +DhqPG7rDXK300AWLmy8PcnUcvAWT9wk4bc+BZvdIny2q92StWNedGRL+8AYnPIBlF
-         0AuBwa2Xr/zna94ioGuJp1weDAcJH6gaK2Qr+EiZGj47DKMeRhMyxHe3zETwXrE9Hq
-         8vjbIyZG15J15AVwuYtu/knjl7bONRzi5Y9CKxhh/o3+Vzwct/25EdHK1KOZccwwUY
-         3UOUARGglk8D9vA6Q5jiQINjgL0MK7nXq4G9tw3WL33ZZKF7KJVXbdwred/hItFIu0
-         IuLDVj0kgQbOA==
+        b=LthOSqY8GXFRlvRi6iW0qsWR3nY+fTPdVIcEgFNdRvFpTHOVlRqbE7PSThL64oz/o
+         Hl+OXm8oin7GZdN+lFwaSDf4tGEMfnTslurPXVX6i8YTl+ZPKdVOPjir6cxtiKRrvg
+         oPt62LKv2Z3Ccy+btHtvz/ABonW2hwwOp7hovPM4+RZgTUvo1HvTbleLFEThVoxI8D
+         vsZXsc5O9kTFs7J3q8qAexwgN/hIO8gPC0Q5xCanoqRSAYS+W5vDxspXkGcR3qTbSe
+         NSP4p1iKrm3xBGlt4wAZ27YXWHL3fvmlJyxsWpNepSvQRz0cM7E8J3D3aSw3zG7/G1
+         fsH//9LIJ6nZg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 69E80E21EE1;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58EF4F83ECD;
         Wed, 25 Jan 2023 02:23:03 +0000 (UTC)
-Subject: Re: [GIT PULL] Rust fixes for 6.2
+Subject: Re: [GIT PULL] KVM fixes for Linux 6.2-rc6
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230124193334.161057-1-ojeda@kernel.org>
-References: <20230124193334.161057-1-ojeda@kernel.org>
+In-Reply-To: <20230124180547.4192955-1-pbonzini@redhat.com>
+References: <20230124180547.4192955-1-pbonzini@redhat.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230124193334.161057-1-ojeda@kernel.org>
-X-PR-Tracked-Remote: https://github.com/Rust-for-Linux/linux tags/rust-fixes-6.2
-X-PR-Tracked-Commit-Id: 6618d69aa129a8fc613e64775d5019524c6f231b
+X-PR-Tracked-Message-Id: <20230124180547.4192955-1-pbonzini@redhat.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+X-PR-Tracked-Commit-Id: c2c46b10d52624376322b01654095a84611c7e09
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 246dc53fb2461dbcd66d4d1d914246a581edad29
-Message-Id: <167461338342.26446.17308850166282928589.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: b2f317173ed5f00a00aedba71cc67454d9cde90f
+Message-Id: <167461338336.26446.1440365901647932335.pr-tracker-bot@kernel.org>
 Date:   Wed, 25 Jan 2023 02:23:03 +0000
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,12 +60,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 24 Jan 2023 20:33:34 +0100:
+The pull request you sent on Tue, 24 Jan 2023 13:05:47 -0500:
 
-> https://github.com/Rust-for-Linux/linux tags/rust-fixes-6.2
+> https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/246dc53fb2461dbcd66d4d1d914246a581edad29
+https://git.kernel.org/torvalds/c/b2f317173ed5f00a00aedba71cc67454d9cde90f
 
 Thank you!
 
