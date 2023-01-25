@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA3E67BDD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E5A67BDDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236317AbjAYVMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:12:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S236283AbjAYVNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236358AbjAYVMc (ORCPT
+        with ESMTP id S236130AbjAYVNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:12:32 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB93B5B591
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:12:18 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-507aac99fdfso15110927b3.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:12:18 -0800 (PST)
+        Wed, 25 Jan 2023 16:13:46 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB8D7A9B
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:13:37 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id d66so21072663vsd.9
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:13:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mjUP68ZzzFyh8hG9RPeRlc5xrTMio/O97kr7jaJq5/0=;
-        b=bZKAmtw+epp2hdpRq2aYZvzRqfJc+Q6/JLBQqH5S+RddlZ7/gEumJ8QBuUtH4JWCly
-         j7q66n+q3gB/gV8f/YYIHMDdCMOwWhy+uzwQtvA/D61T0UT1V0/8briK5e8ZSyVk9mAq
-         59XvAqGaezM4lbTaFzWrDGZIMwNbymCD559QZxaOngdKp1+Ve6S35nnMjPrWPEuM8mkv
-         ipDr0Yg39ysUTCH6HQ/gFQfaGx9E+Nsl3gUQYX1hdhyHPC14SwlYYLynR6SU91texQ0c
-         skYI1gNfNvokuscJm7PhDqmEn8trMNm6HJi7YaGhBxfK3BDztlX1jjguaQxvsshZ/wsm
-         CxmQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=b1nnGEuKKkDGSq1WmxosoaK0D1FohFPeB383P/IXUAg=;
+        b=CcWiG7BHedadfBKBk+HAhiO4vDglOmcdQXzynTfuKA6qPgTYgRfEzB+kFHcgrMLZJP
+         J5VIwbS5mADkLR0BjZW6WDKfB6ljKeObUJ/i8bbl5yRYRSCGsUZrErumXTHHnTCImwQ3
+         LT1qV/A3G2uA1lD5P2tnY6sejYKH4ivzstIxeCNXVPCORrZPpuziYCqvZ8y/wBcyIFjr
+         FMev4qyhkip6P4DtwoqrigQEqBZ+PECcR6jhNVzYBe4DiIfyBI1e0JfD72pvwSKZIZTV
+         IMEQU+5zriiPIeoUo2A3XiRbV6vNeQCa7JPWiu70dvBubF9oej5dobizU386rnv8o7CG
+         TzJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mjUP68ZzzFyh8hG9RPeRlc5xrTMio/O97kr7jaJq5/0=;
-        b=LXbp8ve8J2Joy/QnOdckcCoNsdK0DEf0vGbhyk0LVMhQ8f9UWpp/q3rrsZn9koZgO8
-         zAakaZaMtQGzXBZ5jfQdcDKBnc8XUxDdwqx2SiOmZGamL+dtq1WHmD7WFOEbYKORvtqt
-         Xw8JzHat21dzyIMZdsTD5k4v97OX/jSiBQFAmigsVNNFGqd1IQo0vjVgZNF1ySTsyej1
-         TGyEr0+AdZFV0ubVMnY4P0T0fkcUOBPyg3d9nIw8HFWDwB/oYRsAv1Lw41tmY0q60arI
-         RKJ8Wdn5MVwHtC1wVv4crQnqA6OrT1at8UNxUpnwC/v0PCrvoXyq4t7hC2Dw8PKMhktl
-         phEg==
-X-Gm-Message-State: AO0yUKW215HhrTw+cqOUP9d1X0Ur9X4MzqcHs1RuEd7aA+lvqT7zVQBH
-        lOkvl1Lsv2m+MOtade8xMPPUiZNbnPuU
-X-Google-Smtp-Source: AK7set/jBOwnX0/QoX7ixwv9e2pNPa64RC5YCboTV73zgRZKUW3KNBAU33alOxNSlCaoaeo/b2tuD9s294fU
-X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a0d:d6c7:0:b0:506:3481:ced0 with SMTP id
- y190-20020a0dd6c7000000b005063481ced0mr1197728ywd.396.1674681137911; Wed, 25
- Jan 2023 13:12:17 -0800 (PST)
-Date:   Wed, 25 Jan 2023 13:12:10 -0800
-In-Reply-To: <20230125211210.552679-1-jiangzp@google.com>
-Mime-Version: 1.0
-References: <20230125211210.552679-1-jiangzp@google.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230125131159.kernel.v1.1.Id80089feef7af8846cc6f8182eddc5d7a0ac4ea7@changeid>
-Subject: [kernel PATCH v1 1/1] Bluetooth: Don't send HCI commands to remove
- adv if adapter is off
-From:   Zhengping Jiang <jiangzp@google.com>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        luiz.dentz@gmail.com
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        Archie Pusaka <apusaka@chromium.org>,
-        Zhengping Jiang <jiangzp@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b1nnGEuKKkDGSq1WmxosoaK0D1FohFPeB383P/IXUAg=;
+        b=kaeKtfF8h0sg25FdKJutv9hB28teG6QnxwIH+Qq0AU8Cz8urZ0h2AdE+a84Wm7K/Vr
+         0s7Co0rZkulIdABIXzy2pHHVrMu3NO5S6Fi7zJMhM35eKG4ZNBei2lFMA2Qjq07IrN17
+         mGS57PB1JbRMIvPn23nfdwyLkYxpQ2Fq4JwpcZBKS4MnKOicjl3FsYOetiwnNaqZp+Ip
+         pcsPB7Ts72vm5DKTw8eI+cQbIXFQpMgz1TZ5Nonh0OAx43hl5SiXLdPbbhc53kLGKSvl
+         VYuoldIMRMrE1p9Frfxo5ijFLcWH1lhiPw8X8n1LyJDdUItfdD8RuZQaAiPXGtMAyQ+0
+         gO6w==
+X-Gm-Message-State: AFqh2kqmk81PHw4uuE+UU7fI9tbkXVp9x11VrnDHcR2yTC9AF6TFj0Gc
+        jBor1ExiRWi5/0FxVUeJ/DiE6lY4NzKf18o2QK++VA==
+X-Google-Smtp-Source: AMrXdXt6YoKcTFxrHffLK6kUMgFVjJX89HAI9O5bzW7f5KR45XY2fbmgFm0W1W4KWBZbSO1iEqG3pUI+WItBVOKIKaA=
+X-Received: by 2002:a67:f650:0:b0:3d3:db6b:e761 with SMTP id
+ u16-20020a67f650000000b003d3db6be761mr4775930vso.46.1674681216795; Wed, 25
+ Jan 2023 13:13:36 -0800 (PST)
+MIME-Version: 1.0
+References: <20230124021118.154078-1-nphamcs@gmail.com> <20230124021118.154078-2-nphamcs@gmail.com>
+In-Reply-To: <20230124021118.154078-2-nphamcs@gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 25 Jan 2023 14:13:00 -0700
+Message-ID: <CAOUHufYz+FmxQ8yoocbV8LP05HGU=cRoqJE1-bQa0KyLofJYhQ@mail.gmail.com>
+Subject: Re: [PATCH v7 1/3] workingset: refactor LRU refault to expose refault
+ recency check
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, linux-api@vger.kernel.org,
+        kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,135 +71,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Archie Pusaka <apusaka@chromium.org>
+On Mon, Jan 23, 2023 at 7:11 PM Nhat Pham <nphamcs@gmail.com> wrote:
+>
+> In preparation for computing recently evicted pages in cachestat,
+> refactor workingset_refault and lru_gen_refault to expose a helper
+> function that would test if an evicted page is recently evicted.
+>
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> ---
+>  include/linux/swap.h |   1 +
+>  mm/workingset.c      | 142 +++++++++++++++++++++++++++++--------------
+>  2 files changed, 97 insertions(+), 46 deletions(-)
+>
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index a18cf4b7c724..dae6f6f955eb 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -361,6 +361,7 @@ static inline void folio_set_swap_entry(struct folio *folio, swp_entry_t entry)
+>  }
+>
+>  /* linux/mm/workingset.c */
+> +bool workingset_test_recent(void *shadow, bool file, bool *workingset);
+>  void workingset_age_nonresident(struct lruvec *lruvec, unsigned long nr_pages);
+>  void *workingset_eviction(struct folio *folio, struct mem_cgroup *target_memcg);
+>  void workingset_refault(struct folio *folio, void *shadow);
+> diff --git a/mm/workingset.c b/mm/workingset.c
+> index 79585d55c45d..2f2d94867366 100644
+> --- a/mm/workingset.c
+> +++ b/mm/workingset.c
+> @@ -244,6 +244,30 @@ static void *lru_gen_eviction(struct folio *folio)
+>         return pack_shadow(mem_cgroup_id(memcg), pgdat, token, refs);
+>  }
+>
+> +/*
+> + * Test if the folio is recently evicted.
+> + *
+> + * As a side effect, also populates the references with
+> + * values unpacked from the shadow of the evicted folio.
+> + */
+> +static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
+> +               struct pglist_data **pgdat, unsigned long *token, bool *workingset)
+> +{
+> +       struct mem_cgroup *eviction_memcg;
+> +       struct lruvec *lruvec;
+> +       struct lru_gen_struct *lrugen;
+> +       unsigned long min_seq;
+> +
+> +       unpack_shadow(shadow, memcgid, pgdat, token, workingset);
+> +       eviction_memcg = mem_cgroup_from_id(*memcgid);
+> +
+> +       lruvec = mem_cgroup_lruvec(eviction_memcg, *pgdat);
+> +       lrugen = &lruvec->lrugen;
+> +
+> +       min_seq = READ_ONCE(lrugen->min_seq[file]);
+> +       return (*token >> LRU_REFS_WIDTH) == (min_seq & (EVICTION_MASK >> LRU_REFS_WIDTH));
+> +}
+> +
+>  static void lru_gen_refault(struct folio *folio, void *shadow)
+>  {
+>         int hist, tier, refs;
+> @@ -258,23 +282,22 @@ static void lru_gen_refault(struct folio *folio, void *shadow)
+>         int type = folio_is_file_lru(folio);
+>         int delta = folio_nr_pages(folio);
+>
+> -       unpack_shadow(shadow, &memcg_id, &pgdat, &token, &workingset);
+> -
+> -       if (pgdat != folio_pgdat(folio))
+> -               return;
+> -
+>         rcu_read_lock();
+>
+> +       if (!lru_gen_test_recent(shadow, type, &memcg_id, &pgdat, &token,
+> +                       &workingset))
+> +               goto unlock;
+> +
+>         memcg = folio_memcg_rcu(folio);
+>         if (memcg_id != mem_cgroup_id(memcg))
+>                 goto unlock;
+>
+> +       if (pgdat != folio_pgdat(folio))
+> +               return;
+> +
+>         lruvec = mem_cgroup_lruvec(memcg, pgdat);
+>         lrugen = &lruvec->lrugen;
+> -
+>         min_seq = READ_ONCE(lrugen->min_seq[type]);
+> -       if ((token >> LRU_REFS_WIDTH) != (min_seq & (EVICTION_MASK >> LRU_REFS_WIDTH)))
+> -               goto unlock;
+>
+>         hist = lru_hist_from_seq(min_seq);
+>         /* see the comment in folio_lru_refs() */
+> @@ -306,6 +329,12 @@ static void *lru_gen_eviction(struct folio *folio)
+>         return NULL;
+>  }
+>
+> +static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
+> +               struct pglist_data **pgdat, unsigned long *token, bool *workingset)
+> +{
+> +       return false;
+> +}
+> +
+>  static void lru_gen_refault(struct folio *folio, void *shadow)
+>  {
+>  }
+> @@ -373,40 +402,31 @@ void *workingset_eviction(struct folio *folio, struct mem_cgroup *target_memcg)
+>                                 folio_test_workingset(folio));
+>  }
+>
+> -/**
+> - * workingset_refault - Evaluate the refault of a previously evicted folio.
+> - * @folio: The freshly allocated replacement folio.
+> - * @shadow: Shadow entry of the evicted folio.
+> +/*
+> + * Test if the folio is recently evicted by checking if
+> + * refault distance of shadow exceeds workingset size.
+>   *
+> - * Calculates and evaluates the refault distance of the previously
+> - * evicted folio in the context of the node and the memcg whose memory
+> - * pressure caused the eviction.
+> + * As a side effect, populate workingset with the value
+> + * unpacked from shadow.
+>   */
+> -void workingset_refault(struct folio *folio, void *shadow)
+> +bool workingset_test_recent(void *shadow, bool file, bool *workingset)
+>  {
+> -       bool file = folio_is_file_lru(folio);
+>         struct mem_cgroup *eviction_memcg;
+>         struct lruvec *eviction_lruvec;
+>         unsigned long refault_distance;
+>         unsigned long workingset_size;
+> -       struct pglist_data *pgdat;
+> -       struct mem_cgroup *memcg;
+> -       unsigned long eviction;
+> -       struct lruvec *lruvec;
+>         unsigned long refault;
+> -       bool workingset;
+>         int memcgid;
+> -       long nr;
+> +       struct pglist_data *pgdat;
+> +       unsigned long eviction;
+>
+> -       if (lru_gen_enabled()) {
+> -               lru_gen_refault(folio, shadow);
+> -               return;
+> -       }
+> +       if (lru_gen_enabled())
+> +               lru_gen_test_recent(shadow, file, &memcgid, &pgdat, &eviction,
+> +                       workingset);
 
-Mark the advertisement as disabled when powering off the adapter
-without removing the advertisement, so they can be correctly
-re-enabled when adapter is powered on again.
-
-When adapter is off and user requested to remove advertisement,
-a HCI command will be issued. This causes the command to timeout
-and trigger GPIO reset.
-
-Therefore, immediately remove the advertisement without sending
-any HCI commands.
-
-Note that the above scenario only happens with extended advertisement
-(i.e. not using software rotation), because on the SW rotation
-scenario, we just wait until the rotation timer runs out before
-sending the HCI command. Since the timer is inactive when adapter is
-off, no HCI commands are sent.
-
-Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-Signed-off-by: Zhengping Jiang <jiangzp@google.com>
-
----
-
-Changes in v1:
-- Mark the advertisement as disabled instead of clearing it.
-- Remove the advertisement without sending HCI command if the adapter is off.
-
- net/bluetooth/hci_sync.c | 57 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 53 insertions(+), 4 deletions(-)
-
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 117eedb6f709..08da68a30acc 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -1591,6 +1591,16 @@ int hci_remove_ext_adv_instance_sync(struct hci_dev *hdev, u8 instance,
- 	if (!ext_adv_capable(hdev))
- 		return 0;
- 
-+	/* When adapter is off, remove adv without sending HCI commands */
-+	if (!hdev_is_powered(hdev)) {
-+		hci_dev_lock(hdev);
-+		err = hci_remove_adv_instance(hdev, instance);
-+		if (!err)
-+			mgmt_advertising_removed(sk, hdev, instance);
-+		hci_dev_unlock(hdev);
-+		return err;
-+	}
-+
- 	err = hci_disable_ext_adv_instance_sync(hdev, instance);
- 	if (err)
- 		return err;
-@@ -1772,6 +1782,23 @@ int hci_schedule_adv_instance_sync(struct hci_dev *hdev, u8 instance,
- 	return hci_start_adv_sync(hdev, instance);
- }
- 
-+static void hci_clear_ext_adv_ins_during_power_off(struct hci_dev *hdev,
-+						   struct sock *sk)
-+{
-+	struct adv_info *adv, *n;
-+	int err;
-+
-+	hci_dev_lock(hdev);
-+	list_for_each_entry_safe(adv, n, &hdev->adv_instances, list) {
-+		u8 instance = adv->instance;
-+
-+		err = hci_remove_adv_instance(hdev, instance);
-+		if (!err)
-+			mgmt_advertising_removed(sk, hdev, instance);
-+	}
-+	hci_dev_unlock(hdev);
-+}
-+
- static int hci_clear_adv_sets_sync(struct hci_dev *hdev, struct sock *sk)
- {
- 	int err;
-@@ -1779,6 +1806,12 @@ static int hci_clear_adv_sets_sync(struct hci_dev *hdev, struct sock *sk)
- 	if (!ext_adv_capable(hdev))
- 		return 0;
- 
-+	/* When adapter is off, remove adv without sending HCI commands */
-+	if (!hdev_is_powered(hdev)) {
-+		hci_clear_ext_adv_ins_during_power_off(hdev, sk);
-+		return 0;
-+	}
-+
- 	/* Disable instance 0x00 to disable all instances */
- 	err = hci_disable_ext_adv_instance_sync(hdev, 0x00);
- 	if (err)
-@@ -5177,9 +5210,27 @@ static int hci_disconnect_all_sync(struct hci_dev *hdev, u8 reason)
- 	return 0;
- }
- 
-+static void hci_disable_ext_advertising_temporarily(struct hci_dev *hdev)
-+{
-+	struct adv_info *adv, *n;
-+
-+	if (!ext_adv_capable(hdev))
-+		return;
-+
-+	hci_dev_lock(hdev);
-+
-+	list_for_each_entry_safe(adv, n, &hdev->adv_instances, list)
-+		adv->enabled = false;
-+
-+	hci_dev_clear_flag(hdev, HCI_LE_ADV);
-+
-+	hci_dev_unlock(hdev);
-+}
-+
- /* This function perform power off HCI command sequence as follows:
-  *
-- * Clear Advertising
-+ * Disable Advertising Instances. Do not clear adv instances so advertising
-+ * can be re-enabled on power on.
-  * Stop Discovery
-  * Disconnect all connections
-  * hci_dev_close_sync
-@@ -5199,9 +5250,7 @@ static int hci_power_off_sync(struct hci_dev *hdev)
- 			return err;
- 	}
- 
--	err = hci_clear_adv_sync(hdev, NULL, false);
--	if (err)
--		return err;
-+	hci_disable_ext_advertising_temporarily(hdev);
- 
- 	err = hci_stop_discovery_sync(hdev);
- 	if (err)
--- 
-2.39.1.456.gfc5497dd1b-goog
-
+Missing "return", which was correctly handled in your v2, btw.
