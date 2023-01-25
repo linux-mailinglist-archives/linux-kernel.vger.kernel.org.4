@@ -2,86 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB65967A92D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 04:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BACF67A930
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 04:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbjAYDYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 22:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S231611AbjAYD1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 22:27:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjAYDYn (ORCPT
+        with ESMTP id S229531AbjAYD1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 22:24:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095E0521D9;
-        Tue, 24 Jan 2023 19:24:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98A58B80E86;
-        Wed, 25 Jan 2023 03:24:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93D0C433D2;
-        Wed, 25 Jan 2023 03:24:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674617079;
-        bh=+n3J9w9O2587dakBFNHT9EMbV+TmVacJsDTzzUdYS58=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IwJ680KedhOQcxVTzXwv6j2pQ2LJfdsECGKBfOsKHoY5PaOcTlrm4j5KgxqBCNhpf
-         QiECopDHmi4YfnLuG8oAZ5nfu1JMn33Ji2zYrY7UOwgoTEKqIYSRkibitMXIownEyB
-         m0IZwQdb0kdpidaEDwYnD/F0aF6GJ66aC5glmsQmiHtvs0kVL5yEG18BgOm7Ni3U/z
-         MUubJ0VEzIOlD3nGE1CpYgEBlJovrQmXxqRaPnyYjnO9oCR3hI2G8Yda4udm19lG6T
-         3ZjfSPlECn7xlw2DvLiV2cmiJ6Hb+vWxjkDYSXfodTymYyIfXvRxexs9R1fSUWkVVY
-         e1ljWJoBBhahw==
-Date:   Tue, 24 Jan 2023 19:24:37 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        pabeni@redhat.com, edumazet@google.com, a@unstable.cc,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] ip/ip6_gre: Fix changing addr gen mode not
- generating IPv6 link local address
-Message-ID: <20230124192437.6d33cc06@kernel.org>
-In-Reply-To: <20230124032105.79487-4-Thomas.Winter@alliedtelesis.co.nz>
-References: <20230124032105.79487-1-Thomas.Winter@alliedtelesis.co.nz>
-        <20230124032105.79487-4-Thomas.Winter@alliedtelesis.co.nz>
+        Tue, 24 Jan 2023 22:27:30 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC154521FA;
+        Tue, 24 Jan 2023 19:27:28 -0800 (PST)
+Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
+        by gnuweeb.org (Postfix) with ESMTPSA id 5822A82EFE;
+        Wed, 25 Jan 2023 03:27:22 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1674617248;
+        bh=JVyXISFF2VMV3UQ/rzZ1UPCMs0dCqkS9w8Vfx+tSXtM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZAsUiD+c/ma92RokjmOePatNT2Zq0sMZVtg2ZhoXDWlbHjSUjYvZmSR7T8qOmu1xF
+         uED4jXCVmQ56lBHlEQtnQudp8ZjZS4JjcT0tqEZ+inOlIxloZRH4qdd5MtSjmuKXXw
+         8TaR18GrQaKfVGP0isixnknTaSrha+2H3gWZwC/eVpj/XlO7+wQsNkAylzy34Reu7i
+         /+ggTXCJUm+2PkPoTzKDsIILNUUSWDX/1G5+qwowYVb+bJxsdLCb5Z0OBUIgcby7g2
+         XuCh8l0Bw8l/KOalrN6xj1Kp8sV5AUwaAf9WPlMjJTlpr7S2UoRhrO51cH15oup8dB
+         1YqwBIUrSZ8Rg==
+Date:   Wed, 25 Jan 2023 10:27:18 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     "Li, Xin3" <xin3.li@intel.com>, x86 Mailing List <x86@kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v3 0/2] selftests/x86: sysret_rip update for FRED
+ system
+Message-ID: <Y9Chlgp/DIZDou8T@biznet-home.integral.gnuweeb.org>
+References: <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
+ <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
+ <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
+ <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
+ <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
+ <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
+ <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+ <20230124100926.637335-1-ammarfaizi2@gnuweeb.org>
+ <SA1PR11MB6734CA3184183E490D18CA72A8C99@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <7E935340-B596-4663-80FF-CDC4E31896B4@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7E935340-B596-4663-80FF-CDC4E31896B4@zytor.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 16:21:04 +1300 Thomas Winter wrote:
-> Commit e5dd729460ca changed the code path so that GRE tunnels
-> generate an IPv6 address based on the tunnel source address.
-> It also changed the code path so GRE tunnels don't call addrconf_addr_gen
-> in addrconf_dev_config which is called by addrconf_sysctl_addr_gen_mode
-> when the IN6_ADDR_GEN_MODE is changed.
-> 
-> This patch aims to fix this issue by moving the code in addrconf_notify
-> which calls the addr gen for GRE and SIT into a separate function
-> and calling it in the places that expect the IPv6 address to be
-> generated.
-> 
-> The previous addrconf_dev_config is renamed to addrconf_eth_config
-> since it only expected eth type interfaces and follows the
-> addrconf_gre/sit_config format.
+On Tue, Jan 24, 2023 at 01:37:43PM -0800, H. Peter Anvin wrote:
+> On January 24, 2023 1:32:14 PM PST, "Li, Xin3" <xin3.li@intel.com> wrote:
+> >> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> >> 
+> >> This is an RFC patchset v3:
+> >> sysret_rip test update for Intel FRED architecture.
+> >> 
+> >> Xin Li reported sysret_rip test fails at:
+> >> 
+> >>         assert(ctx->uc_mcontext.gregs[REG_EFL] ==
+> >>                ctx->uc_mcontext.gregs[REG_R11]);
+> >
+> >On FRED systems, flags is 0x200a93 and r11 is 0xfeedfacedeadbeef here.
+> >
+> >We need to remove or change this assertion, maybe:
+> >  assert(ctx->uc_mcontext.gregs[REG_EFL] == ctx->uc_mcontext.gregs[REG_R11] ||
+> >         r11_sentinel == ctx->uc_mcontext.gregs[REG_R11]);
+> >
+>
+> This should use check_regs_result() – which is exactly the reason I made that a separate function.
 
-The commit message reads like a description of the code changes, 
-not the problem statement + extra context it should be.
+Fixed in v4.
 
-Please start with a solid description of what the problem you're seeing
-is, without referring to the implementation / code at all.
+-- 
+Ammar Faizi
 
-You should also mention why changing the code flow for LOOPBACK is safe
-as it's not visible in the patch itself. And I think the subject should
-be more broad than just GRE, since you also fix SIT.
-
-Similar comments to a smaller extent for the second patch.
-
-When you repost please make a fresh thread.
