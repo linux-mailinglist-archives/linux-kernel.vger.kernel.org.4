@@ -2,165 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C762467B7D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 016E267B7D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235970AbjAYRFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:05:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
+        id S235978AbjAYRGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:06:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235688AbjAYRFN (ORCPT
+        with ESMTP id S235474AbjAYRGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:05:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B1183CC;
-        Wed, 25 Jan 2023 09:05:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC48BB81B44;
-        Wed, 25 Jan 2023 17:05:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A186C433EF;
-        Wed, 25 Jan 2023 17:05:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674666309;
-        bh=KCgquHBBE3i32DY08dZlQY8oNliwvemLJmq1BLIltXY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=rvk2iA8pOJhX6AySAr56h3sa54DxzdmfY9i5WuM501Wd1mNsKW2iOkzkfUk1HnGhQ
-         fcXZ1tXfgy1+iteHg1xoxwgQqYrngP6I8DFlYjGkYzXHPxcZWC6m5zhM7YF1UuiA0l
-         TziucBvFB70zD9yrad7zBhej/nswthz1AtU9xK8SPCq1Uu6aGA75iTMLyfqe3fbhfK
-         8PNp1OA66uRHyR6bSMlXwkFyoOWrqXroiCFm2aX/aXa2KX4msX+TNqpXUo0wBJ2ry5
-         2n8/KAzsbFFJuPzmTR/HanO1nPIulfnR4eiliFbC+M/GewjlXC92TsMjvY8X2+5aps
-         5yhA7ses57mjQ==
-Date:   Wed, 25 Jan 2023 11:05:06 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Daniel Scheller <d.scheller@gmx.net>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Berni <bernhard@turmann.eu>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Sean V Kelley <sean.v.kelley@linux.intel.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [bugzilla-daemon@bugzilla.kernel.org: [Bug 208507] New:
- BISECTED: i2c timeout loading module ddbridge with commit
- d2345d1231d80ecbea5fb764eb43123440861462]
-Message-ID: <20230125170506.GA1175690@bhelgaas>
+        Wed, 25 Jan 2023 12:06:01 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC027A9C;
+        Wed, 25 Jan 2023 09:06:00 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PFQBgB029186;
+        Wed, 25 Jan 2023 17:05:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=WUoT33k2oKGE//+xzXJlWgAjYlViU0TSZDltBrob3o4=;
+ b=g5oJkaecGdDVWjiPvmQ/rCXcbC9QAZbzBB9VULpgrE65PFJ4JIuGYm7AE0j+hG3VURVT
+ h3bfivi6eZ0x5kWfFklxcIb3CqLkbmhx6VLvpSlUQjz0qOikRiD0Bnev8t/guN81raQP
+ AVOozQJQmkQaI55blwganM7OvB3VZ3j+EzcLiJCqgRG0S1pCuX+qj++glyB5A3WzjgM/
+ 3XpIAOvfnjOqXGHp3M2CeLS5uI7I3+ePw5Teiw9QJx50471o2IQOKgvyPAzocAFYJdzP
+ ClPorGdOPUfgZm00qRk9+OA186ND/KO9jDzNYUyxVlO/Lyf1UDOAk23IEJp6MOW222C7 dA== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n88ku0dsp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 Jan 2023 17:05:21 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30PGC4U8025091;
+        Wed, 25 Jan 2023 17:05:19 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n86gdna8b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 Jan 2023 17:05:19 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X6vmjV3OsFH1VCeuDhE9w4fu3yJGPwM/ZwprA8UQ9/PJVKE1ra2i2kxnXSUdKJHTeDwLLT2B59bo+bIOosRhyW+Xh/hCknaBV1AG+oFuUHqnAeZcpa29smUD4FDQ5crUi3PPbFyYpy4Df2FHhcb+mRKGwybd9IBvBduVuITyJd7AnaTvml/I7fKQKFxcg+DLkJ5P2MSZNWUfxWLTxYwU+sOXduXbWDL6JMNfJAkhcUQN9Wua2E/cztmuYAwIcLkB4oYM6eSpnKY+2Vxb5J/EuYvW4/Ogi0+VE+NIe8cH0y5gmIxWe54OtbVY8YlMfKEwGSk8c9LKyEVmOgntYPaq2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WUoT33k2oKGE//+xzXJlWgAjYlViU0TSZDltBrob3o4=;
+ b=S0t7APjJcskHEbkFKVU319vBI/m4tgRJIl8DTv+B1ovuDSXPvWrTX77zfHQ1Mac94DOwHHaL7UywSNjoJsB1ujj+ck0HjRXVYNpOp9tkB6mE2yPJgfmW6IJSrcTlom3k2Lxua8gvfCu2D7sX22zp4Ae/mnrajxv34NDNKtvJkLwZ5RrRAkUt/FSmZjvU5t4DqoNT97nfpLqQmmnaclS7xH/IOdbfo8By0UDSQs8XzBKuYWZuvdMwriVaUCOJTmW8E+iDIAhsLMDT5QD/dq3ZBWQRpsywyiTWjiBVGSsgX19vE/vs6LYLVRi2d5Urcc6eLzkTBnDeaGIsjJhpLuMGZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WUoT33k2oKGE//+xzXJlWgAjYlViU0TSZDltBrob3o4=;
+ b=L/8+HtSzqXhVikHpMFkXeDvmtoQdjNtQfw9srZlqtxa5HeNyWILUMFfRxFpZlm6yfjWZjfyI/PlqIKlRAVOIS0nyYcB06OADZqE0JAHvwNrNWucCAAE294I9nWQ5a42mzNzYOmukRTvYR4TTH/vA2SzAccbPl7/BNs9GsRPU6+0=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by DS7PR10MB5069.namprd10.prod.outlook.com (2603:10b6:5:3a8::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.20; Wed, 25 Jan
+ 2023 17:05:17 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::1040:f0e3:c129:cff]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::1040:f0e3:c129:cff%8]) with mapi id 15.20.6043.009; Wed, 25 Jan 2023
+ 17:05:17 +0000
+Message-ID: <770e1ee4-81f9-37f3-e83c-1c8cdc3598e7@oracle.com>
+Date:   Wed, 25 Jan 2023 17:05:10 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 11/11] perf jevents: Add model list option
+To:     Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
+References: <20230124063320.668917-1-irogers@google.com>
+ <20230124063320.668917-12-irogers@google.com>
+Content-Language: en-US
+From:   John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <20230124063320.668917-12-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0532.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c5::14) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200709191722.GA6054@bjorn-Precision-5520>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|DS7PR10MB5069:EE_
+X-MS-Office365-Filtering-Correlation-Id: e420ebd7-996c-4e15-bdd0-08dafef65562
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NQW8OFYR81n4cX/KD+GH0SpT/YhvzdiAUElpOT4tzUa8t31MsNIe/2B118OCbPmlfrdUcDod2NtkOEGTOKYIb+nrE3IGr2JqDYNdhbOK2ocVk+WzIRd8KyCu+ThSUQNO8Ry8WUcg/2kjiK9b/Mn9aCwmkG+AOoqrZ5lMb8QQIjmdh95asKw6v2PcWUW2iOJTId1FypPbIxU2WrXAmwQ7vJKFt3Sxiom/7VH+WqofKRJGjRCUJL5hzUI7RKZuB8NnYa7tSPR0RbbAx6Fqyneho90GtD5jRgBgz2zpFowa4kzQ6g78UAThagjT0pQvaw/znbg6n22IEccngwJ92BKn7Ea5ic+BYRcpt/cVFJqcZdmlWxpd51SACWfggBj/Fp72eNo1ntJvkvcQBp3+X5ewk92OPvEHMlS/nXDijgb4ZU1bGmaT2RzYnwqj8BL9ItfDd5MECpzT48DTmxfiaX6ivv4THn2CAAkvCRXzc7wHG2R3PdTsIUanqvT/sViOT/9mD0Kg4KzcqY5EWZSw5rvqlOqHOIFHQtlFVGnVpYBRm+/I8x51QM/PTUKxRhbQonXld+zhW0KWQpSRwzRuF5zmOQd7uYTsRk3Mh3Lsw8tWmK8a2aqLitP/UtmeahjkpdnttzOlfbntqlunxAgpTeE1Adfx4UfnhaB8o0jxKe0rXM7OtHKQb0iDZA2YQqZo0PnR+mwvhRe+gP97X4Mn+FSBy9qwTIfCE4qpEcCRySfVhJXVYMckzkGMlW6nUtXsT0GM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(346002)(376002)(366004)(136003)(451199018)(5660300002)(7416002)(8936002)(83380400001)(41300700001)(8676002)(4326008)(7406005)(36756003)(86362001)(31696002)(38100700002)(921005)(4744005)(2906002)(478600001)(6486002)(36916002)(2616005)(6506007)(53546011)(6512007)(186003)(26005)(31686004)(6666004)(66476007)(316002)(66946007)(110136005)(54906003)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RThTRVJlZUVZaWM2cndpcm1meU1tSkFxMk5XQWZXRVEwTldhcXQ3T05Hc2F1?=
+ =?utf-8?B?Y0Zrak9UbElBMGc0NzhaTHgva1dFbkJvOE0zMnVjclBScVNuRlREZ1ZuaEVw?=
+ =?utf-8?B?MHB2eEsycktMeEM4V3ozS1p3RTc2RVBUa2NHYmh0blhTQ0YxSFYwekxKTVpx?=
+ =?utf-8?B?c3JaSWJHRXZKblpEK3R5QVNndU9lcUdqRlNRbjV0UjZkUU0wOEpaZ2V0eVpa?=
+ =?utf-8?B?eXYvTFdabTA5M2t5RTMzOUJqY3czR0VwVVhXN1d5UjlaMlA5NXh5T0w1MmZs?=
+ =?utf-8?B?bUs2MVlIdHI1ZlRHTVBiV0RaRTJyN1J3QmdPYVR3RVNrWGFRSG1IYmw0TkUx?=
+ =?utf-8?B?ZW93NEN5SEFBdFdYRkloYjFaQ2dQTnhUaVczelJwT1VtYVpBWUUwUDZPcWNt?=
+ =?utf-8?B?OW9ncE53a05pT2hnZWVsUlowTXgweHZNbHoyME1xU1dFMXNKZ09XVlhIdk5P?=
+ =?utf-8?B?QnQybXQvTDdwUWN6WWVKaFA0TGpWdUM1c1BwVHFYeDJXcWRpL01MMWRaM2Fj?=
+ =?utf-8?B?T0dhNWRtREdvKzF2T2xxMHpWUFFFZDRVOElwL3haRE8rMk5sR3N0ZzRQODQ2?=
+ =?utf-8?B?VGNSZENybkJGa2pJWnh1RVdrQ3ZiL2ZIQTdVVDdpelZMN1ZSeVUwVjdtNGcy?=
+ =?utf-8?B?akxYaFg2RllsVjdlYUtGY2Y2blhpV0NUNjNEaWc0NVRuTERmYjNoMzdLREI2?=
+ =?utf-8?B?eFZrdmNjbXQvWXlCQXNZWHBJRW96cGFUMjFoM3F6M3p1VDduZFBUSFJHUXJq?=
+ =?utf-8?B?ZXhWM014L1BZdzFmbHZmMjlpam9ZUmxXWmxyVFE1aTZmck5wWmE2SDh3cHcv?=
+ =?utf-8?B?UFdmS3JsdFFwVVNUZWo3Q1kxSGY2ZnZwQXJ5WmRpanhTZldhWXdLZ2lzellX?=
+ =?utf-8?B?bm10ZTVCNnZINTF2SmhZcE9uZE52WjJNc29QSW93RDJXWkQ4R29aZEJCMmVl?=
+ =?utf-8?B?VEUwSC8zOGFTdzAzZSs4bWpDczFqZ3BhOUxPa2NyVFgyQ1FVanR2eFBxNzd4?=
+ =?utf-8?B?U2s5bEl2NGlkZEVJbUNmV2psZUZ2eXpsbVNUajdmZVV4SnZLN1V6N1I1QTM1?=
+ =?utf-8?B?Q0svblAvbmdWRVZwWVlzcUh6Z09OV1lLWDBiNWkwcng5dDJrWEEzT2N6Zzdj?=
+ =?utf-8?B?U1JvQy9HbkljbW9Wek9HQ3VNalp0ZGVFaDVuVzlYdE5Nc1RPWmlRUXhqWVRj?=
+ =?utf-8?B?TWpLSXFMb3hDcWtuakdDQlNsaWtiQ1Izd0pnRjlQNWJQRVhKS1dtSkFrUTBI?=
+ =?utf-8?B?MzhzekJOSlZJMk9nQmNwSm8yMUJLU3pNMmdUK2ttdGRIb01pM2FnUTR0d24v?=
+ =?utf-8?B?SGlsL0YwY1FUR1VDd0RDM082ZUNTNzl5QnVvZ2RnV09UNyttWUpkbTdSQ3JX?=
+ =?utf-8?B?TEtyK2JWai9Ca1Zya0xELy9JNklUc25ZUFA2RnVOSkI1QUNCQjl2Q2llcFZ4?=
+ =?utf-8?B?M1JHN0tydGZJdVdkazVIME9ZTC9VQnlqK3Biejl3QjQ1aS8rS0l0RGNXYndL?=
+ =?utf-8?B?eXkzVU9YY2pLWEgzMmwybWhMWjNib2RuWEhCbi9mMXhRYXlKU3VzQzcxZlk5?=
+ =?utf-8?B?S1pSN0hWOWI5a2hVMmdUeG41bW9wTHlySFhYZUhPNkdVR3UxeXhHcXlNSU9M?=
+ =?utf-8?B?bHNZaTdDWFJLNDRySGY1TFdydWFjMHdyOWlLWkVKRG02NWtSRmZrdFFXV1dh?=
+ =?utf-8?B?RGU0b0Z5MzZBK1JoL0ZiVWNJRDI4QVZMcWVHaGNWR3F4MUltRGdpMHQ5VWIv?=
+ =?utf-8?B?THorNFRkU2QxVTdMN0xUbm91OU83MTFPUVRDbEh6cStPMEcwcXMvNVA0OWl3?=
+ =?utf-8?B?cFB3NVZWbzFNUlo3NHczUkpNeXVLcHdGQTIwWWJPWlU2TGpGWHJRZ1FlRmZw?=
+ =?utf-8?B?K2tRd2dtb0tWRVNFOVZHR1dmbkErQXhvUmtTYjI1QmVzcU9GTFh2bXIyTXVL?=
+ =?utf-8?B?MUJteXNURWswMWhncGNmWW5XZUFaSUQwa1JkSlVvRm9qSERSb0NDckh0TFZh?=
+ =?utf-8?B?ait3cG9YVEZVSEQ4SFh1UFlqeS9EeWxRRjVOdTZqQzhJN1Zoazg3c1dWSDly?=
+ =?utf-8?B?L1Fnc2VTQzJyQVZ5YS9nUkNNRUZwYjhIZzJvNmMyU0c0cEtWUi95SjJjRnRx?=
+ =?utf-8?B?emk2ODVXZEF5bGRMR1Y2OGhLWjRTSm9WSC9SdmJ6alVVd3ZGSnJqMWJFUTNQ?=
+ =?utf-8?B?Rnc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?RnR6SjJGSlRyVVYxcTlYWkMxa3hvQXFiWmNRRmFkVWJIKzNNNThrcHhJOHhs?=
+ =?utf-8?B?WkpGWjdaUW1XeGNPKzl1WkcyelVrcXJJdEJJNnF2alovLzY1OGU1ZVd3YlRq?=
+ =?utf-8?B?MFhaRzJnbHRmSUZieW1NUWp6T2hFOWQ3d1lZUW9HaVBQbUlGWWRRT2RVK0ZN?=
+ =?utf-8?B?bGxHYWJydUNIelRSMVpUTzJMZDNmdlhWS3ZtMDJ3ckdnZnpENlVyRXZFMTg5?=
+ =?utf-8?B?eW9ra0VMR3BEVUU5V1UwaDM5YU5nclp3RUZIZTZUTmVDdFB4NDR3bVM2cm1q?=
+ =?utf-8?B?cnQzelNwUEVYMWdsMXhoVUdBUERYeWVxdlc0TVhEbFEyL3NlTVFJVVhvVkhV?=
+ =?utf-8?B?NEZqVjVIcldvS1NvRkRiOWxPN3VIRG5QYVg1UytmVlBNVzZJSXF2YTQxcnZP?=
+ =?utf-8?B?KzFNVDF6MWVpZTBLbUNUbzRCUUE0ZFBrZ0FydlZrNVB4NDZ4T3Q1YlZyZnhi?=
+ =?utf-8?B?emtYNEZmUk5jb3BPOG0zNmJpZVRnb0VDRkl5THorRUtnS1ZPWngxM0lXVzJ4?=
+ =?utf-8?B?NDVRc1QzWnI0MUpDOVNrK05jTXR1TEtrbVVodlBuU3BKc3kra3gxWHJiUmRo?=
+ =?utf-8?B?RHQzMW9ZTi93NWVkaWxHdVlEbmp5a1Axc0h1VmpoVlFEMENRMHF0cWMyTmtj?=
+ =?utf-8?B?K3NtVVltam1qL3BlWHphcEJ3TC94dEN4UVZ4VVFBRDdYR3lBbjdlbHZVNVMx?=
+ =?utf-8?B?aU9VcnV2K1NKcmhxa1ZwV3dEemVURVhjQnA5MThmZHZoTlNnTHpEcFJGZFhj?=
+ =?utf-8?B?TmZvM0FmaFdqMy9BSko1NFpGaSt5SjFyazY3VWN3azRnejlveWo5UWt5dnlP?=
+ =?utf-8?B?Y0NOR1lmN2FmV2pDUGZCVzBuQjdlNDB5aU9YK0trUXJ1ejVBRW9PWVFTNkN0?=
+ =?utf-8?B?SUJDSGNTZXE4Zlo5Tms2TWJsbHVGWjgzMGpuZy9CME5SZTBYaXgrd2hjUzBm?=
+ =?utf-8?B?T3pZUjJ1YVY0SklpYllsOXBxbm1VSGFUVWpZMnVEei9tTlpxL0pGTjFXenE3?=
+ =?utf-8?B?R3ZQaU02czVGMEIxeWRkOHVWTnVNZXhhbjZ6WDFKdXUwMG5tRWhJNHB2Tm1J?=
+ =?utf-8?B?WVRudThCdHlaSUF5d2ZROHJZOWxJRjhDb2ttS1k3RGR0NWNKQnFmaEJ4bm5F?=
+ =?utf-8?B?a0txZUtUemxYQWd4bjQwbnVXTGtWRlRWcVhkRXpqSnpGVzRCTHJMK3hwaHlh?=
+ =?utf-8?B?cVZqRWpYZ2t0M0d0T080bnZOQ205dENqdnp0NGQ4VDFYNWNZbVZrY1VrMUtT?=
+ =?utf-8?B?WnhwNlNPV0VpYWFoZGZJWEt3TmFjOWZzNXcvU0w2aW1rUTVZcHZjSjhJaGpi?=
+ =?utf-8?B?azdnMWg4MlFiM1JwTksvYTg2blpJaDVhcDZIdSs3VVZEZEQ4Y2xvSEFKaXFs?=
+ =?utf-8?B?Mi9PSHpaZFdrVU1EUWJ6VXpEWVJ4YVExNHl5ZVlaNHR1ejRFOXMyUU1ZUjBL?=
+ =?utf-8?B?Q0czc3hHc3gyNW0vUG5mRUZYbk5tN1RtVHJaclhac0VlVUN5R3RMdjhGc1dK?=
+ =?utf-8?B?K0VNRWdjaW5xSUQ1M2VxV0UybFdyMlhHNEM4TUF4SUlDZ01WVWY1THhiOXM5?=
+ =?utf-8?B?QkRMTS85V0o0YlBpOXRudFByUE54eURrTVJjTW0zUFN4N0Z4YkI5SDREL1c2?=
+ =?utf-8?B?Y0VDRnN4WVFoZFJya1ZqSlJkSkhlcVZEd0QrR0FvaHZLTjFqanN1OG9GVmdu?=
+ =?utf-8?Q?9kyUqYDRYhcbsVwVY4oN?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e420ebd7-996c-4e15-bdd0-08dafef65562
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 17:05:17.6649
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sbDm+1+2VxWArA16XEQs++LcmSD/NMN+kck7E6qVc841w7NfvxG2xcyFWYrJFKPtX+ejXgXQl+PFCI97fZ7gHw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5069
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_11,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301250152
+X-Proofpoint-GUID: 5p8Ovcu6tDqgT97Puqgml2UgduleXR06
+X-Proofpoint-ORIG-GUID: 5p8Ovcu6tDqgT97Puqgml2UgduleXR06
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Salvatore, Mauro, Daniel, linux-media]
+On 24/01/2023 06:33, Ian Rogers wrote:
+> This allows the set of generated jevents events and metrics be limited
+> to a subset of the model names. Appropriate if trying to minimize the
+> binary size where only a set of models are possible. On ARM64 the
+> --model selects the implementor rather than model.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-On Thu, Jul 09, 2020 at 02:17:22PM -0500, Bjorn Helgaas wrote:
-> Bisected to Debian commit d2345d1231d8, which is a backport of the
-> upstream commit b88bf6c3b6ff ("PCI: Add boot interrupt quirk mechanism
-> for Xeon chipsets").
-> 
-> Reporter confirmed that reverting the Debian backport from 4.19.132
-> fixes the problem.
->
-> ----- Forwarded message from bugzilla-daemon@bugzilla.kernel.org -----
-> 
-> Date: Thu, 09 Jul 2020 15:01:11 +0000
-> From: bugzilla-daemon@bugzilla.kernel.org
-> To: bjorn@helgaas.com
-> Subject: [Bug 208507] New: BISECTED: i2c timeout loading module ddbridge with
-> 	commit d2345d1231d80ecbea5fb764eb43123440861462
-> Message-ID: <bug-208507-41252@https.bugzilla.kernel.org/>
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=208507
-> 
->             Bug ID: 208507
->            Summary: BISECTED: i2c timeout loading module ddbridge with
->                     commit d2345d1231d80ecbea5fb764eb43123440861462
->            Product: Drivers
->            Version: 2.5
->     Kernel Version: 4.19.132
->           Hardware: x86-64
->                 OS: Linux
->               Tree: Mainline
->             Status: NEW
->           Severity: normal
->           Priority: P1
->          Component: PCI
->           Assignee: drivers_pci@kernel-bugs.osdl.org
->           Reporter: bernhard@turmann.eu
->         Regression: Yes
-> 
-> Created attachment 290179
->   --> https://bugzilla.kernel.org/attachment.cgi?id=290179&action=edit
-> dmesg on 4.19.132
-> 
-> OS: Debian 10.4 Buster
-> CPU: Intel(R) Xeon(R) CPU D-1541 @ 2.10GHz
-> Hardware: Supermicro  Super Server
-> Mainboard: Supermicro X10SDV
-> DVB card: Digital Devices Cine S2 V7 Advanced DVB adapter
-> 
-> Issue:
-> =====
-> Loading kernel module ddbridge fails with i2c timeouts, see attached dmesg. The
-> dvb media adapter is unusable.
-> This happened after Linux kernel upgrade from 4.19.98-1+deb10u1 to
-> 4.19.118-2+deb10u1.
-> 
-> A git bisect based on the Debian kernel repo on branch buster identified as
-> first bad commit: [1fb0eb795661ab9e697c3a053b35aa4dc3b81165] Update to
-> 4.19.116.
-> 
-> Another git bisect based on upstream Linux kernel repo on branch v4.19.y
-> identified as first bad commit: [d2345d1231d80ecbea5fb764eb43123440861462] PCI:
-> Add boot interrupt quirk mechanism for Xeon chipsets.
-> 
-> Other affected Debian kernel version: 5.6.14+2~bpo10+1
-> I tested this version via buster-backports, because so far I was unable to
-> build my own kernel from 5.6.y or even 5.7.y.
-> 
-> Workaround:
-> ==========
-> Reverting the mentioned commit d2345d1231d80ecbea5fb764eb43123440861462 on top
-> of 4.19.132 is fixing the problem. Reverting the same commit on 4.19.118 or
-> 4.19.116 is also fixing the problem.
+would it be really difficult/painful to support model names as specified 
+in the mapfile.csv, like "skylake" (for x86) or "hisilicon/hip08" (for 
+arm64)?
 
-Sorry, I dropped the ball on this.
+Thanks,
+John
 
-Berni has verified that this problem still exists in v6.1.4, and has
-attached current dmesg logs and lspci output.  
-
-Sean's comment (https://bugzilla.kernel.org/show_bug.cgi?id=208507#c18)
-suggests this is actually a ddbridge driver issue related to INTx
-emulation or MSI support.
-
-Berni confirmed that the i2c timeouts happen when
-CONFIG_DVB_DDBRIDGE_MSIENABLE is not enabled, and that enabling MSI
-via the "ddbridge.msi=1" module parameter avoids the i2c timeouts.
-
-The Kconfig help for DVB_DDBRIDGE_MSIENABLE:
-
-  Use PCI MSI (Message Signaled Interrupts) per default. Enabling this
-  might lead to I2C errors originating from the bridge in conjunction
-  with certain SATA controllers, requiring a reload of the ddbridge
-  module. MSI can still be disabled by passing msi=0 as option, as
-  this will just change the msi option default value.
-
-suggests that there may be an i2c or SATA issue that could be fixed so
-ddbridge MSI could be always enabled.  But I don't know about that
-underlying issue.
-
-Per MAINTAINERS, the ddbridge driver looks orphaned, so I cc'd the
-media folks and Daniel, who might know something about the MSI issues,
-based on adaf4df70521 ("media: ddbridge: Kconfig option to control the
-MSI modparam default").
-
-Bjorn
 
