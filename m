@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455AC67BDD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA3E67BDD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236271AbjAYVMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:12:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        id S236317AbjAYVMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:12:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236295AbjAYVM0 (ORCPT
+        with ESMTP id S236358AbjAYVMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:12:26 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CE44AA68
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:12:15 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id 84-20020a630257000000b00477f88d334eso8762775pgc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:12:15 -0800 (PST)
+        Wed, 25 Jan 2023 16:12:32 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB93B5B591
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:12:18 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-507aac99fdfso15110927b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:12:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=V7hcBGquDXE1ItKYAPtHX4Q2dU+QIoSg4FK+T/D54PA=;
-        b=L3NS8SHVeGfpP8K/JnRDmG6rwnuTD7bUQPX9vwPg3CHqHUok3RLjFxC0zFNpqDnaeh
-         Hx93o78ZU46ooMSpQw6aRrqirTJde4WdlhK4xSLWkZNygnuWtZpcF98c/y/1QUvGfyZJ
-         FqsqDPg0g+TI3Lw0tnqtvMnoXN+uMo0PNhg++KqF8iThWlGYxvVHP7lsfsgp9g5TgSee
-         X1abd54KYFSDbLmoglzJSriOoi7uC4RZlxo6NJCVHpj0lB8fKFZ7YExlWS5Zw4sJroSJ
-         uUtTpP1jcy1TC2tsAruW+WUDLrjO+nXEaFFQmHBtofDQhyYgAUHMhtg7kb4FKjbREwOn
-         Etcg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mjUP68ZzzFyh8hG9RPeRlc5xrTMio/O97kr7jaJq5/0=;
+        b=bZKAmtw+epp2hdpRq2aYZvzRqfJc+Q6/JLBQqH5S+RddlZ7/gEumJ8QBuUtH4JWCly
+         j7q66n+q3gB/gV8f/YYIHMDdCMOwWhy+uzwQtvA/D61T0UT1V0/8briK5e8ZSyVk9mAq
+         59XvAqGaezM4lbTaFzWrDGZIMwNbymCD559QZxaOngdKp1+Ve6S35nnMjPrWPEuM8mkv
+         ipDr0Yg39ysUTCH6HQ/gFQfaGx9E+Nsl3gUQYX1hdhyHPC14SwlYYLynR6SU91texQ0c
+         skYI1gNfNvokuscJm7PhDqmEn8trMNm6HJi7YaGhBxfK3BDztlX1jjguaQxvsshZ/wsm
+         CxmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V7hcBGquDXE1ItKYAPtHX4Q2dU+QIoSg4FK+T/D54PA=;
-        b=RbxabJbrPGlM+r1ya0IwYfxmKzistW1emR1U/lGGxcDFJXLtJ99s5lfJTV8/6G6+eB
-         ffNsEOECeQHVWJ/E5p9AIh3dwhkR3MR+OS71YJFMaALl2CMn0CnCdeW9xbj5Od/ufT9v
-         aZDVEmKpU9X0qiWRFIb4D6bTnzN3qGOUjLLftpTKdScm35tYdKX/j2G04KgOeTSAqwaZ
-         26mnyPEEMJzVpOxi4bGCSiExF801wkjk/RZB87sWAkNAcl/DqY2fa9fHRnoyWbrDj1dD
-         bc3ImgXj1OIRCYAhQbkK+XvNPZEOV9WRVPeILK1a9PbIv2gD3hczuZRLbmAW0AxplWql
-         wg4w==
-X-Gm-Message-State: AFqh2kpLMxzHXVe/SgAgJuM4DHApTaAV3JHXn0W84E5voGAuLFPPVcA2
-        NlXk2U79j2aCw8qYS4vxqhoFxk85V9/B
-X-Google-Smtp-Source: AMrXdXurpipw0Ob2XUbpzap2fmXipRkyZte6Rsax47X//HKaWpT1QbUHEQGrvK5nz9rePsp4XryFA7XgyMhb
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mjUP68ZzzFyh8hG9RPeRlc5xrTMio/O97kr7jaJq5/0=;
+        b=LXbp8ve8J2Joy/QnOdckcCoNsdK0DEf0vGbhyk0LVMhQ8f9UWpp/q3rrsZn9koZgO8
+         zAakaZaMtQGzXBZ5jfQdcDKBnc8XUxDdwqx2SiOmZGamL+dtq1WHmD7WFOEbYKORvtqt
+         Xw8JzHat21dzyIMZdsTD5k4v97OX/jSiBQFAmigsVNNFGqd1IQo0vjVgZNF1ySTsyej1
+         TGyEr0+AdZFV0ubVMnY4P0T0fkcUOBPyg3d9nIw8HFWDwB/oYRsAv1Lw41tmY0q60arI
+         RKJ8Wdn5MVwHtC1wVv4crQnqA6OrT1at8UNxUpnwC/v0PCrvoXyq4t7hC2Dw8PKMhktl
+         phEg==
+X-Gm-Message-State: AO0yUKW215HhrTw+cqOUP9d1X0Ur9X4MzqcHs1RuEd7aA+lvqT7zVQBH
+        lOkvl1Lsv2m+MOtade8xMPPUiZNbnPuU
+X-Google-Smtp-Source: AK7set/jBOwnX0/QoX7ixwv9e2pNPa64RC5YCboTV73zgRZKUW3KNBAU33alOxNSlCaoaeo/b2tuD9s294fU
 X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a05:6a00:e83:b0:56b:9ce2:891f with SMTP id
- bo3-20020a056a000e8300b0056b9ce2891fmr3438596pfb.43.1674681134438; Wed, 25
- Jan 2023 13:12:14 -0800 (PST)
-Date:   Wed, 25 Jan 2023 13:12:09 -0800
+ (user=jiangzp job=sendgmr) by 2002:a0d:d6c7:0:b0:506:3481:ced0 with SMTP id
+ y190-20020a0dd6c7000000b005063481ced0mr1197728ywd.396.1674681137911; Wed, 25
+ Jan 2023 13:12:17 -0800 (PST)
+Date:   Wed, 25 Jan 2023 13:12:10 -0800
+In-Reply-To: <20230125211210.552679-1-jiangzp@google.com>
 Mime-Version: 1.0
+References: <20230125211210.552679-1-jiangzp@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230125211210.552679-1-jiangzp@google.com>
-Subject: [kernel PATCH v1 0/1] Reason to disable adv during power off without clearing
+Message-ID: <20230125131159.kernel.v1.1.Id80089feef7af8846cc6f8182eddc5d7a0ac4ea7@changeid>
+Subject: [kernel PATCH v1 1/1] Bluetooth: Don't send HCI commands to remove
+ adv if adapter is off
 From:   Zhengping Jiang <jiangzp@google.com>
 To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
         luiz.dentz@gmail.com
 Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        Archie Pusaka <apusaka@chromium.org>,
         Zhengping Jiang <jiangzp@google.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -73,27 +77,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Archie Pusaka <apusaka@chromium.org>
 
-This change was made to keep the same behavior as before the hci_sync
-rework. When the adapter is powered off, the advertisement will be
-disabled, instead of being cleared. As a result, when the adapter is powered
-on, the advertisement can be re-enabled. There is no need to re-register
-the same advertisement.
+Mark the advertisement as disabled when powering off the adapter
+without removing the advertisement, so they can be correctly
+re-enabled when adapter is powered on again.
 
-However, if the adv is not cleared and the user requested to remove the
-adv when the adapter is off, it will trigger GPIO reset, so we will not
-send the HCI command in this case.
+When adapter is off and user requested to remove advertisement,
+a HCI command will be issued. This causes the command to timeout
+and trigger GPIO reset.
+
+Therefore, immediately remove the advertisement without sending
+any HCI commands.
+
+Note that the above scenario only happens with extended advertisement
+(i.e. not using software rotation), because on the SW rotation
+scenario, we just wait until the rotation timer runs out before
+sending the HCI command. Since the timer is inactive when adapter is
+off, no HCI commands are sent.
+
+Signed-off-by: Archie Pusaka <apusaka@chromium.org>
+Signed-off-by: Zhengping Jiang <jiangzp@google.com>
+
+---
 
 Changes in v1:
 - Mark the advertisement as disabled instead of clearing it.
 - Remove the advertisement without sending HCI command if the adapter is off.
 
-Archie Pusaka (1):
-  Bluetooth: Don't send HCI commands to remove adv if adapter is off
-
  net/bluetooth/hci_sync.c | 57 +++++++++++++++++++++++++++++++++++++---
  1 file changed, 53 insertions(+), 4 deletions(-)
 
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index 117eedb6f709..08da68a30acc 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -1591,6 +1591,16 @@ int hci_remove_ext_adv_instance_sync(struct hci_dev *hdev, u8 instance,
+ 	if (!ext_adv_capable(hdev))
+ 		return 0;
+ 
++	/* When adapter is off, remove adv without sending HCI commands */
++	if (!hdev_is_powered(hdev)) {
++		hci_dev_lock(hdev);
++		err = hci_remove_adv_instance(hdev, instance);
++		if (!err)
++			mgmt_advertising_removed(sk, hdev, instance);
++		hci_dev_unlock(hdev);
++		return err;
++	}
++
+ 	err = hci_disable_ext_adv_instance_sync(hdev, instance);
+ 	if (err)
+ 		return err;
+@@ -1772,6 +1782,23 @@ int hci_schedule_adv_instance_sync(struct hci_dev *hdev, u8 instance,
+ 	return hci_start_adv_sync(hdev, instance);
+ }
+ 
++static void hci_clear_ext_adv_ins_during_power_off(struct hci_dev *hdev,
++						   struct sock *sk)
++{
++	struct adv_info *adv, *n;
++	int err;
++
++	hci_dev_lock(hdev);
++	list_for_each_entry_safe(adv, n, &hdev->adv_instances, list) {
++		u8 instance = adv->instance;
++
++		err = hci_remove_adv_instance(hdev, instance);
++		if (!err)
++			mgmt_advertising_removed(sk, hdev, instance);
++	}
++	hci_dev_unlock(hdev);
++}
++
+ static int hci_clear_adv_sets_sync(struct hci_dev *hdev, struct sock *sk)
+ {
+ 	int err;
+@@ -1779,6 +1806,12 @@ static int hci_clear_adv_sets_sync(struct hci_dev *hdev, struct sock *sk)
+ 	if (!ext_adv_capable(hdev))
+ 		return 0;
+ 
++	/* When adapter is off, remove adv without sending HCI commands */
++	if (!hdev_is_powered(hdev)) {
++		hci_clear_ext_adv_ins_during_power_off(hdev, sk);
++		return 0;
++	}
++
+ 	/* Disable instance 0x00 to disable all instances */
+ 	err = hci_disable_ext_adv_instance_sync(hdev, 0x00);
+ 	if (err)
+@@ -5177,9 +5210,27 @@ static int hci_disconnect_all_sync(struct hci_dev *hdev, u8 reason)
+ 	return 0;
+ }
+ 
++static void hci_disable_ext_advertising_temporarily(struct hci_dev *hdev)
++{
++	struct adv_info *adv, *n;
++
++	if (!ext_adv_capable(hdev))
++		return;
++
++	hci_dev_lock(hdev);
++
++	list_for_each_entry_safe(adv, n, &hdev->adv_instances, list)
++		adv->enabled = false;
++
++	hci_dev_clear_flag(hdev, HCI_LE_ADV);
++
++	hci_dev_unlock(hdev);
++}
++
+ /* This function perform power off HCI command sequence as follows:
+  *
+- * Clear Advertising
++ * Disable Advertising Instances. Do not clear adv instances so advertising
++ * can be re-enabled on power on.
+  * Stop Discovery
+  * Disconnect all connections
+  * hci_dev_close_sync
+@@ -5199,9 +5250,7 @@ static int hci_power_off_sync(struct hci_dev *hdev)
+ 			return err;
+ 	}
+ 
+-	err = hci_clear_adv_sync(hdev, NULL, false);
+-	if (err)
+-		return err;
++	hci_disable_ext_advertising_temporarily(hdev);
+ 
+ 	err = hci_stop_discovery_sync(hdev);
+ 	if (err)
 -- 
 2.39.1.456.gfc5497dd1b-goog
 
