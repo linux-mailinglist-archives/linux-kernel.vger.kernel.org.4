@@ -2,154 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1594F67B6D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E28C467B6D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236011AbjAYQV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:21:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
+        id S236016AbjAYQVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:21:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235918AbjAYQVE (ORCPT
+        with ESMTP id S235986AbjAYQVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:21:04 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238105AA62
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:20:40 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id z5so17586043wrt.6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:20:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=slnyAV6MaHfo5cGXPJA+Cna3TI+4G6tWc0UbnmcgEDE=;
-        b=k7ENkjp7CZQlib2dPzrpRmyMLk2gfukicdyDvoQkkc+q1l7jNEDMn/1hrTulY/mGuL
-         rmn/nbCMhDb/1gRZ0hq7CjBuNiBDkqrqYHfBFAUJ0nK40NcvED+n0AuXvhUBOcx63/4N
-         51U2sTdBFF3wO/OwGpjDEHZ3cfIPsEJccfBOdTIcsu1YXWO/Yt3c+H1zfOaXnfrK2JD4
-         Pb2Bc83boGx592EkWRKK7EfwMsmGXOXUIXSnoOiF3IGHrfYwfz70IKyyftDrl0ABbm27
-         KHhcVRwrGZzFbxL3oWULpRu75PA4WQzCiukeuIU5wJjF1vrVx76ocAwZtCU6kea00GFM
-         bp4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=slnyAV6MaHfo5cGXPJA+Cna3TI+4G6tWc0UbnmcgEDE=;
-        b=79N4ceeXkSmptlJshDlKbDw43YfqAM4fLCvmyROURJyOn8HQnbEoD6ux2eGkQk4Gst
-         sLAjWdNZQ3VqxIDcDKheBQ+mqzMd/PHqVE32kf0+E4jegObJSZdAbNfvR9wR/oCg4J8w
-         kNAVQHMuT7ilePmAratfEqMVHByr9Ihaj0Ob7DDy17M23tH/6f7QzewaRYVeeOnmI7wM
-         dRxqklImUCfS0OCGrRlvo/L1ICdXyKgADfqam+++RF8DGrnEgZ/Z2k4pD5JLxlFDyflx
-         IekUM6qX+mYkJP62UYfvtFd0cyjCwJEhez4r7vwifheEZ//TfTgZfNhmqfedhYhnUgjR
-         rUaQ==
-X-Gm-Message-State: AFqh2kpJL3j8oK3MBQGsYYbodNRyB7mkqyYjvqYiH+M3wvBv7e9znbOd
-        4/GZSMlP+TOvEdPEVJN43AE/nQ==
-X-Google-Smtp-Source: AMrXdXsErnmK+EAjDOryVC5A8CCD05H7UGeqMzi84c5REP0WfWlAHqqLMR+3jCLqqnJd+b6QMKPNPA==
-X-Received: by 2002:a05:6000:5c2:b0:2bb:eb3d:8d20 with SMTP id bh2-20020a05600005c200b002bbeb3d8d20mr27126612wrb.43.1674663636289;
-        Wed, 25 Jan 2023 08:20:36 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n21-20020adf8b15000000b0028965dc7c6bsm4729019wra.73.2023.01.25.08.20.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 08:20:35 -0800 (PST)
-Message-ID: <d6512673-a232-c8e5-45f7-e903fc1a01a7@linaro.org>
-Date:   Wed, 25 Jan 2023 17:20:33 +0100
+        Wed, 25 Jan 2023 11:21:36 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258DB5A815;
+        Wed, 25 Jan 2023 08:21:10 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3E64F1F854;
+        Wed, 25 Jan 2023 16:20:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1674663640; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HKEnDl7csQ+0+t/iqHglTAc7cEfTIinKAWBsLL25EQw=;
+        b=Ud2BsBuClrkdEaqETuF2PE7m3P/lFQfFf0x8jnUGEGmx+lZAVH4mCNi30yEOeORtwOfgHM
+        6nn/h7nzj1liEYUjCRBXlhR9EY+rhhKBZRiG2WxN4N+qMjIZxee1ZQfw3O0pCWPvk77TWF
+        xJ7xkEfiD0h4dHd14mys/wWBhCtgfSQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1674663640;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HKEnDl7csQ+0+t/iqHglTAc7cEfTIinKAWBsLL25EQw=;
+        b=9R8LTQinysPeXO1GBb3wDtLBeYizazt1WwrpH1yGLtYHTLA4AFWiTvOG97w9cQBZZNvQke
+        8yon8PzSNCAzneCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 24E601358F;
+        Wed, 25 Jan 2023 16:20:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Xkv/CNhW0WPRCwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 25 Jan 2023 16:20:40 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 96E1FA06B4; Wed, 25 Jan 2023 17:20:39 +0100 (CET)
+Date:   Wed, 25 Jan 2023 17:20:39 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v8 RESEND 3/8] vfs: plumb i_version handling into struct
+ kstat
+Message-ID: <20230125162039.wquoqycq35t2skqj@quack3>
+References: <20230124193025.185781-1-jlayton@kernel.org>
+ <20230124193025.185781-4-jlayton@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 01/10] dt-bindings: pinctrl: qcom: add IPQ5332 pinctrl
-To:     Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org,
-        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, robimarko@gmail.com, quic_gurus@quicinc.com,
-        bhupesh.sharma@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230125104520.89684-1-quic_kathirav@quicinc.com>
- <20230125104520.89684-2-quic_kathirav@quicinc.com>
- <50ec54ba-3468-3448-3fab-f28e97549ad2@linaro.org>
- <0b28f4a3-c445-7473-501b-39cbcfdb9889@quicinc.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0b28f4a3-c445-7473-501b-39cbcfdb9889@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124193025.185781-4-jlayton@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2023 16:49, Kathiravan Thirumoorthy wrote:
->>
->>> @@ -0,0 +1,134 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/pinctrl/qcom,ipq5332-pinctrl.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Qualcomm IPQ5332 TLMM pin controller
->>> +
->>> +maintainers:
->>> +  - Bjorn Andersson <andersson@kernel.org>
->>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> +
->>> +description: |
->>> +  Top Level Mode Multiplexer pin controller in Qualcomm IPQ5332 SoC.
->>> +
->>> +allOf:
->>> +  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: qcom,ipq5332-tlmm
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  interrupts: true
->> missing maxItems
->>
->> Rebase your patches on latest next and use the latest bindings and
->> drivers as starting point.
+On Tue 24-01-23 14:30:20, Jeff Layton wrote:
+> The NFS server has a lot of special handling for different types of
+> change attribute access, depending on the underlying filesystem. In
+> most cases, it's doing a getattr anyway and then fetching that value
+> after the fact.
 > 
+> Rather that do that, add a new STATX_CHANGE_COOKIE flag that is a
+> kernel-only symbol (for now). If requested and getattr can implement it,
+> it can fill out this field. For IS_I_VERSION inodes, add a generic
+> implementation in vfs_getattr_nosec. Take care to mask
+> STATX_CHANGE_COOKIE off in requests from userland and in the result
+> mask.
 > 
-> Changes are based on v6.2-rc1.  I see the maxItems changes in 
-> linux-next. Will update this in V2.
+> Since not all filesystems can give the same guarantees of monotonicity,
+> claim a STATX_ATTR_CHANGE_MONOTONIC flag that filesystems can set to
+> indicate that they offer an i_version value that can never go backward.
+> 
+> Eventually if we decide to make the i_version available to userland, we
+> can just designate a field for it in struct statx, and move the
+> STATX_CHANGE_COOKIE definition to the uapi header.
+> 
+> Reviewed-by: NeilBrown <neilb@suse.de>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Your patches cannot be based on v6.2-rc1. They won't even apply. You
-miss entire development of last month.
-> 
-> 
->>> +  interrupt-controller: true
->>> +  "#interrupt-cells": true
->>> +  gpio-controller: true
->>> +  "#gpio-cells": true
->>> +  gpio-ranges: true
->>> +  wakeup-parent: true
->>> +
->>> +  gpio-reserved-ranges:
->>> +    minItems: 1
->>> +    maxItems: 27
->>> +
->>> +  gpio-line-names:
->>> +    maxItems: 53
->> You have 54 GPIOs.
-> 
-> 
-> Sorry, GPIO ranges are from 0-52, will update it in all places in V2.
+Looks good to me. Feel free to add:
 
-Ah, then the gpio pattern needs a fix.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
+								Honza
 
-Best regards,
-Krzysztof
-
+> ---
+>  fs/stat.c            | 17 +++++++++++++++--
+>  include/linux/stat.h |  9 +++++++++
+>  2 files changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/stat.c b/fs/stat.c
+> index d6cc74ca8486..f43afe0081fe 100644
+> --- a/fs/stat.c
+> +++ b/fs/stat.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/syscalls.h>
+>  #include <linux/pagemap.h>
+>  #include <linux/compat.h>
+> +#include <linux/iversion.h>
+>  
+>  #include <linux/uaccess.h>
+>  #include <asm/unistd.h>
+> @@ -122,6 +123,11 @@ int vfs_getattr_nosec(const struct path *path, struct kstat *stat,
+>  	stat->attributes_mask |= (STATX_ATTR_AUTOMOUNT |
+>  				  STATX_ATTR_DAX);
+>  
+> +	if ((request_mask & STATX_CHANGE_COOKIE) && IS_I_VERSION(inode)) {
+> +		stat->result_mask |= STATX_CHANGE_COOKIE;
+> +		stat->change_cookie = inode_query_iversion(inode);
+> +	}
+> +
+>  	mnt_userns = mnt_user_ns(path->mnt);
+>  	if (inode->i_op->getattr)
+>  		return inode->i_op->getattr(mnt_userns, path, stat,
+> @@ -602,9 +608,11 @@ cp_statx(const struct kstat *stat, struct statx __user *buffer)
+>  
+>  	memset(&tmp, 0, sizeof(tmp));
+>  
+> -	tmp.stx_mask = stat->result_mask;
+> +	/* STATX_CHANGE_COOKIE is kernel-only for now */
+> +	tmp.stx_mask = stat->result_mask & ~STATX_CHANGE_COOKIE;
+>  	tmp.stx_blksize = stat->blksize;
+> -	tmp.stx_attributes = stat->attributes;
+> +	/* STATX_ATTR_CHANGE_MONOTONIC is kernel-only for now */
+> +	tmp.stx_attributes = stat->attributes & ~STATX_ATTR_CHANGE_MONOTONIC;
+>  	tmp.stx_nlink = stat->nlink;
+>  	tmp.stx_uid = from_kuid_munged(current_user_ns(), stat->uid);
+>  	tmp.stx_gid = from_kgid_munged(current_user_ns(), stat->gid);
+> @@ -643,6 +651,11 @@ int do_statx(int dfd, struct filename *filename, unsigned int flags,
+>  	if ((flags & AT_STATX_SYNC_TYPE) == AT_STATX_SYNC_TYPE)
+>  		return -EINVAL;
+>  
+> +	/* STATX_CHANGE_COOKIE is kernel-only for now. Ignore requests
+> +	 * from userland.
+> +	 */
+> +	mask &= ~STATX_CHANGE_COOKIE;
+> +
+>  	error = vfs_statx(dfd, filename, flags, &stat, mask);
+>  	if (error)
+>  		return error;
+> diff --git a/include/linux/stat.h b/include/linux/stat.h
+> index ff277ced50e9..52150570d37a 100644
+> --- a/include/linux/stat.h
+> +++ b/include/linux/stat.h
+> @@ -52,6 +52,15 @@ struct kstat {
+>  	u64		mnt_id;
+>  	u32		dio_mem_align;
+>  	u32		dio_offset_align;
+> +	u64		change_cookie;
+>  };
+>  
+> +/* These definitions are internal to the kernel for now. Mainly used by nfsd. */
+> +
+> +/* mask values */
+> +#define STATX_CHANGE_COOKIE		0x40000000U	/* Want/got stx_change_attr */
+> +
+> +/* file attribute values */
+> +#define STATX_ATTR_CHANGE_MONOTONIC	0x8000000000000000ULL /* version monotonically increases */
+> +
+>  #endif
+> -- 
+> 2.39.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
