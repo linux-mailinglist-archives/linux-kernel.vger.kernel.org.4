@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A23467BC46
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5862967BC48
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:10:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236365AbjAYUKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S236417AbjAYUKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:10:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236354AbjAYUJw (ORCPT
+        with ESMTP id S236405AbjAYUJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:09:52 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60ED75AA6C
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:09:30 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id q10so1265856wrm.4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:09:30 -0800 (PST)
+        Wed, 25 Jan 2023 15:09:59 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B068F5CFF5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:09:38 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id k16so14625437wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:09:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NDxe4oIJJSUOqPRwp3G0IGOgJo50hIDpNvcK0HbcW+I=;
-        b=qAtHh3HwGlWTIavwZBR9eHLTvK0r//m0TwA4Wf7MIK+sqNyRDS3PBTtmyYxSdDSyAz
-         0wCiETk9qiVzPJvSFoDDOueI0oJhHGQ5Lqa6G+DLURT6rn7UocCXrK2Pp5gYfhFFpOQc
-         Nnc21ecuBb/maD0nI2yjRXyHfVHCjFXU8sIq6WkU7w4r7e50X5c+27sGqh91QyW44z7N
-         qp5wDQqjntoRCjZ32ps2I21XkincXo2a7MgfTnSvvptA0UynoKz/F4ohixYTn9jQWKr3
-         3BgCXgoqm+RkgjaTMCe9F2TMhzCHvkOZd8F6RsN5TL5HBO2tckVNf6KlnSQsjQb7/MVv
-         ylxw==
+        bh=IUNK4telbL5iEm9hMJeiQP6SRHQdjAr35nMvZWBiILs=;
+        b=REd4vr+NBUQzVGTn98U8rYpH2ztbkzE46mstrYzWVGqc6JaLtIGyXUEXeQaMNry8kG
+         8Np9kCEW0zrxUpZ0uq/bQCP247NQl8Ygff6Rb9Mw3xJXO4fufvQrpVUGHZJMM3+PjA/D
+         bAWsJhV67XoXXs2EOA3HdfZY/4ohZvP8e8p4E9wInWYxMjseqMg7XlW+Tv94sDV3gUmg
+         MdADRNptB9qFbCXuJzg8rPdfmcZa7Ax0OIT4RHo8R8inA0v+6DJ4A3S7keWLmHJPfb/q
+         i39yTLdw2v91ILvGUGOOm8JeHw6bWSmVhJD0XSL6xTtFgHdQU6gZcgstxE0dzLk46uyd
+         9MHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NDxe4oIJJSUOqPRwp3G0IGOgJo50hIDpNvcK0HbcW+I=;
-        b=bqyNKzdnxHK1BiNOCUVrmYg1X6JhYhdW2mnMiHu+sepySAx0gwPKcwP3cxXC6CtVwf
-         +B9Vt3f72vUYWNbj33NVzUa8JOjJITeChKS5BSsWPCc2DlJlQtFYa370+7EF8ODIxBqX
-         krx6BwBpfmrLIiSNrf0m8kU1KBu6lIT6kIx1Gj/tBy8wVrOjoyrunMycZTJFIjRWivSE
-         mEAeQZ6DEy50zT+MyunKCPzmQuddwvT2wcfM13Wzbfc+VoJqfQvau1KJRF2SqPU+L1J/
-         HNt5Ez1hXd7OggNimgezIRiotaZotl6Fh/x7VuaOFJQn9+N6DTclXK+bHrvuhOb6gL58
-         F49Q==
-X-Gm-Message-State: AO0yUKWQ2leQzaMDYzP4J5lS+vD3CT1kKmccTPQww/kN0vFo1ddwMyKy
-        qxx2aCQ08uXynA487f3Ar3M=
-X-Google-Smtp-Source: AK7set+gKyL1/EbwngB0SCDE5eQm9o64IfenrGX4+jjBe5iXQY2tEPg5qF3+P6yRQEdKGjIvZeijFg==
-X-Received: by 2002:adf:e3d0:0:b0:2bf:b41c:61de with SMTP id k16-20020adfe3d0000000b002bfb41c61demr1049378wrm.4.1674677368768;
-        Wed, 25 Jan 2023 12:09:28 -0800 (PST)
+        bh=IUNK4telbL5iEm9hMJeiQP6SRHQdjAr35nMvZWBiILs=;
+        b=HGGpgvEoTEZGdG0N0p5x/Bj9Fhmu4P8pFrRTOIhHoql4Te33pQhQoM5IhYhlDJWigj
+         DY2iM3frOuRln+9rrx68G2GnxiwkSuUd3wt0+/Whqxvzq82NN+PRgvGXEhFzPhC6QUwx
+         Eea4a92yBgrrh7Zh63hzhtxPa59qHMX7qo88/PWmBFlrDE3+FBHvu9L4tQuE3EJUpi0n
+         wD6JMQ04EZg5sXu0r0mWGR86lHHZWrniokA3No1upp706v5GB50RS2C5hy4+J1vNqA72
+         L2L6DM7cx8beTy6bYdlS/VzyvYM+QP6AKSrxXdAEgWKArseJ/iG9K9fKr3oFdKjHHQGW
+         etug==
+X-Gm-Message-State: AFqh2kp+Lu17EzFC9tp0B+z0QysfcWBFKakHxT3EBMtbvu1EjWSKGdP8
+        FJ3fyhIIK57p+ObfQmJ6Qu4=
+X-Google-Smtp-Source: AMrXdXuepv1cKXrMXx18nZpaMQWWKMg9TVj9FBgPL1rBbx9bj+2ZLOkP+Euv57+gjC7jBl1bo1b82Q==
+X-Received: by 2002:a05:600c:1c83:b0:3da:ff24:4b93 with SMTP id k3-20020a05600c1c8300b003daff244b93mr8571356wms.3.1674677374737;
+        Wed, 25 Jan 2023 12:09:34 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p57935ca5.dip0.t-ipconnect.de. [87.147.92.165])
-        by smtp.gmail.com with ESMTPSA id f5-20020adffcc5000000b002bfae3f6802sm5124513wrs.58.2023.01.25.12.09.27
+        by smtp.gmail.com with ESMTPSA id h24-20020a05600c499800b003dc1a525f22sm2642847wmp.25.2023.01.25.12.09.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 12:09:28 -0800 (PST)
-Date:   Wed, 25 Jan 2023 21:09:26 +0100
+        Wed, 25 Jan 2023 12:09:34 -0800 (PST)
+Date:   Wed, 25 Jan 2023 21:09:32 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 10/11] staging: rtl8192e: Remove unused variables
- txbeac.., txman.. and txcmdp..
-Message-ID: <6c922591c48512692f77729ac91849ebb4e61bd1.1674675808.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH v2 11/11] staging: rtl8192e: Remove unused variables
+ txbytes.., txbyt.. and signa..
+Message-ID: <c469f82619625fecbed95532967cc7ec2b12e5f9.1674675808.git.philipp.g.hortmann@gmail.com>
 References: <cover.1674675808.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,57 +71,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-txbeaconerr, txmanageokint and txcmdpktokint are initialized and increased
-but never read. Remove dead code.
+txbytesmulticast, txbytesbroadcast and signal_quality are initialized and
+increased or set but never read. Remove dead code.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 8 +-------
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 3 ---
- 2 files changed, 1 insertion(+), 10 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c | 1 -
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c   | 6 +-----
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h   | 3 ---
+ 3 files changed, 1 insertion(+), 9 deletions(-)
 
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+index 9d13fda33fbf..3989d484cc33 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+@@ -1613,7 +1613,6 @@ static void _rtl92e_process_phyinfo(struct r8192_priv *priv, u8 *buffer,
+ 
+ 			tmp_val = priv->stats.slide_evm_total /
+ 				  slide_evm_statistics;
+-			priv->stats.signal_quality = tmp_val;
+ 			priv->stats.last_signal_strength_inpercent = tmp_val;
+ 		}
+ 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 4cc90425fa4c..2c5edda74e73 100644
+index 2c5edda74e73..f8a8ece40ac1 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -2139,11 +2139,7 @@ static irqreturn_t _rtl92e_irq(int irq, void *netdev)
- 		goto done;
- 	}
+@@ -1616,11 +1616,7 @@ static short _rtl92e_tx(struct net_device *dev, struct sk_buff *skb)
+ 	type = WLAN_FC_GET_TYPE(fc);
+ 	pda_addr = header->addr1;
  
--	if (inta & IMR_TBDER)
--		priv->stats.txbeaconerr++;
--
- 	if (inta  & IMR_MGNTDOK) {
--		priv->stats.txmanageokint++;
- 		_rtl92e_tx_isr(dev, MGNT_QUEUE);
- 		spin_unlock_irqrestore(&priv->irq_th_lock, flags);
- 		if (priv->rtllib->ack_tx_to_ieee) {
-@@ -2155,10 +2151,8 @@ static irqreturn_t _rtl92e_irq(int irq, void *netdev)
- 		spin_lock_irqsave(&priv->irq_th_lock, flags);
- 	}
+-	if (is_broadcast_ether_addr(pda_addr))
+-		priv->stats.txbytesbroadcast += skb->len - fwinfo_size;
+-	else if (is_multicast_ether_addr(pda_addr))
+-		priv->stats.txbytesmulticast += skb->len - fwinfo_size;
+-	else
++	if (!is_broadcast_ether_addr(pda_addr) && !is_multicast_ether_addr(pda_addr))
+ 		priv->stats.txbytesunicast += skb->len - fwinfo_size;
  
--	if (inta & IMR_COMDOK) {
--		priv->stats.txcmdpktokint++;
-+	if (inta & IMR_COMDOK)
- 		_rtl92e_tx_isr(dev, TXCMD_QUEUE);
--	}
- 
- 	if (inta & IMR_HIGHDOK)
- 		_rtl92e_tx_isr(dev, HIGH_QUEUE);
+ 	spin_lock_irqsave(&priv->irq_th_lock, flags);
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index f8b2201ea288..c6a4ac6ce959 100644
+index c6a4ac6ce959..4cf776094ac0 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -184,9 +184,6 @@ enum reset_type {
+@@ -184,8 +184,6 @@ enum reset_type {
  
  struct rt_stats {
  	unsigned long received_rate_histogram[4][32];
--	unsigned long txbeaconerr;
--	unsigned long txmanageokint;
--	unsigned long txcmdpktokint;
- 	unsigned long txbytesmulticast;
- 	unsigned long txbytesbroadcast;
+-	unsigned long txbytesmulticast;
+-	unsigned long txbytesbroadcast;
  	unsigned long txbytesunicast;
+ 	unsigned long rxbytesunicast;
+ 	unsigned long txretrycount;
+@@ -195,7 +193,6 @@ struct rt_stats {
+ 	unsigned long	slide_rssi_total;
+ 	unsigned long slide_evm_total;
+ 	long signal_strength;
+-	long signal_quality;
+ 	long last_signal_strength_inpercent;
+ 	long	recv_signal_power;
+ 	u8 rx_rssi_percentage[4];
 -- 
 2.39.1
 
