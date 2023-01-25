@@ -2,79 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BA367C09E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B72E767C0A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjAYXJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 18:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S230455AbjAYXOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 18:14:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjAYXJo (ORCPT
+        with ESMTP id S230044AbjAYXOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 18:09:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748A737F28;
-        Wed, 25 Jan 2023 15:09:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 25 Jan 2023 18:14:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AB83B67A
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 15:13:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674688435;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZxXC6RkcbYR55zhaEzAPuw/LbFxa4LSYY65NGg5ryZY=;
+        b=GMV2PfU9DOfCx03bkpWoMyQlIx88nUudHNupts8L3tQDzvtslQhJsbFPEgwmM6iy6ALdWy
+        mBRokXlXeAWnEd3rTGjnLyYA2L20ryCov2fR8Y9bLVCc/+poUWXH2S7ZUNZpMCcIQhkgOZ
+        cXhr12sGxg30PLzxx9HDyTjLY6b9wcc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-411-hmWo8uBOObCoE9yJ5FisXg-1; Wed, 25 Jan 2023 18:13:49 -0500
+X-MC-Unique: hmWo8uBOObCoE9yJ5FisXg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07A0961647;
-        Wed, 25 Jan 2023 23:09:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B6FCC433EF;
-        Wed, 25 Jan 2023 23:09:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674688182;
-        bh=hCZ1XZTCSjWNvYxTSWzJ96eH/+NdoV+UKJq6grJNktI=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=XVVbEZ2kErRVnh97BqcWzoxJC5vh7Wn67EbUPoNnLYZUoz6EHueLMmDFG+xfpX8zY
-         zp75rSQSDY21OrXuj1KKP/Xcnmh/EazCRNkl4y6RtS25VJAO4xEgIzo8lGTOM2hSRu
-         FEoD2awLy5d1XvQ74PTQM24/JZamMA/zEYebtOqSJqHf0L31jqhGKk3zSy7oYNDt5b
-         sKc/c5LQzbt4EUOCRrgwXQPX3b2ubDgh9Nfcl+7IE/xSPs21n87TS1fyLvv3dFmFji
-         9pqXQX/d2fEAqoVaw5DZbrqDHZl1ma+UG1tIgWsrW/0qXXj+ry+cEfUNaTU6LXxqWy
-         8RLQqhNcCCaIg==
-Message-ID: <3dfa96e2dba814930445e8dcfae97e89.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6AE13801779;
+        Wed, 25 Jan 2023 23:13:49 +0000 (UTC)
+Received: from [172.30.41.16] (unknown [10.22.32.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F399040C1141;
+        Wed, 25 Jan 2023 23:13:48 +0000 (UTC)
+Subject: [PATCH] genirq/msi: Fix fwnode leak
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     maz@kernel.org, tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        alex.williamson@redhat.com
+Date:   Wed, 25 Jan 2023 16:13:48 -0700
+Message-ID: <167468839713.2297784.1309086853550595503.stgit@omen>
+User-Agent: StGit/1.5.dev2+g9ce680a52bd9
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230120092053.182923-1-angelogioacchino.delregno@collabora.com>
-References: <20230120092053.182923-1-angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v4 00/23] MediaTek clocks cleanups and improvements
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        fparent@baylibre.com, chun-jie.chen@mediatek.com,
-        sam.shih@mediatek.com, y.oudjana@protonmail.com,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        ryder.lee@kernel.org, daniel@makrotopia.org,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
-        ikjn@chromium.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, mturquette@baylibre.com
-Date:   Wed, 25 Jan 2023 15:09:40 -0800
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting AngeloGioacchino Del Regno (2023-01-20 01:20:30)
->=20
-> * Some more spare cleanups here and there.
->=20
-> All of this was manually tested on various Chromebooks (with different MTK
-> SoCs) and no regression was detected.
->=20
+kmemleak is reporting pairs of leaked buffers when PCI devices are
+unbound from their drivers.  One of these buffers contains the name of
+the interrupt as generated for the msi_domain_template bundle in
+msi_create_device_irq_domain().  This name is passed through
+irq_domain_alloc_named_fwnode(), where an irqchip_rwid is allocated,
+along with a separate allocation via kasprintf() for another copy of
+the name.  These are the two leaked buffers.
 
-Do you want me to pick this up directly? Or is there some mediatek
-maintainer willing to send me a PR? If I don't hear anything soon I'll
-go sweep my inbox for mediatek clk patches and start applying them.
+Resolve this by adding the missing call to irq_domain_free_fwnode() in
+msi_remove_device_irq_domain().
+
+Fixes: 27a6dea3ebaa ("genirq/msi: Provide msi_create/free_device_irq_domain()")
+Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+---
+ kernel/irq/msi.c |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+index 955267bbc2be..66dc956505b8 100644
+--- a/kernel/irq/msi.c
++++ b/kernel/irq/msi.c
+@@ -1015,6 +1015,7 @@ void msi_remove_device_irq_domain(struct device *dev, unsigned int domid)
+ {
+ 	struct msi_domain_info *info;
+ 	struct irq_domain *domain;
++	struct fwnode_handle *fwnode;
+ 
+ 	msi_lock_descs(dev);
+ 
+@@ -1025,7 +1026,9 @@ void msi_remove_device_irq_domain(struct device *dev, unsigned int domid)
+ 
+ 	dev->msi.data->__domains[domid].domain = NULL;
+ 	info = domain->host_data;
++	fwnode = domain->fwnode;
+ 	irq_domain_remove(domain);
++	irq_domain_free_fwnode(fwnode);
+ 	kfree(container_of(info, struct msi_domain_template, info));
+ 
+ unlock:
+
+
