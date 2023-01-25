@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCCC67BAA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0901A67BAC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjAYTWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 14:22:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        id S236243AbjAYTXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 14:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235892AbjAYTWL (ORCPT
+        with ESMTP id S234966AbjAYTXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 14:22:11 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E651259E4D
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:22:08 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id 188so24325596ybi.9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:22:08 -0800 (PST)
+        Wed, 25 Jan 2023 14:23:06 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48AA76B1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:22:50 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-4c24993965eso278097077b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:22:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=azRxZ4iz/UmvW0JqPrqtZcKNmaFt9MhDUKzgc4KSKbs=;
-        b=idbJO946IIJ5xclJl8K3ScrKphDS9TF1tg1AgsB8MPco32Ta3+qR61NnmqeUtsnx6v
-         goCUeETP5lzAzmASwAR43MDdzy2mxaLRi4K6yZE3Q+T5C1FUbuWCmQDSDtqKn5s2e6iw
-         g3L5+Ey8VBu5ZDVtB0a1Axssd66xmU+yYweeF+hE6jQwYilC1xMJq5jCj+NjIEVUsfL4
-         tw7nY9DM/DzPYd8vrkO+1JZY6FVSYBMjhRJz+WIxF8k5j1BI+Qpdb88Is7APtmnyodC7
-         tcl2VYHmnzhTEoT5QVoxpB++zHDpcXCuz10aLB8wrCQNw685txpV1MvZDG3GANSg7b1j
-         9Xwg==
+        bh=PCnMypYs8jymH6Ufuva+9r/69Y/DZs8kYxwQEYrzQFk=;
+        b=hXTUs83qvSMCw0sqrewtph/1zyRGQA8EwV9VOqASoIhN1O27YlTeLHvU30LwpkaPKE
+         6ZtbduOBpeU0Mk6yScQyxHGjdOZ8W8NbAK7HCSbKR2qQVwpslpoP2Mqh8DnM60UrkSEV
+         Fy/rJx/xAj6ReR1yQheSDvUeiLsUOZe36GsXUe+/pA5dp4+pot+ScO1k5jhTafZOkoJo
+         vEjMe7B3/0BupSIQn5CSlkYjolaKBFMYB73xyId061H8p1ZYZbkvvK9SPdZltanRDpUl
+         vOuM+M/xFo7tmOP85pcv8h038+SVqlBqYWxO3Lgun0O5W06va+PJHK2pFsHgrhvmIiGL
+         lvow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=azRxZ4iz/UmvW0JqPrqtZcKNmaFt9MhDUKzgc4KSKbs=;
-        b=xxHguFuIhR5j4RdkcLtzhkDQ08W+R9BTRq6dt+P+39BjKObe/ffdjfe3+7tyvLfpQp
-         KogLqgK0Ey3/Vlf76r12gUa9bPnGvfbVJ0wGAzVBP8k417/pIIiDKuYYAQAub/AQeeMM
-         l5WiLr2roQVADCp59R53ZDmIeC7fpufl60+7ADegOP8iaX2dcz1jnTI0v0aiqsByP8gz
-         wHaYCsMkw/4wjaiu5nS6bpnc6ebrWqCj2pxJTtephk/8tIIfPzuUDITu6rSd5wDcM1eB
-         zmPXV/q49K/fnC0dLr6mdklssosqFxolCxhRsWoG/LYfxU+icxBXfFkMDxWx8fL9tVT+
-         u1Mw==
-X-Gm-Message-State: AO0yUKW09fcN0q8+MvYBCJbg7sDYErmCeZbyu94zMNBz2NR/Tm37Fo+W
-        qQY/UbAraw299SOTacRC4lsk3wjltdUE34RUH+G76A==
-X-Google-Smtp-Source: AK7set9Keebho/efVX9+GO9rxFk2PCEOZWbQBvt6Ld/Tpsz3uuvCSMXu6oGPdxC/ITtQ87qnzhMkMAEzeywlAhveKx4=
-X-Received: by 2002:a25:c247:0:b0:80b:6201:bee7 with SMTP id
- s68-20020a25c247000000b0080b6201bee7mr946541ybf.340.1674674527537; Wed, 25
- Jan 2023 11:22:07 -0800 (PST)
+        bh=PCnMypYs8jymH6Ufuva+9r/69Y/DZs8kYxwQEYrzQFk=;
+        b=oFEGdGNRHmVnlBTS+zs0GfYrr2SQNGb7AvfV7MpP4XXK4CRFmAIwv1E7mkPmjFL1ey
+         MljH56AbFPd7WMqwVB1fNN2HQ6MS9h8654jJgDcirNbw1PlDwFeqbrFiWTWlq6yc4ytU
+         6by1KX4KUnEBqOjVXcwZ5PF/xi/JckRPayq8ZvWzcA/HNSQ+L7Nu0evggb1uJfeKEwDP
+         IzYPv5xW8W9O36LrfbO4IlMDFW3UW/9A0yLBpJs+Ef4Hmq3sjvNZlEpo3jrsWRkw5D98
+         7Evk/MdPlS0aLdUVbiictI1q3dV6ezbbm0lhkS1QMV2GEQtTDEZ9Ke2m8SqbwoTCnIXo
+         yZdQ==
+X-Gm-Message-State: AO0yUKVa8rMY2bjUJiG9mT1ee6EZzblU048kASC0n1S4011GIuLfBfom
+        gIIFMp/26w0IJqjuDjAXZ5Oz0fdkdP7KUi4QGbeAOQ==
+X-Google-Smtp-Source: AK7set/Rj29H3r8vHaYccCmp943Un+QyMRF/w8dcRdt99GFw8apI+/L+5tSmXBTsBLdlTBniti7hA8kyFbpjr3H10kc=
+X-Received: by 2002:a0d:d456:0:b0:507:26dc:ebd with SMTP id
+ w83-20020a0dd456000000b0050726dc0ebdmr298632ywd.455.1674674569763; Wed, 25
+ Jan 2023 11:22:49 -0800 (PST)
 MIME-Version: 1.0
 References: <20230125083851.27759-1-surenb@google.com> <20230125083851.27759-2-surenb@google.com>
- <Y9Dx0cPXF2yoLwww@hirez.programming.kicks-ass.net> <CAJuCfpEcVCZaCGzc-Wim25eaV5e6YG1YJAAdKwZ6JHViB0z8aw@mail.gmail.com>
- <Y9F28J9njAtwifuL@casper.infradead.org>
-In-Reply-To: <Y9F28J9njAtwifuL@casper.infradead.org>
+ <Y9F19QEDX5d/44EV@casper.infradead.org>
+In-Reply-To: <Y9F19QEDX5d/44EV@casper.infradead.org>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 25 Jan 2023 11:21:56 -0800
-Message-ID: <CAJuCfpHO7g-5GZep0e7r=dFTBhVHpN3R_pHMGOqetgrKyYzMFQ@mail.gmail.com>
+Date:   Wed, 25 Jan 2023 11:22:38 -0800
+Message-ID: <CAJuCfpH+LMFX=TT04gSMA05cz_-CXMum6fobRrduWvzm1HWPmQ@mail.gmail.com>
 Subject: Re: [PATCH v2 1/6] mm: introduce vma->vm_flags modifier functions
 To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, liam.howlett@oracle.com, ldufour@linux.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
         axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
         jannh@google.com, shakeelb@google.com, tatashin@google.com,
         edumazet@google.com, gthelen@google.com, gurua@google.com,
@@ -138,36 +137,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 10:37 AM Matthew Wilcox <willy@infradead.org> wrote:
+On Wed, Jan 25, 2023 at 10:33 AM Matthew Wilcox <willy@infradead.org> wrote:
 >
-> On Wed, Jan 25, 2023 at 08:49:50AM -0800, Suren Baghdasaryan wrote:
-> > On Wed, Jan 25, 2023 at 1:10 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > +     /*
-> > > > +      * Flags, see mm.h.
-> > > > +      * WARNING! Do not modify directly.
-> > > > +      * Use {init|reset|set|clear|mod}_vm_flags() functions instead.
-> > > > +      */
-> > > > +     unsigned long vm_flags;
-> > >
-> > > We have __private and ACCESS_PRIVATE() to help with enforcing this.
-> >
-> > Thanks for pointing this out, Peter! I guess for that I'll need to
-> > convert all read accesses and provide get_vm_flags() too? That will
-> > cause some additional churt (a quick search shows 801 hits over 248
-> > files) but maybe it's worth it? I think Michal suggested that too in
-> > another patch. Should I do that while we are at it?
+> On Wed, Jan 25, 2023 at 12:38:46AM -0800, Suren Baghdasaryan wrote:
+> > +/* Use when VMA is not part of the VMA tree and needs no locking */
+> > +static inline void init_vm_flags(struct vm_area_struct *vma,
+> > +                              unsigned long flags)
+> > +{
+> > +     vma->vm_flags = flags;
 >
-> Here's a trick I saw somewhere in the VFS:
+> vm_flags are supposed to have type vm_flags_t.  That's not been
+> fully realised yet, but perhaps we could avoid making it worse?
 >
->         union {
->                 const vm_flags_t vm_flags;
->                 vm_flags_t __private __vm_flags;
->         };
+> >       pgprot_t vm_page_prot;
+> > -     unsigned long vm_flags;         /* Flags, see mm.h. */
+> > +
+> > +     /*
+> > +      * Flags, see mm.h.
+> > +      * WARNING! Do not modify directly.
+> > +      * Use {init|reset|set|clear|mod}_vm_flags() functions instead.
+> > +      */
+> > +     unsigned long vm_flags;
 >
-> Now it can be read by anybody but written only by those using
-> ACCESS_PRIVATE.
+> Including changing this line to vm_flags_t
 
-Huh, this is quite nice! I think it does not save us from the cases
-when vma->vm_flags is passed by a reference and modified indirectly,
-like in ksm_madvise()? Though maybe such usecases are so rare (I found
-only 2 cases) that we can ignore this?
+Good point. Will make the change. Thanks!
