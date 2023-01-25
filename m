@@ -2,264 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D27867AB73
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F403F67AB6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235040AbjAYIO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
+        id S234981AbjAYIM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:12:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbjAYIOW (ORCPT
+        with ESMTP id S234640AbjAYIMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:14:22 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2D814238
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:14:21 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id r9so16175022wrw.4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:14:20 -0800 (PST)
+        Wed, 25 Jan 2023 03:12:55 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2F58A75;
+        Wed, 25 Jan 2023 00:12:54 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id 5so11869567plo.3;
+        Wed, 25 Jan 2023 00:12:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MRNURLlJxmHnFNrJKg9HhEJFu9q+f4Oy8+pIncn6axs=;
-        b=Ho35g2qD9xGRHO1y8uNy1ChakQl2Axuk7krR6RtDn8/zGRaaeU3aMS0eWMMCzM5puE
-         +HkVB6rP+/ggienaVais/JFeu04sK0g+3lrEqRHsyc1NspUjf48X92Ot9x7DuNHUA1SP
-         SCKauQxua3o+A0lxRjgEcp93vVBZcwT+9b8+eTlbKidTnk1GHoa/Lwdg4u6kgwxuI2pj
-         MJDLr8zsBZ0g4cKhoYTRKFpCE2CfgfGZqrnfbrgRNj1iedIKOmKLBqbSdeHJC8DRJ0iq
-         O/K4qjKR17fWoe/3sK4hSygTz6B87S7B5VT1VdwHPI7innI/yYny0pZWtQ0AWuf0CEiF
-         hq1A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=dz5A2+hnEs/TwXVPFfFU6bx14y/lc5WXCpWs10bBDqM=;
+        b=iXPa1+kxoWTwOCe5ehYgKWhQRJqeN3VcuVAIISKDjU6u45Z1jC/vRleCX8uRrdCd90
+         Edgqo96OZFSR5caNAqRnVmaxv6fTzgd4B4CafII8OwaafU9hZnazbQ+JnPvCeImdUXhP
+         MacF+RIwZ259Ii4On0zq2za1MJ7kw0W02dCRNvunZhMmtjzH4jl1hLMxM7lESSrwLZyU
+         1hQ0ZMi8WhmWzQyhVU3K7VIN9tDsz3Z3JFQlgaLFJK4QvdP0d0GSkJphlUcbLxdSCmD6
+         gtuo+cE8ySGDyBZZLaWVWa/V2HbkS3gjMIe39YrWCG5ueF9K9kml/NMREBGVKXgZlbHR
+         nITA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MRNURLlJxmHnFNrJKg9HhEJFu9q+f4Oy8+pIncn6axs=;
-        b=DoGRb2ilTeJkpVruNxzBJzNuMrjwlRYse0oHebGiwX/Fkozgz9fxee9NmdiwNd7yml
-         F4QYgY4o5Gaz07izzGN1hAJhA48HT+MxdCAXmYTwm/7MEEOLI3q/EWklolA5GZDOjvgA
-         P1if3ectP6hiDi53t/lFIptrR414+mOYcu44pw7pNMAWLEiOAlW5Z0i8nNKZhTgm/h9A
-         W8HLGM5HYfdFxhm2ebJBmg6w7Xhy2BtZC3VjJ2FL/hgf+uwY3M9FL6axL3xFeShxysAQ
-         d0zmZ4Gb+FBufu5l08R/MNE/YAsOIhuIyh0Q82Rj4TbFD2mhQHY88sBFYpIn/WINqpFj
-         s13g==
-X-Gm-Message-State: AFqh2kpJQz6QckIumeW8mxkPm6hcVNGnXKdGzj8PmVvvfgPy7Xy4jIEV
-        WMCnavgXxN59T2uzkaZPYHFJZA==
-X-Google-Smtp-Source: AMrXdXtGV8ESQHqcEI6g/gFNtzz/UJ8HTGWnVn6NNUIJ8Q5yWzXCYjm3iyROWOksYVwBNr1dtzLTEQ==
-X-Received: by 2002:adf:dc81:0:b0:2a1:328f:23aa with SMTP id r1-20020adfdc81000000b002a1328f23aamr27635936wrj.6.1674634459446;
-        Wed, 25 Jan 2023 00:14:19 -0800 (PST)
-Received: from alex-rivos.home (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
-        by smtp.gmail.com with ESMTPSA id a3-20020adff7c3000000b002bdc3f5945dsm3681730wrq.89.2023.01.25.00.14.18
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dz5A2+hnEs/TwXVPFfFU6bx14y/lc5WXCpWs10bBDqM=;
+        b=V2fw3KnGSGmzfglnWJWHeFbrtvHLSSB+3p+mcm56ACUxC02E6+Vn97ignptviGWfD2
+         pu9tnZa+jJZ9hYft1xSXdAPBYSvogoiK5WxoMgIgbPVGJJwzyXkT0UWM/ps03oniogwc
+         fmldPoUEol8z3b4aZsivjfhhPqrMm4n5gunX9FHksgdw1G20mJ6y9YJrDszekGo2gFXI
+         oy0PP8vwTfW330fxpXSbvRSZj+1j2dqfoOtTNO5DSe5lYGw/190/l8n2JKS9ZCzfxRy0
+         24Dw5jyCqyatqcxHFP9QCdbrcmdZWnBEsbwirZm88L+inpEAboFWY1VRAAVerP6cHHif
+         ft6Q==
+X-Gm-Message-State: AFqh2krCfU1oGlLbHsqfQOgQqPtDQkrxzLQuIl/xvDUtdoZkELw1/Aig
+        +l4/fK4MU52gzdSO1la5shk=
+X-Google-Smtp-Source: AMrXdXu+Obv6+t6XFycPBaTAs5DSdUd2i91WLyKPwzmCyG4EDIRDrcl5Y5T6OfknsSzwNmDfebKUsg==
+X-Received: by 2002:a17:902:e847:b0:194:7cd3:329a with SMTP id t7-20020a170902e84700b001947cd3329amr40518184plg.10.1674634373648;
+        Wed, 25 Jan 2023 00:12:53 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:269f:fac5:4c75:d85e])
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902bd0400b0017f756563bcsm2992139pls.47.2023.01.25.00.12.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 00:14:19 -0800 (PST)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Rob Herring <robh@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: [PATCH v5 2/2] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Date:   Wed, 25 Jan 2023 09:12:14 +0100
-Message-Id: <20230125081214.1576313-3-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230125081214.1576313-1-alexghiti@rivosinc.com>
-References: <20230125081214.1576313-1-alexghiti@rivosinc.com>
+        Wed, 25 Jan 2023 00:12:53 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        Michael Petlan <mpetlan@redhat.com>
+Subject: [PATCH] perf stat: Hide invalid uncore event output for aggr mode
+Date:   Wed, 25 Jan 2023 00:12:51 -0800
+Message-Id: <20230125081251.1244997-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the early page table creation, we used to set the mapping for
-PAGE_OFFSET to the kernel load address: but the kernel load address is
-always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-PAGE_OFFSET is).
+The current display code for perf stat iterates given cpus and build the
+aggr map to collect the event data for the aggregation mode.
 
-But actually we don't have to establish this mapping (ie set va_pa_offset)
-that early in the boot process because:
+But uncore events have their own cpu maps and it won't guarantee that
+it'd match to the aggr map.  For example, per-package uncore events
+would generate a single value for each socket.  When user asks per-core
+aggregation mode, the output would contain 0 values for other cores.
 
-- first, setup_vm installs a temporary kernel mapping and among other
-  things, discovers the system memory,
-- then, setup_vm_final creates the final kernel mapping and takes
-  advantage of the discovered system memory to create the linear
-  mapping.
+Thus it needs to check the uncore PMU's cpumask and if it matches to the
+current aggregation id.
 
-During the first phase, we don't know the start of the system memory and
-then until the second phase is finished, we can't use the linear mapping at
-all and phys_to_virt/virt_to_phys translations must not be used because it
-would result in a different translation from the 'real' one once the final
-mapping is installed.
+Before:
+  $ sudo ./perf stat -a --per-core -e power/energy-pkg/ sleep 1
 
-So here we simply delay the initialization of va_pa_offset to after the
-system memory discovery. But to make sure noone uses the linear mapping
-before, we add some guard in the DEBUG_VIRTUAL config.
+   Performance counter stats for 'system wide':
 
-Finally we can use PUD/P4D/PGD hugepages when possible, which will result
-in a better TLB utilization.
+  S0-D0-C0              1               3.73 Joules power/energy-pkg/
+  S0-D0-C1              0      <not counted> Joules power/energy-pkg/
+  S0-D0-C2              0      <not counted> Joules power/energy-pkg/
+  S0-D0-C3              0      <not counted> Joules power/energy-pkg/
 
-Note that we rely on the firmware to protect itself using PMP.
+         1.001404046 seconds time elapsed
 
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-Acked-by: Rob Herring <robh@kernel.org> # DT bits
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+  Some events weren't counted. Try disabling the NMI watchdog:
+  	echo 0 > /proc/sys/kernel/nmi_watchdog
+  	perf stat ...
+  	echo 1 > /proc/sys/kernel/nmi_watchdog
+
+The core 1, 2 and 3 should not be printed because the event is handled
+in a cpu in the core 0 only.  With this change, the output becomes like
+below.
+
+After:
+  $ sudo ./perf stat -a --per-core -e power/energy-pkg/ sleep 1
+
+   Performance counter stats for 'system wide':
+
+  S0-D0-C0              1               2.09 Joules power/energy-pkg/
+
+Fixes: b89761351089 ("perf stat: Update event skip condition for system-wide per-thread mode and merged uncore and hybrid events")
+Cc: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Cc: Michael Petlan <mpetlan@redhat.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- arch/riscv/include/asm/page.h | 16 ++++++++++++++++
- arch/riscv/mm/init.c          | 24 ++++++++++++++++++------
- arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
- drivers/of/fdt.c              | 11 ++++++-----
- 4 files changed, 56 insertions(+), 11 deletions(-)
+ tools/perf/util/stat-display.c | 37 ++++++++++++++++++++++++++++------
+ 1 file changed, 31 insertions(+), 6 deletions(-)
 
-diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-index 728eee53152a..bd7b9dda1e4f 100644
---- a/arch/riscv/include/asm/page.h
-+++ b/arch/riscv/include/asm/page.h
-@@ -90,6 +90,14 @@ typedef struct page *pgtable_t;
- #define PTE_FMT "%08lx"
- #endif
- 
-+#ifdef CONFIG_64BIT
-+/*
-+ * We override this value as its generic definition uses __pa too early in
-+ * the boot process (before kernel_map.va_pa_offset is set).
-+ */
-+#define MIN_MEMBLOCK_ADDR      0
-+#endif
-+
- #ifdef CONFIG_MMU
- #define ARCH_PFN_OFFSET		(PFN_DOWN(phys_ram_base))
- #else
-@@ -121,7 +129,11 @@ extern phys_addr_t phys_ram_base;
- #define is_linear_mapping(x)	\
- 	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
- 
-+#ifndef CONFIG_DEBUG_VIRTUAL
- #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
-+#else
-+void *linear_mapping_pa_to_va(unsigned long x);
-+#endif
- #define kernel_mapping_pa_to_va(y)	({					\
- 	unsigned long _y = (unsigned long)(y);					\
- 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?			\
-@@ -130,7 +142,11 @@ extern phys_addr_t phys_ram_base;
- 	})
- #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
- 
-+#ifndef CONFIG_DEBUG_VIRTUAL
- #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - kernel_map.va_pa_offset)
-+#else
-+phys_addr_t linear_mapping_va_to_pa(unsigned long x);
-+#endif
- #define kernel_mapping_va_to_pa(y) ({						\
- 	unsigned long _y = (unsigned long)(y);					\
- 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ? \
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 225a7d2b65cc..9dfc0afdb114 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -213,6 +213,13 @@ static void __init setup_bootmem(void)
- 	phys_ram_end = memblock_end_of_DRAM();
- 	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
- 		phys_ram_base = memblock_start_of_DRAM();
-+
-+	/*
-+	 * Any use of __va/__pa before this point is wrong as we did not know the
-+	 * start of DRAM before.
-+	 */
-+	kernel_map.va_pa_offset = PAGE_OFFSET - phys_ram_base;
-+
- 	/*
- 	 * memblock allocator is not aware of the fact that last 4K bytes of
- 	 * the addressable memory can not be mapped because of IS_ERR_VALUE
-@@ -667,9 +674,16 @@ void __init create_pgd_mapping(pgd_t *pgdp,
- 
- static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
- {
--	/* Upgrade to PMD_SIZE mappings whenever possible */
--	base &= PMD_SIZE - 1;
--	if (!base && size >= PMD_SIZE)
-+	if (!(base & (PGDIR_SIZE - 1)) && size >= PGDIR_SIZE)
-+		return PGDIR_SIZE;
-+
-+	if (!(base & (P4D_SIZE - 1)) && size >= P4D_SIZE)
-+		return P4D_SIZE;
-+
-+	if (!(base & (PUD_SIZE - 1)) && size >= PUD_SIZE)
-+		return PUD_SIZE;
-+
-+	if (!(base & (PMD_SIZE - 1)) && size >= PMD_SIZE)
- 		return PMD_SIZE;
- 
- 	return PAGE_SIZE;
-@@ -978,11 +992,9 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
- 	set_satp_mode();
- #endif
- 
--	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
-+	kernel_map.va_pa_offset = 0UL;
- 	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
- 
--	phys_ram_base = kernel_map.phys_addr;
--
- 	/*
- 	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
- 	 * kernel, whereas for 64-bit kernel, the end of the virtual address
-diff --git a/arch/riscv/mm/physaddr.c b/arch/riscv/mm/physaddr.c
-index 9b18bda74154..18706f457da7 100644
---- a/arch/riscv/mm/physaddr.c
-+++ b/arch/riscv/mm/physaddr.c
-@@ -33,3 +33,19 @@ phys_addr_t __phys_addr_symbol(unsigned long x)
- 	return __va_to_pa_nodebug(x);
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index 8bd8b0142630..b9dcb13650d0 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -787,6 +787,22 @@ static void uniquify_counter(struct perf_stat_config *config, struct evsel *coun
+ 		uniquify_event_name(counter);
  }
- EXPORT_SYMBOL(__phys_addr_symbol);
-+
-+phys_addr_t linear_mapping_va_to_pa(unsigned long x)
+ 
++static bool check_uncore_event_aggr(struct perf_stat_config *config,
++				    struct evsel *counter,
++				    struct aggr_cpu_id *id)
 +{
-+	BUG_ON(!kernel_map.va_pa_offset);
++	struct perf_cpu cpu;
++	int idx;
 +
-+	return ((unsigned long)(x) - kernel_map.va_pa_offset);
++	perf_cpu_map__for_each_cpu(cpu, idx, counter->core.own_cpus) {
++		struct aggr_cpu_id own_id = config->aggr_get_id(config, cpu);
++
++		if (aggr_cpu_id__equal(id, &own_id))
++			return true;
++	}
++	return false;
 +}
-+EXPORT_SYMBOL(linear_mapping_va_to_pa);
 +
-+void *linear_mapping_pa_to_va(unsigned long x)
-+{
-+	BUG_ON(!kernel_map.va_pa_offset);
-+
-+	return ((void *)((unsigned long)(x) + kernel_map.va_pa_offset));
-+}
-+EXPORT_SYMBOL(linear_mapping_pa_to_va);
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index f08b25195ae7..58107bd56f8f 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
- static void __early_init_dt_declare_initrd(unsigned long start,
- 					   unsigned long end)
- {
--	/* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
--	 * enabled since __va() is called too early. ARM64 does make use
--	 * of phys_initrd_start/phys_initrd_size so we can skip this
--	 * conversion.
-+	/*
-+	 * __va() is not yet available this early on some platforms. In that
-+	 * case, the platform uses phys_initrd_start/phys_initrd_size instead
-+	 * and does the VA conversion itself.
- 	 */
--	if (!IS_ENABLED(CONFIG_ARM64)) {
-+	if (!IS_ENABLED(CONFIG_ARM64) &&
-+	    !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
- 		initrd_start = (unsigned long)__va(start);
- 		initrd_end = (unsigned long)__va(end);
- 		initrd_below_start_ok = 1;
+ static void print_counter_aggrdata(struct perf_stat_config *config,
+ 				   struct evsel *counter, int s,
+ 				   struct outstate *os)
+@@ -814,12 +830,21 @@ static void print_counter_aggrdata(struct perf_stat_config *config,
+ 	ena = aggr->counts.ena;
+ 	run = aggr->counts.run;
+ 
+-	/*
+-	 * Skip value 0 when enabling --per-thread globally, otherwise it will
+-	 * have too many 0 output.
+-	 */
+-	if (val == 0 && config->aggr_mode == AGGR_THREAD && config->system_wide)
+-		return;
++	if (val == 0) {
++		/*
++		 * Skip value 0 when enabling --per-thread globally,
++		 * otherwise it will have too many 0 output.
++		 */
++		if (config->aggr_mode == AGGR_THREAD && config->system_wide)
++			return;
++		/*
++		 * Skip value 0 when it's an uncore event and the given aggr id
++		 * does not belong to the PMU cpumask.
++		 */
++		if (counter->core.requires_cpu &&
++		    !check_uncore_event_aggr(config, counter, &id))
++			return;
++	}
+ 
+ 	if (!metric_only) {
+ 		if (config->json_output)
 -- 
-2.37.2
+2.39.1.405.gd4c25cc71f-goog
 
