@@ -2,121 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B89267B5EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC00F67B5F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236054AbjAYP3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
+        id S234699AbjAYPay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:30:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236052AbjAYP3f (ORCPT
+        with ESMTP id S236100AbjAYP34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:29:35 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B066546733
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:29:32 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id v19so3643218qtq.13
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:29:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3g/bTcIABXhuOTGEfGmYgpildLrwGp+xtHqxezjbAIo=;
-        b=n3udKgQdMP4pzkzNTyzAZ8aA4cXK/Wr696HNOYfmxGhfSHnA7GysozYmADxTuy3bQ5
-         G9sqO79szHSCm+/z6pb7m2PydCzBXwuDNsykOWBjywBH2/waEek0FcLbvF9JQxWHccom
-         RWPiJFQ7yKcOU6/CC7CaAOB23rXkakoeO2kqP+yRuwV2imqNgVshjjulK7E2aIHksHyu
-         Zcu/+wUsZABfe382eTh1WNs/LefIwWfNf3iYm1lKcAnPyiZ6oUBC80hlCUVdp7M0kHds
-         aJAdRFdw95k6YpC7KZ1b8bOvAx9LeQg9VQ4Rqne4/uqRollA3Ey5SAt8if8gmCEowFkD
-         parQ==
-X-Gm-Message-State: AFqh2krVFpVIZGkaFSuibtMkIEsZuzu9fUpdsG6KKVSNvoD78ASu5MK1
-        GEyZ9z83N/XWFg63eoxYcLtwuJ+CyaNBiA==
-X-Google-Smtp-Source: AMrXdXsTM4Px1fobhacOBtaZf4DhDWUGv+jMbuEqTev+8AAUdPhvAWBCOkQsbKRdIiQqrRdgtDl2hg==
-X-Received: by 2002:ac8:754f:0:b0:3b6:3a95:e012 with SMTP id b15-20020ac8754f000000b003b63a95e012mr46610542qtr.53.1674660571650;
-        Wed, 25 Jan 2023 07:29:31 -0800 (PST)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id y27-20020a05620a09db00b006cfc9846594sm3686812qky.93.2023.01.25.07.29.30
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 07:29:31 -0800 (PST)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-50112511ba7so209548937b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:29:30 -0800 (PST)
-X-Received: by 2002:a81:1216:0:b0:506:6b5d:523c with SMTP id
- 22-20020a811216000000b005066b5d523cmr193364yws.283.1674660570612; Wed, 25 Jan
- 2023 07:29:30 -0800 (PST)
+        Wed, 25 Jan 2023 10:29:56 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FE659E42;
+        Wed, 25 Jan 2023 07:29:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674660587; x=1706196587;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=A2tR3uGtswiBcJrUWftQvxqWPML3gAok8N/0LQbz+4A=;
+  b=iQpTzKKxVkg2jVztYouRXUNRDbilSwRz8oyNKkOM0qoQjfFuOKOie28e
+   6DnJOLgjATg8oc394sJNyPDJUt1UW9sHjTrOn52q7ZWPp9zuGKp3/5eMV
+   6ZPaEM6yStOQGTxr6jH2duUquXzSk0V40DqG/2Bz8jkIB26C8rebE7gpk
+   nwfkr655H+pCqy40ktNtBl07l1uYIdukzwqH1y565Ol909jcA4N/VdF00
+   hu9zQL0ZuUTOjLPJSq3szZ/tfqd+n+/zlu2nKzdSNUjeUyBpF4dGrKnPW
+   rx0x/XHaF4NePAPuwkJ6dFO4oilog1bBxK3C+HqB7j8+S2sXj/c+HqCgV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="306242452"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="306242452"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 07:29:40 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="725896529"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="725896529"
+Received: from zguo4-mobl1.amr.corp.intel.com (HELO [10.209.50.216]) ([10.209.50.216])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 07:29:39 -0800
+Message-ID: <14506678-918f-81e1-2c26-2b347ff50701@intel.com>
+Date:   Wed, 25 Jan 2023 07:29:39 -0800
 MIME-Version: 1.0
-References: <20230105033705.3946130-1-leyfoon.tan@starfivetech.com>
-In-Reply-To: <20230105033705.3946130-1-leyfoon.tan@starfivetech.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 25 Jan 2023 16:29:19 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWo=6jR5WEWkdDWVCs0bUPFL3gyTVM_3HWh+SLCxQV5Gw@mail.gmail.com>
-Message-ID: <CAMuHMdWo=6jR5WEWkdDWVCs0bUPFL3gyTVM_3HWh+SLCxQV5Gw@mail.gmail.com>
-Subject: Re: [PATCH v2] riscv: Move call to init_cpu_topology() to later
- initialization stage
-To:     Ley Foon Tan <leyfoon.tan@starfivetech.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ley Foon Tan <lftan.linux@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Sudeep Holla <Sudeep.Holla@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] x86: enable Data Operand Independent Timing Mode
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Roxana Bradescu <roxabee@chromium.org>,
+        Adam Langley <agl@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+References: <20230125012801.362496-1-ebiggers@kernel.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230125012801.362496-1-ebiggers@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ley,
+On 1/24/23 17:28, Eric Biggers wrote:
+> To mitigate this CPU vulnerability, it's possible to enable "Data
+> Operand Independent Timing Mode" (DOITM) by setting a bit in a MSR.
+> While Intel's documentation suggests that this bit should only be set
+> where "necessary", that is highly impractical, given the fact that
+> cryptography can happen nearly anywhere in the kernel and userspace, and
+> the fact that the entire kernel likely needs to be protected anyway.
 
-On Thu, Jan 5, 2023 at 4:45 AM Ley Foon Tan
-<leyfoon.tan@starfivetech.com> wrote:
-> If "capacity-dmips-mhz" is present in a CPU DT node,
-> topology_parse_cpu_capacity() will fail to allocate memory.
-> ARM64, with which this code path is shared, does not call
-> topology_parse_cpu_capacity() until later in boot where memory allocation
-> is available.
->
-> Move init_cpu_topology(), which calls topology_parse_cpu_capacity(), to a
-> later initialization stage, to match ARM64.
->
-> Tested on Qemu platform.
->
-> Fixes: 03f11f03dbfe ("RISC-V: Parse cpu topology during boot.")
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
->
-> ---
-> Changes:
-> v2:
-> - Update commit description with suggestion from Conor.
-> - Added Reviewed-by.
-> - Added Fixes.
+I think this misses a key point from the documentation:
 
-This also fixes the error message
+	This functionality is intended for use by software which has
+	already applied other techniques to mitigate software timing
+	side channels, such as those documented in Intel's Guidelines
+	for Mitigating Timing Side Channels Against Cryptographic
+	Implementations.
 
-    Early cacheinfo failed, ret = -12
+Translating from Intel-speak: Intel thinks that DOITM purely a way to
+make the CPU run slower if you haven't already written code specifically
+to mitigate timing side channels.  All pain, no gain.
 
-seen during early boot on all my RV64 platforms.
+The kernel as a whole is not written that way.  I'm sure the crypto
+folks that are cc'd can tell us specifically if the kernel crypto code
+is written following those recommendations.
 
-Fixes: 5944ce092b97caed ("arch_topology: Build cacheinfo from primary CPU")
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+So, let's call this patch what it is: a potential global slowdown which
+protects a very small amount of crypto code, probably just in userspace.
+ That is probably the code that's generating your RSA keys, so it's
+quite important, but it's also a _very_ small total amount of code.
 
-Gr{oetje,eeting}s,
+There's another part here which I think was recently added to the
+documentation:
 
-                        Geert
+	Intel expects the performance impact of this mode may be
+	significantly higher on future processors. 
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+That's _meant_ to be really scary and keep folks from turning this on by
+default, aka. what this patch does.  Your new CPU will be really slow if
+you turn this on!  Boo!
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+All that said, and given the information that Intel has released, I
+think this patch is generally the right thing to do.  I don't think
+people are wrong for looking at "DODT" as being a new vulnerability.
+Intel obviously doesn't see it that way, which is why "DODT" has (as far
+as I can tell) not been treated with the same security pomp and
+circumstance as other stuff.
+
+Last, if you're going to propose that this be turned on, I expect to see
+at least _some_ performance data.  DOITM=1 isn't free, even on Ice Lake.
