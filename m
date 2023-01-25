@@ -2,72 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E4567A942
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 04:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117CD67A945
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 04:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234481AbjAYD2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 22:28:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
+        id S234292AbjAYDai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 22:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjAYD2r (ORCPT
+        with ESMTP id S229778AbjAYDaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 22:28:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A3CCDE1;
-        Tue, 24 Jan 2023 19:28:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1215B81891;
-        Wed, 25 Jan 2023 03:28:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B8AFC433EF;
-        Wed, 25 Jan 2023 03:28:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674617289;
-        bh=pLxuGuWkccGl+3mFDrpQRG+awrUGbY9Q74QPWO25ak4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p0Zc7D1uDkB+qqUqa023lG7O4aRym5yv4DUb1UU6ppMbs2Qa9hzNyDT3WtC/YL6j+
-         BbCZQsF13tk+D8UA+/QvKcooFSIQPrw67fSBy72kLurfRAcypSsxVvKRnruAOl0ZzS
-         sAnzF1n5mJ7PNE/bgXcsI0kCBOYDUjyQVvzqCKT0UzjVeSlmPjBzz9oimZF4MeDxHa
-         rMZVfOsqihjgn/PXUudywNOSX0Yc0z3H2nPTascMLPejWAGXqVXfSzB1t1tc7sDJ7Q
-         /IuylX6XasHzVSrJPn34uJRpZzJcX2JLJGFXmqdEiW7klfwtC2Xw9H5SquEiO6dyJ0
-         fDmlZOPt5Rx+w==
-Date:   Tue, 24 Jan 2023 19:28:08 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        pabeni@redhat.com, edumazet@google.com, a@unstable.cc,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] ip/ip6_gre: Fix GRE tunnels not generating IPv6
- link local addresses
-Message-ID: <20230124192808.056cf9e8@kernel.org>
-In-Reply-To: <20230124032105.79487-1-Thomas.Winter@alliedtelesis.co.nz>
-References: <20230124032105.79487-1-Thomas.Winter@alliedtelesis.co.nz>
+        Tue, 24 Jan 2023 22:30:35 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C46241F0;
+        Tue, 24 Jan 2023 19:30:07 -0800 (PST)
+Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
+        by gnuweeb.org (Postfix) with ESMTPSA id 1458482EFE;
+        Wed, 25 Jan 2023 03:29:28 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1674617375;
+        bh=3VsbzSjeA/75L5IFPte1m42201Qyxjao5nDLCNapEOI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eHOaM9wHDAQgUUlqpdaaLVA9eDAjJTjX78vKug7we1zKS5a+AgCp+lHhUiGldQa+x
+         YgiglNdhGMWVeJEmlSdF27P4zsJBxg0Qe+nwSnye6WePBgFuRPoYuKcIG+/LyHLbOR
+         SVCANtjeciv1rXalNKZzWGMg/Ponhu1v9AAUGREtKfn4YHiImGwh3rRdTQ4QQT20xx
+         WZAxHsSyhsCLRZ/c4Y8k4BNdraPnIDBXjOHTuvdVFHz83Uiim0c055+4Irz/ZfPNSF
+         IdDR2cNKnFC2YLc5GcCJdzFn+Yg9REApVw8Ik4KicsKsfAZY+IZ1fiW1f0uBxUozpU
+         Xf24BOniXvDFA==
+Date:   Wed, 25 Jan 2023 10:29:24 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     x86 Mailing List <x86@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xin Li <xin3.li@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v3 2/2] selftests/x86: sysret_rip: Add more syscall
+ tests with respect to `%rcx` and `%r11`
+Message-ID: <Y9CiFEoiLislQZCx@biznet-home.integral.gnuweeb.org>
+References: <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
+ <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
+ <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
+ <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
+ <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
+ <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
+ <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+ <20230124100926.637335-1-ammarfaizi2@gnuweeb.org>
+ <20230124100926.637335-3-ammarfaizi2@gnuweeb.org>
+ <48072ce2-e28d-9267-1f8e-3c76682fb782@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48072ce2-e28d-9267-1f8e-3c76682fb782@zytor.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 16:21:01 +1300 Thomas Winter wrote:
-> For our point-to-point GRE tunnels, they have IN6_ADDR_GEN_MODE_NONE
-> when they are created then we set IN6_ADDR_GEN_MODE_EUI64 when they
-> come up to generate the IPv6 link local address for the interface.
-> Recently we found that they were no longer generating IPv6 addresses.
+On Tue, Jan 24, 2023 at 12:59:23PM -0800, H. Peter Anvin wrote:
 > 
-> Also, non-point-to-point tunnels were not generating any IPv6 link
-> local address and instead generating an IPv6 compat address,
-> breaking IPv6 communication on the tunnel.
 > 
-> These failures were caused by commit e5dd729460ca and this patch set
-> aims to resolve these issues.
+> On 1/24/23 02:09, Ammar Faizi wrote:
+> > From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> > 
+> > Test that:
+> > 
+> >   - "syscall" in a FRED system doesn't clobber %rcx and %r11.
+> >   - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
+> > 
+> > Test them out with a trivial system call like __NR_getppid and friends
+> > which are extremely likely to return with SYSRET on an IDT system.
+> > 
+> > Link: https://lore.kernel.org/lkml/25b96960-a07e-a952-5c23-786b55054126@zytor.com
+> > Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> > Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> > Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> > Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> 
+> Add to the description that the purpose of this is to ensure that various
+> system calls are *consistent*, as per the comment immediately below your
+> code.
 
-Ah, you have the problem statement here. It needs to go into the
-patches, I'm afraid. The cover letters are not as visible in-tree
-and certainly don't make it to stable trees.
+Added in v4.
+
+-- 
+Ammar Faizi
+
