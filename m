@@ -2,108 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EE667ABC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E8D67ABCA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235163AbjAYIcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:32:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
+        id S235205AbjAYIct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:32:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235165AbjAYIcB (ORCPT
+        with ESMTP id S235115AbjAYIco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:32:01 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F267DAC
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:31:57 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P1xs33lGPz4xZb;
-        Wed, 25 Jan 2023 19:31:51 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1674635511;
-        bh=RijxhIRRoJPT60iN7+sO/FMf5qceHAshwUEPvlc0unI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=oSCu283IAi1f/b8+XX/irxWfR02z3kE2hV8HUJBZ4WOFfChIAHCsZ2BdLtIN5rTdF
-         QhxChafOYGqg344/ccP6Rewg66ECzdPYzPYj/1apU8wLPvKrEH02pFXscMMr50PiJw
-         x1C60vUKuDt4/oJ8ufhNLzazm8cBHPAGEHBaNK2+fuTO8px0Ba8m9LgDXNan9EZ72S
-         BgCgyWk5xdbYckG9Lblhq9t5hF/wI3C7vWyN3FJepus0iMusQsDIgklya0IAQWBHZd
-         eQaFw9fU0PFUaFoxAgDvHXGoqFQCUPVB5PQz0E0ZTvKmf/9a0v3tEoK/DKnD2Vev8Q
-         rTsPf04LcJJaQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        kernel test robot <lkp@intel.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org, npiggin@gmail.com
-Subject: Re: arch/powerpc/kernel/head_85xx.o: warning: objtool:
- .head.text+0x1a6c: unannotated intra-function call
-In-Reply-To: <1674631223.9e09lbzzb6.naveen@linux.ibm.com>
-References: <202301161955.38kK6ksW-lkp@intel.com>
- <b2273730-f885-7658-7ec4-12fb5bfc515b@linux.ibm.com>
- <1674631223.9e09lbzzb6.naveen@linux.ibm.com>
-Date:   Wed, 25 Jan 2023 19:31:46 +1100
-Message-ID: <87v8kvow0d.fsf@mpe.ellerman.id.au>
+        Wed, 25 Jan 2023 03:32:44 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68CA5141F;
+        Wed, 25 Jan 2023 00:32:39 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id d66so19027126vsd.9;
+        Wed, 25 Jan 2023 00:32:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+hMKsP+ymQZlCwigldf1lFK1mABYe2GYiPiGIJK3DBs=;
+        b=oE/n3Qi6A4g9N2N1LnzoRIe9h2F2kgqYSrk+Jov3IFh7XmkHbq2/F3dh7Hjz4fVXNN
+         6f+64vbpBkwWEWV2IcwfJ+12jXnVqMiXTHvFsznTw95bjmt3MPzGBRbNI08O3yvzJCqV
+         dAs03D/wEDeu5fo8Trz+cNsJIhkbSgzkfNd9GCRpYUHo6aHDjbIJBrqA23beJ/oL9VVq
+         1z0Nd+YvvqQDmJZcYJace0ADAusjT9FybyjwVgFQTGGXQf9BjFqs6g9hGDYPDv81F8wJ
+         ug9/5NX2+H0lhilqwievcsXf/OVoVmxaWMNOe3cGMOqaygb6n3xNeZY0ydmfE/TA0e+d
+         vrtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+hMKsP+ymQZlCwigldf1lFK1mABYe2GYiPiGIJK3DBs=;
+        b=UaNMNky9GstpQULtaw9cuj/VAEGtICbxCuE24F8xXGy4xvgvIQJxClKnwOPduUWIIb
+         JrIaRFmWGuj9uFDsB17mIkrrc5bRJ3CsT9+TJxUzQtCAAWRIbIidlBSX7JTbuLFhlZBf
+         49DkLxZIzUKLiylU4EqAvphyjBQ3M99wkFR49WXXZdghS9M1R2f9hkdWuIbzTJR2QRqL
+         YPLPmBPtL6YlJGRy4Jx8Wor6B9bwjHp0bsLR5aMsHGwndj2HOD+2duPn5kPtXPWa82oP
+         Ooz0DqR+7BSk/ta8UXLxFGPgvp6MGJ7GbuH9Jkb80cbjhve6Ft00+6QrrGOLw1XLIYBK
+         VBrw==
+X-Gm-Message-State: AFqh2krgCi4WSdJ872zeDkJckRDXekrqCFCd5p7T8mOTo0tUGpXoZnni
+        9fCbLApf7eb8GDnX8EimWtawV7ozyIVFoo3I+64=
+X-Google-Smtp-Source: AMrXdXsQI53bA8DTq3bUyjAoK6HZesr6skL+PgyXRZ7z/qlC7onDSMOXKg2OsNoYjrd5P9P6nAMjeAGx6nQalEzqB4s=
+X-Received: by 2002:a05:6102:5587:b0:3d1:2167:11ad with SMTP id
+ dc7-20020a056102558700b003d1216711admr3922488vsb.2.1674635558641; Wed, 25 Jan
+ 2023 00:32:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1674227308.git.alexl@redhat.com> <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+ <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
+ <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
+ <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+ <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com> <20230125041835.GD937597@dread.disaster.area>
+In-Reply-To: <20230125041835.GD937597@dread.disaster.area>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 25 Jan 2023 10:32:26 +0200
+Message-ID: <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Alexander Larsson <alexl@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gscrivan@redhat.com, brauner@kernel.org, viro@zeniv.linux.org.uk,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> writes:
-> Sathvika Vasireddy wrote:
->>=20
->>>>> arch/powerpc/kvm/booke.o: warning: objtool: kvmppc_fill_pt_regs+0x30:=
- unannotated intra-function call
->>=20
->> As an attempt to fix it, I tried expanding ANNOTATE_INTRA_FUNCTION_CALL=
-=20
->> macro to indicate that the branch target is valid. It then threw another=
-=20
->> warning (arch/powerpc/kvm/booke.o: warning: objtool:=20
->> kvmppc_fill_pt_regs+0x38: intra_function_call not a direct call). The=20
->> below diff just removes the warnings for me, but I'm not very sure if=20
->> this is the best way to fix the objtool warnings seen with this=20
->> particular file. Please let me know if there are any better ways to fix =
-it.
->>=20
->> diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
->> index 0dce93ccaadf..b6a413824b98 100644
->> --- a/arch/powerpc/kvm/booke.c
->> +++ b/arch/powerpc/kvm/booke.c
->> @@ -917,7 +917,9 @@ static void kvmppc_fill_pt_regs(struct pt_regs *regs)
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 asm("mr %0, 1" : "=3Dr"(r1));
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 asm("mflr %0" : "=3Dr"(lr));
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 asm("mfmsr %0" : "=3Dr"(msr)=
-);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 asm(".pushsection .discard.intra_f=
-unction_calls; .long 999f;=20
->> .popsection; 999:");
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 asm("bl 1f; 1: mflr %0" : "=
-=3Dr"(ip));
+On Wed, Jan 25, 2023 at 6:18 AM Dave Chinner <david@fromorbit.com> wrote:
 >
-> I don't think you can assume that there won't be anything in between two=
-=20
-> asm statements.
+> On Tue, Jan 24, 2023 at 09:06:13PM +0200, Amir Goldstein wrote:
+> > On Tue, Jan 24, 2023 at 3:13 PM Alexander Larsson <alexl@redhat.com> wrote:
+> > > On Tue, 2023-01-24 at 05:24 +0200, Amir Goldstein wrote:
+> > > > On Mon, Jan 23, 2023 at 7:56 PM Alexander Larsson <alexl@redhat.com>
+> > > > wrote:
+> > > > > On Fri, 2023-01-20 at 21:44 +0200, Amir Goldstein wrote:
+> > > > > > On Fri, Jan 20, 2023 at 5:30 PM Alexander Larsson
+> > > > > > <alexl@redhat.com>
+> > > > > > wrote:
+> > > I'm not sure why the dentry cache case would be more important?
+> > > Starting a new container will very often not have cached the image.
+> > >
+> > > To me the interesting case is for a new image, but with some existing
+> > > page cache for the backing files directory. That seems to model staring
+> > > a new image in an active container host, but its somewhat hard to test
+> > > that case.
+> > >
+> >
+> > ok, you can argue that faster cold cache ls -lR is important
+> > for starting new images.
+> > I think you will be asked to show a real life container use case where
+> > that benchmark really matters.
+>
+> I've already described the real world production system bottlenecks
+> that composefs is designed to overcome in a previous thread.
+>
+> Please go back an read this:
+>
+> https://lore.kernel.org/linux-fsdevel/20230118002242.GB937597@dread.disaster.area/
+>
 
-Yeah, compiler could interleave something theoretically.
+I've read it and now re-read it.
+Most of the post talks about the excess time of creating the namespace,
+which is addressed by erofs+overlayfs.
 
-> Even if that works, I don't think it is good to expand the macro here.=20=
-=20
-> That asm statement looks to be trying to grab the current nip. I don't=20
-> know enough about that code, and someone who knows more about KVM may be=
-=20
-> able to help, but it looks like we should be able to simply set 'ip' to=20
-> the address of kvmppc_fill_pt_regs()?
+I guess you mean this requirement:
+"When you have container instances that might only be needed for a
+few seconds, taking half a minute to set up the container instance
+and then another half a minute to tear it down just isn't viable -
+we need instantiation and teardown times in the order of a second or
+two."
 
-There is _THIS_IP_ which should be sufficient.
+Forgive for not being part of the containers world, so I have to ask -
+Which real life use case requires instantiation and teardown times in
+the order of a second?
 
-cheers
+What is the order of number of files in the manifest of those ephemeral
+images?
+
+The benchmark was done on a 2.6GB centos9 image.
+
+My very minimal understanding of containers world, is that
+A large centos9 image would be used quite often on a client so it
+would be deployed as created inodes in disk filesystem
+and the ephemeral images are likely to be small changes
+on top of those large base images.
+
+Furthermore, the ephmeral images would likely be composed
+of cenos9 + several layers, so the situation of single composefs
+image as large as centos9 is highly unlikely.
+
+Am I understanding the workflow correctly?
+
+If I am, then I would rather see benchmarks with images
+that correspond with the real life use case that drives composefs,
+such as small manifests and/or composefs in combination with
+overlayfs as it would be used more often.
+
+> Cold cache performance dominates the runtime of short lived
+> containers as well as high density container hosts being run to
+> their container level memory limits. `ls -lR` is just a
+> microbenchmark that demonstrates how much better composefs cold
+> cache behaviour is than the alternatives being proposed....
+>
+> This might also help explain why my initial review comments focussed
+> on getting rid of optional format features, straight lining the
+> processing, changing the format or search algorithms so more
+> sequential cacheline accesses occurred resulting in less memory
+> stalls, etc. i.e. reductions in cold cache lookup overhead will
+> directly translate into faster container workload spin up.
+>
+
+I agree that this technology is novel and understand why it results
+in faster cold cache lookup.
+I do not know erofs enough to say if similar techniques could be
+applied to optimize erofs lookup at mkfs.erofs time, but I can guess
+that this optimization was never attempted.
+
+> > > > > This isn't all that strange, as overlayfs does a lot more work for
+> > > > > each lookup, including multiple name lookups as well as several
+> > > > > xattr
+> > > > > lookups, whereas composefs just does a single lookup in a pre-
+> > > > > computed
+> > > >
+> > > > Seriously, "multiple name lookups"?
+> > > > Overlayfs does exactly one lookup for anything but first level
+> > > > subdirs
+> > > > and for sparse files it does the exact same lookup in /objects as
+> > > > composefs.
+> > > > Enough with the hand waving please. Stick to hard facts.
+> > >
+> > > With the discussed layout, in a stat() call on a regular file,
+> > > ovl_lookup() will do lookups on both the sparse file and the backing
+> > > file, whereas cfs_dir_lookup() will just map some page cache pages and
+> > > do a binary search.
+> > >
+> > > Of course if you actually open the file, then cfs_open_file() would do
+> > > the equivalent lookups in /objects. But that is often not what happens,
+> > > for example in "ls -l".
+> > >
+> > > Additionally, these extra lookups will cause extra memory use, as you
+> > > need dentries and inodes for the erofs/squashfs inodes in addition to
+> > > the overlay inodes.
+> >
+> > I see. composefs is really very optimized for ls -lR.
+>
+> No, composefs is optimised for minimal namespace and inode
+> resolution overhead. 'ls -lR' does a lot of these operations, and
+> therefore you see the efficiency of the design being directly
+> exposed....
+>
+> > Now only need to figure out if real users start a container and do ls -lR
+> > without reading many files is a real life use case.
+>
+> I've been using 'ls -lR' and 'find . -ctime 1' to benchmark cold
+> cache directory iteration and inode lookup performance for roughly
+> 20 years. The benchmarks I run *never* read file data, nor is that
+> desired - they are pure directory and inode lookup micro-benchmarks
+> used to analyse VFS and filesystem directory and inode lookup
+> performance.
+>
+> I have been presenting such measurements and patches improving
+> performance of these microbnechmarks to the XFS and fsdevel lists
+> over 15 years and I have *never* had to justify that what I'm
+> measuring is a "real world workload" to anyone. Ever.
+>
+> Complaining about real world relevancy of the presented benchmark
+> might be considered applying a double standard, wouldn't you agree?
+>
+
+I disagree.
+Perhaps my comment was misunderstood.
+
+The cold cache benchmark is certainly relevant for composefs
+comparison and I expect to see it in future submissions.
+
+The point I am trying to drive is this:
+There are two alternatives on the table:
+1. Add fs/composefs
+2. Improve erofs and overlayfs
+
+Functionally, I think we all agree that both alternatives should work.
+
+Option #1 will take much less effort from composefs authors, so it is
+understandable that they would do their best to argue in its favor.
+
+Option #2 is prefered for long term maintenance reasons, which is
+why vfs/erofs/overlayfs developers argue in favor of it.
+
+The only factor that remains that could shift the balance inside
+this gray area are the actual performance numbers.
+
+And back to my point: the not so simple decision between the
+two options, by whoever makes this decision, should be based
+on a real life example of performance improvement and not of
+a microbenchamk.
+
+In my limited experience, a real life example means composefs
+as a layer in overlayfs.
+
+I did not see those numbers and it is clear that they will not be
+as impressive as the bare composefs numbers, so proposing
+composefs needs to include those numbers as well.
+
+Alexander did claim that he has real life use cases for bare readonly
+composefs images, but he did not say what the size of the manifests
+in those images are and he did not say whether these use cases
+also require startup and teardown in orders of seconds.
+
+It looks like the different POV are now well understood by all parties
+and that we are in the process of fine tuning the information that
+needs to be presented for making the best decision based on facts.
+
+This discussion, which was on a collision course at the beginning,
+looks like it is in a converging course - this makes me happy.
+
+Thanks,
+Amir.
