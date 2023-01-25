@@ -2,216 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E8267AF55
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D0067AF54
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235382AbjAYKJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 05:09:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S235524AbjAYKIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 05:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235507AbjAYKI7 (ORCPT
+        with ESMTP id S235507AbjAYKIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:08:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2324630B0E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:08:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674641286;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ITYkPWXk42gwxNi7ucWyzm4+8wZnJwRiJKMXieVl4b8=;
-        b=ftzfBBZe3Mu2gtUPK41FhLSI+udkv+l0UCLqG5UkblUNfVLoJHh/5cER8gXiQ34YROCKQJ
-        mHsWmxSl0tHNOdog+e1hHhPsDiqRz8zW6XwzglebD0Oyj+I8P6nkL6ft7uz4Uo3du4XpCO
-        bn+O1XbPS0+Bayi78EM15Cl0GC/gk2g=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-240-hlI8CaNcMgCjBjDgwIOclA-1; Wed, 25 Jan 2023 05:08:05 -0500
-X-MC-Unique: hlI8CaNcMgCjBjDgwIOclA-1
-Received: by mail-ej1-f72.google.com with SMTP id qf20-20020a1709077f1400b0086ec9755517so11722378ejc.15
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:08:04 -0800 (PST)
+        Wed, 25 Jan 2023 05:08:53 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8AD32516
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:08:40 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id f11so457347pfc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:08:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ekQpdkJMaH8YaGTIBesy/IkLIBnP9FQ2VC8iw7R/F0=;
+        b=raatX0cFeimVn8opFxRN9jpPHlRM3X7p1pF391BCIttZ2fwWoxqFp3El4MhskMZ/KE
+         PiS5XP7VnpNVIPhxNNuL7bhkblasaxz5xc283zks6500Gr3F7byddiAaoyMGGHPiNM7D
+         XIgt7SKWpoBNY+Abff9ZBM9bpnLNhFGN4RUz/hTJ81IFupEFsdKVAfjM2bxVoQbdWhD/
+         RGwwpTMcEjy5ZK+D9QmmXGu1QiCCjHf5FqRdXQbWm4tSnUXccFooiy68dF1FsY/s/pEy
+         vBszJ8pAM9a0x+9HXDXoJx/rcCo27RLH/+D8NP07PccL010UaY7JaM240nRqgzRQ9gGp
+         1j6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ITYkPWXk42gwxNi7ucWyzm4+8wZnJwRiJKMXieVl4b8=;
-        b=PoTFWY9hB19BJQLjXVj/wQnM+/Rh8FgdbvYw43BZIFJO3ZgdHoquAIMkOCcyp+J6pm
-         fvSN/TtUQipnIVxv39HPBMV9dGpapFv4ENpCBMpzQLrJVFJIYWw5oV+rke2JckK+5hBQ
-         E6iajsfSjg/5o1WVMSLavyjhP4hBVUjVEoFCgqZXw9aB8+QD/UvUtC2j5BkKGCFGH0Ha
-         3Sim6SDgnuOhmEBlfoJjZ6T8HFMpbrlOQ6i5wp5wf6CQVh0oavuPT35gRIIJloLivuYS
-         utNju+OEbu41jXrgpo0iayOSApg5y0WBVWJCaj7iLwa9h6sjWsKYsp9LTPPn3IrEbF0Z
-         noIg==
-X-Gm-Message-State: AFqh2krSk3OKiTmLSRGDHwltXvs5AhoRhR9SQbo3nSUiU5x1CynYNT04
-        rN21cHOoK4PVdqGK8B9kJy3iNWCrzVX2hw6s7xE2kPF89+rytcTq40f6X+NXFJ9g7l+wxxWDLUm
-        tNeD6jVjsXdDfOCT8TVkn//Ap
-X-Received: by 2002:a17:907:2064:b0:871:5065:613a with SMTP id qp4-20020a170907206400b008715065613amr33417931ejb.47.1674641283951;
-        Wed, 25 Jan 2023 02:08:03 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtRtf653Hh8BS5B1zI6z5doE5m1cm/W6/O4HVSN8uT7dQRr8nHUEoiIwBkhdCl47sb5Wp8qxA==
-X-Received: by 2002:a17:907:2064:b0:871:5065:613a with SMTP id qp4-20020a170907206400b008715065613amr33417909ejb.47.1674641283746;
-        Wed, 25 Jan 2023 02:08:03 -0800 (PST)
-Received: from greebo.mooo.com (c-e6a5e255.022-110-73746f36.bbcust.telenor.se. [85.226.165.230])
-        by smtp.gmail.com with ESMTPSA id ia24-20020a170907a07800b00877696c015asm2157032ejc.134.2023.01.25.02.08.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 02:08:03 -0800 (PST)
-Message-ID: <ef68afb508f85eebb40fa3926edbff145e831c63.camel@redhat.com>
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-From:   Alexander Larsson <alexl@redhat.com>
-To:     Amir Goldstein <amir73il@gmail.com>,
-        Dave Chinner <david@fromorbit.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gscrivan@redhat.com, brauner@kernel.org, viro@zeniv.linux.org.uk,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 25 Jan 2023 11:08:02 +0100
-In-Reply-To: <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
-References: <cover.1674227308.git.alexl@redhat.com>
-         <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
-         <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
-         <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
-         <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
-         <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
-         <20230125041835.GD937597@dread.disaster.area>
-         <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9ekQpdkJMaH8YaGTIBesy/IkLIBnP9FQ2VC8iw7R/F0=;
+        b=grengWMhGx2AbMkf9sqgkRomMbufInDAhJqJ02GBek2pJHrPJUskQREGpsqP69+4vD
+         QsYuS4ntkmJHipbnexDtYqffyYMp6ZlLQbASWR0JbueyaVMImHm0w6Vy5eOIhCfrE58+
+         oGYRKwKr8gjei2SkTgRZM6U78gVwGVPnaM+uSbQQ7ER1w3xAupsapQ9hP3+V6oxZRpef
+         nm/V2O+Vnr+2uWUildSUmTYi0d4dLxaB8F0PU+g8c43LAQtzEY5Lt0NbAGWMXnrNxN1r
+         AU1FgeT0f/N0M4vUjh/QpAbzZ2fGQ3GjZanWU11wx3AYy/PaxEuhGNsvExChAj4kF1vH
+         FSWg==
+X-Gm-Message-State: AFqh2konOVq95zQoP6K1P8v/hXi2vxoKwNvZzSYBoo6fPIKuVN15NikT
+        eWy6Bc/7PljOkcjVhUfDVX54asZnjul2iEvz+3mhEQ==
+X-Google-Smtp-Source: AMrXdXsksTQgDm0eEuAGBewfAnZPI6f3ECk9PVhAlHpJNiaECDQYX3E/cByZs37ogC/vZmvk3fazJDB6XW9XRqEwqSU=
+X-Received: by 2002:a62:e80a:0:b0:58d:982a:f1ea with SMTP id
+ c10-20020a62e80a000000b0058d982af1eamr2899393pfi.28.1674641320478; Wed, 25
+ Jan 2023 02:08:40 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230119184228.683892-1-krzysztof.kozlowski@linaro.org>
+ <20230124153411.nwkbjgoqgkua2icm@bogus> <c247710b-369a-67d0-0637-b32192d25e4d@linaro.org>
+In-Reply-To: <c247710b-369a-67d0-0637-b32192d25e4d@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 25 Jan 2023 11:08:04 +0100
+Message-ID: <CAPDyKFrS6OER2h3XmHMfbjBA09HT8LYN9A90TPjd0RPim3jMaw@mail.gmail.com>
+Subject: Re: [PATCH v3] cpuidle: psci: Do not suspend topology CPUs on PREEMPT_RT
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-01-25 at 10:32 +0200, Amir Goldstein wrote:
-> On Wed, Jan 25, 2023 at 6:18 AM Dave Chinner <david@fromorbit.com>
-> wrote:
-> >=20
-> >=20
-> >=20
-> > I've already described the real world production system bottlenecks
-> > that composefs is designed to overcome in a previous thread.
-> >=20
-> > Please go back an read this:
-> >=20
-> > https://lore.kernel.org/linux-fsdevel/20230118002242.GB937597@dread.dis=
-aster.area/
-> >=20
->=20
-> I've read it and now re-read it.
-> Most of the post talks about the excess time of creating the
-> namespace,
-> which is addressed by erofs+overlayfs.
->=20
-> I guess you mean this requirement:
-> "When you have container instances that might only be needed for a
-> few seconds, taking half a minute to set up the container instance
-> and then another half a minute to tear it down just isn't viable -
-> we need instantiation and teardown times in the order of a second or
-> two."
->=20
-> Forgive for not being part of the containers world, so I have to ask
-> -
-> Which real life use case requires instantiation and teardown times in
-> the order of a second?
+On Wed, 25 Jan 2023 at 08:43, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> What is the order of number of files in the manifest of those
-> ephemeral
-> images?
->=20
-> The benchmark was done on a 2.6GB centos9 image.
+> On 24/01/2023 16:34, Sudeep Holla wrote:
+> > On Thu, Jan 19, 2023 at 07:42:28PM +0100, Krzysztof Kozlowski wrote:
+> >> The runtime Power Management of CPU topology is not compatible with
+> >> PREEMPT_RT:
+> >> 1. Core cpuidle path disables IRQs.
+> >> 2. Core cpuidle calls cpuidle-psci.
+> >> 3. cpuidle-psci in __psci_enter_domain_idle_state() calls
+> >>    pm_runtime_put_sync_suspend() and pm_runtime_get_sync() which use
+> >>    spinlocks (which are sleeping on PREEMPT_RT).
+> >>
+> >> Deep sleep modes are not a priority of Realtime kernels because the
+> >> latencies might become unpredictable.  On the other hand the PSCI CPU
+> >> idle power domain is a parent of other devices and power domain
+> >> controllers, thus it cannot be simply skipped (e.g. on Qualcomm SM8250).
+> >>
+> >> Disable the runtime PM calls from cpuidle-psci, which effectively stops
+> >> suspending the cpuidle PSCI domain.  This is a trade-off between making
+> >> PREEMPT_RT working and still having a proper power domain hierarchy in
+> >> the system.
+> >>
+> >> Cc: Adrien Thierry <athierry@redhat.com>
+> >> Cc: Brian Masney <bmasney@redhat.com>
+> >> Cc: linux-rt-users@vger.kernel.org
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>
+> >> ---
+> >>
+> >> Changes since v1:
+> >> 1. Re-work commit msg.
+> >> 2. Add note to Kconfig.
+> >>
+> >> Several other patches were dropped, as this is the only one actually
+> >> needed.  It effectively stops PSCI cpuidle power domains from suspending
+> >> thus solving all other issues I experienced.
+> >> ---
+> >>  drivers/cpuidle/Kconfig.arm    | 3 +++
+> >>  drivers/cpuidle/cpuidle-psci.c | 4 ++--
+> >>  2 files changed, 5 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+> >> index 747aa537389b..24429b5bfd1c 100644
+> >> --- a/drivers/cpuidle/Kconfig.arm
+> >> +++ b/drivers/cpuidle/Kconfig.arm
+> >> @@ -24,6 +24,9 @@ config ARM_PSCI_CPUIDLE
+> >>        It provides an idle driver that is capable of detecting and
+> >>        managing idle states through the PSCI firmware interface.
+> >>
+> >> +      The driver is not yet compatible with PREEMPT_RT: no idle states will
+> >> +      be entered by CPUs on such kernel.
+> >> +
+> >
+> > Any particular reason for even compiling this file in or allowing the
+> > ARM_PSCI_CPUIDLE when PREEMPT_RT=y ? If we can't enter idle states, we
+> > can as well compile this file out ?
+>
+> It's the power domain sued for other devices, so we need it. Otherwise
+> other devices will keep waiting for this missing power domain provider.
 
-What does this matter? We want to measure a particular kind of
-operation, so, we use a sample with a lot of those operations. What
-would it help running some operation on a smaller image that does much
-less of the critical operations. That would just make it harder to see
-the data for all the noise. Nobody is saying that reading all the
-metadata in a 2.6GB image is something a container would do. It is
-however doing lots of the operations that constrains container startup,
-and it allows us to compare the performance of these operation between
-different alternatives.
+Yes.
 
-> My very minimal understanding of containers world, is that
-> A large centos9 image would be used quite often on a client so it
-> would be deployed as created inodes in disk filesystem
-> and the ephemeral images are likely to be small changes
-> on top of those large base images.
->=20
-> Furthermore, the ephmeral images would likely be composed
-> of cenos9 + several layers, so the situation of single composefs
-> image as large as centos9 is highly unlikely.
->=20
-> Am I understanding the workflow correctly?
+And we are still able to use those idle states that are solely per
+CPU, which is probably nice to have. No?
 
-In a composefs based container storage implementation one would likely
-not use a layered approach for the "derived" images. Since all file
-content is shared anyway its more useful to just combine the metadata
-of the layers into a single composefs image. It is not going to be very
-large anyway, and it will make lookups much faster as you don't need to
-do all the negative lookups in the upper layers when looking for files
-in the base layer.
-
-> If I am, then I would rather see benchmarks with images
-> that correspond with the real life use case that drives composefs,
-> such as small manifests and/or composefs in combination with
-> overlayfs as it would be used more often.
-
-I feel like there is a constant moving of the goal post here. I've
-provided lots of raw performance numbers, and explained that they are
-important to our usecases, there has to be an end to how detailed they
-need to be. I'm not interested in implementing a complete container
-runtime based on overlayfs just to show that it performs poorly.
-
-> > Cold cache performance dominates the runtime of short lived
-> > containers as well as high density container hosts being run to
-> > their container level memory limits. `ls -lR` is just a
-> > microbenchmark that demonstrates how much better composefs cold
-> > cache behaviour is than the alternatives being proposed....
-> >=20
-> > This might also help explain why my initial review comments
-> > focussed
-> > on getting rid of optional format features, straight lining the
-> > processing, changing the format or search algorithms so more
-> > sequential cacheline accesses occurred resulting in less memory
-> > stalls, etc. i.e. reductions in cold cache lookup overhead will
-> > directly translate into faster container workload spin up.
-> >=20
->=20
-> I agree that this technology is novel and understand why it results
-> in faster cold cache lookup.
-> I do not know erofs enough to say if similar techniques could be
-> applied to optimize erofs lookup at mkfs.erofs time, but I can guess
-> that this optimization was never attempted.
-
-> > > > >=20
-On the contrary, erofs lookup is very similar to composefs. There is
-nothing magical about it, we're talking about pre-computed, static
-lists of names. What you do is you sort the names, put them in a
-compact seek-free form, and then you binary search on them. Composefs
-v3 has some changes to make larger directories slightly more efficient
-(no chunking), but the general performance should be comparable.
-
-I believe Gao said that mkfs.erofs could do slightly better at how data
-arranged so that related things are closer to each other. That may help
-some, but I don't think this is gonna be a massive difference.
-> > > > >=20
-
---=20
-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D=
--=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-
-=3D-=3D-=3D
- Alexander Larsson                                            Red Hat,
-Inc=20
-       alexl@redhat.com            alexander.larsson@gmail.com=20
-He's a short-sighted guerilla filmmaker with a winning smile and a way=20
-with the ladies. She's a scantily clad mutant magician's assistant
-living=20
-on borrowed time. They fight crime!=20
-
+Kind regards
+Uffe
