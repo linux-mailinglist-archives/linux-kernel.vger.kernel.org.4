@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE9A67B2EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD6867B2F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235141AbjAYND0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:03:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
+        id S235226AbjAYNGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234613AbjAYNDX (ORCPT
+        with ESMTP id S234613AbjAYNGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:03:23 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5FA32517;
-        Wed, 25 Jan 2023 05:03:22 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id s66so16149634oib.7;
-        Wed, 25 Jan 2023 05:03:22 -0800 (PST)
+        Wed, 25 Jan 2023 08:06:09 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8859B42DD1;
+        Wed, 25 Jan 2023 05:06:05 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id y19so21716097edc.2;
+        Wed, 25 Jan 2023 05:06:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t3TRaMLCElj28RgHhwbA7Ir1AYkB/9P+D5pixtveZOk=;
+        b=gU/PHo3MaV1FFz7RDJ9GB9ENGSgU04XrJxY54UbvRRroEsP3CKJ395BG15dYDZxAeG
+         c2mjPoOyOBLvI9ce0xMtgnJz0o/Pl6oytoT0mz0i6DfY3NPlAVMrb8xV5x8EjPny37HQ
+         0N0T69W2cb9SQZoqpmkTUeBKG+0RX6Wmj2FLrqc4dObWkwaLBMi6RQGY/BpEMzD7gQxT
+         emEtuIRXTvYidsnF+ZGCHo/gKkNM5sHW8/8qbF8s7kLaG0MkcVeOpR4d1QyThzFxgDbK
+         Sye0ZTMRJf/3fR0hWnNo48O7S7Ed6K4eQAv3wm2DRfZDzTZh3nxetNodaeZoX9refs80
+         I06g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2IsTVqB/pcPCh7jFJPHGPuaVWAVoNerPG3I9d0JHPnA=;
-        b=m01hYGWVW2kp1jbQlXzvLFodqjunuo+iSk/2MfS0grzI+g/0ppQjBQv8dlj8m1Uqig
-         8TilW5ASnjTDBq4fzZglRBhqZHYtDKm/FsxSFLcJeOHbuDk54jHS+DI6SI7aBDcAysLt
-         ADzqlgSP5cAJpyzQHW+39kHoYJWnUyrWjV0LB27SJY931KUk8T0YSI9ynxQzdlBM4/6D
-         OTS0hGF0F4GXqT6b88aWK4SJB71I2QzLbnRlTIKXHzRL0Wcw5Fg4h4cZUFIEFfmA8QX+
-         Pen1Mt/yl12MgJLcTxn+0mH4C2bcWZHtFybYmdgvv1d59BB+KnQbz0ahZs3YRwbK424P
-         QbvA==
-X-Gm-Message-State: AFqh2krIj3J5dSpin1QsxsrAEq5QCMNqYnQLlCAyhC++nyqGkc/tK9qi
-        YRsQWlmlC3wOrj84n/vzm87G76dDFGpqtQ==
-X-Google-Smtp-Source: AMrXdXua2J87aMbWaDqi6lg/OySCUUJw0Je5bvO/eaErvs39xZbjLj3PsbGZkrR5L0mUAkX7R3u+iw==
-X-Received: by 2002:aca:d17:0:b0:365:ce9c:edb6 with SMTP id 23-20020aca0d17000000b00365ce9cedb6mr14169059oin.30.1674651801032;
-        Wed, 25 Jan 2023 05:03:21 -0800 (PST)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id d10-20020a05620a166a00b00706b299d014sm3332243qko.132.2023.01.25.05.03.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 05:03:20 -0800 (PST)
-Received: by mail-yb1-f177.google.com with SMTP id d132so1340502ybb.5;
-        Wed, 25 Jan 2023 05:03:20 -0800 (PST)
-X-Received: by 2002:a25:d505:0:b0:7bf:d201:60cb with SMTP id
- r5-20020a25d505000000b007bfd20160cbmr2613641ybe.365.1674651799865; Wed, 25
- Jan 2023 05:03:19 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t3TRaMLCElj28RgHhwbA7Ir1AYkB/9P+D5pixtveZOk=;
+        b=Uo7Q75NJzzTrZA/kLbdI4qQqNmyBiOxolCFKyBWwbo0IH/tb+a2FjXqM7Swxi5vh0U
+         lX0fatbHUyj9G/TQH6qJYdE90ycH/zGE4zCFI7RTpj15KBBdavCd3OXmTn7ozUk57s1N
+         Fo5VBnhCcNbapsODngv14RmW8IdWx50u9IG3Q3UilCpxtrYn7AedR9hw5mikOpT8A4xk
+         JH67WkWL1fthHOdXtc0p8uY7BlhKBzU5pCtOnDkrRIgydKN/o6c1toclVTq0ochIiKLR
+         1JOf4vOGZ8Snd87JlkbwSufWLA7w8s3o+HUcFKISbEHG98rX8XdZ7JEN/8hRZz2qkKP9
+         Amcw==
+X-Gm-Message-State: AFqh2kqeaGJIqQQhwt0e5CDV3RQxGn2deE3hDCvBy6cZWu4fY/dApFqL
+        qhPs5kMR/xwV+X5v+2YVV1E=
+X-Google-Smtp-Source: AMrXdXsEYYBWCTr9uq6jIS+j9EUt8rXf9FBBVvduYXy7+KVbVQ8ZN3mqJ52n0uMLKbFpYDoavbCpqw==
+X-Received: by 2002:aa7:c994:0:b0:499:bf81:be6 with SMTP id c20-20020aa7c994000000b00499bf810be6mr36035323edt.37.1674651963963;
+        Wed, 25 Jan 2023 05:06:03 -0800 (PST)
+Received: from fedora (176-74-132-138.netdatacomm.cz. [176.74.132.138])
+        by smtp.gmail.com with ESMTPSA id f20-20020a056402005400b0049e1f167956sm2353139edu.9.2023.01.25.05.06.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 05:06:03 -0800 (PST)
+Date:   Wed, 25 Jan 2023 14:05:57 +0100
+From:   Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mani@kernel.org, hemantk@codeaurora.org, quic_jhugo@quicinc.com,
+        andersson@kernel.org, Michael.Srba@seznam.cz, arnd@arndb.de,
+        dipenp@nvidia.com, bvanassche@acm.org, iwona.winiarska@intel.com,
+        ogabbay@kernel.org, tzimmermann@suse.de, fmdefrancesco@gmail.com,
+        jason.m.bills@linux.intel.com, jae.hyun.yoo@linux.intel.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+Subject: Re: [PATCH 2/3] bus: add Wiegand bus driver
+Message-ID: <Y9EpNfZJ5irXZqvR@fedora>
+References: <20230104133414.39305-1-m.zatovic1@gmail.com>
+ <20230104133414.39305-3-m.zatovic1@gmail.com>
+ <Y7WHjD4psjgAAyPd@kroah.com>
 MIME-Version: 1.0
-References: <20230102221815.273719-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230102221815.273719-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20230102221815.273719-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 25 Jan 2023 14:03:08 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXaUE2xyP-t1fh2d1d4AVJ0Jm+-6rf3YMEx2n+MxjLRpg@mail.gmail.com>
-Message-ID: <CAMuHMdXaUE2xyP-t1fh2d1d4AVJ0Jm+-6rf3YMEx2n+MxjLRpg@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] arm64: dts: renesas: rzg2ul-smarc-som: Add PHY
- interrupt support for ETH{0/1}
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7WHjD4psjgAAyPd@kroah.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 2, 2023 at 11:19 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> The PHY interrupt (INT_N) pin is connected to IRQ2 and IRQ7 for ETH0 and
-> ETH1 respectively.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v2 -> v3
-> * No change
+Hello Greg,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.3.
+thank you for your insights! The static lists are needed
+for matching wiegand_board_info structures to
+wiegand_controller structures for drivers of devices that
+do not use devicetree. I have seen this approach in the
+SPI bus driver, so I assumed it was okay. If there is
+a better way, please let me know.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+With regards,
+Martin
