@@ -2,126 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EAB67B933
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5315667B93A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235983AbjAYSWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 13:22:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        id S235908AbjAYSXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236038AbjAYSWV (ORCPT
+        with ESMTP id S235541AbjAYSXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:22:21 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A2659B4D
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:22:18 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id h10so6936304ilq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:22:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mQQ+b96bYTR/JdRx7lqvrfEUi55TNY9dz9cLJO4CiN8=;
-        b=hisavarov1w5W1Psgb6++dahB/QO8VQceskeeHhNEm2K/HYSKp/ek8PCJtXp5Wcr7I
-         gJFlg88ced3rjDWxpZLZlh/bdYD+xNek2hkD9nRMPGgLq0qNwF2kw70+d4/sZ14DS3NS
-         F2cWRxngYJBjSmkvGBwxoNC3WL7bXBOpRqabY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mQQ+b96bYTR/JdRx7lqvrfEUi55TNY9dz9cLJO4CiN8=;
-        b=1tUwDQkZ96pGSemik1ExmvoXkVSdPVVK44ZlESir45m0S0OEoAV1tgedN6O7DcHeix
-         2veCvv8t6haD/pd2r0EEtuheYG5/pD6V+07PkOiV7oK+ijvlKUG0P3dH02txfb0Mm8G3
-         ho9J6rjbiP0/WnD+R8+C2iLKR8+RTHNkTCcfP4AS1Do9UJ5b3wQYIviOLFX/UH46ItOc
-         eqGGEEzPUMOt0/RWmy/FJNoeDkVPnmD7e+BohTM9JePenOlVMoBoXW2bwOEucK+uUQWb
-         EfGx9SetLVj8FP7QPQU83NG2Hvf3nFJoGTsDC9sUhSr35H8rGY0nmG5hWbSPJPYO7Iq6
-         HqPA==
-X-Gm-Message-State: AO0yUKWvgSX3YAqbqG8XHIfr2SFtrYGWfiWOC8E7vF2h366e8kWe4asc
-        4Cro09dGj+eawWsOe36GUwUIUHbJT+uS3b0H
-X-Google-Smtp-Source: AK7set8bYv+TVLVKa1ygBb0b8nY3hJXaX2kUZjCyWQbIRx3er6w2WzoqavPIvRBOh5sq1ig6fHsLCg==
-X-Received: by 2002:a05:6e02:1d0d:b0:310:a137:b6f5 with SMTP id i13-20020a056e021d0d00b00310a137b6f5mr3196365ila.16.1674670937352;
-        Wed, 25 Jan 2023 10:22:17 -0800 (PST)
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com. [209.85.166.44])
-        by smtp.gmail.com with ESMTPSA id j5-20020a056e02218500b0030bfdb6ef60sm1688921ila.58.2023.01.25.10.22.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 10:22:15 -0800 (PST)
-Received: by mail-io1-f44.google.com with SMTP id c66so3432308iof.12
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:22:15 -0800 (PST)
-X-Received: by 2002:a05:6638:2727:b0:374:f967:4187 with SMTP id
- m39-20020a056638272700b00374f9674187mr4302979jav.130.1674670934658; Wed, 25
- Jan 2023 10:22:14 -0800 (PST)
+        Wed, 25 Jan 2023 13:23:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958255A806
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:22:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674670946;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8TAHgioL+cbo0qEgcEaZEdMYDgI4uLoD69uULXZCMWk=;
+        b=e4lQvgw/NvWuSwBKETJfsbT0B4f3d3npyir4pM7X8m+Kd4MXjwrZOoFHcGrn02+gvOy2O4
+        /3myRhEXW6Az1W4rELRM7ZBc2BSS0KuxKulb99ogKq1oTki5kgd7YrXo4MBuIsTxJp6Lpf
+        7IvqRx9hlMvWgSeVgkGExFslSDzblXI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-292-deB-As1LMKysAVKBxmpPAg-1; Wed, 25 Jan 2023 13:22:21 -0500
+X-MC-Unique: deB-As1LMKysAVKBxmpPAg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BADC885C073;
+        Wed, 25 Jan 2023 18:22:20 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6EFB5492B01;
+        Wed, 25 Jan 2023 18:22:20 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 94285403C674B; Wed, 25 Jan 2023 15:22:00 -0300 (-03)
+Date:   Wed, 25 Jan 2023 15:22:00 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+Message-ID: <Y9FzSBw10MGXm2TK@tpad>
+References: <20230125073502.743446-1-leobras@redhat.com>
+ <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+ <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
 MIME-Version: 1.0
-References: <20230119145248.1.I90ffed3ddd21e818ae534f820cb4d6d8638859ab@changeid>
- <20230119145248.2.I2d7aec2fadb9c237cd0090a47d6a8ba2054bf0f8@changeid> <f08b04b2-3fdd-38f5-6402-16c57a3322d2@quicinc.com>
-In-Reply-To: <f08b04b2-3fdd-38f5-6402-16c57a3322d2@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 25 Jan 2023 10:21:57 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WHH5=NZPWSyu6P0HVMpSJK_53=S6PgyjJZCKz8-dE1rg@mail.gmail.com>
-Message-ID: <CAD=FV=WHH5=NZPWSyu6P0HVMpSJK_53=S6PgyjJZCKz8-dE1rg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm/msm/dp: Return IRQ_NONE for unhandled interrupts
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Brás wrote:
+> On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
+> > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
+> > > Disclaimer:
+> > > a - The cover letter got bigger than expected, so I had to split it in
+> > >     sections to better organize myself. I am not very confortable with it.
+> > > b - Performance numbers below did not include patch 5/5 (Remove flags
+> > >     from memcg_stock_pcp), which could further improve performance for
+> > >     drain_all_stock(), but I could only notice the optimization at the
+> > >     last minute.
+> > > 
+> > > 
+> > > 0 - Motivation:
+> > > On current codebase, when drain_all_stock() is ran, it will schedule a
+> > > drain_local_stock() for each cpu that has a percpu stock associated with a
+> > > descendant of a given root_memcg.
+> > > 
+> > > This happens even on 'isolated cpus', a feature commonly used on workloads that
+> > > are sensitive to interruption and context switching such as vRAN and Industrial
+> > > Control Systems.
+> > > 
+> > > Since this scheduling behavior is a problem to those workloads, the proposal is
+> > > to replace the current local_lock + schedule_work_on() solution with a per-cpu
+> > > spinlock.
+> > 
+> > If IIRC we have also discussed that isolated CPUs can simply opt out
+> > from the pcp caching and therefore the problem would be avoided
+> > altogether without changes to the locking scheme. I do not see anything
+> > regarding that in this submission. Could you elaborate why you have
+> > abandoned this option?
+> 
+> Hello Michal,
+> 
+> I understand pcp caching is a nice to have.
+> So while I kept the idea of disabling pcp caching in mind as an option, I first
+> tried to understand what kind of impacts we would be seeing when trying to
+> change the locking scheme.
 
-On Wed, Jan 25, 2023 at 9:22 AM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->
-> > -void dp_ctrl_isr(struct dp_ctrl *dp_ctrl)
-> > +irqreturn_t dp_ctrl_isr(struct dp_ctrl *dp_ctrl)
-> >   {
-> >       struct dp_ctrl_private *ctrl;
-> >       u32 isr;
-> > +     irqreturn_t ret = IRQ_NONE;
-> >
-> >       if (!dp_ctrl)
-> > -             return;
-> > +             return IRQ_NONE;
-> >
-> >       ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
-> >
-> >       isr = dp_catalog_ctrl_get_interrupt(ctrl->catalog);
-> can you add (!isr) check and return IRQ_NONE here to be consistent with
-> dp_aux_isr()?
+Remote draining reduces interruptions whether CPU 
+is marked as isolated or not:
 
-I could, though it doesn't really buy us a whole lot in this case and
-just adds an extra test that's not needed. Here it should be easy for
-someone reading the function to see that if "isr == 0" that neither of
-the two "if" statements below will fire and we'll return "IRQ_NONE"
-anyway.
+- Allows isolated CPUs from benefiting of pcp caching.
+- Removes the interruption to non isolated CPUs. See for example 
 
-...that actually made me go back and wonder whether we still needed
-the "if" test in dp_aux_isr() or if it too was also redundant. It
-turns out that it's not! The previous patch made dp_aux_irq() detect
-unexpected interrupts. Thus the "if (!isr)" test earlier is important
-because otherwise we'd end up WARNing "Unexpected interrupt:
-0x00000000" which would be confusing.
+https://lkml.org/lkml/2022/6/13/2769
 
-So unless you or others feel strongly that I should add the redundant
-test here, I'd rather keep it off. Let me know.
+"Minchan Kim tested this independently and reported;
 
--Doug
+       My workload is not NOHZ CPUs but run apps under heavy memory
+       pressure so they goes to direct reclaim and be stuck on
+       drain_all_pages until work on workqueue run.
+
+       unit: nanosecond
+       max(dur)        avg(dur)                count(dur)
+       166713013       487511.77786438033      1283
+
+       From traces, system encountered the drain_all_pages 1283 times and
+       worst case was 166ms and avg was 487us.
+
+       The other problem was alloc_contig_range in CMA. The PCP draining
+       takes several hundred millisecond sometimes though there is no
+       memory pressure or a few of pages to be migrated out but CPU were
+       fully booked.
+
+       Your patch perfectly removed those wasted time."
+
+
+> After I raised the data in the cover letter, I found that the performance impact
+> appears not be that big. So in order to try keeping the pcp cache on isolated
+> cpus active, I decided to focus effort on the locking scheme change.
+> 
+> I mean, my rationale is: if is there a non-expensive way of keeping the feature,
+> why should we abandon it?
+> 
+> Best regards,
+> Leo
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+
