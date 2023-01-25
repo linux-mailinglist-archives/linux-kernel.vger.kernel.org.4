@@ -2,72 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E0D67B7AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090F367B7B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbjAYQ7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
+        id S235940AbjAYRAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:00:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjAYQ7W (ORCPT
+        with ESMTP id S235745AbjAYRAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:59:22 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5313FE3AA;
-        Wed, 25 Jan 2023 08:59:12 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id m12so2292072edq.5;
-        Wed, 25 Jan 2023 08:59:12 -0800 (PST)
+        Wed, 25 Jan 2023 12:00:17 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F3F65B5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:00:14 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-4c24993965eso272269887b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:00:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:message-id:subject:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Aq9xOcHfIHjbGoqGBQK/mtHjTWt1jvzmQ70KiubeQ08=;
-        b=h1L402zyr75LqZJea+H/1KYNhcjFdMiQR8ixPLd9VMmMnQQYxPoEChTHbQU76B6L7G
-         eN/loO62VoMvgH30B1pC0I1H2YMDn2sEnVTRvsvmmodtbKRA4NMZ8QuguADcS7fGW+NP
-         WKpPQMIjaSi+hrnFXCyh6WkvdffynpoGACLVwXeU/WD1tieasO9oA3tAN42HG0qcdW8G
-         OvcTEcOhEsyrYDtWhQvkwzj0fGXl55+XxGzty5itC8ndG5h8bT/U/QnlUUicrLgYlwi9
-         hYsqIKxmsiUcGhocfzw9P6BTUEMY5e2n8cLcxURNEBtWqL4E7mp01+HBliXoqUtNWl4v
-         t1+g==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=L4MXGiF0uBNS4YdEO04YxfSu/PH3d6GEYxinGGkJ0l0=;
+        b=W2wM+2B23DX4UFGjrNjz2QhZIRJJ0rJbNeAj16MEZr1nVm+y2drgVLMWhYKM+RXZwl
+         LyA9Ln6ru3ELYSr9r7So/z16X90Zls60BXzg/QzJqLOLV/j0Tixqf16TWNyXZGnACB9E
+         QkGJl1ScGfsTp7c4ttit0pgHNn4ey7S424sXU9dWBD5cTrLynb/1YBuhhrezEYSZhLSi
+         3eb09az3BMlgAYXh3d2+5Q7sC0FqvrC0NX040NYjkqv/h2gdKBNO3YpN4EQOf23xtORi
+         NxWfmFe951E1Au7ZDRJqODWALmTWnaVbj7QqRA33jeb/AA79tsFrFPyzpW0c4v2lui2R
+         IvJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:message-id:subject:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Aq9xOcHfIHjbGoqGBQK/mtHjTWt1jvzmQ70KiubeQ08=;
-        b=r0XvskdOHdGKTfHF2FlyK+RRbAzOBEpnLUBHoUl8ypiozxidIaBBEj/F5uRr7m88mQ
-         06tci8CNKob2kSSjiHZaGJdpJMuSguS9B0GiOLG1Ry1F3cJqxdhCYujFoivYltl2gzBk
-         +Ywjg4HwmkszNcR0Eqe69PVivnnQOen+tYbxKbZZbCqiCuHCrhmZiX61OoTVQGBiArOa
-         yTIcUubkZzjH6mt8SQ56TPodPCJYLiYuVzKYUcVivMuPgwq1Rcd2I8g1qpKrLuEghaOM
-         Pfcu8JE/25G+8Zk9zjTKXrcVcEnCqfSrIocXexTjVUohCeEc97V9qWO1QYIXepHbFv41
-         bbaw==
-X-Gm-Message-State: AO0yUKXC5sWnkjTu4n/6mKztzh2R3m4VjDZVCKg51MQF5aSI0KQaBmZj
-        ghisF+7qq2t+QZLqhdovLuo2HLFqXwM=
-X-Google-Smtp-Source: AK7set828rJWOL9F7OxFWyaUdhH3EqcoYYtCIP2A/hedXZr7HejjqH6EPtD8Kfa/MCAJpUQTo9FBbA==
-X-Received: by 2002:a05:6402:31e8:b0:49f:20ee:4519 with SMTP id dy8-20020a05640231e800b0049f20ee4519mr8988460edb.13.1674665950310;
-        Wed, 25 Jan 2023 08:59:10 -0800 (PST)
-Received: from jo-einhundert ([2a02:908:13d6:2180:36e8:f43a:77c6:b1a2])
-        by smtp.gmail.com with ESMTPSA id e25-20020a170906845900b008784ecb2dd5sm119547ejy.104.2023.01.25.08.59.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 08:59:09 -0800 (PST)
-Date:   Wed, 25 Jan 2023 17:59:08 +0100
-From:   =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v5] usb: gadget:  add WebUSB landing page support
-Message-ID: <Y9Ff3Np86AUK4b1k@jo-einhundert>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L4MXGiF0uBNS4YdEO04YxfSu/PH3d6GEYxinGGkJ0l0=;
+        b=2DjhzUqZdxSyjCyrbdGZ0CZjVyQeQWM+enYPlVwQJ6JvkoVc3+qS8bVTVICl6zr4E+
+         omDFeWJHpYLMET2hLHBNpHvCKAb5Bw/8WKw7U4SFMRTxvHEZk1aWXiqG9oMPaQHgehu7
+         Yk+NKT1J7jFggxpAczrTI23VO5zOrfb0o8SCk5cXFzbXvUvAJuDWZ95QqyjnTjMrP8uv
+         A/ry5tYt7FXjmBnUOkHinZiOefNqTQVA4OOdeWKxJC1zwRf9unPRiDRqxL255VY0Xkcs
+         VE4QAiNIj6eX1hynEJ+62pCBkNt0UtEc3g71nmgQ8dCWxFxROFGa2HbLIZ5rMnITDPCm
+         d1wg==
+X-Gm-Message-State: AFqh2kpJr/cgmy/S1Wf00/SW4cQsqsXEgRVV5B1ZHNZnOrtejTY3gksX
+        94dsfeUK/Gm71xX37oY7QcmFRINmTfP48C41vt8w+g==
+X-Google-Smtp-Source: AMrXdXv6WFpwQ2RivVVjLGZIQcqOZe35ABaf7/kGtBR6QRxHke62z7D7Nf0zd78A9HxP1avFtZlnWBmbm7RD5GZUdQA=
+X-Received: by 2002:a0d:c0c7:0:b0:502:30d7:5fff with SMTP id
+ b190-20020a0dc0c7000000b0050230d75fffmr2052050ywd.347.1674666013171; Wed, 25
+ Jan 2023 09:00:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y86cy1AM4w5ju5A4@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230125083851.27759-1-surenb@google.com> <20230125083851.27759-6-surenb@google.com>
+ <Y9D5hjcprLI92VKf@dhcp22.suse.cz>
+In-Reply-To: <Y9D5hjcprLI92VKf@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 25 Jan 2023 09:00:00 -0800
+Message-ID: <CAJuCfpHHPB=VE7Q=hoxVj7GBF18rpSQ-O-5+S3EPxOB5rHOrDg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] mm: introduce mod_vm_flags_nolock and use it in untrack_pfn
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        chenhuacai@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        qianweili@huawei.com, wangzhou1@hisilicon.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, l.stach@pengutronix.de,
+        krzysztof.kozlowski@linaro.org, patrik.r.jakobsson@gmail.com,
+        matthias.bgg@gmail.com, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        tomba@kernel.org, hjc@rock-chips.com, heiko@sntech.de,
+        ray.huang@amd.com, kraxel@redhat.com, sre@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        dimitri.sivanich@hpe.com, zhangfei.gao@linaro.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        dgilbert@interlog.com, hdegoede@redhat.com, mst@redhat.com,
+        jasowang@redhat.com, alex.williamson@redhat.com, deller@gmx.de,
+        jayalk@intworks.biz, viro@zeniv.linux.org.uk, nico@fluxnic.net,
+        xiang@kernel.org, chao@kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, miklos@szeredi.hu,
+        mike.kravetz@oracle.com, muchun.song@linux.dev, bhe@redhat.com,
+        andrii@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, perex@perex.cz, tiwai@suse.com,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-graphics-maintainer@vmware.com,
+        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org,
+        loongarch@lists.linux.dev, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, nvdimm@lists.linux.dev,
+        dmaengine@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-accelerators@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        devel@lists.orangefs.org, kexec@lists.infradead.org,
+        linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
+        selinux@vger.kernel.org, alsa-devel@alsa-project.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,616 +137,263 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a custom (non-USB IF) extension to the USB standard:
+On Wed, Jan 25, 2023 at 1:42 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Wed 25-01-23 00:38:50, Suren Baghdasaryan wrote:
+> > In cases when VMA flags are modified after VMA was isolated and mmap_lock
+> > was downgraded, flags modifications would result in an assertion because
+> > mmap write lock is not held.
+> > Introduce mod_vm_flags_nolock to be used in such situation.
+> > Pass a hint to untrack_pfn to conditionally use mod_vm_flags_nolock for
+> > flags modification and to avoid assertion.
+>
+> The changelog nor the documentation of mod_vm_flags_nolock
+> really explain when it is safe to use it. This is really important for
+> future potential users.
 
-https://wicg.github.io/webusb/
+True. I'll add clarification in the comments and in the changelog. Thanks!
 
-This specification is published under the W3C Community Contributor
-Agreement, which in particular allows to implement the specification
-without any royalties.
-
-The specification allows USB gadgets to announce an URL to landing
-page and describes a Javascript interface for websites to interact
-with the USB gadget, if the user allows it. It is currently
-supported by Chromium-based browsers, such as Chrome, Edge and
-Opera on all major operating systems including Linux.
-
-This patch adds optional support for Linux-based USB gadgets
-wishing to expose such a landing page.
-
-During device enumeration, a host recognizes that the announced
-USB version is at least 2.01, which means, that there are BOS
-descriptors available. The device than announces WebUSB support
-using a platform device capability. This includes a vendor code
-under which the landing page URL can be retrieved using a
-vendor-specific request.
-
-Previously, the BOS descriptors would unconditionally include an
-LPM related descriptor, as BOS descriptors were only ever sent
-when the device was LPM capable. As this is no longer the case,
-this patch puts this descriptor behind a lpm_capable condition.
-
-Usage is modeled after os_desc descriptors:
-echo 1 > webusb/use
-echo "https://www.kernel.org" > webusb/landingPage
-
-lsusb will report the device with the following lines:
-  Platform Device Capability:
-    bLength                24
-    bDescriptorType        16
-    bDevCapabilityType      5
-    bReserved               0
-    PlatformCapabilityUUID    {3408b638-09a9-47a0-8bfd-a0768815b665}
-      WebUSB:
-        bcdVersion    1.00
-        bVendorCode      0
-        iLandingPage     1 https://www.kernel.org
-
-Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
----
-V4 -> V5: * Addressed the htmldocs warnings reported by Stephen Rothwell
-	  * Fixed GUID/UID usage as pointed out by Andy Shevchenko
-	  * Changed locking in configfs as pointed out by Andy Shevchenko
-V3 -> V4: Addressed comments by Andrzej Pietrasiewicz and Alan Stern
-          * Moved WebUSB specific structs and constants to its own header file
-          * added structs for all descriptors sent
-          * added the magic numbers to the new header file with links to the specification
-          * added length validation to landingPage sysfs interface
-V2 -> V3: improved commit message to include additional condition in desc_bos as per comment
-          by Alan Stern
-V1 -> V2: cleaned up coding style, made URL scheme comparison case insensitive, addressed review
-          comments by Alan Stern
-V0 -> V1: use sysfs_emit instead of sprintf and use lock in webusb_bcdVersion_store, addressed review
-          comments by Christophe JAILLET
-
-Checkpatch currently gives a warning if MAINTAINERS should be updated. I didn't because I feel this patch is too small for adding me here.
-Nevertheless, if you think I should, let me know.
-
-
- Documentation/ABI/testing/configfs-usb-gadget |  13 ++
- drivers/usb/gadget/composite.c                | 102 +++++++++--
- drivers/usb/gadget/configfs.c                 | 168 ++++++++++++++++++
- include/linux/usb/composite.h                 |  11 ++
- include/linux/usb/webusb.h                    |  80 +++++++++
- include/uapi/linux/usb/ch9.h                  |  16 ++
- 6 files changed, 380 insertions(+), 10 deletions(-)
- create mode 100644 include/linux/usb/webusb.h
-
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget b/Documentation/ABI/testing/configfs-usb-gadget
-index b7943aa7e997..a8bb896def54 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget
-+++ b/Documentation/ABI/testing/configfs-usb-gadget
-@@ -143,3 +143,16 @@ Description:
- 		qw_sign		an identifier to be reported as "OS String"
- 				proper
- 		=============	===============================================
-+
-+What:		/config/usb-gadget/gadget/webusb
-+Date:		Dec 2022
-+KernelVersion:	6.3
-+Description:
-+		This group contains "WebUSB" extension handling attributes.
-+
-+		=============	===============================================
-+		use		flag turning "WebUSB" support on/off
-+		bcdVersion	bcd WebUSB specification version number
-+		bVendorCode	one-byte value used for custom per-device
-+		landingPage	UTF-8 encoded URL of the device's landing page
-+		=============	===============================================
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 403563c06477..fa7dd6cf014d 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -14,9 +14,11 @@
- #include <linux/device.h>
- #include <linux/utsname.h>
- #include <linux/bitfield.h>
-+#include <linux/uuid.h>
- 
- #include <linux/usb/composite.h>
- #include <linux/usb/otg.h>
-+#include <linux/usb/webusb.h>
- #include <asm/unaligned.h>
- 
- #include "u_os_desc.h"
-@@ -713,14 +715,16 @@ static int bos_desc(struct usb_composite_dev *cdev)
- 	 * A SuperSpeed device shall include the USB2.0 extension descriptor
- 	 * and shall support LPM when operating in USB2.0 HS mode.
- 	 */
--	usb_ext = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
--	bos->bNumDeviceCaps++;
--	le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
--	usb_ext->bLength = USB_DT_USB_EXT_CAP_SIZE;
--	usb_ext->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
--	usb_ext->bDevCapabilityType = USB_CAP_TYPE_EXT;
--	usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT |
--					    USB_BESL_SUPPORT | besl);
-+	if (cdev->gadget->lpm_capable) {
-+		usb_ext = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
-+		bos->bNumDeviceCaps++;
-+		le16_add_cpu(&bos->wTotalLength, USB_DT_USB_EXT_CAP_SIZE);
-+		usb_ext->bLength = USB_DT_USB_EXT_CAP_SIZE;
-+		usb_ext->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
-+		usb_ext->bDevCapabilityType = USB_CAP_TYPE_EXT;
-+		usb_ext->bmAttributes = cpu_to_le32(USB_LPM_SUPPORT |
-+							USB_BESL_SUPPORT | besl);
-+	}
- 
- 	/*
- 	 * The Superspeed USB Capability descriptor shall be implemented by all
-@@ -821,6 +825,37 @@ static int bos_desc(struct usb_composite_dev *cdev)
- 		}
- 	}
- 
-+	/* The WebUSB Platform Capability descriptor */
-+	if (cdev->use_webusb) {
-+		struct usb_plat_dev_cap_descriptor *webusb_cap;
-+		struct usb_webusb_cap_data *webusb_cap_data;
-+		guid_t webusb_uuid = WEBUSB_UUID;
-+
-+		webusb_cap = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
-+		webusb_cap_data = (struct usb_webusb_cap_data *) webusb_cap->CapabilityData;
-+		bos->bNumDeviceCaps++;
-+		le16_add_cpu(&bos->wTotalLength,
-+			USB_DT_USB_PLAT_DEV_CAP_SIZE(USB_WEBUSB_CAP_DATA_SIZE));
-+
-+		webusb_cap->bLength = USB_DT_USB_PLAT_DEV_CAP_SIZE(USB_WEBUSB_CAP_DATA_SIZE);
-+		webusb_cap->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
-+		webusb_cap->bDevCapabilityType = USB_PLAT_DEV_CAP_TYPE;
-+		webusb_cap->bReserved = 0;
-+		export_guid(webusb_cap->UUID, &webusb_uuid);
-+
-+		if (cdev->bcd_webusb_version != 0)
-+			webusb_cap_data->bcdVersion = cpu_to_le16(cdev->bcd_webusb_version);
-+		else
-+			webusb_cap_data->bcdVersion = WEBUSB_VERSION_1_00;
-+
-+		webusb_cap_data->bVendorCode = cdev->b_webusb_vendor_code;
-+
-+		if (strnlen(cdev->landing_page, sizeof(cdev->landing_page)) > 0)
-+			webusb_cap_data->iLandingPage = WEBUSB_LANDING_PAGE_PRESENT;
-+		else
-+			webusb_cap_data->iLandingPage = WEBUSB_LANDING_PAGE_NOT_PRESENT;
-+	}
-+
- 	return le16_to_cpu(bos->wTotalLength);
- }
- 
-@@ -1744,7 +1779,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 					cdev->desc.bcdUSB = cpu_to_le16(0x0210);
- 				}
- 			} else {
--				if (gadget->lpm_capable)
-+				if (gadget->lpm_capable || cdev->use_webusb)
- 					cdev->desc.bcdUSB = cpu_to_le16(0x0201);
- 				else
- 					cdev->desc.bcdUSB = cpu_to_le16(0x0200);
-@@ -1779,7 +1814,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 			break;
- 		case USB_DT_BOS:
- 			if (gadget_is_superspeed(gadget) ||
--			    gadget->lpm_capable) {
-+			    gadget->lpm_capable || cdev->use_webusb) {
- 				value = bos_desc(cdev);
- 				value = min(w_length, (u16) value);
- 			}
-@@ -2013,6 +2048,53 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 			goto check_value;
- 		}
- 
-+		/*
-+		 * WebUSB URL descriptor handling, following:
-+		 * https://wicg.github.io/webusb/#device-requests
-+		 */
-+		if (cdev->use_webusb &&
-+		    ctrl->bRequestType == (USB_DIR_IN | USB_TYPE_VENDOR) &&
-+		    w_index == WEBUSB_GET_URL &&
-+		    w_value == WEBUSB_LANDING_PAGE_PRESENT &&
-+		    ctrl->bRequest == cdev->b_webusb_vendor_code) {
-+			unsigned int	landing_page_length;
-+			unsigned int	landing_page_offset;
-+			struct webusb_url_descriptor *url_descriptor =
-+					(struct webusb_url_descriptor *)cdev->req->buf;
-+
-+			url_descriptor->bDescriptorType = WEBUSB_URL_DESCRIPTOR_TYPE;
-+
-+			if (strncasecmp(cdev->landing_page, "https://",  8) == 0) {
-+				landing_page_offset = 8;
-+				url_descriptor->bScheme = WEBUSB_URL_SCHEME_HTTPS;
-+			} else if (strncasecmp(cdev->landing_page, "http://", 7) == 0) {
-+				landing_page_offset = 7;
-+				url_descriptor->bScheme = WEBUSB_URL_SCHEME_HTTP;
-+			} else {
-+				landing_page_offset = 0;
-+				url_descriptor->bScheme = WEBUSB_URL_SCHEME_NONE;
-+			}
-+
-+			landing_page_length = strnlen(cdev->landing_page,
-+				sizeof(url_descriptor->URL)
-+				- WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + landing_page_offset);
-+
-+			if (ctrl->wLength < WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH
-+					    + landing_page_length)
-+				landing_page_length = ctrl->wLength
-+					- WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + landing_page_offset;
-+
-+			memcpy(url_descriptor->URL,
-+				cdev->landing_page + landing_page_offset,
-+				landing_page_length - landing_page_offset);
-+			url_descriptor->bLength = landing_page_length
-+				- landing_page_offset + WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH;
-+
-+			value = url_descriptor->bLength;
-+
-+			goto check_value;
-+		}
-+
- 		VDBG(cdev,
- 			"non-core control req%02x.%02x v%04x i%04x l%d\n",
- 			ctrl->bRequestType, ctrl->bRequest,
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index 96121d1c8df4..497539e1bca4 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -7,6 +7,7 @@
- #include <linux/nls.h>
- #include <linux/usb/composite.h>
- #include <linux/usb/gadget_configfs.h>
-+#include <linux/usb/webusb.h>
- #include "configfs.h"
- #include "u_f.h"
- #include "u_os_desc.h"
-@@ -39,6 +40,7 @@ struct gadget_info {
- 	struct config_group configs_group;
- 	struct config_group strings_group;
- 	struct config_group os_desc_group;
-+	struct config_group webusb_group;
- 
- 	struct mutex lock;
- 	struct usb_gadget_strings *gstrings[MAX_USB_STRING_LANGS + 1];
-@@ -50,6 +52,11 @@ struct gadget_info {
- 	bool use_os_desc;
- 	char b_vendor_code;
- 	char qw_sign[OS_STRING_QW_SIGN_LEN];
-+	bool use_webusb;
-+	u16 bcd_webusb_version;
-+	u8 b_webusb_vendor_code;
-+	char landing_page[WEBUSB_URL_RAW_MAX_LENGTH];
-+
- 	spinlock_t spinlock;
- 	bool unbind;
- };
-@@ -780,6 +787,156 @@ static void gadget_strings_attr_release(struct config_item *item)
- USB_CONFIG_STRING_RW_OPS(gadget_strings);
- USB_CONFIG_STRINGS_LANG(gadget_strings, gadget_info);
- 
-+static inline struct gadget_info *webusb_item_to_gadget_info(
-+		struct config_item *item)
-+{
-+	return container_of(to_config_group(item),
-+			struct gadget_info, webusb_group);
-+}
-+
-+static ssize_t webusb_use_show(struct config_item *item, char *page)
-+{
-+	return sysfs_emit(page, "%d\n",
-+			webusb_item_to_gadget_info(item)->use_webusb);
-+}
-+
-+static ssize_t webusb_use_store(struct config_item *item, const char *page,
-+				 size_t len)
-+{
-+	struct gadget_info *gi = webusb_item_to_gadget_info(item);
-+	int ret;
-+	bool use;
-+
-+	ret = kstrtobool(page, &use);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&gi->lock);
-+	gi->use_webusb = use;
-+	mutex_unlock(&gi->lock);
-+
-+	return len;
-+}
-+
-+static ssize_t webusb_bcdVersion_show(struct config_item *item, char *page)
-+{
-+	return sysfs_emit(page, "0x%04x\n",
-+					webusb_item_to_gadget_info(item)->bcd_webusb_version);
-+}
-+
-+static ssize_t webusb_bcdVersion_store(struct config_item *item,
-+		const char *page, size_t len)
-+{
-+	struct gadget_info *gi = webusb_item_to_gadget_info(item);
-+	u16 bcdVersion;
-+	int ret;
-+
-+	ret = kstrtou16(page, 0, &bcdVersion);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&gi->lock);
-+
-+	ret = is_valid_bcd(bcdVersion);
-+	if (ret)
-+		goto out;
-+
-+	gi->bcd_webusb_version = bcdVersion;
-+	ret = len;
-+
-+out:
-+	mutex_unlock(&gi->lock);
-+
-+	return ret;
-+}
-+
-+static ssize_t webusb_bVendorCode_show(struct config_item *item, char *page)
-+{
-+	return sysfs_emit(page, "0x%02x\n",
-+			webusb_item_to_gadget_info(item)->b_webusb_vendor_code);
-+}
-+
-+static ssize_t webusb_bVendorCode_store(struct config_item *item,
-+					   const char *page, size_t len)
-+{
-+	struct gadget_info *gi = webusb_item_to_gadget_info(item);
-+	int ret;
-+	u8 b_vendor_code;
-+
-+	ret = kstrtou8(page, 0, &b_vendor_code);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&gi->lock);
-+	gi->b_webusb_vendor_code = b_vendor_code;
-+	mutex_unlock(&gi->lock);
-+
-+	return len;
-+}
-+
-+static ssize_t webusb_landingPage_show(struct config_item *item, char *page)
-+{
-+	return sysfs_emit(page, "%s\n", webusb_item_to_gadget_info(item)->landing_page);
-+}
-+
-+static ssize_t webusb_landingPage_store(struct config_item *item, const char *page,
-+				     size_t len)
-+{
-+	struct gadget_info *gi = webusb_item_to_gadget_info(item);
-+	unsigned int bytes_to_strip = 0;
-+	int l = len;
-+
-+	if (page[l - 1] == '\n') {
-+		--l;
-+		++bytes_to_strip;
-+	}
-+
-+	if (l > sizeof(gi->landing_page)) {
-+		pr_err("webusb: landingPage URL too long\n");
-+		return -EINVAL;
-+	}
-+
-+	// validation
-+	if (strncasecmp(page, "https://",  8) == 0)
-+		bytes_to_strip = 8;
-+	else if (strncasecmp(page, "http://", 7) == 0)
-+		bytes_to_strip = 7;
-+	else
-+		bytes_to_strip = 0;
-+
-+	if (l > U8_MAX - WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + bytes_to_strip) {
-+		pr_err("webusb: landingPage URL %d bytes too long for given URL scheme\n",
-+			l - U8_MAX + WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH - bytes_to_strip);
-+		return -EINVAL;
-+	}
-+
-+	mutex_lock(&gi->lock);
-+	// ensure 0 bytes are set, in case the new landing page is shorter then the old one.
-+	memset(gi->landing_page, 0, sizeof(gi->landing_page));
-+	memcpy(gi->landing_page, page, l);
-+	mutex_unlock(&gi->lock);
-+
-+	return len;
-+}
-+
-+CONFIGFS_ATTR(webusb_, use);
-+CONFIGFS_ATTR(webusb_, bVendorCode);
-+CONFIGFS_ATTR(webusb_, bcdVersion);
-+CONFIGFS_ATTR(webusb_, landingPage);
-+
-+static struct configfs_attribute *webusb_attrs[] = {
-+	&webusb_attr_use,
-+	&webusb_attr_bcdVersion,
-+	&webusb_attr_bVendorCode,
-+	&webusb_attr_landingPage,
-+	NULL,
-+};
-+
-+static struct config_item_type webusb_type = {
-+	.ct_attrs	= webusb_attrs,
-+	.ct_owner	= THIS_MODULE,
-+};
-+
- static inline struct gadget_info *os_desc_item_to_gadget_info(
- 		struct config_item *item)
- {
-@@ -1341,6 +1498,13 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
- 		gi->cdev.desc.iSerialNumber = s[USB_GADGET_SERIAL_IDX].id;
- 	}
- 
-+	if (gi->use_webusb) {
-+		cdev->use_webusb = true;
-+		cdev->bcd_webusb_version = gi->bcd_webusb_version;
-+		cdev->b_webusb_vendor_code = gi->b_webusb_vendor_code;
-+		memcpy(cdev->landing_page, gi->landing_page, WEBUSB_URL_RAW_MAX_LENGTH);
-+	}
-+
- 	if (gi->use_os_desc) {
- 		cdev->use_os_string = true;
- 		cdev->b_vendor_code = gi->b_vendor_code;
-@@ -1605,6 +1769,10 @@ static struct config_group *gadgets_make(
- 			&os_desc_type);
- 	configfs_add_default_group(&gi->os_desc_group, &gi->group);
- 
-+	config_group_init_type_name(&gi->webusb_group, "webusb",
-+			&webusb_type);
-+	configfs_add_default_group(&gi->webusb_group, &gi->group);
-+
- 	gi->composite.bind = configfs_do_nothing;
- 	gi->composite.unbind = configfs_do_nothing;
- 	gi->composite.suspend = NULL;
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index 43ac3fa760db..7ef8cea67f50 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -25,6 +25,7 @@
- #include <linux/version.h>
- #include <linux/usb/ch9.h>
- #include <linux/usb/gadget.h>
-+#include <linux/usb/webusb.h>
- #include <linux/log2.h>
- #include <linux/configfs.h>
- 
-@@ -431,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
-  * @qw_sign: qwSignature part of the OS string
-  * @b_vendor_code: bMS_VendorCode part of the OS string
-  * @use_os_string: false by default, interested gadgets set it
-+ * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
-+ * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
-+ * @landing_page: empty by default, landing page to announce in WebUSB
-+ * @use_webusb:: false by default, interested gadgets set it
-  * @os_desc_config: the configuration to be used with OS descriptors
-  * @setup_pending: true when setup request is queued but not completed
-  * @os_desc_pending: true when os_desc request is queued but not completed
-@@ -474,6 +479,12 @@ struct usb_composite_dev {
- 	struct usb_configuration	*os_desc_config;
- 	unsigned int			use_os_string:1;
- 
-+	/* WebUSB */
-+	u16				bcd_webusb_version;
-+	u8				b_webusb_vendor_code;
-+	char				landing_page[WEBUSB_URL_RAW_MAX_LENGTH];
-+	unsigned int			use_webusb:1;
-+
- 	/* private: */
- 	/* internals */
- 	unsigned int			suspended:1;
-diff --git a/include/linux/usb/webusb.h b/include/linux/usb/webusb.h
-new file mode 100644
-index 000000000000..fe43020b4a48
---- /dev/null
-+++ b/include/linux/usb/webusb.h
-@@ -0,0 +1,80 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * WebUSB descriptors and constants
-+ *
-+ * Copyright (C) 2023 Jó Ágila Bitsch <jgilab@gmail.com>
-+ */
-+
-+#ifndef	__LINUX_USB_WEBUSB_H
-+#define	__LINUX_USB_WEBUSB_H
-+
-+#include "uapi/linux/usb/ch9.h"
-+
-+/*
-+ * Little Endian PlatformCapablityUUID for WebUSB
-+ * 3408b638-09a9-47a0-8bfd-a0768815b665
-+ * to identify Platform Device Capability descriptors as referring to WebUSB.
-+ */
-+#define WEBUSB_UUID \
-+	GUID_INIT(0x3408b638, 0x09a9, 0x47a0, 0x8b, 0xfd, 0xa0, 0x76, 0x88, 0x15, 0xb6, 0x65)
-+
-+/*
-+ * WebUSB Platform Capability data
-+ *
-+ * A device announces support for the
-+ * WebUSB command set by including the following Platform Descriptor Data in its
-+ * Binary Object Store associated with the WebUSB_UUID above.
-+ * See: https://wicg.github.io/webusb/#webusb-platform-capability-descriptor
-+ */
-+struct usb_webusb_cap_data {
-+	__le16 bcdVersion;
-+#define WEBUSB_VERSION_1_00	cpu_to_le16(0x0100) /* currently only version 1.00 is defined */
-+	u8  bVendorCode;
-+	u8  iLandingPage;
-+#define WEBUSB_LANDING_PAGE_NOT_PRESENT	0
-+#define WEBUSB_LANDING_PAGE_PRESENT	1 /* we chose the fixed index 1 for the URL descriptor */
-+} __packed;
-+
-+#define USB_WEBUSB_CAP_DATA_SIZE	4
-+
-+/*
-+ * Get URL Request
-+ *
-+ * The request to fetch an URL is defined in https://wicg.github.io/webusb/#get-url as:
-+ * bmRequestType: (USB_DIR_IN | USB_TYPE_VENDOR) = 11000000B
-+ * bRequest: bVendorCode
-+ * wValue: iLandingPage
-+ * wIndex: GET_URL = 2
-+ * wLength: Descriptor Length (typically U8_MAX = 255)
-+ * Data: URL Descriptor
-+ */
-+#define WEBUSB_GET_URL 2
-+
-+/*
-+ * This descriptor contains a single URL and is returned by the Get URL request.
-+ *
-+ * See: https://wicg.github.io/webusb/#url-descriptor
-+ */
-+struct webusb_url_descriptor {
-+	u8  bLength;
-+#define WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH	3
-+	u8  bDescriptorType;
-+#define WEBUSB_URL_DESCRIPTOR_TYPE		3
-+	u8  bScheme;
-+#define WEBUSB_URL_SCHEME_HTTP			0
-+#define WEBUSB_URL_SCHEME_HTTPS			1
-+#define WEBUSB_URL_SCHEME_NONE			255
-+	u8  URL[U8_MAX - WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH];
-+} __packed;
-+
-+/*
-+ * Buffer size to hold the longest URL that can be in an URL descriptor
-+ *
-+ * The descriptor can be U8_MAX  bytes long.
-+ * WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH bytes are used for a header.
-+ * Since the longest prefix that might be stripped is "https://", we may accommodate an additional
-+ * 8 bytes.
-+ */
-+#define WEBUSB_URL_RAW_MAX_LENGTH (U8_MAX - WEBUSB_URL_DESCRIPTOR_HEADER_LENGTH + 8)
-+
-+#endif /* __LINUX_USB_USBNET_H */
-diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
-index 31fcfa084e63..b17e3a21b15f 100644
---- a/include/uapi/linux/usb/ch9.h
-+++ b/include/uapi/linux/usb/ch9.h
-@@ -947,6 +947,22 @@ struct usb_ss_container_id_descriptor {
- 
- #define USB_DT_USB_SS_CONTN_ID_SIZE	20
- 
-+/*
-+ * Platform Device Capability descriptor: Defines platform specific device
-+ * capabilities
-+ */
-+#define	USB_PLAT_DEV_CAP_TYPE	5
-+struct usb_plat_dev_cap_descriptor {
-+	__u8  bLength;
-+	__u8  bDescriptorType;
-+	__u8  bDevCapabilityType;
-+	__u8  bReserved;
-+	__u8  UUID[16];
-+	__u8  CapabilityData[];
-+} __attribute__((packed));
-+
-+#define USB_DT_USB_PLAT_DEV_CAP_SIZE(capability_data_size)	(20 + capability_data_size)
-+
- /*
-  * SuperSpeed Plus USB Capability descriptor: Defines the set of
-  * SuperSpeed Plus USB specific device level capabilities
--- 
-2.37.2
-
+>
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  arch/x86/mm/pat/memtype.c | 10 +++++++---
+> >  include/linux/mm.h        | 12 +++++++++---
+> >  include/linux/pgtable.h   |  5 +++--
+> >  mm/memory.c               | 13 +++++++------
+> >  mm/memremap.c             |  4 ++--
+> >  mm/mmap.c                 | 16 ++++++++++------
+> >  6 files changed, 38 insertions(+), 22 deletions(-)
+> >
+> > diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
+> > index ae9645c900fa..d8adc0b42cf2 100644
+> > --- a/arch/x86/mm/pat/memtype.c
+> > +++ b/arch/x86/mm/pat/memtype.c
+> > @@ -1046,7 +1046,7 @@ void track_pfn_insert(struct vm_area_struct *vma, pgprot_t *prot, pfn_t pfn)
+> >   * can be for the entire vma (in which case pfn, size are zero).
+> >   */
+> >  void untrack_pfn(struct vm_area_struct *vma, unsigned long pfn,
+> > -              unsigned long size)
+> > +              unsigned long size, bool mm_wr_locked)
+> >  {
+> >       resource_size_t paddr;
+> >       unsigned long prot;
+> > @@ -1065,8 +1065,12 @@ void untrack_pfn(struct vm_area_struct *vma, unsigned long pfn,
+> >               size = vma->vm_end - vma->vm_start;
+> >       }
+> >       free_pfn_range(paddr, size);
+> > -     if (vma)
+> > -             clear_vm_flags(vma, VM_PAT);
+> > +     if (vma) {
+> > +             if (mm_wr_locked)
+> > +                     clear_vm_flags(vma, VM_PAT);
+> > +             else
+> > +                     mod_vm_flags_nolock(vma, 0, VM_PAT);
+> > +     }
+> >  }
+> >
+> >  /*
+> > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > index 55335edd1373..48d49930c411 100644
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > @@ -656,12 +656,18 @@ static inline void clear_vm_flags(struct vm_area_struct *vma,
+> >       vma->vm_flags &= ~flags;
+> >  }
+> >
+> > +static inline void mod_vm_flags_nolock(struct vm_area_struct *vma,
+> > +                                    unsigned long set, unsigned long clear)
+> > +{
+> > +     vma->vm_flags |= set;
+> > +     vma->vm_flags &= ~clear;
+> > +}
+> > +
+> >  static inline void mod_vm_flags(struct vm_area_struct *vma,
+> >                               unsigned long set, unsigned long clear)
+> >  {
+> >       mmap_assert_write_locked(vma->vm_mm);
+> > -     vma->vm_flags |= set;
+> > -     vma->vm_flags &= ~clear;
+> > +     mod_vm_flags_nolock(vma, set, clear);
+> >  }
+> >
+> >  static inline void vma_set_anonymous(struct vm_area_struct *vma)
+> > @@ -2087,7 +2093,7 @@ static inline void zap_vma_pages(struct vm_area_struct *vma)
+> >  }
+> >  void unmap_vmas(struct mmu_gather *tlb, struct maple_tree *mt,
+> >               struct vm_area_struct *start_vma, unsigned long start,
+> > -             unsigned long end);
+> > +             unsigned long end, bool mm_wr_locked);
+> >
+> >  struct mmu_notifier_range;
+> >
+> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> > index 5fd45454c073..c63cd44777ec 100644
+> > --- a/include/linux/pgtable.h
+> > +++ b/include/linux/pgtable.h
+> > @@ -1185,7 +1185,8 @@ static inline int track_pfn_copy(struct vm_area_struct *vma)
+> >   * can be for the entire vma (in which case pfn, size are zero).
+> >   */
+> >  static inline void untrack_pfn(struct vm_area_struct *vma,
+> > -                            unsigned long pfn, unsigned long size)
+> > +                            unsigned long pfn, unsigned long size,
+> > +                            bool mm_wr_locked)
+> >  {
+> >  }
+> >
+> > @@ -1203,7 +1204,7 @@ extern void track_pfn_insert(struct vm_area_struct *vma, pgprot_t *prot,
+> >                            pfn_t pfn);
+> >  extern int track_pfn_copy(struct vm_area_struct *vma);
+> >  extern void untrack_pfn(struct vm_area_struct *vma, unsigned long pfn,
+> > -                     unsigned long size);
+> > +                     unsigned long size, bool mm_wr_locked);
+> >  extern void untrack_pfn_moved(struct vm_area_struct *vma);
+> >  #endif
+> >
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index d6902065e558..5b11b50e2c4a 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -1613,7 +1613,7 @@ void unmap_page_range(struct mmu_gather *tlb,
+> >  static void unmap_single_vma(struct mmu_gather *tlb,
+> >               struct vm_area_struct *vma, unsigned long start_addr,
+> >               unsigned long end_addr,
+> > -             struct zap_details *details)
+> > +             struct zap_details *details, bool mm_wr_locked)
+> >  {
+> >       unsigned long start = max(vma->vm_start, start_addr);
+> >       unsigned long end;
+> > @@ -1628,7 +1628,7 @@ static void unmap_single_vma(struct mmu_gather *tlb,
+> >               uprobe_munmap(vma, start, end);
+> >
+> >       if (unlikely(vma->vm_flags & VM_PFNMAP))
+> > -             untrack_pfn(vma, 0, 0);
+> > +             untrack_pfn(vma, 0, 0, mm_wr_locked);
+> >
+> >       if (start != end) {
+> >               if (unlikely(is_vm_hugetlb_page(vma))) {
+> > @@ -1675,7 +1675,7 @@ static void unmap_single_vma(struct mmu_gather *tlb,
+> >   */
+> >  void unmap_vmas(struct mmu_gather *tlb, struct maple_tree *mt,
+> >               struct vm_area_struct *vma, unsigned long start_addr,
+> > -             unsigned long end_addr)
+> > +             unsigned long end_addr, bool mm_wr_locked)
+> >  {
+> >       struct mmu_notifier_range range;
+> >       struct zap_details details = {
+> > @@ -1689,7 +1689,8 @@ void unmap_vmas(struct mmu_gather *tlb, struct maple_tree *mt,
+> >                               start_addr, end_addr);
+> >       mmu_notifier_invalidate_range_start(&range);
+> >       do {
+> > -             unmap_single_vma(tlb, vma, start_addr, end_addr, &details);
+> > +             unmap_single_vma(tlb, vma, start_addr, end_addr, &details,
+> > +                              mm_wr_locked);
+> >       } while ((vma = mas_find(&mas, end_addr - 1)) != NULL);
+> >       mmu_notifier_invalidate_range_end(&range);
+> >  }
+> > @@ -1723,7 +1724,7 @@ void zap_page_range_single(struct vm_area_struct *vma, unsigned long address,
+> >        * unmap 'address-end' not 'range.start-range.end' as range
+> >        * could have been expanded for hugetlb pmd sharing.
+> >        */
+> > -     unmap_single_vma(&tlb, vma, address, end, details);
+> > +     unmap_single_vma(&tlb, vma, address, end, details, false);
+> >       mmu_notifier_invalidate_range_end(&range);
+> >       tlb_finish_mmu(&tlb);
+> >  }
+> > @@ -2492,7 +2493,7 @@ int remap_pfn_range(struct vm_area_struct *vma, unsigned long addr,
+> >
+> >       err = remap_pfn_range_notrack(vma, addr, pfn, size, prot);
+> >       if (err)
+> > -             untrack_pfn(vma, pfn, PAGE_ALIGN(size));
+> > +             untrack_pfn(vma, pfn, PAGE_ALIGN(size), true);
+> >       return err;
+> >  }
+> >  EXPORT_SYMBOL(remap_pfn_range);
+> > diff --git a/mm/memremap.c b/mm/memremap.c
+> > index 08cbf54fe037..2f88f43d4a01 100644
+> > --- a/mm/memremap.c
+> > +++ b/mm/memremap.c
+> > @@ -129,7 +129,7 @@ static void pageunmap_range(struct dev_pagemap *pgmap, int range_id)
+> >       }
+> >       mem_hotplug_done();
+> >
+> > -     untrack_pfn(NULL, PHYS_PFN(range->start), range_len(range));
+> > +     untrack_pfn(NULL, PHYS_PFN(range->start), range_len(range), true);
+> >       pgmap_array_delete(range);
+> >  }
+> >
+> > @@ -276,7 +276,7 @@ static int pagemap_range(struct dev_pagemap *pgmap, struct mhp_params *params,
+> >       if (!is_private)
+> >               kasan_remove_zero_shadow(__va(range->start), range_len(range));
+> >  err_kasan:
+> > -     untrack_pfn(NULL, PHYS_PFN(range->start), range_len(range));
+> > +     untrack_pfn(NULL, PHYS_PFN(range->start), range_len(range), true);
+> >  err_pfn_remap:
+> >       pgmap_array_delete(range);
+> >       return error;
+> > diff --git a/mm/mmap.c b/mm/mmap.c
+> > index 2c6e9072e6a8..69d440997648 100644
+> > --- a/mm/mmap.c
+> > +++ b/mm/mmap.c
+> > @@ -78,7 +78,7 @@ core_param(ignore_rlimit_data, ignore_rlimit_data, bool, 0644);
+> >  static void unmap_region(struct mm_struct *mm, struct maple_tree *mt,
+> >               struct vm_area_struct *vma, struct vm_area_struct *prev,
+> >               struct vm_area_struct *next, unsigned long start,
+> > -             unsigned long end);
+> > +             unsigned long end, bool mm_wr_locked);
+> >
+> >  static pgprot_t vm_pgprot_modify(pgprot_t oldprot, unsigned long vm_flags)
+> >  {
+> > @@ -2136,14 +2136,14 @@ static inline void remove_mt(struct mm_struct *mm, struct ma_state *mas)
+> >  static void unmap_region(struct mm_struct *mm, struct maple_tree *mt,
+> >               struct vm_area_struct *vma, struct vm_area_struct *prev,
+> >               struct vm_area_struct *next,
+> > -             unsigned long start, unsigned long end)
+> > +             unsigned long start, unsigned long end, bool mm_wr_locked)
+> >  {
+> >       struct mmu_gather tlb;
+> >
+> >       lru_add_drain();
+> >       tlb_gather_mmu(&tlb, mm);
+> >       update_hiwater_rss(mm);
+> > -     unmap_vmas(&tlb, mt, vma, start, end);
+> > +     unmap_vmas(&tlb, mt, vma, start, end, mm_wr_locked);
+> >       free_pgtables(&tlb, mt, vma, prev ? prev->vm_end : FIRST_USER_ADDRESS,
+> >                                next ? next->vm_start : USER_PGTABLES_CEILING);
+> >       tlb_finish_mmu(&tlb);
+> > @@ -2391,7 +2391,11 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
+> >                       mmap_write_downgrade(mm);
+> >       }
+> >
+> > -     unmap_region(mm, &mt_detach, vma, prev, next, start, end);
+> > +     /*
+> > +      * We can free page tables without write-locking mmap_lock because VMAs
+> > +      * were isolated before we downgraded mmap_lock.
+> > +      */
+> > +     unmap_region(mm, &mt_detach, vma, prev, next, start, end, !downgrade);
+> >       /* Statistics and freeing VMAs */
+> >       mas_set(&mas_detach, start);
+> >       remove_mt(mm, &mas_detach);
+> > @@ -2704,7 +2708,7 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
+> >
+> >               /* Undo any partial mapping done by a device driver. */
+> >               unmap_region(mm, &mm->mm_mt, vma, prev, next, vma->vm_start,
+> > -                          vma->vm_end);
+> > +                          vma->vm_end, true);
+> >       }
+> >       if (file && (vm_flags & VM_SHARED))
+> >               mapping_unmap_writable(file->f_mapping);
+> > @@ -3031,7 +3035,7 @@ void exit_mmap(struct mm_struct *mm)
+> >       tlb_gather_mmu_fullmm(&tlb, mm);
+> >       /* update_hiwater_rss(mm) here? but nobody should be looking */
+> >       /* Use ULONG_MAX here to ensure all VMAs in the mm are unmapped */
+> > -     unmap_vmas(&tlb, &mm->mm_mt, vma, 0, ULONG_MAX);
+> > +     unmap_vmas(&tlb, &mm->mm_mt, vma, 0, ULONG_MAX, false);
+> >       mmap_read_unlock(mm);
+> >
+> >       /*
+> > --
+> > 2.39.1
+>
+> --
+> Michal Hocko
+> SUSE Labs
