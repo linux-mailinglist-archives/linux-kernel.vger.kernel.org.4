@@ -2,72 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B32867B942
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BBD67B945
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234965AbjAYSZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 13:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
+        id S235401AbjAYS0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234393AbjAYSZj (ORCPT
+        with ESMTP id S234393AbjAYS0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:25:39 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8279D76A3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:25:37 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id o17-20020a05600c511100b003db021ef437so1958063wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:25:37 -0800 (PST)
+        Wed, 25 Jan 2023 13:26:06 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1C8CDE9;
+        Wed, 25 Jan 2023 10:26:05 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id o13so19425021pjg.2;
+        Wed, 25 Jan 2023 10:26:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=s3qpODb1NvWye9Ia6ON+DIupPsUnzLWUZzhRnfX1OVU=;
-        b=LUmgmC3FMDMwvcdyaFkDldZgZ0FyLD+FX4GRRnh1VhWYkWMFP2f9QjamRjmXD27iZF
-         i1bDg3zIV+umg4REdz5UsBf2UVmbiI/oiUoCMnwiOHdbLxnjCCRQxG1wB3FUzJjl/w7k
-         D+c4JpzjE9qeosItDhsGLpin4i2ITjcex6Wh2bMGJ5SO7QDWtYq/rghKDCZZmyloujJ0
-         q8NTb1p5R29+0KBWF8CEFBlRrvcMEoI0pki4QUp7GBy74kUX5aHkFBO8wCEU1vH/eTrn
-         vXK/KOMu/OFF3KB5vkn87CcjSR0NI+hS267+J2C/PsK2FL6mcd4vR4GDhTK7lH1miZ04
-         /UKw==
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rr6V/M4y82KYnqVb2+nWqEf2dFIrFBb+hUJP0WC6mp8=;
+        b=HY5bjfzY6d3afM7FtQcGjXS+RVZA4xVbTE4BU8YipeBLwjnm6tf+FBll3v3M2DnEJu
+         ZWP0fpI8usn9/hwQU2xl+DBcGpXGVj8M/HQH4+nbGJ5YtSJnE/lqrwovGCXSTSbgDAUg
+         wOY4z0UQE85D5/n+1t9ViTLvOUopu2LVMWkz0L1y2FRNQb80+ZVEkISY19ov660VxMm1
+         n2s5TB5p4EtJoloO8UmGZXQYMA2IFm7TEDOcrYT9yQJhaR/pqH68bF1zDLKXSs1XTALN
+         75Rrt+okjibMdolqEiGLhwCVFeDlwWSinVMdG+RMRx7pIBiFG03j3vhJPzuDPLrqTlJI
+         T81g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s3qpODb1NvWye9Ia6ON+DIupPsUnzLWUZzhRnfX1OVU=;
-        b=DaSCqrQR5UIDAltGkfMSPZc88pxzUPWqXzaIlJyqCDOWhFf64EdLzwGPmS0nvm+bVd
-         FLplCmV7yfq5hak/3ugZGRPkLLuuwDmMLv0LGpyRzPQuvAfq3q2ZIXI3s6E9v0YsL0vY
-         aKNk9HF/b+wSISGQHmcroq5KYbVVpPzRsq27D2YEKLWO/Qu5x2UJO1IcFJEWYsUnOblY
-         TLf56mnXFYJIJ7WhMTeaEqJRgdduS5BHmmfsZw/4xbK3qLfBsS+r4G3/PsBgu3BsYlyP
-         n3RQ4gOx/+JDy0Hz8r+LxO/+g+I3G+pk7H9oPNZZkgRrSwl9EjL9/NQKDV/KqLaGEFWy
-         Gbfw==
-X-Gm-Message-State: AFqh2krOt9T6w7KzyDlITOFLPVRItb2j1HrF6CpjlaMxPGlv9XdIQGXn
-        S1QiprnvDIicHlipjdjYkJWZjtJcTGPsiwRtpe6NVQ==
-X-Google-Smtp-Source: AMrXdXthuBlQs04R8BBsNvNlsC+0CtOyst/8zH1P63ifGn6vgJJFGYnRq0YwgtEW4SbeGfo5b8cX5WDXxO9VbSz6lyM=
-X-Received: by 2002:a05:600c:1c9a:b0:3d9:ee45:8a9e with SMTP id
- k26-20020a05600c1c9a00b003d9ee458a9emr1544505wms.174.1674671135880; Wed, 25
- Jan 2023 10:25:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20230125081251.1244997-1-namhyung@kernel.org> <CAP-5=fVS8EGLk1mgo2fqg4pLn2MOSELJBQ9jfyaiS7bKq-D57w@mail.gmail.com>
- <CAM9d7ci44XtW19qzwmncWfUBJnBq4TaPkAgP8Nh6yAM90hiSXw@mail.gmail.com>
-In-Reply-To: <CAM9d7ci44XtW19qzwmncWfUBJnBq4TaPkAgP8Nh6yAM90hiSXw@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 25 Jan 2023 10:25:23 -0800
-Message-ID: <CAP-5=fUM2_M7LQa8KArn+NoMU-Jkev8FyO67E4tZ+KmG5tk6vA@mail.gmail.com>
-Subject: Re: [PATCH] perf stat: Hide invalid uncore event output for aggr mode
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        Michael Petlan <mpetlan@redhat.com>
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rr6V/M4y82KYnqVb2+nWqEf2dFIrFBb+hUJP0WC6mp8=;
+        b=W7W481r3LhW087wX7hp8+/vVt8R1bSPQ76GUnEcihfOCKeJtmTsGGdTrbn05qQNOEp
+         Ys3jF6UKMGllo10a1/aTmC/4PaDtGUFdlNEh2pbHuPe+oERfCVxf+5j6OHz/aX+i5f+L
+         2+n/Pe05kjOKMi92G/v96JkYH/2isGNkhvT6pzqQOs8KOnbBaSDMP52n7SFYT1AkbH+y
+         NkEFQ8WBoldN9Y8LeS+bS56o5caOpj/SCynmiINii8cir/G9TR/l3Qq+pF6xpTQw4iaf
+         ylV1ne2YrVeoW1Uc904DvTzPZp3qxn+RnX+hZAcsQFzhe+F+RHW5kRAkV4q37ozhJeFi
+         0LtA==
+X-Gm-Message-State: AO0yUKUEogppOSwGoOTGo+qFma1H58FM1lZj7y7ngv0OVP3kXfVuj2yG
+        wZ7XLMjvlhIyVt+6Ax08O8w=
+X-Google-Smtp-Source: AK7set8ITUyv8I7rXxMg2+8jpqt1q9szFd0nCOrh4k7jndKMnAZdR+AWDGmxzQj/w2WsIH6gb5SYxw==
+X-Received: by 2002:a17:90b:1e4e:b0:22b:f84e:5f9a with SMTP id pi14-20020a17090b1e4e00b0022bf84e5f9amr6005990pjb.43.1674671164613;
+        Wed, 25 Jan 2023 10:26:04 -0800 (PST)
+Received: from [192.168.0.128] ([98.97.116.5])
+        by smtp.googlemail.com with ESMTPSA id q95-20020a17090a1b6800b0022698aa22d9sm92406pjq.31.2023.01.25.10.26.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 10:26:04 -0800 (PST)
+Message-ID: <595c5e36b0260ba16833c2a8d9418fd978ca9300.camel@gmail.com>
+Subject: Re: [PATCH] net: page_pool: fix refcounting issues with fragmented
+ allocation
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     Felix Fietkau <nbd@nbd.name>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Cc:     netdev@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-kernel@vger.kernel.org, Yunsheng Lin <linyunsheng@huawei.com>
+Date:   Wed, 25 Jan 2023 10:26:02 -0800
+In-Reply-To: <9baecde9-d92b-c18c-daa8-e7a96baa019b@nbd.name>
+References: <20230124124300.94886-1-nbd@nbd.name>
+         <CAC_iWjKAEgUB8Z3WNNVgUK8omXD+nwt_VPSVyFn1i4EQzJadog@mail.gmail.com>
+         <19121deb-368f-9786-8700-f1c45d227a4c@nbd.name>
+         <cd35316065cfe8d706ca2730babe3e6519df6034.camel@gmail.com>
+         <c7f1ade0-a607-2e55-d106-9acc26cbed94@nbd.name>
+         <49703c370e26ae1a6b19a39dc05e262acf58f6aa.camel@gmail.com>
+         <9baecde9-d92b-c18c-daa8-e7a96baa019b@nbd.name>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,185 +86,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 10:18 AM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hi Ian,
->
-> On Wed, Jan 25, 2023 at 9:33 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Wed, Jan 25, 2023 at 12:12 AM Namhyung Kim <namhyung@kernel.org> wrote:
-> > >
-> > > The current display code for perf stat iterates given cpus and build the
-> > > aggr map to collect the event data for the aggregation mode.
-> > >
-> > > But uncore events have their own cpu maps and it won't guarantee that
-> > > it'd match to the aggr map.  For example, per-package uncore events
-> > > would generate a single value for each socket.  When user asks per-core
-> > > aggregation mode, the output would contain 0 values for other cores.
-> > >
-> > > Thus it needs to check the uncore PMU's cpumask and if it matches to the
-> > > current aggregation id.
-> > >
-> > > Before:
-> > >   $ sudo ./perf stat -a --per-core -e power/energy-pkg/ sleep 1
-> > >
-> > >    Performance counter stats for 'system wide':
-> > >
-> > >   S0-D0-C0              1               3.73 Joules power/energy-pkg/
-> > >   S0-D0-C1              0      <not counted> Joules power/energy-pkg/
-> > >   S0-D0-C2              0      <not counted> Joules power/energy-pkg/
-> > >   S0-D0-C3              0      <not counted> Joules power/energy-pkg/
-> > >
-> > >          1.001404046 seconds time elapsed
-> > >
-> > >   Some events weren't counted. Try disabling the NMI watchdog:
-> > >         echo 0 > /proc/sys/kernel/nmi_watchdog
-> > >         perf stat ...
-> > >         echo 1 > /proc/sys/kernel/nmi_watchdog
-> > >
-> > > The core 1, 2 and 3 should not be printed because the event is handled
-> > > in a cpu in the core 0 only.  With this change, the output becomes like
-> > > below.
-> > >
-> > > After:
-> > >   $ sudo ./perf stat -a --per-core -e power/energy-pkg/ sleep 1
-> > >
-> > >    Performance counter stats for 'system wide':
-> > >
-> > >   S0-D0-C0              1               2.09 Joules power/energy-pkg/
-> > >
-> > > Fixes: b89761351089 ("perf stat: Update event skip condition for system-wide per-thread mode and merged uncore and hybrid events")
-> >
-> > Thanks! Tested further with mixed core and uncore events like:
-> > $ perf stat -A -a -e power/energy-pkg/,cycles sleep 1
-> > and the "<not counted>" are now nicely gone.
->
-> Thanks for the test!
->
-> >
-> > > Cc: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-> > > Cc: Michael Petlan <mpetlan@redhat.com>
-> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > > ---
-> > >  tools/perf/util/stat-display.c | 37 ++++++++++++++++++++++++++++------
-> > >  1 file changed, 31 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-> > > index 8bd8b0142630..b9dcb13650d0 100644
-> > > --- a/tools/perf/util/stat-display.c
-> > > +++ b/tools/perf/util/stat-display.c
-> > > @@ -787,6 +787,22 @@ static void uniquify_counter(struct perf_stat_config *config, struct evsel *coun
-> > >                 uniquify_event_name(counter);
-> > >  }
-> > >
-> > > +static bool check_uncore_event_aggr(struct perf_stat_config *config,
-> > > +                                   struct evsel *counter,
-> > > +                                   struct aggr_cpu_id *id)
-> >
-> > nit: const *s
-> > nit: check_uncore_event_aggr isn't particularly intention revealing,
-> > perhaps something more like should_print_counter. Perhaps some
-> > kernel-doc like:
->
-> It sounds like a generic name.  My intention was to check the uncore events
-> specifically.  But maybe we can add other conditions like global per-thread
-> aggregation mode.
->
-> How about this?
->
-> /*
->  * When the event count is zero, check if the event should not be printed.
->  * For example, uncore events have dedicated CPUs to manage them,
->  * result for other CPUs should be zero and skipped.
->  */
-> static bool should_skip_zero_counter(...)
+On Wed, 2023-01-25 at 18:32 +0100, Felix Fietkau wrote:
+> On 25.01.23 18:11, Alexander H Duyck wrote:
+> > On Tue, 2023-01-24 at 22:30 +0100, Felix Fietkau wrote:
+> > > On 24.01.23 22:10, Alexander H Duyck wrote:
+> > > > On Tue, 2023-01-24 at 18:22 +0100, Felix Fietkau wrote:
+> > > > > On 24.01.23 15:11, Ilias Apalodimas wrote:
+> > > > > > Hi Felix,
+> > > > > >=20
+> > > > > > ++cc Alexander and Yunsheng.
+> > > > > >=20
+> > > > > > Thanks for the report
+> > > > > >=20
+> > > > > > On Tue, 24 Jan 2023 at 14:43, Felix Fietkau <nbd@nbd.name> wrot=
+e:
+> > > > > > >=20
+> > > > > > > While testing fragmented page_pool allocation in the mt76 dri=
+ver, I was able
+> > > > > > > to reliably trigger page refcount underflow issues, which did=
+ not occur with
+> > > > > > > full-page page_pool allocation.
+> > > > > > > It appears to me, that handling refcounting in two separate c=
+ounters
+> > > > > > > (page->pp_frag_count and page refcount) is racy when page ref=
+count gets
+> > > > > > > incremented by code dealing with skb fragments directly, and
+> > > > > > > page_pool_return_skb_page is called multiple times for the sa=
+me fragment.
+> > > > > > >=20
+> > > > > > > Dropping page->pp_frag_count and relying entirely on the page=
+ refcount makes
+> > > > > > > these underflow issues and crashes go away.
+> > > > > > >=20
+> > > > > >=20
+> > > > > > This has been discussed here [1].  TL;DR changing this to page
+> > > > > > refcount might blow up in other colorful ways.  Can we look clo=
+ser and
+> > > > > > figure out why the underflow happens?
+> > > > > I don't see how the approch taken in my patch would blow up. From=
+ what I=20
+> > > > > can tell, it should be fairly close to how refcount is handled in=
+=20
+> > > > > page_frag_alloc. The main improvement it adds is to prevent it fr=
+om=20
+> > > > > blowing up if pool-allocated fragments get shared across multiple=
+ skbs=20
+> > > > > with corresponding get_page and page_pool_return_skb_page calls.
+> > > > >=20
+> > > > > - Felix
+> > > > >=20
+> > > >=20
+> > > > Do you have the patch available to review as an RFC? From what I am
+> > > > seeing it looks like you are underrunning on the pp_frag_count itse=
+lf.
+> > > > I would suspect the issue to be something like starting with a bad
+> > > > count in terms of the total number of references, or deducing the w=
+rong
+> > > > amount when you finally free the page assuming you are tracking you=
+r
+> > > > frag count using a non-atomic value in the driver.
+> > > The driver patches for page pool are here:
+> > > https://patchwork.kernel.org/project/linux-wireless/patch/64abb23f486=
+7c075c19d704beaae5a0a2f8e8821.1673963374.git.lorenzo@kernel.org/
+> > > https://patchwork.kernel.org/project/linux-wireless/patch/68081e02cbe=
+2afa2d35c8aa93194f0adddbd0f05.1673963374.git.lorenzo@kernel.org/
+> > >=20
+> > > They are also applied in my mt76 tree at:
+> > > https://github.com/nbd168/wireless
+> > >=20
+> > > - Felix
+> >=20
+> > So one thing I am thinking is that we may be seeing an issue where we
+> > are somehow getting a mix of frag and non-frag based page pool pages.
+> > That is the only case I can think of where we might be underflowing
+> > negative. If you could add some additional debug info on the underflow
+> > WARN_ON case in page_pool_defrag_page that might be useful.
+> > Specifically I would be curious what the actual return value is. I'm
+> > assuming we are only hitting negative 1, but I would want to verify we
+> > aren't seeing something else.
+> I'll try to run some more tests soon. However, I think I found the piece=
+=20
+> of code that is incompatible with using pp_frag_count.
+> When receiving an A-MSDU packet (multiple MSDUs within a single 802.11=
+=20
+> packet), and it is not split by the hardware, a cfg80211 function=20
+> extracts the individual MSDUs into separate skbs. In that case, a=20
+> fragment can be shared across multiple skbs, and get_page is used to=20
+> increase the refcount.
+> You can find this in net/wireless/util.c: ieee80211_amsdu_to_8023s (and=
+=20
+> its helper functions).
 
-lgtm, I like the idea one day there will be kernel-doc everywhere, but
-that may just be me :-)
-Thanks!
+I'm not sure if it is problematic or not. Basically it is trading off
+by copying over the frags, calling get_page on each frag, and then
+using dev_kfree_skb to disassemble and release the pp_frag references.
+There should be other paths in the kernel that are doing something
+similar.
 
-> > /**
-> >  * should_print_counter() - Based on id, should the current counter's
-> > value be printed.
-> >  * @config: The perf stat configuration with knowledge of the aggregation mode.
-> >  * @counter: The counter with its associated cpumap.
-> >  * @id: The aggregation type that is being queried for printing.
-> >  *
-> >  * An evlist can have evsels with different cpumaps, for example, by
-> > mixing core and uncore events.
-> >  * When displaying one counter the other counter shouldn't be printed.
-> > Check the counter's cpumap
-> >  * to see whether for any CPU it is associated with the counter should
-> > be printed.
-> >  *
-> >  * Return: true for counters that should be printed.
-> >  */
-> >
-> > > +{
-> > > +       struct perf_cpu cpu;
-> > > +       int idx;
-> > > +
-> > > +       perf_cpu_map__for_each_cpu(cpu, idx, counter->core.own_cpus) {
-> >
-> > I know this is pre-existing, sorry to whine. I think we need to
-> > document cpus vs own_cpus in the perf_evsel. Normally own_cpus ==
-> > cpus, but in a case like this the difference matters and I have a hard
-> > time understanding what "own" is supposed to be conveying, and why
-> > here we don't use cpus. I also lose what the connection is with
-> > perf_evlist all_cpus, does that union own_cpus or cpus? At least there
-> > is a comment there :-D Honestly, why do we need to even have 2 cpu
-> > maps in an evsel?
->
-> Right, maybe we can use pmu->cpus instead of evsel->core.own_cpus.
-> IIUC ->cpus is from the user and ->own_cpus is from the hardware.
-> I agree with you that having 2 cpu maps is confusing and it's been a
-> source of subtle bugs.
->
-> Let me see what I can do..
->
-> Thanks,
-> Namhyung
->
-> >
-> > > +               struct aggr_cpu_id own_id = config->aggr_get_id(config, cpu);
-> > > +
-> > > +               if (aggr_cpu_id__equal(id, &own_id))
-> > > +                       return true;
-> > > +       }
-> > > +       return false;
-> > > +}
-> > > +
-> > >  static void print_counter_aggrdata(struct perf_stat_config *config,
-> > >                                    struct evsel *counter, int s,
-> > >                                    struct outstate *os)
-> > > @@ -814,12 +830,21 @@ static void print_counter_aggrdata(struct perf_stat_config *config,
-> > >         ena = aggr->counts.ena;
-> > >         run = aggr->counts.run;
-> > >
-> > > -       /*
-> > > -        * Skip value 0 when enabling --per-thread globally, otherwise it will
-> > > -        * have too many 0 output.
-> > > -        */
-> > > -       if (val == 0 && config->aggr_mode == AGGR_THREAD && config->system_wide)
-> > > -               return;
-> > > +       if (val == 0) {
-> > > +               /*
-> > > +                * Skip value 0 when enabling --per-thread globally,
-> > > +                * otherwise it will have too many 0 output.
-> > > +                */
-> > > +               if (config->aggr_mode == AGGR_THREAD && config->system_wide)
-> > > +                       return;
-> > > +               /*
-> > > +                * Skip value 0 when it's an uncore event and the given aggr id
-> > > +                * does not belong to the PMU cpumask.
-> > > +                */
-> > > +               if (counter->core.requires_cpu &&
-> > > +                   !check_uncore_event_aggr(config, counter, &id))
-> > > +                       return;
-> > > +       }
-> > >
-> > >         if (!metric_only) {
-> > >                 if (config->json_output)
-> > > --
-> > > 2.39.1.405.gd4c25cc71f-goog
-> > >
+> This code also has a bug where it doesn't set pp_recycle on the newly=20
+> allocated skb if the previous one has it, but that's a separate matter=
+=20
+> and fixing it doesn't make the crash go away.
+
+Adding the recycle would cause this bug. So one thing we might be
+seeing is something like that triggering this error. Specifically if
+the page is taken via get_page when assembling the new skb then we
+cannot set the recycle flag in the new skb otherwise it will result in
+the reference undercount we are seeing. What we are doing is shifting
+the references away from the pp_frag_count to the page reference count
+in this case. If we set the pp_recycle flag then it would cause us to
+decrement pp_frag_count instead of the page reference count resulting
+in the underrun.=20
+
+> Is there any way I can make that part of the code work with the current=
+=20
+> page pool frag implementation?
+
+The current code should work. Basically as long as the references are
+taken w/ get_page and skb->pp_recycle is not set then we shouldn't run
+into this issue because the pp_frag_count will be dropped when the
+original skb is freed and the page reference count will be decremented
+when the new one is freed.
+
+For page pool page fragments the main thing to keep in mind is that if
+pp_recycle is set it will update the pp_frag_count and if it is not
+then it will just decrement the page reference count.
