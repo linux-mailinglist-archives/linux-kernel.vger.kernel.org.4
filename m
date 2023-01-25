@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8888667B710
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2092967B712
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbjAYQl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S235458AbjAYQmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234493AbjAYQlz (ORCPT
+        with ESMTP id S235053AbjAYQmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:41:55 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC3361A5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:41:54 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 30PGekT5003899
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 11:40:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1674664852; bh=87ST+3j3ht853XmSEHN0xdLq8YDjUMk/ZvDAixJFyYM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=ZyOS15yoknFWtHea0S6sBlb9jLH5MZbIghmMMAeYdcsk1vIDYas9OrAdlD2BjcEOc
-         F4YohO7z4oO96Dyh5T2KBvee4slOGj/QZToOkse0CSkdXEnqzBC30hIZB3A4X/9J6S
-         VbP/PnEWEEAWLo9bG+zONBnRln+1DFQ/KW71NpcDI1dEszCxk9WQsxM9LL+mMEbyfs
-         YULe/cw7S42QiPwhbzwgW/u+P7QH4o0rPBizRVjUrma/+ahw9MWZdKyry+jDF7/xc0
-         N3l7NxzZ1MXrHvL9rKznMJSEHiZg2y44pjmlzahl3odMO8N7evmBTTkAA4TZZ1tafI
-         oLEI5gSH/GuxA==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 8CC9C15C469B; Wed, 25 Jan 2023 11:40:46 -0500 (EST)
-Date:   Wed, 25 Jan 2023 11:40:46 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Reshetova, Elena" <elena.reshetova@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <Y9FbjjpVTt/Yp0lq@mit.edu>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y9EkCvAfNXnJ+ATo@kroah.com>
- <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+        Wed, 25 Jan 2023 11:42:08 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC7237565;
+        Wed, 25 Jan 2023 08:42:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1674664893;
+        bh=rq+I8BBcOwkHDtDkBgR8HbDE4eXh6wxwg8QxpCdBsuk=;
+        h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:
+         References;
+        b=Aib0yHDu+eyiQv28rupHTeZhOzRItxLLzzSnQWkDqzpyA/2TJf0OMdEGE4mYpX3PE
+         Av7TfeuAuAA0/G0teARI99Jmu1BgpijM1f47Hs2GqMqm1aMIW/3VyXLns9W5HcwwGC
+         Bh4NaKNuvH9T+9d6EdOkLHASvpm1lCiEwQdjNclizsuTXRDiBxOpeeA/omjkMq06aa
+         8VzAKzef5k6GW0PxwsnlBDLO14pcuhjLIjWOOaEjiEdPBeLPJekd1wINQZxOyaFsUr
+         e5p9yRWsnSr6Q2l8VTUpA7v2gWt2iAef9PkBq0erZJhIDgNQqj1fYyyo2Z0+FUvlD1
+         lLWANVNlGFAOg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [127.0.0.1] ([80.245.74.59]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N33ET-1ofqaG02KD-013RVC; Wed, 25
+ Jan 2023 17:41:33 +0100
+Date:   Wed, 25 Jan 2023 17:41:25 +0100
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        erkin.bozoglu@xeront.com, Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>
+Subject: Re: [PATCH 4/5] arm: dts: mt7623: mux phy0 on Bananapi BPI-R2
+User-Agent: K-9 Mail for Android
+Reply-to: frank-w@public-files.de
+In-Reply-To: <20230120205318.519493-5-arinc.unal@arinc9.com>
+References: <20230120205318.519493-1-arinc.unal@arinc9.com> <20230120205318.519493-5-arinc.unal@arinc9.com>
+Message-ID: <9A7BD95A-F026-4EAB-96E1-12B1B0C6AAA4@public-files.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:CG5Ii1F2NzN0unmUtBDjSqSGd3Cfi/OGshwd2tOQ+KvmtVd8au4
+ VD+h0gQ0/p3kX6FHp5MTu/2MvM0VEcPvzs+TsWPU86u26qfKhK1ThTcIyZq/oPfHxaeb+zQ
+ iRGVr0cbfzoFsfcUUWOeCbHb310xYBXdWcmEA8rNipZGmw9rLIuV92BOt99UoLlBzTqsWYY
+ X4UGMEBCvepZgHZ08dhVQ==
+UI-OutboundReport: notjunk:1;M01:P0:K5UPTwbdRb8=;kWsV7bmkHlOyetrvEMoeRlecVhy
+ txkPzft12wrIFC5uE169oHr5ThrVpekB/nkEJYYFQAwfnxsH914wxKGk4usF5NT0o8wPpNco7
+ raEszTt63uPhOUvdQrutQ9XIp3Hoh4/VdOX11/eQ2oOw760xObk7ObF5Qj3EYF+LQHFVdna9u
+ oP7IJQKX0xZOdc+1Nd2YVHFCxNipJ9nYsspQ68sdnubve7zngVsj9Thm7I2fbKCKhJd91IMYE
+ UXrxyMN+2c7qDKVnZ5epSIlriP9eVdh2sH1QMBxfsqA9kAMektkVa515AwqomYUqJtFnDZacS
+ GASml8R22UbNcI+NEHjRE5Wx7QTBv1bBkxBMf9WwF/ayua78K9mVJmFST2Dcc6p4DbTXvzc7C
+ oSSeI7R1da7ecnrpkFjb6IvWblVAeTgRbcmwLMq5zfBQkbW6xZGFc2rtURM5ejDPrAdloLMIP
+ GTC9aTOZupTVayK/PLIjhKv2iChEYkXbwzZ4cZOtN0KJK16D7WfvGvJgjzzGrPQzQEU06g0RQ
+ V0ZdI8Yl+wd+6pLR/BHTgOS4m2T8zT6AeKo9H6skO63nWkSbw6FZv6gJMLhrhUgIi3A49UI6U
+ QdNqLxuHVX46vOGDMfzggVa6AVIJG1b+xFrQfeNqClu1ySK2Sr/RkeB9ZPotnMnvyUb54dciJ
+ uT9UFAOtICPOaEOZQDvO6QIlnSgB0EId302jDAKsfpfA2656PoCsByRH8xi//HXMvLHM3niOY
+ eqyfVRNz5TQkdugiKPCw/42QiJvb+6tGr8lu+q6SJXkRhrnik0c4G9NJdp6XiZ+e4LSH+F2CI
+ lJDIG9FSFMzr0f4drH/Y4EPww93iTWJv86nI/5VCWl1V3WyjgM2XHm41x2ntIHPA+Py41hq1d
+ G2AFXASKAss8utIX1JGbmWdCEOBJIFWhHO7ZXx5IPp3dhN7jNooDgjnq4JPVmeLfbHKuRVVNi
+ Grm01g==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,39 +79,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 03:29:07PM +0000, Reshetova, Elena wrote:
-> > Again, as our documentation states, when you submit patches based on
-> > these tools, you HAVE TO document that.  Otherwise we think you all are
-> > crazy and will get your patches rejected.  You all know this, why ignore
-> > it?
-> 
-> Sorry, I didn’t know that for every bug that is found in linux kernel when
-> we are submitting a fix that we have to list the way how it has been found.
-> We will fix this in the future submissions, but some bugs we have are found by
-> plain code audit, so 'human' is the tool.
+Am 20=2E Januar 2023 21:53:17 MEZ schrieb "Ar=C4=B1n=C3=A7 =C3=9CNAL" <arin=
+c=2Eunal@arinc9=2Ecom>:
 
-So the concern is that *you* may think it is a bug, but other people
-may not agree.  Perhaps what is needed is a full description of the
-goals of Confidential Computing, and what is in scope, and what is
-deliberately *not* in scope.  I predict that when you do this, that
-people will come out of the wood work and say, no wait, "CoCo ala
-S/390 means FOO", and "CoCo ala AMD means BAR", and "CoCo ala RISC V
-means QUUX".
+> 		switch@1f {
+> 			compatible =3D "mediatek,mt7530";
+> 			reg =3D <0x1f>;
+>@@ -199,11 +208,6 @@ ports {
+> 				#address-cells =3D <1>;
+> 				#size-cells =3D <0>;
+>=20
+>-				port@0 {
+>-					reg =3D <0>;
+>-					label =3D "wan";
+>-				};
+>-
 
-Others may end up objecting, "no wait, doing this is going to mean
-***insane*** changes to the entire kernel, and this will be a
-performance / maintenance nightmare and unless you fix your hardware
-in future chips, we wlil consider this a hardware bug and reject all
-of your patches".
+This will break existing userspace setups using wan as interface name=2E
 
-But it's better to figure this out now, then after you get hundreds of
-patches into the upstream kernel, we discover that this is only 5% of
-the necessary changes, and then the rest of your patches are rejected,
-and you have to end up fixing the hardware anyway, with the patches
-upstreamed so far being wasted effort.  :-)
+> 				port@1 {
+> 					reg =3D <1>;
+> 					label =3D "lan0";
 
-If we get consensus on that document, then that can get checked into
-Documentation, and that can represent general consensus on the problem
-early on.
 
-						- Ted
+regards Frank
