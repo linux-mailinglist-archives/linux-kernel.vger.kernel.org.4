@@ -2,191 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28C467B6D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6B767B6DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236016AbjAYQVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
+        id S235073AbjAYQX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235986AbjAYQVg (ORCPT
+        with ESMTP id S235045AbjAYQXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:21:36 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258DB5A815;
-        Wed, 25 Jan 2023 08:21:10 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 25 Jan 2023 11:23:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5123456484;
+        Wed, 25 Jan 2023 08:23:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3E64F1F854;
-        Wed, 25 Jan 2023 16:20:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674663640; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HKEnDl7csQ+0+t/iqHglTAc7cEfTIinKAWBsLL25EQw=;
-        b=Ud2BsBuClrkdEaqETuF2PE7m3P/lFQfFf0x8jnUGEGmx+lZAVH4mCNi30yEOeORtwOfgHM
-        6nn/h7nzj1liEYUjCRBXlhR9EY+rhhKBZRiG2WxN4N+qMjIZxee1ZQfw3O0pCWPvk77TWF
-        xJ7xkEfiD0h4dHd14mys/wWBhCtgfSQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674663640;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HKEnDl7csQ+0+t/iqHglTAc7cEfTIinKAWBsLL25EQw=;
-        b=9R8LTQinysPeXO1GBb3wDtLBeYizazt1WwrpH1yGLtYHTLA4AFWiTvOG97w9cQBZZNvQke
-        8yon8PzSNCAzneCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 24E601358F;
-        Wed, 25 Jan 2023 16:20:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Xkv/CNhW0WPRCwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 25 Jan 2023 16:20:40 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 96E1FA06B4; Wed, 25 Jan 2023 17:20:39 +0100 (CET)
-Date:   Wed, 25 Jan 2023 17:20:39 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
-        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v8 RESEND 3/8] vfs: plumb i_version handling into struct
- kstat
-Message-ID: <20230125162039.wquoqycq35t2skqj@quack3>
-References: <20230124193025.185781-1-jlayton@kernel.org>
- <20230124193025.185781-4-jlayton@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA40CB81ACA;
+        Wed, 25 Jan 2023 16:22:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97C94C433AA;
+        Wed, 25 Jan 2023 16:22:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674663777;
+        bh=TQiqmThMS8h1877Y5nU5Fh3m4/A32suvDtBvcx9Y5OI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ihge/2UAshKVv7ffSOIZaNYtSSuwozAEF0ppR8qPSSCfMDEynzV1oU93klXagjM0u
+         JkmDKtedOKPkDbGZBxuObrbRAEowEoOnqZ/XsGIQfMohYi+Na75aOm/rJIir5bLiMX
+         M8YiRAAwZsf0kA/QB3WhjaKD/YusOTlqbKWltP20f+PxZwvAYovffVcmTZdBoVnazf
+         gZo1uK9GMEOPiUykdu3S8nJQgPiL3cHLad8bAeiu5hjDrbHWoAG8Je8XFK3qt2T2Q6
+         ktT2CFX+IFbbKAYRoBpizMGSD3APuAVu+1NEMZ6XwqP8dMOtpSpBWZMQ7/sNGdBgun
+         Ha29iqF+2aqKQ==
+Received: by mail-lj1-f170.google.com with SMTP id p25so20905373ljn.12;
+        Wed, 25 Jan 2023 08:22:57 -0800 (PST)
+X-Gm-Message-State: AO0yUKUaKaqtja5qOXe/uCuSj7+0vEXSFpJQaoFzeTzrvJG6QvVe8UDg
+        8FUy6jGSHvR2Wh0X+2jLGSzP6bX7/9xF50e6bXY=
+X-Google-Smtp-Source: AK7set/PquMP/FPpDSDRiB4oyDa5KT4Byry8FM7o4Ha44XAhPRypiAyl+tQ6QWjfU6rBDFlaapMULFues0nlM1lVhJU=
+X-Received: by 2002:a2e:5044:0:b0:28e:6e21:fcc1 with SMTP id
+ v4-20020a2e5044000000b0028e6e21fcc1mr32457ljd.152.1674663775570; Wed, 25 Jan
+ 2023 08:22:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124193025.185781-4-jlayton@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125012801.362496-1-ebiggers@kernel.org> <14506678-918f-81e1-2c26-2b347ff50701@intel.com>
+In-Reply-To: <14506678-918f-81e1-2c26-2b347ff50701@intel.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 25 Jan 2023 17:22:44 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEZi1ewVdqXHTi7kWX9aT+j1=rFOVE55LdJYb9LkV9Dkw@mail.gmail.com>
+Message-ID: <CAMj1kXEZi1ewVdqXHTi7kWX9aT+j1=rFOVE55LdJYb9LkV9Dkw@mail.gmail.com>
+Subject: Re: [PATCH] x86: enable Data Operand Independent Timing Mode
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Roxana Bradescu <roxabee@chromium.org>,
+        Adam Langley <agl@google.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 24-01-23 14:30:20, Jeff Layton wrote:
-> The NFS server has a lot of special handling for different types of
-> change attribute access, depending on the underlying filesystem. In
-> most cases, it's doing a getattr anyway and then fetching that value
-> after the fact.
-> 
-> Rather that do that, add a new STATX_CHANGE_COOKIE flag that is a
-> kernel-only symbol (for now). If requested and getattr can implement it,
-> it can fill out this field. For IS_I_VERSION inodes, add a generic
-> implementation in vfs_getattr_nosec. Take care to mask
-> STATX_CHANGE_COOKIE off in requests from userland and in the result
-> mask.
-> 
-> Since not all filesystems can give the same guarantees of monotonicity,
-> claim a STATX_ATTR_CHANGE_MONOTONIC flag that filesystems can set to
-> indicate that they offer an i_version value that can never go backward.
-> 
-> Eventually if we decide to make the i_version available to userland, we
-> can just designate a field for it in struct statx, and move the
-> STATX_CHANGE_COOKIE definition to the uapi header.
-> 
-> Reviewed-by: NeilBrown <neilb@suse.de>
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+On Wed, 25 Jan 2023 at 16:29, Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 1/24/23 17:28, Eric Biggers wrote:
+> > To mitigate this CPU vulnerability, it's possible to enable "Data
+> > Operand Independent Timing Mode" (DOITM) by setting a bit in a MSR.
+> > While Intel's documentation suggests that this bit should only be set
+> > where "necessary", that is highly impractical, given the fact that
+> > cryptography can happen nearly anywhere in the kernel and userspace, and
+> > the fact that the entire kernel likely needs to be protected anyway.
+>
+> I think this misses a key point from the documentation:
+>
+>         This functionality is intended for use by software which has
+>         already applied other techniques to mitigate software timing
+>         side channels, such as those documented in Intel's Guidelines
+>         for Mitigating Timing Side Channels Against Cryptographic
+>         Implementations.
+>
+> Translating from Intel-speak: Intel thinks that DOITM purely a way to
+> make the CPU run slower if you haven't already written code specifically
+> to mitigate timing side channels.  All pain, no gain.
+>
+> The kernel as a whole is not written that way.  I'm sure the crypto
+> folks that are cc'd can tell us specifically if the kernel crypto code
+> is written following those recommendations.
+>
 
-Looks good to me. Feel free to add:
+Cryptography is often singled out because it deals with confidential
+data, and if timing variances leak the data, the confidentiality is
+violated.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+However, this is not fundamentally different from execution at a
+higher privilege level. In this case, the data is shielded from other
+observers by the h/w enforced privilege boundary rather than
+encryption, but if timing variances leak the data, the result is the
+same, i.e., data that was assumed to be confidential as far as user
+space is concerned is no longer confidential.
 
-								Honza
+All the nospec stuff we added for Spectre v1 serves the same purpose,
+essentially, although the timing variances due to cache misses are
+likely easier to measure. IOW, some of the kernel is now written that
+way in fact, although the author of that doc may have had something
+else in mind.
 
-> ---
->  fs/stat.c            | 17 +++++++++++++++--
->  include/linux/stat.h |  9 +++++++++
->  2 files changed, 24 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/stat.c b/fs/stat.c
-> index d6cc74ca8486..f43afe0081fe 100644
-> --- a/fs/stat.c
-> +++ b/fs/stat.c
-> @@ -18,6 +18,7 @@
->  #include <linux/syscalls.h>
->  #include <linux/pagemap.h>
->  #include <linux/compat.h>
-> +#include <linux/iversion.h>
->  
->  #include <linux/uaccess.h>
->  #include <asm/unistd.h>
-> @@ -122,6 +123,11 @@ int vfs_getattr_nosec(const struct path *path, struct kstat *stat,
->  	stat->attributes_mask |= (STATX_ATTR_AUTOMOUNT |
->  				  STATX_ATTR_DAX);
->  
-> +	if ((request_mask & STATX_CHANGE_COOKIE) && IS_I_VERSION(inode)) {
-> +		stat->result_mask |= STATX_CHANGE_COOKIE;
-> +		stat->change_cookie = inode_query_iversion(inode);
-> +	}
-> +
->  	mnt_userns = mnt_user_ns(path->mnt);
->  	if (inode->i_op->getattr)
->  		return inode->i_op->getattr(mnt_userns, path, stat,
-> @@ -602,9 +608,11 @@ cp_statx(const struct kstat *stat, struct statx __user *buffer)
->  
->  	memset(&tmp, 0, sizeof(tmp));
->  
-> -	tmp.stx_mask = stat->result_mask;
-> +	/* STATX_CHANGE_COOKIE is kernel-only for now */
-> +	tmp.stx_mask = stat->result_mask & ~STATX_CHANGE_COOKIE;
->  	tmp.stx_blksize = stat->blksize;
-> -	tmp.stx_attributes = stat->attributes;
-> +	/* STATX_ATTR_CHANGE_MONOTONIC is kernel-only for now */
-> +	tmp.stx_attributes = stat->attributes & ~STATX_ATTR_CHANGE_MONOTONIC;
->  	tmp.stx_nlink = stat->nlink;
->  	tmp.stx_uid = from_kuid_munged(current_user_ns(), stat->uid);
->  	tmp.stx_gid = from_kgid_munged(current_user_ns(), stat->gid);
-> @@ -643,6 +651,11 @@ int do_statx(int dfd, struct filename *filename, unsigned int flags,
->  	if ((flags & AT_STATX_SYNC_TYPE) == AT_STATX_SYNC_TYPE)
->  		return -EINVAL;
->  
-> +	/* STATX_CHANGE_COOKIE is kernel-only for now. Ignore requests
-> +	 * from userland.
-> +	 */
-> +	mask &= ~STATX_CHANGE_COOKIE;
-> +
->  	error = vfs_statx(dfd, filename, flags, &stat, mask);
->  	if (error)
->  		return error;
-> diff --git a/include/linux/stat.h b/include/linux/stat.h
-> index ff277ced50e9..52150570d37a 100644
-> --- a/include/linux/stat.h
-> +++ b/include/linux/stat.h
-> @@ -52,6 +52,15 @@ struct kstat {
->  	u64		mnt_id;
->  	u32		dio_mem_align;
->  	u32		dio_offset_align;
-> +	u64		change_cookie;
->  };
->  
-> +/* These definitions are internal to the kernel for now. Mainly used by nfsd. */
-> +
-> +/* mask values */
-> +#define STATX_CHANGE_COOKIE		0x40000000U	/* Want/got stx_change_attr */
-> +
-> +/* file attribute values */
-> +#define STATX_ATTR_CHANGE_MONOTONIC	0x8000000000000000ULL /* version monotonically increases */
-> +
->  #endif
-> -- 
-> 2.39.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+So IMHO, the scope is really not as narrow as you think.
+
+> So, let's call this patch what it is: a potential global slowdown which
+> protects a very small amount of crypto code, probably just in userspace.
+>  That is probably the code that's generating your RSA keys, so it's
+> quite important, but it's also a _very_ small total amount of code.
+>
+> There's another part here which I think was recently added to the
+> documentation:
+>
+>         Intel expects the performance impact of this mode may be
+>         significantly higher on future processors.
+>
+> That's _meant_ to be really scary and keep folks from turning this on by
+> default, aka. what this patch does.  Your new CPU will be really slow if
+> you turn this on!  Boo!
+>
+
+What is the penalty for switching it on and off? On arm64, it is now
+on by default in the kernel, and off by default in user space, and
+user space can opt into it using an unprivileged instruction.
+
+> All that said, and given the information that Intel has released, I
+> think this patch is generally the right thing to do.  I don't think
+> people are wrong for looking at "DODT" as being a new vulnerability.
+> Intel obviously doesn't see it that way, which is why "DODT" has (as far
+> as I can tell) not been treated with the same security pomp and
+> circumstance as other stuff.
+>
+> Last, if you're going to propose that this be turned on, I expect to see
+> at least _some_ performance data.  DOITM=1 isn't free, even on Ice Lake.
