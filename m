@@ -2,248 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F234067AB7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B84467AB82
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234800AbjAYITC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S234059AbjAYIXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:23:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235001AbjAYISt (ORCPT
+        with ESMTP id S230160AbjAYIXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:18:49 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC794470BB
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:18:46 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id h12so12201835wrv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:18:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=42S+VqN9LTbh+aZs3DUPyk7eOYyO/WSy+YOH5CCdRvI=;
-        b=VBXlWo7Ifpvo9JGRHEWseLgXSjcbd2zUjutSZIUi6oDlIXUxeie+fG4ndxcVLIbIku
-         EGMoKMLRAetrDWiwayZ7a+tYVgytrfzYqhT+8OsYA7/aly7t0S3LhtiXVvO6BY2L4LcZ
-         g/OhoAraGklYtGWV+LYq9EC5k9J5AEO3vtiplqwCMYNHTt5jCa8Boke5bGqIe2SCjm5p
-         pSi4+vbh7zPno77KHuPirfLacIxGsvhQT0NCk//7Af4ZgdJbE1vcw958oAdia42wGzRU
-         1RFffO429hgs2MfdIvLBsN9fijC4PkYlVxJVEsM4tNe2oHS82NUSweqQikwqjheQmLWd
-         GN9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=42S+VqN9LTbh+aZs3DUPyk7eOYyO/WSy+YOH5CCdRvI=;
-        b=UFLtbYt2ZK7nM1lo8Fx39yeFYO6o4XmSIxCaJf+wVMvznC5vNQ2xOl9mLsdIx3TQ4S
-         gA83bmwFYG3eb0gGlXLqF8J1tGX3qEXqeBCAj4GpVD7wcMQkevxoBe5y2mGW+X90d6PU
-         C/oEeKM/jh/NEwBWblK2doP/ov+0ZpYAjgqZ7J4wn+hZQleqQVO1JBlyyx3+XaRjR/7O
-         12bP8ZBgIUC2lfw7HscppSxjOwcPssLwrw3lJKNG1V9Y9Tu/Yfn073cQdSOgexlE1MJ5
-         2rhtnOlDA99WTbEfy6FUR7VZ2V56CGtArsukx0IM/jaA3gHMMvqGoRPyFi5Vg8CxFl+q
-         sceQ==
-X-Gm-Message-State: AO0yUKUo15ynnk+hKZ9tmtjLhXn8vnKj8kYT/6swcQlenPBzUtBJcqR/
-        KrjsG1o/wmdTb7zGonFA78/2rA==
-X-Google-Smtp-Source: AK7set+nHS1ERfeA5HSjZOAP4XMGZ78LShDv+DbrqPS3vDyLLz1iDEMiepScfodZRBJld8itp5pHGQ==
-X-Received: by 2002:adf:e745:0:b0:2bf:bae4:a369 with SMTP id c5-20020adfe745000000b002bfbae4a369mr1183513wrn.10.1674634725326;
-        Wed, 25 Jan 2023 00:18:45 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id p7-20020adff207000000b002bdff778d87sm3770343wro.34.2023.01.25.00.18.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 00:18:44 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 25 Jan 2023 09:18:39 +0100
-Subject: [PATCH v2 3/3] arm64: dts: meson-g12b-odroid: Add initial support
- for Hardkernel ODROID-N2L
+        Wed, 25 Jan 2023 03:23:05 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52507279A1;
+        Wed, 25 Jan 2023 00:23:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674634984; x=1706170984;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=PIBIYWjFUWrv2uzg04TRHETzAcGdaVf2ERiCqorop3U=;
+  b=Z5xvmTcYh+Zy8eCN/LDPnR95xQ687cRx0C5MRtEkxBiZ1+f339539cpF
+   H8irfuJOP5C04UFUe8Nf0d6WnDkSu4vrZgeCyT2N55dwD94afBAE1ywDW
+   CyR/dLpybZToDvWKr0pL7jnF+H+t7pM8+XTNNnNRiTOqgTM007yDYxHwW
+   pqRZNCs/qNxm1J06wJ1zE+jSReM4lPZ5M7X2lu2IO0ImJ3V6T1a6zffd7
+   JBdrawHoEQFueWj5B/1tKgFWZ9mB7nwUyXyLj8J2g9qvYXwaADJU3TvaB
+   hiSSvzg07Y6MlJFLmhwkBwt8jZ/dHzcgK5lw6artqkKvajpt7mbXRf1PA
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="326537057"
+X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
+   d="scan'208";a="326537057"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 00:23:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="804923739"
+X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
+   d="scan'208";a="804923739"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Jan 2023 00:23:03 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 25 Jan 2023 00:23:02 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 25 Jan 2023 00:23:02 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 25 Jan 2023 00:22:59 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oDhkyFn9WOSqr6HdbBKouEs6eoE6nUarhB+MKdX70bM/U5iOZAg6NyAU3w4M51x+es63p0ZLCiws05jnQL9MSZ6iAXbMNhB+/p4WI4NUCe26XRV6BOKdEoyeo2+0IQqxuf3m07OekJ4S/1u1dhiAaLOyZkluGkp5Qy4a7t3km77eruVHBmULC1XMvgQxfsURWtg55nQLzStc0ZcodiUHvxewSyY2jOqMF/poYGIW5F7/E0P95p2ZMuiE1V/AfRVYLzBA5K3CjasN9ALOSBPgMiZXsjBoAp/NG/LX1Y4qbccqZtk3lfnD1N+J1KaWsTn02qhvpHSXeuMnQDkzif/0Mw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q6H3fyOnO+adw6ERWBQV79B5owbjDM04kWpdIn3N4fc=;
+ b=eoPUEQMhUdpechYZfehS+RDjuGqVinpV+GVoqywxsqAyK0LvtRP1qms3A5bjFMwgZKxGhUvSeFZ/kL7KIEQINuRTNQRGfuX8W3QP5l0CCKUr3JncyjbdNALJIUAsaLIZoNaP1ldBJur8WJc9mL2MneDe0xc2w1j0xxzw0DKexW/wrJRG3veNuXoyb36lKjvGoNAzG007P/1XRI2YO+Frji/s2lXKd6T16sf2mxbOisBMzuUzm1ed+T7oOZcDXqlSXuFqUiyr9YzYCx3GT/zsSxg7WywWsbAdFAhn0gxJlw7pZ3zFyVamdEt1pk9epdJIHm+MIrK5AwxSJ1JAYHUF/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
+ by DS7PR11MB6200.namprd11.prod.outlook.com (2603:10b6:8:98::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
+ 2023 08:22:50 +0000
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::59d:4c93:47eb:9811]) by SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::59d:4c93:47eb:9811%5]) with mapi id 15.20.6002.026; Wed, 25 Jan 2023
+ 08:22:49 +0000
+From:   "Li, Xin3" <xin3.li@intel.com>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        "H. Peter Anvin" <hpa@zytor.com>
+CC:     "Hansen, Dave" <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        x86 Mailing List <x86@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC PATCH v5 0/2] sysret_rip update for the Intel FRED
+ architecture
+Thread-Topic: [RFC PATCH v5 0/2] sysret_rip update for the Intel FRED
+ architecture
+Thread-Index: AQHZMHAoqvs/lwdyjkiVXoNdsc7iCK6uxqlQ
+Date:   Wed, 25 Jan 2023 08:22:48 +0000
+Message-ID: <SA1PR11MB67345C4DFEE720C08D30D93DA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
+References: <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
+ <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
+ <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
+ <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com>
+ <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
+ <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
+ <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
+ <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
+ <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
+ <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
+ <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+ <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|DS7PR11MB6200:EE_
+x-ms-office365-filtering-correlation-id: b1d0f53e-6430-40cb-56c3-08dafead5842
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: sn4JExY7Mwb3X/Dlj921a84rEWaGbVGfIRXFLH1dNFe6T3R3dWG7I6uy4+8aGErDeNxgN06m89n8iEAUxASRvrIMEZZgPD1DqEYIVsrj0YtStlSRMxRNdTI2XwEzFmiOcj/ajEidPlHeq2PIMRF+NT42bDZObOuv+9o2kJ2rzY3yOZauBPa8ZFDht4ldlzSfpFlC0N0d1nDjFopwvxuuT3yGTweenmHm67jlLXlvpYO5xo38c1GOElWOjHJrzqpMwrfu82yG9af3/yHV+rCqVMI6rp9isWLgyJOjS3WAp3bucj6Oeovf1UAmXJjPAvW7ftMBiP8suK8UQU+5KF0bxjFM2ZorALP5MjcHRWTte1OAeyX3jb5W8CKHXwuR7VdGdzIFneXlB0cj4eMKUylyg7KDUxPa61iMVfBmjGkl9ondx0VFKUW4xzekIc+qpK5MtCSH6qYkkGs85y/wAF+XXAOHG3Nw+Y1yfZGL7CK+KB0rgBhSXRfzAFaFQgLkPuiyEMd6B3Pez7gCGlEvWzE1qR7oKdHkvT4HlyRsjRVsmzeMSIu9/7k49B+HU27vUiPpKR6WTNtozall1G7xFoH3fFZO6stGQWLGq0UpBi9xM5FeJe04P0ETzJjFz9ZoozUXwBOv5A3LdFI6ASE2vYUBUKHs+fQ2R0NF4OPD43EjM4/lZoCWfFVCm+n5hMeCqoWr9ejciOWO9LIQTl8z7OyIO+BFXyQt/hfG6zC63tuycOU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(39860400002)(376002)(136003)(346002)(396003)(451199018)(8676002)(316002)(86362001)(66946007)(66446008)(71200400001)(38070700005)(54906003)(33656002)(8936002)(5660300002)(15650500001)(52536014)(82960400001)(38100700002)(2906002)(9686003)(66556008)(4326008)(41300700001)(122000001)(26005)(6506007)(186003)(55016003)(76116006)(66476007)(64756008)(966005)(478600001)(7416002)(83380400001)(7696005)(110136005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?I7Nc550ZepVSmW0MjTXdtvTofsPHV2MNdckw8Dcl0VDPe7Fj+X+UcjpT4bUs?=
+ =?us-ascii?Q?O47NBUlPSF7jZ5K7kaTcAeSz9ZWoF0tLe01HfSYTCYSALzt9QQWGa/Q13pNs?=
+ =?us-ascii?Q?gKF8Bl4lHeWYaCGy/p+Fdz5bi0wIrgyOtcR7eV6/i6VxN959zHH5dbsXxH/j?=
+ =?us-ascii?Q?R8SbGO0KwXVePEKswGLLGSs2Fo6jeSZ4jBGOBeT5hGd5HMXoE91fRXRmiKuM?=
+ =?us-ascii?Q?mOmCMh572I12gQUF1SsWQX+hx70t7o864DlYCvMYqvlkyR9S4D0qzaKB17pK?=
+ =?us-ascii?Q?luTzPp7SsF1Xn2/W/hyfpZ6i8yF2qToHZ5N7B4sjFiiAnXQHUntSeoJ2b+YQ?=
+ =?us-ascii?Q?PSl1CfdlLLFGuMogP6gKTU04yx6QViqFgDfydpFlnehyzJMmSIEESAoQtabE?=
+ =?us-ascii?Q?oS9DQxqiyVRTfk6BMtRuSaeWc4W7i5tZPt4LS6UR34+A4tX0OKDU8lMFBrUf?=
+ =?us-ascii?Q?JZ35ZUqdyr1BGdG4II0IAX00ZGI4f2rC/7xwR71INXLQOFIaiJMyi9D3kUjG?=
+ =?us-ascii?Q?3qbmlBeuCIViXnoU6LN6SipuEE+xoMXI2aXSvfH2GFSCaxFpb8/iXKzwz1QN?=
+ =?us-ascii?Q?eQ+IhDLKS24MID+sM7drd6xAPluRsPhmYbzEL8gQ/M3ZLTTYvSLh7OCn/24T?=
+ =?us-ascii?Q?qK7kTAd9QIA0y9cIGtuOeV3r63ak0HtyM8qos4619P9P20yxZOZE0rXlRCOk?=
+ =?us-ascii?Q?tjfSnVnd7e70DKc80QxzSfsdRcUhk7+tJAr2zCZ71FS6SClcwaCaOaS6h8XJ?=
+ =?us-ascii?Q?IJc4qY3NxLLj2wwR0owmETSWxlMty3aTICQ9RLkhl5vxz8BT3aRrVvMYO7NW?=
+ =?us-ascii?Q?Kv4y7eYso22ctrtgBelt+3p5r7U2J4ySfplZHb/op44HTdGSBR1zYD/XFdkC?=
+ =?us-ascii?Q?59Sv3qCOWG8RPIwvQxsT0VOcm02opRYnbJ04ePBKCDINr3MzsCOlmxGi4nDS?=
+ =?us-ascii?Q?gWv2hg2sAS5Xlc//XGZjHWUYqckmyP6RM1aL210Aibh6XXmmN0LjJS1zN6pB?=
+ =?us-ascii?Q?ljODnits3i8VWXS4P6gPb1QiqymlaQgA7tLeTPEQTNgKhAJV8DEJwfV2qaCx?=
+ =?us-ascii?Q?fxFV7KgPBaeqp0E7FffGuVo+YXrb3UNpntzBJ2Eo7nF0z3USVJspSxfwPXrL?=
+ =?us-ascii?Q?YYg9LPyazkYI75zzuU73P22kAm5AsubivVk6oTEOLhupQyjtAeyKSx4Qhbv3?=
+ =?us-ascii?Q?SE5+7YAS0SEA8sbGWBZ2IgaHm+zhjym9nkQfqxMc80Q/PhMtg5TFAFqclCgI?=
+ =?us-ascii?Q?HoVPayC4dBuaNIzyKGBCRn5OLRZWDY0wsuKY/o2gw3ftmazcxvyfq/JjBUXZ?=
+ =?us-ascii?Q?FePm3b/SONF7Piz06ysZPkFbGjpesAKLMnvmbDcDTWhqktwFnmzEJK1gbFlR?=
+ =?us-ascii?Q?WSHDLiKwqdxXvBLMd4JAaN9nb13xzuHdPKKuCUVerzg5udye0bFkPSy+PRJd?=
+ =?us-ascii?Q?S8/WReb3TwGlHXRbFK8P0U1VHmSnK893tjVGt5wuEJs/jOl4hvgN6ta5XXQT?=
+ =?us-ascii?Q?eb1mrFCAZvt824GCtVd4AhBj/ExMORvkc5aNh8HnHsPdV3bZOUKa/w+GZUnG?=
+ =?us-ascii?Q?a408IbZBmwCFzJJMULfZz4E5TlNFqtYAbSWaNeOS?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230122-topic-odroid-n2l-upstream-initial-v2-3-8d3fea6d403d@linaro.org>
-References: <20230122-topic-odroid-n2l-upstream-initial-v2-0-8d3fea6d403d@linaro.org>
-In-Reply-To: <20230122-topic-odroid-n2l-upstream-initial-v2-0-8d3fea6d403d@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Dongjin Kim <tobetter@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1d0f53e-6430-40cb-56c3-08dafead5842
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2023 08:22:48.9261
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Frqt8MIaglxEPjy9CQ3Kzt0O+8SlP9UhD+B/1OcmOcrH2buHvuP5ER3VDZn0oBbiVf0wWTjYcQEVev2yP9AEMg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6200
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ODROID-N2L is a variant SBC in small form factor and some peripherals
-are removed from ODROID-N2PLUS based on S922X SoC.
+This version passes on FRED, thanks a lot for quickly fixing it.
 
-- On-board ethernet is removed
-- On-board RTC is removed
-- USB 3.0 hub is removed, so one USB 2.0 and one USB 3.0 host ports
-  are available
-- Huge heatsink is replaced with 40x40mm heatsink, 5V active heatsink
-  is recommended or a tall passive sink is optional
-- 3.5mm earjack is removed
-- IR remote receiver is removed
-- MIPI DSI port is added new but not yet supported
+  Xin
 
-Signed-off-by: Dongjin Kim <tobetter@gmail.com>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/amlogic/Makefile               |   1 +
- .../boot/dts/amlogic/meson-g12b-odroid-n2l.dts     | 125 +++++++++++++++++++++
- 2 files changed, 126 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-index 97b42e2100e0..04114e8c9992 100644
---- a/arch/arm64/boot/dts/amlogic/Makefile
-+++ b/arch/arm64/boot/dts/amlogic/Makefile
-@@ -15,6 +15,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-go-ultra.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2-plus.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2l.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-khadas-vim3.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-ugoos-am6.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-kii-pro.dtb
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2l.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2l.dts
-new file mode 100644
-index 000000000000..70919f40d597
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2l.dts
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2022 Dongjin Kim <tobetter@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+/* The Amlogic S922X Rev. C supports the same OPPs as the A311D variant */
-+#include "meson-g12b-a311d.dtsi"
-+#include "meson-g12b-odroid.dtsi"
-+
-+/ {
-+	compatible = "hardkernel,odroid-n2l", "amlogic,s922x", "amlogic,g12b";
-+	model = "Hardkernel ODROID-N2L";
-+
-+	sound {
-+		compatible = "amlogic,axg-sound-card";
-+		model = "ODROID-N2L";
-+		audio-aux-devs = <&tdmout_b>, <&tdmin_a>, <&tdmin_b>,
-+				 <&tdmin_c>, <&tdmin_lb>;
-+		audio-routing = "TDMOUT_B IN 0", "FRDDR_A OUT 1",
-+				"TDMOUT_B IN 1", "FRDDR_B OUT 1",
-+				"TDMOUT_B IN 2", "FRDDR_C OUT 1",
-+				"TDM_B Playback", "TDMOUT_B OUT",
-+				"TDMIN_A IN 4", "TDM_B Loopback",
-+				"TDMIN_B IN 4", "TDM_B Loopback",
-+				"TDMIN_C IN 4", "TDM_B Loopback",
-+				"TDMIN_LB IN 1", "TDM_B Loopback",
-+				"TODDR_A IN 0", "TDMIN_A OUT",
-+				"TODDR_B IN 0", "TDMIN_A OUT",
-+				"TODDR_C IN 0", "TDMIN_A OUT",
-+				"TODDR_A IN 1", "TDMIN_B OUT",
-+				"TODDR_B IN 1", "TDMIN_B OUT",
-+				"TODDR_C IN 1", "TDMIN_B OUT",
-+				"TODDR_A IN 2", "TDMIN_C OUT",
-+				"TODDR_B IN 2", "TDMIN_C OUT",
-+				"TODDR_C IN 2", "TDMIN_C OUT",
-+				"TODDR_A IN 6", "TDMIN_LB OUT",
-+				"TODDR_B IN 6", "TDMIN_LB OUT",
-+				"TODDR_C IN 6", "TDMIN_LB OUT";
-+
-+		assigned-clocks = <&clkc CLKID_MPLL2>,
-+				  <&clkc CLKID_MPLL0>,
-+				  <&clkc CLKID_MPLL1>;
-+		assigned-clock-parents = <0>, <0>, <0>;
-+		assigned-clock-rates = <294912000>,
-+				       <270950400>,
-+				       <393216000>;
-+		status = "okay";
-+
-+		dai-link-0 {
-+			sound-dai = <&frddr_a>;
-+		};
-+
-+		dai-link-1 {
-+			sound-dai = <&frddr_b>;
-+		};
-+
-+		dai-link-2 {
-+			sound-dai = <&frddr_c>;
-+		};
-+
-+		dai-link-3 {
-+			sound-dai = <&toddr_a>;
-+		};
-+
-+		dai-link-4 {
-+			sound-dai = <&toddr_b>;
-+		};
-+
-+		dai-link-5 {
-+			sound-dai = <&toddr_c>;
-+		};
-+
-+		/* 8ch hdmi interface */
-+		dai-link-6 {
-+			sound-dai = <&tdmif_b>;
-+			dai-format = "i2s";
-+			dai-tdm-slot-tx-mask-0 = <1 1>;
-+			dai-tdm-slot-tx-mask-1 = <1 1>;
-+			dai-tdm-slot-tx-mask-2 = <1 1>;
-+			dai-tdm-slot-tx-mask-3 = <1 1>;
-+			mclk-fs = <256>;
-+
-+			codec {
-+				sound-dai = <&tohdmitx TOHDMITX_I2S_IN_B>;
-+			};
-+		};
-+
-+		/* hdmi glue */
-+		dai-link-7 {
-+			sound-dai = <&tohdmitx TOHDMITX_I2S_OUT>;
-+
-+			codec {
-+				sound-dai = <&hdmi_tx>;
-+			};
-+		};
-+	};
-+};
-+
-+&eth_phy {
-+	status = "disabled";
-+};
-+
-+&vddcpu_a {
-+	regulator-min-microvolt = <680000>;
-+	regulator-max-microvolt = <1040000>;
-+
-+	pwms = <&pwm_ab 0 1500 0>;
-+};
-+
-+&vddcpu_b {
-+	regulator-min-microvolt = <680000>;
-+	regulator-max-microvolt = <1040000>;
-+
-+	pwms = <&pwm_AO_cd 1 1500 0>;
-+};
-+
-+&usb2_phy0 {
-+	phy-supply = <&usb_pwr_en>;
-+};
-+
-+&usb2_phy1 {
-+	phy-supply = <&usb_pwr_en>;
-+};
-
--- 
-2.34.1
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+>=20
+> This is an RFC patchset v5. There are two patches in this series.
+>=20
+> Xin Li reported that the sysret_rip test fails at:
+>=20
+>         assert(ctx->uc_mcontext.gregs[REG_EFL] =3D=3D
+>                ctx->uc_mcontext.gregs[REG_R11]);
+>=20
+> on the Intel FRED architecture. Let's handle the FRED system scenario too=
+. The
+> 'syscall' instruction in a FRED system doesn't set %rcx=3D%rip and %r11=
+=3D%rflags.
+>=20
+> Syscall and sysenter in a FRED system are treated equivalently to softwar=
+e
+> interrupts, e.g. INT 0x80. They do not modify any registers.
+>=20
+> Link: https://lore.kernel.org/lkml/5d4ad3e3-034f-c7da-d141-
+> 9c001c2343af@intel.com
+>=20
+> #### Changelog v5:
+>=20
+>    - Fix do_syscall() return value (Ammar).
+>=20
+> #### Changelog v4:
+>=20
+>    - Fix the assertion condition inside the SIGUSR1 handler (Xin Li).
+>=20
+>    - Explain the purpose of patch #2 in the commit message (HPA).
+>=20
+>    - Update commit message (Ammar).
+>=20
+>    - Repeat test_syscall_rcx_r11_consistent() 32 times to be more sure
+>      that the result is really consistent (Ammar).
+>=20
+> #### Changelog v3:
+>=20
+>    - Test that we don't get a mix of REGS_SAVED and REGS_SYSRET,
+>      which is a major part of the point (HPA).
+>=20
+> #### Changelog v2:
+>=20
+>    - Use "+r"(rsp) as the right way to avoid redzone problems
+>      per Andrew's comment (HPA).
+>=20
+>=20
+> Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> ---
+>=20
+> Ammar Faizi (2):
+>   selftests/x86: sysret_rip: Handle syscall in a FRED system
+>   selftests/x86: sysret_rip: Add more syscall tests with respect to `%rcx=
+` and `%r11`
+>=20
+>  tools/testing/selftests/x86/sysret_rip.c | 146 +++++++++++++++++++++--
+>  1 file changed, 137 insertions(+), 9 deletions(-)
+>=20
+>=20
+> base-commit: e12ad468c22065a2826b2fc4c11d2113a7975301
+> --
+> Ammar Faizi
 
