@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D16167B9C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACA867B9D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235161AbjAYSoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 13:44:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S235819AbjAYSrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:47:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235849AbjAYSo3 (ORCPT
+        with ESMTP id S235394AbjAYSrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:44:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D2554219;
-        Wed, 25 Jan 2023 10:44:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 25 Jan 2023 13:47:07 -0500
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392C35619C;
+        Wed, 25 Jan 2023 10:47:06 -0800 (PST)
+Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PIFR3X011376;
+        Wed, 25 Jan 2023 18:46:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=YKF5DYJPhIrVAXlXwOYGcigxfIp2850usBGmHFx3nA8=;
+ b=gaap69jIIb8hib+X1L6pqyLaf3/+co2ECqJM6hIPlwMqUN4hdd30IUo2wTwAxeQ7dSBb
+ YWIEYjsnwySEuM30V7NVUUwgeo9u5Nl1T6bIRXw2E0cvCN4dT17tUS8bqEiLtDem8rGS
+ b/jDwYffL1xCQVtE0xN2Be/XRLIZ3rjwz2NiI3hxsFT+WvldpAQjvpiEbFcHqp+6w1cW
+ XazRcNiGNWqnTAPnceIgnjddilZuLHRiiZUi2LK0uSqvKNl07QBJa4w/BT0puv8fo8fn
+ lVc/Hoq9k4mCQwwm2XMx7gXjeLJ4HBFnNQ3uoOv/HESygu9XfTE/XEZqRF8T05IYfssm 4g== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3nb9038jc3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 18:46:44 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4CB7615B2;
-        Wed, 25 Jan 2023 18:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6C55C433EF;
-        Wed, 25 Jan 2023 18:44:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674672265;
-        bh=3u6/lxS5IX3ovbSHqGpPThtcCTCs5Ru+lWTUelavCI0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cGEb8BIpcGeoG4Zi9MwvRUN+6VCTdNaT/rqz7/XbpCPWimYRZld4Gc6Zy43UP3ON3
-         kbk3DuPb+7D9JHHAkaOyPdUH3V4+gn03Gcp3tpzMQ+/kH4V9VjRgelf6qM4NQ2ARCa
-         zzevjCFzM7rgGgTzU2P72byK+nUzrJ07XDJZqlv6uKpljRCFfbOL1MEhCzpo9Z2fwu
-         sotiy6aN8z3w6aycCnIyxiiW2JJcTROMpiGlZJ44EGeo1xvdyTypf5NVO9WkwxlG9F
-         Y2HLJMQAay5jY4r99mrAGzUhOZ5bhlHgP9DfMqPCplJ6AJyhVfDMHD7AvRxujYds9s
-         0KjIBsfrFh+Hw==
-Date:   Wed, 25 Jan 2023 10:44:23 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        SeongJae Park <sj@kernel.org>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Jann Horn <jannh@google.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Darren Kenny <darren.kenny@oracle.com>
-Subject: Re: [PATCH 5.15 13/20] exit: Put an upper limit on how often we can
- oops
-Message-ID: <Y9F4hxtZnE2GssUo@sol.localdomain>
-References: <20230124185110.143857-1-ebiggers@kernel.org>
- <20230124185110.143857-14-ebiggers@kernel.org>
- <033ca877-5091-cbfb-6e6c-e49c4adb9a10@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <033ca877-5091-cbfb-6e6c-e49c4adb9a10@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 78686336E0;
+        Wed, 25 Jan 2023 18:46:43 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 60FFB8089A9;
+        Wed, 25 Jan 2023 18:46:42 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        joel@jms.id.au
+Subject: [PATCH v4 0/5] ARM: Add GXP I2C Support
+Date:   Wed, 25 Jan 2023 12:44:33 -0600
+Message-Id: <20230125184438.28483-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-ORIG-GUID: X9Nx9LwVcbWGZu6MHNLStvYgxQbYRhOo
+X-Proofpoint-GUID: X9Nx9LwVcbWGZu6MHNLStvYgxQbYRhOo
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_12,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 adultscore=0 mlxscore=0 mlxlogscore=968 phishscore=0
+ clxscore=1015 spamscore=0 impostorscore=0 priorityscore=1501 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301250166
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Harshit,
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-On Wed, Jan 25, 2023 at 07:39:10PM +0530, Harshit Mogalapalli wrote:
-> 
-> Thanks for the backports.
-> 
-> I have tried backporting the oops_limit patches to LTS 5.15.y and had a
-> similar set of patches, just want to add a note here on an alternate way for
-> backporting this patch without resolving conflicts manually:
-> 
-> Here is the sequence:
-> 
-> * Patch 12:  [panic: Separate sysctl logic from CONFIG_SMP]
-> --> Cherry-pick Commit: 05ea0424f0e2 ("exit: Move oops specific logic from
-> do_exit into make_task_dead") upstream
-> --> Cherry-pick Commit: de77c3a5b95c ("exit: Move force_uaccess back into
-> do_exit") upstream
-> * Patch 13 which is Commit: d4ccd54d28d3 ("exit: Put an upper limit on how
-> often we can oops") upstream, will be a clean cherry-pick.
-> 
-> The benefit may be making future backports simpler in make_task_dead().
-> 
-> This was the only difference, so your backport looks good to me.
-> 
+The GXP SoC supports 10 I2C engines. Each I2C engine is completely
+independent and can function both as an I2C master and I2C slave. The
+I2C master can operate in a multi master environment. The engines support
+a scalable speed from 8kHZ to 1.5 Mhz.
 
-It's certainly an option.  The reason why I didn't do it that way is to reduce
-the impact of any potential bugs where do_exit() is still called when the new
-make_task_dead() function should be used instead.  With my series, the effect is
-just that oops_limit won't take effect in such cases.  If we also backported
-commit 05ea0424f0e2 ("exit: Move oops specific logic from do_exit into
-make_task_dead"), then do_exit() will lose various other things, such as
-panicing when called from an interrupt handler.  That would increase the chance
-of regressions, unless we made absolutely sure that everywhere that should be
-using make_task_dead() is indeed using it instead of do_exit().
+---
 
-Commit 0e25498f8cd4 ("exit: Add and use make_task_dead."), which I backported,
-did the vast majority of conversions to make_task_dead().
+Changes since v3:
+ *Switch engine variable to u32
+ *Disable IRQ on device remove with register write instead
+ *Provided even greater description with the use of Phandle
+Changes since v2:
+ *Disable IRQ on a device remove
+ *Remove use of I2C_CLASS_DEPRECATED
+ *Use i2c_parse_fw_timings instead of of_property_read_u32
+ *Remove redundant dev_err_probe as platform_get_irq already has one
+ *Used __iomem instead of res->start to find physical address
+ *Use BIT in gxp_i2c_irq_handler
+ *Made value u8 instead of u16 for u8 read
+ *Provided a better description of Phandle in yaml
+Changes since v1:
+ *Removed yaml documentation of hpe,gxp-sysreg as it has been
+  applied to syscon.yaml
+ *Made i2cX a generic node name i2c in dts file
+ *Added status field to the dtsi and the dts for i2c bus
+ *Removed unnecessary size-cells and address-cells from yaml
+ *Removed phandle from hpe,sysreg-phandle
+ *Changed hpe,i2c-max-bus-freq to clock-frequency
+ *Removed rogue tab in structure definition
+ *Removed use of __iomem *base local variables as it was
+  unnecessary
+ *Switched #if IS_ENABLED() -> if (IS_ENABLED()) inside
+  functions
+ *Removed use of pr_* functions
+ *Removed informational prints in register and unregister
+  functions
+ *Removed print from interrupt handler
+ *Removed informational prints from probe function
+ *Switched dev_err -> dev_err_probe in probe function
+ *Used the respective helper for mapping the resource to
+  __iomem
 
-Some architectures still have uses of do_exit() that got cleaned up later,
-though.  It seems it was mostly unreachable code, and some cases that should
-have been doing something else such as BUG() or sending a signal to userspace.
-So, generally not super important cases.
+Nick Hawkins (5):
+  i2c: hpe: Add GXP SoC I2C Controller
+  dt-bindings: i2c: Add hpe,gxp-i2c
+  ARM: dts: hpe: Add I2C Topology
+  ARM: multi_v7_defconfig: add gxp i2c module
+  MAINTAINERS: Add HPE GXP I2C Support
 
-Still, getting all that would bring in many more patches.  We could do that, but
-since this is already a 20-patch series, I wanted to limit the scope a bit.
-These extra patches could always be backported later on top of this if desired.
+ .../devicetree/bindings/i2c/hpe,gxp-i2c.yaml  |  59 ++
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      | 109 ++++
+ arch/arm/boot/dts/hpe-gxp.dtsi                | 125 ++++
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ drivers/i2c/busses/Kconfig                    |   7 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-gxp.c                  | 603 ++++++++++++++++++
+ 8 files changed, 907 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
+ create mode 100644 drivers/i2c/busses/i2c-gxp.c
 
-- Eric
+-- 
+2.17.1
+
