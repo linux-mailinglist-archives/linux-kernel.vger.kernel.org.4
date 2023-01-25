@@ -2,324 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7257A67AFD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FF567AFDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235624AbjAYKkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 05:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S235626AbjAYKlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 05:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235290AbjAYKka (ORCPT
+        with ESMTP id S234279AbjAYKlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:40:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F14621A0D
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:39:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674643188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rhbmWEFdYq3vCAExuufIQ+qo5uHVpM4cptZz8xdZoh4=;
-        b=Dk+y41C6vuNLoF5+NmN/PhR93V+5Fu3tHfHMByqmKGCSid+ILNZtcR3/ioZbbn7/k+ZOEw
-        5dobJY5DgQbYjIjOKOz9gzAPTZChzINLkwzXP6qO5UoP9NeHTZfl9084UJYVAwB03cNgzi
-        M8xBk513kX6YJUPvQc7O56qfB7ylOjY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-LpqEe98WNyaWfdVpx-tqhQ-1; Wed, 25 Jan 2023 05:39:45 -0500
-X-MC-Unique: LpqEe98WNyaWfdVpx-tqhQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9223F857F40;
-        Wed, 25 Jan 2023 10:39:44 +0000 (UTC)
-Received: from localhost (unknown [10.39.195.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9177C39DCA;
-        Wed, 25 Jan 2023 10:39:43 +0000 (UTC)
-From:   Giuseppe Scrivano <gscrivan@redhat.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brauner@kernel.org, viro@zeniv.linux.org.uk,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-References: <cover.1674227308.git.alexl@redhat.com>
-        <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
-        <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
-        <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
-        <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
-        <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
-        <20230125041835.GD937597@dread.disaster.area>
-        <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
-Date:   Wed, 25 Jan 2023 11:39:41 +0100
-In-Reply-To: <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
-        (Amir Goldstein's message of "Wed, 25 Jan 2023 10:32:26 +0200")
-Message-ID: <87wn5ac2z6.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+        Wed, 25 Jan 2023 05:41:09 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F9412F34
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:41:07 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id ud5so46467538ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:41:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9itLukGDfLyDGNVdC/aMITGRyQ/NEdmm4jyab+yhQJk=;
+        b=B9byZ9LipWC3xbXynyfcct7nEW1Ax2oBYlXkrwmDaiPDeEXC5zRImR/LdGfscbcXay
+         LC+ynD9TQIE4hfspZC0rBp719HhtK9y51RI98iUeDu/B+i/k0ZHogJlQxfs3w2vXWf8v
+         b4rYWPDu1TcTeh5WbYzvy1J0oQXKbJ7xIG9DY3wbaMd566tmlE6jtrUvCqFy8kUTGiXQ
+         jNaPUFEx8sEZmBZ27nzJ8zluQrrjspWvwhhn0V8YnAr7MuM5u9aJb0Y2L2+gZ6+etlz6
+         +d63o6KA6Fx08hTHyDuK/sQIne68C2jiohgZ0QOehA1nmyvtaGQb9VawvCRZDRmCe/n2
+         PGvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9itLukGDfLyDGNVdC/aMITGRyQ/NEdmm4jyab+yhQJk=;
+        b=WKXYT2gt/wyioNGttNKxFp+B8ptopJINXVILf8PvgQIP33bWVtYaWvS3LLPK5orc/g
+         8OVwOvKxasSlYZvzFyhR6DMiTZoqxJyUkeTrplsecjaUXlq4E72VrclYV/KkT/BZjsWt
+         zlWg6IoJI6L8dq1/o8YHtk/fVpkYeDTD+xyPqdWS+VVp6gpOnp8Yl1sxlqLj4+KsRiEn
+         vlxtDZd7r6ogArDBHKiPLCQvUEMA4rbCJgpMQDLlaj2vJIUyX8x9TTRcOKxK80jS+cE6
+         CAqFiaq+ol0vIIJCvtbk4+XXkKE41iBGZ+Vx7l2emO7OChlFP0Z0PArHUR39VEcBzIff
+         tTVw==
+X-Gm-Message-State: AFqh2kqzVGJ+++3c4ZRfcwEsvzAzOunbsjqDxPH3CWgPII0R9TWV0WLx
+        AUA/rd7H6FpB8rqn+Mf4jU66wQ==
+X-Google-Smtp-Source: AMrXdXvrYCl3Gy3DZqe6rLo/b+ZcLqkyeb4Yt1GtYysdCkdD1wpvX++KlGdMG+xtAF/8icdbxgqIog==
+X-Received: by 2002:a17:907:7248:b0:872:b1d7:8028 with SMTP id ds8-20020a170907724800b00872b1d78028mr44271808ejc.3.1674643265937;
+        Wed, 25 Jan 2023 02:41:05 -0800 (PST)
+Received: from localhost ([93.99.189.36])
+        by smtp.gmail.com with ESMTPSA id u2-20020aa7d0c2000000b004a0b1d7e39csm203079edo.51.2023.01.25.02.41.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 02:41:05 -0800 (PST)
+Date:   Wed, 25 Jan 2023 11:41:02 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
+Message-ID: <20230125104102.2thvourt3lx2p36a@orel>
+References: <20230123112803.817534-1-alexghiti@rivosinc.com>
+ <20230123142554.f22ajf6upfk2ybxk@orel>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123142554.f22ajf6upfk2ybxk@orel>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Amir Goldstein <amir73il@gmail.com> writes:
+On Mon, Jan 23, 2023 at 03:25:54PM +0100, Andrew Jones wrote:
+> On Mon, Jan 23, 2023 at 12:28:02PM +0100, Alexandre Ghiti wrote:
+> > During the early page table creation, we used to set the mapping for
+> > PAGE_OFFSET to the kernel load address: but the kernel load address is
+> > always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
+> > pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
+> > PAGE_OFFSET is).
+> > 
+> > But actually we don't have to establish this mapping (ie set va_pa_offset)
+> > that early in the boot process because:
+> > 
+> > - first, setup_vm installs a temporary kernel mapping and among other
+> >   things, discovers the system memory,
+> > - then, setup_vm_final creates the final kernel mapping and takes
+> >   advantage of the discovered system memory to create the linear
+> >   mapping.
+> > 
+> > During the first phase, we don't know the start of the system memory and
+> > then until the second phase is finished, we can't use the linear mapping at
+> > all and phys_to_virt/virt_to_phys translations must not be used because it
+> > would result in a different translation from the 'real' one once the final
+> > mapping is installed.
+> > 
+> > So here we simply delay the initialization of va_pa_offset to after the
+> > system memory discovery. But to make sure noone uses the linear mapping
+> > before, we add some guard in the DEBUG_VIRTUAL config.
+> > 
+> > Finally we can use PUD/P4D/PGD hugepages when possible, which will result
+> > in a better TLB utilization.
+> > 
+> > Note that we rely on the firmware to protect itself using PMP.
+> > 
+> > Acked-by: Rob Herring <robh@kernel.org> # DT bits
+> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > ---
+> > 
+> > v4:
+> > - Rebase on top of v6.2-rc3, as noted by Conor
+> > - Add Acked-by Rob
+> > 
+> > v3:
+> > - Change the comment about initrd_start VA conversion so that it fits
+> >   ARM64 and RISCV64 (and others in the future if needed), as suggested
+> >   by Rob
+> > 
+> > v2:
+> > - Add a comment on why RISCV64 does not need to set initrd_start/end that
+> >   early in the boot process, as asked by Rob
+> > 
+> >  arch/riscv/include/asm/page.h | 16 ++++++++++++++++
+> >  arch/riscv/mm/init.c          | 25 +++++++++++++++++++------
+> >  arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
+> >  drivers/of/fdt.c              | 11 ++++++-----
+> >  4 files changed, 57 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
+> > index 9f432c1b5289..7fe84c89e572 100644
+> > --- a/arch/riscv/include/asm/page.h
+> > +++ b/arch/riscv/include/asm/page.h
+> > @@ -90,6 +90,14 @@ typedef struct page *pgtable_t;
+> >  #define PTE_FMT "%08lx"
+> >  #endif
+> >  
+> > +#ifdef CONFIG_64BIT
+> > +/*
+> > + * We override this value as its generic definition uses __pa too early in
+> > + * the boot process (before kernel_map.va_pa_offset is set).
+> > + */
+> > +#define MIN_MEMBLOCK_ADDR      0
+> > +#endif
+> > +
+> >  #ifdef CONFIG_MMU
+> >  extern unsigned long riscv_pfn_base;
+> >  #define ARCH_PFN_OFFSET		(riscv_pfn_base)
+> > @@ -122,7 +130,11 @@ extern phys_addr_t phys_ram_base;
+> >  #define is_linear_mapping(x)	\
+> >  	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
+> >  
+> > +#ifndef CONFIG_DEBUG_VIRTUAL
+> >  #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
+> > +#else
+> > +void *linear_mapping_pa_to_va(unsigned long x);
+> > +#endif
+> >  #define kernel_mapping_pa_to_va(y)	({					\
+> >  	unsigned long _y = (unsigned long)(y);					\
+> >  	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?			\
+> > @@ -131,7 +143,11 @@ extern phys_addr_t phys_ram_base;
+> >  	})
+> >  #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
+> >  
+> > +#ifndef CONFIG_DEBUG_VIRTUAL
+> >  #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - kernel_map.va_pa_offset)
+> > +#else
+> > +phys_addr_t linear_mapping_va_to_pa(unsigned long x);
+> > +#endif
+> >  #define kernel_mapping_va_to_pa(y) ({						\
+> >  	unsigned long _y = (unsigned long)(y);					\
+> >  	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ? \
+> > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> > index 478d6763a01a..cc892ba9f787 100644
+> > --- a/arch/riscv/mm/init.c
+> > +++ b/arch/riscv/mm/init.c
+> > @@ -213,6 +213,14 @@ static void __init setup_bootmem(void)
+> >  	phys_ram_end = memblock_end_of_DRAM();
+> >  	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
+> >  		phys_ram_base = memblock_start_of_DRAM();
+> > +
+> > +	/*
+> > +	 * Any use of __va/__pa before this point is wrong as we did not know the
+> > +	 * start of DRAM before.
+> > +	 */
+> > +	kernel_map.va_pa_offset = PAGE_OFFSET - phys_ram_base;
+> > +	riscv_pfn_base = PFN_DOWN(phys_ram_base);
+> > +
+> >  	/*
+> >  	 * memblock allocator is not aware of the fact that last 4K bytes of
+> >  	 * the addressable memory can not be mapped because of IS_ERR_VALUE
+> > @@ -671,9 +679,16 @@ void __init create_pgd_mapping(pgd_t *pgdp,
+> >  
+> >  static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
+> >  {
+> > -	/* Upgrade to PMD_SIZE mappings whenever possible */
+> > -	base &= PMD_SIZE - 1;
+> > -	if (!base && size >= PMD_SIZE)
+> > +	if (!(base & (PGDIR_SIZE - 1)) && size >= PGDIR_SIZE)
+> > +		return PGDIR_SIZE;
+> > +
+> > +	if (!(base & (P4D_SIZE - 1)) && size >= P4D_SIZE)
+> > +		return P4D_SIZE;
+> > +
+> > +	if (!(base & (PUD_SIZE - 1)) && size >= PUD_SIZE)
+> > +		return PUD_SIZE;
+> > +
+> > +	if (!(base & (PMD_SIZE - 1)) && size >= PMD_SIZE)
+> >  		return PMD_SIZE;
+> >  
+> >  	return PAGE_SIZE;
+> > @@ -982,11 +997,9 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+> >  	set_satp_mode();
+> >  #endif
+> >  
+> > -	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
+> > +	kernel_map.va_pa_offset = 0UL;
+> >  	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
+> >  
+> > -	riscv_pfn_base = PFN_DOWN(kernel_map.phys_addr);
+> > -
+> >  	/*
+> >  	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
+> >  	 * kernel, whereas for 64-bit kernel, the end of the virtual address
+> > diff --git a/arch/riscv/mm/physaddr.c b/arch/riscv/mm/physaddr.c
+> > index 9b18bda74154..18706f457da7 100644
+> > --- a/arch/riscv/mm/physaddr.c
+> > +++ b/arch/riscv/mm/physaddr.c
+> > @@ -33,3 +33,19 @@ phys_addr_t __phys_addr_symbol(unsigned long x)
+> >  	return __va_to_pa_nodebug(x);
+> >  }
+> >  EXPORT_SYMBOL(__phys_addr_symbol);
+> > +
+> > +phys_addr_t linear_mapping_va_to_pa(unsigned long x)
+> > +{
+> > +	BUG_ON(!kernel_map.va_pa_offset);
+> > +
+> > +	return ((unsigned long)(x) - kernel_map.va_pa_offset);
+> > +}
+> > +EXPORT_SYMBOL(linear_mapping_va_to_pa);
+> > +
+> > +void *linear_mapping_pa_to_va(unsigned long x)
+> > +{
+> > +	BUG_ON(!kernel_map.va_pa_offset);
+> > +
+> > +	return ((void *)((unsigned long)(x) + kernel_map.va_pa_offset));
+> > +}
+> > +EXPORT_SYMBOL(linear_mapping_pa_to_va);
+> > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> > index f08b25195ae7..58107bd56f8f 100644
+> > --- a/drivers/of/fdt.c
+> > +++ b/drivers/of/fdt.c
+> > @@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
+> >  static void __early_init_dt_declare_initrd(unsigned long start,
+> >  					   unsigned long end)
+> >  {
+> > -	/* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
+> > -	 * enabled since __va() is called too early. ARM64 does make use
+> > -	 * of phys_initrd_start/phys_initrd_size so we can skip this
+> > -	 * conversion.
+> > +	/*
+> > +	 * __va() is not yet available this early on some platforms. In that
+> > +	 * case, the platform uses phys_initrd_start/phys_initrd_size instead
+> > +	 * and does the VA conversion itself.
+> >  	 */
+> > -	if (!IS_ENABLED(CONFIG_ARM64)) {
+> > +	if (!IS_ENABLED(CONFIG_ARM64) &&
+> > +	    !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
+> 
+> There are now two architectures, so maybe it's time for a new config
+> symbol which would be selected by arm64 and riscv64 and then used here,
+> e.g.
+> 
+>   if (!IS_ENABLED(CONFIG_NO_EARLY_LINEAR_MAP)) {
 
-> On Wed, Jan 25, 2023 at 6:18 AM Dave Chinner <david@fromorbit.com> wrote:
->>
->> On Tue, Jan 24, 2023 at 09:06:13PM +0200, Amir Goldstein wrote:
->> > On Tue, Jan 24, 2023 at 3:13 PM Alexander Larsson <alexl@redhat.com> wrote:
->> > > On Tue, 2023-01-24 at 05:24 +0200, Amir Goldstein wrote:
->> > > > On Mon, Jan 23, 2023 at 7:56 PM Alexander Larsson <alexl@redhat.com>
->> > > > wrote:
->> > > > > On Fri, 2023-01-20 at 21:44 +0200, Amir Goldstein wrote:
->> > > > > > On Fri, Jan 20, 2023 at 5:30 PM Alexander Larsson
->> > > > > > <alexl@redhat.com>
->> > > > > > wrote:
->> > > I'm not sure why the dentry cache case would be more important?
->> > > Starting a new container will very often not have cached the image.
->> > >
->> > > To me the interesting case is for a new image, but with some existing
->> > > page cache for the backing files directory. That seems to model staring
->> > > a new image in an active container host, but its somewhat hard to test
->> > > that case.
->> > >
->> >
->> > ok, you can argue that faster cold cache ls -lR is important
->> > for starting new images.
->> > I think you will be asked to show a real life container use case where
->> > that benchmark really matters.
->>
->> I've already described the real world production system bottlenecks
->> that composefs is designed to overcome in a previous thread.
->>
->> Please go back an read this:
->>
->> https://lore.kernel.org/linux-fsdevel/20230118002242.GB937597@dread.disaster.area/
->>
->
-> I've read it and now re-read it.
-> Most of the post talks about the excess time of creating the namespace,
-> which is addressed by erofs+overlayfs.
->
-> I guess you mean this requirement:
-> "When you have container instances that might only be needed for a
-> few seconds, taking half a minute to set up the container instance
-> and then another half a minute to tear it down just isn't viable -
-> we need instantiation and teardown times in the order of a second or
-> two."
->
-> Forgive for not being part of the containers world, so I have to ask -
-> Which real life use case requires instantiation and teardown times in
-> the order of a second?
->
-> What is the order of number of files in the manifest of those ephemeral
-> images?
->
-> The benchmark was done on a 2.6GB centos9 image.
->
-> My very minimal understanding of containers world, is that
-> A large centos9 image would be used quite often on a client so it
-> would be deployed as created inodes in disk filesystem
-> and the ephemeral images are likely to be small changes
-> on top of those large base images.
->
-> Furthermore, the ephmeral images would likely be composed
-> of cenos9 + several layers, so the situation of single composefs
-> image as large as centos9 is highly unlikely.
->
-> Am I understanding the workflow correctly?
->
-> If I am, then I would rather see benchmarks with images
-> that correspond with the real life use case that drives composefs,
-> such as small manifests and/or composefs in combination with
-> overlayfs as it would be used more often.
->
->> Cold cache performance dominates the runtime of short lived
->> containers as well as high density container hosts being run to
->> their container level memory limits. `ls -lR` is just a
->> microbenchmark that demonstrates how much better composefs cold
->> cache behaviour is than the alternatives being proposed....
->>
->> This might also help explain why my initial review comments focussed
->> on getting rid of optional format features, straight lining the
->> processing, changing the format or search algorithms so more
->> sequential cacheline accesses occurred resulting in less memory
->> stalls, etc. i.e. reductions in cold cache lookup overhead will
->> directly translate into faster container workload spin up.
->>
->
-> I agree that this technology is novel and understand why it results
-> in faster cold cache lookup.
-> I do not know erofs enough to say if similar techniques could be
-> applied to optimize erofs lookup at mkfs.erofs time, but I can guess
-> that this optimization was never attempted.
+I see v5 left this as it was. Any comment on this suggestion?
 
-As Dave mentioned, containers in a cluster usually run with low memory
-limits to increase density of how many containers can run on a single
-host.  I've done some tests to get some numbers on the memory usage.
+Thanks,
+drew
 
-Please let me know if you've any comment on the method I've used to read
-the memory usage, if you've any better suggestion please let me know.
-
-I am using a Fedora container image, but I think the image used is not
-relevant, as the memory used should increase linearly to the image size
-for both setups.
-
-I am using systemd-run --scope to get a new cgroup, the system uses
-cgroupv2.
-
-For this first test I am using a RO mount both for composefs and
-erofs+overlayfs.
-
-# echo 3 > /proc/sys/vm/drop_caches
-# \time systemd-run --scope sh -c 'ls -lR /mnt/composefs > /dev/null; cat $(cat /proc/self/cgroup | sed -e "s|0::|/sys/fs/cgroup|")/memory.peak'
-Running scope as unit: run-r482ec1c3024a4a8b9d2a369bf5dc6df3.scope
-16367616
-0.03user 0.54system 0:00.71elapsed 80%CPU (0avgtext+0avgdata 7552maxresident)k
-10592inputs+0outputs (28major+1273minor)pagefaults 0swaps
-
-# echo 3 > /proc/sys/vm/drop_caches
-# \time systemd-run --scope sh -c 'ls -lR /mnt/erofs-overlay > /dev/null; cat $(cat /proc/self/cgroup | sed -e "s|0::|/sys/fs/cgroup|")/memory.peak'
-Running scope as unit: run-r5f0f599053c349669e5c1ecacaa037b6.scope
-48390144
-0.04user 1.03system 0:01.81elapsed 59%CPU (0avgtext+0avgdata 7552maxresident)k
-30776inputs+0outputs (28major+1269minor)pagefaults 0swaps
-
-the erofs+overlay setup takes 2.5 times to complete and it uses 3 times
-the memory used by composefs.
-
-The second test involves a RW mount for composefs.
-
-For the erofs+overlay setup I've just added an upperdir and workdir to
-the overlay mount, while for composefs I create a completely new overlay
-mount that uses the composefs mount as the lower layer.
-
-# echo 3 > /proc/sys/vm/drop_caches
-# \time systemd-run --scope sh -c 'ls -lR /mnt/composefs-overlay > /dev/null; cat $(cat /proc/self/cgroup | sed -e "s|0::|/sys/fs/cgroup|")/memory.peak'
-Running scope as unit: run-r23519c8048704e5b84a1355f131d9d93.scope
-31014912
-0.05user 1.15system 0:01.38elapsed 87%CPU (0avgtext+0avgdata 7552maxresident)k
-10944inputs+0outputs (28major+1282minor)pagefaults 0swaps
-
-# echo 3 > /proc/sys/vm/drop_caches
-# \time systemd-run --scope sh -c 'ls -lR /mnt/erofs-overlay > /dev/null; cat $(cat /proc/self/cgroup | sed -e "s|0::|/sys/fs/cgroup|")/memory.peak'
-Running scope as unit: run-rdbccf045f3124e379cec00273638db08.scope
-48308224
-0.07user 2.04system 0:03.22elapsed 65%CPU (0avgtext+0avgdata 7424maxresident)k
-30720inputs+0outputs (28major+1273minor)pagefaults 0swaps
-
-so the erofs+overlay setup still takes more time (almost 2.5 times) and
-uses more memory (slightly more than 1.5 times)
-
->> > > > > This isn't all that strange, as overlayfs does a lot more work for
->> > > > > each lookup, including multiple name lookups as well as several
->> > > > > xattr
->> > > > > lookups, whereas composefs just does a single lookup in a pre-
->> > > > > computed
->> > > >
->> > > > Seriously, "multiple name lookups"?
->> > > > Overlayfs does exactly one lookup for anything but first level
->> > > > subdirs
->> > > > and for sparse files it does the exact same lookup in /objects as
->> > > > composefs.
->> > > > Enough with the hand waving please. Stick to hard facts.
->> > >
->> > > With the discussed layout, in a stat() call on a regular file,
->> > > ovl_lookup() will do lookups on both the sparse file and the backing
->> > > file, whereas cfs_dir_lookup() will just map some page cache pages and
->> > > do a binary search.
->> > >
->> > > Of course if you actually open the file, then cfs_open_file() would do
->> > > the equivalent lookups in /objects. But that is often not what happens,
->> > > for example in "ls -l".
->> > >
->> > > Additionally, these extra lookups will cause extra memory use, as you
->> > > need dentries and inodes for the erofs/squashfs inodes in addition to
->> > > the overlay inodes.
->> >
->> > I see. composefs is really very optimized for ls -lR.
->>
->> No, composefs is optimised for minimal namespace and inode
->> resolution overhead. 'ls -lR' does a lot of these operations, and
->> therefore you see the efficiency of the design being directly
->> exposed....
->>
->> > Now only need to figure out if real users start a container and do ls -lR
->> > without reading many files is a real life use case.
->>
->> I've been using 'ls -lR' and 'find . -ctime 1' to benchmark cold
->> cache directory iteration and inode lookup performance for roughly
->> 20 years. The benchmarks I run *never* read file data, nor is that
->> desired - they are pure directory and inode lookup micro-benchmarks
->> used to analyse VFS and filesystem directory and inode lookup
->> performance.
->>
->> I have been presenting such measurements and patches improving
->> performance of these microbnechmarks to the XFS and fsdevel lists
->> over 15 years and I have *never* had to justify that what I'm
->> measuring is a "real world workload" to anyone. Ever.
->>
->> Complaining about real world relevancy of the presented benchmark
->> might be considered applying a double standard, wouldn't you agree?
->>
->
-> I disagree.
-> Perhaps my comment was misunderstood.
->
-> The cold cache benchmark is certainly relevant for composefs
-> comparison and I expect to see it in future submissions.
->
-> The point I am trying to drive is this:
-> There are two alternatives on the table:
-> 1. Add fs/composefs
-> 2. Improve erofs and overlayfs
->
-> Functionally, I think we all agree that both alternatives should work.
->
-> Option #1 will take much less effort from composefs authors, so it is
-> understandable that they would do their best to argue in its favor.
->
-> Option #2 is prefered for long term maintenance reasons, which is
-> why vfs/erofs/overlayfs developers argue in favor of it.
->
-> The only factor that remains that could shift the balance inside
-> this gray area are the actual performance numbers.
->
-> And back to my point: the not so simple decision between the
-> two options, by whoever makes this decision, should be based
-> on a real life example of performance improvement and not of
-> a microbenchamk.
->
-> In my limited experience, a real life example means composefs
-> as a layer in overlayfs.
->
-> I did not see those numbers and it is clear that they will not be
-> as impressive as the bare composefs numbers, so proposing
-> composefs needs to include those numbers as well.
->
-> Alexander did claim that he has real life use cases for bare readonly
-> composefs images, but he did not say what the size of the manifests
-> in those images are and he did not say whether these use cases
-> also require startup and teardown in orders of seconds.
->
-> It looks like the different POV are now well understood by all parties
-> and that we are in the process of fine tuning the information that
-> needs to be presented for making the best decision based on facts.
->
-> This discussion, which was on a collision course at the beginning,
-> looks like it is in a converging course - this makes me happy.
->
+> 
+> >  		initrd_start = (unsigned long)__va(start);
+> >  		initrd_end = (unsigned long)__va(end);
+> >  		initrd_below_start_ok = 1;
+> > -- 
+> > 2.37.2
+> >
+> 
+> Otherwise,
+> 
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> 
 > Thanks,
-> Amir.
-
+> drew
