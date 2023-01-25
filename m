@@ -2,111 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CE567B59E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B210267B59B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236015AbjAYPMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:12:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
+        id S236010AbjAYPLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:11:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236013AbjAYPL4 (ORCPT
+        with ESMTP id S236031AbjAYPLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:11:56 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F60F59B73
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:11:33 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id g11so16643661eda.12
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:11:33 -0800 (PST)
+        Wed, 25 Jan 2023 10:11:47 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F151C5999B
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:11:23 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id i188so20043911vsi.8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:11:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MK9Ce7LoyUpoHVdDI0Q6deRxLh9svgL/G7RdzcTDYaQ=;
-        b=LySUeIdtlIdpu5P4Kgo82re6kq4R6LXSHS8u8/LBIhHqCR82KIlhMlw5ymVaJpi70D
-         S+3hcT5ACjyUAC7ydHn+LbSTc8PYmMxWqbMHJOJZd09rbrTyxpGMKOy/FJ6TwGwawUO3
-         3gdBQg8cwgg+i7TwUr30ShHh8R9d3/c0tKmRTdBQ3UNP3FI2MQc0vwPloZMwM7C0R/y8
-         QDY+Cmg+3Jvoa6OPYSJdPzf1T8dI0MVldCHrlCW3jW0UvO506xUDHdLpqow7PADPcDLJ
-         a1uw6AJqUjW6Lqqxn0rDd+ilQCOzzhdDNxNQToiQPzqKUvFVHZQE1xQZ6FTnKxmmWNUi
-         ZdnQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sKj8jKaS9qzEpZ/g/OHaJQRuOTXzmq7peLRAuzMOX1c=;
+        b=HDJ5qm0/Fk4IPj4N4/RAkv60QIA3V+CilbE0nwMA00YLr2k7NBBZ2jvVmLUCBqUJ5Y
+         1Vn4j7M45VC76cKyChHEv5FPahv6UfN+A8UEEobOYmIcDvuu6vDAUrnyZUVImAEvm3bv
+         q8h/YL1qrQg7ci6bwcHv5ivJ88WgYOZjuRp0OBW0JojSnuT00iN6MNgyyyypYNnaIA/0
+         wukD9CzXPDyQ8E0SSq5Y/3Z2k4MTJDYwe2P4YntkE4AqeAZLctrv+tLur+c7EZe3E6ac
+         YR0NqQjq/wnF3xq00pKaCVaR2PwRkN/j11VES34mcVn0E/wPx5UUBPDOKBJPC9yJCU3G
+         q8Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MK9Ce7LoyUpoHVdDI0Q6deRxLh9svgL/G7RdzcTDYaQ=;
-        b=dKRQsWoW4qsKvYXz5NvhxDP9BH+WNtg3yqrz4O/WNCdLVzyQYMSAogfPlWvPkgy099
-         /Um9rPZEROmnr6vzpBMlBXnxCb+B8NqjHeMWIBTo4OzRUEmFYQyBbs8E4D8TkVTF9N7B
-         4LfOwdbhU0ocGTNr+ghidChcSpDCWxd3nk3bGYNtq+HI96WiTUh48z+oWb6/CpIdhOos
-         4oN+lQCYC/svIM1s3wZY3VOBR+d+dfsgvYJSzi1v36wNSvBmk2HycIzWiaUWT2vX0uLc
-         NTAdYiz1JhOc6yt13acH53UYEUgw5BZ0frR238rIIDwU3XVfvOxj38HjzrMFxcjtT0oT
-         Rryw==
-X-Gm-Message-State: AO0yUKUjSx+QLDgcy9AKNp517niUmBddUlv0VUwHNjAQ4T5NaPb5V9xL
-        t8hZkATDrjzSQ32DYznTb1boIV3LDT74Z/8OhCdNiw==
-X-Google-Smtp-Source: AK7set+/d6h1+icdov+3bpJCPxwXk9ybBiTH6QptRDsERwtuuR1OBU2F9WB1DSqGNVJB0APKd2JKhc35tLg6EYBsWtg=
-X-Received: by 2002:a05:6402:d59:b0:4a0:90da:4653 with SMTP id
- ec25-20020a0564020d5900b004a090da4653mr768644edb.153.1674659489645; Wed, 25
- Jan 2023 07:11:29 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sKj8jKaS9qzEpZ/g/OHaJQRuOTXzmq7peLRAuzMOX1c=;
+        b=5hgYF7d1YajtiC6jM2YbVExOJQWZ5OGwzFXCFMOnPRsEJ7R9onbw96O4aVArVibrbM
+         86QccYwDBkJOljNVjPQCKAFPiXty00fcUmpyzmTg1Risd9z+Q4FtVU1nD77C+xdxHQFI
+         +cfrDSr/YNWPTcu8eQ7YdXIoDFpgelbP8lRB4Ue7ak+i5rmdCSH06b90emkSpOkzWT0R
+         OUI6uPuGilAW9xRyZ+W/NXQaRypMbl+nwGUz+OTD5SZlOm60XYXlMBnZGERBNpZ6KOqT
+         GKLVUgfw85cTpvOnA4PR460SxJaGtqCS6bXrq1j/uoM+K1IJxMI2cUH8VEWeUwxyKMIJ
+         Z40g==
+X-Gm-Message-State: AFqh2koEr5mnxUqvNQYHSMQvCEYjbqlZp6KYyzGJjTJ1WU4UX7xb71gm
+        NmmP2Paws7Up19KBvOPLuMuyMuMueHn32AIBHtfUSggjWVlilgHV
+X-Google-Smtp-Source: AMrXdXvbcCDG8QypkptU6Y9TFYAuhqUDoQNjsVfOwFzFHgNpOJPmg/3cmhm7ehU3nIxSXrKyvMXo1Wd5UNN/5wxEHtg=
+X-Received: by 2002:a67:f2c2:0:b0:3d3:fdf4:9d30 with SMTP id
+ a2-20020a67f2c2000000b003d3fdf49d30mr3817805vsn.34.1674659482687; Wed, 25 Jan
+ 2023 07:11:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20230124131717.128660-1-bchihi@baylibre.com> <20230124131717.128660-6-bchihi@baylibre.com>
- <80ce4ea3-6ebd-c249-45bd-a2f04343690b@collabora.com>
-In-Reply-To: <80ce4ea3-6ebd-c249-45bd-a2f04343690b@collabora.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 25 Jan 2023 16:10:53 +0100
-Message-ID: <CAGuA+opCcdbPbasadEFbKw1nSy-kbK3WzKG=wXn6dtzynjrY1Q@mail.gmail.com>
-Subject: Re: [PATCH v11 5/6] arm64/dts/mt8195: Add thermal zones and thermal nodes
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 25 Jan 2023 20:41:11 +0530
+Message-ID: <CA+G9fYsoGiJRYeuUpak+5aQ4Ev8s_u0YZKXMQuP7CwQsWo1G6g@mail.gmail.com>
+Subject: next-20230124: LTP: shmctl01.c:120: TFAIL: after child shmdt()
+ shm_nattcg=20 expected 0
+To:     open list <linux-kernel@vger.kernel.org>,
+        LTP List <ltp@lists.linux.it>, lkft-triage@lists.linaro.org
+Cc:     chrubis <chrubis@suse.cz>, Arnd Bergmann <arnd@arndb.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Luiz Capitulino <luizcap@amazon.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 4:37 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 24/01/23 14:17, bchihi@baylibre.com ha scritto:
-> > From: Balsam CHIHI <bchihi@baylibre.com>
-> >
-> > Add thermal zones and thermal nodes for the mt8195.
-> >
-> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
->
-> You should change the commit title to reflect the same syntax that you can find
-> in a `git log --oneline arch/arm64/boot/dts/mediatek/`.
->
-> arm64: dts: mediatek: mt8195: Add thermal zones and thermal nodes
->
-> or
->
-> arm64: dts: mt8195: Add thermal zones and thermal nodes
->
+LTP syscalls shmctl01 test failed on Linux next-20230124 tag across all the
+available architectures with following error logs,
 
-Hi Angelo,
+tst_test.c:1524: TINFO: Timeout per run is 0h 05m 00s
+shmctl01.c:256: TINFO: shm_id=9 maps to kernel index=9
+shmctl01.c:220: TINFO: Basic checks
+shmctl01.c:175: TPASS: IPC_STAT: shm_segsz=2048
+shmctl01.c:182: TPASS: IPC_STAT: shm_cpid=103946
+shmctl01.c:189: TPASS: IPC_STAT: shm_ctime=1674621556 in range
+<1674621556,1674621556>
+shmctl01.c:175: TPASS: SHM_STAT: shm_segsz=2048
+shmctl01.c:182: TPASS: SHM_STAT: shm_cpid=103946
+shmctl01.c:189: TPASS: SHM_STAT: shm_ctime=1674621556 in range
+<1674621556,1674621556>
+shmctl01.c:220: TINFO: Children attach SHM
+shmctl01.c:116: TPASS: before child shmat() shm_nattch=0
+shmctl01.c:116: TPASS: after child shmat() shm_nattch=20
+shmctl01.c:120: TFAIL: after child shmdt() shm_nattcg=20 expected 0
+shmctl01.c:220: TINFO: Chidlren inherit SHM
+shmctl01.c:116: TPASS: inherited after fork() shm_nattch=21
+shmctl01.c:120: TFAIL: after child shmdt() shm_nattcg=21 expected 1
+shmctl01.c:120: TFAIL: after parent shmdt() shm_nattcg=21 expected 0
 
-Thank you for the review.
-Should I resend with the fix?
-Or you would fix it when applying it like Matthias did for "[PATCH v11
-3/6] arm64/dts/mt8195: Add efuse node to mt8195"?
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Best regards,
-Balsam
+Test logs:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230124/testrun/14344836/suite/ltp-syscalls/test/shmat01/details/
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230125/testrun/14356742/suite/ltp-syscalls/test/shmat01/log
 
->
-> ...otherwise:
->
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->
+Test history:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230125/testrun/14356742/suite/ltp-syscalls/test/shmat01/history/
+
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: a54df7622717a40ddec95fd98086aff8ba7839a6
+  git_describe: next-20230124
+  kernel_version: 6.2.0-rc5
+  kernel-config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2Kl19cvIBraXOcZpBGCPzCajGAs/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/755587911
+  artifact-location:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2Kl19cvIBraXOcZpBGCPzCajGAs/
+  toolchain: gcc-11
+
+--
+Linaro LKFT
+https://lkft.linaro.org
