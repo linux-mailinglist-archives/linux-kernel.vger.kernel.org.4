@@ -2,81 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAD667BAF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D371D67BAF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234862AbjAYTp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 14:45:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S234961AbjAYTqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 14:46:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjAYTpy (ORCPT
+        with ESMTP id S235146AbjAYTqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 14:45:54 -0500
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1448B521F9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:45:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1674675953; x=1706211953;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HeYCKNAQvODKPnidyMCNbZ/+1A6D3FKxf0yIX4K0Exw=;
-  b=nqCksQgUeqH8YMi3vshvH9F6H+EghB3/hY/n+M5BYNXmqvFiUc35o4s+
-   ycZiNNq26Hgg0wTxtVFutRYCMoDFddqKT8NP9hUHtScX/FFLxbpbcmxAO
-   CX5pWeqwqI30qoNKCMhxuD481opx9vgroTEWXKq9u8eeN6sJ0GPy+zHWC
-   U=;
-X-IronPort-AV: E=Sophos;i="5.97,246,1669075200"; 
-   d="scan'208";a="257837258"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-25ac6bd5.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 19:45:47 +0000
-Received: from EX13D47EUC004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-m6i4x-25ac6bd5.us-east-1.amazon.com (Postfix) with ESMTPS id 2FF26410E8;
-        Wed, 25 Jan 2023 19:45:42 +0000 (UTC)
-Received: from EX19D033EUC004.ant.amazon.com (10.252.61.133) by
- EX13D47EUC004.ant.amazon.com (10.43.164.178) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Wed, 25 Jan 2023 19:45:42 +0000
-Received: from u40bc5e070a0153.ant.amazon.com (10.43.162.56) by
- EX19D033EUC004.ant.amazon.com (10.252.61.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.7; Wed, 25 Jan 2023 19:45:37 +0000
-Date:   Wed, 25 Jan 2023 20:45:32 +0100
-From:   Roman Kagan <rkagan@amazon.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     Zhang Qiao <zhangqiao22@huawei.com>,
-        Waiman Long <longman@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "Vincent Guittot" <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [bug-report] possible s64 overflow in max_vruntime()
-Message-ID: <Y9GG3N5ivVvyETa2@u40bc5e070a0153.ant.amazon.com>
-Mail-Followup-To: Roman Kagan <rkagan@amazon.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <73e639d5-702b-0d03-16d9-a965b1963ef6@huawei.com>
- <Y6RRfF5yRew7rdCp@hirez.programming.kicks-ass.net>
+        Wed, 25 Jan 2023 14:46:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7A141B77
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:45:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674675951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IxReU7OtDHr372Wv68SqBu8t7buHYmfZ4ed0qaGXjK4=;
+        b=ERt+aCOkanvcxPBam9cLXL8QBmFLiaIEorJaNRwis7anbAlyB/i1PGQcs2x59NRGxovqbH
+        x9lIeO5GGDFUFpxyJ3s3iRlc+P2YcWJL9H6udlRhOK2BLP4W4cHWSxaIPhWUs6tLxK9SBU
+        z5DDwPG/fQxXGOEby4gTnsPqlWJuPvc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-646-vp5M5eS9O2Sttrm5PnG-dw-1; Wed, 25 Jan 2023 14:45:48 -0500
+X-MC-Unique: vp5M5eS9O2Sttrm5PnG-dw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E45CD88B7A0;
+        Wed, 25 Jan 2023 19:45:47 +0000 (UTC)
+Received: from localhost (unknown [10.39.195.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 72563492B01;
+        Wed, 25 Jan 2023 19:45:47 +0000 (UTC)
+From:   Giuseppe Scrivano <gscrivan@redhat.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brauner@kernel.org, viro@zeniv.linux.org.uk,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+References: <cover.1674227308.git.alexl@redhat.com>
+        <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+        <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
+        <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
+        <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+        <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+        <20230125041835.GD937597@dread.disaster.area>
+        <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
+        <87wn5ac2z6.fsf@redhat.com>
+        <CAOQ4uxiPLHHnr2=XH4gN4bAjizH-=4mbZMe_sx99FKuPo-fDMQ@mail.gmail.com>
+        <87o7qmbxv4.fsf@redhat.com>
+        <CAOQ4uximBLqXDtq9vDhqR__1ctiiOMhMd03HCFUR_Bh_JFE-UQ@mail.gmail.com>
+        <87fsbybvzq.fsf@redhat.com>
+        <CAOQ4uxgos8m72icX+u2_6Gh7eMmctTTt6XZ=BRt3VzeOZH+UuQ@mail.gmail.com>
+Date:   Wed, 25 Jan 2023 20:45:45 +0100
+In-Reply-To: <CAOQ4uxgos8m72icX+u2_6Gh7eMmctTTt6XZ=BRt3VzeOZH+UuQ@mail.gmail.com>
+        (Amir Goldstein's message of "Wed, 25 Jan 2023 20:07:26 +0200")
+Message-ID: <87wn5a9z4m.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y6RRfF5yRew7rdCp@hirez.programming.kicks-ass.net>
-X-Originating-IP: [10.43.162.56]
-X-ClientProxiedBy: EX13D42UWB001.ant.amazon.com (10.43.161.35) To
- EX19D033EUC004.ant.amazon.com (10.252.61.133)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,70 +79,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Upping the thread as we're hitting this problem too.
+Amir Goldstein <amir73il@gmail.com> writes:
 
-On Thu, Dec 22, 2022 at 01:45:48PM +0100, Peter Zijlstra wrote:
-> On Wed, Dec 21, 2022 at 11:19:31PM +0800, Zhang Qiao wrote:
-> >     I found problem about s64 overflow in max_vruntime().
-> > 
-[...]
-> > static inline u64 min_vruntime(u64 min_vruntime, u64 vruntime)
-> > {
-> > 	/*
-> > 	 * vruntime=0x124b17fd59db8d02
-> > 	 * min_vruntime=0x918fdb05287da7c3
-> > 	 * vruntime - min_vruntime = 9276074894177461567 > s64_max, will s64 overflow
-> > 	 */
-> > 	s64 delta = (s64)(vruntime - min_vruntime);
-> > 	if (delta < 0)
-> > 		min_vruntime = vruntime;
-> > 
-> > 	return min_vruntime;
-> > }
-> > 
-> > ----------
-> > 
-> > max_vruntime() will return the kworker's old vruntime, it is incorrect and the correct result
-> > shoud be cfs_rq->minvruntime. This incorrect result is greater than cfs_rq->min_vruntime and
-> > will cause kworker thread starved.
-> > 
-> >     Does anyone have a good suggestion for slove this problem? or bugfix patch.
-> 
-> I don't understand what you tihnk the problem is. Signed overflow is
-> perfectly fine and works as designed here.
+>> >> I previously mentioned my wish of using it from a user namespace, the
+>> >> goal seems more challenging with EROFS or any other block devices.  I
+>> >> don't know about the difficulty of getting overlay metacopy working in a
+>> >> user namespace, even though it would be helpful for other use cases as
+>> >> well.
+>> >>
+>> >
+>> > There is no restriction of metacopy in user namespace.
+>> > overlayfs needs to be mounted with -o userxattr and the overlay
+>> > xattrs needs to use user.overlay. prefix.
+>>
+>> if I specify both userxattr and metacopy=on then the mount ends up in
+>> the following check:
+>>
+>> if (config->userxattr) {
+>>         [...]
+>>         if (config->metacopy && metacopy_opt) {
+>>                 pr_err("conflicting options: userxattr,metacopy=on\n");
+>>                 return -EINVAL;
+>>         }
+>> }
+>>
+>
+> Right, my bad.
+>
+>> to me it looks like it was done on purpose to prevent metacopy from a
+>> user namespace, but I don't know the reason for sure.
+>>
+>
+> With hand crafted metacopy, an unpriv user can chmod
+> any files to anything by layering another file with different
+> mode on top of it....
 
-Disagreed.
+I might be missing something obvious about metacopy, so please correct
+me if I am wrong, but I don't see how it is any different than just
+copying the file and chowning it.  Of course, as long as overlay uses
+the same security model so that a file that wasn't originally possible
+to access must be still blocked, even if referenced through metacopy.
 
-The calculation is indeed safe against the overflow of the vruntimes
-themselves.  However, when the two vruntimes are more than 2^63 apart,
-their comparison gets inverted due to that s64 overflow.
+> Not sure how the composefs security model intends to handle
+> this scenario with userns mount, but it sounds like a similar
+> problem.
 
-And this is what happens here: one scheduling entity has accumulated a
-vruntime more than 2^63 ahead of another.  Now the comparison is
-inverted due to s64 overflow, and the latter can't get to the cpu,
-because it appears to have vruntime (much) bigger than that of the
-former.
-
-This situation is reproducible e.g. when one scheduling entity is a
-multi-cpu hog, and the other is woken up from a long sleep.  Normally
-when a task is placed on a cfs_rq, its vruntime is pulled to
-min_vruntime, to avoid boosting the woken up task.  However in this case
-the task is so much behind in vruntime that it appears ahead instead,
-its vruntime is not adjusted in place_entity(), and then it looses the
-cpu to the current scheduling entity.
+composefs, if it is going to be used from a user namespace, should be
+doing the same check as overlay and do not allow accessing files that
+weren't accessible before.  It could be even stricter than overlay, and
+expect the payload files to be owned by the user who mounted the file
+system (or be world readable) instead of any ID mapped inside the user
+namespace.
 
 Thanks,
-Roman.
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
+Giuseppe
 
