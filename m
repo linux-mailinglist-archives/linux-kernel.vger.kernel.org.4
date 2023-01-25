@@ -2,183 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F403F67AB6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E3D67AB75
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234981AbjAYIM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
+        id S235075AbjAYIOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234640AbjAYIMz (ORCPT
+        with ESMTP id S234745AbjAYIOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:12:55 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2F58A75;
-        Wed, 25 Jan 2023 00:12:54 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id 5so11869567plo.3;
-        Wed, 25 Jan 2023 00:12:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=dz5A2+hnEs/TwXVPFfFU6bx14y/lc5WXCpWs10bBDqM=;
-        b=iXPa1+kxoWTwOCe5ehYgKWhQRJqeN3VcuVAIISKDjU6u45Z1jC/vRleCX8uRrdCd90
-         Edgqo96OZFSR5caNAqRnVmaxv6fTzgd4B4CafII8OwaafU9hZnazbQ+JnPvCeImdUXhP
-         MacF+RIwZ259Ii4On0zq2za1MJ7kw0W02dCRNvunZhMmtjzH4jl1hLMxM7lESSrwLZyU
-         1hQ0ZMi8WhmWzQyhVU3K7VIN9tDsz3Z3JFQlgaLFJK4QvdP0d0GSkJphlUcbLxdSCmD6
-         gtuo+cE8ySGDyBZZLaWVWa/V2HbkS3gjMIe39YrWCG5ueF9K9kml/NMREBGVKXgZlbHR
-         nITA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dz5A2+hnEs/TwXVPFfFU6bx14y/lc5WXCpWs10bBDqM=;
-        b=V2fw3KnGSGmzfglnWJWHeFbrtvHLSSB+3p+mcm56ACUxC02E6+Vn97ignptviGWfD2
-         pu9tnZa+jJZ9hYft1xSXdAPBYSvogoiK5WxoMgIgbPVGJJwzyXkT0UWM/ps03oniogwc
-         fmldPoUEol8z3b4aZsivjfhhPqrMm4n5gunX9FHksgdw1G20mJ6y9YJrDszekGo2gFXI
-         oy0PP8vwTfW330fxpXSbvRSZj+1j2dqfoOtTNO5DSe5lYGw/190/l8n2JKS9ZCzfxRy0
-         24Dw5jyCqyatqcxHFP9QCdbrcmdZWnBEsbwirZm88L+inpEAboFWY1VRAAVerP6cHHif
-         ft6Q==
-X-Gm-Message-State: AFqh2krCfU1oGlLbHsqfQOgQqPtDQkrxzLQuIl/xvDUtdoZkELw1/Aig
-        +l4/fK4MU52gzdSO1la5shk=
-X-Google-Smtp-Source: AMrXdXu+Obv6+t6XFycPBaTAs5DSdUd2i91WLyKPwzmCyG4EDIRDrcl5Y5T6OfknsSzwNmDfebKUsg==
-X-Received: by 2002:a17:902:e847:b0:194:7cd3:329a with SMTP id t7-20020a170902e84700b001947cd3329amr40518184plg.10.1674634373648;
-        Wed, 25 Jan 2023 00:12:53 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:269f:fac5:4c75:d85e])
-        by smtp.gmail.com with ESMTPSA id p4-20020a170902bd0400b0017f756563bcsm2992139pls.47.2023.01.25.00.12.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 00:12:53 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        Michael Petlan <mpetlan@redhat.com>
-Subject: [PATCH] perf stat: Hide invalid uncore event output for aggr mode
-Date:   Wed, 25 Jan 2023 00:12:51 -0800
-Message-Id: <20230125081251.1244997-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
+        Wed, 25 Jan 2023 03:14:42 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378C214238;
+        Wed, 25 Jan 2023 00:14:41 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P823C6024376;
+        Wed, 25 Jan 2023 08:14:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=keL/V4bFVJjqoggiHb3seMd7EdlHsokOIRNrZhWi3n4=;
+ b=jOkI/TIpG7rD7usDvSTOYYYNfO/S//pTLv0YOr8Rp8Tdam3BR+JfHEVjyoZ9FUeUbS6G
+ ogYq8Eq1MH/Hcy/gEsa0mZDpMGLr3mQ3WrhVba2y5WdzgqirllwsgReIPP6QGMwY3Vpn
+ nfTQqzGFpU6KghZ9CtnsxOmiA/gQ/Wyiy+DDN/Z7G7Z7iUP0c0HLkZyeNJlif3iRt6Qq
+ R3vyuNdpuLaYHK09rkrJl3DdwpMcCVKdVuvVqSxj5NZul52HEr7axWM00vfJ8GzUQvOe
+ xCHjTOXv7Nb32wyOyObvWdQnoRnOjF01dsLr6ThkbSnr1ue8UQ546XMjIf+oKhk4Dl4Q IA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3najqa9bw3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 08:14:35 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30P8EY0D015986
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 08:14:34 GMT
+Received: from hu-namajain-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 25 Jan 2023 00:14:31 -0800
+From:   Naman Jain <quic_namajain@quicinc.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        Naman Jain <quic_namajain@quicinc.com>
+Subject: [PATCH] soc: qcom: socinfo: Add support for new field in revision 17
+Date:   Wed, 25 Jan 2023 13:44:07 +0530
+Message-ID: <20230125081407.31833-1-quic_namajain@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ojc2Bmut0we8S9VQ6RJk0mdjzxPaNbwQ
+X-Proofpoint-ORIG-GUID: ojc2Bmut0we8S9VQ6RJk0mdjzxPaNbwQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_04,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 spamscore=0 mlxscore=0 clxscore=1015
+ impostorscore=0 priorityscore=1501 mlxlogscore=999 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250075
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current display code for perf stat iterates given cpus and build the
-aggr map to collect the event data for the aggregation mode.
+Add support for new field coming with socinfo structure under v17 to get
+hardware platform's oem variant id. This is to enable OEMs to have minor
+changes in the board, but to use the same platform subtype as the one
+supported by Qualcomm. The new field is to be used in platform overlay
+file. Default value is 0, reserved for Qualcomm platforms. Also, add
+debugfs support to read this field for a device.
 
-But uncore events have their own cpu maps and it won't guarantee that
-it'd match to the aggr map.  For example, per-package uncore events
-would generate a single value for each socket.  When user asks per-core
-aggregation mode, the output would contain 0 values for other cores.
-
-Thus it needs to check the uncore PMU's cpumask and if it matches to the
-current aggregation id.
-
-Before:
-  $ sudo ./perf stat -a --per-core -e power/energy-pkg/ sleep 1
-
-   Performance counter stats for 'system wide':
-
-  S0-D0-C0              1               3.73 Joules power/energy-pkg/
-  S0-D0-C1              0      <not counted> Joules power/energy-pkg/
-  S0-D0-C2              0      <not counted> Joules power/energy-pkg/
-  S0-D0-C3              0      <not counted> Joules power/energy-pkg/
-
-         1.001404046 seconds time elapsed
-
-  Some events weren't counted. Try disabling the NMI watchdog:
-  	echo 0 > /proc/sys/kernel/nmi_watchdog
-  	perf stat ...
-  	echo 1 > /proc/sys/kernel/nmi_watchdog
-
-The core 1, 2 and 3 should not be printed because the event is handled
-in a cpu in the core 0 only.  With this change, the output becomes like
-below.
-
-After:
-  $ sudo ./perf stat -a --per-core -e power/energy-pkg/ sleep 1
-
-   Performance counter stats for 'system wide':
-
-  S0-D0-C0              1               2.09 Joules power/energy-pkg/
-
-Fixes: b89761351089 ("perf stat: Update event skip condition for system-wide per-thread mode and merged uncore and hybrid events")
-Cc: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Cc: Michael Petlan <mpetlan@redhat.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Change-Id: I18f80084bc75466f3fcccd55fd21b37d69245aa6
 ---
- tools/perf/util/stat-display.c | 37 ++++++++++++++++++++++++++++------
- 1 file changed, 31 insertions(+), 6 deletions(-)
+ drivers/soc/qcom/socinfo.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 8bd8b0142630..b9dcb13650d0 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -787,6 +787,22 @@ static void uniquify_counter(struct perf_stat_config *config, struct evsel *coun
- 		uniquify_event_name(counter);
- }
+diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+index 10efdbcfdf05..10cdd32ce74d 100644
+--- a/drivers/soc/qcom/socinfo.c
++++ b/drivers/soc/qcom/socinfo.c
+@@ -174,6 +174,8 @@ struct socinfo {
+ 	__le32  pcode;
+ 	__le32  npartnamemap_offset;
+ 	__le32  nnum_partname_mapping;
++	/* Version 17 */
++	__le32 oem_variant;
+ };
  
-+static bool check_uncore_event_aggr(struct perf_stat_config *config,
-+				    struct evsel *counter,
-+				    struct aggr_cpu_id *id)
-+{
-+	struct perf_cpu cpu;
-+	int idx;
-+
-+	perf_cpu_map__for_each_cpu(cpu, idx, counter->core.own_cpus) {
-+		struct aggr_cpu_id own_id = config->aggr_get_id(config, cpu);
-+
-+		if (aggr_cpu_id__equal(id, &own_id))
-+			return true;
-+	}
-+	return false;
-+}
-+
- static void print_counter_aggrdata(struct perf_stat_config *config,
- 				   struct evsel *counter, int s,
- 				   struct outstate *os)
-@@ -814,12 +830,21 @@ static void print_counter_aggrdata(struct perf_stat_config *config,
- 	ena = aggr->counts.ena;
- 	run = aggr->counts.run;
+ #ifdef CONFIG_DEBUG_FS
+@@ -196,6 +198,7 @@ struct socinfo_params {
+ 	u32 nmodem_supported;
+ 	u32 feature_code;
+ 	u32 pcode;
++	u32 oem_variant;
+ };
  
--	/*
--	 * Skip value 0 when enabling --per-thread globally, otherwise it will
--	 * have too many 0 output.
--	 */
--	if (val == 0 && config->aggr_mode == AGGR_THREAD && config->system_wide)
--		return;
-+	if (val == 0) {
-+		/*
-+		 * Skip value 0 when enabling --per-thread globally,
-+		 * otherwise it will have too many 0 output.
-+		 */
-+		if (config->aggr_mode == AGGR_THREAD && config->system_wide)
-+			return;
-+		/*
-+		 * Skip value 0 when it's an uncore event and the given aggr id
-+		 * does not belong to the PMU cpumask.
-+		 */
-+		if (counter->core.requires_cpu &&
-+		    !check_uncore_event_aggr(config, counter, &id))
-+			return;
-+	}
+ struct smem_image_version {
+@@ -519,6 +522,11 @@ static void socinfo_debugfs_init(struct qcom_socinfo *qcom_socinfo,
+ 			   &qcom_socinfo->info.fmt);
  
- 	if (!metric_only) {
- 		if (config->json_output)
+ 	switch (qcom_socinfo->info.fmt) {
++	case SOCINFO_VERSION(0, 17):
++		qcom_socinfo->info.oem_variant = __le32_to_cpu(info->oem_variant);
++		debugfs_create_u32("oem_variant", 0444, qcom_socinfo->dbg_root,
++				   &qcom_socinfo->info.oem_variant);
++		fallthrough;
+ 	case SOCINFO_VERSION(0, 16):
+ 		qcom_socinfo->info.feature_code = __le32_to_cpu(info->feature_code);
+ 		qcom_socinfo->info.pcode = __le32_to_cpu(info->pcode);
 -- 
-2.39.1.405.gd4c25cc71f-goog
+2.17.1
 
