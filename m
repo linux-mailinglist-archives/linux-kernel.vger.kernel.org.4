@@ -2,213 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634A467B387
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D6F67B38F
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235289AbjAYNin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
+        id S235441AbjAYNj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:39:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbjAYNil (ORCPT
+        with ESMTP id S235397AbjAYNjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:38:41 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2051.outbound.protection.outlook.com [40.107.93.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF2355287;
-        Wed, 25 Jan 2023 05:38:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MN2o1tmobPwsFbAvPtTmkzG8pom4NNKLlKIt+9vmDfSvziHjhaenhIlVJNVDYa3dd+/QyqwK9Es/mUz7vj7b0zB9hJlcFBhSsju76FOk/ph27tWy8rbD/rskuQka9N9hp+VaoEX3kE2Pp9lCN/P4qDryBkbdHLAJD18qO2s9GkaIrH7aHrjHoorwAgJ1IwmmPmbbj9HNb5SWXvrdMA/D06a7+/RKz+QwsvVBO94Wh9dljjloalhEPUjaPLBTrq3+bE+y+2oMGegHTa4SGJ2fQ9lSWc0bqfysCIQo4/00qPpDNIw96gsVEkjcfjFL9+rBCXcNrS9VK7ebHrU25tg7EA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/hbbEmp/tNCntjFwtt0pqVXSqee6QGw8Pkya/zDrDA8=;
- b=HJuR78MvCvVCzZBuyj6hu8gY+O9AYlKNBo97kxPN0hIhzUS7WggplXHQCqMx4mG2D7yNCRiNibBD1HIWJmj1FR7CZFW+DWD8YezTtWpsrie9XeTRTNW21cQ8RjqpUIc5ZE85uYKgcvSzC3OgdMIll2kADrkMkeNk/EnEhz5n2u39HSaELzI00QTvEBpIk8AyP+RlkDb6MumN3ELkqFsH4qs2zehBEKX1mDyYHaI/CYA0FIQauogWmhjfh6eOAlMAWAxm202lg4xy5cw//S8FFarFY69STx0H20IjkgEx1Wo4TZjmh7bsIzBFvUxeAZhLs6VOx0zPK+ySgLiLRAK4ng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/hbbEmp/tNCntjFwtt0pqVXSqee6QGw8Pkya/zDrDA8=;
- b=GN37D+FuJSDnDzRGtw3bE1b/R/rcMY43HYmMCoLrUhjMq8u4VueMGDwQyVE2o+fzF9NKhD1NdH6QJIDjJ8glfPPzJOnBGS0OFyoY8A0YkHXEXo4dNi+jUEQzZWzG/VEVksA79mQlzu2lBvQcNaA/CNbe9UfBdS82MIvYm2OgtXEl608VQbQexOtv05hPqKdJtEbBVxJoPYjYGyGIV123BQM8XOnzfHjPZYMKCocyM4nLZ6kVSEsjJ6JSDoGDTEGsg3Xbx/zihREFVfoL+5txgroOOderm5PULr/1TYPMbnAXPCXqnDSkkymbfya7LLt6qEmKTyk9Y1ssJgrLafLomg==
-Received: from MW4PR02CA0029.namprd02.prod.outlook.com (2603:10b6:303:16d::34)
- by DS0PR12MB8272.namprd12.prod.outlook.com (2603:10b6:8:fc::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.21; Wed, 25 Jan 2023 13:38:38 +0000
-Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:16d:cafe::7) by MW4PR02CA0029.outlook.office365.com
- (2603:10b6:303:16d::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.21 via Frontend
- Transport; Wed, 25 Jan 2023 13:38:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- CO1NAM11FT027.mail.protection.outlook.com (10.13.174.224) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6023.16 via Frontend Transport; Wed, 25 Jan 2023 13:38:38 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
- 2023 05:38:37 -0800
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 25 Jan 2023 05:38:36 -0800
-Received: from vidyas-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Wed, 25 Jan 2023 05:38:33 -0800
-From:   Vidya Sagar <vidyas@nvidia.com>
-To:     <bhelgaas@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <rafael.j.wysocki@intel.com>, <kai.heng.feng@canonical.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <treding@nvidia.com>, <jonathanh@nvidia.com>, <kthota@nvidia.com>,
-        <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>, <sagar.tv@gmail.com>
-Subject: [PATCH V1] PCI/ASPM: Update saved buffers with latest ASPM configuration
-Date:   Wed, 25 Jan 2023 19:08:30 +0530
-Message-ID: <20230125133830.20620-1-vidyas@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-X-NVConfidentiality: public
+        Wed, 25 Jan 2023 08:39:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E54255287
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 05:39:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674653943;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sxzotnx/8u7CTeCRsf3MJY8+svrxvajdNHO0lRdFPkg=;
+        b=MuIFaMLdJ7x/dKw1ppNDS3oCUDen14eFbqbnZzroATFuOry9ej7ayLdZqxuVFPcQwWAsbU
+        v0AUPUK0MY5Z72500q0yYcbrvlh4KptfpyPryGjAgpXTWo6lUmaQaDwQwGrtfYMOfaEkzT
+        PFZ2qzBhJG8KRm5r4V2gxPRr7NOz1LQ=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-482-v-hyQZ0NNvKobEV39EIwFg-1; Wed, 25 Jan 2023 08:39:02 -0500
+X-MC-Unique: v-hyQZ0NNvKobEV39EIwFg-1
+Received: by mail-ej1-f71.google.com with SMTP id xj11-20020a170906db0b00b0077b6ecb23fcso12077283ejb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 05:39:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sxzotnx/8u7CTeCRsf3MJY8+svrxvajdNHO0lRdFPkg=;
+        b=R40sjG9XXo/elEcM4gCtKM3SlNK2yx/9oEYyAaJjtYyIzg9E5me+wf81pbetlWlkIv
+         hQe9+nbsTbUrdihyccEdfngRWeQ6SGcrJ2ndPZ5tBlMCPzJRbZvHX/XRdZyMo3tslU2r
+         gFMQkfhMVvFgrIDPLqWpcznUXUHfgvifR+5MkPT65auns8UyZcOtZnX9jWTb2huicSb5
+         B9RAYae2jTVsTnB2TnNAlM8Pen9SoxjKbcbMSHvbC0AobU0V1e0MoPULDYCvqtKl2n9W
+         AttOR2bfE/FQYjfyhi+okH4M+iG7xFJX+J6cGB/ouXU5ukWe+D2CaacMYwFpm3ID/R2p
+         0sqA==
+X-Gm-Message-State: AFqh2krMl7YYS26YL8SBBkQBhFdfJqWmhDMPpqEXr4m6DdZi/EHQpjcC
+        hGxQnrkWThJ3ifJU82my87+MYTA/g5FZI0IW4vQFlygMqg3YgT746uQeWfUKVKKilI8TjlXd9Fy
+        BTDQVwKURjlVoS70BJhe+FVw6
+X-Received: by 2002:aa7:de9a:0:b0:482:d62c:cde with SMTP id j26-20020aa7de9a000000b00482d62c0cdemr48671601edv.13.1674653940736;
+        Wed, 25 Jan 2023 05:39:00 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuSG9aMyPwztmzmC+kCrInOnj8mPzQEuCzuD4sdr5qzPHQ3vYBP3LEEv2c86PDwwr+WEAua5A==
+X-Received: by 2002:aa7:de9a:0:b0:482:d62c:cde with SMTP id j26-20020aa7de9a000000b00482d62c0cdemr48671585edv.13.1674653940587;
+        Wed, 25 Jan 2023 05:39:00 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id o2-20020aa7c7c2000000b0047eeaae9558sm2344417eds.60.2023.01.25.05.38.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 05:39:00 -0800 (PST)
+Message-ID: <383fda33-143d-9e8e-1f7d-080931ae4496@redhat.com>
+Date:   Wed, 25 Jan 2023 14:38:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT027:EE_|DS0PR12MB8272:EE_
-X-MS-Office365-Filtering-Correlation-Id: 78eadf38-d1a6-46c2-c59b-08dafed976e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: s20q6Ov20a1VKSXYXBuAQ0wsg8RIJx7WiKn2vSLG/PqYlIWdWI+thcWW1wqdXjVZpVwMwIaEH78n6PAF7GiFT4d0t17cb0mTfQwA5j5OUKNQTwguD9Fu4iKDhPPVFilSndYLEQU80rIMAU1NqoH0at+5UWKOPG1i5w1xfIWQA1maOruTQ1ewfR+EW3vIJ3ysvgvSBhcvJklZA6r3A3D4tnACh5dA65FqLJHUT/2xI7aC6FT5iUXIoL69bei+oqtaBXoNcU4clsxcRXBphtR/e9EQ6U6SOAUs95GvdvhLvQ2Fv5cgPTeINeAeBHSB+apTsY6lG1me5AdzUJqL64olZWmeLdgA3jwH7wazw/EIm7QLc4/A2e5l5lpoYEu/LXbdnJUcRdBHQ0LMUFWHoaW2DvCDlsTumcYJJkaNWx57HVnaFCAspP9rvM219RUVp/KHGKsXvsH6WXFFg7ylOE6xmt+E7gWy6b/MKAHOJ9zLRnP4xP5y1PMFfL8wcha7NHK4c4ACZhMqBXf56XviKcPBpqrKQQBWBIl/FKNck5ofx+Fq2/EaoTaW8cCgBPcuSmV8V3ielAB8rPA/dSD4rvDIySFuetU16fdePJteqk+FwiDlZjLJK+J+VhiZFH1WsccT6nllC8y/kDVRVvfPwrmTy2/DIm/xIaV3KZALgb0fShMvEiie5xmdW1Kou5qJIMlDtkPshmMTUOgrnnh6dw7VQaT3Gttr4laN/nR4elI9hvQ=
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(39860400002)(396003)(346002)(451199018)(36840700001)(40470700004)(46966006)(36756003)(426003)(41300700001)(2616005)(47076005)(8936002)(336012)(356005)(7636003)(82740400003)(15650500001)(2906002)(5660300002)(83380400001)(1076003)(86362001)(82310400005)(186003)(26005)(478600001)(7696005)(70206006)(70586007)(8676002)(4326008)(316002)(36860700001)(54906003)(110136005)(40480700001)(40460700003)(309714004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 13:38:38.1733
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78eadf38-d1a6-46c2-c59b-08dafed976e8
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8272
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH resend 0/2] i2c/extcon: intel-cht-wc: Lenovo Yoga Tab 3
+ Pro YT3-X90F support
+Content-Language: en-US, nl
+To:     Wolfram Sang <wsa@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>
+References: <20230125111209.18343-1-hdegoede@redhat.com>
+ <Y9Et7nlUmiiPrFUQ@ninjato>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <Y9Et7nlUmiiPrFUQ@ninjato>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Many PCIe device drivers save the configuration state of their respective
-devices during probe and restore the same when their 'slot_reset' hook
-is called through PCIe Error Recovery System.
-If the system has a change in ASPM policy after the driver's probe is
-called and before error event occurred, 'slot_reset' hook restores the
-PCIe configuration state to what it was at the time of probe but not with
-what it was just before the occurrence of the error event.
-This effectively leads to a mismatch in the ASPM configuration between
-the device and its upstream parent device.
-This patch addresses that issue by updating the saved configuration state
-of the device with the latest info whenever there is a change w.r.t ASPM
-policy.
+Hi,
 
-Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
----
- drivers/pci/pci.h       |  4 ++++
- drivers/pci/pcie/aspm.c | 40 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 44 insertions(+)
+On 1/25/23 14:26, Wolfram Sang wrote:
+> 
+>> I'm resending these 2 patches since they seem to have fallen through
+>> the cracks.
+> 
+> Which tree should the patches go via? I am assuming not-i2c, but maybe I
+> am wrong?
 
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index 9ed3b5550043..f4a91d4fe96d 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -566,12 +566,16 @@ bool pcie_wait_for_link(struct pci_dev *pdev, bool active);
- void pcie_aspm_init_link_state(struct pci_dev *pdev);
- void pcie_aspm_exit_link_state(struct pci_dev *pdev);
- void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
-+void pci_save_aspm_state(struct pci_dev *dev);
-+void pci_restore_aspm_state(struct pci_dev *dev);
- void pci_save_aspm_l1ss_state(struct pci_dev *dev);
- void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
- #else
- static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
- static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
- static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
-+static inline void pci_save_aspm_state(struct pci_dev *dev) { }
-+static inline void pci_restore_aspm_state(struct pci_dev *dev) { }
- static inline void pci_save_aspm_l1ss_state(struct pci_dev *dev) { }
- static inline void pci_restore_aspm_l1ss_state(struct pci_dev *dev) { }
- #endif
-diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-index 53a1fa306e1e..f25e0440d36b 100644
---- a/drivers/pci/pcie/aspm.c
-+++ b/drivers/pci/pcie/aspm.c
-@@ -151,6 +151,7 @@ static void pcie_set_clkpm_nocheck(struct pcie_link_state *link, int enable)
- 						   PCI_EXP_LNKCTL_CLKREQ_EN,
- 						   val);
- 	link->clkpm_enabled = !!enable;
-+	pci_save_aspm_state(child);
- }
- 
- static void pcie_set_clkpm(struct pcie_link_state *link, int enable)
-@@ -757,6 +758,39 @@ static void pcie_config_aspm_l1ss(struct pcie_link_state *link, u32 state)
- 				PCI_L1SS_CTL1_L1SS_MASK, val);
- }
- 
-+void pci_save_aspm_state(struct pci_dev *dev)
-+{
-+	int i = 0;
-+	struct pci_cap_saved_state *save_state;
-+	u16 *cap;
-+
-+	if (!pci_is_pcie(dev))
-+		return;
-+
-+	save_state = pci_find_saved_cap(dev, PCI_CAP_ID_EXP);
-+	if (!save_state)
-+		return;
-+
-+	cap = (u16 *)&save_state->cap.data[0];
-+	i++;
-+	pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &cap[i++]);
-+}
-+
-+void pci_restore_aspm_state(struct pci_dev *dev)
-+{
-+	int i = 0;
-+	struct pci_cap_saved_state *save_state;
-+	u16 *cap;
-+
-+	save_state = pci_find_saved_cap(dev, PCI_CAP_ID_EXP);
-+	if (!save_state)
-+		return;
-+
-+	cap = (u16 *)&save_state->cap.data[0];
-+	i++;
-+	pcie_capability_write_word(dev, PCI_EXP_LNKCTL, cap[i++]);
-+}
-+
- void pci_save_aspm_l1ss_state(struct pci_dev *dev)
- {
- 	struct pci_cap_saved_state *save_state;
-@@ -849,6 +883,12 @@ static void pcie_config_aspm_link(struct pcie_link_state *link, u32 state)
- 		pcie_config_aspm_dev(parent, upstream);
- 
- 	link->aspm_enabled = state;
-+
-+	/* Update latest ASPM configuration in saved context */
-+	pci_save_aspm_state(link->downstream);
-+	pci_save_aspm_l1ss_state(link->downstream);
-+	pci_save_aspm_state(parent);
-+	pci_save_aspm_l1ss_state(parent);
- }
- 
- static void pcie_config_aspm_path(struct pcie_link_state *link)
--- 
-2.17.1
+That is a good point. I was under the assumption that the matching MFD
+patch, which I did not resend, was already merged. But I'm wrong,
+sorry about this.
+
+So I'll do a v2 resend with 3 patches which does include the MFD
+patch and then I guess ideally all 3 patches would go through
+the MFD tree.
+
+Wolfram, may I/we have your ack for merging the small i2c change
+through the MFD tree?
+
+The extcon patch already has an ack for that. So I'll hold of
+on sending out a v2 with the missing patch until I have your
+ack, so that v2 will be fully ready to merge through the MFD
+tree.
+
+Regards,
+
+Hans
+
 
