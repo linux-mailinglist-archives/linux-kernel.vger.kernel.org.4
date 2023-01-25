@@ -2,139 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D79F67AAE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 08:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF21467AAEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 08:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235011AbjAYH3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 02:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S234547AbjAYHbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 02:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234859AbjAYH3k (ORCPT
+        with ESMTP id S235028AbjAYHbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 02:29:40 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2EC10255;
-        Tue, 24 Jan 2023 23:29:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674631779; x=1706167779;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HBu4iRgqpdbwgyjjFi/7Wz2ssi58Gb2OMwn5vk9+tw4=;
-  b=LENRZriYEWMQZC+BSUGbu6efAeRY34neyFb4iGmCsEppXAhzBprK37rE
-   MMnJQ7cmPB/JEC/L1NqGW/On1PJfnqTGf2sEAth6p/SFwDfPzqZ9Ncvqv
-   s9Ca0u/I2GHGwiwGb4AQ/AI+NomFM71RgX4Yoyy4Zec1+QIASdE3bXXIW
-   R2Evs32aaSYvccWYIYF4O1tSc6MJTGjtvKbanthXyGlgpNyqqnQU4GEZ4
-   sqlBQuhY5qt78laG6dG7I4PqKzdSI2CK8JfRU/j8gWMG7OhpJD0NIk7S5
-   X6X6J+i+RuVJLtfOIdxhKAP9Nws68F2PDXXjzSkEnkuEB+qmPG0Bk4uwy
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="328585405"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208";a="328585405"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 23:29:39 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="786346960"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208";a="786346960"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.208.193])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 23:29:35 -0800
-Message-ID: <65cb75e0-4c0b-9384-1f6b-77a0053d8109@intel.com>
-Date:   Wed, 25 Jan 2023 09:29:31 +0200
+        Wed, 25 Jan 2023 02:31:47 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9641C318
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 23:31:46 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id t18so3272511wro.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 23:31:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v1Heg0qkvtVQKYMAQh92dkHLnZ6nkSndgk7XA0KOw2Y=;
+        b=izLLoNlPy1AYqSm655DVnMSX9cVyFfh5NZR5blD4Kt41CPkFiCHe8lekltUmfzSSTU
+         Lxe5lIWihCIRPdp74I5YkpzDOpjYqhFSXyTQ5Tymj2pADsuakSMVSl921R6wB6lTuFQ+
+         xwGfklho5fH6mdPMS4K9F6BGrygaNfXz7H61Eowb7VkArXENliL1y96Lwg/2mkf5yM8T
+         KpLVchFdZNhpvVovR+HWD90g28/fTsv2O8/jLqNkqTEw+3yNZSW+HiLx3KiCad7rB0jb
+         pMSec8JFvqEcewLYEWvz4m1DteDHVU6gT/MZQcXMYM1Yg1B4pOkm43PLVRRlCIsjXl7f
+         ZnDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v1Heg0qkvtVQKYMAQh92dkHLnZ6nkSndgk7XA0KOw2Y=;
+        b=IHLbM8QHogYRFXhBbH+iFcV/QL2XJ57HEugN8eIXm8NnT0Zc0PLnCRqVuKIjlLFUmW
+         sFOGVyXFqy6q/o3YzQOkirSpU9V0ir09JsxJPSIUpbsngGoFCJ4Iww/6AKMxP4rrySEc
+         sYIpN64HOAbWRRjLQDHNVwZG8aJq7LnSYoqspbTQODXymePmCE//ubqKvP2poiZqYW02
+         XYaK5UI7EOBJSmLPVCnl87jrxw/rdcxmbonAolb4R1vpU5ATG1fe0jUYtZ0ZiNHTyryz
+         +T8WIDyRSnD+pNltK0lTbifJvEgBiZSJ906MCecGCPi8uaRI3vJJXTVWKY4jnVGTU0aa
+         eHPg==
+X-Gm-Message-State: AFqh2koSmoC4OFNmyS3w782FBb+EbcnT8uiN47UEGrVP6SFGFTPqyTzf
+        V1bnn56TY36sU9+dvEjRWYlWlQ==
+X-Google-Smtp-Source: AMrXdXs7IvJxYrqaViVH7PHdEijBL/2Ap8J0gqK3IfGK/PYgnMGs2mssIOxJHv8mJlvw7W3rROp09g==
+X-Received: by 2002:a5d:6a51:0:b0:2bb:e7ac:af73 with SMTP id t17-20020a5d6a51000000b002bbe7acaf73mr27554884wrw.42.1674631904675;
+        Tue, 24 Jan 2023 23:31:44 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id z18-20020a056000111200b002366dd0e030sm3593460wrw.68.2023.01.24.23.31.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 23:31:44 -0800 (PST)
+Message-ID: <6245a63c-8d9b-1bb0-fe8f-43516a17f3a3@linaro.org>
+Date:   Wed, 25 Jan 2023 08:31:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH] perf/util: Symbol lookup can fail if multiple segmets
- match stext
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2 01/14] dt-bindings: spi: Convert bcm63xx-hsspi bindings
+ to json-schema
 Content-Language: en-US
-To:     Krister Johansen <kjlx@templeofstupid.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        David Reaver <me@davidreaver.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230124223531.GB1962@templeofstupid.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230124223531.GB1962@templeofstupid.com>
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
+        dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
+        jonas.gorski@gmail.com, dan.beygelman@broadcom.com,
+        joel.peshkin@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230124221218.341511-1-william.zhang@broadcom.com>
+ <20230124221218.341511-2-william.zhang@broadcom.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124221218.341511-2-william.zhang@broadcom.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/23 00:35, Krister Johansen wrote:
-> This problem was encountered on an arm64 system with a lot of memory.
-> Without kernel debug symbols installed, and with both kcore and kallsyms
-> available, perf managed to get confused and returned "unknown" for all
-> of the kernel symbols that it tried to look up.
+On 24/01/2023 23:12, William Zhang wrote:
+> This is the preparation for updates on the bcm63xx hsspi driver. Convert
+> the text based bindings to json-schema per new dts requirement.
 > 
-> On this system, stext fell within the vmalloc segment.  The kcore symbol
-> matching code tries to find the first segment that contains stext and
-> uses that to replace the segment generated from just the kallsyms
-> information.  In this case, however, there were two: a very large
-> vmalloc segment, and the text segment.  This caused perf to get confused
-> because multiple overlapping segments were inserted into the RB tree
-> that holds the discovered segments.  However, that alone wasn't
-> sufficient to cause the problem. Even when we could find the segment,
-> the offsets were adjusted in such a way that the newly generated symbols
-> didn't line up with the instruction addresses in the trace.  The most
-> obvious solution would be to consult which segment type is text from
-> kcore, but this information is not exposed to users.
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
 > 
-> Instead, select the smallest matching segment that contains stext
-> instead of the first matching segment.  This allows us to match the text
-> segment instead of vmalloc, if one is contained within the other.
-> 
-> Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-> ---
->  tools/perf/util/symbol.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> index a3a165ae933a..14ac4189eaff 100644
-> --- a/tools/perf/util/symbol.c
-> +++ b/tools/perf/util/symbol.c
-> @@ -1368,10 +1368,16 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
->  
->  	/* Find the kernel map using the '_stext' symbol */
->  	if (!kallsyms__get_function_start(kallsyms_filename, "_stext", &stext)) {
-> +		u64 replacement_size = 0;
-
-We'd usually put a blank line here
-
->  		list_for_each_entry(new_map, &md.maps, node) {
-> -			if (stext >= new_map->start && stext < new_map->end) {
-> +			u64 new_size = new_map->end - new_map->start;
-> +
-> +			if (!(stext >= new_map->start && stext < new_map->end))
-> +				continue;
-> +
-
-Really needs a comment, and please be specific e.g.
-
- ARM64 vmalloc segment overlaps the kernel text segment, so
- choosing the smaller segment will get the kernel text.
 
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> +			if (!replacement_map || new_size < replacement_size) {
->  				replacement_map = new_map;
-> -				break;
-> +				replacement_size = new_size;
->  			}
->  		}
->  	}
+Best regards,
+Krzysztof
 
