@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6A167AEB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE45267AEB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235502AbjAYJqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 04:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
+        id S235326AbjAYJqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:46:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235432AbjAYJqI (ORCPT
+        with ESMTP id S235436AbjAYJqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 25 Jan 2023 04:46:08 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEC25BA8
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:45:44 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id j17so13311765wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:45:43 -0800 (PST)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A632D729D
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:45:45 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so835182wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:45:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7sf93u9qLAl/kW4zKoFQL4lEPy9GA4IuPMNBdksDHS4=;
-        b=v+fFGjaVu6HopZHsKR1i+WrrGZgLZssRidqBnouaBBYmluIu4HuuQpS0bGmEWNuoOD
-         afpoL/k0HjMpjaZJ4qBud9g3vMgpuRsnLQbjUd/osCnoNous9OWI+5VY2KqByddEhcQa
-         iaknKRn/FHyGh0Res25N5dveRZRa0qNkpLAJv5e669mYpg0lXwYj0y+8K8P1wp2AoX8s
-         a4VA3dvH1rgCxZ1863rj6I2PFH3ua11kPIoFWylPR/+Q2Il8Ugzhg26W1J8gl7uXtb+S
-         6B5D8w3fs7d9RMPMBmKzYgF7t5MO9N5DQUd1j6c4Hv/7gTH9jfwrm52glcL+frS2V/fR
-         gJxA==
+        bh=QAZoZHoBuUI+69gut0sQWpWd9KE5DC+R6xcdQlwzKj8=;
+        b=f8AwW5Q4c9/VM8GlsR72Mql0ugf2w0XnfBl4LAvtuFM9WAfaqDQkteATZIBMvPgvGI
+         9b4P7WiXO/gUsQtWkLkaPn0zUFKmkMtYZ8No4rgY04MPdyPpg4GHjks6C20feCmsvbvT
+         nAAXh+0jImh6BFjBumVHEd3/UMz3TCMGrAdNQqvYJL2tNk5LO2Id2FyCSvMP+Spp7dGI
+         ppIjz/qsCY2F++V7JKkZVEi5vT9NdQjMsQqcUk0uWaj0u34WAE+wEQGlPmnBcdt0dZvz
+         ueTSvaZ67Njr0P1Nl4CPBgbVMKggEmNW5rHbLMaeoN61LL7TQlnrKVb2FSbrBK/3tteL
+         c6Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7sf93u9qLAl/kW4zKoFQL4lEPy9GA4IuPMNBdksDHS4=;
-        b=Ax6jgNeqANoneCmNvN4NDEDWcnGp7lfDYUU6OYeoR5zKI1sA1njZ8cbPFYTNW6di41
-         Axn0Fjwk+VhppFGZ/0U/7P4n/l850I228QJNQMaHg9E79+vKPplHxVEPMCoJF4Y5CC+o
-         UAzJBe6ydtALrrJfRrujgOoxc5lsNqB4bEJI2cnPAmyivsMtFVRiaGxXp9huE5miz00B
-         K+a6n62EECtF2Tve3SriQzCC6ComG0GKGjh0TWDbx9hUYyhhU3z9YPwkDpzWnDTAT69J
-         8qJdm50KCL6ZGr0paA6REqlgGJMWNuku3lWubpnF7tWaGiNZjc3E9INjUkJM8F+xMCh7
-         iAvA==
-X-Gm-Message-State: AFqh2krJWyla1tw0k6Shl0ad63T6RousHsqGcEzrwFNtAn3AiAjx0SB/
-        VmRInveNh71YdhWCXL1Rr6d25A==
-X-Google-Smtp-Source: AMrXdXvljaUY7zFk1FMrwWw7waw2nNZzQ2VmmZk/Xs+/90HApHOPzGWCAz2+tIKn+1boYL9dwf0hGA==
-X-Received: by 2002:a05:600c:4f82:b0:3db:25a0:ca5b with SMTP id n2-20020a05600c4f8200b003db25a0ca5bmr22484430wmq.37.1674639933314;
-        Wed, 25 Jan 2023 01:45:33 -0800 (PST)
+        bh=QAZoZHoBuUI+69gut0sQWpWd9KE5DC+R6xcdQlwzKj8=;
+        b=rHwMbKkAvho03xiF3hXHJvAklXyW6EzU57vYIQUjfRsZ8LMVcNdhMnXXJIOp/+eziw
+         ueuB2mj/TenOI9cvXWVdLEFzju6Q/Bnz4oHxpkzNn/jHomDYr9oMh3G6oFw+t199Q3T7
+         z7BiHcv5l7FEg5XTPcEflKRc4P7OCRnpAAUQtxUfNDD70LNCkKNuAUo+V71ofWlaAcFM
+         QKBPmu0DZSzjPYWw9z4NZ6PmJIe1CWLvQBr5qpsU4dYNPbkswbJ9lafuk9c5JvFiknD5
+         RUsAIx+jCm8mGHK77VR4eA3zfPn7x1xE4/hHxZasRHiYfn165gHsCYQiT2vYbNsk4GcN
+         gEWw==
+X-Gm-Message-State: AFqh2kqElZcUCZ9hTNtI1UI1GsdMxGvQtKCFKrCPuKAVm39NlBg3Kek1
+        KmOEDoJTGwcfvjvK0sxAM1Gq8w==
+X-Google-Smtp-Source: AMrXdXsTWzMhynRXYBhoD3rS9kAh4qvXH+6PtaedUbtI+gMYVKGHI4S56ushtgvoEZ6tDkHje5QR5w==
+X-Received: by 2002:a05:600c:4f86:b0:3db:15b1:fb28 with SMTP id n6-20020a05600c4f8600b003db15b1fb28mr27321965wmq.19.1674639935212;
+        Wed, 25 Jan 2023 01:45:35 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id fl22-20020a05600c0b9600b003d1e3b1624dsm1419238wmb.2.2023.01.25.01.45.32
+        by smtp.gmail.com with ESMTPSA id fl22-20020a05600c0b9600b003d1e3b1624dsm1419238wmb.2.2023.01.25.01.45.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 01:45:33 -0800 (PST)
+        Wed, 25 Jan 2023 01:45:34 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -64,9 +64,9 @@ Cc:     replicant@osuosl.org, phone-devel@vger.kernel.org,
         Henrik Grimler <henrik@grimler.se>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 8/9] arm64: dts: exynos: move exynos-bus nodes out of soc in Exynos5433
-Date:   Wed, 25 Jan 2023 10:45:12 +0100
-Message-Id: <20230125094513.155063-8-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 9/9] arm64: dts: exynos: use lowercase hex addresses
+Date:   Wed, 25 Jan 2023 10:45:13 +0100
+Message-Id: <20230125094513.155063-9-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230125094513.155063-1-krzysztof.kozlowski@linaro.org>
 References: <20230125094513.155063-1-krzysztof.kozlowski@linaro.org>
@@ -74,45 +74,124 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The soc node is supposed to have only device nodes with MMIO addresses,
-as reported by dtc W=1:
-
-  exynos5433-bus.dtsi:10.20-16.4:
-    Warning (simple_bus_reg): /soc@0/bus0: missing or empty reg/ranges property
-
-and dtbs_check:
-
-  exynos5433-tm2.dtb: soc@0: bus1:
-    {'compatible': ['samsung,exynos-bus'], 'clocks': [[21, 220]], 'clock-names': ['bus'], 'operating-points-v2': [[165]], 'status': ['okay'], 'devfreq': [[166]]} should not be valid under {'type': 'object'}
-
-Move the bus nodes and their OPP tables out of SoC to fix this.
+By convention the hex addresses should be lowercase.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/exynos/exynos5433-bus.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/exynos/exynos5433.dtsi      | 12 ++++++------
+ arch/arm64/boot/dts/exynos/exynos7-espresso.dts |  2 +-
+ arch/arm64/boot/dts/exynos/exynos7.dtsi         |  6 +++---
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos5433-bus.dtsi b/arch/arm64/boot/dts/exynos/exynos5433-bus.dtsi
-index 72ccf18eb9d1..540b4d6c9067 100644
---- a/arch/arm64/boot/dts/exynos/exynos5433-bus.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos5433-bus.dtsi
-@@ -6,7 +6,7 @@
-  * Chanwoo Choi <cw00.choi@samsung.com>
-  */
+diff --git a/arch/arm64/boot/dts/exynos/exynos5433.dtsi b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
+index 47b5ac06f0d6..9da24fe958a3 100644
+--- a/arch/arm64/boot/dts/exynos/exynos5433.dtsi
++++ b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
+@@ -351,7 +351,7 @@ psci {
+ 		compatible = "arm,psci";
+ 		method = "smc";
+ 		cpu_off = <0x84000002>;
+-		cpu_on = <0xC4000003>;
++		cpu_on = <0xc4000003>;
+ 	};
  
--&soc {
-+/ {
- 	bus_g2d_400: bus0 {
- 		compatible = "samsung,exynos-bus";
- 		clocks = <&cmu_top CLK_ACLK_G2D_400>;
+ 	soc: soc@0 {
+@@ -1020,7 +1020,7 @@ decon_tv: decon@13880000 {
+ 
+ 		dsi: dsi@13900000 {
+ 			compatible = "samsung,exynos5433-mipi-dsi";
+-			reg = <0x13900000 0xC0>;
++			reg = <0x13900000 0xc0>;
+ 			interrupts = <GIC_SPI 205 IRQ_TYPE_LEVEL_HIGH>;
+ 			phys = <&mipi_phy 1>;
+ 			phy-names = "dsim";
+@@ -1272,7 +1272,7 @@ jpeg: codec@15020000 {
+ 
+ 		mfc: codec@152e0000 {
+ 			compatible = "samsung,exynos5433-mfc";
+-			reg = <0x152E0000 0x10000>;
++			reg = <0x152e0000 0x10000>;
+ 			interrupts = <GIC_SPI 358 IRQ_TYPE_LEVEL_HIGH>;
+ 			clock-names = "pclk", "aclk", "aclk_xiu";
+ 			clocks = <&cmu_mfc CLK_PCLK_MFC>,
+@@ -1329,7 +1329,7 @@ sysmmu_tv1x: sysmmu@13a30000 {
+ 
+ 		sysmmu_gscl0: sysmmu@13c80000 {
+ 			compatible = "samsung,exynos-sysmmu";
+-			reg = <0x13C80000 0x1000>;
++			reg = <0x13c80000 0x1000>;
+ 			interrupts = <GIC_SPI 288 IRQ_TYPE_LEVEL_HIGH>;
+ 			clock-names = "aclk", "pclk";
+ 			clocks = <&cmu_gscl CLK_ACLK_SMMU_GSCL0>,
+@@ -1340,7 +1340,7 @@ sysmmu_gscl0: sysmmu@13c80000 {
+ 
+ 		sysmmu_gscl1: sysmmu@13c90000 {
+ 			compatible = "samsung,exynos-sysmmu";
+-			reg = <0x13C90000 0x1000>;
++			reg = <0x13c90000 0x1000>;
+ 			interrupts = <GIC_SPI 290 IRQ_TYPE_LEVEL_HIGH>;
+ 			clock-names = "aclk", "pclk";
+ 			clocks = <&cmu_gscl CLK_ACLK_SMMU_GSCL1>,
+@@ -1351,7 +1351,7 @@ sysmmu_gscl1: sysmmu@13c90000 {
+ 
+ 		sysmmu_gscl2: sysmmu@13ca0000 {
+ 			compatible = "samsung,exynos-sysmmu";
+-			reg = <0x13CA0000 0x1000>;
++			reg = <0x13ca0000 0x1000>;
+ 			interrupts = <GIC_SPI 292 IRQ_TYPE_LEVEL_HIGH>;
+ 			clock-names = "aclk", "pclk";
+ 			clocks = <&cmu_gscl CLK_ACLK_SMMU_GSCL2>,
+diff --git a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+index abb3bd700d6f..f3f4a6ab4b49 100644
+--- a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
++++ b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+@@ -28,7 +28,7 @@ chosen {
+ 
+ 	memory@40000000 {
+ 		device_type = "memory";
+-		reg = <0x0 0x40000000 0x0 0xC0000000>;
++		reg = <0x0 0x40000000 0x0 0xc0000000>;
+ 	};
+ 
+ 	usb30_vbus_reg: regulator-usb30 {
+diff --git a/arch/arm64/boot/dts/exynos/exynos7.dtsi b/arch/arm64/boot/dts/exynos/exynos7.dtsi
+index f378d8629d88..82fee1b7caab 100644
+--- a/arch/arm64/boot/dts/exynos/exynos7.dtsi
++++ b/arch/arm64/boot/dts/exynos/exynos7.dtsi
+@@ -119,7 +119,7 @@ psci {
+ 		compatible = "arm,psci";
+ 		method = "smc";
+ 		cpu_off = <0x84000002>;
+-		cpu_on = <0xC4000003>;
++		cpu_on = <0xc4000003>;
+ 	};
+ 
+ 	soc: soc@0 {
+@@ -146,7 +146,7 @@ gic: interrupt-controller@11001000 {
+ 
+ 		pdma0: dma-controller@10e10000 {
+ 			compatible = "arm,pl330", "arm,primecell";
+-			reg = <0x10E10000 0x1000>;
++			reg = <0x10e10000 0x1000>;
+ 			interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&clock_fsys0 ACLK_PDMA0>;
+ 			clock-names = "apb_pclk";
+@@ -155,7 +155,7 @@ pdma0: dma-controller@10e10000 {
+ 
+ 		pdma1: dma-controller@10eb0000 {
+ 			compatible = "arm,pl330", "arm,primecell";
+-			reg = <0x10EB0000 0x1000>;
++			reg = <0x10eb0000 0x1000>;
+ 			interrupts = <GIC_SPI 226 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&clock_fsys0 ACLK_PDMA1>;
+ 			clock-names = "apb_pclk";
 -- 
 2.34.1
 
