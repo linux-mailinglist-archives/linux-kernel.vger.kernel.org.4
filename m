@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BD667BF9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 23:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED43F67BFA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 23:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjAYWJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 17:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
+        id S230513AbjAYWKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 17:10:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjAYWJx (ORCPT
+        with ESMTP id S230288AbjAYWKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 17:09:53 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3F7272E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:09:52 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id v17so17589558oie.5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:09:52 -0800 (PST)
+        Wed, 25 Jan 2023 17:10:12 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB195CFE7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:10:09 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id s66so17577399oib.7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:10:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MH+uehTDV7kz/MTGcyymtgii9sBR2MngkUK+puzbRUo=;
-        b=bVaFXLYb0tT7c5CIHgg8Nyiv6dvz1JgsjQObGkP4vooWo/wiVUrsFkE8wD3uTVVnkP
-         Vcb1Q6/idpM0WM0sCeW2wysod5Rf0L0XeqYD6QUeETKn5i2/K/tAMk9HNxsfX5DS7SOO
-         lAXQmL2w+OxWaJnloZIyIV692hrMqy41t+2OsRSzcKpWXnxntTA9YduR2F7/YMRQh1LE
-         CdWi0p0GqR1QZF10uZ7EnjG3P2VH3m4nPZ+tSw/1iJvpnryawiP69DJqEC+cLPHesyDR
-         d8pCPfRpc6Cz0DDzb9lvpQeuyZogCLVtmapVbFxZ8NNseActPk583Ycom/osOCJvIxDX
-         /KPw==
+        bh=4MBoQI2jQuhUw84T5k/gy2Pds/AaFtiV5Xy1X72d3Cw=;
+        b=R3UDI3pxYKcrC49x+0YFuHvc1nRET9DxRjhYOs0/0aQ+O5ZN7ErIteIRxDNQ5BZB7J
+         Ga0V6/qNBFsd9ynV+wBqgTw0dj+oyaOuqj9JQucRalQOTwUnMdM2R77At75ZYvy9KqUh
+         8ufY4Kbk1udXKKf6sKa1RnsVtrK1jkoc4HLDzoyaUydk4Uul3Oa7tmHrybtX8vrvMY3O
+         Ix8wG3ThO0RXpq5O7+1TvhMJm9tis4Xb/H8I4O1l5cIHkoW5hc9Fly9JcwKK+LIE1yEY
+         ob24jBK09LOMwi3B5Obj6pClMXqQQLKfAnjaoTLW4am8MO0cfPci0VIk2Ms72XA9jVS7
+         sfhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MH+uehTDV7kz/MTGcyymtgii9sBR2MngkUK+puzbRUo=;
-        b=XrONN/RRcys1yV7+rf3c4jUq8DYZJqx9CgTI/+zbg6g47aeykqnKvEVzjouSV+zhXT
-         +/Q9lLJ1JfWhv4nULtd4Lj6AKBPh2hg8PqzwZ3+6E7pWTu4TPXayutsxf7KoBw08llgW
-         zElnkB4LSARhkcXqcwGvkQXjA0AnJRkRsYlpHSRlxHBr1N7LUXEfIm3qC0Jo4c1i7KhB
-         s3sX2sjyhIx3opmzEgatIAlqkUpuOU4ZBgnmJ62JsEiAGnzAd08F+D8seMA05W5RCrMg
-         X7dFsyiNK7EuHHWMDnxh8LF3GfLU1HaaPqxDhN0lbW03QL4hL1rBr4lRA+bqKEKu3Bnz
-         8CWA==
-X-Gm-Message-State: AO0yUKUqFMegHk6hWXdB5kIziZDSsmokGqmCNMTnXBSYFpJwNst9FgAR
-        8m3Vo2rWsxY07AFyU0TPiAFAYw2hrF/aM5VbgwNV7Lfl
-X-Google-Smtp-Source: AK7set9hc+RYBpFZVbWsJof+toQKzFpoBhxMc29uic0ru74K/P9h8ToMg0mTgQmo2iqKHbPzbcSOG4IjmisZ2J6DwvE=
-X-Received: by 2002:a05:6808:8e7:b0:36f:9df:9343 with SMTP id
- d7-20020a05680808e700b0036f09df9343mr282474oic.112.1674684591554; Wed, 25 Jan
- 2023 14:09:51 -0800 (PST)
+        bh=4MBoQI2jQuhUw84T5k/gy2Pds/AaFtiV5Xy1X72d3Cw=;
+        b=2cF6YYcqPYCum16w0mabNQV1Pm4jAoNGagLz4AmUYYvXqqCOma0EpZ4IBPw/XNV7IQ
+         jJN8KEj/ISUL2NkSq9pao0bbYw5ZJPD5mCQC2uZVCef8VEOz5pMOw5pcKhMesRfMq/rT
+         9lHHHic/ZABQ13mUUTOxomjrqcE+0CN/Uk03ncjMLyQZcRVR+sXpXvCFbynaxNYL2UqA
+         HzYc7mSTACxobETurr/51ASoabc7vnZ6B2z8p6ZeG8B/MbzI6BYXl7ezS3NTjC1Kq0+v
+         9hNRFpMU0DvtEly5nOtBkdNdPnJLngHRpV342dh8m//c1cDraJb9TlUTJbkM04AMz9nY
+         iLCA==
+X-Gm-Message-State: AFqh2kpamjzzaSW2FEMrBUJkTfZkS5vDzBPnVxhHVQ1FUebtqPtulCcO
+        KI2GWkpemcWgZ7JGluw3NM4zlSC7E+expsVKR2hc9g==
+X-Google-Smtp-Source: AMrXdXslDOOF4Gq3gbyLF6+vrB8DgsCL6Eaw6PLWV+g67DAh5lYWllmUF2JzZjoe92TzZKkkKEPiKvjmO1n7H01TqNY=
+X-Received: by 2002:aca:efc6:0:b0:36e:b85f:6081 with SMTP id
+ n189-20020acaefc6000000b0036eb85f6081mr1086274oih.103.1674684608381; Wed, 25
+ Jan 2023 14:10:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20230124012210.13963-1-vishal.moola@gmail.com>
- <20230124012210.13963-2-vishal.moola@gmail.com> <477bbc1e-a60a-cfce-d31e-0b4bdd5f6429@redhat.com>
- <526e5156-6c4b-9f2c-1637-2f83c1dfea1e@redhat.com> <53d86764-d155-8d97-1a4d-7e701848c950@redhat.com>
-In-Reply-To: <53d86764-d155-8d97-1a4d-7e701848c950@redhat.com>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Wed, 25 Jan 2023 14:09:40 -0800
-Message-ID: <CAOzc2pyV9-wq04NRKVE1vRj7PnRF7g+jSFFj-oKYuZk-t9smBA@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v2 1/6] mm: Add folio_estimated_mapcount()
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org
+References: <20221027092036.2698180-1-pbonzini@redhat.com> <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
+ <3a23db58-3ae1-7457-ed09-bc2e3f6e8dc9@redhat.com> <CALMp9eQ3wZ4dkq_8ErcUdQAs2F96Gvr-g=7-iBteJeuN5aX00A@mail.gmail.com>
+ <8bdf22c8-9ef1-e526-df36-9073a150669d@redhat.com>
+In-Reply-To: <8bdf22c8-9ef1-e526-df36-9073a150669d@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 25 Jan 2023 14:09:56 -0800
+Message-ID: <CALMp9eRKp_4j_Q0j1HYP2itT2+z3pRotQK8LwScMsaGF5FpARA@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: x86: Do not return host topology information from KVM_GET_SUPPORTED_CPUID
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,62 +70,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 1:29 PM David Hildenbrand <david@redhat.com> wrote:
+On Wed, Jan 25, 2023 at 1:46 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
-> On 25.01.23 11:24, David Hildenbrand wrote:
-> > On 25.01.23 11:20, David Hildenbrand wrote:
-> >> On 24.01.23 02:22, Vishal Moola (Oracle) wrote:
-> >>> folio_estimated_mapcount() takes in a folio and calls page_mapcount() on
-> >>> the first page of that folio.
-> >>>
-> >>> This is necessary for folio conversions where we only care about either the
-> >>> entire_mapcount of a large folio, or the mapcount of a not large folio.
-> >>>
-> >>> This is in contrast to folio_mapcount() which calculates the total
-> >>> number of the times a folio and its subpages are mapped.
-> >>>
-> >>> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> >>> ---
-> >>>     include/linux/mm.h | 5 +++++
-> >>>     1 file changed, 5 insertions(+)
-> >>>
-> >>> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> >>> index c9db257f09b3..543c360f7ecc 100644
-> >>> --- a/include/linux/mm.h
-> >>> +++ b/include/linux/mm.h
-> >>> @@ -875,6 +875,11 @@ static inline int page_mapcount(struct page *page)
-> >>>             return mapcount;
-> >>>     }
-> >>>
-> >>> +static inline int folio_estimated_mapcount(struct folio *folio)
-> >>> +{
-> >>> +   return page_mapcount(folio_page(folio, 0));
-> >>> +}
-> >>> +
-> >>>     int folio_total_mapcount(struct folio *folio);
-> >>>
-> >>>     /**
-> >>
-> >> I'm sorry, but "estimated" as absolutely unclear semantics. You could
-> >> have a THP mapped into 9999 processes using THP and the estimation would
-> >> be "0".
+> On 1/25/23 17:47, Jim Mattson wrote:
+> >> Part of the definition of the API is that you can take
+> >> KVM_GET_SUPPORTED_CPUID and pass it to KVM_SET_CPUID2 for all vCPUs.
+> >> Returning host topology information for a random host vCPU definitely
+> >> violates the contract.
 > >
-> > ... or would it be 9999 ? What about a PMD-mapped THP? What about a
-> > partially unmapped THP?
+> > You are attempting to rewrite history.  Leaf 0xB was added to > KVM_GET_SUPPORTED_CPUID in commit 0771671749b5 ("KVM: Enhance guest
+> > cpuid management"), and the only documentation of the
+> > KVM_GET_SUPPORTED_CPUID ioctl at that time was in the commit message:
 > >
-> > What are we estimating?
+> >       - KVM_GET_SUPPORTED_CPUID: get all cpuid entries the host (and kvm)
+> >         supports
+> >
+> > [...] the intention was to return the
+> > host topology information for the current logical processor.
 >
-> Thinking about mapcounts again, might not have been my smartest moment.
+> The handling of unknown features is so naive in that commit, that I
+> don't think it is possible to read anything from the implementation; and
+> it certainly should not be a paragon for a future-proof implementation
+> of KVM_GET_SUPPORTED_CPUID.
 >
-> What we return here is the precise number of times the first subpage is
-> mapped (via the large folio and directly). That's supposed to be an
-> estimate for the number of times any subpage part of the folio is mapped.
+> For example, it only hid _known_ CPUID leaves or features and passed the
+> unknown ones through, which you'll agree is completely broken.  It also
+> didn't try to handle all leaves for which ECX might turn out to be
+> significant---which happened for EAX=7 so the commit returns a wrong
+> output for CPUID[EAX=7,ECX=0].EAX.
 >
-> I really don't know a better name, but folio_estimated_mapcount() does
-> not feel completely right to me and triggere dmy confusion in the first
-> place ... hm ...
+> In other words, the only reason it handles 0xB is because it was known
+> to have subleaves.
+>
+> We can get more information about how userspace was intended to use it
+> from the qemu-kvm fork, which at the time was practically the only KVM
+> userspace.  As of 2009 it was only checking a handful of leaves:
+>
+> https://git.kernel.org/pub/scm/virt/kvm/qemu-kvm.git/tree/target-i386/kvm.c?h=kvm-88#n133
+>
+> so shall we say that userspace is supposed to build each CPUID leaf one
+> by one and use KVM_GET_SUPPORTED_CPUID2 for validation only?  I think
+> the first committed documentation agrees: "Userspace can use the
+> information returned by this ioctl to construct cpuid information (for
+> KVM_SET_CPUID2) that is consistent with hardware, kernel, and userspace
+> capabilities, and with user requirements".
+>
+> However, that's the theory.  "Do not break userspace" also involves
+> looking at how userspace *really* uses the API, and make compromises to
+> cater to those uses; which is different from rewriting history.
+>
+> And in practice, people basically stopped reading after "(for
+> KVM_SET_CPUID2)".
+>
+> For example in kvmtool:
+>
+>         kvm_cpuid->nent = MAX_KVM_CPUID_ENTRIES;
+>         if (ioctl(vcpu->kvm->sys_fd, KVM_GET_SUPPORTED_CPUID, kvm_cpuid) < 0)
+>                 die_perror("KVM_GET_SUPPORTED_CPUID failed");
+>
+>         filter_cpuid(kvm_cpuid, vcpu->cpu_id);
+>
+>         if (ioctl(vcpu->vcpu_fd, KVM_SET_CPUID2, kvm_cpuid) < 0)
+>                 die_perror("KVM_SET_CPUID2 failed");
+>
+> where filter_cpuid only does minor adjustments that do not include 0xB,
+> 0x1F and 0x8000001E.  The result is a topology that makes no sense if
+> host #vCPUs != guest #vCPUs, and which doesn't include the correct APIC
+> id in EDX.
+>
+> https://github.com/kvmtool/kvmtool/blob/5657dd3e48b41bc6db38fa657994bc0e030fd31f/x86/cpuid.c
+>
+>
+> crosvm does optionally attempt to pass through leaves 0xB and 0x1F, but
+> it fails to adjust the APIC id in EDX.  On the other hand it also passes
+> through 0x8000001E if ctx.cpu_config.host_cpu_topology is false,
+> incorrectly.  So on one hand this patch breaks host_cpu_topology ==
+> true, on the other hand it fixes host_cpu_topology == false on AMD
+> processors.
+>
+> https://github.com/google/crosvm/blob/cc79897fc0813ee8412e6395648593898962ec82/x86_64/src/cpuid.rs#L121
+>
+>
+> The rust-vmm reference hypervisor adjusts the APIC id in EDX for 0xB but
+> not for 0x1F.  Apart from that it passes through the host topology
+> leaves, again resulting in nonsensical topology for host #vCPUs != guest
+> #vCPUs.
+>
+> https://github.com/rust-vmm/vmm-reference/blob/5cde58bc955afca8a180585a9f01c82d6277a755/src/vm-vcpu-ref/src/x86_64/cpuid.rs
+>
+>
+> Firecracker, finally, ignores KVM_GET_SUPPORTED_CPUID's output for 0xb
+> and 0x8000001E (good!) but fails to do the same for 0x1F, so this patch
+> is again a fix of sorts---having all zeroes in 0x1F is better than
+> having a value that is valid but inconsistent with 0xB.
+>
+> https://github.com/firecracker-microvm/firecracker/blob/cdf4fef3011c51206f178bdf21ececb87caa16c1/src/cpuid/src/transformer/intel.rs#L120
+> https://github.com/firecracker-microvm/firecracker/blob/cdf4fef3011c51206f178bdf21ececb87caa16c1/src/cpuid/src/transformer/amd.rs#L88
+>
+>
+> So basically the only open source userspace that is penalized (but not
+> broken, and also partly fixed) by the patch is crosvm.  QEMU doesn't
+> care, while firecracker/kvmtool/vmm-reference are a net positive.
+>
+> Paolo
 
-I can understand the confusion, but I can't think of a better name
-either myself. I'll go ahead and add a comment to make the purpose
-of this function more clear. Looks like I'll have to move it to get rid
-of the build warnings/errors anyway.
+The topology leaves returned by KVM_GET_SUPPORTED_CPUID *for over a
+decade* have been passed through unmodified from the host. They have
+never made sense for KVM_SET_CPUID2, with the unlikely exception of a
+whole-host VM.
+
+Our VMM populates the topology of the guest CPUID table on its own, as
+any VMM must. However, it uses the host topology (which
+KVM_GET_SUPPORTED_CPUID has been providing pass-through *for over a
+decade*) to see if the requested guest topology is possible.
+
+Changing a long-established ABI in a way that breaks userspace
+applications is a bad practice. I didn't think we, as a community, did
+that. I didn't realize that we were only catering to open source
+implementations here.
