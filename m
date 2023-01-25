@@ -2,119 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 030BB67B671
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACEC67B66B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235886AbjAYP41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
+        id S235807AbjAYP4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235849AbjAYP4Q (ORCPT
+        with ESMTP id S235046AbjAYP4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:56:16 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F94511154;
-        Wed, 25 Jan 2023 07:56:15 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PDaHPb003861;
-        Wed, 25 Jan 2023 15:56:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=K4VENOAaeiW6kNzq+vuIJFNkf2nAt63m7drjWWR5KtI=;
- b=Jfa/gI5l5O8xry+49Hcz8Tk/9kr77VYv8+dje8FX/EcAZ4lPkqxaDNZUl83u5EV7Jyph
- Bca4dVhb4zCYGqfRV3cIrHcGruK2jt+nKyfshqtasiFqGz0fBdtchYt2nvBJXDejk9eU
- 5IUKOeIGPTBuGg5h8rPrvfR4HHKOzuJKXNrtloCCEzKKZ4RYgn96P8fUlxIhz2EFtGx7
- oIy5oDHY9AWCJuZ88MIo4G2YyoqNJ5xUGLS9HszWi3/nCvtRYDAtGI8VxJaMVcTGQHE2
- su6bIZlu3lkC+IEwUj2RmLW5nzAQ8xEyxsQZgJjmwfrywIid8YhP+yAgdh5Lc2YCg3Bk MQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nb2nsrh6m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 15:55:59 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30PFtx76023028
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 15:55:59 GMT
-Received: from [10.50.43.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
- 2023 07:55:50 -0800
-Message-ID: <29c2e17f-9e53-f428-2df2-bc728ace49fe@quicinc.com>
-Date:   Wed, 25 Jan 2023 21:25:46 +0530
+        Wed, 25 Jan 2023 10:56:06 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBD4113CE;
+        Wed, 25 Jan 2023 07:56:04 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id u21so363019edv.3;
+        Wed, 25 Jan 2023 07:56:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YwP2tm0CAOWY073suUhF0J/FRKYyYwUasCH1kI3YMoo=;
+        b=b4Hz3cF3NnfPCbJomxECRfpWj1EP+pcb7wwtSC3FfiHAtis7Fa5wHww841JNA8SfCs
+         KI5ydzziw1GyKjGph9B0R2bUY7w9eOIMCiTMtCSSwWRTFgBMIt4vtyya0bEhltICTtVT
+         HXPXkm03w94K7eVlE/046M5lHlrZWMorer8C2PysP7EH16d7r+bD88618oouazgF7DyM
+         lq1b9BR2r7hz8Vt/cNVQBdXlV+5k/zhxf3vFE1K3xOBT4iR+LgBpsWRdaDwt70ZzENJ8
+         E17gitlojSEGk8tS2+lhF2KG1aa0M6ldVeBY+eRTMlnaMTv7ehMB8GLnbQ/ZCcBtGVkX
+         VXFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YwP2tm0CAOWY073suUhF0J/FRKYyYwUasCH1kI3YMoo=;
+        b=zttSkI4LdfEFVPiVdkjO6vCwoLb91LO6Y92BsBwYQhR9a8BgBiccBdFQY6V2c4Ewyi
+         1B1Re6vMRYDtFvkUd2PJRhLRcMWZ3XwASA1auypK/TAxbrMjWBFFhlq7Ck+TmX+Le9rs
+         7R4qzhMsHycJo7iGiGmnmj/LLooIHaKST3XmlZoz1kvHrjopPwCYYFNZbhp0HQsmiyHC
+         40AGWLmsmxkWdZFL2SgTGa4susBh+QnI3Pa/zusQKakG6ezTt5witsfVZixuNaO1Y6DO
+         91J0AvpPHnF0rjy0Tnyd51OSJ/dTzM3UU5eU4QMb9+aIbaBymFwJsY2dSq9JUF7FOTFS
+         YAKg==
+X-Gm-Message-State: AFqh2krYGRCz0iBEkBtJUsaWBcU6F/lW15jjUZK6CQJagvdPrcppj9if
+        AEILbNy0obDH7bzHTQCd10I=
+X-Google-Smtp-Source: AMrXdXvSd6T12qkyw8dnzURz9Uzda3DdvoaTri+iWPGTm1uzwOsBwUROpY2drT0hNnuSn7Kr40hCKw==
+X-Received: by 2002:a05:6402:25cb:b0:49d:6ebe:e9dc with SMTP id x11-20020a05640225cb00b0049d6ebee9dcmr43014072edb.25.1674662162788;
+        Wed, 25 Jan 2023 07:56:02 -0800 (PST)
+Received: from f.. (cst-prg-88-122.cust.vodafone.cz. [46.135.88.122])
+        by smtp.gmail.com with ESMTPSA id d24-20020a056402517800b0049e249c0e56sm2539287ede.56.2023.01.25.07.56.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 07:56:02 -0800 (PST)
+From:   Mateusz Guzik <mjguzik@gmail.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     serge@hallyn.com, torvalds@linux-foundation.org,
+        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Mateusz Guzik <mjguzik@gmail.com>
+Subject: [PATCH v3 1/2] capability: add cap_isidentical
+Date:   Wed, 25 Jan 2023 16:55:56 +0100
+Message-Id: <20230125155557.37816-1-mjguzik@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 07/10] dt-bindings: firmware: document IPQ5332 SCM
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <robimarko@gmail.com>, <quic_gurus@quicinc.com>,
-        <bhupesh.sharma@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230125104520.89684-1-quic_kathirav@quicinc.com>
- <20230125104520.89684-8-quic_kathirav@quicinc.com>
- <455eb061-ed59-2783-b8d6-7276e7103d3f@linaro.org>
-From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-In-Reply-To: <455eb061-ed59-2783-b8d6-7276e7103d3f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3_tHdniqflTXvGeukAd0H5MpuhBwA0Px
-X-Proofpoint-GUID: 3_tHdniqflTXvGeukAd0H5MpuhBwA0Px
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_09,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- spamscore=0 malwarescore=0 impostorscore=0 suspectscore=0 bulkscore=0
- priorityscore=1501 mlxscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301250142
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
+Reviewed-by: Serge Hallyn <serge@hallyn.com>
+---
+ include/linux/capability.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-On 1/25/2023 4:46 PM, Krzysztof Kozlowski wrote:
-> On 25/01/2023 11:45, Kathiravan Thirumoorthy wrote:
->> From: Kathiravan T <quic_kathirav@quicinc.com>
->>
->> Document the compatible for IPQ5332 SCM.
-> Subject:
-> dt-bindings: firmware: qcom,scm:
-
-
-Thanks for the review, will fix it in V2.
-
-
->> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->> ---
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
->
-> Best regards,
-> Krzysztof
-
-
-Thanks,
-
-Kathiravan T.
+diff --git a/include/linux/capability.h b/include/linux/capability.h
+index 65efb74c3585..736a973c677a 100644
+--- a/include/linux/capability.h
++++ b/include/linux/capability.h
+@@ -156,6 +156,16 @@ static inline bool cap_isclear(const kernel_cap_t a)
+ 	return true;
+ }
+ 
++static inline bool cap_isidentical(const kernel_cap_t a, const kernel_cap_t b)
++{
++	unsigned __capi;
++	CAP_FOR_EACH_U32(__capi) {
++		if (a.cap[__capi] != b.cap[__capi])
++			return false;
++	}
++	return true;
++}
++
+ /*
+  * Check if "a" is a subset of "set".
+  * return true if ALL of the capabilities in "a" are also in "set"
+-- 
+2.39.0
 
