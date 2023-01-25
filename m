@@ -2,197 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2587567AAC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 08:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FF767AACF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 08:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234313AbjAYHVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 02:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
+        id S234522AbjAYHYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 02:24:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbjAYHVs (ORCPT
+        with ESMTP id S233356AbjAYHYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 02:21:48 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E3711169
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 23:21:46 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id h12so12080572wrv.10
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 23:21:46 -0800 (PST)
+        Wed, 25 Jan 2023 02:24:32 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5133E0BB
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 23:24:31 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id z5so16073491wrt.6
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 23:24:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=L5SsXW4to4mQPbXFM5nkMuDOk8eQmviGW5rf64++fL4=;
-        b=ReXrQx6+rZd+ZciRU8AIKVwUDWyt0g96lI2F24Jrg0Zs6X9cIdJZfGJV2yCpx/5XY7
-         iZZu9uGsvLyipfpyr1O955bUmb4hgbxIdEkhf4/cUV7GQyiq81RzE6l5cGSUfLY5/5n1
-         IAxnGHPQwhIIY8w0ct4ovDET3aRff6xtM+nQjO/oznmkc88eghKbsby3LOSdRqom3oSx
-         sbab/0GpdW7Zi3GxEA0DiKdTiGoikHP1Xr87dXnzL+pGehfdN/C2nkn4xzPECbYdnCgM
-         w0swEv/YelX2YfjZjJEnSNp/aS7C78b715s16PiKyZHOHIhw9D7akZGZIrg/wL+2vGIc
-         woWg==
+        bh=rHPk75UldZWFrK2zpIfxnby6zLxh86xUQwr4PeMFBWQ=;
+        b=rw1f/4o4X5NlqumQcfT0f6wydIwHGUpxH8I8yGUp1kO6uWSAKUrOZd1qDwPm70zZMn
+         xaxEzSUkIFOVg1K+AnqFhTtGjj7R2AH+iv3XWeC22XrEeWly9s2VfpiMxt1umkd4sP+z
+         Oc9nXDN2mtVBSoSCPN/9xSUL5gdOyLmy1km8cd9Z0My46xYfypGt0OF+ori/Q4qcv6zi
+         c4NvOgC+WitgnFl+HmL0xY/GIBAMUz/4ZVwXvyoG4rC0+ArydMfllOLsWfp2VQtooB2f
+         Uv4DR3EluzXhhLA56emY+zG4r4RisX/yt6czQXziSP2jLAUMGmeVmtj40RwDJT3Gr8j6
+         XyYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L5SsXW4to4mQPbXFM5nkMuDOk8eQmviGW5rf64++fL4=;
-        b=UQm5DBiMA01xjYGLSKjxT3d6BUK3h19/nmOedGF3cThndrzld6Z0FVAzDfAfEUPNpJ
-         Jh5HS6r2KJx5RfUp+xiMEHTzR3vAXkKrnYesfpLHnbSIWxpEBhZ6weGU+V3tp2M+FHOM
-         rKxDRBWXFZoAMGvcclJI4BsUFAz0OXfcgNhq7o4TU7bmFP5y8ET+YKmZDkuteN1wQlVx
-         RmlpOlyLvNNPPohc10XCur4T8L9E0fz8WTh2HR6ck/MyrXrKM/YT78rk6FtSoScmVfB3
-         dnlri43Nf+zOHma593J0Q92Im+4htjUPFF5YV45N3k+MePLOTEbb1d3GiitG0TaWInMa
-         f0oA==
-X-Gm-Message-State: AO0yUKUlw7vddrPFof0gzM/FoX6e+erXUIHVxkQhZCkIrqYygi3nYL0w
-        d9FYhmztGaqEF2fN0NZcYF2PNA==
-X-Google-Smtp-Source: AK7set9vGUZVulA4Aem9PqZS78x6dG0a3JhlM9N28Kzg/F8G9qkkuTMXiGXfU/94PRT1yjSPSbiQIw==
-X-Received: by 2002:a5d:6549:0:b0:2bf:b5bd:8f60 with SMTP id z9-20020a5d6549000000b002bfb5bd8f60mr2462243wrv.61.1674631305087;
-        Tue, 24 Jan 2023 23:21:45 -0800 (PST)
+        bh=rHPk75UldZWFrK2zpIfxnby6zLxh86xUQwr4PeMFBWQ=;
+        b=7tijzj4cHLsXkMU5nvUcz4c3RCtk7wLB5R0HTTgBB491PKmICVcNwf7b2P9Vg6vTKF
+         S3/ThVrtDEaP92J01Cp5cClvub9IYe3SPyLnpR4izrVwqgTZ5CyWWaEQgCUNT/s/K2P8
+         v3VaYkiEcRmRK/LVua3ldihjALKt6i264DcXbUxCiXY0dfAYZzAIacsN2D1CXhBfpwYj
+         lfEjb4tFush+28q7It/dzyisQk3hECc4/RJMBkjLcFRdwuAm44dRbvMqG79lic0OXWsv
+         3/AbVmX2M0U9HoDuyM42mQGfrdv1E8WjeUav87koXi7KxZJ3nNNWzWWGhpnAtPYjxctT
+         hTdw==
+X-Gm-Message-State: AFqh2koTSBqYeuJBd7BOIJIoCwLqZ13XtyYA8nj6S/uVAMzhejkJGx6N
+        4ZhH91fEAN4HF38O24cVhNpsLg==
+X-Google-Smtp-Source: AMrXdXvju59MOy/PeQz8aEmb8kiEVWSKtzfpztMk26/H14mopbHicF0Za+Fk+TXNM0CiFdfDGz6pNQ==
+X-Received: by 2002:a5d:591b:0:b0:2bf:65ac:ebcc with SMTP id v27-20020a5d591b000000b002bf65acebccmr15954288wrd.17.1674631470385;
+        Tue, 24 Jan 2023 23:24:30 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s8-20020a5d69c8000000b002755e301eeasm3616993wrw.100.2023.01.24.23.21.43
+        by smtp.gmail.com with ESMTPSA id j26-20020a5d453a000000b002bdf3809f59sm3610748wra.38.2023.01.24.23.24.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 23:21:44 -0800 (PST)
-Message-ID: <fcf66269-459c-c7fc-82b7-73303bd67950@linaro.org>
-Date:   Wed, 25 Jan 2023 08:21:42 +0100
+        Tue, 24 Jan 2023 23:24:29 -0800 (PST)
+Message-ID: <a8dd2e04-1baf-2c18-fc73-25e7117f10d2@linaro.org>
+Date:   Wed, 25 Jan 2023 08:24:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [PATCH v1 2/3] dt-bindings: net: bluetooth: Add NXP bluetooth
- support
+Subject: Re: [PATCH 1/5] dt-bindings: mmc: uniphier-sd: Add
+ socionext,syscon-uhs-mode property
 Content-Language: en-US
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-serial@vger.kernel.org, amitkumar.karwar@nxp.com,
-        rohit.fule@nxp.com, sherry.sun@nxp.com
-References: <20230124174714.2775680-1-neeraj.sanjaykale@nxp.com>
- <20230124174714.2775680-3-neeraj.sanjaykale@nxp.com>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230125010201.28246-1-hayashi.kunihiko@socionext.com>
+ <20230125010201.28246-2-hayashi.kunihiko@socionext.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230124174714.2775680-3-neeraj.sanjaykale@nxp.com>
+In-Reply-To: <20230125010201.28246-2-hayashi.kunihiko@socionext.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 18:47, Neeraj Sanjay Kale wrote:
-> Add binding document for generic and legacy NXP bluetooth
-> chipset.
+On 25/01/2023 02:01, Kunihiko Hayashi wrote:
+> UHS mode control is included in the interface logic represented
+> by syscon. To refer this, add new property "socionext,syscon-uhs-mode".
 > 
-> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 > ---
->  .../bindings/net/bluetooth/nxp-bluetooth.yaml | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/bluetooth/nxp-bluetooth.yaml
+>  .../devicetree/bindings/mmc/socionext,uniphier-sd.yaml | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/bluetooth/nxp-bluetooth.yaml b/Documentation/devicetree/bindings/net/bluetooth/nxp-bluetooth.yaml
-> new file mode 100644
-> index 000000000000..d6226838ab1c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/bluetooth/nxp-bluetooth.yaml
+> diff --git a/Documentation/devicetree/bindings/mmc/socionext,uniphier-sd.yaml b/Documentation/devicetree/bindings/mmc/socionext,uniphier-sd.yaml
+> index a586fad0a46b..313621d0d9f5 100644
+> --- a/Documentation/devicetree/bindings/mmc/socionext,uniphier-sd.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/socionext,uniphier-sd.yaml
+> @@ -55,6 +55,16 @@ properties:
+>      minItems: 1
+>      maxItems: 3
+>  
+> +  socionext,syscon-uhs-mode:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      - items:
+> +          - description: phandle to syscon that configures uhs mode
 
-format is vendor,compatible
+s/uhs/UHS/
 
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/net/bluetooth/nxp-bluetooth.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-
-Drop quotes from both
-
-> +
-> +title: NXP Bluetooth chips
-> +
-> +description:
-> +  This documents the binding structure and common properties for serial
-> +  attached NXP Bluetooth devices.
-
-Drop "This documents the binding structure and common properties"... and
-replace everything with proper hardware description.
-
-> +
-> +maintainers:
-> +  - Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nxp,nxp-generic-bt-chip
-> +      - nxp,nxp-legacy-bt-chip
-
-These are wrong on multiple levels. Duplicated vendor prefix. Not
-specific compatible. Fake compatible (non-existing device).
-
-> +
-> +  firmware-name:
+> +          - description: ID of SD instance
 > +    description:
-> +      Specify firmware file name. If this property is not
-> +      specified, it is fetched from the user-space config
-> +      file nxp/bt_mod_para.conf
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    &uart1 {
-> +      pinctrl-names = "default";
-> +      pinctrl-0 = <&pinctrl_uart1>;
-> +      assigned-clocks = <&clk IMX8MM_CLK_UART1>;
-> +      assigned-clock-parents = <&clk IMX8MM_SYS_PLL1_80M>;
-> +      fsl,uart-has-rtscts;
+> +      A phandle to syscon with one argument that configures uhs mode.
 
-Drop everything above except serial node.
+s/uhs/UHS/
 
-> +      status = "okay";
 
-Drop
-
-> +      bluetooth {
-> +              compatible = "nxp,nxp-generic-bt-chip";
-
-Wrong indentation. It's 4-space.
-
-> +      };
-> +    };
-> +  - |
-> +    &uart2 {
-> +      bluetooth {
-> +              compatible = "nxp,nxp-generic-bt-chip";
-> +              firmware-name = "uartuart_n61x_v1.bin"
-> +      };
-> +    };
-> +  - |
-> +    &uart3 {
-> +      bluetooth {
-> +              compatible = "nxp,nxp-legacy-bt-chip";
-> +      };
-> +    };
-> +  - |
-> +    &uart4 {
-> +      bluetooth {
-> +              compatible = "nxp,nxp-legacy-bt-chip";
-> +              firmware-name = "uartuart8987_bt.bin"
-> +      };
-
-Drop all these above - they do not bring anything.
-
-> +    };
-> +
-> +
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
