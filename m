@@ -2,128 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888A567B856
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:22:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B444D67B857
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235796AbjAYRWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:22:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
+        id S236209AbjAYRW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:22:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235791AbjAYRWV (ORCPT
+        with ESMTP id S235899AbjAYRWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:22:21 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A14C166CE;
-        Wed, 25 Jan 2023 09:22:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jG4cbGTotQZtMmHzLerMt8rNdhHYjLAGC/73+W76jIifwi294Nu4AOGnBrTyMTJfodqZaWXfqesIE8S132rm9YLDoiyulh4D+m2QMvSrMNAfpxs0+suikFFbZfYkOphwyahtHLgswyCxMu8yQcjG799wykB6tCyWZt86Jr/I57QvSdi1+p29vI1EFTn4uOHbfeczvp/zzkbI5wTaxg9jM7RxSkC4Arno+STb83WfGaRJa71VRRLVr5bv6XFlRo/9YKHDu55v/JexJT0bK4iuJe71kU7jeWWJ8JdYv7xZpTQJpb7yYwv87uIkywfli5cWtLtpbSh+ZON19Pe3A6v8iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8VE4woQ1XUyZpVXIB5cM6OYd9qQlHfbitrkjo2oNKNQ=;
- b=EpMJlEK5n+3Ll42FuhzLzWUSqT6II5Ny+JNivqxBnIFEIUwoDCP8uqADOksPyHvZB0IOzBfJbDiADsHTYwx8D2W+NFnQL9C9BZ9jTVRiArsezAiK7SbzrxG86suXhYcqMsFUehy1fRBsg95lWMgCPx/BHofJncKYmlap6LOAX5FdhSUJoUKBT7TZI38tGoXd2IK18oa468REeZhnTDbLBIOVVDtyTH2XKRNUpueGejba9TjJwJw1KlTPU+XDM9BRFVoITclZzZl8zrdjJw8tkcXowR9GroPIancB37VzEJqznAspJUbqQB3y6sRFwM4YwyRkTEyOk/djAqATfnzXMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8VE4woQ1XUyZpVXIB5cM6OYd9qQlHfbitrkjo2oNKNQ=;
- b=LdLdM+xn7b4gzSZTMrDIV8r2ZVpFE63pHgMAqhJoPQju0XV1PPA2X5Yj/LQv4HFNrIZk+6IdbARh2tIci3ekQAO8MnuTEzmSsZ8yca+yoZlWDP9oW3HG2h5pQNln9VUcl4KFGxuTx1YMLDB7Wi6EI+E71dFEaaWyQfCJy/WrbvglzfCR61kx3CbxhYfyqdUxDe3JMDMAJFpqnm6jCS9SvSxtSNiuiLYojo3tgc6OG0uYgtenFMYCS8VVzTWBS9/dEmrljJLNKIOlF+t8tz7tfkL7/kDLR2s+LG2fUGwfjTK43oripPYplujRDsluHazAk6BiDdAhSj1Xa43X+t5zrQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
- by CH3PR12MB8283.namprd12.prod.outlook.com (2603:10b6:610:12a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.17; Wed, 25 Jan
- 2023 17:22:17 +0000
-Received: from BN8PR12MB2900.namprd12.prod.outlook.com
- ([fe80::8ae8:c68e:57a9:6dae]) by BN8PR12MB2900.namprd12.prod.outlook.com
- ([fe80::8ae8:c68e:57a9:6dae%3]) with mapi id 15.20.6002.033; Wed, 25 Jan 2023
- 17:22:17 +0000
-Message-ID: <8cf4c8fa-db6a-7814-04d5-921958949f42@nvidia.com>
-Date:   Wed, 25 Jan 2023 22:52:03 +0530
+        Wed, 25 Jan 2023 12:22:25 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB8F5AA5D;
+        Wed, 25 Jan 2023 09:22:22 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PEMsEA004319;
+        Wed, 25 Jan 2023 17:22:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=i02FCDVW6G1T0C20yjVLg6MT/sT2taAVIlLkzuylqh4=;
+ b=J4Z6s+iGdbSOrIh++2QaVQBV4edbpxdCmar0Z+Wy6GKZ2BtVUnTZ+M7l0MpU1OENrMeB
+ 3OweguUpkEQqo/C6oQPQSj5glC+ILIsdJQdf3JcURPedYXa0uDE9Mfkuo3gmMcQz1X16
+ Zx+3VSl/U+EYDdwwc9iw+9+KyPsEa5+ZmXzYlAQTEsyLNCT5Ydn3+8uSOX2IIV/m2GK1
+ mcm4tGAKeY7Xp/3uXnUW8SwbPOBmf3oJIMa0EX/ZBKLkOnSXImB7M9LAlJUXn8yi9ele
+ H3vucXVzd+Vsa3fWJG6m7j3Op/wROKdyHsJ8F+7nKDuBg8tO15k0T1aK0D4E/AvSEiuw +A== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3naaasb8sk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 17:22:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30PHMAQa030214
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 17:22:10 GMT
+Received: from [10.110.102.140] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
+ 2023 09:22:08 -0800
+Message-ID: <f08b04b2-3fdd-38f5-6402-16c57a3322d2@quicinc.com>
+Date:   Wed, 25 Jan 2023 09:22:08 -0800
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH V1] PCI/ASPM: Update saved buffers with latest ASPM
- configuration
-To:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        bhelgaas@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        kai.heng.feng@canonical.com
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        treding@nvidia.com, jonathanh@nvidia.com, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-References: <20230125133830.20620-1-vidyas@nvidia.com>
- <5be13f9b-fc19-28ee-3ed5-8b85f85ca7e8@intel.com>
+Subject: Re: [PATCH 2/2] drm/msm/dp: Return IRQ_NONE for unhandled interrupts
 Content-Language: en-US
-From:   Vidya Sagar <vidyas@nvidia.com>
-In-Reply-To: <5be13f9b-fc19-28ee-3ed5-8b85f85ca7e8@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MAXP287CA0024.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a00:49::32) To BN8PR12MB2900.namprd12.prod.outlook.com
- (2603:10b6:408:69::18)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB2900:EE_|CH3PR12MB8283:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92192152-885c-40fc-9f40-08dafef8b49b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: f8Jp1UqEfefcVKwSiP4Jh6LcuXIu9OZ27ak+N1WhlMoIuhzqPg7illpFxL5der4/vyCkq5Bx6YHu4S7RTNcqXWp058x3o2eF0KDISk+l8dtjESDPDjcn096RZMNWfIOtERjyZmcNDSdqphL8ssfdFRemGPyRG26/BkTHitytQWeIXon9CXNJ3quPApT1Uv7g2wJG7nVg0QD/Xjz5m++ZdlRCUnGM7IfIfcKBEoBHxJaA4+eLA1qnQwqtqh8rziYB0oEfxpxmOjnWSXhTRosrvFs3ADB911CXb4k6kvXAVo2qzNPV1s3LutLgtQxOTBBpteV0K9paAjqzMnwO6M5JV1kv2YxuVDiiBI+sS1FpactdYk8dhuosLjUCs05/72NFtyDnAo6UVeaOHd9o5q5MAm6nH1Lot8tnq4gAAQi0YbxN2o+jCZeO1VIYBt6h4ELPhYoSmPWHjMxzt7uP1mh9ek031dPeeqocjraJkpT3OthJX2AnP3aLi1+l8OwnKzbx0fPXMoRMGz+pKs0FVIIj+cYOcbWUQ/nSLNMkxAcnVYd6JhLCLGbN9FIxrCRCtSWSnZ53JzMy4aTeC8Dzyp6VxTwHvu2OvJ/DQatyuusBKx4nmmjmuvsnty/xt9ylzRVZCX4xVIrHq6muMuBdaUiwDrcBtGk6uUZ90sY9XtjhkO1p8YMX03xcy80a2wrHuGIJQ34k69ODKxiBSnssUuKJGABzmD2xRCWOz/ZOkzeHPOG1wcrI0qNQLXQ5iFcZd7DL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(366004)(376002)(396003)(136003)(346002)(451199018)(5660300002)(8936002)(478600001)(2906002)(66476007)(66946007)(66556008)(4326008)(8676002)(41300700001)(31686004)(15650500001)(6486002)(6666004)(6506007)(186003)(53546011)(26005)(6512007)(2616005)(83380400001)(38100700002)(316002)(36756003)(31696002)(86362001)(43740500002)(45980500001)(309714004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZWlqK2NYMVRJQnlFOVd3YldVN1gxUFk2dnN4a0Y4THlPTC8wRDAweEJmZzYw?=
- =?utf-8?B?RXErWkhpWkVTK0NveFMzZjdXMnluMDRsOS9WVHR5SHV5N1g4UmM0cjVFMStP?=
- =?utf-8?B?Nk5CWlQ5dkRmcVI2bndPbDc2citHczlFd211a09hQ3k0ZkRFZWRzbTFmNUlx?=
- =?utf-8?B?Skt0bk51NkE2cUVockFxWDE4TU1ja1YxNXJVSHFSVUJFRmMvbi9vNDhoODhH?=
- =?utf-8?B?WjhnVzZqOGozcVRiUDhER0VFVy9OY0xuQlVrenBLNkQwZHZKNjBjTUdPSE55?=
- =?utf-8?B?WXczMEI0RGo1eHU5cjhoV3BSSGdyQjlBeWFqTU4vTStMKythMTVLNXB1eVV1?=
- =?utf-8?B?VDFxTDNjczdyS0dzRlZqZmkwS1RoVWtBMWJzQTNFdC9lM0ZGUVFMem9YclVK?=
- =?utf-8?B?Szlmbko4b2RMV3p0K1NnWEk4akJKMjNTV0JKbHlSWVdUbUJQTFJHMmVJWUsv?=
- =?utf-8?B?MzZRc24zUENFVnlFb3kxRGFJUHJEL21pUmJzK0JPa2s1QWhub0tHZTY0RUxo?=
- =?utf-8?B?ZlN1NXhORmdWTmJ4WlQzYTlWRUxmdXhRY09heHFlMmVaZkU3dUU0RDlpY0pz?=
- =?utf-8?B?MnJKd2hKMXV0QjRPSzBJT2dTaUNYamRTb3BwZ0NCRTRQNEtxZDlweHZuaDJw?=
- =?utf-8?B?aGdmUTREMUtuUWRnQU9xa1BiZzh3dElNaERnSVNyUjdsdkNxTkI4aE5ldXQv?=
- =?utf-8?B?NFVkME11WWZsZ0VML3FIaVE0djh5b0dCQ1ZtOTU1TEtaekM4RUlZYVBBNHpp?=
- =?utf-8?B?My8vUE1uQi9OTk1YVFBMSHl6UnJPK1NVditvek9ZN0FGWnRxc212cWlOeUNi?=
- =?utf-8?B?bjhnUVBRUzVMU0NhNWVXUVRDcjkwNVVKaU1tbmJ5dGtVTTdpRkg2d2NaNjhk?=
- =?utf-8?B?bVhYMnlNZ2VUd25aY2xPYllMZ1ZKSmxuQjM2SzRLeEdscUpWNWdFaDJteERm?=
- =?utf-8?B?VW1zSVA0MkNmdWJtL0hBd1N2dnFNVmdNM0czaXowSXkwTWlMK01TNVMrdHZK?=
- =?utf-8?B?Nm81Z05DU1p5d0JSSi9UdUw2YkJXTjFTUmJocDJRNUlvTXBJbW5CdlJYNUoy?=
- =?utf-8?B?UHdsWC9vTUNic1JUeHM0TDNKVUxGem1HZXJjNm80OXlaeWZLb0JwL3ltYW9N?=
- =?utf-8?B?UlRibk1MeUlHaitFQktmcEIrZXc3VkZXbWMyQkZsK0toQ1R1dXdBZGVMS3NU?=
- =?utf-8?B?WXRMT0JhcFlWZjV4QUd0QjI4SHJsVStwYlY5Lzg2blgwVmxOam51SnRiRWla?=
- =?utf-8?B?dDFYa1B5aWM3OGtTcmlqaEdwMVdlWExGWm42QUEybHUreXdYTzFNbzJQL2tT?=
- =?utf-8?B?ZXVpUGd1ZUk3S29hOUxUVGxwS21LUTUyRmpXMEV6NXk0ZnNpYVpLcWk2ZHJM?=
- =?utf-8?B?aGdDU0U4V0JFdW8zL1Z5enlDMzArS3RZR2dFN2M1Ri9UZzhML0JBRFBpZFBC?=
- =?utf-8?B?WjRualhXeW1oUGJSYytRS1ZIRDlPRm5STHRNU1VpY2E0QzR5ak9PRlM2ZmV0?=
- =?utf-8?B?WGtCQUo2TUp0N3BkOVdpS3lRNW5iV090a1FrTGxhRi9xRHo1MEt5WU1mMEdC?=
- =?utf-8?B?SEZ5TTNXN3ZMcFBQOUQzcHA1Wk1nS3pRY2U4Z3J0L0x4aDFMM0lRMll3WHlu?=
- =?utf-8?B?TzFzcUhnSXZtanQycXljc3pvWmpCYU50TDYxNGZjUmU1UkVpUGdZbytqOHJ2?=
- =?utf-8?B?b1R1c0dBZE94bmpMWERySHRWRGJsTkxSTmNiam1ua213S1cvMDdhUnA1TnVL?=
- =?utf-8?B?VjNXQTh6a3V1cDBTNEhyeEd5eU0wR1haMmlJWHo0T1ZOWDB0NjA1WmI2OGlr?=
- =?utf-8?B?RjRFVXZoYmdhMUJvWjZxVDl0S1lOZERmWXNvTkQ4bE5KOGl3UjRreHBUQk5H?=
- =?utf-8?B?TFNXWmRYdmxTWEpIeUtEcVFiN0NwVkVMZlY2MXVKUGxLVHRWOGppKzM5V3pw?=
- =?utf-8?B?dXJSbzZNeTNHSVZiM1Z4VzV1WVFwV1ZoWkFLSmh0VjBKUVNIdDJZUnVKM2RR?=
- =?utf-8?B?d1BOMldUaU40THErZndyZVZlaGhqa3l2dFNldmVUdzN0dHg4YU55ZDY0YzdS?=
- =?utf-8?B?Q05WSUppYiswRVd3eXdZeVRHejVWM3FYWlpnRmUyQ0FiWnZjb3BKTlc5RHFK?=
- =?utf-8?Q?PHImA8M6ZPWkK59QMLh6GIl2+?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92192152-885c-40fc-9f40-08dafef8b49b
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2900.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 17:22:17.1006
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FetnDJhpLU10uDPa7uODWVFc5kKT21v0apg7Ujv/d/yZst/UXQyksiqO8ZCWaKNyDQZBVJ3csJdLeoOCl8Oxmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8283
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Douglas Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        "Johan Hovold" <johan+linaro@kernel.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Sean Paul <sean@poorly.run>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230119145248.1.I90ffed3ddd21e818ae534f820cb4d6d8638859ab@changeid>
+ <20230119145248.2.I2d7aec2fadb9c237cd0090a47d6a8ba2054bf0f8@changeid>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <20230119145248.2.I2d7aec2fadb9c237cd0090a47d6a8ba2054bf0f8@changeid>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Ty9ffe_7begRDoZxgbdc9Seg5nuJkmrS
+X-Proofpoint-ORIG-GUID: Ty9ffe_7begRDoZxgbdc9Seg5nuJkmrS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_10,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
+ impostorscore=0 bulkscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250155
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -131,144 +93,199 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 1/25/2023 8:31 PM, Wysocki, Rafael J wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On 1/25/2023 2:38 PM, Vidya Sagar wrote:
->> Many PCIe device drivers save the configuration state of their respective
->> devices during probe and restore the same when their 'slot_reset' hook
->> is called through PCIe Error Recovery System.
->> If the system has a change in ASPM policy after the driver's probe is
->> called and before error event occurred, 'slot_reset' hook restores the
->> PCIe configuration state to what it was at the time of probe but not with
->> what it was just before the occurrence of the error event.
->> This effectively leads to a mismatch in the ASPM configuration between
->> the device and its upstream parent device.
->> This patch addresses that issue by updating the saved configuration state
->> of the device with the latest info whenever there is a change w.r.t ASPM
->> policy.
->>
->> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> 
-> If it is a bug fix (which I think it is), a Fixes tag should be present
-> here.
-
-It is kind of a bug fix but I couldn't pin point to any particular 
-commit that would have introduced it.
-
-> 
-> If the reporter's names are known, Reported-by tags should be present
-> here too.
-
-I was experimenting with the error handling code and happen to find this.
-
-> 
-> If anyone except for you has tested this patch, a Tested-by tag should
-> be present here.
-
-Only I tested this patch for now. It would be great if more verification 
-is done on this patch.
-
-Thanks,
-Vidya Sagar
-
-> 
->> ---
->>   drivers/pci/pci.h       |  4 ++++
->>   drivers/pci/pcie/aspm.c | 40 ++++++++++++++++++++++++++++++++++++++++
->>   2 files changed, 44 insertions(+)
->>
->> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
->> index 9ed3b5550043..f4a91d4fe96d 100644
->> --- a/drivers/pci/pci.h
->> +++ b/drivers/pci/pci.h
->> @@ -566,12 +566,16 @@ bool pcie_wait_for_link(struct pci_dev *pdev, 
->> bool active);
->>   void pcie_aspm_init_link_state(struct pci_dev *pdev);
->>   void pcie_aspm_exit_link_state(struct pci_dev *pdev);
->>   void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
->> +void pci_save_aspm_state(struct pci_dev *dev);
->> +void pci_restore_aspm_state(struct pci_dev *dev);
->>   void pci_save_aspm_l1ss_state(struct pci_dev *dev);
->>   void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
->>   #else
->>   static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
->>   static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
->>   static inline void pcie_aspm_powersave_config_link(struct pci_dev 
->> *pdev) { }
->> +static inline void pci_save_aspm_state(struct pci_dev *dev) { }
->> +static inline void pci_restore_aspm_state(struct pci_dev *dev) { }
->>   static inline void pci_save_aspm_l1ss_state(struct pci_dev *dev) { }
->>   static inline void pci_restore_aspm_l1ss_state(struct pci_dev *dev) { }
->>   #endif
->> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
->> index 53a1fa306e1e..f25e0440d36b 100644
->> --- a/drivers/pci/pcie/aspm.c
->> +++ b/drivers/pci/pcie/aspm.c
->> @@ -151,6 +151,7 @@ static void pcie_set_clkpm_nocheck(struct 
->> pcie_link_state *link, int enable)
->>                                                  
->> PCI_EXP_LNKCTL_CLKREQ_EN,
->>                                                  val);
->>       link->clkpm_enabled = !!enable;
->> +     pci_save_aspm_state(child);
->>   }
->>
->>   static void pcie_set_clkpm(struct pcie_link_state *link, int enable)
->> @@ -757,6 +758,39 @@ static void pcie_config_aspm_l1ss(struct 
->> pcie_link_state *link, u32 state)
->>                               PCI_L1SS_CTL1_L1SS_MASK, val);
->>   }
->>
->> +void pci_save_aspm_state(struct pci_dev *dev)
->> +{
->> +     int i = 0;
->> +     struct pci_cap_saved_state *save_state;
->> +     u16 *cap;
->> +
->> +     if (!pci_is_pcie(dev))
->> +             return;
->> +
->> +     save_state = pci_find_saved_cap(dev, PCI_CAP_ID_EXP);
->> +     if (!save_state)
->> +             return;
->> +
->> +     cap = (u16 *)&save_state->cap.data[0];
->> +     i++;
->> +     pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &cap[i++]);
->> +}
->> +
->> +void pci_restore_aspm_state(struct pci_dev *dev)
->> +{
->> +     int i = 0;
->> +     struct pci_cap_saved_state *save_state;
->> +     u16 *cap;
->> +
->> +     save_state = pci_find_saved_cap(dev, PCI_CAP_ID_EXP);
->> +     if (!save_state)
->> +             return;
->> +
->> +     cap = (u16 *)&save_state->cap.data[0];
->> +     i++;
->> +     pcie_capability_write_word(dev, PCI_EXP_LNKCTL, cap[i++]);
->> +}
->> +
->>   void pci_save_aspm_l1ss_state(struct pci_dev *dev)
->>   {
->>       struct pci_cap_saved_state *save_state;
->> @@ -849,6 +883,12 @@ static void pcie_config_aspm_link(struct 
->> pcie_link_state *link, u32 state)
->>               pcie_config_aspm_dev(parent, upstream);
->>
->>       link->aspm_enabled = state;
->> +
->> +     /* Update latest ASPM configuration in saved context */
->> +     pci_save_aspm_state(link->downstream);
->> +     pci_save_aspm_l1ss_state(link->downstream);
->> +     pci_save_aspm_state(parent);
->> +     pci_save_aspm_l1ss_state(parent);
->>   }
->>
->>   static void pcie_config_aspm_path(struct pcie_link_state *link)
+On 1/19/2023 2:53 PM, Douglas Anderson wrote:
+> If our interrupt handler gets called and we don't really handle the
+> interrupt then we should return IRQ_NONE. The current interrupt
+> handler didn't do this, so let's fix it.
+>
+> NOTE: for some of the cases it's clear that we should return IRQ_NONE
+> and some cases it's clear that we should return IRQ_HANDLED. However,
+> there are a few that fall somewhere in between. Specifically, the
+> documentation for when to return IRQ_NONE vs. IRQ_HANDLED is probably
+> best spelled out in the commit message of commit d9e4ad5badf4
+> ("Document that IRQ_NONE should be returned when IRQ not actually
+> handled"). That commit makes it clear that we should return
+> IRQ_HANDLED if we've done something to make the interrupt stop
+> happening.
+>
+> The case where it's unclear is, for instance, in dp_aux_isr() after
+> we've read the interrupt using dp_catalog_aux_get_irq() and confirmed
+> that "isr" is non-zero. The function dp_catalog_aux_get_irq() not only
+> reads the interrupts but it also "ack"s all the interrupts that are
+> returned. For an "unknown" interrupt this has a very good chance of
+> actually stopping the interrupt from happening. That would mean we've
+> identified that it's our device and done something to stop them from
+> happening and should return IRQ_HANDLED. Specifically, it should be
+> noted that most interrupts that need "ack"ing are ones that are
+> one-time events and doing an "ack" is enough to clear them. However,
+> since these interrupts are unknown then, by definition, it's unknown
+> if "ack"ing them is truly enough to clear them. It's possible that we
+> also need to remove the original source of the interrupt. In this
+> case, IRQ_NONE would be a better choice.
+>
+> Given that returning an occasional IRQ_NONE isn't the absolute end of
+> the world, however, let's choose that course of action. The IRQ
+> framework will forgive a few IRQ_NONE returns now and again (and it
+> won't even log them, which is why we have to log them ourselves). This
+> means that if we _do_ end hitting an interrupt where "ack"ing isn't
+> enough the kernel will eventually detect the problem and shut our
+> device down.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+>   drivers/gpu/drm/msm/dp/dp_aux.c     | 12 +++++++-----
+>   drivers/gpu/drm/msm/dp/dp_aux.h     |  2 +-
+>   drivers/gpu/drm/msm/dp/dp_ctrl.c    | 10 ++++++++--
+>   drivers/gpu/drm/msm/dp/dp_ctrl.h    |  2 +-
+>   drivers/gpu/drm/msm/dp/dp_display.c |  8 +++++---
+>   5 files changed, 22 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c b/drivers/gpu/drm/msm/dp/dp_aux.c
+> index 34ad08ae6eb9..59e323b7499d 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_aux.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_aux.c
+> @@ -368,14 +368,14 @@ static ssize_t dp_aux_transfer(struct drm_dp_aux *dp_aux,
+>   	return ret;
+>   }
+>   
+> -void dp_aux_isr(struct drm_dp_aux *dp_aux)
+> +irqreturn_t dp_aux_isr(struct drm_dp_aux *dp_aux)
+>   {
+>   	u32 isr;
+>   	struct dp_aux_private *aux;
+>   
+>   	if (!dp_aux) {
+>   		DRM_ERROR("invalid input\n");
+> -		return;
+> +		return IRQ_NONE;
+>   	}
+>   
+>   	aux = container_of(dp_aux, struct dp_aux_private, dp_aux);
+> @@ -384,11 +384,11 @@ void dp_aux_isr(struct drm_dp_aux *dp_aux)
+>   
+>   	/* no interrupts pending, return immediately */
+>   	if (!isr)
+> -		return;
+> +		return IRQ_NONE;
+>   
+>   	if (!aux->cmd_busy) {
+>   		DRM_ERROR("Unexpected DP AUX IRQ %#010x when not busy\n", isr);
+> -		return;
+> +		return IRQ_NONE;
+>   	}
+>   
+>   	/*
+> @@ -420,10 +420,12 @@ void dp_aux_isr(struct drm_dp_aux *dp_aux)
+>   			aux->aux_error_num = DP_AUX_ERR_DEFER;
+>   	} else {
+>   		DRM_WARN("Unexpected interrupt: %#010x\n", isr);
+> -		return;
+> +		return IRQ_NONE;
+>   	}
+>   
+>   	complete(&aux->comp);
+> +
+> +	return IRQ_HANDLED;
+>   }
+>   
+>   void dp_aux_reconfig(struct drm_dp_aux *dp_aux)
+> diff --git a/drivers/gpu/drm/msm/dp/dp_aux.h b/drivers/gpu/drm/msm/dp/dp_aux.h
+> index e930974bcb5b..511305da4f66 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_aux.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_aux.h
+> @@ -11,7 +11,7 @@
+>   
+>   int dp_aux_register(struct drm_dp_aux *dp_aux);
+>   void dp_aux_unregister(struct drm_dp_aux *dp_aux);
+> -void dp_aux_isr(struct drm_dp_aux *dp_aux);
+> +irqreturn_t dp_aux_isr(struct drm_dp_aux *dp_aux);
+>   void dp_aux_init(struct drm_dp_aux *dp_aux);
+>   void dp_aux_deinit(struct drm_dp_aux *dp_aux);
+>   void dp_aux_reconfig(struct drm_dp_aux *dp_aux);
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> index dd26ca651a05..1a5377ef1967 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> @@ -1979,27 +1979,33 @@ int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
+>   	return ret;
+>   }
+>   
+> -void dp_ctrl_isr(struct dp_ctrl *dp_ctrl)
+> +irqreturn_t dp_ctrl_isr(struct dp_ctrl *dp_ctrl)
+>   {
+>   	struct dp_ctrl_private *ctrl;
+>   	u32 isr;
+> +	irqreturn_t ret = IRQ_NONE;
+>   
+>   	if (!dp_ctrl)
+> -		return;
+> +		return IRQ_NONE;
+>   
+>   	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
+>   
+>   	isr = dp_catalog_ctrl_get_interrupt(ctrl->catalog);
+can you add (!isr) check and return IRQ_NONE here to be consistent with 
+dp_aux_isr()?
+>
+> +
+>   	if (isr & DP_CTRL_INTR_READY_FOR_VIDEO) {
+>   		drm_dbg_dp(ctrl->drm_dev, "dp_video_ready\n");
+>   		complete(&ctrl->video_comp);
+> +		ret = IRQ_HANDLED;
+>   	}
+>   
+>   	if (isr & DP_CTRL_INTR_IDLE_PATTERN_SENT) {
+>   		drm_dbg_dp(ctrl->drm_dev, "idle_patterns_sent\n");
+>   		complete(&ctrl->idle_comp);
+> +		ret = IRQ_HANDLED;
+>   	}
+> +
+> +	return ret;
+>   }
+>   
+>   struct dp_ctrl *dp_ctrl_get(struct device *dev, struct dp_link *link,
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> index 9f29734af81c..c3af06dc87b1 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+> @@ -25,7 +25,7 @@ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
+>   int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl);
+>   int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
+>   void dp_ctrl_push_idle(struct dp_ctrl *dp_ctrl);
+> -void dp_ctrl_isr(struct dp_ctrl *dp_ctrl);
+> +irqreturn_t dp_ctrl_isr(struct dp_ctrl *dp_ctrl);
+>   void dp_ctrl_handle_sink_request(struct dp_ctrl *dp_ctrl);
+>   struct dp_ctrl *dp_ctrl_get(struct device *dev, struct dp_link *link,
+>   			struct dp_panel *panel,	struct drm_dp_aux *aux,
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 7ff60e5ff325..8996adbc5bd3 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1192,7 +1192,7 @@ static int dp_hpd_event_thread_start(struct dp_display_private *dp_priv)
+>   static irqreturn_t dp_display_irq_handler(int irq, void *dev_id)
+>   {
+>   	struct dp_display_private *dp = dev_id;
+> -	irqreturn_t ret = IRQ_HANDLED;
+> +	irqreturn_t ret = IRQ_NONE;
+>   	u32 hpd_isr_status;
+>   
+>   	if (!dp) {
+> @@ -1220,13 +1220,15 @@ static irqreturn_t dp_display_irq_handler(int irq, void *dev_id)
+>   
+>   		if (hpd_isr_status & DP_DP_HPD_UNPLUG_INT_MASK)
+>   			dp_add_event(dp, EV_HPD_UNPLUG_INT, 0, 0);
+> +
+> +		ret = IRQ_HANDLED;
+>   	}
+>   
+>   	/* DP controller isr */
+> -	dp_ctrl_isr(dp->ctrl);
+> +	ret |= dp_ctrl_isr(dp->ctrl);
+>   
+>   	/* DP aux isr */
+> -	dp_aux_isr(dp->aux);
+> +	ret |= dp_aux_isr(dp->aux);
+>   
+>   	return ret;
+>   }
