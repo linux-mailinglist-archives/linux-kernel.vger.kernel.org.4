@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9789B67B90B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF3E67B917
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235653AbjAYSLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 13:11:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
+        id S235695AbjAYSOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235552AbjAYSLm (ORCPT
+        with ESMTP id S235717AbjAYSOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:11:42 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CA846090;
-        Wed, 25 Jan 2023 10:11:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674670301; x=1706206301;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JuYjKJS9gbqNnrhb2oKijdYn0zeQyxwNNDDSL14po5s=;
-  b=MUzoJvJRgjC8StWM9h5gzXFN+rMqNyjVZrQ+nvIRBy+x8MzBrDdVPbq0
-   dmTgjJ9LN1ACosLtt3f/Icjzi0853RZE+fhlupUhfDi5ZytyQfjcKm3Ii
-   W8PdaBMCpkXtRgeVjhvAj1D/UFJJT/1BO5snjkJcR7wZV2D5+23K10QEd
-   SbfGTpxuAbFwL4LlG4Xw1yF+M9vXtUDGBwnCbHykvfa1qgWgwToKnseAX
-   d+IrMlQqhOl2ZHU2aPLoBrMX3RyH5+IszUJviSDPTfwfQ4UbAJ6rhnlxZ
-   Ltw1u+3OtLwgsxv0iFhaQJgyuet+FosIUvpUkIoxzWiy3a0DcBB0EE2aX
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="306291660"
-X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
-   d="scan'208";a="306291660"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 10:11:40 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="731143891"
-X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
-   d="scan'208";a="731143891"
-Received: from dodonnel-mobl.ger.corp.intel.com (HELO [10.213.233.83]) ([10.213.233.83])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 10:11:36 -0800
-Message-ID: <371f3ce5-3468-b91d-d688-7e89499ff347@linux.intel.com>
-Date:   Wed, 25 Jan 2023 18:11:35 +0000
+        Wed, 25 Jan 2023 13:14:41 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E77E4A21B
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:14:40 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id x36so22671882ede.13
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:14:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ezfgQvWoMwYi/wrVPbQBarXLnM5cDi1r4h1toUfXH6c=;
+        b=cGn+xBZGLUGvEEQSQEj8q7PiKeDnCb14P3MOhmCCN3HhQSOmIsRjhNBB9kLQOgJPtI
+         GZ3CutDFj51OwAyR8zxU2JURtxQbRtWIqvZu3wP4Di9u47Vcx6QSh1pJH4SxN8OQBniG
+         YcphD1DbWFqQSMYnIEjB7qrG4s9fhM/3URZsILyle9KPNXUW/Ie1SfVlA4MevrKHCkm3
+         p3YkCb9f8dmb7utnp3xYktANPPhrv9eJtYKT+P9YEWUI2htA35cEjMp5ImYJvzxExC2F
+         o3R+nMif1e2BDalQApSuF2LB8IhPhh/pLT/Yj9PWnW5F7d/JKd2ZEE5cmwiwDGVKoD+G
+         0iKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ezfgQvWoMwYi/wrVPbQBarXLnM5cDi1r4h1toUfXH6c=;
+        b=eXZK3KCnBD0iM/yX1qckyXgsGpHAmGiBlhFJSSP4UxELrnIpDf1iMM5GHaEpyXEotL
+         rEU2TBQu6QAtM/O2c1IEwlEXZmXQTXdNPCeOrG/LvWKKiLPQeF4Bi49y/osI44Lo2jhX
+         9yjEd4YCVj/c5bjpVz1gMlYD7qa3YXYC0sstzjKNHGhg68VjvCaJN36SyAaU3sFJrHZ1
+         fIkRxKSmXZNrAWXXzWsrYILpyDDbTAv1jlV5puT75b/PeeAg/4YzSg2NZUtV0/jmjAYT
+         me79p+9OzxUBLvD0ouzJpQmKZY0O+lwVhP4v3H1o7xGT0vSAWbExWOiRKU2mOtYzoCS3
+         WJnQ==
+X-Gm-Message-State: AFqh2kqDJurGOQxaPi50yo0w7pOXaZZJCvyckY8pNffo/M3uabRCOMf2
+        bs/p2droTGyqNaFyCGNl7M09jnN96hRndOkpfAt7Kw==
+X-Google-Smtp-Source: AMrXdXuT6xMFHJVZ5QLk/+wQjDgjKjQNWw0t82BBGNsYvY9n1cbbZqP0y0Ny/YOsHABz+zn+gawW9hmxBLs+nRoPRDk=
+X-Received: by 2002:a05:6402:2054:b0:498:216:ee4c with SMTP id
+ bc20-20020a056402205400b004980216ee4cmr4403222edb.29.1674670478499; Wed, 25
+ Jan 2023 10:14:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC v3 00/12] DRM scheduling cgroup controller
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>,
-        =?UTF-8?Q?St=c3=a9phane_Marchesin?= <marcheu@chromium.org>,
-        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Brian Welty <brian.welty@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-References: <20230112165609.1083270-1-tvrtko.ursulin@linux.intel.com>
- <20230123154239.GA24348@blackbody.suse.cz>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20230123154239.GA24348@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+References: <20230125015738.912924-2-zokeefe@google.com> <202301252110.hFYRsbrm-lkp@intel.com>
+In-Reply-To: <202301252110.hFYRsbrm-lkp@intel.com>
+From:   "Zach O'Keefe" <zokeefe@google.com>
+Date:   Wed, 25 Jan 2023 10:14:01 -0800
+Message-ID: <CAAa6QmTjn-Lnw9Sj80RCaCWmqehDSdRJVp0923UUTD68jMqoDg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mm/MADV_COLLAPSE: catch !none !huge !bad pmd lookups
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-mm@kvack.org, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Yang Shi <shy828301@gmail.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,101 +71,5 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi,
-
-On 23/01/2023 15:42, Michal Koutný wrote:
-> Hello Tvrtko.
-> 
-> Interesting work.
-
-Thanks!
-
-> On Thu, Jan 12, 2023 at 04:55:57PM +0000, Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
->> Because of the heterogenous hardware and driver DRM capabilities, soft limits
->> are implemented as a loose co-operative (bi-directional) interface between the
->> controller and DRM core.
-> 
-> IIUC, this periodic scanning, calculating and applying could be partly
-> implemented with userspace utilities. (As you write, these limits are
-> best effort only, so it sounds to me such a total implementation is
-> unnecessary.)
-
-I don't immediately see how you envisage the half-userspace 
-implementation would look like in terms of what functionality/new APIs 
-would be provided by the kernel?
-
-> I think a better approach would be to avoid the async querying and
-> instead require implementing explicit foo_charge_time(client, dur) API
-> (similar to how other controllers achieve this).
-> Your argument is the heterogenity of devices -- does it mean there are
-> devices/drivers that can't implement such a synchronous charging?
-
-Problem there is to find a suitable point to charge at. If for a moment 
-we limit the discussion to i915, out of the box we could having charging 
-happening at several thousand times per second to effectively never. 
-This is to illustrate the GPU context execution dynamics which range 
-from many small packets of work to multi-minute, or longer. For the 
-latter to be accounted for we'd still need some periodic scanning, which 
-would then perhaps go per driver. For the former we'd have thousands of 
-needless updates per second.
-
-Hence my thinking was to pay both the cost of accounting and collecting 
-the usage data once per actionable event, where the latter is controlled 
-by some reasonable scanning period/frequency.
-
-In addition to that, a few DRM drivers already support GPU usage 
-querying via fdinfo, so that being externally triggered, it is next to 
-trivial to wire all those DRM drivers into such common DRM cgroup 
-controller framework. All that every driver needs to implement on top is 
-the "over budget" callback.
-
->> DRM core provides an API to query per process GPU utilization and 2nd API to
->> receive notification from the cgroup controller when the group enters or exits
->> the over budget condition.
-> 
-> The return value of foo_charge_time() would substitute such a
-> notification synchronously. (By extension all clients in an affected
-> cgroup could be notified to achieve some broader actions.)
-
-Right, it is doable in theory, but as mention above some rate limit 
-would have to be added. And the notification would still need to have 
-unused budget propagation through the tree, so it wouldn't work to 
-localize the action to the single cgroup (the one getting the charge).
-
->> Individual DRM drivers which implement the interface are expected to act on this
->> in the best-effort manner only. There are no guarantees that the soft limits
->> will be respected.
-> 
-> Back to original concern -- must all code reside in the kernel when it's
-> essentially advisory resource control?
-> 
->>   * DRM core is required to track all DRM clients belonging to processes so it
->>     can answer when asked how much GPU time is a process using.
->>   [...]
->>   * Individual drivers need to implement two similar hooks, but which work for
->>     a single DRM client. Over budget callback and GPU utilisation query.
-> 
-> This information is eventually aggregated for each process in a cgroup.
-> (And the action is carried on a single client, not a process.)
-> The per-process tracking seems like an additional indirection.
-> Could be the clients associated directly with DRM cgroup? [1]
-
-I think you could be right here - with some deeper integration with the 
-cgroup subsystem this could probably be done. It would require moving 
-the list of drm clients into the cgroup css state itself. Let me try and 
-sketch that out in the following weeks because it would be a nice 
-simplification if it indeed worked out.
-
-Regards,
-
-Tvrtko
-
-> 
-> 
-> Regards,
-> Michal
-> 
-> [1] I understand the sending a fd of a client is a regular operation, so
->      I'm not sure how cross-cg migrations would have to be handled in any
->      case.
+Apologies here; shouldn't have overlooked the 4 line change. Will
+follow-up with a v2 here in a second.
