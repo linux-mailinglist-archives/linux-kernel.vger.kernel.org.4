@@ -2,69 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5845667B356
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CDF67B36F
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235396AbjAYNdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:33:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
+        id S235540AbjAYNfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbjAYNdn (ORCPT
+        with ESMTP id S235172AbjAYNfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:33:43 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E645C366B1;
-        Wed, 25 Jan 2023 05:33:41 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 980076E0;
-        Wed, 25 Jan 2023 14:33:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674653619;
-        bh=dKBgju70MFJqf2CRYXDiM5DEgZzSi9XFzToHAh5eN0A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=e6IMWJsVU8C5HlyGuTDDLApH6HtDir3PTAkQ9Bhj8rpttoIHWv96F4/s2LTAIHk6O
-         OiH/ceRHwNc5aaB5YB466v3JR/lu/F7ly+gf+TYd4xNsau2P4MWeiVNj488HhjTnp0
-         Ti/EfYbyMX+Uq+JEcQfchcgRGZW8FPiX4JCvWcDM=
-Message-ID: <cad92dbb-43ef-fa8c-1962-13c4a8578899@ideasonboard.com>
-Date:   Wed, 25 Jan 2023 15:33:35 +0200
+        Wed, 25 Jan 2023 08:35:01 -0500
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443CE4E507;
+        Wed, 25 Jan 2023 05:35:00 -0800 (PST)
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PBgBMZ000380;
+        Wed, 25 Jan 2023 05:34:58 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PPS06212021;
+ bh=si9MHYmYyyypVqunUvDViGG9IbErTs+07obEE+u6Bao=;
+ b=GZmV7nEnyRqiKJ3+KU45EGGJ2Ip8mrg/TKogyPQrJVI459MDpOa4ehjr68X1uHNPl6YE
+ ia426/G6lZkIz7oJiQCZBc/OPvkJXsGoW4wm0JNdj4pC65hxsBuh0KrL/PVQgqdV1tFq
+ 6n/OBSxhV5nP1QJCD+XWpvL7xK9h7NJrYvgeHqdCCA1Ok3K/QSnmIEjaTyVu8vfYMfIg
+ rKh2p/L4k8frTK41dvalZJB6Pxno8sr2pryxKXd8AD7Sr5yyyUcgUmZrl0CMwhWW/wgs
+ dvzeV7DXnjAgZoSKlIp9oi06t1HtSIOSyyM5q5Wl9j7TBGGOEM52uh+fwF9+WxPbTuAQ 1Q== 
+Received: from ala-exchng01.corp.ad.wrs.com (unknown-82-252.windriver.com [147.11.82.252])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3n8c78m7ts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 25 Jan 2023 05:34:57 -0800
+Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 25 Jan 2023 05:34:57 -0800
+Received: from otp-azaharia-d1.corp.ad.wrs.com (147.11.136.210) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
+ 15.1.2507.17 via Frontend Transport; Wed, 25 Jan 2023 05:34:56 -0800
+From:   Adrian Zaharia <adrian.zaharia@windriver.com>
+To:     <stable@vger.kernel.org>
+CC:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 5.10 0/1] backport of 'xhci: Set HCD flag to defer primary roothub registration'
+Date:   Wed, 25 Jan 2023 15:33:58 +0200
+Message-ID: <20230125133359.3538078-1-adrian.zaharia@windriver.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
- <20230118124031.788940-6-tomi.valkeinen@ideasonboard.com>
- <Y8gUuqLBXsXQoNUC@smile.fi.intel.com>
- <aba49d82-c76f-7ff2-751c-d1be7b8f3bca@ideasonboard.com>
- <Y8rFh6zO7Hp9mLxE@smile.fi.intel.com>
- <4286abe2-f23f-d4c9-ef18-f351af7a3a8b@ideasonboard.com>
- <Y9EcRlooHwIjOqiZ@smile.fi.intel.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y9EcRlooHwIjOqiZ@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: HXX7LIoZunn8mP9sOD0G-8kKUpKMMPaj
+X-Proofpoint-ORIG-GUID: HXX7LIoZunn8mP9sOD0G-8kKUpKMMPaj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_08,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ phishscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0 adultscore=0
+ clxscore=1011 bulkscore=0 mlxlogscore=878 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250121
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,159 +68,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2023 14:10, Andy Shevchenko wrote:
-> On Wed, Jan 25, 2023 at 01:15:34PM +0200, Tomi Valkeinen wrote:
->> On 20/01/2023 18:47, Andy Shevchenko wrote:
-> 
-> ...
-> 
->>>>> Esp. taking into account that some of them are using actually
->>>>> post-inc. Why this difference?
->>>>
->>>> Possibly a different person has written that particular piece of code, or
->>>> maybe a copy paste from somewhere.
->>>>
->>>> I'm personally fine with seeing both post and pre increments in code.
->>>
->>> I'm not :-), if it's not required by the code. Pre-increment always puzzles
->>> me: Is here anything I have to pay an additional attention to?
->>
->> That is interesting, as to me pre-increment is the simpler, more obvious
->> case. It's just:
->>
->> v = v + 1
->> v
->>
->> Whereas post-increment is:
->>
->> temp = v
->> v = v + 1
->> temp
->>
->> In any case, we're side-tracking here, I think =).
-> 
-> Yes, just see the statistics of use below.
-> 
-> ...
-> 
->>>>>> +	for (nport = 0; nport < priv->hw_data->num_rxports; ++nport) {
->>>>>
->>>>> Post-inc?
->>>>
->>>> I still like pre-inc =).
->>>>
->>>> I see there's a mix os post and pre incs in the code. I'll align those when
->>>> I encounter them, but I don't think it's worth the effort to methodically go
->>>> through all of them to change them use the same style.
->>>
->>> Kernel uses post-inc is an idiom for loops:
->>>
->>> $ git grep -n -w '[_a-z0-9]\+++' | wc -l
->>> 148693
->>>
->>> $ git grep -n -w ' ++[a-z0-9_]\+' | wc -l
->>> 8701
->>>
->>> So, non-standard pattern needs to be explained.
-> 
->>>>>> +	}
-> 
-> ...
-> 
->>>>>> +	ret = fwnode_property_read_u32(link_fwnode, "ti,eq-level", &eq_level);
->>>>>> +	if (ret) {
->>>>>> +		if (ret != -EINVAL) {
->>>>>> +			dev_err(dev, "rx%u: failed to read 'ti,eq-level': %d\n",
->>>>>> +				nport, ret);
->>>>>> +			return ret;
->>>>>> +		}
->>>
->>> This seems like trying to handle special cases, if you want it to be optional,
->>> why not ignoring all errors?
->>
->> I don't follow. Why would we ignore all errors even if the property is
->> optional? If there's a failure in reading the property, or checking if it
->> exists or not, surely that's an actual error to be handled, not to be
->> ignored?
-> 
-> What the problem to ignore them?
+From: Adrian Zaharia <Adrian.Zaharia@windriver.com>
 
-Well, probably nothing will explode if we just ignore them. But... Why 
-would we ignore them?
+This patch enables the flag to defer registering primary roothub if xhci has two roothubs.
+Link to upstream patch:
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=b7a4f9b5d0e4b6dd937678c546c0b322dd1a4054
 
-> But if you are really pedantic about it, perhaps the proper way is to add
-> 
-> fwnode_property_*_optional()
-> 
-> APIs to the set where you take default and return 0 in case default had been
-> used for the absent property.
+The support for deferring roothub registration was added in 5.10.121.
+(See: a2532c441705 "usb: core: hcd: Add support for deferring roothub registration")
 
-Perhaps, but I don't have a default value here.
 
-In any case, I'm not quite sure what you are arguing here. Is it just 
-that you don't think the error check is necessary and should be dropped?
+Kishon Vijay Abraham I (1):
+  xhci: Set HCD flag to defer primary roothub registration
 
->>>>>> +	} else if (eq_level > UB960_MAX_EQ_LEVEL) {
->>>>>> +		dev_err(dev, "rx%u: illegal 'ti,eq-level' value: %d\n", nport,
->>>>>> +			eq_level);
->>>
->>> This part is a validation of DT again, but we discussed above this.
->>>
->>>>>> +	} else {
->>>>>> +		rxport->eq.manual_eq = true;
->>>>>> +		rxport->eq.manual.eq_level = eq_level;
->>>>>> +	}
-> 
-> ...
-> 
->>>>>> +struct ds90ub9xx_platform_data {
->>>>>> +	u32 port;
->>>>>> +	struct i2c_atr *atr;
->>>>>> +	unsigned long bc_rate;
->>>>>
->>>>> Not sure why we need this to be public except, probably, atr...
->>>>
->>>> The port and atr are used by the serializers, for atr. The bc_rate is used
->>>> by the serializers to figure out the clocking (they may use the FPD-Link's
->>>> frequency internally).
->>>
->>> The plain numbers can be passed as device properties. That's why the question
->>> about platform data. Platform data in general is discouraged to be used in a
->>> new code.
->>
->> Device properties, as in, coming from DT?
-> 
->  From anywhere.
-> 
->> The port could be in the DT, but
->> the others are not hardware properties.
-> 
-> Why do we need them? For example, bc_rate.
+ drivers/usb/host/xhci.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The atr pointer is needed so that the serializers (ub913, ub953) can add 
-their i2c adapter to the deserializer's i2c-atr. The port is also needed 
-for that.
 
-The bc rate (back-channel rate) is the FPD-Link back-channel rate which 
-the serializers use for various functionalities. At the moment only the 
-ub953 uses it for calculating an output clock rate.
-
-The bc-rate could be implemented using the clock framework, even if it's 
-not quite a plain clock. I had that code at some point, but it felt a 
-bit off and as we needed the pdata for the ATR, I added the bc-rate there.
-
->> Yes, I don't like using platform data. We need some way to pass information
->> between the drivers.
-> 
-> Device properties allow that and targeting to remove the legacy platform data
-> in zillions of the drivers.
-
-Do you have any pointers to guide me into the right direction? I 
-couldn't find anything with some grepping and googling.
-
-If you mean "device properties" as in ACPI, and so similar to DT 
-properties, aren't those hardware properties? Only the port here is 
-about the hardware.
-
-  Tomi
+base-commit: 179624a57b78c02de833370b7bdf0b0f4a27ca31
+-- 
+2.39.1
 
