@@ -2,94 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2393C67B895
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EEC67B89D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235615AbjAYRau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:30:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
+        id S235961AbjAYRb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:31:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235844AbjAYRas (ORCPT
+        with ESMTP id S235926AbjAYRbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:30:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10A437573;
-        Wed, 25 Jan 2023 09:30:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95F2D6159C;
-        Wed, 25 Jan 2023 17:30:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06045C4339C;
-        Wed, 25 Jan 2023 17:30:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674667837;
-        bh=doO5B7lVAEUM4IZ60baaHsFh7f5V2tq0ZYza3D65Lpk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kWE3AN6tbPb7c+n/nTbhk/PlOIyEndZGB9vYOts3hGoTV30wQj49MvudqcM0qok1o
-         OIN2uNK/dviBas0fvUe4sZ3ht1bl5WqpUAsyd+CPHwzlK0Shtd2wNcDtGGWqdL+wJR
-         8GmWTQ37JmHQCshCjNSsWAizxu/EjsfcYgtcoyHVvf5u9lyHcybuIivTCzycjLwHoD
-         unNLaXYGGQoOrXL2HYmxrRaw9meyRU6Lq+Hd3wO1FEvGzH9bv/JbWb7I7AL11NDB1i
-         BosqYYqdBt61+xYmMqJhXOo1Nv0cQh0zQ4793mM/UHR7c0KbE4p4jddIhmI3DwU2wx
-         4n4lAMt+EQ0CA==
-Received: by mail-vs1-f45.google.com with SMTP id k4so20477666vsc.4;
-        Wed, 25 Jan 2023 09:30:36 -0800 (PST)
-X-Gm-Message-State: AO0yUKVKKk6Em1rH8OygHClywbRVbj5eiT0683ncFvXLh51/Gd+tYCfZ
-        HDFuwu1EMqZ86iWx/PMGM2idwoJYhtMfgGJ7iw==
-X-Google-Smtp-Source: AK7set+1oK/DUMFfhX8xs4Oazj4O0yxp2K04oiLSaHoBwKIZJJpMkvGK98H2tuPZIysvuISWwVghNg0L89SfNiN4fos=
-X-Received: by 2002:a67:fe41:0:b0:3ea:c8c:48a5 with SMTP id
- m1-20020a67fe41000000b003ea0c8c48a5mr99015vsr.53.1674667835932; Wed, 25 Jan
- 2023 09:30:35 -0800 (PST)
+        Wed, 25 Jan 2023 12:31:20 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E543A870;
+        Wed, 25 Jan 2023 09:31:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674667873; x=1706203873;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=b/qAzqJTvFy4xiZPmOAm7JkVbr9jZZbEQu9s5cua2Is=;
+  b=AWcklGPuXD/+9cf1Hhwl+Js//5W4kdegH/s0Gsfid2lOqlLRlb+x3I2W
+   +pbkW5XILBBx4R1+PNuSE8oRW4FgaWulShnBLOkKWlS+uhbh0zDiFg18b
+   B0HjcV5HkJ4l49rkjRSObzCRk/cdHpbAxDpFpDh9wOMFKiS95tbPYl1Kq
+   Ot2LLUNYqUoPmFYD48gejB0bRZ7kz1QxWT4du2BC+j37+/OrVu5C1QCzU
+   vGmNQIWiZblHr58LJMtiiQZtjmG4bpn6uWsBsR9DRE/KcVtOiJMs/A0FN
+   nj/2SCV6VpRy4QFDaAIqFZ5mJzJilrDWScKgr3pC/WGhkgPoafYyLKp3x
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="310194555"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="310194555"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 09:30:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="805079453"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="805079453"
+Received: from dodonnel-mobl.ger.corp.intel.com (HELO [10.213.233.83]) ([10.213.233.83])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 09:30:45 -0800
+Message-ID: <347560bc-d06a-92b7-8003-133d2b8af2df@linux.intel.com>
+Date:   Wed, 25 Jan 2023 17:30:43 +0000
 MIME-Version: 1.0
-References: <20230124222023.316089-1-robh@kernel.org> <Y9EyB+OO7MyGy20w@e120937-lin>
- <20230125141113.kkbowopusikuogx6@bogus>
-In-Reply-To: <20230125141113.kkbowopusikuogx6@bogus>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 25 Jan 2023 11:30:24 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ2DbC88kEb-r=6WxJ=m+v3UO9n6h_HKkQNoAAW6h-hWA@mail.gmail.com>
-Message-ID: <CAL_JsqJ2DbC88kEb-r=6WxJ=m+v3UO9n6h_HKkQNoAAW6h-hWA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: firmware: arm,scmi: Restrict protocol child
- node properties
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/4] memcg: Track exported dma-buffers
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>, Shakeel Butt <shakeelb@google.com>
+Cc:     linux-doc@vger.kernel.org, daniel.vetter@ffwll.ch,
+        Roman Gushchin <roman.gushchin@linux.dev>, cmllamas@google.com,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        jstultz@google.com, Zefan Li <lizefan.x@bytedance.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>, android-mm@google.com,
+        Jonathan Corbet <corbet@lwn.net>, jeffv@google.com,
+        linux-media@vger.kernel.org, selinux@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
+        "T.J. Mercier" <tjmercier@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20230123191728.2928839-1-tjmercier@google.com>
+ <20230123191728.2928839-2-tjmercier@google.com>
+ <Y8/ybgp2FW+e3bjc@dhcp22.suse.cz>
+ <20230124194628.d44rtcfsv23fndxw@google.com>
+ <Y9EX+usSpAjZ/8LS@dhcp22.suse.cz>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <Y9EX+usSpAjZ/8LS@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 8:11 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Wed, Jan 25, 2023 at 01:43:48PM +0000, Cristian Marussi wrote:
-> > so now that the catch-all protocol@ patternProperty is gone in favour
-> > of the 'protocol-node' definition and $refs, does that mean that any
-> > current and future SCMI officially published protocol <N> has to be
-> > added to the above explicit protocol list, even though it does not
-> > have any special additional required property beside reg ?
-> > (like protocol@18 above...)
-> >
->
-> If there are no consumers, should we just not add and deal with it
-> entirely within the kernel. I know we rely today on presence of node
-> before we initialise, but hey we have exception for system power protocol
-> for other reasons, why not add this one too.
->
-> In short we shouldn't have to add a node if there are no consumers. It
-> was one of the topic of discussion initially when SCMI binding was added
-> and they exist only for the consumers otherwise we don't need it as
-> everything is discoverable from the interface.
 
-As you might guess, I agree.
+Hi,
 
-We need to keep 0x18 I suppose, right? I assume it is already in use.
-Are there any others that didn't get documented? We'd need to keep
-them because old kernels would still need them.
+On 25/01/2023 11:52, Michal Hocko wrote:
+> On Tue 24-01-23 19:46:28, Shakeel Butt wrote:
+>> On Tue, Jan 24, 2023 at 03:59:58PM +0100, Michal Hocko wrote:
+>>> On Mon 23-01-23 19:17:23, T.J. Mercier wrote:
+>>>> When a buffer is exported to userspace, use memcg to attribute the
+>>>> buffer to the allocating cgroup until all buffer references are
+>>>> released.
+>>>
+>>> Is there any reason why this memory cannot be charged during the
+>>> allocation (__GFP_ACCOUNT used)?
+>>> Also you do charge and account the memory but underlying pages do not
+>>> know about their memcg (this is normally done with commit_charge for
+>>> user mapped pages). This would become a problem if the memory is
+>>> migrated for example.
+>>
+>> I don't think this is movable memory.
+>>
+>>> This also means that you have to maintain memcg
+>>> reference outside of the memcg proper which is not really nice either.
+>>> This mimicks tcp kmem limit implementation which I really have to say I
+>>> am not a great fan of and this pattern shouldn't be coppied.
+>>>
+>>
+>> I think we should keep the discussion on technical merits instead of
+>> personal perference. To me using skmem like interface is totally fine
+>> but the pros/cons need to be very explicit and the clear reasons to
+>> select that option should be included.
+> 
+> I do agree with that. I didn't want sound to be personal wrt tcp kmem
+> accounting but the overall code maintenance cost is higher because
+> of how tcp take on accounting differs from anything else in the memcg
+> proper. I would prefer to not grow another example like that.
+> 
+>> To me there are two options:
+>>
+>> 1. Using skmem like interface as this patch series:
+>>
+>> The main pros of this option is that it is very simple. Let me list down
+>> the cons of this approach:
+>>
+>> a. There is time window between the actual memory allocation/free and
+>> the charge and uncharge and [un]charge happen when the whole memory is
+>> allocated or freed. I think for the charge path that might not be a big
+>> issue but on the uncharge, this can cause issues. The application and
+>> the potential shrinkers have freed some of this dmabuf memory but until
+>> the whole dmabuf is freed, the memcg uncharge will not happen. This can
+>> consequences on reclaim and oom behavior of the application.
+>>
+>> b. Due to the usage model i.e. a central daemon allocating the dmabuf
+>> memory upfront, there is a requirement to have a memcg charge transfer
+>> functionality to transfer the charge from the central daemon to the
+>> client applications. This does introduce complexity and avenues of weird
+>> reclaim and oom behavior.
+>>
+>>
+>> 2. Allocate and charge the memory on page fault by actual user
+>>
+>> In this approach, the memory is not allocated upfront by the central
+>> daemon but rather on the page fault by the client application and the
+>> memcg charge happen at the same time.
+>>
+>> The only cons I can think of is this approach is more involved and may
+>> need some clever tricks to track the page on the free patch i.e. we to
+>> decrement the dmabuf memcg stat on free path. Maybe a page flag.
+>>
+>> The pros of this approach is there is no need have a charge transfer
+>> functionality and the charge/uncharge being closely tied to the actual
+>> memory allocation and free.
+>>
+>> Personally I would prefer the second approach but I don't want to just
+>> block this work if the dmabuf folks are ok with the cons mentioned of
+>> the first approach.
+> 
+> I am not familiar with dmabuf internals to judge complexity on their end
+> but I fully agree that charge-when-used is much more easier to reason
+> about and it should have less subtle surprises.
 
-Rob
+Disclaimer that I don't seem to see patches 3&4 on dri-devel so maybe I 
+am missing something, but in principle yes, I agree that the 2nd option 
+(charge the user, not exporter) should be preferred. Thing being that at 
+export time there may not be any backing store allocated, plus if the 
+series is restricting the charge transfer to just Android clients then 
+it seems it has the potential to miss many other use cases. At least 
+needs to outline a description on how the feature will be useful outside 
+Android.
+
+Also stepping back for a moment - is a new memory category really 
+needed, versus perhaps attempting to charge the actual backing store 
+memory to the correct client? (There might have been many past 
+discussions on this so it's okay to point me towards something in the 
+archives.)
+
+Regards,
+
+Tvrtko
