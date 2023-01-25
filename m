@@ -2,208 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA0567ADA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:19:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726F967ADB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbjAYJTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 04:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
+        id S235224AbjAYJYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:24:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbjAYJTD (ORCPT
+        with ESMTP id S229884AbjAYJYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 04:19:03 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2070.outbound.protection.outlook.com [40.107.21.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B631046D7A
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:19:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HuQFL862AD18NK+puuh2ddFzV9l48gbK4j0QZ0b/ICI=;
- b=rC4BL0noQe8nVUbtTO+4DGwC9TKCwYTmHDTQ0bufzWqfwqtWongA5zAUNpgPeeRsnhoh1QqM/jjTdCmEw28IQIkialbKpHD1/Skln4+s+HOyYkbpRoDo7u2r34pLRBKEYz0NFyI8BA/g5vxmvfHTEmRDnVZrWCmFNwxwgj/IG1U=
-Received: from AS9PR01CA0008.eurprd01.prod.exchangelabs.com
- (2603:10a6:20b:540::10) by PA4PR08MB7521.eurprd08.prod.outlook.com
- (2603:10a6:102:26a::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.17; Wed, 25 Jan
- 2023 09:18:47 +0000
-Received: from AM7EUR03FT023.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:20b:540:cafe::a7) by AS9PR01CA0008.outlook.office365.com
- (2603:10a6:20b:540::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.34 via Frontend
- Transport; Wed, 25 Jan 2023 09:18:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- AM7EUR03FT023.mail.protection.outlook.com (100.127.140.73) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6023.16 via Frontend Transport; Wed, 25 Jan 2023 09:18:47 +0000
-Received: ("Tessian outbound 3ad958cd7492:v132"); Wed, 25 Jan 2023 09:18:46 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 5be824bac85b6354
-X-CR-MTA-TID: 64aa7808
-Received: from 8ac90293c535.2
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id DBD1A084-0F55-4E27-AE16-0D5B7344ECDC.1;
-        Wed, 25 Jan 2023 09:18:35 +0000
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 8ac90293c535.2
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Wed, 25 Jan 2023 09:18:35 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JcAIjh9FbEFbgeeC/edNcC5GtFqYeYxa7z0GIviEqi+YknUnM3CJiOp+3HrHTm1xgWhM1eesFehTfwOrAnMdsAj3krvmxj2UW0zG2KOpeG4kUqtCSloVbeyd30nbDj37H8hLX5Hp+O5i7IuFa85boovqHOatCtjfTFd1tDHK/muO3OqaNFqpO5k5xU3ufgqSlHRrSEvLO4oXK1BqdBTODirRKhT0QxqM/x+LFxMkvlocx66a9QaWn1APJlimU5/e4XRlV/VpR3fuA27PNSRlj+QepTll7clrlzki+1k68ro33NK37AF0MK04biAiQCHQzSdkx9PWudQIuv9YckiPgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HuQFL862AD18NK+puuh2ddFzV9l48gbK4j0QZ0b/ICI=;
- b=bEO5NX+qx9GxQwwaCADERje/9t6sP9KROyECxhxdnlIUKbucCEbnbHE3ypsFcGvsiZc4heOmmM4FsI6tCE8DlAmdQMplIWtnlADwVvdmploP3tBPJm7bLQub6IEGneDQmvLWPPEo+NGixXMAqJic9llQfrSQb1tS0W6u6wIoMbn02n0srCz3Kz5h+l+4hUiJT7tu6RWpOzlhCPRKYt1nQ8sVIscFGYEc2kuOnV3TyW2EsX+uRdqbMAgFP4wxScZk6GKfBEELoT7JAHJImvC2u1FPRmz4yOtxzqy20Z/ENYwIE/6pjlR+A69YzNgsu9nGUP/kyabXs+/AZceiNHC7JQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HuQFL862AD18NK+puuh2ddFzV9l48gbK4j0QZ0b/ICI=;
- b=rC4BL0noQe8nVUbtTO+4DGwC9TKCwYTmHDTQ0bufzWqfwqtWongA5zAUNpgPeeRsnhoh1QqM/jjTdCmEw28IQIkialbKpHD1/Skln4+s+HOyYkbpRoDo7u2r34pLRBKEYz0NFyI8BA/g5vxmvfHTEmRDnVZrWCmFNwxwgj/IG1U=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from VI1PR08MB3919.eurprd08.prod.outlook.com (2603:10a6:803:c4::31)
- by VE1PR08MB5615.eurprd08.prod.outlook.com (2603:10a6:800:1b3::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
- 2023 09:18:34 +0000
-Received: from VI1PR08MB3919.eurprd08.prod.outlook.com
- ([fe80::bced:32a3:b77e:90a6]) by VI1PR08MB3919.eurprd08.prod.outlook.com
- ([fe80::bced:32a3:b77e:90a6%6]) with mapi id 15.20.6002.033; Wed, 25 Jan 2023
- 09:18:33 +0000
-Message-ID: <d6a92e81-0f67-68ce-744d-149bbcdc06d9@arm.com>
-Date:   Wed, 25 Jan 2023 09:18:30 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 0/2] arm64: Fix pending single-step debugging issues
-To:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>
-Cc:     will@kernel.org, catalin.marinas@arm.com, liwei391@huawei.com,
-        mhiramat@kernel.org, maz@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, dianders@chromium.org
-References: <20221219102452.2860088-1-sumit.garg@linaro.org>
- <CAFA6WYOucB3JdVATbydxYuAb0Q5P7ff_JMb=-BgiF+uip8pdpg@mail.gmail.com>
- <Y9AdunpawWzWKIXN@aspen.lan>
-Content-Language: en-US
-From:   Luis Machado <luis.machado@arm.com>
-In-Reply-To: <Y9AdunpawWzWKIXN@aspen.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P302CA0044.GBRP302.PROD.OUTLOOK.COM
- (2603:10a6:600:317::10) To VI1PR08MB3919.eurprd08.prod.outlook.com
- (2603:10a6:803:c4::31)
+        Wed, 25 Jan 2023 04:24:45 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126F045F4C;
+        Wed, 25 Jan 2023 01:24:44 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id n7so16360294wrx.5;
+        Wed, 25 Jan 2023 01:24:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z0Arz+pfAQe2myKejng9WE2IrSZFUhfsk2WraOwJVT8=;
+        b=Bi3qWzqeMh80NryBIAF5Dhr6ASV1XIfGkldULP1u8WVVtFfkMD7sLb7qlR4JvlPLXk
+         O8CK3lYtRC1ghQgbr/EEHPEM300ot/WvDkj1+sjnCeQz/DRtPs7SIZgmyYklsUr4XiP4
+         erTeIYuE9z9XwqHzyaqcVE+5My6NZK5m+VgI+WUeSll5XsKOHSpn5uJG8nz/hkWiLzMO
+         Ill5FvXYPQqD0U8RbWmuHvxsiU+2M5YHj1cSI6M4OlHFvpm/9vegT7D7pN/2bh9L76b6
+         AptexREEtZs5VOCUdADhVMQFeT4QArwBR/qlZaJI913iz2V1YQBSGT3ZWIohFHuQMz5j
+         Jfmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z0Arz+pfAQe2myKejng9WE2IrSZFUhfsk2WraOwJVT8=;
+        b=QKz77NsKej8VNj9ab8VHtA/tKPcICv3aSJ+nWJ3OFUfL4x+B9zwJyv3ryH8riyg8Aj
+         k7aeo9p3W6HXaJhS3NhgcImr/qbg3isb1957VoHFCcM2Yzq1TuW+7Sr+ChnyExQXNmQK
+         l4rskRwM5rWB0wToYC4M6vECiI65bpw0t5kFV2RplWgs7qSEgFhRTpyqy0eAfQwG2xZl
+         ckis9P5iaTvoNkppXmek6mkDKu021xt/ci6ZpwlEuWStvZ9H2zmP5dlGL4f5T/cQIPvN
+         OwLKvaDDIpkizVCVAOsvGMoy5cUPZSljTNDvu9O4eB4vKTcHuTuhvfluorozy7Svtdql
+         tK9w==
+X-Gm-Message-State: AFqh2kpqx5+yAi7/l2kOf3Iqm9I3A1Xepji5fYOcsxA3GGry9O9/L5oO
+        Wk3wqO4auYwtx53eOx1jDe0=
+X-Google-Smtp-Source: AMrXdXvCVpzdYmkvwD+InHMlUvlzHqd2a6n6HQAKP5NRmt2gyTAvFEqJRs1wOF0A6rEje9NtNEytnA==
+X-Received: by 2002:a05:6000:1e0d:b0:236:c60b:c766 with SMTP id bj13-20020a0560001e0d00b00236c60bc766mr4918321wrb.6.1674638682404;
+        Wed, 25 Jan 2023 01:24:42 -0800 (PST)
+Received: from localhost (95-172-185-203.cpe.netmadeira.com. [95.172.185.203])
+        by smtp.gmail.com with ESMTPSA id p15-20020a5d4e0f000000b002bdc39849d1sm3886630wrt.44.2023.01.25.01.24.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 01:24:42 -0800 (PST)
+Date:   Wed, 25 Jan 2023 11:24:34 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCH v11 030/113] KVM: x86/mmu: Replace hardcoded value 0 for
+ the initial value for SPTE
+Message-ID: <20230125112434.0000512a@gmail.com>
+In-Reply-To: <dee30f0562d8be0102547d8eb9fc77736eae679d.1673539699.git.isaku.yamahata@intel.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+        <dee30f0562d8be0102547d8eb9fc77736eae679d.1673539699.git.isaku.yamahata@intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: VI1PR08MB3919:EE_|VE1PR08MB5615:EE_|AM7EUR03FT023:EE_|PA4PR08MB7521:EE_
-X-MS-Office365-Filtering-Correlation-Id: 26c85c56-692b-4d4d-e01c-08dafeb529d6
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: BgqlCSeeLBrOQXlkA+4HuPIvuE2hdGX8pFx8tYeRCZS7Ox8dVs5paGMT00Bbfre45hFEc8klDiEjQDVoRX0jTbRRhjzCmMFDnKl/R/oeWpd/eZlWRUiQz+lM82zTJAveXGsm2af6LXcMr63b9DvdwG2Hx2FGAAZKzbVOxXu5UNCjyWLoQqP1M2gFhExJSDcEbVmtXvpLiSNwEVkaAXwa3UHugcFG94aeu9dTy5Tgpg0R3igRREp1cl6Biodavea8NZmRS54d0LfuJQFOv04KKf6nF9NayOSA8/jvFtxWBVUc/25yhhmTb9Cn4Mz5tcMvQ/VwKDlPh3ROUuJqd80wWa1C1wiR8Koj+U5AOisHTBHF24d36ZGvtZM5clx7mCppr9w0nvPNVOuq55HUw4RbUIvp6q0kicHXAMNe6aM+SNyk47L0pc3yrUGCu9+tjvTLCjvzy/se4Q1DJMkIqAFklWw2ph8PhFnY3RKy5+kSj25HIYFY6o80RyplJLQLF9Sm62X+MSvPYdsrE0AMB7SwSIGBH77ToHAggEScTKTlZJzEqowhYRQku7iFLBXNb1qBnFgoYLjO6BjPhLKFpSTyQVsi6Qg0o3TEcpHY4yf/3euEEigJ54sAs3fBtglhDwCcw6gR3DHsbKq/sSvKzzAl1ax/OQAeOCTIaAL5RlTSgzD2qUr/AymfEQPpSSTIU+LTElpJDNy/gVE1f6EXlqBbJk7v7wpvuwTS3HFqjHoxU0zavpM6ZTwxj8Sb4C9Q7ylf+AuXQ4H8BRObCZ8HiwHI4oLqqWWi1NoMGrTdv5jcFnTnzjV45B57dXHAiTJT5el+
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3919.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(366004)(136003)(376002)(451199018)(38100700002)(44832011)(8936002)(5660300002)(86362001)(36756003)(2906002)(2616005)(6506007)(110136005)(6512007)(53546011)(26005)(478600001)(8676002)(186003)(66946007)(66556008)(66476007)(316002)(41300700001)(4326008)(6486002)(31686004)(966005)(83380400001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR08MB5615
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM7EUR03FT023.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 6c94c23d-66bd-418b-3d33-08dafeb52172
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mPuVCZm0/uUvBO5qlh+8XTnf7GAws7wej69au6KH0WhjqVMVUxVPbDn3M7UJn4rlyh+kTspGRqjbYRL5c/D9m+OUXRtxmJJiH9rpi6AFgwf5Am4gNKyoc2yG7d3YtycwNX5tqAGymB4mai6BPRxEH4gwykx7YfRRYShiSJpUzsS07ihkJkJSCtTGaQVATGGMZ8q9Gz+RI3p8YM7dO0YEGB+7ad7pzyfHnukoQaeoHDgVuQokpFVEmVY623CuJ6i2wOIhhLf9FEeqsShCzETMv+wgWNffOw+fkozoj4qAdKLZM16hSmmRtX3BHUf/Jobc7d6/+qxqutKusz559dQW4QH6lN4zmH4gWZXLQEuIwn1QL3d0UDWm4aksk2mTqKBt2IOhpNJkgvcAuwKgQUp8YCwAJN5q3BAzdM+8sq1ffLcz5qsBLqSW/etB5yVF0hLtZwIoXhRkyPE3XoffqOgsvWRLE/IvG7sidVUjlpdQpOpBnDSIS6OtkdAxwLmm9/M1lL6VOGcHdvANkyg2nQGOiluW1njr5r1pUzV+ZnoiJcxmfx5LLbHmbri2TBNuc+YVPerr+TEMbFL+8kmN3IgWM2DIKwN2J6BYx7JM8CKVXgdVCa+KVhywCc4YCGfesw3H/pQZ2zYTdi7RUh6EK3i+b7Hl+fyux+0tC8PUsRSA0QMq+X4XnFSykXPffJC2mmZ2oft1gquwEnhfGLb9p5dN7w7O46MCCV14jqrW4zflmjCaPCNFpOEC0hC1hX1adZw4P4mLOrT8YTs1uDOSXSHc5BBvYY6Qh3ppPMpG/rkN7zWtYgFKtREqHKc658gN2UBm
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(346002)(376002)(396003)(451199018)(40470700004)(36840700001)(46966006)(31686004)(40480700001)(40460700003)(966005)(2906002)(6486002)(110136005)(478600001)(316002)(86362001)(31696002)(82740400003)(356005)(82310400005)(81166007)(36756003)(36860700001)(336012)(2616005)(6506007)(70206006)(53546011)(8676002)(41300700001)(4326008)(8936002)(47076005)(5660300002)(44832011)(70586007)(6512007)(26005)(107886003)(186003)(83380400001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 09:18:47.0205
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26c85c56-692b-4d4d-e01c-08dafeb529d6
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT023.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR08MB7521
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 12 Jan 2023 08:31:38 -0800
+isaku.yamahata@intel.com wrote:
 
-Is this expected to change single-stepping operation in usespace for debuggers (gdb/lldb)? If so, it would be nice to at least
-test it a little to make sure it works.
+This refactor patch is quite hacky.
 
-On 1/24/23 18:04, Daniel Thompson wrote:
-> On Thu, Jan 12, 2023 at 02:52:49PM +0530, Sumit Garg wrote:
->> Hi Will, Catalin,
->>
->> On Mon, 19 Dec 2022 at 15:55, Sumit Garg <sumit.garg@linaro.org> wrote:
->>>
->>> This patch-set reworks pending fixes from Wei's series [1] to make
->>> single-step debugging via kgdb/kdb on arm64 work as expected. There was
->>> a prior discussion on ML [2] regarding if we should keep the interrupts
->>> enabled during single-stepping. So patch #1 follows suggestion from Will
->>> [3] to not disable interrupts during single stepping but rather skip
->>> single stepping within interrupt handler.
->>>
->>> [1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
->>> [2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
->>> [3] https://lore.kernel.org/all/20200626095551.GA9312@willie-the-truck/
->>>
->>> Changes in v5:
->>> - Incorporated misc. comments from Mark.
->>>
->>
->> Since patch #1 has already been reviewed/acked by Mark and the
->> complete patchset has been tested by Doug, would it be fine for you to
->> pick up this patchset? It fixes a real single stepping problem for
->> kgdb on arm64.
+Why not change the purpose of vcpu->arch.mmu_shadow_page.gfp_zero and let the
+callers respect that the initial value of spte can be configurable? It will be
+generic and not TDX-specific, then kvm_init_shadow_page() is not required,
+mmu_topup_shadow_page_cache() can be left un-touched as the refactor can cover
+other architectures.
+
+1) Let it store the expected nonpresent value and rename it to nonpresent_spte.
+
+2) Let mmu_spte_clear_track_bits(), mmu_spte_clear_no_track() and all
+the other places where assume 0 as initial value, respect nonpreset_spte.
+
+3) Let kvm_mmu_topup_memory_cache() to respect nonpresent_spte: a. using GFP_ZERO
+if the nonpresent_spte is zero. b. memset the page if nonpresent_spte is *not*
+zero.
+
+Now the initial value is configurable, configure the nonpresent_spte in the TDX
+initialization path before the first topup in the next patch.
+
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
 > 
-> Sorry to be quiet for so long.
+> The TDX support will need the "suppress #VE" bit (bit 63) set as the
+> initial value for SPTE.  To reduce code change size, introduce a new macro
+> SHADOW_NONPRESENT_VALUE for the initial value for the shadow page table
+> entry (SPTE) and replace hard-coded value 0 for it.  Initialize shadow page
+> tables with their value.
 > 
-> Testing this patch set has proven to be a little difficult.
+> The plan is to unconditionally set the "suppress #VE" bit for both AMD and
+> Intel as: 1) AMD hardware uses the bit 63 as NX for present SPTE and
+> ignored for non-present SPTE; 2) for conventional VMX guests, KVM never
+> enables the "EPT-violation #VE" in VMCS control and "suppress #VE" bit is
+> ignored by hardware.
 > 
-> It certainly fixes the single step tests in the kgdbtest suite.
-> That's a good start.
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c         | 50 ++++++++++++++++++++++++++++++----
+>  arch/x86/kvm/mmu/paging_tmpl.h |  3 +-
+>  arch/x86/kvm/mmu/spte.h        |  2 ++
+>  arch/x86/kvm/mmu/tdp_mmu.c     | 15 +++++-----
+>  4 files changed, 56 insertions(+), 14 deletions(-)
 > 
-> Unfortunately when testing using qemu/KVM (hosted on NXP
-> 2k/Solidrun Honeycomb) the patch set is resulting in instability
-> running the built-in self tests (specifically this one:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/misc/kgdbts.c#n74 ). Running this test using the kgdbtest harness
-> results in the test failing roughly a third of the time.
-> 
-> The error reported is that the trap handler tried to unlock a spinlock
-> that isn't currently locked. To be honest I suspect this is a generic
-> problem that the new feature happens to tickle (this test has
-> historically been unreliable on x86 too... and x86 is noteworthy for
-> being the only other platform I test using KVM rather than pure qemu).
-> Of course the only way to prove that would be to find and fix the
-> problem in the trap handler (which probably involves rewriting it) and I
-> haven't managed to do that yet.
-> 
-> In short, I think the debugger is more useful with this patchset than
-> without so, although it is caveated by the above, I'd call this:
-> 
-> Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
-> Tested-by: Daniel Thompson <daniel.thompson@linaro.org>
-> 
-> 
-> Daniel.
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 15d0e8f11d53..59befdfeec23 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -540,9 +540,9 @@ static u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
+>  
+>  	if (!is_shadow_present_pte(old_spte) ||
+>  	    !spte_has_volatile_bits(old_spte))
+> -		__update_clear_spte_fast(sptep, 0ull);
+> +		__update_clear_spte_fast(sptep, SHADOW_NONPRESENT_VALUE);
+>  	else
+> -		old_spte = __update_clear_spte_slow(sptep, 0ull);
+> +		old_spte = __update_clear_spte_slow(sptep, SHADOW_NONPRESENT_VALUE);
+>  
+>  	if (!is_shadow_present_pte(old_spte))
+>  		return old_spte;
+> @@ -576,7 +576,7 @@ static u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
+>   */
+>  static void mmu_spte_clear_no_track(u64 *sptep)
+>  {
+> -	__update_clear_spte_fast(sptep, 0ull);
+> +	__update_clear_spte_fast(sptep, SHADOW_NONPRESENT_VALUE);
+>  }
+>  
+>  static u64 mmu_spte_get_lockless(u64 *sptep)
+> @@ -644,6 +644,39 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
+>  	}
+>  }
+>  
+> +#ifdef CONFIG_X86_64
+> +static inline void kvm_init_shadow_page(void *page)
+> +{
+> +	memset64(page, SHADOW_NONPRESENT_VALUE, 4096 / 8);
+> +}
+> +
+> +static int mmu_topup_shadow_page_cache(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_mmu_memory_cache *mc = &vcpu->arch.mmu_shadow_page_cache;
+> +	int start, end, i, r;
+> +
+> +	start = kvm_mmu_memory_cache_nr_free_objects(mc);
+> +	r = kvm_mmu_topup_memory_cache(mc, PT64_ROOT_MAX_LEVEL);
+> +
+> +	/*
+> +	 * Note, topup may have allocated objects even if it failed to allocate
+> +	 * the minimum number of objects required to make forward progress _at
+> +	 * this time_.  Initialize newly allocated objects even on failure, as
+> +	 * userspace can free memory and rerun the vCPU in response to -ENOMEM.
+> +	 */
+> +	end = kvm_mmu_memory_cache_nr_free_objects(mc);
+> +	for (i = start; i < end; i++)
+> +		kvm_init_shadow_page(mc->objects[i]);
+> +	return r;
+> +}
+> +#else
+> +static int mmu_topup_shadow_page_cache(struct kvm_vcpu *vcpu)
+> +{
+> +	return kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
+> +					  PT64_ROOT_MAX_LEVEL);
+> +}
+> +#endif /* CONFIG_X86_64 */
+> +
+>  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
+>  {
+>  	int r;
+> @@ -653,8 +686,7 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
+>  				       1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM);
+>  	if (r)
+>  		return r;
+> -	r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
+> -				       PT64_ROOT_MAX_LEVEL);
+> +	r = mmu_topup_shadow_page_cache(vcpu);
+>  	if (r)
+>  		return r;
+>  	if (maybe_indirect) {
+> @@ -5920,7 +5952,13 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+>  	vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
+>  	vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
+>  
+> -	vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
+> +	/*
+> +	 * When X86_64, initial SEPT entries are initialized with
+> +	 * SHADOW_NONPRESENT_VALUE.  Otherwise zeroed.  See
+> +	 * mmu_topup_shadow_page_cache().
+> +	 */
+> +	if (!IS_ENABLED(CONFIG_X86_64))
+> +		vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
+>  
+>  	vcpu->arch.mmu = &vcpu->arch.root_mmu;
+>  	vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index 0f6455072055..42d7106c7350 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -1036,7 +1036,8 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
+>  		gpa_t pte_gpa;
+>  		gfn_t gfn;
+>  
+> -		if (!sp->spt[i])
+> +		/* spt[i] has initial value of shadow page table allocation */
+> +		if (sp->spt[i] == SHADOW_NONPRESENT_VALUE)
+>  			continue;
+>  
+>  		pte_gpa = first_pte_gpa + i * sizeof(pt_element_t);
+> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+> index 0d8deefee66c..f190eaf6b2b5 100644
+> --- a/arch/x86/kvm/mmu/spte.h
+> +++ b/arch/x86/kvm/mmu/spte.h
+> @@ -148,6 +148,8 @@ static_assert(MMIO_SPTE_GEN_LOW_BITS == 8 && MMIO_SPTE_GEN_HIGH_BITS == 11);
+>  
+>  #define MMIO_SPTE_GEN_MASK		GENMASK_ULL(MMIO_SPTE_GEN_LOW_BITS + MMIO_SPTE_GEN_HIGH_BITS - 1, 0)
+>  
+> +#define SHADOW_NONPRESENT_VALUE	0ULL
+> +
+>  extern u64 __read_mostly shadow_host_writable_mask;
+>  extern u64 __read_mostly shadow_mmu_writable_mask;
+>  extern u64 __read_mostly shadow_nx_mask;
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 12e430a4ebc3..9cf5844dd34a 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -701,7 +701,7 @@ static inline int tdp_mmu_zap_spte_atomic(struct kvm *kvm,
+>  	 * here since the SPTE is going from non-present to non-present.  Use
+>  	 * the raw write helper to avoid an unnecessary check on volatile bits.
+>  	 */
+> -	__kvm_tdp_mmu_write_spte(iter->sptep, 0);
+> +	__kvm_tdp_mmu_write_spte(iter->sptep, SHADOW_NONPRESENT_VALUE);
+>  
+>  	return 0;
+>  }
+> @@ -878,8 +878,8 @@ static void __tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>  			continue;
+>  
+>  		if (!shared)
+> -			tdp_mmu_set_spte(kvm, &iter, 0);
+> -		else if (tdp_mmu_set_spte_atomic(kvm, &iter, 0))
+> +			tdp_mmu_set_spte(kvm, &iter, SHADOW_NONPRESENT_VALUE);
+> +		else if (tdp_mmu_set_spte_atomic(kvm, &iter, SHADOW_NONPRESENT_VALUE))
+>  			goto retry;
+>  	}
+>  }
+> @@ -935,8 +935,9 @@ bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
+>  	if (WARN_ON_ONCE(!is_shadow_present_pte(old_spte)))
+>  		return false;
+>  
+> -	__tdp_mmu_set_spte(kvm, kvm_mmu_page_as_id(sp), sp->ptep, old_spte, 0,
+> -			   sp->gfn, sp->role.level + 1, true, true);
+> +	__tdp_mmu_set_spte(kvm, kvm_mmu_page_as_id(sp), sp->ptep, old_spte,
+> +			   SHADOW_NONPRESENT_VALUE, sp->gfn, sp->role.level + 1,
+> +			   true, true);
+>  
+>  	return true;
+>  }
+> @@ -970,7 +971,7 @@ static bool tdp_mmu_zap_leafs(struct kvm *kvm, struct kvm_mmu_page *root,
+>  		    !is_last_spte(iter.old_spte, iter.level))
+>  			continue;
+>  
+> -		tdp_mmu_set_spte(kvm, &iter, 0);
+> +		tdp_mmu_set_spte(kvm, &iter, SHADOW_NONPRESENT_VALUE);
+>  		flush = true;
+>  	}
+>  
+> @@ -1339,7 +1340,7 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
+>  	 * invariant that the PFN of a present * leaf SPTE can never change.
+>  	 * See __handle_changed_spte().
+>  	 */
+> -	tdp_mmu_set_spte(kvm, iter, 0);
+> +	tdp_mmu_set_spte(kvm, iter, SHADOW_NONPRESENT_VALUE);
+>  
+>  	if (!pte_write(range->pte)) {
+>  		new_spte = kvm_mmu_changed_pte_notifier_make_spte(iter->old_spte,
 
