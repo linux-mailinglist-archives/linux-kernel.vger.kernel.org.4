@@ -2,290 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B316D67AD8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3709667AD96
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234904AbjAYJN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 04:13:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
+        id S235132AbjAYJOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:14:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbjAYJNY (ORCPT
+        with ESMTP id S234990AbjAYJOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 04:13:24 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C83242DCF;
-        Wed, 25 Jan 2023 01:13:23 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 542DC1FED6;
-        Wed, 25 Jan 2023 09:13:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674638002; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e4VrMGyfypl4tz1uXeNuESnRWwjS0UHF28cDMxitjFw=;
-        b=2hkn8XQwTrWF/rdZq+JYhEM6axyOnMm4YD/ejapuFdLs7IYEgPv/GvMkDwGCa7Ntv3QBRJ
-        cMQsbk0M8PkPZgRtZmqZluq6bp4/eNMTA2QecSMvYyKChYq8aGdHXz94yTYIla53C/7uX5
-        1DXNzbiopjZKC+7wRPXxFhvjHEC72QY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674638002;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e4VrMGyfypl4tz1uXeNuESnRWwjS0UHF28cDMxitjFw=;
-        b=V1He43snFn0CZAimkMBbkFRWiSveIdS7Q0dLdO28TeABCbmB+kQIz0QLqLPKIJ4XKietAA
-        yF4KRd6ZqVYQzFCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 479681339E;
-        Wed, 25 Jan 2023 09:13:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Unp2EbLy0GOTEgAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 25 Jan 2023 09:13:22 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CA891A06B5; Wed, 25 Jan 2023 10:13:21 +0100 (CET)
-Date:   Wed, 25 Jan 2023 10:13:21 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] fs: build the legacy direct I/O code conditionally
-Message-ID: <20230125091321.jhueo4cqppd2ieb6@quack3>
-References: <20230125065839.191256-1-hch@lst.de>
- <20230125065839.191256-3-hch@lst.de>
+        Wed, 25 Jan 2023 04:14:30 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5ED4390E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:14:27 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id m7so2683520wru.8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:14:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=hc4egPtkQ64b0FEbo02Uoe7pc1GGb6uUcEvT9CW2GlM=;
+        b=LgbgqtQsBGbOy2kKL/s2CXN7B0Va4kyOODgbHl7A68rPZg3Y+DfGPMbi2537c+uaN6
+         3TuOYPtEvSvJeiSAkuuEUGpE5NuX01wqY55krQTAHIK7MnowYJC9uijfok3Kt5Id6Wul
+         zt4Femiu06/arHYCCSNst1kQvA6t+29+xGx4+Wrc/x7Gr0FHzTUMA5a+yiynBIxwQ0WS
+         RMnV6ZqJp/F1UcGfIsPY+q0rG6LnAQB4Uplq8d4P1pabfh7VABlgNquIzuDt4ErCIkbj
+         /dCdQ2biMFEeeWM0vKxFHRlIFy3iUo3ue2QuJj9XGBmf3FxzT0uJ1vHY6LkrNQW022RC
+         3H4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hc4egPtkQ64b0FEbo02Uoe7pc1GGb6uUcEvT9CW2GlM=;
+        b=ail/DDB8Mocj6soexZRMwkrptyCbLV7swWj/EsXlb/bepRlLMpQm4SbJ6mTe5+DG8m
+         9uvQoSnt18R9cpcwsWSC4yKG8bcaYUeOwVnwtbSekVctyFtvAlIHQcnjBhYmQnyM4o1g
+         2bUDUthjzR0I0nI2H00RcQ3IpQs22yK07xxxJgIJWGrR3ymFRQjtLmlouESHgW3JKSZ0
+         9RHQ1PiLxXA4KwAg1Oubkf2w7wnNuqKSb9zSI6NUHwSMTww2/fM3lXZZ/RZw80XtAPbN
+         sXo840Fl0epvy8A6LQNq3o4YAHnoAWhQ3ZWsHsrkXeRMacb/EPlN/m5Fre/5YmbwCbVd
+         XPIA==
+X-Gm-Message-State: AFqh2kqkfcNShnGXXemL9/LXE5+N0GIVfhJJrxpb327AYA0NzD2n+Kir
+        T1hz9g2HmTRawrJTHLXBY6QmQw==
+X-Google-Smtp-Source: AMrXdXuwxHGrUcOdE1INuh713o6CIr/hcRn6h0E8yd3uD97y7b+mbl27OCR5aakJ9hopl5M/5G07yQ==
+X-Received: by 2002:a5d:410b:0:b0:2bc:7fdd:9248 with SMTP id l11-20020a5d410b000000b002bc7fdd9248mr25106933wrp.9.1674638066212;
+        Wed, 25 Jan 2023 01:14:26 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:ad2f:6fa7:d25a:7047? ([2a01:e0a:982:cbb0:ad2f:6fa7:d25a:7047])
+        by smtp.gmail.com with ESMTPSA id u13-20020a5d6acd000000b002bc7f64efa3sm3770776wrw.29.2023.01.25.01.14.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 01:14:25 -0800 (PST)
+Message-ID: <27c57fa8-8fcc-1339-8290-547ecceeb2f0@linaro.org>
+Date:   Wed, 25 Jan 2023 10:14:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125065839.191256-3-hch@lst.de>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] drm/msm/dpu: Add DSC hardware blocks to register snapshot
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230125091315.133283-1-marijn.suijten@somainline.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230125091315.133283-1-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 25-01-23 07:58:39, Christoph Hellwig wrote:
-> Add a new LEGACY_DIRECT_IO config symbol that is only selected by the
-> file systems that still use the legacy blockdev_direct_IO code, so that
-> kernels without support for those file systems don't need to build the
-> code.
+On 25/01/2023 10:13, Marijn Suijten wrote:
+> Add missing DSC hardware block register ranges to the snapshot utility
+> to include them in dmesg (on MSM_DISP_SNAPSHOT_DUMP_IN_CONSOLE) and the
+> kms debugfs file.
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-
-Looks good to me. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
->  fs/Kconfig          | 4 ++++
->  fs/Makefile         | 3 ++-
->  fs/affs/Kconfig     | 1 +
->  fs/exfat/Kconfig    | 1 +
->  fs/ext2/Kconfig     | 1 +
->  fs/fat/Kconfig      | 1 +
->  fs/hfs/Kconfig      | 1 +
->  fs/hfsplus/Kconfig  | 1 +
->  fs/jfs/Kconfig      | 1 +
->  fs/nilfs2/Kconfig   | 1 +
->  fs/ntfs3/Kconfig    | 1 +
->  fs/ocfs2/Kconfig    | 1 +
->  fs/reiserfs/Kconfig | 1 +
->  fs/udf/Kconfig      | 1 +
->  14 files changed, 18 insertions(+), 1 deletion(-)
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 5 +++++
+>   1 file changed, 5 insertions(+)
 > 
-> diff --git a/fs/Kconfig b/fs/Kconfig
-> index 2685a4d0d35318..e99830c650336a 100644
-> --- a/fs/Kconfig
-> +++ b/fs/Kconfig
-> @@ -18,6 +18,10 @@ config VALIDATE_FS_PARSER
->  config FS_IOMAP
->  	bool
->  
-> +# old blockdev_direct_IO implementation.  Use iomap for new code instead
-> +config LEGACY_DIRECT_IO
-> +	bool
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index ad08fb7e7105..44648da310f2 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -930,6 +930,11 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
+>   		msm_disp_snapshot_add_block(disp_state, cat->wb[i].len,
+>   				dpu_kms->mmio + cat->wb[i].base, "wb_%d", i);
+>   
+> +	/* dump DSC sub-blocks HW regs info */
+> +	for (i = 0; i < cat->dsc_count; i++)
+> +		msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len,
+> +				dpu_kms->mmio + cat->dsc[i].base, "dsc_%d", i);
 > +
->  if BLOCK
->  
->  source "fs/ext2/Kconfig"
-> diff --git a/fs/Makefile b/fs/Makefile
-> index 4dea17840761a0..606c029e1c9bc3 100644
-> --- a/fs/Makefile
-> +++ b/fs/Makefile
-> @@ -19,13 +19,14 @@ obj-y :=	open.o read_write.o file_table.o super.o \
->  		kernel_read_file.o remap_range.o
->  
->  ifeq ($(CONFIG_BLOCK),y)
-> -obj-y +=	buffer.o direct-io.o mpage.o
-> +obj-y +=	buffer.o mpage.o
->  else
->  obj-y +=	no-block.o
->  endif
->  
->  obj-$(CONFIG_PROC_FS) += proc_namespace.o
->  
-> +obj-$(CONFIG_LEGACY_DIRECT_IO)	+= direct-io.o
->  obj-y				+= notify/
->  obj-$(CONFIG_EPOLL)		+= eventpoll.o
->  obj-y				+= anon_inodes.o
-> diff --git a/fs/affs/Kconfig b/fs/affs/Kconfig
-> index eb9d0ab850cb1d..962b86374e1c15 100644
-> --- a/fs/affs/Kconfig
-> +++ b/fs/affs/Kconfig
-> @@ -2,6 +2,7 @@
->  config AFFS_FS
->  	tristate "Amiga FFS file system support"
->  	depends on BLOCK
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  The Fast File System (FFS) is the common file system used on hard
->  	  disks by Amiga(tm) systems since AmigaOS Version 1.3 (34.20).  Say Y
-> diff --git a/fs/exfat/Kconfig b/fs/exfat/Kconfig
-> index 5a65071b5ecf10..147edeb044691d 100644
-> --- a/fs/exfat/Kconfig
-> +++ b/fs/exfat/Kconfig
-> @@ -3,6 +3,7 @@
->  config EXFAT_FS
->  	tristate "exFAT filesystem support"
->  	select NLS
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  This allows you to mount devices formatted with the exFAT file system.
->  	  exFAT is typically used on SD-Cards or USB sticks.
-> diff --git a/fs/ext2/Kconfig b/fs/ext2/Kconfig
-> index 1248ff4ef56254..77393fda99af09 100644
-> --- a/fs/ext2/Kconfig
-> +++ b/fs/ext2/Kconfig
-> @@ -2,6 +2,7 @@
->  config EXT2_FS
->  	tristate "Second extended fs support"
->  	select FS_IOMAP
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  Ext2 is a standard Linux file system for hard disks.
->  
-> diff --git a/fs/fat/Kconfig b/fs/fat/Kconfig
-> index 238cc55f84c429..afe83b4e717280 100644
-> --- a/fs/fat/Kconfig
-> +++ b/fs/fat/Kconfig
-> @@ -2,6 +2,7 @@
->  config FAT_FS
->  	tristate
->  	select NLS
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  If you want to use one of the FAT-based file systems (the MS-DOS and
->  	  VFAT (Windows 95) file systems), then you must say Y or M here
-> diff --git a/fs/hfs/Kconfig b/fs/hfs/Kconfig
-> index 129926b5142d8f..d985066006d588 100644
-> --- a/fs/hfs/Kconfig
-> +++ b/fs/hfs/Kconfig
-> @@ -3,6 +3,7 @@ config HFS_FS
->  	tristate "Apple Macintosh file system support"
->  	depends on BLOCK
->  	select NLS
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  If you say Y here, you will be able to mount Macintosh-formatted
->  	  floppy disks and hard drive partitions with full read-write access.
-> diff --git a/fs/hfsplus/Kconfig b/fs/hfsplus/Kconfig
-> index 7d4229aecec05b..8034e7827a690b 100644
-> --- a/fs/hfsplus/Kconfig
-> +++ b/fs/hfsplus/Kconfig
-> @@ -4,6 +4,7 @@ config HFSPLUS_FS
->  	depends on BLOCK
->  	select NLS
->  	select NLS_UTF8
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  If you say Y here, you will be able to mount extended format
->  	  Macintosh-formatted hard drive partitions with full read-write access.
-> diff --git a/fs/jfs/Kconfig b/fs/jfs/Kconfig
-> index 05cb0e8e4382ee..51e856f0e4b8d6 100644
-> --- a/fs/jfs/Kconfig
-> +++ b/fs/jfs/Kconfig
-> @@ -3,6 +3,7 @@ config JFS_FS
->  	tristate "JFS filesystem support"
->  	select NLS
->  	select CRC32
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  This is a port of IBM's Journaled Filesystem .  More information is
->  	  available in the file <file:Documentation/admin-guide/jfs.rst>.
-> diff --git a/fs/nilfs2/Kconfig b/fs/nilfs2/Kconfig
-> index 254d102e79c99b..7d59567465e121 100644
-> --- a/fs/nilfs2/Kconfig
-> +++ b/fs/nilfs2/Kconfig
-> @@ -2,6 +2,7 @@
->  config NILFS2_FS
->  	tristate "NILFS2 file system support"
->  	select CRC32
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  NILFS2 is a log-structured file system (LFS) supporting continuous
->  	  snapshotting.  In addition to versioning capability of the entire
-> diff --git a/fs/ntfs3/Kconfig b/fs/ntfs3/Kconfig
-> index 6e4cbc48ab8e43..96cc236f7f7bd3 100644
-> --- a/fs/ntfs3/Kconfig
-> +++ b/fs/ntfs3/Kconfig
-> @@ -2,6 +2,7 @@
->  config NTFS3_FS
->  	tristate "NTFS Read-Write file system support"
->  	select NLS
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  Windows OS native file system (NTFS) support up to NTFS version 3.1.
->  
-> diff --git a/fs/ocfs2/Kconfig b/fs/ocfs2/Kconfig
-> index 5d11380d872417..304d12186ccd38 100644
-> --- a/fs/ocfs2/Kconfig
-> +++ b/fs/ocfs2/Kconfig
-> @@ -7,6 +7,7 @@ config OCFS2_FS
->  	select QUOTA
->  	select QUOTA_TREE
->  	select FS_POSIX_ACL
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  OCFS2 is a general purpose extent based shared disk cluster file
->  	  system with many similarities to ext3. It supports 64 bit inode
-> diff --git a/fs/reiserfs/Kconfig b/fs/reiserfs/Kconfig
-> index 33c8b0dd07a2e7..4d22ecfe0fab65 100644
-> --- a/fs/reiserfs/Kconfig
-> +++ b/fs/reiserfs/Kconfig
-> @@ -2,6 +2,7 @@
->  config REISERFS_FS
->  	tristate "Reiserfs support (deprecated)"
->  	select CRC32
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  Reiserfs is deprecated and scheduled to be removed from the kernel
->  	  in 2025. If you are still using it, please migrate to another
-> diff --git a/fs/udf/Kconfig b/fs/udf/Kconfig
-> index 26e1a49f3ba795..82e8bfa2dfd989 100644
-> --- a/fs/udf/Kconfig
-> +++ b/fs/udf/Kconfig
-> @@ -3,6 +3,7 @@ config UDF_FS
->  	tristate "UDF file system support"
->  	select CRC_ITU_T
->  	select NLS
-> +	select LEGACY_DIRECT_IO
->  	help
->  	  This is a file system used on some CD-ROMs and DVDs. Since the
->  	  file system is supported by multiple operating systems and is more
-> -- 
-> 2.39.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>   	msm_disp_snapshot_add_block(disp_state, cat->mdp[0].len,
+>   			dpu_kms->mmio + cat->mdp[0].base, "top");
+>   
+
+Thanks for the addition, it was missing :-)
+
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
