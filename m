@@ -2,157 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF88667B7D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8211C67B7D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235474AbjAYRGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:06:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        id S235999AbjAYRGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:06:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235822AbjAYRGN (ORCPT
+        with ESMTP id S235985AbjAYRGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:06:13 -0500
+        Wed, 25 Jan 2023 12:06:14 -0500
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933A1568A2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:06:12 -0800 (PST)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PFNjYJ009501;
-        Wed, 25 Jan 2023 17:05:50 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343DF83CC
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:06:13 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PFNkq3030139;
+        Wed, 25 Jan 2023 17:05:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-transfer-encoding : content-type :
- mime-version; s=corp-2022-7-12;
- bh=UdhtyA4FjUASukxO52LXqmfhO0liNQG7ufMjwtkaCQs=;
- b=ec8Wf+NNAnZaMF4pz7BNFbwMI6v++VIkvDWAw5ufQ7z2KutMp+O5i5dUXrJf+UBU5KQo
- LfQj138ddgp1lNlmSy0AnHE+o05BngKvJ+VUv5Pb3hfpQQpxJf6CJAZZdraIuF32GGwK
- GMrnF8yq8cFXCy3IqH+CnzFqdTqnuVUvJeuUUS4WNhFRipgL19JUelIHfVyCKgoHAdro
- jq63NX4tCxVVfK2odxm5hzLa9cFIgevjqLaaZSnjI/OijhR6z6Kd0sK8GicXNxNdRzMk
- au5A54e+4oRt8ZpZZjgH28AJNj0axnQevbaurQ7EDxFJ6UOWM56DV8Y8AoUtxWqh57UV 9A== 
+ subject : date : message-id : in-reply-to : references :
+ content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
+ bh=GihOQ5fsCQtG6jJxaROz1R0G4aMEaawfbkY9vobb0oc=;
+ b=weBAscDqaZV/8NAMqJMNfZOp5wFLCjfImg8Dkcv7A64J1PUt1qQj2ITGpdaCJFyUS+PR
+ aTNX/PfVx8/AbJrH56mIXvH6BqU6qTOrwLVHK6zpQAoiuflQbtIKDHnIfhjVHwycc23g
+ ffXYldvMh2cMu4MyuCAlFaNFdmu4zfdkuWnjk3H/BW/jwNu0AqaGu21iZAWYvGO9aCkB
+ nWaaGsxDyyqxYKkqzhDE8kmxRWNPHQ+c+MaD4wMEb5Zh1Lj0IiE2Zw76ocDpVNXhQ9ZP
+ 9BWKwks2Q0Ry8fnLoKLaaGf/l5Y3KTMf9AqMw07hpcxpAXp4dgdWdhXyWh65jcSJWkmW lw== 
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n883c8je1-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n86u30hmt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Jan 2023 17:05:50 +0000
+        Wed, 25 Jan 2023 17:05:51 +0000
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30PGFv2Z025048;
-        Wed, 25 Jan 2023 17:05:49 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2108.outbound.protection.outlook.com [104.47.58.108])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n86gdnbdv-1
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30PGC4Ur025091;
+        Wed, 25 Jan 2023 17:05:51 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2104.outbound.protection.outlook.com [104.47.58.104])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n86gdnbf8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Jan 2023 17:05:49 +0000
+        Wed, 25 Jan 2023 17:05:51 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I0i2zoZnZtaz1HJF8FaoNMruxMu9cr0U7TUHkNAch2piW7vtwrC3usJcBGMRCFlSTjTsD1KYoNCGG5U+JSUbgjt/dD20ENf301Pn33GbF3rDywVrogtrMZuFOh7cZuPGPvCEGD0ljp3Co4VGFPt+08Nhn2hAKgPcJwIh9QJRgaf1IBkOsfKCIz3quFQ/e1kO0D9lE0Tyxnwjd0FKhpUBL4Ncjvvx5vTsWb4/I2eXgqd82lM0/Zm7JDc0/8EfUkJOduCyfoDGhF1XuO0yff4JKEw+/aLUmuLsx4thKy0ztEa5TDRerWN7Hapke/DGehNlbLiwtQVMJC570LZVnjbJKw==
+ b=fiRTkGqsWH51E5mo04DLC+Vj/7zYmwcQBme1+OeGjBU5C6QN2o0jx4kkH/zUu3thJqozKPrQFlt18uND5D88YflAPwOZW/1wGA/FpQEkRp60JcW3xA+gxOzJfqlms6fRERrxj+dgMzYaon/haqZ7C4EmChZR2ZPM8GGiXxQJIVBnEhWEcs5TU6lJLqDTlINUNTQZ2ECtkK0ONsLWt+5o/pyY2vofs6/nKm7gCumzzuhK60kYLcKdTBQi74bNJ4KHAjQvX9T3UHuit4/VQe7uaDLk2N4+CcoDIoecW4DA6um86SPYgAL0DAb7xfINRA26IwZm531SN1PxSxb/fm3tuQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UdhtyA4FjUASukxO52LXqmfhO0liNQG7ufMjwtkaCQs=;
- b=mPB0JIZWb7TlardGCYS5Lu0z1EBc/KIU7+5b+Z5Tmv6uLA2M6I4TN4E0ORi2DGm8+DXamSIuYAKje+9hEOezNOTMVcUUXgP9Bid4KZHeu908ubB7tMvHfKfNFTFRuZQHHHKLnj9knXVyOZf/zoyBlpntkTSyc3hw9S4sX4C4FSa38odDwVOC9J1GQsQJc4G/MHU5TSmVnCxNY27f45xVNR+tqrW4zPQJ7PnoPnwwW+nY7XhG32+yU8kpH1Tk2ZsareKcvYqbUbax0eFazy+oIRTNWxfkEN7avAdxmbRkkoJ5oPdFTqFEXIYMoSI7U/jNWpejqufMwoQ7/eYqfImQmg==
+ bh=GihOQ5fsCQtG6jJxaROz1R0G4aMEaawfbkY9vobb0oc=;
+ b=iOnpOwVAMU2/R27Al7uTUaTjngv21mC8KTP5mnwXhutu0OpKn5gZOJRyayp9IrqiRcIjfSsPVXltyqphUo47fG6LgxVV+VcZVZ5M2lyKN2SJqe2Met2XhE9xUYnOZvjQFHJUksaDuC/uCYDxxZQGJHUvoqr772wKt2EqY5U0DklxNy/jv0dR2NjEv5qID/JrIKNRX0hqgnwrc9tM0nEpNfw00GbCeiwKZBqiwDFMl7Kj1KmEdqGowdf7fLgxNmNV2E6pbnUB9J5EMh4p9U/StzLWHSM/bYfx8gxLIf/7NPnwr37SMptH2jNHsVHPAcyy6vrp0h/r2boNlp4tAwkKmA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UdhtyA4FjUASukxO52LXqmfhO0liNQG7ufMjwtkaCQs=;
- b=zKpmTxuI2pafxLfZ/w6TPrv2P4QwgSm0hMbS3007CzG0h5jJ5R7rfuWVzbLMUQk5WgxDQLcmdmo5cTEHOV3RwOhAEafMi4SdZp3CFUomzRw1dqH2Vm/3JmQh9LAKZgOb3XHajBiMtEjCyOQm5bNfzhHlCyjS1zF1rTXQB6I4QAA=
+ bh=GihOQ5fsCQtG6jJxaROz1R0G4aMEaawfbkY9vobb0oc=;
+ b=pdR7EP4Z21NkbT+Nwx6V9q4hJFgneZBjGe3RNQ8FY0vpfZdZAHgD2/Bcl7W3LtdjAzD7J2Iyzo+eGPjp0Pbw7q6QARFCry+/slJctg0L9rTouH0B69/FcTE1ivxuyvZYkOGzegPvI53wNTBYQEvBn8fUoQCsV0BGWn8BTraBr8Q=
 Received: from DS7PR10MB5117.namprd10.prod.outlook.com (2603:10b6:5:3a6::17)
  by MN2PR10MB4384.namprd10.prod.outlook.com (2603:10b6:208:198::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.20; Wed, 25 Jan
- 2023 17:05:47 +0000
+ 2023 17:05:49 +0000
 Received: from DS7PR10MB5117.namprd10.prod.outlook.com
  ([fe80::93ca:e22f:aa6d:94d9]) by DS7PR10MB5117.namprd10.prod.outlook.com
  ([fe80::93ca:e22f:aa6d:94d9%2]) with mapi id 15.20.6043.017; Wed, 25 Jan 2023
- 17:05:47 +0000
+ 17:05:49 +0000
 From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
         mike.kravetz@oracle.com, willy@infradead.org, jhubbard@nvidia.com,
         gerald.schaefer@linux.ibm.com,
         Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: [PATCH v2 0/8] convert hugetlb fault functions to folios
-Date:   Wed, 25 Jan 2023 09:05:29 -0800
-Message-Id: <20230125170537.96973-1-sidhartha.kumar@oracle.com>
+Subject: [PATCH v2 1/8] mm/hugetlb: convert hugetlb_install_page to folios
+Date:   Wed, 25 Jan 2023 09:05:30 -0800
+Message-Id: <20230125170537.96973-2-sidhartha.kumar@oracle.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230125170537.96973-1-sidhartha.kumar@oracle.com>
+References: <20230125170537.96973-1-sidhartha.kumar@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BY3PR05CA0010.namprd05.prod.outlook.com
- (2603:10b6:a03:254::15) To DS7PR10MB5117.namprd10.prod.outlook.com
+X-ClientProxiedBy: BY3PR05CA0007.namprd05.prod.outlook.com
+ (2603:10b6:a03:254::12) To DS7PR10MB5117.namprd10.prod.outlook.com
  (2603:10b6:5:3a6::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DS7PR10MB5117:EE_|MN2PR10MB4384:EE_
-X-MS-Office365-Filtering-Correlation-Id: e662a0f6-872c-4ba0-3983-08dafef666e8
+X-MS-Office365-Filtering-Correlation-Id: 612d9d1e-082b-47b2-160f-08dafef66831
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: O0k6dLCRpX/TSqkY1NHny2wWBnTv23Tc367ZaNaTQNoCjZQWIGYhjiDt9+K2yybrebt1LbPRyIl+iBZU5xoGZDH1qdCHzSizCqIOpIHXXBtV4OukXxLMXCLuWYo7x+SMelrlqMRw5/3rj5YqQ45WRvl4w7cjkQsm/gKsdQN7zEfZGWoM7aPYS7JOCMB6UWxbGlrfOlr/X3O8ayHfj5hI1Ppkr+szUqSbFhlX4cFoMXiOGTsD85fn+t1erPQwnAYLgKa/h+61QgOwYGV/ubClRVqmalGmI0wchRtGD2BLeVMdQ9sw2mH4pUQb6xeCaGXaXusULM6tFHaoYoJ6l+LIUarRWLv+ffLKn80vfro65UvzQgCSVM0NeG+94ATr97MaqKWrZ9OmiLwLENAIWo79jPlT98HLOFARJiMexbzcDhOXVsklmArIvpKp1nGwElonGmD9k+iuwz/0tI2k7mFobLu1XoHAMGcofXO4Lux1RMoNY5yzOrOtfcme/LK4yCCdKxARvVBzDwQweqqIKSSyj7kNz5zyHNRh7CrD1w5+JOgFNm92H1QW4rztM+rFTX6DRtlaul0+vQun6cA3FX6GvjEuGfIc3Gg769wZXCurjqyDzTxOdMms6lobmqqIFfLKLag72aHY92a8wMvfFg5h1A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5117.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(346002)(376002)(136003)(39860400002)(451199018)(186003)(26005)(6512007)(38100700002)(66946007)(66476007)(66556008)(8676002)(83380400001)(4326008)(8936002)(41300700001)(2906002)(44832011)(107886003)(6486002)(478600001)(5660300002)(6666004)(2616005)(1076003)(6506007)(316002)(86362001)(36756003)(40140700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: tVYIDJKxjxX1ITFVMbfPZh0tHM/gIPi/lSsQjnZv0N9QK+7SoPly57I4GlBNdf4yuYBM+Si6l33yv1UqdBQRaSLVvq7zuAgwsrN1mAAW/MAF9vFwc2ifEB7fTflmBHq+H8ZeGCBxRPPwkw974Q1R/gfKq89GCiuXKdiVlomQW0VHG1nHyYAP7TCccMHeAK4Nx/6ONG7MYYZ407/X0CHBEe1rd4MbMGecB6bSqrB8pB1q2Xih0Co5tbEaMmUruvPMRA8BC+dV4UEGdAA6hfObSBiUP9UfZA5N4r2UW74DN13gTWl6cSkims+APqK0p0wFz81YXqDFxTxfZJb45lbkSRhdN9wKq06bmAzd8Gu0I9M66XtRCJQGiY0Pr2FT+UiT/G+kse0C6SOS1ddRF974e0U/qLoeEoRek9diCk4/SWUC27QsQ+QmrQJxwtPrLCf59DUK90ES/m8XpNOjJxIu7HVAbmMnX2OOmZ9jzOtdzfaMyxEarBFCFQkYYGMRcrvezwdORmS9CIMhrtbqiD1EXrIelTc5p0cxVrL7yV9U5nTDOSDDpBa2dVHLBlcLBjn/sJJ3UMVQuYa1eR3gV+DLKT/Od1a8MVvE2f28PIvhAB9NdOE4ib4FfG9Y2eKIUIQuS9P2s/eqYvpR2C4Ka96gCA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5117.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(346002)(376002)(136003)(39860400002)(451199018)(186003)(26005)(6512007)(38100700002)(66946007)(66476007)(66556008)(8676002)(83380400001)(4326008)(8936002)(41300700001)(2906002)(44832011)(107886003)(6486002)(478600001)(5660300002)(6666004)(2616005)(1076003)(6506007)(316002)(86362001)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qkPYyEJG5RK4E7I6laEYdpaBFWI/nwkin3lxGmi7oyXH4ePd03MZ/fBa6dpT?=
- =?us-ascii?Q?rZHbgL4FiXBp/PFi+BEhgIpIF1le8cX1G3qL0spwySsG3X1zgnHyVgm8sfSq?=
- =?us-ascii?Q?eI0XqDpCZ7kHaVJMccTlehLUwhmCFcgg74N9g1kTm0DNnXbN3hiSN1Tr+ueN?=
- =?us-ascii?Q?mSiT2OXPhcYbJ8kC/+xeerfdiTl6LXcOltq3YQe99SzkDx1F5wu+O8H/ephU?=
- =?us-ascii?Q?491/93MdOFW5Ny//Pl0AV71nvwVQr6PvN0MPbXPKMBzNs9rui4STRcwjogUe?=
- =?us-ascii?Q?Vq9KQXJq0gKB0fF06MF5CG/dw6m8XSYhQQ6JS9AUWsyRvlEFrQ4ye/2QuWD7?=
- =?us-ascii?Q?snftrZf79LiymwGLWb8lhbnM/AiCULFaUWVvACE02kPmkkGJRqV6t5DAToVs?=
- =?us-ascii?Q?fCW6G0Wxtf/sDHyfnwoUKI81m/KnKECxmp4gt+jfriN0XMYSZHIEtJE6TyAE?=
- =?us-ascii?Q?qviLgqHwMwwK52viwQeXgQev5X3+Q5eBwPamJQTr98/ucFos1stByustUe5W?=
- =?us-ascii?Q?FBALKwQcU10JnZXKPyYvpCvhu4Jd6Pe6ZymKE65G1FScu8Sh5i6U8IG4Lnqu?=
- =?us-ascii?Q?uAAAALvShh0YZ01EUtH4kuVQvZNdxx2HLc38XZLKeJ4x93wM92sAgcbcdJY9?=
- =?us-ascii?Q?3By1dpjn0g7NTSJlsL+QRChjxnsFe4OX3/IHykh/C7vkaA6GvZ952RkZ8p+i?=
- =?us-ascii?Q?ZAvolbAU4rEZY/sLAWOIqj/zXGpo689lIfa6O6W4qDhQ4zPc2yZHgOAP/gYs?=
- =?us-ascii?Q?IwxeIpFUmc+prXCoZ7qLE6zSITTnPs180KZxeJrQR5bT/w5LC5iXsGdmv3GP?=
- =?us-ascii?Q?FkAKQZR+KCUzCQOaCRD/BvaG51uXc8N/eko0Ossg+4xR/Q+jdzoCnIwKI58a?=
- =?us-ascii?Q?NjgWUgCGHEt1xXWGtHCKg9qGewo24I8KcafgHY79J9TCtqChe8fDlcmYy9Re?=
- =?us-ascii?Q?fI6Cm/8d9GaEoDTfScGRzUxFYfoAjmG7/rtbpNSYunnczMmd3weQCeWsXyq0?=
- =?us-ascii?Q?+BJaOxmSwJpDdfX5cvUczsW1C5I6TuZKs01dB/a26WtaZbWgkZ83JBriyxbx?=
- =?us-ascii?Q?/88FNPwk4NJo64DcAPS1AnS3uv9dGMmWR1CsMsO7wQTCvB5wXOlrHLXgOWzF?=
- =?us-ascii?Q?/JS+s6czKvgtJYiPMQuVxZhpyAZfwN+yUlaCD5gguRUghqgT4DZZnc79uMTc?=
- =?us-ascii?Q?2VIcTGoKCluJ3OQeyC09umsSh8GSFHAMO8r4cE313BZel6szVp8yvRpp+lnB?=
- =?us-ascii?Q?RgHvoMH/QWJtfmhkZbDoNUvmMmJTcLY2Y8V8PcvWPcZi73I514jBqiNGl/2V?=
- =?us-ascii?Q?kBYX9oFpwxYJnLSAu64TYn5lnbPrTu5napEDKl4xdVJThicNvZx9DyloDwXs?=
- =?us-ascii?Q?AdwqQpjA3+OheoBJnmkZdHb6p53A+Uw1CHcc4anQQ9135FxnKPgCB1IgqOu4?=
- =?us-ascii?Q?WghFknmqI2LuxutyK6BTvw04y+myDXqQjllx2ODViXRGxdqEmBit/VyGA7o4?=
- =?us-ascii?Q?lPR/aNLRSnYBw/WcYs3+GmQEslv3wTMrDdRI5oQteNnHYvtGCxtLF17dSDG8?=
- =?us-ascii?Q?zi5RZ2Qd/2xWq/vTNX3XrhU5n2Ma/2bqQtAeRMUibpAbFcCHsU4jgDC4vI87?=
- =?us-ascii?Q?xg=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zdYH2L9NW2lIHJSHRXOEz4gUWJ02FiE4oEtOent2Nb0F7blbmTpeZ5wMP8P4?=
+ =?us-ascii?Q?bvNulgS55AhZhWUTDcSMlZGQRiqXyzR/R/YqgJ47gw4RwkeQbc69JOFjMCnD?=
+ =?us-ascii?Q?5QSKu34NdEb8gMo+bNcGDReMM8QpEHSRx5dJ4f+ksk1Kn4ApV7I3EDlcYiX3?=
+ =?us-ascii?Q?9lWOW0oYSMtP6+J7sap1rXZaCUjD88c7Rgum9h1hGd+X9tXQy54Ew8+XGOc7?=
+ =?us-ascii?Q?nx8eRNTEaFoig2VVkMy1sjRZiPZ4KHTq3RRn/iUPazeFgWU8nL7qkM2jZE/L?=
+ =?us-ascii?Q?fZgAWiBqsLGgHyNVGej2ZmCUEuCz/jWdZ4qOzhzAr9oppmtlwg7ZaoMc/51M?=
+ =?us-ascii?Q?dZbivW8CDDnR2vYItq30tH5Lr+uAyqilc8mwF0p8vwHb2yyKAnFqE3urJf9o?=
+ =?us-ascii?Q?2McbsUVHAZcO9gwpk4FTlBlidUZSmljSZgCTTUXUQiPCuOghh3tZmJwcX71v?=
+ =?us-ascii?Q?A99FrX3LYF7g/AEw+gybE9km6bjZXLqjte+0fER45Qx5k6+vHYqf7/cLaejU?=
+ =?us-ascii?Q?D/l9yIsl0TZ3Ih6fZl4z8/u4OqMYgn3G/h7nFLv24S5f718oTlAFFsQCROIr?=
+ =?us-ascii?Q?X2L76SESvv4oR7B3hypemX1Fc5YHt1wd/RXJw1aHFaaWIhWRhmxzeaoR8Ja6?=
+ =?us-ascii?Q?dUgSMyscP63QnXbasorM1nP4RnqfkF7Z34uc21XJiDrzC8cDquD6Gaj/M5Kq?=
+ =?us-ascii?Q?VjQ41AQt4qv/Yf0eQSjGu+3V59SI+6WIIQYG5yoRhU9o4whEy3vCImwZ6Lln?=
+ =?us-ascii?Q?/SiQ/Mgnqevpp0S/V2DqQwMAwjBFS8FuJJ5wdB+FakYfkRGGbMxLi8cgJnb7?=
+ =?us-ascii?Q?j1sIXTKv2mYjyLpISgHk4JyS/a2TTCg/NZ33RHR+IfsKpMagS3t4gOi4YmMv?=
+ =?us-ascii?Q?0sbcNhtmwf1Io/yqEM/bincyw5Jdt1cTvCiDSbKZa4cZqR7p24XUJyY4Kn7L?=
+ =?us-ascii?Q?LN+Rohz8bPEFkS+tnvxI0IkqVkXqxY7rx/88wyn+xVyGE/xu1ZY/K4U7rTeY?=
+ =?us-ascii?Q?i2R/CcBlyNTINsWjziy8X/5xyqJpf2wmwBk79i9FaLbLHQjITHT85CGf16B0?=
+ =?us-ascii?Q?btywZRlLi2eFrzGcWKFhROLy7wByqrQgq8rSte6Pjixu7O/K3t6f11XrqQxQ?=
+ =?us-ascii?Q?NpUTLeMkg7OpMvVYNf8Eq+dTQ4EdvXSJBfZQgfQdXoLYo7gYDkw7AnhtT1dy?=
+ =?us-ascii?Q?zwoGI6xumn0zVUh1e+U2SestZtRzHC0d4XN1oV6ZpNFxyGS5Tm8d0qrvOvWK?=
+ =?us-ascii?Q?GjMZcS6rrDnGdhIld7IaIe5vYP5/oKnsuGyh4OpZm+UXus2ie830jd5it7+p?=
+ =?us-ascii?Q?HNSHPX8ALyx+QOkLT9RqloEZrRGaYfUcQEKQuGF37JWdAVizUXr2ZtTnywrZ?=
+ =?us-ascii?Q?32wao7Ov/Squi7121qRm2criKoAyBPlrzYNlQlHF+hzCnU6ioLoGXD+gRVyC?=
+ =?us-ascii?Q?BCpbc0v2Z6GdfOclZbguCoBA7MF4vF1E9MloWnQGP5NDdT1uSRHrOwvn8+pU?=
+ =?us-ascii?Q?TC9DDJSYqCA82zK5dsFc3baiGQ30zh+D2X4DvB7VqibKT+1faWLMgq8Y1H4m?=
+ =?us-ascii?Q?YxFbJiWNlo53gmW0+XpzIEAVKjUTq7NLKaEEAVXKhhntLz8YRI17y9h2fLpL?=
+ =?us-ascii?Q?tg=3D=3D?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?V/KFxRGMVON+XPscKaLrpB7nX2RI7q2oc8rdZScKjW2P7grDpU3zNnJ1j6I6?=
- =?us-ascii?Q?csbeIKL7UBzUkq9SNVsy7orC/Mp9zra8/TZzRXAFlsbDxUBUnYdFI0+Gym5e?=
- =?us-ascii?Q?nraDZAvTtNLAqvUuBFMJd8bmxjfUghHN3+DHb2bmpI2j7jiUZ5wYVoncwBNG?=
- =?us-ascii?Q?qejpkuUSLFJX2VVoZsP5gRxQW5F1UoV+EiFc78ByQ2p2unpK8zxg+xewSdkt?=
- =?us-ascii?Q?blp/VxkFw2e5+OlK6rsCwwr5FNtHuz8w/xpg448fE0FhOsW1mi0crJvpmKTG?=
- =?us-ascii?Q?FIaN6ARtG2DiYLMsRM2vMuAKImcGbdtD3gb54jFOQyjr8Fq+G/EM+cv/mNJZ?=
- =?us-ascii?Q?PIRzh7i81nErq3q7phs4u1DKmkLoWiXLe6Onoz7s80Avd+nySu9qHP26aLSd?=
- =?us-ascii?Q?8waEBi7hcnlrSrCpcE/jcps/IQf4ar06wrLOhKdbh2XEraFeY9UYnmwNNWjz?=
- =?us-ascii?Q?JGspWVXFmB0f+gQmvh39fM5OqdVU3QGQJSXttTc62HEXt8urFn2WgjFXgfcl?=
- =?us-ascii?Q?LylrwUNG2eS/1jCTgd9OSzJJZLI6YPJ3Jg6xLK5RzbOQeoi2RypSjCAvvgB3?=
- =?us-ascii?Q?QXQ03XczOCLA8v5UDmuEpkfFQegHwubdICWTdZshVTs+N26lAbity9dESDST?=
- =?us-ascii?Q?JarifWYQG1HFkTtHKWWVdxpzGUuuzJtq12jvA5qOsv8PlEAQsGo4UTeMDBb/?=
- =?us-ascii?Q?yO6h/zko3H6VqZDLLBuiPsBCCCbABmXfbj1At0+iw3/spgn+8YRGaP34NPpO?=
- =?us-ascii?Q?K+Mr913zV5fY/6LBfojxxFtCsGS+OtplRsEsWLyODOwspbvm4RAvZ+fJtN/b?=
- =?us-ascii?Q?M7grcfLFNLStAYNw7hNtJNbWaIXoZ0ECUcZoOBv5xawZcazDDcNEYRNgva4f?=
- =?us-ascii?Q?grtiN08LIiR5/2py7iPo4t0h8ad4jUOCs+/9xVNSuo7TsoFvq1x75g0zvmad?=
- =?us-ascii?Q?SLW5rBuHNZ0HLHEMzJyp0ljBG+esj2bl3C/1DH6cEYU=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?VPhzxu5h04wnzq+3efX8zVHK3M9gsUSsUHvyS6uIwqgWa1MTJ/AmSv/WtiHg?=
+ =?us-ascii?Q?wPcKteZcXJ+5tdo1IeYOcZWJ905TVUcUV1iIJJYd3KScb3i3bNpukeT/ntFD?=
+ =?us-ascii?Q?7M86+O29QHDBO9wS0fxfNZxKBNt4wHb3zSu4Lp4XbGBZ17qE9WgSt+9n3NKH?=
+ =?us-ascii?Q?GAu0f8X3J2VdRK3HJe8uFLRTxjBHedP8h6lMDJNubRDZgk4joP8614OUC2vp?=
+ =?us-ascii?Q?ZqVsVrZkYK2c+hyem4z6MCTTDWuwNIOcbwdACJybvPpSqG6KVMVGTJhB4LLq?=
+ =?us-ascii?Q?S+2IsgtXRqp5mXP2/mBLiHOz+DrHxBqCINcT93l+Ejc6KpztYXFV8+mOCPGB?=
+ =?us-ascii?Q?scac3uQ0zqHvm9q19p3qESUBRJPniDV8zXTzed/iKllBbApRhuoWHONy1yC/?=
+ =?us-ascii?Q?vQmNZUPXdM/ZsN8w7sc9+jzOvpWrXeP7wzLBK+kmUXeTCrKWJC7Is4fZyLM8?=
+ =?us-ascii?Q?nVEw9IG0gW00Ce236hOh/41x5YPabu5x6P4diayY5/XMTdrpcEGjHPtcsQH/?=
+ =?us-ascii?Q?s3GOBidKnnPa74RmdbxdJv6W5Y/+TixKa+Ycy6DLvEXV5+VkRFFwpIXOsodB?=
+ =?us-ascii?Q?h0g3QHwryUDxuUaED5obMcp6qkk9gYQb/zbxgZQXldS+xsTQLSeSguKy7tcv?=
+ =?us-ascii?Q?dqNJVP0JpguAlfJ8d8ZVgXbjZMcx2p3t0sCbxrWHGoapwUjAZCk9vDRZI6Ln?=
+ =?us-ascii?Q?1ex9RlApRlWoTrIabK9l2/GNBwFsIs25MSwNqw5bp9fjQgoM9rZJKpLkNsWJ?=
+ =?us-ascii?Q?H9p5XwaFrXjh4Rh6GIoKA5W1nwmZSXUwaUG34jDT91XezxXoTF+/SkqwKRsd?=
+ =?us-ascii?Q?712gt+wbYNRlHrHNyyFYYACs34sFW8yWtck7zL9VimAijjwdAchJ1nNu8OAj?=
+ =?us-ascii?Q?rD96R4i4jE46lDBvFn2XjNVywYhowL214CVOk8BdvB80fclqVtt5KJwjuhxc?=
+ =?us-ascii?Q?X4ZkB/gnJ+PFT2fx4uR5RhgPmrwyQsUOPQDsSWtSFfI=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e662a0f6-872c-4ba0-3983-08dafef666e8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 612d9d1e-082b-47b2-160f-08dafef66831
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5117.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 17:05:47.1375
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 17:05:49.1522
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4+efVr+jwd425AbqOWhoP5U22aYFJPjz/mqOxRQcdsyQKcxRIIVE/o6yHgzyo1DZcMpqoON2hDdr1LMmQS9iQIbNCml3XpkTgWf4ImBkVG0=
+X-MS-Exchange-CrossTenant-UserPrincipalName: pK9CZ+aXwKBidi7Tto+6eXjw9PldWKZTvLOI9WxmGcY5U6JmNpIcm5YxvscjczIz7yhjUiOVMNgFtvan8p130CzU+EGGu3K2dbjIMVv2vv4=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4384
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-25_11,2023-01-25_01,2022-06-22_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 spamscore=0
- bulkscore=0 mlxlogscore=803 malwarescore=0 adultscore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
  definitions=main-2301250152
-X-Proofpoint-ORIG-GUID: kQvGTX3x-LoQ5DAC9SFnS-2eGyKxON6E
-X-Proofpoint-GUID: kQvGTX3x-LoQ5DAC9SFnS-2eGyKxON6E
+X-Proofpoint-GUID: IcBZ1j0OaSwGt-kMqukEJkwn7--uYOsb
+X-Proofpoint-ORIG-GUID: IcBZ1j0OaSwGt-kMqukEJkwn7--uYOsb
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -163,208 +165,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-============== CHANGE LOG ===========================
-v1 -> v2
-	- Add r-b to patches 1,3
+Change hugetlb_install_page() to hugetlb_install_folio(). This reduces one
+user of the Huge Page flag macros which take in a page.
 
-	- Refactor hugetlbfs_pagecache_present() to use rcu +
-	  page_cache_next_miss() per Matthew in patch 2.
+Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+---
+ mm/hugetlb.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-	- Change function name from putback_active_hugetlb_folio()
-	  to folio_putback_active_hugetlb() per Matthew in patch 3.
-
-	- Squashed v1 patches 4-5 into one patch to make for easier
-	  review as did not need to handle null page case from
-	  alloc_huge_page().
-	  
-	  Refactor hugetlbfs_fallocate() to use same rcu +
-	  page_cache_next_miss() that Matthew suggested for 
-	  hugetlbfs_pagecache_present() per Mike in patch 4.
-
-	  Initialize h_cg variable to NULL in alloc_hugetlb_folio() to 
-	  suppress compiler warning when CONFIG_CGROUP_HUGETLB is not set
-	  per lkp@intel.com in patch 4.
-
-	  Changed variable page_in_pagecache to folio_in_pagecache in
-	  hugetlb_mcopy_atomic_pte() as the variable is set to true once
-	  the folio variable is added to the page cache in patch 4.
-
-	- Fixed wrong change from get_page(page) ->
-	  folio_get(pagecache_folio) reported by Gerald Schaefer in
-	  patch 7.
-
-
-============== OVERVIEW ===========================
-This series converts the hugetlb page faulting functions to operate on
-folios. These include hugetlb_no_page(), hugetlb_wp(),
-copy_hugetlb_page_range(), and hugetlb_mcopy_atomic_pte().
-
-patch 1-3:
-        - convert prerequisite helper functions to folios.
-
-patch 4:
-        - add a folio variable to the hugetlb fault functions to complete
-	  conversion to folios.
-
-patch 5-7:
-        - convert three functions to take in a folio rather than a page as
-          all callers now use folios.
-
-patch 8:
-	-update documentation that references alloc_huge_page
-
-============== TEST COVERAGE ============================
-
-Linux Test Project Hugetlb Test Fault Coverage
-
-[opc@sidhakum-devel kernel (master)]$ sudo ./funccount 'hugetlb_no_page'
-FUNC                              COUNT
-hugetlb_no_page                    7796
-
-[opc@sidhakum-devel kernel (master)]$ sudo ./funccount 'hugetlb_wp'
-FUNC                              COUNT
-hugetlb_wp                         4623
-
-Using fallocate commands to create files on hugeltbfs
-
-[opc@sidhakum-devel kernel (master)]$ sudo ./funccount 'hugetlbfs*'
-FUNC                              COUNT
-hugetlbfs_fallocate                   1
-
-
-Userfaultfd selftest
-./userfaultfd hugetlb 256 50 /dev/hugepages/hugefile
-
-[opc@sidhakum-devel kernel (master)]$ sudo ./funccount 'hugetlb_mcopy_atomic_pte'
-FUNC                              COUNT
-hugetlb_mcopy_atomic_pte           6240
-
-
-[opc@sidhakum-devel kernel (master)]$ sudo ./funccount 'copy_hugetlb_page_range'
-FUNC                              COUNT
-copy_hugetlb_page_range               3
-
-============== PERFORMANCE ============================
-using bpftrace to track time spent in fault functions over 10 rounds of
-the LTP hugetlb tests
-
-pre-patch:
-
-@hugetlb_wp_nsecs:
-[256, 512)          3675 |@@@@@@@@@@                                          |
-[512, 1K)          18875 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-[1K, 2K)            1366 |@@@                                                 |
-[2K, 4K)              77 |                                                    |
-[4K, 8K)              12 |                                                    |
-[8K, 16K)             10 |                                                    |
-[16K, 32K)             2 |                                                    |
-[32K, 64K)             0 |                                                    |
-[64K, 128K)            0 |                                                    |
-[128K, 256K)           0 |                                                    |
-[256K, 512K)           0 |                                                    |
-[512K, 1M)             0 |                                                    |
-[1M, 2M)               0 |                                                    |
-[2M, 4M)               0 |                                                    |
-[4M, 8M)               0 |                                                    |
-[8M, 16M)              0 |                                                    |
-[16M, 32M)             0 |                                                    |
-[32M, 64M)             0 |                                                    |
-[64M, 128M)            0 |                                                    |
-[128M, 256M)           0 |                                                    |
-[256M, 512M)           0 |                                                    |
-[512M, 1G)             0 |                                                    |
-[1G, 2G)               0 |                                                    |
-[2G, 4G)               1 |                                                    |
-
-@hugetlb_no_page_nsecs:                                                                                                                                                                                                                   
-[64, 128)              1 |                                                    |                                                                                                                                                           
-[128, 256)             0 |                                                    |                                                                                                                                                           
-[256, 512)            67 |                                                    |                                                                                                                                                           
-[512, 1K)             66 |                                                    |                                                                                                                                                           
-[1K, 2K)              65 |                                                    |                                                                                                                                                           
-[2K, 4K)             198 |                                                    |                                                                                                                                                           
-[4K, 8K)              97 |                                                    |                                                                                                                                                           
-[8K, 16K)              3 |                                                    |                                                                                                                                                           
-[16K, 32K)             4 |                                                    |                                                                                                                                                           
-[32K, 64K)           678 |                                                    |                                                                                                                                                           
-[64K, 128K)         3401 |@                                                   |                                                                                                                                                           
-[128K, 256K)       96746 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|                                                                                                                                                           
-[256K, 512K)         107 |                                                    |                                                                                                                                                           
-[512K, 1M)             0 |                                                    |                                                                                                                                                           
-[1M, 2M)               1 |                                                    |                                                                                                                                                           
-[2M, 4M)               0 |                                                    |                                                                                                                                                           
-[4M, 8M)               1 |                                                    |                                                                                                                                                           
-[8M, 16M)              0 |                                                    |                                                                                                                                                           
-[16M, 32M)             0 |                                                    |                                                                                                                                                           
-[32M, 64M)             0 |                                                    |                                                                                                                                                           
-[64M, 128M)            0 |                                                    |                                                                                                                                                           
-[128M, 256M)           0 |                                                    |                                                                                                                                                           
-[256M, 512M)           0 |                                                    |                                                                                                                                                           
-[512M, 1G)             0 |                                                    |                                                                                                                                                           
-[1G, 2G)               0 |                                                    |                                                                                                                                                           
-[2G, 4G)             283 |                                                    |
-
-post-patch:
-
-@hugetlb_wp_nsecs: 
-[256, 512)         22282 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-[512, 1K)          16242 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@               |
-[1K, 2K)            1579 |@@@                                                 |
-[2K, 4K)              76 |                                                    |
-[4K, 8K)              18 |                                                    |
-[8K, 16K)             30 |                                                    |
-[16K, 32K)             4 |                                                    |
-
-@hugetlb_no_page_nsecs:                                                                                                                                                                                                                    
-[256, 512)            92 |                                                    |                                                                                                                                                            
-[512, 1K)             46 |                                                    |                                                                                                                                                            
-[1K, 2K)              83 |                                                    |                                                                                                                                                            
-[2K, 4K)             188 |                                                    |                                                                                                                                                            
-[4K, 8K)              80 |                                                    |                                                                                                                                                            
-[8K, 16K)             13 |                                                    |                                                                                                                                                            
-[16K, 32K)             8 |                                                    |                                                                                                                                                            
-[32K, 64K)          2332 |@                                                   |                                                                                                                                                            
-[64K, 128K)         7992 |@@@                                                 |                                                                                                                                                            
-[128K, 256K)      106347 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-[256K, 512K)         143 |                                                    |
-[512K, 1M)             1 |                                                    |
-[1M, 2M)               0 |                                                    |
-[2M, 4M)               0 |                                                    |
-[4M, 8M)               0 |                                                    |
-[8M, 16M)              0 |                                                    |
-[16M, 32M)             0 |                                                    |
-[32M, 64M)             0 |                                                    |
-[64M, 128M)            0 |                                                    |
-[128M, 256M)           0 |                                                    |
-[256M, 512M)           0 |                                                    |
-[512M, 1G)             0 |                                                    |
-[1G, 2G)               0 |                                                    |
-[2G, 4G)             606 |                                                    |
-
-rebased on 01/24/23 mm-unstable
-
-Sidhartha Kumar (8):
-  mm/hugetlb: convert hugetlb_install_page to folios
-  mm/hugetlb: convert hugetlbfs_pagecache_present() to folios
-  mm/hugetlb: convert putback_active_hugepage to take in a folio
-  mm/hugetlb: convert hugetlb fault paths to use alloc_hugetlb_folio()
-  mm/hugetlb: convert restore_reserve_on_error to take in a folio
-  mm/hugetlb: convert hugetlb_add_to_page_cache to take in a folio
-  mm/hugetlb: convert hugetlb_wp() to take in a folio
-  Documentation/mm: update hugetlbfs documentation to mention
-    alloc_hugetlb_folio
-
- Documentation/mm/hugetlbfs_reserv.rst         |  21 +-
- .../zh_CN/mm/hugetlbfs_reserv.rst             |  14 +-
- fs/hugetlbfs/inode.c                          |  40 +--
- include/linux/hugetlb.h                       |  16 +-
- include/linux/rmap.h                          |   2 +-
- mm/hugetlb.c                                  | 279 +++++++++---------
- mm/mempolicy.c                                |   6 +-
- mm/migrate.c                                  |   8 +-
- mm/rmap.c                                     |   6 +-
- 9 files changed, 196 insertions(+), 196 deletions(-)
-
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index d20c8b09890e..849206e94742 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4946,14 +4946,14 @@ static bool is_hugetlb_entry_hwpoisoned(pte_t pte)
+ }
+ 
+ static void
+-hugetlb_install_page(struct vm_area_struct *vma, pte_t *ptep, unsigned long addr,
+-		     struct page *new_page)
++hugetlb_install_folio(struct vm_area_struct *vma, pte_t *ptep, unsigned long addr,
++		     struct folio *new_folio)
+ {
+-	__SetPageUptodate(new_page);
+-	hugepage_add_new_anon_rmap(new_page, vma, addr);
+-	set_huge_pte_at(vma->vm_mm, addr, ptep, make_huge_pte(vma, new_page, 1));
++	__folio_mark_uptodate(new_folio);
++	hugepage_add_new_anon_rmap(&new_folio->page, vma, addr);
++	set_huge_pte_at(vma->vm_mm, addr, ptep, make_huge_pte(vma, &new_folio->page, 1));
+ 	hugetlb_count_add(pages_per_huge_page(hstate_vma(vma)), vma->vm_mm);
+-	SetHPageMigratable(new_page);
++	folio_set_hugetlb_migratable(new_folio);
+ }
+ 
+ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+@@ -5107,7 +5107,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 					/* huge_ptep of dst_pte won't change as in child */
+ 					goto again;
+ 				}
+-				hugetlb_install_page(dst_vma, dst_pte, addr, new);
++				hugetlb_install_folio(dst_vma, dst_pte, addr, page_folio(new));
+ 				spin_unlock(src_ptl);
+ 				spin_unlock(dst_ptl);
+ 				continue;
 -- 
 2.39.1
 
