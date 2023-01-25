@@ -2,143 +2,775 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB4667AD14
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A54D267AD1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbjAYI6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:58:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
+        id S234991AbjAYJBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:01:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233135AbjAYI6B (ORCPT
+        with ESMTP id S231253AbjAYJBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:58:01 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2045.outbound.protection.outlook.com [40.107.223.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BEE29159;
-        Wed, 25 Jan 2023 00:58:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZoVJMDhDADSAjh3DpAw8jhWK2qxhDws9aNqQJQGIjKYo1Lbsp5i0VMtrbqwQRU82JDtlINrV1c83cnFHLyFnaJ6eapWSg7w3Rr3DF/wKEiDO6sVFnUbS8e/HzxE5WCXQPR6Xnv+ST7BfpObm96EbtAG9zz6arV1xZRMnElcKDeRt3F/8LQU6LyXAZYLQdoKvNdx1oyTJltX3tsefRQLh6TsdO2+NsesPVd7U0IOuczRE8C80ppVTZiqrSUL/mPD1w6sHt8Uicf0V/ewIkn5tGPy9aeC9Zl25X/sfyTmmAylXJ3uyfOrXNBONAgfb+MTD336FE4Sw73DZtxvhOO/YUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8QtO7hO449bahb0egpuEwBt9Uw6IhzMbo72xTEehkwI=;
- b=JuaDJ9HMNiZMrkidSWkyIs9mni1yNST/GmpGl3z0r8RQK4e1jfLusfVyYBPVSusK3AhD409pR7moGOp3FljdNc7yD0LLyuuk8WO8HFH/IJC56mdQY2LDo+Uo1vwuQ1lt+oTA7qrVppo0bMuuUen0QjF84QzCbwOORFGugTSJi8ofFaiHejo0AkFSiValBv1fwDyfoxYcr69qAllCUi3Y/XCBCdXbrWl6o64GrweD0cJu8QQ1bUXh+WEdc5KMVwc5Z7IdJG28zostbFNwvPBWCoHqDMXLDTN4DYp//B96vhUmCE45gW9qoY0cJmU4UIBDpF2U/OVpRRG757ReZJTg9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8QtO7hO449bahb0egpuEwBt9Uw6IhzMbo72xTEehkwI=;
- b=Fw4cz7AGgk961ihrweXSOVudO34wqAR2Zct82N/2iFo51gkBPbUZA/gGrnHec1h77IJwJP3qjvs0nhLVRguApIvJDapey8gTjUSIwq2Ws+jQOSqWEtjlNEFKh538emMfiO8cxuD1GFEccMHQ3xGS0p9B7VKLLa4EYzU/prNgwgM=
-Received: from MW4PR03CA0178.namprd03.prod.outlook.com (2603:10b6:303:8d::33)
- by DM8PR12MB5480.namprd12.prod.outlook.com (2603:10b6:8:24::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
- 2023 08:57:54 +0000
-Received: from CO1NAM11FT080.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8d:cafe::63) by MW4PR03CA0178.outlook.office365.com
- (2603:10b6:303:8d::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.17 via Frontend
- Transport; Wed, 25 Jan 2023 08:57:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT080.mail.protection.outlook.com (10.13.174.99) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6023.16 via Frontend Transport; Wed, 25 Jan 2023 08:57:53 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 25 Jan
- 2023 02:57:48 -0600
-From:   Robert Richter <rrichter@amd.com>
-To:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Robert Richter <rrichter@amd.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] cxl/mbox: Add debug messages for enabled mailbox commands
-Date:   Wed, 25 Jan 2023 09:57:28 +0100
-Message-ID: <20230125085728.234697-1-rrichter@amd.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 25 Jan 2023 04:01:14 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721012DE4F
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:01:11 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id b7so16319516wrt.3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:01:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=MUCOggIrLtNQeugqg+KVvEOFp3rnxoDmmsdkGUPQsSc=;
+        b=pY8pU6mKf2hYLVuzjqbK0cjKp7sbRVGlLmh7hCzZmg4ZOS0zMTlkz/XsC4Zx0rbO+u
+         zRTHwO7WbH3KVwG5B42OipZGvPmiDPDLjv7mbZazprmUQN6koh3btyGQtCniTyYhQDwo
+         bnuZaLqWC6pXFbmBoCChu8VuwIM3U0Q4MiWFpGqprqDAT2q9gOSZ20/aDqMQN4nrwf6+
+         jKE+LNVba5VsvN1gkSG2ixK3+Y/HKir2c+YxnPWRGE9XqGCNaaYTs5qB1wydbfRkbGfb
+         T5VR5F6FD9tZlxZU53vEyoNI5YIMoGhQF9byPXoZqu6YNw3cndql4noefFKuk7nWi7iB
+         Syaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MUCOggIrLtNQeugqg+KVvEOFp3rnxoDmmsdkGUPQsSc=;
+        b=gVeD4sgmsoyAXyzSmwk2rBdLyio34Vd10oXd6UPWW54CNlZkViJr1ytiv4ZOOBNnna
+         jQOSURvKPNZDyztS5lv3HoiRSKpzRRqJqBzM+23vXbQUBOHQA09pIePG1jP2421c7QQb
+         IpfoiD4laBTUneATCgpFdZEfmrSyZkyYYFYX3BgCCQzlvOhPIcLamYky3oyfn31RuxBD
+         PkWulRVr7PQv8WS8xfiSx/RZlYEWL8cnEBUkFcFwoIjMaNNJvXcYxjuqqkevmnmJRxDT
+         BrwrOfFLy3OYBAiXNO38qOnbjcnuj7tADK44VeKK/BuusX0j4Zs3f3cNcFSPJGjwacI1
+         PbjA==
+X-Gm-Message-State: AFqh2krDsIt+8GYOPpndXR05JS9zic4/gXbUogRlgpgx+FGphBe3X0C0
+        Emg7whXBkTAyxEAuf6ZxjDY90Q==
+X-Google-Smtp-Source: AMrXdXuGuph2vHT2uRZD5npum/f536dqMAsYRp+TW9pmYfCCvnOaI9zaYJAUb1/V/hexkWynLpQjOg==
+X-Received: by 2002:adf:eb8f:0:b0:2be:34fa:786b with SMTP id t15-20020adfeb8f000000b002be34fa786bmr21933659wrn.38.1674637268685;
+        Wed, 25 Jan 2023 01:01:08 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:ad2f:6fa7:d25a:7047? ([2a01:e0a:982:cbb0:ad2f:6fa7:d25a:7047])
+        by smtp.gmail.com with ESMTPSA id j9-20020a5d6049000000b002be1dcb6efbsm4695621wrt.9.2023.01.25.01.01.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 01:01:08 -0800 (PST)
+Message-ID: <e07dbdee-19e2-ed13-dece-50f65631be69@linaro.org>
+Date:   Wed, 25 Jan 2023 10:01:07 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT080:EE_|DM8PR12MB5480:EE_
-X-MS-Office365-Filtering-Correlation-Id: c729c05f-87c7-445b-e092-08dafeb23e8e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2fXdd9LNAfU5d2wdcIekKMdT7UGzECGPofsL94nbhLAvMoOwBkfIMH38n7VLLH7r6VNaiAgzgRMvcBsUlyTapsTN3aeXkWpTuRDfe0uD9J0aUxqjwrMuxhBKPV+QqyPH35RUwg0OL2gLkzUV27V/11RvsunKfSui25y+Ld157qUJZJ48uN1nt5JnXEyKHwWpjYITRyKchO33d0Mkgrx3uiHw1G7nW5ZtDVOj3zeYnQrvOKetRRe+e2GMGdlMum8aTJxwt4KktZoCr1IihsOMT3xrWwERvtYEa8qxTs5myXUru2phYZ8pRnrpMDSKYszzgT0ZJn052lI1TLHENrgjOQtJmgVi33R7IlHAgg01GJcD1JirCRrO9jh8ViyM7lrXN6EarL/0BDN41fnar3QHSgEQVwDUkzHpw7mOvkjWJWz6Ueazjq/EtBqHj7Q5Kl9dycbgBO22j9e/rF+lJPBPffL/6j1PGIhBPcRqQIbxby4TpKLTPMW4kWpgpo25g7Mo3kC+bulGb7/JBvzrxEd+k5SCG+N6hJA8ViiZcTV8MUtsjOouRkjbXWB/k9d1sNOBDRoVGKydBV3scdoHZQM8vVqrm620VI0KirRmQsfKi0oT29kYd5tSlb1MFyj2+7rkl5CrAUP6+qC0V5lLqmhLZ/BWilxhGcMhihYmmut1dVlHXgmAcKSW9gh4otTyxUYRjPUFUwGTM7G3fuv/esOLGaUMM3c8t3RC/sQ+qrAquTQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(396003)(346002)(376002)(451199018)(36840700001)(40470700004)(46966006)(70586007)(41300700001)(4326008)(8676002)(54906003)(36860700001)(110136005)(26005)(316002)(70206006)(2616005)(336012)(8936002)(356005)(1076003)(81166007)(5660300002)(15650500001)(82310400005)(40480700001)(40460700003)(426003)(2906002)(16526019)(83380400001)(6666004)(82740400003)(47076005)(478600001)(36756003)(186003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 08:57:53.2125
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c729c05f-87c7-445b-e092-08dafeb23e8e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT080.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5480
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v1 13/14] drm/msm/disp/dpu1: add dsc supporting functions
+ to dpu encoder
+Content-Language: en-US
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1674498274-6010-1-git-send-email-quic_khsieh@quicinc.com>
+ <1674498274-6010-14-git-send-email-quic_khsieh@quicinc.com>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <1674498274-6010-14-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only unsupported mailbox commands are reported in debug messages. A
-list of enabled commands is useful too. Change debug messages to also
-report the opcodes of enabled commands. Esp. if card initialization
-fails there is no way to get this information from userland.
+On 23/01/2023 19:24, Kuogee Hsieh wrote:
+> Since display Port is an external peripheral, runtime compression
+> detection is added to handle plug in and unplugged events. Currently
+> only DSC compression supported. Once DSC compression detected, topology
+> is static added and used to allocate system resources to accommodate
+> DSC requirement. DSC related parameters are calculated and committed to
+> DSC encoder. Also compression information are propagated to phy and
+> committed to timing engine at video mode. This patch completes DSC
+> implementation.
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 314 ++++++++++++++++-----
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h   |   5 +-
+>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  34 ++-
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h    |   3 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c             |  10 +-
+>   5 files changed, 292 insertions(+), 74 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index d2625b3..d7f5f93 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -15,6 +15,7 @@
+>   #include <drm/drm_crtc.h>
+>   #include <drm/drm_file.h>
+>   #include <drm/drm_probe_helper.h>
+> +#include <drm/drm_bridge.h>
+>   
+>   #include "msm_drv.h"
+>   #include "dpu_kms.h"
+> @@ -30,6 +31,7 @@
+>   #include "dpu_crtc.h"
+>   #include "dpu_trace.h"
+>   #include "dpu_core_irq.h"
+> +#include "dpu_dsc_helper.h"
+>   #include "disp/msm_disp_snapshot.h"
+>   
+>   #define DPU_DEBUG_ENC(e, fmt, ...) DRM_DEBUG_ATOMIC("enc%d " fmt,\
+> @@ -542,12 +544,12 @@ bool dpu_encoder_use_dsc_merge(struct drm_encoder *drm_enc)
+>   	return (num_dsc > 0) && (num_dsc > intf_count);
+>   }
+>   
+> -static struct msm_display_topology dpu_encoder_get_topology(
+> +static void dpu_encoder_get_topology(
+>   			struct dpu_encoder_virt *dpu_enc,
+>   			struct dpu_kms *dpu_kms,
+> -			struct drm_display_mode *mode)
+> +			struct drm_display_mode *mode,
+> +			struct msm_display_topology *topology)
+>   {
+> -	struct msm_display_topology topology = {0};
+>   	int i, intf_count = 0;
+>   
+>   	for (i = 0; i < MAX_PHYS_ENCODERS_PER_VIRTUAL; i++)
+> @@ -567,19 +569,19 @@ static struct msm_display_topology dpu_encoder_get_topology(
+>   	 * sufficient number
+>   	 */
+>   	if (intf_count == 2)
+> -		topology.num_lm = 2;
+> +		topology->num_lm = 2;
+>   	else if (!dpu_kms->catalog->caps->has_3d_merge)
+> -		topology.num_lm = 1;
+> +		topology->num_lm = 1;
+>   	else
+> -		topology.num_lm = (mode->hdisplay > MAX_HDISPLAY_SPLIT) ? 2 : 1;
+> +		topology->num_lm = (mode->hdisplay > MAX_HDISPLAY_SPLIT) ? 2 : 1;
+>   
+>   	if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_DSI) {
+>   		if (dpu_kms->catalog->dspp &&
+> -			(dpu_kms->catalog->dspp_count >= topology.num_lm))
+> -			topology.num_dspp = topology.num_lm;
+> +			(dpu_kms->catalog->dspp_count >= topology->num_lm))
+> +			topology->num_dspp = topology->num_lm;
+>   	}
+>   
+> -	topology.num_intf = intf_count;
+> +	topology->num_intf = intf_count;
+>   
+>   	if (dpu_enc->dsc) {
+>   		/*
+> @@ -588,12 +590,31 @@ static struct msm_display_topology dpu_encoder_get_topology(
+>   		 * this is power optimal and can drive up to (including) 4k
+>   		 * screens
+>   		 */
+> -		topology.num_dsc = 2;
+> -		topology.num_lm = 2;
+> -		topology.num_intf = 1;
+> +		topology->num_dsc = 2;
+> +		topology->num_intf = 1;
+> +		topology->num_lm = 2;
+>   	}
+>   
+> -	return topology;
+> +	/*
+> +	 * default topology for display port DSC implementation.
+> +	 * TODO:
+> +	 *	change to runtime resource calculation
+> +	 */
+> +	if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_TMDS) {
+> +		topology->num_dsc = 0;
+> +		topology->num_intf = intf_count;
+> +
+> +		if (dpu_enc->comp_info) {
+> +			/* In case of Display Stream Compression (DSC), we would use
+> +			 * 2 encoders, 2 layer mixers and 1 interface
+> +			 * this is power optimal and can drive up to (including) 4k
+> +			 * screens
+> +			 */
+> +			topology->num_dsc = 1;
+> +			topology->num_intf = 1;
+> +			topology->num_lm = 1;
+> +		}
+> +	}
+>   }
+>   
+>   static int dpu_encoder_virt_atomic_check(
+> @@ -605,7 +626,7 @@ static int dpu_encoder_virt_atomic_check(
+>   	struct msm_drm_private *priv;
+>   	struct dpu_kms *dpu_kms;
+>   	struct drm_display_mode *adj_mode;
+> -	struct msm_display_topology topology;
+> +	struct msm_display_topology *topology;
+>   	struct dpu_global_state *global_state;
+>   	int i = 0;
+>   	int ret = 0;
+> @@ -642,7 +663,27 @@ static int dpu_encoder_virt_atomic_check(
+>   		}
+>   	}
+>   
+> -	topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode);
+> +	/*
+> +	 * For display port, at this moment we know panel had been plugged in
+> +	 * and dsc supported is detected.
+> +	 * however we do not know the details of resolution will be used
+> +	 * until mode_set had been done.
+> +	 *
+> +	 * use default topology to reserve system resource for dsc
+> +	 *
+> +	 * TODO: run time calculation of topology instead of hardcode it now
+> +	 */
+> +	if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_TMDS) {
+> +		struct drm_bridge *bridge;
+> +
+> +		if (!dpu_enc->comp_info) {
+> +			bridge = drm_bridge_chain_get_first_bridge(drm_enc);
+> +			dpu_enc->comp_info = msm_dp_bridge_get_compression(bridge);
+> +		}
+> +	}
+> +
+> +	topology = &dpu_enc->topology;
+> +	dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode, topology);
+>   
+>   	/* Reserve dynamic resources now. */
+>   	if (!ret) {
+> @@ -655,7 +696,7 @@ static int dpu_encoder_virt_atomic_check(
+>   
+>   			if (!crtc_state->active_changed || crtc_state->active)
+>   				ret = dpu_rm_reserve(&dpu_kms->rm, global_state,
+> -						drm_enc, crtc_state, topology);
+> +						drm_enc, crtc_state, *topology);
+>   		}
+>   	}
+>   
+> @@ -1009,7 +1050,37 @@ void dpu_encoder_cleanup_wb_job(struct drm_encoder *drm_enc,
+>   
+>   		if (phys->ops.cleanup_wb_job)
+>   			phys->ops.cleanup_wb_job(phys, job);
+> +	}
+> +}
+> +
+> +static void dpu_encoder_populate_encoder_phys(struct drm_encoder *drm_enc,
+> +					struct dpu_encoder_virt *dpu_enc)
+> +{
+> +	struct msm_compression_info *comp_info;
+> +	struct msm_display_dsc_info *dsc_info;
+> +	int i;
+> +
+> +	if (!dpu_enc->comp_info)
+> +		return;
+> +
+> +	comp_info = dpu_enc->comp_info;
+> +	dsc_info = &comp_info->msm_dsc_info;
+> +
+> +	for (i = 0; i < dpu_enc->num_phys_encs; i++) {
+> +		struct dpu_encoder_phys *phys = dpu_enc->phys_encs[i];
+> +
+> +		if (!phys)
+> +			continue;
+> +
+> +		phys->comp_type = comp_info->comp_type;
+> +		phys->comp_ratio = comp_info->comp_ratio;
+>   
+> +		if (phys->comp_type == MSM_DISPLAY_COMPRESSION_DSC) {
+> +			phys->dsc_extra_pclk_cycle_cnt = dsc_info->pclk_per_line;
+> +			phys->dsc_extra_disp_width = dsc_info->extra_width;
+> +			phys->dce_bytes_per_line =
+> +				dsc_info->bytes_per_pkt * dsc_info->pkt_per_line;
+> +		}
+>   	}
+>   }
+>   
+> @@ -1050,6 +1121,24 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
+>   
+>   	trace_dpu_enc_mode_set(DRMID(drm_enc));
+>   
+> +	/*
+> +	 * For display port, msm_dp_bridge_mode_set() will conver panel info
+> +	 * into dp_mode. This including detail dsc information if it is enabled.
+> +	 * after that, msm_dp_bridge_get_compression() will return detail
+> +	 * dsc compression info
+> +	 */
+> +	if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_TMDS) {
+> +		struct drm_display_mode *mode, *adjusted_mode;
+> +		struct drm_bridge *bridge;
+> +
+> +		mode = &crtc_state->mode;
+> +		adjusted_mode = &crtc_state->adjusted_mode;
+> +		bridge = drm_bridge_chain_get_first_bridge(drm_enc);
+> +		msm_dp_bridge_mode_set(bridge, mode, adjusted_mode);
+> +
+> +		dpu_enc->comp_info = msm_dp_bridge_get_compression(bridge);
+> +	}
+> +
+>   	/* Query resource that have been reserved in atomic check step. */
+>   	num_pp = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
+>   		drm_enc->base.id, DPU_HW_BLK_PINGPONG, hw_pp,
+> @@ -1061,19 +1150,18 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
+>   	dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
+>   		drm_enc->base.id, DPU_HW_BLK_DSPP, hw_dspp,
+>   		ARRAY_SIZE(hw_dspp));
+> +	num_dsc = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
+> +		drm_enc->base.id, DPU_HW_BLK_DSC,
+> +		hw_dsc, ARRAY_SIZE(hw_dsc));
+>   
+>   	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++)
+>   		dpu_enc->hw_pp[i] = i < num_pp ? to_dpu_hw_pingpong(hw_pp[i])
+>   						: NULL;
+>   
+> -	if (dpu_enc->dsc) {
+> -		num_dsc = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
+> -							drm_enc->base.id, DPU_HW_BLK_DSC,
+> -							hw_dsc, ARRAY_SIZE(hw_dsc));
+> -		for (i = 0; i < num_dsc; i++) {
+> -			dpu_enc->hw_dsc[i] = to_dpu_hw_dsc(hw_dsc[i]);
+> -			dsc_mask |= BIT(dpu_enc->hw_dsc[i]->idx - DSC_0);
+> -		}
+> +	for (i = 0; i < num_dsc; i++) {
+> +		dpu_enc->hw_dsc[i] = to_dpu_hw_dsc(hw_dsc[i]);
+> +		dpu_enc->hw_pp[i]->dsc = dpu_enc->hw_dsc[i]; /* bind dsc to pp */
+> +		dsc_mask |= BIT(dpu_enc->hw_dsc[i]->idx - DSC_0);
+>   	}
+>   
+>   	dpu_enc->dsc_mask = dsc_mask;
+> @@ -1110,10 +1198,22 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
+>   		phys->hw_pp = dpu_enc->hw_pp[i];
+>   		phys->hw_ctl = to_dpu_hw_ctl(hw_ctl[i]);
+>   
+> +		if (phys->intf_idx >= INTF_0 && phys->intf_idx < INTF_MAX)
+> +			phys->hw_intf = dpu_rm_get_intf(&dpu_kms->rm, phys->intf_idx);
+> +
+> +		/* phys->hw_intf populated at dpu_encoder_setup_display() */
+> +		if (!phys->hw_intf) {
+> +			DPU_ERROR_ENC(dpu_enc,
+> +				"no intf block assigned at idx: %d\n", i);
+> +			return;
+> +		}
+> +
+>   		phys->cached_mode = crtc_state->adjusted_mode;
+>   		if (phys->ops.atomic_mode_set)
+>   			phys->ops.atomic_mode_set(phys, crtc_state, conn_state);
+>   	}
+> +
+> +	dpu_encoder_populate_encoder_phys(drm_enc, dpu_enc);
+>   }
+>   
+>   static void _dpu_encoder_virt_enable_helper(struct drm_encoder *drm_enc)
+> @@ -1208,6 +1308,8 @@ static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
+>   	mutex_unlock(&dpu_enc->enc_lock);
+>   }
+>   
+> +static void dpu_encoder_unprep_dsc(struct dpu_encoder_virt *dpu_enc);
+> +
+>   static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+>   {
+>   	struct dpu_encoder_virt *dpu_enc = NULL;
+> @@ -1233,6 +1335,10 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+>   			phys->ops.disable(phys);
+>   	}
+>   
+> +	if (dpu_enc->comp_info && (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_TMDS)) {
+> +		dpu_encoder_unprep_dsc(dpu_enc);
+> +		dpu_enc->comp_info = NULL;
+> +	}
+>   
+>   	/* after phys waits for frame-done, should be no more frames pending */
+>   	if (atomic_xchg(&dpu_enc->frame_done_timeout_ms, 0)) {
+> @@ -1795,40 +1901,16 @@ static void dpu_encoder_vsync_event_work_handler(struct kthread_work *work)
+>   			nsecs_to_jiffies(ktime_to_ns(wakeup_time)));
+>   }
+>   
+> -static u32
+> -dpu_encoder_dsc_initial_line_calc(struct drm_dsc_config *dsc,
+> -				  u32 enc_ip_width)
+> -{
+> -	int ssm_delay, total_pixels, soft_slice_per_enc;
+> -
+> -	soft_slice_per_enc = enc_ip_width / dsc->slice_width;
+> -
+> -	/*
+> -	 * minimum number of initial line pixels is a sum of:
+> -	 * 1. sub-stream multiplexer delay (83 groups for 8bpc,
+> -	 *    91 for 10 bpc) * 3
+> -	 * 2. for two soft slice cases, add extra sub-stream multiplexer * 3
+> -	 * 3. the initial xmit delay
+> -	 * 4. total pipeline delay through the "lock step" of encoder (47)
+> -	 * 5. 6 additional pixels as the output of the rate buffer is
+> -	 *    48 bits wide
+> -	 */
+> -	ssm_delay = ((dsc->bits_per_component < 10) ? 84 : 92);
+> -	total_pixels = ssm_delay * 3 + dsc->initial_xmit_delay + 47;
+> -	if (soft_slice_per_enc > 1)
+> -		total_pixels += (ssm_delay * 3);
+> -	return DIV_ROUND_UP(total_pixels, dsc->slice_width);
+> -}
+> -
+>   static void dpu_encoder_dsc_pipe_cfg(struct dpu_encoder_virt *dpu_enc,
+>   				     struct dpu_hw_dsc *hw_dsc,
+>   				     struct dpu_hw_pingpong *hw_pp,
+> -				     struct drm_dsc_config *dsc,
+> +				     struct msm_display_dsc_info *dsc_info,
+>   				     u32 common_mode,
+>   				     u32 initial_lines)
+>   {
+>   	struct dpu_encoder_phys *cur_master = dpu_enc->cur_master;
+>   	struct dpu_hw_ctl *ctl;
+> +	struct drm_dsc_config *dsc = &dsc_info->drm_dsc;
+>   
+>   	ctl = cur_master->hw_ctl;
+>   
+> @@ -1852,51 +1934,137 @@ static void dpu_encoder_dsc_pipe_cfg(struct dpu_encoder_virt *dpu_enc,
+>   
+>   }
+>   
+> +static void dpu_encoder_dsc_disable(struct dpu_encoder_virt *dpu_enc,
+> +				     struct dpu_hw_dsc *hw_dsc,
+> +				     struct dpu_hw_pingpong *hw_pp)
+> +{
+> +	struct dpu_encoder_phys *cur_master = dpu_enc->cur_master;
+> +	struct dpu_hw_ctl *ctl;
+> +
+> +	ctl = cur_master->hw_ctl;
+> +
+> +	if (hw_dsc->ops.dsc_disable)
+> +		hw_dsc->ops.dsc_disable(hw_dsc);
+> +
+> +	if (hw_pp->ops.disable_dsc)
+> +		hw_pp->ops.disable_dsc(hw_pp);
+> +
+> +}
+> +
+>   static void dpu_encoder_prep_dsc(struct dpu_encoder_virt *dpu_enc,
+> -				 struct drm_dsc_config *dsc)
+> +				 struct msm_display_dsc_info *dsc_info)
+>   {
+>   	/* coding only for 2LM, 2enc, 1 dsc config */
+>   	struct dpu_encoder_phys *enc_master = dpu_enc->cur_master;
+>   	struct dpu_hw_dsc *hw_dsc[MAX_CHANNELS_PER_ENC];
+>   	struct dpu_hw_pingpong *hw_pp[MAX_CHANNELS_PER_ENC];
+> +	struct msm_display_topology *topology = &dpu_enc->topology;
+> +	enum dpu_3d_blend_mode mode_3d;
+>   	int this_frame_slices;
+>   	int intf_ip_w, enc_ip_w;
+> -	int dsc_common_mode;
+> -	int pic_width;
+> -	u32 initial_lines;
+> +	int dsc_common_mode = 0;
+> +	int dsc_pic_width;
+> +	int num_lm, num_dsc, num_intf;
+> +	bool dsc_merge, merge_3d, dsc_4hsmerge;
+> +	bool disable_merge_3d = false;
+> +	int ich_res;
+>   	int i;
+>   
+>   	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++) {
+>   		hw_pp[i] = dpu_enc->hw_pp[i];
+>   		hw_dsc[i] = dpu_enc->hw_dsc[i];
+> +	}
+>   
+> -		if (!hw_pp[i] || !hw_dsc[i]) {
+> -			DPU_ERROR_ENC(dpu_enc, "invalid params for DSC\n");
+> -			return;
+> -		}
+> +	num_lm = topology->num_lm;
+> +	num_dsc = topology->num_dsc;
+> +	num_intf = topology->num_intf;
+> +
+> +
+> +	mode_3d = (num_lm > num_dsc) ? BLEND_3D_H_ROW_INT : BLEND_3D_NONE;
+> +	merge_3d = ((mode_3d != BLEND_3D_NONE) && !(enc_master->hw_intf->cfg.split_link_en)) ?
+> +			true : false;
+> +
+> +	dsc_merge = ((num_dsc > num_intf) && !dsc_info->half_panel_pu &&
+> +			!(enc_master->hw_intf->cfg.split_link_en)) ? true : false;
+> +	disable_merge_3d = (merge_3d && dsc_info->half_panel_pu) ?  false : true;
+> +	dsc_4hsmerge = (dsc_merge && num_dsc == 4 && num_intf == 1) ?  true : false;
+> +
+> +	/*
+> +	 * If this encoder is driving more than one DSC encoder, they
+> +	 * operate in tandem, same pic dimension needs to be used by
+> +	 * each of them.(pp-split is assumed to be not supported)
+> +	 *
+> +	 * If encoder is driving more than 2 DSCs, each DSC pair will operate
+> +	 * on half of the picture in tandem.
+> +	 */
+> +	dsc_pic_width = dsc_info->drm_dsc.pic_width;
+> +
+> +	if (num_dsc > 2) {
+> +		dsc_pic_width /= 2;
+> +		dsc_info->dsc_4hsmerge_en = dsc_4hsmerge;
+>   	}
+>   
+> -	dsc_common_mode = 0;
+> -	pic_width = dsc->pic_width;
+> +	this_frame_slices = dsc_pic_width / dsc_info->drm_dsc.slice_width;
+> +	intf_ip_w = this_frame_slices * dsc_info->drm_dsc.slice_width;
+> +	enc_ip_w = intf_ip_w;
+> +
+> +	if (!dsc_info->half_panel_pu)
+> +		intf_ip_w /= num_intf;
+> +	if (!dsc_info->half_panel_pu && (num_dsc > 1))
+> +		dsc_common_mode |= DSC_MODE_SPLIT_PANEL;
+> +	if (dsc_merge) {
+> +		dsc_common_mode |= DSC_MODE_MULTIPLEX;
+> +		/*
+> +		 * in dsc merge case: when using 2 encoders for the same
+> +		 * stream, no. of slices need to be same on both the
+> +		 * encoders.
+> +		 */
+> +		enc_ip_w = intf_ip_w / 2;
+> +	}
+>   
+> -	dsc_common_mode = DSC_MODE_MULTIPLEX | DSC_MODE_SPLIT_PANEL;
+>   	if (enc_master->intf_mode == INTF_MODE_VIDEO)
+>   		dsc_common_mode |= DSC_MODE_VIDEO;
+>   
+> -	this_frame_slices = pic_width / dsc->slice_width;
+> -	intf_ip_w = this_frame_slices * dsc->slice_width;
+> +	dsc_info->num_active_ss_per_enc = dsc_info->drm_dsc.slice_count;
+> +
+> +	if (dsc_info->dsc_4hsmerge_en)
+> +		dsc_info->num_active_ss_per_enc = dsc_info->drm_dsc.slice_count >> 2;
+> +	else if ((dsc_common_mode & DSC_MODE_MULTIPLEX) || (dsc_info->half_panel_pu))
+> +		dsc_info->num_active_ss_per_enc = dsc_info->drm_dsc.slice_count >> 1;
+> +
+> +	dpu_dsc_populate_dsc_private_params(dsc_info, intf_ip_w);
+> +
+> +	dpu_dsc_initial_line_calc(dsc_info, enc_ip_w, dsc_common_mode);
+>   
+>   	/*
+>   	 * dsc merge case: when using 2 encoders for the same stream,
+>   	 * no. of slices need to be same on both the encoders.
+>   	 */
+> -	enc_ip_w = intf_ip_w / 2;
+> -	initial_lines = dpu_encoder_dsc_initial_line_calc(dsc, enc_ip_w);
+> +	ich_res = dpu_dsc_ich_reset_override_needed(dsc_info->half_panel_pu, dsc_info);
+> +
+> +	for (i = 0; i < num_dsc; i++) {
+> +		dpu_encoder_dsc_pipe_cfg(dpu_enc, hw_dsc[i], hw_pp[i], dsc_info,
+> +					dsc_common_mode, 0);
+> +	}
+> +}
+> +
+> +static void dpu_encoder_unprep_dsc(struct dpu_encoder_virt *dpu_enc)
+> +{
+> +	/* coding only for 2LM, 2enc, 1 dsc config */
+> +	struct dpu_hw_dsc *hw_dsc[MAX_CHANNELS_PER_ENC];
+> +	struct dpu_hw_pingpong *hw_pp[MAX_CHANNELS_PER_ENC];
+> +	struct msm_display_topology *topology = &dpu_enc->topology;
+> +	int i, num_dsc;
+>   
+>   	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++) {
+> -		dpu_encoder_dsc_pipe_cfg(dpu_enc, hw_dsc[i], hw_pp[i], dsc,
+> -					dsc_common_mode, initial_lines);
+> +		hw_pp[i] = dpu_enc->hw_pp[i];
+> +		hw_dsc[i] = dpu_enc->hw_dsc[i];
+>   	}
+> +
+> +	num_dsc = topology->num_dsc;
+> +
+> +	for (i = 0; i < num_dsc; i++)
+> +		dpu_encoder_dsc_disable(dpu_enc, hw_dsc[i], hw_pp[i]);
+>   }
+>   
+>   void dpu_encoder_prepare_for_kickoff(struct drm_encoder *drm_enc)
+> @@ -1904,6 +2072,7 @@ void dpu_encoder_prepare_for_kickoff(struct drm_encoder *drm_enc)
+>   	struct dpu_encoder_virt *dpu_enc;
+>   	struct dpu_encoder_phys *phys;
+>   	bool needs_hw_reset = false;
+> +	bool needs_phy_enable = false;
+>   	unsigned int i;
+>   
+>   	dpu_enc = to_dpu_encoder_virt(drm_enc);
+> @@ -1918,6 +2087,9 @@ void dpu_encoder_prepare_for_kickoff(struct drm_encoder *drm_enc)
+>   			phys->ops.prepare_for_kickoff(phys);
+>   		if (phys->enable_state == DPU_ENC_ERR_NEEDS_HW_RESET)
+>   			needs_hw_reset = true;
+> +
+> +		if (phys->enable_state == DPU_ENC_ENABLING)
+> +			needs_phy_enable = true;
+>   	}
+>   	DPU_ATRACE_END("enc_prepare_for_kickoff");
+>   
+> @@ -1931,8 +2103,10 @@ void dpu_encoder_prepare_for_kickoff(struct drm_encoder *drm_enc)
+>   		}
+>   	}
+>   
+> -	if (dpu_enc->dsc)
+> -		dpu_encoder_prep_dsc(dpu_enc, dpu_enc->dsc);
+> +	if (needs_phy_enable && dpu_enc->comp_info)
+> +		dpu_encoder_prep_dsc(dpu_enc, &dpu_enc->comp_info->msm_dsc_info);
+> +
+> +
+>   }
+>   
+>   bool dpu_encoder_is_valid_for_commit(struct drm_encoder *drm_enc)
+> @@ -2295,7 +2469,7 @@ static int dpu_encoder_setup_display(struct dpu_encoder_virt *dpu_enc,
+>   				dpu_kms->catalog->caps->has_idle_pc;
+>   
+>   	dpu_enc->comp_info = disp_info->comp_info;
+> -	if (dpu_enc->comp_info)
+> +	if (dpu_enc->comp_info && dpu_enc->comp_info->enabled)
+>   		dpu_enc->dsc = &dpu_enc->comp_info->msm_dsc_info.drm_dsc;
+>   
+>   	mutex_lock(&dpu_enc->enc_lock);
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
+> index 0569b36..ae4f6a8 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
+> @@ -1,6 +1,6 @@
+>   /* SPDX-License-Identifier: GPL-2.0-only */
+>   /*
+> - * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>    * Copyright (c) 2015-2018 The Linux Foundation. All rights reserved.
+>    */
+>   
+> @@ -202,6 +202,9 @@ struct dpu_encoder_phys {
+>   	int irq[INTR_IDX_MAX];
+>   	enum msm_display_compression_type comp_type;
+>   	u32 comp_ratio;
+> +	u32 dsc_extra_pclk_cycle_cnt;
+> +	u32 dsc_extra_disp_width;
+> +	u32 dce_bytes_per_line;
+>   };
+>   
+>   static inline int dpu_encoder_phys_inc_pending(struct dpu_encoder_phys *phys)
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> index 3330e185..6c7d791 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> @@ -86,6 +86,11 @@ static void drm_mode_to_intf_timing_params(
+>   	timing->underflow_clr = 0xff;
+>   	timing->hsync_skew = mode->hskew;
+>   
+> +	if (phys_enc->comp_type != MSM_DISPLAY_COMPRESSION_NONE) {
+> +		timing->compression_en = true;
+> +		timing->dce_bytes_per_line = phys_enc->dce_bytes_per_line;
+> +	}
+> +
+>   	/* DSI controller cannot handle active-low sync signals. */
+>   	if (phys_enc->hw_intf->cap->type == INTF_DSI) {
+>   		timing->hsync_polarity = 0;
+> @@ -104,14 +109,36 @@ static void drm_mode_to_intf_timing_params(
+>   
+>   	/*
+>   	 * for DP, divide the horizonal parameters by 2 when
+> -	 * widebus is enabled
+> +	 * widebus or compression is enabled, irrespective of
+> +	 * compression ratio
+>   	 */
+> -	if (phys_enc->hw_intf->cap->type == INTF_DP && timing->wide_bus_en) {
+> +	if (phys_enc->hw_intf->cap->type == INTF_DP &&
+> +		(timing->wide_bus_en || (phys_enc->comp_ratio > 1))) {
+>   		timing->width = timing->width >> 1;
+>   		timing->xres = timing->xres >> 1;
+>   		timing->h_back_porch = timing->h_back_porch >> 1;
+>   		timing->h_front_porch = timing->h_front_porch >> 1;
+>   		timing->hsync_pulse_width = timing->hsync_pulse_width >> 1;
+> +
+> +		if (phys_enc->comp_type == MSM_DISPLAY_COMPRESSION_DSC &&
+> +				(phys_enc->comp_ratio > 1)) {
+> +			timing->extra_dto_cycles =
+> +					phys_enc->dsc_extra_pclk_cycle_cnt;
+> +			timing->width += phys_enc->dsc_extra_disp_width;
+> +			timing->h_back_porch +=
+> +					phys_enc->dsc_extra_disp_width;
+> +		}
+> +	}
+> +
+> +	/*
+> +	 * for DSI, if compression is enabled, then divide the horizonal active
+> +	 * timing parameters by compression ratio.
+> +	 */
+> +	if ((phys_enc->hw_intf->cap->type != INTF_DP) &&
+> +			((phys_enc->comp_type == MSM_DISPLAY_COMPRESSION_DSC))) {
+> +		// adjust active dimensions
+> +		timing->width = DIV_ROUND_UP(timing->width, phys_enc->comp_ratio);
+> +		timing->xres = DIV_ROUND_UP(timing->xres, phys_enc->comp_ratio);
+>   	}
+>   }
+>   
+> @@ -281,6 +308,9 @@ static void dpu_encoder_phys_vid_setup_timing_engine(
+>   
+>   	phys_enc->hw_intf->hw_rev = phys_enc->dpu_kms->core_rev;
+>   
+> +	if (phys_enc->hw_pp->dsc)
+> +		intf_cfg.dsc_num = phys_enc->hw_pp->dsc->idx;
 
-On that occasion also add missing trailing newlines.
+Why ??? it breaks when in multiplex mode and we have multiple DSCs !
 
-Signed-off-by: Robert Richter <rrichter@amd.com>
----
-v2:
- * Changed message to "Opcode 0x%04x enabled\n". Updated patch
-   description accordingly.
-
- drivers/cxl/core/mbox.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-index a48ade466d6a..202d49dd9911 100644
---- a/drivers/cxl/core/mbox.c
-+++ b/drivers/cxl/core/mbox.c
-@@ -629,11 +629,12 @@ static void cxl_walk_cel(struct cxl_dev_state *cxlds, size_t size, u8 *cel)
- 
- 		if (!cmd) {
- 			dev_dbg(cxlds->dev,
--				"Opcode 0x%04x unsupported by driver", opcode);
-+				"Opcode 0x%04x unsupported by driver\n", opcode);
- 			continue;
- 		}
- 
- 		set_bit(cmd->info.id, cxlds->enabled_cmds);
-+		dev_dbg(cxlds->dev, "Opcode 0x%04x enabled\n", opcode);
- 	}
- }
- 
-
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
--- 
-2.30.2
+> +
+>   	spin_lock_irqsave(phys_enc->enc_spinlock, lock_flags);
+>   	phys_enc->hw_intf->ops.setup_timing_gen(phys_enc->hw_intf,
+>   			&timing_params, fmt);
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
+> index c002234..ee71cee 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
+> @@ -1,5 +1,6 @@
+>   /* SPDX-License-Identifier: GPL-2.0-only */
+>   /* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>    */
+>   
+>   #ifndef _DPU_HW_PINGPONG_H
+> @@ -8,6 +9,7 @@
+>   #include "dpu_hw_catalog.h"
+>   #include "dpu_hw_mdss.h"
+>   #include "dpu_hw_util.h"
+> +#include "dpu_hw_dsc.h"
+>   
+>   #define DITHER_MATRIX_SZ 16
+>   
+> @@ -149,6 +151,7 @@ struct dpu_hw_pingpong {
+>   	enum dpu_pingpong idx;
+>   	const struct dpu_pingpong_cfg *caps;
+>   	struct dpu_hw_merge_3d *merge_3d;
+> +	struct dpu_hw_dsc *dsc;
+>   
+>   	/* ops */
+>   	struct dpu_hw_pingpong_ops ops;
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+> index 396429e..bb22ec8 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+> @@ -1,6 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0-only
+>   /*
+>    * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>    */
+>   
+>   #define pr_fmt(fmt)	"[drm:%s] " fmt, __func__
+> @@ -246,6 +247,11 @@ int dpu_rm_init(struct dpu_rm *rm,
+>   		struct dpu_hw_dsc *hw;
+>   		const struct dpu_dsc_cfg *dsc = &cat->dsc[i];
+>   
+> +		if (dsc->id < DSC_0 || dsc->id >= DSC_MAX) {
+> +			DPU_ERROR("skip dsc %d with invalid id\n", dsc->id);
+> +			continue;
+> +		}
+> +
+>   		hw = dpu_hw_dsc_init(dsc->id, mmio, cat);
+>   		if (IS_ERR_OR_NULL(hw)) {
+>   			rc = PTR_ERR(hw);
+> @@ -535,8 +541,10 @@ static int _dpu_rm_make_reservation(
+>   	}
+>   
+>   	ret  = _dpu_rm_reserve_dsc(rm, global_state, enc, &reqs->topology);
+> -	if (ret)
+> +	if (ret) {
+> +		DPU_ERROR("unable to find appropriate DSC\n");
+>   		return ret;
+> +	}
+>   
+>   	return ret;
+>   }
 
