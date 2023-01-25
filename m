@@ -2,139 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A62E67BC79
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6866A67BC7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236207AbjAYUXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:23:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
+        id S236388AbjAYUXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234138AbjAYUXV (ORCPT
+        with ESMTP id S236328AbjAYUXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:23:21 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7AD1CAE4;
-        Wed, 25 Jan 2023 12:23:20 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id i185so20979783vsc.6;
-        Wed, 25 Jan 2023 12:23:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FFO2JzP+RgwtR+gLRVfPRorrM96PvpyQ8Xwlt7fNIcI=;
-        b=KBwTxWr+ekQAnUYhgg1lcx55aPnPWaaRyazlKof0Kxku17D2FzAli2P1AsHCbY5teK
-         yNov5DWUGXRbKfVCtk6Lqm6NrIqL33MBDrEAchi/k08kWwijhfdL2Wrxbp5fmaxvk2YL
-         0w7G6ykC19WD3i+eCTUFBmnYxs3t4dxO8UI+vvo5hcubbsLoTPd+d30UyHjtKXdjq9z4
-         cjC7doMH9YDeOLrulKeQ0JjOX3qdgV8wm1+703wLSe70K+mM+YNTIc5uxO1U6ePOzalG
-         7HjVvft4N8kILE88BCPMt3PURuphAqV8LMTEAZHOAIj3A6S0AqKD+YcJbdzL2xd/OdY5
-         Girw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FFO2JzP+RgwtR+gLRVfPRorrM96PvpyQ8Xwlt7fNIcI=;
-        b=Uy4QlxsmRpWs5yVjffYTQIi1WAHXtF2431bIHtgljMjl62aBCXbRVR1fZgk+Ci5FyB
-         RWzwMFCCDrYNDpJnHwxydBu9TRpqyfuoLA7/ZFgu/TA8ctr9zqRbHGOZWz85SCXPddJ1
-         /p/SfsLoJ8P1kL25QaR7FMy1fKJYi3wrMFDkVl8CUfYOTCVg3QMmsBGpn8MruE0VgAln
-         M50FZiDNqFxN38DHjnErs3ImFCyuGcGRvTBmzfm+UEAIOxsq7Xk581dpxrKIu0AKeKre
-         F5uGP5AYYEu8r8Qzt/teo8buuZsAbWKJUXKAR1orkMfFc5wrRKM/PQsO3P158/KNWLZC
-         UwAw==
-X-Gm-Message-State: AFqh2kowkhAW98fE++xNXD9x8TCupf6bw06lE+xpcNx2QI+gzdL8aztN
-        6BWlQM8H/gtRp/yQDc4HXxIGzgPaBPAtTp7j+/w=
-X-Google-Smtp-Source: AMrXdXuWP5BxkV14he0BC9U1KBpyNMbnQtKcZGYmpNnJkn/dmCemHFNFdeFBMzePxk8eAfXXPZa2xZkEowhUBdF6W90=
-X-Received: by 2002:a05:6102:5587:b0:3d1:2167:11ad with SMTP id
- dc7-20020a056102558700b003d1216711admr4206272vsb.2.1674678199329; Wed, 25 Jan
- 2023 12:23:19 -0800 (PST)
+        Wed, 25 Jan 2023 15:23:51 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7059545235;
+        Wed, 25 Jan 2023 12:23:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674678227; x=1706214227;
+  h=subject:from:to:cc:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oW1gyLbFzR4XGy/nrIoXw/90pgAFQddwJ8dJi52PPsQ=;
+  b=SGXPFsYa+dIjFfbkNiuZzcVTLy/MV+kgQSeB21IFLntKpZoXA2ekWVW0
+   YgiBlbhzBgtiC7+NAhpn2+gKkQ9CfPe3JlyHKDTwr4CjkitNO1AosdXc4
+   kMg4mCLfHygkJASAPWANGY+CMYNP0z5J0BrMT4f6CX6TJ50UqeQKW0GE0
+   OqXXLVZZhtyN6ydeRyCitnzZ153qRuD2o5GNMwCTJ7ZggUPGP0NrK94zu
+   KVlylhwT+hdQ+MFgB2zeRqVm0TB9iArINGeyFRut9GUNSeiNC3GRun/Id
+   vAmebaPd/PDEblZ4mTqyKq43wASgc1FckrmIfYBMAQA0N35aGLFVbNo4x
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="307011730"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="307011730"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 12:23:47 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="805126312"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="805126312"
+Received: from lwlu-mobl.amr.corp.intel.com (HELO dwillia2-xfh.jf.intel.com) ([10.209.17.213])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 12:23:46 -0800
+Subject: [PATCH v2] nvdimm: Support sizeof(struct page) >
+ MAX_STRUCT_PAGE_SIZE
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     nvdimm@lists.linux.dev
+Cc:     stable@vger.kernel.org, Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, Jeff Moyer <jmoyer@redhat.com>,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Date:   Wed, 25 Jan 2023 12:23:46 -0800
+Message-ID: <167467815773.463042.7022545814443036382.stgit@dwillia2-xfh.jf.intel.com>
+User-Agent: StGit/0.18-3-g996c
 MIME-Version: 1.0
-References: <cover.1674227308.git.alexl@redhat.com> <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
- <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
- <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
- <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
- <20230125041835.GD937597@dread.disaster.area> <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
- <87wn5ac2z6.fsf@redhat.com> <CAOQ4uxiPLHHnr2=XH4gN4bAjizH-=4mbZMe_sx99FKuPo-fDMQ@mail.gmail.com>
- <87o7qmbxv4.fsf@redhat.com> <CAOQ4uximBLqXDtq9vDhqR__1ctiiOMhMd03HCFUR_Bh_JFE-UQ@mail.gmail.com>
- <87fsbybvzq.fsf@redhat.com> <CAOQ4uxgos8m72icX+u2_6Gh7eMmctTTt6XZ=BRt3VzeOZH+UuQ@mail.gmail.com>
- <87wn5a9z4m.fsf@redhat.com>
-In-Reply-To: <87wn5a9z4m.fsf@redhat.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 25 Jan 2023 22:23:08 +0200
-Message-ID: <CAOQ4uxi7GHVkaqxsQV6ninD9fhvMAPk1xFRM2aMRFXQZUV-s3Q@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Giuseppe Scrivano <gscrivan@redhat.com>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brauner@kernel.org, viro@zeniv.linux.org.uk,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 9:45 PM Giuseppe Scrivano <gscrivan@redhat.com> wrote:
->
-> Amir Goldstein <amir73il@gmail.com> writes:
->
-> >> >> I previously mentioned my wish of using it from a user namespace, the
-> >> >> goal seems more challenging with EROFS or any other block devices.  I
-> >> >> don't know about the difficulty of getting overlay metacopy working in a
-> >> >> user namespace, even though it would be helpful for other use cases as
-> >> >> well.
-> >> >>
-> >> >
-> >> > There is no restriction of metacopy in user namespace.
-> >> > overlayfs needs to be mounted with -o userxattr and the overlay
-> >> > xattrs needs to use user.overlay. prefix.
-> >>
-> >> if I specify both userxattr and metacopy=on then the mount ends up in
-> >> the following check:
-> >>
-> >> if (config->userxattr) {
-> >>         [...]
-> >>         if (config->metacopy && metacopy_opt) {
-> >>                 pr_err("conflicting options: userxattr,metacopy=on\n");
-> >>                 return -EINVAL;
-> >>         }
-> >> }
-> >>
-> >
-> > Right, my bad.
-> >
-> >> to me it looks like it was done on purpose to prevent metacopy from a
-> >> user namespace, but I don't know the reason for sure.
-> >>
-> >
-> > With hand crafted metacopy, an unpriv user can chmod
-> > any files to anything by layering another file with different
-> > mode on top of it....
->
-> I might be missing something obvious about metacopy, so please correct
-> me if I am wrong, but I don't see how it is any different than just
-> copying the file and chowning it.  Of course, as long as overlay uses
-> the same security model so that a file that wasn't originally possible
-> to access must be still blocked, even if referenced through metacopy.
->
+Commit 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
 
-You're right.
-The reason for mutual exclusion maybe related to the
-comment in ovl_check_metacopy_xattr() about EACCES.
-Need to check with Vivek or Miklos.
+...updated MAX_STRUCT_PAGE_SIZE to account for sizeof(struct page)
+potentially doubling in the case of CONFIG_KMSAN=y. Unfortunately this
+doubles the amount of capacity stolen from user addressable capacity for
+everyone, regardless of whether they are using the debug option. Revert
+that change, mandate that MAX_STRUCT_PAGE_SIZE never exceed 64, but
+allow for debug scenarios to proceed with creating debug sized page maps
+with a compile option to support debug scenarios.
 
-But get this - you do not need metacopy=on to follow lower inode.
-It should work without metacopy=on.
-metacopy=on only instructs overlayfs whether to copy up data
-or only metadata when changing metadata of lower object, so it is
-not relevant for readonly mount.
+Note that this only applies to cases where the page map is permanent,
+i.e. stored in a reservation of the pmem itself ("--map=dev" in "ndctl
+create-namespace" terms). For the "--map=mem" case, since the allocation
+is ephemeral for the lifespan of the namespace, there are no explicit
+restriction. However, the implicit restriction, of having enough
+available "System RAM" to store the page map for the typically large
+pmem, still applies.
 
-Thanks,
-Amir.
+Fixes: 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
+Cc: <stable@vger.kernel.org>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Marco Elver <elver@google.com>
+Reported-by: Jeff Moyer <jmoyer@redhat.com>
+---
+Changes since v1 [1]:
+* Replace the module option with a compile option and a description of
+  the tradeoffs to consider when running with KMSAN enabled in the
+  presence of NVDIMM namespaces and their local reservation of capacity
+  for a 'struct page' memmap array. (Greg)
+
+[1]: https://lore.kernel.org/all/63bc8fec4744a_5178e29467@dwillia2-xfh.jf.intel.com.notmuch/
+
+ drivers/nvdimm/Kconfig    |   19 +++++++++++++++++++
+ drivers/nvdimm/nd.h       |    2 +-
+ drivers/nvdimm/pfn_devs.c |   42 +++++++++++++++++++++++++++---------------
+ 3 files changed, 47 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
+index 79d93126453d..77b06d54cc62 100644
+--- a/drivers/nvdimm/Kconfig
++++ b/drivers/nvdimm/Kconfig
+@@ -102,6 +102,25 @@ config NVDIMM_KEYS
+ 	depends on ENCRYPTED_KEYS
+ 	depends on (LIBNVDIMM=ENCRYPTED_KEYS) || LIBNVDIMM=m
+ 
++config NVDIMM_KMSAN
++	bool
++	depends on KMSAN
++	help
++	  KMSAN, and other memory debug facilities, increase the size of
++	  'struct page' to contain extra metadata. This collides with
++	  the NVDIMM capability to store a potentially
++	  larger-than-"System RAM" size 'struct page' array in a
++	  reservation of persistent memory rather than limited /
++	  precious DRAM. However, that reservation needs to persist for
++	  the life of the given NVDIMM namespace. If you are using KMSAN
++	  to debug an issue unrelated to NVDIMMs or DAX then say N to this
++	  option. Otherwise, say Y but understand that any namespaces
++	  (with the page array stored pmem) created with this build of
++	  the kernel will permanently reserve and strand excess
++	  capacity compared to the CONFIG_KMSAN=n case.
++
++	  Select N if unsure.
++
+ config NVDIMM_TEST_BUILD
+ 	tristate "Build the unit test core"
+ 	depends on m
+diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
+index 85ca5b4da3cf..ec5219680092 100644
+--- a/drivers/nvdimm/nd.h
++++ b/drivers/nvdimm/nd.h
+@@ -652,7 +652,7 @@ void devm_namespace_disable(struct device *dev,
+ 		struct nd_namespace_common *ndns);
+ #if IS_ENABLED(CONFIG_ND_CLAIM)
+ /* max struct page size independent of kernel config */
+-#define MAX_STRUCT_PAGE_SIZE 128
++#define MAX_STRUCT_PAGE_SIZE 64
+ int nvdimm_setup_pfn(struct nd_pfn *nd_pfn, struct dev_pagemap *pgmap);
+ #else
+ static inline int nvdimm_setup_pfn(struct nd_pfn *nd_pfn,
+diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
+index 61af072ac98f..c7655a1fe38c 100644
+--- a/drivers/nvdimm/pfn_devs.c
++++ b/drivers/nvdimm/pfn_devs.c
+@@ -13,6 +13,8 @@
+ #include "pfn.h"
+ #include "nd.h"
+ 
++const static bool page_struct_override = IS_ENABLED(CONFIG_NVDIMM_KMSAN);
++
+ static void nd_pfn_release(struct device *dev)
+ {
+ 	struct nd_region *nd_region = to_nd_region(dev->parent);
+@@ -758,12 +760,6 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
+ 		return -ENXIO;
+ 	}
+ 
+-	/*
+-	 * Note, we use 64 here for the standard size of struct page,
+-	 * debugging options may cause it to be larger in which case the
+-	 * implementation will limit the pfns advertised through
+-	 * ->direct_access() to those that are included in the memmap.
+-	 */
+ 	start = nsio->res.start;
+ 	size = resource_size(&nsio->res);
+ 	npfns = PHYS_PFN(size - SZ_8K);
+@@ -782,20 +778,33 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
+ 	}
+ 	end_trunc = start + size - ALIGN_DOWN(start + size, align);
+ 	if (nd_pfn->mode == PFN_MODE_PMEM) {
++		unsigned long page_map_size = MAX_STRUCT_PAGE_SIZE * npfns;
++
+ 		/*
+ 		 * The altmap should be padded out to the block size used
+ 		 * when populating the vmemmap. This *should* be equal to
+ 		 * PMD_SIZE for most architectures.
+ 		 *
+-		 * Also make sure size of struct page is less than 128. We
+-		 * want to make sure we use large enough size here so that
+-		 * we don't have a dynamic reserve space depending on
+-		 * struct page size. But we also want to make sure we notice
+-		 * when we end up adding new elements to struct page.
++		 * Also make sure size of struct page is less than
++		 * MAX_STRUCT_PAGE_SIZE. The goal here is compatibility in the
++		 * face of production kernel configurations that reduce the
++		 * 'struct page' size below MAX_STRUCT_PAGE_SIZE. For debug
++		 * kernel configurations that increase the 'struct page' size
++		 * above MAX_STRUCT_PAGE_SIZE, the page_struct_override allows
++		 * for continuing with the capacity that will be wasted when
++		 * reverting to a production kernel configuration. Otherwise,
++		 * those configurations are blocked by default.
+ 		 */
+-		BUILD_BUG_ON(sizeof(struct page) > MAX_STRUCT_PAGE_SIZE);
+-		offset = ALIGN(start + SZ_8K + MAX_STRUCT_PAGE_SIZE * npfns, align)
+-			- start;
++		if (sizeof(struct page) > MAX_STRUCT_PAGE_SIZE) {
++			if (page_struct_override)
++				page_map_size = sizeof(struct page) * npfns;
++			else {
++				dev_err(&nd_pfn->dev,
++					"Memory debug options prevent using pmem for the page map\n");
++				return -EINVAL;
++			}
++		}
++		offset = ALIGN(start + SZ_8K + page_map_size, align) - start;
+ 	} else if (nd_pfn->mode == PFN_MODE_RAM)
+ 		offset = ALIGN(start + SZ_8K, align) - start;
+ 	else
+@@ -818,7 +827,10 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
+ 	pfn_sb->version_minor = cpu_to_le16(4);
+ 	pfn_sb->end_trunc = cpu_to_le32(end_trunc);
+ 	pfn_sb->align = cpu_to_le32(nd_pfn->align);
+-	pfn_sb->page_struct_size = cpu_to_le16(MAX_STRUCT_PAGE_SIZE);
++	if (sizeof(struct page) > MAX_STRUCT_PAGE_SIZE && page_struct_override)
++		pfn_sb->page_struct_size = cpu_to_le16(sizeof(struct page));
++	else
++		pfn_sb->page_struct_size = cpu_to_le16(MAX_STRUCT_PAGE_SIZE);
+ 	pfn_sb->page_size = cpu_to_le32(PAGE_SIZE);
+ 	checksum = nd_sb_checksum((struct nd_gen_sb *) pfn_sb);
+ 	pfn_sb->checksum = cpu_to_le64(checksum);
+
