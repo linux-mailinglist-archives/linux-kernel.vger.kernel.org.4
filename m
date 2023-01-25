@@ -2,174 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F2E67AAB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 08:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC4967AAB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 08:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234823AbjAYHJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 02:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
+        id S234712AbjAYHLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 02:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbjAYHJw (ORCPT
+        with ESMTP id S229783AbjAYHLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 02:09:52 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84AE5260;
-        Tue, 24 Jan 2023 23:09:50 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P4PWSj012719;
-        Wed, 25 Jan 2023 07:09:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=dk4L0nxHFgeoextqDDpHvgs+Wvi0a7VUuGjWYKu97xI=;
- b=QbDliG0OgojK9f3uvIfzJgtCvWBtR2K2fAJHFF9iyNKdDWgVfldsiAh7E9C9A5ucq/M0
- dXDTnSEpMQW/lMLXAV5knUUHhFAdBL7X/jOv8K+EZqIzqftpA6JsVWZs0cZjVU/ie+3g
- luOTK0sYT+2FnONBv2PrxGC6/KNViQDZQfvX1yNFiXZvoPI930ZFzH3p5saxe5vF7Y9P
- LjBN4BHFJ+6T/V2083nyRL4EJZ5KIsuBI8SbG+XAyQmwQ8kr68xjHRN4oh1MqxlYbg4t
- JwyuXPvlENbUY+DKh5dqfj/CLSzhvMwP4+4G3AtRTzZQj2V0jYbm8zk3PTCz/+yDla3t +Q== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na9hvga4s-1
+        Wed, 25 Jan 2023 02:11:06 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CA05260;
+        Tue, 24 Jan 2023 23:11:01 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P5wYg8018646;
+        Wed, 25 Jan 2023 07:10:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=RBqV54Nrv3kEwv1XiZhZaXvmfcZ+NG4YbScD4yT8hfY=;
+ b=TPn1qqnRFxfPfz1TlM7g2K1qT46MS3mCAp3/jZ/KsgncT4lju4RmYqPvzlTzx2Qvi1s1
+ zbKWCZmwf628mgWa2ZjsCBebAb8EgqOY/dE3DFHUkdRIgIImQaik0yNDsziqKbSXbG/+
+ TBUI+YMfJPyMrstLuaT3nks09MhRyVaUt5UGgt2SY/S/nrfElDXSJXbHDkTU3xwFF28/
+ AwLPgaaVaw4lu0ZcO/LYo4K1uVFTkp3oJC2BahvjTy8dQZGErVCMOxB99u+daTH2HRja
+ BIBpv77aDGT6CYUUVawODdwCLsHb7ZerXJ1Jgr8xJv5Rw+ZEyad75TOl9GieCMY9f4Bd Ig== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3napvhgqv2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 07:09:44 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30OFtTQP015313;
-        Wed, 25 Jan 2023 07:09:42 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3n87p6bd58-1
+        Wed, 25 Jan 2023 07:10:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30P7AuLI010384
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 07:09:42 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30P79dpd50135534
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Jan 2023 07:09:39 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 08F6E20043;
-        Wed, 25 Jan 2023 07:09:39 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7280120040;
-        Wed, 25 Jan 2023 07:09:38 +0000 (GMT)
-Received: from localhost (unknown [9.43.44.248])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 25 Jan 2023 07:09:38 +0000 (GMT)
-Date:   Wed, 25 Jan 2023 12:39:36 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH] selftests/ftrace: Extend multiple_kprobes.tc to add
- multiple consecutive probes in a function
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Akanksha J N <akanksha@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
-        shuah@kernel.org
-References: <20230112095600.37665-1-akanksha@linux.ibm.com>
-        <1673529279.3c5f8oes3z.naveen@linux.ibm.com>
-        <20230113005153.c6ca2f75b9d12627eb63308a@kernel.org>
-        <1673601511.tq30r5phea.naveen@linux.ibm.com>
-        <20230114002126.a37640f815b74e9e78259a9f@kernel.org>
-        <1673856229.a7tekgas75.naveen@linux.ibm.com>
-        <20230120085554.ab4dc1b72990a4957c4c88e2@kernel.org>
-In-Reply-To: <20230120085554.ab4dc1b72990a4957c4c88e2@kernel.org>
+        Wed, 25 Jan 2023 07:10:56 GMT
+Received: from [10.110.119.13] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 23:10:56 -0800
+Message-ID: <6289c682-d5e0-8871-36a2-f9a02d98829d@quicinc.com>
+Date:   Tue, 24 Jan 2023 23:10:55 -0800
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1674629944.vwzovyd4lk.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: pf6msvON4-I-YzcNZ0QklmHr5QuubfMT
-X-Proofpoint-GUID: pf6msvON4-I-YzcNZ0QklmHr5QuubfMT
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 3/6] rpmsg: glink: rpm: Wrap driver context
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230109224001.1706516-1-quic_bjorande@quicinc.com>
+ <20230109224001.1706516-4-quic_bjorande@quicinc.com>
+From:   Chris Lew <quic_clew@quicinc.com>
+In-Reply-To: <20230109224001.1706516-4-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -HQpqmMNeT3IMh7e-5SX6wsEx7u13S08
+X-Proofpoint-ORIG-GUID: -HQpqmMNeT3IMh7e-5SX6wsEx7u13S08
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_02,2023-01-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- mlxlogscore=922 priorityscore=1501 phishscore=0 lowpriorityscore=0
- bulkscore=0 spamscore=0 mlxscore=0 impostorscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250064
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+ definitions=2023-01-25_03,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
+ adultscore=0 impostorscore=0 mlxscore=0 spamscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250065
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masami,
-
-Masami Hiramatsu wrote:
->> >=20
->> > Yes, please make it separate, this test case is for checking whether
->> > the ftrace can define/enable/disable multiple kprobe events. Not for
->> > checking kprobe with different types, nor checking interactions among
->> > different types of kprobes.
->> >=20
->> > (BTW, if you want to test optprobe on x86, you can not put the probes
->> >  within the jump instruction (+5 bytes). It will unoptimize existing
->> >  optimized kprobe in that case)
->>=20
->> Ok, I can see why we won't be able to optimize any of the probes on x86=20
->> with this approach. But, we should be able to do so on powerpc and arm,=20
->> the only other architectures supporting OPTPROBES at this time. For x86,=
-=20
->> we may have to extend the test to check kprobes/list.
->=20
-> Are there any instruction type specific limitation on those arch for
-> using optprobe? I guess the 'call' (branch with link register) will not
-> able to be optimized because it leaves the trampoline address on the
-> stack.
-
-Yes, at least on powerpc, we only optimize ALU instructions and do not=20
-optimize load/store instructions, among many others. This is the reason=20
-we try to put a probe uptil 256 offset into a function in the proposed=20
-test, which will almost certainly catch an instruction that can be=20
-optimized.
-
->=20
->>=20
->> Crucially, I think trying to place a probe at each byte can still=20
->> exercize interactions across KPROBES_ON_FTRACE and normal kprobes, so=20
->> this test is still a good start. In addition, we get to ensure that=20
->> kprobes infrastructure is rejecting placing probes at non-instruction=20
->> boundaries.
->=20
-> The interfere between probes can be happen between kprobes and optprobe
-> (*only on x86*), but not with KPORBES_ON_FTRACE. The ftrace replaced NOP
-> will be handled as one instruction.=20
-
-Yes.
-
->=20
->> > And do you really need to run "multiple" kprobes at once?
->> > I think what you need is 'kprobe_opt_types.tc'.
->>=20
->> Yes, enabling those probes is a good stress test to ensure we are only=20
->> accepting valid probe locations.
->>=20
->> multiple_kprobe_types.tc ? :)
->=20
-> Please don't mixed it with the concept of 'multiple' probe test.
-> It is different that
->  - kprobes can put probes on each instruction boundary.
->  - kprobes can allocate and enable multiple probes at the same time.
->=20
-> What the multiple_kprobes.tc tests is the latter one.
-> (This is the reason why it chooses different functions so as not to
->  interfere with each other.)
-
-Ok, I was coming from the point of view that both tests end up=20
-installing "multiple" kprobes, but I do see your point.
-
-How about adding two new tests:
-1. The same test as has been proposed in this thread: trying to add a=20
-kprobe at every byte within $FUNCTION_FORK upto an offset of 256 bytes.=20
-We can probably call it kprobe_insn_boundary.tc
-2. A new test to ensure we can add different kprobe types=20
-(kprobe_opt_types.tc). This test will need to enable and check if each=20
-probe has been optimized or not and needs arch-specific knowledge so=20
-that we can take care of x86.
-
-Would that be ok?
 
 
-Thanks,
-Naveen
+On 1/9/2023 2:39 PM, Bjorn Andersson wrote:
+> As with the SMEM driver update, wrap the RPM context in a struct to
+> facilitate the upcoming changes of moving IRQ and mailbox registration
+> to the driver.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
 
+Reviewed-by: Chris Lew <quic_clew@quicinc.com>
+
+>   drivers/rpmsg/qcom_glink_rpm.c | 44 ++++++++++++++++++++--------------
+>   1 file changed, 26 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/qcom_glink_rpm.c b/drivers/rpmsg/qcom_glink_rpm.c
+> index f64f45d1a735..6443843df6ca 100644
+> --- a/drivers/rpmsg/qcom_glink_rpm.c
+> +++ b/drivers/rpmsg/qcom_glink_rpm.c
+> @@ -53,6 +53,13 @@ struct glink_rpm_pipe {
+>   	void __iomem *fifo;
+>   };
+>   
+> +struct glink_rpm {
+> +	struct qcom_glink *glink;
+> +
+> +	struct glink_rpm_pipe rx_pipe;
+> +	struct glink_rpm_pipe tx_pipe;
+> +};
+> +
+>   static size_t glink_rpm_rx_avail(struct qcom_glink_pipe *glink_pipe)
+>   {
+>   	struct glink_rpm_pipe *pipe = to_rpm_pipe(glink_pipe);
+> @@ -257,8 +264,7 @@ static int glink_rpm_parse_toc(struct device *dev,
+>   static int glink_rpm_probe(struct platform_device *pdev)
+>   {
+>   	struct qcom_glink *glink;
+> -	struct glink_rpm_pipe *rx_pipe;
+> -	struct glink_rpm_pipe *tx_pipe;
+> +	struct glink_rpm *rpm;
+>   	struct device_node *np;
+>   	void __iomem *msg_ram;
+>   	size_t msg_ram_size;
+> @@ -266,9 +272,8 @@ static int glink_rpm_probe(struct platform_device *pdev)
+>   	struct resource r;
+>   	int ret;
+>   
+> -	rx_pipe = devm_kzalloc(&pdev->dev, sizeof(*rx_pipe), GFP_KERNEL);
+> -	tx_pipe = devm_kzalloc(&pdev->dev, sizeof(*tx_pipe), GFP_KERNEL);
+> -	if (!rx_pipe || !tx_pipe)
+> +	rpm = devm_kzalloc(&pdev->dev, sizeof(*rpm), GFP_KERNEL);
+> +	if (!rpm)
+>   		return -ENOMEM;
+>   
+>   	np = of_parse_phandle(dev->of_node, "qcom,rpm-msg-ram", 0);
+> @@ -283,36 +288,39 @@ static int glink_rpm_probe(struct platform_device *pdev)
+>   		return -ENOMEM;
+>   
+>   	ret = glink_rpm_parse_toc(dev, msg_ram, msg_ram_size,
+> -				  rx_pipe, tx_pipe);
+> +				  &rpm->rx_pipe, &rpm->tx_pipe);
+>   	if (ret)
+>   		return ret;
+>   
+>   	/* Pipe specific accessors */
+> -	rx_pipe->native.avail = glink_rpm_rx_avail;
+> -	rx_pipe->native.peak = glink_rpm_rx_peak;
+> -	rx_pipe->native.advance = glink_rpm_rx_advance;
+> -	tx_pipe->native.avail = glink_rpm_tx_avail;
+> -	tx_pipe->native.write = glink_rpm_tx_write;
+> +	rpm->rx_pipe.native.avail = glink_rpm_rx_avail;
+> +	rpm->rx_pipe.native.peak = glink_rpm_rx_peak;
+> +	rpm->rx_pipe.native.advance = glink_rpm_rx_advance;
+> +	rpm->tx_pipe.native.avail = glink_rpm_tx_avail;
+> +	rpm->tx_pipe.native.write = glink_rpm_tx_write;
+>   
+> -	writel(0, tx_pipe->head);
+> -	writel(0, rx_pipe->tail);
+> +	writel(0, rpm->tx_pipe.head);
+> +	writel(0, rpm->rx_pipe.tail);
+>   
+> -	glink = qcom_glink_native_probe(&pdev->dev,
+> +	glink = qcom_glink_native_probe(dev,
+>   					0,
+> -					&rx_pipe->native,
+> -					&tx_pipe->native,
+> +					&rpm->rx_pipe.native,
+> +					&rpm->tx_pipe.native,
+>   					true);
+>   	if (IS_ERR(glink))
+>   		return PTR_ERR(glink);
+>   
+> -	platform_set_drvdata(pdev, glink);
+> +	rpm->glink = glink;
+> +
+> +	platform_set_drvdata(pdev, rpm);
+>   
+>   	return 0;
+>   }
+>   
+>   static int glink_rpm_remove(struct platform_device *pdev)
+>   {
+> -	struct qcom_glink *glink = platform_get_drvdata(pdev);
+> +	struct glink_rpm *rpm = platform_get_drvdata(pdev);
+> +	struct qcom_glink *glink = rpm->glink;
+>   
+>   	qcom_glink_native_remove(glink);
+>   
