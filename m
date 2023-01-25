@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA6067AF6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCC167AF6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjAYKNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 05:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
+        id S235477AbjAYKOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 05:14:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235280AbjAYKNu (ORCPT
+        with ESMTP id S235435AbjAYKOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:13:50 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D2013502
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:13:47 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id z17-20020a256651000000b007907852ca4dso19450926ybm.16
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:13:47 -0800 (PST)
+        Wed, 25 Jan 2023 05:14:01 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F2D4588B
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:13:50 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5073cf66299so3177157b3.17
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:13:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=heLbD3mGJYiSLYw01jzlG4oQZAdBRW0StN/Xjg7KmmU=;
-        b=Th14K2HTVuAxor9Fx9q3Xy5v5o3773fGlKrMPidDRNgJYlCoaDOCwYh2TpFQ2l5ksz
-         /8IZZzhgATWifp2hRAlsFEaDE9uwMgxmJfCrJm9s/XXkazoDIz/Qhf606nhToseZGQFv
-         lqk/PlcxoDLPW129p6EO0rJXpAhFADFgmFf0aZTa6O2Ft2RHSe4stYbcLrJCmhuay8aH
-         wHOe4UWzsm+op9vlAKcD69x+IBndt3UsXq9RzuNvsvGG3YO7A53ixYRIepgQV1y2Gk2P
-         ytP7pVWbDhaMNAVHX2y6pvo/kYSmOXbWH57iH4sKJncE6ukUZM2hZFRPDogjK1xacjNH
-         vw4w==
+        bh=BcXbKXfFCZQ65tuD3mFQUJWR038yCPdErih0bDBe5/g=;
+        b=JVs98/QdBEeM/4DZBc3DtaO3NheWS9ikg5NYi6FuMMM25iHCQ/O3qX3Pj3Pr/HmMoa
+         kpCAQ6S0I1TT6pupwtJMbSUncFNMTaS+Y5gj4BuPperHK7F54pJOBj5jqp3Rb2W/ETrC
+         qPN5TcgtzSb6Eioi9yaWXASW2bt5mP9WTz1xrvkMwccT9fmSB9TN/ElOZQDzbaUDjmEu
+         aMkN91fpLlf3O6wWlZMsPv14voNumw5cA0skKP7rPC12oaTVg1Jf74AqaIpRbolpUv4A
+         +HKSyyhyxXLP3TovBq0eu1jtaTgQpBU2mGb5q2jFaHWfP8b0wl1GybzRYi/8+vnxkPwd
+         qsdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=heLbD3mGJYiSLYw01jzlG4oQZAdBRW0StN/Xjg7KmmU=;
-        b=Mzal7/otAx8b5bp1to1YWo+buPpzn/19GWdCWWvb+qIgZ6h79khoiz2lCYRbTF472n
-         yF7ZB66AaBlso0aCROrZssc8YHr1+Pitv9wHVinq4WWpQEM1ri9fw2O19lPJkuVwd9I1
-         nF1Wx1AlOfhAdUDOgOsKL9+WrJXbWnfTFX1PnKuTuIHf+kYkQ6uP38CjuPyywU1MnTr0
-         xX+FOPqRHOQsrLrGhjqIYSSfvgSLQMrYUBeydKz3DQKOMycNPaQ1SfXqmE+Kqe/NDanq
-         rd+JFEzsyf0KEjXXQKdl6wuH8WYy2S+I/Ebur9GdEof7rylTKAlBLzvpxYDcLYTGSKId
-         hkJw==
-X-Gm-Message-State: AFqh2kqQdh21U7x8uIgABqnGTqrICgnUoe32c9kdTznQuTH/3sN3qWM5
-        guL5GJofwfFWOunyLUjNIO2KY/Cn9wGZnxVwkg==
-X-Google-Smtp-Source: AMrXdXuLCNuTwodY1z6nZ5WVqBNMBc/D4RkFmhUQ4sfWNBdxqTTApao9GOPXDLTuVbIaqrQc5kTHC39z/FZMlHiR4w==
+        bh=BcXbKXfFCZQ65tuD3mFQUJWR038yCPdErih0bDBe5/g=;
+        b=g8nrIAk+FNbewBtfdt7dC0QNIUROVJYio60cwwklaKdtzeSusqCGjQopkgMcEvhD4t
+         T2YNT5ss3il8NxjESJZ58yoTaoSLeFI+KqyXtvze1+28hxT2421OjeSrcHuq3uFtiAq9
+         LYQy2rugZGzKXivjOMc2BRdIFC/g1L+r93g03KIEX2f8P7C3dtTL0ZbZ/npvZU7OpLrG
+         fpGNf4PiLOTEF7SWOKIB3hIpGJt3z/zIoszuu5y+o+iEIDsHAB6kXt/HpZjHc/Tu3Kma
+         Vit0KI8XvjTRA+87TQ/qQ872pBiRb8jf9+xuSU9OpdTiCmlhh0VjV+O1VjRo4Dmy99Iu
+         ztaQ==
+X-Gm-Message-State: AFqh2kqOWUOnZVi9uM8v6nNT3xiPrQ14+oEaZ2yyKkJVeiYl8zRTjT/g
+        4rR9+QytKAdoh6MIc9ekQSFIiiLh625/cMvnWg==
+X-Google-Smtp-Source: AMrXdXvxbk/q02OwWMKjU/sgeSSCMcMKzCLRXR6TpBECgKrEfw3hA+c5UScAEsOP15DQOTFIAsQS75Tb1Fl66+xujw==
 X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:e533:80e6:38fe:22c])
- (user=peternewman job=sendgmr) by 2002:a25:4d55:0:b0:7b4:fa63:5519 with SMTP
- id a82-20020a254d55000000b007b4fa635519mr3595149ybb.270.1674641626979; Wed,
- 25 Jan 2023 02:13:46 -0800 (PST)
-Date:   Wed, 25 Jan 2023 11:13:32 +0100
+ (user=peternewman job=sendgmr) by 2002:a81:1951:0:b0:4fe:8186:e5fa with SMTP
+ id 78-20020a811951000000b004fe8186e5famr2299814ywz.140.1674641629953; Wed, 25
+ Jan 2023 02:13:49 -0800 (PST)
+Date:   Wed, 25 Jan 2023 11:13:33 +0100
 In-Reply-To: <20230125101334.1069060-1-peternewman@google.com>
 Mime-Version: 1.0
 References: <20230125101334.1069060-1-peternewman@google.com>
 X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
-Message-ID: <20230125101334.1069060-2-peternewman@google.com>
-Subject: [PATCH v3 1/3] x86/resctrl: Factor rdtgroup lock for multi-file ops
+Message-ID: <20230125101334.1069060-3-peternewman@google.com>
+Subject: [PATCH v3 2/3] x86/resctrl: Factor work to update task CLOSID/RMID
 From:   Peter Newman <peternewman@google.com>
 To:     reinette.chatre@intel.com, fenghua.yu@intel.com
 Cc:     Babu.Moger@amd.com, bp@alien8.de, dave.hansen@linux.intel.com,
@@ -72,80 +72,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rdtgroup_kn_lock_live() can only release a kernfs lock for a single file
-before waiting on the rdtgroup_mutex, limiting its usefulness for
-operations on multiple files, such as rename.
+Functions that update a task's CLOSID or RMID must determine whether the
+task is concurrently running to determine whether the task needs to be
+interrupted.
 
-Factor the work needed to respectively break and unbreak active
-protection on an individual file into rdtgroup_kn_{get,put}().
+Negotiating the race conditions involved is nuanced, so spare new types
+of task group-moving functionality from needing to understand the fine
+details.
+
+Factor the task_struct::{closid,rmid} update along with the synchronized
+concurrently-running-task check from rdt_move_group_tasks() into a new
+rdt_move_one_task() helper. Use this helper in __rdtgroup_move_task() as
+well.
 
 This should not result in any functional change.
 
 Signed-off-by: Peter Newman <peternewman@google.com>
 ---
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 35 ++++++++++++++++----------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 60 +++++++++++++-------------
+ 1 file changed, 29 insertions(+), 31 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 5993da21d822..c3fb525d52e9 100644
+index c3fb525d52e9..b2081bc1bbfd 100644
 --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
 +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -2028,6 +2028,26 @@ static struct rdtgroup *kernfs_to_rdtgroup(struct kernfs_node *kn)
- 	}
+@@ -528,6 +528,31 @@ static void rdtgroup_remove(struct rdtgroup *rdtgrp)
+ 	kfree(rdtgrp);
  }
  
-+static void rdtgroup_kn_get(struct rdtgroup *rdtgrp, struct kernfs_node *kn)
++static void rdt_move_one_task(struct task_struct *t, u32 closid, u32 rmid,
++			      cpumask_var_t mask)
 +{
-+	atomic_inc(&rdtgrp->waitcount);
-+	kernfs_break_active_protection(kn);
++	WRITE_ONCE(t->closid, closid);
++	WRITE_ONCE(t->rmid, rmid);
++
++	/*
++	 * Order the closid/rmid stores above before the loads
++	 * in task_curr(). This pairs with the full barrier
++	 * between the rq->curr update and resctrl_sched_in()
++	 * during context switch.
++	 */
++	smp_mb();
++
++	/*
++	 * If the task is on a CPU, set the CPU in the mask.
++	 * The detection is inaccurate as tasks might move or
++	 * schedule before the smp function call takes place.
++	 * In such a case the function call is pointless, but
++	 * there is no other side effect.
++	 */
++	if (IS_ENABLED(CONFIG_SMP) && mask && task_curr(t))
++		cpumask_set_cpu(task_cpu(t), mask);
 +}
 +
-+static void rdtgroup_kn_put(struct rdtgroup *rdtgrp, struct kernfs_node *kn)
-+{
-+	if (atomic_dec_and_test(&rdtgrp->waitcount) &&
-+	    (rdtgrp->flags & RDT_DELETED)) {
-+		if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKSETUP ||
-+		    rdtgrp->mode == RDT_MODE_PSEUDO_LOCKED)
-+			rdtgroup_pseudo_lock_remove(rdtgrp);
-+		kernfs_unbreak_active_protection(kn);
-+		rdtgroup_remove(rdtgrp);
-+	} else {
-+		kernfs_unbreak_active_protection(kn);
-+	}
-+}
-+
- struct rdtgroup *rdtgroup_kn_lock_live(struct kernfs_node *kn)
+ static void _update_task_closid_rmid(void *task)
  {
- 	struct rdtgroup *rdtgrp = kernfs_to_rdtgroup(kn);
-@@ -2035,8 +2055,7 @@ struct rdtgroup *rdtgroup_kn_lock_live(struct kernfs_node *kn)
- 	if (!rdtgrp)
- 		return NULL;
+ 	/*
+@@ -566,25 +591,17 @@ static int __rdtgroup_move_task(struct task_struct *tsk,
+ 	 */
  
--	atomic_inc(&rdtgrp->waitcount);
--	kernfs_break_active_protection(kn);
-+	rdtgroup_kn_get(rdtgrp, kn);
+ 	if (rdtgrp->type == RDTCTRL_GROUP) {
+-		WRITE_ONCE(tsk->closid, rdtgrp->closid);
+-		WRITE_ONCE(tsk->rmid, rdtgrp->mon.rmid);
++		rdt_move_one_task(tsk, rdtgrp->closid, rdtgrp->mon.rmid, NULL);
+ 	} else if (rdtgrp->type == RDTMON_GROUP) {
+ 		if (rdtgrp->mon.parent->closid == tsk->closid) {
+-			WRITE_ONCE(tsk->rmid, rdtgrp->mon.rmid);
++			rdt_move_one_task(tsk, tsk->closid, rdtgrp->mon.rmid,
++					  NULL);
+ 		} else {
+ 			rdt_last_cmd_puts("Can't move task to different control group\n");
+ 			return -EINVAL;
+ 		}
+ 	}
  
- 	mutex_lock(&rdtgroup_mutex);
- 
-@@ -2055,17 +2074,7 @@ void rdtgroup_kn_unlock(struct kernfs_node *kn)
- 		return;
- 
- 	mutex_unlock(&rdtgroup_mutex);
+-	/*
+-	 * Ensure the task's closid and rmid are written before determining if
+-	 * the task is current that will decide if it will be interrupted.
+-	 * This pairs with the full barrier between the rq->curr update and
+-	 * resctrl_sched_in() during context switch.
+-	 */
+-	smp_mb();
 -
--	if (atomic_dec_and_test(&rdtgrp->waitcount) &&
--	    (rdtgrp->flags & RDT_DELETED)) {
--		if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKSETUP ||
--		    rdtgrp->mode == RDT_MODE_PSEUDO_LOCKED)
--			rdtgroup_pseudo_lock_remove(rdtgrp);
--		kernfs_unbreak_active_protection(kn);
--		rdtgroup_remove(rdtgrp);
--	} else {
--		kernfs_unbreak_active_protection(kn);
--	}
-+	rdtgroup_kn_put(rdtgrp, kn);
- }
- 
- static int mkdir_mondata_all(struct kernfs_node *parent_kn,
+ 	/*
+ 	 * By now, the task's closid and rmid are set. If the task is current
+ 	 * on a CPU, the PQR_ASSOC MSR needs to be updated to make the resource
+@@ -2409,26 +2426,7 @@ static void rdt_move_group_tasks(struct rdtgroup *from, struct rdtgroup *to,
+ 	for_each_process_thread(p, t) {
+ 		if (!from || is_closid_match(t, from) ||
+ 		    is_rmid_match(t, from)) {
+-			WRITE_ONCE(t->closid, to->closid);
+-			WRITE_ONCE(t->rmid, to->mon.rmid);
+-
+-			/*
+-			 * Order the closid/rmid stores above before the loads
+-			 * in task_curr(). This pairs with the full barrier
+-			 * between the rq->curr update and resctrl_sched_in()
+-			 * during context switch.
+-			 */
+-			smp_mb();
+-
+-			/*
+-			 * If the task is on a CPU, set the CPU in the mask.
+-			 * The detection is inaccurate as tasks might move or
+-			 * schedule before the smp function call takes place.
+-			 * In such a case the function call is pointless, but
+-			 * there is no other side effect.
+-			 */
+-			if (IS_ENABLED(CONFIG_SMP) && mask && task_curr(t))
+-				cpumask_set_cpu(task_cpu(t), mask);
++			rdt_move_one_task(t, to->closid, to->mon.rmid, mask);
+ 		}
+ 	}
+ 	read_unlock(&tasklist_lock);
 -- 
 2.39.1.405.gd4c25cc71f-goog
 
