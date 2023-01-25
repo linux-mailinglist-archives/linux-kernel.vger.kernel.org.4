@@ -2,94 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C1867BC2C
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E8167BC2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236260AbjAYUId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:08:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S236233AbjAYUIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:08:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236258AbjAYUI1 (ORCPT
+        with ESMTP id S236141AbjAYUIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:08:27 -0500
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28C05CFF8;
-        Wed, 25 Jan 2023 12:08:25 -0800 (PST)
-Received: by mail-ot1-f44.google.com with SMTP id cm26-20020a056830651a00b00684e5c0108dso11784894otb.9;
-        Wed, 25 Jan 2023 12:08:25 -0800 (PST)
+        Wed, 25 Jan 2023 15:08:50 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54BA5D11F
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:08:35 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so2134059wmc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:08:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bF+Lp+JDPbwdrmjIfQ0g/QFY3xJvOU79Nk3DY5MrQzU=;
+        b=lZjNXxnG0NwYLfZGiRVHlHOqlnjaMPZ1JSID3VMPnHtvUjKMLeD8kgH7GkoAlRPX/d
+         lZsrQftznCgl+6B9zFnjD0+R9mTZi5VWhbUqy+4Dn9yPmXaY6jyYgA05zUKIL4QREQK5
+         860WaQ3CHo79PSRDa601F2pA1CnldWLfwjFHehb6YLT3RlbdoLrWrgFfXYGOaht7gepv
+         INCRHLR1CmWe+DN+syp7s+t92FtOLxWMVgWyvQN3aeNBwzg5pTrvlQhgsWUr4Mnq5ALl
+         Pjus4IqrryktYkJ6L4HFew8xH3VG4y/sS7B0imQPMEb4osTROToIXx1df3catPY43Fdy
+         Wg9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cWgaUXrrfuDciYk4fQKTg/r1Izy/Hz1zVjtkeDOPneI=;
-        b=jFBf+IRpw99o1IXA/W2YfWXO3243+5cITUTZrAPSqE0X9d9fT9RRGKxjQ6UlqB6PA2
-         BxGOrFuz2E6PgX9t5zscfXXKSg/DIQmOGOx09eux5hMIR6/g1AoPHSC05FPXPkvYpFXm
-         wOx3tTvXEhPQKtANcscFZruPKoGh0qwRpt6zKuB/VAB55Zv+aFwa85TQeGfm0ya3Q4QT
-         bxcJppw/W/LG/NKdM9toJVocAOE0H6zhuGtbCrRZDvBFpc7k1B3gBgzfK83kNXojBmmU
-         oth76HKvAkiFAwn+HJZhMW8fXPGKeA8LQsljcH029iIAVKD78JZqgCJ3qaAbEh6IrAgS
-         37IA==
-X-Gm-Message-State: AFqh2krDIn9N4pu6IpfNSW4GgKmrok2hyzLzN7osIao/zmVbdrdl2eNh
-        NPUc9fJpNnCdc3lStc0B4A==
-X-Google-Smtp-Source: AMrXdXus3Z4ceRGOdNX1UqMgR5Jf06MXM2+F28K1Q1mS/DZ7M+aspNZLq1GQou47O7HCV+kd1rd9xA==
-X-Received: by 2002:a05:6830:1d6e:b0:66c:6c78:27f4 with SMTP id l14-20020a0568301d6e00b0066c6c7827f4mr17518733oti.3.1674677304813;
-        Wed, 25 Jan 2023 12:08:24 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j25-20020a056830015900b0068657984c22sm2553323otp.32.2023.01.25.12.08.23
+        bh=bF+Lp+JDPbwdrmjIfQ0g/QFY3xJvOU79Nk3DY5MrQzU=;
+        b=0ZCU4ps7CDjyUNain9SU2rew4DFE91VNZRxynAxv8LdtU23tDZKTdNl6b6zKk4gUNy
+         StzqNr8QHamfWRlv/idz7jV98o8jl9DOSLZbSXRWOfTZOziyIZAGtSUTEziyRBRWIpT7
+         yr5mhKozdO0FiZfsbWbHiQl6W6slbLJn1w3QHdaCXQMoA3FmI0bqIqQB8KFTp8biPWjQ
+         wOWS6iT1YZEHVrGNpWTnB1y06sc4585ehBPfrFyl9fECxPsFW25zu0NYsUoa2VUDVTv/
+         wDxaQfEyGMgLNLIta64IVwqt45JPCdjwjcXEy31Y0tMMXBzWSqICiVt0FkWHXDYPtY/z
+         6Kig==
+X-Gm-Message-State: AFqh2ko0tLlXmTbJ1OsquExs0W6O2GAz9rq1n5a+0YKqfYXKycPIq+1L
+        O1x9qRuCrd7tj2zpxE4XBWk=
+X-Google-Smtp-Source: AMrXdXuPLC9TNzoxh2qQMgwhJ2ZPBby8KQ2A7s3S3pJ34Cz3y7HlrsLZZ6qnvRp141wNiT4CSj68aQ==
+X-Received: by 2002:a05:600c:3ba8:b0:3d9:8635:a901 with SMTP id n40-20020a05600c3ba800b003d98635a901mr8573813wms.3.1674677314209;
+        Wed, 25 Jan 2023 12:08:34 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p57935ca5.dip0.t-ipconnect.de. [87.147.92.165])
+        by smtp.gmail.com with ESMTPSA id bi5-20020a05600c3d8500b003db0bb81b6asm2751098wmb.1.2023.01.25.12.08.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 12:08:24 -0800 (PST)
-Received: (nullmailer pid 2788919 invoked by uid 1000);
-        Wed, 25 Jan 2023 20:08:23 -0000
-Date:   Wed, 25 Jan 2023 14:08:23 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-riscv@lists.infradead.org,
-        Fabio Estevam <festevam@gmail.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        Fugang Duan <fugang.duan@nxp.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Chester Lin <clin@suse.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-serial@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Pragnesh Patel <pragnesh.patel@sifive.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Peter Korsgaard <jacmet@sunsite.dk>
-Subject: Re: [PATCH v2 08/12] dt-bindings: serial: fsl-lpuart: drop rs485
- properties
-Message-ID: <167467730194.2788619.6626868986212724244.robh@kernel.org>
-References: <20230124091602.44027-1-krzysztof.kozlowski@linaro.org>
- <20230124091916.45054-6-krzysztof.kozlowski@linaro.org>
+        Wed, 25 Jan 2023 12:08:33 -0800 (PST)
+Date:   Wed, 25 Jan 2023 21:08:31 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 02/11] staging: rtl8192e: Remove unused variables
+ rxdatacrcerr and rxmgmtcrcerr
+Message-ID: <32c9183fa2f4edd24ae6f93d56b808eb1821832b.1674675808.git.philipp.g.hortmann@gmail.com>
+References: <cover.1674675808.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230124091916.45054-6-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <cover.1674675808.git.philipp.g.hortmann@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,15 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+rxdatacrcerr and rxmgmtcrcerr are initialized and increased but never
+read. Remove dead code.
 
-On Tue, 24 Jan 2023 10:19:12 +0100, Krzysztof Kozlowski wrote:
-> The binding references rs485 schema, so there is no need to list its
-> properties.  Simplify a bit by removing unneeded entries.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 3 ---
->  1 file changed, 3 deletions(-)
-> 
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 7 -------
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 2 --
+ 2 files changed, 9 deletions(-)
 
-Acked-by: Rob Herring <robh@kernel.org>
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index 605146c840c7..e0d0f4faeca7 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -1926,13 +1926,6 @@ static void _rtl92e_rx_normal(struct net_device *dev)
+ 				priv->rtllib->LedControlHandler(dev,
+ 							LED_CTL_RX);
+ 
+-		if (stats.bCRC) {
+-			if (type != RTLLIB_FTYPE_MGMT)
+-				priv->stats.rxdatacrcerr++;
+-			else
+-				priv->stats.rxmgmtcrcerr++;
+-		}
+-
+ 		skb_len = skb->len;
+ 
+ 		if (!rtllib_rx(priv->rtllib, skb, &stats)) {
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index 82cbc7f5536a..f91a6f7a4e0a 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -183,8 +183,6 @@ enum reset_type {
+ };
+ 
+ struct rt_stats {
+-	unsigned long rxdatacrcerr;
+-	unsigned long rxmgmtcrcerr;
+ 	unsigned long rxcrcerrmin;
+ 	unsigned long rxcrcerrmid;
+ 	unsigned long rxcrcerrmax;
+-- 
+2.39.1
+
