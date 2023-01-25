@@ -2,208 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C77967C032
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 23:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D2667C037
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 23:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235836AbjAYWyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 17:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48350 "EHLO
+        id S236058AbjAYWyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 17:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235936AbjAYWyG (ORCPT
+        with ESMTP id S230064AbjAYWyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 17:54:06 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934D748A10
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:54:03 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id by10-20020a056a00400a00b005918acc2e44so24877pfb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:54:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=b0J4iQz6mVo6c6roQjaIqXL7knKeg1+IHzCeOidMp+4=;
-        b=duPMv+B+ac5xZD+nzhSwoU8TM/YzapsEKD4xJl6tYyrtdaa18QKaB/UdSW8iQZmeNo
-         zTjO3IVC1EHyoun3s16ZA71xR8kQIcEba+QEE2XersNrjffJsvwoMcIDHEw67y+Tsm5m
-         Vk1tiDhHVCAcZ8lyJstomBI8jcsbLX6R+3h6AqAZ1Dnj8tKByQIv4aPuQ1ZV/8i1U9zl
-         8FpMoC3u0KtuY4T947qtttiXkC8RmYSqqnW9zkon8qhWjmaiass5BqSXzmeC5H5mp3tA
-         lR7piNTsqZ6Cw0m8uvGJwLt+ux1XlzspffDJCiQRvwM2Ed4acY1gnvcjRabUCWoEiCUH
-         KGWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b0J4iQz6mVo6c6roQjaIqXL7knKeg1+IHzCeOidMp+4=;
-        b=rGeZoLSKOGNgZ9E+vRtpouGZBM/bygAOnuPV5AL06zCaY2PKKZKpmLWdWhVqXVsK3u
-         63z7tIuwhS/Wjgu0vOvgnfy+rZkHo75Mhtzpk64IGLRcbuDKhRkU5Gq20i8bZd5z3c8W
-         8hOmZNmi97VrTkLMnLIYf5yalw5Suff85+WR1lc90+F5+yMn5gfY1khKEwEiWN55cFsG
-         vs/bUCrv9l7Hle4I8yUDZgNzgSA6wkJnkrG1OuIVqeaHFmFwsgYDVM65rDnnznX9MdqT
-         08VyGIvV2F6L7kQKGCfSqN9U/EYTPZoQP4JUmTsD/rfj+30fggZtH/ijV2wKSJgMQGyN
-         GYmA==
-X-Gm-Message-State: AO0yUKVBG6n+IoYJU6Nm5H7ZBrVZTuYWVFdKfoO12H6zfMZBK0epK8pV
-        Et6tNzAGIM+7ps0P0JKQ5C4h3qasCb4e
-X-Google-Smtp-Source: AK7set/oVNIVG6ZqjXwzRec3b48YjsoL5D/+knPXngkUkYKKIMnvLlla1OllIYt991LRciT8dE/2shnEx8Zt
-X-Received: from zokeefe3.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1b6])
- (user=zokeefe job=sendgmr) by 2002:a17:90a:a205:b0:229:f43c:4049 with SMTP id
- u5-20020a17090aa20500b00229f43c4049mr118780pjp.0.1674687242591; Wed, 25 Jan
- 2023 14:54:02 -0800 (PST)
-Date:   Wed, 25 Jan 2023 14:53:58 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230125225358.2576151-1-zokeefe@google.com>
-Subject: [PATCH v2] mm/MADV_COLLAPSE: catch !none !huge !bad pmd lookups
-From:   "Zach O'Keefe" <zokeefe@google.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Zach O'Keefe" <zokeefe@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 17:54:40 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C2745F77;
+        Wed, 25 Jan 2023 14:54:39 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PMbfeD011156;
+        Wed, 25 Jan 2023 22:54:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=ShNDCs/hYU1h67HATsn0qG9LFaTmURi2um0s6wqdc2U=;
+ b=tX1SnapGhx29F4qOA9ufEbid/ROUjp74rkypIHjM6/I571RyuT3unjYsAqFTVBhafFK7
+ /YWw1E5gpR/XXvApeLq8u7cg3NCTbXqIYJSbhn7AsxbYodwC8U6gDQcdewT13PnPhOH1
+ E8dGUQ5OqHNFwbclebbTqBXNxbnvmfXSQekekkgaucyXuZoGzSR/2Oop20NytZwUiRWP
+ OJJBZAez3a1fjK4Due61XNs5QKgTJyuHxkDNnAnmrVBCRH0LwngaDXJDjAg8pexCwnPa
+ oXDai+FPtR+wosbR6N2lWzDgDdAe4/0yrToO7DmdpDAIWlKMLbFPhi2y0wrIco61fNy7 NQ== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nb2smtuy7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 22:54:21 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PMnH66019851;
+        Wed, 25 Jan 2023 22:54:20 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3n87p7gvw2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 22:54:20 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PMsJN354657512
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 Jan 2023 22:54:19 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A02058065;
+        Wed, 25 Jan 2023 22:54:19 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 472585804B;
+        Wed, 25 Jan 2023 22:54:17 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.77.150.21])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 25 Jan 2023 22:54:17 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-fsi@lists.ozlabs.org
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mhiramat@kernel.org, rostedt@goodmis.org, alistair@popple.id.au,
+        joel@jms.id.au, jk@ozlabs.org, andrew@aj.id.au,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, eajames@linux.ibm.com
+Subject: [PATCH v2 0/2] fsi: Add IBM I2C Responder virtual FSI master
+Date:   Wed, 25 Jan 2023 16:54:14 -0600
+Message-Id: <20230125225416.4074040-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: W-wLbNMXEBCJveMhmoGvHShloq3qQF3L
+X-Proofpoint-ORIG-GUID: W-wLbNMXEBCJveMhmoGvHShloq3qQF3L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_13,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ malwarescore=0 suspectscore=0 mlxscore=0 adultscore=0 clxscore=1011
+ spamscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250200
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 34488399fa08 ("mm/madvise: add file and shmem support to
-MADV_COLLAPSE") we make the following change to find_pmd_or_thp_or_none():
+The I2C Responder (I2CR) is an I2C device that translates I2C commands
+to CFAM or SCOM operations, effectively implementing an FSI master and
+bus.
 
-	-       if (!pmd_present(pmde))
-	-               return SCAN_PMD_NULL;
-	+       if (pmd_none(pmde))
-	+               return SCAN_PMD_NONE;
+Changes since v1:
+ - Fix the binding document
+ - Change the binding name
+ - Clean up the size argument checking
+ - Reduce __force by using packed struct for the command
 
-This was for-use by MADV_COLLAPSE file/shmem codepaths, where MADV_COLLAPSE
-might identify a pte-mapped hugepage, only to have khugepaged race-in, free
-the pte table, and clear the pmd.  Such codepaths include:
+Eddie James (2):
+  dt-bindings: fsi: Document the IBM I2C Responder virtual FSI master
+  fsi: Add IBM I2C Responder virtual FSI master
 
-A) If we find a suitably-aligned compound page of order HPAGE_PMD_ORDER
-   already in the pagecache.
-B) In retract_page_tables(), if we fail to grab mmap_lock for the target
-   mm/address.
+ .../bindings/fsi/ibm,i2cr-fsi-master.yaml     |  41 ++++
+ drivers/fsi/Kconfig                           |   9 +
+ drivers/fsi/Makefile                          |   1 +
+ drivers/fsi/fsi-master-i2cr.c                 | 225 ++++++++++++++++++
+ include/trace/events/fsi_master_i2cr.h        |  96 ++++++++
+ 5 files changed, 372 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fsi/ibm,i2cr-fsi-master.yaml
+ create mode 100644 drivers/fsi/fsi-master-i2cr.c
+ create mode 100644 include/trace/events/fsi_master_i2cr.h
 
-In these cases, collapse_pte_mapped_thp() really does expect a none (not
-just !present) pmd, and we want to suitably identify that case separate
-from the case where no pmd is found, or it's a bad-pmd (of course, many
-things could happen once we drop mmap_lock, and the pmd could plausibly
-undergo multiple transitions due to intervening fault, split, etc).
-Regardless, the code is prepared install a huge-pmd only when the existing
-pmd entry is either a genuine pte-table-mapping-pmd, or the none-pmd.
-
-However, the commit introduces a logical hole; namely, that we've allowed
-!none- && !huge- && !bad-pmds to be classified as genuine
-pte-table-mapping-pmds.  One such example that could leak through are swap
-entries.  The pmd values aren't checked again before use in
-pte_offset_map_lock(), which is expecting nothing less than a genuine
-pte-table-mapping-pmd.
-
-We want to put back the !pmd_present() check (below the pmd_none() check),
-but need to be careful to deal with subtleties in pmd transitions and
-treatments by various arch.
-
-The issue is that __split_huge_pmd_locked() temporarily clears the present
-bit (or otherwise marks the entry as invalid), but pmd_present()
-and pmd_trans_huge() still need to return true while the pmd is in this
-transitory state.  For example, x86's pmd_present() also checks the
-_PAGE_PSE , riscv's version also checks the _PAGE_LEAF bit, and arm64 also
-checks a PMD_PRESENT_INVALID bit.
-
-Covering all 4 cases for x86 (all checks done on the same pmd value):
-
-1) pmd_present() && pmd_trans_huge()
-   All we actually know here is that the PSE bit is set. Either:
-   a) We aren't racing with __split_huge_page(), and PRESENT or PROTNONE
-      is set.
-      => huge-pmd
-   b) We are currently racing with __split_huge_page().  The danger here
-      is that we proceed as-if we have a huge-pmd, but really we are
-      looking at a pte-mapping-pmd.  So, what is the risk of this
-      danger?
-
-      The only relevant path is:
-
-	madvise_collapse() -> collapse_pte_mapped_thp()
-
-      Where we might just incorrectly report back "success", when really
-      the memory isn't pmd-backed.  This is fine, since split could
-      happen immediately after (actually) successful madvise_collapse().
-      So, it should be safe to just assume huge-pmd here.
-
-2) pmd_present() && !pmd_trans_huge()
-   Either:
-   a) PSE not set and either PRESENT or PROTNONE is.
-      => pte-table-mapping pmd (or PROT_NONE)
-   b) devmap.  This routine can be called immediately after
-      unlocking/locking mmap_lock -- or called with no locks held (see
-      khugepaged_scan_mm_slot()), so previous VMA checks have since been
-      invalidated.
-
-3) !pmd_present() && pmd_trans_huge()
-  Not possible.
-
-4) !pmd_present() && !pmd_trans_huge()
-  Neither PRESENT nor PROTNONE set
-  => not present
-
-I've checked all archs that implement pmd_trans_huge() (arm64, riscv,
-powerpc, longarch, x86, mips, s390) and this logic roughly translates
-(though devmap treatment is unique to x86 and powerpc, and (3) doesn't
-necessarily hold in general -- but that doesn't matter since !pmd_present()
-always takes failure path).
-
-Also, add a comment above find_pmd_or_thp_or_none() to help future
-travelers reason about the validity of the code; namely, the possible
-mutations that might happen out from under us, depending on how
-mmap_lock is held (if at all).
-
-Fixes: 34488399fa08 ("mm/madvise: add file and shmem support to MADV_COLLAPSE")
-Reported-by: Hugh Dickins <hughd@google.com>
-Signed-off-by: Zach O'Keefe <zokeefe@google.com>
-Cc: stable@vger.kernel.org
-
----
-Request that this be pulled into stable since it's theoretically
-possible (though I have no reproducer) that while mmap_lock is dropped,
-racing thp migration installs a pmd migration entry which then has a path to
-be consumed, unchecked, by pte_offset_map().
-
-v1 -> v2: Fix typo
----
- mm/khugepaged.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 9548644bdb56..1face2ae5877 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -943,6 +943,10 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
- 	return SCAN_SUCCEED;
- }
- 
-+/*
-+ * See pmd_trans_unstable() for how the result may change out from
-+ * underneath us, even if we hold mmap_lock in read.
-+ */
- static int find_pmd_or_thp_or_none(struct mm_struct *mm,
- 				   unsigned long address,
- 				   pmd_t **pmd)
-@@ -961,8 +965,12 @@ static int find_pmd_or_thp_or_none(struct mm_struct *mm,
- #endif
- 	if (pmd_none(pmde))
- 		return SCAN_PMD_NONE;
-+	if (!pmd_present(pmde))
-+		return SCAN_PMD_NULL;
- 	if (pmd_trans_huge(pmde))
- 		return SCAN_PMD_MAPPED;
-+	if (pmd_devmap(pmde))
-+		return SCAN_PMD_NULL;
- 	if (pmd_bad(pmde))
- 		return SCAN_PMD_NULL;
- 	return SCAN_SUCCEED;
 -- 
-2.39.1.456.gfc5497dd1b-goog
+2.31.1
 
