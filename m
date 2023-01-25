@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AC367BE07
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD8C67BE25
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236420AbjAYVTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
+        id S236392AbjAYVXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:23:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235065AbjAYVTk (ORCPT
+        with ESMTP id S229458AbjAYVXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:19:40 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39C12136;
-        Wed, 25 Jan 2023 13:19:37 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id i185so16653vsc.6;
-        Wed, 25 Jan 2023 13:19:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lTQv0dOEZWq+FwJ5FdLe3oRltvUzAdQ2m1PRYdyAtRg=;
-        b=VSwvW2LBQnj3A3hvoooZA07wLI0D00qpE0zcf9URRbWXFB/nH7BsH36wkBCKZPgm+a
-         HfZBXJOelTG3sR3z0VoAwWA8+vconM/A4yXLmOPUJGeYkzZWV/Kb0MrHvfAjPbSky+j7
-         B1hE1sV4Oo/gg2iSNuj8D3QvaP20ufCSbYU06ZyGfQMny0Tvzg3CVua7cEoXQZB3imF0
-         AQ3fyb+RPaQiaUz4zQtfodNIxvNXEgdZ0jnqfcJL7a9ybZaDA2zPnTSEtG+lQjLIkMAi
-         WKEau1ZINmrHNnKwKG4kAbtlh1EHhpKJkL4/gAB/gpbqEd+TERJ74EVz9RsV8UBpa0h/
-         +gxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lTQv0dOEZWq+FwJ5FdLe3oRltvUzAdQ2m1PRYdyAtRg=;
-        b=Iml4yZ7RQjGIuuc3G1lvFCF3XExq5Wwcnl5rfYJ+4Dst1JIxh76lTM4Na81VH/NNuG
-         ib/Zo+Gm7zhF1VqkrypxckdqCF2f3xgYIHxkM2SS+o3pT22lsnW8Eujs+4HTx+JTTtTL
-         k82xu0p+DHfkU/vQlB1nERbZfRpdOJfgTJgBUEAsq/lKT+g8Wjoyk9FP9QxbNpBK9qbm
-         S7orK1wu9SSlQNd5dLIgYofPpMxGtKBeDYmIs8C3+crFt7kbZu0cFKYZO2EAy1v9CwqQ
-         QBd6Pcyd5GIVhQHkQLLiWgQY9fd++dKQukYR3Tsk9kd6Jdl9wcresiza/hyK6VkR0Z/Y
-         3XfQ==
-X-Gm-Message-State: AFqh2krCf04fCRnSCJvaQfBD+A9S0Ix3+fm7/4f7EDKe+4HSB0QHIhdR
-        GsXX3RWnJ/cKB6URSPtYREfMcZHmsa+2GNaRD/Y=
-X-Google-Smtp-Source: AMrXdXvFT6qh7t4GE++8ITizEcLmCKkw51OcxmWN+uAnPLHeN8YTWf9Wt+oKkB8cGAA4mzmcx3fuwWzfO2585tw2ioQ=
-X-Received: by 2002:a67:17c7:0:b0:3d3:ef73:b726 with SMTP id
- 190-20020a6717c7000000b003d3ef73b726mr5423395vsx.22.1674681577064; Wed, 25
- Jan 2023 13:19:37 -0800 (PST)
+        Wed, 25 Jan 2023 16:23:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA4345887
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:23:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEBB3B81BBC
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 21:23:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 596C2C433EF;
+        Wed, 25 Jan 2023 21:23:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674681809;
+        bh=QCdGrqD8UJo5cxOQpPF6bRpNm6pMH/vyFxkiVJ5VPCg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=IABr23uypQNWfOhj8d1ld9CkCkPKVIpclY6Iy6suARflOuu6fb9RpDQ3npQXObrRp
+         bSCXWeUBwo8uOPGCXVJeoTPzs8U8jTOE09j30+zu+u+TP5MTPonByHBQzDOQ2t2MWU
+         1JPoswwx7xo4valcXnEzK4NjH3ehvx6wtIffIw0Zjru1Qbd/FBs34s6UfxllrXPGlT
+         DNggAbvC+Pcf6Ng/8uINUZCSqs09S/2aFm2WRM3fXQAgJVcZjkT8nYJCfKa4SHaUZ4
+         RBLNdUESlVnrnUkFrWVegW+j67Q2DaszFSbe9F+FeKjhXKqJ9uusGEUHjinQjtbRNr
+         wXTm1g8mRiqww==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 01C065C0865; Wed, 25 Jan 2023 13:23:28 -0800 (PST)
+Date:   Wed, 25 Jan 2023 13:23:28 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230125212328.GP2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Y9CL8LBz+/mbbD00@rowland.harvard.edu>
+ <20230125022019.GB2948950@paulmck-ThinkPad-P17-Gen-1>
+ <cedf3a39-12cd-1cb1-ad5a-7c10768cee40@huaweicloud.com>
+ <20230125150520.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9FMEATzv3gcTUe2@rowland.harvard.edu>
+ <20230125171832.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9F+SyLpxHwdK0rE@rowland.harvard.edu>
+ <20230125194651.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9GSuzHFdRfLeAAp@andrea>
+ <f9f7a9b0-23c8-587f-61a9-ca4b0950ad1b@huaweicloud.com>
 MIME-Version: 1.0
-References: <20221224121814.11709-1-lephilousophe@gmail.com>
- <CAO-hwJJwUQJueutZ5z_4qwBb1Y4+-9h3ta0Xran=s6pJ_e3itQ@mail.gmail.com> <nycvar.YFH.7.76.2301251425190.1734@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.2301251425190.1734@cbobk.fhfr.pm>
-From:   Philippe Valembois <lephilousophe@gmail.com>
-Date:   Wed, 25 Jan 2023 22:19:25 +0100
-Message-ID: <CAPBBQ-aD9htg-LjGHpKfz5EWYBvjHi0jCycDfXPry8jckb5HZQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] HID: evision: Add preliminary support for EVision keyboards
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f9f7a9b0-23c8-587f-61a9-ca4b0950ad1b@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Jan 25, 2023 at 10:10:32PM +0100, Jonas Oberhauser wrote:
+> 
+> 
+> On 1/25/2023 9:36 PM, Andrea Parri wrote:
+> > > > Why do you want the implementation to forbid it?  The pattern of the
+> > > > litmus test resembles 3+3W, and you don't care whether the kernel allows
+> > > > that pattern.  Do you?
+> > > Jonas asked a similar question, so I am answering you both here.
+> > > 
+> > > With (say) a release-WRITE_ONCE() chain implementing N+2W for some
+> > > N, it is reasonably well known that you don't get ordering, hardware
+> > > support otwithstanding.  After all, none of the Linux kernel, C, and C++
+> > > memory models make that guarantee.  In addition, the non-RCU barriers
+> > > and accesses that you can use to create N+2W have been in very wide use
+> > > for a very long time.
+> > > 
+> > > Although RCU has been in use for almost as long as those non-RCU barriers,
+> > > it has not been in wide use for anywhere near that long.  So I cannot
+> > > be so confident in ruling out some N+2W use case for RCU.
+> > Did some archeology...  the pattern, with either RCU sync plus a release
+> > or with two full fences plus a release, was forbidden by "ancient LKMM":
+> > the relevant changes were described in
+> > 
+> >    https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/LWNLinuxMM/WeakModel.html#Coherence%20Point%20and%20RCU
+> > 
+> >    Andrea
+> 
+> Fascinating! It says there "But the weak model allows it, as required" --
+> what does "as required" mean? Just "as required by dropping the constraint"?
 
-It is a blackhole address indeed.
-I just sent a v3 with my corrected email address.
+"As required by our reluctance to support it, given that all use cases
+we have seen are traps for the unwary."
 
-Thanks,
-Regards,
-Philippe Valembois
+> Is there still a notion of "strong model" and "weak model", or was the
+> strong model dropped?
 
-Le mer. 25 janv. 2023 =C3=A0 14:27, Jiri Kosina <jikos@kernel.org> a =C3=A9=
-crit :
->
-> On Mon, 23 Jan 2023, Benjamin Tissoires wrote:
->
-> > > From: Philippe Valembois <lephilousophe@users.noreply.github.com>
-> >
-> > Jiri, I have a doubt. Do we accept emails from users.noreply.github.com=
-?
->
-> From quick search in github documentation, this seems to be a blackhole
-> email address, right?
->
-> If so, I'd much prefer to have a real e-mail address there, in order to
-> make sure the author / signoff holders can be reached in the future if
-> there are any concerns regarding the patch.
->
-> The e-mail address disclosure concern is moot as soon as the emaill with
-> the patch hits LKML anyway.
->
-> Thanks,
->
-> --
-> Jiri Kosina
-> SUSE Labs
->
+The strong model was dropped.  The differences between them were
+eventually small enough that it did not make sense to maintain two models.
+
+							Thanx, Paul
