@@ -2,208 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289FB67B6FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871ED67B6FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235137AbjAYQfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33902 "EHLO
+        id S234279AbjAYQgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233619AbjAYQfv (ORCPT
+        with ESMTP id S235263AbjAYQgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:35:51 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40112E0CA
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:35:49 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id e3so17616907wru.13
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:35:49 -0800 (PST)
+        Wed, 25 Jan 2023 11:36:06 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F2336471
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:36:05 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id k10-20020a17090a590a00b0022ba875a1a4so2591624pji.3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:36:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ASFlQvqBFf2+5cfZFM0tnDhN0cmGUnXdcMgd/XrWuzI=;
-        b=bFW8Q0SAsCFre+6x3yP+2SyUjrYalHBu1AKf3hNSB3DS1ve3TjqfAiABaHJ5k7x2yg
-         Gok2XiNmpaqk4Q9Y4N/bQFHHH/FwypWdbgr1tdGmBsJT6g10gQrO17U9epFhwJ8QHo5O
-         VFAE54N8hQmLOeUt2/8ZCAEwHDyGS3SrOoj3rxkt1zQoBmfIZ7wqtBFSRKAyF/tLO9Fv
-         pWfsizlSv7z/p7DRtpl/9zp+5P2OLKTeTLNPXQdDSb7x7e6wl/dusiCZlqtUpju+8abF
-         3j57gQHnefwvp6xfyjI1y3cAn0Oar1juPv7Fnqzb6fQbvcXsERA1w8EZhEkcOuojnGTZ
-         O4YA==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7gjeuMBJi0E7usVDBoVD4pYljRyA65e2p6zLRcXsT+M=;
+        b=VXfFN2sKcuFtMkOJIK8FnEGx1n1jbrqkbh8aiLnDr08t3pVR2Keo1+ky3+1H/44+b2
+         eRQWoH3l8g+sCNxO1r9nyIQRntey7cVzUGkrWAkaLOOnS3v6iFiLwyXaQhvjwYvNdZdG
+         Wt+vTb0tP8Loz9+o+otoPbL5JEk2/TzH3omkxZ1Ubc3BqOWQK2rSfos5PIrtxmTxfInx
+         x3xdcvxy9EUSgMCN6cvrL0IEVvRTEVQdtP8Q0scW/C7FomOwfJrLsZvdnoRQw6QSl/HS
+         1qliWz0eL4QenyVdz/GnuP6mNdcxuFQx280g0JM0VqiS98AB/AQTasu/oKuNUvsUHDE/
+         C0jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ASFlQvqBFf2+5cfZFM0tnDhN0cmGUnXdcMgd/XrWuzI=;
-        b=J9Y2AkgYtLIqQCw0ToODWHUhAa/uJSpLbPyibjzyyUzvIRTgfD4sKrXVxF+5UDYNCf
-         hfo0iaSXdYZT5GVjmFJET+3YpcZll7iglOGxoF6MznGphoRO8Kiq4x+YpNpDjh0NAkXn
-         Vo62DJFmjcMey2u05Iy6g0hzAYUHzfjcbk7gj3I1MpwhiSEiJdN4fpAV5obTkQ2vJwyc
-         +rPR780zoZ9Zq7Ikp3eB9utv5wwupkKCXlM4m2CXzeYPFNZOmVPoGn/tLvO7n9v2ukv9
-         tLNcCyO8KcG/tXeEmIKG805Ti4yGXZkCJcXvf8oRd3ca3QL/1sjaEu9d+zvOdk6SluNO
-         c8wQ==
-X-Gm-Message-State: AO0yUKUfyFXYHekhX2tvQpnFWeLcAkcR7zmg3iEFkXueeT/cdFmUwo1p
-        gAkDbThY4BGG8VAo2zZW87K2KA==
-X-Google-Smtp-Source: AK7set877JoLU/rLX1cYG/9G0z1LOBdfsORkeGVXzsa+7RkiPtt94c3q8kdsrRc/y95JrLfIqt3qvQ==
-X-Received: by 2002:a5d:694f:0:b0:2bf:b743:f035 with SMTP id r15-20020a5d694f000000b002bfb743f035mr3371024wrw.28.1674664548237;
-        Wed, 25 Jan 2023 08:35:48 -0800 (PST)
-Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
-        by smtp.gmail.com with ESMTPSA id t9-20020adff049000000b002bddaea7a0bsm4846651wro.57.2023.01.25.08.35.47
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7gjeuMBJi0E7usVDBoVD4pYljRyA65e2p6zLRcXsT+M=;
+        b=iji2hhPe+r/t5/eNuEcvUlXhQhhOfSIOOwAS4jOnN2/ALV3ireJCO+jiHjZUoCFPDz
+         nW2XUOpkCtxZhUojLQ/44pYhgJK9pVPTwX7pKiK2C6hxeWZ7dfhSx2gnPNIK03aoMhop
+         rlPh5MdfTo/eWMMssOkTBxBmK5USg1UwLch08qGDvsIuqWWTE4Dnj1SWgdbxzaObDlQj
+         rEghym5JPeU8ktiowMT6CMpWyBmKy9gvI6mObVat6t0TY01Ls5JIvw1FhbvpRji17Q1y
+         br0F9KnNOHAxhIWLqISSgQeMT1HncO4pozTXyTiIZthCyOGpKXqXJ7MYrzMxK1QoUA5n
+         YwEw==
+X-Gm-Message-State: AO0yUKXnDXyEMwE4cbhe3PlKiJ5lBGakIf0pYQqjbh3pWJCw/mRXF1UR
+        PjYClPZsFt8cpu+myh1nmGXxwuUu8zU=
+X-Google-Smtp-Source: AK7set/i3ZvdzEaAJdLRUPlgempqiPaRSIpBTyT+N/jDTUIKj0/ls1/6tauzQhTnyOnat1LPlgKejQ==
+X-Received: by 2002:a17:902:e848:b0:196:32fa:6993 with SMTP id t8-20020a170902e84800b0019632fa6993mr1749025plg.66.1674664564769;
+        Wed, 25 Jan 2023 08:36:04 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:4ff6:fb01:3677:2696])
+        by smtp.gmail.com with ESMTPSA id p18-20020a63b812000000b004cf643a425asm3385177pge.61.2023.01.25.08.36.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 08:35:47 -0800 (PST)
-Date:   Wed, 25 Jan 2023 16:35:46 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>
-Subject: Re: [PATCH v2] sched: cpuset: Don't rebuild sched domains on
- suspend-resume
-Message-ID: <20230125163546.pspvigh4groiwjy7@airbuntu>
-References: <20230120194822.962958-1-qyousef@layalina.io>
- <c4c2dec6-a72b-d675-fb42-be40e384ea2c@redhat.com>
+        Wed, 25 Jan 2023 08:36:04 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Wed, 25 Jan 2023 08:36:02 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] mm/madvise: add vmstat statistics for
+ madvise_[cold|pageout]
+Message-ID: <Y9FacrcUIaLZq4DL@google.com>
+References: <20230125005457.4139289-1-minchan@kernel.org>
+ <Y9DigKf0w712t0OO@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c4c2dec6-a72b-d675-fb42-be40e384ea2c@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y9DigKf0w712t0OO@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/20/23 17:16, Waiman Long wrote:
+On Wed, Jan 25, 2023 at 09:04:16AM +0100, Michal Hocko wrote:
+> On Tue 24-01-23 16:54:57, Minchan Kim wrote:
+> > madvise LRU manipulation APIs need to scan address ranges to find
+> > present pages at page table and provides advice hints for them.
+> > 
+> > Likewise pg[scan/steal] count on vmstat, madvise_pg[scanned/hinted]
+> > shows the proactive reclaim efficiency so this patch adds those
+> > two statistics in vmstat.
+> > 
+> > 	madvise_pgscanned, madvise_pghinted
+> > 
+> > Since proactive reclaim using process_madvise(2) as userland
+> > memory policy is popular(e.g,. Android ActivityManagerService),
+> > those stats are helpful to know how efficiently the policy works
+> > well.
 > 
-> On 1/20/23 14:48, Qais Yousef wrote:
-> > Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
-> > enabled rebuilding sched domain on cpuset and hotplug operations to
-> > correct deadline accounting.
-> > 
-> > Rebuilding sched domain is a slow operation and we see 10+ ms delay on
-> > suspend-resume because of that.
-> > 
-> > Since nothing is expected to change on suspend-resume operation; skip
-> > rebuilding the sched domains to regain the time lost.
-> > 
-> > Debugged-by: Rick Yiu <rickyiu@google.com>
-> > Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> > ---
-> > 
-> >      Changes in v2:
-> >      	* Remove redundant check in update_tasks_root_domain() (Thanks Waiman)
-> >      v1 link:
-> >      	https://lore.kernel.org/lkml/20221216233501.gh6m75e7s66dmjgo@airbuntu/
-> > 
-> >   kernel/cgroup/cpuset.c  | 3 +++
-> >   kernel/sched/deadline.c | 3 +++
-> >   2 files changed, 6 insertions(+)
-> > 
-> > diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> > index a29c0b13706b..9a45f083459c 100644
-> > --- a/kernel/cgroup/cpuset.c
-> > +++ b/kernel/cgroup/cpuset.c
-> > @@ -1088,6 +1088,9 @@ static void rebuild_root_domains(void)
-> >   	lockdep_assert_cpus_held();
-> >   	lockdep_assert_held(&sched_domains_mutex);
-> > +	if (cpuhp_tasks_frozen)
-> > +		return;
-> > +
-> >   	rcu_read_lock();
-> >   	/*
-> > diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> > index 0d97d54276cc..42c1143a3956 100644
-> > --- a/kernel/sched/deadline.c
-> > +++ b/kernel/sched/deadline.c
-> > @@ -2575,6 +2575,9 @@ void dl_clear_root_domain(struct root_domain *rd)
-> >   {
-> >   	unsigned long flags;
-> > +	if (cpuhp_tasks_frozen)
-> > +		return;
-> > +
-> >   	raw_spin_lock_irqsave(&rd->dl_bw.lock, flags);
-> >   	rd->dl_bw.total_bw = 0;
-> >   	raw_spin_unlock_irqrestore(&rd->dl_bw.lock, flags);
+> The usecase description is still too vague. What are those values useful
+> for? Is there anything actionable based on those numbers? How do you
+> deal with multiple parties using madvise resp. process_madvise so that
+> their stats are combined?
+
+The metric helps monitoing system MM health under fleet and experimental
+tuning with diffrent policies from the centralized userland memory daemon.
+That's really good fit under vmstat along with other MM metrics.
+
 > 
-> cpuhp_tasks_frozen is set when thaw_secondary_cpus() or
-> freeze_secondary_cpus() is called. I don't know the exact suspend/resume
-> calling sequences, will cpuhp_tasks_frozen be cleared at the end of resume
-> sequence? Maybe we should make sure that rebuild_root_domain() is called at
-> least once at the end of resume operation.
+> In the previous version I have also pointed out that this might be
+> easily achieved by tracepoints. Your counterargument was a convenience
+> in a large scale monitoring without going much into details. Presumably
+> this is because your fleet based monitoring already collects
+> /proc/vmstat while tracepoints based monitoring would require additional
+> changes. This alone is rather weak argument to be honest because
+> deploying tracepoints monitoring is quite trivial and can be done
+> outside of the said memory reclaim agent.
 
-Very good questions. It made me look at the logic again and I realize now that
-the way force_build behaves is causing this issue.
+The convenience matters but that's not my argument. 
 
-I *think* we should just make the call rebuild_root_domains() only if
-cpus_updated in cpuset_hotplug_workfn().
+Ithink using tracepoint for system metric makes no sense even though
+the tracepoint could be extended by using bpf or histogram trigger to
+get the accumulated counters for system metric.
 
-cpuset_cpu_active() seems to be the source of force_rebuild in my case; which
-seems to be called only after the last cpu is back online (what you suggest).
-In this case we can end up with cpus_updated = false, but force_rebuild = true.
+The tracepoint is the next step if we want to know further breakdown
+once something strange happens. That's why we have separate level metric
+system to narrow problem down rather than implementing all the metric
+with tracepoint. Please, look at vmstat fields. Almost every fields
+would have same question you asked "how do you break down if multiple
+processes were invovled to contribute the metric?"
 
-Now you added a couple of new users to force_rebuild in 4b842da276a8a; I'm
-trying to figure out what the conditions would be there. It seems we can have
-corner cases for cpus_update might not trigger correctly?
-
-Could the below be a good cure?
-
-AFAICT we must rebuild the root domains if something has changed in cpuset.
-Which should be captured by either having:
-
-	* cpus_updated = true
-	* force_rebuild && !cpuhp_tasks_frozen
-
-/me goes to test the patch
-
---->8---
-
-	diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-	index a29c0b13706b..363e4459559f 100644
-	--- a/kernel/cgroup/cpuset.c
-	+++ b/kernel/cgroup/cpuset.c
-	@@ -1079,6 +1079,8 @@ static void update_tasks_root_domain(struct cpuset *cs)
-		css_task_iter_end(&it);
-	 }
-
-	+static bool need_rebuild_rd = true;
-	+
-	 static void rebuild_root_domains(void)
-	 {
-		struct cpuset *cs = NULL;
-	@@ -1088,6 +1090,9 @@ static void rebuild_root_domains(void)
-		lockdep_assert_cpus_held();
-		lockdep_assert_held(&sched_domains_mutex);
-
-	+       if (!need_rebuild_rd)
-	+               return;
-	+
-		rcu_read_lock();
-
-		/*
-	@@ -3627,7 +3632,9 @@ static void cpuset_hotplug_workfn(struct work_struct *work)
-		/* rebuild sched domains if cpus_allowed has changed */
-		if (cpus_updated || force_rebuild) {
-			force_rebuild = false;
-	+               need_rebuild_rd = cpus_updated || (force_rebuild && !cpuhp_tasks_frozen);
-			rebuild_sched_domains();
-	+               need_rebuild_rd = true;
-		}
-
-		free_cpumasks(NULL, ptmp);
-
-
---->8---
-
-Thanks!
-
---
-Qais Yousef
+I am fine if you suggest adding tracepoint as well as the vmstat fields
+for further breakdown but only relying on tracepoint and frineds for
+system global metric doesn't make sense.
