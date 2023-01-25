@@ -2,95 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D929867ACAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFC567ABDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235309AbjAYIpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        id S235208AbjAYIeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235483AbjAYIou (ORCPT
+        with ESMTP id S235245AbjAYIeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:44:50 -0500
-X-Greylist: delayed 417 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 Jan 2023 00:40:17 PST
-Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d500])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9329E53565;
-        Wed, 25 Jan 2023 00:40:16 -0800 (PST)
-Received: from sas8-92ddc00f49ef.qloud-c.yandex.net (sas8-92ddc00f49ef.qloud-c.yandex.net [IPv6:2a02:6b8:c1b:2988:0:640:92dd:c00f])
-        by forward500b.mail.yandex.net (Yandex) with ESMTP id D8C285F39A;
-        Wed, 25 Jan 2023 11:33:16 +0300 (MSK)
-Received: by sas8-92ddc00f49ef.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id CXKlpM8YBeA1-MrFzk96U;
-        Wed, 25 Jan 2023 11:33:16 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1674635596;
-        bh=Iu7kC5v6n5QYhMcI1r9TLZt9aPN3xDWmxLQey5H8/Sc=;
-        h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
-        b=fBIvUJjSADfV0T9Xa3qtwCwY5pN92MQzDF2KhoQm8bB4GVPvcjCQdTPhlN5+qiUUr
-         S++rIecuSu/WVFVwrkjTh15i/Y2pHGTsqHUIpPbGT0cUPmio7Pgj1DtNrR4hGdHn+d
-         XfzmtzALnXKiv0CZBuhU/yIjEr71jRACDBQIBqOs=
-Authentication-Results: sas8-92ddc00f49ef.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
-Date:   Wed, 25 Jan 2023 11:33:11 +0300
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Hartley Sweeten" <hsweeten@visionengravers.com>,
-        "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Lukasz Majewski" <lukma@denx.de>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] gpio: ep93xx: convert driver to DT
-Message-ID: <20230125113311.2aff259d@redslave.neermore.group>
-In-Reply-To: <a699e52a-db19-4374-a4bc-a3948ecc43ef@app.fastmail.com>
-References: <20230117100845.16708-1-nikita.shubin@maquefel.me>
-        <a699e52a-db19-4374-a4bc-a3948ecc43ef@app.fastmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Wed, 25 Jan 2023 03:34:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA913518C7;
+        Wed, 25 Jan 2023 00:33:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6709361457;
+        Wed, 25 Jan 2023 08:33:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB4DC433D2;
+        Wed, 25 Jan 2023 08:33:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674635631;
+        bh=K6brwDn0nPd5gxiWmmiOqjTLHojOPbrwFmK1dTsu3hE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A28QRC1M5D+5Jdx2S8CYqrY8gNGpPR6+atiPKcucumP7QEmgpPOe81r5PctfAMVlQ
+         hAUeTNJOQh+mjMEgUQ+iTDfgHPDX0n90ZJUXIqImW9vgdgyNr8qAk1tuUbRfLLzCzH
+         6m+t/D4APkPrf8A/tTJAUJvb69oLo+NEFX+nhaFUKiEXaIv9IIUn65XUtbs6jZ0EnR
+         qyRvbcvz7GUximGkjlSFFp99RiVBuVhnsasCioqGssCOfpGGgD6Rr3xbty0U+wgjqq
+         +zpD5VkrvYEEP5NJY2pM1Mt6h8mmETegSZbZq5/niAF/bPTEuF46R0JjzGtpIJs9Dr
+         +ec9Wd72646Ng==
+Date:   Wed, 25 Jan 2023 09:33:48 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the
+ kernel
+Message-ID: <Y9DpbChLZfDONHPz@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230118134940.240102-1-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tb/30T6pH9Jh5tf8"
+Content-Disposition: inline
+In-Reply-To: <20230118134940.240102-1-brgl@bgdev.pl>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Arnd!
 
-On Tue, 17 Jan 2023 11:15:20 +0100
-"Arnd Bergmann" <arnd@arndb.de> wrote:
+--tb/30T6pH9Jh5tf8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On Tue, Jan 17, 2023, at 11:08, Nikita Shubin wrote:
-> 
-> > 
-> > +#ifdef CONFIG_OF
-> > +static const struct of_device_id ep93xx_gpio_match[] = {
-> > +	{ .compatible = "cirrus,ep93xx-gpio" },
-> > +	{ /* end of table */ },
-> > +};
-> > +MODULE_DEVICE_TABLE(of, ep93xx_gpio_match);
-> > +#endif
-> > +
-> >  static struct platform_driver ep93xx_gpio_driver = {
-> >  	.driver		= {
-> >  		.name	= "gpio-ep93xx",
-> > +		.of_match_table = ep93xx_gpio_match,
-> >  	},
-> >  	.probe		= ep93xx_gpio_probe,  
-> 
-> The #ifdef here is wrong and will cause a build failure because
-> of the unconditional reference to the variable.
-> 
-> Just remove the #ifdef/#endif.
+On Wed, Jan 18, 2023 at 02:49:40PM +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>=20
+> If we open an i2c character device and then unbind the underlying i2c
+> adapter (either by unbinding it manually via sysfs or - for a real-life
+> example - when unplugging a USB device with an i2c adaper), the kernel
+> thread calling i2c_del_adapter() will become blocked waiting for the
+> completion that only completes once all references to the character
+> device get dropped.
+>=20
+> In order to fix that, we introduce a couple changes. They need to be
+> part of a single commit in order to preserve bisectability. First, drop
+> the dev_release completion. That removes the risk of a deadlock but
+> we now need to protect the character device structures against NULL
+> pointer dereferences. To that end introduce an rw semaphore. It will
+> protect the dummy i2c_client structure against dropping the adapter from
+> under it. It will be taken for reading by all file_operations callbacks
+> and for writing by the notifier's unbind handler. This way we don't
+> prohibit the syscalls that don't get in each other's way from running
+> concurrently but the adapter will not be unbound before all syscalls
+> return.
+>=20
+> Finally: upon being notified about an unbind event for the i2c adapter,
+> we take the lock for writing and set the adapter pointer in the character
+> device's structure to NULL. This "numbs down" the device - it still exists
+> but is no longer functional. Meanwhile every syscall callback checks that
+> pointer after taking the lock but before executing any code that requires
+> it. If it's NULL, we return an error to user-space.
+>=20
+> This way we can safely open an i2c device from user-space, unbind the
+> device without triggering a deadlock and any subsequent system-call for
+> the file descriptor associated with the removed adapter will gracefully
+> fail.
+>=20
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+> v1 -> v2:
+> - keep the device release callback and use it to free the IDR number
+> - rebase on top of v6.2-rc1
+>=20
+> v2 -> v3:
+> - make symbol names more descriptive
+> - protect the name_show() sysfs callback too
+> - zero the adapter's struct device on device release
+> - make sure the code works nicely with CONFIG_DEBUG_KOBJECT_RELEASE enabl=
+ed
 
-Sorry about that - i remember that i should drop it everywhere, which
-did for all but ep93xx-gpio, i am dropping match currently, as it will
-produce a warning without dt-bindings documentation, it will be
-introduced together with the rest of series.
+So, this code handled all my stress-testing well so far. I'll try to
+think of some more ideas until this evening, but likely I will apply it
+later. Nonetheless, more review eyes are still welcome!
 
-> 
->     Arnd
 
+--tb/30T6pH9Jh5tf8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPQ6WgACgkQFA3kzBSg
+KbZAZBAAgTfOAe+naUS9bzF8naZ2Re0e60UEDoBPo2YyTozfagfyBfGvjmZdDYgn
+g+tdu8jDhhrPjpkkoZiXzBdEq7jVKQL4laDgWTsbN/GqyzRwYwDGdrVr/kwOu4C8
+dHkUAaFnTgL50m3e+CiSh+0dGtkZRuLlzA3OMh0TiE/E9g/6NJDkwTOiuQWs8uq3
+fmdtBAWgoXK6PjseWSWbkpVsmxUN2AXgZX1NkWwqEGS59BzEyosoMq+COndU8iFS
+GE8uYa69WYwkqIne3WwUVxr/wB+yQu2lYS/P/QmBHpvOpEtR1dRWSHptzM1OoaH0
+VsoaxXJA8Co7B45UoYn8HuDRXu4adFdipkYniKa8lF0NHckoFZsmwP53hk1XiXk8
+1ars7AcrAV5/z+1nMejn9lmeocP/C4THDn3my1j/HNTmQHU0GaI4GSYI44QVrQ24
+mU9BjX6dQcCKe1fI5AnIHDwNI2F3ex6coU9F3EYSJw7uuy8mOhR/cqRP0JLJpoOz
+692HgRrkARu/TFsSLDONhvr5HwyYoXnCFBzzgxjYkd4EpVQDKwpi0cjAUpVQ/7c2
+bFRQRVh67nsRWpWPBCJffYohuzx0XyOekgSqbhr+9pXo60rC2fQ29M/Tftu7+7Wz
+GzNe3/Z5wnRh/vEwcHdVgo/LCe2kXXDW6lzYFocWZewnCEYzuds=
+=SmGY
+-----END PGP SIGNATURE-----
+
+--tb/30T6pH9Jh5tf8--
