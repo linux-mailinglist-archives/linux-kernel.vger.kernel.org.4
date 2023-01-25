@@ -2,98 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E870F67B0B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C237667B0B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235177AbjAYLJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S233965AbjAYLKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235263AbjAYLJJ (ORCPT
+        with ESMTP id S230146AbjAYLK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:09:09 -0500
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADA54B740;
-        Wed, 25 Jan 2023 03:09:05 -0800 (PST)
-Received: by mail-qt1-f173.google.com with SMTP id d3so886528qte.8;
-        Wed, 25 Jan 2023 03:09:05 -0800 (PST)
+        Wed, 25 Jan 2023 06:10:27 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773E64C1E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:10:23 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id bk16so16655385wrb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:10:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XJtTZhrwaqH3s3nH8A+0YXY5lPVl4tJDj1mXgSnDowA=;
+        b=zbL5Bo69yM/6w4xhXqFMJxIAOw5UQ2yCYIiDsIeWN/3gNv75Jg/yCr4CRpp1Sd2I04
+         fBaFHe6vVl4gQ6Ckg/IvwWyI6ydZ4qoFacpmRsSNzfGBnG0dwjsggENeR33EMM2zkIeW
+         0q/5r7I/Ud2lPjFrJAzeXuJCSfgvgviZQSur1oSIJFAK+5DcO5FTF8fkHTz15ujOeJ0J
+         P7yTUoZeTcjdTSyXpMcVod77Xw1kl2/FqISs4d620/jYZ/7qkaxN23CPY2/sQOEH3Ow1
+         cVZMldgnUYxW2UJxSQC4PL2kygFLma+OcTySfRN2Rh0uHKR4gfJMcROwrn1tEP31C0EJ
+         7NxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hytH7Ayjy2lSXxgse9Hs7i/6L/ka4Pba77DRcwMleL0=;
-        b=BIQV3l+pE0ELpyGFQY1nrcl0CqJ4Rw1hZ4zkWdMXkKZr6YTJdo1rO6G/Ikbk9skHSK
-         Ur9HC6kzjjCPCvOVSPgTJVcRxiujphdNrItSrGT1bZcY9Ct5exTTzlEQTf6HRe7fcetg
-         0sbk1Wk7U+UNUoONUdFWoowwcNPpHLJsGkipc/DnU4WIlXsdAdj+bmEweJAeCKYEQ4nn
-         KEvYKHek6UwehtqIOB2NZUzI/399Jh42mT+ggMjAavj/Y79KcEgJ4NRgM9G52Gt0ZeH7
-         gFucus14lBWacJfZSjOqUDBnIUmQQxy129fqOqezBDPaozeg/1gt8LxtAFnDsYrnepJO
-         1RcQ==
-X-Gm-Message-State: AFqh2koq9NKP/jRqEMgP+bqUqp4cZWpnkNFCes7itGJ0WckwSoVW19aw
-        JjfG03G5x2t7MyYh1Ox9EyCx6IaUJQoGeA==
-X-Google-Smtp-Source: AMrXdXtDSnoslcx9l7iRN+ZGb6XVPWM/e8vWVLBHlAQ9dkHmE9IUkxrIrra2XGxn+Fb2PO+yhEgQSQ==
-X-Received: by 2002:a05:622a:a09:b0:3b6:309e:dfdb with SMTP id bv9-20020a05622a0a0900b003b6309edfdbmr50291880qtb.22.1674644943971;
-        Wed, 25 Jan 2023 03:09:03 -0800 (PST)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id e1-20020ac84141000000b003b63c08a888sm3221025qtm.4.2023.01.25.03.09.03
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XJtTZhrwaqH3s3nH8A+0YXY5lPVl4tJDj1mXgSnDowA=;
+        b=XggPZOQj9o1RXOmHGINVXG9xYy/hUra7h0r043ACfRvekyDQ8FDnNGsYBrwQZlMpKF
+         7F/YY8go9IpmTcQwEpLuY+1UsegTTzvcxdRBS5BdElJLhme/J8ew0ozI5ORV626bSLTL
+         Rru+zCnh9mfwqU2WoGhoQ2SWG/FN5oE57DzzknNjGODKF4AItTYymPw8wf8FsZmciaWZ
+         POOo61zBXDzNlVntIT7AIpHGS4KY/04jvWVNrNJYBWnK420b/s5RWlLsoaMazre4UIUj
+         W6sx0e11etKqDArB/iJgFRIYurbcSVtYhSAJbhpgETV8oLQyqUREMHAKEmYIIm4FHSqH
+         /lLA==
+X-Gm-Message-State: AFqh2ko8FtjQF20ZukRIpqsHk7E8XCuBX/dyvHYRWoSoTKRe7j35DSrr
+        bOdyrO0C6N97/U7zE0fYe0msgw==
+X-Google-Smtp-Source: AMrXdXtSIH3syXyxnqXwjnP6DbOMmtoF5w7xPN0YIgvt87MuZJe5f5fhpWIcO4suVj/J5Yr/QKdELA==
+X-Received: by 2002:adf:b181:0:b0:2be:59aa:fce5 with SMTP id q1-20020adfb181000000b002be59aafce5mr16633860wra.69.1674645021880;
+        Wed, 25 Jan 2023 03:10:21 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id u2-20020adfae42000000b002bfb8f829eesm1524135wrd.71.2023.01.25.03.10.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 03:09:03 -0800 (PST)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-4ff1fa82bbbso211669727b3.10;
-        Wed, 25 Jan 2023 03:09:03 -0800 (PST)
-X-Received: by 2002:a05:690c:c89:b0:4dd:7a8e:1cf3 with SMTP id
- cm9-20020a05690c0c8900b004dd7a8e1cf3mr3348364ywb.384.1674644942927; Wed, 25
- Jan 2023 03:09:02 -0800 (PST)
+        Wed, 25 Jan 2023 03:10:21 -0800 (PST)
+Message-ID: <50ec54ba-3468-3448-3fab-f28e97549ad2@linaro.org>
+Date:   Wed, 25 Jan 2023 12:10:18 +0100
 MIME-Version: 1.0
-References: <20230118135259.19249-1-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20230118135259.19249-1-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 25 Jan 2023 12:08:51 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX2x=AFUCCC86UuQych4mN2v6NgWdwXnEogpDmgMrdoMg@mail.gmail.com>
-Message-ID: <CAMuHMdX2x=AFUCCC86UuQych4mN2v6NgWdwXnEogpDmgMrdoMg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: r9a09g011: Reword ethernet status
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 01/10] dt-bindings: pinctrl: qcom: add IPQ5332 pinctrl
+Content-Language: en-US
+To:     Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org,
+        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, robimarko@gmail.com, quic_gurus@quicinc.com,
+        bhupesh.sharma@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230125104520.89684-1-quic_kathirav@quicinc.com>
+ <20230125104520.89684-2-quic_kathirav@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230125104520.89684-2-quic_kathirav@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 2:53 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> Although of_fdt_device_is_available returns true when the DT
-> property "status" is assigned "ok" or "okay", and false for every
-> other value, it's become common practice to assign "disabled"
-> when we want of_fdt_device_is_available to return false.
-> For some reason, the status property of the ethernet node was
-> assigned "disable" when originally added to the kernel. Change
-> it to "disabled" for consistency.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+On 25/01/2023 11:45, Kathiravan Thirumoorthy wrote:
+> From: Kathiravan T <quic_kathirav@quicinc.com>
+> 
+> Add device tree bindings for IPQ5332 TLMM block.
+> 
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> ---
+>  .../pinctrl/qcom,ipq5332-pinctrl.yaml         | 134 ++++++++++++++++++
+>  1 file changed, 134 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..d101ee04b8b7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-pinctrl.yaml
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.3.
+Name matching compatible, please.
 
-Gr{oetje,eeting}s,
+> @@ -0,0 +1,134 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/qcom,ipq5332-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm IPQ5332 TLMM pin controller
+> +
+> +maintainers:
+> +  - Bjorn Andersson <andersson@kernel.org>
+> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> +
+> +description: |
+> +  Top Level Mode Multiplexer pin controller in Qualcomm IPQ5332 SoC.
+> +
+> +allOf:
+> +  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,ipq5332-tlmm
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts: true
 
-                        Geert
+missing maxItems
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Rebase your patches on latest next and use the latest bindings and
+drivers as starting point.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +  interrupt-controller: true
+> +  "#interrupt-cells": true
+> +  gpio-controller: true
+> +  "#gpio-cells": true
+> +  gpio-ranges: true
+> +  wakeup-parent: true
+> +
+> +  gpio-reserved-ranges:
+> +    minItems: 1
+> +    maxItems: 27
+> +
+> +  gpio-line-names:
+> +    maxItems: 53
+
+You have 54 GPIOs.
+
+> +
+> +patternProperties:
+> +  "-state$":
+> +    oneOf:
+> +      - $ref: "#/$defs/qcom-ipq5332-tlmm-state"
+> +      - patternProperties:
+> +          "-pins$":
+> +            $ref: "#/$defs/qcom-ipq5332-tlmm-state"
+> +        additionalProperties: false
+> +
+> +$defs:
+> +  qcom-ipq5332-tlmm-state:
+> +    type: object
+> +    description:
+> +      Pinctrl node's client devices use subnodes for desired pin configuration.
+> +      Client device subnodes use below standard properties.
+> +    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
+> +
+> +    properties:
+> +      pins:
+> +        description:
+> +          List of gpio pins affected by the properties specified in this
+> +          subnode.
+> +        items:
+> +          pattern: "^gpio([0-9]|[1-4][0-9]|5[0-3])$"
+> +        minItems: 1
+> +        maxItems: 36
+> +
+> +      function:
+> +        description:
+> +          Specify the alternative function to be configured for the specified
+> +          pins.
+> +
+> +        enum: [ PTA_0, PTA_2, PTA_1, atest_char, atest_char0, atest_char1,
+
+1. lowercase only
+
+2. order all these by name
+
+
+> +                atest_char2, atest_char3, atest_tic, audio_pri, audio_pri0,
+> +                audio_pri1, audio_sec, audio_sec0, audio_sec1, blsp0_i2c,
+> +                blsp0_spi, blsp0_uart0, blsp0_uart1, blsp1_i2c0, blsp1_i2c1,
+> +                blsp1_spi0, blsp1_spi1, blsp1_uart0, blsp1_uart1, blsp1_uart2,
+> +                blsp2_i2c0, blsp2_i2c1, blsp2_spi, blsp2_spi0, blsp2_spi1,
+> +                core_voltage, cri_trng0, cri_trng1, cri_trng2, cri_trng3,
+> +                cxc_clk, cxc_data, dbg_out, gcc_plltest, gcc_tlmm, gpio,
+> +                lock_det, mac0, mac1, mdc0, mdc1, mdio0, mdio1, pc, pcie0_clk,
+
+Best regards,
+Krzysztof
+
