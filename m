@@ -2,97 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661EA67B5BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C97D67B5CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236018AbjAYPUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
+        id S236017AbjAYPV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbjAYPUs (ORCPT
+        with ESMTP id S234862AbjAYPVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:20:48 -0500
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DEE26583;
-        Wed, 25 Jan 2023 07:20:47 -0800 (PST)
-Received: by mail-lj1-f176.google.com with SMTP id a37so20732372ljq.0;
-        Wed, 25 Jan 2023 07:20:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eA2k8GKSkaJ8JiRx7vynIxEnjRyi/3LR49biO0Zb0Dc=;
-        b=ixTEenOPk/P28/WU27Zufkdc1V3U+/6IBKwUhocsiuw+38itv78CKYJIJm3IOPxZZh
-         i+I5OzNOaSm1ilJLMkp+jKPUY0F6AY8m8Y2Cwsj+Y8qI8jKMhoBPei3zxJ9oehMAyShU
-         PhwwAmOmols9U59QKZl6AMsxBjG3El/paycXsVjsVKrlrhBw6aj8slLejN1b+R0s9QaD
-         TmH9wrXTjrJ5FrPvIvW2bYBhGb7flpPu8GQEPpgqXs0Xz2an4o9ImNOL50s50RwqvzXy
-         QyVI4FIV3ss7L7nUtFffLVk1rXQRrFqUcYgMbf6L90I8kUVdqe9xsyl2fGvb6KskfYrf
-         BUYA==
-X-Gm-Message-State: AO0yUKXmbTAydZAGwzOumhfq49MvzXh/EWMms6YopzkVR3ek3mVBsXyK
-        wxEznsPlAqbF9SnhPAHSQ8bmhs+kJYNlfIDTq3yttu65
-X-Google-Smtp-Source: AMrXdXvLgZvoJvJqVmraThNQIStOeL24DaFIwzCkVTm8WaEP+sS95TlKL6RuNKiTDyWh6InzZ3GrXySUxCjLUSwLpiY=
-X-Received: by 2002:a17:906:4e9a:b0:84d:4dc6:1c08 with SMTP id
- v26-20020a1709064e9a00b0084d4dc61c08mr5520786eju.421.1674660035333; Wed, 25
- Jan 2023 07:20:35 -0800 (PST)
+        Wed, 25 Jan 2023 10:21:54 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D68C18AA8;
+        Wed, 25 Jan 2023 07:21:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674660113; x=1706196113;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wK3p8oOR9HlAtXRXux6KGj539I6sXbcsgCvp9ZNibfE=;
+  b=EQxme39ZAQy07Jr8nr1e3BuAh0m0vmWpSm9l3mptGDvW9DJYabb1AM6I
+   kKe8br9qXIp9y+Kt0N6KETBEKKJsb4A9KvvetBrW301qgN3IexZT7eDWm
+   m4wg90VhVvgF8zC3/CqxsRFuSGu02USMmhshdjS2UVs5KqzunGf0aCCHB
+   yGls6pgYeutJLEsWYFcL2e4LejIi2yn9oA3v5Kw0utYU5fS8regpfvRGU
+   uprYVLqs80Zw7OTixwJgUIhysulVFr9pY57fNaGlxcSwINyUf8mdsERyg
+   C8AVbIAkOFlZIKCbcPHE1gX7EgEtnnv9nWvpZBWpgz3CIRVsOspqfbOQF
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="412811035"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="412811035"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 07:21:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="612455983"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="612455983"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2023 07:21:50 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pKhau-00Eupa-2F;
+        Wed, 25 Jan 2023 17:21:48 +0200
+Date:   Wed, 25 Jan 2023 17:21:48 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>
+Subject: Re: [PATCH v1 2/3] ACPI: utils: Add
+ acpi_get_first_match_physical_node()
+Message-ID: <Y9FJDFgdLYN2hpl4@smile.fi.intel.com>
+References: <20230123171006.58274-1-andriy.shevchenko@linux.intel.com>
+ <20230123171006.58274-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <5665899.DvuYhMxLoT@kreacher>
-In-Reply-To: <5665899.DvuYhMxLoT@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 Jan 2023 16:20:23 +0100
-Message-ID: <CAJZ5v0iVqGoVq1TVvYoQLxRWnP1nTPe7seeQvbVPancxH_6J1g@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] thermal: intel: int340x: Use generic trip points table
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123171006.58274-2-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srinivas,
+On Mon, Jan 23, 2023 at 07:10:05PM +0200, Andy Shevchenko wrote:
+> There are drivers that are using a logic that is combined in the offered
+> acpi_get_first_match_physical_node(). The rationale to have this helper
+> not only redunction of the lines of code, but improving the robustness
+> by properly handling the reference counters on the error paths.
 
-On Wed, Jan 25, 2023 at 3:55 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> Hi All,
->
-> This series replaces the following patch:
->
-> https://patchwork.kernel.org/project/linux-pm/patch/2147918.irdbgypaU6@kreacher/
->
-> but it has been almost completely rewritten, so I've dropped all tags from it.
->
-> The most significant difference is that firmware-induced trip point updates are
-> now handled in a less controversial manner (no renumbering, just temperature
-> updates if applicable).
->
-> Please refer to the individual patch changelogs for details.
->
-> The series is on top of this patch:
->
-> https://patchwork.kernel.org/project/linux-pm/patch/2688799.mvXUDI8C0e@kreacher/
->
-> which applies on top of the linux-next branch in linux-pm.git from today.
+After rebasing on top of the latest code base (with Hans' patches included) I
+checked the users of similar code flow and found that there is no sense to
+provide this helper now. It's only one user for this API as is, otherwise it
+needs an access to struct acpi_device, which the proposed API doesn't provide.
 
-There are two additional branches in linux-pm.git:
+Hence, self-NAK.
 
-thermal-intel-fixes
-thermal-intel-testing
+-- 
+With Best Regards,
+Andy Shevchenko
 
-The former is just fixes to go on top of 6.2-rc5 and the latter - this
-series on top of those and the current thermal-intel branch I have
-locally with the Intel thermal drivers changes for 6.3.
 
-I would appreciate giving each of them a go in your test setup.
-
-Cheers!
