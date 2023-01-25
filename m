@@ -2,156 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E362667B208
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F85667B20B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235357AbjAYLwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:52:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
+        id S235803AbjAYLwu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 25 Jan 2023 06:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbjAYLw3 (ORCPT
+        with ESMTP id S235179AbjAYLwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:52:29 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B4F4617C;
-        Wed, 25 Jan 2023 03:52:28 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F356B1FF27;
-        Wed, 25 Jan 2023 11:52:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674647547; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SJ/Hov8dA5AtQwjazEvVbMXGIJ9ndLLp47N7ofQ4cx4=;
-        b=pXgacsTdHgiGYyBVN9vgcoDkHPc99KMqxN2lHF4x8BCAe49JWYrvjhluYPBo8Aeiyuau/n
-        HZpptJzXCIUorXumCdWJLU1ZdriRaVaJLMK8evnFcYo8OX8aItgG9bo+TU9MqtAEMbhTxh
-        0FmX6ijtqb1rsOdAc8WxYlw22VbBysI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CFD3E1358F;
-        Wed, 25 Jan 2023 11:52:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YZ4UMvoX0WP4bAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 25 Jan 2023 11:52:26 +0000
-Date:   Wed, 25 Jan 2023 12:52:26 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     "T.J. Mercier" <tjmercier@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
-        jeffv@google.com, cmllamas@google.com,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2 1/4] memcg: Track exported dma-buffers
-Message-ID: <Y9EX+usSpAjZ/8LS@dhcp22.suse.cz>
-References: <20230123191728.2928839-1-tjmercier@google.com>
- <20230123191728.2928839-2-tjmercier@google.com>
- <Y8/ybgp2FW+e3bjc@dhcp22.suse.cz>
- <20230124194628.d44rtcfsv23fndxw@google.com>
+        Wed, 25 Jan 2023 06:52:47 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBEA5FC5;
+        Wed, 25 Jan 2023 03:52:44 -0800 (PST)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id C3A8EE0005;
+        Wed, 25 Jan 2023 11:52:41 +0000 (UTC)
+Message-ID: <39fcf3b6b0954873d5e7cdcabcd26a63178619b8.camel@hadess.net>
+Subject: Re: [PATCH 2/3] HID: logitech-hidpp: Don't restart communication if
+ not necessary
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Kosina <jikos@kernel.org>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Date:   Wed, 25 Jan 2023 12:52:41 +0100
+In-Reply-To: <CAO-hwJJb+hkCpqbiF0Zw8Ot4aCJDpgvMXpVS6rCoMe7QWkhiCg@mail.gmail.com>
+References: <20221220092207.428640-1-hadess@hadess.net>
+         <20221220092207.428640-2-hadess@hadess.net>
+         <a75e34efce22ab1de8f0a2e247294a441e710193.camel@hadess.net>
+         <CAO-hwJJb+hkCpqbiF0Zw8Ot4aCJDpgvMXpVS6rCoMe7QWkhiCg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124194628.d44rtcfsv23fndxw@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 24-01-23 19:46:28, Shakeel Butt wrote:
-> On Tue, Jan 24, 2023 at 03:59:58PM +0100, Michal Hocko wrote:
-> > On Mon 23-01-23 19:17:23, T.J. Mercier wrote:
-> > > When a buffer is exported to userspace, use memcg to attribute the
-> > > buffer to the allocating cgroup until all buffer references are
-> > > released.
+On Wed, 2023-01-25 at 11:18 +0100, Benjamin Tissoires wrote:
+> On Tue, Jan 24, 2023 at 6:20 PM Bastien Nocera <hadess@hadess.net>
+> wrote:
 > > 
-> > Is there any reason why this memory cannot be charged during the
-> > allocation (__GFP_ACCOUNT used)?
-> > Also you do charge and account the memory but underlying pages do not
-> > know about their memcg (this is normally done with commit_charge for
-> > user mapped pages). This would become a problem if the memory is
-> > migrated for example.
-> 
-> I don't think this is movable memory.
-> 
-> > This also means that you have to maintain memcg
-> > reference outside of the memcg proper which is not really nice either.
-> > This mimicks tcp kmem limit implementation which I really have to say I
-> > am not a great fan of and this pattern shouldn't be coppied.
+> > On Tue, 2022-12-20 at 10:22 +0100, Bastien Nocera wrote:
+> > > Don't stop and restart communication with the device unless we
+> > > need
+> > > to
+> > > modify the connect flags used because of a device quirk.
 > > 
+> > FIWW, Andreas Bergmeier told me off-list that this fixed their
+> > problem
+> > with the Litra Glow not connecting properly.
+> > 
+> > Would be great to have reviews on this and my other HID++ patches.
 > 
-> I think we should keep the discussion on technical merits instead of
-> personal perference. To me using skmem like interface is totally fine
-> but the pros/cons need to be very explicit and the clear reasons to
-> select that option should be included.
+> Sigh. I reviewed the patches just now (well, v2 at least), and
+> thought
+> I better give a shot at it before merging, and it turns out that this
+> patch breaks the Unifying receivers.
+> 
+> Without it, each device presented to the user space has a proper
+> name:
+> 
+> logitech-hidpp-device 0003:046D:4041.001C: input,hidraw15: USB HID
+> v1.11 Keyboard [Logitech MX Master] on usb-0000:01:00.0-4/input2:5
+> 
+> But with it, I get:
+> 
+> logitech-hidpp-device 0003:046D:4041.0024: input,hidraw8: USB HID
+> v1.11 Keyboard [Logitech Wireless Device PID:4041] on
+> usb-0000:00:14.0-8.2.4/input2:5
+> 
+> This is because we present the device to the userspace before being
+> able to fetch the name from the receiver.
+> 
+> I think we should make that connect/disconnect a special case of the
+> receivers too. Or maybe if the bus is not Bluetooth or USB, do the
+> disconnect/reconnect.
 
-I do agree with that. I didn't want sound to be personal wrt tcp kmem
-accounting but the overall code maintenance cost is higher because
-of how tcp take on accounting differs from anything else in the memcg
-proper. I would prefer to not grow another example like that.
+From what I can tell, this would mean restarting the connection in case
+hidpp_unifying_init() did anything, right?
 
-> To me there are two options:
-> 
-> 1. Using skmem like interface as this patch series:
-> 
-> The main pros of this option is that it is very simple. Let me list down
-> the cons of this approach:
-> 
-> a. There is time window between the actual memory allocation/free and
-> the charge and uncharge and [un]charge happen when the whole memory is
-> allocated or freed. I think for the charge path that might not be a big
-> issue but on the uncharge, this can cause issues. The application and
-> the potential shrinkers have freed some of this dmabuf memory but until
-> the whole dmabuf is freed, the memcg uncharge will not happen. This can
-> consequences on reclaim and oom behavior of the application.
-> 
-> b. Due to the usage model i.e. a central daemon allocating the dmabuf
-> memory upfront, there is a requirement to have a memcg charge transfer
-> functionality to transfer the charge from the central daemon to the
-> client applications. This does introduce complexity and avenues of weird
-> reclaim and oom behavior.
-> 
-> 
-> 2. Allocate and charge the memory on page fault by actual user
-> 
-> In this approach, the memory is not allocated upfront by the central
-> daemon but rather on the page fault by the client application and the
-> memcg charge happen at the same time.
-> 
-> The only cons I can think of is this approach is more involved and may
-> need some clever tricks to track the page on the free patch i.e. we to
-> decrement the dmabuf memcg stat on free path. Maybe a page flag.
-> 
-> The pros of this approach is there is no need have a charge transfer
-> functionality and the charge/uncharge being closely tied to the actual
-> memory allocation and free.
-> 
-> Personally I would prefer the second approach but I don't want to just
-> block this work if the dmabuf folks are ok with the cons mentioned of
-> the first approach.
+I'll test this out and update the patch.
 
-I am not familiar with dmabuf internals to judge complexity on their end
-but I fully agree that charge-when-used is much more easier to reason
-about and it should have less subtle surprises.
--- 
-Michal Hocko
-SUSE Labs
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index 4547e9580101..e0c28257f598 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -4392,8 +4392,10 @@ static int hidpp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+        /* Allow incoming packets */
+        hid_device_io_start(hdev);
+ 
+-       if (hidpp->quirks & HIDPP_QUIRK_UNIFYING)
+-               hidpp_unifying_init(hidpp);
++       if (hidpp->quirks & HIDPP_QUIRK_UNIFYING) {
++               if (hidpp_unifying_init(hidpp) == 0)
++                       will_restart = true;
++       }
+ 
+        connected = hidpp_root_get_protocol_version(hidpp) == 0;
+        atomic_set(&hidpp->connected, connected);
+
