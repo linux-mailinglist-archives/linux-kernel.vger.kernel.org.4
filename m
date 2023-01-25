@@ -2,120 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB60067BDD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B596367BDDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbjAYVNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:13:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
+        id S236257AbjAYVNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235602AbjAYVNh (ORCPT
+        with ESMTP id S235840AbjAYVNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:13:37 -0500
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9CC12F2A;
-        Wed, 25 Jan 2023 13:13:31 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id r132so17419632oif.10;
-        Wed, 25 Jan 2023 13:13:31 -0800 (PST)
+        Wed, 25 Jan 2023 16:13:47 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773209017
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:13:38 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id j17so14740324wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:13:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JsLcxuxMTOazJRO3G1nL5/Q+Xnan4zO8kzHASnq1QZA=;
+        b=BgPfXAy0xOw1jZzEbavomqOSRnTH55mU8tvfwtEZ211OT7cCuz4uXG8XLn1gMe7ONe
+         WcCxHjrR7rmB4hCxBmvLnkyg1JeznuygjjtRQn7ShAW9vY/v1z6kaULuOCpQ3bTLU9LZ
+         3VMp3nITMf74K8HDDlOagxUdAPoZSPLi1hlwVQIQjK6feAVtBoWa/psdPMOKVRijpms9
+         Ij4B56IAUPDeJMzPlunCf/IZJVGvXMLU7jdEEvTmWPW8I2wht4agM1ZJHcJIyAGa22Vp
+         Phu69pBL4/G/FWVWHETfTq7FEamrTTNYm/eoHFbNobTwA787DvNT6MeMxv+RLzTcuxda
+         8EGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mxxLu5neQmd1wkijNxY+uQAZdlFfbPPJYNilQTfY588=;
-        b=dia0HfuMAMd75vSEwVfY4fAzzyZA7lHYJxsX9dh5L9QEv3BkPbBKEwbMpfi32uGpke
-         uzcXem4ikueBezF0ktjd+I0IaiFbsB8Q7oORlQTrMWvqBELqQb4A5muNUX/8ogLQBv7i
-         ef69pD9sTrXzWOgNt1olsESXA1OBn/SuTvgWuklceBcgT1dLUxRWhFAwT5cSlfptZIvy
-         z7AZv26IE6H+uAhAybYtsggXcV6V+PGv6BJDyNkQHlEH52l4TuSu4cL28Oz/4jCDQ0OX
-         HposoCluAyQuqLZ7f7I1L1iqzarbYv9M9utc9U8v1arlbCP84+H1ob0yxuHeugySItFn
-         poyA==
-X-Gm-Message-State: AFqh2kpZrd8ZoGvBf1rVCaYiERYnjx4vJLn1QjwY4RtBXCkS2Vv+ONoj
-        6rm6IxOAr0vz+4i8Tj9j6Hv2JoRnCQ==
-X-Google-Smtp-Source: AMrXdXu/SugN1OZvYht+GqN+hP045IwbIzwV4tVY82cvphVKskkZ9RCsN4cRd8p4EMcNXA2Injxghg==
-X-Received: by 2002:aca:1b0a:0:b0:364:ef1f:90e with SMTP id b10-20020aca1b0a000000b00364ef1f090emr14953639oib.28.1674681210360;
-        Wed, 25 Jan 2023 13:13:30 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h22-20020a9d6016000000b00670461b8be4sm2607200otj.33.2023.01.25.13.13.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 13:13:30 -0800 (PST)
-Received: (nullmailer pid 2902560 invoked by uid 1000);
-        Wed, 25 Jan 2023 21:13:29 -0000
-Date:   Wed, 25 Jan 2023 15:13:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: samsung,exynos-dwc3: allow unit
- address in DTS
-Message-ID: <20230125211329.GA2899932-robh@kernel.org>
-References: <20230125175943.675823-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JsLcxuxMTOazJRO3G1nL5/Q+Xnan4zO8kzHASnq1QZA=;
+        b=WWyZsZdrbMWvYTKngaxe4WHaRodGiEe/a3S4sALAVR7CvmEX3/V3CbU12tJlUruVC1
+         24tgh8pcmSumwVmXXhk7SCKcRxMzpjA2HaMPQcQ121VxtLHEgNkjt0dGE3kztMNM8OOu
+         fpnsD7bFkFH6b3jvuIbcm5tgBH3xELIVxtM5jgUBnOUE74Ndc0+FMt2dM5/K0mZ9/1Zh
+         i+qucJM9uUf7AfF1H6RnhaImvAS6k99IC+BPZzRcwE8Jekb5OelfGNfIs47gAl/myQQn
+         YIr4bhFtWo5KuZ7BYiC9553IKENNlCa9BV92vpEmdyNeYURyiwoZ8ibWTsL+xEaB//EU
+         /TIA==
+X-Gm-Message-State: AFqh2kp1dE3C4W6vo7aGjoMDtiVxasAQJ8VoniRjsZEXlM2ltm1s51kX
+        fmNZrS9+d7tW7tVqtnP84OoTxQ==
+X-Google-Smtp-Source: AMrXdXsPYFyzktUf5LMtw863JQqiB8bnQdiNRPJy/rhWvqe1b+FhuVVb7GKiJsFGeACA50mg+EvsQQ==
+X-Received: by 2002:a05:600c:5028:b0:3db:1dea:75c9 with SMTP id n40-20020a05600c502800b003db1dea75c9mr25055623wmr.28.1674681216854;
+        Wed, 25 Jan 2023 13:13:36 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id w19-20020a05600c099300b003cfd4e6400csm2807723wmp.19.2023.01.25.13.13.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 13:13:36 -0800 (PST)
+Message-ID: <d4b8eee7-ab0a-03ab-01ba-a71e290099d6@linaro.org>
+Date:   Wed, 25 Jan 2023 22:13:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125175943.675823-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v11 2/6] dt-bindings/thermal/mediatek: Add LVTS thermal
+ controllers dt-binding definition
+To:     Rob Herring <robh@kernel.org>
+Cc:     bchihi@baylibre.com, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230124131717.128660-1-bchihi@baylibre.com>
+ <20230124131717.128660-3-bchihi@baylibre.com>
+ <2471a5de-b7a6-fea7-152f-4fe25063abf9@linaro.org>
+ <20230125203528.GB2855708-robh@kernel.org>
+Content-Language: en-US
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230125203528.GB2855708-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 06:59:43PM +0100, Krzysztof Kozlowski wrote:
-> The Samsung Exynos SoC USB 3.0 DWC3 Controller is a simple wrapper of
-> actual DWC3 Controller device node.  It handles necessary Samsung
-> Exynos-specific resources (regulators, clocks), but does not have its
-> own MMIO address space.
+On 25/01/2023 21:35, Rob Herring wrote:
+> On Wed, Jan 25, 2023 at 12:14:17PM +0100, Daniel Lezcano wrote:
+>> On 24/01/2023 14:17, bchihi@baylibre.com wrote:
+>>> From: Balsam CHIHI <bchihi@baylibre.com>
+>>>
+>>> Add LVTS thermal controllers dt-binding definition for mt8195.
+>>>
+>>> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+>>> ---
+>>
+>> Krzysztof, Rob,
+>>
+>> are you ok with these changes ?
 > 
-> However neither simple-bus bindings nor dtc W=1 accept device nodes in
-> soc@ node which do not have unit address.  Therefore allow using
-> the address space of child device (actual DWC3 Controller) as the
-> wrapper's address.
+> It says v11, but I sure don't recall the 10 other versions...
 
-The correct fix is 'ranges' should have a value. Though the whole 
-wrapper thing when there are no registers I dislike...
+Ah, yes indeed. I remember Krzysztof told Balsam to fix the recipient 
+list because some maintainers were missing.
 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> DTS fixes are here:
-> https://lore.kernel.org/linux-samsung-soc/20230125175751.675090-1-krzysztof.kozlowski@linaro.org/T/#t
-> ---
->  .../devicetree/bindings/usb/samsung,exynos-dwc3.yaml        | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-> index 6b9a3bcb3926..a94b1926dda0 100644
-> --- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-> @@ -29,6 +29,9 @@ properties:
->  
->    ranges: true
->  
-> +  reg:
-> +    maxItems: 1
-> +
->    '#size-cells':
->      const: 1
->  
-> @@ -108,8 +111,9 @@ examples:
->      #include <dt-bindings/clock/exynos5420.h>
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->  
-> -    usb {
-> +    usb-wrapper@12000000 {
->          compatible = "samsung,exynos5250-dwusb3";
-> +        reg = <0x12000000 0x10000>;
->          #address-cells = <1>;
->          #size-cells = <1>;
->          ranges;
-> -- 
-> 2.34.1
-> 
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
