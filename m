@@ -2,107 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2490267A757
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 01:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDBD67A75B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 01:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233971AbjAYAGo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 24 Jan 2023 19:06:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S229546AbjAYAKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 19:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjAYAGm (ORCPT
+        with ESMTP id S229606AbjAYAKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 19:06:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8D993F7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:06:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C94661301
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:06:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF4AAC4339B;
-        Wed, 25 Jan 2023 00:06:39 +0000 (UTC)
-Date:   Tue, 24 Jan 2023 19:06:38 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Anuradha Weeraman <anuradha@debian.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/rt: Fix unused-const-variable W=1 warning and
- style issue
-Message-ID: <20230124190638.124a1c7a@gandalf.local.home>
-In-Reply-To: <20230119162233.887915-1-anuradha@debian.org>
-References: <20230119162233.887915-1-anuradha@debian.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 24 Jan 2023 19:10:16 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C172C474E5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:10:15 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id p24so16348170plw.11
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:10:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kvQQY5R/smm2VpLt79RKnjfK0iF1mBHjWIkac6Aen1w=;
+        b=DePKpPk+izzwBKxlN6VqyaCycZe6DgWRR0tmOk/Qy5d7YS05HX83MPEYVtNPSLLclj
+         qZre+ZkAG7HUdzU1qJscs8RAa3BiuAJlF9fw8GKkz5rXiWOwMDD7FK0nR4BSL3YHF/sp
+         UwbNZNzBvdEAnyLXw7W0w5xJg4VYFWMnNr6NzpdG+IZwcAH0pBN8ESPjUxqjZKLhoy/+
+         3KJtQhMkBvy11jsxRXOTULAVH5BRjyy3Tj6DkzpIONTYBuEJ0kPVCTps5iSJrYKuAskP
+         y0vA4ImMwi8WYqhBNFZNDUox5Sbq0hbSZ34aXC13ikv74oDNrRBDIdqFTJNdAPb1VInx
+         EhEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kvQQY5R/smm2VpLt79RKnjfK0iF1mBHjWIkac6Aen1w=;
+        b=nGI5v10qxoUs2oZeRzrCmOXa2hcWm1bzLDJSG9KusP6fUhUF+ufmVfJTAPyU3LmaEA
+         Wu8FYhNNr/0ynBjhfzNsIiX+HgcXHq0U6kHhoDELOwTlCWv8ObC8vcUrsWz/La+jkADw
+         +SLeHKp58ya0EpvT+FZ+PEMOeiyirw6ej56JY8Llwh1U9ht1aG342HB4L37R6vW4yOG4
+         4eARUGOeumb5st3ASDZ9DEmCMh/Yi2YKQd2ll6aheeHwquYN1/6LvVuQQrkj1C+oGxv8
+         5c3DF8ZK3QkPhbGVLTHyO3ns9iRtP32XEOLVK8e8d2YWFdUks1wcX85gffz3NZybIlTO
+         1OWg==
+X-Gm-Message-State: AO0yUKXA5OpFg/OgJ7Ddin01U1FIQP4chG1DZ9veLyAN5//B+RlzrVzA
+        fCbe/ll0roIAViicOmTm2auf2w==
+X-Google-Smtp-Source: AK7set/jVpOixJjbQ2WRp5+nE0HpwuNbU1zpLJ9qSvLTawGNSnxn+fFUXp15uUUfsCklU1ALw/xoqw==
+X-Received: by 2002:a05:6a21:998a:b0:b8:c859:7fc4 with SMTP id ve10-20020a056a21998a00b000b8c8597fc4mr501308pzb.1.1674605414680;
+        Tue, 24 Jan 2023 16:10:14 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u4-20020a17090ae00400b0022bbad75af4sm139372pjy.2.2023.01.24.16.10.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 16:10:14 -0800 (PST)
+Date:   Wed, 25 Jan 2023 00:10:11 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>
+Subject: Re: [PATCH v3 6/8] KVM: x86/svm/pmu: Add AMD PerfMonV2 support
+Message-ID: <Y9BzYzEjAwUA+wuy@google.com>
+References: <20221111102645.82001-1-likexu@tencent.com>
+ <20221111102645.82001-7-likexu@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111102645.82001-7-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 Jan 2023 21:52:32 +0530
-Anuradha Weeraman <anuradha@debian.org> wrote:
+On Fri, Nov 11, 2022, Like Xu wrote:
+On Fri, Nov 11, 2022, Like Xu wrote:
+> @@ -162,20 +179,42 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
+>  {
+>       struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> +     struct kvm_cpuid_entry2 *entry;
+> +     union cpuid_0x80000022_ebx ebx;
+>
+> -     if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE))
+> -             pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS_CORE;
+> +     pmu->version = 1;
+> +     if (kvm_cpu_cap_has(X86_FEATURE_AMD_PMU_V2) &&
 
-> Compiler warning with W=1 due to unused constant in
->     kernel/sched/rt.c:9:18: warning: ‘max_rt_runtime’ defined but not used
-> 
-> Fix by wrapping the variable in an #if check for CONFIG_SYSCTL and
-> CONFIG_RT_GROUP_SCHED, which are the only blocks where this variable
-> is referenced from.
-> 
-> Also, fix style issue for "else should follow close brace '}'".
-> 
-> Signed-off-by: Anuradha Weeraman <anuradha@debian.org>
-> ---
->  kernel/sched/rt.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> index ed2a47e4ddae..e46e76893a0c 100644
-> --- a/kernel/sched/rt.c
-> +++ b/kernel/sched/rt.c
-> @@ -5,8 +5,11 @@
->   */
->  
->  int sched_rr_timeslice = RR_TIMESLICE;
+Why check kvm_cpu_cap support?  I.e. what will go wrong if userspace enumerates
+PMU v2 to the guest without proper hardware/KVM support.
+
+If this is _necessary_ to protect the host kernel, then we should probably have
+a helper to query PMU features, e.g.
+
+static __always_inline bool guest_pmu_has(struct kvm_vcpu *vcpu,
+                                          unsigned int x86_feature)
+{
+        return kvm_cpu_cap_has(x86_feature) &&
+               guest_cpuid_has(vcpu, x86_feature);
+}
+
+
+
+> +         guest_cpuid_has(vcpu, X86_FEATURE_AMD_PMU_V2)) {
+> +             pmu->version = 2;
+> +             entry = kvm_find_cpuid_entry_index(vcpu, 0x80000022, 0);
+> +             ebx.full = entry->ebx;
+> +             pmu->nr_arch_gp_counters = min3((unsigned int)ebx.split.num_core_pmc,
+> +                                             (unsigned int)kvm_pmu_cap.num_counters_gp,
+> +                                             (unsigned int)KVM_AMD_PMC_MAX_GENERIC);
+
+Blech.  This really shouldn't be necessary, KVM should tweak kvm_pmu_cap.num_counters_gp
+as needed during initialization to ensure num_counters_gp doesn't exceed KVM's
+internal limits.
+
+Posted a patch[*], please take a look.  As mentioned in that thread, I'll somewhat
+speculatively apply that series sooner than later so that you can use it a base
+for this series (assuming the patch isn't busted).
+
+[*] https://lore.kernel.org/all/20230124234905.3774678-2-seanjc@google.com
+
+> +     }
 > +
-> +#if defined(CONFIG_SYSCTL) || defined(CONFIG_RT_GROUP_SCHED)
->  /* More than 4 hours if BW_SHIFT equals 20. */
->  static const u64 max_rt_runtime = MAX_BW;
+> +     /* Commitment to minimal PMCs, regardless of CPUID.80000022 */
 
-As keeping track of which config needs this can get difficult in the
-future, why not just make it:
+Please expand this comment.  I'm still not entirely sure I've interpreted it correctly,
+and I'm not sure that I agree with the code.
 
-static const u64 __maybe_unused max_rt_runtime = MAX_BW;
+> +     if (kvm_cpu_cap_has(X86_FEATURE_PERFCTR_CORE) &&
 
-?
+AFAICT, checking kvm_cpu_cap_has() is an unrelated change.  Either it's a bug fix
+and belongs in a separate patch, or it's unnecessary and should be dropped.
 
--- Steve
+> +         guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE))
+> +             pmu->nr_arch_gp_counters = max_t(unsigned int,
+> +                                              pmu->nr_arch_gp_counters,
+> +                                              AMD64_NUM_COUNTERS_CORE);
+>       else
+> -             pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS;
+> +             pmu->nr_arch_gp_counters = max_t(unsigned int,
+> +                                              pmu->nr_arch_gp_counters,
+> +                                              AMD64_NUM_COUNTERS);
 
-> +#endif
->  
->  static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun);
->  
-> @@ -604,8 +607,7 @@ static void sched_rt_rq_dequeue(struct rt_rq *rt_rq)
->  		dequeue_top_rt_rq(rt_rq, rt_rq->rt_nr_running);
->  		/* Kick cpufreq (see the comment in kernel/sched/sched.h). */
->  		cpufreq_update_util(rq_of_rt_rq(rt_rq), 0);
-> -	}
-> -	else if (on_rt_rq(rt_se))
-> +	} else if (on_rt_rq(rt_se))
->  		dequeue_rt_entity(rt_se, 0);
->  }
->  
+Using max() doesn't look right.  E.g. if KVM ends up running on some odd setup
+where ebx.split.num_core_pmc/kvm_pmu_cap.num_counters_gp is less than
+AMD64_NUM_COUNTERS_CORE or AMD64_NUM_COUNTERS.
 
+Or more likely, if userspace says "only expose N counters to this guest".
+
+Shouldn't this be something like?
+
+	if (guest_cpuid_has(vcpu, X86_FEATURE_AMD_PMU_V2))
+		pmu->nr_arch_gp_counters = min(ebx.split.num_core_pmc,
+					       kvm_pmu_cap.num_counters_gp);
+	else if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE))
+		pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS_CORE;
+	else
+		pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERSE;
