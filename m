@@ -2,90 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5388067AF74
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D78CB67AF7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234994AbjAYKPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 05:15:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
+        id S235414AbjAYKQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 05:16:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjAYKPm (ORCPT
+        with ESMTP id S235306AbjAYKQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:15:42 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3225DF773;
-        Wed, 25 Jan 2023 02:15:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1674641741;
-  x=1706177741;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GlFVmobLzB8+d7JlS4oaIjn/VGWKDV7B/1AmomosFQQ=;
-  b=hWx0QgsiIGF9na8abYLhZXyG7/BW5wfhEELEtuRAMgwzf5llmIldwB+P
-   KuL099WRhCm0QL9ykzSLe3XDOH39C+lnkMP2813ekf454iF4BrEs5/NKw
-   1GDbGRFTfml5FJPrdATaDsytiZgpN71oZ+rl/E/bCcG3dVxjmOaA+6W+p
-   oQoypo79jPVDM6+5CXIzf37YwOjKF1rgZhGjkAyKz0mF0oSp2y2hojJls
-   Oj31LtdCXoK5fw1pj3735R/tjeJdwGgm0gFZJMjiZIgBQYNTnvkR6Ryln
-   CzYphq/AEzJfhHvZqcX+KVkkPVxDu5jHKOAXi+yuUgTEEVvzKPykiPuRF
-   w==;
-Date:   Wed, 25 Jan 2023 11:15:38 +0100
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Lee Jones <lee@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>, <robh@kernel.org>
-Subject: Re: [PATCH] mfd: Add Simple PCI MFD driver
-Message-ID: <Y9EBSmOoE5+83jS5@axis.com>
-References: <20230120-simple-mfd-pci-v1-1-c46b3d6601ef@axis.com>
- <Y86op9oh5ldrZQyG@google.com>
- <Y862WTT03/JxXUG8@kroah.com>
+        Wed, 25 Jan 2023 05:16:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1C32B291
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:16:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674641764;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o5qeGFKBSRr+kwZlDb48jnVzaPiHRNkZlEPfgWj2/lw=;
+        b=T7SE9BPhzokN2DhET+RJNkHxyaq/dYev3n0Z/TDfhi3RbCNkm064lKVsij4O6Kj4uOJJNr
+        bxAef/NFT/L7bilUdCDUBeshpuTyBg+/E4tv2UPOmaQOgeB0Tlbg7llrYofKvYWCSYiXAx
+        /AkfKqSWejLfwuxVawcEsNjfwtLnDgk=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-612-WSqBFc98O-a4uhfH7dYCpg-1; Wed, 25 Jan 2023 05:16:02 -0500
+X-MC-Unique: WSqBFc98O-a4uhfH7dYCpg-1
+Received: by mail-ed1-f71.google.com with SMTP id g14-20020a056402090e00b0046790cd9082so12751486edz.21
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:16:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o5qeGFKBSRr+kwZlDb48jnVzaPiHRNkZlEPfgWj2/lw=;
+        b=yxtm1X/OOJecWTnFPfrFJ7gHDH6ewBUVZkHSTb+uxOuVGunBTG9b/Ul+lMGj46tCC+
+         ITUNBf59BOTv4CAGkurVasjE5twpTLXZLp7TCaILwH/MFz79ogbopkxSCpM2K4wdSHlx
+         7ELoSwePm0Yqxz8ZMkepJGHO15KK8kzUs5xQzoAypLka2f4DjqtwGkSCqta2oOINgscD
+         6bv/P7cHU6H3tiQHg9QaybAg81afEiMFzZdNBtUla9lMwtAT1awC+dlZQt9KviItYD3X
+         4z/V7fqFLDd06BW2p6Wce0CStVb2/JQKHxFYYGuksvvCQs86b9hZ8XyJMEy3iUpr7tJg
+         EObA==
+X-Gm-Message-State: AFqh2kpngM3+OuZpY+BvdJT0UZhT2nsDul/PeHUvBjQ1stgffcv5M6HF
+        PguLhSeImKumhaE/YO+qy3+a5Wcksv5sXJ4oi/lpekzPrtdqfCLdss3a1X43J2Gbw5Nf/EPjj2R
+        jJm8U9esRug9MRcympi9l7UOb
+X-Received: by 2002:a17:906:ced0:b0:870:5ed6:74b4 with SMTP id si16-20020a170906ced000b008705ed674b4mr32453482ejb.61.1674641761449;
+        Wed, 25 Jan 2023 02:16:01 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsz/EIskzfmm3gedIZzqyypQVO/xKGeWVH2p8YM0BX8XO8y15Ts7QahD4qr5ZRrSyziktbNww==
+X-Received: by 2002:a17:906:ced0:b0:870:5ed6:74b4 with SMTP id si16-20020a170906ced000b008705ed674b4mr32453475ejb.61.1674641761274;
+        Wed, 25 Jan 2023 02:16:01 -0800 (PST)
+Received: from greebo.mooo.com (c-e6a5e255.022-110-73746f36.bbcust.telenor.se. [85.226.165.230])
+        by smtp.gmail.com with ESMTPSA id vk6-20020a170907cbc600b0084c62b7b7d8sm2121300ejc.187.2023.01.25.02.16.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 02:16:00 -0800 (PST)
+Message-ID: <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+From:   Alexander Larsson <alexl@redhat.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Amir Goldstein <amir73il@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gscrivan@redhat.com, david@fromorbit.com, brauner@kernel.org,
+        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 25 Jan 2023 11:15:59 +0100
+In-Reply-To: <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com>
+References: <cover.1674227308.git.alexl@redhat.com>
+         <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+         <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
+         <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
+         <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+         <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+         <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
+         <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y862WTT03/JxXUG8@kroah.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 05:31:21PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Jan 23, 2023 at 03:32:55PM +0000, Lee Jones wrote:
-> > On Mon, 23 Jan 2023, Vincent Whitchurch wrote:
-> > 
-> > > Add a PCI driver which registers all child nodes specified in the
-> > > devicetree.  It will allow platform devices to be used on virtual
-> > > systems which already support PCI and devicetree, such as UML with
-> > > virt-pci.
-> > > 
-> > > The driver has no id_table by default; user space needs to provide one
-> > > using the new_id mechanism in sysfs.
-> > 
-> > This feels wrong for several reasons.
-> > 
-> > Firstly, I think Greg (Cc:ed) will have something to say about this.
-> 
-> Yes, this isn't ok.  Please write a real driver for the hardware under
-> control here, and that would NOT be a MFD driver (hint, if you want to
-> split up a PCI device into different drivers, use the aux bus code, that
-> is what it is there for.)
+On Wed, 2023-01-25 at 18:05 +0800, Gao Xiang wrote:
+>=20
+>=20
+> On 2023/1/25 17:37, Alexander Larsson wrote:
+> > On Tue, 2023-01-24 at 21:06 +0200, Amir Goldstein wrote:
+> > > On Tue, Jan 24, 2023 at 3:13 PM Alexander Larsson
+> > > <alexl@redhat.com>
+>=20
+> ...
+>=20
+> > > >=20
+> > > > They are all strictly worse than squashfs in the above testing.
+> > > >=20
+> > >=20
+> > > It's interesting to know why and if an optimized mkfs.erofs
+> > > mkfs.ext4 would have done any improvement.
+> >=20
+> > Even the non-loopback mounted (direct xfs backed) version performed
+> > worse than the squashfs one. I'm sure a erofs with sparse files
+> > would
+> > do better due to a more compact file, but I don't really see how it
+> > would perform significantly different than the squashfs code. Yes,
+> > squashfs lookup is linear in directory length, while erofs is
+> > log(n),
+> > but the directories are not so huge that this would dominate the
+> > runtime.
+> >=20
+> > To get an estimate of this I made a broken version of the erofs
+> > image,
+> > where the metacopy files are actually 0 byte size rather than
+> > sparse.
+> > This made the erofs file 18M instead, and gained 10% in the cold
+> > cache
+> > case. This, while good, is not near enough to matter compared to
+> > the
+> > others.
+> >=20
+> > I don't think the base performance here is really much dependent on
+> > the
+> > backing filesystem. An ls -lR workload is just a measurement of the
+> > actual (i.e. non-dcache) performance of the filesystem
+> > implementation
+> > of lookup and iterate, and overlayfs just has more work to do here,
+> > especially in terms of the amount of i/o needed.
+>=20
+> I will form a formal mkfs.erofs version in one or two days since
+> we're
+> cerebrating Lunar New year now.
+>=20
+> Since you don't have more I/O traces for analysis, I have to do
+> another
+> wild guess.
+>=20
+> Could you help benchmark your v2 too? I'm not sure if such
+> performance also exists in v2.=C2=A0 The reason why I guess as this is
+> that it seems that you read all dir inode pages when doing the first
+> lookup, it can benefit to seq dir access.
+>=20
+> I'm not sure if EROFS can make a similar number by doing forcing
+> readahead on dirs to read all dir data at once as well.
+>=20
+> Apart from that I don't see significant difference, at least
+> personally
+> I'd like to know where it could have such huge difference.=C2=A0 I don't
+> think that is all because of read-only on-disk format differnce.
 
-I hope it's clear from my other replies in this thread that the entire
-purpose of this driver is to allow arbitrary platform devices to be used
-via a PCI device in virtual environments like User Mode Linux in order
-to test existing platform drivers using mocked hardware.
+I think the performance difference between v2 and v3 would be rather
+minor in this case, because I don't think a lot of the directories are
+large enough to be split in chunks. I also don't believe erofs and
+composefs should fundamentally differ much in performance here, given
+that both use a compact binary searchable layout for dirents. However,
+the full comparison is "composefs" vs "overlayfs + erofs", and in that
+case composefs wins.
 
-Given this "hardware", it's not clear what a "real driver" would do
-differently.  The auxiliary bus cannot be used since it naturally does
-not support platform devices.  A hard coded list of sub-devices cannot
-be used since arbitrary platform devices with arbitrary devicetree
-properties need to be supported.
+--=20
+=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D=
+-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-
+=3D-=3D-=3D
+ Alexander Larsson                                            Red Hat,
+Inc=20
+       alexl@redhat.com            alexander.larsson@gmail.com=20
+He's an obese Catholic messiah who knows the secret of the alien=20
+invasion. She's a provocative Bolivian single mother living on borrowed
+time. They fight crime!=20
 
-I could move this driver to drivers/bus/ and pitch it as a
-"PCI<->platform bridge for testing in virtual environments", if that
-makes more sense.
