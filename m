@@ -2,124 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E3D67AB75
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:14:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A88B67AB7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235075AbjAYIOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
+        id S235103AbjAYIS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbjAYIOm (ORCPT
+        with ESMTP id S234913AbjAYISq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:14:42 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378C214238;
-        Wed, 25 Jan 2023 00:14:41 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P823C6024376;
-        Wed, 25 Jan 2023 08:14:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=keL/V4bFVJjqoggiHb3seMd7EdlHsokOIRNrZhWi3n4=;
- b=jOkI/TIpG7rD7usDvSTOYYYNfO/S//pTLv0YOr8Rp8Tdam3BR+JfHEVjyoZ9FUeUbS6G
- ogYq8Eq1MH/Hcy/gEsa0mZDpMGLr3mQ3WrhVba2y5WdzgqirllwsgReIPP6QGMwY3Vpn
- nfTQqzGFpU6KghZ9CtnsxOmiA/gQ/Wyiy+DDN/Z7G7Z7iUP0c0HLkZyeNJlif3iRt6Qq
- R3vyuNdpuLaYHK09rkrJl3DdwpMcCVKdVuvVqSxj5NZul52HEr7axWM00vfJ8GzUQvOe
- xCHjTOXv7Nb32wyOyObvWdQnoRnOjF01dsLr6ThkbSnr1ue8UQ546XMjIf+oKhk4Dl4Q IA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3najqa9bw3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 08:14:35 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30P8EY0D015986
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 08:14:34 GMT
-Received: from hu-namajain-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 25 Jan 2023 00:14:31 -0800
-From:   Naman Jain <quic_namajain@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        Naman Jain <quic_namajain@quicinc.com>
-Subject: [PATCH] soc: qcom: socinfo: Add support for new field in revision 17
-Date:   Wed, 25 Jan 2023 13:44:07 +0530
-Message-ID: <20230125081407.31833-1-quic_namajain@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 25 Jan 2023 03:18:46 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246632ED66
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:18:44 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id bk16so16183860wrb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:18:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WbD+hf3FdzdoYfGCceQ6HYFxbilvveL00wdzz479bAg=;
+        b=TU4IljbPlO/Cu5JIUMlCZ3SK14XQ4s6KPMmklhaXSQ42uMuxnqet82/79UIicE2Q+R
+         UxK2bCwTgpGlL5WENRCZe0EedKJUh/IIEPFW7xMPyG+YGvIZHt3cCzpn2Eq41wGMX2/x
+         POPZH5/y1aiy/YES1lr93Flbo6Hzeq4UZ3W31Xq3Ccb4Gt+9nYcoZZ/9iZIxrJAaq5uG
+         cWjk66Q4e67h6YH+celevxLvumcA8mhPWPyczXo+YpRbmkCXQA0dY7iZ8WAx8gGKijMO
+         zXQw3nSbnlDJk8+8EYCgAIT+bnj20xhvpRk03R7iGSiES8205uxhWfVIZyoKSJPVupmG
+         1jYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WbD+hf3FdzdoYfGCceQ6HYFxbilvveL00wdzz479bAg=;
+        b=yxzvFFNK634/CyDR+3CCExhwFGFA8aTp1+lLn2+lcomryChueAuKcQ0t+dZ3kD0TEV
+         qWFdOhoPNt3WMj9yaTkpeKXqqkN4xDI4+7DTqZNB2kLmR1CWVDb2size984CbBpGPPJL
+         BMsh9qNIooDOVloMJftZH34zeNvPZ00vufQSq3hHsold3DcC/gcgrsr4/irjAAsRiAt4
+         4Y5tEmPPF1S8CzcLStPx+LKLRGaT28xrSzIzBeNUsnK1z4XE8hxTfvi3G/yQNVom57hb
+         i21WtldSgyDmgzCktb3wHP6Ce6zSCICmQ3oiOsSCmCjaF8BCObb9n78+mwLWRL3EMI3p
+         5ikg==
+X-Gm-Message-State: AFqh2kqmSMlRj877CL1nWztxKdwhSKWF+BKQj4HxocZ0CgQtUULeppOH
+        U7uZTQtbBHcKKOOIYXvxDN7e+A==
+X-Google-Smtp-Source: AMrXdXtpdzpnwqRRl/ZPBknIAsI3dT0aYCw6sp/T5m0FkClf8NlpnkPD9KBbymR3GBHpDTU+rz7f8w==
+X-Received: by 2002:a5d:404c:0:b0:2be:1258:897d with SMTP id w12-20020a5d404c000000b002be1258897dmr26796348wrp.43.1674634722560;
+        Wed, 25 Jan 2023 00:18:42 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id p7-20020adff207000000b002bdff778d87sm3770343wro.34.2023.01.25.00.18.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 00:18:42 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v2 0/3] arm64: meson-g12b: add initial support for
+ Odroid-N2L
+Date:   Wed, 25 Jan 2023 09:18:36 +0100
+Message-Id: <20230122-topic-odroid-n2l-upstream-initial-v2-0-8d3fea6d403d@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ojc2Bmut0we8S9VQ6RJk0mdjzxPaNbwQ
-X-Proofpoint-ORIG-GUID: ojc2Bmut0we8S9VQ6RJk0mdjzxPaNbwQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_04,2023-01-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- malwarescore=0 adultscore=0 spamscore=0 mlxscore=0 clxscore=1015
- impostorscore=0 priorityscore=1501 mlxlogscore=999 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250075
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANzl0GMC/5WOQQ6CMBBFr0K6dkxbMIAr72FYlDLAJLUl00I0h
+ LtbuYHL9xb//V1EZMIo7sUuGDeKFHwGfSmEnY2fEGjILLTUpVRaQwoLWQgDBxrAawfrEhOjeQF
+ 5SmQcNFiNdaXqVlsl8k5vIkLPxts5L/nVuSwXxpHeZ/jZZZ4ppsCf88emfvaf5KZAgrJ4Q9nIs
+ h3kw5E3HK6BJ9Edx/EFgykUy+gAAAA=
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        Dongjin Kim <tobetter@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for new field coming with socinfo structure under v17 to get
-hardware platform's oem variant id. This is to enable OEMs to have minor
-changes in the board, but to use the same platform subtype as the one
-supported by Qualcomm. The new field is to be used in platform overlay
-file. Default value is 0, reserved for Qualcomm platforms. Also, add
-debugfs support to read this field for a device.
+ODROID-N2L is a variant SBC in small form factor and some peripherals
+are removed from ODROID-N2PLUS based on S922X SoC.
 
-Change-Id: I18f80084bc75466f3fcccd55fd21b37d69245aa6
+- On-board ethernet is removed      
+- On-board RTC is removed        
+- USB 3.0 hub is removed, so one USB 2.0 and one USB 3.0 host ports
+are available                                                                               
+- Huge heatsink is replaced with 40x40mm heatsink, 5V active heatsink
+is recommended or a tall passive sink is optional                  
+- 3.5mm earjack is removed                                                                  
+- IR remote receiver is removed                                                             
+- MIPI DSI port is added
+
+So achieve this the current odroid-n2 dtsi is moved as odroid.dtsi
+and only the N2/N2+ changes are kept in the odroid-n2.
+With this only a minimal changes are needed to support the Odroid-N2L.
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/soc/qcom/socinfo.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Changes in v2:
+- Fixed include and phy0 supply name on patch 3
+- Added review tag on patch 1
+- Link to v1: https://lore.kernel.org/r/20230122-topic-odroid-n2l-upstream-initial-v1-0-1ce5e08039d0@linaro.org
 
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index 10efdbcfdf05..10cdd32ce74d 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -174,6 +174,8 @@ struct socinfo {
- 	__le32  pcode;
- 	__le32  npartnamemap_offset;
- 	__le32  nnum_partname_mapping;
-+	/* Version 17 */
-+	__le32 oem_variant;
- };
- 
- #ifdef CONFIG_DEBUG_FS
-@@ -196,6 +198,7 @@ struct socinfo_params {
- 	u32 nmodem_supported;
- 	u32 feature_code;
- 	u32 pcode;
-+	u32 oem_variant;
- };
- 
- struct smem_image_version {
-@@ -519,6 +522,11 @@ static void socinfo_debugfs_init(struct qcom_socinfo *qcom_socinfo,
- 			   &qcom_socinfo->info.fmt);
- 
- 	switch (qcom_socinfo->info.fmt) {
-+	case SOCINFO_VERSION(0, 17):
-+		qcom_socinfo->info.oem_variant = __le32_to_cpu(info->oem_variant);
-+		debugfs_create_u32("oem_variant", 0444, qcom_socinfo->dbg_root,
-+				   &qcom_socinfo->info.oem_variant);
-+		fallthrough;
- 	case SOCINFO_VERSION(0, 16):
- 		qcom_socinfo->info.feature_code = __le32_to_cpu(info->feature_code);
- 		qcom_socinfo->info.pcode = __le32_to_cpu(info->pcode);
+---
+Neil Armstrong (3):
+      dt-bindings: arm: amlogic: document Odroid-N2L
+      arm64: dts: meson-g12b: move common node into new odroid.dtsi
+      arm64: dts: meson-g12b-odroid: Add initial support for Hardkernel ODROID-N2L
+
+ Documentation/devicetree/bindings/arm/amlogic.yaml |   1 +
+ arch/arm64/boot/dts/amlogic/Makefile               |   1 +
+ .../boot/dts/amlogic/meson-g12b-odroid-n2.dtsi     | 448 +--------------------
+ .../boot/dts/amlogic/meson-g12b-odroid-n2l.dts     | 125 ++++++
+ arch/arm64/boot/dts/amlogic/meson-g12b-odroid.dtsi | 445 ++++++++++++++++++++
+ 5 files changed, 581 insertions(+), 439 deletions(-)
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230122-topic-odroid-n2l-upstream-initial-8e4f741792c1
+
+Best regards,
 -- 
-2.17.1
+Neil Armstrong <neil.armstrong@linaro.org>
 
