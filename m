@@ -2,121 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC00F67B5F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C51567B5FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234699AbjAYPay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51790 "EHLO
+        id S236099AbjAYPbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:31:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236100AbjAYP34 (ORCPT
+        with ESMTP id S236107AbjAYPbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:29:56 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FE659E42;
-        Wed, 25 Jan 2023 07:29:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674660587; x=1706196587;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=A2tR3uGtswiBcJrUWftQvxqWPML3gAok8N/0LQbz+4A=;
-  b=iQpTzKKxVkg2jVztYouRXUNRDbilSwRz8oyNKkOM0qoQjfFuOKOie28e
-   6DnJOLgjATg8oc394sJNyPDJUt1UW9sHjTrOn52q7ZWPp9zuGKp3/5eMV
-   6ZPaEM6yStOQGTxr6jH2duUquXzSk0V40DqG/2Bz8jkIB26C8rebE7gpk
-   nwfkr655H+pCqy40ktNtBl07l1uYIdukzwqH1y565Ol909jcA4N/VdF00
-   hu9zQL0ZuUTOjLPJSq3szZ/tfqd+n+/zlu2nKzdSNUjeUyBpF4dGrKnPW
-   rx0x/XHaF4NePAPuwkJ6dFO4oilog1bBxK3C+HqB7j8+S2sXj/c+HqCgV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="306242452"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="306242452"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 07:29:40 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="725896529"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="725896529"
-Received: from zguo4-mobl1.amr.corp.intel.com (HELO [10.209.50.216]) ([10.209.50.216])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 07:29:39 -0800
-Message-ID: <14506678-918f-81e1-2c26-2b347ff50701@intel.com>
-Date:   Wed, 25 Jan 2023 07:29:39 -0800
+        Wed, 25 Jan 2023 10:31:22 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF2359E6E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:31:20 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso12735451ilj.17
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:31:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=udHQk+LlTsImsgasQumCY8J2ntYLpL4el7t+VlKTCIE=;
+        b=gmyyRWqoYbGMcPAbjHem83db8/jSTGrygR1AJkaMIo5tusu5CdMgSUxLXYXKhCZiUk
+         g5vaeINmVj7ZXUXp8pwSBbA+CGzouVE44aXjJ/4/TvaF6cg1POlUm4rY4/fIEXDRE05/
+         RYxHUFwDloS1vgCnuU2By3r2BmMmOaijz4Xv+zEI1gT8oYkTMJ65hTN5OLwBlWzcpufa
+         k7LEcz6rGdbakrlNY9Q3wS0IEQIgJpoUS2/2YlrzIY41qEKpqn2cw9pXAtoa9bxOUyIt
+         vSjVe0UcLj3lh37VLoMpduIIwXG+yDIQKSMKO59YZ6Sp+piWDKvt6HQP8cdhrb44tpaQ
+         goJg==
+X-Gm-Message-State: AFqh2kpMq39cUnCdut0mXPwlrhoNRM4rKHyv9xGxkEZ/W9EuBA9NyX3m
+        KYjiQ7GS0TUndfy7VQcRFTuoJN6JUXGHWdwtPXV2T0OLD62O
+X-Google-Smtp-Source: AMrXdXvYuyCeKloGvGCiyTGOeSFAIYlP8RvM+qa/Pn+pUN3KSGjpHp6QfR1gEUZNgdL27egar00ZoXEcvv5hg5cc0eOGQiRY5LDo
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] x86: enable Data Operand Independent Timing Mode
-Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Roxana Bradescu <roxabee@chromium.org>,
-        Adam Langley <agl@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>
-References: <20230125012801.362496-1-ebiggers@kernel.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230125012801.362496-1-ebiggers@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c88d:0:b0:3a3:2315:cb3b with SMTP id
+ m13-20020a02c88d000000b003a32315cb3bmr3706135jao.206.1674660679405; Wed, 25
+ Jan 2023 07:31:19 -0800 (PST)
+Date:   Wed, 25 Jan 2023 07:31:19 -0800
+In-Reply-To: <0000000000005d4f3205b9ab95f4@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ea5ad205f31852e8@google.com>
+Subject: Re: [syzbot] WARNING in pskb_expand_head
+From:   syzbot <syzbot+a1c17e56a8a62294c714@syzkaller.appspotmail.com>
+To:     alexanderduyck@fb.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        edumazet@google.com, hawk@kernel.org, john.fastabend@gmail.com,
+        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com,
+        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, willemb@google.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 17:28, Eric Biggers wrote:
-> To mitigate this CPU vulnerability, it's possible to enable "Data
-> Operand Independent Timing Mode" (DOITM) by setting a bit in a MSR.
-> While Intel's documentation suggests that this bit should only be set
-> where "necessary", that is highly impractical, given the fact that
-> cryptography can happen nearly anywhere in the kernel and userspace, and
-> the fact that the entire kernel likely needs to be protected anyway.
+syzbot suspects this issue was fixed by commit:
 
-I think this misses a key point from the documentation:
+commit dbae2b062824fc2d35ae2d5df2f500626c758e80
+Author: Paolo Abeni <pabeni@redhat.com>
+Date:   Wed Sep 28 08:43:09 2022 +0000
 
-	This functionality is intended for use by software which has
-	already applied other techniques to mitigate software timing
-	side channels, such as those documented in Intel's Guidelines
-	for Mitigating Timing Side Channels Against Cryptographic
-	Implementations.
+    net: skb: introduce and use a single page frag cache
 
-Translating from Intel-speak: Intel thinks that DOITM purely a way to
-make the CPU run slower if you haven't already written code specifically
-to mitigate timing side channels.  All pain, no gain.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16a58035480000
+start commit:   bf682942cd26 Merge tag 'scsi-fixes' of git://git.kernel.or..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b68d4454cd7c7d91
+dashboard link: https://syzkaller.appspot.com/bug?extid=a1c17e56a8a62294c714
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14b18438880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120c9038880000
 
-The kernel as a whole is not written that way.  I'm sure the crypto
-folks that are cc'd can tell us specifically if the kernel crypto code
-is written following those recommendations.
+If the result looks correct, please mark the issue as fixed by replying with:
 
-So, let's call this patch what it is: a potential global slowdown which
-protects a very small amount of crypto code, probably just in userspace.
- That is probably the code that's generating your RSA keys, so it's
-quite important, but it's also a _very_ small total amount of code.
+#syz fix: net: skb: introduce and use a single page frag cache
 
-There's another part here which I think was recently added to the
-documentation:
-
-	Intel expects the performance impact of this mode may be
-	significantly higher on future processors. 
-
-That's _meant_ to be really scary and keep folks from turning this on by
-default, aka. what this patch does.  Your new CPU will be really slow if
-you turn this on!  Boo!
-
-All that said, and given the information that Intel has released, I
-think this patch is generally the right thing to do.  I don't think
-people are wrong for looking at "DODT" as being a new vulnerability.
-Intel obviously doesn't see it that way, which is why "DODT" has (as far
-as I can tell) not been treated with the same security pomp and
-circumstance as other stuff.
-
-Last, if you're going to propose that this be turned on, I expect to see
-at least _some_ performance data.  DOITM=1 isn't free, even on Ice Lake.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
