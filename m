@@ -2,463 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CB467BADD
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F09AA67BAE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235513AbjAYT3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 14:29:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
+        id S235265AbjAYTfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 14:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235286AbjAYT3C (ORCPT
+        with ESMTP id S234783AbjAYTfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 14:29:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C0428D2F;
-        Wed, 25 Jan 2023 11:29:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B581615C7;
-        Wed, 25 Jan 2023 19:29:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0F88C4339E;
-        Wed, 25 Jan 2023 19:28:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674674939;
-        bh=e26NG6knwaYVcB1yQ5DxesL+2c1hEGvZdYEi2xrkBMI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wt+KjoOHmo3AK6SngjGadIkO/LfiEDMVWsgdJAUW6Xx4aPiWLI8HIRJ2TXm4PQpwh
-         hsZVLtNYcYOgiZdSXVCX/tYSvc5AQfV0F/NUlH7MJgxQ6DEO5mN+HAdlAerI2hEvvq
-         BfGXc7GM+2uU4hG+3e2KYHov9HYIwGNpXY2VZe+HM6br3qU4laKtE6lIvSGf8I9CWN
-         7RFbxxkSQ1RYJ5//RR23Ee4RYVUJOSpWUrJ/n5SiVTpGoILRLJQqCp2IEeAYzengpS
-         nDx1rJBGu8INx2vDQw272EgdQsVrp5kgj4Xs8G9UZgHmIQ3Vcg+8vZXY7YJE5HdCto
-         fOXq8CEsMqrrA==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Michal Hocko <mhocko@suse.com>
-Subject: [PATCH v5 1/1] docs/mm: Physical Memory: add structure, introduction and nodes description
-Date:   Wed, 25 Jan 2023 21:28:41 +0200
-Message-Id: <20230125192841.25342-2-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230125192841.25342-1-rppt@kernel.org>
-References: <20230125192841.25342-1-rppt@kernel.org>
+        Wed, 25 Jan 2023 14:35:15 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA03E4997B;
+        Wed, 25 Jan 2023 11:35:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674675312; x=1706211312;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=DjSzYoCvw3gY3t++SjA9T2OGq3u9N+cfLwvPA+C7/CU=;
+  b=mlFrn6T4tgqOXbiQx6Uy7tQXAXAH6dQHHFZHea3nFXNArSYtreg7PZHT
+   u8+/D8+LnWiRQOkNSPdJbvg3VrS5kLUAPyXrHiINgppKSO5bbyjxfLxbQ
+   zooeQBixwuuYB7o8aESA0KtCtlQygXQMvsvN8+MZjRjWYN8insnhwN6Bu
+   1t3p0d4CRyFOUn1DcIbn6G0VTnT0lm4TGVivWY4BsGozXtYDcPukDMIGy
+   cF/GloxdzyQWKA+5k/jro3oAvhwVCrO7AeTiFEduWZtJxoRncS7LQjuDR
+   AShzMRd8vyQxW/vaL/HQdNPi2lVgmWAKC2bc9EwGEi/zwvX8AOSbJCQY/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="307000387"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="307000387"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 11:35:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="836443809"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="836443809"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2023 11:35:01 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 25 Jan 2023 11:35:00 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 25 Jan 2023 11:35:00 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 25 Jan 2023 11:35:00 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XR9/Idu1mB2f0sTE9CmRVOcSzr7RcMTPdMS/AxLQUqv9gqIzWa6UnhBpZCUnwyPlkIrP6AilnDoYhucH8NaEbPrB2OMUlHjZpxI9YyczREdgybfOAgu6uYIW0gZIS7NJJUhn2chInpXk5y9+s3mye483XkqTW25H1vty6k1oZbjGXA9sfGQHiAghC1NqugmM4KaRgZyMVFjcCC5A1KIPEFqCk1BFqwcqJfKbUze6jTswyJlTNQNohXath79VZ6XUqbO6ov4wIEnl+Q0+U+aLj2zwfuXFymhukrlOuA6sPCpEUIbKMrWlz5H/1nsMNQqWtMGxNFR5IujvavE3a0aX8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ClwnrKSzGOFrip7OVOrxLgvGQlizhNV3FcjgSFPsKpc=;
+ b=SH0Sex6owmrLDO2NqbmTj35tDNs3BvRyKEdz03Z0EK7yCO+rks92wKIs7P/OjhuqvqY6ED4YaDMHmCHmY4/eldPvrIEqSGmf1TWJVQGc/xBLLrhs/vmQRxaTvzioILrouqSQT1q3UvTXRvyoeyzS3Z+C4P8bbZldw+J68/qH14jvWDOYPMZB2HjjWvKX4+Ac1PmhkY9MP4jpnEhQklC+KxZ9Mg2wsYX5w9gvCw5u/P6vxFDSYx5GDHpvUM+ZvhJB1u4ys0iPwtEnBc1MmUsEreWyPoGpdEVYfXJKOhOOjHwOmMDTS2KVyXmlz5NpP23yPoUur/pYcruiYOHve8sfSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by CH0PR11MB8213.namprd11.prod.outlook.com (2603:10b6:610:18b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
+ 2023 19:34:58 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc%5]) with mapi id 15.20.6002.033; Wed, 25 Jan 2023
+ 19:34:57 +0000
+Date:   Wed, 25 Jan 2023 11:34:55 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Vishal Verma <vishal.l.verma@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+CC:     <nvdimm@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Vishal Verma <vishal.l.verma@intel.com>
+Subject: RE: [PATCH] ACPI: NFIT: fix a potential deadlock during NFIT teardown
+Message-ID: <63d1845f8f86f_3a36e529441@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230112-acpi_nfit_lockdep-v1-1-660be4dd10be@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230112-acpi_nfit_lockdep-v1-1-660be4dd10be@intel.com>
+X-ClientProxiedBy: BYAPR11CA0088.namprd11.prod.outlook.com
+ (2603:10b6:a03:f4::29) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|CH0PR11MB8213:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6d1cb3a9-16c5-4f05-6347-08daff0b3dd2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xXXXYFdfpKUMPLdRWbkkLj/gAAwWHlRgqy/tJlQopza2p4XcVQ30nIJz3Y68RbGfKEKNSA6BOPbjbgteRxBU4/be1qmO3VL6fpsCP3hJLj8g+wwTHrMapT08ZmTCQ94KOyKlrAZT/Tsrg3lOn7UJfbQtEt7p3vZBZBd2JYDGOVjNxsbdYmtZVArbUOB+HF04lwCRGk1N+b6uJDfcNSy49lOI0adz5kveZvRM6lsfoo5dK+7dcKU/xjcrHa9o5bAWyOkrxs/ywjYxHRufLSllhwUHXBX94jwdiY/fWwu9fBUbJVNZi9c7oZ0iWv9zQ9fvVFgaRvvwfO9CJzm7GIqzKZEbUzSfX0F/nAcaQwq9fRtOnq7QKH84rNZy6UyEp1e0TqnX3IqBo5pVvMX3PpBEd7bGHRwUIi3JK6E92/BWeloBL8VdcQ/3KSZu3QtbygtaZ8TB25zC3Trr/mfzzEDUvlAD34uTSxu0u9AJToBgWlTdad5MnoAJ+na/Bdmu5V/IrW4X48I5DjgEHbN0D7naGhDtmB+dJQz0Cf8HHQlEjUYh2MZP0BXuojJNkMDemYbkowCfQD6kN4za1VhKeVyWEZcD1iE6vyJakCwj29FayT1AkCMGx2jN7slh9vKG8ysTsrFYCmeS3X5/4sJqK8SGtA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(136003)(346002)(39860400002)(376002)(451199018)(66556008)(110136005)(38100700002)(82960400001)(2906002)(6506007)(6512007)(9686003)(5660300002)(41300700001)(83380400001)(8936002)(186003)(107886003)(26005)(478600001)(66946007)(6486002)(8676002)(316002)(66476007)(86362001)(4326008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?48gi1aFPFC5Yrfqu+XfwEZU1pnUbi+bDRmm0Xl5AJ2ozwKbk8tTo8zj5uA3o?=
+ =?us-ascii?Q?3N4orGjU8UQlde4BSJcr+4aIW9oz4cefPlaK3oiktI9YEUnI6ZzRwccls2wo?=
+ =?us-ascii?Q?wjD7utXUblGRiP/ZomhPFlvFnt9AScFot/ydPp+Oc8kDDnr6yzc5APhLl4ou?=
+ =?us-ascii?Q?81DBz+2/cPp0g6GamlHfTPC4/lKnAIPd3Rbrp0XCSk1aJifPMLOkztlRzi0t?=
+ =?us-ascii?Q?1PULSeW3wYOWT5xRiHnlMEtQXsR7p8l4cmG26N1D3a7XVnjzIunjO2wL9AAq?=
+ =?us-ascii?Q?h5ovR7ULHa/1wMMuRXt93jO1icFMFa3ZQSDZbQwxCccpklV/P14G4Mm6fCUm?=
+ =?us-ascii?Q?NM94lGmE9DBb0tm34p/QEtNNBe1UrGVhV94palTOJUfL43ts/1Mq6tCwPHl2?=
+ =?us-ascii?Q?yGcmUEhljxO10eF0pLS77sfqn1HoMQUMbNMDf4llYiEnMkEahx+rdqh7qIcT?=
+ =?us-ascii?Q?s0Ziz2wiBs/AA1VUxoUaq4V0H510MH3cb0fwliw24jKQMSFKJf+cVzGAZ+Dl?=
+ =?us-ascii?Q?0dtnWDdb+nfUab1OmM7Ser0qSLDAuzW3yow23IzJ8tNAlQv+VRIFH56Oypd5?=
+ =?us-ascii?Q?Qbio+2zhiNuHpO//pk1VkPjUtvX6O2DReOU1T8VmPp+Ea3ejyKpajSJuBXO5?=
+ =?us-ascii?Q?UVhQ4ZIMNXWkDvQAgMN00xuq6Th3+y8hcB6Ry6rCxPhENsrJPgM5qIt+3b6E?=
+ =?us-ascii?Q?sG9zDPqsuUipBuatZI/HKAlmwPCWYv7XCHN0qe8KR0ysf0wqae1nVYAXppMF?=
+ =?us-ascii?Q?5yOdSMXS9rgt/ErfO+awQo/6keEG3iQKRrH/vhzVhX1IJnV6a0mYir4F3F3+?=
+ =?us-ascii?Q?PmRbRAypn+JikayaZBkHhukHnoNBrKwHwtOZC9dfu6E+0fUM0lfR19PqxBsg?=
+ =?us-ascii?Q?tmMHkP3+nbpPdfkPOWARMHeOQmq+FCEo98yniJ12hZxwzXDGaYQrFwn5OGOC?=
+ =?us-ascii?Q?PUiDqJeyLeIm+91M4hanzsbMFANGxPeHoscjh3pY03F2B2RX+gBZvanf0T3J?=
+ =?us-ascii?Q?sOW2A+v3LDqaNwr1U2FZZ49fTi73+o0hV1IGdQdtjUCUfd02W5aQID/YRAet?=
+ =?us-ascii?Q?StDx7EGHl4qQCn/2ytK/o01PVmdAAHUhIMpxnzrdojNRJegra+56M5N8U2JF?=
+ =?us-ascii?Q?58W+GDZ6rgAjaip7kKyZMJFDkfYR7pSjGAGNihFwv+Mh4CxcZoQTdQt2Wu5R?=
+ =?us-ascii?Q?fC37BiromWWGgGGweRGSpxeKuJd2Ho3lK/g7OQ4oaI9ZukgLUCUvE/oZjwDX?=
+ =?us-ascii?Q?/rINjQXjjzQfrzOdYxMJG125GXFDV1iji4VXFDonS+k5fahd6CWX5uHy0yoX?=
+ =?us-ascii?Q?1MjIS+lilp8a6FzP/ajApz+ylmxyjPNQtO0ZCBb0BQURh/l4G2mxd+QZYPCV?=
+ =?us-ascii?Q?lSKzpFtOYNHhS4wJ6tWJmOXODSCZzUKrm8ybOIR9EG7aGRoUCjMl0VuYFgkp?=
+ =?us-ascii?Q?aYPaaNFMTcdvnjw8sn03yFeH1Exy2PIRnkx6F1ff+klv/An/3JH424t8nH6g?=
+ =?us-ascii?Q?uU1FPr6OguNnRcxQAAassiFtfexdqT3PEJHbK3gyKT9fHAWC4rStldQRzlHb?=
+ =?us-ascii?Q?5zhbJiBRayIDpQL1eOWoHRqghgJv8HgOyN029aTqU1lE5/954fx6pGI1DFao?=
+ =?us-ascii?Q?hg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d1cb3a9-16c5-4f05-6347-08daff0b3dd2
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 19:34:57.4986
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MKKUtX/r3u8s3eecXe+li68f7+7uQZaLEY9L9hO1DuE+FUykBUjvcHNZC1wL7alZjhfKVd0zQ6ll18l0ogwI4wZBwks85t0iYt/fyVBfvvo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB8213
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Vishal Verma wrote:
+> Lockdep reports that acpi_nfit_shutdown() may deadlock against an
+> opportune acpi_nfit_scrub(). acpi_nfit_scrub () is run from inside a
+> 'work' and therefore has already acquired workqueue-internal locks. It
+> also acquiires acpi_desc->init_mutex. acpi_nfit_shutdown() first
+> acquires init_mutex, and was subsequently attempting to cancel any
+> pending workqueue items. This reversed locking order causes a potential
+> deadlock:
+> 
+>     ======================================================
+>     WARNING: possible circular locking dependency detected
+>     6.2.0-rc3 #116 Tainted: G           O     N
+>     ------------------------------------------------------
+>     libndctl/1958 is trying to acquire lock:
+>     ffff888129b461c0 ((work_completion)(&(&acpi_desc->dwork)->work)){+.+.}-{0:0}, at: __flush_work+0x43/0x450
+> 
+>     but task is already holding lock:
+>     ffff888129b460e8 (&acpi_desc->init_mutex){+.+.}-{3:3}, at: acpi_nfit_shutdown+0x87/0xd0 [nfit]
+> 
+>     which lock already depends on the new lock.
+> 
+>     ...
+> 
+>     Possible unsafe locking scenario:
+> 
+>           CPU0                    CPU1
+>           ----                    ----
+>      lock(&acpi_desc->init_mutex);
+>                                   lock((work_completion)(&(&acpi_desc->dwork)->work));
+>                                   lock(&acpi_desc->init_mutex);
+>      lock((work_completion)(&(&acpi_desc->dwork)->work));
+> 
+>     *** DEADLOCK ***
+> 
+> Since the workqueue manipulation is protected by its own internal locking,
+> the cancellation of pending work doesn't need to be done under
+> acpi_desc->init_mutex. Move cancel_delayed_work_sync() outside the
+> init_mutex to fix the deadlock. Any work that starts after
+> acpi_nfit_shutdown() drops the lock will see ARS_CANCEL, and the
+> cancel_delayed_work_sync() will safely flush it out.
+> 
+> Reported-by: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
+> ---
+>  drivers/acpi/nfit/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
+> index f1cc5ec6a3b6..4e48d6db05eb 100644
+> --- a/drivers/acpi/nfit/core.c
+> +++ b/drivers/acpi/nfit/core.c
+> @@ -3297,8 +3297,8 @@ void acpi_nfit_shutdown(void *data)
+>  
+>  	mutex_lock(&acpi_desc->init_mutex);
+>  	set_bit(ARS_CANCEL, &acpi_desc->scrub_flags);
+> -	cancel_delayed_work_sync(&acpi_desc->dwork);
+>  	mutex_unlock(&acpi_desc->init_mutex);
+> +	cancel_delayed_work_sync(&acpi_desc->dwork);
 
-Add structure, introduction and Nodes section to Physical Memory
-chapter.
-
-As the new documentation references core-api/dma-api and mm/page_reclaim,
-add page labels to those documents.
-
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- Documentation/core-api/dma-api.rst   |   2 +
- Documentation/mm/page_reclaim.rst    |   2 +
- Documentation/mm/physical_memory.rst | 347 +++++++++++++++++++++++++++
- 3 files changed, 351 insertions(+)
-
-diff --git a/Documentation/core-api/dma-api.rst b/Documentation/core-api/dma-api.rst
-index 829f20a193ca..c847a5b0a0d3 100644
---- a/Documentation/core-api/dma-api.rst
-+++ b/Documentation/core-api/dma-api.rst
-@@ -1,3 +1,5 @@
-+.. _dma_api:
-+
- ============================================
- Dynamic DMA mapping using the generic device
- ============================================
-diff --git a/Documentation/mm/page_reclaim.rst b/Documentation/mm/page_reclaim.rst
-index 50a30b7f8ac3..3fccde066436 100644
---- a/Documentation/mm/page_reclaim.rst
-+++ b/Documentation/mm/page_reclaim.rst
-@@ -1,5 +1,7 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
-+.. _page_reclaim:
-+
- ============
- Page Reclaim
- ============
-diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
-index 2ab7b8c1c863..d24220d62475 100644
---- a/Documentation/mm/physical_memory.rst
-+++ b/Documentation/mm/physical_memory.rst
-@@ -3,3 +3,350 @@
- ===============
- Physical Memory
- ===============
-+
-+Linux is available for a wide range of architectures so there is a need for an
-+architecture-independent abstraction to represent the physical memory. This
-+chapter describes the structures used to manage physical memory in a running
-+system.
-+
-+The first principal concept prevalent in the memory management is
-+`Non-Uniform Memory Access (NUMA)
-+<https://en.wikipedia.org/wiki/Non-uniform_memory_access>`_.
-+With multi-core and multi-socket machines, memory may be arranged into banks
-+that incur a different cost to access depending on the “distance” from the
-+processor. For example, there might be a bank of memory assigned to each CPU or
-+a bank of memory very suitable for DMA near peripheral devices.
-+
-+Each bank is called a node and the concept is represented under Linux by a
-+``struct pglist_data`` even if the architecture is UMA. This structure is
-+always referenced to by it's typedef ``pg_data_t``. ``A pg_data_t`` structure
-+for a particular node can be referenced by ``NODE_DATA(nid)`` macro where
-+``nid`` is the ID of that node.
-+
-+For NUMA architectures, the node structures are allocated by the architecture
-+specific code early during boot. Usually, these structures are allocated
-+locally on the memory bank they represent. For UMA architectures, only one
-+static ``pg_data_t`` structure called ``contig_page_data`` is used. Nodes will
-+be discussed further in Section :ref:`Nodes <nodes>`
-+
-+The entire physical address space is partitioned into one or more blocks
-+called zones which represent ranges within memory. These ranges are usually
-+determined by architectural constraints for accessing the physical memory.
-+The memory range within a node that corresponds to a particular zone is
-+described by a ``struct zone``, typedeffed to ``zone_t``. Each zone has
-+one of the types described below.
-+
-+* ``ZONE_DMA`` and ``ZONE_DMA32`` historically represented memory suitable for
-+  DMA by peripheral devices that cannot access all of the addressable
-+  memory. For many years there are better more and robust interfaces to get
-+  memory with DMA specific requirements (:ref:`DMA API <dma_api>`), but
-+  ``ZONE_DMA`` and ``ZONE_DMA32`` still represent memory ranges that have
-+  restrictions on how they can be accessed.
-+  Depending on the architecture, either of these zone types or even they both
-+  can be disabled at build time using ``CONFIG_ZONE_DMA`` and
-+  ``CONFIG_ZONE_DMA32`` configuration options. Some 64-bit platforms may need
-+  both zones as they support peripherals with different DMA addressing
-+  limitations.
-+
-+* ``ZONE_NORMAL`` is for normal memory that can be accessed by the kernel all
-+  the time. DMA operations can be performed on pages in this zone if the DMA
-+  devices support transfers to all addressable memory. ``ZONE_NORMAL`` is
-+  always enabled.
-+
-+* ``ZONE_HIGHMEM`` is the part of the physical memory that is not covered by a
-+  permanent mapping in the kernel page tables. The memory in this zone is only
-+  accessible to the kernel using temporary mappings. This zone is available
-+  only on some 32-bit architectures and is enabled with ``CONFIG_HIGHMEM``.
-+
-+* ``ZONE_MOVABLE`` is for normal accessible memory, just like ``ZONE_NORMAL``.
-+  The difference is that the contents of most pages in ``ZONE_MOVABLE`` is
-+  movable. That means that while virtual addresses of these pages do not
-+  change, their content may move between different physical pages. Often
-+  ``ZONE_MOVABLE`` is populated during memory hotplug, but it may be
-+  also populated on boot using one of ``kernelcore``, ``movablecore`` and
-+  ``movable_node`` kernel command line parameters. See :ref:`Page migration
-+  <page_migration>` and :ref:`Memory Hot(Un)Plug <admin_guide_memory_hotplug>`
-+  for additional details.
-+
-+* ``ZONE_DEVICE`` represents memory residing on devices such as PMEM and GPU.
-+  It has different characteristics than RAM zone types and it exists to provide
-+  :ref:`struct page <Pages>` and memory map services for device driver
-+  identified physical address ranges. ``ZONE_DEVICE`` is enabled with
-+  configuration option ``CONFIG_ZONE_DEVICE``.
-+
-+It is important to note that many kernel operations can only take place using
-+``ZONE_NORMAL`` so it is the most performance critical zone. Zones are
-+discussed further in Section :ref:`Zones <zones>`.
-+
-+The relation between node and zone extents is determined by the physical memory
-+map reported by the firmware, architectural constraints for memory addressing
-+and certain parameters in the kernel command line.
-+
-+For example, with 32-bit kernel on an x86 UMA machine with 2 Gbytes of RAM the
-+entire memory will be on node 0 and there will be three zones: ``ZONE_DMA``,
-+``ZONE_NORMAL`` and ``ZONE_HIGHMEM``::
-+
-+  0                                                            2G
-+  +-------------------------------------------------------------+
-+  |                            node 0                           |
-+  +-------------------------------------------------------------+
-+
-+  0         16M                    896M                        2G
-+  +----------+-----------------------+--------------------------+
-+  | ZONE_DMA |      ZONE_NORMAL      |       ZONE_HIGHMEM       |
-+  +----------+-----------------------+--------------------------+
-+
-+
-+With a kernel built with ``ZONE_DMA`` disabled and ``ZONE_DMA32`` enabled and
-+booted with ``movablecore=80%`` parameter on an arm64 machine with 16 Gbytes of
-+RAM equally split between two nodes, there will be ``ZONE_DMA32``,
-+``ZONE_NORMAL`` and ``ZONE_MOVABLE`` on node 0, and ``ZONE_NORMAL`` and
-+``ZONE_MOVABLE`` on node 1::
-+
-+
-+  1G                                9G                         17G
-+  +--------------------------------+ +--------------------------+
-+  |              node 0            | |          node 1          |
-+  +--------------------------------+ +--------------------------+
-+
-+  1G       4G        4200M          9G          9320M          17G
-+  +---------+----------+-----------+ +------------+-------------+
-+  |  DMA32  |  NORMAL  |  MOVABLE  | |   NORMAL   |   MOVABLE   |
-+  +---------+----------+-----------+ +------------+-------------+
-+
-+.. _nodes:
-+
-+Nodes
-+=====
-+
-+As we have mentioned, each node in memory is described by a ``pg_data_t`` which
-+is a typedef for a ``struct pglist_data``. When allocating a page, by default
-+Linux uses a node-local allocation policy to allocate memory from the node
-+closest to the running CPU. As processes tend to run on the same CPU, it is
-+likely the memory from the current node will be used. The allocation policy can
-+be controlled by users as described in
-+Documentation/admin-guide/mm/numa_memory_policy.rst.
-+
-+Most NUMA architectures maintain an array of pointers to the node
-+structures. The actual structures are allocated early during boot when
-+architecture specific code parses the physical memory map reported by the
-+firmware. The bulk of the node initialization happens slightly later in the
-+boot process by free_area_init() function, described later in Section
-+:ref:`Initialization <initialization>`.
-+
-+
-+Along with the node structures, kernel maintains an array of ``nodemask_t``
-+bitmasks called ``node_states``. Each bitmask in this array represents a set of
-+nodes with particular properties as defined by ``enum node_states``:
-+
-+``N_POSSIBLE``
-+  The node could become online at some point.
-+``N_ONLINE``
-+  The node is online.
-+``N_NORMAL_MEMORY``
-+  The node has regular memory.
-+``N_HIGH_MEMORY``
-+  The node has regular or high memory. When ``CONFIG_HIGHMEM`` is disabled
-+  aliased to ``N_NORMAL_MEMORY``.
-+``N_MEMORY``
-+  The node has memory(regular, high, movable)
-+``N_CPU``
-+  The node has one or more CPUs
-+
-+For each node that has a property described above, the bit corresponding to the
-+node ID in the ``node_states[<property>]`` bitmask is set.
-+
-+For example, for node 2 with normal memory and CPUs, bit 2 will be set in ::
-+
-+  node_states[N_POSSIBLE]
-+  node_states[N_ONLINE]
-+  node_states[N_NORMAL_MEMORY]
-+  node_states[N_HIGH_MEMORY]
-+  node_states[N_MEMORY]
-+  node_states[N_CPU]
-+
-+For various operations possible with nodemasks please refer to
-+``include/linux/nodemask.h``.
-+
-+Among other things, nodemasks are used to provide macros for node traversal,
-+namely ``for_each_node()`` and ``for_each_online_node()``.
-+
-+For instance, to call a function foo() for each online node::
-+
-+	for_each_online_node(nid) {
-+		pg_data_t *pgdat = NODE_DATA(nid);
-+
-+		foo(pgdat);
-+	}
-+
-+Node structure
-+--------------
-+
-+The nodes structure ``struct pglist_data`` is declared in
-+``include/linux/mmzone.h``. Here we briefly describe fields of this
-+structure:
-+
-+General
-+~~~~~~~
-+
-+``node_zones``
-+  The zones for this node.  Not all of the zones may be populated, but it is
-+  the full list. It is referenced by this node's node_zonelists as well as
-+  other node's node_zonelists.
-+
-+``node_zonelists``
-+  The list of all zones in all nodes. This list defines the order of zones
-+  that allocations are preferred from. The ``node_zonelists`` is set up by
-+  ``build_zonelists()`` in ``mm/page_alloc.c`` during the initialization of
-+  core memory management structures.
-+
-+``nr_zones``
-+  Number of populated zones in this node.
-+
-+``node_mem_map``
-+  For UMA systems that use FLATMEM memory model the 0's node
-+  ``node_mem_map`` is array of struct pages representing each physical frame.
-+
-+``node_page_ext``
-+  For UMA systems that use FLATMEM memory model the 0's node
-+  ``node_page_ext`` is array of extensions of struct pages. Available only
-+  in the kernels built with ``CONFIG_PAGE_EXTENTION`` enabled.
-+
-+``node_start_pfn``
-+  The page frame number of the starting page frame in this node.
-+
-+``node_present_pages``
-+  Total number of physical pages present in this node.
-+
-+``node_spanned_pages``
-+  Total size of physical page range, including holes.
-+
-+``node_size_lock``
-+  A lock that protects the fields defining the node extents. Only defined when
-+  at least one of ``CONFIG_MEMORY_HOTPLUG`` or
-+  ``CONFIG_DEFERRED_STRUCT_PAGE_INIT`` configuration options are enabled.
-+  ``pgdat_resize_lock()`` and ``pgdat_resize_unlock()`` are provided to
-+  manipulate ``node_size_lock`` without checking for ``CONFIG_MEMORY_HOTPLUG``
-+  or ``CONFIG_DEFERRED_STRUCT_PAGE_INIT``.
-+
-+``node_id``
-+  The Node ID (NID) of the node, starts at 0.
-+
-+``totalreserve_pages``
-+  This is a per-node reserve of pages that are not available to userspace
-+  allocations.
-+
-+``first_deferred_pfn``
-+  If memory initialization on large machines is deferred then this is the first
-+  PFN that needs to be initialized. Defined only when
-+  ``CONFIG_DEFERRED_STRUCT_PAGE_INIT`` is enabled
-+
-+``deferred_split_queue``
-+  Per-node queue of huge pages that their split was deferred. Defined only when ``CONFIG_TRANSPARENT_HUGEPAGE`` is enabled.
-+
-+``__lruvec``
-+  Per-node lruvec holding LRU lists and related parameters. Used only when
-+  memory cgroups are disabled. It should not be accessed directly, use
-+  ``mem_cgroup_lruvec()`` to look up lruvecs instead.
-+
-+Reclaim control
-+~~~~~~~~~~~~~~~
-+
-+See also :ref:`Page Reclaim <page_reclaim>`.
-+
-+``kswapd``
-+  Per-node instance of kswapd kernel thread.
-+
-+``kswapd_wait``, ``pfmemalloc_wait``, ``reclaim_wait``
-+  Workqueues used to synchronize memory reclaim tasks
-+
-+``nr_writeback_throttled``
-+  Number of tasks that are throttled waiting on dirty pages to clean.
-+
-+``nr_reclaim_start``
-+  Number of pages written while reclaim is throttled waiting for writeback.
-+
-+``kswapd_order``
-+  Controls the order kswapd tries to reclaim
-+
-+``kswapd_highest_zoneidx``
-+  The highest zone index to be reclaimed by kswapd
-+
-+``kswapd_failures``
-+  Number of runs kswapd was unable to reclaim any pages
-+
-+``min_unmapped_pages``
-+  Minimal number of unmapped file backed pages that cannot be reclaimed.
-+  Determined by ``vm.min_unmapped_ratio`` sysctl. Only defined when
-+  ``CONFIG_NUMA`` is enabled.
-+
-+``min_slab_pages``
-+  Minimal number of SLAB pages that cannot be reclaimed. Determined by
-+  ``vm.min_slab_ratio sysctl``. Only defined when ``CONFIG_NUMA`` is enabled
-+
-+``flags``
-+  Flags controlling reclaim behavior.
-+
-+Compaction control
-+~~~~~~~~~~~~~~~~~~
-+
-+``kcompactd_max_order``
-+  Page order that kcompactd should try to achieve.
-+
-+``kcompactd_highest_zoneidx``
-+  The highest zone index to be compacted by kcompactd.
-+
-+``kcompactd_wait``
-+  Workqueue used to synchronize memory compaction tasks.
-+
-+``kcompactd``
-+  Per-node instance of kcompactd kernel thread.
-+
-+``proactive_compact_trigger``
-+  Determines if proactive compaction is enabled. Controlled by
-+  ``vm.compaction_proactiveness`` sysctl.
-+
-+Statistics
-+~~~~~~~~~~
-+
-+``per_cpu_nodestats``
-+  Per-CPU VM statistics for the node
-+
-+``vm_stat``
-+  VM statistics for the node.
-+
-+.. _zones:
-+
-+Zones
-+=====
-+
-+.. admonition:: Stub
-+
-+   This section is incomplete. Please list and describe the appropriate fields.
-+
-+.. _pages:
-+
-+Pages
-+=====
-+
-+.. admonition:: Stub
-+
-+   This section is incomplete. Please list and describe the appropriate fields.
-+
-+.. _folios:
-+
-+Folios
-+======
-+
-+.. admonition:: Stub
-+
-+   This section is incomplete. Please list and describe the appropriate fields.
-+
-+.. _initialization:
-+
-+Initialization
-+==============
-+
-+.. admonition:: Stub
-+
-+   This section is incomplete. Please list and describe the appropriate fields.
--- 
-2.35.1
-
+Looks good, applied.
