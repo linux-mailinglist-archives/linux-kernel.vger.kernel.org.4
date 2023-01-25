@@ -2,189 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF5767BBF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F276167BC09
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236253AbjAYUEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:04:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S236187AbjAYUFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236040AbjAYUEr (ORCPT
+        with ESMTP id S235525AbjAYUFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:04:47 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283024C6D6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:04:44 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id h5so7583865ybj.8
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:04:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MtZUdD+8O7hxMGTcR1DMvNk+cmrcvsJPjaaxCUIim34=;
-        b=fOjBWO27z2DRRtGxPdgxFPgp37eKG2B9PVK/K0KiaXIloz+AuZ38tULN6fcXWxzCXe
-         tU2hdkFiNRDubvDFYYKIraSWMsmgZB5TrENA6ESEOPBjPR/dQpPpkMJl5TsP7oaNQBaU
-         TxPNiWcr87ZC110sXUh6RSZVcOchas4NTyfHWTxoFZ1DzEOO9gAxP0Yd2EzEp0fULRzI
-         KH11tad7CESbeI0SS36cVhoreBuXewlt8xttyfZyHJv8HTgUAkB8genFUrpEvMtBNPp0
-         +Cp+2h8ohoZFxIl3/0g98E+3IWq3CPHCxOoXQqQtkHA1Zm+a4/B25A6qnkeflqA4pUuK
-         /J3g==
+        Wed, 25 Jan 2023 15:05:45 -0500
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810CB12587;
+        Wed, 25 Jan 2023 12:05:43 -0800 (PST)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-15b9c93848dso22813893fac.1;
+        Wed, 25 Jan 2023 12:05:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MtZUdD+8O7hxMGTcR1DMvNk+cmrcvsJPjaaxCUIim34=;
-        b=xlWq7/cE/og+tkzjX2gz6WY9BleYJZ+0pyavKMnM3WsVFdRYnwv3ULFbeu5J7gtGvo
-         uRPRMOOtIhSUXdj5T7tSkfL/Q1ozKhy7EeHs376/eoJ4uxcDlWcQXMW+208w/o+YFs21
-         tenvKiPyEd3T8cRtd0e0nyN7bz+gSTF7faSSVDqncD+xW8JcHKsifDbKu4/ECNyFBuwq
-         eoxqWa2vcEM/9fmn2ogqFkbba8DNEmrEOhv4DHfZcgk2yc+hkPByIPx4aP680s6pxpe3
-         XQ+4NV7CVWbBAcZNd4e18DQCYnPj2gahZUc68Nrp/i+FS0Qv9VTLa3vpQ7fmenQTu0Ju
-         M5Qw==
-X-Gm-Message-State: AO0yUKWM7i9chhGnk5WBWmgPhxeFuhULffAPuXiVjSjU7vnia/dDzYSl
-        ppA8TYV2hvA0zzbvgUIb1mnBrEyOgC5ckuioY+/76g==
-X-Google-Smtp-Source: AK7set/0yo0srPljd82kRg54UhHAn9kAcoGNmLhg0Ao5vhrkKbvYpqMk0gx/CzAceT8L+J/HB1ohTrPmB4dI55xwr6c=
-X-Received: by 2002:a25:341:0:b0:80b:96cc:310d with SMTP id
- 62-20020a250341000000b0080b96cc310dmr522771ybd.117.1674677083118; Wed, 25 Jan
- 2023 12:04:43 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8kqCnvG5HfBYMdFzmIrllsGYjZVwDWefqF05Cmky4HA=;
+        b=1MkdHccN4sTH4t9xBZvyUQIxoYOq7j8fZzdGNnazpcF2mE85RiQc+0HFSP1Z/3DKYS
+         WnIb0QEc4RdWG7FAw0qbFSsXDZ4+cdo45vccV7EDix/1G4+hKJ4kgikaoUfV5SE+FbKM
+         X+ALhCtuuwtE+QlexxVkbkhd5lOVr3PED0pDep9hs0Gm94/DVYEnW4XINdP6GDm9co/q
+         9scVxhpfpOADKuIe6EchvP4EjwDM4tqzgGAJSwjA/oEiZA6qmNhdief8rcSc8kJdV9pv
+         3lq5+h28KgV2C/kVO0K9hc8rYCvHxMoaqqFD2DdS2r3v3MJAkGxsSNF15sT012OVOVg4
+         sBVg==
+X-Gm-Message-State: AO0yUKUD5ZeFxQsUh/9oHbyjsD9L9fqTzkpbEq6ZlOwuB1mr7ICd3rNx
+        W2JLtY3BMbx45vM3aVctOQ==
+X-Google-Smtp-Source: AK7set+KlYA9hOhKxY3yXbw1+jJFui+axb/K8qUGpNYSrXD6fL93Qjufe/ZRHNh9bIxZbHxYbUPr4A==
+X-Received: by 2002:a05:6870:14d5:b0:163:45a2:e276 with SMTP id l21-20020a05687014d500b0016345a2e276mr684576oab.9.1674677142691;
+        Wed, 25 Jan 2023 12:05:42 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n20-20020a056870559400b0010d7242b623sm2325869oao.21.2023.01.25.12.05.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 12:05:42 -0800 (PST)
+Received: (nullmailer pid 2768672 invoked by uid 1000);
+        Wed, 25 Jan 2023 20:05:39 -0000
+Date:   Wed, 25 Jan 2023 14:05:39 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-sunxi@lists.linux.dev, openbmc@lists.ozlabs.org,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>, Han Xu <han.xu@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        ", Bert Vermeulen" <bert@biot.com>, Marek Vasut <marex@denx.de>,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        ", Christophe Kerello" <christophe.kerello@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-arm-msm@vger.kernel.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        ", Broadcom internal kernel review list" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-spi@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Pragnesh Patel <pragnesh.patel@sifive.com>,
+        linux-riscv@lists.infradead.org,
+        Leilk Liu <leilk.liu@mediatek.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        devicetree@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        =?UTF-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-aspeed@lists.ozlabs.org, Gabor Juhos <juhosg@openwrt.org>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Erwan Leray <erwan.leray@foss.st.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Parshuram Thombare <pthombar@cadence.com>,
+        ", Fabio Estevam" <festevam@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v2 2/2] spi: dt-bindings: cleanup examples - indentation,
+ lowercase hex
+Message-ID: <167467713905.2768614.7865748447151198568.robh@kernel.org>
+References: <20230124083342.34869-1-krzysztof.kozlowski@linaro.org>
+ <20230124083342.34869-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20230123191728.2928839-1-tjmercier@google.com>
- <20230123191728.2928839-2-tjmercier@google.com> <Y8/ybgp2FW+e3bjc@dhcp22.suse.cz>
- <CABdmKX1c_8LdJJboENnZhwGjrszDWOOVt-Do93-sJW46mZMD6A@mail.gmail.com> <Y9EbHW84ydBzpTTO@dhcp22.suse.cz>
-In-Reply-To: <Y9EbHW84ydBzpTTO@dhcp22.suse.cz>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Wed, 25 Jan 2023 12:04:32 -0800
-Message-ID: <CABdmKX0TEf_18UC0_pt1BumB9vDdJW2Ntv5bo0wh_CMOEcAEdA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] memcg: Track exported dma-buffers
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
-        jeffv@google.com, cmllamas@google.com,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124083342.34869-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 4:05 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Tue 24-01-23 10:55:21, T.J. Mercier wrote:
-> > On Tue, Jan 24, 2023 at 7:00 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Mon 23-01-23 19:17:23, T.J. Mercier wrote:
-> > > > When a buffer is exported to userspace, use memcg to attribute the
-> > > > buffer to the allocating cgroup until all buffer references are
-> > > > released.
-> > >
-> > > Is there any reason why this memory cannot be charged during the
-> > > allocation (__GFP_ACCOUNT used)?
-> >
-> > My main motivation was to keep code changes away from exporters and
-> > implement the accounting in one common spot for all of them. This is a
-> > bit of a carryover from a previous approach [1] where there was some
-> > objection to pushing off this work onto exporters and forcing them to
-> > adapt, but __GFP_ACCOUNT does seem like a smaller burden than before
-> > at least initially. However in order to support charge transfer
-> > between cgroups with __GFP_ACCOUNT we'd need to be able to get at the
-> > pages backing dmabuf objects, and the exporters are the ones with that
-> > access. Meaning I think we'd have to add some additional dma_buf_ops
-> > to achieve that, which was the objection from [1].
-> >
-> > [1] https://lore.kernel.org/lkml/5cc27a05-8131-ce9b-dea1-5c75e994216d@amd.com/
-> >
-> > >
-> > > Also you do charge and account the memory but underlying pages do not
-> > > know about their memcg (this is normally done with commit_charge for
-> > > user mapped pages). This would become a problem if the memory is
-> > > migrated for example.
-> >
-> > Hmm, what problem do you see in this situation? If the backing pages
-> > are to be migrated that requires the cooperation of the exporter,
-> > which currently has no influence on how the cgroup charging is done
-> > and that seems fine. (Unless you mean migrating the charge across
-> > cgroups? In which case that's the next patch.)
->
-> My main concern was that page migration could lose the external tracking
-> without some additional steps on the dmabuf front.
->
-I see, yes that would be true if an exporter moves data around between
-system memory and VRAM for example. (I think TTM does this sort of
-thing, but not sure if that's actually within a single dma buffer.)
-VRAM feels like it maybe doesn't belong in memcg, yet it would still
-be charged there under this series right now. I don't really see a way
-around this except to involve the exporters directly in the accounting
-(or don't attempt to distinguish between types of memory).
 
-> > > This also means that you have to maintain memcg
-> > > reference outside of the memcg proper which is not really nice either.
-> > > This mimicks tcp kmem limit implementation which I really have to say I
-> > > am not a great fan of and this pattern shouldn't be coppied.
-> > >
-> > Ah, what can I say. This way looked simple to me. I think otherwise
-> > we're back to making all exporters do more stuff for the accounting.
-> >
-> > > Also you are not really saying anything about the oom behavior. With
-> > > this implementation the kernel will try to reclaim the memory and even
-> > > trigger the memcg oom killer if the request size is <= 8 pages. Is this
-> > > a desirable behavior?
-> >
-> > It will try to reclaim some memory, but not the dmabuf pages right?
-> > Not *yet* anyway. This behavior sounds expected to me.
->
-> Yes, we have discussed that shrinkers will follow up later which is
-> fine. The question is how much reclaim actually makes sense at this
-> stage. Charging interface usually copes with sizes resulting from
-> allocation requests (so usually 1<<order based). I can imagine that a
-> batch charge like implemented here could easily be 100s of MBs and it is
-> much harder to define reclaim targets for. At least that is something
-> the memcg charging hasn't really considered yet.  Maybe the existing
-> try_charge implementation can cope with that just fine but it would be
-> really great to have the expected behavior described.
->
-> E.g. should be memcg OOM killer be invoked? Should reclaim really target
-> regular memory at all costs or just a lightweight memory reclaim is
-> preferred (is the dmabuf charge failure an expensive operation wrt.
-> memory refault due to reclaim).
+On Tue, 24 Jan 2023 09:33:42 +0100, Krzysztof Kozlowski wrote:
+> Cleanup examples:
+>  - use 4-space indentation (for cases when it is neither 4 not 2 space),
+>  - drop redundant blank lines,
+>  - use lowercase hex.
+> 
+> No functional impact except adjusting to preferred coding style.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be> # renesas
+> Reviewed-by: Andrew Jeffery <andrew@aj.id.au> # aspeed
+> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org> # meson
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Adjust indentation in two more examples (cdns,qspi-nor, st,stm32-spi)
+> 2. Add tags
+> ---
+>  .../bindings/spi/amlogic,meson-gx-spicc.yaml  |  26 +--
+>  .../bindings/spi/amlogic,meson6-spifc.yaml    |  22 +--
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml      |  24 +--
+>  .../bindings/spi/brcm,spi-bcm-qspi.yaml       | 156 +++++++++---------
+>  .../bindings/spi/cdns,qspi-nor.yaml           |  34 ++--
+>  .../bindings/spi/nvidia,tegra210-quad.yaml    |  42 ++---
+>  .../bindings/spi/qcom,spi-qcom-qspi.yaml      |   1 -
+>  .../devicetree/bindings/spi/renesas,rspi.yaml |  22 +--
+>  .../bindings/spi/spi-sunplus-sp7021.yaml      |   4 +-
+>  .../devicetree/bindings/spi/st,stm32-spi.yaml |  23 ++-
+>  10 files changed, 176 insertions(+), 178 deletions(-)
+> 
 
-Ah, in my experience very large individual buffers like that are rare.
-Cumulative system-wide usage might reach 100s of megs or more spread
-across many buffers. On my phone the majority of buffer sizes are 4
-pages or less, but there are a few that reach into the tens of megs.
-But now I see your point. I still think that where a memcg limit is
-exceeded and we can't reclaim enough as a result of a new dmabuf
-allocation, we should see a memcg OOM kill. Sounds like you are
-looking for that to be written down, so I'll try to find a place for
-that.
-
-Part of the motivation for this accounting is to eventually have a
-well defined limit for applications to know how much more they can
-allocate. So where buffer size or number of buffers is a flexible
-variable, I'd like to see an application checking this limit before
-making a large request in an effort to avoid reclaim in the first
-place. Where there is heavy memory pressure and multiple competing
-apps, the status-quo today is a kill for us anyways (typically LMKD).
-
-
-
-
-> --
-> Michal Hocko
-> SUSE Labs
+Reviewed-by: Rob Herring <robh@kernel.org>
