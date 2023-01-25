@@ -2,135 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7421F67B691
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B4A67B693
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbjAYQGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
+        id S234367AbjAYQGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235343AbjAYQGR (ORCPT
+        with ESMTP id S235792AbjAYQGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:06:17 -0500
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BA85618F
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:06:09 -0800 (PST)
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PEFdYF009571;
-        Wed, 25 Jan 2023 16:05:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pps0720; bh=R4/ji/oWIB41UUb9Z6bZKWNmzLOw7BtR6ZQcihC3S9s=;
- b=k1qCiE8DGlx6zOFsqMO4HikZxd9Yi4BwDwOlpYzDyDBhyy2i3JLieuFxqqbobz1Ad+OK
- 7y0MRnmTGVAcNrjd+uI0x42CbU5AgFV1TWrir+uMct310UBGCP62wk6fE0P7gcn4cnqv
- IcgXdSmgkrve/VPlrtqLOT1CJZn81DFB2qMgs830AnU3p2fiMstQA6HFe0GYDpXdeHFw
- +Dl5PaNcSu86vZS6IQDcdLmhZQyKvwwNL44/H6VGthEFGNwB3y4pZJGefhoL+obYcPxk
- YeRv6dKPyYYImI1gqbcR4khU8e2WDOi5bcbQtDi8X8/fIyC8qkOz2lFm0h7PZku7hRCw zQ== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3nb616s79n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 16:05:45 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 0CDC0809118;
-        Wed, 25 Jan 2023 16:05:43 +0000 (UTC)
-Received: from swahl-home.5wahls.com (unknown [16.231.227.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id CDB7E80BA27;
-        Wed, 25 Jan 2023 16:05:39 +0000 (UTC)
-Date:   Wed, 25 Jan 2023 10:05:37 -0600
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Steve Wahl <steve.wahl@hpe.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] x86/platform/uv: UV support for sub-NUMA clustering
-Message-ID: <Y9FTURnqROHP5UUa@swahl-home.5wahls.com>
-References: <20230123221812.3970769-1-steve.wahl@hpe.com>
- <Y9ESRzbzM0e8Kr1M@gmail.com>
+        Wed, 25 Jan 2023 11:06:39 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6178559E75;
+        Wed, 25 Jan 2023 08:06:24 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id g11so16826426eda.12;
+        Wed, 25 Jan 2023 08:06:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=l4kWGlqJC/g488ocuFK/LpqeMy7MO0k2vXLk45E7PuA=;
+        b=Yp1kdybDLtCnI2z/5VhhA7iGsp6U22cJcv1sV+Vrt4BB4SxnuRzjyZcawy62hQgSP0
+         PhgVXQSdQS7OpozLe50sdNtwH4b8zyDOAH22bx52dfH4quSoyAh4gdBoX2M1/CM5svmK
+         BXZx5ZO+A3g4BRKxvLtO+yLhAUGrW0BlNoPb+73fiRPjOCxe7YokKjnLDUqfvwxpf5an
+         SxyLFTntE9ZqxwV7fcYq6HWnWWBe4Vk0LGb3RCzGh66Mo5ge3Hm9JkiBWugreuGYIVnx
+         A3yO2GzGVpWHMfjEbcBLSj+hrCIrQrE7SL6zBOOSPVxiZGpoo+5nb8KOHUUXIUxYuGlg
+         TTpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l4kWGlqJC/g488ocuFK/LpqeMy7MO0k2vXLk45E7PuA=;
+        b=7i23s/pGKqb068vbcy1KM6P4nkcIAxDY1YqO2JXCiRV8X0Di7rRA71glUomKDrbnh5
+         v7kKSL39B7QRV2tEH837KJpmV8rlmmZW73rKwxMt+cynIGYMGLvWf4ozm5sl96lfkM9l
+         vu1tYZfn9NdR5geg7JPlBbrmOZkmCNlpHFAEZu+LcbNPxzKrE7XCX0cYwqwkjmb7lspa
+         yfsyW1Og3jsb9iUWkhKO9E5M01iiSheH5AriQkb2/m33LGQ3US8AalkgZzFyC/o2kAl3
+         XWz/0cvmm6mzF6drXgAUcrEER1MAO+Een8ZViN/T4mI6HMj4hjenbuwjQdJJU/CUXTQ9
+         8CDQ==
+X-Gm-Message-State: AFqh2kq48bH871xVbkt0/TjJ2gewKp/t0gsDTQ3NbQmTp/COmV+i7JNP
+        QKxsR+f6YaOy0XoPxh2VDFutlrc9QHkHxihDFr4=
+X-Google-Smtp-Source: AMrXdXvMsK7VCK3lJs6JPXWyszE2beYfRsVcLZJ8q4Z4ovR0YsDmmv43+SS9/v/GAHu5h2IJrwRIg4xirUJy9rDfRdU=
+X-Received: by 2002:a05:6402:22f7:b0:49b:651d:7930 with SMTP id
+ dn23-20020a05640222f700b0049b651d7930mr4339446edb.79.1674662782804; Wed, 25
+ Jan 2023 08:06:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9ESRzbzM0e8Kr1M@gmail.com>
-X-Proofpoint-ORIG-GUID: 5e1ECre_UckeXDcyxxuzYQeYxDWF0BpZ
-X-Proofpoint-GUID: 5e1ECre_UckeXDcyxxuzYQeYxDWF0BpZ
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_10,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- impostorscore=0 malwarescore=0 clxscore=1011 suspectscore=0
- mlxlogscore=865 spamscore=0 adultscore=0 bulkscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250143
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125050359.339273-1-void@manifault.com> <20230125050359.339273-5-void@manifault.com>
+In-Reply-To: <20230125050359.339273-5-void@manifault.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 25 Jan 2023 08:06:11 -0800
+Message-ID: <CAADnVQJ18MRB+z5feD-hu8zdV2s=rhTW--RWW06NWp-kQaBhag@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/4] bpf/selftests: Verify struct_ops prog
+ sleepable behavior
+To:     David Vernet <void@manifault.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>, Tejun Heo <tj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 12:28:07PM +0100, Ingo Molnar wrote:
-> 
-> * Steve Wahl <steve.wahl@hpe.com> wrote:
-> 
-> > +static int __init alloc_conv_table(int num_elem, unsigned short **table)
-> > +{
-> > +	int i;
-> > +	size_t bytes;
-> > +
-> > +	bytes = num_elem * sizeof(*table[0]);
-> > +	*table = kmalloc(bytes, GFP_KERNEL);
-> > +	WARN_ON_ONCE(!*table);
-> > +	if (!*table)
-> > +		return -ENOMEM;
-> 
-> WARN_ON_ONCE() is pass-through on the condition, so you can write this in a 
-> shorter form:
-> 
-> 	if (!WARN_ON_ONCE(!*table))
-> 		return -ENOMEM;
+On Tue, Jan 24, 2023 at 9:04 PM David Vernet <void@manifault.com> wrote:
+>
+> In a set of prior changes, we added the ability for struct_ops programs
+> to be sleepable. This patch enhances the dummy_st_ops selftest suite to
+> validate this behavior by adding a new sleepable struct_ops entry to
+> dummy_st_ops.
+>
+> Signed-off-by: David Vernet <void@manifault.com>
+> ---
+>  include/linux/bpf.h                           |  1 +
+>  net/bpf/bpf_dummy_struct_ops.c                | 18 +++++++
+>  .../selftests/bpf/prog_tests/dummy_st_ops.c   | 54 ++++++++++++++-----
+>  .../selftests/bpf/progs/dummy_st_ops_fail.c   | 27 ++++++++++
+>  ...{dummy_st_ops.c => dummy_st_ops_success.c} | 19 +++----
+>  5 files changed, 94 insertions(+), 25 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/progs/dummy_st_ops_fail.c
+>  rename tools/testing/selftests/bpf/progs/{dummy_st_ops.c => dummy_st_ops_success.c} (72%)
 
-That is nicer.  I will incorporate this (including all the repeats).
+It fails on s390:
+dummy_st_ops_success/dummy_multiple_args:FAIL
 
-...
-> 
-> > +		WARN_ON_ONCE(!new_hub);
-> > +		if (!new_hub)
-> > +			return;
-> 
-> Same. Also a memory leak of at least uv_hub_info_list_blade?
-
-You're right, and this is not the only place.  I will rework.
-
-...
-> > +
-> > +	for_each_node(nodeid) {
-> > +		__uv_hub_info_list[nodeid] = uv_hub_info_list_blade[uv_node_to_blade_id(nodeid)];
-> > +	}
-> 
-> Unnecessary curly braces.
-
-I will fix.
-
-> Looks good otherwise - presumably it's both tested and backwards compatible 
-> with older UV hardware?
-
-Yes, in fact there was a major re-work before letting it escape to the
-world because the previous version didn't function on older hardware.
-
-Thank you for taking the time to review!
-
---> Steve
--- 
-Steve Wahl, Hewlett Packard Enterprise
+Please add to DENYLIST as part of this patch.
