@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62DBC67B6A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2FA67B6AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235173AbjAYQNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
+        id S235408AbjAYQPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjAYQNc (ORCPT
+        with ESMTP id S229778AbjAYQPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:13:32 -0500
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8EA3EFE1;
-        Wed, 25 Jan 2023 08:13:31 -0800 (PST)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-15f97c478a8so21877948fac.13;
-        Wed, 25 Jan 2023 08:13:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TTCa2vo9i3IBnK5+rd9IFa4vMJNUSl/n6ZWkom8taS0=;
-        b=LGXmc+7qa90BRAQshm1bvTSn5RjXArZ1JsUUhQgv/WLF4Ek82ogc1PwOeBSjE2FRSJ
-         sEh+ZfkamISHFKJZVJbrM55gzukc+V6P17dDapsBwzYk43E55h6zf2xD1z2Lx+k7X+7v
-         OnesAhGCAIlWlaMOEXf0S+LDI0Wtpr/Rr6IqYFeasr04Y6HyKsjaQ/XZOKjjxoZ8MqSJ
-         yeBmD+3Qnwd5ezP1vISjrI7N9BqyDcLwwJlmuDoHXbP/t/oEYJVA6A2OU26iegalAhGs
-         7ei4kuK+/EYzvU8swDg7DLScg2pV0Nq0uL0imZJmeGrUgmZ7ell9K3O3K03hJxwNboZu
-         mbGg==
-X-Gm-Message-State: AO0yUKUG22wkqJdWXmAHHaClGf9S9yLHqXyn4raH4+AJP9rlsSQoFDCm
-        SR1LmLZi51rEKrUGH+3ttos=
-X-Google-Smtp-Source: AK7set85967Uk9TtaN3rp2BoksbIi2nkImEVWAAxvT/nsm7tovrMjskLQGR4R6w6UFCs/Wxcqpo40A==
-X-Received: by 2002:a05:6870:d248:b0:163:2054:44db with SMTP id h8-20020a056870d24800b00163205444dbmr3347258oac.30.1674663210437;
-        Wed, 25 Jan 2023 08:13:30 -0800 (PST)
-Received: from maniforge ([24.1.27.177])
-        by smtp.gmail.com with ESMTPSA id bi11-20020a05620a318b00b007090bb886a2sm3854016qkb.118.2023.01.25.08.13.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 08:13:29 -0800 (PST)
-Date:   Wed, 25 Jan 2023 10:13:26 -0600
-From:   David Vernet <void@manifault.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>, Tejun Heo <tj@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/7] bpf: Enable cpumasks to be queried and
- used as kptrs
-Message-ID: <Y9FVJjbBvIjwwd0S@maniforge>
-References: <20230125143816.721952-1-void@manifault.com>
- <20230125143816.721952-3-void@manifault.com>
- <CAADnVQLtNJ7DYsvzZ0q3So-8PxywiCC4pmV0xKhkDZiw+jx=4A@mail.gmail.com>
+        Wed, 25 Jan 2023 11:15:20 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584FC30EB;
+        Wed, 25 Jan 2023 08:15:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674663319; x=1706199319;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=T/lcPQT2YnqHNhI7wuxUl84yk2/vgVT1L52WHsP5bXk=;
+  b=BivQQkuEFQNnFJvmcM8pAeykDpnk2clZZORzV17UaY8EOQwGTYiTnUWD
+   n6OrDjb8+FDv/CMmFTUR1ryX9zDGO25qlgnWSdu1wgqc9Lx8bRNSKcgNX
+   5vtUiPh+ZClbzh3YReFrVNOh5w3ZGUXJ3oUKvClOS8ZXhYRMxPZs+G8Wc
+   1uS5fRpaTZ+ZK/oFQpnLkPPSFm3c8cye75JHeBQ//FsIM2HGSO04td5+I
+   lXX1h2I3GNN2fDqe553ReKoT5Ws9JN0bwJ0/M8xr0u4Uyam47xC7ri1CR
+   R/am1Zkx9xmbHT//K3O+xuLlsY4h6BE7ZPirCO8dwGNiS/MyK3y6edYbs
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="327849368"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="327849368"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 08:15:18 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="751256459"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="751256459"
+Received: from zguo4-mobl1.amr.corp.intel.com (HELO [10.209.50.216]) ([10.209.50.216])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 08:15:17 -0800
+Message-ID: <ba4420b1-ea8c-d75d-2c4a-f0e7a6d01c6b@intel.com>
+Date:   Wed, 25 Jan 2023 08:15:16 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQLtNJ7DYsvzZ0q3So-8PxywiCC4pmV0xKhkDZiw+jx=4A@mail.gmail.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] x86: enable Data Operand Independent Timing Mode
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Roxana Bradescu <roxabee@chromium.org>,
+        Adam Langley <agl@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+References: <20230125012801.362496-1-ebiggers@kernel.org>
+ <14506678-918f-81e1-2c26-2b347ff50701@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <14506678-918f-81e1-2c26-2b347ff50701@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 08:01:49AM -0800, Alexei Starovoitov wrote:
-> On Wed, Jan 25, 2023 at 6:38 AM David Vernet <void@manifault.com> wrote:
-> > +
-> > +void bpf_cpumask_set_cpu(u32 cpu, struct bpf_cpumask *cpumask)
-> > +{
-> > +       if (!cpu_valid(cpu))
-> > +               return;
-> > +
-> > +       cpumask_set_cpu(cpu, (struct cpumask *)cpumask);
+On 1/25/23 07:29, Dave Hansen wrote:
+> There's another part here which I think was recently added to the
+> documentation:
 > 
-> I was considering suggesting to use &cpumask->cpumask here and
-> in other cases, but figured it's better to leave it as-is,
-> since bpf prog will be doing this cast, so it matches.
-> Maybe some build assertion is necessary to make sure it's the first member.
-> Probably overkill as well.
-
-IMO a build assertion is a good idea. Serves as documentation and a
-sanity check. I'll send it out in a follow-on patch, unless you really
-think it's overkill.
-
+> 	Intel expects the performance impact of this mode may be
+> 	significantly higher on future processors. 
 > 
-> Applied.
+> That's _meant_ to be really scary and keep folks from turning this on by
+> default, aka. what this patch does.  Your new CPU will be really slow if
+> you turn this on!  Boo!
+
+*If* we go forward with this patch's approach in the kernel, I think we
+should at least consider what the kernel will do in a future where there
+are two classes of systems:
+
+	1. Ice Lake era ones where DOITM=1 is cheap enough that it can
+	   on by default.
+	2. "Future processors" where DOITM=1 by default is too costly.
+
+Maybe for #2 we set DOITM=0 in the kernel.  Maybe we add per-task
+controls.
+
+But, there *is* DOITM cost where the large fleets are going to be
+tempted to turn it off somehow, somewhere.  The kernel will be better
+off if we can design that in now.
