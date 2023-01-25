@@ -2,150 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B987D67B24B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E0567B254
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235216AbjAYMGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 07:06:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
+        id S235068AbjAYMHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 07:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjAYMGS (ORCPT
+        with ESMTP id S234279AbjAYMHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 07:06:18 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DED58675;
-        Wed, 25 Jan 2023 04:05:53 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BDBC621DAC;
-        Wed, 25 Jan 2023 12:05:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674648350; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M6ZhLLcIfUWj0Dx+OmAWrztylazBquGZXcGl1z85yuQ=;
-        b=tjJPeQ8m8W5P71g2m3JXDLxSp72HbJQftZy3vAdP9Nl5ZEHWbqPcQpFn4uWOw77aDGRZxH
-        61qkk+aV/38b489Z7WPEGg5c6TfyGOai2/nQeNkVYrNH/43gA/P/ON4+Sm72XqAf9C3oEF
-        fsOYWoE2wspY0mKU/zUs0DzufjAsLUw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 96D241358F;
-        Wed, 25 Jan 2023 12:05:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WtVTJB4b0WMbdgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 25 Jan 2023 12:05:50 +0000
-Date:   Wed, 25 Jan 2023 13:05:49 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
-        jeffv@google.com, cmllamas@google.com,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2 1/4] memcg: Track exported dma-buffers
-Message-ID: <Y9EbHW84ydBzpTTO@dhcp22.suse.cz>
-References: <20230123191728.2928839-1-tjmercier@google.com>
- <20230123191728.2928839-2-tjmercier@google.com>
- <Y8/ybgp2FW+e3bjc@dhcp22.suse.cz>
- <CABdmKX1c_8LdJJboENnZhwGjrszDWOOVt-Do93-sJW46mZMD6A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABdmKX1c_8LdJJboENnZhwGjrszDWOOVt-Do93-sJW46mZMD6A@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 07:07:41 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C099568A2;
+        Wed, 25 Jan 2023 04:07:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674648443; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=LJWZWgMDiOvUUOaxxGp5C9xXe/ZHhMSs5o934rGBP7am70paMhfe5n7ok2rlAbrCUcSIk3J1UJ3Dc77SNbm5R4xvuRCHBTwgs/15FvCNj8L3W053HKXINbVwKdIcoTEVZCbINRpNrVxlkPcB0Tc+qeDiIT5I+0PbbfZU+uW3ri8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1674648443; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=qawlbShSNoXounucMMWi7eU+2wNcInRRobNeMbuhMeI=; 
+        b=R6/wFhs9j7gRP2AGewtIPEg+O2vbXCpctTB+X9Q9NZ0DMVZlLesku4kCGDHECZHb552u0OymObfuFl7aR3kFok+VXVQbPkwm2FUbANVO5e7zsWvduzmeUERh+cNgh75s232rByVvtZg8IE6P3V3hr7GvHB8f+2nQ6j7SYoV98q0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674648443;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:Message-ID:From:From:To:To:Cc:Cc:Subject:Subject:In-Reply-To:References:MIME-Version:Content-Type:Message-Id:Reply-To;
+        bh=qawlbShSNoXounucMMWi7eU+2wNcInRRobNeMbuhMeI=;
+        b=ohSnSu8BoNmvslUHYqpZt1gXcPG9EcrR0c5VKZLiKdQ8DOhvpb8PEJs5fcc6Fq65
+        /aiJxKOQ/M7mXI9h9gyLGsgJqp41tUbpSIyNfJOBC9GfqqnLnRQNp0knc7uyx0qrkGh
+        tekv5GtEr/HoZOHvMaV2VqzVsRQ3Wm58pdTqNXPM=
+Received: from lchen-xiaoxin.linux.beauty (221.225.241.248 [221.225.241.248]) by mx.zohomail.com
+        with SMTPS id 1674648440762719.0128530744996; Wed, 25 Jan 2023 04:07:20 -0800 (PST)
+Date:   Wed, 25 Jan 2023 20:06:31 +0800
+Message-ID: <87tu0ehl88.wl-me@linux.beauty>
+From:   Li Chen <me@linux.beauty>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Li Chen <lchen@ambarella.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:ARM/Ambarella SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 07/15] dt-bindings: clock: Add Ambarella clock bindings
+In-Reply-To: <b26a52ff-6b8a-8a64-7189-346cd2b0d705@linaro.org>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+        <20230123073305.149940-8-lchen@ambarella.com>
+        <0c19efb4-3bca-f500-ca24-14b9d24369ef@linaro.org>
+        <87y1prgdyu.wl-me@linux.beauty>
+        <b26a52ff-6b8a-8a64-7189-346cd2b0d705@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-ZohoMailClient: External
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 24-01-23 10:55:21, T.J. Mercier wrote:
-> On Tue, Jan 24, 2023 at 7:00 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Mon 23-01-23 19:17:23, T.J. Mercier wrote:
-> > > When a buffer is exported to userspace, use memcg to attribute the
-> > > buffer to the allocating cgroup until all buffer references are
-> > > released.
-> >
-> > Is there any reason why this memory cannot be charged during the
-> > allocation (__GFP_ACCOUNT used)?
-> 
-> My main motivation was to keep code changes away from exporters and
-> implement the accounting in one common spot for all of them. This is a
-> bit of a carryover from a previous approach [1] where there was some
-> objection to pushing off this work onto exporters and forcing them to
-> adapt, but __GFP_ACCOUNT does seem like a smaller burden than before
-> at least initially. However in order to support charge transfer
-> between cgroups with __GFP_ACCOUNT we'd need to be able to get at the
-> pages backing dmabuf objects, and the exporters are the ones with that
-> access. Meaning I think we'd have to add some additional dma_buf_ops
-> to achieve that, which was the objection from [1].
-> 
-> [1] https://lore.kernel.org/lkml/5cc27a05-8131-ce9b-dea1-5c75e994216d@amd.com/
-> 
-> >
-> > Also you do charge and account the memory but underlying pages do not
-> > know about their memcg (this is normally done with commit_charge for
-> > user mapped pages). This would become a problem if the memory is
-> > migrated for example.
-> 
-> Hmm, what problem do you see in this situation? If the backing pages
-> are to be migrated that requires the cooperation of the exporter,
-> which currently has no influence on how the cgroup charging is done
-> and that seems fine. (Unless you mean migrating the charge across
-> cgroups? In which case that's the next patch.)
+On Wed, 25 Jan 2023 17:55:34 +0800,
+Hi Krzysztof,
 
-My main concern was that page migration could lose the external tracking
-without some additional steps on the dmabuf front.
-
-> > This also means that you have to maintain memcg
-> > reference outside of the memcg proper which is not really nice either.
-> > This mimicks tcp kmem limit implementation which I really have to say I
-> > am not a great fan of and this pattern shouldn't be coppied.
+Krzysztof Kozlowski wrote:
+>
+> On 25/01/2023 10:28, Li Chen wrote:
 > >
-> Ah, what can I say. This way looked simple to me. I think otherwise
-> we're back to making all exporters do more stuff for the accounting.
-> 
-> > Also you are not really saying anything about the oom behavior. With
-> > this implementation the kernel will try to reclaim the memory and even
-> > trigger the memcg oom killer if the request size is <= 8 pages. Is this
-> > a desirable behavior?
-> 
-> It will try to reclaim some memory, but not the dmabuf pages right?
-> Not *yet* anyway. This behavior sounds expected to me.
+> > Hi Krzysztof,
+> >
+> > Sorry for my late reply.
+> >
+> > On Mon, 23 Jan 2023 16:11:08 +0800,
+> > Krzysztof Kozlowski wrote:
+> >>
+> >> On 23/01/2023 08:32, Li Chen wrote:
+> >>> This patch introduce clock bindings for Ambarella.
+> >>>
+> >>> Signed-off-by: Li Chen <lchen@ambarella.com>
+> >>> Change-Id: I29018a23ed3a5b79a1103e859a5c7ed7bb83a261
+> >>
+> >> All the same problems plus new:
+> >>
+> >> Subject: drop second/last, redundant "bindings". The "dt-bindings"
+> >> prefix is already stating that these are bindings.
+> >
+> > Well noted.
+> >
+> >>> ---
+> >>>  .../clock/ambarella,composite-clock.yaml      | 52 ++++++++++++++++
+> >>>  .../bindings/clock/ambarella,pll-clock.yaml   | 59 +++++++++++++++++++
+> >>>  MAINTAINERS                                   |  2 +
+> >>>  3 files changed, 113 insertions(+)
+> >>>  create mode 100644 Documentation/devicetree/bindings/clock/ambarella,composite-clock.yaml
+> >>>  create mode 100644 Documentation/devicetree/bindings/clock/ambarella,pll-clock.yaml
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/clock/ambarella,composite-clock.yaml b/Documentation/devicetree/bindings/clock/ambarella,composite-clock.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..fac1cb9379c4
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/clock/ambarella,composite-clock.yaml
+> >>> @@ -0,0 +1,52 @@
+> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/clock/ambarella,composite-clock.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: Ambarella Composite Clock
+> >>> +
+> >>> +maintainers:
+> >>> +  - Li Chen <lchen@ambarella.com>
+> >>> +
+> >>
+> >> Missing description.
+> >
+> > Thanks, description as below will be added in v2:
+> >
+> > "Ambarella SoCs integrates some composite clocks, like uart0, which aggrate the functionality
+> > of the basic clock types, like mux and div."
+> >
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    items:
+> >>
+> >> Drop items.
+> >
+> > Ok.
+> >
+> >>> +      - const: ambarella,composite-clock
+> >>
+> >> Missing SoC specific compatible. This is anyway not really correct
+> >> compatible...
+> >
+> > Most Ambarella's compatibles don't contain SoC name, because we prefer
+> > to use syscon + offsets in dts to tell driver the correct register offsets, or
+> > ues struct soc_device and SoC identity stores in a given physical address.
+>
+> That's not correct hardware description. Drop the syscon and offsets.
 
-Yes, we have discussed that shrinkers will follow up later which is
-fine. The question is how much reclaim actually makes sense at this
-stage. Charging interface usually copes with sizes resulting from
-allocation requests (so usually 1<<order based). I can imagine that a
-batch charge like implemented here could easily be 100s of MBs and it is
-much harder to define reclaim targets for. At least that is something
-the memcg charging hasn't really considered yet.  Maybe the existing
-try_charge implementation can cope with that just fine but it would be
-really great to have the expected behavior described.
+Ok.
 
-E.g. should be memcg OOM killer be invoked? Should reclaim really target
-regular memory at all costs or just a lightweight memory reclaim is
-preferred (is the dmabuf charge failure an expensive operation wrt.
-memory refault due to reclaim).
--- 
-Michal Hocko
-SUSE Labs
+> > 
+> > So compatibles like "ambarella,composite-clock" and "ambarella,pinctrl" are
+> > used widely in Ambarella kernels.
+>
+> What do you do downstream does not matter. You can invent any crazy idea
+> and it is not an argument that it should be done like that. Usually
+> downstream code is incorrect...
+
+Yeah, I understand it.
+I really hope to learn the standard/right ways and
+I am very grateful for your careful reviews.
+
+> > Feel free to correct me if you think this
+> > is not a good idea.
+>
+> This is bad idea. Compatibles should be specific. Devices should not use
+> syscons to poke other registers, unless strictly necessary, but have
+> strictly defined MMIO address space and use it.
+
+Ok, I will convert syscon-based regmaps to SoC-specific compatibles and of_device_id->data.
+
+But I have three questions:
+
+0. why syscon + offsets is a bad idea copared to specific compatibles?
+1. when would it be a good idea to use syscon in device tree?
+2. syscon VS reg, which is preferred in device tree?
+
+Thanks in advanced.
+
+> >
+> >>> +
+> >>> +  clocks: true
+> >>
+> >> No, needs constraints.
+> >
+> > Ok. I will list all clocks name
+> >
+> >>> +  assigned-clocks: true
+> >>> +  assigned-clock-parents: true
+> >>> +  assigned-clock-rates: true
+> >>
+> >> Drop these three.
+> >
+> > Ok
+> >
+> >>> +  clock-output-names: true
+> >>
+> >> Missing constraints.
+> >
+> > Ok, I will add "maxItems: 1"
+> >
+> >>> +  amb,mux-regmap: true
+> >>
+> >> NAK.
+> >>
+> >> It's enough. The patches have very, very poor quality.
+> >>
+> >> Missing description, missing type/$ref, wrong prefix.
+> >
+> > Sorry, I forget to run dt_binding_check, I will spend some
+> > time learning the binding and check, sorry for it.
+> >
+> >>> +  amb,div-regmap: true
+> >>> +  amb,div-width: true
+> >>> +  amb,div-shift: true
+> >>
+> >> These two are arguments to phandle.
+> >
+> > I will add description and $ref to regmap and width/shift.
+>
+> Drop all these syscon properties.
+
+Ok, so I should replace these regmaps with reg, right?
+
+> >
+> >>> +
+> >>> +  '#clock-cells':
+> >>> +    const: 0
+> >>> +
+> >>> +required:
+> >>> +  - compatible
+> >>> +  - reg
+> >>> +  - clocks
+> >>> +  - '#clock-cells'
+> >>> +
+> >>> +additionalProperties: false
+> >>
+> >> So why you decided to add it here and not in other places?
+> >
+> > I didn't understand it well. I will add it to other places in v2,
+> > thanks for pointint out it.
+> >
+> >>> +
+> >>> +examples:
+> >>> +  - |
+> >>> +      gclk_uart0: gclk-uart0 {
+> >>
+> >> Wrong indentation.
+> >
+> > Well noted.
+> >
+> >>> +        #clock-cells = <0>;
+> >>> +        compatible = "ambarella,composite-clock";
+> >>> +        clocks = <&osc>, <&gclk_core>, <&pll_out_enet>, <&pll_out_sd>;
+> >>> +        clock-output-names = "gclk_uart0";
+> >>> +        assigned-clocks = <&gclk_uart0>;
+> >>> +        assigned-clock-parents = <&osc>;
+> >>> +        assigned-clock-rates = <24000000>;
+> >>> +        amb,mux-regmap = <&rct_syscon 0x1c8>;
+> >>> +        amb,div-regmap = <&rct_syscon 0x038>;
+> >>> +        amb,div-width = <24>;
+> >>> +        amb,div-shift = <0>;
+> >>> +      };
+> >>> diff --git a/Documentation/devicetree/bindings/clock/ambarella,pll-clock.yaml b/Documentation/devicetree/bindings/clock/ambarella,pll-clock.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..65c1feb60041
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/clock/ambarella,pll-clock.yaml
+> >>> @@ -0,0 +1,59 @@
+> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/clock/ambarella,pll-clock.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: Ambarella PLL Clock
+> >>> +
+> >>> +maintainers:
+> >>> +  - Li Chen <lchen@ambarella.com>
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    enum:
+> >>> +      - ambarella,pll-clock
+> >>> +      - ambarella,clkpll-v0
+> >>> +
+> >>> +if:
+> >>
+> >> No, this does not work like that. It sits under "allOf", located after
+> >> "required:".
+> >
+> > Thanks, I will learn "allOf" and use it in v2. BTW, we use the two compatibles as below:
+> > clocks {
+> >                 compatible = "ambarella,clkpll-v0";
+>
+> Nope.
+>
+> >                 ...
+> >                 gclk_core: gclk-core {
+> >                         #clock-cells = <0>;
+> >                         compatible = "ambarella,pll-clock";
+>
+> Also nope.
+>
+> >                         clocks = <&osc>;
+> >                         clock-output-names = "gclk_core";
+> >                         amb,clk-regmap = <&rct_syscon 0x000 0x004 0x100 0x104 0x000 0x000>;
+>
+> Nope, nope, nope.
+>
+> You need proper clock-controller with its own MMIO address space.
+>
+> >                 };
+> >                 ...
+> > }
+> >
+> > I'm not sure can I describe the two compatibles in this single yaml, can you give some advice? thanks!
+>
+> There are plenty of examples, including example-schema.
+
+Ok, I will learn more and fix it.
+
+Regards,
+Li
