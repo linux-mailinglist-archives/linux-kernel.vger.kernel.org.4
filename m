@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C62E67ADCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4635867ADD6
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235245AbjAYJ2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 04:28:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
+        id S235252AbjAYJ3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235234AbjAYJ2D (ORCPT
+        with ESMTP id S232306AbjAYJ3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 04:28:03 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FD918AB4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:28:02 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id i17so8530035ila.9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:28:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3vAoXdS/YoRTyt2xMAeJZRk1CWXWTFAex8XSq5QFxAI=;
-        b=S24ranaz74YGGuc1OAnh94VOLMsmXsIZLcj8+scBUXH89LJHLuMjrTWBh0p6/v76tY
-         88SOxVz5O1VxFq7CGGLduJHWVWXrsan3v+wmnVqudCskHR25NDnATl7XEhIxO/RYKqbj
-         sJBRUFAQPX4CXb95M6G1bYcGuC9qC9i6xYDeoz5vETxL3Kpjv+eJ1nPzsTItAunGMclx
-         6jhubgP+0FlGVJZzPWwy+1GRmjTyErdxqdkNfgoZvb07znINfh+aAjSi4ARRr8FOF7C/
-         xseyzU0u4Thzb5GLUPFr741oGMQbebvwzcem/HaogSUNTnFOM119SyBF+of2dzbWbZQV
-         EiaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3vAoXdS/YoRTyt2xMAeJZRk1CWXWTFAex8XSq5QFxAI=;
-        b=Nq0TAzRAIenihDkL56WtU3hZr+vkvD/6VogZo3A9CdUnMzcZ6wbdialDsOiV4KEE7x
-         N/6gb0PP6VRiIx6t0NQaeu9LwTA+3yoH36oD11dCxaccaacLgnUS50PBeI+KzaJF3kDs
-         QFxDhG0BhhhoDH1Xs9+0tJHaP5v2sdKFQWOPL7BBEqa08+3bu3Yp8VUzv06n3XNHMTYa
-         vYmcrCtJCrBffV5DcKTNVb/NweIb5mgz8ZLYjoKs3sLvPL1xC2n4Uuub2Vn+SY4MMnpd
-         6ANlNO78w3lnggs+hrXZRqFg8UqveY2NXxyiU7ch/eVZOIBr42Tl80Esyg0Y9WG+h51K
-         cmsQ==
-X-Gm-Message-State: AO0yUKWnlpziP24J0Ms+iTHHS+hQAd6RNfmKFuO7Spg6lPXdFyjAslC5
-        YVDqafgAWpUMg0dGp4gTZEdnpIHmhtse6kFuYQ2Y0A==
-X-Google-Smtp-Source: AK7set/bcEtGvKWUjj5g+XyVKGurJsF1MsHuI4LRXED0wzXVTUEYgHVVK6kVIc67YzuuYSiM20spifAd3Cryc3TTTtw=
-X-Received: by 2002:a92:ca8d:0:b0:310:98bd:dbf0 with SMTP id
- t13-20020a92ca8d000000b0031098bddbf0mr583597ilo.128.1674638881876; Wed, 25
- Jan 2023 01:28:01 -0800 (PST)
-MIME-Version: 1.0
-References: <20230117163543.1049025-1-jannh@google.com> <CACT4Y+aQUeoWnWmbDG3O2_P75f=2u=VDRA1PjuTtbJsp5Xw2VA@mail.gmail.com>
-In-Reply-To: <CACT4Y+aQUeoWnWmbDG3O2_P75f=2u=VDRA1PjuTtbJsp5Xw2VA@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Wed, 25 Jan 2023 10:27:25 +0100
-Message-ID: <CAG48ez32X1WKryh5ueQ0=Mn=PMKc6zunOYsMHhwMMMxKKaMfqA@mail.gmail.com>
-Subject: Re: [PATCH] fork, vmalloc: KASAN-poison backing pages of vmapped stacks
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Wed, 25 Jan 2023 04:29:46 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD4D193D1;
+        Wed, 25 Jan 2023 01:29:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674638971; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Cqxpx+/WBy72ex2kZEIHyPo+naMFPb5kMYQvk6aLoIF0z0FzwG/QaAmMxje9kKuz8EMO2rWrQ7yS7SZ0wtrq31Z4FqHlLt5GodmPLgalDPo425Gd0HaxXZ+uQpDzYVfhZnQCySKo10ei9bgxHtC95bIBRJm06PX8uU8STZVOwFs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1674638971; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=xkUg3nf6OEkoY+au5DwmIp1JKRouLWwMmVa4vTYLlCw=; 
+        b=WEjQ7Y5tui0zAcLQjRcBeWTdwMI9eca3b7+V3vznKbB88U1PMIh0k9Zp4/EcnjYS6/TaloOnZ/AEGb2hz4/qZj8JdudfDV1pK5zxWG86oOG0hCH/1RAlvs0NNaIezzledt6I7UvU4Ug/MXwQ3SfbykI2KgBJh5DrEVl2zEjAS/Q=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674638971;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:Message-ID:From:From:To:To:Cc:Cc:Subject:Subject:In-Reply-To:References:MIME-Version:Content-Type:Message-Id:Reply-To;
+        bh=xkUg3nf6OEkoY+au5DwmIp1JKRouLWwMmVa4vTYLlCw=;
+        b=NZYVOFcgDjflfenyaZs5V94vkCwIPdSH92OhImxH2F0qo9kmlmT/D6iBfpZg8JWS
+        AgFDMCg+CYFpQwKh/GjNjadB5x/yLszesuREGuWikO9LUhu3Lp3/XSZkMVCBZv6LFPS
+        D3rfUwLiFrQDuNzLM8pUDl3hbNRSpxhYDV3YVfUE=
+Received: from lchen-xiaoxin.linux.beauty (221.225.241.248 [221.225.241.248]) by mx.zohomail.com
+        with SMTPS id 16746389698191012.618366623598; Wed, 25 Jan 2023 01:29:29 -0800 (PST)
+Date:   Wed, 25 Jan 2023 17:28:41 +0800
+Message-ID: <87y1prgdyu.wl-me@linux.beauty>
+From:   Li Chen <me@linux.beauty>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Li Chen <lchen@ambarella.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:ARM/Ambarella SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 07/15] dt-bindings: clock: Add Ambarella clock bindings
+In-Reply-To: <0c19efb4-3bca-f500-ca24-14b9d24369ef@linaro.org>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+        <20230123073305.149940-8-lchen@ambarella.com>
+        <0c19efb4-3bca-f500-ca24-14b9d24369ef@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,76 +71,230 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 8:36 AM Dmitry Vyukov <dvyukov@google.com> wrote:
-> On Tue, 17 Jan 2023 at 17:35, Jann Horn <jannh@google.com> wrote:
-> >
-> > KASAN (except in HW_TAGS mode) tracks memory state based on virtual
-> > addresses. The mappings of kernel stack pages in the linear mapping are
-> > currently marked as fully accessible.
->
-> Hi Jann,
->
-> To confirm my understanding, this is not just KASAN (except in HW_TAGS
-> mode), but also CONFIG_VMAP_STACK is required, right?
 
-Yes.
+Hi Krzysztof,
 
-> > Since stack corruption issues can cause some very gnarly errors, let's be
-> > extra careful and tell KASAN to forbid accesses to stack memory through the
-> > linear mapping.
+Sorry for my late reply.
+
+On Mon, 23 Jan 2023 16:11:08 +0800,
+Krzysztof Kozlowski wrote:
+>
+> On 23/01/2023 08:32, Li Chen wrote:
+> > This patch introduce clock bindings for Ambarella.
 > >
-> > Signed-off-by: Jann Horn <jannh@google.com>
+> > Signed-off-by: Li Chen <lchen@ambarella.com>
+> > Change-Id: I29018a23ed3a5b79a1103e859a5c7ed7bb83a261
+>
+> All the same problems plus new:
+>
+> Subject: drop second/last, redundant "bindings". The "dt-bindings"
+> prefix is already stating that these are bindings.
+
+Well noted.
+
 > > ---
-> > I wrote this after seeing
-> > https://lore.kernel.org/all/Y8W5rjKdZ9erIF14@casper.infradead.org/
-> > and wondering about possible ways that this kind of stack corruption
-> > could be sneaking past KASAN.
-> > That's proooobably not the explanation, but still...
->
-> I think catching any silent corruptions is still very useful. Besides
-> confusing reports, sometimes they lead to an explosion of random
-> reports all over the kernel.
->
-> >  include/linux/vmalloc.h |  6 ++++++
-> >  kernel/fork.c           | 10 ++++++++++
-> >  mm/vmalloc.c            | 24 ++++++++++++++++++++++++
-> >  3 files changed, 40 insertions(+)
+> >  .../clock/ambarella,composite-clock.yaml      | 52 ++++++++++++++++
+> >  .../bindings/clock/ambarella,pll-clock.yaml   | 59 +++++++++++++++++++
+> >  MAINTAINERS                                   |  2 +
+> >  3 files changed, 113 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/ambarella,composite-clock.yaml
+> >  create mode 100644 Documentation/devicetree/bindings/clock/ambarella,pll-clock.yaml
 > >
-> > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> > index 096d48aa3437..bfb50178e5e3 100644
-> > --- a/include/linux/vmalloc.h
-> > +++ b/include/linux/vmalloc.h
-> > @@ -297,4 +297,10 @@ bool vmalloc_dump_obj(void *object);
-> >  static inline bool vmalloc_dump_obj(void *object) { return false; }
-> >  #endif
-> >
-> > +#if defined(CONFIG_MMU) && (defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS))
-> > +void vmalloc_poison_backing_pages(const void *addr);
-> > +#else
-> > +static inline void vmalloc_poison_backing_pages(const void *addr) {}
-> > +#endif
+> > diff --git a/Documentation/devicetree/bindings/clock/ambarella,composite-clock.yaml b/Documentation/devicetree/bindings/clock/ambarella,composite-clock.yaml
+> > new file mode 100644
+> > index 000000000000..fac1cb9379c4
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/ambarella,composite-clock.yaml
+> > @@ -0,0 +1,52 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/ambarella,composite-clock.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Ambarella Composite Clock
+> > +
+> > +maintainers:
+> > +  - Li Chen <lchen@ambarella.com>
+> > +
 >
-> I think this should be in kasan headers and prefixed with kasan_.
-> There are also kmsan/kcsan that may poison memory and hw poisoning
-> (MADV_HWPOISON), so it's a somewhat overloaded term on its own.
+> Missing description.
+
+Thanks, description as below will be added in v2:
+
+"Ambarella SoCs integrates some composite clocks, like uart0, which aggrate the functionality
+of the basic clock types, like mux and div."
+
+> > +properties:
+> > +  compatible:
+> > +    items:
 >
-> Can/should this be extended to all vmalloc-ed memory? Or some of it
-> can be accessed via both addresses?
+> Drop items.
 
-I think anything that does vmalloc_to_page() has a high chance of
-doing accesses via both addresses, in particular anything involving
-DMA.
+Ok.
 
-Oooh, actually, there is some CIFS code that does vmalloc_to_page()
-and talks about stack memory... I'll report that over on the other
-thread re CIFS weirdness.
+> > +      - const: ambarella,composite-clock
+>
+> Missing SoC specific compatible. This is anyway not really correct
+> compatible...
 
-> Also, should we mprotect it instead while it's allocated as the stack?
-> If it works, it looks like a reasonable improvement for
-> CONFIG_VMAP_STACK in general. Would also catch non-instrumented
-> accesses.
+Most Ambarella's compatibles don't contain SoC name, because we prefer
+to use syscon + offsets in dts to tell driver the correct register offsets, or
+ues struct soc_device and SoC identity stores in a given physical address.
 
-Well, we could also put it under CONFIG_DEBUG_PAGEALLOC and then use
-the debug_pagealloc_map_pages() / debug_pagealloc_unmap_pages()
-facilities to remove the page table entries. But I don't know if
-anyone actually runs fuzzing with CONFIG_DEBUG_PAGEALLOC.
+So compatibles like "ambarella,composite-clock" and "ambarella,pinctrl" are
+used widely in Ambarella kernels. Feel free to correct me if you think this
+is not a good idea.
+
+> > +
+> > +  clocks: true
+>
+> No, needs constraints.
+
+Ok. I will list all clocks name
+
+> > +  assigned-clocks: true
+> > +  assigned-clock-parents: true
+> > +  assigned-clock-rates: true
+>
+> Drop these three.
+
+Ok
+
+> > +  clock-output-names: true
+>
+> Missing constraints.
+
+Ok, I will add "maxItems: 1"
+
+> > +  amb,mux-regmap: true
+>
+> NAK.
+>
+> It's enough. The patches have very, very poor quality.
+>
+> Missing description, missing type/$ref, wrong prefix.
+
+Sorry, I forget to run dt_binding_check, I will spend some
+time learning the binding and check, sorry for it.
+
+> > +  amb,div-regmap: true
+> > +  amb,div-width: true
+> > +  amb,div-shift: true
+>
+> These two are arguments to phandle.
+
+I will add description and $ref to regmap and width/shift.
+
+> > +
+> > +  '#clock-cells':
+> > +    const: 0
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
+> > +  - '#clock-cells'
+> > +
+> > +additionalProperties: false
+>
+> So why you decided to add it here and not in other places?
+
+I didn't understand it well. I will add it to other places in v2,
+thanks for pointint out it.
+
+> > +
+> > +examples:
+> > +  - |
+> > +      gclk_uart0: gclk-uart0 {
+>
+> Wrong indentation.
+
+Well noted.
+
+> > +        #clock-cells = <0>;
+> > +        compatible = "ambarella,composite-clock";
+> > +        clocks = <&osc>, <&gclk_core>, <&pll_out_enet>, <&pll_out_sd>;
+> > +        clock-output-names = "gclk_uart0";
+> > +        assigned-clocks = <&gclk_uart0>;
+> > +        assigned-clock-parents = <&osc>;
+> > +        assigned-clock-rates = <24000000>;
+> > +        amb,mux-regmap = <&rct_syscon 0x1c8>;
+> > +        amb,div-regmap = <&rct_syscon 0x038>;
+> > +        amb,div-width = <24>;
+> > +        amb,div-shift = <0>;
+> > +      };
+> > diff --git a/Documentation/devicetree/bindings/clock/ambarella,pll-clock.yaml b/Documentation/devicetree/bindings/clock/ambarella,pll-clock.yaml
+> > new file mode 100644
+> > index 000000000000..65c1feb60041
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/ambarella,pll-clock.yaml
+> > @@ -0,0 +1,59 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/ambarella,pll-clock.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Ambarella PLL Clock
+> > +
+> > +maintainers:
+> > +  - Li Chen <lchen@ambarella.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - ambarella,pll-clock
+> > +      - ambarella,clkpll-v0
+> > +
+> > +if:
+>
+> No, this does not work like that. It sits under "allOf", located after
+> "required:".
+
+Thanks, I will learn "allOf" and use it in v2. BTW, we use the two compatibles as below:
+clocks {
+                compatible = "ambarella,clkpll-v0";
+                ...
+                gclk_core: gclk-core {
+                        #clock-cells = <0>;
+                        compatible = "ambarella,pll-clock";
+                        clocks = <&osc>;
+                        clock-output-names = "gclk_core";
+                        amb,clk-regmap = <&rct_syscon 0x000 0x004 0x100 0x104 0x000 0x000>;
+                };
+                ...
+}
+
+I'm not sure can I describe the two compatibles in this single yaml, can you give some advice? thanks!
+
+> > +  properties:
+> > +    compatible:
+> > +      const: ambarella,pll-clock
+> > +
+> > +then:
+> > +  properties:
+> > +    clocks:
+> > +      maxItems: 1
+> > +
+> > +    clock-output-names: true
+> > +    amb,clk-regmap: true
+> > +    amb,frac-mode: true
+> > +    assigned-clocks: true
+> > +    assigned-clock-rates: true
+>
+> Same problems.
+
+Ok.
+
+> > +    gclk_axi: gclk-axi {
+> > +        #clock-cells = <0>;
+> > +        compatible = "fixed-factor-clock";
+>
+> What is this example about? Not related at all. Provide real example.
+
+Sorry, I paste the wrong example, I will replace it with our gclk_core pll
+instead.
+
+Regards,
+Li
