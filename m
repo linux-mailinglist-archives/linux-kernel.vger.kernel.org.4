@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F62A67B881
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A25D67B87A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235560AbjAYR1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
+        id S235059AbjAYR04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235311AbjAYR1u (ORCPT
+        with ESMTP id S229612AbjAYR0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:27:50 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE3A35AB;
-        Wed, 25 Jan 2023 09:27:48 -0800 (PST)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30PHPOXR3191416
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Wed, 25 Jan 2023 09:25:24 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30PHPOXR3191416
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023010601; t=1674667525;
-        bh=VnoyFUy9dOE00kCz07pDoYxTfplcGaca5G+hnmBxs+s=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=QbTpX7nL7CyyJ6yfVZ8M5fweKYAIjwNmBEApgktVaVlmfH/soztuowedAJ8+WjIiX
-         iSpsQMM7fnHKUvAmeTaL6eg6/Nofmklx+0YI1wlZ0fFsF/XrQ7bevAgERPeKdL/1t6
-         vaTDilZR2MNcpuqkJFPZNkSTmmbAJwxih+Qocs6A8M7l35tqonA5/NqutwBG/d137l
-         jDkL4F/Dw3WrpbQkqbEcrlVj0UY25F79iDf634NXBaufOG0DsdH9Og5BNDV7IZcmRF
-         0xUPYQC1M2bqWt+YNGdtObPYqufufCQb7p/bxgIt3OlEgw3oVjrRwdqtrZgHnpoxFm
-         xICw+ZEgkjS5w==
-Date:   Wed, 25 Jan 2023 09:25:21 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-CC:     Xin Li <xin3.li@intel.com>, Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v5_1/2=5D_selftests/x86=3A_sy?= =?US-ASCII?Q?sret=5Frip=3A_Handle_syscall_in_a_FRED_system?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y9EUc6SIhN4skrmi@biznet-home.integral.gnuweeb.org>
-References: <20230124022729.596997-3-ammarfaizi2@gnuweeb.org> <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com> <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org> <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com> <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org> <20230125034958.734527-1-ammarfaizi2@gnuweeb.org> <20230125034958.734527-2-ammarfaizi2@gnuweeb.org> <8770815f-0f23-d0c5-e56a-d401827842c9@zytor.com> <Y9D8++DxphJS1oc4@biznet-home.integral.gnuweeb.org> <A7DAB159-7C02-412D-9CFB-5C3C3760DECB@zytor.com> <Y9EUc6SIhN4skrmi@biznet-home.integral.gnuweeb.org>
-Message-ID: <13EFEDBA-3BC2-4654-BFDD-53E79178107B@zytor.com>
+        Wed, 25 Jan 2023 12:26:55 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8809A9F;
+        Wed, 25 Jan 2023 09:26:53 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id z11so22631000ede.1;
+        Wed, 25 Jan 2023 09:26:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CYMEij3rxHWyzgLm7dd5XsZ6vBXXY5YhrQ7zALUGLjk=;
+        b=Dv8hdB3DMUVXMukiXrX8R5uayffhTytfjOgnhlH736EMc/WIsAQMKzQ57MnRHeWfFV
+         F5n3xRt1KakybWkK45QuYajlkvzPLPosyqXR5rIt0hlMzci8GZPbFFEF3CHAYx8vP+FI
+         dODp8tKCEe1ugqJMoxMcZ0nPXGlCRpjb0siys1HlQlai19Q0sgK5VCnv39XzIfMpOX36
+         aG0myJGc/o/HGOD2kuxfpc40mLNnhjIFyVhT5+bTcY7BZ32M3VR2MkVBxdkJJ5FSy3GR
+         bqnyabPa0HRsK863qhLq+U5WF328x620ZEXXVWii0q+Spxo+bzpjNxZFYnv/PHETxY1g
+         8pew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CYMEij3rxHWyzgLm7dd5XsZ6vBXXY5YhrQ7zALUGLjk=;
+        b=O/I/HOnqVuWBC8RMrYaEc8YiiPzTGEWxPjbwiHwnowiJ6iMI79XGskVEYoA7LuDxyn
+         rSRv6f9uqLOQiyXOd5dAGG22XCfoEpsU/YGAyWEc9OJKutosQIfE31FriniO9lzn+S1K
+         +fwglx/2p7IL/a9yLClcHSrgR98Pqo2P1LgbChk1jwAmrva7uBuMEljLvnVAm32B06Uw
+         QeXXgouj4idQM6YBn86mLHWOpg3ejYgmN8Gyh59hhimCMtdKKTtT/RgBZEU4KemfAoeq
+         4EMHUFYlq41R42OVyjBPasXKs4hpjJyrdqxZZuXKSqF75mKEdRulWSlDKNja/gzV41eF
+         Vn5Q==
+X-Gm-Message-State: AFqh2kr/xjknTdK3IMGS2klFpQ6LAB+HlHeFxZpS5HVPJGshBTm9z5kc
+        RC6W2mp6Wo9Uba2fXDUkmuoI1memruE=
+X-Google-Smtp-Source: AMrXdXsUvLlARBjMXRXjQMdoUzGjSjgvrKOPoFY18DBSj653Pol8v+oWAZdyD2Rlk/XeWRH8j+FQVg==
+X-Received: by 2002:a50:ff08:0:b0:49b:7416:e3ff with SMTP id a8-20020a50ff08000000b0049b7416e3ffmr34024896edu.5.1674667611597;
+        Wed, 25 Jan 2023 09:26:51 -0800 (PST)
+Received: from jo-einhundert ([2a02:908:13d6:2180:36e8:f43a:77c6:b1a2])
+        by smtp.gmail.com with ESMTPSA id lf14-20020a170907174e00b007c1633cea13sm2688052ejc.12.2023.01.25.09.26.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 09:26:51 -0800 (PST)
+Date:   Wed, 25 Jan 2023 18:26:49 +0100
+From:   =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
+To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH] usb: gadget: add doc to struct usb_composite_dev
+Message-ID: <Y9FmWVF+J08V4RbP@jo-einhundert>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y86cy1AM4w5ju5A4@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On January 25, 2023 3:37:23 AM PST, Ammar Faizi <ammarfaizi2@gnuweeb=2Eorg>=
- wrote:
->On Wed, Jan 25, 2023 at 02:17:41AM -0800, H=2E Peter Anvin wrote:
->> I guess it would depend on what they "normally" are=2E My #1 impulse wo=
-uld be to leave them both unchanged=2E
->
->Ah okay=2E=2E=2E I think I understand now=2E My confusion came from a com=
-ment
->in that code=2E
->
->The current SIGUSR1 handler has a comment:
->
->    /* Set IP and CX to match so that SYSRET can happen=2E */
->    ctx->uc_mcontext=2Egregs[REG_RIP] =3D rip;
->    ctx->uc_mcontext=2Egregs[REG_RCX] =3D rip;
->
->So I thought if we leave them both unchanged, then SYSRET can happen
->too, because IP and CX match=2E My initial confusion about that was:
->
->    Where do we actually exercise IRET if the SIGUSR2 handler
->    exercises SYSRET then?
->
->I realized my assumption was wrong=2E The current SIGUSR1 handler
->actually forces the kernel to use IRET, not SYSRET=2E Because the %rip
->is set to a non-canonical address=2E So that's the place where it
->exercises IRET=2E
->
->IOW, my understanding now:
->
->The current SIGUSR1 handler exercises the SYSRET-appropriate condition
->detector in the kernel=2E It doesn't actually go to the SYSRET path
->despite the comment saying "SYSRET can happen"=2E That detector must take
->us to the IRET path or we will #GP in kernel space on Intel CPUs=2E
->
->In short, the SIGUSR1 handler asserts that "SYSRET must *not* happen"=2E
->
->The expected SIGUSR2 handler addition exercises the SYSRET path by
->leaving REG_IP and REG_CX unchanged=2E
->
->Am I correct?
->
+Added documentation to the new struct members:
+* bcd_webusb_version
+* b_webusb_vendor_code
+* landing_page
+* use_webusb
+to avoid warnings in the build of htmldocs
 
-That's the idea=2E
+Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
+---
+ include/linux/usb/composite.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 91d22c3ed458..7ef8cea67f50 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -432,6 +432,10 @@ static inline struct usb_composite_driver *to_cdriver(
+  * @qw_sign: qwSignature part of the OS string
+  * @b_vendor_code: bMS_VendorCode part of the OS string
+  * @use_os_string: false by default, interested gadgets set it
++ * @bcd_webusb_version: 0x0100 by default, WebUSB specification version
++ * @b_webusb_vendor_code: 0x0 by default, vendor code for WebUSB
++ * @landing_page: empty by default, landing page to announce in WebUSB
++ * @use_webusb:: false by default, interested gadgets set it
+  * @os_desc_config: the configuration to be used with OS descriptors
+  * @setup_pending: true when setup request is queued but not completed
+  * @os_desc_pending: true when os_desc request is queued but not completed
+-- 
+2.37.2
+
