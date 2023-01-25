@@ -2,115 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F27F67B5B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B3767B5B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235998AbjAYPSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:18:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
+        id S236008AbjAYPUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235562AbjAYPSM (ORCPT
+        with ESMTP id S235306AbjAYPUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:18:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACA010F2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:17:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674659846;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H+72qkNOq5RMTaBAvY8lwUcPUyphuIdSxxM26w+0GHU=;
-        b=c7u4HON1/V7O5j7yiP0wz5WBLPf5N4sr8DWElIbuHS73A4WCMEihqBbNdWGBFQWfuH05mh
-        luIUna6jlKOl7Q17FNVcLACCFAaG/vkwx+Kx36n36V802ZS4AG7OrRnoGuhaVheQfT8tHB
-        Z8vO0WFZ0emDB/YGRMhSIL9NV6GPEQ0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-567-eZuIKS6RP-CEviKn2zUA_g-1; Wed, 25 Jan 2023 10:17:23 -0500
-X-MC-Unique: eZuIKS6RP-CEviKn2zUA_g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D039801779;
-        Wed, 25 Jan 2023 15:17:22 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (ovpn-195-63.brq.redhat.com [10.40.195.63])
-        by smtp.corp.redhat.com (Postfix) with SMTP id DCC141121333;
-        Wed, 25 Jan 2023 15:17:20 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 25 Jan 2023 16:17:20 +0100 (CET)
-Date:   Wed, 25 Jan 2023 16:17:17 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marco Elver <elver@google.com>
-Subject: Re: [RFC PATCH v2] posix-timers: Support delivery of signals to the
- current thread
-Message-ID: <20230125151717.GB13746@redhat.com>
-References: <20221216171807.760147-1-dvyukov@google.com>
- <20230112112411.813356-1-dvyukov@google.com>
- <20230125124304.GA13746@redhat.com>
+        Wed, 25 Jan 2023 10:20:22 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07F6218AA8;
+        Wed, 25 Jan 2023 07:20:21 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DF144B3;
+        Wed, 25 Jan 2023 07:21:02 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.31.176])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7EEAD3F71E;
+        Wed, 25 Jan 2023 07:20:16 -0800 (PST)
+Date:   Wed, 25 Jan 2023 15:20:08 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@kernel.org, will@kernel.org, boqun.feng@gmail.com,
+        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com, rostedt@goodmis.org,
+        mhiramat@kernel.org, wanpengli@tencent.com, vkuznets@redhat.com,
+        boris.ostrovsky@oracle.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Subject: Re: [PATCH 0/6] A few cpuidle vs rcu fixes
+Message-ID: <Y9FIqD21+DZU2kjV@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230123205009.790550642@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125124304.GA13746@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230123205009.790550642@infradead.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/25, Oleg Nesterov wrote:
->
-> Other than that I see nothing wrong in this patch, but I forgot everything
-> about posix timers many years ago ;)
+Hi Peter,
 
-Stupid question. Am I right that in posix_timer_event()
+On Mon, Jan 23, 2023 at 09:50:09PM +0100, Peter Zijlstra wrote:
+> 0-day robot reported graph-tracing made the cpuidle-vs-rcu rework go splat.
+> 
+> These patches appear to cure this, the ftrace selftest now runs to completion
+> without spamming scary messages to dmesg.
 
-	same_thread_group(current, pid_task(timr->it_pid, PIDTYPE_PID))
+In addition to the other bits for arm64, we'll need the following patch. Are
+you happy to add that to the start of this series?
 
-is always true?
+I've tested this on an arm64 Juno board with a full-fat ftrace config,
+CONFIG_PROVE_LOCKING + CONFIG_DEBUG_LOCKDEP, and CONFIG_DEBUG_VIRTUAL=y, and
+build tested for 32-bit arm.
 
-If yes, perhaps we can do a much simpler change which doesn't even affect API?
-See the trivial patch below.
+Thanks,
+Mark.
 
-send_sigqueue(PIDTYPE_TGID) notify any thread in thread group, so this doesn't
-really change the semantics, just complete_signal() will likely choose "current"
-as a target for signal_wake_up() and iiuc this is what we want for balancing?
+---->8----
+From 30ab9eba19e952cb51c9f599d2ac9b8a302cb63d Mon Sep 17 00:00:00 2001
+From: Mark Rutland <mark.rutland@arm.com>
+Date: Wed, 25 Jan 2023 14:20:49 +0000
+Subject: [PATCH] drivers: firmware: psci: don't instrument suspend code
 
-Oleg.
+The PSCI suspend code is currently instrumentable, which is not safe as
+instrumentation (e.g. ftrace) may try to make use of RCU during idle
+periods when RCU is not watching.
 
+To fix this we need to ensure that psci_suspend_finisher() and anything
+it calls are not instrumented. We can do this fairly simply by marking
+psci_suspend_finisher() and the psci*_cpu_suspend() functions as
+noinstr, and the underlying helper functions as __always_inline.
 
-diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 5dead89308b7..e38b53a0f814 100644
---- a/kernel/time/posix-timers.c
-+++ b/kernel/time/posix-timers.c
-@@ -336,6 +336,7 @@ void posixtimer_rearm(struct kernel_siginfo *info)
- int posix_timer_event(struct k_itimer *timr, int si_private)
- {
- 	enum pid_type type;
-+	struct pid *pid;
- 	int ret;
- 	/*
- 	 * FIXME: if ->sigq is queued we can race with
-@@ -350,8 +351,9 @@ int posix_timer_event(struct k_itimer *timr, int si_private)
- 	 */
- 	timr->sigq->info.si_sys_private = si_private;
- 
--	type = !(timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_TGID : PIDTYPE_PID;
--	ret = send_sigqueue(timr->sigq, timr->it_pid, type);
-+	type = (timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_PID : PIDTYPE_TGID;
-+	pid = (type == PIDTYPE_PID) ? timr->it_pid : task_pid(current);
-+	ret = send_sigqueue(timr->sigq, pid, type);
- 	/* If we failed to send the signal the timer stops. */
- 	return ret > 0;
+When CONFIG_DEBUG_VIRTUAL=y, __pa_symbol() can expand to an out-of-line
+instrumented function, so we must use __pa_symbol_nodebug() within
+psci_suspend_finisher().
+
+The raw SMCCC invocation functions are written in assembly, and are not
+subject to compiler instrumentation.
+
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+---
+ drivers/firmware/psci/psci.c | 31 +++++++++++++++++++------------
+ 1 file changed, 19 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+index f3a044fa4652a..c12847b4736de 100644
+--- a/drivers/firmware/psci/psci.c
++++ b/drivers/firmware/psci/psci.c
+@@ -108,9 +108,10 @@ bool psci_power_state_is_valid(u32 state)
+ 	return !(state & ~valid_mask);
  }
+ 
+-static unsigned long __invoke_psci_fn_hvc(unsigned long function_id,
+-			unsigned long arg0, unsigned long arg1,
+-			unsigned long arg2)
++static __always_inline unsigned long
++__invoke_psci_fn_hvc(unsigned long function_id,
++		     unsigned long arg0, unsigned long arg1,
++		     unsigned long arg2)
+ {
+ 	struct arm_smccc_res res;
+ 
+@@ -118,9 +119,10 @@ static unsigned long __invoke_psci_fn_hvc(unsigned long function_id,
+ 	return res.a0;
+ }
+ 
+-static unsigned long __invoke_psci_fn_smc(unsigned long function_id,
+-			unsigned long arg0, unsigned long arg1,
+-			unsigned long arg2)
++static __always_inline unsigned long
++__invoke_psci_fn_smc(unsigned long function_id,
++		     unsigned long arg0, unsigned long arg1,
++		     unsigned long arg2)
+ {
+ 	struct arm_smccc_res res;
+ 
+@@ -128,7 +130,7 @@ static unsigned long __invoke_psci_fn_smc(unsigned long function_id,
+ 	return res.a0;
+ }
+ 
+-static int psci_to_linux_errno(int errno)
++static __always_inline int psci_to_linux_errno(int errno)
+ {
+ 	switch (errno) {
+ 	case PSCI_RET_SUCCESS:
+@@ -169,7 +171,8 @@ int psci_set_osi_mode(bool enable)
+ 	return psci_to_linux_errno(err);
+ }
+ 
+-static int __psci_cpu_suspend(u32 fn, u32 state, unsigned long entry_point)
++static __always_inline int
++__psci_cpu_suspend(u32 fn, u32 state, unsigned long entry_point)
+ {
+ 	int err;
+ 
+@@ -177,13 +180,15 @@ static int __psci_cpu_suspend(u32 fn, u32 state, unsigned long entry_point)
+ 	return psci_to_linux_errno(err);
+ }
+ 
+-static int psci_0_1_cpu_suspend(u32 state, unsigned long entry_point)
++static __always_inline int
++psci_0_1_cpu_suspend(u32 state, unsigned long entry_point)
+ {
+ 	return __psci_cpu_suspend(psci_0_1_function_ids.cpu_suspend,
+ 				  state, entry_point);
+ }
+ 
+-static int psci_0_2_cpu_suspend(u32 state, unsigned long entry_point)
++static __always_inline int
++psci_0_2_cpu_suspend(u32 state, unsigned long entry_point)
+ {
+ 	return __psci_cpu_suspend(PSCI_FN_NATIVE(0_2, CPU_SUSPEND),
+ 				  state, entry_point);
+@@ -447,10 +452,12 @@ late_initcall(psci_debugfs_init)
+ #endif
+ 
+ #ifdef CONFIG_CPU_IDLE
+-static int psci_suspend_finisher(unsigned long state)
++static noinstr int psci_suspend_finisher(unsigned long state)
+ {
+ 	u32 power_state = state;
+-	phys_addr_t pa_cpu_resume = __pa_symbol(cpu_resume);
++	phys_addr_t pa_cpu_resume;
++
++	pa_cpu_resume = __pa_symbol_nodebug((unsigned long)cpu_resume);
+ 
+ 	return psci_ops.cpu_suspend(power_state, pa_cpu_resume);
+ }
+-- 
+2.30.2
 
