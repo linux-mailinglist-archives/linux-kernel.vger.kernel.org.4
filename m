@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F95967B0A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:08:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E870F67B0B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235720AbjAYLIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
+        id S235177AbjAYLJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235531AbjAYLIK (ORCPT
+        with ESMTP id S235263AbjAYLJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:08:10 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5714B744
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:08:04 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so969726wma.1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:08:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tgNd6pdprwR64P3gTI1USNLkbTKHZW562SWliCwEACM=;
-        b=ADO6TqbweMkdaSb2eI1zg9+zyiYl+laiAa083zdMlJDzys8Pf2H6WOla5OukORSZeo
-         qQd3U9cLObqdPg4kvHCN8gkLJMsRbMBGs3k+6IznwRBEDwR/gjZTZ5A7hF9w82nwVdCT
-         RedDxB9/P2okicTBIOud0z319G2b+A8QZo+C5w4tjPRm1us3gDknrA9THTS+N9qvlek2
-         IMuWpuLGH1QyqJmEGZYJ99izXbJuT009pX6TxtGhLnLrGbrzHDytRSy+D5F/EKF5MuWc
-         uwEvTVsgwUdzzu7D/VcoM+l/INLsrvkbf3OEDuRNoDsQqtZ6kenhhqImeTyHgc9SK+cg
-         P61Q==
+        Wed, 25 Jan 2023 06:09:09 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADA54B740;
+        Wed, 25 Jan 2023 03:09:05 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id d3so886528qte.8;
+        Wed, 25 Jan 2023 03:09:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tgNd6pdprwR64P3gTI1USNLkbTKHZW562SWliCwEACM=;
-        b=EuXgYvmOyaJHLqOld3VRDnF6HfwnygKHSfbz/saF/ErzW/jnfA3TSdfTfxpNook2/f
-         BWkk0yN4kRK6GIIs4MeY5A3VVUQATqyjS6768Ph9lgnQeKIHp/EdXJWhDiScOzybcA/o
-         wVxD4MahSbRYd8OaMr8IphJDQmEzuQvN1HUpcV48TcfM0ixuzIpEBihjGINGqx3jxaqs
-         WWQNllnjfLShlR7CcqVIRUbKaeMQ6+JNoYCN8puJCJ1ZFxHR8IESjxFmLodXUiSyfLBq
-         akZw5yddTkth/idM+lIKvzuXrWD7ides/sXn7mOKurwvzKSzG306Coz2f7kJjae2k0n6
-         zv3A==
-X-Gm-Message-State: AFqh2kqg2CLTwG0bHNI46Ypihjs49CLGaNX4TDBSypLlwVgvsoqbvWR0
-        WYBo3fLofIUIfOFkPfX/bbFN4A==
-X-Google-Smtp-Source: AMrXdXsPehuhP8/0wsrKQRHY7pty6KTDfGXFEaq+5JL6AFSYRRELry8uhLX7C+8zyV2XA47766i/fQ==
-X-Received: by 2002:a05:600c:46cb:b0:3db:1afd:ac45 with SMTP id q11-20020a05600c46cb00b003db1afdac45mr26226470wmo.7.1674644882380;
-        Wed, 25 Jan 2023 03:08:02 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b5-20020a05600c150500b003dafb0c8dfbsm1760931wmg.14.2023.01.25.03.07.59
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hytH7Ayjy2lSXxgse9Hs7i/6L/ka4Pba77DRcwMleL0=;
+        b=BIQV3l+pE0ELpyGFQY1nrcl0CqJ4Rw1hZ4zkWdMXkKZr6YTJdo1rO6G/Ikbk9skHSK
+         Ur9HC6kzjjCPCvOVSPgTJVcRxiujphdNrItSrGT1bZcY9Ct5exTTzlEQTf6HRe7fcetg
+         0sbk1Wk7U+UNUoONUdFWoowwcNPpHLJsGkipc/DnU4WIlXsdAdj+bmEweJAeCKYEQ4nn
+         KEvYKHek6UwehtqIOB2NZUzI/399Jh42mT+ggMjAavj/Y79KcEgJ4NRgM9G52Gt0ZeH7
+         gFucus14lBWacJfZSjOqUDBnIUmQQxy129fqOqezBDPaozeg/1gt8LxtAFnDsYrnepJO
+         1RcQ==
+X-Gm-Message-State: AFqh2koq9NKP/jRqEMgP+bqUqp4cZWpnkNFCes7itGJ0WckwSoVW19aw
+        JjfG03G5x2t7MyYh1Ox9EyCx6IaUJQoGeA==
+X-Google-Smtp-Source: AMrXdXtDSnoslcx9l7iRN+ZGb6XVPWM/e8vWVLBHlAQ9dkHmE9IUkxrIrra2XGxn+Fb2PO+yhEgQSQ==
+X-Received: by 2002:a05:622a:a09:b0:3b6:309e:dfdb with SMTP id bv9-20020a05622a0a0900b003b6309edfdbmr50291880qtb.22.1674644943971;
+        Wed, 25 Jan 2023 03:09:03 -0800 (PST)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id e1-20020ac84141000000b003b63c08a888sm3221025qtm.4.2023.01.25.03.09.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 03:08:01 -0800 (PST)
-Message-ID: <36c9c3ce-1ae0-6619-d74d-142ed34b2f3f@linaro.org>
-Date:   Wed, 25 Jan 2023 12:07:59 +0100
+        Wed, 25 Jan 2023 03:09:03 -0800 (PST)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-4ff1fa82bbbso211669727b3.10;
+        Wed, 25 Jan 2023 03:09:03 -0800 (PST)
+X-Received: by 2002:a05:690c:c89:b0:4dd:7a8e:1cf3 with SMTP id
+ cm9-20020a05690c0c8900b004dd7a8e1cf3mr3348364ywb.384.1674644942927; Wed, 25
+ Jan 2023 03:09:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V1 3/8] dt-bindings: pinctrl: qcom: Document IPQ9574
- pinctrl driver
-Content-Language: en-US
-To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, ulf.hansson@linaro.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, tdas@codeaurora.org, bhupesh.sharma@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <20230124141541.8290-1-quic_devipriy@quicinc.com>
- <20230124141541.8290-4-quic_devipriy@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230124141541.8290-4-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230118135259.19249-1-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20230118135259.19249-1-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 25 Jan 2023 12:08:51 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX2x=AFUCCC86UuQych4mN2v6NgWdwXnEogpDmgMrdoMg@mail.gmail.com>
+Message-ID: <CAMuHMdX2x=AFUCCC86UuQych4mN2v6NgWdwXnEogpDmgMrdoMg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: r9a09g011: Reword ethernet status
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 15:15, devi priya wrote:
-> Document the pinctrl driver for IPQ9574
-> 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
-> ---
->  .../bindings/pinctrl/qcom,ipq9574-tlmm.yaml   | 135 ++++++++++++++++++
->  1 file changed, 135 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq9574-tlmm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,ipq9574-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,ipq9574-tlmm.yaml
-> new file mode 100644
-> index 000000000000..d736f0fb7835
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,ipq9574-tlmm.yaml
-> @@ -0,0 +1,135 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/qcom,ipq9574-tlmm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Technologies, Inc. IPQ9574 TLMM block
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> +
-> +description:
-> +  Top Level Mode Multiplexer pin controller in Qualcomm IPQ9574 SoC.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,ipq9574-tlmm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts: true
+On Wed, Jan 18, 2023 at 2:53 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> Although of_fdt_device_is_available returns true when the DT
+> property "status" is assigned "ok" or "okay", and false for every
+> other value, it's become common practice to assign "disabled"
+> when we want of_fdt_device_is_available to return false.
+> For some reason, the status property of the ethernet node was
+> assigned "disable" when originally added to the kernel. Change
+> it to "disabled" for consistency.
+>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
-Also - missing maxItems.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.3.
 
-I think you based your patches on some older version, so you might miss
-here changes we did recently.
+Gr{oetje,eeting}s,
 
-Best regards,
-Krzysztof
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
