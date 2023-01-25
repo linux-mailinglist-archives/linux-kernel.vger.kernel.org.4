@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1C467BC16
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA3E67BC1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236175AbjAYUGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:06:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
+        id S236222AbjAYUHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:07:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236012AbjAYUGt (ORCPT
+        with ESMTP id S236155AbjAYUHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:06:49 -0500
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27243EC50;
-        Wed, 25 Jan 2023 12:06:42 -0800 (PST)
-Received: by mail-oi1-f180.google.com with SMTP id s124so17293031oif.1;
-        Wed, 25 Jan 2023 12:06:42 -0800 (PST)
+        Wed, 25 Jan 2023 15:07:03 -0500
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6A4457F2;
+        Wed, 25 Jan 2023 12:07:00 -0800 (PST)
+Received: by mail-oi1-f182.google.com with SMTP id v17so17276181oie.5;
+        Wed, 25 Jan 2023 12:07:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cjdeMOLunBcaH9abbjTPumVPAzpI0woKuv5TqA6wWlg=;
-        b=6upkJX424fNniMQEujc+Hto49Q2U6KjBLPg9Z7dYXnYh6Uyi2Np5CmXamO2AgZRPEk
-         OTr140htRYeOFexYSloaAQCanwNhkMofkdsCamJ8CGGh6DdmrtjiZs/Epxxj8gtM/AAf
-         49ejJ6ydKw5Hz1S6roPj8nH4mvI1FFec/BuwfFpux43qnRUZ/03SwwW4yLc9/r7yWStK
-         Wcy2SeozUQXol6pLUFyjFsAUgvzHb15OlP9oMcly2Vq39M5rYt8fiBVDA2hVLsWZzazA
-         ZPbCpHpg9eX9K+nAJp+0sCjGweXO+Ejuiy3q7G/M44D1wLjjoVeHBGco1xsCaZj0UlA4
-         3nKQ==
-X-Gm-Message-State: AFqh2kqVmlec5dJEDeticxArcHgryoW4gJw/fV+rJ4+VxkDWKpsCJ/6f
-        HSt7dpQD2hlFiw5yrGf1Lw==
-X-Google-Smtp-Source: AMrXdXs39pVibYTbO8sCzlzh4gXhBnoYQHFDiAukdaJUOpcBjaCiIgpNW6SRZHdq1Euvc18hPYacFw==
-X-Received: by 2002:aca:e106:0:b0:363:8e7e:60b with SMTP id y6-20020acae106000000b003638e7e060bmr15163351oig.31.1674677201827;
-        Wed, 25 Jan 2023 12:06:41 -0800 (PST)
+        bh=HjxpPCXLfIbQ+6VlgSG0tsTyVkfQNnId/4DSkULnpV4=;
+        b=CfT8Nyfr30Lmyael8Xf0rEY+c/BMd/cdoVWRIOFYsqJwSIYHLeXog8qq1zZX9KLuNF
+         E7UjwtpGNaSw/9BaK3l/nufizqx3nTq0kgPNeGa5BGq9zqqyzFkfLA4nH2/+y7U3rIQ0
+         +k+W7oIQG+cTQRn0HYD5hFmmkuh3YplJBzYNtQoCnlGG2i16sqC0ksS4C/W/15G9LHDk
+         x0BpogRiVOXgH2NYWyIDxJB7ZTZHy3G/mSkruFRbIQ2DcgFD57cAOp1CNptq12477qyN
+         LOK9VZl5RJBvP4ZjPrLuqKSj6hxKmbdCRvNIXnBitS60tgKJts4ZmefPuEnwNbCXOZwk
+         0YbQ==
+X-Gm-Message-State: AFqh2kq396xwo/9vzM+AbPsW+FxNRR4dy9mEVo0psCvPpZUHreq5VkvF
+        QioGlI5Kr3Vq93CuF0S5DA==
+X-Google-Smtp-Source: AMrXdXvZSXdLIAvantzWPKLx8w8nHQA+dbuiWBV7hE/X1AIpaFtwf5qnOANWheWQAHC+czb3K7K1XQ==
+X-Received: by 2002:a54:4708:0:b0:364:eb0f:6de1 with SMTP id k8-20020a544708000000b00364eb0f6de1mr15696584oik.23.1674677219277;
+        Wed, 25 Jan 2023 12:06:59 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l74-20020a9d1b50000000b0068668e2e08bsm2534670otl.58.2023.01.25.12.06.40
+        by smtp.gmail.com with ESMTPSA id eu25-20020a056808289900b00369ec58932csm2620202oib.45.2023.01.25.12.06.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 12:06:41 -0800 (PST)
-Received: (nullmailer pid 2770378 invoked by uid 1000);
-        Wed, 25 Jan 2023 20:06:40 -0000
-Date:   Wed, 25 Jan 2023 14:06:40 -0600
+        Wed, 25 Jan 2023 12:06:58 -0800 (PST)
+Received: (nullmailer pid 2771034 invoked by uid 1000);
+        Wed, 25 Jan 2023 20:06:57 -0000
+Date:   Wed, 25 Jan 2023 14:06:57 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Fabio Estevam <festevam@gmail.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Kevin Hilman <khilman@baylibre.com>,
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michal Simek <michal.simek@xilinx.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fugang Duan <fugang.duan@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, Chester Lin <clin@suse.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        Pragnesh Patel <pragnesh.patel@sifive.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
         Magnus Damm <magnus.damm@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Shawn Guo <shawnguo@kernel.org>,
         Lubomir Rintel <lkundrak@v3.sk>,
+        Fugang Duan <fugang.duan@nxp.com>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        Chester Lin <clin@suse.com>, devicetree@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Le Ray <erwan.leray@foss.st.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Kevin Hilman <khilman@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Peter Korsgaard <jacmet@sunsite.dk>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-serial@vger.kernel.org,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Subject: Re: [PATCH v2 03/12] dt-bindings: serial: pl011: allow ARM Primecell
- properties
-Message-ID: <167467719955.2770340.7541724589555631279.robh@kernel.org>
+        linux-amlogic@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org,
+        Pragnesh Patel <pragnesh.patel@sifive.com>
+Subject: Re: [PATCH v2 04/12] dt-bindings: serial: correct ref to serial.yaml
+Message-ID: <167467721713.2770933.9672853616239186241.robh@kernel.org>
 References: <20230124091602.44027-1-krzysztof.kozlowski@linaro.org>
- <20230124091916.45054-1-krzysztof.kozlowski@linaro.org>
+ <20230124091916.45054-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230124091916.45054-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124091916.45054-2-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -94,15 +95,21 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 24 Jan 2023 10:19:07 +0100, Krzysztof Kozlowski wrote:
-> Reference ARM Primecell bindings to allow typical Primecell device node properties:
+On Tue, 24 Jan 2023 10:19:08 +0100, Krzysztof Kozlowski wrote:
+> The serial bindings should reference the local (in kernel) serial.yaml,
+> not the /schemas/serial.yaml.  The latter comes from dtschema package
+> and is a small subset of serial bindings.
 > 
->   broadcom/bcm2711-rpi-400.dtb: serial@7e201000: Unevaluated properties are not allowed ('arm,primecell-periphid' was unexpected)
+> Usage of the local serial.yaml allows typical properties and children:
+> 
+>   xilinx/avnet-ultra96-rev1.dtb: serial@ff000000: Unevaluated properties are not allowed ('bluetooth' were unexpected)
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Michal Simek <michal.simek@amd.com>
 > ---
->  Documentation/devicetree/bindings/serial/pl011.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  Documentation/devicetree/bindings/serial/cdns,uart.yaml         | 2 +-
+>  Documentation/devicetree/bindings/serial/xlnx,opb-uartlite.yaml | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
