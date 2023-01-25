@@ -2,76 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBFC67B331
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE9C67B344
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235348AbjAYNY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:24:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        id S235380AbjAYN0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:26:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjAYNY4 (ORCPT
+        with ESMTP id S230257AbjAYN0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:24:56 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584111423F;
-        Wed, 25 Jan 2023 05:24:55 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 024FF21D53;
-        Wed, 25 Jan 2023 13:24:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674653094; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uzt5+rLRlm/axdJj2mIj/bMptJgE194uAOpesCCRc2Y=;
-        b=RdGmIAkgn7YC1ScTgFAXzoBjhGhO5U9eFqcSmhz6cIVOojIvPVkwvWaVawl20nxZulqI6s
-        KOvYTPBeSMILMXQiw6edGMU9jCLNKTCXiQN657ZBZ5zEN55aadDPGasxW4/l+6BNc9vyoV
-        ltCGPYibnhhTMPKKETrzUpDQH2v3PsI=
-Received: from suse.cz (unknown [10.100.201.202])
+        Wed, 25 Jan 2023 08:26:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF3BCA3D;
+        Wed, 25 Jan 2023 05:26:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 7D54C2C141;
-        Wed, 25 Jan 2023 13:24:52 +0000 (UTC)
-Date:   Wed, 25 Jan 2023 14:24:50 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        live-patching@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Song Liu <song@kernel.org>
-Subject: Re: [PATCH 1/2] powerpc/module_64: Improve restore_r2() return
- semantics
-Message-ID: <Y9EtohjVnoJLqccx@alley>
-References: <cover.1674617130.git.jpoimboe@kernel.org>
- <15baf76c271a0ae09f7b8556e50f2b4251e7049d.1674617130.git.jpoimboe@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45F3B61449;
+        Wed, 25 Jan 2023 13:26:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 522A0C4339B;
+        Wed, 25 Jan 2023 13:26:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674653171;
+        bh=4knBTTiGJRaC5brOKaa73+KxU383zntAlCPiXzrwpwY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ncNsVOtK6e8FtF0HtPIoVliygz3BlwNpL4niAjDpRDHrFJRKd2H877Pq1/iFh7M81
+         mbMTnKQ/+7N+ZM0qXMeCf8PYG0klzXlpnQVjZMj2gr55+qaRdFFzC2c5hUFQuJ80pT
+         rD08onpfJVqTNj/svbnFwlM9aJH40JR6zalz4bAs4p/FGYnV7JNtLaubt9RSHUN2ej
+         A39hjg5x/J+9WxyjYBVYV3SEUje6/187EE1WVlnlDyMFCWJKyKlBnk/SOXM8eR+ltz
+         iULGsqn5khkeDBRjASmB86VuGJTL/TJg01fZxI0Yuztj556k/IjuOLkJf9tmnMftua
+         J6+PBlZ9VmIuw==
+Date:   Wed, 25 Jan 2023 14:26:06 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH resend 0/2] i2c/extcon: intel-cht-wc: Lenovo Yoga Tab 3
+ Pro YT3-X90F support
+Message-ID: <Y9Et7nlUmiiPrFUQ@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230125111209.18343-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IPNI/dOR7wHBaljP"
 Content-Disposition: inline
-In-Reply-To: <15baf76c271a0ae09f7b8556e50f2b4251e7049d.1674617130.git.jpoimboe@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230125111209.18343-1-hdegoede@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2023-01-24 19:38:04, Josh Poimboeuf wrote:
-> restore_r2() returns 1 on success, which is surprising for a non-boolean
-> function.  Change it to return 0 on success and -errno on error to match
-> kernel coding convention.
-> 
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Looks good:
+--IPNI/dOR7wHBaljP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-It is in the right direction. Just note that there are more functions
-with the boolean semantic passed via int return value. But there
-are also other functions already using the 0/-E* return values so
-this is rather positive change.
+> I'm resending these 2 patches since they seem to have fallen through
+> the cracks.
 
-Best Regards,
-Petr
+Which tree should the patches go via? I am assuming not-i2c, but maybe I
+am wrong?
+
+
+--IPNI/dOR7wHBaljP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPRLeoACgkQFA3kzBSg
+KbYx5w/5AbRWMIf4Uu2pAPcyNVmQyy4QuF4BJagxdaz+M2RXNaBlSIb2aI2zP28S
+VFFlKL34HsOaOFWREPQpYGTbh63xvh/CZ6aMDmpXROxHFPdwhgwmWj4giEwfsdeq
+2hlA6l0+CJBAHHxJutdYvl+NesNWnEQ1dEVAU82MQ4Ox4LYqDvskaOggGhQ+jZoZ
+Jh4ZdNPXc8t/fULGfXc/9300eHNGo08Zkl0s1FTYLSsaSO+KutJYwmP96ZNTFBU8
+L/sRqe6Xs8IXF++Mm7QkDSTrdROhAeWm8iZVmducHlQ0HDublqWNDJyZ/QUl9lMC
+ydx/mMY0nPdZWAFijCXzCnCFoWzqmgEovoVTD8s0Lc5CZdgn2JMEchyts3x/zia5
+dWDPfyjThZmMyKEoZEQ0xPjWV7gdNLyb0wwoUINMB+GtbFIm651qQyXBXIYDjrgn
+n8ncDeL2YWMD3z68cVhydt1ukTuquOt2Hy5Q0/dHZx077BzZ7cz8Ve3fySvuOyL2
+8LlkBOz5x/SmA17jWBsJkf3Y8AP1Fm1lyO2Micn2PWA/Kn9DIHcZOBL2uruKyF7a
+JNGB0tTNzNxl++K5XYUelah9Bc9nEowWnRLm8TNLSOcCFFyLTUQYxfpD3A1KrQZZ
+MmHQIKly8LKaOUzZBsm5jmFbMvQxYq3e0ZGQiQxQ9bqbZ+yYWMk=
+=ACHY
+-----END PGP SIGNATURE-----
+
+--IPNI/dOR7wHBaljP--
