@@ -2,96 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A923F67ADD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1DA67ADDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235234AbjAYJ3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 04:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
+        id S234980AbjAYJaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjAYJ3A (ORCPT
+        with ESMTP id S233965AbjAYJaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 04:29:00 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDECAD0A;
-        Wed, 25 Jan 2023 01:28:59 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id bk15so45852092ejb.9;
-        Wed, 25 Jan 2023 01:28:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nkDlpiK6JqYBUlqcSfouXIHmsyVu7ZE8aOa2LbX/OX4=;
-        b=Ri4Rgc0kjv11SM3M3hT7DgWRg27kM4xn+I+Iu9fv/2DxCZ1O98df8xtCH7mUpgtn+V
-         IQ4VK5EdeOlPWgiR5gLUEohgI8wg55mcKkm7AezEm8fXX6x2juyAW6/R0u9kgnd2grES
-         POIlAILRgRXTdNVC4ocLKQm6nZCt+ZUZCVFE6l3FRG81l9jYKxbgVv9FcabFT9WIFASs
-         N1vnulG2h0wZjf0icfD61QAZYoCVzGYEXZR+KAukww+6I48SL01v/AS2h44YpI/xDHKw
-         IGRm21wSPcCDcCrnmGstLYtOYcUa6Crk601qzOS/gVrdqF4sg0oZR+YqL9uGQ12ml4y+
-         g3kg==
+        Wed, 25 Jan 2023 04:30:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1812314EBA
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:29:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674638967;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TjE3MFK73jMeqX5iFxpax2sxTvtsTUXIevN9S/ssTM8=;
+        b=hGuHRKTSdxcNm6h1xJ+cZHURTHNnaMFrP3pjnmedoSRAZinH7QBz3ucSV6EjnSWXOLmrdO
+        uXWHLnDbY+Zz49j34J6/0Z0+H7u+MzI4YLwLlYVAYuH0hzcs0zpOK5ikZ+fPFWCYNogS3I
+        zBLMvMt4D5L2a2phEgkLC43WkURij5k=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-664-YvgrsaHROcKWepMEogk6sw-1; Wed, 25 Jan 2023 04:29:25 -0500
+X-MC-Unique: YvgrsaHROcKWepMEogk6sw-1
+Received: by mail-wr1-f70.google.com with SMTP id bj7-20020a0560001e0700b002bfb3c6ec00so607072wrb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:29:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nkDlpiK6JqYBUlqcSfouXIHmsyVu7ZE8aOa2LbX/OX4=;
-        b=KJ4xTHEU3MJs/Gng9BamOYJciuo3LP83z0mfzMJ2bL8fYBQWvcVjMSZn+mTXqVVKog
-         LBV5mH1sKDpvMM4tKTo9+He4UgfzyuVOvT42LvfCAsrdIOtUaHg1fJwngrImf/y5iQ0n
-         Ufsp45Kop3Mpx3P2QZrZTP/ewuqLGAXnmUP5aE6m7dD7Vn+64vefd9wtF+XFgENrfdSv
-         zWwaHZ1SOfH1n/k2eZCfutN8iNYLzIn0eOLfSpJACeLRfYfULr8XhxfeAklXpojK5yqv
-         n+Fi2w7knwTyCdIUwU+omneRVQqgU3y5eTMiwXQAnMw1xkg8ooALzTeS0G+9YgKTQuAz
-         TBPQ==
-X-Gm-Message-State: AFqh2kodBz6VtbezmjzKFqzJPG22XzUaDHD62ci8NqRLbNRddMSX5q4L
-        pufP85lKCcQlTpKGXtAMXxA=
-X-Google-Smtp-Source: AMrXdXvtAxeG907Zl+UkNPimfhMuSmIMZLKOu8Yj5pdDBbCXfKLfEuYmeyP7+o4O6IRkylGXMIiXFw==
-X-Received: by 2002:a17:906:fc0e:b0:84d:3fa7:12d7 with SMTP id ov14-20020a170906fc0e00b0084d3fa712d7mr31759441ejb.21.1674638938082;
-        Wed, 25 Jan 2023 01:28:58 -0800 (PST)
-Received: from fedora (176-74-132-138.netdatacomm.cz. [176.74.132.138])
-        by smtp.gmail.com with ESMTPSA id jp9-20020a170906f74900b00877800030f2sm2059259ejb.169.2023.01.25.01.28.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 01:28:57 -0800 (PST)
-Date:   Wed, 25 Jan 2023 10:28:55 +0100
-From:   Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        mani@kernel.org, hemantk@codeaurora.org, quic_jhugo@quicinc.com,
-        andersson@kernel.org, Michael.Srba@seznam.cz, arnd@arndb.de,
-        dipenp@nvidia.com, bvanassche@acm.org, iwona.winiarska@intel.com,
-        ogabbay@kernel.org, tzimmermann@suse.de, fmdefrancesco@gmail.com,
-        jason.m.bills@linux.intel.com, jae.hyun.yoo@linux.intel.com,
-        gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org
-Subject: Re: [PATCH 3/3] wiegand: add Wiegand GPIO bit-banged controller
- driver
-Message-ID: <Y9D2V1dz6/+EOa5D@fedora>
-References: <20230104133414.39305-1-m.zatovic1@gmail.com>
- <20230104133414.39305-4-m.zatovic1@gmail.com>
- <Y7WwVCqDCXFrTqR9@smile.fi.intel.com>
- <Y7Ww67pIyjeLKBE7@smile.fi.intel.com>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TjE3MFK73jMeqX5iFxpax2sxTvtsTUXIevN9S/ssTM8=;
+        b=nXCuuuQw/RiPanxpSk+OC4/K/Y4L3ehy53b+iMPpfdZFUHSFuBstxcdLAYwxCQnjY8
+         uQsLhoLLuhht6kxZzrSadYeuVmgAPsZds3I+YRHmH7otTLJI2tu+e/EvGgNNgfLYVxpL
+         oqZarrU4wk4Ca1b94Ji830YDKcm8uVemqjvibHsdXu3Kmpp2EMRBQRYvghHZpH48GEum
+         IHVVOHB+HreCDzNxUyFa1m64LFh0h9NID/6nXW2aIesNbAAPaefYfMv4qrbznV9uyWr2
+         DZ9BD1VcqpYb/4IUTaxBrskl8smlO6VIyQhy0IgfRdhhkib6/+13XTobgPWQztjpQgRR
+         wHHw==
+X-Gm-Message-State: AFqh2kohRBqR8w9N78z6DOifDsk2j9QiGWznki+lWlb73hrFThvk9+sg
+        zPVTtxFsqzOK7uRnw9Z6GwcuQRbOBU2jgOjgWszJPG1EZ+aBpJXG9E24mxORuhBAET+pRemUnAp
+        U7fk7RlvM4FSoPGkdcVsQGUcv
+X-Received: by 2002:adf:fb86:0:b0:2b6:7876:3cd4 with SMTP id a6-20020adffb86000000b002b678763cd4mr25258746wrr.16.1674638963417;
+        Wed, 25 Jan 2023 01:29:23 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsLivmPABRiZvHHfGmnyR69nY5+HViCF4rvX0glv7Y5M6gJXrX848D3l9+TwkCsYm87blrEGw==
+X-Received: by 2002:adf:fb86:0:b0:2b6:7876:3cd4 with SMTP id a6-20020adffb86000000b002b678763cd4mr25258727wrr.16.1674638963093;
+        Wed, 25 Jan 2023 01:29:23 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:4c00:486:38e2:8ff8:a135? (p200300cbc7054c00048638e28ff8a135.dip0.t-ipconnect.de. [2003:cb:c705:4c00:486:38e2:8ff8:a135])
+        by smtp.gmail.com with ESMTPSA id d9-20020adff2c9000000b002be34f87a34sm4166170wrp.1.2023.01.25.01.29.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 01:29:22 -0800 (PST)
+Message-ID: <716d9e97-b08f-eb0f-101a-be6eaf36f184@redhat.com>
+Date:   Wed, 25 Jan 2023 10:29:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7Ww67pIyjeLKBE7@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 23/39] mm: Don't allow write GUPs to shadow stack
+ memory
+Content-Language: en-US
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "kees@kernel.org" <kees@kernel.org>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-24-rick.p.edgecombe@intel.com>
+ <aa973c0f-5d90-36df-01b2-db9d9182910e@redhat.com>
+ <87fsc1il73.fsf@oldenburg.str.redhat.com>
+ <c6dc94eb193634fa27e1715ab2978a3ce4b6c544.camel@intel.com>
+ <fd741ac9-8214-a375-00b2-a652a7ef27ea@redhat.com>
+ <6adfa0b5c38a9362f819fcc364e02c37d99a7f4a.camel@intel.com>
+ <5B29D7A0-385A-41E8-AA56-EF726E6906BF@kernel.org>
+ <19ff6ea3b96d027defb548fb6b7f89de17905a4b.camel@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <19ff6ea3b96d027defb548fb6b7f89de17905a4b.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On 25.01.23 00:41, Edgecombe, Rick P wrote:
+> On Tue, 2023-01-24 at 15:08 -0800, Kees Cook wrote:
+>>> GDB support for shadow stack is queued up for whenever the kernel
+>>> interface settles. I believe it just uses ptrace, and not this
+>>> proc.
+>>> But yea ptrace poke will still need to use FOLL_FORCE and be able
+>>> to
+>>> write through shadow stacks.
+>>
+>> I'd prefer to avoid adding more FOLL_FORCE if we can. If gdb can do
+>> stack manipulations through a ptrace interface then let's leave off
+>> FOLL_FORCE.
+> 
+> Ptrace and /proc/self/mem both use FOLL_FORCE. I think ptrace will
+> always need it or something like it for debugging.
+> 
+> To jog your memory, this series doesn't change what uses FOLL_FORCE. It
+> just sets the shadow stack rules to be the same as read-only memory. So
+> even though shadow stack memory is sort of writable, it's a bit more
+> locked down and FOLL_FORCE is required to write to it with GUP.
+> 
+> If we just remove FOLL_FORCE from /proc/self/mem, something will
+> probably break right? How do we do this? Some sort of opt-in?
 
-thank you for the notes, I am working on fixing them. You have
-mentioned, that it seems like the driver which should be generic
-provides specific functionality. AFAIK, the Wiegand protocol
-does not define the payload length of messages. Most devices use
-one of the three formats I have implemented - 26, 36 and 
-37-bits. If I understand you right, the Wiegand GPIO bit-banged
-driver should allow one to send messages of any length and it 
-will be up to a device driver to make sure the correct message
-length is used. Is this the correct approach?
+I don't think removing that is an option. It's another debug interface 
+that has been allowing such access for ever ...
 
-With regards,
-Martin
+Blocking /proc/self/mem access completely for selected processes might 
+be the better alternative.
+
+-- 
+Thanks,
+
+David / dhildenb
+
