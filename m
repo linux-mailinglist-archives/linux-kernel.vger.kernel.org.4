@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9F467B6C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3B167B6C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235964AbjAYQUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        id S235914AbjAYQU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235762AbjAYQUQ (ORCPT
+        with ESMTP id S235656AbjAYQUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:20:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79C016AD7
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:20:14 -0800 (PST)
+        Wed, 25 Jan 2023 11:20:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8533355285
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:20:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E0CAB81ACE
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F51AC433AE;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA1C261225
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:20:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9701AC433AA;
         Wed, 25 Jan 2023 16:20:12 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1pKiVP-004MuB-1M;
+        id 1pKiVP-004Muk-21;
         Wed, 25 Jan 2023 11:20:11 -0500
-Message-ID: <20230125162011.241146323@goodmis.org>
+Message-ID: <20230125162011.443836539@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 25 Jan 2023 11:18:32 -0500
+Date:   Wed, 25 Jan 2023 11:18:33 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [for-linus][PATCH 08/11] tracing/filter: fix kernel-doc warnings
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [for-linus][PATCH 09/11] ftrace: Maintain samples/ftrace
 References: <20230125161824.332648375@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,57 +47,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Mark Rutland <mark.rutland@arm.com>
 
-Use the 'struct' keyword for a struct's kernel-doc notation and
-use the correct function parameter name to eliminate kernel-doc
-warnings:
+There's no entry in MAINTAINERS for samples/ftrace. Add one so that the
+FTRACE maintainers are kept in the loop.
 
-kernel/trace/trace_events_filter.c:136: warning: cannot understand function prototype: 'struct prog_entry '
-kerne/trace/trace_events_filter.c:155: warning: Excess function parameter 'when_to_branch' description in 'update_preds'
+Link: https://lkml.kernel.org/r/20230103124912.2948963-2-mark.rutland@arm.com
 
-Also correct some trivial punctuation problems.
-
-Link: https://lkml.kernel.org/r/20230108021238.16398-1-rdunlap@infradead.org
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_events_filter.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-index 96acc2b71ac7..e095c3b3a50d 100644
---- a/kernel/trace/trace_events_filter.c
-+++ b/kernel/trace/trace_events_filter.c
-@@ -128,7 +128,7 @@ static bool is_not(const char *str)
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f781f936ae35..70be8603c8d3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8570,6 +8570,7 @@ F:	kernel/trace/fgraph.c
+ F:	arch/*/*/*/*ftrace*
+ F:	arch/*/*/*ftrace*
+ F:	include/*/ftrace.h
++F:	samples/ftrace
  
- /**
-- * prog_entry - a singe entry in the filter program
-+ * struct prog_entry - a singe entry in the filter program
-  * @target:	     Index to jump to on a branch (actually one minus the index)
-  * @when_to_branch:  The value of the result of the predicate to do a branch
-  * @pred:	     The predicate to execute.
-@@ -140,16 +140,16 @@ struct prog_entry {
- };
- 
- /**
-- * update_preds- assign a program entry a label target
-+ * update_preds - assign a program entry a label target
-  * @prog: The program array
-  * @N: The index of the current entry in @prog
-- * @when_to_branch: What to assign a program entry for its branch condition
-+ * @invert: What to assign a program entry for its branch condition
-  *
-  * The program entry at @N has a target that points to the index of a program
-  * entry that can have its target and when_to_branch fields updated.
-  * Update the current program entry denoted by index @N target field to be
-  * that of the updated entry. This will denote the entry to update if
-- * we are processing an "||" after an "&&"
-+ * we are processing an "||" after an "&&".
-  */
- static void update_preds(struct prog_entry *prog, int N, int invert)
- {
+ FUNGIBLE ETHERNET DRIVERS
+ M:	Dimitris Michailidis <dmichail@fungible.com>
 -- 
 2.39.0
