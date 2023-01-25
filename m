@@ -2,126 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD04D67B9EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6674067B9EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235394AbjAYSwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 13:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
+        id S229468AbjAYSx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjAYSwt (ORCPT
+        with ESMTP id S229449AbjAYSxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:52:49 -0500
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEFF171F;
-        Wed, 25 Jan 2023 10:52:45 -0800 (PST)
-Received: by mail-ej1-f49.google.com with SMTP id os24so6448643ejb.8;
-        Wed, 25 Jan 2023 10:52:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RQeDdHynJPckR6TzoLgOIVW3N1/aAZvGLbwQhlPV21k=;
-        b=sqHZNek6y90ncWo+JFnqD1P9uVxHTznNcifvTYvWJoGFjbCmCDK6/GTbUwXzn2b2La
-         UUMNB3uhcFvJdCxJbDYvCYFfP0wXhBEn2PrFPe4aiV0zQiBi68wA9FdDusMXZQCQ7fn7
-         +0Fv9FwCMlQNPU0d5aAIr+aDiJy4RAu31B+SzTjkVPYe+45RDP0lK6hlnN1kmnQi9svG
-         mTKfhZ2uJ3u7AaKo8Bil/k4Pqya6CA+mU3eQQ3BxuK6rGsl0cryhBnDTewKSXR9Pv/tT
-         4OYTMqAqjmv9ZhJGDpLo+Lh20p+v8wDOLO+4XA444UeRa9h/f6yY+ecaZcZ9MeuWKCly
-         CsEw==
-X-Gm-Message-State: AFqh2koIN0/Lk2J4Ff4aQtbGT4wKYi/f4G9yMpXrTui9Cy33jo2toAv4
-        uIJCzykk52xKLwlR8wx7BUM=
-X-Google-Smtp-Source: AMrXdXt9KVvifwzbI7QYwDKfgYLTPfsvX+seF3bVuy/8Ekey/CYt6oSHzdPyVitRNiPnqIRVr8UEYw==
-X-Received: by 2002:a17:906:c409:b0:863:73ee:bb67 with SMTP id u9-20020a170906c40900b0086373eebb67mr34402293ejz.73.1674672763593;
-        Wed, 25 Jan 2023 10:52:43 -0800 (PST)
-Received: from localhost (fwdproxy-cln-007.fbsv.net. [2a03:2880:31ff:7::face:b00c])
-        by smtp.gmail.com with ESMTPSA id p16-20020a1709060e9000b008779570227bsm2675642ejf.112.2023.01.25.10.52.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 10:52:42 -0800 (PST)
-From:   Breno Leitao <leitao@debian.org>
-To:     kuba@kernel.org, netdev@vger.kernel.org
-Cc:     leitao@debian.org, leit@fb.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, andrew@lunn.ch,
-        linux-kernel@vger.kernel.org,
-        Michael van der Westhuizen <rmikey@meta.com>
-Subject: [PATCH v3] netpoll: Remove 4s sleep during carrier detection
-Date:   Wed, 25 Jan 2023 10:52:30 -0800
-Message-Id: <20230125185230.3574681-1-leitao@debian.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 25 Jan 2023 13:53:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4159EFA;
+        Wed, 25 Jan 2023 10:53:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E680FB8198A;
+        Wed, 25 Jan 2023 18:53:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AD45C433D2;
+        Wed, 25 Jan 2023 18:53:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674672798;
+        bh=ySiX2eF1vZukYsf5N23nsuVwoa68LgZrCTTePp/8IWc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fU4tHnGmgQLup3dXzJbl2xbW2Tfvm4D5d+ldUDZZ5+7sUDuSYuGQEkYy/1wavT8jd
+         K1z+uCe27CYGJRjeEO/wKhvJJwQ74mItTJcuv4vx+abTGly8wkEwSuuGcmFtCmoDk/
+         8aP8xBDMWDDKTPjDeKmY7ddc+Z+izeyNXVhTAYaYRhTc03dRr+snE9U3O4JdMwDJlr
+         npfDoJ4c0Zym8+1lJWVdxU0ypFyAbssyFddut39m4WOtBpW4/UlsXh2UNao111P2cA
+         aQ4pkDbaZg4kQhtoxZxMAkHSzyOoMibPkqxzY2Yjj/BQqP8TaxjgiGkFS6K8FX8TOv
+         ONKAGoynszqrA==
+Date:   Wed, 25 Jan 2023 10:53:16 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     live-patching@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 2/2] powerpc/module_64: Fix "expected nop" error on
+ module re-patching
+Message-ID: <20230125185316.ebvxecd7gsvgtudr@treble>
+References: <cover.1674617130.git.jpoimboe@kernel.org>
+ <2f6329ffd9674df6ff57e03edeb2ca54414770ab.1674617130.git.jpoimboe@kernel.org>
+ <CAPhsuW40jEiyp0ogsO6oH_frpFCmiioSHrMOKkwGcZ8_6w5dZA@mail.gmail.com>
+ <20230125164609.wvuarciciyoqa3tb@treble>
+ <CAPhsuW45k8Avx=Zfid1pxaeHAbLGgOcxbN_=DQOb8WdPx7fB+Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW45k8Avx=Zfid1pxaeHAbLGgOcxbN_=DQOb8WdPx7fB+Q@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch removes the msleep(4s) during netpoll_setup() if the carrier
-appears instantly.
+On Wed, Jan 25, 2023 at 09:36:02AM -0800, Song Liu wrote:
+> On Wed, Jan 25, 2023 at 8:46 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+> >
+> > On Tue, Jan 24, 2023 at 10:09:56PM -0800, Song Liu wrote:
+> > > > @@ -514,9 +515,18 @@ static int restore_r2(const char *name, u32 *instruction, struct module *me)
+> > > >         if (!instr_is_relative_link_branch(ppc_inst(*prev_insn)))
+> > > >                 return 0;
+> > > >
+> > > > -       if (*instruction != PPC_RAW_NOP()) {
+> > > > +       /*
+> > > > +        * For livepatch, the restore r2 instruction might have already been
+> > > > +        * written previously, if the referenced symbol is in a previously
+> > > > +        * unloaded module which is now being loaded again.  In that case, skip
+> > > > +        * the warning and the instruction write.
+> > > > +        */
+> > > > +       if (insn_val == PPC_INST_LD_TOC)
+> > > > +               return 0;
+> > >
+> > > Do we need "sym->st_shndx == SHN_LIVEPATCH" here?
+> >
+> > My original patch had that check, but I dropped it for simplicity.
+> >
+> > In the non-livepatch case, the condition should never be true, but it
+> > doesn't hurt to check it anyway.
+> 
+> While this is the only place we use PPC_INST_LD_TOC, there is another
+> place we use "PPC_RAW_STD(_R2, _R1, R2_STACK_OFFSET)", which
+> is identical to PPC_INST_LD_TOC. So I am not quite sure whether this
+> happens for non-livepatch.
 
-Here are some scenarios where this workaround is counter-productive in
-modern ages:
+It's not actually identical.  That's the "store r2 to the stack"
+counterpart to the load in PPC_INST_LD_TOC, which loads r2 from the
+stack.
 
-Servers which have BMC communicating over NC-SI via the same NIC as gets
-used for netconsole. BMC will keep the PHY up, hence the carrier
-appearing instantly.
+For R_PPC_REL24 relocations, when calling a function which lives outside
+the module, 24 bits isn't enough to encode the relative branch target
+address.  So it has to save r2 (TOC pointer) to the stack, and branch to
+a stub, which then branches to the external function.
 
-The link is fibre, SERDES getting sync could happen within 0.1Hz, and
-the carrier also appears instantly.
+When the external function returns execution to the instruction after
+the original branch, that instruction needs to restore the TOC pointer
+from the stack to r2.
 
-Other than that, if a driver is reporting instant carrier and then
-losing it, this is probably a driver bug.
+The compiler knows this, and emits the instruction after the branch as a
+NOP.  The module code replaces that NOP with a "restore r2 from the
+stack".  That's what restore_r2() does.
 
-Reported-by: Michael van der Westhuizen <rmikey@meta.com>
-Signed-off-by: Breno Leitao <leitao@debian.org>
---
-v1->v2: added "RFC" in the subject
-v2->v3: improved the commit message
----
- net/core/netpoll.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+Long story short, restore_r2() needs to ensure the instruction after the
+branch restores r2 from the stack.  If that instruction is already
+there, it doesn't need to do anything.
 
-diff --git a/net/core/netpoll.c b/net/core/netpoll.c
-index 9be762e1d..a089b704b 100644
---- a/net/core/netpoll.c
-+++ b/net/core/netpoll.c
-@@ -682,7 +682,7 @@ int netpoll_setup(struct netpoll *np)
- 	}
- 
- 	if (!netif_running(ndev)) {
--		unsigned long atmost, atleast;
-+		unsigned long atmost;
- 
- 		np_info(np, "device %s not up yet, forcing it\n", np->dev_name);
- 
-@@ -694,7 +694,6 @@ int netpoll_setup(struct netpoll *np)
- 		}
- 
- 		rtnl_unlock();
--		atleast = jiffies + HZ/10;
- 		atmost = jiffies + carrier_timeout * HZ;
- 		while (!netif_carrier_ok(ndev)) {
- 			if (time_after(jiffies, atmost)) {
-@@ -704,15 +703,6 @@ int netpoll_setup(struct netpoll *np)
- 			msleep(1);
- 		}
- 
--		/* If carrier appears to come up instantly, we don't
--		 * trust it and pause so that we don't pump all our
--		 * queued console messages into the bitbucket.
--		 */
--
--		if (time_before(jiffies, atleast)) {
--			np_notice(np, "carrier detect appears untrustworthy, waiting 4 seconds\n");
--			msleep(4000);
--		}
- 		rtnl_lock();
- 	}
- 
 -- 
-2.30.2
-
+Josh
