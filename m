@@ -2,125 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB4867C0C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EC367C0C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbjAYXYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 18:24:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S235078AbjAYXY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 18:24:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjAYXYA (ORCPT
+        with ESMTP id S229539AbjAYXY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 18:24:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9C0EB43;
-        Wed, 25 Jan 2023 15:23:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D8DB616CE;
-        Wed, 25 Jan 2023 23:23:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8608FC433D2;
-        Wed, 25 Jan 2023 23:23:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674689038;
-        bh=6tp3KFSKFoIv/jRWP2Z/IaFhlmFsfDDgU2jQuLsJlU8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=MtvI5k1cB8TRIDlKapI26zKGmQhW9SmsveHd7/meKchg+mfAo2HdD6ov3q+R6USmM
-         szRTMyUR99Xupj2DSPBGFp+l0++uRXKhpCOqeQp0sbM0kYxO93vgGh1AQeb9B4QjJB
-         qAWQjg62p4PuTlDwxEgO2+qTm23mV9WekMR2KxeCqY+SGjYheA0cZFJLyd/VzNXYKR
-         oyWdpc4Zq3dnQY4BySNPdCbgNcdJHnENvqBiS2v5A8YhNmqwDngRRSyX4dMnnnf1Yy
-         kyBNSgN/3/IaPFLleUevo66VxSsHrAJzKs+2524Ta/QZt2RxLq9OX1ko2MdCemHJ8F
-         Vi458E4fxWSEg==
-Date:   Wed, 25 Jan 2023 17:23:57 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 24/27] dmaengine: dw-edma: Relax driver config settings
-Message-ID: <20230125232357.GA1176625@bhelgaas>
+        Wed, 25 Jan 2023 18:24:27 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E04EB43;
+        Wed, 25 Jan 2023 15:24:26 -0800 (PST)
+Received: from localhost.localdomain (unknown [182.253.88.152])
+        by gnuweeb.org (Postfix) with ESMTPSA id 68211824E0;
+        Wed, 25 Jan 2023 23:24:19 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1674689065;
+        bh=zhEhASVFM/Au5cThaAVr8lOzqAVrP1V8SBnPOSUlAds=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BfnpgP1gwAvctQdGaPovsk+HWtJf1Bg3IRFpUq0p8YF87IASfmnBs8XkcF/9qTFIi
+         utlFTPX6kEKPmFEDxRgamtXR5Dw+K44F+QZlLQJwe/2puvmqegrVzczv2F6hnHESgt
+         jyxi9TPWCUJ1rxuIOUtyNozmbZhI6C+mhc/tqKAbD/9BpyjDZ9I7ImpcGjdUJd5r8g
+         TLIGvS6vHzadmyN3boa2PftPeVf6RQrOrKY3lCMSiN+l/wp1S/VSQUR8NkI7S4VilK
+         IcvTttCV1W5BrIBk9WAmjY00cnj9nNw9GQwPekIbZ5y8tu4wq/PWpGfAhR65XzXBI6
+         B4r16r+bbuE+A==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>, Xin Li <xin3.li@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>,
+        Borislav Petkov <bp@alien8.de>, Shuah Khan <shuah@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        x86 Mailing List <x86@kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v7 0/3] sysret_rip update for the Intel FRED architecture
+Date:   Thu, 26 Jan 2023 06:24:12 +0700
+Message-Id: <20230125232415.860397-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+References: <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com> <25b96960-a07e-a952-5c23-786b55054126@zytor.com> <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org> <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com> <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com> <20230124022729.596997-1-ammarfaizi2@gnuweeb.org> <20230124022729.596997-3-ammarfaizi2@gnuweeb.org> <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com> <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org> <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com> <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125144019.sn7kliw3qlwgtwzs@mobilestation>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 05:40:19PM +0300, Serge Semin wrote:
-> On Tue, Jan 24, 2023 at 05:47:44PM -0600, Bjorn Helgaas wrote:
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-> > In the commit log, I think "forcibly selecting the DW eDMA driver from
-> > the DW PCIe RP/EP kconfig" actually refers to just the "DW eDMA PCIe"
-> > driver" not the "DW PCIe RP/EP driver," right?
-> 
-> Right.
+Hi,
 
-Good.  I think it's worth updating the commit log to clear this up
-because there are several things with very similar names, so it's
-confusing enough already ;)
+This is an RFC patchset v7. There are three patches in this series.
 
-> > The undefined reference to dw_edma_probe() doesn't actually happen
-> > unless we merge 27/27 without *this* patch, right? 
-> 
-> Right.
+Xin Li reported that the sysret_rip test fails at:
 
-Thanks, I got unreasonably focused on the "fix 'undefined reference'
-error" comment, wondering if we needed to identify a Fixes: commit, so
-this clears that up, too.
+        assert(ctx->uc_mcontext.gregs[REG_EFL] ==
+               ctx->uc_mcontext.gregs[REG_R11]);
 
-> > I would use "depends on
-> >      DW_EDMA" instead of adding if/endif around DW_EDMA_PCIE.
-> 
-> Could you explain why is the "depends on" operator more preferable
-> than if/endif? In this case since we have a single core kconfig from
-> which all the eDMA LLDD config(s) (except PCIE_DW for the reason
-> previously described) will surely depend on, using if/endif would
-> cause the possible new eDMA-capable LLDD(s) adding their kconfig
-> entries within the if-endif clause without need to copy the same
-> "depends on DW_EDMA" pattern over and over. That seems to look a bit
-> more maintainable than the alternative you suggest. Do you think
-> otherwise?
+on the Intel FRED architecture. Let's handle the FRED system scenario
+too. The 'syscall' instruction in a FRED system doesn't set %rcx=%rip
+and %r11=%rflags.
 
-Only that "depends on" is much more common and I always try to avoid
-unusual constructs.  But I wasn't looking into the future and
-imagining several LLDDs with similar uses of "depends on DW_EDMA".
-Thanks for that perspective; with it, I think it's OK either way.
+Syscall and sysenter in a FRED system are treated equivalently to
+software interrupts, e.g. INT 0x80. They do not modify any registers.
 
-> > What do you think? 
-> 
-> What you described was the second option I had in mind for the update
-> to look like, but after all I decided to take a shorter path and
-> combine the modifications into a single patch. If you think that
-> splitting it up would make the update looking simpler then I'll do as
-> you suggest. But in that case Lorenzo will need to re-merge the
-> updated patchset v10.
+Link: https://lore.kernel.org/lkml/5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com
 
-It's a pretty trivial update, so I just did it myself.  The result is
-at https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=pci/ctrl/dwc&id=ecadcaed4ef7
+## Changelog v7:
 
-I split this patch and tweaked some commit messages for consistency
-(including the "DW eDMA PCIe driver" change above).  "git diff -b"
-with Lorenzo's current branch (95624672bb3e ("PCI: dwc: Add DW eDMA
-engine support")) is empty except for a minor comment change.  
+   - Fix comment, REGS_ERROR no longer exists in the enum (Ammar).
 
-Bjorn
+   - Update commit message (Ammar).
+
+## Changelog v6:
+
+   - Move the check-regs assertion in sigusr1() to check_regs_result()
+     (HPA).
+
+   - Add a new test just like sigusr1(), but don't modify REG_RCX and
+     REG_R11. This is used to test SYSRET behavior consistency (HPA).
+
+## Changelog v5:
+
+   - Fix do_syscall() return value (Ammar).
+
+## Changelog v4:
+
+   - Fix the assertion condition inside the SIGUSR1 handler (Xin Li).
+
+   - Explain the purpose of patch #2 in the commit message (HPA).
+
+   - Update commit message (Ammar).
+
+   - Repeat test_syscall_rcx_r11_consistent() 32 times to be more sure
+     that the result is really consistent (Ammar).
+
+## Changelog v3:
+
+   - Test that we don't get a mix of REGS_SAVED and REGS_SYSRET,
+     which is a major part of the point (HPA).
+
+## Changelog v2:
+
+   - Use "+r"(rsp) as the right way to avoid redzone problems
+     per Andrew's comment (HPA).
+
+
+Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+
+Ammar Faizi (3):
+  selftests/x86: sysret_rip: Handle syscall in a FRED system
+  selftests/x86: sysret_rip: Add more syscall tests with respect to `%rcx` and `%r11`
+  selftests/x86: sysret_rip: Test SYSRET with a signal handler
+
+ tools/testing/selftests/x86/sysret_rip.c | 171 +++++++++++++++++++++--
+ 1 file changed, 162 insertions(+), 9 deletions(-)
+
+
+base-commit: e12ad468c22065a2826b2fc4c11d2113a7975301
+-- 
+Ammar Faizi
+
