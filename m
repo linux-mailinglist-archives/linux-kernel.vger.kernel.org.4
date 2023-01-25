@@ -2,151 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44BA67BDC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D828F67BDCD
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235986AbjAYVLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:11:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
+        id S236048AbjAYVMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:12:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234913AbjAYVK3 (ORCPT
+        with ESMTP id S236662AbjAYVMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:10:29 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B9A5AA63
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:09:33 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id l125so6119vsc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:09:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9RJJ/n41zzX+saTp2LNncjY8Fypt3NmL9yEutFB4n1s=;
-        b=WOHm/saIG3Dr4q+24Z7G6SYdxWckEwYZ2OiPVUiQlFDjk9J/GGH5G2lPCp9nPBdUM6
-         NKLPG74xTyEwESMRZGQkeobMfCP0xvhk5dxc/hF9opSrydqXNm+bgs4xusEtsuqt6ZTj
-         erM0lCjFlt1FjkKoN2A0doFteQq1lyRdmHVl5KpF63lOurZ1mSrCtIHL8WCuWLQTVOdQ
-         f57HcEWpr7rvKo71D5asNmYTOkr2yKFiuCioq2hGejao5f7Z1Lr2hfTb0FQGrA4rgB2Z
-         r62S/gRt3R3/7qHDmBiWTdJj+fteUohtw1NfX3myqFn9sBC4hrsY1vkKe36xcZhRDijK
-         IetA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9RJJ/n41zzX+saTp2LNncjY8Fypt3NmL9yEutFB4n1s=;
-        b=Ew4uLz7s8e7Rs5OMXH3SU3D2SKaejE3PcMf811tupYXXrJYouhJJdREeLGn378mm3S
-         jQ36Hewvy5uEg+eIo5K3kryaulqDa7dNCbx8FHvoxAzbcS2csqjm0VJ/23qhzqQBHeue
-         eMFZhuUn+C9yIigM4hKhPx60dQOAuJkK/RKbOz8Q7o/zRRn7f9XluLsgQhjgiTA8KuHA
-         OqUtIS6LF1idngyZbXh1ToxTp8/G1ZHpYO9Bv0DwIYmZa9bL4i+6kRC3O0v/seyzLB/H
-         FL+5yvnaac0rKYXipcvd8OvLYzQcGrqoevRZTr+hCWZyFQMTi8Jq1G5YYu7e9cj08ute
-         MAAg==
-X-Gm-Message-State: AO0yUKW0bqNmAfVEMijeW2L2h2ARvsFTBFFZrSa7mMHTnBc1vE3e4jMZ
-        CdrDgvjebDPlCKQXcORBfAg27Q==
-X-Google-Smtp-Source: AK7set9bH4FlpCkV+Z+7rYCaPzI9wpMh7X7Sa4ITkX7oLz7viTzX4t7Ud2ygznpBXw4WanAYEKE8aw==
-X-Received: by 2002:a67:7284:0:b0:3e9:93fa:140c with SMTP id n126-20020a677284000000b003e993fa140cmr1644589vsc.9.1674680962198;
-        Wed, 25 Jan 2023 13:09:22 -0800 (PST)
-Received: from [127.0.1.1] (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
-        by smtp.gmail.com with ESMTPSA id q196-20020a3743cd000000b0070736988c10sm4177090qka.110.2023.01.25.13.09.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 13:09:21 -0800 (PST)
-From:   Jonathan Cormier <jcormier@criticallink.com>
-Date:   Wed, 25 Jan 2023 16:09:12 -0500
-Subject: [PATCH 4/4] DRM: BRIDGE: TFP410: If connected, use I2C for polled HPD status.
+        Wed, 25 Jan 2023 16:12:05 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FFB23674
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:11:34 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P2GWz0Ll6z9xtmf
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:03:11 +0800 (CST)
+Received: from [10.81.213.36] (unknown [10.81.213.36])
+        by APP2 (Coremail) with SMTP id GxC2BwBXJl3KmtFjpY_GAA--.15701S2;
+        Wed, 25 Jan 2023 22:10:46 +0100 (CET)
+Message-ID: <f9f7a9b0-23c8-587f-61a9-ca4b0950ad1b@huaweicloud.com>
+Date:   Wed, 25 Jan 2023 22:10:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+To:     Andrea Parri <parri.andrea@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+References: <Y9BdNVk2LQiUYABS@rowland.harvard.edu>
+ <20230124225449.GY2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9CL8LBz+/mbbD00@rowland.harvard.edu>
+ <20230125022019.GB2948950@paulmck-ThinkPad-P17-Gen-1>
+ <cedf3a39-12cd-1cb1-ad5a-7c10768cee40@huaweicloud.com>
+ <20230125150520.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9FMEATzv3gcTUe2@rowland.harvard.edu>
+ <20230125171832.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9F+SyLpxHwdK0rE@rowland.harvard.edu>
+ <20230125194651.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9GSuzHFdRfLeAAp@andrea>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <Y9GSuzHFdRfLeAAp@andrea>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230125-tfp410_i2c-v1-4-66a4d4e390b7@criticallink.com>
-References: <20230125-tfp410_i2c-v1-0-66a4d4e390b7@criticallink.com>
-In-Reply-To: <20230125-tfp410_i2c-v1-0-66a4d4e390b7@criticallink.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Jyri Sarha <jsarha@ti.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Michael Williamson <michael.williamson@criticallink.com>,
-        Bob Duke <bduke@criticallink.com>,
-        Jonathan Cormier <jcormier@criticallink.com>
-X-Mailer: b4 0.11.3-dev-d001f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1533;
- i=jcormier@criticallink.com; h=from:subject:message-id;
- bh=dbb6ec7CfpiriM2pWdSl9OaXPVL9sCebyFiqEYEERQk=;
- b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0Zp8UY3oOfu1sE+y2VZfLN0nj6Zb8gpmkZWoxYPV
- wM1zUW2JAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9GafAAKCRDc1/0uCzbrqly9EA
- CPJlnlwhTnKovCKXXIx14LdNjTl14R/C5jZyKgskM3kkTsxuPRLUWuniHgeDEO7fhbZx3FwtW1QUp/
- Zn9RnwRza3ZKJEyHv0elltxnjisj/WTR0Z3NGL2xHIQXP8MxyGFBYtvJZoQHQ3rpmu9bOkhCIvD+fG
- 7MenhcEfyBVbKBnIiK7AraSXgAMBWt5lGo6o8ZBbVHBVgol/iU5lkMs4Od1hCEmfWDyiGAbvvQnCGc
- XSo2TauNuwCKaDxFtgPUmxx9OEN5ng5G72LWN9H3o32YN7zWBHJsArkqExSVXGMn/BlK/rsjzKIwg5
- BQp91qTt4vHztKSR7ekaU6ikv8dQ8kG6f39xSrLXYOxt3IXaIauH6JtqkjeqnsaqxUDi3fR8sVjIW4
- 6CU4mgt8wLdSt6qR7kSYMmqg6BDRRrKjvNd5HvlG1AYTs/aIXXxos80/58TJ+n/PqtROGGKAEPDDli
- oYJ6lkB/1H7pHV9ZfrvCTz9Ws4egquII/R3G7FOyp+kEMFTZQy7jIPfvmXHSdIIo8XSf8fg9pOz8IG
- j4k9CKHz3e699zCre/Yi7JazXyKpcJ3nedEX6XbrDIgXwqx7jShjt0rl2A/sdXuOQSR7Lfg1Ckqqmd
- X3/+eF32C7gtCmaP6ZLHcb0F93Y//74lDL+IYvGiTXMqEz+qFfntvOV1Q+Xw==
-X-Developer-Key: i=jcormier@criticallink.com; a=openpgp;
- fpr=FF328CEA09E66D63136754DFDCD7FD2E0B36EBAA
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: GxC2BwBXJl3KmtFjpY_GAA--.15701S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urWUAr4xtF47WryrGF13XFb_yoW8Xr43pF
+        WFkr4Yyr4Dtry0kw1kAw1jvayxuw4rtF45Jwn3Gws8uws0vrnYvr429w4Y9ayDZ393Gws0
+        qrWDJa47ur1UKrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvSb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43
+        ZEXa7IUbG2NtUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Williamson <michael.williamson@criticallink.com>
 
-If the I2C bus is connected on the TFP410, then use the register
-status bit to determine connection state.  This is needed, in particular,
-for polling the state when the Hot Plug detect is not connected to
-a controlling CPU via GPIO/IRQ lane.
 
-Signed-off-by: Michael Williamson <michael.williamson@criticallink.com>
-Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
----
- drivers/gpu/drm/bridge/ti-tfp410.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+On 1/25/2023 9:36 PM, Andrea Parri wrote:
+>>> Why do you want the implementation to forbid it?  The pattern of the
+>>> litmus test resembles 3+3W, and you don't care whether the kernel allows
+>>> that pattern.  Do you?
+>> Jonas asked a similar question, so I am answering you both here.
+>>
+>> With (say) a release-WRITE_ONCE() chain implementing N+2W for some
+>> N, it is reasonably well known that you don't get ordering, hardware
+>> support otwithstanding.  After all, none of the Linux kernel, C, and C++
+>> memory models make that guarantee.  In addition, the non-RCU barriers
+>> and accesses that you can use to create N+2W have been in very wide use
+>> for a very long time.
+>>
+>> Although RCU has been in use for almost as long as those non-RCU barriers,
+>> it has not been in wide use for anywhere near that long.  So I cannot
+>> be so confident in ruling out some N+2W use case for RCU.
+> Did some archeology...  the pattern, with either RCU sync plus a release
+> or with two full fences plus a release, was forbidden by "ancient LKMM":
+> the relevant changes were described in
+>
+>    https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/LWNLinuxMM/WeakModel.html#Coherence%20Point%20and%20RCU
+>
+>    Andrea
 
-diff --git a/drivers/gpu/drm/bridge/ti-tfp410.c b/drivers/gpu/drm/bridge/ti-tfp410.c
-index 837e1f81a0ff..ac216eaec3c8 100644
---- a/drivers/gpu/drm/bridge/ti-tfp410.c
-+++ b/drivers/gpu/drm/bridge/ti-tfp410.c
-@@ -28,6 +28,9 @@
- #define TFP410_BIT_BSEL BIT(2)
- #define TFP410_BIT_DSEL BIT(3)
- 
-+#define TFP410_REG_CTL_2_MODE	0x09
-+#define TFP410_BIT_HTPLG BIT(1)
-+
- static const struct regmap_config tfp410_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
-@@ -105,6 +108,16 @@ static enum drm_connector_status
- tfp410_connector_detect(struct drm_connector *connector, bool force)
- {
- 	struct tfp410 *dvi = drm_connector_to_tfp410(connector);
-+	u32 val;
-+	unsigned int ret;
-+
-+	if (dvi->i2c) {
-+		ret = regmap_test_bits(dvi->regmap, TFP410_REG_CTL_2_MODE, TFP410_BIT_HTPLG);
-+		if (ret < 0)
-+			dev_err(dvi->dev, "%s failed to read HTPLG bit : %d\n", __func__, ret);
-+		else
-+			return ret ? connector_status_connected : connector_status_disconnected;
-+	}
- 
- 	return drm_bridge_detect(dvi->next_bridge);
- }
+Fascinating! It says there "But the weak model allows it, as required" 
+-- what does "as required" mean? Just "as required by dropping the 
+constraint"?
 
--- 
-2.25.1
+Is there still a notion of "strong model" and "weak model", or was the 
+strong model dropped?
+
+jonas
+
