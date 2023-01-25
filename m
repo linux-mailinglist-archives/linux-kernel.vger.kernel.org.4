@@ -2,243 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B84467AB82
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9A167AB85
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234059AbjAYIXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S234465AbjAYIXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjAYIXF (ORCPT
+        with ESMTP id S233880AbjAYIXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:23:05 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52507279A1;
-        Wed, 25 Jan 2023 00:23:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674634984; x=1706170984;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=PIBIYWjFUWrv2uzg04TRHETzAcGdaVf2ERiCqorop3U=;
-  b=Z5xvmTcYh+Zy8eCN/LDPnR95xQ687cRx0C5MRtEkxBiZ1+f339539cpF
-   H8irfuJOP5C04UFUe8Nf0d6WnDkSu4vrZgeCyT2N55dwD94afBAE1ywDW
-   CyR/dLpybZToDvWKr0pL7jnF+H+t7pM8+XTNNnNRiTOqgTM007yDYxHwW
-   pqRZNCs/qNxm1J06wJ1zE+jSReM4lPZ5M7X2lu2IO0ImJ3V6T1a6zffd7
-   JBdrawHoEQFueWj5B/1tKgFWZ9mB7nwUyXyLj8J2g9qvYXwaADJU3TvaB
-   hiSSvzg07Y6MlJFLmhwkBwt8jZ/dHzcgK5lw6artqkKvajpt7mbXRf1PA
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="326537057"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208";a="326537057"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 00:23:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="804923739"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208";a="804923739"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Jan 2023 00:23:03 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 25 Jan 2023 00:23:02 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 25 Jan 2023 00:23:02 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 25 Jan 2023 00:22:59 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oDhkyFn9WOSqr6HdbBKouEs6eoE6nUarhB+MKdX70bM/U5iOZAg6NyAU3w4M51x+es63p0ZLCiws05jnQL9MSZ6iAXbMNhB+/p4WI4NUCe26XRV6BOKdEoyeo2+0IQqxuf3m07OekJ4S/1u1dhiAaLOyZkluGkp5Qy4a7t3km77eruVHBmULC1XMvgQxfsURWtg55nQLzStc0ZcodiUHvxewSyY2jOqMF/poYGIW5F7/E0P95p2ZMuiE1V/AfRVYLzBA5K3CjasN9ALOSBPgMiZXsjBoAp/NG/LX1Y4qbccqZtk3lfnD1N+J1KaWsTn02qhvpHSXeuMnQDkzif/0Mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q6H3fyOnO+adw6ERWBQV79B5owbjDM04kWpdIn3N4fc=;
- b=eoPUEQMhUdpechYZfehS+RDjuGqVinpV+GVoqywxsqAyK0LvtRP1qms3A5bjFMwgZKxGhUvSeFZ/kL7KIEQINuRTNQRGfuX8W3QP5l0CCKUr3JncyjbdNALJIUAsaLIZoNaP1ldBJur8WJc9mL2MneDe0xc2w1j0xxzw0DKexW/wrJRG3veNuXoyb36lKjvGoNAzG007P/1XRI2YO+Frji/s2lXKd6T16sf2mxbOisBMzuUzm1ed+T7oOZcDXqlSXuFqUiyr9YzYCx3GT/zsSxg7WywWsbAdFAhn0gxJlw7pZ3zFyVamdEt1pk9epdJIHm+MIrK5AwxSJ1JAYHUF/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
- by DS7PR11MB6200.namprd11.prod.outlook.com (2603:10b6:8:98::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
- 2023 08:22:50 +0000
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::59d:4c93:47eb:9811]) by SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::59d:4c93:47eb:9811%5]) with mapi id 15.20.6002.026; Wed, 25 Jan 2023
- 08:22:49 +0000
-From:   "Li, Xin3" <xin3.li@intel.com>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        "H. Peter Anvin" <hpa@zytor.com>
-CC:     "Hansen, Dave" <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC PATCH v5 0/2] sysret_rip update for the Intel FRED
- architecture
-Thread-Topic: [RFC PATCH v5 0/2] sysret_rip update for the Intel FRED
- architecture
-Thread-Index: AQHZMHAoqvs/lwdyjkiVXoNdsc7iCK6uxqlQ
-Date:   Wed, 25 Jan 2023 08:22:48 +0000
-Message-ID: <SA1PR11MB67345C4DFEE720C08D30D93DA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
-References: <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
- <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
- <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
- <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com>
- <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
- <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
- <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
- <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
- <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
- <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
- <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
- <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|DS7PR11MB6200:EE_
-x-ms-office365-filtering-correlation-id: b1d0f53e-6430-40cb-56c3-08dafead5842
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sn4JExY7Mwb3X/Dlj921a84rEWaGbVGfIRXFLH1dNFe6T3R3dWG7I6uy4+8aGErDeNxgN06m89n8iEAUxASRvrIMEZZgPD1DqEYIVsrj0YtStlSRMxRNdTI2XwEzFmiOcj/ajEidPlHeq2PIMRF+NT42bDZObOuv+9o2kJ2rzY3yOZauBPa8ZFDht4ldlzSfpFlC0N0d1nDjFopwvxuuT3yGTweenmHm67jlLXlvpYO5xo38c1GOElWOjHJrzqpMwrfu82yG9af3/yHV+rCqVMI6rp9isWLgyJOjS3WAp3bucj6Oeovf1UAmXJjPAvW7ftMBiP8suK8UQU+5KF0bxjFM2ZorALP5MjcHRWTte1OAeyX3jb5W8CKHXwuR7VdGdzIFneXlB0cj4eMKUylyg7KDUxPa61iMVfBmjGkl9ondx0VFKUW4xzekIc+qpK5MtCSH6qYkkGs85y/wAF+XXAOHG3Nw+Y1yfZGL7CK+KB0rgBhSXRfzAFaFQgLkPuiyEMd6B3Pez7gCGlEvWzE1qR7oKdHkvT4HlyRsjRVsmzeMSIu9/7k49B+HU27vUiPpKR6WTNtozall1G7xFoH3fFZO6stGQWLGq0UpBi9xM5FeJe04P0ETzJjFz9ZoozUXwBOv5A3LdFI6ASE2vYUBUKHs+fQ2R0NF4OPD43EjM4/lZoCWfFVCm+n5hMeCqoWr9ejciOWO9LIQTl8z7OyIO+BFXyQt/hfG6zC63tuycOU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(39860400002)(376002)(136003)(346002)(396003)(451199018)(8676002)(316002)(86362001)(66946007)(66446008)(71200400001)(38070700005)(54906003)(33656002)(8936002)(5660300002)(15650500001)(52536014)(82960400001)(38100700002)(2906002)(9686003)(66556008)(4326008)(41300700001)(122000001)(26005)(6506007)(186003)(55016003)(76116006)(66476007)(64756008)(966005)(478600001)(7416002)(83380400001)(7696005)(110136005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?I7Nc550ZepVSmW0MjTXdtvTofsPHV2MNdckw8Dcl0VDPe7Fj+X+UcjpT4bUs?=
- =?us-ascii?Q?O47NBUlPSF7jZ5K7kaTcAeSz9ZWoF0tLe01HfSYTCYSALzt9QQWGa/Q13pNs?=
- =?us-ascii?Q?gKF8Bl4lHeWYaCGy/p+Fdz5bi0wIrgyOtcR7eV6/i6VxN959zHH5dbsXxH/j?=
- =?us-ascii?Q?R8SbGO0KwXVePEKswGLLGSs2Fo6jeSZ4jBGOBeT5hGd5HMXoE91fRXRmiKuM?=
- =?us-ascii?Q?mOmCMh572I12gQUF1SsWQX+hx70t7o864DlYCvMYqvlkyR9S4D0qzaKB17pK?=
- =?us-ascii?Q?luTzPp7SsF1Xn2/W/hyfpZ6i8yF2qToHZ5N7B4sjFiiAnXQHUntSeoJ2b+YQ?=
- =?us-ascii?Q?PSl1CfdlLLFGuMogP6gKTU04yx6QViqFgDfydpFlnehyzJMmSIEESAoQtabE?=
- =?us-ascii?Q?oS9DQxqiyVRTfk6BMtRuSaeWc4W7i5tZPt4LS6UR34+A4tX0OKDU8lMFBrUf?=
- =?us-ascii?Q?JZ35ZUqdyr1BGdG4II0IAX00ZGI4f2rC/7xwR71INXLQOFIaiJMyi9D3kUjG?=
- =?us-ascii?Q?3qbmlBeuCIViXnoU6LN6SipuEE+xoMXI2aXSvfH2GFSCaxFpb8/iXKzwz1QN?=
- =?us-ascii?Q?eQ+IhDLKS24MID+sM7drd6xAPluRsPhmYbzEL8gQ/M3ZLTTYvSLh7OCn/24T?=
- =?us-ascii?Q?qK7kTAd9QIA0y9cIGtuOeV3r63ak0HtyM8qos4619P9P20yxZOZE0rXlRCOk?=
- =?us-ascii?Q?tjfSnVnd7e70DKc80QxzSfsdRcUhk7+tJAr2zCZ71FS6SClcwaCaOaS6h8XJ?=
- =?us-ascii?Q?IJc4qY3NxLLj2wwR0owmETSWxlMty3aTICQ9RLkhl5vxz8BT3aRrVvMYO7NW?=
- =?us-ascii?Q?Kv4y7eYso22ctrtgBelt+3p5r7U2J4ySfplZHb/op44HTdGSBR1zYD/XFdkC?=
- =?us-ascii?Q?59Sv3qCOWG8RPIwvQxsT0VOcm02opRYnbJ04ePBKCDINr3MzsCOlmxGi4nDS?=
- =?us-ascii?Q?gWv2hg2sAS5Xlc//XGZjHWUYqckmyP6RM1aL210Aibh6XXmmN0LjJS1zN6pB?=
- =?us-ascii?Q?ljODnits3i8VWXS4P6gPb1QiqymlaQgA7tLeTPEQTNgKhAJV8DEJwfV2qaCx?=
- =?us-ascii?Q?fxFV7KgPBaeqp0E7FffGuVo+YXrb3UNpntzBJ2Eo7nF0z3USVJspSxfwPXrL?=
- =?us-ascii?Q?YYg9LPyazkYI75zzuU73P22kAm5AsubivVk6oTEOLhupQyjtAeyKSx4Qhbv3?=
- =?us-ascii?Q?SE5+7YAS0SEA8sbGWBZ2IgaHm+zhjym9nkQfqxMc80Q/PhMtg5TFAFqclCgI?=
- =?us-ascii?Q?HoVPayC4dBuaNIzyKGBCRn5OLRZWDY0wsuKY/o2gw3ftmazcxvyfq/JjBUXZ?=
- =?us-ascii?Q?FePm3b/SONF7Piz06ysZPkFbGjpesAKLMnvmbDcDTWhqktwFnmzEJK1gbFlR?=
- =?us-ascii?Q?WSHDLiKwqdxXvBLMd4JAaN9nb13xzuHdPKKuCUVerzg5udye0bFkPSy+PRJd?=
- =?us-ascii?Q?S8/WReb3TwGlHXRbFK8P0U1VHmSnK893tjVGt5wuEJs/jOl4hvgN6ta5XXQT?=
- =?us-ascii?Q?eb1mrFCAZvt824GCtVd4AhBj/ExMORvkc5aNh8HnHsPdV3bZOUKa/w+GZUnG?=
- =?us-ascii?Q?a408IbZBmwCFzJJMULfZz4E5TlNFqtYAbSWaNeOS?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 25 Jan 2023 03:23:46 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A920E366A3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:23:44 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id bk16so16196322wrb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:23:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5YDvDkWAbLDWKsnQUnWtcsgg0pzlyYSw3Ro2XkM1b1U=;
+        b=kcqF6iq5mRuvn+vLGKITzcs41XGVfxnke94ZRKDv6r/GXQtJq/DjhtH1Bka1ZuWmOz
+         hs+sqQ3WOiAIzxmt/9Zuy/4eSmxyAq/uDcMuDh+FJbpdipz28DjE2DIVkgbNi25nI5zK
+         jZGqHtN15KR7z7UdxlfjkoHN0aNKg85LhpwylDBIfJNneOTjMUQ1oWWjUE6Vj1+92pDr
+         DRAh5QfaLNT5gzj81fbZsHRopjbSDX3pwjXbQqwgN0tn+3A3A42nZDMT6rcPdvCmhryC
+         zOFWEjBbK4SyukL/JoRIo5lmLYlAkvj+bWXz40K7tGlP0Gc3CfH5evRrgYHF5D/SHgDa
+         TiBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5YDvDkWAbLDWKsnQUnWtcsgg0pzlyYSw3Ro2XkM1b1U=;
+        b=w4JGT4u0e2mlIPqGvQTyM0/Iw8KoNcrt7aJG7DQ+cIcCQEtxTdd/lMZ6zdKR0D/pyN
+         QciyIYI8WLt4U63zs1FeUeOvc2NZFkhrx3vkkhsb4/ELHlsArai0bv4OAbRdNQKWPLzx
+         30SYgdbScW4709xbX0mSBL8BHqbw3EnWAaBMQEzmlqqV8ykFXt2ouacyRJZl2of36CC0
+         SAxtCUbYLii0VI/pyFrH6LuBpO0AOQG2bzKJCiob8CqNsrKbQPbr7OBIPKCoDa3IuUx9
+         HhB79Rff/8w5A48bsAqujN4gdR1hEyXCYNdrXxyrbRzT2Ap7hbzBcL8kUaJZftRJshlL
+         aPRA==
+X-Gm-Message-State: AO0yUKX3C55XZMmVAuX3z+DkyCrCwCNlgHWSkwI+PFl1A/KXiYrVkBzR
+        dAzavaQiIcQwaStJtNvUYxOY1A==
+X-Google-Smtp-Source: AK7set8JCzmJVT6O7sSrzWnjZzAPmb2N1a6Du011MY/JsAbWFnt0usJeT+kWtq+HdmDEjFicCUfIZg==
+X-Received: by 2002:a5d:42cd:0:b0:2bf:81eb:dc26 with SMTP id t13-20020a5d42cd000000b002bf81ebdc26mr7593494wrr.37.1674635023170;
+        Wed, 25 Jan 2023 00:23:43 -0800 (PST)
+Received: from alex-rivos.home (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
+        by smtp.gmail.com with ESMTPSA id a18-20020a056000101200b002be25db0b7bsm3821071wrx.10.2023.01.25.00.23.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 00:23:42 -0800 (PST)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH v3 0/6] RISC-V kasan rework
+Date:   Wed, 25 Jan 2023 09:23:27 +0100
+Message-Id: <20230125082333.1577572-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b1d0f53e-6430-40cb-56c3-08dafead5842
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2023 08:22:48.9261
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Frqt8MIaglxEPjy9CQ3Kzt0O+8SlP9UhD+B/1OcmOcrH2buHvuP5ER3VDZn0oBbiVf0wWTjYcQEVev2yP9AEMg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6200
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This version passes on FRED, thanks a lot for quickly fixing it.
+As described in patch 2, our current kasan implementation is intricate,
+so I tried to simplify the implementation and mimic what arm64/x86 are
+doing.
 
-  Xin
+In addition it fixes UEFI bootflow with a kasan kernel and kasan inline
+instrumentation: all kasan configurations were tested on a large ubuntu
+kernel with success with KASAN_KUNIT_TEST and KASAN_MODULE_TEST.
 
-> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
->=20
-> This is an RFC patchset v5. There are two patches in this series.
->=20
-> Xin Li reported that the sysret_rip test fails at:
->=20
->         assert(ctx->uc_mcontext.gregs[REG_EFL] =3D=3D
->                ctx->uc_mcontext.gregs[REG_R11]);
->=20
-> on the Intel FRED architecture. Let's handle the FRED system scenario too=
-. The
-> 'syscall' instruction in a FRED system doesn't set %rcx=3D%rip and %r11=
-=3D%rflags.
->=20
-> Syscall and sysenter in a FRED system are treated equivalently to softwar=
-e
-> interrupts, e.g. INT 0x80. They do not modify any registers.
->=20
-> Link: https://lore.kernel.org/lkml/5d4ad3e3-034f-c7da-d141-
-> 9c001c2343af@intel.com
->=20
-> #### Changelog v5:
->=20
->    - Fix do_syscall() return value (Ammar).
->=20
-> #### Changelog v4:
->=20
->    - Fix the assertion condition inside the SIGUSR1 handler (Xin Li).
->=20
->    - Explain the purpose of patch #2 in the commit message (HPA).
->=20
->    - Update commit message (Ammar).
->=20
->    - Repeat test_syscall_rcx_r11_consistent() 32 times to be more sure
->      that the result is really consistent (Ammar).
->=20
-> #### Changelog v3:
->=20
->    - Test that we don't get a mix of REGS_SAVED and REGS_SYSRET,
->      which is a major part of the point (HPA).
->=20
-> #### Changelog v2:
->=20
->    - Use "+r"(rsp) as the right way to avoid redzone problems
->      per Andrew's comment (HPA).
->=20
->=20
-> Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-> Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> ---
->=20
-> Ammar Faizi (2):
->   selftests/x86: sysret_rip: Handle syscall in a FRED system
->   selftests/x86: sysret_rip: Add more syscall tests with respect to `%rcx=
-` and `%r11`
->=20
->  tools/testing/selftests/x86/sysret_rip.c | 146 +++++++++++++++++++++--
->  1 file changed, 137 insertions(+), 9 deletions(-)
->=20
->=20
-> base-commit: e12ad468c22065a2826b2fc4c11d2113a7975301
-> --
-> Ammar Faizi
+inline ubuntu config + uefi:
+ sv39: OK
+ sv48: OK
+ sv57: OK
+
+outline ubuntu config + uefi:
+ sv39: OK
+ sv48: OK
+ sv57: OK
+
+Actually 1 test always fails with KASAN_KUNIT_TEST that I have to check:
+# kasan_bitops_generic: EXPECTATION FAILED at mm/kasan/kasan__test.c:1020
+KASAN failure expected in "set_bit(nr, addr)", but none occurrred
+
+Note that Palmer recently proposed to remove COMMAND_LINE_SIZE from the
+userspace abi
+https://lore.kernel.org/lkml/20221211061358.28035-1-palmer@rivosinc.com/T/
+so that we can finally increase the command line to fit all kasan kernel
+parameters.
+
+All of this should hopefully fix the syzkaller riscv build that has been
+failing for a few months now, any test is appreciated and if I can help
+in any way, please ask.
+
+v3:
+- Add AB from Ard in patch 4, thanks
+- Fix checkpatch issues in patch 1, thanks Conor
+
+v2:
+- Rebase on top of v6.2-rc3
+- patch 4 is now way simpler than it used to be since Ard already moved
+  the string functions into the efistub.
+
+Alexandre Ghiti (6):
+  riscv: Split early and final KASAN population functions
+  riscv: Rework kasan population functions
+  riscv: Move DTB_EARLY_BASE_VA to the kernel address space
+  riscv: Fix EFI stub usage of KASAN instrumented strcmp function
+  riscv: Fix ptdump when KASAN is enabled
+  riscv: Unconditionnally select KASAN_VMALLOC if KASAN
+
+ arch/riscv/Kconfig             |   1 +
+ arch/riscv/kernel/image-vars.h |   2 -
+ arch/riscv/mm/init.c           |   2 +-
+ arch/riscv/mm/kasan_init.c     | 516 ++++++++++++++++++---------------
+ arch/riscv/mm/ptdump.c         |  24 +-
+ 5 files changed, 298 insertions(+), 247 deletions(-)
+
+-- 
+2.37.2
 
