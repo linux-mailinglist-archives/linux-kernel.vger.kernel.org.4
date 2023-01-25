@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE3A67B726
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C3A67B71D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235649AbjAYQqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:46:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S235343AbjAYQqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbjAYQqm (ORCPT
+        with ESMTP id S229517AbjAYQqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:46:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E2559E8
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:45:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674665155;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cIZWZHwWr/it1Ap7qgC7p4Cjw9SyMvAGdi9exT2yBFE=;
-        b=R2Y2OVA1rtcwa/BTy72bV+TQgGHWBRfMYzd2BtBwIHIGEdg4yPdM8iXBHzeA0AzPdHUqZy
-        YmQF0bdWoF7rPTjfUZE+TESNPpDqsywHEkTLlUQ6zrJ3OnzJrdwhWy7lKsWqyJwJNqiMo9
-        Eb2+w6FrAy87FnPCNrye999IBoUsaBs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-63-_Dd014ylNHGYP0Dq4BLwSA-1; Wed, 25 Jan 2023 11:45:51 -0500
-X-MC-Unique: _Dd014ylNHGYP0Dq4BLwSA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 326D8801779;
-        Wed, 25 Jan 2023 16:45:51 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (ovpn-195-63.brq.redhat.com [10.40.195.63])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 8612B14171BB;
-        Wed, 25 Jan 2023 16:45:49 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 25 Jan 2023 17:45:48 +0100 (CET)
-Date:   Wed, 25 Jan 2023 17:45:46 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marco Elver <elver@google.com>
-Subject: Re: [RFC PATCH v2] posix-timers: Support delivery of signals to the
- current thread
-Message-ID: <20230125164546.GD13746@redhat.com>
-References: <20221216171807.760147-1-dvyukov@google.com>
- <20230112112411.813356-1-dvyukov@google.com>
- <20230125124304.GA13746@redhat.com>
- <20230125151717.GB13746@redhat.com>
- <CACT4Y+YKy_4mBLYomr49+fTm31Y6Q_kXhJz8O-_RTjMe=B-6eg@mail.gmail.com>
- <20230125163137.GC13746@redhat.com>
+        Wed, 25 Jan 2023 11:46:00 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A588A5618B;
+        Wed, 25 Jan 2023 08:45:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674665158; x=1706201158;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XdmD7UQAGzmd7MjF/AVg3Q2yN7Wg4zxBx49JM/0ghV4=;
+  b=J0tP8zkTbdhnjmn0BWCBr/E6DAXRrISl0R5nosb1iJbc8Nh5I6Xz6hEF
+   zD61jRppX7YD7vL5o81bSs+mhEjBOK0KffvniAUun2WC+cBiKAdCHcscN
+   SaQmkk20EnoyCAndEiFT3lBw2zfAcTeTnc0X/SVFvrcMPyjNo6ne3hpBS
+   n1ajmIHZ990rYYUd2m1Asj3yL+EvsXXOpXDkCaPxgGE9j2pXMX7Oj2ELT
+   5eVGwPgTc87gXwYbgWFHLrXt4ZGVEieMay2VVs7zUM+4vmzDAgS12DHlN
+   io6k2iHGGR7euWxyqmGyqc9LWk8jTFTj4hZuf8Z6REo+uaUysP/Y3KGYx
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="324305906"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="324305906"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 08:45:58 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="751266882"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="751266882"
+Received: from zguo4-mobl1.amr.corp.intel.com (HELO [10.209.50.216]) ([10.209.50.216])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 08:45:57 -0800
+Message-ID: <1000ec59-c8b7-e546-5baa-bdd0e878bf76@intel.com>
+Date:   Wed, 25 Jan 2023 08:45:56 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125163137.GC13746@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] x86: enable Data Operand Independent Timing Mode
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Roxana Bradescu <roxabee@chromium.org>,
+        Adam Langley <agl@google.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+References: <20230125012801.362496-1-ebiggers@kernel.org>
+ <14506678-918f-81e1-2c26-2b347ff50701@intel.com>
+ <CAMj1kXEZi1ewVdqXHTi7kWX9aT+j1=rFOVE55LdJYb9LkV9Dkw@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAMj1kXEZi1ewVdqXHTi7kWX9aT+j1=rFOVE55LdJYb9LkV9Dkw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,20 +74,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/25, Oleg Nesterov wrote:
->
-> > 2. The signal is still queued into process shared_pending
->
-> Yes. But just in case, please note that if this signal is not realtime
-> (sigev_signo < SIGRTMIN) and it is already queued, it will be dropped.
-> And I do not know if this can work for you.
->
-> However this is what we already have with SIGEV_SIGNAL w/o SIGEV_THREAD_ID,
-> and the same is true for SIGEV_THREAD_ID if the signal is already pending in
-> target_task->pending.
+On 1/25/23 08:22, Ard Biesheuvel wrote:
+...
+> All the nospec stuff we added for Spectre v1 serves the same purpose,
+> essentially, although the timing variances due to cache misses are
+> likely easier to measure. IOW, some of the kernel is now written that
+> way in fact, although the author of that doc may have had something
+> else in mind.
+> 
+> So IMHO, the scope is really not as narrow as you think.
 
-Damn ;) please ignore. I forgot that send_sigqueue() doesn't check
-legacy_queue().
+I've spoken with the folks who wrote that doc.  They've told me
+repeatedly that the scope is super narrow.  Seriously, look at just
+*one* thing in the other Intel doc about mitigating timing side-channels[1]:
 
-Oleg.
+	be wary of code generated from high-level language source code
+	that appears to adhere to all of these recommendations.
 
+The kernel has a fair amount of code written in high-level languages.
+
+The authors of the DOIT doc truly intend the real-world benefits of
+DOITM to be exceedingly narrow.  I think it would be fair to say that
+they think:
+
+	DOITM is basically useless for most code written in C, including
+	basically the entire kernel.
+
+I'll go forward this on to them and make sure I'm not overstating this
+_too_ much.
+
+>> That's _meant_ to be really scary and keep folks from turning this on by
+>> default, aka. what this patch does.  Your new CPU will be really slow if
+>> you turn this on!  Boo!
+> 
+> What is the penalty for switching it on and off? On arm64, it is now
+> on by default in the kernel, and off by default in user space, and
+> user space can opt into it using an unprivileged instruction.
+
+Right now, DOITM is controlled by a bit in an MSR and it applies
+everywhere.  It is (thankfully) one of the cheap MSRs and is not
+architecturally serializing.
+
+That's still not ideal and there is a desire to expose the bit to
+userspace *somehow* to make it much, much cheaper to toggle.  But, it'll
+still be an extra bit that needs to get managed and context switched.
+
+When I looked, the arm64 bit seemed to be in some flags register that
+got naturally saved and restored already on user<->kernel transitions.
+Was I reading it right?  It seemed like a really nice, simple mechanism
+to me.
+
+
+1.
+https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/secure-coding/mitigate-timing-side-channel-crypto-implementation.html
