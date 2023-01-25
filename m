@@ -2,200 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D4967BBD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFB867BBE9
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236213AbjAYUEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S236220AbjAYUEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236219AbjAYUEk (ORCPT
+        with ESMTP id S236115AbjAYUEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:04:40 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C04545F75
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:04:34 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-4ff07dae50dso234855467b3.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:04:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=g4Z/KcaPjXn69aR2a4PJBdKAtPbyRD5H10aHIp7bfig=;
-        b=VpJEl0p6UP5EG1JMEX/1nNDeCM09VjlGrBKHAR7qp8btAZslvIHihzbIA13ZtSxRAX
-         WuaIPCP6sD8HlMb2hrns/dRfH/bmdnOgQ1sZN7uFKnUUUHnpoUxAt2UMRTWNojIyGG+T
-         xmmR6IIViD6PvKYlzJaRkmylrswdZcEbNZHOZshGQ3AM45NWyRTN8XsSPHOhfmTx455a
-         7oYN+oJVapBqJHx8tefnhKROowuFVoyO/I5YRWl6bA8nfAFNyLbo+Do+EwhPB4Xq1WMs
-         +8XS3GU5BQ8dabju+VBOqRec/CdS3xVciRlQDrZuCRpyCm9w6ZbThEuVRa01YkyD0AVp
-         SvUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g4Z/KcaPjXn69aR2a4PJBdKAtPbyRD5H10aHIp7bfig=;
-        b=vTrAzIFTZifCnusfZwbyyXyX5FlWk1SFfwrgQlfM0naG79CmTvf92tQjkx9x/KpkWv
-         4rKI/IySR+sJNb44npneIu93eEvD7RFJadEhKKU+9cNhGKWHYu4nDGH+t8sqaDNzb3vG
-         WLfbeBgQhZHnZCZV6c89g+c/wc8kUajDA75BcaDpChYdl0D8gUA88tumR7LOBdY6/ImI
-         YL6uRPWIZPaDBWNxpW84S/NYkeBQ3NfH5Xv6JIYnO/MKUsJtcEMUreAY23C3SbolwAMj
-         PKcH2YdCdZrXFC2pNpPmjK/B6LjkECTvWd5p6yEMK7rchhqfXLcTLwrsxCG5/PJJRAZw
-         EjUA==
-X-Gm-Message-State: AFqh2krsSq7OC3L3sNQxgjyaS4SDA9U1CDIuGAdaHw+rIJa0Ix5nEZQU
-        FDLyt8iXFnWf6tPZk2tDsEbbUsjsrERuNFBimMxjzQ==
-X-Google-Smtp-Source: AMrXdXsL+8flLz3xdvXfNoHp7/pIWBUkAGWKzicGjDD1htotJLiQz9rqBYu8ruKeIIILSM7UFrGxJTr6UyE334PFFzM=
-X-Received: by 2002:a0d:d492:0:b0:506:c44:caa4 with SMTP id
- w140-20020a0dd492000000b005060c44caa4mr1941205ywd.439.1674677073645; Wed, 25
- Jan 2023 12:04:33 -0800 (PST)
+        Wed, 25 Jan 2023 15:04:46 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8490912587;
+        Wed, 25 Jan 2023 12:04:43 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30PK4VR4096181;
+        Wed, 25 Jan 2023 14:04:31 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1674677071;
+        bh=q04QEmurduN8rMs3TdU5HLHxq3EBdz7WBEpMoppBJFM=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=fNTSJ+FhTLDhAoCEvupVzSbv6f2QLO8dspkdmyFBPM6E0/vLEAC71Lj4BOXqamj9c
+         EvDu5eoCerOvJdtrvmyUnvbGNt9ojAmu+T7QHOfPUkueJONQtjm+bLnCJ+JFONuL9p
+         m+XyNux7R4VibhsrHgpx3TWoUJKf+/0zax+U3RTk=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30PK4UHB046988
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 25 Jan 2023 14:04:30 -0600
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 25
+ Jan 2023 14:04:30 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 25 Jan 2023 14:04:30 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30PK4TN3038113;
+        Wed, 25 Jan 2023 14:04:29 -0600
+Date:   Thu, 26 Jan 2023 01:34:28 +0530
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>
+CC:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Sinthu Raja <sinthu.raja@ti.com>
+Subject: Re: [PATCH V2 2/2] arm64: dts: ti: k3-am68-sk-base-board: Add pinmux
+ for RPi Header
+Message-ID: <20230125200427.2bqlpym5tzz43yqq@uda0490373>
+References: <20230124120311.7323-1-sinthu.raja@ti.com>
+ <20230124120311.7323-3-sinthu.raja@ti.com>
 MIME-Version: 1.0
-References: <20230123191728.2928839-1-tjmercier@google.com>
- <20230123191728.2928839-2-tjmercier@google.com> <Y8/ybgp2FW+e3bjc@dhcp22.suse.cz>
- <20230124194628.d44rtcfsv23fndxw@google.com> <Y9EX+usSpAjZ/8LS@dhcp22.suse.cz>
- <347560bc-d06a-92b7-8003-133d2b8af2df@linux.intel.com>
-In-Reply-To: <347560bc-d06a-92b7-8003-133d2b8af2df@linux.intel.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Wed, 25 Jan 2023 12:04:22 -0800
-Message-ID: <CABdmKX09S3bYzX+xBkhfkFULk2BtzS11RhzrvWv94j+cHSezPA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] memcg: Track exported dma-buffers
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Michal Hocko <mhocko@suse.com>, Shakeel Butt <shakeelb@google.com>,
-        linux-doc@vger.kernel.org, daniel.vetter@ffwll.ch,
-        Roman Gushchin <roman.gushchin@linux.dev>, cmllamas@google.com,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        jstultz@google.com, Zefan Li <lizefan.x@bytedance.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>, android-mm@google.com,
-        Jonathan Corbet <corbet@lwn.net>, jeffv@google.com,
-        linux-media@vger.kernel.org, selinux@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        Muchun Song <muchun.song@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230124120311.7323-3-sinthu.raja@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 9:31 AM Tvrtko Ursulin
-<tvrtko.ursulin@linux.intel.com> wrote:
+On 17:33-20230124, Sinthu Raja wrote:
+> From: Sinthu Raja <sinthu.raja@ti.com>
+> 
+> Add pinmux required to bring out the i2c and gpios on 40-pin RPi
+> expansion header on the AM68 SK board.
+> 
+> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> ---
+> 
+> No Changes in V2.
+> 
+>  .../boot/dts/ti/k3-am68-sk-base-board.dts     | 70 ++++++++++++++++++-
+>  1 file changed, 69 insertions(+), 1 deletion(-)
 >
->
-> Hi,
->
-> On 25/01/2023 11:52, Michal Hocko wrote:
-> > On Tue 24-01-23 19:46:28, Shakeel Butt wrote:
-> >> On Tue, Jan 24, 2023 at 03:59:58PM +0100, Michal Hocko wrote:
-> >>> On Mon 23-01-23 19:17:23, T.J. Mercier wrote:
-> >>>> When a buffer is exported to userspace, use memcg to attribute the
-> >>>> buffer to the allocating cgroup until all buffer references are
-> >>>> released.
-> >>>
-> >>> Is there any reason why this memory cannot be charged during the
-> >>> allocation (__GFP_ACCOUNT used)?
-> >>> Also you do charge and account the memory but underlying pages do not
-> >>> know about their memcg (this is normally done with commit_charge for
-> >>> user mapped pages). This would become a problem if the memory is
-> >>> migrated for example.
-> >>
-> >> I don't think this is movable memory.
-> >>
-> >>> This also means that you have to maintain memcg
-> >>> reference outside of the memcg proper which is not really nice either.
-> >>> This mimicks tcp kmem limit implementation which I really have to say I
-> >>> am not a great fan of and this pattern shouldn't be coppied.
-> >>>
-> >>
-> >> I think we should keep the discussion on technical merits instead of
-> >> personal perference. To me using skmem like interface is totally fine
-> >> but the pros/cons need to be very explicit and the clear reasons to
-> >> select that option should be included.
-> >
-> > I do agree with that. I didn't want sound to be personal wrt tcp kmem
-> > accounting but the overall code maintenance cost is higher because
-> > of how tcp take on accounting differs from anything else in the memcg
-> > proper. I would prefer to not grow another example like that.
-> >
-> >> To me there are two options:
-> >>
-> >> 1. Using skmem like interface as this patch series:
-> >>
-> >> The main pros of this option is that it is very simple. Let me list down
-> >> the cons of this approach:
-> >>
-> >> a. There is time window between the actual memory allocation/free and
-> >> the charge and uncharge and [un]charge happen when the whole memory is
-> >> allocated or freed. I think for the charge path that might not be a big
-> >> issue but on the uncharge, this can cause issues. The application and
-> >> the potential shrinkers have freed some of this dmabuf memory but until
-> >> the whole dmabuf is freed, the memcg uncharge will not happen. This can
-> >> consequences on reclaim and oom behavior of the application.
-> >>
-> >> b. Due to the usage model i.e. a central daemon allocating the dmabuf
-> >> memory upfront, there is a requirement to have a memcg charge transfer
-> >> functionality to transfer the charge from the central daemon to the
-> >> client applications. This does introduce complexity and avenues of weird
-> >> reclaim and oom behavior.
-> >>
-> >>
-> >> 2. Allocate and charge the memory on page fault by actual user
-> >>
-> >> In this approach, the memory is not allocated upfront by the central
-> >> daemon but rather on the page fault by the client application and the
-> >> memcg charge happen at the same time.
-> >>
-> >> The only cons I can think of is this approach is more involved and may
-> >> need some clever tricks to track the page on the free patch i.e. we to
-> >> decrement the dmabuf memcg stat on free path. Maybe a page flag.
-> >>
-> >> The pros of this approach is there is no need have a charge transfer
-> >> functionality and the charge/uncharge being closely tied to the actual
-> >> memory allocation and free.
-> >>
-> >> Personally I would prefer the second approach but I don't want to just
-> >> block this work if the dmabuf folks are ok with the cons mentioned of
-> >> the first approach.
-> >
-> > I am not familiar with dmabuf internals to judge complexity on their end
-> > but I fully agree that charge-when-used is much more easier to reason
-> > about and it should have less subtle surprises.
->
-> Disclaimer that I don't seem to see patches 3&4 on dri-devel so maybe I
-> am missing something, but in principle yes, I agree that the 2nd option
-> (charge the user, not exporter) should be preferred. Thing being that at
-> export time there may not be any backing store allocated, plus if the
-> series is restricting the charge transfer to just Android clients then
-> it seems it has the potential to miss many other use cases. At least
-> needs to outline a description on how the feature will be useful outside
-> Android.
->
-There is no restriction like that. It's available to anybody who wants
-to call dma_buf_charge_transfer if they actually have a need for that,
-which I don't really expect to be common since most users/owners of
-the buffers will be the ones causing the export in the first place.
-It's just not like that on Android with the extra allocator process in
-the middle most of the time.
 
-> Also stepping back for a moment - is a new memory category really
-> needed, versus perhaps attempting to charge the actual backing store
-> memory to the correct client? (There might have been many past
-> discussions on this so it's okay to point me towards something in the
-> archives.)
->
-Well the dmabuf counter for the stat file is really just a subcategory
-of memory that is charged. Its existence is not related to getting the
-charge attributed to the right process/cgroup. We do want to know how
-much of the memory attributed to a process is for dmabufs, which is
-the main point of this series.
+Tested-by: Rahul T R <r-ravikumar@ti.com>
 
-> Regards,
->
-> Tvrtko
+> diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+> index 2091cd2431fb..722cd19b74e0 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+> @@ -173,6 +173,32 @@ J721S2_IOPAD(0x0a0, PIN_INPUT, 0) /* (AB25) MCASP0_AXR12.MCAN7_RX */
+>  			J721S2_IOPAD(0x09c, PIN_INPUT, 0) /* (T24) MCASP0_AXR11.MCAN7_TX */
+>  		>;
+>  	};
+> +
+> +	main_i2c4_pins_default: main-i2c4-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_IOPAD(0x010, PIN_INPUT_PULLUP, 7) /* (AF28) MCAN13_RX.I2C4_SDA */
+> +			J721S2_IOPAD(0x014, PIN_INPUT_PULLUP, 7) /* (AD25) MCAN14_TX.I2C4_SCL */
+> +		>;
+> +	};
+> +
+> +	rpi_header_gpio0_pins_default: rpi-header-gpio0-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_IOPAD(0x0a8, PIN_INPUT, 7) /* (U24)  MCASP0_AXR14.GPIO0_42 */
+> +			J721S2_IOPAD(0x090, PIN_INPUT, 7) /* (W24) MCASP0_AXR8.GPIO0_36 */
+> +			J721S2_IOPAD(0x0bc, PIN_INPUT, 7) /* (V28) MCASP1_AFSX.GPIO0_47 */
+> +			J721S2_IOPAD(0x06c, PIN_INPUT, 7) /* (V26) MCAN1_TX.GPIO0_27 */
+> +			J721S2_IOPAD(0x004, PIN_INPUT, 7) /* (W25) MCAN12_TX.GPIO0_1 */
+> +			J721S2_IOPAD(0x008, PIN_INPUT, 7) /* (AC24) MCAN12_RX.GPIO0_2 */
+> +			J721S2_IOPAD(0x0b8, PIN_INPUT, 7) /* (AA24) MCASP1_ACLKX.GPIO0_46 */
+> +			J721S2_IOPAD(0x00c, PIN_INPUT, 7) /* (AE28) MCAN13_TX.GPIO0_3 */
+> +			J721S2_IOPAD(0x034, PIN_INPUT, 7) /* (AD24) PMIC_WAKE0.GPIO0_13 */
+> +			J721S2_IOPAD(0x0a4, PIN_INPUT, 7) /* (T23) MCASP0_AXR13.GPIO0_41 */
+> +			J721S2_IOPAD(0x0c0, PIN_INPUT, 7) /* (T28) MCASP1_AXR0.GPIO0_48 */
+> +			J721S2_IOPAD(0x0b4, PIN_INPUT, 7) /* (U25) MCASP1_AXR4.GPIO0_45 */
+> +			J721S2_IOPAD(0x0cc, PIN_INPUT, 7) /* (AE27) SPI0_CS0.GPIO0_51 */
+> +			J721S2_IOPAD(0x08c, PIN_INPUT, 7) /* (T25) MCASP0_AXR7.GPIO0_35 */
+> +		>;
+> +	};
+>  };
+>  
+>  &wkup_pmx0 {
+> @@ -214,12 +240,39 @@ J721S2_WKUP_IOPAD(0x0d0, PIN_OUTPUT, 0) /* (C23) WKUP_GPIO0_4.MCU_MCAN1_TX*/
+>  		>;
+>  	};
+>  
+> +	mcu_i2c0_pins_default: mcu-i2c0-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_WKUP_IOPAD(0x100, PIN_INPUT, 0) /*(H24) WKUP_GPIO0_63.MCU_I2C0_SCL*/
+> +			J721S2_WKUP_IOPAD(0x104, PIN_INPUT, 0) /*(H27) WKUP_GPIO0_64.MCU_I2C0_SDA*/
+> +		>;
+> +	};
+> +
+>  	mcu_i2c1_pins_default: mcu-i2c1-pins-default {
+>  		pinctrl-single,pins = <
+>  			J721S2_WKUP_IOPAD(0x0e0, PIN_INPUT, 0) /* (F24) WKUP_GPIO0_8.MCU_I2C1_SCL */
+>  			J721S2_WKUP_IOPAD(0x0e4, PIN_INPUT, 0) /* (H26) WKUP_GPIO0_9.MCU_I2C1_SDA */
+>  		>;
+>  	};
+> +
+> +	mcu_rpi_header_gpio0_pins_default: mcu-rpi-header-gpio0-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_WKUP_IOPAD(0x180, PIN_INPUT, 7) /* (G25) WKUP_GPIO0_66 */
+> +			J721S2_WKUP_IOPAD(0x190, PIN_INPUT, 7) /* (K26) WKUP_GPIO0_49 */
+> +			J721S2_WKUP_IOPAD(0x0c4, PIN_INPUT, 7) /* (E24) MCU_SPI1_D0.WKUP_GPIO0_1 */
+> +			J721S2_WKUP_IOPAD(0x0c8, PIN_INPUT, 7) /* (C28) MCU_SPI1_D1.WKUP_GPIO0_2 */
+> +			J721S2_WKUP_IOPAD(0x0c0, PIN_INPUT, 7) /* (D26) MCU_SPI1_CLK.WKUP_GPIO0_0 */
+> +			J721S2_WKUP_IOPAD(0x0fc, PIN_INPUT, 7) /* (D25) MCU_SPI1_CS2.WKUP_GPIO0_15*/
+> +			J721S2_WKUP_IOPAD(0x120, PIN_INPUT, 7) /* (G27) WKUP_GPIO0_56 */
+> +			J721S2_WKUP_IOPAD(0x17c, PIN_INPUT, 7) /* (J26) WKUP_GPIO0_57 */
+> +			J721S2_WKUP_IOPAD(0x184, PIN_INPUT, 7) /* (J27) WKUP_GPIO0_67 */
+> +			J721S2_WKUP_IOPAD(0x0cc, PIN_INPUT, 7) /* (C27) MCU_SPI1_CS0.WKUP_GPIO0_3 */
+> +		>;
+> +	};
+> +};
+> +
+> +&main_gpio0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&rpi_header_gpio0_pins_default>;
+>  };
+>  
+>  &main_gpio2 {
+> @@ -235,7 +288,8 @@ &main_gpio6 {
+>  };
+>  
+>  &wkup_gpio0 {
+> -	status = "disabled";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&mcu_rpi_header_gpio0_pins_default>;
+>  };
+>  
+>  &wkup_gpio1 {
+> @@ -273,6 +327,20 @@ exp1: gpio@21 {
+>  	};
+>  };
+>  
+> +&main_i2c4 {
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&main_i2c4_pins_default>;
+> +	clock-frequency = <400000>;
+> +};
+> +
+> +&mcu_i2c0 {
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&mcu_i2c0_pins_default>;
+> +	clock-frequency = <400000>;
+> +};
+> +
+>  &main_sdhci0 {
+>  	/* Unused */
+>  	status = "disabled";
+> -- 
+> 2.36.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
