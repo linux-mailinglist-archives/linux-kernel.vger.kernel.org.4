@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD62067AE3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9567D67AE40
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233586AbjAYJkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 04:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
+        id S234754AbjAYJkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjAYJkV (ORCPT
+        with ESMTP id S234138AbjAYJkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 04:40:21 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270A02716;
-        Wed, 25 Jan 2023 01:40:20 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 035163200951;
-        Wed, 25 Jan 2023 04:40:16 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 25 Jan 2023 04:40:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674639616; x=1674726016; bh=mVnLaWhnWq
-        piceQjqtY4G7r56a9ztAu8ycJAfseC+RE=; b=FHaO0ny/uYgy9ZYtBeUQgaDfx4
-        two+K4Ff6AL1mh1RKLm2/rHiqlGB4pmEGee8spf4yBIrqWRYjb0seYmIHkF1C5sQ
-        aO+Ym65d5j4I/IS4bWocAa1YttMW7x+XGe0ISfFIh9PT2LAM/21JQgQZD1Z0x+Zr
-        T5Hq9xOq+w2noZUizKuu1ldi0gOI/YrCmxGYdSpql0axhznmiJchgM7T9xtVeUol
-        M6c3vWmrdTlJyvMShro3Wd/AmpG1bt1v3/SSlK2rK/nOJvsRPHQ8QaffmiveaQ75
-        PpTAn3q7ETCnJCOKGTWUKNXsesjoUPPviG/WPiWT8+pNqMXhaLFFjy09PaLg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674639616; x=1674726016; bh=mVnLaWhnWqpiceQjqtY4G7r56a9z
-        tAu8ycJAfseC+RE=; b=TXXMEY0yaBKp6nhpJbq127eJSwDhHPUCt8tNJx7LCII9
-        a7i/lQzlfd0mYCnbSADEYIXPWtHXEi1ySj1RjyUzDRRih6zd1vYDgWPfO6lvEnA7
-        8F7K+Sn0Df+8Zk98KO9z+q/KNL7o/JN3tw9ojTElr7SmP55xh9daQU2ZuEEnwAAk
-        AXbIXX0wutgd7BhoWY2XepGWT12Dk+pC+Koyi5SERIutCqAQOoiR/zNFtAvQNFaa
-        sWB2k9hrDSLZbsfe7QzbgzbI44uCnSaccHM/WnA0AKZGB9FKkmpBTk5/EwhPBPzY
-        5LXIBkEWrN2eO62S1iJ+aJVFDS6ncvc4n9hY03Ee9g==
-X-ME-Sender: <xms:__jQYwKzyy64Q46l2fp-gaSFVtLPE9iPIUgEugqYnqsVVjDvik6oMw>
-    <xme:__jQYwIgXfkuUwDrwubzQvgGUSNpf-ltT1GIzSt46LeX6J44m8LuWem4tZTDJcFO1
-    5gI0e9X0TsEMw2ceU4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvvddgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:__jQYwvFoAxXo2ZJX4M7RvVBcblxiy-2uS1iGJ8qbHaeJ06QMLDymQ>
-    <xmx:__jQY9Yzg0autAV8v_lTIqaomz3TCkukojyKNQueRuVbHMGod73wYA>
-    <xmx:__jQY3Ya-3_W-EPE7LQHCG7YoLx9-oMgV40AlgjPCf6-4GuOLKBmCw>
-    <xmx:APnQY76uNj4ajFm7QU_WjE09raXk2uoQVpUyTxfBjo1msXG7zO9yqg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id BB115B60089; Wed, 25 Jan 2023 04:40:15 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <918952b8-6687-42ab-82af-b64c8db7e191@app.fastmail.com>
-In-Reply-To: <20230125083026.5399-2-nikita.shubin@maquefel.me>
-References: <20230117100845.16708-1-nikita.shubin@maquefel.me>
- <20230125083026.5399-1-nikita.shubin@maquefel.me>
- <20230125083026.5399-2-nikita.shubin@maquefel.me>
-Date:   Wed, 25 Jan 2023 10:39:57 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Nikita Shubin" <nikita.shubin@maquefel.me>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Cc:     "Hartley Sweeten" <hsweeten@visionengravers.com>,
-        "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Lukasz Majewski" <lukma@denx.de>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] gpio: ep93xx: Fix port F hwirq numbers in handler
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 04:40:49 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC69F30DF;
+        Wed, 25 Jan 2023 01:40:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mAgJz+pic6BVmXYxBN+VWs/MMMnUkDDE/YC6Sdu0ab4=; b=nQunn52byOr6gIM3Gee8jkXqqf
+        P6ahezAXaOoJgEZU94N64D+DY4WwzdeoQuN4TSrB2re+n+FRNKB313f7pWE3Axto20QcMUBKawlfC
+        V1XlCuQ0HNEXvSEVlc9MCGGDKp9M9zX1BjIEPu/fEx26+EqvosBwmbH9b7QG7nRTmlygLzXEHtwKa
+        mJAB4xNAatoGxBX1ofJIpGgNLMwT/i7t85iVTBKKH0Q4JXlZDCPTj6rQBK6UpcUUCjr/3q3NQMTAi
+        6qzJSabUvHh49Pf9klLM7hSY7ZwtdmvWkG9b3eRbmn6kPYULi21KJSaokx6M+bIa4JJK6jTNUkaUe
+        dH8i0crA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKcGP-005onB-Pz; Wed, 25 Jan 2023 09:40:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 29E27300137;
+        Wed, 25 Jan 2023 10:40:17 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1094A21477E2E; Wed, 25 Jan 2023 10:40:17 +0100 (CET)
+Date:   Wed, 25 Jan 2023 10:40:17 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     mingo@kernel.org, will@kernel.org, boqun.feng@gmail.com,
+        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com, rostedt@goodmis.org,
+        mhiramat@kernel.org, wanpengli@tencent.com, vkuznets@redhat.com,
+        boris.ostrovsky@oracle.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/6] A few cpuidle vs rcu fixes
+Message-ID: <Y9D5AfnOukWNOZ5q@hirez.programming.kicks-ass.net>
+References: <20230123205009.790550642@infradead.org>
+ <Y9AIj1s5iPPki3dK@FVFF77S0Q05N>
+ <Y9AVtUY8bnF3WjQr@FVFF77S0Q05N>
+ <Y9Al0PfSsx/VWL31@FVFF77S0Q05N>
+ <Y9D31FHOCaSnO5gS@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9D31FHOCaSnO5gS@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023, at 09:30, Nikita Shubin wrote:
-> Fix wrong translation of irq numbers in port F handler, as ep93xx hwirqs
-> increased by 1, we should simply decrease them by 1 in translation.
->
-> Fixes: 482c27273f52 ("ARM: ep93xx: renumber interrupts")
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-
-Cc: stable@vger.kernel.org # v5.19+
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-
-
-> ---
->  drivers/gpio/gpio-ep93xx.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpio-ep93xx.c b/drivers/gpio/gpio-ep93xx.c
-> index 2e1779709113..7edcdc575080 100644
-> --- a/drivers/gpio/gpio-ep93xx.c
-> +++ b/drivers/gpio/gpio-ep93xx.c
-> @@ -148,7 +148,7 @@ static void ep93xx_gpio_f_irq_handler(struct irq_desc *desc)
->  	 */
->  	struct irq_chip *irqchip = irq_desc_get_chip(desc);
->  	unsigned int irq = irq_desc_get_irq(desc);
-> -	int port_f_idx = ((irq + 1) & 7) ^ 4; /* {19..22,47..50} -> {0..7} */
-> +	int port_f_idx = (irq & 7) ^ 4; /* {20..23,48..51} -> {0..7} */
->  	int gpio_irq = EP93XX_GPIO_F_IRQ_BASE + port_f_idx;
+On Wed, Jan 25, 2023 at 10:35:16AM +0100, Peter Zijlstra wrote:
+> tip/sched/core contains the following patch addressing this:
 > 
->  	chained_irq_enter(irqchip, desc);
-> -- 
-> 2.37.4
+> ---
+> commit 9aedeaed6fc6fe8452b9b8225e95cc2b8631ff91
+> Author: Peter Zijlstra <peterz@infradead.org>
+> Date:   Thu Jan 12 20:43:49 2023 +0100
+> 
+>     tracing, hardirq: No moar _rcuidle() tracing
+>     
+>     Robot reported that trace_hardirqs_{on,off}() tickle the forbidden
+>     _rcuidle() tracepoint through local_irq_{en,dis}able().
+>     
+>     For 'sane' configs, these calls will only happen with RCU enabled and
+>     as such can use the regular tracepoint. This also means it's possible
+>     to trace them from NMI context again.
+>     
+>     Reported-by: kernel test robot <lkp@intel.com>
+>     Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>     Signed-off-by: Ingo Molnar <mingo@kernel.org>
+>     Link: https://lore.kernel.org/r/20230112195541.477416709@infradead.org
+> 
+> diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
+> index 629f2854e12b..f992444a0b1f 100644
+> --- a/kernel/trace/trace_preemptirq.c
+> +++ b/kernel/trace/trace_preemptirq.c
+> @@ -19,6 +19,20 @@
+>  /* Per-cpu variable to prevent redundant calls when IRQs already off */
+>  static DEFINE_PER_CPU(int, tracing_irq_cpu);
+>  
+> +/*
+> + * Use regular trace points on architectures that implement noinstr
+> + * tooling: these calls will only happen with RCU enabled, which can
+> + * use a regular tracepoint.
+> + *
+> + * On older architectures, use the rcuidle tracing methods (which
+> + * aren't NMI-safe - so exclude NMI contexts):
+> + */
+> +#ifdef CONFIG_ARCH_WANTS_NO_INSTR
+> +#define trace(point)	trace_##point
+> +#else
+> +#define trace(point)	if (!in_nmi()) trace_##point##_rcuidle
+> +#endif
+> +
+>  /*
+>   * Like trace_hardirqs_on() but without the lockdep invocation. This is
+>   * used in the low level entry code where the ordering vs. RCU is important
+
+For some reason I missed the trace_preempt_{on,off} things, so that then
+gets the below on top or so.
+
+diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
+index f992444a0b1f..ea96b41c8838 100644
+--- a/kernel/trace/trace_preemptirq.c
++++ b/kernel/trace/trace_preemptirq.c
+@@ -100,15 +100,13 @@ NOKPROBE_SYMBOL(trace_hardirqs_off);
+ 
+ void trace_preempt_on(unsigned long a0, unsigned long a1)
+ {
+-	if (!in_nmi())
+-		trace_preempt_enable_rcuidle(a0, a1);
++	trace(preempt_enable)(a0, a1);
+ 	tracer_preempt_on(a0, a1);
+ }
+ 
+ void trace_preempt_off(unsigned long a0, unsigned long a1)
+ {
+-	if (!in_nmi())
+-		trace_preempt_disable_rcuidle(a0, a1);
++	trace(preempt_disable)(a0, a1);
+ 	tracer_preempt_off(a0, a1);
+ }
+ #endif
