@@ -2,72 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46F067A903
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C00467A909
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbjAYCvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 21:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
+        id S233858AbjAYC5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 21:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234107AbjAYCvp (ORCPT
+        with ESMTP id S229534AbjAYC5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 21:51:45 -0500
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9078E539BD;
-        Tue, 24 Jan 2023 18:51:41 -0800 (PST)
-Received: by mail-il1-x142.google.com with SMTP id i17so8284242ila.9;
-        Tue, 24 Jan 2023 18:51:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HVOnr9X3NZfRTxwQMKhCnEXQXYREpSkn5siHkgp3Q+8=;
-        b=O139B5k8qR284vjoPwjnF+U5bBM3w6GG+l7LlqDrBkJsrCn5xxs8rjRcIQHWF4NUP8
-         KJTz1Lv8kzENCOYOJLkqlwRvp2zLocpiCQKn9X5UxuwgdQS2kpYcaqNnCIfyBUiUjitY
-         ugtGIIw06VPAj4o0kkOcJFQy3Ih6WiMqsl7rrTcHY6ItPPJMJDEfwk/O6ShvxKJcslpW
-         Y9/Ia9t3wIMCR5Ip6AKf2MVQsjxUzzpaRcNhZ3mh6AK2Mb8NY3259PfSg4Bin/dotOZV
-         VZMcMp+Qa62bD4aZZhGfCbnU94mfMrlYVkyfFYOyIEH5PVqtMXe2ISZ7jjD7XQTvts51
-         Fakw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HVOnr9X3NZfRTxwQMKhCnEXQXYREpSkn5siHkgp3Q+8=;
-        b=F4FY+BXqcv+/ZuT7ygaS+CtQdVXUjUKLMTwrrXYEamk1xTfU659Ahj49imueZ32qiM
-         9dfnSBp26CXF908VhGu5D2V9DNBHTBe3O0kq1+0V3OSaeOjhv97wa1SMAQx5QoRSV4nd
-         1xClwZI00qF6457irfFGbEaVSBAtT/L0CTvwJ+ePj6tEevPOh2QKDMVlhJTD9tUlrQ4H
-         vhYGDATsbXk0qEGPMW8z0Yf44MTREELLGfiB7u4OHdKDqsdQEkjI6ey6LWn64UEBYa3n
-         tB9W1pinVBSPdide8LjJRuLujxffrTbOSP2lpKZx10OheRJDd5SJprEs9vKOSq2+BXnY
-         0ngg==
-X-Gm-Message-State: AO0yUKWjVe5NfC7lrtael/2JGb3VFYuepXUqLnc5XAH0l7ozgzE1s7JX
-        OL2KogcBDoRgNFQG9iwyX2DH7pswvmix
-X-Google-Smtp-Source: AK7set9eyd4ZgOq0rRch2zEwPO05tvZoZD+qfbBf/C5js+MubnuOM8i+lJ5RLQH1ZbCuJgNUt0QriQ==
-X-Received: by 2002:a05:6e02:20c3:b0:310:a12c:78a2 with SMTP id 3-20020a056e0220c300b00310a12c78a2mr872263ilq.6.1674615100667;
-        Tue, 24 Jan 2023 18:51:40 -0800 (PST)
-Received: from fedora.mshome.net ([104.184.156.161])
-        by smtp.gmail.com with ESMTPSA id v5-20020a023845000000b0038a13e116a1sm1265722jae.61.2023.01.24.18.51.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 18:51:40 -0800 (PST)
-From:   Gregory Price <gourry.memverge@gmail.com>
-X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-doc@vger.kernel.org, oleg@redhat.com, avagin@gmail.com,
-        peterz@infradead.org, luto@kernel.org, krisman@collabora.com,
-        tglx@linutronix.de, corbet@lwn.net, shuah@kernel.org,
-        Gregory Price <gregory.price@memverge.com>
-Subject: [PATCH v6 2/2] ptrace,syscall_user_dispatch: add a getter/setter for sud configuration
-Date:   Tue, 24 Jan 2023 21:51:26 -0500
-Message-Id: <20230125025126.787431-3-gregory.price@memverge.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230125025126.787431-1-gregory.price@memverge.com>
-References: <20230125025126.787431-1-gregory.price@memverge.com>
+        Tue, 24 Jan 2023 21:57:30 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D6A712A9AC
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 18:57:28 -0800 (PST)
+Received: (qmail 193799 invoked by uid 1000); 24 Jan 2023 21:57:28 -0500
+Date:   Tue, 24 Jan 2023 21:57:28 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>, paulmck@kernel.org,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
+        quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org, viktor@mpi-sws.org
+Subject: Re: [PATCH] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y9CamIsCmFkPYrwl@rowland.harvard.edu>
+References: <Y8rCBOkM/hY+Z27t@rowland.harvard.edu>
+ <2f656643-deef-552e-e489-b7afd0dc777f@huaweicloud.com>
+ <Y8xRe1Gr6LNjKD4S@rowland.harvard.edu>
+ <41a14c54-8f17-d3ba-fc03-f9af4645881d@huaweicloud.com>
+ <Y87D0ekKCHFLjzeP@rowland.harvard.edu>
+ <8908438d-da93-b843-f0e0-831ba7070c86@huaweicloud.com>
+ <Y873uBB5rAW8tjdd@rowland.harvard.edu>
+ <1a189694-57b4-81d0-625a-64dd069b1953@huaweicloud.com>
+ <Y9AR4Gr10SyCKovo@rowland.harvard.edu>
+ <40447973-6f6b-86f7-1147-d8f20a943767@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40447973-6f6b-86f7-1147-d8f20a943767@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,171 +51,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement ptrace getter/setter interface for syscall user dispatch.
+On Tue, Jan 24, 2023 at 09:23:02PM +0100, Jonas Oberhauser wrote:
+> 
+> 
+> On 1/24/2023 6:14 PM, Alan Stern wrote:
+> > On Tue, Jan 24, 2023 at 02:14:03PM +0100, Jonas Oberhauser wrote:
+> > > After mulling it over a bit in my big old head, I consider that even though
+> > > dropping the [W] may be shorter, it might make for the simpler model by
+> > > excluding lots of cases.
+> > > That makes me think you should do it for real in the definition of prop. And
+> > > not just at the very end, because in fact each cumul-fence link might come
+> > > from a non-A-cumulative fence. So the same argument you are giving should be
+> > > applied recursively.
+> > > Either
+> > > 
+> > > 	prop = (overwrite & ext)? ; (cumul-fence; [W])* ; rfe?
+> > > 
+> > > or integrate it directly into cumul-fence.
+> > I dislike this sort of argument.  I understand the formal memory model
+> > by relating it to the informal operational model.  Thus, cumul-fence
+> > links a write W to another event E when the fence guarantees that W will
+> > propagate to E's CPU before E executes.
+> 
+> I later wondered why it's not defined like this and realized that prop means
+> that it's before E executes.
+> 
+> > That's how the memory model
+> > expresses the propagation properties of these fences.
+> 
+> I don't think that's really a perfect match though.
+> For example, W ->wmb E (and thus cumul-fence) does guarantee that W
+> propagates to E's CPU before E executes.
+> But the propagation property of wmb is that W propagates to every CPU before
+> E propagates to that CPU.
+> It just so happens that the time E propagates to E's CPU is the time it
+> executes.
+> 
+> Indeed, looking at the non-strong properties of fences only, should give
+> rise to a relation that only says "W propagates to any CPU before E
+> propagates to that CPU" and that is a relation between stores. And quite
+> different from "W propagates to E's CPU before E executes".
+> 
+> I believe that relation is (cumul-fence;[W])+.
 
-These prctl settings are presently write-only, making it impossible to
-implement transparent checkpoint via software like CRIU.
+Add an rfe? to the end and you get the "before E executes" version.  Or 
+more accurately (rfe? ; ppo*).  Hmmm, the only reason for omitting that 
+ppo* term in the model is that it would never be needed.  So maybe we 
+should after all do the same for the hb* term at the end of pb and the 
+(hb* | pb*) part at the end of rb.
 
-This is modeled after a similar interface for SECCOMP, which can have
-its configuration dumped by ptrace.
 
-Signed-off-by: Gregory Price <gregory.price@memverge.com>
----
- .../admin-guide/syscall-user-dispatch.rst     |  5 ++-
- include/linux/syscall_user_dispatch.h         | 19 +++++++++
- include/uapi/linux/ptrace.h                   |  9 +++++
- kernel/entry/syscall_user_dispatch.c          | 40 +++++++++++++++++++
- kernel/ptrace.c                               |  9 +++++
- 5 files changed, 81 insertions(+), 1 deletion(-)
+Starting from first principles, it's apparent that each of these types 
+of propagation fences is associated with two relations: one involving 
+propagation order and a companion relation involving execution order.
 
-diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentation/admin-guide/syscall-user-dispatch.rst
-index 60314953c728..a23ae21a1d5b 100644
---- a/Documentation/admin-guide/syscall-user-dispatch.rst
-+++ b/Documentation/admin-guide/syscall-user-dispatch.rst
-@@ -43,7 +43,10 @@ doesn't rely on any of the syscall ABI to make the filtering.  It uses
- only the syscall dispatcher address and the userspace key.
- 
- As the ABI of these intercepted syscalls is unknown to Linux, these
--syscalls are not instrumentable via ptrace or the syscall tracepoints.
-+syscalls are not instrumentable via ptrace or the syscall tracepoints,
-+however an interfaces to suspend, checkpoint, and restore syscall user
-+dispatch configuration has been added to ptrace to assist userland
-+checkpoint/restart software.
- 
- Interface
- ---------
-diff --git a/include/linux/syscall_user_dispatch.h b/include/linux/syscall_user_dispatch.h
-index a0ae443fb7df..9e1bd0d87c1e 100644
---- a/include/linux/syscall_user_dispatch.h
-+++ b/include/linux/syscall_user_dispatch.h
-@@ -22,6 +22,13 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- #define clear_syscall_work_syscall_user_dispatch(tsk) \
- 	clear_task_syscall_work(tsk, SYSCALL_USER_DISPATCH)
- 
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+	void __user *data);
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+	void __user *data);
-+
-+
- #else
- struct syscall_user_dispatch {};
- 
-@@ -35,6 +42,18 @@ static inline void clear_syscall_work_syscall_user_dispatch(struct task_struct *
- {
- }
- 
-+static inline int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+	void __user *data)
-+{
-+	return -EINVAL;
-+}
-+
-+static inline int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+	void __user *data)
-+{
-+	return -EINVAL;
-+}
-+
- #endif /* CONFIG_GENERIC_ENTRY */
- 
- #endif /* _SYSCALL_USER_DISPATCH_H */
-diff --git a/include/uapi/linux/ptrace.h b/include/uapi/linux/ptrace.h
-index ba9e3f19a22c..53ef59134dcb 100644
---- a/include/uapi/linux/ptrace.h
-+++ b/include/uapi/linux/ptrace.h
-@@ -112,6 +112,15 @@ struct ptrace_rseq_configuration {
- 	__u32 pad;
- };
- 
-+#define PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG 0x4210
-+#define PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG 0x4211
-+struct syscall_user_dispatch_config {
-+	__u64 mode;
-+	__s8 *selector;
-+	__u64 offset;
-+	__u64 len;
-+};
-+
- /*
-  * These values are stored in task->ptrace_message
-  * by ptrace_stop to describe the current syscall-stop.
-diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
-index b5ec75164805..ee02ce21f75e 100644
---- a/kernel/entry/syscall_user_dispatch.c
-+++ b/kernel/entry/syscall_user_dispatch.c
-@@ -111,3 +111,43 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- 
- 	return 0;
- }
-+
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+		void __user *data)
-+{
-+	struct syscall_user_dispatch *sd = &task->syscall_dispatch;
-+	struct syscall_user_dispatch_config config;
-+
-+	if (size != sizeof(struct syscall_user_dispatch_config))
-+		return -EINVAL;
-+
-+	if (test_syscall_work(SYSCALL_USER_DISPATCH))
-+		config.mode = PR_SYS_DISPATCH_ON;
-+	else
-+		config.mode = PR_SYS_DISPATCH_OFF;
-+
-+	config.offset = sd->offset;
-+	config.len = sd->len;
-+	config.selector = sd->selector;
-+
-+	if (copy_to_user(data, &config, sizeof(config)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+		void __user *data)
-+{
-+	struct syscall_user_dispatch_config config;
-+	int ret;
-+
-+	if (size != sizeof(struct syscall_user_dispatch_config))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&config, data, sizeof(config)))
-+		return -EFAULT;
-+
-+	return set_syscall_user_dispatch(config.mode, config.offset, config.len,
-+			config.selector);
-+}
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index a348b68d07a2..76de46e080e2 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -32,6 +32,7 @@
- #include <linux/compat.h>
- #include <linux/sched/signal.h>
- #include <linux/minmax.h>
-+#include <linux/syscall_user_dispatch.h>
- 
- #include <asm/syscall.h>	/* for syscall_get_* */
- 
-@@ -1263,6 +1264,14 @@ int ptrace_request(struct task_struct *child, long request,
- 		break;
- #endif
- 
-+	case PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG:
-+		ret = syscall_user_dispatch_set_config(child, addr, datavp);
-+		break;
-+
-+	case PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG:
-+		ret = syscall_user_dispatch_get_config(child, addr, datavp);
-+		break;
-+
- 	default:
- 		break;
- 	}
--- 
-2.39.0
+Here's what I mean.  For the sake of discussion let's define several 
+classes of fences:
 
+	efences are those which constrain execution order;
+
+	pfences are those which constrain propagation order;
+
+	sfences are those which strongly constrain propagation order.
+
+Each class includes the following ones.  (And if you like, you can 
+insert afences between pfences and sfences -- they would be the 
+A-cumulative fences.)
+
+Now, the memory model builds up successively more inclusive notions of 
+execution order.  This process starts with execution of instructions in 
+the same CPU not involving fences.  Thus we have the ppo relations: 
+dependencies and a few oddball things like ((overwrite ; rfe) & int) or 
+([UL] ; po ; [LKR]).
+
+Next, the efences also restrict single-CPU execution order.  These 
+fences only need to have one associated relation since they don't 
+specifically involve propagation.  Adding rfe to the list gives us 
+inter-CPU ordering.
+
+Then associated with pfences we have the relation you've been talking 
+about:
+
+	W propagates to each CPU before W' does.
+
+This is (cumul-fence ; [W]).  Perhaps a better name for it would be 
+wprop.  Given this relation, we obtain a companion relation that 
+restricts execution order:
+
+	((overwrite & ext) ; wprop+ ; rfe) & int.
+
+(Note that the overall form is the same for afences as for pfences.) 
+Adding this companion relation into the mix gives us essentially hb.
+
+For sfences the associated relation expresses:
+
+	W propagates to every CPU before Y executes.
+
+This is basically (wprop* ; rfe? ; sfence) (using the fact that all 
+sfences are A-cumulative) -- or if you prefer, (wprop* ; cumul-sfence).  
+We can call this sprop.  Then the companion relation restricting 
+execution order is:
+
+	(overwrite & ext) ; sprop
+
+For RCU, the associated relation expressing t2(A) < t1(B) is rcu-order 
+and the companion relation is rcu-fence.
+
+Putting all those execution-order relations together gives us xb, the 
+executes-before relation.  Then the only axiom we need for all of this 
+that xb is acyclic.
+
+Of course, I have left out a lot of details.  Still, how does that sound 
+as a scheme for rationalizing the memory model?
+
+Alan
