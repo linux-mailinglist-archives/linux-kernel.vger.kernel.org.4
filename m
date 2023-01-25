@@ -2,150 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D50267B3CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6B867B3CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235584AbjAYOEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 09:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S235519AbjAYOEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 09:04:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235544AbjAYOEO (ORCPT
+        with ESMTP id S234845AbjAYOEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 09:04:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D732C656
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:03:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674655406;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ncu/m+5+/WI/1e3GSfSo6VdQKJavRU4pao1vU93BlHw=;
-        b=ASdeiyC5dQGfefeGpjyx68VeoT1lscEtHhJCvdSy2XhrPeD6NBfdbPBRRGLKJr0lmYyr9W
-        VSsMOUad6lX3UvBsY/oELV9+AKBcnwqIrotkq3w98K8f6UUtBSmuTlOiJqPsGSrB/tVEKX
-        9xmUXeMnIt/r/xOcU6yahz/LIQl7Da0=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-661-KRqkqCN6NTyNz9oRPfE5ZQ-1; Wed, 25 Jan 2023 09:03:25 -0500
-X-MC-Unique: KRqkqCN6NTyNz9oRPfE5ZQ-1
-Received: by mail-ed1-f71.google.com with SMTP id b6-20020a056402278600b0049e41edf3cfso12873866ede.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:03:24 -0800 (PST)
+        Wed, 25 Jan 2023 09:04:09 -0500
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE37B458;
+        Wed, 25 Jan 2023 06:04:07 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id mp20so47852676ejc.7;
+        Wed, 25 Jan 2023 06:04:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ncu/m+5+/WI/1e3GSfSo6VdQKJavRU4pao1vU93BlHw=;
-        b=LhoYt90trY+8xAzHExoltIQrmVI4G1bf+QIEOAzakiP+8FNBSgTRlwW3CkxKOES4GI
-         30U725xLxREnws0FdqqvDljCQz07GwyuGVHOecJV8MsPQ7ZZ/d0ktpHBghzZG5pjYoWO
-         z0GwNjZfA+DPch4pz8TRXBrO89n4GP4VjS701DvdUN0Bgg2CBVZK21m6eM+6oXfopRrE
-         mj19+EGV641Zxza1CC8iwumxYDVnbGN+QxadUSKjjK9z7h/nkqsGy36ngAVbEUKTohMv
-         QiUqIUX8iR+dHIA7Wc4Tttv54cDZjt1//6/ETiSUn+FDvIM9ffPyQ5LJWaB/+0bRvyPT
-         mGaQ==
-X-Gm-Message-State: AFqh2koqNcVN5Zqas1l9JAtKJAccFvXvxFB+O7e9Zb36f0f2Q3YXYfaB
-        g3JtJL9G9A2QdELXn/Hp90GiuFEqAuEmwz1LsdZe2fZt5RJ/WLdgyW8rx8KKpLyFEBsPaj9qZhM
-        /mLgbI269o6HZc4O2TT7WxXQ6
-X-Received: by 2002:a17:907:8b0a:b0:877:5c3e:706 with SMTP id sz10-20020a1709078b0a00b008775c3e0706mr31811573ejc.73.1674655402445;
-        Wed, 25 Jan 2023 06:03:22 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvUCNcE7exKGBNTzRlyuPWTkp0ghZlVVEFfENUI7ck1uWhBq7Q6OM8ofgDDHy/1rAF7l/yHUA==
-X-Received: by 2002:a17:907:8b0a:b0:877:5c3e:706 with SMTP id sz10-20020a1709078b0a00b008775c3e0706mr31811559ejc.73.1674655402220;
-        Wed, 25 Jan 2023 06:03:22 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id un4-20020a170907cb8400b008775b8a5a5fsm2389452ejc.198.2023.01.25.06.03.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 06:03:21 -0800 (PST)
-Message-ID: <ad6673bd-1500-eb9e-f5be-95e63bb8ff64@redhat.com>
-Date:   Wed, 25 Jan 2023 15:03:20 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QaQLLyWQMu0cYP6O6gnotQPF1R1OOQ10sIq9rkF2ReQ=;
+        b=u93EQ5/n9/qkhDkPsma/1fABZjnfVaJSOxoXdfB8HNQsnVlo0siI1wymnfq1tTQtge
+         dTkvjmFG/BH9V8d1JObQAL+1RPkHK24cDVuBvK/hM1Nq17zxrd+XpbzsyuH34/LJCndt
+         A2DgzuPQ93KVhyv2j2OapX2V9Na4A7uo5Z9XHaKow0FNrc5lLc+AAtB646DKqo3p7cAM
+         h3K4ac546pclgthEJAGYlgcqf63PEKykGfn7r8K75mDkwcRBT60hL4U4BJUDFjgZUyfr
+         1B7FuOuWRxcWIEEaioN/AqT+lW5TrokavRNz9sKj5IWw5Dt7hSyNVdFqfT3Q+NG8n+AF
+         u74w==
+X-Gm-Message-State: AFqh2kocYAx3rgfy17btlA6sh2FSW4vqP3mAtQ+kPsAiwRujEfFrRiP0
+        wBumwopbO9B4oBbufbRBvuGms9+eDse38UKpzIM=
+X-Google-Smtp-Source: AMrXdXvc6pde4wRliLQh07o2Rero2AincHDkvUZhLpLTyEkQCpZyRbSkfS1vi99Kj+jYmmiKjE4rIAQAgzHrWPOpaY4=
+X-Received: by 2002:a17:906:d101:b0:84d:3813:fb8 with SMTP id
+ b1-20020a170906d10100b0084d38130fb8mr4509019ejz.384.1674655446166; Wed, 25
+ Jan 2023 06:04:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] x86: KVM: Add common feature flag for AMD's PSFD
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20230124194519.2893234-1-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20230124194519.2893234-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230123152756.4031574-1-daniel.lezcano@linaro.org> <3e2c6c44-f562-28ff-26cc-933f386e9719@linaro.org>
+In-Reply-To: <3e2c6c44-f562-28ff-26cc-933f386e9719@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 25 Jan 2023 15:03:54 +0100
+Message-ID: <CAJZ5v0iH283yXWdzTN1Gb2xBUjy0E04zEgrny1N6QcsAwsJyyg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Misc thermal cleanup and fixes
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rui.zhang@intel.com, rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 20:45, Sean Christopherson wrote:
-> Use a common X86_FEATURE_* flag for AMD's PSFD, and suppress it from
-> /proc/cpuinfo via the standard method of an empty string instead of
-> hacking in a one-off "private" #define in KVM.  The request that led to
-> KVM defining its own flag was really just that the feature not show up
-> in /proc/cpuinfo, and additional patches+discussions in the interim have
-> clarified that defining flags in cpufeatures.h purely so that KVM can
-> advertise features to userspace is ok so long as the kernel already uses
-> a word to track the associated CPUID leaf.
-> 
-> No functional change intended.
-> 
-> Link: https://lore.kernel.org/all/d1b1e0da-29f0-c443-6c86-9549bbe1c79d@redhat.como
-> Link: https://lore.kernel.org/all/YxGZH7aOXQF7Pu5q@nazgul.tnic
-> Link: https://lore.kernel.org/all/Y3O7UYWfOLfJkwM%2F@zn.tnic
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/include/asm/cpufeatures.h | 1 +
->   arch/x86/kvm/cpuid.c               | 8 +-------
->   2 files changed, 2 insertions(+), 7 deletions(-)
+On Wed, Jan 25, 2023 at 12:16 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+> will you take this series on your branch ?
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+Yes, I'm planning to do that, if I don't find any issues with it (not
+likely though).
 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index 61012476d66e..2acaebc7bb76 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -330,6 +330,7 @@
->   #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
->   #define X86_FEATURE_AMD_SSB_NO		(13*32+26) /* "" Speculative Store Bypass is fixed in hardware. */
->   #define X86_FEATURE_CPPC		(13*32+27) /* Collaborative Processor Performance Control */
-> +#define X86_FEATURE_AMD_PSFD            (13*32+28) /* "" Predictive Store Forwarding Disable */
->   #define X86_FEATURE_BTC_NO		(13*32+29) /* "" Not vulnerable to Branch Type Confusion */
->   #define X86_FEATURE_BRS			(13*32+31) /* Branch Sampling available */
->   
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 2a9f1e200dbc..fb2b0e3ecce1 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -59,12 +59,6 @@ u32 xstate_required_size(u64 xstate_bv, bool compacted)
->   	return ret;
->   }
->   
-> -/*
-> - * This one is tied to SSB in the user API, and not
-> - * visible in /proc/cpuinfo.
-> - */
-> -#define KVM_X86_FEATURE_AMD_PSFD	(13*32+28) /* Predictive Store Forwarding Disable */
-> -
->   #define F feature_bit
->   
->   /* Scattered Flag - For features that are scattered by cpufeatures.h. */
-> @@ -710,7 +704,7 @@ void kvm_set_cpu_caps(void)
->   		F(CLZERO) | F(XSAVEERPTR) |
->   		F(WBNOINVD) | F(AMD_IBPB) | F(AMD_IBRS) | F(AMD_SSBD) | F(VIRT_SSBD) |
->   		F(AMD_SSB_NO) | F(AMD_STIBP) | F(AMD_STIBP_ALWAYS_ON) |
-> -		__feature_bit(KVM_X86_FEATURE_AMD_PSFD)
-> +		F(AMD_PSFD)
->   	);
->   
->   	/*
-> 
-> base-commit: 7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f
-
-
+> On 23/01/2023 16:27, Daniel Lezcano wrote:
+> > This series is based on linux-pm/thermal
+> >
+> > It unregisters the netlink generic family for thermal in case the thermal
+> > framework fails to initialize, removes a unneeded ida_destroy() call and moves
+> > the thermal trip code in a separate file.
+> >
+> > A couple of changes have been removed from the previous version:
+> >
+> >   - Ordering the trip points. Some consolidation is needed in the set_trip_temp
+> >     ops before ordering the trip points, so this change is postpone
+> >
+> >   - Remove the mutex destroy call. Even if the call is not needed, the
+> >     justification of the change is not accurate. So it is postponed also.
+> >
+> >   V2:
+> >     - Removed ordering the trip points change
+> >     - Removed mutex destroy change
+> >     - Added "No functional change intented" as requested by Rui
+> >     - Added the function declaration for_each_thermal_trip
+> >
+> > Daniel Lezcano (3):
+> >    thermal/core: Fix unregistering netlink at thermal init time
+> >    thermal/core: Remove unneeded ida_destroy()
+> >    thermal/core: Move the thermal trip code to a dedicated file
+> >
+> >   drivers/thermal/Makefile          |   4 +-
+> >   drivers/thermal/thermal_core.c    |  93 +--------------
+> >   drivers/thermal/thermal_core.h    |   4 +
+> >   drivers/thermal/thermal_helpers.c |  62 ----------
+> >   drivers/thermal/thermal_netlink.c |   5 +
+> >   drivers/thermal/thermal_netlink.h |   3 +
+> >   drivers/thermal/thermal_trip.c    | 182 ++++++++++++++++++++++++++++++
+> >   7 files changed, 199 insertions(+), 154 deletions(-)
+> >   create mode 100644 drivers/thermal/thermal_trip.c
+> >
+>
+> --
