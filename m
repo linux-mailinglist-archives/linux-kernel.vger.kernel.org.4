@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276A967B490
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2952F67B494
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235730AbjAYOew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 09:34:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        id S235723AbjAYOfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 09:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235718AbjAYOen (ORCPT
+        with ESMTP id S235758AbjAYOe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 09:34:43 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2469759984;
-        Wed, 25 Jan 2023 06:34:38 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id be8so5156393plb.7;
-        Wed, 25 Jan 2023 06:34:38 -0800 (PST)
+        Wed, 25 Jan 2023 09:34:56 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AAD5998B;
+        Wed, 25 Jan 2023 06:34:44 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id b24-20020a17090a551800b0022beefa7a23so2199619pji.5;
+        Wed, 25 Jan 2023 06:34:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9uUEIUXRT9q9lHy3kc8AWUGd4aWNpn7Eo0QlIhJUhEE=;
-        b=bbLfdOAYTTbyGy3Pjn2l/V+nZL0/zc7m7ILa4+blFmAhwL0yBtgJevoY97wMdAyHWx
-         KAXNp1M4yjLcZT0x+EFujMqyCCIPgTxyKKtQLnzNKaq6pntp6UBHqosiUJRrsHk2OhsV
-         sdmRSmrhNNC3qeACPMKFtC8PRmrft/M/1DnB8MNqtIacKcaJojZEFwOqCzXbzj6D4B8D
-         dlSSLltt3F998561RLYxPqPgPR02HWJv3M7Ui3XpSKTlNFpUqMSr1agbwAm8up2kI5B/
-         4OLjsIgs9XP+RMYMkJAPK1Pay/bfVgEfXHxjbsxeYVjK/Vbl3wAD4H+lAHwjJwenKV0o
-         E++Q==
+        bh=jl6Yi+gm6x0jddwKUYCeMj4VHkB5ErH9lG4Oo4LvHEI=;
+        b=UTCrM5Ts3D+yEtU/KCHhWsAXHapP08wO/KjKMqHYe9yj2GF1ch9RqJJf+heWVMtBy8
+         Dk/Iep6KJsQQrmSo5dE8av/feMByB04hc4uRjTskJti89/F4Yb3TsjNEe/0h+RZuXDnz
+         lTwBzPnyftadre+sp7SCUwyvxhikmt718eNJG9vysYXXw1nDtBy4843hQ6VyowtdLU2H
+         IlrT0nyknu7PKTCYNG575dWrl3mMrhiLz13KMSKlQPocVnalREz/Br3m2wQtybHWRJiK
+         sVezqiyX2i4tl/NRPUJ5AAy/Dp2/QioyaoHw7eyrs2ahqrUe5ttWkz3h0YMq4oZMafia
+         jONQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9uUEIUXRT9q9lHy3kc8AWUGd4aWNpn7Eo0QlIhJUhEE=;
-        b=eKPINmnxNm2bPmlfDiag+utQYTtncRw4cxiuouPA7j/TlL/X5oZiVDxeTm33zguHS0
-         SCVKYMdWAlbtSmU9dO7MLduMO9tsbbskowZODZxKHq7p1lGZwJNmxEqVztBpZhF3q2yz
-         gKaQnXtXLJ09YzB3GrD8u4QOQsZjJBlOZmgX0pNgoKnqNVXzz3ko4Gqv0cDi1vQiajoC
-         mCYQ6WjpDwvDERZXGtowLsrZNcjdlsY+zI5GwSupuGitIMUqJbwFuCkGX8XiW2IzEs+5
-         qDqmdkS61/VEI2d1365RmiDj4qJ60lNBWDaQvT0W3ixyJB7+gd+BuitF3yXypA2ry+Ag
-         NMhg==
-X-Gm-Message-State: AFqh2koSiKEVz3ttfALAeR/t+RWZWMn5qRdWMMIDm2k/fYl4DVT5NixI
-        mCkZAkQb8HaQm4/s2NOi4WE=
-X-Google-Smtp-Source: AMrXdXuPaax7cW0zR8SleapPgK1Xc3MqA2CnRHvd6tNBi5TlrQ1FsAi02NbRNP6wV+CScodvylHOjA==
-X-Received: by 2002:a17:90a:160f:b0:228:5b99:3b45 with SMTP id n15-20020a17090a160f00b002285b993b45mr34241546pja.7.1674657278370;
-        Wed, 25 Jan 2023 06:34:38 -0800 (PST)
+        bh=jl6Yi+gm6x0jddwKUYCeMj4VHkB5ErH9lG4Oo4LvHEI=;
+        b=OUAPOtFcazLPdEWLgjJSalVMH8bBiGg7JViwmPmDpKLakDoANy9c72CI3lcoh4zRD7
+         8vobvcjUWt8qQnfZ1jSgqVIM0NKjCs0JE6+ZowtW0n5P8+L6OEmF0POpf4I7m+1FOriq
+         GD8Qaj2F+uW2/tS3NHxOZWi9kf1Z15PwxRtwqNcXbIiUPS3I4lDaE/PI+02JhP2/OKh2
+         fUjT/bP4+tFG/tHxxW4YlOub6GvqVF4IQocW6YFDHpbiFQSadcC/ggFjC3jbrGVYhkx8
+         0SsDHN72r+PjDjAjgw6tLx5q+of4Rf5of+Tcirz/hgB+2o2+E0fCG9s//DFdp01fImnj
+         DTPQ==
+X-Gm-Message-State: AFqh2koAq9gzF5pwEfsLbsj+ItRaYZgiSQDLKOHFFDOKOIJWol3YZ6Yw
+        nD27iby1kcn+anJTT3kubzs=
+X-Google-Smtp-Source: AMrXdXtvjxXhIcJ2tVOdp1iKzinV8pzyoZgxU25wu2sydM8Afq2kh6MP3sp+3RaSnj7uV+rlPS1qDw==
+X-Received: by 2002:a17:90a:f612:b0:225:e88c:33c2 with SMTP id bw18-20020a17090af61200b00225e88c33c2mr34864397pjb.7.1674657283921;
+        Wed, 25 Jan 2023 06:34:43 -0800 (PST)
 Received: from localhost.localdomain ([45.112.3.15])
-        by smtp.gmail.com with ESMTPSA id c2-20020a17090a1d0200b0022c033f501asm1671465pjd.41.2023.01.25.06.34.34
+        by smtp.gmail.com with ESMTPSA id c2-20020a17090a1d0200b0022c033f501asm1671465pjd.41.2023.01.25.06.34.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 06:34:37 -0800 (PST)
+        Wed, 25 Jan 2023 06:34:43 -0800 (PST)
 From:   Anand Moon <linux.amoon@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND linux-next v4.1 3/4] arm64: dts: meson: move usb-hub node under dwc3 node on Odroid C4
-Date:   Wed, 25 Jan 2023 14:34:02 +0000
-Message-Id: <20230125143404.1424-4-linux.amoon@gmail.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND linux-next v4.1 4/4] dt-bindings: usb: Fix properties for VL817 hub controller
+Date:   Wed, 25 Jan 2023 14:34:03 +0000
+Message-Id: <20230125143404.1424-5-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230125143404.1424-1-linux.amoon@gmail.com>
 References: <20230125143404.1424-1-linux.amoon@gmail.com>
@@ -78,69 +74,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the usb-hub node under dwc3 node and drop superfluous
-dr_mode as it is the default in meson-g12-common.dtsi.
+Cleanup by removing unneeded quotes from refs and
+add maxItems to reset-gpios and fix the required list.
 
-Fixes: 71593b2020b3 ("arm64: dts: amlogic: Used onboard usb hub reset on odroid c4")
+Fixes: 31360c28dfdd ("dt-bindings: usb: Add binding for Via lab VL817 hub controller")
 Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
- .../boot/dts/amlogic/meson-sm1-odroid-c4.dts  | 41 +++++++++----------
- 1 file changed, 20 insertions(+), 21 deletions(-)
+Dropped Rev Krzysztof.
+---
+ .../devicetree/bindings/usb/vialab,vl817.yaml  | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
-index d04768a66bfe..a988015dd2d5 100644
---- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dts
-@@ -26,30 +26,29 @@ led-blue {
- 	sound {
- 		model = "ODROID-C4";
- 	};
-+};
+diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
+index 5f9771e22058..23a13e1d5c7a 100644
+--- a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
++++ b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
+@@ -14,29 +14,32 @@ allOf:
  
-+&dwc3 {
- 	/* USB hub supports both USB 2.0 and USB 3.0 root hub */
--	usb-hub {
--		dr_mode = "host";
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		/* 2.0 hub on port 1 */
--		hub_2_0: hub@1 {
--			compatible = "usb2109,2817";
--			reg = <1>;
--			peer-hub = <&hub_3_0>;
--			reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
--			vdd-supply = <&vcc_5v>;
--		};
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* 2.0 hub on port 1 */
-+	hub_2_0: hub@1 {
-+		compatible = "usb2109,2817";
-+		reg = <1>;
-+		peer-hub = <&hub_3_0>;
-+		reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
-+		vdd-supply = <&vcc_5v>;
-+	};
+ properties:
+   compatible:
+-    items:
+-      - enum:
+-          - usb2109,2817
+-          - usb2109,817
++    enum:
++      - usb2109,2817
++      - usb2109,817
  
--		/* 3.1 hub on port 4 */
--		hub_3_0: hub@2 {
--			compatible = "usb2109,817";
--			reg = <2>;
--			peer-hub = <&hub_2_0>;
--			reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
--			vdd-supply = <&vcc_5v>;
--		};
-+	/* 3.1 hub on port 4 */
-+	hub_3_0: hub@2 {
-+		compatible = "usb2109,817";
-+		reg = <2>;
-+		peer-hub = <&hub_2_0>;
-+		reset-gpios = <&gpio GPIOH_4 GPIO_ACTIVE_LOW>;
-+		vdd-supply = <&vcc_5v>;
- 	};
- };
+   reg: true
+ 
+   reset-gpios:
+-    description: GPIO controlling the RESET# pin.
++    maxItems: 1
++    description:
++      GPIO controlling the RESET# pin.
+ 
+   vdd-supply:
+     description:
+       phandle to the regulator that provides power to the hub.
+ 
+   peer-hub:
+-    $ref: '/schemas/types.yaml#/definitions/phandle'
++    $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+       phandle to the peer hub on the controller.
+ 
+ required:
+-  - peer-hub
+   - compatible
+   - reg
++  - reset-gpios
++  - vdd-supply
++  - peer-hub
+ 
+ additionalProperties: false
+ 
+@@ -45,7 +48,6 @@ examples:
+     #include <dt-bindings/gpio/gpio.h>
+ 
+     usb {
+-        dr_mode = "host";
+         #address-cells = <1>;
+         #size-cells = <0>;
  
 -- 
 2.38.1
