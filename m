@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB70667B1A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C71967B1A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235532AbjAYLjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:39:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S235662AbjAYLkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235462AbjAYLjg (ORCPT
+        with ESMTP id S235691AbjAYLjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:39:36 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56334274B3;
-        Wed, 25 Jan 2023 03:39:15 -0800 (PST)
-Date:   Wed, 25 Jan 2023 11:39:12 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674646753;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Wed, 25 Jan 2023 06:39:44 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10B0CA29;
+        Wed, 25 Jan 2023 03:39:27 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 64AD61FEB4;
+        Wed, 25 Jan 2023 11:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674646766; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1jBboM+ctgRrhBN99GTml3A4jV37DjryvctriP0Q0cM=;
-        b=vzqOFQBCgZtlsCsbG6BpGjcRPU45yaucN62K81vcmNpZpU4BDXIH4sv8xXJiovycU5R+rr
-        FJxeQ5t+8YrHMx7pw9jGUnWR6BuyPP8MOAkmC/QiBR0ioeF+HQ+Xl3f0GOpgmK4JSxlZwB
-        xPz0Wf2mJC3M2kyZtS2/BbmxtI4dI+RctTlvFbpfDRSLrdgpId7epige1qmWPBmO3nYeSM
-        HPPeaNxuQxeVJCxukdysX4TJq85egrpF4il0vlrkN7M2B5ppa/70rICUzOJU0GqvRbDjmF
-        MzlzKrWPRdgnJXXkU5mQia+CivpTdBG+p8OlfoJ9kjvoLwbLYstDvbOI0NJWEQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674646753;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1jBboM+ctgRrhBN99GTml3A4jV37DjryvctriP0Q0cM=;
-        b=3TIuWSeq9hVMbJZ0RRyhM6lXE73h4h7Akfr6dfn3cdQsUDX1xKK50e9781j7eulXVJjtR9
-        tVFu0EQDfES63PAA==
-From:   "tip-bot2 for Jens Axboe" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/fpu] x86/fpu: Don't set TIF_NEED_FPU_LOAD for PF_IO_WORKER threads
-Cc:     Jens Axboe <axboe@kernel.dk>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <560c844c-f128-555b-40c6-31baff27537f@kernel.dk>
-References: <560c844c-f128-555b-40c6-31baff27537f@kernel.dk>
+        bh=Oqqka9Owzafd2X56BISD/lkkMSHTDdTB9S6csfU4aLY=;
+        b=KYsnXNxxrnUiZeznqoi+EbhT2L0rtf5QYqic6aQTX5P5VQ1STxtKjbDnMPgtlg7/Y1p61L
+        KvRwG/pY12Ow/MVHYy249SOWJfTwl35GWdrSy9yvyhUV3hBWnCJBOumPvpNF2+dJ1WFAWP
+        qn7IAe/rCU0k7ivrlr77GeNUyPbpS2M=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 432E61339E;
+        Wed, 25 Jan 2023 11:39:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Uts0D+4U0WNkZAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 25 Jan 2023 11:39:26 +0000
+Date:   Wed, 25 Jan 2023 12:39:25 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+Message-ID: <Y9EU7awmpZaqbFtP@dhcp22.suse.cz>
+References: <20230125073502.743446-1-leobras@redhat.com>
+ <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+ <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
 MIME-Version: 1.0
-Message-ID: <167464675263.4906.14890690259469588852.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,70 +69,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/fpu branch of tip:
+On Wed 25-01-23 08:06:46, Leonardo Brás wrote:
+> On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
+> > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
+> > > Disclaimer:
+> > > a - The cover letter got bigger than expected, so I had to split it in
+> > >     sections to better organize myself. I am not very confortable with it.
+> > > b - Performance numbers below did not include patch 5/5 (Remove flags
+> > >     from memcg_stock_pcp), which could further improve performance for
+> > >     drain_all_stock(), but I could only notice the optimization at the
+> > >     last minute.
+> > > 
+> > > 
+> > > 0 - Motivation:
+> > > On current codebase, when drain_all_stock() is ran, it will schedule a
+> > > drain_local_stock() for each cpu that has a percpu stock associated with a
+> > > descendant of a given root_memcg.
+> > > 
+> > > This happens even on 'isolated cpus', a feature commonly used on workloads that
+> > > are sensitive to interruption and context switching such as vRAN and Industrial
+> > > Control Systems.
+> > > 
+> > > Since this scheduling behavior is a problem to those workloads, the proposal is
+> > > to replace the current local_lock + schedule_work_on() solution with a per-cpu
+> > > spinlock.
+> > 
+> > If IIRC we have also discussed that isolated CPUs can simply opt out
+> > from the pcp caching and therefore the problem would be avoided
+> > altogether without changes to the locking scheme. I do not see anything
+> > regarding that in this submission. Could you elaborate why you have
+> > abandoned this option?
+> 
+> Hello Michal,
+> 
+> I understand pcp caching is a nice to have.
+> So while I kept the idea of disabling pcp caching in mind as an option, I first
+> tried to understand what kind of impacts we would be seeing when trying to
+> change the locking scheme.
+> 
+> After I raised the data in the cover letter, I found that the performance impact
+> appears not be that big. So in order to try keeping the pcp cache on isolated
+> cpus active, I decided to focus effort on the locking scheme change.
+> 
+> I mean, my rationale is: if is there a non-expensive way of keeping the feature,
+> why should we abandon it?
 
-Commit-ID:     cb3ea4b7671b7cfbac3ee609976b790aebd0bbda
-Gitweb:        https://git.kernel.org/tip/cb3ea4b7671b7cfbac3ee609976b790aebd0bbda
-Author:        Jens Axboe <axboe@kernel.dk>
-AuthorDate:    Tue, 24 Jan 2023 08:23:20 -07:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Wed, 25 Jan 2023 12:35:15 +01:00
+Because any locking to pcp adds a potential contention. You haven't been
+able to trigger that contention by your testing but that doesn't really
+mean it is non-existent.
 
-x86/fpu: Don't set TIF_NEED_FPU_LOAD for PF_IO_WORKER threads
+Besided that opt-out for isolated cpus should be a much smaller change
+with a much more predictable behavior. The overall performance for
+charging on isolated cpus will be slightly worse but it hasn't been seen
+this is anything really noticeable. Most workloads which do care about
+isolcpus tend to not enter kernel much AFAIK so this should have
+relatively small impact.
 
-We don't set it on PF_KTHREAD threads as they never return to userspace,
-and PF_IO_WORKER threads are identical in that regard. As they keep
-running in the kernel until they die, skip setting the FPU flag on them.
-
-More of a cosmetic thing that was found while debugging and
-issue and pondering why the FPU flag is set on these threads.
-
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/560c844c-f128-555b-40c6-31baff27537f@kernel.dk
----
- arch/x86/include/asm/fpu/sched.h | 2 +-
- arch/x86/kernel/fpu/context.h    | 2 +-
- arch/x86/kernel/fpu/core.c       | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/include/asm/fpu/sched.h b/arch/x86/include/asm/fpu/sched.h
-index b2486b2..c2d6cd7 100644
---- a/arch/x86/include/asm/fpu/sched.h
-+++ b/arch/x86/include/asm/fpu/sched.h
-@@ -39,7 +39,7 @@ extern void fpu_flush_thread(void);
- static inline void switch_fpu_prepare(struct fpu *old_fpu, int cpu)
- {
- 	if (cpu_feature_enabled(X86_FEATURE_FPU) &&
--	    !(current->flags & PF_KTHREAD)) {
-+	    !(current->flags & (PF_KTHREAD | PF_IO_WORKER))) {
- 		save_fpregs_to_fpstate(old_fpu);
- 		/*
- 		 * The save operation preserved register state, so the
-diff --git a/arch/x86/kernel/fpu/context.h b/arch/x86/kernel/fpu/context.h
-index 958accf..9fcfa5c 100644
---- a/arch/x86/kernel/fpu/context.h
-+++ b/arch/x86/kernel/fpu/context.h
-@@ -57,7 +57,7 @@ static inline void fpregs_restore_userregs(void)
- 	struct fpu *fpu = &current->thread.fpu;
- 	int cpu = smp_processor_id();
- 
--	if (WARN_ON_ONCE(current->flags & PF_KTHREAD))
-+	if (WARN_ON_ONCE(current->flags & (PF_KTHREAD | PF_IO_WORKER)))
- 		return;
- 
- 	if (!fpregs_state_valid(fpu, cpu)) {
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index 9baa89a..2babc53 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -426,7 +426,7 @@ void kernel_fpu_begin_mask(unsigned int kfpu_mask)
- 
- 	this_cpu_write(in_kernel_fpu, true);
- 
--	if (!(current->flags & PF_KTHREAD) &&
-+	if (!(current->flags & (PF_KTHREAD | PF_IO_WORKER)) &&
- 	    !test_thread_flag(TIF_NEED_FPU_LOAD)) {
- 		set_thread_flag(TIF_NEED_FPU_LOAD);
- 		save_fpregs_to_fpstate(&current->thread.fpu);
+All that being said I would prefer a simpler solution which seems to be
+to simply opt out from pcp caching and if the performance for real
+world workloads shows regressions then we can start thinking about a
+more complex solution.
+-- 
+Michal Hocko
+SUSE Labs
