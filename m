@@ -2,108 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16D667B285
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C332C67B288
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235499AbjAYMTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 07:19:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
+        id S234627AbjAYMXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 07:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235566AbjAYMTI (ORCPT
+        with ESMTP id S235089AbjAYMWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 07:19:08 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8303F72BD;
-        Wed, 25 Jan 2023 04:19:07 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.165.226])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 25 Jan 2023 07:22:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B70A72BD;
+        Wed, 25 Jan 2023 04:22:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 613ED6602E43;
-        Wed, 25 Jan 2023 12:18:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674649145;
-        bh=8pBnnWTRCzJetctu8Nbw6JJEIemO40Oj4vUcQtXcfGg=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=F7KhLA2McNOeHM6FUER+Uc9UkGtMLFCI26a93xGU8BG4e6doRmku8xHSzd5DA4Ljx
-         arLliEsGKg6V/CdUqjU8gxw49K+M8pa+vvQpCZ7KRerOTYvZHCLBwQ38BYlNH13Yus
-         7lzwaWY4LgfVpe8M0dpRTiWk+IyPQvLHduULFtbtPYCmM24EZVvmxrGLnvbJOZ/2am
-         Z1P788FsylIi0qw+ncIPPhORHQg+uHsiu2XWPpAE1s3REKdL4A3Nb88vqQahtVGUfp
-         KRUun+8gUwAf98n7c3I8EAC3NLMyx4NprwEW+wsGmnImeNqKhsdBSqRoV1t8TQVGCG
-         vXHWXGurCPdlw==
-Message-ID: <1310badc-5fcd-dc98-9b5c-85044c6c7083@collabora.com>
-Date:   Wed, 25 Jan 2023 17:18:52 +0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 259F0B8199F;
+        Wed, 25 Jan 2023 12:22:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40A05C433D2;
+        Wed, 25 Jan 2023 12:22:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674649368;
+        bh=vWlk6Pf2n+qySYXb7Jo8S4jGyJymWOjnRGQIVh7XVy4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lyGyLr8exeibpwwo7uart4zLX/2LvXCSzdZOrbS34B9uV0MFss8Dgkr5+q0bunFsO
+         SC9JDdVGISelH6NYeZ4K0VEn1vf3uncQMfMSepGdPrtgUWJKyz/NwCf1vIcvak2YWF
+         7ZnPq6lr8g6HKMOo8Xqi/cKsCVdpfTQHLY8akEMM=
+Date:   Wed, 25 Jan 2023 13:22:45 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Viken Dadhaniya <vdadhani@qti.qualcomm.com>
+Cc:     "Viken Dadhaniya (QUIC)" <quic_vdadhani@quicinc.com>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Mukesh Savaliya (QUIC)" <quic_msavaliy@quicinc.com>,
+        "Vijaya Krishna Nivarthi (Temp) (QUIC)" <quic_vnivarth@quicinc.com>,
+        "Visweswara Tanuku (QUIC)" <quic_vtanuku@quicinc.com>,
+        "Aniket RANDIVE (QUIC)" <quic_arandive@quicinc.com>
+Subject: Re: [PATCH V1 1/1] Serial: core: Add compat ioctl support
+Message-ID: <Y9EfFQ33Mpms3tTF@kroah.com>
+References: <20221222044925.27846-1-quic_vdadhani@quicinc.com>
+ <Y6Pv5WWtM63DwCAl@kroah.com>
+ <PH0PR02MB7431B1CA343760B422D34B97EBCE9@PH0PR02MB7431.namprd02.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v7 1/4] userfaultfd: Add UFFD WP Async support
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230109064519.3555250-1-usama.anjum@collabora.com>
- <20230109064519.3555250-2-usama.anjum@collabora.com> <Y8gkY8OlnOwvlkj4@x1n>
- <0bed5911-48b9-0cc2-dfcf-d3bc3b0e8388@collabora.com> <Y8lxW5YtD6MX61WD@x1n>
- <Y8qq0dKIJBshua+X@x1n> <328f54c1-171f-22a1-10c9-8b7a25bd8027@collabora.com>
- <Y9AUsCxgitOI2lUA@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y9AUsCxgitOI2lUA@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR02MB7431B1CA343760B422D34B97EBCE9@PH0PR02MB7431.namprd02.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 10:26 PM, Peter Xu wrote:
-> On Mon, Jan 23, 2023 at 03:11:20PM +0500, Muhammad Usama Anjum wrote:
->>> One thing worth mention is, I think for async wp it doesn't need to be
->>> restricted by UFFD_USER_MODE_ONLY, because comparing to the sync messages
->>> it has no risk of being utilized for malicious purposes.
->> I think with updated handling path updated in do_wp_page() and
->> wp_huge_pmd() in version, UFFD_USER_MODE_ONLY will not affect us.
+On Wed, Jan 25, 2023 at 11:27:49AM +0000, Viken Dadhaniya wrote:
+> Hi Greg,
 > 
-> This is more or less a comment for the design, the new code should work (by
-> bypassing handle_userfaultfd(), where this bit was checked).
-> 
-> We'll need an man page update if this feature will be merged [1], and if so
-> it'll need to be updated for the UFFD_USER_MODE_ONLY section regarding to
-> async uffd-wp support too.  I think that can also be worked out after the
-> series being accepted first, so just a heads up.
-> 
-> [1] https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git
-Thank you for explaining it. Definitely, we'll update the man pages after
-the change has been merged. I've added it to my notes.>
+> Please find response inline.
 
--- 
-BR,
-Muhammad Usama Anjum
+As they should be :)
+
+> > -----Original Message-----
+> > From: Greg KH <gregkh@linuxfoundation.org>
+> > Sent: Thursday, December 22, 2022 11:19 AM
+> > To: Viken Dadhaniya (QUIC) <quic_vdadhani@quicinc.com>
+> > Cc: jirislaby@kernel.org; linux-serial@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; Mukesh Savaliya (QUIC) <quic_msavaliy@quicinc.com>;
+> > Vijaya Krishna Nivarthi (Temp) (QUIC) <quic_vnivarth@quicinc.com>; Visweswara
+> > Tanuku (QUIC) <quic_vtanuku@quicinc.com>; Aniket RANDIVE (QUIC)
+> > <quic_arandive@quicinc.com>
+> > Subject: Re: [PATCH V1 1/1] Serial: core: Add compat ioctl support
+
+That's horrible, please fix your email client.
+
+> > How was this tested?  What is currently broken that now works properly (or the
+> > other way around?)
+> >
+> 
+> We are running 32-bit user-space application on 64-bit kernel, and vendor specific ioctl command issued by application is not reaching the vendor driver.
+> Without these changes, the IOCTL call was returning from the tty framework rather than reaching to the vendor driver. IOCTL call is successfully reaching the vendor uart driver via tty framework after adding compat ioctl and functionality is working as expected and below is the dump stack with compat ioctl.
+
+What in-kernel tty ioctl is having a problem that a compat ioctl layer
+is needed?  Let's fix that up.
+
+As you know, we can't do anything about out-of-tree drivers.  Nor do you
+want us to, so this really feels like a broken driver, it should NOT be
+creating random new ioctls on the tty device node, that is NOT what it
+is there for.
+
+> [ 1265.554002] Hardware name: Qualcomm Technologies, Inc. Monaco IDP V1.0 (DT)
+> [ 1265.554008] Call trace:
+> [ 1265.554011] dump_backtrace.cfi_jt+0x0/0x8
+> [ 1265.554023] show_stack+0x1c/0x2c
+> [ 1265.554032] dump_stack_lvl+0x80/0xc8
+> [ 1265.554041] dump_stack+0x1c/0x2c
+> [ 1265.554049] msm_geni_serial_ioctl+0x2cc/0x3d0 [msm_geni_serial]
+
+This function is not in our kernel tree, so it looks to be a bug in that
+driver, sorry.  Do NOT paper over out-of-tree driver bugs in the core
+kernel (hint, are you sure you are even allowed to do that?)
+
+> [ 1265.554099] uart_ioctl+0x1a4/0x1d8
+> [ 1265.554109] uart_compat_ioctl+0x14/0x28
+> [ 1265.554117] tty_compat_ioctl+0x1a8/0x2dc
+> [ 1265.554125] __arm64_compat_sys_ioctl+0x158/0x1d0
+> [ 1265.554132] invoke_syscall+0x60/0x150
+> [ 1265.554140] el0_svc_common.llvm.3148309083493694862+0xc8/0x114
+> [ 1265.554148] do_el0_svc_compat+0x20/0x30
+> [ 1265.554154] el0_svc_compat+0x28/0x90
+> [ 1265.554162] el0t_32_sync_handler+0x7c/0xbc
+> [ 1265.554169] el0t_32_sync+0x1b8/0x1bc
+>  
+> > This patch implies that _every_ driver with an ioctl must create a
+> > compat_ioctl() callback, are you sure that is the case?
+> > 
+> 
+> this depends on user application and kernel version. for 32-bit application to run on 64-bit kernel, compat_ioctl is requried.
+
+Again, what in-tree tty ioctls are affected by this?
+
+thanks,
+
+greg k-h
