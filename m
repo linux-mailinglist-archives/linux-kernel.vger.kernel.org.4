@@ -2,133 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7420C67B6ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C3267B6F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235481AbjAYQ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
+        id S235020AbjAYQbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234844AbjAYQ1K (ORCPT
+        with ESMTP id S230188AbjAYQbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:27:10 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2026.outbound.protection.outlook.com [40.92.107.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB0E13D5F;
-        Wed, 25 Jan 2023 08:26:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Oh5nNppO+f925Lyv9uT34oZkGTsqJY+a1PZTinCvhA8Cyi/zp5IyAcslVkjEOw3Y0jzrt7U/fK68rjOThsHjRS+5qwLlI2WFmFwwzcagUYLWgxslPIumsbQp2l4lW22gNywa+R5dYR9MJ84OcGObnjT7xt0OmDx7jdIhdoFxJm0KtjSVU9mtv8LjbVm0CZqEVkfwUohK6uvdA99Fjzr84DPT8EN2zDzB+X5XpeK8SdyQwOZrPOMEq94CRiqKdvqWuNIjmIysPRBaQTKuC8Mfdxz//fJQOHVfg4YWFeJxxanusIRnGBevEfkczufTmIrMnpFXZdlHOXV/x4y8392DdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o/x2N2jdglW/FWBEjKI4Idb/FU5Fp+Ub0dKji/v8rSc=;
- b=WRuEJFubRY2ygbM2hDJgZ413Q6ueVLKNt55GJAg3/Mc6iobMn/d9kwOtXYuNNbgMtwK+p/sTGbxSsRtFs83pR/tXwUVEvbVc896GjLr/AcyzwWXxwaAtN77QY8hentuzAxQT4/GWAhjN+XLi625m2+TqB/rwvcAD2iRNAU74rUS10iB5beuyUzC1hwgauQVxU5IsP0ugApOko2e+Hct3mXguQys9l2Z/4ptPCQ87u+uy4QVkiQY92lX78IYlg9Q70IcYZ9p5OaX02mRoi/Z99wAX4xRr+7gPbqgT/oc9k4xjKdyEu2aBsiravKzFss+pE0tRAksWwZEiDFRm/9Ezjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o/x2N2jdglW/FWBEjKI4Idb/FU5Fp+Ub0dKji/v8rSc=;
- b=inQI0HQjckybmrxg5nu0ER38FAHZVWxRg6oaqqcFiMJEBleFsg589UwbHKip9VGEBG0+gyi35YpNdDW8AKugARMOMEdLyw5+aNteLQSa9y4UxlK/Vn+zffR+1FNvURs9frjCprwLOiMwNeeHmHJ3SAKZxe3VpIC9w884r/y0z5SJ3JUxh2NBjzJ2juQcSHsvEyKiT/McweF1BzxipdrRrXKhz8m0HzzmSKzE2bgXOf0EwyOQiufZZ5dD1SNMDON0Xdr01XvHhD24KHLvPvbNnkNWDB9bOmGfUHanhKhIiYcJ4JbawnMlqtbbcwZR6RXP6YRh1y0YmLesT29K4/k/PA==
-Received: from SG2PR02MB4090.apcprd02.prod.outlook.com (2603:1096:4:a4::16) by
- TYZPR02MB5868.apcprd02.prod.outlook.com (2603:1096:400:1f9::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.21; Wed, 25 Jan
- 2023 16:26:55 +0000
-Received: from SG2PR02MB4090.apcprd02.prod.outlook.com
- ([fe80::ef9f:f14:b935:7b92]) by SG2PR02MB4090.apcprd02.prod.outlook.com
- ([fe80::ef9f:f14:b935:7b92%6]) with mapi id 15.20.6043.021; Wed, 25 Jan 2023
- 16:26:55 +0000
-Message-ID: <SG2PR02MB40905C54F83BE73B4E6E17EFD7CE9@SG2PR02MB4090.apcprd02.prod.outlook.com>
-Date:   Thu, 26 Jan 2023 00:26:52 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: BUG: crash after suspending
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-References: <SG2PR02MB4090B1F3E5EC0B7FCCC01807D7CE9@SG2PR02MB4090.apcprd02.prod.outlook.com>
- <Y9DpQGj+9FZglZjo@kuha.fi.intel.com>
-Content-Language: en-US
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Fan Chengwei <fancieux@outlook.com>
-In-Reply-To: <Y9DpQGj+9FZglZjo@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN:  [1FkdXx34a1JyG5LcKsEpepcI1OfMIVTCINJu6SJEUKUwZqqQtLM+UgUdypjzpwIA]
-X-ClientProxiedBy: SI2PR01CA0041.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::15) To SG2PR02MB4090.apcprd02.prod.outlook.com
- (2603:1096:4:a4::16)
-X-Microsoft-Original-Message-ID: <70f0dc21-bd19-82d4-b5e3-78e5772eeafc@outlook.com>
+        Wed, 25 Jan 2023 11:31:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2731043F
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:30:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674664245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JBeDLOHoOES+39Ztu3Hollt0jQ+hn2zacalI5JTrttM=;
+        b=dHi5mEzuVTG1Eo+DiQgDA4sQ0pMF5VAqCi9/dvRlqET8cl9USpaSr2wWjEQ7py7FAIQJC5
+        I1JtqjEmgSQCIYdOSsvA1S7mVHSv00oXrmaUzMmNosiVxm841sonG6AQFsWG68vz1B7aZQ
+        x+XQRTL4K5iYNjFP8hGELg72qXrqMn8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-ICb2TN-RPS6mJxRLcrPizA-1; Wed, 25 Jan 2023 11:30:41 -0500
+X-MC-Unique: ICb2TN-RPS6mJxRLcrPizA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 33282101A521;
+        Wed, 25 Jan 2023 16:30:41 +0000 (UTC)
+Received: from localhost (unknown [10.39.195.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1987614171BB;
+        Wed, 25 Jan 2023 16:30:39 +0000 (UTC)
+From:   Giuseppe Scrivano <gscrivan@redhat.com>
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     linux-kernel@vger.kernel.org, keescook@chromium.org,
+        bristot@redhat.com, ebiederm@xmission.com, brauner@kernel.org,
+        viro@zeniv.linux.org.uk, alexl@redhat.com, peterz@infradead.org,
+        bmasney@redhat.com
+Subject: Re: [PATCH v3 1/2] exec: add PR_HIDE_SELF_EXE prctl
+References: <20230120102512.3195094-1-gscrivan@redhat.com>
+        <20230124015348.6rvic5g6ymsfvj4e@senku> <87h6wgcrv6.fsf@redhat.com>
+        <20230125152847.wr443tggzb3no6mg@senku>
+Date:   Wed, 25 Jan 2023 17:30:37 +0100
+In-Reply-To: <20230125152847.wr443tggzb3no6mg@senku> (Aleksa Sarai's message
+        of "Thu, 26 Jan 2023 02:28:47 +1100")
+Message-ID: <871qnibmqa.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR02MB4090:EE_|TYZPR02MB5868:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9c305e3e-024a-46a7-4296-08dafef0f927
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EYKdbd2AA1iXCYMG2ZyOJQn860MS8VTN7TykyJsdChfwd5mUqiWYMeV1IiKTa3aOCmIPcds7ennwsJvDNzRuC6NZqaZgsgJHEeVHMwmuK3Cy+mJM9AnTRJnxOCtGgbTjcx9G4kwshtdMIArGqNKH7gxISllRsMQMvXFnhj3CpZwBe5MYSJiV73opQfE+IB+lH7V7kUhwvouF8tAPJGaF0dX1jI29GbXy/vQ1O1Xj7TX4xuVgzPAAxQEDlddroyJ6mTSetxHFgQFRUEHAAIAGFAWV36K+q9hqPDGKdzjFBMJ32ekHY/QksHFjQkH8fl8RKZJM6g5Ro3s5GiJrbLLzJpTXf0ohXNA5/BhmuLw7NcC3gBWWgFG768UZwRjJh5dow8NPlfu7kBflV69hjvs7DG4jJcdfYDWwPdkV8Zxtwg6X0GJVVHX6lMO/OnmHHKL4NsaaZevUyONF2OLfZbhoLI4ryPt+HDx6WbOpl9fcE861wGMT1uj3EoG7Ea+nUg5HropwpztGsqcK9nnOiRraKp8bHvyiGPYCjyHW6SJFDsUrdfh4Bs+ZfvKd96oZjwxBkf9bQRPWScmEr9qvjGejlQ29QjXdJZdxVV92Qu+OPi5wRMw4wR2TNgWmtt1YWG5upc4haJ27SobNWuSPxpdtwg==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WnoxQjBDWEx5Y1NQRjZSNTNtb2d4amZhZGF4OEw2MG1mbnVNWm1NeVFEUmNz?=
- =?utf-8?B?eWFzMDQybm82NFlRTUdERm5rZ3J6U2s1RTdhZEgxSGRJZldObmFvWS8xTmNz?=
- =?utf-8?B?eEI5UWdNTWlHdEhMdXlib21wcVRNRTJkUlRhV3ExMCtnQlNvOW92S0kvU1hQ?=
- =?utf-8?B?dFI4K2hIV3hKa2M4YnJBd3gvZ1dZdlBKdFlmdWNqVnhMbG9oNHFiWFM4TXdY?=
- =?utf-8?B?YUs1TWZ2Q1A2QmkvVXdVZGg2ZmFtTUNWbm8rb0lrQmFwNXJZT3RqQStyTzg5?=
- =?utf-8?B?UWxCRlkwMEJUeTZWd3JxbXVRK0g1UnVNS0xaQ09mak94SEVWcWg2d0dwZlQ2?=
- =?utf-8?B?N01IRW55bDg1MTA5cXlPei9JL2RpTHBpWDhSN2QvQVE3VUYwVTZxMmd5Q1VE?=
- =?utf-8?B?akVxcnk0ZEVJeG9JenFKN0FzN0FFazJvU1YxKzA0M0V6ajhIZEdSYVZrZ0dE?=
- =?utf-8?B?M015TzF1ZHI0bUcrT0RnZjRyZjRzcHpLQ1g4ZUE0RStzQnhvM2JhVGFHR2Vi?=
- =?utf-8?B?bDJxdkZXSUxoYzh3b1RRVSthWThmS1ozMURWMG5tWHEwRTdOWFdHdmlUSTFo?=
- =?utf-8?B?TmtxM1k5UWdMOTNwZDlWMzJHUUdmakZTSXZnSDh2dTdrckFtK05PVWVGQ28x?=
- =?utf-8?B?UHhBVzhMT2xUSzBmQ1JHYVBGcW5vaWRIeDd6VGpXQ1VYR2oramhXbXo0RU8y?=
- =?utf-8?B?U3VrM2hVMWs1cjhaY3Q3emd2RzhFR2doRHBWaXFVdzRLZGtsekpNYXFCZk1s?=
- =?utf-8?B?V2lKTjIxWmM3WlMwR2J0RUkwL0V1eThSaTA1bnFucW9Qb0xURWFpY1RoYmNX?=
- =?utf-8?B?MWdUZE1rWXMvK2hyNHVndi81R0ZzUXdHOG1HYW9XQ3hrYVlzeVN0dllwVzRq?=
- =?utf-8?B?UUZKQUpZU1ViTE5rY2tId2wwSGNpcFJjK0hsMUttY0xHMjZ5YWJuRDd4TlZ1?=
- =?utf-8?B?WnpvTnFvaEtMV2JtS3Y1NTZPQ0dDTExpOVJzZlc2SGgycXkwejJNUnA0UmZV?=
- =?utf-8?B?Q3pMMWIvQnMybytEVVBQTlEwYS8vVitlc25rc1R1c05IVEROa050SFZsR0xH?=
- =?utf-8?B?V2pMamN1YkV4cTNGcmJuYm9DOHN2U1RrUEd4ZkhuVnEwYWVtUWRKQms0RUIz?=
- =?utf-8?B?TEFpWFZ0Vllhem9aU2dhNHg2ekRMMWRBcWt0YmQyMGMxRC9kd0l4UWFTT2NU?=
- =?utf-8?B?VnZyRHNyYmV5cWxGdE1qUnY2dW03U3U4dk4raHUraHdNZk9OWkREVEZxZlQv?=
- =?utf-8?B?MjQ1TFZhMHlWU21kajBwQzM2Vjh0SmJDeVlmc1drMXNPQ3M2K1dhVDdsRG5w?=
- =?utf-8?B?am1EQlcyZk9RRkRLQ29DcEZjczh6OHBuTzRvVlVuVE9nU2ovSmVoc0dOM1dt?=
- =?utf-8?B?WjNoMURxU09LbUR0VTlEenBFU2Fac2hlVkcxeGg4bjBZNWtzN2ZjdHlyTXlN?=
- =?utf-8?B?THg2MGVraVhMeFJHUGoxY1QzUzJ6WW9hT0xTRExNVk5vanJrdWx2Ykl1Wmpy?=
- =?utf-8?B?bXZCZU9NUXNaV2N1ZTJZKytuN3RFK2NYR0pyVHQ4QkhrTlQ5VHV3cTNlNmhZ?=
- =?utf-8?B?K1UwOWljWElYc01qL2lzMllPWk1Fc2syQm9nTTZVU0FRY2o3UVNrb2Y5c21J?=
- =?utf-8?B?M1AyWFA3aUhJVXZFdGVXYkdpK2p3b0Yzbk1kQWNHelhaZXg0cXFLOWR4N2Nj?=
- =?utf-8?B?di9aMVJSaEFoem9td0piblJBY2JSdDJVL3FaQWZiSTFSTm94V1JzRHlyczY4?=
- =?utf-8?B?ampmS1pOdzBmWnpaV2loWDhvLzkvR095U3YrTE92dkoxRy9EdkQ0ODZsSkUv?=
- =?utf-8?B?WTkvTDlzV0FlalhEbDhwUT09?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c305e3e-024a-46a7-4296-08dafef0f927
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR02MB4090.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 16:26:55.7989
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR02MB5868
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Aleksa Sarai <cyphar@cyphar.com> writes:
 
+> On 2023-01-24, Giuseppe Scrivano <gscrivan@redhat.com> wrote:
+>> Aleksa Sarai <cyphar@cyphar.com> writes:
+>> 
+>> > On 2023-01-20, Giuseppe Scrivano <gscrivan@redhat.com> wrote:
+>> >> This patch adds a new prctl called PR_HIDE_SELF_EXE which allows
+>> >> processes to hide their own /proc/*/exe file. When this prctl is
+>> >> used, every access to /proc/*/exe for the calling process will
+>> >> fail with ENOENT.
+>> >> 
+>> >> This is useful for preventing issues like CVE-2019-5736, where an
+>> >> attacker can gain host root access by overwriting the binary
+>> >> in OCI runtimes through file-descriptor mishandling in containers.
+>> >> 
+>> >> The current fix for CVE-2019-5736 is to create a read-only copy or
+>> >> a bind-mount of the current executable, and then re-exec the current
+>> >> process.  With the new prctl, the read-only copy or bind-mount copy is
+>> >> not needed anymore.
+>> >> 
+>> >> While map_files/ also might contain symlinks to files in host,
+>> >> proc_map_files_get_link() permissions checks are already sufficient.
+>> >
+>> > I suspect this doesn't protect against the execve("/proc/self/exe")
+>> > tactic (because it clears the bit on execve), so I'm not sure this is
+>> > much safer than PR_SET_DUMPABLE (yeah, it stops root in the source
+>> > userns from accessing /proc/$pid/exe but the above attack makes that no
+>> > longer that important).
+>> 
+>> it protects against that attack too.  It clears the bit _after_ the
+>> execve() syscall is done.
+>> 
+>> If you attempt execve("/proc/self/exe") you still get ENOENT:
+>> 
+>> ```
+>> #include <stdlib.h>
+>> #include <stdio.h>
+>> #include <sys/prctl.h>
+>> #include <unistd.h>
+>> 
+>> int main(void)
+>> {
+>>         int ret;
+>> 
+>>         ret = prctl(65, 1, 0, 0, 0);
+>>         if (ret != 0)
+>>                 exit(1);
+>> 
+>>         execl("/proc/self/exe", "foo", NULL);
+>>         exit(2);
+>> }
+>> ```
+>> 
+>> # strace -e prctl,execve ./hide-self-exe
+>> execve("./hide-self-exe", ["./hide-self-exe"], 0x7fff975a3690 /* 39 vars */) = 0
+>> prctl(0x41 /* PR_??? */, 0x1, 0, 0, 0)  = 0
+>> execve("/proc/self/exe", ["foo"], 0x7ffcf51868b8 /* 39 vars */) = -1 ENOENT (No such file or directory)
+>> +++ exited with 2 +++
+>> 
+>> I've also tried execv'ing with a script that uses "#!/proc/self/exe" and
+>> I get the same ENOENT.
+>
+> Ah, you're right. As you mentioned, you could still do the attack
+> through /proc/self/map_files but that would require you to know where
+> the binary will be located (and being non-dumpable blocks container
+> processes from doing tricks to get the right path).
+>
+> I wonder if we should somehow require (or auto-apply) SUID_DUMP_NONE
+> when setting this prctl, since it does currently depend on it to be
+> properly secure...
 
-On 1/25/23 16:33, Heikki Krogerus wrote:
-> Hi,
-> 
-> The information you just gave is very useful. Thank you!
-> 
-> I'm still not completely sure if I understand the problem, but I'm
-> attaching a patch. Can you test it?
-> 
-> I'll also attach it to the bug.
-> 
-> thanks,
-> 
-It looks like the patch worked, and the original bug doesn't show up on 
-my laptop. Thank you.
+from what I can see, access to /proc/*/map_files is already protected
+by proc_map_files_get_link() that requires either CAP_SYS_ADMIN in the
+initial user namespace or CAP_CHECKPOINT_RESTORE in the user namespace.
+
+Setting SUID_DUMP_NONE wouldn't hurt though :-)
+
+After reading some comments on the LWN.net article, I wonder if
+PR_HIDE_SELF_EXE should apply to CAP_SYS_ADMIN in the initial user
+namespace or if in this case root should keep the privilege to inspect
+the binary of a process.  If a container runs with that many privileges
+then it has already other ways to damage the host anyway.
+
+>> > I think the only way to fix this properly is by blocking re-opens of
+>> > magic links that have more permissions than they originally did. I just
+>> > got back from vacation, but I'm working on fixing up [1] so it's ready
+>> > to be an RFC so we can close this hole once and for all.
+>> 
+>> so that relies on the fact opening /proc/self/exe with O_WRONLY fails
+>> with ETXTBSY?
+>
+> Not quite, it relies on the fact that /proc/self/exe (and any other
+> magiclink to /proc/self/exe) does not have a write mode (semantically,
+> because of -ETXTBSY) and thus blocks any attempt to open it (or re-open
+> it) with a write mode. It also fixes some other possible issues and lets
+> you have upgrade masks (a-la capabilities) to file descriptors.
+>
+> Ultimately I think having a complete "no really, nobody can touch this"
+> knob is also a good idea, and as this is is much simpler we can it in
+> much quicker than the magiclink stuff (which I still think is necessary
+> in general).
+>
+>> > [1]: https://github.com/cyphar/linux/tree/magiclink/open_how-reopen
+>> >
+>> >> 
+>> >> Signed-off-by: Giuseppe Scrivano <gscrivan@redhat.com>
+>> >> ---
+>> >> v2: https://lkml.org/lkml/2023/1/19/849
+>> >> 
+>> >> Differences from v2:
+>> >> 
+>> >> - fixed the test to check PR_SET_HIDE_SELF_EXE after fork
+>> >> 
+>> >> v1: https://lkml.org/lkml/2023/1/4/334
+>> >> 
+>> >> Differences from v1:
+>> >> 
+>> >> - amended more information in the commit message wrt map_files not
+>> >>   requiring the same protection.
+>> >> - changed the test to verify PR_HIDE_SELF_EXE cannot be unset after
+>> >>   a fork.
+>> >> 
+>> >> fs/exec.c                        | 1 +
+>> >>  fs/proc/base.c                   | 8 +++++---
+>> >>  include/linux/sched.h            | 5 +++++
+>> >>  include/uapi/linux/prctl.h       | 3 +++
+>> >>  kernel/sys.c                     | 9 +++++++++
+>> >>  tools/include/uapi/linux/prctl.h | 3 +++
+>> >>  6 files changed, 26 insertions(+), 3 deletions(-)
+>> >> 
+>> >> diff --git a/fs/exec.c b/fs/exec.c
+>> >> index ab913243a367..5a5dd964c3a3 100644
+>> >> --- a/fs/exec.c
+>> >> +++ b/fs/exec.c
+>> >> @@ -1855,6 +1855,7 @@ static int bprm_execve(struct linux_binprm *bprm,
+>> >>  	/* execve succeeded */
+>> >>  	current->fs->in_exec = 0;
+>> >>  	current->in_execve = 0;
+>> >> +	task_clear_hide_self_exe(current);
+>> >>  	rseq_execve(current);
+>> >>  	acct_update_integrals(current);
+>> >>  	task_numa_free(current, false);
+>> >> diff --git a/fs/proc/base.c b/fs/proc/base.c
+>> >> index 9e479d7d202b..959968e2da0d 100644
+>> >> --- a/fs/proc/base.c
+>> >> +++ b/fs/proc/base.c
+>> >> @@ -1723,19 +1723,21 @@ static int proc_exe_link(struct dentry *dentry, struct path *exe_path)
+>> >>  {
+>> >>  	struct task_struct *task;
+>> >>  	struct file *exe_file;
+>> >> +	long hide_self_exe;
+>> >>  
+>> >>  	task = get_proc_task(d_inode(dentry));
+>> >>  	if (!task)
+>> >>  		return -ENOENT;
+>> >>  	exe_file = get_task_exe_file(task);
+>> >> +	hide_self_exe = task_hide_self_exe(task);
+>> >>  	put_task_struct(task);
+>> >> -	if (exe_file) {
+>> >> +	if (exe_file && !hide_self_exe) {
+>> >>  		*exe_path = exe_file->f_path;
+>> >>  		path_get(&exe_file->f_path);
+>> >>  		fput(exe_file);
+>> >>  		return 0;
+>> >> -	} else
+>> >> -		return -ENOENT;
+>> >> +	}
+>> >> +	return -ENOENT;
+>> >>  }
+>> >>  
+>> >>  static const char *proc_pid_get_link(struct dentry *dentry,
+>> >> diff --git a/include/linux/sched.h b/include/linux/sched.h
+>> >> index 853d08f7562b..8db32d5fc285 100644
+>> >> --- a/include/linux/sched.h
+>> >> +++ b/include/linux/sched.h
+>> >> @@ -1790,6 +1790,7 @@ static __always_inline bool is_percpu_thread(void)
+>> >>  #define PFA_SPEC_IB_DISABLE		5	/* Indirect branch speculation restricted */
+>> >>  #define PFA_SPEC_IB_FORCE_DISABLE	6	/* Indirect branch speculation permanently restricted */
+>> >>  #define PFA_SPEC_SSB_NOEXEC		7	/* Speculative Store Bypass clear on execve() */
+>> >> +#define PFA_HIDE_SELF_EXE		8	/* Hide /proc/self/exe for the process */
+>> >>  
+>> >>  #define TASK_PFA_TEST(name, func)					\
+>> >>  	static inline bool task_##func(struct task_struct *p)		\
+>> >> @@ -1832,6 +1833,10 @@ TASK_PFA_CLEAR(SPEC_IB_DISABLE, spec_ib_disable)
+>> >>  TASK_PFA_TEST(SPEC_IB_FORCE_DISABLE, spec_ib_force_disable)
+>> >>  TASK_PFA_SET(SPEC_IB_FORCE_DISABLE, spec_ib_force_disable)
+>> >>  
+>> >> +TASK_PFA_TEST(HIDE_SELF_EXE, hide_self_exe)
+>> >> +TASK_PFA_SET(HIDE_SELF_EXE, hide_self_exe)
+>> >> +TASK_PFA_CLEAR(HIDE_SELF_EXE, hide_self_exe)
+>> >> +
+>> >>  static inline void
+>> >>  current_restore_flags(unsigned long orig_flags, unsigned long flags)
+>> >>  {
+>> >> diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
+>> >> index a5e06dcbba13..f12f3df12468 100644
+>> >> --- a/include/uapi/linux/prctl.h
+>> >> +++ b/include/uapi/linux/prctl.h
+>> >> @@ -284,4 +284,7 @@ struct prctl_mm_map {
+>> >>  #define PR_SET_VMA		0x53564d41
+>> >>  # define PR_SET_VMA_ANON_NAME		0
+>> >>  
+>> >> +#define PR_SET_HIDE_SELF_EXE		65
+>> >> +#define PR_GET_HIDE_SELF_EXE		66
+>> >> +
+>> >>  #endif /* _LINUX_PRCTL_H */
+>> >> diff --git a/kernel/sys.c b/kernel/sys.c
+>> >> index 5fd54bf0e886..e992f1b72973 100644
+>> >> --- a/kernel/sys.c
+>> >> +++ b/kernel/sys.c
+>> >> @@ -2626,6 +2626,15 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+>> >>  	case PR_SET_VMA:
+>> >>  		error = prctl_set_vma(arg2, arg3, arg4, arg5);
+>> >>  		break;
+>> >> +	case PR_SET_HIDE_SELF_EXE:
+>> >> +		if (arg2 != 1 || arg3 || arg4 || arg5)
+>> >> +			return -EINVAL;
+>> >> +		task_set_hide_self_exe(current);
+>> >> +		break;
+>> >> +	case PR_GET_HIDE_SELF_EXE:
+>> >> +		if (arg2 || arg3 || arg4 || arg5)
+>> >> +			return -EINVAL;
+>> >> +		return task_hide_self_exe(current) ? 1 : 0;
+>> >>  	default:
+>> >>  		error = -EINVAL;
+>> >>  		break;
+>> >> diff --git a/tools/include/uapi/linux/prctl.h b/tools/include/uapi/linux/prctl.h
+>> >> index a5e06dcbba13..f12f3df12468 100644
+>> >> --- a/tools/include/uapi/linux/prctl.h
+>> >> +++ b/tools/include/uapi/linux/prctl.h
+>> >> @@ -284,4 +284,7 @@ struct prctl_mm_map {
+>> >>  #define PR_SET_VMA		0x53564d41
+>> >>  # define PR_SET_VMA_ANON_NAME		0
+>> >>  
+>> >> +#define PR_SET_HIDE_SELF_EXE		65
+>> >> +#define PR_GET_HIDE_SELF_EXE		66
+>> >> +
+>> >>  #endif /* _LINUX_PRCTL_H */
+>> >> -- 
+>> >> 2.38.1
+>> >> 
+>> 
+
