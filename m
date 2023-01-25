@@ -2,156 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382E967BF49
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:53:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 274E967BF4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjAYVxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:53:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
+        id S235791AbjAYVxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234492AbjAYVxL (ORCPT
+        with ESMTP id S235569AbjAYVxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:53:11 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B12B776
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:53:08 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id p185so17565257oif.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:53:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FK/9T29iODZ59+f1JESHnd65s/n5b9dY4UEOyjBbcEU=;
-        b=b04tS0O7N/N1riUBFoYctrcBokH18TCZYDw1crIuvH0vRs3879TSHEHgIYpJgN5F7U
-         l6Jvb3DA4UinIge9ko3eVA0xGQHU/uFDSYnYurZwwqFI2AmIpZSSocg5RGf+8+mc+8sV
-         L8DB35lMrp8eE6dvbKuMCDfVIiMcgKd4dGPIYs5WmEiTDMhjBfteqeUec9/NjkWf3cfb
-         cZZf6uoj67288SzlA199jUnie2PlaoqF/cmhPelc8hT+i8pnnicf7PuRk4eIkM+ghbbO
-         WFlwthEy/nIjyTXPxryFyDoa3HERXQBXaP4bnVLTULy5jajJf20OH+UJh+OkucXazIlm
-         JlLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FK/9T29iODZ59+f1JESHnd65s/n5b9dY4UEOyjBbcEU=;
-        b=PO42iTvLb4GeJsFD+7qwtqTQg4JJDAJe67LvDxPiFkuRze4rlvja/FzJRnWUxnjbsc
-         XHobDDlbrw6jqu1qWKx5CaYLozWEAFRaHUj4RCPQ8qZIOjPYYNFQadexvm9g4bC1mDfx
-         q0fKVnmOxbDzJ3AB6slCb+gU5GoUYTNyxcA8QeJNI1z1Az5nxA1EzflCjehVHGaL9dse
-         9BJjqcUtZrVViLwHEjQVqMx2vuKo0YlRHVkVgdgE1vkxEBbsSuM/3Vqrt/0IQSxhBzxJ
-         lA2SET2Y2mGfAkQKD3Pya2m8/nfcY+TIeaAGJ402V5wxmQA1+qLyb2GDoenosiTOWikt
-         d08g==
-X-Gm-Message-State: AFqh2kqcjYbtxM8GR4Dxj4nKWtrrIYdcjgnObjm++7EXow16tupaT/Ue
-        x+mj/HIK2V5zej0RxB58MGA9cnM02rmAyTsuaYg6ew==
-X-Google-Smtp-Source: AMrXdXuyaO7b1tJc+dr7mmKNnVfcM8OpbeMgqTOB+gTbqM/Ybvjftr2ysl8nBnAGotjaDqCxGVWxb8sYOYxE2fh8ark=
-X-Received: by 2002:aca:2b16:0:b0:364:4a32:d98a with SMTP id
- i22-20020aca2b16000000b003644a32d98amr1363175oik.157.1674683586013; Wed, 25
- Jan 2023 13:53:06 -0800 (PST)
+        Wed, 25 Jan 2023 16:53:37 -0500
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4929DB46F;
+        Wed, 25 Jan 2023 13:53:35 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 57CD330000085;
+        Wed, 25 Jan 2023 22:53:33 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 2F7E6260B2D; Wed, 25 Jan 2023 22:53:33 +0100 (CET)
+Date:   Wed, 25 Jan 2023 22:53:33 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        linux-pci@vger.kernel.org
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <20230125215333.GA18160@wunner.de>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <Y9Ex3ZUIFxwOBg1n@work-vm>
+ <Y9E7PNmSTP5w2zuw@kroah.com>
+ <Y9FDZPV7qENtNNyk@work-vm>
 MIME-Version: 1.0
-References: <20230109215347.3119271-1-rananta@google.com> <20230109215347.3119271-5-rananta@google.com>
- <Y9BhiOyvMvu/L0J4@thinky-boi>
-In-Reply-To: <Y9BhiOyvMvu/L0J4@thinky-boi>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Wed, 25 Jan 2023 13:52:54 -0800
-Message-ID: <CAJHc60yPWrry_+g=rxJs26SBW4oz-ovrBZ=OyzbBieTaA=36gQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/6] KVM: arm64: Optimize TLBIs in the dirty logging path
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9FDZPV7qENtNNyk@work-vm>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+[cc += Jonathan Cameron, linux-pci]
 
-On Tue, Jan 24, 2023 at 2:54 PM Oliver Upton <oliver.upton@linux.dev> wrote:
->
-> Hi Raghavendra,
->
-> I find the commit title rather ambiguous. May I suggest:
->
->   KVM: arm64: Use range-based TLBIs for write protection
->
-> On Mon, Jan 09, 2023 at 09:53:45PM +0000, Raghavendra Rao Ananta wrote:
-> > Currently the dirty-logging paths, including
-> > kvm_arch_flush_remote_tlbs_memslot() and kvm_mmu_wp_memory_region()
-> > ivalidates the entire VM's TLB entries using kvm_flush_remote_tlbs().
-> > As the range of IPAs is provided by these functions, this is highly
-> > inefficient on the systems which support FEAT_TLBIRANGE. Hence,
-> > use kvm_flush_remote_tlbs_range() to flush the TLBs instead.
->
-> This commit message gives a rather mechanical description of the commit.
-> Instead of describing the change, could you describe _why_ this is an
-> improvement over the VM-wide invalidation?
->
-Of course. I assumed the optimization would be obvious, but sure,
-it'll be better to describe it.
-FYI, thanks to David's common code for range-based TLBI, this patch
-shrunk to just one line, and would impact only the flush after
-write-protect.
+On Wed, Jan 25, 2023 at 02:57:40PM +0000, Dr. David Alan Gilbert wrote:
+> Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:
+> > Great, so why not have hardware attestation also for your devices you
+> > wish to talk to?  Why not use that as well?  Then you don't have to
+> > worry about anything in the guest.
+> 
+> There were some talks at Plumbers where PCIe is working on adding that;
+> it's not there yet though.  I think that's PCIe 'Integrity and Data
+> Encryption' (IDE - sigh), and PCIe 'Security Prtocol and Data Model' -
+> SPDM.   I don't know much of the detail of those, just that they're far
+> enough off that people aren't depending on them yet.
+
+CMA/SPDM (PCIe r6.0 sec 6.31) is in active development on this branch:
+
+https://github.com/l1k/linux/commits/doe
+
+It will allow for authentication of PCIe devices.  Goal is to submit
+this quarter (Q1).  Afterwards we'll look into retrieving measurements
+via CMA/SPDM and bringing up IDE encryption.
+
+It's a kernel-native implementation which uses the existing crypto and
+keys infrastructure and is wired into the appropriate places in the
+PCI core to authenticate devices on enumeration and reauthenticate
+when CMA/SPDM state is lost (after resume from D3cold, after a
+Secondary Bus Reset and after a DPC-induced Hot Reset).
+
+The device authentication service afforded here is generic.
+It is up to users and vendors to decide how to employ it,
+be it for "confidential computing" or something else.
+
+Trusted root certificates to validate device certificates can be
+installed into a kernel keyring using the familiar keyctl(1) utility,
+but platform-specific roots of trust (such as a HSM) could be
+supported as well.
+
+I would like to stress that this particular effort is a collaboration
+of multiple vendors.  It is decidedly not a single vendor trying to
+shoehorn something into upstream, so the criticism that has been
+leveled upthread against other things does not apply here.
+
+The Plumbers BoF you're referring to was co-authored by Jonathan Cameron
+and me and its purpose was precisely to have an open discussion and
+align on an approach that works for everyone:
+
+https://lpc.events/event/16/contributions/1304/
+
+
+>    a) there's no good way to authenticate a PCI device yet
+>      - any nasty device can claim to have a given PCI ID.
+
+CMA/SPDM prescribes that the Subject Alternative Name of the device
+certificate contains the Vendor ID, Device ID, Subsystem Vendor ID,
+Subsystem ID, Class Code, Revision and Serial Number (PCIe r6.0
+sec 6.31.3).
+
+Thus a forged Device ID in the Configuration Space Header will result
+in authentication failure.
 
 Thanks,
-Raghavendra
-> --
-> Thanks,
-> Oliver
->
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > ---
-> >  arch/arm64/kvm/arm.c | 7 ++++++-
-> >  arch/arm64/kvm/mmu.c | 2 +-
-> >  2 files changed, 7 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > index 00da570ed72bd..179520888c697 100644
-> > --- a/arch/arm64/kvm/arm.c
-> > +++ b/arch/arm64/kvm/arm.c
-> > @@ -1433,7 +1433,12 @@ void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
-> >  void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
-> >                                       const struct kvm_memory_slot *memslot)
-> >  {
-> > -     kvm_flush_remote_tlbs(kvm);
-> > +     phys_addr_t start, end;
-> > +
-> > +     start = memslot->base_gfn << PAGE_SHIFT;
-> > +     end = (memslot->base_gfn + memslot->npages) << PAGE_SHIFT;
-> > +
-> > +     kvm_flush_remote_tlbs_range(kvm, start, end);
-> >  }
-> >
-> >  static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
-> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> > index 70f76bc909c5d..e34b81f5922ce 100644
-> > --- a/arch/arm64/kvm/mmu.c
-> > +++ b/arch/arm64/kvm/mmu.c
-> > @@ -976,7 +976,7 @@ static void kvm_mmu_wp_memory_region(struct kvm *kvm, int slot)
-> >       write_lock(&kvm->mmu_lock);
-> >       stage2_wp_range(&kvm->arch.mmu, start, end);
-> >       write_unlock(&kvm->mmu_lock);
-> > -     kvm_flush_remote_tlbs(kvm);
-> > +     kvm_flush_remote_tlbs_range(kvm, start, end);
-> >  }
-> >
-> >  /**
-> > --
-> > 2.39.0.314.g84b9a713c41-goog
-> >
-> >
+
+Lukas
