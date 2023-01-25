@@ -2,100 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB21867AE91
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D1467AE94
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235371AbjAYJoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 04:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
+        id S235415AbjAYJoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235373AbjAYJoM (ORCPT
+        with ESMTP id S235392AbjAYJoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 04:44:12 -0500
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F54230EF;
-        Wed, 25 Jan 2023 01:43:26 -0800 (PST)
-Received: by mail-vk1-xa30.google.com with SMTP id bs10so439998vkb.3;
-        Wed, 25 Jan 2023 01:43:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tCWq+O0xtWDJHVp9bnvZ8bZvWJE8EClyj5Mz1s1LVAk=;
-        b=mUwAYcLaNrppfQcwh05lO3E3QaFdYZ8abbOiVVnpMSLbUgXnWW69RtPVAfx0YneHy2
-         aDUwBPweqhpiqI+eXKojNHwb6jAQ1UryvMXXJCUsqw6Ts8b07tjIYZQrOZMNkG8hcabA
-         KlgYcQNrrGWnsodJ4xguLCOWia2jAd62tbXCXMbxT/6IrQH3v8diJEf1N1vxDXc0NneR
-         XJf5GaV971kcO4LWC6n0waLeh4cPPrYiip7Fi8t7JDL85yoNhWfRHBpiDaAMUN2AZGQY
-         7aMkAQ9brYs+7voMxIe2UTOrYCXikCKaIuAb+pGXHHKzSbtn0WZb95JvkEalGlCJB6Ah
-         WkyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tCWq+O0xtWDJHVp9bnvZ8bZvWJE8EClyj5Mz1s1LVAk=;
-        b=FK23G+Mn81N2ivZT3Ecx7FG6uw/6CUuERdkRfn111rrAkkHntq7QLL7C2LBDWlG+xU
-         hiPgiIL9TwAiNBzwbPTNKd78eVH1H9F2NmjTNEpxKKyow4E9PzIEq9qm57e7Y2csNPI1
-         XBIYzBGrAzSsx8yMdA6GqJRmAb2vgRjrJtfV8ZJ7sY6xaCAbp0/3QHkARuFub5MZt+2w
-         ETZsIuxN9pRKafl7HYKKY6zWd1gu+JMwbckzdYPzDuwtnasx1lB+nF4U9p/LgBeuwYPK
-         5fKXZW9Veb2djqsu1ZMXXmXRd1cnIV7l4wqXrK+a66I7JCdNfJpAO7tZvaVZdOedBiGp
-         L7Yg==
-X-Gm-Message-State: AFqh2kok46iZwoAyUbIOlvMxjhQnQQbKHDibfql1mI0IENuVLxP9ciVu
-        VKUWz83HF6MWQSSIMltbJQ6z+84Q8mxRrD3myjk=
-X-Google-Smtp-Source: AMrXdXtMVLT1VlTS1zRfr4VvTCh4w9CLfTixYp7P7YrgIEhZomqQqx1c9GChF38RhFcxN2G1ULW3+FtsbfY0jEDLQS4=
-X-Received: by 2002:a1f:90cd:0:b0:3c5:db35:9288 with SMTP id
- s196-20020a1f90cd000000b003c5db359288mr4108132vkd.32.1674639805550; Wed, 25
- Jan 2023 01:43:25 -0800 (PST)
+        Wed, 25 Jan 2023 04:44:13 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549A52726;
+        Wed, 25 Jan 2023 01:43:36 -0800 (PST)
+Date:   Wed, 25 Jan 2023 09:43:31 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674639811;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vzaEP7E6E1PaybXUfz3v0RQtUATPx3kmREJUUl+Xx80=;
+        b=eMG7Pavtv3lgfnqYR/cRzPhsy0TiuRn7yWMRTdBReilm2epvz3mozwC+Ar3RZVvN90mRlW
+        PjejF5RDuBgq9jtIFrmkXjD6Z6X5HjtYZvf3mMnLWATGrvBJ2iS5jahF6IvQvgVUhfud8+
+        qmyUqXt7u1k/xKqBnoXTW2cOmFyvvsWc2SpGwJsBVNSfHlvDbzUMXiM9aTmOlldLwSuhv7
+        oDekFtaNH5Dg7+yBapPKg8SBxjRhc4/qInZwYSfBuYLYABtK6OWQPCtzeapklx1gJ+eKPh
+        /jYOG4eGnM9WvKNYZahn8RGLzpD7yssgFd/P0kW+vKBxPryMGWThV/YjlxmwyA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674639811;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vzaEP7E6E1PaybXUfz3v0RQtUATPx3kmREJUUl+Xx80=;
+        b=ofIXQP2O9R4pdYaAw7hB9jcebe6/IZPb0sVs+9OWt6D+Ku6uTQnqoRVyXTl11dMnlTy4qi
+        VzWvv6xArPAnGSCw==
+From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] x86/cpu: Use cpu_feature_enabled() when checking global
+ pages support
+Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230125075013.9292-1-bp@alien8.de>
+References: <20230125075013.9292-1-bp@alien8.de>
 MIME-Version: 1.0
-References: <20230125072605.1121-1-linux.amoon@gmail.com> <20230125072605.1121-5-linux.amoon@gmail.com>
- <bd29cba9-fb1c-051e-e10e-cb3e73ec5ff9@linaro.org>
-In-Reply-To: <bd29cba9-fb1c-051e-e10e-cb3e73ec5ff9@linaro.org>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 25 Jan 2023 15:13:08 +0530
-Message-ID: <CANAwSgRWVPghhEwvQgzQicJHcjgAv_d5nYfE0Ni90butc5ouSQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND linux-next v4 4/4] dt-bindings: usb: Fix properties
- for VL817 hub controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <167463981101.4906.8494952549894706565.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+The following commit has been merged into the x86/mm branch of tip:
 
-On Wed, 25 Jan 2023 at 13:10, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 25/01/2023 08:26, Anand Moon wrote:
-> > Cleanup by removing unneeded quotes from refs and
-> > add maxItems to reset-gpios and fix the required list.
-> >
-> > Fixes: 31360c28dfdd ("dt-bindings: usb: Add binding for Via lab VL817 hub controller")
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> NAK.
->
-> You ignored my feedback. Please help me understand how my tag appeared here.
->
-I have followed your feedback and modified the below patch
-I thought you review these changes see below.
+Commit-ID:     ebd3ad60a688131de7df1dd05fd2d7c57f542268
+Gitweb:        https://git.kernel.org/tip/ebd3ad60a688131de7df1dd05fd2d7c57f542268
+Author:        Borislav Petkov (AMD) <bp@alien8.de>
+AuthorDate:    Wed, 25 Jan 2023 08:50:13 +01:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Wed, 25 Jan 2023 10:32:06 +01:00
 
-[0] https://lore.kernel.org/all/df1c8545-01d0-3821-0c19-07a369e40472@linaro.org/
+x86/cpu: Use cpu_feature_enabled() when checking global pages support
 
-> Best regards,
-> Krzysztof
->
+X86_FEATURE_PGE determines whether the CPU has enabled global page
+translations support. Use the faster cpu_feature_enabled() check to
+shave off some more cycles when flushing all TLB entries, including the
+global ones.
 
-Thanks
--Anand
+What this practically saves is:
+
+   mov    0x82eb308(%rip),%rax        # 0xffffffff8935bec8 <boot_cpu_data+40>
+   test   $0x20,%ah
+
+... which test the bit. Not a lot, but TLB flushing is a timing-sensitive
+path, so anything to make it even faster.
+
+No functional changes.
+
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20230125075013.9292-1-bp@alien8.de
+---
+ arch/x86/mm/tlb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index c1e31e9..92d73cc 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -1205,7 +1205,7 @@ void __flush_tlb_all(void)
+ 	 */
+ 	VM_WARN_ON_ONCE(preemptible());
+ 
+-	if (boot_cpu_has(X86_FEATURE_PGE)) {
++	if (cpu_feature_enabled(X86_FEATURE_PGE)) {
+ 		__flush_tlb_global();
+ 	} else {
+ 		/*
