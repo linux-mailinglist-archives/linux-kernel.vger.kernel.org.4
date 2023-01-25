@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4CD67A97B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 05:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E776867A991
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 05:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234466AbjAYEEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 23:04:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S231281AbjAYESr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 23:18:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234492AbjAYEEW (ORCPT
+        with ESMTP id S229758AbjAYESl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 23:04:22 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C558D4AA4C
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 20:04:15 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id q9so12624915pgq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 20:04:15 -0800 (PST)
+        Tue, 24 Jan 2023 23:18:41 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866274A214
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 20:18:39 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id 88so5664339pjo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 20:18:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FcnTDJJRJLnAcGyKzJWIX9FAeZvmDKRyTv30CMpkzNs=;
-        b=2gZUOLi0wG7EyjRboogZXUO4Z5cmo/jeAmy5AHLRCr9NPQdHpGmiAa+mNB9AlTiJca
-         CpSUZbtc7wLtTZEtnPdRm8qudP2WO3cQjYn96V8NIUKqccQkSfskAkA/jt1zoO9xz76N
-         Pn0Ftt+wNXAcrWdADqpe4nryv7Gm8LjmwUA2IarmfDE4BDWpCkkW2+mhBE+qTZuU9P0V
-         UEDpCIO1vUw1cYFj9hVxvDezVWsoRZcLBKE8vmCbIwuXLIwWCGWq4sWDne8cMbE4QPNy
-         j1fNarf77ZneysgMFJUcBCodfSpsDSF71kHVNM8FlO2A/CzpvrSY5Y8/9JElrJVXunWw
-         Leeg==
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2zm9CTlz+B7NJKOJgLLkEu+O8sHPBZCAAUFTPto5VIk=;
+        b=3C51J7aWxQ6yjnwfiQ3VXcwFzqnYkU0WUSVdQfpEiwhxFLRBH850em1vH7fnmVYmk8
+         ePkxkjpGEjHCZabc0wpfJazxapQfy0X12xtsXrNh0pGqnzdXIBmTTXY6zgEGT400wxp8
+         cdQl7s20rjPfQPhmpjnxj16DWM7uehNCnZMBfXQQsKadteVVBfauCUHr2RUTvYrVRXNe
+         52ExfDxXq3IIQsyWwovxBBIufwOlVpNsrKoAEd1Tg7VfdyJD562Ke9IZzoj+NfwhmnGX
+         +CfTWbf4r0zgp7OL9oxys1olyev6DI4+dvkGlx+9UhhTqyxfAdrS56ujzWqj+BL9OY70
+         akuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FcnTDJJRJLnAcGyKzJWIX9FAeZvmDKRyTv30CMpkzNs=;
-        b=YLbZimiCrM1s2pB29lxEpA9X0W3l3TPYERUGJjm0aRV2PNoFpLQZZpt+2TYj2fQldc
-         k1DzDyM00SR6ymrFpGtexDzXUvy0fGoTH1qQ8efFRYLS69A9s+ueiO0ibE7x4dqI5gof
-         Cn2JZ+pK4ne7WTtPo2ZCPsWYYDA7yzebrSskOgDQ/f0XHFd8hesAZdflr5Ddw12aQ9vX
-         yAHW2qPErk2UYPg2iLCQF7a4yml+6+INZyeIRjWAu21fypbZCo021xXTbc55mC8Km5FH
-         ifIW7Eud2AG1vjEX5BQbzEJVA3YNU2w91wpgvQnWwYnFE0TB8Ed7HIi3l/wPRdc1X/s0
-         OsnA==
-X-Gm-Message-State: AFqh2kppniRi48of1he5K7/dvO+mRpejjJPdj2iIK19kw+7c6IwxK1hA
-        YLu52aXSWgFiwJ95sk+4hQz6mA==
-X-Google-Smtp-Source: AMrXdXvU5nZQfE1g8DWAa2Tx9zY1CmMmhisFdT5KhcqS39aPUzqw5a/pDdy04dsVryLa1u2dp63pbQ==
-X-Received: by 2002:a62:ea0e:0:b0:577:d10d:6eab with SMTP id t14-20020a62ea0e000000b00577d10d6eabmr31519118pfh.21.1674619455213;
-        Tue, 24 Jan 2023 20:04:15 -0800 (PST)
-Received: from ?IPV6:2400:4050:a840:1e00:4457:c267:5e09:481b? ([2400:4050:a840:1e00:4457:c267:5e09:481b])
-        by smtp.gmail.com with ESMTPSA id 17-20020aa79211000000b00575b6d7c458sm2397550pfo.21.2023.01.24.20.04.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 20:04:14 -0800 (PST)
-Message-ID: <f81f8974-3c1b-4e34-ce51-5e0e7472079b@daynix.com>
-Date:   Wed, 25 Jan 2023 13:04:10 +0900
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2zm9CTlz+B7NJKOJgLLkEu+O8sHPBZCAAUFTPto5VIk=;
+        b=0NHZmttZWxU+Cu62CCZxtHzsicfOMGKJ9RCkVwMOLhEMpmkwMQQbp4efc6RHf7AAP6
+         sP6twSb8KXu1nN1e8p+YpUIIsDFTZ4e9ANBAZzDLBEAEXpeqYof0wmQLwbo+Vt3eXzHO
+         V0u2Tja8bpToM91YllDCRluEE/5NX4UQnCwT5ffo33ls2KJ6hDdtwgIP5IhfCwk810+8
+         pKzhZrhDsKHo4yvKtVCR9lI3YRAPyyMx5I/mbAcs1zDcxEsOMqEkzYhQspTaG08CefXD
+         eGPTb8OIftvzO15FMv6BZHe18eHhUQye2d0NaebzfOsvl9ajgHZpuNQoFdn1x06n3r6j
+         pQDw==
+X-Gm-Message-State: AFqh2kq1UL3DZuvDVRXHgZc4Wg0/O6T83/dFbg3QPEEL/8hCf4GXiKiz
+        KEOvbewnSxo7b8GFooEDjpbApA==
+X-Google-Smtp-Source: AMrXdXstCbKhe4ltOgpD7q8klZlIBNEMLWnyCNJ+hi2dh29mehTBM6rYD9fpUpFXjA2JNSkjdAovaA==
+X-Received: by 2002:a05:6a20:e610:b0:9d:efbf:787d with SMTP id my16-20020a056a20e61000b0009defbf787dmr31979402pzb.50.1674620319091;
+        Tue, 24 Jan 2023 20:18:39 -0800 (PST)
+Received: from dread.disaster.area (pa49-186-60-71.pa.vic.optusnet.com.au. [49.186.60.71])
+        by smtp.gmail.com with ESMTPSA id s17-20020a639251000000b004cc95c9bd97sm2196890pgn.35.2023.01.24.20.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 20:18:38 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pKXF5-007B4H-EB; Wed, 25 Jan 2023 15:18:35 +1100
+Date:   Wed, 25 Jan 2023 15:18:35 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Alexander Larsson <alexl@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gscrivan@redhat.com, brauner@kernel.org, viro@zeniv.linux.org.uk,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+Message-ID: <20230125041835.GD937597@dread.disaster.area>
+References: <cover.1674227308.git.alexl@redhat.com>
+ <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+ <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
+ <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
+ <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+ <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [Intel-wired-lan] [PATCH RESEND] igbvf: Fix rx_buffer_len
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Tony Nguyen <anthony.l.nguyen@intel.com>, netdev@vger.kernel.org,
-        Yan Vugenfirer <yvugenfi@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>,
-        Eric Dumazet <edumazet@google.com>,
-        intel-wired-lan@lists.osuosl.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20230124043915.12952-1-akihiko.odaki@daynix.com>
- <a23d0eb5-123f-a2ad-5585-59147bb9b172@molgen.mpg.de>
-Content-Language: en-US
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <a23d0eb5-123f-a2ad-5585-59147bb9b172@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,86 +82,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/01/24 19:49, Paul Menzel wrote:
-> Dear Akihiko,
+On Tue, Jan 24, 2023 at 09:06:13PM +0200, Amir Goldstein wrote:
+> On Tue, Jan 24, 2023 at 3:13 PM Alexander Larsson <alexl@redhat.com> wrote:
+> > On Tue, 2023-01-24 at 05:24 +0200, Amir Goldstein wrote:
+> > > On Mon, Jan 23, 2023 at 7:56 PM Alexander Larsson <alexl@redhat.com>
+> > > wrote:
+> > > > On Fri, 2023-01-20 at 21:44 +0200, Amir Goldstein wrote:
+> > > > > On Fri, Jan 20, 2023 at 5:30 PM Alexander Larsson
+> > > > > <alexl@redhat.com>
+> > > > > wrote:
+> > I'm not sure why the dentry cache case would be more important?
+> > Starting a new container will very often not have cached the image.
+> >
+> > To me the interesting case is for a new image, but with some existing
+> > page cache for the backing files directory. That seems to model staring
+> > a new image in an active container host, but its somewhat hard to test
+> > that case.
+> >
 > 
-> 
-> Thank you for your patch.
-> 
-> Am 24.01.23 um 05:39 schrieb Akihiko Odaki:
-> 
-> Maybe improve the commit message summary to be more specific:
-> 
-> igbvf: Align rx_buffer_len to fix memory corrption
-> 
->> When rx_buffer_len is not aligned by 1024, igbvf sets the aligned size
->> to SRRCTL while the buffer is allocated with the unaligned size. This
->> allows the device to write more data than rx_buffer_len, resulting in
->> memory corruption. Align rx_buffer_len itself so that the buffer will
->> be allocated with the aligned size.
->>
->> The condition to split RX packet header, which uses rx_buffer_len, is
->> also modified so that it doesn't change the behavior for the same
->> actual (unaligned) packet size. Actually the new condition is not
->> identical with the old one as it will no longer request splitting when
->> the actual packet size is exactly 2048, but that should be negligible.
-> 
-> Is there an easy way to reproduce it?
-> 
-> 
-> Kind regards,
-> 
-> Paul
-> 
-> 
+> ok, you can argue that faster cold cache ls -lR is important
+> for starting new images.
+> I think you will be asked to show a real life container use case where
+> that benchmark really matters.
 
-I withdraw this patch. While igbvf sets a value greater than the actual 
-buffer size to SRRCTL.BSIZEPKT, such a long packet should be dropped 
-according to VMOLR.RLPML.
+I've already described the real world production system bottlenecks
+that composefs is designed to overcome in a previous thread.
 
-Regards,
-Akihiko Odaki
+Please go back an read this:
 
->> Fixes: d4e0fe01a38a ("igbvf: add new driver to support 82576 virtual 
->> functions")
->> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
->> ---
->>   drivers/net/ethernet/intel/igbvf/netdev.c | 9 +++++----
->>   1 file changed, 5 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/intel/igbvf/netdev.c 
->> b/drivers/net/ethernet/intel/igbvf/netdev.c
->> index 3a32809510fc..b6bca78198fa 100644
->> --- a/drivers/net/ethernet/intel/igbvf/netdev.c
->> +++ b/drivers/net/ethernet/intel/igbvf/netdev.c
->> @@ -1341,10 +1341,9 @@ static void igbvf_setup_srrctl(struct 
->> igbvf_adapter *adapter)
->>       srrctl |= E1000_SRRCTL_DROP_EN;
->>       /* Setup buffer sizes */
->> -    srrctl |= ALIGN(adapter->rx_buffer_len, 1024) >>
->> -          E1000_SRRCTL_BSIZEPKT_SHIFT;
->> +    srrctl |= adapter->rx_buffer_len >> E1000_SRRCTL_BSIZEPKT_SHIFT;
->> -    if (adapter->rx_buffer_len < 2048) {
->> +    if (adapter->rx_buffer_len <= 2048) {
->>           adapter->rx_ps_hdr_size = 0;
->>           srrctl |= E1000_SRRCTL_DESCTYPE_ADV_ONEBUF;
->>       } else {
->> @@ -1625,7 +1624,7 @@ static int igbvf_sw_init(struct igbvf_adapter 
->> *adapter)
->>       struct net_device *netdev = adapter->netdev;
->>       s32 rc;
->> -    adapter->rx_buffer_len = ETH_FRAME_LEN + VLAN_HLEN + ETH_FCS_LEN;
->> +    adapter->rx_buffer_len = ALIGN(ETH_FRAME_LEN + VLAN_HLEN + 
->> ETH_FCS_LEN, 1024);
->>       adapter->rx_ps_hdr_size = 0;
->>       adapter->max_frame_size = netdev->mtu + ETH_HLEN + ETH_FCS_LEN;
->>       adapter->min_frame_size = ETH_ZLEN + ETH_FCS_LEN;
->> @@ -2429,6 +2428,8 @@ static int igbvf_change_mtu(struct net_device 
->> *netdev, int new_mtu)
->>           adapter->rx_buffer_len = ETH_FRAME_LEN + VLAN_HLEN +
->>                        ETH_FCS_LEN;
->> +    adapter->rx_buffer_len = ALIGN(adapter->rx_buffer_len, 1024);
->> +
->>       netdev_dbg(netdev, "changing MTU from %d to %d\n",
->>              netdev->mtu, new_mtu);
->>       netdev->mtu = new_mtu;
+https://lore.kernel.org/linux-fsdevel/20230118002242.GB937597@dread.disaster.area/
+
+Cold cache performance dominates the runtime of short lived
+containers as well as high density container hosts being run to
+their container level memory limits. `ls -lR` is just a
+microbenchmark that demonstrates how much better composefs cold
+cache behaviour is than the alternatives being proposed....
+
+This might also help explain why my initial review comments focussed
+on getting rid of optional format features, straight lining the
+processing, changing the format or search algorithms so more
+sequential cacheline accesses occurred resulting in less memory
+stalls, etc. i.e. reductions in cold cache lookup overhead will
+directly translate into faster container workload spin up.
+
+> > > > This isn't all that strange, as overlayfs does a lot more work for
+> > > > each lookup, including multiple name lookups as well as several
+> > > > xattr
+> > > > lookups, whereas composefs just does a single lookup in a pre-
+> > > > computed
+> > >
+> > > Seriously, "multiple name lookups"?
+> > > Overlayfs does exactly one lookup for anything but first level
+> > > subdirs
+> > > and for sparse files it does the exact same lookup in /objects as
+> > > composefs.
+> > > Enough with the hand waving please. Stick to hard facts.
+> >
+> > With the discussed layout, in a stat() call on a regular file,
+> > ovl_lookup() will do lookups on both the sparse file and the backing
+> > file, whereas cfs_dir_lookup() will just map some page cache pages and
+> > do a binary search.
+> >
+> > Of course if you actually open the file, then cfs_open_file() would do
+> > the equivalent lookups in /objects. But that is often not what happens,
+> > for example in "ls -l".
+> >
+> > Additionally, these extra lookups will cause extra memory use, as you
+> > need dentries and inodes for the erofs/squashfs inodes in addition to
+> > the overlay inodes.
+> 
+> I see. composefs is really very optimized for ls -lR.
+
+No, composefs is optimised for minimal namespace and inode
+resolution overhead. 'ls -lR' does a lot of these operations, and
+therefore you see the efficiency of the design being directly
+exposed....
+
+> Now only need to figure out if real users start a container and do ls -lR
+> without reading many files is a real life use case.
+
+I've been using 'ls -lR' and 'find . -ctime 1' to benchmark cold
+cache directory iteration and inode lookup performance for roughly
+20 years. The benchmarks I run *never* read file data, nor is that
+desired - they are pure directory and inode lookup micro-benchmarks
+used to analyse VFS and filesystem directory and inode lookup
+performance.
+
+I have been presenting such measurements and patches improving
+performance of these microbnechmarks to the XFS and fsdevel lists
+over 15 years and I have *never* had to justify that what I'm
+measuring is a "real world workload" to anyone. Ever.
+
+Complaining about real world relevancy of the presented benchmark
+might be considered applying a double standard, wouldn't you agree?
+
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
