@@ -2,185 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E3967B536
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CF467B53E
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235960AbjAYO4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 09:56:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
+        id S235222AbjAYO6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 09:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235922AbjAYOzs (ORCPT
+        with ESMTP id S233235AbjAYO6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 09:55:48 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9C630FE;
-        Wed, 25 Jan 2023 06:55:46 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C565B1EC0493;
-        Wed, 25 Jan 2023 15:55:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1674658543;
+        Wed, 25 Jan 2023 09:58:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5493D55B2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:57:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674658667;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Y5InzrMMR7tYD7K8IQxbCKmCrcbndsF98jURDpiEvtA=;
-        b=QhsVXgG9+mQg62pSTSotZNXiTHgj4Kr6DjoD6RzyyIrLoNuw0inT+OEDkhvYR4sZ9y9twf
-        dkUtWiZR9A2rC/a29R9t7FALlEu268HgkolBGU6CkU1ELWPMp15xxUqQFFuhLce3GKLUNv
-        ZZy1MIaPxdrIzvmknDNQqsceFa0jwx4=
-Date:   Wed, 25 Jan 2023 15:55:40 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Message-ID: <Y9FC7Dpzr5Uge/Mi@zn.tnic>
-References: <1673559753-94403-1-git-send-email-mikelley@microsoft.com>
- <1673559753-94403-7-git-send-email-mikelley@microsoft.com>
- <Y8r2TjW/R3jymmqT@zn.tnic>
- <BYAPR21MB168897DBA98E91B72B4087E1D7CA9@BYAPR21MB1688.namprd21.prod.outlook.com>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ociYsRIOcqs1chHlUZYkLN67j5pvRMByvtLRcDsunuk=;
+        b=io6VMfAu52qlL/QwJLW+UYYG1f1yIX23A4T2QIebu+nsV4SbdxNVELGkGRMw4Qxufqoad/
+        RY5LJKR6ioGb1F9EQiru3XStkpvtephq8dSjoNA5TtpZKLGD0BXxYtfioLxqKMY+kyw2mR
+        rhKbn+DkMv3Syd6g1+eljT+xKgAFZy0=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-441-74YlIncFOueDm6OBojL6Yg-1; Wed, 25 Jan 2023 09:57:45 -0500
+X-MC-Unique: 74YlIncFOueDm6OBojL6Yg-1
+Received: by mail-wm1-f70.google.com with SMTP id l23-20020a7bc457000000b003db0cb8e543so645564wmi.3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:57:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ociYsRIOcqs1chHlUZYkLN67j5pvRMByvtLRcDsunuk=;
+        b=fLIRSYEiKNNQM9bEhgXhPNa2UMDzLEgfSxMTTVZuhgd1NlEbkhniwGv7DlwGmr55uD
+         N9yarVZYoTgnVTy7EEYbonzpTO2Pr9hfaS1GBUhsGP5ZvbEm84peTpD8SWkJT92GYkh0
+         8LObqYiboFrE57RMOHpTo9AG+EcAW5QGFIuO9E9N9Z5AK5uC39wqcJbG5O6LE2mumyXD
+         m/IdZXX8wW4nrRxyYy8pHBjYUopD2LixU9tQBir8i0NWZWzo7JazR7iS3DUw0/eZkF09
+         I3jnbi793TXDGDdNl64IXXxWQc0+xxrioVEyU+/+q0YCIFFE11mhyslqEN5HYbwA1j6g
+         Blvg==
+X-Gm-Message-State: AFqh2konqe1rufjdXWxP2+ozjQpb1bbXyJCmaYRiZL5q8FdAaRRNCIDB
+        qul46lf9dSm8pKb/jEyZbMUBOt/ECy3kK/U4ui8XEA9ERwHGmtHlawygsWQ6KIZKPgup+t/9wtc
+        TTbDwQ48OVL0Th5B7QBMM7eH4
+X-Received: by 2002:adf:c7cb:0:b0:2bc:48b3:f6de with SMTP id y11-20020adfc7cb000000b002bc48b3f6demr32863665wrg.0.1674658664553;
+        Wed, 25 Jan 2023 06:57:44 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuXKMB7DVadoT6AZiGB/VCjx9ogi08Xmb1ZthHn0lER+hHf+ZyH1zfSzJQBPvZIBSn4/ihCPQ==
+X-Received: by 2002:adf:c7cb:0:b0:2bc:48b3:f6de with SMTP id y11-20020adfc7cb000000b002bc48b3f6demr32863639wrg.0.1674658664181;
+        Wed, 25 Jan 2023 06:57:44 -0800 (PST)
+Received: from work-vm (ward-16-b2-v4wan-166627-cust863.vm18.cable.virginm.net. [81.97.203.96])
+        by smtp.gmail.com with ESMTPSA id c7-20020a056000104700b002be4ff0c917sm4555395wrx.84.2023.01.25.06.57.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 06:57:43 -0800 (PST)
+Date:   Wed, 25 Jan 2023 14:57:40 +0000
+From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y9FDZPV7qENtNNyk@work-vm>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <Y9Ex3ZUIFxwOBg1n@work-vm>
+ <Y9E7PNmSTP5w2zuw@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <BYAPR21MB168897DBA98E91B72B4087E1D7CA9@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9E7PNmSTP5w2zuw@kroah.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 04:10:23AM +0000, Michael Kelley (LINUX) wrote:
-> Per the commit message for 009767dbf42a, it's not safe to read MSR_AMD64_SEV
-> on all implementations of AMD processors.
+* Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:
+> On Wed, Jan 25, 2023 at 01:42:53PM +0000, Dr. David Alan Gilbert wrote:
+> > * Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:
+> > > On Wed, Jan 25, 2023 at 12:28:13PM +0000, Reshetova, Elena wrote:
+> > > > Hi Greg, 
+> > > > 
+> > > > You mentioned couple of times (last time in this recent thread:
+> > > > https://lore.kernel.org/all/Y80WtujnO7kfduAZ@kroah.com/) that we ought to start
+> > > > discussing the updated threat model for kernel, so this email is a start in this direction. 
+> > > 
+> > > Any specific reason you didn't cc: the linux-hardening mailing list?
+> > > This seems to be in their area as well, right?
+> > > 
+> > > > As we have shared before in various lkml threads/conference presentations
+> > > > ([1], [2], [3] and many others), for the Confidential Computing guest kernel, we have a 
+> > > > change in the threat model where guest kernel doesn’t anymore trust the hypervisor. 
+> > > 
+> > > That is, frankly, a very funny threat model.  How realistic is it really
+> > > given all of the other ways that a hypervisor can mess with a guest?
+> > 
+> > It's what a lot of people would like; in the early attempts it was easy
+> > to defeat, but in TDX and SEV-SNP the hypervisor has a lot less that it
+> > can mess with - remember that not just the memory is encrypted, so is
+> > the register state, and the guest gets to see changes to mapping and a
+> > lot of control over interrupt injection etc.
+> 
+> And due to the fact that SEV and TDX really do not work, how is anyone
+> expecting any of this to work?  As one heckler on IRC recently put it,
+> if you squint hard enough, you can kind of ignore the real-world issues
+> here, so perhaps this should all be called "squint-puting" in order to
+> feel like you have a "confidential" system?  :)
 
-1. Why does that matter to you? This is Hygon.
+I agree the original SEV was that weak; I've not seen anyone give a good
+argument against SNP or TDX.
 
-2. The MSR access is behind CPUID check.
+> > > So what do you actually trust here?  The CPU?  A device?  Nothing?
+> > 
+> > We trust the actual physical CPU, provided that it can prove that it's a
+> > real CPU with the CoCo hardware enabled.
+> 
+> Great, so why not have hardware attestation also for your devices you
+> wish to talk to?  Why not use that as well?  Then you don't have to
+> worry about anything in the guest.
 
-> CC_ATTR_ACCESS_IOAPIC_ENCRYPTED is used in io_apic_set_fixmap(), which is
-> called on all Intel/AMD systems without any qualifications.   Even if
-> rdmsrl_safe() works at this point in boot, I'm a little leery of reading a new
-> MSR in a path that essentially every x86 bare-metal system or VM takes during
-> boot.
+There were some talks at Plumbers where PCIe is working on adding that;
+it's not there yet though.  I think that's PCIe 'Integrity and Data
+Encryption' (IDE - sigh), and PCIe 'Security Prtocol and Data Model' -
+SPDM.   I don't know much of the detail of those, just that they're far
+enough off that people aren't depending on them yet.
 
-You read the MSR once and cache it. sme_enable() already does that. I don't see
-what the problem is.
+> > Both the SNP and TDX hardware
+> > can perform an attestation signed by the CPU to prove to someone
+> > external that the guest is running on a real trusted CPU.
+> 
+> And again, do the same thing for the other hardware devices and all is
+> good.  To not do that is to just guess and wave hands.  You know this :)
 
-> Or am I being overly paranoid about old processor models or hypervisor
-> versions potentially doing something weird?
+That wouldn't help you necessarily for virtual devices - where the
+hypervisor implements the device (like a virtual NIC).
 
-Yes, you are. :)
+> > Note that the trust is limited:
+> >   a) We don't trust that we can make forward progress - if something
+> > does something bad it's OK for the guest to stop.
+> 
+> So the guest can stop itself?
 
-If they're doing something weird which is out of spec, then we'll deal with them
-later.
+Sure.
 
-> But in any case, the whole point of cc_platform_has() is to provide a level of
-> abstraction from the hardware registers, and it's fully safe to use on every x86
-> bare-metal system or VM.  And while I don't anticipate it now, maybe there's
-> some future scheme where a paravisor-like entity could be used with Intel
-> TDX.  It seems like using a cc_platform_has() abstraction is better than directly
-> accessing the MSR.
+> >   b) We don't trust devices, and we don't trust them by having the guest
+> > do normal encryption; e.g. just LUKS on the disk and normal encrypted
+> > networking. [There's a lot of schemes people are working on about how
+> > the guest gets the keys etc for that)
+> 
+> How do you trust you got real data on the disk?  On the network?  Those
+> are coming from the host, how is any of that data to be trusted?  Where
+> does the trust stop and why?
 
-That's fine but we're talking about this particular implementation and that is
-vTOM-like with the address space split. If TDX does address space split later,
-we can accomodate it too. (Although I think they are not interested in this).
+We don't; you use LUKS2 on the disk and/or dm-verity; so there's no
+trust in the disk.
+You use whatever your favorite network encryption already is that
+you're using to send data across the untrusted net.
+So no trust in the data from the NIC.
 
-And if you really want to use cc_platform_has(), we could do
+> > > I hate the term "hardening".  Please just say it for what it really is,
+> > > "fixing bugs to handle broken hardware".  We've done that for years when
+> > > dealing with PCI and USB and even CPUs doing things that they shouldn't
+> > > be doing.  How is this any different in the end?
+> > > 
+> > > So what you also are saying here now is "we do not trust any PCI
+> > > devices", so please just say that (why do you trust USB devices?)  If
+> > > that is something that you all think that Linux should support, then
+> > > let's go from there.
+> > 
+> > I don't think generally all PCI device drivers guard against all the
+> > nasty things that a broken implementation of their hardware can do.
+> 
+> I know that all PCI drivers can NOT do that today as that was never
+> anything that Linux was designed for.
 
-	cc_platform_has(CC_ADDRESS_SPACE_SPLIT_ON_A_PARAVISOR)
+Agreed; which again is why I only really worry about the subset of
+devices I'd want in a CoCo VM.
 
-or something with a better name.
+> > The USB devices are probably a bit better, because they actually worry
+> > about people walking up with a nasty HID device;  I'm skeptical that
+> > a kernel would survive a purposely broken USB controller.
+> 
+> I agree with you there, USB drivers are only starting to be fuzzed at
+> the descriptor level, that's all.  Which is why they too can be put into
+> the "untrusted" area until you trust them.
+> 
+> > I'm not sure the request here isn't really to make sure *all* PCI devices
+> > are safe; just the ones we care about in a CoCo guest (e.g. the virtual devices) -
+> > and potentially ones that people will want to pass-through (which
+> > generally needs a lot more work to make safe).
+> > (I've not looked at these Intel tools to see what they cover)
+> 
+> Why not just create a whole new bus path for these "trusted" devices to
+> attach to and do that instead of tyring to emulate a protocol that was
+> explicitly designed NOT to this model at all?  Why are you trying to
+> shoehorn something here and not just designing it properly from the
+> beginning?
 
-The point is, you want to do things which are specific for this particular
-implementation. If so, then check for it. Do not do hacky things which get the
-work done for your case but can very easily be misused by others.
+I'd be kind of OK with that for the virtual devices; but:
 
-> My resolution of the TPM driver issue is admittedly a work-around.   I think
-> of it as temporary in anticipation of future implementations of PCIe TDISP
-> hardware, which allows PCI devices to DMA directly into guest encrypted
-> memory.
+  a) I think you'd start reinventing PCIe with enumeration etc
 
-Yap, that sounds real nice.
+  b) We do want those pass through NICs etc that are PCIe
+    - as long as you use normal guest crypto stuff then the host
+    can be just as nasty as it likes with the data they present.
 
-> TDISP also places the device's BAR values in an encrypted portion
-> of the GPA space. Assuming TDISP hardware comes along in the next couple
-> of years, Linux will need a robust way to deal with a mix of PCI devices
-> being in unencrypted and encrypted GPA space.  I don't know how a
-> specific device will be mapped correctly, but I hope it can happen in the
-> generic PCI code, and not by modifying each device driver.
+  c) The world has enough bus protocols, and people understand the
+   basics of PCI(e) - we really don't need another one.
 
-I guess those devices would advertize that capability somehow so that code can
-query it and act accordingly.
+> > Having said that, how happy are you with Thunderbolt PCI devices being
+> > plugged into your laptop or into the hotplug NVMe slot on a server?
+> 
+> We have protection for that, and have had it for many years.  Same for
+> USB devices.  This isn't new, perhaps you all have not noticed those
+> features be added and taken advantage of already by many Linux distros
+> and system images (i.e. ChromeOS and embedded systems?)
 
-> It's probably premature to build that robust mechanism now, but when it comes,
-> my work-around would be replaced.
+What protection?  I know we have an IOMMU, and that stops the device
+stamping all over RAM by itself - but I think Intel's worries are more
+subtle, things where the device starts playing with what PCI devices
+are expected to do to try and trigger untested kernel paths.  I don't
+think there's protection against that.
+I know we can lock by PCI/USB vendor/device ID - but those can be made
+up trivially; protection like that is meaningless.
 
-It would be replaced if it doesn't have any users. By the looks of it, it'll
-soon grow others and then good luck removing it.
+> > We're now in the position we were with random USB devices years ago.
+> 
+> Nope, we are not, again, we already handle random PCI devices being
+> plugged in.  It's up to userspace to make the policy decision if it
+> should be trusted or not before the kernel has access to it.
+> 
+> So a meta-comment, why not just use that today?  If your guest OS can
+> not authenticate the PCI device passed to it, don't allow the kernel to
+> bind to it.  If it can be authenticated, wonderful, bind away!  You can
+> do this today with no kernel changes needed.
 
-> With all that in mind, I don't want to modify the TPM driver to special-case
-> its MMIO space being encrypted.  FWIW, the TPM driver today uses
-> devm_ioremap_resource() to do the mapping, which defaults to mapping
-> decrypted except for the exceptions implemented in __ioremap_caller().
-> There's no devm_* option for specifying encrypted.
+Because:
+   a) there's no good way to authenticate a PCI device yet
+     - any nasty device can claim to have a given PCI ID.
+   b) Even if you could, there's no man-in-the-middle protection yet.
 
-You mean, it is hard to add a DEVM_IOREMAP_ENCRYPTED type which will have
-__devm_ioremap() call ioremap_encrypted()?
+> > Also we would want to make sure that any config data that the hypervisor
+> > can pass to the guest is validated.
+> 
+> Define "validated" please.
 
-Or define a IORESOURCE_ENCRYPTED and pass it through the ioresource flags?
+Lets say you get something like a ACPI table or qemu fw.cfg table
+giving details of your devices; if the hypervisor builds those in a
+nasty way what happens?
 
-Why is that TPM driver so precious that it can be touched and the arch code
-would have to accept hacks?
+> > The problem seems reasonably well understood within the CoCo world - how
+> > far people want to push it probably varies; but it's good to make the
+> > problem more widely understood.
+> 
+> The "CoCo" world seems distant and separate from the real-world of Linux
+> kernel development if you all do not even know about the authentication
+> methods that we have for years for enabling access to PCI and USB
+> devices as described above.  If the impementations that we currently
+> have are lacking in some way, wonderful, please submit changes for them
+> and we will be glad to review them as needed.
 
-> Handling decrypted vs. encrypted in the driver would require extending the
-> driver API to provide an "encrypted" option, and that seems like going in the
-> wrong long-term direction.
+That's probably fair to some degree - the people looking at this are VM
+people, not desktop people; I'm not sure what the overlap is; but as I
+say above, I don't think the protection currently available really help
+here.  Please show us where we're wrong.
 
-Sorry, I can't follow here.
+> Remember, it's up to you all to convince us that your changes make
+> actual sense and are backed up with working implementations.  Not us :)
 
+Sure;  I'm seeing existing implementations being used in vendors clouds
+at the moment, and they're slowly getting the security people want.
+I'd like to see that being done with upstream kernels and firmware.
+
+Dave
+
+
+> good luck!
+> 
+> greg k-h
+> 
 -- 
-Regards/Gruss,
-    Boris.
+Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
 
-https://people.kernel.org/tglx/notes-about-netiquette
