@@ -2,204 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFB867BBE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF5767BBF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236220AbjAYUEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S236253AbjAYUEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:04:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236115AbjAYUEq (ORCPT
+        with ESMTP id S236040AbjAYUEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:04:46 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8490912587;
-        Wed, 25 Jan 2023 12:04:43 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30PK4VR4096181;
-        Wed, 25 Jan 2023 14:04:31 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674677071;
-        bh=q04QEmurduN8rMs3TdU5HLHxq3EBdz7WBEpMoppBJFM=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=fNTSJ+FhTLDhAoCEvupVzSbv6f2QLO8dspkdmyFBPM6E0/vLEAC71Lj4BOXqamj9c
-         EvDu5eoCerOvJdtrvmyUnvbGNt9ojAmu+T7QHOfPUkueJONQtjm+bLnCJ+JFONuL9p
-         m+XyNux7R4VibhsrHgpx3TWoUJKf+/0zax+U3RTk=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30PK4UHB046988
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 25 Jan 2023 14:04:30 -0600
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 25
- Jan 2023 14:04:30 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 25 Jan 2023 14:04:30 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30PK4TN3038113;
-        Wed, 25 Jan 2023 14:04:29 -0600
-Date:   Thu, 26 Jan 2023 01:34:28 +0530
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>
-CC:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Sinthu Raja <sinthu.raja@ti.com>
-Subject: Re: [PATCH V2 2/2] arm64: dts: ti: k3-am68-sk-base-board: Add pinmux
- for RPi Header
-Message-ID: <20230125200427.2bqlpym5tzz43yqq@uda0490373>
-References: <20230124120311.7323-1-sinthu.raja@ti.com>
- <20230124120311.7323-3-sinthu.raja@ti.com>
+        Wed, 25 Jan 2023 15:04:47 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283024C6D6
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:04:44 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id h5so7583865ybj.8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:04:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MtZUdD+8O7hxMGTcR1DMvNk+cmrcvsJPjaaxCUIim34=;
+        b=fOjBWO27z2DRRtGxPdgxFPgp37eKG2B9PVK/K0KiaXIloz+AuZ38tULN6fcXWxzCXe
+         tU2hdkFiNRDubvDFYYKIraSWMsmgZB5TrENA6ESEOPBjPR/dQpPpkMJl5TsP7oaNQBaU
+         TxPNiWcr87ZC110sXUh6RSZVcOchas4NTyfHWTxoFZ1DzEOO9gAxP0Yd2EzEp0fULRzI
+         KH11tad7CESbeI0SS36cVhoreBuXewlt8xttyfZyHJv8HTgUAkB8genFUrpEvMtBNPp0
+         +Cp+2h8ohoZFxIl3/0g98E+3IWq3CPHCxOoXQqQtkHA1Zm+a4/B25A6qnkeflqA4pUuK
+         /J3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MtZUdD+8O7hxMGTcR1DMvNk+cmrcvsJPjaaxCUIim34=;
+        b=xlWq7/cE/og+tkzjX2gz6WY9BleYJZ+0pyavKMnM3WsVFdRYnwv3ULFbeu5J7gtGvo
+         uRPRMOOtIhSUXdj5T7tSkfL/Q1ozKhy7EeHs376/eoJ4uxcDlWcQXMW+208w/o+YFs21
+         tenvKiPyEd3T8cRtd0e0nyN7bz+gSTF7faSSVDqncD+xW8JcHKsifDbKu4/ECNyFBuwq
+         eoxqWa2vcEM/9fmn2ogqFkbba8DNEmrEOhv4DHfZcgk2yc+hkPByIPx4aP680s6pxpe3
+         XQ+4NV7CVWbBAcZNd4e18DQCYnPj2gahZUc68Nrp/i+FS0Qv9VTLa3vpQ7fmenQTu0Ju
+         M5Qw==
+X-Gm-Message-State: AO0yUKWM7i9chhGnk5WBWmgPhxeFuhULffAPuXiVjSjU7vnia/dDzYSl
+        ppA8TYV2hvA0zzbvgUIb1mnBrEyOgC5ckuioY+/76g==
+X-Google-Smtp-Source: AK7set/0yo0srPljd82kRg54UhHAn9kAcoGNmLhg0Ao5vhrkKbvYpqMk0gx/CzAceT8L+J/HB1ohTrPmB4dI55xwr6c=
+X-Received: by 2002:a25:341:0:b0:80b:96cc:310d with SMTP id
+ 62-20020a250341000000b0080b96cc310dmr522771ybd.117.1674677083118; Wed, 25 Jan
+ 2023 12:04:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230124120311.7323-3-sinthu.raja@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230123191728.2928839-1-tjmercier@google.com>
+ <20230123191728.2928839-2-tjmercier@google.com> <Y8/ybgp2FW+e3bjc@dhcp22.suse.cz>
+ <CABdmKX1c_8LdJJboENnZhwGjrszDWOOVt-Do93-sJW46mZMD6A@mail.gmail.com> <Y9EbHW84ydBzpTTO@dhcp22.suse.cz>
+In-Reply-To: <Y9EbHW84ydBzpTTO@dhcp22.suse.cz>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Wed, 25 Jan 2023 12:04:32 -0800
+Message-ID: <CABdmKX0TEf_18UC0_pt1BumB9vDdJW2Ntv5bo0wh_CMOEcAEdA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] memcg: Track exported dma-buffers
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        daniel.vetter@ffwll.ch, android-mm@google.com, jstultz@google.com,
+        jeffv@google.com, cmllamas@google.com,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17:33-20230124, Sinthu Raja wrote:
-> From: Sinthu Raja <sinthu.raja@ti.com>
-> 
-> Add pinmux required to bring out the i2c and gpios on 40-pin RPi
-> expansion header on the AM68 SK board.
-> 
-> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
-> ---
-> 
-> No Changes in V2.
-> 
->  .../boot/dts/ti/k3-am68-sk-base-board.dts     | 70 ++++++++++++++++++-
->  1 file changed, 69 insertions(+), 1 deletion(-)
+On Wed, Jan 25, 2023 at 4:05 AM Michal Hocko <mhocko@suse.com> wrote:
 >
+> On Tue 24-01-23 10:55:21, T.J. Mercier wrote:
+> > On Tue, Jan 24, 2023 at 7:00 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Mon 23-01-23 19:17:23, T.J. Mercier wrote:
+> > > > When a buffer is exported to userspace, use memcg to attribute the
+> > > > buffer to the allocating cgroup until all buffer references are
+> > > > released.
+> > >
+> > > Is there any reason why this memory cannot be charged during the
+> > > allocation (__GFP_ACCOUNT used)?
+> >
+> > My main motivation was to keep code changes away from exporters and
+> > implement the accounting in one common spot for all of them. This is a
+> > bit of a carryover from a previous approach [1] where there was some
+> > objection to pushing off this work onto exporters and forcing them to
+> > adapt, but __GFP_ACCOUNT does seem like a smaller burden than before
+> > at least initially. However in order to support charge transfer
+> > between cgroups with __GFP_ACCOUNT we'd need to be able to get at the
+> > pages backing dmabuf objects, and the exporters are the ones with that
+> > access. Meaning I think we'd have to add some additional dma_buf_ops
+> > to achieve that, which was the objection from [1].
+> >
+> > [1] https://lore.kernel.org/lkml/5cc27a05-8131-ce9b-dea1-5c75e994216d@amd.com/
+> >
+> > >
+> > > Also you do charge and account the memory but underlying pages do not
+> > > know about their memcg (this is normally done with commit_charge for
+> > > user mapped pages). This would become a problem if the memory is
+> > > migrated for example.
+> >
+> > Hmm, what problem do you see in this situation? If the backing pages
+> > are to be migrated that requires the cooperation of the exporter,
+> > which currently has no influence on how the cgroup charging is done
+> > and that seems fine. (Unless you mean migrating the charge across
+> > cgroups? In which case that's the next patch.)
+>
+> My main concern was that page migration could lose the external tracking
+> without some additional steps on the dmabuf front.
+>
+I see, yes that would be true if an exporter moves data around between
+system memory and VRAM for example. (I think TTM does this sort of
+thing, but not sure if that's actually within a single dma buffer.)
+VRAM feels like it maybe doesn't belong in memcg, yet it would still
+be charged there under this series right now. I don't really see a way
+around this except to involve the exporters directly in the accounting
+(or don't attempt to distinguish between types of memory).
 
-Tested-by: Rahul T R <r-ravikumar@ti.com>
+> > > This also means that you have to maintain memcg
+> > > reference outside of the memcg proper which is not really nice either.
+> > > This mimicks tcp kmem limit implementation which I really have to say I
+> > > am not a great fan of and this pattern shouldn't be coppied.
+> > >
+> > Ah, what can I say. This way looked simple to me. I think otherwise
+> > we're back to making all exporters do more stuff for the accounting.
+> >
+> > > Also you are not really saying anything about the oom behavior. With
+> > > this implementation the kernel will try to reclaim the memory and even
+> > > trigger the memcg oom killer if the request size is <= 8 pages. Is this
+> > > a desirable behavior?
+> >
+> > It will try to reclaim some memory, but not the dmabuf pages right?
+> > Not *yet* anyway. This behavior sounds expected to me.
+>
+> Yes, we have discussed that shrinkers will follow up later which is
+> fine. The question is how much reclaim actually makes sense at this
+> stage. Charging interface usually copes with sizes resulting from
+> allocation requests (so usually 1<<order based). I can imagine that a
+> batch charge like implemented here could easily be 100s of MBs and it is
+> much harder to define reclaim targets for. At least that is something
+> the memcg charging hasn't really considered yet.  Maybe the existing
+> try_charge implementation can cope with that just fine but it would be
+> really great to have the expected behavior described.
+>
+> E.g. should be memcg OOM killer be invoked? Should reclaim really target
+> regular memory at all costs or just a lightweight memory reclaim is
+> preferred (is the dmabuf charge failure an expensive operation wrt.
+> memory refault due to reclaim).
 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
-> index 2091cd2431fb..722cd19b74e0 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
-> @@ -173,6 +173,32 @@ J721S2_IOPAD(0x0a0, PIN_INPUT, 0) /* (AB25) MCASP0_AXR12.MCAN7_RX */
->  			J721S2_IOPAD(0x09c, PIN_INPUT, 0) /* (T24) MCASP0_AXR11.MCAN7_TX */
->  		>;
->  	};
-> +
-> +	main_i2c4_pins_default: main-i2c4-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721S2_IOPAD(0x010, PIN_INPUT_PULLUP, 7) /* (AF28) MCAN13_RX.I2C4_SDA */
-> +			J721S2_IOPAD(0x014, PIN_INPUT_PULLUP, 7) /* (AD25) MCAN14_TX.I2C4_SCL */
-> +		>;
-> +	};
-> +
-> +	rpi_header_gpio0_pins_default: rpi-header-gpio0-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721S2_IOPAD(0x0a8, PIN_INPUT, 7) /* (U24)  MCASP0_AXR14.GPIO0_42 */
-> +			J721S2_IOPAD(0x090, PIN_INPUT, 7) /* (W24) MCASP0_AXR8.GPIO0_36 */
-> +			J721S2_IOPAD(0x0bc, PIN_INPUT, 7) /* (V28) MCASP1_AFSX.GPIO0_47 */
-> +			J721S2_IOPAD(0x06c, PIN_INPUT, 7) /* (V26) MCAN1_TX.GPIO0_27 */
-> +			J721S2_IOPAD(0x004, PIN_INPUT, 7) /* (W25) MCAN12_TX.GPIO0_1 */
-> +			J721S2_IOPAD(0x008, PIN_INPUT, 7) /* (AC24) MCAN12_RX.GPIO0_2 */
-> +			J721S2_IOPAD(0x0b8, PIN_INPUT, 7) /* (AA24) MCASP1_ACLKX.GPIO0_46 */
-> +			J721S2_IOPAD(0x00c, PIN_INPUT, 7) /* (AE28) MCAN13_TX.GPIO0_3 */
-> +			J721S2_IOPAD(0x034, PIN_INPUT, 7) /* (AD24) PMIC_WAKE0.GPIO0_13 */
-> +			J721S2_IOPAD(0x0a4, PIN_INPUT, 7) /* (T23) MCASP0_AXR13.GPIO0_41 */
-> +			J721S2_IOPAD(0x0c0, PIN_INPUT, 7) /* (T28) MCASP1_AXR0.GPIO0_48 */
-> +			J721S2_IOPAD(0x0b4, PIN_INPUT, 7) /* (U25) MCASP1_AXR4.GPIO0_45 */
-> +			J721S2_IOPAD(0x0cc, PIN_INPUT, 7) /* (AE27) SPI0_CS0.GPIO0_51 */
-> +			J721S2_IOPAD(0x08c, PIN_INPUT, 7) /* (T25) MCASP0_AXR7.GPIO0_35 */
-> +		>;
-> +	};
->  };
->  
->  &wkup_pmx0 {
-> @@ -214,12 +240,39 @@ J721S2_WKUP_IOPAD(0x0d0, PIN_OUTPUT, 0) /* (C23) WKUP_GPIO0_4.MCU_MCAN1_TX*/
->  		>;
->  	};
->  
-> +	mcu_i2c0_pins_default: mcu-i2c0-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721S2_WKUP_IOPAD(0x100, PIN_INPUT, 0) /*(H24) WKUP_GPIO0_63.MCU_I2C0_SCL*/
-> +			J721S2_WKUP_IOPAD(0x104, PIN_INPUT, 0) /*(H27) WKUP_GPIO0_64.MCU_I2C0_SDA*/
-> +		>;
-> +	};
-> +
->  	mcu_i2c1_pins_default: mcu-i2c1-pins-default {
->  		pinctrl-single,pins = <
->  			J721S2_WKUP_IOPAD(0x0e0, PIN_INPUT, 0) /* (F24) WKUP_GPIO0_8.MCU_I2C1_SCL */
->  			J721S2_WKUP_IOPAD(0x0e4, PIN_INPUT, 0) /* (H26) WKUP_GPIO0_9.MCU_I2C1_SDA */
->  		>;
->  	};
-> +
-> +	mcu_rpi_header_gpio0_pins_default: mcu-rpi-header-gpio0-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721S2_WKUP_IOPAD(0x180, PIN_INPUT, 7) /* (G25) WKUP_GPIO0_66 */
-> +			J721S2_WKUP_IOPAD(0x190, PIN_INPUT, 7) /* (K26) WKUP_GPIO0_49 */
-> +			J721S2_WKUP_IOPAD(0x0c4, PIN_INPUT, 7) /* (E24) MCU_SPI1_D0.WKUP_GPIO0_1 */
-> +			J721S2_WKUP_IOPAD(0x0c8, PIN_INPUT, 7) /* (C28) MCU_SPI1_D1.WKUP_GPIO0_2 */
-> +			J721S2_WKUP_IOPAD(0x0c0, PIN_INPUT, 7) /* (D26) MCU_SPI1_CLK.WKUP_GPIO0_0 */
-> +			J721S2_WKUP_IOPAD(0x0fc, PIN_INPUT, 7) /* (D25) MCU_SPI1_CS2.WKUP_GPIO0_15*/
-> +			J721S2_WKUP_IOPAD(0x120, PIN_INPUT, 7) /* (G27) WKUP_GPIO0_56 */
-> +			J721S2_WKUP_IOPAD(0x17c, PIN_INPUT, 7) /* (J26) WKUP_GPIO0_57 */
-> +			J721S2_WKUP_IOPAD(0x184, PIN_INPUT, 7) /* (J27) WKUP_GPIO0_67 */
-> +			J721S2_WKUP_IOPAD(0x0cc, PIN_INPUT, 7) /* (C27) MCU_SPI1_CS0.WKUP_GPIO0_3 */
-> +		>;
-> +	};
-> +};
-> +
-> +&main_gpio0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&rpi_header_gpio0_pins_default>;
->  };
->  
->  &main_gpio2 {
-> @@ -235,7 +288,8 @@ &main_gpio6 {
->  };
->  
->  &wkup_gpio0 {
-> -	status = "disabled";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&mcu_rpi_header_gpio0_pins_default>;
->  };
->  
->  &wkup_gpio1 {
-> @@ -273,6 +327,20 @@ exp1: gpio@21 {
->  	};
->  };
->  
-> +&main_i2c4 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_i2c4_pins_default>;
-> +	clock-frequency = <400000>;
-> +};
-> +
-> +&mcu_i2c0 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&mcu_i2c0_pins_default>;
-> +	clock-frequency = <400000>;
-> +};
-> +
->  &main_sdhci0 {
->  	/* Unused */
->  	status = "disabled";
-> -- 
-> 2.36.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Ah, in my experience very large individual buffers like that are rare.
+Cumulative system-wide usage might reach 100s of megs or more spread
+across many buffers. On my phone the majority of buffer sizes are 4
+pages or less, but there are a few that reach into the tens of megs.
+But now I see your point. I still think that where a memcg limit is
+exceeded and we can't reclaim enough as a result of a new dmabuf
+allocation, we should see a memcg OOM kill. Sounds like you are
+looking for that to be written down, so I'll try to find a place for
+that.
+
+Part of the motivation for this accounting is to eventually have a
+well defined limit for applications to know how much more they can
+allocate. So where buffer size or number of buffers is a flexible
+variable, I'd like to see an application checking this limit before
+making a large request in an effort to avoid reclaim in the first
+place. Where there is heavy memory pressure and multiple competing
+apps, the status-quo today is a kill for us anyways (typically LMKD).
+
+
+
+
+> --
+> Michal Hocko
+> SUSE Labs
