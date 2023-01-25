@@ -2,91 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A289E67ABB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5DC67ABE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235036AbjAYI3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
+        id S234839AbjAYIf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbjAYI3e (ORCPT
+        with ESMTP id S234627AbjAYIf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:29:34 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57871632B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:29:32 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pKb9p-0006lm-82; Wed, 25 Jan 2023 09:29:25 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pKb9m-00034W-Gv; Wed, 25 Jan 2023 09:29:22 +0100
-Date:   Wed, 25 Jan 2023 09:29:22 +0100
-From:   Sascha Hauer <sha@pengutronix.de>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sandy Huang <hjc@rock-chips.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH v3 0/6] drm/rockchip: vop2: add support for the rgb
- output block
-Message-ID: <20230125082922.GZ24755@pengutronix.de>
-References: <20230124054706.3921383-1-michael.riesch@wolfvision.net>
+        Wed, 25 Jan 2023 03:35:56 -0500
+X-Greylist: delayed 319 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 Jan 2023 00:35:55 PST
+Received: from forward103o.mail.yandex.net (forward103o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::606])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084296A77;
+        Wed, 25 Jan 2023 00:35:54 -0800 (PST)
+Received: from sas2-ffeb92823cb1.qloud-c.yandex.net (sas2-ffeb92823cb1.qloud-c.yandex.net [IPv6:2a02:6b8:c08:6803:0:640:ffeb:9282])
+        by forward103o.mail.yandex.net (Yandex) with ESMTP id C648F10AAF53;
+        Wed, 25 Jan 2023 11:30:31 +0300 (MSK)
+Received: by sas2-ffeb92823cb1.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id UUKCeP8ZA4Y1-fXis0HZR;
+        Wed, 25 Jan 2023 11:30:31 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1674635431;
+        bh=vMqQxoLJ0OjTyTvK+N3TACsOXvm5uWLcaMM3em0scfI=;
+        h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
+        b=h57w1pwdXDfOgFlMXJmd0nrUDrwmLoZ8bV/PehuPKirn9G5jQTU/Dk+FZKlTrzcCA
+         HR81ibZqhTTSlXu2xLCat4johVr6Rp1bUHH44fw2XNuIicUoTMxZ0XoChqUttN/Ht8
+         QqwmlOi2Fdjs/XjD3ECiYcQ4fg3Bg9beUCj2HKCc=
+Authentication-Results: sas2-ffeb92823cb1.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     linux-gpio@vger.kernel.org
+Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/3] gpio-ep93xx: prepare for dt, fixes
+Date:   Wed, 25 Jan 2023 11:30:23 +0300
+Message-Id: <20230125083026.5399-1-nikita.shubin@maquefel.me>
+X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20230117100845.16708-1-nikita.shubin@maquefel.me>
+References: <20230117100845.16708-1-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124054706.3921383-1-michael.riesch@wolfvision.net>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 06:47:00AM +0100, Michael Riesch wrote:
-> Hi all,
-> 
-> This series adds support for the RGB output block that can be found in the
-> Rockchip Video Output Processor (VOP) 2. Version 2 of this series
-> incorporates the feedback by Dan Carpenter and Sascha Hauer. Version 3
-> fixes a dumb mistake pointed out by Sascha :-) Thanks for your comments!
-> 
-> Patches 1-4 clean up the code and make it more general.
-> 
-> Patch 5 activates the support for the RGB output block in the VOP2 driver.
-> 
-> Patch 6 adds pinctrls for the 16-bit and 18-bit RGB data lines.
-> 
-> Tested on a custom board featuring the RK3568 SoC with a 18-bit RGB
-> display.
-> 
-> Looking forward to your comments!
+This series introduce fixes and DT conver preparations:
 
-For the series:
+- fix F port irq numbers out of sync
+- make immutable
+- prepare for DT conversion
 
-Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
 
-Sascha
+Nikita Shubin (3):
+  gpio: ep93xx: Fix port F hwirq numbers in handler
+  gpio: ep93xx: Make irqchip immutable
+  gpio: ep93xx: split device in multiple
+
+ arch/arm/mach-ep93xx/core.c          | 121 ++++++++-
+ arch/arm/mach-ep93xx/edb93xx.c       |   2 +-
+ arch/arm/mach-ep93xx/simone.c        |   4 +-
+ arch/arm/mach-ep93xx/ts72xx.c        |   4 +-
+ arch/arm/mach-ep93xx/vision_ep9307.c |  10 +-
+ drivers/gpio/gpio-ep93xx.c           | 357 +++++++++++----------------
+ 6 files changed, 258 insertions(+), 240 deletions(-)
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.37.4
+
