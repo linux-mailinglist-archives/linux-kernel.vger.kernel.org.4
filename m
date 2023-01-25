@@ -2,91 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C5967BC47
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A23467BC46
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236387AbjAYUKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:10:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
+        id S236365AbjAYUKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:10:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236388AbjAYUJ5 (ORCPT
+        with ESMTP id S236354AbjAYUJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:09:57 -0500
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDB55D900;
-        Wed, 25 Jan 2023 12:09:35 -0800 (PST)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1631b928691so6413265fac.11;
-        Wed, 25 Jan 2023 12:09:35 -0800 (PST)
+        Wed, 25 Jan 2023 15:09:52 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60ED75AA6C
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:09:30 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id q10so1265856wrm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:09:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NDxe4oIJJSUOqPRwp3G0IGOgJo50hIDpNvcK0HbcW+I=;
+        b=qAtHh3HwGlWTIavwZBR9eHLTvK0r//m0TwA4Wf7MIK+sqNyRDS3PBTtmyYxSdDSyAz
+         0wCiETk9qiVzPJvSFoDDOueI0oJhHGQ5Lqa6G+DLURT6rn7UocCXrK2Pp5gYfhFFpOQc
+         Nnc21ecuBb/maD0nI2yjRXyHfVHCjFXU8sIq6WkU7w4r7e50X5c+27sGqh91QyW44z7N
+         qp5wDQqjntoRCjZ32ps2I21XkincXo2a7MgfTnSvvptA0UynoKz/F4ohixYTn9jQWKr3
+         3BgCXgoqm+RkgjaTMCe9F2TMhzCHvkOZd8F6RsN5TL5HBO2tckVNf6KlnSQsjQb7/MVv
+         ylxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7GwbvorGn0RsrCr1lYO8AQMjltKd8a/pRgkR5/1pKCQ=;
-        b=vINhH318gGrH6cV6e8EkyIbLnLXH79tm9/DBf2nlgtSXDlcuHc/FQyw/w2cBcDsXXj
-         DP24o7dBe20niNu1xnPPfIbveUq2A9T0kvYsmiyNqOLrpyCybD+DQWUXF0PGbqcqPKM+
-         l7uUm3lkQ5jjThQCxMH5/WdnGu1OVL6vgcBgcZiWmazscNp9FIUiSXmIDawWxXQxtfTH
-         Hv917z8oinxdqn5VJqIESkGVxghNR4xa6tMF+bn83R7G0yPQBeGntIOkIzUEdx+PRkUC
-         9Wzb8d8LFAV4VmeGSIyY58uTnmzPsWbsaNlIlSsQ8imYXvfGW5eiiOoe1Vl89JH8gecN
-         Bl1Q==
-X-Gm-Message-State: AO0yUKXmuGrX5wN/dHqwNBMcIibHutSTDheuSTOrQT136BdfdZ78UgPw
-        ihLvr5Be9vWCuQLqMe4LIg==
-X-Google-Smtp-Source: AK7set8vWoADu2dFh2Wi0jTLqZLUS3c9WQz5pfsofwNc+7WfeFAiHYC6lXfkVBUekSKcwpURaqmjaA==
-X-Received: by 2002:a05:6870:1711:b0:163:3d31:58be with SMTP id h17-20020a056870171100b001633d3158bemr1344921oae.45.1674677365046;
-        Wed, 25 Jan 2023 12:09:25 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j24-20020a056870051800b0013b9ee734dcsm2271007oao.35.2023.01.25.12.09.23
+        bh=NDxe4oIJJSUOqPRwp3G0IGOgJo50hIDpNvcK0HbcW+I=;
+        b=bqyNKzdnxHK1BiNOCUVrmYg1X6JhYhdW2mnMiHu+sepySAx0gwPKcwP3cxXC6CtVwf
+         +B9Vt3f72vUYWNbj33NVzUa8JOjJITeChKS5BSsWPCc2DlJlQtFYa370+7EF8ODIxBqX
+         krx6BwBpfmrLIiSNrf0m8kU1KBu6lIT6kIx1Gj/tBy8wVrOjoyrunMycZTJFIjRWivSE
+         mEAeQZ6DEy50zT+MyunKCPzmQuddwvT2wcfM13Wzbfc+VoJqfQvau1KJRF2SqPU+L1J/
+         HNt5Ez1hXd7OggNimgezIRiotaZotl6Fh/x7VuaOFJQn9+N6DTclXK+bHrvuhOb6gL58
+         F49Q==
+X-Gm-Message-State: AO0yUKWQ2leQzaMDYzP4J5lS+vD3CT1kKmccTPQww/kN0vFo1ddwMyKy
+        qxx2aCQ08uXynA487f3Ar3M=
+X-Google-Smtp-Source: AK7set+gKyL1/EbwngB0SCDE5eQm9o64IfenrGX4+jjBe5iXQY2tEPg5qF3+P6yRQEdKGjIvZeijFg==
+X-Received: by 2002:adf:e3d0:0:b0:2bf:b41c:61de with SMTP id k16-20020adfe3d0000000b002bfb41c61demr1049378wrm.4.1674677368768;
+        Wed, 25 Jan 2023 12:09:28 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p57935ca5.dip0.t-ipconnect.de. [87.147.92.165])
+        by smtp.gmail.com with ESMTPSA id f5-20020adffcc5000000b002bfae3f6802sm5124513wrs.58.2023.01.25.12.09.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 12:09:24 -0800 (PST)
-Received: (nullmailer pid 2800439 invoked by uid 1000);
-        Wed, 25 Jan 2023 20:09:23 -0000
-Date:   Wed, 25 Jan 2023 14:09:23 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Fugang Duan <fugang.duan@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-serial@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pragnesh Patel <pragnesh.patel@sifive.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Fabio Estevam <festevam@gmail.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Chester Lin <clin@suse.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH v2 11/12] dt-bindings: serial: drop unneeded quotes
-Message-ID: <167467736271.2800253.2821370670394691234.robh@kernel.org>
-References: <20230124091602.44027-1-krzysztof.kozlowski@linaro.org>
- <20230124091916.45054-9-krzysztof.kozlowski@linaro.org>
+        Wed, 25 Jan 2023 12:09:28 -0800 (PST)
+Date:   Wed, 25 Jan 2023 21:09:26 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 10/11] staging: rtl8192e: Remove unused variables
+ txbeac.., txman.. and txcmdp..
+Message-ID: <6c922591c48512692f77729ac91849ebb4e61bd1.1674675808.git.philipp.g.hortmann@gmail.com>
+References: <cover.1674675808.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230124091916.45054-9-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <cover.1674675808.git.philipp.g.hortmann@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,19 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+txbeaconerr, txmanageokint and txcmdpktokint are initialized and increased
+but never read. Remove dead code.
 
-On Tue, 24 Jan 2023 10:19:15 +0100, Krzysztof Kozlowski wrote:
-> Cleanup by removing unneeded quotes from refs.  No functional impact
-> except adjusting to preferred coding style.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/serial/8250.yaml            | 4 ++--
->  .../devicetree/bindings/serial/fsl,s32-linflexuart.yaml       | 2 +-
->  Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml    | 4 ++--
->  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml      | 2 +-
->  Documentation/devicetree/bindings/serial/fsl-mxs-auart.yaml   | 2 +-
->  5 files changed, 7 insertions(+), 7 deletions(-)
-> 
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 8 +-------
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 3 ---
+ 2 files changed, 1 insertion(+), 10 deletions(-)
 
-Acked-by: Rob Herring <robh@kernel.org>
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index 4cc90425fa4c..2c5edda74e73 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -2139,11 +2139,7 @@ static irqreturn_t _rtl92e_irq(int irq, void *netdev)
+ 		goto done;
+ 	}
+ 
+-	if (inta & IMR_TBDER)
+-		priv->stats.txbeaconerr++;
+-
+ 	if (inta  & IMR_MGNTDOK) {
+-		priv->stats.txmanageokint++;
+ 		_rtl92e_tx_isr(dev, MGNT_QUEUE);
+ 		spin_unlock_irqrestore(&priv->irq_th_lock, flags);
+ 		if (priv->rtllib->ack_tx_to_ieee) {
+@@ -2155,10 +2151,8 @@ static irqreturn_t _rtl92e_irq(int irq, void *netdev)
+ 		spin_lock_irqsave(&priv->irq_th_lock, flags);
+ 	}
+ 
+-	if (inta & IMR_COMDOK) {
+-		priv->stats.txcmdpktokint++;
++	if (inta & IMR_COMDOK)
+ 		_rtl92e_tx_isr(dev, TXCMD_QUEUE);
+-	}
+ 
+ 	if (inta & IMR_HIGHDOK)
+ 		_rtl92e_tx_isr(dev, HIGH_QUEUE);
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index f8b2201ea288..c6a4ac6ce959 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -184,9 +184,6 @@ enum reset_type {
+ 
+ struct rt_stats {
+ 	unsigned long received_rate_histogram[4][32];
+-	unsigned long txbeaconerr;
+-	unsigned long txmanageokint;
+-	unsigned long txcmdpktokint;
+ 	unsigned long txbytesmulticast;
+ 	unsigned long txbytesbroadcast;
+ 	unsigned long txbytesunicast;
+-- 
+2.39.1
+
