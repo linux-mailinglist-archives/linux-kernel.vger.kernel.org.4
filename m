@@ -2,111 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1E967C0E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0923F67C0E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236007AbjAYXgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 18:36:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
+        id S230338AbjAYXhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 18:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236044AbjAYXg2 (ORCPT
+        with ESMTP id S229520AbjAYXg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 18:36:28 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49F35EF8B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 15:36:14 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4d5097a95f5so1714437b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 15:36:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r6gsGOWqmWqPTUheNVBr3Q9nvHWl0lLSYR4b+5IyM2U=;
-        b=A/+QvJNXy/d2vUI7IPHDHgHrWDO5jed44nN4fWVgpwvqVaJ31sqqH7bmSeeRmlNRUe
-         R8yZL4gzTLe9/1VGW0HvHObu5bU15WhlNXVFuvCtXS1G895lG29e5Fcqxn2GSCvSAWbL
-         a8+HubzPqRrnoptHqtaiUWYzGkX+Bc9oxqltwaro1OAtno0UicpOEKYTqlPtF+8tMqyj
-         yl/bjmJVeg0LR1s+57cLzBKsRlrrNOMebK53a2LFqIWNe7pEp/2Pdvl38JYqyOXxSvMk
-         fAnMfk21t3L3pUqNrcRKGWlBkL42c9QvZGZGpHK8jyyUU6ou7Oa+/eZkY6FyQAx511UH
-         LrZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r6gsGOWqmWqPTUheNVBr3Q9nvHWl0lLSYR4b+5IyM2U=;
-        b=o19gGwdfCKzoqf2Q7UZHSMJThxpjXgRF7jQ0bhwSUfhzHsYPAhbpzCQPwuI7JdqFv5
-         FLmgeXUGkpxDfCURHzwQLd/E6AT0Ft/Vvsppbl+vRuvA9R+P5a02pG1MF5UUL68iEo0i
-         KlK/WYhmSB2L5JnFS74/9F2L53R+Q3e3BJlAzqTktBCSMzq0Yq5b3p8AlpyJPrXjs2gG
-         p8vCwenYKGufmcpPADK46PlkM511W0wPoUaHMABFdDKLDFutgNmOKlHYoN1P3fti0OEX
-         un9bg7LIkRDKCXU/ZiDXPN20NOJvTM805poE/TXv9adp3qu3uqA9rdtHx56XJqNSd/9A
-         87+w==
-X-Gm-Message-State: AFqh2kpuu+RKO5pHXnP6Ew6HWWyULTBZB/zm7+MLSAGb1e5RnYsTtad8
-        fRNtI/9FHSerdqpaY+OvQ0YIzQJ7iwg=
-X-Google-Smtp-Source: AMrXdXu2jHtIhTXjXhL9uqm1GdxSUteqsFjlccKLo1OvqKsStZdC9fM8D9TZdXuT4x0gDFJ1URuxrGbnlWU=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:f7b0:20e8:ce66:f98])
- (user=surenb job=sendgmr) by 2002:a05:6902:1148:b0:803:6201:640a with SMTP id
- p8-20020a056902114800b008036201640amr1801877ybu.141.1674689773846; Wed, 25
- Jan 2023 15:36:13 -0800 (PST)
-Date:   Wed, 25 Jan 2023 15:35:54 -0800
-In-Reply-To: <20230125233554.153109-1-surenb@google.com>
+        Wed, 25 Jan 2023 18:36:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E683646BA;
+        Wed, 25 Jan 2023 15:36:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B488B81C57;
+        Wed, 25 Jan 2023 23:36:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6638C433D2;
+        Wed, 25 Jan 2023 23:36:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1674689790;
+        bh=W6HQ8MA0yrgY78AuioxRnZ92kiAT5egdp56hd0Zn8bA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Guj4q8Wlu/BQ0vrXh0xj8fH4hmAV+wXBAgut16Iz4qfH5Xphsfr9+wI7wY0LbxLs0
+         CS+kZDuXdKZL0IfNs9/WVlNNqB/+kL/EHGW+nfnbfIKFU7fyfPIQlkRl0kIFhI8OMM
+         ZRYzYl1BLSaJA+JEhljHJwTQEqnERMYgL6Np0Cac=
+Date:   Wed, 25 Jan 2023 15:36:28 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Alexey Gladkov <legion@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, containers@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Val Cowan <vcowan@redhat.com>
+Subject: Re: [RFC PATCH v1 0/6] proc: Add allowlist for procfs files
+Message-Id: <20230125153628.43c12cbe05423fef7d44f0dd@linux-foundation.org>
+In-Reply-To: <cover.1674660533.git.legion@kernel.org>
+References: <cover.1674660533.git.legion@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-References: <20230125233554.153109-1-surenb@google.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230125233554.153109-8-surenb@google.com>
-Subject: [PATCH v3 7/7] mm: export dump_mm()
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
-        mingo@redhat.com, will@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mmap_assert_write_locked() is used in vm_flags modifiers. Because
-mmap_assert_write_locked() uses dump_mm() and vm_flags are sometimes
-modified from inside a module, it's necessary to export dump_mm()
-function.
+On Wed, 25 Jan 2023 16:28:47 +0100 Alexey Gladkov <legion@kernel.org> wrote:
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
----
- mm/debug.c | 1 +
- 1 file changed, 1 insertion(+)
+> The patch expands subset= option. If the proc is mounted with the
+> subset=allowlist option, the /proc/allowlist file will appear. This file
+> contains the filenames and directories that are allowed for this
+> mountpoint. By default, /proc/allowlist contains only its own name.
+> Changing the allowlist is possible as long as it is present in the
+> allowlist itself.
+> 
+> This allowlist is applied in lookup/readdir so files that will create
+> modules after mounting will not be visible.
+> 
+> Compared to the previous patches [1][2], I switched to a special virtual
+> file from listing filenames in the mount options.
+> 
 
-diff --git a/mm/debug.c b/mm/debug.c
-index 9d3d893dc7f4..96d594e16292 100644
---- a/mm/debug.c
-+++ b/mm/debug.c
-@@ -215,6 +215,7 @@ void dump_mm(const struct mm_struct *mm)
- 		mm->def_flags, &mm->def_flags
- 	);
- }
-+EXPORT_SYMBOL(dump_mm);
- 
- static bool page_init_poisoning __read_mostly = true;
- 
--- 
-2.39.1
+Changlog doesn't explain why you think Linux needs this feature.  The
+[2/6] changelog hints that containers might be involved.  IOW, please
+fully describe the requirement and use-case(s).
 
+Also, please describe why /proc/allowlist is made available via a mount
+option, rather than being permanently present.
+
+And why add to subset=, instead of a separate mount option.
+
+Does /proc/allowlist work in subdirectories?  Like, permit presence of
+/proc/sys/vm/compact_memory?
+
+I think the whole thing is misnamed, really.  "allowlist" implies
+access permissions.  Some of the test here uses "visibility" and other
+places use "presence", which are better.  "presentlist" and
+/proc/presentlist might be better.  But why not simply /proc/contents?
+
+Please run these patches through checkpatch and consider the result.
