@@ -2,146 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFBF67A7EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 01:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 780B767A7F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 01:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233822AbjAYAoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 19:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S234111AbjAYApe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 19:45:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjAYAoh (ORCPT
+        with ESMTP id S231553AbjAYApc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 19:44:37 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCFF37F38;
-        Tue, 24 Jan 2023 16:44:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674607473; x=1706143473;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QM2+POLX0q7xcehfBUAPRbRSsX9KORGrbBZHP2QA5B4=;
-  b=O4GwL7D/ILhQO5gWJIRepYIt246TNpqi36W31B9FgeoxDuFx+G+LQDaK
-   kQDHEI42L5ztwWWZlJxwq3r5X9Jc8wjXZ2IRxxUBZ3Z6DSNTxuwwTn4DM
-   V1TNoG9jPxpBZGdqNvbFPYr0fjxAOCVts5+igtb8iSrlEHhQa+ErkLIoC
-   xldLJow1OED4wLXtC7cLaa+tZBt8yDTtoRpmqZx7H4xhaD/AxqXDh0UGJ
-   VyjIVyj7Q4//PJIOa0+OZR48jak5qvk4Jd/0GiJcOoxMGf3vlJ0mRACP0
-   GBprQ2+wXfjzoEQJzSozrmPZ1Y7lKcXd3d8x17kfg6VQVDou2ejW2gLPv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="412684651"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="412684651"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 16:44:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="804816336"
-X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="804816336"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2023 16:44:28 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pKTtr-0006uW-1S;
-        Wed, 25 Jan 2023 00:44:27 +0000
-Date:   Wed, 25 Jan 2023 08:44:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-serial@vger.kernel.org,
-        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com,
-        neeraj.sanjaykale@nxp.com
-Subject: Re: [PATCH v1 3/3] Bluetooth: NXP: Add protocol support for NXP
- Bluetooth chipsets
-Message-ID: <202301250824.iVWBIZts-lkp@intel.com>
-References: <20230124174714.2775680-4-neeraj.sanjaykale@nxp.com>
+        Tue, 24 Jan 2023 19:45:32 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27334AA6C;
+        Tue, 24 Jan 2023 16:45:30 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OLRBns027197;
+        Wed, 25 Jan 2023 00:45:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=H03eYmyGEROq9vsq7tIFQliUIeCvTRDLi/flje0uI1E=;
+ b=rcvj90jHXMGusE7bd4DIaX0si3IaHFEpaAZBQshKnGJdCKBzgI/CQ7rHA5eGHZvQX3ON
+ K8SnwwQuj6+/gUn/ljTyIPvXMCezOcsm7/fILPBBtQ2UhUYXrrVATrKU776jvwB3kJ84
+ MQS1hkpi7cmxYV6UhB6Z0mPoiRRk28xCL1QM2Q1Gf/iNhy3EomwWIFixafk1/qQ8EHz5
+ AJslxIhgGurN9urM7MNpcULxhdTEf480sNOMxOUnOPO3J10O870fqM96Ogug5J5Q0/XH
+ 4hrrWSl6bnjspdLcWzATb+OqwaKXnboZdwK6lTStw5eBIufy9NcFBxGEqTrnCDXOQ75S hg== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nabufe4yk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 00:45:17 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30OFtUHm015320;
+        Wed, 25 Jan 2023 00:45:15 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3n87p6b5af-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 00:45:15 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30P0jDxj22086256
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 Jan 2023 00:45:13 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C2DC20040;
+        Wed, 25 Jan 2023 00:45:13 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E4A5A20043;
+        Wed, 25 Jan 2023 00:45:12 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 25 Jan 2023 00:45:12 +0000 (GMT)
+Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 30829605F1;
+        Wed, 25 Jan 2023 11:45:09 +1100 (AEDT)
+Message-ID: <f8351bc887f8f95063f5e301f78755ef608a76a0.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 24/24] integrity/powerpc: Support loading keys from
+ pseries secvar
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-integrity@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
+        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
+        ruscur@russell.cc, mpe@ellerman.id.au, gjoyce@linux.ibm.com,
+        sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
+        joel@jms.id.au
+Date:   Wed, 25 Jan 2023 11:45:08 +1100
+In-Reply-To: <57dca1ea3ef66bc0935bdd1dab4536f1151f4004.camel@linux.ibm.com>
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+         <20230120074306.1326298-25-ajd@linux.ibm.com>
+         <57dca1ea3ef66bc0935bdd1dab4536f1151f4004.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124174714.2775680-4-neeraj.sanjaykale@nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: oD1Spg5gcsRbhjst3Fj-QbmPqUNYwWRd
+X-Proofpoint-ORIG-GUID: oD1Spg5gcsRbhjst3Fj-QbmPqUNYwWRd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-24_17,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=731 bulkscore=0
+ mlxscore=0 impostorscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
+ lowpriorityscore=0 spamscore=0 adultscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301250001
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neeraj,
+On Tue, 2023-01-24 at 10:14 -0500, Mimi Zohar wrote:
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* The following only applie=
+s for the edk2-compat backend.
+> > */
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0node =3D of_find_compatible_=
+node(NULL, NULL, "ibm,edk2-
+> > compat-v1");
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!node)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0len =3D secvar_ops->format(b=
+uf, 32);
+>=20
+> "powerpc/secvar: Handle format string in the consumer"=C2=A0 defines
+> opal_secvar_format() for the object format "ibm,secvar-backend".=C2=A0
+> Here
+> shouldn't it being returning the format for "ibm,edk2-compat-v1"?
 
-Thank you for the patch! Perhaps something to improve:
+opal_secvar_format() doesn't return "ibm,secvar-backend", it searches
+for the device tree node named "ibm,secvar-backend", then reads and
+returns the contents of the property "format" under that node.
 
-[auto build test WARNING on bluetooth-next/master]
-[also build test WARNING on bluetooth/master tty/tty-testing tty/tty-next tty/tty-linus linus/master v6.2-rc5 next-20230124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The expected content of the format property is "ibm,edk2-compat-v1".
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Neeraj-Sanjay-Kale/serdev-Add-method-to-assert-break/20230125-015108
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20230124174714.2775680-4-neeraj.sanjaykale%40nxp.com
-patch subject: [PATCH v1 3/3] Bluetooth: NXP: Add protocol support for NXP Bluetooth chipsets
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230125/202301250824.iVWBIZts-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e5f775c45ec84de38a4cadfb115c488cb44e5943
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Neeraj-Sanjay-Kale/serdev-Add-method-to-assert-break/20230125-015108
-        git checkout e5f775c45ec84de38a4cadfb115c488cb44e5943
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/bluetooth/btnxp.c: In function 'nxp_load_fw_params_for_chip_id':
->> drivers/bluetooth/btnxp.c:439:25: warning: 'strncpy' specified bound 50 equals destination size [-Wstringop-truncation]
-     439 |                         strncpy(nxpdev->fw_name, fw_mod_params[i].fw_name, MAX_FW_FILE_NAME_LEN);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/strncpy +439 drivers/bluetooth/btnxp.c
-
-   431	
-   432	static int nxp_load_fw_params_for_chip_id(u16 chip_id, struct hci_dev *hdev)
-   433	{
-   434		struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-   435		int i;
-   436	
-   437		for (i = 0; i < MAX_NO_OF_CHIPS_SUPPORT; i++) {
-   438			if (chip_id == fw_mod_params[i].chip_id) {
- > 439				strncpy(nxpdev->fw_name, fw_mod_params[i].fw_name, MAX_FW_FILE_NAME_LEN);
-   440				nxpdev->oper_speed = fw_mod_params[i].oper_speed;
-   441				nxpdev->fw_dnld_pri_baudrate = fw_mod_params[i].fw_dnld_pri_baudrate;
-   442				nxpdev->fw_dnld_sec_baudrate = fw_mod_params[i].fw_dnld_sec_baudrate;
-   443				nxpdev->fw_init_baudrate = fw_mod_params[i].fw_init_baudrate;
-   444				break;
-   445			}
-   446		}
-   447		if (i == MAX_NO_OF_CHIPS_SUPPORT) {
-   448			if (chip_id == 0xffff)
-   449				BT_ERR("%s does not contain entry for 'legacy_chip'", BT_FW_CONF_FILE);
-   450			else
-   451				BT_ERR("Unsupported chip signature: %04X", chip_id);
-   452			clear_bit(BTNXPUART_FW_DOWNLOADING, &nxpdev->tx_state);
-   453			return -ENOENT;
-   454		}
-   455		return 0;
-   456	}
-   457	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--=20
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
