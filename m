@@ -2,188 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B3767B5B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 661EA67B5BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236008AbjAYPUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
+        id S236018AbjAYPUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235306AbjAYPUW (ORCPT
+        with ESMTP id S235162AbjAYPUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:20:22 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07F6218AA8;
-        Wed, 25 Jan 2023 07:20:21 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DF144B3;
-        Wed, 25 Jan 2023 07:21:02 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.31.176])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7EEAD3F71E;
-        Wed, 25 Jan 2023 07:20:16 -0800 (PST)
-Date:   Wed, 25 Jan 2023 15:20:08 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@kernel.org, will@kernel.org, boqun.feng@gmail.com,
-        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com, rostedt@goodmis.org,
-        mhiramat@kernel.org, wanpengli@tencent.com, vkuznets@redhat.com,
-        boris.ostrovsky@oracle.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Subject: Re: [PATCH 0/6] A few cpuidle vs rcu fixes
-Message-ID: <Y9FIqD21+DZU2kjV@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230123205009.790550642@infradead.org>
+        Wed, 25 Jan 2023 10:20:48 -0500
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DEE26583;
+        Wed, 25 Jan 2023 07:20:47 -0800 (PST)
+Received: by mail-lj1-f176.google.com with SMTP id a37so20732372ljq.0;
+        Wed, 25 Jan 2023 07:20:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eA2k8GKSkaJ8JiRx7vynIxEnjRyi/3LR49biO0Zb0Dc=;
+        b=ixTEenOPk/P28/WU27Zufkdc1V3U+/6IBKwUhocsiuw+38itv78CKYJIJm3IOPxZZh
+         i+I5OzNOaSm1ilJLMkp+jKPUY0F6AY8m8Y2Cwsj+Y8qI8jKMhoBPei3zxJ9oehMAyShU
+         PhwwAmOmols9U59QKZl6AMsxBjG3El/paycXsVjsVKrlrhBw6aj8slLejN1b+R0s9QaD
+         TmH9wrXTjrJ5FrPvIvW2bYBhGb7flpPu8GQEPpgqXs0Xz2an4o9ImNOL50s50RwqvzXy
+         QyVI4FIV3ss7L7nUtFffLVk1rXQRrFqUcYgMbf6L90I8kUVdqe9xsyl2fGvb6KskfYrf
+         BUYA==
+X-Gm-Message-State: AO0yUKXmbTAydZAGwzOumhfq49MvzXh/EWMms6YopzkVR3ek3mVBsXyK
+        wxEznsPlAqbF9SnhPAHSQ8bmhs+kJYNlfIDTq3yttu65
+X-Google-Smtp-Source: AMrXdXvLgZvoJvJqVmraThNQIStOeL24DaFIwzCkVTm8WaEP+sS95TlKL6RuNKiTDyWh6InzZ3GrXySUxCjLUSwLpiY=
+X-Received: by 2002:a17:906:4e9a:b0:84d:4dc6:1c08 with SMTP id
+ v26-20020a1709064e9a00b0084d4dc61c08mr5520786eju.421.1674660035333; Wed, 25
+ Jan 2023 07:20:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123205009.790550642@infradead.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <5665899.DvuYhMxLoT@kreacher>
+In-Reply-To: <5665899.DvuYhMxLoT@kreacher>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 25 Jan 2023 16:20:23 +0100
+Message-ID: <CAJZ5v0iVqGoVq1TVvYoQLxRWnP1nTPe7seeQvbVPancxH_6J1g@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] thermal: intel: int340x: Use generic trip points table
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+Hi Srinivas,
 
-On Mon, Jan 23, 2023 at 09:50:09PM +0100, Peter Zijlstra wrote:
-> 0-day robot reported graph-tracing made the cpuidle-vs-rcu rework go splat.
-> 
-> These patches appear to cure this, the ftrace selftest now runs to completion
-> without spamming scary messages to dmesg.
+On Wed, Jan 25, 2023 at 3:55 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> Hi All,
+>
+> This series replaces the following patch:
+>
+> https://patchwork.kernel.org/project/linux-pm/patch/2147918.irdbgypaU6@kreacher/
+>
+> but it has been almost completely rewritten, so I've dropped all tags from it.
+>
+> The most significant difference is that firmware-induced trip point updates are
+> now handled in a less controversial manner (no renumbering, just temperature
+> updates if applicable).
+>
+> Please refer to the individual patch changelogs for details.
+>
+> The series is on top of this patch:
+>
+> https://patchwork.kernel.org/project/linux-pm/patch/2688799.mvXUDI8C0e@kreacher/
+>
+> which applies on top of the linux-next branch in linux-pm.git from today.
 
-In addition to the other bits for arm64, we'll need the following patch. Are
-you happy to add that to the start of this series?
+There are two additional branches in linux-pm.git:
 
-I've tested this on an arm64 Juno board with a full-fat ftrace config,
-CONFIG_PROVE_LOCKING + CONFIG_DEBUG_LOCKDEP, and CONFIG_DEBUG_VIRTUAL=y, and
-build tested for 32-bit arm.
+thermal-intel-fixes
+thermal-intel-testing
 
-Thanks,
-Mark.
+The former is just fixes to go on top of 6.2-rc5 and the latter - this
+series on top of those and the current thermal-intel branch I have
+locally with the Intel thermal drivers changes for 6.3.
 
----->8----
-From 30ab9eba19e952cb51c9f599d2ac9b8a302cb63d Mon Sep 17 00:00:00 2001
-From: Mark Rutland <mark.rutland@arm.com>
-Date: Wed, 25 Jan 2023 14:20:49 +0000
-Subject: [PATCH] drivers: firmware: psci: don't instrument suspend code
+I would appreciate giving each of them a go in your test setup.
 
-The PSCI suspend code is currently instrumentable, which is not safe as
-instrumentation (e.g. ftrace) may try to make use of RCU during idle
-periods when RCU is not watching.
-
-To fix this we need to ensure that psci_suspend_finisher() and anything
-it calls are not instrumented. We can do this fairly simply by marking
-psci_suspend_finisher() and the psci*_cpu_suspend() functions as
-noinstr, and the underlying helper functions as __always_inline.
-
-When CONFIG_DEBUG_VIRTUAL=y, __pa_symbol() can expand to an out-of-line
-instrumented function, so we must use __pa_symbol_nodebug() within
-psci_suspend_finisher().
-
-The raw SMCCC invocation functions are written in assembly, and are not
-subject to compiler instrumentation.
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- drivers/firmware/psci/psci.c | 31 +++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index f3a044fa4652a..c12847b4736de 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -108,9 +108,10 @@ bool psci_power_state_is_valid(u32 state)
- 	return !(state & ~valid_mask);
- }
- 
--static unsigned long __invoke_psci_fn_hvc(unsigned long function_id,
--			unsigned long arg0, unsigned long arg1,
--			unsigned long arg2)
-+static __always_inline unsigned long
-+__invoke_psci_fn_hvc(unsigned long function_id,
-+		     unsigned long arg0, unsigned long arg1,
-+		     unsigned long arg2)
- {
- 	struct arm_smccc_res res;
- 
-@@ -118,9 +119,10 @@ static unsigned long __invoke_psci_fn_hvc(unsigned long function_id,
- 	return res.a0;
- }
- 
--static unsigned long __invoke_psci_fn_smc(unsigned long function_id,
--			unsigned long arg0, unsigned long arg1,
--			unsigned long arg2)
-+static __always_inline unsigned long
-+__invoke_psci_fn_smc(unsigned long function_id,
-+		     unsigned long arg0, unsigned long arg1,
-+		     unsigned long arg2)
- {
- 	struct arm_smccc_res res;
- 
-@@ -128,7 +130,7 @@ static unsigned long __invoke_psci_fn_smc(unsigned long function_id,
- 	return res.a0;
- }
- 
--static int psci_to_linux_errno(int errno)
-+static __always_inline int psci_to_linux_errno(int errno)
- {
- 	switch (errno) {
- 	case PSCI_RET_SUCCESS:
-@@ -169,7 +171,8 @@ int psci_set_osi_mode(bool enable)
- 	return psci_to_linux_errno(err);
- }
- 
--static int __psci_cpu_suspend(u32 fn, u32 state, unsigned long entry_point)
-+static __always_inline int
-+__psci_cpu_suspend(u32 fn, u32 state, unsigned long entry_point)
- {
- 	int err;
- 
-@@ -177,13 +180,15 @@ static int __psci_cpu_suspend(u32 fn, u32 state, unsigned long entry_point)
- 	return psci_to_linux_errno(err);
- }
- 
--static int psci_0_1_cpu_suspend(u32 state, unsigned long entry_point)
-+static __always_inline int
-+psci_0_1_cpu_suspend(u32 state, unsigned long entry_point)
- {
- 	return __psci_cpu_suspend(psci_0_1_function_ids.cpu_suspend,
- 				  state, entry_point);
- }
- 
--static int psci_0_2_cpu_suspend(u32 state, unsigned long entry_point)
-+static __always_inline int
-+psci_0_2_cpu_suspend(u32 state, unsigned long entry_point)
- {
- 	return __psci_cpu_suspend(PSCI_FN_NATIVE(0_2, CPU_SUSPEND),
- 				  state, entry_point);
-@@ -447,10 +452,12 @@ late_initcall(psci_debugfs_init)
- #endif
- 
- #ifdef CONFIG_CPU_IDLE
--static int psci_suspend_finisher(unsigned long state)
-+static noinstr int psci_suspend_finisher(unsigned long state)
- {
- 	u32 power_state = state;
--	phys_addr_t pa_cpu_resume = __pa_symbol(cpu_resume);
-+	phys_addr_t pa_cpu_resume;
-+
-+	pa_cpu_resume = __pa_symbol_nodebug((unsigned long)cpu_resume);
- 
- 	return psci_ops.cpu_suspend(power_state, pa_cpu_resume);
- }
--- 
-2.30.2
-
+Cheers!
