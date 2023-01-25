@@ -2,113 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5EB67B1D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B3867B1A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235728AbjAYLpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S235430AbjAYLjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:39:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjAYLpL (ORCPT
+        with ESMTP id S235433AbjAYLjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:45:11 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF85BBA8;
-        Wed, 25 Jan 2023 03:45:10 -0800 (PST)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id 4F0C381845;
-        Wed, 25 Jan 2023 11:37:28 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674646654;
-        bh=/EctXOG2MvaNtKtikXj94vEve/rQIfCrMsw24dL44Y4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nACC8Fx8Cbe28zU/v8ud+iy7Z7fQJStibaoq9HttVSgyccF2xqH3ljfZPzDf43HRq
-         fwnWG54L28s8Bq3jJ9RKoe1tZae4/OTNBIo+8066v0mwWqFSixRLL1zOgYpTUtdtjA
-         vIZ6lp5gt/8s/bZiZCNkNI9L8OCE+1G2x0j55VhvSowESJVIb4hNwfx3jCddZkUicx
-         qTIkVXhkWUlFuIvpzVCUe0rLYUANMpYf5X9uV0KEleg57jsqSeTWg/HnoHCGLoxwUN
-         lcrcLqzDiRwgAYgcSdqh7YRWObLy8osLCWJCi3wf7rAXkG5iCfZPte/8p2A02aSOLY
-         7JVF6pL+ZxK0A==
-Date:   Wed, 25 Jan 2023 18:37:23 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Xin Li <xin3.li@intel.com>, Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v5 1/2] selftests/x86: sysret_rip: Handle syscall in
- a FRED system
-Message-ID: <Y9EUc6SIhN4skrmi@biznet-home.integral.gnuweeb.org>
-References: <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
- <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
- <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
- <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
- <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
- <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
- <20230125034958.734527-2-ammarfaizi2@gnuweeb.org>
- <8770815f-0f23-d0c5-e56a-d401827842c9@zytor.com>
- <Y9D8++DxphJS1oc4@biznet-home.integral.gnuweeb.org>
- <A7DAB159-7C02-412D-9CFB-5C3C3760DECB@zytor.com>
+        Wed, 25 Jan 2023 06:39:36 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCE66A4B;
+        Wed, 25 Jan 2023 03:39:12 -0800 (PST)
+Date:   Wed, 25 Jan 2023 11:39:08 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674646749;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fofvn1ee1G4NNgw9bxVzFaQH030mEGN5Kw1WXXUCOQg=;
+        b=0GcR8lz2jteTZaWg+Y6y2K1tOnj7IjeRD0LMYxXvoDY0UdaBbcM0FOE9EHs1mHjA5P81tQ
+        pOcLg+Jo6SK/Hm3D8gdeu5Uu3G2NdMYXY6YzapAd4U8R+tTylHLY8oqhRGXpfjhxLh6SUV
+        QceJQOywJ+2lKHCsmrGOn42qEU1+DdvVVaDAjV7Q5sZhA+eQfUM+3GVoi33Yu4cXVgAhc+
+        3Q/hj+YhKkSWvuc7U+PwSXrVMk0RXtf71ibUzsf8E9i01Q89sv5WNmuZWdFNIhX3XXp8Df
+        8rYM3YOL7PrMXeCXflRCPy3NNJDQpXQ6f6YHytULb4R+mjjsySDhjdbOB4In+w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674646749;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fofvn1ee1G4NNgw9bxVzFaQH030mEGN5Kw1WXXUCOQg=;
+        b=um1bwEiL/7cxpFd1RUHQKh4BP2Ak9uYFr9mXjZ6jUsdokdkm1QhmTURbFRYCiDL9sK/jSb
+        5xWZ+cOxjCWKwqBg==
+From:   "tip-bot2 for Randy Dunlap" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86/Kconfig: Fix spellos & punctuation
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230124181753.19309-1-rdunlap@infradead.org>
+References: <20230124181753.19309-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <A7DAB159-7C02-412D-9CFB-5C3C3760DECB@zytor.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167464674857.4906.11845808884729998732.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 02:17:41AM -0800, H. Peter Anvin wrote:
-> I guess it would depend on what they "normally" are. My #1 impulse would be to leave them both unchanged.
+The following commit has been merged into the x86/cleanups branch of tip:
 
-Ah okay... I think I understand now. My confusion came from a comment
-in that code.
+Commit-ID:     54628de6792bfa86a8d73520b6fa0029971f9fc6
+Gitweb:        https://git.kernel.org/tip/54628de6792bfa86a8d73520b6fa0029971f9fc6
+Author:        Randy Dunlap <rdunlap@infradead.org>
+AuthorDate:    Tue, 24 Jan 2023 10:17:53 -08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Wed, 25 Jan 2023 12:21:04 +01:00
 
-The current SIGUSR1 handler has a comment:
+x86/Kconfig: Fix spellos & punctuation
 
-    /* Set IP and CX to match so that SYSRET can happen. */
-    ctx->uc_mcontext.gregs[REG_RIP] = rip;
-    ctx->uc_mcontext.gregs[REG_RCX] = rip;
+Fix spelling (reported by codespell) & punctuation in arch/x86/ Kconfig.
 
-So I thought if we leave them both unchanged, then SYSRET can happen
-too, because IP and CX match. My initial confusion about that was:
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20230124181753.19309-1-rdunlap@infradead.org
+---
+ arch/x86/Kconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-    Where do we actually exercise IRET if the SIGUSR2 handler
-    exercises SYSRET then?
-
-I realized my assumption was wrong. The current SIGUSR1 handler
-actually forces the kernel to use IRET, not SYSRET. Because the %rip
-is set to a non-canonical address. So that's the place where it
-exercises IRET.
-
-IOW, my understanding now:
-
-The current SIGUSR1 handler exercises the SYSRET-appropriate condition
-detector in the kernel. It doesn't actually go to the SYSRET path
-despite the comment saying "SYSRET can happen". That detector must take
-us to the IRET path or we will #GP in kernel space on Intel CPUs.
-
-In short, the SIGUSR1 handler asserts that "SYSRET must *not* happen".
-
-The expected SIGUSR2 handler addition exercises the SYSRET path by
-leaving REG_IP and REG_CX unchanged.
-
-Am I correct?
-
--- 
-Ammar Faizi
-
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 3604074..a825bf0 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1502,7 +1502,7 @@ config X86_5LEVEL
+ 	depends on X86_64
+ 	help
+ 	  5-level paging enables access to larger address space:
+-	  upto 128 PiB of virtual address space and 4 PiB of
++	  up to 128 PiB of virtual address space and 4 PiB of
+ 	  physical address space.
+ 
+ 	  It will be supported by future Intel CPUs.
+@@ -2609,8 +2609,8 @@ config CALL_THUNKS_DEBUG
+ 	  a noisy dmesg about callthunks generation and call patching for
+ 	  trouble shooting. The debug prints need to be enabled on the
+ 	  kernel command line with 'debug-callthunks'.
+-	  Only enable this, when you are debugging call thunks as this
+-	  creates a noticable runtime overhead. If unsure say N.
++	  Only enable this when you are debugging call thunks as this
++	  creates a noticeable runtime overhead. If unsure say N.
+ 
+ config CPU_IBPB_ENTRY
+ 	bool "Enable IBPB on kernel entry"
