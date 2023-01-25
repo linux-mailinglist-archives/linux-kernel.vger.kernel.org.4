@@ -2,473 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2110567C03C
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 23:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E2A67C03D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 23:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236087AbjAYWze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 17:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        id S236160AbjAYWzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 17:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235965AbjAYWzc (ORCPT
+        with ESMTP id S235965AbjAYWzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 17:55:32 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6157560CB9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:55:08 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id x188-20020a2531c5000000b00716de19d76bso21319889ybx.19
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:55:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=a5aTHflhvU5hl+JkwekB7RlOlr/hp8opqL15QvEvo54=;
-        b=bzJkDFDODwQ4aHczZ5Q29/ItRyxdl5BzMlhkXInDNq7XoQP+rKcbY8Wv9t1t+PrziN
-         8JWaVl5mT8IpHx6sqr1EPTFJ6XrLcuJ5bixw3ZyBldPnxVYau+fueN5JGSFpnOceecKW
-         jPAomFh/8HDxILl5PnriMP5ukvKu1O0UwmYIOC8UmT9sdBYSQpRU4isozBpJIu5snXC4
-         lvpNVIWVQKaFREvzzdISZtw8/DFZThhJr557P+IGkJCT5nBiDSr7X+zOZR20Wh7kDoax
-         k7/TTaHn7yrb5nwTBU/ypUW/0Go7z2gsIYfEBoKNuAmyTKGt0BhlihmjOyL6OSryp9Pd
-         YIaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a5aTHflhvU5hl+JkwekB7RlOlr/hp8opqL15QvEvo54=;
-        b=hoJHuEyUvpUmB0bEvEJMrlR+IXh9VgG/STdBzIvzemR76XqfmTMthokRXf+iSpzTaz
-         7Cn2me+NomPhexySE7BbTrSHUITzPumuRI7uUo+2uWKMASh7R3QqdwQiWJhMJSY/G8mK
-         CZLUx4XQys9flWu84TzeuYB9VeeP67+fXWaqnIMvDbctbB6g5fDsdO568qWtlV7R7zOy
-         xJyjWmPo7uJjGjc/yutZ6s35urog4yusy4TZa9t9Vy6K7I+5tJ8zfFlxoruQOz9C0nZk
-         VIrLywutJd8H9wDT15C7UuHLMxdlSDTGvdgUp/N/7dXyRGGBsilGYYDNT1QwVc89rarL
-         Lk8A==
-X-Gm-Message-State: AFqh2kp2YYVw+Ztvrjo0nzthznsLsbRhdbxl5ni/7f1t4U0PLWEyjD2o
-        YEHCRYYSIFQ28He/38Qt5IEfoMQWWw==
-X-Google-Smtp-Source: AMrXdXtI9b5ejz77UAIM3baiDxU99jcZXtO//dFoZkyOApxz9CPrvwKmllDiZa1jLWm274hcqNB+nVXRAA==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a81:124c:0:b0:502:bcca:867c with SMTP id
- 73-20020a81124c000000b00502bcca867cmr2657198yws.484.1674687307523; Wed, 25
- Jan 2023 14:55:07 -0800 (PST)
-Date:   Wed, 25 Jan 2023 22:54:49 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230125225449.351154-1-rmoar@google.com>
-Subject: [PATCH v3] lib/hashtable_test.c: add test for the hashtable structure
-From:   Rae Moar <rmoar@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
-Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 17:55:42 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C6B458AE
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:55:15 -0800 (PST)
+Received: from [192.168.2.197] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4AC3C6602D1F;
+        Wed, 25 Jan 2023 22:55:12 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674687314;
+        bh=3KgCvkiMWuw1advwxtDNvcxv2KngByLwOXF9vKgP06k=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=YnJHI30zZohHLfInL1M102KVG7aDB4zyDl9JeidmzFJOnpyPGCEZJzzrXJWGV0q6X
+         QLzt+lGGzDOJjkzm4OQd7du3QeyODeIlGPizmQHDmlTZ+ug6QSr3p9reYn4uRfJMar
+         EwXw+P4krJQo+OZ2KArfEIZTDqdFqRbWeXjGYChH5nK4uXD+nT1/pagQsnb8JbIB/J
+         PfX0UtNWY3sgFerI4nxqSXwlYOxcMyi6riIpo1k0ieeBQZMsfb999bzPKDVYrzsja9
+         ic8x/sl66WetMSLWjZyH7vob1UEP2hjtNpaNHWsBuf0o5kcpei/eW3DK3XkQ3bnYPb
+         FIzYr3XntbicA==
+Message-ID: <e5e9e8dd-a5b6-cfd2-44d6-4d5aa768e56c@collabora.com>
+Date:   Thu, 26 Jan 2023 01:55:09 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v10 00/11] Add generic memory shrinker to VirtIO-GPU and
+ Panfrost DRM drivers
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Gerd Hoffmann <kraxel@redhat.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        David Airlie <airlied@gmail.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
+In-Reply-To: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a KUnit test for the kernel hashtable implementation in
-include/linux/hashtable.h.
+Hello Thomas and Gerd,
 
-Note that this version does not yet test each of the rcu
-alternative versions of functions.
+On 1/9/23 00:04, Dmitry Osipenko wrote:
+> This series:
+> 
+>   1. Makes minor fixes for drm_gem_lru and Panfrost
+>   2. Brings refactoring for older code
+>   3. Adds common drm-shmem memory shrinker
+>   4. Enables shrinker for VirtIO-GPU driver
+>   5. Switches Panfrost driver to the common shrinker
+> 
+> Changelog:
+> 
+> v10:- Rebased on a recent linux-next.
+> 
+>     - Added Rob's ack to MSM "Prevent blocking within shrinker loop" patch.
+> 
+>     - Added Steven's ack/r-b/t-b for the Panfrost patches.
+> 
+>     - Fixed missing export of the new drm_gem_object_evict() function.
+> 
+>     - Added fixes tags to the first two patches that are making minor fixes,
+>       for consistency.
 
-Signed-off-by: Rae Moar <rmoar@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
----
+Do you have comments on this version? Otherwise ack will be appreciated.
+Thanks in advance!
 
-Changes since v2:
-- Remove extraneous hash_init() calls when using DEFINE_HASHTABLE.
-- Change up the size of the hashtables in different tests.
-- Change formatting to group lines regarding the same hashtable_test_entry.
-- Use KUNIT_ASSERT_LEQ() and KUNIT_ASSERT_GEQ() instead of a few if
-  statements.
-
-Changes since v1:
-- Change Kconfig.debug message to be more succinct.
-- Directly increment current element's visited field rather than looking up
-  corresponding element.
-- Use KUNIT_ASSERT_... statements to check the keys are within range rather
-  than using if statements.
-- Change hash_for_each_possible test to check buckets using a hash_for_each
-  method instead of calculating the bucket number using hash_min.
-
-Note: The check patch script is outputting open brace errors on lines
-152, 185, 239 of lib/hashtable_test.c. However, I think these errors are
-a mistake as the format of the braces on those lines is consistent
-with the Linux Kernel style guide. As David Gow commented on the
-last version, "This is a known issue with checkpatch and function
-names with "for_each" in them. It was discussed here, and we
-ultimately decided just to ignore the warnings:
-https://lore.kernel.org/all/CABVgOSmCHbGjZBjeWSbPEZbJw22SaBQnoO77xxNzN_ugAwzNiQ@mail.gmail.com/."
-
- lib/Kconfig.debug    |  13 ++
- lib/Makefile         |   1 +
- lib/hashtable_test.c | 317 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 331 insertions(+)
- create mode 100644 lib/hashtable_test.c
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 881c3f84e88a..69b1452a3eeb 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2496,6 +2496,19 @@ config LIST_KUNIT_TEST
- 
- 	  If unsure, say N.
- 
-+config HASHTABLE_KUNIT_TEST
-+	tristate "KUnit Test for Kernel Hashtable structures" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds the hashtable KUnit test suite.
-+	  It tests the basic functionality of the API defined in
-+	  include/linux/hashtable.h. For more information on KUnit and
-+	  unit tests in general please refer to the KUnit documentation
-+	  in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
-+
- config LINEAR_RANGES_TEST
- 	tristate "KUnit test for linear_ranges"
- 	depends on KUNIT
-diff --git a/lib/Makefile b/lib/Makefile
-index 4d9461bfea42..5f8efbe8e97f 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -369,6 +369,7 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
- CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
- obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
-+obj-$(CONFIG_HASHTABLE_KUNIT_TEST) += hashtable_test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
- obj-$(CONFIG_BITS_TEST) += test_bits.o
- obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
-diff --git a/lib/hashtable_test.c b/lib/hashtable_test.c
-new file mode 100644
-index 000000000000..1d1b3288dee2
---- /dev/null
-+++ b/lib/hashtable_test.c
-@@ -0,0 +1,317 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit test for the Kernel Hashtable structures.
-+ *
-+ * Copyright (C) 2022, Google LLC.
-+ * Author: Rae Moar <rmoar@google.com>
-+ */
-+#include <kunit/test.h>
-+
-+#include <linux/hashtable.h>
-+
-+struct hashtable_test_entry {
-+	int key;
-+	int data;
-+	struct hlist_node node;
-+	int visited;
-+};
-+
-+static void hashtable_test_hash_init(struct kunit *test)
-+{
-+	/* Test the different ways of initialising a hashtable. */
-+	DEFINE_HASHTABLE(hash1, 2);
-+	DECLARE_HASHTABLE(hash2, 3);
-+
-+	/* When using DECLARE_HASHTABLE, must use hash_init to
-+	 * initialize the hashtable.
-+	 */
-+	hash_init(hash2);
-+
-+	KUNIT_EXPECT_TRUE(test, hash_empty(hash1));
-+	KUNIT_EXPECT_TRUE(test, hash_empty(hash2));
-+}
-+
-+static void hashtable_test_hash_empty(struct kunit *test)
-+{
-+	struct hashtable_test_entry a;
-+	DEFINE_HASHTABLE(hash, 1);
-+
-+	KUNIT_EXPECT_TRUE(test, hash_empty(hash));
-+
-+	a.key = 1;
-+	a.data = 13;
-+	hash_add(hash, &a.node, a.key);
-+
-+	/* Hashtable should no longer be empty. */
-+	KUNIT_EXPECT_FALSE(test, hash_empty(hash));
-+}
-+
-+static void hashtable_test_hash_hashed(struct kunit *test)
-+{
-+	struct hashtable_test_entry a, b;
-+	DEFINE_HASHTABLE(hash, 4);
-+
-+	a.key = 1;
-+	a.data = 13;
-+	hash_add(hash, &a.node, a.key);
-+	b.key = 1;
-+	b.data = 2;
-+	hash_add(hash, &b.node, b.key);
-+
-+	KUNIT_EXPECT_TRUE(test, hash_hashed(&a.node));
-+	KUNIT_EXPECT_TRUE(test, hash_hashed(&b.node));
-+}
-+
-+static void hashtable_test_hash_add(struct kunit *test)
-+{
-+	struct hashtable_test_entry a, b, *x;
-+	int bkt;
-+	DEFINE_HASHTABLE(hash, 3);
-+
-+	a.key = 1;
-+	a.data = 13;
-+	a.visited = 0;
-+	hash_add(hash, &a.node, a.key);
-+	b.key = 2;
-+	b.data = 10;
-+	b.visited = 0;
-+	hash_add(hash, &b.node, b.key);
-+
-+	hash_for_each(hash, bkt, x, node) {
-+		x->visited++;
-+		if (x->key == a.key)
-+			KUNIT_EXPECT_EQ(test, x->data, 13);
-+		else if (x->key == b.key)
-+			KUNIT_EXPECT_EQ(test, x->data, 10);
-+		else
-+			KUNIT_FAIL(test, "Unexpected key in hashtable.");
-+	}
-+
-+	/* Both entries should have been visited exactly once. */
-+	KUNIT_EXPECT_EQ(test, a.visited, 1);
-+	KUNIT_EXPECT_EQ(test, b.visited, 1);
-+}
-+
-+static void hashtable_test_hash_del(struct kunit *test)
-+{
-+	struct hashtable_test_entry a, b, *x;
-+	DEFINE_HASHTABLE(hash, 6);
-+
-+	a.key = 1;
-+	a.data = 13;
-+	hash_add(hash, &a.node, a.key);
-+	b.key = 2;
-+	b.data = 10;
-+	b.visited = 0;
-+	hash_add(hash, &b.node, b.key);
-+
-+	hash_del(&b.node);
-+	hash_for_each_possible(hash, x, node, b.key) {
-+		x->visited++;
-+		KUNIT_EXPECT_NE(test, x->key, b.key);
-+	}
-+
-+	/* The deleted entry should not have been visited. */
-+	KUNIT_EXPECT_EQ(test, b.visited, 0);
-+
-+	hash_del(&a.node);
-+
-+	/* The hashtable should be empty. */
-+	KUNIT_EXPECT_TRUE(test, hash_empty(hash));
-+}
-+
-+static void hashtable_test_hash_for_each(struct kunit *test)
-+{
-+	struct hashtable_test_entry entries[3];
-+	struct hashtable_test_entry *x;
-+	int bkt, i, j, count;
-+	DEFINE_HASHTABLE(hash, 3);
-+
-+	/* Add three entries to the hashtable. */
-+	for (i = 0; i < 3; i++) {
-+		entries[i].key = i;
-+		entries[i].data = i + 10;
-+		entries[i].visited = 0;
-+		hash_add(hash, &entries[i].node, entries[i].key);
-+	}
-+
-+	count = 0;
-+	hash_for_each(hash, bkt, x, node) {
-+		x->visited += 1;
-+		KUNIT_ASSERT_GE_MSG(test, x->key, 0, "Unexpected key in hashtable.");
-+		KUNIT_ASSERT_LT_MSG(test, x->key, 3, "Unexpected key in hashtable.");
-+		count++;
-+	}
-+
-+	/* Should have visited each entry exactly once. */
-+	KUNIT_EXPECT_EQ(test, count, 3);
-+	for (j = 0; j < 3; j++)
-+		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-+}
-+
-+static void hashtable_test_hash_for_each_safe(struct kunit *test)
-+{
-+	struct hashtable_test_entry entries[3];
-+	struct hashtable_test_entry *x;
-+	struct hlist_node *tmp;
-+	int bkt, i, j, count;
-+	DEFINE_HASHTABLE(hash, 3);
-+
-+	/* Add three entries to the hashtable. */
-+	for (i = 0; i < 3; i++) {
-+		entries[i].key = i;
-+		entries[i].data = i + 10;
-+		entries[i].visited = 0;
-+		hash_add(hash, &entries[i].node, entries[i].key);
-+	}
-+
-+	count = 0;
-+	hash_for_each_safe(hash, bkt, tmp, x, node) {
-+		x->visited += 1;
-+		KUNIT_ASSERT_GE_MSG(test, x->key, 0, "Unexpected key in hashtable.");
-+		KUNIT_ASSERT_LT_MSG(test, x->key, 3, "Unexpected key in hashtable.");
-+		count++;
-+
-+		/* Delete entry during loop. */
-+		hash_del(&x->node);
-+	}
-+
-+	/* Should have visited each entry exactly once. */
-+	KUNIT_EXPECT_EQ(test, count, 3);
-+	for (j = 0; j < 3; j++)
-+		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-+}
-+
-+static void hashtable_test_hash_for_each_possible(struct kunit *test)
-+{
-+	struct hashtable_test_entry entries[4];
-+	struct hashtable_test_entry *x, *y;
-+	int buckets[2];
-+	int bkt, i, j, count;
-+	DEFINE_HASHTABLE(hash, 5);
-+
-+	/* Add three entries with key = 0 to the hashtable. */
-+	for (i = 0; i < 3; i++) {
-+		entries[i].key = 0;
-+		entries[i].data = i;
-+		entries[i].visited = 0;
-+		hash_add(hash, &entries[i].node, entries[i].key);
-+	}
-+
-+	/* Add an entry with key = 1. */
-+	entries[3].key = 1;
-+	entries[3].data = 3;
-+	entries[3].visited = 0;
-+	hash_add(hash, &entries[3].node, entries[3].key);
-+
-+	count = 0;
-+	hash_for_each_possible(hash, x, node, 0) {
-+		x->visited += 1;
-+		KUNIT_ASSERT_GE_MSG(test, x->data, 0, "Unexpected data in hashtable.");
-+		KUNIT_ASSERT_LT_MSG(test, x->data, 4, "Unexpected data in hashtable.");
-+		count++;
-+	}
-+
-+	/* Should have visited each entry with key = 0 exactly once. */
-+	for (j = 0; j < 3; j++)
-+		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-+
-+	/* Save the buckets for the different keys. */
-+	hash_for_each(hash, bkt, y, node) {
-+		KUNIT_ASSERT_GE_MSG(test, y->key, 0, "Unexpected key in hashtable.");
-+		KUNIT_ASSERT_LE_MSG(test, y->key, 1, "Unexpected key in hashtable.");
-+		buckets[y->key] = bkt;
-+	}
-+
-+	/* If entry with key = 1 is in the same bucket as the entries with
-+	 * key = 0, check it was visited. Otherwise ensure that only three
-+	 * entries were visited.
-+	 */
-+	if (buckets[0] == buckets[1]) {
-+		KUNIT_EXPECT_EQ(test, count, 4);
-+		KUNIT_EXPECT_EQ(test, entries[3].visited, 1);
-+	} else {
-+		KUNIT_EXPECT_EQ(test, count, 3);
-+		KUNIT_EXPECT_EQ(test, entries[3].visited, 0);
-+	}
-+}
-+
-+static void hashtable_test_hash_for_each_possible_safe(struct kunit *test)
-+{
-+	struct hashtable_test_entry entries[4];
-+	struct hashtable_test_entry *x, *y;
-+	struct hlist_node *tmp;
-+	int buckets[2];
-+	int bkt, i, j, count;
-+	DEFINE_HASHTABLE(hash, 5);
-+
-+	/* Add three entries with key = 0 to the hashtable. */
-+	for (i = 0; i < 3; i++) {
-+		entries[i].key = 0;
-+		entries[i].data = i;
-+		entries[i].visited = 0;
-+		hash_add(hash, &entries[i].node, entries[i].key);
-+	}
-+
-+	/* Add an entry with key = 1. */
-+	entries[3].key = 1;
-+	entries[3].data = 3;
-+	entries[3].visited = 0;
-+	hash_add(hash, &entries[3].node, entries[3].key);
-+
-+	count = 0;
-+	hash_for_each_possible_safe(hash, x, tmp, node, 0) {
-+		x->visited += 1;
-+		KUNIT_ASSERT_GE_MSG(test, x->data, 0, "Unexpected data in hashtable.");
-+		KUNIT_ASSERT_LT_MSG(test, x->data, 4, "Unexpected data in hashtable.");
-+		count++;
-+
-+		/* Delete entry during loop. */
-+		hash_del(&x->node);
-+	}
-+
-+	/* Should have visited each entry with key = 0 exactly once. */
-+	for (j = 0; j < 3; j++)
-+		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-+
-+	/* Save the buckets for the different keys. */
-+	hash_for_each(hash, bkt, y, node) {
-+		KUNIT_ASSERT_GE_MSG(test, y->key, 0, "Unexpected key in hashtable.");
-+		KUNIT_ASSERT_LE_MSG(test, y->key, 1, "Unexpected key in hashtable.");
-+		buckets[y->key] = bkt;
-+	}
-+
-+	/* If entry with key = 1 is in the same bucket as the entries with
-+	 * key = 0, check it was visited. Otherwise ensure that only three
-+	 * entries were visited.
-+	 */
-+	if (buckets[0] == buckets[1]) {
-+		KUNIT_EXPECT_EQ(test, count, 4);
-+		KUNIT_EXPECT_EQ(test, entries[3].visited, 1);
-+	} else {
-+		KUNIT_EXPECT_EQ(test, count, 3);
-+		KUNIT_EXPECT_EQ(test, entries[3].visited, 0);
-+	}
-+}
-+
-+static struct kunit_case hashtable_test_cases[] = {
-+	KUNIT_CASE(hashtable_test_hash_init),
-+	KUNIT_CASE(hashtable_test_hash_empty),
-+	KUNIT_CASE(hashtable_test_hash_hashed),
-+	KUNIT_CASE(hashtable_test_hash_add),
-+	KUNIT_CASE(hashtable_test_hash_del),
-+	KUNIT_CASE(hashtable_test_hash_for_each),
-+	KUNIT_CASE(hashtable_test_hash_for_each_safe),
-+	KUNIT_CASE(hashtable_test_hash_for_each_possible),
-+	KUNIT_CASE(hashtable_test_hash_for_each_possible_safe),
-+	{},
-+};
-+
-+static struct kunit_suite hashtable_test_module = {
-+	.name = "hashtable",
-+	.test_cases = hashtable_test_cases,
-+};
-+
-+kunit_test_suites(&hashtable_test_module);
-+
-+MODULE_LICENSE("GPL");
-
-base-commit: 5835ffc27381c2d32c3f0d7b575cb3397555ab47
 -- 
-2.39.1.456.gfc5497dd1b-goog
+Best regards,
+Dmitry
 
