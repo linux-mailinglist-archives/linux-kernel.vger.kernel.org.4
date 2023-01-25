@@ -2,221 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C75D67B5A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C839A67B5AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235980AbjAYPNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
+        id S235994AbjAYPPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:15:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235264AbjAYPNR (ORCPT
+        with ESMTP id S235264AbjAYPPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:13:17 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032C0233F2;
-        Wed, 25 Jan 2023 07:12:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=z09YQWZaNeyU5LlbPTAJDfM0JH/4UK1IAx6XSK7tCyU=; b=Wwh9EVUpzB4tnYoH3BAKok+CJi
-        eqRkB7pQq8kx/0XBa0l2cq5vfNE/HnY5WY4XL7ouQuJ5+WmHxcWGN39qT1Y1TZjMvHXmCkb/T1W5n
-        chA+814FYsLFeRCAz37bP6hK6YSKmDXCbpSpaNrTYxZS4l1upr40JR59S92DbhYx/xRsWDQxrNUH+
-        DXzGeD/KrpkBoB+6QdTGdcLuId15wyup6vEdsB/8pJOLXFhubDGdD8ogvPwgBEjBD9YSw0NDu2ker
-        1LEk6nDq8OKwpYbD2demB5MmWNjDS4A6a+OlUeJijMW+SLDeZYmDlHM3h5SRCbc9RfEFl+auZ7THo
-        tjJTE2yA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36292)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pKhS4-0000ph-3g; Wed, 25 Jan 2023 15:12:39 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pKhS1-0006Lm-18; Wed, 25 Jan 2023 15:12:37 +0000
-Date:   Wed, 25 Jan 2023 15:12:36 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dsa: marvell: Provide per device information
- about max frame size
-Message-ID: <Y9FG5PxOq7qsfvtz@shell.armlinux.org.uk>
-References: <20230106101651.1137755-1-lukma@denx.de>
- <Y8Fno+svcnNY4h/8@shell.armlinux.org.uk>
- <20230116105148.230ef4ae@wsk>
- <20230125122412.4eb1746d@wsk>
+        Wed, 25 Jan 2023 10:15:07 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C3010F7;
+        Wed, 25 Jan 2023 07:15:05 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 22FC76E0;
+        Wed, 25 Jan 2023 16:15:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674659703;
+        bh=oKIvNBSf+5K0GFSSvkPWB0oPeYQqncCxVXyxT2yZVm4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bTyc7tvDmDf9v55+eHo5pdZdMLOvI0ZwgpfSeLP5T5cW2Hb71Lp90TjS6JJF/GV93
+         e6CfQnNQjPLTXKQxesQ9Qe+BF5JudUIQ751Oq375AoCkOzOkkuukRfK0tH6W75Mg1B
+         q1/8xHrH1Wy1cbREdyifR2491mtIyICqhDkwnkGg=
+Message-ID: <5d208710-f284-e6e9-18dc-f5ef63a9ea44@ideasonboard.com>
+Date:   Wed, 25 Jan 2023 17:14:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125122412.4eb1746d@wsk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
+ <20230118124031.788940-6-tomi.valkeinen@ideasonboard.com>
+ <Y8gUuqLBXsXQoNUC@smile.fi.intel.com>
+ <aba49d82-c76f-7ff2-751c-d1be7b8f3bca@ideasonboard.com>
+ <Y8rFh6zO7Hp9mLxE@smile.fi.intel.com>
+ <4286abe2-f23f-d4c9-ef18-f351af7a3a8b@ideasonboard.com>
+ <Y9EcRlooHwIjOqiZ@smile.fi.intel.com>
+ <cad92dbb-43ef-fa8c-1962-13c4a8578899@ideasonboard.com>
+ <Y9FBlMl4b3l1zVck@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y9FBlMl4b3l1zVck@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 12:24:12PM +0100, Lukasz Majewski wrote:
-> Hi,
+On 25/01/2023 16:49, Andy Shevchenko wrote:
+> On Wed, Jan 25, 2023 at 03:33:35PM +0200, Tomi Valkeinen wrote:
+>> On 25/01/2023 14:10, Andy Shevchenko wrote:
+>>> On Wed, Jan 25, 2023 at 01:15:34PM +0200, Tomi Valkeinen wrote:
+>>>> On 20/01/2023 18:47, Andy Shevchenko wrote:
 > 
-> > Hi Russell,
-> > 
-> > > On Fri, Jan 06, 2023 at 11:16:49AM +0100, Lukasz Majewski wrote:  
-> > > > Different Marvell DSA switches support different size of max frame
-> > > > bytes to be sent. This value corresponds to the memory allocated
-> > > > in switch to store single frame.
-> > > > 
-> > > > For example mv88e6185 supports max 1632 bytes, which is now
-> > > > in-driver standard value. On the other hand - mv88e6250 supports
-> > > > 2048 bytes. To be more interresting - devices supporting jumbo
-> > > > frames - use yet another value (10240 bytes)
-> > > > 
-> > > > As this value is internal and may be different for each switch IC,
-> > > > new entry in struct mv88e6xxx_info has been added to store it.
-> > > > 
-> > > > This commit doesn't change the code functionality - it just
-> > > > provides the max frame size value explicitly - up till now it has
-> > > > been assigned depending on the callback provided by the IC driver
-> > > > (e.g. .set_max_frame_size, .port_set_jumbo_size).    
-> > > 
-> > > I don't think this patch is correct.
-> > > 
-> > > One of the things that mv88e6xxx_setup_port() does when initialising
-> > > each port is:
-> > > 
-> > >         if (chip->info->ops->port_set_jumbo_size) {
-> > >                 err = chip->info->ops->port_set_jumbo_size(chip,
-> > > port, 10218); if (err)
-> > >                         return err;
-> > >         }
-> > > 
-> > > There is one implementation of this, which is
-> > > mv88e6165_port_set_jumbo_size() and that has the effect of setting
-> > > port register 8 to the largest size. So any chip that supports the
-> > > port_set_jumbo_size() method will be programmed on initialisation to
-> > > support this larger size.
-> > > 
-> > > However, you seem to be listing e.g. the 88e6190 (if I'm
-> > > interpreting the horrid mv88e6xxx_table changes correctly)  
-> > 
-> > Those changes were requested by the community. Previous versions of
-> > this patch were just changing things to allow correct operation of the
-> > switch ICs on which I do work (i.e. 88e6020 and 88e6071).
-> > 
-> > And yes, for 88e6190 the max_frame_size = 10240, but (by mistake) the
-> > same value was not updated for 88e6190X.
-> > 
-> > The question is - how shall I proceed? 
-> > 
-> > After the discussion about this code - it looks like approach from v3
-> > [1] seems to be the most non-intrusive for other ICs.
-> > 
+> ...
 > 
-> I would appreciate _any_ hints on how shall I proceed to prepare those
-> patches, so the community will accept them...
+>>>>>>>> +	ret = fwnode_property_read_u32(link_fwnode, "ti,eq-level", &eq_level);
+>>>>>>>> +	if (ret) {
+>>>>>>>> +		if (ret != -EINVAL) {
+>>>>>>>> +			dev_err(dev, "rx%u: failed to read 'ti,eq-level': %d\n",
+>>>>>>>> +				nport, ret);
+>>>>>>>> +			return ret;
+>>>>>>>> +		}
+>>>>>
+>>>>> This seems like trying to handle special cases, if you want it to be optional,
+>>>>> why not ignoring all errors?
+>>>>
+>>>> I don't follow. Why would we ignore all errors even if the property is
+>>>> optional? If there's a failure in reading the property, or checking if it
+>>>> exists or not, surely that's an actual error to be handled, not to be
+>>>> ignored?
+>>>
+>>> What the problem to ignore them?
+>>
+>> Well, probably nothing will explode if we just ignore them. But... Why would
+>> we ignore them?
+>>
+>>> But if you are really pedantic about it, perhaps the proper way is to add
+>>>
+>>> fwnode_property_*_optional()
+>>>
+>>> APIs to the set where you take default and return 0 in case default had been
+>>> used for the absent property.
+>>
+>> Perhaps, but I don't have a default value here.
+> 
+> It's impossible. You have one. 0 is also can be default.
 
-What I'm concerned about, and why I replied, is that setting the devices
-to have a max frame size of 1522 when we program them to use a larger
-frame size means we break those switches for normal sized packets.
+No, I either have the value ("eq-level"), or it's undefined, not used, 
+doesn't exist. There's no default eq-level.
 
-The current logic in mv88e6xxx_get_max_mtu() is:
+>> In any case, I'm not quite sure what you are arguing here. Is it just that
+>> you don't think the error check is necessary and should be dropped?
+> 
+> Yes, I do not see the value of these complex error checking.
+> Dropping that makes it KISS. I.o.w. why do we care about errors
+> if the property is optional? Make it mandatory otherwise.
 
-	If the chip implements port_set_jumbo_size, then packet sizes of
-	up to 10240 are supported.
-	(ops: 6131, 6141, 6171, 6172, 6175, 6176, 6190, 6190x, 6240, 6320,
-	6321, 6341, 6350, 6351, 6352, 6390, 6390x, 6393x)
-	If the chip implements set_max_frame_size, then packet sizes of
-	up to 1632 are supported.
-	(ops: 6085, 6095, 6097, 6123, 6161, 6185)
-	Otherwise, packets of up to 1522 are supported.
+If the call fails, there's an error somewhere. Maybe the user tried to 
+define eq-level, but something is wrong. Isn't it better to catch that 
+error, rather than ignoring it, leaving the user wonder why things don't 
+work as he expects?
 
-Now, going through the patch, I see:
+>>>>>>>> +	} else if (eq_level > UB960_MAX_EQ_LEVEL) {
+>>>>>>>> +		dev_err(dev, "rx%u: illegal 'ti,eq-level' value: %d\n", nport,
+>>>>>>>> +			eq_level);
+>>>>>
+>>>>> This part is a validation of DT again, but we discussed above this.
+>>>>>
+>>>>>>>> +	} else {
+>>>>>>>> +		rxport->eq.manual_eq = true;
+>>>>>>>> +		rxport->eq.manual.eq_level = eq_level;
+>>>>>>>> +	}
+>>>
+>>> ...
+>>>
+>>>>>>>> +struct ds90ub9xx_platform_data {
+>>>>>>>> +	u32 port;
+>>>>>>>> +	struct i2c_atr *atr;
+>>>>>>>> +	unsigned long bc_rate;
+>>>>>>>
+>>>>>>> Not sure why we need this to be public except, probably, atr...
+>>>>>>
+>>>>>> The port and atr are used by the serializers, for atr. The bc_rate is used
+>>>>>> by the serializers to figure out the clocking (they may use the FPD-Link's
+>>>>>> frequency internally).
+>>>>>
+>>>>> The plain numbers can be passed as device properties. That's why the question
+>>>>> about platform data. Platform data in general is discouraged to be used in a
+>>>>> new code.
+>>>>
+>>>> Device properties, as in, coming from DT?
+>>>
+>>>   From anywhere.
+>>>
+>>>> The port could be in the DT, but
+>>>> the others are not hardware properties.
+>>>
+>>> Why do we need them? For example, bc_rate.
+>>
+>> The atr pointer is needed so that the serializers (ub913, ub953) can add
+>> their i2c adapter to the deserializer's i2c-atr. The port is also needed for
+>> that.
+>>
+>> The bc rate (back-channel rate) is the FPD-Link back-channel rate which the
+>> serializers use for various functionalities. At the moment only the ub953
+>> uses it for calculating an output clock rate.
+>>
+>> The bc-rate could be implemented using the clock framework, even if it's not
+>> quite a plain clock. I had that code at some point, but it felt a bit off
+>> and as we needed the pdata for the ATR, I added the bc-rate there.
+> 
+> And I don't see why it is not a property of the device.
 
-	88e6085 has 10240 but currently has 1632
-	88e6095 has 1632 (no change)
-	88e6097 has 1632 (no change)
-	88e6123 has 10240 but currently has 1632
-	88e6131 has 10240 (no change)
-	88e6141 has 10240 (no change)
-	88e6161 has 1632 but currently has 10240
-	88e6165 has 1632 but currently has 1522
-	88e6171 has 1522 but currently has 10240
-	88e6172 has 10240 (no change)
-	88e6175 has 1632 but currently has 10240
-	88e6176 has 10240 (no change)
-	88e6185 has 1632 (no change)
-	88e6190 has 10240 (no change)
-	88e6190x has 10240 (no change)
-	88e6191 has 10240 but currently has 1522
-	88e6191x has 1522 but currently has 10240
-	88e6193x has 1522 but currently has 10240
-	88e6220 has 2048 but currently has 1522
-	88e6240 has 10240 (no change)
-	88e6250 has 2048 but currently has 1522
-	88e6290 has 10240 but currently has 1522
-	88e6320 has 10240 (no change)
-	88e6321 has 10240 (no change)
-	88e6341 has 10240 (no change)
-	88e6350 has 10240 (no change)
-	88e6351 has 10240 (no change)
-	88e6352 has 10240 (no change)
-	88e6390 has 1522 but currently has 10240
-	88e6390x has 1522 but currently has 10240
-	88e6393x has 1522 but currently has 10240
+It with a "property of the device" you mean a hardware property, it's 
+not because we don't know it, it can be changed at runtime. It's not 
+supposed to change after probing the serializer, but up to that point it 
+can change.
 
-My point is that based on the above, there's an awful lot of changes
-that this one patch brings, and I'm not sure many of them are intended.
+>>>> Yes, I don't like using platform data. We need some way to pass information
+>>>> between the drivers.
+>>>
+>>> Device properties allow that and targeting to remove the legacy platform data
+>>> in zillions of the drivers.
+>>
+>> Do you have any pointers to guide me into the right direction? I couldn't
+>> find anything with some grepping and googling.
+>>
+>> If you mean "device properties" as in ACPI, and so similar to DT properties,
+>> aren't those hardware properties? Only the port here is about the hardware.
+> 
+> About hardware, or PCB, or as quirks for missing DT/ACPI/any FW properties,
+> like clock rates.
+> 
+> The Linux kernel layer for that is called software nodes. The rough
+> approximation to see where and how it's being used can be achieved
+> by grepping for specific macros:
+> 
+> 	git grep -lw PROPERTY_ENTRY_.*
+> 
+> E.g. arch/arm/mach-tegra/board-paz00.c tegra_paz00_wifikill_init()
+> implementation.
 
-All the ones with "but currently has 10240", it seems they implement
-port_set_jumbo_size() which, although the switch may default to a
-smaller frame size, we configure it to be higher. Maybe these don't
-implement the field that configures those? Maybe your patch is wrong?
-I don't know.
+Thanks, I'll have a look. But I presume we can only pass "plain" values, 
+so it won't work for the ATR pointer anyway.
 
-Similarly for the ones with "but currently has 1632", it seems they
-implement set_max_frame_size(), but this is only called via
-mv88e6xxx_change_mtu(), and I haven't worked out whether that will
-be called during initialisation by the networking layer.
+  Tomi
 
-Now, what really concerns me is the difficulty in making this change.
-As we can see from the above, there's a lot of changes going on here,
-and it's not obvious which are intentional and which may be bugs.
-
-So, I think it would be far better to introduce the "max_frame_size"
-field using the existing values, and then verify that value during
-initialisation time for every entry in mv88e6xxx_table[] using the
-rules that mv88e6xxx_get_max_mtu() was using. Boot that kernel, and
-have it run that verification, and state that's what's happened and
-was successful in the commit message.
-
-In the next commit, change mv88e6xxx_get_max_mtu() to use those
-verified values and remove the verification code.
-
-Then in the following commit, update the "max_frame_size" values with
-the changes you intend to make.
-
-Then, we can (a) have confidence that each of the new members were
-properly initialised, and (b) we can also see what changes you're
-intentionally making.
-
-Right now, given that at least two of the "max_frame_size" values are
-wrong in this patch, I think we can say for certain that we've proven
-that trying to introduce this new member and use it in a single patch
-is too error prone.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
