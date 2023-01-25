@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72E767C0A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB1967C0A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbjAYXOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 18:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
+        id S233235AbjAYXPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 18:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjAYXOn (ORCPT
+        with ESMTP id S230373AbjAYXPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 18:14:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AB83B67A
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 15:13:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674688435;
+        Wed, 25 Jan 2023 18:15:09 -0500
+Received: from out-9.mta0.migadu.com (out-9.mta0.migadu.com [91.218.175.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68057442FF
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 15:15:08 -0800 (PST)
+Date:   Wed, 25 Jan 2023 15:14:48 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1674688503;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZxXC6RkcbYR55zhaEzAPuw/LbFxa4LSYY65NGg5ryZY=;
-        b=GMV2PfU9DOfCx03bkpWoMyQlIx88nUudHNupts8L3tQDzvtslQhJsbFPEgwmM6iy6ALdWy
-        mBRokXlXeAWnEd3rTGjnLyYA2L20ryCov2fR8Y9bLVCc/+poUWXH2S7ZUNZpMCcIQhkgOZ
-        cXhr12sGxg30PLzxx9HDyTjLY6b9wcc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-hmWo8uBOObCoE9yJ5FisXg-1; Wed, 25 Jan 2023 18:13:49 -0500
-X-MC-Unique: hmWo8uBOObCoE9yJ5FisXg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6AE13801779;
-        Wed, 25 Jan 2023 23:13:49 +0000 (UTC)
-Received: from [172.30.41.16] (unknown [10.22.32.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F399040C1141;
-        Wed, 25 Jan 2023 23:13:48 +0000 (UTC)
-Subject: [PATCH] genirq/msi: Fix fwnode leak
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     maz@kernel.org, tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        alex.williamson@redhat.com
-Date:   Wed, 25 Jan 2023 16:13:48 -0700
-Message-ID: <167468839713.2297784.1309086853550595503.stgit@omen>
-User-Agent: StGit/1.5.dev2+g9ce680a52bd9
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GQas9hJPH93Zr57s1dcc7T+g336s2ZkXNkxopiNZy5Y=;
+        b=L++sVVFKgB2QgSfUln8N4pW6K99/uC71K7MHO0eTNd2gOjxQp1AktmI+V60pLnLZKq6KFC
+        hACk9uz3DsoIitBsOXZt7BIu60/uMI/JLjE4PEEUb0PdbUDFsVn25UofpY3G6aCVyuS6ma
+        52wkIVgDt+qNHn0YlWdzI9qQ/UE4CgA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+Message-ID: <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
+References: <20230125073502.743446-1-leobras@redhat.com>
+ <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+ <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+ <Y9FzSBw10MGXm2TK@tpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9FzSBw10MGXm2TK@tpad>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmemleak is reporting pairs of leaked buffers when PCI devices are
-unbound from their drivers.  One of these buffers contains the name of
-the interrupt as generated for the msi_domain_template bundle in
-msi_create_device_irq_domain().  This name is passed through
-irq_domain_alloc_named_fwnode(), where an irqchip_rwid is allocated,
-along with a separate allocation via kasprintf() for another copy of
-the name.  These are the two leaked buffers.
+On Wed, Jan 25, 2023 at 03:22:00PM -0300, Marcelo Tosatti wrote:
+> On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Brás wrote:
+> > On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
+> > > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
+> > > > Disclaimer:
+> > > > a - The cover letter got bigger than expected, so I had to split it in
+> > > >     sections to better organize myself. I am not very confortable with it.
+> > > > b - Performance numbers below did not include patch 5/5 (Remove flags
+> > > >     from memcg_stock_pcp), which could further improve performance for
+> > > >     drain_all_stock(), but I could only notice the optimization at the
+> > > >     last minute.
+> > > > 
+> > > > 
+> > > > 0 - Motivation:
+> > > > On current codebase, when drain_all_stock() is ran, it will schedule a
+> > > > drain_local_stock() for each cpu that has a percpu stock associated with a
+> > > > descendant of a given root_memcg.
 
-Resolve this by adding the missing call to irq_domain_free_fwnode() in
-msi_remove_device_irq_domain().
+Do you know what caused those drain_all_stock() calls? I wonder if we should look
+into why we have many of them and whether we really need them?
 
-Fixes: 27a6dea3ebaa ("genirq/msi: Provide msi_create/free_device_irq_domain()")
-Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
----
- kernel/irq/msi.c |    3 +++
- 1 file changed, 3 insertions(+)
+It's either some user's actions (e.g. reducing memory.max), either some memcg
+is entering pre-oom conditions. In the latter case a lot of drain calls can be
+scheduled without a good reason (assuming the cgroup contain multiple tasks running
+on multiple cpus). Essentially each cpu will try to grab the remains of the memory quota
+and move it locally. I wonder in such circumstances if we need to disable the pcp-caching
+on per-cgroup basis.
 
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 955267bbc2be..66dc956505b8 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -1015,6 +1015,7 @@ void msi_remove_device_irq_domain(struct device *dev, unsigned int domid)
- {
- 	struct msi_domain_info *info;
- 	struct irq_domain *domain;
-+	struct fwnode_handle *fwnode;
- 
- 	msi_lock_descs(dev);
- 
-@@ -1025,7 +1026,9 @@ void msi_remove_device_irq_domain(struct device *dev, unsigned int domid)
- 
- 	dev->msi.data->__domains[domid].domain = NULL;
- 	info = domain->host_data;
-+	fwnode = domain->fwnode;
- 	irq_domain_remove(domain);
-+	irq_domain_free_fwnode(fwnode);
- 	kfree(container_of(info, struct msi_domain_template, info));
- 
- unlock:
+Generally speaking, draining of pcpu stocks is useful only if an idle cpu is holding some
+charges/memcg references (it might be not completely idle, but running some very special
+workload which is not doing any kernel allocations or a process belonging to the root memcg).
+In all other cases pcpu stock will be either drained naturally by an allocation from another
+memcg or an allocation from the same memcg will "restore" it, making draining useless.
 
+We also can into drain_all_pages() opportunistically, without waiting for the result.
+On a busy system it's most likely useless, we might oom before scheduled works will be executed.
 
+I admit I planned to do some work around and even started, but then never had enough time to
+finish it.
+
+Overall I'm somewhat resistant to an idea of making generic allocation & free paths slower
+for an improvement of stock draining. It's not a strong objection, but IMO we should avoid
+doing this without a really strong reason.
+
+Thanks!
