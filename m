@@ -2,103 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DAC67B19E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5EB67B1D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235259AbjAYLib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S235728AbjAYLpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:45:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235313AbjAYLiZ (ORCPT
+        with ESMTP id S230146AbjAYLpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:38:25 -0500
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112EE5618E;
-        Wed, 25 Jan 2023 03:37:55 -0800 (PST)
-Received: by mail-qv1-f54.google.com with SMTP id m12so13866102qvt.9;
-        Wed, 25 Jan 2023 03:37:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E/t7ys6E2CbYDYuVcXfgtBpZgdyeb4IZ4cqbwkss4Uo=;
-        b=UZBvsy//01TZAyy8XetTeHupyQ0DKpMhFBtSMsATvkYgH2X/0Mo1rjz5UmMCCx1g+d
-         BRa83TsBJkJo7HBuNt5w8OaKLRJEgqnq9V0tb6bFqZXCa93/Gjj1xK9s9NuLesGjNywL
-         SNUVk9MGOCFurN/H3JUhNKq2uo8FQmM5MBpXwxlO829K5xkXt45MrMQe4MSJnmkaC0Km
-         lMfZP4h8kmeqv+Wc4L0k4gNm1ssNCfDGWe32HW/8AYIudLjoRNgtL0FKZBcgcaeoalFd
-         8/vGl+qkZCfxRB5d8NQOduFhEbu17noPcITdEs2GNCDruarJk4iUVpSsgF9qJJQEL49X
-         Dkyg==
-X-Gm-Message-State: AO0yUKUCxF53zUrkAkStATOr06XGhjEIVu3Wqfu9auCH0Qtsd6f0EaoK
-        oNOHcH8WH/WIOyg/mf95J47Qr25SNSyirg==
-X-Google-Smtp-Source: AK7set9OF5JhON/JLlyY5FFbCkQZmy+rqSEs2v5J2i1sSCZoOgt+xUwTy+lwrQrqGwC3KYROOsz3NQ==
-X-Received: by 2002:a0c:f441:0:b0:537:7057:49cf with SMTP id h1-20020a0cf441000000b00537705749cfmr5215902qvm.37.1674646630205;
-        Wed, 25 Jan 2023 03:37:10 -0800 (PST)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id i65-20020a37b844000000b006fec1c0754csm3329969qkf.87.2023.01.25.03.37.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 03:37:09 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id p141so19819238ybg.12;
-        Wed, 25 Jan 2023 03:37:09 -0800 (PST)
-X-Received: by 2002:a25:9ac1:0:b0:7b4:6a33:d89f with SMTP id
- t1-20020a259ac1000000b007b46a33d89fmr2485292ybo.543.1674646629124; Wed, 25
- Jan 2023 03:37:09 -0800 (PST)
+        Wed, 25 Jan 2023 06:45:11 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF85BBA8;
+        Wed, 25 Jan 2023 03:45:10 -0800 (PST)
+Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
+        by gnuweeb.org (Postfix) with ESMTPSA id 4F0C381845;
+        Wed, 25 Jan 2023 11:37:28 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1674646654;
+        bh=/EctXOG2MvaNtKtikXj94vEve/rQIfCrMsw24dL44Y4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nACC8Fx8Cbe28zU/v8ud+iy7Z7fQJStibaoq9HttVSgyccF2xqH3ljfZPzDf43HRq
+         fwnWG54L28s8Bq3jJ9RKoe1tZae4/OTNBIo+8066v0mwWqFSixRLL1zOgYpTUtdtjA
+         vIZ6lp5gt/8s/bZiZCNkNI9L8OCE+1G2x0j55VhvSowESJVIb4hNwfx3jCddZkUicx
+         qTIkVXhkWUlFuIvpzVCUe0rLYUANMpYf5X9uV0KEleg57jsqSeTWg/HnoHCGLoxwUN
+         lcrcLqzDiRwgAYgcSdqh7YRWObLy8osLCWJCi3wf7rAXkG5iCfZPte/8p2A02aSOLY
+         7JVF6pL+ZxK0A==
+Date:   Wed, 25 Jan 2023 18:37:23 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Xin Li <xin3.li@intel.com>, Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        x86 Mailing List <x86@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v5 1/2] selftests/x86: sysret_rip: Handle syscall in
+ a FRED system
+Message-ID: <Y9EUc6SIhN4skrmi@biznet-home.integral.gnuweeb.org>
+References: <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
+ <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
+ <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
+ <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
+ <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+ <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
+ <20230125034958.734527-2-ammarfaizi2@gnuweeb.org>
+ <8770815f-0f23-d0c5-e56a-d401827842c9@zytor.com>
+ <Y9D8++DxphJS1oc4@biznet-home.integral.gnuweeb.org>
+ <A7DAB159-7C02-412D-9CFB-5C3C3760DECB@zytor.com>
 MIME-Version: 1.0
-References: <20230102221815.273719-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230102221815.273719-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20230102221815.273719-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 25 Jan 2023 12:36:57 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXeEXgMYgFq_nTRmco7P7TFSMKcRoQxcL-hKECn+_5FGw@mail.gmail.com>
-Message-ID: <CAMuHMdXeEXgMYgFq_nTRmco7P7TFSMKcRoQxcL-hKECn+_5FGw@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] arm64: dts: renesas: r9a07g043[u]: Update pinctrl
- node to handle GPIO interrupts
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <A7DAB159-7C02-412D-9CFB-5C3C3760DECB@zytor.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 2, 2023 at 11:19 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Add required properties in pinctrl node to handle GPIO interrupts.
->
-> Note as IRQC is not enabled in RZ/Five the phandle for interrupt-parent
-> is added in RZ/G2UL specific dtsi so that RZ/Five pinctrl driver
-> continues without waiting for IRQC to probe.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v2 -> v3
-> * No change
+On Wed, Jan 25, 2023 at 02:17:41AM -0800, H. Peter Anvin wrote:
+> I guess it would depend on what they "normally" are. My #1 impulse would be to leave them both unchanged.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.3.
+Ah okay... I think I understand now. My confusion came from a comment
+in that code.
 
-Gr{oetje,eeting}s,
+The current SIGUSR1 handler has a comment:
 
-                        Geert
+    /* Set IP and CX to match so that SYSRET can happen. */
+    ctx->uc_mcontext.gregs[REG_RIP] = rip;
+    ctx->uc_mcontext.gregs[REG_RCX] = rip;
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+So I thought if we leave them both unchanged, then SYSRET can happen
+too, because IP and CX match. My initial confusion about that was:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+    Where do we actually exercise IRET if the SIGUSR2 handler
+    exercises SYSRET then?
+
+I realized my assumption was wrong. The current SIGUSR1 handler
+actually forces the kernel to use IRET, not SYSRET. Because the %rip
+is set to a non-canonical address. So that's the place where it
+exercises IRET.
+
+IOW, my understanding now:
+
+The current SIGUSR1 handler exercises the SYSRET-appropriate condition
+detector in the kernel. It doesn't actually go to the SYSRET path
+despite the comment saying "SYSRET can happen". That detector must take
+us to the IRET path or we will #GP in kernel space on Intel CPUs.
+
+In short, the SIGUSR1 handler asserts that "SYSRET must *not* happen".
+
+The expected SIGUSR2 handler addition exercises the SYSRET path by
+leaving REG_IP and REG_CX unchanged.
+
+Am I correct?
+
+-- 
+Ammar Faizi
+
