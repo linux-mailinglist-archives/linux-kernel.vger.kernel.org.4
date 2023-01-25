@@ -2,158 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6A767B2B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0133367B2BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235390AbjAYMoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 07:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S235287AbjAYMpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 07:45:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjAYMn7 (ORCPT
+        with ESMTP id S229827AbjAYMpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 07:43:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A7A1284E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 04:43:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB265614C7
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:43:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ACF5C433D2;
-        Wed, 25 Jan 2023 12:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674650637;
-        bh=PwIsHuwFo5nA+InprKfHzo+Ujv7Cp1wg7w1iCpL1uZc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dC2b9msDOnCmEzmf7PQV9Mdx5tYHMlGaly3M9GNbfWV6mJ5aDKnRG9CoNb8/ViPin
-         /qYDVPmaWvIK+81S+uoKRPSwSeu/xSC7fIDdMsynREM6gImZbjEqAw0zi5PqDlCpcQ
-         R+rA+jKzEkorWePk4AEIk4+Hi2eRIHzqH80Do4qA=
-Date:   Wed, 25 Jan 2023 13:43:54 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Reshetova, Elena" <elena.reshetova@intel.com>
-Cc:     "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <Y9EkCvAfNXnJ+ATo@kroah.com>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+        Wed, 25 Jan 2023 07:45:15 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1549F12064
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 04:45:14 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id y19so20193046ljq.7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 04:45:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+me64axwvDqb7B12zwUNh5XD3eQ8C/hEK64GWEC77Lc=;
+        b=w2Z8tMT3RCLczntu9mAnYJ6xWxaivZDCN8Y+umUhDZwrKVZ93JXeIUiigYbCflW1W6
+         XY3VmJjeWoo1yifNlcn5OenpElU3xdJO7NRRrQ/TsN/0JONlKDXRbQuv9p2KZcVviwe/
+         CNKjVUmrDMMDlhP6u9BwP7+GzNrzDcdoZgNfFI1LSbfLn0RhH4mjVgqJIZzyQtnE8sTy
+         0HQNAkCst8ChKhzly5074JMvkzYIsLjZDF9bvJ+ukwDksev8Plc/5GFHnkRXJiN3mvpj
+         FL0Cl4HpC9g21DqBV+A04eWijlZ2LcWdvj6uZEmo309eaak3CoDhEGb5NXfwI9pRaLtj
+         /nKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+me64axwvDqb7B12zwUNh5XD3eQ8C/hEK64GWEC77Lc=;
+        b=nFlqhCCtmgh1410SmUQ/G1ViJ35C9+uUst1moMiH1+NJyuufW6q0jGx6Og6rN1zB4A
+         2Jw0ksO8EBh7XkmCkNPas+CaKkKzzI04iJmy5GrXNJ7Lp3W/As2//Da1Ycu5Eth3oBsn
+         zumDjHfdLdM3MSkYooSu4k6sP+gHVd2c6b5/xvuLc8ZhvKys2dRLyxGSVQg+ZbxeZPMr
+         ah6RMTwcxZIS7spTcMpFN9A7ltqXGhJA82Jkj14ZPOp+iUBHqqA0cYQNZwf26tIc9OBp
+         FvA8A0+Xv6VPBYOoQeFVRd8sRl2eM9mxIs3YtQSXEFmQPKIoSUi5FmMiJSFTVllfsZFk
+         4zGw==
+X-Gm-Message-State: AFqh2krJinYqRUarXzJpAO3KHwdVJDR/Iy+LaRxFGFrEmVzYHEYx5WTr
+        gIM0jdn3+K0rcPEw2calDZWMtcXywZcNxUCAU4+cdg==
+X-Google-Smtp-Source: AMrXdXsj+EmM846GRFfVzMFebETbdJcj3JaNFDqk/iENU4af0huMhLJOavcFgRfOFGf1qsrrLMTKVCuaWGsIUE1nvBE=
+X-Received: by 2002:a2e:7204:0:b0:28a:13a7:a2e7 with SMTP id
+ n4-20020a2e7204000000b0028a13a7a2e7mr2015909ljc.520.1674650712346; Wed, 25
+ Jan 2023 04:45:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230117100845.16708-1-nikita.shubin@maquefel.me>
+ <20230125083026.5399-1-nikita.shubin@maquefel.me> <20230125083026.5399-3-nikita.shubin@maquefel.me>
+In-Reply-To: <20230125083026.5399-3-nikita.shubin@maquefel.me>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 25 Jan 2023 13:45:00 +0100
+Message-ID: <CAMRc=Mf1p0-7T6Wc85u_NGpO7e8fLW=MJX44OjTazAPxXCeoxA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] gpio: ep93xx: Make irqchip immutable
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     linux-gpio@vger.kernel.org,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 12:28:13PM +0000, Reshetova, Elena wrote:
-> Hi Greg, 
-> 
-> You mentioned couple of times (last time in this recent thread:
-> https://lore.kernel.org/all/Y80WtujnO7kfduAZ@kroah.com/) that we ought to start
-> discussing the updated threat model for kernel, so this email is a start in this direction. 
+On Wed, Jan 25, 2023 at 9:30 AM Nikita Shubin <nikita.shubin@maquefel.me> wrote:
+>
+> This turns the Cirrus ep93xx gpio irqchip immutable.
+>
+> Preserve per-chip labels by adding an ->irq_print_chip() callback.
+>
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> ---
+> Bartosz Golaszewski, Linus Walleij:
+>
+> This could come togather with some refactoring and replacing
+> all 'd->irq & 7' to 'irqd_to_hwirq', bu this comes in following
+> patch.
+> ---
+>  drivers/gpio/gpio-ep93xx.c | 34 +++++++++++++++++++++-------------
+>  1 file changed, 21 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-ep93xx.c b/drivers/gpio/gpio-ep93xx.c
+> index 7edcdc575080..192be99b1392 100644
+> --- a/drivers/gpio/gpio-ep93xx.c
+> +++ b/drivers/gpio/gpio-ep93xx.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/gpio/driver.h>
+>  #include <linux/bitops.h>
+> +#include <linux/seq_file.h>
+>
+>  #define EP93XX_GPIO_F_INT_STATUS 0x5c
+>  #define EP93XX_GPIO_A_INT_STATUS 0xa0
+> @@ -40,7 +41,6 @@
+>  #define EP93XX_GPIO_F_IRQ_BASE 80
+>
+>  struct ep93xx_gpio_irq_chip {
+> -       struct irq_chip ic;
+>         u8 irq_offset;
+>         u8 int_unmasked;
+>         u8 int_enabled;
+> @@ -185,6 +185,7 @@ static void ep93xx_gpio_irq_mask_ack(struct irq_data *d)
+>         ep93xx_gpio_update_int_params(epg, eic);
+>
+>         writeb(port_mask, epg->base + eic->irq_offset + EP93XX_INT_EOI_OFFSET);
+> +       gpiochip_disable_irq(gc, irqd_to_hwirq(d));
+>  }
+>
+>  static void ep93xx_gpio_irq_mask(struct irq_data *d)
+> @@ -195,6 +196,7 @@ static void ep93xx_gpio_irq_mask(struct irq_data *d)
+>
+>         eic->int_unmasked &= ~BIT(d->irq & 7);
+>         ep93xx_gpio_update_int_params(epg, eic);
+> +       gpiochip_disable_irq(gc, irqd_to_hwirq(d));
+>  }
+>
+>  static void ep93xx_gpio_irq_unmask(struct irq_data *d)
+> @@ -203,6 +205,7 @@ static void ep93xx_gpio_irq_unmask(struct irq_data *d)
+>         struct ep93xx_gpio_irq_chip *eic = to_ep93xx_gpio_irq_chip(gc);
+>         struct ep93xx_gpio *epg = gpiochip_get_data(gc);
+>
+> +       gpiochip_enable_irq(gc, irqd_to_hwirq(d));
+>         eic->int_unmasked |= BIT(d->irq & 7);
+>         ep93xx_gpio_update_int_params(epg, eic);
+>  }
+> @@ -320,15 +323,25 @@ static int ep93xx_gpio_set_config(struct gpio_chip *gc, unsigned offset,
+>         return 0;
+>  }
+>
+> -static void ep93xx_init_irq_chip(struct device *dev, struct irq_chip *ic)
+> +static void ep93xx_irq_print_chip(struct irq_data *data, struct seq_file *p)
+>  {
+> -       ic->irq_ack = ep93xx_gpio_irq_ack;
+> -       ic->irq_mask_ack = ep93xx_gpio_irq_mask_ack;
+> -       ic->irq_mask = ep93xx_gpio_irq_mask;
+> -       ic->irq_unmask = ep93xx_gpio_irq_unmask;
+> -       ic->irq_set_type = ep93xx_gpio_irq_type;
+> +       struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
+> +
+> +       seq_printf(p, dev_name(gc->parent));
+>  }
+>
+> +static const struct irq_chip gpio_eic_irq_chip = {
+> +       .name                   = "ep93xx-gpio-eic",
+> +       .irq_ack                = ep93xx_gpio_irq_ack,
+> +       .irq_mask               = ep93xx_gpio_irq_mask,
+> +       .irq_unmask             = ep93xx_gpio_irq_unmask,
+> +       .irq_mask_ack   = ep93xx_gpio_irq_mask_ack,
+> +       .irq_set_type   = ep93xx_gpio_irq_type,
+> +       .irq_print_chip = ep93xx_irq_print_chip,
+> +       .flags                  = IRQCHIP_IMMUTABLE,
+> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
+> +};
+> +
+>  static int ep93xx_gpio_add_bank(struct ep93xx_gpio_chip *egc,
+>                                 struct platform_device *pdev,
+>                                 struct ep93xx_gpio *epg,
+> @@ -359,12 +372,7 @@ static int ep93xx_gpio_add_bank(struct ep93xx_gpio_chip *egc,
+>                 if (!egc->eic)
+>                         return -ENOMEM;
+>                 egc->eic->irq_offset = bank->irq;
+> -               ic = &egc->eic->ic;
+> -               ic->name = devm_kasprintf(dev, GFP_KERNEL, "gpio-irq-%s", bank->label);
+> -               if (!ic->name)
+> -                       return -ENOMEM;
+> -               ep93xx_init_irq_chip(dev, ic);
+> -               girq->chip = ic;
+> +               gpio_irq_chip_set_chip(girq, &gpio_eic_irq_chip);
+>         }
+>
+>         if (bank->has_irq) {
+> --
+> 2.37.4
+>
 
-Any specific reason you didn't cc: the linux-hardening mailing list?
-This seems to be in their area as well, right?
+Queued for fixes, thanks!
 
-> As we have shared before in various lkml threads/conference presentations
-> ([1], [2], [3] and many others), for the Confidential Computing guest kernel, we have a 
-> change in the threat model where guest kernel doesn’t anymore trust the hypervisor. 
-
-That is, frankly, a very funny threat model.  How realistic is it really
-given all of the other ways that a hypervisor can mess with a guest?
-
-So what do you actually trust here?  The CPU?  A device?  Nothing?
-
-> This is a big change in the threat model and requires both careful assessment of the 
-> new (hypervisor <-> guest kernel) attack surface, as well as careful design of mitigations
-> and security validation techniques. This is the activity that we have started back at Intel
-> and the current status can be found in
-> 
-> 1) Threat model and potential mitigations: 
-> https://intel.github.io/ccc-linux-guest-hardening-docs/security-spec.html
-
-So you trust all of qemu but not Linux?  Or am I misreading that
-diagram?
-
-> 2) One of the described in the above doc mitigations is "hardening of the enabled
-> code". What we mean by this, as well as techniques that are being used are
-> described in this document: 
-> https://intel.github.io/ccc-linux-guest-hardening-docs/tdx-guest-hardening.html
-
-I hate the term "hardening".  Please just say it for what it really is,
-"fixing bugs to handle broken hardware".  We've done that for years when
-dealing with PCI and USB and even CPUs doing things that they shouldn't
-be doing.  How is this any different in the end?
-
-So what you also are saying here now is "we do not trust any PCI
-devices", so please just say that (why do you trust USB devices?)  If
-that is something that you all think that Linux should support, then
-let's go from there.
-
-> 3) All the tools are open-source and everyone can start using them right away even
-> without any special HW (readme has description of what is needed).
-> Tools and documentation is here:
-> https://github.com/intel/ccc-linux-guest-hardening
-
-Again, as our documentation states, when you submit patches based on
-these tools, you HAVE TO document that.  Otherwise we think you all are
-crazy and will get your patches rejected.  You all know this, why ignore
-it?
-
-> 4) all not yet upstreamed linux patches (that we are slowly submitting) can be found 
-> here: https://github.com/intel/tdx/commits/guest-next
-
-Random github trees of kernel patches are just that, sorry.
-
-> So, my main question before we start to argue about the threat model, mitigations, etc,
-> is what is the good way to get this reviewed to make sure everyone is aligned?
-> There are a lot of angles and details, so what is the most efficient method? 
-> Should I split the threat model from https://intel.github.io/ccc-linux-guest-hardening-docs/security-spec.html
-> into logical pieces and start submitting it to mailing list for discussion one by one? 
-
-Yes, start out by laying out what you feel the actual problem is, what
-you feel should be done for it, and the patches you have proposed to
-implement this, for each and every logical piece.
-
-Again, nothing new here, that's how Linux is developed, again, you all
-know this, it's not anything I should have to say.
-
-> Any other methods? 
-> 
-> The original plan we had in mind is to start discussing the relevant pieces when submitting the code,
-> i.e. when submitting the device filter patches, we will include problem statement, threat model link, 
-> data, alternatives considered, etc. 
-
-As always, we can't do anything without actual working changes to the
-code, otherwise it's just a pipe dream and we can't waste our time on it
-(neither would you want us to).
-
-thanks, and good luck!
-
-greg k-h
+Bart
