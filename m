@@ -2,398 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338ED67BD9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A53667BDA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235842AbjAYVFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
+        id S236189AbjAYVH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235476AbjAYVFK (ORCPT
+        with ESMTP id S230257AbjAYVH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:05:10 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BC2518FE
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:05:08 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P2GNq33lZz9xFm8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:56:59 +0800 (CST)
-Received: from [10.81.213.36] (unknown [10.81.213.36])
-        by APP2 (Coremail) with SMTP id GxC2BwDXqmFgmdFj4YrGAA--.16205S2;
-        Wed, 25 Jan 2023 22:04:43 +0100 (CET)
-Message-ID: <c44183e7-44ae-4be3-bb47-517067a112b5@huaweicloud.com>
-Date:   Wed, 25 Jan 2023 22:04:29 +0100
+        Wed, 25 Jan 2023 16:07:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353CE518FE
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:07:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674680826;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ADJBHBSQO9c3rp8+698fJfvCCb9Mh4itPrPUhtne/TY=;
+        b=O6pTvXYKrGtbdDf2Wm8YYNO8wdmit6G2hmqdCLFq0oF10b5j/4FREeGWldSMy94SnRhepf
+        jWKMxhziNFQyzRbnz6cNkJ6TYpCZFxC4bdhaKRJOTghhDdythvSbmD40LY7jc43X2oeLpS
+        2j66X55M1wILIXa3JHcfMtc0Ra414QE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-586-AVIQIay9PYmttcPLYftLlA-1; Wed, 25 Jan 2023 16:07:02 -0500
+X-MC-Unique: AVIQIay9PYmttcPLYftLlA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B0651871CD5;
+        Wed, 25 Jan 2023 21:07:02 +0000 (UTC)
+Received: from warthog.procyon.org.uk.com (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5482E1121330;
+        Wed, 25 Jan 2023 21:07:00 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v10 0/8] iov_iter: Improve page extraction (pin or just list)
+Date:   Wed, 25 Jan 2023 21:06:49 +0000
+Message-Id: <20230125210657.2335748-1-dhowells@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [Patch 2/2] tools/memory-model: Provide exact SRCU semantics
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <Y9GO3xEYkIQq/qSl@rowland.harvard.edu>
- <Y9GPI/g23YWx+0Ce@rowland.harvard.edu> <Y9GPVnK6lQbY6vCK@rowland.harvard.edu>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y9GPVnK6lQbY6vCK@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwDXqmFgmdFj4YrGAA--.16205S2
-X-Coremail-Antispam: 1UD129KBjvJXoWfGF1fCFy7Zry3JryrCw4UArb_yoWkXFWUpr
-        9xtFyfGw4DXryxZw17ur17Gry8A34rXFWUJr1kG34xZFy7Zrn8Jr47KF1rXry5Wry7Ar4D
-        Xr1jqr1DJw1UAaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUFDGOUUUUU
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Al, Christoph,
 
+Here are patches to provide support for extracting pages from an iov_iter
+and to use this in the extraction functions in the block layer bio code.
 
-On 1/25/2023 9:21 PM, Alan Stern wrote:
-> LKMM has long provided only approximate handling of SRCU read-side
-> critical sections.  This has not been a pressing problem because LKMM's
-> traditional handling is correct for the common cases of non-overlapping
-> and properly nested critical sections.  However, LKMM's traditional
-> handling of partially overlapping critical sections incorrectly fuses
-> them into one large critical section.
->
-> For example, consider the following litmus test:
->
-> ------------------------------------------------------------------------
->
-> C C-srcu-nest-5
->
-> (*
->   * Result: Sometimes
->   *
->   * This demonstrates non-nested overlapping of SRCU read-side critical
->   * sections.  Unlike RCU, SRCU critical sections do not unconditionally
->   * nest.
->   *)
->
-> {}
->
-> P0(int *x, int *y, struct srcu_struct *s1)
-> {
->          int r1;
->          int r2;
->          int r3;
->          int r4;
->
->          r3 = srcu_read_lock(s1);
->          r2 = READ_ONCE(*y);
->          r4 = srcu_read_lock(s1);
->          srcu_read_unlock(s1, r3);
->          r1 = READ_ONCE(*x);
->          srcu_read_unlock(s1, r4);
-> }
->
-> P1(int *x, int *y, struct srcu_struct *s1)
-> {
->          WRITE_ONCE(*y, 1);
->          synchronize_srcu(s1);
->          WRITE_ONCE(*x, 1);
-> }
->
-> locations [0:r1]
-> exists (0:r1=1 /\ 0:r2=0)
->
-> ------------------------------------------------------------------------
->
-> Current mainline incorrectly flattens the two critical sections into
-> one larger critical section, giving "Never" instead of the correct
-> "Sometimes":
->
-> ------------------------------------------------------------------------
->
-> $ herd7 -conf linux-kernel.cfg C-srcu-nest-5.litmus
-> Test C-srcu-nest-5 Allowed
-> States 3
-> 0:r1=0; 0:r2=0;
-> 0:r1=0; 0:r2=1;
-> 0:r1=1; 0:r2=1;
-> No
-> Witnesses
-> Positive: 0 Negative: 3
-> Flag srcu-bad-nesting
-> Condition exists (0:r1=1 /\ 0:r2=0)
-> Observation C-srcu-nest-5 Never 0 3
-> Time C-srcu-nest-5 0.01
-> Hash=e692c106cf3e84e20f12991dc438ff1b
->
-> ------------------------------------------------------------------------
->
-> To its credit, it does complain about bad nesting.  But with this
-> commit we get the following result, which has the virtue of being
-> correct:
->
-> ------------------------------------------------------------------------
->
-> $ herd7 -conf linux-kernel.cfg C-srcu-nest-5.litmus
-> Test C-srcu-nest-5 Allowed
-> States 4
-> 0:r1=0; 0:r2=0;
-> 0:r1=0; 0:r2=1;
-> 0:r1=1; 0:r2=0;
-> 0:r1=1; 0:r2=1;
-> Ok
-> Witnesses
-> Positive: 1 Negative: 3
-> Condition exists (0:r1=1 /\ 0:r2=0)
-> Observation C-srcu-nest-5 Sometimes 1 3
-> Time C-srcu-nest-5 0.05
-> Hash=e692c106cf3e84e20f12991dc438ff1b
->
-> ------------------------------------------------------------------------
->
-> In addition, there are new srcu_down_read() and srcu_up_read()
-> functions on their way to mainline.  Roughly speaking, these are to
-> srcu_read_lock() and srcu_read_unlock() as down() and up() are to
-> mutex_lock() and mutex_unlock().  The key point is that
-> srcu_down_read() can execute in one process and the matching
-> srcu_up_read() in another, as shown in this litmus test:
->
-> ------------------------------------------------------------------------
->
-> C C-srcu-nest-6
->
-> (*
->   * Result: Never
->   *
->   * This would be valid for srcu_down_read() and srcu_up_read().
->   *)
->
-> {}
->
-> P0(int *x, int *y, struct srcu_struct *s1, int *idx, int *f)
-> {
->          int r2;
->          int r3;
->
->          r3 = srcu_down_read(s1);
->          WRITE_ONCE(*idx, r3);
->          r2 = READ_ONCE(*y);
->          smp_store_release(f, 1);
-> }
->
-> P1(int *x, int *y, struct srcu_struct *s1, int *idx, int *f)
-> {
->          int r1;
->          int r3;
->          int r4;
->
->          r4 = smp_load_acquire(f);
->          r1 = READ_ONCE(*x);
->          r3 = READ_ONCE(*idx);
->          srcu_up_read(s1, r3);
-> }
->
-> P2(int *x, int *y, struct srcu_struct *s1)
-> {
->          WRITE_ONCE(*y, 1);
->          synchronize_srcu(s1);
->          WRITE_ONCE(*x, 1);
-> }
->
-> locations [0:r1]
-> filter (1:r4=1)
-> exists (1:r1=1 /\ 0:r2=0)
->
-> ------------------------------------------------------------------------
->
-> When run on current mainline, this litmus test gets a complaint about
-> an unknown macro srcu_down_read().  With this commit:
->
-> ------------------------------------------------------------------------
->
-> herd7 -conf linux-kernel.cfg C-srcu-nest-6.litmus
-> Test C-srcu-nest-6 Allowed
-> States 3
-> 0:r1=0; 0:r2=0; 1:r1=0;
-> 0:r1=0; 0:r2=1; 1:r1=0;
-> 0:r1=0; 0:r2=1; 1:r1=1;
-> No
-> Witnesses
-> Positive: 0 Negative: 3
-> Condition exists (1:r1=1 /\ 0:r2=0)
-> Observation C-srcu-nest-6 Never 0 3
-> Time C-srcu-nest-6 0.02
-> Hash=c1f20257d052ca5e899be508bedcb2a1
->
-> ------------------------------------------------------------------------
->
-> Note that the user must supply the flag "f" and the "filter" clause,
-> similar to what must be done to emulate call_rcu().
->
-> The commit works by treating srcu_read_lock()/srcu_down_read() as
-> loads and srcu_read_unlock()/srcu_up_read() as stores.  This allows us
-> to determine which unlock matches which lock by looking for a data
-> dependency between them.  In order for this to work properly, the data
-> dependencies have to be tracked through stores to intermediate
-> variables such as "idx" in the litmus test above; this is handled by
-> the new carry-srcu-data relation.  But it's important here (and in the
-> existing carry-dep relation) to avoid tracking the dependencies
-> through SRCU unlock stores.  Otherwise, in situations resembling:
->
-> 	A: r1 = srcu_read_lock(s);
-> 	B: srcu_read_unlock(s, r1);
-> 	C: r2 = srcu_read_lock(s);
-> 	D: srcu_read_unlock(s, r2);
->
-> it would look as if D was dependent on both A and C, because "s" would
-> appear to be an intermediate variable written by B and read by C.
-> This explains the complications in the definitions of carry-srcu-dep
-> and carry-dep.
->
-> As a debugging aid, the commit adds a check for errors in which the
-> value returned by one call to srcu_read_lock()/srcu_down_read() is
-> passed to more than one instance of srcu_read_unlock()/srcu_up_read().
->
-> Finally, since these SRCU-related primitives are now treated as
-> ordinary reads and writes, we have to add them into the lists of
-> marked accesses (i.e., not subject to data races) and lock-related
-> accesses (i.e., one shouldn't try to access an srcu_struct with a
-> non-lock-related primitive such as READ_ONCE() or a plain write).
->
-> [ paulmck: Fix space-before-tab whitespace nit. ]
->
-> TBD-contributions-from: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+The patches make the following changes:
 
-In general this seems like a good solution for the time being.
-I do have a few minor questions.
+ (1) Add a function, iov_iter_extract_pages() to replace
+     iov_iter_get_pages*() that gets refs, pins or just lists the pages as
+     appropriate to the iterator type.
 
-> ---
->
->   tools/memory-model/linux-kernel.bell |   17 +++++------------
->   tools/memory-model/linux-kernel.def  |    6 ++++--
->   tools/memory-model/lock.cat          |    6 +++---
->   3 files changed, 12 insertions(+), 17 deletions(-)
->
-> Index: usb-devel/tools/memory-model/linux-kernel.bell
-> ===================================================================
-> --- usb-devel.orig/tools/memory-model/linux-kernel.bell
-> +++ usb-devel/tools/memory-model/linux-kernel.bell
-> @@ -57,20 +57,13 @@ flag ~empty Rcu-lock \ domain(rcu-rscs)
->   flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
->   
->   (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
-> -let srcu-rscs = let rec
-> -	    unmatched-locks = Srcu-lock \ domain(matched)
-> -	and unmatched-unlocks = Srcu-unlock \ range(matched)
-> -	and unmatched = unmatched-locks | unmatched-unlocks
-> -	and unmatched-po = ([unmatched] ; po ; [unmatched]) & loc
-> -	and unmatched-locks-to-unlocks =
-> -		([unmatched-locks] ; po ; [unmatched-unlocks]) & loc
-> -	and matched = matched | (unmatched-locks-to-unlocks \
-> -		(unmatched-po ; unmatched-po))
-> -	in matched
-> +let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
-> +let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
->   
->   (* Validate nesting *)
->   flag ~empty Srcu-lock \ domain(srcu-rscs) as unmatched-srcu-lock
->   flag ~empty Srcu-unlock \ range(srcu-rscs) as unmatched-srcu-unlock
-> +flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-srcu-matches
+     Add a function, iov_iter_extract_will_pin() that will indicate from
+     the iterator type how the cleanup is to be performed, returning true
+     if the pages will need unpinning, false otherwise.
 
-Have you considered adding
-flag ~empty (srcu-rscs ; srcu-rscs^-1) \ id as mixed-srcu-cookie
+ (2) Make the bio struct carry a pair of flags to indicate the cleanup
+     mode.  BIO_NO_PAGE_REF is replaced with BIO_PAGE_REFFED (indicating
+     FOLL_GET was used) and BIO_PAGE_PINNED (indicating FOLL_PIN was used)
+     is added.
 
-Although I think one has to be intentionally trying to trick herd
-to be violating this. If herd could produce different cookies, this would be
-easy to detect just by the different-values flag you already have.
+     BIO_PAGE_REFFED will go away, but at the moment fs/direct-io.c sets it
+     and this series does not fully address that file.
 
+ (4) Add a function, bio_release_page(), to release a page appropriately to
+     the cleanup mode indicated by the BIO_PAGE_* flags.
 
->   
->   (* Check for use of synchronize_srcu() inside an RCU critical section *)
->   flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
-> @@ -80,11 +73,11 @@ flag ~empty different-values(srcu-rscs)
->   
->   (* Compute marked and plain memory accesses *)
->   let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
-> -		LKR | LKW | UL | LF | RL | RU
-> +		LKR | LKW | UL | LF | RL | RU | Srcu-lock | Srcu-unlock
+ (5) Make the iter-to-bio code use iov_iter_extract_pages() to retain the
+     pages appropriately and clean them up later.
 
-Good catch! But why wasn't this necessary before? Is it only necessary 
-now because the accesses became loads and stores (maybe to avoid data 
-races?)
+ (6) Fix bio_flagged() so that it doesn't prevent a gcc optimisation.
 
->   let Plain = M \ Marked
->   
->   (* Redefine dependencies to include those carried through plain accesses *)
-> -let carry-dep = (data ; rfi)*
-> +let carry-dep = (data ; [~ Srcu-unlock] ; rfi)*
->   let addr = carry-dep ; addr
->   let ctrl = carry-dep ; ctrl
->   let data = carry-dep ; data
-> Index: usb-devel/tools/memory-model/linux-kernel.def
-> ===================================================================
-> --- usb-devel.orig/tools/memory-model/linux-kernel.def
-> +++ usb-devel/tools/memory-model/linux-kernel.def
-> @@ -49,8 +49,10 @@ synchronize_rcu() { __fence{sync-rcu}; }
->   synchronize_rcu_expedited() { __fence{sync-rcu}; }
->   
->   // SRCU
-> -srcu_read_lock(X)  __srcu{srcu-lock}(X)
-> -srcu_read_unlock(X,Y) { __srcu{srcu-unlock}(X,Y); }
-> +srcu_read_lock(X) __load{srcu-lock}(*X)
-> +srcu_read_unlock(X,Y) { __store{srcu-unlock}(*X,Y); }
-> +srcu_down_read(X) __load{srcu-lock}(*X)
-> +srcu_up_read(X,Y) { __store{srcu-unlock}(*X,Y); }
+I've pushed the patches here also:
 
-How do you feel about introducing Srcu-up and Srcu-down with this patch?
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
 
->   synchronize_srcu(X)  { __srcu{sync-srcu}(X); }
->   synchronize_srcu_expedited(X)  { __srcu{sync-srcu}(X); }
->   
-> Index: usb-devel/tools/memory-model/lock.cat
-> ===================================================================
-> --- usb-devel.orig/tools/memory-model/lock.cat
-> +++ usb-devel/tools/memory-model/lock.cat
-> @@ -36,9 +36,9 @@ let RU = try RU with emptyset
->   (* Treat RL as a kind of LF: a read with no ordering properties *)
->   let LF = LF | RL
->   
-> -(* There should be no ordinary R or W accesses to spinlocks *)
-> -let ALL-LOCKS = LKR | LKW | UL | LF | RU
-> -flag ~empty [M \ IW] ; loc ; [ALL-LOCKS] as mixed-lock-accesses
-> +(* There should be no ordinary R or W accesses to spinlocks or SRCU structs *)
-> +let ALL-LOCKS = LKR | LKW | UL | LF | RU | Srcu-lock | Srcu-unlock | Sync-srcu
-> +flag ~empty [M \ IW \ ALL-LOCKS] ; loc ; [ALL-LOCKS] as mixed-lock-accesses
+David
 
-Since this was pointed out by Boqun, would it be appropriate to mention 
-him in the patch somehow?
+Changes:
+========
+ver #10)
+ - Fix use of i->kvec in iov_iter_extract_bvec_pages() to be i->bvec.
+ - Drop bio_set_cleanup_mode(), open coding it instead.
 
->   (* Link Lock-Reads to their RMW-partner Lock-Writes *)
->   let lk-rmw = ([LKR] ; po-loc ; [LKW]) \ (po ; po)
+ver #9)
+ - It's now not permitted to use FOLL_PIN outside of mm/, so:
+ - Change iov_iter_extract_mode() into iov_iter_extract_will_pin() and
+   return true/false instead of FOLL_PIN/0.
+ - Drop of folio_put_unpin() and page_put_unpin() and instead call
+   unpin_user_page() (and put_page()) directly as necessary.
+ - Make __bio_release_pages() call bio_release_page() instead of
+   unpin_user_page() as there's no BIO_* -> FOLL_* translation to do.
+ - Drop the FOLL_* renumbering patch.
+ - Change extract_flags to extraction_flags.
 
-Thanks for your patience,
-jonas
+ver #8)
+ - Import Christoph Hellwig's changes.
+   - Split the conversion-to-extraction patch.
+   - Drop the extract_flags arg from iov_iter_extract_mode().
+   - Don't default bios to BIO_PAGE_REFFED, but set explicitly.
+ - Switch FOLL_PIN and FOLL_GET when renumbering so PIN is at bit 0.
+ - Switch BIO_PAGE_PINNED and BIO_PAGE_REFFED so PINNED is at bit 0.
+ - We should always be using FOLL_PIN (not FOLL_GET) for DIO, so adjust the
+   patches for that.
+
+ver #7)
+ - For now, drop the parts to pass the I/O direction to iov_iter_*pages*()
+   as it turned out to be a lot more complicated, with places not setting
+   IOCB_WRITE when they should, for example.
+ - Drop all the patches that changed things other then the block layer's
+   bio handling.  The netfslib and cifs changes can go into a separate
+   patchset.
+ - Add support for extracting pages from KVEC-type iterators.
+ - When extracting from BVEC/KVEC, skip over empty vecs at the front.
+
+ver #6)
+ - Fix write() syscall and co. not setting IOCB_WRITE.
+ - Added iocb_is_read() and iocb_is_write() to check IOCB_WRITE.
+ - Use op_is_write() in bio_copy_user_iov().
+ - Drop the iterator direction checks from smbd_recv().
+ - Define FOLL_SOURCE_BUF and FOLL_DEST_BUF and pass them in as part of
+   gup_flags to iov_iter_get/extract_pages*().
+ - Replace iov_iter_get_pages*2() with iov_iter_get_pages*() and remove.
+ - Add back the function to indicate the cleanup mode.
+ - Drop the cleanup_mode return arg to iov_iter_extract_pages().
+ - Provide a helper to clean up a page.
+ - Renumbered FOLL_GET and FOLL_PIN and made BIO_PAGE_REFFED/PINNED have
+   the same numerical values, enforced with an assertion.
+ - Converted AF_ALG, SCSI vhost, generic DIO, FUSE, splice to pipe, 9P and
+   NFS.
+ - Added in the patches to make CIFS do top-to-bottom iterators and use
+   various of the added extraction functions.
+ - Added a pair of work-in-progess patches to make sk_buff fragments store
+   FOLL_GET and FOLL_PIN.
+
+ver #5)
+ - Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED and split into own patch.
+ - Transcribe FOLL_GET/PIN into BIO_PAGE_REFFED/PINNED flags.
+ - Add patch to allow bio_flagged() to be combined by gcc.
+
+ver #4)
+ - Drop the patch to move the FOLL_* flags to linux/mm_types.h as they're
+   no longer referenced by linux/uio.h.
+ - Add ITER_SOURCE/DEST cleanup patches.
+ - Make iov_iter/netfslib iter extraction patches use ITER_SOURCE/DEST.
+ - Allow additional gup_flags to be passed into iov_iter_extract_pages().
+ - Add struct bio patch.
+
+ver #3)
+ - Switch to using EXPORT_SYMBOL_GPL to prevent indirect 3rd-party access
+   to get/pin_user_pages_fast()[1].
+
+ver #2)
+ - Rolled the extraction cleanup mode query function into the extraction
+   function, returning the indication through the argument list.
+ - Fixed patch 4 (extract to scatterlist) to actually use the new
+   extraction API.
+
+Link: https://lore.kernel.org/r/Y3zFzdWnWlEJ8X8/@infradead.org/ [1]
+Link: https://lore.kernel.org/r/166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166722777223.2555743.162508599131141451.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166732024173.3186319.18204305072070871546.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166869687556.3723671.10061142538708346995.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166920902005.1461876.2786264600108839814.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/166997419665.9475.15014699817597102032.stgit@warthog.procyon.org.uk/ # v3
+Link: https://lore.kernel.org/r/167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk/ # v4
+Link: https://lore.kernel.org/r/167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk/ # v5
+Link: https://lore.kernel.org/r/167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk/ # v6
+Link: https://lore.kernel.org/r/20230120175556.3556978-1-dhowells@redhat.com/ # v7
+Link: https://lore.kernel.org/r/20230123173007.325544-1-dhowells@redhat.com/ # v8
+Link: https://lore.kernel.org/r/20230124170108.1070389-1-dhowells@redhat.com/ # v9
+
+Christoph Hellwig (1):
+  block: Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED with inverted
+    logic
+
+David Howells (7):
+  iov_iter: Define flags to qualify page extraction.
+  iov_iter: Add a function to extract a page list from an iterator
+  iomap: Don't get an reference on ZERO_PAGE for direct I/O block
+    zeroing
+  block: Fix bio_flagged() so that gcc can better optimise it
+  block: Add BIO_PAGE_PINNED and associated infrastructure
+  block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
+  block: convert bio_map_user_iov to use iov_iter_extract_pages
+
+ block/bio.c               |  33 ++--
+ block/blk-map.c           |  26 +--
+ block/blk.h               |  12 ++
+ fs/direct-io.c            |   2 +
+ fs/iomap/direct-io.c      |   1 -
+ include/linux/bio.h       |   5 +-
+ include/linux/blk_types.h |   3 +-
+ include/linux/uio.h       |  32 +++-
+ lib/iov_iter.c            | 335 +++++++++++++++++++++++++++++++++++++-
+ 9 files changed, 408 insertions(+), 41 deletions(-)
 
