@@ -2,104 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB1967C0A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580E767C0AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbjAYXPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 18:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S234182AbjAYXPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 18:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjAYXPJ (ORCPT
+        with ESMTP id S229457AbjAYXPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 18:15:09 -0500
-Received: from out-9.mta0.migadu.com (out-9.mta0.migadu.com [91.218.175.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68057442FF
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 15:15:08 -0800 (PST)
-Date:   Wed, 25 Jan 2023 15:14:48 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674688503;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GQas9hJPH93Zr57s1dcc7T+g336s2ZkXNkxopiNZy5Y=;
-        b=L++sVVFKgB2QgSfUln8N4pW6K99/uC71K7MHO0eTNd2gOjxQp1AktmI+V60pLnLZKq6KFC
-        hACk9uz3DsoIitBsOXZt7BIu60/uMI/JLjE4PEEUb0PdbUDFsVn25UofpY3G6aCVyuS6ma
-        52wkIVgDt+qNHn0YlWdzI9qQ/UE4CgA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-Message-ID: <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
-References: <20230125073502.743446-1-leobras@redhat.com>
- <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
- <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
- <Y9FzSBw10MGXm2TK@tpad>
+        Wed, 25 Jan 2023 18:15:46 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105D93B67A;
+        Wed, 25 Jan 2023 15:15:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5E0E6CE2248;
+        Wed, 25 Jan 2023 23:15:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87AE6C433D2;
+        Wed, 25 Jan 2023 23:15:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674688542;
+        bh=HM9cYqq/Wx50VCJDYc4v22id5b4Gv1NOMWPHBYRQCmE=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=UHxc0S8L6FPfYYs7vVH3oUNGJpFy3Ml1RD1hT9LOHgy8VKZoj1d1iHEtVD4hTH4/x
+         VCDgNgBIX6aVdJXCq/zbVi5Fa6tEWfuXI/aGE2ErOSdjPsxrtNFmDHH6EKsacYfNRk
+         1w6sA6QBchdRNyPoamEQYxlq4o4E0fuTiaiJsnWSU+zznNewpkPN3IudK3r4qM6Vom
+         WY0Elb+AQGSE6BPL98xG3ZhqknW3TWiGZuOFqqE5DsRctcHh7MkAyv/weO/5a8zZ95
+         kZEqRzCHCjV08QCnsV+cSSTlchtD/7IKvXTP2sMOfBYTHdnEFqeYlRFYdI91NuQ0eI
+         dyNaRaNtRIXAg==
+Message-ID: <6db0c9da3a05ee8adaf7262ebce16d3d.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9FzSBw10MGXm2TK@tpad>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <df133e5a-8030-0774-091c-6f8e0692e945@linaro.org>
+References: <20230118132254.2356209-1-dmitry.baryshkov@linaro.org> <20230118132254.2356209-8-dmitry.baryshkov@linaro.org> <7055af43f4a8894ac34e53c5847fb3de.sboyd@kernel.org> <63f017c7-d320-a996-7bda-33d263a847bc@linaro.org> <525ef5cdefe987c3412249760324eb09.sboyd@kernel.org> <df133e5a-8030-0774-091c-6f8e0692e945@linaro.org>
+Subject: Re: [PATCH v4 7/7] clk: qcom: add the driver for the MSM8996 APCS clocks
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Date:   Wed, 25 Jan 2023 15:15:40 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 03:22:00PM -0300, Marcelo Tosatti wrote:
-> On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Brás wrote:
-> > On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
-> > > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
-> > > > Disclaimer:
-> > > > a - The cover letter got bigger than expected, so I had to split it in
-> > > >     sections to better organize myself. I am not very confortable with it.
-> > > > b - Performance numbers below did not include patch 5/5 (Remove flags
-> > > >     from memcg_stock_pcp), which could further improve performance for
-> > > >     drain_all_stock(), but I could only notice the optimization at the
-> > > >     last minute.
-> > > > 
-> > > > 
-> > > > 0 - Motivation:
-> > > > On current codebase, when drain_all_stock() is ran, it will schedule a
-> > > > drain_local_stock() for each cpu that has a percpu stock associated with a
-> > > > descendant of a given root_memcg.
+Quoting Konrad Dybcio (2023-01-25 14:05:27)
+>=20
+> On 25.01.2023 22:56, Stephen Boyd wrote:
+> >=20
+> > So it is waiting for the CPU clk to be stable? The comment is not clear.
+> Okay, so perhaps this is just a misunderstanding because of a lackluster
+> comment.. This SYS_APCS_AUX (provided by this driver) is one of the CPU
+> clock sources (and probably the "safest" of them all, as it's fed by
+> GPLL0 and not the CPU PLLs) the delay is there to ensure it can
+> stabilize after setting the divider to DIV2. In a theoretical case, the
+> big 8996 cpucc driver could select this clock as a target for one (or
+> both) of the per-cluster muxes and it could put the CPUs in a weird state.
+>=20
+> As unlikely as that would be, especially considering 8996 (AFAIK) doesn't
+> use this clock source coming out of reset / bootloader, this lets us
+> ensure one less thing can break.
 
-Do you know what caused those drain_all_stock() calls? I wonder if we should look
-into why we have many of them and whether we really need them?
-
-It's either some user's actions (e.g. reducing memory.max), either some memcg
-is entering pre-oom conditions. In the latter case a lot of drain calls can be
-scheduled without a good reason (assuming the cgroup contain multiple tasks running
-on multiple cpus). Essentially each cpu will try to grab the remains of the memory quota
-and move it locally. I wonder in such circumstances if we need to disable the pcp-caching
-on per-cgroup basis.
-
-Generally speaking, draining of pcpu stocks is useful only if an idle cpu is holding some
-charges/memcg references (it might be not completely idle, but running some very special
-workload which is not doing any kernel allocations or a process belonging to the root memcg).
-In all other cases pcpu stock will be either drained naturally by an allocation from another
-memcg or an allocation from the same memcg will "restore" it, making draining useless.
-
-We also can into drain_all_pages() opportunistically, without waiting for the result.
-On a busy system it's most likely useless, we might oom before scheduled works will be executed.
-
-I admit I planned to do some work around and even started, but then never had enough time to
-finish it.
-
-Overall I'm somewhat resistant to an idea of making generic allocation & free paths slower
-for an improvement of stock draining. It's not a strong objection, but IMO we should avoid
-doing this without a really strong reason.
-
-Thanks!
+Great! I look forward to a better comment.
