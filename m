@@ -2,108 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E2A67C03D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 23:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C73E67C089
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 00:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236160AbjAYWzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 17:55:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
+        id S236168AbjAYXA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 18:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235965AbjAYWzm (ORCPT
+        with ESMTP id S229739AbjAYXAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 17:55:42 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C6B458AE
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 14:55:15 -0800 (PST)
-Received: from [192.168.2.197] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 25 Jan 2023 18:00:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D301713DD8;
+        Wed, 25 Jan 2023 15:00:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4AC3C6602D1F;
-        Wed, 25 Jan 2023 22:55:12 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674687314;
-        bh=3KgCvkiMWuw1advwxtDNvcxv2KngByLwOXF9vKgP06k=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=YnJHI30zZohHLfInL1M102KVG7aDB4zyDl9JeidmzFJOnpyPGCEZJzzrXJWGV0q6X
-         QLzt+lGGzDOJjkzm4OQd7du3QeyODeIlGPizmQHDmlTZ+ug6QSr3p9reYn4uRfJMar
-         EwXw+P4krJQo+OZ2KArfEIZTDqdFqRbWeXjGYChH5nK4uXD+nT1/pagQsnb8JbIB/J
-         PfX0UtNWY3sgFerI4nxqSXwlYOxcMyi6riIpo1k0ieeBQZMsfb999bzPKDVYrzsja9
-         ic8x/sl66WetMSLWjZyH7vob1UEP2hjtNpaNHWsBuf0o5kcpei/eW3DK3XkQ3bnYPb
-         FIzYr3XntbicA==
-Message-ID: <e5e9e8dd-a5b6-cfd2-44d6-4d5aa768e56c@collabora.com>
-Date:   Thu, 26 Jan 2023 01:55:09 +0300
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E9AEB81C55;
+        Wed, 25 Jan 2023 23:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2922CC433D2;
+        Wed, 25 Jan 2023 23:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674687621;
+        bh=RZksb65p0COvQF0t0733KNOTzQrC/hPGvtjudMm7qIw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=KG+P6oi76PcsMbhOHkhtWTkaqTl0yrOxQLKNJ9uoB/Zoi3L0Wyslfptmz49fVIJgB
+         ovbXowfC0jy9c6ho58PvqGWeyeB7F8IGV1bUwfGh1KoG4xv+2erniNbpEdVxYB4hB7
+         9s6Ccv3ferDUP6aPmjNRyodxdfEsURyCRLYADCgcQTKU+M52pRphsO7vZrxD4yImD1
+         bVqVpX+5Er6gtDHTb+Ls44qFse2d9N3jy5YGMI5IqiiVMwRdfifWT8dYchfSTzskh6
+         keBzE3bW6bq+2hrJmcBvING8m2F80bXgKZYsoHx3cAny3wwJmQQXLpbTd/GiGYDwbS
+         q0xxzpxGf/HTg==
+Message-ID: <a7058fb92642a1661995d7d3ca6411bd.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v10 00/11] Add generic memory shrinker to VirtIO-GPU and
- Panfrost DRM drivers
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Gerd Hoffmann <kraxel@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        David Airlie <airlied@gmail.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
-In-Reply-To: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <4c531c68-b74f-2f90-e8f6-98a4b0316cd4@ansari.sh>
+References: <20230121192540.9177-1-rayyan@ansari.sh> <20230121192540.9177-2-rayyan@ansari.sh> <06d53a3fa48080d902476b71308e69bd.sboyd@kernel.org> <4c531c68-b74f-2f90-e8f6-98a4b0316cd4@ansari.sh>
+Subject: Re: [PATCH v4 1/3] clk: qcom: smd: Add XO RPM clocks for MSM8226/MSM8974
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+To:     Rayyan Ansari <rayyan@ansari.sh>, linux-arm-msm@vger.kernel.org
+Date:   Wed, 25 Jan 2023 15:00:19 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Thomas and Gerd,
+Quoting Rayyan Ansari (2023-01-25 14:25:08)
+> On 25/01/2023 20:58, Stephen Boyd wrote:
+> > Quoting Rayyan Ansari (2023-01-21 11:25:38)
+> >> Add the XO and XO_A clocks to the MSM8974 clock list, which is also
+> >> used on MSM8226.
+> >=20
+> > Why was this missing for so long? Does this break suspend? Why are you
+> > adding it now?
+>=20
+> I am adding it because of a recommendation from a maintainer on an older =
 
-On 1/9/23 00:04, Dmitry Osipenko wrote:
-> This series:
-> 
->   1. Makes minor fixes for drm_gem_lru and Panfrost
->   2. Brings refactoring for older code
->   3. Adds common drm-shmem memory shrinker
->   4. Enables shrinker for VirtIO-GPU driver
->   5. Switches Panfrost driver to the common shrinker
-> 
-> Changelog:
-> 
-> v10:- Rebased on a recent linux-next.
-> 
->     - Added Rob's ack to MSM "Prevent blocking within shrinker loop" patch.
-> 
->     - Added Steven's ack/r-b/t-b for the Panfrost patches.
-> 
->     - Fixed missing export of the new drm_gem_object_evict() function.
-> 
->     - Added fixes tags to the first two patches that are making minor fixes,
->       for consistency.
+> patch version.
+> See=20
+> https://lore.kernel.org/linux-arm-msm/20230119023337.h6a7f56lizhv4tcy@bui=
+lder.lan/#t
 
-Do you have comments on this version? Otherwise ack will be appreciated.
-Thanks in advance!
-
--- 
-Best regards,
-Dmitry
-
+So nobody has tested this on msm8974? Can you add this information to
+the commit text? And can it be tested on msm8974?
