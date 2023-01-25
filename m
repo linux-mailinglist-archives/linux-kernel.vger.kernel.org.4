@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A0D67A88A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 02:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABE067A89B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbjAYB6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 20:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
+        id S230432AbjAYCM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 21:12:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232306AbjAYB6Q (ORCPT
+        with ESMTP id S229528AbjAYCMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 20:58:16 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7051538023
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 17:58:13 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id 193-20020a6305ca000000b004cece0d0d64so7697156pgf.13
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 17:58:13 -0800 (PST)
+        Tue, 24 Jan 2023 21:12:54 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F71E26855
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 18:12:53 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id j5so3389877pjn.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 18:12:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CLeT8Nf/jj+XeEyGWZaHUysjcWhO2WN556Qt8YbZFTA=;
-        b=bXlVQRumzm40VAjDslHGOuknPuAdE9sb0L4akt62AYYiNfF1nl/PE9a3K4+mhxfxbU
-         qlOjlx9HYpNZ7nlKZHVgHB0Q1n9WvvwyURl+Khn4oVXSDFDI5stAZNLD/GV7mYuhnAmX
-         4fP31lq2dBuIKqP7/dpZqBG1jQWdaE4UbMixSINcYMwJN6K9z5usFxW1G1RYeQzjzLmE
-         IuTvdJPPP3texNImaofSkc7EevfsFsTYsDDWMHluYgcK4K8lzmtm33VRfk8XHHm/C1AO
-         JzwN7PIDjhXbMVtdks4HwD6HiFKY6CPRKEfjrxQ0G2uWsS+SXuQvOj6jyB/oyIkb1ojY
-         XkMw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wyo4ScdnKnOpNdEhwobdQ9WeYs+jQOexpJlhKGainQs=;
+        b=WQyTcKY9Wn6wifrEjH06aIMPm5KuR8cVj90LyYYJz6t1gLRSgzj4DxVSOIXQrDTHeL
+         9zuk9jn2JQ1RAshLv1HMdYfn/ObWLARV+rYWZAYhvVg0ex573km+2YS9+iAxnzzFPWab
+         xk3UswT1bRiKDvYUUrjYuisGK3SXVxzpr1oMSX5KjT2qJDBLIOulxdjgfeAMQccwgUNC
+         m72LoKWAg5fYvJETfDRi+uSLf6VdRf0ewoX7PM5gLhfDyex8y4ln3R0dJFbdWLLF0w05
+         oTABPC3xvqhglWITFsiPtJPXWGmtTLJ6lfAY3IQ23XLwQ1j8xvdZOy65FOU+2aHNk8Tj
+         dZ/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CLeT8Nf/jj+XeEyGWZaHUysjcWhO2WN556Qt8YbZFTA=;
-        b=EkiXB9Kvw16qJ5dui8fH29xlhoPTxrB3LMOGIazRwOG5i4OR/+hjIRleQGzF6eEZWe
-         6+bgFEHvKVviMMOJN5mjo13qqkrXgJ0Xxw9gU5qNj50ZRa9bvP3hxBUDOfOxIefZwVs3
-         SUfG6Twi0FR7CA0TLoex3LA6EQhJ1VX1dFhQHyZaOTwig7C/whEefgu7iv54RKGCdKee
-         a9B3RDSmNI19uc8WR8eKtYRWOU/mT4pP33XKly/63dqH279Zvj/LyL+Cmt3yubIHweOY
-         YPzosY0EGygzN8kIVD4erYixXyQVaw3Di+io2UIgwg7lkpyJ8KkODvfDmF1ozIR+x/yK
-         rFtw==
-X-Gm-Message-State: AFqh2kojUvQOGBS+aZCzyKSJ648U5UpVqD1VnWPGwEAfnKZKrAmaaxG5
-        QngvbRFhHybHlv03chy8KNvLVMYstkOM
-X-Google-Smtp-Source: AMrXdXuhZDEkZKkDLUre49lmdMlmiICegzf6uQdbSopmZQDIYG8wsakARMsaTdDgeLxTwvPxruwcgZi2TTo/
-X-Received: from zokeefe3.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1b6])
- (user=zokeefe job=sendgmr) by 2002:a62:6d04:0:b0:578:9709:615f with SMTP id
- i4-20020a626d04000000b005789709615fmr3520547pfc.45.1674611892894; Tue, 24 Jan
- 2023 17:58:12 -0800 (PST)
-Date:   Tue, 24 Jan 2023 17:57:38 -0800
-In-Reply-To: <20230125015738.912924-1-zokeefe@google.com>
-Mime-Version: 1.0
-References: <20230125015738.912924-1-zokeefe@google.com>
-X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
-Message-ID: <20230125015738.912924-2-zokeefe@google.com>
-Subject: [PATCH 2/2] mm/MADV_COLLAPSE: catch !none !huge !bad pmd lookups
-From:   "Zach O'Keefe" <zokeefe@google.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Zach O'Keefe" <zokeefe@google.com>, stable@vger.kernel.org
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wyo4ScdnKnOpNdEhwobdQ9WeYs+jQOexpJlhKGainQs=;
+        b=kgMtI1pc/NRWhPc4AnO9ZSiG1OCv5enxX9DI4wvWVCg9krUif7pM35XZujATRWtwuD
+         LgenkrqPbO6dE7Un6RfvgpyHur0UIja/HQD2js9D/kiEKSdBhbAMP1RaS+gm3XaEYZcl
+         Fg/rLvTpUe3Ma5JZ8rP3AS0/svgFwFLAZz/pLRCAtj4JnnT4t2CayGw99FCE8ijt5pL5
+         gHggQzS718T1WvpuKBbEVEE2bxPycrOrfZL2lGXFQ6YTa4/69vWXq891Q3yqMH4RrB3b
+         oMo2jq7ZdgnwtaU946dQIJe9wOZcQhZR+MPu32U5zf5iq+ujceiSEKW8fpr8bbOlyT9l
+         Dc4A==
+X-Gm-Message-State: AFqh2kooaU42m0H2K910WRffROeVU1ZIoUQS5K2V1SdAuJGJ0PKT7Lnn
+        TxAN6wnevVxtJr1ejPBj09qeI8I5lGNfqtpiFAHTqg==
+X-Google-Smtp-Source: AMrXdXsVEndUelWqeTOq/yI0y1T7Go1AUXK7I4T+7m8PmMng+9RYf16DOxvQdM/cJ77ZduwDlA9DcaAtqzg9qyhk06g=
+X-Received: by 2002:a17:90a:e646:b0:229:ca6a:d742 with SMTP id
+ ep6-20020a17090ae64600b00229ca6ad742mr3309663pjb.221.1674612772253; Tue, 24
+ Jan 2023 18:12:52 -0800 (PST)
+MIME-Version: 1.0
+References: <20230118091122.2205452-1-dmitry.baryshkov@linaro.org> <CAL_JsqJ=0neiZ4wkPiMqJMT4E1O_xO0uLrTmEGUcnZMqxkw4UQ@mail.gmail.com>
+In-Reply-To: <CAL_JsqJ=0neiZ4wkPiMqJMT4E1O_xO0uLrTmEGUcnZMqxkw4UQ@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 24 Jan 2023 18:12:15 -0800
+Message-ID: <CAGETcx8Xy5OzsbW3123esxsbQJq-SqDkP1S5g2mmwzoCz4shtQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH] of: property: do not create clocks device link for
+ clock controllers
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,139 +74,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 34488399fa08 ("mm/madvise: add file and shmem support to
-MADV_COLLAPSE") we make the following change to find_pmd_or_thp_or_none():
+On Wed, Jan 18, 2023 at 5:35 AM Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Wed, Jan 18, 2023 at 3:11 AM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+> > Do not create device link for clock controllers. Some of the clocks
+> > provided to the device via OF can be the clocks that are just parents to
+> > the clocks provided by this clock controller. Clock subsystem already
+> > has support for handling missing clock parents correctly (clock
+> > orphans). Later when the parent clock is registered, clocks get
+> > populated properly.
+> >
+> > An example of the system where this matters is the SDM8450 MTP board
+> > (see arch/arm64/boot/dts/qcom/sdm845-mtp.dts). Here the dispcc uses
+> > clocks provided by dsi0_phy and dsi1_phy device tree nodes. However the
+> > dispcc itself provides clocks to both PHYs, to the PHY parent device,
+> > etc. With just dsi0_phy in place devlink is able to break the
+> > dependency, but with two PHYs, dispcc doesn't get probed at all, thus
+> > breaking display support.
+> >
+> > Cc: Bjorn Andersson <andersson@kernel.org>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Cc: Saravana Kannan <saravanak@google.com>
+> > Cc: Abel Vesa <abel.vesa@linaro.org>
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> >
+> > This patch has been posted a year ago in January 2022 ([1]). Since that time
+> > Saravana failed to produce patches to assist in debugging the issue
+> > ([2]) or to fix the issue ([3]). The issue we observe has been described
+> > by Abel at ([4]). As we work on adding support for Dual DSI
+> > configurations, the issue becomes more and more important, since binding
+> > the whole display subsystem fails.
 
-	-       if (!pmd_present(pmde))
-	-               return SCAN_PMD_NULL;
-	+       if (pmd_none(pmde))
-	+               return SCAN_PMD_NONE;
+I did send out a patch series[1] to try and fix this. Heck I even
+talked about this in LPC 2022. So I don't think it's accurate to say I
+didn't help debug this or fix this. There's some email thread in lore
+where Abel gave more details and I figured out the issue and we didn't
+need any more debugging. And then I sent out [1]. Sorry I missed you
+in the cc lise for [1] -- I try to keep track of everyone to cc but
+things slip through the cracks sometimes. But at the same time, it's
+easy to check for emails from me before saying I didn't help or didn't
+send out fixes :)
 
-This was for-use by MADV_COLLAPSE file/shmem codepaths, where MADV_COLLAPSE
-might identify a pte-mapped hugepage, only to have khugepaged race-in, free
-the pte table, and clear the pmd.  Such codepaths include:
+If you do try to give [1] a shot, there are a bunch of bugs that
+people pointed out for which I gave fixes on top of [1] in the
+replies. I was supposed to work on v2 over the holidays, but that
+didn't happen because of stuff outside my control.
 
-A) If we find a suitably-aligned compound page of order HPAGE_PMD_ORDER
-   already in the pagecache.
-B) In retract_page_tables(), if we fail to grab mmap_lock for the target
-   mm/address.
+> That's ample time to fix this, so I intend to apply this. But I'll
+> give it a few days for comments.
 
-In these cases, collapse_pte_mapped_thp() really does expect a none (not
-just !present) pmd, and we want to suitably identify that case separate
-from the case where no pmd is found, or it's a bad-pmd (of course, many
-things could happen once we drop mmap_lock, and the pmd could plausibly
-undergo multiple transitions due to intervening fault, split, etc).
-Regardless, the code is prepared install a huge-pmd only when the existing
-pmd entry is either a genuine pte-table-mapping-pmd, or the none-pmd.
+Rob, I'd recommend not applying this because it'll fix it for Dmitry
+but break someone else's use case. That's the whole reason it takes me
+a while to send out patches -- it's easy to fix it for a subset of
+devices, but fixing something without breaking someone else is harder
+(I still believe it's doable) and it takes a while to test them on all
+the devices I want to test before sending them out.
 
-However, the commit introduces a logical hole; namely, that we've allowed
-!none- && !huge- && !bad-pmds to be classified as genuine
-pte-table-mapping-pmds.  One such example that could leak through are swap
-entries.  The pmd values aren't checked again before use in
-pte_offset_map_lock(), which is expecting nothing less than a genuine
-pte-table-mapping-pmd.
-
-We want to put back the !pmd_present() check (below the pmd_none() check),
-but need to be careful to deal with subtleties in pmd transitions and
-treatments by various arch.
-
-The issue is that __split_huge_pmd_locked() temporarily clears the present
-bit (or otherwise marks the entry as invalid), but pmd_present()
-and pmd_trans_huge() still need to return true while the pmd is in this
-transitory state.  For example, x86's pmd_present() also checks the
-_PAGE_PSE , riscv's version also checks the _PAGE_LEAF bit, and arm64 also
-checks a PMD_PRESENT_INVALID bit.
-
-Covering all 4 cases for x86 (all checks done on the same pmd value):
-
-1) pmd_present() && pmd_trans_huge()
-   All we actually know here is that the PSE bit is set. Either:
-   a) We aren't racing with __split_huge_page(), and PRESENT or PROTNONE
-      is set.
-      => huge-pmd
-   b) We are currently racing with __split_huge_page().  The danger here
-      is that we proceed as-if we have a huge-pmd, but really we are
-      looking at a pte-mapping-pmd.  So, what is the risk of this
-      danger?
-
-      The only relevant path is:
-
-	madvise_collapse() -> collapse_pte_mapped_thp()
-
-      Where we might just incorrectly report back "success", when really
-      the memory isn't pmd-backed.  This is fine, since split could
-      happen immediately after (actually) successful madvise_collapse().
-      So, it should be safe to just assume huge-pmd here.
-
-2) pmd_present() && !pmd_trans_huge()
-   Either:
-   a) PSE not set and either PRESENT or PROTNONE is.
-      => pte-table-mapping pmd (or PROT_NONE)
-   b) devmap.  This routine can be called immediately after
-      unlocking/locking mmap_lock -- or called with no locks held (see
-      khugepaged_scan_mm_slot()), so previous VMA checks have since been
-      invalidated.
-
-3) !pmd_present() && pmd_trans_huge()
-  Not possible.
-
-4) !pmd_present() && !pmd_trans_huge()
-  Neither PRESENT nor PROTNONE set
-  => not present
-
-I've checked all archs that implement pmd_trans_huge() (arm64, riscv,
-powerpc, longarch, x86, mips, s390) and this logic roughly translates
-(though devmap treatment is unique to x86 and powerpc, and (3) doesn't
-necessarily hold in general -- but that doesn't matter since !pmd_present()
-always takes failure path).
-
-Also, add a comment above find_pmd_or_thp_or_none() to help future
-travelers reason about the validity of the code; namely, the possible
-mutations that might happen out from under us, depending on how
-mmap_lock is held (if at all).
-
-Fixes: 34488399fa08 ("mm/madvise: add file and shmem support to MADV_COLLAPSE")
-Reported-by: Hugh Dickins <hughd@google.com>
-Signed-off-by: Zach O'Keefe <zokeefe@google.com>
-Cc: stable@vger.kernel.org
-
----
-Request that this be pulled into stable since it's theoretically
-possible (though I have no reproducer) that while mmap_lock is dropped,
-racing thp migration installs a pmd migration entry which then has a path to
-be consumed, unchecked, by pte_offset_map().
----
- mm/khugepaged.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index fa38cae240b9..7ea668bbea70 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -941,6 +941,10 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
- 	return SCAN_SUCCEED;
- }
- 
-+/*
-+ * See pmd_trans_unstable() for how the result may change out from
-+ * underneath us, even if we hold mmap_lock in read.
-+ */
- static int find_pmd_or_thp_or_none(struct mm_struct *mm,
- 				   unsigned long address,
- 				   pmd_t **pmd)
-@@ -959,8 +963,12 @@ static int find_pmd_or_thp_or_none(struct mm_struct *mm,
- #endif
- 	if (pmd_none(pmde))
- 		return SCAN_PMD_NONE;
-+	if (!pmd_present(pmde))
-+		return SCAN_PMD_NULL;
- 	if (pmd_trans_huge(pmde))
- 		return SCAN_PMD_MAPPED;
-+	if (pmd_devmap(pmd))
-+		return SCAN_PMD_NULL;
- 	if (pmd_bad(pmde))
- 		return SCAN_PMD_NULL;
- 	return SCAN_SUCCEED;
--- 
-2.39.1.405.gd4c25cc71f-goog
-
+-Saravana
+[1] - https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com/
