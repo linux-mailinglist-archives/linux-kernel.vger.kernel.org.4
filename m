@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803B767B391
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D67E67B397
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235472AbjAYNkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S235444AbjAYNmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjAYNkk (ORCPT
+        with ESMTP id S229953AbjAYNmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:40:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1683F4DCD4;
-        Wed, 25 Jan 2023 05:40:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C59E3B81714;
-        Wed, 25 Jan 2023 13:40:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D69C433D2;
-        Wed, 25 Jan 2023 13:40:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674654036;
-        bh=Gsm6wMIJG6DsBaQdU2Cp1zJXJXZ3h6uadDA4nB+UVeE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qpdcFE7g3exQiUIbzkrhP1o2DZlB4IJBV1ixsJtWVPla5DlgsuPBM7tRSGlA5cvcO
-         Iw5APg3ziFp2BvuyjtYU/zV8oNUW0d9/T24IuKnXl7q/l4kA0fIYBEWPGnFkMq3tL5
-         R3DJx1mZGslDyB54/JDVWpGUaxRPE0N6M4DtVjp4ndPfMzljVFVZGStFIy4Jg6zMeD
-         HdK3UjxSIcuRvdwTXzGDR4XG0vufIdYYU1CTE73GUWEvd9pR02UqT+mRNWiyWgfd6z
-         smD13AwrtXRN097kV7TxZ89cX0voK/4t6jSnhFqIRThpL7VmXsVOO+Nha5951Psp8F
-         MlMR+q9iZ4ogA==
-Date:   Wed, 25 Jan 2023 14:40:33 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH resend 0/2] i2c/extcon: intel-cht-wc: Lenovo Yoga Tab 3
- Pro YT3-X90F support
-Message-ID: <Y9ExUbiHOgbHOBie@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>
-References: <20230125111209.18343-1-hdegoede@redhat.com>
- <Y9Et7nlUmiiPrFUQ@ninjato>
- <383fda33-143d-9e8e-1f7d-080931ae4496@redhat.com>
+        Wed, 25 Jan 2023 08:42:53 -0500
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CCDB76D;
+        Wed, 25 Jan 2023 05:42:51 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id j9so15924139qtv.4;
+        Wed, 25 Jan 2023 05:42:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KVLXLhrWZMxsS5LRw98rr15QqoCU46pEI19S0OxbMm4=;
+        b=ZiTPoD8FEZ2Kw/SQ6hzgXuhGAmT4q8z7x5uU2krqL0HRgMIeVonmYLcglLHb8JNRgJ
+         mENwX/UAoSTcNfI+fWWpDcwYXMkNT3muKJCK6UNXm8ibuNl29vGrwQslTifDXcFiyvwy
+         1zQdCsrm2cCuY+jpU7jdNCNqaL7cGoQ9zX7AXuaopyCyngzZ02nVguZfltkbpxYaSP7y
+         2hvOQDczUjERt/ZnbfqiCFGXVkdJwr3iEsYAep2VgoB2x3FgYmIZXA6k4Z4iARg88niO
+         It5lfq61IrnuzSwhHiEFSaMIRUnWcY4QVR5G5zgzemixxt8048BTZzvVaf/WtfXifOzc
+         QHrg==
+X-Gm-Message-State: AFqh2koj5iVqAp+tLyVPWQGNaYCdeicb5HSquUn3uWtt19Gmi3AuPChW
+        FDyTmTf7KJ4eGebd9YSMtJhc9iD/81yT/w==
+X-Google-Smtp-Source: AMrXdXvRb+7PJe1ivjV8VqGbG94rxv6z1zS/8anDHjfdr5zJGXC38BDAyP3ohWoUVis0DTPSaCKzPg==
+X-Received: by 2002:ac8:5c14:0:b0:3b6:33c6:c5ac with SMTP id i20-20020ac85c14000000b003b633c6c5acmr60877323qti.4.1674654170281;
+        Wed, 25 Jan 2023 05:42:50 -0800 (PST)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id d10-20020a05620a166a00b00706b299d014sm3388067qko.132.2023.01.25.05.42.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 05:42:49 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id u72so2334903ybi.7;
+        Wed, 25 Jan 2023 05:42:49 -0800 (PST)
+X-Received: by 2002:a25:d505:0:b0:7bf:d201:60cb with SMTP id
+ r5-20020a25d505000000b007bfd20160cbmr2623220ybe.365.1674654169340; Wed, 25
+ Jan 2023 05:42:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Vk1n9/8R0IEAM9f6"
-Content-Disposition: inline
-In-Reply-To: <383fda33-143d-9e8e-1f7d-080931ae4496@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230118144747.24968-1-fabrizio.castro.jz@renesas.com> <20230118144747.24968-3-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20230118144747.24968-3-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 25 Jan 2023 14:42:38 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVMxt93MxBuO60qWmwuKjfFAts=FyWt4VVP+5uO1Pwx0w@mail.gmail.com>
+Message-ID: <CAMuHMdVMxt93MxBuO60qWmwuKjfFAts=FyWt4VVP+5uO1Pwx0w@mail.gmail.com>
+Subject: Re: [PATCH 2/3] arm64: dts: renesas: v2mevk2: Add PWC support
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 18, 2023 at 3:48 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> The RZ/V2M EVK uses the PWC IP to control external power supplies
+> and the I/O voltage for the uSD card.
+>
+> This patch enables the PWC node, and it also enables the poweroff
+> features since PWC is actually used to control the board power
+> rails.
+>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
---Vk1n9/8R0IEAM9f6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.3.
 
+Gr{oetje,eeting}s,
 
-> Wolfram, may I/we have your ack for merging the small i2c change
-> through the MFD tree?
+                        Geert
 
-Patch 1 already has my ack :)
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
---Vk1n9/8R0IEAM9f6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPRMVEACgkQFA3kzBSg
-KbbH6RAAs0UIiogXMSrliwrf42w7e7vSDtTjYRGut6rURlsnOH+JsLnnDZ5OAcTd
-+93KooyX3leUDXbGdHbj/Tv4eITsn+XeTgfqtyZvLqrdLwgb0fHI8XbKMDU51Bu9
-LM0Ohrx8zrUYGsa/MDW9WD49lf2LSviPPIsYWXnD484/swhw+iS86nIZ1M6U5O5E
-uQJM9/dBx9QTr9wOozM5+Qzk4lxsOHUAOeYicYAdBVssIjbPUaaafurrLKz+JvM7
-h030Co9u/1x/qZBCk78pBLkvokf/jnt7ZT1pYD4LQD6MKOItBWa2/YzXWUh7wRnm
-+H1vlk4ctHTg3w1Q5igGqrXKpbNqInOd3eyxpYKe8TzfPu65RcnMen8BMOAl/7mN
-D/dOT6G0OIMELz/k3i6RDoKWaWcsHmlPmNm1h0sQGMAKadm0BRST+FnDMFR1p0A1
-N3Y10a2empJkAY9w1mfVZ9T03LRoLlB3oe8c36olqv34oKZmr5wJOCae62hfE/eo
-cuJvppcBIfomXeszr+C8w/QokSqrZle5NE5FNWNXDTei7OpffyhMrtzPxjcyEAqA
-DX79dz5/Uyaje9tZnAIYmPsX8+z0Ph9WTwiSvM4SylC/hXVMRjylU5jQGDwziZKv
-QlY4aIvv1NSUAQhkpTHhVgHNRz9oi+fcAhAXALVjEKkBHhiC/Fo=
-=1oFK
------END PGP SIGNATURE-----
-
---Vk1n9/8R0IEAM9f6--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
