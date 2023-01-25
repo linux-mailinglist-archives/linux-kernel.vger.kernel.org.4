@@ -2,98 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DF767AF85
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2D167AF80
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235498AbjAYKUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 05:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
+        id S235023AbjAYKTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 05:19:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235457AbjAYKUV (ORCPT
+        with ESMTP id S233330AbjAYKTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:20:21 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08C237F0A;
-        Wed, 25 Jan 2023 02:20:20 -0800 (PST)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30PAHgFr3073106
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Wed, 25 Jan 2023 02:17:42 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30PAHgFr3073106
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023010601; t=1674641863;
-        bh=fgf0O//Iw/voqvEUpEUdG2dcondsK9mqYxF3Vys4i7U=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=baJF93gAtdLK96f3IaSa5ZFBoo00AUsymj332aKjUMi5V74ufdqhVJViR1NOCbQY5
-         XxQeu48s2haA57Z8EzxC1M8KvRdfiTAlfpH3hVYyJv0ueDiJ6RglPPBYAxN/DDFTFH
-         9MWEeg2LuHE/4rPaqK5Gl3MMpjgTnF2kEVmCBDgMZpT2vw7+qXf35HWXO2Jwhjyyiw
-         1GQ9cdnsBXijCzj1hl4t2UXyfx5pfARrAZ0LWR49rNGxcdPImqzy/vLmOeIKtkPkIs
-         vI9rCm2LUSafcVJbq+b8LREOVTBPmoHets1aLr8p3jaOH1y1TQowEEbCOLp7xtpq36
-         fxK4cg2+LDHaA==
-Date:   Wed, 25 Jan 2023 02:17:41 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-CC:     Xin Li <xin3.li@intel.com>, Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v5_1/2=5D_selftests/x86=3A_sy?= =?US-ASCII?Q?sret=5Frip=3A_Handle_syscall_in_a_FRED_system?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y9D8++DxphJS1oc4@biznet-home.integral.gnuweeb.org>
-References: <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com> <20230124022729.596997-1-ammarfaizi2@gnuweeb.org> <20230124022729.596997-3-ammarfaizi2@gnuweeb.org> <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com> <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org> <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com> <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org> <20230125034958.734527-1-ammarfaizi2@gnuweeb.org> <20230125034958.734527-2-ammarfaizi2@gnuweeb.org> <8770815f-0f23-d0c5-e56a-d401827842c9@zytor.com> <Y9D8++DxphJS1oc4@biznet-home.integral.gnuweeb.org>
-Message-ID: <A7DAB159-7C02-412D-9CFB-5C3C3760DECB@zytor.com>
+        Wed, 25 Jan 2023 05:19:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D582B37543
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:18:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674641907;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TlcjdODWqojRJNrRfpiByy7Z0dDf4IDNUwL8/r9qais=;
+        b=Bn7KC/pAmgVmr3416DApxUHV2cEsA0WTj076P855U0ibx+Nfabo4dyCqvqHaiW7xNeYYnP
+        AhOCNOszOLFLT/UeItQfUbAJR3ptgkwe76HXZgF1HtodwMGVudiY20p+HDu7JVZnMbJq/k
+        +VXzgta3Nxt3+avY+TfRsKtCbhDvhW0=
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
+ [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-167-KLUSCK8ON7ikr0ZZRIA2qg-1; Wed, 25 Jan 2023 05:18:18 -0500
+X-MC-Unique: KLUSCK8ON7ikr0ZZRIA2qg-1
+Received: by mail-yb1-f198.google.com with SMTP id 2-20020a250b02000000b0080b9a77383fso1928218ybl.22
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:18:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TlcjdODWqojRJNrRfpiByy7Z0dDf4IDNUwL8/r9qais=;
+        b=Tg++2RoPOhZz1e08S2WcL2/8+W8hGa/trp+02chzQKw5LWu2uqY48TKmqK2iZiTrJq
+         TrXdCXr1kk+3uTWBnZqc154nKG/6Ks1yY7LPNdmUYEAlDj94ZxXyphFAcSwGiMVHlqlW
+         9Fb0YBQVAebFDBlqMBXXhgg8y8UB7IOGfW/v2nS9bBO983H3bjl79OqMyDOLcfF3YuDx
+         2NS1bmaZOMAUwtRTm0p57zHm3FhV/RDyHnOGIvSavPQ/K2JugtFPVRjKXgOLEIPnKbLM
+         bc/bxo1SfsI5ynlOY3S1g7FU27t7M5WC4HMmxwhsQiF/xF1YQZROmgGa9mragT+oQJXm
+         qplw==
+X-Gm-Message-State: AFqh2kqOY0HLIN2iHIPOGNixvYH3IAylPYuKKgLlBrNwTKi/JsEOiZ2h
+        WBG20UoImMXRwWYudUz4DtfMjI7/9Hdbklz0TKREHTBFR5fcgD37EmgFeBfjMuZ5ELNHmGpJf4j
+        orMOl7OoTwygzGMN683AkbXEveDxU+pi1zrd05QTe
+X-Received: by 2002:a25:b94d:0:b0:801:e503:dd0c with SMTP id s13-20020a25b94d000000b00801e503dd0cmr1633455ybm.384.1674641897000;
+        Wed, 25 Jan 2023 02:18:17 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvfnJiCb9f0wuIflc1pIHfh46sevA0ev0xwdmK+b5QMrMqam704CgWlQm/C+Aao1/PX9VMQgFqBHlFUTsiUTpE=
+X-Received: by 2002:a25:b94d:0:b0:801:e503:dd0c with SMTP id
+ s13-20020a25b94d000000b00801e503dd0cmr1633454ybm.384.1674641896780; Wed, 25
+ Jan 2023 02:18:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221220092207.428640-1-hadess@hadess.net> <20221220092207.428640-2-hadess@hadess.net>
+ <a75e34efce22ab1de8f0a2e247294a441e710193.camel@hadess.net>
+In-Reply-To: <a75e34efce22ab1de8f0a2e247294a441e710193.camel@hadess.net>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 25 Jan 2023 11:18:05 +0100
+Message-ID: <CAO-hwJJb+hkCpqbiF0Zw8Ot4aCJDpgvMXpVS6rCoMe7QWkhiCg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] HID: logitech-hidpp: Don't restart communication if
+ not necessary
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Kosina <jikos@kernel.org>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On January 25, 2023 1:57:15 AM PST, Ammar Faizi <ammarfaizi2@gnuweeb=2Eorg>=
- wrote:
->On Wed, Jan 25, 2023 at 12:39:26AM -0800, H=2E Peter Anvin wrote:
->> >   	/* Set IP and CX to match so that SYSRET can happen=2E */
->> >   	ctx->uc_mcontext=2Egregs[REG_RIP] =3D rip;
->> >   	ctx->uc_mcontext=2Egregs[REG_RCX] =3D rip;
->>=20
->> It would be interesting to have the syscall handler try both with and
->> without this (so it would end up doing both IRET and SYSCALL on legacy=
-=2E)
->> Perhaps SIGUSR1 versus SIGUSR2=2E=2E=2E
+On Tue, Jan 24, 2023 at 6:20 PM Bastien Nocera <hadess@hadess.net> wrote:
 >
->Just to clarify this more so I am sure I understand it correctly=2E
+> On Tue, 2022-12-20 at 10:22 +0100, Bastien Nocera wrote:
+> > Don't stop and restart communication with the device unless we need
+> > to
+> > modify the connect flags used because of a device quirk.
 >
->Did you mean to have the same signal handler without modifiying
->'REG_RCX' but still change 'REG_RIP'?
+> FIWW, Andreas Bergmeier told me off-list that this fixed their problem
+> with the Litra Glow not connecting properly.
 >
->IOW, we want to only *remove*:
+> Would be great to have reviews on this and my other HID++ patches.
+
+Sigh. I reviewed the patches just now (well, v2 at least), and thought
+I better give a shot at it before merging, and it turns out that this
+patch breaks the Unifying receivers.
+
+Without it, each device presented to the user space has a proper name:
+
+logitech-hidpp-device 0003:046D:4041.001C: input,hidraw15: USB HID
+v1.11 Keyboard [Logitech MX Master] on usb-0000:01:00.0-4/input2:5
+
+But with it, I get:
+
+logitech-hidpp-device 0003:046D:4041.0024: input,hidraw8: USB HID
+v1.11 Keyboard [Logitech Wireless Device PID:4041] on
+usb-0000:00:14.0-8.2.4/input2:5
+
+This is because we present the device to the userspace before being
+able to fetch the name from the receiver.
+
+I think we should make that connect/disconnect a special case of the
+receivers too. Or maybe if the bus is not Bluetooth or USB, do the
+disconnect/reconnect.
+
+Cheers,
+Benjamin
+
 >
->   ctx->uc_mcontext=2Egregs[REG_RCX] =3D rip;
+> Cheers
 >
->and *keep*:
->
->   ctx->uc_mcontext=2Egregs[REG_RIP] =3D rip;
->
->for the SIGUSR2 handler=2E Thus, inside the entry64 we will jump to the
->iret path because %rcx !=3D %r11 upon rt_sigreturn()?
+> > ---
+> >  drivers/hid/hid-logitech-hidpp.c | 31 +++++++++++++++++++-----------
+> > -
+> >  1 file changed, 19 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-
+> > logitech-hidpp.c
+> > index 7f9187201913..b4e4a8c79c75 100644
+> > --- a/drivers/hid/hid-logitech-hidpp.c
+> > +++ b/drivers/hid/hid-logitech-hidpp.c
+> > @@ -4310,6 +4310,7 @@ static int hidpp_probe(struct hid_device *hdev,
+> > const struct hid_device_id *id)
+> >         bool connected;
+> >         unsigned int connect_mask = HID_CONNECT_DEFAULT;
+> >         struct hidpp_ff_private_data data;
+> > +       bool will_restart = false;
+> >
+> >         /* report_fixup needs drvdata to be set before we call
+> > hid_parse */
+> >         hidpp = devm_kzalloc(&hdev->dev, sizeof(*hidpp), GFP_KERNEL);
+> > @@ -4360,6 +4361,9 @@ static int hidpp_probe(struct hid_device *hdev,
+> > const struct hid_device_id *id)
+> >                         return ret;
+> >         }
+> >
+> > +       if (hidpp->quirks & HIDPP_QUIRK_DELAYED_INIT)
+> > +               will_restart = true;
+> > +
+> >         INIT_WORK(&hidpp->work, delayed_work_cb);
+> >         mutex_init(&hidpp->send_mutex);
+> >         init_waitqueue_head(&hidpp->wait);
+> > @@ -4374,7 +4378,7 @@ static int hidpp_probe(struct hid_device *hdev,
+> > const struct hid_device_id *id)
+> >          * Plain USB connections need to actually call start and open
+> >          * on the transport driver to allow incoming data.
+> >          */
+> > -       ret = hid_hw_start(hdev, 0);
+> > +       ret = hid_hw_start(hdev, will_restart ? 0 : connect_mask);
+> >         if (ret) {
+> >                 hid_err(hdev, "hw start failed\n");
+> >                 goto hid_hw_start_fail;
+> > @@ -4411,6 +4415,7 @@ static int hidpp_probe(struct hid_device *hdev,
+> > const struct hid_device_id *id)
+> >                         hidpp->wireless_feature_index = 0;
+> >                 else if (ret)
+> >                         goto hid_hw_init_fail;
+> > +               ret = 0;
+> >         }
+> >
+> >         if (connected && (hidpp->quirks & HIDPP_QUIRK_CLASS_WTP)) {
+> > @@ -4425,19 +4430,21 @@ static int hidpp_probe(struct hid_device
+> > *hdev, const struct hid_device_id *id)
+> >
+> >         hidpp_connect_event(hidpp);
+> >
+> > -       /* Reset the HID node state */
+> > -       hid_device_io_stop(hdev);
+> > -       hid_hw_close(hdev);
+> > -       hid_hw_stop(hdev);
+> > +       if (will_restart) {
+> > +               /* Reset the HID node state */
+> > +               hid_device_io_stop(hdev);
+> > +               hid_hw_close(hdev);
+> > +               hid_hw_stop(hdev);
+> >
+> > -       if (hidpp->quirks & HIDPP_QUIRK_NO_HIDINPUT)
+> > -               connect_mask &= ~HID_CONNECT_HIDINPUT;
+> > +               if (hidpp->quirks & HIDPP_QUIRK_NO_HIDINPUT)
+> > +                       connect_mask &= ~HID_CONNECT_HIDINPUT;
+> >
+> > -       /* Now export the actual inputs and hidraw nodes to the world
+> > */
+> > -       ret = hid_hw_start(hdev, connect_mask);
+> > -       if (ret) {
+> > -               hid_err(hdev, "%s:hid_hw_start returned error\n",
+> > __func__);
+> > -               goto hid_hw_start_fail;
+> > +               /* Now export the actual inputs and hidraw nodes to
+> > the world */
+> > +               ret = hid_hw_start(hdev, connect_mask);
+> > +               if (ret) {
+> > +                       hid_err(hdev, "%s:hid_hw_start returned
+> > error\n", __func__);
+> > +                       goto hid_hw_start_fail;
+> > +               }
+> >         }
+> >
+> >         if (hidpp->quirks & HIDPP_QUIRK_CLASS_G920) {
 >
 
-I guess it would depend on what they "normally" are=2E My #1 impulse would=
- be to leave them both unchanged=2E
