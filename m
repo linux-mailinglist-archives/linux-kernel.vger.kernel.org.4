@@ -2,129 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7307E67B2B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6A767B2B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235347AbjAYMoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 07:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
+        id S235390AbjAYMoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 07:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjAYMoB (ORCPT
+        with ESMTP id S229827AbjAYMn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 07:44:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679811A498
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 04:43:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674650596;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=j9odPV+6puEiMnrNrOig8rmnxEdCUxbVvIwgsbWCFPc=;
-        b=gj7j2hqwUod/jSDuxc/lO4qFn6nsPvgy1qOaxi9WEjVCCST4Zkbt9SXUeLvJRTiI9xINBQ
-        f91ggh1jFTjUcuNoW682n03vqhZfFdmb47kp10aUEYtT+IgxUkT5vlKWJ0jSf2MNMvsxwk
-        OwZQVjLHq9kk6huFdn8y34PN8VeNX5c=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-384-qsug1qW2MwC1g2YRCA_56g-1; Wed, 25 Jan 2023 07:43:10 -0500
-X-MC-Unique: qsug1qW2MwC1g2YRCA_56g-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 25 Jan 2023 07:43:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A7A1284E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 04:43:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9962C299E74E;
-        Wed, 25 Jan 2023 12:43:09 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (ovpn-195-63.brq.redhat.com [10.40.195.63])
-        by smtp.corp.redhat.com (Postfix) with SMTP id F04F3492B00;
-        Wed, 25 Jan 2023 12:43:07 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 25 Jan 2023 13:43:07 +0100 (CET)
-Date:   Wed, 25 Jan 2023 13:43:04 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marco Elver <elver@google.com>
-Subject: Re: [RFC PATCH v2] posix-timers: Support delivery of signals to the
- current thread
-Message-ID: <20230125124304.GA13746@redhat.com>
-References: <20221216171807.760147-1-dvyukov@google.com>
- <20230112112411.813356-1-dvyukov@google.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB265614C7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:43:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ACF5C433D2;
+        Wed, 25 Jan 2023 12:43:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674650637;
+        bh=PwIsHuwFo5nA+InprKfHzo+Ujv7Cp1wg7w1iCpL1uZc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dC2b9msDOnCmEzmf7PQV9Mdx5tYHMlGaly3M9GNbfWV6mJ5aDKnRG9CoNb8/ViPin
+         /qYDVPmaWvIK+81S+uoKRPSwSeu/xSC7fIDdMsynREM6gImZbjEqAw0zi5PqDlCpcQ
+         R+rA+jKzEkorWePk4AEIk4+Hi2eRIHzqH80Do4qA=
+Date:   Wed, 25 Jan 2023 13:43:54 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y9EkCvAfNXnJ+ATo@kroah.com>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230112112411.813356-1-dvyukov@google.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12, Dmitry Vyukov wrote:
->
-> --- a/kernel/time/posix-timers.c
-> +++ b/kernel/time/posix-timers.c
-> @@ -336,6 +336,7 @@ void posixtimer_rearm(struct kernel_siginfo *info)
->  int posix_timer_event(struct k_itimer *timr, int si_private)
->  {
->  	enum pid_type type;
-> +	struct pid *pid;
->  	int ret;
->  	/*
->  	 * FIXME: if ->sigq is queued we can race with
-> @@ -350,8 +351,9 @@ int posix_timer_event(struct k_itimer *timr, int si_private)
->  	 */
->  	timr->sigq->info.si_sys_private = si_private;
->
-> +	pid = timr->it_pid ?: task_pid(current);
->  	type = !(timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_TGID : PIDTYPE_PID;
+On Wed, Jan 25, 2023 at 12:28:13PM +0000, Reshetova, Elena wrote:
+> Hi Greg, 
+> 
+> You mentioned couple of times (last time in this recent thread:
+> https://lore.kernel.org/all/Y80WtujnO7kfduAZ@kroah.com/) that we ought to start
+> discussing the updated threat model for kernel, so this email is a start in this direction. 
 
-can't resist... somehow the line above looks confusing to me, perhaps you
-can change it to
+Any specific reason you didn't cc: the linux-hardening mailing list?
+This seems to be in their area as well, right?
 
-	type = (timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_PID : PIDTYPE_TGID;
+> As we have shared before in various lkml threads/conference presentations
+> ([1], [2], [3] and many others), for the Confidential Computing guest kernel, we have a 
+> change in the threat model where guest kernel doesn’t anymore trust the hypervisor. 
 
-> -static struct pid *good_sigevent(sigevent_t * event)
-> +static struct pid *good_sigevent(sigevent_t *event, clockid_t which_clock)
->  {
->  	struct pid *pid = task_tgid(current);
->  	struct task_struct *rtn;
->
->  	switch (event->sigev_notify) {
->  	case SIGEV_SIGNAL | SIGEV_THREAD_ID:
-> +		/* This will use the current task for signals. */
-> +		if (which_clock == CLOCK_PROCESS_CPUTIME_ID &&
-> +		    !event->sigev_notify_thread_id)
-> +			return NULL;
+That is, frankly, a very funny threat model.  How realistic is it really
+given all of the other ways that a hypervisor can mess with a guest?
 
-this doesn't look right, this skips the "sigev_signo" check below.
+So what do you actually trust here?  The CPU?  A device?  Nothing?
 
-Other than that I see nothing wrong in this patch, but I forgot everything
-about posix timers many years ago ;)
+> This is a big change in the threat model and requires both careful assessment of the 
+> new (hypervisor <-> guest kernel) attack surface, as well as careful design of mitigations
+> and security validation techniques. This is the activity that we have started back at Intel
+> and the current status can be found in
+> 
+> 1) Threat model and potential mitigations: 
+> https://intel.github.io/ccc-linux-guest-hardening-docs/security-spec.html
 
-> @@ -527,9 +534,11 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
->
->  	if (event) {
->  		rcu_read_lock();
-> -		new_timer->it_pid = get_pid(good_sigevent(event));
-> +		pid = good_sigevent(event, which_clock);
-> +		if (!IS_ERR(pid))
-> +			new_timer->it_pid = get_pid(pid);
+So you trust all of qemu but not Linux?  Or am I misreading that
+diagram?
 
-Another cosmetic nit, feel free to ignore... If you change good_sigevent()
+> 2) One of the described in the above doc mitigations is "hardening of the enabled
+> code". What we mean by this, as well as techniques that are being used are
+> described in this document: 
+> https://intel.github.io/ccc-linux-guest-hardening-docs/tdx-guest-hardening.html
 
-	case SIGEV_NONE:
--		return pid;
-+		return get_pid(pid);
+I hate the term "hardening".  Please just say it for what it really is,
+"fixing bugs to handle broken hardware".  We've done that for years when
+dealing with PCI and USB and even CPUs doing things that they shouldn't
+be doing.  How is this any different in the end?
 
-you can remove this "if (!IS_ERR(pid))" code above.
+So what you also are saying here now is "we do not trust any PCI
+devices", so please just say that (why do you trust USB devices?)  If
+that is something that you all think that Linux should support, then
+let's go from there.
 
-Oleg.
+> 3) All the tools are open-source and everyone can start using them right away even
+> without any special HW (readme has description of what is needed).
+> Tools and documentation is here:
+> https://github.com/intel/ccc-linux-guest-hardening
 
+Again, as our documentation states, when you submit patches based on
+these tools, you HAVE TO document that.  Otherwise we think you all are
+crazy and will get your patches rejected.  You all know this, why ignore
+it?
+
+> 4) all not yet upstreamed linux patches (that we are slowly submitting) can be found 
+> here: https://github.com/intel/tdx/commits/guest-next
+
+Random github trees of kernel patches are just that, sorry.
+
+> So, my main question before we start to argue about the threat model, mitigations, etc,
+> is what is the good way to get this reviewed to make sure everyone is aligned?
+> There are a lot of angles and details, so what is the most efficient method? 
+> Should I split the threat model from https://intel.github.io/ccc-linux-guest-hardening-docs/security-spec.html
+> into logical pieces and start submitting it to mailing list for discussion one by one? 
+
+Yes, start out by laying out what you feel the actual problem is, what
+you feel should be done for it, and the patches you have proposed to
+implement this, for each and every logical piece.
+
+Again, nothing new here, that's how Linux is developed, again, you all
+know this, it's not anything I should have to say.
+
+> Any other methods? 
+> 
+> The original plan we had in mind is to start discussing the relevant pieces when submitting the code,
+> i.e. when submitting the device filter patches, we will include problem statement, threat model link, 
+> data, alternatives considered, etc. 
+
+As always, we can't do anything without actual working changes to the
+code, otherwise it's just a pipe dream and we can't waste our time on it
+(neither would you want us to).
+
+thanks, and good luck!
+
+greg k-h
