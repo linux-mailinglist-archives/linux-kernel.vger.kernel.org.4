@@ -2,149 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3138467B40E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:17:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F8467B415
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235089AbjAYOQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 09:16:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
+        id S235018AbjAYOST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 09:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235708AbjAYOQh (ORCPT
+        with ESMTP id S230160AbjAYOSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 09:16:37 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E46C59269;
-        Wed, 25 Jan 2023 06:16:31 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30PEFpX5078732;
-        Wed, 25 Jan 2023 08:15:51 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674656151;
-        bh=jRRc/TwCn2Ab7SzgY7gDKwVopy46rdstAXyfHcFys4A=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=vALcbRAguG9MxIGMrgaTsbC/nmS3Zl5vRKmpPO3OtwUXKdb1Nhjz88nyeS6A5rLvD
-         9jfOGnkOwgTpsKKr4V382r4WOFSc0YOsNN28iCbd6NMyWJBDCOFZq/p/aJVS9Xztl0
-         ENYcBdLWK/w2oMVUj0kMciAd6lF2IAtUMO7uGv24=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30PEFpFh070481
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 25 Jan 2023 08:15:51 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 25
- Jan 2023 08:15:51 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 25 Jan 2023 08:15:51 -0600
-Received: from [10.250.234.92] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30PEFlUE084111;
-        Wed, 25 Jan 2023 08:15:48 -0600
-Message-ID: <a9e3fc94-cf0d-2cfd-640f-c81dfe35f05a@ti.com>
-Date:   Wed, 25 Jan 2023 19:45:46 +0530
+        Wed, 25 Jan 2023 09:18:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5542759569
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:17:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674656254;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zZZP2VQ0m7L+P6Wmzdw4rMDbBVAh0dCyfGR86LB0pbA=;
+        b=Gkhq0nTTGdiPv4M8cvn6mTWZfPqYj2awRBmqHOSlDGJ5f6+u9e2QTth8m58fGUmiOj64ml
+        7F5OLkX585ejiICaHCjLQq+NrprUlPkCVVIJl8+Wto0cgwXa3J/NqeGSGnp3i2gL1PsGoy
+        /6+qkNz+Ya7Xp3DB3f5mWpUwO5uICq0=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-343-lAzBzac0OmKbx65RTKEaIw-1; Wed, 25 Jan 2023 09:17:33 -0500
+X-MC-Unique: lAzBzac0OmKbx65RTKEaIw-1
+Received: by mail-ed1-f69.google.com with SMTP id y2-20020a056402440200b0049e4d71f5dcso13038148eda.5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:17:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zZZP2VQ0m7L+P6Wmzdw4rMDbBVAh0dCyfGR86LB0pbA=;
+        b=swnucye4KyOFjsgHI3srRa8xS7lLKaFVNMwCSA3qnfBQhnvYfdbsa4Fw8pvqRO1m00
+         Tvvfu2v/vPVIzdFOFIz2h5eTZ02QFmeumyngvv7/fs4J6tCdWrERiqrRS58XZQuvu1xV
+         voEVXv8YolbxmdwM+kAR9nqEPH9mRx1FU8uhY0j+mqI1Xi4SouRju04/JDomWNaLFR7Q
+         RJTra4wMjyFif6XWxPN/WtmLcDhwk11u93beyf3vb+NVRv15hS9riiuJPyt+I257GobP
+         fUSBn/K9m/BStDMWF08B8P87GpJiF1Mp9HvmNnrWS7LhZRkMR9oBR4r8eme/h/B1oNMQ
+         XEQQ==
+X-Gm-Message-State: AFqh2kqzZBIxpR7ObRDtUYf2BWBYaCIjn6HjXpmGhe6BeLerK1vRo0eo
+        ANB239hS6vI5z6Xr9iNvGprZYQ9DkctLeTGji6aZc+nxJpXcss90DXURQrVhcqhH873Xp2vmZSr
+        vgHUOF8AE7EDYXub194GzijJf
+X-Received: by 2002:a17:906:8d08:b0:86f:e30c:72c1 with SMTP id rv8-20020a1709068d0800b0086fe30c72c1mr36842648ejc.8.1674656252044;
+        Wed, 25 Jan 2023 06:17:32 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvBj7aU+14YJWcR++IIkzUaO6+QpEeJ1D/PdS8A9NhCEiPJCG7mo9mKIV50EbEdgEk9NeteVQ==
+X-Received: by 2002:a17:906:8d08:b0:86f:e30c:72c1 with SMTP id rv8-20020a1709068d0800b0086fe30c72c1mr36842629ejc.8.1674656251863;
+        Wed, 25 Jan 2023 06:17:31 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id da14-20020a056402176e00b0046dd0c2a08esm2420415edb.36.2023.01.25.06.17.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 06:17:31 -0800 (PST)
+Message-ID: <3a23db58-3ae1-7457-ed09-bc2e3f6e8dc9@redhat.com>
+Date:   Wed, 25 Jan 2023 15:17:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RESEND PATCH] PCI: cadence: Fix Gen2 Link Retraining process
+ Thunderbird/102.5.1
 Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>, <tjoseph@cadence.com>,
-        <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
-        <bhelgaas@google.com>, <nadeem@cadence.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>, <nm@ti.com>
-References: <20230102075656.260333-1-s-vadapalli@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20230102075656.260333-1-s-vadapalli@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Jim Mattson <jmattson@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, stable@vger.kernel.org
+References: <20221027092036.2698180-1-pbonzini@redhat.com>
+ <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v2] KVM: x86: Do not return host topology information from
+ KVM_GET_SUPPORTED_CPUID
+In-Reply-To: <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/25/23 00:16, Jim Mattson wrote:
+> This is a userspace ABI change that breaks existing hypervisors.
+> Please don't do this. Userspace ABIs are supposed to be inviolate.
 
+What exactly is broken?
 
-On 02/01/23 1:26 pm, Siddharth Vadapalli wrote:
-> The Link Retraining process is initiated to account for the Gen2 defect in
-> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
-> is i2085, documented at:
-> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
-> 
-> The existing workaround implemented for the errata waits for the Data Link
-> initialization to complete and assumes that the link retraining process
-> at the Physical Layer has completed. However, it is possible that the
-> Physical Layer training might be ongoing as indicated by the
-> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
-> 
-> Fix the existing workaround, to ensure that the Physical Layer training
-> has also completed, in addition to the Data Link initialization.
-> 
-> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> ---
->  .../controller/cadence/pcie-cadence-host.c    | 27 +++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> index 940c7dd701d6..5b14f7ee3c79 100644
-> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> @@ -12,6 +12,8 @@
->  
->  #include "pcie-cadence.h"
->  
-> +#define LINK_RETRAIN_TIMEOUT HZ
-> +
->  static u64 bar_max_size[] = {
->  	[RP_BAR0] = _ULL(128 * SZ_2G),
->  	[RP_BAR1] = SZ_2G,
-> @@ -77,6 +79,27 @@ static struct pci_ops cdns_pcie_host_ops = {
->  	.write		= pci_generic_config_write,
->  };
->  
-> +static int cdns_pcie_host_training_complete(struct cdns_pcie *pcie)
-> +{
-> +	u32 pcie_cap_off = CDNS_PCIE_RP_CAP_OFFSET;
-> +	unsigned long end_jiffies;
-> +	u16 lnk_stat;
-> +
-> +	/* Wait for link training to complete. Exit after timeout. */
-> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
-> +	do {
-> +		lnk_stat = cdns_pcie_rp_readw(pcie, pcie_cap_off + PCI_EXP_LNKSTA);
-> +		if (!(lnk_stat & PCI_EXP_LNKSTA_LT))
-> +			break;
-> +		usleep_range(0, 1000);
-> +	} while (time_before(jiffies, end_jiffies));
-> +
-> +	if (!(lnk_stat & PCI_EXP_LNKSTA_LT))
-> +		return 0;
-> +
-> +	return -ETIMEDOUT;
-> +}
-> +
->  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
->  {
->  	struct device *dev = pcie->dev;
-> @@ -118,6 +141,10 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
->  		cdns_pcie_rp_writew(pcie, pcie_cap_off + PCI_EXP_LNKCTL,
->  				    lnk_ctl);
->  
-> +		ret = cdns_pcie_host_training_complete(pcie);
-> +		if (ret)
-> +			return ret;
-> +
->  		ret = cdns_pcie_host_wait_for_link(pcie);
->  	}
->  	return ret;
+Part of the definition of the API is that you can take 
+KVM_GET_SUPPORTED_CPUID and pass it to KVM_SET_CPUID2 for all vCPUs. 
+Returning host topology information for a random host vCPU definitely 
+violates the contract.
 
-Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+Furthermore, any existing userspace should be prepared to deal with 
+nonexistent host topology leaves.  If you mean that said userspace would 
+now pass no topology to the guest, that's not an API change either.
 
-Regards
-Vignesh
+(Now, there are certainly other parts of the KVM_GET_SUPPORTED_CPUID 
+contract that should be specified better.  But that should be done for 
+each leaf one by one, which I intend to do, and would not extend to 
+these three host topology leaves).
+
+Paolo
+
