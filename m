@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9F167A7B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 01:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 868BA67A7B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 01:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234841AbjAYA2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 19:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
+        id S234877AbjAYA2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 19:28:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234840AbjAYA2l (ORCPT
+        with ESMTP id S234845AbjAYA2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 19:28:41 -0500
+        Tue, 24 Jan 2023 19:28:42 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7011F4DE27
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:28:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E5D65AF
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:28:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7015A613DC
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C81BCC433A4;
-        Wed, 25 Jan 2023 00:27:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 089CF61425
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:27:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20CB2C43321;
+        Wed, 25 Jan 2023 00:27:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674606452;
-        bh=qdP6NXSXpyI8pYe6XWt4MIApSDs2MCybUN24u0PUPWM=;
+        s=k20201202; t=1674606453;
+        bh=2niA6R2oYPuWrzIU0B6wVlNq4jSpbdluB2kfj2HTDEE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZK08XQliqevn5CBB4TaWIMENAvtA3RRTjasnvfvdSSTJ/bYHYy+Q4+Yfwn062zEJR
-         n8uJ5wyXlYDFdafjugzt8vswtiZ+lJoP/Hwvhh8kkbdEKdhr6SuC6ozXxVcfE0TTHk
-         YjUDSLE9auItg+lnJ++fkCGGk2UWe/dZtWAsb5Ya2dCtJ5vLxy/LG2T8+NCHOrvjBG
-         bUsN6UNzjxzXt6dy9Y/IgbgmOXMtlatXybXM7jnqNa0SonWXMMhfCqIltDuMU+rJc5
-         LJN4UX09lBE+9If4iqZX97KPfm+qSjjQNSaZgWC7gTIDd3L4Nn+9z17CqjP5EftVGK
-         RyhcWDEyLizjg==
+        b=P890L5dMPd0z14y217P4NJAsrRGhnNTPWJb+uAeG8aIx0xrLSURfo8KclMKBjrr/j
+         QVpNEjrbBNAWCWVdYlzAXYuyhgIZfGFxc+VZ7iLzq+DDd/ty5W/VEE9aR3TGBwy3Eo
+         TG2lF20+d1MZzl3woOiq2XdeWEo6b3P9ZzJJt7qrfMRvL2BnvkRHToVIZHpizGtF9S
+         rgmcbOO7HCBGo4p7/AWWMq39sHof8LIUrc6OIw0LMExGdS8BDKMchdWlOmTU6QWUH3
+         RNgxElyg24b5zVZwYzBOvMfj2tGgxSmqPyjPDM0KYnRtYiFHI1mhuq2E/Mh88XW80N
+         c5h9N7Nc69zBw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 793CD5C1CEF; Tue, 24 Jan 2023 16:27:32 -0800 (PST)
+        id 7B5EF5C1CF4; Tue, 24 Jan 2023 16:27:32 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     tglx@linutronix.de
 Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
         sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
         maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
         ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com,
-        Waiman Long <longman@redhat.com>,
-        John Stultz <jstultz@google.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH v2 clocksource 5/7] clocksource: Suspend the watchdog temporarily when high read latency detected
-Date:   Tue, 24 Jan 2023 16:27:28 -0800
-Message-Id: <20230125002730.1471349-5-paulmck@kernel.org>
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Waiman Long <longman@redhat.com>, x86@kernel.org
+Subject: [PATCH v2 clocksource 6/7] clocksource: Verify HPET and PMTMR when TSC unverified
+Date:   Tue, 24 Jan 2023 16:27:29 -0800
+Message-Id: <20230125002730.1471349-6-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230125002708.GA1471122@paulmck-ThinkPad-P17-Gen-1>
 References: <20230125002708.GA1471122@paulmck-ThinkPad-P17-Gen-1>
@@ -60,140 +63,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Tang <feng.tang@intel.com>
+On systems with two or fewer sockets, when the boot CPU has CONSTANT_TSC,
+NONSTOP_TSC, and TSC_ADJUST, clocksource watchdog verification of the
+TSC is disabled.  This works well much of the time, but there is the
+occasional production-level system that meets all of these criteria, but
+which still has a TSC that skews significantly from atomic-clock time.
+This is usually attributed to a firmware or hardware fault.  Yes, the
+various NTP daemons do express their opinions of userspace-to-atomic-clock
+time skew, but they put them in various places, depending on the daemon
+and distro in question.  It would therefore be good for the kernel to
+have some clue that there is a problem.
 
-Bugs have been reported on 8 sockets x86 machines in which the TSC was
-wrongly disabled when the system is under heavy workload.
+The old behavior of marking the TSC unstable is a non-starter because a
+great many workloads simply cannot tolerate the overheads and latencies
+of the various non-TSC clocksources.  In addition, NTP-corrected systems
+sometimes can tolerate significant kernel-space time skew as long as
+the userspace time sources are within epsilon of atomic-clock time.
 
- [ 818.380354] clocksource: timekeeping watchdog on CPU336: hpet wd-wd read-back delay of 1203520ns
- [ 818.436160] clocksource: wd-tsc-wd read-back delay of 181880ns, clock-skew test skipped!
- [ 819.402962] clocksource: timekeeping watchdog on CPU338: hpet wd-wd read-back delay of 324000ns
- [ 819.448036] clocksource: wd-tsc-wd read-back delay of 337240ns, clock-skew test skipped!
- [ 819.880863] clocksource: timekeeping watchdog on CPU339: hpet read-back delay of 150280ns, attempt 3, marking unstable
- [ 819.936243] tsc: Marking TSC unstable due to clocksource watchdog
- [ 820.068173] TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.
- [ 820.092382] sched_clock: Marking unstable (818769414384, 1195404998)
- [ 820.643627] clocksource: Checking clocksource tsc synchronization from CPU 267 to CPUs 0,4,25,70,126,430,557,564.
- [ 821.067990] clocksource: Switched to clocksource hpet
+Therefore, when watchdog verification of TSC is disabled, enable it for
+HPET and PMTMR (AKA ACPI PM timer).  This provides the needed in-kernel
+time-skew diagnostic without degrading the system's performance.
 
-This can be reproduced by running memory intensive 'stream' tests,
-or some of the stress-ng subcases such as 'ioport'.
-
-The reason for these issues is the when system is under heavy load, the
-read latency of the clocksources can be very high.  Even lightweight TSC
-reads can show high latencies, and latencies are much worse for external
-clocksources such as HPET or the APIC PM timer.  These latencies can
-result in false-positive clocksource-unstable determinations.
-
-These issues were initially reported by a customer running on a production
-system, and this problem was reproduced on several generations of Xeon
-servers, especially when running the stress-ng test.  These Xeon servers
-were not production systems, but they did have the latest steppings
-and firmware.
-
-Given that the clocksource watchdog is a continual diagnostic check with
-frequency of twice a second, there is no need to rush it when the system
-is under heavy load.  Therefore, when high clocksource read latencies
-are detected, suspend the watchdog timer for 5 minutes.
-
-Signed-off-by: Feng Tang <feng.tang@intel.com>
-Acked-by: Waiman Long <longman@redhat.com>
-Cc: John Stultz <jstultz@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Feng Tang <feng.tang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Waiman Long <longman@redhat.com>
+Cc: <x86@kernel.org>
+Tested-by: Feng Tang <feng.tang@intel.com>
 ---
- kernel/time/clocksource.c | 45 ++++++++++++++++++++++++++++-----------
- 1 file changed, 32 insertions(+), 13 deletions(-)
+ arch/x86/include/asm/time.h   | 1 +
+ arch/x86/kernel/hpet.c        | 2 ++
+ arch/x86/kernel/tsc.c         | 5 +++++
+ drivers/clocksource/acpi_pm.c | 6 ++++--
+ 4 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index fc486cd972635..91836b727cef5 100644
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -387,6 +387,15 @@ void clocksource_verify_percpu(struct clocksource *cs)
- }
- EXPORT_SYMBOL_GPL(clocksource_verify_percpu);
+diff --git a/arch/x86/include/asm/time.h b/arch/x86/include/asm/time.h
+index 8ac563abb567b..a53961c64a567 100644
+--- a/arch/x86/include/asm/time.h
++++ b/arch/x86/include/asm/time.h
+@@ -8,6 +8,7 @@
+ extern void hpet_time_init(void);
+ extern void time_init(void);
+ extern bool pit_timer_init(void);
++extern bool tsc_clocksource_watchdog_disabled(void);
  
-+static inline void clocksource_reset_watchdog(void)
+ extern struct clock_event_device *global_clock_event;
+ 
+diff --git a/arch/x86/kernel/hpet.c b/arch/x86/kernel/hpet.c
+index 71f336425e58a..c8eb1ac5125ab 100644
+--- a/arch/x86/kernel/hpet.c
++++ b/arch/x86/kernel/hpet.c
+@@ -1091,6 +1091,8 @@ int __init hpet_enable(void)
+ 	if (!hpet_counting())
+ 		goto out_nohpet;
+ 
++	if (tsc_clocksource_watchdog_disabled())
++		clocksource_hpet.flags |= CLOCK_SOURCE_MUST_VERIFY;
+ 	clocksource_register_hz(&clocksource_hpet, (u32)hpet_freq);
+ 
+ 	if (id & HPET_ID_LEGSUP) {
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index a78e73da4a74b..af3782fb6200c 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -1186,6 +1186,11 @@ static void __init tsc_disable_clocksource_watchdog(void)
+ 	clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+ }
+ 
++bool tsc_clocksource_watchdog_disabled(void)
 +{
-+	struct clocksource *cs;
-+
-+	list_for_each_entry(cs, &watchdog_list, wd_list)
-+		cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
++	return !(clocksource_tsc.flags & CLOCK_SOURCE_MUST_VERIFY);
 +}
 +
-+
- static void clocksource_watchdog(struct timer_list *unused)
+ static void __init check_system_tsc_reliable(void)
  {
- 	u64 csnow, wdnow, cslast, wdlast, delta;
-@@ -394,6 +403,7 @@ static void clocksource_watchdog(struct timer_list *unused)
- 	int64_t wd_nsec, cs_nsec;
- 	struct clocksource *cs;
- 	enum wd_read_status read_ret;
-+	unsigned long extra_wait = 0;
- 	u32 md;
+ #if defined(CONFIG_MGEODEGX1) || defined(CONFIG_MGEODE_LX) || defined(CONFIG_X86_GENERIC)
+diff --git a/drivers/clocksource/acpi_pm.c b/drivers/clocksource/acpi_pm.c
+index 279ddff81ab49..82338773602ca 100644
+--- a/drivers/clocksource/acpi_pm.c
++++ b/drivers/clocksource/acpi_pm.c
+@@ -23,6 +23,7 @@
+ #include <linux/pci.h>
+ #include <linux/delay.h>
+ #include <asm/io.h>
++#include <asm/time.h>
  
- 	spin_lock(&watchdog_lock);
-@@ -413,13 +423,30 @@ static void clocksource_watchdog(struct timer_list *unused)
- 
- 		read_ret = cs_watchdog_read(cs, &csnow, &wdnow);
- 
--		if (read_ret != WD_READ_SUCCESS) {
--			if (read_ret == WD_READ_UNSTABLE)
--				/* Clock readout unreliable, so give it up. */
--				__clocksource_unstable(cs);
-+		if (read_ret == WD_READ_UNSTABLE) {
-+			/* Clock readout unreliable, so give it up. */
-+			__clocksource_unstable(cs);
- 			continue;
- 		}
- 
-+		/*
-+		 * When WD_READ_SKIP is returned, it means the system is likely
-+		 * under very heavy load, where the latency of reading
-+		 * watchdog/clocksource is very big, and affect the accuracy of
-+		 * watchdog check. So give system some space and suspend the
-+		 * watchdog check for 5 minutes.
-+		 */
-+		if (read_ret == WD_READ_SKIP) {
-+			/*
-+			 * As the watchdog timer will be suspended, and
-+			 * cs->last could keep unchanged for 5 minutes, reset
-+			 * the counters.
-+			 */
-+			clocksource_reset_watchdog();
-+			extra_wait = HZ * 300;
-+			break;
-+		}
-+
- 		/* Clocksource initialized ? */
- 		if (!(cs->flags & CLOCK_SOURCE_WATCHDOG) ||
- 		    atomic_read(&watchdog_reset_pending)) {
-@@ -523,7 +550,7 @@ static void clocksource_watchdog(struct timer_list *unused)
- 	 * pair clocksource_stop_watchdog() clocksource_start_watchdog().
- 	 */
- 	if (!timer_pending(&watchdog_timer)) {
--		watchdog_timer.expires += WATCHDOG_INTERVAL;
-+		watchdog_timer.expires += WATCHDOG_INTERVAL + extra_wait;
- 		add_timer_on(&watchdog_timer, next_cpu);
+ /*
+  * The I/O port the PMTMR resides at.
+@@ -210,8 +211,9 @@ static int __init init_acpi_pm_clocksource(void)
+ 		return -ENODEV;
  	}
- out:
-@@ -548,14 +575,6 @@ static inline void clocksource_stop_watchdog(void)
- 	watchdog_running = 0;
+ 
+-	return clocksource_register_hz(&clocksource_acpi_pm,
+-						PMTMR_TICKS_PER_SEC);
++	if (tsc_clocksource_watchdog_disabled())
++		clocksource_acpi_pm.flags |= CLOCK_SOURCE_MUST_VERIFY;
++	return clocksource_register_hz(&clocksource_acpi_pm, PMTMR_TICKS_PER_SEC);
  }
  
--static inline void clocksource_reset_watchdog(void)
--{
--	struct clocksource *cs;
--
--	list_for_each_entry(cs, &watchdog_list, wd_list)
--		cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
--}
--
- static void clocksource_resume_watchdog(void)
- {
- 	atomic_inc(&watchdog_reset_pending);
+ /* We use fs_initcall because we want the PCI fixups to have run
 -- 
 2.31.1.189.g2e36527f23
 
