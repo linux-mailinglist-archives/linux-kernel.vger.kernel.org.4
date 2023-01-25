@@ -2,111 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC6167BDEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA22067BDF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236313AbjAYVPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
+        id S236094AbjAYVRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:17:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236120AbjAYVOm (ORCPT
+        with ESMTP id S229674AbjAYVRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:14:42 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CF31DBBA
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:14:40 -0800 (PST)
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 809D13F2D8
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 21:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1674681279;
-        bh=ThPASxkQPa8akyDheX0+gKydQu/0488KOg7wyMg90UM=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=B+fmEPVuruQRN+j7SD7H2831vp1TkBBrD7jHiSC0FpTyFnnAzfuGtAUdF6ntk/2B0
-         V9AygTpNnXO7O9llsz9rRPIO45wHx3UjdOBaceVPZIiRqZnhGWJXTSptG20lyj0g6i
-         oEaE8RBDYkgFpyvR6locEX8K7in5ayInM0Q0D4xwmbJTmkQ/RlEEPtTWuN7fN2wzBJ
-         ZNlYGbmLChk5YltoZJehJmepTcci6WtaPUhKNI+xBV4S+Rf9U/zr95Ain1NRRlbqBI
-         ZRHiQg26yf8wQXT8Tohbf9WzhDwgut0Z530f/F9v1wMzJjw5mY+SnsQO2yeRAdEd25
-         ea4pW4T5Tt/bg==
-Received: by mail-wm1-f69.google.com with SMTP id u12-20020a05600c210c00b003da1c092b83so1013189wml.7
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:14:39 -0800 (PST)
+        Wed, 25 Jan 2023 16:17:20 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AF292;
+        Wed, 25 Jan 2023 13:17:19 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id y1so13888534wru.2;
+        Wed, 25 Jan 2023 13:17:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G/dOixqGazFuuUydAnibWPioO6axm1wLYYFvHZeFiM4=;
+        b=lypYtqxgiH9ub1GbXCFhve2nCUOl07JUyyboy7XNnabaB7e9Frrj+1knGyz2tQVsoD
+         jfuaAk99iRwdIblMQ5k69pRAJZiLWIeEN+JFGmU2D0jCgURv0/r5hkds70OwhUuYavyR
+         Ajc5x8Tg3ZF1rQV+ELSeP/lGupZCOOTW6ryX7DhjzxTFL/WAlmJZ2N6/xkq0b9njIrYC
+         tc3XFRE8G1ccMamxPg5xgK4pWBCSjNVlP8NFvhZ7uVGcMKrFhNSAZhp6EaQZ5MTxx4+A
+         67924njKsmERzu1//JVFSlNM5xB1no4wtlnkFFZllQbTZ5sXcOcJSWMcCoXFIGtkuJMT
+         JY3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ThPASxkQPa8akyDheX0+gKydQu/0488KOg7wyMg90UM=;
-        b=rnVMjvki3+kIcNUNm0fodtt0OhiXJo9dJqaqfsrlv9UUfHKiHG/c1GTdAvcqrtaOpA
-         ADBgdNeTqRXKxZtzaStSJGRUuMYh1ihuBltmpXhJL8RLfe98UuqhwgUXdahUPs+7k9L3
-         ns7unNOyU7En++GgLSs9KQZW2JhF/l/oHg2SnD0lrdELKlfNstt+JDLD4CBjcTZZptIC
-         1K2AQng0NIQNQJAGbxOKD/mdddt5XBW8GqC1hYKzmbgmGHQSVkPWiJh97yUZ1Pemzobd
-         f8RDZ8bR03yUtwTzoJB1tkZ4wjvDiebetHrQAj70hBOn6xWXS80/NSBuFTCQcDZgSzF7
-         kYnw==
-X-Gm-Message-State: AO0yUKUSne/e9Jov+RMxpdJET3MOHsqVjuhZq5YOZ/vg2tyX92uMc3j4
-        ++tU8Aa/oymR3RtUw1MEPM7ioQNBM5ehyYsK+eOQe2vyGErjG8fV8fVS0iwtyG0fhXRqe0BES6Z
-        +aEyKU2mPohvNP1s4gi2egywP7AK8lxJCnYkpryEfFw==
-X-Received: by 2002:adf:a493:0:b0:2bf:b5c0:f157 with SMTP id g19-20020adfa493000000b002bfb5c0f157mr5175454wrb.39.1674681278936;
-        Wed, 25 Jan 2023 13:14:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set+YG1U/BehDKtOLtFbxMC++ML3k7K+wehcNVLO5HFEq/vSitr9BPNZZqRj5SWCdU9q0dHX8wg==
-X-Received: by 2002:adf:a493:0:b0:2bf:b5c0:f157 with SMTP id g19-20020adfa493000000b002bfb5c0f157mr5175441wrb.39.1674681278787;
-        Wed, 25 Jan 2023 13:14:38 -0800 (PST)
-Received: from qwirkle.internal ([81.2.157.149])
-        by smtp.gmail.com with ESMTPSA id l10-20020a05600012ca00b002bfb02153d1sm5738146wrx.45.2023.01.25.13.14.38
+        bh=G/dOixqGazFuuUydAnibWPioO6axm1wLYYFvHZeFiM4=;
+        b=Pfl0r/pMlGbWT7E6GbUOzHCgO8pbFt2T4DOkuRptkfOfrjkcvzF7bPQVWMkFdaVCuZ
+         SoEJ6KE54fUYHUTe/gmXZUn/VexZPtpdHhjqUMIBAAkv+2rcCq4TkwszxgJfl3/Z4qKI
+         PgZVmxe//Xgty2xGQ7maLPbiK9KaJDiCWi/sTxTXcwECoZlFZxLMfvJ6E2iF+FaLEpmO
+         AbrQd+UZxTdxOU0AZtCcsSYjQSSiOAG5B8gfEzhaCd6/5I9hUQulRZcAw6TK+G/wMHl9
+         DKIgNSaEJ8t2KmWCQpm7K+wXJdO2LqX32tdTfLyciJuFABVAjSQdRfV3AcLe7KTxdDHy
+         Himg==
+X-Gm-Message-State: AO0yUKVMW7udD116o81eUldrrO3FnWnyWm3vVVWSK5xM7LFdco2MkoEj
+        f6t17fBJBPbmJ8RAmwWu1Lc=
+X-Google-Smtp-Source: AK7set+OV6G4Gh1C16xKs7cDdESAKiUMdC4m5V/rSL1AY/Nf00UGF/1UFRJmeBsBSPi9iMHLhrX/Sg==
+X-Received: by 2002:adf:aa93:0:b0:2bf:ad61:6018 with SMTP id h19-20020adfaa93000000b002bfad616018mr8804224wrc.10.1674681437866;
+        Wed, 25 Jan 2023 13:17:17 -0800 (PST)
+Received: from me ([78.197.158.195])
+        by smtp.gmail.com with ESMTPSA id x10-20020adfdcca000000b002bbddb89c71sm5236172wrm.67.2023.01.25.13.17.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 13:14:38 -0800 (PST)
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Andrei Gherzan <andrei.gherzan@canonical.com>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests: net: .gitignore the scratch directory of bpf
-Date:   Wed, 25 Jan 2023 21:13:50 +0000
-Message-Id: <20230125211350.113855-2-andrei.gherzan@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230125211350.113855-1-andrei.gherzan@canonical.com>
-References: <20230125211350.113855-1-andrei.gherzan@canonical.com>
+        Wed, 25 Jan 2023 13:17:17 -0800 (PST)
+Received: (nullmailer pid 12284 invoked by uid 1000);
+        Wed, 25 Jan 2023 21:15:32 -0000
+From:   Philippe Valembois <lephilousophe@gmail.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Cc:     Philippe Valembois <lephilousophe@gmail.com>
+Subject: [PATCH v3 1/1] HID: evision: Add preliminary support for EVision keyboards
+Date:   Wed, 25 Jan 2023 22:15:10 +0100
+Message-Id: <20230125211511.12266-1-lephilousophe@gmail.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230123211843.10028-1-lephilousophe@gmail.com>
+References: <20230123211843.10028-1-lephilousophe@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The net/bpf Makefile uses a similar build infrastructure to BPF[1] while
-building libbpf as a dependency of nat6to4. This change adds a .gitignore
-entry for SCRATCH_DIR where libbpf and its headers end up built/installed.
+For now only supports one model and only filters out bogus reports sent
+when the keyboard has been configured through hidraw.
+Without this, as events are not released, soft repeat floods userspace
+with unknown key events.
 
-[1] Introduced in commit 837a3d66d698 ("selftests: net: Add
-cross-compilation support for BPF programs")
-
-Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+Signed-off-by: Philippe Valembois <lephilousophe@gmail.com>
 ---
- tools/testing/selftests/net/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/hid/Kconfig       |  7 ++++++
+ drivers/hid/Makefile      |  1 +
+ drivers/hid/hid-evision.c | 53 +++++++++++++++++++++++++++++++++++++++
+ drivers/hid/hid-ids.h     |  3 +++
+ 4 files changed, 64 insertions(+)
+ create mode 100644 drivers/hid/hid-evision.c
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index a6911cae368c..0d07dd13c973 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -40,6 +40,7 @@ test_unix_oob
- timestamping
- tls
- toeplitz
-+/tools
- tun
- txring_overwrite
- txtimestamp
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index e2a5d30c8..35f214773 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -329,6 +329,13 @@ config HID_ELO
+ 	Support for the ELO USB 4000/4500 touchscreens. Note that this is for
+ 	different devices than those handled by CONFIG_TOUCHSCREEN_USB_ELO.
+ 
++config HID_EVISION
++	tristate "EVision Keyboards Support"
++	depends on HID
++	help
++	Support for some EVision keyboards. Note that this is needed only when
++	applying customization using userspace programs.
++
+ config HID_EZKEY
+ 	tristate "Ezkey BTC 8193 keyboard"
+ 	default !EXPERT
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index e8014c1a2..bd01571dd 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -45,6 +45,7 @@ obj-$(CONFIG_HID_EMS_FF)	+= hid-emsff.o
+ obj-$(CONFIG_HID_ELAN)		+= hid-elan.o
+ obj-$(CONFIG_HID_ELECOM)	+= hid-elecom.o
+ obj-$(CONFIG_HID_ELO)		+= hid-elo.o
++obj-$(CONFIG_HID_EVISION)	+= hid-evision.o
+ obj-$(CONFIG_HID_EZKEY)		+= hid-ezkey.o
+ obj-$(CONFIG_HID_FT260)		+= hid-ft260.o
+ obj-$(CONFIG_HID_GEMBIRD)	+= hid-gembird.o
+diff --git a/drivers/hid/hid-evision.c b/drivers/hid/hid-evision.c
+new file mode 100644
+index 000000000..ef6b4b435
+--- /dev/null
++++ b/drivers/hid/hid-evision.c
+@@ -0,0 +1,53 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ *  HID driver for EVision devices
++ *  For now, only ignore bogus consumer reports
++ *  sent after the keyboard has been configured
++ *
++ *  Copyright (c) 2022 Philippe Valembois
++ */
++
++#include <linux/device.h>
++#include <linux/input.h>
++#include <linux/hid.h>
++#include <linux/module.h>
++
++#include "hid-ids.h"
++
++static int evision_input_mapping(struct hid_device *hdev, struct hid_input *hi,
++		struct hid_field *field, struct hid_usage *usage,
++		unsigned long **bit, int *max)
++{
++	if ((usage->hid & HID_USAGE_PAGE) != HID_UP_CONSUMER)
++		return 0;
++
++	/* Ignore key down event */
++	if ((usage->hid & HID_USAGE) >> 8 == 0x05)
++		return -1;
++	/* Ignore key up event */
++	if ((usage->hid & HID_USAGE) >> 8 == 0x06)
++		return -1;
++
++	switch (usage->hid & HID_USAGE) {
++	/* Ignore configuration saved event */
++	case 0x0401: return -1;
++	/* Ignore reset event */
++	case 0x0402: return -1;
++	}
++	return 0;
++}
++
++static const struct hid_device_id evision_devices[] = {
++	{ HID_USB_DEVICE(USB_VENDOR_ID_EVISION, USB_DEVICE_ID_EVISION_ICL01) },
++	{ }
++};
++MODULE_DEVICE_TABLE(hid, evision_devices);
++
++static struct hid_driver evision_driver = {
++	.name = "evision",
++	.id_table = evision_devices,
++	.input_mapping = evision_input_mapping,
++};
++module_hid_driver(evision_driver);
++
++MODULE_LICENSE("GPL");
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 0f8c11842..7ae89aebd 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -445,6 +445,9 @@
+ #define USB_VENDOR_ID_EMS		0x2006
+ #define USB_DEVICE_ID_EMS_TRIO_LINKER_PLUS_II 0x0118
+ 
++#define USB_VENDOR_ID_EVISION           0x320f
++#define USB_DEVICE_ID_EVISION_ICL01     0x5041
++
+ #define USB_VENDOR_ID_FLATFROG		0x25b5
+ #define USB_DEVICE_ID_MULTITOUCH_3200	0x0002
+ 
 -- 
-2.34.1
+2.39.1
 
