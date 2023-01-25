@@ -2,121 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A739267B486
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C790467B49D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 15:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235511AbjAYOeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 09:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
+        id S235750AbjAYOfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 09:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbjAYOeD (ORCPT
+        with ESMTP id S235689AbjAYOfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 09:34:03 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0B92F791;
-        Wed, 25 Jan 2023 06:34:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674657242; x=1706193242;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3kpOMqrQuctFKDrDiGjBznoIROiBQ5QhwWS1ed7ePGE=;
-  b=eeZzmZZYBYFhSOLUPBMGTrUn290Gw7tjfzbXj7edVCgtPzflaliA9F7Z
-   JsPm9p6FG4ke+5D6UsqBZ9vhLYvkNKc/Dr7+yg7mY7qvH+0/eCjkzV7qg
-   znWlIyERyCYGz0MZWx8u0Y8vOfP/HpQC+k704ye+zYVAE6zfYCVhY7JUC
-   peHwuaanJas+O6f1vxpnbFZPXyEYM9DAXTyfTkfCw8gE453wn0FExv4H+
-   yuBAnHDskgyqaBetW4I5hpA+VoBoPDnMGdDTD3vICjIakqV/YoN30MxNm
-   88hsV9Qimm2UlmyBqoXMlgfVVtY82qRSsaEcb/DkbgIe3tjo73QFVjrlg
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="324268176"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="324268176"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 06:33:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="805017342"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="805017342"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Jan 2023 06:33:57 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 37B9A165; Wed, 25 Jan 2023 16:34:33 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?J=C3=B3=20=C3=81gila=20Bitsch?= <jgilab@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/1] usb: gadget: Use correct APIs and data types for UUID handling
-Date:   Wed, 25 Jan 2023 16:34:25 +0200
-Message-Id: <20230125143425.85268-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
+        Wed, 25 Jan 2023 09:35:34 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F0A561B4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:35:07 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id ud5so48197749ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 06:35:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PdB/SfQ0SWBNWh08eH3SW1QsUqwi/lP4LXtXf+kq5IA=;
+        b=Dd+et0jm0/0xlucO8IFpitLrtrMSv/ALQqB/ABHM6GgO6GnUzbRaEoTk9f90z5SHOH
+         9895maVzDl98Arm+NjPKIpdjElFiPZ9Jeo3LnXvbd4H05ZCFdnrJZi99XjV9DuJIyOuk
+         hXLfIXmUZKYnIFIDh41CJkrMdT4MIPZV0C/TCRbZvgVNOnT6O1KVuJs617S0kWw2mpSQ
+         uZdVaCSLaejaA7nV+bDUgxTpJXKRrsO9QkaYrxMBLf3VRY+v1eKc6Mv7GoRJIYGKTsQM
+         cWQ4yjrV9wrx0iL3inejwa5YjLJHK4dEDve3GY1NPGCTVeDN74focNhN5QW8lINjPCTf
+         02Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PdB/SfQ0SWBNWh08eH3SW1QsUqwi/lP4LXtXf+kq5IA=;
+        b=BmJ9I8jvbkkfOb82oKrUyxXkFuyjN5nXnPHT21kNYtMGIuPQyroJdkG23w4aWJqPi4
+         xbpeuhZIskoNuOPwlB7BYeRDXFQRk8qlLSMio0HXQsosNZzXarT6o0E9hmcapxF0Bczt
+         OsYlqZQDuMUNI3DWeA1l8a5Te66DfRQ+TwkSjfYBnn2h0QKzsrnoWr6GFQ8HryhPZE38
+         G+AV2wr/oo0QylKUkNhKWzO9HRfBIC+UvXLQrTv7xFS3B2uIeV+Zrep1MLQDpDcjilsA
+         3znfz9JNDjPRt+hOxq6FyS5pt4KdFT/IsGStpNMU/NZ57t4b8p9I3B4885qE9+FB9KN7
+         FGMg==
+X-Gm-Message-State: AFqh2koPVqC5s/1YR9q+Al8EWzBoTuAabT+si7ITRtDikjWRyjc7pYqZ
+        aJVAC8F+PdGXT4sEgpH8aJxyfg==
+X-Google-Smtp-Source: AMrXdXvIoSQXuacQCMREvujIPcbrM3wN6HpuxYCIHNdefXOQtvM5NR0Td/Q1ffeOepulflZ21gnbaA==
+X-Received: by 2002:a17:906:6b13:b0:872:cc12:f712 with SMTP id q19-20020a1709066b1300b00872cc12f712mr30129839ejr.43.1674657305792;
+        Wed, 25 Jan 2023 06:35:05 -0800 (PST)
+Received: from c64.fritz.box ([81.221.122.240])
+        by smtp.gmail.com with ESMTPSA id gx2-20020a1709068a4200b0082000f8d871sm2437789ejc.152.2023.01.25.06.35.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 06:35:05 -0800 (PST)
+From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+To:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, lee@kernel.org, linus.walleij@linaro.org,
+        matthias.bgg@gmail.com, gregkh@linuxfoundation.org,
+        daniel.lezcano@linaro.org, chunfeng.yun@mediatek.com,
+        angelogioacchino.delregno@collabora.com, nfraprado@collabora.com,
+        allen-kh.cheng@mediatek.com, sean.wang@mediatek.com,
+        zhiyong.tao@mediatek.com
+Subject: [PATCH v9 0/9] Add minimal MT8365 and MT8365-EVK support
+Date:   Wed, 25 Jan 2023 15:34:54 +0100
+Message-Id: <20230125143503.1015424-1-bero@baylibre.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have two types for UUIDs depending on the byte ordering.
-Instead of explaining how bytes should go over the wire,
-use dedicated APIs and data types. This removes a confusion
-over the byte ordering.
+v9:
+  - Fix a regression in v8 that broke the USB port
+  - Remove superfluous include in mt8365.dtsi
+  - Fix some naming issues pointed out by dtbs_check
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/gadget/composite.c | 4 ++--
- include/linux/usb/webusb.h     | 9 +++------
- 2 files changed, 5 insertions(+), 8 deletions(-)
+v8:
+  - Add binding descriptions for mediatek,mt8365-systimer and
+    mediatek,mt8365-uart
+  - Specify ranges with parameters for u3phy
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 8e2603688016..fa7dd6cf014d 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -829,7 +829,7 @@ static int bos_desc(struct usb_composite_dev *cdev)
- 	if (cdev->use_webusb) {
- 		struct usb_plat_dev_cap_descriptor *webusb_cap;
- 		struct usb_webusb_cap_data *webusb_cap_data;
--		uuid_t webusb_uuid = WEBUSB_UUID;
-+		guid_t webusb_uuid = WEBUSB_UUID;
- 
- 		webusb_cap = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
- 		webusb_cap_data = (struct usb_webusb_cap_data *) webusb_cap->CapabilityData;
-@@ -841,7 +841,7 @@ static int bos_desc(struct usb_composite_dev *cdev)
- 		webusb_cap->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
- 		webusb_cap->bDevCapabilityType = USB_PLAT_DEV_CAP_TYPE;
- 		webusb_cap->bReserved = 0;
--		export_uuid(webusb_cap->UUID, &webusb_uuid);
-+		export_guid(webusb_cap->UUID, &webusb_uuid);
- 
- 		if (cdev->bcd_webusb_version != 0)
- 			webusb_cap_data->bcdVersion = cpu_to_le16(cdev->bcd_webusb_version);
-diff --git a/include/linux/usb/webusb.h b/include/linux/usb/webusb.h
-index b430d84357f3..fe43020b4a48 100644
---- a/include/linux/usb/webusb.h
-+++ b/include/linux/usb/webusb.h
-@@ -11,15 +11,12 @@
- #include "uapi/linux/usb/ch9.h"
- 
- /*
-- * little endian PlatformCapablityUUID for WebUSB
-+ * Little Endian PlatformCapablityUUID for WebUSB
-  * 3408b638-09a9-47a0-8bfd-a0768815b665
-- * to identify Platform Device Capability descriptors as referring to WebUSB
-- *
-- * the UUID above MUST be sent over the wire as the byte sequence:
-- * {0x38, 0xB6, 0x08, 0x34, 0xA9, 0x09, 0xA0, 0x47, 0x8B, 0xFD, 0xA0, 0x76, 0x88, 0x15, 0xB6, 0x65}.
-+ * to identify Platform Device Capability descriptors as referring to WebUSB.
-  */
- #define WEBUSB_UUID \
--	UUID_INIT(0x38b60834, 0xa909, 0xa047, 0x8b, 0xfd, 0xa0, 0x76, 0x88, 0x15, 0xb6, 0x65)
-+	GUID_INIT(0x3408b638, 0x09a9, 0x47a0, 0x8b, 0xfd, 0xa0, 0x76, 0x88, 0x15, 0xb6, 0x65)
- 
- /*
-  * WebUSB Platform Capability data
+Tested-by: Kevin Hilman <khilman@baylibre.com>
+
+v7:
+  - Update GIC information in mt8365.dtsi (thanks to Marc Zyngier for
+    pointing out the problem)
+  - Adjust the timer to match the updated GIC information
+
+v6:
+  - Add systimer in mt8365.dtsi
+  - Add I/D caches and L2 cache details in mt8365.dtsi
+  - Move bl31_secmon_reserved from mt8365.dtsi to mt8365-evk.dts
+  - Fix inconsistent indentation in mt8365-pinctrl example
+  - Further mt8365.dtsi cleanups
+  - Submit to additional maintainers spotted by get_maintainer.pl
+
+v5:
+  - Reorder top-level entries in mediatek,mt8365-pinctrl.yaml to match
+    example-schema
+  - Use consistent quotes
+
+v4:
+  - Remove pins-are-numbered references that have been holding things up
+    now that the patches removing it from dt-bindings have landed in linux-next
+
+v3:
+  - Remove a number of components that are not yet supported (they will
+    come back alongside the corresponding drivers)
+  - Address issues found by dt_binding_check (mostly fixing pinctrl
+    bindings)
+  - Address issues pointed out in comments
+  - Reorder patches
+
+v2:
+  - Add missing dt-bindings documentation
+  - Small cleanups addressing issues in v1 pointed out by Krzysztof Kozlowski
+
+
+Bernhard Rosenkränzer (6):
+  dt-bindings: arm64: dts: mediatek: Add mt8365-evk board
+  dt-bindings: irq: mtk, sysirq: add support for mt8365
+  dt-bindings: mfd: syscon: Add mt8365-syscfg
+  dt-bindings: pinctrl: add bindings for Mediatek MT8365 SoC
+  dt-bindings: timer: mediatek,mtk-timer: add MT8365
+  dt-bindings: serial: mediatek,uart: add MT8365
+
+Fabien Parent (3):
+  dt-bindings: usb: mediatek,mtu3: add MT8365 SoC bindings
+  dt-bindings: usb: mediatek,mtk-xhci: add MT8365 SoC bindings
+  arm64: dts: mediatek: Initial mt8365-evk support
+
+ .../devicetree/bindings/arm/mediatek.yaml     |   4 +
+ .../interrupt-controller/mediatek,sysirq.txt  |   1 +
+ .../devicetree/bindings/mfd/syscon.yaml       |   1 +
+ .../pinctrl/mediatek,mt8365-pinctrl.yaml      | 197 +++++++++
+ .../bindings/serial/mediatek,uart.yaml        |   1 +
+ .../bindings/timer/mediatek,mtk-timer.txt     |   1 +
+ .../bindings/usb/mediatek,mtk-xhci.yaml       |   1 +
+ .../bindings/usb/mediatek,mtu3.yaml           |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   1 +
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts   | 168 ++++++++
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi      | 377 ++++++++++++++++++
+ 11 files changed, 753 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
+
 -- 
-2.39.0
+2.39.1
 
