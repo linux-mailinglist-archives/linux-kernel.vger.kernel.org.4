@@ -2,142 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081FF67BF29
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382E967BF49
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235784AbjAYVvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:51:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S231465AbjAYVxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:53:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236439AbjAYVuk (ORCPT
+        with ESMTP id S234492AbjAYVxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:50:40 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587DC66F92
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:49:04 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id tz11so358604ejc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:49:04 -0800 (PST)
+        Wed, 25 Jan 2023 16:53:11 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B12B776
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:53:08 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id p185so17565257oif.2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:53:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7KXsMJoxmG6msNyIOzT+xXKJjyw52diPo/oB2OGQFIc=;
-        b=Rerd9H10x6Gx+s3IGAlP97PqeX97Nrs642WdP0JiqsdY83E7AXruxqbBbGJ0hKf8iq
-         7T/utPMve4LdrvjfM/czuFm38RoYzkX8CGOYcjRMpRAYngdkL+IWL5l8A+Cgg06dsUDo
-         D1Qcro+3bnEP74kdIsOmLT9vCapvdHpbtwcCj28Q5uD/sLAUy93EQ8/gwxpCxBVtuuCX
-         //7qvIAuaJn8hKbfJe0E8j6ZV7zI9Ht1DZS7scNnl6slCK8cqM9Mi9VvXU/OmeRcEm73
-         wpCgNQX5y8XSf83V/QPSxWmYwYM28MS2wLIV2UqJgzc7DuKU4Kx0unKEf54Cs9q1Ajxk
-         Km3g==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FK/9T29iODZ59+f1JESHnd65s/n5b9dY4UEOyjBbcEU=;
+        b=b04tS0O7N/N1riUBFoYctrcBokH18TCZYDw1crIuvH0vRs3879TSHEHgIYpJgN5F7U
+         l6Jvb3DA4UinIge9ko3eVA0xGQHU/uFDSYnYurZwwqFI2AmIpZSSocg5RGf+8+mc+8sV
+         L8DB35lMrp8eE6dvbKuMCDfVIiMcgKd4dGPIYs5WmEiTDMhjBfteqeUec9/NjkWf3cfb
+         cZZf6uoj67288SzlA199jUnie2PlaoqF/cmhPelc8hT+i8pnnicf7PuRk4eIkM+ghbbO
+         WFlwthEy/nIjyTXPxryFyDoa3HERXQBXaP4bnVLTULy5jajJf20OH+UJh+OkucXazIlm
+         JlLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7KXsMJoxmG6msNyIOzT+xXKJjyw52diPo/oB2OGQFIc=;
-        b=wZyaaItgvRAuVIEjpXjF9wA8ar+vm9dwuuOom4iWfvYs5RurqeBnCMstldqzwDpBRj
-         n1Q+idnhvRI8BhCLYSQB6V9HUvxTmFrAvxw1cMc1OZAf/c2S2BlLLyqsXoNbpFXXrQ+R
-         tBUy3XhCYd/W6zlEj+7VsaIAqVMKneGeX3umu8eBSEXX34W94iFCJVnzqysiJkVRoXnm
-         bzkg9B6ykqzGCSQNFf/CpgVbo5l6o6sqGxxJxU9rRPQpUvSp5KCQF5DmQT4FYhuRdfr5
-         WbPxcabsmYYXWZ8c/vUgU/a8QFbwRUxk4jW9JXWfe/AbVF8iwn6j+eZhk2TPv3icZkDK
-         c+kA==
-X-Gm-Message-State: AFqh2kpradWnZmlnB/elwK356gpCglP0esxlJR2PxiC0KKWh45uoL00R
-        3oxE1rvgGoLR2r+dSy1mPQSfLA==
-X-Google-Smtp-Source: AMrXdXtq7820kXaStsnx2W1/UkTYIvQoMzS4+ZU8NcgBhZqkbMKaCOv4tZLEjDxE5x1rTqe5hse6IA==
-X-Received: by 2002:a17:906:4b4c:b0:871:e336:cd2a with SMTP id j12-20020a1709064b4c00b00871e336cd2amr33430411ejv.47.1674683342846;
-        Wed, 25 Jan 2023 13:49:02 -0800 (PST)
-Received: from [192.168.1.101] (abyk108.neoplus.adsl.tpnet.pl. [83.9.30.108])
-        by smtp.gmail.com with ESMTPSA id f5-20020a170906c08500b00871390a3b74sm2956739ejz.177.2023.01.25.13.48.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 13:49:02 -0800 (PST)
-Message-ID: <63f017c7-d320-a996-7bda-33d263a847bc@linaro.org>
-Date:   Wed, 25 Jan 2023 22:48:54 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FK/9T29iODZ59+f1JESHnd65s/n5b9dY4UEOyjBbcEU=;
+        b=PO42iTvLb4GeJsFD+7qwtqTQg4JJDAJe67LvDxPiFkuRze4rlvja/FzJRnWUxnjbsc
+         XHobDDlbrw6jqu1qWKx5CaYLozWEAFRaHUj4RCPQ8qZIOjPYYNFQadexvm9g4bC1mDfx
+         q0fKVnmOxbDzJ3AB6slCb+gU5GoUYTNyxcA8QeJNI1z1Az5nxA1EzflCjehVHGaL9dse
+         9BJjqcUtZrVViLwHEjQVqMx2vuKo0YlRHVkVgdgE1vkxEBbsSuM/3Vqrt/0IQSxhBzxJ
+         lA2SET2Y2mGfAkQKD3Pya2m8/nfcY+TIeaAGJ402V5wxmQA1+qLyb2GDoenosiTOWikt
+         d08g==
+X-Gm-Message-State: AFqh2kqcjYbtxM8GR4Dxj4nKWtrrIYdcjgnObjm++7EXow16tupaT/Ue
+        x+mj/HIK2V5zej0RxB58MGA9cnM02rmAyTsuaYg6ew==
+X-Google-Smtp-Source: AMrXdXuyaO7b1tJc+dr7mmKNnVfcM8OpbeMgqTOB+gTbqM/Ybvjftr2ysl8nBnAGotjaDqCxGVWxb8sYOYxE2fh8ark=
+X-Received: by 2002:aca:2b16:0:b0:364:4a32:d98a with SMTP id
+ i22-20020aca2b16000000b003644a32d98amr1363175oik.157.1674683586013; Wed, 25
+ Jan 2023 13:53:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v4 7/7] clk: qcom: add the driver for the MSM8996 APCS
- clocks
-To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230118132254.2356209-1-dmitry.baryshkov@linaro.org>
- <20230118132254.2356209-8-dmitry.baryshkov@linaro.org>
- <7055af43f4a8894ac34e53c5847fb3de.sboyd@kernel.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <7055af43f4a8894ac34e53c5847fb3de.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230109215347.3119271-1-rananta@google.com> <20230109215347.3119271-5-rananta@google.com>
+ <Y9BhiOyvMvu/L0J4@thinky-boi>
+In-Reply-To: <Y9BhiOyvMvu/L0J4@thinky-boi>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Wed, 25 Jan 2023 13:52:54 -0800
+Message-ID: <CAJHc60yPWrry_+g=rxJs26SBW4oz-ovrBZ=OyzbBieTaA=36gQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/6] KVM: arm64: Optimize TLBIs in the dirty logging path
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Oliver,
 
+On Tue, Jan 24, 2023 at 2:54 PM Oliver Upton <oliver.upton@linux.dev> wrote:
+>
+> Hi Raghavendra,
+>
+> I find the commit title rather ambiguous. May I suggest:
+>
+>   KVM: arm64: Use range-based TLBIs for write protection
+>
+> On Mon, Jan 09, 2023 at 09:53:45PM +0000, Raghavendra Rao Ananta wrote:
+> > Currently the dirty-logging paths, including
+> > kvm_arch_flush_remote_tlbs_memslot() and kvm_mmu_wp_memory_region()
+> > ivalidates the entire VM's TLB entries using kvm_flush_remote_tlbs().
+> > As the range of IPAs is provided by these functions, this is highly
+> > inefficient on the systems which support FEAT_TLBIRANGE. Hence,
+> > use kvm_flush_remote_tlbs_range() to flush the TLBs instead.
+>
+> This commit message gives a rather mechanical description of the commit.
+> Instead of describing the change, could you describe _why_ this is an
+> improvement over the VM-wide invalidation?
+>
+Of course. I assumed the optimization would be obvious, but sure,
+it'll be better to describe it.
+FYI, thanks to David's common code for range-based TLBI, this patch
+shrunk to just one line, and would impact only the flush after
+write-protect.
 
-On 25.01.2023 22:38, Stephen Boyd wrote:
-> Quoting Dmitry Baryshkov (2023-01-18 05:22:54)
->> diff --git a/drivers/clk/qcom/apcs-msm8996.c b/drivers/clk/qcom/apcs-msm8996.c
->> new file mode 100644
->> index 000000000000..7e46ea8ed444
->> --- /dev/null
->> +++ b/drivers/clk/qcom/apcs-msm8996.c
->> @@ -0,0 +1,76 @@
-> [...]
->> +
->> +static int qcom_apcs_msm8996_clk_probe(struct platform_device *pdev)
->> +{
->> +       struct device *dev = &pdev->dev;
->> +       struct device *parent = dev->parent;
->> +       struct regmap *regmap;
->> +       struct clk_hw *hw;
->> +       unsigned int val;
->> +       int ret = -ENODEV;
->> +
->> +       regmap = dev_get_regmap(parent, NULL);
->> +       if (!regmap) {
->> +               dev_err(dev, "failed to get regmap: %d\n", ret);
->> +               return ret;
->> +       }
->> +
->> +       regmap_read(regmap, APCS_AUX_OFFSET, &val);
->> +       regmap_update_bits(regmap, APCS_AUX_OFFSET, APCS_AUX_DIV_MASK,
->> +                          FIELD_PREP(APCS_AUX_DIV_MASK, APCS_AUX_DIV_2));
->> +
->> +       /* Hardware mandated delay */
-> 
-> Delay for what? Setting the divider? What if the register value didn't
-> change at all? Can you skip the delay in that case?
-Waiting 5 us unconditionally in exchange for ensured CPU clock
-source stability sounds like a rather fair deal.. Checking if
-the register value changed would not save us much time..
-
-Konrad
-> 
->> +       udelay(5);
->> +
->> +       /*
->> +        * Register the clock as fixed rate instead of being a child of gpll0
->> +        * to let the driver register probe as early as possible.
-> 
-> The function doesn't block or return EPROBE_DEFER if the clk is orphaned
-> when registered. Why is this necessary? Are you getting defered by the
-> fw_devlink logic thinking it needs to defer probe of this driver until
-> gpll0 provider probes? We should fix fw_devlink to not do that. Maybe if
-> the node is a clk provider (#clock-cells exists) then we don't wait for
-> clocks property to be provided, because the clk core already handles
-> that itself.
-> 
->> +        */
->> +       hw = devm_clk_hw_register_fixed_rate(dev, "sys_apcs_aux", NULL, 0, 300000000);
+Thanks,
+Raghavendra
+> --
+> Thanks,
+> Oliver
+>
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >  arch/arm64/kvm/arm.c | 7 ++++++-
+> >  arch/arm64/kvm/mmu.c | 2 +-
+> >  2 files changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index 00da570ed72bd..179520888c697 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -1433,7 +1433,12 @@ void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
+> >  void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
+> >                                       const struct kvm_memory_slot *memslot)
+> >  {
+> > -     kvm_flush_remote_tlbs(kvm);
+> > +     phys_addr_t start, end;
+> > +
+> > +     start = memslot->base_gfn << PAGE_SHIFT;
+> > +     end = (memslot->base_gfn + memslot->npages) << PAGE_SHIFT;
+> > +
+> > +     kvm_flush_remote_tlbs_range(kvm, start, end);
+> >  }
+> >
+> >  static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
+> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > index 70f76bc909c5d..e34b81f5922ce 100644
+> > --- a/arch/arm64/kvm/mmu.c
+> > +++ b/arch/arm64/kvm/mmu.c
+> > @@ -976,7 +976,7 @@ static void kvm_mmu_wp_memory_region(struct kvm *kvm, int slot)
+> >       write_lock(&kvm->mmu_lock);
+> >       stage2_wp_range(&kvm->arch.mmu, start, end);
+> >       write_unlock(&kvm->mmu_lock);
+> > -     kvm_flush_remote_tlbs(kvm);
+> > +     kvm_flush_remote_tlbs_range(kvm, start, end);
+> >  }
+> >
+> >  /**
+> > --
+> > 2.39.0.314.g84b9a713c41-goog
+> >
+> >
