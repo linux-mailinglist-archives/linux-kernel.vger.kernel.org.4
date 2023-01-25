@@ -2,117 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D6F67B38F
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4E267B394
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235441AbjAYNj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:39:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
+        id S235515AbjAYNl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:41:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235397AbjAYNjw (ORCPT
+        with ESMTP id S229806AbjAYNlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:39:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E54255287
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 05:39:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674653943;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sxzotnx/8u7CTeCRsf3MJY8+svrxvajdNHO0lRdFPkg=;
-        b=MuIFaMLdJ7x/dKw1ppNDS3oCUDen14eFbqbnZzroATFuOry9ej7ayLdZqxuVFPcQwWAsbU
-        v0AUPUK0MY5Z72500q0yYcbrvlh4KptfpyPryGjAgpXTWo6lUmaQaDwQwGrtfYMOfaEkzT
-        PFZ2qzBhJG8KRm5r4V2gxPRr7NOz1LQ=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-482-v-hyQZ0NNvKobEV39EIwFg-1; Wed, 25 Jan 2023 08:39:02 -0500
-X-MC-Unique: v-hyQZ0NNvKobEV39EIwFg-1
-Received: by mail-ej1-f71.google.com with SMTP id xj11-20020a170906db0b00b0077b6ecb23fcso12077283ejb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 05:39:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sxzotnx/8u7CTeCRsf3MJY8+svrxvajdNHO0lRdFPkg=;
-        b=R40sjG9XXo/elEcM4gCtKM3SlNK2yx/9oEYyAaJjtYyIzg9E5me+wf81pbetlWlkIv
-         hQe9+nbsTbUrdihyccEdfngRWeQ6SGcrJ2ndPZ5tBlMCPzJRbZvHX/XRdZyMo3tslU2r
-         gFMQkfhMVvFgrIDPLqWpcznUXUHfgvifR+5MkPT65auns8UyZcOtZnX9jWTb2huicSb5
-         B9RAYae2jTVsTnB2TnNAlM8Pen9SoxjKbcbMSHvbC0AobU0V1e0MoPULDYCvqtKl2n9W
-         AttOR2bfE/FQYjfyhi+okH4M+iG7xFJX+J6cGB/ouXU5ukWe+D2CaacMYwFpm3ID/R2p
-         0sqA==
-X-Gm-Message-State: AFqh2krMl7YYS26YL8SBBkQBhFdfJqWmhDMPpqEXr4m6DdZi/EHQpjcC
-        hGxQnrkWThJ3ifJU82my87+MYTA/g5FZI0IW4vQFlygMqg3YgT746uQeWfUKVKKilI8TjlXd9Fy
-        BTDQVwKURjlVoS70BJhe+FVw6
-X-Received: by 2002:aa7:de9a:0:b0:482:d62c:cde with SMTP id j26-20020aa7de9a000000b00482d62c0cdemr48671601edv.13.1674653940736;
-        Wed, 25 Jan 2023 05:39:00 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuSG9aMyPwztmzmC+kCrInOnj8mPzQEuCzuD4sdr5qzPHQ3vYBP3LEEv2c86PDwwr+WEAua5A==
-X-Received: by 2002:aa7:de9a:0:b0:482:d62c:cde with SMTP id j26-20020aa7de9a000000b00482d62c0cdemr48671585edv.13.1674653940587;
-        Wed, 25 Jan 2023 05:39:00 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id o2-20020aa7c7c2000000b0047eeaae9558sm2344417eds.60.2023.01.25.05.38.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 05:39:00 -0800 (PST)
-Message-ID: <383fda33-143d-9e8e-1f7d-080931ae4496@redhat.com>
-Date:   Wed, 25 Jan 2023 14:38:59 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH resend 0/2] i2c/extcon: intel-cht-wc: Lenovo Yoga Tab 3
- Pro YT3-X90F support
-Content-Language: en-US, nl
-To:     Wolfram Sang <wsa@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>
-References: <20230125111209.18343-1-hdegoede@redhat.com>
- <Y9Et7nlUmiiPrFUQ@ninjato>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <Y9Et7nlUmiiPrFUQ@ninjato>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 08:41:25 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC99C4DCD4;
+        Wed, 25 Jan 2023 05:41:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674654069; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=FYqS8pXHLDpygW1IQ0GkOLw8TvGh1suuGXX5dcgCR4kviESto6QkhbL2B1aKAjJcVLtj64bpmUFmVLyJee/hjbzg3iBRRLVyYHMaTuvdGnmeD67dbRz0qBIGS10mLNy5guVjQKa71+EkKrU5GRIpTlRBB2VnJO9AI0pF36/5x04=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1674654069; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=Buta/IEuOcOmRkcva2fQ1tSXMH4qcUYXjavj7E1aFaM=; 
+        b=H7IVh18j4spC50AvmeauW2WLpWCchVRxizHNYlQ/YU7KE9A+qshM/gQT6He53N66Js84Nxx2wOuhUQZ4pe95HdfB9mevYsDE0MLziSQWgKI1x3XlKBExmj6CHvPULCJdthLFPk+AP1qYRVv7ZRKI/sFTgUWmzzbq0EQNwEWa9vo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674654069;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:Message-ID:From:From:To:To:Cc:Cc:Subject:Subject:In-Reply-To:References:MIME-Version:Content-Type:Message-Id:Reply-To;
+        bh=Buta/IEuOcOmRkcva2fQ1tSXMH4qcUYXjavj7E1aFaM=;
+        b=iR9fvJXN2YOKwZ4jTdPNlcIB5azaqsL4YvIVUxl0D5Zo71alnZNa/IG9H0+LSOsV
+        ZXkQB0JslpTamZJLId+oKVVSlpJOgBeqdpPkh35hEhCICdGkqPWmc7OALFmtd83sXBu
+        SPKBg05RPZcvndMXv3yrN/aKI+OAkELiekFM2DZw=
+Received: from lchen-xiaoxin.linux.beauty (221.225.241.248 [221.225.241.248]) by mx.zohomail.com
+        with SMTPS id 1674654067964288.69962327378846; Wed, 25 Jan 2023 05:41:07 -0800 (PST)
+Date:   Wed, 25 Jan 2023 21:40:19 +0800
+Message-ID: <87sffyhgvw.wl-me@linux.beauty>
+From:   Li Chen <me@linux.beauty>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Li Chen <lchen@ambarella.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:ARM/Ambarella SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 07/15] dt-bindings: clock: Add Ambarella clock bindings
+In-Reply-To: <ec9fc589-2612-3315-3550-83b68bead926@linaro.org>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+        <20230123073305.149940-8-lchen@ambarella.com>
+        <0c19efb4-3bca-f500-ca24-14b9d24369ef@linaro.org>
+        <87y1prgdyu.wl-me@linux.beauty>
+        <b26a52ff-6b8a-8a64-7189-346cd2b0d705@linaro.org>
+        <87tu0ehl88.wl-me@linux.beauty>
+        <ec9fc589-2612-3315-3550-83b68bead926@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-ZohoMailClient: External
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 25 Jan 2023 20:14:16 +0800,
 
-On 1/25/23 14:26, Wolfram Sang wrote:
-> 
->> I'm resending these 2 patches since they seem to have fallen through
->> the cracks.
-> 
-> Which tree should the patches go via? I am assuming not-i2c, but maybe I
-> am wrong?
+Hi Krzysztof,
 
-That is a good point. I was under the assumption that the matching MFD
-patch, which I did not resend, was already merged. But I'm wrong,
-sorry about this.
+Krzysztof Kozlowski wrote:
+>
+> On 25/01/2023 13:06, Li Chen wrote:
+> >>> Feel free to correct me if you think this
+> >>> is not a good idea.
+> >>
+> >> This is bad idea. Compatibles should be specific. Devices should not use
+> >> syscons to poke other registers, unless strictly necessary, but have
+> >> strictly defined MMIO address space and use it.
+> >
+> > Ok, I will convert syscon-based regmaps to SoC-specific compatibles and of_device_id->data.
+> >
+> > But I have three questions:
+> >
+> > 0. why syscon + offsets is a bad idea copared to specific compatibles?
+>
+> Specific compatibles are a requirement. They are needed to match device
+> in exact way, not some generic and unspecific. The same with every other
+> interface, it must be specific to allow only correct usage.
+>
+> It's of course different with generic fallbacks, but we do not talk
+> about them here...
+>
+> > 1. when would it be a good idea to use syscon in device tree?
+>
+> When your device needs to poke one or few registers from some
+> system-controller block.
+>
+> > 2. syscon VS reg, which is preferred in device tree?
+>
+> There is no such choice. Your DTS *must* describe the hardware. The
+> hardware description is for example clock controller which has its own
+> address space. If you now do not add clock controller's address space to
+> the clock controller, it is not a proper hardware description. The same
+> with every other property. If your device has interrupts, but you do not
+> add them, it is not correct description.
 
-So I'll do a v2 resend with 3 patches which does include the MFD
-patch and then I guess ideally all 3 patches would go through
-the MFD tree.
+Got it. But Ambarella hardware design is kind of strange. I want to add mroe
+expalaination about why Ambarella's downstream kernel
+use so much syscon in device trees:
 
-Wolfram, may I/we have your ack for merging the small i2c change
-through the MFD tree?
+For most SoCs from other vendors, they have seperate address space regions
+for different peripherals, like
+axi address space A: ENET
+axi address space B: PCIe
+axi address space B: USB
+...
 
-The extcon patch already has an ack for that. So I'll hold of
-on sending out a v2 with the missing patch until I have your
-ack, so that v2 will be fully ready to merge through the MFD
-tree.
+Ambarella is somewhat **different**, its SoCs have two system controllers regions:
+RCT and scratchpad, take RCT for example:
+"The S6LM system software
+interacts with PLLs, PHYs and several other low-level hardware blocks using APB reset clock and test (RCT)
+registers with a system-layer application programming interface (API).
+This includes the setting of clock frequencies."
+
+There are so many peripherals registers located inside RCT and scratchpad
+(like usb/phy, gpio, sd, dac, enet, rng), and some peripherals even have no their
+own modules for register definitions.
+
+So most time(for a peripheral driver), the only differences between different
+Ambarella SoCs are just the syscon(rct or scratchpad) offsets get changed.
+
+I don't think such lazy hardware design is common in vendors other than ambarella.
+
+If I switch to SoC-specific compatibles, and remove these syscon from device tree,
+of_device_id->data may only contain system controller(rct or scratchpad) offset for many Ambarella drivers,
+and ioremap/devm_ioremap carefully.
+
+The question is: can upstream kernel accept such codes?
+
+If yes, I will switch to SoC-specific compatibles and remove syscon without hesitation.
 
 Regards,
-
-Hans
-
-
+Li
