@@ -2,120 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF0967B8FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC6C67B900
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235204AbjAYSHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 13:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S235460AbjAYSH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:07:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjAYSHl (ORCPT
+        with ESMTP id S233235AbjAYSHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:07:41 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC59C1716F;
-        Wed, 25 Jan 2023 10:07:39 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id c21so9605476vkn.10;
-        Wed, 25 Jan 2023 10:07:39 -0800 (PST)
+        Wed, 25 Jan 2023 13:07:54 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD833170A
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:07:52 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id g9so1472618pfo.5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:07:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qM7kiuRwQe1g9m3XMwcQMXA/t3ho0zA60PXcbSeaBhI=;
-        b=fT+aa6N02Pkl/fbQ/kW3yJcYpRJFk2o7pcuA7glQwdC83q+73YcoRU7WywZM7azBXr
-         6qwz3qsDBYqiZlcz0rrVkWCDOBmWGy8fG01RimEZ0xKpGcB/Hh8Wn/SzM0ATs74MnTrb
-         y8SjcWelNYvZppo6pCt88JAA13oWMazKLPe9lCuSZTCTUMqPFufslhR813qh+Aitq7g3
-         k7kOny/y5aj9Q9VF4CbZybjdvXtLKgjzqTo/miuu1GnBG5xHeXGIBIcWZyJiKY7te2c8
-         RuMXfHzixCyTfxypRrX3IOr8NQjVWtd90m2YSigaAFPEfGV+HwLfklcPSclxc32HfCeB
-         BtfQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4ph4PmSnV9gkntOR+tyZ2xCVJp+S/HCqBMLy3CJDgIs=;
+        b=B3kmlyghCk/Gms0IxSLviaMQ0DunjankOyK8Eu5UcrZS4p1wyq2yl14FLZacrjZE2G
+         8cdzM1r37TNyoj91FbTWRCUMrBJjdd4ccgHLtRWBQlrcyduYzeMkC+7ehA9S68ht7NhG
+         qheSSmFPYv+VA77ZB7hzF5dUSQ1/pQsI6IFWXduIiCnO0LDUUwgcacUDTcCk4YYN7Ac7
+         HfVik+J4gcCTXVUZSgpV++EDqHfKjVY9Md5uT9ThC+5wtAZe6BYyEB8WxRyuquV8q9FT
+         t8jiXN/5csYf1O+/yETCpJ45NZ0bZjC3Q9jscyiOfskGEs8mQRG6hOcd1/eDJhEsnMTY
+         z4TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qM7kiuRwQe1g9m3XMwcQMXA/t3ho0zA60PXcbSeaBhI=;
-        b=ovSbZkn1wyMkmo25plTOsEw7Elk+hyjOurKUdj9x8MRMJbtw7wXJU/IWdmgF5nSXTs
-         0e7b1/Vj629DsGthxjvd0lzVtu60FR0dYxHyC+4lyS7FqtJLSI9jWKVDokz1QWvdHlJE
-         tPrvVuul6RGth7oshiauhSO3qt8x2OptSd4AkuvvyFUJeEbETVBwrEnIPksVeUwUUxq5
-         R3pAl+XhSPxzR2BfEfPEykW9mVBN5aWMKtW57+zPCsYW3dPFzeaQWWMu1RydUdAh4ZUq
-         Qq6Ei/leqxJOdQ/tiWPvShazPHjGFn1Phng6LzpW74m0tVlkoB4oXxt7QZREDCUlAPCn
-         goiw==
-X-Gm-Message-State: AFqh2koJtwfpzLRxi3vSc/QaGnoQuEc0r3G+9F9rNEb+fyxopZw/cBK8
-        pOwZ8MUxsRJuiJ3fcwoQ0t/YIdMkd1rX1m5yQmCnchMD
-X-Google-Smtp-Source: AMrXdXuj19/f+u/5mrylRroHZVaYwXjn0LMc76xVKN+dasjd/frlcGHq3a9QMQ+t6VhPxryqzicp6TXHf/dB5Lh73ek=
-X-Received: by 2002:a1f:91d4:0:b0:3db:104:6d13 with SMTP id
- t203-20020a1f91d4000000b003db01046d13mr4343547vkd.25.1674670058841; Wed, 25
- Jan 2023 10:07:38 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4ph4PmSnV9gkntOR+tyZ2xCVJp+S/HCqBMLy3CJDgIs=;
+        b=U3kRbAlei07Hz4Oz4VsiZg2L9Cj+2p6UWXxXJ+JC7xINuv5GjhVn8d4JxgrTPTYGBb
+         fAqX4RMPSZWvI/IE1Qcq4QczgwdqSbCjabvhI3LAxXYYJGersTdvlbRqZrDeb6gDfeTz
+         ZW0JPgUJiID0J/i2LLFbYYA+GwnGkpHZiq5k6vm8R21ADyWWvVdxXIbVdy4hF3R3mBWj
+         fFvv4c4VBVlX5LNQOY8m3wTpfTfO/eM1+dZ5PNo7sSkCsMCNBeVihAaRQZxIwjPIAHkJ
+         0FrBCBpRWp7WUBSs6ZgrsOpr5G+jlta8/Z2d+d4dJx/jWWNg/NCpvOyqp8FIdKuUdFHy
+         rbxQ==
+X-Gm-Message-State: AFqh2kptCRH2arp/HXo2B0DzYJTffXqv3dSM5HV9f7Yxtu1uNHKKFpvj
+        LpOz3hAklIycqTTqVNbAalY=
+X-Google-Smtp-Source: AMrXdXtLEtRtG8jiGuSCQqHIOY2lrPuHWW5AMyNky68CjwmNYoCK5TuHk0dkIHPXX0GpG4BdqknE2w==
+X-Received: by 2002:a05:6a00:8b:b0:582:b8e0:bc54 with SMTP id c11-20020a056a00008b00b00582b8e0bc54mr32598193pfj.21.1674670072054;
+        Wed, 25 Jan 2023 10:07:52 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:4ff6:fb01:3677:2696])
+        by smtp.gmail.com with ESMTPSA id i6-20020a056a00224600b00589ed7ae132sm2585300pfu.13.2023.01.25.10.07.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 10:07:51 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Wed, 25 Jan 2023 10:07:49 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] mm/madvise: add vmstat statistics for
+ madvise_[cold|pageout]
+Message-ID: <Y9Fv9YnNn7bHvLkN@google.com>
+References: <20230125005457.4139289-1-minchan@kernel.org>
+ <Y9DigKf0w712t0OO@dhcp22.suse.cz>
+ <Y9FacrcUIaLZq4DL@google.com>
+ <Y9FhtBbnlNxAZAS4@dhcp22.suse.cz>
 MIME-Version: 1.0
-References: <cover.1674227308.git.alexl@redhat.com> <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
- <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
- <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
- <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
- <20230125041835.GD937597@dread.disaster.area> <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
- <87wn5ac2z6.fsf@redhat.com> <CAOQ4uxiPLHHnr2=XH4gN4bAjizH-=4mbZMe_sx99FKuPo-fDMQ@mail.gmail.com>
- <87o7qmbxv4.fsf@redhat.com> <CAOQ4uximBLqXDtq9vDhqR__1ctiiOMhMd03HCFUR_Bh_JFE-UQ@mail.gmail.com>
- <87fsbybvzq.fsf@redhat.com>
-In-Reply-To: <87fsbybvzq.fsf@redhat.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 25 Jan 2023 20:07:26 +0200
-Message-ID: <CAOQ4uxgos8m72icX+u2_6Gh7eMmctTTt6XZ=BRt3VzeOZH+UuQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Giuseppe Scrivano <gscrivan@redhat.com>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brauner@kernel.org, viro@zeniv.linux.org.uk,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9FhtBbnlNxAZAS4@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >> I previously mentioned my wish of using it from a user namespace, the
-> >> goal seems more challenging with EROFS or any other block devices.  I
-> >> don't know about the difficulty of getting overlay metacopy working in a
-> >> user namespace, even though it would be helpful for other use cases as
-> >> well.
-> >>
-> >
-> > There is no restriction of metacopy in user namespace.
-> > overlayfs needs to be mounted with -o userxattr and the overlay
-> > xattrs needs to use user.overlay. prefix.
->
-> if I specify both userxattr and metacopy=on then the mount ends up in
-> the following check:
->
-> if (config->userxattr) {
->         [...]
->         if (config->metacopy && metacopy_opt) {
->                 pr_err("conflicting options: userxattr,metacopy=on\n");
->                 return -EINVAL;
->         }
-> }
->
+On Wed, Jan 25, 2023 at 06:07:00PM +0100, Michal Hocko wrote:
+> On Wed 25-01-23 08:36:02, Minchan Kim wrote:
+> > On Wed, Jan 25, 2023 at 09:04:16AM +0100, Michal Hocko wrote:
+> > > On Tue 24-01-23 16:54:57, Minchan Kim wrote:
+> > > > madvise LRU manipulation APIs need to scan address ranges to find
+> > > > present pages at page table and provides advice hints for them.
+> > > > 
+> > > > Likewise pg[scan/steal] count on vmstat, madvise_pg[scanned/hinted]
+> > > > shows the proactive reclaim efficiency so this patch adds those
+> > > > two statistics in vmstat.
+> > > > 
+> > > > 	madvise_pgscanned, madvise_pghinted
+> > > > 
+> > > > Since proactive reclaim using process_madvise(2) as userland
+> > > > memory policy is popular(e.g,. Android ActivityManagerService),
+> > > > those stats are helpful to know how efficiently the policy works
+> > > > well.
+> > > 
+> > > The usecase description is still too vague. What are those values useful
+> > > for? Is there anything actionable based on those numbers? How do you
+> > > deal with multiple parties using madvise resp. process_madvise so that
+> > > their stats are combined?
+> > 
+> > The metric helps monitoing system MM health under fleet and experimental
+> > tuning with diffrent policies from the centralized userland memory daemon.
+> 
+> That is just too vague for me to imagine anything more specific then, we
+> have numbers and we can show them in a report. What does it actually
+> mean that madvise_pgscanned is high. Or that pghinted / pgscanned is
+> low (that you tend to manually reclaim sparse mappings)?
 
-Right, my bad.
+If that's low, it means the userspace daemon's current tune/policy are
+inefficient or too aggressive since it is working on address spacess
+of processes which don't have enough memory the hint can work(e.g.,
+shared addresses, cold address ranges or some special address ranges like
+VM_PFNMAP) so sometime, we can detect regression to find culprit or
+have a chance to look into better ideas to improve.
 
-> to me it looks like it was done on purpose to prevent metacopy from a
-> user namespace, but I don't know the reason for sure.
->
-
-With hand crafted metacopy, an unpriv user can chmod
-any files to anything by layering another file with different
-mode on top of it....
-
-Not sure how the composefs security model intends to handle
-this scenario with userns mount, but it sounds like a similar
-problem.
-
-Thanks,
-Amir.
+> 
+> > That's really good fit under vmstat along with other MM metrics.
+> > 
+> > > 
+> > > In the previous version I have also pointed out that this might be
+> > > easily achieved by tracepoints. Your counterargument was a convenience
+> > > in a large scale monitoring without going much into details. Presumably
+> > > this is because your fleet based monitoring already collects
+> > > /proc/vmstat while tracepoints based monitoring would require additional
+> > > changes. This alone is rather weak argument to be honest because
+> > > deploying tracepoints monitoring is quite trivial and can be done
+> > > outside of the said memory reclaim agent.
+> > 
+> > The convenience matters but that's not my argument. 
+> > 
+> > Ithink using tracepoint for system metric makes no sense even though
+> > the tracepoint could be extended by using bpf or histogram trigger to
+> > get the accumulated counters for system metric.
+> 
+> System wide metrics data collection by ftrace is a common use case. I
+> really do not follow your argument here. There are certainly cases where
+> ftrace is suboptimal solution - e.g. when the cumulative data couldn't
+> have been collected early on for one reason or another (e.g. system
+> uptime is already high when you decide to start collecting). But you
+> have stated there is data collection happening so what does prevent
+> collecting this just along with anything else.
+>  
+> > The tracepoint is the next step if we want to know further breakdown
+> > once something strange happens. That's why we have separate level metric
+> > system to narrow problem down rather than implementing all the metric
+> > with tracepoint. Please, look at vmstat fields. Almost every fields
+> > would have same question you asked "how do you break down if multiple
+> > processes were invovled to contribute the metric?"
+> 
+> Yes, we tended to be much more willing to add counters. Partly because
+> runtime debugging capabilities were not that great in the past as we
+> have these days.
+> 
+> > I am fine if you suggest adding tracepoint as well as the vmstat fields
+> > for further breakdown but only relying on tracepoint and frineds for
+> > system global metric doesn't make sense.
+> 
+> We have to agree to disagree here. I am not going to nack this but I
+> disagree with this patch because the justification is just too vague and
+> also those numbers cannot really be attributed to anybody performing
+> madvise to actually evaluate that activity.
+> -- 
+> Michal Hocko
+> SUSE Labs
