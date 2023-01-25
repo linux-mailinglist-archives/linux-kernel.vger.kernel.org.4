@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F98667ABAE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEC667ABB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234977AbjAYI2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:28:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
+        id S235079AbjAYI3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232745AbjAYI2u (ORCPT
+        with ESMTP id S235068AbjAYI3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:28:50 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708B4272E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:28:49 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id k16so13137875wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:28:49 -0800 (PST)
+        Wed, 25 Jan 2023 03:29:52 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D6C5FCB
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:29:50 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so704665wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:29:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7CyWdPwmsoEln1rCKIxbXcZ7tw/K7pVLqcNgYwRXhLM=;
-        b=OisDsC+EIU6/jRjZrG5YFX4xE8/lvWiWrn7vehFtHMjH7D0bf29AeT04n5xGe5fKJp
-         QwzGcRQRPD4oviUUPE7WZPnHk2GiI+k65Kj1+4IqzyFas7V1+uq3scf39HwiUSCDS0bM
-         3GFbIfDG1qf+5p6j7xF62Am7PdJqMN0hs0O1MBDOyx+VgkEARy7VqAMxUUoozspSuyCb
-         zGptkj2sywHeru4KD/jipfAgT/fDB6eiDqPgV8sNJawFiakebAPzX9f/+aFyeqaELdjM
-         EWj99llip6FBzTieb0mX39hEiGm4J8Aivv2WdB2psRB1QsdCZ2daajNJ816Crq3pUT3I
-         iHGA==
+        bh=871OGCI0aHwZZE6OKggKudWipUlPKXToB5Kn7OlT7Ew=;
+        b=C0wvOpQb3U0DVvjPMPgyyNT1+YP+zfNBdXYl4gQ9ZKvrIdgqPBYNBaTBSPmh43qicA
+         a1LJSTPWiSwzYXEeLtvo+26GCcml0gCxNjiATpq1q00LMLOCIA62ag4FyNQ9T8VTlEme
+         8oXHMAL04imiMoZZueW0GkozNOJ+G+5vIvGykPewjxnfaNXbHT5k5+4aIsETOCwDq4bD
+         HwbdpXSUZsZAJTyxGPSFqn4LqWQTwxxyiRFmS4IJp5LQSi1e9zzn66VmmxEjbhyvm3yy
+         yXeZCUtdp/IdHS6PN6pE9DGSoyqFGqXpCM4fiC9vTHliLM0PrTlGcJdBI5YhVXALWy+f
+         y9yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7CyWdPwmsoEln1rCKIxbXcZ7tw/K7pVLqcNgYwRXhLM=;
-        b=jJ4vHat5f4mb0kRdd4pSAtiyXz39DLDp3Ss6Tv4CEa57XCDCBEd6+ylD9Noy51Nl7r
-         JAdWaXKPg8dOVOrAKD6LDeLhFqiIlRgKqT9bjHQrrRz68Sy2hnQyIbL8cxsCIg8aDEBg
-         dbDGvt6jua/z/rQO2WDEMYbLub7g7DXJwKRbrCZ+9SfcDAE9V5cqfgfSgL+QvqTI1ofr
-         xE0+x7VNj2M3aGpiJvMBU7QPlqxm/EEHvnnY8bdlHU/IbF8oLLONvhXWoVvlYPrGBh8l
-         m/G2qLFm8OijdigUELCuUFvoh/F8yLBFRbNJ2ORKzUz765rmg0ezgoVdnHp2i1uIF2La
-         RzFA==
-X-Gm-Message-State: AFqh2koGihfVjE2g1RMGISr/gUzs830Y37aDUzYetpQYTvpVsR44lJcQ
-        n6M5pnglRuKaeHjQZVAvcGzfSQ==
-X-Google-Smtp-Source: AMrXdXtQiFRonCSKZgGEtQQk1kbS0BKk/gtu6+bWv/OU7qtsnQJRbTeUZKPdSNWmMFbG9pHM7wQoFw==
-X-Received: by 2002:a05:600c:43d3:b0:3da:fbcd:cdd2 with SMTP id f19-20020a05600c43d300b003dafbcdcdd2mr31194035wmn.9.1674635328028;
-        Wed, 25 Jan 2023 00:28:48 -0800 (PST)
+        bh=871OGCI0aHwZZE6OKggKudWipUlPKXToB5Kn7OlT7Ew=;
+        b=cEoNbZoozosBQVRyck8rIhr9ac1U+4jH5uNVusj6ZB4h/vitHCk+fdkv9ahoCa6JoP
+         Xv0f0lol/sIiLja3C9FLK2NZ32J/XELmxxTiqeIWusFIquOg3nO68uUPQ9JdaxHqk0HY
+         GmeeZPEE1ZfAG3IEz5O0ayn2PrttLnX5zC1phal4sEGdfA1IJ1Uc4GWOjcNSOAfht9NP
+         RV8pHXVp/IignkoTCo516nH/8Owq6yonMsMN3qm/RIxq8Xno8FYTX8Ybr5bOEUU2nCbH
+         oGvaNowCwMEdzWGJsMUO6sAme6nVOXphgHsRZ++vx75wOo+j6QqaPwcrONk+NDxFSqHM
+         UwnA==
+X-Gm-Message-State: AFqh2kosOCV9Xq86Y05n6GftRRg5MmnSCmKii1nTfS2bOxDElg+yPtsa
+        7jMIm1nJJ1Yiw164JEmGzV3U7A==
+X-Google-Smtp-Source: AMrXdXsuDmppa2cK6f9yHqBRO/sT58CjC7qn+D8bUDIkmfppKXnmAQCYCVk1D2pFp4XoIe6uX5V6oA==
+X-Received: by 2002:a05:600c:3b9b:b0:3d2:392e:905f with SMTP id n27-20020a05600c3b9b00b003d2392e905fmr30562318wms.24.1674635389029;
+        Wed, 25 Jan 2023 00:29:49 -0800 (PST)
 Received: from alex-rivos.home (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
-        by smtp.gmail.com with ESMTPSA id d11-20020a05600c3acb00b003db30be4a54sm1080541wms.38.2023.01.25.00.28.47
+        by smtp.gmail.com with ESMTPSA id d24-20020a05600c4c1800b003db0cab0844sm1070737wmp.40.2023.01.25.00.29.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 00:28:47 -0800 (PST)
+        Wed, 25 Jan 2023 00:29:48 -0800 (PST)
 From:   Alexandre Ghiti <alexghiti@rivosinc.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -64,9 +64,9 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         kasan-dev@googlegroups.com, linux-efi@vger.kernel.org
 Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH v3 5/6] riscv: Fix ptdump when KASAN is enabled
-Date:   Wed, 25 Jan 2023 09:23:32 +0100
-Message-Id: <20230125082333.1577572-6-alexghiti@rivosinc.com>
+Subject: [PATCH v3 6/6] riscv: Unconditionnally select KASAN_VMALLOC if KASAN
+Date:   Wed, 25 Jan 2023 09:23:33 +0100
+Message-Id: <20230125082333.1577572-7-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230125082333.1577572-1-alexghiti@rivosinc.com>
 References: <20230125082333.1577572-1-alexghiti@rivosinc.com>
@@ -81,86 +81,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The KASAN shadow region was moved next to the kernel mapping but the
-ptdump code was not updated and it appears to break the dump of the kernel
-page table, so fix this by moving the KASAN shadow region in ptdump.
+If KASAN is enabled, VMAP_STACK depends on KASAN_VMALLOC so enable
+KASAN_VMALLOC with KASAN so that we can enable VMAP_STACK by default.
 
-Fixes: f7ae02333d13 ("riscv: Move KASAN mapping next to the kernel mapping")
 Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 ---
- arch/riscv/mm/ptdump.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ arch/riscv/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/riscv/mm/ptdump.c b/arch/riscv/mm/ptdump.c
-index 830e7de65e3a..20a9f991a6d7 100644
---- a/arch/riscv/mm/ptdump.c
-+++ b/arch/riscv/mm/ptdump.c
-@@ -59,10 +59,6 @@ struct ptd_mm_info {
- };
- 
- enum address_markers_idx {
--#ifdef CONFIG_KASAN
--	KASAN_SHADOW_START_NR,
--	KASAN_SHADOW_END_NR,
--#endif
- 	FIXMAP_START_NR,
- 	FIXMAP_END_NR,
- 	PCI_IO_START_NR,
-@@ -74,6 +70,10 @@ enum address_markers_idx {
- 	VMALLOC_START_NR,
- 	VMALLOC_END_NR,
- 	PAGE_OFFSET_NR,
-+#ifdef CONFIG_KASAN
-+	KASAN_SHADOW_START_NR,
-+	KASAN_SHADOW_END_NR,
-+#endif
- #ifdef CONFIG_64BIT
- 	MODULES_MAPPING_NR,
- 	KERNEL_MAPPING_NR,
-@@ -82,10 +82,6 @@ enum address_markers_idx {
- };
- 
- static struct addr_marker address_markers[] = {
--#ifdef CONFIG_KASAN
--	{0, "Kasan shadow start"},
--	{0, "Kasan shadow end"},
--#endif
- 	{0, "Fixmap start"},
- 	{0, "Fixmap end"},
- 	{0, "PCI I/O start"},
-@@ -97,6 +93,10 @@ static struct addr_marker address_markers[] = {
- 	{0, "vmalloc() area"},
- 	{0, "vmalloc() end"},
- 	{0, "Linear mapping"},
-+#ifdef CONFIG_KASAN
-+	{0, "Kasan shadow start"},
-+	{0, "Kasan shadow end"},
-+#endif
- #ifdef CONFIG_64BIT
- 	{0, "Modules/BPF mapping"},
- 	{0, "Kernel mapping"},
-@@ -362,10 +362,6 @@ static int __init ptdump_init(void)
- {
- 	unsigned int i, j;
- 
--#ifdef CONFIG_KASAN
--	address_markers[KASAN_SHADOW_START_NR].start_address = KASAN_SHADOW_START;
--	address_markers[KASAN_SHADOW_END_NR].start_address = KASAN_SHADOW_END;
--#endif
- 	address_markers[FIXMAP_START_NR].start_address = FIXADDR_START;
- 	address_markers[FIXMAP_END_NR].start_address = FIXADDR_TOP;
- 	address_markers[PCI_IO_START_NR].start_address = PCI_IO_START;
-@@ -377,6 +373,10 @@ static int __init ptdump_init(void)
- 	address_markers[VMALLOC_START_NR].start_address = VMALLOC_START;
- 	address_markers[VMALLOC_END_NR].start_address = VMALLOC_END;
- 	address_markers[PAGE_OFFSET_NR].start_address = PAGE_OFFSET;
-+#ifdef CONFIG_KASAN
-+	address_markers[KASAN_SHADOW_START_NR].start_address = KASAN_SHADOW_START;
-+	address_markers[KASAN_SHADOW_END_NR].start_address = KASAN_SHADOW_END;
-+#endif
- #ifdef CONFIG_64BIT
- 	address_markers[MODULES_MAPPING_NR].start_address = MODULES_VADDR;
- 	address_markers[KERNEL_MAPPING_NR].start_address = kernel_map.virt_addr;
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index e2b656043abf..0f226d3261ca 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -117,6 +117,7 @@ config RISCV
+ 	select HAVE_RSEQ
+ 	select IRQ_DOMAIN
+ 	select IRQ_FORCED_THREADING
++	select KASAN_VMALLOC if KASAN
+ 	select MODULES_USE_ELF_RELA if MODULES
+ 	select MODULE_SECTIONS if MODULES
+ 	select OF
 -- 
 2.37.2
 
