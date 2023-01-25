@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF54567A8AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDA767A8AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbjAYCUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 21:20:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
+        id S229826AbjAYCXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 21:23:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjAYCUV (ORCPT
+        with ESMTP id S232680AbjAYCXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 21:20:21 -0500
+        Tue, 24 Jan 2023 21:23:05 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED4B10AAB
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 18:20:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F0C460A1;
+        Tue, 24 Jan 2023 18:23:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A962613CA
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E819CC433D2;
-        Wed, 25 Jan 2023 02:20:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 244DB61425;
+        Wed, 25 Jan 2023 02:23:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 83D95C433D2;
+        Wed, 25 Jan 2023 02:23:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674613220;
-        bh=SoCAwJmBB4a2CPMDqnQA3neIrz5nUwDQFsM8itQBG3I=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=U1Ny6h8j1qyiGrm0NyvXJbWFPJUNrV11kl8ms49ysd637ho09Ma5IK7nhuUC7jhA7
-         jLn7p6JZ5QGGFWiLwsoqr6QlQcPFHWVugVkQll1ihM9FrKjelkENDzjJTrBvUT4gSG
-         qmcg2L+QSA7Jcrs7hAKZv2hckc4dpXIvxOVxsoqVrobohxkM3qnPiGCBU8Csl+L7ml
-         eK8KlDCbtKH548zlkuve6z9XBUdKEmB6BFkkmcJoZrQudoI6gx8oCMPGf5owTvHU/x
-         QfuPou64cAH5Zrz9FuBeSbONHYwEss7hRO85mhOgZ3Bxu/WPasgcJNwds5rjLosq3m
-         BThDhPRJSYT5w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 977C55C1052; Tue, 24 Jan 2023 18:20:19 -0800 (PST)
-Date:   Tue, 24 Jan 2023 18:20:19 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230125022019.GB2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230124145423.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <8cc799ab-ffa1-47f7-6e1d-97488a210f14@huaweicloud.com>
- <20230124162253.GL2948950@paulmck-ThinkPad-P17-Gen-1>
- <3e5020c2-0dd3-68a6-9b98-5a7f57ed7733@huaweicloud.com>
- <20230124172647.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <2788294a-972e-acbc-84ce-25d2bb4d26d6@huaweicloud.com>
- <20230124221524.GV2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9BdNVk2LQiUYABS@rowland.harvard.edu>
- <20230124225449.GY2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9CL8LBz+/mbbD00@rowland.harvard.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9CL8LBz+/mbbD00@rowland.harvard.edu>
+        s=k20201202; t=1674613383;
+        bh=RmBWaMyaa0laTJX7aWLHIfTg4wj/shTg5ZFg8+FJ9RM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=NXrcGXdS+881kce/xUMs2Fn3Mhlr43Vv7ffoeC4bp6zxpmqt6edjo5aAvuDa2x5Fe
+         +DhqPG7rDXK300AWLmy8PcnUcvAWT9wk4bc+BZvdIny2q92StWNedGRL+8AYnPIBlF
+         0AuBwa2Xr/zna94ioGuJp1weDAcJH6gaK2Qr+EiZGj47DKMeRhMyxHe3zETwXrE9Hq
+         8vjbIyZG15J15AVwuYtu/knjl7bONRzi5Y9CKxhh/o3+Vzwct/25EdHK1KOZccwwUY
+         3UOUARGglk8D9vA6Q5jiQINjgL0MK7nXq4G9tw3WL33ZZKF7KJVXbdwred/hItFIu0
+         IuLDVj0kgQbOA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 69E80E21EE1;
+        Wed, 25 Jan 2023 02:23:03 +0000 (UTC)
+Subject: Re: [GIT PULL] Rust fixes for 6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230124193334.161057-1-ojeda@kernel.org>
+References: <20230124193334.161057-1-ojeda@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230124193334.161057-1-ojeda@kernel.org>
+X-PR-Tracked-Remote: https://github.com/Rust-for-Linux/linux tags/rust-fixes-6.2
+X-PR-Tracked-Commit-Id: 6618d69aa129a8fc613e64775d5019524c6f231b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 246dc53fb2461dbcd66d4d1d914246a581edad29
+Message-Id: <167461338342.26446.17308850166282928589.pr-tracker-bot@kernel.org>
+Date:   Wed, 25 Jan 2023 02:23:03 +0000
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -77,39 +65,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 08:54:56PM -0500, Alan Stern wrote:
-> On Tue, Jan 24, 2023 at 02:54:49PM -0800, Paul E. McKenney wrote:
-> > On Tue, Jan 24, 2023 at 05:35:33PM -0500, Alan Stern wrote:
-> > > Can you be more explicit?  Exactly what guarantees does the kernel 
-> > > implementation make that can't be expressed in LKMM?
-> > 
-> > I doubt that I will be able to articulate it very well, but here goes.
-> > 
-> > Within the Linux kernel, the rule for a given RCU "domain" is that if
-> > an event follows a grace period in pretty much any sense of the word,
-> > then that event sees the effects of all events in all read-side critical
-> > sections that began prior to the start of that grace period.
-> > 
-> > Here the senses of the word "follow" include combinations of rf, fr,
-> > and co, combined with the various acyclic and irreflexive relations
-> > defined in LKMM.
-> 
-> The LKMM says pretty much the same thing.  In fact, it says the event 
-> sees the effects of all events po-before the unlock of (not just inside) 
-> any read-side critical section that began prior to the start of the 
-> grace period.
-> 
-> > > And are these anything the memory model needs to worry about?
-> > 
-> > Given that several people, yourself included, are starting to use LKMM
-> > to analyze the Linux-kernel RCU implementations, maybe it does.
-> > 
-> > Me, I am happy either way.
-> 
-> Judging from your description, I don't think we have anything to worry 
-> about.
+The pull request you sent on Tue, 24 Jan 2023 20:33:34 +0100:
 
-Sounds good, and let's proceed on that assumption then.  We can always
-revisit later if need be.
+> https://github.com/Rust-for-Linux/linux tags/rust-fixes-6.2
 
-							Thanx, Paul
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/246dc53fb2461dbcd66d4d1d914246a581edad29
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
