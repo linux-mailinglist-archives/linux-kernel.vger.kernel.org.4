@@ -2,163 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F9D67AD97
+	by mail.lfdr.de (Postfix) with ESMTP id D90B067AD98
 	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235182AbjAYJPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 04:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
+        id S235194AbjAYJQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234990AbjAYJPj (ORCPT
+        with ESMTP id S235093AbjAYJQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 04:15:39 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B02D4346A
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:15:37 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id q8so13214127wmo.5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:15:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=hLYyMf8v6sX0CmntSwjS63uxAxPxvpyOkk5T320V7ls=;
-        b=vQIeg+80cD1Jh0nHmdw6lIMdBYusiJ8CWnr+acIqPUQ8bgzxwSQV+fGSXvKjFVIEtz
-         iwFgfpQ+PqMQT7N7huipewrSougdMtpDfSqzHshcM+zcqO/0qigO7GUsIx+ZVib7Vgmc
-         4YzGL45GG3DY4I5YhdNjC6bkHnl7jh5Skej2L7BHl793N7X9B5DKoSApVtLxrece0pl7
-         LDttDDg5eljQPKDffr1lM4ltoLQUC2uhAw+Jc/g+r5OA1itaP0kFHGJXxFzCmvu4a09A
-         pDvFwZjLQippIXa/8ZeT9dFxC8PCnQJTHnoMHNaDJOtUYns09Nrw/vg51pEUhnfDbA6L
-         +QRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hLYyMf8v6sX0CmntSwjS63uxAxPxvpyOkk5T320V7ls=;
-        b=2IJrOGmH6ftgV0/uJOq/3C+tQ8rsm+4cShuRmJNpMa7nV0wexz4Suv+7LOG1YDeW2c
-         rhjtEKGjIWneMGxtKG2a5TeZLgaNXUwERUtn5qglx+Eiqr2hzh8LAUAFlOLdb9MbkEq2
-         Yd/zcsHgUF898ehcyx+ZIzF6EKNQpegn8mlxp9ogBxBwYaophsIQpwF6CDREzeTt7v79
-         9jV2u+F4EXpX2JMl37QjjcKqoiBmKmdP0trq8ONnhSzVA8ivpeEKi3a10Dn7evbi/PfM
-         R8XbOBymImgZZI4sy7GKinBRVfqBRfdpI3tDrUxlmGRY1/oipQgGdTI0wZoP9GwGd4+p
-         aN5A==
-X-Gm-Message-State: AFqh2kqs8bjXWdLnsljm92jgVrkncml9Shx6rtI88KPjK17OHyWFiWT1
-        BGxqZYaaNz/PStmgZIqXIMMwhCVjU/zPs2J53fU=
-X-Google-Smtp-Source: AMrXdXvWRskL0ALdre/zwBQd4CWcE4EeqG3qOzIokfuCHYl0YnH8WVH4If4CW54QDvyDULTACzs7sw==
-X-Received: by 2002:a05:600c:35d4:b0:3dc:b1b:830 with SMTP id r20-20020a05600c35d400b003dc0b1b0830mr6688372wmq.33.1674638135988;
-        Wed, 25 Jan 2023 01:15:35 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:ad2f:6fa7:d25a:7047? ([2a01:e0a:982:cbb0:ad2f:6fa7:d25a:7047])
-        by smtp.gmail.com with ESMTPSA id x26-20020a1c7c1a000000b003db01178b62sm1191493wmc.40.2023.01.25.01.15.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 01:15:35 -0800 (PST)
-Message-ID: <47b12a29-1438-3930-b471-69136d41e148@linaro.org>
-Date:   Wed, 25 Jan 2023 10:15:34 +0100
+        Wed, 25 Jan 2023 04:16:16 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C04A43902
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:16:15 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2208D21C63;
+        Wed, 25 Jan 2023 09:16:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1674638174; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dbEk+ZO9OgIMyfnfk7cAzQznGDfrejCScbCPOkSmu1w=;
+        b=s0ozv1x9WXQ3dVgwQCWBhwhhR42bJ9Y8Oqd/qFRIUy1uRxCPJ/zFFe2F6ok5PV/DytzFeX
+        +zPvwL0KT/BKtOVyx1kLXv6MxTj9LuJM6GPrwIVQJpIYAme1bchNNQmPt0MhL3v1j+XOvS
+        xLeDw1vJ6LXcjbFysIRSIOo9BelbRpU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1674638174;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dbEk+ZO9OgIMyfnfk7cAzQznGDfrejCScbCPOkSmu1w=;
+        b=CguzZdWDaw9vRJhhpHymRwFFEWXULpojH/hqepwNAj+i/bVHxMdTpWkLsFiAwhAqJKLIw6
+        BwRQDwZWqMXOigBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 07D271339E;
+        Wed, 25 Jan 2023 09:16:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qZDYAV7z0GMbFAAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 25 Jan 2023 09:16:14 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 6879DA06B5; Wed, 25 Jan 2023 10:16:13 +0100 (CET)
+Date:   Wed, 25 Jan 2023 10:16:13 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Shigeru Yoshida <syoshida@redhat.com>
+Cc:     jack@suse.com, linux-kernel@vger.kernel.org,
+        syzbot+aebf90eea2671c43112a@syzkaller.appspotmail.com
+Subject: Re: [PATCH -next] udf: Fix a race condition between udf_rename() and
+ udf_expand_dir_adinicb()
+Message-ID: <20230125091613.6pg5ft3lpcwijw6q@quack3>
+References: <20230124173015.3213309-1-syoshida@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] arm64: dts: qcom: sm8250: Disable wsamacro and swr0 by
- default
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230124164616.228619-1-konrad.dybcio@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230124164616.228619-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124173015.3213309-1-syoshida@redhat.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2023 17:46, Konrad Dybcio wrote:
-> They are not used on all boards, so disable them by default.
-> Enable them back on MTP/RB5, which were the only current users.
+On Wed 25-01-23 02:30:15, Shigeru Yoshida wrote:
+> syzbot reported a general fault in udf_filter_write_fi() [1].  This
+> causes a stack trace like below:
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 6 ++++++
->   arch/arm64/boot/dts/qcom/sm8250-mtp.dts  | 6 ++++++
->   arch/arm64/boot/dts/qcom/sm8250.dtsi     | 4 ++++
->   3 files changed, 16 insertions(+)
+> general protection fault, probably for non-canonical address 0xdffffc0000000005: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+> CPU: 0 PID: 5127 Comm: syz-executor298 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> RIP: 0010:udf_fiiter_write_fi+0x14e/0x9d0 fs/udf/directory.c:402
+> ...
+> Call Trace:
+>  <TASK>
+>  udf_rename+0x69d/0xb80 fs/udf/namei.c:874
+>  vfs_rename+0x1162/0x1a90 fs/namei.c:4780
+>  do_renameat2+0xb22/0xc30 fs/namei.c:4931
+>  __do_sys_rename fs/namei.c:4977 [inline]
+>  __se_sys_rename fs/namei.c:4975 [inline]
+>  __x64_sys_rename+0x81/0xa0 fs/namei.c:4975
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> index 8c64cb060e21..6802d36fb20c 100644
-> --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> @@ -1007,6 +1007,8 @@ can@0 {
->   };
->   
->   &swr0 {
-> +	status = "okay";
-> +
->   	left_spkr: speaker@0,3 {
->   		compatible = "sdw10217211000";
->   		reg = <0 3>;
-> @@ -1322,6 +1324,10 @@ &venus {
->   	status = "okay";
->   };
->   
-> +&wsamacro {
-> +	status = "okay";
-> +};
-> +
->   /* PINCTRL - additions to nodes defined in sm8250.dtsi */
->   &qup_spi0_cs_gpio {
->   	drive-strength = <6>;
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-> index 0991b34a8e49..c0d83fa9a73b 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-> @@ -759,6 +759,8 @@ codec {
->   };
->   
->   &swr0 {
-> +	status = "okay";
-> +
->   	left_spkr: speaker@0,3 {
->   		compatible = "sdw10217211000";
->   		reg = <0 3>;
-> @@ -892,3 +894,7 @@ &usb_2_qmpphy {
->   &venus {
->   	status = "okay";
->   };
-> +
-> +&wsamacro {
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index 95f1a6afcd43..a0ba166f89d8 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -2277,6 +2277,8 @@ wsamacro: codec@3240000 {
->   
->   			pinctrl-names = "default";
->   			pinctrl-0 = <&wsa_swr_active>;
-> +
-> +			status = "disabled";
->   		};
->   
->   		swr0: soundwire-controller@3250000 {
-> @@ -2297,6 +2299,8 @@ swr0: soundwire-controller@3250000 {
->   			#sound-dai-cells = <1>;
->   			#address-cells = <2>;
->   			#size-cells = <0>;
-> +
-> +			status = "disabled";
->   		};
->   
->   		audiocc: clock-controller@3300000 {
+> The cause of this issue is a race condition between udf_rename() and
+> udf_expand_dir_adinicb().
+> 
+> If udf_rename() and udf_expand_dir_adinicb() run concurrently,
+> iinfo->i_alloc_type can be changed by udf_expand_dir_adinicb() while
+> udf_rename() is running.  This causes NULL pointer dereference for
+> iter->bh[0]->b_data in udf_fiiter_write_fi().
+> 
+> Link: https://syzkaller.appspot.com/bug?id=2811e6cdd35ea1df1fa2ef31b8d92c6408aa15d2 [1]
+> Reported-by: syzbot+aebf90eea2671c43112a@syzkaller.appspotmail.com
+> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Thanks for the patch but I have already fixed the bug in a patch I've
+posted here [1]. A cleaner fix is actually to use i_rwsem to protect moved
+directory from other modifications (which is what I did).
+
+[1] https://lore.kernel.org/all/20230124121814.25951-14-jack@suse.cz
+
+								Honza
+
+> ---
+>  fs/udf/namei.c | 35 ++++++++++++++++++++++++-----------
+>  1 file changed, 24 insertions(+), 11 deletions(-)
+> 
+> diff --git a/fs/udf/namei.c b/fs/udf/namei.c
+> index 06f066ba3072..5048652c6cd4 100644
+> --- a/fs/udf/namei.c
+> +++ b/fs/udf/namei.c
+> @@ -149,6 +149,8 @@ static struct buffer_head *udf_expand_dir_adinicb(struct inode *inode,
+>  	uint8_t *impuse;
+>  	int ret;
+>  
+> +	down_write(&iinfo->i_data_sem);
+> +
+>  	if (UDF_QUERY_FLAG(inode->i_sb, UDF_FLAG_USE_SHORT_AD))
+>  		alloctype = ICBTAG_FLAG_AD_SHORT;
+>  	else
+> @@ -157,7 +159,7 @@ static struct buffer_head *udf_expand_dir_adinicb(struct inode *inode,
+>  	if (!inode->i_size) {
+>  		iinfo->i_alloc_type = alloctype;
+>  		mark_inode_dirty(inode);
+> -		return NULL;
+> +		goto out;
+>  	}
+>  
+>  	/* alloc block, and copy data to it */
+> @@ -165,15 +167,15 @@ static struct buffer_head *udf_expand_dir_adinicb(struct inode *inode,
+>  			       iinfo->i_location.partitionReferenceNum,
+>  			       iinfo->i_location.logicalBlockNum, err);
+>  	if (!(*block))
+> -		return NULL;
+> +		goto out;
+>  	newblock = udf_get_pblock(inode->i_sb, *block,
+>  				  iinfo->i_location.partitionReferenceNum,
+>  				0);
+>  	if (!newblock)
+> -		return NULL;
+> +		goto out;
+>  	dbh = udf_tgetblk(inode->i_sb, newblock);
+>  	if (!dbh)
+> -		return NULL;
+> +		goto out;
+>  	lock_buffer(dbh);
+>  	memcpy(dbh->b_data, iinfo->i_data, inode->i_size);
+>  	memset(dbh->b_data + inode->i_size, 0,
+> @@ -197,7 +199,7 @@ static struct buffer_head *udf_expand_dir_adinicb(struct inode *inode,
+>  	if (ret < 0) {
+>  		*err = ret;
+>  		udf_free_blocks(inode->i_sb, inode, &eloc, 0, 1);
+> -		return NULL;
+> +		goto out;
+>  	}
+>  	mark_inode_dirty(inode);
+>  
+> @@ -213,6 +215,8 @@ static struct buffer_head *udf_expand_dir_adinicb(struct inode *inode,
+>  			impuse = NULL;
+>  		udf_fiiter_write_fi(&iter, impuse);
+>  	}
+> +	up_write(&iinfo->i_data_sem);
+> +
+>  	/*
+>  	 * We don't expect the iteration to fail as the directory has been
+>  	 * already verified to be correct
+> @@ -221,6 +225,9 @@ static struct buffer_head *udf_expand_dir_adinicb(struct inode *inode,
+>  	udf_fiiter_release(&iter);
+>  
+>  	return dbh;
+> +out:
+> +	up_write(&iinfo->i_data_sem);
+> +	return NULL;
+>  }
+>  
+>  static int udf_fiiter_add_entry(struct inode *dir, struct dentry *dentry,
+> @@ -766,6 +773,7 @@ static int udf_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+>  	bool has_diriter = false;
+>  	int retval;
+>  	struct kernel_lb_addr tloc;
+> +	struct udf_inode_info *old_iinfo = UDF_I(old_inode);
+>  
+>  	if (flags & ~RENAME_NOREPLACE)
+>  		return -EINVAL;
+> @@ -780,11 +788,13 @@ static int udf_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+>  		goto out_oiter;
+>  	}
+>  
+> +	down_read(&old_iinfo->i_data_sem);
+> +
+>  	if (S_ISDIR(old_inode->i_mode)) {
+>  		if (new_inode) {
+>  			retval = -ENOTEMPTY;
+>  			if (!empty_dir(new_inode))
+> -				goto out_oiter;
+> +				goto out_unlock;
+>  		}
+>  		retval = udf_fiiter_find_entry(old_inode, &dotdot_name,
+>  					       &diriter);
+> @@ -795,7 +805,7 @@ static int udf_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+>  			retval = -EFSCORRUPTED;
+>  		}
+>  		if (retval)
+> -			goto out_oiter;
+> +			goto out_unlock;
+>  		has_diriter = true;
+>  		tloc = lelb_to_cpu(diriter.fi.icb.extLocation);
+>  		if (udf_get_lb_pblock(old_inode->i_sb, &tloc, 0) !=
+> @@ -805,25 +815,25 @@ static int udf_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+>  				"directory (ino %lu) has parent entry pointing to another inode (%lu != %u)\n",
+>  				old_inode->i_ino, old_dir->i_ino,
+>  				udf_get_lb_pblock(old_inode->i_sb, &tloc, 0));
+> -			goto out_oiter;
+> +			goto out_unlock;
+>  		}
+>  	}
+>  
+>  	retval = udf_fiiter_find_entry(new_dir, &new_dentry->d_name, &niter);
+>  	if (retval && retval != -ENOENT)
+> -		goto out_oiter;
+> +		goto out_unlock;
+>  	/* Entry found but not passed by VFS? */
+>  	if (!retval && !new_inode) {
+>  		retval = -EFSCORRUPTED;
+>  		udf_fiiter_release(&niter);
+> -		goto out_oiter;
+> +		goto out_unlock;
+>  	}
+>  	/* Entry not found? Need to add one... */
+>  	if (retval) {
+>  		udf_fiiter_release(&niter);
+>  		retval = udf_fiiter_add_entry(new_dir, new_dentry, &niter);
+>  		if (retval)
+> -			goto out_oiter;
+> +			goto out_unlock;
+>  	}
+>  
+>  	/*
+> @@ -882,7 +892,10 @@ static int udf_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+>  			mark_inode_dirty(new_dir);
+>  		}
+>  	}
+> +	up_read(&old_iinfo->i_data_sem);
+>  	return 0;
+> +out_unlock:
+> +	up_read(&old_iinfo->i_data_sem);
+>  out_oiter:
+>  	if (has_diriter)
+>  		udf_fiiter_release(&diriter);
+> -- 
+> 2.39.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
