@@ -2,174 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179CA67BB7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0078D67BB7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235733AbjAYT5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 14:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S235691AbjAYT5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 14:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235836AbjAYT5A (ORCPT
+        with ESMTP id S235776AbjAYT5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 14:57:00 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B530298EF
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:56:34 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E25A121CD7;
-        Wed, 25 Jan 2023 19:56:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674676578; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0k6N5kE57VZVpq+fQtdtp8c94mweCUDz7pBZZ4tonHA=;
-        b=UHW9RuYEXRBi8OPXL3b8MT8caa9jQf7FKYlLxE9Rc6ucbIsly/YkqCLHESRcRlxG5DNa5E
-        CiuaZ+sJW8CeZEZUgT5jf80dWOhGg17H4pm3AtsfY6IkmvvsAx/RbObXHDHu1moABSLDOT
-        RXXWjFbHd0zfQMpxS4qj5y4qXdwEBAI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674676578;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0k6N5kE57VZVpq+fQtdtp8c94mweCUDz7pBZZ4tonHA=;
-        b=gQ4MBHWKgLDAT7A56WFDOH9YMgBcyeCxVFFvcjTLfqW/CSU95E4orj77XXEGLBupsC3/xA
-        SNiapv5D7No/efBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 992C31339E;
-        Wed, 25 Jan 2023 19:56:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7tRlJGKJ0WN6dAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 25 Jan 2023 19:56:18 +0000
-Message-ID: <82ad8c89-9d6a-ffa8-e2ad-7b53ac27cafb@suse.de>
-Date:   Wed, 25 Jan 2023 20:56:17 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] drm/ssd130x: Init display before the SSD130X_DISPLAY_ON
- command
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Wed, 25 Jan 2023 14:57:22 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1915CE73;
+        Wed, 25 Jan 2023 11:57:03 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id r205so17233353oib.9;
+        Wed, 25 Jan 2023 11:57:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vhbyqf+hKaYLy7rx+ITC5uZbCekwC8EyC3gvS3cW19E=;
+        b=RUrlTAQTtC+z+C/CTYQCR1Q1U1s+w4uugHOBfA8pRrOVNf6koD5JU1wUHIHS3dcNPE
+         BYz/nP7nIW4Xp4GZeXpPHs3V9jKPRSa7eL+UaTKjFjzp6GSqDJEAHYabflw875DeZuim
+         nd/yddjE9JE3seRAAclZCT4TYygsEWobXZhenzMfZGDCRM8hpLjSjBZlPcVps7GKDE3m
+         ZFH9kS096E1znAkOkc0+U0e+H3wLOqvj6SItSvYhCMKQBjOygUt8pbi/hj4q0gfGmP4x
+         yusRR6uVgsu9g0LUQBX33BKlRHC6pdVDN5zfWqMBzZAyaglGh86bdM5u+B7vGq+Ip+k9
+         HHPg==
+X-Gm-Message-State: AFqh2kq11aZozh85AcBwXmxXG5aNgpvGoHbbVRSG4mySpjvrQlEzSKjL
+        zZTjUkIjwh2oyGZGtetkOw==
+X-Google-Smtp-Source: AMrXdXsrjDDOyTJPRcwXbpvMj1q1wpvkSl04SNiPfclCp0ZVsH0qzLNNT5ozZfskACFeDZU7NnlAYg==
+X-Received: by 2002:a05:6808:b0a:b0:363:b22:6553 with SMTP id s10-20020a0568080b0a00b003630b226553mr15943086oij.14.1674676590563;
+        Wed, 25 Jan 2023 11:56:30 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c22-20020a9d6856000000b006863ad4f435sm2523208oto.52.2023.01.25.11.56.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 11:56:30 -0800 (PST)
+Received: (nullmailer pid 2752652 invoked by uid 1000);
+        Wed, 25 Jan 2023 19:56:29 -0000
+Date:   Wed, 25 Jan 2023 13:56:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Andrew Davis <afd@ti.com>
+Cc:     Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Tang <dt.tangr@gmail.com>,
+        Fabian Vogt <fabian@ritter-vogt.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org
-References: <20230125184230.3343206-1-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230125184230.3343206-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------sNf0DUNwwdHy7oxjUmXOZkda"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v5 1/9] dt-bindings: mfd: Add TI-Nspire misc registers
+Message-ID: <20230125195629.GA2717320-robh@kernel.org>
+References: <20230123214924.27476-1-afd@ti.com>
+ <20230123214924.27476-2-afd@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123214924.27476-2-afd@ti.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------sNf0DUNwwdHy7oxjUmXOZkda
-Content-Type: multipart/mixed; boundary="------------Z3tK6Z4kby7W05R2Xt4Vf69v";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
- David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org
-Message-ID: <82ad8c89-9d6a-ffa8-e2ad-7b53ac27cafb@suse.de>
-Subject: Re: [PATCH] drm/ssd130x: Init display before the SSD130X_DISPLAY_ON
- command
-References: <20230125184230.3343206-1-javierm@redhat.com>
-In-Reply-To: <20230125184230.3343206-1-javierm@redhat.com>
+On Mon, Jan 23, 2023 at 03:49:16PM -0600, Andrew Davis wrote:
+> The TI Nspire devices contain a set of registers with a seemingly
+> miscellaneous set of functionality. This area is known simply as the
+> "misc" region.
+> 
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
+>  .../bindings/mfd/ti,nspire-misc.yaml          | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/ti,nspire-misc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,nspire-misc.yaml b/Documentation/devicetree/bindings/mfd/ti,nspire-misc.yaml
+> new file mode 100644
+> index 000000000000..316c4b3dcd87
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/ti,nspire-misc.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/ti,nspire-misc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI Nspire MISC hardware block
+> +
+> +maintainers:
+> +  - Andrew Davis <afd@ti.com>
+> +
+> +description: |
 
---------------Z3tK6Z4kby7W05R2Xt4Vf69v
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Drop '|'
 
-DQoNCkFtIDI1LjAxLjIzIHVtIDE5OjQyIHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
-bGFzOg0KPiBDb21taXQgNjIyMTEzYjlmMTFmICgiZHJtL3NzZDEzMHg6IFJlcGxhY2Ugc2lt
-cGxlIGRpc3BsYXkgaGVscGVycyB3aXRoIHRoZQ0KPiBhdG9taWMgaGVscGVycyIpIGNoYW5n
-ZWQgdGhlIGRyaXZlciB0byBqdXN0IHVzZSB0aGUgYXRvbWljIGhlbHBlcnMgaW5zdGVhZA0K
-PiBvZiB0aGUgc2ltcGxlIEtNUyBhYnN0cmFjdGlvbiBsYXllci4NCj4gDQo+IEJ1dCB0aGUg
-Y29tbWl0IGFsc28gbWFkZSBhIHN1YnRsZSBjaGFuZ2Ugb24gdGhlIGRpc3BsYXkgcG93ZXIg
-c2VxdWVuY2UgYW5kDQo+IGluaXRpYWxpemF0aW9uIG9yZGVyLCBieSBtb3ZpbmcgdGhlIHNz
-ZDEzMHhfcG93ZXJfb24oKSBjYWxsIHRvIHRoZSBlbmNvZGVyDQo+IC5hdG9taWNfZW5hYmxl
-IGhhbmRsZXIgYW5kIHRoZSBzc2QxMzB4X2luaXQoKSBjYWxsIHRvIENSVEMgLnJlc2V0IGhh
-bmRsZXIuDQo+IA0KPiBCZWZvcmUgdGhpcyBjaGFuZ2UsIGJvdGggc3NkMTMweF9wb3dlcl9v
-bigpIGFuZCBzc2QxMzB4X2luaXQoKSB3ZXJlIGNhbGxlZA0KPiBpbiB0aGUgc2ltcGxlIGRp
-c3BsYXkgcGlwZWxpbmUgLmVuYWJsZSBoYW5kbGVyLCBzbyB0aGUgZGlzcGxheSB3YXMgYWxy
-ZWFkeQ0KPiBpbml0aWFsaXplZCBieSB0aGUgdGltZSB0aGUgU1NEMTMwWF9ESVNQTEFZX09O
-IGNvbW1hbmQgd2FzIHNlbnQuDQo+IA0KPiBGb3Igc29tZSByZWFzb25zLCBpdCBvbmx5IG1h
-ZGUgdGhlIHNzZDEzMHggU1BJIGRyaXZlciB0byBmYWlsIGJ1dCB0aGUgSTJDDQo+IHdhcyBz
-dGlsbCB3b3JraW5nLiBUaGF0IGlzIHRoZSByZWFzb24gd2h5IHRoZSBidWcgd2FzIG5vdCBu
-b3RpY2VkIGJlZm9yZS4NCj4gDQo+IFRvIHJldmVydCB0byB0aGUgb2xkIGRyaXZlciBiZWhh
-dmlvciwgbW92ZSB0aGUgc3NkMTMweF9pbml0KCkgY2FsbCB0byB0aGUNCj4gZW5jb2RlciAu
-YXRvbWljX2VuYWJsZSBhcyB3ZWxsLiBCZXNpZGVzIGZpeGluZyB0aGUgcGFuZWwgbm90IGJl
-aW5nIHR1cm5lZA0KPiBvbiB3aGVuIHVzaW5nIFNQSSwgaXQgYWxzbyBnZXRzIHJpZCBvZiB0
-aGUgY3VzdG9tIENSVEMgLnJlc2V0IGNhbGxiYWNrLg0KPiANCj4gRml4ZXM6IDYyMjExM2I5
-ZjExZiAoImRybS9zc2QxMzB4OiBSZXBsYWNlIHNpbXBsZSBkaXNwbGF5IGhlbHBlcnMgd2l0
-aCB0aGUgYXRvbWljIGhlbHBlcnMiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGlu
-ZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCg0KUmV2aWV3ZWQtYnk6IFRob21h
-cyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiANCj4gICBk
-cml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMgfCAxOCArKysrKysrLS0tLS0tLS0t
-LS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCAxMSBkZWxldGlvbnMo
-LSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4
-LmMgYi9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMNCj4gaW5kZXggYjE2MzMw
-YThiNjI0Li44Y2JmNWFhNjZlMTkgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9z
-b2xvbW9uL3NzZDEzMHguYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2Qx
-MzB4LmMNCj4gQEAgLTY2MywxOCArNjYzLDggQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBkcm1f
-Y3J0Y19oZWxwZXJfZnVuY3Mgc3NkMTMweF9jcnRjX2hlbHBlcl9mdW5jcyA9IHsNCj4gICAJ
-LmF0b21pY19jaGVjayA9IGRybV9jcnRjX2hlbHBlcl9hdG9taWNfY2hlY2ssDQo+ICAgfTsN
-Cj4gICANCj4gLXN0YXRpYyB2b2lkIHNzZDEzMHhfY3J0Y19yZXNldChzdHJ1Y3QgZHJtX2Ny
-dGMgKmNydGMpDQo+IC17DQo+IC0Jc3RydWN0IGRybV9kZXZpY2UgKmRybSA9IGNydGMtPmRl
-djsNCj4gLQlzdHJ1Y3Qgc3NkMTMweF9kZXZpY2UgKnNzZDEzMHggPSBkcm1fdG9fc3NkMTMw
-eChkcm0pOw0KPiAtDQo+IC0Jc3NkMTMweF9pbml0KHNzZDEzMHgpOw0KPiAtDQo+IC0JZHJt
-X2F0b21pY19oZWxwZXJfY3J0Y19yZXNldChjcnRjKTsNCj4gLX0NCj4gLQ0KPiAgIHN0YXRp
-YyBjb25zdCBzdHJ1Y3QgZHJtX2NydGNfZnVuY3Mgc3NkMTMweF9jcnRjX2Z1bmNzID0gew0K
-PiAtCS5yZXNldCA9IHNzZDEzMHhfY3J0Y19yZXNldCwNCj4gKwkucmVzZXQgPSBkcm1fYXRv
-bWljX2hlbHBlcl9jcnRjX3Jlc2V0LA0KPiAgIAkuZGVzdHJveSA9IGRybV9jcnRjX2NsZWFu
-dXAsDQo+ICAgCS5zZXRfY29uZmlnID0gZHJtX2F0b21pY19oZWxwZXJfc2V0X2NvbmZpZywN
-Cj4gICAJLnBhZ2VfZmxpcCA9IGRybV9hdG9taWNfaGVscGVyX3BhZ2VfZmxpcCwNCj4gQEAg
-LTY5Myw2ICs2ODMsMTIgQEAgc3RhdGljIHZvaWQgc3NkMTMweF9lbmNvZGVyX2hlbHBlcl9h
-dG9taWNfZW5hYmxlKHN0cnVjdCBkcm1fZW5jb2RlciAqZW5jb2RlciwNCj4gICAJaWYgKHJl
-dCkNCj4gICAJCXJldHVybjsNCj4gICANCj4gKwlyZXQgPSBzc2QxMzB4X2luaXQoc3NkMTMw
-eCk7DQo+ICsJaWYgKHJldCkgew0KPiArCQlzc2QxMzB4X3Bvd2VyX29mZihzc2QxMzB4KTsN
-Cj4gKwkJcmV0dXJuOw0KPiArCX0NCj4gKw0KPiAgIAlzc2QxMzB4X3dyaXRlX2NtZChzc2Qx
-MzB4LCAxLCBTU0QxMzBYX0RJU1BMQVlfT04pOw0KPiAgIA0KPiAgIAliYWNrbGlnaHRfZW5h
-YmxlKHNzZDEzMHgtPmJsX2Rldik7DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBo
-aWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkg
-R21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2
-ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+> +  System controller node represents a register region containing a set
+> +  of miscellaneous registers. The registers are not cohesive enough to
+> +  represent as any specific type of device. Currently there is a reset
+> +  controller.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - ti,nspire-misc
+> +      - const: syscon
+> +      - const: simple-mfd
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  reboot:
+> +    $ref: "../power/reset/syscon-reboot.yaml"
 
---------------Z3tK6Z4kby7W05R2Xt4Vf69v--
+$ref: /schemas/power/reset/syscon-reboot.yaml#
 
---------------sNf0DUNwwdHy7oxjUmXOZkda
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Otherwise,
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPRiWIFAwAAAAAACgkQlh/E3EQov+C7
-CxAAiiI4/gJIcoiJgRDtIrFnPOmqPKEnXk9pIG5Q4s+y9soTfsSTrY91eDcsmaU95RXOFocTb2b3
-lenDoKkbuZ1f4lGO9WA6Ef6tpeZSiCqXsK64Z9VvYl2eq54RA7amOK5dMqqM0jFHaszUIi71ZoTw
-T3+7eWRRQ0oc3dnFRutjuN1cQqyrdYTMmRhuNvJewOWx0FC4QM4blDq4mWcJEYcx9b98gumALKPh
-jx9IsXLvEoTcMlNdNgT9RHPaOL0W8HVtmZ+TL4uXer9LV3duCMg5ZPFu5Xizzrn01xC9vVIMfNb4
-HQozKE4nHB6r+W/3yGMsBf6WmdwMs87XK8suRDnpw1Lmjn4T51uVHuaqDWO2ZNi8nlG5mGvQTQz0
-fAo/v4eyx1gIn7t/ZYOHmFz9rRga2QNYAmYSJOf5Y+VswBf0M2mclO5RGuUHlgcUlL2lKSCA66/W
-cuD3kXW4MldHDSxaMpWami/g4mNCvXTmSRnY0fOBvq9LcvwbgJ+EvV+KmE7UIwY0XYCGdA9OEynD
-2xzlLUykIjwP9jMwSIPiHUQliK2Ps6XKPuF7vY49aMaLzEYwCoC7lkj9yjNpihJfnA+VPRzp42SI
-Rircf9u5974M3q2rK99S5DpZyyXBUSYaLFqXwEWyeSOzPpBQDzqRNdqivp1+ZjANJSshq05YGaWS
-IQ4=
-=WpXs
------END PGP SIGNATURE-----
-
---------------sNf0DUNwwdHy7oxjUmXOZkda--
+Reviewed-by: Rob Herring <robh@kernel.org>
