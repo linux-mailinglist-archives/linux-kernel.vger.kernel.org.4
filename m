@@ -2,148 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E06267B6B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5156567B6C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235549AbjAYQRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
+        id S235935AbjAYQUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjAYQRo (ORCPT
+        with ESMTP id S235735AbjAYQUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:17:44 -0500
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB838A61;
-        Wed, 25 Jan 2023 08:17:42 -0800 (PST)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-15f97c478a8so21892179fac.13;
-        Wed, 25 Jan 2023 08:17:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G6fehPfifrX/RPot9q+cZL35omyfpQUYf5YWxcfsJTM=;
-        b=jN+V+j7z0c8rXiKWo20rYjTy+nuiCv22HCWx68ZBsucB7hx+6MaudjF/MzNsV2oXz6
-         l07MJMoKR2k0tlQLBkwP8iAvVsYktri+NYl22xlCRxvfH0QKIDMkcxh2RlKiaeFsSeC0
-         +gpysUgpGMzeLfcP66iatj5mJ0Vg7JGVffnjxDc205glA1Dj8UJyzTxFwlu/MYGqAbJW
-         7DlOrH37t9J4NtKhurCSaHYmMyotxoh7pI234IaaXOewcNHYMVOFgIJBa84KagubsiZT
-         THNPG/yxTyXbXPh7WwDR6jK0V7fPf7c9pZ32kN92rjiGB1cAEzHR2oQhGH5jeNTDFAGU
-         VCog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G6fehPfifrX/RPot9q+cZL35omyfpQUYf5YWxcfsJTM=;
-        b=is97E9Kq2cORukjaZ56yToTkjzU8221Q9dltBozpKepA4xVmnIcO0nKWSeCTzhTJfp
-         oIHrmmWGr5vsXutGjnjh2R44dri6EVKehYTl74mmUUiClaYgHx1SNLCdW43FlOimg8bx
-         jYreLBNwPFwomrJ4jrp5yCeIyY4oDQsbZWKNvI4rln5iLYEBJmGdzJSV60jqkaFIx2Ie
-         uiWdwKJs+unkL7tb1F5EdvqMwsNIdYWtlZW/rf7ojLB/9sxlswDfljXzX0/FNiWK2w4U
-         6ySYdJgyd5cRb0rOwEuReakPuRryQiUpFyyZPb0zvEu++1WGI4P3GKyygeI8OwxNyA88
-         Qw8Q==
-X-Gm-Message-State: AO0yUKWJphUrTply4sfDSFC+7GXMLmGqOpJxvRl8QnlwJHBCvs5o7sLN
-        nnNPqGReiPAbdTQi/xkAzl19X+T9ms45qDNPw9gJ6VUk
-X-Google-Smtp-Source: AK7set8Nw9HWqCnwUl9Dh9bx8TiuKFQo1VUtoK4VQflaGueUpuYcZ4LiyuM7wvD0WjmmnIc4n0NtKaTBjpOttqRQQ7I=
-X-Received: by 2002:a05:6870:10d5:b0:163:1dac:5acb with SMTP id
- 21-20020a05687010d500b001631dac5acbmr396514oar.159.1674663460908; Wed, 25 Jan
- 2023 08:17:40 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a8a:ad6:0:b0:49c:e11d:f815 with HTTP; Wed, 25 Jan 2023
- 08:17:40 -0800 (PST)
-In-Reply-To: <CAGudoHG-42ziSNT0g8asRj8iGzx-Gn=ETZuXkswER3Daov37=A@mail.gmail.com>
-References: <20230116212105.1840362-1-mjguzik@gmail.com> <20230116212105.1840362-2-mjguzik@gmail.com>
- <CAHC9VhSKEyyd-s_j=1UbA0+vOK7ggyCp6e-FNSG7XVYvCxoLnA@mail.gmail.com>
- <CAGudoHF+bg0qiq+ByVpysa9t8J=zpF8=d1CqDVS5GmOGpVM9rQ@mail.gmail.com>
- <CAHC9VhTnpWKnKRu3wFTNfub_qdcDePdEXYZWOpvpqL0fcfS_Uw@mail.gmail.com>
- <CAGudoHEWQJKMS=pL9Ate4COshgQaC-fjQ2RN3LiYmdS=0MVruA@mail.gmail.com>
- <CAHC9VhSYg-BbJvNBZd3dayYCf8bzedASoidnX23_i4iK7P-WxQ@mail.gmail.com>
- <CAHk-=wiG5wdWrx2uXRK3-i31Zp416krnu_KjmBbS3BVkiAUXLQ@mail.gmail.com>
- <CAHC9VhTg8mMHzdSPbpxvOQCWxuNuXzR7c6FJOg5+XGb-PYemRw@mail.gmail.com> <CAGudoHG-42ziSNT0g8asRj8iGzx-Gn=ETZuXkswER3Daov37=A@mail.gmail.com>
-From:   Mateusz Guzik <mjguzik@gmail.com>
-Date:   Wed, 25 Jan 2023 17:17:40 +0100
-Message-ID: <CAGudoHHkeF-ozA-A+7ZcJP-Su02PwE4rfQ79VgD0zw8zS84YwA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] vfs: avoid duplicating creds in faccessat if possible
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        viro@zeniv.linux.org.uk, serge@hallyn.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 11:20:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CDE561AB
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:20:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 788A1B81ACA
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:20:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 009ADC433D2;
+        Wed, 25 Jan 2023 16:20:10 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1pKiVN-004MpN-2W;
+        Wed, 25 Jan 2023 11:20:09 -0500
+Message-ID: <20230125161824.332648375@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Wed, 25 Jan 2023 11:18:24 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Natalia Petrova <n.petrova@fintech.ru>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [for-linus][PATCH 00/11] tracing: Updates for 6.2
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/23, Mateusz Guzik <mjguzik@gmail.com> wrote:
-> On 1/24/23, Paul Moore <paul@paul-moore.com> wrote:
->> Although I'm looking at this again and realized that only
->> do_faccessat() calls access_override_creds(), so why not just fold the
->> new access_need_override_creds() logic into access_override_creds()?
->> Just have one function that takes the flag value, and returns an
->> old_cred/NULL pointer (or pass old_cred to the function by reference
->> and return an error code); that should still provide the performance
->> win Mateusz is looking for while providing additional safety against
->> out-of-sync changes.  I would guess the code would be smaller too.
->>
->
-> It is unclear from the description if you are arguing for moving the new
-> func into access_override_creds almost as is just put prior to existing
-> code *or* mixing checks with assignments.
->
-> static bool *access_override_creds(struct cred **ptr)
->         [snip]
->         if (!uid_eq(cred->fsuid, cred->uid) ||
->             !gid_eq(cred->fsgid, cred->gid))
->                 return false;
->         /* remaining checks go here as well */
->         [snip]
->
->         override_cred = prepare_creds();
->         if (!override_cred) {
->                 *ptr = NULL;
->                 return true;
->         }
->
->         override_cred->fsuid = override_cred->uid;
->         override_cred->fsgid = override_cred->gid;
->         [snip]
->
-> If this is what you had in mind, I note it retains all the duplication
-> except in one func body which I'm confident does not buy anything,
-> provided the warning comment is added.
->
-> At the same time the downside is that it uglifies error handling at the
-> callsite, so I would say a net loss.
->
-> Alternatively, if you want to somehow keep tests aroung assignments the
-> code gets super hairy.
->
-> But maybe you wanted something else?
->
-> As I noted in another email this already got more discussion than it
-> warrants.
->
-> Addition of the warning comment makes sense, but concerns after that
-> don't sound legitimate to me.
->
+Tracing updates for 6.2:
 
-So I posted v3 with the comment, you are CC'ed.
+- Fix filter memory leak by calling ftrace_free_filter()
 
-I'm not going to further argue about the patch. If you want to write
-your own variant that's fine with me, feel free to take my bench results
-and denote they come from a similar version.
+- Initialize trace_printk() earlier so that ftrace_dump_on_oops shows data
+  on early crashs.
 
-There is other stuff I want to post and unslowed access() helps making
-the case. The CONFIG_INIT_ON_ALLOC_DEFAULT_ON option is enabled on
-Debian, Ubuntu and Arch and as a side effect it zeroes bufs allocated
-every time a path lookup is performed. As these are 4096 bytes in size
-it is not pretty whatsoever and I'm confident not worth the hardening
-promised by mandatory zeroing. Got patches to add exemption support for
-caches to sort it out without disabling the opt.
+- Update the outdated instructions in scripts/tracing/ftrace-bisect.sh
 
--- 
-Mateusz Guzik <mjguzik gmail.com>
+- Add lockdep_is_held() to fix lockdep warning
+
+- Add allocation failure check in create_hist_field()
+
+- Don't initalize pointer that gets set right away in enabled_monitors_write()
+
+- Update MAINTAINER entries
+
+- Fix help messages in Kconfigs
+
+- Fix kernel-doc header for update_preds()
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+ftrace/urgent
+
+Head SHA1: 78020233418518faa72fba11f40e1d53b9e88a2e
+
+
+Chuang Wang (1):
+      tracing/osnoise: Use built-in RCU list checking
+
+Colin Ian King (1):
+      rv: remove redundant initialization of pointer ptr
+
+Mark Rutland (2):
+      ftrace: Export ftrace_free_filter() to modules
+      ftrace: Maintain samples/ftrace
+
+Masami Hiramatsu (Google) (1):
+      bootconfig: Update MAINTAINERS file to add tree and mailing list
+
+Natalia Petrova (1):
+      trace_events_hist: add check for return value of 'create_hist_field'
+
+Randy Dunlap (3):
+      tracing: Kconfig: Fix spelling/grammar/punctuation
+      lib: Kconfig: fix spellos
+      tracing/filter: fix kernel-doc warnings
+
+Steven Rostedt (Google) (2):
+      tracing: Make sure trace_printk() can output as soon as it can be used
+      ftrace/scripts: Update the instructions for ftrace-bisect.sh
+
+----
+ MAINTAINERS                                 |  5 +++++
+ kernel/trace/Kconfig                        |  8 +++----
+ kernel/trace/ftrace.c                       | 23 ++++++++++++++++++-
+ kernel/trace/rv/rv.c                        |  2 +-
+ kernel/trace/trace.c                        |  2 ++
+ kernel/trace/trace.h                        |  1 +
+ kernel/trace/trace_events_filter.c          |  8 +++----
+ kernel/trace/trace_events_hist.c            |  2 ++
+ kernel/trace/trace_osnoise.c                |  5 ++---
+ kernel/trace/trace_output.c                 |  3 +--
+ lib/Kconfig.debug                           |  2 +-
+ lib/Kconfig.kcsan                           |  2 +-
+ samples/ftrace/ftrace-direct-multi-modify.c |  1 +
+ samples/ftrace/ftrace-direct-multi.c        |  1 +
+ scripts/tracing/ftrace-bisect.sh            | 34 ++++++++++++++++++++++-------
+ 15 files changed, 74 insertions(+), 25 deletions(-)
