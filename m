@@ -2,163 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C50167B962
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B2B67B965
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235644AbjAYScC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 13:32:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
+        id S235857AbjAYSci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:32:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236066AbjAYSb4 (ORCPT
+        with ESMTP id S234924AbjAYScg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:31:56 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2055.outbound.protection.outlook.com [40.107.93.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF6A15569
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:31:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TKwQaxmGyK31peGCSuh0n1TKOeK6ezHBEvOIFgefnyERlwYsdOVYMd/H731NZ5b5pJHkUkbeHDCkzJ9VWN+AZlsuOatlIrPTTj8sOZvY2vlC8qEX5WUAHPQPuWszRdhuaymW7SdUXCDIGHnDZ1RHWyIVOYOj1BYrNpzjE4XrbhQsF7ulqbnFDTd3JMwRTU5a8q1448j6dUwwtxWIb1s3Ay5Fo2j7pvBn1H59NOjWczeLUUFGknVZC5FgXplDMAlCE2F/U2PM3VcPFjDx5RtozD3J3trSJ/C90qXFB8Yd12FqBt5/035vx3q51hT/ourJ2bRBHDXh/wOtN7ryL6AIkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wWnbzm6VP/kPrkd6HykJUKW+ONLzY65xVGniEmXlnLU=;
- b=hJLKQNP+aYmLrbPbXFZn0zZun9d5pvGCvobh6JFI+V5rwZZwdKmaWIZ9c/msIzIp9bpiHvVODeeZe4cLwDWwNgJtm+0MmJEFXXIRYvfb3zd3jE24ubh38MPAqJEcWPdBzlRxdaMftAuyIXlKbkSXbJ4rlR66kB+R4xI+J99oNFL/HuG/wYh6dg6AdHc0lRIa2oNUw1BCvRdDC0RrAmwogu3jmYfj49NodnKOS0POG5AQ+cGMhmkijrpto5rhvTpczcL3mI5q3TBMaT3hh1n74NI22raxmJeLf1jEPaRX3UN0w1fwa7O9/ZyEEfkiA9S+vJ4tN4LfgH0h77eg5y9GJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wWnbzm6VP/kPrkd6HykJUKW+ONLzY65xVGniEmXlnLU=;
- b=r2GupwupRQQXl/A2/LryFgJqSfyxX5uPPlbxkaFXkvK0GwVdKH1/Zp5zUIE+vpNpElpSe2cbwACT90JsG4xhi6Ry9Ps9EOU2qilzEOsQYjNRGRn9s1F+NR/aud19pm5YU85IH9k2tdHmkOQgh+CwsyDHb+043gZNnZ2Wwgl9u3U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by SJ0PR12MB5472.namprd12.prod.outlook.com (2603:10b6:a03:3bb::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
- 2023 18:31:38 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::8200:4042:8db4:63d7]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::8200:4042:8db4:63d7%3]) with mapi id 15.20.6002.033; Wed, 25 Jan 2023
- 18:31:38 +0000
-Message-ID: <0be2faed-6b95-0c15-1016-3b4d1a980998@amd.com>
-Date:   Wed, 25 Jan 2023 12:31:34 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v13 1/4] virt/coco/sev-guest: Add throttling awareness
-Content-Language: en-US
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wed, 25 Jan 2023 13:32:36 -0500
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AB410423
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:32:35 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id B2FFC920626
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 18:32:34 +0000 (UTC)
+Received: from pdx1-sub0-mail-a306.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 002AB9212E7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 18:32:33 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1674671554; a=rsa-sha256;
+        cv=none;
+        b=BtDbI2R2XLd6eBw5G+IBNvb768fdQdkP1U5deNJT5N/PHVknUeePGej0IUuEWgo0PALBTK
+        /02EIs5jNB8tpiCCO5wMSeLJxfestXiZXVwrfiIDXa1veUayNwhS4F80+MzdHAe8itf4gp
+        jgSYeJLsSxhk21u09GlIu13JQ7xBQ3Dxm+mzUczU0L4rHIC+YedPpLlHYemY6xDcGv2UVa
+        pj6/BexsAU+sNYi+GJaOo1QglDzlZG0qyZVdLdy8dKHlNSKpevTpQ3Nb5TUtKYYGrg2hk1
+        jn52dSCvz5Xctayj3HWPj330/Upi4Oi2UwjggCvfPTBRVXE3cPlnWuUSqkE/4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1674671554;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=RklJeSBsXo3eoBMozqg37WAfagKIJsfsLub9jJTlyS0=;
+        b=VLbPo2n/njUZrvXU3fIXRwPTcU1ObmSar48bwv10Rp/gl3v2SSUpf+oKd43PbKteq3X+kZ
+        tNRn/2cHqGtg8A8EkbBqOlFnMmCnE0a9VqP45bpFkpPqW3rIUIeVP/bMAidcU0zlFnn0z3
+        iJFrWQJPgAQS3/vFELXPpYBXEfiINZiVOlOqr/GqXdj46c7bZi8CLv27HmdzXK7hhZQtPE
+        MhRw0J/B7zfxrpP/RkqbWcWUukLcIr2YIXMrTLM4K8U4o3/d43EiHP9yBPca4LvV7J5NB2
+        82S8FQ+XRx8QhtcLWobGLw3yTtnZdXK6rPE9XgdXCD/fHlZCpEGpoaXb4FN3ow==
+ARC-Authentication-Results: i=1;
+        rspamd-6989874cc5-4dw8b;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MailChannels-Auth-Id: dreamhost
+X-Shrill-Abaft: 611cd91253d2316a_1674671554254_2343272906
+X-MC-Loop-Signature: 1674671554254:3707289730
+X-MC-Ingress-Time: 1674671554254
+Received: from pdx1-sub0-mail-a306.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.97.48.83 (trex/6.7.1);
+        Wed, 25 Jan 2023 18:32:34 +0000
+Received: from kmjvbox (c-76-102-200-71.hsd1.ca.comcast.net [76.102.200.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kjlx@templeofstupid.com)
+        by pdx1-sub0-mail-a306.dreamhost.com (Postfix) with ESMTPSA id 4P2CB93LKDzRn
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:32:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
+        s=dreamhost; t=1674671553;
+        bh=RklJeSBsXo3eoBMozqg37WAfagKIJsfsLub9jJTlyS0=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=N/714JzxOON/lNp5Lt6uyGnicVW6JvwaCA6YQbKmc4DCcuKtK3cTWOyDCGP0gW219
+         kLVElSeK0dBdv4Qry5EE10vpE/CaHFWD0JgR4g7GAHFLHpK9VE+ryBNWoJMIKg6it5
+         5JMtkc+4WV1psHPnlsxKGS9cK0mGd3GhoGVL4otA=
+Received: from johansen (uid 1000)
+        (envelope-from kjlx@templeofstupid.com)
+        id e00e2
+        by kmjvbox (DragonFly Mail Agent v0.12);
+        Wed, 25 Jan 2023 10:32:31 -0800
+Date:   Wed, 25 Jan 2023 10:32:31 -0800
+From:   Krister Johansen <kjlx@templeofstupid.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        David Reaver <me@davidreaver.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <Borislav.Petkov@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michael Sterritt <sterritt@google.com>
-References: <20230124211455.2563674-1-dionnaglaze@google.com>
- <20230124211455.2563674-2-dionnaglaze@google.com>
- <724f03d8-91e9-e870-f063-65c2e98b6ee5@amd.com>
- <CAAH4kHbdLe5-hY5raoSyqhXru9Rz4050_RMDsq8EAEBnWZcKRQ@mail.gmail.com>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <CAAH4kHbdLe5-hY5raoSyqhXru9Rz4050_RMDsq8EAEBnWZcKRQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR08CA0025.namprd08.prod.outlook.com
- (2603:10b6:208:239::30) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: [PATCH] perf/util: Symbol lookup can fail if multiple segmets
+ match stext
+Message-ID: <20230125183231.GB1963@templeofstupid.com>
+References: <20230124223531.GB1962@templeofstupid.com>
+ <65cb75e0-4c0b-9384-1f6b-77a0053d8109@intel.com>
+ <231b238b-d464-464e-01d1-a2d5374a79ea@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|SJ0PR12MB5472:EE_
-X-MS-Office365-Filtering-Correlation-Id: ee119060-f64a-4830-0fb4-08daff026535
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bah/Bzg0JHuvyT0G5eUHgKWNQn8W8X3sISV7YhGTJU5YUF5srAbHELtW5i5/DRiWQCwlqw78BLA1zmjLFADZ7VCQ3NTEi7NlYIkwgdbqzp/xqp44URfE8zPeCy04o5zBBhZjRCPgVliMrHEWUxvfkE+zkXAAW0x5F3CzK/hX6feOe7gnmqEsZm+7XcCiYeE2r9unftxM0/sN7Pzfld/BPRpceOAgvwbAjqkro3CxTCCQvjuOkbs5A8k708uc4VWb4eDJFpEPTZVMSH4PGO6i7tw4UQxhZZxd6Zbeqwcb0X1gVhHK76qh79U0Wg7RE1+mU/sQRJ58yqa304i+kKtroJMWB1KT+x5GP4z2F5DFa5fP+9AhyAp314CrO21Ct27Wlg0zmWSZt6zF38icgdVbaJ2HZrS/8GOT1sqcMFprZ7qsqBsiHSb0kke7P1B2ez9mpHFoXnhGAwMn5DHbj1LIbQ4syEowd9+JrKolT4x/BRf/uqipodtPcVvz9F+T7q7ZjnJFZrcU7wXgJ2jyQ2XgY1sHIdlnJY51q2d1iZ+xvTRZo9ZRrz56msjkkOLhan+kjVvm1Cwc70lDizPZr2seSqVWndtGcCliU9OTHzojXWGktRmv81pPw0bljuJ3WjrnHksb3Ovkkb7hwwESUYRbHydrJ8CAYphOlzRkyX+rfhZCcdP9cCOWHtU93lOk9jx6mywCxMfXxz0fhEGQanKiD3mosFzQ7jDJe6dtuR4JpjY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199018)(86362001)(36756003)(2906002)(41300700001)(8936002)(5660300002)(38100700002)(6486002)(186003)(6512007)(26005)(31686004)(6916009)(8676002)(66556008)(54906003)(4744005)(2616005)(6666004)(6506007)(53546011)(83380400001)(66946007)(316002)(7416002)(4326008)(478600001)(66476007)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RzVST2VjVk12RStRTXFQM3dUQlQ0V2RLa0w2YzBjdUt5a3cvaVpPRDJUUDl1?=
- =?utf-8?B?MWd3S1NaVUlnYmZQM0tuR25vVDlRTVFGUWd0cTFZVWN1L3Z4UWZrbURTejl5?=
- =?utf-8?B?OEZ1VE1zK01wRS9jdmo5MWpSc0t3Zml3ZzVCVGM0YmZQOFFNUW1JdFlZU0Nk?=
- =?utf-8?B?MnpGQmV1dDNCU1dCNyt2cnJpNDVnbTk1cTFub0NVMlRrcnhPNE1NOGNVeDFT?=
- =?utf-8?B?ZWJ1NVdyT3dvY1hMcURQVld2OFF6N0UvRS9VTDJIeHhOaFRCbE1VL29KR2tM?=
- =?utf-8?B?ZjNRbHF3VVhJcHFVUnp2Z3ZrVDBNYkNHTDdyMGtnZ2NHL3UxRTRYb3VPRFdR?=
- =?utf-8?B?YldCeWZPUUlqV015U3pRWXFMdUhTQllmZU8yWTFoOStKa251cmt5b2xoZmVS?=
- =?utf-8?B?RFRyQ0F5bEtreldvanB0UkJERVB3Y3ZCTmNuVGZxbldzTDA3NHVEMUZPV3Vq?=
- =?utf-8?B?WlVVTStyL1N4ZHZQRUlIc205V1JUVGdncTN0WWlRTkhjQmFibk43TVNCSTZK?=
- =?utf-8?B?UGJ0QU5RenZRZSsvM0tSLzR4elBGLy9MSCtSMWlLTDliRW9nclE1UnJKbk5Y?=
- =?utf-8?B?YmxxZ2JOUTAyS2Y3TTQyY0tDcnQrUkRRank3WnRVdS9zMUNEOVhxUnRDMGNr?=
- =?utf-8?B?N1RjeFpNRTY2YlFFUzhWbGhBbTAvaG1CTm9seXlYaUx0Q0FYcnFSY1BVdWk5?=
- =?utf-8?B?ZjFKbzJwQUx3clA3SVZtSGRUOGk4dW96aDJMN3hFcm1IRmdwT2J3Q0RnK2JM?=
- =?utf-8?B?VERCUlhUaW4rVEtlbWJXdklYVXdSaHYrcjFEQWcrc0x3TmlNMjFKK29Ncisx?=
- =?utf-8?B?TERKaGRRZWwrU3lTWkoxL3MwNlZnT0ptYWlIN09ackxRRWdLeE9Sc24zYVpU?=
- =?utf-8?B?bjBkTkVSYW94ay95L2RvcUNITTFGUWZhYWZxWjB2UllodDhTWnRGclJISldZ?=
- =?utf-8?B?ZEhVejl1eUs4Zk9yemZBTE00eTNhemxPajlKNkxoaGoxdVJodGlaWFpWaXRi?=
- =?utf-8?B?cGhCbjVBajV5a1VjSlZic0pSUXFqN3g5YnVOYzdEYXVDdjhYUlFKZnpRaUFW?=
- =?utf-8?B?TG1EVThmZjBkOWRMQjNMb1doY29zem16RHhuZE5vZG1zSzNxNFU1U1B2aWZw?=
- =?utf-8?B?KzJjTVJoU09OZ2t3Y05wRGR1VWtwTFNBM1poVzc0a042ck1TdzlaVDg2VUV2?=
- =?utf-8?B?QmZTYktCMTFXVGJpUzIvaHFiNXlWOVVrRFRGWjJROElyaG85Z3FUajJCT0Z5?=
- =?utf-8?B?YUVwcDJXdXN1YVRPZXFDQVRpeUZ4NnJzaWlSUTJIZFF4eW5jNTUwT1loemdE?=
- =?utf-8?B?cEhhNXMzbW9MS2trVzN1RExWMjNzMkUyR2I3OVJLUUdEcUd2bnUrK3hzV3Nr?=
- =?utf-8?B?MFNVbVRQOWpjN3d4V055dDdSR1oycWliczA4Q0ZDNkViSU1RZUU1a2RuRFNU?=
- =?utf-8?B?bC9TZFpSb0VRcGNQYk1iN1dCNy9XS0J6T3hIamc5eEhMQW4zamJIUDJFNmxS?=
- =?utf-8?B?YjEzVlc3YTg3N282ZHRWTnRmMXJaNGpGYmVPNDd4N2MwcEEzWG80RVF5VjFD?=
- =?utf-8?B?dkhRaGNYdnQ1dlpFNDg2cHFRNEx5U2lGcXRsdWtqblZJVjZSckVxSXV5TU5k?=
- =?utf-8?B?QzNVeDVvczlyMWwyYjZwLy8zUnBFb0VZVDlyam5NT0FubE5raWo1ODJYV2Qx?=
- =?utf-8?B?Mm93R3RUcWZaY2Fmclk3Y2FSSVdiQnFPWVl5K3RtSm4vbXc5TmFWQWdxY3Nr?=
- =?utf-8?B?SUh6V1VpTGYxOHc5RjRucktHeE8rdFFrQ0hqWERUbmNadW5JTk9TNHhicVgv?=
- =?utf-8?B?MDhRZ1dmR2ZqZmQrcTJ5VTZVTnp1QUg5c1VCNmpxY3VDR3lvNHR6a2dISTR1?=
- =?utf-8?B?N1BpZ0dDUkxZaWVnQngxUDhYVDVkWXhld28wdXUwUUUrZ0h6VFFXdmdpaVda?=
- =?utf-8?B?Q1BHNmpicHVNcjZtVXFIQ0F1UExHbUl2dnFPc3ZPU3RwU0VrS2hDcjVlMlZp?=
- =?utf-8?B?K1Z5M0txRHdTR2Fnd2p0MjVLRVNmd1RlcTBIYWsvSDRWK2gzWkd0NDdZNmww?=
- =?utf-8?B?RmhBOEZLN0JQTzVwODJobVBIMmpMUVhEdW9FWlN5MFJiNkpUYklvWWdvSEV5?=
- =?utf-8?Q?czOj7W/rfdp+b+gV/khrdhHMi?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee119060-f64a-4830-0fb4-08daff026535
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 18:31:38.1058
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TnqeeOnvlsjVtTvuJ3aP1q+/sO920BfHM5axM6UbR4i/FQLLOSKED5hsy/m+T0SBm38Bc71ERdvbCyy+hnhIAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5472
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <231b238b-d464-464e-01d1-a2d5374a79ea@intel.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/23 11:48, Dionna Amalie Glaze wrote:
->>
->> So these should really be:
->>
->> #define SNP_GUEST_REQ_INVALID_LEN       (1ULL << 32)
->> #define SNP_GUEST_REQ_ERR_BUSY          (2ULL << 32)
->>
->> Thanks,
->> Tom
->>
-> 
-> Patch 3/4 cleans them up with just such a shift. They also move from
-> arch/x86/include/asm/sev-common.h to include/uapi/linux/sev-guest.h.
-> Is it okay to delay that cleanup until after the fix patch?
+Hi Adrian,
 
-Yeah, if they're being deleted later and fixed up, I'm ok with that.
-
-Thanks,
-Tom
-
+On Wed, Jan 25, 2023 at 09:37:59AM +0200, Adrian Hunter wrote:
+> On 25/01/23 09:29, Adrian Hunter wrote:
 > 
+> Also subject line has spelling mistake, and should identify kcore
+> as the issue e.g.
 > 
-> --
-> -Dionna Glaze, PhD (she/her)
+> perf symbol: Symbol lookup with kcore can fail if multiple segments match stext
+> 
+> > On 25/01/23 00:35, Krister Johansen wrote:
+> >> This problem was encountered on an arm64 system with a lot of memory.
+> >> Without kernel debug symbols installed, and with both kcore and kallsyms
+> >> available, perf managed to get confused and returned "unknown" for all
+> >> of the kernel symbols that it tried to look up.
+> >>
+> >> On this system, stext fell within the vmalloc segment.  The kcore symbol
+> >> matching code tries to find the first segment that contains stext and
+> >> uses that to replace the segment generated from just the kallsyms
+> >> information.  In this case, however, there were two: a very large
+> >> vmalloc segment, and the text segment.  This caused perf to get confused
+> >> because multiple overlapping segments were inserted into the RB tree
+> >> that holds the discovered segments.  However, that alone wasn't
+> >> sufficient to cause the problem. Even when we could find the segment,
+> >> the offsets were adjusted in such a way that the newly generated symbols
+> >> didn't line up with the instruction addresses in the trace.  The most
+> >> obvious solution would be to consult which segment type is text from
+> >> kcore, but this information is not exposed to users.
+> >>
+> >> Instead, select the smallest matching segment that contains stext
+> >> instead of the first matching segment.  This allows us to match the text
+> >> segment instead of vmalloc, if one is contained within the other.
+> >>
+> >> Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
+> >> ---
+> >>  tools/perf/util/symbol.c | 10 ++++++++--
+> >>  1 file changed, 8 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> >> index a3a165ae933a..14ac4189eaff 100644
+> >> --- a/tools/perf/util/symbol.c
+> >> +++ b/tools/perf/util/symbol.c
+> >> @@ -1368,10 +1368,16 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
+> >>  
+> >>  	/* Find the kernel map using the '_stext' symbol */
+> >>  	if (!kallsyms__get_function_start(kallsyms_filename, "_stext", &stext)) {
+> >> +		u64 replacement_size = 0;
+> > 
+> > We'd usually put a blank line here
+> > 
+> >>  		list_for_each_entry(new_map, &md.maps, node) {
+> >> -			if (stext >= new_map->start && stext < new_map->end) {
+> >> +			u64 new_size = new_map->end - new_map->start;
+> >> +
+> >> +			if (!(stext >= new_map->start && stext < new_map->end))
+> >> +				continue;
+> >> +
+> > 
+> > Really needs a comment, and please be specific e.g.
+> > 
+> >  ARM64 vmalloc segment overlaps the kernel text segment, so
+> >  choosing the smaller segment will get the kernel text.
+> > 
+> > 
+> > 
+> >> +			if (!replacement_map || new_size < replacement_size) {
+> >>  				replacement_map = new_map;
+> >> -				break;
+> >> +				replacement_size = new_size;
+> >>  			}
+> >>  		}
+> >>  	}
+
+Thanks for all the feedback.  I'll incorporate these changes and send
+out a v2 shortly.
+
+-K
