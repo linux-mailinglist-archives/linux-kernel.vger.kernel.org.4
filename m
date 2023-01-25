@@ -2,173 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647F967BA6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE6267B96A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236049AbjAYTLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 14:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
+        id S236003AbjAYSey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:34:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235770AbjAYTLj (ORCPT
+        with ESMTP id S235192AbjAYSes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 14:11:39 -0500
-X-Greylist: delayed 1801 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 Jan 2023 11:11:30 PST
-Received: from cheetah.elm.relay.mailchannels.net (cheetah.elm.relay.mailchannels.net [23.83.212.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4111759E46
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:11:29 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 802BC142016
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 18:34:21 +0000 (UTC)
-Received: from pdx1-sub0-mail-a306.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 1B034141741
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 18:34:21 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1674671661; a=rsa-sha256;
-        cv=none;
-        b=Lv6iqSh0vruuM6JWALSQp45x+nXLIgb1+GI8qcdkuX7HIpNAozI7ntKwHICnC+46fB1GaM
-        Nbu90rIe/HtGoTBKwBF18dArGwIZ5znma/YPh6yncXhzh7DzrJ58ZULO56MoiCTR4Ys/ZB
-        0QOJ9wk0wEFXKIJ8cnvp8NDQdwkPpKwWAtDWvB0tQDwrcCWSNBQDKxs8IYmFj3lH1G23U6
-        lENnKwlqrHg9E2jnvQu/myHgxTjuD121SLESGxAaj0Yh2qtvywjVMPv7Y5nZVnev5Fdkf9
-        +YlFb0eDfwrUQYE6dphQbvG0lld6DDe5MsyvS9jDG3NyqADye0mSV9/7/B0xyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1674671661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=LkeKleEDMVCNjKIW3DlOQ6z6V0h2UxZNTVRuJ7I3Uy8=;
-        b=4NIIse/tdLklFLwuZPBj7a6Cm97zsCqivJP9Ltt+hs/a3smM8v/+7+yWGbCqyAjR3CAt/9
-        CmWYnfCuhibrnsu57bi7y02boaN1s5eUDRFCWjq2jWE7ZWRAsdJxuvLImRXlXHfoitZqDQ
-        0tKo8IVLdKVyDLxcUtiaFABygzOnnO4bInivNkN6gOmFzEIF81l7PBP7jwQuoyW0tr9WxR
-        KGF9xJtrMUZgCVfV474fc/TwNUGFUEr/YdVHy5fCK3MUxcdReb90bsKugVOiQIaC9HSyAP
-        D57pKaMGz2hMNMEMpbCavGNMIaxVyjjdfcsCi8TbN8VNSkzPweWbChx7XWCw8Q==
-ARC-Authentication-Results: i=1;
-        rspamd-65f5b7cf85-p88lq;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Good
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Cellar-Fearful: 19f0e2196ef9d892_1674671661345_1297264958
-X-MC-Loop-Signature: 1674671661345:1215867327
-X-MC-Ingress-Time: 1674671661345
-Received: from pdx1-sub0-mail-a306.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.126.30.49 (trex/6.7.1);
-        Wed, 25 Jan 2023 18:34:21 +0000
-Received: from kmjvbox (c-76-102-200-71.hsd1.ca.comcast.net [76.102.200.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a306.dreamhost.com (Postfix) with ESMTPSA id 4P2CDD1nY6zK2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:34:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1674671660;
-        bh=LkeKleEDMVCNjKIW3DlOQ6z6V0h2UxZNTVRuJ7I3Uy8=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=A8KtaZKkUDU0VW7aIb+A21v1hNAq7FyF4xiS1eKqVQk6vPU1pXyTxmJU9gWvgmZqx
-         OjDqxyi79pRvB7gFUN/YSUa4QXEzipJyUuzJtWNxbeSWC+a9CeJku6mn2AxP7S8xU6
-         C3EA/6ipl+na3DRKPqwSFTFHVdzkUQe9aiUjbYBE=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e00e2
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Wed, 25 Jan 2023 10:34:18 -0800
-Date:   Wed, 25 Jan 2023 10:34:18 -0800
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        David Reaver <me@davidreaver.com>
-Subject: [PATCH v2] perf/util: Symbol lookup with kcore can fail if multiple
- segments match stext
-Message-ID: <20230125183418.GD1963@templeofstupid.com>
-References: <20230124223531.GB1962@templeofstupid.com>
+        Wed, 25 Jan 2023 13:34:48 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6F865B1;
+        Wed, 25 Jan 2023 10:34:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674671687; x=1706207687;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=DLIRvXMdKH0hTEcM4b9xtXkEm+HmcMdb8x6cxdoVsZE=;
+  b=iYf6/UAaBbqSqOaYgFEKzCmYUfTe13UmSd957x8mBTP/ZrJ9VI3Xiprv
+   KWO0r2bCuMzfCXsk9xjJDsxEr1NPKRDBe0Yks/EsgHsLNPKUdepGtVFzR
+   DmjJGWN3aCfSeiGQty9CrjnupsmImVNX3GmNeBfwEoChldH10mSoRV/Rz
+   EFS1AFm0db8O1PK7VAq9vj1f7e9x7W/V0bwwIEQPEsdsOtFCw+/1Khbvs
+   8gFN2bVAFhZOoTZaDGE2o2Rmv/RgNt3A3333eQ8KobIUqphHPqltlDm6G
+   DSzdUPFH8kjmH7hU+UYTWo0B3tGaKYtGhsFJOc/eQo9r6Qfd1/oBvk+j7
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="326666759"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="326666759"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 10:34:42 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="991364139"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="991364139"
+Received: from ssgirme-mobl2.amr.corp.intel.com (HELO vverma7-desk1.local) ([10.212.29.187])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 10:34:42 -0800
+From:   Vishal Verma <vishal.l.verma@intel.com>
+Date:   Wed, 25 Jan 2023 11:34:18 -0700
+Subject: [PATCH] ACPI: NFIT: fix a potential deadlock during NFIT teardown
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124223531.GB1962@templeofstupid.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230112-acpi_nfit_lockdep-v1-1-660be4dd10be@intel.com>
+X-B4-Tracking: v=1; b=H4sIACl20WMC/x2N0QqDMAwAf0XybMF2orBfGSI1TWdYiaVVGYj/v
+ rDHOzjugkqFqcKzuaDQyZU3UbBtA7h6eZPhoAyuc4/OWmc8Zp4l8j6nDT+BsnFDH8bYWxpwBO0
+ WX8ksxQuuWsqRkspcKPL3P3pN9/0Dl7n4oXgAAAA=
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Cc:     nvdimm@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vishal Verma <vishal.l.verma@intel.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2708;
+ i=vishal.l.verma@intel.com; h=from:subject:message-id;
+ bh=DLIRvXMdKH0hTEcM4b9xtXkEm+HmcMdb8x6cxdoVsZE=;
+ b=owGbwMvMwCXGf25diOft7jLG02pJDMkXy2yffTuc+V6KKz1C4fa1Faa1n8o2zJpZLXP+iUVD0CGH
+ A53sHaUsDGJcDLJiiix/93xkPCa3PZ8nMMERZg4rE8gQBi5OAZhI80OG/14hX3uXHj5xR2C3zXk5sf
+ WnZTkve4hrRoR79jwS+bzokzYjQ+PrnLkVX0xWS0wxjlJUEHHv00yP5QvvK2b04Xvgyb2FFwA=
+X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp;
+ fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This problem was encountered on an arm64 system with a lot of memory.
-Without kernel debug symbols installed, and with both kcore and kallsyms
-available, perf managed to get confused and returned "unknown" for all
-of the kernel symbols that it tried to look up.
+Lockdep reports that acpi_nfit_shutdown() may deadlock against an
+opportune acpi_nfit_scrub(). acpi_nfit_scrub () is run from inside a
+'work' and therefore has already acquired workqueue-internal locks. It
+also acquiires acpi_desc->init_mutex. acpi_nfit_shutdown() first
+acquires init_mutex, and was subsequently attempting to cancel any
+pending workqueue items. This reversed locking order causes a potential
+deadlock:
 
-On this system, stext fell within the vmalloc segment.  The kcore symbol
-matching code tries to find the first segment that contains stext and
-uses that to replace the segment generated from just the kallsyms
-information.  In this case, however, there were two: a very large
-vmalloc segment, and the text segment.  This caused perf to get confused
-because multiple overlapping segments were inserted into the RB tree
-that holds the discovered segments.  However, that alone wasn't
-sufficient to cause the problem. Even when we could find the segment,
-the offsets were adjusted in such a way that the newly generated symbols
-didn't line up with the instruction addresses in the trace.  The most
-obvious solution would be to consult which segment type is text from
-kcore, but this information is not exposed to users.
+    ======================================================
+    WARNING: possible circular locking dependency detected
+    6.2.0-rc3 #116 Tainted: G           O     N
+    ------------------------------------------------------
+    libndctl/1958 is trying to acquire lock:
+    ffff888129b461c0 ((work_completion)(&(&acpi_desc->dwork)->work)){+.+.}-{0:0}, at: __flush_work+0x43/0x450
 
-Instead, select the smallest matching segment that contains stext
-instead of the first matching segment.  This allows us to match the text
-segment instead of vmalloc, if one is contained within the other.
+    but task is already holding lock:
+    ffff888129b460e8 (&acpi_desc->init_mutex){+.+.}-{3:3}, at: acpi_nfit_shutdown+0x87/0xd0 [nfit]
 
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
+    which lock already depends on the new lock.
+
+    ...
+
+    Possible unsafe locking scenario:
+
+          CPU0                    CPU1
+          ----                    ----
+     lock(&acpi_desc->init_mutex);
+                                  lock((work_completion)(&(&acpi_desc->dwork)->work));
+                                  lock(&acpi_desc->init_mutex);
+     lock((work_completion)(&(&acpi_desc->dwork)->work));
+
+    *** DEADLOCK ***
+
+Since the workqueue manipulation is protected by its own internal locking,
+the cancellation of pending work doesn't need to be done under
+acpi_desc->init_mutex. Move cancel_delayed_work_sync() outside the
+init_mutex to fix the deadlock. Any work that starts after
+acpi_nfit_shutdown() drops the lock will see ARS_CANCEL, and the
+cancel_delayed_work_sync() will safely flush it out.
+
+Reported-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
-v2:
-  - Correct whitespace, add comments, and fix-up subject. (Feedback from Adrian
-    Hunter)
----
- tools/perf/util/symbol.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ drivers/acpi/nfit/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index a3a165ae933a..98014f937568 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -1368,10 +1368,23 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
+diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
+index f1cc5ec6a3b6..4e48d6db05eb 100644
+--- a/drivers/acpi/nfit/core.c
++++ b/drivers/acpi/nfit/core.c
+@@ -3297,8 +3297,8 @@ void acpi_nfit_shutdown(void *data)
  
- 	/* Find the kernel map using the '_stext' symbol */
- 	if (!kallsyms__get_function_start(kallsyms_filename, "_stext", &stext)) {
-+		u64 replacement_size = 0;
-+
- 		list_for_each_entry(new_map, &md.maps, node) {
--			if (stext >= new_map->start && stext < new_map->end) {
-+			u64 new_size = new_map->end - new_map->start;
-+
-+			if (!(stext >= new_map->start && stext < new_map->end))
-+				continue;
-+
-+			/*
-+			 * On some architectures, ARM64 for example, the kernel
-+			 * text can get allocated inside of the vmalloc segment.
-+			 * Select the smallest matching segment, in case stext
-+			 * falls within more than one in the list.
-+			 */
-+			if (!replacement_map || new_size < replacement_size) {
- 				replacement_map = new_map;
--				break;
-+				replacement_size = new_size;
- 			}
- 		}
- 	}
+ 	mutex_lock(&acpi_desc->init_mutex);
+ 	set_bit(ARS_CANCEL, &acpi_desc->scrub_flags);
+-	cancel_delayed_work_sync(&acpi_desc->dwork);
+ 	mutex_unlock(&acpi_desc->init_mutex);
++	cancel_delayed_work_sync(&acpi_desc->dwork);
+ 
+ 	/*
+ 	 * Bounce the nvdimm bus lock to make sure any in-flight
+
+---
+base-commit: b7bfaa761d760e72a969d116517eaa12e404c262
+change-id: 20230112-acpi_nfit_lockdep-264d7f41e6c7
+
+Best regards,
 -- 
-2.25.1
+Vishal Verma <vishal.l.verma@intel.com>
 
