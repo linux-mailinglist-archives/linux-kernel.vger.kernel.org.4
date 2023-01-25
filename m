@@ -2,192 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6A467AB48
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D34A67AB5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234864AbjAYIEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:04:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
+        id S234449AbjAYIIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:08:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234079AbjAYIET (ORCPT
+        with ESMTP id S232745AbjAYIIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:04:19 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A463F2BE
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:04:18 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1F0F21FEC6;
-        Wed, 25 Jan 2023 08:04:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674633857; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w2zAQ050thACMQf74nb0AbuOfBM8Mh5wKq9lwzEQNQw=;
-        b=DlzVb5eUU8M4wLQzumk5AyLWTYfdboA/monTb0IeANtflQLNGnZ2obikPjkEhcGzpxGvSm
-        yZBszOmsbJbQlelQMdM3pyF4nXZunqQPczHfum5kXe7DUE3q2Bt2ppWiDwD5etOset4Uu2
-        1EA4TfxnNz6dVqXfIx8NrFR2tCIOczo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F34641358F;
-        Wed, 25 Jan 2023 08:04:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BatMOYDi0GNiawAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 25 Jan 2023 08:04:16 +0000
-Date:   Wed, 25 Jan 2023 09:04:16 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] mm/madvise: add vmstat statistics for
- madvise_[cold|pageout]
-Message-ID: <Y9DigKf0w712t0OO@dhcp22.suse.cz>
-References: <20230125005457.4139289-1-minchan@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125005457.4139289-1-minchan@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 03:08:22 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A319E46733;
+        Wed, 25 Jan 2023 00:08:21 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id E47623200961;
+        Wed, 25 Jan 2023 03:08:17 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 25 Jan 2023 03:08:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674634097; x=1674720497; bh=8DJTpXByBP
+        HrfsqMbJyZG5Oa0YHr8WBMwvW/C9sBIMA=; b=R8DYioSCULAYEFrMEQZ5tWfDBd
+        4GbBvD7LL2yqzKz9bOIeIoV/ad4OlyB4uN3vr58BIsdIVVLwJYHsbBp6L392GNhv
+        oFpyIYTOL1+kq0v7MQ9XtfFT5Y474zanIlkNHThxfpMDrXFpkir+U3oOGvBWJetE
+        DlsFTt4sf2VowIuX9uA6k3L+rMep0uAoOvZzndTM1nIoBaGWAoWglih9t4JplLu5
+        uWH7B/7QMQmNp85rDT3DvQBFVnrTNKhjJyS90tDvXeeLLopXKB5PbILQLfDjbBS9
+        gKXz0+ET/dywvJ57O+5vgYJiXlRd9KG0JBVN7f0OzNWtdFoXoYbaw0HC196Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674634097; x=1674720497; bh=8DJTpXByBPHrfsqMbJyZG5Oa0YHr
+        8WBMwvW/C9sBIMA=; b=Up+VcH1SmO8K4j3FANlN/i9+XJHNW0yoxSXy47H57ncN
+        yWcRO33t7ZhsXDMLJJxptk12jCw9ZEnWXapZne+DGwTCuKKrNJBmHET9U3VgJ3Xd
+        wIVkGQzb9SBEZzu9TkeMQSe8CvFzO0xp9MCcJazPdYutHymSUVnl/TIZUPUwDpAH
+        NPocdXXfCGsGV/5GwO9psL7qu2iGS0AZrenpoYLRlHd4VmbPNUfyMBmSiITWWYDD
+        1b7XQiVGJamOMqIiXj9B4qrPcUEkSNrJ3ivXl4bvxiIvDN0/OfZz/40R9/fLeC5l
+        OeFCNqyPRxPGUuQZU//Riele61UamqdQ8xBYeldUvg==
+X-ME-Sender: <xms:cOPQY_nCuAwzBnUF4KTBiQC3YU32XOR3G5eRXymIuk1mZv1_OG9BkQ>
+    <xme:cOPQYy3WWF2UByWSYVYulr_QTPjcriCluRuy27vvf42ufCkvd3WHq-QYGxcli8ssc
+    7NlqzkYCVHoFuIM4rI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvuddguddvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:cOPQY1r3G_4gi0Jn91WdLgKYKs_-6OhPnv11UFEd_314SvBfhw_VbQ>
+    <xmx:cOPQY3mZ_qm9uGqF2lsnXUTpTpt2bPz7UKLjtM_rbsxd1NcjV_uAzQ>
+    <xmx:cOPQY93SGcX_5wRWDstEgghM3-IlT0RfyAn7iCducnsgt3fwhnhHZQ>
+    <xmx:cePQY6lFCETUCoe3YZyDplJ9hPAbMXDjx36n2hMRHtuSVAxHfN3MDQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DB120B60086; Wed, 25 Jan 2023 03:08:16 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <e9b0338e-3b2f-4b54-8547-ab8babf7c0e1@app.fastmail.com>
+In-Reply-To: <20230113160651.51201-2-nick.hawkins@hpe.com>
+References: <20230113160651.51201-1-nick.hawkins@hpe.com>
+ <20230113160651.51201-2-nick.hawkins@hpe.com>
+Date:   Wed, 25 Jan 2023 09:07:57 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>, soc@kernel.org
+Cc:     "Guenter Roeck" <linux@roeck-us.net>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        "Russell King" <linux@armlinux.org.uk>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 1/2] ARM: dts: add GXP Support for fans and SPI
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 24-01-23 16:54:57, Minchan Kim wrote:
-> madvise LRU manipulation APIs need to scan address ranges to find
-> present pages at page table and provides advice hints for them.
-> 
-> Likewise pg[scan/steal] count on vmstat, madvise_pg[scanned/hinted]
-> shows the proactive reclaim efficiency so this patch adds those
-> two statistics in vmstat.
-> 
-> 	madvise_pgscanned, madvise_pghinted
-> 
-> Since proactive reclaim using process_madvise(2) as userland
-> memory policy is popular(e.g,. Android ActivityManagerService),
-> those stats are helpful to know how efficiently the policy works
-> well.
+On Fri, Jan 13, 2023, at 17:06, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+>
+> Reorganize the base address of AHB to accommodate the SPI and fan driver
+> register requirements. Add the hpe,gxp-spifi and hpe,gxp-fan-ctrl
+> compatibles. Add comments to make the register range more clear.
 
-The usecase description is still too vague. What are those values useful
-for? Is there anything actionable based on those numbers? How do you
-deal with multiple parties using madvise resp. process_madvise so that
-their stats are combined?
+The changelog describes three separate things, which usually means
+you should split up the patch into three smaller ones to make
+it easier to review.
 
-In the previous version I have also pointed out that this might be
-easily achieved by tracepoints. Your counterargument was a convenience
-in a large scale monitoring without going much into details. Presumably
-this is because your fleet based monitoring already collects
-/proc/vmstat while tracepoints based monitoring would require additional
-changes. This alone is rather weak argument to be honest because
-deploying tracepoints monitoring is quite trivial and can be done
-outside of the said memory reclaim agent.
+It sounds like the third one is no longer part of the patch anyway.
 
-> Signed-off-by: Minchan Kim <minchan@kernel.org>
-> ---
+> @@ -52,76 +52,102 @@
+>  			cache-level = <2>;
+>  		};
 > 
-> * From v1 - https://lore.kernel.org/linux-mm/20230117231632.2734737-1-minchan@kernel.org/
->   * not relying on the pageout for accounting - mhocko
->   * drop unnecessary changes - mhocko
->   
->  include/linux/vm_event_item.h | 2 ++
->  mm/madvise.c                  | 8 ++++++++
->  mm/vmstat.c                   | 2 ++
->  3 files changed, 12 insertions(+)
-> 
-> diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
-> index 7f5d1caf5890..3c117858946d 100644
-> --- a/include/linux/vm_event_item.h
-> +++ b/include/linux/vm_event_item.h
-> @@ -52,6 +52,8 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
->  		PGSCAN_FILE,
->  		PGSTEAL_ANON,
->  		PGSTEAL_FILE,
-> +		MADVISE_PGSCANNED,
-> +		MADVISE_PGHINTED,
->  #ifdef CONFIG_NUMA
->  		PGSCAN_ZONE_RECLAIM_FAILED,
->  #endif
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index 7db6622f8293..d2624e77f729 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -344,6 +344,8 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
->  	spinlock_t *ptl;
->  	struct folio *folio = NULL;
->  	LIST_HEAD(folio_list);
-> +	unsigned int nr_scanned = 0;
-> +	unsigned int nr_hinted = 0;
->  	bool pageout_anon_only_filter;
->  
->  	if (fatal_signal_pending(current))
-> @@ -357,6 +359,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
->  		pmd_t orig_pmd;
->  		unsigned long next = pmd_addr_end(addr, end);
->  
-> +		nr_scanned += HPAGE_PMD_NR;
->  		tlb_change_page_size(tlb, HPAGE_PMD_SIZE);
->  		ptl = pmd_trans_huge_lock(pmd, vma);
->  		if (!ptl)
-> @@ -414,6 +417,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
->  			}
->  		} else
->  			folio_deactivate(folio);
-> +		nr_hinted += HPAGE_PMD_NR;
->  huge_unlock:
->  		spin_unlock(ptl);
->  		if (pageout)
-> @@ -431,6 +435,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
->  	arch_enter_lazy_mmu_mode();
->  	for (; addr < end; pte++, addr += PAGE_SIZE) {
->  		ptent = *pte;
-> +		nr_scanned++;
->  
->  		if (pte_none(ptent))
->  			continue;
-> @@ -508,6 +513,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
->  			}
->  		} else
->  			folio_deactivate(folio);
-> +		nr_hinted++;
->  	}
->  
->  	arch_leave_lazy_mmu_mode();
-> @@ -515,6 +521,8 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
->  	if (pageout)
->  		reclaim_pages(&folio_list);
->  	cond_resched();
-> +	count_vm_events(MADVISE_PGSCANNED, nr_scanned);
-> +	count_vm_events(MADVISE_PGHINTED, nr_hinted);
->  
->  	return 0;
->  }
-> diff --git a/mm/vmstat.c b/mm/vmstat.c
-> index 1ea6a5ce1c41..84acc90820e1 100644
-> --- a/mm/vmstat.c
-> +++ b/mm/vmstat.c
-> @@ -1283,6 +1283,8 @@ const char * const vmstat_text[] = {
->  	"pgscan_file",
->  	"pgsteal_anon",
->  	"pgsteal_file",
-> +	"madvise_pgscanned",
-> +	"madvise_pghinted",
->  
->  #ifdef CONFIG_NUMA
->  	"zone_reclaim_failed",
-> -- 
-> 2.39.1.405.gd4c25cc71f-goog
+> -		ahb@c0000000 {
+> +		ahb@80000000 {
+>  			compatible = "simple-bus";
+>  			#address-cells = <1>;
+>  			#size-cells = <1>;
+> -			ranges = <0x0 0xc0000000 0x30000000>;
+> +			ranges = <0x0 0x80000000 0xf000000>,
+> +				<0x40000000 0xc0000000 0x40000000>;
 
--- 
-Michal Hocko
-SUSE Labs
+In the changelog text for the first patch that moves the
+ranges down, it would make sense to describe why this specific
+move is done. "to accommodate the SPI and fan driver
+register requirements" does not actually tell me why it was
+first thought that the bus starts at 0xc0000000 but now starts
+at 0x80000000 and has a weird hole.
+
+Please explain how you determined the location of the hole and
+the 0x80000000 offset. Are these from the datasheet, from
+the hardware design or did you make them up because you thought
+this is what I want?
+
+>  			dma-ranges;
+
+Having a 1:1 translation for DMA addresses is actually an indication
+that the MMIO addresses on the bus might also be directly
+mapped, rather than offset: If AHB addresses 0x0-0x80000000
+refer to the local MMIO registers, there is no more room
+for addressing RAM in the same addresses.
+
+> -			vic1: interrupt-controller@80f00000 {
+> +			vic1: interrupt-controller@f00000 {
+>  				compatible = "arm,pl192-vic";
+> -				reg = <0x80f00000 0x1000>;
+> +				reg = <0xf00000 0x1000>;
+>  				interrupt-controller;
+>  				#interrupt-cells = <1>;
+>  			};
+
+Since you said that the earlier version of this was broken,
+it would also make sense to split this bit out into a separate
+bugfix patch, or at least describe it in the changelog text.
+
+       Arnd
