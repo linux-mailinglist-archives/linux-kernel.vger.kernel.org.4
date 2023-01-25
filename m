@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2CD67B277
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BD667B279
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235419AbjAYMRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 07:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
+        id S235288AbjAYMR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 07:17:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235102AbjAYMRb (ORCPT
+        with ESMTP id S235268AbjAYMR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 07:17:31 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B87715549;
-        Wed, 25 Jan 2023 04:17:29 -0800 (PST)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id BEC9B2000A;
-        Wed, 25 Jan 2023 12:17:26 +0000 (UTC)
-From:   Bastien Nocera <hadess@hadess.net>
-To:     linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
-        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Subject: [PATCH v2 2/2] HID: logitech-hidpp: Remove HIDPP_QUIRK_NO_HIDINPUT quirk
-Date:   Wed, 25 Jan 2023 13:17:23 +0100
-Message-Id: <20230125121723.3122-2-hadess@hadess.net>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230125121723.3122-1-hadess@hadess.net>
-References: <20230125121723.3122-1-hadess@hadess.net>
+        Wed, 25 Jan 2023 07:17:56 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB7E61AE;
+        Wed, 25 Jan 2023 04:17:46 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 6adeaa922a7c58fb; Wed, 25 Jan 2023 13:17:44 +0100
+Received: from kreacher.localnet (unknown [213.134.163.149])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 94B3022094AA;
+        Wed, 25 Jan 2023 13:17:43 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH v1] thermal: intel: int340x: Add locking to int340x_thermal_get_trip_type()
+Date:   Wed, 25 Jan 2023 13:17:42 +0100
+Message-ID: <2688799.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.149
+X-CLIENT-HOSTNAME: 213.134.163.149
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedruddvvddgfeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudefrddufeegrdduieefrddugeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeifedrudegledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtgho
+ mhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HIDPP_QUIRK_NO_HIDINPUT isn't used by any devices but still happens to
-work as HIDPP_QUIRK_DELAYED_INIT is defined to the same value. Remove
-HIDPP_QUIRK_NO_HIDINPUT and use HIDPP_QUIRK_DELAYED_INIT everywhere
-instead.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Tested on a T650 which requires that quirk, and a number of unifying and
-Bluetooth devices that don't.
+In order to prevent int340x_thermal_get_trip_type() from possibly
+racing with int340x_thermal_read_trips() invoked by int3403_notify()
+add locking to it in analogy with int340x_thermal_get_trip_temp().
 
-Signed-off-by: Bastien Nocera <hadess@hadess.net>
+Fixes: 6757a7abe47b ("thermal: intel: int340x: Protect trip temperature from concurrent updates")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/hid/hid-logitech-hidpp.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-index 31d1fc23a435..ec388e436b6a 100644
---- a/drivers/hid/hid-logitech-hidpp.c
-+++ b/drivers/hid/hid-logitech-hidpp.c
-@@ -71,7 +71,7 @@ MODULE_PARM_DESC(disable_tap_to_click,
- /* bits 2..20 are reserved for classes */
- /* #define HIDPP_QUIRK_CONNECT_EVENTS		BIT(21) disabled */
- #define HIDPP_QUIRK_WTP_PHYSICAL_BUTTONS	BIT(22)
--#define HIDPP_QUIRK_NO_HIDINPUT			BIT(23)
-+#define HIDPP_QUIRK_DELAYED_INIT		BIT(23)
- #define HIDPP_QUIRK_FORCE_OUTPUT_REPORTS	BIT(24)
- #define HIDPP_QUIRK_UNIFYING			BIT(25)
- #define HIDPP_QUIRK_HIDPP_WHEELS		BIT(26)
-@@ -87,8 +87,6 @@ MODULE_PARM_DESC(disable_tap_to_click,
- 					 HIDPP_CAPABILITY_HIDPP20_HI_RES_SCROLL | \
- 					 HIDPP_CAPABILITY_HIDPP20_HI_RES_WHEEL)
+On top of the linux-next branch in linux-pm.git from today.
+
+---
+ drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+Index: linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
++++ linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+@@ -75,7 +75,9 @@ static int int340x_thermal_get_trip_type
+ 					 enum thermal_trip_type *type)
+ {
+ 	struct int34x_thermal_zone *d = zone->devdata;
+-	int i;
++	int i, ret = 0;
++
++	mutex_lock(&d->trip_mutex);
  
--#define HIDPP_QUIRK_DELAYED_INIT		HIDPP_QUIRK_NO_HIDINPUT
--
- #define HIDPP_CAPABILITY_HIDPP10_BATTERY	BIT(0)
- #define HIDPP_CAPABILITY_HIDPP20_BATTERY	BIT(1)
- #define HIDPP_CAPABILITY_BATTERY_MILEAGE	BIT(2)
-@@ -4001,7 +3999,7 @@ static void hidpp_connect_event(struct hidpp_device *hidpp)
- 	if (hidpp->capabilities & HIDPP_CAPABILITY_HI_RES_SCROLL)
- 		hi_res_scroll_enable(hidpp);
+ 	if (trip < d->aux_trip_nr)
+ 		*type = THERMAL_TRIP_PASSIVE;
+@@ -94,10 +96,12 @@ static int int340x_thermal_get_trip_type
+ 			}
+ 		}
+ 		if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
+-			return -EINVAL;
++			ret = -EINVAL;
+ 	}
  
--	if (!(hidpp->quirks & HIDPP_QUIRK_NO_HIDINPUT) || hidpp->delayed_input)
-+	if (!(hidpp->quirks & HIDPP_QUIRK_DELAYED_INIT) || hidpp->delayed_input)
- 		/* if the input nodes are already created, we can stop now */
- 		return;
+-	return 0;
++	mutex_unlock(&d->trip_mutex);
++
++	return ret;
+ }
  
-@@ -4238,7 +4236,7 @@ static int hidpp_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		hid_hw_close(hdev);
- 		hid_hw_stop(hdev);
- 
--		if (hidpp->quirks & HIDPP_QUIRK_NO_HIDINPUT)
-+		if (hidpp->quirks & HIDPP_QUIRK_DELAYED_INIT)
- 			connect_mask &= ~HID_CONNECT_HIDINPUT;
- 
- 		/* Now export the actual inputs and hidraw nodes to the world */
--- 
-2.39.1
+ static int int340x_thermal_set_trip_temp(struct thermal_zone_device *zone,
+
+
 
