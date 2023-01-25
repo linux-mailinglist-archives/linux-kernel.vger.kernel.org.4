@@ -2,135 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F08767B6B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1594F67B6D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 17:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235556AbjAYQTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 11:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
+        id S236011AbjAYQV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 11:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235171AbjAYQTB (ORCPT
+        with ESMTP id S235918AbjAYQVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 11:19:01 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB3740C4;
-        Wed, 25 Jan 2023 08:19:00 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id y19so20903326ljq.7;
-        Wed, 25 Jan 2023 08:18:59 -0800 (PST)
+        Wed, 25 Jan 2023 11:21:04 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238105AA62
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:20:40 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id z5so17586043wrt.6
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 08:20:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWTwmjgTRG2EECSYQmhAYPRybSGpNQjjUuI6hEqENqQ=;
-        b=fx79Yiu3p2VXSMIcnE7/zAtFUxCLQDsSiyj52gsKmsSDYNjSzuO4hPDMCxgq28t05i
-         mh+tX7/+ncTaf2xBg9P9U6WuEyl3q1g2et/x2160Z/dI9KMElTdFj6t0cOz3t51M8VFl
-         5QeVyLwBk9BKztwZzSLq/3Vxhz98Vs4D3T3u0f7fe/VYf6X0fi2+G7xtsqDKCblkxpZl
-         TfcgDwHkqyM98dq5Gzt9aLzQp0Vzkcku4dlAq58MqSfkv1tl+ChM/bk7ssoQiLE1+18+
-         WlhvCV2fjS44+JitD9d1InSaypTg5JxlrHMx5tBIVqThjhLy5jkDKOmSnLyc4b90KeVg
-         t1Mw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=slnyAV6MaHfo5cGXPJA+Cna3TI+4G6tWc0UbnmcgEDE=;
+        b=k7ENkjp7CZQlib2dPzrpRmyMLk2gfukicdyDvoQkkc+q1l7jNEDMn/1hrTulY/mGuL
+         rmn/nbCMhDb/1gRZ0hq7CjBuNiBDkqrqYHfBFAUJ0nK40NcvED+n0AuXvhUBOcx63/4N
+         51U2sTdBFF3wO/OwGpjDEHZ3cfIPsEJccfBOdTIcsu1YXWO/Yt3c+H1zfOaXnfrK2JD4
+         Pb2Bc83boGx592EkWRKK7EfwMsmGXOXUIXSnoOiF3IGHrfYwfz70IKyyftDrl0ABbm27
+         KHhcVRwrGZzFbxL3oWULpRu75PA4WQzCiukeuIU5wJjF1vrVx76ocAwZtCU6kea00GFM
+         bp4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VWTwmjgTRG2EECSYQmhAYPRybSGpNQjjUuI6hEqENqQ=;
-        b=USUw3xBUd2Qyg64UTBfRm6Z8vxJoUvQbCh+317PYv8/LcLEFX7E5C3WJ82QU2ngrjR
-         moqOJsI8ui8STsUFRhgmXsmNLjejMR/as4GmF8tzVx5Imyads3YcGQiYmmolCp2zNgeO
-         qzxknrZNAoYQtd9yqTWlbpe78HFuhWgaiHKOxL0TQxuIqeQNghOVj60ERGSo6urjHNq5
-         n07++tNGdaLxGSxWgDuT2cbs9LyFnY+Cg3L25hs5xFfh25K+RzxEvbYh22Wh/4+w3EuD
-         tS3FPUxPJHwaiv/tPaS3XxX2lqatd52KWwxRByVC19kyc8C+nUEge9nXqCUxO1kqbQEC
-         sOdg==
-X-Gm-Message-State: AFqh2kpCnu7SMF1LP5x0fLMhZe2cJzCGFJDWayUlVZTNVLHSMtuwzzyz
-        l6WCfOYiEu2B7TPrDSjTEi9ykHku0oWaFO+GE0M=
-X-Google-Smtp-Source: AMrXdXt+i/C8qLbsPe1lcHCbto7pEcuq4AoalDKFW9EXEReHLxE56apK7IJ7DuB55V7+a9FU6onq+yWAq9F1fTPa7cw=
-X-Received: by 2002:a2e:9210:0:b0:28b:cb2b:d11c with SMTP id
- k16-20020a2e9210000000b0028bcb2bd11cmr1873538ljg.73.1674663538274; Wed, 25
- Jan 2023 08:18:58 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=slnyAV6MaHfo5cGXPJA+Cna3TI+4G6tWc0UbnmcgEDE=;
+        b=79N4ceeXkSmptlJshDlKbDw43YfqAM4fLCvmyROURJyOn8HQnbEoD6ux2eGkQk4Gst
+         sLAjWdNZQ3VqxIDcDKheBQ+mqzMd/PHqVE32kf0+E4jegObJSZdAbNfvR9wR/oCg4J8w
+         kNAVQHMuT7ilePmAratfEqMVHByr9Ihaj0Ob7DDy17M23tH/6f7QzewaRYVeeOnmI7wM
+         dRxqklImUCfS0OCGrRlvo/L1ICdXyKgADfqam+++RF8DGrnEgZ/Z2k4pD5JLxlFDyflx
+         IekUM6qX+mYkJP62UYfvtFd0cyjCwJEhez4r7vwifheEZ//TfTgZfNhmqfedhYhnUgjR
+         rUaQ==
+X-Gm-Message-State: AFqh2kpJL3j8oK3MBQGsYYbodNRyB7mkqyYjvqYiH+M3wvBv7e9znbOd
+        4/GZSMlP+TOvEdPEVJN43AE/nQ==
+X-Google-Smtp-Source: AMrXdXsErnmK+EAjDOryVC5A8CCD05H7UGeqMzi84c5REP0WfWlAHqqLMR+3jCLqqnJd+b6QMKPNPA==
+X-Received: by 2002:a05:6000:5c2:b0:2bb:eb3d:8d20 with SMTP id bh2-20020a05600005c200b002bbeb3d8d20mr27126612wrb.43.1674663636289;
+        Wed, 25 Jan 2023 08:20:36 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n21-20020adf8b15000000b0028965dc7c6bsm4729019wra.73.2023.01.25.08.20.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 08:20:35 -0800 (PST)
+Message-ID: <d6512673-a232-c8e5-45f7-e903fc1a01a7@linaro.org>
+Date:   Wed, 25 Jan 2023 17:20:33 +0100
 MIME-Version: 1.0
-References: <20221211204324.169991-1-tmaimon77@gmail.com> <20221211204324.169991-2-tmaimon77@gmail.com>
- <20221216184402.8A426C433D2@smtp.kernel.org> <CAP6Zq1iPmy-fvqqAwBuoskR18v0dPVwYm0tEcE5h1g8fOiOQvg@mail.gmail.com>
-In-Reply-To: <CAP6Zq1iPmy-fvqqAwBuoskR18v0dPVwYm0tEcE5h1g8fOiOQvg@mail.gmail.com>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Wed, 25 Jan 2023 18:18:47 +0200
-Message-ID: <CAP6Zq1iAMcahqZJz1WTYokXoxJWROk3YK5br3OG1gry2uMrq7A@mail.gmail.com>
-Subject: Re: [PATCH v14 1/1] clk: npcm8xx: add clock controller
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     avifishman70@gmail.com, benjaminfair@google.com, joel@jms.id.au,
-        mturquette@baylibre.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, openbmc@lists.ozlabs.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 01/10] dt-bindings: pinctrl: qcom: add IPQ5332 pinctrl
+To:     Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org,
+        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, robimarko@gmail.com, quic_gurus@quicinc.com,
+        bhupesh.sharma@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230125104520.89684-1-quic_kathirav@quicinc.com>
+ <20230125104520.89684-2-quic_kathirav@quicinc.com>
+ <50ec54ba-3468-3448-3fab-f28e97549ad2@linaro.org>
+ <0b28f4a3-c445-7473-501b-39cbcfdb9889@quicinc.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0b28f4a3-c445-7473-501b-39cbcfdb9889@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On 25/01/2023 16:49, Kathiravan Thirumoorthy wrote:
+>>
+>>> @@ -0,0 +1,134 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/pinctrl/qcom,ipq5332-pinctrl.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Qualcomm IPQ5332 TLMM pin controller
+>>> +
+>>> +maintainers:
+>>> +  - Bjorn Andersson <andersson@kernel.org>
+>>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> +
+>>> +description: |
+>>> +  Top Level Mode Multiplexer pin controller in Qualcomm IPQ5332 SoC.
+>>> +
+>>> +allOf:
+>>> +  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: qcom,ipq5332-tlmm
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts: true
+>> missing maxItems
+>>
+>> Rebase your patches on latest next and use the latest bindings and
+>> drivers as starting point.
+> 
+> 
+> Changes are based on v6.2-rc1.  I see the maxItems changes in 
+> linux-next. Will update this in V2.
 
-Kind reminder regarding the NPCM clock questions
+Your patches cannot be based on v6.2-rc1. They won't even apply. You
+miss entire development of last month.
+> 
+> 
+>>> +  interrupt-controller: true
+>>> +  "#interrupt-cells": true
+>>> +  gpio-controller: true
+>>> +  "#gpio-cells": true
+>>> +  gpio-ranges: true
+>>> +  wakeup-parent: true
+>>> +
+>>> +  gpio-reserved-ranges:
+>>> +    minItems: 1
+>>> +    maxItems: 27
+>>> +
+>>> +  gpio-line-names:
+>>> +    maxItems: 53
+>> You have 54 GPIOs.
+> 
+> 
+> Sorry, GPIO ranges are from 0-52, will update it in all places in V2.
 
-Thanks,
+Ah, then the gpio pattern needs a fix.
 
-Tomer
 
-On Tue, 17 Jan 2023 at 19:35, Tomer Maimon <tmaimon77@gmail.com> wrote:
->
-> Hi Stephen,
->
-> Very sorry for the late reply.
->
-> On Fri, 16 Dec 2022 at 20:44, Stephen Boyd <sboyd@kernel.org> wrote:
-> >
-> > Quoting Tomer Maimon (2022-12-11 12:43:24)
-> > > diff --git a/drivers/clk/clk-npcm8xx.c b/drivers/clk/clk-npcm8xx.c
-> > > new file mode 100644
-> > > index 000000000000..08ee7bea6f3a
-> > > --- /dev/null
-> > > +++ b/drivers/clk/clk-npcm8xx.c
-> > > @@ -0,0 +1,650 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > [...]
-> > > +#define NPCM8XX_CLK_S_RCP        "rcp"
-> > > +
-> > > +static const u32 pll_mux_table[] = { 0, 1, 2, 3 };
-> > > +static const struct clk_parent_data pll_mux_parents[] = {
-> > > +       { .fw_name = NPCM8XX_CLK_S_PLL0, .name = NPCM8XX_CLK_S_PLL0 },
-> >
-> > As this is a new driver either you should only have .fw_name here. The
-> > .name field is a backup to migrate code over to a new binding. When
-> > .fw_name is used there should be an associated DT binding update. I
-> What do you mean by associated DT binding? does the.fw_name, for
-> example, NPCM8XX_CLK_S_PLL0 need to represent in the device tree?
-> > doubt the usage of .fw_name is correct though, because aren't these clks
-> > internal to the controller? The .fw_name field is about describing does the
-> yes the PLL clocks are internal.
-> > parents that are an input to the clk controller node in DT (because the
-> > controller is a consumer of these clks that are external to the device).
-> >
-> > So can you use the .hw field for these internal clks? Check out
-> > CLK_HW_INIT_HWS() macro and friends for a possible way to initialize
-> > this.
-> but still, I have used devm_clk_hw_register_mux_parent_data_table
-> function to register the clock mux,
-> should I use  devm_clk_hw_register_mux_parent_hws function instead?
-> Does this modification need to be done in all the mux parent struct?
-> could you point me to some example in the Linux kernel how do you
-> think that I should represent the mux clock in the NPCM8XX clock
-> driver?
-> >
-> > > +       { .fw_name = NPCM8XX_CLK_S_PLL1, .name = NPCM8XX_CLK_S_PLL1 },
-> > > +       { .fw_name = NPCM8XX_CLK_S_REFCLK, .name = NPCM8XX_CLK_S_REFCLK },
-> >
-> > Maybe this is external? If so, it would be great to have this in the
-> > binding as a `clocks` property.
-> O.K.
->
-> Thanks,
->
-> Tomer
+Best regards,
+Krzysztof
+
