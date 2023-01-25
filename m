@@ -2,158 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5315667B93A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C783F67B930
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235908AbjAYSXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 13:23:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
+        id S235902AbjAYSWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:22:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235541AbjAYSXQ (ORCPT
+        with ESMTP id S234805AbjAYSWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:23:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958255A806
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:22:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674670946;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8TAHgioL+cbo0qEgcEaZEdMYDgI4uLoD69uULXZCMWk=;
-        b=e4lQvgw/NvWuSwBKETJfsbT0B4f3d3npyir4pM7X8m+Kd4MXjwrZOoFHcGrn02+gvOy2O4
-        /3myRhEXW6Az1W4rELRM7ZBc2BSS0KuxKulb99ogKq1oTki5kgd7YrXo4MBuIsTxJp6Lpf
-        7IvqRx9hlMvWgSeVgkGExFslSDzblXI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-292-deB-As1LMKysAVKBxmpPAg-1; Wed, 25 Jan 2023 13:22:21 -0500
-X-MC-Unique: deB-As1LMKysAVKBxmpPAg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BADC885C073;
-        Wed, 25 Jan 2023 18:22:20 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6EFB5492B01;
-        Wed, 25 Jan 2023 18:22:20 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 94285403C674B; Wed, 25 Jan 2023 15:22:00 -0300 (-03)
-Date:   Wed, 25 Jan 2023 15:22:00 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-Message-ID: <Y9FzSBw10MGXm2TK@tpad>
-References: <20230125073502.743446-1-leobras@redhat.com>
- <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
- <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+        Wed, 25 Jan 2023 13:22:12 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E9148587;
+        Wed, 25 Jan 2023 10:22:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674670931; x=1706206931;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A76BzDJayrPXI3YjD5EhPGdQ7ascQPANML7Hn/B6Fpg=;
+  b=BHQQc3aiVEG36bP7gOhoMmthLNvxUuSCT9IvKOF1IriZDTC0pKu+Ia8a
+   oyIpSDmG+xVQ4jFVW+rnWg8EyL+CyvEXlGRXCa90HszJtAyoiLZqBKCcB
+   A9hJCc5mwOJ12GTtmmQwrHMvdIgZt6bysSIN+K5p/e965Ihr+feOhvUID
+   X66QkIuDxXQFp6N+weu8+Z2krfNuE+fpSDiMjrX+2OWNb79xzTSVSo2Zw
+   lQ+ZEB/NCdJxSX3mlfLEoJaHInSFJO5NY3sxIqYgGOHYeR1WS1tea8Jir
+   gP3/b9M0QBSohvD025tn09HcADDjrQg/7dOIizqjTq65vJTC9hDZpwrxH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="306295375"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="306295375"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 10:22:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="612520344"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="612520344"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2023 10:22:06 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pKkPM-00F1f9-1d;
+        Wed, 25 Jan 2023 20:22:04 +0200
+Date:   Wed, 25 Jan 2023 20:22:04 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Pierluigi Passaro <pierluigi.p@variscite.com>,
+        linus.walleij@linaro.org, yamada.masahiro@socionext.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sfr@canb.auug.org.au, eran.m@variscite.com, nate.d@variscite.com,
+        francesco.f@variscite.com, pierluigi.passaro@gmail.com,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3] gpiolib: fix linker errors when GPIOLIB is disabled
+Message-ID: <Y9FzTGxX5Z+XsTHV@smile.fi.intel.com>
+References: <20230124013138.358595-1-pierluigi.p@variscite.com>
+ <CAMRc=Mcf+PA-uhT+3Sq5AxHUMb-K_ogw=kBtGV6-wK00PtXGkw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMRc=Mcf+PA-uhT+3Sq5AxHUMb-K_ogw=kBtGV6-wK00PtXGkw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Brás wrote:
-> On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
-> > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
-> > > Disclaimer:
-> > > a - The cover letter got bigger than expected, so I had to split it in
-> > >     sections to better organize myself. I am not very confortable with it.
-> > > b - Performance numbers below did not include patch 5/5 (Remove flags
-> > >     from memcg_stock_pcp), which could further improve performance for
-> > >     drain_all_stock(), but I could only notice the optimization at the
-> > >     last minute.
-> > > 
-> > > 
-> > > 0 - Motivation:
-> > > On current codebase, when drain_all_stock() is ran, it will schedule a
-> > > drain_local_stock() for each cpu that has a percpu stock associated with a
-> > > descendant of a given root_memcg.
-> > > 
-> > > This happens even on 'isolated cpus', a feature commonly used on workloads that
-> > > are sensitive to interruption and context switching such as vRAN and Industrial
-> > > Control Systems.
-> > > 
-> > > Since this scheduling behavior is a problem to those workloads, the proposal is
-> > > to replace the current local_lock + schedule_work_on() solution with a per-cpu
-> > > spinlock.
-> > 
-> > If IIRC we have also discussed that isolated CPUs can simply opt out
-> > from the pcp caching and therefore the problem would be avoided
-> > altogether without changes to the locking scheme. I do not see anything
-> > regarding that in this submission. Could you elaborate why you have
-> > abandoned this option?
-> 
-> Hello Michal,
-> 
-> I understand pcp caching is a nice to have.
-> So while I kept the idea of disabling pcp caching in mind as an option, I first
-> tried to understand what kind of impacts we would be seeing when trying to
-> change the locking scheme.
+On Tue, Jan 24, 2023 at 09:54:54AM +0100, Bartosz Golaszewski wrote:
+> On Tue, Jan 24, 2023 at 2:31 AM Pierluigi Passaro
+> <pierluigi.p@variscite.com> wrote:
 
-Remote draining reduces interruptions whether CPU 
-is marked as isolated or not:
+...
 
-- Allows isolated CPUs from benefiting of pcp caching.
-- Removes the interruption to non isolated CPUs. See for example 
+> >  #else /* CONFIG_GPIOLIB */
+> >
+> > +#include <linux/gpio/machine.h>
+> > +#include <linux/gpio/consumer.h>
+> 
+> Please move those headers to the top and arrange them alphabetically
+> with the rest of the <linux/ headers. Since you're now including
+> those, remove any forward declarations of the types in question.
 
-https://lkml.org/lkml/2022/6/13/2769
+That's not correct way. The headers will make the whole purpose of splitting
+(between driver, machine, and consumer) useless.
 
-"Minchan Kim tested this independently and reported;
+Lemme look at it, but I believe the solution is not so simple.
+We need to clean up header inclusions as we did for pin control.
 
-       My workload is not NOHZ CPUs but run apps under heavy memory
-       pressure so they goes to direct reclaim and be stuck on
-       drain_all_pages until work on workqueue run.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-       unit: nanosecond
-       max(dur)        avg(dur)                count(dur)
-       166713013       487511.77786438033      1283
-
-       From traces, system encountered the drain_all_pages 1283 times and
-       worst case was 166ms and avg was 487us.
-
-       The other problem was alloc_contig_range in CMA. The PCP draining
-       takes several hundred millisecond sometimes though there is no
-       memory pressure or a few of pages to be migrated out but CPU were
-       fully booked.
-
-       Your patch perfectly removed those wasted time."
-
-
-> After I raised the data in the cover letter, I found that the performance impact
-> appears not be that big. So in order to try keeping the pcp cache on isolated
-> cpus active, I decided to focus effort on the locking scheme change.
-> 
-> I mean, my rationale is: if is there a non-expensive way of keeping the feature,
-> why should we abandon it?
-> 
-> Best regards,
-> Leo
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
 
