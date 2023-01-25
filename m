@@ -2,81 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C237667B0B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5ED567B0C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233965AbjAYLKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:10:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        id S235056AbjAYLMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:12:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjAYLK1 (ORCPT
+        with ESMTP id S233330AbjAYLMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:10:27 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773E64C1E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:10:23 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id bk16so16655385wrb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:10:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XJtTZhrwaqH3s3nH8A+0YXY5lPVl4tJDj1mXgSnDowA=;
-        b=zbL5Bo69yM/6w4xhXqFMJxIAOw5UQ2yCYIiDsIeWN/3gNv75Jg/yCr4CRpp1Sd2I04
-         fBaFHe6vVl4gQ6Ckg/IvwWyI6ydZ4qoFacpmRsSNzfGBnG0dwjsggENeR33EMM2zkIeW
-         0q/5r7I/Ud2lPjFrJAzeXuJCSfgvgviZQSur1oSIJFAK+5DcO5FTF8fkHTz15ujOeJ0J
-         P7yTUoZeTcjdTSyXpMcVod77Xw1kl2/FqISs4d620/jYZ/7qkaxN23CPY2/sQOEH3Ow1
-         cVZMldgnUYxW2UJxSQC4PL2kygFLma+OcTySfRN2Rh0uHKR4gfJMcROwrn1tEP31C0EJ
-         7NxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XJtTZhrwaqH3s3nH8A+0YXY5lPVl4tJDj1mXgSnDowA=;
-        b=XggPZOQj9o1RXOmHGINVXG9xYy/hUra7h0r043ACfRvekyDQ8FDnNGsYBrwQZlMpKF
-         7F/YY8go9IpmTcQwEpLuY+1UsegTTzvcxdRBS5BdElJLhme/J8ew0ozI5ORV626bSLTL
-         Rru+zCnh9mfwqU2WoGhoQ2SWG/FN5oE57DzzknNjGODKF4AItTYymPw8wf8FsZmciaWZ
-         POOo61zBXDzNlVntIT7AIpHGS4KY/04jvWVNrNJYBWnK420b/s5RWlLsoaMazre4UIUj
-         W6sx0e11etKqDArB/iJgFRIYurbcSVtYhSAJbhpgETV8oLQyqUREMHAKEmYIIm4FHSqH
-         /lLA==
-X-Gm-Message-State: AFqh2ko8FtjQF20ZukRIpqsHk7E8XCuBX/dyvHYRWoSoTKRe7j35DSrr
-        bOdyrO0C6N97/U7zE0fYe0msgw==
-X-Google-Smtp-Source: AMrXdXtSIH3syXyxnqXwjnP6DbOMmtoF5w7xPN0YIgvt87MuZJe5f5fhpWIcO4suVj/J5Yr/QKdELA==
-X-Received: by 2002:adf:b181:0:b0:2be:59aa:fce5 with SMTP id q1-20020adfb181000000b002be59aafce5mr16633860wra.69.1674645021880;
-        Wed, 25 Jan 2023 03:10:21 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u2-20020adfae42000000b002bfb8f829eesm1524135wrd.71.2023.01.25.03.10.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 03:10:21 -0800 (PST)
-Message-ID: <50ec54ba-3468-3448-3fab-f28e97549ad2@linaro.org>
-Date:   Wed, 25 Jan 2023 12:10:18 +0100
+        Wed, 25 Jan 2023 06:12:14 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06885245;
+        Wed, 25 Jan 2023 03:12:13 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P9hNvE021293;
+        Wed, 25 Jan 2023 11:11:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=cwPZEAwG3kJNq20afg+KRj0R9I20txiVUCJM6INRiWY=;
+ b=eB45XUegccbWvVS0w247+aK505BvgvgN2MnnM/EjMDqEHs6U90h26Ct0E3uM4PRVdyQC
+ tBSJrEFfaLT2CvIqv4oDfBs51buc3Opzql7MVnLDZcGnfHCbx6jWNap67mjxVMTwfjOQ
+ GjtcZfLM6f+FmLNtw8EI5vtvNtu+Se4yVjQujS7rC5QbbsTUWcFfiISK4uwK/VObx8g5
+ 5L7nDoCjwkvD2ouMcEyn36ILE6qz5AtZbr/kj5LF/oqHWhv2+ObBuQJ7MHhKkgvPYerS
+ PUrvdjK7gE5wXFmPtS/ZLGoUEOnNvSwkkzaY3j/daDuwAWPNDvM2q4ngbXf2cEs0jBoi EQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89hk6xt4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 11:11:32 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30PBBVue021907
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 11:11:31 GMT
+Received: from [10.50.14.225] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
+ 2023 03:11:22 -0800
+Message-ID: <f81e4605-9111-7f70-abb3-72067d68f8e2@quicinc.com>
+Date:   Wed, 25 Jan 2023 16:41:19 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 01/10] dt-bindings: pinctrl: qcom: add IPQ5332 pinctrl
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V1 0/8] Add minimal boot support for IPQ9574
 Content-Language: en-US
-To:     Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org,
-        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, robimarko@gmail.com, quic_gurus@quicinc.com,
-        bhupesh.sharma@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230125104520.89684-1-quic_kathirav@quicinc.com>
- <20230125104520.89684-2-quic_kathirav@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230125104520.89684-2-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
+        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>, <shawnguo@kernel.org>,
+        <arnd@arndb.de>, <marcel.ziswiler@toradex.com>,
+        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
+        <broonie@kernel.org>, <tdas@codeaurora.org>,
+        <bhupesh.sharma@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <20230124141541.8290-1-quic_devipriy@quicinc.com>
+ <5331527f-a96c-1c1b-dcf5-8f7e5957814d@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <5331527f-a96c-1c1b-dcf5-8f7e5957814d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: HLgW6i7oLREm8pxqnCqZvSUEWLUYAW2A
+X-Proofpoint-ORIG-GUID: HLgW6i7oLREm8pxqnCqZvSUEWLUYAW2A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_05,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=697 phishscore=0
+ suspectscore=0 clxscore=1015 mlxscore=0 impostorscore=0 spamscore=0
+ adultscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250102
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,123 +95,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2023 11:45, Kathiravan Thirumoorthy wrote:
-> From: Kathiravan T <quic_kathirav@quicinc.com>
+
+
+On 1/24/2023 8:02 PM, Krzysztof Kozlowski wrote:
+> On 24/01/2023 15:15, devi priya wrote:
+>> The IPQ9574 is Qualcomm's 802.11ax SoC for Routers,
+>> Gateways and Access Points.
+>>
+>> This series adds minimal board boot support for ipq9574-al02-c7 board
+>>
+>> [V1]
 > 
-> Add device tree bindings for IPQ5332 TLMM block.
+> You already sent a v1. This should be v2.
 > 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> ---
->  .../pinctrl/qcom,ipq5332-pinctrl.yaml         | 134 ++++++++++++++++++
->  1 file changed, 134 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-pinctrl.yaml
+>> 	Fixed all the review comments
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..d101ee04b8b7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,ipq5332-pinctrl.yaml
-
-Name matching compatible, please.
-
-> @@ -0,0 +1,134 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/qcom,ipq5332-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm IPQ5332 TLMM pin controller
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> +
-> +description: |
-> +  Top Level Mode Multiplexer pin controller in Qualcomm IPQ5332 SoC.
-> +
-> +allOf:
-> +  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,ipq5332-tlmm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts: true
-
-missing maxItems
-
-Rebase your patches on latest next and use the latest bindings and
-drivers as starting point.
-
-> +  interrupt-controller: true
-> +  "#interrupt-cells": true
-> +  gpio-controller: true
-> +  "#gpio-cells": true
-> +  gpio-ranges: true
-> +  wakeup-parent: true
-> +
-> +  gpio-reserved-ranges:
-> +    minItems: 1
-> +    maxItems: 27
-> +
-> +  gpio-line-names:
-> +    maxItems: 53
-
-You have 54 GPIOs.
-
-> +
-> +patternProperties:
-> +  "-state$":
-> +    oneOf:
-> +      - $ref: "#/$defs/qcom-ipq5332-tlmm-state"
-> +      - patternProperties:
-> +          "-pins$":
-> +            $ref: "#/$defs/qcom-ipq5332-tlmm-state"
-> +        additionalProperties: false
-> +
-> +$defs:
-> +  qcom-ipq5332-tlmm-state:
-> +    type: object
-> +    description:
-> +      Pinctrl node's client devices use subnodes for desired pin configuration.
-> +      Client device subnodes use below standard properties.
-> +    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
-> +
-> +    properties:
-> +      pins:
-> +        description:
-> +          List of gpio pins affected by the properties specified in this
-> +          subnode.
-> +        items:
-> +          pattern: "^gpio([0-9]|[1-4][0-9]|5[0-3])$"
-> +        minItems: 1
-> +        maxItems: 36
-> +
-> +      function:
-> +        description:
-> +          Specify the alternative function to be configured for the specified
-> +          pins.
-> +
-> +        enum: [ PTA_0, PTA_2, PTA_1, atest_char, atest_char0, atest_char1,
-
-1. lowercase only
-
-2. order all these by name
-
-
-> +                atest_char2, atest_char3, atest_tic, audio_pri, audio_pri0,
-> +                audio_pri1, audio_sec, audio_sec0, audio_sec1, blsp0_i2c,
-> +                blsp0_spi, blsp0_uart0, blsp0_uart1, blsp1_i2c0, blsp1_i2c1,
-> +                blsp1_spi0, blsp1_spi1, blsp1_uart0, blsp1_uart1, blsp1_uart2,
-> +                blsp2_i2c0, blsp2_i2c1, blsp2_spi, blsp2_spi0, blsp2_spi1,
-> +                core_voltage, cri_trng0, cri_trng1, cri_trng2, cri_trng3,
-> +                cxc_clk, cxc_data, dbg_out, gcc_plltest, gcc_tlmm, gpio,
-> +                lock_det, mac0, mac1, mdc0, mdc1, mdio0, mdio1, pc, pcie0_clk,
-
-Best regards,
-Krzysztof
-
+> That's not specific enough.
+> 
+Okay, got it. Will add the changelogs, address few minor comments on 
+this series and post V3
+> Best regards,
+> Krzysztof
+> 
+Best Regards,
+Devi Priya
