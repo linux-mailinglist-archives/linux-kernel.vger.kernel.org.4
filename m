@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1382F67A794
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 01:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A94567A791
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 01:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234593AbjAYAXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 19:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
+        id S234341AbjAYAXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 19:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbjAYAX2 (ORCPT
+        with ESMTP id S234171AbjAYAX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 24 Jan 2023 19:23:28 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF8F4CE4E
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:23:24 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id ud5so43542466ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:23:24 -0800 (PST)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A388F4DBFF
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:23:25 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id bk15so43433389ejb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:23:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dZ27p7zF4T27+K/nN0SUmKAuxZywkQG/U6QyG5d8NyA=;
-        b=QJ/19TCg14yqvOQLmIFg24XehYjzB9j13SdaTs1rKJ83AU1VbzHGuKuUMnia3DaMML
-         LYwAkiPjcpm6NzEf2MRfedGuZXWLPbji4TBfQVe1kb2+bizrSabk+mvVD4ucmqmdHomI
-         sOzZQOyU62Vj1y/SnnJ7ovCeQmu4/ovGgcCLS58UHYkmDqA9IS737Fa8dcPPHHX8FyKU
-         X6ffSN2Y1q2FZbNMIoB5MCFOrEAHXpIJuP732o9D10rrJkvmhIKXIgz+muzpARYPOoYa
-         4oXKc+9TN6pU4/ulqMYkpcDIyOvjw7ARw0qoWqgw9n9iDD42cWOsF+YLPNx9JYP0EXLl
-         oJsg==
+        bh=XtSwGpV2j0nQXiZ+LcNdnpcv1hVjkJ1W08Bggr7Cjy0=;
+        b=TIneo37BFcCoCvPMeBd+WYwoMRhtkaoPCmdy6r3Ws0YPEw99fpwL9/3Z9uvGBE8G5I
+         J0pATloRutbCl+kMFdBctuX/JUuWrbwmXJqt0ZIKbXvl7cfejdjxN0iGJojYnm0HawTY
+         +Pk9+qH+/lIxmXXnq7Iqzbfl3chdCfS7pl6Zw8sfTy99Ez9YeHDDZtnR/8UxtIMQJpvl
+         88AJ+ATsMy51AlyxKQeUZjZIO7qOp1rNA9txjGTgCxfK6LtYcawgt68/Xu/YTlTQ7Lzt
+         qB4+3/1iG6jrEY+Fs3ZJLGVFvwtVrxbJxaqyEmQrEFShhadwx4/8EKqUefbFNUlelut9
+         M2wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dZ27p7zF4T27+K/nN0SUmKAuxZywkQG/U6QyG5d8NyA=;
-        b=fE9EVATpSImB6mM2c663kUs9tSI0E8ZeBb9Shy8E/EK4x10EsTMAuUYWnGPFR4Bb80
-         GPfugIoeeRNC3jWVPpx6zu49FAD09mLHr1y+mdah+qpLrqcMjaKcyw2WVhyLcrWI7Qvq
-         yMvwtZPQ1O6VvVScYzX1G6WkPPeG9S+NhNwTZtkq4O1wSUb6PD1OdU2LClVpDE/ZuHMJ
-         ZMeeIKNNq/kDVpZc/VPtNcfURdKYhKpKjR/MWkjGFnQNqAKvB0GvBW35m+e7aL035+Qi
-         6o60JsS11dMI0HQ3zNZkHXw00xguBV1ZaKIIMY9TUroERHyu2MVj3ma+xdCUoiLNsNLo
-         LL1w==
-X-Gm-Message-State: AFqh2koAKaHU4IDll2JN1mWlVLIQdDMG9aEnsIOyFz+ueW9XicnMCDGO
-        rJ3uQN6mrhTq0tP9SsSlHQrjog==
-X-Google-Smtp-Source: AMrXdXuPVo13SXKzlv8efr0eXOVX+Rwf2H5jTBFY9jVwKrKrye2EFI7PJBI7aI+BIoZC8hmeQf5ZAg==
-X-Received: by 2002:a17:906:a3cf:b0:861:3ed5:e029 with SMTP id ca15-20020a170906a3cf00b008613ed5e029mr44674312ejb.49.1674606202741;
-        Tue, 24 Jan 2023 16:23:22 -0800 (PST)
+        bh=XtSwGpV2j0nQXiZ+LcNdnpcv1hVjkJ1W08Bggr7Cjy0=;
+        b=s6luloXAanDEm3/UrPBj1V5zbzGaSiBG/Aag94exK55caQjXCNcuYWjnMnQp+dZhIe
+         cu6chistenYInMLH10Xg6a8sbIx7AWoMsF8AEQ5cWVE44AB9GFc2P5HR04jp1MRbvzo/
+         xdGuuh3Lya1NlNdECR/hTwlbYxY9MBy1KoBPSW1Wm/YVmwNC9P6f920k6WgY6HeBtLS1
+         XG8ln0CJ2ojciIHDsrBwQdfMRTlfHvqVuuB2fqGfG2Xl3Q3w0FXGCh/6EfLadpcjsEca
+         XDgnX35Al0lnUz9fDqn9GYMpNRL/HaOkN/xQHSAmSxadn+ZT55P175Q2k/BW9MZ3H+4d
+         w6Ag==
+X-Gm-Message-State: AFqh2krLpVgtWTf7UFmxdWwpu24vy4IRNdn29L+xKP7CkbePlONAhJ3s
+        sXSHVHjvwiRY+ZUBUqlEor/4Jg==
+X-Google-Smtp-Source: AMrXdXsWPHwaqA3WsFV3Zsw9CNtSgOoeqJLePtVfjlhhSr1kf3GR4doCP1rTJ0p7Jd0Cz9n8wGI1Zg==
+X-Received: by 2002:a17:906:8298:b0:86d:be0:607d with SMTP id h24-20020a170906829800b0086d0be0607dmr32534825ejx.70.1674606204058;
+        Tue, 24 Jan 2023 16:23:24 -0800 (PST)
 Received: from fedora.local (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id if10-20020a170906df4a00b00738795e7d9bsm1584606ejc.2.2023.01.24.16.23.21
+        by smtp.gmail.com with ESMTPSA id if10-20020a170906df4a00b00738795e7d9bsm1584606ejc.2.2023.01.24.16.23.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 16:23:22 -0800 (PST)
+        Tue, 24 Jan 2023 16:23:23 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 25 Jan 2023 01:23:08 +0100
-Subject: [PATCH v3 3/6] crypto: stm32/hash: Use existing busy poll function
+Date:   Wed, 25 Jan 2023 01:23:09 +0100
+Subject: [PATCH v3 4/6] crypto: stm32/hash: Wait for idle before final CPU xmit
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221227-ux500-stm32-hash-v3-3-32ee12cd6f06@linaro.org>
+Message-Id: <20221227-ux500-stm32-hash-v3-4-32ee12cd6f06@linaro.org>
 References: <20221227-ux500-stm32-hash-v3-0-32ee12cd6f06@linaro.org>
 In-Reply-To: <20221227-ux500-stm32-hash-v3-0-32ee12cd6f06@linaro.org>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
@@ -81,11 +81,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When exporting state we are waiting indefinitely in the same
-was as the ordinary stm32_hash_wait_busy() poll-for-completion
-function but without a timeout, which means we could hang in
-an eternal loop. Fix this by waiting for completion like the
-rest of the code.
+When calculating the hash using the CPU, right before the final
+hash calculation, heavy testing on Ux500 reveals that it is wise
+to wait for the hardware to go idle before calculating the
+final hash.
+
+The default test vectors mostly worked fine, but when I used the
+extensive tests and stress the hardware I ran into this problem.
 
 Acked-by: Lionel Debieve <lionel.debieve@foss.st.com>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
@@ -95,29 +97,23 @@ ChangeLog v2->v3:
 ChangeLog v1->v2:
 - Pick up Lionel's ACK
 ---
- drivers/crypto/stm32/stm32-hash.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/crypto/stm32/stm32-hash.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
-index 0473ced7b4ea..cc0a4e413a82 100644
+index cc0a4e413a82..d4eefd8292ff 100644
 --- a/drivers/crypto/stm32/stm32-hash.c
 +++ b/drivers/crypto/stm32/stm32-hash.c
-@@ -960,11 +960,13 @@ static int stm32_hash_export(struct ahash_request *req, void *out)
- 	struct stm32_hash_dev *hdev = stm32_hash_find_dev(ctx);
- 	u32 *preg;
- 	unsigned int i;
-+	int ret;
+@@ -362,6 +362,9 @@ static int stm32_hash_xmit_cpu(struct stm32_hash_dev *hdev,
+ 		stm32_hash_write(hdev, HASH_DIN, buffer[count]);
  
- 	pm_runtime_get_sync(hdev->dev);
- 
--	while ((stm32_hash_read(hdev, HASH_SR) & HASH_SR_BUSY))
--		cpu_relax();
-+	ret = stm32_hash_wait_busy(hdev);
-+	if (ret)
-+		return ret;
- 
- 	rctx->hw_context = kmalloc_array(3 + HASH_CSR_REGISTER_NUMBER,
- 					 sizeof(u32),
+ 	if (final) {
++		if (stm32_hash_wait_busy(hdev))
++			return -ETIMEDOUT;
++
+ 		stm32_hash_set_nblw(hdev, length);
+ 		reg = stm32_hash_read(hdev, HASH_STR);
+ 		reg |= HASH_STR_DCAL;
 
 -- 
 2.39.0
