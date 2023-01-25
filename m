@@ -2,213 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FB367B1A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:40:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7FC67B1AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235565AbjAYLju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:39:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
+        id S235090AbjAYLkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235597AbjAYLjn (ORCPT
+        with ESMTP id S230146AbjAYLkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:39:43 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B8093D0;
-        Wed, 25 Jan 2023 03:39:34 -0800 (PST)
-Date:   Wed, 25 Jan 2023 11:39:33 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674646773;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JxhCGxMvdLa+0WXtDH9qfNnCD3UABqFwwGYEf+V+huU=;
-        b=TcpxGEw4PDjnHbORQrsdhWYqpDU00q6gEV3hZW5IUaVqVcVHjg0RV2AlYBlxERZ72lKFoE
-        szJzdOS1bgdabreLgqzjHFWJpveyfM2JwHHj2NJYky3AmPjro4d3QxIPTsyU/UY2XEe3WV
-        zaBFIlRpRIKwelccHVHJdhWv+ixr5cMNNcAUsbLB7521KLluER7Ul/kzvQCXcuXXv4QtxO
-        lpo3scGCQ4KtptH+wjQ6q6X094da0ofMLlSTA2BID36ikBFbrjkMlU6PH7YtasUQdmAmo2
-        ipdGqciorgWZKShPYa3iQGyCl8xV85OBTU5tAwAqtD3Kjs6wx+a7iRbpcvNuOA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674646773;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JxhCGxMvdLa+0WXtDH9qfNnCD3UABqFwwGYEf+V+huU=;
-        b=2GelqKaOl18Xp5jdCW7WNLFJSzMdDAKcZlqErnZNMHZYqioFCkYLPkYp6ePP0afunvp7ax
-        2Yb+eyalpEyBqEDQ==
-From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/vdso] x86/vdso: Move VDSO image init to vdso2c generated code
-Cc:     Brian Gerst <brgerst@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230124184019.26850-1-brgerst@gmail.com>
-References: <20230124184019.26850-1-brgerst@gmail.com>
+        Wed, 25 Jan 2023 06:40:49 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A71BB
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:40:47 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id ss4so46729881ejb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:40:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M9CONn1V7Ye0B52Z8jaNfjazx4lKqTqS2Pz1n8BRitY=;
+        b=glVFMNjSO3M/lJkAc38ryLFpJX/PuxEQkkajt8a8RsWGcjR8b0wC4FIAHEqN+saZRU
+         29/3wnp6WOHjMxZgsD3Dsd04QuzB/iBeyDHvgh8hLSt3sJbiVLfq5QQRMViMQjkfnuXy
+         7fnNMqWzBhDEGEDuKuz5a2Fc11hnRancjlfkzMpttm3Prl/KmYmN9ZHL9QJHechR44US
+         89Uy9V1IgfRLqpZmyiUSpJM6L7lFa6H2esZgfi5Uzm5BVrgpfRHqINY3OBwquk9cBBrL
+         lfDD+cmFKD6j8G7diOV21inLVr5BH0fQgv47esxBZaSZv5ODsKGDocUZ5XzvaFAxBi0e
+         N9HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M9CONn1V7Ye0B52Z8jaNfjazx4lKqTqS2Pz1n8BRitY=;
+        b=TtUNE4I+G25SVlc+stmD6GDru724wgDugxUPvDsZcoXihG+pxLjwQj1Cgrgx9CX7Vk
+         DgI8hAybJXm8xgEHPX6hjXdzjF9u7QxWD6XDvjjgTiC+oLQf8TXlXwY3onmjS5NP0KGU
+         Mec/GbGbIbW96+ano3dCskxJLlW3irioFEtk8YJcq2pHAHcYq4oPFew/33u2MVXQxGXH
+         rlVGQCx+Mr7RmM0JElAFB/YcCHWyudjluZDgxUD1ZGhvl8g+M1P2B7TrinrXguFnBzDd
+         9MYkFr/4IBe4wVN4JP+aT7iDaGvRptqidgJSYgSXkIX2AdUiFSUsSpT2C4BBEP4F+IBB
+         0baQ==
+X-Gm-Message-State: AFqh2koRUBiRKCtl5j1RjXK7BVY9f+Iu225u9XTStVwLXORpGN7Kez6x
+        B8Qw2HLrPScLxIUQPGAH/kqNzml2V1pGEGIG
+X-Google-Smtp-Source: AMrXdXuOtX/o0noIZONw0GP3yL+7WMkkHddkrvvKpIG3R3OivXD5kAxRBtnLfDYjR/dvWr01000UcQ==
+X-Received: by 2002:a17:906:6313:b0:7c1:6151:34c0 with SMTP id sk19-20020a170906631300b007c1615134c0mr35279437ejc.6.1674646846419;
+        Wed, 25 Jan 2023 03:40:46 -0800 (PST)
+Received: from localhost ([93.99.189.36])
+        by smtp.gmail.com with ESMTPSA id p7-20020a1709060e8700b0086f4b8f9e42sm2287363ejf.65.2023.01.25.03.40.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 03:40:45 -0800 (PST)
+Date:   Wed, 25 Jan 2023 12:40:44 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Conor Dooley <conor@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] riscv: Get rid of riscv_pfn_base variable
+Message-ID: <20230125114044.qcr2canalvljevcu@orel>
+References: <20230125081214.1576313-1-alexghiti@rivosinc.com>
+ <20230125081214.1576313-2-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-Message-ID: <167464677321.4906.10647012897510355541.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125081214.1576313-2-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/vdso branch of tip:
+On Wed, Jan 25, 2023 at 09:12:13AM +0100, Alexandre Ghiti wrote:
+> Use directly phys_ram_base instead, riscv_pfn_base is just the pfn of
+> the address contained in phys_ram_base.
+> 
+> Even if there is no functional change intended in this patch, actually
+> setting phys_ram_base that early changes the behaviour of
+> kernel_mapping_pa_to_va during the early boot: phys_ram_base used to be
+> zero before this patch and now it is set to the physical start address of
+> the kernel. But it does not break the conversion of a kernel physical
+> address into a virtual address since kernel_mapping_pa_to_va should only
+> be used on kernel physical addresses, i.e. addresses greater than the
+> physical start address of the kernel.
 
-Commit-ID:     4c382d723edce1b3c72b55b1b505cf5526a56afc
-Gitweb:        https://git.kernel.org/tip/4c382d723edce1b3c72b55b1b505cf5526a56afc
-Author:        Brian Gerst <brgerst@gmail.com>
-AuthorDate:    Tue, 24 Jan 2023 13:40:19 -05:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Wed, 25 Jan 2023 12:33:40 +01:00
+afaict, only CONFIG_XIP_KERNEL kernels use phys_ram_base prior to
+setup_bootmem() and, for them, this change only redundantly sets
+phys_ram_base to the same thing, so I believe this is a no functional
+change patch.
 
-x86/vdso: Move VDSO image init to vdso2c generated code
+> 
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/page.h | 3 +--
+>  arch/riscv/mm/init.c          | 6 +-----
+>  2 files changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
+> index 9f432c1b5289..728eee53152a 100644
+> --- a/arch/riscv/include/asm/page.h
+> +++ b/arch/riscv/include/asm/page.h
+> @@ -91,8 +91,7 @@ typedef struct page *pgtable_t;
+>  #endif
+>  
+>  #ifdef CONFIG_MMU
+> -extern unsigned long riscv_pfn_base;
+> -#define ARCH_PFN_OFFSET		(riscv_pfn_base)
+> +#define ARCH_PFN_OFFSET		(PFN_DOWN(phys_ram_base))
+>  #else
+>  #define ARCH_PFN_OFFSET		(PAGE_OFFSET >> PAGE_SHIFT)
+>  #endif /* CONFIG_MMU */
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 478d6763a01a..225a7d2b65cc 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -271,9 +271,6 @@ static void __init setup_bootmem(void)
+>  #ifdef CONFIG_MMU
+>  struct pt_alloc_ops pt_ops __initdata;
+>  
+> -unsigned long riscv_pfn_base __ro_after_init;
+> -EXPORT_SYMBOL(riscv_pfn_base);
+> -
+>  pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+>  pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+>  static pte_t fixmap_pte[PTRS_PER_PTE] __page_aligned_bss;
+> @@ -285,7 +282,6 @@ static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAG
+>  
+>  #ifdef CONFIG_XIP_KERNEL
+>  #define pt_ops			(*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
+> -#define riscv_pfn_base         (*(unsigned long  *)XIP_FIXUP(&riscv_pfn_base))
+>  #define trampoline_pg_dir      ((pgd_t *)XIP_FIXUP(trampoline_pg_dir))
+>  #define fixmap_pte             ((pte_t *)XIP_FIXUP(fixmap_pte))
+>  #define early_pg_dir           ((pgd_t *)XIP_FIXUP(early_pg_dir))
+> @@ -985,7 +981,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>  	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
+>  	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
+>  
+> -	riscv_pfn_base = PFN_DOWN(kernel_map.phys_addr);
+> +	phys_ram_base = kernel_map.phys_addr;
 
-Generate an init function for each VDSO image, replacing init_vdso() and
-sysenter_setup().
+nit: I'd put this in the #else part of the #ifdef CONFIG_XIP_KERNEL above
+to have some consistency with that #ifdef arm and also avoid the redundant
+assignment of phys_ram_base for CONFIG_XIP_KERNEL.
 
-Signed-off-by: Brian Gerst <brgerst@gmail.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230124184019.26850-1-brgerst@gmail.com
----
- arch/x86/entry/vdso/vdso2c.h       |  6 ++++++
- arch/x86/entry/vdso/vdso32-setup.c |  9 ---------
- arch/x86/entry/vdso/vma.c          | 19 ++++---------------
- arch/x86/include/asm/processor.h   |  1 -
- arch/x86/include/asm/vdso.h        |  2 +-
- arch/x86/kernel/cpu/common.c       |  1 -
- 6 files changed, 11 insertions(+), 27 deletions(-)
+>  
+>  	/*
+>  	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
+> -- 
+> 2.37.2
+>
 
-diff --git a/arch/x86/entry/vdso/vdso2c.h b/arch/x86/entry/vdso/vdso2c.h
-index 5264daa..67b3e37 100644
---- a/arch/x86/entry/vdso/vdso2c.h
-+++ b/arch/x86/entry/vdso/vdso2c.h
-@@ -179,6 +179,7 @@ static void BITSFUNC(go)(void *raw_addr, size_t raw_len,
- 
- 	fprintf(outfile, "/* AUTOMATICALLY GENERATED -- DO NOT EDIT */\n\n");
- 	fprintf(outfile, "#include <linux/linkage.h>\n");
-+	fprintf(outfile, "#include <linux/init.h>\n");
- 	fprintf(outfile, "#include <asm/page_types.h>\n");
- 	fprintf(outfile, "#include <asm/vdso.h>\n");
- 	fprintf(outfile, "\n");
-@@ -218,5 +219,10 @@ static void BITSFUNC(go)(void *raw_addr, size_t raw_len,
- 			fprintf(outfile, "\t.sym_%s = %" PRIi64 ",\n",
- 				required_syms[i].name, (int64_t)syms[i]);
- 	}
-+	fprintf(outfile, "};\n\n");
-+	fprintf(outfile, "static __init int init_%s(void) {\n", image_name);
-+	fprintf(outfile, "\treturn init_vdso_image(&%s);\n", image_name);
- 	fprintf(outfile, "};\n");
-+	fprintf(outfile, "subsys_initcall(init_%s);\n", image_name);
-+
- }
-diff --git a/arch/x86/entry/vdso/vdso32-setup.c b/arch/x86/entry/vdso/vdso32-setup.c
-index 43842fa..3b300a7 100644
---- a/arch/x86/entry/vdso/vdso32-setup.c
-+++ b/arch/x86/entry/vdso/vdso32-setup.c
-@@ -51,17 +51,8 @@ __setup("vdso32=", vdso32_setup);
- __setup_param("vdso=", vdso_setup, vdso32_setup, 0);
- #endif
- 
--int __init sysenter_setup(void)
--{
--	init_vdso_image(&vdso_image_32);
--
--	return 0;
--}
--
- #ifdef CONFIG_X86_64
- 
--subsys_initcall(sysenter_setup);
--
- #ifdef CONFIG_SYSCTL
- /* Register vsyscall32 into the ABI table */
- #include <linux/sysctl.h>
-diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
-index b8f3f9b..2738eb2 100644
---- a/arch/x86/entry/vdso/vma.c
-+++ b/arch/x86/entry/vdso/vma.c
-@@ -44,13 +44,16 @@ unsigned int vclocks_used __read_mostly;
- unsigned int __read_mostly vdso64_enabled = 1;
- #endif
- 
--void __init init_vdso_image(const struct vdso_image *image)
-+int __init init_vdso_image(const struct vdso_image *image)
- {
-+	BUILD_BUG_ON(VDSO_CLOCKMODE_MAX >= 32);
- 	BUG_ON(image->size % PAGE_SIZE != 0);
- 
- 	apply_alternatives((struct alt_instr *)(image->data + image->alt),
- 			   (struct alt_instr *)(image->data + image->alt +
- 						image->alt_len));
-+
-+	return 0;
- }
- 
- static const struct vm_special_mapping vvar_mapping;
-@@ -418,18 +421,4 @@ static __init int vdso_setup(char *s)
- 	return 1;
- }
- __setup("vdso=", vdso_setup);
--
--static int __init init_vdso(void)
--{
--	BUILD_BUG_ON(VDSO_CLOCKMODE_MAX >= 32);
--
--	init_vdso_image(&vdso_image_64);
--
--#ifdef CONFIG_X86_X32_ABI
--	init_vdso_image(&vdso_image_x32);
--#endif
--
--	return 0;
--}
--subsys_initcall(init_vdso);
- #endif /* CONFIG_X86_64 */
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 4e35c66..2dd0c8a 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -542,7 +542,6 @@ enum idle_boot_override {IDLE_NO_OVERRIDE=0, IDLE_HALT, IDLE_NOMWAIT,
- 			 IDLE_POLL};
- 
- extern void enable_sep_cpu(void);
--extern int sysenter_setup(void);
- 
- 
- /* Defined in head.S */
-diff --git a/arch/x86/include/asm/vdso.h b/arch/x86/include/asm/vdso.h
-index 2963a2f..d7f6592 100644
---- a/arch/x86/include/asm/vdso.h
-+++ b/arch/x86/include/asm/vdso.h
-@@ -45,7 +45,7 @@ extern const struct vdso_image vdso_image_x32;
- extern const struct vdso_image vdso_image_32;
- #endif
- 
--extern void __init init_vdso_image(const struct vdso_image *image);
-+extern int __init init_vdso_image(const struct vdso_image *image);
- 
- extern int map_vdso_once(const struct vdso_image *image, unsigned long addr);
- 
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 9cfca3d..3a9043e 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1953,7 +1953,6 @@ void __init identify_boot_cpu(void)
- 	if (HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT))
- 		pr_info("CET detected: Indirect Branch Tracking enabled\n");
- #ifdef CONFIG_X86_32
--	sysenter_setup();
- 	enable_sep_cpu();
- #endif
- 	cpu_detect_tlb(&boot_cpu_data);
+Otherwise,
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+
+Thanks,
+drew
