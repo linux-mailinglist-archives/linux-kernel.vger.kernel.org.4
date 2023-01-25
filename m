@@ -2,199 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9496367A7AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 01:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 919D067A7B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 01:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234793AbjAYA2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 19:28:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
+        id S234931AbjAYA26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 19:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbjAYA2N (ORCPT
+        with ESMTP id S234873AbjAYA2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 19:28:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C719518E0;
-        Tue, 24 Jan 2023 16:27:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F33146141D;
-        Wed, 25 Jan 2023 00:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2088BC43442;
-        Wed, 25 Jan 2023 00:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674606453;
-        bh=Hf6D8jaVh9N46w1G0EEZbriQYqxBI7NIDla18BtPWI4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GsY2fk5zT8DTcq3AwyfRvEy78M9JjdbFUe8YMnBV7hXK7/RIi5I8ZkMfNVaxnQfoi
-         uT6pA7E7X2eN+KlCKaWkSG8pvviYwHmm2/ji9DqcUamRKwt0h/IKwmy1NPPekEvYXX
-         i5JxsWEH6816qagZnEbQCN2dWOeNM+y87ChgdTEqHuOW10rYUruZxvIQu0x53ogep+
-         lcv7lypzWme4ZHo+TO/GX0SbaBrXR5srcqayHkvhPLyyLRt88zs3m+Dldxnzz+UEMn
-         SIiAZLAhaqRx0i14Tfho4gcsTgBv0Bj7l7vAfSKoZoWJ4yoYGd4svMwYpbc9gTStQc
-         FjFFY0BU+NGQg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7D74F5C1D0D; Tue, 24 Jan 2023 16:27:32 -0800 (PST)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
-        sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
-        maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
-        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-doc@vger.kernel.org, "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH v2 clocksource 7/7] x86/tsc: Add option to force frequency recalibration with HW timer
-Date:   Tue, 24 Jan 2023 16:27:30 -0800
-Message-Id: <20230125002730.1471349-7-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20230125002708.GA1471122@paulmck-ThinkPad-P17-Gen-1>
-References: <20230125002708.GA1471122@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 24 Jan 2023 19:28:45 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FB54FCF4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:28:12 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id s17-20020a0566022bd100b00704c01f38abso9682307iov.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 16:28:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FHz9nUalEZpL+NYGlZGsQfum4vHxjPouJjL9/+2yvJQ=;
+        b=SJ5CpeqhsXu83H9/15urtHD+mNi1cUGXXhywxBKEJIkZZuUuAtHP7/ak1t5KtZKmyy
+         OEfSYAOyYvc0kdaXuuaBMjPCpwMk4FZcRAgkAlS4r7/V6GNHBJ7FGV5+JYUVFO7FHUbr
+         isPRbwklo2a8+Ej/jBcCZANUSL7ke/xrgI6tFR1zl6zIqE/wpvgIg/LKybKUeooFt9Uk
+         eIRPpfA2oJRWsi4F0T/L4jxvNK2IBcY6Bzat7vfpsKGtO5LcSAe4vf+m/yM+qBxxXOgW
+         2QMZfu42H5oD0QwtPKDDk65s3uOFtTrhUg7w9DZgi14bE9tmUr3OMY0srVcpwnfjGKiq
+         xMPg==
+X-Gm-Message-State: AFqh2kraPftp9AT+D7zNj99/BHjgnAuVhT/a2lOPbJknpQB7VGIm789N
+        sqEjfnH5Vvka8W/4YT0L2rhnY/IPooqtnQ6CSxwEKvnm0Ltu
+X-Google-Smtp-Source: AMrXdXspl2RwG0xe0vbGsOk4B3nhvQHCg5/uehBUvE66cNYOOcS7ltg534+IEfflwDF4glDRj6lU0zIsMGCbTnIwUNuFxj+YzuE1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:94c7:0:b0:6de:383e:4146 with SMTP id
+ y7-20020a5d94c7000000b006de383e4146mr1832543ior.48.1674606456228; Tue, 24 Jan
+ 2023 16:27:36 -0800 (PST)
+Date:   Tue, 24 Jan 2023 16:27:36 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f6540d05f30bb23f@google.com>
+Subject: [syzbot] [ext4?] possible deadlock in ext4_xattr_set_handle (3)
+From:   syzbot <syzbot+edce54daffee36421b4c@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Tang <feng.tang@intel.com>
+Hello,
 
-The kernel assumes that the TSC frequency which is provided by the
-hardware / firmware via MSRs or CPUID(0x15) is correct after applying
-a few basic consistency checks. This disables the TSC recalibration
-against HPET or PM timer.
+syzbot found the following issue on:
 
-As a result there is no mechanism to validate that frequency in cases
-where a firmware or hardware defect is suspected. And there was case
-that some user used atomic clock to measure the TSC frequency and
-reported an inaccuracy issue, which was later fixed in firmware.
+HEAD commit:    edc00350d205 Merge tag 'block-6.2-2023-01-20' of git://git..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=134b1441480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=899d86a7610a0ea0
+dashboard link: https://syzkaller.appspot.com/bug?extid=edce54daffee36421b4c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
-Add an option 'recalibrate' for 'tsc' kernel parameter to force the
-tsc freq recalibration with HPET or PM timer, and warn if the
-deviation from previous value is more than about 500 PPM, which
-provides a way to verify the data from hardware / firmware.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-There is no functional change to existing work flow.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+edce54daffee36421b4c@syzkaller.appspotmail.com
 
-Recently there was a real-world case: "The 40ms/s divergence between
-TSC and HPET was observed on hardware that is quite recent" [1], on
-that platform the TSC frequence 1896 MHz was got from CPUID(0x15),
-and the force-reclibration with HPET/PMTIMER both calibrated out
-value of 1975 MHz, which also matched with check from software
-'chronyd', indicating it's a problem of BIOS or firmware.
+ext4 filesystem being mounted at /syzkaller-testdir3627507797/syzkaller.9jT2hR/316/file0 supports timestamps until 2038 (0x7fffffff)
+======================================================
+WARNING: possible circular locking dependency detected
+6.2.0-rc4-syzkaller-00350-gedc00350d205 #0 Not tainted
+------------------------------------------------------
+syz-executor.2/573 is trying to acquire lock:
+ffffffff8c8d4f60 (fs_reclaim){+.+.}-{0:0}, at: might_alloc include/linux/sched/mm.h:271 [inline]
+ffffffff8c8d4f60 (fs_reclaim){+.+.}-{0:0}, at: slab_pre_alloc_hook mm/slab.h:720 [inline]
+ffffffff8c8d4f60 (fs_reclaim){+.+.}-{0:0}, at: slab_alloc_node mm/slub.c:3434 [inline]
+ffffffff8c8d4f60 (fs_reclaim){+.+.}-{0:0}, at: __kmem_cache_alloc_node+0x41/0x430 mm/slub.c:3491
 
-[Thanks tglx for helping improving the commit log]
-[ paulmck: Wordsmith Kconfig help text. ]
+but task is already holding lock:
+ffff8880277eb2f0 (&ei->xattr_sem){++++}-{3:3}, at: ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
+ffff8880277eb2f0 (&ei->xattr_sem){++++}-{3:3}, at: ext4_xattr_set_handle+0x160/0x1510 fs/ext4/xattr.c:2305
 
-[1]. https://lore.kernel.org/lkml/20221117230910.GI4001@paulmck-ThinkPad-P17-Gen-1/
-Signed-off-by: Feng Tang <feng.tang@intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: <x86@kernel.org>
-Cc: <linux-doc@vger.kernel.org>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&ei->xattr_sem){++++}-{3:3}:
+       down_write+0x94/0x220 kernel/locking/rwsem.c:1562
+       ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
+       ext4_xattr_set_handle+0x160/0x1510 fs/ext4/xattr.c:2305
+       __ext4_set_acl+0x35c/0x5a0 fs/ext4/acl.c:217
+       ext4_set_acl+0x484/0x5f0 fs/ext4/acl.c:259
+       set_posix_acl+0x25b/0x320 fs/posix_acl.c:957
+       vfs_remove_acl+0x276/0x640 fs/posix_acl.c:1209
+       ovl_do_remove_acl fs/overlayfs/overlayfs.h:292 [inline]
+       ovl_workdir_create+0x462/0x800 fs/overlayfs/super.c:821
+       ovl_make_workdir fs/overlayfs/super.c:1294 [inline]
+       ovl_get_workdir fs/overlayfs/super.c:1444 [inline]
+       ovl_fill_super+0x1a02/0x6330 fs/overlayfs/super.c:2000
+       mount_nodev+0x64/0x120 fs/super.c:1405
+       legacy_get_tree+0x109/0x220 fs/fs_context.c:610
+       vfs_get_tree+0x8d/0x2f0 fs/super.c:1489
+       do_new_mount fs/namespace.c:3145 [inline]
+       path_mount+0x132a/0x1e20 fs/namespace.c:3475
+       do_mount fs/namespace.c:3488 [inline]
+       __do_sys_mount fs/namespace.c:3697 [inline]
+       __se_sys_mount fs/namespace.c:3674 [inline]
+       __ia32_sys_mount+0x282/0x300 fs/namespace.c:3674
+       do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+       __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+       do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+       entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+-> #1 (jbd2_handle){++++}-{0:0}:
+       start_this_handle+0xfe7/0x14a0 fs/jbd2/transaction.c:463
+       jbd2__journal_start+0x39d/0x9b0 fs/jbd2/transaction.c:520
+       __ext4_journal_start_sb+0x6e9/0x860 fs/ext4/ext4_jbd2.c:111
+       __ext4_journal_start fs/ext4/ext4_jbd2.h:326 [inline]
+       ext4_dirty_inode+0xa5/0x130 fs/ext4/inode.c:6107
+       __mark_inode_dirty+0x247/0x11e0 fs/fs-writeback.c:2419
+       mark_inode_dirty_sync include/linux/fs.h:2470 [inline]
+       iput.part.0+0x57/0x880 fs/inode.c:1770
+       iput+0x5c/0x80 fs/inode.c:1763
+       dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
+       __dentry_kill+0x3c0/0x640 fs/dcache.c:607
+       shrink_dentry_list+0x240/0x800 fs/dcache.c:1201
+       prune_dcache_sb+0xeb/0x150 fs/dcache.c:1282
+       super_cache_scan+0x33a/0x590 fs/super.c:104
+       do_shrink_slab+0x464/0xce0 mm/vmscan.c:843
+       shrink_slab+0x175/0x660 mm/vmscan.c:1003
+       shrink_node_memcgs mm/vmscan.c:6140 [inline]
+       shrink_node+0x95d/0x1f40 mm/vmscan.c:6169
+       kswapd_shrink_node mm/vmscan.c:6960 [inline]
+       balance_pgdat+0x8f5/0x1530 mm/vmscan.c:7150
+       kswapd+0x70b/0xfc0 mm/vmscan.c:7410
+       kthread+0x2e8/0x3a0 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+-> #0 (fs_reclaim){+.+.}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+       lock_acquire kernel/locking/lockdep.c:5668 [inline]
+       lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+       __fs_reclaim_acquire mm/page_alloc.c:4674 [inline]
+       fs_reclaim_acquire+0x11d/0x160 mm/page_alloc.c:4688
+       might_alloc include/linux/sched/mm.h:271 [inline]
+       slab_pre_alloc_hook mm/slab.h:720 [inline]
+       slab_alloc_node mm/slub.c:3434 [inline]
+       __kmem_cache_alloc_node+0x41/0x430 mm/slub.c:3491
+       __do_kmalloc_node mm/slab_common.c:967 [inline]
+       __kmalloc_node+0x4d/0xd0 mm/slab_common.c:975
+       kmalloc_node include/linux/slab.h:610 [inline]
+       kvmalloc_node+0x76/0x1a0 mm/util.c:581
+       kvmalloc include/linux/slab.h:737 [inline]
+       ext4_xattr_inode_cache_find fs/ext4/xattr.c:1484 [inline]
+       ext4_xattr_inode_lookup_create fs/ext4/xattr.c:1527 [inline]
+       ext4_xattr_set_entry+0x1d92/0x3a00 fs/ext4/xattr.c:1669
+       ext4_xattr_block_set+0x61b/0x3000 fs/ext4/xattr.c:1906
+       ext4_xattr_set_handle+0xd8a/0x1510 fs/ext4/xattr.c:2390
+       ext4_xattr_set+0x144/0x360 fs/ext4/xattr.c:2492
+       __vfs_setxattr+0x173/0x1e0 fs/xattr.c:202
+       __vfs_setxattr_noperm+0x129/0x5f0 fs/xattr.c:236
+       __vfs_setxattr_locked+0x1d3/0x260 fs/xattr.c:297
+       vfs_setxattr+0x143/0x340 fs/xattr.c:323
+       do_setxattr+0x151/0x190 fs/xattr.c:608
+       setxattr+0x146/0x160 fs/xattr.c:631
+       path_setxattr+0x197/0x1c0 fs/xattr.c:650
+       __do_sys_setxattr fs/xattr.c:666 [inline]
+       __se_sys_setxattr fs/xattr.c:662 [inline]
+       __ia32_sys_setxattr+0xc0/0x160 fs/xattr.c:662
+       do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+       __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+       do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+       entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+other info that might help us debug this:
+
+Chain exists of:
+  fs_reclaim --> jbd2_handle --> &ei->xattr_sem
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&ei->xattr_sem);
+                               lock(jbd2_handle);
+                               lock(&ei->xattr_sem);
+  lock(fs_reclaim);
+
+ *** DEADLOCK ***
+
+3 locks held by syz-executor.2/573:
+ #0: ffff8880650a0460 (sb_writers#4){.+.+}-{0:0}, at: path_setxattr+0xb2/0x1c0 fs/xattr.c:648
+ #1: ffff8880277eb628 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff8880277eb628 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: vfs_setxattr+0x120/0x340 fs/xattr.c:322
+ #2: ffff8880277eb2f0 (&ei->xattr_sem){++++}-{3:3}, at: ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
+ #2: ffff8880277eb2f0 (&ei->xattr_sem){++++}-{3:3}, at: ext4_xattr_set_handle+0x160/0x1510 fs/ext4/xattr.c:2305
+
+stack backtrace:
+CPU: 2 PID: 573 Comm: syz-executor.2 Not tainted 6.2.0-rc4-syzkaller-00350-gedc00350d205 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+ lock_acquire kernel/locking/lockdep.c:5668 [inline]
+ lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+ __fs_reclaim_acquire mm/page_alloc.c:4674 [inline]
+ fs_reclaim_acquire+0x11d/0x160 mm/page_alloc.c:4688
+ might_alloc include/linux/sched/mm.h:271 [inline]
+ slab_pre_alloc_hook mm/slab.h:720 [inline]
+ slab_alloc_node mm/slub.c:3434 [inline]
+ __kmem_cache_alloc_node+0x41/0x430 mm/slub.c:3491
+ __do_kmalloc_node mm/slab_common.c:967 [inline]
+ __kmalloc_node+0x4d/0xd0 mm/slab_common.c:975
+ kmalloc_node include/linux/slab.h:610 [inline]
+ kvmalloc_node+0x76/0x1a0 mm/util.c:581
+ kvmalloc include/linux/slab.h:737 [inline]
+ ext4_xattr_inode_cache_find fs/ext4/xattr.c:1484 [inline]
+ ext4_xattr_inode_lookup_create fs/ext4/xattr.c:1527 [inline]
+ ext4_xattr_set_entry+0x1d92/0x3a00 fs/ext4/xattr.c:1669
+ ext4_xattr_block_set+0x61b/0x3000 fs/ext4/xattr.c:1906
+ ext4_xattr_set_handle+0xd8a/0x1510 fs/ext4/xattr.c:2390
+ ext4_xattr_set+0x144/0x360 fs/ext4/xattr.c:2492
+ __vfs_setxattr+0x173/0x1e0 fs/xattr.c:202
+ __vfs_setxattr_noperm+0x129/0x5f0 fs/xattr.c:236
+ __vfs_setxattr_locked+0x1d3/0x260 fs/xattr.c:297
+ vfs_setxattr+0x143/0x340 fs/xattr.c:323
+ do_setxattr+0x151/0x190 fs/xattr.c:608
+ setxattr+0x146/0x160 fs/xattr.c:631
+ path_setxattr+0x197/0x1c0 fs/xattr.c:650
+ __do_sys_setxattr fs/xattr.c:666 [inline]
+ __se_sys_setxattr fs/xattr.c:662 [inline]
+ __ia32_sys_setxattr+0xc0/0x160 fs/xattr.c:662
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+RIP: 0023:0xf7f96549
+Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+RSP: 002b:00000000f7f915cc EFLAGS: 00000296 ORIG_RAX: 00000000000000e2
+RAX: ffffffffffffffda RBX: 00000000200000c0 RCX: 0000000020000180
+RDX: 00000000200005c0 RSI: 0000000000002000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000296 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	03 74 c0 01          	add    0x1(%rax,%rax,8),%esi
+   4:	10 05 03 74 b8 01    	adc    %al,0x1b87403(%rip)        # 0x1b8740d
+   a:	10 06                	adc    %al,(%rsi)
+   c:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
+  10:	10 07                	adc    %al,(%rdi)
+  12:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
+  16:	10 08                	adc    %cl,(%rax)
+  18:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
+  1c:	00 00                	add    %al,(%rax)
+  1e:	00 00                	add    %al,(%rax)
+  20:	00 51 52             	add    %dl,0x52(%rcx)
+  23:	55                   	push   %rbp
+  24:	89 e5                	mov    %esp,%ebp
+  26:	0f 34                	sysenter
+  28:	cd 80                	int    $0x80
+* 2a:	5d                   	pop    %rbp <-- trapping instruction
+  2b:	5a                   	pop    %rdx
+  2c:	59                   	pop    %rcx
+  2d:	c3                   	retq
+  2e:	90                   	nop
+  2f:	90                   	nop
+  30:	90                   	nop
+  31:	90                   	nop
+  32:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+  39:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+
+
 ---
- .../admin-guide/kernel-parameters.txt         |  4 +++
- arch/x86/kernel/tsc.c                         | 34 ++++++++++++++++---
- 2 files changed, 34 insertions(+), 4 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 6cfa6e3996cf7..95f0d104c2322 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6369,6 +6369,10 @@
- 			in situations with strict latency requirements (where
- 			interruptions from clocksource watchdog are not
- 			acceptable).
-+			[x86] recalibrate: force recalibration against a HW timer
-+			(HPET or PM timer) on systems whose TSC frequency was
-+			obtained from HW or FW using either an MSR or CPUID(0x15).
-+			Warn if the difference is more than 500 ppm.
- 
- 	tsc_early_khz=  [X86] Skip early TSC calibration and use the given
- 			value instead. Useful when the early TSC frequency discovery
-diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index af3782fb6200c..a5371c6d4b64b 100644
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -48,6 +48,8 @@ static DEFINE_STATIC_KEY_FALSE(__use_tsc);
- 
- int tsc_clocksource_reliable;
- 
-+static int __read_mostly tsc_force_recalibrate;
-+
- static u32 art_to_tsc_numerator;
- static u32 art_to_tsc_denominator;
- static u64 art_to_tsc_offset;
-@@ -303,6 +305,8 @@ static int __init tsc_setup(char *str)
- 		mark_tsc_unstable("boot parameter");
- 	if (!strcmp(str, "nowatchdog"))
- 		no_tsc_watchdog = 1;
-+	if (!strcmp(str, "recalibrate"))
-+		tsc_force_recalibrate = 1;
- 	return 1;
- }
- 
-@@ -1379,6 +1383,25 @@ static void tsc_refine_calibration_work(struct work_struct *work)
- 	else
- 		freq = calc_pmtimer_ref(delta, ref_start, ref_stop);
- 
-+	/* Will hit this only if tsc_force_recalibrate has been set */
-+	if (boot_cpu_has(X86_FEATURE_TSC_KNOWN_FREQ)) {
-+
-+		/* Warn if the deviation exceeds 500 ppm */
-+		if (abs(tsc_khz - freq) > (tsc_khz >> 11)) {
-+			pr_warn("Warning: TSC freq calibrated by CPUID/MSR differs from what is calibrated by HW timer, please check with vendor!!\n");
-+			pr_info("Previous calibrated TSC freq:\t %lu.%03lu MHz\n",
-+				(unsigned long)tsc_khz / 1000,
-+				(unsigned long)tsc_khz % 1000);
-+		}
-+
-+		pr_info("TSC freq recalibrated by [%s]:\t %lu.%03lu MHz\n",
-+			hpet ? "HPET" : "PM_TIMER",
-+			(unsigned long)freq / 1000,
-+			(unsigned long)freq % 1000);
-+
-+		return;
-+	}
-+
- 	/* Make sure we're within 1% */
- 	if (abs(tsc_khz - freq) > tsc_khz/100)
- 		goto out;
-@@ -1412,8 +1435,10 @@ static int __init init_tsc_clocksource(void)
- 	if (!boot_cpu_has(X86_FEATURE_TSC) || !tsc_khz)
- 		return 0;
- 
--	if (tsc_unstable)
--		goto unreg;
-+	if (tsc_unstable) {
-+		clocksource_unregister(&clocksource_tsc_early);
-+		return 0;
-+	}
- 
- 	if (boot_cpu_has(X86_FEATURE_NONSTOP_TSC_S3))
- 		clocksource_tsc.flags |= CLOCK_SOURCE_SUSPEND_NONSTOP;
-@@ -1426,9 +1451,10 @@ static int __init init_tsc_clocksource(void)
- 		if (boot_cpu_has(X86_FEATURE_ART))
- 			art_related_clocksource = &clocksource_tsc;
- 		clocksource_register_khz(&clocksource_tsc, tsc_khz);
--unreg:
- 		clocksource_unregister(&clocksource_tsc_early);
--		return 0;
-+
-+		if (!tsc_force_recalibrate)
-+			return 0;
- 	}
- 
- 	schedule_delayed_work(&tsc_irqwork, 0);
--- 
-2.31.1.189.g2e36527f23
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
