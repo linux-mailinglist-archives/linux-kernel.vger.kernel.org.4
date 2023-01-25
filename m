@@ -2,105 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF5767B1AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1A067B1BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235614AbjAYLlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:41:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
+        id S235742AbjAYLly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:41:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjAYLlX (ORCPT
+        with ESMTP id S235570AbjAYLlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:41:23 -0500
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB948E;
-        Wed, 25 Jan 2023 03:41:22 -0800 (PST)
-Received: by mail-qt1-f182.google.com with SMTP id j9so15659431qtv.4;
-        Wed, 25 Jan 2023 03:41:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N0Lw6g01TroemQ7j6adGGcs3s/PeT68xQ37YefaRRX8=;
-        b=JXnwLXomTaDDuCQdyQIXrrD8dfRfQ7x2t4LR2b0W/LF3xGrn1aPfixeiKvM0v8146T
-         V/tjqYJn+AATEwZCwg9P/L3hK+Lnh2a9QeKrYP0IOLBhAmsU907yMeaR14EXxHDfcNgr
-         GzWLnE+SD7XRM0Gdn0HFsdQG4V3/WEK5v4QdJa7cIT0j9JtG4WS42c90rPmJ4oXfPqTW
-         3mocrUN/tJK+OcEgPuv/ItyV+HkPnUsStPAOHmAZX5N5xv7DDkfZeuSwKCsUZ/yzEQET
-         65QPtQY6kgF/eQyfl2TewPPRSWHodBQ2Gt+4rgukmMXH/qTgP/81vOg4kPGS32d81Mcm
-         vBqw==
-X-Gm-Message-State: AFqh2kovHZ19s7aSzi3nZcyWnT9mLMJ3v2XhBQ2EPZaH4MOx5Mh0J0ZN
-        b8qvd+W/6OqzfAr5dgWLEj2dNuvKQRUbwQ==
-X-Google-Smtp-Source: AMrXdXtJhmmnrEt7JiqVZeSmCadPFrF3/R+BVI+zjTLULL+v2baBDPzd061hEYp7n+8cgeBWCqV1HA==
-X-Received: by 2002:ac8:58c3:0:b0:3b6:2c85:6fe8 with SMTP id u3-20020ac858c3000000b003b62c856fe8mr57146161qta.53.1674646881380;
-        Wed, 25 Jan 2023 03:41:21 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05622a175300b0039cc944ebdasm3228914qtk.54.2023.01.25.03.41.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 03:41:20 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id t16so17949516ybk.2;
-        Wed, 25 Jan 2023 03:41:20 -0800 (PST)
-X-Received: by 2002:a25:37d4:0:b0:80b:8602:f3fe with SMTP id
- e203-20020a2537d4000000b0080b8602f3femr556918yba.36.1674646880330; Wed, 25
- Jan 2023 03:41:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20230102222708.274369-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20230102222708.274369-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 25 Jan 2023 12:41:09 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU5Aj_BNSOOOCTiqi3oLWV7qNv6-pbEo6ytf88DJB8taA@mail.gmail.com>
-Message-ID: <CAMuHMdU5Aj_BNSOOOCTiqi3oLWV7qNv6-pbEo6ytf88DJB8taA@mail.gmail.com>
-Subject: Re: [PATCH] riscv: dts: renesas: rzfive-smarc-som: Drop PHY interrupt
- support for ETH{0,1}
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Wed, 25 Jan 2023 06:41:52 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B5E2195F;
+        Wed, 25 Jan 2023 03:41:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674646908; x=1706182908;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mU94htPXEz2pHW7YqIdCZL3DKTjFRjvvgNm9xhpgYKI=;
+  b=hp8JrSZmHw7u3yOApdDKP27ZfdDg7qvlLB3KbH8krwpJCJ4LTmqpLOBm
+   Uou7DpBF6knRwkcyLhrO2vGN+CFKlAIrSk53pvD8HKttPkn+sA2yNxcnm
+   QNjcaHwVhb5AGG0I5h/IJeO31eCWGAjiUKo1RKbEiH/BxDjiS9qlA2jXF
+   73wJ1TGy1ut3KxC3Klkj4tiTQF6pFkhKAp2d4fBo7jthwPTCuXs/0Leko
+   dSD8f1rdizZZ6SDWPOvP5MgygmUgsaG0dkMuj1gzYXh02NoS2XwkV4Qn4
+   5p8wHBYj1p+eUdEyeUg7A6a2PuwEYYkcApPiM+DYkSPdHvmYBJ4sCPuFd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="306198696"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="306198696"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 03:41:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="991238414"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="991238414"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Jan 2023 03:41:42 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pKe9r-00EpOh-17;
+        Wed, 25 Jan 2023 13:41:39 +0200
+Date:   Wed, 25 Jan 2023 13:41:38 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+Subject: Re: [PATCH v8 5/7] media: i2c: add DS90UB960 driver
+Message-ID: <Y9EVcktGPabqYw+q@smile.fi.intel.com>
+References: <20230120153417.1156207-1-tomi.valkeinen@ideasonboard.com>
+ <20230120153417.1156207-6-tomi.valkeinen@ideasonboard.com>
+ <Y88EhodG7b+oSvtE@pendragon.ideasonboard.com>
+ <beaebec6-4ec5-8041-5f70-a974ae417a78@ideasonboard.com>
+ <Y9AjFcsQQZqZBhAb@pendragon.ideasonboard.com>
+ <ead8904b-0e17-81e7-98a8-19e4abfdf281@ideasonboard.com>
+ <Y9EAw+PUwZJFH+NO@pendragon.ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9EAw+PUwZJFH+NO@pendragon.ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 2, 2023 at 11:27 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> IRQC support for RZ/Five is still missing so drop the interrupts and
-> interrupt-parent properties from the PHY nodes of ETH{0,1}.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> Hi All,
->
-> This patch is to avoid build issues due to patch series [0]. This patch
-> applies on top of [1]
->
-> [0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20230102221815.273719-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> [1] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20221229230300.104524-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+On Wed, Jan 25, 2023 at 12:13:23PM +0200, Laurent Pinchart wrote:
+> On Wed, Jan 25, 2023 at 09:39:57AM +0200, Tomi Valkeinen wrote:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.3.
+...
 
-Gr{oetje,eeting}s,
+> I find
+> 
+> 	dev_dbg(dev, read_err_str, port, "ti,cdr-mode", ret);
+> 
+> less readable as I then have to look up the read_err_str string to
+> understand that line. I also wonder, in that case, if the compiler can
+> still warn if the format string doesn't match the argument types.
 
-                        Geert
+Sorry to be a bit offtopic, but this argument is exactly what I'm trying
+to tell Sakari when reviewing some other series.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-- 
+With Best Regards,
+Andy Shevchenko
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
