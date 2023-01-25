@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE2467AB6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A67C67AB70
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233674AbjAYIMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S234983AbjAYINW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:13:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234754AbjAYIMb (ORCPT
+        with ESMTP id S234745AbjAYINV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:12:31 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94884CE47
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:12:18 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so2040062wmq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:12:18 -0800 (PST)
+        Wed, 25 Jan 2023 03:13:21 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE3014238
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:13:19 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so661781wmc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:13:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iyJXSqP7CQm+h+5+1oMeWkfZOWd0y631bmCZOmSTMyk=;
-        b=U1tQ4sQMqpKkkDDWwHt7ZgPqHAKCJeMt1uKYltAzs2h6l9hw4T2xJNSe/xeFcet/e/
-         csG39fgFwY2TqfLyRb0HhdaCBinxbA73mLJpGvXw7UxOEsGNL6BuAaxzQjpHu7Gn5Z/3
-         cejorsMJW4ya9Mw2LYIBstGIRb9WrgIDWPEVAUTRGF1f486ttdA8eZRbiMoTApJHnPVg
-         9oK8RQ9J+d9frUa7biTHAnpYLUiWPwPsgq6LTh3va7CIrem+UYgCZCNqce/ijtTrZ6EI
-         XVXuV7P5E9cwGL6bUpcXIrSZy8OZD1hRiYkNlQUXA5twnIxQT/I35wQ90oXDflWqp+lz
-         41YA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JRMBYXDDfGwQT0ouwoUhoXMTDZlIFt+s+o6xL3IiRLY=;
+        b=6SHjABAYsb9sIxgAv1yTgtlFmDL+DXfi+ajm3smPcn19BZzxrisi1qt06XocrXURXb
+         wQLBdO4CEXOsZhznrRPj8vFcM/nTgOkR59EEhz70DMNfAWHRS9/6JORIAcGjtp996dpw
+         bKDNrdYGhtNIl8pGFHDgYXV3MJqJVCNQRsq0F7GIludpClpOR6K1m7kZMU1jBbkCS0Ut
+         AlSKBJC2rloal0MVNyqQJtmlR4qn6fdWolrZ59c3tPILMAoK4rCmuxArBApe8g2T8TKD
+         XXOCMW/RXuVVDEfu4DPUI5Q0fgGeEcO25uwyijHgFfyqitESiWiDoxB1ZeDyMEXJnhYO
+         wF/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iyJXSqP7CQm+h+5+1oMeWkfZOWd0y631bmCZOmSTMyk=;
-        b=gSWuSOevzxD3V2Qrgjb8OrgRkAntUnzsPAnDt+f9OLfxTW81NjdJomaaf90Cs6kqI5
-         +OJ2cBzOrUvVAYb0WNeCLaP0DNi9PsYZGZl0xVVmnpeH5sf18Tn+FPdYQyLdv+sr6/Zl
-         afy9uirjtYyIeiLZ9Zp2ar1ZHG+ZhDJ8s75CDD+wmQGZYy1fvkmohIYWQCn6tOlNCnls
-         EW7o322/U3IxyrPMG3ra4PX2ynnE+Hyl/PLEZr38Ecxwv1TZfwFNgnwBiky26j8OrifA
-         PHjTZ8HOekuNIZ7eB2+Ehk/WVRK+5R5JfuOXlqxsMd4FC0jWInMAUSmwpciCiIaYSRUV
-         QrpA==
-X-Gm-Message-State: AFqh2kouLCL4HxfO/GRveWPpn1uVnq1ousvSTH51O3NHkscb5jl9Uuvc
-        TAQiGNHoamE60IvGSW/UhdvY7Q==
-X-Google-Smtp-Source: AMrXdXvo/5JiqclykmzIB1NdGAzJlDGhKgsGjykOeNA58K9JyuQOPNNN63ZjRphCQmq7Rvir8ugUsA==
-X-Received: by 2002:a05:600c:1c9d:b0:3da:db4:6105 with SMTP id k29-20020a05600c1c9d00b003da0db46105mr30909204wms.37.1674634337244;
-        Wed, 25 Jan 2023 00:12:17 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JRMBYXDDfGwQT0ouwoUhoXMTDZlIFt+s+o6xL3IiRLY=;
+        b=3iVfzxVIZ5QcBQFMAlIP15Je7Mb6wuFfrdc3KYi+DUM5Fvsg7ZZX1e9RP2dB2M4T1y
+         ZoLFr7dHPSrOn53RVUcpF6zbIQN/9wmr+rBv7U6x9/SFqbkgAHeGUIOlqPRugG34g5df
+         VDB8SnIK48IXZ3rDU3jaFCKDkaDwwjDNMd5IW6F5mdF8WuumSoX5vK/kUP/9Wt0f7kWR
+         SBlMMFAhnKpcoWeqWbD/3vjTgUdoS3CT2pdWB6vQ2OdJT2rd2NdAfhH3hRpNfYJPX7UK
+         ZKAhKNOA3TGbJFJQdApppJINR4d1WtunWXT2RKp85SK4+8wRdbmV9f7ePa1/Iieh5dZf
+         j6Gg==
+X-Gm-Message-State: AFqh2krEHkffdx0kQObs8mj78r1+gK1X/ny9OhmkqimQoaqA8o6M03rd
+        2hDloKOwzBWry9Vo1zU73YlXBA==
+X-Google-Smtp-Source: AMrXdXvWfWdoytoOqidg1cHLUyDe1MVkKUECDjQaq67xQo8MEZOVr9cCg+Ez9pnaBdNwW4QEaggpMg==
+X-Received: by 2002:a7b:c5cb:0:b0:3d3:4f99:bb32 with SMTP id n11-20020a7bc5cb000000b003d34f99bb32mr29381871wmk.36.1674634398316;
+        Wed, 25 Jan 2023 00:13:18 -0800 (PST)
 Received: from alex-rivos.home (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
-        by smtp.gmail.com with ESMTPSA id g12-20020a05600c310c00b003db012d49b7sm6028511wmo.2.2023.01.25.00.12.16
+        by smtp.gmail.com with ESMTPSA id a19-20020a05600c349300b003cfa622a18asm1139569wmq.3.2023.01.25.00.13.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 00:12:16 -0800 (PST)
+        Wed, 25 Jan 2023 00:13:17 -0800 (PST)
 From:   Alexandre Ghiti <alexghiti@rivosinc.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -59,52 +60,86 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arch@vger.kernel.org
 Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH v5 0/2] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Date:   Wed, 25 Jan 2023 09:12:12 +0100
-Message-Id: <20230125081214.1576313-1-alexghiti@rivosinc.com>
+Subject: [PATCH v5 1/2] riscv: Get rid of riscv_pfn_base variable
+Date:   Wed, 25 Jan 2023 09:12:13 +0100
+Message-Id: <20230125081214.1576313-2-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230125081214.1576313-1-alexghiti@rivosinc.com>
+References: <20230125081214.1576313-1-alexghiti@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset intends to improve tlb utilization by using hugepages for
-the linear mapping.
+Use directly phys_ram_base instead, riscv_pfn_base is just the pfn of
+the address contained in phys_ram_base.
 
-v5:
-- Fix nommu builds by getting rid of riscv_pfn_base in patch 1, thanks
-  Conor
-- Add RB from Andre
+Even if there is no functional change intended in this patch, actually
+setting phys_ram_base that early changes the behaviour of
+kernel_mapping_pa_to_va during the early boot: phys_ram_base used to be
+zero before this patch and now it is set to the physical start address of
+the kernel. But it does not break the conversion of a kernel physical
+address into a virtual address since kernel_mapping_pa_to_va should only
+be used on kernel physical addresses, i.e. addresses greater than the
+physical start address of the kernel.
 
-v4:
-- Rebase on top of v6.2-rc3, as noted by Conor
-- Add Acked-by Rob
+Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+---
+ arch/riscv/include/asm/page.h | 3 +--
+ arch/riscv/mm/init.c          | 6 +-----
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-v3:
-- Change the comment about initrd_start VA conversion so that it fits
-  ARM64 and RISCV64 (and others in the future if needed), as suggested
-  by Rob
-
-v2:
-- Add a comment on why RISCV64 does not need to set initrd_start/end that
-  early in the boot process, as asked by Rob
-
-Alexandre Ghiti (2):
-  riscv: Get rid of riscv_pfn_base variable
-  riscv: Use PUD/P4D/PGD pages for the linear mapping
-
- arch/riscv/include/asm/page.h | 19 +++++++++++++++++--
- arch/riscv/mm/init.c          | 28 ++++++++++++++++++----------
- arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
- drivers/of/fdt.c              | 11 ++++++-----
- 4 files changed, 57 insertions(+), 17 deletions(-)
-
+diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
+index 9f432c1b5289..728eee53152a 100644
+--- a/arch/riscv/include/asm/page.h
++++ b/arch/riscv/include/asm/page.h
+@@ -91,8 +91,7 @@ typedef struct page *pgtable_t;
+ #endif
+ 
+ #ifdef CONFIG_MMU
+-extern unsigned long riscv_pfn_base;
+-#define ARCH_PFN_OFFSET		(riscv_pfn_base)
++#define ARCH_PFN_OFFSET		(PFN_DOWN(phys_ram_base))
+ #else
+ #define ARCH_PFN_OFFSET		(PAGE_OFFSET >> PAGE_SHIFT)
+ #endif /* CONFIG_MMU */
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 478d6763a01a..225a7d2b65cc 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -271,9 +271,6 @@ static void __init setup_bootmem(void)
+ #ifdef CONFIG_MMU
+ struct pt_alloc_ops pt_ops __initdata;
+ 
+-unsigned long riscv_pfn_base __ro_after_init;
+-EXPORT_SYMBOL(riscv_pfn_base);
+-
+ pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+ pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+ static pte_t fixmap_pte[PTRS_PER_PTE] __page_aligned_bss;
+@@ -285,7 +282,6 @@ static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAG
+ 
+ #ifdef CONFIG_XIP_KERNEL
+ #define pt_ops			(*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
+-#define riscv_pfn_base         (*(unsigned long  *)XIP_FIXUP(&riscv_pfn_base))
+ #define trampoline_pg_dir      ((pgd_t *)XIP_FIXUP(trampoline_pg_dir))
+ #define fixmap_pte             ((pte_t *)XIP_FIXUP(fixmap_pte))
+ #define early_pg_dir           ((pgd_t *)XIP_FIXUP(early_pg_dir))
+@@ -985,7 +981,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+ 	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
+ 	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
+ 
+-	riscv_pfn_base = PFN_DOWN(kernel_map.phys_addr);
++	phys_ram_base = kernel_map.phys_addr;
+ 
+ 	/*
+ 	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
 -- 
 2.37.2
 
