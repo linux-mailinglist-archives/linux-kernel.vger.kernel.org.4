@@ -2,296 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D01867B565
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CC067B568
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235684AbjAYPGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:06:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
+        id S235710AbjAYPGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbjAYPGC (ORCPT
+        with ESMTP id S235059AbjAYPGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:06:02 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE7D40F4;
-        Wed, 25 Jan 2023 07:06:01 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id bk16so17345346wrb.11;
-        Wed, 25 Jan 2023 07:06:01 -0800 (PST)
+        Wed, 25 Jan 2023 10:06:43 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8851B7EC4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:06:41 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id mp20so48382761ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:06:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BkSUqZWMeZKVzKhiXO+ME3iOU+7nVh8EOP2pS4JSDHk=;
-        b=pm5Kt+1xFUjO+/tA1En5NnW+iB1X6cb+z6ws/fJ6yp+APi5QUPNO4lLdqZqYDvnAWF
-         vmC79mW7hGuCNWaYgGrgh1ZiIBoN8f1k4dKsXgBDPvlP164J0sJ71+7kmsvY0CdLngdy
-         r8pisUG+oEt3fi1mwBIuCKkR/KX5wHcjaaLt9lLHtrzXyYM9dub9gTKwAD76luR+gzpA
-         fRwk4Qfmr7qKD8yb6/fHCT+h8ne5LV0NVrTwJ6xyIto8/5FqfOqdeKzy65sPBzM4HIRP
-         yp1jj5aSSjcKmNdviyVZzT4ByG48E3Yj0I9eIUBsjoZu/50zgE3Mnniiichq+vo7eFrd
-         /1hQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hZ+XWT7x3GIrVuC5smdu5kaGnAEgwF0jVXjRtih1Jog=;
+        b=cH3hA1DNTFYYXcYv2dYsdfs/F0a4Fo0x393HAZwW7sg2/ZjfnFAD1GtMUOqjWL6CnP
+         ZvzRjkIG0subDN66xQFmo5RPvHMO3JcQFlvxD4ONkyFtfwzAB0ttmle/4y/TihRmks2S
+         QXEXCp8Wf6YgFDGr3UNW6Zg1acdhVDLA6TZFsp2afNANCN/FBWcfLjqRBqIzEzy0hs2+
+         Iu7AQIKZKCjwH1r3tr76JeJWLqDPeFtDwhkwh4CwUKs4fBH3dkJgQS9oXUFzIuRCTvAV
+         wz10ylaivnJCsis/1BoziUFwpkgIXGHitA8M5eSFjzZ2tVIZ5zMWatWzwaCmwmELkutj
+         aVZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BkSUqZWMeZKVzKhiXO+ME3iOU+7nVh8EOP2pS4JSDHk=;
-        b=g/fwJRzeRHSZVwpQafcdfep8RoO086PPzVRjiuZsNRXzhqC+07b9xKTJ8VpwB0hyIm
-         0A4eswiI3rBHz5N0auxZqjgF5sgb8J+A33faFURIWs+MKKxhcjO+TObL4CNsn4SbrZ55
-         jcX28jyGyEk3om/tg9aVetuL+M5sM03WrsMPArfxs2/U930IFlu6zLn0bkMlnWY9ZDV1
-         JL1MUtMS9gzJg5Xb39NbaOS7++ea7tK40XDeWGYE/btYtN3FUHUyFJhROS6McnO+O7iH
-         QPGQ9mQJaLkuZ0t+SDPhDXXZiqschiwi3FYXIrbmho3OznwaItHZg/pZ3huJV1XUEw2E
-         cNZg==
-X-Gm-Message-State: AO0yUKVcRLfagCXiESx1ekRe1BGOMAmS1V8plQ4Q+7UhFkhBJCiGBlpF
-        bpcMo7p2/oHWW1V3knX6Q60=
-X-Google-Smtp-Source: AK7set/wQ+37CgFbge5PWcKRfAPog2dI1ab9mJdFRTdZzk13Uw1WQ8F4y3kqvHrOHGQ3ixy37HIFhw==
-X-Received: by 2002:adf:e189:0:b0:2bf:ae19:d8dd with SMTP id az9-20020adfe189000000b002bfae19d8ddmr6897863wrb.37.1674659159649;
-        Wed, 25 Jan 2023 07:05:59 -0800 (PST)
-Received: from [192.168.1.135] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id o2-20020a5d6842000000b002be5401ef5fsm4704041wrw.39.2023.01.25.07.05.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 07:05:59 -0800 (PST)
-Message-ID: <879c35aa-35a3-b6dd-21f0-5355bcedbb55@gmail.com>
-Date:   Wed, 25 Jan 2023 16:05:57 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hZ+XWT7x3GIrVuC5smdu5kaGnAEgwF0jVXjRtih1Jog=;
+        b=p2trIhr46sOzsuQ1cUKotQ9w0jCEPevF3AtqVBrO9Od6OOt19rMx9lcCh340uHd3P+
+         VDfxFxQCqNxH2Vog2Hsy7rrEWCbuQxYyQydyU8o6Yu7CdiX4I8eI4XJjxLDoNdD5nBtI
+         PkxQxRdg9ZEB5eI+MS37YOT1lHpktxPM5SHP0M/v1CKBh/NIpedECA/joI89T2H5fqKY
+         Hxo7gFpkQ8eIL3HsHmdaokk6mB2YARAxSwFdxyNkNoCxkoz2+tOmsn2Vfpa9kcVALuFB
+         xLJOqeO3tNSZRj5NDlzDymP3ZNA5ky5tEqDoBbiNpxbsHI1A8euvYNiFtZqalph8rWIp
+         CXrg==
+X-Gm-Message-State: AFqh2krs26aHHAzY2X4lTa3jvTfo1KOCOv7lSiEPr0t6UX/JvwbIeG/6
+        dW7g0x00uXe2Z9X+bl8ntTgAX4Tij7nfAg7ShqchHQ==
+X-Google-Smtp-Source: AMrXdXvqJOlDJST3w87/gr/ZwRFOMtImwLKSDqGCZTr2eYhDs7UWmBPmEUcE54nfAXRo5cLYHmUUvd9VLSwpRS2TOrc=
+X-Received: by 2002:a17:907:c243:b0:7c0:e391:c548 with SMTP id
+ tj3-20020a170907c24300b007c0e391c548mr5314680ejc.18.1674659200062; Wed, 25
+ Jan 2023 07:06:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v30 00/11] Add MediaTek SoC(vdosys1) support for mt8195
-Content-Language: en-US
-To:     "Nancy.Lin" <nancy.lin@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        CK Hu <ck.hu@mediatek.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Jason-JH . Lin" <jason-jh.lin@mediatek.com>,
-        Nathan Lu <nathan.lu@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Xinlei Lee <xinlei.lee@mediatek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+References: <20230124131717.128660-1-bchihi@baylibre.com> <20230124131717.128660-5-bchihi@baylibre.com>
+ <5dd5c795-5e67-146d-7132-30fc90171d4c@collabora.com>
+In-Reply-To: <5dd5c795-5e67-146d-7132-30fc90171d4c@collabora.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Wed, 25 Jan 2023 16:06:04 +0100
+Message-ID: <CAGuA+oo6dV=Vs69PMPSpBSdqDa2ESHjiTzrH_ZYAyUgVmq9HJw@mail.gmail.com>
+Subject: Re: [PATCH v11 4/6] thermal/drivers/mediatek: Add the Low Voltage
+ Thermal Sensor driver
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, llvm@lists.linux.dev,
-        singo.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230113104434.28023-1-nancy.lin@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230113104434.28023-1-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Whole series applied, thanks!
+On Tue, Jan 24, 2023 at 4:31 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 24/01/23 14:17, bchihi@baylibre.com ha scritto:
+> > From: Balsam CHIHI <bchihi@baylibre.com>
+> >
+> > The Low Voltage Thermal Sensor (LVTS) is a multiple sensors, multi
+> > controllers contained in a thermal domain.
+> >
+> > A thermal domains can be the MCU or the AP.
+> >
+> > Each thermal domains contain up to seven controllers, each thermal
+> > controller handle up to four thermal sensors.
+> >
+> > The LVTS has two Finite State Machines (FSM), one to handle the
+> > functionin temperatures range like hot or cold temperature and another
+> > one to handle monitoring trip point. The FSM notifies via interrupts
+> > when a trip point is crossed.
+> >
+> > The interrupt is managed at the thermal controller level, so when an
+> > interrupt occurs, the driver has to find out which sensor triggered
+> > such an interrupt.
+> >
+> > The sampling of the thermal can be filtered or immediate. For the
+> > former, the LVTS measures several points and applies a low pass
+> > filter.
+> >
+> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>
+> On MT8195 Tomato Chromebook:
+> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-On 13/01/2023 11:44, Nancy.Lin wrote:
-> The hardware path of vdosys1 with DPTx output need to go through by several modules, such as, OVL_ADAPTOR and MERGE.
-> 
-> Add mmsys and mutex modules support by the patches below:
-> 
-> Changes in v30:
-> - rebase to next-20230113
-> - fix reviewer comment in v29
->    - fix mmysy binding doc for vdosys1
-> 
-> Changes in v29:
-> - rebase to next-20221226
-> - fix reviewer comment in v28
->    - fix mmsys binding doc for vdosys1
-> 
-> Changes in v28:
-> - rebase to next-20221107
-> - fix reviewer comment in v27
->    - remove change id
->    - fix mmsys config api typo
-> 
-> Changes in v27:
-> - rebase to next-20221102
-> - change mmsys compatible for mt8195 vdosys1
->    - base on jason's series[ref 1]
-> - fix reviewer comment
->    - only register mmsys reset controller if num_resets > 0
-> 
-> Changes in v26:
-> - fix reviewer comment
->    - set mmsys num_resets to 32 for 8192
-> - rebase to next-20220819
-> 
-> Changes in v25:
-> - fix reviewer comment
->    - refine mtk_mmsys_reset_update func
-> - rebase to next-20220708
-> 
-> Changes in v24:
-> - fix reviewer comment
->    - refine mtk_mmsys_reset_update func
-> - rebase to next-20220622
-> 
-> Changes in v23:
-> - separate[7] mmsys/mutex and drm patches into two series
-> 
-> Changes in v22:
-> - rebase to next-20220525
-> - rebase to vdosys0 series v22
-> - separate dts to a new patch
-> 
-> Changes in v21:
-> - fix reviewer comment
->    - fix rdma and ethdr binding doc and dts
-> 
-> Changes in v20:
-> - fix reviewer comment
->    - update mmsys update bit api name
->    - add mtk_mmsys_update_bits error message if lose gce property
->    - list all mt8195 vdosys1 reset bits
-> 
-> Changes in v19:
-> - fix reviewer comment
->    - separate mt8195 mmsys component to a new patch
->    - separate mt8195 vdo0 and vdo1 routing table
->    - separate mmsys_write_reg api to a new patch and simplify write reg code
->    - separate mmsys 64 bit reset to a new patch
->    - separate mtk-mutex dp_intf1 component to a new patch
-> 
-> Changes in v18:
-> - fix reviewer comment
->    - fix rdma binding doc
->    - fix ethdr binding doc
->    - refine mmsys config cmdq support
->    - refine merge reset control flow, get reset control in probe function
->    - add ethdr reset control error handling and remove dbg log
-> - rebase to vdosys0 series v20 (ref [5])
-> 
-> Changes in v17:
-> - fix reviewer comment in v16
->    - separate ovl adaptor comp in mtk-mmsys and mtk-mutex
->    - separate mmsys config API
->    - move mdp_rdma binding yaml
-> - fix ovl adaptor pm runtime get sync timing issue
-> - rebase to vdosys0 series v19 (ref [5])
-> - rebase to [7] for modify vblank register change
-> 
-> Changes in v16:
-> - fix reviewer comment in v 15
->    - fix mtk_drm_ddp_comp.c alignment
->    - fix vdosys0 mmsys num before adding vdosys1 patch
-> 
-> Changes in v15:
-> - fix ethdr uppercase hex number in dts
-> 
-> Changes in v14:
-> - remove MTK_MMSYS 64 bit dependency
-> - add ethdr.yaml back and fix dt_schema check fail
-> 
-> Resend v13
-> - add related maintainer in maillist
-> 
-> Changes in v13:
-> - fix reviewer comment in v12
->    - fix rdma dt-binding format
->    - fix dts node naming
-> - fix 32 bit build error
->    - modify 64bit dependency for mtk-mmsys
-> - rebase to vdosys0 series v16. (ref [5])
-> 
-> Changes in v12:
-> - fix reviewer comment in v11
->    - modify mbox index
->    - refine dma dev for ovl_adaptor sub driver
-> 
-> Changes in v11:
-> - remove ethdr vblank spin lock
-> - refine ovl_adaptor print message
-> 
-> Changes in v10:
-> - refine ethdr reset control using devm_reset_control_array_get_optional_exclusive
-> - fix ovl_adaptor mtk_ovl_adaptor_clk_enable error handle issue
-> 
-> Changes in v9:
-> - rebase on kernel-5.16-rc1
-> - rebase on vdosys0 series v13. (ref [5])
-> - fix ovl_adaptor sub driver is brought up unintentionally
-> - fix clang build test fail- duplicate ethdr/mdp_rdma init_module/cleanup_module symbol issue
-> 
-> Changes in v8:
-> - separate merge async reset to new patch.
-> - separate drm ovl_adaptor sub driver to new patch.
-> - fix reviewer comment in v7.
-> 
-> Changes in v7:
-> - rebase on vdosys0 series v12 (ref[5])
-> - add dma description in ethdr binding document.
-> - refine vdosys1 bit definition of mmsys routing table.
-> - separate merge modification into 3 pathces.
-> - separate mutex modification into 2 patches.
-> - add plane color coding for mdp_rdma csc.
-> - move mdp_rdma pm control to ovl_adaptor.
-> - fix reviewer comment in v6.
-> 
-> Changes in v6:
-> - rebase on kernel-5.15-rc1.
-> - change mbox label to gce0 for dts node of vdosys1.
-> - modify mmsys reset num for mt8195.
-> - rebase on vdosys0 series v10. (ref [5])
-> - use drm to bring up ovl_adaptor driver.
-> - move drm iommu/mutex check from kms init to drm bind.
-> - modify rdma binding doc location. (Documentation/devicetree/bindings/arm/)
-> - modify for reviewer's comment in v5.
-> 
-> Changes in v5:
-> - add mmsys reset controller reference.
-> 
-> Changes in v4:
-> - use merge common driver for merge1~4.
-> - refine ovl_adaptor rdma driver.
-> - use ovl_adaptor ddp_comp function instead of ethdr.
-> - modify for reviewer's comment in v3.
-> 
-> Changes in v3:
-> - modify for reviewer's comment in v2.
-> - add vdosys1 2 pixels align limit.
-> - add mixer odd offset support.
-> 
-> Changes in v2:
-> - Merge PSEUDO_OVL and ETHDR into one DRM component.
-> - Add mmsys config API for vdosys1 hardware setting.
-> - Add mmsys reset control using linux reset framework.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> 
-> This series are based on the following patch:
-> [1] Change mmsys compatible for mt8195 mediatek-drm
->      20221126101220.18179-1-jason-jh.lin@mediatek.com
-> 
-> Nancy.Lin (11):
->    dt-bindings: arm: mediatek: mmsys: add vdosys1 compatible for MT8195
->    dt-bindings: reset: mt8195: add vdosys1 reset control bit
->    soc: mediatek: add mtk-mmsys ethdr and mdp_rdma components
->    soc: mediatek: add mtk-mmsys support for mt8195 vdosys1
->    soc: mediatek: refine code to use mtk_mmsys_update_bits API
->    soc: mediatek: add mtk-mmsys config API for mt8195 vdosys1
->    soc: mediatek: add cmdq support of mtk-mmsys config API for mt8195
->      vdosys1
->    soc: mediatek: mmsys: add mmsys for support 64 reset bits
->    soc: mediatek: mmsys: add reset control for MT8195 vdosys1
->    soc: mediatek: add mtk-mutex component - dp_intf1
->    soc: mediatek: add mtk-mutex support for mt8195 vdosys1
-> 
->   .../bindings/arm/mediatek/mediatek,mmsys.yaml |   1 +
->   drivers/soc/mediatek/mt8195-mmsys.h           | 146 +++++++++++++++++
->   drivers/soc/mediatek/mtk-mmsys.c              | 149 +++++++++++++-----
->   drivers/soc/mediatek/mtk-mmsys.h              |   1 +
->   drivers/soc/mediatek/mtk-mutex.c              |  37 +++++
->   include/dt-bindings/reset/mt8195-resets.h     |  45 ++++++
->   include/linux/soc/mediatek/mtk-mmsys.h        |  25 +++
->   7 files changed, 366 insertions(+), 38 deletions(-)
-> 
+Hi Angelo,
+
+Thank you for reviewing and testing it.
+
+Best regards,
+Balsam
