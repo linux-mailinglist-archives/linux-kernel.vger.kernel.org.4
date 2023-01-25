@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207BE67B7C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACEBC67B7CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235834AbjAYRCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
+        id S235824AbjAYRDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235992AbjAYRBd (ORCPT
+        with ESMTP id S230347AbjAYRDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:01:33 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4F148593;
-        Wed, 25 Jan 2023 09:01:32 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id 203so8719218iou.13;
-        Wed, 25 Jan 2023 09:01:32 -0800 (PST)
+        Wed, 25 Jan 2023 12:03:09 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967D483CC
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:03:08 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id 203so8721737iou.13
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:03:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ec1Ka0db1NrX1Xb7d95sT9qUeiw8lmRBXlQq56Tj8+c=;
-        b=TAHjGISDVcHzQJ7O+EVA+8A0dOl8L6jAXumEOFX13od6F2COjwX5d8GUyYDW4iHg1N
-         BknN44cQLaSCws3uEf5xB1+Tpb4IPERmY4E/tECkGkhj4LdOyojZg8CM1icIdSnYIE8e
-         BIa0fuFf4nJ9BcRlY4zN9Vbvm+G1nmx744EDE1USWyPIrs0Zn9sOabCSQWOLSDOIjtUe
-         1oeacil1nLfduuSOOhnUeUTef6naudguuW5Er9vC3TFSn16ZVoZNndlaHZ+sK/HgG0WS
-         CXl8hOGqg9oELkKNiuF1RdqYqKiXMPyGCuJDdX3f5f46nr30xqWN4esTJzVO6H6GYuwW
-         1lmQ==
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JPVWLTo+vaeF5iEwBOSiPYaPy6VvLY/Th6ssTGMUgl8=;
+        b=XOj66zypoWrEmuT3uRLp5WqdKG6YJzZ3bYzEf7icQnSt11h1lgop4iFwYvZd8XSkLW
+         DOhCCX2b/oAh3+Zn2Wbf8yTMBPyg4qQ9WvSXZfvlA5GXw24XQUibg3s70nBhgzVL4VWI
+         9dRgvzEHF/Z525nzrcj5BsWnP3zhkK2xeMpf8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ec1Ka0db1NrX1Xb7d95sT9qUeiw8lmRBXlQq56Tj8+c=;
-        b=53KDGWsGlL7QtAUUMcIqYP/Re4YY6PXBkTuIYMYQxhe+0UM3oNvu/F1SrUsAs49Qoj
-         RJI1QRFLfIuddl9I/GVjy4D3dCk6f+7LpxvBNRm4AcIvDThjwByyiEKQVq+eUy5WnvQD
-         IbecJs6BZGxEpMCe5DclV+dLutBy2Uqu7xEMLxWlo0udUirEh6ZWT7YBN5SnHHQ17Oh2
-         3oUUGe0mY4+gs1kKYkjWvsiH3mm91pza5dbAMEeYVUhc9mpgWcb+rBFSVxLE/a2bQ5PA
-         /WLsa+TvGatzvEvuMzLnEjMevZD4fx7XwtL9mB1AMNzJKKC1H2fyJJhfOQYtXHhLCiVI
-         b9Qg==
-X-Gm-Message-State: AFqh2kqUGn5Sf/u+yYTwAXx3uCmqQ6wfUY5jXqwQpdatZuIsYCd40QqP
-        27ON1GOwgEtx+K1eUOT0f+T1LrgBnLsP6JL7q0f43hB5UUk=
-X-Google-Smtp-Source: AMrXdXvgmWJenxWNl6uHkQ679tdqmRtHUOqyTNLrAWKiBQAK+mZ5VsPFIv6EeYW4gCr55iuoyUHqqQC5wCpHKj5GJS4=
-X-Received: by 2002:a5d:8798:0:b0:704:5916:5290 with SMTP id
- f24-20020a5d8798000000b0070459165290mr2644851ion.10.1674666091656; Wed, 25
- Jan 2023 09:01:31 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JPVWLTo+vaeF5iEwBOSiPYaPy6VvLY/Th6ssTGMUgl8=;
+        b=yXGyIW/bfZscyePtZO01ABSoexA3aRzTLMULhGtNH+9zmyHSLJ0CGQmOo1qZRw+SG0
+         rqLrFQY9w9svAqSaT1+n2w0zR88+5FBjpAHSI7ufo5s9OHM6/uOabsKGMekC2BL1S5rE
+         rq2VIRwdFDKJjhAevno5XoekaEnaMkjAiGOTuhGExlBt0oXG2liWEsj0amJF94UL1+D6
+         Fa9YUmsiLUc5VMaZjP6GXOHnmIhLHoGEM5hoUsvqS4sWVkAr3p3FByzMvWbLNhK7FVHp
+         9hbqHl6iuKx0d/BtHAW+4Ir2oHLiGY6QLHGHeIJP4tcD96rL5uxJDmUNxc7oNcjLhu7Q
+         c6rw==
+X-Gm-Message-State: AFqh2kruWK5aBnQPJ8exKP+kTuR65SwvDtFGjTmwSwaSEyKWIU32/GRe
+        EQUb6jRmgj+IkSQ9ahOFdRySZw==
+X-Google-Smtp-Source: AMrXdXvTzdx9bV9nfBVmDShQ+Q25befjEqOGzUdAdd2h+zE8uQH1JTh2YMA7BjTp1cddc+oR3ewuZA==
+X-Received: by 2002:a5e:dd04:0:b0:6dd:f251:caf7 with SMTP id t4-20020a5edd04000000b006ddf251caf7mr4676393iop.0.1674666187811;
+        Wed, 25 Jan 2023 09:03:07 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id p1-20020a0566022b0100b006ddb3b698ffsm1597921iov.23.2023.01.25.09.03.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 09:03:07 -0800 (PST)
+Message-ID: <c38ba6b9-b748-cf84-92bd-d29211b10f24@linuxfoundation.org>
+Date:   Wed, 25 Jan 2023 10:03:06 -0700
 MIME-Version: 1.0
-References: <20230123152430.3e51fd25@canb.auug.org.au> <Y86cy1AM4w5ju5A4@kroah.com>
-In-Reply-To: <Y86cy1AM4w5ju5A4@kroah.com>
-From:   =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>
-Date:   Wed, 25 Jan 2023 18:01:20 +0100
-Message-ID: <CAMUOyH3p1ji0AQSKD6b05ozUfQ5_09jzx8VttQSGZampjBZofw@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the usb tree
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] selftests: amd-pstate: Don't delete source files via
+ Makefile
+To:     Doug Smythies <dsmythies@telus.net>,
+        'Huang Rui' <ray.huang@amd.com>, sedat.dilek@gmail.com,
+        li.meng@amd.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
+ <000601d92db7$39e9d0b0$adbd7210$@telus.net>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <000601d92db7$39e9d0b0$adbd7210$@telus.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,36 +78,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 3:42 PM Greg KH <greg@kroah.com> wrote:
->
-> On Mon, Jan 23, 2023 at 03:24:30PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the usb tree, today's linux-next build (htmldocs) produce=
-d
-> > this warning:
-> >
-> > include/linux/usb/composite.h:510: warning: Function parameter or membe=
-r 'bcd_webusb_version' not described in 'usb_composite_dev'
-> > include/linux/usb/composite.h:510: warning: Function parameter or membe=
-r 'b_webusb_vendor_code' not described in 'usb_composite_dev'
-> > include/linux/usb/composite.h:510: warning: Function parameter or membe=
-r 'landing_page' not described in 'usb_composite_dev'
-> > include/linux/usb/composite.h:510: warning: Function parameter or membe=
-r 'use_webusb' not described in 'usb_composite_dev'
-> >
-> > Introduced by commit
-> >
-> >   93c473948c58 ("usb: gadget: add WebUSB landing page support")
->
-> J=C3=B3, can you send a follow-on patch to fix this issue please?
->
-> thanks,
->
-> greg k-h
+On 1/21/23 09:41, Doug Smythies wrote:
+> Revert the portion of a recent Makefile change that incorrectly
+> deletes source files when doing "make clean".
+> 
+> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Doug Smythies <dsmythies@telus.net>
+> ---
+> v2: fix address list.
+> ---
+>   tools/testing/selftests/amd-pstate/Makefile | 5 -----
+>   1 file changed, 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+> index 5f195ee756d6..5fd1424db37d 100644
+> --- a/tools/testing/selftests/amd-pstate/Makefile
+> +++ b/tools/testing/selftests/amd-pstate/Makefile
+> @@ -7,11 +7,6 @@ all:
+>   uname_M := $(shell uname -m 2>/dev/null || echo not)
+>   ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+> 
+> -ifeq (x86,$(ARCH))
+> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> -endif
+> -
 
-I just posted a new version where I also merged in Andy Shevchenko's
-patches against by patch.
+This looks good - Do you need these files to run this test and if so
+do these need to installed when the test is run on a test system?
 
-Best regards,
-J=C3=B3
+Now applied to linux-kselftest fixes. I will send this up for the next
+rc.
+
+thanks,
+-- Shuah
