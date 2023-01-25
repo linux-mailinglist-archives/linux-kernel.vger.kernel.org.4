@@ -2,92 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4C667B385
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C6A67B38D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234529AbjAYNhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:37:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
+        id S235366AbjAYNjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:39:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbjAYNhg (ORCPT
+        with ESMTP id S235373AbjAYNjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:37:36 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031CE366B1;
-        Wed, 25 Jan 2023 05:37:34 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id mg12so47700139ejc.5;
-        Wed, 25 Jan 2023 05:37:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FGZhhsvD8+TQGlEbFXQhClVyxy7cnFPOZ3OksWnERd4=;
-        b=FMhX4qVIJUl8wQB544nU5iRXOltV/J6nYBFsQd1f44MT9NNt26E6t0yU518C5ZTnYv
-         fT3Vo5gnKTEO6/BSKd46JYn/SgJrpkrmViAZRdUkzYe3Eyzdo8vqxnUrBAJKP8iu+xqF
-         YNYDTBrUHRwhggU1t6sXogMBR0j/IhNsT4PvPb5CyaguXlS/LlPxxmXBoIyBAHor7b4d
-         +sifvxx/wrJTA5/reGcBssY2Y4wGiKKOj2W9CbcZc0rT6Xl15/CbM4F266MvmD5QLGP7
-         kiHsnrOVr6TMR4j7eZf/W6PHEKc8nAvivR87saB2vpKwwgE72sqBuRFRIJpNZhZEKm3z
-         8zgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FGZhhsvD8+TQGlEbFXQhClVyxy7cnFPOZ3OksWnERd4=;
-        b=BQ+5TMHrktS2vlFvHpgrZyVkceSBPTkRmXp/04SzwVDfA98Oe66UBF+b/ig3Tt5KXP
-         bcn8AIgt3bBxBpfK1HHvvRTliH45nkS9O8PNPNj4EzH21GfBu57R4WjC4Zwo7B3WrpM7
-         f0e1qgADx/nacJXsBngD4fNqyRkjXJnyTPprttMgBRDXfzlOAbRpeIwdNHsWSLeyWNfc
-         0Tjfj5RNKyIgKNmIv2BbkS2WjBr9fuhsvDOeUVmd2nfQgx7sPoms0wNFZWGUdaUcuMLF
-         GhZjSgpoWU/IKJw6AtC8NQUK+lrHZJHeAXI7zQ77uISP2rcXiRWc2EewSt8Wor7A6jb3
-         hxqg==
-X-Gm-Message-State: AFqh2kqPgQ63hM9VQ4zI+q2zHPkD+p8lcp6WzbMqyfWpXAXDL5tWFW0u
-        /mQsq9hkrrYH6VhPAACCG+A=
-X-Google-Smtp-Source: AMrXdXtHu/X+yu1d8gTj6hiercOSjzVtHpNWuOyfLzScQKZvCGxLRq7WryD7DFvsocN+mk4vqdIMFg==
-X-Received: by 2002:a17:906:c7cc:b0:7ae:bfec:74c7 with SMTP id dc12-20020a170906c7cc00b007aebfec74c7mr33164552ejb.72.1674653852388;
-        Wed, 25 Jan 2023 05:37:32 -0800 (PST)
-Received: from fedora (176-74-132-138.netdatacomm.cz. [176.74.132.138])
-        by smtp.gmail.com with ESMTPSA id m11-20020a1709060d8b00b0084d1efe9af6sm2373904eji.58.2023.01.25.05.37.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 05:37:31 -0800 (PST)
-Date:   Wed, 25 Jan 2023 14:37:27 +0100
-From:   Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        mani@kernel.org, hemantk@codeaurora.org, quic_jhugo@quicinc.com,
-        andersson@kernel.org, Michael.Srba@seznam.cz, arnd@arndb.de,
-        dipenp@nvidia.com, bvanassche@acm.org, iwona.winiarska@intel.com,
-        ogabbay@kernel.org, tzimmermann@suse.de, fmdefrancesco@gmail.com,
-        jason.m.bills@linux.intel.com, jae.hyun.yoo@linux.intel.com,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
-Subject: Re: [PATCH 2/3] bus: add Wiegand bus driver
-Message-ID: <Y9Ewl37xP9+b2cek@fedora>
-References: <20230104133414.39305-1-m.zatovic1@gmail.com>
- <20230104133414.39305-3-m.zatovic1@gmail.com>
- <Y7WHjD4psjgAAyPd@kroah.com>
- <Y9EpNfZJ5irXZqvR@fedora>
- <Y9EuCGT2KkGfYrVf@kroah.com>
+        Wed, 25 Jan 2023 08:39:33 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A94E561BF;
+        Wed, 25 Jan 2023 05:39:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674653972; x=1706189972;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uVNuIPRm9QPwcd4oqZ9GXJlGxWAucFgmjYS9xfDWMt4=;
+  b=E1bJfvnGz74TIAP8bIer8+zNj6rf7Xz/dQNf7u34E2aQrge2CwsFJDNW
+   kp89yQ9AdoifufhDW0wK7JBpHCRu54aWKDIPWH2JUXji0IADNGWhBXyeB
+   UhfCxRs421BHPbkM6cwuF0TAiy3nc9dDoFpSfbFjmo9aROqcqtw9leoMD
+   nVBWpgBszIKp0qUd8xIy6y3Cjea16gfQCbAR8qtqMQt0cpRzX+X0Zaops
+   sFeyhYoPVkN+bK46H2hkrzUzchwdpcXaP3xZvHF5kbE4zgaFAB5Hr7XIX
+   ymZing00hqbS/rWksMYH1oo/zPLxJeF/exupO3iFmBQE5cS1jDbsGH06g
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="314457759"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="314457759"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 05:39:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="639937713"
+X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
+   d="scan'208";a="639937713"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 25 Jan 2023 05:39:29 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKfzs-0007Km-1U;
+        Wed, 25 Jan 2023 13:39:28 +0000
+Date:   Wed, 25 Jan 2023 21:38:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zach O'Keefe <zokeefe@google.com>, linux-mm@kvack.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Hugh Dickins <hughd@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Zach O'Keefe <zokeefe@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] mm/MADV_COLLAPSE: catch !none !huge !bad pmd lookups
+Message-ID: <202301252110.hFYRsbrm-lkp@intel.com>
+References: <20230125015738.912924-2-zokeefe@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9EuCGT2KkGfYrVf@kroah.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230125015738.912924-2-zokeefe@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am sorry, I should have included more information.
+Hi Zach,
 
-Anyways, Arnd Bergmann has been kind enough to give me more
-insight and I now understand the point you were making in
-the review and will fix it.
+Thank you for the patch! Yet something to improve:
 
-I will be careful to include more information in the future
-communication.
+[auto build test ERROR on akpm-mm/mm-everything]
 
-With regards,
-Martin
+url:    https://github.com/intel-lab-lkp/linux/commits/Zach-O-Keefe/mm-MADV_COLLAPSE-catch-none-huge-bad-pmd-lookups/20230125-095954
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230125015738.912924-2-zokeefe%40google.com
+patch subject: [PATCH 2/2] mm/MADV_COLLAPSE: catch !none !huge !bad pmd lookups
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20230125/202301252110.hFYRsbrm-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/6001eb9a8f1687a1d0b72831d991886106cac37b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zach-O-Keefe/mm-MADV_COLLAPSE-catch-none-huge-bad-pmd-lookups/20230125-095954
+        git checkout 6001eb9a8f1687a1d0b72831d991886106cac37b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   mm/khugepaged.c: In function 'find_pmd_or_thp_or_none':
+>> mm/khugepaged.c:972:24: error: incompatible type for argument 1 of 'pmd_devmap'
+     972 |         if (pmd_devmap(pmd))
+         |                        ^~~
+         |                        |
+         |                        pmd_t **
+   In file included from include/linux/pgtable.h:6,
+                    from include/linux/mm.h:29,
+                    from mm/khugepaged.c:4:
+   arch/x86/include/asm/pgtable.h:254:36: note: expected 'pmd_t' but argument is of type 'pmd_t **'
+     254 | static inline int pmd_devmap(pmd_t pmd)
+         |                              ~~~~~~^~~
+
+
+vim +/pmd_devmap +972 mm/khugepaged.c
+
+   945	
+   946	/*
+   947	 * See pmd_trans_unstable() for how the result may change out from
+   948	 * underneath us, even if we hold mmap_lock in read.
+   949	 */
+   950	static int find_pmd_or_thp_or_none(struct mm_struct *mm,
+   951					   unsigned long address,
+   952					   pmd_t **pmd)
+   953	{
+   954		pmd_t pmde;
+   955	
+   956		*pmd = mm_find_pmd(mm, address);
+   957		if (!*pmd)
+   958			return SCAN_PMD_NULL;
+   959	
+   960		pmde = pmdp_get_lockless(*pmd);
+   961	
+   962	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+   963		/* See comments in pmd_none_or_trans_huge_or_clear_bad() */
+   964		barrier();
+   965	#endif
+   966		if (pmd_none(pmde))
+   967			return SCAN_PMD_NONE;
+   968		if (!pmd_present(pmde))
+   969			return SCAN_PMD_NULL;
+   970		if (pmd_trans_huge(pmde))
+   971			return SCAN_PMD_MAPPED;
+ > 972		if (pmd_devmap(pmd))
+   973			return SCAN_PMD_NULL;
+   974		if (pmd_bad(pmde))
+   975			return SCAN_PMD_NULL;
+   976		return SCAN_SUCCEED;
+   977	}
+   978	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
