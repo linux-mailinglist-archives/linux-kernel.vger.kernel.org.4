@@ -2,89 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A1667B32A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBFC67B331
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235282AbjAYNVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:21:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
+        id S235348AbjAYNY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:24:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjAYNVl (ORCPT
+        with ESMTP id S230257AbjAYNY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:21:41 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B43217CCE;
-        Wed, 25 Jan 2023 05:21:40 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id vw16so47553897ejc.12;
-        Wed, 25 Jan 2023 05:21:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z11HQjPD482wG6TQqbqQUkBWzfmDI9uIR3DR03/5mws=;
-        b=SaY/5HA+NXWkAvzF746yaoiv142/ti9OjsIQOTJ+8G3SmmrDkNbf8OF+34ZoyYTZel
-         MUJ73Z8vhlP51FEqYXeDck+gQB2e2ta7U+XnRMByb+d8s7iP4iCGWTkLihUn3UnyUNXU
-         WMeDQJWD01i04uT6+mSbMMAbbXPycFV7PdtoT0XnNmiwZD7QjY3UdsaDMTxY1OA1Bv7r
-         mlL2gEjFolPBNbhObl9Z1nMzTjOtJGkgvGCD0Td4owhpIVjvBf7IKonh7p8vzdPTv6pp
-         kMYUjszwwL3ZqU34b7fUwvrR7nKZoG6Fomxz3y+pqo9e1eUldNnlvq5xVqVUxGZ4Y+He
-         IzHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z11HQjPD482wG6TQqbqQUkBWzfmDI9uIR3DR03/5mws=;
-        b=gnswqa3wf+PhtMWsMPuhVRsCszbPXqOhHL7hxGPevkNnVzA8z2kQJIEp1FR3B9XLuB
-         thyidaD8hfzLoJs7GNHerdpKNY1840A0mXMGbWaSy7x6kVDXEL3yxJ1fzF4c6vL+orB+
-         QPs2nf61E9R9ibv+6GyOmCl3kdLSXam7vgjbdqEcUCh/tvVBjUOnGdQzLc/d2sa0FvrI
-         Fk5wBnLumxLgMKcQaSGcbYpu3UM4N8V4UoQL1qzEywQqgq2aa5RdHP/X/qwcsaXt/3h3
-         AydlwVY1s3GknngDfWtPp2GPLrS31yQupS3uBuhP8lczAUqc2+uXVyoLdWw3il2yvMoX
-         Sswg==
-X-Gm-Message-State: AFqh2koa9Jt4FV8Ugd7xBmquod0L70Y0jc3o9h3pKvn9gVZaHsBhUUb1
-        XL/3BTMYYmH8tqI0v5OY7H8=
-X-Google-Smtp-Source: AMrXdXvnFsQ5y9XBLsNVnApLK68mC1dOMwOKSCWKL+7FwFYjkukpqa1izK5KofCcHh6kfZtdL+nNjA==
-X-Received: by 2002:a17:907:8c14:b0:84c:e9c4:5751 with SMTP id ta20-20020a1709078c1400b0084ce9c45751mr34847769ejc.74.1674652898698;
-        Wed, 25 Jan 2023 05:21:38 -0800 (PST)
-Received: from fedora (176-74-132-138.netdatacomm.cz. [176.74.132.138])
-        by smtp.gmail.com with ESMTPSA id fq32-20020a1709069da000b0083f91a32131sm2352741ejc.0.2023.01.25.05.21.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 05:21:38 -0800 (PST)
-Date:   Wed, 25 Jan 2023 14:21:35 +0100
-From:   Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        hemantk@codeaurora.org, quic_jhugo@quicinc.com,
-        Bjorn Andersson <andersson@kernel.org>, Michael.Srba@seznam.cz,
-        dipenp@nvidia.com, Bart Van Assche <bvanassche@acm.org>,
-        iwona.winiarska@intel.com, Oded Gabbay <ogabbay@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        fmdefrancesco@gmail.com, jason.m.bills@linux.intel.com,
-        jae.hyun.yoo@linux.intel.com, krzysztof.kozlowski+dt@linaro.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 2/3] bus: add Wiegand bus driver
-Message-ID: <Y9Es35/ehMuB9q8g@fedora>
-References: <20230104133414.39305-1-m.zatovic1@gmail.com>
- <20230104133414.39305-3-m.zatovic1@gmail.com>
- <Y7WHjD4psjgAAyPd@kroah.com>
- <Y9EpNfZJ5irXZqvR@fedora>
- <43964d94-1c76-4c4f-b093-92a611518a87@app.fastmail.com>
+        Wed, 25 Jan 2023 08:24:56 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584111423F;
+        Wed, 25 Jan 2023 05:24:55 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 024FF21D53;
+        Wed, 25 Jan 2023 13:24:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674653094; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uzt5+rLRlm/axdJj2mIj/bMptJgE194uAOpesCCRc2Y=;
+        b=RdGmIAkgn7YC1ScTgFAXzoBjhGhO5U9eFqcSmhz6cIVOojIvPVkwvWaVawl20nxZulqI6s
+        KOvYTPBeSMILMXQiw6edGMU9jCLNKTCXiQN657ZBZ5zEN55aadDPGasxW4/l+6BNc9vyoV
+        ltCGPYibnhhTMPKKETrzUpDQH2v3PsI=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7D54C2C141;
+        Wed, 25 Jan 2023 13:24:52 +0000 (UTC)
+Date:   Wed, 25 Jan 2023 14:24:50 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        live-patching@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Subject: Re: [PATCH 1/2] powerpc/module_64: Improve restore_r2() return
+ semantics
+Message-ID: <Y9EtohjVnoJLqccx@alley>
+References: <cover.1674617130.git.jpoimboe@kernel.org>
+ <15baf76c271a0ae09f7b8556e50f2b4251e7049d.1674617130.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <43964d94-1c76-4c4f-b093-92a611518a87@app.fastmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <15baf76c271a0ae09f7b8556e50f2b4251e7049d.1674617130.git.jpoimboe@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I can not think of any such case. I was trying to be safe
-when including this functionality, as I have seen it in the
-SPI driver. Thank you for the information, I will just
-leave it out.
+On Tue 2023-01-24 19:38:04, Josh Poimboeuf wrote:
+> restore_r2() returns 1 on success, which is surprising for a non-boolean
+> function.  Change it to return 0 on success and -errno on error to match
+> kernel coding convention.
+> 
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+
+Looks good:
+
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+It is in the right direction. Just note that there are more functions
+with the boolean semantic passed via int return value. But there
+are also other functions already using the 0/-E* return values so
+this is rather positive change.
+
+Best Regards,
+Petr
