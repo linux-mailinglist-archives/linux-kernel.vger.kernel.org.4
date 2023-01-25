@@ -2,467 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D9A67B9F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B832E67B9F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235657AbjAYSy7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 25 Jan 2023 13:54:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
+        id S235697AbjAYS4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjAYSy5 (ORCPT
+        with ESMTP id S229806AbjAYSz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:54:57 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0179EFA
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:54:56 -0800 (PST)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PGOwR6012768
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:54:55 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3narn0n7jj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:54:55 -0800
-Received: from twshared25601.14.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 25 Jan 2023 10:54:53 -0800
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 9E75F1469A274; Wed, 25 Jan 2023 10:54:49 -0800 (PST)
-From:   Song Liu <song@kernel.org>
-To:     <linux-kernel@vger.kernel.org>, <linux-modules@vger.kernel.org>,
-        <live-patching@vger.kernel.org>
-CC:     <x86@kernel.org>, Song Liu <song@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v11 2/2] livepatch,x86: Clear relocation targets on a module removal
-Date:   Wed, 25 Jan 2023 10:54:01 -0800
-Message-ID: <20230125185401.279042-2-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230125185401.279042-1-song@kernel.org>
-References: <20230125185401.279042-1-song@kernel.org>
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: jYUcy19FRyf8rbRggnQ59m819DLLh_5G
-X-Proofpoint-ORIG-GUID: jYUcy19FRyf8rbRggnQ59m819DLLh_5G
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 25 Jan 2023 13:55:59 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBFD9EFA;
+        Wed, 25 Jan 2023 10:55:58 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PBDlvZ013708;
+        Wed, 25 Jan 2023 18:55:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=L3/5hDPRGEQidEXlkIYd10t70J2lUdzqn3DEtzJQsVU=;
+ b=V/2BcYPWujtJAv6icS+r6q5vebwvz4mvm5awbtP2RhqGn51SmPIbMIQn3R8BgEkqpHmJ
+ sRIQeBkj5lUSsSh5UwT2mhGXYAbTYLGrYnFu8xZTn69Zfx4TNktRpYb3tXmGLKGOdUrU
+ 3Jy3TbA+reVQoznJ9U7RwhA+TOroZAGFVb2ekc2zpMGno182lDaU7BAT+ZFhK6R/r+J3
+ nr3uLnJtxxqWhjUHe3D2GGqKsxfVW4dXBjNvCcoY6ZEi0C1L8xn6atzBNJUyR5N5rN2t
+ tZg5ZcLLD6MRJN2HDzVaxEEpBLzak7drLwCQ+o7Zf3XaegVqsfzKdjjGkCKZDZhFCxOu Mw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nar2n9vje-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 18:55:54 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30PItrBm014700
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 18:55:53 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 25 Jan 2023 10:55:53 -0800
+Date:   Wed, 25 Jan 2023 10:55:51 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Chris Lew <quic_clew@quicinc.com>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/6] rpmsg: glink: smem: Wrap driver context
+Message-ID: <20230125185551.GA2034155@hu-bjorande-lv.qualcomm.com>
+References: <20230109224001.1706516-1-quic_bjorande@quicinc.com>
+ <20230109224001.1706516-3-quic_bjorande@quicinc.com>
+ <21302696-aadc-2005-bb64-ec807e737d1a@quicinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <21302696-aadc-2005-bb64-ec807e737d1a@quicinc.com>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4Rwqn3LPX06hkxs5b3nWnALZf0iOcUdD
+X-Proofpoint-GUID: 4Rwqn3LPX06hkxs5b3nWnALZf0iOcUdD
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-25_12,2023-01-25_01,2022-06-22_01
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ mlxscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=999
+ spamscore=0 phishscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301250167
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Josh reported a bug:
+On Tue, Jan 24, 2023 at 10:30:42PM -0800, Chris Lew wrote:
+> 
+> 
+> On 1/9/2023 2:39 PM, Bjorn Andersson wrote:
+> > The Glink SMEM driver allocates a struct device and hangs two
+> > devres-allocated pipe objects thereon. To facilitate the move of
+> > interrupt and mailbox handling to the driver, introduce a wrapper object
+> > capturing the device, glink reference and remote processor id.
+> > 
+> > The type of the remoteproc reference is updated, as these are
+> > specifically targetting the SMEM implementation.
+> 
+> s/targetting/targeting
+> 
 
-  When the object to be patched is a module, and that module is
-  rmmod'ed and reloaded, it fails to load with:
+Thank you.
 
-  module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
-  livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-  livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> > 
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> > ---
+> >   drivers/remoteproc/qcom_common.h |  3 +-
+> >   drivers/rpmsg/qcom_glink_smem.c  | 76 ++++++++++++++++++++------------
+> >   include/linux/rpmsg/qcom_glink.h | 12 ++---
+> >   3 files changed, 55 insertions(+), 36 deletions(-)
+> > 
+> > diff --git a/drivers/remoteproc/qcom_common.h b/drivers/remoteproc/qcom_common.h
+> > index c35adf730be0..2747c7d9ba44 100644
+> > --- a/drivers/remoteproc/qcom_common.h
+> > +++ b/drivers/remoteproc/qcom_common.h
+> > @@ -6,6 +6,7 @@
+> >   #include "remoteproc_internal.h"
+> >   #include <linux/soc/qcom/qmi.h>
+> > +struct qcom_glink_smem;
+> >   struct qcom_sysmon;
+> >   struct qcom_rproc_glink {
+> > @@ -15,7 +16,7 @@ struct qcom_rproc_glink {
+> >   	struct device *dev;
+> >   	struct device_node *node;
+> > -	struct qcom_glink *edge;
+> > +	struct qcom_glink_smem *edge;
+> >   };
+> >   struct qcom_rproc_subdev {
+> > diff --git a/drivers/rpmsg/qcom_glink_smem.c b/drivers/rpmsg/qcom_glink_smem.c
+> > index 579bc4443f6d..703e63fa5a86 100644
+> > --- a/drivers/rpmsg/qcom_glink_smem.c
+> > +++ b/drivers/rpmsg/qcom_glink_smem.c
+> > @@ -33,6 +33,14 @@
+> >   #define SMEM_GLINK_NATIVE_XPRT_FIFO_0		479
+> >   #define SMEM_GLINK_NATIVE_XPRT_FIFO_1		480
+> > +struct qcom_glink_smem {
+> > +	struct device dev;
+> > +
+> > +	struct qcom_glink *glink;
+> > +
+> > +	u32 remote_pid;
+> > +};
+> > +
+> >   struct glink_smem_pipe {
+> >   	struct qcom_glink_pipe native;
+> > @@ -41,7 +49,7 @@ struct glink_smem_pipe {
+> >   	void *fifo;
+> > -	int remote_pid;
+> > +	struct qcom_glink_smem *smem;
+> >   };
+> >   #define to_smem_pipe(p) container_of(p, struct glink_smem_pipe, native)
+> > @@ -49,13 +57,14 @@ struct glink_smem_pipe {
+> >   static size_t glink_smem_rx_avail(struct qcom_glink_pipe *np)
+> >   {
+> >   	struct glink_smem_pipe *pipe = to_smem_pipe(np);
+> > +	struct qcom_glink_smem *smem = pipe->smem;
+> >   	size_t len;
+> >   	void *fifo;
+> >   	u32 head;
+> >   	u32 tail;
+> >   	if (!pipe->fifo) {
+> > -		fifo = qcom_smem_get(pipe->remote_pid,
+> > +		fifo = qcom_smem_get(smem->remote_pid,
+> >   				     SMEM_GLINK_NATIVE_XPRT_FIFO_1, &len);
+> >   		if (IS_ERR(fifo)) {
+> >   			pr_err("failed to acquire RX fifo handle: %ld\n",
+> > @@ -179,45 +188,49 @@ static void glink_smem_tx_write(struct qcom_glink_pipe *glink_pipe,
+> >   static void qcom_glink_smem_release(struct device *dev)
+> >   {
+> > -	kfree(dev);
+> > +	struct qcom_glink_smem *smem = container_of(dev, struct qcom_glink_smem, dev);
+> > +
+> > +	kfree(smem);
+> >   }
+> > -struct qcom_glink *qcom_glink_smem_register(struct device *parent,
+> > -					    struct device_node *node)
+> > +struct qcom_glink_smem *qcom_glink_smem_register(struct device *parent,
+> > +						 struct device_node *node)
+> >   {
+> >   	struct glink_smem_pipe *rx_pipe;
+> >   	struct glink_smem_pipe *tx_pipe;
+> >   	struct qcom_glink *glink;
+> > -	struct device *dev;
+> > +	struct qcom_glink_smem *smem;
+> 
+> I think we're following reverse christmas tree in this file
+> 
+> >   	u32 remote_pid;
+> >   	__le32 *descs;
+> >   	size_t size;
+> >   	int ret;
+> > -	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+> > -	if (!dev)
+> > +	smem = kzalloc(sizeof(*smem), GFP_KERNEL);
+> > +	if (!smem)
+> >   		return ERR_PTR(-ENOMEM);
+> > 
+> 
+> Would it be proper to keep a pointer to dev and avoid all the changes to
+> smem->dev use?
+> 
+> dev = &smem->dev;
+> 
 
-  The livepatch module has a relocation which references a symbol
-  in the _previous_ loading of nfsd. When apply_relocate_add()
-  tries to replace the old relocation with a new one, it sees that
-  the previous one is nonzero and it errors out.
+That seems reasonable. Will respin accordingly.
 
-He also proposed three different solutions. We could remove the error
-check in apply_relocate_add() introduced by commit eda9cec4c9a1
-("x86/module: Detect and skip invalid relocations"). However the check
-is useful for detecting corrupted modules.
-
-We could also deny the patched modules to be removed. If it proved to be
-a major drawback for users, we could still implement a different
-approach. The solution would also complicate the existing code a lot.
-
-We thus decided to reverse the relocation patching (clear all relocation
-targets on x86_64). The solution is not
-universal and is too much arch-specific, but it may prove to be simpler
-in the end.
-
-Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Originally-by: Miroslav Benes <mbenes@suse.cz>
-Signed-off-by: Song Liu <song@kernel.org>
-Acked-by: Miroslav Benes <mbenes@suse.cz>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
----
-
-NOTE: powerpc32 code is only compile tested.
-
-Changes v10 => v11:
-1. Do not initialize "size" in __write_relocate_add(). (Petr Mladek)
-2. Use __weak clear_relocate_add(). (Christophe Leroy)
-
-Changes v9 => v10:
-1. Revise commit log. (Josh Poimboeuf)
-2. Various improvements in code style, comments, etc. (Josh Poimboeuf)
-
-Changes v8 => v9:
-1. Fix overflow check for R_X86_64_PC32 and R_X86_64_PLT32. (Petr Mladek)
-
-Changes v7 = v8:
-1. Remove the logic in powerpc/kernel/module_64.c, as there is ongoing
-   discussions.
-2. For x86_64, add check for expected value during clear_relocate_add().
-   (Petr Mladek)
-3. Optimize the logic in klp_write_section_relocs(). (Petr Mladek)
-4. Optimize __write_relocate_add (x86_64). (Joe Lawrence)
-
-Changes v6 = v7:
-1. Reduce code duplication in livepatch/core.c and x86/kernel/module.c.
-2. Add more comments to powerpc/kernel/module_64.c.
-3. Added Joe's Tested-by (which I should have added in v6).
-
-Changes v5 = v6:
-1. Fix powerpc64.
-2. Fix compile for powerpc32.
-
-Changes v4 = v5:
-1. Fix compile with powerpc.
-
-Changes v3 = v4:
-1. Reuse __apply_relocate_add to make it more reliable in long term.
-   (Josh Poimboeuf)
-2. Add back ppc64 logic from v2, with changes to match current code.
-   (Josh Poimboeuf)
-
-Changes v2 => v3:
-1. Rewrite x86 changes to match current code style.
-2. Remove powerpc changes as there is no test coverage in v3.
-3. Only keep 1/3 of v2.
-
-v2: https://lore.kernel.org/all/20190905124514.8944-1-mbenes@suse.cz/T/#u
-
-fix
----
- arch/x86/kernel/module.c     | 93 +++++++++++++++++++++++-------------
- include/linux/moduleloader.h | 17 +++++++
- kernel/livepatch/core.c      | 62 +++++++++++++++++++-----
- 3 files changed, 126 insertions(+), 46 deletions(-)
-
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index 1dee3ad82da2..84ad0e61ba6e 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -129,22 +129,27 @@ int apply_relocate(Elf32_Shdr *sechdrs,
- 	return 0;
- }
- #else /*X86_64*/
--static int __apply_relocate_add(Elf64_Shdr *sechdrs,
-+static int __write_relocate_add(Elf64_Shdr *sechdrs,
- 		   const char *strtab,
- 		   unsigned int symindex,
- 		   unsigned int relsec,
- 		   struct module *me,
--		   void *(*write)(void *dest, const void *src, size_t len))
-+		   void *(*write)(void *dest, const void *src, size_t len),
-+		   bool apply)
- {
- 	unsigned int i;
- 	Elf64_Rela *rel = (void *)sechdrs[relsec].sh_addr;
- 	Elf64_Sym *sym;
- 	void *loc;
- 	u64 val;
-+	u64 zero = 0ULL;
- 
--	DEBUGP("Applying relocate section %u to %u\n",
-+	DEBUGP("%s relocate section %u to %u\n",
-+	       apply ? "Applying" : "Clearing",
- 	       relsec, sechdrs[relsec].sh_info);
- 	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
-+		size_t size;
-+
- 		/* This is where to make the change */
- 		loc = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
- 			+ rel[i].r_offset;
-@@ -162,52 +167,53 @@ static int __apply_relocate_add(Elf64_Shdr *sechdrs,
- 
- 		switch (ELF64_R_TYPE(rel[i].r_info)) {
- 		case R_X86_64_NONE:
--			break;
-+			continue;  /* nothing to write */
- 		case R_X86_64_64:
--			if (*(u64 *)loc != 0)
--				goto invalid_relocation;
--			write(loc, &val, 8);
-+			size = 8;
- 			break;
- 		case R_X86_64_32:
--			if (*(u32 *)loc != 0)
--				goto invalid_relocation;
--			write(loc, &val, 4);
--			if (val != *(u32 *)loc)
-+			if (val != *(u32 *)&val)
- 				goto overflow;
-+			size = 4;
- 			break;
- 		case R_X86_64_32S:
--			if (*(s32 *)loc != 0)
--				goto invalid_relocation;
--			write(loc, &val, 4);
--			if ((s64)val != *(s32 *)loc)
-+			if ((s64)val != *(s32 *)&val)
- 				goto overflow;
-+			size = 4;
- 			break;
- 		case R_X86_64_PC32:
- 		case R_X86_64_PLT32:
--			if (*(u32 *)loc != 0)
--				goto invalid_relocation;
- 			val -= (u64)loc;
--			write(loc, &val, 4);
-+			size = 4;
- 			break;
- 		case R_X86_64_PC64:
--			if (*(u64 *)loc != 0)
--				goto invalid_relocation;
- 			val -= (u64)loc;
--			write(loc, &val, 8);
-+			size = 8;
- 			break;
- 		default:
- 			pr_err("%s: Unknown rela relocation: %llu\n",
- 			       me->name, ELF64_R_TYPE(rel[i].r_info));
- 			return -ENOEXEC;
- 		}
-+
-+		if (apply) {
-+			if (memcmp(loc, &zero, size)) {
-+				pr_err("x86/modules: Invalid relocation target, existing value is nonzero for type %d, loc %p, val %Lx\n",
-+				       (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
-+				return -ENOEXEC;
-+			}
-+			write(loc, &val, size);
-+		} else {
-+			if (memcmp(loc, &val, size)) {
-+				pr_warn("x86/modules: Invalid relocation target, existing value does not match expected value for type %d, loc %p, val %Lx\n",
-+					(int)ELF64_R_TYPE(rel[i].r_info), loc, val);
-+				return -ENOEXEC;
-+			}
-+			write(loc, &zero, size);
-+		}
- 	}
- 	return 0;
- 
--invalid_relocation:
--	pr_err("x86/modules: Skipping invalid relocation target, existing value is nonzero for type %d, loc %p, val %Lx\n",
--	       (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
--	return -ENOEXEC;
--
- overflow:
- 	pr_err("overflow in relocation type %d val %Lx\n",
- 	       (int)ELF64_R_TYPE(rel[i].r_info), val);
-@@ -216,11 +222,12 @@ static int __apply_relocate_add(Elf64_Shdr *sechdrs,
- 	return -ENOEXEC;
- }
- 
--int apply_relocate_add(Elf64_Shdr *sechdrs,
--		   const char *strtab,
--		   unsigned int symindex,
--		   unsigned int relsec,
--		   struct module *me)
-+static int write_relocate_add(Elf64_Shdr *sechdrs,
-+			      const char *strtab,
-+			      unsigned int symindex,
-+			      unsigned int relsec,
-+			      struct module *me,
-+			      bool apply)
- {
- 	int ret;
- 	bool early = me->state == MODULE_STATE_UNFORMED;
-@@ -231,8 +238,8 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
- 		mutex_lock(&text_mutex);
- 	}
- 
--	ret = __apply_relocate_add(sechdrs, strtab, symindex, relsec, me,
--				   write);
-+	ret = __write_relocate_add(sechdrs, strtab, symindex, relsec, me,
-+				   write, apply);
- 
- 	if (!early) {
- 		text_poke_sync();
-@@ -242,6 +249,26 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
- 	return ret;
- }
- 
-+int apply_relocate_add(Elf64_Shdr *sechdrs,
-+		   const char *strtab,
-+		   unsigned int symindex,
-+		   unsigned int relsec,
-+		   struct module *me)
-+{
-+	return write_relocate_add(sechdrs, strtab, symindex, relsec, me, true);
-+}
-+
-+#ifdef CONFIG_LIVEPATCH
-+void clear_relocate_add(Elf64_Shdr *sechdrs,
-+			const char *strtab,
-+			unsigned int symindex,
-+			unsigned int relsec,
-+			struct module *me)
-+{
-+	write_relocate_add(sechdrs, strtab, symindex, relsec, me, false);
-+}
-+#endif
-+
- #endif
- 
- int module_finalize(const Elf_Ehdr *hdr,
-diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
-index 7b4587a19189..03be088fb439 100644
---- a/include/linux/moduleloader.h
-+++ b/include/linux/moduleloader.h
-@@ -75,6 +75,23 @@ int apply_relocate_add(Elf_Shdr *sechdrs,
- 		       unsigned int symindex,
- 		       unsigned int relsec,
- 		       struct module *mod);
-+#ifdef CONFIG_LIVEPATCH
-+/*
-+ * Some architectures (namely x86_64 and ppc64) perform sanity checks when
-+ * applying relocations.  If a patched module gets unloaded and then later
-+ * reloaded (and re-patched), klp re-applies relocations to the replacement
-+ * function(s).  Any leftover relocations from the previous loading of the
-+ * patched module might trigger the sanity checks.
-+ *
-+ * To prevent that, when unloading a patched module, clear out any relocations
-+ * that might trigger arch-specific sanity checks on a future module reload.
-+ */
-+void clear_relocate_add(Elf_Shdr *sechdrs,
-+		   const char *strtab,
-+		   unsigned int symindex,
-+		   unsigned int relsec,
-+		   struct module *me);
-+#endif
- #else
- static inline int apply_relocate_add(Elf_Shdr *sechdrs,
- 				     const char *strtab,
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 201f0c0482fb..140997b36025 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -268,6 +268,14 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
- 	return 0;
- }
- 
-+void __weak clear_relocate_add(Elf_Shdr *sechdrs,
-+		   const char *strtab,
-+		   unsigned int symindex,
-+		   unsigned int relsec,
-+		   struct module *me)
-+{
-+}
-+
- /*
-  * At a high-level, there are two types of klp relocation sections: those which
-  * reference symbols which live in vmlinux; and those which reference symbols
-@@ -291,10 +299,10 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
-  *    the to-be-patched module to be loaded and patched sometime *after* the
-  *    klp module is loaded.
-  */
--int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
--			     const char *shstrtab, const char *strtab,
--			     unsigned int symndx, unsigned int secndx,
--			     const char *objname)
-+static int klp_write_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
-+				    const char *shstrtab, const char *strtab,
-+				    unsigned int symndx, unsigned int secndx,
-+				    const char *objname, bool apply)
- {
- 	int cnt, ret;
- 	char sec_objname[MODULE_NAME_LEN];
-@@ -316,11 +324,26 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
- 	if (strcmp(objname ? objname : "vmlinux", sec_objname))
- 		return 0;
- 
--	ret = klp_resolve_symbols(sechdrs, strtab, symndx, sec, sec_objname);
--	if (ret)
--		return ret;
-+	if (apply) {
-+		ret = klp_resolve_symbols(sechdrs, strtab, symndx,
-+					  sec, sec_objname);
-+		if (ret)
-+			return ret;
-+
-+		return apply_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
-+	}
-+
-+	clear_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
-+	return 0;
-+}
- 
--	return apply_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
-+int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
-+			     const char *shstrtab, const char *strtab,
-+			     unsigned int symndx, unsigned int secndx,
-+			     const char *objname)
-+{
-+	return klp_write_section_relocs(pmod, sechdrs, shstrtab, strtab, symndx,
-+					secndx, objname, true);
- }
- 
- /*
-@@ -769,8 +792,9 @@ static int klp_init_func(struct klp_object *obj, struct klp_func *func)
- 			   func->old_sympos ? func->old_sympos : 1);
- }
- 
--static int klp_apply_object_relocs(struct klp_patch *patch,
--				   struct klp_object *obj)
-+static int klp_write_object_relocs(struct klp_patch *patch,
-+				   struct klp_object *obj,
-+				   bool apply)
- {
- 	int i, ret;
- 	struct klp_modinfo *info = patch->mod->klp_info;
-@@ -781,10 +805,10 @@ static int klp_apply_object_relocs(struct klp_patch *patch,
- 		if (!(sec->sh_flags & SHF_RELA_LIVEPATCH))
- 			continue;
- 
--		ret = klp_apply_section_relocs(patch->mod, info->sechdrs,
-+		ret = klp_write_section_relocs(patch->mod, info->sechdrs,
- 					       info->secstrings,
- 					       patch->mod->core_kallsyms.strtab,
--					       info->symndx, i, obj->name);
-+					       info->symndx, i, obj->name, apply);
- 		if (ret)
- 			return ret;
- 	}
-@@ -792,6 +816,18 @@ static int klp_apply_object_relocs(struct klp_patch *patch,
- 	return 0;
- }
- 
-+static int klp_apply_object_relocs(struct klp_patch *patch,
-+				   struct klp_object *obj)
-+{
-+	return klp_write_object_relocs(patch, obj, true);
-+}
-+
-+static void klp_clear_object_relocs(struct klp_patch *patch,
-+				    struct klp_object *obj)
-+{
-+	klp_write_object_relocs(patch, obj, false);
-+}
-+
- /* parts of the initialization that is done only when the object is loaded */
- static int klp_init_object_loaded(struct klp_patch *patch,
- 				  struct klp_object *obj)
-@@ -1179,7 +1215,7 @@ static void klp_cleanup_module_patches_limited(struct module *mod,
- 			klp_unpatch_object(obj);
- 
- 			klp_post_unpatch_callback(obj);
--
-+			klp_clear_object_relocs(patch, obj);
- 			klp_free_object_loaded(obj);
- 			break;
- 		}
--- 
-2.30.2
-
+Thanks,
+Bjorn
