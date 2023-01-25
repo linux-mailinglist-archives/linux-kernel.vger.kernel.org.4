@@ -2,187 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683B967B2B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7307E67B2B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 13:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235550AbjAYMn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 07:43:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
+        id S235347AbjAYMoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 07:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235541AbjAYMnZ (ORCPT
+        with ESMTP id S229827AbjAYMoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 07:43:25 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131D72E0F9;
-        Wed, 25 Jan 2023 04:43:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674650600; x=1706186600;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7xlAOKZg/CWOOSXfjkaPp3PCI9MEqMPNFAOGBRGha+A=;
-  b=jlNfcB9HVaMIvyFt3dUYIWCivLS7Ttdc1BlXWGfJmGX+iq20b2Dh1CMp
-   WlkYar9ThhHlBa8QqIa+Kujx1LfUU8Gq3fIbU28UsyehZo1enGCiBYFd7
-   D/YjtaEKA9UlWZFA4TTnArdo5x1TNg+R7b7GphGd/LSwJbwm41QIenhJM
-   3OVw5TfAkpq7iA/KVehMmHLb5NvCls8b6HNKT9Uidq0TFSmVVhZiRLpxu
-   O4wNwrx91jOMho/xyW2UQibOceWRkUHY3gb23R7W/QWFNhAZi01b+Cq5m
-   YYZ+JwFUStTen/FBP+C7VGl1YWTtxImA5GUIKXHeNMeYudOS/FG2rs11P
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="306894497"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="306894497"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 04:43:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="836334603"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="836334603"
-Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 04:43:16 -0800
-From:   Rajat Khandelwal <rajat.khandelwal@intel.com>
-To:     irenic.rajneesh@gmail.com, david.e.box@intel.com,
-        hdegoede@redhat.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rajat.khandelwal@intel.com,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Subject: [PATCH v2] platform/x86/intel/pmc: core: Add support to show LTR-ignored components
-Date:   Wed, 25 Jan 2023 18:13:01 +0530
-Message-Id: <20230125124301.1366990-1-rajat.khandelwal@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 25 Jan 2023 07:44:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679811A498
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 04:43:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674650596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=j9odPV+6puEiMnrNrOig8rmnxEdCUxbVvIwgsbWCFPc=;
+        b=gj7j2hqwUod/jSDuxc/lO4qFn6nsPvgy1qOaxi9WEjVCCST4Zkbt9SXUeLvJRTiI9xINBQ
+        f91ggh1jFTjUcuNoW682n03vqhZfFdmb47kp10aUEYtT+IgxUkT5vlKWJ0jSf2MNMvsxwk
+        OwZQVjLHq9kk6huFdn8y34PN8VeNX5c=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-384-qsug1qW2MwC1g2YRCA_56g-1; Wed, 25 Jan 2023 07:43:10 -0500
+X-MC-Unique: qsug1qW2MwC1g2YRCA_56g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9962C299E74E;
+        Wed, 25 Jan 2023 12:43:09 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (ovpn-195-63.brq.redhat.com [10.40.195.63])
+        by smtp.corp.redhat.com (Postfix) with SMTP id F04F3492B00;
+        Wed, 25 Jan 2023 12:43:07 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 25 Jan 2023 13:43:07 +0100 (CET)
+Date:   Wed, 25 Jan 2023 13:43:04 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marco Elver <elver@google.com>
+Subject: Re: [RFC PATCH v2] posix-timers: Support delivery of signals to the
+ current thread
+Message-ID: <20230125124304.GA13746@redhat.com>
+References: <20221216171807.760147-1-dvyukov@google.com>
+ <20230112112411.813356-1-dvyukov@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112112411.813356-1-dvyukov@google.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+On 01/12, Dmitry Vyukov wrote:
+>
+> --- a/kernel/time/posix-timers.c
+> +++ b/kernel/time/posix-timers.c
+> @@ -336,6 +336,7 @@ void posixtimer_rearm(struct kernel_siginfo *info)
+>  int posix_timer_event(struct k_itimer *timr, int si_private)
+>  {
+>  	enum pid_type type;
+> +	struct pid *pid;
+>  	int ret;
+>  	/*
+>  	 * FIXME: if ->sigq is queued we can race with
+> @@ -350,8 +351,9 @@ int posix_timer_event(struct k_itimer *timr, int si_private)
+>  	 */
+>  	timr->sigq->info.si_sys_private = si_private;
+>
+> +	pid = timr->it_pid ?: task_pid(current);
+>  	type = !(timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_TGID : PIDTYPE_PID;
 
-Currently, 'ltr_ignore' sysfs attribute, when read, returns nothing, even
-if there are components whose LTR values have been ignored.
+can't resist... somehow the line above looks confusing to me, perhaps you
+can change it to
 
-This patch adds the feature to print out such components, if they exist.
+	type = (timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_PID : PIDTYPE_TGID;
 
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
----
+> -static struct pid *good_sigevent(sigevent_t * event)
+> +static struct pid *good_sigevent(sigevent_t *event, clockid_t which_clock)
+>  {
+>  	struct pid *pid = task_tgid(current);
+>  	struct task_struct *rtn;
+>
+>  	switch (event->sigev_notify) {
+>  	case SIGEV_SIGNAL | SIGEV_THREAD_ID:
+> +		/* This will use the current task for signals. */
+> +		if (which_clock == CLOCK_PROCESS_CPUTIME_ID &&
+> +		    !event->sigev_notify_thread_id)
+> +			return NULL;
 
-v2: kmalloc -> devm_kmalloc
+this doesn't look right, this skips the "sigev_signo" check below.
 
- drivers/platform/x86/intel/pmc/core.c | 47 ++++++++++++++++++++-------
- drivers/platform/x86/intel/pmc/core.h |  2 +-
- 2 files changed, 36 insertions(+), 13 deletions(-)
+Other than that I see nothing wrong in this patch, but I forgot everything
+about posix timers many years ago ;)
 
-diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
-index 3a15d32d7644..d4196b10b8af 100644
---- a/drivers/platform/x86/intel/pmc/core.c
-+++ b/drivers/platform/x86/intel/pmc/core.c
-@@ -53,6 +53,14 @@ const struct pmc_bit_map msr_map[] = {
- 	{}
- };
- 
-+struct ltr_entry {
-+	u32 comp_index;
-+	const char *comp_name;
-+	struct list_head node;
-+};
-+
-+static LIST_HEAD(ltr_ignore_list);
-+
- static inline u32 pmc_core_reg_read(struct pmc_dev *pmcdev, int reg_offset)
- {
- 	return readl(pmcdev->regbase + reg_offset);
-@@ -435,27 +443,18 @@ static int pmc_core_pll_show(struct seq_file *s, void *unused)
- }
- DEFINE_SHOW_ATTRIBUTE(pmc_core_pll);
- 
--int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
-+void pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
- {
- 	const struct pmc_reg_map *map = pmcdev->map;
- 	u32 reg;
--	int err = 0;
- 
- 	mutex_lock(&pmcdev->lock);
- 
--	if (value > map->ltr_ignore_max) {
--		err = -EINVAL;
--		goto out_unlock;
--	}
--
- 	reg = pmc_core_reg_read(pmcdev, map->ltr_ignore_offset);
- 	reg |= BIT(value);
- 	pmc_core_reg_write(pmcdev, map->ltr_ignore_offset, reg);
- 
--out_unlock:
- 	mutex_unlock(&pmcdev->lock);
--
--	return err;
- }
- 
- static ssize_t pmc_core_ltr_ignore_write(struct file *file,
-@@ -464,6 +463,8 @@ static ssize_t pmc_core_ltr_ignore_write(struct file *file,
- {
- 	struct seq_file *s = file->private_data;
- 	struct pmc_dev *pmcdev = s->private;
-+	const struct pmc_reg_map *map = pmcdev->map;
-+	struct ltr_entry *entry;
- 	u32 buf_size, value;
- 	int err;
- 
-@@ -473,13 +474,35 @@ static ssize_t pmc_core_ltr_ignore_write(struct file *file,
- 	if (err)
- 		return err;
- 
--	err = pmc_core_send_ltr_ignore(pmcdev, value);
-+	if (value > map->ltr_ignore_max)
-+		return -EINVAL;
- 
--	return err == 0 ? count : err;
-+	list_for_each_entry(entry, &ltr_ignore_list, node) {
-+		if (entry->comp_index == value)
-+			return -EEXIST;
-+	}
-+
-+	entry = devm_kmalloc(&pmcdev->pdev->dev, sizeof(*entry), GFP_KERNEL);
-+	if (!entry)
-+		return -ENOMEM;
-+
-+	entry->comp_name = map->ltr_show_sts[value].name;
-+	entry->comp_index = value;
-+	list_add_tail(&entry->node, &ltr_ignore_list);
-+
-+	pmc_core_send_ltr_ignore(pmcdev, value);
-+
-+	return count;
- }
- 
- static int pmc_core_ltr_ignore_show(struct seq_file *s, void *unused)
- {
-+	struct ltr_entry *entry;
-+
-+	list_for_each_entry(entry, &ltr_ignore_list, node) {
-+		seq_printf(s, "%s\n", entry->comp_name);
-+	}
-+
- 	return 0;
- }
- 
-diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-index 810204d758ab..da35b0fcbe6e 100644
---- a/drivers/platform/x86/intel/pmc/core.h
-+++ b/drivers/platform/x86/intel/pmc/core.h
-@@ -396,7 +396,7 @@ extern const struct pmc_reg_map adl_reg_map;
- extern const struct pmc_reg_map mtl_reg_map;
- 
- extern void pmc_core_get_tgl_lpm_reqs(struct platform_device *pdev);
--extern int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value);
-+extern void pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value);
- 
- void spt_core_init(struct pmc_dev *pmcdev);
- void cnp_core_init(struct pmc_dev *pmcdev);
--- 
-2.34.1
+> @@ -527,9 +534,11 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
+>
+>  	if (event) {
+>  		rcu_read_lock();
+> -		new_timer->it_pid = get_pid(good_sigevent(event));
+> +		pid = good_sigevent(event, which_clock);
+> +		if (!IS_ERR(pid))
+> +			new_timer->it_pid = get_pid(pid);
+
+Another cosmetic nit, feel free to ignore... If you change good_sigevent()
+
+	case SIGEV_NONE:
+-		return pid;
++		return get_pid(pid);
+
+you can remove this "if (!IS_ERR(pid))" code above.
+
+Oleg.
 
