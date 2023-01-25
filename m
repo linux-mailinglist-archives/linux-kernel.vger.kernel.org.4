@@ -2,136 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3C567B18B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BB667B195
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235576AbjAYLgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:36:49 -0500
+        id S235049AbjAYLhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:37:09 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235516AbjAYLgn (ORCPT
+        with ESMTP id S235541AbjAYLg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:36:43 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658F4568BC;
-        Wed, 25 Jan 2023 03:36:10 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30PBZia4120986;
-        Wed, 25 Jan 2023 05:35:44 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674646544;
-        bh=YNw16xWGpsD/uXggMokkTEYED+EdmUza/46l2QtEBuE=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=k6KWqtkUR+mL9LJd4SJ3ZjdgV6+2P5hw9d8Ro5jREh0ZrLIIzB981gI1/lUb57dD7
-         BMj5UpYFTEbeGdjxqHyw7b86rFF9z1GBoxNBSt+ngimRK8QvzwhJUIZLMc2xd3oHHF
-         fccgYoQt8rfHlL+/zEUyrWWp76rv99n4B4WjB9Ao=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30PBZixI013337
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 25 Jan 2023 05:35:44 -0600
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 25
- Jan 2023 05:35:43 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 25 Jan 2023 05:35:43 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30PBZght021900;
-        Wed, 25 Jan 2023 05:35:43 -0600
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Aradhya Bhatia <a-bhatia1@ti.com>
-Subject: [PATCH v7 6/6] drm/tidss: Enable Dual and Duplicate Modes for OLDI
-Date:   Wed, 25 Jan 2023 17:05:29 +0530
-Message-ID: <20230125113529.13952-7-a-bhatia1@ti.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230125113529.13952-1-a-bhatia1@ti.com>
-References: <20230125113529.13952-1-a-bhatia1@ti.com>
+        Wed, 25 Jan 2023 06:36:58 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E1B5865B
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:36:22 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id k16so13518086wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 03:36:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5dVhlUNjqsBL30qFj7Fwhndj9IVP6//dpSPYEVekBIY=;
+        b=Kfhm/onlZx2XNp3mdcPwUJXKM/RQ9cXvyvfCBFaza36IV80QSJlRXc6u8VFbj0YDCU
+         5CaxDqL7o8JrgR9Qe7ocBOkJ1eLv8Rfx0irZCdhwepiMbfh1btuRiajQ36SlDAArAOqz
+         3x4Lc1aLNYGJt9UalXa7G6rtWEBbCqkFmkSXOaizotUJndK5Ce9a/bhRZufzro8qCkhv
+         y7ZU3RdNDDxWg56tKp5MQq+03MBS6vjUL6eHmqjnbo+AfYS24K/7Q19Xce31qkKfZJMw
+         bo6TPMS/Q3BoZqAC4Td+Nm0J79kLe5u/5a4ziZDNgJCAP6u8ho6T4cgYO4GCZ9I8STeD
+         F50g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5dVhlUNjqsBL30qFj7Fwhndj9IVP6//dpSPYEVekBIY=;
+        b=rJUUhP32PaAb6HAZ+827/MB/Q0GNx9kky69w7ObSRLqqrRTxcbfB9yuC8XjNALD06A
+         Pk0qkiu7p1O11d3LJ9yIeR2UswSnHX3WeHscGPETa6ZQ/8Oi9ArCGWe20rkafq4mAAKZ
+         O3ko3pvX3TLSUW7JQ2ykfCbZ5T7uMhpxXbcqylZmMuRs4LYBrjOIwp0Lhxtgko89mA74
+         T3zGpqlUXlZ4YG5vKnstI+9kKkSrYcFvbR4M0HIbhYZNxufHg4A7jrnINWFrdje2wr7G
+         5K7F1CTUM6b59pBKF28VfxppxUtsqvpv/2mdlEwRRK0bzo1L6cq3eTwpRrhcRSK+ZO7h
+         03KQ==
+X-Gm-Message-State: AFqh2koXsCoFqPcnIOfRFFQjARKTJe5irmXF2V9cITv/eiDTkRxm9gP4
+        xcrCerFGE0aZZ8NOO969Hg2dbQ==
+X-Google-Smtp-Source: AMrXdXsIWEY9FTI1OV1UwP/0HQPv4v1+dM8bovEcXISKZKpdILaC0A7PO/9NZBTVAPpZTTdVsdtfqw==
+X-Received: by 2002:a05:600c:3556:b0:3db:331b:bd2d with SMTP id i22-20020a05600c355600b003db331bbd2dmr20147637wmq.18.1674646577387;
+        Wed, 25 Jan 2023 03:36:17 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n13-20020a05600c500d00b003db2b81660esm1642996wmr.21.2023.01.25.03.36.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 03:36:17 -0800 (PST)
+Message-ID: <a768138f-a960-16b4-7097-9212638141a5@linaro.org>
+Date:   Wed, 25 Jan 2023 12:36:14 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: arm: qcom: Add Xiaomi Mi Pad 5 Pro
+ (xiaomi-elish)
+Content-Language: en-US
+To:     Jianhua Lu <lujianhua000@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230125112903.10710-1-lujianhua000@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230125112903.10710-1-lujianhua000@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AM625 DSS IP contains 2 OLDI TXes which can work together to enable 2
-cloned displays of or even a single dual-link display with higher
-resolutions like WUXGA (1920x1200@60fps) with a reduced OLDI clock
-frequency.
+On 25/01/2023 12:29, Jianhua Lu wrote:
+> Add a compatible for Xiaomi Mi Pad 5 Pro.
+> 
+> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
 
-Configure the necessary register to enable and disable the OLDI TXes
-with required modes configurations.
 
-Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
----
- drivers/gpu/drm/tidss/tidss_dispc.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
-index 0e03557bc142..79ad9743a93b 100644
---- a/drivers/gpu/drm/tidss/tidss_dispc.c
-+++ b/drivers/gpu/drm/tidss/tidss_dispc.c
-@@ -1020,8 +1020,8 @@ static void dispc_enable_oldi(struct dispc_device *dispc, u32 hw_videoport,
- 	int count = 0;
- 
- 	/*
--	 * For the moment DUALMODESYNC, MASTERSLAVE, MODE, and SRC
--	 * bits of DISPC_VP_DSS_OLDI_CFG are set statically to 0.
-+	 * For the moment MASTERSLAVE, and SRC bits of DISPC_VP_DSS_OLDI_CFG are
-+	 * always set to 0.
- 	 */
- 
- 	if (fmt->data_width == 24)
-@@ -1038,6 +1038,26 @@ static void dispc_enable_oldi(struct dispc_device *dispc, u32 hw_videoport,
- 
- 	oldi_cfg |= BIT(0); /* ENABLE */
- 
-+	switch (dispc->oldi_mode) {
-+	case OLDI_MODE_SINGLE_LINK:
-+		/* All configuration is done for this mode.  */
-+		break;
-+
-+	case OLDI_MODE_CLONE_SINGLE_LINK:
-+		oldi_cfg |= BIT(5); /* CLONE MODE */
-+		break;
-+
-+	case OLDI_MODE_DUAL_LINK:
-+		oldi_cfg |= BIT(11); /* DUALMODESYNC */
-+		oldi_cfg |= BIT(3); /* data-mapping field also indicates dual-link mode */
-+		break;
-+
-+	default:
-+		dev_warn(dispc->dev, "%s: Incorrect oldi mode. Returning.\n",
-+			 __func__);
-+		return;
-+	}
-+
- 	dispc_vp_write(dispc, hw_videoport, DISPC_VP_DSS_OLDI_CFG, oldi_cfg);
- 
- 	while (!(oldi_reset_bit & dispc_read(dispc, DSS_SYSSTATUS)) &&
--- 
-2.39.0
+Best regards,
+Krzysztof
 
