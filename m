@@ -2,106 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC97367AEE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7716D67AEF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbjAYJxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 04:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S235142AbjAYJz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234885AbjAYJxI (ORCPT
+        with ESMTP id S234689AbjAYJz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 04:53:08 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65396E89
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:52:34 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id g15so868449ild.3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:52:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OuciH5zAUURnBDw16GG9WV+6Jm2kIAhFJoGWXvuLyzY=;
-        b=A1AB+qgY+bNcqCoh6g/QPfcTbHSdfM703fBk6MwZVQpdjKXroZK1oH0ns7MrSkqpEh
-         EOFNTevaPYrK/s2JxRXzjpxKJuFDLK0q2y5rZGlM4eYwU42FRyAmNuFKT7Bg1y72UQr6
-         97toi8YHPu1hdYbPDOUE8UH3Qse8M8RNx9XwKsItw/AX5ZjEdGoF6VszDeJWjYB0aicF
-         ydXIqaQhWbVJDKjQyaFJQGQ8Tb4O2relzLKrriy0p8DNZHpby7I/ajeseKccsiM2etXU
-         gc06b1Ly5AKuKaPMG0ZIbCmyoYgFf9iOl8HavzkcQOMATVBkyu4NrQfUDAIvJdVcxVmJ
-         W1Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OuciH5zAUURnBDw16GG9WV+6Jm2kIAhFJoGWXvuLyzY=;
-        b=NZA3ErlKRGmna0iSqYa7l4+CE0Hbaa+Nnabsxn20qDYuwughfudDQrLLH3lervpgL9
-         yzBL9esu4/E71s0rK5r+Sj3xI1pxRIcN35Efbj8koeUJuDSGB8crurY+g+yFqG3rZGx5
-         WWgJ5P3HYPzBFdvyXQgoh8lZYQz9SyEgkrUCJYgxrcuBjwskBJV7VGWZXBQEhS8WKXt+
-         vkA/hhucEy2YTrd+GOAUCpY4g0ULhkH/ryodZdG9yd8J7GjufsztHJLyEkCXeKRd89ux
-         dyLuTRUtmu36K9+G1lCdwOmaqTTOKDQv4tNrfC7cY0Yk5yr4XJFzIp37Tohaq1vpbsdN
-         W/iA==
-X-Gm-Message-State: AO0yUKUQ9W6M6WzvRwL6FM67xU7DV7bi1cTKyo2AHDCf5IuCf/GGPKX8
-        TwFJUxorpuDXXaQQGTE48ZR6xiCC9x75kKa9XtcEHDkBfqkE/WwC
-X-Google-Smtp-Source: AK7set/RqxBYpDySUQ4Hf1TOiGHp0yJPE0emZ8yXer/udU2W95b7BNk2ZoGFsf4v/GnYc+LqXkIFjxHDeLUfWqc82qo=
-X-Received: by 2002:a05:6e02:b23:b0:310:9cb4:223d with SMTP id
- e3-20020a056e020b2300b003109cb4223dmr495004ilu.164.1674640351299; Wed, 25 Jan
- 2023 01:52:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20221121112134.407362-1-glider@google.com> <20221121112134.407362-4-glider@google.com>
- <CAG_fn=WDjw1MVYhEh7K4HOpGNBWsq6YuyG6Xx7XcP4Xpu+KhZg@mail.gmail.com> <20230124130401.eb5d453213d557cf3b7a8ed6@linux-foundation.org>
-In-Reply-To: <20230124130401.eb5d453213d557cf3b7a8ed6@linux-foundation.org>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 25 Jan 2023 10:51:54 +0100
-Message-ID: <CAG_fn=XgBL00Oo5v7se5ZyP+uBbFSOaed4KReZVgpg3n8Nu95g@mail.gmail.com>
-Subject: Re: [PATCH 4/5] fs: hfs: initialize fsdata in hfs_file_truncate()
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jaegeuk@kernel.org, chao@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Eric Biggers <ebiggers@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 04:55:26 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2693430E8;
+        Wed, 25 Jan 2023 01:55:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674640517; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=lgOSlRFjiTeXa1ZiN0Sh5q2BNXtuIw1nkHYqh6Cne9vaO7pk8dCW1x1knI7VU7IhgwjIlDY1gSBM24Muw30HLmFpYM4w5hGTQzutF4lMgeh97Rj5ZTqQenGdZia6gfJ+Zdh4j0+b0UHLHixr5iSLtvPcMACiNFd/26FJulMgCgY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1674640517; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=GxhsZuLW1aUUdsIzkDgq7YtS68/mjfyyTwcISg+gePc=; 
+        b=F5dsF2CihVBrWMGwf1Hzr0xnW89rx2OEbQ9vMdxa4tj3XKiac2EH3/M6LsGyUh+OkgBuKvgQ4elsqhFVLjb6p/pUflgKdBsAJMEUm+EBicd+ZX1CAEvO7gLfa/O9gOsfUYM9TDtqxzbl73UR/TLF8WieIJC0MjI+5B920DG06WY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674640517;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:Message-ID:From:From:To:To:Cc:Cc:Subject:Subject:In-Reply-To:References:MIME-Version:Content-Type:Message-Id:Reply-To;
+        bh=GxhsZuLW1aUUdsIzkDgq7YtS68/mjfyyTwcISg+gePc=;
+        b=t7IMeHM8eXXlOe/+x22OEMDUS/bjYxO9RZy7BxQdzpDLZNuloE0YQJOgm2ZEc3xh
+        7WZ9xErJN9/r6zArxEZ+A7Cse7ze2vLqk/TLfUgegdQQmp/JRy2awfqjR+H+Fs66n76
+        PW5YudxpvvVsI6SfdWD/jHVSlKEuCp0R4mWGLJ7w=
+Received: from lchen-xiaoxin.linux.beauty (221.225.241.248 [221.225.241.248]) by mx.zohomail.com
+        with SMTPS id 1674640515886204.08088684860002; Wed, 25 Jan 2023 01:55:15 -0800 (PST)
+Date:   Wed, 25 Jan 2023 17:54:28 +0800
+Message-ID: <87wn5bgcrv.wl-me@linux.beauty>
+From:   Li Chen <me@linux.beauty>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Li Chen <lchen@ambarella.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:ARM/Ambarella SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 09/15] dt-bindings: serial: add support for Ambarella
+In-Reply-To: <bdff58bf-1a07-ab78-a782-d58d8c644e00@linaro.org>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+        <20230123073305.149940-10-lchen@ambarella.com>
+        <bdff58bf-1a07-ab78-a782-d58d8c644e00@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-ZohoMailClient: External
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 10:04 PM Andrew Morton
-<akpm@linux-foundation.org> wrote:
->
-> On Tue, 24 Jan 2023 11:51:30 +0100 Alexander Potapenko <glider@google.com> wrote:
->
-> > On Mon, Nov 21, 2022 at 12:21 PM Alexander Potapenko <glider@google.com> wrote:
-> > >
-> > > When aops->write_begin() does not initialize fsdata, KMSAN may report
-> > > an error passing the latter to aops->write_end().
-> > >
-> > > Fix this by unconditionally initializing fsdata.
-> > >
-> > > Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> > > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> > > Signed-off-by: Alexander Potapenko <glider@google.com>
-> >
-> > Dear FS maintainers,
-> >
-> > HFS/HFSPLUS are orphaned, can someone take this patch to their tree?
-> > Thanks in advance!
-> > (same for "fs: hfsplus: initialize fsdata in hfsplus_file_truncate()":
-> > https://lore.kernel.org/all/20221121112134.407362-5-glider@google.com/)
->
-> I grabbed both.
->
-> I removed the
->
->         Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
->
-> because that might provoke the backport bots to backport this fix
-> across eight years worth of kernels.  Before KMSAN existed!
 
-Right, makes sense.
+Hi Krzysztof Kozlowski,
+
+Sorry for my late reply.
+
+On Mon, 23 Jan 2023 16:11:52 +0800,
+Krzysztof Kozlowski wrote:
+>
+> On 23/01/2023 08:32, Li Chen wrote:
+> > Add compatible for Ambarella.
+> >
+> > Signed-off-by: Li Chen <lchen@ambarella.com>
+> > Change-Id: I32513d98f52af0311dfb55dd5c4739a58f6b9fc1
+> > ---
+> >  .../bindings/serial/ambarella_uart.yaml       | 57 +++++++++++++++++++
+> >  MAINTAINERS                                   |  1 +
+> >  2 files changed, 58 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/serial/ambarella_uart.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/serial/ambarella_uart.yaml b/Documentation/devicetree/bindings/serial/ambarella_uart.yaml
+> > new file mode 100644
+> > index 000000000000..238d68078270
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/serial/ambarella_uart.yaml
+> > @@ -0,0 +1,57 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/serial/ambarella_uart.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Ambarella S6LM SoC UART Controller
+> > +
+> > +maintainers:
+> > +  - Li Chen <lchen@ambarella.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: ambarella,uart
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  amb,ignore-fe:
+> > +    description: |
+> > +      ignore frame error report for CV2/CV22/CV25/S6LM because it's
+> > +      checked too strict so that normal stop may be treated as frame error.
+>
+> Missing type. I don't understand why this is property of DT.
+
+Ok, I will add "type: boolean" to it.
+
+> Anyway several problems mentioned earlier, please fix.
+
+Well noted.
+
+Regards,
+Li
