@@ -2,64 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C71967B1A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FB367B1A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbjAYLkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S235565AbjAYLju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:39:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235691AbjAYLjo (ORCPT
+        with ESMTP id S235597AbjAYLjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:39:44 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10B0CA29;
-        Wed, 25 Jan 2023 03:39:27 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 64AD61FEB4;
-        Wed, 25 Jan 2023 11:39:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674646766; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 25 Jan 2023 06:39:43 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B8093D0;
+        Wed, 25 Jan 2023 03:39:34 -0800 (PST)
+Date:   Wed, 25 Jan 2023 11:39:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674646773;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Oqqka9Owzafd2X56BISD/lkkMSHTDdTB9S6csfU4aLY=;
-        b=KYsnXNxxrnUiZeznqoi+EbhT2L0rtf5QYqic6aQTX5P5VQ1STxtKjbDnMPgtlg7/Y1p61L
-        KvRwG/pY12Ow/MVHYy249SOWJfTwl35GWdrSy9yvyhUV3hBWnCJBOumPvpNF2+dJ1WFAWP
-        qn7IAe/rCU0k7ivrlr77GeNUyPbpS2M=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 432E61339E;
-        Wed, 25 Jan 2023 11:39:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Uts0D+4U0WNkZAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 25 Jan 2023 11:39:26 +0000
-Date:   Wed, 25 Jan 2023 12:39:25 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-Message-ID: <Y9EU7awmpZaqbFtP@dhcp22.suse.cz>
-References: <20230125073502.743446-1-leobras@redhat.com>
- <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
- <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+        bh=JxhCGxMvdLa+0WXtDH9qfNnCD3UABqFwwGYEf+V+huU=;
+        b=TcpxGEw4PDjnHbORQrsdhWYqpDU00q6gEV3hZW5IUaVqVcVHjg0RV2AlYBlxERZ72lKFoE
+        szJzdOS1bgdabreLgqzjHFWJpveyfM2JwHHj2NJYky3AmPjro4d3QxIPTsyU/UY2XEe3WV
+        zaBFIlRpRIKwelccHVHJdhWv+ixr5cMNNcAUsbLB7521KLluER7Ul/kzvQCXcuXXv4QtxO
+        lpo3scGCQ4KtptH+wjQ6q6X094da0ofMLlSTA2BID36ikBFbrjkMlU6PH7YtasUQdmAmo2
+        ipdGqciorgWZKShPYa3iQGyCl8xV85OBTU5tAwAqtD3Kjs6wx+a7iRbpcvNuOA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674646773;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JxhCGxMvdLa+0WXtDH9qfNnCD3UABqFwwGYEf+V+huU=;
+        b=2GelqKaOl18Xp5jdCW7WNLFJSzMdDAKcZlqErnZNMHZYqioFCkYLPkYp6ePP0afunvp7ax
+        2Yb+eyalpEyBqEDQ==
+From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/vdso] x86/vdso: Move VDSO image init to vdso2c generated code
+Cc:     Brian Gerst <brgerst@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230124184019.26850-1-brgerst@gmail.com>
+References: <20230124184019.26850-1-brgerst@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+Message-ID: <167464677321.4906.10647012897510355541.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,66 +63,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 25-01-23 08:06:46, Leonardo Brás wrote:
-> On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
-> > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
-> > > Disclaimer:
-> > > a - The cover letter got bigger than expected, so I had to split it in
-> > >     sections to better organize myself. I am not very confortable with it.
-> > > b - Performance numbers below did not include patch 5/5 (Remove flags
-> > >     from memcg_stock_pcp), which could further improve performance for
-> > >     drain_all_stock(), but I could only notice the optimization at the
-> > >     last minute.
-> > > 
-> > > 
-> > > 0 - Motivation:
-> > > On current codebase, when drain_all_stock() is ran, it will schedule a
-> > > drain_local_stock() for each cpu that has a percpu stock associated with a
-> > > descendant of a given root_memcg.
-> > > 
-> > > This happens even on 'isolated cpus', a feature commonly used on workloads that
-> > > are sensitive to interruption and context switching such as vRAN and Industrial
-> > > Control Systems.
-> > > 
-> > > Since this scheduling behavior is a problem to those workloads, the proposal is
-> > > to replace the current local_lock + schedule_work_on() solution with a per-cpu
-> > > spinlock.
-> > 
-> > If IIRC we have also discussed that isolated CPUs can simply opt out
-> > from the pcp caching and therefore the problem would be avoided
-> > altogether without changes to the locking scheme. I do not see anything
-> > regarding that in this submission. Could you elaborate why you have
-> > abandoned this option?
-> 
-> Hello Michal,
-> 
-> I understand pcp caching is a nice to have.
-> So while I kept the idea of disabling pcp caching in mind as an option, I first
-> tried to understand what kind of impacts we would be seeing when trying to
-> change the locking scheme.
-> 
-> After I raised the data in the cover letter, I found that the performance impact
-> appears not be that big. So in order to try keeping the pcp cache on isolated
-> cpus active, I decided to focus effort on the locking scheme change.
-> 
-> I mean, my rationale is: if is there a non-expensive way of keeping the feature,
-> why should we abandon it?
+The following commit has been merged into the x86/vdso branch of tip:
 
-Because any locking to pcp adds a potential contention. You haven't been
-able to trigger that contention by your testing but that doesn't really
-mean it is non-existent.
+Commit-ID:     4c382d723edce1b3c72b55b1b505cf5526a56afc
+Gitweb:        https://git.kernel.org/tip/4c382d723edce1b3c72b55b1b505cf5526a56afc
+Author:        Brian Gerst <brgerst@gmail.com>
+AuthorDate:    Tue, 24 Jan 2023 13:40:19 -05:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Wed, 25 Jan 2023 12:33:40 +01:00
 
-Besided that opt-out for isolated cpus should be a much smaller change
-with a much more predictable behavior. The overall performance for
-charging on isolated cpus will be slightly worse but it hasn't been seen
-this is anything really noticeable. Most workloads which do care about
-isolcpus tend to not enter kernel much AFAIK so this should have
-relatively small impact.
+x86/vdso: Move VDSO image init to vdso2c generated code
 
-All that being said I would prefer a simpler solution which seems to be
-to simply opt out from pcp caching and if the performance for real
-world workloads shows regressions then we can start thinking about a
-more complex solution.
--- 
-Michal Hocko
-SUSE Labs
+Generate an init function for each VDSO image, replacing init_vdso() and
+sysenter_setup().
+
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20230124184019.26850-1-brgerst@gmail.com
+---
+ arch/x86/entry/vdso/vdso2c.h       |  6 ++++++
+ arch/x86/entry/vdso/vdso32-setup.c |  9 ---------
+ arch/x86/entry/vdso/vma.c          | 19 ++++---------------
+ arch/x86/include/asm/processor.h   |  1 -
+ arch/x86/include/asm/vdso.h        |  2 +-
+ arch/x86/kernel/cpu/common.c       |  1 -
+ 6 files changed, 11 insertions(+), 27 deletions(-)
+
+diff --git a/arch/x86/entry/vdso/vdso2c.h b/arch/x86/entry/vdso/vdso2c.h
+index 5264daa..67b3e37 100644
+--- a/arch/x86/entry/vdso/vdso2c.h
++++ b/arch/x86/entry/vdso/vdso2c.h
+@@ -179,6 +179,7 @@ static void BITSFUNC(go)(void *raw_addr, size_t raw_len,
+ 
+ 	fprintf(outfile, "/* AUTOMATICALLY GENERATED -- DO NOT EDIT */\n\n");
+ 	fprintf(outfile, "#include <linux/linkage.h>\n");
++	fprintf(outfile, "#include <linux/init.h>\n");
+ 	fprintf(outfile, "#include <asm/page_types.h>\n");
+ 	fprintf(outfile, "#include <asm/vdso.h>\n");
+ 	fprintf(outfile, "\n");
+@@ -218,5 +219,10 @@ static void BITSFUNC(go)(void *raw_addr, size_t raw_len,
+ 			fprintf(outfile, "\t.sym_%s = %" PRIi64 ",\n",
+ 				required_syms[i].name, (int64_t)syms[i]);
+ 	}
++	fprintf(outfile, "};\n\n");
++	fprintf(outfile, "static __init int init_%s(void) {\n", image_name);
++	fprintf(outfile, "\treturn init_vdso_image(&%s);\n", image_name);
+ 	fprintf(outfile, "};\n");
++	fprintf(outfile, "subsys_initcall(init_%s);\n", image_name);
++
+ }
+diff --git a/arch/x86/entry/vdso/vdso32-setup.c b/arch/x86/entry/vdso/vdso32-setup.c
+index 43842fa..3b300a7 100644
+--- a/arch/x86/entry/vdso/vdso32-setup.c
++++ b/arch/x86/entry/vdso/vdso32-setup.c
+@@ -51,17 +51,8 @@ __setup("vdso32=", vdso32_setup);
+ __setup_param("vdso=", vdso_setup, vdso32_setup, 0);
+ #endif
+ 
+-int __init sysenter_setup(void)
+-{
+-	init_vdso_image(&vdso_image_32);
+-
+-	return 0;
+-}
+-
+ #ifdef CONFIG_X86_64
+ 
+-subsys_initcall(sysenter_setup);
+-
+ #ifdef CONFIG_SYSCTL
+ /* Register vsyscall32 into the ABI table */
+ #include <linux/sysctl.h>
+diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
+index b8f3f9b..2738eb2 100644
+--- a/arch/x86/entry/vdso/vma.c
++++ b/arch/x86/entry/vdso/vma.c
+@@ -44,13 +44,16 @@ unsigned int vclocks_used __read_mostly;
+ unsigned int __read_mostly vdso64_enabled = 1;
+ #endif
+ 
+-void __init init_vdso_image(const struct vdso_image *image)
++int __init init_vdso_image(const struct vdso_image *image)
+ {
++	BUILD_BUG_ON(VDSO_CLOCKMODE_MAX >= 32);
+ 	BUG_ON(image->size % PAGE_SIZE != 0);
+ 
+ 	apply_alternatives((struct alt_instr *)(image->data + image->alt),
+ 			   (struct alt_instr *)(image->data + image->alt +
+ 						image->alt_len));
++
++	return 0;
+ }
+ 
+ static const struct vm_special_mapping vvar_mapping;
+@@ -418,18 +421,4 @@ static __init int vdso_setup(char *s)
+ 	return 1;
+ }
+ __setup("vdso=", vdso_setup);
+-
+-static int __init init_vdso(void)
+-{
+-	BUILD_BUG_ON(VDSO_CLOCKMODE_MAX >= 32);
+-
+-	init_vdso_image(&vdso_image_64);
+-
+-#ifdef CONFIG_X86_X32_ABI
+-	init_vdso_image(&vdso_image_x32);
+-#endif
+-
+-	return 0;
+-}
+-subsys_initcall(init_vdso);
+ #endif /* CONFIG_X86_64 */
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 4e35c66..2dd0c8a 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -542,7 +542,6 @@ enum idle_boot_override {IDLE_NO_OVERRIDE=0, IDLE_HALT, IDLE_NOMWAIT,
+ 			 IDLE_POLL};
+ 
+ extern void enable_sep_cpu(void);
+-extern int sysenter_setup(void);
+ 
+ 
+ /* Defined in head.S */
+diff --git a/arch/x86/include/asm/vdso.h b/arch/x86/include/asm/vdso.h
+index 2963a2f..d7f6592 100644
+--- a/arch/x86/include/asm/vdso.h
++++ b/arch/x86/include/asm/vdso.h
+@@ -45,7 +45,7 @@ extern const struct vdso_image vdso_image_x32;
+ extern const struct vdso_image vdso_image_32;
+ #endif
+ 
+-extern void __init init_vdso_image(const struct vdso_image *image);
++extern int __init init_vdso_image(const struct vdso_image *image);
+ 
+ extern int map_vdso_once(const struct vdso_image *image, unsigned long addr);
+ 
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 9cfca3d..3a9043e 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1953,7 +1953,6 @@ void __init identify_boot_cpu(void)
+ 	if (HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT))
+ 		pr_info("CET detected: Indirect Branch Tracking enabled\n");
+ #ifdef CONFIG_X86_32
+-	sysenter_setup();
+ 	enable_sep_cpu();
+ #endif
+ 	cpu_detect_tlb(&boot_cpu_data);
