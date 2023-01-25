@@ -2,158 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A43767B359
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE7E67B366
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235411AbjAYNeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:34:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
+        id S234759AbjAYNe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbjAYNeI (ORCPT
+        with ESMTP id S234869AbjAYNex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:34:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980FE4CE47;
-        Wed, 25 Jan 2023 05:34:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F7C361449;
-        Wed, 25 Jan 2023 13:34:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 344F7C433D2;
-        Wed, 25 Jan 2023 13:34:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674653643;
-        bh=CzW3zBsYmO2eQ//HaKiDjgXblnunSy6jgP+bU4BqWoU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r4WLmbpJI8HKn3osqJ8KAZo5aHIkW3hBs7gPzTOOOST0azfTJ8nwZJZgEEe6KcFmB
-         0NYqXXkQQBDiJZ3WFP2TvfRbr31EaUzHtmhH1yIhS3fyecMkexfPk139LsG8CM1MYj
-         6bbBfRaGsF7tz2AwG6rx1xYLVRCBuMlONGUwgXhU=
-Date:   Wed, 25 Jan 2023 14:34:01 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Lee Jones <lee@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>, "robh@kernel.org" <robh@kernel.org>
-Subject: Re: [PATCH] mfd: Add Simple PCI MFD driver
-Message-ID: <Y9EvyRqdpzJCcD63@kroah.com>
-References: <20230120-simple-mfd-pci-v1-1-c46b3d6601ef@axis.com>
- <Y86op9oh5ldrZQyG@google.com>
- <Y862WTT03/JxXUG8@kroah.com>
- <Y9EBSmOoE5+83jS5@axis.com>
- <Y9EgrKT3hDyx+ULy@kroah.com>
- <Y9EpUnRDmWPobcrL@axis.com>
+        Wed, 25 Jan 2023 08:34:53 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C39A56EF7;
+        Wed, 25 Jan 2023 05:34:53 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PDQDl8019535;
+        Wed, 25 Jan 2023 13:34:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : reply-to : references : mime-version :
+ content-type : in-reply-to; s=qcppdkim1;
+ bh=bVExUW5TsBTIAyHKVhS2iVtTheeV6yIVPn1bahdiUQ8=;
+ b=XXmCCdoCQdD9UXAKSUXLYddVShB0WLzlE/Ij8QVvJwh47j9nQad8GjkzcsD/ELLeNCLR
+ vdjp3s5HL6boHgb0ngQV1/S6srUkeCspOgpwFsFzpLk61xKY6qVoDxKo4w2SVZpc64IA
+ jw9ufR9P6EAPi7wGwHJF2Jrk2CjaPgObEwfBpED5hGOX0lfjtX8s3ZBReMEDPh340Ggt
+ 8SLEy2xC/f8+6SYNCRbQo39PX4KDG7c82IE3rFn9Pn6Q7JvDvj+AfXwO6GEvLn1+UCf3
+ Wd8+4jse/em2dr2MOVm6AMo94F3zi3A+IEQ1tOQwjam4Xaw3RjL7xvbwxqXB+F5ENO0R dQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89hk74xm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 13:34:35 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30PDYYLe000852
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 13:34:34 GMT
+Received: from quicinc.com (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
+ 2023 05:34:28 -0800
+Date:   Wed, 25 Jan 2023 19:04:24 +0530
+From:   Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v9 13/27] gunyah: vm_mgr: Add/remove user memory regions
+Message-ID: <20230125133424.GA332@quicinc.com>
+Reply-To: Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
+ <20230120224627.4053418-14-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <Y9EpUnRDmWPobcrL@axis.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230120224627.4053418-14-quic_eberman@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jaB3vNnrEZlj2BcTgEhiu4QVKnZcfpEO
+X-Proofpoint-ORIG-GUID: jaB3vNnrEZlj2BcTgEhiu4QVKnZcfpEO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_08,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=706 phishscore=0
+ suspectscore=0 clxscore=1015 mlxscore=0 impostorscore=0 spamscore=0
+ adultscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250121
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 02:06:26PM +0100, Vincent Whitchurch wrote:
-> On Wed, Jan 25, 2023 at 01:29:32PM +0100, Greg Kroah-Hartman wrote:
-> > On Wed, Jan 25, 2023 at 11:15:38AM +0100, Vincent Whitchurch wrote:
-> > > I hope it's clear from my other replies in this thread that the entire
-> > > purpose of this driver is to allow arbitrary platform devices to be used
-> > > via a PCI device in virtual environments like User Mode Linux in order
-> > > to test existing platform drivers using mocked hardware.
-> > 
-> > That still feels wrong, why is PCI involved here at all?
-> >
-> > Don't abuse platform devices like this please, mock up a platform device
-> > framework instead if you want to test them that way, don't think that
-> > adding a platform device "below" a PCI device is somehow allowed at all.
-> 
-> As you know, PCI allows exposing an MMIO region to the host, so the host
-> can use ioremap() and readl()/writel() on it.  This allows reusing
-> platform drivers even though the device is on the other side of a PCI
-> bus.
-> 
-> There is hardware already supported by the kernel since a long time ago
-> which is handled by putting platform devices below PCI devices.  See
-> add_bus_probe() in arch/x86/kernel/devicetree.c.
+* Elliot Berman <quic_eberman@quicinc.com> [2023-01-20 14:46:12]:
 
-Those are not platform devices below a PCI device from what I can tell,
-and if it is, it's wrong and should be fixed up.  Don't perpetuate bad
-design decisions of the past please.
+> +	/* Check for overlap */
+> +	list_for_each_entry(tmp_mapping, &ghvm->memory_mappings, list) {
+> +		if (!((mapping->guest_phys_addr + (mapping->npages << PAGE_SHIFT) <=
+> +			tmp_mapping->guest_phys_addr) ||
+> +			(mapping->guest_phys_addr >=
+> +			tmp_mapping->guest_phys_addr + (tmp_mapping->npages << PAGE_SHIFT)))) {
+> +			ret = -EEXIST;
+> +			goto unlock;
+> +		}
+> +	}
+> +
+> +	list_add(&mapping->list, &ghvm->memory_mappings);
 
-> And this hardware also wants to do the same thing:
-> 
->  https://lore.kernel.org/lkml/1674183732-5157-1-git-send-email-lizhi.hou@amd.com/
+I think the potential race condition described last time is still possible. Pls
+check.
 
-That too is wrong.
+> +unlock:
+> +	mutex_unlock(&ghvm->mm_lock);
+> +	if (ret)
+> +		goto free_mapping;
+> +
+> +	mapping->pages = kcalloc(mapping->npages, sizeof(*mapping->pages), GFP_KERNEL);
+> +	if (!mapping->pages) {
+> +		ret = -ENOMEM;
+> +		goto reclaim;
 
-That is NOT what the platform devices and drivers are for at all, make
-them some other type of device please, which is why the aux bus was
-created.
+Same comment as last time. Can you check this error path? We seem to call
+unpin_user_page() in this path, which is not correct.
 
-> Also, UML already supports out-of-process PCI, and there is ongoing work
-> in QEMU to add support for out-of-process PCI emulation.  So using PCI
-> will allow this to work on different kinds of virtual environments
-> without having to invent a new method specifically for platform devices.
+> +	}
+> +
+> +	pinned = pin_user_pages_fast(region->userspace_addr, mapping->npages,
+> +					FOLL_WRITE | FOLL_LONGTERM, mapping->pages);
+> +	if (pinned < 0) {
+> +		ret = pinned;
+> +		goto reclaim;
 
-I don't see how PCI is relevant here, sorry.
+Same comment as above.
 
-> > > The auxiliary bus cannot be used since it naturally does
-> > > not support platform devices.
-> > 
-> > The aux bus can support any type of bus (it's there to be used as you
-> > want, it's just that people are currently using it for PCI devices right
-> > now).
-> 
-> I assume we're talking about drivers/base/auxiliary.c?  The kernel doc
-> says:
-> 
->  * A key requirement for utilizing the auxiliary bus is that there is no
->  * dependency on a physical bus, device, register accesses or regmap support.
->  * These individual devices split from the core cannot live on the platform bus
->  * as they are not physical devices that are controlled by DT/ACPI.
-> 
-> But this case the sub-devices do need standard register access with
-> readl()/writel() and _are_ controlled by devicetree.
-
-Ok, let's make a new bus for them then.  As obviously they are not
-platform devices if they live on the PCI bus.
-
-> > > A hard coded list of sub-devices cannot be used since arbitrary
-> > > platform devices with arbitrary devicetree properties need to be
-> > > supported.
-> > 
-> > Then make a new bus type and again, do not abuse platform devices.
-> 
-> How can existing platform drivers be re-used if you invent a new bus
-> type and don't create platform devices?
-
-The same way we reuse lots of drivers for devices on different busses
-today.
-
-> > > I could move this driver to drivers/bus/ and pitch it as a
-> > > "PCI<->platform bridge for testing in virtual environments", if that
-> > > makes more sense.
-> > 
-> > Again, nope, a platform device is NOT ever a child of a PCI device.
-> > That's just not how PCI works at all.
-> > 
-> > Would you do the attempt to do this for USB?  (hint, no.)  So why is PCI
-> > somehow special here?
-> 
-> PCI is special because it allows exposing an MMIO region to the host and
-> allowing the host to access it like any other I/O memory.  USB doesn't
-> allow that.
-
-So you are saying that just because a bus type exports MMIO regions, it
-should be allowed to be a platform device?  Sorry, but make that a new
-bus type as obviously it is something else.  Maybe these are all just
-real PCI devices (or sub devices), so treat them like that please.
-
-thanks,
-
-greg k-h
