@@ -2,120 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DA467B172
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 085A867B174
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 12:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235299AbjAYLe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 06:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
+        id S235638AbjAYLfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 06:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235689AbjAYLed (ORCPT
+        with ESMTP id S235688AbjAYLed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 25 Jan 2023 06:34:33 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736E115CB2;
-        Wed, 25 Jan 2023 03:34:31 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PBVCWD001867;
-        Wed, 25 Jan 2023 11:34:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=/+VsR0WVfZgRKDbswEbML4hy6rt27/ONKz75RbjHZZ8=;
- b=J4xz1ELfTDUoHtKoY8WJNjsq6qVrhyXswcZjGyTLvNmzDPHXDZZfHjm1X/N1sE38Tr5s
- rXROvlnbncx1b8rIBSW+gOaJJhGP+8t7tH4M8ECpnJ+PRoxpOKrV6zwA6nvqeIZT86Vq
- 7T5zEsDA2Q2vUDAQDucW74b/ZK5Gj4RNH3fixwFO2h0Ol7b2CRBsImnhtpL5IjTbE26i
- +0HDjXUXF1LRUFHG3JaN7s9SaWrvmT97I8EloYuhPvhxwOYfDb2e47yQi853IjQje08U
- +RcHUitr/2MPcQ0Zw7H8EY6z3LBG7I287DGfsnKX2PWiupjP7oxo3pNpbYtLwdD6iLWs KQ== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n89hk6ykh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 11:34:28 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 30PBYOdA022986;
-        Wed, 25 Jan 2023 11:34:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3n894ksyqm-1;
-        Wed, 25 Jan 2023 11:34:24 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30PBYOUR022981;
-        Wed, 25 Jan 2023 11:34:24 GMT
-Received: from hu-maiyas-hyd.qualcomm.com (hu-vdadhani-hyd.qualcomm.com [10.213.106.28])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 30PBYN8f022980;
-        Wed, 25 Jan 2023 11:34:24 +0000
-Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 4047106)
-        id 3BEF65000AA; Wed, 25 Jan 2023 17:04:23 +0530 (+0530)
-From:   Viken Dadhaniya <quic_vdadhani@quicinc.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, quic_vnivarth@quicinc.com,
-        quic_vtanuku@quicinc.com, quic_arandive@quicinc.com,
-        Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Subject: [PATCH V2] Serial: core: Add compat ioctl support
-Date:   Wed, 25 Jan 2023 17:04:18 +0530
-Message-Id: <20230125113418.7221-1-quic_vdadhani@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Qju924ljFTlRTFPnG1rNQPYZUdI0OysZ
-X-Proofpoint-ORIG-GUID: Qju924ljFTlRTFPnG1rNQPYZUdI0OysZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_06,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- suspectscore=0 clxscore=1011 mlxscore=0 impostorscore=0 spamscore=0
- adultscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250105
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F838E;
+        Wed, 25 Jan 2023 03:34:32 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D6AD26E0;
+        Wed, 25 Jan 2023 12:34:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674646469;
+        bh=7h8gV3yROK10RMIraRxPOa8yE19c0tpUmSaniy7cNbI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AIKjvsYuq+yp2jYzws9CkAi5YnUeSPQvSH57bvW85payAjSQWQmthNo3+GL1M1Hkf
+         mNvH9iscZmWmUrl+bJrcFeP3C3hx7BBKDRlSJr8rDGohi1A2M7Eod+G+cQpktT1uYe
+         TFgAYti4YF7v0gUqKQbEg7nVvbm1a1B4XkP36n0s=
+Message-ID: <a59ea457-58df-0058-ddaf-c605e5432864@ideasonboard.com>
+Date:   Wed, 25 Jan 2023 13:34:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v8 5/7] media: i2c: add DS90UB960 driver
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230120153417.1156207-1-tomi.valkeinen@ideasonboard.com>
+ <20230120153417.1156207-6-tomi.valkeinen@ideasonboard.com>
+ <Y88EhodG7b+oSvtE@pendragon.ideasonboard.com>
+ <beaebec6-4ec5-8041-5f70-a974ae417a78@ideasonboard.com>
+ <Y9AjFcsQQZqZBhAb@pendragon.ideasonboard.com>
+ <ead8904b-0e17-81e7-98a8-19e4abfdf281@ideasonboard.com>
+ <Y9EAw+PUwZJFH+NO@pendragon.ideasonboard.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y9EAw+PUwZJFH+NO@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current serial core driver doesn't support compat_ioctl
-due to which 32-bit application is not able to send
-ioctls to driver on a 64-bit platform.
+On 25/01/2023 12:13, Laurent Pinchart wrote:
+> Hi Tomi,
+> 
+> On Wed, Jan 25, 2023 at 09:39:57AM +0200, Tomi Valkeinen wrote:
+>> On 24/01/2023 20:27, Laurent Pinchart wrote:
+>>
+>>>>>> +	} else if (ret < 0) {
+>>>>>> +		dev_err(dev, "rx%u: failed to read 'ti,cdr-mode': %d\n", nport,
+>>>>>
+>>>>> If you moved the "ti,cdr-mode" to an argument, printed with %s, the same
+>>>>> format string would be used for the other properties below, and should
+>>>>> thus be de-duplicated by the compiler.
+>>>>
+>>>> I'm not quite sure if this is a sensible optimization or not, but I did
+>>>> it so that I introduce:
+>>>>
+>>>> const char *read_err_str = "rx%u: failed to read '%s': %d\n";
+>>>
+>>> static
+>>>
+>>>> and then use that in the function, which makes the lines much shorter
+>>>> and, I think, a bit more readable.
+>>>
+>>> If you use the same string literal multiple times, the compiler should
+>>> de-duplicate it automatically, so you don't have to create a variable
+>>> manually.
+>>
+>> Yes, but I think this looked better, as it made the code look less
+>> cluttered, and the point is more obvious. Otherwise, looking at the
+>> code, seeing dev_dbg(dev, "Foo %s\n", "bar"); looks pretty weird.
+> 
+> I find
+> 
+> 	dev_dbg(dev, read_err_str, port, "ti,cdr-mode", ret);
+> 
+> less readable as I then have to look up the read_err_str string to
+> understand that line. I also wonder, in that case, if the compiler can
+> still warn if the format string doesn't match the argument types.
 
-Added compat_ioctl support in serial core to handle
-ioctls from 32-bit applications on a 64-bit platform.
+That's a good point, it doesn't.
 
-Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
----
- drivers/tty/serial/serial_core.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+>>>>>> +static void ub960_notify_unbind(struct v4l2_async_notifier *notifier,
+>>>>>> +				struct v4l2_subdev *subdev,
+>>>>>> +				struct v4l2_async_subdev *asd)
+>>>>>> +{
+>>>>>> +	struct ub960_rxport *rxport = to_ub960_asd(asd)->rxport;
+>>>>>> +
+>>>>>> +	rxport->source_sd = NULL;
+>>>>>
+>>>>> Does this serve any purpose ? If not, I'd drop the unbind handler.
+>>>>
+>>>> It makes sure we don't access the source subdev after it has been
+>>>> unbound. I don't see much harm with this function, but can catch cleanup
+>>>> errors.
+>>>
+>>> Do you mean we'll crash on a NULL pointer dereference instead of
+>>> accessing freed memory if this happens ? I suppose it's marginally
+>>> better :-)
+>>
+>> Generally speaking I think it's significantly better. Accessing freed
+>> memory might go unnoticed for a long time, and might not cause any
+>> errors or cause randomly some minor errors. Here we might not even be
+>> accessing freed memory, as the source sd is probably still there, so
+>> KASAN wouldn't catch it.
+>>
+>> In this particular case it might not matter that much. The source_sd is
+>> only used when starting streaming, so the chances are quite small that
+>> we'd end up there after the unbind.
+>>
+>> Still, I think it's a very good practice to NULL the pointers when
+>> they're no longer valid.
+> 
+> Fine with me.
+> 
+>>>>>> +}
+>>>
+>>> [snip]
+>>>
+>>>>>> +static int ub960_create_subdev(struct ub960_data *priv)
+>>>>>> +{
+>>>>>> +	struct device *dev = &priv->client->dev;
+>>>>>> +	unsigned int i;
+>>>>>> +	int ret;
+>>>>>> +
+>>>>>> +	v4l2_i2c_subdev_init(&priv->sd, priv->client, &ub960_subdev_ops);
+>>>>>
+>>>>> A blank line would be nice.
+>>>>
+>>>> Ok.
+>>>>
+>>>>>> +	v4l2_ctrl_handler_init(&priv->ctrl_handler, 1);
+>>>>>
+>>>>> You create two controls.
+>>>>
+>>>> Yep. Although I dropped TPG, so only one again.
+>>>>
+>>>>>> +	priv->sd.ctrl_handler = &priv->ctrl_handler;
+>>>>>> +
+>>>>>> +	v4l2_ctrl_new_std_menu_items(&priv->ctrl_handler, &ub960_ctrl_ops,
+>>>>>> +				     V4L2_CID_TEST_PATTERN,
+>>>>>> +				     ARRAY_SIZE(ub960_tpg_qmenu) - 1, 0, 0,
+>>>>>> +				     ub960_tpg_qmenu);
+>>>>>> +
+>>>>>> +	v4l2_ctrl_new_int_menu(&priv->ctrl_handler, NULL, V4L2_CID_LINK_FREQ,
+>>>>>> +			       ARRAY_SIZE(priv->tx_link_freq) - 1, 0,
+>>>>>> +			       priv->tx_link_freq);
+>>>>>> +
+>>>>>> +	if (priv->ctrl_handler.error) {
+>>>>>> +		ret = priv->ctrl_handler.error;
+>>>>>> +		goto err_free_ctrl;
+>>>>>> +	}
+>>>>>> +
+>>>>>> +	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+>>>>>> +			  V4L2_SUBDEV_FL_HAS_EVENTS | V4L2_SUBDEV_FL_STREAMS;
+>>>>>> +	priv->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+>>>>>> +	priv->sd.entity.ops = &ub960_entity_ops;
+>>>>>> +
+>>>>>> +	for (i = 0; i < priv->hw_data->num_rxports + priv->hw_data->num_txports; i++) {
+>>>>>> +		priv->pads[i].flags = ub960_pad_is_sink(priv, i) ?
+>>>>>> +					      MEDIA_PAD_FL_SINK :
+>>>>>> +					      MEDIA_PAD_FL_SOURCE;
+>>>>>> +	}
+>>>>>> +
+>>>>>> +	ret = media_entity_pads_init(&priv->sd.entity,
+>>>>>> +				     priv->hw_data->num_rxports +
+>>>>>> +					     priv->hw_data->num_txports,
+>>>>>
+>>>>> :-(
+>>>>
+>>>> I don't have strong opinion on this, but don't you find it a bit
+>>>> confusing if a single argument spans multiple lines but without any indent?
+>>>>
+>>>> With a quick look, this looks like a call with 4 arguments:
+>>>>
+>>>> ret = media_entity_pads_init(&priv->sd.entity,
+>>>> 			     priv->hw_data->num_rxports +
+>>>> 			     priv->hw_data->num_txports,
+>>>> 			     priv->pads);
+>>>
+>>> I suppose I'm used to it, so it appears more readable to me. It's also
+>>> the style used through most of the kernel. There's of course always the
+>>> option of storing the result of the computation in a local variable.
+>>
+>> I'll be happy to indent like that if someone tells me how to configure
+>> clang-format to do that =). I didn't figure it out.
+> 
+> Setting ContinuationIndentWidth to 0 "fixes" it, but I suspect it may
+> have other side effects.
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index b9fbbee598b8..ad4c3a5a3d29 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -1601,6 +1601,12 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
- 	return ret;
- }
- 
-+static long
-+uart_compat_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
-+{
-+	return (long)uart_ioctl(tty, cmd, arg);
-+};
-+
- static void uart_set_ldisc(struct tty_struct *tty)
- {
- 	struct uart_state *state = tty->driver_data;
-@@ -2670,6 +2676,7 @@ static const struct tty_operations uart_ops = {
- 	.chars_in_buffer= uart_chars_in_buffer,
- 	.flush_buffer	= uart_flush_buffer,
- 	.ioctl		= uart_ioctl,
-+	.compat_ioctl   = uart_compat_ioctl,
- 	.throttle	= uart_throttle,
- 	.unthrottle	= uart_unthrottle,
- 	.send_xchar	= uart_send_xchar,
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+Yes, it creates some funny indenting, like:
+
+ret =
+func(......);
+
+> This being said, running clang-format on this file gives me a diffstat
+> of 450 insertions(+), 365 deletions(-), so I don't think you can rely on
+> it blindly...
+
+True, although I the bulk of those are with the #defines and structs.
+
+  Tomi
 
