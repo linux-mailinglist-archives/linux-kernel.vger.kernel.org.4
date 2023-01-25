@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A8A67AD94
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407E567AD9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 10:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235207AbjAYJRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 04:17:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S235219AbjAYJR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 04:17:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjAYJRF (ORCPT
+        with ESMTP id S234913AbjAYJR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 04:17:05 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CFA42DCF;
-        Wed, 25 Jan 2023 01:17:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=v4+Ubjw7AoXhgXeA4YKb/blLYieE36zolgnmCKDWMaQ=; b=PWZuXTBiSc8LCj9cdn0+AnFvjN
-        zB0glAj0lJcTES3hfB7UtJlzSluJ8M4Yvt4oh6waOtOum2+4ZBzbPnjNSXADhOfB7s9Vbqpmc1P49
-        j658tOcZkbmVBMSgCorIbPwiBerE4zHleGY4BJQ9/NNhoXk/wYH4ZU+MCeaettZlSCheoGSW2GMVr
-        2+9lrL7caIC1r3xxRVoPDsFyYiSSvNfuOhO8nlzJYKbQPxAhGsQB+ajtO4ioX1QpSXst9aobE1kU6
-        vrpdN3L4Ct2CFXS+UyK2hr4kfk8ys3R2p0VrT0loTxqhh85S1kHg3OT+LKst/Ibf6YxvnrGA+tuQ3
-        Z+5eQ3CA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pKbt0-0026uI-0x;
-        Wed, 25 Jan 2023 09:16:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0F593300137;
-        Wed, 25 Jan 2023 10:16:35 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D728A2C5B6905; Wed, 25 Jan 2023 10:16:35 +0100 (CET)
-Date:   Wed, 25 Jan 2023 10:16:35 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Ingo Molnar <mingo@elte.hu>
-Subject: Re: [PATCH 1/2] perf/tracing: Use stage6 of tracing to not duplicate
- macros
-Message-ID: <Y9Dzczg7xZTTAnyp@hirez.programming.kicks-ass.net>
-References: <20230124202238.563854686@goodmis.org>
- <20230124202515.716458410@goodmis.org>
+        Wed, 25 Jan 2023 04:17:56 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5FCEC74
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:17:54 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so771916wma.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 01:17:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=g89bMr3eE03J+TYQWkkytiL1T/BGnye7+WdWGuXhj80=;
+        b=pElJrXqx9Z2iEcj0CeiqbotfV1L1GPhFvE/mB0VdGY27rqnksdG3jYxGErTQuRqBZA
+         NVRz3+jxAHpLTk5SwckXcv/hU4T+OLa0aCrsYxeqR4V2kgCMK7cwS0Vzeww/6mQ0o0dB
+         ExVUoyX9c4Q8CchbQgfvDbaQU7NWqKwZNPJytXu7Xrb7jByogSe0nlCmoTdT4C/qzd/3
+         k6eMduO5FkYBKRxkT8xH7PMwnharj1f9dqsj+F4QqMOR8a8IyywAQ73z28TMGOR6N9xq
+         FZkhzzZNrxLNjMPsKAT5g54pgCa6iY00Y4cwbSQeemClEwh7HjyHVdsDCN1vGEa4rFzs
+         1GwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g89bMr3eE03J+TYQWkkytiL1T/BGnye7+WdWGuXhj80=;
+        b=uCUD6c90j+fkynTP+4kZdGZd09g+wIYyyyGmiPvrJqYNt9CvQ0Vl4SCPVnuk0ZSpTS
+         3SEwwOPLVAQbLwfVC2K+XBKeTZCxMwWgRkkftbGFiBvMj+1RJt9lF/1VR9XNZ7xN3m6d
+         rQQiCwD+hkZYATwWayD0xY9t9zWqAAQp9puUoJYso1UIkuJkRaDFfMFyiumJQB6B7blS
+         dV0IXGFZTo1g0XjFX3ItqM/9Rq/XCdaxgm++sle4KQC0JiaDLpMl+ofPIl0HfB7GW7Il
+         sFQIdWr9minWCboZ51m+HVNOM0eF5I0GylDMbAQEOXrTWt4Etsgo83coev2reo6mK7lu
+         az7Q==
+X-Gm-Message-State: AFqh2krkjglXLJmfRp6JiOHc3+ArGXYpVjl4ky6RGfGrP+DOZ/HNSqNZ
+        TO7Z6gpXQGkIXWkwvP7ZQ/M68Q==
+X-Google-Smtp-Source: AMrXdXt6qkMvVDN8MHnXrpvwuViLfxSnAY1YvtkHqbCUyxWLTcWNuZIL/5T7W85otq5EKVAoJZM4ew==
+X-Received: by 2002:a05:600c:ccf:b0:3db:f34:e9e0 with SMTP id fk15-20020a05600c0ccf00b003db0f34e9e0mr27755990wmb.35.1674638273229;
+        Wed, 25 Jan 2023 01:17:53 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:ad2f:6fa7:d25a:7047? ([2a01:e0a:982:cbb0:ad2f:6fa7:d25a:7047])
+        by smtp.gmail.com with ESMTPSA id f4-20020adfb604000000b0029100e8dedasm3862328wre.28.2023.01.25.01.17.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 01:17:52 -0800 (PST)
+Message-ID: <5e99bf45-598a-7e02-7866-f542455cf910@linaro.org>
+Date:   Wed, 25 Jan 2023 10:17:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124202515.716458410@goodmis.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] drm/bridge: Kconfig: fix a spelling mistake
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Jagan Teki <jagan@amarulasolutions.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org
+References: <20230124233442.22305-1-rdunlap@infradead.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230124233442.22305-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 03:22:39PM -0500, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On 25/01/2023 00:34, Randy Dunlap wrote:
+> Correct a spelling mistake (reported by codespell).
 > 
-> The perf events are created by the same macro magic as tracefs trace
-> events are. But to hook into perf, it has its own code. It duplicates many
-> of the same macros as the tracefs macros and this is an issue because it
-> misses bug fixes as well as any new enhancements that come with the other
-> trace macros.
-> 
-> As the trace macros have been put into their own staging files, have perf
-> take advantage of this and use the tracefs stage 6 macros that the "fast
-> assign" portion of the trace event macro uses.
-> 
-> Link: https://lore.kernel.org/lkml/1671181385-5719-1-git-send-email-quic_linyyuan@quicinc.com/
-> 
-> Cc: Frederic Weisbecker <fweisbec@gmail.com>
-> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Cc: Peter Zijlstra <a.p.zijlstra@chello.nl>
-> Cc: Ingo Molnar <mingo@elte.hu>
-> Reported-by: Linyu Yuan <quic_linyyuan@quicinc.com>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jagan Teki <jagan@amarulasolutions.com>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Robert Foss <rfoss@kernel.org>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
