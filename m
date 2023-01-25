@@ -2,65 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C468667B8FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF0967B8FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235109AbjAYSGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 13:06:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
+        id S235204AbjAYSHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjAYSGq (ORCPT
+        with ESMTP id S230347AbjAYSHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:06:46 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A7E126D5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:06:45 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id d10so13914685pgm.13
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:06:45 -0800 (PST)
+        Wed, 25 Jan 2023 13:07:41 -0500
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC59C1716F;
+        Wed, 25 Jan 2023 10:07:39 -0800 (PST)
+Received: by mail-vk1-xa35.google.com with SMTP id c21so9605476vkn.10;
+        Wed, 25 Jan 2023 10:07:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RJhg8HWY73+ZEkyEoyDbcVYjsCE09nGUo617LE3EVXg=;
-        b=pLxzQmAIUAIMWobm0n233MwU1wQhVJ0QKnw0EMMtm2Gy1sP91XLN8d7CoIdTSUGMQ0
-         W/4G/8ivodKwA0d+WibgVa60QJqla1fBdnd/IjUC053U4WvIbfjmyiyoAx5syWdUsnBI
-         Gawr56t96YP2CrZPSMAdIr1a2KfWXxkB4yEuc1T36omSNI/80n9GGQL6Lh8+S0J9jkPJ
-         Xs9y2J/YdGQRLGxdJwt0/vJYEp3veWkOCP4xuNUPTaIQpSMaXfHO6nnCjvbbYQU5PJ/5
-         1V7ZJhXzBvIZEiZchFW1oRk+3z8eSHx8IGUi1zJG8WMkqidBf3ncW72iCstVAFQEcykm
-         mmUw==
+        bh=qM7kiuRwQe1g9m3XMwcQMXA/t3ho0zA60PXcbSeaBhI=;
+        b=fT+aa6N02Pkl/fbQ/kW3yJcYpRJFk2o7pcuA7glQwdC83q+73YcoRU7WywZM7azBXr
+         6qwz3qsDBYqiZlcz0rrVkWCDOBmWGy8fG01RimEZ0xKpGcB/Hh8Wn/SzM0ATs74MnTrb
+         y8SjcWelNYvZppo6pCt88JAA13oWMazKLPe9lCuSZTCTUMqPFufslhR813qh+Aitq7g3
+         k7kOny/y5aj9Q9VF4CbZybjdvXtLKgjzqTo/miuu1GnBG5xHeXGIBIcWZyJiKY7te2c8
+         RuMXfHzixCyTfxypRrX3IOr8NQjVWtd90m2YSigaAFPEfGV+HwLfklcPSclxc32HfCeB
+         BtfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RJhg8HWY73+ZEkyEoyDbcVYjsCE09nGUo617LE3EVXg=;
-        b=GUtvyxBKH+un+3Y+PSSSH77h0AMQ2PHXZDsmp+/EOALHpKf2ELzXpAn1D2SYbMLmZG
-         BeiunAk4+vqRSH/j241rIniBUXuMq2pQOWWB7tOl6QZs/wSGOeVhHyQgMxkVlVGqJXmM
-         qjVTMN3B15Z27/F5x2UA9aY+Mydr3e6t2dSe8Wrd+9QgTwY5s1lJmKGa2X5zJtCZrieJ
-         c3V51BfbYFFlMC/Ah0GVgZygVF+XDqVqRkqVkzZ1+J9daoQjpPoiJkde+LDcHrvfJELr
-         WX7Vf34vRozPR+J3vjmm1eTTOJgTeOXvEToM6B05SEPCgP9Z5ZqtslqsF+UxnxUPFlCH
-         TJaA==
-X-Gm-Message-State: AO0yUKWuVa1GcoUN+SW74zqZLOBC/6gVUGwQgbmNpXGlmCcwpKBhzgNA
-        jHlFXBzr9P7+vh2c634GryMH1zsvYJxa8+iQlwe5H3oQ
-X-Google-Smtp-Source: AK7set8eyCwuwnpxHr9Cb5IrHAhzqgGXMkGPE2szqGUbIaxgkfmlbNTfJaxIJMYCjD35g51ztYgjh9Ar2jl4XnUdzOE=
-X-Received: by 2002:aa7:9987:0:b0:590:7611:1c4a with SMTP id
- k7-20020aa79987000000b0059076111c4amr166067pfh.63.1674670004787; Wed, 25 Jan
- 2023 10:06:44 -0800 (PST)
+        bh=qM7kiuRwQe1g9m3XMwcQMXA/t3ho0zA60PXcbSeaBhI=;
+        b=ovSbZkn1wyMkmo25plTOsEw7Elk+hyjOurKUdj9x8MRMJbtw7wXJU/IWdmgF5nSXTs
+         0e7b1/Vj629DsGthxjvd0lzVtu60FR0dYxHyC+4lyS7FqtJLSI9jWKVDokz1QWvdHlJE
+         tPrvVuul6RGth7oshiauhSO3qt8x2OptSd4AkuvvyFUJeEbETVBwrEnIPksVeUwUUxq5
+         R3pAl+XhSPxzR2BfEfPEykW9mVBN5aWMKtW57+zPCsYW3dPFzeaQWWMu1RydUdAh4ZUq
+         Qq6Ei/leqxJOdQ/tiWPvShazPHjGFn1Phng6LzpW74m0tVlkoB4oXxt7QZREDCUlAPCn
+         goiw==
+X-Gm-Message-State: AFqh2koJtwfpzLRxi3vSc/QaGnoQuEc0r3G+9F9rNEb+fyxopZw/cBK8
+        pOwZ8MUxsRJuiJ3fcwoQ0t/YIdMkd1rX1m5yQmCnchMD
+X-Google-Smtp-Source: AMrXdXuj19/f+u/5mrylRroHZVaYwXjn0LMc76xVKN+dasjd/frlcGHq3a9QMQ+t6VhPxryqzicp6TXHf/dB5Lh73ek=
+X-Received: by 2002:a1f:91d4:0:b0:3db:104:6d13 with SMTP id
+ t203-20020a1f91d4000000b003db01046d13mr4343547vkd.25.1674670058841; Wed, 25
+ Jan 2023 10:07:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20230125015738.912924-1-zokeefe@google.com>
-In-Reply-To: <20230125015738.912924-1-zokeefe@google.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 25 Jan 2023 10:06:33 -0800
-Message-ID: <CAHbLzkoF+gbgopWBSP0Xe0+g-DLF_n-NQ_7gvg+0EEGpv8Q7Tw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mm/MADV_COLLAPSE: set EAGAIN on unexpected page refcount
-To:     "Zach O'Keefe" <zokeefe@google.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>
+References: <cover.1674227308.git.alexl@redhat.com> <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+ <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
+ <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
+ <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+ <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+ <20230125041835.GD937597@dread.disaster.area> <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
+ <87wn5ac2z6.fsf@redhat.com> <CAOQ4uxiPLHHnr2=XH4gN4bAjizH-=4mbZMe_sx99FKuPo-fDMQ@mail.gmail.com>
+ <87o7qmbxv4.fsf@redhat.com> <CAOQ4uximBLqXDtq9vDhqR__1ctiiOMhMd03HCFUR_Bh_JFE-UQ@mail.gmail.com>
+ <87fsbybvzq.fsf@redhat.com>
+In-Reply-To: <87fsbybvzq.fsf@redhat.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 25 Jan 2023 20:07:26 +0200
+Message-ID: <CAOQ4uxgos8m72icX+u2_6Gh7eMmctTTt6XZ=BRt3VzeOZH+UuQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+To:     Giuseppe Scrivano <gscrivan@redhat.com>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brauner@kernel.org, viro@zeniv.linux.org.uk,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,44 +80,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 5:58 PM Zach O'Keefe <zokeefe@google.com> wrote:
+> >> I previously mentioned my wish of using it from a user namespace, the
+> >> goal seems more challenging with EROFS or any other block devices.  I
+> >> don't know about the difficulty of getting overlay metacopy working in a
+> >> user namespace, even though it would be helpful for other use cases as
+> >> well.
+> >>
+> >
+> > There is no restriction of metacopy in user namespace.
+> > overlayfs needs to be mounted with -o userxattr and the overlay
+> > xattrs needs to use user.overlay. prefix.
 >
-> During collapse, in a few places we check to see if a given small page
-> has any unaccounted references.  If the refcount on the page doesn't
-> match our expectations, it must be there is an unknown user concurrently
-> interested in the page, and so it's not safe to move the contents
-> elsewhere. However, the unaccounted pins are likely an ephemeral state.
+> if I specify both userxattr and metacopy=on then the mount ends up in
+> the following check:
 >
-> In such a situation, make MADV_COLLAPSE set EAGAIN errno, indicating that
-> collapse may succeed on retry.
+> if (config->userxattr) {
+>         [...]
+>         if (config->metacopy && metacopy_opt) {
+>                 pr_err("conflicting options: userxattr,metacopy=on\n");
+>                 return -EINVAL;
+>         }
+> }
+>
 
-The page may be DMA pinned (for example, pin_user_pages()), it is not
-worth retrying for such pages. But it may also not be worth optimizing
-for this case at this point.
+Right, my bad.
 
-So the patch looks good to me. Reviewed-by: Yang Shi <shy828301@gmail.com>
+> to me it looks like it was done on purpose to prevent metacopy from a
+> user namespace, but I don't know the reason for sure.
+>
 
->
-> Fixes: 7d8faaf15545 ("mm/madvise: introduce MADV_COLLAPSE sync hugepage collapse")
-> Reported-by: Hugh Dickins <hughd@google.com>
-> Signed-off-by: Zach O'Keefe <zokeefe@google.com>
->
-> ---
->  mm/khugepaged.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index e23619bfecc4..fa38cae240b9 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -2712,6 +2712,7 @@ static int madvise_collapse_errno(enum scan_result r)
->         case SCAN_CGROUP_CHARGE_FAIL:
->                 return -EBUSY;
->         /* Resource temporary unavailable - trying again might succeed */
-> +       case SCAN_PAGE_COUNT:
->         case SCAN_PAGE_LOCK:
->         case SCAN_PAGE_LRU:
->         case SCAN_DEL_PAGE_LRU:
-> --
-> 2.39.1.405.gd4c25cc71f-goog
->
+With hand crafted metacopy, an unpriv user can chmod
+any files to anything by layering another file with different
+mode on top of it....
+
+Not sure how the composefs security model intends to handle
+this scenario with userns mount, but it sounds like a similar
+problem.
+
+Thanks,
+Amir.
