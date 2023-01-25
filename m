@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237D967B3A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D8F67B3AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235667AbjAYNpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S235416AbjAYNpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:45:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234742AbjAYNpS (ORCPT
+        with ESMTP id S235651AbjAYNpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:45:18 -0500
-Received: from outbound-smtp41.blacknight.com (outbound-smtp41.blacknight.com [46.22.139.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9F814239
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 05:45:09 -0800 (PST)
+        Wed, 25 Jan 2023 08:45:21 -0500
+Received: from outbound-smtp28.blacknight.com (outbound-smtp28.blacknight.com [81.17.249.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5292913503
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 05:45:20 -0800 (PST)
 Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp41.blacknight.com (Postfix) with ESMTPS id 7E3781F90
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:45:08 +0000 (GMT)
-Received: (qmail 21346 invoked from network); 25 Jan 2023 13:45:08 -0000
+        by outbound-smtp28.blacknight.com (Postfix) with ESMTPS id CA76246026
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:45:18 +0000 (GMT)
+Received: (qmail 21935 invoked from network); 25 Jan 2023 13:45:18 -0000
 Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPA; 25 Jan 2023 13:45:07 -0000
+  by 81.17.254.9 with ESMTPA; 25 Jan 2023 13:45:18 -0000
 From:   Mel Gorman <mgorman@techsingularity.net>
 To:     Vlastimil Babka <vbabka@suse.cz>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -33,9 +33,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux-MM <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 2/4] mm, compaction: Check if a page has been captured before draining PCP pages
-Date:   Wed, 25 Jan 2023 13:44:32 +0000
-Message-Id: <20230125134434.18017-3-mgorman@techsingularity.net>
+Subject: [PATCH 3/4] mm, compaction: Finish scanning the current pageblock if requested
+Date:   Wed, 25 Jan 2023 13:44:33 +0000
+Message-Id: <20230125134434.18017-4-mgorman@techsingularity.net>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230125134434.18017-1-mgorman@techsingularity.net>
 References: <20230125134434.18017-1-mgorman@techsingularity.net>
@@ -49,44 +49,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a page has been captured then draining is unnecssary so check first
-for a captured page.
+cc->finish_pageblock is set when the current pageblock should be
+rescanned but fast_find_migrateblock can select an alternative
+block. Disable fast_find_migrateblock when the current pageblock
+scan should be completed.
 
 Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 ---
- mm/compaction.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ mm/compaction.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/mm/compaction.c b/mm/compaction.c
-index c018b0e65720..28711a21a8a2 100644
+index 28711a21a8a2..4b3a0238879c 100644
 --- a/mm/compaction.c
 +++ b/mm/compaction.c
-@@ -2441,6 +2441,12 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
- 			}
- 		}
+@@ -1762,6 +1762,13 @@ static unsigned long fast_find_migrateblock(struct compact_control *cc)
+ 	if (cc->ignore_skip_hint)
+ 		return pfn;
  
-+		/* Stop if a page has been captured */
-+		if (capc && capc->page) {
-+			ret = COMPACT_SUCCESS;
-+			break;
-+		}
++	/*
++	 * If the pageblock should be finished then do not select a different
++	 * pageblock.
++	 */
++	if (cc->finish_pageblock)
++		return pfn;
 +
- check_drain:
- 		/*
- 		 * Has the migration scanner moved away from the previous
-@@ -2459,12 +2465,6 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
- 				last_migrated_pfn = 0;
- 			}
- 		}
--
--		/* Stop if a page has been captured */
--		if (capc && capc->page) {
--			ret = COMPACT_SUCCESS;
--			break;
--		}
- 	}
- 
- out:
+ 	/*
+ 	 * If the migrate_pfn is not at the start of a zone or the start
+ 	 * of a pageblock then assume this is a continuation of a previous
 -- 
 2.35.3
 
