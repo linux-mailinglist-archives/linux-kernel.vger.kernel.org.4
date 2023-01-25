@@ -2,97 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C783F67B930
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD8867B937
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235902AbjAYSWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 13:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S235172AbjAYSXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:23:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234805AbjAYSWM (ORCPT
+        with ESMTP id S234955AbjAYSXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:22:12 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E9148587;
-        Wed, 25 Jan 2023 10:22:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674670931; x=1706206931;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A76BzDJayrPXI3YjD5EhPGdQ7ascQPANML7Hn/B6Fpg=;
-  b=BHQQc3aiVEG36bP7gOhoMmthLNvxUuSCT9IvKOF1IriZDTC0pKu+Ia8a
-   oyIpSDmG+xVQ4jFVW+rnWg8EyL+CyvEXlGRXCa90HszJtAyoiLZqBKCcB
-   A9hJCc5mwOJ12GTtmmQwrHMvdIgZt6bysSIN+K5p/e965Ihr+feOhvUID
-   X66QkIuDxXQFp6N+weu8+Z2krfNuE+fpSDiMjrX+2OWNb79xzTSVSo2Zw
-   lQ+ZEB/NCdJxSX3mlfLEoJaHInSFJO5NY3sxIqYgGOHYeR1WS1tea8Jir
-   gP3/b9M0QBSohvD025tn09HcADDjrQg/7dOIizqjTq65vJTC9hDZpwrxH
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="306295375"
-X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
-   d="scan'208";a="306295375"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 10:22:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="612520344"
-X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
-   d="scan'208";a="612520344"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2023 10:22:06 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pKkPM-00F1f9-1d;
-        Wed, 25 Jan 2023 20:22:04 +0200
-Date:   Wed, 25 Jan 2023 20:22:04 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Pierluigi Passaro <pierluigi.p@variscite.com>,
-        linus.walleij@linaro.org, yamada.masahiro@socionext.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sfr@canb.auug.org.au, eran.m@variscite.com, nate.d@variscite.com,
-        francesco.f@variscite.com, pierluigi.passaro@gmail.com,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3] gpiolib: fix linker errors when GPIOLIB is disabled
-Message-ID: <Y9FzTGxX5Z+XsTHV@smile.fi.intel.com>
-References: <20230124013138.358595-1-pierluigi.p@variscite.com>
- <CAMRc=Mcf+PA-uhT+3Sq5AxHUMb-K_ogw=kBtGV6-wK00PtXGkw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=Mcf+PA-uhT+3Sq5AxHUMb-K_ogw=kBtGV6-wK00PtXGkw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 13:23:15 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66F621A0F
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:23:14 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id n93-20020a17090a2ce600b0022beeabcf6cso1469373pjd.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 10:23:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=M87dcnyKpD7G1vtcjsccWcpFLIefiVPTj+pV2nUpSG4=;
+        b=cqpU958WIRRZuxW78R8qLwP+/G95uXUi6naqyOp/KrsDH9if60UbRnnpSi2+pR2nev
+         UK0+lCkc1WO0Hpsuy/8qer2ScUxTcEJYaFQyGoElV5ud+7U+8NEi1CsKyjupA4DsYSBl
+         6wY/eYBQtIazYv+TRXs9mONbINl5SI/X9zN+sFBW0Ti8ti1GUFv5XiCc01KdJCj87hvm
+         JmBFFqc7+pgA6JtPXLoO6x6VspQEw4Vmnm3xWOGBgMo/dhvKSXKAgYxaNqAfttmmUFYW
+         HHEkGOtucdfiiqpFfBuyUinQzEo9WwVZ1EwCXBJDlKYfyw8XKi1XHIjs2Q1a8qGrRFx/
+         txUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M87dcnyKpD7G1vtcjsccWcpFLIefiVPTj+pV2nUpSG4=;
+        b=pJt4qTuSbTd7lnEfvnvBne+z5U8Ng0aFEF79I0CZ0zkTXHZWADYfEXi5LuFDPB7Z7w
+         5XMmlLniJAn73FmhzZlEEWD9VvEyYfpEQZO5ToX2SZRJov81D1tqOJu72R2j2vKsP6Ua
+         Zas0QzezC2FeA8B4GOM1ux/XRLOOzFTrGvoCrM2HI0Ah1Yv+hj2lXJMRtbliOwT82fql
+         YDj8JgPJByQaqASMm4lpFApAbtG+9irfAbwMPffwIMU8WGilaBGqDaGpoywgEJOKnYlK
+         6RkBvd9QqmNOMwuN9b5nitozQzo1mn6hNjbqsRdIAKGPg6jnrEmvCUYMFdDcauo76vPu
+         w6+A==
+X-Gm-Message-State: AFqh2kqrAz0p9mAGCXVcbLPvdRcowXQly+8fZbbk4hwMq3GLSC2CZBbI
+        Ql22/EH7wsW4hcBu8aIFfHaQZHZ8MCHw2AMsMoB029a3LrnES3I9rVzo4vfYW3Lty70I+vpTq9b
+        JrccfiSjIxyUXN95DQdYW+yvtcSAz0NQXYRgX8VUi8vhxtIYAlD09V4ZNTAsRxm/NhMddLCJz
+X-Google-Smtp-Source: AMrXdXtEpWrAsWzep2D2iByFfZUFSPA1b2tP11R7WCW7y9XyIuLS885Q86bi0AFPoSOC3bUhgujVshoODF4I
+X-Received: from sweer.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e45])
+ (user=bgardon job=sendgmr) by 2002:a17:902:aa4b:b0:194:b3c6:18ee with SMTP id
+ c11-20020a170902aa4b00b00194b3c618eemr3153349plr.29.1674670994101; Wed, 25
+ Jan 2023 10:23:14 -0800 (PST)
+Date:   Wed, 25 Jan 2023 18:23:09 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230125182311.2022303-1-bgardon@google.com>
+Subject: [PATCH v4 0/2] selftests: KVM: Add a test for eager page splitting
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 09:54:54AM +0100, Bartosz Golaszewski wrote:
-> On Tue, Jan 24, 2023 at 2:31 AM Pierluigi Passaro
-> <pierluigi.p@variscite.com> wrote:
+David Matlack recently added a feature known as eager page splitting
+to x86 KVM. This feature improves vCPU performance during dirty
+logging because the splitting operation is moved out of the page
+fault path, avoiding EPT/NPT violations or allowing the vCPU threads
+to resolve the violation in the fast path.
 
-...
+While this feature is a great performance improvement, it does not
+have adequate testing in KVM selftests. Add a test to provide coverage
+of eager page splitting.
 
-> >  #else /* CONFIG_GPIOLIB */
-> >
-> > +#include <linux/gpio/machine.h>
-> > +#include <linux/gpio/consumer.h>
-> 
-> Please move those headers to the top and arrange them alphabetically
-> with the rest of the <linux/ headers. Since you're now including
-> those, remove any forward declarations of the types in question.
+Patch 1 is a quick refactor to be able to re-use some code from
+dirty_log_perf_test.
+Patch 2 adds the actual test.
 
-That's not correct way. The headers will make the whole purpose of splitting
-(between driver, machine, and consumer) useless.
+V1->V2:
+	Run test in multiple modes, as suggested by David and Ricardo
+	Cleanups from shameful copy-pasta, as suggested by David
+V2->V3:
+	Removed copyright notice from the top of
+	dirty_log_page_splitting.c
+	Adopted ASSERT_EQ for test assertions
+	Now skipping testing with MANUAL_PROTECT if unsupported
+V3->V4:
+	Added the copyright notices back. Thanks Vipin for the right
+	thing to do there.
 
-Lemme look at it, but I believe the solution is not so simple.
-We need to clean up header inclusions as we did for pin control.
+Ben Gardon (2):
+  selftests: KVM: Move dirty logging functions to memstress.(c|h)
+  selftests: KVM: Add dirty logging page splitting test
+
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/dirty_log_perf_test.c       |  84 +-----
+ .../selftests/kvm/include/kvm_util_base.h     |   1 +
+ .../testing/selftests/kvm/include/memstress.h |   8 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |   5 +
+ tools/testing/selftests/kvm/lib/memstress.c   |  72 +++++
+ .../x86_64/dirty_log_page_splitting_test.c    | 257 ++++++++++++++++++
+ 7 files changed, 351 insertions(+), 77 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/dirty_log_page_splitting_test.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.1.456.gfc5497dd1b-goog
 
