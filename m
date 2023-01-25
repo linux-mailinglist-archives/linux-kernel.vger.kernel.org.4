@@ -2,165 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6238E67BDB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4CE67BDC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236738AbjAYVJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
+        id S235312AbjAYVKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:10:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236378AbjAYVIx (ORCPT
+        with ESMTP id S236676AbjAYVKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:08:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FCE5AA5B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:07:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674680849;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HxbGCr5tQJM018IcUZUsOd5DaRqruIG+kHm6Wg5+DfQ=;
-        b=OQ+HCzL64ecp3a6hCgYP6aH5k5ghWbg2ru5XDiO9wPvU5w5TsDAwyyJ9mPUGezGdJ9TxEf
-        Ns6o55YDEiQ2VRawmMWfbEy89R1blKYsupybFqxRKBvs8Tg+6VH0gu0DcnE8ozQYFHMsDq
-        hBb/zSrStipg8Tsys4YGM3lIcBNjfoU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-453-R8pex_C2NICT8VgrohPLJQ-1; Wed, 25 Jan 2023 16:07:26 -0500
-X-MC-Unique: R8pex_C2NICT8VgrohPLJQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A1591C0A58E;
-        Wed, 25 Jan 2023 21:07:25 +0000 (UTC)
-Received: from warthog.procyon.org.uk.com (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9317A14171BB;
-        Wed, 25 Jan 2023 21:07:23 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v10 8/8] block: convert bio_map_user_iov to use iov_iter_extract_pages
-Date:   Wed, 25 Jan 2023 21:06:57 +0000
-Message-Id: <20230125210657.2335748-9-dhowells@redhat.com>
-In-Reply-To: <20230125210657.2335748-1-dhowells@redhat.com>
-References: <20230125210657.2335748-1-dhowells@redhat.com>
+        Wed, 25 Jan 2023 16:10:23 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197632687A
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:09:19 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id e8so17226962qts.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:09:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=criticallink.com; s=google;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EPiDgcipjgNdRkY3Z9BH0bSCD7F/IhOp1+OkeiKo+Tg=;
+        b=Gjuim1G2iQKXJUKX+bJTr24WRgNSOngeO9fmVyvAqTmTDHLuw0udDGy8ckLeB/GV6i
+         Tp1vvhaiR8FnOLujfQg1Ng9DeOa9f9vYZXZHYCHnYdWYlVN0lzvzmFv1RlqoWACMpH8w
+         Xf1jG7/GFlRfjrUGz1gSDEJwoq52chMd5d0wpOfGIm8RoAN/zwj5LzKeMN7p8ZyaApr0
+         siu/c0kJCY8MWNJb72+YZTesuaOih93Naah/tMli87xhCZ4fxvY/XbWXYVXDtjreCOHh
+         +SnkVSnoHLSFaGH9gpr8aEH6RTW6Bb2eg3pY+plFMAsF3PS8iEumCzCmyHx2bSxu7xu0
+         CJKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EPiDgcipjgNdRkY3Z9BH0bSCD7F/IhOp1+OkeiKo+Tg=;
+        b=7D0Yq0zxqeArfB83Lznd6uKlcijnDDrSzTS1TOnC2ButqK+Fw3KTf45dcMEBnseWdp
+         9sKs9oTZnE4LqGVUXhb42YAKGXa2ECPA5l3MoSNV1kO9AllSLgVCv8F1Yz8jLjJLxKU8
+         B/b9P/q3HM1dpakjzGYNugSS9dkl7rzQmjWyzyigdA51KQI/WXBSlsZ1Mrq4ip2iRQ01
+         NWrr22CZWVSzauKKVO2uTAifzv0/iUg/2mqbUsazuD6i7vMGE8VL0YvQa1k7fAX2Q6tp
+         ug94OH+IHVYtn3JAX1a5Ln3cWGZdLKg8TWTMuxZoSiGNeggBGaI1uRdzN++Yxy2Jw0ox
+         NG9g==
+X-Gm-Message-State: AFqh2kpSJpWQluaR0aw/5K2bPqVba5qI0eVIHx+1oZGwb68Az7h+yUsD
+        vFg67XBzQRubALhIOF8ZYkiClg==
+X-Google-Smtp-Source: AMrXdXu6tjgpwHxMJ/VXW+rCUpOHcG/ItMbGudGs+gp7qu7VsX/kPfQBOmSAwq/UAbLuR/G3NAFKzg==
+X-Received: by 2002:ac8:4896:0:b0:3a5:24ac:a175 with SMTP id i22-20020ac84896000000b003a524aca175mr51479667qtq.56.1674680957167;
+        Wed, 25 Jan 2023 13:09:17 -0800 (PST)
+Received: from [127.0.1.1] (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
+        by smtp.gmail.com with ESMTPSA id q196-20020a3743cd000000b0070736988c10sm4177090qka.110.2023.01.25.13.09.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 13:09:16 -0800 (PST)
+From:   Jonathan Cormier <jcormier@criticallink.com>
+Subject: [PATCH 0/4] DRM: BRIDGE: TFP410: Add i2c support
+Date:   Wed, 25 Jan 2023 16:09:09 -0500
+Message-Id: <20230125-tfp410_i2c-v1-0-66a4d4e390b7@criticallink.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHWa0WMC/yXN0QrCMAyF4VcZubaQtorgq4iUpqYuoHWkmwzG3
+ t1uu/zhfJwFKqtwhVu3gPJPqnxLC3vqIPWxvNjIszU4dB6tu5gxD2eLQVwyntwVCSl7RmiAYmVD
+ GkvqN/KWMs3hE+vIGg62rQblLPN+eX+s6x/+HeIjggAAAA==
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Jyri Sarha <jsarha@ti.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Michael Williamson <michael.williamson@criticallink.com>,
+        Bob Duke <bduke@criticallink.com>,
+        Jonathan Cormier <jcormier@criticallink.com>
+X-Mailer: b4 0.11.3-dev-d001f
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1891;
+ i=jcormier@criticallink.com; h=from:subject:message-id;
+ bh=7DEgVz84wDEyR0sxfDf06N+lWfzxeUZpfqRP1tczmxs=;
+ b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0Zp7aDcdCk+9yMv/XE+pU/W5vRSh5c+/zfRFxfs8
+ 6ZFbyKiJAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9GaewAKCRDc1/0uCzbrqup9D/
+ 9gWJb98/LvAHt8vKxBJs/VL/ecw/yYOXuX2o4XY5CriXYLYwA3NX77R/64zbW7vZf3m+h7zMqur5yZ
+ vRxww+qSw0z/wMfEh+w3XDuUW5iL/KMKryjn+SDpL+7akKZH6PI35ejhWN+uY6Fmi6EykYPr7h9N1G
+ +mmhncSOZUHmKibhdojCvPtf5Kd8hhaOOX4AJ6/v+5axWHO9J2zl+/82Fo8FhJOqlWgl99phDKSyoi
+ XwxF7YpmJQtUmHvU2Hu2OgGmrVqFVj9et4/GaQYmk5oeNP3oYDayki/I9buVMlm6dVaCbvyYerp9Cf
+ d8dwBuknlDoHG+gikH+bgvD8/5oIiomcDNHMEGj8cdXVI0O7tsb+6QGHnuxTxgzDW0jhtwOfbFofFr
+ GYvc8LFIE63PV3oLVQGvsAG5cdS3+U83BKiymFm3KdfnQq2ZL6BW9Cw+428YOqwHeZjSrme3uRd+vB
+ 0SZNEIFIMx68HBqZtjq2KEUQv4CIa2Mvfgik+8LCLKV2dbqlP43qoYCBIw52YL7Dt9uEXZRcSqf6a/
+ RWOWRjOpL/NAtZbH4xHypOXge8UMYAe8JHj4sn4jaCgk1QM8iHJpU0QgfBk/ZLkfLGR/evleBSOntd
+ LvU+NYPGaRHrS/xZf9NhErmOicts1pRjXje5HFanOi+kZU3DWwC6Vj5+rOEA==
+X-Developer-Key: i=jcormier@criticallink.com; a=openpgp;
+ fpr=FF328CEA09E66D63136754DFDCD7FD2E0B36EBAA
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This will pin pages or leave them unaltered rather than getting a ref on
-them as appropriate to the iterator.
+The TFP410 driver does not support I2C.  As such, the device remains in
+Power Down if the I2C is enabled by the bootstrap pins.
 
-The pages need to be pinned for DIO rather than having refs taken on them
-to prevent VM copy-on-write from malfunctioning during a concurrent fork()
-(the result of the I/O could otherwise end up being visible to/affected by
-the child process).
+Add basic support for the I2C interface, and provide support to take
+the device out of power down when enabled.  Also read the bootstrap mode
+pins via the CTL_1_MODE register when using the I2C bus.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Jan Kara <jack@suse.cz>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Logan Gunthorpe <logang@deltatee.com>
-cc: linux-block@vger.kernel.org
+Also allow polling device to support hdmi/dvi hotplug detection.
+
+To: Andrzej Hajda <andrzej.hajda@intel.com>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+To: Robert Foss <robert.foss@linaro.org>
+To: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+To: Jonas Karlman <jonas@kwiboo.se>
+To: Jernej Skrabec <jernej.skrabec@gmail.com>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Tomi Valkeinen <tomi.valkeinen@ti.com>
+To: Jyri Sarha <jsarha@ti.com>
+Cc: dri-devel@lists.freedesktop.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Michael Williamson <michael.williamson@criticallink.com>
+Cc: Bob Duke <bduke@criticallink.com>
+Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
+
 ---
+Jonathan Cormier (1):
+      dt-bindings: display: bridge: tfp410: Add tfp410 i2c example
 
-Notes:
-    ver #10)
-     - Drop bio_set_cleanup_mode(), open coding it instead.
-    
-    ver #8)
-     - Split the patch up a bit [hch].
-     - We should only be using pinned/non-pinned pages and not ref'd pages,
-       so adjust the comments appropriately.
-    
-    ver #7)
-     - Don't treat BIO_PAGE_REFFED/PINNED as being the same as FOLL_GET/PIN.
-    
-    ver #5)
-     - Transcribe the FOLL_* flags returned by iov_iter_extract_pages() to
-       BIO_* flags and got rid of bi_cleanup_mode.
-     - Replaced BIO_NO_PAGE_REF to BIO_PAGE_REFFED in the preceding patch.
+Michael Williamson (3):
+      DRM: BRIDGE: TFP410: Support basic I2C interface
+      DRM: BRIDGE: TFP410: Fix logic to configured polled HPD
+      DRM: BRIDGE: TFP410: If connected, use I2C for polled HPD status.
 
- block/blk-map.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ .../bindings/display/bridge/ti,tfp410.yaml         |  42 ++++++++
+ drivers/gpu/drm/bridge/ti-tfp410.c                 | 110 +++++++++++++++------
+ 2 files changed, 124 insertions(+), 28 deletions(-)
+---
+base-commit: 93f875a8526a291005e7f38478079526c843cbec
+change-id: 20230125-tfp410_i2c-3b270b0bf3e0
 
-diff --git a/block/blk-map.c b/block/blk-map.c
-index 0e2b0a861ba3..9c7ccea3f334 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -281,22 +281,21 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 
- 	if (blk_queue_pci_p2pdma(rq->q))
- 		extraction_flags |= ITER_ALLOW_P2PDMA;
-+	if (iov_iter_extract_will_pin(iter))
-+		bio_set_flag(bio, BIO_PAGE_PINNED);
- 
--	bio_set_flag(bio, BIO_PAGE_REFFED);
- 	while (iov_iter_count(iter)) {
--		struct page **pages, *stack_pages[UIO_FASTIOV];
-+		struct page *stack_pages[UIO_FASTIOV];
-+		struct page **pages = stack_pages;
- 		ssize_t bytes;
- 		size_t offs;
- 		int npages;
- 
--		if (nr_vecs <= ARRAY_SIZE(stack_pages)) {
--			pages = stack_pages;
--			bytes = iov_iter_get_pages(iter, pages, LONG_MAX,
--						   nr_vecs, &offs, extraction_flags);
--		} else {
--			bytes = iov_iter_get_pages_alloc(iter, &pages,
--						LONG_MAX, &offs, extraction_flags);
--		}
-+		if (nr_vecs > ARRAY_SIZE(stack_pages))
-+			pages = NULL;
-+
-+		bytes = iov_iter_extract_pages(iter, &pages, LONG_MAX,
-+					       nr_vecs, extraction_flags, &offs);
- 		if (unlikely(bytes <= 0)) {
- 			ret = bytes ? bytes : -EFAULT;
- 			goto out_unmap;
-@@ -318,7 +317,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 				if (!bio_add_hw_page(rq->q, bio, page, n, offs,
- 						     max_sectors, &same_page)) {
- 					if (same_page)
--						put_page(page);
-+						bio_release_page(bio, page);
- 					break;
- 				}
- 
-@@ -330,7 +329,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 		 * release the pages we didn't map into the bio, if any
- 		 */
- 		while (j < npages)
--			put_page(pages[j++]);
-+			bio_release_page(bio, pages[j++]);
- 		if (pages != stack_pages)
- 			kvfree(pages);
- 		/* couldn't stuff something into bio? */
-
+Best regards,
+-- 
+Jonathan Cormier <jcormier@criticallink.com>
