@@ -2,168 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E0767B647
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD2867B63E
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235782AbjAYPwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
+        id S235713AbjAYPvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:51:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234770AbjAYPv6 (ORCPT
+        with ESMTP id S234845AbjAYPvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:51:58 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF9B5975A;
-        Wed, 25 Jan 2023 07:51:53 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PEP7B4030492;
-        Wed, 25 Jan 2023 15:51:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Ot3thYC/XF960Hm4CCL8hZjS2AUE9XkW1K+tW89TnXg=;
- b=j3XjAWjmmitofe6f7v7wRCAN+q81GZLuePym9+Bn5377FTG/XGTIWIUwM7bMGaxbbTNe
- vUoX9oc6N6ylVzNtYtVgVr9f9gNFIOfSp3C3sOQPwX5+fEd1dSuS9S9bLnf3EcVMnx+0
- mbJIfNWC73UX5XqRq8IlWYw8LkdxaiG3o7mA3ABA9Nz8UGFU4VMwrE4Kqa4vodPOV6xC
- RqRnkNQJvbDg7JhidIrFRv66RwtM6UMv5uPaPn6R8DppB/tUoZqsx+9wxUmVjEg0kwvb
- zX9m5I9ePSQv8POPCUuUyh6ehikdnUcmYhzz3Eeq0Mv+sorwKZ+Z/gsxpU3oWcYqWoeU CQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3napvhhgdb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 15:51:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30PFp1La011821
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 15:51:01 GMT
-Received: from [10.50.43.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 25 Jan
- 2023 07:50:52 -0800
-Message-ID: <bbd084bf-b670-6121-5173-373e3c91b955@quicinc.com>
-Date:   Wed, 25 Jan 2023 21:20:49 +0530
+        Wed, 25 Jan 2023 10:51:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852BD59547;
+        Wed, 25 Jan 2023 07:51:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08B7D60BB9;
+        Wed, 25 Jan 2023 15:51:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4FAEC433D2;
+        Wed, 25 Jan 2023 15:51:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674661869;
+        bh=bI0hzWdhxx1TRfwSDpRC/Ok7IsDHm5o2rgX4Dm1E37M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SLlQcjkjPBflDhg8CRVeT2kX4dG24Qy3Nfq+kaUgDWce/aH8mfsYC+ckGHLYHFnXc
+         C2pZJ2c3VeMtkZHMsaP2arcfjEZGzNuPaGUqOpynEiTTK6frYTvl81djhn7p6jXWeg
+         th1BlX7/3QUfSk6maUeL++RwGa6BXhyG13Km95kds9aD25PwrrYZhDaPZAuTGpb01A
+         zw2vtxAFHs8K7yXUyJLugEn20JobJe1gRkd0j7VhW4KQoqyuoWpxl7R4JOb0EsTqUz
+         v6aRfpAsrCZE//GONxrqngbO4Zt0EkTE1kbmYMLsGj8cc7hjMb7TPjxFtGY4dhTLA4
+         teWNEXz59w8VQ==
+Date:   Wed, 25 Jan 2023 16:50:59 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v8 RESEND 3/8] vfs: plumb i_version handling into struct
+ kstat
+Message-ID: <20230125155059.u22lmktpylymmruo@wittgenstein>
+References: <20230124193025.185781-1-jlayton@kernel.org>
+ <20230124193025.185781-4-jlayton@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 04/10] dt-bindings: clock: Add Qualcomm IPQ5332 GCC
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <robimarko@gmail.com>, <quic_gurus@quicinc.com>,
-        <bhupesh.sharma@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230125104520.89684-1-quic_kathirav@quicinc.com>
- <20230125104520.89684-5-quic_kathirav@quicinc.com>
- <ccddc46f-b007-4e0c-9c1f-df2c13d459eb@linaro.org>
-From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-In-Reply-To: <ccddc46f-b007-4e0c-9c1f-df2c13d459eb@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eGeuIrkmqau1Mo9Fudal6J6rV-ngOgyJ
-X-Proofpoint-ORIG-GUID: eGeuIrkmqau1Mo9Fudal6J6rV-ngOgyJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_10,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
- adultscore=0 impostorscore=0 mlxscore=0 spamscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250141
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230124193025.185781-4-jlayton@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 24, 2023 at 02:30:20PM -0500, Jeff Layton wrote:
+> The NFS server has a lot of special handling for different types of
+> change attribute access, depending on the underlying filesystem. In
+> most cases, it's doing a getattr anyway and then fetching that value
+> after the fact.
+> 
+> Rather that do that, add a new STATX_CHANGE_COOKIE flag that is a
+> kernel-only symbol (for now). If requested and getattr can implement it,
+> it can fill out this field. For IS_I_VERSION inodes, add a generic
+> implementation in vfs_getattr_nosec. Take care to mask
+> STATX_CHANGE_COOKIE off in requests from userland and in the result
+> mask.
+> 
+> Since not all filesystems can give the same guarantees of monotonicity,
+> claim a STATX_ATTR_CHANGE_MONOTONIC flag that filesystems can set to
+> indicate that they offer an i_version value that can never go backward.
+> 
+> Eventually if we decide to make the i_version available to userland, we
+> can just designate a field for it in struct statx, and move the
+> STATX_CHANGE_COOKIE definition to the uapi header.
+> 
+> Reviewed-by: NeilBrown <neilb@suse.de>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  fs/stat.c            | 17 +++++++++++++++--
+>  include/linux/stat.h |  9 +++++++++
+>  2 files changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/stat.c b/fs/stat.c
+> index d6cc74ca8486..f43afe0081fe 100644
+> --- a/fs/stat.c
+> +++ b/fs/stat.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/syscalls.h>
+>  #include <linux/pagemap.h>
+>  #include <linux/compat.h>
+> +#include <linux/iversion.h>
+>  
+>  #include <linux/uaccess.h>
+>  #include <asm/unistd.h>
+> @@ -122,6 +123,11 @@ int vfs_getattr_nosec(const struct path *path, struct kstat *stat,
+>  	stat->attributes_mask |= (STATX_ATTR_AUTOMOUNT |
+>  				  STATX_ATTR_DAX);
+>  
+> +	if ((request_mask & STATX_CHANGE_COOKIE) && IS_I_VERSION(inode)) {
+> +		stat->result_mask |= STATX_CHANGE_COOKIE;
+> +		stat->change_cookie = inode_query_iversion(inode);
+> +	}
+> +
+>  	mnt_userns = mnt_user_ns(path->mnt);
+>  	if (inode->i_op->getattr)
+>  		return inode->i_op->getattr(mnt_userns, path, stat,
+> @@ -602,9 +608,11 @@ cp_statx(const struct kstat *stat, struct statx __user *buffer)
+>  
+>  	memset(&tmp, 0, sizeof(tmp));
+>  
+> -	tmp.stx_mask = stat->result_mask;
+> +	/* STATX_CHANGE_COOKIE is kernel-only for now */
+> +	tmp.stx_mask = stat->result_mask & ~STATX_CHANGE_COOKIE;
+>  	tmp.stx_blksize = stat->blksize;
+> -	tmp.stx_attributes = stat->attributes;
+> +	/* STATX_ATTR_CHANGE_MONOTONIC is kernel-only for now */
+> +	tmp.stx_attributes = stat->attributes & ~STATX_ATTR_CHANGE_MONOTONIC;
+>  	tmp.stx_nlink = stat->nlink;
+>  	tmp.stx_uid = from_kuid_munged(current_user_ns(), stat->uid);
+>  	tmp.stx_gid = from_kgid_munged(current_user_ns(), stat->gid);
+> @@ -643,6 +651,11 @@ int do_statx(int dfd, struct filename *filename, unsigned int flags,
+>  	if ((flags & AT_STATX_SYNC_TYPE) == AT_STATX_SYNC_TYPE)
+>  		return -EINVAL;
+>  
+> +	/* STATX_CHANGE_COOKIE is kernel-only for now. Ignore requests
+> +	 * from userland.
+> +	 */
+> +	mask &= ~STATX_CHANGE_COOKIE;
+> +
+>  	error = vfs_statx(dfd, filename, flags, &stat, mask);
+>  	if (error)
+>  		return error;
+> diff --git a/include/linux/stat.h b/include/linux/stat.h
+> index ff277ced50e9..52150570d37a 100644
+> --- a/include/linux/stat.h
+> +++ b/include/linux/stat.h
 
-On 1/25/2023 4:43 PM, Krzysztof Kozlowski wrote:
-> On 25/01/2023 11:45, Kathiravan Thirumoorthy wrote:
->> From: Kathiravan T <quic_kathirav@quicinc.com>
->>
->> Add binding for the Qualcomm IPQ5332 Global Clock Controller.
->>
->> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->> ---
-> Thank you for your patch. There is something to discuss/improve.
+Sorry being late to the party once again...
 
+> @@ -52,6 +52,15 @@ struct kstat {
+>  	u64		mnt_id;
+>  	u32		dio_mem_align;
+>  	u32		dio_offset_align;
+> +	u64		change_cookie;
+>  };
+>  
+> +/* These definitions are internal to the kernel for now. Mainly used by nfsd. */
+> +
+> +/* mask values */
+> +#define STATX_CHANGE_COOKIE		0x40000000U	/* Want/got stx_change_attr */
+> +
+> +/* file attribute values */
+> +#define STATX_ATTR_CHANGE_MONOTONIC	0x8000000000000000ULL /* version monotonically increases */
 
-Thanks for taking time to review the patch.
+maybe it would be better to copy what we do for SB_* vs SB_I_* flags and
+at least rename them to:
 
+STATX_I_CHANGE_COOKIE
+STATX_I_ATTR_CHANGE_MONOTONIC
+i_change_cookie
 
->
->> +  clocks:
->> +    items:
->> +      - description: Board XO clock source
->> +      - description: Sleep clock source
->> +      - description: PCIE 2lane PHY pipe clock source
->> +      - description: PCIE 2lane x1 PHY pipe clock source (For second lane)
->> +      - description: USB PCIE wrapper pipe clock source
->> +
->> +  clock-names:
->> +    items:
->> +      - const: xo
->> +      - const: sleep_clk
->> +      - const: pcie_2lane_phy_pipe_clk
->> +      - const: pcie_2lane_phy_pipe_clk_x1
->> +      - const: usb_pcie_wrapper_pipe_clk
->> +
->> +required:
->> +  - compatible
-> clocks are required
+to visually distinguish internal and external flags.
 
+And also if possible it might be useful to move STATX_I_* flags to the
+higher 32 bits and then one can use upper_32_bits to retrieve kernel
+internal flags and lower_32_bits for userspace flags in tiny wrappers.
 
-Ack.
+(I did something similar for clone3() a few years ago but there to
+distinguish between flags available both in clone() and clone3() and
+such that are only available in clone3().)
 
-
->
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    clock-controller@1800000 {
->> +      compatible = "qcom,ipq5332-gcc";
->> +      reg = <0x01800000 0x80000>;
->> +      #clock-cells = <1>;
->> +      #power-domain-cells = <1>;
->> +      #reset-cells = <1>;
->> +    };
->> +...
->> diff --git a/include/dt-bindings/clock/qcom,gcc-ipq5332.h b/include/dt-bindings/clock/qcom,gcc-ipq5332.h
->> new file mode 100644
->> index 000000000000..a305c648b724
->> --- /dev/null
->> +++ b/include/dt-bindings/clock/qcom,gcc-ipq5332.h
-> Filename should match bindings/compatible.
-
-
-Ack.
-
-
->
->
-> Best regards,
-> Krzysztof
-
-
-Thanks,
-
-Kathiravan T.
-
+But just a thought. I mostly worry about accidently leaking this to
+userspace so ideally we'd even have separate fields in struct kstat for
+internal and external attributes but that might bump kstat size, though
+I don't think struct kstat is actually ever really allocated all that
+much.
