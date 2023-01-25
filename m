@@ -2,174 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D120367B2F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD3E67B2FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 14:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235558AbjAYNG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 08:06:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
+        id S235057AbjAYNKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 08:10:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235574AbjAYNG4 (ORCPT
+        with ESMTP id S232999AbjAYNKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 08:06:56 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A5A577D5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 05:06:45 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id 9-20020a056e0220c900b0030f1b0dfa9dso12323585ilq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 05:06:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LuTSqo617XSrdp8KTYdn2x6SJRlcbMB29Krz/ReNwwI=;
-        b=CP5c//sboX3f6y9kBk3eIweEsY+mb/l74jeJWdjFP0h4PY+OOe0t+O3jZsxopxMqeG
-         GoACxYuROimwVUFm/01BccKRvd7xxy8RF8CgsQKA1KyVQI4aMVUzmHebcidFh+ZVFcAE
-         x0VPY1XSczvz8UooifAEHwwallE94oBwjZj93iXrIlZDe+q6I1OIvDHBMWO4UMy8hsNj
-         SNU1pauunKZiSDVpMTsjAypqsBT0f/syLbyWRv8WUt4nr3qD4ZWLdg+U7UiZrqUFI7EW
-         sK+fk/VHXiqGWM2QPhxlVEx0CByzn/6vzoe2DCDA+wjbKsmVG+OHe9sAcWUKYclakco3
-         YVjw==
-X-Gm-Message-State: AO0yUKXkUAkF4G+JNBofmlR6YLHgdPd6TJIyy3zZnR1OLBVfHH+xS0go
-        SvbXF2HCd8uoNGB+LHq1ZR58k8EyRm0I+9CS85SX3xQAEAU2
-X-Google-Smtp-Source: AK7set+DXb6Z8Gv0MQHpZxz6gfOlcEb0EwWwK8w/phv3KXT9qZMMDWqVUnOg181Bcpn7PK+rr2tSsnGxIJnPZE240v4H6DcMm6hs
+        Wed, 25 Jan 2023 08:10:04 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCA248A39;
+        Wed, 25 Jan 2023 05:10:02 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P241w5FBpz4xN5;
+        Thu, 26 Jan 2023 00:09:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1674652197;
+        bh=Fwm8ctv+aCNu1LYwfHNIxF2N4IkFJEym+qN9b8CLahU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=lNFbFff2B/+4f6CEwrZJlkdL7Wg89pqNa6jlqXE86gaDP07osJlKhAXgJ7PPsVJ7P
+         rIP+e3JfSbHKBTSyIRtukysVpTAa1cPdGtDHNY8W6vFSAz8eU9xWYhl1WB9QCDPBQ8
+         8QWqiD4xaO6Fa83SzLFtimmjvSNe59I68T5zV2osJSscYqiDVSD1MfTq12uPcMX4FG
+         pIlhwukmzXgPvzyUUk3HQ3lzrGbkQpbtno/bdJtTtINvFEgfYJyxh3GOmTkHazquZV
+         2yqydn4pJY/gAY1sbX8ooTIPL+shpN8u+NFwihi5Ra7HCmrXTcethT0vHJPV//UUoY
+         xd1DMy9d/9S9Q==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
+        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
+        ruscur@russell.cc, zohar@linux.ibm.com, gjoyce@linux.ibm.com,
+        sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
+        joel@jms.id.au
+Subject: Re: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
+ structures and buffers
+In-Reply-To: <20230120074306.1326298-3-ajd@linux.ibm.com>
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+ <20230120074306.1326298-3-ajd@linux.ibm.com>
+Date:   Thu, 26 Jan 2023 00:09:53 +1100
+Message-ID: <87pmb2pxpa.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1006:b0:30f:8a37:ef1a with SMTP id
- n6-20020a056e02100600b0030f8a37ef1amr1070905ilj.187.1674652004685; Wed, 25
- Jan 2023 05:06:44 -0800 (PST)
-Date:   Wed, 25 Jan 2023 05:06:44 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dca1ae05f3164d2f@google.com>
-Subject: [syzbot] [btrfs?] kernel BUG in btrfs_csum_one_bio
-From:   syzbot <syzbot+d8941552e21eac774778@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, fdmanana@suse.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Andrew Donnellan <ajd@linux.ibm.com> writes:
+> A number of structures and buffers passed to PKS hcalls have alignment
+> requirements, which could on occasion cause problems:
+>
+> - Authorisation structures must be 16-byte aligned and must not cross a
+>   page boundary
+>
+> - Label structures must not cross page boundaries
+>
+> - Password output buffers must not cross page boundaries
+>
+> Round up the allocations of these structures/buffers to the next power of
+> 2 to make sure this happens.
 
-syzbot found the following issue on:
+It's not the *next* power of 2, it's the *nearest* power of 2, including
+the initial value if it's already a power of 2.
 
-HEAD commit:    f883675bf652 Merge tag 'gpio-fixes-for-v6.2-rc5' of git://..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=114f4b71480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d24faf5fc10540ae
-dashboard link: https://syzkaller.appspot.com/bug?extid=d8941552e21eac774778
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=157373de480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=153fd539480000
+That in conjunction with slab's guarantee that power of 2 sized objects
+are naturally aligned, and that the relevant structs are smaller than a
+page, is what makes this actually work.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a81ede383e7d/disk-f883675b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/510567d86f5c/vmlinux-f883675b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0fc2746533ba/bzImage-f883675b.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/40fdc0e77810/mount_0.gz
+So I think the patch is fine, but the change log and comments probably
+need to be a bit clearer.
 
-The issue was bisected to:
+cheers
 
-commit 2c8f5e8cdf0f77670b1a9f72156ad4e82ed323d1
-Author: Filipe Manana <fdmanana@suse.com>
-Date:   Fri Nov 11 11:50:27 2022 +0000
-
-    btrfs: remove leftover setting of EXTENT_UPTODATE state in an inode's io_tree
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14c1e256480000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=16c1e256480000
-console output: https://syzkaller.appspot.com/x/log.txt?x=12c1e256480000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d8941552e21eac774778@syzkaller.appspotmail.com
-Fixes: 2c8f5e8cdf0f ("btrfs: remove leftover setting of EXTENT_UPTODATE state in an inode's io_tree")
-
-RSP: 002b:00007ffc233556b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f5e11d88ab9
-RDX: 000000000000fea7 RSI: 00000000200001c0 RDI: 0000000000000004
-RBP: 00007ffc233556e0 R08: 0000000000000002 R09: 00007ffc233556f0
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000006
-R13: 00007ffc23355720 R14: 00007ffc23355700 R15: 000000000000000a
- </TASK>
-------------[ cut here ]------------
-kernel BUG at fs/btrfs/file-item.c:871!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 5275 Comm: syz-executor267 Not tainted 6.2.0-rc4-syzkaller-00379-gf883675bf652 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-RIP: 0010:btrfs_csum_one_bio+0x11bd/0x1210 fs/btrfs/file-item.c:871
-Code: 8b 5c 24 20 e9 85 f2 ff ff e8 0f fa 02 fe 48 c7 c7 e0 88 84 8d 4c 89 f6 48 89 da e8 9d 83 f7 00 e9 4b f0 ff ff e8 f3 f9 02 fe <0f> 0b 44 89 f9 80 e1 07 38 c1 0f 8c 89 fd ff ff be 08 00 00 00 4c
-RSP: 0018:ffffc90004a2f120 EFLAGS: 00010293
-RAX: ffffffff8388e1fd RBX: 0000000000400140 RCX: ffff88801fd43a80
-RDX: 0000000000000000 RSI: 1ffff11003fa8755 RDI: ffff88801fd43aac
-RBP: ffffc90004a2f458 R08: ffffffff81c50a8e R09: 00000000ffffffff
-R10: fffffbfff1a83333 R11: 1ffffffff1a83332 R12: 1ffff1100fba540c
-R13: dffffc0000000000 R14: 000000000000005c R15: 000000000000f000
-FS:  0000555556645300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055a1244ffb38 CR3: 0000000021b63000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_submit_data_write_bio+0x339/0x4a0 fs/btrfs/inode.c:2755
- submit_one_bio+0x353/0x490 fs/btrfs/extent_io.c:158
- submit_write_bio fs/btrfs/extent_io.c:184 [inline]
- extent_writepages+0x306/0x540 fs/btrfs/extent_io.c:3212
- do_writepages+0x3c3/0x680 mm/page-writeback.c:2581
- filemap_fdatawrite_wbc+0x11e/0x170 mm/filemap.c:388
- __filemap_fdatawrite_range mm/filemap.c:421 [inline]
- filemap_fdatawrite_range+0x175/0x200 mm/filemap.c:439
- btrfs_fdatawrite_range fs/btrfs/file.c:3857 [inline]
- start_ordered_ops fs/btrfs/file.c:1737 [inline]
- btrfs_sync_file+0x383/0x1190 fs/btrfs/file.c:1813
- generic_write_sync include/linux/fs.h:2885 [inline]
- btrfs_do_write_iter+0xcd3/0x1280 fs/btrfs/file.c:1684
- call_write_iter include/linux/fs.h:2189 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7dc/0xc50 fs/read_write.c:584
- ksys_write+0x177/0x2a0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5e11d88ab9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc233556b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f5e11d88ab9
-RDX: 000000000000fea7 RSI: 00000000200001c0 RDI: 0000000000000004
-RBP: 00007ffc233556e0 R08: 0000000000000002 R09: 00007ffc233556f0
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000006
-R13: 00007ffc23355720 R14: 00007ffc23355700 R15: 000000000000000a
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:btrfs_csum_one_bio+0x11bd/0x1210 fs/btrfs/file-item.c:871
-Code: 8b 5c 24 20 e9 85 f2 ff ff e8 0f fa 02 fe 48 c7 c7 e0 88 84 8d 4c 89 f6 48 89 da e8 9d 83 f7 00 e9 4b f0 ff ff e8 f3 f9 02 fe <0f> 0b 44 89 f9 80 e1 07 38 c1 0f 8c 89 fd ff ff be 08 00 00 00 4c
-RSP: 0018:ffffc90004a2f120 EFLAGS: 00010293
-RAX: ffffffff8388e1fd RBX: 0000000000400140 RCX: ffff88801fd43a80
-RDX: 0000000000000000 RSI: 1ffff11003fa8755 RDI: ffff88801fd43aac
-RBP: ffffc90004a2f458 R08: ffffffff81c50a8e R09: 00000000ffffffff
-R10: fffffbfff1a83333 R11: 1ffffffff1a83332 R12: 1ffff1100fba540c
-R13: dffffc0000000000 R14: 000000000000005c R15: 000000000000f000
-FS:  0000555556645300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055cbc1e980c8 CR3: 0000000021b63000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> Reported-by: Benjamin Gray <bgray@linux.ibm.com>
+> Fixes: 2454a7af0f2a ("powerpc/pseries: define driver for Platform KeyStore")
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Reviewed-by: Russell Currey <ruscur@russell.cc>
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+>
+> ---
+>
+> v3: Merge plpks fixes and signed update series with secvar series
+>
+> v4: Fix typo in commit message
+>
+>     Move up in series (npiggin)
+> ---
+>  arch/powerpc/platforms/pseries/plpks.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platforms/pseries/plpks.c
+> index 9e85b6d85b0b..a01cf2ff140a 100644
+> --- a/arch/powerpc/platforms/pseries/plpks.c
+> +++ b/arch/powerpc/platforms/pseries/plpks.c
+> @@ -126,7 +126,8 @@ static int plpks_gen_password(void)
+>  	u8 *password, consumer = PKS_OS_OWNER;
+>  	int rc;
+>  
+> -	password = kzalloc(maxpwsize, GFP_KERNEL);
+> +	// The password must not cross a page boundary, so we align to the next power of 2
+> +	password = kzalloc(roundup_pow_of_two(maxpwsize), GFP_KERNEL);
+>  	if (!password)
+>  		return -ENOMEM;
+>  
+> @@ -162,7 +163,9 @@ static struct plpks_auth *construct_auth(u8 consumer)
+>  	if (consumer > PKS_OS_OWNER)
+>  		return ERR_PTR(-EINVAL);
+>  
+> -	auth = kzalloc(struct_size(auth, password, maxpwsize), GFP_KERNEL);
+> +	// The auth structure must not cross a page boundary and must be
+> +	// 16 byte aligned. We align to the next largest power of 2
+> +	auth = kzalloc(roundup_pow_of_two(struct_size(auth, password, maxpwsize)), GFP_KERNEL);
+>  	if (!auth)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> @@ -196,7 +199,8 @@ static struct label *construct_label(char *component, u8 varos, u8 *name,
+>  	if (component && slen > sizeof(label->attr.prefix))
+>  		return ERR_PTR(-EINVAL);
+>  
+> -	label = kzalloc(sizeof(*label), GFP_KERNEL);
+> +	// The label structure must not cross a page boundary, so we align to the next power of 2
+> +	label = kzalloc(roundup_pow_of_two(sizeof(*label)), GFP_KERNEL);
+>  	if (!label)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> -- 
+> 2.39.0
