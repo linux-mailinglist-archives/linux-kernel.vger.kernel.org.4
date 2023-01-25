@@ -2,172 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32CB567B053
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE4B67B05A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235831AbjAYKtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 05:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
+        id S235869AbjAYKuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 05:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235731AbjAYKtO (ORCPT
+        with ESMTP id S235876AbjAYKtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:49:14 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F708577E5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:48:13 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso961542wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:48:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3qynjSOc6nz4Nf6cQvYVVmdAvys7aqe1bFN8sKVYTz8=;
-        b=mvgkbs7E687JKkTLyPJRpf8Xfh8mSV2+GLd1lNG7xZ/hquVAxxx/ZdarKyszSnvPE+
-         DBXn/W4v1I2+NKYIqjUPOOorRGG+Kdonx9kWv7PkfHwHg8NakgZhDD5UooSRECRGQDeX
-         tBgY//8TJ1ncc4A1nGHSGMuHVvW6FLrQN/FaPsJSA9xHji44P9/C6IYa9KIuTTDWhkdi
-         ipYwsJGijh9sT/4dflQh12wTP9sf7+iiKdPef3xIM6Sq9EKHcKd3pp+LiAXEFUUKavm6
-         zXDZMFo+ywL3NJEM4wqelJNC2vv/n2y768gbUPChpXzC/EJ+n0NV8K2eInQsnFhps1Sc
-         BqIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3qynjSOc6nz4Nf6cQvYVVmdAvys7aqe1bFN8sKVYTz8=;
-        b=0TxavutZULPlu8YOsMbQxlRHb8r/j5Kni/ZKWnHjqVzl4t+Xu0V4p5nHdruDw+kD5l
-         ukMx3Gg1v2VkQUfD1M7oCanjm4r2aNy2YpLKgxjG86bHx7+7djVpR6mXXcNAI9ivQdpt
-         8cnl0J1z2++c67tQiBKKfoAYJQRGHXQ6Y6NQAsDhOhkZBx85k9BGQifDTylAaqxlK0TG
-         hbw+mmEgq1j/XMZk4WYs4ZiF1RBrwxV6QX0FLh5rUlUuZKohhr33piENSkdkhL4zyx91
-         yDh+BzePJa2tnuSgzH/cdlO0oY4uF7QJvt3Mb6kKpN1H8kzKIIaFItCVvyvslLiTjrZ2
-         OLZg==
-X-Gm-Message-State: AFqh2kovpHcEFctf11NK+/iSzKMlpnvzv6VfOjiw4Wd0z6bVB77qbDc0
-        L+jbrv5Mt8cQLrt3bTzFtUW2Eg==
-X-Google-Smtp-Source: AMrXdXue8fHvsLjHuYjJlYDZFc9m+OmNq0Yo/E91IxOqD8Lm3kf4A9yMhzqoxJAjsplHCLG0SdGLoA==
-X-Received: by 2002:a05:600c:1713:b0:3da:fd90:19dd with SMTP id c19-20020a05600c171300b003dafd9019ddmr31052393wmn.26.1674643686984;
-        Wed, 25 Jan 2023 02:48:06 -0800 (PST)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id r1-20020a05600c424100b003d9a86a13bfsm1423692wmm.28.2023.01.25.02.48.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 02:48:06 -0800 (PST)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Wed, 25 Jan 2023 11:47:28 +0100
-Subject: [PATCH net-next 8/8] selftests: mptcp: userspace: avoid read
- errors
+        Wed, 25 Jan 2023 05:49:49 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F73937F2A;
+        Wed, 25 Jan 2023 02:48:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ur19YO34lAzxbIJXx6wXRY1oaiq2m1foajEK/7hgelM=; b=ZpYPziHizJDNiS+CWKyXU8QIqI
+        J5s2qsIZIy753gFUyE3KoKdxRoe4OP1zfruBlS3ZWEPKf2xy0ctWk/elJ7C3htckgKb8DzenBOWZo
+        7VLW54Ik+NbBarF6145B+n665M5u5S+RM9NmmEC3OECuL3PeuJMDw42Byv1/8Kz7oNBCVSzYDBczr
+        qE46Pvswf7ig3RxbCjo22A0DvWTBID+AjgOtLFZsz6NvjM/LV+chqd4kClWx/ybS612zy7Lg1agUs
+        /KGmrHsHY1OlYnE4auDjCJSvVXiXCbe4RlDSygceYhNDRZ4HsKNdp/CPUclN8oOpCMxolTtWzx4qL
+        G9mZsPag==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKdJk-005r3F-IH; Wed, 25 Jan 2023 10:47:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E9F6430036B;
+        Wed, 25 Jan 2023 11:47:44 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CEBFE2C5B742E; Wed, 25 Jan 2023 11:47:44 +0100 (CET)
+Date:   Wed, 25 Jan 2023 11:47:44 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@kernel.org,
+        will@kernel.org, boqun.feng@gmail.com, tglx@linutronix.de,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, mhiramat@kernel.org, wanpengli@tencent.com,
+        vkuznets@redhat.com, boris.ostrovsky@oracle.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Paul McKenney <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>
+Subject: Re: [PATCH 3/6] ftrace/x86: Warn and ignore graph tracing when RCU
+ is disabled
+Message-ID: <Y9EI0Gn/NUJt6GEk@hirez.programming.kicks-ass.net>
+References: <20230123205009.790550642@infradead.org>
+ <20230123205515.059999893@infradead.org>
+ <20230123165304.370121e7@gandalf.local.home>
+ <20230123170753.7ac9419e@gandalf.local.home>
+ <Y8/u00WHGElMDjoo@hirez.programming.kicks-ass.net>
+ <Y9ARbgtYhxSuOIlZ@FVFF77S0Q05N>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230123-upstream-net-next-pm-v4-v6-v1-8-43fac502bfbf@tessares.net>
-References: <20230123-upstream-net-next-pm-v4-v6-v1-0-43fac502bfbf@tessares.net>
-In-Reply-To: <20230123-upstream-net-next-pm-v4-v6-v1-0-43fac502bfbf@tessares.net>
-To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2122;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=6MOG1ZEazJbpV3v3EchrO329puIDO6dd5lQxjWDGRMo=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBj0QjdROHosjdgthf7sJ7fwTT7T291txcJlOXdMy83
- 0OLZ1G6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY9EI3QAKCRD2t4JPQmmgc7csEA
- CbPf+IRNTcrGZQC9QI7Yjf/aCMXKOxRtzRhttRiohq7mKvymkfTT4g70DdGz+uRLKD+cK9TkMqd2mv
- HVH3WfEd+OSehw0Vk/yr3fYuXQewl8dVbg+DA1EagE3EDeUJ0Ztm/y5N2f7Zud34C5b1mWqKShx+dF
- wg1ybzUvvQu+GCkGL/SqRVNkVSK37EfnYB65gIikXED5CDt/I+wqCi/cOQcmFpjk7/Pfdaj4uhS2mP
- A/6iMw32sesJ2BMqCVuyCDRxPCOPEiFD22/45KINjXTfVOZGtBYchOynwxDxpTGsOnrWANUWay21xs
- 7KJ7eIIXLiv+OJM+6+8Fyjl6vW2h5z1msYmcBZjmJMdKFFAGvnx6XGVji524YO3uQECONQolvJoItm
- Op86B/1iTSVmGpwB7wJJNCTcgWuEB9+GSbRWYyfuKPWgf1YpK4AEHBOCJn74qFvXd0qhHZ8bzKZ6D1
- 0O/nrR+CJGb4HlMQCrzrr6Xe0KFPfx7UMZg/RiCG9APdhw3Viamh03zD8WfI1Bs0Ocb5x/0K9dwW48
- 22UiCsU1M11LYEkINUw65f6XsqPO/uwWh7fGmXFHzM9gCg0HeHRi75RV1ztTqey69uMSk5d0aDKuRp
- RvfrKxDXEYcTaQAG+/nA/RXn78aCdfwHL6oHShYKJXZMf/Mm/6OLUsCoaNNA==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9ARbgtYhxSuOIlZ@FVFF77S0Q05N>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the cleanup phase, the server pids were killed with a SIGTERM
-directly, not using a SIGUSR1 first to quit safely. As a result, this
-test was often ending with two error messages:
+On Tue, Jan 24, 2023 at 05:12:14PM +0000, Mark Rutland wrote:
+> On Tue, Jan 24, 2023 at 03:44:35PM +0100, Peter Zijlstra wrote:
+> > On Mon, Jan 23, 2023 at 05:07:53PM -0500, Steven Rostedt wrote:
+> > 
+> > > Actually, perhaps we can just add this, and all you need to do is create
+> > > and set CONFIG_NO_RCU_TRACING (or some other name).
+> > 
+> > Elsewhere I've used CONFIG_ARCH_WANTS_NO_INSTR for this.
+> 
+> Yes please; if we use CONFIG_ARCH_WANTS_NO_INSTR then arm64 will get this "for
+> free" once we add the missing checks (which I assume we need) in our ftrace_prepare_return().
+> 
+> > Anyway, I took it for a spin and it .... doesn't seems to do the job.
+> > 
+> > With my patch the first splat is
+> > 
+> >   "RCU not on for: cpuidle_poll_time+0x0/0x70"
+> > 
+> > While with yours I seems to get the endless:
+> > 
+> >   "WARNING: suspicious RCU usage"
+> > 
+> > thing. Let me see if I can figure out where it goes side-ways.
+> 
+> Hmmm... for WARN_ONCE() don't we need to wake RCU first also? I thought we
+> needed that at least for the printk machinery?
 
-  read: Connection reset by peer
+OK, the below seems to work nice for me -- although I'm still on a
+hacked up printk, but the recursive RCU not watching fail seems to be
+tamed.
 
-While at it, use a for-loop to terminate all the PIDs the same way.
+Ofc. Paul might have an opinion on this glorious bodge ;-)
 
-Also the different files are now removed after having killed the PIDs
-using them. It makes more sense to do that in this order.
-
-Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- tools/testing/selftests/net/mptcp/userspace_pm.sh | 32 +++++++++--------------
- 1 file changed, 12 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-index 259382ad552c..66c5be25c13d 100755
---- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
-+++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-@@ -50,6 +50,9 @@ print_title()
+diff --git a/include/linux/trace_recursion.h b/include/linux/trace_recursion.h
+index c303f7a114e9..d48cd92d2364 100644
+--- a/include/linux/trace_recursion.h
++++ b/include/linux/trace_recursion.h
+@@ -135,6 +135,21 @@ extern void ftrace_record_recursion(unsigned long ip, unsigned long parent_ip);
+ # define do_ftrace_record_recursion(ip, pip)	do { } while (0)
+ #endif
  
- kill_wait()
- {
-+	[ $1 -eq 0 ] && return 0
++#ifdef CONFIG_ARCH_WANTS_NO_INSTR
++# define trace_warn_on_no_rcu(ip)					\
++	({								\
++		bool __ret = !rcu_is_watching();			\
++		if (__ret && !trace_recursion_test(TRACE_RECORD_RECURSION_BIT)) { \
++			trace_recursion_set(TRACE_RECORD_RECURSION_BIT); \
++			WARN_ONCE(true, "RCU not on for: %pS\n", (void *)ip); \
++			trace_recursion_clear(TRACE_RECORD_RECURSION_BIT); \
++		}							\
++		__ret;							\
++	})
++#else
++# define trace_warn_on_no_rcu(ip)	false
++#endif
 +
-+	kill -SIGUSR1 $1 > /dev/null 2>&1
- 	kill $1 > /dev/null 2>&1
- 	wait $1 2>/dev/null
- }
-@@ -58,32 +61,21 @@ cleanup()
- {
- 	print_title "Cleanup"
+ /*
+  * Preemption is promised to be disabled when return bit >= 0.
+  */
+@@ -144,6 +159,9 @@ static __always_inline int trace_test_and_set_recursion(unsigned long ip, unsign
+ 	unsigned int val = READ_ONCE(current->trace_recursion);
+ 	int bit;
  
--	rm -rf $file $client_evts $server_evts
--
- 	# Terminate the MPTCP connection and related processes
--	if [ $client4_pid -ne 0 ]; then
--		kill -SIGUSR1 $client4_pid > /dev/null 2>&1
--	fi
--	if [ $server4_pid -ne 0 ]; then
--		kill_wait $server4_pid
--	fi
--	if [ $client6_pid -ne 0 ]; then
--		kill -SIGUSR1 $client6_pid > /dev/null 2>&1
--	fi
--	if [ $server6_pid -ne 0 ]; then
--		kill_wait $server6_pid
--	fi
--	if [ $server_evts_pid -ne 0 ]; then
--		kill_wait $server_evts_pid
--	fi
--	if [ $client_evts_pid -ne 0 ]; then
--		kill_wait $client_evts_pid
--	fi
-+	local pid
-+	for pid in $client4_pid $server4_pid $client6_pid $server6_pid\
-+		   $server_evts_pid $client_evts_pid
-+	do
-+		kill_wait $pid
-+	done
++	if (trace_warn_on_no_rcu(ip))
++		return -1;
 +
- 	local netns
- 	for netns in "$ns1" "$ns2" ;do
- 		ip netns del "$netns"
- 	done
+ 	bit = trace_get_context_bit() + start;
+ 	if (unlikely(val & (1 << bit))) {
+ 		/*
+diff --git a/lib/bug.c b/lib/bug.c
+index c223a2575b72..0a10643ea168 100644
+--- a/lib/bug.c
++++ b/lib/bug.c
+@@ -47,6 +47,7 @@
+ #include <linux/sched.h>
+ #include <linux/rculist.h>
+ #include <linux/ftrace.h>
++#include <linux/context_tracking.h>
  
-+	rm -rf $file $client_evts $server_evts
-+
- 	stdbuf -o0 -e0 printf "Done\n"
+ extern struct bug_entry __start___bug_table[], __stop___bug_table[];
+ 
+@@ -153,7 +154,7 @@ struct bug_entry *find_bug(unsigned long bugaddr)
+ 	return module_find_bug(bugaddr);
  }
  
-
--- 
-2.38.1
-
+-enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
++static enum bug_trap_type __report_bug(unsigned long bugaddr, struct pt_regs *regs)
+ {
+ 	struct bug_entry *bug;
+ 	const char *file;
+@@ -209,6 +210,30 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+ 	return BUG_TRAP_TYPE_BUG;
+ }
+ 
++enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
++{
++	enum bug_trap_type ret;
++	bool rcu = false;
++
++#ifdef CONFIG_CONTEXT_TRACKING_IDLE
++	/*
++	 * Horrible hack to shut up recursive RCU isn't watching fail since
++	 * lots of the actual reporting also relies on RCU.
++	 */
++	if (!rcu_is_watching()) {
++		rcu = true;
++		ct_state_inc(RCU_DYNTICKS_IDX);
++	}
++#endif
++
++	ret = __report_bug(bugaddr, regs);
++
++	if (rcu)
++		ct_state_inc(RCU_DYNTICKS_IDX);
++
++	return ret;
++}
++
+ static void clear_once_table(struct bug_entry *start, struct bug_entry *end)
+ {
+ 	struct bug_entry *bug;
