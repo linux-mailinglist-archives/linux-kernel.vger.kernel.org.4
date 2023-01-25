@@ -2,112 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47EFC67B9D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F245167B9C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 19:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235585AbjAYSrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 13:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
+        id S234393AbjAYSrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 13:47:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235360AbjAYSrH (ORCPT
+        with ESMTP id S229481AbjAYSrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 13:47:07 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC1A5420B;
-        Wed, 25 Jan 2023 10:47:05 -0800 (PST)
-Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PGc3uB005428;
-        Wed, 25 Jan 2023 18:46:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=pps0720;
- bh=lf1JrEL6GKOzP4PS0ec23yDiLZvxtEWCgefmJb4f5HA=;
- b=VIGsp+JPbXEE0NZoKo/TO6ajVO9WJqdCtu8jw9n7y/GFobyoI9w6sAPDAVlsofWBgtL4
- bsdVia42Zv0tnaqPdr53uRbv0d9dEtiQ9C9KHv5jd22veeBdbPHWxRGrxXxLNoPOdmXr
- P3B87WxI1sK7tqQgFLoSgHEkHNRiHVkcBm7R/O5mJDyvmhoqGO6t7gN/89EmPNEx+0Gs
- JiTrlEoUNrg4PXhHNKNyN1qse5OkzFbcNC8RldPXLx36kEM8MYt4sT3O4VJz1GOOfhNX
- Wc0w3Lu+y+bjVoI3wAk2NWMgjLHA0F7xeS6MQ2TgX8OLWmuhyDRWenHPO3wDIlXyards nA== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3nb83xsagt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 18:46:46 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 25 Jan 2023 13:47:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3911151C49;
+        Wed, 25 Jan 2023 10:47:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id D8EB013197;
-        Wed, 25 Jan 2023 18:46:45 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 610598089A9;
-        Wed, 25 Jan 2023 18:46:45 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        joel@jms.id.au
-Subject: [PATCH v4 5/5] MAINTAINERS: Add HPE GXP I2C Support
-Date:   Wed, 25 Jan 2023 12:44:38 -0600
-Message-Id: <20230125184438.28483-6-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230125184438.28483-1-nick.hawkins@hpe.com>
-References: <20230125184438.28483-1-nick.hawkins@hpe.com>
-X-Proofpoint-ORIG-GUID: ctwJSBnIvxms2MNXcAATn4T_p7DcFahd
-X-Proofpoint-GUID: ctwJSBnIvxms2MNXcAATn4T_p7DcFahd
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_12,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- phishscore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
- clxscore=1015 mlxlogscore=999 spamscore=0 bulkscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250166
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1B18615B3;
+        Wed, 25 Jan 2023 18:46:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0586AC433D2;
+        Wed, 25 Jan 2023 18:46:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674672419;
+        bh=e35zOz55fvzDHe3U2OJO5ZyYTEJxv3m4O3arQ4xHu2Q=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=lZx1OjncBFk3KhakW/keEzXjkMh8CzQFUSxiz0i523UhOmFbavzP1u/f+wDZd41Dj
+         JkJxMZjVxktOabJKfPaKwVHFCmGpsZ/MTQzTZOzj0uEAzg1zXz6NmSq+E/Wu90SZzF
+         qbfP5f8KGIMT9DhdDOxBtfYtIO0DVl95Nzn3HucSFaNwk9bgkZRlWu/KfIG83BGefW
+         EnOARW49bEt9btXDF9eUIrw+l87z5qMVEWTKmBgw6EMhrTJF/HGY3DqdmhITB15K62
+         OyouCYlbluDtRJKjdczyBcsvERva3BaXWLffDfhWlFoVN3m/xnxff4ijZ07URvMhTm
+         dRjaxPmD6Ut/g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 9686D5C0865; Wed, 25 Jan 2023 10:46:58 -0800 (PST)
+Date:   Wed, 25 Jan 2023 10:46:58 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>, mingo@kernel.org,
+        will@kernel.org, boqun.feng@gmail.com, tglx@linutronix.de,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, mhiramat@kernel.org, wanpengli@tencent.com,
+        vkuznets@redhat.com, boris.ostrovsky@oracle.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Frederic Weisbecker <fweisbec@gmail.com>
+Subject: Re: [PATCH 3/6] ftrace/x86: Warn and ignore graph tracing when RCU
+ is disabled
+Message-ID: <20230125184658.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230123205009.790550642@infradead.org>
+ <20230123205515.059999893@infradead.org>
+ <20230123165304.370121e7@gandalf.local.home>
+ <20230123170753.7ac9419e@gandalf.local.home>
+ <Y8/u00WHGElMDjoo@hirez.programming.kicks-ass.net>
+ <Y9ARbgtYhxSuOIlZ@FVFF77S0Q05N>
+ <Y9EI0Gn/NUJt6GEk@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9EI0Gn/NUJt6GEk@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+On Wed, Jan 25, 2023 at 11:47:44AM +0100, Peter Zijlstra wrote:
+> On Tue, Jan 24, 2023 at 05:12:14PM +0000, Mark Rutland wrote:
+> > On Tue, Jan 24, 2023 at 03:44:35PM +0100, Peter Zijlstra wrote:
+> > > On Mon, Jan 23, 2023 at 05:07:53PM -0500, Steven Rostedt wrote:
+> > > 
+> > > > Actually, perhaps we can just add this, and all you need to do is create
+> > > > and set CONFIG_NO_RCU_TRACING (or some other name).
+> > > 
+> > > Elsewhere I've used CONFIG_ARCH_WANTS_NO_INSTR for this.
+> > 
+> > Yes please; if we use CONFIG_ARCH_WANTS_NO_INSTR then arm64 will get this "for
+> > free" once we add the missing checks (which I assume we need) in our ftrace_prepare_return().
+> > 
+> > > Anyway, I took it for a spin and it .... doesn't seems to do the job.
+> > > 
+> > > With my patch the first splat is
+> > > 
+> > >   "RCU not on for: cpuidle_poll_time+0x0/0x70"
+> > > 
+> > > While with yours I seems to get the endless:
+> > > 
+> > >   "WARNING: suspicious RCU usage"
+> > > 
+> > > thing. Let me see if I can figure out where it goes side-ways.
+> > 
+> > Hmmm... for WARN_ONCE() don't we need to wake RCU first also? I thought we
+> > needed that at least for the printk machinery?
+> 
+> OK, the below seems to work nice for me -- although I'm still on a
+> hacked up printk, but the recursive RCU not watching fail seems to be
+> tamed.
+> 
+> Ofc. Paul might have an opinion on this glorious bodge ;-)
 
-Add the I2C controller source and bindings.
+For some definition of the word "glorious", to be sure.  ;-)
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+Am I correct that you have two things happening here?  (1) Preventing
+trace recursion and (2) forcing RCU to pay attention when needed.
 
----
+I cannot resist pointing out that you have re-invented RCU_NONIDLE(),
+though avoiding much of the overhead when not needed.  ;-)
 
-v4:
- *No change
-v3:
- *No change
-v2:
- *No change
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+I would have objections if this ever leaks out onto a non-error code path.
+There are things that need doing when RCU starts and stops watching,
+and this approach omits those things.  Which again is OK in this case,
+where this code is only ever executed when something is already broken,
+but definitely *not* OK when things are not already broken.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1daadaa4d48b..d671a8b6968e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2217,12 +2217,14 @@ M:	Jean-Marie Verdun <verdun@hpe.com>
- M:	Nick Hawkins <nick.hawkins@hpe.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-+F:	Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
- F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
- F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
- F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
- F:	arch/arm/mach-hpe/
- F:	drivers/clocksource/timer-gxp.c
-+F:	drivers/i2c/busses/i2c-gxp.c
- F:	drivers/spi/spi-gxp.c
- F:	drivers/watchdog/gxp-wdt.c
- 
--- 
-2.17.1
+							Thanx, Paul
 
+> ---
+> 
+> diff --git a/include/linux/trace_recursion.h b/include/linux/trace_recursion.h
+> index c303f7a114e9..d48cd92d2364 100644
+> --- a/include/linux/trace_recursion.h
+> +++ b/include/linux/trace_recursion.h
+> @@ -135,6 +135,21 @@ extern void ftrace_record_recursion(unsigned long ip, unsigned long parent_ip);
+>  # define do_ftrace_record_recursion(ip, pip)	do { } while (0)
+>  #endif
+>  
+> +#ifdef CONFIG_ARCH_WANTS_NO_INSTR
+> +# define trace_warn_on_no_rcu(ip)					\
+> +	({								\
+> +		bool __ret = !rcu_is_watching();			\
+> +		if (__ret && !trace_recursion_test(TRACE_RECORD_RECURSION_BIT)) { \
+> +			trace_recursion_set(TRACE_RECORD_RECURSION_BIT); \
+> +			WARN_ONCE(true, "RCU not on for: %pS\n", (void *)ip); \
+> +			trace_recursion_clear(TRACE_RECORD_RECURSION_BIT); \
+> +		}							\
+> +		__ret;							\
+> +	})
+> +#else
+> +# define trace_warn_on_no_rcu(ip)	false
+> +#endif
+> +
+>  /*
+>   * Preemption is promised to be disabled when return bit >= 0.
+>   */
+> @@ -144,6 +159,9 @@ static __always_inline int trace_test_and_set_recursion(unsigned long ip, unsign
+>  	unsigned int val = READ_ONCE(current->trace_recursion);
+>  	int bit;
+>  
+> +	if (trace_warn_on_no_rcu(ip))
+> +		return -1;
+> +
+>  	bit = trace_get_context_bit() + start;
+>  	if (unlikely(val & (1 << bit))) {
+>  		/*
+> diff --git a/lib/bug.c b/lib/bug.c
+> index c223a2575b72..0a10643ea168 100644
+> --- a/lib/bug.c
+> +++ b/lib/bug.c
+> @@ -47,6 +47,7 @@
+>  #include <linux/sched.h>
+>  #include <linux/rculist.h>
+>  #include <linux/ftrace.h>
+> +#include <linux/context_tracking.h>
+>  
+>  extern struct bug_entry __start___bug_table[], __stop___bug_table[];
+>  
+> @@ -153,7 +154,7 @@ struct bug_entry *find_bug(unsigned long bugaddr)
+>  	return module_find_bug(bugaddr);
+>  }
+>  
+> -enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+> +static enum bug_trap_type __report_bug(unsigned long bugaddr, struct pt_regs *regs)
+>  {
+>  	struct bug_entry *bug;
+>  	const char *file;
+> @@ -209,6 +210,30 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+>  	return BUG_TRAP_TYPE_BUG;
+>  }
+>  
+> +enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+> +{
+> +	enum bug_trap_type ret;
+> +	bool rcu = false;
+> +
+> +#ifdef CONFIG_CONTEXT_TRACKING_IDLE
+> +	/*
+> +	 * Horrible hack to shut up recursive RCU isn't watching fail since
+> +	 * lots of the actual reporting also relies on RCU.
+> +	 */
+> +	if (!rcu_is_watching()) {
+> +		rcu = true;
+> +		ct_state_inc(RCU_DYNTICKS_IDX);
+> +	}
+> +#endif
+> +
+> +	ret = __report_bug(bugaddr, regs);
+> +
+> +	if (rcu)
+> +		ct_state_inc(RCU_DYNTICKS_IDX);
+> +
+> +	return ret;
+> +}
+> +
+>  static void clear_once_table(struct bug_entry *start, struct bug_entry *end)
+>  {
+>  	struct bug_entry *bug;
