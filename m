@@ -2,235 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A9967BF62
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDC467BF63
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjAYV4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49390 "EHLO
+        id S229940AbjAYV45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjAYVzO (ORCPT
+        with ESMTP id S236123AbjAYVz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:55:14 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED522696;
-        Wed, 25 Jan 2023 13:55:13 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id f34so97324lfv.10;
-        Wed, 25 Jan 2023 13:55:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SZV5K/HfAKQARdyuwKteZTtvAS263iCJ28CNRNH2rEI=;
-        b=P1uBVP4tRSwhHrmjFoDdb1BM1wxpmqooN5zuTeh+N796tEtOVLgN/hkMY7x0vKkCl8
-         K23jsOFwI9S/92KJkjkquYFzAVgFkwSg6DLhkYtWr2pYAkZkHW+Oaq3JMEoubwn1H5zn
-         3qjKzCuzXDWLL97vKfBCd+RRPBWxWdjJtbdrdwNjaaDVDxjB59kGCV+yXwZKfaMMuCfS
-         Xza3PL1P6gKZo3KedqGoW8lb3AJf0OmEUzRPlzASkABbFC4xpKSZvucNTejXv1nT8R9d
-         +jSexKCnlpDsgYc+SCgoy9aeJHmnaLMdMSVhc9JAi31g+u62huGWX6np0gSGiAq2R5Hq
-         SsmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SZV5K/HfAKQARdyuwKteZTtvAS263iCJ28CNRNH2rEI=;
-        b=RRa1et9Z1BgKzAtJamhnwrC9Mbr4Af5urU5Jn6FEP31W4B1hwTk3ZZlEPIumNCdlVV
-         vopuNkMXz4YhpagAUEbwqlh8jcARLGfMeKSiLxiO/Ey2nUEIufWBLlbu//e8xs/Wx5vC
-         eIx98uGfEkCjKVZ1a+io39UdwekPG8SWiTTwb91nYPx7k5T875EwtgNkjuzAzT4leg86
-         /68zgMaBbsMd9xDhK4zaSzJ/vAV/7/5kg8w7CLU/tbBlvhxCgS6fno9mwSHLcBYR8zoa
-         Rt9p2zsYXG/eZS+xDQSms0ZdkFyXMFBkz+LBxEGcEoJ6V0q2MPsQ8MAgtezMSB+hr31s
-         sRtg==
-X-Gm-Message-State: AFqh2kqcBcq+keGAomMAYy6DmBg8peI4McKpk25ogS/KqkOT8fcB3Xim
-        gfvctcGfMRKxmqBk5Q9ZxEmvnTu5Z9R+pRMSPM8=
-X-Google-Smtp-Source: AMrXdXssXQCtaRxBOu8LyVHz7f7VKYZwTN75dhQo/hX/fF52WubYSdWJxDQ2AO63ToUf3rSWi2Wq/aTYRBzBzpBFcyc=
-X-Received: by 2002:a19:5211:0:b0:4bd:5210:bd97 with SMTP id
- m17-20020a195211000000b004bd5210bd97mr1863086lfb.25.1674683711267; Wed, 25
- Jan 2023 13:55:11 -0800 (PST)
+        Wed, 25 Jan 2023 16:55:26 -0500
+Received: from fx403.security-mail.net (smtpout140.security-mail.net [85.31.212.143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5727E86A8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:55:24 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx403.security-mail.net (Postfix) with ESMTP id 7CE77579880
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 22:55:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1674683722;
+        bh=WtoB9JtlKwd4Y8mogATd1m73eAkNffWMtzkgdcOdrFg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=jpK3fSfJCzy3ZANEGkjKa68WlzWKHAnxNIOUyHjrFerEyLWvdC7JV4+9BbvbaYOVc
+         zG/WmhbgVQcAC7cuLJSoEk6kP3iplqZGTody8prkX2fh/DSCpiNkfhrN11Nmfvh2q9
+         5rHYkMRf2BwOr/BqbGtWV8yBWOizstOkO2UnIhWc=
+Received: from fx403 (localhost [127.0.0.1]) by fx403.security-mail.net
+ (Postfix) with ESMTP id 0F1A55794C5; Wed, 25 Jan 2023 22:55:22 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx403.security-mail.net (Postfix) with ESMTPS id 194FF578B2C; Wed, 25 Jan
+ 2023 22:55:21 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id D2EB627E0493; Wed, 25 Jan 2023
+ 22:55:20 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id AEC3727E0491; Wed, 25 Jan 2023 22:55:20 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ si6Lv1AzzjtE; Wed, 25 Jan 2023 22:55:20 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 4AA5127E0461; Wed, 25 Jan 2023
+ 22:55:20 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <13e79.63d1a549.170d1.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu AEC3727E0491
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674683720;
+ bh=OP2H0clmfjMlntXGEQUOupSQETmz7iibW86xdOXdO/c=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=FiSVH+wqDIs88qUIullcsu5BFjd2D7z2E5u8DrTYSpKgGNXgRV/wZx6pLf0jEnjj1
+ nq174SqV22wtEYt+DC4eOS10NI0yUL2JmwTj2bfQCvZEO4mxAawGM/7zjbG/MQC8HR
+ kpFf4zpnPjbRuo+I0TP0j3cj6aN2Vd984BCzoL6c=
+Date:   Wed, 25 Jan 2023 22:55:19 +0100
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Clement Leger <clement@clement-leger.fr>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>,
+        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Alex Michon <amichon@kalray.eu>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <git@xen0n.name>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        John Garry <john.garry@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Atish Patra <atishp@atishpatra.org>,
+        Qi Liu <liuqi115@huawei.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-audit@redhat.com,
+        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH v2 12/31] kvx: Add other common headers
+Message-ID: <20230125215519.GE5952@tellis.lin.mbt.kalray.eu>
+References: <20230120141002.2442-1-ysionneau@kalray.eu>
+ <20230120141002.2442-13-ysionneau@kalray.eu> <Y8qlOpYgDefMPqWH@zx2c4.com>
 MIME-Version: 1.0
-References: <20230125211210.552679-1-jiangzp@google.com> <20230125131159.kernel.v1.1.Id80089feef7af8846cc6f8182eddc5d7a0ac4ea7@changeid>
-In-Reply-To: <20230125131159.kernel.v1.1.Id80089feef7af8846cc6f8182eddc5d7a0ac4ea7@changeid>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Wed, 25 Jan 2023 13:54:59 -0800
-Message-ID: <CABBYNZJ8U4F_Bs5H9Xh5DbEcPOWHx3V43q3oA2GeTwTu8wt5ow@mail.gmail.com>
-Subject: Re: [kernel PATCH v1 1/1] Bluetooth: Don't send HCI commands to
- remove adv if adapter is off
-To:     Zhengping Jiang <jiangzp@google.com>
-Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        Archie Pusaka <apusaka@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <Y8qlOpYgDefMPqWH@zx2c4.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhengping,
+Hi Jason,
 
-On Wed, Jan 25, 2023 at 1:12 PM Zhengping Jiang <jiangzp@google.com> wrote:
->
-> From: Archie Pusaka <apusaka@chromium.org>
->
-> Mark the advertisement as disabled when powering off the adapter
-> without removing the advertisement, so they can be correctly
-> re-enabled when adapter is powered on again.
->
-> When adapter is off and user requested to remove advertisement,
-> a HCI command will be issued. This causes the command to timeout
-> and trigger GPIO reset.
+On Fri, Jan 20, 2023 at 03:29:14PM +0100, Jason A. Donenfeld wrote:
+> Hi Yann,
+> 
+> On Fri, Jan 20, 2023 at 03:09:43PM +0100, Yann Sionneau wrote:
+> > +#include <linux/random.h>
+> > +#include <linux/version.h>
+> > +
+> > +extern unsigned long __stack_chk_guard;
+> > +
+> > +/*
+> > + * Initialize the stackprotector canary value.
+> > + *
+> > + * NOTE: this must only be called from functions that never return,
+> > + * and it must always be inlined.
+> > + */
+> > +static __always_inline void boot_init_stack_canary(void)
+> > +{
+> > +	unsigned long canary;
+> > +
+> > +	/* Try to get a semi random initial value. */
+> > +	get_random_bytes(&canary, sizeof(canary));
+> > +	canary ^= LINUX_VERSION_CODE;
+> > +	canary &= CANARY_MASK;
+> > +
+> > +	current->stack_canary = canary;
+> > +	__stack_chk_guard = current->stack_canary;
+> > +}
+> 
+> 
+> You should rewrite this as:
+> 
+>     current->stack_canary = get_random_canary();
+>     __stack_chk_guard = current->stack_canary;
+> 
+> which is what the other archs all now do. (They didn't used to, and this
+> looks like it's simply based on older code.)
+Thanks for the suggestion, this will be into v3
 
-Please include the btmon portion when the issue occurs.
+> > +#define get_cycles get_cycles
+> > +
+> > +#include <asm/sfr.h>
+> > +#include <asm-generic/timex.h>
+> > +
+> > +static inline cycles_t get_cycles(void)
+> > +{
+> > +	return kvx_sfr_get(PM0);
+> > +}
+> 
+> Glad to see this CPU has a cycle counter. Out of curiosity, what is
+> its resolution?
+This cpu has 4 performance monitor (PM), the first one is reserved to
+count cycles, and it is cycle accurate.
 
-> Therefore, immediately remove the advertisement without sending
-> any HCI commands.
->
-> Note that the above scenario only happens with extended advertisement
-> (i.e. not using software rotation), because on the SW rotation
-> scenario, we just wait until the rotation timer runs out before
-> sending the HCI command. Since the timer is inactive when adapter is
-> off, no HCI commands are sent.
->
-> Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-> Signed-off-by: Zhengping Jiang <jiangzp@google.com>
->
-> ---
->
-> Changes in v1:
-> - Mark the advertisement as disabled instead of clearing it.
-> - Remove the advertisement without sending HCI command if the adapter is off.
+> Also, related, does this CPU happen to have a "RDRAND"-like instruction?
+I didn't knew about the RDRAND insruction, but no this CPU do not have
+an instruction like that.
 
-Perhaps we should split these into 2 separated changes then, on top of
-it it perhaps would be a good idea to implement a test in mgmt-tester
-to check the correct behavior.
+> (I don't know anything about kvx or even what it is.)
+It's a VLIW core, a bit like Itanium, there are currently not publicly
+available documentation.  We have started a discussion internally at
+Kalray to share more information regarding this CPU and its ABI.
 
->  net/bluetooth/hci_sync.c | 57 +++++++++++++++++++++++++++++++++++++---
->  1 file changed, 53 insertions(+), 4 deletions(-)
->
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index 117eedb6f709..08da68a30acc 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -1591,6 +1591,16 @@ int hci_remove_ext_adv_instance_sync(struct hci_dev *hdev, u8 instance,
->         if (!ext_adv_capable(hdev))
->                 return 0;
->
-> +       /* When adapter is off, remove adv without sending HCI commands */
-> +       if (!hdev_is_powered(hdev)) {
-> +               hci_dev_lock(hdev);
-> +               err = hci_remove_adv_instance(hdev, instance);
-> +               if (!err)
-> +                       mgmt_advertising_removed(sk, hdev, instance);
+A very crude instruction listing can be found in our fork of
+gdb-binutils: https://raw.githubusercontent.com/kalray/binutils/binutils-2_35_2/coolidge/opcodes/kv3-opc.c
 
-This code above is duplicated in a few places so we might as well have
-it as a separate function e.g. hci_remove_adv
-
-> +               hci_dev_unlock(hdev);
-> +               return err;
-> +       }
-> +
->         err = hci_disable_ext_adv_instance_sync(hdev, instance);
->         if (err)
->                 return err;
-> @@ -1772,6 +1782,23 @@ int hci_schedule_adv_instance_sync(struct hci_dev *hdev, u8 instance,
->         return hci_start_adv_sync(hdev, instance);
->  }
->
-> +static void hci_clear_ext_adv_ins_during_power_off(struct hci_dev *hdev,
-> +                                                  struct sock *sk)
-> +{
-> +       struct adv_info *adv, *n;
-> +       int err;
-> +
-> +       hci_dev_lock(hdev);
-> +       list_for_each_entry_safe(adv, n, &hdev->adv_instances, list) {
-> +               u8 instance = adv->instance;
-> +
-> +               err = hci_remove_adv_instance(hdev, instance);
-> +               if (!err)
-> +                       mgmt_advertising_removed(sk, hdev, instance);
-
-Then just call hci_remove_adv.
-
-> +       }
-> +       hci_dev_unlock(hdev);
-> +}
-> +
->  static int hci_clear_adv_sets_sync(struct hci_dev *hdev, struct sock *sk)
->  {
->         int err;
-> @@ -1779,6 +1806,12 @@ static int hci_clear_adv_sets_sync(struct hci_dev *hdev, struct sock *sk)
->         if (!ext_adv_capable(hdev))
->                 return 0;
->
-> +       /* When adapter is off, remove adv without sending HCI commands */
-> +       if (!hdev_is_powered(hdev)) {
-> +               hci_clear_ext_adv_ins_during_power_off(hdev, sk);
-
-Use the remove to describe the action e.g. hci_remove_all_adv.
-
-> +               return 0;
-> +       }
-> +
->         /* Disable instance 0x00 to disable all instances */
->         err = hci_disable_ext_adv_instance_sync(hdev, 0x00);
->         if (err)
-> @@ -5177,9 +5210,27 @@ static int hci_disconnect_all_sync(struct hci_dev *hdev, u8 reason)
->         return 0;
->  }
->
-> +static void hci_disable_ext_advertising_temporarily(struct hci_dev *hdev)
-> +{
-> +       struct adv_info *adv, *n;
-> +
-> +       if (!ext_adv_capable(hdev))
-> +               return;
-> +
-> +       hci_dev_lock(hdev);
-> +
-> +       list_for_each_entry_safe(adv, n, &hdev->adv_instances, list)
-> +               adv->enabled = false;
-> +
-> +       hci_dev_clear_flag(hdev, HCI_LE_ADV);
-> +
-> +       hci_dev_unlock(hdev);
-> +}
-> +
->  /* This function perform power off HCI command sequence as follows:
->   *
-> - * Clear Advertising
-> + * Disable Advertising Instances. Do not clear adv instances so advertising
-> + * can be re-enabled on power on.
->   * Stop Discovery
->   * Disconnect all connections
->   * hci_dev_close_sync
-> @@ -5199,9 +5250,7 @@ static int hci_power_off_sync(struct hci_dev *hdev)
->                         return err;
->         }
->
-> -       err = hci_clear_adv_sync(hdev, NULL, false);
-> -       if (err)
-> -               return err;
-> +       hci_disable_ext_advertising_temporarily(hdev);
-
-Something like hci_disable_all_adv sounds better here.
-
->
->         err = hci_stop_discovery_sync(hdev);
->         if (err)
-> --
-> 2.39.1.456.gfc5497dd1b-goog
->
+Best regards,
+-- Jules
 
 
--- 
-Luiz Augusto von Dentz
+
+
+
