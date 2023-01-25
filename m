@@ -2,89 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4C967A8FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE7F67A8FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbjAYCsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 21:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S233577AbjAYCvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 21:51:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjAYCsC (ORCPT
+        with ESMTP id S229778AbjAYCvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 21:48:02 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028F5305D4;
-        Tue, 24 Jan 2023 18:48:01 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P25CfQ000921;
-        Wed, 25 Jan 2023 02:47:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=xcouaf8WF3bKdZYFqAH7FiBbZbwxJAqyIEnMuh21s7o=;
- b=MEtatucxswP3chHoB1y329bLD8EWnP2qrpsSY9L2eLKmHfpBG0suYquygzZx+nguc5/T
- jpvM6vQPtqTcf+i50aVhKp40gHf5vd0ViN5OIlN4qWRubPk6pIHBfLfm4NRViT5xlEND
- w+kvuxKzE+CHik0xUvcjnxWE3RfDiv9dM9f1Ya3bs/yEPjav9GOco4B5dAImmcXDbDFg
- VTvcmf/JJQbJ+RouxDzMmQ7L1O4D5tLvxlK8BCFe3Ql5X0JyZOejfISINGNG3SNV7cl9
- 7rwRC7wXO+zHOMeq3rLD3n5XVXnU3TLyZNvsh8nUxJNrJVroyFX0xoAHRi6SiZnZEFkF 8Q== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nacg17ger-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 02:47:48 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30P1Xb6G010736;
-        Wed, 25 Jan 2023 02:47:47 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3n87p75mph-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 02:47:47 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30P2lktU11600598
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Jan 2023 02:47:46 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 176F558058;
-        Wed, 25 Jan 2023 02:47:46 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9333D58056;
-        Wed, 25 Jan 2023 02:47:44 +0000 (GMT)
-Received: from sig-9-77-142-161.ibm.com (unknown [9.77.142.161])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 25 Jan 2023 02:47:44 +0000 (GMT)
-Message-ID: <adbb8d2f438f01f32d9e09b508cde31b3efdc3a4.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 24/24] integrity/powerpc: Support loading keys from
- pseries secvar
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Russell Currey <ruscur@russell.cc>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
-        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
-        mpe@ellerman.id.au, gjoyce@linux.ibm.com, sudhakar@linux.ibm.com,
-        bgray@linux.ibm.com, erichte@linux.ibm.com, joel@jms.id.au
-Date:   Tue, 24 Jan 2023 21:47:44 -0500
-In-Reply-To: <71b48934e26a991eaf62c9869a8dfee769e0799d.camel@russell.cc>
-References: <20230120074306.1326298-1-ajd@linux.ibm.com>
-         <20230120074306.1326298-25-ajd@linux.ibm.com>
-         <57dca1ea3ef66bc0935bdd1dab4536f1151f4004.camel@linux.ibm.com>
-         <71b48934e26a991eaf62c9869a8dfee769e0799d.camel@russell.cc>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: dtJwXYAFt2-I7yskS6p4JbtAx62PVEPv
-X-Proofpoint-GUID: dtJwXYAFt2-I7yskS6p4JbtAx62PVEPv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-24_17,2023-01-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 malwarescore=0
- clxscore=1015 impostorscore=0 spamscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301250019
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 24 Jan 2023 21:51:35 -0500
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62F830288;
+        Tue, 24 Jan 2023 18:51:33 -0800 (PST)
+Received: by mail-il1-x142.google.com with SMTP id p12so8287145ilq.10;
+        Tue, 24 Jan 2023 18:51:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TU58h35XRxb7co6c01lARxtF0FVRm+LFEZuUsbxAK/k=;
+        b=O6n4VVODt/w5XFECKba6TdLlSE1RbISaQ03kzuYuqPk/ocEAF/JCyNCZhGHMCrl8sV
+         h22G3AHh5nS1vYyYltVDJDFdhs43hy6mO6oCaRYfhaNyfx/mfvAvlOjbh4HR0Of3VYJ3
+         LvVhLn21VKPx/2waUDIryfniNY7ZvVjLN3zo3YU+gWFeZW2bRvP87TEMJZzGvkRIZ911
+         v9O2YNNse/QiviBL2JAAUW8gMhAUaEfnoH4uo3lgtGX2haykf57twHZT157pZCyTwfj6
+         bEe1julmHQ0nf3vQUBGeR9xY9EwCYRmpZIrSa4XE08UxdYhz0b6iHOmANUaSC4DPKSGN
+         U2pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TU58h35XRxb7co6c01lARxtF0FVRm+LFEZuUsbxAK/k=;
+        b=3/N9Zv36gDT9yhaB+jgnyp5g7IH7z0d6sbw+b3n9PlCsUGJ+NYx5pEcUc3bwRNxQAW
+         Yrt3luXmA2WUtpBFTlftILepppTNVKLx/pjVuvmvQK70p1ySqPeqqEKzaor+1Kgmdo8b
+         2TYm6YmvWwUKwPn8RJ6bZvVWzH6xKhugIIYQ65mPhhIZ4o7pTJv8yFaaAIiYBpoFauBM
+         saqQ0TysAyn0VWIDIRNp1aAzEuBTbIFG5sYi0P5yF4tZVmD/G52u726EI9lqH4aLLkO/
+         H2nYRY8UpNUMvO18ITohMjdokVBo1rwArCdMh0TPd3Wrw5V2KLv+520JpXVDvHJ6SWM9
+         9CsQ==
+X-Gm-Message-State: AFqh2krComHAk2ayNgRAIPDpa7grji6IzvS5ROQF1MCBwFNVv0kgDC+K
+        /kPMf0rhXHTNL7IJkGjfYluwGlNuNYSE
+X-Google-Smtp-Source: AMrXdXuefzXhtpv6QTKOltVwlHxYDayDVMCkwxB1v2S5WzEoieqFW7+1Xeqdx47fS2fPH386+15R7Q==
+X-Received: by 2002:a05:6e02:1a45:b0:302:392c:5878 with SMTP id u5-20020a056e021a4500b00302392c5878mr28612992ilv.13.1674615093048;
+        Tue, 24 Jan 2023 18:51:33 -0800 (PST)
+Received: from fedora.mshome.net ([104.184.156.161])
+        by smtp.gmail.com with ESMTPSA id v5-20020a023845000000b0038a13e116a1sm1265722jae.61.2023.01.24.18.51.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 18:51:32 -0800 (PST)
+From:   Gregory Price <gourry.memverge@gmail.com>
+X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, oleg@redhat.com, avagin@gmail.com,
+        peterz@infradead.org, luto@kernel.org, krisman@collabora.com,
+        tglx@linutronix.de, corbet@lwn.net, shuah@kernel.org,
+        Gregory Price <gregory.price@memverge.com>
+Subject: [PATCH v6 0/2] 
+Date:   Tue, 24 Jan 2023 21:51:24 -0500
+Message-Id: <20230125025126.787431-1-gregory.price@memverge.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,132 +72,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-01-25 at 13:23 +1100, Russell Currey wrote:
-> On Tue, 2023-01-24 at 10:14 -0500, Mimi Zohar wrote:
-> > On Fri, 2023-01-20 at 18:43 +1100, Andrew Donnellan wrote:
-> > > From: Russell Currey <ruscur@russell.cc>
-> > > 
-> > > The secvar object format is only in the device tree under powernv.
-> > > We now have an API call to retrieve it in a generic way, so we
-> > > should
-> > > use that instead of having to handle the DT here.
-> > > 
-> > > Add support for pseries secvar, with the "ibm,plpks-sb-v1" format.
-> > > The object format is expected to be the same, so there shouldn't be
-> > > any
-> > > functional differences between objects retrieved from powernv and
-> > > pseries.
-> > > 
-> > > Signed-off-by: Russell Currey <ruscur@russell.cc>
-> > > Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> > > 
-> > > ---
-> > > 
-> > > v3: New patch
-> > > 
-> > > v4: Pass format buffer size (stefanb, npiggin)
-> > > ---
-> > >  .../integrity/platform_certs/load_powerpc.c     | 17 ++++++++++---
-> > > ----
-> > >  1 file changed, 10 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/security/integrity/platform_certs/load_powerpc.c
-> > > b/security/integrity/platform_certs/load_powerpc.c
-> > > index dee51606d5f4..d4ce91bf3fec 100644
-> > > --- a/security/integrity/platform_certs/load_powerpc.c
-> > > +++ b/security/integrity/platform_certs/load_powerpc.c
-> > > @@ -10,7 +10,6 @@
-> > >  #include <linux/cred.h>
-> > >  #include <linux/err.h>
-> > >  #include <linux/slab.h>
-> > > -#include <linux/of.h>
-> > >  #include <asm/secure_boot.h>
-> > >  #include <asm/secvar.h>
-> > >  #include "keyring_handler.h"
-> > > @@ -59,16 +58,22 @@ static int __init load_powerpc_certs(void)
-> > >         void *db = NULL, *dbx = NULL;
-> > >         u64 dbsize = 0, dbxsize = 0;
-> > >         int rc = 0;
-> > > -       struct device_node *node;
-> > > +       ssize_t len;
-> > > +       char buf[32];
-> > >  
-> > >         if (!secvar_ops)
-> > >                 return -ENODEV;
-> > >  
-> > > -       /* The following only applies for the edk2-compat backend.
-> > > */
-> > > -       node = of_find_compatible_node(NULL, NULL, "ibm,edk2-
-> > > compat-v1");
-> > > -       if (!node)
-> > > +       len = secvar_ops->format(buf, 32);
-> > 
-> > "powerpc/secvar: Handle format string in the consumer"  defines
-> > opal_secvar_format() for the object format "ibm,secvar-backend". 
-> > Here
-> > shouldn't it being returning the format for "ibm,edk2-compat-v1"?
-> > 
-> 
-> They end up with the same value.  The DT structure on powernv looks
-> like this:
-> 
-> /proc/device-tree/ibm,opal/secvar:
-> name             "secvar"
-> compatible       "ibm,secvar-backend"
-> 		 "ibm,edk2-compat-v1"
-> format           "ibm,edk2-compat-v1"
-> max-var-key-len  00000000 00000400
-> phandle          0000805a (32858)
-> max-var-size     00000000 00002000
-> 
-> The existing code is checking for a node compatible with "ibm,edk2-
-> compat-v1", which would match the node above.  opal_secvar_format()
-> checks for a node compatible with "ibm,secvar-backend" (again, matching
-> above) and then returns the contents of the "format" string, which is
-> "ibm,edk2-compat-v1".
-> 
-> Ultimately it's two different ways of doing the same thing, but this
-> way load_powerpc_certs() doesn't have to interact with the device tree.
+v6: drop fs/proc/array update, it's not needed
+    drop on_dispatch field exposure in config structure, it's not
+    checkpoint relevant.
+    (Thank you for the reviews Oleg and Andrei)
 
-Agreed.  Thank you for the explanation.  To simplify review, I suggest
-either adding this explanation in the patch description or stage the
-change by replacing the existing "ibm,edk2-compat-v1" usage first.
+v5: automated test for !defined(GENERIC_ENTRY) failed, fix fs/proc
+    use ifdef for GENERIC_ENTRY || TIF_SYSCALL_USER_DISPATCH
+    note: syscall user dispatch is not presently supported for
+          non-generic entry, but could be implemented. question is
+          whether the TIF_ define should be carved out now or then
 
-thanks,
+v4: Whitespace
+    s/CHECKPOINT_RESTART/CHECKPOINT_RESUME
+    check test_syscall_work(SYSCALL_USER_DISPATCH) to determine if it's
+    turned on or not in fs/proc/array and getter interface
 
-Mimi
+v3: Kernel test robot static function fix
+    Whitespace nitpicks
 
-> 
-> 
-> > Mimi
-> > 
-> > > +       if (len <= 0)
-> > >                 return -ENODEV;
-> > >  
-> > > +       // Check for known secure boot implementations from OPAL or
-> > > PLPKS
-> > > +       if (strcmp("ibm,edk2-compat-v1", buf) && strcmp("ibm,plpks-
-> > > sb-v1", buf)) {
-> > > +               pr_err("Unsupported secvar implementation \"%s\",
-> > > not loading certs\n", buf);
-> > > +               return -ENODEV;
-> > > +       }
-> > > +
-> > >         /*
-> > >          * Get db, and dbx. They might not exist, so it isn't an
-> > > error if we
-> > >          * can't get them.
-> > > @@ -103,8 +108,6 @@ static int __init load_powerpc_certs(void)
-> > >                 kfree(dbx);
-> > >         }
-> > >  
-> > > -       of_node_put(node);
-> > > -
-> > >         return rc;
-> > >  }
-> > >  late_initcall(load_powerpc_certs);
-> > 
-> > 
-> 
+v2: Implements the getter/setter interface in ptrace rather than prctl
 
+Syscall user dispatch makes it possible to cleanly intercept system
+calls from user-land.  However, most transparent checkpoint software
+presently leverages some combination of ptrace and system call
+injection to place software in a ready-to-checkpoint state.
+
+If Syscall User Dispatch is enabled at the time of being quiesced,
+injected system calls will subsequently be interposed upon and
+dispatched to the task's signal handler.
+
+This patch set implements 2 features to enable software such as CRIU
+to cleanly interpose upon software leveraging syscall user dispatch.
+
+- Implement PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH, akin to a similar
+  feature for SECCOMP.  This allows a ptracer to temporarily disable
+  syscall user dispatch, making syscall injection possible.
+
+- Implement a getter interface for Syscall User Dispatch config info.
+  To resume successfully, the checkpoint/resume software has to
+  save and restore this information.  Presently this configuration
+  is write-only, with no way for C/R software to save it.
+
+  This was done in ptrace because syscall user dispatch is not part of
+  uapi. The syscall_user_dispatch_config structure was added to the
+  ptrace exports.
+
+Gregory Price (2):
+  ptrace,syscall_user_dispatch: Implement Syscall User Dispatch
+    Suspension
+  ptrace,syscall_user_dispatch: add a getter/setter for sud
+    configuration
+
+ .../admin-guide/syscall-user-dispatch.rst     |  5 ++-
+ include/linux/ptrace.h                        |  2 +
+ include/linux/syscall_user_dispatch.h         | 19 ++++++++
+ include/uapi/linux/ptrace.h                   | 15 ++++++-
+ kernel/entry/syscall_user_dispatch.c          | 45 +++++++++++++++++++
+ kernel/ptrace.c                               | 13 ++++++
+ 6 files changed, 97 insertions(+), 2 deletions(-)
+
+-- 
+2.39.0
 
