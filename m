@@ -2,145 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E412567B7ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B81C467B80D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236100AbjAYRJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S236129AbjAYRKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236014AbjAYRIy (ORCPT
+        with ESMTP id S236084AbjAYRJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:08:54 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E2D366AB
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:08:15 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7C5C721C87;
-        Wed, 25 Jan 2023 17:07:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674666421; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 25 Jan 2023 12:09:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5211E1C8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 09:08:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674666435;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=X7Ju2TighrFIcVxjh+s1qto4imNLUIwLW2Cvl9ClH/c=;
-        b=mERbHiW3P/FkBgADmDFMb3EIyG+9ELTNSjsHkg2ww9hD2EYeRufEt5MgdhgbLBrCPxKiYc
-        QcCRd5KunNq16r6rhn3/xfCygB8tvnR1+nW/vMEooieGQo+mKor0/fGwGD7f3r4Hm4EF+i
-        XiG8HGWhufcJabdDDaEI5WiNWYwc6E8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=Wq3Q5+Num0rwyySEnsJ5ltWOQliKuH/vVqGzLOIkZiA=;
+        b=ULKI600g3ng68CUygyznDuZ/LaiARZUWmABaLQwzknvfnjQ1mRHwDdrofvqfrwAU7PYfiK
+        Qo5I4yq8fu83c6ZPUjycEpgsoA2DSaMltkmuSTsO0f/6ljIZDdF2gmVpIY960dAg2FVUfO
+        /+QFgEXZ5eEdkvl2MPghXtRbbSoMf6c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-529-YKypOLZXPrmEtGz0Nrurag-1; Wed, 25 Jan 2023 12:07:13 -0500
+X-MC-Unique: YKypOLZXPrmEtGz0Nrurag-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 57C791358F;
-        Wed, 25 Jan 2023 17:07:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id pVeAErVh0WNuJAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 25 Jan 2023 17:07:01 +0000
-Date:   Wed, 25 Jan 2023 18:07:00 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] mm/madvise: add vmstat statistics for
- madvise_[cold|pageout]
-Message-ID: <Y9FhtBbnlNxAZAS4@dhcp22.suse.cz>
-References: <20230125005457.4139289-1-minchan@kernel.org>
- <Y9DigKf0w712t0OO@dhcp22.suse.cz>
- <Y9FacrcUIaLZq4DL@google.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 26097802BF5;
+        Wed, 25 Jan 2023 17:07:13 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (ovpn-195-63.brq.redhat.com [10.40.195.63])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 7DCC714171BB;
+        Wed, 25 Jan 2023 17:07:11 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 25 Jan 2023 18:07:10 +0100 (CET)
+Date:   Wed, 25 Jan 2023 18:07:08 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marco Elver <elver@google.com>
+Subject: Re: [RFC PATCH v2] posix-timers: Support delivery of signals to the
+ current thread
+Message-ID: <20230125170708.GE13746@redhat.com>
+References: <20221216171807.760147-1-dvyukov@google.com>
+ <20230112112411.813356-1-dvyukov@google.com>
+ <20230125124304.GA13746@redhat.com>
+ <20230125151717.GB13746@redhat.com>
+ <CACT4Y+YKy_4mBLYomr49+fTm31Y6Q_kXhJz8O-_RTjMe=B-6eg@mail.gmail.com>
+ <20230125163137.GC13746@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9FacrcUIaLZq4DL@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230125163137.GC13746@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 25-01-23 08:36:02, Minchan Kim wrote:
-> On Wed, Jan 25, 2023 at 09:04:16AM +0100, Michal Hocko wrote:
-> > On Tue 24-01-23 16:54:57, Minchan Kim wrote:
-> > > madvise LRU manipulation APIs need to scan address ranges to find
-> > > present pages at page table and provides advice hints for them.
-> > > 
-> > > Likewise pg[scan/steal] count on vmstat, madvise_pg[scanned/hinted]
-> > > shows the proactive reclaim efficiency so this patch adds those
-> > > two statistics in vmstat.
-> > > 
-> > > 	madvise_pgscanned, madvise_pghinted
-> > > 
-> > > Since proactive reclaim using process_madvise(2) as userland
-> > > memory policy is popular(e.g,. Android ActivityManagerService),
-> > > those stats are helpful to know how efficiently the policy works
-> > > well.
-> > 
-> > The usecase description is still too vague. What are those values useful
-> > for? Is there anything actionable based on those numbers? How do you
-> > deal with multiple parties using madvise resp. process_madvise so that
-> > their stats are combined?
-> 
-> The metric helps monitoing system MM health under fleet and experimental
-> tuning with diffrent policies from the centralized userland memory daemon.
+On 01/25, Oleg Nesterov wrote:
+>
+> > >  int posix_timer_event(struct k_itimer *timr, int si_private)
+> > >  {
+> > >         enum pid_type type;
+> > > +       struct pid *pid;
+> > >         int ret;
+> > >         /*
+> > >          * FIXME: if ->sigq is queued we can race with
+> > > @@ -350,8 +351,9 @@ int posix_timer_event(struct k_itimer *timr, int si_private)
+> > >          */
+> > >         timr->sigq->info.si_sys_private = si_private;
+> > >
+> > > -       type = !(timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_TGID : PIDTYPE_PID;
+> > > -       ret = send_sigqueue(timr->sigq, timr->it_pid, type);
+> > > +       type = (timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_PID : PIDTYPE_TGID;
+> > > +       pid = (type == PIDTYPE_PID) ? timr->it_pid : task_pid(current);
+> > > +       ret = send_sigqueue(timr->sigq, pid, type);
+> > >         /* If we failed to send the signal the timer stops. */
+> > >         return ret > 0;
+> > >  }
 
-That is just too vague for me to imagine anything more specific then, we
-have numbers and we can show them in a report. What does it actually
-mean that madvise_pgscanned is high. Or that pghinted / pgscanned is
-low (that you tend to manually reclaim sparse mappings)?
+...
 
-> That's really good fit under vmstat along with other MM metrics.
-> 
-> > 
-> > In the previous version I have also pointed out that this might be
-> > easily achieved by tracepoints. Your counterargument was a convenience
-> > in a large scale monitoring without going much into details. Presumably
-> > this is because your fleet based monitoring already collects
-> > /proc/vmstat while tracepoints based monitoring would require additional
-> > changes. This alone is rather weak argument to be honest because
-> > deploying tracepoints monitoring is quite trivial and can be done
-> > outside of the said memory reclaim agent.
-> 
-> The convenience matters but that's not my argument. 
-> 
-> Ithink using tracepoint for system metric makes no sense even though
-> the tracepoint could be extended by using bpf or histogram trigger to
-> get the accumulated counters for system metric.
+> But! I just noticed send_sigqueue() does pid_task(pid, type), so the patch
+> above needs another change
+>
+> 	--- a/kernel/signal.c
+> 	+++ b/kernel/signal.c
+> 	@@ -1970,7 +1970,8 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
+> 	 
+> 		ret = -1;
+> 		rcu_read_lock();
+> 	-	t = pid_task(pid, type);
+> 	+	// comment to explain why don't we use "type"
+> 	+	t = pid_task(pid, PIDTYPE_PID);
+> 		if (!t || !likely(lock_task_sighand(t, &flags)))
+> 			goto ret;
 
-System wide metrics data collection by ftrace is a common use case. I
-really do not follow your argument here. There are certainly cases where
-ftrace is suboptimal solution - e.g. when the cumulative data couldn't
-have been collected early on for one reason or another (e.g. system
-uptime is already high when you decide to start collecting). But you
-have stated there is data collection happening so what does prevent
-collecting this just along with anything else.
+So. Unless I missed something (quite possibly) we do not even need the patch
+above. The one liner change below can work just fine.
+
+Oleg.
+
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1970,7 +1970,8 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
  
-> The tracepoint is the next step if we want to know further breakdown
-> once something strange happens. That's why we have separate level metric
-> system to narrow problem down rather than implementing all the metric
-> with tracepoint. Please, look at vmstat fields. Almost every fields
-> would have same question you asked "how do you break down if multiple
-> processes were invovled to contribute the metric?"
+ 	ret = -1;
+ 	rcu_read_lock();
+-	t = pid_task(pid, type);
++	/* GOOD COMMENT */
++	t = type == PIDTYPE_PID ? pid_task(pid, type) : current;
+ 	if (!t || !likely(lock_task_sighand(t, &flags)))
+ 		goto ret;
+ 
 
-Yes, we tended to be much more willing to add counters. Partly because
-runtime debugging capabilities were not that great in the past as we
-have these days.
-
-> I am fine if you suggest adding tracepoint as well as the vmstat fields
-> for further breakdown but only relying on tracepoint and frineds for
-> system global metric doesn't make sense.
-
-We have to agree to disagree here. I am not going to nack this but I
-disagree with this patch because the justification is just too vague and
-also those numbers cannot really be attributed to anybody performing
-madvise to actually evaluate that activity.
--- 
-Michal Hocko
-SUSE Labs
