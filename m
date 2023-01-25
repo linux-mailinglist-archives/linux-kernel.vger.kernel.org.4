@@ -2,192 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82EE67BF1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 081FF67BF29
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 22:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236548AbjAYVta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 16:49:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
+        id S235784AbjAYVvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 16:51:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236381AbjAYVsS (ORCPT
+        with ESMTP id S236439AbjAYVuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 16:48:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC6061D74
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:46:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674683202;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gLCQgOuNAMLOsGwRlp0t3XHDmNl5xofkTJb6esBr2zs=;
-        b=jCNmJoH/Lk/n58i9RUT9jTh8Et8e+donPUpBi+jR4NG2hh9rvAYA3w+9Pz2KPB/3BDVTii
-        /67/fcJ13jq5DAIklCgLJZET5qhezIeoUWsuulM/+EGIDIK0IWrLdUs+TOqSX7lTTDyzhj
-        +VzuOK6qbV7pYMkzSUVWK6hl1RfO3ho=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-287-CO6arb63NAKHgT_6olSy3w-1; Wed, 25 Jan 2023 16:46:40 -0500
-X-MC-Unique: CO6arb63NAKHgT_6olSy3w-1
-Received: by mail-ed1-f71.google.com with SMTP id c12-20020a05640227cc00b0049e2c079aabso127957ede.1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:46:40 -0800 (PST)
+        Wed, 25 Jan 2023 16:50:40 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587DC66F92
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:49:04 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id tz11so358604ejc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 13:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7KXsMJoxmG6msNyIOzT+xXKJjyw52diPo/oB2OGQFIc=;
+        b=Rerd9H10x6Gx+s3IGAlP97PqeX97Nrs642WdP0JiqsdY83E7AXruxqbBbGJ0hKf8iq
+         7T/utPMve4LdrvjfM/czuFm38RoYzkX8CGOYcjRMpRAYngdkL+IWL5l8A+Cgg06dsUDo
+         D1Qcro+3bnEP74kdIsOmLT9vCapvdHpbtwcCj28Q5uD/sLAUy93EQ8/gwxpCxBVtuuCX
+         //7qvIAuaJn8hKbfJe0E8j6ZV7zI9Ht1DZS7scNnl6slCK8cqM9Mi9VvXU/OmeRcEm73
+         wpCgNQX5y8XSf83V/QPSxWmYwYM28MS2wLIV2UqJgzc7DuKU4Kx0unKEf54Cs9q1Ajxk
+         Km3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gLCQgOuNAMLOsGwRlp0t3XHDmNl5xofkTJb6esBr2zs=;
-        b=rpaoOrltHckg2j12FSuBCUe1M1NASH4+vZIPB4EanVnXcuRTDrOUwkrGY992BoYrYC
-         gIPp1iav+FhtVhDMuBeq/UkpwQCaK142AcTsasjbsHM9MXWXhH5Rp8VACOrW3HOGjRlK
-         7WR+4O5H/RTCXnbDLLCbIGHJmR8Ul7nUYx+wvgW9veq5EtcOdWpvW26jj5aK3JloRkRf
-         PUzBLEIwXqWIdMpjCLmPINeTP+PCIYQV54BlrwiAaSwU+h4bL3Ea+zQERNDeei2tLZBi
-         JR/mYFCBtNtsCuQAyBFLV8ySe6ERJHDXf4bGclgm9AdsARCXgWoz+eDxO7dop0QDi7VM
-         pebw==
-X-Gm-Message-State: AFqh2krFO7cSJuABOUxokKgYZdbqfngjnLN0ne77bsBWRAZDIr+gJ/aA
-        OR7Q7NmFnUpxWVUDJ5qYEHbcnkVoaYJ9MPVyko98xl6AUS+I3fXep8T3+Olgqaaf+z+ICb4RI0n
-        LxjltI5Y0JZyaBcXZwc5Z2SuP
-X-Received: by 2002:a05:6402:3220:b0:49e:1d59:794f with SMTP id g32-20020a056402322000b0049e1d59794fmr42338662eda.22.1674683198341;
-        Wed, 25 Jan 2023 13:46:38 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuaYorcRAqvlHkC2q/xU+XLFWtAsQn5eyQjkeLaZlqhHL+7YF+wyeezO9kOjzNPzfxS7pMrUw==
-X-Received: by 2002:a05:6402:3220:b0:49e:1d59:794f with SMTP id g32-20020a056402322000b0049e1d59794fmr42338646eda.22.1674683198074;
-        Wed, 25 Jan 2023 13:46:38 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id r9-20020a056402018900b0049e09105705sm2826937edv.62.2023.01.25.13.46.31
+        bh=7KXsMJoxmG6msNyIOzT+xXKJjyw52diPo/oB2OGQFIc=;
+        b=wZyaaItgvRAuVIEjpXjF9wA8ar+vm9dwuuOom4iWfvYs5RurqeBnCMstldqzwDpBRj
+         n1Q+idnhvRI8BhCLYSQB6V9HUvxTmFrAvxw1cMc1OZAf/c2S2BlLLyqsXoNbpFXXrQ+R
+         tBUy3XhCYd/W6zlEj+7VsaIAqVMKneGeX3umu8eBSEXX34W94iFCJVnzqysiJkVRoXnm
+         bzkg9B6ykqzGCSQNFf/CpgVbo5l6o6sqGxxJxU9rRPQpUvSp5KCQF5DmQT4FYhuRdfr5
+         WbPxcabsmYYXWZ8c/vUgU/a8QFbwRUxk4jW9JXWfe/AbVF8iwn6j+eZhk2TPv3icZkDK
+         c+kA==
+X-Gm-Message-State: AFqh2kpradWnZmlnB/elwK356gpCglP0esxlJR2PxiC0KKWh45uoL00R
+        3oxE1rvgGoLR2r+dSy1mPQSfLA==
+X-Google-Smtp-Source: AMrXdXtq7820kXaStsnx2W1/UkTYIvQoMzS4+ZU8NcgBhZqkbMKaCOv4tZLEjDxE5x1rTqe5hse6IA==
+X-Received: by 2002:a17:906:4b4c:b0:871:e336:cd2a with SMTP id j12-20020a1709064b4c00b00871e336cd2amr33430411ejv.47.1674683342846;
+        Wed, 25 Jan 2023 13:49:02 -0800 (PST)
+Received: from [192.168.1.101] (abyk108.neoplus.adsl.tpnet.pl. [83.9.30.108])
+        by smtp.gmail.com with ESMTPSA id f5-20020a170906c08500b00871390a3b74sm2956739ejz.177.2023.01.25.13.48.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 13:46:32 -0800 (PST)
-Message-ID: <8bdf22c8-9ef1-e526-df36-9073a150669d@redhat.com>
-Date:   Wed, 25 Jan 2023 22:46:30 +0100
+        Wed, 25 Jan 2023 13:49:02 -0800 (PST)
+Message-ID: <63f017c7-d320-a996-7bda-33d263a847bc@linaro.org>
+Date:   Wed, 25 Jan 2023 22:48:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v4 7/7] clk: qcom: add the driver for the MSM8996 APCS
+ clocks
+To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230118132254.2356209-1-dmitry.baryshkov@linaro.org>
+ <20230118132254.2356209-8-dmitry.baryshkov@linaro.org>
+ <7055af43f4a8894ac34e53c5847fb3de.sboyd@kernel.org>
 Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, stable@vger.kernel.org
-References: <20221027092036.2698180-1-pbonzini@redhat.com>
- <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
- <3a23db58-3ae1-7457-ed09-bc2e3f6e8dc9@redhat.com>
- <CALMp9eQ3wZ4dkq_8ErcUdQAs2F96Gvr-g=7-iBteJeuN5aX00A@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v2] KVM: x86: Do not return host topology information from
- KVM_GET_SUPPORTED_CPUID
-In-Reply-To: <CALMp9eQ3wZ4dkq_8ErcUdQAs2F96Gvr-g=7-iBteJeuN5aX00A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <7055af43f4a8894ac34e53c5847fb3de.sboyd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/23 17:47, Jim Mattson wrote:
->> Part of the definition of the API is that you can take
->> KVM_GET_SUPPORTED_CPUID and pass it to KVM_SET_CPUID2 for all vCPUs.
->> Returning host topology information for a random host vCPU definitely
->> violates the contract.
+
+
+On 25.01.2023 22:38, Stephen Boyd wrote:
+> Quoting Dmitry Baryshkov (2023-01-18 05:22:54)
+>> diff --git a/drivers/clk/qcom/apcs-msm8996.c b/drivers/clk/qcom/apcs-msm8996.c
+>> new file mode 100644
+>> index 000000000000..7e46ea8ed444
+>> --- /dev/null
+>> +++ b/drivers/clk/qcom/apcs-msm8996.c
+>> @@ -0,0 +1,76 @@
+> [...]
+>> +
+>> +static int qcom_apcs_msm8996_clk_probe(struct platform_device *pdev)
+>> +{
+>> +       struct device *dev = &pdev->dev;
+>> +       struct device *parent = dev->parent;
+>> +       struct regmap *regmap;
+>> +       struct clk_hw *hw;
+>> +       unsigned int val;
+>> +       int ret = -ENODEV;
+>> +
+>> +       regmap = dev_get_regmap(parent, NULL);
+>> +       if (!regmap) {
+>> +               dev_err(dev, "failed to get regmap: %d\n", ret);
+>> +               return ret;
+>> +       }
+>> +
+>> +       regmap_read(regmap, APCS_AUX_OFFSET, &val);
+>> +       regmap_update_bits(regmap, APCS_AUX_OFFSET, APCS_AUX_DIV_MASK,
+>> +                          FIELD_PREP(APCS_AUX_DIV_MASK, APCS_AUX_DIV_2));
+>> +
+>> +       /* Hardware mandated delay */
 > 
-> You are attempting to rewrite history.  Leaf 0xB was added to > KVM_GET_SUPPORTED_CPUID in commit 0771671749b5 ("KVM: Enhance guest
-> cpuid management"), and the only documentation of the
-> KVM_GET_SUPPORTED_CPUID ioctl at that time was in the commit message:
+> Delay for what? Setting the divider? What if the register value didn't
+> change at all? Can you skip the delay in that case?
+Waiting 5 us unconditionally in exchange for ensured CPU clock
+source stability sounds like a rather fair deal.. Checking if
+the register value changed would not save us much time..
+
+Konrad
 > 
->       - KVM_GET_SUPPORTED_CPUID: get all cpuid entries the host (and kvm)
->         supports
->
-> [...] the intention was to return the
-> host topology information for the current logical processor.
-
-The handling of unknown features is so naive in that commit, that I 
-don't think it is possible to read anything from the implementation; and 
-it certainly should not be a paragon for a future-proof implementation 
-of KVM_GET_SUPPORTED_CPUID.
-
-For example, it only hid _known_ CPUID leaves or features and passed the 
-unknown ones through, which you'll agree is completely broken.  It also 
-didn't try to handle all leaves for which ECX might turn out to be 
-significant---which happened for EAX=7 so the commit returns a wrong 
-output for CPUID[EAX=7,ECX=0].EAX.
-
-In other words, the only reason it handles 0xB is because it was known 
-to have subleaves.
-
-We can get more information about how userspace was intended to use it 
-from the qemu-kvm fork, which at the time was practically the only KVM 
-userspace.  As of 2009 it was only checking a handful of leaves:
-
-https://git.kernel.org/pub/scm/virt/kvm/qemu-kvm.git/tree/target-i386/kvm.c?h=kvm-88#n133
-
-so shall we say that userspace is supposed to build each CPUID leaf one 
-by one and use KVM_GET_SUPPORTED_CPUID2 for validation only?  I think 
-the first committed documentation agrees: "Userspace can use the 
-information returned by this ioctl to construct cpuid information (for 
-KVM_SET_CPUID2) that is consistent with hardware, kernel, and userspace 
-capabilities, and with user requirements".
-
-However, that's the theory.  "Do not break userspace" also involves 
-looking at how userspace *really* uses the API, and make compromises to 
-cater to those uses; which is different from rewriting history.
-
-And in practice, people basically stopped reading after "(for 
-KVM_SET_CPUID2)".
-
-For example in kvmtool:
-
-	kvm_cpuid->nent = MAX_KVM_CPUID_ENTRIES;
-	if (ioctl(vcpu->kvm->sys_fd, KVM_GET_SUPPORTED_CPUID, kvm_cpuid) < 0)
-		die_perror("KVM_GET_SUPPORTED_CPUID failed");
-
-	filter_cpuid(kvm_cpuid, vcpu->cpu_id);
-
-	if (ioctl(vcpu->vcpu_fd, KVM_SET_CPUID2, kvm_cpuid) < 0)
-		die_perror("KVM_SET_CPUID2 failed");
-
-where filter_cpuid only does minor adjustments that do not include 0xB, 
-0x1F and 0x8000001E.  The result is a topology that makes no sense if 
-host #vCPUs != guest #vCPUs, and which doesn't include the correct APIC 
-id in EDX.
-
-https://github.com/kvmtool/kvmtool/blob/5657dd3e48b41bc6db38fa657994bc0e030fd31f/x86/cpuid.c
-
-
-crosvm does optionally attempt to pass through leaves 0xB and 0x1F, but 
-it fails to adjust the APIC id in EDX.  On the other hand it also passes 
-through 0x8000001E if ctx.cpu_config.host_cpu_topology is false, 
-incorrectly.  So on one hand this patch breaks host_cpu_topology == 
-true, on the other hand it fixes host_cpu_topology == false on AMD 
-processors.
-
-https://github.com/google/crosvm/blob/cc79897fc0813ee8412e6395648593898962ec82/x86_64/src/cpuid.rs#L121
-
-
-The rust-vmm reference hypervisor adjusts the APIC id in EDX for 0xB but 
-not for 0x1F.  Apart from that it passes through the host topology 
-leaves, again resulting in nonsensical topology for host #vCPUs != guest 
-#vCPUs.
-
-https://github.com/rust-vmm/vmm-reference/blob/5cde58bc955afca8a180585a9f01c82d6277a755/src/vm-vcpu-ref/src/x86_64/cpuid.rs
-
-
-Firecracker, finally, ignores KVM_GET_SUPPORTED_CPUID's output for 0xb 
-and 0x8000001E (good!) but fails to do the same for 0x1F, so this patch 
-is again a fix of sorts---having all zeroes in 0x1F is better than 
-having a value that is valid but inconsistent with 0xB.
-
-https://github.com/firecracker-microvm/firecracker/blob/cdf4fef3011c51206f178bdf21ececb87caa16c1/src/cpuid/src/transformer/intel.rs#L120
-https://github.com/firecracker-microvm/firecracker/blob/cdf4fef3011c51206f178bdf21ececb87caa16c1/src/cpuid/src/transformer/amd.rs#L88
-
-
-So basically the only open source userspace that is penalized (but not 
-broken, and also partly fixed) by the patch is crosvm.  QEMU doesn't 
-care, while firecracker/kvmtool/vmm-reference are a net positive.
-
-Paolo
-
-> Any future changes to either the operational behavior or the
-> documented behavior of the ABI surely demand a version bump.
+>> +       udelay(5);
+>> +
+>> +       /*
+>> +        * Register the clock as fixed rate instead of being a child of gpll0
+>> +        * to let the driver register probe as early as possible.
 > 
-
+> The function doesn't block or return EPROBE_DEFER if the clk is orphaned
+> when registered. Why is this necessary? Are you getting defered by the
+> fw_devlink logic thinking it needs to defer probe of this driver until
+> gpll0 provider probes? We should fix fw_devlink to not do that. Maybe if
+> the node is a clk provider (#clock-cells exists) then we don't wait for
+> clocks property to be provided, because the clk core already handles
+> that itself.
+> 
+>> +        */
+>> +       hw = devm_clk_hw_register_fixed_rate(dev, "sys_apcs_aux", NULL, 0, 300000000);
