@@ -2,92 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4BA67B8C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B04867B8C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236098AbjAYRlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
+        id S236181AbjAYRmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235093AbjAYRlf (ORCPT
+        with ESMTP id S235791AbjAYRmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:41:35 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A9B37541;
-        Wed, 25 Jan 2023 09:41:35 -0800 (PST)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id 8735881F42;
-        Wed, 25 Jan 2023 17:41:28 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674668494;
-        bh=Wo/QLZs7Iimn8JQQFtFENUgEjo1tvasMuPeWKFbAdjk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fODmjBow1Eux9eNTdLT+3b9qfeLHBmDhD2CH5obiHrNgbZXp13ipDL+iBq5MjqpQN
-         mf3bWU/5zbAsbJHnKZUhknLW0jTNAau9tdG5jVKy+A2XmPaa+tDPyhiYiBHONE8r0N
-         dT4eaaG13GmTGubkZMI/3RALFqm+qOfmzQmGpN6v2Tmvjbfw5E053QaHBCkDcnfMx6
-         aekxf2pEIK7wWQM+8aNy7kV6a6mJCyB9w5qGM3YEAfvl+iVQniOPsFPcOOcJdny+qD
-         HgVFh/IO1xRixUh1yhZRI/Kn4MC7jG0+wkDI/AzNUWk1x4EL0NIAqHzWLveSWUuFBo
-         2A4+A+UC9vSWA==
-Date:   Thu, 26 Jan 2023 00:41:24 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     "Li, Xin3" <xin3.li@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v5 0/2] sysret_rip update for the Intel FRED
- architecture
-Message-ID: <Y9FpxEz2+LJc7vJP@biznet-home.integral.gnuweeb.org>
-References: <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
- <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
- <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
- <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
- <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
- <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
- <SA1PR11MB67345C4DFEE720C08D30D93DA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <Y9DpNG+jb8G/lhA1@biznet-home.integral.gnuweeb.org>
- <SA1PR11MB673480C4129F7A7EA9DFAF4AA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <A5C220D5-BCE6-42DC-8115-ED41CD011993@zytor.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <A5C220D5-BCE6-42DC-8115-ED41CD011993@zytor.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 12:42:24 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D7C37B45;
+        Wed, 25 Jan 2023 09:42:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 078EACE20EE;
+        Wed, 25 Jan 2023 17:42:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 431AEC433D2;
+        Wed, 25 Jan 2023 17:42:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674668540;
+        bh=Ejjm4FOUdaKKWkHq5trYwDwbcUx+La+RfeiglCyWxaA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Qvx2Xlocs1Gf3bqPoOs07fByeDf3SsHDCUUH5Znd8NMfO2NMqRCUGvKmCkY8ST7Iy
+         qcK+5FnAzTRnNr9gEukwRRAIIdGcA4BQfVXU09PUPAZ+uLxUOeAefmvE/ZgvIfzIji
+         vf+WJiJEVTphf95ifhGWhpRrIvOZNLICT6fhe5mM/sE0jVAy6NAwdW3coyJ0DxmcbR
+         Wj1rPwFo+awZ0x4s3s7JeJvHwJVok70RaVSzIRisPS0qFpAGjwOwO0NaFi3hQjLoqy
+         G0AHWXuAKdapJ/qcSk3uAv7X8yjZmpYaW5ecmXOx/VK71v6rvOo/0/+S6fUsrvZJQF
+         4KSRw0lXJ85Wg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 27779C04E34;
+        Wed, 25 Jan 2023 17:42:20 +0000 (UTC)
+Subject: Re: [GIT PULL] fuse acl fix for v6.2-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230125100040.374709-1-brauner@kernel.org>
+References: <20230125100040.374709-1-brauner@kernel.org>
+X-PR-Tracked-List-Id: <linux-fsdevel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230125100040.374709-1-brauner@kernel.org>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.fuse.acl.v6.2-rc6
+X-PR-Tracked-Commit-Id: facd61053cff100973921d4d45d47cf53c747ec6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7c46948a6e9cf47ed03b0d489fde894ad46f1437
+Message-Id: <167466854014.20999.16961050055018169582.pr-tracker-bot@kernel.org>
+Date:   Wed, 25 Jan 2023 17:42:20 +0000
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Seth Forshee <sforshee@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 09:24:40AM -0800, H. Peter Anvin wrote:
-> On January 25, 2023 9:07:18 AM PST, "Li, Xin3" <xin3.li@intel.com> wrote:
-> > Would it be better to get this patch set merged first?
-> > 
-> > Otherwise surely I will include it in the FRED patch set.
-> 
-> If the maintainers are ok with it, it would be better to merge it
-> sooner: once we have agreed on the semantics, which I believe we
-> have, we should be testing those semantics and nothing else.
+The pull request you sent on Wed, 25 Jan 2023 11:00:40 +0100:
 
-OK, let's keep this patchset separated from the FRED support
-patchset.
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.fuse.acl.v6.2-rc6
 
-In the meantime, let me address the recent HPA's comments.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7c46948a6e9cf47ed03b0d489fde894ad46f1437
+
+Thank you!
 
 -- 
-Ammar Faizi
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
