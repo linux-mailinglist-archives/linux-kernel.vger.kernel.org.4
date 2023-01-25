@@ -2,47 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8943B67B56A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8442E67B56C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 16:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235652AbjAYPHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 10:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S235765AbjAYPIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 10:08:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235059AbjAYPHf (ORCPT
+        with ESMTP id S234279AbjAYPIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 10:07:35 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D8A23674
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 07:07:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1674659245; bh=3kVFSj9F5r4zxQcKbBTyYKgIq05zuwPxG6KbVQ++e3g=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=ijJPXqb9T9rNuYug9wDmBjZNcoI7knQGv8uhpPu+63nu+Scs9p8fYO64+AHMrkdJw
-         2hMEv2cUyhkIYyYKWWdSmFP6WRIHhgWibdJ96z0Uzi+3QmMsPdDM1iwhLzm/ba//Yr
-         5e3iaPKb81ODwt4zzBRTTxWkaerko2Z6dcXhC0Zc=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Wed, 25 Jan 2023 16:07:24 +0100 (CET)
-X-EA-Auth: P9eRXJcvULD/LlNSEoxED6IvPVWZxGaHOnHgLK9K0jZ0NU4zvHdVexZOWXhZmyT1B6y9xTnZegI4FpF4U7FiqDfX7yUYLlBh
-Date:   Wed, 25 Jan 2023 20:37:14 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: [PATCH] drm/nouveau/devinit: Convert function disable() to be void
-Message-ID: <Y9FFoooIXjlr+UP1@ubun2204.myguest.virtualbox.org>
-MIME-Version: 1.0
+        Wed, 25 Jan 2023 10:08:22 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2117.outbound.protection.outlook.com [40.107.220.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D19940C3;
+        Wed, 25 Jan 2023 07:08:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hk6jp0xEaDRSzFdkJyVmb0bFz8BK1E3DJQh2D0GinUedB7vrUcYa3T10op+lI/DY0RPbSzBw4z3KF8dM2YZGLuiP0CwsQ5AbQ1EEHDUeb7zc4XTADzu3N4W6q6exFsR4GfpXxZBl4feHEult6vpHkdCS6qi0bdjpk4w7YiDsSLfslizjf7aRaH6dR+fPWCde5V70UEwXbvxqWOKpPg+iNdC/r2LWQCAfKTZM1M9y9WKfS8FWXRSZWFo6eYm3PPhJBi+a7XF50vLvCxQP+CmcLoSdyQlGXxVPdsvBtKQMI9ML1wBJZ0oXuYGr6zarqajqEEHEeqPfHMefzl4iQMTFXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WgoP6nt54NVHJuTpSMDLW6YT4iEokTmnX7jTJJ19wbg=;
+ b=CavfcFn4zYAY/GFmR2NbIxAwyd/ZSt0Kuh+ODgnUvQwaTrhGeawh27I0HWXm0eKpX+i/xgDJsUFJNN9tJxCeySeRuDFBGQmxDqGsw3hkJOCcTBd5ueZYEsCs0dmecWhVQvWA1C7VsSfEsWuX+nFvPZGBxrDRydYxhYTPqqQB/OGT30BfguNE2/C6EkXq5Z+u1LOPunGyBS0UzKZAgrE1Xf2Om3e+lAYqAtK6CRqyUPZ1V/4+7S5/c6gSuOJGQirq+Xik7RhmuJSeo8Mp3aHmbgYyOZIQ2r1ofhq/5HHPznOwB+Sy3ddbdPFB2W5ZlE1/n0ilpCQYLGRdPKhx582ijg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WgoP6nt54NVHJuTpSMDLW6YT4iEokTmnX7jTJJ19wbg=;
+ b=f1xa0vAga591s1QdbeTDMWNHCS2cxPo8j+tAI5T/Zywq4rjPxDbBHkfyQ+ouPbYUZ6DJ23zAPXZl1TdPJGKrmB9e0K5JVGxvY1lk+mfyoZhYmxo8P9CNkBDqm4l7Nb2t3YM7jCvJUoQOd9co8Fw+OtUnElUOlIVSM37oYQSt7yI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM6PR13MB4461.namprd13.prod.outlook.com (2603:10b6:5:1b6::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.21; Wed, 25 Jan
+ 2023 15:08:18 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65%6]) with mapi id 15.20.6043.021; Wed, 25 Jan 2023
+ 15:08:18 +0000
+Date:   Wed, 25 Jan 2023 16:08:12 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Natalia Petrova <n.petrova@fintech.ru>
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] i40e: Add checking for null for nlmsg_find_attr()
+Message-ID: <Y9FF3NfHYFdQlKei@corigine.com>
+References: <20230125141328.8479-1-n.petrova@fintech.ru>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20230125141328.8479-1-n.petrova@fintech.ru>
+X-ClientProxiedBy: AS4P250CA0012.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5df::18) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB4461:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54e52dfb-8b0d-4bc6-a8ea-08dafee5fd5b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4GtH5yN6AVum41usuMaDvediwyD3uyqM8I5TQCCQuutQ8XnTt7VGzpEeaemx/BSr4hdX7foV243C+RkTeQsFL5RgX+3eQo77Re0kLgwTGsUln+ob+8B078TEpKJ+dZJdGmsRxQjl+VpELragAmTilbXnSG/FJ+49V+QS8WVqZZI1EM+Mco6qtmGV4UDT3tjn3O7PTTKTieqDhDIhmyqji2OmozebWuWKZql1QUduUBot8gQuXh+GoV2WxBRTXEtq1yjzjlriF2vNX116Df/ufSyrl+GVywFdiIRP4yV15sNxvwjsy7ahNQdIXqhwE+geCirDcEBqmQozuTFR8ztuE5/OmbiOELqR/FN7ZCRMkb2+13z4qF1HRVLOqCsgBw6yVRbp3c8Rja+iUZR2MrFqDKmVlUrYZTrr4EfdxGxZAgrZDyJU9NBIb/73E01N18tC7rzZT1J8q0VMu4RGZYJosilkp3mubPzV3nYVVLpm1TFHlfAkxVhcTyKqvi4RpVZVTaqPRVhfz1NHsih8cIbDoSFH3i/xvGAQQ5dzYArKmjST46Li4kPp0Ijrgbye9+dQZj6NL2o4YXK0ADAj/pKuRorp23RSQ3DqNUCJnB3bewTnBDJdjG0tZ8phhm3dE70/BNerCT/dI4M6rWW/dHpoDQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(366004)(396003)(39830400003)(346002)(451199018)(38100700002)(86362001)(36756003)(54906003)(44832011)(7416002)(316002)(2906002)(41300700001)(4326008)(66476007)(66556008)(8936002)(6916009)(66946007)(8676002)(5660300002)(186003)(6512007)(6506007)(2616005)(83380400001)(6486002)(6666004)(478600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cusIBQbpWy8SYVPwfI7/iWjf60ecQqPXkBTIDWHcsa2BmESHkugbRYjhMER/?=
+ =?us-ascii?Q?kdSEmggf1U+RiPcgX7BzHV0ODFZ2nPdxR37zWTL/Hguenrl7JoBiKjzHLTmB?=
+ =?us-ascii?Q?dQGW72clTvEMZ4gjC5BZD42Nw2k7flECi/ge1qTqguRPW75hoq7CgvhtSp0b?=
+ =?us-ascii?Q?c8ieBs4xIxx7DJ13143MCtyQxshQef5wsqB4Hw51G3CdMUSgLc77JZY+Qc08?=
+ =?us-ascii?Q?ZahmVSv6awt7C4Rtgf57xBQdZ7WCu8F7oDhL74HURTBOiQ7QjD83wfNAWS99?=
+ =?us-ascii?Q?CCYhSCuRbEF7O24ZGBKCrg65cHARXtwKnsRGY0vGoCnEzmd6jiapMb7Y3u9R?=
+ =?us-ascii?Q?HdJj4UOstC7j1LRxPqctMXKP3N7J1ULVKFJGwiac/PcKl9gSjpNgwQfIt/Uk?=
+ =?us-ascii?Q?E3jmrsNzSNOKEefewO6ncI7wtrCrFOHXzeSpLJnGC6HD4yrGQ+aliJfg2vs5?=
+ =?us-ascii?Q?opSY6NXX/pTv4q3icoMFRBziQGJBJRf7S6cQzL5Z8aSEPkXwCxLwWuTFMme3?=
+ =?us-ascii?Q?3i6ABfyu91yZ4Q8CpGZJlzrBCMiFrJiGkfgcWvrHutChAnm6rvsBG0IKJW37?=
+ =?us-ascii?Q?s7UNaAGT+T64ryTlURgSAkZiZ6UZhSIp9wHLou6uhBVXQB5azAAwPhVLKPYg?=
+ =?us-ascii?Q?M7rFADJfgtn6DbmyXw4Rc/99Auw/Pgyp+6duAy3Cd47Fb8g5uqwvifvWc5jC?=
+ =?us-ascii?Q?TZlKecR0I7o5xSj3CTSI5dKFoZ3X2Ydqvkwp7SkQUktShpm2Kc7w0zOCQXBU?=
+ =?us-ascii?Q?cdRycxXRAeIagSsRVFHaUygGzBlNacxLLIGmwPPraZw3huWclFW3PTGecznK?=
+ =?us-ascii?Q?ltx0xxRa5tU73iy1haGkD298yo2oWffjXDPW7FQsTRjxG9f2Gr7kkMcqK2Hm?=
+ =?us-ascii?Q?LoO7weEYBLrdoHanWI3qzKruxaXeeCzE1CN/7DmHit0TEBLDISI0Uar7dXdZ?=
+ =?us-ascii?Q?qMUEtOoeE160KJiPYSYmRo9n7jbDwJO7g4l/XNIuFl4lSbQF0JZpux6RpqPJ?=
+ =?us-ascii?Q?G7M9DqcvZmS4TXN5UTHybhK8yuQ/QKJ7rl+y9I+UaN3pa6LweqBNw/xlAgal?=
+ =?us-ascii?Q?ho84RHAH3KLr/RdcwnMn9jcYoT9QirlEcz1QILvm9lPmSLcrAqK9OKwP6tId?=
+ =?us-ascii?Q?Xo3JP2/D/IyFaMS9aj8tKchafk8OOp/j2zLk7CeV9NgU34wtxjQ9bxI2KoFC?=
+ =?us-ascii?Q?QIDHjDMsSyk2XeMcmIH/w9IHs68FZb/SsvO5j97Lki4EmZ0DSQooKxBqof4Y?=
+ =?us-ascii?Q?LnofDgQAl0Nxe99EOBOtPL5UbSs503ABryHGZqnbqClGmijZ5lLIbzhVNAAX?=
+ =?us-ascii?Q?iz5Nj/ane1sC4CywsSsqGfLPezbL2P3h1+KKEmFbzfw0ZJWiRuSt4a1NhHsX?=
+ =?us-ascii?Q?fto8aXL/MW2F4t/Fy2Dy5Br02Ny+8DC+ClEPDUH6bY9DwH8opMUaLVWIgXph?=
+ =?us-ascii?Q?Lql5cYhSVJOup0vL4QwbPwClk7Or3ErpESgqWujLS9MqpPGyVz5lk/7+NSTu?=
+ =?us-ascii?Q?QABCcrG+a54AQrGx8mvbv6dcoayNU1mDCGLATzGEFPvY4iJt6wN+aEZZGbqh?=
+ =?us-ascii?Q?pCaMOAc4J9YLT1nSJlcPnwrWfegtecuJufel0o4e9sLLqgCg3dsWHRlQMhzM?=
+ =?us-ascii?Q?6VDrx0W+trGc7qkPUggO8hRBA11uqsGP4V6aFKizWg2+hYnErNYJJSjKbPuJ?=
+ =?us-ascii?Q?6wfKfA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54e52dfb-8b0d-4bc6-a8ea-08dafee5fd5b
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 15:08:18.0745
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LOWov/q9A3OvBxlbQ5mMExMsLAY7Xu+1/Zk+pckpffDVLs6rbhlVHkord7Hjg+AEENVtcLE/PsEsv21c0IsCJAxUw4czQofamA7y0gLZeNk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB4461
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,235 +120,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current design of callback function disable() of struct
-nvkm_devinit_func is defined to return a u64 value. In its implementation
-in the driver modules, the function always returns a fixed value 0. Hence
-the design and implementation of this function should be enhanced to return
-void instead of a fixed value. This change also eliminates untouched
-return variables.
+On Wed, Jan 25, 2023 at 05:13:28PM +0300, Natalia Petrova wrote:
+> The result of nlmsg_find_attr() 'br_spec' is dereferenced in
+> nla_for_each_nested, but it can take null value in 'nla_find' finction,
+> which will result in an error.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: 51616018dd1b ("i40e: Add support for getlink, setlink ndo ops")
+> Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
+> ---
+>  drivers/net/ethernet/intel/i40e/i40e_main.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> index b36bf9c3e1e4..ed4be4ffeb09 100644
+> --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
+> +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> @@ -13101,6 +13101,8 @@ static int i40e_ndo_bridge_setlink(struct net_device *dev,
+>  	}
+>  
+>  	br_spec = nlmsg_find_attr(nlh, sizeof(struct ifinfomsg), IFLA_AF_SPEC);
+> +	if (!br_spec)
+> +		return -ENOENT;
 
-The change is identified using the returnvar.cocci Coccinelle semantic
-patch script.
+Seems fine to me, but I wonder if -EINVAL is more appropriate.
+nlh is invalid in this case.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Please note: The change is compile build tested only.
-
- drivers/gpu/drm/nouveau/nvkm/subdev/devinit/base.c  | 3 ++-
- drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g84.c   | 5 +----
- drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g98.c   | 4 +---
- drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c | 4 +---
- drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gm107.c | 4 +---
- drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gt215.c | 4 +---
- drivers/gpu/drm/nouveau/nvkm/subdev/devinit/mcp89.c | 4 +---
- drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv50.c  | 5 +----
- drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv50.h  | 2 +-
- drivers/gpu/drm/nouveau/nvkm/subdev/devinit/priv.h  | 2 +-
- 10 files changed, 11 insertions(+), 26 deletions(-)
-
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/base.c b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/base.c
-index dd4981708fe4..3d9319c319c6 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/base.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/base.c
-@@ -51,7 +51,8 @@ u64
- nvkm_devinit_disable(struct nvkm_devinit *init)
- {
- 	if (init && init->func->disable)
--		return init->func->disable(init);
-+		init->func->disable(init);
-+
- 	return 0;
- }
- 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g84.c b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g84.c
-index c224702b7bed..00df7811dd10 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g84.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g84.c
-@@ -26,13 +26,12 @@
- #include <subdev/bios.h>
- #include <subdev/bios/init.h>
- 
--static u64
-+static void
- g84_devinit_disable(struct nvkm_devinit *init)
- {
- 	struct nvkm_device *device = init->subdev.device;
- 	u32 r001540 = nvkm_rd32(device, 0x001540);
- 	u32 r00154c = nvkm_rd32(device, 0x00154c);
--	u64 disable = 0ULL;
- 
- 	if (!(r001540 & 0x40000000)) {
- 		nvkm_subdev_disable(device, NVKM_ENGINE_MPEG, 0);
-@@ -47,8 +46,6 @@ g84_devinit_disable(struct nvkm_devinit *init)
- 		nvkm_subdev_disable(device, NVKM_ENGINE_BSP, 0);
- 	if (!(r00154c & 0x00000040))
- 		nvkm_subdev_disable(device, NVKM_ENGINE_CIPHER, 0);
--
--	return disable;
- }
- 
- static const struct nvkm_devinit_func
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g98.c b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g98.c
-index 8977483a9f42..54bee499b982 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g98.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g98.c
-@@ -26,7 +26,7 @@
- #include <subdev/bios.h>
- #include <subdev/bios/init.h>
- 
--static u64
-+static void
- g98_devinit_disable(struct nvkm_devinit *init)
- {
- 	struct nvkm_device *device = init->subdev.device;
-@@ -45,8 +45,6 @@ g98_devinit_disable(struct nvkm_devinit *init)
- 		nvkm_subdev_disable(device, NVKM_ENGINE_MSVLD, 0);
- 	if (!(r00154c & 0x00000040))
- 		nvkm_subdev_disable(device, NVKM_ENGINE_SEC, 0);
--
--	return 0ULL;
- }
- 
- static const struct nvkm_devinit_func
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c
-index 5b7cb1fe7897..5368e705e7fd 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c
-@@ -63,7 +63,7 @@ gf100_devinit_pll_set(struct nvkm_devinit *init, u32 type, u32 freq)
- 	return ret;
- }
- 
--static u64
-+static void
- gf100_devinit_disable(struct nvkm_devinit *init)
- {
- 	struct nvkm_device *device = init->subdev.device;
-@@ -85,8 +85,6 @@ gf100_devinit_disable(struct nvkm_devinit *init)
- 		nvkm_subdev_disable(device, NVKM_ENGINE_CE, 0);
- 	if (r022500 & 0x00000200)
- 		nvkm_subdev_disable(device, NVKM_ENGINE_CE, 1);
--
--	return 0ULL;
- }
- 
- void
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gm107.c b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gm107.c
-index 8955af2704c7..7bcbc4895ec2 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gm107.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gm107.c
-@@ -26,7 +26,7 @@
- #include <subdev/bios.h>
- #include <subdev/bios/init.h>
- 
--u64
-+void
- gm107_devinit_disable(struct nvkm_devinit *init)
- {
- 	struct nvkm_device *device = init->subdev.device;
-@@ -39,8 +39,6 @@ gm107_devinit_disable(struct nvkm_devinit *init)
- 		nvkm_subdev_disable(device, NVKM_ENGINE_CE, 2);
- 	if (r021c04 & 0x00000001)
- 		nvkm_subdev_disable(device, NVKM_ENGINE_DISP, 0);
--
--	return 0ULL;
- }
- 
- static const struct nvkm_devinit_func
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gt215.c b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gt215.c
-index 3d0ab86c3115..dbca92318baf 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gt215.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gt215.c
-@@ -62,7 +62,7 @@ gt215_devinit_pll_set(struct nvkm_devinit *init, u32 type, u32 freq)
- 	return ret;
- }
- 
--static u64
-+static void
- gt215_devinit_disable(struct nvkm_devinit *init)
- {
- 	struct nvkm_device *device = init->subdev.device;
-@@ -80,8 +80,6 @@ gt215_devinit_disable(struct nvkm_devinit *init)
- 		nvkm_subdev_disable(device, NVKM_ENGINE_MSVLD, 0);
- 	if (!(r00154c & 0x00000200))
- 		nvkm_subdev_disable(device, NVKM_ENGINE_CE, 0);
--
--	return 0ULL;
- }
- 
- static u32
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/mcp89.c b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/mcp89.c
-index a9cdf2411187..a24bd2e7d7ce 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/mcp89.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/mcp89.c
-@@ -26,7 +26,7 @@
- #include <subdev/bios.h>
- #include <subdev/bios/init.h>
- 
--static u64
-+static void
- mcp89_devinit_disable(struct nvkm_devinit *init)
- {
- 	struct nvkm_device *device = init->subdev.device;
-@@ -46,8 +46,6 @@ mcp89_devinit_disable(struct nvkm_devinit *init)
- 		nvkm_subdev_disable(device, NVKM_ENGINE_VIC, 0);
- 	if (!(r00154c & 0x00000200))
- 		nvkm_subdev_disable(device, NVKM_ENGINE_CE, 0);
--
--	return 0;
- }
- 
- static const struct nvkm_devinit_func
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv50.c b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv50.c
-index 380995d398b1..07ed8fd778b2 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv50.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv50.c
-@@ -77,17 +77,14 @@ nv50_devinit_pll_set(struct nvkm_devinit *init, u32 type, u32 freq)
- 	return 0;
- }
- 
--static u64
-+static void
- nv50_devinit_disable(struct nvkm_devinit *init)
- {
- 	struct nvkm_device *device = init->subdev.device;
- 	u32 r001540 = nvkm_rd32(device, 0x001540);
--	u64 disable = 0ULL;
- 
- 	if (!(r001540 & 0x40000000))
- 		nvkm_subdev_disable(device, NVKM_ENGINE_MPEG, 0);
--
--	return disable;
- }
- 
- void
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv50.h b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv50.h
-index 987a7f478b84..8de409c084c1 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv50.h
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/nv50.h
-@@ -23,7 +23,7 @@ int  gf100_devinit_ctor(struct nvkm_object *, struct nvkm_object *,
- int  gf100_devinit_pll_set(struct nvkm_devinit *, u32, u32);
- void gf100_devinit_preinit(struct nvkm_devinit *);
- 
--u64  gm107_devinit_disable(struct nvkm_devinit *);
-+void  gm107_devinit_disable(struct nvkm_devinit *);
- 
- int gm200_devinit_post(struct nvkm_devinit *, bool);
- void gm200_devinit_preos(struct nv50_devinit *, bool);
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/priv.h b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/priv.h
-index dd8b038a8cee..a648482d06e9 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/priv.h
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/priv.h
-@@ -12,7 +12,7 @@ struct nvkm_devinit_func {
- 	u32  (*mmio)(struct nvkm_devinit *, u32);
- 	void (*meminit)(struct nvkm_devinit *);
- 	int  (*pll_set)(struct nvkm_devinit *, u32 type, u32 freq);
--	u64  (*disable)(struct nvkm_devinit *);
-+	void (*disable)(struct nvkm_devinit *);
- };
- 
- void nvkm_devinit_ctor(const struct nvkm_devinit_func *, struct nvkm_device *,
--- 
-2.34.1
-
-
-
+>  
+>  	nla_for_each_nested(attr, br_spec, rem) {
+>  		__u16 mode;
+> -- 
+> 2.34.1
+> 
