@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3925767A94E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 04:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 861E367A959
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 04:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234410AbjAYDiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 22:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
+        id S230480AbjAYDoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 22:44:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233279AbjAYDiW (ORCPT
+        with ESMTP id S230252AbjAYDor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 22:38:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7085CCA26;
-        Tue, 24 Jan 2023 19:38:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED74D61444;
-        Wed, 25 Jan 2023 03:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1AAC433A0;
-        Wed, 25 Jan 2023 03:38:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674617892;
-        bh=7M3ieHPKjncgevNaIxm++BYHAAhc0S9LqYRA8tUI6Pc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P9J1452odLsdx9doxYgTkxrLdCcOxbiWEcNN3c1SS4mdkU1oxRzvV4a4XV/0BbQ9l
-         SBxFaspcH9MniyYLQbBXgGXc/40u0BVnlosMkZ59hGsQD2ZtlCSgjxkQ6YRqMLPlSZ
-         PrGLsThlzNCrIgruY4wNOh2EKMnjXOqodtyk565vVkwRA9c3ZM9fgB+A5DldgqdSYt
-         tQw6v6Rp0lqJA5umtMy0jcsmp3utJc6DJPUHg7Qip/IOYG6z7+TqLVowgk8ynnZS3N
-         8r+3N4ZEqgI0VoBXDnvPlvm6BvZES1t+sHzbRcI1WtgVfxlZ53ysJD7yxDpif/2MR6
-         Y9i+Oqrub8C7Q==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     live-patching@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Song Liu <song@kernel.org>
-Subject: [PATCH 2/2] powerpc/module_64: Fix "expected nop" error on module re-patching
-Date:   Tue, 24 Jan 2023 19:38:05 -0800
-Message-Id: <2f6329ffd9674df6ff57e03edeb2ca54414770ab.1674617130.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <cover.1674617130.git.jpoimboe@kernel.org>
-References: <cover.1674617130.git.jpoimboe@kernel.org>
+        Tue, 24 Jan 2023 22:44:47 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656695BA4;
+        Tue, 24 Jan 2023 19:44:44 -0800 (PST)
+Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
+        by gnuweeb.org (Postfix) with ESMTPSA id 0C3B082EFF;
+        Wed, 25 Jan 2023 03:44:37 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1674618284;
+        bh=mpRUDUZIZZzLmygxuJtFY1U1CWw+tvFmbmQsHCSH3Lc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nq9VTXrfMqII4bevpBsOxzUkptwiZb0uvJAWU6IoeGmZLpOXVLNXRtv92gtmN3QqM
+         Zj81eWOyb/e1+DxVqVcZIzSshrDhSbYyFF8u5zJxL42q3bmZqk381jxjcrsCNw0AF8
+         rWMRv5uCnfOyGHuRt4XBSfrErT8hyoZpGGtiFFabGlSMgDe8+/IgFW19YPXPnrvnbg
+         RUzqP6iAJ8mXKbIfwfl60VReNqXzhjsILkB45EOl53F1WXE7gQshJcC2dDnFcuyaun
+         qvThntBiobmTv0xsYA8zCo3rXYnlrFX2fAgBFixQ4A9XWJQoDVELRY3ceeEaLf1PbV
+         BhjUmIkhRKYBg==
+Date:   Wed, 25 Jan 2023 10:44:34 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>, Xin Li <xin3.li@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        x86 Mailing List <x86@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v4 1/2] selftests/x86: sysret_rip: Handle syscall in
+ a FRED system
+Message-ID: <Y9ClotgPpMLrsucQ@biznet-home.integral.gnuweeb.org>
+References: <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
+ <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
+ <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
+ <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
+ <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
+ <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
+ <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+ <20230125032240.728463-1-ammarfaizi2@gnuweeb.org>
+ <20230125032240.728463-2-ammarfaizi2@gnuweeb.org>
+ <Y9Cj4ta/DpiVGFeo@biznet-home.integral.gnuweeb.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9Cj4ta/DpiVGFeo@biznet-home.integral.gnuweeb.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a module with a livepatched function is unloaded and then reloaded,
-klp attempts to dynamically re-patch it.  On ppc64, that fails with the
-following error:
+On Wed, Jan 25, 2023 at 10:37:17AM +0700, Ammar Faizi wrote:
+> On Wed, Jan 25, 2023 at 10:22:39AM +0700, Ammar Faizi wrote:
+> > +	/*
+> > +	 * Test that we don't get a mix of REGS_SAVED and REGS_SYSRET.
+> > +	 * It needs at least calling do_syscall() twice to assert.
+> > +	 */
+> > +	if (regs_ok_state == REGS_UNDEFINED) {
+> > +		/*
+> > +		 * First time calling do_syscall().
+> > +		 */
+> > +		regs_ok_state = ret;
+> > +		return ret;
+> > +	} else {
+> 
+> Oops, this should not be returning ret here. Ignore this version.
+> I'll send v5.
 
-  module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
-  livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-  livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+Side note: This mistake doesn't affect the test correctness because
+we currenly don't use the return value of do_syscall().
 
-The error happens because the restore r2 instruction had already
-previously been written into the klp module's replacement function when
-the original function was patched the first time.  So the instruction
-wasn't a nop as expected.
+But still worth fixing...
 
-When the restore r2 instruction has already been patched in, detect that
-and skip the warning and the instruction write.
-
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- arch/powerpc/kernel/module_64.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
-index 016e79bba531..bf1da99fff74 100644
---- a/arch/powerpc/kernel/module_64.c
-+++ b/arch/powerpc/kernel/module_64.c
-@@ -502,6 +502,7 @@ static unsigned long stub_for_addr(const Elf64_Shdr *sechdrs,
- static int restore_r2(const char *name, u32 *instruction, struct module *me)
- {
- 	u32 *prev_insn = instruction - 1;
-+	u32 insn_val = *instruction;
- 
- 	if (is_mprofile_ftrace_call(name))
- 		return 0;
-@@ -514,9 +515,18 @@ static int restore_r2(const char *name, u32 *instruction, struct module *me)
- 	if (!instr_is_relative_link_branch(ppc_inst(*prev_insn)))
- 		return 0;
- 
--	if (*instruction != PPC_RAW_NOP()) {
-+	/*
-+	 * For livepatch, the restore r2 instruction might have already been
-+	 * written previously, if the referenced symbol is in a previously
-+	 * unloaded module which is now being loaded again.  In that case, skip
-+	 * the warning and the instruction write.
-+	 */
-+	if (insn_val == PPC_INST_LD_TOC)
-+		return 0;
-+
-+	if (insn_val != PPC_RAW_NOP()) {
- 		pr_err("%s: Expected nop after call, got %08x at %pS\n",
--			me->name, *instruction, instruction);
-+			me->name, insn_val, instruction);
- 		return -ENOEXEC;
- 	}
- 
 -- 
-2.39.0
+Ammar Faizi
 
