@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B9D67BCD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF2767BCD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236363AbjAYUiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S236465AbjAYUiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:38:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236497AbjAYUiK (ORCPT
+        with ESMTP id S236482AbjAYUiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:38:10 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E037714499
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:38:04 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id p12so1463ilq.10
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:38:04 -0800 (PST)
+        Wed, 25 Jan 2023 15:38:11 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B025DC2F
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:38:05 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id a9so33306ilb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:38:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RODNscjc/Rt2ZTSAcIwz/VoCR1rWE14Nx64cYwURel8=;
-        b=iVUOqYzgJAMBp/vKcsOc/3dxzpTDj3YIoTkV3FTVQEPVPzyeOtbyzfEfGyIyRj5RYx
-         4IQs2cPzx9CeQDiOcgp5WRitwoC/kRoOzCf6wADx84e8pIC4/Y+wjhabjvqSpcZea4OB
-         KQWsCGRTnw70X9M9hpaBiEvZOS091NZV/egtGkzcF2CmI/UmUQ5RxpeCxpyCHucaoyo4
-         3t6KmdAfFWEIotvswSf54UX/sv32sKnlwsF7bxUghIIje8H8BxLIJ+Z0A2xcafwiEFxV
-         zMx6PwNNNYKpdY1DMjJQsav/a0vkNbxSPXyxxtKqWKtF20mpFHtzDBRcpB64GWqmXUt7
-         eIDQ==
+        bh=+GZxyiBPwjVVw5bY+5L1X1rDI1qOdjAKyHdasBC3ULQ=;
+        b=Pcm5M1jZT5rDnxcOuBf1EHnK+chJTeNxSetfhfy3aAneipKuw7P/qqJEYUu1PfXVDn
+         ourG/Oc62k1oVHB3Jc45ggCT4sdFo1fdyqeHpzpGfSCaRIK13rosa2fPqwk4FoS1YksD
+         0ZprA/6L3TU1PLwDorZXYuVM0tt3VrJNnGLKM84l9lZkPZjFb3PhhPROQhkMi+PUacQH
+         sdTPnHOOba8rz18+MYnwdJYT+7SxGlH2Z0fTVQBFpRqQu+SR4yj/7f85t7eK6+tpIeWc
+         L3HG7ieWv0v7O+p9/p3p6h+zOm/eZmBAb2484Xb7sGNyur0c06GJN8KiSIwxxHLYJMbH
+         o+fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RODNscjc/Rt2ZTSAcIwz/VoCR1rWE14Nx64cYwURel8=;
-        b=Eh4U7T7q4pRFWh2uGZ8fP0qw01GfsccLspSAWcmA9MtUIGB5hfP4k6LE8+cHR1yaB9
-         JOE6RHMp7ZH3VLcdt9N8/YM76kG/nMbqgYtMmXmktLew1ON5WE3jWa6O8ZQvUABrlPsT
-         iCZ/51yHdovJYWKenbZwXjA4swZASOKy4eTS84XMvjXib5voZSohZ75R4OnP4WnnkDfX
-         0jRRGcJ8VgZ1Ey5UkntdnLu8XhrhDAEHVXQgNo10Q2C7P8YBhXHLcYre5NAhPQjUcmRX
-         nmYVZi5FigtR76Z/Q1GlDuF/qliCwU1U5RmbA6suedV5/ucfcyjkMntJIONG6yoPJfuo
-         iXLw==
-X-Gm-Message-State: AFqh2krUUv60/xXaRS2CJB7IuT8v8ztaMbwjcK0/ciddrdLvffVKnPFJ
-        jkAx+0flTWN9zRcyrV9BUlo6VAsCu6A=
-X-Google-Smtp-Source: AMrXdXtdLLHNja8c10Pzwty2Gj1lQ6vwVCeNim0SzN6sX2Qpcc44eemPLvtkfADILpBvoa4cu9/12w==
-X-Received: by 2002:a05:6e02:1aab:b0:30e:f07b:84ac with SMTP id l11-20020a056e021aab00b0030ef07b84acmr38533727ilv.19.1674679083872;
-        Wed, 25 Jan 2023 12:38:03 -0800 (PST)
+        bh=+GZxyiBPwjVVw5bY+5L1X1rDI1qOdjAKyHdasBC3ULQ=;
+        b=cXsBWiSLy4GvPbuzwO/dBqItcwnaWkXepuMwh/+cu+62lTgqwArG2L9riF0qXfF/gO
+         FZ6KTUp/oI36aromT/+rlXoaUmKKm2p5y271g1c+9Ip7w8S/Y+FfUkxEoiZDDLHo0Yxt
+         sZI/RpEBQ/7KCduqRDbAckO5ZqcTg9wvKzkIx6sOtdSY1N+L364ek3pps+HMHa8bzkZi
+         xhK1da35l3fYxhyZgH4pY+3lVr6dyKCfXidoW2lbRYRWQN+ErRHdTW2ZtJEUdCwzieVW
+         cn0iigssfJp3mYbkaVnthLUwiN2AqOP0jZUTeYWTET9tQMejkQr9FZzSI0S9+ALANYHu
+         xuJQ==
+X-Gm-Message-State: AFqh2krPqMrTApUFtc+O45AdMBtlWdVP40gzsp2isiroFZjQKqgkGLnq
+        2m4ntY4gywoq25yafNjj/rHejfLlKHc=
+X-Google-Smtp-Source: AMrXdXssegA9kYKRjlrOctGbbeJm4011Wdthjge82j3e0r523u23oEz8BG/Sm+GZIoGEVbQv9Xy7ug==
+X-Received: by 2002:a92:1a50:0:b0:30f:3ea9:79f9 with SMTP id z16-20020a921a50000000b0030f3ea979f9mr16985406ill.3.1674679084893;
+        Wed, 25 Jan 2023 12:38:04 -0800 (PST)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id y11-20020a056e02128b00b00310a599fd43sm665104ilq.46.2023.01.25.12.38.02
+        by smtp.googlemail.com with ESMTPSA id y11-20020a056e02128b00b00310a599fd43sm665104ilq.46.2023.01.25.12.38.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 12:38:03 -0800 (PST)
+        Wed, 25 Jan 2023 12:38:04 -0800 (PST)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
@@ -57,9 +57,9 @@ To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
 Cc:     jani.nikula@intel.com, ville.syrjala@linux.intel.com,
         daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH v3 06/19] dyndbg: drop NUM_TYPE_ARRAY
-Date:   Wed, 25 Jan 2023 13:37:30 -0700
-Message-Id: <20230125203743.564009-7-jim.cromie@gmail.com>
+Subject: [PATCH v3 07/19] dyndbg: reduce verbose/debug clutter
+Date:   Wed, 25 Jan 2023 13:37:31 -0700
+Message-Id: <20230125203743.564009-8-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230125203743.564009-1-jim.cromie@gmail.com>
 References: <20230125203743.564009-1-jim.cromie@gmail.com>
@@ -75,32 +75,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ARRAY_SIZE works here, since array decl is complete.
+currently, for verbose=3, this is logged:
 
-no functional change
+ dyndbg: query 0: "class DRM_UT_CORE +p" mod:*
+ dyndbg: split into words: "class" "DRM_UT_CORE" "+p"
+
+ dyndbg: op='+'
+ dyndbg: flags=0x1
+ dyndbg: *flagsp=0x1 *maskp=0xffffffff
+
+ dyndbg: parsed: func="" file="" module="" format="" lineno=0-0 class=DRM_UT_CORE
+ dyndbg: no matches for query
+ dyndbg: no-match: func="" file="" module="" format="" lineno=0-0 class=DRM_UT_CORE
+ dyndbg: processed 1 queries, with 0 matches, 0 errs
+
+This patch:
+
+shrinks 3 lines of 2nd stanza to single line
+
+drops 2 middle lines of 3rd stanza
+ 3 differs from 1 only by status
+ 2 is just status, retold in 4, with more info.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/linux/dynamic_debug.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ lib/dynamic_debug.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index bf47bcfad8e6..81b643ab7f6e 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -104,11 +104,9 @@ struct ddebug_class_map {
- 		.mod_name = KBUILD_MODNAME,				\
- 		.base = _base,						\
- 		.map_type = _maptype,					\
--		.length = NUM_TYPE_ARGS(char*, __VA_ARGS__),		\
-+		.length = ARRAY_SIZE(_var##_classnames),		\
- 		.class_names = _var##_classnames,			\
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index 0a5efc735b36..2d4640479e5b 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -265,9 +265,6 @@ static int ddebug_change(const struct ddebug_query *query,
  	}
--#define NUM_TYPE_ARGS(eltype, ...)				\
--        (sizeof((eltype[]){__VA_ARGS__}) / sizeof(eltype))
+ 	mutex_unlock(&ddebug_lock);
  
- /* encapsulate linker provided built-in (or module) dyndbg data */
- struct _ddebug_info {
+-	if (!nfound && verbose)
+-		pr_info("no matches for query\n");
+-
+ 	return nfound;
+ }
+ 
+@@ -496,7 +493,6 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
+ 		pr_err("bad flag-op %c, at start of %s\n", *str, str);
+ 		return -EINVAL;
+ 	}
+-	v3pr_info("op='%c'\n", op);
+ 
+ 	for (; *str ; ++str) {
+ 		for (i = ARRAY_SIZE(opt_array) - 1; i >= 0; i--) {
+@@ -510,7 +506,6 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
+ 			return -EINVAL;
+ 		}
+ 	}
+-	v3pr_info("flags=0x%x\n", modifiers->flags);
+ 
+ 	/* calculate final flags, mask based upon op */
+ 	switch (op) {
+@@ -526,7 +521,7 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
+ 		modifiers->flags = 0;
+ 		break;
+ 	}
+-	v3pr_info("*flagsp=0x%x *maskp=0x%x\n", modifiers->flags, modifiers->mask);
++	v3pr_info("op='%c' flags=0x%x maskp=0x%x\n", op, modifiers->flags, modifiers->mask);
+ 
+ 	return 0;
+ }
+@@ -536,7 +531,7 @@ static int ddebug_exec_query(char *query_string, const char *modname)
+ 	struct flag_settings modifiers = {};
+ 	struct ddebug_query query = {};
+ #define MAXWORDS 9
+-	int nwords, nfound;
++	int nwords;
+ 	char *words[MAXWORDS];
+ 
+ 	nwords = ddebug_tokenize(query_string, words, MAXWORDS);
+@@ -554,10 +549,7 @@ static int ddebug_exec_query(char *query_string, const char *modname)
+ 		return -EINVAL;
+ 	}
+ 	/* actually go and implement the change */
+-	nfound = ddebug_change(&query, &modifiers);
+-	vpr_info_dq(&query, nfound ? "applied" : "no-match");
+-
+-	return nfound;
++	return ddebug_change(&query, &modifiers);
+ }
+ 
+ /* handle multiple queries in query string, continue on error, return
 -- 
 2.39.1
 
