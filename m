@@ -2,127 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1906367BD58
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF3767BD54
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235896AbjAYUtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        id S235777AbjAYUtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235065AbjAYUte (ORCPT
+        with ESMTP id S235065AbjAYUtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:49:34 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18648694;
-        Wed, 25 Jan 2023 12:49:30 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKWIU7023790;
-        Wed, 25 Jan 2023 20:49:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=xACmOZ4ukkAcUmVvUM2aiIZYmP4ylYGfvpEzRuo+ADQ=;
- b=hirsF36WmOnPPiLYEfT6z5x6zLQ1iZpDCo7XmAKUfIL6XSumL0YUs3i3F9uyouDnaSPk
- 6Scp64RlrxjUlTz1UnFyCJVohIo3/uXhF1Zz3hWC8LUIrr++Ght3mki78+0BfFJr3Zve
- kLOOKiFtVYk1+hgkvIL8pdXTf9+znDpX8TCgeQbsQfgZ6Fkn2aJxJlq3se1qpdFMvzwT
- 6SoAt7qg0udHpUBqWZfPRDa6K+r/0PKF1oS5i2lN3uaEUkvS5KD1disivs7imrewhbpM
- SazazOUnjyoa2uMwgULeZ7jXVqWH8UDRBrvAX/KMVDmIzdorsQVsTjKqlQEsBctSEuOm 3Q== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nak7jjnrq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 20:49:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30PKnKW1029109
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 20:49:20 GMT
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 25 Jan 2023 12:49:19 -0800
-Date:   Wed, 25 Jan 2023 12:49:11 -0800
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        "Harsh Agarwal" <quic_harshq@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "quic_shazhuss@quicinc.com" <quic_shazhuss@quicinc.com>
-Subject: Re: [RFC v4 2/5] usb: dwc3: core: Refactor PHY logic to support
- Multiport Controller
-Message-ID: <20230125204911.GA2657@jackp-linux.qualcomm.com>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-3-quic_kriskura@quicinc.com>
- <20230119003619.ane3weigd4ebsta6@synopsys.com>
- <7fa2d7b0-509d-ae90-4208-6f0245f927f7@quicinc.com>
- <20230120010226.wjwtisj4id6frirl@synopsys.com>
- <91fa86d8-f443-db13-1544-73e2dd50d964@quicinc.com>
- <20230120224400.77t2j3qtcdfqwt5s@synopsys.com>
- <0d9eab77-ad5f-be23-8ed6-d78c0d3ccef1@quicinc.com>
- <20230125190805.l7yo5lls7gfhoo4b@synopsys.com>
+        Wed, 25 Jan 2023 15:49:19 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E41744A3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 12:49:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674679758; x=1706215758;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iKVvmqHGR0SXWX9t0Lomf8ijyjMQhY9AxrfjeDTmD4U=;
+  b=JXleQ92mCTtd6sGylxeaq1wWh/OsNnGGPZv1P1d2uvp4+UuBu446Z6xk
+   UX3OOdIiLmwLj0O+VxYp73e5iQHam/q9DkyembdT1qWmK3Qt9LcfAOgGb
+   KGYIlV3SO83C4nW2kqe4Z0nBanKna9AIkzklkAGqcp9i2SNEROYX7dt7t
+   U2mEyhJuVnfUKONd2vrMzUol+M3vDudfnBYY7Da5f4H5V80cJLWbG84eA
+   ewTaXTuWNP0/frHJtchvK/8IXA/4+rXxaoGRCcV21RGYC+B8gZwDfI3ZD
+   gmQv9GUY+RLiH3Z+tx1O/piO1uDrR6vzBhGy3HjsK/orcZebi+U4CyOYF
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="306335478"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="306335478"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 12:49:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="612567342"
+X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
+   d="scan'208";a="612567342"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2023 12:49:17 -0800
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     namhyung@kernel.org, eranian@google.com, ak@linux.intel.com,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH V2] perf/x86/intel/ds: Fix the conversion from TSC to perf time
+Date:   Wed, 25 Jan 2023 12:49:25 -0800
+Message-Id: <20230125204925.924442-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230125190805.l7yo5lls7gfhoo4b@synopsys.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Z-C9IGQCNa0z5KoXaTsC96qJO6MLpGlF
-X-Proofpoint-ORIG-GUID: Z-C9IGQCNa0z5KoXaTsC96qJO6MLpGlF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_13,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 mlxlogscore=799
- priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1015 bulkscore=0
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301250185
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 07:08:10PM +0000, Thinh Nguyen wrote:
+From: Kan Liang <kan.liang@linux.intel.com>
 
-<snip>
+The time order is incorrect when the TSC in a PEBS record is used.
 
-> > +       /*
-> > +        * If the controller is not host-only, then it must be a
-> > +        * single port controller.
-> > +        */
+ $perf record -e cycles:upp dd if=/dev/zero of=/dev/null
+  count=10000
+ $ perf script --show-task-events
+       perf-exec     0     0.000000: PERF_RECORD_COMM: perf-exec:915/915
+              dd   915   106.479872: PERF_RECORD_COMM exec: dd:915/915
+              dd   915   106.483270: PERF_RECORD_EXIT(915:915):(914:914)
+              dd   915   106.512429:          1 cycles:upp:
+ ffffffff96c011b7 [unknown] ([unknown])
+ ... ...
 
-Thinh, is this a correct assumption?  Is it possible for the IP to be
-synthesized to support both dual-role and multiple ports?  We know that
-when operating in device mode only the first port can be used but the
-additional ports would be usable when in host.
+The perf time is from sched_clock_cpu(). The current PEBS code
+unconditionally convert the TSC to native_sched_clock(). There is a
+shift between the two clocks. If the TSC is stable, the shift is
+consistent, __sched_clock_offset. If the TSC is unstable, the shift has
+to be calculated at runtime.
 
-Thanks,
-Jack
+This patch doesn't support the conversion when the TSC is unstable. The
+TSC unstable case is a corner case and very unlikely to happen. If it
+happens, the TSC in a PEBS record will be dropped and fall back to
+perf_event_clock().
 
-> > +       temp = readl(regs + DWC3_GHWPARAMS0);
-> > +       hw_mode = DWC3_GHWPARAMS0_MODE(temp);
-> > +       if (hw_mode != DWC3_GHWPARAMS0_MODE_HOST) {
-> > +               dwc->num_ports = 1;
-> > +               dwc->num_ss_ports = 1;
-> > +               return 0;
-> > +       }
-> 
-> This check should be done before we get into this function.
+Fixes: 47a3aeb39e8d ("perf/x86/intel/pebs: Fix PEBS timestamps overwritten")
+Reported-by: Namhyung Kim <namhyung@kernel.org>
+Link: https://lore.kernel.org/all/CAM9d7cgWDVAq8-11RbJ2uGfwkKD6fA-OMwOKDrNUrU_=8MgEjg@mail.gmail.com/
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+---
+
+Changes since V1:
+- Update the comments and description to avoid the confusion.
+
+ arch/x86/events/intel/ds.c | 35 ++++++++++++++++++++++++++---------
+ 1 file changed, 26 insertions(+), 9 deletions(-)
+
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index 183efa914b99..b0354dc869d2 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -2,12 +2,14 @@
+ #include <linux/bitops.h>
+ #include <linux/types.h>
+ #include <linux/slab.h>
++#include <linux/sched/clock.h>
+ 
+ #include <asm/cpu_entry_area.h>
+ #include <asm/perf_event.h>
+ #include <asm/tlbflush.h>
+ #include <asm/insn.h>
+ #include <asm/io.h>
++#include <asm/timer.h>
+ 
+ #include "../perf_event.h"
+ 
+@@ -1568,6 +1570,27 @@ static u64 get_data_src(struct perf_event *event, u64 aux)
+ 	return val;
+ }
+ 
++static void setup_pebs_time(struct perf_event *event,
++			    struct perf_sample_data *data,
++			    u64 tsc)
++{
++	/* Converting to a user-defined clock is not supported yet. */
++	if (event->attr.use_clockid != 0)
++		return;
++
++	/*
++	 * Doesn't support the conversion when the TSC is unstable.
++	 * The TSC unstable case is a corner case and very unlikely to
++	 * happen. If it happens, the TSC in a PEBS record will be
++	 * dropped and fall back to perf_event_clock().
++	 */
++	if (!using_native_sched_clock() || !sched_clock_stable())
++		return;
++
++	data->time = native_sched_clock_from_tsc(tsc) + __sched_clock_offset;
++	data->sample_flags |= PERF_SAMPLE_TIME;
++}
++
+ #define PERF_SAMPLE_ADDR_TYPE	(PERF_SAMPLE_ADDR |		\
+ 				 PERF_SAMPLE_PHYS_ADDR |	\
+ 				 PERF_SAMPLE_DATA_PAGE_SIZE)
+@@ -1715,11 +1738,8 @@ static void setup_pebs_fixed_sample_data(struct perf_event *event,
+ 	 *
+ 	 * We can only do this for the default trace clock.
+ 	 */
+-	if (x86_pmu.intel_cap.pebs_format >= 3 &&
+-		event->attr.use_clockid == 0) {
+-		data->time = native_sched_clock_from_tsc(pebs->tsc);
+-		data->sample_flags |= PERF_SAMPLE_TIME;
+-	}
++	if (x86_pmu.intel_cap.pebs_format >= 3)
++		setup_pebs_time(event, data, pebs->tsc);
+ 
+ 	if (has_branch_stack(event))
+ 		perf_sample_save_brstack(data, event, &cpuc->lbr_stack);
+@@ -1781,10 +1801,7 @@ static void setup_pebs_adaptive_sample_data(struct perf_event *event,
+ 	perf_sample_data_init(data, 0, event->hw.last_period);
+ 	data->period = event->hw.last_period;
+ 
+-	if (event->attr.use_clockid == 0) {
+-		data->time = native_sched_clock_from_tsc(basic->tsc);
+-		data->sample_flags |= PERF_SAMPLE_TIME;
+-	}
++	setup_pebs_time(event, data, basic->tsc);
+ 
+ 	/*
+ 	 * We must however always use iregs for the unwinder to stay sane; the
+-- 
+2.35.1
+
