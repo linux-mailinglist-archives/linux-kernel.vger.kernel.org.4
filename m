@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBD767AF8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C1E67AF9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235514AbjAYKWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 05:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
+        id S235547AbjAYKXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 05:23:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234540AbjAYKWx (ORCPT
+        with ESMTP id S235523AbjAYKXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:22:53 -0500
+        Wed, 25 Jan 2023 05:23:34 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8770C3A581
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:22:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F73E3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:22:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674642126;
+        s=mimecast20190719; t=1674642163;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=89IL5nu5A2pzN0EnC6g6HKyleu+Olf0iNi7gGVlHd5c=;
-        b=GB6x9Xn1tAwJzRGbskebY8/4gIAN29cXcVRkTc5z2vTwqCPrMc0Gpr8h99X/tDn5y0eqts
-        SmEx9jHQmUhN2t1lq946npadmPpS1m1mSjEZMfNq41QgYRF71GUbtUVrxyWsSC4wVlDLNY
-        Ma8vYBmnis9K5XIjvXAPddSvHRjBaMw=
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
- [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=rr13eYjbTYRH96MeV8Up2tdYMhCePM43zaWw8ahE9us=;
+        b=SgFYeawbyfwitFqiiMQZha42KH+BufKOg9tV/RfWAtbnn06FoNNMDDoKECQ4EJBW8ofL6O
+        sscZXTcYJ3G06+j6EX551LNzK/PSd9ivq9fZ6BbWS0A4FBlqmuqY4mHPJoWNz6UF9LiYg5
+        dJso1oF3fUfrKfC+HqZwoWUaRjHYOaU=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-537-VT1gLR4nMqCFHx1TQNRGJA-1; Wed, 25 Jan 2023 05:22:05 -0500
-X-MC-Unique: VT1gLR4nMqCFHx1TQNRGJA-1
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-4fee82718afso151907347b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:22:05 -0800 (PST)
+ us-mta-629-OUsmUINVMcWaueQDPipuPg-1; Wed, 25 Jan 2023 05:22:42 -0500
+X-MC-Unique: OUsmUINVMcWaueQDPipuPg-1
+Received: by mail-yb1-f199.google.com with SMTP id y66-20020a253245000000b007cb4f1e3e57so19264718yby.8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:22:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=89IL5nu5A2pzN0EnC6g6HKyleu+Olf0iNi7gGVlHd5c=;
-        b=P6tXksgwvQcnC9sAp80FRvyAY230Xb5GAKwH4n/MkUj9yyPpVLxwLd7kJ3dOMUcx4O
-         Zv7ecVbdF33j9MOGldXjKWshDrTJXInNt6+lfTjtWNgAmu1sXpWlmMA1RawsJj9x8bkY
-         Jrb7b3/ylzpXqccoczoxFFvdhpukXnH42IbQ1TDB4XP7DgsnFzu4QCbPcKiFB+qjfSof
-         mWKyhs7uMpg2CmiKTKrblS11nxNpsqYTGSUepGobH59k1PDCMDVPBIw0SqQvco5z7gnY
-         Aa9d8PE8imzwvtJuk4dN7H2P57JveLrkjn0qmptfT6JXKaGy1UR4dBat4BcsCu9wxxqm
-         RAzw==
-X-Gm-Message-State: AFqh2kocTPONnC0CiSLlSdh3YtwHxKOZIToDx762GMMG+ZqfQFBs3nwA
-        Vs4NfmdFLKLa2xupCKyj6ZGUTcL8urlfmfzN6vfWg5dSUG5NWz3SG/h9s02f8eOx88K0jjlv89W
-        dyiHnQJ2OCbpWRh2LSpYm5OVa1dY+a8DcXvIVtGeO
-X-Received: by 2002:a25:1856:0:b0:732:edd2:4138 with SMTP id 83-20020a251856000000b00732edd24138mr2324885yby.448.1674642124660;
-        Wed, 25 Jan 2023 02:22:04 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvddEmRAkvvDknAyoKqnRzba9kixGoTQM2pl9vXy3pB4NOuX4HZrLEyws7vvL9+LlW1co9yqu2FEChxNddAuXI=
-X-Received: by 2002:a25:1856:0:b0:732:edd2:4138 with SMTP id
- 83-20020a251856000000b00732edd24138mr2324882yby.448.1674642124466; Wed, 25
- Jan 2023 02:22:04 -0800 (PST)
+        bh=rr13eYjbTYRH96MeV8Up2tdYMhCePM43zaWw8ahE9us=;
+        b=BoiIBDmx4UwPqhmC+KHWbiFZ6wmZ6QaISydhWcB9WvQqf2Jdt/t6NEpvOjZFCQxQoN
+         Dca6Rc8wmuV7GXfpyYywieaCLnl7pcBahmQMAnSRjOzW41QhLfJ+e4yBTtpPs5Z3056l
+         O+1XnAyuXPhvpC5hPPUb/chc+bO3my8JTF+fNrfpMxSLmNwZZVltq+HUwxO4Zly/JpNM
+         p9nQ3zaGHPdgH3Mt8aBnOg01G9CWloqvsqkdH+ajd+uOqBIpACTDJrSO3dbO1n/LUw6W
+         Qnjt5IL3MYWLLSbRAdLZpaaN1RfvszjbfmImdXjsSLSiUx+SHjdsjJFMt/IbIWfHUBiE
+         KYnQ==
+X-Gm-Message-State: AFqh2kq8fBMdxiqoo5E6aa/xqMtX8AWv8CL1AlOVGU65dlGL3i1gvoqU
+        z89Fdww7pMN72HJdZzIWTXG+2BwBIZ5tZX0D1NmYFQnoiSlq53ctEj0iQntyyj1WQ78A6/kX+hY
+        IvDJ8u6J10FjD2Q4IRyXeqE5/su4Bur451yZjkqHN
+X-Received: by 2002:a81:48d2:0:b0:4fe:5adc:24bc with SMTP id v201-20020a8148d2000000b004fe5adc24bcmr2497820ywa.337.1674642161003;
+        Wed, 25 Jan 2023 02:22:41 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvFNfvyBAiH/VVCdqNkB59RtPBVoQQeFANXZAk158KWgPw8WXeXLiwCoSH2AKkotOOwr42FeG7TNME3IT8gcSw=
+X-Received: by 2002:a81:48d2:0:b0:4fe:5adc:24bc with SMTP id
+ v201-20020a8148d2000000b004fe5adc24bcmr2497815ywa.337.1674642160824; Wed, 25
+ Jan 2023 02:22:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20230116130937.391441-1-hadess@hadess.net>
-In-Reply-To: <20230116130937.391441-1-hadess@hadess.net>
+References: <20221220154345.474596-1-hadess@hadess.net>
+In-Reply-To: <20221220154345.474596-1-hadess@hadess.net>
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 25 Jan 2023 11:21:53 +0100
-Message-ID: <CAO-hwJLFt185LS5ePO3Wr=L1VULdAHKQC3oXvLAS9GC0-UraFQ@mail.gmail.com>
-Subject: Re: [PATCH] HID: logitech-hidpp: Hard-code HID++ 1.0 fast scroll support
+Date:   Wed, 25 Jan 2023 11:22:29 +0100
+Message-ID: <CAO-hwJKVoPB8LGLVT_gw87nKM=+pEVU2HqhA_G_SfvCT2=hkBQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] Revert "HID: logitech-hidpp: add a module
+ parameter to keep firmware gestures"
 To:     Bastien Nocera <hadess@hadess.net>
 Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jiri Kosina <jikos@kernel.org>,
@@ -76,73 +77,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 2:09 PM Bastien Nocera <hadess@hadess.net> wrote:
+On Tue, Dec 20, 2022 at 4:43 PM Bastien Nocera <hadess@hadess.net> wrote:
 >
-> HID++ 1.0 devices only export whether Fast Scrolling is enabled, not
-> whether they are capable of it. Reinstate the original quirks for the 3
-> supported mice so fast scrolling works again on those devices.
+> Now that we're in 2022, and the majority of desktop environments can and
+> should support touchpad gestures through libinput, remove the legacy
+> module parameter that made it possible to use gestures implemented in
+> firmware.
 >
-> Fixes: 908d325 ("HID: logitech-hidpp: Detect hi-res scrolling support")
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216903
+> This will eventually allow simplifying the driver's initialisation code.
+>
+> This reverts commit 9188dbaed68a4b23dc96eba165265c08caa7dc2a.
+>
 > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> ---
 
-Applied to for-6.3/logitech
-
-Thanks!
+Applied just this one to for-6.3/logitech
 
 Cheers,
 Benjamin
 
->  drivers/hid/hid-logitech-hidpp.c | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
+> ---
+>  drivers/hid/hid-logitech-hidpp.c | 10 ----------
+>  1 file changed, 10 deletions(-)
 >
 > diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-> index abf2c95e4d0b..fa026e9107c5 100644
+> index 08ad19097e9e..7f9187201913 100644
 > --- a/drivers/hid/hid-logitech-hidpp.c
 > +++ b/drivers/hid/hid-logitech-hidpp.c
-> @@ -77,6 +77,7 @@ MODULE_PARM_DESC(disable_tap_to_click,
->  #define HIDPP_QUIRK_HIDPP_WHEELS               BIT(26)
->  #define HIDPP_QUIRK_HIDPP_EXTRA_MOUSE_BTNS     BIT(27)
->  #define HIDPP_QUIRK_HIDPP_CONSUMER_VENDOR_KEYS BIT(28)
-> +#define HIDPP_QUIRK_HI_RES_SCROLL_1P0          BIT(29)
+> @@ -32,11 +32,6 @@ MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("Benjamin Tissoires <benjamin.tissoires@gmail.com>");
+>  MODULE_AUTHOR("Nestor Lopez Casado <nlopezcasad@logitech.com>");
 >
->  /* These are just aliases for now */
->  #define HIDPP_QUIRK_KBD_SCROLL_WHEEL HIDPP_QUIRK_HIDPP_WHEELS
-> @@ -3472,14 +3473,8 @@ static int hidpp_initialize_hires_scroll(struct hidpp_device *hidpp)
->                         hid_dbg(hidpp->hid_dev, "Detected HID++ 2.0 hi-res scrolling\n");
->                 }
->         } else {
-> -               struct hidpp_report response;
+> -static bool disable_raw_mode;
+> -module_param(disable_raw_mode, bool, 0644);
+> -MODULE_PARM_DESC(disable_raw_mode,
+> -       "Disable Raw mode reporting for touchpads and keep firmware gestures.");
 > -
-> -               ret = hidpp_send_rap_command_sync(hidpp,
-> -                                                 REPORT_ID_HIDPP_SHORT,
-> -                                                 HIDPP_GET_REGISTER,
-> -                                                 HIDPP_ENABLE_FAST_SCROLL,
-> -                                                 NULL, 0, &response);
-> -               if (!ret) {
-> +               /* We cannot detect fast scrolling support on HID++ 1.0 devices */
-> +               if (hidpp->quirks & HIDPP_QUIRK_HI_RES_SCROLL_1P0) {
->                         hidpp->capabilities |= HIDPP_CAPABILITY_HIDPP10_FAST_SCROLL;
->                         hid_dbg(hidpp->hid_dev, "Detected HID++ 1.0 fast scroll\n");
->                 }
-> @@ -4296,9 +4291,15 @@ static const struct hid_device_id hidpp_devices[] = {
->           HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH,
->                 USB_DEVICE_ID_LOGITECH_T651),
->           .driver_data = HIDPP_QUIRK_CLASS_WTP },
-> +       { /* Mouse Logitech Anywhere MX */
-> +         LDJ_DEVICE(0x1017), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_1P0 },
->         { /* Mouse logitech M560 */
->           LDJ_DEVICE(0x402d),
->           .driver_data = HIDPP_QUIRK_DELAYED_INIT | HIDPP_QUIRK_CLASS_M560 },
-> +       { /* Mouse Logitech M705 (firmware RQM17) */
-> +         LDJ_DEVICE(0x101b), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_1P0 },
-> +       { /* Mouse Logitech Performance MX */
-> +         LDJ_DEVICE(0x101a), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_1P0 },
->         { /* Keyboard logitech K400 */
->           LDJ_DEVICE(0x4024),
->           .driver_data = HIDPP_QUIRK_CLASS_K400 },
+>  static bool disable_tap_to_click;
+>  module_param(disable_tap_to_click, bool, 0644);
+>  MODULE_PARM_DESC(disable_tap_to_click,
+> @@ -4355,11 +4350,6 @@ static int hidpp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>             hidpp_application_equals(hdev, HID_GD_KEYBOARD))
+>                 hidpp->quirks |= HIDPP_QUIRK_HIDPP_CONSUMER_VENDOR_KEYS;
+>
+> -       if (disable_raw_mode) {
+> -               hidpp->quirks &= ~HIDPP_QUIRK_CLASS_WTP;
+> -               hidpp->quirks &= ~HIDPP_QUIRK_NO_HIDINPUT;
+> -       }
+> -
+>         if (hidpp->quirks & HIDPP_QUIRK_CLASS_WTP) {
+>                 ret = wtp_allocate(hdev, id);
+>                 if (ret)
 > --
-> 2.39.0
+> 2.38.1
 >
 
