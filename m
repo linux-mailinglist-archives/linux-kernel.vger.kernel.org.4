@@ -2,55 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC79667B88E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2393C67B895
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235745AbjAYRaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S235615AbjAYRau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235092AbjAYRaU (ORCPT
+        with ESMTP id S235844AbjAYRas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:30:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884162006B;
-        Wed, 25 Jan 2023 09:30:19 -0800 (PST)
+        Wed, 25 Jan 2023 12:30:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10A437573;
+        Wed, 25 Jan 2023 09:30:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49E3BB81B54;
-        Wed, 25 Jan 2023 17:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E693DC4339B;
-        Wed, 25 Jan 2023 17:30:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95F2D6159C;
+        Wed, 25 Jan 2023 17:30:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06045C4339C;
+        Wed, 25 Jan 2023 17:30:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674667817;
-        bh=xFfZ/wlQiMSSLDumbVmp038tztLwpQ9suVw9G/i7sbA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=atVqVTf1Qp5KWxnWHWJ9MsGOpj4b5RKNR0DwbOI+zYqLUoOT9yrXLa/0SCzJPLwZR
-         iO3M6lkQq8KufONvkdfk57nC7K8OZN0OkXaCF9zDs+TZeXTA12siMRpLFaZ7W5LQMM
-         MH8WY2T9CGMKwgO4K8rj6mITxSFZQ5wbI2zyWFEP76pLQJxgdprmfIJezxDwCWbjqD
-         rgvZ3XtH+SDi4wXBFBLakX4wnmNSgIZENxwKwu8ZkMJqwrdy/vXGf2qBnhA5smTgMG
-         ljtXme6wIscpPma7dsACylxqfGXOqkLdGXIl4vaXDCJPQCV7iii3z8plARN00c/10u
-         eqrGLSABaT34g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C819FF83ED0;
-        Wed, 25 Jan 2023 17:30:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1674667837;
+        bh=doO5B7lVAEUM4IZ60baaHsFh7f5V2tq0ZYza3D65Lpk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kWE3AN6tbPb7c+n/nTbhk/PlOIyEndZGB9vYOts3hGoTV30wQj49MvudqcM0qok1o
+         OIN2uNK/dviBas0fvUe4sZ3ht1bl5WqpUAsyd+CPHwzlK0Shtd2wNcDtGGWqdL+wJR
+         8GmWTQ37JmHQCshCjNSsWAizxu/EjsfcYgtcoyHVvf5u9lyHcybuIivTCzycjLwHoD
+         unNLaXYGGQoOrXL2HYmxrRaw9meyRU6Lq+Hd3wO1FEvGzH9bv/JbWb7I7AL11NDB1i
+         BosqYYqdBt61+xYmMqJhXOo1Nv0cQh0zQ4793mM/UHR7c0KbE4p4jddIhmI3DwU2wx
+         4n4lAMt+EQ0CA==
+Received: by mail-vs1-f45.google.com with SMTP id k4so20477666vsc.4;
+        Wed, 25 Jan 2023 09:30:36 -0800 (PST)
+X-Gm-Message-State: AO0yUKVKKk6Em1rH8OygHClywbRVbj5eiT0683ncFvXLh51/Gd+tYCfZ
+        HDFuwu1EMqZ86iWx/PMGM2idwoJYhtMfgGJ7iw==
+X-Google-Smtp-Source: AK7set+1oK/DUMFfhX8xs4Oazj4O0yxp2K04oiLSaHoBwKIZJJpMkvGK98H2tuPZIysvuISWwVghNg0L89SfNiN4fos=
+X-Received: by 2002:a67:fe41:0:b0:3ea:c8c:48a5 with SMTP id
+ m1-20020a67fe41000000b003ea0c8c48a5mr99015vsr.53.1674667835932; Wed, 25 Jan
+ 2023 09:30:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 1/2] tools/resolve_btfids: Install subcmd headers
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167466781681.13690.9875840754457766562.git-patchwork-notify@kernel.org>
-Date:   Wed, 25 Jan 2023 17:30:16 +0000
-References: <20230124064324.672022-1-irogers@google.com>
-In-Reply-To: <20230124064324.672022-1-irogers@google.com>
-To:     Ian Rogers <irogers@google.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, connoro@google.com,
-        nathan@kernel.org, memxor@gmail.com, bpf@vger.kernel.org,
+References: <20230124222023.316089-1-robh@kernel.org> <Y9EyB+OO7MyGy20w@e120937-lin>
+ <20230125141113.kkbowopusikuogx6@bogus>
+In-Reply-To: <20230125141113.kkbowopusikuogx6@bogus>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 25 Jan 2023 11:30:24 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ2DbC88kEb-r=6WxJ=m+v3UO9n6h_HKkQNoAAW6h-hWA@mail.gmail.com>
+Message-ID: <CAL_JsqJ2DbC88kEb-r=6WxJ=m+v3UO9n6h_HKkQNoAAW6h-hWA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: firmware: arm,scmi: Restrict protocol child
+ node properties
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,30 +65,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Wed, Jan 25, 2023 at 8:11 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Wed, Jan 25, 2023 at 01:43:48PM +0000, Cristian Marussi wrote:
+> > so now that the catch-all protocol@ patternProperty is gone in favour
+> > of the 'protocol-node' definition and $refs, does that mean that any
+> > current and future SCMI officially published protocol <N> has to be
+> > added to the above explicit protocol list, even though it does not
+> > have any special additional required property beside reg ?
+> > (like protocol@18 above...)
+> >
+>
+> If there are no consumers, should we just not add and deal with it
+> entirely within the kernel. I know we rely today on presence of node
+> before we initialise, but hey we have exception for system power protocol
+> for other reasons, why not add this one too.
+>
+> In short we shouldn't have to add a node if there are no consumers. It
+> was one of the topic of discussion initially when SCMI binding was added
+> and they exist only for the consumers otherwise we don't need it as
+> everything is discoverable from the interface.
 
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+As you might guess, I agree.
 
-On Mon, 23 Jan 2023 22:43:23 -0800 you wrote:
-> Previously tools/lib/subcmd was added to the include path, switch to
-> installing the headers and then including from that directory. This
-> avoids dependencies on headers internal to tools/lib/subcmd. Add the
-> missing subcmd directory to the affected #include.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> 
-> [...]
+We need to keep 0x18 I suppose, right? I assume it is already in use.
+Are there any others that didn't get documented? We'd need to keep
+them because old kernels would still need them.
 
-Here is the summary with links:
-  - [v4,1/2] tools/resolve_btfids: Install subcmd headers
-    https://git.kernel.org/bpf/bpf-next/c/af03299d8536
-  - [v4,2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-    https://git.kernel.org/bpf/bpf-next/c/13e07691a16f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Rob
