@@ -2,392 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4370E67BAD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50B067BAD6
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 20:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235046AbjAYTYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 14:24:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
+        id S235225AbjAYTYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 14:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235501AbjAYTYC (ORCPT
+        with ESMTP id S235093AbjAYTYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 14:24:02 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149317AA7
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:23:57 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id 144so1133596pfv.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 11:23:57 -0800 (PST)
+        Wed, 25 Jan 2023 14:24:43 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E43683EA;
+        Wed, 25 Jan 2023 11:24:35 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id d9so18824158pll.9;
+        Wed, 25 Jan 2023 11:24:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=MP7GVYmKKI6v0YJdrOAo9N9GtxhCW+S6PSlt/fe9+N8=;
-        b=HIG6H2SZmtAG7aLU8mmcXwc9L+4PbL4sPJKMHDFHCf+0UQUP9BpWe4lQTQ5NtpHqLS
-         6KMzrESdPhO73LK7I8uh7oNC/xIYYSJCgRYAx8so/0UXvPdCokb98wvQmXiDb/XpIRS4
-         ZMyUfku+eMc0txhQiJLT43Hu+rF0hd5EOHtLY=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ujiGpL29kziCWkNZQbKbe7voLq0Mqz36QhUqxaZlsdM=;
+        b=JHuIDbTOkriV+7vCGtCkabHvcDkLESfQRA7thPAEAEF+H4JuF/cNVzNRdXIRsZs7ZH
+         E4CcOLUY2LIWLiNdrPuexD+wmk4hG6NI8Bp3CeJGaqHwOIkTnwN7nWmJsi63lrdRErc2
+         E9UB+XcLSo6SbOCVMscCUjvTLpn7t88KQMn+FQtUALsYFMmogsPFFIXAF/JX6lqRKt7j
+         Mfe4e+z/Q9WedfmQZWXv4MEk+bA/fX7hVrhvUR5AofRgzaG4njUoSBrqHgEtsOq6lz8T
+         7M2rFinedK7XXRPtZ8njOCSyELxH15USKqB/lz68alIq8GBoQSkrkpJe1vRLXZDFUJeN
+         R1Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MP7GVYmKKI6v0YJdrOAo9N9GtxhCW+S6PSlt/fe9+N8=;
-        b=pljbkmTOeSLkJAH7bko3SydnXPnWba5U/fpTem+SrMgRqudJMCU9xbvT/RfPw91+Ur
-         1Uz3SEEcOXmBjb896FShoLnyEjKXg1LfSDfABPIGCF/21MyuKtCIptWn5LJvgs+sk6we
-         xLQXROrzXAsh/FlOs4TAJYBeO9V3QVd/4A9VPIGwUZYrKmwG0FGf/eRXVP6DJioMETYS
-         BP9ydZ1PUqc3d6wd1yMwyw4fJZJEIt3JhkPnvtuPkRun7YdZnOLtoyFh7lLsElt3TBUH
-         B0u3pGP+ZA1FFJ/iZNlNE4A6HZfhespiKP1y7VduuK8aDoJwY9mlJ/2lhStw5OvmphDf
-         ygyw==
-X-Gm-Message-State: AO0yUKUSlTJbDdYiQ0c0XHAJHT47WeIyrMgDVPat42dj7MOICJv3mXK3
-        qtCRPP9Wze0HDFbasbofwSICtlFnnKQw++liTOxNpRNLcuoDEF9N6We5jTXm1nMr6ue1D3nA3o5
-        SgAeL1+4thKtt6szsNmI2Fu6qzpBO8knEVxP2mzFWJ1f5Ly4aS74qHus2CNFthz5bCSr7y1B2Wc
-        L66+haDIPdMuLTNg==
-X-Google-Smtp-Source: AK7set+dNwYSnFAQPza6b+CUsHbyTImqrWPJCZ0Ssjkyh1xPNe4stUZEShWIsTKG3T0ntvBZrUrQgA==
-X-Received: by 2002:a05:6a00:22cc:b0:590:7843:500b with SMTP id f12-20020a056a0022cc00b005907843500bmr664978pfj.7.1674674635692;
-        Wed, 25 Jan 2023 11:23:55 -0800 (PST)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id t18-20020a056a00139200b0058e17922ad0sm3965742pfg.185.2023.01.25.11.23.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 25 Jan 2023 11:23:54 -0800 (PST)
-Subject: Re: [PATCH v2 02/14] dt-bindings: spi: Add bcmbca-hsspi controller
- support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
-        dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
-        jonas.gorski@gmail.com, dan.beygelman@broadcom.com,
-        joel.peshkin@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230124221218.341511-1-william.zhang@broadcom.com>
- <20230124221218.341511-3-william.zhang@broadcom.com>
- <abedd2e8-3c7e-f347-06af-99f2e5a2412b@linaro.org>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <ee4727e1-5705-edb0-c724-2ae4d4d1a8e2@broadcom.com>
-Date:   Wed, 25 Jan 2023 11:23:52 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ujiGpL29kziCWkNZQbKbe7voLq0Mqz36QhUqxaZlsdM=;
+        b=s5w+TdTbUgj/FpFmO38MHS7LNgoz6QZC0WiEVXn0WYGmQ1V6nMqr4eJs+PkRGVYXWa
+         URr99azKqIkXqlnd98egPWgTdyXu53UDYd7bti+8BLxej3XgT3T5aZHmQ0IqFtct/AQc
+         v9/x+J5UfF8f3O0CfqLRpVizYw0Ro4Sh993MGsHUujgZrN5g5z5fkjlEc6P128BrL/EL
+         RWK+W4Ec5YwLCIyCkVoUrSk6apaVQyOoepmKGp/znPOmzQwJ4FlyIAICHfrXeKNW200H
+         UpAqVQhsS6uIFYThRcYrFS2TO9QTfk/5NCd/RCPqPTk6Vvxa/31rKTgaRME+QuP616zd
+         mtIQ==
+X-Gm-Message-State: AFqh2kpjdwcJ8MXyzXDFproDnRoNsw+wk9YeXJEITaIfzrvUGjbmVCJp
+        2hz4Kr6QyS1vhwFYX6E2vuo=
+X-Google-Smtp-Source: AMrXdXs66379RJjn3gx3zcd7OM9OrtJLjL+TLhKUxwLwik3Svcsffp1m6Vw/cD69o5b80o2s7aCBUw==
+X-Received: by 2002:a17:902:b68f:b0:193:30be:d146 with SMTP id c15-20020a170902b68f00b0019330bed146mr31649213pls.63.1674674674428;
+        Wed, 25 Jan 2023 11:24:34 -0800 (PST)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:29ee:2efb:110e:b369])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170903248500b00189a50d2a3esm3972667plw.241.2023.01.25.11.24.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 11:24:33 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        Michael Petlan <mpetlan@redhat.com>
+Subject: [PATCH v2] perf stat: Hide invalid uncore event output for aggr mode
+Date:   Wed, 25 Jan 2023 11:24:31 -0800
+Message-Id: <20230125192431.2929677-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
 MIME-Version: 1.0
-In-Reply-To: <abedd2e8-3c7e-f347-06af-99f2e5a2412b@linaro.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d3b55205f31b9260"
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000d3b55205f31b9260
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+The current display code for perf stat iterates given cpus and build the
+aggr map to collect the event data for the aggregation mode.
 
+But uncore events have their own cpu maps and it won't guarantee that
+it'd match to the aggr map.  For example, per-package uncore events
+would generate a single value for each socket.  When user asks per-core
+aggregation mode, the output would contain 0 values for other cores.
 
+Thus it needs to check the uncore PMU's cpumask and if it matches to the
+current aggregation id.
 
-On 01/24/2023 11:35 PM, Krzysztof Kozlowski wrote:
-> On 24/01/2023 23:12, William Zhang wrote:
->> The new Broadcom Broadband BCMBCA SoCs includes a updated HSSPI
->> controller. Add new compatible strings to differentiate the old and new
->> controller while keeping MIPS based chip with the old compatible. Update
->> property requirements for these two revisions of the controller.  Also
->> add myself and Kursad as the maintainers.
->>
->> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->>
->> ---
->>
->> Changes in v2:
->> - Update new compatible string to follow Broadcom convention <chip
->> specific compatible>, <version of the IP>, <fallback>
->> - Add reg-names min/maxItem constraints to be consistent with reg
->> property
->> - Make interrupts required property
->> - Remove double quote from spi-controller.yaml reference
->> - Remove brcm,use-cs-workaround flag
->> - Update the example with new compatile and interrupts property
->> - Update commit message
->>
->>   .../bindings/spi/brcm,bcm63xx-hsspi.yaml      | 106 +++++++++++++++++-
->>   1 file changed, 101 insertions(+), 5 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->> index d1a0c9adee7a..d39604654c9e 100644
->> --- a/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
->> @@ -4,20 +4,73 @@
->>   $id: http://devicetree.org/schemas/spi/brcm,bcm63xx-hsspi.yaml#
->>   $schema: http://devicetree.org/meta-schemas/core.yaml#
->>   
->> -title: Broadcom BCM6328 High Speed SPI controller
->> +title: Broadcom Broadband SoC High Speed SPI controller
->>   
->>   maintainers:
->> +
-> 
-> This is a friendly reminder during the review process.
-> 
-> It seems my previous comments were not fully addressed. Maybe my
-> feedback got lost between the quotes, maybe you just forgot to apply it.
-> Please go back to the previous discussion and either implement all
-> requested changes or keep discussing them.
-> 
-> Thank you.
-> 
-Yeah I forgot to remove the blank line after maintainers tag.  Also 
-regarding the explanation of dummy cs workaround flag,  we decided to 
-remove it as it is not necessary after discussion internally and with 
-SPI maintainer Mark. Let me know if I missed anything else.
+Before:
+  $ sudo ./perf stat -a --per-core -e power/energy-pkg/ sleep 1
 
->> +  - William Zhang <william.zhang@broadcom.com>
->> +  - Kursad Oney <kursad.oney@broadcom.com>
->>     - Jonas Gorski <jonas.gorski@gmail.com>
->>   
->> -allOf:
->> -  - $ref: spi-controller.yaml#
-> 
-> In your previous patch, put it already in desired place (after
-> "required:"), so you will not have to shuffle it.
-> 
-Will update the previous patch in v3
+   Performance counter stats for 'system wide':
 
->> +description: |
->> +  Broadcom Broadband SoC supports High Speed SPI master controller since the
->> +  early MIPS based chips such as BCM6328 and BCM63268.  This initial rev 1.0
->> +  controller was carried over to recent ARM based chips, such as BCM63138,
->> +  BCM4908 and BCM6858. The old MIPS based chip should continue to use the
->> +  brcm,bcm6328-hsspi compatible string. The recent ARM based chip is required to
->> +  use the brcm,bcmbca-hsspi-v1.0 as part of its compatible string list as
->> +  defined below to match the specific chip along with ip revision info.
->> +
->> +  This rev 1.0 controller has a limitation that can not keep the chip select line
->> +  active between the SPI transfers within the same SPI message. This can
->> +  terminate the transaction to some SPI devices prematurely. The issue can be
->> +  worked around by either the controller's prepend mode or using the dummy chip
->> +  select workaround. Driver automatically picks the suitable mode based on
->> +  transfer type so it is transparent to the user.
->> +
->> +  The newer SoCs such as BCM6756, BCM4912 and BCM6855 include an updated SPI
->> +  controller rev 1.1 that add the capability to allow the driver to control chip
->> +  select explicitly. This solves the issue in the old controller.
->>   
->>   properties:
->>     compatible:
->> -    const: brcm,bcm6328-hsspi
->> +    oneOf:
->> +      - const: brcm,bcm6328-hsspi
->> +      - items:
->> +          - enum:
->> +              - brcm,bcm47622-hsspi
->> +              - brcm,bcm4908-hsspi
->> +              - brcm,bcm63138-hsspi
->> +              - brcm,bcm63146-hsspi
->> +              - brcm,bcm63148-hsspi
->> +              - brcm,bcm63158-hsspi
->> +              - brcm,bcm63178-hsspi
->> +              - brcm,bcm6846-hsspi
->> +              - brcm,bcm6856-hsspi
->> +              - brcm,bcm6858-hsspi
->> +              - brcm,bcm6878-hsspi
->> +          - const: brcm,bcmbca-hsspi-v1.0
->> +          - const: brcm,bcmbca-hsspi
-> 
-> Why do you need "brcm,bcmbca-hsspi"? Nothing binds to it, so it's
-> useless and very generic.
-> 
-This was from Florian's suggestion and Broadcom's convention. See [1] 
-and you are okay with that [2].  I added the rev compatible and you were 
-not objecting it finally if I understand you correctly.
+  S0-D0-C0              1               3.73 Joules power/energy-pkg/
+  S0-D0-C1              0      <not counted> Joules power/energy-pkg/
+  S0-D0-C2              0      <not counted> Joules power/energy-pkg/
+  S0-D0-C3              0      <not counted> Joules power/energy-pkg/
 
->> +      - items:
->> +          - enum:
->> +              - brcm,bcm4912-hsspi
->> +              - brcm,bcm6756-hsspi
->> +              - brcm,bcm6813-hsspi
->> +              - brcm,bcm6855-hsspi
->> +          - const: brcm,bcmbca-hsspi-v1.1
->> +          - const: brcm,bcmbca-hsspi
-> 
-> Same here.
-> 
->>   
->>     reg:
->> -    maxItems: 1
->> +    items:
->> +      - description: main registers
->> +      - description: miscellaneous control registers
->> +    minItems: 1
->> +
->> +  reg-names:
->> +    items:
->> +      - const: hsspi
->> +      - const: spim-ctrl
->> +    minItems: 1
->>   
->>     clocks:
->>       items:
->> @@ -39,10 +92,39 @@ required:
->>     - clock-names
->>     - interrupts
->>   
->> +allOf:
->> +  - $ref: spi-controller.yaml#
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - brcm,bcm6328-hsspi
->> +              - brcm,bcmbca-hsspi-v1.0
->> +    then:
->> +      properties:
->> +        reg:
->> +          minItems: 1
-> 
-> drop minItems
-> 
-Will fix in v3 and the next one as well
+         1.001404046 seconds time elapsed
 
->> +          maxItems: 1
->> +        reg-names:
->> +          minItems: 1
-> 
-> drop minItems
-> 
->> +          maxItems: 1
->> +    else:
->> +      properties:
->> +        reg:
->> +          minItems: 2
->> +          maxItems: 2
->> +        reg-names:
->> +          minItems: 2
->> +          maxItems: 2
->> +      required:
->> +        - reg-names
->> +
->>   unevaluatedProperties: false
->>   
->>   examples:
->>     - |
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>       spi@10001000 {
->>           compatible = "brcm,bcm6328-hsspi";
->>           reg = <0x10001000 0x600>;
->> @@ -53,3 +135,17 @@ examples:
->>           #address-cells = <1>;
->>           #size-cells = <0>;
->>       };
->> +  - |
->> +    spi@ff801000 {
->> +        compatible = "brcm,bcm6756-hsspi", "brcm,bcmbca-hsspi-v1.1",
->> +                     "brcm,bcmbca-hsspi";
->> +        reg = <0xff801000 0x1000>,
->> +              <0xff802610 0x4>;
->> +        reg-names = "hsspi", "spim-ctrl";
->> +        interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
->> +        clocks = <&hsspi>, <&hsspi_pll>;
->> +        clock-names = "hsspi", "pll";
->> +        num-cs = <8>;
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +    };
-> 
-> Drop new example - the difference is only in reg. Or change old example
-> to have only one (newer, more complex).
-> 
-Will replace the old example with this more recent and complex example in v3
+  Some events weren't counted. Try disabling the NMI watchdog:
+  	echo 0 > /proc/sys/kernel/nmi_watchdog
+  	perf stat ...
+  	echo 1 > /proc/sys/kernel/nmi_watchdog
 
-> Best regards,
-> Krzysztof
-> 
+The core 1, 2 and 3 should not be printed because the event is handled
+in a cpu in the core 0 only.  With this change, the output becomes like
+below.
 
-[1] https://www.spinics.net/lists/devicetree/msg565016.html
-[2] https://www.spinics.net/lists/devicetree/msg565197.html
+After:
+  $ sudo ./perf stat -a --per-core -e power/energy-pkg/ sleep 1
 
---000000000000d3b55205f31b9260
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+   Performance counter stats for 'system wide':
 
-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
-YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
-6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
-xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
-VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
-/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
-0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
-urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBxovfj9Ke/nFlstpeYdaIVfiXL6
-9zYE0DrBOgxR5x50MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDEyNTE5MjM1NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBTcetos7FE9xAT3CGyxatNM1EDmEPUJE7/qoNLczIkDTgw
-KM6e64o0cIV0Ai0U3P6qki2KSgJYc3lKF0fG1qV/5kn4SKJdab7rXjfVIrWyQETpvIefdo/qpfky
-p50V5UNLQopE7nyMueuClCWu30VPGEo8fIwOhZRL1x8EEn5DYOOw2cTGQen/29+s/OJ59MMkYVP4
-yjZMZjClPVBW2NAFqY+x1o5Jea914LS7w74+arlt5JLbtKDkRd5C3bnllLP3TmBop3a6V1ks/wrx
-PNnmofdK/YzC9tdlTm9C+vYHuc2RYpA5UVnxUjagqAEgBdn5Jg6jGS6tWoG8UT18F3mO
---000000000000d3b55205f31b9260--
+  S0-D0-C0              1               2.09 Joules power/energy-pkg/
+
+Fixes: b89761351089 ("perf stat: Update event skip condition for system-wide per-thread mode and merged uncore and hybrid events")
+Cc: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Cc: Michael Petlan <mpetlan@redhat.com>
+Tested-by: Ian Rogers <irogers@google.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+* rename to 'should_skip_zero_counter'
+* check pmu->cpus instead
+* add kernel-doc style comments
+* add Ian's Tested-by tag
+
+ tools/perf/util/stat-display.c | 51 ++++++++++++++++++++++++++++++----
+ 1 file changed, 46 insertions(+), 5 deletions(-)
+
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index 8bd8b0142630..1b5cb20efd23 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -787,6 +787,51 @@ static void uniquify_counter(struct perf_stat_config *config, struct evsel *coun
+ 		uniquify_event_name(counter);
+ }
+ 
++/**
++ * should_skip_zero_count() - Check if the event should print 0 values.
++ * @config: The perf stat configuration (including aggregation mode).
++ * @counter: The evsel with its associated cpumap.
++ * @id: The aggregation id that is being queried.
++ *
++ * Due to mismatch between the event cpumap or thread-map and the
++ * aggregation mode, sometimes it'd iterate the counter with the map
++ * which does not contain any values.
++ *
++ * For example, uncore events have dedicated CPUs to manage them,
++ * result for other CPUs should be zero and skipped.
++ *
++ * Return: %true if the value should NOT be printed, %false if the value
++ * needs to be printed like "<not counted>" or "<not supported>".
++ */
++static bool should_skip_zero_counter(struct perf_stat_config *config,
++				     struct evsel *counter,
++				     const struct aggr_cpu_id *id)
++{
++	struct perf_cpu cpu;
++	int idx;
++
++	/*
++	 * Skip value 0 when enabling --per-thread globally,
++	 * otherwise it will have too many 0 output.
++	 */
++	if (config->aggr_mode == AGGR_THREAD && config->system_wide)
++		return true;
++	/*
++	 * Skip value 0 when it's an uncore event and the given aggr id
++	 * does not belong to the PMU cpumask.
++	 */
++	if (!counter->pmu || !counter->pmu->is_uncore)
++		return false;
++
++	perf_cpu_map__for_each_cpu(cpu, idx, counter->pmu->cpus) {
++		struct aggr_cpu_id own_id = config->aggr_get_id(config, cpu);
++
++		if (aggr_cpu_id__equal(id, &own_id))
++			return false;
++	}
++	return true;
++}
++
+ static void print_counter_aggrdata(struct perf_stat_config *config,
+ 				   struct evsel *counter, int s,
+ 				   struct outstate *os)
+@@ -814,11 +859,7 @@ static void print_counter_aggrdata(struct perf_stat_config *config,
+ 	ena = aggr->counts.ena;
+ 	run = aggr->counts.run;
+ 
+-	/*
+-	 * Skip value 0 when enabling --per-thread globally, otherwise it will
+-	 * have too many 0 output.
+-	 */
+-	if (val == 0 && config->aggr_mode == AGGR_THREAD && config->system_wide)
++	if (val == 0 && should_skip_zero_counter(config, counter, &id))
+ 		return;
+ 
+ 	if (!metric_only) {
+-- 
+2.39.1.456.gfc5497dd1b-goog
+
