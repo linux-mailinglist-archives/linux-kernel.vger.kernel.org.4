@@ -2,186 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66DB67A8E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4C967A8FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 03:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234011AbjAYCmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 Jan 2023 21:42:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
+        id S232084AbjAYCsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 Jan 2023 21:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbjAYCmf (ORCPT
+        with ESMTP id S229778AbjAYCsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 Jan 2023 21:42:35 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C390A4FCD3;
-        Tue, 24 Jan 2023 18:42:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674614552; x=1706150552;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=aoe6Ul87ioJcaFSMqx+jW/v9ahqGK2ZJzLvXi1v7vb0=;
-  b=VRsyQkPiLAG0ZUENR9xEgItQ2qusqZI03N8aqOBBR5RLtlf84/Yk+xww
-   cqFByFlCWzhAQ5ipcVXq0GI5OL3BmsuecO7Py02RoxWoRmvOuo9o+Le+p
-   QYOjv1ci9fEDPmv4eT4a9dyl7TcfalOQmHODLgKa6F+kQrXrGrdUt5neZ
-   Y1XBKmTszqmu4iCgX10u5FDrbGr8OX/ypPPxK+JLecyiyL+TIPLHcEtXP
-   enujNEa9Z4PyyR5uQsXQBuDDoDxHp69xyhdwfH46Ahd4dn9UgKstalodG
-   91HwTMXj8MiOi1E8OWNXqW/ZK6HlmnCOig96q3f1C1IewOyBlyqHyOZNz
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="388814358"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208";a="388814358"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 18:42:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="692802732"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208";a="692802732"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga008.jf.intel.com with ESMTP; 24 Jan 2023 18:42:32 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 24 Jan 2023 18:42:31 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 24 Jan 2023 18:42:31 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 24 Jan 2023 18:42:31 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 24 Jan 2023 18:42:31 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KaDBUIj9B78+5jbTLp25vGCQQvApjL5KGuPGiGlg9bV+OWU6uhD+dVvEJariZPGoicIMxJCbN5tkmiNiSXnVSizapIaWZ6PcHkC5HLM8UtGRivNhOp6iUMp+q0wh2qt8rYSjWghdAxsYGRco1Q0u5OgU0dGsUBnJ+/KrpNqlbCOXb/4BZqsxOficVuf25ig8bfDzAlmp3sTYn/EeC59eTsdakBh8Qd5k/1+ifMDHM9kBlFoMVHwKA70YXaNjs4dJvIxRE+8QKHAXj05sKhqTgDASAS/ekd72+5R0zSEFwacxUaSc3va3FSnJI0e8dcItxp/0onafm3WXSyiFJp1F9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aoe6Ul87ioJcaFSMqx+jW/v9ahqGK2ZJzLvXi1v7vb0=;
- b=UhvweuhmprbEW/dRiUsh928ioGNTHhZLJEMbhrgTCPO0o/0d+7xpOgE1R4uVkg5c2RcARQ51Z9LU3f9xGbxiVc98AsqmyPeclgXSRp7psNIJtORNHfHR0ZHAo6f/RHC1V9gBh4uQPrjAOrr2Qld2OIOtVcClJ64DphUlRiyVS8IjSmdlw06SRbZppQsEAqJ+ElTfyC22pQVEJIZu2fwijJ5fKAVQP4DhWHAWiidMuc5YLVJpBxtOuPw93y12iimoG5OM6+/21ylG6LEod7HuXFM9BlobnvtscehwnRWF2Z8QRE6B0XoBYxsKdW0hMwIoeNRsGcn7y1WCqO2BRqBgQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB6373.namprd11.prod.outlook.com (2603:10b6:8:cb::20) by
- SN7PR11MB6970.namprd11.prod.outlook.com (2603:10b6:806:2aa::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
- 2023 02:42:28 +0000
-Received: from DS0PR11MB6373.namprd11.prod.outlook.com
- ([fe80::cf29:418d:2ed1:c1b9]) by DS0PR11MB6373.namprd11.prod.outlook.com
- ([fe80::cf29:418d:2ed1:c1b9%5]) with mapi id 15.20.6002.027; Wed, 25 Jan 2023
- 02:42:28 +0000
-From:   "Wang, Wei W" <wei.w.wang@intel.com>
-To:     "Christopherson,, Sean" <seanjc@google.com>,
-        Michal Luczaj <mhal@rbox.co>
-CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        =?iso-2022-jp?B?GyRCTHhoR0p2GyhC?= <liujingfeng@qianxin.com>
-Subject: RE: [PATCH v1] KVM: destruct kvm_io_device while unregistering it
- from kvm_io_bus
-Thread-Topic: [PATCH v1] KVM: destruct kvm_io_device while unregistering it
- from kvm_io_bus
-Thread-Index: AQHZG4G35lVMEMdAHEKf7mCxBCtF/K6szOiAgAFfNoCAAAkiAIAAXpAw
-Date:   Wed, 25 Jan 2023 02:42:28 +0000
-Message-ID: <DS0PR11MB6373D54320929E2A98123671DCCE9@DS0PR11MB6373.namprd11.prod.outlook.com>
-References: <20221229123302.4083-1-wei.w.wang@intel.com>
- <Y88XYR0L2DyiKnIM@google.com> <85285ccd-7b1a-9a94-5471-8036cb824b28@rbox.co>
- <Y9BFqIK04V6fBMz7@google.com>
-In-Reply-To: <Y9BFqIK04V6fBMz7@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB6373:EE_|SN7PR11MB6970:EE_
-x-ms-office365-filtering-correlation-id: 93c5071a-482f-4bf0-5e25-08dafe7dccad
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HD2JDVGLdQJ7if4jX7c9I3AR2Q55U6VXO6kPi0NGPwtk2hv3Ef4Pf1UFSD5TRBQSHxaJs4hXnrEUuWfK7ApIKQ2ufvSDTBh4Mf+MnfDnV1xSxhcGJVGmEWyf5AcuHcQbRwjLP2no3BxlFPxhfMZINyk/RMA8ghB7K4MBTij5L508JJeUYD8pNa+IT9d5X/qj3EkxjzYaycwoNnuXFoslv+gM02V6bAlKGuV97Z75hU0Zo1+WEWqwLzFmfWh9M6ztGZ7jF8U4VkqH29ea3AwXeWbipxQfjQlC+wF0Shx7LR1TU168mTwnEA+fkMCT8kT4hq5Ag/21bB43XOk8rtTnySV7SnDescNelSYNYzEnarpIjiMo+UYfimtwrLIjgukggU6zxBQuCsfdH3TiRfiqh7c8i1NZij8iyOxW21kdwqYwegl0F8jaf1OWmnwdTJWof2NMUdgBtNTuAfmGWbeO3dcN3FpiTUuTY/hLvkHeZNAsG+zIdLUqZZiH2IrgWmra06Y8grPMmbGm7lYM7p+FIhty4VRS6aFabejU2lHnGt04VD00dY40Ae71euaZVTKHsnUWDRWRsMZnEfWJCmU8uEHAEOpBn7drzMHBFaFgcRYgiWDRzmu4dISGWhTJ7CjiXxrIXhqR89RBE4ajrD2OPOetoBBicEQes0rIXG1RzAkkDBfOFBI2pRMC1Eqw8clc
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB6373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(366004)(396003)(39860400002)(346002)(451199018)(66446008)(66946007)(76116006)(64756008)(4326008)(8676002)(66556008)(110136005)(38070700005)(54906003)(316002)(66476007)(122000001)(82960400001)(38100700002)(55016003)(86362001)(8936002)(52536014)(41300700001)(2906002)(83380400001)(33656002)(4744005)(5660300002)(478600001)(26005)(71200400001)(186003)(9686003)(53546011)(7696005)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?WGd2eG5URUJJYkxiZlpTbnJlODlOUzBDcER1a0lVdVBlT3dmL0VLWlBP?=
- =?iso-2022-jp?B?cWF5M0s0K2ZSVTZWUktkc0treGZlVElVMjRBb1cxT3Ard01UN1NVVWcz?=
- =?iso-2022-jp?B?S09nRm9XTUc2ck1CUE9ZNDI0ajFTUDMzMk5TTzhvZ2RxMUR6T1RIUW55?=
- =?iso-2022-jp?B?MkFSYTZMSTVUcXpQL2l5emV6QUVCRmg2STlVdVE0SnVvZGV5Zi9nVGFV?=
- =?iso-2022-jp?B?eXByT0tsb0NrbXNRd0lERE56SDZaNUQvQVlOSGpFODdXT2FKU21RRElt?=
- =?iso-2022-jp?B?b2FEalplQXV6bFRSQ0Rmem9FOWxMdmpuenN6NDdSOFNIYWdXMzRMZ0gr?=
- =?iso-2022-jp?B?Y0hNQXYzUnp5L1V5amVyK3dZcW92ZjRtMkFReHZabWFZTGxTaWNSMjBI?=
- =?iso-2022-jp?B?VndEU0ZMQmVkSTFGamlPWWo0NWNzSEJlL3hRZEFUK29JMTZzdVFXOFVm?=
- =?iso-2022-jp?B?TlVmbWsrb0FsemtwUW96aG1zWHhhTzV3K2hPdXV6c0tvTXBZM3N1RkFH?=
- =?iso-2022-jp?B?ZHZqYnR0NHl5bjk3cGduSDZCZGtpTXRTMmN3b3o3Qm9nNnV5d2NYYVY5?=
- =?iso-2022-jp?B?Vk1TY3ZKK24zVEdVbFZBK1RDN0JRN3Z0YmY5NEI2bGNoRkZ3ZjNFditC?=
- =?iso-2022-jp?B?UzB5d09iZUpVN1JSNjI4SksxcVQ5SW9lRkcxbVM4Y0U0UzJNakh5Uy9L?=
- =?iso-2022-jp?B?TEdMcTExdENkWlBRdzVJRHVROTkwS05Ycm5qRzNQTlB6b2FEcVZ3ZkIy?=
- =?iso-2022-jp?B?aXB0VlBXb3NDS3E1c00wYVlpRktQN2dpN3NaYzI2WW82akFUdUl5LzUw?=
- =?iso-2022-jp?B?QXJLcVhVWHV2RUFTYjdBR3JZcWFFUlZydVIrQkhKUzZLMnJDd3dRSzRF?=
- =?iso-2022-jp?B?Q25vMFd1MnhOOUhXU0NJb05mZFpKbFZFWjFML01xRW1tbHdxQXFMK1NE?=
- =?iso-2022-jp?B?STZWZDFTREY1TEJ4NmZRS25yT2thQWdXSUUrKzhDZjYzRGJUcGtjV3Zh?=
- =?iso-2022-jp?B?VFFWRVF6bTNSRk5lVEtWdlE1a0RWbHEzKzhtamJQUG5kNm9CYXppVjEy?=
- =?iso-2022-jp?B?cUhpWWxBMjRVcUdpc1k1TW05dnVLdWJFZUh5RlJPWXdGTjRPVEVkaVEy?=
- =?iso-2022-jp?B?NktwWkgrWmZHQjVpUFZ5MjlBc2tLWmtkT1lZZEcrb0VHUGhFVWtMUUhq?=
- =?iso-2022-jp?B?cUNhOW9FL21VbHVrQlc2cStpVjFubXFoM2dNLzdMQmhoZjM4R0hEcTQ3?=
- =?iso-2022-jp?B?b0xLVWlGNnZud0gweXBGd0dDWVRjYldieUNuRGkwangvclVFZEpoWk8v?=
- =?iso-2022-jp?B?Q2hWeU0zc1FvRUsrd3FQYWRhbmphbUFmZnFkbHkvSTJuUUpsVkRUR0xI?=
- =?iso-2022-jp?B?ejArQjhpUU9CQzJZd21qemU1WTZUZWVDZHJtSkQ3RlBab0pUanVINDgy?=
- =?iso-2022-jp?B?eVhZSnBPOVBON0UxMVJRb3FuaXpkUjRXb0VDK2NSUnhENmFtRWphMXEv?=
- =?iso-2022-jp?B?R1B4ckY4TCs1Syt3K0t1S1ZBQmpFcXBHRTVPN2M4NUViYWdvQXkraElF?=
- =?iso-2022-jp?B?RW9rYXlTUVFQUUwwZm5ESDFCRG5PamZYVS9qVnlFakNveXNMTjA2OTRj?=
- =?iso-2022-jp?B?Y2thZkZRcmprZlFuQkRtS0RnMkp0RXhxaDNsd2psaVJFYVVxRnV6bFhi?=
- =?iso-2022-jp?B?OGxyM1p2dWdaZjhHK3REUlN3NDhYN1FEK25BelVxQkt5WXE2Ym1kWk9F?=
- =?iso-2022-jp?B?dFZqN0lrelZGeUZTbkl4T2lZdUVzem9Id0ZGS05YZld0amg1ZGRuTUVS?=
- =?iso-2022-jp?B?U2hQa3pQazg3T3Rib0xlVGxZRVN1SzFEQ04xMXRtR21oUFBCVks2QWlF?=
- =?iso-2022-jp?B?QWtaVklXYjNtdU5VNE40R2lHKzZGdVQyM3A1dDg5VjQzWitIMFNJdHo5?=
- =?iso-2022-jp?B?RC92Qm5PUGdpRXZSM3I5Y0ptbGUwQ0xaQnZSTDFTbXgyZldES3Z0a0xJ?=
- =?iso-2022-jp?B?S0g4bVdjZDMzMDJBUDUzenVaWjlSd25UYVBIaUtvUHlGQ0ZqTHZFSDNX?=
- =?iso-2022-jp?B?aGZ2eXRiNFRvSGVnNXkrRG5BdnlsaEFhTzV4ekxWNkk5bUtmTVZ0Ui9j?=
- =?iso-2022-jp?B?Mk9pa1Fyblo5NXEyTWdsa096V1Y0ZjBFMEVMVnV2dkUrVStxWjR4bTg2?=
- =?iso-2022-jp?B?MENFVm5UV09HSURSWDJQeHdaaE1OWWZ1TmRLb2FOWHhRZzdCYUpwVHJH?=
- =?iso-2022-jp?B?K0NzQXRVSHd4R25iZjdmWFkvWGtVekFtM1R5U0FCUkIwVWFrSkwrZkIy?=
- =?iso-2022-jp?B?MzJLOQ==?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB6373.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93c5071a-482f-4bf0-5e25-08dafe7dccad
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2023 02:42:28.4315
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RnUOyvOg+E1YZtW9TMZYU/e2TcZrkVI6FKrivPTCUY2YtVKNF4phjQ/OERQv8y2kdZVFIkCQe0lPAK4+BdrONQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6970
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 21:48:02 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028F5305D4;
+        Tue, 24 Jan 2023 18:48:01 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P25CfQ000921;
+        Wed, 25 Jan 2023 02:47:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=xcouaf8WF3bKdZYFqAH7FiBbZbwxJAqyIEnMuh21s7o=;
+ b=MEtatucxswP3chHoB1y329bLD8EWnP2qrpsSY9L2eLKmHfpBG0suYquygzZx+nguc5/T
+ jpvM6vQPtqTcf+i50aVhKp40gHf5vd0ViN5OIlN4qWRubPk6pIHBfLfm4NRViT5xlEND
+ w+kvuxKzE+CHik0xUvcjnxWE3RfDiv9dM9f1Ya3bs/yEPjav9GOco4B5dAImmcXDbDFg
+ VTvcmf/JJQbJ+RouxDzMmQ7L1O4D5tLvxlK8BCFe3Ql5X0JyZOejfISINGNG3SNV7cl9
+ 7rwRC7wXO+zHOMeq3rLD3n5XVXnU3TLyZNvsh8nUxJNrJVroyFX0xoAHRi6SiZnZEFkF 8Q== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nacg17ger-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 02:47:48 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30P1Xb6G010736;
+        Wed, 25 Jan 2023 02:47:47 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3n87p75mph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 02:47:47 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30P2lktU11600598
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 Jan 2023 02:47:46 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 176F558058;
+        Wed, 25 Jan 2023 02:47:46 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9333D58056;
+        Wed, 25 Jan 2023 02:47:44 +0000 (GMT)
+Received: from sig-9-77-142-161.ibm.com (unknown [9.77.142.161])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 25 Jan 2023 02:47:44 +0000 (GMT)
+Message-ID: <adbb8d2f438f01f32d9e09b508cde31b3efdc3a4.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 24/24] integrity/powerpc: Support loading keys from
+ pseries secvar
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Russell Currey <ruscur@russell.cc>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, gcwilson@linux.ibm.com,
+        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
+        mpe@ellerman.id.au, gjoyce@linux.ibm.com, sudhakar@linux.ibm.com,
+        bgray@linux.ibm.com, erichte@linux.ibm.com, joel@jms.id.au
+Date:   Tue, 24 Jan 2023 21:47:44 -0500
+In-Reply-To: <71b48934e26a991eaf62c9869a8dfee769e0799d.camel@russell.cc>
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+         <20230120074306.1326298-25-ajd@linux.ibm.com>
+         <57dca1ea3ef66bc0935bdd1dab4536f1151f4004.camel@linux.ibm.com>
+         <71b48934e26a991eaf62c9869a8dfee769e0799d.camel@russell.cc>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: dtJwXYAFt2-I7yskS6p4JbtAx62PVEPv
+X-Proofpoint-GUID: dtJwXYAFt2-I7yskS6p4JbtAx62PVEPv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-24_17,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ clxscore=1015 impostorscore=0 spamscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250019
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, January 25, 2023 4:55 AM, Sean Christopherson wrote:
-> >
-> > I was wondering: would it make sense to simplify from
-> > list_for_each_entry_safe() to list_for_each_entry() in this loop?
->=20
-> Ooh, yeah, that's super confusing, at least to me, because the "safe" par=
-t
-> implies that the loop processes entries after kvm_io_bus_unregister_dev()=
-,
-> i.e. needs to guard against failure same as the coalesced MMIO case.
->=20
-> Wei, want to tack on a patch in v2?
+On Wed, 2023-01-25 at 13:23 +1100, Russell Currey wrote:
+> On Tue, 2023-01-24 at 10:14 -0500, Mimi Zohar wrote:
+> > On Fri, 2023-01-20 at 18:43 +1100, Andrew Donnellan wrote:
+> > > From: Russell Currey <ruscur@russell.cc>
+> > > 
+> > > The secvar object format is only in the device tree under powernv.
+> > > We now have an API call to retrieve it in a generic way, so we
+> > > should
+> > > use that instead of having to handle the DT here.
+> > > 
+> > > Add support for pseries secvar, with the "ibm,plpks-sb-v1" format.
+> > > The object format is expected to be the same, so there shouldn't be
+> > > any
+> > > functional differences between objects retrieved from powernv and
+> > > pseries.
+> > > 
+> > > Signed-off-by: Russell Currey <ruscur@russell.cc>
+> > > Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> > > 
+> > > ---
+> > > 
+> > > v3: New patch
+> > > 
+> > > v4: Pass format buffer size (stefanb, npiggin)
+> > > ---
+> > >  .../integrity/platform_certs/load_powerpc.c     | 17 ++++++++++---
+> > > ----
+> > >  1 file changed, 10 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/security/integrity/platform_certs/load_powerpc.c
+> > > b/security/integrity/platform_certs/load_powerpc.c
+> > > index dee51606d5f4..d4ce91bf3fec 100644
+> > > --- a/security/integrity/platform_certs/load_powerpc.c
+> > > +++ b/security/integrity/platform_certs/load_powerpc.c
+> > > @@ -10,7 +10,6 @@
+> > >  #include <linux/cred.h>
+> > >  #include <linux/err.h>
+> > >  #include <linux/slab.h>
+> > > -#include <linux/of.h>
+> > >  #include <asm/secure_boot.h>
+> > >  #include <asm/secvar.h>
+> > >  #include "keyring_handler.h"
+> > > @@ -59,16 +58,22 @@ static int __init load_powerpc_certs(void)
+> > >         void *db = NULL, *dbx = NULL;
+> > >         u64 dbsize = 0, dbxsize = 0;
+> > >         int rc = 0;
+> > > -       struct device_node *node;
+> > > +       ssize_t len;
+> > > +       char buf[32];
+> > >  
+> > >         if (!secvar_ops)
+> > >                 return -ENODEV;
+> > >  
+> > > -       /* The following only applies for the edk2-compat backend.
+> > > */
+> > > -       node = of_find_compatible_node(NULL, NULL, "ibm,edk2-
+> > > compat-v1");
+> > > -       if (!node)
+> > > +       len = secvar_ops->format(buf, 32);
+> > 
+> > "powerpc/secvar: Handle format string in the consumer"  defines
+> > opal_secvar_format() for the object format "ibm,secvar-backend". 
+> > Here
+> > shouldn't it being returning the format for "ibm,edk2-compat-v1"?
+> > 
+> 
+> They end up with the same value.  The DT structure on powernv looks
+> like this:
+> 
+> /proc/device-tree/ibm,opal/secvar:
+> name             "secvar"
+> compatible       "ibm,secvar-backend"
+> 		 "ibm,edk2-compat-v1"
+> format           "ibm,edk2-compat-v1"
+> max-var-key-len  00000000 00000400
+> phandle          0000805a (32858)
+> max-var-size     00000000 00002000
+> 
+> The existing code is checking for a node compatible with "ibm,edk2-
+> compat-v1", which would match the node above.  opal_secvar_format()
+> checks for a node compatible with "ibm,secvar-backend" (again, matching
+> above) and then returns the contents of the "format" string, which is
+> "ibm,edk2-compat-v1".
+> 
+> Ultimately it's two different ways of doing the same thing, but this
+> way load_powerpc_certs() doesn't have to interact with the device tree.
 
-Yes. I will include it in v2.
+Agreed.  Thank you for the explanation.  To simplify review, I suggest
+either adding this explanation in the patch description or stage the
+change by replacing the existing "ibm,edk2-compat-v1" usage first.
+
+thanks,
+
+Mimi
+
+> 
+> 
+> > Mimi
+> > 
+> > > +       if (len <= 0)
+> > >                 return -ENODEV;
+> > >  
+> > > +       // Check for known secure boot implementations from OPAL or
+> > > PLPKS
+> > > +       if (strcmp("ibm,edk2-compat-v1", buf) && strcmp("ibm,plpks-
+> > > sb-v1", buf)) {
+> > > +               pr_err("Unsupported secvar implementation \"%s\",
+> > > not loading certs\n", buf);
+> > > +               return -ENODEV;
+> > > +       }
+> > > +
+> > >         /*
+> > >          * Get db, and dbx. They might not exist, so it isn't an
+> > > error if we
+> > >          * can't get them.
+> > > @@ -103,8 +108,6 @@ static int __init load_powerpc_certs(void)
+> > >                 kfree(dbx);
+> > >         }
+> > >  
+> > > -       of_node_put(node);
+> > > -
+> > >         return rc;
+> > >  }
+> > >  late_initcall(load_powerpc_certs);
+> > 
+> > 
+> 
+
+
