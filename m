@@ -2,266 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E8D67ABCA
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3292267ABC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 09:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235205AbjAYIct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 03:32:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
+        id S235157AbjAYIb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 03:31:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbjAYIco (ORCPT
+        with ESMTP id S235137AbjAYIbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 03:32:44 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68CA5141F;
-        Wed, 25 Jan 2023 00:32:39 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id d66so19027126vsd.9;
-        Wed, 25 Jan 2023 00:32:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+hMKsP+ymQZlCwigldf1lFK1mABYe2GYiPiGIJK3DBs=;
-        b=oE/n3Qi6A4g9N2N1LnzoRIe9h2F2kgqYSrk+Jov3IFh7XmkHbq2/F3dh7Hjz4fVXNN
-         6f+64vbpBkwWEWV2IcwfJ+12jXnVqMiXTHvFsznTw95bjmt3MPzGBRbNI08O3yvzJCqV
-         dAs03D/wEDeu5fo8Trz+cNsJIhkbSgzkfNd9GCRpYUHo6aHDjbIJBrqA23beJ/oL9VVq
-         1z0Nd+YvvqQDmJZcYJace0ADAusjT9FybyjwVgFQTGGXQf9BjFqs6g9hGDYPDv81F8wJ
-         ug9/5NX2+H0lhilqwievcsXf/OVoVmxaWMNOe3cGMOqaygb6n3xNeZY0ydmfE/TA0e+d
-         vrtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+hMKsP+ymQZlCwigldf1lFK1mABYe2GYiPiGIJK3DBs=;
-        b=UaNMNky9GstpQULtaw9cuj/VAEGtICbxCuE24F8xXGy4xvgvIQJxClKnwOPduUWIIb
-         JrIaRFmWGuj9uFDsB17mIkrrc5bRJ3CsT9+TJxUzQtCAAWRIbIidlBSX7JTbuLFhlZBf
-         49DkLxZIzUKLiylU4EqAvphyjBQ3M99wkFR49WXXZdghS9M1R2f9hkdWuIbzTJR2QRqL
-         YPLPmBPtL6YlJGRy4Jx8Wor6B9bwjHp0bsLR5aMsHGwndj2HOD+2duPn5kPtXPWa82oP
-         Ooz0DqR+7BSk/ta8UXLxFGPgvp6MGJ7GbuH9Jkb80cbjhve6Ft00+6QrrGOLw1XLIYBK
-         VBrw==
-X-Gm-Message-State: AFqh2krgCi4WSdJ872zeDkJckRDXekrqCFCd5p7T8mOTo0tUGpXoZnni
-        9fCbLApf7eb8GDnX8EimWtawV7ozyIVFoo3I+64=
-X-Google-Smtp-Source: AMrXdXsQI53bA8DTq3bUyjAoK6HZesr6skL+PgyXRZ7z/qlC7onDSMOXKg2OsNoYjrd5P9P6nAMjeAGx6nQalEzqB4s=
-X-Received: by 2002:a05:6102:5587:b0:3d1:2167:11ad with SMTP id
- dc7-20020a056102558700b003d1216711admr3922488vsb.2.1674635558641; Wed, 25 Jan
- 2023 00:32:38 -0800 (PST)
+        Wed, 25 Jan 2023 03:31:55 -0500
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on062f.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DF71632B
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 00:31:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qgk/CzBwWEefrgyuiA2OBKWWFYBulgTmzCOVcJVy/oATfKr+OWX9SiG1lmQI037L/R/7P90e5DpTRucNmGMyP5yM5ztuoi7LbaSk0xLvijCRQt4Q6QtCtQGUbkYn6r/vD82DizhLo11PTnPK43A1z5R5097T7RrtrjdIqTgbQsGUUJrC0EIuxMAxh+GRhPD1RfvXqK7VPKxD22uHV9gIhETkt5B7p+mrO/3a5CpnxZOOnMK2ToaaxE9Xhhig+SBBos3ryj+S5+n9eiPY6AZkvjh7powkpb0bOX/qWRidBJwBSA9KXIaKxxpXa+2gCR6FSJLvvi8vZqQ6+vUhEj/nEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YoxCTsVdZFHDRxqGyEYXLG9qHPT2PJVSDWgO1l1hkYE=;
+ b=DqO0AsMREWvpQA7np873Mtipaq4IrRrK9K/0D5dxrZChhuP8L96iXPEgx14vMuUdFGlMsmOdtw00KdhmEUG03XyZfpqgzy9YDXqyU/Qy69+d0WgeIvwjK61BAufi94gntyC6HFLDz7dZNs0ai6AZAOqJIzAqTPdbdzvS3WxZbHmjhXzhof+nJLgUMLBet9pFtEwnmNwzGPjBZTG5ZeHQydwDMg8kdk8NTmF/DRHt00IqZ60C25RCPXO00WQkH6JN3nwKiSycoFDJpJhEC6S0CBJzTEuIfSLwIKKnVRnql0bxup/PQQjiuSbn2/7uvMvzfDjOaobEb2GShyUE6X8Nag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YoxCTsVdZFHDRxqGyEYXLG9qHPT2PJVSDWgO1l1hkYE=;
+ b=MPmLZjUNG2kuHG+nXr4j629KhEmXKpgFVyh2L/DN5TWvcdxGvYl4sCI2BtVfH7orzTFYxWKI0iMFf8Nf0svbiqvh/Kr2sTtmvGM46Hx9Sc8fz1sffCeuMLzZpyp2kjvjDHGGTwN64A2kKMcccuX1ad2QnVCBFTrWYyxOVGMgusI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by PAXPR04MB9301.eurprd04.prod.outlook.com (2603:10a6:102:2b9::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
+ 2023 08:31:33 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::5725:92ec:f43e:f5fc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::5725:92ec:f43e:f5fc%7]) with mapi id 15.20.6002.028; Wed, 25 Jan 2023
+ 08:31:33 +0000
+From:   Liu Ying <victor.liu@nxp.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, geert+renesas@glider.be,
+        linux-imx@nxp.com, Rob Herring <robh@kernel.org>,
+        Lee Jones <lee@kernel.org>
+Subject: [PATCH] driver: bus: simple-pm-bus: Add Freescale i.MX8qm/qxp CSR compatible strings
+Date:   Wed, 25 Jan 2023 16:32:48 +0800
+Message-Id: <20230125083248.1305270-1-victor.liu@nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0235.apcprd06.prod.outlook.com
+ (2603:1096:4:ac::19) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-References: <cover.1674227308.git.alexl@redhat.com> <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
- <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
- <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
- <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com> <20230125041835.GD937597@dread.disaster.area>
-In-Reply-To: <20230125041835.GD937597@dread.disaster.area>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 25 Jan 2023 10:32:26 +0200
-Message-ID: <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Alexander Larsson <alexl@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gscrivan@redhat.com, brauner@kernel.org, viro@zeniv.linux.org.uk,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|PAXPR04MB9301:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec166100-4173-48ca-6ff9-08dafeae90d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: erbkF/zyPRQh2fxVphJakKOXSNIb2u0VZtHZiIPC9XbTdoa4O6+WzoZxOHiLvQqkh+pM1xV0NTIE82zoThqMxC1C7x2o8JgIBrc5Fq0L420d/uKrKKC4Ka4vHV2AAK+9x6TMHtGHMdhoZp/FnXpN/PW95Y+zhCAfoQHKZwm0wauCrJ92l6s+xw75u0Vr6b5HUan9Cp647jrdMTUF31Zbn92I97ijQWiqkaYnYtSBHdXxyZ0qZ0tGYNIwPT0uksryZ0KcxTZSArG5xffdU3XrSus0iwJ2CN4qtbrYaRabnNFfXJMhCHe14te/tAiPX6cWFGnAx8OS5d9m3lzpdbSgL1DMVLwJ8rOHUozDhVuSXUbhUDUBc91FrVhPCjuXIPq6L5LptG5WnxrO3aBqCs1qxNL9Lb+J1mlzF/M9iFYHb9luDk4E22pqKLE4oRVG1+NKFNiFcOHuxMU20bXLUe2p98pyk33vF+3iiaLsv3KVsEUQ216QUkHg3TKtdTA+qVibcu1+YO2Lb5FzvnjLSlWOq1LVAMDplyjVo6Ypq2b0H6K0jOxdT6sZOnOg4kwVaWFAKXZ+baawVDLoFAw+M/9DHFNSd/eMk8In7bUD2Ab51L1f2Q8h3qPWKqSZso4XQMG8xgl5KNCmvzu2rQqDILtbP8RQltnIogt3HjR6NGJe8noBv3oWWig+1MkjMQUEnLU9ZogR6fxi35YKKi1v65K3stT1rlQie7hsW4IYicpyJy8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(136003)(346002)(366004)(396003)(451199018)(38350700002)(38100700002)(83380400001)(54906003)(6916009)(66556008)(2616005)(478600001)(8676002)(186003)(66476007)(6486002)(36756003)(1076003)(66946007)(52116002)(966005)(2906002)(86362001)(41300700001)(26005)(5660300002)(316002)(6506007)(6666004)(6512007)(4326008)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/zn7ByK5GzjH6qYQVbxqmZg1TumVQ/nIqhGQpbSCuosaBiccYKA+7uSUkfBs?=
+ =?us-ascii?Q?mraup0fgtclaGgOL4iLQHNVmgMv1SUbIC32LsDu81ecmhrlrsUKXsfjy08sM?=
+ =?us-ascii?Q?HxmGVq7mU3OfhzCy1RYP1lICZHXAsM8MfZfQ0/vF4ekTZeu2GAQKujJ+/oMm?=
+ =?us-ascii?Q?ETRU7UHTJfTua5e8a/ndww1h1PSfnG0fxXlXld3wX3RrqTvJvgtC6WI5v+u/?=
+ =?us-ascii?Q?EBb2L45OdV5O7HxSDmB4WNSLTivM5YMB+GLYatVpeLnQjAizjvWDYt3XWERB?=
+ =?us-ascii?Q?5t9rDhciAQrKSPp7DBZmsxJ+09brPT3qKfNPzKBBxumyQ8s2LGgI3jgGVxYd?=
+ =?us-ascii?Q?G6Kwc0POqcEWyQeXUhrNNrEDQOKRIXLGITprXoJ3qIHC+JXobRRVgerumtdv?=
+ =?us-ascii?Q?cJqJpeEP+gacj8Mx9lFQ6qsnFblXPenw8MhqP5jmwcshEcg0oFLyzRzgZKJA?=
+ =?us-ascii?Q?4A8p3SHSprfJOg6CPedh8C2oKIdB1Y+ehASHzc3Pgny9Y2MWg16MxuJCqI48?=
+ =?us-ascii?Q?90eMoKVsert/6TYUuHf6GwEFaOFZLBz/hpukrVy+fdfNMcEAnEJqQgeNeuIX?=
+ =?us-ascii?Q?l/tT99/aq/fRuB3b7Ae6TDuTakvBu9sU3SErldt0MBP9ZGhNT+mTp+y3ZDkW?=
+ =?us-ascii?Q?jcgG0V0IX79lq838TFA9EnP0MBebDizd3J1/QBF6DXTz0tL0Wh43+HteUBRS?=
+ =?us-ascii?Q?XH19EE7FXjyExGjnNjFn7azPGhzfz8xDUk5XDRTWbtEoBnhz6Jdj2O1pRE9I?=
+ =?us-ascii?Q?1v3PwlE+hyFS6E7Q128v/gWw1SOTTnoAgmzBNb4t6TmTy+KWmNtCNP09N9QM?=
+ =?us-ascii?Q?eYxNjsmB2/5W1fzdNkz8mNimDTxIDqYbz5f/X+1IS8i3qRVblN1AdcHUjPzD?=
+ =?us-ascii?Q?3H1dIw9F6uRtU0rEMKGAAezdQ0LZCni7l3uMHFVxDRHXc7gu+2bWr4StXwbU?=
+ =?us-ascii?Q?291iv05NkEwM0jjdCVgaayyHoGd2B4Qwf/XVHdnkd9uviIBFXQ3cRIK80aHZ?=
+ =?us-ascii?Q?Gy/Y+OTSmH8AmQMcNXMJUBjfzsyduhzcOv+S/nsOzMc98QditQ6QqbwnCwN3?=
+ =?us-ascii?Q?DCYPH6+E0IoE4dv0c3L4WE5MEQLBdiQWMwWopbWxJBQ1AXh8pVNSLmaApxiH?=
+ =?us-ascii?Q?1ShfsKv0Ti8JbJ8FVeiNldENdGmQWwbkUKwfPqCc4YXeNKysPtVWo370hDwq?=
+ =?us-ascii?Q?tU2JGj3pNIS7omoJZtJz26rCqhUSH5Q3A3sNTZUpAxXo4x42cQFXokW3vOmW?=
+ =?us-ascii?Q?4owAwbOcmRQP1OOYZEataYMCfhb7JpQRri5u88RzoS0OHiBJy9L0aurtsZS5?=
+ =?us-ascii?Q?vXSsNh0SXTt5IUeko87iTQZPtMos0YtuIqCegxnQV7Z8Z+k8kS67B1QYhkC8?=
+ =?us-ascii?Q?4anQJtPV4MhVviaFL8m7WOl5m41WWp11BK65kMuFd0CBhmQ1P35EwYwp62Uh?=
+ =?us-ascii?Q?DlcLSgqgsArUwHjhNWRj26jxRut858IJAyLAFiQSrGLd9WEUEc4JWAmkFtVZ?=
+ =?us-ascii?Q?kP/+bapiHjEJSfm6Qs31eLjA3L7cLEXTygc8N0zjH6fDIDprC6IGxvTQeMzD?=
+ =?us-ascii?Q?FB+OAJzBtUuiqZqYR9WlguLextMB+FBTtpV+rcmO?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec166100-4173-48ca-6ff9-08dafeae90d3
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2023 08:31:33.6542
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nCscIDLc4skoe+epslrrfdy9lNewb4o95cuIOjP1bnCINeTQeF1rWSVJ8jQYdIFbdguTUfBKBAX881IWRZUuKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9301
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        T_SPF_PERMERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 6:18 AM Dave Chinner <david@fromorbit.com> wrote:
->
-> On Tue, Jan 24, 2023 at 09:06:13PM +0200, Amir Goldstein wrote:
-> > On Tue, Jan 24, 2023 at 3:13 PM Alexander Larsson <alexl@redhat.com> wrote:
-> > > On Tue, 2023-01-24 at 05:24 +0200, Amir Goldstein wrote:
-> > > > On Mon, Jan 23, 2023 at 7:56 PM Alexander Larsson <alexl@redhat.com>
-> > > > wrote:
-> > > > > On Fri, 2023-01-20 at 21:44 +0200, Amir Goldstein wrote:
-> > > > > > On Fri, Jan 20, 2023 at 5:30 PM Alexander Larsson
-> > > > > > <alexl@redhat.com>
-> > > > > > wrote:
-> > > I'm not sure why the dentry cache case would be more important?
-> > > Starting a new container will very often not have cached the image.
-> > >
-> > > To me the interesting case is for a new image, but with some existing
-> > > page cache for the backing files directory. That seems to model staring
-> > > a new image in an active container host, but its somewhat hard to test
-> > > that case.
-> > >
-> >
-> > ok, you can argue that faster cold cache ls -lR is important
-> > for starting new images.
-> > I think you will be asked to show a real life container use case where
-> > that benchmark really matters.
->
-> I've already described the real world production system bottlenecks
-> that composefs is designed to overcome in a previous thread.
->
-> Please go back an read this:
->
-> https://lore.kernel.org/linux-fsdevel/20230118002242.GB937597@dread.disaster.area/
->
+Freescale i.MX8qm/qxp CSR module matches with what the simple power
+managed bus driver does, considering it needs an IPG clock to be
+enabled before accessing it's child devices, the child devices need
+to be populated by the CSR module and the child devices' power
+management operations need to be propagated to their parent devices.
+Add the CSR module's compatible strings to simple_pm_bus_of_match[]
+table to support the CSR module.
 
-I've read it and now re-read it.
-Most of the post talks about the excess time of creating the namespace,
-which is addressed by erofs+overlayfs.
+Suggested-by: Rob Herring <robh@kernel.org>
+Suggested-by: Lee Jones <lee@kernel.org>
+Signed-off-by: Liu Ying <victor.liu@nxp.com>
+---
+The CSR module's dt-binding documentation can be found at
+Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.yaml.
 
-I guess you mean this requirement:
-"When you have container instances that might only be needed for a
-few seconds, taking half a minute to set up the container instance
-and then another half a minute to tear it down just isn't viable -
-we need instantiation and teardown times in the order of a second or
-two."
+Suggested by Rob and Lee in this thread:
+https://patchwork.kernel.org/project/linux-arm-kernel/patch/20221017075702.4182846-1-victor.liu@nxp.com/
 
-Forgive for not being part of the containers world, so I have to ask -
-Which real life use case requires instantiation and teardown times in
-the order of a second?
+ drivers/bus/simple-pm-bus.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-What is the order of number of files in the manifest of those ephemeral
-images?
+diff --git a/drivers/bus/simple-pm-bus.c b/drivers/bus/simple-pm-bus.c
+index 7afe1947e1c0..4a7575afe6c6 100644
+--- a/drivers/bus/simple-pm-bus.c
++++ b/drivers/bus/simple-pm-bus.c
+@@ -120,6 +120,8 @@ static const struct of_device_id simple_pm_bus_of_match[] = {
+ 	{ .compatible = "simple-mfd",	.data = ONLY_BUS },
+ 	{ .compatible = "isa",		.data = ONLY_BUS },
+ 	{ .compatible = "arm,amba-bus",	.data = ONLY_BUS },
++	{ .compatible = "fsl,imx8qm-lvds-csr", },
++	{ .compatible = "fsl,imx8qxp-mipi-lvds-csr", },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, simple_pm_bus_of_match);
+-- 
+2.37.1
 
-The benchmark was done on a 2.6GB centos9 image.
-
-My very minimal understanding of containers world, is that
-A large centos9 image would be used quite often on a client so it
-would be deployed as created inodes in disk filesystem
-and the ephemeral images are likely to be small changes
-on top of those large base images.
-
-Furthermore, the ephmeral images would likely be composed
-of cenos9 + several layers, so the situation of single composefs
-image as large as centos9 is highly unlikely.
-
-Am I understanding the workflow correctly?
-
-If I am, then I would rather see benchmarks with images
-that correspond with the real life use case that drives composefs,
-such as small manifests and/or composefs in combination with
-overlayfs as it would be used more often.
-
-> Cold cache performance dominates the runtime of short lived
-> containers as well as high density container hosts being run to
-> their container level memory limits. `ls -lR` is just a
-> microbenchmark that demonstrates how much better composefs cold
-> cache behaviour is than the alternatives being proposed....
->
-> This might also help explain why my initial review comments focussed
-> on getting rid of optional format features, straight lining the
-> processing, changing the format or search algorithms so more
-> sequential cacheline accesses occurred resulting in less memory
-> stalls, etc. i.e. reductions in cold cache lookup overhead will
-> directly translate into faster container workload spin up.
->
-
-I agree that this technology is novel and understand why it results
-in faster cold cache lookup.
-I do not know erofs enough to say if similar techniques could be
-applied to optimize erofs lookup at mkfs.erofs time, but I can guess
-that this optimization was never attempted.
-
-> > > > > This isn't all that strange, as overlayfs does a lot more work for
-> > > > > each lookup, including multiple name lookups as well as several
-> > > > > xattr
-> > > > > lookups, whereas composefs just does a single lookup in a pre-
-> > > > > computed
-> > > >
-> > > > Seriously, "multiple name lookups"?
-> > > > Overlayfs does exactly one lookup for anything but first level
-> > > > subdirs
-> > > > and for sparse files it does the exact same lookup in /objects as
-> > > > composefs.
-> > > > Enough with the hand waving please. Stick to hard facts.
-> > >
-> > > With the discussed layout, in a stat() call on a regular file,
-> > > ovl_lookup() will do lookups on both the sparse file and the backing
-> > > file, whereas cfs_dir_lookup() will just map some page cache pages and
-> > > do a binary search.
-> > >
-> > > Of course if you actually open the file, then cfs_open_file() would do
-> > > the equivalent lookups in /objects. But that is often not what happens,
-> > > for example in "ls -l".
-> > >
-> > > Additionally, these extra lookups will cause extra memory use, as you
-> > > need dentries and inodes for the erofs/squashfs inodes in addition to
-> > > the overlay inodes.
-> >
-> > I see. composefs is really very optimized for ls -lR.
->
-> No, composefs is optimised for minimal namespace and inode
-> resolution overhead. 'ls -lR' does a lot of these operations, and
-> therefore you see the efficiency of the design being directly
-> exposed....
->
-> > Now only need to figure out if real users start a container and do ls -lR
-> > without reading many files is a real life use case.
->
-> I've been using 'ls -lR' and 'find . -ctime 1' to benchmark cold
-> cache directory iteration and inode lookup performance for roughly
-> 20 years. The benchmarks I run *never* read file data, nor is that
-> desired - they are pure directory and inode lookup micro-benchmarks
-> used to analyse VFS and filesystem directory and inode lookup
-> performance.
->
-> I have been presenting such measurements and patches improving
-> performance of these microbnechmarks to the XFS and fsdevel lists
-> over 15 years and I have *never* had to justify that what I'm
-> measuring is a "real world workload" to anyone. Ever.
->
-> Complaining about real world relevancy of the presented benchmark
-> might be considered applying a double standard, wouldn't you agree?
->
-
-I disagree.
-Perhaps my comment was misunderstood.
-
-The cold cache benchmark is certainly relevant for composefs
-comparison and I expect to see it in future submissions.
-
-The point I am trying to drive is this:
-There are two alternatives on the table:
-1. Add fs/composefs
-2. Improve erofs and overlayfs
-
-Functionally, I think we all agree that both alternatives should work.
-
-Option #1 will take much less effort from composefs authors, so it is
-understandable that they would do their best to argue in its favor.
-
-Option #2 is prefered for long term maintenance reasons, which is
-why vfs/erofs/overlayfs developers argue in favor of it.
-
-The only factor that remains that could shift the balance inside
-this gray area are the actual performance numbers.
-
-And back to my point: the not so simple decision between the
-two options, by whoever makes this decision, should be based
-on a real life example of performance improvement and not of
-a microbenchamk.
-
-In my limited experience, a real life example means composefs
-as a layer in overlayfs.
-
-I did not see those numbers and it is clear that they will not be
-as impressive as the bare composefs numbers, so proposing
-composefs needs to include those numbers as well.
-
-Alexander did claim that he has real life use cases for bare readonly
-composefs images, but he did not say what the size of the manifests
-in those images are and he did not say whether these use cases
-also require startup and teardown in orders of seconds.
-
-It looks like the different POV are now well understood by all parties
-and that we are in the process of fine tuning the information that
-needs to be presented for making the best decision based on facts.
-
-This discussion, which was on a collision course at the beginning,
-looks like it is in a converging course - this makes me happy.
-
-Thanks,
-Amir.
