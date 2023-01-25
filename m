@@ -2,147 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E755067AB0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 08:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7BB67AB0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 08:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235105AbjAYHiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 02:38:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
+        id S234100AbjAYHjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 02:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235102AbjAYHiK (ORCPT
+        with ESMTP id S229621AbjAYHjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 02:38:10 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC48635AA;
-        Tue, 24 Jan 2023 23:38:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674632287; x=1706168287;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=td2yaLP75K7hdcR8vRnyCdAYZQaUWatMbukN3aHfTn0=;
-  b=EEMpObBHffWjkMi1GohQFpPW4WpfsfzKK7EaPXFDiurxd7Dp1DPNnQkU
-   fPF53sWlKPIRwvSSX3NIxCC6xB30Y6yRz4l25Dct202jYIng8k6dUWeQC
-   LEaoUCSjDZw0IR83+ZtLgQIYAoRTNwYqkI5HWlH6hqNZgJn7idsv2AjqA
-   XWtB2RkdW854R5xvGUZh/cpBhhxZFuP0aJUbwH5Qgy6pmIsz6BUN9BBwh
-   xZQbcsfeWdn/sPNAvLtoVR0gWo71fU70XQ3zlF9GV9OyNXsxXFzcLh5lG
-   zKAb32oLqlfKZm02D5R+wez1rKxC8rwyuOBIgzG8URQs6ESZNNJx24Ii1
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="310075307"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208";a="310075307"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 23:38:07 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="655719572"
-X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
-   d="scan'208";a="655719572"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.208.193])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 23:38:03 -0800
-Message-ID: <231b238b-d464-464e-01d1-a2d5374a79ea@intel.com>
-Date:   Wed, 25 Jan 2023 09:37:59 +0200
+        Wed, 25 Jan 2023 02:39:31 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C76273C
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 23:39:29 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4P1whb5Xk7z9sZc;
+        Wed, 25 Jan 2023 08:39:27 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id MT6z57Ty28-a; Wed, 25 Jan 2023 08:39:27 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4P1whb4kwSz9sZb;
+        Wed, 25 Jan 2023 08:39:27 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9366E8B76C;
+        Wed, 25 Jan 2023 08:39:27 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id xXLeK9_K2_mb; Wed, 25 Jan 2023 08:39:27 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 71CB98B763;
+        Wed, 25 Jan 2023 08:39:27 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 30P7dH6q2507485
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 08:39:17 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 30P7dHEt2507480;
+        Wed, 25 Jan 2023 08:39:17 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+Subject: [PATCH 1/2] powerpc/64: Set default CPU in Kconfig
+Date:   Wed, 25 Jan 2023 08:38:59 +0100
+Message-Id: <76c11197b058193dcb8e8b26adffba09cfbdab11.1674632329.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH] perf/util: Symbol lookup can fail if multiple segmets
- match stext
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Krister Johansen <kjlx@templeofstupid.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        David Reaver <me@davidreaver.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-References: <20230124223531.GB1962@templeofstupid.com>
- <65cb75e0-4c0b-9384-1f6b-77a0053d8109@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <65cb75e0-4c0b-9384-1f6b-77a0053d8109@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1674632338; l=4553; s=20211009; h=from:subject:message-id; bh=o5ZG3kS7s56YN6S0PENEuRRm8HrUICRj+MzBkRcmHjo=; b=jwAxWm0+nUIWpzOVipi0FuGhCR25nXlZGvS1cK2r0YHp9W2Mh2eKWVIk9m9AQ0XTb3mKz2DW/nU5 0ZsqrPzlBZxlQF8/Y2dinfmNB0ehv9ENSWVFvC9hVoDJJXOEnGl4
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/23 09:29, Adrian Hunter wrote:
+Since 0069f3d14e7a ("powerpc/64e: Tie PPC_BOOK3E_64 to PPC_E500MC"), the
+only possible BOOK3E/64 are E500, so no need of a default CPU over the
+E5500.
 
-Also subject line has spelling mistake, and should identify kcore
-as the issue e.g.
+When the user selects book3e, they must have an e500 compatible
+compiler, and it won't work anymore with the default -mcpu=power64, see
+commit d6b551b8f90c ("powerpc/64e: Fix build failure with GCC 12
+(unrecognized opcode: `wrteei')").
 
-perf symbol: Symbol lookup with kcore can fail if multiple segments match stext
+For book3s/64, replace GENERIC_CPU by POWERPC64_CPU to match the PPC32
+POWERPC_CPU, and set a default mpcu value in Kconfig directly.
 
-> On 25/01/23 00:35, Krister Johansen wrote:
->> This problem was encountered on an arm64 system with a lot of memory.
->> Without kernel debug symbols installed, and with both kcore and kallsyms
->> available, perf managed to get confused and returned "unknown" for all
->> of the kernel symbols that it tried to look up.
->>
->> On this system, stext fell within the vmalloc segment.  The kcore symbol
->> matching code tries to find the first segment that contains stext and
->> uses that to replace the segment generated from just the kallsyms
->> information.  In this case, however, there were two: a very large
->> vmalloc segment, and the text segment.  This caused perf to get confused
->> because multiple overlapping segments were inserted into the RB tree
->> that holds the discovered segments.  However, that alone wasn't
->> sufficient to cause the problem. Even when we could find the segment,
->> the offsets were adjusted in such a way that the newly generated symbols
->> didn't line up with the instruction addresses in the trace.  The most
->> obvious solution would be to consult which segment type is text from
->> kcore, but this information is not exposed to users.
->>
->> Instead, select the smallest matching segment that contains stext
->> instead of the first matching segment.  This allows us to match the text
->> segment instead of vmalloc, if one is contained within the other.
->>
->> Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
->> ---
->>  tools/perf/util/symbol.c | 10 ++++++++--
->>  1 file changed, 8 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
->> index a3a165ae933a..14ac4189eaff 100644
->> --- a/tools/perf/util/symbol.c
->> +++ b/tools/perf/util/symbol.c
->> @@ -1368,10 +1368,16 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
->>  
->>  	/* Find the kernel map using the '_stext' symbol */
->>  	if (!kallsyms__get_function_start(kallsyms_filename, "_stext", &stext)) {
->> +		u64 replacement_size = 0;
-> 
-> We'd usually put a blank line here
-> 
->>  		list_for_each_entry(new_map, &md.maps, node) {
->> -			if (stext >= new_map->start && stext < new_map->end) {
->> +			u64 new_size = new_map->end - new_map->start;
->> +
->> +			if (!(stext >= new_map->start && stext < new_map->end))
->> +				continue;
->> +
-> 
-> Really needs a comment, and please be specific e.g.
-> 
->  ARM64 vmalloc segment overlaps the kernel text segment, so
->  choosing the smaller segment will get the kernel text.
-> 
-> 
-> 
->> +			if (!replacement_map || new_size < replacement_size) {
->>  				replacement_map = new_map;
->> -				break;
->> +				replacement_size = new_size;
->>  			}
->>  		}
->>  	}
-> 
+When a user selects a particular CPU, they must ensure the compiler has
+the requested capability. Therefore, remove hidden fallback, instead
+offer user the possibility to say they want to use the toolchain
+default.
+
+Fixes: d6b551b8f90c ("powerpc/64e: Fix build failure with GCC 12 (unrecognized opcode: `wrteei')")
+Reported-by: Pali Rohár <pali@kernel.org>
+Tested-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/3fd60c2d8a28668a42b766b18362a526ef47e757.1670420281.git.christophe.leroy@csgroup.eu
+---
+ arch/powerpc/Makefile                  | 22 +++++-----------------
+ arch/powerpc/platforms/Kconfig.cputype | 12 +++++++-----
+ 2 files changed, 12 insertions(+), 22 deletions(-)
+
+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+index dc4cbf0a5ca9..bf5f0a998273 100644
+--- a/arch/powerpc/Makefile
++++ b/arch/powerpc/Makefile
+@@ -146,19 +146,6 @@ CFLAGS-$(CONFIG_PPC32)	+= $(call cc-option, $(MULTIPLEWORD))
+ 
+ CFLAGS-$(CONFIG_PPC32)	+= $(call cc-option,-mno-readonly-in-sdata)
+ 
+-ifdef CONFIG_PPC_BOOK3S_64
+-ifdef CONFIG_CPU_LITTLE_ENDIAN
+-CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=power8
+-else
+-CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=power4
+-endif
+-CFLAGS-$(CONFIG_GENERIC_CPU) += $(call cc-option,-mtune=power10,	\
+-				  $(call cc-option,-mtune=power9,	\
+-				  $(call cc-option,-mtune=power8)))
+-else ifdef CONFIG_PPC_BOOK3E_64
+-CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=powerpc64
+-endif
+-
+ ifdef CONFIG_FUNCTION_TRACER
+ CC_FLAGS_FTRACE := -pg
+ ifdef CONFIG_MPROFILE_KERNEL
+@@ -166,11 +153,12 @@ CC_FLAGS_FTRACE += -mprofile-kernel
+ endif
+ endif
+ 
+-CFLAGS-$(CONFIG_TARGET_CPU_BOOL) += $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
+-AFLAGS-$(CONFIG_TARGET_CPU_BOOL) += $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
++CFLAGS-$(CONFIG_TARGET_CPU_BOOL) += -mcpu=$(CONFIG_TARGET_CPU)
++AFLAGS-$(CONFIG_TARGET_CPU_BOOL) += -mcpu=$(CONFIG_TARGET_CPU)
+ 
+-CFLAGS-$(CONFIG_E5500_CPU) += $(call cc-option,-mcpu=e500mc64,-mcpu=powerpc64)
+-CFLAGS-$(CONFIG_E6500_CPU) += $(call cc-option,-mcpu=e6500,$(E5500_CPU))
++CFLAGS-$(CONFIG_POWERPC64_CPU) += $(call cc-option,-mtune=power10,	\
++				  $(call cc-option,-mtune=power9,	\
++				  $(call cc-option,-mtune=power8)))
+ 
+ asinstr := $(call as-instr,lis 9$(comma)foo@high,-DHAVE_AS_ATHIGH=1)
+ 
+diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
+index 9563336e3348..31cea2eeb59e 100644
+--- a/arch/powerpc/platforms/Kconfig.cputype
++++ b/arch/powerpc/platforms/Kconfig.cputype
+@@ -118,19 +118,18 @@ endchoice
+ 
+ choice
+ 	prompt "CPU selection"
+-	default GENERIC_CPU
+ 	help
+ 	  This will create a kernel which is optimised for a particular CPU.
+ 	  The resulting kernel may not run on other CPUs, so use this with care.
+ 
+ 	  If unsure, select Generic.
+ 
+-config GENERIC_CPU
++config POWERPC64_CPU
+ 	bool "Generic (POWER5 and PowerPC 970 and above)"
+ 	depends on PPC_BOOK3S_64 && !CPU_LITTLE_ENDIAN
+ 	select PPC_64S_HASH_MMU
+ 
+-config GENERIC_CPU
++config POWERPC64_CPU
+ 	bool "Generic (POWER8 and above)"
+ 	depends on PPC_BOOK3S_64 && CPU_LITTLE_ENDIAN
+ 	select ARCH_HAS_FAST_MULTIPLIER
+@@ -233,13 +232,12 @@ config E500MC_CPU
+ 
+ config TOOLCHAIN_DEFAULT_CPU
+ 	bool "Rely on the toolchain's implicit default CPU"
+-	depends on PPC32
+ 
+ endchoice
+ 
+ config TARGET_CPU_BOOL
+ 	bool
+-	default !GENERIC_CPU && !TOOLCHAIN_DEFAULT_CPU
++	default !TOOLCHAIN_DEFAULT_CPU
+ 
+ config TARGET_CPU
+ 	string
+@@ -251,6 +249,10 @@ config TARGET_CPU
+ 	default "power8" if POWER8_CPU
+ 	default "power9" if POWER9_CPU
+ 	default "power10" if POWER10_CPU
++	default "e500mc64" if E5500_CPU
++	default "e6500" if E6500_CPU
++	default "power4" if POWERPC64_CPU && !CPU_LITTLE_ENDIAN
++	default "power8" if POWERPC64_CPU && CPU_LITTLE_ENDIAN
+ 	default "405" if 405_CPU
+ 	default "440" if 440_CPU
+ 	default "464" if 464_CPU
+-- 
+2.38.1
 
