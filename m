@@ -2,67 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED63C67BC76
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A62E67BC79
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 21:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236336AbjAYUWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 15:22:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
+        id S236207AbjAYUXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 15:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234138AbjAYUWS (ORCPT
+        with ESMTP id S234138AbjAYUXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:22:18 -0500
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7842F5925D;
-        Wed, 25 Jan 2023 12:22:17 -0800 (PST)
-Received: by mail-oo1-f47.google.com with SMTP id h3-20020a4ac443000000b004fb2954e7c3so3335947ooq.10;
-        Wed, 25 Jan 2023 12:22:17 -0800 (PST)
+        Wed, 25 Jan 2023 15:23:21 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7AD1CAE4;
+        Wed, 25 Jan 2023 12:23:20 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id i185so20979783vsc.6;
+        Wed, 25 Jan 2023 12:23:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FFO2JzP+RgwtR+gLRVfPRorrM96PvpyQ8Xwlt7fNIcI=;
+        b=KBwTxWr+ekQAnUYhgg1lcx55aPnPWaaRyazlKof0Kxku17D2FzAli2P1AsHCbY5teK
+         yNov5DWUGXRbKfVCtk6Lqm6NrIqL33MBDrEAchi/k08kWwijhfdL2Wrxbp5fmaxvk2YL
+         0w7G6ykC19WD3i+eCTUFBmnYxs3t4dxO8UI+vvo5hcubbsLoTPd+d30UyHjtKXdjq9z4
+         cjC7doMH9YDeOLrulKeQ0JjOX3qdgV8wm1+703wLSe70K+mM+YNTIc5uxO1U6ePOzalG
+         7HjVvft4N8kILE88BCPMt3PURuphAqV8LMTEAZHOAIj3A6S0AqKD+YcJbdzL2xd/OdY5
+         Girw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3QV5aYju94H6dkD3L7A3nPcZMzwhL2uI6SZmpxqkGgo=;
-        b=C6KLFuwIPCOembF3+mdJhyQAJETsR4y5ePnDj31LPVbaRx1PRB2TpPTcFQ40dh7mMy
-         3RX2QsVfcW4rqKKRB5H2npES0rTkw1sspp2V0d1MwH+fNAqEQPaOV0Ktg9DlhcCtTqo9
-         T38fjJyVV7YBbRhFlxnOeN3wZM4DYqQfoej92gPKK+ChBbJGsDd1F2YYlZUt5JTBMhGC
-         Xypl3ZwS7rANH/zTmgujj4MX1jfUi/ir89ToyMpB9GaxWQf36tinqG0b3LNJwdF0p4gZ
-         N7SvjIN4d3chmTA4LcBBB1cF964pLhNEIsP3wMT59OWn5eN8EaAv/z4W2cuc2Ij7hqre
-         CUcg==
-X-Gm-Message-State: AFqh2kpb+TckfN4kpcplNT0HtUSLWUhuETEW8qDOBa0A+WIvmX91Qnjw
-        5wtiXDDkqoth3eMZq4DFnQ==
-X-Google-Smtp-Source: AMrXdXv14UQ8CWf0xNn+17CDaLJFAafwyepDkS+ifEDVW5JhBsWhaBfEZyAJnJopDhDR6AXvEOmb2Q==
-X-Received: by 2002:a4a:498d:0:b0:4f2:6b72:6f75 with SMTP id z135-20020a4a498d000000b004f26b726f75mr15582770ooa.7.1674678136672;
-        Wed, 25 Jan 2023 12:22:16 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r141-20020a4a3793000000b0050dc3c2f77asm2201809oor.8.2023.01.25.12.22.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 12:22:16 -0800 (PST)
-Received: (nullmailer pid 2846936 invoked by uid 1000);
-        Wed, 25 Jan 2023 20:22:15 -0000
-Date:   Wed, 25 Jan 2023 14:22:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Etienne Carriere <etienne.carriere@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Pascal Paillet <p.paillet@foss.st.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: arm: optee: add interrupt controller
- properties
-Message-ID: <20230125202215.GA2811928-robh@kernel.org>
-References: <20230124105643.1737250-1-etienne.carriere@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FFO2JzP+RgwtR+gLRVfPRorrM96PvpyQ8Xwlt7fNIcI=;
+        b=Uy4QlxsmRpWs5yVjffYTQIi1WAHXtF2431bIHtgljMjl62aBCXbRVR1fZgk+Ci5FyB
+         RWzwMFCCDrYNDpJnHwxydBu9TRpqyfuoLA7/ZFgu/TA8ctr9zqRbHGOZWz85SCXPddJ1
+         /p/SfsLoJ8P1kL25QaR7FMy1fKJYi3wrMFDkVl8CUfYOTCVg3QMmsBGpn8MruE0VgAln
+         M50FZiDNqFxN38DHjnErs3ImFCyuGcGRvTBmzfm+UEAIOxsq7Xk581dpxrKIu0AKeKre
+         F5uGP5AYYEu8r8Qzt/teo8buuZsAbWKJUXKAR1orkMfFc5wrRKM/PQsO3P158/KNWLZC
+         UwAw==
+X-Gm-Message-State: AFqh2kowkhAW98fE++xNXD9x8TCupf6bw06lE+xpcNx2QI+gzdL8aztN
+        6BWlQM8H/gtRp/yQDc4HXxIGzgPaBPAtTp7j+/w=
+X-Google-Smtp-Source: AMrXdXuWP5BxkV14he0BC9U1KBpyNMbnQtKcZGYmpNnJkn/dmCemHFNFdeFBMzePxk8eAfXXPZa2xZkEowhUBdF6W90=
+X-Received: by 2002:a05:6102:5587:b0:3d1:2167:11ad with SMTP id
+ dc7-20020a056102558700b003d1216711admr4206272vsb.2.1674678199329; Wed, 25 Jan
+ 2023 12:23:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124105643.1737250-1-etienne.carriere@linaro.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <cover.1674227308.git.alexl@redhat.com> <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+ <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
+ <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
+ <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+ <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+ <20230125041835.GD937597@dread.disaster.area> <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
+ <87wn5ac2z6.fsf@redhat.com> <CAOQ4uxiPLHHnr2=XH4gN4bAjizH-=4mbZMe_sx99FKuPo-fDMQ@mail.gmail.com>
+ <87o7qmbxv4.fsf@redhat.com> <CAOQ4uximBLqXDtq9vDhqR__1ctiiOMhMd03HCFUR_Bh_JFE-UQ@mail.gmail.com>
+ <87fsbybvzq.fsf@redhat.com> <CAOQ4uxgos8m72icX+u2_6Gh7eMmctTTt6XZ=BRt3VzeOZH+UuQ@mail.gmail.com>
+ <87wn5a9z4m.fsf@redhat.com>
+In-Reply-To: <87wn5a9z4m.fsf@redhat.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 25 Jan 2023 22:23:08 +0200
+Message-ID: <CAOQ4uxi7GHVkaqxsQV6ninD9fhvMAPk1xFRM2aMRFXQZUV-s3Q@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+To:     Giuseppe Scrivano <gscrivan@redhat.com>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brauner@kernel.org, viro@zeniv.linux.org.uk,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,133 +81,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Sudeep
+On Wed, Jan 25, 2023 at 9:45 PM Giuseppe Scrivano <gscrivan@redhat.com> wrote:
+>
+> Amir Goldstein <amir73il@gmail.com> writes:
+>
+> >> >> I previously mentioned my wish of using it from a user namespace, the
+> >> >> goal seems more challenging with EROFS or any other block devices.  I
+> >> >> don't know about the difficulty of getting overlay metacopy working in a
+> >> >> user namespace, even though it would be helpful for other use cases as
+> >> >> well.
+> >> >>
+> >> >
+> >> > There is no restriction of metacopy in user namespace.
+> >> > overlayfs needs to be mounted with -o userxattr and the overlay
+> >> > xattrs needs to use user.overlay. prefix.
+> >>
+> >> if I specify both userxattr and metacopy=on then the mount ends up in
+> >> the following check:
+> >>
+> >> if (config->userxattr) {
+> >>         [...]
+> >>         if (config->metacopy && metacopy_opt) {
+> >>                 pr_err("conflicting options: userxattr,metacopy=on\n");
+> >>                 return -EINVAL;
+> >>         }
+> >> }
+> >>
+> >
+> > Right, my bad.
+> >
+> >> to me it looks like it was done on purpose to prevent metacopy from a
+> >> user namespace, but I don't know the reason for sure.
+> >>
+> >
+> > With hand crafted metacopy, an unpriv user can chmod
+> > any files to anything by layering another file with different
+> > mode on top of it....
+>
+> I might be missing something obvious about metacopy, so please correct
+> me if I am wrong, but I don't see how it is any different than just
+> copying the file and chowning it.  Of course, as long as overlay uses
+> the same security model so that a file that wasn't originally possible
+> to access must be still blocked, even if referenced through metacopy.
+>
 
-On Tue, Jan 24, 2023 at 11:56:41AM +0100, Etienne Carriere wrote:
-> Adds an optional interrupt controller property to optee firmware node
-> in the DT bindings. Optee driver may embeds an irqchip exposing
-> interrupts notified by the TEE world. Optee registers up to 1 interrupt
-> controller and identifies each line with a line number from 0 to
-> UINT16_MAX.
-> 
-> In the example, the platform SCMI device uses optee interrupt irq 5
-> as async signal to trigger processing of an async incoming SCMI message,
-> in the scope of a CPU DVFS control. A platform can have several SCMI
-> channels driven this way. Optee irqs also permits small embedded devices
-> to share e.g. a gpio expander, a group of wakeup sources, etc... between
-> OP-TEE world (for sensitive services) and Linux world (for non-sensitive
-> services). The physical controller is driven from the TEE which exposes
-> some controls to Linux kernel.
-> 
-> Cc: Jens Wiklander <jens.wiklander@linaro.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Sumit Garg <sumit.garg@linaro.org>
-> 
-> Co-developed-by: Pascal Paillet <p.paillet@foss.st.com>
-> Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
-> Changes since v1:
-> - Added a description to #interrupt-cells property.
-> - Changed of example. Linux wakeup event was subject to discussion and
->   i don't know much about input events in Linux. So move to SCMI.
->   In the example, an SCMI server in OP-TEE world raises optee irq 5
->   so that Linux scmi optee channel &scmi_cpu_dvfs pushed in the incoming
->   SCMI message in the scmi device for liekly later processing in threaded
->   context. The example includes all parties: optee, scmi, sram, gic.
-> - Obviously rephrased the commit message.
-> - Added Cc: tags
-> ---
->  .../arm/firmware/linaro,optee-tz.yaml         | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> index d4dc0749f9fd..9c00c27f8b2c 100644
-> --- a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> +++ b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> @@ -40,6 +40,14 @@ properties:
->        HVC #0, register assignments
->        register assignments are specified in drivers/tee/optee/optee_smc.h
->  
-> +  interrupt-controller: true
-> +
-> +  "#interrupt-cells":
-> +    const: 1
-> +    description: |
-> +      OP-TEE exposes irq for irp chip controllers from OP-TEE world. Each
-> +      irq is assigned a single line number identifier used as first argument.
-> +
->  required:
->    - compatible
->    - method
-> @@ -64,3 +72,62 @@ examples:
->              method = "hvc";
->          };
->      };
-> +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    firmware  {
-> +        optee: optee {
-> +            compatible = "linaro,optee-tz";
-> +            method = "smc";
-> +            interrupts = <GIC_SPI 187 IRQ_TYPE_EDGE_RISING>;
-> +            interrupt-controller;
-> +            #interrupt-cells = <1>;
-> +        };
-> +
-> +        scmi {
-> +            compatible = "linaro,scmi-optee";
-> +            linaro,optee-channel-id = <0>;
-> +            interrupt-parent = <&gic>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            scmi_cpu_dvfs: protocol@13 {
-> +                reg = <0x13>;
-> +                linaro,optee-channel-id = <1>;
-> +                shmem = <&scmi_shm_tx>, <&scmi_shm_rx>;
-> +                interrupts-extended = <&optee 5>;
-> +                interrupt-names = "a2p";
+You're right.
+The reason for mutual exclusion maybe related to the
+comment in ovl_check_metacopy_xattr() about EACCES.
+Need to check with Vivek or Miklos.
 
-These properties aren't documented. Soon there will be a warning[1]. 
+But get this - you do not need metacopy=on to follow lower inode.
+It should work without metacopy=on.
+metacopy=on only instructs overlayfs whether to copy up data
+or only metadata when changing metadata of lower object, so it is
+not relevant for readonly mount.
 
-> +                #clock-cells = <1>;
-> +            };
-> +        };
-> +    };
-> +
-> +    gic: interrupt-controller@a0021000 {
-> +        compatible = "arm,cortex-a7-gic";
-> +        reg = <0xa0021000 0x1000>, <0xa0022000 0x2000>;
-> +        interrupt-controller;
-> +        #interrupt-cells = <3>;
-> +    };
-> +
-> +    soc {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        sram@2ffff000 {
-> +            compatible = "mmio-sram";
-> +            reg = <0x2ffff000 0x1000>;
-> +            #address-cells = <1>;
-> +            #size-cells = <1>;
-> +            ranges = <0 0x2ffff000 0x1000>;
-> +
-> +            scmi_shm_tx: scmi-sram@0 {
-> +                compatible = "arm,scmi-shmem";
-> +                reg = <0 0x80>;
-> +            };
-> +
-> +            scmi_shm_rx: scmi-sram@100 {
-> +                compatible = "arm,scmi-shmem";
-> +                reg = <0x100 0x80>;
-> +            };
-
-There's no need to show providers in examples (unless the example is for 
-the provider).
-
-Rob
+Thanks,
+Amir.
