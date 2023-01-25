@@ -2,145 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3D467AA5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 07:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F1067AA63
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 07:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234448AbjAYGgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 01:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S234641AbjAYGiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 01:38:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234138AbjAYGgH (ORCPT
+        with ESMTP id S233434AbjAYGiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 01:36:07 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3843F2B0;
-        Tue, 24 Jan 2023 22:36:05 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P6SxQR006588;
-        Wed, 25 Jan 2023 06:35:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ueo7qGmLs52stwbaqTQ+/XirgW99VlTZgfpNSgfGkwQ=;
- b=l04yBiwfH4gCN6aOq8yiZqvn9LJCaQKGUcbBsLSYyovw83Tt0JIXpt+3Ll89LwQpRLfW
- pPOJBgJHcubWXJVgUATpOTVFITws6a2nYWc41Ck4yz1NxzpEeBRW24uqyljszVwI9lgr
- oNeRWBiD8q7zqyAbtxd78KRJQgfzEUNAZX9+md4qQT4O8UNkRrN3GP8xvKOQlw2z5iV9
- A9Ig92R+fCLt+X/EPN/AX1eKmMv1K+h0CpD0gJBPFOjCTGvCSEDuj1gtvF8aeqExbEl/
- 0Dzx47/zJpZVHs9D/W/m6b1DIQpPr6WUdS8IuXCmSE76azTFJFFZGpCHfaAYV9HXLmda kQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nar2n8jkj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 06:35:57 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30P6ZuB5028532
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 06:35:56 GMT
-Received: from [10.110.119.13] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
- 2023 22:35:38 -0800
-Message-ID: <89a1721a-d364-6ad9-a817-91ac654fd1cc@quicinc.com>
-Date:   Tue, 24 Jan 2023 22:34:45 -0800
+        Wed, 25 Jan 2023 01:38:22 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0A13B657
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 22:38:21 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id u29so3462850uaa.8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 Jan 2023 22:38:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mNFG5ld86qrefZDsClfqnrcg2ULlQhutlrH8/TF8HwM=;
+        b=Fx9ZF8iaEWd4LCekxoPCNzgQN0oJORPaiJEQtSKm5xC6zf21IeujNO8u3CyuJSCVsg
+         J1bqgzZlsi9AHsJUTZ2xkA1kcIubfOhJJU8yq7kzjDOBcEozQ/iz3/yU4vkQlZltneMx
+         UCJ3/Ost7dVzs1w7pW8tA0d9f2x+PU0BV0zgZkOw0UNQixHgOsy+Z7Uc9EMlTBfHBdNL
+         pOzD/ES9yyJw9GE+y8M4jPHm2n2SmDbE9qiMTJlA+OXRWICqIjp692MK8Csb9vSBvzrF
+         Dr/Ro8wTTB7Xi7vlFwGDOs8gUQ3R6lr8uZCxDsFRKy8IG5j+j5YOvUpyTcVYzYC8ai2z
+         qBnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mNFG5ld86qrefZDsClfqnrcg2ULlQhutlrH8/TF8HwM=;
+        b=CThsdIF8ukVnyVogveNmKAvYuLI/McteXvCJV2tVNTrXErOuKLsJhTBNK4BoDklTQ8
+         8uO7JkYwOMeWgk2KkxdTxfD4cWLCQLykOv8l/z7ZZFdzkGEJRXXdVe7V7Tj30jsqNqjf
+         UebW1gLroGODD7JaKQUYBvmsJJYPGin3WgdgTWafuh8r+x+tfmVoEdvz3bdlXB7P1TeH
+         QTXdHGMrOZGO9LiWsQYKqJrrfhuf05vwavkAtOWnFw2Eiw8Ro8L19nfTZoxp33t6r5v9
+         cWFY3AQMEWT32Simp8i94x2CUXMfC375DjEron/tpI3UqS2p79ThSFouyv/ZKe6r6SV7
+         GJkg==
+X-Gm-Message-State: AFqh2krntxcEpTnV54k0R3IW3YgTavqpJVwkjvM3sKkCEmUuh1EYw9Hi
+        8hPsHLXuR+DXe7sL95EN+9VOlywAsviYQFv0Ph+wTQ==
+X-Google-Smtp-Source: AMrXdXtrpm0DykpuTo8YHoJNv7Aw0k7FU59u9Oacd3hflPVW8jRLF6uHwTZ09IvWmOHGd/nvjKgdz/dnnHLlONgktPA=
+X-Received: by 2002:ab0:3155:0:b0:419:25c5:30dc with SMTP id
+ e21-20020ab03155000000b0041925c530dcmr3745651uam.26.1674628700126; Tue, 24
+ Jan 2023 22:38:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 1/6] rpmsg: glink: Extract tx kick operation
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230109224001.1706516-1-quic_bjorande@quicinc.com>
- <20230109224001.1706516-2-quic_bjorande@quicinc.com>
-From:   Chris Lew <quic_clew@quicinc.com>
-In-Reply-To: <20230109224001.1706516-2-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: CQOjNoN7lj-cl7N5njBwrzAUmN2EvVLw
-X-Proofpoint-GUID: CQOjNoN7lj-cl7N5njBwrzAUmN2EvVLw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-25_02,2023-01-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- mlxscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=999
- spamscore=0 phishscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301250059
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125061927.141538-1-rmoar@google.com>
+In-Reply-To: <20230125061927.141538-1-rmoar@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 25 Jan 2023 14:38:08 +0800
+Message-ID: <CABVgOSkaBJE1FMSquPaZ=5ULFLyfrkMYKixn0YLZZJAtKoNG_g@mail.gmail.com>
+Subject: Re: [PATCH v1] kunit: fix bug in KUNIT_EXPECT_MEMEQ
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000d1cf6a05f310e00c"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--000000000000d1cf6a05f310e00c
+Content-Type: text/plain; charset="UTF-8"
 
-
-On 1/9/2023 2:39 PM, Bjorn Andersson wrote:
-> Refactor out the tx kick operations to its own function, in preparation
-> for pushing the details to the individual transports.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+On Wed, 25 Jan 2023 at 14:19, Rae Moar <rmoar@google.com> wrote:
+>
+> In KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ, add check if one of the
+> inputs is NULL and fail if this is the case.
+>
+> Currently, the kernel crashes if one of the inputs is NULL. Instead,
+> fail the test and add an appropriate error message.
+>
+> This was found by the kernel test robot:
+> https://lore.kernel.org/all/202212191448.D6EDPdOh-lkp@intel.com/
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
 > ---
 
-Reviewed-by: Chris Lew <quic_clew@quicinc.com>
+This looks good to me, modulo a small formatting issue with the
+continuation backslashes (see below).
 
->   drivers/rpmsg/qcom_glink_native.c | 17 +++++++++--------
->   1 file changed, 9 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-> index 115c0a1eddb1..5fd8b70271b7 100644
-> --- a/drivers/rpmsg/qcom_glink_native.c
-> +++ b/drivers/rpmsg/qcom_glink_native.c
-> @@ -303,6 +303,12 @@ static void qcom_glink_tx_write(struct qcom_glink *glink,
->   	glink->tx_pipe->write(glink->tx_pipe, hdr, hlen, data, dlen);
->   }
->   
-> +static void qcom_glink_tx_kick(struct qcom_glink *glink)
-> +{
-> +	mbox_send_message(glink->mbox_chan, NULL);
-> +	mbox_client_txdone(glink->mbox_chan, 0);
-> +}
-> +
->   static void qcom_glink_send_read_notify(struct qcom_glink *glink)
->   {
->   	struct glink_msg msg;
-> @@ -313,8 +319,7 @@ static void qcom_glink_send_read_notify(struct qcom_glink *glink)
->   
->   	qcom_glink_tx_write(glink, &msg, sizeof(msg), NULL, 0);
->   
-> -	mbox_send_message(glink->mbox_chan, NULL);
-> -	mbox_client_txdone(glink->mbox_chan, 0);
-> +	qcom_glink_tx_kick(glink);
->   }
->   
->   static int qcom_glink_tx(struct qcom_glink *glink,
-> @@ -355,9 +360,7 @@ static int qcom_glink_tx(struct qcom_glink *glink,
->   	}
->   
->   	qcom_glink_tx_write(glink, hdr, hlen, data, dlen);
-> -
-> -	mbox_send_message(glink->mbox_chan, NULL);
-> -	mbox_client_txdone(glink->mbox_chan, 0);
-> +	qcom_glink_tx_kick(glink);
->   
->   out:
->   	spin_unlock_irqrestore(&glink->tx_lock, flags);
-> @@ -1046,9 +1049,7 @@ static irqreturn_t qcom_glink_native_intr(int irq, void *data)
->   			break;
->   		case RPM_CMD_READ_NOTIF:
->   			qcom_glink_rx_advance(glink, ALIGN(sizeof(msg), 8));
-> -
-> -			mbox_send_message(glink->mbox_chan, NULL);
-> -			mbox_client_txdone(glink->mbox_chan, 0);
-> +			qcom_glink_tx_kick(glink);
->   			break;
->   		case RPM_CMD_INTENT:
->   			qcom_glink_handle_intent(glink, param1, param2, avail);
+It might be worth considering this as a fix to the patch which first
+introduced the MEMEQ macros with a Fixes tag, e.g.:
+Fixes: b8a926bea8b1 ("kunit: Introduce KUNIT_EXPECT_MEMEQ and
+KUNIT_EXPECT_MEMNEQ macros")
+
+Otherwise, this is:
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  include/kunit/test.h |  7 ++++---
+>  lib/kunit/assert.c   | 40 +++++++++++++++++++++++++---------------
+>  2 files changed, 29 insertions(+), 18 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 87ea90576b50..3c7045e22512 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -683,9 +683,10 @@ do {                                                                              \
+>                 .right_text = #right,                                          \
+>         };                                                                     \
+>                                                                                \
+> -       if (likely(memcmp(__left, __right, __size) op 0))                      \
+> -               break;                                                         \
+> -                                                                              \
+> +       if (likely(__left && __right))                     \
+> +               if (likely(memcmp(__left, __right, __size) op 0))            \
+> +                       break;                                                         \
+> +                                                                                              \
+
+The backslashes no longer line up here.
+
+>         _KUNIT_FAILED(test,                                                    \
+>                       assert_type,                                             \
+>                       kunit_mem_assert,                                        \
+> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+> index f5b50babe38d..05a09652f5a1 100644
+> --- a/lib/kunit/assert.c
+> +++ b/lib/kunit/assert.c
+> @@ -241,24 +241,34 @@ void kunit_mem_assert_format(const struct kunit_assert *assert,
+>         mem_assert = container_of(assert, struct kunit_mem_assert,
+>                                   assert);
+>
+> -       string_stream_add(stream,
+> -                         KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
+> -                         mem_assert->text->left_text,
+> -                         mem_assert->text->operation,
+> -                         mem_assert->text->right_text);
+> +       if (!mem_assert->left_value) {
+> +               string_stream_add(stream,
+> +                                 KUNIT_SUBTEST_INDENT "Expected %s is not null, but is\n",
+> +                                 mem_assert->text->left_text);
+> +       } else if (!mem_assert->right_value) {
+> +               string_stream_add(stream,
+> +                                 KUNIT_SUBTEST_INDENT "Expected %s is not null, but is\n",
+> +                                 mem_assert->text->right_text);
+> +       } else {
+> +               string_stream_add(stream,
+> +                               KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
+> +                               mem_assert->text->left_text,
+> +                               mem_assert->text->operation,
+> +                               mem_assert->text->right_text);
+>
+> -       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
+> -                         mem_assert->text->left_text);
+> -       kunit_assert_hexdump(stream, mem_assert->left_value,
+> -                            mem_assert->right_value, mem_assert->size);
+> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
+> +                               mem_assert->text->left_text);
+> +               kunit_assert_hexdump(stream, mem_assert->left_value,
+> +                                       mem_assert->right_value, mem_assert->size);
+>
+> -       string_stream_add(stream, "\n");
+> +               string_stream_add(stream, "\n");
+>
+> -       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
+> -                         mem_assert->text->right_text);
+> -       kunit_assert_hexdump(stream, mem_assert->right_value,
+> -                            mem_assert->left_value, mem_assert->size);
+> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
+> +                               mem_assert->text->right_text);
+> +               kunit_assert_hexdump(stream, mem_assert->right_value,
+> +                                       mem_assert->left_value, mem_assert->size);
+>
+> -       kunit_assert_print_msg(message, stream);
+> +               kunit_assert_print_msg(message, stream);
+> +       }
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_mem_assert_format);
+>
+> base-commit: 5cb26c298ffde271d9bd1dd1b87ad028218f77fe
+> --
+> 2.39.1.405.gd4c25cc71f-goog
+>
+
+--000000000000d1cf6a05f310e00c
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
+jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
+p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
+2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
++bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
+/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDM
+B0uuZmCMMek4jfUCcJ+a4C2/9PTc8ACqVjASBiv2DjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAxMjUwNjM4MjBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAL8z4NN+CIGf5vv/uBEQJ
+KVIjgltcYo0nnGdyjXd1msDs3S0G0DCBvDfphOQvSnAQd+xl6unCBo6EUEtujDbb5zhpjU/awAbp
+49atZaWjp9URunSTzvoIlXzcklLh+wkmYPq0xwtPGL5FA+HFYazkaqBkQyOBqACSozE0bxVKtfKd
+r9+QsMgNhjMxnqdDx82X2b0VUQpxxUYBeb89gc01lS4+XqlPCY7IV/O87TR1RkZ9ytSeWrHi4EY2
+1oljyVCAtH+NYd0eKd23QwwTnhLw2rWKhxZQHM9KCqQB/K9CiYXaTYsMoDhnTPFDLEqc3hOUyt0Q
++gc86qMvqfqdMAWLEA==
+--000000000000d1cf6a05f310e00c--
