@@ -2,258 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E7267AAA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 07:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A915B67AAAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 08:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234952AbjAYG6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 01:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
+        id S231620AbjAYHFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 02:05:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234920AbjAYG6v (ORCPT
+        with ESMTP id S233135AbjAYHFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 01:58:51 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D8B47403;
-        Tue, 24 Jan 2023 22:58:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=/caBiVGll/6SnclWcFCO9ngnR7ZU07wxLwdfypB6UYE=; b=3SBEaEiZiPSenf6OZy25Ma0Wzh
-        3tYKbH1NuA5bzhunjqOm2SDz21mMlmDlp14sM/OvsHW54cPQ8g8rZ61UvSUbyvItEPs4lDjM51I6M
-        c9aEBVEyfk7HYpJHScrtBJOXYOtf6A+zvzUvjDzAb3125K6Js8XYb/CU2ElRmvfzdZRdkL35ADmun
-        nLQkxjGe952tVNkObt329+FY1dHAsRMnQ95EgAyQxGtP9rhL3VbHogSB4SaiO67qjJRtxuA0EITsb
-        ElUILxlxBVE0sPLt1fsCHeKBcEyd7E5T+OFZrIlezKQ+itggKuJrwrja3v5uvYRD3bBVC7zt2uw5t
-        QmLyBDsg==;
-Received: from [2001:4bb8:19a:27af:97a1:70ca:d917:c407] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKZk7-006CeX-JQ; Wed, 25 Jan 2023 06:58:48 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] fs: build the legacy direct I/O code conditionally
-Date:   Wed, 25 Jan 2023 07:58:39 +0100
-Message-Id: <20230125065839.191256-3-hch@lst.de>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230125065839.191256-1-hch@lst.de>
-References: <20230125065839.191256-1-hch@lst.de>
+        Wed, 25 Jan 2023 02:05:24 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A103D46092;
+        Tue, 24 Jan 2023 23:05:02 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P6OlXq028830;
+        Wed, 25 Jan 2023 07:04:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=kuf3CPpk1ne0jnopE0CpQlsAJhT3rVTGJ4IBpQwqZTI=;
+ b=Rwu1KTo0ayDsx2fUHWbTWrO8QTNfqxdtdu581gRdOdcqeJ7zx1pEvqZHH5qrmN+B5hyT
+ GRdSgtNmaBV2hjerIy28izM2oe4BA3vgnMzLSQYCx0QUq8SrDqvr8j6zJ03JWDEGJuPs
+ z7yBkbtxcv0UO75lyk6/+6puzCpoPohKUv2k71iLAnMgPnzZxJio1tbGSItneieo39vV
+ 64hH0tvxJ1IsC7J9FccCELi+XFHg0OEKXP1oMpVrdZOnKKmg633cLjiMJeutywLmE4qr
+ wrOhf/L7h2UG863YxhTowDNyMeTwP2Gs6/nW+MGj02mTcd21SrIh8n51k8utlz/AHoOd KA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nar2n8kuv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 07:04:59 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30P74wws015670
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 07:04:58 GMT
+Received: from [10.110.119.13] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
+ 2023 23:04:57 -0800
+Message-ID: <1b5887bd-93e3-8653-2771-9cdc0539f534@quicinc.com>
+Date:   Tue, 24 Jan 2023 23:04:56 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 5/6] rpmsg: glink: Fail qcom_glink_tx() once remove has
+ been initiated
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230109224001.1706516-1-quic_bjorande@quicinc.com>
+ <20230109224001.1706516-6-quic_bjorande@quicinc.com>
+From:   Chris Lew <quic_clew@quicinc.com>
+In-Reply-To: <20230109224001.1706516-6-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: kXv61LVy4cQL42N18sk49mJxcKMnku-c
+X-Proofpoint-GUID: kXv61LVy4cQL42N18sk49mJxcKMnku-c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_03,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ mlxscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=873
+ spamscore=0 phishscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301250063
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new LEGACY_DIRECT_IO config symbol that is only selected by the
-file systems that still use the legacy blockdev_direct_IO code, so that
-kernels without support for those file systems don't need to build the
-code.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- fs/Kconfig          | 4 ++++
- fs/Makefile         | 3 ++-
- fs/affs/Kconfig     | 1 +
- fs/exfat/Kconfig    | 1 +
- fs/ext2/Kconfig     | 1 +
- fs/fat/Kconfig      | 1 +
- fs/hfs/Kconfig      | 1 +
- fs/hfsplus/Kconfig  | 1 +
- fs/jfs/Kconfig      | 1 +
- fs/nilfs2/Kconfig   | 1 +
- fs/ntfs3/Kconfig    | 1 +
- fs/ocfs2/Kconfig    | 1 +
- fs/reiserfs/Kconfig | 1 +
- fs/udf/Kconfig      | 1 +
- 14 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/fs/Kconfig b/fs/Kconfig
-index 2685a4d0d35318..e99830c650336a 100644
---- a/fs/Kconfig
-+++ b/fs/Kconfig
-@@ -18,6 +18,10 @@ config VALIDATE_FS_PARSER
- config FS_IOMAP
- 	bool
- 
-+# old blockdev_direct_IO implementation.  Use iomap for new code instead
-+config LEGACY_DIRECT_IO
-+	bool
-+
- if BLOCK
- 
- source "fs/ext2/Kconfig"
-diff --git a/fs/Makefile b/fs/Makefile
-index 4dea17840761a0..606c029e1c9bc3 100644
---- a/fs/Makefile
-+++ b/fs/Makefile
-@@ -19,13 +19,14 @@ obj-y :=	open.o read_write.o file_table.o super.o \
- 		kernel_read_file.o remap_range.o
- 
- ifeq ($(CONFIG_BLOCK),y)
--obj-y +=	buffer.o direct-io.o mpage.o
-+obj-y +=	buffer.o mpage.o
- else
- obj-y +=	no-block.o
- endif
- 
- obj-$(CONFIG_PROC_FS) += proc_namespace.o
- 
-+obj-$(CONFIG_LEGACY_DIRECT_IO)	+= direct-io.o
- obj-y				+= notify/
- obj-$(CONFIG_EPOLL)		+= eventpoll.o
- obj-y				+= anon_inodes.o
-diff --git a/fs/affs/Kconfig b/fs/affs/Kconfig
-index eb9d0ab850cb1d..962b86374e1c15 100644
---- a/fs/affs/Kconfig
-+++ b/fs/affs/Kconfig
-@@ -2,6 +2,7 @@
- config AFFS_FS
- 	tristate "Amiga FFS file system support"
- 	depends on BLOCK
-+	select LEGACY_DIRECT_IO
- 	help
- 	  The Fast File System (FFS) is the common file system used on hard
- 	  disks by Amiga(tm) systems since AmigaOS Version 1.3 (34.20).  Say Y
-diff --git a/fs/exfat/Kconfig b/fs/exfat/Kconfig
-index 5a65071b5ecf10..147edeb044691d 100644
---- a/fs/exfat/Kconfig
-+++ b/fs/exfat/Kconfig
-@@ -3,6 +3,7 @@
- config EXFAT_FS
- 	tristate "exFAT filesystem support"
- 	select NLS
-+	select LEGACY_DIRECT_IO
- 	help
- 	  This allows you to mount devices formatted with the exFAT file system.
- 	  exFAT is typically used on SD-Cards or USB sticks.
-diff --git a/fs/ext2/Kconfig b/fs/ext2/Kconfig
-index 1248ff4ef56254..77393fda99af09 100644
---- a/fs/ext2/Kconfig
-+++ b/fs/ext2/Kconfig
-@@ -2,6 +2,7 @@
- config EXT2_FS
- 	tristate "Second extended fs support"
- 	select FS_IOMAP
-+	select LEGACY_DIRECT_IO
- 	help
- 	  Ext2 is a standard Linux file system for hard disks.
- 
-diff --git a/fs/fat/Kconfig b/fs/fat/Kconfig
-index 238cc55f84c429..afe83b4e717280 100644
---- a/fs/fat/Kconfig
-+++ b/fs/fat/Kconfig
-@@ -2,6 +2,7 @@
- config FAT_FS
- 	tristate
- 	select NLS
-+	select LEGACY_DIRECT_IO
- 	help
- 	  If you want to use one of the FAT-based file systems (the MS-DOS and
- 	  VFAT (Windows 95) file systems), then you must say Y or M here
-diff --git a/fs/hfs/Kconfig b/fs/hfs/Kconfig
-index 129926b5142d8f..d985066006d588 100644
---- a/fs/hfs/Kconfig
-+++ b/fs/hfs/Kconfig
-@@ -3,6 +3,7 @@ config HFS_FS
- 	tristate "Apple Macintosh file system support"
- 	depends on BLOCK
- 	select NLS
-+	select LEGACY_DIRECT_IO
- 	help
- 	  If you say Y here, you will be able to mount Macintosh-formatted
- 	  floppy disks and hard drive partitions with full read-write access.
-diff --git a/fs/hfsplus/Kconfig b/fs/hfsplus/Kconfig
-index 7d4229aecec05b..8034e7827a690b 100644
---- a/fs/hfsplus/Kconfig
-+++ b/fs/hfsplus/Kconfig
-@@ -4,6 +4,7 @@ config HFSPLUS_FS
- 	depends on BLOCK
- 	select NLS
- 	select NLS_UTF8
-+	select LEGACY_DIRECT_IO
- 	help
- 	  If you say Y here, you will be able to mount extended format
- 	  Macintosh-formatted hard drive partitions with full read-write access.
-diff --git a/fs/jfs/Kconfig b/fs/jfs/Kconfig
-index 05cb0e8e4382ee..51e856f0e4b8d6 100644
---- a/fs/jfs/Kconfig
-+++ b/fs/jfs/Kconfig
-@@ -3,6 +3,7 @@ config JFS_FS
- 	tristate "JFS filesystem support"
- 	select NLS
- 	select CRC32
-+	select LEGACY_DIRECT_IO
- 	help
- 	  This is a port of IBM's Journaled Filesystem .  More information is
- 	  available in the file <file:Documentation/admin-guide/jfs.rst>.
-diff --git a/fs/nilfs2/Kconfig b/fs/nilfs2/Kconfig
-index 254d102e79c99b..7d59567465e121 100644
---- a/fs/nilfs2/Kconfig
-+++ b/fs/nilfs2/Kconfig
-@@ -2,6 +2,7 @@
- config NILFS2_FS
- 	tristate "NILFS2 file system support"
- 	select CRC32
-+	select LEGACY_DIRECT_IO
- 	help
- 	  NILFS2 is a log-structured file system (LFS) supporting continuous
- 	  snapshotting.  In addition to versioning capability of the entire
-diff --git a/fs/ntfs3/Kconfig b/fs/ntfs3/Kconfig
-index 6e4cbc48ab8e43..96cc236f7f7bd3 100644
---- a/fs/ntfs3/Kconfig
-+++ b/fs/ntfs3/Kconfig
-@@ -2,6 +2,7 @@
- config NTFS3_FS
- 	tristate "NTFS Read-Write file system support"
- 	select NLS
-+	select LEGACY_DIRECT_IO
- 	help
- 	  Windows OS native file system (NTFS) support up to NTFS version 3.1.
- 
-diff --git a/fs/ocfs2/Kconfig b/fs/ocfs2/Kconfig
-index 5d11380d872417..304d12186ccd38 100644
---- a/fs/ocfs2/Kconfig
-+++ b/fs/ocfs2/Kconfig
-@@ -7,6 +7,7 @@ config OCFS2_FS
- 	select QUOTA
- 	select QUOTA_TREE
- 	select FS_POSIX_ACL
-+	select LEGACY_DIRECT_IO
- 	help
- 	  OCFS2 is a general purpose extent based shared disk cluster file
- 	  system with many similarities to ext3. It supports 64 bit inode
-diff --git a/fs/reiserfs/Kconfig b/fs/reiserfs/Kconfig
-index 33c8b0dd07a2e7..4d22ecfe0fab65 100644
---- a/fs/reiserfs/Kconfig
-+++ b/fs/reiserfs/Kconfig
-@@ -2,6 +2,7 @@
- config REISERFS_FS
- 	tristate "Reiserfs support (deprecated)"
- 	select CRC32
-+	select LEGACY_DIRECT_IO
- 	help
- 	  Reiserfs is deprecated and scheduled to be removed from the kernel
- 	  in 2025. If you are still using it, please migrate to another
-diff --git a/fs/udf/Kconfig b/fs/udf/Kconfig
-index 26e1a49f3ba795..82e8bfa2dfd989 100644
---- a/fs/udf/Kconfig
-+++ b/fs/udf/Kconfig
-@@ -3,6 +3,7 @@ config UDF_FS
- 	tristate "UDF file system support"
- 	select CRC_ITU_T
- 	select NLS
-+	select LEGACY_DIRECT_IO
- 	help
- 	  This is a file system used on some CD-ROMs and DVDs. Since the
- 	  file system is supported by multiple operating systems and is more
--- 
-2.39.0
+On 1/9/2023 2:40 PM, Bjorn Andersson wrote:
+> Upon removing the glink edge communication is at best one-way. This
 
+glink edge, communication
+
+> means that the very common scenario of glink requesting intents will not
+> be possible to serve.
+> 
+> Typically a successful transmission results in the client waiting for a
+> response, with some timeout and a mechanism for aborting that timeout.
+> 
+> Because of this, once the glink edge is defunct once removal is
+> commenced it's better to fail transmissions fast.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+
+Reviewed-by: Chris Lew <quic_clew@quicinc.com>
+
+>   drivers/rpmsg/qcom_glink_native.c | 20 ++++++++++++++++++++
+>   1 file changed, 20 insertions(+)
+> 
+> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+> index db5d946d5901..d81d0729493e 100644
+> --- a/drivers/rpmsg/qcom_glink_native.c
+> +++ b/drivers/rpmsg/qcom_glink_native.c
+> @@ -90,6 +90,7 @@ struct glink_core_rx_intent {
+>    * @intentless:	flag to indicate that there is no intent
+>    * @tx_avail_notify: Waitqueue for pending tx tasks
+>    * @sent_read_notify: flag to check cmd sent or not
+> + * @abort_tx:	flag indicating that all tx attempts should fail
+>    */
+>   struct qcom_glink {
+>   	struct device *dev;
+> @@ -111,6 +112,8 @@ struct qcom_glink {
+>   	bool intentless;
+>   	wait_queue_head_t tx_avail_notify;
+>   	bool sent_read_notify;
+> +
+> +	bool abort_tx;
+>   };
+>   
+>   enum {
+> @@ -326,12 +329,22 @@ static int qcom_glink_tx(struct qcom_glink *glink,
+>   
+>   	spin_lock_irqsave(&glink->tx_lock, flags);
+>   
+> +	if (glink->abort_tx) {
+> +		ret = -EIO;
+> +		goto out;
+> +	}
+> +
+>   	while (qcom_glink_tx_avail(glink) < tlen) {
+>   		if (!wait) {
+>   			ret = -EAGAIN;
+>   			goto out;
+>   		}
+>   
+> +		if (glink->abort_tx) {
+> +			ret = -EIO;
+> +			goto out;
+> +		}
+> +
+>   		if (!glink->sent_read_notify) {
+>   			glink->sent_read_notify = true;
+>   			qcom_glink_send_read_notify(glink);
+> @@ -1763,11 +1776,18 @@ static int qcom_glink_remove_device(struct device *dev, void *data)
+>   void qcom_glink_native_remove(struct qcom_glink *glink)
+>   {
+>   	struct glink_channel *channel;
+> +	unsigned long flags;
+>   	int cid;
+>   	int ret;
+>   
+>   	qcom_glink_cancel_rx_work(glink);
+>   
+> +	/* Fail all attempts at sending messages */
+> +	spin_lock_irqsave(&glink->tx_lock, flags);
+> +	glink->abort_tx = true;
+> +	wake_up_all(&glink->tx_avail_notify);
+> +	spin_unlock_irqrestore(&glink->tx_lock, flags);
+> +
+>   	ret = device_for_each_child(glink->dev, NULL, qcom_glink_remove_device);
+>   	if (ret)
+>   		dev_warn(glink->dev, "Can't remove GLINK devices: %d\n", ret);
