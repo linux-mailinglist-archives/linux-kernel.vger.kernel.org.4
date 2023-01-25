@@ -2,368 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E5967AF68
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76DA67AF69
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 11:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235351AbjAYKNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 05:13:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52658 "EHLO
+        id S234650AbjAYKNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 05:13:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235282AbjAYKNe (ORCPT
+        with ESMTP id S235375AbjAYKNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:13:34 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C48241F1;
-        Wed, 25 Jan 2023 02:13:30 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 82D546E0;
-        Wed, 25 Jan 2023 11:13:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674641606;
-        bh=LnwJ2Up/FLzmG7OYUnL3pp9pHtl+LHPjE32uPckwnEM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Py5pC7HnLduNUqkHQxHZwWUQgsFypd92Ahtj/qzvsoE7zb9vNoMZZ3M0tpSREB2FQ
-         5gF0ZCI/Quztp6YIW4eZA01WNweGiC7887qCazDbP3shwFNKU1TfyqXac/r2y29fxE
-         BNGk6pDhegcEZQIfQNuPHLCFMPGVLob6fSa73Trg=
-Date:   Wed, 25 Jan 2023 12:13:23 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>
-Subject: Re: [PATCH v8 5/7] media: i2c: add DS90UB960 driver
-Message-ID: <Y9EAw+PUwZJFH+NO@pendragon.ideasonboard.com>
-References: <20230120153417.1156207-1-tomi.valkeinen@ideasonboard.com>
- <20230120153417.1156207-6-tomi.valkeinen@ideasonboard.com>
- <Y88EhodG7b+oSvtE@pendragon.ideasonboard.com>
- <beaebec6-4ec5-8041-5f70-a974ae417a78@ideasonboard.com>
- <Y9AjFcsQQZqZBhAb@pendragon.ideasonboard.com>
- <ead8904b-0e17-81e7-98a8-19e4abfdf281@ideasonboard.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ead8904b-0e17-81e7-98a8-19e4abfdf281@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 05:13:46 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C802E0D7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:13:44 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id n8-20020a258d08000000b007facaf67acfso19318662ybl.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 02:13:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nLUsTBHrrP1VhsvDJnzbuN/5sK2viyEG6W8L3lNl6Sk=;
+        b=KDQQgzA6ROA2joiFtYVUURuaQ1Hsp1OMCTQ7RsdBogEMxTx122OSOHHe/2ladw+zv0
+         SzzJeyLfJS/ccz87LZGefevS6O2iblGCSEqXx7UM26cCyX9jP6MN1E2EdjwgKlZcTZMA
+         pHCKWTG2IdJ6tKiyjC+D6ECoCoc/X1D3Gk1HNh0y4NgVmioOfI4OPHknIdtt4aNWRA9p
+         WE5m1qE4qQkzI3s2c762i19eabLJ/P6M9ioPZBWAiGwtTFwddbbROIocPguNqdzo2G94
+         9Ml6Tpb+/4bnQHEZbmzYKHjsjZn+TYqS+pJT7lAh2hCaQdILQSpX9QJIQ58BM9ddCXG8
+         S/MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nLUsTBHrrP1VhsvDJnzbuN/5sK2viyEG6W8L3lNl6Sk=;
+        b=haqY+npTTjDCa51buei/XvPgN+B0LcOpELt5qO0yBjSVsfpdhuc33G9FsFPOdgop3v
+         FTto2kxJSKNeTX7xyjmYDMEsHFj8FymOiv/bWG363go50PiCPKm7feJ5dg7rcvE9WVlm
+         AJuF7eJ/ZMiiB3r+cMyffctG4JpUIVWa+vf8X6zJPHbvBNDxUF7W6QJCH9HI9fglTDW0
+         3cT2z/yEZIjjczQ090Pdh6GyiT0gesqyBYu4Q26LHaKNDSeR8judvRWc+ht1hvBy5uCH
+         ko2g4a8qCJ1yKASW2XWe0G/T1r5zvDFkxNyRgGSaM4WhnGjH/ruupVwkHWN4sXk516vh
+         KYuw==
+X-Gm-Message-State: AO0yUKVn9jNx02789R6MWQgD840LhgIaWUx5BssJWyRhL9TjOOHioM6B
+        GASDCDpxnylbcVPkSwrpnXZRaHf2VKeF2QoS/g==
+X-Google-Smtp-Source: AK7set/G3elPQMLkoX2O/dUa20K7aJ8Wo3NmUnSPSQK1p55cNhluRRsiz2mOPwccHdq2A9RQ1uICefB4yzlsCbc8RA==
+X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:e533:80e6:38fe:22c])
+ (user=peternewman job=sendgmr) by 2002:a25:a28e:0:b0:80b:72cc:ba35 with SMTP
+ id c14-20020a25a28e000000b0080b72ccba35mr481251ybi.330.1674641623977; Wed, 25
+ Jan 2023 02:13:43 -0800 (PST)
+Date:   Wed, 25 Jan 2023 11:13:31 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
+Message-ID: <20230125101334.1069060-1-peternewman@google.com>
+Subject: [PATCH v3 0/3] x86/resctrl: Implement rename to help move containers' tasks
+From:   Peter Newman <peternewman@google.com>
+To:     reinette.chatre@intel.com, fenghua.yu@intel.com
+Cc:     Babu.Moger@amd.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        eranian@google.com, gupasani@google.com, hpa@zytor.com,
+        james.morse@arm.com, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, skodak@google.com, tony.luck@intel.com,
+        tglx@linutronix.de, x86@kernel.org,
+        Peter Newman <peternewman@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
+Hi Reinette, Fenghua,
 
-On Wed, Jan 25, 2023 at 09:39:57AM +0200, Tomi Valkeinen wrote:
-> On 24/01/2023 20:27, Laurent Pinchart wrote:
-> 
-> >>>> +	} else if (ret < 0) {
-> >>>> +		dev_err(dev, "rx%u: failed to read 'ti,cdr-mode': %d\n", nport,
-> >>>
-> >>> If you moved the "ti,cdr-mode" to an argument, printed with %s, the same
-> >>> format string would be used for the other properties below, and should
-> >>> thus be de-duplicated by the compiler.
-> >>
-> >> I'm not quite sure if this is a sensible optimization or not, but I did
-> >> it so that I introduce:
-> >>
-> >> const char *read_err_str = "rx%u: failed to read '%s': %d\n";
-> > 
-> > static
-> > 
-> >> and then use that in the function, which makes the lines much shorter
-> >> and, I think, a bit more readable.
-> > 
-> > If you use the same string literal multiple times, the compiler should
-> > de-duplicate it automatically, so you don't have to create a variable
-> > manually.
-> 
-> Yes, but I think this looked better, as it made the code look less 
-> cluttered, and the point is more obvious. Otherwise, looking at the 
-> code, seeing dev_dbg(dev, "Foo %s\n", "bar"); looks pretty weird.
+This patch series implements the solution Reinette suggested in the
+earlier RFD thread[1] for the problem of moving a container's tasks to a
+different control group on systems that don't provide enough CLOSIDs to
+give every container its own control group.
 
-I find
+This patch series assumes that a MON group's CLOSID can simply be
+changed to that of a new parent CTRL_MON group. This is allowed on Intel
+and AMD, but not MPAM implementations. While we (Google) only foresee
+needing this functionality on Intel and AMD systems, this series should
+hopefully be a good starting point for supporting MPAM.
 
-	dev_dbg(dev, read_err_str, port, "ti,cdr-mode", ret);
+Thanks!
+-Peter
 
-less readable as I then have to look up the read_err_str string to
-understand that line. I also wonder, in that case, if the compiler can
-still warn if the format string doesn't match the argument types.
+Updates:
 
-> >>>> +static void ub960_notify_unbind(struct v4l2_async_notifier *notifier,
-> >>>> +				struct v4l2_subdev *subdev,
-> >>>> +				struct v4l2_async_subdev *asd)
-> >>>> +{
-> >>>> +	struct ub960_rxport *rxport = to_ub960_asd(asd)->rxport;
-> >>>> +
-> >>>> +	rxport->source_sd = NULL;
-> >>>
-> >>> Does this serve any purpose ? If not, I'd drop the unbind handler.
-> >>
-> >> It makes sure we don't access the source subdev after it has been
-> >> unbound. I don't see much harm with this function, but can catch cleanup
-> >> errors.
-> > 
-> > Do you mean we'll crash on a NULL pointer dereference instead of
-> > accessing freed memory if this happens ? I suppose it's marginally
-> > better :-)
-> 
-> Generally speaking I think it's significantly better. Accessing freed 
-> memory might go unnoticed for a long time, and might not cause any 
-> errors or cause randomly some minor errors. Here we might not even be 
-> accessing freed memory, as the source sd is probably still there, so 
-> KASAN wouldn't catch it.
-> 
-> In this particular case it might not matter that much. The source_sd is 
-> only used when starting streaming, so the chances are quite small that 
-> we'd end up there after the unbind.
-> 
-> Still, I think it's a very good practice to NULL the pointers when 
-> they're no longer valid.
+v3: use revised task CLOSID/RMID update IPI sync method from [3]
+v2: reworded change logs based on what I've learned from review comments
+    in another patch series[2]
 
-Fine with me.
+[v1] https://lore.kernel.org/lkml/20221115154515.952783-1-peternewman@google.com/
+[v2] https://lore.kernel.org/lkml/20221129120149.1035444-1-peternewman@google.com/
 
-> >>>> +}
-> > 
-> > [snip]
-> > 
-> >>>> +static int ub960_create_subdev(struct ub960_data *priv)
-> >>>> +{
-> >>>> +	struct device *dev = &priv->client->dev;
-> >>>> +	unsigned int i;
-> >>>> +	int ret;
-> >>>> +
-> >>>> +	v4l2_i2c_subdev_init(&priv->sd, priv->client, &ub960_subdev_ops);
-> >>>
-> >>> A blank line would be nice.
-> >>
-> >> Ok.
-> >>
-> >>>> +	v4l2_ctrl_handler_init(&priv->ctrl_handler, 1);
-> >>>
-> >>> You create two controls.
-> >>
-> >> Yep. Although I dropped TPG, so only one again.
-> >>
-> >>>> +	priv->sd.ctrl_handler = &priv->ctrl_handler;
-> >>>> +
-> >>>> +	v4l2_ctrl_new_std_menu_items(&priv->ctrl_handler, &ub960_ctrl_ops,
-> >>>> +				     V4L2_CID_TEST_PATTERN,
-> >>>> +				     ARRAY_SIZE(ub960_tpg_qmenu) - 1, 0, 0,
-> >>>> +				     ub960_tpg_qmenu);
-> >>>> +
-> >>>> +	v4l2_ctrl_new_int_menu(&priv->ctrl_handler, NULL, V4L2_CID_LINK_FREQ,
-> >>>> +			       ARRAY_SIZE(priv->tx_link_freq) - 1, 0,
-> >>>> +			       priv->tx_link_freq);
-> >>>> +
-> >>>> +	if (priv->ctrl_handler.error) {
-> >>>> +		ret = priv->ctrl_handler.error;
-> >>>> +		goto err_free_ctrl;
-> >>>> +	}
-> >>>> +
-> >>>> +	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-> >>>> +			  V4L2_SUBDEV_FL_HAS_EVENTS | V4L2_SUBDEV_FL_STREAMS;
-> >>>> +	priv->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-> >>>> +	priv->sd.entity.ops = &ub960_entity_ops;
-> >>>> +
-> >>>> +	for (i = 0; i < priv->hw_data->num_rxports + priv->hw_data->num_txports; i++) {
-> >>>> +		priv->pads[i].flags = ub960_pad_is_sink(priv, i) ?
-> >>>> +					      MEDIA_PAD_FL_SINK :
-> >>>> +					      MEDIA_PAD_FL_SOURCE;
-> >>>> +	}
-> >>>> +
-> >>>> +	ret = media_entity_pads_init(&priv->sd.entity,
-> >>>> +				     priv->hw_data->num_rxports +
-> >>>> +					     priv->hw_data->num_txports,
-> >>>
-> >>> :-(
-> >>
-> >> I don't have strong opinion on this, but don't you find it a bit
-> >> confusing if a single argument spans multiple lines but without any indent?
-> >>
-> >> With a quick look, this looks like a call with 4 arguments:
-> >>
-> >> ret = media_entity_pads_init(&priv->sd.entity,
-> >> 			     priv->hw_data->num_rxports +
-> >> 			     priv->hw_data->num_txports,
-> >> 			     priv->pads);
-> > 
-> > I suppose I'm used to it, so it appears more readable to me. It's also
-> > the style used through most of the kernel. There's of course always the
-> > option of storing the result of the computation in a local variable.
-> 
-> I'll be happy to indent like that if someone tells me how to configure 
-> clang-format to do that =). I didn't figure it out.
+[1] https://lore.kernel.org/lkml/7b09fb62-e61a-65b9-a71e-ab725f527ded@intel.com/
+[2] https://lore.kernel.org/lkml/54e50a9b-268f-2020-f54c-d38312489e2f@intel.com/
+[3] https://lore.kernel.org/lkml/20221220161123.432120-1-peternewman@google.com/
 
-Setting ContinuationIndentWidth to 0 "fixes" it, but I suspect it may
-have other side effects.
+Peter Newman (3):
+  x86/resctrl: Factor rdtgroup lock for multi-file ops
+  x86/resctrl: Factor work to update task CLOSID/RMID
+  x86/resctrl: Implement rename op for mon groups
 
-This being said, running clang-format on this file gives me a diffstat
-of 450 insertions(+), 365 deletions(-), so I don't think you can rely on
-it blindly...
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 170 ++++++++++++++++++-------
+ 1 file changed, 126 insertions(+), 44 deletions(-)
 
-> >>>> +				     priv->pads);
-> >>>> +	if (ret)
-> >>>> +		goto err_free_ctrl;
-> >>>> +
-> >>>> +	priv->sd.state_lock = priv->sd.ctrl_handler->lock;
-> >>>> +
-> >>>> +	ret = v4l2_subdev_init_finalize(&priv->sd);
-> >>>> +	if (ret)
-> >>>> +		goto err_entity_cleanup;
-> >>>> +
-> >>>> +	ret = ub960_v4l2_notifier_register(priv);
-> >>>> +	if (ret) {
-> >>>> +		dev_err(dev, "v4l2 subdev notifier register failed: %d\n", ret);
-> >>>> +		goto err_free_state;
-> >>>> +	}
-> >>>> +
-> >>>> +	ret = v4l2_async_register_subdev(&priv->sd);
-> >>>> +	if (ret) {
-> >>>> +		dev_err(dev, "v4l2_async_register_subdev error: %d\n", ret);
-> >>>> +		goto err_unreg_notif;
-> >>>> +	}
-> >>>> +
-> >>>> +	return 0;
-> >>>> +
-> >>>> +err_unreg_notif:
-> >>>> +	ub960_v4l2_notifier_unregister(priv);
-> >>>> +err_free_state:
-> >>>
-> >>> err_subdev_cleanup:
-> >>
-> >> Yep.
-> >>
-> >>>> +	v4l2_subdev_cleanup(&priv->sd);
-> >>>> +err_entity_cleanup:
-> >>>> +	media_entity_cleanup(&priv->sd.entity);
-> >>>> +err_free_ctrl:
-> >>>> +	v4l2_ctrl_handler_free(&priv->ctrl_handler);
-> >>>> +
-> >>>> +	return ret;
-> >>>> +}
-> > 
-> > [snip]
-> > 
-> >>>> +static int ub960_probe(struct i2c_client *client)
-> >>>> +{
-> >>>> +	struct device *dev = &client->dev;
-> >>>> +	struct ub960_data *priv;
-> >>>> +	int ret;
-> >>>> +
-> >>>> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> >>>> +	if (!priv)
-> >>>> +		return -ENOMEM;
-> >>>> +
-> >>>> +	priv->client = client;
-> >>>> +
-> >>>> +	priv->hw_data = device_get_match_data(dev);
-> >>>> +
-> >>>> +	mutex_init(&priv->reg_lock);
-> >>>> +	mutex_init(&priv->atr_alias_table.lock);
-> >>>> +
-> >>>> +	INIT_DELAYED_WORK(&priv->poll_work, ub960_handler_work);
-> >>>> +
-> >>>> +	/*
-> >>>> +	 * Initialize these to invalid values so that the first reg writes will
-> >>>> +	 * configure the target.
-> >>>> +	 */
-> >>>> +	priv->current_indirect_target = 0xff;
-> >>>> +	priv->current_read_rxport = 0xff;
-> >>>> +	priv->current_write_rxport_mask = 0xff;
-> >>>> +	priv->current_read_csiport = 0xff;
-> >>>> +	priv->current_write_csiport_mask = 0xff;
-> >>>> +
-> >>>> +	ret = ub960_get_hw_resources(priv);
-> >>>> +	if (ret)
-> >>>> +		goto err_mutex_destroy;
-> >>>> +
-> >>>> +	ret = ub960_enable_core_hw(priv);
-> >>>> +	if (ret)
-> >>>> +		goto err_mutex_destroy;
-> >>>> +
-> >>>> +	/* release GPIO lock */
-> >>>> +	if (priv->hw_data->is_ub9702)
-> >>>> +		ub960_update_bits(priv, UB960_SR_RESET,
-> >>>> +				  UB960_SR_RESET_GPIO_LOCK_RELEASE,
-> >>>> +				  UB960_SR_RESET_GPIO_LOCK_RELEASE);
-> >>>
-> >>> Could this be moved to ub960_enable_core_hw() ?
-> >>
-> >> Yes.
-> >>
-> >>>> +
-> >>>> +	ret = ub960_parse_dt(priv);
-> >>>> +	if (ret)
-> >>>> +		goto err_disable_core_hw;
-> >>>> +
-> >>>> +	ret = ub960_init_tx_ports(priv);
-> >>>> +	if (ret)
-> >>>> +		goto err_free_ports;
-> >>>> +
-> >>>> +	ret = ub960_rxport_enable_vpocs(priv);
-> >>>> +	if (ret)
-> >>>> +		goto err_free_ports;
-> >>>> +
-> >>>> +	ret = ub960_init_rx_ports(priv);
-> >>>> +	if (ret)
-> >>>> +		goto err_disable_vpocs;
-> >>>> +
-> >>>> +	ub960_reset(priv, false);
-> >>>> +
-> >>>> +	ub960_rxport_wait_locks(priv, GENMASK(3, 0), NULL);
-> >>>> +
-> >>>> +	/*
-> >>>> +	 * Clear any errors caused by switching the RX port settings while
-> >>>> +	 * probing.
-> >>>> +	 */
-> >>>> +	ub960_clear_rx_errors(priv);
-> >>>> +
-> >>>> +	ret = ub960_init_atr(priv);
-> >>>> +	if (ret)
-> >>>> +		goto err_disable_vpocs;
-> >>>> +
-> >>>> +	ret = ub960_rxport_add_serializers(priv);
-> >>>> +	if (ret)
-> >>>> +		goto err_uninit_atr;
-> >>>> +
-> >>>> +	ret = ub960_create_subdev(priv);
-> >>>> +	if (ret)
-> >>>> +		goto err_free_sers;
-> >>>> +
-> >>>> +	if (client->irq)
-> >>>> +		dev_warn(dev, "irq support not implemented, using polling\n");
-> >>>
-> >>> That's not nice :-( Can it be fixed ? I'm OK if you do so on top.
-> >>
-> >> Fixed? You mean implemented? I don't have HW, so I'd rather leave it to
-> >> someone who has.
-> > 
-> > Yes, I meant implemented. The fact that we wake up the system every
-> > 500ms for I2C transfers isn't great, although I suppose in systems that
-> > use FPD-Link, that may not matter that much.
-> 
-> I agree, polling is annoying. But again, when there's a platform that 
-> uses IRQs, I think irq handling can be added (and tested) easily.
 
+base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
 -- 
-Regards,
+2.39.1.405.gd4c25cc71f-goog
 
-Laurent Pinchart
