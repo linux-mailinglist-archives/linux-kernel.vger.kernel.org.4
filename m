@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFD467B8AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D98467B8B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 Jan 2023 18:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236051AbjAYRgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 12:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
+        id S236124AbjAYRga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 12:36:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjAYRgS (ORCPT
+        with ESMTP id S236098AbjAYRg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:36:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B733618B1D;
-        Wed, 25 Jan 2023 09:36:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51F39615A1;
-        Wed, 25 Jan 2023 17:36:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49AAC4339C;
-        Wed, 25 Jan 2023 17:36:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674668176;
-        bh=HIRhQFRsenIpGbfr60wVwlvaqGvdjpK2FqZYpaiCKwo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aJ55On6TL/U9WNEaQakd6jSX0Dc5vKvgiohGPnAkWpdRKG9os8X9C7JhUyAbRwYCT
-         bzYDMjmCKbx8Qt7aqHtSFKGPDZDysodYMWsoOlZWBtoHgfmKuOIyVZpWEX0glWuuQk
-         egxUp1/OwtGlhTPSmAk+YYc2pfJf37HFCBwQjbHPAdI3dWwzasXhEtKnzTN63kq1Ne
-         Ou6srYLqxXeJOQOvMaiqBLdifsuOVMmgJF+S5ZjMEjKP/dqATwDNDtxyxXFf771sOZ
-         0RpBFtzT2IwIvQnjME667DoMJV7kCI2hVIALOz0f09aM9K5OCPnkptFYGUc/qNQCsg
-         Gmbdx/zQX7V5w==
-Received: by mail-lf1-f48.google.com with SMTP id w11so26484403lfu.11;
-        Wed, 25 Jan 2023 09:36:16 -0800 (PST)
-X-Gm-Message-State: AFqh2kp+dgGMDIOXszZ6qNC9UHeUnwen8uKlV2tCVgICmqNMeQ/Y7Fxp
-        kze5jvLzrg4zT1/WIrzcPHGyxs6BXV1VEKKN/qE=
-X-Google-Smtp-Source: AMrXdXvhPt/s3DaLoFekOs0k/EkuWPTCApiwCxC5zZ9oekC5jwXgYcZfDtkaPZzojcQseFAKz4Wb7VdPPjbKlkUBJX0=
-X-Received: by 2002:a05:6512:2115:b0:4cb:1d3e:685b with SMTP id
- q21-20020a056512211500b004cb1d3e685bmr1788108lfr.126.1674668174651; Wed, 25
- Jan 2023 09:36:14 -0800 (PST)
+        Wed, 25 Jan 2023 12:36:28 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD335B597;
+        Wed, 25 Jan 2023 09:36:24 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 874105C00D8;
+        Wed, 25 Jan 2023 12:36:21 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 25 Jan 2023 12:36:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1674668181; x=
+        1674754581; bh=VpaKyOeeNsoB1s68TYe0vuAy9Pw1dIF/erA8n8pEvvE=; b=Y
+        qZcgC2AgtBLb9D1dcphAx3AxU9wKSEkdcFlR/gNp4L1ITi4V8xBdJPPgTxWXZHK7
+        Ops9LuZvrdpueF0NbFtp1B+1PIF0tF6R5FPTsXPwqeSO6g/JqqQo8vNeYlqVLDHV
+        gRBQc96akQ5N+Sa4w9t/EZXcbXwmYOYwdWnqNW0MchhTrhgLL9YB+a/G/TwUOmei
+        Lugq9FI35jkUURre/Qnqv7jAsm64y1uKFkwDU6bOuaGAGlV9A3/ZUQ7wDyP/CAML
+        IgNmVncixYEPJLfatd3xOIFJfRPzxGtLMxcjxlCEhtw3DKlAmxE0VYl0im9Kw2ot
+        KTfTVjlfcfjXTXVYh1s9Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674668181; x=
+        1674754581; bh=VpaKyOeeNsoB1s68TYe0vuAy9Pw1dIF/erA8n8pEvvE=; b=c
+        2nRGqU1DVQrYh+bkKCPX1uGLrkfqY28YU8CFtkwrq/7iFo6eznR4VRZgrBQJuq47
+        TW4W4L9tLmOniudVYBy81Zmptd0nwRo8Z+NkHWKShWBtYLSAUYGRkFjzZr0FXMd4
+        VN6uyKz0JypxeItYePeN32u/7gmDFm5olAcE3enqlgvujJVwUD9VJbW6huinwfGP
+        /YpUI5IWv82xQILJN3xnoW9L68pfrM1VMDo9aM+gurHVmLm/Bi5ZXwyt88/YVhae
+        KMgTX+Vh6CfCjB9oZt2gV6b0LMlyBFhTszEI+680YO+8Epl2zfNOCu6ioGQA+BCe
+        0c23ygxvWHbJdLcMtbgXA==
+X-ME-Sender: <xms:lWjRY4PU9BNhdnZLVqH22Ckv-yKve6IfxbRmrLPkOYr16Fa4aEb21A>
+    <xme:lWjRY-9J5kBvbPRctsp4en3lpDlNi5i6UgOsugOF636GCW4EWiBQ_CyQnGPA9AEXk
+    6LtNz7S7lrhzA>
+X-ME-Received: <xmr:lWjRY_SMLuo8pFPTRCD7BmswoLQUC-F-62Cqy-mI7lhDB-_vrz6sgdDsWMzjb3TFWKI1hsWaGlgWgHYa0_3fXelwjQIdctmecp0smA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvvddguddtgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepifhr
+    vghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnheple
+    ehheduudeugeegjefgheeuudffheevueekgfekueefledtjeetieeutdekkeelnecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrh
+    horghhrdgtohhm
+X-ME-Proxy: <xmx:lWjRYwuoSFbxuuRkK-b6nA4sV6EaIVGQ_DsoH8DuD2_gsSD6olht3w>
+    <xmx:lWjRYwczUbQxtK94G4zKyJmM66da4QAHhwq9_DB4XxGkVjyyyT49eA>
+    <xmx:lWjRY02gxVddiAPl66716QFvmdEgVipbhNyVtzYnWi6eCCiQ0WlCOw>
+    <xmx:lWjRY4RgnBGRwKwj_QMTbaUt5rUCa7rK1ZwRWPm74zkchuomIA7ilw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 Jan 2023 12:36:20 -0500 (EST)
+Date:   Wed, 25 Jan 2023 18:36:17 +0100
+From:   Greg KH <greg@kroah.com>
+To:     =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: add doc to struct usb_composite_dev
+Message-ID: <Y9Fokec99g+c31P2@kroah.com>
+References: <Y86cy1AM4w5ju5A4@kroah.com>
+ <Y9FmWVF+J08V4RbP@jo-einhundert>
 MIME-Version: 1.0
-References: <cover.1674617130.git.jpoimboe@kernel.org> <2f6329ffd9674df6ff57e03edeb2ca54414770ab.1674617130.git.jpoimboe@kernel.org>
- <CAPhsuW40jEiyp0ogsO6oH_frpFCmiioSHrMOKkwGcZ8_6w5dZA@mail.gmail.com> <20230125164609.wvuarciciyoqa3tb@treble>
-In-Reply-To: <20230125164609.wvuarciciyoqa3tb@treble>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 25 Jan 2023 09:36:02 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW45k8Avx=Zfid1pxaeHAbLGgOcxbN_=DQOb8WdPx7fB+Q@mail.gmail.com>
-Message-ID: <CAPhsuW45k8Avx=Zfid1pxaeHAbLGgOcxbN_=DQOb8WdPx7fB+Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] powerpc/module_64: Fix "expected nop" error on module re-patching
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        live-patching@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9FmWVF+J08V4RbP@jo-einhundert>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 8:46 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> On Tue, Jan 24, 2023 at 10:09:56PM -0800, Song Liu wrote:
-> > > @@ -514,9 +515,18 @@ static int restore_r2(const char *name, u32 *instruction, struct module *me)
-> > >         if (!instr_is_relative_link_branch(ppc_inst(*prev_insn)))
-> > >                 return 0;
-> > >
-> > > -       if (*instruction != PPC_RAW_NOP()) {
-> > > +       /*
-> > > +        * For livepatch, the restore r2 instruction might have already been
-> > > +        * written previously, if the referenced symbol is in a previously
-> > > +        * unloaded module which is now being loaded again.  In that case, skip
-> > > +        * the warning and the instruction write.
-> > > +        */
-> > > +       if (insn_val == PPC_INST_LD_TOC)
-> > > +               return 0;
-> >
-> > Do we need "sym->st_shndx == SHN_LIVEPATCH" here?
->
-> My original patch had that check, but I dropped it for simplicity.
->
-> In the non-livepatch case, the condition should never be true, but it
-> doesn't hurt to check it anyway.
+On Wed, Jan 25, 2023 at 06:26:49PM +0100, Jó Ágila Bitsch wrote:
+> Added documentation to the new struct members:
+> * bcd_webusb_version
+> * b_webusb_vendor_code
+> * landing_page
+> * use_webusb
+> to avoid warnings in the build of htmldocs
+> 
+> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
 
-While this is the only place we use PPC_INST_LD_TOC, there is another
-place we use "PPC_RAW_STD(_R2, _R1, R2_STACK_OFFSET)", which
-is identical to PPC_INST_LD_TOC. So I am not quite sure whether this
-happens for non-livepatch.
+What commit id does this fix?
 
-Thanks,
-Song
+And it was reported by Stephen, so can you provide a reported-by tag
+too?
+
+thanks,
+greg k-h
