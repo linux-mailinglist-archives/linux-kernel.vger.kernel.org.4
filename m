@@ -2,109 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D202567CBA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8E867CBAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbjAZNGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:06:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S232929AbjAZNIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:08:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbjAZNGr (ORCPT
+        with ESMTP id S229657AbjAZNIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:06:47 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8E05B96;
-        Thu, 26 Jan 2023 05:06:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674738406; x=1706274406;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kykFXhubpymwzzf6wp/HVD1TT25MTI+pMnPfzf7Ns7M=;
-  b=QKdBx5mxqBQ5iBzRiGY57p/6nMbHxNOXzomSD0NBXTFd59YVV+uIj/eI
-   1eEbhG/Pe0VwxmnJXW3eIcePEZ5C/S/C6wea332I8I+nn/KsIgcDBP3uo
-   yvI/YmZtfyU/UsSbr6Io3g8VK67VZtGIBuvhd6RNQrIk3zNJu9rOdCIrE
-   2U54lSZTeYs7leLJocEeFRrzU0GMk/OZlHV5KYBRhNbSqBHODzWdlzf0k
-   7mcU8QudM49EQwEyu4hJyM+PWW0yBieLeW8fcp27frtHiWvduxPOaIyKr
-   dkss731qFf1LlQgJq+7kBvKjbE2A6xbw4bZ9r+WsDI5QBfOAgieHrcoJ3
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="389143297"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="389143297"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 05:06:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="771129604"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="771129604"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 26 Jan 2023 05:06:33 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pL1xX-00FOp3-0j;
-        Thu, 26 Jan 2023 15:06:31 +0200
-Date:   Thu, 26 Jan 2023 15:06:30 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Luca Ellero <l.ellero@asem.it>
-Cc:     dmitry.torokhov@gmail.com, daniel@zonque.org,
-        m.felsch@pengutronix.de, u.kleine-koenig@pengutronix.de,
-        mkl@pengutronix.de, miquel.raynal@bootlin.com, imre.deak@nokia.com,
-        luca.ellero@brickedbrain.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] Input: ads7846 - fix support for ADS7845
-Message-ID: <Y9J61vTJQI8CzwQB@smile.fi.intel.com>
-References: <20230126105227.47648-1-l.ellero@asem.it>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126105227.47648-1-l.ellero@asem.it>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 26 Jan 2023 08:08:50 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263F55CFDC;
+        Thu, 26 Jan 2023 05:08:48 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 9698B3200925;
+        Thu, 26 Jan 2023 08:08:44 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 26 Jan 2023 08:08:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674738524; x=1674824924; bh=9QQlQ8OR3l
+        Q7ANbnLGJzCKzUzxNH3SO1M63tzLmReU8=; b=bGOQSJQrebxBgNQkKOnJyI53Qd
+        UZ2y68yn0j1iPnKrhB1p4iTeRNa0TbvDq8V5784vAgvgMy4AjqeYAT61c/YPGsKk
+        vDi/TI8H9iRnNE/LgVgoWg8NZgcxcusM6E/qDptd+0DR/KNtVxtVjHfqwWomMRar
+        E7UG0CcDLI8y/j9UZ74KGsK06fPgfA54DN0A/4UMtcLi3MP6tooX/n8zG9OZ3hqr
+        ZrN1a3oyiyOkylfz3Zk28WMIZhKAxOq5m/ueBks4uGsK9DBgi5+qFq3y/8V3gWhk
+        /AOBmUJ0ebp4W1+PYMfiTSP7nFIwo94UeqpaWDpV6rasggW1jp/nh0wWta6w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674738524; x=1674824924; bh=9QQlQ8OR3lQ7ANbnLGJzCKzUzxNH
+        3SO1M63tzLmReU8=; b=UkVFsbQIWdvMgbEoTghnOBCiu1fmZLk7QAD1cfSqOfDS
+        LnFUhh7BssziNnPEjsu1EwUzdFOfIvUnfCLY5UL8yg61kq4INZo7GLjg3a/UFBZQ
+        zFX1dxiXV7tNS4TLSusDJ0wsBkrTfzaD0UouiwnqEdQvTk/ci1LAuLVbkiA9fUUD
+        Ov8kGqiez0CCtCkdK/GoulEmjRzsWMIanORPbTRDcdWtjrmCIm57SE4oevc9OCOZ
+        rY40NHxBl5ietfDDqNGDjniOaESah5BKyx+7Wx29tiTlg61zpA96au7vTZztgZOT
+        qU5azHgEtJVTJB1XRpD8tUJDOWFhbVZ7iQh33nJd9w==
+X-ME-Sender: <xms:W3vSYzWrUIpSamA3Lgs7TjY-QO_jw778A3EhUghurJGroUoeIZAuww>
+    <xme:W3vSY7mf_HDQ3fkDP7wqUtg50JVvUKzv8ZQGL39EzE9kqckfFVkqilu77JJMVRJI_
+    Itkh990UOdy5_mWARc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedggeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:W3vSY_aP_LaflpUUI2nRqCjCc7I86tzdoVWbvAeQYJeDFnMCLl0IpA>
+    <xmx:W3vSY-W7iyIrPcHRTcUxAATF3WM3Z22xFrRN6_dZEOd0Z6bcXHVCww>
+    <xmx:W3vSY9mCrkmh7C0TblhQP24w0nWUakSfmSoKRtggg9bRSyJav3KTfg>
+    <xmx:XHvSY7ZHQ99m8KMWgfx8xwYuXKbsezBX7xt1Usod_OdaOYf7PFbrLA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 523F9B60086; Thu, 26 Jan 2023 08:08:43 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <38bfface-43a0-4538-afb3-b94e998f2f81@app.fastmail.com>
+In-Reply-To: <Y9JS8HEPMu+/zEFb@smile.fi.intel.com>
+References: <20230125201020.10948-1-andriy.shevchenko@linux.intel.com>
+ <20230125201020.10948-6-andriy.shevchenko@linux.intel.com>
+ <8454db45-a967-4542-8f16-538043542e14@app.fastmail.com>
+ <Y9JS8HEPMu+/zEFb@smile.fi.intel.com>
+Date:   Thu, 26 Jan 2023 14:08:24 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Cc:     "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>
+Subject: Re: [PATCH v1 5/5] gpio: Clean up headers
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:52:24AM +0100, Luca Ellero wrote:
-> ADS7845 support is buggy in this driver.
-> These patches fix various issues to get it work properly.
+On Thu, Jan 26, 2023, at 11:16, Andy Shevchenko wrote:
+> On Thu, Jan 26, 2023 at 09:42:32AM +0100, Arnd Bergmann wrote:
+>> On Wed, Jan 25, 2023, at 21:10, Andy Shevchenko wrote:
+>> > There is a few things done:
+>> > - include only the headers we are direct user of
+>> > - when pointer is in use, provide a forward declaration
+>> > - add missing headers
+>> > - group generic headers and subsystem headers
+>> > - sort each group alphabetically
+>> >
+>> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> > ---
+>> >  include/asm-generic/gpio.h    |  8 --------
+>> >  include/linux/gpio.h          |  9 +++------
+>> >  include/linux/gpio/consumer.h | 14 ++++++++++----
+>> >  include/linux/gpio/driver.h   | 34 ++++++++++++++++++++++++----------
+>> >  4 files changed, 37 insertions(+), 28 deletions(-)
+>> 
+>> This change looks fine, but it conflicts with a slightly
+>> broader cleanup that I meant to have already submitted,
+>> folding include/asm-generic/gpio.h into linux/gpio.h and
+>> removing the driver-side interface from that.
+>> 
+>> Let me try to dig out my series again, we should be able to
+>> either use my version, or merge parts of this patch into it.
+>
+> Can you share your patches, so I will rebase mine on top and see what's left?
+>
 
-Entire series now looks good to me
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Thanks!
+See the top patches of my randconfig branch at
 
-> Changes for v2:
->  - add missing period in patch 0001 message
->  - elaborate comment in patch 0002
->  
-> Changes for v3:
->  - send from the same email address of "Signed-off"
-> 
-> Changes for v4:
->  - fix tag
->  - fix comment in patch 0002
-> 
-> Changes for v5:
->  - add Fixes: tag
->  - fix comment in patch 0001
-> 
-> Luca Ellero (3):
->   Input: ads7846 - don't report pressure for ads7845
->   Input: ads7846 - always set last command to PWRDOWN
->   Input: ads7846 - don't check penirq immediately for 7845
-> 
->  drivers/input/touchscreen/ads7846.c | 23 +++++++++++++----------
->  1 file changed, 13 insertions(+), 10 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
+https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=randconfig-6.3-next
 
--- 
-With Best Regards,
-Andy Shevchenko
+There are eight cleanup patches for gpiolib, plus another seven
+patches for individual drivers. I just rebased the tree on top of
+linux-next, fixed previous build regression, and will send the
+gpiolib patches later on if there are no new problems with it.
 
-
+   Arnd
