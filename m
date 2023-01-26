@@ -2,206 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA8067D95D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F36167D960
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233398AbjAZXEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:04:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S233356AbjAZXEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbjAZXEE (ORCPT
+        with ESMTP id S232937AbjAZXEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:04:04 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1CE6A706
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:03:53 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id j1so1197415iob.6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:03:53 -0800 (PST)
+        Thu, 26 Jan 2023 18:04:45 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0970674492
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:04:23 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id h5so3953656ybj.8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:04:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N26PEPApLYbpGz0qyKTlI8x1Z7NNwGnlm+O7zvpxGcs=;
-        b=jV3sjLex1kbpEc3GWpAMPWdMaIdlA7yEzjz4a9asfMWv3NL6RKXXBEo8SN5LWeZsEM
-         l+EGsnMNpnsEr5cSbQP+9OF/fca+U1XIRgOzcbCOgJ5X4KjGcYhDqN/0Kt3jy1MrhyrL
-         QjPtf/Th8PXUZYciux58kxjxfeQSwRbC9U7qlEDB74v2vzn8/dBoCf0TyNIdOdLZlsju
-         9SrpKufFhkPMMLIgEV6z8UuzuqFWdcdiLxIigki7UJuDgC2YcpGcvWNjx5EEQVIyVeXl
-         HAfYSGb6APRJ85OgAxoEFdjjVRuPrQnQk8uU+5CU5cFUiv/EeLQgsgUqZeprRQYsUC1j
-         Hj1w==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xkDJ6MyKVc/yoPEgFwADBOJoFNEHdP+bpdBc8jczQVM=;
+        b=fcGnVsvWf9nRIjaBJIrDn8rx44F5Ld868Cj4XkTTjIBGCXV2mq0XjOg3khBN/pHisU
+         jjEgGVr8IEiuaMN+t0UYTS/BZj0N/I8SYcQt3xJTYsfmRXtDrCDErhh9BmtRicXrGrS8
+         DWU4qMuL4hpzWf5wq4qwktCdwV7XDPQxGYp51qKD4maK4MYT3x/yraidt55GwoeQx9FS
+         Tgxh7umPPyD8RcMT4rlMwCBNHLmgO41psuEg0VuKDhtITd0ORexflJX6Q7BJwPVyTMHt
+         4xkZs3G+ml4z9RX59OvuVwkyoUJoPXpK6zfOSTfgxGCWBIvt8VUa0oGg0vXQmino72Gs
+         /yvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N26PEPApLYbpGz0qyKTlI8x1Z7NNwGnlm+O7zvpxGcs=;
-        b=XBn5BztdJHS6vHUKv26F6o5SB06MC11e8zVewoTKasFWRXlKelUy3/zlokKWbd5TI0
-         CcQE0S4v1emOavmBQQ/mWA6+dg41MQF4myIxqBZYHW4Ii66hslRylkDc1JRBEJ9WVPin
-         w/6Fq0vSo0Kn8t0Ftf6DIbe8K1h3mfcs6/QhPO6IeYfQP6UNKjuSlHhYUHWkZnCQYJGP
-         s8iafSv6C3HZ063yWL0/yF5CpJ6szy1kSNK3exCFzBMuAGHDHP1hkilMPLN2RZsWw2mR
-         xsshR8D8HdbQzFkcqF6zvrSG2fv5Hv7E64l859o600xEVo08SDijxsZ3IL7Op9x0gyvy
-         q1HA==
-X-Gm-Message-State: AFqh2kpPZVm91oQnu7x9j5Oxu9hvhH8ePlpUIlylJBqaNXzE3gR+ks3E
-        BjzNQGSx+oEzUVjW1UMFS5pzgA==
-X-Google-Smtp-Source: AMrXdXtIdkarRoDNgD4GrQZClYf/mKVXlQGJSrx6jyDSeVaoioXe8qOIGzVme9t4KANLslPXpjHEFw==
-X-Received: by 2002:a6b:dd11:0:b0:704:67aa:57b0 with SMTP id f17-20020a6bdd11000000b0070467aa57b0mr26056011ioc.2.1674774232392;
-        Thu, 26 Jan 2023 15:03:52 -0800 (PST)
-Received: from eriador.lumag.spb.ru ([194.204.33.9])
-        by smtp.gmail.com with ESMTPSA id l4-20020a6bd104000000b006f8b7d869a0sm670924iob.1.2023.01.26.15.03.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 15:03:52 -0800 (PST)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 7/7] clk: qcom: add the driver for the MSM8996 APCS clocks
-Date:   Fri, 27 Jan 2023 01:03:19 +0200
-Message-Id: <20230126230319.3977109-8-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230126230319.3977109-1-dmitry.baryshkov@linaro.org>
-References: <20230126230319.3977109-1-dmitry.baryshkov@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xkDJ6MyKVc/yoPEgFwADBOJoFNEHdP+bpdBc8jczQVM=;
+        b=0UJ5ondnBKLz9pRE3Q0ty7WmZLdPt6SdPrFaQB//YC+Ty/KGpH/VCMBROpqw302SdE
+         PSn5PM7+89Qh4I6ma3Bdoi+xA0/G3OU4xW3xXlEYLlPuVWqAfDu5Szb4h46HjI/xasnC
+         E23+C3MsiBctbb/3Fvdoq3gwcJNy5p3qU0spmJCEo4QVL7WZ3UMoEj/c/opfAcbSFqVK
+         y34nLKLg89+Vb71VYtn4O6OB2zOu1lbshORzOwoHn/d69W+omIknQ+6bCKyeNQ/65b8h
+         tWln80yah9OjZNcAUx6thM7oH4bESZQVmZvNt/LSn+T4uxOm9kZCM5z7RB72YNEtVUN6
+         4vPA==
+X-Gm-Message-State: AFqh2kqn3F17Xa/rL5Btsizf3XCe99c9OwXhM9P2Otf8jopzYBtBDGFv
+        OEZdCSs+godK4egxqqKhdZr0jAdn255p3J8MrTnVZg==
+X-Google-Smtp-Source: AMrXdXs+4wbK0s4poI8ySoyQ9Rt9tQ4r5PbQykwi2MGaaHYxTVYoUn2B2aSHOIyXrm2WJG0uyq5dGoRhM/4XHPahPJA=
+X-Received: by 2002:a25:6a0b:0:b0:7d1:5a92:eb5c with SMTP id
+ f11-20020a256a0b000000b007d15a92eb5cmr4460775ybc.166.1674774260527; Thu, 26
+ Jan 2023 15:04:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230125182311.2022303-1-bgardon@google.com> <20230125182311.2022303-3-bgardon@google.com>
+ <CAHVum0ex4=X_iD_hKMQAkNVEcVzZSNUb_V0ApjPKxpCX+oFV6w@mail.gmail.com> <CANgfPd-7Yb05BYBW7TOg67qq=_vSXqrRQ_XF7WUfstQjXgyPww@mail.gmail.com>
+In-Reply-To: <CANgfPd-7Yb05BYBW7TOg67qq=_vSXqrRQ_XF7WUfstQjXgyPww@mail.gmail.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Thu, 26 Jan 2023 15:03:44 -0800
+Message-ID: <CAHVum0eepF4wNp84eb2mY+Wyw0MGhyDuOu_81pvrYDbAWn2UXg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] selftests: KVM: Add dirty logging page splitting test
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a simple driver handling the APCS clocks on MSM8996. For now it
-supports just a single aux clock, linking GPLL0 to CPU and CBF clocks.
+On Thu, Jan 26, 2023 at 2:52 PM Ben Gardon <bgardon@google.com> wrote:
+>
+> On Thu, Jan 26, 2023 at 12:06 PM Vipin Sharma <vipinsh@google.com> wrote:
+> >
+> > On Wed, Jan 25, 2023 at 10:23 AM Ben Gardon <bgardon@google.com> wrote:
+> >
+> > > +static void run_vcpus_get_page_stats(struct kvm_vm *vm, struct kvm_page_stats *stats, const char *stage)
+> > > +{
+> > > +       int i;
+> > > +
+> > > +       iteration++;
+> > > +       for (i = 0; i < VCPUS; i++) {
+> > > +               while (READ_ONCE(vcpu_last_completed_iteration[i]) !=
+> > > +                      iteration)
+> > > +                       ;
+> > > +       }
+> > > +
+> > > +       get_page_stats(vm, stats, stage);
+> >
+> > get_page_stats() is already called in run_test() explicitly for other
+> > stats. I think it's better to split this function and make the flow
+> > like:
+> >
+> > run_vcpus_till_iteration(iteration++);
+> > get_page_stats(vm, &stats_populated, "populating memory");
+> >
+> > This makes it easy to follow run_test_till_iteration() and easy to see
+> > where stats are collected. run_test_till_iteration() can also be a
+> > library function used by other tests like dirty_log_perf_test
+>
+> Yeah, either way works. We can do it all in the run_tests function as
+> I originally had or we can have the run vcpus and get stats in a
+> helper as David suggested or we can separate run_vcpus and get_stats
+> helpers as you're suggesting. I don't think it makes much of a
+> difference.
+> If you feel strongly I can send out another iteration of this test.
+>
 
-Note, there is little sense in registering sys_apcs_aux as a child of
-gpll0. The PLL is always-on. And listing the gpll0 as a property of the
-apcs would delay its probing until the GCC has been probed (while we
-would like for the apcs to be probed as early as possible).
+I should have read David's comment and responded in that version.
+No strong feelings. It is up to you.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/clk/qcom/Makefile       |  2 +-
- drivers/clk/qcom/apcs-msm8996.c | 88 +++++++++++++++++++++++++++++++++
- 2 files changed, 89 insertions(+), 1 deletion(-)
- create mode 100644 drivers/clk/qcom/apcs-msm8996.c
+> >
+> >
+> > > +       dirty_log_manual_caps = 0;
+> > > +       for_each_guest_mode(run_test, NULL);
+> > > +
+> > > +       dirty_log_manual_caps =
+> > > +               kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2);
+> > > +
+> > > +       if (dirty_log_manual_caps) {
+> > > +               dirty_log_manual_caps &= (KVM_DIRTY_LOG_MANUAL_PROTECT_ENABLE |
+> > > +                                         KVM_DIRTY_LOG_INITIALLY_SET);
+> > > +               for_each_guest_mode(run_test, NULL);
+> > > +       }
+> >
+> > Should there be a message to show  that this capability is not tested
+> > as it is not available?
+> > Or, there can be a command line option to explicitly provide intent of
+> > testing combined,  split modes, or both? Then test can error out
+> > accordingly.
+>
+> Sure, that would work too. If I send another version of this series I
+> can add a skip message, but I don't want to re-add an option to
+> specify whether to run with MANUAL_PROTECT, because that's what I had
+> originally and then David suggested I remove it and just always run
+> both.
 
-diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-index 3194465dd02c..a8ed1f38b2f7 100644
---- a/drivers/clk/qcom/Makefile
-+++ b/drivers/clk/qcom/Makefile
-@@ -52,7 +52,7 @@ obj-$(CONFIG_MSM_MMCC_8998) += mmcc-msm8998.o
- obj-$(CONFIG_QCOM_A53PLL) += a53-pll.o
- obj-$(CONFIG_QCOM_A7PLL) += a7-pll.o
- obj-$(CONFIG_QCOM_CLK_APCS_MSM8916) += apcs-msm8916.o
--obj-$(CONFIG_QCOM_CLK_APCC_MSM8996) += clk-cpu-8996.o
-+obj-$(CONFIG_QCOM_CLK_APCC_MSM8996) += apcs-msm8996.o clk-cpu-8996.o
- obj-$(CONFIG_QCOM_CLK_APCS_SDX55) += apcs-sdx55.o
- obj-$(CONFIG_QCOM_CLK_RPM) += clk-rpm.o
- obj-$(CONFIG_QCOM_CLK_RPMH) += clk-rpmh.o
-diff --git a/drivers/clk/qcom/apcs-msm8996.c b/drivers/clk/qcom/apcs-msm8996.c
-new file mode 100644
-index 000000000000..48d22572b6ae
---- /dev/null
-+++ b/drivers/clk/qcom/apcs-msm8996.c
-@@ -0,0 +1,88 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Qualcomm APCS clock controller driver
-+ *
-+ * Copyright (c) 2022, Linaro Limited
-+ * Author: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/clk-provider.h>
-+#include <linux/delay.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#define APCS_AUX_OFFSET	0x50
-+
-+#define APCS_AUX_DIV_MASK GENMASK(17, 16)
-+#define APCS_AUX_DIV_2 0x1
-+
-+static int qcom_apcs_msm8996_clk_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device *parent = dev->parent;
-+	struct regmap *regmap;
-+	struct clk_hw *hw;
-+	unsigned int val;
-+	int ret = -ENODEV;
-+
-+	regmap = dev_get_regmap(parent, NULL);
-+	if (!regmap) {
-+		dev_err(dev, "failed to get regmap: %d\n", ret);
-+		return ret;
-+	}
-+
-+	regmap_read(regmap, APCS_AUX_OFFSET, &val);
-+	regmap_update_bits(regmap, APCS_AUX_OFFSET, APCS_AUX_DIV_MASK,
-+			   FIELD_PREP(APCS_AUX_DIV_MASK, APCS_AUX_DIV_2));
-+
-+	/*
-+	 * This clock is used during CPU cluster setup while setting up CPU PLLs.
-+	 * Add hardware mandated delay to make sure that the sys_apcs_aux clock
-+	 * is stable (after setting the divider) before continuing
-+	 * bootstrapping to keep CPUs from ending up in a weird state.
-+	 */
-+	udelay(5);
-+
-+	/*
-+	 * As this clocks is a parent of the CPU cluster clocks and is actually
-+	 * used as a parent during CPU clocks setup, we want for it to gegister
-+	 * as early as possible, without letting fw_devlink to delay probing of
-+	 * either of the drivers.
-+	 *
-+	 * The sys_apcs_aux is a child (divider) of gpll0, but we register it
-+	 * as a fixed rate clock instead to ease bootstrapping procedure. By
-+	 * doing this we make sure that CPU cluster clocks are able to be setup
-+	 * early during the boot process (as it is recommended by Qualcomm).
-+	 */
-+	hw = devm_clk_hw_register_fixed_rate(dev, "sys_apcs_aux", NULL, 0, 300000000);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
-+
-+	return devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, hw);
-+}
-+
-+static struct platform_driver qcom_apcs_msm8996_clk_driver = {
-+	.probe = qcom_apcs_msm8996_clk_probe,
-+	.driver = {
-+		.name = "qcom-apcs-msm8996-clk",
-+	},
-+};
-+
-+/* Register early enough to fix the clock to be used for other cores */
-+static int __init qcom_apcs_msm8996_clk_init(void)
-+{
-+	return platform_driver_register(&qcom_apcs_msm8996_clk_driver);
-+}
-+postcore_initcall(qcom_apcs_msm8996_clk_init);
-+
-+static void __exit qcom_apcs_msm8996_clk_exit(void)
-+{
-+	platform_driver_unregister(&qcom_apcs_msm8996_clk_driver);
-+}
-+module_exit(qcom_apcs_msm8996_clk_exit);
-+
-+MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Qualcomm MSM8996 APCS clock driver");
--- 
-2.39.0
+Sounds good.
 
+Reviewed-By: Vipin Sharma <vipinsh@google.com>
