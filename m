@@ -2,257 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F7367CAEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:29:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF9467CAEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236966AbjAZM30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 07:29:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        id S236986AbjAZM2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 07:28:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235934AbjAZM3X (ORCPT
+        with ESMTP id S235786AbjAZM2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:29:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E79B49017
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:28:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674736116;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=LHHI1z3/Zi2ZVpvIelVqZ7oFqL4vmSAmqEC9YF9uobE=;
-        b=AFsYFO4dq3jJSlU97IWa5r5hzmCCBXVQL3We9YbWFmqKnq5RLtihog/cpmkuj8sg4H2c/i
-        uumXEUkhNMwFFAxjrgWA+A5e62tv86eYcKPrA/6eekKkw+nN4olESxjjdmLy2DGZLVNsA9
-        SMiH+96FT1VFOEityEsezZCkjC1mOcc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-641-vru26c0CNEWub7a1oHUaCw-1; Thu, 26 Jan 2023 07:28:33 -0500
-X-MC-Unique: vru26c0CNEWub7a1oHUaCw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1AA4629ABA18;
-        Thu, 26 Jan 2023 12:28:33 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.39.192.60])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F0C442026D76;
-        Thu, 26 Jan 2023 12:28:31 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Networking for 6.2-rc6
-Date:   Thu, 26 Jan 2023 13:26:43 +0100
-Message-Id: <20230126122643.379852-1-pabeni@redhat.com>
+        Thu, 26 Jan 2023 07:28:52 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C1B4942F
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:28:51 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id n7so1605113wrx.5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:28:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YUsFc75hI6TZHDszdvKDaz8iQW9fEFrZhZGH/dc9Zw4=;
+        b=BN+d3LISu6a9WAmIRfCGEq3LV3ZEGBMmPnsj1ySWKY9C+nLw0I9WA7/FvQ6hMatZYM
+         hKzU04mq0XhzCqwQ2Z4iYx0GUxKRU8vIYwl1FP29qDg3sF0oFZadjRHuB5stRBUVP+SP
+         ZpM8annmXq+46AWqUDyH1RXcVZuPs7fX227vymzSjIA5eetbIxuIXsN61xDSskvobZap
+         zXr2oEvXU5QiyweG+E+Nxpi67tzciHoPVxXuleq5hvbeQ/VTefilOfQvk18o+lzMEMFs
+         kR26zPcNUWX5xNPMmHqxedVO5/ktHkc0JTu+P1972yyGwPFF1XM+jaWmP5J+WTPucOpm
+         Xkzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YUsFc75hI6TZHDszdvKDaz8iQW9fEFrZhZGH/dc9Zw4=;
+        b=4euy8bzbv45NK/gnY0w3M2xqMOGqb5yAO8sL5qlnFCeSW+Rv+V+Q0IKFBE3wRllvfW
+         J9jYxn5J8gVJR474Zriz01uP0p8XwmvFulDS0a3IOs1GrXrWUcGIFLJv4gd8aOiF5Vfb
+         NLz5ANSHHvhduC5B3PL/uR9T7tGjU6ATrpEBdMq6SF8pQq5WErY1M1ddg6zBMw6NvCjB
+         OwW1TRYj0N11v1p/Vru7+pH7aWHz7fyz1cqgsiGtp9mZJbMN7EXz0533UWLwKr5pXC1j
+         j0M33lrCDjIOayqnmaXmeJVrkUiAOemxC4qI6bdr7xrCActTmq47Pq504DX+lTGC86y7
+         Dq2g==
+X-Gm-Message-State: AFqh2ko6+UwRq3horZU1ON7sI6hw2UJ23IUbi/O6EYv2il2XkwXEzx9O
+        275du94OC4+dXvNUA73Z9IgTAA==
+X-Google-Smtp-Source: AMrXdXtQZiQtIGhUwqlUb6hRQYC42p3Tl0CsgkP1SwkHsrGvt1b6dzuRXRIRm5S+/M/Gst+sUSO5Jg==
+X-Received: by 2002:adf:e30c:0:b0:2be:1fae:690e with SMTP id b12-20020adfe30c000000b002be1fae690emr29396197wrj.50.1674736130352;
+        Thu, 26 Jan 2023 04:28:50 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id z12-20020adff74c000000b00291f1a5ced6sm1222424wrp.53.2023.01.26.04.28.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 04:28:49 -0800 (PST)
+Message-ID: <d4a70ab2-c5a2-2478-3fa9-c703c1619252@linaro.org>
+Date:   Thu, 26 Jan 2023 13:28:48 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 1/3] gpio: dt-bindings: add new property to wd,mbl-gpio
+ bindings
+Content-Language: en-US
+To:     nl250060@ncr.com, Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230126-gpio-mmio-fix-v1-0-8a20ce0e8275@ncr.com>
+ <20230126-gpio-mmio-fix-v1-1-8a20ce0e8275@ncr.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230126-gpio-mmio-fix-v1-1-8a20ce0e8275@ncr.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
+On 26/01/2023 11:17, Niall Leonard via B4 Submission Endpoint wrote:
+> From: Niall Leonard <nl250060@ncr.com>
 
-Notably, this includes the fix for the mctp issue you have been
-notified of.
+Subject: missing "wd,mbl-gpio:" prefix.
 
-There are no known pending regressions to the better of my knowledge.
+Subject: drop second/last, redundant "bindings". The "dt-bindings"
+prefix is already stating that these are bindings.
 
-The following changes since commit 5deaa98587aca2f0e7605388e89cfa1df4bad5cb:
+> 
+> Added optional "no-input" property
 
-  Merge tag 'net-6.2-rc5-2' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-01-20 09:58:44 -0800)
+Missing full stop.
 
-are available in the Git repository at:
+> 
+> Signed-off-by: Niall Leonard <nl250060@ncr.com>
+> ---
+>  Documentation/devicetree/bindings/gpio/wd,mbl-gpio.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/wd,mbl-gpio.txt b/Documentation/devicetree/bindings/gpio/wd,mbl-gpio.txt
+> index 038c3a6a1f4d..9405f9dad522 100644
+> --- a/Documentation/devicetree/bindings/gpio/wd,mbl-gpio.txt
+> +++ b/Documentation/devicetree/bindings/gpio/wd,mbl-gpio.txt
+> @@ -18,6 +18,7 @@ Required properties:
+>  
+>  Optional properties:
+>  	- no-output: GPIOs are read-only.
+> +	- no-input: GPIOs are write-only. Read is via a shadow register.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.2-rc6
+Why this property is needed? Why driver cannot always use shadow register?
 
-for you to fetch changes up to 7083df59abbc2b7500db312cac706493be0273ff:
+Anyway, please convert the bindings to DT schema first (see
+writing-schema and example-schema).
+Documentation/devicetree/bindings/writing-schema.rst
 
-  net: mdio-mux-meson-g12a: force internal PHY off on mux switch (2023-01-25 22:46:51 -0800)
-
-----------------------------------------------------------------
-Networking fixes for 6.2-rc6, including fixes from netfilter.
-
-Current release - regressions:
-
-  - sched: sch_taprio: do not schedule in taprio_reset()
-
-Previous releases - regressions:
-
-  - core: fix UaF in netns ops registration error path
-
-  - ipv4: prevent potential spectre v1 gadgets
-
-  - ipv6: fix reachability confirmation with proxy_ndp
-
-  - netfilter: fix for the set rbtree
-
-  - eth: fec: use page_pool_put_full_page when freeing rx buffers
-
-  - eth: iavf: fix temporary deadlock and failure to set MAC address
-
-Previous releases - always broken:
-
- - netlink: prevent potential spectre v1 gadgets
-
- - netfilter: fixes for SCTP connection tracking
-
- - mctp: struct sock lifetime fixes
-
- - eth: ravb: fix possible hang if RIS2_QFF1 happen
-
- - eth: tg3: resolve deadlock in tg3_reset_task() during EEH
-
-Misc:
-
- - Mat stepped out as MPTCP co-maintainer
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-
-----------------------------------------------------------------
-Ahmad Fatoum (1):
-      net: dsa: microchip: fix probe of I2C-connected KSZ8563
-
-Alexandru Tachici (1):
-      net: ethernet: adi: adin1110: Fix multicast offloading
-
-David Christensen (1):
-      net/tg3: resolve deadlock in tg3_reset_task() during EEH
-
-David S. Miller (3):
-      Merge branch 'ethtool-mac-merge'
-      Merge branch 'ravb-fixes'
-      Merge branch 'mptcp-fixes'
-
-Eric Dumazet (7):
-      netlink: prevent potential spectre v1 gadgets
-      netlink: annotate data races around nlk->portid
-      netlink: annotate data races around dst_portid and dst_group
-      netlink: annotate data races around sk_state
-      ipv4: prevent potential spectre v1 gadget in ip_metrics_convert()
-      ipv4: prevent potential spectre v1 gadget in fib_metrics_match()
-      net/sched: sch_taprio: do not schedule in taprio_reset()
-
-Gergely Risko (1):
-      ipv6: fix reachability confirmation with proxy_ndp
-
-Gerhard Engleder (1):
-      tsnep: Fix TX queue stop/wake for multiple queues
-
-Haiyang Zhang (1):
-      net: mana: Fix IRQ name - add PCI and queue number
-
-Hyunwoo Kim (1):
-      net/x25: Fix to not accept on connected socket
-
-Ivan Vecera (1):
-      docs: networking: Fix bridge documentation URL
-
-Jakub Kicinski (4):
-      Merge branch 'netlink-annotate-various-data-races'
-      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
-      Merge branch '40GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
-      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
-
-Jeremy Kerr (3):
-      net: mctp: add an explicit reference from a mctp_sk_key to sock
-      net: mctp: move expiry timer delete to unhash
-      net: mctp: mark socks as dead on unhash, prevent re-add
-
-Jerome Brunet (1):
-      net: mdio-mux-meson-g12a: force internal PHY off on mux switch
-
-Kuniyuki Iwashima (1):
-      netrom: Fix use-after-free of a listening socket.
-
-Marcelo Ricardo Leitner (1):
-      sctp: fail if no bound addresses can be used for a given scope
-
-Marcin Szycik (1):
-      iavf: Move netdev_update_features() into watchdog task
-
-Mat Martineau (1):
-      MAINTAINERS: Update MPTCP maintainer list and CREDITS
-
-Michal Schmidt (1):
-      iavf: fix temporary deadlock and failure to set MAC address
-
-Pablo Neira Ayuso (2):
-      netfilter: nft_set_rbtree: Switch to node list walk for overlap detection
-      netfilter: nft_set_rbtree: skip elements in transaction from garbage collection
-
-Paolo Abeni (3):
-      net: fix UaF in netns ops registration error path
-      Revert "Merge branch 'ethtool-mac-merge'"
-      net: mctp: hold key reference when looking up a general key
-
-Paul M Stillwell Jr (1):
-      ice: move devlink port creation/deletion
-
-Sriram Yagnaraman (4):
-      netfilter: conntrack: fix vtag checks for ABORT/SHUTDOWN_COMPLETE
-      netfilter: conntrack: fix bug in for_each_sctp_chunk
-      Revert "netfilter: conntrack: add sctp DATA_SENT state"
-      netfilter: conntrack: unify established states for SCTP paths
-
-Stefan Assmann (1):
-      iavf: schedule watchdog immediately when changing primary MAC
-
-Vladimir Oltean (1):
-      net: ethtool: netlink: introduce ethnl_update_bool()
-
-Wei Fang (1):
-      net: fec: Use page_pool_put_full_page when freeing rx buffers
-
-Yoshihiro Shimoda (3):
-      net: ethernet: renesas: rswitch: Fix ethernet-ports handling
-      net: ravb: Fix lack of register setting after system resumed for Gen3
-      net: ravb: Fix possible hang if RIS2_QFF1 happen
-
- CREDITS                                            |   7 +
- Documentation/networking/bridge.rst                |   2 +-
- Documentation/networking/nf_conntrack-sysctl.rst   |  10 +-
- MAINTAINERS                                        |   1 -
- drivers/net/dsa/microchip/ksz9477_i2c.c            |   2 +-
- drivers/net/ethernet/adi/adin1110.c                |   2 +-
- drivers/net/ethernet/broadcom/tg3.c                |   8 +-
- drivers/net/ethernet/engleder/tsnep_main.c         |  15 +-
- drivers/net/ethernet/freescale/fec_main.c          |   2 +-
- drivers/net/ethernet/intel/iavf/iavf.h             |   2 +-
- drivers/net/ethernet/intel/iavf/iavf_ethtool.c     |  10 +-
- drivers/net/ethernet/intel/iavf/iavf_main.c        | 113 ++++---
- drivers/net/ethernet/intel/iavf/iavf_virtchnl.c    |  10 +-
- drivers/net/ethernet/intel/ice/ice_lib.c           |   3 -
- drivers/net/ethernet/intel/ice/ice_main.c          |  25 +-
- drivers/net/ethernet/microsoft/mana/gdma_main.c    |   9 +-
- drivers/net/ethernet/renesas/ravb_main.c           |  10 +-
- drivers/net/ethernet/renesas/rswitch.c             |  22 +-
- drivers/net/ethernet/renesas/rswitch.h             |  12 +
- drivers/net/mdio/mdio-mux-meson-g12a.c             |  23 +-
- include/net/mana/gdma.h                            |   3 +
- include/uapi/linux/netfilter/nf_conntrack_sctp.h   |   3 +-
- include/uapi/linux/netfilter/nfnetlink_cttimeout.h |   3 +-
- lib/nlattr.c                                       |   3 +
- net/core/net_namespace.c                           |   2 +-
- net/ipv4/fib_semantics.c                           |   2 +
- net/ipv4/metrics.c                                 |   2 +
- net/ipv6/ip6_output.c                              |  15 +-
- net/mctp/af_mctp.c                                 |  10 +-
- net/mctp/route.c                                   |  34 ++-
- net/netfilter/nf_conntrack_proto_sctp.c            | 170 +++++------
- net/netfilter/nf_conntrack_standalone.c            |  16 -
- net/netfilter/nft_set_rbtree.c                     | 332 +++++++++++++--------
- net/netlink/af_netlink.c                           |  38 ++-
- net/netrom/nr_timer.c                              |   1 +
- net/sched/sch_taprio.c                             |   1 -
- net/sctp/bind_addr.c                               |   6 +
- net/x25/af_x25.c                                   |   6 +
- 38 files changed, 535 insertions(+), 400 deletions(-)
+Best regards,
+Krzysztof
 
