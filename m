@@ -2,127 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E86567D34C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A74367D34E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbjAZRfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 12:35:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S231929AbjAZRff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 12:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbjAZRfO (ORCPT
+        with ESMTP id S231980AbjAZRfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:35:14 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027FF6D5F7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:35:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6D2B1CE2556
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C96FC4339E;
-        Thu, 26 Jan 2023 17:35:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674754507;
-        bh=8NyZxmmPHwCgj6cNJeb8JMor/gTQfCk0BlHUYGpf2kA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=O/uXzuD15fyxZ41lTDj0T7mGEoaRIEgI+RoBWyy5RYHhpIpXNWRJpwWeCB3IkzrjN
-         bc2HkwDKq1nuHG7jiWIh96ftHQCPG+cFECKtocOU90Rcq16VXsZYHCMYaf3Mtw0V2t
-         642JKNKVQ7f4qsN+V433v+QcOqXEaeWBIfH4yA2bT4vpd8G73yS+D40ZQZv3wAYleB
-         TF1mHgCZuL+G5SttZuYtLXmAmqQQL2Ptk60YhmVgz6O0CrCzRSpfSP1bNsufeckCRB
-         9njQIJdOT+QJUdDhySigPEW03IfHGY5qFzUyLjBrM0L+K64j1OXMjzLepjzan9u1B9
-         +xYKANeYUMtrA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2450F5C0510; Thu, 26 Jan 2023 09:35:07 -0800 (PST)
-Date:   Thu, 26 Jan 2023 09:35:07 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: [Patch 2/2] tools/memory-model: Provide exact SRCU semantics
-Message-ID: <20230126173507.GE2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Y9GO3xEYkIQq/qSl@rowland.harvard.edu>
- <Y9GPI/g23YWx+0Ce@rowland.harvard.edu>
- <Y9GPVnK6lQbY6vCK@rowland.harvard.edu>
- <c44183e7-44ae-4be3-bb47-517067a112b5@huaweicloud.com>
- <Y9Gyuj+2UFefUdJS@rowland.harvard.edu>
- <edadb690-e791-0e9c-e641-ea8876abe96e@huaweicloud.com>
+        Thu, 26 Jan 2023 12:35:25 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200DC71642
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:35:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=4K7XlSvLqsgNooioi1OUJRX2pbW
+        KDuA2+FsM3NFS1Wc=; b=PBH34yhNsYUnTyG6d/7YlWTTSdhqi06yCPmDqRUUAmd
+        Ow67bP15IEs9QZu8O8oLAubYAxxGioKpF2BJ5PJL36FmDckqyXuRqzH0NQ2xgIzk
+        GU16B1T3Ycj2TNY6cIYDMJRP/Ib57AdW5Wyh6Teb17013t4QY92Suq2+3OiJrj5w
+        =
+Received: (qmail 3889470 invoked from network); 26 Jan 2023 18:35:18 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Jan 2023 18:35:18 +0100
+X-UD-Smtp-Session: l3s3148p1@Aj4qLC7zMOcujnvo
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Cong Dang <cong.dang.xn@renesas.com>,
+        Hai Pham <hai.pham.ud@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
+Date:   Thu, 26 Jan 2023 18:35:12 +0100
+Message-Id: <20230126173513.36659-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <edadb690-e791-0e9c-e641-ea8876abe96e@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 12:30:14PM +0100, Jonas Oberhauser wrote:
-> 
-> 
-> On 1/25/2023 11:52 PM, Alan Stern wrote:
-> > On Wed, Jan 25, 2023 at 10:04:29PM +0100, Jonas Oberhauser wrote:
-> > > 
-> > > On 1/25/2023 9:21 PM, Alan Stern wrote:
-> > > >    (* Validate nesting *)
-> > > >    flag ~empty Srcu-lock \ domain(srcu-rscs) as unmatched-srcu-lock
-> > > >    flag ~empty Srcu-unlock \ range(srcu-rscs) as unmatched-srcu-unlock
-> > > > +flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-srcu-matches
-> > > [...]
-> > > >    // SRCU
-> > > > -srcu_read_lock(X)  __srcu{srcu-lock}(X)
-> > > > -srcu_read_unlock(X,Y) { __srcu{srcu-unlock}(X,Y); }
-> > > > +srcu_read_lock(X) __load{srcu-lock}(*X)
-> > > > +srcu_read_unlock(X,Y) { __store{srcu-unlock}(*X,Y); }
-> > > > +srcu_down_read(X) __load{srcu-lock}(*X)
-> > > > +srcu_up_read(X,Y) { __store{srcu-unlock}(*X,Y); }
-> > > How do you feel about introducing Srcu-up and Srcu-down with this patch?
-> > Why invent new classes for them?  They are literally the same operation
-> > as Srcu-lock and Srcu-unlock; the only difference is how the kernel's
-> > lockdep checker treats them.
-> I don't think they're necessarily implemented in a compatible way, so
-> 
-> r = srcu_lock(s);
-> srcu_up(s,r);
-> 
-> might not actually work, but would currently be ok'ed by LKMM.
+According to the datasheets, the Strobe Timing Adjustment bit (STRTIM)
+setting is different on R-Car SoCs, i.e.
 
-In kernels built with CONFIG_PROVE_LOCKING=y (AKA built with lockdep
-enabled), lockdep would complain about having an srcu_read_lock() with
-no matching srcu_read_unlock().  Kernels built without lockdep (that is,
-kernels actually used in production) would be happy with this.
+R-Car M3 ES1.*  : STRTIM[2:0] is set to 0x6
+other R-Car Gen3: STRTIM[2:0] is set to 0x7
+other R-Car Gen4: STRTIM[3:0] is set to 0xf
 
-So as Jonas suspects, this should be classified as not actually working.
+To fix this issue, a DT match data was added to specify the setting
+for special use cases.
 
->                                                                With
-> different classes you could state
->   flag ~empty [Srcu-lock];srcu-rscs;[Srcu-up] as srcu-mismatch-lock-to-up
->   flag ~empty [Srcu-down];srcu-rscs;[Srcu-unlock] as
-> srcu-mismatch-down-to-unlock
-> 
-> I think with the current implementation this code might work, but I don't
-> feel like this is inherently true.
-> 
-> You could then also go ahead and define the "same CPU" requirement as a flag
-> for lock and unlock specifically, like
->   flag ~empty [Srcu-lock];srcu-rscs & ext as srcu-lock-unlock-mismatch-CPU
-> or so.
-> 
-> Best wishes, jonas
-> 
+Signed-off-by: Cong Dang <cong.dang.xn@renesas.com>
+Signed-off-by: Hai Pham  <hai.pham.ud@renesas.com>
+[wsa: rebased, restructured, added Gen4 support]
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+
+Changes since v2:
+* dropped support for H3 ES1 (we don't support it upstream anymore)
+* M3-W ES1 now handled via 'compatible' (Thanks, Geert!)
+* -> dropped soc_device_match()
+* removed old rpcif_type entry in struct rpcif (Thanks, Prabhakar)
+
+ drivers/memory/renesas-rpc-if.c | 45 +++++++++++++++++++++++----------
+ include/memory/renesas-rpc-if.h |  7 ++++-
+ 2 files changed, 38 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+index c36b407851ff..1dc684a93ff4 100644
+--- a/drivers/memory/renesas-rpc-if.c
++++ b/drivers/memory/renesas-rpc-if.c
+@@ -7,6 +7,7 @@
+  * Copyright (C) 2019-2020 Cogent Embedded, Inc.
+  */
+ 
++#include <linux/bitops.h>
+ #include <linux/clk.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+@@ -163,6 +164,25 @@ static const struct regmap_access_table rpcif_volatile_table = {
+ 	.n_yes_ranges	= ARRAY_SIZE(rpcif_volatile_ranges),
+ };
+ 
++static const struct rpcif_info rpcif_info_r8a7796 = {
++	.type = RPCIF_RCAR_GEN3,
++	.strtim = 6,
++};
++
++static const struct rpcif_info rpcif_info_gen3 = {
++	.type = RPCIF_RCAR_GEN3,
++	.strtim = 7,
++};
++
++static const struct rpcif_info rpcif_info_rz_g2l = {
++	.type = RPCIF_RZ_G2L,
++	.strtim = 7,
++};
++
++static const struct rpcif_info rpcif_info_gen4 = {
++	.type = RPCIF_RCAR_GEN4,
++	.strtim = 15,
++};
+ 
+ /*
+  * Custom accessor functions to ensure SM[RW]DR[01] are always accessed with
+@@ -276,9 +296,9 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
+ 	rpc->dirmap = devm_ioremap_resource(&pdev->dev, res);
+ 	if (IS_ERR(rpc->dirmap))
+ 		return PTR_ERR(rpc->dirmap);
+-	rpc->size = resource_size(res);
+ 
+-	rpc->type = (uintptr_t)of_device_get_match_data(dev);
++	rpc->size = resource_size(res);
++	rpc->info = of_device_get_match_data(dev);
+ 	rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+ 
+ 	return PTR_ERR_OR_ZERO(rpc->rstc);
+@@ -305,7 +325,7 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+ 
+ 	pm_runtime_get_sync(rpc->dev);
+ 
+-	if (rpc->type == RPCIF_RZ_G2L) {
++	if (rpc->info->type == RPCIF_RZ_G2L) {
+ 		int ret;
+ 
+ 		ret = reset_control_reset(rpc->rstc);
+@@ -321,12 +341,10 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+ 	/* DMA Transfer is not supported */
+ 	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT, RPCIF_PHYCNT_HS, 0);
+ 
+-	if (rpc->type == RPCIF_RCAR_GEN3)
+-		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+-				   RPCIF_PHYCNT_STRTIM(7), RPCIF_PHYCNT_STRTIM(7));
+-	else if (rpc->type == RPCIF_RCAR_GEN4)
+-		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+-				   RPCIF_PHYCNT_STRTIM(15), RPCIF_PHYCNT_STRTIM(15));
++	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
++			   /* create mask with all affected bits set */
++			   RPCIF_PHYCNT_STRTIM(BIT(fls(rpc->info->strtim)) - 1),
++			   RPCIF_PHYCNT_STRTIM(rpc->info->strtim));
+ 
+ 	regmap_update_bits(rpc->regmap, RPCIF_PHYOFFSET1, RPCIF_PHYOFFSET1_DDRTMG(3),
+ 			   RPCIF_PHYOFFSET1_DDRTMG(3));
+@@ -337,7 +355,7 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+ 		regmap_update_bits(rpc->regmap, RPCIF_PHYINT,
+ 				   RPCIF_PHYINT_WPVAL, 0);
+ 
+-	if (rpc->type == RPCIF_RZ_G2L)
++	if (rpc->info->type == RPCIF_RZ_G2L)
+ 		regmap_update_bits(rpc->regmap, RPCIF_CMNCR,
+ 				   RPCIF_CMNCR_MOIIO(3) | RPCIF_CMNCR_IOFV(3) |
+ 				   RPCIF_CMNCR_BSZ(3),
+@@ -720,9 +738,10 @@ static int rpcif_remove(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id rpcif_of_match[] = {
+-	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = (void *)RPCIF_RCAR_GEN3 },
+-	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = (void *)RPCIF_RCAR_GEN4 },
+-	{ .compatible = "renesas,rzg2l-rpc-if", .data = (void *)RPCIF_RZ_G2L },
++	{ .compatible = "renesas,r8a7796-rpc-if", .data = &rpcif_info_r8a7796 },
++	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = &rpcif_info_gen3 },
++	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = &rpcif_info_gen4 },
++	{ .compatible = "renesas,rzg2l-rpc-if", .data = &rpcif_info_rz_g2l },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, rpcif_of_match);
+diff --git a/include/memory/renesas-rpc-if.h b/include/memory/renesas-rpc-if.h
+index 862eff613dc7..405011008a5a 100644
+--- a/include/memory/renesas-rpc-if.h
++++ b/include/memory/renesas-rpc-if.h
+@@ -63,6 +63,11 @@ enum rpcif_type {
+ 	RPCIF_RZ_G2L,
+ };
+ 
++struct rpcif_info {
++	enum rpcif_type type;
++	u8 strtim;
++};
++
+ struct rpcif {
+ 	struct device *dev;
+ 	void __iomem *base;
+@@ -70,7 +75,7 @@ struct rpcif {
+ 	struct regmap *regmap;
+ 	struct reset_control *rstc;
+ 	size_t size;
+-	enum rpcif_type type;
++	const struct rpcif_info *info;
+ 	enum rpcif_data_dir dir;
+ 	u8 bus_size;
+ 	u8 xfer_size;
+-- 
+2.30.2
+
