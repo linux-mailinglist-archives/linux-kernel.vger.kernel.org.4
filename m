@@ -2,114 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1088E67CC4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C1567CC48
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237024AbjAZNee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
+        id S237070AbjAZNeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236360AbjAZNeX (ORCPT
+        with ESMTP id S235298AbjAZNeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 Jan 2023 08:34:23 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC7D173A;
-        Thu, 26 Jan 2023 05:34:21 -0800 (PST)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QBB150021981;
-        Thu, 26 Jan 2023 08:34:13 -0500
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3navamh71r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 08:34:13 -0500
-Received: from m0167088.ppops.net (m0167088.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QDTnLZ023763;
-        Thu, 26 Jan 2023 08:34:13 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3navamh71k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 08:34:13 -0500
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 30QDYCO8008429
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 26 Jan 2023 08:34:12 -0500
-Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
- ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 26 Jan 2023 08:34:11 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 26 Jan 2023 08:34:11 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 26 Jan 2023 08:34:11 -0500
-Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.156])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 30QDXoaq000628;
-        Thu, 26 Jan 2023 08:34:07 -0500
-From:   Alexandru Tachici <alexandru.tachici@analog.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <richardcochran@gmail.com>, <yangyingliang@huawei.com>,
-        <weiyongjun1@huawei.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <lennart@lfdomain.com>
-Subject: [net-next v2 3/3] dt-bindings: net: adin1110: Document ts-capt pin
-Date:   Thu, 26 Jan 2023 15:33:46 +0200
-Message-ID: <20230126133346.61097-4-alexandru.tachici@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230126133346.61097-1-alexandru.tachici@analog.com>
-References: <20230126133346.61097-1-alexandru.tachici@analog.com>
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF49B2719
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:34:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AF4D617D6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:34:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE09C433D2;
+        Thu, 26 Jan 2023 13:34:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674740061;
+        bh=to53vRo2E8+ZQwfM2dAtJdAuNh/BZOwCkTPbJBBxk1k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PbiydQE7PhGniIW4YlGyCqYEdUPSvHGpYDQNqRRKOOFN9Nu0JgHMHLPO3MVvXyNvC
+         iLZgSCatCaMRIbA4uBuvpuo3sXwQxxNtHkPG5m6XNVmFk/HbHmcODUuQrPqWejdJ2W
+         LOv6gCsKbtBnnDk0WAOAq6Dq5Qu4ID3WcMjxIiJQJBDeOljAYzmorxiLeEzqmt2Ig6
+         aGec/EgJznklvoKAwsuyIFcShg81qx0XKZGqVkWjtnOMwzKJaemOkRRTd38ymFsebW
+         NiTJUrX22V/RjUhgz8hkMhfL0mBW2zsWxN2fpFr4MfLfXZVKTpOXiXeDyA6/PLvGuH
+         EHLShs/Y5pEkg==
+Date:   Thu, 26 Jan 2023 13:34:16 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 1/2] mfd: Make .disable() callback return void
+Message-ID: <Y9KBWKNJQo0yCw2I@google.com>
+References: <20230113182427.257484-1-u.kleine-koenig@pengutronix.de>
+ <20230113182427.257484-2-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: stKTUITrxeE8t4e_wT3ROwUC9idYRi4c
-X-Proofpoint-ORIG-GUID: 1pjAKUfZ_XwoRhQSy4fq2ODpcNbUD2zI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_05,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
- suspectscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
- mlxlogscore=884 malwarescore=0 priorityscore=1501 clxscore=1015
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260131
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230113182427.257484-2-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the use of the timestamp capture pin.
+On Fri, 13 Jan 2023, Uwe Kleine-König wrote:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
----
- Documentation/devicetree/bindings/net/adi,adin1110.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+> All implementations return 0 unconditionally, so change the prototype to
+> return void. This allows to get rid of error handling in callers that
+> isn't actually used.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/mfd/asic3.c      | 17 +++++++++--------
+>  drivers/mfd/htc-pasic3.c |  3 +--
+>  drivers/mfd/mfd-core.c   |  4 +++-
+>  drivers/mfd/t7l66xb.c    |  4 +---
+>  drivers/mfd/tc6387xb.c   |  4 +---
+>  drivers/mfd/tc6393xb.c   | 16 ++++++++++------
+>  include/linux/mfd/core.h |  2 +-
+>  7 files changed, 26 insertions(+), 24 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/adi,adin1110.yaml b/Documentation/devicetree/bindings/net/adi,adin1110.yaml
-index 9de865295d7a..f2db919c166b 100644
---- a/Documentation/devicetree/bindings/net/adi,adin1110.yaml
-+++ b/Documentation/devicetree/bindings/net/adi,adin1110.yaml
-@@ -50,6 +50,13 @@ properties:
-     maxItems: 1
-     description: GPIO connected to active low reset
- 
-+  ts-capt-gpios:
-+    maxItems: 1
-+    description: |
-+      Optional active high GPIO. Connected to the TS_TIMER pin of ADIN1110.
-+      When pulled up device will save a timestamp containing both the
-+      seconds and nanoseconds part simultaneously.
-+
- required:
-   - compatible
-   - reg
+Doesn't apply to the MFD tree.
+
+Please rebase and I'll merge it.
+
 -- 
-2.34.1
-
+Lee Jones [李琼斯]
