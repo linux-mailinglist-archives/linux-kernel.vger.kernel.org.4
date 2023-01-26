@@ -2,60 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FD467D983
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D42D67D985
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjAZXP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:15:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S233087AbjAZXQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233423AbjAZXPj (ORCPT
+        with ESMTP id S229547AbjAZXQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:15:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B499D6A706;
-        Thu, 26 Jan 2023 15:15:31 -0800 (PST)
+        Thu, 26 Jan 2023 18:16:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEC6F742
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:16:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53374B81C5E;
-        Thu, 26 Jan 2023 23:15:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B504CC433EF;
-        Thu, 26 Jan 2023 23:15:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674774929;
-        bh=yLxfhl2XeMsnGXh8m4CYuImOEZKgrEUslX63nDnPLrc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=VPk1P6ShqdMJdgOLDXfAg3hmy8SL4IAesCX9ibxD3BDdaupVSCJa7vRBe9x1k72s3
-         0WT3de7uDz1Kh7XfvLBViNk61oDrsMXN3jDJ09HhctMhpqHlfJ81OdtfBE+PohHfd4
-         tw+89BwTzSlRTG8QDGtuRInId/FBPYFZd6NTyYImd89YX/3OfczFjJj4qstBXsQrRh
-         9Ede9P3N6bh8AVRHs4Hg7Qyumb+wJn3pVA0l3XyLzekrglV+HU1C6A/7KeCFZypUD2
-         XMOBOd5CEzMzRNhi3tlSuHqf1WLHI2Os2wURhy0PtV93Cg6KqWu3qHavIsmPzpQGf+
-         GH4IkWzOisVbQ==
-Date:   Thu, 26 Jan 2023 17:15:27 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-pci@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        netdev@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        intel-wired-lan@lists.osuosl.org,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>, Stefan Roese <sr@denx.de>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Naama Meir <naamax.meir@linux.intel.com>,
-        Gurucharan G <gurucharanx.g@intel.com>
-Subject: Re: [PATCH 0/9] PCI/AER: Remove redundant Device Control Error
- Reporting Enable
-Message-ID: <20230126231527.GA1322015@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118234612.272916-1-helgaas@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE06861950
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:16:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41345C433EF;
+        Thu, 26 Jan 2023 23:16:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1674774971;
+        bh=DzMj8quRGZzfP4LzqMW0/0WiOG9K84kclaczDPTR9hQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vZzkHXUd55UHlrFSl5UYOQw8xTPzkkHQEKTaR4XMmM9nNadmhN+z+9mTzMMZX9lMH
+         bGc6MHUao0uGuWpbN1v38qLNyGnedkywv7FbN7loN/hZKfIurtPWdoG1xEp6pITmo8
+         BiSQ6TGuZUIg2rCAK0XF0Girj0Op/z62q9SUHPyA=
+Date:   Thu, 26 Jan 2023 15:16:10 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mikhail Zaslonko <zaslonko@linux.ibm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: Re: [PATCH 0/8] lib/zlib: Set of s390 DFLTCC related patches for
+ kernel zlib
+Message-Id: <20230126151610.29e25c9870b77f0c880382bb@linux-foundation.org>
+In-Reply-To: <20230126131428.1222214-1-zaslonko@linux.ibm.com>
+References: <20230126131428.1222214-1-zaslonko@linux.ibm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,52 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc all the folks I forgot to cc when sending the original cover
-letter, sorry about that, plus the folks who very generously tested
-the driver patches]
+On Thu, 26 Jan 2023 14:14:20 +0100 Mikhail Zaslonko <zaslonko@linux.ibm.com> wrote:
 
-On Wed, Jan 18, 2023 at 05:46:03PM -0600, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
+> Patches 1-7 represent a set of s390 zlib hardware support (DFLTCC) related fixes
+> and enhancements integrated from zlib-ng repo relevant to kernel zlib
+> (https://github.com/zlib-ng/zlib-ng).
+> Since the official zlib repository never got DFLTCC support code merged, all
+> the patches have been picked from zlib-ng fork (zlib data compression library
+> for the next generation systems). This repo contains new optimizations and
+> fixes not getting implemented into the official zlib repository and falls under
+> the same zlib License. All of the original patches from zlib-ng were authored
+> by Ilya Leoshkevich <iii@linux.ibm.com>. Coding style has been preserved for
+> future maintainability.
+> Patches 1-2 should have no effect for the kernel zlib but make the code
+> closer to zlib-ng for future maintainability.
+> Only Patch 3 touches common zlib_deflate code, other patches are relevant to
+> s390 tree only.
 > 
-> Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is native"),
-> ths PCI core sets the Device Control bits that enable error reporting for
-> PCIe devices.
+> Patch 8 is separate and intends to resolve an issue with kernel PPP driver
+> which can use kernel zlib for packet compression. Without this patch PPP
+> decompression can fail due to error code returned by hardware (dfltcc_inflate)
+> and PPP disables zlib compression for further packets.
 > 
-> This series removes redundant calls to pci_enable_pcie_error_reporting()
-> that do the same thing from the AER driver and several NIC drivers.
-> 
-> There are several more drivers where this should be removed; I started with
-> just the Intel drivers here.
-> 
-> Bjorn Helgaas (9):
->   PCI/AER: Remove redundant Device Control Error Reporting Enable
->   e1000e: Remove redundant pci_enable_pcie_error_reporting()
->   fm10k: Remove redundant pci_enable_pcie_error_reporting()
->   i40e: Remove redundant pci_enable_pcie_error_reporting()
->   iavf: Remove redundant pci_enable_pcie_error_reporting()
->   ice: Remove redundant pci_enable_pcie_error_reporting()
->   igb: Remove redundant pci_enable_pcie_error_reporting()
->   igc: Remove redundant pci_enable_pcie_error_reporting()
->   ixgbe: Remove redundant pci_enable_pcie_error_reporting()
+> @Andrew, would you pick this patch series yourself (which is totally fine
+> with me) or shall we carry it via s390 tree?
 
-Thank you very much for reviewing and testing these.  I applied the
-first (PCI/AER) patch to the PCI tree.
+I'll grab.  zlib changes are pretty rare, but perhaps someone else will
+do something..
 
-I think Jakub is planning to merge the rest via the netdev tree.
-There are no dependencies, so they can be squashed if desired.  Let me
-know if you'd prefer me to merge them or squash them.
+> Mikhail Zaslonko (8):
+>   lib/zlib: Adjust offset calculation for dfltcc_state
+>   lib/zlib: Implement switching between DFLTCC and software
+>   lib/zlib: Fix DFLTCC not flushing EOBS when creating raw streams
+>   lib/zlib: Fix DFLTCC ignoring flush modes when avail_in == 0
+>   lib/zlib: DFLTCC not writing header bits when avail_out == 0
+>   lib/zlib: Split deflate and inflate states for DFLTCC
+>   lib/zlib: DFLTCC support inflate with small window
+>   lib/zlib: DFLTCC always switch to software inflate for Z_PACKET_FLUSH
+>     option
 
->  drivers/net/ethernet/intel/e1000e/netdev.c    |  7 ---
->  drivers/net/ethernet/intel/fm10k/fm10k_pci.c  |  5 --
->  drivers/net/ethernet/intel/i40e/i40e_main.c   |  4 --
->  drivers/net/ethernet/intel/iavf/iavf_main.c   |  5 --
->  drivers/net/ethernet/intel/ice/ice_main.c     |  3 --
->  drivers/net/ethernet/intel/igb/igb_main.c     |  5 --
->  drivers/net/ethernet/intel/igc/igc_main.c     |  5 --
->  drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |  5 --
->  drivers/pci/pcie/aer.c                        | 48 -------------------
->  9 files changed, 87 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
+Most of these have a github link in lieu of a changelog.  And most of
+the github commits are unchangelogged.  That's pretty sad, but the zlib
+audience is small and zlib isn't really kernel code anyway, so I guess
+we can look the other way.
