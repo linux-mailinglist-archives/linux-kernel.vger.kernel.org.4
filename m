@@ -2,34 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B52567D425
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 883B567D426
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbjAZS04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:26:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
+        id S232095AbjAZS1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbjAZS0t (ORCPT
+        with ESMTP id S232127AbjAZS0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:26:49 -0500
+        Thu, 26 Jan 2023 13:26:51 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 359BF6BBDA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 10:26:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DA1A6D347
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 10:26:41 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 92D9A1515;
-        Thu, 26 Jan 2023 10:27:21 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C36E1152B;
+        Thu, 26 Jan 2023 10:27:22 -0800 (PST)
 Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6CB963F71E;
-        Thu, 26 Jan 2023 10:26:38 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D28483F71E;
+        Thu, 26 Jan 2023 10:26:39 -0800 (PST)
 From:   Robin Murphy <robin.murphy@arm.com>
 To:     joro@8bytes.org, will@kernel.org
 Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org, hch@lst.de,
-        jgg@nvidia.com, baolu.lu@linux.intel.com,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v2 7/8] iommu: Retire bus ops
-Date:   Thu, 26 Jan 2023 18:26:22 +0000
-Message-Id: <198e82a6b1a28605409c395da4ec1a67b0e1587b.1674753627.git.robin.murphy@arm.com>
+        jgg@nvidia.com, baolu.lu@linux.intel.com
+Subject: [PATCH v2 8/8] iommu: Clean up open-coded ownership checks
+Date:   Thu, 26 Jan 2023 18:26:23 +0000
+Message-Id: <af9d39475ac0811650e617983d7e7859c7b0e856.1674753627.git.robin.murphy@arm.com>
 X-Mailer: git-send-email 2.36.1.dirty
 In-Reply-To: <cover.1674753627.git.robin.murphy@arm.com>
 References: <cover.1674753627.git.robin.murphy@arm.com>
@@ -43,151 +41,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the rest of the API internals converted, it's time to finally
-tackle probe_device and how we bootstrap the per-device ops association
-to begin with. This ends up being disappointingly straightforward, since
-fwspec users are already doing it in order to find their of_xlate
-callback, and it works out that we can easily do the equivalent for
-other drivers too. Then shuffle the remaining awareness of iommu_ops
-into the couple of core headers that still need it, and breathe a sigh
-of relief.
+Some drivers already implement their own defence against the possibility
+of being given someone else's device. Since this is now taken care of by
+the core code (and via a slightly different path from the original
+fwspec-based idea), let's clean them up.
 
-Ding dong the bus ops are gone!
-
-CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-CC: Christoph Hellwig <hch@lst.de>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
 
-v2: Clarify the iommu_ops_from_fwnode(NULL) assumption [Baolu]
+v2: No change, but I'll note here that it's really about the fwspec->ops
+    checks; the !fwspec clauses are just going along for the ride where
+    that's clearly impossible as well. I plan to sweep for other
+    redundant checks in future when looking at the relevant flows.
 
- drivers/iommu/iommu.c       | 28 +++++++++++++++++-----------
- include/acpi/acpi_bus.h     |  2 ++
- include/linux/device.h      |  1 -
- include/linux/device/bus.h  |  5 -----
- include/linux/dma-map-ops.h |  1 +
- 5 files changed, 20 insertions(+), 17 deletions(-)
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  3 ---
+ drivers/iommu/arm/arm-smmu/arm-smmu.c       |  9 +--------
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c     | 14 ++------------
+ drivers/iommu/mtk_iommu.c                   |  7 +------
+ drivers/iommu/mtk_iommu_v1.c                |  3 ---
+ drivers/iommu/sprd-iommu.c                  |  8 +-------
+ drivers/iommu/virtio-iommu.c                |  3 ---
+ 7 files changed, 5 insertions(+), 42 deletions(-)
 
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index bdc5fdf39d2b..7fb7c84e3dc6 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -219,13 +219,6 @@ int iommu_device_register(struct iommu_device *iommu,
- 	/* We need to be able to take module references appropriately */
- 	if (WARN_ON(is_module_address((unsigned long)ops) && !ops->owner))
- 		return -EINVAL;
--	/*
--	 * Temporarily enforce global restriction to a single driver. This was
--	 * already the de-facto behaviour, since any possible combination of
--	 * existing drivers would compete for at least the PCI or platform bus.
--	 */
--	if (iommu_buses[0]->iommu_ops && iommu_buses[0]->iommu_ops != ops)
--		return -EBUSY;
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+index ab160198edd6..cb05d9771192 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+@@ -2642,9 +2642,6 @@ static struct iommu_device *arm_smmu_probe_device(struct device *dev)
+ 	struct arm_smmu_master *master;
+ 	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
  
- 	iommu->ops = ops;
- 	if (hwdev)
-@@ -235,10 +228,8 @@ int iommu_device_register(struct iommu_device *iommu,
- 	list_add_tail(&iommu->list, &iommu_device_list);
- 	spin_unlock(&iommu_device_lock);
+-	if (!fwspec || fwspec->ops != &arm_smmu_ops)
+-		return ERR_PTR(-ENODEV);
+-
+ 	if (WARN_ON_ONCE(dev_iommu_priv_get(dev)))
+ 		return ERR_PTR(-EBUSY);
  
--	for (int i = 0; i < ARRAY_SIZE(iommu_buses) && !err; i++) {
--		iommu_buses[i]->iommu_ops = ops;
-+	for (int i = 0; i < ARRAY_SIZE(iommu_buses) && !err; i++)
- 		err = bus_iommu_probe(iommu_buses[i]);
--	}
- 	if (err)
- 		iommu_device_unregister(iommu);
- 	return err;
-@@ -310,12 +301,27 @@ static u32 dev_iommu_get_max_pasids(struct device *dev)
- 
- static int __iommu_probe_device(struct device *dev, struct list_head *group_list)
- {
--	const struct iommu_ops *ops = dev->bus->iommu_ops;
-+	const struct iommu_ops *ops;
- 	struct iommu_device *iommu_dev;
-+	struct iommu_fwspec *fwspec;
- 	struct iommu_group *group;
- 	static DEFINE_MUTEX(iommu_probe_device_lock);
+diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+index 607f06af01b6..235550db0d59 100644
+--- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
++++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+@@ -1118,11 +1118,6 @@ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
+ 	struct arm_smmu_device *smmu;
  	int ret;
  
-+	/*
-+	 * For FDT-based systems and ACPI IORT/VIOT, drivers register IOMMU
-+	 * instances with non-NULL fwnodes, and client devices should have been
-+	 * identified with a fwspec by this point. Otherwise, we can currently
-+	 * assume that only one of Intel, AMD, s390, PAMU or legacy SMMUv2 can
-+	 * be present, and that any of their registered instances has suitable
-+	 * ops for probing, and thus cheekily co-opt the same mechanism.
-+	 */
-+	fwspec = dev_iommu_fwspec_get(dev);
-+	if (fwspec && fwspec->ops)
-+		ops = fwspec->ops;
-+	else
-+		ops = iommu_ops_from_fwnode(NULL);
-+
- 	if (!ops)
- 		return -ENODEV;
- 	/*
-diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-index cd3b75e08ec3..067dde9291c9 100644
---- a/include/acpi/acpi_bus.h
-+++ b/include/acpi/acpi_bus.h
-@@ -614,6 +614,8 @@ struct acpi_pci_root {
- 
- /* helper */
- 
-+struct iommu_ops;
-+
- bool acpi_dma_supported(const struct acpi_device *adev);
- enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev);
- int acpi_iommu_fwspec_init(struct device *dev, u32 id,
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 44e3acae7b36..f7a7ecafedd3 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -41,7 +41,6 @@ struct class;
- struct subsys_private;
- struct device_node;
- struct fwnode_handle;
--struct iommu_ops;
- struct iommu_group;
- struct dev_pin_info;
- struct dev_iommu;
-diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
-index d8b29ccd07e5..4ece3470112f 100644
---- a/include/linux/device/bus.h
-+++ b/include/linux/device/bus.h
-@@ -63,9 +63,6 @@ struct fwnode_handle;
-  *			this bus.
-  * @pm:		Power management operations of this bus, callback the specific
-  *		device driver's pm-ops.
-- * @iommu_ops:  IOMMU specific operations for this bus, used to attach IOMMU
-- *              driver implementations to a bus and allow the driver to do
-- *              bus-specific setup
-  * @p:		The private data of the driver core, only the driver core can
-  *		touch this.
-  * @lock_key:	Lock class key for use by the lock validator
-@@ -109,8 +106,6 @@ struct bus_type {
- 
- 	const struct dev_pm_ops *pm;
- 
--	const struct iommu_ops *iommu_ops;
+-	if (!fwspec || fwspec->ops != &arm_smmu_ops) {
+-		dev_err(dev, "cannot attach to SMMU, is it on the same bus?\n");
+-		return -ENXIO;
+-	}
 -
- 	struct subsys_private *p;
- 	struct lock_class_key lock_key;
+ 	/*
+ 	 * FIXME: The arch/arm DMA API code tries to attach devices to its own
+ 	 * domains between of_xlate() and probe_device() - we have no way to cope
+@@ -1352,10 +1347,8 @@ static struct iommu_device *arm_smmu_probe_device(struct device *dev)
+ 		fwspec = dev_iommu_fwspec_get(dev);
+ 		if (ret)
+ 			goto out_free;
+-	} else if (fwspec && fwspec->ops == &arm_smmu_ops) {
+-		smmu = arm_smmu_get_by_fwnode(fwspec->iommu_fwnode);
+ 	} else {
+-		return ERR_PTR(-ENODEV);
++		smmu = arm_smmu_get_by_fwnode(fwspec->iommu_fwnode);
+ 	}
  
-diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-index d678afeb8a13..e8ebf0bf611b 100644
---- a/include/linux/dma-map-ops.h
-+++ b/include/linux/dma-map-ops.h
-@@ -10,6 +10,7 @@
- #include <linux/pgtable.h>
+ 	ret = -EINVAL;
+diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+index d7be3adee426..3fe02720ab29 100644
+--- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
++++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+@@ -79,16 +79,6 @@ static struct qcom_iommu_domain *to_qcom_iommu_domain(struct iommu_domain *dom)
  
- struct cma;
-+struct iommu_ops;
+ static const struct iommu_ops qcom_iommu_ops;
  
- /*
-  * Values for struct dma_map_ops.flags:
+-static struct qcom_iommu_dev * to_iommu(struct device *dev)
+-{
+-	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+-
+-	if (!fwspec || fwspec->ops != &qcom_iommu_ops)
+-		return NULL;
+-
+-	return dev_iommu_priv_get(dev);
+-}
+-
+ static struct qcom_iommu_ctx * to_ctx(struct qcom_iommu_domain *d, unsigned asid)
+ {
+ 	struct qcom_iommu_dev *qcom_iommu = d->iommu;
+@@ -361,7 +351,7 @@ static void qcom_iommu_domain_free(struct iommu_domain *domain)
+ 
+ static int qcom_iommu_attach_dev(struct iommu_domain *domain, struct device *dev)
+ {
+-	struct qcom_iommu_dev *qcom_iommu = to_iommu(dev);
++	struct qcom_iommu_dev *qcom_iommu = dev_iommu_priv_get(dev);
+ 	struct qcom_iommu_domain *qcom_domain = to_qcom_iommu_domain(domain);
+ 	int ret;
+ 
+@@ -486,7 +476,7 @@ static bool qcom_iommu_capable(struct device *dev, enum iommu_cap cap)
+ 
+ static struct iommu_device *qcom_iommu_probe_device(struct device *dev)
+ {
+-	struct qcom_iommu_dev *qcom_iommu = to_iommu(dev);
++	struct qcom_iommu_dev *qcom_iommu = dev_iommu_priv_get(dev);
+ 	struct device_link *link;
+ 
+ 	if (!qcom_iommu)
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index d5a4955910ff..ce19a2a21e2a 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -776,16 +776,11 @@ static phys_addr_t mtk_iommu_iova_to_phys(struct iommu_domain *domain,
+ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+ {
+ 	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+-	struct mtk_iommu_data *data;
++	struct mtk_iommu_data *data = dev_iommu_priv_get(dev);
+ 	struct device_link *link;
+ 	struct device *larbdev;
+ 	unsigned int larbid, larbidx, i;
+ 
+-	if (!fwspec || fwspec->ops != &mtk_iommu_ops)
+-		return ERR_PTR(-ENODEV); /* Not a iommu client device */
+-
+-	data = dev_iommu_priv_get(dev);
+-
+ 	if (!MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_MM))
+ 		return &data->iommu;
+ 
+diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+index 78d0a84c704f..328833823181 100644
+--- a/drivers/iommu/mtk_iommu_v1.c
++++ b/drivers/iommu/mtk_iommu_v1.c
+@@ -478,9 +478,6 @@ static struct iommu_device *mtk_iommu_v1_probe_device(struct device *dev)
+ 		idx++;
+ 	}
+ 
+-	if (!fwspec || fwspec->ops != &mtk_iommu_v1_ops)
+-		return ERR_PTR(-ENODEV); /* Not a iommu client device */
+-
+ 	data = dev_iommu_priv_get(dev);
+ 
+ 	/* Link the consumer device with the smi-larb device(supplier) */
+diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
+index ae94d74b73f4..85378f7cfd1f 100644
+--- a/drivers/iommu/sprd-iommu.c
++++ b/drivers/iommu/sprd-iommu.c
+@@ -358,13 +358,7 @@ static phys_addr_t sprd_iommu_iova_to_phys(struct iommu_domain *domain,
+ 
+ static struct iommu_device *sprd_iommu_probe_device(struct device *dev)
+ {
+-	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+-	struct sprd_iommu_device *sdev;
+-
+-	if (!fwspec || fwspec->ops != &sprd_iommu_ops)
+-		return ERR_PTR(-ENODEV);
+-
+-	sdev = dev_iommu_priv_get(dev);
++	struct sprd_iommu_device *sdev = dev_iommu_priv_get(dev);
+ 
+ 	return &sdev->iommu;
+ }
+diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
+index 5b8fe9bfa9a5..59f1abd6ee53 100644
+--- a/drivers/iommu/virtio-iommu.c
++++ b/drivers/iommu/virtio-iommu.c
+@@ -945,9 +945,6 @@ static struct iommu_device *viommu_probe_device(struct device *dev)
+ 	struct viommu_dev *viommu = NULL;
+ 	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+ 
+-	if (!fwspec || fwspec->ops != &viommu_ops)
+-		return ERR_PTR(-ENODEV);
+-
+ 	viommu = viommu_get_by_fwnode(fwspec->iommu_fwnode);
+ 	if (!viommu)
+ 		return ERR_PTR(-ENODEV);
 -- 
 2.36.1.dirty
 
