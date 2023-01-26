@@ -2,184 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C4A67CC8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0D167CC90
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbjAZNqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:46:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
+        id S230252AbjAZNsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjAZNqb (ORCPT
+        with ESMTP id S230352AbjAZNsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:46:31 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FD53C2C;
-        Thu, 26 Jan 2023 05:46:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674740789; x=1706276789;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vrS30aIV2IHHyAksZ/6zJl0RtGur8hynqjqn0BJeecU=;
-  b=I867bbOPTP6+tc71LUYe1Sz7xkb1l8pFHrW56tx9J23Cowx9gKi46EdQ
-   eW2r4hQKpwXiSGOduUHWFk7whkWbcLfwgecVvcC1Qgzq5Jb4VrL5nX/nI
-   Hd8MsWHUvM9YVuDxOyIw54DqAQ/gvf/dHjfxAbxxIrFj51xAeI0qyO9ka
-   uYIWN2/2dNE/pY75L6N13pP7sHBsWCD/4mPmigj7iEnwCwudPk0l2frOy
-   fYrAUaJMLt2ilRd2+uZ6KtmdiMJQg68RliRRg8l1XDxpq91+LP+4dYJ83
-   MH2xb1hXoqZ4Bkxr5g2Ni4zsRE76nPoZqnvpamleNUu5IDYtKIoY5b7PL
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="307159279"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="307159279"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 05:46:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="693337328"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="693337328"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 26 Jan 2023 05:46:25 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pL2a8-00FQB8-0A;
-        Thu, 26 Jan 2023 15:46:24 +0200
-Date:   Thu, 26 Jan 2023 15:46:23 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/8] gpiolib: remove asm-generic/gpio.h
-Message-ID: <Y9KELwugMhV1TCiK@smile.fi.intel.com>
-References: <20230126132801.2042371-1-arnd@kernel.org>
- <20230126132801.2042371-4-arnd@kernel.org>
+        Thu, 26 Jan 2023 08:48:03 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7260134314
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:48:02 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id C53975C00ED;
+        Thu, 26 Jan 2023 08:48:01 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 26 Jan 2023 08:48:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1674740881; x=1674827281; bh=k5J6EfmVH8
+        O4lmkv85SSqR8bROTedQCfPtI6ATiEF80=; b=E7mweMcI2FI9eK9g1n5cBnEsyv
+        Uvr2hvB5RLotvxKelx6WTpCOc4QT5ywDC/vRyGkoQ1HLw9lSaEMg6N1VM3c+dt3v
+        XEmO4+F/n4LJcw/ACqVGrun+p9DHV544R2sMZikOLDBUecCm7Fvx56UHmnCr0a30
+        DPYQEYXmpjwcy6wsoL0QvkS+clbIbtxZdO+oRXmMLK8kcnPliOxm+RyI8b+YV9DD
+        aEXAzFRQcep4rMDK/citwwaFw/JIic2f3SJWQOMa6bFjghJtO4oYhnQjlcgHnOiR
+        uyNMeWIfGAjUlV6Rw+BPQ99ujUKtlxnsGdAd03+jnvm2UWHvs9wHzeOKiZYQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1674740881; x=1674827281; bh=k5J6EfmVH8O4l
+        mkv85SSqR8bROTedQCfPtI6ATiEF80=; b=pwS+/XLHcN82l09dsCUcRVty7TygA
+        u345uJPwYZ2gFng82EZzDgNex7uySERHqOAdYr0iMPa2lh+5gPvPIw3kriy/q+Ff
+        VpvgXzJNN0CC7soGcF9B/5/TGREMvMmoWzlcKcbh2HnfMDeM6k7DuOZrsFqR1U5a
+        /n9cJFcZkznsombADbPFzKhhsPwvY+GfoaOZFW28B9AZJDy+Gats3Ixwl0eHFpve
+        Efa1CAkGQOcFn9y5G7RsblqnCJ6xs99DANNFh+AtxsvMDQJ1id9Vx4xblJfNM0y2
+        QpiRaDRj/kuE/HW87Vgo/cHXOZltPluqIsxHeNGyrWqtB3uMpi2Z4cjsA==
+X-ME-Sender: <xms:kYTSY6ylFQGGg_ywe_s2SuOXTR7IT08eOuHbClkCK1eSWEwU9uobSQ>
+    <xme:kYTSY2QulhM0rMuturj0D0Y_HfcHqeng5dR7Tn5cirVS4-Lb8pdGAdQSG1w3Micos
+    teEzr8stXQhVSAaw5A>
+X-ME-Received: <xmr:kYTSY8XwL7gSbmS_4HoVEl9xNtEPbf_NmfClXs_Hwa895AOJ51ods9YPBROzWoTgp2jvufk0ForZfAxggENyq3kYAFCaIvA-TrpzdwuBBNGl6Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgheeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepgfeutdejvdeiheffveetieejtdfhleekleffheejtdfhkeehfeekgedvgeei
+    tddtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:kYTSYwjuOY9z6Tad0tG39JMhTOBvz8rqkUA9Ye4ATnSI2zqploChbw>
+    <xmx:kYTSY8BNKaOxXPyQlAmkARYVyzgyxRfv77rtli8OzmaLvuPJQljLMg>
+    <xmx:kYTSYxI3V0JDeb-APWobafb01wuYk3y08Op3_mZnW9b3TMw23uMkeQ>
+    <xmx:kYTSY2wjXr6QEPgU5470oP7jIEyQgVyvnTbpBAj2Xe8nQn2TlmsEVw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 26 Jan 2023 08:48:01 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH v2 0/9] drm/vc4: hdmi: Broadcast RGB, BT601, BT2020
+Date:   Thu, 26 Jan 2023 14:46:35 +0100
+Message-Id: <20221207-rpi-hdmi-improvements-v2-0-8ace2d8221ad@cerno.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126132801.2042371-4-arnd@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADuE0mMC/4WNTQrCMBCFr1KydiRJ1YIr7yEu8jOagTYpkxiQ0
+ rs7eAFXj+/B996mKjJhVddhU4ydKpUsYA+DCsnlFwJFYWW1tcbqCXglSHEhoGXl0nHB3CqMEU3Q
+ 0TsbgxLXu4rg2eWQxM7veZYyUW2FP7+vbiTu/2a7AQ0Xb87PaToFM7pbQM7l2FB2H/u+fwH9JJJ
+ nwAAAAA==
+To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2598; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=1Vb0fKsZ2vacyVeb1RTpG6gPYgxfRyxw4QIlRNR9Ngg=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMmXWpx5P8zukFS6d02/9ZDuJj7L02mb+ade/VvBFXBL5tRK
+ u5uPOkpYGMS4GGTFFFlihM2XxJ2a9bqTjW8ezBxWJpAhDFycAjARmzSGH2unZ7E/X//m+NGMCwr9ul
+ Xc9usfHv9RW/HW6ynLXI8Zjgz/tJgXPhf/26GmfPtvVbRkCcdj3aQlXCn22vXqZbvXhpqzAQA=
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 02:27:56PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The asm-generic/gpio.h file is now always included when
-> using gpiolib, so just move its contents into linux/gpio.h
-> with a few minor simplifications.
+Hi,
 
-Thanks! Very appreciated, my comments below.
+Here's a collection of patches that have been in the downstream tree for a
+while to add a bunch of new features to the HDMI controller.
 
-...
+Let me know what you think,
+Maxime
 
-> --- a/drivers/gpio/gpio-davinci.c
-> +++ b/drivers/gpio/gpio-davinci.c
-> @@ -7,6 +7,7 @@
->   */
+To: Emma Anholt <emma@anholt.net>
+To: Maxime Ripard <mripard@kernel.org>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
->  #include <linux/gpio/driver.h>
+---
+Changes in v2:
+- Added a new patch to convert every state accessor to container_of_const
+- Added a comment to mention why planes don't need to be checked
+- Removed vc4_hdmi.broadcast_rgb field
+- Reordered the CSC swap and CSC matrices organization patches to make it clearer
+- Link to v1: https://lore.kernel.org/r/20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech
 
+---
+Dave Stevenson (7):
+      drm/vc4: hdmi: Add Broadcast RGB property to allow override of RGB range
+      drm/vc4: hdmi: Rename full range helper
+      drm/vc4: hdmi: Swap CSC matrix channels for YUV444
+      drm/vc4: hdmi: Rework the CSC matrices organization
+      drm/vc4: hdmi: Add a function to retrieve the CSC matrix
+      drm/vc4: hdmi: Add BT.601 Support
+      drm/vc4: hdmi: Add BT.2020 Support
 
-> +#include <linux/gpio.h>
+Maxime Ripard (2):
+      drm/vc4: Switch to container_of_const
+      drm/vc4: hdmi: Update all the planes if the TV margins are changed
 
-I believe the driver does not need this.
+ drivers/gpu/drm/vc4/tests/vc4_mock.h        |   3 +
+ drivers/gpu/drm/vc4/tests/vc4_mock_output.c |   4 +-
+ drivers/gpu/drm/vc4/vc4_bo.c                |   2 +-
+ drivers/gpu/drm/vc4/vc4_crtc.c              |   4 +-
+ drivers/gpu/drm/vc4/vc4_dpi.c               |   7 +-
+ drivers/gpu/drm/vc4/vc4_drv.h               |  65 ++----
+ drivers/gpu/drm/vc4/vc4_dsi.c               |  19 +-
+ drivers/gpu/drm/vc4/vc4_gem.c               |   7 +-
+ drivers/gpu/drm/vc4/vc4_hdmi.c              | 343 +++++++++++++++++++++++-----
+ drivers/gpu/drm/vc4/vc4_hdmi.h              |  25 +-
+ drivers/gpu/drm/vc4/vc4_irq.c               |   2 +-
+ drivers/gpu/drm/vc4/vc4_kms.c               |  16 +-
+ drivers/gpu/drm/vc4/vc4_plane.c             |   2 +-
+ drivers/gpu/drm/vc4/vc4_txp.c               |  12 +-
+ drivers/gpu/drm/vc4/vc4_v3d.c               |   2 +-
+ drivers/gpu/drm/vc4/vc4_vec.c               |  14 +-
+ 16 files changed, 355 insertions(+), 172 deletions(-)
+---
+base-commit: 9fbee811e479aca2f3523787cae1f46553141b40
+change-id: 20221207-rpi-hdmi-improvements-3de1c0dba2dc
 
-I have briefly checked all gpio_ places in it and found nothing that requires
-this inclusion to be done.
-
->  #include <linux/errno.h>
->  #include <linux/kernel.h>
->  #include <linux/clk.h>
-> @@ -24,8 +25,6 @@
->  #include <linux/spinlock.h>
->  #include <linux/pm_runtime.h>
->  
-> -#include <asm-generic/gpio.h>
-> -
->  #define MAX_REGS_BANKS 5
->  #define MAX_INT_PER_BANK 32
-
-Thanks for this, that was a PITA!
-
-...
-
-> --- a/drivers/pinctrl/core.c
-> +++ b/drivers/pinctrl/core.c
-> @@ -30,7 +30,7 @@
->  
->  #ifdef CONFIG_GPIOLIB
->  #include "../gpio/gpiolib.h"
-> -#include <asm-generic/gpio.h>
-> +#include <linux/gpio.h>
-
-Can we actually swap them?
-
-#include <linux/gpio.h>
-#include "../gpio/gpiolib.h"
-
-But hold on, why do we even need gpio.h here?!
-
->  #endif
->  
->  #include "core.h"
-
-...
-
-> --- a/include/linux/gpio.h
-> +++ b/include/linux/gpio.h
-> @@ -54,26 +54,101 @@ struct gpio {
->  };
->  
->  #ifdef CONFIG_GPIOLIB
-> -#include <asm-generic/gpio.h>
-> +#include <linux/compiler.h>
-
-> +#include <linux/gpio/driver.h>
-> +#include <linux/gpio/consumer.h>
-
-#include <linux/gpio/consumer.h>
-#include <linux/gpio/driver.h>
-
-...
-
-> +/*
-> + * "valid" GPIO numbers are nonnegative and may be passed to
-> + * setup routines like gpio_request().  only some valid numbers
-
-While at it, '.  only' --> '. Only'.
-
-> + * can successfully be requested and used.
-> + *
-> + * Invalid GPIO numbers are useful for indicating no-such-GPIO in
-> + * platform data and other tables.
-> + */
-
-...
-
-> +extern int gpio_request(unsigned gpio, const char *label);
-> +extern void gpio_free(unsigned gpio);
-
-While at it, s/extern//.
-
-...
-
-> +extern int gpio_request_one(unsigned gpio, unsigned long flags, const char *label);
-> +extern int gpio_request_array(const struct gpio *array, size_t num);
-> +extern void gpio_free_array(const struct gpio *array, size_t num);
-
-Ditto.
-
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Maxime Ripard <maxime@cerno.tech>
