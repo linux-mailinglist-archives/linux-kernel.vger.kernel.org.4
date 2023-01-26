@@ -2,91 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBF267C28B
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 02:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A48C67C28E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 02:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjAZBpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 20:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S230051AbjAZBqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 20:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbjAZBpq (ORCPT
+        with ESMTP id S229458AbjAZBqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 20:45:46 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 715A2611D2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:45:45 -0800 (PST)
-Received: (qmail 239293 invoked by uid 1000); 25 Jan 2023 20:45:44 -0500
-Date:   Wed, 25 Jan 2023 20:45:44 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <Y9HbSBLrNJ9O2ad6@rowland.harvard.edu>
-References: <20230125022019.GB2948950@paulmck-ThinkPad-P17-Gen-1>
- <cedf3a39-12cd-1cb1-ad5a-7c10768cee40@huaweicloud.com>
- <20230125150520.GG2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9FMEATzv3gcTUe2@rowland.harvard.edu>
- <20230125171832.GH2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9F+SyLpxHwdK0rE@rowland.harvard.edu>
- <20230125194651.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9GVFkVRRRs5/rBd@rowland.harvard.edu>
- <20230125213832.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230125233308.GA1552266@paulmck-ThinkPad-P17-Gen-1>
+        Wed, 25 Jan 2023 20:46:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB214B1B2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:46:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8CA37B81B99
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:46:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AED66C433EF;
+        Thu, 26 Jan 2023 01:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674697569;
+        bh=ISaeOmOM3kCAsLFU8We6f/ym3iORXFNgcC3FJNjdmqI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eJTNu+nrrVNBzgOjAFb3LlVB4tHkZepX6M6UQywzI1lX5JGkv5w4hRkqxZdTJ+sAu
+         Z84GYk0Pg7ESQrPhU6NKs2Q6lRg4tMXRYE/xZW3rxdBxuFas+uENHVAPPiOCdgZLD5
+         qwEK8F6aiZJug59mZw9oKHVZf2iq0c1FSPlEVbjdNSnJgY8X6fRfP1BCnZ8f+OYQ4D
+         SujNUxiISOc7+0/CYggdeaMOeU/dV/sK/Kbeal3AoXbmKLi7FhCix9wppmrACVPjYZ
+         iabYBqzmO0eP3c7FBFM57WWrN286Rr7nZEwuD7XzSCHktj49OqmVehYoLpqmBYWnni
+         lI9QxUcZxVBJA==
+Date:   Wed, 25 Jan 2023 17:46:06 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Stephane Eranian <eranian@google.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH v3 1/3] objtool: Install libsubcmd in build
+Message-ID: <20230126014606.idgutoohowyel6ei@treble>
+References: <20230105090155.357604-1-irogers@google.com>
+ <20230105090155.357604-2-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230125233308.GA1552266@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230105090155.357604-2-irogers@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 03:33:08PM -0800, Paul E. McKenney wrote:
-> Ah, and returning to the earlier question as to whether srcu_read_unlock()
-> can use release semantics instead of smp_mb(), at the very least, this
-> portion of the synchronize_srcu() function's header comment must change:
+On Thu, Jan 05, 2023 at 01:01:53AM -0800, Ian Rogers wrote:
+> Including from tools/lib can create inadvertent dependencies. Install
+> libsubcmd in the objtool build and then include the headers from
+> there.
 > 
-> 	On systems with more than one CPU, when synchronize_srcu()
-> 	returns, each CPU is guaranteed to have executed a full
-> 	memory barrier since the end of its last corresponding SRCU
-> 	read-side critical section whose beginning preceded the call
-> 	to synchronize_srcu().
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Yes, that would not be true.  But on the other hand, it would be true 
-that each CPU is guaranteed to have executed a release memory barrier 
-since the end of its last corresponding SRCU read-side critical section 
-whose beginning preceded the call to synchronize_srcu(), _and_ the CPU 
-executing synchronize_srcu() is guaranteed to have executed a full 
-memory barrier after seeing the values from all those release stores.
-This is not quite the same thing but it ought to be just as good.
+After a make, "git status" shows:
 
-> I don't know of any SRCU code that relies on this, but it would be good to
-> check.	There used to (and might still) be RCU code relying on this, which
-> is why this sentence was added to the header comment in the first place.
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	tools/objtool/libsubcmd/
 
-If there is code relying on that guarantee, it ought to work just as 
-well by relying on the modified guarantee.
+So tools/objtool/.gitignore needs an update.
 
-Of course, there might be code relying on a guarantee that 
-srcu_read_unlock() executes a full memory barrier.  This guarantee would 
-certainly no longer hold.  But as I understand it, this guarantee was 
-never promised by the SRCU subsystem.
+> --- a/tools/objtool/Makefile
+> +++ b/tools/objtool/Makefile
+> @@ -12,9 +12,15 @@ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+>  srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  endif
+>  
+> -SUBCMD_SRCDIR		= $(srctree)/tools/lib/subcmd/
+> -LIBSUBCMD_OUTPUT	= $(or $(OUTPUT),$(CURDIR)/)
+> -LIBSUBCMD		= $(LIBSUBCMD_OUTPUT)libsubcmd.a
+> +LIBSUBCMD_DIR = $(srctree)/tools/lib/subcmd/
+> +ifneq ($(OUTPUT),)
+> +  LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
+> +else
+> +  LIBSUBCMD_OUTPUT = $(CURDIR)/libsubcmd
+> +endif
+> +LIBSUBCMD_DESTDIR = $(LIBSUBCMD_OUTPUT)
 
-Alan
+Similar to Nicolas' comment, it's confusing to have two variables with
+the same value.  Please s/LIBSUBCMD_DESTDIR/LIBSUBCMD_OUTPUT/
+
+> +LIBSUBCMD = $(LIBSUBCMD_OUTPUT)/libsubcmd.a
+> +CFLAGS += -I$(LIBSUBCMD_OUTPUT)/include
+
+As far as I can tell, this CFLAGS addition is both ineffective (it's
+overwritten later) and unnecessary (it's made redundant by the same
+addition to the INCLUDES variable).
+
+-- 
+Josh
