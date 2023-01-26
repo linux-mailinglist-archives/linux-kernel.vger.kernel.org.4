@@ -2,85 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B34567D8B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E335A67D8BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232782AbjAZWpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S232985AbjAZWr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjAZWpd (ORCPT
+        with ESMTP id S229639AbjAZWrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:45:33 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DDC45F6B
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:45:32 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 26 Jan 2023 17:47:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5902245F79
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:47:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P2wlT4JJLz4xP9;
-        Fri, 27 Jan 2023 09:45:25 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1674773130;
-        bh=XOKb+ncwVNSj6JKEiaBHvEDttpakjMycwDg9zTg++Is=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=lXPZDhnKp+sd6gqb53jikb6eOO6odHtdILrgzMgKDSyLuMoDiBgRP+ELHuco2Pk5j
-         bExTu6/51nR17KrDBvMMVYYRMM2grTktq8Y19ZTAzOGve6zQ0RyaYuxJJU/ccYwlLq
-         VARaTKbguSWg8orJhovLaoxUEZ/5QmZ4v3DA+YJ3tYKHLpmDuiMv8TMcbVpE+OaslI
-         cN4ip7nvjhM/ywEx0AI/tTtnUKDaMxc8nsEcWchZvTI/jVdU5mh3Uk7y/gMUlLr/rh
-         I1ETMQKGU6oSz8J0oiWM1S5u/Qz57DHabOJzXwIqRnptofS40o/hs7F8nK2MOsp1A7
-         36j8Yufdy8jkw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
-        mingo@redhat.com, will@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        surenb@google.com
-Subject: Re: [PATCH v4 5/7] mm: replace vma->vm_flags indirect modification
- in ksm_madvise
-In-Reply-To: <20230126193752.297968-6-surenb@google.com>
-References: <20230126193752.297968-1-surenb@google.com>
- <20230126193752.297968-6-surenb@google.com>
-Date:   Fri, 27 Jan 2023 09:45:23 +1100
-Message-ID: <87o7qkzzi4.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5FF361982
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 22:47:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E3CC433D2;
+        Thu, 26 Jan 2023 22:47:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1674773243;
+        bh=Ep/KY1mu+CYgnjaFY9zEbtTygigA8q1n5HTt47g3wsM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZNprl7PhmX2pjn2/SqfKBf/BFgPCmxOFGfb3Xdu65l8w0TIX26cGDy94uq5D2Yk+v
+         sxp3N4d97pMptUV6mSJT8e+iowsH3FpgSEUGnkq/5sU9fZxo38/HTxCxgJNMFn9Cj+
+         izplUSGTZRGb152LzibI/rgC2RuzV871BGLMwg10=
+Date:   Thu, 26 Jan 2023 14:47:22 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>, Yang Shi <shy828301@gmail.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Vishal Moola (Oracle) <vishal.moola@gmail.com>
+Subject: Re: [PATCH 0/2] Fixes for hugetlb mapcount at most 1 for shared
+ PMDs
+Message-Id: <20230126144722.8b84116c488553c79d8623ec@linux-foundation.org>
+In-Reply-To: <20230126222721.222195-1-mike.kravetz@oracle.com>
+References: <20230126222721.222195-1-mike.kravetz@oracle.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Suren Baghdasaryan <surenb@google.com> writes:
-> Replace indirect modifications to vma->vm_flags with calls to modifier
-> functions to be able to track flag changes and to keep vma locking
-> correctness.
->
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Acked-by: Michal Hocko <mhocko@suse.com>
-> Acked-by: Mel Gorman <mgorman@techsingularity.net>
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->  arch/powerpc/kvm/book3s_hv_uvmem.c | 6 +++++-
+On Thu, 26 Jan 2023 14:27:19 -0800 Mike Kravetz <mike.kravetz@oracle.com> wrote:
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+> Ongoing folio conversions cause context conflicts in the second patch
+> when applied to mm-unstable/linux-next.  I can create separate patch(es)
+> if people agree with these.
 
-cheers
+I fixed things up.  queue_folios_hugetlb() is now
+
+static int queue_folios_hugetlb(pte_t *pte, unsigned long hmask,
+			       unsigned long addr, unsigned long end,
+			       struct mm_walk *walk)
+{
+	int ret = 0;
+#ifdef CONFIG_HUGETLB_PAGE
+	struct queue_pages *qp = walk->private;
+	unsigned long flags = (qp->flags & MPOL_MF_VALID);
+	struct folio *folio;
+	spinlock_t *ptl;
+	pte_t entry;
+
+	ptl = huge_pte_lock(hstate_vma(walk->vma), walk->mm, pte);
+	entry = huge_ptep_get(pte);
+	if (!pte_present(entry))
+		goto unlock;
+	folio = pfn_folio(pte_pfn(entry));
+	if (!queue_folio_required(folio, qp))
+		goto unlock;
+
+	if (flags == MPOL_MF_STRICT) {
+		/*
+		 * STRICT alone means only detecting misplaced folio and no
+		 * need to further check other vma.
+		 */
+		ret = -EIO;
+		goto unlock;
+	}
+
+	if (!vma_migratable(walk->vma)) {
+		/*
+		 * Must be STRICT with MOVE*, otherwise .test_walk() have
+		 * stopped walking current vma.
+		 * Detecting misplaced folio but allow migrating folios which
+		 * have been queued.
+		 */
+		ret = 1;
+		goto unlock;
+	}
+
+	/*
+	 * With MPOL_MF_MOVE, we try to migrate only unshared folios. If it
+	 * is shared it is likely not worth migrating.
+	 *
+	 * To check if the folio is shared, ideally we want to make sure
+	 * every page is mapped to the same process. Doing that is very
+	 * expensive, so check the estimated mapcount of the folio instead.
+	 */
+	if (flags & (MPOL_MF_MOVE_ALL) ||
+	    (flags & MPOL_MF_MOVE && folio_estimated_mapcount(folio) == 1 &&
+	     !hugetlb_pmd_shared(pte))) {
+		if (isolate_hugetlb(folio, qp->pagelist) &&
+			(flags & MPOL_MF_STRICT))
+			/*
+			 * Failed to isolate folio but allow migrating pages
+			 * which have been queued.
+			 */
+			ret = 1;
+	}
+unlock:
+	spin_unlock(ptl);
+#else
+	BUG();
+#endif
+	return ret;
+}
+
