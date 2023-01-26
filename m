@@ -2,50 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4AD567D714
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C8B67D715
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbjAZVAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
+        id S232192AbjAZVA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjAZVAr (ORCPT
+        with ESMTP id S231655AbjAZVAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:00:47 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923BC7AA1;
-        Thu, 26 Jan 2023 13:00:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wLI4YlaPJ0vdUzGdXt/0yTHNylxA/iLKuoE6TucGDAU=; b=kdSmeM4kphKwe+O4qMDdxOwzWQ
-        j+nWeOIfn/TbDYWVkjiqNWyAO19f48sjgdHswSrjat//hLCKkRHTNFCfeoNDqzAvaZ7AgzlgaqiRT
-        KVmPcP1kFCfZVdATqhYj72YKKlUnK5+1LeqOJxXYr6fztmKEvGe80qPAR/dlJ+ThuKnMVzI9Zxh60
-        tBp+UdcrVlCh2POmKIQAoGfMNfmh/IZTT/uaT+450kU4WunFbEmwKo0UF5yZBqRWjhLLNqnxMzRlS
-        3rG1obQakEa4WaPoM0dlqJbbCgz4ukJdNFR/VlAox9SuEQXDJlXH+pYhmMK0BaXUybu+gRdHOCKJC
-        6Osowkvw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pL9MR-00CZdq-Ap; Thu, 26 Jan 2023 21:00:43 +0000
-Date:   Thu, 26 Jan 2023 13:00:43 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <song@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] module: replace module_layout with module_memory
-Message-ID: <Y9Lp+5mqxP0bgvrM@bombadil.infradead.org>
-References: <20230125185004.254742-1-song@kernel.org>
- <Y9IYTI3pWuKbJ3bC@bombadil.infradead.org>
- <CAPhsuW7ipGS=RhowYSp06DBYOY31sYoup7-Je+CEuKCxJsHavQ@mail.gmail.com>
+        Thu, 26 Jan 2023 16:00:54 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5AB4ABE2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:00:53 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id k13so3056651plg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:00:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k1VrlYk4ybpwtqtLutbYjllW7SLxzj4A88S/3GMWXz0=;
+        b=KyX4GHM239zpw0SLa6ilOemKM4AL8PggjPZAiUmVHmBb6Nqm7v2XL1lIx20APvFvXA
+         WNr0FSBrZIP8fczsUfkSAazN7nhdeHHDBSsvN7uf2yV4lf13N2bfyg1a4maKF7En6ott
+         qt/edecGRpeoHJlrwHexnkNYQgCqvnvjXH00UYHPW9JFJojdJ6kN0elv3idgd9mkCFPe
+         cqsxnchaE3u27JBX/RBTMt4rPqMAc/L1roAj3JYMjQnKKX/OPlG46ugjBCibj2SBAcFM
+         G9QIHmyxbyMSeTUplU5uLSXpbnwUX73XlcA5ATs4mhJPZ/DXykeMKObKIc4tOTlqSq/9
+         p96A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k1VrlYk4ybpwtqtLutbYjllW7SLxzj4A88S/3GMWXz0=;
+        b=7z8SzWs8E1nCMpENUVXYuqr4JUZnzDhd25my4y/SwpQuNy1xVHQB2yo5C09CR11lgW
+         imIZHx4kwxUmLRoLIbNoaRAa+eeqLTBWmScjsY1FRF8YaEc/Bf7DHqMjePQ57a0wBHHR
+         HxosuMOkwFiruDUmNEmBTUWfWVDQz963mSL3ZSBRKp6XPSqxIi01gEQQApfxEhvPiJR/
+         r0GpVCqbSbT/eakAq4QvigGsGcAeyP0gmqFMiH3Ovoz2nfYWGs4/ESWLKa7Q9Ef4zCkB
+         cuOjLd9gYpH2KVOqLY5MIaJJbwUSNE9z5pHF44nmOni3AJyEA/Ju2v460kE7pDbcojuV
+         +GtA==
+X-Gm-Message-State: AO0yUKW7cJrOcq1/1E6/5e1kPyIQJ+fVgJJWrfuyy1rcCjMm6fltSaQD
+        EYZsk9wDRcczX8oPB4wf7nYrcg==
+X-Google-Smtp-Source: AK7set/5KdZbA6hPjRJxJIk6pPmPLbIG/PEZE74cY8csx7Ody/+pmRZuhtGUWixg3VDUMHHJ8swa8A==
+X-Received: by 2002:a17:90a:4b88:b0:219:f970:5119 with SMTP id i8-20020a17090a4b8800b00219f9705119mr1022118pjh.1.1674766852256;
+        Thu, 26 Jan 2023 13:00:52 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:cb5e:1d39:8f45:c450])
+        by smtp.gmail.com with ESMTPSA id nm16-20020a17090b19d000b0022c0622cc16sm3783971pjb.54.2023.01.26.13.00.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 13:00:51 -0800 (PST)
+Date:   Thu, 26 Jan 2023 13:00:45 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>
+Subject: Re: [PATCH 1/2] platform/chrome: cros_ec: Add VDM attention headers
+Message-ID: <Y9Lp/T5RezpCQ5Zx@google.com>
+References: <20230126205620.3714994-1-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+Hc6okv4I9ucYZvU"
 Content-Disposition: inline
-In-Reply-To: <CAPhsuW7ipGS=RhowYSp06DBYOY31sYoup7-Je+CEuKCxJsHavQ@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20230126205620.3714994-1-pmalani@chromium.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,116 +81,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guenter Roeck,
 
-Any chance you can give this branch a good spin on your multi-arch setup
-to see what may below up?
+--+Hc6okv4I9ucYZvU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-testing
+Hi Prashant,
 
-On Thu, Jan 26, 2023 at 12:01:40PM -0800, Song Liu wrote:
-> Hi Luis,
-> 
-> Thanks for your kind review!
-> 
-> On Wed, Jan 25, 2023 at 10:06 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> [...]
-> > >
-> > >         MOD_MEM_TYPE_TEXT,
-> > >         MOD_MEM_TYPE_DATA,
-> > >         MOD_MEM_TYPE_RODATA,
-> > >         MOD_MEM_TYPE_RO_AFTER_INIT,
-> > >         MOD_MEM_TYPE_INIT_TEXT,
-> > >         MOD_MEM_TYPE_INIT_DATA,
-> > >         MOD_MEM_TYPE_INIT_RODATA,
-> > >
-> > > and allocating them separately.
-> >
-> > First thanks for doing this work!
-> >
-> > This seems to not acknolwedge the original goal of the first module_layout and
-> > the latched rb-tree use, and that was was for speeding up __module_address()
-> > since it *can* even be triggered on NMIs. I say this because the first question
-> > that comes to me is the impact to performance on __module_address() I can't
-> > see that changing much here, but mention it as it similar consideration
-> > should be made in case future changes modify this path.
-> 
-> To make sure I understand this correctly. Do you mean we need something like
-> the following in the commit log?
-> 
-> """
-> This adds slightly more entries to mod_tree (from up to 3 entries per module, to
-> up to 7 entries per module). However, this at most adds a small constant
-> overhead to __module_address(), which is expected to be fast.
-> """
+On Thu, Jan 26, 2023 at 08:55:45PM +0000, Prashant Malani wrote:
+> Incorporate updates to the EC headers to support the retrieval of VDM
+> Attention messages from port partners. These headers are already present
+> in the ChromeOS EC codebase. [1]
+>=20
+> [1] https://source.chromium.org/chromium/chromiumos/platform/ec/+/main:in=
+clude/ec_commands.h
+>=20
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Yes I think this is very useful information for the reviewier.
+Reviewed-by: Benson Leung <bleung@chromium.org>
 
-> > Microbenching something so trivial as __module_address() may not be as useful
-> > for an idle system, at the very least being able to compare before and after
-> > even on idle may be useful *if* you eventually do some more radical changes
-> > here. Modules-related kernel/kallsyms_selftest.c did that for kallsyms_lookup_name()
-> > and friend just recently for a minor performance enhancement.
-> 
-> kernel/kallsyms_selftest.c is new to me. I will give it a try.
 
-It was just merged, be sure to have da35048f2600 ("kallsyms: Fix
-scheduling with interrupts disabled in self-test").
+> ---
+>  include/linux/platform_data/cros_ec_commands.h | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/lin=
+ux/platform_data/cros_ec_commands.h
+> index b9c4a3964247..ec327638c6eb 100644
+> --- a/include/linux/platform_data/cros_ec_commands.h
+> +++ b/include/linux/platform_data/cros_ec_commands.h
+> @@ -5862,6 +5862,7 @@ enum tcpc_cc_polarity {
+>  #define PD_STATUS_EVENT_MUX_1_SET_DONE		BIT(5)
+>  #define PD_STATUS_EVENT_VDM_REQ_REPLY		BIT(6)
+>  #define PD_STATUS_EVENT_VDM_REQ_FAILED		BIT(7)
+> +#define PD_STATUS_EVENT_VDM_ATTENTION			BIT(8)
+> =20
+>  struct ec_params_typec_status {
+>  	uint8_t port;
+> @@ -5906,7 +5907,8 @@ struct ec_response_typec_status {
+>  } __ec_align1;
+> =20
+>  /*
+> - * Gather the response to the most recent VDM REQ from the AP
+> + * Gather the response to the most recent VDM REQ from the AP, as well
+> + * as popping the oldest VDM:Attention from the DPM queue
+>   */
+>  #define EC_CMD_TYPEC_VDM_RESPONSE 0x013C
+> =20
+> @@ -5919,10 +5921,18 @@ struct ec_response_typec_vdm_response {
+>  	uint8_t vdm_data_objects;
+>  	/* Partner to address - see enum typec_partner_type */
+>  	uint8_t partner_type;
+> -	/* Reserved */
+> -	uint16_t reserved;
+> +	/* enum ec_status describing VDM response */
+> +	uint16_t vdm_response_err;
+>  	/* VDM data, including VDM header */
+>  	uint32_t vdm_response[VDO_MAX_SIZE];
+> +	/* Number of 32-bit Attention fields filled in */
+> +	uint8_t vdm_attention_objects;
+> +	/* Number of remaining messages to consume */
+> +	uint8_t vdm_attention_left;
+> +	/* Reserved */
+> +	uint16_t reserved1;
+> +	/* VDM:Attention contents */
+> +	uint32_t vdm_attention[2];
+>  } __ec_align1;
+> =20
+>  #undef VDO_MAX_SIZE
+> --=20
+> 2.39.1.456.gfc5497dd1b-goog
+>=20
 
-> > > Signed-off-by: Song Liu <song@kernel.org>
-> > > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > >
-> > > ---
-> > >
-> > > This is the preparation work for the type aware module_alloc() discussed
-> > > in [1]. While this work is not covered much in the discussion, it is a
-> > > critical step of the effort.
-> > >
-> > > As this part grows pretty big (~1000 lines, + and -), I would like get
-> > > some feedback on it, so that I know it is on the right track.
-> > >
-> > > Please share your comments. Thanks!
-> > >
-> > > Test coverage: Tested on x86_64.
-> >
-> > I will likely merge this onto modules-next soon, not because I think it is
-> > ready, but just because I think it *is* mostly ready and the next thing
-> > we need is exposure and testing. rc5 is pretty late to consider this
-> > for v6.3 and so hopefully for this cycle we can at least settle on
-> > something which will sit in linux-next since the respective linux-next
-> > after v6.3-rc1 is released.
-> 
-> Yes, this definitely needs more tests. Given different archs use
-> module_layout in all sorts of ways. I will be very surprised if I updated
-> all them correctly (though I tried hard to).
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
 
-OK so let's be patient with testing. Getting help from Guenter here
-can probably speed up finding issues.
+--+Hc6okv4I9ucYZvU
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> > > Build tested by kernel test bot in [2]. The only regression in [2] was a
-> > > typo in parisc, which is also fixed.
-> > >
-> > > [1] https://lore.kernel.org/linux-mm/20221107223921.3451913-1-song@kernel.org/T/#u
-> >
-> > You still never addressed my performance suggestions so don't be
-> > surprised if I insist later. Yes you can use existing performance
-> > benchmarks, specially now with modules as a hard requirement, to
-> > show gains. So I'd like to clarify that if I'm reviewing late it is
-> > because:
-> >
-> > a) my modules patch review queue has been high as of late
-> > b) you seem to not have taken these performance suggestions into consideration
-> >    before and so I tend to put it at my end of my queue for review.
-> 
-> I think it will be a lot easier to run performance tests with the
-> module support. Let's see what we can do when we get to the
-> performance test part.
+-----BEGIN PGP SIGNATURE-----
 
-Fantastic, clearly I'm interested in being able to reproduce so I will
-email you offline about some techniques I've used to reproduce some
-things easily for testing things with modules.
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY9Lp/QAKCRBzbaomhzOw
+wkAbAQCX71yLAbLh1OxBZwN3ogdzQ1kJauzB/zib0YK6R3LZZQD9EIRAl7YEcjAo
+h+vhn3rZ1HljmiVxXvePEHEJwQWnFQo=
+=ulQ7
+-----END PGP SIGNATURE-----
 
-  Luis
+--+Hc6okv4I9ucYZvU--
