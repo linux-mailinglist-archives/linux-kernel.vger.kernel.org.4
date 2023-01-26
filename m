@@ -2,73 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD3C67D5EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D47067D5F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjAZUIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:08:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
+        id S232733AbjAZUIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:08:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbjAZUII (ORCPT
+        with ESMTP id S230515AbjAZUIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:08:08 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31BC13DE4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:08:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yLIeRegKr0X7vGwXYffh/Se/fwvXPCTq8z1VBVpsZ3M=; b=wO8H0zWv4XC0Lj0qhFP+52HnYB
-        8DXzNRfWpx1zYL08jWrsf70m8NGRhRdK6jLsdd4Czh3tApW8svxijyo+oVVVUqNPO5lKItdzEGhz4
-        Dxw3mPAUIC5QykqHl6IyToLpYf9VM699EY4ORgT32Hc/FlA7waQEbdyJJ+okQsWcugiGlavaUspmd
-        1slmPM0Oex0M5RKlT64rC67QJtNVn92C0oAYuaGfnnFvFtDuOohVMhomWy0KSJ5JTEEHANxy2ncHC
-        Dp1pBMkh2VBcaWpJBwMpD0U2RSrgX98v670VRWk6P/MnRS/QwzlVrKB9uehpbm7tu3Yd5xYcs3+tO
-        2XjrcLkg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pL8XJ-0073AH-5o; Thu, 26 Jan 2023 20:07:53 +0000
-Date:   Thu, 26 Jan 2023 20:07:53 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        David Sterba <dsterba@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Al Viro <viro@zeniv.linux.org.uk>, Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH] mm/highmem: Align-down to page the address for
- kunmap_flush_on_unmap()
-Message-ID: <Y9LdmUw8TkoJOWvM@casper.infradead.org>
-References: <20230126143346.12086-1-fmdefrancesco@gmail.com>
+        Thu, 26 Jan 2023 15:08:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB6412042
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:08:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1646161921
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 20:08:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F4FEC433D2;
+        Thu, 26 Jan 2023 20:08:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674763708;
+        bh=rYVXbHt9sfvzBQ3JofKbpIpDUyKamvlUflwEzgDVm48=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=OIMu0+2r9BjvE5afhTmrIXqj+SU0rY3dDX+1+sElZC/jGAOdbVTVle3UmFUdQDrMi
+         JIwdxCildcH4iXrKxgB6vqaTXqLT6pAGMQ3r0bBaWlsCJK04igVSsLangPCsdkxe8s
+         Xak19OtHpgxIDepVjzHDZh9HY8N53Ykp4EAHGE163rfqX0FLyKQ5BVFvFu+X/4Ul88
+         PkaViwSyGQHXQXnWdRCVRfWjWB+6QSaMnMbxrarRtHSawnkX6kX3ZT/jVPRP4f5j/j
+         lERpSFc4SF/LSUQgDrDw38DrxxvsKHNl5mPThTWDKyfGqjOMgykTxqFcfzeasUoYGZ
+         KIJ4dcNXWqV/A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1043C5C1C6D; Thu, 26 Jan 2023 12:08:28 -0800 (PST)
+Date:   Thu, 26 Jan 2023 12:08:28 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
+        quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] tools/memory-model: Unify UNLOCK+LOCK pairings to
+ po-unlock-lock-po
+Message-ID: <20230126200828.GK2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
+ <20230126134604.2160-2-jonas.oberhauser@huaweicloud.com>
+ <Y9KsI/PsW4DK083z@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230126143346.12086-1-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9KsI/PsW4DK083z@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 03:33:46PM +0100, Fabio M. De Francesco wrote:
-> If ARCH_HAS_FLUSH_ON_KUNMAP is defined (PA-RISC case), __kunmap_local()
-> calls kunmap_flush_on_unmap(). The latter currently flushes the wrong
-> address (as confirmed by Matthew Wilcox and Helge Deller). Al Viro
-> proposed to call kunmap_flush_on_unmap() on an aligned-down to page
-> address in order to fix this issue. Consensus has been reached on this
-> solution.
+On Thu, Jan 26, 2023 at 11:36:51AM -0500, Alan Stern wrote:
+> On Thu, Jan 26, 2023 at 02:46:03PM +0100, Jonas Oberhauser wrote:
+> > LKMM uses two relations for talking about UNLOCK+LOCK pairings:
+> > 
+> > 	1) po-unlock-lock-po, which handles UNLOCK+LOCK pairings
+> > 	   on the same CPU or immediate lock handovers on the same
+> > 	   lock variable
+> > 
+> > 	2) po;[UL];(co|po);[LKW];po, which handles UNLOCK+LOCK pairs
+> > 	   literally as described in rcupdate.h#L1002, i.e., even
+> > 	   after a sequence of handovers on the same lock variable.
+> > 
+> > The latter relation is used only once, to provide the guarantee
+> > defined in rcupdate.h#L1002 by smp_mb__after_unlock_lock(), which
+> > makes any UNLOCK+LOCK pair followed by the fence behave like a full
+> > barrier.
+> > 
+> > This patch drops this use in favor of using po-unlock-lock-po
+> > everywhere, which unifies the way the model talks about UNLOCK+LOCK
+> > pairings.  At first glance this seems to weaken the guarantee given
+> > by LKMM: When considering a long sequence of lock handovers
+> > such as below, where P0 hands the lock to P1, which hands it to P2,
+> > which finally executes such an after_unlock_lock fence, the mb
+> > relation currently links any stores in the critical section of P0
+> > to instructions P2 executes after its fence, but not so after the
+> > patch.
+> > 
+> > P0(int *x, int *y, spinlock_t *mylock)
+> > {
+> >         spin_lock(mylock);
+> >         WRITE_ONCE(*x, 2);
+> >         spin_unlock(mylock);
+> >         WRITE_ONCE(*y, 1);
+> > }
+> > 
+> > P1(int *y, int *z, spinlock_t *mylock)
+> > {
+> >         int r0 = READ_ONCE(*y); // reads 1
+> >         spin_lock(mylock);
+> >         spin_unlock(mylock);
+> >         WRITE_ONCE(*z,1);
+> > }
+> > 
+> > P2(int *z, int *d, spinlock_t *mylock)
+> > {
+> >         int r1 = READ_ONCE(*z); // reads 1
+> >         spin_lock(mylock);
+> >         spin_unlock(mylock);
+> >         smp_mb__after_unlock_lock();
+> >         WRITE_ONCE(*d,1);
+> > }
+> > 
+> > P3(int *x, int *d)
+> > {
+> >         WRITE_ONCE(*d,2);
+> >         smp_mb();
+> >         WRITE_ONCE(*x,1);
+> > }
+> > 
+> > exists (1:r0=1 /\ 2:r1=1 /\ x=2 /\ d=2)
+> > 
+> > Nevertheless, the ordering guarantee given in rcupdate.h is actually
+> > not weakened.  This is because the unlock operations along the
+> > sequence of handovers are A-cumulative fences.  They ensure that any
+> > stores that propagate to the CPU performing the first unlock
+> > operation in the sequence must also propagate to every CPU that
+> > performs a subsequent lock operation in the sequence.  Therefore any
+> > such stores will also be ordered correctly by the fence even if only
+> > the final handover is considered a full barrier.
+> > 
+> > Indeed this patch does not affect the behaviors allowed by LKMM at
+> > all.  The mb relation is used to define ordering through:
+> > 1) mb/.../ppo/hb, where the ordering is subsumed by hb+ where the
+> >    lock-release, rfe, and unlock-acquire orderings each provide hb
+> > 2) mb/strong-fence/cumul-fence/prop, where the rfe and A-cumulative
+> >    lock-release orderings simply add more fine-grained cumul-fence
+> >    edges to substitute a single strong-fence edge provided by a long
+> >    lock handover sequence
+> > 3) mb/strong-fence/pb and various similar uses in the definition of
+> >    data races, where as discussed above any long handover sequence
+> >    can be turned into a sequence of cumul-fence edges that provide
+> >    the same ordering.
+> > 
+> > Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> > ---
 > 
-> Therefore, if ARCH_HAS_FLUSH_ON_KUNMAP is defined, call
-> kunmap_flush_on_unmap() on an aligned-down to page address computed with
-> the PTR_ALIGN_DOWN() macro.
+> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
-You missed a spot.  Sent the version I've had in my tree for a few days.
+A quick spot check showed no change in performance, so thank you both!
+
+Queued for review and further testing.
+
+							Thanx, Paul
+
+> >  tools/memory-model/linux-kernel.cat | 15 +++++++++++++--
+> >  1 file changed, 13 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+> > index 07f884f9b2bf..6e531457bb73 100644
+> > --- a/tools/memory-model/linux-kernel.cat
+> > +++ b/tools/memory-model/linux-kernel.cat
+> > @@ -37,8 +37,19 @@ let mb = ([M] ; fencerel(Mb) ; [M]) |
+> >  	([M] ; fencerel(Before-atomic) ; [RMW] ; po? ; [M]) |
+> >  	([M] ; po? ; [RMW] ; fencerel(After-atomic) ; [M]) |
+> >  	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
+> > -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+> > -		fencerel(After-unlock-lock) ; [M])
+> > +(*
+> > + * Note: The po-unlock-lock-po relation only passes the lock to the direct
+> > + * successor, perhaps giving the impression that the ordering of the
+> > + * smp_mb__after_unlock_lock() fence only affects a single lock handover.
+> > + * However, in a longer sequence of lock handovers, the implicit
+> > + * A-cumulative release fences of lock-release ensure that any stores that
+> > + * propagate to one of the involved CPUs before it hands over the lock to
+> > + * the next CPU will also propagate to the final CPU handing over the lock
+> > + * to the CPU that executes the fence.  Therefore, all those stores are
+> > + * also affected by the fence.
+> > + *)
+> > +	([M] ; po-unlock-lock-po ;
+> > +		[After-unlock-lock] ; po ; [M])
+> >  let gp = po ; [Sync-rcu | Sync-srcu] ; po?
+> >  let strong-fence = mb | gp
+> >  
+> > -- 
+> > 2.17.1
+> > 
