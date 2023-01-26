@@ -2,83 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BB667CD85
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F5E67CD8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbjAZOTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S231701AbjAZOTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbjAZOTK (ORCPT
+        with ESMTP id S231889AbjAZOTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:19:10 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53A56A704
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:18:41 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id 9-20020a056e0220c900b0030f1b0dfa9dso1249956ilq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:18:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+nF+RW16YJdagWMfMttlQoNAWgrztV2W7ki7kcH6wQ=;
-        b=5jliA+WoKOc58dSQaDRGok7ZEmsuPUQguL5BILbbNkQQig2SJzPEBZyP37U3dvAXnP
-         Fjzr16mFTupu/Np0C0PVoO6hI8yi7eq7Kn0b2mE72zCT3v21iVW38IbWog3Yo9cDXqqb
-         AraPkck8pDR84Yg2iVBxX6cAbDhK+eUeTRZCmLuEnd/JGl+ZPVjIdxp7z6sCY9Zn0gWn
-         hY9+FmTS0SsAFB+ZyWlI2BZKDsRjq2cJXbTtOEm7NsRAF0A1ZYLv5chXDVFIN9Wn5Fk1
-         letEwFhubQr7BUK/4Vhlem8Td5enC7+LV0W8659axwDB1QITBDm3Iit/F6I69PRIm2CS
-         n4CQ==
-X-Gm-Message-State: AFqh2koMzIqMjB0AmBOkSgULE082YwXT7YT5Y/0SgXcL8Xg9MpGrfioe
-        yaBrsQbx1TNq1vKkCW79xDdg+Nad5z1STw+iLUFCRV8MIBK6
-X-Google-Smtp-Source: AMrXdXtcH4ugW0dNRQ7ZfF6SczQn0xpplKw5P7FtIjRWz13PZ+9UZq2GtmXnv95pBDcikeb1+ZgB8qxL2nPtmQ7KXoZTTbDWmJFG
-MIME-Version: 1.0
-X-Received: by 2002:a02:3407:0:b0:39e:a16b:99c6 with SMTP id
- x7-20020a023407000000b0039ea16b99c6mr3610706jae.167.1674742696299; Thu, 26
- Jan 2023 06:18:16 -0800 (PST)
-Date:   Thu, 26 Jan 2023 06:18:16 -0800
-In-Reply-To: <000000000000788a6905f0c06160@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000080d62605f32b6bcb@google.com>
-Subject: Re: [syzbot] INFO: task hung in rfkill_sync_work
-From:   syzbot <syzbot+9ef743bba3a17c756174@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, hdanton@sina.com,
-        johannes@sipsolutions.net, krzysztof.kozlowski@canonical.com,
-        krzysztof.kozlowski@linaro.org, kuba@kernel.org, linma@zju.edu.cn,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 26 Jan 2023 09:19:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BF915C9C
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:18:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A697461753
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:18:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 058B5C4339B;
+        Thu, 26 Jan 2023 14:18:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674742729;
+        bh=hMc1AmLrPA7CiaXnhw7DGjrkYDVNXuEpH2+n7eta8Lc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jV8Gztt4PetOOETz+e5vKQyV3DbzzwK9ITu/pQpuz/qqYhyeCUjW9nQRDk3arGdw6
+         Y18rRAOiDv0hPeZyAwZOOpwrR8LgIrgkYjQ97oxGiQS3x2dtcl+OUFD2T671CqSd5P
+         xWnpKnwtOcvIb8rxFs/deDefNh2kdvVw/nBULeDqRpr6irPN6n09KI1QFTPUz06iX+
+         3TtKq9afbz43WTT8LS+y1d16fIAio2KgynW8koANLqr8z7xFvC9ACK2CNkPQIkr6PR
+         x1NFdqcNdUNKv7latbpxQ3WA4YzDjgT98FqDBzQy02Jm8UEpTtva+ZaGuKfWBanAY4
+         f5Gs5BeCu5MBg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pL35S-004qj7-KG;
+        Thu, 26 Jan 2023 14:18:46 +0000
+Date:   Thu, 26 Jan 2023 14:18:46 +0000
+Message-ID: <86y1ppl6pl.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 2/2] irqchip: irq-ti-sci-inta: Introduce IRQ affinity support
+In-Reply-To: <20230122081607.959474-3-vigneshr@ti.com>
+References: <20230122081607.959474-1-vigneshr@ti.com>
+        <20230122081607.959474-3-vigneshr@ti.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: vigneshr@ti.com, nm@ti.com, kristo@kernel.org, ssantosh@kernel.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On Sun, 22 Jan 2023 08:16:07 +0000,
+Vignesh Raghavendra <vigneshr@ti.com> wrote:
+> 
+> Add support for setting IRQ affinity for VINTs which have only one event
+> mapped to them. This just involves changing the parent IRQs affinity
+> (GIC/INTR). Flag VINTs which have affinity configured so as to not
+> aggregate/map more events to such VINTs.
 
-commit 3e3b5dfcd16a3e254aab61bd1e8c417dd4503102
-Author: Lin Ma <linma@zju.edu.cn>
-Date:   Tue Nov 16 15:26:52 2021 +0000
 
-    NFC: reorder the logic in nfc_{un,}register_device
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=110cbe1e480000
-start commit:   9d2f6060fe4c Merge tag 'trace-v6.2-1' of git://git.kernel...
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=130cbe1e480000
-console output: https://syzkaller.appspot.com/x/log.txt?x=150cbe1e480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=85327a149d5f50f
-dashboard link: https://syzkaller.appspot.com/bug?extid=9ef743bba3a17c756174
-userspace arch: i386
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=156edba0480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15556074480000
+> 
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+>  drivers/irqchip/irq-ti-sci-inta.c | 39 +++++++++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+> 
+> diff --git a/drivers/irqchip/irq-ti-sci-inta.c b/drivers/irqchip/irq-ti-sci-inta.c
+> index f1419d24568e..237cb4707cb8 100644
+> --- a/drivers/irqchip/irq-ti-sci-inta.c
+> +++ b/drivers/irqchip/irq-ti-sci-inta.c
+> @@ -64,6 +64,7 @@ struct ti_sci_inta_event_desc {
+>   * @events:		Array of event descriptors assigned to this vint.
+>   * @parent_virq:	Linux IRQ number that gets attached to parent
+>   * @vint_id:		TISCI vint ID
+> + * @affinity_managed	flag to indicate VINT affinity is managed
+>   */
+>  struct ti_sci_inta_vint_desc {
+>  	struct irq_domain *domain;
+> @@ -72,6 +73,7 @@ struct ti_sci_inta_vint_desc {
+>  	struct ti_sci_inta_event_desc events[MAX_EVENTS_PER_VINT];
+>  	unsigned int parent_virq;
+>  	u16 vint_id;
+> +	bool affinity_managed;
+>  };
+>  
+>  /**
+> @@ -334,6 +336,8 @@ static struct ti_sci_inta_event_desc *ti_sci_inta_alloc_irq(struct irq_domain *d
+>  	vint_id = ti_sci_get_free_resource(inta->vint);
+>  	if (vint_id == TI_SCI_RESOURCE_NULL) {
+>  		list_for_each_entry(vint_desc, &inta->vint_list, list) {
+> +			if (vint_desc->affinity_managed)
+> +				continue;
+>  			free_bit = find_first_zero_bit(vint_desc->event_map,
+>  						       MAX_EVENTS_PER_VINT);
+>  			if (free_bit != MAX_EVENTS_PER_VINT)
+> @@ -434,6 +438,7 @@ static int ti_sci_inta_request_resources(struct irq_data *data)
+>  		return PTR_ERR(event_desc);
+>  
+>  	data->chip_data = event_desc;
+> +	irq_data_update_effective_affinity(data, cpu_online_mask);
+>  
+>  	return 0;
+>  }
+> @@ -504,11 +509,45 @@ static void ti_sci_inta_ack_irq(struct irq_data *data)
+>  		ti_sci_inta_manage_event(data, VINT_STATUS_OFFSET);
+>  }
+>  
+> +#ifdef CONFIG_SMP
+> +static int ti_sci_inta_set_affinity(struct irq_data *d,
+> +				    const struct cpumask *mask_val, bool force)
+> +{
+> +	struct ti_sci_inta_event_desc *event_desc;
+> +	struct ti_sci_inta_vint_desc *vint_desc;
+> +	struct irq_data *parent_irq_data;
+> +
+> +	if (cpumask_equal(irq_data_get_effective_affinity_mask(d), mask_val))
+> +		return 0;
+> +
+> +	event_desc = irq_data_get_irq_chip_data(d);
+> +	if (event_desc) {
+> +		vint_desc = to_vint_desc(event_desc, event_desc->vint_bit);
+> +
+> +		/*
+> +		 * Cannot set affinity if there is more than one event
+> +		 * mapped to same VINT
+> +		 */
+> +		if (bitmap_weight(vint_desc->event_map, MAX_EVENTS_PER_VINT) > 1)
+> +			return -EINVAL;
+> +
+> +		vint_desc->affinity_managed = true;
+> +
+> +		irq_data_update_effective_affinity(d, mask_val);
+> +		parent_irq_data = irq_get_irq_data(vint_desc->parent_virq);
+> +		if (parent_irq_data->chip->irq_set_affinity)
+> +			return parent_irq_data->chip->irq_set_affinity(parent_irq_data, mask_val, force);
 
-Reported-by: syzbot+9ef743bba3a17c756174@syzkaller.appspotmail.com
-Fixes: 3e3b5dfcd16a ("NFC: reorder the logic in nfc_{un,}register_device")
+This looks completely wrong.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+You still have a chained irqchip on all paths, and have to do some
+horrible probing to work out:
+
+- which parent interrupt this is
+
+- how many interrupts are connected to it
+
+And then the fun begins:
+
+- You have one interrupt that is standalone, so its affinity can be
+  moved
+
+- An unrelated driver gets probed, and one of its interrupts gets
+  lumped together with the one above
+
+- Now it cannot be moved anymore, and userspace complains
+
+The rule is very simple: chained irqchip, no affinity management.
+Either you reserve a poll of direct interrupts that have affinity
+management and no muxing, or you keep the current approach.
+
+But I'm strongly opposed to this sort of approach.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
