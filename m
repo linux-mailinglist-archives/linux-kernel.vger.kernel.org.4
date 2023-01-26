@@ -2,48 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31FFA67CE52
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F61767CE59
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232261AbjAZOhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
+        id S232272AbjAZOib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:38:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjAZOhk (ORCPT
+        with ESMTP id S229948AbjAZOi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:37:40 -0500
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593B323862;
-        Thu, 26 Jan 2023 06:37:35 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        Thu, 26 Jan 2023 09:38:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6806180;
+        Thu, 26 Jan 2023 06:38:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id C19AD2D3;
-        Thu, 26 Jan 2023 14:37:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C19AD2D3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1674743854; bh=0562LnNUCt9JJJhRg4NFLkVnEkQms9BWIzzgPLd1QRM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=WluIPROi/OYJ6Ckue5eY2R57K5jPfXBoV01kK89mACVlFNDTWTlRTNXuc8wtXIhHz
-         7WFv0hnqotkBWr9pFkiAV2D0Da2VI/iuwrZza6jn4rHB29rsdDepw8TdvkljX7lyAf
-         QBISnW9/3zrfzqLy0ZYWvtUF4ma09pJlldKJUHJJdfhbC26aK8Cflz/7v5b0ByIQh3
-         K98S5hKzdzkRHfpdXUdGDvxmRdaN6ROHTJOfqwLmUmJgEMK38oLxfwkCujnjZx06BF
-         DGfa13+iRz3Zm32/Jh650R4LDuiCKmziuC9tMHfUGZ4viS2c4pZuBGt/EbYe4Ss98n
-         zeitpWiNljs4w==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: leds: fix the following docu build warning
-In-Reply-To: <5fd77765-4f55-f204-6aa0-963830cd13d8@gmail.com>
-References: <20230125154426.12464-1-skhan@linuxfoundation.org>
- <5fd77765-4f55-f204-6aa0-963830cd13d8@gmail.com>
-Date:   Thu, 26 Jan 2023 07:37:33 -0700
-Message-ID: <87bkmlbbv6.fsf@meer.lwn.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58C52B81D15;
+        Thu, 26 Jan 2023 14:38:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 819EEC433D2;
+        Thu, 26 Jan 2023 14:38:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674743906;
+        bh=J6kTUDHhp3UX3SKN+nHetWZA+yyFDNmaZMGXaU/Kwxo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AYTqRKSW62JnHa+QPvCzuJ7D2W5Sd7w+SS+Gc0kWhW6sBEwV0WEY2ZuHBR5v2yJqW
+         gOTg417S8mg4dOOPMkiJ26ELSOjpVxezlY05fYHilegIrMTy6n/ONSO4VdXuJnQFvO
+         0SVTvHTgCwbRdcR4w7ZNDUiO1wsuOz9YZRme9IUOTMQds93NFLeJSiCYsDN6yw/DBi
+         uxPg6UxNhAGKostehxnl/tu8sS8gzTLppGnOWRvt4QQVO+51Aj4ddhEkv7JfT6SAG5
+         wngRELtMSbB/qu8QwRM3+FhYlIuT7B3E6jv0iwh5yF5ytRm8YliUnKog2E4Tkrr5il
+         Pyu2Yp1gItPMg==
+Date:   Thu, 26 Jan 2023 14:38:18 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Bernhard =?iso-8859-1?Q?Rosenkr=E4nzer?= <bero@baylibre.com>
+Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, linus.walleij@linaro.org, matthias.bgg@gmail.com,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        chunfeng.yun@mediatek.com, angelogioacchino.delregno@collabora.com,
+        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
+        sean.wang@mediatek.com, zhiyong.tao@mediatek.com
+Subject: Re: [PATCH v9 3/9] dt-bindings: mfd: syscon: Add mt8365-syscfg
+Message-ID: <Y9KQWp1942TDjV1P@google.com>
+References: <20230125143503.1015424-1-bero@baylibre.com>
+ <20230125143503.1015424-4-bero@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230125143503.1015424-4-bero@baylibre.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,27 +63,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
+On Wed, 25 Jan 2023, Bernhard Rosenkränzer wrote:
 
-> On 1/25/23 22:44, Shuah Khan wrote:
->> Add leds-qcom-lpg to Documentation/leds/index.rst to fix the following
->> doc build warning.
->> 
->
-> The patch subject should have been "docs: leds: add missing documentation
-> to the toctree"
+> Document Mediatek mt8365-syscfg
+> 
+> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-Shuah has been doing this for a while and really does not need your
-instructions on how to do a patch; this one is fine as-is.
+Applied, thanks
 
-Bagas, please stop harassing our contributors.  I'm getting fairly tired
-of asking that.
-
-> Otherwise, LGTM.
->
-> Acked-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
-Do you have a history or status with the LED subsystem that puts you in
-a position to ack this patch?
-
-jon
+-- 
+Lee Jones [李琼斯]
