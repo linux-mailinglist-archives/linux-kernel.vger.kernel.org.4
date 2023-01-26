@@ -2,140 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B3D67D4A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA35267D4A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbjAZSun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:50:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
+        id S231825AbjAZSvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbjAZSuk (ORCPT
+        with ESMTP id S229482AbjAZSvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:50:40 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CE4126D3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 10:50:38 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so1779906wmc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 10:50:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=J/whTD282K6WecPGYHs6gXgw7rwbNpkwpfrS4Ud3OEM=;
-        b=KQhZ3EBb7Ll1P2eOPpRQovChfAHLXhEBnBsa2cH4KAhXmTUQFp2fdXv6HJ8HvJTNEj
-         gO278RWGJruX+GK6CigrXiriSjJwx4wy2w6/9sP3aIXc20BUB15DFCmMTIoXILdYpoB9
-         SnDvQB3A+6sc/nnPWGuU5MqgqCagWNofmN1NvOe5BFb/MZx3mGSwIDZv+WBSifnglctG
-         Is7nYK/qauYvWssFU418bAyqMO7qFl/czEU3PZJM5IcZnE6nIRWrhHY+NQYsm/0XJb69
-         rO8f5L/96GSsdQAegc7mYDwBvul19Sha0v8r+Lpy98WZu4v3/T1bNlG2pGYiAKfRR10W
-         CsPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J/whTD282K6WecPGYHs6gXgw7rwbNpkwpfrS4Ud3OEM=;
-        b=X4zpUAjpwfDhRo4rnSsu2rwDCZvOTV/zsYXJcamQF1qjUkCm3U4EpFjBrO0vzsZq1G
-         zenf6uBSJVsJz1muBu6y6A+DOcmBuj4V6jVL3pk7MK9DMRQvtwPqBtp90u27JRZeiKJf
-         dG1utV7QjgvJh0nxGH8SODDi24bL/MB7skGXGV0PmdrupRtFz2A+QJVPKXsnXlwKTH6M
-         xGGntUqk7srfo4gCXfIMkVGdjhKdinh4uHs3LTV9hgbsZJaSnS0pkhqf54JHD2/CBKqg
-         1WjKtAwoE7NrmWhZz/7wYdqWSemeWimACWAQdox+udNcOzn+t4e11LNWe60kFPorFtmn
-         SoAQ==
-X-Gm-Message-State: AFqh2kpoFF5NGvYLmtYDH2QBg+bD9a85//+C9i7hKLaQYvMibnSJrq/J
-        J760UtzQf+X26+4wTtWAfbON1A==
-X-Google-Smtp-Source: AMrXdXv3PKUpNXo2uUsfIjSLP4FdvSGa04WQE2S+MRjCR54k63+fjCwjur4D7WpHQ3oE8IQQ69WHaA==
-X-Received: by 2002:a05:600c:1c86:b0:3da:fa75:ce58 with SMTP id k6-20020a05600c1c8600b003dafa75ce58mr39807792wms.21.1674759036713;
-        Thu, 26 Jan 2023 10:50:36 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id r25-20020adfa159000000b00297dcfdc90fsm2049532wrr.24.2023.01.26.10.50.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 10:50:36 -0800 (PST)
-Date:   Thu, 26 Jan 2023 20:50:34 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] soc: qcom: llcc: Fix slice configuration values for
- SC8280XP
-Message-ID: <Y9LLehs4PSvHE6qf@linaro.org>
-References: <20230126171636.2319496-1-abel.vesa@linaro.org>
- <09bf9907-27b9-146f-4a94-dcab51350d5a@linaro.org>
+        Thu, 26 Jan 2023 13:51:20 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DBE125A5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 10:51:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674759079; x=1706295079;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EUuqn1ycEIdwDAaw96eVc0aA4k9yO8V9TEzS4NuFvcg=;
+  b=bf3D6CoSWoc1+Z4Mju5c37cIEwZmTIVI2F7yoBWao9KPBkviRT0ib7S1
+   ShKwevWHqFO6k7n3QKA1XcwjEf7n7xxVQkXGVb9OiDwpSI2BkfwkVIOGZ
+   B0VeJkcxmqVhYmc1jfpzGRQ3jlar6XlDLjbjVo+QzDTZSbs2W22jeBCX0
+   SZyT+84/tG1JsGucJyjyWFpBNOXV+iSO6gBjkNBRnyxmnLMTGkVDtv3s6
+   dFdWZv9VSFMiQVsqJEuUQFjitCfTS4QOhowFGH/PTSzvXuAeZO0ByS+Op
+   D/WwRgWskb4eGsG43GNZNsQaohSKIH/rCc5SVJ70VjfhSaIEuzNQifAF4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="324607576"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="324607576"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 10:51:18 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="726368061"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="726368061"
+Received: from ernestom-mobl.amr.corp.intel.com (HELO [10.212.255.13]) ([10.212.255.13])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 10:51:18 -0800
+Message-ID: <dca84e05-e376-c593-74fa-37c58f30767a@intel.com>
+Date:   Thu, 26 Jan 2023 10:51:17 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <09bf9907-27b9-146f-4a94-dcab51350d5a@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC] mm: Allow ZONE_DMA32 to be disabled via kernel command line
+Content-Language: en-US
+To:     Georgi Djakov <quic_c_gdjako@quicinc.com>, catalin.marinas@arm.com,
+        will@kernel.org
+Cc:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, djakov@kernel.org
+References: <20230126164352.17562-1-quic_c_gdjako@quicinc.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230126164352.17562-1-quic_c_gdjako@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-26 18:25:52, Konrad Dybcio wrote:
+On 1/26/23 08:43, Georgi Djakov wrote:
+> From: Chris Goldsworthy <quic_cgoldswo@quicinc.com>
 > 
-> 
-> On 26.01.2023 18:16, Abel Vesa wrote:
-> > The new values have been taken from downstream kernel.
-> > 
-> > Fixes: ec69dfbdc426 ("soc: qcom: llcc: Add sc8180x and sc8280xp configurations")
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >  drivers/soc/qcom/llcc-qcom.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-> > index 23ce2f78c4ed..5702354fb946 100644
-> > --- a/drivers/soc/qcom/llcc-qcom.c
-> > +++ b/drivers/soc/qcom/llcc-qcom.c
-> > @@ -183,17 +183,17 @@ static const struct llcc_slice_config sc8280xp_data[] = {
-> >  	{ LLCC_AUDIO,    6,  1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 0, 0 },
-> >  	{ LLCC_CMPT,     10, 6144, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 0, 0 },
-> >  	{ LLCC_GPUHTW,   11, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> > -	{ LLCC_GPU,      12, 4096, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 1 },
-> > +	{ LLCC_GPU,      12, 4608, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 1 },
-> priority (the arg right after 4608) should be 0 per downstream
+> It's useful to have an option to disable the ZONE_DMA32 during boot as
+> CONFIG_ZONE_DMA32 is by default enabled (on multiplatform kernels for
+> example). There are platforms that do not use this zone and in some high
+> memory pressure scenarios this would help on easing kswapd (to leave file
+> backed memory intact / unreclaimed). When the ZONE_DMA32 is enabled on
+> these platforms - kswapd is woken up more easily and drains the file cache
+> which leads to some performance issues.
 
-Actually according to Sai's review [1], I need to revert this part.
+Any chance you could expound on "some performance issues", maybe with
+actual workloads and numbers?
 
-> 
-> 
-> >  	{ LLCC_MMUHWT,   13, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> >  	{ LLCC_DISP,     16, 6144, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> >  	{ LLCC_AUDHW,    22, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> >  	{ LLCC_DRE,      26, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> >  	{ LLCC_CVP,      28, 512,  3, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> >  	{ LLCC_APTCM,    30, 1024, 3, 1, 0x0,   0x1, 1, 0, 0, 1, 0, 0 },
-> > -	{ LLCC_WRCACHE,  31, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> > -	{ LLCC_CVPFW,    32, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> > -	{ LLCC_CPUSS1,   33, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> > -	{ LLCC_CPUHWT,   36, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> > +	{ LLCC_WRCACHE,  31, 512, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
+Also, what are the practical implications here?  There are obviously an
+ever decreasing number of 32-bit DMA devices out there.  Somebody that
+has one and uses this option might be sad because now they're stuck
+using ZONE_DMA which is quite tiny.
 
-Same goes for this line above.
+What other ZONE_DMA32 users are left?  Will anyone else care?  There is
+some DMA32 slab and vmalloc() functionality remaining.  Is it impacted?
 
-> > +	{ LLCC_CVPFW,    17, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> > +	{ LLCC_CPUSS1,   3, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> > +	{ LLCC_CPUHWT,   5, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
+What should the default be?  If disable_dma32=0 by default, this seems
+like code that will never get tested.  There are some rather subtle
+relationships between ZONE_DMA32 and other zones that could get missed
+without sufficient testing, like...
 
-As for these 3 slice_ids, I need to doable check.
+alloc_flags_nofragment() has some rather relevant comments that are left
+unaddressed:
 
-> CMPT1 (id 34) is still missing.
+>         /*
+>          * If ZONE_DMA32 exists, assume it is the one after ZONE_NORMAL and
+>          * the pointer is within zone->zone_pgdat->node_zones[]. Also assume
+>          * on UMA that if Normal is populated then so is DMA32.
+>          */
 
-And Sai also says that CAMEXP0 (the upstream name of CMPT1) needs to be
-dropped.
+This patch appears to break the "on UMA" assumption.
 
-> 
-> With that:
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Konrad
-> >  };
-> >  
-> >  static const struct llcc_slice_config sdm845_data[] =  {
 
-[1] https://lore.kernel.org/lkml/8a627cc0-8f9b-0bda-c9b5-6d51a788948a@quicinc.com/
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 58a0bb2c17f1..1a56098c0e19 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -118,6 +118,12 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * Provide a run-time mean of disabling ZONE_DMA32 if it is enabled via
+> + * CONFIG_ZONE_DMA32.
+> + */
+> +static bool disable_dma32 __ro_after_init;
+
+Is this referenced in any hot paths?  It might deserve a static branch.
+
+> diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
+> index cb258f58fdc8..b8af7e2f21f5 100644
+> --- a/arch/x86/mm/init.c
+> +++ b/arch/x86/mm/init.c
+> @@ -112,6 +112,12 @@ static unsigned long min_pfn_mapped;
+>  
+>  static bool __initdata can_use_brk_pgt = true;
+>  
+> +/*
+> + * Provide a run-time mean of disabling ZONE_DMA32 if it is enabled via
+> + * CONFIG_ZONE_DMA32.
+> + */
+> +static bool disable_dma32 __ro_after_init;
+> +
+>  /*
+>   * Pages returned are already directly mapped.
+>   *
+> @@ -1032,7 +1038,7 @@ void __init zone_sizes_init(void)
+>  	max_zone_pfns[ZONE_DMA]		= min(MAX_DMA_PFN, max_low_pfn);
+>  #endif
+>  #ifdef CONFIG_ZONE_DMA32
+> -	max_zone_pfns[ZONE_DMA32]	= min(MAX_DMA32_PFN, max_low_pfn);
+> +	max_zone_pfns[ZONE_DMA32]	= disable_dma32 ? 0 : min(MAX_DMA32_PFN, max_low_pfn);
+>  #endif
+>  	max_zone_pfns[ZONE_NORMAL]	= max_low_pfn;
+>  #ifdef CONFIG_HIGHMEM
+> @@ -1042,6 +1048,18 @@ void __init zone_sizes_init(void)
+>  	free_area_init(max_zone_pfns);
+>  }
+>  
+> +static int __init early_disable_dma32(char *buf)
+> +{
+> +	if (!buf)
+> +		return -EINVAL;
+> +
+> +	if (!strcmp(buf, "on"))
+> +		disable_dma32 = true;
+> +
+> +	return 0;
+> +}
+> +early_param("disable_dma32", early_disable_dma32);
+
+Ick.  Is there no way to do this other than a cross-arch copy/paste?
+
+> diff --git a/include/linux/dma-direct.h b/include/linux/dma-direct.h
+> index 18aade195884..ed69618cf1fc 100644
+> --- a/include/linux/dma-direct.h
+> +++ b/include/linux/dma-direct.h
+> @@ -24,6 +24,28 @@ struct bus_dma_region {
+>  	u64		offset;
+>  };
+>  
+> +static inline bool zone_dma32_is_empty(int node)
+> +{
+> +#ifdef CONFIG_ZONE_DMA32
+> +	pg_data_t *pgdat = NODE_DATA(node);
+> +
+> +	return zone_is_empty(&pgdat->node_zones[ZONE_DMA32]);
+> +#else
+> +	return true;
+> +#endif
+> +}
+> +
+> +static inline bool zone_dma32_are_empty(void)
+> +{
+> +	int node;
+> +
+> +	for_each_node(node)
+> +		if (!zone_dma32_is_empty(node))
+> +			return false;
+> +
+> +	return true;
+> +}
+
+That for_each_node() loop can be 1024 nodes long.  I hope this isn't in
+any hot paths.  It'll be fine on DMA32 systems because it'll fall out of
+the loop on the first pass.  But, if someone uses your shiny new option,
+they're in for a long loop.
+
+Oh, and this is:
+
+#define for_each_node(node)        for_each_node_state(node, N_POSSIBLE)
+
+Did you really want all *possible* nodes?  Or will
+for_each_online_node() do?
+
+Also, I'd be rather shocked if there wasn't one-stop-shopping for this
+somewhere.  Consulting your new 'disable_dma32' variable would make this
+function rather cheap.  I suspect a totally empty set of DMA32 will also
+leave its mark in arch_zone_*_possible_pfn[].
+
+>  static inline dma_addr_t translate_phys_to_dma(struct device *dev,
+>  		phys_addr_t paddr)
+>  {
+> diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+> index 63859a101ed8..754210c65658 100644
+> --- a/kernel/dma/direct.c
+> +++ b/kernel/dma/direct.c
+> @@ -60,7 +60,7 @@ static gfp_t dma_direct_optimal_gfp_mask(struct device *dev, u64 dma_mask,
+>  	*phys_limit = dma_to_phys(dev, dma_limit);
+>  	if (*phys_limit <= DMA_BIT_MASK(zone_dma_bits))
+>  		return GFP_DMA;
+> -	if (*phys_limit <= DMA_BIT_MASK(32))
+> +	if (*phys_limit <= DMA_BIT_MASK(32) && !zone_dma32_is_empty(dev_to_node(dev)))
+>  		return GFP_DMA32;
+>  	return 0;
+>  }
+> @@ -145,7 +145,8 @@ static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
+>  
+>  		if (IS_ENABLED(CONFIG_ZONE_DMA32) &&
+>  		    phys_limit < DMA_BIT_MASK(64) &&
+> -		    !(gfp & (GFP_DMA32 | GFP_DMA))) {
+> +		    !(gfp & (GFP_DMA32 | GFP_DMA)) &&
+> +		    !zone_dma32_is_empty(node)) {
+>  			gfp |= GFP_DMA32;
+>  			goto again;
+>  		}
+
+The zone_dma32_is_empty() value is known at compile-time if
+!CONFIG_ZONE_DMA32.  That would make it redundant to check both.
+
+> diff --git a/kernel/dma/pool.c b/kernel/dma/pool.c
+> index 4d40dcce7604..8e79903fbda8 100644
+> --- a/kernel/dma/pool.c
+> +++ b/kernel/dma/pool.c
+> @@ -71,7 +71,7 @@ static bool cma_in_zone(gfp_t gfp)
+>  	end = cma_get_base(cma) + size - 1;
+>  	if (IS_ENABLED(CONFIG_ZONE_DMA) && (gfp & GFP_DMA))
+>  		return end <= DMA_BIT_MASK(zone_dma_bits);
+> -	if (IS_ENABLED(CONFIG_ZONE_DMA32) && (gfp & GFP_DMA32))
+> +	if (IS_ENABLED(CONFIG_ZONE_DMA32) && (gfp & GFP_DMA32) && !zone_dma32_are_empty())
+>  		return end <= DMA_BIT_MASK(32);
+>  	return true;
+>  }
+> @@ -153,7 +153,7 @@ static void atomic_pool_work_fn(struct work_struct *work)
+>  	if (IS_ENABLED(CONFIG_ZONE_DMA))
+>  		atomic_pool_resize(atomic_pool_dma,
+>  				   GFP_KERNEL | GFP_DMA);
+> -	if (IS_ENABLED(CONFIG_ZONE_DMA32))
+> +	if (IS_ENABLED(CONFIG_ZONE_DMA32) && !zone_dma32_are_empty())
+>  		atomic_pool_resize(atomic_pool_dma32,
+>  				   GFP_KERNEL | GFP_DMA32);
+>  	atomic_pool_resize(atomic_pool_kernel, GFP_KERNEL);
+> @@ -209,7 +209,7 @@ static int __init dma_atomic_pool_init(void)
+>  		if (!atomic_pool_dma)
+>  			ret = -ENOMEM;
+>  	}
+> -	if (IS_ENABLED(CONFIG_ZONE_DMA32)) {
+> +	if (IS_ENABLED(CONFIG_ZONE_DMA32) && !zone_dma32_are_empty()) {
+>  		atomic_pool_dma32 = __dma_atomic_pool_init(atomic_pool_size,
+>  						GFP_KERNEL | GFP_DMA32);
+>  		if (!atomic_pool_dma32)
+> @@ -224,7 +224,7 @@ postcore_initcall(dma_atomic_pool_init);
+>  static inline struct gen_pool *dma_guess_pool(struct gen_pool *prev, gfp_t gfp)
+>  {
+>  	if (prev == NULL) {
+> -		if (IS_ENABLED(CONFIG_ZONE_DMA32) && (gfp & GFP_DMA32))
+> +		if (IS_ENABLED(CONFIG_ZONE_DMA32) && (gfp & GFP_DMA32) && !zone_dma32_are_empty())
+>  			return atomic_pool_dma32;
+>  		if (atomic_pool_dma && (gfp & GFP_DMA))
+>  			return atomic_pool_dma;
+
+I think every single call to zone_dma32_are_empty() is !'d.  It seems
+like it chose the wrong polarity.
