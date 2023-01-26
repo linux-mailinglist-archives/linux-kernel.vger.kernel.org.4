@@ -2,184 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F0C67D059
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6272E67D05E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbjAZPhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        id S231274AbjAZPjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjAZPhm (ORCPT
+        with ESMTP id S229674AbjAZPjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:37:42 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFC51024D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:37:41 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id q5so2215793wrv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:37:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TIu+mxWdNJUsrvi9xRNkt+BBymodGN7DZvnTku8FBhM=;
-        b=yD5BTlXOpJ6Hzs9Dck91DU4pOh8K0FDaUZ0KEcFsMKwptBaB1nnp881ttyXkeb0DqG
-         dXw8jxGQ14PHAlHOmO1OldRwCuQJgd8vuiGXA0Bcbk+iCHc+nUaLjvijC0TmTfFiUx89
-         V5RC7wgpQnLljOUkaRrwN3WqPrvyZ5gYL9vH0ucG0FeGAg8wB6I00pEntBuefheucGRG
-         1KpVbsGiuDt5nyJmy/Vh2zXsMOxX5FNNaOF+Xb5UAEoCkB0LzIJ8SboWftAB7QWyZ3ub
-         kQVzOFd582ywmdOwyH/ynIi5atSvc3bZP0MonE+fhVekLPFPWDk/jQ6xK6zmVgxRCMKz
-         vrCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TIu+mxWdNJUsrvi9xRNkt+BBymodGN7DZvnTku8FBhM=;
-        b=r2+D8zV0NaHW/WH6xVltPS+zaZFGrVNQkE6zC0F4z0CJ0b0C6UQghonUCuwaLSfj51
-         hGCu6vtgU0p7KFuLI5G5cbxCCnL9551HWAUq3Yceo/6sKrKAKTBSccktzFiUxIJxt3dC
-         T1MmJ6Ml5/atqWBKxo94MJv+IGdjo8Jrgs49aRW3tb4FTsK8I1T70TVMrSV2j/bBFtPr
-         n50+TW9roXUQ/v6c6ini7ig0ufS3Upna7mf37L1JX9dDJVy63GRhf35zggftLFzBOtrI
-         /s3PhOwCIv2ZYStiOqqnONrFnw3bMcICDoiTTR9SkbcN+hHNSZUQGszpN8I/zxQTXX/9
-         6aUw==
-X-Gm-Message-State: AFqh2kpjMTmdUsPhbcXCHtwSZOLFhdjopemWMe4GPhPnpfJtEzBQ2uFS
-        cMPGP36ogw2PzCf8a6SEaSLIRA==
-X-Google-Smtp-Source: AMrXdXtaC7G8MzUnGzoywTq1B88ssXXh0aT8RJOiRHsHPA1jxPZmEt45aPHQpEHi0LPaBuEulQRAPw==
-X-Received: by 2002:a5d:61c5:0:b0:2bf:9608:57ee with SMTP id q5-20020a5d61c5000000b002bf960857eemr21204904wrv.21.1674747459452;
-        Thu, 26 Jan 2023 07:37:39 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id j5-20020adff005000000b002bddd75a83fsm1649521wro.8.2023.01.26.07.37.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 07:37:39 -0800 (PST)
-Message-ID: <810bf9e9-1428-be68-3bcf-93c332987959@linaro.org>
-Date:   Thu, 26 Jan 2023 16:37:37 +0100
+        Thu, 26 Jan 2023 10:39:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26974172C
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:38:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674747515;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=djrJC5jl8hw1WPQkoTgHRSAmPOKjMJ0SWC0GWLzxol4=;
+        b=NU3rT77fXi9TsgqUzqL6c652xgSbYgs/aGM3Wo5cCS4jrD4qIhD0X57FtHc0EZIRVFNw1e
+        BXC0QjSm7kOKmUabnS8ibrHxfDnArheM4UYnUUStrREBwUwxokawP+GAoPMk3WbZ8BOXzc
+        NFUvzhXkcnnFFDyHWt+XulzW6ttvzic=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-298-l0VMB3wuOsaG0sz9_qnC5g-1; Thu, 26 Jan 2023 10:38:33 -0500
+X-MC-Unique: l0VMB3wuOsaG0sz9_qnC5g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B05F2A59553;
+        Thu, 26 Jan 2023 15:38:33 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.43])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 318D3C15BA0;
+        Thu, 26 Jan 2023 15:38:32 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 resend 0/3] mfd: intel_soc_pmic_chtwc + cell drivers Lenovo Yoga Tab 3 YT3-X90F support
+Date:   Thu, 26 Jan 2023 16:38:20 +0100
+Message-Id: <20230126153823.22146-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
- usage
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Wei Ni <wni@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Johan Hovold <johan@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-References: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
- <Y9J4WAFyXyV/nqlG@orome>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Y9J4WAFyXyV/nqlG@orome>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 13:55, Thierry Reding wrote:
-> On Tue, Jan 24, 2023 at 08:57:23PM +0100, Daniel Lezcano wrote:
->>
->> Hi,
->>
->> does anyone know what is the purpose of the get_thermal_instance() usage in
->> this code:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c?h=thermal/linux-next#n623
->>
->> The driver is using a function which is reserved for the thermal core. It
->> should not.
->>
->> Is the following change ok ?
->>
->> diff --git a/drivers/thermal/tegra/soctherm.c
->> b/drivers/thermal/tegra/soctherm.c
->> index 220873298d77..5f552402d987 100644
->> --- a/drivers/thermal/tegra/soctherm.c
->> +++ b/drivers/thermal/tegra/soctherm.c
->> @@ -620,9 +620,8 @@ static int tegra_thermctl_set_trip_temp(struct
->> thermal_zone_device *tz, int trip
->>   				continue;
->>
->>   			cdev = ts->throt_cfgs[i].cdev;
->> -			if (get_thermal_instance(tz, cdev, trip_id))
->> -				stc = find_throttle_cfg_by_name(ts, cdev->type);
->> -			else
->> +			stc = find_throttle_cfg_by_name(ts, cdev->type);
->> +			if (!stc)
->>   				continue;
->>
->>   			return throttrip_program(dev, sg, stc, temp);
->> @@ -768,9 +767,9 @@ static int tegra_soctherm_set_hwtrips(struct device
->> *dev,
->>   			continue;
->>
->>   		cdev = ts->throt_cfgs[i].cdev;
->> -		if (get_thermal_instance(tz, cdev, trip))
->> -			stc = find_throttle_cfg_by_name(ts, cdev->type);
->> -		else
->> +
->> +		stc = find_throttle_cfg_by_name(ts, cdev->type);
->> +		if (!stc)
->>   			continue;
->>
->>   		ret = throttrip_program(dev, sg, stc, temperature);
-> 
-> There's a small difference in behavior after applying this patch. Prior
-> to this I get (on Tegra210):
-> 
-> 	[   12.354091] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
-> 	[   12.379009] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
-> 	[   12.388882] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
-> 	[   12.401007] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
-> 	[   12.471041] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
-> 	[   12.482852] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
-> 	[   12.482860] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
-> 	[   12.485357] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
-> 	[   12.501774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
-> 
-> and after these changes, it turns into:
-> 
-> 	[   12.447113] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
-> 	[   12.472300] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
-> 	[   12.481789] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
-> 	[   12.495447] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
-> 	[   12.496514] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
-> 	[   12.510353] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
-> 	[   12.526856] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
-> 	[   12.528774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
-> 	[   12.569352] tegra_soctherm 700e2000.thermal-sensor: programming throttle for pll to 103000
-> 	[   12.577635] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when pll reaches 103000 mC
-> 	[   12.590952] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
-> 	[   12.600783] tegra_soctherm 700e2000.thermal-sensor: programming throttle for mem to 103000
-> 	[   12.609204] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when mem reaches 103000 mC
-> 
-> The "programming throttle ..." messages are something I've added locally
-> to trace what gets called. So it looks like for "pll" and "mem" thermal
-> zones, we now program trip points whereas we previously didn't.
+Hi Lee, et. al.
 
-Hmm, yeah. I did go into the details of the driver but if there is no 
-cooling device associated with a trip point it will result in a noop 
-from the thermal framework POV. The check is done in the governors by 
-going through the thermal zone device list and cdev.
+Here is a resend of my patch series to add support for
+the Lenovo Yoga Tab 3 YT3-X90F tablet to the intel_soc_pmic_chtwc
+driver + 2 of the drivers for instantiated mfd-cells.
+
+This is unmodified from the previous version except for
+having acks from the i2c, resp. extcon subsys maintainers
+for routing the entire series through the MFD tree.
+
+Still I have marked this as v2, to distuingish this from the resend
+of patches 2-3 yesterday, which I did because I was under the wrong
+impression that patch 1/3 was already merged.
+
+Regards,
+
+Hans
 
 
-> I'll take a closer look to see if we can replace the calls to
-> get_thermal_instance() by something else.
 
-That is great, thanks !
+Hans de Goede (3):
+  mfd: intel_soc_pmic_chtwc: Add Lenovo Yoga Tab 3 X90F to
+    intel_cht_wc_models
+  i2c: cht-wc: Add charger-chip info for the Lenovo Yoga Tab 3 YT3-X90F
+  extcon: intel-cht-wc: Add support for Lenovo Yoga Tab 3 Pro YT3-X90F
 
-
+ drivers/extcon/extcon-intel-cht-wc.c |  1 +
+ drivers/i2c/busses/i2c-cht-wc.c      | 46 ++++++++++++++++++++++++++++
+ drivers/mfd/intel_soc_pmic_chtwc.c   |  8 +++++
+ include/linux/mfd/intel_soc_pmic.h   |  1 +
+ 4 files changed, 56 insertions(+)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.39.0
 
