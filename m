@@ -2,122 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185FD67D692
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B31BA67D696
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbjAZUjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:39:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47108 "EHLO
+        id S232504AbjAZUl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbjAZUjF (ORCPT
+        with ESMTP id S231488AbjAZUlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:39:05 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCDE7AB0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:39:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C22F4CE259D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 20:39:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F90FC433EF;
-        Thu, 26 Jan 2023 20:38:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1674765539;
-        bh=eqCm1yGf+yfktl0RDMe042s02iMXVNx/WsE1kqwweJk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=03/Rs4NqdOvG8k51Xy1Ddo7iNB2UHGqimSa4IDuaWsW575lmMkFEMbLJBaEfSvP3B
-         PTvunZQwaQObaUNpWnAlq5lZtYduS054WH38K4VA0JnA90K9DRovq+BUiq/bClvkxi
-         7j2hYHNmCb4nC0hMitC7HDb0s5t2s0n5MpaGXKJo=
-Date:   Thu, 26 Jan 2023 12:38:58 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        David Sterba <dsterba@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Al Viro <viro@zeniv.linux.org.uk>, Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH] mm/highmem: Align-down to page the address for
- kunmap_flush_on_unmap()
-Message-Id: <20230126123858.42d9377ad6e352a58c81668b@linux-foundation.org>
-In-Reply-To: <20230126143346.12086-1-fmdefrancesco@gmail.com>
-References: <20230126143346.12086-1-fmdefrancesco@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 26 Jan 2023 15:41:24 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E304125BA
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:41:23 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id c124so1922347pfb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:41:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fVMuPLhQ7MqOM6GrhILLRb9j0GFeXbyWToL/2X/iFxY=;
+        b=KmdNYh+eqvWDeDS4rcLM+u78dmmn4InPH9pxQNtn/u8fa23Q0k8tqcPEm/0hNGOnJq
+         HdPFuYgMhKi0x9k8P9va76ZEh5Z8gZuC3b/rdtAm2cB/KU4La9LI6qOjUL7fblXEWEjb
+         OljOlfOnZhoXv38yBy9XfHwvr9jgwwD1FgjdMhQp13zJaGG0YEP1M6DL6V+rZysVV8OG
+         xLtGVZyokGJreQ3D4iW/5/IKgBRD/UBJODRbrAq6wqTAfcJUm/3meA0t91SbjZd/rBM1
+         vDYCTgbI8hB4mszXzffuTPfL40QZCDMFpSNtTTsf5z7Y1GaxkR/gQ1euni/spYg+F7Rl
+         s90Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fVMuPLhQ7MqOM6GrhILLRb9j0GFeXbyWToL/2X/iFxY=;
+        b=X/fNxXeKj8bWvWPGGJe2PiWEM8tVVIedGJfgThiY2Ri7S1+BFixnF6P/oBMZ/2EGzD
+         /ozyajC3YbyDAt8L+x0IxTsZnuvBMIfRfuRnYHHsgU8Cl+7BWHtpqHzCEBdsPapyE9/X
+         goFuBZSTj1SOP4pC8ab2JiKXnDlldxM18wAiI9vBo4HVzn4zsN1f8nPhFwAPbfcJ19+T
+         Kkp27obTjk2Vju6BfEWoEa6ppKGtZvOmDWtAMCYI9QWWWrG+MoWsBAkbSn+n+iduRbDo
+         Wo+JJG5gLIwGb7QIUjH/LX8ga87R3BaRmkM/Xj3OInH1hSlOnWV8oRaKTD5ZvTwBSDSb
+         mH4A==
+X-Gm-Message-State: AO0yUKXQvf22QpFwkcdCAI7g33uQlGkm2RRajblrU31jmZ8Gg5YZG1Xm
+        K/T0ewywE6PD7ErEz8lZrftZTpvv/+eAFjrlRNYVkbQM3ZSOvmA6
+X-Google-Smtp-Source: AK7set/ZzNhQNeQ+aVnimgeueSuhljnNd4gRDZYaaf6YQ618+S6Mw3eaAEGR6G5CssPOncxy1IOl0WWzkMPrvvFLPoE=
+X-Received: by 2002:a63:bd52:0:b0:4da:af6:ed with SMTP id d18-20020a63bd52000000b004da0af600edmr851945pgp.30.1674765681704;
+ Thu, 26 Jan 2023 12:41:21 -0800 (PST)
+MIME-Version: 1.0
+References: <20230125213251.2013791-1-zwisler@google.com> <87a6259mll.fsf@meer.lwn.net>
+ <20230126153438.5e98da15@gandalf.local.home>
+In-Reply-To: <20230126153438.5e98da15@gandalf.local.home>
+From:   Ross Zwisler <zwisler@google.com>
+Date:   Thu, 26 Jan 2023 13:41:05 -0700
+Message-ID: <CAGRrVHwykqUBREOAVB0tYQiVT5VsHKpda4POtR_k6j3oxDUTSQ@mail.gmail.com>
+Subject: Re: [PATCH] docs: ftrace: always use canonical ftrace path
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 Jan 2023 15:33:46 +0100 "Fabio M. De Francesco" <fmdefrancesco@gmail.com> wrote:
+On Thu, Jan 26, 2023 at 1:34 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Thu, 26 Jan 2023 11:28:38 -0700
+> Jonathan Corbet <corbet@lwn.net> wrote:
+>
+> > Ross Zwisler <zwisler@chromium.org> writes:
+> >
+> > > The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
+> > >
+> > > But, from Documentation/trace/ftrace.rst:
+> > >
+> > >   Before 4.1, all ftrace tracing control files were within the debugfs
+> > >   file system, which is typically located at /sys/kernel/debug/tracing.
+> > >   For backward compatibility, when mounting the debugfs file system,
+> > >   the tracefs file system will be automatically mounted at:
+> > >
+> > >   /sys/kernel/debug/tracing
+> > >
+> > > Many parts of Documentation still reference this older debugfs path, so
+> > > let's update them to avoid confusion.
+> > >
+> > > Signed-off-by: Ross Zwisler <zwisler@google.com>
+> >
+> > So this seems like a good cleanup to me.  Unless somebody objects, I'll
+> > apply it to the docs tree in the near future.
+> >
+>
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>
+> Doing a quick 'git grep 'debug/tracing' there's a lot more that needs to be
+> cleaned up, but that's outside the Documentation directory.
+>
+> Ross, care to follow through with those? ;-)
 
-> If ARCH_HAS_FLUSH_ON_KUNMAP is defined (PA-RISC case), __kunmap_local()
-> calls kunmap_flush_on_unmap(). The latter currently flushes the wrong
-> address (as confirmed by Matthew Wilcox and Helge Deller). Al Viro
-> proposed to call kunmap_flush_on_unmap() on an aligned-down to page
-> address in order to fix this issue. Consensus has been reached on this
-> solution.
+Yep, I'll send out patches to take care of the rest, just wanted to
+send this out since I had it ready.
+I'm planning on dividing up the patches by subsystem/maintainer, but
+am open to suggestions if that sounds incorrect.
 
-What are the user-visible runtime effects of this flaw?
-
-> Therefore, if ARCH_HAS_FLUSH_ON_KUNMAP is defined, call
-> kunmap_flush_on_unmap() on an aligned-down to page address computed with
-> the PTR_ALIGN_DOWN() macro.
-> 
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
-> Confirmed-by: Helge Deller <deller@gmx.de>
-> Confirmed-by: Matthew Wilcox <willy@infradead.org>
-> Fixes: f3ba3c710ac5 ("mm/highmem: Provide kmap_local*")
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
-> 
-> I have (at least) two problems with this patch...
-> 
-> 1) checkpatch.pl complains about the use of the non-standard
-> "Confirmed-by" tags. I don't know how else I can give credit to Helge
-> and Matthew. However, this is not the first time that I see non-standard
-> tags in patches applied upstream (I too had a non-standard
-> "Analysed-by" tag in patch which fixes a SAC bug). Any objections?
-
-Add a paragraph "this was confirmed by X and Y", then add Cc:X, Cc:y?
-
-This gives you an opportunity to tell us what "confirmed" actually
-means!  Did they confirm that it's a bug?  Or that the fix is correct? 
-I dunno.
-
-> 2) I'm not sure whether or not the "Fixes" tag is appropriate in this
-> patch. Can someone either confirm or deny it?
-> 
->  include/linux/highmem-internal.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-internal.h
-> index 034b1106d022..e247c9ac4583 100644
-> --- a/include/linux/highmem-internal.h
-> +++ b/include/linux/highmem-internal.h
-> @@ -200,7 +200,7 @@ static inline void *kmap_local_pfn(unsigned long pfn)
->  static inline void __kunmap_local(const void *addr)
->  {
->  #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
-> -	kunmap_flush_on_unmap(addr);
-> +	kunmap_flush_on_unmap(PTR_ALIGN_DOWN(addr, PAGE_SIZE));
->  #endif
->  }
->  
-> -- 
-> 2.39.0
+> Thanks Jon and Ross,
+>
+> -- Steve
