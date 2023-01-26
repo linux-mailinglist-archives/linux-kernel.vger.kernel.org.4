@@ -2,131 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F45A67CD4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5072B67CD4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjAZOK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:10:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        id S231516AbjAZOMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:12:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjAZOKo (ORCPT
+        with ESMTP id S231490AbjAZOMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:10:44 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E038B305E1;
-        Thu, 26 Jan 2023 06:10:42 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id E6C5C320092D;
-        Thu, 26 Jan 2023 09:10:38 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 09:10:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674742238; x=1674828638; bh=U4/r5dEQVW
-        x3dUhx1q619GsM2gBX67/2IbFa62g79pQ=; b=VitC5m5ZKrj9aJkwfsqhl6rrIn
-        rjpjHYk/JpdBSO5g0k5d+PB+lq2VIjK+ltomiwQSHBtrjlX1ShUCsHNRBmV5r7aN
-        PZ0DrhSVfr0VTf7ddlN2E0XBIDEAHNej5R2ERaZTnnddhPmNktYbGcFLbu3vGTAa
-        NTUfJeAYaOl4aielSpvUVHiJv1K8zr2GgcIe78zDFEcadLOWkttOE39+jcyMRROZ
-        Spv/e1mWqedhBGzjJCkVt9sopiXSVqT21spwpbCCwlXR2noNBJyDbKXlVdMgZZxQ
-        gY/TY5Zao/EzwPzfh2wo+nJk/VPYAhyRWFxTgdHyXPgECb66i9kQrLJnjjJg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674742238; x=1674828638; bh=U4/r5dEQVWx3dUhx1q619GsM2gBX
-        67/2IbFa62g79pQ=; b=pBezrvZ/KoJB+oazpPSXQZ3v3cJlcHYnqq6FHLUAxTmn
-        c964WuSj3qfPVYSjkfqlaW93yOc67osErakfjU3Ss2dzc+QkaIcbvSal8NixuhL9
-        3ouLKpqQaoLmM5xvHNTsMVHl9xmtkitErObvj2NFZWoBKxfsrCWxjqdN7hyiRWXr
-        iFBJQnFY4fe3ylcBH3XujVleb2bPWkaWDKIj/Yp6agnqQXGFgpAAq/inQSsFYSea
-        6KuElIczYZ2J0YnXQJoB1BO5ViOSb7ajeLBDVgDvBFegQnoYIu5GydmFTx+KwVmZ
-        0rPVcK2G9dM1zpgjBu1A6RzejPsONUcNYR70LW4MKA==
-X-ME-Sender: <xms:3onSY5fJPBNTTNiylmZt8cNbON9Jw-zelUwrjOLHX5jJz_PCdbJ7eg>
-    <xme:3onSY3ObKd9fwitNqm_T3ilq23stf6VYf080DksGmFwHLDX5kXbTsOBWIR_ajSPx0
-    pyCVD3IPpj7C6Utf7U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgieduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:3onSYyjaxGX_ZYMg9ARyB6sq6zv96P-J2j0b1r-EorDASu-0dCUUAA>
-    <xmx:3onSYy8_lEInyTOBJtNttgOfc7f-kWn1CKItZstHIScLm7MZU6xwaQ>
-    <xmx:3onSY1vlesccpBnbd_xi30VjwoH31dt03YCvJLQyT3ZJ9vIBqTO05g>
-    <xmx:3onSY7CcfnICaCVecYgHBHkpDwWtD9ioCdh3VRpm4FlHKsc_77glYg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id F1222B60086; Thu, 26 Jan 2023 09:10:37 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <5d11eea7-0dd4-44d5-be09-27ae18492916@app.fastmail.com>
-In-Reply-To: <AM6PR08MB4376030EDCFAD7F5FD5313D2FFCF9@AM6PR08MB4376.eurprd08.prod.outlook.com>
-References: <20230125201020.10948-1-andriy.shevchenko@linux.intel.com>
- <20230125201020.10948-2-andriy.shevchenko@linux.intel.com>
- <ca399c86-5bfc-057b-6f9f-50614b91a9b9@csgroup.eu>
- <Y9JTo1RkxT2jORPE@smile.fi.intel.com>
- <7b7df1f7-4f47-d19a-02ff-91984b25ba98@csgroup.eu>
- <a9ec7f46-dd07-40e7-ae48-a1e48d2101c5@app.fastmail.com>
- <Y9KAPge5zy0cIqi8@smile.fi.intel.com>
- <AM6PR08MB4376030EDCFAD7F5FD5313D2FFCF9@AM6PR08MB4376.eurprd08.prod.outlook.com>
-Date:   Thu, 26 Jan 2023 15:10:18 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Pierluigi Passaro" <pierluigi.p@variscite.com>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Cc:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        "kernel test robot" <lkp@intel.com>
-Subject: Re: [PATCH v1 1/5] gpiolib: fix linker errors when GPIOLIB is disabled
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 26 Jan 2023 09:12:02 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38845206AA
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:11:51 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id m15so1201876wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:11:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+b5T9XrtD/RFlpp0uwB7/1Pl9LZdmUTgBTpWnQxQNg0=;
+        b=KgkGYKmzHk+umIchVB+AffMuOBKKGy11miVrlbRmgjBYfNUc1d29XbltzlN0TUmmoG
+         AOKE3A8VxQeffJ5oKoZ1OSSAz70K7j5AEHM0TjF/s5NOjKf+czL0ikMaOu/4oEQd7wS1
+         x3/OT0g7gbMfgnKjL0edCYs00EMHlyGGdd4TsAIFxfyb1O2gKjEUvvn/aBaTaWh+iQ7a
+         Bd/bZtN7MzwfJgplXlEAtYHuc6WkrJlRnBW8aF3kqTqNcoauGSxVytMD+NRcoaVfYzkZ
+         aAmS3dNgmakfOBGkTV0wWMxPMvZpDbv6S7ZdGpTButK1VL8S58TDTNlYo9cyn0E7IVlE
+         FWVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+b5T9XrtD/RFlpp0uwB7/1Pl9LZdmUTgBTpWnQxQNg0=;
+        b=PoWgChsTCWQadogQVVH0VsAI5f9aC/u1z3E3gusrsUm2DnFEY+jhfLZ2iq6+5lP1YN
+         zgvrRuJ2yWm1+NUC58aDRzXzdonS1N0BXO0nZVsl+MgnqHSIEb5qHJk5J1FU1jGtEPjl
+         yKvoX2VUraxUwz2q5bSPuBG5fKp1Rp6lELkTldrKaMBGm+RUlqCIcHK++ruaTrI7eN6R
+         n+QgJMPrGBI2Up0z9+/f3LLf4Y1W4F2LTsP+2p7e1JaUD6PsOJywRhIGlMOgqRtRncGO
+         gl+7fQpJP3zgf8glcW/PhrFVfnP26WIfxDM+zhAJLoqF1HIBf+GFM2rrI+BKkChD7Utv
+         jD7Q==
+X-Gm-Message-State: AFqh2kpVuXqcBhl0xtgdR/WMO/NccUri4cTvLCQufspPIJ/28D5PgDBT
+        tzDqeDGBV+j/9HEPBk+wd5s=
+X-Google-Smtp-Source: AMrXdXs25gZoS2pK9ThpGF3J8OGsM8W2ixFAUZ2vWOac6jb6rx2vYC15dLav7KyTjl9KgCtCZ4aLeg==
+X-Received: by 2002:a05:600c:5390:b0:3d9:a145:4d1a with SMTP id hg16-20020a05600c539000b003d9a1454d1amr32611789wmb.34.1674742309470;
+        Thu, 26 Jan 2023 06:11:49 -0800 (PST)
+Received: from localhost.localdomain (host-79-44-17-213.retail.telecomitalia.it. [79.44.17.213])
+        by smtp.gmail.com with ESMTPSA id e38-20020a05600c4ba600b003db11dfc687sm1532413wmp.36.2023.01.26.06.11.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 06:11:48 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Sterba <dsterba@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Helge Deller <deller@gmx.de>
+Subject: [PATCH] mm/highmem: Align-down to page the address for kunmap_flush_on_unmap()
+Date:   Thu, 26 Jan 2023 15:11:44 +0100
+Message-Id: <20230126141144.11042-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023, at 14:41, Pierluigi Passaro wrote:
-> On Thu, Jan 26, 2023 at 02:29PM +0100, Arnd Bergmann wrote:
->> > >>>
->> > >>> If link fails, it means we still have unexpected calls to
->> > >>> gpiochip_request_own_desc() or gpiochip_free_own_desc(), and we should
->> > >>> fix the root cause instead of hiding it with a WARN().
+If ARCH_HAS_FLUSH_ON_KUNMAP is defined (PA-RISC case), __kunmap_local()
+calls kunmap_flush_on_unmap(). The latter currently flushes the wrong
+address (as confirmed by Matthew Wilcox and Helge Deller). Al Viro
+proposed to call kunmap_flush_on_unmap() on an aligned-down to page
+address in order to fix this issue. Consensus has been reached on this
+solution.
 
->> > This means either I made a mistake in my search, or the problem
->> > has already been fixed. Either way, I think Andy should provide
->> > the exact build failure he observed so we know what caller caused
->> > the issue.
->> 
->> I believe it's not me, who first reported it. So, Pierluigi, can you point
->> out to the LKP message that reported the issue?
->> 
->> P.S> LKP sometimes finds a really twisted configurations to probe on.
->> 
->> 
-> I've received the following messages:
-> - https://lore.kernel.org/all/202301240409.tZdm0o0a-lkp@intel.com/
-> - https://lore.kernel.org/all/202301240439.wYz6uU0k-lkp@intel.com/
-> - https://lore.kernel.org/all/20230124075600.649bd7bb@canb.auug.org.au/
-> Please let me know if you need further details.
+Therefore, if ARCH_HAS_FLUSH_ON_KUNMAP is defined, call
+kunmap_flush_on_unmap() on an aligned-down to page address computed with
+the PTR_ALIGN_DOWN() macro.
 
-I think these three are all regressions that are caused by the patch
-in this thread, rather than the original problem that it was trying
-to fix.
+Cc: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+Confirmed-by: Helge Deller <deller@gmx.de>
+Confirmed-by: Matthew Wilcox <willy@infradead.org>
+Fixes: f3ba3c710ac5 ("mm/highmem: Provide kmap_local*")
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
-The one we're looking for is a randconfig bug that showed up
-as a link failure when referencing gpiochip_request_own_desc
-or gpiochip_free_own_desc.
+I have (at least) two problems with this patch...
 
-      Arnd
+1) checkpatch.pl complains about the use of the non-standard
+"Confirmed-by" tags. I don't know how else I can give credit to Helge
+and Matthew. However, this is not the first time that I see non-standard
+tags in patches applied upstream (I too had a non-standard
+"Analysed-by" tag in patch which fixes a SAC bug). Any objections?
+
+2) I'm not sure whether or not the "Fixes" tag is appropriate in this
+patch. Can someone either confirm or deny it?
+
+ include/linux/highmem-internal.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-internal.h
+index 034b1106d022..e247c9ac4583 100644
+--- a/include/linux/highmem-internal.h
++++ b/include/linux/highmem-internal.h
+@@ -200,7 +200,7 @@ static inline void *kmap_local_pfn(unsigned long pfn)
+ static inline void __kunmap_local(const void *addr)
+ {
+ #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
+-	kunmap_flush_on_unmap(addr);
++	kunmap_flush_on_unmap(PTR_ALIGN_DOWN(addr, PAGE_SIZE));
+ #endif
+ }
+ 
+-- 
+2.39.0
+
