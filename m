@@ -2,181 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA38267D68F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD8367D68C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbjAZUiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
+        id S232823AbjAZUhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbjAZUh5 (ORCPT
+        with ESMTP id S229716AbjAZUhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:37:57 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE837659C
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:37:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1674765430; bh=Q1Tjx1rmtKuARky73KHmwm+KOPC8klJJ3O+bRP/G2v0=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=jcGLQFJR0BvBFk1IqPNY/j1h1LjieQhYn9qAJFSq45ll6RQDW+BdJdFmn2dHTnoTg
-         duAESJaqQXMtsfmdjOM7xAw/2GB7rGHNA5wBpo0rAOA3iuLnUDgSANgpDS4GMkY19o
-         fx0s4atA3Ra2fGR8RWp+1LN03o08w94BZRA+IiqClWR3ofGs611Ao7RP3LvJrh9mCN
-         gRjiXGLBe2f4zO1ygPDCcEtsA4pE49PXkBy+VkgKEQscZJroM8Prv1nJHVXrd9h8sA
-         2An9vtLLm4BQm7yUoCt8xPyOdGt3lTd25CgdKPf3HfxsL8AAfs1ReYz2GNuww+9xif
-         vQlbZwNxerAvQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.130.156]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MVNB1-1pD45Z1DkN-00SKBx; Thu, 26
- Jan 2023 21:37:10 +0100
-Message-ID: <804f9617-cdad-d3cb-f4c0-7d99d12f49d6@gmx.de>
-Date:   Thu, 26 Jan 2023 21:37:08 +0100
+        Thu, 26 Jan 2023 15:37:18 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A45728EC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:37:16 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id h10so1293139ilq.6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:37:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3eT8OlmJ/cvpeFa+CMg7lyhz2OoajpKwuYq94B2ZkiQ=;
+        b=cW9hmEOQ1/8OV4wVUy3XmSkGeoIzCwJ+DKcyUKz1ZGmDgHdGf2xwXE72ELEJvckmZU
+         P14K8LthH+Yv3LUFXX3K2qk8vUZMHYmb8IcQxxd2arJNhuC1c93CaazNLSB4e8dpGv0y
+         v3GLPJEcrz92/H5KCrsJ5VG9g0G9ImqyFB8Xk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3eT8OlmJ/cvpeFa+CMg7lyhz2OoajpKwuYq94B2ZkiQ=;
+        b=FsVH1as2y0q3NSf2r/i2Ip45waPo6DcGA+l7lD8JIm13fkQUmpZFtA5zrLKjr9KN87
+         CLEnAu3X3qrBHTyq31XWczPpIcBvrZ5jTlhBhSWXEvtuYYx8Lj7jy7HJ/hpxfTn5sEdk
+         POtagWoX86GhCyZOOdhUAiR7tIQYzNR/tIyzMW/MJkw09Zz9V8CGeFY9kcldBFmvKFcu
+         6JykZz7kyO2EDo1IbfuSxkmJGttxKwXhWOVIAJhpYFo/GvAs/fgkJ5jBc7Ib21qJp3MJ
+         4SCND0JpIkSLgex1az8RDPaqAHHgo+INIgRkXHqzbXFzTLDyyXrYWtRMlBmoPJF2cXzP
+         gF6w==
+X-Gm-Message-State: AO0yUKU4USmnEJ1Kuo+pFOPP70aBChfSkuX0Tw/Pz8uDNh4TcUJ9TBLz
+        MpQVM2Wi28od3oAK/kX/rKLQug==
+X-Google-Smtp-Source: AK7set+ZAYNF5Gm2Q/PzHEOSck1J/FKk8Wd90kiTp9R+X3GrE7zuFFDhukCNaDrchud6aJTKXaZFgA==
+X-Received: by 2002:a92:7f01:0:b0:310:bcf6:9acd with SMTP id a1-20020a927f01000000b00310bcf69acdmr297671ild.3.1674765436147;
+        Thu, 26 Jan 2023 12:37:16 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id i16-20020a02cc50000000b0039e97f04e1esm742133jaq.155.2023.01.26.12.37.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 12:37:15 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------rtJyWblrBlrD4sA9gfXE41Ey"
+Message-ID: <3bbe9344-4546-5bd1-52ae-ed6532528e6c@linuxfoundation.org>
+Date:   Thu, 26 Jan 2023 13:37:14 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] mm/highmem: Align-down to page the address for
- kunmap_flush_on_unmap()
+ Thunderbird/102.4.2
 Content-Language: en-US
-To:     Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        David Sterba <dsterba@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Al Viro <viro@zeniv.linux.org.uk>
-References: <20230126143346.12086-1-fmdefrancesco@gmail.com>
- <63d2d97bce4c7_63e3f29442@iweiny-mobl.notmuch>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <63d2d97bce4c7_63e3f29442@iweiny-mobl.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:u4BFU7cKkIybX2YjafYiO5oIG8ou3+EqicbBfICwTIuGlIohlY8
- x+twENvBqTGTRE6ibJjx90EsajvO0mvWoaCidpYQ7+IQ467F70sSMOyXDLqGpgH02WYTRO+
- Q+IsxQRr0mUMvZh8/Wx/BUyoxTyxXyDpNsLDJh7v311vBR1xZFPNwCcSLZqJleGFaa0VJMI
- /tfX48k5EWBZQHf84nOUg==
-UI-OutboundReport: notjunk:1;M01:P0:1xTPqY+rPhM=;K/7jXTCqkp172Vrr/+2AcXTgYSX
- PyW+tFf0LKoRU4wtCofhWU/gfLpZ9+TW4xAYtG2DXHKdbk9g5Agu0P7IK0NpRj+4ZaoPMbdxK
- mulNl83O/65oGwKfiOFBMeZ4MpQ89W/qrhiE5eR6ZMYwp4ujfjXl25fGegDCzySHSWaVtKY36
- 5qLKxVA54sqycW0Be9v3CyJgWyGFe0phiTR6FbfIqEswG/HVDJLEfzbRg3vjj5gjFwlnRa6hJ
- A8t473FoshWC61mqPYc3vdEzuL6xXdB/GOJXEKOvRbxuWS7JnSlRTfPa5SKHNUwc1h/V+j9qW
- x0wRssf1yYu9d24BUT+yXyLJ7WBX6ooK9u597AVMZyZz2zTfSWGnO9RRuPut4b59Sl0+0Y2m2
- GNuEqzPPBoPczpi25kUzjhhQZrCeiTyT6hlCWBLLiWmgoO8ILWYtbEf6Sps9gf6t5f7fWIqig
- GXOGRdOkUohaZG6dSDoFHuJQJiOjVa2L94M7WWUGbKFnTqyjZOSj0ijsfDuD5hXQBEw5dE/N5
- CEwCob5VqVOOhuGap7xdP2tHjnLXHkQCH5Jivb2MWoCEPJtc1IiU5TNZZ3RTGcEc5Dh6ZCs87
- pUdWEpmb9YW7YAsV/VDWnAK5JquPXMOqi/SKuJC0AFNaxxuJ/TjerQxHRpVCMvqOwVBtHu5D1
- lnHfu8qLOZKwRVrRLWNYpCNP38WHb2+OhjOCPcl/WTGlzFgy29R7EwSuOo1lbfbP1mt0NEAJS
- 8od/jRTBvXMsabBFLSRl3k2NQ3U7frTLZtTvl/E5IpSgan/sfINqOZS9LjthE3IBBwwVDz8Bf
- YgHI3x+KzcbVyu8S2RbhR/eAUoaT98SyBHGDNoKRl8bBxkx1pZh8B/XJFlzsotBIfhL7KAHyX
- ElVTUijKbWtv2r9yUKoA4LHC5eyQkjqdzkVNWmMlAcnIARiGwpkOK79uK3WVc5gnib3I2ye21
- 9TGnxQ==
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-pm@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest fixes update for Linux 6.2-rc6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/23 20:50, Ira Weiny wrote:
-> Fabio M. De Francesco wrote:
->
-> FWIW I think I would simplify the subject
-> [PATCH] mm/highmem: Fix kunmap_local() on flush on unmap architectures
->
-> Or something like that.
->
->> If ARCH_HAS_FLUSH_ON_KUNMAP is defined (PA-RISC case), __kunmap_local()
->> calls kunmap_flush_on_unmap(). The latter currently flushes the wrong
->> address (as confirmed by Matthew Wilcox and Helge Deller). Al Viro
->> proposed to call kunmap_flush_on_unmap() on an aligned-down to page
->> address in order to fix this issue. Consensus has been reached on this
->> solution.
->>
->> Therefore, if ARCH_HAS_FLUSH_ON_KUNMAP is defined, call
->> kunmap_flush_on_unmap() on an aligned-down to page address computed wit=
-h
->> the PTR_ALIGN_DOWN() macro.
->>
->> Cc: Ira Weiny <ira.weiny@intel.com>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
->> Confirmed-by: Helge Deller <deller@gmx.de>
->> Confirmed-by: Matthew Wilcox <willy@infradead.org>
->> Fixes: f3ba3c710ac5 ("mm/highmem: Provide kmap_local*")
->> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
->> ---
->>
->> I have (at least) two problems with this patch...
->>
->> 1) checkpatch.pl complains about the use of the non-standard
->> "Confirmed-by" tags. I don't know how else I can give credit to Helge
->> and Matthew. However, this is not the first time that I see non-standar=
-d
->> tags in patches applied upstream (I too had a non-standard
->> "Analysed-by" tag in patch which fixes a SAC bug). Any objections?
->
-> I think you can add Matthew and Helge as Suggested-by:  All 3 had input =
-on
-> the solution.
->
->>
->> 2) I'm not sure whether or not the "Fixes" tag is appropriate in this
->> patch. Can someone either confirm or deny it?
->
-> This 'fixes' looks correct to me.  I don't know how many folks are runni=
-ng
-> highmem with parisc but if they are I am sure they would appreciate the
-> extra knowledge.
+This is a multi-part message in MIME format.
+--------------rtJyWblrBlrD4sA9gfXE41Ey
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-It seems nobody is running highmem on parisc, because it can't be enabled.
-AFAICS, it's not in any parisc related Kconfig file.
+Hi Linus,
 
-> I do wonder if this should be cc'ed to stable to ensure it gets
-> backported?  Helge do you think there is a need for that?
+Please pull the following Kselftest fixes update for Linux 6.2-rc6.
 
-For correctness I think it's nevertheless good to backport it.
+This Kselftest fixes update for Linux 6.2-rc6 consists of a single
+fix to a amd-pstate test Makefile bug that deletes source files
+during make clean run.
 
->>   include/linux/highmem-internal.h | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-i=
-nternal.h
->> index 034b1106d022..e247c9ac4583 100644
->> --- a/include/linux/highmem-internal.h
->> +++ b/include/linux/highmem-internal.h
->> @@ -200,7 +200,7 @@ static inline void *kmap_local_pfn(unsigned long pf=
-n)
->>   static inline void __kunmap_local(const void *addr)
->>   {
->>   #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
->> -	kunmap_flush_on_unmap(addr);
->> +	kunmap_flush_on_unmap(PTR_ALIGN_DOWN(addr, PAGE_SIZE));
->>   #endif
->>   }
+diff is attached.
 
-That would be another possibility:
+thanks,
+-- Shuah
 
-diff --git a/arch/parisc/include/asm/cacheflush.h b/arch/parisc/include/as=
-m/cacheflush.h
-index 0bdee6724132..ce5d1f8a23bd 100644
-=2D-- a/arch/parisc/include/asm/cacheflush.h
-+++ b/arch/parisc/include/asm/cacheflush.h
-@@ -77,6 +77,7 @@ void flush_anon_page(struct vm_area_struct *vma, struct =
-page *page, unsigned lon
-  #define ARCH_HAS_FLUSH_ON_KUNMAP
-  static inline void kunmap_flush_on_unmap(const void *addr)
-  {
-+       addr =3D PTR_ALIGN_DOWN(addr, PAGE_SIZE);
-         flush_kernel_dcache_page_addr(addr);
-  }
+----------------------------------------------------------------
+The following changes since commit 9fdaca2c1e157dc0a3c0faecf3a6a68e7d8d0c7b:
 
+   kselftest: Fix error message for unconfigured LLVM builds (2023-01-12 13:38:04 -0700)
 
-Helge
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.2-rc6
+
+for you to fetch changes up to a49fb7218ed84a4c5e6c56b9fd933498b9730912:
+
+   selftests: amd-pstate: Don't delete source files via Makefile (2023-01-25 10:01:35 -0700)
+
+----------------------------------------------------------------
+linux-kselftest-fixes-6.2-rc6
+
+This Kselftest fixes update for Linux 6.2-rc6 consists of a single
+fix to a amd-pstate test Makefile bug that deletes source files
+during make clean run.
+
+----------------------------------------------------------------
+Doug Smythies (1):
+       selftests: amd-pstate: Don't delete source files via Makefile
+
+  tools/testing/selftests/amd-pstate/Makefile | 5 -----
+  1 file changed, 5 deletions(-)
+----------------------------------------------------------------
+--------------rtJyWblrBlrD4sA9gfXE41Ey
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-fixes-6.2-rc6.diff"
+Content-Disposition: attachment; filename="linux-kselftest-fixes-6.2-rc6.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FtZC1wc3RhdGUvTWFrZWZp
+bGUgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hbWQtcHN0YXRlL01ha2VmaWxlCmluZGV4
+IDVmMTk1ZWU3NTZkNi4uNWZkMTQyNGRiMzdkIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5n
+L3NlbGZ0ZXN0cy9hbWQtcHN0YXRlL01ha2VmaWxlCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2Vs
+ZnRlc3RzL2FtZC1wc3RhdGUvTWFrZWZpbGUKQEAgLTcsMTEgKzcsNiBAQCBhbGw6CiB1bmFt
+ZV9NIDo9ICQoc2hlbGwgdW5hbWUgLW0gMj4vZGV2L251bGwgfHwgZWNobyBub3QpCiBBUkNI
+ID89ICQoc2hlbGwgZWNobyAkKHVuYW1lX00pIHwgc2VkIC1lIHMvaS44Ni94ODYvIC1lIHMv
+eDg2XzY0L3g4Ni8pCiAKLWlmZXEgKHg4NiwkKEFSQ0gpKQotVEVTVF9HRU5fRklMRVMgKz0g
+Li4vLi4vLi4vcG93ZXIveDg2L2FtZF9wc3RhdGVfdHJhY2VyL2FtZF9wc3RhdGVfdHJhY2Uu
+cHkKLVRFU1RfR0VOX0ZJTEVTICs9IC4uLy4uLy4uL3Bvd2VyL3g4Ni9pbnRlbF9wc3RhdGVf
+dHJhY2VyL2ludGVsX3BzdGF0ZV90cmFjZXIucHkKLWVuZGlmCi0KIFRFU1RfUFJPR1MgOj0g
+cnVuLnNoCiBURVNUX0ZJTEVTIDo9IGJhc2ljLnNoIHRiZW5jaC5zaCBnaXRzb3VyY2Uuc2gK
+IAo=
+
+--------------rtJyWblrBlrD4sA9gfXE41Ey--
