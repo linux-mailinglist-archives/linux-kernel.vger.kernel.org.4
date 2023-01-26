@@ -2,123 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D2C67CED7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A90567CEF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjAZOvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S232324AbjAZOwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjAZOvn (ORCPT
+        with ESMTP id S232318AbjAZOwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:51:43 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B840E3C3D;
-        Thu, 26 Jan 2023 06:51:42 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id B5A933200927;
-        Thu, 26 Jan 2023 09:51:41 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 09:51:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674744701; x=1674831101; bh=fp8XG8ujSp
-        BTUo0gvG07eg1nSLzR3qG3Vf+yqNSrM64=; b=u8ZXKGwFIV3GRy5HcDIrBBe5uo
-        qxngDC3z5EOMah3s3OQb8h+tQET1qM9+ti6sdsFrLGVE50O6/izze0AE4raPxq5n
-        hU6A5li03/xI15nfSBMHevkLIrw4AaoQzhvnk1f+7YDqZqjDQCcI79wodqOrdzVm
-        McV1W3uKA2UMj4zDFEHkvhCbJFP901RaGLmAmlc9TSb5unfJ4OukWgKsOgtVPYvj
-        eah3Dz16Tj6wkgGvPpxpvgVDrwX9lNVzrt9QrtoiAndhw3vj9/jYhYpcu5xvLQTg
-        nyP7ql0/PLTUlsXlf7NkmFg2MSpliBV4OMDHSbgJjzsf7a0ecRD+ODCXpMRg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674744701; x=1674831101; bh=fp8XG8ujSpBTUo0gvG07eg1nSLzR
-        3qG3Vf+yqNSrM64=; b=hLHGwF2HWE1qc3yhSfawZyB6Fgrz0L+l0iSURq2wEg8H
-        x32mjaiUoCQiT35Y3NFl+XzmJjg3ICV/m9yKcPhhY7/ezAu17Q+pfsCJPxJLzT85
-        dZX6MwJef4UNUVWodUMdGQXQrshzg8dYtDJmuNaS1qTk/KCcr27RtLgU3UDaQ0SI
-        8sCJZ0k5RN7qO3G+6kteTU8guA7PRmoiMI2MJjjH7Bz3vbuG/9wIOKGE5B8aslxn
-        afTSHNlx5Y872Y3jPSjbHW/1hUkzirkSFg2yusv2B4bergdHQX4qyb8g+DVs+URq
-        2Ze4Ezs+4YrpazzALXXUc1BoYSTMI2SaITj++xuoFQ==
-X-ME-Sender: <xms:fZPSY4h8SfK1gkKAFPI5nbjn5ZT9BwF3YeyPIjQcoH57kiBmBUZ8Xg>
-    <xme:fZPSYxBSgjSjJRFLWrKiC2RYAj3Tz3Fo2uw_ONaqc7nlnTqSaJlp0Komdoi8Pp7ul
-    eSk0Fl-meTg7W3jweQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgieelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:fZPSYwGpV-_Pu-WrrOR_ghfIkPzBg0qJOCq0-saytHP7gL_lJw7BSQ>
-    <xmx:fZPSY5RH-ZlxFbBcmxeMzWA4gXKZ3yoZDEuEX1Tp7Ap8XRRt30uiDw>
-    <xmx:fZPSY1w2Jha4WVanZJnBfv7buoul5XTtJOfTlGRnXB0rPezkcmx2hg>
-    <xmx:fZPSY4pk1gQHybv4IdQGcsIsXStWDyNVLBPVJuu1EoN5wmsY_X_MZg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 004F0B60086; Thu, 26 Jan 2023 09:51:40 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <ba57a2f1-f14a-4f92-b6f2-22f92c8d3de5@app.fastmail.com>
-In-Reply-To: <Y9KIeXq866C+VKV+@smile.fi.intel.com>
-References: <20230126132801.2042371-1-arnd@kernel.org>
- <20230126132801.2042371-7-arnd@kernel.org>
- <Y9KIeXq866C+VKV+@smile.fi.intel.com>
-Date:   Thu, 26 Jan 2023 15:51:21 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/8] gpiolib: split linux/gpio/driver.h out of linux/gpio.h
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 26 Jan 2023 09:52:31 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDBB6B9AC;
+        Thu, 26 Jan 2023 06:52:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8F39ACE24AD;
+        Thu, 26 Jan 2023 14:52:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A51AC433D2;
+        Thu, 26 Jan 2023 14:52:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674744722;
+        bh=F9wPDL14DyENKQWHuzRKYw2D0Df71Uvt9kOe8yYjEdw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=fu9IRowp94gfxx7w4wpqN0NEj2N4k3iLexz/EWtyHQB8Xh/1iCvj019brhoPlhgck
+         +2mPCLMrHoCEnZKfwkMmH0DY9SZHSSydjhSn7p1suflQQmI79Fldy5v+02PHVFI7wI
+         9gRDvybad8yvhkK/tmgZmEEsmw1+ExvNgc91cmtn8T11LKf7x+CzbBGOmqHimdiuuj
+         cyD62OMNky7AbGlsH8YM9h/Fa4K/b3h+12lZvsNCMd4UYr8LgqKdWPc/lANtud22Dx
+         j7kAKqy1BdewPyCFBDOCJGC0SiDocSB2cdH5WaPHILZjsPGor/ihQ8c5r8CGRegD2o
+         fFPMosSs55+9Q==
+Date:   Thu, 26 Jan 2023 08:52:00 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
+Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
+        wenrui.li@rock-chips.com, rick.wertenbroek@heig-vd.ch,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 0/8] PCI: rockchip: Fix PCIe endpoint controller driver
+Message-ID: <20230126145200.GA1270846@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126135049.708524-1-rick.wertenbroek@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023, at 15:04, Andy Shevchenko wrote:
-> On Thu, Jan 26, 2023 at 02:27:59PM +0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> Almost all gpio drivers include linux/gpio/driver.h, and other
->> files should not rely on includes from this header.
->> 
->> Remove the indirect include from here and include the correct
->> headers directly from where they are used.
->
-> Some minor nit-picks below, otherwise
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
->> +#include <linux/of.h>
->
-> Taking the limited context into account, I think this makes more sense to be
-> placed before platform_device.h as to keep longer _sorted_ chain.
->
->>  #include <linux/gpio/gpio-reg.h>
->>  #include <linux/gpio/machine.h>
->> +#include <linux/gpio/driver.h>
->
-> Similar. Keep it more sorted.
->
+Hi Rick,
 
->> +#include <linux/gpio/driver.h>
->>  #include <linux/gpio.h>
->
-> Here is the opposite ordering to the above similar cases. Swap?
+Thanks very much for your work.
 
-Changed all as suggested, thanks!
+On Thu, Jan 26, 2023 at 02:50:40PM +0100, Rick Wertenbroek wrote:
+> This is a series of patches that fixes the PCIe endpoint controller driver
+> for the Rockchip RK3399 SoC. It is based on Linux kernel 6.0.19
+> 
+> The original driver in mainline had issues and would not allow for the
+> RK3399 to operate in PCIe endpoint mode. This patch series fixes that so
+> that the PCIe core controller of the RK3399 SoC can now act as a PCIe
+> endpoint.
 
-     Arnd
+So we merged cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip
+PCIe controller") when it actually didn't work?  Ouch.  Thanks for
+fixing it and testing it.
+
+> Rick Wertenbroek (8):
+>   PCI: rockchip: Removed writes to unused registers
+>   PCI: rockchip: Fixed setup of Device ID
+>   PCI: rockchip: Fixed endpoint controller Configuration Request Retry
+>     Status
+>   PCI: rockchip: Added poll and timeout to wait for PHY PLLs to be
+>     locked
+>   PCI: rockchip: Added dtsi entry for PCIe endpoint controller
+>   PCI: rockchip: Fixed window mapping and address translation for
+>     endpoint
+>   PCI: rockchip: Fixed legacy IRQ generation for endpoint
+>   PCI: rockchip: Fixed MSI generation from PCIe endpoint core
+
+For the next iteration, can you please update these subject lines and
+commit logs to:
+
+  - Use imperative mood, i.e., read like a command, instead of a past
+    tense description of what was done.  For example, say "Remove
+    writes to unused registers" instead of "Removed writes ..."
+
+  - Be more specific when possible.  "Fix" conveys no information
+    about the actual code change.  For example, "Fixed endpoint
+    controller Configuration Request Retry Status" gives a general
+    idea, but it would be more useful if it said something about
+    clearing config mode after probe.
+
+  - Say what the patch does in the commit log.  The current ones often
+    describe a *problem*, but do not explicitly say what the patch
+    does.  The commit log should be complete in itself even without
+    the subject line, so it usually contains a slightly expanded
+    version of the subject line.
+
+  - Split patches that do more than one logical thing.  The commit log
+    for "Fixed MSI generation ..." talks about a u16/u32 shift issue,
+    but the patch also adds an unrelated check for multi-function
+    devices.
+
+  - If a patch is a fix for an existing issue and may need to be
+    backported, identify the commit that introduced the issue and add
+    "Fixes: " lines.  This helps distros figure out whether and how
+    far to backport patches.
+
+  - Refer to the device consistently.  I see:
+      RK3399 PCI EP core
+      RK3399 SoC PCIe EP core
+      RK3399 PCIe endpoint core
+    I vote for "RK3399 PCIe Endpoint core".
+
+Notes about imperative mood:
+  https://chris.beams.io/posts/git-commit/
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?id=v6.0#n94
+
+>  arch/arm64/boot/dts/rockchip/rk3399.dtsi  |  25 ++++
+>  drivers/pci/controller/pcie-rockchip-ep.c | 149 +++++++++++-----------
+>  drivers/pci/controller/pcie-rockchip.c    |  16 +++
+>  drivers/pci/controller/pcie-rockchip.h    |  36 ++++--
+>  4 files changed, 137 insertions(+), 89 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
