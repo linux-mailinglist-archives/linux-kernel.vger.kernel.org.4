@@ -2,158 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2457667D0D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5581D67D0DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbjAZQCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:02:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
+        id S232540AbjAZQDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:03:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbjAZQCm (ORCPT
+        with ESMTP id S232483AbjAZQDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:02:42 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB2C69500
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:02:37 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id qx13so6211534ejb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:02:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XlKMRT9EHE65PtZHGD4k5FPNh/3AR3OGuPsdhBKT3qA=;
-        b=gVGoa76c/5rcg8G4PJsKVsH40EqYRtPXBFl7cMEhxTAGOx7n3XRkZBT5M1LjyfxzzS
-         NNTkEx8ZywN1TUdTYOGh6T2vQPp9JSmW2Ip0K4W3QnoyiA8dyh9gv0zxTLENpebOTA6Y
-         2TxJyZ01aQkpqZQ1izt8958vsDK9vtJm81ED338cGJ//zUeessnoocomcBAR7VKzpYCs
-         nJySEhKgBYDOjCcG+9shtL+EjAYO9GRPiQ8vR0Z5/+jhv3p0BDqHz5lEwigamOyQh5Uf
-         BwYynfKbGPtzq8Eb51M8Ebjd2g8s4fmr9EU/yj7rgI2u+1LxavslRi4hqS7VpeUOnETi
-         FSDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XlKMRT9EHE65PtZHGD4k5FPNh/3AR3OGuPsdhBKT3qA=;
-        b=l2GcX2eT/7hlE9ZrJBi1YBKA6CurU172d93DyzjVhLwFe8N9JTPY1DX9aqN6qfGmpu
-         P+rrSFFBFgyDhoy+Iln5A19WmHy3VpUtmymP0gq+20TZv4St48hXYnVv3EOJHUjbgIAb
-         2xVRoTn7CoGyH/Mq5LDBnNMcG6wqJDAU5HcPrTZcRD4jcSDqus6GVkGHGeUiNUF2q6DN
-         JPuGPli42jlPVwLJV7ZQZP1jLnAN3CZaRsn6JSFCfQRl0P/trxCI/gXhrBTFeklIeWk4
-         Qv2G4sbAOgfz5sF6GeoULmUYgoXKhNPe1nvm1KdWYsJV75Y/NBV+LsWMU+9Pf9zYS8B+
-         0cMg==
-X-Gm-Message-State: AFqh2kqfEF1Z9Cp2mvddkJiytx39i5xsUaFa6yvHPep5vBKC5Hv1zn6/
-        3BqbrnFyMFGuO4Or1ac911i0mg==
-X-Google-Smtp-Source: AMrXdXsk6/rbV5qIL2/9m6irzy5vZLxenpeokFpPeGQyT1ZRaqMfMO3FJ+14IUiRM7HGjs6S8IzxYw==
-X-Received: by 2002:a17:907:2489:b0:84d:255e:21a4 with SMTP id zg9-20020a170907248900b0084d255e21a4mr39291298ejb.2.1674748956236;
-        Thu, 26 Jan 2023 08:02:36 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id ec16-20020a170906b6d000b0073d796a1043sm762948ejb.123.2023.01.26.08.02.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 08:02:35 -0800 (PST)
-Date:   Thu, 26 Jan 2023 17:02:34 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] RISC-V: Detect AIA CSRs from ISA string
-Message-ID: <20230126160234.pkx4socjv3fcxpmn@orel>
-References: <20230112140304.1830648-1-apatel@ventanamicro.com>
- <20230112140304.1830648-3-apatel@ventanamicro.com>
+        Thu, 26 Jan 2023 11:03:05 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 19D10DBE1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:02:52 -0800 (PST)
+Received: (qmail 263998 invoked by uid 1000); 26 Jan 2023 11:02:52 -0500
+Date:   Thu, 26 Jan 2023 11:02:52 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: [Patch 2/2] tools/memory-model: Provide exact SRCU semantics
+Message-ID: <Y9KkLHWzuIQ8sDwq@rowland.harvard.edu>
+References: <Y9GO3xEYkIQq/qSl@rowland.harvard.edu>
+ <Y9GPI/g23YWx+0Ce@rowland.harvard.edu>
+ <Y9GPVnK6lQbY6vCK@rowland.harvard.edu>
+ <c44183e7-44ae-4be3-bb47-517067a112b5@huaweicloud.com>
+ <Y9Gyuj+2UFefUdJS@rowland.harvard.edu>
+ <edadb690-e791-0e9c-e641-ea8876abe96e@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230112140304.1830648-3-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <edadb690-e791-0e9c-e641-ea8876abe96e@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 07:32:59PM +0530, Anup Patel wrote:
-> We have two extension names for AIA ISA support: Smaia (M-mode AIA CSRs)
-> and Ssaia (S-mode AIA CSRs).
+On Thu, Jan 26, 2023 at 12:30:14PM +0100, Jonas Oberhauser wrote:
 > 
-> We extend the ISA string parsing to detect Smaia and Ssaia extensions.
 > 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/hwcap.h | 8 ++++++++
->  arch/riscv/kernel/cpu.c        | 2 ++
->  arch/riscv/kernel/cpufeature.c | 2 ++
->  3 files changed, 12 insertions(+)
+> On 1/25/2023 11:52 PM, Alan Stern wrote:
+> > On Wed, Jan 25, 2023 at 10:04:29PM +0100, Jonas Oberhauser wrote:
+> > > 
+> > > On 1/25/2023 9:21 PM, Alan Stern wrote:
+> > > >    (* Validate nesting *)
+> > > >    flag ~empty Srcu-lock \ domain(srcu-rscs) as unmatched-srcu-lock
+> > > >    flag ~empty Srcu-unlock \ range(srcu-rscs) as unmatched-srcu-unlock
+> > > > +flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-srcu-matches
+> > > [...]
+> > > >    // SRCU
+> > > > -srcu_read_lock(X)  __srcu{srcu-lock}(X)
+> > > > -srcu_read_unlock(X,Y) { __srcu{srcu-unlock}(X,Y); }
+> > > > +srcu_read_lock(X) __load{srcu-lock}(*X)
+> > > > +srcu_read_unlock(X,Y) { __store{srcu-unlock}(*X,Y); }
+> > > > +srcu_down_read(X) __load{srcu-lock}(*X)
+> > > > +srcu_up_read(X,Y) { __store{srcu-unlock}(*X,Y); }
+> > > How do you feel about introducing Srcu-up and Srcu-down with this patch?
+> > Why invent new classes for them?  They are literally the same operation
+> > as Srcu-lock and Srcu-unlock; the only difference is how the kernel's
+> > lockdep checker treats them.
+> I don't think they're necessarily implemented in a compatible way, so
 > 
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index 86328e3acb02..c649e85ed7bb 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -59,10 +59,18 @@ enum riscv_isa_ext_id {
->  	RISCV_ISA_EXT_ZIHINTPAUSE,
->  	RISCV_ISA_EXT_SSTC,
->  	RISCV_ISA_EXT_SVINVAL,
-> +	RISCV_ISA_EXT_SSAIA,
-> +	RISCV_ISA_EXT_SMAIA,
+> r = srcu_lock(s);
+> srcu_up(s,r);
+> 
+> might not actually work, but would currently be ok'ed by LKMM.
 
-These will change a couple different ways due other other patches in
-flight, but let's put the pair in alphabetical order now so they get
-moved together that way.
+I'll let Paul answer this.
 
->  	RISCV_ISA_EXT_ID_MAX
->  };
->  static_assert(RISCV_ISA_EXT_ID_MAX <= RISCV_ISA_EXT_MAX);
->  
-> +#ifdef CONFIG_RISCV_M_MODE
-> +#define RISCV_ISA_EXT_SxAIA		RISCV_ISA_EXT_SMAIA
-> +#else
-> +#define RISCV_ISA_EXT_SxAIA		RISCV_ISA_EXT_SSAIA
-> +#endif
+>  With
+> different classes you could state
+>   flag ~empty [Srcu-lock];srcu-rscs;[Srcu-up] as srcu-mismatch-lock-to-up
+>   flag ~empty [Srcu-down];srcu-rscs;[Srcu-unlock] as
+> srcu-mismatch-down-to-unlock
+> 
+> I think with the current implementation this code might work, but I don't
+> feel like this is inherently true.
+> 
+> You could then also go ahead and define the "same CPU" requirement as a flag
+> for lock and unlock specifically, like
+>   flag ~empty [Srcu-lock];srcu-rscs & ext as srcu-lock-unlock-mismatch-CPU
+> or so.
 
-This isn't used in this patch, so should probably be introduced in a later
-patch when it is.
+Bear in mind that the herd7 model is not obliged to find and warn about 
+all possible bugs in a litmus test.  Especially if the same code would 
+generate a warning or error when run in the kernel.
 
-> +
->  /*
->   * This enum represents the logical ID for each RISC-V ISA extension static
->   * keys. We can use static key to optimize code path if some ISA extensions
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index 1b9a5a66e55a..a215ec929160 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -162,6 +162,8 @@ arch_initcall(riscv_cpuinfo_init);
->   *    extensions by an underscore.
->   */
->  static struct riscv_isa_ext_data isa_ext_arr[] = {
-> +	__RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
-> +	__RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
->  	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
->  	__RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
->  	__RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 93e45560af30..3c5b51f519d5 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -228,6 +228,8 @@ void __init riscv_fill_hwcap(void)
->  				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
->  				SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
->  				SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
-> +				SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SMAIA);
-> +				SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SSAIA);
->  			}
->  #undef SET_ISA_EXT_MAP
->  		}
-> -- 
-> 2.34.1
->
-
-Otherwise,
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
+Alan
