@@ -2,160 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD05367D43A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DE267D434
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbjAZSbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S231697AbjAZSbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbjAZSba (ORCPT
+        with ESMTP id S231378AbjAZSa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:31:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFF17A80
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 10:30:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674757842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WJ8MdjffZpW5lQ84mrB4VkeRYCCIBYfwyQ9vUthM6jo=;
-        b=hF1TaJXYuDymzQeluQTSRj0cotHU2l5foDUpk5RrCZ4caTTYvVv98wTiVH+CvScU4hCgMD
-        ZdtsN8XQ0/iZFDvwSSpvI2wpR6F7kWvzlNKGX5gBBAIe1N/03ZgJahsfvYMAeOFvhFWAGY
-        L9frOnnz7KZRV3Ry/JLPPIHlDEXqIuc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-394-d_NhYaU3MwuMT2DQJBei5Q-1; Thu, 26 Jan 2023 13:30:35 -0500
-X-MC-Unique: d_NhYaU3MwuMT2DQJBei5Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4387D858F09;
-        Thu, 26 Jan 2023 18:30:35 +0000 (UTC)
-Received: from [10.22.33.13] (unknown [10.22.33.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C241A40C1141;
-        Thu, 26 Jan 2023 18:30:34 +0000 (UTC)
-Message-ID: <017f7b9e-323c-f9aa-12fa-9c9a16dabd35@redhat.com>
-Date:   Thu, 26 Jan 2023 13:30:34 -0500
+        Thu, 26 Jan 2023 13:30:59 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98D09029;
+        Thu, 26 Jan 2023 10:30:56 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id h10so1138821ilq.6;
+        Thu, 26 Jan 2023 10:30:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BtZAD+XajG4Ff3lpRNxc5VU6XMKBXj9jHvhDyP5qqKs=;
+        b=KPsDp1ZwjFTTJ9gseCa1sE6zHCopqeOf/Sg/pl/lSTGYaq7YbyYzCXFfjgqTaFoz2y
+         /78jOoWSVY8fpqVWeng2kRq1uHlIVfjJo7BnEpJ7D7749rrhv/gM4JQ7e5gNp5OOTSdH
+         efknyTybs2voRsrloxjG8Gs+qgrtOdoGgrjDdP6ayo/IQLrbKCIJAKXfbJCARC22Cwpl
+         N9UuoCUe7mDjrqiLucD+/LF55z+jxisMJ4WSqcBWYYm9fVDz+u3PZVxldCN9GJol1BvT
+         zq2K+sIX0tzzWEKLiZXjq6Xt41mwrgMDI5LT6r7+On7DMs2nuTaFTyLzRfXxAztNrTA6
+         FuYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BtZAD+XajG4Ff3lpRNxc5VU6XMKBXj9jHvhDyP5qqKs=;
+        b=Q7HautlicMRnXFrqA5hxrpjMP6GGtb19j8DP6tSQhAK6m4ymOCIYEpbans2LxQ8xVs
+         r43kBhX6y0AmBy7PSWXHzJHOSfEnWhO/RPRHirTyRqYsdR/lcKqc+WnUuRQKV39xKr2v
+         1Sdhm/MoVr5WQGC/X0IU619kKGG8UX15pq8V2roiJ9izn7R2hq+s7tHv7vi984IUfj7B
+         3eX7QuabzB3I9qZbZB4jdM1HTxKY2UAJV4UhrV+lJjHuKYY90gmewp+xVCA6Xjdu8cE6
+         ccFwGuefCxDMHDbzNan/tSjfY4HSIC4ir037i4KowkAuvfQ1JxIILw6VupXHD5OHuPcs
+         voNQ==
+X-Gm-Message-State: AFqh2kowD5I67IwNFYkCH+dRWAWQIxZjOqKAwcWobNCTU81xvk6tYULp
+        /wkGc02DrQYggg29PzM7XoHLx9xFVdGG5D6y8dtnzBlMaOw=
+X-Google-Smtp-Source: AMrXdXs7ZAjEie6unF52csPKnYMHWPA0TToP3oo+e6ede7qZNmS9Jv0sLRReSaXYHZxccnUNnT9ZZeW+MZ0E6f7JTY8=
+X-Received: by 2002:a92:6a05:0:b0:30d:ba97:90e2 with SMTP id
+ f5-20020a926a05000000b0030dba9790e2mr4343477ilc.38.1674757856075; Thu, 26 Jan
+ 2023 10:30:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
-Content-Language: en-US
-To:     Boqun Feng <boqun.feng@gmail.com>,
-        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     dsterba@suse.cz, Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Chris Murphy <lists@colorremedies.com>,
+References: <20230125025126.787431-1-gregory.price@memverge.com>
+ <20230125025126.787431-2-gregory.price@memverge.com> <20230126003008.GA31684@redhat.com>
+ <CANaxB-xn0wW5xA_CT7bA5=jig+td__EDKPBWSpZdfgMgVOezCg@mail.gmail.com>
+ <20230126150725.GB4069@redhat.com> <CANaxB-woave9F479O75P9PC+nFO3DVmbeFA1rXf2c=bhRmWoiQ@mail.gmail.com>
+ <Y9K92SQnrXhd0qjC@memverge.com>
+In-Reply-To: <Y9K92SQnrXhd0qjC@memverge.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Thu, 26 Jan 2023 10:30:44 -0800
+Message-ID: <CANaxB-yL8-4DWMb4h9bBXSZBJ=RrPQuJw76mz0CFkX-3f4Pq_w@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] ptrace,syscall_user_dispatch: Implement Syscall
+ User Dispatch Suspension
+To:     Gregory Price <gregory.price@memverge.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Gregory Price <gourry.memverge@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-References: <CABXGCsN+BcaGO0+0bJszDPvA=5JF_bOPfXC=OLzMzsXY2M8hyQ@mail.gmail.com>
- <20220726164250.GE13489@twin.jikos.cz>
- <CABXGCsN1rzCoYiB-vN5grzsMdvgm1qv2jnWn0enXq5R-wke8Eg@mail.gmail.com>
- <20230125171517.GV11562@twin.jikos.cz>
- <CABXGCsOD7jVGYkFFG-nM9BgNq_7c16yU08EBfaUc6+iNsX338g@mail.gmail.com>
- <Y9K6m5USnON/19GT@boqun-archlinux>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y9K6m5USnON/19GT@boqun-archlinux>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Andy Lutomirski <luto@kernel.org>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/23 12:38, Boqun Feng wrote:
-> [Cc lock folks]
+On Thu, Jan 26, 2023 at 9:52 AM Gregory Price
+<gregory.price@memverge.com> wrote:
 >
-> On Thu, Jan 26, 2023 at 02:47:42PM +0500, Mikhail Gavrilov wrote:
->> On Wed, Jan 25, 2023 at 10:21 PM David Sterba <dsterba@suse.cz> wrote:
->>> On Wed, Jan 25, 2023 at 01:27:48AM +0500, Mikhail Gavrilov wrote:
->>>> On Tue, Jul 26, 2022 at 9:47 PM David Sterba <dsterba@suse.cz> wrote:
->>>>> On Tue, Jul 26, 2022 at 05:32:54PM +0500, Mikhail Gavrilov wrote:
->>>>>> Hi guys.
->>>>>> Always with intensive writing on a btrfs volume, the message "BUG:
->>>>>> MAX_LOCKDEP_CHAIN_HLOCKS too low!" appears in the kernel logs.
->>>>> Increase the config value of LOCKDEP_CHAINS_BITS, default is 16, 18
->>>>> tends to work.
->>>> Hi,
->>>> Today I was able to get the message "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too
->>>> low!" again even with LOCKDEP_CHAINS_BITS=18 and kernel 6.2-rc5.
->>>>
->>>> ❯ cat /boot/config-`uname -r` | grep LOCKDEP_CHAINS_BITS
->>>> CONFIG_LOCKDEP_CHAINS_BITS=18
->>>>
->>>> [88685.088099] BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
->>>> [88685.088124] turning off the locking correctness validator.
->>>> [88685.088133] Please attach the output of /proc/lock_stat to the bug report
->>>> [88685.088142] CPU: 14 PID: 1749746 Comm: mv Tainted: G        W    L
->>>>    -------  ---  6.2.0-0.rc5.20230123git2475bf0250de.38.fc38.x86_64 #1
->>>> [88685.088154] Hardware name: System manufacturer System Product
->>>> Name/ROG STRIX X570-I GAMING, BIOS 4408 10/28/2022
->>>>
->>>> What's next? Increase this value to 19?
->>> Yes, though increasing the value is a workaround so you may see the
->>> warning again.
->> Is there any sense in this WARNING if we would ignore it and every
->> time increase the threshold value?
-> Lockdep uses static allocated array to track lock holdings chains to
-> avoid dynmaic memory allocation in its own code. So if you see the
-> warning it means your test has more combination of lock holdings than
-> the array can record. In other words, you reach the resource limitation,
-> and in that sense it makes sense to just ignore it and increase the
-> value: you want to give lockdep enough resource to work, right?
+> On Thu, Jan 26, 2023 at 09:45:39AM -0800, Andrei Vagin wrote:
+> > On Thu, Jan 26, 2023 at 7:07 AM Oleg Nesterov <oleg@redhat.com> wrote:
+> > >
+> > > On 01/25, Andrei Vagin wrote:
+> > > >
+> > > > On Wed, Jan 25, 2023 at 4:30 PM Oleg Nesterov <oleg@redhat.com> wrote:
+> > > > >
+> > > > > On 01/24, Gregory Price wrote:
+> > > > > >
+> > > > > > Adds PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH to ptrace options, and
+> > > > > > modify Syscall User Dispatch to suspend interception when enabled.
+> > > > > >
+> > > > > > This is modeled after the SUSPEND_SECCOMP feature, which suspends
+> > > > > > SECCOMP interposition.  Without doing this, software like CRIU will
+> > > > > > inject system calls into a process and be intercepted by Syscall
+> > > > > > User Dispatch, either causing a crash (due to blocked signals) or
+> > > > > > the delivery of those signals to a ptracer (not the intended behavior).
+> > > > >
+> > > > > Cough... Gregory, I am sorry ;)
+> > > > >
+> > > > > but can't we drop this patch to ?
+> > > > >
+> > > > > CRIU needs to do PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG and check
+> > > > > config->mode anyway as we discussed.
+> > > > >
+> > > > > Then it can simply set *config->selector = SYSCALL_DISPATCH_FILTER_ALLOW
+> > > > > with the same effect, no?
+> > > >
+> > > > Oleg,
+> > > >
+> > > > PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH is automatically cleared when
+> > > > a tracer detaches. It is critical when tracers detach due to unexpected
+> > > > reasons
+> > >
+> > > IIUC, PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH is needed to run the injected
+> > > code, and this also needs to change the state of the traced process. If
+> > > the tracer (CRIU) dies while the tracee runs this code, I guess the tracee
+> > > will have other problems?
+> >
+> > Our injected code can reheal itself if something goes wrong. The hack
+> > here is that we inject
+> > the code with a signal frame and it calls rt_segreturn to resume the process.
+> >
+> > We want to have this functionality for most cases. I don't expect that
+> > the syscall user dispatch
+> > is used by many applications, so I don't strongly insist on
+> > PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH. In addition, if we know a user dispatch
+> > memory region, it can be enough to inject our code out of this region
+> > without disabling SUD.
+> >
+> > Thanks,
+> > Andrei
 >
->> May Be set 99 right away? Or remove such a check condition?
-> That requires having 2^99 * 5 * sizeof(u16) memory for lock holding
-> chains array..
+> The region is exclusive, so syscalls *outside* [offset, offset+len]
+> produce a dispatch. That means you would have to inject into that region.
 
-Note that every increment of LOCKDEP_CHAINS_BITS double the storage 
-space. With 99, that will likely exceed the total amount of memory you 
-have in your system.
+You are right. I missed that. So it depends how large a region is and
+whether it has enough
+free space to inject our code.
 
-Boqun, where does the 5 figure come from. It is just a simple u16 array 
-of size MAX_LOCKDEP_CHAIN_HLOCKS. The chain_hlocks array stores the lock 
-chains that show up in the lockdep splats and in the /proc/lockdep* 
-files. Each chain is variable size. As we add new lock into the chain, 
-we have to repeatedly deallocate and reallocate a larger chain buffer. 
-That will cause fragmentation in the chain_hlocks[]. So if we have a 
-very long lock chain, the allocation may fail because the largest free 
-block is smaller than the requested chain length. There may be enough 
-free space in chain_hlocks, but it is just too fragmented to be useful.
+Out of curiosity, do you know any real app that use SUD? I think it
+was implemented for wine,
+but they haven't started using it yet.
 
-Maybe we should figure out a better way to handle this fragmentation. In 
-the mean time, the easiest way forward is just to increase the 
-LOCKDEP_CHAINS_BITS by 1.
-
->
-> However, a few other options we can try in lockdep are:
->
-> *	warn but not turn off the lockdep: the lock holding chain is
-> 	only a cache for what lock holding combination lockdep has ever
-> 	see, we also record the dependency in the graph. Without the
-> 	lock holding chain, lockdep can still work but just slower.
->
-> *	allow dynmaic memory allocation in lockdep: I think this might
-> 	be OK since we have lockdep_recursion to avoid lockdep code ->
-> 	mm code -> lockdep code -> mm code ... deadlock. But maybe I'm
-> 	missing something. And even we allow it, the use of memory
-> 	doesn't change, you will still need that amout of memory to
-> 	track lock holding chains.
-
-It is not just the issue of calling the memory allocator. There is also 
-the issue of copying data from old chain_hlocks to new one while the old 
-one may be updated during the copying process unless we can freeze 
-everything else.
-
-Cheers,
-Longman
-
+Thanks,
+Andrei
