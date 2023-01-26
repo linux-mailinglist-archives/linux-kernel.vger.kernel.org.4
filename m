@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D25E67D9BF
+	by mail.lfdr.de (Postfix) with ESMTP id 7938667D9C0
 	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbjAZXjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:39:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S233521AbjAZXja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:39:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbjAZXjV (ORCPT
+        with ESMTP id S233511AbjAZXj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:39:21 -0500
+        Thu, 26 Jan 2023 18:39:27 -0500
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B09011661
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:38:48 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id d21-20020a25add5000000b007ff8112e8b8so3610718ybe.17
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:38:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551183A91
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:38:56 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id i17-20020a25bc11000000b007b59a5b74aaso3560726ybh.7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:38:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xTYdmI9og0perxBFMnwOyD8JALYBo9fFqhvIGnAB7iw=;
-        b=pN++yaxhHw5hsqtHgPMZeHJr1T+f83UqE4aoFtt5+LAeg4UHQo6kEIwVfN/W5KzpWd
-         NAKHo1zdw7heZJbx1WfqGp1S+SxrOx8iQQEmdAlVDg2VTtwzUZXBX9I4nN6s/ySTc+jr
-         3ZaRTEU2LdtjdBqC28mfYKA3RWWRWiipp0ubURRbSnB2td+dOXW6A6Z1YmXTTTs7lrMt
-         kSSpO1HdzzSc0Io1imdV8ICez2HaQFT3vzJjPfo5xcK7Rc2m+quLXQ9DiPdQKhFDh9i9
-         7D6enP4ZWLDUdi03ANNOdVpbRaEKQA7hGat0dQrO/F54JVVNV8CR5DwopbFxCgwL+Ylt
-         8iEg==
+        bh=snCBxLwh7jm6krd4EQPzPcciOFAFt0fWD1CpQDw1t+8=;
+        b=e6ohvklUxI4ipjwUCogc5GWZzMwgpvonuMqEFAldtcrN5gwr7vxUrcVT0vO30kWL/u
+         UTKdHnDRG6MmsGo21+eZky1ijnGvGJykYoL/kbFW9ydXTr28qfBvoBzw4x0iBjSVI/qy
+         VTCRwVi0mxUxy0SzS4w3U/CgWKzSOIkd80PZW3EXNp2goqcaJGRQYStILOiyjyH57toU
+         Ov2TmXZBqoiT6exgPN6QdRQYDvkEyTP7AI0uIu/zVKmHN2V4qhHd+ihEH4gbDypEXF5s
+         B7IQpf7Q7r5YYT3Gs4h8bzZo9lqB4lzNuM0ur+i/xVRYO3M91t6R/XihIzHynFsRrdw4
+         oOWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xTYdmI9og0perxBFMnwOyD8JALYBo9fFqhvIGnAB7iw=;
-        b=LF9iNDE3uju5cV6L8jhAxrzhU4QnfF6kYHff5HkorPunrOdajjHPHXkxAM3NJggqgP
-         SX8yQFbJErVmVBetdq22OOueO3w3DcZLeyoURX18BmiGa3zfTUw+0XfXKrCMJz7T0bTR
-         S2o8pIetfQpRhHTxI2QbXF2RCE5cVgrZfm31Ywq/l83h3XPFcrHq6pjooqOpSKlsVH2f
-         O3BywE2T3aCcKfUx4i5IVzHcDEAgUB3dSqcmq2cEMNk86KlGHjSiJh1XYvVxyTTY59tW
-         A1YoN9S/GKNZjo0wQkuAOqrMOn3PUMRiEv0xJVK8DTB9YANMXC8ShNbWacKl+UaC8xGA
-         IGGA==
-X-Gm-Message-State: AO0yUKWE4W0QAfhgWxrKi7OchygGi61YE3/iWK6Dflv8bmSCdlebqx4E
-        l/+j60G81dkawKpUTdzmXh3OYrNRptRd
-X-Google-Smtp-Source: AK7set8ogChtzu8dxXsUiUpTxkmy4XJKX0fEnPVUFfp8yLVVlaZbFvMbbtXJs9Lil32EN+jbOQsVkSj+abRi
+        bh=snCBxLwh7jm6krd4EQPzPcciOFAFt0fWD1CpQDw1t+8=;
+        b=pGeV4Gd6ozE5ai7JR6SRsjhmt5Em7ae1Djtq0HBGi5+u1lKqMrOUtxGJZeA6wlJtWZ
+         k+twcFs6vGOyJOnZyZ7Pm4rrwGGp7QQoARSn4bewKStls1hiSm7CkObEKHwpWTuIUxru
+         HZX+zdYTucmnr/F7O2GWu9X5FYTWjEsgTu5hMy9LSX3uqDcBldjwXml9u/5pD1v/7oTe
+         gzYMRzrgtw7U2qLAhte8VLFVSpUkQeQ+s6yBYSLFImAh1ze6Tc0wU3wrBH3+uMvZ6m+T
+         3wg1vh3JlO56A6yXf+v0Om3JFrx+Z5uAyIlYoC/uA8YNtEuBMiikLzNMuQ3vW+9nV5oG
+         AYYA==
+X-Gm-Message-State: AO0yUKUZyUgD9I+7Ib4RRwIqkIdZwasFwtltzh0tKus4zoMx2rYPAYno
+        /vOWegvLJzs9dWbz3fcKOXhg68tzivqN
+X-Google-Smtp-Source: AK7set/8zwjdXupmXxmE3nxBHcDXM+9r4moQ67xxfCC3ARU9uYuzrlHsQS14Uo2BYtJ6Y5jtB3/pbR3UBgqM
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b9b8:6de0:39b3:4cf7])
- (user=irogers job=sendgmr) by 2002:a25:ce90:0:b0:80b:6168:a831 with SMTP id
- x138-20020a25ce90000000b0080b6168a831mr1670207ybe.408.1674776313147; Thu, 26
- Jan 2023 15:38:33 -0800 (PST)
-Date:   Thu, 26 Jan 2023 15:36:43 -0800
+ (user=irogers job=sendgmr) by 2002:a0d:fb43:0:b0:506:5a29:80ce with SMTP id
+ l64-20020a0dfb43000000b005065a2980cemr1081160ywf.254.1674776321949; Thu, 26
+ Jan 2023 15:38:41 -0800 (PST)
+Date:   Thu, 26 Jan 2023 15:36:44 -0800
 In-Reply-To: <20230126233645.200509-1-irogers@google.com>
-Message-Id: <20230126233645.200509-14-irogers@google.com>
+Message-Id: <20230126233645.200509-15-irogers@google.com>
 Mime-Version: 1.0
 References: <20230126233645.200509-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Subject: [PATCH v5 13/15] perf jevents: Correct bad character encoding
+Subject: [PATCH v5 14/15] tools build: Add test echo-cmd
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Will Deacon <will@kernel.org>,
@@ -94,29 +94,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A character encoding issue added a "3D" character that breaks the
-metrics test.
+Add quiet_cmd_test so that:
+$(Q)$(call echo-cmd,test)
 
-Fixes: 40769665b63d ("perf jevents: Parse metrics during conversion")
+will print:
+TEST   <path>
+
+This is useful for executing compile-time tests similar to what
+happens for fortify tests in the kernel's lib directory.
 ---
- tools/perf/pmu-events/metric_test.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/build/Makefile.build | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/pmu-events/metric_test.py b/tools/perf/pmu-events/metric_test.py
-index ced5998bd827..e4c792428277 100644
---- a/tools/perf/pmu-events/metric_test.py
-+++ b/tools/perf/pmu-events/metric_test.py
-@@ -89,8 +89,8 @@ class TestMetricExpressions(unittest.TestCase):
-     after = r'min((a + b if c > 1 else c + d), e + f)'
-     self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
+diff --git a/tools/build/Makefile.build b/tools/build/Makefile.build
+index 715092fc6a23..89430338a3d9 100644
+--- a/tools/build/Makefile.build
++++ b/tools/build/Makefile.build
+@@ -53,6 +53,7 @@ build-file := $(dir)/Build
  
--    before =3D r'a if b else c if d else e'
--    after =3D r'(a if b else (c if d else e))'
-+    before = r'a if b else c if d else e'
-+    after = r'(a if b else (c if d else e))'
-     self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
+ quiet_cmd_flex  = FLEX    $@
+ quiet_cmd_bison = BISON   $@
++quiet_cmd_test  = TEST    $@
  
-   def test_ToPython(self):
+ # Create directory unless it exists
+ quiet_cmd_mkdir = MKDIR   $(dir $@)
 -- 
 2.39.1.456.gfc5497dd1b-goog
 
