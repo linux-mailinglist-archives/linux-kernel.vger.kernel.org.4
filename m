@@ -2,112 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C9767C978
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9219F67C97B
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237188AbjAZLKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 06:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
+        id S237180AbjAZLKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 06:10:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237179AbjAZLJq (ORCPT
+        with ESMTP id S237175AbjAZLJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 06:09:46 -0500
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFE062278;
-        Thu, 26 Jan 2023 03:09:32 -0800 (PST)
+        Thu, 26 Jan 2023 06:09:57 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F9E6FD01;
+        Thu, 26 Jan 2023 03:09:37 -0800 (PST)
 Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MhSU8-1oyMdV2F0c-00Mf4m;
- Thu, 26 Jan 2023 12:09:16 +0100
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MMko5-1pJaoS3cND-008Z8L;
+ Thu, 26 Jan 2023 12:09:20 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     devicetree@vger.kernel.org
 Cc:     linux-imx@nxp.com, Liu Ying <victor.liu@nxp.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Zhou Peng <eagle.zhou@nxp.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Fabio Estevam <festevam@denx.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
+        Li Yang <leoyang.li@nxp.com>, Marek Vasut <marex@denx.de>,
+        Matthias Schiffer <matthias.schiffer@tq-group.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Peng Fan <peng.fan@nxp.com>, Rob Herring <robh+dt@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>
-Subject: [PATCH v5 07/10] arm64: dts: imx8qm: add vpu decoder and encoder
-Date:   Thu, 26 Jan 2023 12:08:30 +0100
-Message-Id: <20230126110833.264439-8-marcel@ziswiler.com>
+        Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH v5 08/10] dt-bindings: arm: fsl: add toradex,apalis-imx8 et al.
+Date:   Thu, 26 Jan 2023 12:08:31 +0100
+Message-Id: <20230126110833.264439-9-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230126110833.264439-1-marcel@ziswiler.com>
 References: <20230126110833.264439-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:HEn1QHC1PewP+ScZapGw/H0xIYiwFoIoJyuGFSZ5ayX/ulNeo9e
- V2m6P6/4M2iNvM1B5FYUUU2/iEPW5mZKWzMUelhyjekEh5EkvZuLvoXYPKdhb/X+jHk9MXQ
- pJlMwalps56ZDUXezDN/a531Isq7rNjx0fRMS3Y5IL8MvFxr5YhjSDd1Ss7v53droKfsEaI
- BA83yqfEpgbYoVuHtgA/A==
-UI-OutboundReport: notjunk:1;M01:P0:Ca88Re7TIbw=;hJa4g8nlPecz7STyk8qEzHBRfGQ
- pn63Si+nDDkHQ3jkJOsHFiPSIg7HmN/zXsrfgBUqBFfW6BUVBy8G8EJs3vRM+YEeNpKdwDDm2
- ntak7TIIS0jN7pm9z02RtGy9tOzHbegHcN4HpTouloqgv2pYw/5b4rdIIsLxMwhFwOYzgmNvo
- vVaXbAlufiFq1YDdzFvHYbIAN8YDZY4UPhQi/9JiuFafI1sKbKnoN8puJDR/wLfrpANDJsj+T
- pPt7sbYNlTAUD+mgsCaxmj/Iz+UdLxMG7KwRcFb47+mKaLoMzzhJvKlOObgBLxKRrBX1Kp+WI
- DG0u1Ry/9ZpCjL+57NYQgawyG6Mtb2npSqiQvddiefuE0dhG92UMfbd4wNBk9CfBmJPfGzNPE
- rWWzWGQEGHMpk9mkZPF/FUS/cPHT5bupMp+QLJGWo5rzLPOyX7Z2L4tcoi9LTW7c2tVdQSqCW
- yFDAnN1rowvjUVa4GlsQFnMQ+Zf2y+jJJG0c1JH1ypf1TZKPdo+UlnbxZ0MgnGKIpfp/xmuBg
- QTqyONndV5NBZSoeLIZbEAHlr3Q6vX3ewHwBPTYVinQRm7vB6WFZmcgn8S169hGgCyJ4y3Bpl
- SibxnNJKuzNvz7SSgwwZH/6XdoRMCUMNzfEikqvDNHJXqnZFypYgowpX4gVcPEuyXSCa96vfk
- Jt5le+k4yfwaH4I5mViovzsJ0FZuUxd/06lYYYETgQ==
+X-Provags-ID: V03:K1:z72gvH5gjQVTTz4A+P/SpuVzSRj0DEPuUinQ/GBCGsZGjVQ+leI
+ JkF7njqP5Dz7QBmD8HZdJnsYagzl1EsZFLS8ggJ8+a0vKaetSdRYWFqpHMHCWNSy8pLCa0P
+ eq18iFqztjbrb8u/42IVMFRTsin6nMLcAVAi2KIRJjnGVL+TEHxSHoqe6+WyLvIFzHsX0Ls
+ Gssx+te5pXdxxBAw8m+sQ==
+UI-OutboundReport: notjunk:1;M01:P0:RIteeyZepIE=;qpTQQfr0GLZFudE2DgpWiuRswC0
+ OkyY43hng0StIY3VB2t9Pt+Qn7CsHEKtLBbSPAYYn6OPujdE729qj13ptVreAcKB+z/ccF/PH
+ U0RTESW9ItCR7nsbxY9STCDZslKDdKpePmhv4VpwqbaVCjXKT746EbDQj5dPrHqwfEGJDy8LK
+ Avh1KGC4EjLBQEQvT5mPoA3hsdrIpsP7SYqu0i7g/i2V6aulSs2ace4/k+U7PxTw758Zz+FWX
+ bJv34MtiJOrGPEtCKFZL6OLVUF6m3aFxDfaAPmfG/f+THgka2DsJ4Oe0H+ZTR9Oq7bJU4dL7V
+ oFXXEO20iZRo/pDFg/cEdWVOPwelBSzAgQWHhx+u4GKxc3Y34l0AB7Y3+gRppjgp2hVOAzugp
+ r76ssFn2eNbl8j7VBggnheWjMa2o2OH/7UN+jC1SXHaceEI3Ehvwf1SwavOvuPBPQVBX8oVpg
+ Z9qQPBvngYsRYuG9mgkHCA3HkIO54yb0rjqMQi4FrH+H5x7dDxWDtwSQZNLHjkbp2BFe06Ld2
+ tnfRSV+qQus6fDHPO7BfssTHg8X2Pv1F+/oLjZQi2jqrPmDiEe4JOBal+5kAa+HKIKzdZy2mz
+ tAhMG5ieGoV1G1ViUwX5JZiJY+VbAcgB+eWZ5bx3fC+PYn68DhUv8Wha4X6aHzSdQsbXXSjik
+ GoaUrzYqSV4waLZkoCnK0aUOGY51505QucYCKiAC8g==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Peng <eagle.zhou@nxp.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Enable VPU decoder and encoder functionality.
+Add toradex,apalis-imx8 for the Apalis iMX8 aka QuadMax modules and the
+carrier boards (Apalis Evaluation board as well as Ixora V1.1 and V1.2)
+they may be mated in.
 
-Signed-off-by: Zhou Peng <eagle.zhou@nxp.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Acked-by: Rob Herring <robh@kernel.org>
 
 ---
 
-(no changes since v4)
+(no changes since v3)
 
-Changes in v4:
-- New patch combining the following downstream patches:
-  commit 4f2147ce6f0e ("arm64: dts: imx8qm: add vpu decoder and encoder")
-  commit 0c9f9b64d27d ("LF-6575: imx8q: vpu: switch to amphion upstream driver")
+Changes in v3:
+- Properly accommodate for -v1.1 modules curtsey Francesco.
 
- arch/arm64/boot/dts/freescale/imx8qm.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+Changes in v2:
+- Fixed missing space in the comment V1.1Module curtsey Max.
+- Added Rob's ack.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8qm.dtsi b/arch/arm64/boot/dts/freescale/imx8qm.dtsi
-index 41ce8336f29e..9fff867709f0 100644
---- a/arch/arm64/boot/dts/freescale/imx8qm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8qm.dtsi
-@@ -23,6 +23,9 @@ aliases {
- 		serial1 = &lpuart1;
- 		serial2 = &lpuart2;
- 		serial3 = &lpuart3;
-+		vpu_core0 = &vpu_core0;
-+		vpu_core1 = &vpu_core1;
-+		vpu_core2 = &vpu_core2;
- 	};
+ .../devicetree/bindings/arm/fsl.yaml          | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 05b5276a0e14..eaebef5a71c0 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -1035,6 +1035,25 @@ properties:
+         items:
+           - enum:
+               - fsl,imx8qm-mek           # i.MX8QM MEK Board
++              - toradex,apalis-imx8      # Apalis iMX8 Modules
++              - toradex,apalis-imx8-v1.1 # Apalis iMX8 V1.1 Modules
++          - const: fsl,imx8qm
++
++      - description: i.MX8QM Boards with Toradex Apalis iMX8 Modules
++        items:
++          - enum:
++              - toradex,apalis-imx8-eval            # Apalis iMX8 Module on Apalis Evaluation Board
++              - toradex,apalis-imx8-ixora-v1.1      # Apalis iMX8 Module on Ixora V1.1 Carrier Board
++          - const: toradex,apalis-imx8
++          - const: fsl,imx8qm
++
++      - description: i.MX8QM Boards with Toradex Apalis iMX8 V1.1 Modules
++        items:
++          - enum:
++              - toradex,apalis-imx8-v1.1-eval       # Apalis iMX8 V1.1 Module on Apalis Eval. Board
++              - toradex,apalis-imx8-v1.1-ixora-v1.1 # Apalis iMX8 V1.1 Module on Ixora V1.1 C. Board
++              - toradex,apalis-imx8-v1.1-ixora-v1.2 # Apalis iMX8 V1.1 Module on Ixora V1.2 C. Board
++          - const: toradex,apalis-imx8-v1.1
+           - const: fsl,imx8qm
  
- 	cpus {
-@@ -212,6 +215,7 @@ rtc: rtc {
- 	};
- 
- 	/* sorted in register address */
-+	#include "imx8-ss-vpu.dtsi"
- 	#include "imx8-ss-img.dtsi"
- 	#include "imx8-ss-dma.dtsi"
- 	#include "imx8-ss-conn.dtsi"
+       - description: i.MX8QXP based Boards
 -- 
 2.36.1
 
