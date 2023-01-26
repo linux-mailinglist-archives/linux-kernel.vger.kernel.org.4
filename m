@@ -2,198 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A75067C953
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD05567C95A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjAZLAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 06:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        id S236950AbjAZLC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 06:02:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237152AbjAZK7x (ORCPT
+        with ESMTP id S236665AbjAZLC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:59:53 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CE393E4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:59:51 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P2d5G3tdhz4wgv;
-        Thu, 26 Jan 2023 21:59:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1674730786;
-        bh=PCtjVepWpk4GVT4pLOjcJhXEJ7Ve61N+43Vi055QQMk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=UJ2ydcyFtr+dijCjka/06++SoUFGz/mq3/xT9p1dnPwjot0Kgs6fMRIKhz94CnzDc
-         2Hcq+L1/i+Ev/9TQIZVamh1HBvXA1MGcDdi4656157jNthYE6vVtBO0dH2ePLrE27S
-         6vmTMqTuZrfHpBG9iHGFRiu/P1/S0m9W7+GDyZCANd+FFVz5/qJrtPeY1aaQoKs+Pc
-         6oEDXodwmoar9TGA5H0pwzyT8RIYgkAPTiga6NIqfBk3cDwBSDslVeNBgUCfzlL4BV
-         xHd2VIv2d+cokONEHtTWVfIvkoZW6b0K5BNZjOzIGtq2iNC39zK16f9JcvRcZ/aswT
-         vpCunW79QOJAg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] powerpc/pci: Allow to disable filling deprecated
- pci-OF-bus-map
-In-Reply-To: <20230122112118.qhezbsmoeggbkqfs@pali>
-References: <20220817163927.24453-1-pali@kernel.org>
- <20221009112555.spnwid27r4rwi67q@pali>
- <20221101222603.h3nlrp6xuhrnkmht@pali>
- <20221126162345.a4uuyefmtavfqa6g@pali>
- <20221216181206.tfzd2qalkking6sj@pali>
- <20230122112118.qhezbsmoeggbkqfs@pali>
-Date:   Thu, 26 Jan 2023 21:59:43 +1100
-Message-ID: <87r0vhzhls.fsf@mpe.ellerman.id.au>
+        Thu, 26 Jan 2023 06:02:56 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF422313B;
+        Thu, 26 Jan 2023 03:02:54 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0104A2B3;
+        Thu, 26 Jan 2023 12:02:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674730972;
+        bh=VXTem+t9dM+VDk9w0VKGh8hc/0bNhFcoS03nbbkEXXU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JTJrD37nWQ4ToLeEKb+RpXHLTHUeRr6JYacydA/eUbkE0tcW+TXh6ptpHlT+IITdU
+         3GxnYHR5Y+eYM4fVk6BRkhYWkXBRpPn9VezR/9AuGGExLYnjIzovwVDF7TYcc+8YOO
+         CqdfrB5kNnVDzu6Ml0VZjON6oQ9t/RDhQH3ABMY8=
+Date:   Thu, 26 Jan 2023 13:02:47 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     ayaka <ayaka@soulik.info>, randy.li@synaptics.com,
+        Brian.Starkey@arm.com, frkoenig@chromium.org,
+        hans.verkuil@cisco.com, helen.koike@collabora.com,
+        hiroh@chromium.org, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        mchehab@kernel.org, narmstrong@baylibre.com, nicolas@ndufresne.ca,
+        sakari.ailus@iki.fi, stanimir.varbanov@linaro.org,
+        tfiga@chromium.org
+Subject: Re: [RFC PATCH v6 03/11] media: v4l2: Add extended buffer (de)queue
+ operations for video types
+Message-ID: <Y9Jd12nYGk2xTYzx@pendragon.ideasonboard.com>
+References: <20210114180738.1758707-1-helen.koike@collabora.com>
+ <20210114180738.1758707-4-helen.koike@collabora.com>
+ <20230125200026.16643-1-ayaka@soulik.info>
+ <7609d523-667a-49a8-45f5-8186de20c24b@xs4all.nl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <7609d523-667a-49a8-45f5-8186de20c24b@xs4all.nl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pali Roh=C3=A1r <pali@kernel.org> writes:
-> PING? It is more than 5 months since this patch series is there and it
-> still has not received any comment.
+On Thu, Jan 26, 2023 at 09:57:51AM +0100, Hans Verkuil wrote:
+> On 25/01/2023 21:00, ayaka wrote:
+> > I am currently refresh this patchset, but I didn't see the need beyond v4l2_ext_pix_fmt, which I had done.
+> > On 2/23/21 20:58, Hans Verkuil wrote:
+> >> On 14/01/2021 19:07, Helen Koike wrote:
+> >>> Those extended buffer ops have several purpose:
+> >>> 1/ Fix y2038 issues by converting the timestamp into an u64 counting
+> >>>     the number of ns elapsed since 1970
+> > 
+> > I think application just use the timestamp field for tracking the
+> > buffer. It would be just a sequence buffer.
+> > At least for the most widely cases, the video encoder and decoder
+> > and ISP, this field is not a wall time.
+> 
+> For video capture and video output this is typically the monotonic
+> clock value.
+> 
+> For memory-to-memory devices it is something that is just copied from
+> output to capture.
+> 
+> So ISPs definitely use this as a proper timestamp.
 
-There was some related discussion in another thread.
+There are both inline (live-to-memory) and offline (memory-to-memory)
+ISPs. The former certainly need a proper timestamp.
 
-I planned to pick it up last merge window, but it breaks the
-pmac32_defconfig build when CONFIG_PPC_PCI_OF_BUS_MAP_FILL=3Dn:
+> >>> 2/ Unify single/multiplanar handling
+> >>> 3/ Add a new start offset field to each v4l2 plane buffer info struct
+> >>>     to support the case where a single buffer object is storing all
+> >>>     planes data, each one being placed at a different offset
+> >
+> > I really care about this. But I think the data_offset field in
+> > struct v4l2_plane is enough. The rest is the problem of the kernel
+> > internal API and allocator.
+> 
+> data_offset has proven to be very confusing and is rarely used because
+> of that.
+> 
+> We do need some sort of an offset field as proposed here, but it
+> shouldn't be named data_offset.
 
-  ld: arch/powerpc/platforms/powermac/feature.o: in function `core99_ata100=
-_enable':
-  feature.c:(.text+0xcd0): undefined reference to `pci_device_from_OF_node'
-  ld: arch/powerpc/platforms/powermac/pci.o: in function `pmac_pci_init':
-  pci.c:(.init.text+0x5d4): undefined reference to `pci_device_from_OF_node'
-  ld: pci.c:(.init.text+0x660): undefined reference to `pci_device_from_OF_=
-node'
+The existing data_offset field was indeed added for other purposes, to
+let drivers report where the actual image data starts for devices that
+prepend some sort of header. That's indeed not what we want here, we
+instead need something similar to the offsets field of struct
+drm_mode_fb_cmd2.
 
-So I dropped it, and haven't had time to work out a fix.
+> > I am thinking just add a field recording the offset input from the user.
+> > When we return the buffer back to the user, the value of the offset
+> > should be same as the it is queued.
+> > 
+> > Meanwhile, the API compatible that I want to keep is user using the
+> > ext_pix API could access those drivers support old API.
+> > But I don't want the user would expect they could get correct pixel
+> > format using the old ioctl(). It could create many duplicated pixel
+> > formats. If we want to keep the compatible here, that is the job of
+> > libv4l.
+> > 
+> > Besides, I think make the driver using the new API be compatible
+> > with the old ioctl() would lead a huge problem. User won't like to
+> > update its code if it could work even in a less performance mode
+> > because this code are for all the other hardware vendors/models.
+> > Unless we make this a feature, they could make a new branch in their
+> > code(don't count them would upate the kernel of the other products).
+> 
+> New drivers that require the additional information that these new ioctls give can
+> decide to just support these new ioctls only. But for existing drivers you want
+> to automatically support the new ioctls.
 
-cheers
+-- 
+Regards,
 
-> On Friday 16 December 2022 19:12:06 Pali Roh=C3=A1r wrote:
->> PING?
->>=20
->> On Saturday 26 November 2022 17:23:45 Pali Roh=C3=A1r wrote:
->> > PING?
->> >=20
->> > On Tuesday 01 November 2022 23:26:03 Pali Roh=C3=A1r wrote:
->> > > Hello! Gentle reminder...
->> > >=20
->> > > On Sunday 09 October 2022 13:25:55 Pali Roh=C3=A1r wrote:
->> > > > Hello! Any comments on this? It would be nice to take these two pa=
-tches
->> > > > (or at least patch 2) to finally enable PPC_PCI_BUS_NUM_DOMAIN_DEP=
-ENDENT
->> > > > by default where possible.
->> > > >=20
->> > > > Per following comment there can be an issue with early powermac so=
- seems
->> > > > that PPC_PCI_OF_BUS_MAP_FILL still has to be by default enabled (w=
-hich
->> > > > implies that PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT is disabled) on powe=
-rmac:
->> > > > https://lore.kernel.org/linuxppc-dev/575f239205e8635add81c9f902b7d=
-9db7beb83ea.camel@kernel.crashing.org/
->> > > >=20
->> > > > On Wednesday 17 August 2022 18:39:26 Pali Roh=C3=A1r wrote:
->> > > > > Creating or filling pci-OF-bus-map property in the device-tree is
->> > > > > deprecated since May 2006 [1]. Allow to disable filling this pro=
-perty by
->> > > > > unsetting config option CONFIG_PPC_PCI_OF_BUS_MAP_FILL for remai=
-ning chrp
->> > > > > and powermac code.
->> > > > >=20
->> > > > > Disabling of pci-OF-bus-map property allows to enable new option
->> > > > > CONFIG_PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT also for chrp and powerm=
-ac.
->> > > > >=20
->> > > > > [1] - https://lore.kernel.org/linuxppc-dev/1148016268.13249.14.c=
-amel@localhost.localdomain/
->> > > > >=20
->> > > > > Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
->> > > > > ---
->> > > > >  arch/powerpc/Kconfig         | 12 +++++++++++-
->> > > > >  arch/powerpc/kernel/pci_32.c |  6 ++++++
->> > > > >  2 files changed, 17 insertions(+), 1 deletion(-)
->> > > > >=20
->> > > > > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
->> > > > > index 5881441f7672..df2696c406ad 100644
->> > > > > --- a/arch/powerpc/Kconfig
->> > > > > +++ b/arch/powerpc/Kconfig
->> > > > > @@ -373,9 +373,19 @@ config PPC_DCR
->> > > > >  	depends on PPC_DCR_NATIVE || PPC_DCR_MMIO
->> > > > >  	default y
->> > > > >=20=20
->> > > > > +config PPC_PCI_OF_BUS_MAP_FILL
->> > > > > +	bool "Fill pci-OF-bus-map property in the device-tree"
->> > > > > +	depends on PPC32
->> > > > > +	depends on PPC_PMAC || PPC_CHRP
->> > > > > +	default y
->> > > > > +	help
->> > > > > +	  This option creates and fills pci-OF-bus-map property in the
->> > > > > +	  device-tree which is deprecated and is needed only for old
->> > > > > +	  platforms.
->> > > > > +
->> > > > >  config PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT
->> > > > >  	depends on PPC32
->> > > > > -	depends on !PPC_PMAC && !PPC_CHRP
->> > > > > +	depends on !PPC_PCI_OF_BUS_MAP_FILL
->> > > > >  	bool "Assign PCI bus numbers from zero individually for each P=
-CI domain"
->> > > > >  	help
->> > > > >  	  By default on PPC32 were PCI bus numbers unique across all P=
-CI domains.
->> > > > > diff --git a/arch/powerpc/kernel/pci_32.c b/arch/powerpc/kernel/=
-pci_32.c
->> > > > > index 433965bf37b4..ffc4e1928c80 100644
->> > > > > --- a/arch/powerpc/kernel/pci_32.c
->> > > > > +++ b/arch/powerpc/kernel/pci_32.c
->> > > > > @@ -64,6 +64,8 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_IBM,	PC=
-I_DEVICE_ID_IBM_CPC710_PCI64,	fixu
->> > > > >=20=20
->> > > > >  #if defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP)
->> > > > >=20=20
->> > > > > +#ifdef CONFIG_PPC_PCI_OF_BUS_MAP_FILL
->> > > > > +
->> > > > >  static u8* pci_to_OF_bus_map;
->> > > > >  static int pci_bus_count;
->> > > > >=20=20
->> > > > > @@ -223,6 +225,8 @@ pci_create_OF_bus_map(void)
->> > > > >  }
->> > > > >  #endif
->> > > > >=20=20
->> > > > > +#endif /* CONFIG_PPC_PCI_OF_BUS_MAP_FILL */
->> > > > > +
->> > > > >  #endif /* defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP) =
-*/
->> > > > >=20=20
->> > > > >  void pcibios_setup_phb_io_space(struct pci_controller *hose)
->> > > > > @@ -264,6 +268,7 @@ static int __init pcibios_init(void)
->> > > > >  	}
->> > > > >=20=20
->> > > > >  #if defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP)
->> > > > > +#ifdef CONFIG_PPC_PCI_OF_BUS_MAP_FILL
->> > > > >  	pci_bus_count =3D next_busno;
->> > > > >=20=20
->> > > > >  	/* OpenFirmware based machines need a map of OF bus
->> > > > > @@ -272,6 +277,7 @@ static int __init pcibios_init(void)
->> > > > >  	 */
->> > > > >  	if (pci_assign_all_buses)
->> > > > >  		pcibios_make_OF_bus_map();
->> > > > > +#endif
->> > > > >  #endif
->> > > > >=20=20
->> > > > >  	/* Call common code to handle resource allocation */
->> > > > > --=20
->> > > > > 2.20.1
->> > > > >=20
+Laurent Pinchart
