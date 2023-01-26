@@ -2,169 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4734567D759
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C6267D77F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232801AbjAZVIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:08:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S232907AbjAZVPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:15:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbjAZVI0 (ORCPT
+        with ESMTP id S232430AbjAZVPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:08:26 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6412B65367;
-        Thu, 26 Jan 2023 13:08:22 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QJIbFW017731;
-        Thu, 26 Jan 2023 21:08:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Wy5jGqa36Ei/jzaR8orKTioPfJB7/DMwnd5+9ENVdCo=;
- b=tdtMpEO7KLez33WvEOGHnfJ65kzdvK7AXKqQFpuuAsa0r1njwIHW0erqwU0EjugroPGw
- NZ9uyrW2gdYjuVMohc8QtUOcx24cA3g517A19/qXoZjsUoB4Tjubm5fARakrS+i1hs3t
- v9yZDgGgkmvLNUWS5AkUDjpzV6c61K/CGRz46Gu9/Np/MgatEjsr3/nipNKiQhDHwS0u
- FQscsHUnynW5lgcPg264yDMF61Z59lVnCN4nbwnQsU4roKLJOlnVhnuG2wygwSeGfdgL
- mHe7jAwCMsw3t9ocaoLUsQD+zu03mUpfKopT8Z+ATdos3k7/RpJeJKRrNYpg5xP8iRrb 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbu2jtbgq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 21:08:18 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QL5i9N017326;
-        Thu, 26 Jan 2023 21:08:17 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbu2jtbge-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 21:08:17 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QK1GLK012685;
-        Thu, 26 Jan 2023 21:08:17 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3n87p7yar1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 21:08:16 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QL8F3p26542554
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 21:08:15 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 36F9A58059;
-        Thu, 26 Jan 2023 21:08:15 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 020925805F;
-        Thu, 26 Jan 2023 21:08:14 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.3.213])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 26 Jan 2023 21:08:13 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        stefanb@linux.ibm.com, eajames@linux.ibm.com
-Subject: [PATCH v3 2/2] tpm: Add reserved memory event log
-Date:   Thu, 26 Jan 2023 15:08:10 -0600
-Message-Id: <20230126210810.881119-3-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230126210810.881119-1-eajames@linux.ibm.com>
-References: <20230126210810.881119-1-eajames@linux.ibm.com>
+        Thu, 26 Jan 2023 16:15:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3127B6D5D1;
+        Thu, 26 Jan 2023 13:15:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6F306192C;
+        Thu, 26 Jan 2023 21:15:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834FEC433D2;
+        Thu, 26 Jan 2023 21:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674767739;
+        bh=kDoN7lRtkiguVPMIrt2hz2XvkeOAxA8ec5u0EoQ2oZU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MZIYwYDxGRui5ufSSQCI03NAPZNsVz2pa74E1a6S835vWtFU/TqegK/BdgJZHyn3D
+         fq1l4NeIEbkMq2GODsWzDFq1+sS3yYiFuCJ/uaZgVEkaK24VxjPzZQwou2YhYlZ169
+         hF/LiP5B7rK2WENUAK9rtuvNnnxQIyv3jaiQNnIgPJXtIN2giNjB3gt0KGgOIbkJsR
+         786k4VnAtaA+AkLvo1AhU2QySPMZAx1+MAUBG240zIV6BQS6XbUNMnsB2UpzTM9imk
+         RnpHu4KDinDlB6hjS4AHJ/XNrolgE5CC/4m39TtoPEUFcvf1pQRdBl5HjsPe3kS7pn
+         mtx6dg/QdCdoA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH] [v2] vfio-mdev: add back CONFIG_VFIO dependency
+Date:   Thu, 26 Jan 2023 22:08:31 +0100
+Message-Id: <20230126211211.1762319-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VHzkvyJ3c-j3u6p9mKvGRC0sFtdq8EkA
-X-Proofpoint-ORIG-GUID: jw-LOoTPqCc19JY8vA4-3_SrxfArdeR3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_09,2023-01-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 phishscore=0 priorityscore=1501 bulkscore=0 adultscore=0
- suspectscore=0 clxscore=1015 mlxscore=0 impostorscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260198
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some platforms may desire to pass the event log up to Linux in the
-form of a reserved memory region. In particular, this is desirable
-for embedded systems or baseboard management controllers (BMCs)
-booting with U-Boot. IBM OpenBMC BMCs will be the first user.
-Add support for the reserved memory in the TPM core to find the
-region and map it.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
+CONFIG_VFIO_MDEV cannot be selected when VFIO itself is
+disabled, otherwise we get a link failure:
+
+WARNING: unmet direct dependencies detected for VFIO_MDEV
+  Depends on [n]: VFIO [=n]
+  Selected by [y]:
+  - SAMPLE_VFIO_MDEV_MTTY [=y] && SAMPLES [=y]
+  - SAMPLE_VFIO_MDEV_MDPY [=y] && SAMPLES [=y]
+  - SAMPLE_VFIO_MDEV_MBOCHS [=y] && SAMPLES [=y]
+/home/arnd/cross/arm64/gcc-13.0.1-nolibc/x86_64-linux/bin/x86_64-linux-ld: samples/vfio-mdev/mdpy.o: in function `mdpy_remove':
+mdpy.c:(.text+0x1e1): undefined reference to `vfio_unregister_group_dev'
+/home/arnd/cross/arm64/gcc-13.0.1-nolibc/x86_64-linux/bin/x86_64-linux-ld: samples/vfio-mdev/mdpy.o: in function `mdpy_probe':
+mdpy.c:(.text+0x149e): undefined reference to `_vfio_alloc_device'
+
+Fixes: 8bf8c5ee1f38 ("vfio-mdev: turn VFIO_MDEV into a selectable symbol")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/char/tpm/eventlog/of.c | 38 +++++++++++++++++++++++++++++++++-
- 1 file changed, 37 insertions(+), 1 deletion(-)
+v2: fix the s390 and drm drivers as well, in addition to the
+sample code.
+---
+ arch/s390/Kconfig            | 4 +++-
+ drivers/gpu/drm/i915/Kconfig | 1 +
+ samples/Kconfig              | 3 +++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
-index 741ab2204b11..c815cadf00a4 100644
---- a/drivers/char/tpm/eventlog/of.c
-+++ b/drivers/char/tpm/eventlog/of.c
-@@ -12,12 +12,48 @@
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index 045e681caa36..078cd1a773a3 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -715,6 +715,7 @@ config VFIO_CCW
+ 	def_tristate n
+ 	prompt "Support for VFIO-CCW subchannels"
+ 	depends on S390_CCW_IOMMU
++	depends on VFIO
+ 	select VFIO_MDEV
+ 	help
+ 	  This driver allows usage of I/O subchannels via VFIO-CCW.
+@@ -726,8 +727,9 @@ config VFIO_AP
+ 	def_tristate n
+ 	prompt "VFIO support for AP devices"
+ 	depends on S390_AP_IOMMU && KVM
+-	select VFIO_MDEV
++	depends on VFIO
+ 	depends on ZCRYPT
++	select VFIO_MDEV
+ 	help
+ 	  This driver grants access to Adjunct Processor (AP) devices
+ 	  via the VFIO mediated device interface.
+diff --git a/drivers/gpu/drm/i915/Kconfig b/drivers/gpu/drm/i915/Kconfig
+index a14f68730d6d..b84c16933bbd 100644
+--- a/drivers/gpu/drm/i915/Kconfig
++++ b/drivers/gpu/drm/i915/Kconfig
+@@ -120,6 +120,7 @@ config DRM_I915_GVT_KVMGT
+ 	depends on X86
+ 	depends on 64BIT
+ 	depends on KVM
++	depends on VFIO
+ 	select DRM_I915_GVT
+ 	select KVM_EXTERNAL_WRITE_TRACKING
+ 	select VFIO_MDEV
+diff --git a/samples/Kconfig b/samples/Kconfig
+index 56b191d128d8..44a09dfa8a0b 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -185,6 +185,7 @@ config SAMPLE_UHID
  
- #include <linux/device.h>
- #include <linux/slab.h>
-+#include <linux/io.h>
-+#include <linux/ioport.h>
- #include <linux/of.h>
-+#include <linux/of_address.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/tpm_eventlog.h>
+ config SAMPLE_VFIO_MDEV_MTTY
+ 	tristate "Build VFIO mtty example mediated device sample code"
++	depends on VFIO
+ 	select VFIO_MDEV
+ 	help
+ 	  Build a virtual tty sample driver for use as a VFIO
+@@ -192,6 +193,7 @@ config SAMPLE_VFIO_MDEV_MTTY
  
- #include "../tpm.h"
- #include "common.h"
+ config SAMPLE_VFIO_MDEV_MDPY
+ 	tristate "Build VFIO mdpy example mediated device sample code"
++	depends on VFIO
+ 	select VFIO_MDEV
+ 	help
+ 	  Build a virtual display sample driver for use as a VFIO
+@@ -209,6 +211,7 @@ config SAMPLE_VFIO_MDEV_MDPY_FB
  
-+static int tpm_read_log_memory_region(struct tpm_chip *chip)
-+{
-+	struct device_node *node;
-+	struct resource res;
-+	int rc;
-+
-+	node = of_parse_phandle(chip->dev.parent->of_node, "memory-region", 0);
-+	if (!node) {
-+		dev_info(&chip->dev, "no phandle\n");
-+		return -ENODEV;
-+	}
-+
-+	rc = of_address_to_resource(node, 0, &res);
-+	of_node_put(node);
-+	if (rc) {
-+		dev_info(&chip->dev, "no mem\n");
-+		return rc;
-+	}
-+
-+	chip->log.bios_event_log = devm_memremap(&chip->dev, res.start, resource_size(&res),
-+						 MEMREMAP_WB);
-+	if (!chip->log.bios_event_log) {
-+		dev_info(&chip->dev, "err memremap\n");
-+		return -ENOMEM;
-+	}
-+
-+	chip->log.bios_event_log_end = chip->log.bios_event_log + resource_size(&res);
-+
-+	return chip->flags & TPM_CHIP_FLAG_TPM2 ? EFI_TCG2_EVENT_LOG_FORMAT_TCG_2 :
-+		EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-+}
-+
- int tpm_read_log_of(struct tpm_chip *chip)
- {
- 	struct device_node *np;
-@@ -39,7 +75,7 @@ int tpm_read_log_of(struct tpm_chip *chip)
- 	sizep = of_get_property(np, "linux,sml-size", NULL);
- 	basep = of_get_property(np, "linux,sml-base", NULL);
- 	if (sizep == NULL && basep == NULL)
--		return -ENODEV;
-+		return tpm_read_log_memory_region(chip);
- 	if (sizep == NULL || basep == NULL)
- 		return -EIO;
- 
+ config SAMPLE_VFIO_MDEV_MBOCHS
+ 	tristate "Build VFIO mdpy example mediated device sample code"
++	depends on VFIO
+ 	select VFIO_MDEV
+ 	select DMA_SHARED_BUFFER
+ 	help
 -- 
-2.31.1
+2.39.0
 
