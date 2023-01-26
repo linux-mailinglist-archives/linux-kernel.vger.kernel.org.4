@@ -2,204 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0AE67D054
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 374FE67D056
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjAZPev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:34:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
+        id S230301AbjAZPgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:36:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbjAZPet (ORCPT
+        with ESMTP id S229674AbjAZPgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:34:49 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F156A712
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:34:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=h9TgFQ/b9wTcT2zGUiB6D5VZSC+7nZ1MX8BeZINlqwk=; b=B1c9xa2HNMN/9BoAnVevSSIOvx
-        /Z6Bq26COwn8PKWvkvG0Nw4TzQ9f1jJSt/S9KLr2RkgWAE+MxdZtrkbWaUFuTI2SMOPujSx1vfeDN
-        UoyZ99n70TLnY1vJR4yrQpmygDUAMbz11cy5WS4PlxYqxLtzLuNDK3qzt/13uAgPn97KTNhnrRbTb
-        3MNvc3CSxsajYWAsuKdVUu7M8lL4e5jG5pAICPSwhZOR3mB5UfciiOlsCnUr0HZ1KxL8zqs9zJoJ8
-        8UG74P+mc+moSRMiiD1hfbq3GwxEgK/Y6V9mMeurPMqXnMIv+aXlzpmSUfyTngW0yXT+98+3lL2X4
-        nVY1+p+w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pL4Gj-006rLM-4r; Thu, 26 Jan 2023 15:34:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4A9E3300577;
-        Thu, 26 Jan 2023 16:34:27 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 253BC2084C4A6; Thu, 26 Jan 2023 16:34:27 +0100 (CET)
-Date:   Thu, 26 Jan 2023 16:34:27 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mingo@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        jpoimboe@kernel.org, jbaron@akamai.com, ardb@kernel.org,
-        linux-kernel@vger.kernel.org, erhard_f@mailbox.org,
-        ndesaulniers@google.com, mhiramat@kernel.org, sandipan.das@amd.com
-Subject: [PATCH v1.1 3/3] x86/static_call: Add support for Jcc tail-calls
-Message-ID: <Y9Kdg9QjHkr9G5b5@hirez.programming.kicks-ass.net>
-References: <20230123205915.751729592@infradead.org>
- <20230123210607.173715335@infradead.org>
- <20230123174431.4421dfdf@gandalf.local.home>
- <Y8/X6fdRT80jssIf@hirez.programming.kicks-ass.net>
- <20230124100753.13608e1f@gandalf.local.home>
+        Thu, 26 Jan 2023 10:36:41 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CCAEC47;
+        Thu, 26 Jan 2023 07:36:40 -0800 (PST)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QEjHqJ007113;
+        Thu, 26 Jan 2023 15:36:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=RSyPL1U6GXPs6hPxIDi4w+LX+f9ekl+CEHIFrSXE6WI=;
+ b=GGkLrhfXbAWWTAjcyTvidaSUGcC7KoyI9pAHYg4oAKnwVB7hLlOYFKFXQjB5IBkbM2um
+ GpoIfZ3X4E8hUBsXLuwjiIKkht6lcHGVTr/tK5vnpGydC8O9c1u2mxnPRdRFpzsgMO47
+ pXMxL09TZMX/0YaGgUh2/I/FZxxDGUnRfSYFDm3kDYWBCdEkio3wkQBlZRgVuc8sfkmD
+ C8xe9u06W8J5wHzVoV8+XU3dTLIYZmKWVAcc+5UiupaNOzxfZg0vCkHNoTvLpp9/chfc
+ FUNhLbSNZ7cLcnLcsFxL1WaqOK3/NOLzc0u40xPfpuO+hUyzoyKcgwihFEwfu99sXxGo qg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n86ybjj34-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 26 Jan 2023 15:36:23 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30QEvf8o019163;
+        Thu, 26 Jan 2023 15:36:22 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n86gebrbk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 26 Jan 2023 15:36:22 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QFUTSf014868;
+        Thu, 26 Jan 2023 15:36:21 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3n86gebrap-1;
+        Thu, 26 Jan 2023 15:36:21 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, error27@gmail.com,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Irina Tirdea <irina.tirdea@intel.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: accel: mma9551_core: Prevent uninitialized variable in mma9551_read_config_word()
+Date:   Thu, 26 Jan 2023 07:36:09 -0800
+Message-Id: <20230126153610.3586243-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124100753.13608e1f@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-26_07,2023-01-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 mlxscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301260151
+X-Proofpoint-GUID: KrAAVUjle3Hq6Fo8EIgcTLaOqSLmDv81
+X-Proofpoint-ORIG-GUID: KrAAVUjle3Hq6Fo8EIgcTLaOqSLmDv81
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 10:07:53AM -0500, Steven Rostedt wrote:
-> On Tue, 24 Jan 2023 14:06:49 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> > > Just to confirm, as it's not clear if this is the static call site or one
-> > > of the functions that is being called.  
-> > 
-> > Ah, you've not looked at enough asm then? ;-) Yes this is the static
-> > call site, see the __SCT_ target (instruction at 0x35d).
-> 
-> Yeah, could you specify it a bit more in the change log such that those
-> looking back at this don't have to have that requirement of staring at
-> enough asm ;-)
+Smatch Warns:
+drivers/iio/accel/mma9551_core.c:299
+	mma9551_read_config_word() error: uninitialized symbol 'v'.
 
-How's this then?
+When (offset >= 1 << 12) is true mma9551_transfer() will return -EINVAL
+without 'v' being initialized, so check for the error and return.
 
+Fixes: 40cb761306d6 ("iio: add driver for Freescale MMA9553")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 ---
-Subject: x86/static_call: Add support for Jcc tail-calls
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Fri Jan 20 16:40:33 CET 2023
-
-Clang likes to create conditional tail calls like:
-
-0000000000000350 <amd_pmu_add_event>:
-350:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1) 351: R_X86_64_NONE      __fentry__-0x4
-355:       48 83 bf 20 01 00 00 00         cmpq   $0x0,0x120(%rdi)
-35d:       0f 85 00 00 00 00       jne    363 <amd_pmu_add_event+0x13>     35f: R_X86_64_PLT32     __SCT__amd_pmu_branch_add-0x4
-363:       e9 00 00 00 00          jmp    368 <amd_pmu_add_event+0x18>     364: R_X86_64_PLT32     __x86_return_thunk-0x4
-
-Where 0x35d is a static call site that's turned into a conditional
-tail-call using the Jcc class of instructions.
-
-Teach the in-line static call text patching about this.
-
-Notably, since there is no conditional-ret, in that case patch the Jcc
-to point at an empty stub function that does the ret -- or the return
-thunk when needed.
-
-Reported-by: "Erhard F." <erhard_f@mailbox.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+This is detected using static analysis.
 ---
- arch/x86/kernel/static_call.c |   50 +++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 47 insertions(+), 3 deletions(-)
+ drivers/iio/accel/mma9551_core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kernel/static_call.c
-+++ b/arch/x86/kernel/static_call.c
-@@ -9,6 +9,7 @@ enum insn_type {
- 	NOP = 1,  /* site cond-call */
- 	JMP = 2,  /* tramp / site tail-call */
- 	RET = 3,  /* tramp / site cond-tail-call */
-+	JCC = 4,
- };
+diff --git a/drivers/iio/accel/mma9551_core.c b/drivers/iio/accel/mma9551_core.c
+index 64ca7d7a9673..75eee7f7303a 100644
+--- a/drivers/iio/accel/mma9551_core.c
++++ b/drivers/iio/accel/mma9551_core.c
+@@ -296,9 +296,12 @@ int mma9551_read_config_word(struct i2c_client *client, u8 app_id,
  
- /*
-@@ -25,12 +26,40 @@ static const u8 xor5rax[] = { 0x2e, 0x2e
+ 	ret = mma9551_transfer(client, app_id, MMA9551_CMD_READ_CONFIG,
+ 			       reg, NULL, 0, (u8 *)&v, 2);
++	if (ret < 0)
++		return ret;
++
+ 	*val = be16_to_cpu(v);
  
- static const u8 retinsn[] = { RET_INSN_OPCODE, 0xcc, 0xcc, 0xcc, 0xcc };
- 
-+static u8 __is_Jcc(u8 *insn) /* Jcc.d32 */
-+{
-+	u8 ret = 0;
-+
-+	if (insn[0] == 0x0f) {
-+		u8 tmp = insn[1];
-+		if ((tmp & 0xf0) == 0x80)
-+			ret = tmp;
-+	}
-+
-+	return ret;
-+}
-+
-+extern void __static_call_return(void);
-+
-+asm (".global __static_call_return\n\t"
-+     ".type __static_call_return, @function\n\t"
-+     ASM_FUNC_ALIGN "\n\t"
-+     "__static_call_return:\n\t"
-+     ANNOTATE_NOENDBR
-+     ANNOTATE_RETPOLINE_SAFE
-+     "ret; int3\n\t"
-+     ".size __static_call_return, . - __static_call_return \n\t");
-+
- static void __ref __static_call_transform(void *insn, enum insn_type type,
- 					  void *func, bool modinit)
- {
- 	const void *emulate = NULL;
- 	int size = CALL_INSN_SIZE;
- 	const void *code;
-+	u8 op, buf[6];
-+
-+	if ((type == JMP || type == RET) && (op = __is_Jcc(insn)))
-+		type = JCC;
- 
- 	switch (type) {
- 	case CALL:
-@@ -57,6 +86,20 @@ static void __ref __static_call_transfor
- 		else
- 			code = &retinsn;
- 		break;
-+
-+	case JCC:
-+		if (!func) {
-+			func = __static_call_return;
-+			if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
-+				func = x86_return_thunk;
-+		}
-+
-+		buf[0] = 0x0f;
-+		__text_gen_insn(buf+1, op, insn+1, func, 5);
-+		code = buf;
-+		size = 6;
-+
-+		break;
- 	}
- 
- 	if (memcmp(insn, code, size) == 0)
-@@ -68,9 +111,9 @@ static void __ref __static_call_transfor
- 	text_poke_bp(insn, code, size, emulate);
+-	return ret;
++	return 0;
  }
+ EXPORT_SYMBOL_NS(mma9551_read_config_word, IIO_MMA9551);
  
--static void __static_call_validate(void *insn, bool tail, bool tramp)
-+static void __static_call_validate(u8 *insn, bool tail, bool tramp)
- {
--	u8 opcode = *(u8 *)insn;
-+	u8 opcode = insn[0];
- 
- 	if (tramp && memcmp(insn+5, tramp_ud, 3)) {
- 		pr_err("trampoline signature fail");
-@@ -79,7 +122,8 @@ static void __static_call_validate(void
- 
- 	if (tail) {
- 		if (opcode == JMP32_INSN_OPCODE ||
--		    opcode == RET_INSN_OPCODE)
-+		    opcode == RET_INSN_OPCODE ||
-+		    __is_Jcc(insn))
- 			return;
- 	} else {
- 		if (opcode == CALL_INSN_OPCODE ||
+-- 
+2.38.1
+
