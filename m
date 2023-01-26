@@ -2,149 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1222467D8AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1731A67D8B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbjAZWlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:41:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S232764AbjAZWnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbjAZWkw (ORCPT
+        with ESMTP id S231772AbjAZWnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:40:52 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09384EF7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:40:51 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id o5so2624205qtr.11
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:40:51 -0800 (PST)
+        Thu, 26 Jan 2023 17:43:07 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9A045F6B;
+        Thu, 26 Jan 2023 14:43:04 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id k2so2579550qvd.12;
+        Thu, 26 Jan 2023 14:43:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7++FPNmCT11inHBtqfYJtM4/xAJgiLCvorUz1cWzIv4=;
-        b=FfWgMmXFYEj9lPeH/Vdv0zqG9hIvMC3dzwgFaJPxJPBQ/Bl/fhkUfEOTaV64Fzy4TR
-         QL4milXBTiVyIzRmgCFLJMQjMxFI1fXWYOI9uT/ooir+UY5FQDGo9KkaYI3vaz3v1iXc
-         EyCoq6qPTHK1pNFQv/RSJj6ooLeQe1QU1BjuWnsmrXyltSIXYXbtK/AupdJMGD8ZP2X8
-         ZE/ibew4ToAU5EzVKFkfnmcLGPIr1d4Y8tAW+5vpghVyZAJ+uWORKCxp1HhhNT7LLeHR
-         4Kf4dv5h+c/akVW39GQ3PrMfnysFXSf04gax26PoX9/TEwPnXphQrgEPBYgWaoZbHx+6
-         JooA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mQTH5iCah1FP2x9WKr5XrRV0wZBo+AefYkRVKX7uGhg=;
+        b=B3xswdfEcfO/qyMhYpZB3KsgnA7LApXU3UffOfCL8MaKK7LcmlIbnOdyyAutsttOZl
+         9XIiElrB948y+mVlkap8paUXw0Oxy6HP5KcoFsPHCcao2T4mxGNBCCoNLw1NoQpqGKOa
+         bM5vKKA4yxx4ns6mBovlBX6ysJWrf0JvpHD5kAEWrMLCmhmoueoPevWTE/SuelXPKDjB
+         jfxhCcECDPp7a7xj/rQR9CAsFEylf7j+REU0indcK1IOQynUvbUXNVyWCePjIFwOpWqr
+         /w1wZsEAChR/1KZ2Ap39jsiiYGrBeCOP6+fvHMZchQUjIBVYlZLBA+JS8HJaO2G+MZB9
+         wtxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7++FPNmCT11inHBtqfYJtM4/xAJgiLCvorUz1cWzIv4=;
-        b=mvmjyjQHoQU8kjzV9uD5x619R5VNjZt3tmZpT0nPOJOT5b35uq3E7CWrvmatVEZmSz
-         FNdpLhhbKDJu77zIOIiXSOhClOySVKJpryMFDrKgvpbbMJD/GY6vA7wja47j3HmZtyQV
-         p2X0Yv2iZm0UOq2Qws0y3WacFqaIfMjGNnvW7M0bNxgSaDgn8ysqV9LiWGqOEWzvyo4B
-         F1+AOcK32XrapXXNa4unf+4nR9cO8yqNYJJk8IrQkkNFiqiFjVKJy3VtYTmnxJkGoxrC
-         bR9nMSnPAqv0vR1SfLp263Ut9klEvkacsilaOAbI/+q/OGNwz7jpE1ACKT6dMJ2oNj5+
-         +P0Q==
-X-Gm-Message-State: AFqh2kr7qfM0j047Bc51nAfPNh3Wm1sNgpYVIbFHZXcWd8pW+319DMsl
-        GSiEaUQPmtHW+ruaSiy7Yi4mKQ==
-X-Google-Smtp-Source: AMrXdXtNzkgpHvsmeAGerw4Q2mbncA0QO3CZexfZka0EC7XsZpNsJxDhm0PKWk2L8YK7E1xkZrVDbw==
-X-Received: by 2002:a05:622a:178d:b0:3b6:35cb:b946 with SMTP id s13-20020a05622a178d00b003b635cbb946mr71952397qtk.14.1674772851400;
-        Thu, 26 Jan 2023 14:40:51 -0800 (PST)
-Received: from [127.0.1.1] (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
-        by smtp.gmail.com with ESMTPSA id ek3-20020a05622a4fc300b003b68ea3d5c8sm1505678qtb.41.2023.01.26.14.40.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 14:40:51 -0800 (PST)
-From:   Jonathan Cormier <jcormier@criticallink.com>
-Date:   Thu, 26 Jan 2023 17:40:45 -0500
-Subject: [PATCH v2 4/4] drm/bridge: tfp410: If connected, use I2C for
- polled HPD status.
+        bh=mQTH5iCah1FP2x9WKr5XrRV0wZBo+AefYkRVKX7uGhg=;
+        b=y3WefQZNP0YvfHRhoTvcN0tZ3S7aC+jVYhLGNu4Vx0wXuetsjjIpJ8CRYlDfcE9TQD
+         ara9teFOZguUVebaMu9iLY9NRr2eDA3vjxzhoE518SprkqDv4CHjKifpFXe7WG8tuSeG
+         7pzQiVEFd6NGv0zeZK75LI/MFQSK6w4laAjwPCfYL4/X+p64021n7zaEBdpeNfSkljXn
+         F8ZOgnNsXvzPFIkXeaHQtQ0ZvkMg9cfw7YNrQUPplyDgTS+Krt1l0HFChsiu1CpSfiuX
+         maN4mKawBVsAdgS6NTxuu9O61R7MjEnbNJpvNTpqlbRykUO8e5ABr5ypkqBGaRzfhXFy
+         3IbQ==
+X-Gm-Message-State: AO0yUKULKavljxVSQlDz0JDFx5eiVY/wzATQ+5O3nRNluG1WcOPO3CEW
+        u/FN6ToIejlM9bFCgZkQh3D/es09JZjy/39tdYQ=
+X-Google-Smtp-Source: AK7set/GP31tlQzIKhQe2uNsROk0VfM6oJ5yONHSQEvGrN3cwpCTVJnp1Jbol4KbNXyYIqaJ4f/8n4AtcRVW31Bpixg=
+X-Received: by 2002:ad4:4b68:0:b0:537:6e55:eeb7 with SMTP id
+ m8-20020ad44b68000000b005376e55eeb7mr613764qvx.66.1674772983589; Thu, 26 Jan
+ 2023 14:43:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230125-tfp410_i2c-v2-4-bf22f4dcbcea@criticallink.com>
-References: <20230125-tfp410_i2c-v2-0-bf22f4dcbcea@criticallink.com>
-In-Reply-To: <20230125-tfp410_i2c-v2-0-bf22f4dcbcea@criticallink.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Michael Williamson <michael.williamson@criticallink.com>,
-        Bob Duke <bduke@criticallink.com>,
-        Jonathan Cormier <jcormier@criticallink.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1511;
- i=jcormier@criticallink.com; h=from:subject:message-id;
- bh=mnMRLzTQ5OvUKpoF4H4mdtxVS/UwcOVTBoA/DdsbVck=;
- b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0wFuvXkSsXrMPuQIuaE7dqR3P3ABer3/DA77uFMa
- Kse6bIOJAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9MBbgAKCRDc1/0uCzbrqjH0EA
- CuMWARBsza9msRcHworH1ssy/nFvqzq4JbkaBvAIl0CJb4diN58Mnla1QqnkkqHuSAj/Wta4K9JmJB
- XPBdPdsr66l2JKinBGdLAJRJHN6r0BM66hlL5RuizDJHFhfU9WgWiQsz4KoidZh/rUcm2yvODPTR2y
- TS+c4JA5a8mNj6EELvH+dZG3MRdgAot6HEH9yDLjUXz7kMYb5Acz1YmpfKYHnyZUP9OsKopq+iAOs/
- oEB8kr36y6xylEkJfTZyHcAwKpD/5T3Nlk5FcMGQh5BrXqF9X51He1ns5V5fujw/N7Ybrhn+sAdwcB
- iA/w6dhTfeuyRRlyGJo7liNOUEVeu9Qx1EVE11AriFjxFxEC9muC2aVQPZT8OmU7ho9okGhDRkmA6K
- PI9f71y0dUHpZHPzyEoYlwAz/kEVd2U7VnPtJmA//l9AS2z/zk9gLghAMllvkkPgr5ye6khJd+v4O0
- V89ebxTpges+Kbd/oyShBYwRpSh4gYTM4w+RpKg1tB/3FlTempzoX//3/QMAthGRmygseCSDjWM6UD
- uUoHgcxV86Dzfnn2WEyQcRS89AXv4DIF45hiPtOpLd/X/ZSgTOhpkF/50WLKHDT7X1MTEKSYjDxii2
- ivTCGpZLsW6Qv3lF7PR3bbLSzeHEOmUh2MfoYtbMteNMElwBVsJsqY+PIP3g==
-X-Developer-Key: i=jcormier@criticallink.com; a=openpgp;
- fpr=FF328CEA09E66D63136754DFDCD7FD2E0B36EBAA
+References: <CABXGCsN+BcaGO0+0bJszDPvA=5JF_bOPfXC=OLzMzsXY2M8hyQ@mail.gmail.com>
+ <20220726164250.GE13489@twin.jikos.cz> <CABXGCsN1rzCoYiB-vN5grzsMdvgm1qv2jnWn0enXq5R-wke8Eg@mail.gmail.com>
+ <20230125171517.GV11562@twin.jikos.cz> <CABXGCsOD7jVGYkFFG-nM9BgNq_7c16yU08EBfaUc6+iNsX338g@mail.gmail.com>
+ <Y9K6m5USnON/19GT@boqun-archlinux>
+In-Reply-To: <Y9K6m5USnON/19GT@boqun-archlinux>
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Fri, 27 Jan 2023 03:42:52 +0500
+Message-ID: <CABXGCsMD6nAPpF34c6oMK47kHUQqADQPUCWrxyY7WFiKi1qPNg@mail.gmail.com>
+Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     dsterba@suse.cz, Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Chris Murphy <lists@colorremedies.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Williamson <michael.williamson@criticallink.com>
+On Thu, Jan 26, 2023 at 10:39 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+>
+> [Cc lock folks]
+>
+> On Thu, Jan 26, 2023 at 02:47:42PM +0500, Mikhail Gavrilov wrote:
+> > On Wed, Jan 25, 2023 at 10:21 PM David Sterba <dsterba@suse.cz> wrote:
+> > >
+> > > On Wed, Jan 25, 2023 at 01:27:48AM +0500, Mikhail Gavrilov wrote:
+> > > > On Tue, Jul 26, 2022 at 9:47 PM David Sterba <dsterba@suse.cz> wrot=
+e:
+> > > > >
+> > > > > On Tue, Jul 26, 2022 at 05:32:54PM +0500, Mikhail Gavrilov wrote:
+> > > > > > Hi guys.
+> > > > > > Always with intensive writing on a btrfs volume, the message "B=
+UG:
+> > > > > > MAX_LOCKDEP_CHAIN_HLOCKS too low!" appears in the kernel logs.
+> > > > >
+> > > > > Increase the config value of LOCKDEP_CHAINS_BITS, default is 16, =
+18
+> > > > > tends to work.
+> > > >
+> > > > Hi,
+> > > > Today I was able to get the message "BUG: MAX_LOCKDEP_CHAIN_HLOCKS =
+too
+> > > > low!" again even with LOCKDEP_CHAINS_BITS=3D18 and kernel 6.2-rc5.
+> > > >
+> > > > =E2=9D=AF cat /boot/config-`uname -r` | grep LOCKDEP_CHAINS_BITS
+> > > > CONFIG_LOCKDEP_CHAINS_BITS=3D18
+> > > >
+> > > > [88685.088099] BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
+> > > > [88685.088124] turning off the locking correctness validator.
+> > > > [88685.088133] Please attach the output of /proc/lock_stat to the b=
+ug report
+> > > > [88685.088142] CPU: 14 PID: 1749746 Comm: mv Tainted: G        W   =
+ L
+> > > >   -------  ---  6.2.0-0.rc5.20230123git2475bf0250de.38.fc38.x86_64 =
+#1
+> > > > [88685.088154] Hardware name: System manufacturer System Product
+> > > > Name/ROG STRIX X570-I GAMING, BIOS 4408 10/28/2022
+> > > >
+> > > > What's next? Increase this value to 19?
+> > >
+> > > Yes, though increasing the value is a workaround so you may see the
+> > > warning again.
+> >
+> > Is there any sense in this WARNING if we would ignore it and every
+> > time increase the threshold value?
+>
+> Lockdep uses static allocated array to track lock holdings chains to
+> avoid dynmaic memory allocation in its own code. So if you see the
+> warning it means your test has more combination of lock holdings than
+> the array can record. In other words, you reach the resource limitation,
+> and in that sense it makes sense to just ignore it and increase the
+> value: you want to give lockdep enough resource to work, right?
 
-If the I2C bus is connected on the TFP410, then use the register
-status bit to determine connection state.  This is needed, in particular,
-for polling the state when the Hot Plug detect is not connected to
-a controlling CPU via GPIO/IRQ lane.
+It is needed for correct working btrfs. David, am I right?
 
-Signed-off-by: Michael Williamson <michael.williamson@criticallink.com>
-Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
----
- drivers/gpu/drm/bridge/ti-tfp410.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+>
+> > May Be set 99 right away? Or remove such a check condition?
+>
+> That requires having 2^99 * 5 * sizeof(u16) memory for lock holding
+> chains array..
+>
+> However, a few other options we can try in lockdep are:
+>
+> *       warn but not turn off the lockdep: the lock holding chain is
+>         only a cache for what lock holding combination lockdep has ever
+>         see, we also record the dependency in the graph. Without the
+>         lock holding chain, lockdep can still work but just slower.
+>
+> *       allow dynmaic memory allocation in lockdep: I think this might
+>         be OK since we have lockdep_recursion to avoid lockdep code ->
+>         mm code -> lockdep code -> mm code ... deadlock. But maybe I'm
+>         missing something. And even we allow it, the use of memory
+>         doesn't change, you will still need that amout of memory to
+>         track lock holding chains.
+>
+> I'm not sure whether these options are better than just increasing the
+> number, maybe to unblock your ASAP, you can try make it 30 and make sure
+> you have large enough memory to test.
 
-diff --git a/drivers/gpu/drm/bridge/ti-tfp410.c b/drivers/gpu/drm/bridge/ti-tfp410.c
-index 41007d05d584..eeb7202452aa 100644
---- a/drivers/gpu/drm/bridge/ti-tfp410.c
-+++ b/drivers/gpu/drm/bridge/ti-tfp410.c
-@@ -28,6 +28,9 @@
- #define TFP410_BIT_BSEL BIT(2)
- #define TFP410_BIT_DSEL BIT(3)
- 
-+#define TFP410_REG_CTL_2_MODE	0x09
-+#define TFP410_BIT_HTPLG BIT(1)
-+
- static const struct regmap_config tfp410_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
-@@ -105,6 +108,15 @@ static enum drm_connector_status
- tfp410_connector_detect(struct drm_connector *connector, bool force)
- {
- 	struct tfp410 *dvi = drm_connector_to_tfp410(connector);
-+	int ret;
-+
-+	if (dvi->i2c) {
-+		ret = regmap_test_bits(dvi->regmap, TFP410_REG_CTL_2_MODE, TFP410_BIT_HTPLG);
-+		if (ret < 0)
-+			dev_err(dvi->dev, "%s failed to read HTPLG bit : %d\n", __func__, ret);
-+		else
-+			return ret ? connector_status_connected : connector_status_disconnected;
-+	}
- 
- 	return drm_bridge_detect(dvi->next_bridge);
- }
+About just to increase the LOCKDEP_CHAINS_BITS by 1. Where should this
+be done? In vanilla kernel on kernel.org? In a specific distribution?
+or the user must rebuild the kernel himself? Maybe increase
+LOCKDEP_CHAINS_BITS by 1 is most reliable solution, but it difficult
+to distribute to end users because the meaning of using packaged
+distributions is lost (user should change LOCKDEP_CHAINS_BITS in
+config and rebuild the kernel by yourself).
 
--- 
-2.25.1
+It would be great if the chosen value would simply work always
+everywhere. 30? ok! But as I understand, btrfs does not have any
+guarantees for this. David, am I right?
 
+Anyway, thank you for keeping the conversation going.
+
+--=20
+Best Regards,
+Mike Gavrilov.
