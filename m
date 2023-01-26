@@ -2,158 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4830D67C18D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74ADC67C185
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjAZA02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 19:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S235958AbjAZAZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 19:25:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236144AbjAZA0N (ORCPT
+        with ESMTP id S234924AbjAZAZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 19:26:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AD862D08;
-        Wed, 25 Jan 2023 16:25:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADD55B81C65;
-        Thu, 26 Jan 2023 00:25:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A33C433D2;
-        Thu, 26 Jan 2023 00:25:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674692736;
-        bh=rcUgsNadKKTYCHHFUAWb2M6WYShRxFqUqgbGPO0Ctyo=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=USfPHSeVEkf75rA9BZhlvuBgt3C7xXOJz8CoJRO6VnKLCjKvOAvSuVOAAHVjwSZuH
-         JX2uNAzawrEKpN+IqKJBN8lZGMGtxJCIlcga2OR/Jokxood0zP+0bznprQUUG8DKwD
-         QQ4K8QcBAABfVqaYdZkX1GDNvLDUpOqo8lT76FcMgCjtCOTzSgIuGkJP+fXUzUf6dD
-         100h5T1y3ypmPfXHYY5ic0/FD44fBeYBRbgvrs6b+RGsQdN+Y9IGXhlnFK4zWS8fRh
-         7XQZeHxve4rzsEvNEN1VoemmfZArPIZ/VVHfPgRMbQaX3uomO1YRRPxzlGNr8JKnr3
-         01bMP8uE6lW7Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        =?utf-8?q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>, Han Xu <han.xu@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        =?utf-8?q?=EF=BF=BDecki?= <rafal@milecki.pl>,
-        Vaishnav Achath <vaishnav.a@ti.com>,
-        Parshuram Thombare <pthombar@cadence.com>,
-        Leilk Liu <leilk.liu@mediatek.com>,
-        Gabor Juhos <juhosg@openwrt.org>,
-        Bert Vermeulen <bert@biot.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Marek Vasut <marex@denx.de>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Pragnesh Patel <pragnesh.patel@sifive.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Erwan Leray <erwan.leray@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>
-In-Reply-To: <20230124083342.34869-1-krzysztof.kozlowski@linaro.org>
-References: <20230124083342.34869-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 1/2] spi: dt-bindings: drop unneeded quotes
-Message-Id: <167469271489.2661317.15374060752399847689.b4-ty@kernel.org>
-Date:   Thu, 26 Jan 2023 00:25:14 +0000
+        Wed, 25 Jan 2023 19:25:24 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5B062D07;
+        Wed, 25 Jan 2023 16:25:22 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PNBtbt008108;
+        Thu, 26 Jan 2023 00:25:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=+RCrcWbS7CVekzpCj861iGExbrDokQNGKMeHGD8EP0o=;
+ b=b4ExrqTIQm0NEli2wMaNn6b0E/7AApb6T94QigCZeRfNidj84bWoifPt9U+VpY6IRKeE
+ PXE4g7eQyDM+HhAjnfvq+zQVtYHW/bs+336DVhmUdzn/bNFguJXRfbW1eqSheQWFJaOr
+ KkFUE096gL/LEDIGMDXSDkkzLwBTeBVvofUlOArEBD5L9HvfKgUbvKoFDiskKvRU1cGM
+ K5rTRRYAZMT0CSEjgCzI0AnxDkbai4fW3uCLKDo5cjzvsaxnn4Hui7tJfL2TNrLazHqZ
+ FJre1WmuTWHfa5TMe5lXMEiogOdegI0LWIIFO23yKNAjGoCxnKw4WsQES7kqyIfpglYX mw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nb5yn980p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 00:25:17 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30Q0PGUN026775
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 00:25:16 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 25 Jan 2023 16:25:16 -0800
+Date:   Wed, 25 Jan 2023 16:25:15 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Chris Lew <quic_clew@quicinc.com>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/6] rpmsg: glink: Move irq and mbox handling to
+ transports
+Message-ID: <20230126002515.GA2156118@hu-bjorande-lv.qualcomm.com>
+References: <20230109224001.1706516-1-quic_bjorande@quicinc.com>
+ <20230109224001.1706516-5-quic_bjorande@quicinc.com>
+ <4d9606ef-8b5c-4116-f2fe-bdd0d846ac3b@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <4d9606ef-8b5c-4116-f2fe-bdd0d846ac3b@quicinc.com>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: puDlfn8rG7TMjLvcOOKmvNWdEUksMteq
+X-Proofpoint-GUID: puDlfn8rG7TMjLvcOOKmvNWdEUksMteq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_14,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 impostorscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ adultscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301260000
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 09:33:41 +0100, Krzysztof Kozlowski wrote:
-> Cleanup by removing unneeded quotes from refs and redundant blank lines.
-> No functional impact except adjusting to preferred coding style.
+On Tue, Jan 24, 2023 at 10:55:47PM -0800, Chris Lew wrote:
+> On 1/9/2023 2:39 PM, Bjorn Andersson wrote:
+> > diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+[..]
+> > @@ -305,8 +296,7 @@ static void qcom_glink_tx_write(struct qcom_glink *glink,
+> >   static void qcom_glink_tx_kick(struct qcom_glink *glink)
+> >   {
+> > -	mbox_send_message(glink->mbox_chan, NULL);
+> > -	mbox_client_txdone(glink->mbox_chan, 0);
+> > +	glink->tx_pipe->kick(glink->tx_pipe);
 > 
+> I think that we need to check that tx_pipe is not null or validate that
+> tx_pipe is not null in the native register probe.
 > 
 
-Applied to
+The function pointers are const, so it's only during development of a
+transport that this could become NULL, and it's impossible to register
+successfully without hitting that oops.
 
-   broonie/spi.git for-next
+So I don't know if it's worth adding a runtime check for this. It's just
+a handful of checks, but they would run trillions of times for no
+purpose...
 
-Thanks!
+> >   }
+> >   static void qcom_glink_send_read_notify(struct qcom_glink *glink)
+[..]
+> > @@ -35,6 +36,6 @@ struct qcom_glink *qcom_glink_native_probe(struct device *dev,
+> >   					   struct qcom_glink_pipe *tx,
+> >   					   bool intentless);
+> >   void qcom_glink_native_remove(struct qcom_glink *glink);
+> > +void qcom_glink_native_intr(struct qcom_glink *glink);
+> > 
+> 
+> We could rename this away from qcom_glink_native_intr to something like
+> qcom_glink_native_rx. Seeing this in the header, the purpose sounds a bit
+> obscure.
+> 
 
-[1/2] spi: dt-bindings: drop unneeded quotes
-      commit: 99a7fa0e75a3a595a577fb5efa4b84a491f664a2
-[2/2] spi: dt-bindings: cleanup examples - indentation, lowercase hex
-      commit: ee8d422c91d87ebe230769b2cb89f087e56b560a
+Perhaps qcom_glink_native_notify_rx()?
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> > -void qcom_glink_native_unregister(struct qcom_glink *glink);
+> >   #endif
+> > diff --git a/drivers/rpmsg/qcom_glink_rpm.c b/drivers/rpmsg/qcom_glink_rpm.c
+[..]
+> > @@ -277,6 +301,24 @@ struct qcom_glink_smem *qcom_glink_smem_register(struct device *parent,
+> >   		goto err_put_dev;
+> >   	}
+> > +	smem->irq = of_irq_get(smem->dev.of_node, 0);
+> > +	ret = devm_request_irq(&smem->dev, smem->irq, qcom_glink_smem_intr,
+> > +			       IRQF_NO_SUSPEND | IRQF_NO_AUTOEN,
+> > +			       "glink-smem", smem);
+> 
+> Are we adding dropping IRQF_NO_SUSPEND and adding enable irq wake for smem
+> in follow up change?
+> 
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Yes, while I haven't reviewed all the details of that discussion again,
+I was planning to follow up with something on that after this has been
+merged.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+That way we can discuss/review that separately.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+> > +	if (ret) {
+> > +		dev_err(&smem->dev, "failed to request IRQ\n");
+> > +		goto err_put_dev;
+> > +	}
+> > +
+[..]
+> > @@ -314,8 +361,13 @@ void qcom_glink_smem_unregister(struct qcom_glink_smem *smem)
+> >   {
+> >   	struct qcom_glink *glink = smem->glink;
+> > +	disable_irq(smem->irq);
+> > +
+> >   	qcom_glink_native_remove(glink);
+> > -	qcom_glink_native_unregister(glink);
+> > +
+> > +	device_unregister(&smem->dev);
+> > +
+> > +	mbox_free_channel(smem->mbox_chan);
+> 
+> This might need to be moved above device_unregister. I think the release
+> function frees the smem structure.
+> 
 
-Thanks,
-Mark
+Yes, that looks correct.
 
+Thank you for the review,
+Bjorn
+
+> >   }
+> >   EXPORT_SYMBOL_GPL(qcom_glink_smem_unregister);
