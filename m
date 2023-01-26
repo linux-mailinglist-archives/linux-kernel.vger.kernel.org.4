@@ -2,170 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7023167C606
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DC267C60C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:40:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236464AbjAZIjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 03:39:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S235118AbjAZIk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 03:40:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236402AbjAZIjU (ORCPT
+        with ESMTP id S236654AbjAZIkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 03:39:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E3F6C117
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 00:38:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674722278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=03govaco/k7QRuYG8wH+zgOyem44zOrE/2g3qGYBeec=;
-        b=FWqtu4MW7Sx/608JPLVCggviPdHcgpHYc3GlhLf0tfUZCuclY6o7zOgg4Yy1zZUuJekJt4
-        A+Jmf/TK55QXZwD5WxPTH6Ily505lVNN5GVyixx9PYGoUCmZO/1VDiLk9VYMH8OOM+pJbS
-        K+6v/KIC9smuG5wp3WX1pENFBMLb7Rs=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-393-sC-wqvVoPXSZVMEsA3u2hw-1; Thu, 26 Jan 2023 03:37:57 -0500
-X-MC-Unique: sC-wqvVoPXSZVMEsA3u2hw-1
-Received: by mail-wm1-f72.google.com with SMTP id l8-20020a05600c1d0800b003dc25f6bb5dso569414wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 00:37:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=03govaco/k7QRuYG8wH+zgOyem44zOrE/2g3qGYBeec=;
-        b=4j080u1sh+bfAv4B0IZcWjI3ZDjGKcW/Et6Qn5XkI60DLM0URUJQ37I+ZcLwBBV8Jz
-         p/3mqscOpS7LYVV7XS7UlJssR3TAf5S4GkdmURqX+zxeBjOBJS4C2xA5qt42xMfNMl7p
-         eCyPt/cC4sJ7k2tgXdg/Uj7kvh9hwy7FaFDpjVSrqWt8SliumpY5QwLIklAk9poK0225
-         R1EOQ66XAUGKq5TuiWNxzhauYv6OEUraSEzxPztNQ00lNooJo/nQJW+NTo5to8GefUBS
-         FWm1IQt8D1idJzLQphOvwdk8tO7ixv1gQi9xzbMryp73gjVJOtPB2gtvHYISgOVBoXWE
-         6ySQ==
-X-Gm-Message-State: AO0yUKVprbj992shZAPiik834/VVSwVi47Xj5pdnL2M/P3lsGOzDBc4F
-        GNu24WsEEnY0YslzxxlYgs2CSBUbYiwHoTWP4I4fLoLmlrlcYIAfFS53VVsDjSwOev/YTkYGC6y
-        H9xDhR9pstFfjzSncK+Gg5Jw5
-X-Received: by 2002:a05:600c:46cb:b0:3dc:1d62:1e9c with SMTP id q11-20020a05600c46cb00b003dc1d621e9cmr4576482wmo.41.1674722276212;
-        Thu, 26 Jan 2023 00:37:56 -0800 (PST)
-X-Google-Smtp-Source: AK7set8iyfb7Q4H7MkzbfZ3IksQgPv9DTJio1Pn6vTBNqXG4VFnEqYcPyKuzkUvU34RxL6c9T07KNw==
-X-Received: by 2002:a05:600c:46cb:b0:3dc:1d62:1e9c with SMTP id q11-20020a05600c46cb00b003dc1d621e9cmr4576466wmo.41.1674722275766;
-        Thu, 26 Jan 2023 00:37:55 -0800 (PST)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id h20-20020a05600c351400b003dc1300eab0sm4508629wmq.33.2023.01.26.00.37.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 00:37:55 -0800 (PST)
-Message-ID: <52af321f-175b-9fa9-10f0-ac2bba04c677@redhat.com>
-Date:   Thu, 26 Jan 2023 09:37:54 +0100
+        Thu, 26 Jan 2023 03:40:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F8228D31;
+        Thu, 26 Jan 2023 00:40:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80FE161755;
+        Thu, 26 Jan 2023 08:40:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9507C433D2;
+        Thu, 26 Jan 2023 08:40:01 +0000 (UTC)
+Message-ID: <7d1a375a-c3d1-0f8e-4d69-10dedacf6974@xs4all.nl>
+Date:   Thu, 26 Jan 2023 09:39:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH mm-unstable v2 1/6] mm: Add folio_estimated_mapcount()
-To:     Vishal Moola <vishal.moola@gmail.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org
-References: <20230124012210.13963-1-vishal.moola@gmail.com>
- <20230124012210.13963-2-vishal.moola@gmail.com>
- <477bbc1e-a60a-cfce-d31e-0b4bdd5f6429@redhat.com>
- <526e5156-6c4b-9f2c-1637-2f83c1dfea1e@redhat.com>
- <53d86764-d155-8d97-1a4d-7e701848c950@redhat.com>
- <CAOzc2pyV9-wq04NRKVE1vRj7PnRF7g+jSFFj-oKYuZk-t9smBA@mail.gmail.com>
+Subject: Re: [PATCH v5 4/6] media: platform: visconti: Add Toshiba Visconti
+ Video Input Interface driver v4l2 controls handler
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAOzc2pyV9-wq04NRKVE1vRj7PnRF7g+jSFFj-oKYuZk-t9smBA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     yuji2.ishikawa@toshiba.co.jp, laurent.pinchart@ideasonboard.com,
+        mchehab@kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rafael.j.wysocki@intel.com, broonie@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230111022433.25950-1-yuji2.ishikawa@toshiba.co.jp>
+ <20230111022433.25950-5-yuji2.ishikawa@toshiba.co.jp>
+ <741cc02e-9d72-db59-171a-14bbd7925c7c@xs4all.nl>
+ <TYAPR01MB6201386D11891171A984744792CF9@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <TYAPR01MB6201386D11891171A984744792CF9@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.01.23 23:09, Vishal Moola wrote:
-> On Wed, Jan 25, 2023 at 1:29 PM David Hildenbrand <david@redhat.com> wrote:
+On 26/01/2023 01:38, yuji2.ishikawa@toshiba.co.jp wrote:
+>>> +#define VISCONTI_VIIF_DPC_TABLE_SIZE 8192
+>>> +static int viif_l1_set_dpc(struct viif_device *viif_dev, struct viif_l1_dpc_config
+>> *l1_dpc)
+>>> +{
+>>> +	uintptr_t table_h_paddr = 0;
+>>> +	uintptr_t table_m_paddr = 0;
+>>> +	uintptr_t table_l_paddr = 0;
+>>> +	unsigned long irqflags;
+>>> +	int ret;
+>>> +
+>>> +	if (l1_dpc->table_h_addr) {
+>>> +		if (copy_from_user(viif_dev->table_vaddr->dpc_table_h,
+>>> +				   u64_to_user_ptr(l1_dpc->table_h_addr),
+>>> +				   VISCONTI_VIIF_DPC_TABLE_SIZE))
+>>> +			return -EFAULT;
 >>
->> On 25.01.23 11:24, David Hildenbrand wrote:
->>> On 25.01.23 11:20, David Hildenbrand wrote:
->>>> On 24.01.23 02:22, Vishal Moola (Oracle) wrote:
->>>>> folio_estimated_mapcount() takes in a folio and calls page_mapcount() on
->>>>> the first page of that folio.
->>>>>
->>>>> This is necessary for folio conversions where we only care about either the
->>>>> entire_mapcount of a large folio, or the mapcount of a not large folio.
->>>>>
->>>>> This is in contrast to folio_mapcount() which calculates the total
->>>>> number of the times a folio and its subpages are mapped.
->>>>>
->>>>> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
->>>>> ---
->>>>>      include/linux/mm.h | 5 +++++
->>>>>      1 file changed, 5 insertions(+)
->>>>>
->>>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
->>>>> index c9db257f09b3..543c360f7ecc 100644
->>>>> --- a/include/linux/mm.h
->>>>> +++ b/include/linux/mm.h
->>>>> @@ -875,6 +875,11 @@ static inline int page_mapcount(struct page *page)
->>>>>              return mapcount;
->>>>>      }
->>>>>
->>>>> +static inline int folio_estimated_mapcount(struct folio *folio)
->>>>> +{
->>>>> +   return page_mapcount(folio_page(folio, 0));
->>>>> +}
->>>>> +
->>>>>      int folio_total_mapcount(struct folio *folio);
->>>>>
->>>>>      /**
->>>>
->>>> I'm sorry, but "estimated" as absolutely unclear semantics. You could
->>>> have a THP mapped into 9999 processes using THP and the estimation would
->>>> be "0".
->>>
->>> ... or would it be 9999 ? What about a PMD-mapped THP? What about a
->>> partially unmapped THP?
->>>
->>> What are we estimating?
+>> NACK!
 >>
->> Thinking about mapcounts again, might not have been my smartest moment.
->>
->> What we return here is the precise number of times the first subpage is
->> mapped (via the large folio and directly). That's supposed to be an
->> estimate for the number of times any subpage part of the folio is mapped.
->>
->> I really don't know a better name, but folio_estimated_mapcount() does
->> not feel completely right to me and triggere dmy confusion in the first
->> place ... hm ...
+>> I thought those addresses in a struct were iffy. This is not supported, it
+>> basically bypasses the whole control framework.
 > 
-> I can understand the confusion, but I can't think of a better name
-> either myself. I'll go ahead and add a comment to make the purpose
-> of this function more clear. Looks like I'll have to move it to get rid
-> of the build warnings/errors anyway.
+> I understand. 
+> 
+>> The way to do this is to create separate array controls for these tables.
+>> And table_h_addr becomes a simple 0 or 1 value, indicating whether to use
+>> the table set by that control. For small arrays it is also an option to
+>> embed them in the control structure.
+> 
+> As I wrote in reply for patch 2/6, I thought embedding is the only solution.
+> Thank you for giving another plan: adding controls for tables.
+> When I use individual controls for tables, are there some orderings between controls?
+>  -- such that control DPC_TABLE_{H,M,L} should be configured before SET_DPC
 
-The issue is that we're not estimating the mapcount of the folio, so the 
-name is very misleading ... I think you really want to avoid the term 
-mapcount completely in that context. We're just using the #mappings of 
-the first subpage to determine something differently.
+There is no ordering dependency. But you can cluster controls:
 
-Thinking about it, I guess "folio_estimated_sharers()" might be what we 
-actually want to name it. Then you can comment how we estimate sharers 
-by looking at into how many page tables the first subpage is currently 
-mapped, and assume the same holds true for the other subpages.
+https://linuxtv.org/downloads/v4l-dvb-apis-new/driver-api/v4l2-controls.html#control-clusters
 
-It's unreliable because other subpages might behave differently, we 
-might not be holding the pagelock to stabilize, and we're not looking at 
-indirect mappings via the swapcache. But it's a comapratively good 
-estimate for most scenarios I guess.
+The idea is that userspace sets all the related controls with one VIDIOC_S_EXT_CTRLS
+ioctl, and then for the clustered controls the s_ctrl callback is called only
+once.
 
--- 
-Thanks,
+You can also check in try_ctrl if the controls in a cluster are sane. E.g.
+if control A has value 1, and that requires that control B has a value >= 5,
+then try_ctrl can verify that. Normally controls are independent from one
+another, but clustering will link them together.
 
-David / dhildenb
+It's really what you want here. A good example is here: drivers/media/common/cx2341x.c
+It's used by several PCI drivers that use this MPEG codec chipset, and it uses
+clusters and also implements try_ctrl.
+
+> 
+>> Are these l, h and m tables independent from one another? I.e. is it possible
+>> to set l but not h and m? I suspect it is all or nothing, and in that case you
+>> need only a single control to set all three tables (a two dimensional array).
+> 
+> These three tables can be setup individually.
+> 
+>> Anyway, the same issue applies to all the controls were you pass addresses for
+>> tables, that all needs to change.
+> 
+> All right. These controls must be fixed.
+> 
+>>> +		table_h_paddr =
+>> (uintptr_t)viif_dev->table_paddr->dpc_table_h;
+>>> +	}
+>>> +	if (l1_dpc->table_m_addr) {
+>>> +		if (copy_from_user(viif_dev->table_vaddr->dpc_table_m,
+>>> +				   u64_to_user_ptr(l1_dpc->table_m_addr),
+>>> +				   VISCONTI_VIIF_DPC_TABLE_SIZE))
+>>> +			return -EFAULT;
+>>> +		table_m_paddr =
+>> (uintptr_t)viif_dev->table_paddr->dpc_table_m;
+>>> +	}
+>>> +	if (l1_dpc->table_l_addr) {
+>>> +		if (copy_from_user(viif_dev->table_vaddr->dpc_table_l,
+>>> +				   u64_to_user_ptr(l1_dpc->table_l_addr),
+>>> +				   VISCONTI_VIIF_DPC_TABLE_SIZE))
+>>> +			return -EFAULT;
+>>> +		table_l_paddr = (uintptr_t)viif_dev->table_paddr->dpc_table_l;
+>>> +	}
+>>> +
+>>> +	spin_lock_irqsave(&viif_dev->lock, irqflags);
+>>> +	hwd_viif_isp_guard_start(viif_dev->hwd_res);
+>>> +	ret = hwd_viif_l1_set_dpc_table_transmission(viif_dev->hwd_res,
+>> table_h_paddr,
+>>> +						     table_m_paddr,
+>> table_l_paddr);
+>>> +	if (ret)
+>>> +		goto err;
+>>> +
+>>> +	ret = hwd_viif_l1_set_dpc(viif_dev->hwd_res, &l1_dpc->param_h,
+>> &l1_dpc->param_m,
+>>> +				  &l1_dpc->param_l);
+>>> +
+>>> +err:
+>>> +	hwd_viif_isp_guard_end(viif_dev->hwd_res);
+>>> +	spin_unlock_irqrestore(&viif_dev->lock, irqflags);
+>>> +	return ret;
+>>> +}
+
+<snip>
+
+>>> +static int visconti_viif_isp_get_ctrl(struct v4l2_ctrl *ctrl)
+>>> +{
+>>> +	struct viif_device *viif_dev = ctrl->priv;
+>>> +
+>>> +	pr_info("isp_get_ctrl: %s", ctrl->name);
+>>> +	if (pm_runtime_status_suspended(viif_dev->dev)) {
+>>> +		pr_info("warning: visconti viif HW is not powered");
+>>> +		return 0;
+>>> +	}
+>>> +
+>>> +	switch (ctrl->id) {
+>>> +	case V4L2_CID_VISCONTI_VIIF_CSI2RX_GET_CALIBRATION_STATUS:
+>>> +		return viif_csi2rx_get_calibration_status(viif_dev,
+>> ctrl->p_new.p);
+>>> +	case V4L2_CID_VISCONTI_VIIF_CSI2RX_GET_ERR_STATUS:
+>>> +		return viif_csi2rx_get_err_status(viif_dev, ctrl->p_new.p);
+>>> +	case V4L2_CID_VISCONTI_VIIF_GET_LAST_CAPTURE_STATUS:
+>>> +		return viif_isp_get_last_capture_status(viif_dev,
+>> ctrl->p_new.p);
+>>> +	case V4L2_CID_VISCONTI_VIIF_GET_REPORTED_ERRORS:
+>>> +		return viif_isp_get_reported_errors(viif_dev, ctrl->p_new.p);
+>>
+>> My question for these four controls is: are these really volatile controls?
+>> A volatile control means that the hardware can change the registers at any
+>> time without telling the CPU about it via an interrupt or some similar
+>> mechanism.
+>>
+>> If there *is* such a mechanism, then it is not a volatile control, instead the
+>> driver has to update the control value whenever the HW informs it about the
+>> new value.
+>>
+>> I can't tell, so that's why I ask here to double check.
+>>
+> 
+> I quickly checked HW and found ...
+> 
+> * CSI2RX_GET_CALIBRATION_STATUS: No interrupt mechanism
+
+So that remains volatile.
+
+> * CSI2RX_GET_ERR_STATUS: An interrupt handler can be used
+> * GET_LAST_CAPTURE_STATUS: information can be updated at Vsync interrupt
+
+For these two you can use v4l2_ctrl_s_ctrl to set the new value.
+Note that this function takes a mutex, so you might not be able
+to call it directly from the irq handler.
+
+> * GET_LAST_ERROR: An interrupt handler can be used
+> 
+> I'll try building control values while running interrupt services.
+> Do I have to do G_EXT_CTRLS followed by S_EXT_CTRLS if I want Read-To-Clear operation?
+> Currently, GET_LAST_ERROR control reports accumerated errors since last read.
+
+Interesting use-case. I think this can stay a volatile control. Make sure
+to document that reading this control will clear the values.
+
+> 
+>>> +	default:
+>>> +		pr_info("unknown_ctrl: id=%08X val=%d", ctrl->id, ctrl->val);
+>>> +		break;
+>>> +	}
+>>> +	return 0;
+>>> +}
+
+Regards,
+
+	Hans
 
