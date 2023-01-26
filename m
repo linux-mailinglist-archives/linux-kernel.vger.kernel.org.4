@@ -2,163 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E0167CEEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D2C67CED7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:51:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbjAZOvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:51:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S230371AbjAZOvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbjAZOvt (ORCPT
+        with ESMTP id S229446AbjAZOvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:51:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C7A23862;
-        Thu, 26 Jan 2023 06:51:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5798A61842;
-        Thu, 26 Jan 2023 14:51:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3695EC433EF;
-        Thu, 26 Jan 2023 14:51:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674744706;
-        bh=vTtNm5B4uxkFGkyUcD6bt7bUv740cC5zoLQ3n4iCXig=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r54XDevqCxaIthjhpV90e/3PReNDit6CxkjYziBMldcr+DpwGPcGH7s0yFhPlYu8B
-         NohDoJ7KVIUCX5Zs7V0ydKB7t9XQRchAYOCR8XLnEbVPCZ8e7MIHv0UEcp73VODAq8
-         aFhcsGcrVCc28IZRly/gODnl3cguu4R9trJCc4u2GtQ9ygUwR4IFSGftEKj188geBR
-         3987kGANtDLWA/GzBI6W69E/F450ClXU14kAngo3y+A1wCivQR2InkOef4HeCwIwVj
-         QYEspA95Wv7WS3mfCUr9QMGnsDd2HsZvTUBOWl52ZSZiQBqHvpwy1Yy3PsmXixNWVQ
-         B28KDvwGClVRQ==
-Date:   Thu, 26 Jan 2023 16:50:59 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        chenhuacai@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        qianweili@huawei.com, wangzhou1@hisilicon.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-        airlied@gmail.com, daniel@ffwll.ch,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, l.stach@pengutronix.de,
-        krzysztof.kozlowski@linaro.org, patrik.r.jakobsson@gmail.com,
-        matthias.bgg@gmail.com, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
-        tomba@kernel.org, hjc@rock-chips.com, heiko@sntech.de,
-        ray.huang@amd.com, kraxel@redhat.com, sre@kernel.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        dimitri.sivanich@hpe.com, zhangfei.gao@linaro.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        dgilbert@interlog.com, hdegoede@redhat.com, mst@redhat.com,
-        jasowang@redhat.com, alex.williamson@redhat.com, deller@gmx.de,
-        jayalk@intworks.biz, viro@zeniv.linux.org.uk, nico@fluxnic.net,
-        xiang@kernel.org, chao@kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, miklos@szeredi.hu,
-        mike.kravetz@oracle.com, muchun.song@linux.dev, bhe@redhat.com,
-        andrii@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, perex@perex.cz, tiwai@suse.com,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-graphics-maintainer@vmware.com,
-        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org,
-        loongarch@lists.linux.dev, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, nvdimm@lists.linux.dev,
-        dmaengine@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-accelerators@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        devel@lists.orangefs.org, kexec@lists.infradead.org,
-        linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
-        selinux@vger.kernel.org, alsa-devel@alsa-project.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v2 1/6] mm: introduce vma->vm_flags modifier functions
-Message-ID: <Y9KTUw/04FmBVplw@kernel.org>
-References: <20230125083851.27759-1-surenb@google.com>
- <20230125083851.27759-2-surenb@google.com>
- <Y9JFFYjfJf9uDijE@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9JFFYjfJf9uDijE@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 26 Jan 2023 09:51:43 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B840E3C3D;
+        Thu, 26 Jan 2023 06:51:42 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id B5A933200927;
+        Thu, 26 Jan 2023 09:51:41 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 26 Jan 2023 09:51:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674744701; x=1674831101; bh=fp8XG8ujSp
+        BTUo0gvG07eg1nSLzR3qG3Vf+yqNSrM64=; b=u8ZXKGwFIV3GRy5HcDIrBBe5uo
+        qxngDC3z5EOMah3s3OQb8h+tQET1qM9+ti6sdsFrLGVE50O6/izze0AE4raPxq5n
+        hU6A5li03/xI15nfSBMHevkLIrw4AaoQzhvnk1f+7YDqZqjDQCcI79wodqOrdzVm
+        McV1W3uKA2UMj4zDFEHkvhCbJFP901RaGLmAmlc9TSb5unfJ4OukWgKsOgtVPYvj
+        eah3Dz16Tj6wkgGvPpxpvgVDrwX9lNVzrt9QrtoiAndhw3vj9/jYhYpcu5xvLQTg
+        nyP7ql0/PLTUlsXlf7NkmFg2MSpliBV4OMDHSbgJjzsf7a0ecRD+ODCXpMRg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674744701; x=1674831101; bh=fp8XG8ujSpBTUo0gvG07eg1nSLzR
+        3qG3Vf+yqNSrM64=; b=hLHGwF2HWE1qc3yhSfawZyB6Fgrz0L+l0iSURq2wEg8H
+        x32mjaiUoCQiT35Y3NFl+XzmJjg3ICV/m9yKcPhhY7/ezAu17Q+pfsCJPxJLzT85
+        dZX6MwJef4UNUVWodUMdGQXQrshzg8dYtDJmuNaS1qTk/KCcr27RtLgU3UDaQ0SI
+        8sCJZ0k5RN7qO3G+6kteTU8guA7PRmoiMI2MJjjH7Bz3vbuG/9wIOKGE5B8aslxn
+        afTSHNlx5Y872Y3jPSjbHW/1hUkzirkSFg2yusv2B4bergdHQX4qyb8g+DVs+URq
+        2Ze4Ezs+4YrpazzALXXUc1BoYSTMI2SaITj++xuoFQ==
+X-ME-Sender: <xms:fZPSY4h8SfK1gkKAFPI5nbjn5ZT9BwF3YeyPIjQcoH57kiBmBUZ8Xg>
+    <xme:fZPSYxBSgjSjJRFLWrKiC2RYAj3Tz3Fo2uw_ONaqc7nlnTqSaJlp0Komdoi8Pp7ul
+    eSk0Fl-meTg7W3jweQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:fZPSYwGpV-_Pu-WrrOR_ghfIkPzBg0qJOCq0-saytHP7gL_lJw7BSQ>
+    <xmx:fZPSY5RH-ZlxFbBcmxeMzWA4gXKZ3yoZDEuEX1Tp7Ap8XRRt30uiDw>
+    <xmx:fZPSY1w2Jha4WVanZJnBfv7buoul5XTtJOfTlGRnXB0rPezkcmx2hg>
+    <xmx:fZPSY4pk1gQHybv4IdQGcsIsXStWDyNVLBPVJuu1EoN5wmsY_X_MZg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 004F0B60086; Thu, 26 Jan 2023 09:51:40 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <ba57a2f1-f14a-4f92-b6f2-22f92c8d3de5@app.fastmail.com>
+In-Reply-To: <Y9KIeXq866C+VKV+@smile.fi.intel.com>
+References: <20230126132801.2042371-1-arnd@kernel.org>
+ <20230126132801.2042371-7-arnd@kernel.org>
+ <Y9KIeXq866C+VKV+@smile.fi.intel.com>
+Date:   Thu, 26 Jan 2023 15:51:21 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/8] gpiolib: split linux/gpio/driver.h out of linux/gpio.h
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:17:09AM +0200, Mike Rapoport wrote:
-> On Wed, Jan 25, 2023 at 12:38:46AM -0800, Suren Baghdasaryan wrote:
-> > vm_flags are among VMA attributes which affect decisions like VMA merging
-> > and splitting. Therefore all vm_flags modifications are performed after
-> > taking exclusive mmap_lock to prevent vm_flags updates racing with such
-> > operations. Introduce modifier functions for vm_flags to be used whenever
-> > flags are updated. This way we can better check and control correct
-> > locking behavior during these updates.
-> > 
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  include/linux/mm.h       | 37 +++++++++++++++++++++++++++++++++++++
-> >  include/linux/mm_types.h |  8 +++++++-
-> >  2 files changed, 44 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index c2f62bdce134..b71f2809caac 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@ -627,6 +627,43 @@ static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
-> >  	INIT_LIST_HEAD(&vma->anon_vma_chain);
-> >  }
-> >  
-> > +/* Use when VMA is not part of the VMA tree and needs no locking */
-> > +static inline void init_vm_flags(struct vm_area_struct *vma,
-> > +				 unsigned long flags)
-> 
-> I'd suggest to make it vm_flags_init() etc.
+On Thu, Jan 26, 2023, at 15:04, Andy Shevchenko wrote:
+> On Thu, Jan 26, 2023 at 02:27:59PM +0100, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> Almost all gpio drivers include linux/gpio/driver.h, and other
+>> files should not rely on includes from this header.
+>> 
+>> Remove the indirect include from here and include the correct
+>> headers directly from where they are used.
+>
+> Some minor nit-picks below, otherwise
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>
+>> +#include <linux/of.h>
+>
+> Taking the limited context into account, I think this makes more sense to be
+> placed before platform_device.h as to keep longer _sorted_ chain.
+>
+>>  #include <linux/gpio/gpio-reg.h>
+>>  #include <linux/gpio/machine.h>
+>> +#include <linux/gpio/driver.h>
+>
+> Similar. Keep it more sorted.
+>
 
-Thinking more about it, it will be even clearer to name these vma_flags_xyz()
+>> +#include <linux/gpio/driver.h>
+>>  #include <linux/gpio.h>
+>
+> Here is the opposite ordering to the above similar cases. Swap?
 
-> Except that
-> 
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> 
+Changed all as suggested, thanks!
 
---
-Sincerely yours,
-Mike.
+     Arnd
