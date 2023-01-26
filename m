@@ -2,226 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BD867D214
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCF167D219
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbjAZQrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
+        id S229548AbjAZQsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:48:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjAZQru (ORCPT
+        with ESMTP id S229851AbjAZQsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:47:50 -0500
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB533A91;
-        Thu, 26 Jan 2023 08:47:47 -0800 (PST)
-Received: by mail-ej1-f43.google.com with SMTP id bk15so6641988ejb.9;
-        Thu, 26 Jan 2023 08:47:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tVtxoYcAJiNZA/xK4oj3uHYKyVzBhkS4aamUvP5k4So=;
-        b=wWKqY2USF0eaxGQx7jeJBfbatlWb7yCGbkjtp04oEH19u3+t7iXk0HgkM+c235F4AB
-         mtcWpiIiztQMxG0Z2vNFKJTnUDHeuXHrLrOjOa0HSy0rLgbJZqwtJIavzUEb+y9I7Kxm
-         0nS0smo1/0Sz5LLSF1gcsoq4couBoDXIs9T1Z06FkDw1JsfG4E/1v0em6RSmhkV1fP4k
-         ZU+lfYIFUriIDKzLLNOU1wYIusfaPDgYLJmxGzlJSifa5Omq88phMveoP11197oLtNlA
-         ej2RvjjuWvkZIxutDiLb7QEVL8zR4+Kjh5/TJNBypQcUxtLC/QFMvWyluF323OGdJb9u
-         M9NA==
-X-Gm-Message-State: AFqh2kos9Qiz6X2Au7h+SlqIhLlTrbAlyvfLX/IXP3HMpBj1gxBj5fDF
-        wHs9vgVA+++IrsR0h6XDqlimjFIpgBKp5DDLFRk=
-X-Google-Smtp-Source: AMrXdXtLNQgRLnkWewPCvyuMjfKKVUnX2TdqXxFc3uMk23jqDgCN/knZnC+Aqcyt4vOf9Qs9Dtj/UOOAuMESPJ7nw4M=
-X-Received: by 2002:a17:907:d10f:b0:872:be4b:1b65 with SMTP id
- uy15-20020a170907d10f00b00872be4b1b65mr5357694ejc.125.1674751665699; Thu, 26
- Jan 2023 08:47:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org> <20230118181622.33335-3-daniel.lezcano@linaro.org>
-In-Reply-To: <20230118181622.33335-3-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 26 Jan 2023 17:47:34 +0100
-Message-ID: <CAJZ5v0jbHR03UyJBMmBBYnSsZmGG0OXqLJvMfXxXKVn4Np4Egw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for intel_soc_dts_iosf
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>
+        Thu, 26 Jan 2023 11:48:04 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789D310AB8;
+        Thu, 26 Jan 2023 08:48:01 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QG0E2U022895;
+        Thu, 26 Jan 2023 16:47:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=H9BGEl0RtETnTYX/w1MPim2M0yzG/FokCSxhsZYeRJM=;
+ b=Mfy0tUgUoqrDZqveTcFR1bNs2IYgRbrbB03FWbUAz59uSDUqauXnONxNhAfUvO/Uwfel
+ k+FtrJ3gI5P6j9EaHv2iyOKlRqPfQdJCAnGrSz0qJdKP0GoYfXvJtAgmK1Nb7Vet6E/M
+ vH2fAIHOyLvi5NdOcZE5rPRRG6K6CPG+Gq5g+oMBQutN0lt/BXaibf5fYis+KxEf+RqA
+ DfNGT9dObSSp4FNrxBb+Bxh+DpzcGIg1SF4VMRKSzHaOyX6Zj2+w3/TToJomM1DjgvIb
+ b0PPY3DeDTHpZDw2O+z5keNzjPW7TzE5yQeHjIXNcirwuniUa3BVsUanUioX3272dgHq ow== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbvnjs7u5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 16:47:58 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QGVoCX004738;
+        Thu, 26 Jan 2023 16:47:57 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbvnjs7tc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 16:47:57 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QEw0cX032068;
+        Thu, 26 Jan 2023 16:47:55 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3n87p64qy3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 16:47:54 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QGlocr24510768
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 26 Jan 2023 16:47:50 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 78B0B20043;
+        Thu, 26 Jan 2023 16:47:50 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 438B820063;
+        Thu, 26 Jan 2023 16:47:44 +0000 (GMT)
+Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.157.249])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 26 Jan 2023 16:47:44 +0000 (GMT)
+Message-ID: <6d870c61856f84c9c48262eecf9001012163edbb.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 08/14] KVM: s390: Move common code of mem_op
+ functions into functions
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Janosch Frank <frankja@linux.ibm.com>,
+        Thomas Huth <thuth@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Date:   Thu, 26 Jan 2023 17:47:43 +0100
+In-Reply-To: <dbd8204a-5413-b593-7ede-1c5ea7ee4425@linux.ibm.com>
+References: <20230125212608.1860251-1-scgl@linux.ibm.com>
+         <20230125212608.1860251-9-scgl@linux.ibm.com>
+         <a1141cf5-8c44-5e9e-688c-c9dab3ebe8d4@redhat.com>
+         <dbd8204a-5413-b593-7ede-1c5ea7ee4425@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6axKEfGUJckkU8JWwTO_v_qeHDGBBlFa
+X-Proofpoint-GUID: tWQ6c_HrWz5wNnhZiQ1Xq5oiF-SUuYm6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-26_07,2023-01-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxlogscore=999 clxscore=1015 mlxscore=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301260160
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> From: Daniel Lezcano <daniel.lezcano@kernel.org>
->
-> The thermal framework gives the possibility to register the trip
-> points with the thermal zone. When that is done, no get_trip_* ops are
-> needed and they can be removed.
->
-> Convert ops content logic into generic trip points and register them with the
-> thermal zone.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/intel/intel_soc_dts_iosf.c | 58 ++++++++--------------
->  drivers/thermal/intel/intel_soc_dts_iosf.h |  2 +-
->  2 files changed, 23 insertions(+), 37 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
-> index 342b0bb5a56d..130c416ec601 100644
-> --- a/drivers/thermal/intel/intel_soc_dts_iosf.c
-> +++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
-> @@ -71,20 +71,13 @@ static int get_tj_max(u32 *tj_max)
->         return err;
->  }
->
-> -static int sys_get_trip_temp(struct thermal_zone_device *tzd, int trip,
-> -                            int *temp)
-> +static int get_trip_temp(struct intel_soc_dts_sensors *sensors, int trip, int *temp)
->  {
->         int status;
->         u32 out;
-> -       struct intel_soc_dts_sensor_entry *dts;
-> -       struct intel_soc_dts_sensors *sensors;
->
-> -       dts = tzd->devdata;
-> -       sensors = dts->sensors;
-> -       mutex_lock(&sensors->dts_update_lock);
->         status = iosf_mbi_read(BT_MBI_UNIT_PMC, MBI_REG_READ,
->                                SOC_DTS_OFFSET_PTPS, &out);
-> -       mutex_unlock(&sensors->dts_update_lock);
->         if (status)
->                 return status;
->
-> @@ -173,8 +166,13 @@ static int update_trip_temp(struct intel_soc_dts_sensor_entry *dts,
->         if (status)
->                 goto err_restore_te_out;
->
-> -       dts->trip_types[thres_index] = trip_type;
-> -
-> +       status = get_trip_temp(sensors, thres_index, &temp);
-> +       if (status)
-> +               goto err_restore_te_out;
-> +
-> +       dts->trips[thres_index].type = trip_type;
-> +       dts->trips[thres_index].temperature = temp;
+On Thu, 2023-01-26 at 14:02 +0100, Janosch Frank wrote:
+> On 1/26/23 07:48, Thomas Huth wrote:
+> > On 25/01/2023 22.26, Janis Schoetterl-Glausch wrote:
+> > > The vcpu and vm mem_op ioctl implementations share some functionality=
+.
+> > > Move argument checking and buffer allocation into functions and call
+> > > them from both implementations.
+> > > This allows code reuse in case of additional future mem_op operations=
+.
+> > >=20
+> > > Suggested-by: Janosch Frank <frankja@linux.ibm.com>
+> > > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> > > ---
+> > >    arch/s390/kvm/kvm-s390.c | 80 +++++++++++++++++++++---------------=
+----
+> > >    1 file changed, 42 insertions(+), 38 deletions(-)
+> > >=20
+> > > diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> > > index e4890e04b210..e0dfaa195949 100644
+> > > --- a/arch/s390/kvm/kvm-s390.c
+> > > +++ b/arch/s390/kvm/kvm-s390.c
+> > > @@ -2764,24 +2764,44 @@ static int kvm_s390_handle_pv(struct kvm *kvm=
+, struct kvm_pv_cmd *cmd)
+> > >    	return r;
+> > >    }
+> > >   =20
+> > > -static bool access_key_invalid(u8 access_key)
+> > > +static int mem_op_validate_common(struct kvm_s390_mem_op *mop, u64 s=
+upported_flags)
+> > >    {
+> > > -	return access_key > 0xf;
+> > > +	if (mop->flags & ~supported_flags || !mop->size)
+> > > +		return -EINVAL;
+> > > +	if (mop->size > MEM_OP_MAX_SIZE)
+> > > +		return -E2BIG;
+> > > +	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
+> > > +		if (mop->key > 0xf)
+> > > +			return -EINVAL;
+> > > +	} else {
+> > > +		mop->key =3D 0;
+> > > +	}
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static void *mem_op_alloc_buf(struct kvm_s390_mem_op *mop)
+> > > +{
+> > > +	void *buf;
+> > > +
+> > > +	if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)
+> > > +		return NULL;
+> > > +	buf =3D vmalloc(mop->size);
+> > > +	if (!buf)
+> > > +		return ERR_PTR(-ENOMEM);
+> > > +	return buf;
+> > >    }
+> > >   =20
+> > >    static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem=
+_op *mop)
+> > >    {
+> > >    	void __user *uaddr =3D (void __user *)mop->buf;
+> > > -	u64 supported_flags;
+> > >    	void *tmpbuf =3D NULL;
+> >=20
+> > You likely can now remove the "=3D NULL" here, I guess?
+> >=20
+> > >    	int r, srcu_idx;
+> > >   =20
+> > > -	supported_flags =3D KVM_S390_MEMOP_F_SKEY_PROTECTION
+> > > -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
+> > > -	if (mop->flags & ~supported_flags || !mop->size)
+> > > -		return -EINVAL;
+> > > -	if (mop->size > MEM_OP_MAX_SIZE)
+> > > -		return -E2BIG;
+> > > +	r =3D mem_op_validate_common(mop, KVM_S390_MEMOP_F_SKEY_PROTECTION =
+|
+> > > +					KVM_S390_MEMOP_F_CHECK_ONLY);
+> > > +	if (r)
+> > > +		return r;
+> > > +
+> > >    	/*
+> > >    	 * This is technically a heuristic only, if the kvm->lock is not
+> > >    	 * taken, it is not guaranteed that the vm is/remains non-protect=
+ed.
+> > > @@ -2793,17 +2813,9 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm,=
+ struct kvm_s390_mem_op *mop)
+> > >    	 */
+> > >    	if (kvm_s390_pv_get_handle(kvm))
+> > >    		return -EINVAL;
+> > > -	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
+> > > -		if (access_key_invalid(mop->key))
+> > > -			return -EINVAL;
+> > > -	} else {
+> > > -		mop->key =3D 0;
+> > > -	}
+> > > -	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
+> > > -		tmpbuf =3D vmalloc(mop->size);
+> > > -		if (!tmpbuf)
+> > > -			return -ENOMEM;
+> > > -	}
+> > > +	tmpbuf =3D mem_op_alloc_buf(mop);
+> > > +	if (IS_ERR(tmpbuf))
+> > > +		return PTR_ERR(tmpbuf);
+> > >   =20
+> > >    	srcu_idx =3D srcu_read_lock(&kvm->srcu);
+> > >   =20
+> > > @@ -5250,28 +5262,20 @@ static long kvm_s390_vcpu_mem_op(struct kvm_v=
+cpu *vcpu,
+> > >    {
+> > >    	void __user *uaddr =3D (void __user *)mop->buf;
+> > >    	void *tmpbuf =3D NULL;
+> >=20
+> > ... and here, too.
+> >=20
+> > But I have to admit that I'm also not sure whether I like the
+> > mem_op_alloc_buf() part or not (the mem_op_validate_common() part looks=
+ fine
+> > to me) : mem_op_alloc_buf() is a new function with 11 lines of code, an=
+d the
+> > old spots that allocate memory were only 5 lines of code each, so you n=
+ow
+> > increased the LoC count and additionally have to fiddly with IS_ERR and
+> > PTR_ERR which is always a little bit ugly in my eyes ... IMHO I'd rathe=
+r
+> > keep the old code here. But that's just my 0.02 =E2=82=AC, if you think=
+ it's nicer
+> > with mem_op_alloc_buf(), I won't insist on keeping the old code.
+> >=20
+> >    Thomas
+> >=20
+>=20
+> I've done a PoC that has a **buff argument and combines the check with=
+=20
+> the alloc.
 
-This change doesn't look correct to me, because this function takes
-temp as an argument and it is used to populate the trip with it at
-least in some cases.
-
-Why should temp be overwritten here?
-
-> +
->         return 0;
->  err_restore_te_out:
->         iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
-> @@ -202,24 +200,12 @@ static int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
->
->         mutex_lock(&sensors->dts_update_lock);
->         status = update_trip_temp(tzd->devdata, trip, temp,
-> -                                 dts->trip_types[trip]);
-> +                                 dts->trips[trip].type);
->         mutex_unlock(&sensors->dts_update_lock);
->
->         return status;
->  }
->
-> -static int sys_get_trip_type(struct thermal_zone_device *tzd,
-> -                            int trip, enum thermal_trip_type *type)
-> -{
-> -       struct intel_soc_dts_sensor_entry *dts;
-> -
-> -       dts = tzd->devdata;
-> -
-> -       *type = dts->trip_types[trip];
-> -
-> -       return 0;
-> -}
-> -
->  static int sys_get_curr_temp(struct thermal_zone_device *tzd,
->                              int *temp)
->  {
-> @@ -245,8 +231,6 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd,
->
->  static struct thermal_zone_device_ops tzone_ops = {
->         .get_temp = sys_get_curr_temp,
-> -       .get_trip_temp = sys_get_trip_temp,
-> -       .get_trip_type = sys_get_trip_type,
->         .set_trip_temp = sys_set_trip_temp,
->  };
->
-> @@ -320,7 +304,8 @@ static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
->         dts->trip_mask = trip_mask;
->         dts->trip_count = trip_count;
->         snprintf(name, sizeof(name), "soc_dts%d", id);
-> -       dts->tzone = thermal_zone_device_register(name,
-> +       dts->tzone = thermal_zone_device_register_with_trips(name,
-> +                                                 dts->trips,
->                                                   trip_count,
->                                                   trip_mask,
->                                                   dts, &tzone_ops,
-> @@ -430,27 +415,28 @@ struct intel_soc_dts_sensors *intel_soc_dts_iosf_init(
->                 notification = false;
->         else
->                 notification = true;
-> -       for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
-> -               sensors->soc_dts[i].sensors = sensors;
-> -               ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
-> -                                          notification, trip_count,
-> -                                          read_only_trip_count);
-> -               if (ret)
-> -                       goto err_free;
-> -       }
->
->         for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
->                 ret = update_trip_temp(&sensors->soc_dts[i], 0, 0,
->                                        THERMAL_TRIP_PASSIVE);
->                 if (ret)
-> -                       goto err_remove_zone;
-> +                       goto err_free;
->
->                 ret = update_trip_temp(&sensors->soc_dts[i], 1, 0,
->                                        THERMAL_TRIP_PASSIVE);
->                 if (ret)
-> -                       goto err_remove_zone;
-> +                       goto err_free;
->         }
->
-> +       for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
-> +               sensors->soc_dts[i].sensors = sensors;
-> +               ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
-> +                                          notification, trip_count,
-> +                                          read_only_trip_count);
-> +               if (ret)
-> +                       goto err_remove_zone;
-> +       }
-> +
->         return sensors;
->  err_remove_zone:
->         for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i)
-> diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.h b/drivers/thermal/intel/intel_soc_dts_iosf.h
-> index c54945748200..ee0a39e3edd3 100644
-> --- a/drivers/thermal/intel/intel_soc_dts_iosf.h
-> +++ b/drivers/thermal/intel/intel_soc_dts_iosf.h
-> @@ -27,7 +27,7 @@ struct intel_soc_dts_sensor_entry {
->         u32 store_status;
->         u32 trip_mask;
->         u32 trip_count;
-> -       enum thermal_trip_type trip_types[2];
-> +       struct thermal_trip trips[2];
->         struct thermal_zone_device *tzone;
->         struct intel_soc_dts_sensors *sensors;
->  };
-> --
-> 2.34.1
->
+I just didn't like that much because it felt like an unspecific memop_do_th=
+ings function.
