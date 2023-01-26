@@ -2,203 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D69E467C150
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4531667C15A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjAZAG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 19:06:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
+        id S230324AbjAZAJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 19:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjAZAGz (ORCPT
+        with ESMTP id S229472AbjAZAJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 19:06:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254A24EF6;
-        Wed, 25 Jan 2023 16:06:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6209B81C5C;
-        Thu, 26 Jan 2023 00:06:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81720C433D2;
-        Thu, 26 Jan 2023 00:06:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674691611;
-        bh=krGfb8fiMTnJ3sWgLJgyhtCwXwLorPNgOSjdWwe2A/s=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=h6QhUV7yMXcKEik2CDp7OhaOoMu7vZMsxJ57WryGF1FsClUzPyaRYA3Fw/Kh4s+LS
-         iLFr0KJAd/s3gERKN8oC0qaZplEzykPqmm9tTYblzXlUV0a3uVdbue8L8DXr+puJsY
-         PYejVuWqkw1HXoyj1lxDGgm/nmJPyZJaF7yeDA76HH9CBFB2QdtbclqJDra/YmH3Iu
-         rE4AzAT6OZOPy3egSvfBBa7RI7A9aoOPcuTrV5KSoLM08Ung9/0bjvJNXCelJKpbTa
-         O2vZOR5NvnLCY5T8C4Yi00oa56M+J21Smryn8nePVrQOQNmRu8xvB4aSjPVgM78M/D
-         LXsEpESw19gVg==
-Message-ID: <f324c845f0d291d041a13046a349ae95.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Wed, 25 Jan 2023 19:09:41 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23448611D4;
+        Wed, 25 Jan 2023 16:09:40 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso5054447pju.0;
+        Wed, 25 Jan 2023 16:09:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=l5XuXmavpSaZYzYj4+k/+ajUmojV5SNgAjFshG+/OWQ=;
+        b=JJADm9ZcnjTK0j/Sr1kLk1GqTvHwQGpWMGC7gvei5tGEnhaAAnFHBqxI6DqWCdoa7A
+         mjoNooUzGz5GEmEO1x5QYv7TQspVC6pwjZr4duM0aUgz3V9mY7ct6Be4rbo/VWZ1Xkfe
+         wY+4plFaObGBcG5K+tUM61g15IEISVBg6N9AcLMxUByzzweq/jzeofGn1Zw/rM2SMGW4
+         VzW0qY/SmKGZAaBg5BWKlE1p73zx0gKfGe2fMjhF/t6swa0FXQYRvXjmhN1rKETljPlC
+         iDPLKobdir4TYjVrbSnnMiW+VLWtFUy1erqEZdhb2D1jsp1RdGAPeth+4JD2x2mUHyS9
+         0ejQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l5XuXmavpSaZYzYj4+k/+ajUmojV5SNgAjFshG+/OWQ=;
+        b=ocilVDfpmaJntchqI7wKCNBF2dM33In+vVZZqRfT84CGVlw9ZN2Ccndpu+i85NN6Xi
+         XO+lluytXdgdFDIIMn5p0OtKENXchUJbUdus9pbyb0XWTAmxWC5lvB/y3xV2BnFMt1eM
+         H0r+LCqBDfU/8pGTV7XsTVV4ql442LtL0mpk4o30uUwryw3dUDpxje/lKrYKx9TwtFZs
+         Y37HzByeaJqAIQ8gLpq90DAPSCYDNh3DRnSpX4ZWFmvc+JmfF/QgdcTevSxRkD5ndVgk
+         3GJzlSWlr2NTRBwjP6rIvvv+hcB/g2VxHWBbqyVdnXTkd2b+AT32r317nLCpRvjMNRzM
+         F6Ew==
+X-Gm-Message-State: AFqh2koExvBRNiUrzYhOw1SrmPynllbEEAYIM7RESJ0M76+mbE1gJvoK
+        riy10UktPoX1gM/O3e+vbrw=
+X-Google-Smtp-Source: AMrXdXvhZRnZ/1zz5oVxrQPA1vnOuc3g4M3uAzkecsih4IdzeoRh7kmCZWOTCu07b6YkpYL9KitACA==
+X-Received: by 2002:a05:6a20:8e05:b0:af:ae14:9ecb with SMTP id y5-20020a056a208e0500b000afae149ecbmr52912491pzj.17.1674691779457;
+        Wed, 25 Jan 2023 16:09:39 -0800 (PST)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:29ee:2efb:110e:b369])
+        by smtp.gmail.com with ESMTPSA id j13-20020a170902c3cd00b00177faf558b5sm4216160plj.250.2023.01.25.16.09.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 16:09:38 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
+        bpf@vger.kernel.org
+Subject: [PATCH] perf lock contention: Add -S/--callstack-filter option
+Date:   Wed, 25 Jan 2023 16:09:36 -0800
+Message-Id: <20230126000936.3017683-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <367fba29-bc08-1f27-249c-09e406adfbbb@ideasonboard.com>
-References: <20221226095745.19757-1-a-bhatia1@ti.com> <20221226095745.19757-2-a-bhatia1@ti.com> <8980856c1138571976f00413b94cfeb8.sboyd@kernel.org> <1856e963-4514-92f3-5d43-d5b711083193@ti.com> <367fba29-bc08-1f27-249c-09e406adfbbb@ideasonboard.com>
-Subject: Re: [PATCH 1/2] dt-bindings: clock: fixed-factor: Add TI AM62 SoC OLDI clock
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Linux Clock List <linux-clk@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>, Jai Luthra <j-luthra@ti.com>
-To:     Aradhya Bhatia <a-bhatia1@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Date:   Wed, 25 Jan 2023 16:06:49 -0800
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Tomi Valkeinen (2023-01-17 01:40:24)
-> On 16/01/2023 11:51, Aradhya Bhatia wrote:
-> > Hi Stephen,
-> >=20
-> > Thanks for taking a look at the patch.
-> >=20
-> > On 12-Jan-23 01:14, Stephen Boyd wrote:
-> >> Quoting Aradhya Bhatia (2022-12-26 01:57:44)
-> >>> Add "ti,k3-am62-oldi-clk-div" to the fixed factor clock compatible en=
-um
-> >>> list.
-> >>>
-> >>> "ti,k3-am62-oldi-clk-div" is a fixed-factor clock that helps the TI
-> >>> display subsystem request a pixel clock for itself and a corresponding
-> >>> serial clock for its OLDI Transmitters. The serial clock is 7 times t=
-he
-> >>> pixel clock. This clock needs the clock set rate request to be
-> >>> propagated to the parent clock provider.
-> >>>
-> >>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-> >>> ---
-> >>> =C2=A0 Documentation/devicetree/bindings/clock/fixed-factor-clock.yam=
-l | 1 +
-> >>> =C2=A0 1 file changed, 1 insertion(+)
-> >>>
-> >>> diff --git=20
-> >>> a/Documentation/devicetree/bindings/clock/fixed-factor-clock.yaml=20
-> >>> b/Documentation/devicetree/bindings/clock/fixed-factor-clock.yaml
-> >>> index 8f71ab300470..0696237530f7 100644
-> >>> --- a/Documentation/devicetree/bindings/clock/fixed-factor-clock.yaml
-> >>> +++ b/Documentation/devicetree/bindings/clock/fixed-factor-clock.yaml
-> >>> @@ -14,6 +14,7 @@ properties:
-> >>> =C2=A0=C2=A0=C2=A0 compatible:
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 enum:
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - fixed-factor-clock
-> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - ti,k3-am62-oldi-clk-div
-> >>
-> >> I don't see this compatible anywhere in the kernel tree. Is there a
-> >> patch that adds a node using this? I wonder why the display subsystem
-> >> can't add this fixed factor clk directly in the driver. Does the OLDI
-> >> Transmitter send a clk to the display subsystem?
-> >>
-> >> I'm asking all these questions because we got rid of vendor compatibles
-> >> here in hopes of simplifying the logic. Maybe the problem can be
-> >> approached differently, but I don't know all the details.
-> >=20
-> >=20
-> > +--------+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 +-=
------------------+
-> > |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > |=C2=A0 PLL=C2=A0=C2=A0 +---+----+------------->| OLDI Transmitter |
-> > |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0=
-=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > +--------+=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 +------------------+
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0=C2=A0 |
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 +------------------+
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0=C2=A0 +------------->| OLDI Transmitter |
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 +------------------+
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 +------------------+
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0 +----------+=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 /7=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=
-=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Display=C2=A0=C2=A0=C2=A0=C2=A0 |
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 +-->|=C2=A0=C2=A0 Clock=C2=A0 +--->| Sub-System (DSS) |
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 Div=C2=A0=C2=A0 |=C2=A0=C2=
-=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |
-> >  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 +----------+=C2=A0=C2=A0=C2=A0 +---------------=
----+
-> >=20
-> > This is how the the clock architecture for DSS looks like.
-> >=20
-> > The clock divider is not a part of DSS, but outside it.
+The -S/--callstack-filter is to limit display entries having the given
+string in the callstack (not only in the caller in the output).
 
-The divider is fixed as well? And presumably inside the SoC?
+The following example shows lock contention results if the callstack
+has 'net' substring somewhere.  Note that the caller '__dev_queue_xmit'
+does not match to it, but it has 'inet6_csk_xmit' in the callstack.
 
-> >=20
-> > The clock request flow is initiated by the DSS driver because it has the
-> > required timing parameter information. It requests a certain pixel
-> > frequency. But the frequency required by the OLDI TXes is 7 times
-> > that pixel frequency.
-> >=20
-> > (Just for clarification, in some cases, the OLDI TX does require only
-> > 3.5 times the pixel frequency, but in those situations there is another
-> > divider in-front of OLDI TX that gets activated with a signal and
-> > divides the incoming frequency by 2, thereby requiring the PLL to still
-> > generate a 7x frequency.)
-> >=20
-> > Hence, the idea is that the clock divider is able to propagate the set
-> > rate request back to PLL, asking for a frequency 7 times more than the
-> > DSS's asking rate.
+This applies even if you don't use -v option to show the full callstack.
 
-Got it. Can the PLL driver provide a pll_div_7 clk that is used for the
-DSS pixel clk?
+  $ sudo ./perf lock con -abv -S net sleep 1
+  ...
+   contended   total wait     max wait     avg wait         type   caller
 
-> >=20
-> > If this is something less than ideal and should not go up, then I can
-> > implement a new clock device with a separate but similar clock driver.
-> >=20
-> > Let me know what you think!
->=20
-> As a clarification I would also add to the above that on other TI SoCs=20
-> with DSS, and also for the second video port on AM62, the clock=20
-> framework provides DSS a clock using the pclk frequency.
->=20
+           5     70.20 us     16.13 us     14.04 us     spinlock   __dev_queue_xmit+0xb6d
+                          0xffffffffa5dd1c60  _raw_spin_lock+0x30
+                          0xffffffffa5b8f6ed  __dev_queue_xmit+0xb6d
+                          0xffffffffa5cd8267  ip6_finish_output2+0x2c7
+                          0xffffffffa5cdac14  ip6_finish_output+0x1d4
+                          0xffffffffa5cdb477  ip6_xmit+0x457
+                          0xffffffffa5d1fd17  inet6_csk_xmit+0xd7
+                          0xffffffffa5c5f4aa  __tcp_transmit_skb+0x54a
+                          0xffffffffa5c6467d  tcp_keepalive_timer+0x2fd
 
-Are you saying that adding a fixed div-7 clk in the DSS driver is wrong?
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/Documentation/perf-lock.txt |  6 +++
+ tools/perf/builtin-lock.c              | 68 +++++++++++++++++++++++++-
+ tools/perf/util/bpf_lock_contention.c  |  2 +-
+ tools/perf/util/lock-contention.h      |  1 +
+ 4 files changed, 75 insertions(+), 2 deletions(-)
+
+diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
+index 0f9f720e599d..11b8901d8d13 100644
+--- a/tools/perf/Documentation/perf-lock.txt
++++ b/tools/perf/Documentation/perf-lock.txt
+@@ -187,6 +187,12 @@ CONTENTION OPTIONS
+ --lock-filter=<value>::
+ 	Show lock contention only for given lock addresses or names (comma separated list).
+ 
++-S::
++--callstack-filter=<value>::
++	Show lock contention only if the callstack contains the given string.
++	Note that it matches the substring so 'rq' would match both 'raw_spin_rq_lock'
++	and 'irq_enter_rcu'.
++
+ 
+ SEE ALSO
+ --------
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index 506c2fe42d52..216a9a252bf4 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -63,11 +63,22 @@ static unsigned long bpf_map_entries = 10240;
+ static int max_stack_depth = CONTENTION_STACK_DEPTH;
+ static int stack_skip = CONTENTION_STACK_SKIP;
+ static int print_nr_entries = INT_MAX / 2;
++static LIST_HEAD(callstack_filters);
++
++struct callstack_filter {
++	struct list_head list;
++	char name[];
++};
+ 
+ static struct lock_filter filters;
+ 
+ static enum lock_aggr_mode aggr_mode = LOCK_AGGR_ADDR;
+ 
++static bool needs_callstack(void)
++{
++	return verbose > 0 || !list_empty(&callstack_filters);
++}
++
+ static struct thread_stat *thread_stat_find(u32 tid)
+ {
+ 	struct rb_node *node;
+@@ -1060,7 +1071,7 @@ static int report_lock_contention_begin_event(struct evsel *evsel,
+ 		if (!ls)
+ 			return -ENOMEM;
+ 
+-		if (aggr_mode == LOCK_AGGR_CALLER && verbose > 0) {
++		if (aggr_mode == LOCK_AGGR_CALLER && needs_callstack()) {
+ 			ls->callstack = get_callstack(sample, max_stack_depth);
+ 			if (ls->callstack == NULL)
+ 				return -ENOMEM;
+@@ -1595,6 +1606,31 @@ static void print_contention_result(struct lock_contention *con)
+ 		if (!st->wait_time_total)
+ 			continue;
+ 
++		if (aggr_mode == LOCK_AGGR_CALLER && !list_empty(&callstack_filters)) {
++			struct map *kmap;
++			struct symbol *sym;
++			u64 ip;
++
++			for (int i = 0; i < max_stack_depth; i++) {
++				struct callstack_filter *filter;
++
++				if (!st->callstack || !st->callstack[i])
++					break;
++
++				ip = st->callstack[i];
++				sym = machine__find_kernel_symbol(con->machine, ip, &kmap);
++				if (sym == NULL)
++					continue;
++
++				list_for_each_entry(filter, &callstack_filters, list) {
++					if (strstr(sym->name, filter->name))
++						goto found;
++				}
++			}
++			continue;
++		}
++
++found:
+ 		list_for_each_entry(key, &lock_keys, list) {
+ 			key->print(key, st);
+ 			pr_info(" ");
+@@ -1743,6 +1779,7 @@ static int __cmd_contention(int argc, const char **argv)
+ 		.max_stack = max_stack_depth,
+ 		.stack_skip = stack_skip,
+ 		.filters = &filters,
++		.save_callstack = needs_callstack(),
+ 	};
+ 
+ 	session = perf_session__new(use_bpf ? NULL : &data, &eops);
+@@ -2123,6 +2160,33 @@ static int parse_lock_addr(const struct option *opt __maybe_unused, const char *
+ 	return ret;
+ }
+ 
++static int parse_call_stack(const struct option *opt __maybe_unused, const char *str,
++			   int unset __maybe_unused)
++{
++	char *s, *tmp, *tok;
++	int ret = 0;
++
++	s = strdup(str);
++	if (s == NULL)
++		return -1;
++
++	for (tok = strtok_r(s, ", ", &tmp); tok; tok = strtok_r(NULL, ", ", &tmp)) {
++		struct callstack_filter *entry;
++
++		entry = malloc(sizeof(*entry) + strlen(tok) + 1);
++		if (entry == NULL) {
++			pr_err("Memory allocation failure\n");
++			return -1;
++		}
++
++		strcpy(entry->name, tok);
++		list_add_tail(&entry->list, &callstack_filters);
++	}
++
++	free(s);
++	return ret;
++}
++
+ int cmd_lock(int argc, const char **argv)
+ {
+ 	const struct option lock_options[] = {
+@@ -2190,6 +2254,8 @@ int cmd_lock(int argc, const char **argv)
+ 		     "Filter specific type of locks", parse_lock_type),
+ 	OPT_CALLBACK('L', "lock-filter", NULL, "ADDRS/NAMES",
+ 		     "Filter specific address/symbol of locks", parse_lock_addr),
++	OPT_CALLBACK('S', "callstack-filter", NULL, "NAMES",
++		     "Filter specific function in the callstack", parse_call_stack),
+ 	OPT_PARENT(lock_options)
+ 	};
+ 
+diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
+index 0236334fd69b..4902ac331f41 100644
+--- a/tools/perf/util/bpf_lock_contention.c
++++ b/tools/perf/util/bpf_lock_contention.c
+@@ -268,7 +268,7 @@ int lock_contention_read(struct lock_contention *con)
+ 			break;
+ 		}
+ 
+-		if (verbose > 0) {
++		if (con->save_callstack) {
+ 			st->callstack = memdup(stack_trace, stack_size);
+ 			if (st->callstack == NULL)
+ 				break;
+diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
+index b99e83fccf5c..17e594d57a61 100644
+--- a/tools/perf/util/lock-contention.h
++++ b/tools/perf/util/lock-contention.h
+@@ -128,6 +128,7 @@ struct lock_contention {
+ 	int max_stack;
+ 	int stack_skip;
+ 	int aggr_mode;
++	bool save_callstack;
+ };
+ 
+ #ifdef HAVE_BPF_SKEL
+-- 
+2.39.1.456.gfc5497dd1b-goog
+
