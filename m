@@ -2,252 +2,725 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C2C67D9D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6F167D9DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233174AbjAZXnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:43:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        id S233573AbjAZXnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233541AbjAZXnS (ORCPT
+        with ESMTP id S233576AbjAZXnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:43:18 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49562F7AA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:43:00 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QNE5ci030508;
-        Thu, 26 Jan 2023 23:42:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=X+L5MFkHihrqdcRaXRdUszWsJTbmmn9Y8iRbdpsP3lc=;
- b=YDbWDKvMUjmlGZ4cdKzQ9R6a9tCbrxiaghiNF0BiwODQi/XnCyVMUEbBPM1WGEnt572w
- DziH4Juk8zHV5cZsjmw7MbQP8ZsO6RQngS8Q7K4t9u1TUt20Kob1wMxJYQn3SeXb3JbN
- cxpL/NNIB/eOiG9L9dEARaTGJr6WQVL6WkoPbqPWLPqmXSrpe3fXt8f5FfkhpJPWPd0U
- man+m0tco0JwQrM9F40GiCFesy8gqbXm2Zyt463r0c3Df5dA1+MZJ53kh9osSsyZwOTy
- J18iSSMLBN/RBbxi9nQGkRJBIFApc/fgyN9zn/hwmA7Cvi7fltPm+xpK71r4RAIkZN/q 3Q== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n86fckrsp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 23:42:35 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30QNOIGI034531;
-        Thu, 26 Jan 2023 23:42:35 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2040.outbound.protection.outlook.com [104.47.57.40])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n86g8w0ym-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 23:42:35 +0000
+        Thu, 26 Jan 2023 18:43:39 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3902D65;
+        Thu, 26 Jan 2023 15:43:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674776608; x=1706312608;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=zz/xKK6QCo1ek6JQ0UBcFX+mcJV+95sBtfF7NAwjrZk=;
+  b=gKrEtTVBtu7Qi9PzF4KWqQoadP4CLh7FohZuhn/YDk9Gsvz4q3CSRktq
+   jPyhkyHQ6eMgi1ykjKHYuaWRuJ8RY3R9xv1Q7KxYaREegIQule5+fnG01
+   uJa/lXjZ8gRFtxUayBMsISD2TRU9g4MTLZ4AfV8T9EymT/Rn5V3iDyAIg
+   QFP1Z9j4/RKjSLD9E2pnAJFb5GCYp5th+oF126iWxSwilN7Z1qcQYGcLi
+   A18wVJ6TCcF9+hRsDVAemcUUK1AfO+gOgQ4qlzyIKqLA2Ri3qP7ulj487
+   ezAcbgYSl0LuPiT+30TLRyb8qF0X/+7I+c9QV7+xmHlqbQRZZC2k57lpa
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="325659766"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="325659766"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 15:43:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="771355674"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="771355674"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga002.fm.intel.com with ESMTP; 26 Jan 2023 15:43:26 -0800
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 26 Jan 2023 15:43:26 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 26 Jan 2023 15:43:26 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.44) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 26 Jan 2023 15:43:26 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EmstydQw5RzEeGLJBHI+MW/uo8mBihfeCnf+Qm5CPikIyGNqhRyERA6ePStyf/QQxMzpPQWat4XAHIdiOMNQq7wgGNNxBZEFuVUe8pU5DdGBAzvLcC0mynTokB36i/MAuNubGCISsQKuhpCNdooUYd7jZ/wXOM8KwdgAEM1nt7XFtjI53fMGg9FeM4MCYD+5EVF+6T0aLtqrsYuLSphkM+Q6/SDs8yZaLl/UyBs2agkwvYx0J+jlKOAngTuLTG3q/99vpJGEdA0s9B75fqbOP9r9smNPQsJkf3S9NgdEORdS0z7Btt98rYf+GFdcSRbDUVwrbNmAkCi80ADCe060rg==
+ b=m+NNE50k8zKrSeUydJbRfjji4/+UyX/mSTqrMslu4Rk2LaBi3BbHiJAPrvVEHH34kKXrVlG4GqDPz2Ir5ac0tnasbL83NJq7NCf/bMd3t2tfeqVuEOYtmUUlpYmClvXCc+w05FQe2CzFwVZAxRS/ytynswgxWhL3svSDE5RB1c1ybQ6k8XHQ/nooWFqP1134gcn104zianfS0KCb1oSGNEwkppBo8zHDueYv14oxmpIZ85RNN4AXSmFE6oGkxUKfQ5nqOfr+0Mly4eAM1dR/EyJbDs21sz7xLHbkkwt7K9D2uo/hzXv25nwqVSpggTGN/XYroRiZAXWTeGRdhSjoFg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X+L5MFkHihrqdcRaXRdUszWsJTbmmn9Y8iRbdpsP3lc=;
- b=fg1GZDHS7y2l8fJwI/9ctrfFDSWd4aBPtdyYAjDHWNmeztMTQvq7w+EmwkUGmOI1q320ABjKFoIrwnmywcWnsFdPmyaYoMH/hM6IdB7faAr+hlOsAMRBQTFQjcS3xPDs/xNPDtPZhAZvjR/AOFLXElzM3GXL+XPoh6i28qjdPqwJxsvesWr7rYMloD5aVorZM1VGDQfJG6DjT5veI9wAQJ5e54pjwTMFYgO5wnxbWXLfLrTZKqIZCPqSSlTQGXhCFNjfh3hKw+T4EumUnytuIyrdWWuiCa1iGSdVFH1Xe/6RRuUBw9Vq1IeF2+ssw2i4ehuEDlUx62YFGXE88aaZVg==
+ bh=28jfIqmwgY9unrGGgr+jYV+s0V+oVRAO8tKZZV4UQYY=;
+ b=e+lZprlh2MplF0It4vO5t/+DPG1uaNUBUm4f2MXen8mvsjJBgup5m7gbX3/p+Nbd8o7qe3p2+TCthkq0gNk9wQHnZn/px50/YkheXGxRSLhllw4TRtcKunYPhJkHbxttxss1Zl1RuxEFP1wwGR0vRzNzHZx7q9J74zV2lCccrtkUuhdIve78xK+VKtfR9xgbnFTLRh3qlhgZHH6jfQST3EVOgdpyJ1KyZP2oVczI/Lmb5KVHHewUxrJYbcxcQEaGblSJzVwvGx1qGhGDiEezWrNld74r9JZmZdZ7Ot9XuahKhu2h54aGiBlipAOmVFdAGCu8uWYqenmtUtvlZ1ZOmg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X+L5MFkHihrqdcRaXRdUszWsJTbmmn9Y8iRbdpsP3lc=;
- b=iCfpK1FfNsg5Tz6x958P9ERaUReZITK5wialLcIgUJlyTP7WclhLia99kYMuxWwJLs7BX0vIJRO/kevISsNYQO5ojrSLZxPRq2YrwCC+j45bb17pM4d+qfeafKIxoluIvooxCwjhzooWWFoLUjhKlQMmKC5KTyq2KAs/pGpB8ys=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by PH0PR10MB5611.namprd10.prod.outlook.com (2603:10b6:510:f9::16) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH7PR11MB6522.namprd11.prod.outlook.com (2603:10b6:510:212::12)
+ by BL1PR11MB5446.namprd11.prod.outlook.com (2603:10b6:208:31e::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Thu, 26 Jan
- 2023 23:42:32 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::3a1:b634:7903:9d14]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::3a1:b634:7903:9d14%9]) with mapi id 15.20.6043.022; Thu, 26 Jan 2023
- 23:42:32 +0000
-Date:   Thu, 26 Jan 2023 15:42:29 -0800
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     syzbot <syzbot+83cc82a0254bc0c17b52@syzkaller.appspotmail.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, muchun.song@linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Subject: Re: [syzbot] kernel BUG in free_huge_page
-Message-ID: <Y9MP5fmQ28nceDjx@monkey>
-References: <000000000000a9dc0705f3105a26@google.com>
-Content-Type: text/plain; charset=us-ascii
+ 2023 23:43:23 +0000
+Received: from PH7PR11MB6522.namprd11.prod.outlook.com
+ ([fe80::2ceb:afd:8ee7:4cc]) by PH7PR11MB6522.namprd11.prod.outlook.com
+ ([fe80::2ceb:afd:8ee7:4cc%6]) with mapi id 15.20.6002.033; Thu, 26 Jan 2023
+ 23:43:23 +0000
+Date:   Thu, 26 Jan 2023 23:43:05 +0000
+From:   Matthew Brost <matthew.brost@intel.com>
+To:     Danilo Krummrich <dakr@redhat.com>
+CC:     <daniel@ffwll.ch>, <airlied@redhat.com>,
+        <christian.koenig@amd.com>, <bskeggs@redhat.com>,
+        <jason@jlekstrand.net>, <tzimmermann@suse.de>,
+        <mripard@kernel.org>, <corbet@lwn.net>,
+        <nouveau@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH drm-next 03/14] drm: manager to keep track of GPUs VA
+ mappings
+Message-ID: <Y9MQCfCo9F7dwl33@DUT025-TGLU.fm.intel.com>
+References: <20230118061256.2689-1-dakr@redhat.com>
+ <20230118061256.2689-4-dakr@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <000000000000a9dc0705f3105a26@google.com>
-X-ClientProxiedBy: MW4PR04CA0187.namprd04.prod.outlook.com
- (2603:10b6:303:86::12) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+In-Reply-To: <20230118061256.2689-4-dakr@redhat.com>
+X-ClientProxiedBy: SJ0PR03CA0153.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::8) To PH7PR11MB6522.namprd11.prod.outlook.com
+ (2603:10b6:510:212::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|PH0PR10MB5611:EE_
-X-MS-Office365-Filtering-Correlation-Id: 044b49c1-1911-4375-b892-08dafff6fe85
+X-MS-TrafficTypeDiagnostic: PH7PR11MB6522:EE_|BL1PR11MB5446:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba224d39-eb04-43b4-22b4-08dafff71c9d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YRbs4n2yR7+XgW9r/3l4GmmSm4D/7L3FZogUuBjxhlmeLYoJS7nsScGUUQsATEi3nBypFkykLN28Fosf3v6OGHG9jYyaPspX9WvkCtUQIM52EfhKJsRj87Gzc5tlPxORe8XLRsEudvtz3b+uC680I/OlY0KOLuVlTQG1MtKA+mniTXhggv54NirbfUTiVM4AxkSTallEd6a7wocM3uFnbBMo5Zb6QuSsWOuvUlFUhVBmkS6jMlkzNRVuJ5uwltyXk+VGfESqBdQ+PIUFya9wUQVXqMRxzQaPeJCOY6sx9NiTnx0oCPvaSI4Q8kF1K6V5IxoukkMXT/WSYs/DmYXTvQUhJ+SkOpM8xxi/tLDF14IwMoEwaKE+koPNsmQXzmzjxFFyXu9Mvd1Bi2jLwq7uArCObW4cZnIPZHPQHqGwz8B4GlGEI5gp61+cDtVP0qXdSffszQxLVp9UuAPv8A6Scd/XwlQzU1YMDIJHnAOXyAxOWLG/KwrSMMnAbK6CmS3nUrIs6uiq5IPZ+6ItPUZXKjPAaDGIXIdQYkKqlxPjgzxL5rVPi25W6T01IorrXUHn7uKPPNHDAJ+B5mXGKe916kSpQJwZ0hcOwyBpFQTpkOEeIMIrjG9qkLqTwbbcqp4YGcaGZDVjZLmJCEg6q46Ncdrh9LsVUF7KkS/6NeemZ3cC34nDXxRA76Z9izo0itcFd14Cz/VEoyocxq56TYwKHn1vrcDQjaIlLAMAl1X1c+RhQEp/aID7kygrCdeFaBe+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(396003)(136003)(376002)(346002)(366004)(39860400002)(451199018)(86362001)(38100700002)(66476007)(316002)(66946007)(66556008)(7416002)(5660300002)(4326008)(8936002)(6636002)(8676002)(41300700001)(33716001)(2906002)(44832011)(110136005)(83380400001)(478600001)(6486002)(966005)(26005)(53546011)(186003)(6506007)(6666004)(9686003)(6512007)(14583001)(99710200001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: iqdFAt9SNiCyw4TSB9bM2fAFy2KrAIj03GVfMYRWikl+nrviVCUXpDKBzGidRi9HOpSrEgZVXH9QqdJUzmfLRA7l2VCpL9gHRFD7eyuhYQWHIanV95o/UzHoPUo2PLuZxYsFiFIC0z3CWaRkYL2ohOdWnxbyPu5ijVT9ftGTVwmsDRWeS/VggxaUzkP9KI9A/ZrqIcA3GGban4W01RTyNmCx5dd89q+dkC/7XEAqHrBeLTLdzaqfmf6nsAn382zTSpxQdkgCFO44vEIy9sfGUNRHBATHE5IO0601rRBF715WfVwow3sc01qTaeEwcGLyeSGD+Sy+09OvoLiyP8cRBvbs3UnTwcA/fc4pD809P5d0de6C6rRkIzZRzV2aeagHNB5ApHqdT2kVLRNMyt/i7Lgq9J2rQQ2wxxMju4iQStpsp34JEbQZq5yGJbknpAQX8bN8YG+7c4IFrab06czWA7FyX2ITg7WhwGFz+msiefHp+39E1reV5s7sp1UNEutgB0VD1YhkO11fWGP4fY3aS+dsRl9NF/G4yNiUvuPc1HvmYG9CS8n8k9EGK+HmwT2gUAi+0M4XlbvMQc/YbPj+5cPYqr71c1IYw2BMBdE6syk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6522.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(376002)(346002)(136003)(366004)(39860400002)(451199018)(66899018)(66946007)(4326008)(316002)(8676002)(66476007)(6916009)(8936002)(41300700001)(66556008)(38100700002)(86362001)(82960400001)(6506007)(6666004)(966005)(26005)(6512007)(186003)(7416002)(30864003)(44832011)(5660300002)(83380400001)(2906002)(478600001)(6486002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uwE1zkXjvt+CuPyc2srr74xoY82lLJJnwZypUrVkBABEfTW0RMm0f3G9W5dA?=
- =?us-ascii?Q?7VwRuuTqi0/255OCNV7j6LJ0NX7glL6OZ31Ci/J6j7l13PYzh8FuTfSt4obo?=
- =?us-ascii?Q?XKKCFui6QCogI8bAPM+UHrckzxyhGMw1a/YUiYM1zPU4xqzl354OwjpbM8cr?=
- =?us-ascii?Q?VSIVSGYy75DLKAXAH7OwwRIjFTy4RcwVhH3IoEgT+SU8BxY0uf9fCgZpnzfU?=
- =?us-ascii?Q?Fl8635vGHudnjtKWPoittpI2asGugtxUxXvx8xKMn3x0nwrCEv6TBkjCsDmO?=
- =?us-ascii?Q?IVVi31Un1qVzRPZrlXBm2ivxqQKq1dohi2z857we1JEjumh06kxH/yfnSyxz?=
- =?us-ascii?Q?C1lYl3l9NDOkKiu6ERe5SX2zR01++Gky38rED1ma9RSwK1NwLHZG3M43+ALw?=
- =?us-ascii?Q?neqarAFA0ko6MUot22IWuMnnIJcibOtB3uf84LQknfdQ2PhHHOOoQHCI5CCQ?=
- =?us-ascii?Q?qtr2Edo5hSysEfhCgKC41xnldJNe3VWxDxKMCjbDi2k2ZOEc7Uyy61T6EiYv?=
- =?us-ascii?Q?xjmAjON1pkQjGNgZCO6VK90jkyexai+E5XMXWf216cyrlncpVTZAt04xqnGZ?=
- =?us-ascii?Q?E9abZQjgSiVNfm/eK2xlqnGke6tbQCo30s6qz7cpbHrUBHaxiMXl31kX6Lux?=
- =?us-ascii?Q?GG3U8VFafkEba50MZdHYbQy5D0Rw1mVl9JPmB7oRG9taYO3csLmQ8QSCGvqB?=
- =?us-ascii?Q?d0D5Uf0thuXY5nteGGlxWoz8leTVwMh5iaxEKc11Ro2L3NCRge8yqUfq9BY3?=
- =?us-ascii?Q?vVeDzp8vcdqQFIN8rXT8b40GjfY+G0gUpvOjOLiNqRKmGoWixocjkvZIwJva?=
- =?us-ascii?Q?M1JIT9JXYmzuu3suunChow2AhSILLBqYdngHE7lxuI8Nxo98rt+mV+x58fgi?=
- =?us-ascii?Q?xESm4Q+dodL+8FPYfbVKrpKrD3bWYNO0BnNyj669Ov2S36dnotOmBTi8x20Y?=
- =?us-ascii?Q?zwNQqTmgeK95i9Ymg7Bc9xBlBiwj2mYRHG48wx9Lv0Jwoqs846Mk9fNwl7PE?=
- =?us-ascii?Q?iPWqD3hVcUuqKCX4hxMav3RitaZV/4GLuKVkrInVXhmCeuaG3sXJOa1dCDvx?=
- =?us-ascii?Q?n3ChaBgf7GCmOW5fHCE91ayQuq6PJ28H7eLG9/MuTjT/v1/KA1Ki3N7T5yk7?=
- =?us-ascii?Q?sn/hV6EEutEy+zlEF5nY38kcXGeWImUKld5lY6VQtHLRxj+zSEQ/ZHe0T8oW?=
- =?us-ascii?Q?VLD/lt8ZMmQKSsfT7TkCn+0ZACfdxhPCmjTeuVxTHhwhYdVjme3qkMGDcvd9?=
- =?us-ascii?Q?id9wqBNuOGxWAm7zBErtIV5X+NlpKDN/h71pZA54IqZrXltw3qsm6jESSDx9?=
- =?us-ascii?Q?ZfQl8Ty/qPur5AlgUOYHRQHtsuaNVjQ4E4Ns9UV7tFunGq/kJH+bonXMDVHY?=
- =?us-ascii?Q?huN4HSzHIYT/UmAMjIvKrkDh7vLB8wbQlm6Ei2ub72QW4gb41ULPJvVu96NZ?=
- =?us-ascii?Q?bQy87rW1BEFN03skfoDkRJqHPfCyF5f68LFT7LWgDPu/eC/NMo+uhEEmO/9r?=
- =?us-ascii?Q?aNwAwqcyOaztMcwsdnW/zSkvDAz2lcAJfl4rR9ygKEz2+cAZXIrtuDrFrwPr?=
- =?us-ascii?Q?BfGzHS59evXPvVPJv+9N3jTx3o1lp2+9N4I20EEvfXOowt3CKn6PIUAhQg0e?=
- =?us-ascii?Q?OA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?cbJyjJ5kONi7ZWbyzvldgac7iHoIgnJojGeo9W7AcoXtqH3dT0Ktn89Ruy0Z?=
- =?us-ascii?Q?qww2yZZm/kZBn+pbtonEmpqdnCmacNh0uKzUVBKZ8TOBKVn1jpJtfYUl2Dfe?=
- =?us-ascii?Q?dZMuXCIg/LLhoycYtV+srkPn3uY/AnUOwSThkQC1rEOFcSwoYtVVjC0oQKzN?=
- =?us-ascii?Q?mvPEdZdsuNWjtS1vJ5H4ClMFWHG/BRzUJVuQAUg1bn3O8xVSy4tLjuHMQGQM?=
- =?us-ascii?Q?qKZ1tVo1YCiLWJAuitFmC72kx2YHt14kjgQH7fJU+dXipr7SenNzBGTFFQHz?=
- =?us-ascii?Q?KrObkpPncl7BcO74oL2EibphCYPVYYBL6ChsI299t1R+C9Ha3B3e5DMPHnFj?=
- =?us-ascii?Q?VwCkiQayvd5MdAaAl0zOkyr4bUTcBs7ozqbG1Nfc76GV38v4OFoi7lqW00rR?=
- =?us-ascii?Q?pFyXaRQNG2DTMxLeYS8qciJrqV1p+Sq0a2kE7cClaQVm1YqYHnlpYay4Wn3z?=
- =?us-ascii?Q?kcsgV9wYAuQBL7d2by3zQaa3Ay0rEsn5UjdFQUU3QL6CzqQBytxxMLtOgrWA?=
- =?us-ascii?Q?0nOKavEuFlrq2tNEP/STcSVW++r2qXh/46YyGbYv1PvBgdWNUWjiUZFAh0+i?=
- =?us-ascii?Q?JCFOzVOb5G9RXGBMfLifRIVyjFgX+OP77KAtXakoP4MA6QTCeFsQZbyY2x58?=
- =?us-ascii?Q?o8yLfMXSjVLrL3tZFCp9isE9O8EWSnYrzBcOrikbtxsrEmldAmRCQYEzXEuC?=
- =?us-ascii?Q?tZOq4PqIcI9pMvlFjZtMeHIzxNVY1Qg8otW+0ekrdWe5Wrf2BPlW3Gzv5iYQ?=
- =?us-ascii?Q?YjJ9R04EGM32S2veMM84QHuavFnx7t/flsz7glgvFe2MiaIH1tkBBPLYNdry?=
- =?us-ascii?Q?Cj/lg0p12uHmHLzypjxHi1aMBE5CryaQdYQ4Ql5Fj8KjpB1KzWFiZOKUtotr?=
- =?us-ascii?Q?tTTUDB9rN1csDJQTS93Gi6CGFIMO/74wkWMCgblDr4Bj8bIT/VaIfu/aOUro?=
- =?us-ascii?Q?Up9os3LqOeOoB9ERpbjG7GDvqEFVq82nTck8pzmcArbMPhq90MfCtkHPoQpC?=
- =?us-ascii?Q?qJnYTg0a4chTcLe4XA3nHHGPtJv9Nn8+l643e50Cr5Oagh3HqOsFz2f3jsve?=
- =?us-ascii?Q?z1zxTaC2NsX5p6SHrVCaguRn6jH3tfc/AczSZDX0LIdwJDbdP1/UyI62E8hC?=
- =?us-ascii?Q?xwYCDmWClWWowaVyZaQI0xomhJVFuUYNXQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 044b49c1-1911-4375-b892-08dafff6fe85
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YDrhRL0MPMhMGohkK9XN8/N7JqK5FrMfu2XguUyBA4JyxqqbJG3mLI/eFX5n?=
+ =?us-ascii?Q?LnI7Hxd5CvqBTXyO4RB/ZO2sYhb+d6VZakPQJGUUb6D8L1iz+OknCKtTMk8f?=
+ =?us-ascii?Q?hk5ujAWiS8mMhd0Rob3YD+nF7r27PRBkQgD2FPuwyFQWXALo23i79+B1U3U5?=
+ =?us-ascii?Q?LVx81jIKnuk02T7TWuFlpdEdm6BzE++Qk2Ll5hmmvawvNmMQyBrR2nYToKnr?=
+ =?us-ascii?Q?5hLAhyWNUon70O9bRFHexGzl6gROCB04uI2tQTIewpAulla/LHuo06+Pxev4?=
+ =?us-ascii?Q?ePwCpCPpjZtm3k83iNce9N8f7wz2/pJwDyHIJ+7moOOrQSyeNavZNaHVyBNY?=
+ =?us-ascii?Q?IIJo8ExMGLrqy4EPRiTj0rN4LlLzuaRQ0L+VKCeYiC219+foVpKDCFnWlwrJ?=
+ =?us-ascii?Q?1No09FsBYe9wzLBrHWjanBYrtq2CK0sC40BHKioxBVZQ2lRe07eVJ2CzTda5?=
+ =?us-ascii?Q?Y/pgJmCXxeqAlhhc3g7G8vYi2IIcMqaLeG8s16Pp60JSUe1ju0TotF4v2PTP?=
+ =?us-ascii?Q?/EuL2jLQzh53HkJt6i4Vya4IIDImmsr4Nprle8HsWgHHee6hQdGPbxqK8bHE?=
+ =?us-ascii?Q?tvMIavT5zwVfM1hm4T/CzC1RkQUPfDY9R/mejtjHBi/+9rJxBDg6cayqcWXK?=
+ =?us-ascii?Q?0UGQTcAgcveuXgad+zWOVi8ryMvCBcRrwIXzI30pJ0M2GVSKpA0PqkC0BwRT?=
+ =?us-ascii?Q?Do5favCxaUQ2rtZpetEm5zRU+r7I+7HY1ah/emL6lbCQ+2Ub7nnqC/5TfNd9?=
+ =?us-ascii?Q?v2o1P+5AJOG+6lDyTvSHRL2Ki2s+A/uhQbjB6W5cPRxYT7kma3CMrg0uvjI8?=
+ =?us-ascii?Q?6VgyH+1Hafy4CTQKwo8LfweGmdnDHUDIwxGV7+09Z3Hq1Kab+/rNxt4yiqQa?=
+ =?us-ascii?Q?Fd5nphv9tWuzRTfm5NF36M6FFZHGiU2Q+9eieS0ETIhAzkr+SFL/LxEM9avN?=
+ =?us-ascii?Q?F+4UB9ewdDd0nmeK+uT4hGybyUVeBnscTEUEUxJa66v3ZNYixae84P+n3MfG?=
+ =?us-ascii?Q?NJ13U6RWgxVSWFtRteYKa6aLGrhL8p5BqHyhDl7iO7l1ZmlEtPFP6VrnwRMV?=
+ =?us-ascii?Q?dm0RbjBjSjg/QxHj1hohpjvIr2QumSm9ap/rC/pQn9WRrV6ricXVzS7JT/tN?=
+ =?us-ascii?Q?QV4B/Z8YteAQxP83/du2LTF1CSUMvKAXo4NZZpP1AOKv3aHWGvG4lSUzKAoN?=
+ =?us-ascii?Q?CLNxqz2F0kC7lfRkA9qcZqgACvqaDlhmnPEo4FPpaBJkUWk4MYGmUdUMW1K5?=
+ =?us-ascii?Q?D1ovVgOAoj7CE8LcZosJTOMaJGGJ+ABiDezux3MhuMVtmfH45iWxpUDcazvu?=
+ =?us-ascii?Q?zlSgAjrNJ7ohyUzESZgg5BR4ZyT3X0pavBb4pLOYlS+FHOlJF7Jsvl3k6kC5?=
+ =?us-ascii?Q?IrjLB8Eyi5L+JaefKGzSJC3BVm1aFVHfPKE2VzqIV4CdlcEUXa1rPDbsCgCi?=
+ =?us-ascii?Q?NTLtUKHEHTOn8Vv5WlT5xNcwLt9uFzpwqt+cGvKXarvfPV6s4Y+6j2z2Ka0T?=
+ =?us-ascii?Q?ZEL4jeDUTtOQdhaGPkUr/eNi2Nl1gkJxcafkBgiHd4EiWAV7uT56CK+jP2g2?=
+ =?us-ascii?Q?mIOwnNwQ003x/bg895cj2VWTyIXTcfprYo32O2U175nUmV0weznzmeN+Rvu1?=
+ =?us-ascii?Q?AA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba224d39-eb04-43b4-22b4-08dafff71c9d
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6522.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 23:42:32.5279
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 23:43:23.1067
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LKvOK94Y5d9SlP35kHg46slTHwUEJFV4ePdfMifdlEjCvU64JhzcIB6lgpEQCqXH7QQ0hDYjOfW1+8qbh26BEg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5611
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_09,2023-01-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 phishscore=0
- suspectscore=0 malwarescore=0 adultscore=0 mlxlogscore=999 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301260221
-X-Proofpoint-GUID: 8dVMLCq4aR1YhhNZT54lv7-hopOhUL7p
-X-Proofpoint-ORIG-GUID: 8dVMLCq4aR1YhhNZT54lv7-hopOhUL7p
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: Hvjb3/GVB1A7XhGRNmvrTW5GMYM4f99mS0wqdBLngaOed8X/64/FNS9ypopMq8Sa5337olM7fBOJxL2gocowqg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5446
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/24/23 22:00, syzbot wrote:
-> Hello,
+On Wed, Jan 18, 2023 at 07:12:45AM +0100, Danilo Krummrich wrote:
+> This adds the infrastructure for a manager implementation to keep track
+> of GPU virtual address (VA) mappings.
 > 
-> syzbot found the following issue on:
+> New UAPIs, motivated by Vulkan sparse memory bindings graphics drivers
+> start implementing, allow userspace applications to request multiple and
+> arbitrary GPU VA mappings of buffer objects. The DRM GPU VA manager is
+> intended to serve the following purposes in this context.
 > 
-> HEAD commit:    691781f561e9 Add linux-next specific files for 20230123
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1393d0ac480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=804cddf7ddbc6c64
-> dashboard link: https://syzkaller.appspot.com/bug?extid=83cc82a0254bc0c17b52
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 1) Provide a dedicated range allocator to track GPU VA allocations and
+>    mappings, making use of the drm_mm range allocator.
+> 
+> 2) Generically connect GPU VA mappings to their backing buffers, in
+>    particular DRM GEM objects.
+> 
+> 3) Provide a common implementation to perform more complex mapping
+>    operations on the GPU VA space. In particular splitting and merging
+>    of GPU VA mappings, e.g. for intersecting mapping requests or partial
+>    unmap requests.
+> 
+> Idea-suggested-by: Dave Airlie <airlied@redhat.com>
+> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+
 <snip>
-> ------------[ cut here ]------------
-> kernel BUG at mm/hugetlb.c:1865!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 8927 Comm: syz-executor.5 Not tainted 6.2.0-rc5-next-20230123-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-> RIP: 0010:free_huge_page+0xa5b/0xe80 mm/hugetlb.c:1865
-> Code: 0f 0b e8 08 98 b7 ff 4c 89 e7 e8 00 3e f7 ff 89 c3 e9 a0 f9 ff ff e8 f4 97 b7 ff 48 c7 c6 a0 6f 59 8a 4c 89 e7 e8 55 8b ef ff <0f> 0b e8 de 97 b7 ff 48 8d 7b 17 48 b8 00 00 00 00 00 fc ff df 4c
-> RSP: 0018:ffffc9000557f908 EFLAGS: 00010246
-> RAX: 0000000000040000 RBX: 0000000000000001 RCX: ffffc900062ea000
-> RDX: 0000000000040000 RSI: ffffffff81ca564b RDI: 0000000000000000
-> RBP: ffffffff91c45bf8 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000001 R11: 1ffffffff21798de R12: ffffea0002580000
-> R13: ffffea0002580090 R14: 0000000000000000 R15: ffffea0002580034
-> FS:  00007f42bf3be700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f2349dabf84 CR3: 0000000021513000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __folio_put_large mm/swap.c:119 [inline]
->  __folio_put+0x109/0x140 mm/swap.c:127
->  folio_put include/linux/mm.h:1203 [inline]
->  put_page+0x21b/0x280 include/linux/mm.h:1272
->  hugetlb_fault+0x153e/0x23f0 mm/hugetlb.c:6130
->  follow_hugetlb_page+0x6ab/0x1e40 mm/hugetlb.c:6524
->  __get_user_pages+0x29b/0xfc0 mm/gup.c:1125
->  populate_vma_page_range+0x241/0x320 mm/gup.c:1526
->  __mm_populate+0x105/0x3b0 mm/gup.c:1640
->  do_mlock+0x370/0x6d0 mm/mlock.c:608
->  __do_sys_mlock mm/mlock.c:616 [inline]
->  __se_sys_mlock mm/mlock.c:614 [inline]
->  __x64_sys_mlock+0x59/0x80 mm/mlock.c:614
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f42be68c0c9
 
-I believe this has the same root cause as the problem reported here:
+> diff --git a/include/drm/drm_gpuva_mgr.h b/include/drm/drm_gpuva_mgr.h
+> new file mode 100644
+> index 000000000000..adeb0c916e91
+> --- /dev/null
+> +++ b/include/drm/drm_gpuva_mgr.h
+> @@ -0,0 +1,527 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#ifndef __DRM_GPUVA_MGR_H__
+> +#define __DRM_GPUVA_MGR_H__
+> +
+> +/*
+> + * Copyright (c) 2022 Red Hat.
+> + *
+> + * Permission is hereby granted, free of charge, to any person obtaining a
+> + * copy of this software and associated documentation files (the "Software"),
+> + * to deal in the Software without restriction, including without limitation
+> + * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+> + * and/or sell copies of the Software, and to permit persons to whom the
+> + * Software is furnished to do so, subject to the following conditions:
+> + *
+> + * The above copyright notice and this permission notice shall be included in
+> + * all copies or substantial portions of the Software.
+> + *
+> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+> + * THE COPYRIGHT HOLDER(S) OR AUTHOR(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR
+> + * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+> + * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+> + * OTHER DEALINGS IN THE SOFTWARE.
+> + */
+> +
+> +#include <drm/drm_mm.h>
+> +#include <linux/mm.h>
+> +#include <linux/rbtree.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/types.h>
+> +
+> +struct drm_gpuva_region;
+> +struct drm_gpuva;
+> +struct drm_gpuva_ops;
+> +
+> +/**
+> + * struct drm_gpuva_manager - DRM GPU VA Manager
+> + *
+> + * The DRM GPU VA Manager keeps track of a GPU's virtual address space by using
+> + * the &drm_mm range allocator. Typically, this structure is embedded in bigger
+> + * driver structures.
+> + *
+> + * Drivers can pass addresses and ranges in an arbitrary unit, e.g. bytes or
+> + * pages.
+> + *
+> + * There should be one manager instance per GPU virtual address space.
+> + */
+> +struct drm_gpuva_manager {
+> +	/**
+> +	 * @name: the name of the DRM GPU VA space
+> +	 */
+> +	const char *name;
+> +
+> +	/**
+> +	 * @mm_start: start of the VA space
+> +	 */
+> +	u64 mm_start;
+> +
+> +	/**
+> +	 * @mm_range: length of the VA space
+> +	 */
+> +	u64 mm_range;
+> +
+> +	/**
+> +	 * @region_mm: the &drm_mm range allocator to track GPU VA regions
+> +	 */
+> +	struct drm_mm region_mm;
+> +
 
-https://lore.kernel.org/linux-mm/20230124162346.404985e8@thinkpad/
+I'd suggest using a rb_tree rather than drm_mm, it should be quite a bit
+more light weight - that is what we currently use in Xe for VM / VMA
+management.
 
-With the code segment,
-[...]
->  	page = pte_page(entry);
-> -	if (page != pagecache_page)
-> +	if (page_folio(page) != pagecache_folio)
->  		if (!trylock_page(page)) {
->  			need_wait_lock = 1;
->  			goto out_ptl;
->  		}
->  
-> -	get_page(page);
-> +	folio_get(pagecache_folio);
->  
+See lines 994-1056 in the following file:
+https://cgit.freedesktop.org/drm/drm-xe/tree/drivers/gpu/drm/xe/xe_vm.c?h=drm-xe-next
 
-In Gerald's case, pagecache_folio == NULL.
+I'm pretty sure all of your magic marcos (drm_gpuva_for_each*) should be
+easily implemented using a rb_tree too.
 
-In addition, note that page_folio(page) and pagecache_folio can refer to
-two different folios.  We already have a ref on pagecache_folio from previous
-code 'pagecache_folio = filemap_lock_folio()'.  The above would incorrectly
-get another ref on pagecache_folio instead of page.  So, page would be
-short one ref but still mapped.  At the end of hugetlb_fault(), we will
-do a put_page(page) and since we did not take a ref on the page, the ref
-count will drop to zero and we end up calling free_huge_page while the page
-is still mapped. That triggers the BUG. :(
+Matt
 
-This looks to be fixed in v2 of the patch.
--- 
-Mike Kravetz
+> +	/**
+> +	 * @va_mm: the &drm_mm range allocator to track GPU VA mappings
+> +	 */
+> +	struct drm_mm va_mm;
+> +
+> +	/**
+> +	 * @kernel_alloc_node:
+> +	 *
+> +	 * &drm_mm_node representing the address space cutout reserved for
+> +	 * the kernel
+> +	 */
+> +	struct drm_mm_node kernel_alloc_node;
+> +};
+> +
+> +void drm_gpuva_manager_init(struct drm_gpuva_manager *mgr,
+> +			    const char *name,
+> +			    u64 start_offset, u64 range,
+> +			    u64 reserve_offset, u64 reserve_range);
+> +void drm_gpuva_manager_destroy(struct drm_gpuva_manager *mgr);
+> +
+> +/**
+> + * struct drm_gpuva_region - structure to track a portion of GPU VA space
+> + *
+> + * This structure represents a portion of a GPUs VA space and is associated
+> + * with a &drm_gpuva_manager. Internally it is based on a &drm_mm_node.
+> + *
+> + * GPU VA mappings, represented by &drm_gpuva objects, are restricted to be
+> + * placed within a &drm_gpuva_region.
+> + */
+> +struct drm_gpuva_region {
+> +	/**
+> +	 * @node: the &drm_mm_node to track the GPU VA region
+> +	 */
+> +	struct drm_mm_node node;
+> +
+> +	/**
+> +	 * @mgr: the &drm_gpuva_manager this object is associated with
+> +	 */
+> +	struct drm_gpuva_manager *mgr;
+> +
+> +	/**
+> +	 * @sparse: indicates whether this region is sparse
+> +	 */
+> +	bool sparse;
+> +};
+> +
+> +struct drm_gpuva_region *
+> +drm_gpuva_region_find(struct drm_gpuva_manager *mgr,
+> +		      u64 addr, u64 range);
+> +int drm_gpuva_region_insert(struct drm_gpuva_manager *mgr,
+> +			    struct drm_gpuva_region *reg,
+> +			    u64 addr, u64 range);
+> +void drm_gpuva_region_destroy(struct drm_gpuva_manager *mgr,
+> +			      struct drm_gpuva_region *reg);
+> +
+> +int drm_gpuva_insert(struct drm_gpuva_manager *mgr,
+> +		     struct drm_gpuva *va,
+> +		     u64 addr, u64 range);
+> +/**
+> + * drm_gpuva_for_each_region_in_range - iternator to walk over a range of nodes
+> + * @node__: &drm_gpuva_region structure to assign to in each iteration step
+> + * @gpuva__: &drm_gpuva_manager structure to walk
+> + * @start__: starting offset, the first node will overlap this
+> + * @end__: ending offset, the last node will start before this (but may overlap)
+> + *
+> + * This iterator walks over all nodes in the range allocator that lie
+> + * between @start and @end. It is implemented similarly to list_for_each(),
+> + * but is using &drm_mm's internal interval tree to accelerate the search for
+> + * the starting node, and hence isn't safe against removal of elements. It
+> + * assumes that @end is within (or is the upper limit of) the &drm_gpuva_manager.
+> + * If [@start, @end] are beyond the range of the &drm_gpuva_manager, the
+> + * iterator may walk over the special _unallocated_ &drm_mm.head_node of the
+> + * backing &drm_mm, and may even continue indefinitely.
+> + */
+> +#define drm_gpuva_for_each_region_in_range(node__, gpuva__, start__, end__) \
+> +	for (node__ = (struct drm_gpuva_region *)__drm_mm_interval_first(&(gpuva__)->region_mm, \
+> +									 (start__), (end__)-1); \
+> +	     node__->node.start < (end__); \
+> +	     node__ = (struct drm_gpuva_region *)list_next_entry(&node__->node, node_list))
+> +
+> +/**
+> + * drm_gpuva_for_each_region - iternator to walk over a range of nodes
+> + * @entry: &drm_gpuva_region structure to assign to in each iteration step
+> + * @gpuva: &drm_gpuva_manager structure to walk
+> + *
+> + * This iterator walks over all &drm_gpuva_region structures associated with the
+> + * &drm_gpuva_manager.
+> + */
+> +#define drm_gpuva_for_each_region(entry, gpuva) \
+> +	list_for_each_entry(entry, drm_mm_nodes(&(gpuva)->region_mm), node.node_list)
+> +
+> +/**
+> + * drm_gpuva_for_each_region_safe - iternator to safely walk over a range of
+> + * nodes
+> + * @entry: &drm_gpuva_region structure to assign to in each iteration step
+> + * @next: &next &drm_gpuva_region to store the next step
+> + * @gpuva: &drm_gpuva_manager structure to walk
+> + *
+> + * This iterator walks over all &drm_gpuva_region structures associated with the
+> + * &drm_gpuva_manager. It is implemented with list_for_each_safe(), so save
+> + * against removal of elements.
+> + */
+> +#define drm_gpuva_for_each_region_safe(entry, next, gpuva) \
+> +	list_for_each_entry_safe(entry, next, drm_mm_nodes(&(gpuva)->region_mm), node.node_list)
+> +
+> +
+> +/**
+> + * enum drm_gpuva_flags - flags for struct drm_gpuva
+> + */
+> +enum drm_gpuva_flags {
+> +	/**
+> +	 * @DRM_GPUVA_SWAPPED: flag indicating that the &drm_gpuva is swapped
+> +	 */
+> +	DRM_GPUVA_SWAPPED = (1 << 0),
+> +};
+> +
+> +/**
+> + * struct drm_gpuva - structure to track a GPU VA mapping
+> + *
+> + * This structure represents a GPU VA mapping and is associated with a
+> + * &drm_gpuva_manager. Internally it is based on a &drm_mm_node.
+> + *
+> + * Typically, this structure is embedded in bigger driver structures.
+> + */
+> +struct drm_gpuva {
+> +	/**
+> +	 * @node: the &drm_mm_node to track the GPU VA mapping
+> +	 */
+> +	struct drm_mm_node node;
+> +
+> +	/**
+> +	 * @mgr: the &drm_gpuva_manager this object is associated with
+> +	 */
+> +	struct drm_gpuva_manager *mgr;
+> +
+> +	/**
+> +	 * @region: the &drm_gpuva_region the &drm_gpuva is mapped in
+> +	 */
+> +	struct drm_gpuva_region *region;
+> +
+> +	/**
+> +	 * @head: the &list_head to attach this object to a &drm_gem_object
+> +	 */
+> +	struct list_head head;
+> +
+> +	/**
+> +	 * @flags: the &drm_gpuva_flags for this mapping
+> +	 */
+> +	enum drm_gpuva_flags flags;
+> +
+> +	/**
+> +	 * @gem: structure containing the &drm_gem_object and it's offset
+> +	 */
+> +	struct {
+> +		/**
+> +		 * @offset: the offset within the &drm_gem_object
+> +		 */
+> +		u64 offset;
+> +
+> +		/**
+> +		 * @obj: the mapped &drm_gem_object
+> +		 */
+> +		struct drm_gem_object *obj;
+> +	} gem;
+> +};
+> +
+> +void drm_gpuva_link_locked(struct drm_gpuva *va);
+> +void drm_gpuva_link_unlocked(struct drm_gpuva *va);
+> +void drm_gpuva_unlink_locked(struct drm_gpuva *va);
+> +void drm_gpuva_unlink_unlocked(struct drm_gpuva *va);
+> +
+> +void drm_gpuva_destroy_locked(struct drm_gpuva *va);
+> +void drm_gpuva_destroy_unlocked(struct drm_gpuva *va);
+> +
+> +struct drm_gpuva *drm_gpuva_find(struct drm_gpuva_manager *mgr,
+> +				 u64 addr, u64 range);
+> +struct drm_gpuva *drm_gpuva_find_prev(struct drm_gpuva_manager *mgr, u64 start);
+> +struct drm_gpuva *drm_gpuva_find_next(struct drm_gpuva_manager *mgr, u64 end);
+> +
+> +/**
+> + * drm_gpuva_swap - sets whether the backing BO of this &drm_gpuva is swapped
+> + * @va: the &drm_gpuva to set the swap flag of
+> + * @swap: indicates whether the &drm_gpuva is swapped
+> + */
+> +static inline void drm_gpuva_swap(struct drm_gpuva *va, bool swap)
+> +{
+> +	if (swap)
+> +		va->flags |= DRM_GPUVA_SWAPPED;
+> +	else
+> +		va->flags &= ~DRM_GPUVA_SWAPPED;
+> +}
+> +
+> +/**
+> + * drm_gpuva_swapped - indicates whether the backing BO of this &drm_gpuva
+> + * is swapped
+> + * @va: the &drm_gpuva to check
+> + */
+> +static inline bool drm_gpuva_swapped(struct drm_gpuva *va)
+> +{
+> +	return va->flags & DRM_GPUVA_SWAPPED;
+> +}
+> +
+> +/**
+> + * drm_gpuva_for_each_va_in_range - iternator to walk over a range of nodes
+> + * @node__: &drm_gpuva structure to assign to in each iteration step
+> + * @gpuva__: &drm_gpuva_manager structure to walk
+> + * @start__: starting offset, the first node will overlap this
+> + * @end__: ending offset, the last node will start before this (but may overlap)
+> + *
+> + * This iterator walks over all nodes in the range allocator that lie
+> + * between @start and @end. It is implemented similarly to list_for_each(),
+> + * but is using &drm_mm's internal interval tree to accelerate the search for
+> + * the starting node, and hence isn't safe against removal of elements. It
+> + * assumes that @end is within (or is the upper limit of) the &drm_gpuva_manager.
+> + * If [@start, @end] are beyond the range of the &drm_gpuva_manager, the
+> + * iterator may walk over the special _unallocated_ &drm_mm.head_node of the
+> + * backing &drm_mm, and may even continue indefinitely.
+> + */
+> +#define drm_gpuva_for_each_va_in_range(node__, gpuva__, start__, end__) \
+> +	for (node__ = (struct drm_gpuva *)__drm_mm_interval_first(&(gpuva__)->va_mm, \
+> +								  (start__), (end__)-1); \
+> +	     node__->node.start < (end__); \
+> +	     node__ = (struct drm_gpuva *)list_next_entry(&node__->node, node_list))
+> +
+> +/**
+> + * drm_gpuva_for_each_va - iternator to walk over a range of nodes
+> + * @entry: &drm_gpuva structure to assign to in each iteration step
+> + * @gpuva: &drm_gpuva_manager structure to walk
+> + *
+> + * This iterator walks over all &drm_gpuva structures associated with the
+> + * &drm_gpuva_manager.
+> + */
+> +#define drm_gpuva_for_each_va(entry, gpuva) \
+> +	list_for_each_entry(entry, drm_mm_nodes(&(gpuva)->va_mm), node.node_list)
+> +
+> +/**
+> + * drm_gpuva_for_each_va_safe - iternator to safely walk over a range of
+> + * nodes
+> + * @entry: &drm_gpuva structure to assign to in each iteration step
+> + * @next: &next &drm_gpuva to store the next step
+> + * @gpuva: &drm_gpuva_manager structure to walk
+> + *
+> + * This iterator walks over all &drm_gpuva structures associated with the
+> + * &drm_gpuva_manager. It is implemented with list_for_each_safe(), so save
+> + * against removal of elements.
+> + */
+> +#define drm_gpuva_for_each_va_safe(entry, next, gpuva) \
+> +	list_for_each_entry_safe(entry, next, drm_mm_nodes(&(gpuva)->va_mm), node.node_list)
+> +
+> +/**
+> + * enum drm_gpuva_op_type - GPU VA operation type
+> + *
+> + * Operations to alter the GPU VA mappings tracked by the &drm_gpuva_manager
+> + * can be map, remap or unmap operations.
+> + */
+> +enum drm_gpuva_op_type {
+> +	/**
+> +	 * @DRM_GPUVA_OP_MAP: the map op type
+> +	 */
+> +	DRM_GPUVA_OP_MAP,
+> +
+> +	/**
+> +	 * @DRM_GPUVA_OP_REMAP: the remap op type
+> +	 */
+> +	DRM_GPUVA_OP_REMAP,
+> +
+> +	/**
+> +	 * @DRM_GPUVA_OP_UNMAP: the unmap op type
+> +	 */
+> +	DRM_GPUVA_OP_UNMAP,
+> +};
+> +
+> +/**
+> + * struct drm_gpuva_op_map - GPU VA map operation
+> + *
+> + * This structure represents a single map operation generated by the
+> + * DRM GPU VA manager.
+> + */
+> +struct drm_gpuva_op_map {
+> +	/**
+> +	 * @va: structure containing address and range of a map
+> +	 * operation
+> +	 */
+> +	struct {
+> +		/**
+> +		 * @addr: the base address of the new mapping
+> +		 */
+> +		u64 addr;
+> +
+> +		/**
+> +		 * @range: the range of the new mapping
+> +		 */
+> +		u64 range;
+> +	} va;
+> +
+> +	/**
+> +	 * @gem: structure containing the &drm_gem_object and it's offset
+> +	 */
+> +	struct {
+> +		/**
+> +		 * @offset: the offset within the &drm_gem_object
+> +		 */
+> +		u64 offset;
+> +
+> +		/**
+> +		 * @obj: the &drm_gem_object to map
+> +		 */
+> +		struct drm_gem_object *obj;
+> +	} gem;
+> +};
+> +
+> +/**
+> + * struct drm_gpuva_op_unmap - GPU VA unmap operation
+> + *
+> + * This structure represents a single unmap operation generated by the
+> + * DRM GPU VA manager.
+> + */
+> +struct drm_gpuva_op_unmap {
+> +	/**
+> +	 * @va: the &drm_gpuva to unmap
+> +	 */
+> +	struct drm_gpuva *va;
+> +
+> +	/**
+> +	 * @keep:
+> +	 *
+> +	 * Indicates whether this &drm_gpuva is physically contiguous with the
+> +	 * original mapping request.
+> +	 *
+> +	 * Optionally, if &keep is set, drivers may keep the actual page table
+> +	 * mappings for this &drm_gpuva, adding the missing page table entries
+> +	 * only and update the &drm_gpuva_manager accordingly.
+> +	 */
+> +	bool keep;
+> +};
+> +
+> +/**
+> + * struct drm_gpuva_op_remap - GPU VA remap operation
+> + *
+> + * This represents a single remap operation generated by the DRM GPU VA manager.
+> + *
+> + * A remap operation is generated when an existing GPU VA mmapping is split up
+> + * by inserting a new GPU VA mapping or by partially unmapping existent
+> + * mapping(s), hence it consists of a maximum of two map and one unmap
+> + * operation.
+> + *
+> + * The @unmap operation takes care of removing the original existing mapping.
+> + * @prev is used to remap the preceding part, @next the subsequent part.
+> + *
+> + * If either a new mapping's start address is aligned with the start address
+> + * of the old mapping or the new mapping's end address is aligned with the
+> + * end address of the old mapping, either @prev or @next is NULL.
+> + *
+> + * Note, the reason for a dedicated remap operation, rather than arbitrary
+> + * unmap and map operations, is to give drivers the chance of extracting driver
+> + * specific data for creating the new mappings from the unmap operations's
+> + * &drm_gpuva structure which typically is embedded in larger driver specific
+> + * structures.
+> + */
+> +struct drm_gpuva_op_remap {
+> +	/**
+> +	 * @prev: the preceding part of a split mapping
+> +	 */
+> +	struct drm_gpuva_op_map *prev;
+> +
+> +	/**
+> +	 * @next: the subsequent part of a split mapping
+> +	 */
+> +	struct drm_gpuva_op_map *next;
+> +
+> +	/**
+> +	 * @unmap: the unmap operation for the original existing mapping
+> +	 */
+> +	struct drm_gpuva_op_unmap *unmap;
+> +};
+> +
+> +/**
+> + * struct drm_gpuva_op - GPU VA operation
+> + *
+> + * This structure represents a single generic operation, which can be either
+> + * map, unmap or remap.
+> + *
+> + * The particular type of the operation is defined by @op.
+> + */
+> +struct drm_gpuva_op {
+> +	/**
+> +	 * @entry:
+> +	 *
+> +	 * The &list_head used to distribute instances of this struct within
+> +	 * &drm_gpuva_ops.
+> +	 */
+> +	struct list_head entry;
+> +
+> +	/**
+> +	 * @op: the type of the operation
+> +	 */
+> +	enum drm_gpuva_op_type op;
+> +
+> +	union {
+> +		/**
+> +		 * @map: the map operation
+> +		 */
+> +		struct drm_gpuva_op_map map;
+> +
+> +		/**
+> +		 * @unmap: the unmap operation
+> +		 */
+> +		struct drm_gpuva_op_unmap unmap;
+> +
+> +		/**
+> +		 * @remap: the remap operation
+> +		 */
+> +		struct drm_gpuva_op_remap remap;
+> +	};
+> +};
+> +
+> +/**
+> + * struct drm_gpuva_ops - wraps a list of &drm_gpuva_op
+> + */
+> +struct drm_gpuva_ops {
+> +	/**
+> +	 * @list: the &list_head
+> +	 */
+> +	struct list_head list;
+> +};
+> +
+> +/**
+> + * drm_gpuva_for_each_op - iterator to walk over all ops
+> + * @op: &drm_gpuva_op to assign in each iteration step
+> + * @ops: &drm_gpuva_ops to walk
+> + *
+> + * This iterator walks over all ops within a given list of operations.
+> + */
+> +#define drm_gpuva_for_each_op(op, ops) list_for_each_entry(op, &(ops)->list, entry)
+> +
+> +/**
+> + * drm_gpuva_for_each_op_safe - iterator to safely walk over all ops
+> + * @op: &drm_gpuva_op to assign in each iteration step
+> + * @next: &next &drm_gpuva_op to store the next step
+> + * @ops: &drm_gpuva_ops to walk
+> + *
+> + * This iterator walks over all ops within a given list of operations. It is
+> + * implemented with list_for_each_safe(), so save against removal of elements.
+> + */
+> +#define drm_gpuva_for_each_op_safe(op, next, ops) \
+> +	list_for_each_entry_safe(op, next, &(ops)->list, entry)
+> +
+> +struct drm_gpuva_ops *
+> +drm_gpuva_sm_map_ops_create(struct drm_gpuva_manager *mgr,
+> +			    u64 addr, u64 range,
+> +			    struct drm_gem_object *obj, u64 offset);
+> +struct drm_gpuva_ops *
+> +drm_gpuva_sm_unmap_ops_create(struct drm_gpuva_manager *mgr,
+> +			      u64 addr, u64 range);
+> +void drm_gpuva_ops_free(struct drm_gpuva_ops *ops);
+> +
+> +#endif /* __DRM_GPUVA_MGR_H__ */
+> -- 
+> 2.39.0
+> 
