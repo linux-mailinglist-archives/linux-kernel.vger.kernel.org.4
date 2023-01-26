@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA10567D2B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A190767D2C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbjAZRJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 12:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S232172AbjAZRKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 12:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjAZRJ1 (ORCPT
+        with ESMTP id S232300AbjAZRKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:09:27 -0500
+        Thu, 26 Jan 2023 12:10:12 -0500
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971F3BBAD
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:09:22 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 73E515C043E;
-        Thu, 26 Jan 2023 12:09:19 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B98C646
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:10:08 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D72865C0432;
+        Thu, 26 Jan 2023 12:10:07 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 26 Jan 2023 12:09:19 -0500
+  by compute6.internal (MEProxy); Thu, 26 Jan 2023 12:10:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1674752959; x=1674839359; bh=gq8oLyYgH8
-        4nvePeqaj8P7EbKq1ftFoCwR8UL87bIYo=; b=UrFFEoUQNYayThb1nLTUB86oNQ
-        5MAOCi0aMLB24U/4Qg9um26W6Extmhf0h7H7WFr26zNYDqqAnvEC07/yn/T4hEgu
-        YlsPerWapnJtv2uGNXlzcQzbbhTgak0wD5M22PmHh0E27kpERS5oGjMonUpzn8Y1
-        x7Wk/QlhNez1F6hablUkblDLDl7TXjJSjz8dP4LLdbLiJnB010k0nfHwYKh4Kkdr
-        0AaUBNImx0dLQj+bRhFFOtMexjubUlnVkAR0gDn2J6pLx3lZyZucP/6JKnGUsrB0
-        Pbfouvx0sAIoUoDx2hipcQ9lhpcQL+TWYhrJYLAIjgJxIkZhzoJIRhiuGpZA==
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1674753007; x=
+        1674839407; bh=r8PfVgfg1/1/LZjTHHsJomA3Uy4NDG54RVBnB5RCyr0=; b=i
+        OMneerGnFOg01mvXwYKOrilpgKgtN2YF2q43xZSo+mRI5twbkHDXaXIwgVSRouJ1
+        65p3JF8o+6q2GcOnyVyKOE9ebDL57uQv+Wx5hDz+78wX6b3JlwQSkOxuIArignc/
+        vQ+IUcQ63XwHhhr+fQW5sR9QLane19xyol7beemJQ/s+UGJqeHbwQe+f2gfb9qdq
+        inswiE13VgzvaNEDKO9a9CFfz+uzqvi3DkYIPv732OwQtVkB/GKfc3dA5t7JEZ0n
+        Ug/7qQ1atrz0+482puou0Z5zPYm9yFZ2TbVvGBGxT3tn37tO1S/GpJBUFPbbJ5oF
+        oubgnACTLLlUM1FR1KIHA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1674752959; x=1674839359; bh=gq8oLyYgH84nv
-        ePeqaj8P7EbKq1ftFoCwR8UL87bIYo=; b=ThAiYZ8J/I8xelcLovWwtP8abMq2z
-        DqiosZKBGJ5tDGfDVKyrSAIzYmhF1kSfHl8AUp1jADmv1EcH5VqLBSmw9dFEDaXu
-        xqVJUYvwBn/5fEsf68pJWzxrKDGJOmqYh7Fda42D3DPr4J2ti+vVjAqaHLB1ReFC
-        Nbs/+tzkX8P71vMqSs+T+uNyLbHTnCY/O3wFBDdZIvB3nafYUdXkRYB4rYjJBlOV
-        e97ccqS7Mw0VxKU5UkSNrYSA/BOQvd2R8veCAU/pS1wPJTZFsF9iz0tux15LXdjg
-        Q23+EmZl2WMzBPDM8HAuV+B6FEdGVsn/8UWEnLe6KPQ2L5LIwMWiw6/8g==
-X-ME-Sender: <xms:vbPSY6fUfwt3uOckNoJSRsPMdx4dShWy7UWKnQVnNAjCmkH_mzfzFw>
-    <xme:vbPSY0OxZeIUe90I0FZBErwaKpwPf_MhzYnelPd__EOqG2LdomX6JfG98OcIsRnwm
-    k6eJLoy-GXN2L9jYTE>
-X-ME-Received: <xmr:vbPSY7gDsz2MVkCsMvS81TXTq5nNBZJTQewS9vQorNIwWl9wIwSlJtGPB1pOd7yO0WYeVyBm08w4jH09u8xSeY8qHRrYdnzdUQzNvlPGOuDBug>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgleejucetufdoteggodetrfdotf
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674753007; x=
+        1674839407; bh=r8PfVgfg1/1/LZjTHHsJomA3Uy4NDG54RVBnB5RCyr0=; b=N
+        o8++D68TaOHuEuvEILXJr6z7O+49rKKa6vOCJokzIte38Etazwc2Z0cKXXgUnVTc
+        +0ePT76lzAOjkNe8CQwvZ+5MeDDlY3yOTqZb1MtJKDAOWzQ938dgFcYtrKAKUxH1
+        P66yPIHyvn1EpG2o7fETP3vwB/z0uS5wr68+7FM6Q4NxjGejFRscHPFNSehMoFl3
+        PYbXDH3pT2huERw7/TjRjdggm9lkluX7yNkw+yf4KN+h5D3gG169UBSGjTT1fjiN
+        UteSy9cS63SHYZgedZOLC3PkUkQZTcAEAe2higU8EcPyhBrD1nBWwcBTbEqKUsiX
+        O6piMwtZbMR07AP/DpEMQ==
+X-ME-Sender: <xms:77PSY34L4Da-JcyF4G0JBy0cT_T_Xx3zkWXow9mCPX0bqIOiMMImlA>
+    <xme:77PSY8401suvRE02LCLcvL77IrqsXsqusaGl_-bygdU7LR74mOD2EcOdtXZ2YyS7o
+    kW7irSOUa5wQtifvPE>
+X-ME-Received: <xmr:77PSY-fn7YY0z3xA5W834UowgoD07OL6h2qIaGxi6BSthufeDPpsOpSc40I_wSOtnRWXVFww3vvpCkvI294Xy2nEP_0HLOMQNeCEyptfNxzR9Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgleekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhephedvudehieegjedtieejveeiledvteeulefhvedvkeeuleehkeevffegvedv
-    ieeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:vrPSY39RE11DDj4oqtMc39B1tM6tSjVNccnnv9Vq2NOP7WKkjW7-Ww>
-    <xmx:vrPSY2uRyXvsCHRMcmBFCd36-lE3rzPANi23c2VuzFrS39uQdD6TlQ>
-    <xmx:vrPSY-GoAycvWKZqkUyCgKbljVXILvpi63tiS-eVPJadArRRyEB6wQ>
-    <xmx:v7PSY3-816kK-Y-TK1aBPjDxmxG1ydnAT0on2o4605mnjSJknjxL7A>
+    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepvedvleeijeegvdekffehkeehieelhfeggfffheetkeeuledvtdeuffeh
+    teeltdffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:77PSY4KzfJGso5_D4piK_FfJQKFEQ-kUreJvvKKzuFcOw2TCkmuHyw>
+    <xmx:77PSY7L-em_BXw6_t0dlrcCdC6fuuONyD5Tp7_LqERU34yHkulNwHA>
+    <xmx:77PSYxz6MKGMl57AbWqauE6PIEU1AlmlFDgFeAFugmF47qVfr7C2vA>
+    <xmx:77PSY0453PrdRCZeR5Bwf0m_pAZgZ4nIzIhSAfhGJXCi7IPZVA11tQ>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 26 Jan 2023 12:09:16 -0500 (EST)
+ 26 Jan 2023 12:10:06 -0500 (EST)
 From:   Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH 0/4] drm/vc4: hdmi: Firmware clocks cleanup
-Date:   Thu, 26 Jan 2023 18:05:46 +0100
-Message-Id: <20230126-rpi-display-fw-clk-cleanup-v1-0-d646ff6fb842@cerno.tech>
+Date:   Thu, 26 Jan 2023 18:05:47 +0100
+Subject: [PATCH 2/4] drm/vc4: hdmi: Enable power domain before setting minimum
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOqy0mMC/x2NSw7CMAwFr1J5jaUkfCS4CmLhJC61iEyUqEBV9
- e61WLzFvMXMCp2bcIfbsELjj3R5q4E/DJAm0iejZGMILhydDxdsVTBLr4UWHL+YysvGpHNFf80+
- urMnd0pggkidMTbSNJlC51LsrI1H+f2L98e27fIrNsWBAAAA
+Message-Id: <20230126-rpi-display-fw-clk-cleanup-v1-2-d646ff6fb842@cerno.tech>
+References: <20230126-rpi-display-fw-clk-cleanup-v1-0-d646ff6fb842@cerno.tech>
+In-Reply-To: <20230126-rpi-display-fw-clk-cleanup-v1-0-d646ff6fb842@cerno.tech>
 To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>
@@ -79,11 +80,11 @@ Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Maxime Ripard <maxime@cerno.tech>
 X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1350; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=U9eolbaMAC7R9IXkVJ9lSBBeSMe3NsbCd8smJA/NZRY=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMmXNn20V/SQ3/Tvw32zeRZBNQEF66bLmJ7fHZC/53niujDj
- mgdcHaUsDGJcDLJiiiwxwuZL4k7Net3JxjcPZg4rE8gQBi5OAZjIQxdGhvY3SY9O7kysf1zwyeHEHd
- PG5uXx4osWpMy/0ayVMO222hJGhi1FJ/STbFb5+xYnakyWafu+e+EsPXX+1yE+98+yPVmlwQgA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2394; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=kZGgOHx1L8Al+hD8WBITB+QjtYhPj3I6fD0qrBD3FhE=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMmXNn1cUXxw3eOl1Z/WXv/I+yunIH534lFG8zne6xJjdvNM
+ YFi5uqOUhUGMi0FWTJElRth8SdypWa872fjmwcxhZQIZwsDFKQATyXRkZFh2WyvtZvbNrpbMb+3t7g
+ eimY5tOa33UHp5oq7i21yDzzMYGfZccHvts+12IG9UNOdxnZVp0pudnAMat6oaL+R9fOGmMA8A
 X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -95,42 +96,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On the RaspberryPi0-3, the HSM clock was provided by the clk-bcm2835
+driver, but on the Pi4 it was provided by the firmware through the
+clk-raspberrypi driver.
 
-In order to accomodate the Pi0-3 using the clk-bcm2835 and the Pi4 using the
-clk-raspberrypi clock drivers for the HDMI clocks, we piled a number of
-workarounds over the years.
+The clk-bcm2835 driver registers the HSM clock using the
+CLK_SET_RATE_GATE flag that prevents any modification to the rate while
+the clock is active.
 
-Since 6.2, we've switched the Pi0-3 to the clk-raspberrypi driver, so we can
-now remove those workarounds.
+This meant that we needed to call clk_set_min_rate() before our call to
+pm_runtime_resume_and_get() since our runtime_resume implementation
+needs to enable the HSM clock for the HDMI controller registers to be
+functional.
 
-Let me know what you think,
-Maxime
+However, the HSM clock is part of the HDMI power domain which might not
+be powered prior to the pm_runtime_resume_and_get() call, so we could
+end up changing the rate of the HSM clock while its power domain was
+disabled.
 
-To: Emma Anholt <emma@anholt.net>
-To: Maxime Ripard <mripard@kernel.org>
-To: David Airlie <airlied@gmail.com>
-To: Daniel Vetter <daniel@ffwll.ch>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org
+We recently changed the backing driver for the RaspberryPi0-3 to
+clk-raspberrypi though, which doesn't have such restrictions. We can
+thus move the clk_set_min_rate() after our call to runtime_resume and
+avoid the access while the power domain is disabled.
+
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-
 ---
-Maxime Ripard (4):
-      drm/vc4: hdmi: Replace hardcoded value by define
-      drm/vc4: hdmi: Enable power domain before setting minimum
-      Revert "drm/vc4: hdmi: Fix HSM clock too low on Pi4"
-      Revert "drm/vc4: hdmi: Enforce the minimum rate at runtime_resume"
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
- drivers/gpu/drm/vc4/vc4_hdmi.c | 46 ++++++++++++------------------------------
- drivers/gpu/drm/vc4/vc4_hdmi.h |  1 -
- 2 files changed, 13 insertions(+), 34 deletions(-)
----
-base-commit: 9fbee811e479aca2f3523787cae1f46553141b40
-change-id: 20230126-rpi-display-fw-clk-cleanup-19d1b051a04c
+diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+index 98fa306dbd24..9dd722b9ae3a 100644
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -1466,6 +1466,12 @@ static void vc4_hdmi_encoder_pre_crtc_configure(struct drm_encoder *encoder,
+ 	if (!drm_dev_enter(drm, &idx))
+ 		goto out;
+ 
++	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
++	if (ret < 0) {
++		DRM_ERROR("Failed to retain power domain: %d\n", ret);
++		goto err_dev_exit;
++	}
++
+ 	/*
+ 	 * As stated in RPi's vc4 firmware "HDMI state machine (HSM) clock must
+ 	 * be faster than pixel clock, infinitesimally faster, tested in
+@@ -1488,13 +1494,7 @@ static void vc4_hdmi_encoder_pre_crtc_configure(struct drm_encoder *encoder,
+ 	ret = clk_set_min_rate(vc4_hdmi->hsm_clock, hsm_rate);
+ 	if (ret) {
+ 		DRM_ERROR("Failed to set HSM clock rate: %d\n", ret);
+-		goto err_dev_exit;
+-	}
+-
+-	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+-	if (ret < 0) {
+-		DRM_ERROR("Failed to retain power domain: %d\n", ret);
+-		goto err_dev_exit;
++		goto err_put_runtime_pm;
+ 	}
+ 
+ 	ret = clk_set_rate(vc4_hdmi->pixel_clock, tmds_char_rate);
 
-Best regards,
 -- 
-Maxime Ripard <maxime@cerno.tech>
+2.39.1
