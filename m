@@ -2,95 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1FD67C4F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6C267C4FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjAZHeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 02:34:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S233109AbjAZHlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 02:41:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjAZHer (ORCPT
+        with ESMTP id S229630AbjAZHli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 02:34:47 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A012EF9C
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 23:34:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1674718466; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=IQYpRnWWtPK0El+L92Ni4UwuTMux/ljq/Rl4COtsXqBW6K+hfREcfwTZ/bKk14SsvH5SuB4fsqtHo/krSibmO6Xgyku0fRMsuMXDPDFqcLrK2fPRJL4l44ZQ3x8F8GbqhGWHi5COETAXuOAyumRO/n2rycaDE/IFZ1npTFEQZO0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1674718466; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=U65p8hOzdSe3/PC0vg4Oj9gzj+NCyyXs40Dv4ecIoSg=; 
-        b=ltIoxJ2frCbfyZyjop54Yqa04RFbVWO5KZ0luyfPMmj5MWpuKYEaqv37C6GJ9cXWjlcerzPrf1BgeFyRI7zQGs0gnggWJNvSlpJAAoxToXAGrWyszo25SwDkEdH2ljKssDxOT7XD9QDR7Ms7p0sy5x1epCBVKxBb/UUFDruwgOU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674718466;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=U65p8hOzdSe3/PC0vg4Oj9gzj+NCyyXs40Dv4ecIoSg=;
-        b=IV52+0Qd7O9MQ0HkOzjDHlqvpjfMgTQXIqyarOeJv+Nw3BW6tQEfcF9hCG6gdbsR
-        828PGh+UwM1tosFGzLC0tWQzJFGs75H2cjZ1RY9FzJccSsZ1MLAA2VJBr8gJutd87bL
-        npHrTkIUJjmFhSaKXUMkyyb62g32F1xmbOviu5LA=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1674718463412842.8049862602045; Wed, 25 Jan 2023 23:34:23 -0800 (PST)
-Message-ID: <1f0e41f4-edf8-fcb5-9bb6-5b5163afa599@arinc9.com>
-Date:   Thu, 26 Jan 2023 10:34:11 +0300
+        Thu, 26 Jan 2023 02:41:38 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10BA65F2D;
+        Wed, 25 Jan 2023 23:41:36 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 973622210B;
+        Thu, 26 Jan 2023 07:41:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674718895; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mncfe4kJe4t7mpaj+aaMpUVysMSI3MXidyK6ywAzmc0=;
+        b=UL/28di24psjPcStaP7/ABTZSBwBaZupgJJ4DSVAM8SvNGREBi1UxcQo4kxQu5V3ZGxb/7
+        Ei7mT7wBbYdb4meO0r0bNG1opKAjusHwBxdas9X+gGIjnoIzyVR2Nh0wuaSJ0rT4jArO/G
+        MqUFVoKMoss3rxA7mQ4/uxLXF8J05DM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 783FF1358A;
+        Thu, 26 Jan 2023 07:41:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YUv4Gq8u0mOxHQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 26 Jan 2023 07:41:35 +0000
+Date:   Thu, 26 Jan 2023 08:41:34 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
+        Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+Message-ID: <Y9Iurktut9B9T+Tl@dhcp22.suse.cz>
+References: <20230125073502.743446-1-leobras@redhat.com>
+ <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+ <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+ <Y9FzSBw10MGXm2TK@tpad>
+ <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net] net: dsa: mt7530: fix tristate and help description
-To:     John 'Warthog9' Hawley <warthog9@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com
-References: <20230125053653.6316-1-arinc.unal@arinc9.com>
- <20230125224411.5a535817@kernel.org>
- <dd21bd3d-b3bb-c90b-8950-e71f4af6b167@kernel.org>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <dd21bd3d-b3bb-c90b-8950-e71f4af6b167@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.01.2023 10:23, John 'Warthog9' Hawley wrote:
-> On 1/25/2023 10:44 PM, Jakub Kicinski wrote:
->> On Wed, 25 Jan 2023 08:36:53 +0300 Arınç ÜNAL wrote:
->>> Fix description for tristate and help sections which include inaccurate
->>> information.
->>>
->>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> Didn't make it thru to the list again :(
->> Double check that none of the addresses in To: or Cc: are missing
->> spaces between name and email or after a dot. That seems to be the most
->> common cause of trouble. Or try to resend using just emails, no names.
->>
+On Wed 25-01-23 15:14:48, Roman Gushchin wrote:
+> On Wed, Jan 25, 2023 at 03:22:00PM -0300, Marcelo Tosatti wrote:
+> > On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Br�s wrote:
+> > > On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
+> > > > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
+> > > > > Disclaimer:
+> > > > > a - The cover letter got bigger than expected, so I had to split it in
+> > > > >     sections to better organize myself. I am not very confortable with it.
+> > > > > b - Performance numbers below did not include patch 5/5 (Remove flags
+> > > > >     from memcg_stock_pcp), which could further improve performance for
+> > > > >     drain_all_stock(), but I could only notice the optimization at the
+> > > > >     last minute.
+> > > > > 
+> > > > > 
+> > > > > 0 - Motivation:
+> > > > > On current codebase, when drain_all_stock() is ran, it will schedule a
+> > > > > drain_local_stock() for each cpu that has a percpu stock associated with a
+> > > > > descendant of a given root_memcg.
 > 
-> You are also likely to run into trouble if your character set is set to 
-> UTF-8.
+> Do you know what caused those drain_all_stock() calls? I wonder if we should look
+> into why we have many of them and whether we really need them?
+> 
+> It's either some user's actions (e.g. reducing memory.max), either some memcg
+> is entering pre-oom conditions. In the latter case a lot of drain calls can be
+> scheduled without a good reason (assuming the cgroup contain multiple tasks running
+> on multiple cpus).
 
-I think that may be the problem here. I just resent this with only Jakub 
-and the lists without names. It didn't make it to netdev. My name 
-includes non-Latin characters. I'm not sure how I can change UTF-8 to 
-something else that works with this list. I had no such issues with 
-linux-mediatek.
+I believe I've never got a specific answer to that. We
+have discussed that in the previous version submission
+(20221102020243.522358-1-leobras@redhat.com and specifically
+Y2TQLavnLVd4qHMT@dhcp22.suse.cz). Leonardo has mentioned a mix of RT and
+isolcpus. I was wondering about using memcgs in RT workloads because
+that just sounds weird but let's say this is the case indeed. Then an RT
+task or whatever task that is running on an isolated cpu can have pcp
+charges.
 
-Arınç
+> Essentially each cpu will try to grab the remains of the memory quota
+> and move it locally. I wonder in such circumstances if we need to disable the pcp-caching
+> on per-cgroup basis.
+
+I think it would be more than sufficient to disable pcp charging on an
+isolated cpu. This is not a per memcg property. I can imagine that
+different tasks running in the same memcg can run on a mix of CPUs (e.g.
+only part of it on isolated CPUs). It is a recipe for all sorts of
+priority inversions but well, memcg and RT is there already.
+
+> Generally speaking, draining of pcpu stocks is useful only if an idle cpu is holding some
+> charges/memcg references (it might be not completely idle, but running some very special
+> workload which is not doing any kernel allocations or a process belonging to the root memcg).
+> In all other cases pcpu stock will be either drained naturally by an allocation from another
+> memcg or an allocation from the same memcg will "restore" it, making draining useless.
+> 
+> We also can into drain_all_pages() opportunistically, without waiting for the result.
+> On a busy system it's most likely useless, we might oom before scheduled works will be executed.
+
+I think the primary objective is that no userspace unintended execution
+happens on isolated cpus.
+ 
+> I admit I planned to do some work around and even started, but then never had enough time to
+> finish it.
+> 
+> Overall I'm somewhat resistant to an idea of making generic allocation & free paths slower
+> for an improvement of stock draining. It's not a strong objection, but IMO we should avoid
+> doing this without a really strong reason.
+
+Are you OK with a simple opt out on isolated CPUs? That would make
+charges slightly slower (atomic on the hierarchy counters vs. a single
+pcp adjustment) but it would guarantee that the isolated workload is
+predictable which is the primary objective AFAICS.
+-- 
+Michal Hocko
+SUSE Labs
