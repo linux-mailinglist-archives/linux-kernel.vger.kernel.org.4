@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BEE67C81B
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1578E67C81A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237046AbjAZKMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:12:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
+        id S237043AbjAZKMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:12:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236994AbjAZKMd (ORCPT
+        with ESMTP id S236911AbjAZKMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 Jan 2023 05:12:33 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B354566009;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF639646A4;
         Thu, 26 Jan 2023 02:12:32 -0800 (PST)
 Date:   Thu, 26 Jan 2023 10:12:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674727948;
+        s=2020; t=1674727947;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PnmbFw9pmFjIRXsSIt30ejYlyKsvq42lF3vi36XLWME=;
-        b=3x+b/2mkIIqXKZr6jx8DkXaCndZ/KSeUSJoOmkEmxCvE755dOV4GkdgvNE3U0mv1odLTDr
-        4yNRLjgf59Ga0ZmgBOnAdj0Ygwa91HB6Rb06Gzi1JQGPuWLpr/VPurXsaUL63l+ImN91ih
-        bQXHafMYVgJ/zb8nBkOZFSxa7MLq+MvNOOL/Lz4Q4unJmMYWIxC6aPa5fpszuSy2MD/wQy
-        AEhKYv7HBDTgaB5c+xnHdHpWCMjbdq4ifgUpsy2dXbpsNrtXIQNI6CRWybMc4t46HZOVK4
-        HACzfSlhT3vrosXBqag7GaRamKjsNhDCxcT0jCxXHnIkZmVto4+jrNhgIDbLww==
+        bh=kA/2pfShbrv9r951XbAH8XdetMRq+kl9ocZsq4lHtqw=;
+        b=wEMrsJoa0BvcC8WzTwKJgoEIcPsbt/5WVQrUn314U4UpnjeD0r6gD/bhvShtEC7nY8p+gi
+        2WPmcypTwWRX1frNiGHJGXR8/3TNvbrpS0cKqV/NRAHYYsgPOgu6nmuVzlPifGajcqE45j
+        nh8nsAHFUMI5gjHtp28CrLoal3w+fmrQhcGuKd1QhHrqDi+KVISgjHpcYQirswioBvou/J
+        mqDn1wOSa7piJeTOZgO+DFjVzLEAH3TSKqK6H9V1Z3fMQYRQmgZpCtfw58jeWriovTsWd2
+        SDlevV89zVZ68KtCk6L07VTjh4ZcTX6z59P0XsP9pg8mH727md6ecsJ2DiQUJA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674727948;
+        s=2020e; t=1674727947;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PnmbFw9pmFjIRXsSIt30ejYlyKsvq42lF3vi36XLWME=;
-        b=EJvQvfY3kvgkNnpuK43Rskz3wN53xmNd33O02NDcTKnkzqhS3FWZN8o5GysBnQpmkLM38V
-        Uqk65/u83yvTAJDQ==
+        bh=kA/2pfShbrv9r951XbAH8XdetMRq+kl9ocZsq4lHtqw=;
+        b=INQGFUMBstWlH+1A4/h5Tqem0NKjjq7hdUn/Lljiq2nl3cpqtNSfZ0nfmCDDLUQKKhYBFh
+        tcZsWEEtr24XbgAA==
 From:   "tip-bot2 for Kim Phillips" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] KVM: x86: Move open-coded CPUID leaf 0x80000021 EAX
- bit propagation code
+Subject: [tip: x86/cpu] x86/cpu, kvm: Add the NO_NESTED_DATA_BP feature
 Cc:     Kim Phillips <kim.phillips@amd.com>,
         "Borislav Petkov (AMD)" <bp@alien8.de>,
         Sean Christopherson <seanjc@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230124163319.2277355-3-kim.phillips@amd.com>
-References: <20230124163319.2277355-3-kim.phillips@amd.com>
+In-Reply-To: <20230124163319.2277355-4-kim.phillips@amd.com>
+References: <20230124163319.2277355-4-kim.phillips@amd.com>
 MIME-Version: 1.0
-Message-ID: <167472794770.4906.742433074585875386.tip-bot2@tip-bot2>
+Message-ID: <167472794735.4906.7514311983673336382.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,84 +67,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cpu branch of tip:
 
-Commit-ID:     c35ac8c4bf600ee23bacb20f863aa7830efb23fb
-Gitweb:        https://git.kernel.org/tip/c35ac8c4bf600ee23bacb20f863aa7830efb23fb
+Commit-ID:     a9dc9ec5a1fafc3d2fe7a7b594eefaeaccf89a6b
+Gitweb:        https://git.kernel.org/tip/a9dc9ec5a1fafc3d2fe7a7b594eefaeaccf89a6b
 Author:        Kim Phillips <kim.phillips@amd.com>
-AuthorDate:    Tue, 24 Jan 2023 10:33:13 -06:00
+AuthorDate:    Tue, 24 Jan 2023 10:33:14 -06:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Wed, 25 Jan 2023 12:33:13 +01:00
+CommitterDate: Wed, 25 Jan 2023 12:36:34 +01:00
 
-KVM: x86: Move open-coded CPUID leaf 0x80000021 EAX bit propagation code
+x86/cpu, kvm: Add the NO_NESTED_DATA_BP feature
 
-Move code from __do_cpuid_func() to kvm_set_cpu_caps() in preparation for adding
-the features in their native leaf.
-
-Also drop the bit description comments as it will be more self-describing once
-the individual features are added.
-
-Whilst there, switch to using the more efficient cpu_feature_enabled() instead
-of static_cpu_has().
-
-Note, LFENCE_RDTSC and "NULL selector clears base" are currently synthetic,
-Linux-defined feature flags as Linux tracking of the features predates AMD's
-definition.  Keep the manual propagation of the flags from their synthetic
-counterparts until the kernel fully converts to AMD's definition, otherwise KVM
-would stop synthesizing the flags as intended.
+The "Processor ignores nested data breakpoints" feature was being
+open-coded for KVM.  Add the feature to its newly introduced CPUID leaf
+0x80000021 EAX proper.
 
 Signed-off-by: Kim Phillips <kim.phillips@amd.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 Acked-by: Sean Christopherson <seanjc@google.com>
-Link: https://lore.kernel.org/r/20230124163319.2277355-3-kim.phillips@amd.com
+Link: https://lore.kernel.org/r/20230124163319.2277355-4-kim.phillips@amd.com
 ---
- arch/x86/kvm/cpuid.c | 31 ++++++++++++-------------------
- 1 file changed, 12 insertions(+), 19 deletions(-)
+ arch/x86/include/asm/cpufeatures.h | 3 +++
+ arch/x86/kvm/cpuid.c               | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index b890058..1b2d40a 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -427,6 +427,9 @@
+ #define X86_FEATURE_V_TSC_AUX		(19*32+ 9) /* "" Virtual TSC_AUX */
+ #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
+ 
++/* AMD-defined Extended Feature 2 EAX, CPUID level 0x80000021 (EAX), word 20 */
++#define X86_FEATURE_NO_NESTED_DATA_BP	(20*32+ 0) /* "" No Nested Data Breakpoints */
++
+ /*
+  * BUG word(s)
+  */
 diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index b14653b..f3edc35 100644
+index f3edc35..aa3a6dc 100644
 --- a/arch/x86/kvm/cpuid.c
 +++ b/arch/x86/kvm/cpuid.c
-@@ -741,6 +741,17 @@ void kvm_set_cpu_caps(void)
- 		0 /* SME */ | F(SEV) | 0 /* VM_PAGE_FLUSH */ | F(SEV_ES) |
+@@ -742,7 +742,7 @@ void kvm_set_cpu_caps(void)
  		F(SME_COHERENT));
  
-+	kvm_cpu_cap_mask(CPUID_8000_0021_EAX,
-+		BIT(0) /* NO_NESTED_DATA_BP */ |
-+		BIT(2) /* LFENCE Always serializing */ | 0 /* SmmPgCfgLock */ |
-+		BIT(6) /* NULL_SEL_CLR_BASE */ | 0 /* PrefetchCtlMsr */
-+	);
-+	if (cpu_feature_enabled(X86_FEATURE_LFENCE_RDTSC))
-+		kvm_cpu_caps[CPUID_8000_0021_EAX] |= BIT(2) /* LFENCE Always serializing */;
-+	if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
-+		kvm_cpu_caps[CPUID_8000_0021_EAX] |= BIT(6) /* NULL_SEL_CLR_BASE */;
-+	kvm_cpu_caps[CPUID_8000_0021_EAX] |= BIT(9) /* NO_SMM_CTL_MSR */;
-+
- 	kvm_cpu_cap_mask(CPUID_C000_0001_EDX,
- 		F(XSTORE) | F(XSTORE_EN) | F(XCRYPT) | F(XCRYPT_EN) |
- 		F(ACE2) | F(ACE2_EN) | F(PHE) | F(PHE_EN) |
-@@ -1222,25 +1233,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		break;
- 	case 0x80000021:
- 		entry->ebx = entry->ecx = entry->edx = 0;
--		/*
--		 * Pass down these bits:
--		 *    EAX      0      NNDBP, Processor ignores nested data breakpoints
--		 *    EAX      2      LAS, LFENCE always serializing
--		 *    EAX      6      NSCB, Null selector clear base
--		 *
--		 * Other defined bits are for MSRs that KVM does not expose:
--		 *   EAX      3      SPCL, SMM page configuration lock
--		 *   EAX      13     PCMSR, Prefetch control MSR
--		 *
--		 * KVM doesn't support SMM_CTL.
--		 *   EAX       9     SMM_CTL MSR is not supported
--		 */
--		entry->eax &= BIT(0) | BIT(2) | BIT(6);
--		entry->eax |= BIT(9);
--		if (static_cpu_has(X86_FEATURE_LFENCE_RDTSC))
--			entry->eax |= BIT(2);
--		if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
--			entry->eax |= BIT(6);
-+		cpuid_entry_override(entry, CPUID_8000_0021_EAX);
- 		break;
- 	/*Add support for Centaur's CPUID instruction*/
- 	case 0xC0000000:
+ 	kvm_cpu_cap_mask(CPUID_8000_0021_EAX,
+-		BIT(0) /* NO_NESTED_DATA_BP */ |
++		F(NO_NESTED_DATA_BP) |
+ 		BIT(2) /* LFENCE Always serializing */ | 0 /* SmmPgCfgLock */ |
+ 		BIT(6) /* NULL_SEL_CLR_BASE */ | 0 /* PrefetchCtlMsr */
+ 	);
