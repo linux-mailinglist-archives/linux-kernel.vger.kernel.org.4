@@ -2,88 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3B567CC5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2649267CC60
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236489AbjAZNig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
+        id S237063AbjAZNjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjAZNie (ORCPT
+        with ESMTP id S236377AbjAZNjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:38:34 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069E83EFE9;
-        Thu, 26 Jan 2023 05:38:34 -0800 (PST)
-Received: from fedcomp.intra.ispras.ru (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 168DF40D403D;
-        Thu, 26 Jan 2023 13:38:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 168DF40D403D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1674740312;
-        bh=QkDEpXH1Gip6cB8Z5DI/PU+3Jf6pqpNZOdCpsXvaOQk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jPwPhgaK9hbw2qhoci3+jAswqFODFk4bJLcZDSq7CHjM/4wkDP/URh8cHoFN5hYYp
-         BHgB914VZRTVajsL3nyu2nWNAvsYjv6yW18W7ytB3QrZ4iKJqDn4+UKsjwINU/MmGu
-         vx8bAH3BE6ZeXsuCT9US8r2M1kWX2ahok90vefig=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Abhishek Pandit-Subedi <abhishekpandit@google.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Subject: [PATCH 4.14/4.19/5.4/5.10/5.15] Bluetooth: hci_sync: cancel cmd_timer if hci_open failed
-Date:   Thu, 26 Jan 2023 16:38:17 +0300
-Message-Id: <20230126133817.819879-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.34.1
+        Thu, 26 Jan 2023 08:39:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A330E45BD5;
+        Thu, 26 Jan 2023 05:39:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F5A3B81DC0;
+        Thu, 26 Jan 2023 13:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED866C4339E;
+        Thu, 26 Jan 2023 13:38:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674740340;
+        bh=3gnbHufn8tvtYBXfJcxSBpfzUNOp7H3EkIw2GJIYjgw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YIsCB1IhovlAeELk1XKJOXRwEpG2jdkrlDHnY9J7xy4dvse5eclsKqughFTGv+pkc
+         /mjB7uZ6iUjpiWu7ueVdhwMNZPqtp9YrB4EuP1KLvh/+y0FMs5gJt2yArde37cC4Th
+         pZaJ2A272C3lX85N9wrtbkmtle/5nVuT5axBRBg+ndBAMmuYmVajxysFZn6hOYbn+F
+         +DlJa5zl3VOYDiugu044AMsYqXEPwTc2wg1D+nu5veFzaaW1kZuEDG7lgS0ptDrger
+         ZP8CQFrJwJZHx91A2auvJvF1oIiL7hxywIQgF0c7i7dSSAXpTai+UnJVx28VoY5jAo
+         9q8ZUrr4ighGg==
+Received: by mail-ua1-f50.google.com with SMTP id j1so344822uan.1;
+        Thu, 26 Jan 2023 05:38:59 -0800 (PST)
+X-Gm-Message-State: AFqh2kqzZjIBhTDL0dSYEAA/JHe9pZG42800zrj13BAp8ykyUZxghQ6U
+        0XnW7R+Ms10y8CarsXomPW9kxBpkBEPlg+WPOw==
+X-Google-Smtp-Source: AMrXdXsiGeT85ZR+/u+85VzDpJDX04wnLvJNs+7Dcb8hausx6i/2duWGFT0kGPcnJXbR4OO7GypUU3GwITb3P7nsCC4=
+X-Received: by 2002:ab0:5a32:0:b0:61b:d0f0:406b with SMTP id
+ l47-20020ab05a32000000b0061bd0f0406bmr3059624uad.9.1674740338890; Thu, 26 Jan
+ 2023 05:38:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125184438.28483-1-nick.hawkins@hpe.com> <20230125184438.28483-3-nick.hawkins@hpe.com>
+ <20230125211811.GA2902717-robh@kernel.org> <399C2A3B-703A-4D67-818A-27AFA2F1B742@hpe.com>
+In-Reply-To: <399C2A3B-703A-4D67-818A-27AFA2F1B742@hpe.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 26 Jan 2023 07:38:47 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJgoWBmx8-Gcabo_d8R7wqS1pPAu1wauAqq8JRrWMFq3A@mail.gmail.com>
+Message-ID: <CAL_JsqJgoWBmx8-Gcabo_d8R7wqS1pPAu1wauAqq8JRrWMFq3A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/5] dt-bindings: i2c: Add hpe,gxp-i2c
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "joel@jms.id.au" <joel@jms.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Archie Pusaka <apusaka@chromium.org>
+On Wed, Jan 25, 2023 at 3:32 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
+>
+> > > + hpe,sysreg:
+> > > + $ref: /schemas/types.yaml#/definitions/phandle
+> > > + description:
+> > > + Phandle to the global status and enable interrupt registers shared
+> > > + between each I2C engine controller instance. It enables the I2C
+> > > + engine controller to act as both a master or slave by being able to
+> > > + arm and respond to interrupts from its engine. Each bit in the
+> > > + registers represent the respective bit position.
+>
+>
+> > Each bit represents the bit position?
+>
+> Yes what I mean here is that bit 0 represents engine 0, bit 1 represents
+> engine 1 and so on. I will reword this how you have below.
+>
+> > AIUI, each I2C instance has a bit in it needs to control. How does the
+> > driver know what instance (and therefore the correct bit)? Typically you
+> > would have a 2nd cell here with that information.
+>
+> We are currently using the memory area designated reg to determine
+> which engine we are on.
+>
+> Here is a snippet from patch 1 of this patchset that introduces the driver:
+> /* Use physical memory address to determine which I2C engine this is. */
+> +       drvdata->engine = ((u32)drvdata->base & 0xf00) >> 8;
+>
+> This works because each engine is 0x100 apart.
 
-commit 97dfaf073f5881c624856ef293be307b6166115c upstream.
+Ah, that works fine then.
 
-If a command is already sent, we take care of freeing it, but we
-also need to cancel the timeout as well.
-
-Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
----
- net/bluetooth/hci_core.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index a41b4dcf1a7a..cabe8eb4c14f 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -1632,6 +1632,7 @@ static int hci_dev_do_open(struct hci_dev *hdev)
- 			hdev->flush(hdev);
- 
- 		if (hdev->sent_cmd) {
-+			cancel_delayed_work_sync(&hdev->cmd_timer);
- 			kfree_skb(hdev->sent_cmd);
- 			hdev->sent_cmd = NULL;
- 		}
--- 
-2.34.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
