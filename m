@@ -2,114 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31BA67D696
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 965B467D69A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbjAZUl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:41:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
+        id S232833AbjAZUmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:42:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbjAZUlY (ORCPT
+        with ESMTP id S231488AbjAZUmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:41:24 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E304125BA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:41:23 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id c124so1922347pfb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:41:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fVMuPLhQ7MqOM6GrhILLRb9j0GFeXbyWToL/2X/iFxY=;
-        b=KmdNYh+eqvWDeDS4rcLM+u78dmmn4InPH9pxQNtn/u8fa23Q0k8tqcPEm/0hNGOnJq
-         HdPFuYgMhKi0x9k8P9va76ZEh5Z8gZuC3b/rdtAm2cB/KU4La9LI6qOjUL7fblXEWEjb
-         OljOlfOnZhoXv38yBy9XfHwvr9jgwwD1FgjdMhQp13zJaGG0YEP1M6DL6V+rZysVV8OG
-         xLtGVZyokGJreQ3D4iW/5/IKgBRD/UBJODRbrAq6wqTAfcJUm/3meA0t91SbjZd/rBM1
-         vDYCTgbI8hB4mszXzffuTPfL40QZCDMFpSNtTTsf5z7Y1GaxkR/gQ1euni/spYg+F7Rl
-         s90Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fVMuPLhQ7MqOM6GrhILLRb9j0GFeXbyWToL/2X/iFxY=;
-        b=X/fNxXeKj8bWvWPGGJe2PiWEM8tVVIedGJfgThiY2Ri7S1+BFixnF6P/oBMZ/2EGzD
-         /ozyajC3YbyDAt8L+x0IxTsZnuvBMIfRfuRnYHHsgU8Cl+7BWHtpqHzCEBdsPapyE9/X
-         goFuBZSTj1SOP4pC8ab2JiKXnDlldxM18wAiI9vBo4HVzn4zsN1f8nPhFwAPbfcJ19+T
-         Kkp27obTjk2Vju6BfEWoEa6ppKGtZvOmDWtAMCYI9QWWWrG+MoWsBAkbSn+n+iduRbDo
-         Wo+JJG5gLIwGb7QIUjH/LX8ga87R3BaRmkM/Xj3OInH1hSlOnWV8oRaKTD5ZvTwBSDSb
-         mH4A==
-X-Gm-Message-State: AO0yUKXQvf22QpFwkcdCAI7g33uQlGkm2RRajblrU31jmZ8Gg5YZG1Xm
-        K/T0ewywE6PD7ErEz8lZrftZTpvv/+eAFjrlRNYVkbQM3ZSOvmA6
-X-Google-Smtp-Source: AK7set/ZzNhQNeQ+aVnimgeueSuhljnNd4gRDZYaaf6YQ618+S6Mw3eaAEGR6G5CssPOncxy1IOl0WWzkMPrvvFLPoE=
-X-Received: by 2002:a63:bd52:0:b0:4da:af6:ed with SMTP id d18-20020a63bd52000000b004da0af600edmr851945pgp.30.1674765681704;
- Thu, 26 Jan 2023 12:41:21 -0800 (PST)
+        Thu, 26 Jan 2023 15:42:04 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B997AB0;
+        Thu, 26 Jan 2023 12:42:01 -0800 (PST)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 2321CCB452;
+        Thu, 26 Jan 2023 20:41:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1674765719; bh=m+AyRkpU35PI1/KK7hJz1VYCQdwvbwm4TM5BZi0YkKY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=fkgTKbVsA5M4qFr25+D09azhzbUKoiPxHsuTvfCIoyc2q1D7DW5QpVXyswaM5f0q0
+         Xtc3y0opFRlUxed8Jr4pHo5OM6caQavk5ROBAx0ofGPJMK+9bhZ1IF3AckUDuJBTV0
+         Ww2/MqtwCS62j1NSJ8oYLhhy3YLhRs0/i7yzSaCc=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] ARM: dts: qcom: msm8974-oneplus-bacon: Add notification LED
+Date:   Thu, 26 Jan 2023 21:41:58 +0100
+Message-ID: <1840339.tdWV9SEqCh@g550jk>
+In-Reply-To: <dbfa802a-968f-0504-a131-59e2a8f52c9f@linaro.org>
+References: <20230122-msm8974-bacon-features-v1-0-4049f565c24c@z3ntu.xyz>
+ <4455893.LvFx2qVVIh@g550jk> <dbfa802a-968f-0504-a131-59e2a8f52c9f@linaro.org>
 MIME-Version: 1.0
-References: <20230125213251.2013791-1-zwisler@google.com> <87a6259mll.fsf@meer.lwn.net>
- <20230126153438.5e98da15@gandalf.local.home>
-In-Reply-To: <20230126153438.5e98da15@gandalf.local.home>
-From:   Ross Zwisler <zwisler@google.com>
-Date:   Thu, 26 Jan 2023 13:41:05 -0700
-Message-ID: <CAGRrVHwykqUBREOAVB0tYQiVT5VsHKpda4POtR_k6j3oxDUTSQ@mail.gmail.com>
-Subject: Re: [PATCH] docs: ftrace: always use canonical ftrace path
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FROM_SUSPICIOUS_NTLD,SPF_HELO_NONE,SPF_PASS,
+        T_PDS_OTHER_BAD_TLD autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 1:34 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Thu, 26 Jan 2023 11:28:38 -0700
-> Jonathan Corbet <corbet@lwn.net> wrote:
->
-> > Ross Zwisler <zwisler@chromium.org> writes:
-> >
-> > > The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
-> > >
-> > > But, from Documentation/trace/ftrace.rst:
-> > >
-> > >   Before 4.1, all ftrace tracing control files were within the debugfs
-> > >   file system, which is typically located at /sys/kernel/debug/tracing.
-> > >   For backward compatibility, when mounting the debugfs file system,
-> > >   the tracefs file system will be automatically mounted at:
-> > >
-> > >   /sys/kernel/debug/tracing
-> > >
-> > > Many parts of Documentation still reference this older debugfs path, so
-> > > let's update them to avoid confusion.
-> > >
-> > > Signed-off-by: Ross Zwisler <zwisler@google.com>
-> >
-> > So this seems like a good cleanup to me.  Unless somebody objects, I'll
-> > apply it to the docs tree in the near future.
-> >
->
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
->
-> Doing a quick 'git grep 'debug/tracing' there's a lot more that needs to be
-> cleaned up, but that's outside the Documentation directory.
->
-> Ross, care to follow through with those? ;-)
+On Donnerstag, 26. J=E4nner 2023 10:41:24 CET Krzysztof Kozlowski wrote:
+> On 25/01/2023 21:51, Luca Weiss wrote:
+> > On Montag, 23. J=E4nner 2023 18:18:16 CET Krzysztof Kozlowski wrote:
+> >> On 22/01/2023 17:48, Luca Weiss wrote:
+> >>> Add the node describing the sn3193 that's used to provide notification
+> >>> LED.
+> >>>=20
+> >>> Unfortunately the driver currently supports neither multicolor API nor
+> >>> using the properties function & color, so we use label instead.
+> >>>=20
+> >>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> >>> ---
+> >>>=20
+> >>>  .../arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts | 28
+> >>>  ++++++++++++++++++++++ 1 file changed, 28 insertions(+)
+> >>>=20
+> >>> diff --git a/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
+> >>> b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts index
+> >>> ffb486ceb6a6..a672c45d7070 100644
+> >>> --- a/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
+> >>> +++ b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
+> >>> @@ -114,6 +114,34 @@ led@0 {
+> >>>=20
+> >>>  			default-brightness =3D <80>;
+> >>>  	=09
+> >>>  		};
+> >>>  =09
+> >>>  	};
+> >>>=20
+> >>> +
+> >>> +	led-controller@68 {
+> >>> +		compatible =3D "si-en,sn3193";
+> >>> +		reg =3D <0x68>;
+> >>> +
+> >>> +		shutdown-gpios =3D <&tlmm 45 GPIO_ACTIVE_HIGH>;
+> >>> +
+> >>> +		#address-cells =3D <1>;
+> >>> +		#size-cells =3D <0>;
+> >>> +
+> >>> +		led@1 {
+> >>> +			reg =3D <1>;
+> >>> +			label =3D "red:status";
+> >>=20
+> >> These should be colors and functions.
+> >=20
+> > Hi Krzysztof,
+> >=20
+> > please check the commit message for this. I tried using it but it didn't
+> > work, the driver in general might need an overhaul at some point...
+> >=20
+> >> Unfortunately the driver currently supports neither multicolor API nor
+> >> using the properties function & color, so we use label instead.
+> >=20
+> > Or maybe I messed up but pretty sure this was the case when I wrote the
+> > dts.
+> I don't understand how driver is related here - it's not the driver's
+> property, but LED core. If the driver "supports" label, then it supports
+> color and status.
 
-Yep, I'll send out patches to take care of the rest, just wanted to
-send this out since I had it ready.
-I'm planning on dividing up the patches by subsystem/maintainer, but
-am open to suggestions if that sounds incorrect.
+The leds-is31fl319x.c driver uses devm_led_classdev_register but the functi=
+on=20
+where 'function' and 'color' is parsed is led_parse_fwnode_props which is=20
+called from led_compose_name which is called from led_classdev_register_ext=
+=20
+(or with the devm_ prefix), and not called from the register method without=
+=20
+_ext suffix.
 
-> Thanks Jon and Ross,
->
-> -- Steve
+So in other words, the led driver would need changes to use the new=20
+registration API to be able to use 'function' and 'color' instead of 'label=
+'.
+
+Regards
+Luca
+
+>=20
+> Best regards,
+> Krzysztof
+
+
+
+
