@@ -2,111 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1449667D691
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 185FD67D692
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbjAZUiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        id S232626AbjAZUjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:39:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232833AbjAZUh6 (ORCPT
+        with ESMTP id S232108AbjAZUjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:37:58 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879971116B
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:37:53 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id E992832007E8;
-        Thu, 26 Jan 2023 15:37:50 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 15:37:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674765469; x=1674851869; bh=PMRahnb2Ak
-        WjbHaXnveaTHzGxVSBrfYNS4b8vo+obi0=; b=imGPK7aNybQBJmap5UxzEIhID0
-        8QfKpJLpADlZ92HHyyIExVfvUsUDgN7WJt2HM7RbcLXGKS2V6LpD5b4S9/BRKe58
-        w9aHLPIy7pye8Ao3kf5K9/QpOGfqBE8JlA9+R2sbk0PoulOgH3NMA9+9IZRV8K95
-        x7tQmE+TYHfWl2gv+xKZl6rluC6PY52klLtBs1A1aJyvBR1E7QfGDZkoCL7p/Qyb
-        4QZHHC2fRe96CPyeA9AP1px0o2TpX/i6Qdatv3qbzc80NmKfRz42HhTra56cp2fs
-        87Yi09zEIawX+7+wSEB0zw6WcZqoMbvCzjkfe1HguhQzyFpQ4ROZRNhJ6gzA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674765469; x=1674851869; bh=PMRahnb2AkWjbHaXnveaTHzGxVSB
-        rfYNS4b8vo+obi0=; b=NUyD36npwB6t0VBzIV9Dtwk7yDh7d9sba6qVz2n90LId
-        s7ooiveSZL3wHIbdVeJOye3zNRe5Rn6Fn9cOVCTH4Bb1VAgwl7Pm2Ip/BAMjFwxg
-        vaYNMaC08kLIs0UrbHvzPO1/Gll8KJW0tn3mjLl034HBHOTfLq5CtD/5KXaAXTXg
-        tY87rtvgKpVNwQJ/f9RXRVTf7EgwDd1sdxIGCKJfQ3ivOcRmZ8qUz6zbF2InLlLy
-        bMR4dASys2Y4aOZYkV29BAODR7FI1n+l06Z56d/Lz30pfBeNnNhr34XMhp2FFTzi
-        EwKNYpFEDmdeyuo/DDbdopGzuju+QM4phY10PxFrKg==
-X-ME-Sender: <xms:nOTSY3Io4aVCPmGra_sSKINg1NEdBFGofiZcuSYRdUfS_L8t6LrJag>
-    <xme:nOTSY7LAQlhDKVI6_tYJRKKq0DSTFPj4c5rNqz9JJLbACkpb-oHdEemL5Q5-wfbyG
-    BL7jBbyc4mMQ7oI-Xw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgudegtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:nOTSY_tPBIUTxnShS-Q5rEoRO11I8aLzADMUbqiy-RiAtcN6Y_07fw>
-    <xmx:nOTSYwb8-Cy1i_-3E3urRJNaEqfQqJL0VQ0o29LiciAYFeJCBBisEQ>
-    <xmx:nOTSY-Z2PJ6mA_5Bs0AmvTeM0n5CNODWILJv5_p7IrCbnbWL8SWCDg>
-    <xmx:neTSY0MtI2RJuWyQ23mYUTrHbsWNmF_kkEeFJ8Lw1q6xdnzLJW-uOg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D5E03B60086; Thu, 26 Jan 2023 15:37:48 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+        Thu, 26 Jan 2023 15:39:05 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCDE7AB0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:39:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C22F4CE259D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 20:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F90FC433EF;
+        Thu, 26 Jan 2023 20:38:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1674765539;
+        bh=eqCm1yGf+yfktl0RDMe042s02iMXVNx/WsE1kqwweJk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=03/Rs4NqdOvG8k51Xy1Ddo7iNB2UHGqimSa4IDuaWsW575lmMkFEMbLJBaEfSvP3B
+         PTvunZQwaQObaUNpWnAlq5lZtYduS054WH38K4VA0JnA90K9DRovq+BUiq/bClvkxi
+         7j2hYHNmCb4nC0hMitC7HDb0s5t2s0n5MpaGXKJo=
+Date:   Thu, 26 Jan 2023 12:38:58 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Sterba <dsterba@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Al Viro <viro@zeniv.linux.org.uk>, Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH] mm/highmem: Align-down to page the address for
+ kunmap_flush_on_unmap()
+Message-Id: <20230126123858.42d9377ad6e352a58c81668b@linux-foundation.org>
+In-Reply-To: <20230126143346.12086-1-fmdefrancesco@gmail.com>
+References: <20230126143346.12086-1-fmdefrancesco@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-Message-Id: <cd4f23d7-cdd7-49e1-8eff-9ec04dcb36c8@app.fastmail.com>
-In-Reply-To: <7ec6bd88-7f18-7eca-fa92-cfea9a25a395@arm.com>
-References: <20230126163530.3495413-1-arnd@kernel.org>
- <7ec6bd88-7f18-7eca-fa92-cfea9a25a395@arm.com>
-Date:   Thu, 26 Jan 2023 21:37:29 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Suzuki K Poulose" <suzuki.poulose@arm.com>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        "Tao Zhang" <quic_taozha@quicinc.com>,
-        "Mao Jinlong" <quic_jinlmao@quicinc.com>
-Cc:     "Mike Leach" <mike.leach@linaro.org>,
-        "Leo Yan" <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Coresight: tpda/tpdm: remove incorrect __exit annotation
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023, at 19:02, Suzuki K Poulose wrote:
-> On 26/01/2023 16:35, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
-> Thanks for the fix, I will queue this. Btw, I did try to
-> reproduce it locally, but couldn't trigger the warnings,
-> even with
->
-> CONFIG_WERROR=y
->
-> and all CORESIGHT configs builtin. I see other drivers doing the
-> same outside coresight too. Just curious to know why is this
-> any different. Is it specific to "bus" driver (e.g. AMBA) ?
+On Thu, 26 Jan 2023 15:33:46 +0100 "Fabio M. De Francesco" <fmdefrancesco@gmail.com> wrote:
 
-The warning comes from postprocessing the object file, it's got
-nothing to do with the bus type, only with a symbol in .data
-referencing a symbol in .init.text. Maybe there are some
-config options that keep the section from getting discarded?
-Or possibly you only built the files in this directory, but did
-not get to the final link?
+> If ARCH_HAS_FLUSH_ON_KUNMAP is defined (PA-RISC case), __kunmap_local()
+> calls kunmap_flush_on_unmap(). The latter currently flushes the wrong
+> address (as confirmed by Matthew Wilcox and Helge Deller). Al Viro
+> proposed to call kunmap_flush_on_unmap() on an aligned-down to page
+> address in order to fix this issue. Consensus has been reached on this
+> solution.
 
-      Arnd
+What are the user-visible runtime effects of this flaw?
+
+> Therefore, if ARCH_HAS_FLUSH_ON_KUNMAP is defined, call
+> kunmap_flush_on_unmap() on an aligned-down to page address computed with
+> the PTR_ALIGN_DOWN() macro.
+> 
+> Cc: Ira Weiny <ira.weiny@intel.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+> Confirmed-by: Helge Deller <deller@gmx.de>
+> Confirmed-by: Matthew Wilcox <willy@infradead.org>
+> Fixes: f3ba3c710ac5 ("mm/highmem: Provide kmap_local*")
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+> 
+> I have (at least) two problems with this patch...
+> 
+> 1) checkpatch.pl complains about the use of the non-standard
+> "Confirmed-by" tags. I don't know how else I can give credit to Helge
+> and Matthew. However, this is not the first time that I see non-standard
+> tags in patches applied upstream (I too had a non-standard
+> "Analysed-by" tag in patch which fixes a SAC bug). Any objections?
+
+Add a paragraph "this was confirmed by X and Y", then add Cc:X, Cc:y?
+
+This gives you an opportunity to tell us what "confirmed" actually
+means!  Did they confirm that it's a bug?  Or that the fix is correct? 
+I dunno.
+
+> 2) I'm not sure whether or not the "Fixes" tag is appropriate in this
+> patch. Can someone either confirm or deny it?
+> 
+>  include/linux/highmem-internal.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-internal.h
+> index 034b1106d022..e247c9ac4583 100644
+> --- a/include/linux/highmem-internal.h
+> +++ b/include/linux/highmem-internal.h
+> @@ -200,7 +200,7 @@ static inline void *kmap_local_pfn(unsigned long pfn)
+>  static inline void __kunmap_local(const void *addr)
+>  {
+>  #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
+> -	kunmap_flush_on_unmap(addr);
+> +	kunmap_flush_on_unmap(PTR_ALIGN_DOWN(addr, PAGE_SIZE));
+>  #endif
+>  }
+>  
+> -- 
+> 2.39.0
