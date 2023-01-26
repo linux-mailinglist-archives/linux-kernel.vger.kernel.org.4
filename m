@@ -2,73 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A41367D5AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2294F67D5C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbjAZTup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 14:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        id S231898AbjAZTze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 14:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbjAZTul (ORCPT
+        with ESMTP id S229446AbjAZTzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 14:50:41 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697664FC06
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:50:35 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id d9so2811612pll.9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:50:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UUvKx9totPqnePNsm+o+Df+E2nVvcP4SPqdwJ4LAruE=;
-        b=tYTM15unzWTtR1t8u6g5HH2QlrZI0TTC+UkGRb9L0pzB9YB5zIuQAXELhRJb33FobU
-         l4B+JbY+OFzkKkNvgBzbGsQZoYFUzFYTpuxXidKXwy2vtn/zrOle+j+RKzXn5HTdkpHO
-         vaSe+rPLbmYqeQ8FEU5yMNUeOPcuTxnxLWhy4habFZZQ5WNUY2XZs5RCMLJKtdKFUjTu
-         coU2pjHC2aeawT1pfZciaSH8lnyLTRALYqri5d5E8iwmz4pQh5ulWbmwWOKDOtqmC8KU
-         ikFs9qZCQvA5vxIKGFkERXkeJFcIp+S0ey0s/bH0QFQ67gxsPmRMH9U+1X6nSgK2hRAN
-         ONJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UUvKx9totPqnePNsm+o+Df+E2nVvcP4SPqdwJ4LAruE=;
-        b=StxXUNvoTiWBXB3kDtaK9Y1tesJaetw+vI7NdX0DP3rfQ6corAyXPNPJbcUx/N/vJu
-         1eKbbx7n9bSI771fptA1zhgJKvREAZ1AV3sJNV4Bl84x/SJxE7QXz6G6CqELeh85ch0V
-         4/vdJqDp2ijysFzgKXlPfSmhZydgKO4qFjhQ492z9mU2oanY3re0P49UorfDQInfL/Jn
-         N4vApZhw8Jy0BPKt9kXxSnB/FWzjVRag9oiuASRM36rqZGU6Y9buNN90YQVZoKhnAVRM
-         tuINbX+DzlfSbefqz1I4kU1fp/y4JsiU/ROSPhLanPZy3yIZUfwt+epK0PIVhbXSgxfm
-         ud/g==
-X-Gm-Message-State: AO0yUKVotrgYxsz8tEYgco/bhBL1Rdr7orZGcaLFJgVWTV1JJMiV6ywZ
-        MEW5qfkzLY++LNwNhhnBpeEbrA==
-X-Google-Smtp-Source: AK7set8AiFhu+LCC9WPRp5yN14IXny544EmZy5V3SkTTa3S5ynSEQGbZky6lxKfZnc0VWSdyNv9xJw==
-X-Received: by 2002:a05:6a20:4c08:b0:a4:efde:2ed8 with SMTP id fm8-20020a056a204c0800b000a4efde2ed8mr1164132pzb.0.1674762634726;
-        Thu, 26 Jan 2023 11:50:34 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w5-20020a170902d3c500b00194bf8cef44sm1339566plb.117.2023.01.26.11.50.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 11:50:34 -0800 (PST)
-Date:   Thu, 26 Jan 2023 19:50:30 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yang Weijiang <weijiang.yang@intel.com>
-Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, like.xu.linux@gmail.com,
-        kan.liang@linux.intel.com, wei.w.wang@intel.com,
-        Zhang Yi Z <yi.z.zhang@linux.intel.com>
-Subject: Re: [PATCH v2 03/15] KVM: x86: Refresh CPUID on writes to
- MSR_IA32_XSS
-Message-ID: <Y9LZhsqxRjMjbK3s@google.com>
-References: <20221125040604.5051-1-weijiang.yang@intel.com>
- <20221125040604.5051-4-weijiang.yang@intel.com>
+        Thu, 26 Jan 2023 14:55:33 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66506BBCD;
+        Thu, 26 Jan 2023 11:55:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674762931; x=1706298931;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ZcEh3J82cdf49eNGrExLLGwSmNTTRLaju90uGMkg8T8=;
+  b=aGtP2Z+84DO6OJaDX8ks0thd0uQAeKcRjNhYoynaI2ho98tYsNxp23um
+   CP9dHkh/aeFvSx4aRhxYZ9KzzDh3e0IKV9IGNtuZuK6iDtwpP9zLYgsG/
+   tq9BH/wOK+0EXFjDjZF8YNqwnwgQPpIUzaQ8bU/HdOHpWBIEiPutO94Zg
+   63pMh//SBKn/qzyrob128hjE6P2f6HEhZmMtW36rCH12E8afGmT+waBKG
+   zbSH5NGuWvvUgzAD9M2mC+jWnHUcNj8CMCgu5JGshheh+Vb+WwZbeAABN
+   3NUh4KnmoPUQdxEKA2ecV4ME4brUhtmr+7E8HecCoEFKBr8AnUxipkszL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="329028971"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="329028971"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 11:55:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="908376269"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="908376269"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga006.fm.intel.com with ESMTP; 26 Jan 2023 11:55:24 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 26 Jan 2023 11:55:23 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 26 Jan 2023 11:55:22 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 26 Jan 2023 11:55:22 -0800
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.47) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 26 Jan 2023 11:55:22 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YmcRw70u4OyHYAudhRjjl210YhnpMcn38a5qAEqS6dMAQcbi6A8fkKtnZ3MDrbB3mX+qdYWR9UfZIOFKoG8OFs+r681z4aotjOgRPrLz5b9B6Caw8Mu2XU2wDQGEQRslpG19M802B9x57GsRHXeJ0vwdtyrMLr3VFAqwNHwGS6Pck31LreOcjy6G5vLu8KrPRyLyEvUw6PcjlIGqcgSYZ/VA5KzNMJMF9veas5zq4VRpplwkE4CGzJkFMPyoINeZ/ofMwJZRTN9SIWpNJ72LGLa3BDLjEg+kxMoM/hHAUT9mqYObywTDTLVoFnXfZDMKIezlq58RUJk+imVZcvPwyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RZRy4cGyAzDBhYid0dvRv93xjKbcID5eMh1MPcNjyxQ=;
+ b=J3Aqyoz9rbE2JC2iIqZD7l9/5PEit7SD2uDM601lBlLo5GPEVTJkqKxnPhJ98kI5uzTaWZr1/gCyLuGt4zGv9yadbXCeKZa3abES2W79ySFXmn7QTQm68CtjuX8+TtzqXcwLCSI+5rDk1iD3lbtIhW/rImd/bMpRaISK4rwfmFzGqciyz3LAX9sti5lKPga897TUOl9upKCO+1VMPnB6KrhLECiVfWyHCheoHE9KJ8AQjo1B/qMWxxK9aGHDrCsQpGyRdbeKfthirhMNduemAeld7Ic8bDj6rVAV7+Zqz2NGZ9mmt7E/NGv3RBwWhPtnLA4scjcqQg6WJCZGsBHtNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com (2603:10b6:303:90::24)
+ by CH3PR11MB8210.namprd11.prod.outlook.com (2603:10b6:610:163::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Thu, 26 Jan
+ 2023 19:55:20 +0000
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::c743:ed9a:85d0:262e]) by CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::c743:ed9a:85d0:262e%5]) with mapi id 15.20.6043.022; Thu, 26 Jan 2023
+ 19:55:20 +0000
+Message-ID: <a23c80c4-933c-9be0-6d36-4d4238b13f23@intel.com>
+Date:   Thu, 26 Jan 2023 11:55:18 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 5.10 1/1] i40e: Add checking for null for
+ nlmsg_find_attr()
+Content-Language: en-US
+To:     Natalia Petrova <n.petrova@fintech.ru>, <stable@vger.kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC:     Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
+References: <20230126135555.11407-1-n.petrova@fintech.ru>
+ <20230126135555.11407-2-n.petrova@fintech.ru>
+From:   Jesse Brandeburg <jesse.brandeburg@intel.com>
+In-Reply-To: <20230126135555.11407-2-n.petrova@fintech.ru>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR04CA0313.namprd04.prod.outlook.com
+ (2603:10b6:303:82::18) To CO1PR11MB4914.namprd11.prod.outlook.com
+ (2603:10b6:303:90::24)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221125040604.5051-4-weijiang.yang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR11MB4914:EE_|CH3PR11MB8210:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0aa88719-7838-4540-2d94-08daffd74151
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xATvsUb9f9Vc2u2POdJVi21awA/jAjUQmqjB3Bd/mikvYSrc6qqdTk8wD9jSKF8IPE76ZbRSUORxhswQMlFvSgqUcaBolYct3uh1C7BNUZTNx587zh/GfzzLbly27Eu6mHTQjh9p4KgZb6NJ0hhWMMa+b2zImhyIUK7LQjN5bLSexPnfId9L4ZTFMxhpzRW+Ksq7TYsX8eqYzmrDB7AxufXt1zfGqn+6dbP8+8xuxrzMpzRazEOs7CJ3G5Xl6IYWmoZUdorh/OzuHHLM7ajoYbIBGdbUZqJP9pfHGQ6Bze9QRYtxBgH8fcZLPP7xgNjr/zevKLlc69qYRYFTipDCzS4J+0rD92L2Z5qlbfmqCnA9riquTZZvSAqaBnG3ndt+SOvJb5Rr3c42AMzWYWN5NdHen+hu/76zjJkYUqnVL4kQUSmPVGwkFgPYPJHtgdLFzGgvH7LCsJ7mCfDLHDsEoIXuBvA2C6dDkEiL1WJwGeeBPYklddNIeA+wxpamBCoc2lMBtx64LpPXWCKck/rPM2Yt8ZSzPIpbgMcVDn7/+5XQuqW4Wdi5UX1VufVWvaxw/vaPU+dWLFUP7pU29zO7tPkkpRIbq42wyZFPQB4VEbyVJWYGoePZd/dAXrRm4UHoQ2R3SLGFISCAJCxYfICCgJXNrADMmV9fn7ntZAAQtBrhZj0bONO3gH8O1iLg6ELCI5Z+Uy0im+KzItn64XU8fVpicewEYO0wNP9FEocyAqE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4914.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(366004)(396003)(39860400002)(136003)(451199018)(316002)(54906003)(38100700002)(41300700001)(8676002)(66476007)(66556008)(31696002)(5660300002)(7416002)(86362001)(36756003)(8936002)(4326008)(66946007)(44832011)(2906002)(6506007)(82960400001)(53546011)(110136005)(26005)(6512007)(186003)(31686004)(478600001)(6486002)(83380400001)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cE1sTWJtWE5Jd3ZtbDcxbDBORUJ6VnpQck1OcmY1enNYeDJJMml3c01HZUcz?=
+ =?utf-8?B?dXJodHZablI4SkptY3RKZEVtc1dLM2RCb1c0UUR5TmdkbGUyUDVqbWRJd0R0?=
+ =?utf-8?B?Y0JIaUE0dldRMjZWVktuQTYreUVzb1pleE8ySXBZTEhVZXIxL3RORXNzRzJ2?=
+ =?utf-8?B?TktKTFhwbCs3RDdGcTNUemV4bkpJNCswY0hQM3FXZy80d0xLUm9FSC9RTkpv?=
+ =?utf-8?B?V293UkF5bkttaWU3TjlpbGhDSGZkRjhydTlqNHZ3NXc5SU83VkVUMzFuQ0lY?=
+ =?utf-8?B?Ly9RQWFkdW50MzlrT29IMER1M09XUndPcWJGcnp0a0cyNUhONDF1dTdUcGts?=
+ =?utf-8?B?bGs5bWNaRW9MbHFMRjU4VXhwVnhWY0E4Q2lsbDd2UzdLdUt3M2VCcHlubmVt?=
+ =?utf-8?B?ZVh3bm1GVE5pRm5mVjBUUlBjU21EZEpMSENpYWprTm5sdHZPWG5TWlRrM2wr?=
+ =?utf-8?B?TnV2ZlNkMUllVVRLSmZhZUc3VXFRelVpZ3FLdmlzMkdzZk1RbzIrSkhiQVVh?=
+ =?utf-8?B?MnJJVlBVc3l6a0FSY2lLOVJhbU1BWDRYT2ZlYVVSbGdpL1A3UGU4SThXNjEy?=
+ =?utf-8?B?YlE3WjZOMUozS3lkbmsrNW1Hd09WblZMbzhkaTdZNDZDUGRvendnQXl6NTRq?=
+ =?utf-8?B?SWxWMWpnYzF2Z2hGS0xZK2VrQ1EwQ3NDeFo2dk9rREtJZTJ0RXN2Qnh3bXVp?=
+ =?utf-8?B?enR1ZEtBSkwvUVpJRXhGSzR1cGVPZUlVVkdkSUl6QlE3M0ZjaU1sNjhOR29Q?=
+ =?utf-8?B?UnZWQlB0a3Y2VDIzVCtpOGhmUEdZVGZKb2U4YXRqQ3N4OXBUVEVDOHdYYVlC?=
+ =?utf-8?B?MzY2Rkk5aWpCbCtTNDBtSFZpMkV6cThQSGdrNU81NVAzZUhCSmNaZnJJVncr?=
+ =?utf-8?B?TUpBaERCMmd5MWRvWFpBcVZYbTZ5Zi92OUVrWFYyNTRaQ2lRWnZZY2RuTDZG?=
+ =?utf-8?B?aXBBUDdKWWtFTGkybjM2VGVYdjJodnE3cStwSVZRSUowU3h4UG9saG92dzZQ?=
+ =?utf-8?B?L2NpdmV1VjIxV1FvVkZXYjdnZGw1dENaUmUyeXhyN2hvTWMyNlBEbHlHUkR0?=
+ =?utf-8?B?cjREd09ndTl4dDZCbGJCWUloT1pjMU9mdWtZVmFlakxCNlR3RElWRmZXUnpv?=
+ =?utf-8?B?eVdvQVdJZlgwY1lmOHkrMjZJT1RCczNiUEtEdDVxZzgwb2JsUEs3R1l4N3R4?=
+ =?utf-8?B?VDFIaVB5SlBaMklEa0Q5dVlpRXFxUUprMkFkYnc1TGpvb3lFRlpDY3U0REtj?=
+ =?utf-8?B?Wjh6RFloL21naEg0S1hvdmpjaUxVZGtHQjllWG9oRzV0K1pnd29LcGZiTXZM?=
+ =?utf-8?B?b0UyODI5TCtZdW1pUmkrVlhTZjZ2WWttWHB5ZGxFcTJyNnZOMVpiOWJrSmpK?=
+ =?utf-8?B?akpNL2tMa2gzbytSTnEveDBUblFqVnN6R1lkc2tYQTVFMzlBWVViSzJkYmUr?=
+ =?utf-8?B?eG5CdlRyZWN2Vjc2VkdNQXd6TDFyMUJXVHB5bUE3S29HZGJsRng1L0swWGtJ?=
+ =?utf-8?B?bTErdk00ZjRMemlSZVZBMlVtU0FvNzc1SXlMSmk5bmpVU2lndDJUVnNEaHBy?=
+ =?utf-8?B?NHd3YUZpNzVaR1YvbGlzeXp5MzZEVm1GZkhhdXZKNWx6Uk5laGhleDNteFZZ?=
+ =?utf-8?B?VmtCZjJFU3hOdWtOV3FJSjV1d25hOW9SakcyM3R4ZnlIS0FmN0xRYld2NHJV?=
+ =?utf-8?B?ZlFsY2NEZWwwYlBSQ3g1eEJ4U0I1TzdmTzhQb2lXSmhXbFpMV3ptVTNIR01J?=
+ =?utf-8?B?VjlMaklGcXc4ais3QUJuZTdycVNmeG5wVzNmMnBUaWYzcDFHQXRHUXhvWEpX?=
+ =?utf-8?B?WU9VQzVPc2FPcW0yODFTQmdFNlpEWkNFeE9vZnBnN0VvVy9nYkJZY3VWZ1RE?=
+ =?utf-8?B?ZytoRnd3b3ZVY0Zram5MVk10dklLTXMxQWVUZHdMOFpJVzZJN2xFQWMxUThE?=
+ =?utf-8?B?bkJ4eW5xZ0NWQjFhN3Q5QWxmeW01V0pWTmVUOStPUGRPd0xFSHFBeFRGaWt2?=
+ =?utf-8?B?SXVBZGhrUmJtcURBUUh2bmdjNjhOMmliK0VaRHB1WTVnT1llclMwQmhFbFVz?=
+ =?utf-8?B?enduWldqWUJEc3J2ZmYwaCtkUFo2OTNLcDRBL2tMNmF3aWNRbVZxSmtQMTFG?=
+ =?utf-8?B?STA5Mi9XZHpGbERiNzFCQ2xuRkpNMkljaFZWcDcrcUVxVVZ1bzNvWUQrck03?=
+ =?utf-8?B?NGc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0aa88719-7838-4540-2d94-08daffd74151
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4914.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 19:55:20.6643
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cIaMkxswm/CLYj/YGH+cqSsWJdhvQQ/hDJY/LXuYbhOUWNhJAlpMTY97nQqmWswn5SCPWphJfaG2v6ItMOltd8bDTwgxedxK9qOot2RWTzk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8210
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,70 +169,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022, Yang Weijiang wrote:
-> Updated CPUID.0xD.0x1, which reports the current required storage size
-> of all features enabled via XCR0 | XSS, when the guest's XSS is modified.
+On 1/26/2023 5:55 AM, Natalia Petrova wrote:
+> The result of nlmsg_find_attr() 'br_spec' is dereferenced in
+> nla_for_each_nested(), but it can take null value in nla_find() function,
+> which will result in an error.
 > 
-> Note, KVM does not yet support any XSS based features, i.e. supported_xss
-> is guaranteed to be zero at this time.
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
-> Co-developed-by: Zhang Yi Z <yi.z.zhang@linux.intel.com>
-> Signed-off-by: Zhang Yi Z <yi.z.zhang@linux.intel.com>
-> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+> Fixes: 51616018dd1b ("i40e: Add support for getlink, setlink ndo ops")
+> Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
 > ---
->  arch/x86/kvm/cpuid.c | 16 +++++++++++++---
->  arch/x86/kvm/x86.c   |  6 ++++--
->  2 files changed, 17 insertions(+), 5 deletions(-)
+>   drivers/net/ethernet/intel/i40e/i40e_main.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 6b5912578edd..85e3df6217af 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -272,9 +272,19 @@ static void __kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu, struct kvm_cpuid_e
->  		best->ebx = xstate_required_size(vcpu->arch.xcr0, false);
->  
->  	best = cpuid_entry2_find(entries, nent, 0xD, 1);
-> -	if (best && (cpuid_entry_has(best, X86_FEATURE_XSAVES) ||
-> -		     cpuid_entry_has(best, X86_FEATURE_XSAVEC)))
-> -		best->ebx = xstate_required_size(vcpu->arch.xcr0, true);
-> +	if (best) {
-> +		if (cpuid_entry_has(best, X86_FEATURE_XSAVES) ||
-> +		    cpuid_entry_has(best, X86_FEATURE_XSAVEC))  {
-> +			u64 xstate = vcpu->arch.xcr0 | vcpu->arch.ia32_xss;
-> +
-> +			best->ebx = xstate_required_size(xstate, true);
-> +		}
-> +
-> +		if (!cpuid_entry_has(best, X86_FEATURE_XSAVES)) {
-> +			best->ecx = 0;
-> +			best->edx = 0;
+> diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> index 53d0083e35da..4626d2a1af91 100644
+> --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
+> +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> @@ -13167,6 +13167,8 @@ static int i40e_ndo_bridge_setlink(struct net_device *dev,
+>   	}
+>   
+>   	br_spec = nlmsg_find_attr(nlh, sizeof(struct ifinfomsg), IFLA_AF_SPEC);
+> +	if (!br_spec)
+> +		return -EINVAL;
+>   
+>   	nla_for_each_nested(attr, br_spec, rem) {
+>   		__u16 mode;
 
-ECX and EDX should be left alone, it is userspace's responsibility to provide a
-sane CPUID model.  E.g. KVM doesn't clear EBX or EDX in CPUID.0xD.0x1 when XSAVE
-is unsupported.
+Makes sense to me. Thanks.
 
-> +		}
-> +	}
->  
->  	best = __kvm_find_kvm_cpuid_features(vcpu, entries, nent);
->  	if (kvm_hlt_in_guest(vcpu->kvm) && best &&
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 16726b44061b..888a153e32bc 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3685,8 +3685,10 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  		 */
->  		if (data & ~kvm_caps.supported_xss)
->  			return 1;
-> -		vcpu->arch.ia32_xss = data;
-> -		kvm_update_cpuid_runtime(vcpu);
-> +		if (vcpu->arch.ia32_xss != data) {
-> +			vcpu->arch.ia32_xss = data;
-> +			kvm_update_cpuid_runtime(vcpu);
-> +		}
->  		break;
->  	case MSR_SMI_COUNT:
->  		if (!msr_info->host_initiated)
-> -- 
-> 2.27.0
-> 
+Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+
