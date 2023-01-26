@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C3867D55D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CBD67D560
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbjAZTbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 14:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
+        id S232116AbjAZTdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 14:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbjAZTbL (ORCPT
+        with ESMTP id S229512AbjAZTdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 14:31:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF50A5CFCC
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:31:09 -0800 (PST)
+        Thu, 26 Jan 2023 14:33:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CDC5C0DE;
+        Thu, 26 Jan 2023 11:33:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C40F60B55
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 19:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E25AAC433EF;
-        Thu, 26 Jan 2023 19:31:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23455B81EDE;
+        Thu, 26 Jan 2023 19:33:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12630C433EF;
+        Thu, 26 Jan 2023 19:33:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674761468;
-        bh=PGqWzb4wgvcNL+4at+iClbkHPoLojf2NKMh3JxPkiEk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=iX03FAtac96I2DRhYB+Srj8X8jEkbl9mbu4U+p8Vc8qOIPYQcMXMWLy6XK+PGVa+C
-         hg1Q7GffLzwGP1DKiPv6fZfmXT1YOvGbUB5nmg7shzt8PoswHEB7VGHYm9CBptLSNg
-         Uqn/7kCYRw6mtKhjLwr7kCbCk2is1xIYP7dH5gXRKq7x1IqeMb4Y744e7pGGTIPJ9t
-         mW9DZgKoq0sZ3WYuH9RWxuRoc/pV/WQnkHhN1FCeAm3Mk+3qU4K+YVUnCEF54LnFmA
-         Pw7j2u37kNaz2Cyi8DIrFsimKZqQVaGOYcdgaosixfN/fhcCpgHhCE1WhHH6VXyhQy
-         taHFEzHDA09zg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7B8275C0510; Thu, 26 Jan 2023 11:31:08 -0800 (PST)
-Date:   Thu, 26 Jan 2023 11:31:08 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: [Patch 2/2] tools/memory-model: Provide exact SRCU semantics
-Message-ID: <20230126193108.GH2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Y9GO3xEYkIQq/qSl@rowland.harvard.edu>
- <Y9GPI/g23YWx+0Ce@rowland.harvard.edu>
- <Y9GPVnK6lQbY6vCK@rowland.harvard.edu>
- <c44183e7-44ae-4be3-bb47-517067a112b5@huaweicloud.com>
- <Y9Gyuj+2UFefUdJS@rowland.harvard.edu>
- <edadb690-e791-0e9c-e641-ea8876abe96e@huaweicloud.com>
- <20230126173507.GE2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9LQEuUBn3fwZEBe@rowland.harvard.edu>
+        s=k20201202; t=1674761613;
+        bh=vc1V/Z7elonzdwRvP09P1oJKTw2NjoGYhFuRtgSWD/w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fSqtLDPDPu1c+MOZCM5VJHtYOpB9srDL4tEUBP0KxZnD0YPFDG4/zSNmJx7qf3j13
+         a4u9rxJ7f1Rp4R89ekkgu88a3tlovoCU5M9rNwXj2FhHy/VWyiT91i+PL+YoKu0L/5
+         4X7WODDbh/Cm7dnzuKZEgOgYSM3iSwGKHlEiaaT/SevbaTPpdWcYQE3LKeBKc/sDht
+         paoSKaHKMRQij0yZe26xc0Kb9FEJosj5zlaIintYRAfCgNPJ/PYGahYPIfVe83Gftf
+         YkKnOQvF4ZOJt8zUvyL0XneWXjTApFUw1bR2Xy9VRiRYnROYdnjw27GFVn3auIWglg
+         n8AsGSqh4IzHw==
+Date:   Thu, 26 Jan 2023 19:33:28 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 09/13] riscv: switch to relative alternative entries
+Message-ID: <Y9LViAD0aPSBwi5t@spud>
+References: <20230115154953.831-1-jszhang@kernel.org>
+ <20230115154953.831-10-jszhang@kernel.org>
+ <20230120183418.ngdppppvwzysqtcr@orel>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="pCzcGbmwE1oO9rIP"
 Content-Disposition: inline
-In-Reply-To: <Y9LQEuUBn3fwZEBe@rowland.harvard.edu>
+In-Reply-To: <20230120183418.ngdppppvwzysqtcr@orel>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -74,29 +64,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 02:10:10PM -0500, Alan Stern wrote:
-> On Thu, Jan 26, 2023 at 09:35:07AM -0800, Paul E. McKenney wrote:
-> > On Thu, Jan 26, 2023 at 12:30:14PM +0100, Jonas Oberhauser wrote:
-> > > I don't think they're necessarily implemented in a compatible way, so
-> > > 
-> > > r = srcu_lock(s);
-> > > srcu_up(s,r);
-> > > 
-> > > might not actually work, but would currently be ok'ed by LKMM.
-> > 
-> > In kernels built with CONFIG_PROVE_LOCKING=y (AKA built with lockdep
-> > enabled), lockdep would complain about having an srcu_read_lock() with
-> > no matching srcu_read_unlock().  Kernels built without lockdep (that is,
-> > kernels actually used in production) would be happy with this.
-> > 
-> > So as Jonas suspects, this should be classified as not actually working.
-> 
-> Lockdep complaints don't actually stop things from working (unless you 
-> want them to).  They're just warnings, right?
 
-True, but they are taken seriously due to lockdep disabling itself after
-the first warning.  So a warning for this sort of thing could hide some
-other deadlock, which tend to strongly motivate fixing issues leading
-to lockdep warnings.
+--pCzcGbmwE1oO9rIP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-							Thanx, Paul
+On Fri, Jan 20, 2023 at 07:34:18PM +0100, Andrew Jones wrote:
+> On Sun, Jan 15, 2023 at 11:49:49PM +0800, Jisheng Zhang wrote:
+> ...
+> >  #define ALT_ENTRY(oldptr, newptr, vendor_id, errata_id, newlen)		\
+> > -	RISCV_PTR " " oldptr "\n"					\
+> > -	RISCV_PTR " " newptr "\n"					\
+> > -	REG_ASM " " vendor_id "\n"					\
+> > -	REG_ASM " " newlen "\n"						\
+> > -	".word " errata_id "\n"
+> > +	".4byte	((" oldptr ") - .) \n"					\
+> > +	".4byte	((" newptr ") - .) \n"					\
+> > +	".2byte	" vendor_id "\n"					\
+> > +	".2byte " newlen "\n"						\
+> > +	".4byte	" errata_id "\n"
+> >
+>=20
+> Hi Jisheng,
+>=20
+> This patch breaks loading the KVM module for me. I got "kvm: Unknown
+> relocation type 34". My guess is that these 2 byte fields are inspiring
+> the compiler to emit 16-bit relocation types. The patch below fixes
+> things for me. If you agree with fixing it this way, rather than
+> changing something in alternatives, like not using 2 byte fields,
+> then please pick the below patch up in your series.
+>=20
+> Thanks,
+> drew
+>=20
+> From 4d203697aa745a0cd3a9217d547a9fb7fa2a87c7 Mon Sep 17 00:00:00 2001
+> From: Andrew Jones <ajones@ventanamicro.com>
+> Date: Fri, 20 Jan 2023 19:05:44 +0100
+> Subject: [PATCH] riscv: module: Add ADD16 and SUB16 rela types
+> Content-type: text/plain
+>=20
+> To prepare for 16-bit relocation types to be emitted in alternatives
+> add support for ADD16 and SUB16.
+>=20
+> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+
+For the fixup:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks!
+
+> ---
+>  arch/riscv/kernel/module.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>=20
+> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
+> index 76f4b9c2ec5b..7c651d55fcbd 100644
+> --- a/arch/riscv/kernel/module.c
+> +++ b/arch/riscv/kernel/module.c
+> @@ -268,6 +268,13 @@ static int apply_r_riscv_align_rela(struct module *m=
+e, u32 *location,
+>  	return -EINVAL;
+>  }
+> =20
+> +static int apply_r_riscv_add16_rela(struct module *me, u32 *location,
+> +				    Elf_Addr v)
+> +{
+> +	*(u16 *)location +=3D (u16)v;
+> +	return 0;
+> +}
+> +
+>  static int apply_r_riscv_add32_rela(struct module *me, u32 *location,
+>  				    Elf_Addr v)
+>  {
+> @@ -282,6 +289,13 @@ static int apply_r_riscv_add64_rela(struct module *m=
+e, u32 *location,
+>  	return 0;
+>  }
+> =20
+> +static int apply_r_riscv_sub16_rela(struct module *me, u32 *location,
+> +				    Elf_Addr v)
+> +{
+> +	*(u16 *)location -=3D (u16)v;
+> +	return 0;
+> +}
+> +
+>  static int apply_r_riscv_sub32_rela(struct module *me, u32 *location,
+>  				    Elf_Addr v)
+>  {
+> @@ -315,8 +329,10 @@ static int (*reloc_handlers_rela[]) (struct module *=
+me, u32 *location,
+>  	[R_RISCV_CALL]			=3D apply_r_riscv_call_rela,
+>  	[R_RISCV_RELAX]			=3D apply_r_riscv_relax_rela,
+>  	[R_RISCV_ALIGN]			=3D apply_r_riscv_align_rela,
+> +	[R_RISCV_ADD16]			=3D apply_r_riscv_add16_rela,
+>  	[R_RISCV_ADD32]			=3D apply_r_riscv_add32_rela,
+>  	[R_RISCV_ADD64]			=3D apply_r_riscv_add64_rela,
+> +	[R_RISCV_SUB16]			=3D apply_r_riscv_sub16_rela,
+>  	[R_RISCV_SUB32]			=3D apply_r_riscv_sub32_rela,
+>  	[R_RISCV_SUB64]			=3D apply_r_riscv_sub64_rela,
+>  };
+> --=20
+> 2.39.0
+>=20
+
+--pCzcGbmwE1oO9rIP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9LViAAKCRB4tDGHoIJi
+0oYcAQClYSueSJDtig3qrqwQobGwxe0T5StqPgiOWqePZrc3xwD/UjmLjjuPj8LR
++jdmg1Xrybx2t2TsXVT06MPkbpsV1wI=
+=uhHG
+-----END PGP SIGNATURE-----
+
+--pCzcGbmwE1oO9rIP--
