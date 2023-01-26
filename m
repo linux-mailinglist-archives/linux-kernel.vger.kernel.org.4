@@ -2,271 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AB967D126
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B4C67D129
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbjAZQSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S232606AbjAZQTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbjAZQRy (ORCPT
+        with ESMTP id S232646AbjAZQSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:17:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BB82D163;
-        Thu, 26 Jan 2023 08:17:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8925DB81E95;
-        Thu, 26 Jan 2023 16:17:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AC1FC4339B;
-        Thu, 26 Jan 2023 16:17:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674749863;
-        bh=qoJdV7Hy0K/c3KYKzdd66F4ZCzYzGAgyJAzosdZYTXY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cTckPmHczcg+AmhpY0WopBVBiM4auGprubeGb+ETYLShjMPmJ5mpuaJ5Fb9c3chV7
-         4oAxWJ37kNRL0IUroFpa8oppcSeG4A1V/D4789jqdycoA0h1mZwo6sQluhxF23HL9Q
-         3U0qeWhGPgwjuBxF95V8hBvtfFkf2Kjx05CAFKDYm54iaXuf5l8o1w60oYVYKcbGFD
-         OfqMZY2DuXEYF8x403lWa5nu9rB5e1Ddnk62W2bGW28QMoLwc+I9Y8tDoYSOzJT7zO
-         zqXtMaglx4z6G99tVWYzg5RdC1YaJcxunFnbvfxRr/VGjienZC9y9u/6FTLeKoLfbS
-         WLmQofbj2Pb1Q==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>, linux-wpan@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ca8210: move to gpio descriptors
-Date:   Thu, 26 Jan 2023 17:17:15 +0100
-Message-Id: <20230126161737.2985704-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Thu, 26 Jan 2023 11:18:44 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620F5233FD
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:18:43 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id c124so2555822ybb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:18:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vvEyqxPpR8M4BC65XVopg/XEu9SCivMiAr3QBDUWiyU=;
+        b=H348+fayL/o7ZK4OMOl0X4WP2eMya1R6g3s71mVa0DA8XCsYAD7Mno2OaEE7NA0CmO
+         e4033coOL787sHvi/S6s9OFvGkRHoLaUuJ1duFsKOvl5kj/wYF8+5cRX76ijn0+r9mVN
+         /MK6vYc4x8jCg28wjYXYjcmydOgZp19VGDCnfGGlA3w2bC3Yw6+bgXPCcc6kwlaa/Dld
+         Xkvgt3oautRKkhJGYhlwnO6TvcpaegDMiJu4G7chvMyMJzFUHGEi5AWj6fisELCIR8Mt
+         LiDJG1ULptGXP+W67GIwNcq68sjgGTmxbYOeP0BP5KnuDIfe/tA0SCD/oII/g1WHFURW
+         dp6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vvEyqxPpR8M4BC65XVopg/XEu9SCivMiAr3QBDUWiyU=;
+        b=NrKyNLH4tQpLBbNMBDAohDhcLS/MKSl/dj/ZQyYb4vpdJI4RVu7yqn35TWFvcDJko7
+         zP5i5ctb+FXJLx1da/WUmxC4EzWWOEMZM4KrwIk3HNXlVnoPBFpoopscqdIC7a3TWcUM
+         Owg3j+XDSrUlQz7Ku5uexiNMrxhmm12Pzo4TntFKWgI+M1pzmu6FvPdxcQTaNzbSW41i
+         4VQsdQkkmkPxfEsRSgZUDEcGKTIGBdliWRNj90d4X8XHrb1C5Dl6AZX+2mvi3ulng/KF
+         DVoNibj3tYImX6m4r4JolauiaDwQ7XdLoGAvHLMEY9A4ICwYfFMBG127frU6dXgag82Y
+         3PZA==
+X-Gm-Message-State: AO0yUKXkiM2a+ZXbyl2QkODOW4xF/7sYvIgqHfsxXizVY/N5t2JMzd1V
+        H86LVmM41ZJwfkxaKV7h8PHGTXNfrhgtKBro7BUg/w==
+X-Google-Smtp-Source: AK7set9P+5mtUtKJMZFiPeuyZhPr8TwEdg7FU3uDJVhz4F2UDpdSR6q0zVgkPPrpoaJxmCX2P+Pz2XDq0fuB0xLwifk=
+X-Received: by 2002:a25:6811:0:b0:80b:c92b:ed7c with SMTP id
+ d17-20020a256811000000b0080bc92bed7cmr466120ybc.593.1674749922312; Thu, 26
+ Jan 2023 08:18:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125233554.153109-1-surenb@google.com> <20230125233554.153109-7-surenb@google.com>
+ <20230126154740.j3a3lu4x557c56yi@techsingularity.net>
+In-Reply-To: <20230126154740.j3a3lu4x557c56yi@techsingularity.net>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 26 Jan 2023 08:18:31 -0800
+Message-ID: <CAJuCfpHP6hQAWZr2exZEXOzLbMNU_c9qNNc7pa2NYAhYLe=EKQ@mail.gmail.com>
+Subject: Re: [PATCH v3 6/7] mm: introduce mod_vm_flags_nolock and use it in untrack_pfn
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Jan 26, 2023 at 7:47 AM Mel Gorman <mgorman@techsingularity.net> wrote:
+>
+> On Wed, Jan 25, 2023 at 03:35:53PM -0800, Suren Baghdasaryan wrote:
+> > In cases when VMA flags are modified after VMA was isolated and mmap_lock
+> > was downgraded, flags modifications would result in an assertion because
+> > mmap write lock is not held.
+>
+> Add note that it's also used during exit when the locking of the VMAs
+> becomes irrelevant (mm users is 0, should be no VMA modifications taking
+> place other than zap).
 
-The driver requires DT based probing already, and can
-be simplified by using the modern gpio interfaces.
+Ack.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/net/ieee802154/ca8210.c | 93 +++++++++------------------------
- 1 file changed, 24 insertions(+), 69 deletions(-)
+>
+> The typical naming pattern when a caller either knows it holds the necessary
+> lock or knows it does not matter is __mod_vm_flags()
 
-diff --git a/drivers/net/ieee802154/ca8210.c b/drivers/net/ieee802154/ca8210.c
-index 5c0be6a3ec5e..2ee2746688ea 100644
---- a/drivers/net/ieee802154/ca8210.c
-+++ b/drivers/net/ieee802154/ca8210.c
-@@ -52,13 +52,11 @@
- #include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
--#include <linux/gpio.h>
- #include <linux/ieee802154.h>
- #include <linux/io.h>
- #include <linux/kfifo.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
--#include <linux/of_gpio.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/poll.h>
-@@ -312,6 +310,9 @@ struct ca8210_test {
-  * @promiscuous:            whether the ca8210 is in promiscuous mode or not
-  * @retries:                records how many times the current pending spi
-  *                          transfer has been retried
-+ * @gpio_reset:     	    gpio of ca8210 reset line
-+ * @gpio_irq:       	    gpio number of ca8210 interrupt line
-+ * @irq_id:        	    identifier for the ca8210 irq
-  */
- struct ca8210_priv {
- 	struct spi_device *spi;
-@@ -332,6 +333,9 @@ struct ca8210_priv {
- 	struct completion spi_transfer_complete, sync_exchange_complete;
- 	bool promiscuous;
- 	int retries;
-+	struct gpio_desc *gpio_reset;
-+	struct gpio_desc *gpio_irq;
-+	int irq_id;
- };
- 
- /**
-@@ -351,18 +355,12 @@ struct work_priv_container {
-  * @extclockenable: true if the external clock is to be enabled
-  * @extclockfreq:   frequency of the external clock
-  * @extclockgpio:   ca8210 output gpio of the external clock
-- * @gpio_reset:     gpio number of ca8210 reset line
-- * @gpio_irq:       gpio number of ca8210 interrupt line
-- * @irq_id:         identifier for the ca8210 irq
-  *
-  */
- struct ca8210_platform_data {
- 	bool extclockenable;
- 	unsigned int extclockfreq;
- 	unsigned int extclockgpio;
--	int gpio_reset;
--	int gpio_irq;
--	int irq_id;
- };
- 
- /**
-@@ -628,14 +626,13 @@ static int ca8210_spi_transfer(
-  */
- static void ca8210_reset_send(struct spi_device *spi, unsigned int ms)
- {
--	struct ca8210_platform_data *pdata = spi->dev.platform_data;
- 	struct ca8210_priv *priv = spi_get_drvdata(spi);
- 	long status;
- 
--	gpio_set_value(pdata->gpio_reset, 0);
-+	gpiod_set_value(priv->gpio_reset, 0);
- 	reinit_completion(&priv->ca8210_is_awake);
- 	msleep(ms);
--	gpio_set_value(pdata->gpio_reset, 1);
-+	gpiod_set_value(priv->gpio_reset, 1);
- 	priv->promiscuous = false;
- 
- 	/* Wait until wakeup indication seen */
-@@ -2788,74 +2785,34 @@ static void ca8210_unregister_ext_clock(struct spi_device *spi)
- 	dev_info(&spi->dev, "External clock unregistered\n");
- }
- 
--/**
-- * ca8210_reset_init() - Initialise the reset input to the ca8210
-- * @spi:  Pointer to target ca8210 spi device
-- *
-- * Return: 0 or linux error code
-- */
--static int ca8210_reset_init(struct spi_device *spi)
--{
--	int ret;
--	struct ca8210_platform_data *pdata = spi->dev.platform_data;
--
--	pdata->gpio_reset = of_get_named_gpio(
--		spi->dev.of_node,
--		"reset-gpio",
--		0
--	);
--
--	ret = gpio_direction_output(pdata->gpio_reset, 1);
--	if (ret < 0) {
--		dev_crit(
--			&spi->dev,
--			"Reset GPIO %d did not set to output mode\n",
--			pdata->gpio_reset
--		);
--	}
--
--	return ret;
--}
--
- /**
-  * ca8210_interrupt_init() - Initialise the irq output from the ca8210
-  * @spi:  Pointer to target ca8210 spi device
-  *
-  * Return: 0 or linux error code
-  */
--static int ca8210_interrupt_init(struct spi_device *spi)
-+static int ca8210_interrupt_init(struct spi_device *spi, struct ca8210_priv *priv)
- {
- 	int ret;
--	struct ca8210_platform_data *pdata = spi->dev.platform_data;
- 
--	pdata->gpio_irq = of_get_named_gpio(
--		spi->dev.of_node,
--		"irq-gpio",
--		0
--	);
--
--	pdata->irq_id = gpio_to_irq(pdata->gpio_irq);
--	if (pdata->irq_id < 0) {
--		dev_crit(
--			&spi->dev,
--			"Could not get irq for gpio pin %d\n",
--			pdata->gpio_irq
--		);
--		gpio_free(pdata->gpio_irq);
--		return pdata->irq_id;
-+	priv->gpio_irq = gpiod_get(&spi->dev, "irq", GPIOD_IN);
-+	priv->irq_id = gpiod_to_irq(priv->gpio_irq);
-+	if (priv->irq_id < 0) {
-+		dev_crit(&spi->dev, "Could not get irq for gpio pin\n");
-+		gpiod_put(priv->gpio_irq);
-+		return priv->irq_id;
- 	}
- 
- 	ret = request_irq(
--		pdata->irq_id,
-+		priv->irq_id,
- 		ca8210_interrupt_handler,
- 		IRQF_TRIGGER_FALLING,
- 		"ca8210-irq",
- 		spi_get_drvdata(spi)
- 	);
- 	if (ret) {
--		dev_crit(&spi->dev, "request_irq %d failed\n", pdata->irq_id);
--		gpiod_unexport(gpio_to_desc(pdata->gpio_irq));
--		gpio_free(pdata->gpio_irq);
-+		dev_crit(&spi->dev, "request_irq %d failed\n", priv->irq_id);
-+		gpiod_put(priv->gpio_irq);
- 	}
- 
- 	return ret;
-@@ -3009,7 +2966,7 @@ static void ca8210_test_interface_clear(struct ca8210_priv *priv)
-  */
- static void ca8210_remove(struct spi_device *spi_device)
- {
--	struct ca8210_priv *priv;
-+	struct ca8210_priv *priv = spi_get_drvdata(spi_device);
- 	struct ca8210_platform_data *pdata;
- 
- 	dev_info(&spi_device->dev, "Removing ca8210\n");
-@@ -3020,12 +2977,10 @@ static void ca8210_remove(struct spi_device *spi_device)
- 			ca8210_unregister_ext_clock(spi_device);
- 			ca8210_config_extern_clk(pdata, spi_device, 0);
- 		}
--		free_irq(pdata->irq_id, spi_device->dev.driver_data);
-+		free_irq(priv->irq_id, spi_device->dev.driver_data);
- 		kfree(pdata);
- 		spi_device->dev.platform_data = NULL;
- 	}
--	/* get spi_device private data */
--	priv = spi_get_drvdata(spi_device);
- 	if (priv) {
- 		dev_info(
- 			&spi_device->dev,
-@@ -3114,13 +3069,13 @@ static int ca8210_probe(struct spi_device *spi_device)
- 		dev_crit(&spi_device->dev, "ca8210_dev_com_init failed\n");
- 		goto error;
- 	}
--	ret = ca8210_reset_init(priv->spi);
--	if (ret) {
--		dev_crit(&spi_device->dev, "ca8210_reset_init failed\n");
-+	priv->gpio_reset = gpiod_get(&spi_device->dev, "reset", GPIOD_OUT_HIGH);
-+	if (IS_ERR(priv->gpio_reset)) {
-+		dev_crit(&spi_device->dev, "ca8210 reset init failed\n");
- 		goto error;
- 	}
- 
--	ret = ca8210_interrupt_init(priv->spi);
-+	ret = ca8210_interrupt_init(priv->spi, priv);
- 	if (ret) {
- 		dev_crit(&spi_device->dev, "ca8210_interrupt_init failed\n");
- 		goto error;
--- 
-2.39.0
+Ok. It sounds less explicit but plenty of examples, so I'm fine with
+such rename. Will apply in the next version.
 
+>
+> > Introduce mod_vm_flags_nolock to be used in such situation, when VMA is
+> > not part of VMA tree and locking it is not required.
+>
+> Instead of such situations, describe in as "used when the caller takes
+> responsibility for the required locking".
+
+Ack.
+
+>
+> > Pass a hint to untrack_pfn to conditionally use mod_vm_flags_nolock for
+> > flags modification and to avoid assertion.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>
+> Patch itself looks ok. It strays close to being "conditional locking"
+> though which might attract some complaints.
+
+The description seems to accurately describe what's done here but I'm
+open to better suggestions.
+Thanks!
+
+>
+> --
+> Mel Gorman
+> SUSE Labs
