@@ -2,95 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C0C67D1D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E4E67D1DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbjAZQi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:38:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S231968AbjAZQj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:39:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbjAZQi1 (ORCPT
+        with ESMTP id S231710AbjAZQj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:38:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09CB4AA62
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:38:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CCB4618E8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:38:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB66FC433D2;
-        Thu, 26 Jan 2023 16:38:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674751097;
-        bh=6qtgNxbECemucjlcZnysho52hl61i0+xb+1L04Nx6II=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GDHMo0oZscx3hvSa024f66iPJ8KgOweUrlORbRbz4kuAV3jGG03zI0+Rh7a9uh2eK
-         2snSerZvJ/fwoQTAP1ZIkxcXe67XQc10Ba4YA3WjK/zdncb8TuMTTtzkK1gcCfr7BN
-         GXcUX5N/xLoi/tCDUAD7/8W7bcxaL7OPD2XuJkNyMaI/c1nPYSuFyG4nanzJLgxJyk
-         R03PHKS/sF1Yq2GLeCRE1XCI5YlVJrmRJqQWkkDj78WxWAzwtWDTmC7wSqhuiYnYv7
-         acpJD2iIggHlvEUWeXbeEvK2GBMMT50jJ8VNvAF/reJaU2Eg2m8RRIdpKnzSpLF64h
-         1w/ob8zWBSKqw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Krystian Pradzynski <krystian.pradzynski@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] accel/ivpu: avoid duplciate assignment
-Date:   Thu, 26 Jan 2023 17:37:55 +0100
-Message-Id: <20230126163804.3648051-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230126163804.3648051-1-arnd@kernel.org>
-References: <20230126163804.3648051-1-arnd@kernel.org>
+        Thu, 26 Jan 2023 11:39:26 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5788183;
+        Thu, 26 Jan 2023 08:39:24 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P2mRl0Xqsz9v7Ys;
+        Fri, 27 Jan 2023 00:31:15 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwCHXGOnrNJjEzvKAA--.36334S2;
+        Thu, 26 Jan 2023 17:39:10 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
+        viro@zeniv.linux.org.uk, Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v3 1/2] ima: Align ima_file_mmap() parameters with mmap_file LSM hook
+Date:   Thu, 26 Jan 2023 17:38:10 +0100
+Message-Id: <20230126163812.1870942-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwCHXGOnrNJjEzvKAA--.36334S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr1UXF1fAFWUuw13Kw1fCrg_yoWrtF1rpF
+        98Ka4UGrZ5JFy09r97uay7Za43K34xKrWUWayIg340y3Z8XF1v9r13AFy29r1rCr95AFyI
+        q347KrW5C3WqyFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvqb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x02
+        62kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280
+        aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07jzQ6JUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4Ql4wACs+
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-With extra warnings enabled, gcc warns about two assignments
-of the same .mmap callback:
+Commit 98de59bfe4b2f ("take calculation of final prot in
+security_mmap_file() into a helper") moved the code to update prot, to be
+the actual protections applied to the kernel, to a new helper called
+mmap_prot().
 
-In file included from drivers/accel/ivpu/ivpu_drv.c:10:
-include/drm/drm_accel.h:31:27: error: initialized field overwritten [-Werror=override-init]
-   31 |         .mmap           = drm_gem_mmap
-      |                           ^~~~~~~~~~~~
-drivers/accel/ivpu/ivpu_drv.c:360:9: note: in expansion of macro 'DRM_ACCEL_FOPS'
-  360 |         DRM_ACCEL_FOPS,
-      |         ^~~~~~~~~~~~~~
+However, while without the helper ima_file_mmap() was getting the updated
+prot, with the helper ima_file_mmap() gets the original prot, which
+contains the protections requested by the application.
 
-Remove the unused local assignment.
+A possible consequence of this change is that, if an application calls
+mmap() with only PROT_READ, and the kernel applies PROT_EXEC in addition,
+that application would have access to executable memory without having this
+event recorded in the IMA measurement list. This situation would occur for
+example if the application, before mmap(), calls the personality() system
+call with READ_IMPLIES_EXEC as the first argument.
 
-Fixes: 20709aa9435b ("accel: Add .mmap to DRM_ACCEL_FOPS")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Align ima_file_mmap() parameters with those of the mmap_file LSM hook, so
+that IMA can receive both the requested prot and the final prot. Since the
+requested protections are stored in a new variable, and the final
+protections are stored in the existing variable, this effectively restores
+the original behavior of the MMAP_CHECK hook.
+
+Cc: stable@vger.kernel.org
+Fixes: 98de59bfe4b2 ("take calculation of final prot in security_mmap_file() into a helper")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- drivers/accel/ivpu/ivpu_drv.c | 1 -
- 1 file changed, 1 deletion(-)
+ include/linux/ima.h               | 6 ++++--
+ security/integrity/ima/ima_main.c | 7 +++++--
+ security/security.c               | 7 ++++---
+ 3 files changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/accel/ivpu/ivpu_drv.c b/drivers/accel/ivpu/ivpu_drv.c
-index 2bc2f1b90671..a29e8ee0dce6 100644
---- a/drivers/accel/ivpu/ivpu_drv.c
-+++ b/drivers/accel/ivpu/ivpu_drv.c
-@@ -356,7 +356,6 @@ int ivpu_shutdown(struct ivpu_device *vdev)
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 5a0b2a285a18..d79fee67235e 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -21,7 +21,8 @@ extern int ima_file_check(struct file *file, int mask);
+ extern void ima_post_create_tmpfile(struct user_namespace *mnt_userns,
+ 				    struct inode *inode);
+ extern void ima_file_free(struct file *file);
+-extern int ima_file_mmap(struct file *file, unsigned long prot);
++extern int ima_file_mmap(struct file *file, unsigned long reqprot,
++			 unsigned long prot, unsigned long flags);
+ extern int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot);
+ extern int ima_load_data(enum kernel_load_data_id id, bool contents);
+ extern int ima_post_load_data(char *buf, loff_t size,
+@@ -76,7 +77,8 @@ static inline void ima_file_free(struct file *file)
+ 	return;
+ }
  
- static const struct file_operations ivpu_fops = {
- 	.owner		= THIS_MODULE,
--	.mmap           = drm_gem_mmap,
- 	DRM_ACCEL_FOPS,
- };
+-static inline int ima_file_mmap(struct file *file, unsigned long prot)
++static inline int ima_file_mmap(struct file *file, unsigned long reqprot,
++				unsigned long prot, unsigned long flags)
+ {
+ 	return 0;
+ }
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 377300973e6c..f48f4e694921 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -397,7 +397,9 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ /**
+  * ima_file_mmap - based on policy, collect/store measurement.
+  * @file: pointer to the file to be measured (May be NULL)
+- * @prot: contains the protection that will be applied by the kernel.
++ * @reqprot: protection requested by the application
++ * @prot: protection that will be applied by the kernel
++ * @flags: operational flags
+  *
+  * Measure files being mmapped executable based on the ima_must_measure()
+  * policy decision.
+@@ -405,7 +407,8 @@ static int process_measurement(struct file *file, const struct cred *cred,
+  * On success return 0.  On integrity appraisal error, assuming the file
+  * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
+  */
+-int ima_file_mmap(struct file *file, unsigned long prot)
++int ima_file_mmap(struct file *file, unsigned long reqprot,
++		  unsigned long prot, unsigned long flags)
+ {
+ 	u32 secid;
  
+diff --git a/security/security.c b/security/security.c
+index d1571900a8c7..174afa4fad81 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -1661,12 +1661,13 @@ static inline unsigned long mmap_prot(struct file *file, unsigned long prot)
+ int security_mmap_file(struct file *file, unsigned long prot,
+ 			unsigned long flags)
+ {
++	unsigned long prot_adj = mmap_prot(file, prot);
+ 	int ret;
+-	ret = call_int_hook(mmap_file, 0, file, prot,
+-					mmap_prot(file, prot), flags);
++
++	ret = call_int_hook(mmap_file, 0, file, prot, prot_adj, flags);
+ 	if (ret)
+ 		return ret;
+-	return ima_file_mmap(file, prot);
++	return ima_file_mmap(file, prot, prot_adj, flags);
+ }
+ 
+ int security_mmap_addr(unsigned long addr)
 -- 
-2.39.0
+2.25.1
 
