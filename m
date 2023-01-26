@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE0267CC78
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC0A67CC80
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbjAZNmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:42:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
+        id S231130AbjAZNoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:44:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbjAZNmk (ORCPT
+        with ESMTP id S230480AbjAZNoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:42:40 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254C56E43A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:42:33 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id 123so1971583ybv.6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:42:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tpcudo7gJTTbbuTXM+JjARhwoG+S0cT/6fCk8EgJ3Lc=;
-        b=NK0yPEUk/K6ONN9dNsc7JvUHaQ170Ni3OGZnighVNStfLllS5t/BteesuDgU0TUPjq
-         1JibIBpLF8B3H1QqiDDXr7Q2PvxrlVdt/PFFLxLQLlJNmaMMQUwl/4FFyDSzzGZDieKV
-         iL2rMydR6smmLgq9A0pnwS+2Qv15DqPrzx0oquj/Fdj02FgmAVcSvQrLcdw6GuzV6+CZ
-         lpN/PSxKvls8df7RSa6ZFYyCSlf513RU5e5D4rLwxCUoF6w6NQrFlcf3Go95U6yWnpcL
-         llWWxEfozzz30onyyGQpyx2Rz4bw2DdH7F8h8rRFdb/UMgmY6UUSy2yM0EBBAn/3Pcz8
-         y+sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tpcudo7gJTTbbuTXM+JjARhwoG+S0cT/6fCk8EgJ3Lc=;
-        b=dqfPXt74Sxm4FSBxXv4/mO0cdDAR/IYhBp04+iya9pLXWST32gxq2YDPHcZljSqLAk
-         pIF/W89AXETLVIrzChDXchYhKeRqttPJyAjMScGbzcFmWUhpEkwYQa08upJv9aLsDC3v
-         2DG7Sj2lkmT290tcHtycbCZdjln6xYPd0RJIKvw98TvG3Yv+co5eBOQksRpCweMQ4xyh
-         CLbpQXD+OEoII/5YHpLlZ0+hC9ymJ4gMtCwt9egEK+YvUbJPcS4zcygQKivs9BDLqWtU
-         DVwjoaguBmBuM15wn+Jm0dfH6o0PWA5/H4Wy6rI9YaLwktRGIA9s5920JSzIjKOujBRG
-         es+Q==
-X-Gm-Message-State: AO0yUKVS0sqKTxHXmDkBchmI5IuroTzT+aLixgMseKmBT6622fXbgILA
-        9PoX9E/IaReGLdRv/L0E3Fu9QFgmgrY6p5izmpHh/w==
-X-Google-Smtp-Source: AK7set8QbLRvblkAO9Y2WdUOE4AoqHwyG/MzmEgbUt/H7gmbHQ71M9dyBUWLCRrIyD1+N2KqvKysQXtvT1Hqg9ksT0M=
-X-Received: by 2002:a25:f81b:0:b0:80b:821f:b621 with SMTP id
- u27-20020a25f81b000000b0080b821fb621mr750152ybd.24.1674740552288; Thu, 26 Jan
- 2023 05:42:32 -0800 (PST)
+        Thu, 26 Jan 2023 08:44:04 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFFD13DFB
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:44:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674740640; x=1706276640;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=IE9WImV6ttkpscX6WJP7EEbQlQIw2Hf/3vh9FYwkFfI=;
+  b=QLiGdgKeT7KXITewoTHySaqMsKGcRzEM446cd19/BoNM8GujCSlvmqT7
+   xvEGBQIWwSDpjyaWgDlTscaCsKkK7gJnChsZoKFxSQpLPOPnxLGifWqyY
+   gEofvaWMLAvUysnwvuI4Uarj51XKar7WU0mlgzTQrk560yCu6LUIo1ph6
+   xzk7a+6kMldhC2alvJckzfIHs++U/qTZ+lqJD8pYNsBQEhgxau9MbEUlX
+   rfZEae17uTNW/vMoR2hObq9EiUy5L5ae5Wk3/ATEqEjcJcQKIwI0oGBti
+   ki5mjVj/2vmc27mhE781TwW/V3fjOUrB2NDu+fUtCWX7tYsLsgUQvgjSZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="307158631"
+X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
+   d="scan'208";a="307158631"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 05:43:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="612790595"
+X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
+   d="scan'208";a="612790595"
+Received: from jnikula-mobl4.fi.intel.com (HELO localhost) ([10.237.66.157])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 05:43:56 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Salvatore Bonaccorso <carnil@debian.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, 971068@bugs.debian.org
+Subject: Re: Assertion failure in i915 intel_display.c#assert_plane() after
+ resume from hibernation
+In-Reply-To: <20230124173127.os3rwxnt6m6nloce@nabtop.nabijaczleweli.xyz>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <Y89xbXITTRFpjm5B@eldamar.lan> <87bkmo6ivf.fsf@intel.com>
+ <20230124173127.os3rwxnt6m6nloce@nabtop.nabijaczleweli.xyz>
+Date:   Thu, 26 Jan 2023 15:43:53 +0200
+Message-ID: <878rhp5s2u.fsf@intel.com>
 MIME-Version: 1.0
-References: <20230118062116.26315-1-Guodong.Liu@mediatek.com>
-In-Reply-To: <20230118062116.26315-1-Guodong.Liu@mediatek.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 26 Jan 2023 14:42:21 +0100
-Message-ID: <CACRpkdZeRPaYN2aN=kBskkLJ0VjFCRZc8ccf0bBW+0sposVn7A@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: mediatek: Fix the drive register definition of
- some Pins
-To:     Guodong Liu <Guodong.Liu@mediatek.com>
-Cc:     Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Light Hsieh <light.hsieh@mediatek.com>,
-        Rob Herring <robh@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 7:21 AM Guodong Liu <Guodong.Liu@mediatek.com> wrote:
+On Tue, 24 Jan 2023, =D0=BD=D0=B0=D0=B1 <nabijaczleweli@nabijaczleweli.xyz>=
+ wrote:
+> Booted with both, hibernated, resumed; full dmesg below.
 
-> The drive adjustment register definition of gpio13 and gpio81 is wrong:
-> "the start address for the range" of gpio18 is corrected to 0x000,
-> "the start bit for the first register within the range" of gpio81 is
-> corrected to 24.
->
-> Fixes: 6cf5e9ef362a ("pinctrl: add pinctrl driver on mt8195")
-> Signed-off-by: Guodong Liu <Guodong.Liu@mediatek.com>
+Unfortunately, this is probably hitting a regression with drm debug
+logging, and we don't get proper debug logging for i915. :(
 
-Patch applied for fixes.
+Please use DRM_USE_DYNAMIC_DEBUG=3Dn with v6.1. I don't know if the proper
+fixes have been backported to v6.1 stable kernels.
 
-Yours,
-Linus Walleij
+BR,
+Jani.
+
+
+--=20
+Jani Nikula, Intel Open Source Graphics Center
