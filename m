@@ -2,130 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF4867D19D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D6467D1A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbjAZQ2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:28:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
+        id S229551AbjAZQbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:31:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232206AbjAZQ2B (ORCPT
+        with ESMTP id S229650AbjAZQbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:28:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48003270B;
-        Thu, 26 Jan 2023 08:27:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B2F2B81EAB;
-        Thu, 26 Jan 2023 16:27:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C07FEC433EF;
-        Thu, 26 Jan 2023 16:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674750422;
-        bh=0B3WByzbvhV82JVnWTI4aBuMjHJDudsWnukTFb5RhdA=;
-        h=From:Date:Subject:To:Cc:From;
-        b=EDHRithYdgojTuNASPVs2fl0h4UgABXTSYzJ9Lvp85KaWZkzexE2CNyjD/9taaezT
-         /+qEY1tNEZq3KoZLFQOPAQwG+Kq3IOYFBkJNItMpYqx9gAKT3kN61gaeAE4dSJJmZR
-         uK/0e8Vo/gwq8YAycIt7Kmz5cACJ9SnhvGwSRkUNJf74lVbeFTFRYOyot7H1W33eBy
-         BJCKZcdnTcC61OFsTSbGTdTx1onbmPRKAXlRQ3pMpvv3chZ9AWA18vc22sP0QpDNNl
-         2bPQDJY1N1PRmIurWKyyaR2eexjoFxUaX++xqz+aF7OFbGrp4FVZY8bOV4afnz7Wt7
-         46XEQ3FBIGDcA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Thu, 26 Jan 2023 16:26:39 +0000
-Subject: [PATCH] of/address: Return an error when no valid dma-ranges are
- found
+        Thu, 26 Jan 2023 11:31:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42937376D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674750558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uQ5AeqRdHoqDiMiO534YbFssRp+d+rc3l3U4CDokNu0=;
+        b=iS1zAoXImPje6u9tF4h2fGdsSdnhWR5X6q7dlIAbsL2zr6uURSMBetNmqIfWhomLgnZ5E4
+        2Av9q6IsCfBRWZnhqRMgK+02Lzg8ANWET2ny89nP1QWafG0wAQXGBHI2B8P/wOhHwXtINu
+        KjoxdWPd+prPVtD0AxTPsvRHqR5nW9o=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-126-AoaTtJXIO3SNqtak7escPQ-1; Thu, 26 Jan 2023 11:29:15 -0500
+X-MC-Unique: AoaTtJXIO3SNqtak7escPQ-1
+Received: by mail-wm1-f71.google.com with SMTP id z22-20020a05600c0a1600b003db00dc4b69so3076222wmp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:29:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uQ5AeqRdHoqDiMiO534YbFssRp+d+rc3l3U4CDokNu0=;
+        b=uFKgz+U/vNJEiapyfsIVKF1ZvlBrqoSE8N4/q1EnP7w5BHrNMOeE3MP5sUdqLh6ZMd
+         mYC6haHA8CHM/JGEVq/hElxwWTMlT2EiFItCrIipMyvgnSOC1ktBOn7CIrppTcRhpveS
+         tB/zSTKs5sHNadmikuwmk59tf4HRbeZ/ifjlyagxwZQ6D1Q/ooXMYVigrH0CNnvbxeyW
+         JzjsZM0jgLhv/2QrX+Lq8rS7BYObuVWyeH6/Ob5/CT1kSXeTSIWikYGLf6sMDyq3noXr
+         HHS6EafApsr07qfn1pDoER4+wwMGWtS/ZDrBlZiIicUcQNSvoWVAEKqdVzzzAypJPybV
+         2q9g==
+X-Gm-Message-State: AFqh2kpiYkDCiMdeycIrd29iTmKad94rkbEZjMgdmlBG5hdXpblZ1riE
+        +DoCnUNsRlulgKOxz7i2D2xvm3GlxzduU2Bv4HKizq0vatcoGOplF+zMHs3sLdapQCzcGsBDt/p
+        gATXIRe/C98o1viQvljKI9LFV
+X-Received: by 2002:a05:600c:1c9d:b0:3da:db4:6105 with SMTP id k29-20020a05600c1c9d00b003da0db46105mr36614916wms.37.1674750554561;
+        Thu, 26 Jan 2023 08:29:14 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu/XUMPJtU5iYBp8WyqQ43Iwj8Vmxw+tnCVJfRHeV2qUt/JRWJYMx6HGI88x+KBLozOr/fmeg==
+X-Received: by 2002:a05:600c:1c9d:b0:3da:db4:6105 with SMTP id k29-20020a05600c1c9d00b003da0db46105mr36614890wms.37.1674750554324;
+        Thu, 26 Jan 2023 08:29:14 -0800 (PST)
+Received: from redhat.com ([2.52.137.69])
+        by smtp.gmail.com with ESMTPSA id p8-20020a05600c05c800b003c65c9a36dfsm1742661wmd.48.2023.01.26.08.29.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 08:29:13 -0800 (PST)
+Date:   Thu, 26 Jan 2023 11:29:08 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <20230126105618-mutt-send-email-mst@kernel.org>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230126-synquacer-boot-v1-1-94ed0eb1011f@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAL6p0mMC/x2NQQ6CMBAAv0L27Ca0EDR+xXjolkX2YIu7YCSEv
- 1M8ziST2cBYhQ3u1QbKXzHJqYC7VBDHkF6M0hcGX/umdr5DW9NnCZEVKecZfdtQ7+h2HboWSkT
- BGElDiuOZze/ptJPyIL//5vHc9wPT+2Y+dgAAAA==
-To:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Luca Di Stefano <luca.distefano@linaro.org>,
-        993612@bugs.debian.org, stable@kernel.org
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2335; i=broonie@kernel.org;
- h=from:subject:message-id; bh=0B3WByzbvhV82JVnWTI4aBuMjHJDudsWnukTFb5RhdA=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj0qnSX2z5hfYDIvpgA1MmtHtOEYUPZ6tljqI7AjOe
- CI3xYzGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY9Kp0gAKCRAk1otyXVSH0PIPB/
- 9wqN4V/XYFlVMlFoZQ+WV2Lh3k+oKFGTXfLAzUYQY7Zgfz6KnJZgdwgwx/IRigG1ktQxL6IQQ0t3x0
- kZYu2wy5hQDhib4KGIkozJ6BFrLn14sE43fkg33pi6fKuqsMuisvdASS0awe32qcDdZ847fUum9SYk
- xBkW33qV2YcuZ3ZbisXZY8V5d1vqhyh1KxH64VYOeLLjon5En8DFHq8ezNdpi9SC3vcf14xUT3qqbg
- n+irYoWiKaWerUqBDDEGkAbRb9HhWd73rlahS/jj4zBYTGKeLmxpKK+7N6phhA6VqdaWE9WF/Xk16K
- eh4ALvZK6Fb1tsI48O4d1Iel1M/HIx
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7a8b64d17e35 ("of/address: use range parser for of_dma_get_range")
-converted the parsing of dma-range properties to use code shared with the
-PCI range parser. The intent was to introduce no functional changes however
-in the case where we fail to translate the first resource instead of
-returning -EINVAL the new code we return 0. Restore the previous behaviour
-by returning an error if we find no valid ranges, the original code only
-handled the first range but subsequently support for parsing all supplied
-ranges was added.
+On Wed, Jan 25, 2023 at 03:29:07PM +0000, Reshetova, Elena wrote:
+> And this is a very special aspect of 'hardening' since it is about hardening a kernel
+> under different threat model/assumptions. 
 
-This avoids confusing code using the parsed ranges which doesn't expect to
-successfully parse ranges but have only a list terminator returned, this
-fixes breakage with so far as I can tell all DMA for on SoC devices on the
-Socionext Synquacer platform which has a firmware supplied DT. A bisect
-identified the original conversion as triggering the issues there.
+I am not sure it's that special in that hardening IMHO is not a specific
+threat model or a set of assumptions. IIUC it's just something that
+helps reduce severity of vulnerabilities.  Similarly, one can use the CC
+hardware in a variety of ways I guess. And one way is just that -
+hardening linux such that ability to corrupt guest memory does not
+automatically escalate into guest code execution.
 
-Fixes: 7a8b64d17e35 ("of/address: use range parser for of_dma_get_range")
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: Luca Di Stefano <luca.distefano@linaro.org>
-Cc: 993612@bugs.debian.org
-Cc: stable@kernel.org
----
- drivers/of/address.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+If you put it this way, you get to participate in a well understood
+problem space instead of constantly saying "yes but CC is special".  And
+further, you will now talk about features as opposed to fixing bugs.
+Which will stop annoying people who currently seem annoyed by the
+implication that their code is buggy simply because it does not cache in
+memory all data read from hardware. Finally, you then don't really need
+to explain why e.g. DoS is not a problem but info leak is a problem - when
+for many users it's actually the reverse - the reason is not that it's
+not part of a threat model - which then makes you work hard to define
+the threat model - but simply that CC hardware does not support this
+kind of hardening.
 
-diff --git a/drivers/of/address.c b/drivers/of/address.c
-index c34ac33b7338..21342223b8e5 100644
---- a/drivers/of/address.c
-+++ b/drivers/of/address.c
-@@ -975,10 +975,12 @@ int of_dma_get_range(struct device_node *np, const struct bus_dma_region **map)
- 	}
- 
- 	/*
--	 * Record all info in the generic DMA ranges array for struct device.
-+	 * Record all info in the generic DMA ranges array for struct device,
-+	 * returning an error if we don't find any parsable ranges.
- 	 */
- 	*map = r;
- 	of_dma_range_parser_init(&parser, node);
-+	ret = -EINVAL;
- 	for_each_of_range(&parser, &range) {
- 		pr_debug("dma_addr(%llx) cpu_addr(%llx) size(%llx)\n",
- 			 range.bus_addr, range.cpu_addr, range.size);
-@@ -992,6 +994,7 @@ int of_dma_get_range(struct device_node *np, const struct bus_dma_region **map)
- 		r->size = range.size;
- 		r->offset = range.cpu_addr - range.bus_addr;
- 		r++;
-+		ret = 0;
- 	}
- out:
- 	of_node_put(node);
-
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20230126-synquacer-boot-243bd1b87f64
-
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+MST
 
