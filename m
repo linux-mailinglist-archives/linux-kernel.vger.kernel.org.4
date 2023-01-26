@@ -2,107 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193DE67D992
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C6867D997
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233053AbjAZXYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:24:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S233066AbjAZX2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:28:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjAZXYr (ORCPT
+        with ESMTP id S229756AbjAZX2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:24:47 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338164C6EF;
-        Thu, 26 Jan 2023 15:24:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674775486; x=1706311486;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=t+xT9AgXpdl1/3c5BvBnA3g4wo3hRTBdAyWmjHwNvjU=;
-  b=d8M+Qj9UUwfQMBBTah6DPU7mASgdiUetTRiCBnLrwczpxwuf6gZ6xl2e
-   5E7x9PzO3GMTMgYLCaoBd9pErGmcckhrm2z+KoaMBIJ29yyj6RJh/+dV6
-   FR+7UcGyYTAICO+8w6ztDXy7PZBW3RHwW1Ij/s5yuCHziYJkFGPXjRPkv
-   LSfegyvi6V542g4VzxVTLN2BtRZrIXDleVdekSSjAtLM7w9PFAQL2dabJ
-   y4pDc85XAIQQ2108Gsl0oTUb+zpMshvgwRtRbnkwoUpbPchj3GW46AV3V
-   LoNju85f13VCm6NhzhwXiaJmWGa//WWSu85N32DGvoPzeWb1RFj5RiOZk
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="329110364"
-X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="329110364"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 15:24:45 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="656387197"
-X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="656387197"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.112.115]) ([10.212.112.115])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 15:24:44 -0800
-Message-ID: <099e9e5b-88dd-ae5f-307d-6ea9f16586f1@intel.com>
-Date:   Thu, 26 Jan 2023 16:24:43 -0700
+        Thu, 26 Jan 2023 18:28:12 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576FC36474;
+        Thu, 26 Jan 2023 15:28:11 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4CD63CDB;
+        Fri, 27 Jan 2023 00:28:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674775689;
+        bh=85GVWImqabLaQOCHxWsKf6TcbxMX/QaYIdYeLIfaCmU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jR+URH5KqirXEN1bdS/bwqV5ZiQWPoMn7MmH2vwcJtLOLQBAzr6lVqIQ5f5aEDaWb
+         mxRqlKT7o81ByhdPGIDdL97oCrfpMhOtJt0wR1x0Ydd61cLrpf0N1tn0Ui9eRsnREW
+         SSpRzF7bk4FfyLeBq3bkdJEz4l1UrcZglgSLDlKE=
+Date:   Fri, 27 Jan 2023 01:28:05 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Dafna Hirschfeld <dafna@fastmail.com>
+Cc:     Paul Elder <paul.elder@ideasonboard.com>,
+        linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] media: rkisp1: Make local immutable array
+ variables static const
+Message-ID: <Y9MMhSVrWujmfgCR@pendragon.ideasonboard.com>
+References: <20221117084217.3892680-1-paul.elder@ideasonboard.com>
+ <20221117084217.3892680-3-paul.elder@ideasonboard.com>
+ <Y3lYcRySWnrLKpWe@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH] cxl/mbox: Add debug messages for supported mailbox
- commands
-Content-Language: en-US
-To:     Robert Richter <rrichter@amd.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Jonathan Cameron <jonathan.cameron@huawei.com>,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230119130450.107519-1-rrichter@amd.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230119130450.107519-1-rrichter@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y3lYcRySWnrLKpWe@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dafna,
 
+On Sun, Nov 20, 2022 at 12:28:01AM +0200, Laurent Pinchart wrote:
+> Hi Dafna,
+> 
+> Are you fine with this patch, can I include it in my next pull request
+> along with the other ones from the series ?
 
-On 1/19/23 6:04 AM, Robert Richter wrote:
-> Only unsupported mailbox commands are reported in debug messages. A
-> list of supported commands is useful too. Change debug messages to
-> also report the opcodes of supported commands.
-> 
-> On that occasion also add missing trailing newlines.
-> 
-> Signed-off-by: Robert Richter <rrichter@amd.com>
+Ping.
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> On Thu, Nov 17, 2022 at 05:42:16PM +0900, Paul Elder wrote:
+> > From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > 
+> > The max_widths and max_heights variables in rkisp1_try_fmt() are
+> > immutable and don't need to be allocated on the stack every time the
+> > function is called. Make them static.
+> > 
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
+> > ---
+> >  .../media/platform/rockchip/rkisp1/rkisp1-capture.c  | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> > index 7695ef134908..91e685fdbbe9 100644
+> > --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> > +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> > @@ -1150,13 +1150,17 @@ static void rkisp1_try_fmt(const struct rkisp1_capture *cap,
+> >  			   const struct rkisp1_capture_fmt_cfg **fmt_cfg,
+> >  			   const struct v4l2_format_info **fmt_info)
+> >  {
+> > +	static const unsigned int max_widths[] = {
+> > +		RKISP1_RSZ_MP_SRC_MAX_WIDTH,
+> > +		RKISP1_RSZ_SP_SRC_MAX_WIDTH,
+> > +	};
+> > +	static const unsigned int max_heights[] = {
+> > +		RKISP1_RSZ_MP_SRC_MAX_HEIGHT,
+> > +		RKISP1_RSZ_SP_SRC_MAX_HEIGHT,
+> > +	};
+> >  	const struct rkisp1_capture_config *config = cap->config;
+> >  	const struct rkisp1_capture_fmt_cfg *fmt;
+> >  	const struct v4l2_format_info *info;
+> > -	const unsigned int max_widths[] = { RKISP1_RSZ_MP_SRC_MAX_WIDTH,
+> > -					    RKISP1_RSZ_SP_SRC_MAX_WIDTH };
+> > -	const unsigned int max_heights[] = { RKISP1_RSZ_MP_SRC_MAX_HEIGHT,
+> > -					     RKISP1_RSZ_SP_SRC_MAX_HEIGHT};
+> >  
+> >  	fmt = rkisp1_find_fmt_cfg(cap, pixm->pixelformat);
+> >  	if (!fmt) {
 
-> ---
->   drivers/cxl/core/mbox.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index a48ade466d6a..ffa9f84c2dce 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -629,11 +629,12 @@ static void cxl_walk_cel(struct cxl_dev_state *cxlds, size_t size, u8 *cel)
->   
->   		if (!cmd) {
->   			dev_dbg(cxlds->dev,
-> -				"Opcode 0x%04x unsupported by driver", opcode);
-> +				"Opcode 0x%04x unsupported by driver\n", opcode);
->   			continue;
->   		}
->   
->   		set_bit(cmd->info.id, cxlds->enabled_cmds);
-> +		dev_dbg(cxlds->dev, "Opcode 0x%04x supported by driver\n", opcode);
->   	}
->   }
->   
-> 
-> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+-- 
+Regards,
+
+Laurent Pinchart
