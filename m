@@ -2,122 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA2067DA07
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F49B67DA13
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbjAZXzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:55:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
+        id S233600AbjAZX4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233232AbjAZXzu (ORCPT
+        with ESMTP id S233601AbjAZX42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:55:50 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E6749424
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:55:49 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id g11-20020a056e021a2b00b0030da3e7916fso2205863ile.18
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:55:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f/mHGqHnlLOZDTRc/j4sUoCCFZeovVeLFLkYmFL04bs=;
-        b=aDqNlO8dBdm551+krDi8bxuGX7GgXK/LJaN/5pokuJegJEBv+4EHOKiJYmfIx3DdDH
-         fBOpaiFiTujE98ParGNCB+MAEsq3cZA9JvhREEHWCbmqnezK49pSlV2J/F4dTA9f+nMW
-         ++WtvMk1hlTTFVSoWkZN9uhcn0ENAxQBCa2wyNBdg+q1IP7UBpVbsy98hHoExw0pz63x
-         8pSJiJRUMwUMZS/vz7iW5tQ6bgOSiWG1v3uQFIXLJSN0R+Sv4o1EZhNicAdgq1u5W7hc
-         9VJK5vZtBNRSmsDuC0PKXgScRKLIHzoqCzMn/hi5Q/kTB1uHUU5aeDBHPmnnagIYVlu0
-         hzag==
-X-Gm-Message-State: AO0yUKUFksTrdxyT1NyXd5YUO6RQ6oqQ2yVkjVyJepQopGHOYVS5oxVo
-        dObjYhQftbaXY8x5IBEgHGF8LkF5tHGuDpDzhKEUQBia1Xki
-X-Google-Smtp-Source: AK7set9LBHt3fobyke2L4mqXoPyEh5AZP1qBIHcmqh7Kn/LIAqBVKBO/uUeMDncENlcv9Dsh1RMVweA+aSyUuFoW9XxIAiLNtqJI
+        Thu, 26 Jan 2023 18:56:28 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5120C6BBF9;
+        Thu, 26 Jan 2023 15:56:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674777380; x=1706313380;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=VYUVW7CL9ypocyrP3BG7nEIRwZsMDTKYgKGdXQiVPI8=;
+  b=SVu7CWVAPqT4Ye9rWAFz1GsKivX0t1a8veLHsVIziZ5MEy5kd2wA1XOc
+   Le46cPgHFcn66ihaMc+C2gEUo3BFv4kXnYHQQIOgU1iurcSlwkPjB6RJW
+   Ym76gMHDxc/IxFbcBBDqZ/yFu0OKfusIUFo3+IWvr8SsuFwhYmZFc4HCC
+   D0zj2o1XShpYOK6deMP3pGNyvnuJlA6k7Z5qRuiNIdmbpRJbCiLuxTHuS
+   5zxAHntKED/41TewuOcIeAJKwCzCcuWwZW1evU8rG/FwhZhfCvkrcDYI8
+   ua4doNyTM+poXpbmmOtjTJv2l6kjrJINRtxEbw5bZEJZRfWoHfoKZsTsM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="413210766"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="413210766"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 15:56:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="991868758"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="991868758"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Jan 2023 15:56:19 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 26 Jan 2023 15:56:19 -0800
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 26 Jan 2023 15:56:18 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 26 Jan 2023 15:56:18 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.41) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 26 Jan 2023 15:56:19 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HxbbHq/EjYgQGs3ZEpLFQZJjv4PkxnbESzs+gBe/TPBQYYbc1czRYHGdENUW6PjEKwM9ZSVaaphsPviMN7pJ2N1ELPIASvzp9SsrWn4Fg1Lar/xvxHXmAYPnR3gQf0KsmMwCWj3etMWfr8UYbvQrMlizMjRIz91Nvvs7ZQMSeArAk7sO5YQr2bBo2tLTyC6vwcMWA6XdMO5nf0HOeOV5AbCJoKOgq2kbbG0OcS7MEmMwWXeOByLSw5ragiov1wG1yJ2Z2/DRQpaqiyjXIfN3hgzUR+LKkRyA/n8Kg/ngsvI9kg6+fTqFN8pMbug60jbyZDyZ+dK34KzYxR7wnWdtIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=St0kcfIi3CRvwXJ2HilG/zHkWZK+IMEc36140j0DUsY=;
+ b=eOvdrzCH3iwGWcFpR0xD6AS1YVQ4PKAazAJ+v56+XiEMTrKDKyVHMygiAziT2xo3K/Yu/P0C4egPxzeRNenOZPpjT0ES4h3gg439h/fsyD9dIq9Ovr2ugZ23qYVqyORrNSu5nPUd/YViqbTlY8oRXLwOufha4bP4sJva9Jl93HujNXvpx8KnV7uVuNC2+lbSC/EHPRJn3s3l9HT+ydkhVYhWapx9fUh+Aw+IdUIe5Gc23kzwAY2f6S6CfIIXr9G6f5OKlpkqiSXSSjYwu3gbqbc3t9EA4eLPO0p18dQwtZQntwo7w38CbFVpVV0deGJ+k+G4RbBHHtIbFAPjL9fIQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by SA2PR11MB4923.namprd11.prod.outlook.com (2603:10b6:806:fa::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Thu, 26 Jan
+ 2023 23:56:16 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc%5]) with mapi id 15.20.6043.022; Thu, 26 Jan 2023
+ 23:56:16 +0000
+Date:   Thu, 26 Jan 2023 15:56:14 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Randy Dunlap <rdunlap@infradead.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ira Weiny" <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        "Dan Williams" <dan.j.williams@intel.com>,
+        <linux-cxl@vger.kernel.org>
+Subject: RE: [PATCH v2] cxl: fix spelling mistakes
+Message-ID: <63d3131ded3ec_ea22229485@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230125032221.21277-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230125032221.21277-1-rdunlap@infradead.org>
+X-ClientProxiedBy: BYAPR11CA0063.namprd11.prod.outlook.com
+ (2603:10b6:a03:80::40) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-X-Received: by 2002:a92:bd0d:0:b0:310:b103:a416 with SMTP id
- c13-20020a92bd0d000000b00310b103a416mr730073ile.12.1674777348318; Thu, 26 Jan
- 2023 15:55:48 -0800 (PST)
-Date:   Thu, 26 Jan 2023 15:55:48 -0800
-In-Reply-To: <000000000000a0d7f305eecfcbb9@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ecacda05f3337c03@google.com>
-Subject: Re: [syzbot] [vfs?] [ntfs3?] WARNING in path_openat
-From:   syzbot <syzbot+be8872fcb764bf9fea73@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SA2PR11MB4923:EE_
+X-MS-Office365-Filtering-Correlation-Id: b4c3122f-3fa5-4496-a99f-08dafff8e972
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OQXj/57+HyWTHD4Eu6EyQ/rbF0m+ovbFdFaqzN55dkvEQDlP4xpoohCcWoRXPWSyNeWECJ+MvOqSmD0C8wmR51kjpZ7+tZoKqcsDIV02FLGayTP31BexwpvcFDcMaImuTbty0vhUqSRsGOB9lcJjPArN34R3ezEpcLlEeUr1xRpuhDYrL4J4fAR2IqdtYo+xNYYHLX2IPnYKj1QGRLBm5uRMvuZJg4/smJMTkh1D+Da9SyenHO0DHYmkLwGp+csPxYXzAOkr5ut6N8oyNxNx0ojNvGWa5DkG5feARrX+fQPVFqwRdAqgnDrAtlcMF48x5C5t3BXsdynLVDsZxj0gi1EYcwMW9lmyuxYcIzGdVD3MIcm5HGxR+HxnUypr1lLyutg/TEqDdYx7E7PUNLOpRFBmLFwFQDI4u1HUlN4JpGeOz45PBWV5IzndHQc1dRQK6RNMO/rW6sZtltR7cRw8zFiB5SM9MClvDB7QNdCDalyC9wIsQEYjcU2ZAN1LQtBD1KIQ7kyyxa21fBjyFlXS7Eg+riuOwea1UE6Bxp00yBaUqzZYS7a4XRpJBFvJFK3eRw4ddFe7rFLyGK3cPJfaAciayKaVUpjmWGmts6rhPbOgrMAEjGst/CY6C8ZvJR0eCEKBPjCoBkuytM7D0LIMhA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(376002)(396003)(39860400002)(366004)(136003)(451199018)(8676002)(54906003)(82960400001)(316002)(6506007)(6486002)(478600001)(66946007)(5660300002)(4744005)(2906002)(4326008)(66476007)(41300700001)(8936002)(66556008)(38100700002)(26005)(6512007)(86362001)(186003)(9686003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tXJcW9s+8SlDUdkVXVSYpOO6FPq0e3sakuFIkPIiTSwQoiQ3GTmQ6+PMyJk+?=
+ =?us-ascii?Q?lXqulwJMKngL2meOz5sJGrH5r7ebbdj1qr6osrpoEv5rk6XIoALBklS8nDJy?=
+ =?us-ascii?Q?oA/fZxFqYAzIANDkpWLNDw4PSCcXxeze/eFw6fFNR7ItMcckuONUp1PQjVFn?=
+ =?us-ascii?Q?chwf3lUAFYtqY1z+RMFsnKQ5hNGs9LkTVyj7H2ziz0I5bvLk5fbM/mFfba35?=
+ =?us-ascii?Q?BodLrLjfzXUb4Md2f+QJuFmlnWekG19qbBUu9MiQobfZwghfEbjuyBcuqWb/?=
+ =?us-ascii?Q?uIcmAHi7rSQXGXj++4QWVUzubrYHD6zITQBNppLMbgBaN0RM+k917dpP/eBv?=
+ =?us-ascii?Q?7qD1M9cbq3GvdmaEO1hp3spGl8TOPQu/fw0F0ILbULzSxTmj2i8f7hnzLtGS?=
+ =?us-ascii?Q?ted8bXnYFGEWArKbvGdIMuz2GQJA3xovkT2lt2UW6KIof+idox0QRnRAZVV0?=
+ =?us-ascii?Q?FtSxGAeRt4ujAOmYgvAVnanCE9Zc9GxPKDfIYaR3WgHGWavYz1EdJ469DovJ?=
+ =?us-ascii?Q?G8hS7xJxwWdlNaWR18QB9T+QAvdtbOPHuAe44sCjzCqJOC/xqdGWUeWW184t?=
+ =?us-ascii?Q?ezFSaAbvYC5XxO3b5rjnzZuk6JO/kot3TdFJ88R3oEPRWCIOkddGzALxeb8n?=
+ =?us-ascii?Q?8B16m9OuaCzlP1KmviaXygiyJZqpExsFvlqHX3djzJ/v5u9b8zT3j7R1JDvY?=
+ =?us-ascii?Q?n04Ydxg7K87gMQFlvEeSmdukk73LSwiTCiK5/zRu3LHpoXca8aPR0MwzUlW0?=
+ =?us-ascii?Q?3rl8akwAsyVSToiB6qyz9XM5+BWPMNGYAqfAoJb0UYqA1d5UStE/M2T1TNh9?=
+ =?us-ascii?Q?AzB9uGIx/CulZH/fU/2m/8s/BfJM+al1EFGJax9qd/jP4PlC1/J3F07idHCv?=
+ =?us-ascii?Q?ceHwAw9Y0llp9HP5iTbxf0J1ytXTN7QXyuPenud6U3q6HbSh0+6MIYzRVv07?=
+ =?us-ascii?Q?4J/phjlurPXTPkl44eGV8yQujV3vcAgPcxHwvYQ3GJ5MWBRLbKG976EMje4V?=
+ =?us-ascii?Q?hPlavRbm7JB5AXMiXpkph4geu0C/9sMOXELKeuywZpjxRRUOCeeqPevbV4ks?=
+ =?us-ascii?Q?xnIp7EYLEE6EImco6kkDvRUaEL4TPdGJEM7CPEkHeFq9xfECCTd8y89yvntk?=
+ =?us-ascii?Q?CmKFE3DS65SUB+seKPL+5zk08cG1o8YA5OKfLgUfYho+ielrkHMEWx/TYdyC?=
+ =?us-ascii?Q?eyVpZXRj14tQHNI6zMwAZX1qszi25iASKRMzwzl8Nk7vyV8edzCQPaQMRett?=
+ =?us-ascii?Q?bc/EnZuztSL0Hju2mJGuj5Fq82NBjx+jC5INmo2LD18YJTNTWwY1iiIdlTbz?=
+ =?us-ascii?Q?dWznBrX4gArO6MytisMNgIkwXL16L6ksPXhyXY+9IQZqRbvFlumf2A0dJbZ9?=
+ =?us-ascii?Q?PhKc/TBQs9FtMakzL7QzURho+15UqVxBUtJITk1Uou2xCUS61x36+7OR2lyf?=
+ =?us-ascii?Q?XC0oMGhIuqE1z+HLre5N7rxvfbvoBXWzlmirCPxRdRvT2PpanAU9ZZamAGBK?=
+ =?us-ascii?Q?UZaGPlAN2munsmKFSECUh+krj5mNa8mOZK9TTtoptOEMHgiUOip7Eo2O9o9G?=
+ =?us-ascii?Q?CzVy01DTIEqB36oGK8jPjmHG7XQcWN4WmQm9AXqeEOCfDhN7Mb+Nacru42mb?=
+ =?us-ascii?Q?Rw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4c3122f-3fa5-4496-a99f-08dafff8e972
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 23:56:16.1487
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Yn5WmO4AT7MQO/TWPy3F7z7yFBcmMccvs74xRwTn/9php9QhMDJKfxhlnnEvyS5RdTQ/F2dgKmBGJJT8USmoi4QEQudJ+554HHOv1tgi1z4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4923
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Randy Dunlap wrote:
+> Correct spelling mistakes (reported by codespell).
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Alison Schofield <alison.schofield@intel.com>
+> Cc: Vishal Verma <vishal.l.verma@intel.com>
+> Cc: Ira Weiny <ira.weiny@intel.com>
+> Cc: Ben Widawsky <bwidawsk@kernel.org>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: linux-cxl@vger.kernel.org
+> ---
+> v2: add corrections for other source-code spelling errors (Alison)
 
-HEAD commit:    7c46948a6e9c Merge tag 'fs.fuse.acl.v6.2-rc6' of git://git..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=109c0b8e480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c8d5c2ee6c2bd4b8
-dashboard link: https://syzkaller.appspot.com/bug?extid=be8872fcb764bf9fea73
-compiler:       Debian clang version 13.0.1-6~deb11u1, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17346ee1480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=149c16cd480000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/cc51645b6401/disk-7c46948a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/be036b5604a3/vmlinux-7c46948a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/274f5abf2c8f/bzImage-7c46948a.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/afb5c6b7a19b/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+be8872fcb764bf9fea73@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-DEBUG_RWSEMS_WARN_ON((rwsem_owner(sem) != current) && !rwsem_test_oflags(sem, RWSEM_NONSPINNABLE)): count = 0x0, magic = 0xffff88807104ea70, owner = 0x0, curr 0xffff8880196757c0, list empty
-WARNING: CPU: 0 PID: 7935 at kernel/locking/rwsem.c:1361 __up_write kernel/locking/rwsem.c:1360 [inline]
-WARNING: CPU: 0 PID: 7935 at kernel/locking/rwsem.c:1361 up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
-Modules linked in:
-CPU: 0 PID: 7935 Comm: syz-executor316 Not tainted 6.2.0-rc5-syzkaller-00047-g7c46948a6e9c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-RIP: 0010:__up_write kernel/locking/rwsem.c:1360 [inline]
-RIP: 0010:up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
-Code: c7 00 ad ed 8a 48 c7 c6 a0 af ed 8a 48 8b 54 24 28 48 8b 4c 24 18 4d 89 e0 4c 8b 4c 24 30 31 c0 53 e8 9b 5a e8 ff 48 83 c4 08 <0f> 0b e9 6b fd ff ff 48 c7 c1 18 cb 96 8e 80 e1 07 80 c1 03 38 c1
-RSP: 0018:ffffc9000b7cf860 EFLAGS: 00010296
-RAX: 4643b7f86e564100 RBX: ffffffff8aedade0 RCX: ffff8880196757c0
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc9000b7cf930 R08: ffffffff816f2b8d R09: fffff520016f9ec5
-R10: fffff520016f9ec5 R11: 1ffff920016f9ec4 R12: 0000000000000000
-R13: ffff88807104ea70 R14: 1ffff920016f9f14 R15: dffffc0000000000
-FS:  00007ff043008700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000561cee05f058 CR3: 0000000021d9a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- inode_unlock include/linux/fs.h:761 [inline]
- open_last_lookups fs/namei.c:3485 [inline]
- path_openat+0x14ff/0x2dd0 fs/namei.c:3711
- do_filp_open+0x264/0x4f0 fs/namei.c:3741
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_creat fs/open.c:1402 [inline]
- __se_sys_creat fs/open.c:1396 [inline]
- __x64_sys_creat+0x11f/0x160 fs/open.c:1396
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff04b2814a9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 d1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ff0430082f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
-RAX: ffffffffffffffda RBX: 00007ff04b326790 RCX: 00007ff04b2814a9
-RDX: 00007ff04b2814a9 RSI: 0000000000000106 RDI: 0000000020000200
-RBP: 00007ff04b2f2c88 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000020000600
-R13: 0030656c69662f2e R14: 0000000020000b80 R15: 00007ff04b326798
- </TASK>
-
+Applied for 6.3, thanks Randy!
