@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489AC67C4E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F2367C4EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjAZHaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 02:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
+        id S229828AbjAZHct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 02:32:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbjAZHaU (ORCPT
+        with ESMTP id S229483AbjAZHcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 02:30:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC1C65EFA;
-        Wed, 25 Jan 2023 23:30:19 -0800 (PST)
+        Thu, 26 Jan 2023 02:32:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A4510C5;
+        Wed, 25 Jan 2023 23:32:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B23EB81D0C;
-        Thu, 26 Jan 2023 07:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DE86FC4339C;
-        Thu, 26 Jan 2023 07:30:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE89A616E8;
+        Thu, 26 Jan 2023 07:32:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C726C433EF;
+        Thu, 26 Jan 2023 07:32:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674718216;
-        bh=YnYWB3x55mMTUNnUE9DhqZgIZJ2l4QVcj3NAixK6vpo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QdUQ0eHDiNIX8yz6rNLnfFLyf/PWhvIzDKh/a5xj9VAVuHjnnZ3HSaDRvzea9zE7I
-         UYhQseaLar/mhxMHkWd3tYFjSHUXPhTSFjiAFu6FZ40Ft96bJnNIzXbnW0HLKdA0iS
-         XvVoxT8PRMBZ02IuY49icQA/GBo1+mggMISsmm4vRJ9U35/mr5lQZR0uwrXXoUBM45
-         zrDAyMRGiAlUpDdCIxwyiDmTXXFq8sh7hOpw7A+OaBzLoVMm2SRBCxPV2A4zjhZ45t
-         iQAISa50G+187Ij9ym5Rfood24UzxspUOfID2HeGigzShkoFNGYz6Ym/Tk91rgRbtK
-         Zl28b93uUdniA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF884F83ED3;
-        Thu, 26 Jan 2023 07:30:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1674718364;
+        bh=uJex7Agm+AtQyHaWdclWSJ1h9HW1dSHugJEqVU/QF5I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bgTvrhPiOZTU1IGYW325iwByxCRk3IW1x4zTic5wg/b8nP+Na0XmPahlFKUG/nVtR
+         LyHYWWLbwiYm0SEynmb8eoe318tgfEQ7UpAUgRhQPAEvwTJo39KJFwn1f8eZUVaxOr
+         vZNyvJCg/FrNwjOMEHZvIqjoc+3RPTJ5oLBTzCSIIAK4tjY/vUGxvkD+SXtyIrW+C0
+         R3u9Yb+A3JHm14ALSD5D/p7k1x10CoV0ivHvsprWFrclE9dL3iK1koaPm/hoTNmSIe
+         GiSSil4yjvt125YQ/uTrHaZ5SMTZl4R25CdVYI5JFryJrpHZe+q8GUPJpzsRpgTO9S
+         Yv4Mled7swbgA==
+Date:   Thu, 26 Jan 2023 15:32:36 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Philippe Schenker <dev@pschenker.ch>
+Cc:     devicetree@vger.kernel.org,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: imx8mm-verdin: Do not power down eth-phy
+Message-ID: <20230126073235.GU20713@T480>
+References: <20230116140153.23938-1-dev@pschenker.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net] net: mdio-mux-meson-g12a: force internal PHY off on
- mux switch
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167471821678.31738.7019222500176784682.git-patchwork-notify@kernel.org>
-Date:   Thu, 26 Jan 2023 07:30:16 +0000
-References: <20230124101157.232234-1-jbrunet@baylibre.com>
-In-Reply-To: <20230124101157.232234-1-jbrunet@baylibre.com>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, andrew@lunn.ch,
-        linux-amlogic@lists.infradead.org, khilman@baylibre.com,
-        neil.armstrong@linaro.org, linux-kernel@vger.kernel.org,
-        hkallweit1@gmail.com, qi.duan@amlogic.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116140153.23938-1-dev@pschenker.ch>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,30 +64,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 24 Jan 2023 11:11:57 +0100 you wrote:
-> Force the internal PHY off then on when switching to the internal path.
-> This fixes problems where the PHY ID is not properly set.
+On Mon, Jan 16, 2023 at 03:01:52PM +0100, Philippe Schenker wrote:
+> From: Philippe Schenker <philippe.schenker@toradex.com>
 > 
-> Fixes: 7090425104db ("net: phy: add amlogic g12a mdio mux support")
-> Suggested-by: Qi Duan <qi.duan@amlogic.com>
-> Co-developed-by: Heiner Kallweit <hkallweit1@gmail.com>
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+> Currently if suspending using either freeze or memory state, the fec
+> driver tries to power down the phy which leads to crash of the kernel
+> and non-responsible kernel with the following call trace:
 > 
-> [...]
+> [   24.839889 ] Call trace:
+> [   24.839892 ]  phy_error+0x18/0x60
+> [   24.839898 ]  kszphy_handle_interrupt+0x6c/0x80
+> [   24.839903 ]  phy_interrupt+0x20/0x2c
+> [   24.839909 ]  irq_thread_fn+0x30/0xa0
+> [   24.839919 ]  irq_thread+0x178/0x2c0
+> [   24.839925 ]  kthread+0x154/0x160
+> [   24.839932 ]  ret_from_fork+0x10/0x20
+> 
+> Since there is currently no functionality in the phy subsystem to power
+> down phys let's just disable the feature of powering-down the ethernet
+> phy.
+> 
+> Fixes: 6a57f224f734 ("arm64: dts: freescale: add initial support for verdin imx8m mini")
+> Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
 
-Here is the summary with links:
-  - [v2,net] net: mdio-mux-meson-g12a: force internal PHY off on mux switch
-    https://git.kernel.org/netdev/net/c/7083df59abbc
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Applied, thanks!
