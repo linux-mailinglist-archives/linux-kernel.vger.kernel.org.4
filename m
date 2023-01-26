@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F7D67CDF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E8967CDED
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbjAZOXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S232168AbjAZOXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjAZOXF (ORCPT
+        with ESMTP id S231912AbjAZOXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:23:05 -0500
+        Thu, 26 Jan 2023 09:23:03 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94ADB34021;
-        Thu, 26 Jan 2023 06:23:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03DD1D932;
+        Thu, 26 Jan 2023 06:23:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AE43B81DF5;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7022AB81DF1;
         Thu, 26 Jan 2023 14:22:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15EDDC43339;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1158CC43335;
         Thu, 26 Jan 2023 14:22:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1674742978;
-        bh=4z6TJNCwS8qAM3wHcv2tU/0WELTPhAMwIRU/5y7TjEE=;
+        bh=WgIpMYi4FWB9ExPnYPbTqydDNPPFYwbTWNzEsRMkHfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LBQT9bNAxaKz3msJlHyveDXtH9yd1HKLE5fDUuw8OD2p7etlbFJPb2qRBztfKhuYF
-         rUxQClpzfTQaRpRQa4CSoCp9T/Wl93TVXapwPn+FYBuONDOb74X6RIN37Fj8oD++SG
-         z1AsFAaBUmD783R10QNTVWZR21BwgdyEKS2dZ+oJ9W4IdWROZ/zEDqU8rSj7BqzI7L
-         qGMmjB/v+QqBKj+Up2tC8YiraDoyW0uzoh34MjZN9+L4RcytiIPb9vaft6pSNNhYFD
-         MEbIBK4TO9YL3rH86ppK60lMlB3mW5w1p1Juu/hqcVjinkWL0oREeZXJ1JXegeCHok
-         wi4F9K1A1yubA==
+        b=Y2P++exfhCPS0wl63NfNlZ9YTF6VV4ZmZvL2VWcAMqTbPOuagVa/Sr1rEJOCUDJB2
+         8/sV9t+VcsLmLR3hDIuEwQjOC0Qy9SPfnffxUx8E+Iqd3hrRieU2nd1FUbbwgItkOf
+         kltAkxHnKaDgV7ItPF0wptnJPqaJZaxusnLf45/yILWIBMnAoxlfLcCZYPfkDLQ3O5
+         hnjhKC1jZqiVaaDkuNPHYafSNyXx+PsLJ0V74KfrtE9nRJyhUPuh8+MuRs66y66hiB
+         ANKnLvvbCL6Q+OmLTkwEJBCoWtStshKXpxHtC/yWOlteSPHQeAjLbe42N/5yHbAggq
+         QUU7aF07HNL2A==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pL39c-0006id-RQ; Thu, 26 Jan 2023 15:23:04 +0100
+        id 1pL39c-0006ig-Ui; Thu, 26 Jan 2023 15:23:04 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Bjorn Andersson <andersson@kernel.org>
@@ -47,9 +47,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 10/24] rtc: pm8xxx: rename alarm irq variable
-Date:   Thu, 26 Jan 2023 15:20:43 +0100
-Message-Id: <20230126142057.25715-11-johan+linaro@kernel.org>
+Subject: [PATCH 11/24] rtc: pm8xxx: clean up comments
+Date:   Thu, 26 Jan 2023 15:20:44 +0100
+Message-Id: <20230126142057.25715-12-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230126142057.25715-1-johan+linaro@kernel.org>
 References: <20230126142057.25715-1-johan+linaro@kernel.org>
@@ -64,65 +64,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up the driver somewhat by renaming the driver-data alarm irq
-variable by dropping the redundant "rtc" prefix.
+Clean up the driver comments somewhat and remove obsolete, incorrect or
+redundant ones.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/rtc/rtc-pm8xxx.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/rtc/rtc-pm8xxx.c | 39 +++++++++++++++++----------------------
+ 1 file changed, 17 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-index 0fdbd233b10e..ea867b20573a 100644
+index ea867b20573a..8a94a19e0d14 100644
 --- a/drivers/rtc/rtc-pm8xxx.c
 +++ b/drivers/rtc/rtc-pm8xxx.c
-@@ -46,7 +46,7 @@ struct pm8xxx_rtc_regs {
-  * @rtc:		rtc device for this driver.
-  * @regmap:		regmap used to access RTC registers
-  * @allow_set_time:	indicates whether writing to the RTC is allowed
-- * @rtc_alarm_irq:	rtc alarm irq number.
-+ * @alarm_irq:		alarm irq number
-  * @regs:		rtc registers description.
+@@ -23,13 +23,13 @@
+ 
+ /**
+  * struct pm8xxx_rtc_regs - describe RTC registers per PMIC versions
+- * @ctrl: base address of control register
+- * @write: base address of write register
+- * @read: base address of read register
+- * @alarm_ctrl: base address of alarm control register
+- * @alarm_ctrl2: base address of alarm control2 register
+- * @alarm_rw: base address of alarm read-write register
+- * @alarm_en: alarm enable mask
++ * @ctrl:		address of control register
++ * @write:		base address of write registers
++ * @read:		base address of read registers
++ * @alarm_ctrl:		address of alarm control register
++ * @alarm_ctrl2:	address of alarm control2 register
++ * @alarm_rw:		base address of alarm read-write registers
++ * @alarm_en:		alarm enable mask
+  */
+ struct pm8xxx_rtc_regs {
+ 	unsigned int ctrl;
+@@ -42,12 +42,12 @@ struct pm8xxx_rtc_regs {
+ };
+ 
+ /**
+- * struct pm8xxx_rtc -  rtc driver internal structure
+- * @rtc:		rtc device for this driver.
+- * @regmap:		regmap used to access RTC registers
+- * @allow_set_time:	indicates whether writing to the RTC is allowed
++ * struct pm8xxx_rtc -  RTC driver internal structure
++ * @rtc:		RTC device
++ * @regmap:		regmap used to access registers
++ * @allow_set_time:	whether the time can be set
+  * @alarm_irq:		alarm irq number
+- * @regs:		rtc registers description.
++ * @regs:		register description
   * @dev:		device structure
   */
-@@ -54,7 +54,7 @@ struct pm8xxx_rtc {
- 	struct rtc_device *rtc;
- 	struct regmap *regmap;
- 	bool allow_set_time;
--	int rtc_alarm_irq;
-+	int alarm_irq;
- 	const struct pm8xxx_rtc_regs *regs;
- 	struct device *dev;
+ struct pm8xxx_rtc {
+@@ -90,7 +90,7 @@ static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	if (rc)
+ 		return rc;
+ 
+-	/* Disable RTC H/w before writing on RTC register */
++	/* Disable RTC */
+ 	rc = regmap_update_bits(rtc_dd->regmap, regs->ctrl, PM8xxx_RTC_ENABLE, 0);
+ 	if (rc)
+ 		return rc;
+@@ -111,7 +111,7 @@ static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	if (rc)
+ 		return rc;
+ 
+-	/* Enable RTC H/w after writing on RTC register */
++	/* Enable RTC */
+ 	rc = regmap_update_bits(rtc_dd->regmap, regs->ctrl, PM8xxx_RTC_ENABLE,
+ 				PM8xxx_RTC_ENABLE);
+ 	if (rc)
+@@ -242,7 +242,7 @@ static int pm8xxx_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
+ 	if (rc)
+ 		return rc;
+ 
+-	/* Clear Alarm register */
++	/* Clear alarm register */
+ 	if (!enable) {
+ 		rc = regmap_bulk_write(rtc_dd->regmap, regs->alarm_rw, value,
+ 				       sizeof(value));
+@@ -269,13 +269,13 @@ static irqreturn_t pm8xxx_alarm_trigger(int irq, void *dev_id)
+ 
+ 	rtc_update_irq(rtc_dd->rtc, 1, RTC_IRQF | RTC_AF);
+ 
+-	/* Clear the alarm enable bit */
++	/* Disable alarm */
+ 	rc = regmap_update_bits(rtc_dd->regmap, regs->alarm_ctrl,
+ 				regs->alarm_en, 0);
+ 	if (rc)
+ 		return IRQ_NONE;
+ 
+-	/* Clear RTC alarm register */
++	/* Clear alarm status */
+ 	rc = regmap_update_bits(rtc_dd->regmap, regs->alarm_ctrl2,
+ 				PM8xxx_RTC_ALARM_CLEAR, 0);
+ 	if (rc)
+@@ -332,9 +332,6 @@ static const struct pm8xxx_rtc_regs pmk8350_regs = {
+ 	.alarm_en	= BIT(7),
  };
-@@ -364,8 +364,8 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
- 		return -ENXIO;
- 	}
  
--	rtc_dd->rtc_alarm_irq = platform_get_irq(pdev, 0);
--	if (rtc_dd->rtc_alarm_irq < 0)
-+	rtc_dd->alarm_irq = platform_get_irq(pdev, 0);
-+	if (rtc_dd->alarm_irq < 0)
- 		return -ENXIO;
+-/*
+- * Hardcoded RTC bases until IORESOURCE_REG mapping is figured out
+- */
+ static const struct of_device_id pm8xxx_id_table[] = {
+ 	{ .compatible = "qcom,pm8921-rtc", .data = &pm8921_regs },
+ 	{ .compatible = "qcom,pm8058-rtc", .data = &pm8058_regs },
+@@ -382,7 +379,6 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
  
- 	rtc_dd->allow_set_time = of_property_read_bool(pdev->dev.of_node,
-@@ -391,7 +391,7 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+ 	device_init_wakeup(&pdev->dev, 1);
+ 
+-	/* Register the RTC device */
+ 	rtc_dd->rtc = devm_rtc_allocate_device(&pdev->dev);
+ 	if (IS_ERR(rtc_dd->rtc))
+ 		return PTR_ERR(rtc_dd->rtc);
+@@ -390,7 +386,6 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+ 	rtc_dd->rtc->ops = &pm8xxx_rtc_ops;
  	rtc_dd->rtc->range_max = U32_MAX;
  
- 	/* Request the alarm IRQ */
--	rc = devm_request_any_context_irq(&pdev->dev, rtc_dd->rtc_alarm_irq,
-+	rc = devm_request_any_context_irq(&pdev->dev, rtc_dd->alarm_irq,
+-	/* Request the alarm IRQ */
+ 	rc = devm_request_any_context_irq(&pdev->dev, rtc_dd->alarm_irq,
  					  pm8xxx_alarm_trigger,
  					  IRQF_TRIGGER_RISING,
- 					  "pm8xxx_rtc_alarm", rtc_dd);
-@@ -404,7 +404,7 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
- 	if (rc)
- 		return rc;
- 
--	rc = dev_pm_set_wake_irq(&pdev->dev, rtc_dd->rtc_alarm_irq);
-+	rc = dev_pm_set_wake_irq(&pdev->dev, rtc_dd->alarm_irq);
- 	if (rc)
- 		return rc;
- 
 -- 
 2.39.1
 
