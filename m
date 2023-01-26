@@ -2,156 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635A867CFB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FD667CFDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjAZPQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:16:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
+        id S232087AbjAZPST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232487AbjAZPQ2 (ORCPT
+        with ESMTP id S231890AbjAZPSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:16:28 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D2170D40;
-        Thu, 26 Jan 2023 07:15:57 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id 5so2106348plo.3;
-        Thu, 26 Jan 2023 07:15:57 -0800 (PST)
+        Thu, 26 Jan 2023 10:18:17 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44FB6D5F0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:17:32 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id w11so2205233edv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:17:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9IUMglE7oIMks0RLQ6Ljbyu9rHxNe78WuuFe544zjMU=;
-        b=lhZydBIEBXohwuADdNmiN1QRNyqQ7/FkdK8WXfloJ4wTi9dFeAz+fYeV5lwIsC9HjU
-         ohYDxBW5rLEdIx9OUWWHRYrkZiE4KpId0Iu/2/8JFGHKH3V9DNlWtBud7Y9u5Rwv9u1g
-         aYwaSKo5lcYpHp7dwYi+2d3oWO1YMZdBUPM25bUfYfct8DRisQAO593mWUd02gV7zyAx
-         yjVUxQdRSrrPY08MKq6f/scDwJybQBbbf2/6apySXxeRVUHzmjIifX6cJVEn5+qeVWs4
-         29hLuUD74+hltnd6ypqYeXaf2x5fYOdMnR99yXxg0QhXc256XR05rDk7LkHLFypv6XCq
-         /2/Q==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5ZAfO7IxAr14EAlhNtiFp5Qcd0YjV1Wu3mwyrUUlhD8=;
+        b=WycDfuOeAMXNIrCnI7mqkfBVYLAdUHyfVKbzu+0R3Kls1cp1yXX0ookuee148acXZN
+         9m7ALcUa2MEv5z7jmcZf9NYELk4j5FfiFt6ZG7fJJr6ve2Vov4gvdB1UtgfS04zZPQ7M
+         DKnp/WP5UqyhDW6K8I81+MDRt0SXvD557NoNOHkoxAsgQVpng4Iso5kYm8itzDed4jup
+         pGmP/XudT9/YV2uY6pIk68JFGbkLl3n7Ww387RBMl72Cm3oghYPhTktQUDg9pkudR4ma
+         cdoTfIouJrC0NhnmAD7IBMSEILCU8YCPS29b3YhQRIbxvGBUIzYqWVe8qY6CXkdLAypB
+         BUSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9IUMglE7oIMks0RLQ6Ljbyu9rHxNe78WuuFe544zjMU=;
-        b=jJLPJ8qSpggg6OrgQ7QPYjR50OhJBt9jVTSzKvu3+ePENqeB752UKY4QPZ9umDQDKb
-         VA8qbAq97X2JL5iVIX/mBmsajCRgHyiZe1POdO5MoHRrc+fXa1jlRnqrembZd7QdWt3O
-         X3V3Z/ivVAxC+/Yqc/sAQQVt9l/fCx41tZ4MBvAXtNHCyKo8ZDywUkrsTPf9AWW3pqfo
-         f1vR4al9znIkNK96T+9XF3g44SApN3CH8U2FtRPIk7+KB7vyFys/t0KJ30lDSnNgt4Bo
-         oIIplrnEGTvUV7m9j/3Lg8dF+lOgEHh7eMsWCW7YcW2upbb0Xqt/v2uuo3ouYOv1tvGj
-         GNrQ==
-X-Gm-Message-State: AFqh2koFoKyxNwkNfOf/kVYwvbZAt9hugQtMeOCUx88e/SZMmW3OBD4y
-        JwfRNxRWi/tyWFhSny242zPIU8TF4NyfegVreAs=
-X-Google-Smtp-Source: AMrXdXvb5OpCoUW2QPkNJzzZ5WP7DXx7VOrVFPRWZNL1EBCxdVqKoluVdSIYu3nmLS+d37hq51dYuvfwf4VuxpEzCGw=
-X-Received: by 2002:a17:90b:291:b0:227:3f:57be with SMTP id
- az17-20020a17090b029100b00227003f57bemr5726599pjb.158.1674746156510; Thu, 26
- Jan 2023 07:15:56 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5ZAfO7IxAr14EAlhNtiFp5Qcd0YjV1Wu3mwyrUUlhD8=;
+        b=seVK83Y1Kze02nZfC8zi1HzV6qfo7aFqvCM3vU+OmdmiZJH7O/XJnz6zdyZ++eB+YD
+         ndIVuC1YcgFkuZ8rhIgTUbOrGt8oNE5GkKREdpo8OnaPpEaFf4wLlcCjZ65bC9DaY+eK
+         eW5mbONbe6mCpnX5ufbJmAvvlaJMwFa0ZhBtDV7oP12m1ZTDe4+vdFIldY1zXNNlvxUl
+         OP5nDfNWbl2XRMj7pc6faVw6ug71kItTMwrzvG+av8gz6z6mPvFy/FYbjiQZRm6bAkew
+         FuglR1oBE/ABR4Ht02Z67NyeKB+mQ0+jQsRtZ7RXPoOdij2GWmRcrT9TkfZyig3PNH9k
+         CiyQ==
+X-Gm-Message-State: AFqh2krHiQ5OxSxlz+P7vG6DSi/gjf8CJWF4vwo3BSL7h8xvOpVzfI/l
+        SPns4qEZU7QnUCtI/Q7+RDzQ+A==
+X-Google-Smtp-Source: AMrXdXtYw8AIVUi0iCcQsXJSz4GqxpS6e3+ueaMfAGJ7o2t91Civs5gXDDQXTo9MmSbmEMnio0pmiA==
+X-Received: by 2002:a05:6402:524f:b0:490:47c3:3d7f with SMTP id t15-20020a056402524f00b0049047c33d7fmr52370898edd.2.1674746229163;
+        Thu, 26 Jan 2023 07:17:09 -0800 (PST)
+Received: from localhost.localdomain (abyk108.neoplus.adsl.tpnet.pl. [83.9.30.108])
+        by smtp.gmail.com with ESMTPSA id a16-20020aa7d910000000b00463bc1ddc76sm842808edr.28.2023.01.26.07.17.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 07:17:08 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 01/14] drm/msm/a6xx: De-staticize sptprac en/disable functions
+Date:   Thu, 26 Jan 2023 16:16:05 +0100
+Message-Id: <20230126151618.225127-2-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230126151618.225127-1-konrad.dybcio@linaro.org>
+References: <20230126151618.225127-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-References: <20230124221218.341511-1-william.zhang@broadcom.com> <20230124221218.341511-13-william.zhang@broadcom.com>
-In-Reply-To: <20230124221218.341511-13-william.zhang@broadcom.com>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Thu, 26 Jan 2023 16:15:44 +0100
-Message-ID: <CAOiHx=nX5GUnE-y0HfbA3j=-YNRD6qfuYJPjyKpn0hGhOUCLLQ@mail.gmail.com>
-Subject: Re: [PATCH v2 12/14] spi: bcm63xx-hsspi: Disable spi mem dual io
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
-        dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 at 23:33, William Zhang <william.zhang@broadcom.com> wrote:
->
-> In general the controller supports SPI dual mode operation but the
-> particular SPI flash dual io read op switches from single mode in cmd
-> phase to dual mode in address and data phase. This is not compatible
-> with prepend operation where cmd and address are sent out through the
-> prepend buffer and they must use same the number of io pins.
->
-> This patch disables these SPI flash dual io read ops through the mem_ops
-> supports_op interface. This makes sure the SPI flash driver selects the
-> compatible read ops at run time.
->
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->
-> ---
->
-> Changes in v2:
-> - Remove the code that uses the deprecated flag use_cs_workaround
-> - Always disable dual io read ops as prepend is the default mode
->
->  drivers/spi/spi-bcm63xx-hsspi.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->
-> diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hsspi.c
-> index 2a0bef943967..dd320fda7611 100644
-> --- a/drivers/spi/spi-bcm63xx-hsspi.c
-> +++ b/drivers/spi/spi-bcm63xx-hsspi.c
-> @@ -20,6 +20,7 @@
->  #include <linux/spi/spi.h>
->  #include <linux/mutex.h>
->  #include <linux/of.h>
-> +#include <linux/spi/spi-mem.h>
->  #include <linux/reset.h>
->  #include <linux/pm_runtime.h>
->
-> @@ -663,6 +664,23 @@ static int bcm63xx_hsspi_transfer_one(struct spi_master *master,
->         return 0;
->  }
->
-> +static bool bcm63xx_hsspi_mem_supports_op(struct spi_mem *mem,
-> +                           const struct spi_mem_op *op)
-> +{
-> +       if (!spi_mem_default_supports_op(mem, op))
-> +               return false;
-> +
-> +       /* Controller doesn't support spi mem dual/quad read cmd in prepend mode */
-> +       if ((op->cmd.opcode == 0xbb) || (op->cmd.opcode == 0xeb))
+These two will be reused by at least A619_holi in the non-gmu
+paths. De-staticize them to make it possible.
 
-There are defines in linux/mtd/spi-nor.h you can use:
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 4 ++--
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-if ((op->cmd.opcode == SPINOR_OP_READ_1_2_2) || (op->cmd.opcode ==
-SPINOR_OP_READ_1_4_4))
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+index f3c9600221d4..90e636dcdd5b 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+@@ -354,7 +354,7 @@ void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state)
+ }
+ 
+ /* Enable CPU control of SPTP power power collapse */
+-static int a6xx_sptprac_enable(struct a6xx_gmu *gmu)
++int a6xx_sptprac_enable(struct a6xx_gmu *gmu)
+ {
+ 	int ret;
+ 	u32 val;
+@@ -376,7 +376,7 @@ static int a6xx_sptprac_enable(struct a6xx_gmu *gmu)
+ }
+ 
+ /* Disable CPU control of SPTP power power collapse */
+-static void a6xx_sptprac_disable(struct a6xx_gmu *gmu)
++void a6xx_sptprac_disable(struct a6xx_gmu *gmu)
+ {
+ 	u32 val;
+ 	int ret;
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+index e034935b3986..ec28abdd327b 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+@@ -186,5 +186,7 @@ int a6xx_hfi_set_freq(struct a6xx_gmu *gmu, int index);
+ 
+ bool a6xx_gmu_gx_is_on(struct a6xx_gmu *gmu);
+ bool a6xx_gmu_sptprac_is_on(struct a6xx_gmu *gmu);
++void a6xx_sptprac_disable(struct a6xx_gmu *gmu);
++int a6xx_sptprac_enable(struct a6xx_gmu *gmu);
+ 
+ #endif
+-- 
+2.39.1
 
-Though SPINOR_OP_READ_1_4_4 seems to be redundant, since the
-controller does not support quad mode, and does not advertise it, so
-it should never even be an option.
-
-Looking at that file, instead what is missing is
-SPINOR_OP_READ_1_2_2_4B (0xbc) which shouldn't be usable either.
-
-
-> +               return false;
-> +
-> +       return true;
-> +}
-> +
-> +static const struct spi_controller_mem_ops bcm63xx_hsspi_mem_ops = {
-> +       .supports_op = bcm63xx_hsspi_mem_supports_op,
-> +};
-> +
->  static irqreturn_t bcm63xx_hsspi_interrupt(int irq, void *dev_id)
->  {
->         struct bcm63xx_hsspi *bs = (struct bcm63xx_hsspi *)dev_id;
-> @@ -760,6 +778,7 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
->         mutex_init(&bs->msg_mutex);
->         init_completion(&bs->done);
->
-> +       master->mem_ops = &bcm63xx_hsspi_mem_ops;
->         master->dev.of_node = dev->of_node;
->         if (!dev->of_node)
->                 master->bus_num = HSSPI_BUS_NUM;
-> --
-> 2.37.3
->
