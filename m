@@ -2,65 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2616D67CF84
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2591567CF85
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:13:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjAZPNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S231950AbjAZPNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:13:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjAZPNM (ORCPT
+        with ESMTP id S231846AbjAZPN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:13:12 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FC1530C4;
-        Thu, 26 Jan 2023 07:13:00 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id be8so2078850plb.7;
-        Thu, 26 Jan 2023 07:13:00 -0800 (PST)
+        Thu, 26 Jan 2023 10:13:27 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89322EB79
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:13:26 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id d30so3466580lfv.8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:13:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fJLihLuF0yKMMg408sSjk4wJtac1oa0MPZR4v84EZyk=;
-        b=ajYvFORYwYT2aGu312rNzNZC4DzemKiWaReBFW2DpSBaAOIb+hW0Bi+2bQpfmJDWL2
-         EZFkK0ABOzEEWBGifZOFcYYG64Stklwf8VHjKPiHylrsYl5TbVBWFflI8Kyqq51W+TYx
-         8gTl0i3GsOAgI/S0/wctI0nzJQuYcScjv8J8PCqXREqPlms4lPZFZ7IuI80E4nRFHCj2
-         a6vG83j3Dx7xJFt9uJkJJb2DHJlAlA5gGwAcXXzF01euoZkAZrsj5pF/wmlX4Uga7RqV
-         JYffJ4MFsvRT1RRd9Mh7jgM8CroVZiWM9HJTRXp5dvvz5J7uwMrcsT/09/VDrLiwT211
-         QEUw==
+        bh=hc6ZwBnEHfllxJYiT753cJcnxMfaeJjttvRk6qoxRnQ=;
+        b=F1wBM/+4TMypuSmQSIBzjeRJFFyaHQ/0qchQXZcr/y1UPvy/oKavxAnQCmS3lMrKM7
+         LvRmeNXxA8/YJyJtwlt+EfqApeBOS0bN+KqQTMl4fzvJg+5okFap0FyU2HcYivlwX858
+         qJRjg/XQg2t84NUMvaqnxn9c8QaDbakgQCqK9jS+Qq9WsTcsvio+93agkPl9RN5xn2LE
+         G3P1osGYD4WVgvIHIPPRZ2XNTdw9DorvlnCrVtwQLAeiTJ3qxPQdPyOuVQeR9cXBhHo0
+         cqF61Q7e7j9g4UPI+q8h+AKnriHt2Ynt2P2a8DNsuK9vqUgNOIitUN4UYT/Yjc31D9Tn
+         I/Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fJLihLuF0yKMMg408sSjk4wJtac1oa0MPZR4v84EZyk=;
-        b=I8XU35G6iBG+9xC/5bR+jhBAx7NKZmgfzhlGenWXKj6OiuCSgyiCBT9SGf0a+biq4r
-         9bgPfUGUSPGi7oBYLOVCYplWBfcIqFcwF4Eb1CJajFB/2V/i4/LegSLoS2q596y0Xa1B
-         2XVdt5VQm9VVrj0mQtETBetktyT4nYe0LAbPiVrPbEcuj7hRtfY9zPp07g8QYEcwnglA
-         rgdq9FiVp7nOjDcpUmZWvEjDDjPqbOAFLbGFoTsRNvdQeVZWgvHUtw88zU8J5aBHxH0B
-         V6y1P2wISPkYN2MZ5fxw02cVN8VenRA6vprQ1NCIgOMnheNs4ie4BnEf4dPy+Y1mavjH
-         cf0w==
-X-Gm-Message-State: AFqh2kppM0UdzDzfiC3m8SbTMWp/KoUEyl0TEQuasoLSP6jRo7zaUSVN
-        Yanp6QjWvd9k480rXoAC8NTwN14/Ifb5jWH30mw=
-X-Google-Smtp-Source: AMrXdXsaYvTBw1/bD43wF5Qyc8/V0QyLm+C2IC6gpKECwS+f8f6MVHeMq2wX1HQeAccctpOmIJCXEM/s04WRHLqpbes=
-X-Received: by 2002:a17:90b:291:b0:227:3f:57be with SMTP id
- az17-20020a17090b029100b00227003f57bemr5724649pjb.158.1674745980446; Thu, 26
- Jan 2023 07:13:00 -0800 (PST)
+        bh=hc6ZwBnEHfllxJYiT753cJcnxMfaeJjttvRk6qoxRnQ=;
+        b=e/8h2wHyoeRVv8p1OnJQYw1h06qzJ7NEq6/Do6v0tXW0ZGbSbBbu4rSj2/So8pfDA7
+         XZrtcyOwzBPDyxqe82BgBcnknjVfoSD1AGweXmpWIdz57vePu9pJDPclEaWSi5kKCinu
+         A8WIbXGoL+ulLeIt0ysZyGFYqCboliy9A/uoyBikF/2/zGVaVKqb/J2jtwEefeV2gIso
+         TdRXIRHhRbONHlOT/l/RQ40bwCiG21jnqCwODYv3SR5RpLf+p5RWcoA1wb2l0rsIH8MS
+         arjzJUJlfOKZ6b9I8PpAV9T5UPFr0x213cb5DrLgH0ta8cBiGqaXCj6fF2b60QvgzuZT
+         xY8g==
+X-Gm-Message-State: AFqh2kqwrSeZXgrIcllDYL/Q8+EWOjl1qysD7JEcdf0Z7QqY8lCO0327
+        xLoFxE9r9bruzdpX4E4EQqwNY5jbETAdGZ4RkBI=
+X-Google-Smtp-Source: AMrXdXuXLi2sgAvR7DVwDeHXnP46pNcE98/obdzUFlb01kXRVZpGWgVhlaA5MI4hdvDdc/Mj43YUXtaznXztN/mcpBk=
+X-Received: by 2002:ac2:5596:0:b0:4cb:334f:85ef with SMTP id
+ v22-20020ac25596000000b004cb334f85efmr1675146lfg.67.1674746004845; Thu, 26
+ Jan 2023 07:13:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20230124221218.341511-1-william.zhang@broadcom.com> <20230124221218.341511-9-william.zhang@broadcom.com>
-In-Reply-To: <20230124221218.341511-9-william.zhang@broadcom.com>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Thu, 26 Jan 2023 16:12:48 +0100
-Message-ID: <CAOiHx=mQJXAkSsXkgGzpJUCzwxD1nC-Hbw3WX3OfRmp7cfFiww@mail.gmail.com>
-Subject: Re: [PATCH v2 08/14] spi: bcm63xx-hsspi: Handle cs_change correctly
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
-        dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com> <Y9Ex3ZUIFxwOBg1n@work-vm> <Y9E5Cg7mreDx737N@redhat.com>
+ <CAFLxGvwHRK3vyXiCv5ELvrDSEkcDgV5c6pNnWgWhcATfp1dedA@mail.gmail.com> <Y9KVHnHnig4jwNPx@work-vm>
+In-Reply-To: <Y9KVHnHnig4jwNPx@work-vm>
+From:   Richard Weinberger <richard.weinberger@gmail.com>
+Date:   Thu, 26 Jan 2023 16:13:11 +0100
+Message-ID: <CAFLxGvyMncqjkEXiOqenQu+rZW46RP7UorXs36+awmgnBxTGhA@mail.gmail.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+Cc:     =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,120 +94,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 at 23:33, William Zhang <william.zhang@broadcom.com> wr=
-ote:
+On Thu, Jan 26, 2023 at 3:58 PM Dr. David Alan Gilbert
+<dgilbert@redhat.com> wrote:
 >
-> The kernel SPI interface includes the cs_change flag that alters how
-> the CS behaves.
+> * Richard Weinberger (richard.weinberger@gmail.com) wrote:
+> > On Wed, Jan 25, 2023 at 3:22 PM Daniel P. Berrang=C3=A9 <berrange@redha=
+t.com> wrote:
+> > > Any virtual device exposed to the guest that can transfer potentially
+> > > sensitive data needs to have some form of guest controlled encryption
+> > > applied. For disks this is easy with FDE like LUKS, for NICs this is
+> > > already best practice for services by using TLS. Other devices may no=
+t
+> > > have good existing options for applying encryption.
+> >
+> > I disagree wrt. LUKS. The cryptography behind LUKS protects persistent =
+data
+> > but not transport. If an attacker can observe all IO you better
+> > consult a cryptographer.
+> > LUKS has no concept of session keys or such, so the same disk sector wi=
+ll
+> > always get encrypted with the very same key/iv.
 >
-> If we're in the middle of transfers, it tells us to unselect the
-> CS momentarily since the target device requires that.
->
-> If we're at the end of a transfer, it tells us to keep the CS
-> selected, perhaps because the next transfer is likely targeted
-> to the same device.
->
-> We implement this scheme in the HSSPI driver in this change.
->
-> Prior to this change, the CS would toggle momentarily if cs_change
-> was set for the last transfer. This can be ignored by some or
-> most devices, but the Microchip TPM2 device does not ignore it.
->
-> With the change, the behavior is corrected and the 'glitch' is
-> eliminated.
->
-> Signed-off-by: Kursad Oney <kursad.oney@broadcom.com>
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->
-> ---
->
-> Changes in v2:
-> - Fix unused variable =E2=80=98reg=E2=80=99 compile warning
->
->  drivers/spi/spi-bcm63xx-hsspi.c | 29 +++++++++++++++++++++--------
->  1 file changed, 21 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hs=
-spi.c
-> index 55cbe7deba08..696e14abba2d 100644
-> --- a/drivers/spi/spi-bcm63xx-hsspi.c
-> +++ b/drivers/spi/spi-bcm63xx-hsspi.c
-> @@ -338,7 +338,7 @@ static int bcm63xx_hsspi_transfer_one(struct spi_mast=
-er *master,
->         struct spi_device *spi =3D msg->spi;
->         int status =3D -EINVAL;
->         int dummy_cs;
-> -       u32 reg;
-> +       bool restore_polarity =3D true;
+> Are you aware of anything that you'd use instead?
 
-While restore polarity is how this is implemented, I think using a
-more semantic name like keep_cs would be better.
+Well, I'd think towards iSCSI over TLS to protect the IO transport.
 
->
->         mutex_lock(&bs->msg_mutex);
->         /* This controller does not support keeping CS active during idle=
-.
-> @@ -367,16 +367,29 @@ static int bcm63xx_hsspi_transfer_one(struct spi_ma=
-ster *master,
->
->                 spi_transfer_delay_exec(t);
->
-> -               if (t->cs_change)
-> +               /*
-> +                * cs_change rules:
-> +                * (1) cs_change =3D 0 && last_xfer =3D 0:
-> +                *     Do not touch the CS. On to the next xfer.
-> +                * (2) cs_change =3D 1 && last_xfer =3D 0:
-> +                *     Set cs =3D false before the next xfer.
-> +                * (3) cs_change =3D 0 && last_xfer =3D 1:
-> +                *     We want CS to be deactivated. So do NOT set cs =3D=
- false,
-> +                *     instead just restore the original polarity. This h=
-as the
-> +                *     same effect of deactivating the CS.
-> +                * (4) cs_change =3D 1 && last_xfer =3D 1:
-> +                *     We want to keep CS active. So do NOT set cs =3D fa=
-lse, and
-> +                *     make sure we do NOT reverse polarity.
-> +                */
-> +               if (t->cs_change && !list_is_last(&t->transfer_list, &msg=
-->transfers))
->                         bcm63xx_hsspi_set_cs(bs, spi->chip_select, false)=
-;
-> +
-> +               restore_polarity =3D !t->cs_change;
->         }
+> Are you happy with dm-verity for protection against modification?
 
-I still find setting restore_polarity on each loop iteration when only
-its last set value matters confusing and hard to read, so I still
-propose keeping close to the generic implementation (
-https://elixir.bootlin.com/linux/v6.1.8/source/drivers/spi/spi.c#L1560
-) and do
-
-if (t->cs_change) {
-   if (list_is_last())
-       restore_polarity =3D false;
-   else
-       bcm63xx_hsspi_set_cs(bs, spi->chip_select, false);
-}
-
-While there, you might also want to check the cs_off value(s) as well.
-
-
-
->
-> -       mutex_lock(&bs->bus_mutex);
-> -       reg =3D __raw_readl(bs->regs + HSSPI_GLOBAL_CTRL_REG);
-> -       reg &=3D ~GLOBAL_CTRL_CS_POLARITY_MASK;
-> -       reg |=3D bs->cs_polarity;
-> -       __raw_writel(reg, bs->regs + HSSPI_GLOBAL_CTRL_REG);
-> -       mutex_unlock(&bs->bus_mutex);
-> +       bcm63xx_hsspi_set_cs(bs, dummy_cs, false);
-> +       if (restore_polarity)
-> +               bcm63xx_hsspi_set_cs(bs, spi->chip_select, false);
->
->         mutex_unlock(&bs->msg_mutex);
->         msg->status =3D status;
-> --
-> 2.37.3
->
+Like LUKS (actually dm-crypt) the crypto behind is designed to protect
+persistent data not transport.
+My fear is that an attacker who is able to observe IOs can do bad things.
