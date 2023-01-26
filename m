@@ -2,144 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D2167CAC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C28667CACE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237053AbjAZMTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 07:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
+        id S237153AbjAZMTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 07:19:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237191AbjAZMSj (ORCPT
+        with ESMTP id S237223AbjAZMTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:18:39 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517256C126
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:18:26 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P2ffk3yznz9v7W0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 20:10:22 +0800 (CST)
-Received: from [10.48.129.37] (unknown [10.48.129.37])
-        by APP2 (Coremail) with SMTP id GxC2BwDXo1pwb9JjCG3JAA--.427S2;
-        Thu, 26 Jan 2023 13:18:03 +0100 (CET)
-Message-ID: <0ef2e974-5c3a-6195-62d5-a4c436bd7d82@huaweicloud.com>
-Date:   Thu, 26 Jan 2023 13:17:49 +0100
+        Thu, 26 Jan 2023 07:19:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8942A16AD7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:18:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674735526;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I9Pg4QUbNxEbqQg5rlyFX3DNaClmlULemPiPESaUQkE=;
+        b=GNeS5sbPyHCBktL6Bz9x2qI6aJysIMXM3wCbRzTmNyD8X+20ljEI4kQsoGPK9SO/iyjaJ0
+        OzCMpDLD9XYmQGlWZnBAm3KBjiTwxNa3H/N7KZ1EIjVzZJwy7gH/tMdNNq8ipTEaNJP+uF
+        uuRdFTLu2FAUQ8qLA/5bO4JosZiHNJE=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-286-qX3TVsWiO3mGfoIVkSbvyw-1; Thu, 26 Jan 2023 07:18:45 -0500
+X-MC-Unique: qX3TVsWiO3mGfoIVkSbvyw-1
+Received: by mail-qv1-f70.google.com with SMTP id f16-20020ad442d0000000b005376362aa66so977124qvr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:18:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I9Pg4QUbNxEbqQg5rlyFX3DNaClmlULemPiPESaUQkE=;
+        b=uihJ4fsLx5eJkakOP/ChvIxSMuqBNCx2RbuPaRyxDLHU2eiV3bGKJmKNuV73SnXFk7
+         nUIldd/hZdyouYmxWzFgZn9WA6RTfG74ZdPbiX7zol3XXZJu0e8DinI6Ji19RqKUaivd
+         DPkdaDNIaZKLwwRmLUhAC6guGywG1Kd5MqgnRow8uFcOf/XQjZs/7RsOSTwnwX2hHWsP
+         f0l1o3jjeuycEGb0xFPLnWJeAteRHd81CO38OI0QFJDiMqUKECP0ii0jNqbSFVOV+365
+         qCbJZ1cflfSSeoPXm5VTlH2P5htNVdXaJbXKVcQJJPX2p9WcqU52hcSPckrUx0mmaAiv
+         Jw1A==
+X-Gm-Message-State: AO0yUKX72O+JgQPgCpQJE9Lgfk+wNYcMpfVypTgoyAZgfyoi7wbc3mBR
+        Z4gZI0tN1pN4NguRBzp3diLiVyVz1vO8RGsMZUYnvHTsFiy75Z2E0ZmQkVYTd18htzYUw5FRcs+
+        Plxo2mYzui6JH4wM71Oo72peO
+X-Received: by 2002:a05:622a:1b9f:b0:3b7:fb43:e745 with SMTP id bp31-20020a05622a1b9f00b003b7fb43e745mr12125497qtb.39.1674735524639;
+        Thu, 26 Jan 2023 04:18:44 -0800 (PST)
+X-Google-Smtp-Source: AK7set/LpzPPRNyX46aBCgsS1xFZrPlr8YJl6tz+anqlXRntKC1x8THXiiUIltDWpqrLib/RmsI1nQ==
+X-Received: by 2002:a05:622a:1b9f:b0:3b7:fb43:e745 with SMTP id bp31-20020a05622a1b9f00b003b7fb43e745mr12125469qtb.39.1674735524334;
+        Thu, 26 Jan 2023 04:18:44 -0800 (PST)
+Received: from [192.168.0.2] (ip-109-43-177-174.web.vodafone.de. [109.43.177.174])
+        by smtp.gmail.com with ESMTPSA id b17-20020ac84f11000000b0039a610a04b1sm632086qte.37.2023.01.26.04.18.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 04:18:43 -0800 (PST)
+Message-ID: <6594a21f-6372-0b69-3bb3-6ed1b1387e6e@redhat.com>
+Date:   Thu, 26 Jan 2023 13:18:39 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     paulmck@kernel.org, Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <cedf3a39-12cd-1cb1-ad5a-7c10768cee40@huaweicloud.com>
- <20230125150520.GG2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9FMEATzv3gcTUe2@rowland.harvard.edu>
- <20230125171832.GH2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9F+SyLpxHwdK0rE@rowland.harvard.edu>
- <20230125194651.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9GVFkVRRRs5/rBd@rowland.harvard.edu>
- <20230125213832.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230125233308.GA1552266@paulmck-ThinkPad-P17-Gen-1>
- <Y9HbSBLrNJ9O2ad6@rowland.harvard.edu>
- <20230126015330.GX2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230126015330.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v6 10/14] KVM: s390: Refactor absolute vm mem_op function
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+References: <20230125212608.1860251-1-scgl@linux.ibm.com>
+ <20230125212608.1860251-11-scgl@linux.ibm.com>
+From:   Thomas Huth <thuth@redhat.com>
+In-Reply-To: <20230125212608.1860251-11-scgl@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDXo1pwb9JjCG3JAA--.427S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXr4fAw17Wr4kCFy7XFWUJwb_yoW5Ww43pF
-        W8KF47KF4kJ397Zw4xCF4xCrWFyrWrXa45Jr9ayr18A343Gr4S9rW3KFyYgFy5Wrs3u3W0
-        vF4j93s8ua4UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UZ18PUUUUU=
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 25/01/2023 22.26, Janis Schoetterl-Glausch wrote:
+> Remove code duplication with regards to the CHECK_ONLY flag.
+> Decrease the number of indents.
+> No functional change indented.
+> 
+> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+> 
+> 
+> Cosmetic only, can be dropped.
 
+I'm torn between unnecessary-code-churn and 
+nice-to-get-rid-of-one-indentation-level here ... anyway, patch looks sane 
+to me, so:
 
-On 1/26/2023 2:53 AM, Paul E. McKenney wrote:
-> On Wed, Jan 25, 2023 at 08:45:44PM -0500, Alan Stern wrote:
->> On Wed, Jan 25, 2023 at 03:33:08PM -0800, Paul E. McKenney wrote:
->>> Ah, and returning to the earlier question as to whether srcu_read_unlock()
->>> can use release semantics instead of smp_mb(), at the very least, this
->>> portion of the synchronize_srcu() function's header comment must change:
->>>
->>> 	On systems with more than one CPU, when synchronize_srcu()
->>> 	returns, each CPU is guaranteed to have executed a full
->>> 	memory barrier since the end of its last corresponding SRCU
->>> 	read-side critical section whose beginning preceded the call
->>> 	to synchronize_srcu().
->>
->> Of course, there might be code relying on a guarantee that
->> srcu_read_unlock() executes a full memory barrier.  This guarantee would
->> certainly no longer hold.  But as I understand it, this guarantee was
->> never promised by the SRCU subsystem.
-> That indented sentence was copied from the synchronize_srcu() function's
-> header comment, which might be interpreted by some as a promise by the
-> SRCU subsystem.
-
-I think we understand that it is a promise of the SRCU subsystem, the 
-question is just what the promise is.
-As Alan said, if the promise is interpreted as something like
-
-"every store that propagated to the read side critical section must have 
-propagated to all CPUs before the  synchronize_srcu() ends" (where the 
-RSCS and synchronize_srcu() calls are those from the promise)
-
-then that guarantee holds even if you only use a release fence to 
-communicate the end of the RSCS to the GP. Note that this interpretation 
-is analogous to the promise of smp_mb__after_unlock_lock(), which says 
-that an UNLOCK+LOCK pair act as a full fence: here the read-side 
-unlock+gp act as a full memory barrier.
-
-On the other hand, if the promise is more literally interpreted as
-
-"there is a (possibly virtual) instruction in the reader-side execution 
-stream that acts as a full memory barrier, and that instruction is 
-executed before the  synchronize_srcu() ends"
-
-then that guarantee is violated, and I suppose you might be able to 
-write some absurd client that inspects every store of the reader thread 
-and sees that there is no line in the reader side code that acts like a 
-full fence. But it would take a lot of effort to discern this.
-
-Perhaps someone interpreting the promise like this might however come to 
-the conclusion that because the only part of the code that is actually 
-under control of srcu, and hence the only code where that full barrier 
-could be hidden, would be inside the srcu_unlock(), they might expect to 
-always find this full barrier there and treat srcu_unlock() in general 
-as a full barrier. Considering that the wording explicitly isn't "an 
-srcu_unlock() is a full barrier", I hope few people would have this 
-unhealthy idea. But you never know.
-
-Best wishes,
-jonas
+Reviewed-by: Thomas Huth <thuth@redhat.com>
 
