@@ -2,214 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6569767D9A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0852467D9A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbjAZXdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
+        id S232758AbjAZXeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjAZXc6 (ORCPT
+        with ESMTP id S229498AbjAZXe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:32:58 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BAE3C3C
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:32:56 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id ud5so9408426ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:32:56 -0800 (PST)
+        Thu, 26 Jan 2023 18:34:29 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB566E8D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:34:28 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id z31so2201880pfw.4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:34:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OKgZ/poIpGJWM5cLb9CWvinBk87AHczhWKzm6hX+O4w=;
-        b=dMVT3Kg5WjyArEpQyZrvnzWzkhYZ1aYLhuMyDlRgsKcQFpP/Hmqf9V7eL5/b5ZRihG
-         xFttLd8LqSHZzVb/SbYUy891SlnB1s8C6Z6oH3FBWbc5vHzT2Tr3jDtWNywru16qf1OI
-         YU2keEklZjd2ZuS96E4FVMQtGp6fthxunCpU3+kb1N7mZg6jE5czDLzMdVFPp7hI0eTs
-         zdviiuS9o/SYdsyf8vFh/+KQsRrYWGjx/hkGSnkuwXv6Z26ccuTBI4ZaFRMq5h0A5czb
-         hMuYEhh+mT9Z0T8Bv1W8EV5aH5LT1aZ4f0EpQx8zIbtlRCbdWMVlT2YhP0xI3uyiQT+N
-         YXCw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZmlCUBRCPwLvDMyRKhmvFFYyCxvm8e49EMH29s2svEk=;
+        b=V7pzD6PvMlRTA677LV794Nzyy1S2TBgILbVqqW6ty0pWMAGXaCr9JdjcF4So27okbd
+         lVit+lRnXs05quAU4kmV8NadesAnDUqUDnKSSRv8uFKBvl13EWRY/3jwA4NIc4SW7E1/
+         wbN4UZGtuSLt5Tqu2/oDsQQGyxZzgoV3/g+iG6eGqjhkyCfL1dbMzl3YF0C4+06VhNQq
+         5gq77m4p+7PHXo3V7i5gNUiYcoBov8NDX2ksttB2+xDdKxOj68e0hFOm4zscS7mzILyi
+         /u7b+RecsNMfrR7+jZqk/9L6hBllhwQCV4deoye22sdy6UXWaMV3B65O+2zMckYRV+6v
+         WVgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OKgZ/poIpGJWM5cLb9CWvinBk87AHczhWKzm6hX+O4w=;
-        b=iSbOPRyc5KFQs0sv02GUyW0CcHMzM31Rf8Wj8wVmqjSW52mmET8ks4/zEtcx0mmKLQ
-         n8XEL0uzooqn4it/EH6McK5JRxyeZmsq91jthMkCxFKP5TJQXKKvRrS/es1PLbJzYRiQ
-         NXT1SW8/YjPW7bQu4MMqwPgmhpGY25Eg4nm3+qHJ4u1pI8qHzY10oC/MLu3mItV+ph87
-         r4oUEtokpzt4G+KLu1T3MI0hc5yG3D9gEzFURX+nLRMbFeBa780onlgFekzERl4Rgbxh
-         DzTb9IiUdkPl3+StjlFSZdUXRdyY3b1TNFIA3Rg63gNEt+IDORrTAxxe0RkI1esEhDNW
-         +f/Q==
-X-Gm-Message-State: AFqh2kpaOZaJK9Uu4f5ANrWmIJ1gQo+990uGHJdKSvPhxsf2TU0UodSk
-        H79gFv+tYK3j+RUsYMDdWtrqAQ==
-X-Google-Smtp-Source: AMrXdXtgqXraXM/O+xAGX7e9lH6r1vl84rwFRa03KZYcGerC4TryIqmA2oyYApcBe/Xt70ZG3nsPtg==
-X-Received: by 2002:a17:906:150d:b0:7c1:458b:a947 with SMTP id b13-20020a170906150d00b007c1458ba947mr37761802ejd.26.1674775974968;
-        Thu, 26 Jan 2023 15:32:54 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id lf16-20020a170907175000b008787134a939sm1212371ejc.18.2023.01.26.15.32.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 15:32:54 -0800 (PST)
-Message-ID: <96ab46f1-3733-e11c-ee4e-a70096fd400f@linaro.org>
-Date:   Fri, 27 Jan 2023 00:32:52 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZmlCUBRCPwLvDMyRKhmvFFYyCxvm8e49EMH29s2svEk=;
+        b=BAt7IdLLpLOUiYwG6NgayhvVfi3IlrPuD4DZsIfNPjKESP8g6tllzrzlcnqzJDHMCC
+         6rSrlwmCLqbf0YZafHxOfLVg0JQPXjjcr+rdnkg+xk+wDlL6PRzzjyEJKjkvaxKIwGw7
+         oKBchbVa3eJyOS6xVKd7eFdHm2MysiCLSAchbv4IYa0mHlatHMQMtpe/DhNwpf1ku16b
+         cAOr/IZ44AoIZp4VGH0IhprI0E5gRfPrtNuSK7CiO55n1cjGPMAvgwC5wgPil3plqNW4
+         iU+bOytMGI89I1FLM80yjb4aXOxxuYqX8usNU/tcEZmE21qBDsAdxO+iRhjsX27N0DEH
+         w5eA==
+X-Gm-Message-State: AO0yUKVU8g7whqIHspGCmx+xQ4hj7zaCo4/d76czo7fDengj4oL2iZjp
+        FcbA2APa2pWr5TXtFgpamSL5yeDaQEy41Tpc84U=
+X-Google-Smtp-Source: AK7set+jurZu+DhTB98Wjvu0Zv3kgBKXskjxfUjFlfo8kCzK0PCeGHCM1YBpxMKkAjD/DohwQdb1WzQR6i+wH7KREwg=
+X-Received: by 2002:a05:6a00:23c2:b0:592:5653:facb with SMTP id
+ g2-20020a056a0023c200b005925653facbmr365495pfc.28.1674776067755; Thu, 26 Jan
+ 2023 15:34:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v5 7/7] clk: qcom: add the driver for the MSM8996 APCS
- clocks
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230126230319.3977109-1-dmitry.baryshkov@linaro.org>
- <20230126230319.3977109-8-dmitry.baryshkov@linaro.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230126230319.3977109-8-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <150768c55722311699fdcf8f5379e8256749f47d.1674716617.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <150768c55722311699fdcf8f5379e8256749f47d.1674716617.git.christophe.leroy@csgroup.eu>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Fri, 27 Jan 2023 00:34:16 +0100
+Message-ID: <CA+fCnZcnwN-FGbteoMwFeHrGoM-5Gv5bs2udvRtzk-MT6s+B9w@mail.gmail.com>
+Subject: Re: [PATCH] kasan: Fix Oops due to missing calls to kasan_arch_is_ready()
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 26, 2023 at 8:08 AM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+> On powerpc64, you can build a kernel with KASAN as soon as you build it
+> with RADIX MMU support. However if the CPU doesn't have RADIX MMU,
+> KASAN isn't enabled at init and the following Oops is encountered.
+>
+>   [    0.000000][    T0] KASAN not enabled as it requires radix!
+>
+>   [    4.484295][   T26] BUG: Unable to handle kernel data access at 0xc00e000000804a04
+>   [    4.485270][   T26] Faulting instruction address: 0xc00000000062ec6c
+>   [    4.485748][   T26] Oops: Kernel access of bad area, sig: 11 [#1]
+>   [    4.485920][   T26] BE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
+>   [    4.486259][   T26] Modules linked in:
+>   [    4.486637][   T26] CPU: 0 PID: 26 Comm: kworker/u2:2 Not tainted 6.2.0-rc3-02590-gf8a023b0a805 #249
+>   [    4.486907][   T26] Hardware name: IBM pSeries (emulated by qemu) POWER9 (raw) 0x4e1200 0xf000005 of:SLOF,HEAD pSeries
+>   [    4.487445][   T26] Workqueue: eval_map_wq .tracer_init_tracefs_work_func
+>   [    4.488744][   T26] NIP:  c00000000062ec6c LR: c00000000062bb84 CTR: c0000000002ebcd0
+>   [    4.488867][   T26] REGS: c0000000049175c0 TRAP: 0380   Not tainted  (6.2.0-rc3-02590-gf8a023b0a805)
+>   [    4.489028][   T26] MSR:  8000000002009032 <SF,VEC,EE,ME,IR,DR,RI>  CR: 44002808  XER: 00000000
+>   [    4.489584][   T26] CFAR: c00000000062bb80 IRQMASK: 0
+>   [    4.489584][   T26] GPR00: c0000000005624d4 c000000004917860 c000000001cfc000 1800000000804a04
+>   [    4.489584][   T26] GPR04: c0000000003a2650 0000000000000cc0 c00000000000d3d8 c00000000000d3d8
+>   [    4.489584][   T26] GPR08: c0000000049175b0 a80e000000000000 0000000000000000 0000000017d78400
+>   [    4.489584][   T26] GPR12: 0000000044002204 c000000003790000 c00000000435003c c0000000043f1c40
+>   [    4.489584][   T26] GPR16: c0000000043f1c68 c0000000043501a0 c000000002106138 c0000000043f1c08
+>   [    4.489584][   T26] GPR20: c0000000043f1c10 c0000000043f1c20 c000000004146c40 c000000002fdb7f8
+>   [    4.489584][   T26] GPR24: c000000002fdb834 c000000003685e00 c000000004025030 c000000003522e90
+>   [    4.489584][   T26] GPR28: 0000000000000cc0 c0000000003a2650 c000000004025020 c000000004025020
+>   [    4.491201][   T26] NIP [c00000000062ec6c] .kasan_byte_accessible+0xc/0x20
+>   [    4.491430][   T26] LR [c00000000062bb84] .__kasan_check_byte+0x24/0x90
+>   [    4.491767][   T26] Call Trace:
+>   [    4.491941][   T26] [c000000004917860] [c00000000062ae70] .__kasan_kmalloc+0xc0/0x110 (unreliable)
+>   [    4.492270][   T26] [c0000000049178f0] [c0000000005624d4] .krealloc+0x54/0x1c0
+>   [    4.492453][   T26] [c000000004917990] [c0000000003a2650] .create_trace_option_files+0x280/0x530
+>   [    4.492613][   T26] [c000000004917a90] [c000000002050d90] .tracer_init_tracefs_work_func+0x274/0x2c0
+>   [    4.492771][   T26] [c000000004917b40] [c0000000001f9948] .process_one_work+0x578/0x9f0
+>   [    4.492927][   T26] [c000000004917c30] [c0000000001f9ebc] .worker_thread+0xfc/0x950
+>   [    4.493084][   T26] [c000000004917d60] [c00000000020be84] .kthread+0x1a4/0x1b0
+>   [    4.493232][   T26] [c000000004917e10] [c00000000000d3d8] .ret_from_kernel_thread+0x58/0x60
+>   [    4.495642][   T26] Code: 60000000 7cc802a6 38a00000 4bfffc78 60000000 7cc802a6 38a00001 4bfffc68 60000000 3d20a80e 7863e8c2 792907c6 <7c6348ae> 20630007 78630fe0 68630001
+>   [    4.496704][   T26] ---[ end trace 0000000000000000 ]---
+>
+> The Oops is due to kasan_byte_accessible() not checking the readiness
+> of KASAN. Add missing call to kasan_arch_is_ready() and bail out when
+> not ready. The same problem is observed with ____kasan_kfree_large()
+> so fix it the same.
+>
+> Also, as KASAN is not available and no shadow area is allocated for
+> linear memory mapping, there is no point in allocating shadow mem for
+> vmalloc memory as shown below in /sys/kernel/debug/kernel_page_tables
+>
+>   ---[ kasan shadow mem start ]---
+>   0xc00f000000000000-0xc00f00000006ffff  0x00000000040f0000       448K         r  w       pte  valid  present        dirty  accessed
+>   0xc00f000000860000-0xc00f00000086ffff  0x000000000ac10000        64K         r  w       pte  valid  present        dirty  accessed
+>   0xc00f3ffffffe0000-0xc00f3fffffffffff  0x0000000004d10000       128K         r  w       pte  valid  present        dirty  accessed
+>   ---[ kasan shadow mem end ]---
+>
+> So, also verify KASAN readiness before allocating and poisoning
+> shadow mem for VMAs.
 
+Hi Cristophe,
 
-On 27.01.2023 00:03, Dmitry Baryshkov wrote:
-> Add a simple driver handling the APCS clocks on MSM8996. For now it
-> supports just a single aux clock, linking GPLL0 to CPU and CBF clocks.
-> 
-> Note, there is little sense in registering sys_apcs_aux as a child of
-> gpll0. The PLL is always-on. And listing the gpll0 as a property of the
-> apcs would delay its probing until the GCC has been probed (while we
-> would like for the apcs to be probed as early as possible).
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Would it possible to unify kasan_arch_is_ready with the already
+existing kasan_enabled check?
 
-Konrad
->  drivers/clk/qcom/Makefile       |  2 +-
->  drivers/clk/qcom/apcs-msm8996.c | 88 +++++++++++++++++++++++++++++++++
->  2 files changed, 89 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/clk/qcom/apcs-msm8996.c
-> 
-> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-> index 3194465dd02c..a8ed1f38b2f7 100644
-> --- a/drivers/clk/qcom/Makefile
-> +++ b/drivers/clk/qcom/Makefile
-> @@ -52,7 +52,7 @@ obj-$(CONFIG_MSM_MMCC_8998) += mmcc-msm8998.o
->  obj-$(CONFIG_QCOM_A53PLL) += a53-pll.o
->  obj-$(CONFIG_QCOM_A7PLL) += a7-pll.o
->  obj-$(CONFIG_QCOM_CLK_APCS_MSM8916) += apcs-msm8916.o
-> -obj-$(CONFIG_QCOM_CLK_APCC_MSM8996) += clk-cpu-8996.o
-> +obj-$(CONFIG_QCOM_CLK_APCC_MSM8996) += apcs-msm8996.o clk-cpu-8996.o
->  obj-$(CONFIG_QCOM_CLK_APCS_SDX55) += apcs-sdx55.o
->  obj-$(CONFIG_QCOM_CLK_RPM) += clk-rpm.o
->  obj-$(CONFIG_QCOM_CLK_RPMH) += clk-rpmh.o
-> diff --git a/drivers/clk/qcom/apcs-msm8996.c b/drivers/clk/qcom/apcs-msm8996.c
-> new file mode 100644
-> index 000000000000..48d22572b6ae
-> --- /dev/null
-> +++ b/drivers/clk/qcom/apcs-msm8996.c
-> @@ -0,0 +1,88 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Qualcomm APCS clock controller driver
-> + *
-> + * Copyright (c) 2022, Linaro Limited
-> + * Author: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/delay.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#define APCS_AUX_OFFSET	0x50
-> +
-> +#define APCS_AUX_DIV_MASK GENMASK(17, 16)
-> +#define APCS_AUX_DIV_2 0x1
-> +
-> +static int qcom_apcs_msm8996_clk_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device *parent = dev->parent;
-> +	struct regmap *regmap;
-> +	struct clk_hw *hw;
-> +	unsigned int val;
-> +	int ret = -ENODEV;
-> +
-> +	regmap = dev_get_regmap(parent, NULL);
-> +	if (!regmap) {
-> +		dev_err(dev, "failed to get regmap: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	regmap_read(regmap, APCS_AUX_OFFSET, &val);
-> +	regmap_update_bits(regmap, APCS_AUX_OFFSET, APCS_AUX_DIV_MASK,
-> +			   FIELD_PREP(APCS_AUX_DIV_MASK, APCS_AUX_DIV_2));
-> +
-> +	/*
-> +	 * This clock is used during CPU cluster setup while setting up CPU PLLs.
-> +	 * Add hardware mandated delay to make sure that the sys_apcs_aux clock
-> +	 * is stable (after setting the divider) before continuing
-> +	 * bootstrapping to keep CPUs from ending up in a weird state.
-> +	 */
-> +	udelay(5);
-> +
-> +	/*
-> +	 * As this clocks is a parent of the CPU cluster clocks and is actually
-> +	 * used as a parent during CPU clocks setup, we want for it to gegister
-> +	 * as early as possible, without letting fw_devlink to delay probing of
-> +	 * either of the drivers.
-> +	 *
-> +	 * The sys_apcs_aux is a child (divider) of gpll0, but we register it
-> +	 * as a fixed rate clock instead to ease bootstrapping procedure. By
-> +	 * doing this we make sure that CPU cluster clocks are able to be setup
-> +	 * early during the boot process (as it is recommended by Qualcomm).
-> +	 */
-> +	hw = devm_clk_hw_register_fixed_rate(dev, "sys_apcs_aux", NULL, 0, 300000000);
-> +	if (IS_ERR(hw))
-> +		return PTR_ERR(hw);
-> +
-> +	return devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, hw);
-> +}
-> +
-> +static struct platform_driver qcom_apcs_msm8996_clk_driver = {
-> +	.probe = qcom_apcs_msm8996_clk_probe,
-> +	.driver = {
-> +		.name = "qcom-apcs-msm8996-clk",
-> +	},
-> +};
-> +
-> +/* Register early enough to fix the clock to be used for other cores */
-> +static int __init qcom_apcs_msm8996_clk_init(void)
-> +{
-> +	return platform_driver_register(&qcom_apcs_msm8996_clk_driver);
-> +}
-> +postcore_initcall(qcom_apcs_msm8996_clk_init);
-> +
-> +static void __exit qcom_apcs_msm8996_clk_exit(void)
-> +{
-> +	platform_driver_unregister(&qcom_apcs_msm8996_clk_driver);
-> +}
-> +module_exit(qcom_apcs_msm8996_clk_exit);
-> +
-> +MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Qualcomm MSM8996 APCS clock driver");
+Both functions seem to be serving a similar purpose: for example this
+patch adds kasan_arch_is_ready into __kasan_poison_vmalloc, which is
+called by kasan_poison_vmalloc when kasan_enabled returns true.
+
+The kasan_enabled is only implemented for HW_TAGS right now, but it
+should be easy enough to make it work other cases by
+kasan_flag_enabled into common.c and adding __wrappers for
+shadow-related functions into include/linux/kasan.h. This way
+architectures won't need to define their own static key and duplicate
+the functionality.
+
+I don't mind having this patch applied as is, considering that it's a
+fix. However, if the unification that I mentioned is possible, that
+would be a nice improvement.
+
+Thanks!
