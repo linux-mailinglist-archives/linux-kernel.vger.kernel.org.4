@@ -2,115 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECCD67C870
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B780567C86D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237193AbjAZKV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
+        id S237112AbjAZKV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:21:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237103AbjAZKVj (ORCPT
+        with ESMTP id S237101AbjAZKVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:21:39 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B49CA5EE;
-        Thu, 26 Jan 2023 02:21:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674728477; x=1706264477;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/Wdj5n8WybsZYtkV2jOsasrUUhnq8i1MgcmZSnWSJSg=;
-  b=FyiHZ00AmlV5cMXIVuXLnwRdxqk23SJon6/e8tKZ4jsvncTIYqhj0Bmh
-   Cse5ZiTgtXV5BZn0/9us917oyeiXkTNuygyxvvvEN9JLBpEHQmWeab40z
-   R6wuh1/DOr5/qwlVxx76NNSp5b+NR19c7G8dFSjbk2aD9Q80NBwnxWN+l
-   jsheza8XPogUUS0LpcntvzDCGkaGNedUidC1ad+Pt0J7FfMYfgGuW2r4b
-   F3LkKM2M/MLEZWQl09mNLbfZc5gJFVRhI9n+LbDONNFK9B23gLYTKNBBg
-   22+FS5ANsl5KSISvtQKPTBsKCbCVa8L27mNF6VYEQ0aQKe6h0ZLTLOFY5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="328861727"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="328861727"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 02:21:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="662804905"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="662804905"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 26 Jan 2023 02:21:09 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pKzNS-00FKzV-1t;
-        Thu, 26 Jan 2023 12:21:06 +0200
-Date:   Thu, 26 Jan 2023 12:21:06 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
-Message-ID: <Y9JUEv66Gze8FjMZ@smile.fi.intel.com>
-References: <Y8gUuqLBXsXQoNUC@smile.fi.intel.com>
- <aba49d82-c76f-7ff2-751c-d1be7b8f3bca@ideasonboard.com>
- <Y8rFh6zO7Hp9mLxE@smile.fi.intel.com>
- <4286abe2-f23f-d4c9-ef18-f351af7a3a8b@ideasonboard.com>
- <Y9EcRlooHwIjOqiZ@smile.fi.intel.com>
- <cad92dbb-43ef-fa8c-1962-13c4a8578899@ideasonboard.com>
- <Y9FBlMl4b3l1zVck@smile.fi.intel.com>
- <5d208710-f284-e6e9-18dc-f5ef63a9ea44@ideasonboard.com>
- <Y9FKcoVlgUWR4rhn@smile.fi.intel.com>
- <04a82b08-524f-8d03-ac47-73d826907fc3@ideasonboard.com>
+        Thu, 26 Jan 2023 05:21:38 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C7730CC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:21:13 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id k10-20020a17090a590a00b0022ba875a1a4so4817487pji.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:21:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ddKdS4x8c4ZSI9PbKdla4xMHlbecpUYnHnf7KqPY/v4=;
+        b=TbbP3dSXNHK+WCKiSy8NwSY69jfIfGRylpoYBlbfh8Vyltgw9fYthWHobDknJ7RrD8
+         qJvMB1dc2VVJVzixsiB98VdDTvQSlV1ePPrcoMw7fzWe+wYyrsHjYub3b9lI4FZT6Ylv
+         Xqck8nFJVj1FdQNNNDVKxqcZTcJWFMzAIMkgUPORcrgMsOJwppjJB5XorGbQjek8fWCr
+         n9cwovZymXFJ1OoXPFBP76X1WHnZXxxxWYpBfpz5XLTszY/qj1k5FiS0emnp8wdOzWcD
+         uxCpEpZa3j8EMmrjcNi8kCmCJHbl/t6DtVkxkqzwI3OgbzAhHz6Pv1hxa+lw01tZn5gZ
+         UqRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ddKdS4x8c4ZSI9PbKdla4xMHlbecpUYnHnf7KqPY/v4=;
+        b=MoRJaCqai1j2Vb7MMU9etcFBBf0i8IJQJp0Ll2y0tTEug3CmR6tiZ7WChg485a6EId
+         4iOhiNhq27NsqpLh7xd+Ez3Rw7Qa57tTmX2bWPazB4srg+lOr8YJ0A8gKkb0ILhqJS1D
+         YsZ9vfMBbHnNJVV2vKwOEKWu+8cbdM+fJ0QEkPgEZK15EWV88uN3Sq853dykfFj2TybW
+         AVBL6cYIuuGPyqViFkiOqIjhH0ZU4JOmC2+YzI95dvF6ZAY/+q+0Ca3AQkw6n3Gydhau
+         rrGc1oqVnOFGqGcoOO0KJtpCSL8njuZQDyOfz4ekGs4XXz4hW/3Hi1Zeg9VaamxRwcli
+         mi5A==
+X-Gm-Message-State: AO0yUKVcUZHyl2C5WzMEXA4u3RI5y5WYCg/nHuy8fCeq96yBKGC4ZW2n
+        UJ9Pne9FjFGu0+61OxzgClJql+L6BEepVPimOBo=
+X-Google-Smtp-Source: AK7set8wBOA6iH5NzIAsXOU3Ougawg/ftwl+WPlhykJXs/aFBkPdglxIhrHKHeeT4h1XWtB4gbdyF6+ZUdsbf9kKv8Y=
+X-Received: by 2002:a17:90a:7f82:b0:22c:249:c116 with SMTP id
+ m2-20020a17090a7f8200b0022c0249c116mr1075161pjl.23.1674728472577; Thu, 26 Jan
+ 2023 02:21:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <04a82b08-524f-8d03-ac47-73d826907fc3@ideasonboard.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7300:ec15:b0:99:6fd6:b648 with HTTP; Thu, 26 Jan 2023
+ 02:21:12 -0800 (PST)
+Reply-To: subik7633@gmail.com
+From:   Susan Bikarm <biksusan825@gmail.com>
+Date:   Thu, 26 Jan 2023 02:21:12 -0800
+Message-ID: <CAP0wf6xgBoHy0xWjvQuiDuDkvHtOL04jGYnR=eD=p87r3ca+fw@mail.gmail.com>
+Subject: Please can i have your attention
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 10:41:47AM +0200, Tomi Valkeinen wrote:
-> On 25/01/2023 17:27, Andy Shevchenko wrote:
+Dear ,
 
-...
+Please can I have your attention and possibly help me for humanity's
+sake please. I am writing this message with a heavy heart filled with
+sorrows and sadness.
+Please if you can respond, i have an issue that i will be most
+grateful if you could help me deal with it please.
 
-> > But I probably don't understand the ATR structure and what exactly we need to
-> > pass to it, perhaps it also can be replaced with properties (note, that we have
-> > some interesting ones that called references, which is an alternative to DT
-> > phandle).
-> 
-> Well, maybe this needs a Linux bus implementation. I'm not that familiar
-> with implementing a bus, but I think that would make it easier to share data
-> between the deserializer and the serializer. A bus sounds a bit like an
-> overkill for a 1-to-1 connection, used by a few drivers, but maybe it
-> wouldn't be too much code.
-
-Have you looked at auxiliary bus (appeared a few releases ago in kernel)?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Susan
