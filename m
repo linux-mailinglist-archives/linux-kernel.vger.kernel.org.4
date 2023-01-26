@@ -2,148 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A97A067CA79
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8094467CA75
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237182AbjAZMEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 07:04:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S236952AbjAZMEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 07:04:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236821AbjAZME3 (ORCPT
+        with ESMTP id S236364AbjAZMED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:04:29 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D23E8688;
-        Thu, 26 Jan 2023 04:04:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VOYYOFluZ3iiE3C4UV5w2zwSbmkrX31OvmObcOHb8QY=; b=a4Dxr3QUr9TtmHfliGOtcckkzx
-        BrP5GWkLqc27yiUm4kwh19HaOVWBXahjBqw/wPDcEhVzPchelLHiGctMWCq8KVERaxBV+MzPRs7YD
-        s7xFIhhUHFTBcr0IBv19oaJvydg7OHzPC9cZD3k9h8yXi9iumBnFnHKj7fbxel0aGk6MTYEI8n7rz
-        VJWfPck6gySngS1vUKbLJbhJsn7dmxZonWOTlYAnzhCXODc79DpGm0cv4Ct/FtpQKWmz2xi7E/5Y5
-        mgtej+AQW8D2kRVq+Ru0p5qzcwJ9vdCP54+cxPk9OJYRNIX6YKokDu1hmNfkpTOHL5hQ4w8qDBU6c
-        ml/cqMcw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pL0yo-006hzg-Em; Thu, 26 Jan 2023 12:03:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CDDFC3002BF;
-        Thu, 26 Jan 2023 13:03:44 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 96DF92082E0E1; Thu, 26 Jan 2023 13:03:44 +0100 (CET)
-Date:   Thu, 26 Jan 2023 13:03:44 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH resend] iopoll: Call cpu_relax() in busy loops
-Message-ID: <Y9JsIJat3sZU2rl1@hirez.programming.kicks-ass.net>
-References: <8d492ee4a391bd089a01c218b0b4e05cf8ea593c.1674729407.git.geert+renesas@glider.be>
+        Thu, 26 Jan 2023 07:04:03 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B1AF9
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:04:01 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so3128686wmb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:04:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GVvADtVeyYptFWF0MydblAJtxtKctGx6MpVLSGR2LlE=;
+        b=L84Uy1hwTkVHRhQ3dVQI6CQdYNLEwmKIHOfwhOdxyvMcy4OUH4bylSASxR/tqpX8p5
+         NLXY5VCrscWlUqc1bLDhnR/DbAFgomJ3iU+D9Kcwtr4UZLZve+oAzu8OFTcU66e31+hL
+         fATs8XFrDz5IRN/5eL6slYS4c7Iehsnko3Kz6f7w71LzCtrtJfKf8DTk/Xc/5Y7FuK/F
+         CmMxZ/cddW8JIVKNfk3da+Yzo29zfJvoT0qNZqLRxDCMxEK0i7EBXbkirjP+n8OnKdcI
+         PH/6dQOIT53Kr0zJKrRl/RwhZxLkAinC3dOqOwqBqZXiD+FOiVGMtL+y6kR3yUNKjBdn
+         a5AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GVvADtVeyYptFWF0MydblAJtxtKctGx6MpVLSGR2LlE=;
+        b=CGDgfBgpaekbfA0+EKsovZzhpinNgv/8S5W5T82gM1vbqpNqjHXsttZoxjdHLHKIM5
+         PlA7LMi/Rc7fPq4ltHqkAyp5QSY8WrSftDqhlXEQCmjHu/l25FAxLWOrqZnc6Ax4u1UR
+         4eClTDLgr2Ga88UNmQJVnVpqzdqB1Cd85jCBc7uk7k5XSPK0gAX5mFhs/pB+mhJtUU//
+         CdYrUn9cYW/SImZ2t4VOAME2N9aAgfj15F2DRmg0VJsso3GNn1lh5RcYg4OlDN287xnI
+         FY4MyVg6dEiXJ9pkv5mk1b00LJbEqAARnhYm3G32yoQ4pND7Ap87SFUwb7tjDBgaMg+D
+         4rwA==
+X-Gm-Message-State: AFqh2kpyEGjBuwvn2mi/TLpuPzOllwZv699FlZMreUFDxATHjItZLqaA
+        AtBCqLrvTn25tUJnCcuX/VPGAw==
+X-Google-Smtp-Source: AMrXdXvswf6o+FLrL8oSK0T/z89VYOCOqxTXsD7xa1Luv/CMKcJo5ayhihdj+Fv0ZyQgV3x979I4ww==
+X-Received: by 2002:a05:600c:214f:b0:3cf:7197:e67c with SMTP id v15-20020a05600c214f00b003cf7197e67cmr35714366wml.25.1674734640378;
+        Thu, 26 Jan 2023 04:04:00 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l38-20020a05600c08a600b003d358beab9dsm1200363wmp.47.2023.01.26.04.03.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 04:03:59 -0800 (PST)
+Message-ID: <3d076b05-6953-abe4-44de-3badacd55887@linaro.org>
+Date:   Thu, 26 Jan 2023 13:03:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d492ee4a391bd089a01c218b0b4e05cf8ea593c.1674729407.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [RFC PATCH v2 21/22] ASoC: dt-bindings: Add Q6USB backend
+ bindings
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-22-quic_wcheng@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230126031424.14582-22-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:45:37AM +0100, Geert Uytterhoeven wrote:
-> It is considered good practice to call cpu_relax() in busy loops, see
-> Documentation/process/volatile-considered-harmful.rst.  This can not
-> only lower CPU power consumption or yield to a hyperthreaded twin
-> processor, but also allows an architecture to mitigate hardware issues
-> (e.g. ARM Erratum 754327 for Cortex-A9 prior to r2p0) in the
-> architecture-specific cpu_relax() implementation.
+On 26/01/2023 04:14, Wesley Cheng wrote:
+> Add a dt-binding to describe the definition of enabling the Q6 USB backend
+> device for audio offloading.  The node carries information, which is passed
+> along to the QC USB SND class driver counterpart.  These parameters will be
+> utilized during QMI stream enable requests.
+
+Subject: drop second/last, redundant "bindings". The "dt-bindings"
+prefix is already stating that these are bindings.
+
 > 
-> As the iopoll helpers lack calls to cpu_relax(), people are sometimes
-> reluctant to use them, and may fall back to open-coded polling loops
-> (including cpu_relax() calls) instead.
-> 
-> Fix this by adding calls to cpu_relax() to the iopoll helpers:
->   - For the non-atomic case, it is sufficient to call cpu_relax() in
->     case of a zero sleep-between-reads value, as a call to
->     usleep_range() is a safe barrier otherwise.
->   - For the atomic case, cpu_relax() must be called regardless of the
->     sleep-between-reads value, as there is no guarantee all
->     architecture-specific implementations of udelay() handle this.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-In addition to these dodgy architecture fails, cpu_relax() is also a
-compiler barrier, it is not immediately obvious that the @op argument
-'function' will result in an actual function call (inlining ftw).
-
-Where a function call is a C sequence point, this is lost on inlining.
-Therefore, with agressive enough optimization it might be possible for
-the compiler to hoist the:
-
-	(val) = op(args);
-
-'load' out of the loop because it doesn't see the value changing. The
-addition of cpu_relax() will inhibit this.
-
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > ---
-> Resent with a larger audience due to lack of comments.
+>  .../bindings/sound/qcom,q6usb-dais.yaml       | 55 +++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
 > 
-> This has been discussed before, but I am not aware of any patches moving
-> forward:
->   - "Re: [PATCH 6/7] clk: renesas: rcar-gen3: Add custom clock for PLLs"
->     https://lore.kernel.org/all/CAMuHMdWUEhs=nwP+a0vO2jOzkq-7FEOqcJ+SsxAGNXX1PQ2KMA@mail.gmail.com/
->   - "Re: [PATCH v2] clk: samsung: Prevent potential endless loop in the PLL set_rate ops"
->     https://lore.kernel.org/all/20200811164628.GA7958@kozik-lap
-> ---
->  include/linux/iopoll.h | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/include/linux/iopoll.h b/include/linux/iopoll.h
-> index 2c8860e406bd8cae..73132721d1891a2e 100644
-> --- a/include/linux/iopoll.h
-> +++ b/include/linux/iopoll.h
-> @@ -53,6 +53,8 @@
->  		} \
->  		if (__sleep_us) \
->  			usleep_range((__sleep_us >> 2) + 1, __sleep_us); \
-> +		else \
-> +			cpu_relax(); \
+> diff --git a/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml b/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
+> new file mode 100644
+> index 000000000000..e24b4d52fa7e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/qcom,q6usb-dais.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/qcom,q6usb-dais.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm ASoC USB backend DAI
+> +
+> +maintainers:
+> +  - Wesley Cheng <quic_wcheng@quicinc.com>
+> +
+> +description:
+> +  The Q6USB backend is a supported AFE port on the Q6DSP. This backend
+> +  driver will communicate the required settings to the QC USB SND class
+> +  driver for properly enabling the audio stream.  Parameters defined
+> +  under this node will carry settings, which will be passed along during
+> +  the QMI stream enable request.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,q6usb-dais
+> +
+> +  iommus:
+> +    maxItems: 1
+> +
+> +  "#sound-dai-cells":
+> +    const: 1
+> +
+> +  qcom,usb-audio-stream-id:
+> +    description:
+> +      SID for the Q6DSP processor for IOMMU mapping.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  qcom,usb-audio-intr-num:
+> +    description:
+> +      Desired XHCI interrupter number to use.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +required:
+> +  - compatible
+> +  - '#sound-dai-cells'
 
-There's a simplicitly argument to be had for making it unconditional
-here too I suppose. usleep() is 'slow' anyway.
+Use consistent quotes - either " or '
 
->  	} \
->  	(cond) ? 0 : -ETIMEDOUT; \
->  })
-> @@ -95,6 +97,7 @@
->  		} \
->  		if (__delay_us) \
->  			udelay(__delay_us); \
-> +		cpu_relax(); \
->  	} \
->  	(cond) ? 0 : -ETIMEDOUT; \
->  })
-> -- 
-> 2.34.1
-> 
+> +  - qcom,usb-audio-intr-num
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    usbdai: usbd {
+
+Generic node name, so: dais
+
+Drop also label, not needed/used in example.
+
+> +      compatible = "qcom,q6usb-dais";
+> +      #sound-dai-cells = <1>;
+> +      iommus = <&apps_smmu 0x180f 0x0>;
+> +      qcom,usb-audio-stream-id = <0xf>;
+> +      qcom,usb-audio-intr-num = <2>;
+> +    };
+
+Best regards,
+Krzysztof
+
