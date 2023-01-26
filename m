@@ -2,76 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CD867D80D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C06167D814
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233039AbjAZV5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S232315AbjAZWAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:00:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbjAZV5B (ORCPT
+        with ESMTP id S231253AbjAZV7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:57:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187DB728F6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:56:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23280B81DC2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:56:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 746E6C433EF;
-        Thu, 26 Jan 2023 21:56:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674770178;
-        bh=89eL4l2vH6KCZTfrG7vyQ7zHN+D+4zoTm+z0+a6kYA4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=X3Ijtpavk2nl0kbJmvOx/mICvbhWFQO+eT+KZXaFBFXVtSNMzNUzEY7dqXNQSaKTs
-         HCeHOSi2V6Fd8NkozdRvZfkrWcdKUnFt+YiuqmO2g2Rft23oTXh4PgmuKG2juWiXWb
-         f5GEeVS3077wko+ePk0NLg+SjFiEMtKMGG2eBkjLiPn7rNU3UrhbVedKQNkAKsJ+jl
-         Z5gsJHrhp+xjJCoqDDAI6xKsa5OCnt6SCqSg9im1sL8trTfyQylyo84usrcDZfvGFw
-         HrHiBLRwKG51MTRJSOWaRddrNlg/l6yUrFtKjL4r/CcPia9NxdeAXY8kr/f5qyZxHa
-         iVx+J1bdtqohQ==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        cocci@inria.fr (moderated list:COCCINELLE/Semantic Patches (SmPL)),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] scripts: coccicheck: Use /usr/bin/env
-Date:   Thu, 26 Jan 2023 21:56:12 +0000
-Message-Id: <20230126215612.86436-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        Thu, 26 Jan 2023 16:59:50 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AD273748;
+        Thu, 26 Jan 2023 13:59:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OjhglGBtSbHObWDXAQNTT3eTz1SwBz2eUzou0wVBXL4=; b=ZAhKcJYH33xoZNrKKxREfVuiKH
+        FE2ksTaRnzRNGB7IjpkdxrQCJVPWs339OBUOQlTkneAfPxtnhoD14ttrIN7GVO4aDCyQzKuiUJKtl
+        ivkcVgBY7xYxb89/MCqUyU0tbGFdeKsxaMqlt/jWodNWlpaq4GQ7faOfpFmYKCJ1c+lnBHVmApfvb
+        DMFPueqgxVxAQhHmDrqLaSUp1TnqHiNvn4sde+xASvB5wvg9YuR9lXOX/xzIXsj0yK/ICoaDmlN+A
+        CDL6eN9pCiUuU9x1vYn2sHeQ/G8hKMy51an4yw8P65vo0syurSlKlXW/MXAF6xgl5cAZfDBiyGiz3
+        dQJAHSCA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pLAHQ-004K6H-2O;
+        Thu, 26 Jan 2023 21:59:36 +0000
+Date:   Thu, 26 Jan 2023 21:59:36 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v11 2/8] iov_iter: Add a function to extract a page list
+ from an iterator
+Message-ID: <Y9L3yA+B1rrnrGK8@ZenIV>
+References: <20230126141626.2809643-1-dhowells@redhat.com>
+ <20230126141626.2809643-3-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126141626.2809643-3-dhowells@redhat.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If bash is not located under /bin, coccicheck fails to run.  In the real
-world, this happens for instance when NixOS is used in the host.  Instead,
-use /usr/bin/env to locate the executable binary for bash.
+On Thu, Jan 26, 2023 at 02:16:20PM +0000, David Howells wrote:
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- scripts/coccicheck | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +/**
+> + * iov_iter_extract_will_pin - Indicate how pages from the iterator will be retained
+> + * @iter: The iterator
+> + *
+> + * Examine the iterator and indicate by returning true or false as to how, if
+> + * at all, pages extracted from the iterator will be retained by the extraction
+> + * function.
+> + *
+> + * %true indicates that the pages will have a pin placed in them that the
+> + * caller must unpin.  This is must be done for DMA/async DIO to force fork()
+> + * to forcibly copy a page for the child (the parent must retain the original
+> + * page).
+> + *
+> + * %false indicates that no measures are taken and that it's up to the caller
+> + * to retain the pages.
+> + */
+> +static inline bool iov_iter_extract_will_pin(const struct iov_iter *iter)
+> +{
+> +	return user_backed_iter(iter);
+> +}
+> +
 
-diff --git a/scripts/coccicheck b/scripts/coccicheck
-index 2956fce8fa4f..b4d0d6eb3e73 100755
---- a/scripts/coccicheck
-+++ b/scripts/coccicheck
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/usr/bin/env bash
- # SPDX-License-Identifier: GPL-2.0
- # Linux kernel coccicheck
- #
--- 
-2.38.1
-
+Wait a sec; why would we want a pin for pages we won't be modifying?
+A reference - sure, but...
