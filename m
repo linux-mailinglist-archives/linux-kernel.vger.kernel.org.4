@@ -2,156 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E7367D8C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA4467D8CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbjAZWtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
+        id S231961AbjAZWvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232388AbjAZWtj (ORCPT
+        with ESMTP id S230205AbjAZWvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:49:39 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2087.outbound.protection.outlook.com [40.107.244.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFAF577C4;
-        Thu, 26 Jan 2023 14:49:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eJ7JvpXsrwFjOt9+HpB6z9eH79sGY+0+PSzMcrTEcowNzgrWNuCj6C8ouyKqFJg5uGu8GjgYZRNpMIeOsZpcSXSYbanKZa412L1NQX35QMccyUrkwdv+ewLIctL1aiEA3V0DdR/CHL303cJgcHckG5wEi+cOcGBq53DsG1OYpQyMc40bdbr11lHQUSVxg2cKmE1NtoEF/XTtNN6vPDDfoZxnlFNWnNTnNpnZIh95jvSTthY0DOEVeEfo2O4mHqC4DMeuk9i0hmzz1Nn7rQjy7eVsKznyLbocXych8sk6UiJGfU2qBGPj81khNGhPQSrdHtFVTb9NWzVI2JyF5WAHVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=72MlngrVJhO8vi22N2nyiNPWPhFojC+8hVnkjp9yON4=;
- b=EUoX8164jG5JoMsrzktbsbI5rSeQTWC1pIixo4tJ/7CCRsvQ2BLx2KXW3DPG/fG0dbbsO4nAmu1yhKgmX76h04B5F0+FDgc7g7lTzorLtq+AdmvgUKeUHOtfTT5B5rVupSRcXjyUDD4mz/zKHtpLu1G7vt1RoWXf9L9iaDtJwNZp/VGVWsFl+b6Qc80G8iM+u8DCezUGHnYgcXfy/B9SCpf1l0Y35p30JIGUzteMjY9B6YpaZLE4bW70bXkp5IYxBYKiKjUGLUUp46oN0YAF66qkWigBYqYoFKyy4/SNSCPl18saAFzG6SOztheq2imAdSceb/ms7MmUuS/5s+pbGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=zeniv.linux.org.uk
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=72MlngrVJhO8vi22N2nyiNPWPhFojC+8hVnkjp9yON4=;
- b=RtyK/11kkuP1qrdWTvco3wocOCGASsIKXoDnEJQMN1xKj1kh10Am1CcGbHDB6Y7DMAer813Sfr/6+0cMi2y+6bF9oDLpjZ4dZA+7gOb+mkRGuZ0IsOMcKFkq2qRm7BXjzMfGibdVxFEaRIxW1Cf1fIQe2nGp03CVU9zUzr44syAshLOtYilBrb+e4glmIioSir4HSw6Kjifusu3bHcNzYu2en4iIcFYl+FwpCHYk1HH75EAcCZaSIexlQE+5gOg1no/go3N7kQ93GdjYep2qKtJefvIukfiA/bwO4HIh45wCtsZSW4mL12it3ApLpDuiH1YPk3lOvKDuNsvB18lJIw==
-Received: from DM6PR13CA0032.namprd13.prod.outlook.com (2603:10b6:5:bc::45) by
- CY5PR12MB6370.namprd12.prod.outlook.com (2603:10b6:930:20::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.22; Thu, 26 Jan 2023 22:49:27 +0000
-Received: from DM6NAM11FT009.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:bc:cafe::f4) by DM6PR13CA0032.outlook.office365.com
- (2603:10b6:5:bc::45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22 via Frontend
- Transport; Thu, 26 Jan 2023 22:49:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT009.mail.protection.outlook.com (10.13.173.20) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.22 via Frontend Transport; Thu, 26 Jan 2023 22:49:27 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 26 Jan
- 2023 14:49:18 -0800
-Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 26 Jan
- 2023 14:49:18 -0800
-Message-ID: <bf3edf11-02d1-128c-ebc0-11bb38404ac9@nvidia.com>
-Date:   Thu, 26 Jan 2023 14:49:17 -0800
+        Thu, 26 Jan 2023 17:51:07 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36EA47ECD
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:51:05 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id y69so1189898iof.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:51:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7zvY1NZIKVudFjIBW9E/G/NnVjL+16aZwag2juBW8hg=;
+        b=PqSCzzSwgfPbeBwBYPYREBBLEW6iHqVw8wj07TiWAyIpMp1ebEGAwiMpW1VTodraYN
+         G/HLMa/GIIQv3SdmPB2F3ZNSqZ5Sf+49w22fJhcdTi0z8irz26iikYm+6IEofGWo8thi
+         2YqtStdW3bHgIrNJlxjR2vM3ovEo/CNbdlcv5xDjXdOuSEJNHxu5+eTQ5t1xI8m92mi7
+         ZZOOXfJxa/3XE+4IDcpHSGGW936gOt8HIrYKQdKrqTP8oUCSf/WIVSSWohxZ4lJLO/tQ
+         3EfEMckl85d67DhJ8hZzn2zrkJHTdVP/aYFlP3nNWj4MvdS2AGrh6meL/RhAlqq++l9i
+         W3Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7zvY1NZIKVudFjIBW9E/G/NnVjL+16aZwag2juBW8hg=;
+        b=QJMGB3Ji1KSc4v3SQ75beX/+hBGirEU5f0qUVYDRthfUj40V/UH8dyNt0gNVQksp4b
+         1tLn2NX1jGhfa1gBlKygt2dMZMHl4CS/5w4mRH4qyD39NIeeCnU6BJbuJKUXwkT3sQPz
+         FMSwHA1r0lWz3xVXAW6mXIjyd3db5YHC6YUSY5VDxWX66whXV9tCLGpieyBSZORwepbK
+         J+mrX5nKCTuQQ5G5oboa/GlyrTCRUXKnz4Ik9NWsGN3Jz9aYImU+lSEB4K6ERar0DYnW
+         XZ4Fkndh7p/4zDdx382c1oY72jyaBX4aCHrGZMUyZoap/M1lp4aWNiDSEmqhvhhUmVex
+         3Iyw==
+X-Gm-Message-State: AFqh2krJk1NtHZi6iT763qVmHJbnM/MFnd/wliIuvCWJql+QM2oXTpcK
+        +uozx0G5R0hoeKVIM/LLNt1WUQ==
+X-Google-Smtp-Source: AMrXdXs8V40PLbV/yhExX2kRHQCY1Yo9wbM7q84dlGOei7EhLtS3so+HtLLiv2VHa+z7t8Tv2X3jvg==
+X-Received: by 2002:a6b:c8c3:0:b0:704:d3b0:3029 with SMTP id y186-20020a6bc8c3000000b00704d3b03029mr24381288iof.17.1674773465391;
+        Thu, 26 Jan 2023 14:51:05 -0800 (PST)
+Received: from [192.168.2.31] ([194.204.33.9])
+        by smtp.gmail.com with ESMTPSA id y18-20020a056638039200b003a20a8f6bd2sm853151jap.153.2023.01.26.14.51.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 14:51:04 -0800 (PST)
+Message-ID: <505fc434-c31f-726e-b1cb-0bbfd5f83490@linaro.org>
+Date:   Fri, 27 Jan 2023 00:51:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v11 2/8] iov_iter: Add a function to extract a page list
- from an iterator
-Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>
-CC:     Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Jason Gunthorpe" <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        <linux-fsdevel@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Christoph Hellwig <hch@lst.de>
-References: <20230126141626.2809643-1-dhowells@redhat.com>
- <20230126141626.2809643-3-dhowells@redhat.com> <Y9L3yA+B1rrnrGK8@ZenIV>
- <Y9MAbYt6DIRFm954@ZenIV>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <Y9MAbYt6DIRFm954@ZenIV>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ Thunderbird/102.6.0
+Subject: Re: [RESEND PATCH] of: property: do not create clocks device link for
+ clock controllers
+Content-Language: en-GB
+To:     Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+References: <20230118091122.2205452-1-dmitry.baryshkov@linaro.org>
+ <CAL_JsqJ=0neiZ4wkPiMqJMT4E1O_xO0uLrTmEGUcnZMqxkw4UQ@mail.gmail.com>
+ <CAGETcx8Xy5OzsbW3123esxsbQJq-SqDkP1S5g2mmwzoCz4shtQ@mail.gmail.com>
+ <20230125190926.GA2697290-robh@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230125190926.GA2697290-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT009:EE_|CY5PR12MB6370:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6f665809-61e2-4588-6374-08daffef9443
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0lRFA3zuBlsjKiFn7am25PoK9oeD/TkumaWRLlZ/ZksQmzgLeaWf/Kp8NcfiPaYbLuw17OoVqQYtJResbHDIaVQzDppOX1k/rc8VlvknSNrxltv3VWDIBaUypDJlifR4DMKFhxLXAHIk9/eM1Zwrb50X7WYdxGNXxwM1pk75+sMu1fScuIwfRWNmkqH09ClgwEXjj2ErpJuMEjaD+16sLfdjCkqvtEVOK2C/vChR89d2mey1yJ0Rsw5LJPQUTHy1/y2QvEZUHDomD1vw9pZavZET6g+wCVO61jk5IGCMksPt182lc4sgTP+csfZaX7xiGsB101WhQ/0IL6/y+fgN5RjdmoaaH4bPDOpW3uEiAa6PtuF8P69IfMwEUknb7FaH0x178nbg40PdEzqdtC33W1uKBMoYCywarGVxQWZAfqzjWEGYIncZTRlBZJtwhAYDEEtT5NFZTsmNGytLve1Xa+RdsLBitSwjRhgo5IsOm4coRAnNiF4Hoa7ywACD/jhltboSJ4hkOCKutocSNCf9PCWe8XGMjuTC3C9cpttChKSr6kGTo+l2OFVjScDIfPhkQtW8FHm6v1kYl5fnHbvwWtGLAOL2KvcSkbn9hrE+LH7ep4wcBX2wmN1+z6NBSzFjTR1hZuJl3KVW0wXCb/0e9WWZ9XkHLTrGWSV2UUCsHCcIJzVGAkLIMquzxEZXWUxnmkIgvKfS3RwJaJXKsD5T1cXio55BDRoC3w8C4NlbdBobO4kIXMTqsCT54Q0mBKG9u4pPnpxBQPOIfdOlBz80jKaQjyKhGVItd1hf28pbsK6k4wMJmu8OrYGe3qtfV1/t
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(376002)(346002)(39860400002)(451199018)(40470700004)(46966006)(36840700001)(16526019)(186003)(31686004)(26005)(478600001)(966005)(47076005)(336012)(2616005)(82310400005)(426003)(83380400001)(316002)(54906003)(41300700001)(8676002)(7636003)(356005)(70206006)(53546011)(82740400003)(16576012)(110136005)(86362001)(36756003)(5660300002)(40460700003)(7416002)(8936002)(4326008)(70586007)(31696002)(40480700001)(2906002)(36860700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 22:49:27.4651
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f665809-61e2-4588-6374-08daffef9443
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT009.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6370
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/23 14:36, Al Viro wrote:
-...
->>> +static inline bool iov_iter_extract_will_pin(const struct iov_iter *iter)
->>> +{
->>> +	return user_backed_iter(iter);
->>> +}
->>> +
+On 25/01/2023 21:09, Rob Herring wrote:
+> On Tue, Jan 24, 2023 at 06:12:15PM -0800, Saravana Kannan wrote:
+>> On Wed, Jan 18, 2023 at 5:35 AM Rob Herring <robh+dt@kernel.org> wrote:
+>>>
+>>> On Wed, Jan 18, 2023 at 3:11 AM Dmitry Baryshkov
+>>> <dmitry.baryshkov@linaro.org> wrote:
+>>>>
+>>>> Do not create device link for clock controllers. Some of the clocks
+>>>> provided to the device via OF can be the clocks that are just parents to
+>>>> the clocks provided by this clock controller. Clock subsystem already
+>>>> has support for handling missing clock parents correctly (clock
+>>>> orphans). Later when the parent clock is registered, clocks get
+>>>> populated properly.
+>>>>
+>>>> An example of the system where this matters is the SDM8450 MTP board
+>>>> (see arch/arm64/boot/dts/qcom/sdm845-mtp.dts). Here the dispcc uses
+>>>> clocks provided by dsi0_phy and dsi1_phy device tree nodes. However the
+>>>> dispcc itself provides clocks to both PHYs, to the PHY parent device,
+>>>> etc. With just dsi0_phy in place devlink is able to break the
+>>>> dependency, but with two PHYs, dispcc doesn't get probed at all, thus
+>>>> breaking display support.
+>>>>
+>>>> Cc: Bjorn Andersson <andersson@kernel.org>
+>>>> Cc: Stephen Boyd <sboyd@kernel.org>
+>>>> Cc: Saravana Kannan <saravanak@google.com>
+>>>> Cc: Abel Vesa <abel.vesa@linaro.org>
+>>>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>>> ---
+>>>>
+>>>> This patch has been posted a year ago in January 2022 ([1]). Since that time
+>>>> Saravana failed to produce patches to assist in debugging the issue
+>>>> ([2]) or to fix the issue ([3]). The issue we observe has been described
+>>>> by Abel at ([4]). As we work on adding support for Dual DSI
+>>>> configurations, the issue becomes more and more important, since binding
+>>>> the whole display subsystem fails.
 >>
->> Wait a sec; why would we want a pin for pages we won't be modifying?
->> A reference - sure, but...
+>> I did send out a patch series[1] to try and fix this. Heck I even
+>> talked about this in LPC 2022. So I don't think it's accurate to say I
+>> didn't help debug this or fix this. There's some email thread in lore
+>> where Abel gave more details and I figured out the issue and we didn't
+>> need any more debugging. And then I sent out [1]. Sorry I missed you
+>> in the cc lise for [1] -- I try to keep track of everyone to cc but
+>> things slip through the cracks sometimes. But at the same time, it's
+>> easy to check for emails from me before saying I didn't help or didn't
+>> send out fixes :)
+>>
+>> If you do try to give [1] a shot, there are a bunch of bugs that
+>> people pointed out for which I gave fixes on top of [1] in the
+>> replies. I was supposed to work on v2 over the holidays, but that
+>> didn't happen because of stuff outside my control.
+>>
+>>> That's ample time to fix this, so I intend to apply this. But I'll
+>>> give it a few days for comments.
+>>
+>> Rob, I'd recommend not applying this because it'll fix it for Dmitry
+>> but break someone else's use case. That's the whole reason it takes me
+>> a while to send out patches -- it's easy to fix it for a subset of
+>> devices, but fixing something without breaking someone else is harder
+>> (I still believe it's doable) and it takes a while to test them on all
+>> the devices I want to test before sending them out.
+
+This case is really simple, I think. Clock controllers (and 
+clock-core-framework) are prepared to handle clock orphans properly. 
+Moreover they have been supposed to work in such way for quite a while. 
+In other words, I don't think we should save them from this 
+-EPROBE_DEFERRED.
+
+Thus I think it is better to let them continue doing their job of 
+handling probe deferrals on their own, at least for the time being. And 
+then, when your patches are finished, we can think about reenabling 
+current behaviour. As a reminder, currently, all Qualcomm platforms 
+trying to use double DSI configuration are broken and have to use 
+fw_devlink= kernel params.
+
+Stephen, do you have any comments regarding this fw_devlink usage vs CCF?
+
 > 
-> After having looked through the earlier iterations of the patchset -
-> sorry, but that won't fly for (at least) vmsplice().  There we can't
-> pin those suckers; thankfully, we don't need to - they are used only
-> for fetches, so FOLL_GET is sufficient.  With your "we'll just pin them,
-> source or destination" you won't be able to convert at least that
-> call of iov_iter_get_pages2().  And there might be other similar cases;
-> I won't swear there's more, but ISTR running into more than one of
-> the "pin won't be OK here, but fortunately it's a data source" places.
+> Okay, will give it a bit longer.
+> 
+> Rob
 
-Assuming that "page is a data source" means that we are writing out from
-the page to a block device (so, a WRITE operation, which of course
-actually *reads* from the page), then...
-
-...one thing I'm worried about now is whether Jan's original problem
-report [1] can be fixed, because that involves page writeback. And it
-seems like we need to mark the pages involved as "maybe dma-pinned" via
-FOLL_PIN pins, in order to solve it.
-
-Or am I missing a key point (I hope)?
-
-
-[1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz/T/#u
-
-thanks,
 -- 
-John Hubbard
-NVIDIA
+With best wishes
+Dmitry
+
