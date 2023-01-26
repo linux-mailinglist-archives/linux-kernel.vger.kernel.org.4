@@ -2,266 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6ECB67C468
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4631467C46D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236065AbjAZGGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 01:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
+        id S235494AbjAZGMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 01:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235678AbjAZGGM (ORCPT
+        with ESMTP id S229472AbjAZGML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 01:06:12 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E0621970;
-        Wed, 25 Jan 2023 22:06:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JQrN3UZl/mHZBH9yHVK69TJgyXOspURdR0VdlwbD4Eg=; b=0XWSI2tdvwlthpgOh9S7JLikrc
-        mY9T4izPEya7VzwoSqdo97+1eVsNWjFkfhriLwIAHL/4DYxsruzwBSqSj/QCCzdtpJ+4bbi+pi3wx
-        4V1GAKmJM689VLJzZBkU4prksD3Dl3RQTyLZ1g5+wBed2aq/TOw3amGsPAiDYZBE2tIfm6w+/U+YO
-        Gmj26micbcDQkInFQfVw/F1PxhXns3G1WDQVsawXqI7TQU7HXdDfeyAcw8EmfUY4rf7TTqBIm/kF8
-        Lf8GSEA9Bjfy5+BQmVO7JZuoq2/Dpk3DRR/UJ/IVU33gM6JA13oQEd7+UKyNz/QR2Vdwh1H/q4tMv
-        Hao/k7Vg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKvOe-009ieL-BM; Thu, 26 Jan 2023 06:06:04 +0000
-Date:   Wed, 25 Jan 2023 22:06:04 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] module: replace module_layout with module_memory
-Message-ID: <Y9IYTI3pWuKbJ3bC@bombadil.infradead.org>
-References: <20230125185004.254742-1-song@kernel.org>
+        Thu, 26 Jan 2023 01:12:11 -0500
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF00561B2;
+        Wed, 25 Jan 2023 22:12:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
+        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=E26z4NVJzqOdOJLD4siZBzqaZ/0nN127BV3Z64CfA0Q=; b=Urc4/f18/6Fft7us+9miPj5aIl
+        wodqWExFWOg9+9AlotMGGy2cAOcA8P4lcwNX+lvpmFpM5iSqbzymvtPZ5nRXKrSt94CZJ9L61+nFk
+        VgJs1tNUlZR5uL5XyOtiASRa9iUjQkm5HcsWk1qCDtJaTNV48LYC5LXbSLJAYddo4JTI=;
+Received: from p5b206403.dip0.t-ipconnect.de ([91.32.100.3] helo=nf.local)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1pKvUO-002WYs-Qi; Thu, 26 Jan 2023 07:12:00 +0100
+Message-ID: <8ec239d3-a005-8609-0724-f1042659791e@nbd.name>
+Date:   Thu, 26 Jan 2023 07:12:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125185004.254742-1-song@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Content-Language: en-US
+To:     Alexander H Duyck <alexander.duyck@gmail.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Cc:     netdev@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-kernel@vger.kernel.org, Yunsheng Lin <linyunsheng@huawei.com>
+References: <20230124124300.94886-1-nbd@nbd.name>
+ <CAC_iWjKAEgUB8Z3WNNVgUK8omXD+nwt_VPSVyFn1i4EQzJadog@mail.gmail.com>
+ <19121deb-368f-9786-8700-f1c45d227a4c@nbd.name>
+ <cd35316065cfe8d706ca2730babe3e6519df6034.camel@gmail.com>
+ <c7f1ade0-a607-2e55-d106-9acc26cbed94@nbd.name>
+ <49703c370e26ae1a6b19a39dc05e262acf58f6aa.camel@gmail.com>
+ <9baecde9-d92b-c18c-daa8-e7a96baa019b@nbd.name>
+ <595c5e36b0260ba16833c2a8d9418fd978ca9300.camel@gmail.com>
+ <0c0e96a7-1cf1-b856-b339-1f3df36a562c@nbd.name>
+ <a0b43a978ae43064777d9d240ef38b3567f58e5a.camel@gmail.com>
+ <9992e7b5-7f2b-b79d-9c48-cf689807f185@nbd.name>
+ <301aa48a-eb3b-eb56-5041-d6f8d61024d1@nbd.name>
+ <148028e75d720091caa56e8b0a89544723fda47e.camel@gmail.com>
+From:   Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH] net: page_pool: fix refcounting issues with fragmented
+ allocation
+In-Reply-To: <148028e75d720091caa56e8b0a89544723fda47e.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 10:50:04AM -0800, Song Liu wrote:
-> module_layout manages different types of memory (text, data, rodata, etc.)
-> in one allocation, which is problematic for some reasons:
+On 25.01.23 23:14, Alexander H Duyck wrote:
+> On Wed, 2023-01-25 at 20:40 +0100, Felix Fietkau wrote:
+>> On 25.01.23 20:10, Felix Fietkau wrote:
+>> > On 25.01.23 20:02, Alexander H Duyck wrote:
+>> > > On Wed, 2023-01-25 at 19:42 +0100, Felix Fietkau wrote:
+>> > > > On 25.01.23 19:26, Alexander H Duyck wrote:
+>> > > > > On Wed, 2023-01-25 at 18:32 +0100, Felix Fietkau wrote:
+>> > > > > > On 25.01.23 18:11, Alexander H Duyck wrote:
+>> > > > > > > On Tue, 2023-01-24 at 22:30 +0100, Felix Fietkau wrote:
+>> > > > > > > > On 24.01.23 22:10, Alexander H Duyck wrote:
+>> > > > > > > > > On Tue, 2023-01-24 at 18:22 +0100, Felix Fietkau wrote:
+>> > > > > > > > > > On 24.01.23 15:11, Ilias Apalodimas wrote:
+>> > > > > > > > > > > Hi Felix,
+>> > > > > > > > > > > 
+>> > > > > > > > > > > ++cc Alexander and Yunsheng.
+>> > > > > > > > > > > 
+>> > > > > > > > > > > Thanks for the report
+>> > > > > > > > > > > 
+>> > > > > > > > > > > On Tue, 24 Jan 2023 at 14:43, Felix Fietkau <nbd@nbd.name> wrote:
+>> > > > > > > > > > > > 
+>> > > > > > > > > > > > While testing fragmented page_pool allocation in the mt76 driver, I was able
+>> > > > > > > > > > > > to reliably trigger page refcount underflow issues, which did not occur with
+>> > > > > > > > > > > > full-page page_pool allocation.
+>> > > > > > > > > > > > It appears to me, that handling refcounting in two separate counters
+>> > > > > > > > > > > > (page->pp_frag_count and page refcount) is racy when page refcount gets
+>> > > > > > > > > > > > incremented by code dealing with skb fragments directly, and
+>> > > > > > > > > > > > page_pool_return_skb_page is called multiple times for the same fragment.
+>> > > > > > > > > > > > 
+>> > > > > > > > > > > > Dropping page->pp_frag_count and relying entirely on the page refcount makes
+>> > > > > > > > > > > > these underflow issues and crashes go away.
+>> > > > > > > > > > > > 
+>> > > > > > > > > > > 
+>> > > > > > > > > > > This has been discussed here [1].  TL;DR changing this to page
+>> > > > > > > > > > > refcount might blow up in other colorful ways.  Can we look closer and
+>> > > > > > > > > > > figure out why the underflow happens?
+>> > > > > > > > > > I don't see how the approch taken in my patch would blow up. From what I 
+>> > > > > > > > > > can tell, it should be fairly close to how refcount is handled in 
+>> > > > > > > > > > page_frag_alloc. The main improvement it adds is to prevent it from 
+>> > > > > > > > > > blowing up if pool-allocated fragments get shared across multiple skbs 
+>> > > > > > > > > > with corresponding get_page and page_pool_return_skb_page calls.
+>> > > > > > > > > > 
+>> > > > > > > > > > - Felix
+>> > > > > > > > > > 
+>> > > > > > > > > 
+>> > > > > > > > > Do you have the patch available to review as an RFC? From what I am
+>> > > > > > > > > seeing it looks like you are underrunning on the pp_frag_count itself.
+>> > > > > > > > > I would suspect the issue to be something like starting with a bad
+>> > > > > > > > > count in terms of the total number of references, or deducing the wrong
+>> > > > > > > > > amount when you finally free the page assuming you are tracking your
+>> > > > > > > > > frag count using a non-atomic value in the driver.
+>> > > > > > > > The driver patches for page pool are here:
+>> > > > > > > > https://patchwork.kernel.org/project/linux-wireless/patch/64abb23f4867c075c19d704beaae5a0a2f8e8821.1673963374.git.lorenzo@kernel.org/
+>> > > > > > > > https://patchwork.kernel.org/project/linux-wireless/patch/68081e02cbe2afa2d35c8aa93194f0adddbd0f05.1673963374.git.lorenzo@kernel.org/
+>> > > > > > > > 
+>> > > > > > > > They are also applied in my mt76 tree at:
+>> > > > > > > > https://github.com/nbd168/wireless
+>> > > > > > > > 
+>> > > > > > > > - Felix
+>> > > > > > > 
+>> > > > > > > So one thing I am thinking is that we may be seeing an issue where we
+>> > > > > > > are somehow getting a mix of frag and non-frag based page pool pages.
+>> > > > > > > That is the only case I can think of where we might be underflowing
+>> > > > > > > negative. If you could add some additional debug info on the underflow
+>> > > > > > > WARN_ON case in page_pool_defrag_page that might be useful.
+>> > > > > > > Specifically I would be curious what the actual return value is. I'm
+>> > > > > > > assuming we are only hitting negative 1, but I would want to verify we
+>> > > > > > > aren't seeing something else.
+>> > > > > > I'll try to run some more tests soon. However, I think I found the piece 
+>> > > > > > of code that is incompatible with using pp_frag_count.
+>> > > > > > When receiving an A-MSDU packet (multiple MSDUs within a single 802.11 
+>> > > > > > packet), and it is not split by the hardware, a cfg80211 function 
+>> > > > > > extracts the individual MSDUs into separate skbs. In that case, a 
+>> > > > > > fragment can be shared across multiple skbs, and get_page is used to 
+>> > > > > > increase the refcount.
+>> > > > > > You can find this in net/wireless/util.c: ieee80211_amsdu_to_8023s (and 
+>> > > > > > its helper functions).
+>> > > > > 
+>> > > > > I'm not sure if it is problematic or not. Basically it is trading off
+>> > > > > by copying over the frags, calling get_page on each frag, and then
+>> > > > > using dev_kfree_skb to disassemble and release the pp_frag references.
+>> > > > > There should be other paths in the kernel that are doing something
+>> > > > > similar.
+>> > > > > 
+>> > > > > > This code also has a bug where it doesn't set pp_recycle on the newly 
+>> > > > > > allocated skb if the previous one has it, but that's a separate matter 
+>> > > > > > and fixing it doesn't make the crash go away.
+>> > > > > 
+>> > > > > Adding the recycle would cause this bug. So one thing we might be
+>> > > > > seeing is something like that triggering this error. Specifically if
+>> > > > > the page is taken via get_page when assembling the new skb then we
+>> > > > > cannot set the recycle flag in the new skb otherwise it will result in
+>> > > > > the reference undercount we are seeing. What we are doing is shifting
+>> > > > > the references away from the pp_frag_count to the page reference count
+>> > > > > in this case. If we set the pp_recycle flag then it would cause us to
+>> > > > > decrement pp_frag_count instead of the page reference count resulting
+>> > > > > in the underrun.
+>> > > > Couldn't leaving out the pp_recycle flag potentially lead to a case 
+>> > > > where the last user of the page drops it via page_frag_free instead of 
+>> > > > page_pool_return_skb_page? Is that valid?
+>> > > 
+>> > > No. What will happen is that when the pp_frag_count is exhausted the
+>> > > page will be unmapped and evicted from the page pool. When the page is
+>> > > then finally freed it will end up going back to the page allocator
+>> > > instead of page pool.
+>> > > 
+>> > > Basically the idea is that until pp_frag_count reaches 0 there will be
+>> > > at least 1 page reference held.
+>> > > 
+>> > > > > > Is there any way I can make that part of the code work with the current 
+>> > > > > > page pool frag implementation?
+>> > > > > 
+>> > > > > The current code should work. Basically as long as the references are
+>> > > > > taken w/ get_page and skb->pp_recycle is not set then we shouldn't run
+>> > > > > into this issue because the pp_frag_count will be dropped when the
+>> > > > > original skb is freed and the page reference count will be decremented
+>> > > > > when the new one is freed.
+>> > > > > 
+>> > > > > For page pool page fragments the main thing to keep in mind is that if
+>> > > > > pp_recycle is set it will update the pp_frag_count and if it is not
+>> > > > > then it will just decrement the page reference count.
+>> > > > What takes care of DMA unmap and other cleanup if the last reference to 
+>> > > > the page is dropped via page_frag_free?
+>> > > > 
+>> > > > - Felix
+>> > > 
+>> > > When the page is freed on the skb w/ pp_recycle set it will unmap the
+>> > > page and evict it from the page pool. Basically in these cases the page
+>> > > goes from the page pool back to the page allocator.
+>> > > 
+>> > > The general idea with this is that if we are using fragments that there
+>> > > will be enough of them floating around that if one or two frags have a
+>> > > temporeary detour through a non-recycling path that hopefully by the
+>> > > time the last fragment is freed the other instances holding the
+>> > > additional page reference will have let them go. If not then the page
+>> > > will go back to the page allocator and it will have to be replaced in
+>> > > the page pool.
+>> > Thanks for the explanation, it makes sense to me now. Unfortunately it
+>> > also means that I have no idea what could cause this issue. I will
+>> > finish my mt76 patch rework which gets rid of the pp vs non-pp
+>> > allocation mix and re-run my tests to provide updated traces.
+>> Here's the updated mt76 page pool support commit:
+>> https://github.com/nbd168/wireless/commit/923cdab6d4c92a0acb3536b3b0cc4af9fee7c808
 > 
-> 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
-> 2. It is hard to use huge pages in modules (and not break strict rwx).
-> 3. Many archs uses module_layout for arch-specific data, but it is not
->    obvious how these data are used (are they RO, RX, or RW?)
+> Yeah, so I don't see anything wrong with the patch in terms of page
+> pool.
 > 
-> Improve the scenario by replacing 2 (or 3) module_layout per module with
-> up to 7 module_memory per module:
+>> And here is the trace that I'm getting with 6.1:
+>> https://nbd.name/p/a16957f2
+>> 
+>> If you have any debug patch you'd like me to test, please let me know.
+>> 
+>> - Felix
 > 
->         MOD_MEM_TYPE_TEXT,
->         MOD_MEM_TYPE_DATA,
->         MOD_MEM_TYPE_RODATA,
->         MOD_MEM_TYPE_RO_AFTER_INIT,
->         MOD_MEM_TYPE_INIT_TEXT,
->         MOD_MEM_TYPE_INIT_DATA,
->         MOD_MEM_TYPE_INIT_RODATA,
+> So looking at the traces I am assuming what we are seeing is the
+> deferred freeing from the TCP Rx path since I don't see a driver
+> anywhere between net_rx_action and napi_consume skb. So it seems like
+> the packets are likely making it all the way up the network stack.
 > 
-> and allocating them separately.
+> Is this the first wireless driver to add support for page pool? I'm
+> thinking we must be seeing something in the wireless path that is
+> causing an issue such as the function you called out earlier but I
+> can't see anything obvious.
+Yes, it's the first driver with page pool support.
 
-First thanks for doing this work!
+> One thing we need to be on the lookout for is cloned skbs. When an skb
+> is cloned the pp_recycle gets copied over. In that case the reference
+> is moved over to the skb dataref count. What comes to mind is something
+> like commit 1effe8ca4e34c ("skbuff: fix coalescing for page_pool
+> fragment recycling").
+I suspect that the crash might be related to a bad interaction between 
+the page reuse in A-MSDU rx + skb coalescing on TCP rx.
+If I change the A-MSDU code to copy data instead of reusing fragments, 
+it doesn't crash anymore.
+I believe the issue must be specific to that codepath, since most 
+received and processed packets are either not A-MSDU or A-MSDU decap has 
+already been performed by the hardware.
+If I change my test to use 3 client mode interfaces instead of 4, the 
+hardware is able to offload all A-MSDU rx processing and I don't see any 
+crashes anymore.
 
-This seems to not acknolwedge the original goal of the first module_layout and
-the latched rb-tree use, and that was was for speeding up __module_address()
-since it *can* even be triggered on NMIs. I say this because the first question
-that comes to me is the impact to performance on __module_address() I can't
-see that changing much here, but mention it as it similar consideration
-should be made in case future changes modify this path.
+Could you please take another look at ieee80211_amsdu_to_8023s to see if 
+there's anything in there that could cause these issues?
 
-Microbenching something so trivial as __module_address() may not be as useful
-for an idle system, at the very least being able to compare before and after
-even on idle may be useful *if* you eventually do some more radical changes
-here. Modules-related kernel/kallsyms_selftest.c did that for kallsyms_lookup_name()
-and friend just recently for a minor performance enhancement.
+- Felix
 
-At a high level it is perhaps my only conern so far while reviewing this patch,
-and I am glad it is now clear that addressing modules is a requirement. The rest
-seems like a highly welcomed cleanup even though the diffstat does not reflect
-that.
-
-> Various archs use module_layout for different data. These data are put
-> into different module_memory based on their location in module_layout.
-> IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
-> data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
-
-I think the commit log should document a bit the rationale for why
-ARCH_WANTS_MODULES_DATA_IN_VMALLOC gets *can* tidied up so well here.
-
-> Signed-off-by: Song Liu <song@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> 
-> ---
-> 
-> This is the preparation work for the type aware module_alloc() discussed
-> in [1]. While this work is not covered much in the discussion, it is a
-> critical step of the effort.
-> 
-> As this part grows pretty big (~1000 lines, + and -), I would like get
-> some feedback on it, so that I know it is on the right track.
-> 
-> Please share your comments. Thanks!
-> 
-> Test coverage: Tested on x86_64.
-
-I will likely merge this onto modules-next soon, not because I think it is
-ready, but just because I think it *is* mostly ready and the next thing
-we need is exposure and testing. rc5 is pretty late to consider this
-for v6.3 and so hopefully for this cycle we can at least settle on
-something which will sit in linux-next since the respective linux-next
-after v6.3-rc1 is released.
-
-> Build tested by kernel test bot in [2]. The only regression in [2] was a
-> typo in parisc, which is also fixed.
-> 
-> [1] https://lore.kernel.org/linux-mm/20221107223921.3451913-1-song@kernel.org/T/#u
-
-You still never addressed my performance suggestions so don't be
-surprised if I insist later. Yes you can use existing performance
-benchmarks, specially now with modules as a hard requirement, to
-show gains. So I'd like to clarify that if I'm reviewing late it is
-because:
-
-a) my modules patch review queue has been high as of late
-b) you seem to not have taken these performance suggestions into consideration
-   before and so I tend to put it at my end of my queue for review.
-
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index d02d39c7174e..c90eb2ba0985 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -925,11 +929,31 @@ static ssize_t store_uevent(struct module_attribute *mattr,
->  struct module_attribute module_uevent =
->  	__ATTR(uevent, 0200, NULL, store_uevent);
->  
-> +#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-> +
-> +static ssize_t show_coresize(struct module_attribute *mattr,
-> +			     struct module_kobject *mk, char *buffer)
-> +{
-> +	enum mod_mem_type type;
-
-This is unused.
-
-> @@ -1389,16 +1466,29 @@ unsigned int __weak arch_mod_section_prepend(struct module *mod,
->  	return 0;
->  }
->  
-> -/* Update size with this section: return offset. */
-> -long module_get_offset(struct module *mod, unsigned int *size,
-> -		       Elf_Shdr *sechdr, unsigned int section)
-> +/*
-> + * Use highest 4 bits of sh_entsize to store the mod_mem_type of this
-> + * section. This leaves 28 bits for offset on 32-bit systems, which is
-> + * about 256 MiB (WARN_ON_ONCE if we exceed that).
-> + */
-> +
-> +#define SH_ENTSIZE_TYPE_BITS	4
-> +#define SH_ENTSIZE_TYPE_SHIFT	(BITS_PER_LONG - SH_ENTSIZE_TYPE_BITS)
-> +#define SH_ENTSIZE_TYPE_MASK	((1UL << SH_ENTSIZE_TYPE_BITS) - 1)
-> +#define SH_ENTSIZE_OFFSET_MASK	((1UL << (BITS_PER_LONG - SH_ENTSIZE_TYPE_BITS)) - 1)
-> +
-> +long module_get_offset_and_type(struct module *mod, enum mod_mem_type type,
-> +				Elf_Shdr *sechdr, unsigned int section)
->  {
-> -	long ret;
-> +	long offset;
-> +	long mask = ((unsigned long)(type) & SH_ENTSIZE_TYPE_MASK) << SH_ENTSIZE_TYPE_SHIFT;
->  
-> -	*size += arch_mod_section_prepend(mod, section);
-> -	ret = ALIGN(*size, sechdr->sh_addralign ?: 1);
-> -	*size = ret + sechdr->sh_size;
-> -	return ret;
-> +	mod->mod_mem[type].size += arch_mod_section_prepend(mod, section);
-> +	offset = ALIGN(mod->mod_mem[type].size, sechdr->sh_addralign ?: 1);
-> +	mod->mod_mem[type].size = offset + sechdr->sh_size;
-> +
-> +	WARN_ON_ONCE(offset & mask);
-> +	return offset | mask;
->  }
-
-Could you split this somehow with the mask stuff up into its own
-non-functional patch first somehow to make this easier to review?
-
-No worries if you can't.
-
-> @@ -2117,74 +2193,45 @@ static int find_module_sections(struct module *mod, struct load_info *info)
->  
->  static int move_module(struct module *mod, struct load_info *info)
->  {
-> +	enum mod_mem_type type;
->  	int i;
->  	void *ptr;
->  
-> -	/* Do the allocs. */
-> -	ptr = module_alloc(mod->core_layout.size);
-> -	/*
-> -	 * The pointer to this block is stored in the module structure
-> -	 * which is inside the block. Just mark it as not being a
-> -	 * leak.
-> -	 */
-> -	kmemleak_not_leak(ptr);
-> -	if (!ptr)
-> -		return -ENOMEM;
-> -
-> -	memset(ptr, 0, mod->core_layout.size);
-> -	mod->core_layout.base = ptr;
-> +	for_each_mod_mem_type(type) {
-> +		if (!mod->mod_mem[type].size) {
-> +			mod->mod_mem[type].base = NULL;
-> +			continue;
-> +		}
-> +		mod->mod_mem[type].size = PAGE_ALIGN(mod->mod_mem[type].size);
-> +		if (mod_mem_use_vmalloc(type))
-> +			ptr = vzalloc(mod->mod_mem[type].size);
-> +		else
-> +			ptr = module_alloc(mod->mod_mem[type].size);
-
-This form to check for mod_mem_use_vmalloc() is used twice, how about
-a helper to just do it one line for us?
-
-> @@ -2195,6 +2242,14 @@ static int move_module(struct module *mod, struct load_info *info)
->  	}
->  
->  	return 0;
-> +out_enomem:
-> +	for (type--; type >= 0; type--) {
-> +		if (mod_mem_use_vmalloc(type))
-> +			vfree(mod->mod_mem[type].base);
-> +		else
-> +			module_memfree(mod->mod_mem[type].base);
-> +	}
-> +	return -ENOMEM;
->  }
-
-Here's the other user.
-
-> diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-
-This was the hardest file to review and so I ask the same, if a separate
-non-functional change could be done first to make the changes easier
-to review.
-
-No worries if not.
-
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-
-I'll queue this onto modules-testing to see what blows up. After at
-least one more review I'll queue this onto modules-next.
-
-  Luis
