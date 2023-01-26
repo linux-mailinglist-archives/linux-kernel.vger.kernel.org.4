@@ -2,182 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A4467CD37
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 245E067CD35
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjAZOBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
+        id S231576AbjAZOBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:01:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjAZOBO (ORCPT
+        with ESMTP id S231938AbjAZOBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:01:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B6C2D64
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:00:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674741604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=golVTvyAYMyqQTXL0A4vzvXwefTm1YQbAQTKoQROxVQ=;
-        b=KkrYep4i+AluR3Pbq5iVywqCmsQkF7DG9aZsfArmsq/NVRWOJpPBzSdKWm6sh/WH8pTZqP
-        Cdkr9xSXPAcorZ1B0fYwsW/VFhpRV1Y1L3CpdsmacnnERvMmmRXGUlvjztv5gnVSIr2Y34
-        KgSX/fVlaz93ezpBK02fwD5gKELlrHs=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-130-bkB_N2XqNaqURDXmLEyEoQ-1; Thu, 26 Jan 2023 09:00:03 -0500
-X-MC-Unique: bkB_N2XqNaqURDXmLEyEoQ-1
-Received: by mail-ej1-f71.google.com with SMTP id hr22-20020a1709073f9600b0086ffb73ac1cso1291156ejc.23
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:00:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=golVTvyAYMyqQTXL0A4vzvXwefTm1YQbAQTKoQROxVQ=;
-        b=iFzOxbmKpsxlaxsevZUTOwyfY5rzu1325jwtzWhKZkfRPbB2qra+SGKiMV/A6Hej7d
-         TlohVEPzRbpw81wyYDEA2YXkreHUJqSPceYC7D9dfRnioHOeezO3ZR6bAceyzV/obf8E
-         1PMVIKZtC8mqoofkuZaiJ6B4WWEdR25uWiLNB3NNO0tr2XjglKxZmnv136XR6VVy28P2
-         dlTfea9MZ2AHqNXKAmcCVdcyFgu3tOiMNa9CEs3U4YP5TYKfK5h2CTQR67edydlp+b1C
-         SdU2xRyN5GGevd0UVkrlshfHu5cv2H4s4piGtNvxEyPvzk2JuekZCcarwjmbGV+5JIs4
-         5V1g==
-X-Gm-Message-State: AO0yUKXiqtngKcU+kyB1jlFOzY/7A8s+ZJ0DQHzndAQysK0Kh/e0J+72
-        3+aGiZXLAbq9JnrS5o7OdG+hT2tFowxXfb15qSsbZoVL230EwwsLssp0sz7xydaPkfKcpxp+S4I
-        YpQy494uK3qaERb/gpvShni1i
-X-Received: by 2002:a17:906:1290:b0:878:5da4:77a6 with SMTP id k16-20020a170906129000b008785da477a6mr2841364ejb.51.1674741601548;
-        Thu, 26 Jan 2023 06:00:01 -0800 (PST)
-X-Google-Smtp-Source: AK7set9i+i8oVPbwI2m3EAe737D5eqSwY72umpiASPA9QOU/tRuFqjGkSd6v7xXqSk4NzbP4w8Gzcw==
-X-Received: by 2002:a17:906:1290:b0:878:5da4:77a6 with SMTP id k16-20020a170906129000b008785da477a6mr2841347ejb.51.1674741601326;
-        Thu, 26 Jan 2023 06:00:01 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id h17-20020a1709066d9100b0087856bd9dbbsm642242ejt.97.2023.01.26.06.00.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 06:00:00 -0800 (PST)
-Message-ID: <4d44b351-d4bf-56dd-952b-97a70687fb68@redhat.com>
-Date:   Thu, 26 Jan 2023 14:59:59 +0100
+        Thu, 26 Jan 2023 09:01:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6000F2069B;
+        Thu, 26 Jan 2023 06:00:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 655EA61826;
+        Thu, 26 Jan 2023 14:00:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA33DC4339B;
+        Thu, 26 Jan 2023 14:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674741624;
+        bh=B46HmDxNE4EPRybPZ/i6YseUbzGF3u4U7Gc3rTsKJ1g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RjQzmZK9Ne7vSXIYlHjvB8PmCT8uijDI/DE714/3NBB1xkWOvJWfYcjpENGnFJ5G/
+         3Ru93qk3TR0K6DDo/R22Wnky7FWKoxHzXn1Kj4uUeMjcoOiqxi8EudKDE+ETPi2cq2
+         jooHGTqSWB6dhMA2aQgyVcIN9rF2wWQFU3ZmFdKsAiMNVWvVN+qi8XolOsfa4WH9X3
+         fuhZjpgT0zW6zQrsXM6Wbl8+Nyk6lztwK1azH9nMavED5FQgYUEgWyUj8bZW4zYtsz
+         +D2okfNGFJoB+PClm4FaBUm/hLVGSpXjU9XurAHBH1r96lCo3w06lgt6eR89I+7KGR
+         /MaYGHFetMzGQ==
+Received: by mail-vs1-f44.google.com with SMTP id 3so1952320vsq.7;
+        Thu, 26 Jan 2023 06:00:24 -0800 (PST)
+X-Gm-Message-State: AO0yUKXnO2XPIiJe0lsdUJOy+UxH7BnCVWu8IkfrCJWJ77O8Ca+V4iMP
+        mkudjCTFKaqhY3q0V8jg501y8J2VStVZ8xJuxQ==
+X-Google-Smtp-Source: AK7set/2ph/nW5qH6jiw8P+E7LiM7AXtrsN3WmyK/fNrMsYOV/fRzSb1ju2QZ415GNK80U9Tie1hGn26hM+05rb8AqE=
+X-Received: by 2002:a67:c219:0:b0:3e9:107e:cc55 with SMTP id
+ i25-20020a67c219000000b003e9107ecc55mr627489vsj.6.1674741623822; Thu, 26 Jan
+ 2023 06:00:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] platform-drivers-x86 for 6.2-3
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Language: en-US, nl
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230124105643.1737250-1-etienne.carriere@linaro.org>
+ <20230125202215.GA2811928-robh@kernel.org> <CAN5uoS9tVyRQP1-2-Umxc33APGW=EFdidbgNVq_H6wVUXauHEg@mail.gmail.com>
+In-Reply-To: <CAN5uoS9tVyRQP1-2-Umxc33APGW=EFdidbgNVq_H6wVUXauHEg@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 26 Jan 2023 08:00:12 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+sv4vf6iconbitnQ33y0_B7+0T1JmCpjQvfmkqFd0Mgw@mail.gmail.com>
+Message-ID: <CAL_Jsq+sv4vf6iconbitnQ33y0_B7+0T1JmCpjQvfmkqFd0Mgw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: arm: optee: add interrupt controller properties
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Pascal Paillet <p.paillet@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed, Jan 25, 2023 at 3:00 PM Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
+>
+> On Wed, 25 Jan 2023 at 21:22, Rob Herring <robh@kernel.org> wrote:
+> >
+> > +Sudeep
+> >
+> > On Tue, Jan 24, 2023 at 11:56:41AM +0100, Etienne Carriere wrote:
+> > > Adds an optional interrupt controller property to optee firmware node
+> > > in the DT bindings. Optee driver may embeds an irqchip exposing
+> > > interrupts notified by the TEE world. Optee registers up to 1 interrupt
+> > > controller and identifies each line with a line number from 0 to
+> > > UINT16_MAX.
+> > >
+> > > In the example, the platform SCMI device uses optee interrupt irq 5
+> > > as async signal to trigger processing of an async incoming SCMI message,
+> > > in the scope of a CPU DVFS control. A platform can have several SCMI
+> > > channels driven this way. Optee irqs also permits small embedded devices
+> > > to share e.g. a gpio expander, a group of wakeup sources, etc... between
+> > > OP-TEE world (for sensitive services) and Linux world (for non-sensitive
+> > > services). The physical controller is driven from the TEE which exposes
+> > > some controls to Linux kernel.
+> > >
+> > > Cc: Jens Wiklander <jens.wiklander@linaro.org>
+> > > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> > > Cc: Marc Zyngier <maz@kernel.org>
+> > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > Cc: Sumit Garg <sumit.garg@linaro.org>
+> > >
+> > > Co-developed-by: Pascal Paillet <p.paillet@foss.st.com>
+> > > Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+> > > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> > > ---
+> > > Changes since v1:
+> > > - Added a description to #interrupt-cells property.
+> > > - Changed of example. Linux wakeup event was subject to discussion and
+> > >   i don't know much about input events in Linux. So move to SCMI.
+> > >   In the example, an SCMI server in OP-TEE world raises optee irq 5
+> > >   so that Linux scmi optee channel &scmi_cpu_dvfs pushed in the incoming
+> > >   SCMI message in the scmi device for liekly later processing in threaded
+> > >   context. The example includes all parties: optee, scmi, sram, gic.
+> > > - Obviously rephrased the commit message.
+> > > - Added Cc: tags
+> > > ---
+> > >  .../arm/firmware/linaro,optee-tz.yaml         | 67 +++++++++++++++++++
+> > >  1 file changed, 67 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
+> > > index d4dc0749f9fd..9c00c27f8b2c 100644
+> > > --- a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
+> > > +++ b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
+> > > @@ -40,6 +40,14 @@ properties:
+> > >        HVC #0, register assignments
+> > >        register assignments are specified in drivers/tee/optee/optee_smc.h
+> > >
+> > > +  interrupt-controller: true
+> > > +
+> > > +  "#interrupt-cells":
+> > > +    const: 1
+> > > +    description: |
+> > > +      OP-TEE exposes irq for irp chip controllers from OP-TEE world. Each
+> > > +      irq is assigned a single line number identifier used as first argument.
+> > > +
+> > >  required:
+> > >    - compatible
+> > >    - method
+> > > @@ -64,3 +72,62 @@ examples:
+> > >              method = "hvc";
+> > >          };
+> > >      };
+> > > +
+> > > +  - |
+> > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > > +    firmware  {
+> > > +        optee: optee {
+> > > +            compatible = "linaro,optee-tz";
+> > > +            method = "smc";
+> > > +            interrupts = <GIC_SPI 187 IRQ_TYPE_EDGE_RISING>;
+> > > +            interrupt-controller;
+> > > +            #interrupt-cells = <1>;
+> > > +        };
+> > > +
+> > > +        scmi {
+> > > +            compatible = "linaro,scmi-optee";
+> > > +            linaro,optee-channel-id = <0>;
+> > > +            interrupt-parent = <&gic>;
+> > > +            #address-cells = <1>;
+> > > +            #size-cells = <0>;
+> > > +
+> > > +            scmi_cpu_dvfs: protocol@13 {
+> > > +                reg = <0x13>;
+> > > +                linaro,optee-channel-id = <1>;
+> > > +                shmem = <&scmi_shm_tx>, <&scmi_shm_rx>;
+> > > +                interrupts-extended = <&optee 5>;
+> > > +                interrupt-names = "a2p";
+> >
+> > These properties aren't documented. Soon there will be a warning[1].
+>
+> They are.
+> https://github.com/torvalds/linux/blob/v6.1/Documentation/devicetree/bindings/firmware/arm%2Cscmi.yaml#L45-L53
 
-Here is the second round of fixes for platform-drivers-x86 for 6.2.
+They are not. That's the scmi node, not a protocol node.
 
-Highlights:
- -  Fix false positive apple_gmux backlight detection on older
-    iGPU only MacBook models
- -  Various other small fixes and hardware-id additions
+> In arm,scmi.yaml, interrupts optional property stands for interrupts
+> and interrupts-extended, no?
 
-The MacBook backlight fix includes a small change under drivers/acpi,
-this has been Acked by Rafael for merging through the pdx86 tree.
+Yes.
 
-Regards,
-
-Hans
-
-
-The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
-
-  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.2-3
-
-for you to fetch changes up to 1bc5d819f0b9784043ea08570e1b21107aa35739:
-
-  platform/x86: thinkpad_acpi: Fix profile modes on Intel platforms (2023-01-25 12:45:16 +0100)
-
-----------------------------------------------------------------
-platform-drivers-x86 for v6.2-3
-
-Highlights:
- -  Fix false positive apple_gmux backlight detection on older
-    iGPU only MacBook models
- -  Various other small fixes and hardware-id additions
-
-The following is an automated git shortlog grouped by driver:
-
-ACPI:
- -  video: Fix apple gmux detection
-
-apple-gmux:
- -  Add apple_gmux_detect() helper
- -  Move port defines to apple-gmux.h
-
-asus-wmi:
- -  Fix kbd_dock_devid tablet-switch reporting
-
-dell-wmi:
- -  Add a keymap for KEY_MUTE in type 0x0010 table
-
-gigabyte-wmi:
- -  add support for B450M DS3H WIFI-CF
-
-hp-wmi:
- -  Fix cast to smaller integer type warning
- -  Handle Omen Key event
-
-platform/x86/amd:
- -  pmc: Add a module parameter to disable workarounds
- -  pmc: Disable IRQ1 wakeup for RN/CZN
-
-thinkpad_acpi:
- -  Fix profile modes on Intel platforms
-
-----------------------------------------------------------------
-Hans de Goede (5):
-      platform/x86: asus-wmi: Fix kbd_dock_devid tablet-switch reporting
-      platform/x86: hp-wmi: Fix cast to smaller integer type warning
-      platform/x86: apple-gmux: Move port defines to apple-gmux.h
-      platform/x86: apple-gmux: Add apple_gmux_detect() helper
-      ACPI: video: Fix apple gmux detection
-
-Kevin Kuriakose (1):
-      platform/x86: gigabyte-wmi: add support for B450M DS3H WIFI-CF
-
-Koba Ko (1):
-      platform/x86: dell-wmi: Add a keymap for KEY_MUTE in type 0x0010 table
-
-Mario Limonciello (2):
-      platform/x86/amd: pmc: Disable IRQ1 wakeup for RN/CZN
-      platform/x86/amd: pmc: Add a module parameter to disable workarounds
-
-Mark Pearson (1):
-      platform/x86: thinkpad_acpi: Fix profile modes on Intel platforms
-
-Rishit Bansal (1):
-      platform/x86: hp-wmi: Handle Omen Key event
-
- drivers/acpi/video_detect.c               |  24 +------
- drivers/platform/x86/amd/pmc.c            |  58 +++++++++++++++-
- drivers/platform/x86/apple-gmux.c         |  93 +++++--------------------
- drivers/platform/x86/asus-wmi.c           |  17 +++--
- drivers/platform/x86/dell/dell-wmi-base.c |   3 +
- drivers/platform/x86/gigabyte-wmi.c       |   1 +
- drivers/platform/x86/hp/hp-wmi.c          |   6 +-
- drivers/platform/x86/thinkpad_acpi.c      |  11 +--
- include/linux/apple-gmux.h                | 109 +++++++++++++++++++++++++++++-
- 9 files changed, 211 insertions(+), 111 deletions(-)
-
+Rob
