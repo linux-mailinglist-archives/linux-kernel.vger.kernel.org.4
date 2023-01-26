@@ -2,253 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E93F67C8A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2DF67C89F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236480AbjAZKee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
+        id S235678AbjAZKe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236038AbjAZKeb (ORCPT
+        with ESMTP id S229674AbjAZKe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:34:31 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E043D577DC
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:34:27 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id kt14so3912212ejc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:34:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yNKGiFVF7gZl8W9gtBpFjfAaHbcRzsNNp7MAmipi5tM=;
-        b=sUSCEuKpo0FtzU8NNmxCzR/r2KwAtc7S3/o1ClFq6L9vLkC3QIXXqEZ1opixeisU2G
-         iQTu9Eem/CRw6cJOSeu7z6mPcb7H/FVOfoZ44gOSFpxE8OI6Gwzrgh5AEeogGN8s+g4i
-         KCHz5FZ76MAQjOHnzVRtA3LXcGWipp0RxLRwDT/QDXulGWbSn6K0iQT23A+suDeAfldL
-         ZlqmQnVFVyHgdNSeaLuxDM27lWzd7rcg7/8h+i2P943Mv4R0tr4a03cqFezJDRNzYFec
-         U2fF6z/pk8rZeVEQD1pEE4HvcznmUxdp79rYtx0UoQRipTTEKRNGgyHYqLf3I5Fma1c5
-         r06A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yNKGiFVF7gZl8W9gtBpFjfAaHbcRzsNNp7MAmipi5tM=;
-        b=lv+mpXOakK790BUDnrL8v5SNxtD7H4C1VXNL3erZGSaQJ5dUmW4LKRUA1SF/W4D9wp
-         NuE8qJvg5iOmWT/2ETtDreEiyeh12JL9ya2p4kpdU0ihSbCZCr1CAFOJYlpHqm3eTWDZ
-         q/c6cUih22GK0HpkMNzWoWu6mSw1bG/AT6RonHoMmSFg0CIy1fDs6So+Eb85jVobirla
-         o9BorYKjMcJUJG0nnXdpRb2eM2R291dK5JDCVR98p0JMx0+7ayrHGjH7zr5kWKyKDYt8
-         p8Rqw/A4XXg55xcudJ6Y9t3hZ4PlEPP5XWIdj+pddUNj5EU3s/yQ31yoxiulwn9Hzcf5
-         0NNQ==
-X-Gm-Message-State: AFqh2krUEwkQzDaLR8o4nBrVPXEqvcc/eyuj769vsED67MIuSlV4tE0i
-        Xr/HO18ulR/MDI07/2f+m6FfCyzist857VLEiNz4Mw==
-X-Google-Smtp-Source: AMrXdXu0EMTejStEvfuw0MDinG//EO3AdM5XPHW4c5XWtjDfz8npqgxmZS5z1qRVIzw1wvFeVznkiNtOTi4NmJ3dBNA=
-X-Received: by 2002:a17:906:80da:b0:872:618e:b01c with SMTP id
- a26-20020a17090680da00b00872618eb01cmr3636438ejx.275.1674729266315; Thu, 26
- Jan 2023 02:34:26 -0800 (PST)
+        Thu, 26 Jan 2023 05:34:26 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF61D3EC4B;
+        Thu, 26 Jan 2023 02:34:23 -0800 (PST)
+Date:   Thu, 26 Jan 2023 10:34:21 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674729262;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FcbMsLxLzSVPi5YivDAULjGl6AaAwxfLVanRJMCxmNw=;
+        b=S9Wx+Z6ICh5lyAV/fbKXOpGic9/RmLVdm23I9lGxRVMtAQVPJLs/Dv3TTsUszrudLvpaIQ
+        hzLDx9IR0mn4Xw4P4ou/NMdZX4lxepq7SOJOzpUEy9n93Z2zIcs4ESNJ5R774HetqCI1Tz
+        D7HgENQ1JcE/65y4wkcnMdmFR4ymD42cFhVLXtA/aK+tQzvrEI/5egxvZrRGYoWlF0ayZT
+        isS43jIU1cB1Yj7LLjVS4xN2vWvrj6WddcPVgYWXjv8ZxNICxJL8aR/bVC5lP0DsGsXkAl
+        o6IHYgwHAC1YSrDHkCIhd5GdZNT0U9Z891dWJrH7HLMJQSk/DTKam7kcmNgZsw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674729262;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FcbMsLxLzSVPi5YivDAULjGl6AaAwxfLVanRJMCxmNw=;
+        b=UaSBV2tS3Baf60PnBbp9XNzmzh5w8sby7nZaTyzYwrayG9qnXg+diYPj91BIRlvFYqE78/
+        H86WIElhuLpZ+gDw==
+From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cache] x86/resctrl: Fix a silly -Wunused-but-set-variable warning
+Cc:     kernel test robot <lkp@intel.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Babu Moger <babu.moger@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <202301242015.kbzkVteJ-lkp@intel.com>
+References: <202301242015.kbzkVteJ-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230124131717.128660-1-bchihi@baylibre.com> <20230124131717.128660-3-bchihi@baylibre.com>
- <20230125203420.GA2855708-robh@kernel.org>
-In-Reply-To: <20230125203420.GA2855708-robh@kernel.org>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Thu, 26 Jan 2023 11:33:50 +0100
-Message-ID: <CAGuA+oq1F4UnEz+ujjtaj=+WCMZOky38B4z4go7TXhMYt1EeEw@mail.gmail.com>
-Subject: Re: [PATCH v11 2/6] dt-bindings/thermal/mediatek: Add LVTS thermal
- controllers dt-binding definition
-To:     Rob Herring <robh@kernel.org>
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <167472926132.4906.9798540795502253502.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+The following commit has been merged into the x86/cache branch of tip:
 
-On Wed, Jan 25, 2023 at 9:34 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, Jan 24, 2023 at 02:17:13PM +0100, bchihi@baylibre.com wrote:
-> > From: Balsam CHIHI <bchihi@baylibre.com>
-> >
->
-> dt-bindings: thermal: ... for the subject
+Commit-ID:     793207bad71c5339c614d12ac21d627da7bf771d
+Gitweb:        https://git.kernel.org/tip/793207bad71c5339c614d12ac21d627da7bf771d
+Author:        Borislav Petkov (AMD) <bp@alien8.de>
+AuthorDate:    Tue, 24 Jan 2023 19:01:05 +01:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Thu, 26 Jan 2023 11:15:20 +01:00
 
-I will fix it.
+x86/resctrl: Fix a silly -Wunused-but-set-variable warning
 
->
-> > Add LVTS thermal controllers dt-binding definition for mt8195.
-> >
-> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> > ---
-> >  .../thermal/mediatek,lvts-thermal.yaml        | 107 ++++++++++++++++++
-> >  include/dt-bindings/thermal/mediatek-lvts.h   |  19 ++++
-> >  2 files changed, 126 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> >  create mode 100644 include/dt-bindings/thermal/mediatek-lvts.h
-> >
-> > diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> > new file mode 100644
-> > index 000000000000..12bfbdd8ff89
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> > @@ -0,0 +1,107 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MediaTek SoC Low Voltage Thermal Sensor (LVTS)
-> > +
-> > +maintainers:
-> > +  - Balsam CHIHI <bchihi@baylibre.com>
-> > +
-> > +description: |
-> > +  LVTS is a thermal management architecture composed of three subsystems,
-> > +  a Sensing device - Thermal Sensing Micro Circuit Unit (TSMCU),
-> > +  a Converter - Low Voltage Thermal Sensor converter (LVTS), and
-> > +  a Digital controller (LVTS_CTRL).
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt8195-lvts-ap
-> > +      - mediatek,mt8195-lvts-mcu
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +  resets:
-> > +    maxItems: 1
-> > +    description: LVTS reset for clearing temporary data on AP/MCU.
-> > +
-> > +  nvmem-cells:
-> > +    minItems: 1
-> > +    items:
-> > +      - description: Calibration eFuse data 1 for LVTS
-> > +      - description: Calibration eFuse data 2 for LVTS
-> > +
-> > +  nvmem-cell-names:
-> > +    minItems: 1
-> > +    items:
-> > +      - const: lvts-calib-data-1
-> > +      - const: lvts-calib-data-2
-> > +
-> > +  "#thermal-sensor-cells":
-> > +    const: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - resets
-> > +  - nvmem-cells
-> > +  - nvmem-cell-names
-> > +  - "#thermal-sensor-cells"
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/clock/mt8195-clk.h>
-> > +    #include <dt-bindings/reset/mt8195-resets.h>
-> > +    #include <dt-bindings/thermal/mediatek-lvts.h>
-> > +
-> > +    soc {
-> > +      #address-cells = <2>;
-> > +      #size-cells = <2>;
-> > +
-> > +      lvts_mcu: thermal-sensor@11278000 {
-> > +        compatible = "mediatek,mt8195-lvts-mcu";
-> > +        reg = <0 0x11278000 0 0x1000>;
-> > +        interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +        clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
-> > +        resets = <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
-> > +        nvmem-cells = <&lvts_efuse_data1 &lvts_efuse_data2>;
-> > +        nvmem-cell-names = "lvts-calib-data-1", "lvts-calib-data-2";
-> > +        #thermal-sensor-cells = <1>;
-> > +      };
-> > +    };
-> > +
-> > +    thermal_zones: thermal-zones {
-> > +      cpu0-thermal {
-> > +        polling-delay = <1000>;
-> > +        polling-delay-passive = <250>;
-> > +        thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU0>;
-> > +
-> > +        trips {
-> > +          cpu0_alert: trip-alert {
-> > +            temperature = <85000>;
-> > +            hysteresis = <2000>;
-> > +            type = "passive";
-> > +          };
-> > +
-> > +          cpu0_crit: trip-crit {
-> > +            temperature = <100000>;
-> > +            hysteresis = <2000>;
-> > +            type = "critical";
-> > +          };
-> > +        };
-> > +      };
-> > +    };
-> > diff --git a/include/dt-bindings/thermal/mediatek-lvts.h b/include/dt-bindings/thermal/mediatek-lvts.h
-> > new file mode 100644
-> > index 000000000000..428a95c18509
-> > --- /dev/null
-> > +++ b/include/dt-bindings/thermal/mediatek-lvts.h
-> > @@ -0,0 +1,19 @@
-> > +/* SPDX-License-Identifier: GPL-2.0+ */
->
-> Okay with GPL 4? GPL-2.0-only
->
-> Dual license please. Consistent with your .dts files.
+clang correctly complains
 
-I will fix this too.
+  arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable \
+     'h' set but not used [-Wunused-but-set-variable]
+          u32 h;
+              ^
 
->
-> > +/*
-> > + * Copyright (c) 2023 MediaTek Inc.
-> > + * Author: Balsam CHIHI <bchihi@baylibre.com>
-> > + */
-> > +
-> > +#ifndef __MEDIATEK_LVTS_DT_H
-> > +#define __MEDIATEK_LVTS_DT_H
-> > +
-> > +#define MT8195_MCU_BIG_CPU0  0
-> > +#define MT8195_MCU_BIG_CPU1  1
-> > +#define MT8195_MCU_BIG_CPU2  2
-> > +#define MT8195_MCU_BIG_CPU3  3
-> > +#define MT8195_MCU_LITTLE_CPU0       4
-> > +#define MT8195_MCU_LITTLE_CPU1       5
-> > +#define MT8195_MCU_LITTLE_CPU2       6
-> > +#define MT8195_MCU_LITTLE_CPU3       7
-> > +
-> > +#endif /* __MEDIATEK_LVTS_DT_H */
-> > --
-> > 2.34.1
-> >
+but it can't know whether this use is innocuous or really a problem.
+There's a reason why those warning switches are behind a W=1 and not
+enabled by default - yes, one needs to do:
 
-Thank you for the review.
+  make W=1 CC=clang HOSTCC=clang arch/x86/kernel/cpu/resctrl/
 
-Best regards,
-Balsam
+with clang 14 in order to trigger it.
+
+I would normally not take a silly fix like that but this one is simple
+and doesn't make the code uglier so...
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Acked-by: Reinette Chatre <reinette.chatre@intel.com>
+Tested-by: Babu Moger <babu.moger@amd.com>
+Link: https://lore.kernel.org/r/202301242015.kbzkVteJ-lkp@intel.com
+---
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index 5990589..e2c1599 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -1453,17 +1453,17 @@ static void mon_event_config_read(void *info)
+ {
+ 	struct mon_config_info *mon_info = info;
+ 	unsigned int index;
+-	u32 h;
++	u64 msrval;
+ 
+ 	index = mon_event_config_index_get(mon_info->evtid);
+ 	if (index == INVALID_CONFIG_INDEX) {
+ 		pr_warn_once("Invalid event id %d\n", mon_info->evtid);
+ 		return;
+ 	}
+-	rdmsr(MSR_IA32_EVT_CFG_BASE + index, mon_info->mon_config, h);
++	rdmsrl(MSR_IA32_EVT_CFG_BASE + index, msrval);
+ 
+ 	/* Report only the valid event configuration bits */
+-	mon_info->mon_config &= MAX_EVT_CONFIG_BITS;
++	mon_info->mon_config = msrval & MAX_EVT_CONFIG_BITS;
+ }
+ 
+ static void mondata_config_read(struct rdt_domain *d, struct mon_config_info *mon_info)
