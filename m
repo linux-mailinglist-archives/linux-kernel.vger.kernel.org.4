@@ -2,109 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F6567C48C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4564567C491
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbjAZGrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 01:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
+        id S235949AbjAZGtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 01:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235490AbjAZGrn (ORCPT
+        with ESMTP id S230233AbjAZGtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 01:47:43 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066EC4FC2B;
-        Wed, 25 Jan 2023 22:47:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 81B19CE213B;
-        Thu, 26 Jan 2023 06:47:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F1C9C433EF;
-        Thu, 26 Jan 2023 06:47:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674715657;
-        bh=U/Lr21J7uETR5Skm9OfM4ZqCMCq4HQhi2ibbyNKSkjc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kaafE+jQbTnGxuLXUHXU31+JU6kuVUhkafuGhIeymDGK5C16crV2eGVuoY1VBI4ev
-         KPXMicohRm+pjemlIz4i+WO77VOO7XFFBU8yyMQE7G0fj6tQPvcp1dlTVzHJpKkX7h
-         i8Fe1cqCd/WQGg7E7YkUXY3WVTl0e4A0ztIxoXlVJLT1DxErgEmeVt/bFSo1gQ0898
-         GLy0XgbgivS/a66BcqPhMUMLirkOPT9orb7DNcFd6SiGS4jNnselL5fwzvarMJ/YEF
-         6tomUg1qd1epL1GXphDTaPXYyb3criFtRwpdgig0ZxBk2O9VmFejG9ls1bzd7Yj9ME
-         tnKaStt8LsrQw==
-Date:   Thu, 26 Jan 2023 14:47:30 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     l.stach@pengutronix.de, bhelgaas@google.com, robh+dt@kernel.org,
-        lorenzo.pieralisi@arm.com, kishon@ti.com, kw@linux.com,
-        frank.li@nxp.com, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Subject: Re: [PATCH v5 04/14] arm64: dts: Add i.MX8MM PCIe EP support
-Message-ID: <20230126064728.GQ20713@T480>
-References: <1673847684-31893-1-git-send-email-hongxing.zhu@nxp.com>
- <1673847684-31893-5-git-send-email-hongxing.zhu@nxp.com>
+        Thu, 26 Jan 2023 01:49:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253F0271B
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 22:48:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674715733;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NmaQytAd5teTparcEG1b1oyi2EiAKphXrn+FZrXb+Qo=;
+        b=IiipaUj2gmTNVi6mNaCWfkA34xEPki2kbGnVYbpNkmNXpdUXWDNcceFxzsfPSa7rj3xKa9
+        uPX0DNFaIdB9xdq82zMtxb4ggq3qQ3fAnqkWPJ/eDYwzfD9nlCaAysfL1ylVi33ScjGcFQ
+        9e2wFcYKpdpl94kRNKJcw1chHFe++rQ=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-263-iK1wgk06PIyXgcSC_J77FA-1; Thu, 26 Jan 2023 01:48:52 -0500
+X-MC-Unique: iK1wgk06PIyXgcSC_J77FA-1
+Received: by mail-qv1-f71.google.com with SMTP id k15-20020a0cd68f000000b00535261af1b1so611953qvi.13
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 22:48:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NmaQytAd5teTparcEG1b1oyi2EiAKphXrn+FZrXb+Qo=;
+        b=dMXo7pw/x3Bo/ONP0J9AHFr7NssUjlSk8S97wsOXh1wuWs+G12KDFPWmoA70ltGL3I
+         VvDoidBBEjKwD+CR64UevO+KCw5qdWyB+0Dw88cJW9fJ9+4RhgHupwlJixa3K44zL4Pr
+         Te+uYJRs7pEhBK1uXbsq+l8V8gUC8PUhvnQ6LViUnY7+FvNCq7n2LCW67XugNVX1VIBK
+         yheodrjv4vcYlsR5k7TF18wtKOY3I88A0Z9eNoWWZVrr/5pWOsHE5gD2YbtvGcnk04CK
+         yMXr39lJxXp9bF9uV4qSJBtQOmGEm67Q0Nb+GG6zkcsWpbN5ZbQUDtSOtc1XCKaMEY9O
+         G22w==
+X-Gm-Message-State: AO0yUKWu1N3QGAizuKrTTp05S5ZVApx28Uqqm1D2tgxnlhAJLxtJ6i9h
+        78tIWDuXWqhx9SbNGfWIyDPamZmVu1OfWSTDdyClWJQfwvbKZpqFLHz42YVw3oipKD4ODotv89U
+        PI/CDlnF2LcdwClxCWrwyQHZ9
+X-Received: by 2002:ac8:7dd5:0:b0:3b0:d422:1cbe with SMTP id c21-20020ac87dd5000000b003b0d4221cbemr2751011qte.10.1674715731563;
+        Wed, 25 Jan 2023 22:48:51 -0800 (PST)
+X-Google-Smtp-Source: AK7set90BkmPDKwMD/1Qt0FIfZGx66CPV1T0quAs3f1ZGGwe1yW0KU3JJXf3B7GHqjaXgkSzLHxxOw==
+X-Received: by 2002:ac8:7dd5:0:b0:3b0:d422:1cbe with SMTP id c21-20020ac87dd5000000b003b0d4221cbemr2751000qte.10.1674715731308;
+        Wed, 25 Jan 2023 22:48:51 -0800 (PST)
+Received: from [192.168.8.105] (tmo-064-101.customers.d1-online.com. [80.187.64.101])
+        by smtp.gmail.com with ESMTPSA id fb23-20020a05622a481700b003b62cd6e60esm253556qtb.43.2023.01.25.22.48.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 22:48:50 -0800 (PST)
+Message-ID: <a1141cf5-8c44-5e9e-688c-c9dab3ebe8d4@redhat.com>
+Date:   Thu, 26 Jan 2023 07:48:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1673847684-31893-5-git-send-email-hongxing.zhu@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+References: <20230125212608.1860251-1-scgl@linux.ibm.com>
+ <20230125212608.1860251-9-scgl@linux.ibm.com>
+From:   Thomas Huth <thuth@redhat.com>
+Subject: Re: [PATCH v6 08/14] KVM: s390: Move common code of mem_op functions
+ into functions
+In-Reply-To: <20230125212608.1860251-9-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 01:41:14PM +0800, Richard Zhu wrote:
-> Add i.MX8MM PCIe EP support.
+On 25/01/2023 22.26, Janis Schoetterl-Glausch wrote:
+> The vcpu and vm mem_op ioctl implementations share some functionality.
+> Move argument checking and buffer allocation into functions and call
+> them from both implementations.
+> This allows code reuse in case of additional future mem_op operations.
 > 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 > ---
->  arch/arm64/boot/dts/freescale/imx8mm.dtsi | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+>   arch/s390/kvm/kvm-s390.c | 80 +++++++++++++++++++++-------------------
+>   1 file changed, 42 insertions(+), 38 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> index 4ee89fdcf59b..8124761f629c 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> @@ -1293,6 +1293,26 @@ pcie0: pcie@33800000 {
->  			status = "disabled";
->  		};
->  
-> +		pcie0_ep: pcie_ep@33800000 {
-
-Hyphen is more preferable than underscore in name node.
-
-I fixed it (and the other two patches) up, and applied all DTS patches.
-
-Shawn
-
-> +			compatible = "fsl,imx8mm-pcie-ep";
-> +			reg = <0x33800000 0x400000>,
-> +			      <0x18000000 0x8000000>;
-> +			reg-names = "regs", "addr_space";
-> +			num-lanes = <1>;
-> +			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "dma";
-> +			fsl,max-link-speed = <2>;
-> +			power-domains = <&pgc_pcie>;
-> +			resets = <&src IMX8MQ_RESET_PCIE_CTRL_APPS_EN>,
-> +				 <&src IMX8MQ_RESET_PCIE_CTRL_APPS_TURNOFF>;
-> +			reset-names = "apps", "turnoff";
-> +			phys = <&pcie_phy>;
-> +			phy-names = "pcie-phy";
-> +			num-ib-windows = <4>;
-> +			num-ob-windows = <4>;
-> +			status = "disabled";
-> +		};
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index e4890e04b210..e0dfaa195949 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -2764,24 +2764,44 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
+>   	return r;
+>   }
+>   
+> -static bool access_key_invalid(u8 access_key)
+> +static int mem_op_validate_common(struct kvm_s390_mem_op *mop, u64 supported_flags)
+>   {
+> -	return access_key > 0xf;
+> +	if (mop->flags & ~supported_flags || !mop->size)
+> +		return -EINVAL;
+> +	if (mop->size > MEM_OP_MAX_SIZE)
+> +		return -E2BIG;
+> +	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
+> +		if (mop->key > 0xf)
+> +			return -EINVAL;
+> +	} else {
+> +		mop->key = 0;
+> +	}
+> +	return 0;
+> +}
 > +
->  		gpu_3d: gpu@38000000 {
->  			compatible = "vivante,gc";
->  			reg = <0x38000000 0x8000>;
-> -- 
-> 2.25.1
-> 
+> +static void *mem_op_alloc_buf(struct kvm_s390_mem_op *mop)
+> +{
+> +	void *buf;
+> +
+> +	if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)
+> +		return NULL;
+> +	buf = vmalloc(mop->size);
+> +	if (!buf)
+> +		return ERR_PTR(-ENOMEM);
+> +	return buf;
+>   }
+>   
+>   static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   {
+>   	void __user *uaddr = (void __user *)mop->buf;
+> -	u64 supported_flags;
+>   	void *tmpbuf = NULL;
+
+You likely can now remove the "= NULL" here, I guess?
+
+>   	int r, srcu_idx;
+>   
+> -	supported_flags = KVM_S390_MEMOP_F_SKEY_PROTECTION
+> -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
+> -	if (mop->flags & ~supported_flags || !mop->size)
+> -		return -EINVAL;
+> -	if (mop->size > MEM_OP_MAX_SIZE)
+> -		return -E2BIG;
+> +	r = mem_op_validate_common(mop, KVM_S390_MEMOP_F_SKEY_PROTECTION |
+> +					KVM_S390_MEMOP_F_CHECK_ONLY);
+> +	if (r)
+> +		return r;
+> +
+>   	/*
+>   	 * This is technically a heuristic only, if the kvm->lock is not
+>   	 * taken, it is not guaranteed that the vm is/remains non-protected.
+> @@ -2793,17 +2813,9 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   	 */
+>   	if (kvm_s390_pv_get_handle(kvm))
+>   		return -EINVAL;
+> -	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
+> -		if (access_key_invalid(mop->key))
+> -			return -EINVAL;
+> -	} else {
+> -		mop->key = 0;
+> -	}
+> -	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
+> -		tmpbuf = vmalloc(mop->size);
+> -		if (!tmpbuf)
+> -			return -ENOMEM;
+> -	}
+> +	tmpbuf = mem_op_alloc_buf(mop);
+> +	if (IS_ERR(tmpbuf))
+> +		return PTR_ERR(tmpbuf);
+>   
+>   	srcu_idx = srcu_read_lock(&kvm->srcu);
+>   
+> @@ -5250,28 +5262,20 @@ static long kvm_s390_vcpu_mem_op(struct kvm_vcpu *vcpu,
+>   {
+>   	void __user *uaddr = (void __user *)mop->buf;
+>   	void *tmpbuf = NULL;
+
+... and here, too.
+
+But I have to admit that I'm also not sure whether I like the 
+mem_op_alloc_buf() part or not (the mem_op_validate_common() part looks fine 
+to me) : mem_op_alloc_buf() is a new function with 11 lines of code, and the 
+old spots that allocate memory were only 5 lines of code each, so you now 
+increased the LoC count and additionally have to fiddly with IS_ERR and 
+PTR_ERR which is always a little bit ugly in my eyes ... IMHO I'd rather 
+keep the old code here. But that's just my 0.02 €, if you think it's nicer 
+with mem_op_alloc_buf(), I won't insist on keeping the old code.
+
+  Thomas
+
+
+> -	int r = 0;
+> -	const u64 supported_flags = KVM_S390_MEMOP_F_INJECT_EXCEPTION
+> -				    | KVM_S390_MEMOP_F_CHECK_ONLY
+> -				    | KVM_S390_MEMOP_F_SKEY_PROTECTION;
+> +	int r;
+>   
+> -	if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size)
+> +	r = mem_op_validate_common(mop, KVM_S390_MEMOP_F_INJECT_EXCEPTION |
+> +					KVM_S390_MEMOP_F_CHECK_ONLY |
+> +					KVM_S390_MEMOP_F_SKEY_PROTECTION);
+> +	if (r)
+> +		return r;
+> +	if (mop->ar >= NUM_ACRS)
+>   		return -EINVAL;
+> -	if (mop->size > MEM_OP_MAX_SIZE)
+> -		return -E2BIG;
+>   	if (kvm_s390_pv_cpu_is_protected(vcpu))
+>   		return -EINVAL;
+> -	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
+> -		if (access_key_invalid(mop->key))
+> -			return -EINVAL;
+> -	} else {
+> -		mop->key = 0;
+> -	}
+> -	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
+> -		tmpbuf = vmalloc(mop->size);
+> -		if (!tmpbuf)
+> -			return -ENOMEM;
+> -	}
+> +	tmpbuf = mem_op_alloc_buf(mop);
+> +	if (IS_ERR(tmpbuf))
+> +		return PTR_ERR(tmpbuf);
+>   
+>   	switch (mop->op) {
+>   	case KVM_S390_MEMOP_LOGICAL_READ:
+
