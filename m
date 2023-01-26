@@ -2,115 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9365667C62C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D4967C630
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235610AbjAZIrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 03:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        id S236180AbjAZIum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 03:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbjAZIrK (ORCPT
+        with ESMTP id S233264AbjAZIul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 03:47:10 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D64B18B22;
-        Thu, 26 Jan 2023 00:47:10 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id g16so772712qtu.2;
-        Thu, 26 Jan 2023 00:47:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uyvIiOs8TFT5QdDt56s5AZud5rN36NlIHxnKx2RxH+M=;
-        b=z5VQVQj2l/0Y4IAJi6pSC2tqdGbQ3r5MZL3TB+bRvecbWXbfLYivj9nwrAPnOeh+83
-         ocFxmEFXuhtQtpiu4OsmRm55blVyHy/b6BCikZGiPMHJcBxvvUbQTjpEMKurKbCHXnR1
-         qqmapMkdiMhrQyeIjZC2UE0wiHEKljgeanirpQSMDbYosw6Jsp5h0IZNThggXe5FIGP0
-         E90OhFgpVwkx1MZIhCVyyBINJMh+7PAjdFzND0D+jvDdfSKqyfA/e9Q04twQ/XdTF2r0
-         Uo3pebGuhyQT2PkVDtVtQRaydO3KR6j0AF3h9zdGKwjddVV/Cp0dXKkD9LcxbuZPqILS
-         TQCA==
-X-Gm-Message-State: AFqh2krB25Kc65Vez+ZjRNDViOy22qazmwADD+Gw/pYEms4OPy4FHQod
-        QxNlPeoScfMTl+AQ+g8Mt1022Mi6Omd3JA==
-X-Google-Smtp-Source: AMrXdXsIrvAqIzyGRdIbtJ55Ah+FjFDlwSZQCkO1edIw4lVoAxIN0o40T4G1211v6mXH3ejVwqxm9A==
-X-Received: by 2002:ac8:1008:0:b0:3ab:6a9a:aa8b with SMTP id z8-20020ac81008000000b003ab6a9aaa8bmr45157604qti.60.1674722828933;
-        Thu, 26 Jan 2023 00:47:08 -0800 (PST)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id 2-20020ac85602000000b003b68c7aeebfsm421736qtr.3.2023.01.26.00.47.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 00:47:08 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-50660e2d2ffso14483657b3.1;
-        Thu, 26 Jan 2023 00:47:07 -0800 (PST)
-X-Received: by 2002:a0d:f281:0:b0:508:2f2c:8e5f with SMTP id
- b123-20020a0df281000000b005082f2c8e5fmr253434ywf.384.1674722827384; Thu, 26
- Jan 2023 00:47:07 -0800 (PST)
+        Thu, 26 Jan 2023 03:50:41 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D92402FA
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 00:50:40 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 013211FEC8;
+        Thu, 26 Jan 2023 08:50:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674723038; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IvynYn1TeTR37CMNyUJIdJbXjbksPqyXG4Gm0PnotkU=;
+        b=o3nLFQKq7gWk7kZ3BEWxJHkMbjMWpRw3n+rc+6LqXsQOqWJDsrgVJHlecgA8lBwNfz6VJO
+        oPiG8IsYXQqeHLdFldfHPGpXX4glM+e4XVVrXRvt02zvGQYxOGUYc69q3gbgb0lQ7Sqa88
+        CD6YJNavR9sZjhIljGx0RTf8pN+GCwY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9423139B3;
+        Thu, 26 Jan 2023 08:50:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VFUWM90+0mPEQgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 26 Jan 2023 08:50:37 +0000
+Date:   Thu, 26 Jan 2023 09:50:37 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] mm/madvise: add vmstat statistics for
+ madvise_[cold|pageout]
+Message-ID: <Y9I+3ZkWRdXdPBxg@dhcp22.suse.cz>
+References: <20230125005457.4139289-1-minchan@kernel.org>
+ <Y9DigKf0w712t0OO@dhcp22.suse.cz>
+ <Y9FacrcUIaLZq4DL@google.com>
+ <Y9FhtBbnlNxAZAS4@dhcp22.suse.cz>
+ <Y9Fv9YnNn7bHvLkN@google.com>
+ <Y9GhNxqfjTEAFr5V@dhcp22.suse.cz>
+ <Y9Grb2rggptkCu+n@google.com>
 MIME-Version: 1.0
-References: <IA1PR07MB98308653E259A6F2CE94A4AFABCE9@IA1PR07MB9830.namprd07.prod.outlook.com>
-In-Reply-To: <IA1PR07MB98308653E259A6F2CE94A4AFABCE9@IA1PR07MB9830.namprd07.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 26 Jan 2023 09:46:55 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVbW7jmO-Q8=f1HicPNzxb70TPE57akkDCcqvrS=gA9Hg@mail.gmail.com>
-Message-ID: <CAMuHMdVbW7jmO-Q8=f1HicPNzxb70TPE57akkDCcqvrS=gA9Hg@mail.gmail.com>
-Subject: Re: UBSAN: shift-out-of-bounds in fbcon_set_font
-To:     Sanan Hasanov <sanan.hasanov@knights.ucf.edu>
-Cc:     "deller@gmx.de" <deller@gmx.de>,
-        "sam@ravnborg.org" <sam@ravnborg.org>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "samuel.thibault@ens-lyon.org" <samuel.thibault@ens-lyon.org>,
-        "penguin-kernel@I-love.SAKURA.ne.jp" 
-        <penguin-kernel@i-love.sakura.ne.jp>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "contact@pgazz.com" <contact@pgazz.com>,
-        "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9Grb2rggptkCu+n@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sanan,
+On Wed 25-01-23 14:21:35, Minchan Kim wrote:
+> On Wed, Jan 25, 2023 at 10:37:59PM +0100, Michal Hocko wrote:
+> > On Wed 25-01-23 10:07:49, Minchan Kim wrote:
+> > > On Wed, Jan 25, 2023 at 06:07:00PM +0100, Michal Hocko wrote:
+> > > > On Wed 25-01-23 08:36:02, Minchan Kim wrote:
+> > > > > On Wed, Jan 25, 2023 at 09:04:16AM +0100, Michal Hocko wrote:
+> > > > > > On Tue 24-01-23 16:54:57, Minchan Kim wrote:
+> > > > > > > madvise LRU manipulation APIs need to scan address ranges to find
+> > > > > > > present pages at page table and provides advice hints for them.
+> > > > > > > 
+> > > > > > > Likewise pg[scan/steal] count on vmstat, madvise_pg[scanned/hinted]
+> > > > > > > shows the proactive reclaim efficiency so this patch adds those
+> > > > > > > two statistics in vmstat.
+> > > > > > > 
+> > > > > > > 	madvise_pgscanned, madvise_pghinted
+> > > > > > > 
+> > > > > > > Since proactive reclaim using process_madvise(2) as userland
+> > > > > > > memory policy is popular(e.g,. Android ActivityManagerService),
+> > > > > > > those stats are helpful to know how efficiently the policy works
+> > > > > > > well.
+> > > > > > 
+> > > > > > The usecase description is still too vague. What are those values useful
+> > > > > > for? Is there anything actionable based on those numbers? How do you
+> > > > > > deal with multiple parties using madvise resp. process_madvise so that
+> > > > > > their stats are combined?
+> > > > > 
+> > > > > The metric helps monitoing system MM health under fleet and experimental
+> > > > > tuning with diffrent policies from the centralized userland memory daemon.
+> > > > 
+> > > > That is just too vague for me to imagine anything more specific then, we
+> > > > have numbers and we can show them in a report. What does it actually
+> > > > mean that madvise_pgscanned is high. Or that pghinted / pgscanned is
+> > > > low (that you tend to manually reclaim sparse mappings)?
+> > > 
+> > > If that's low, it means the userspace daemon's current tune/policy are
+> > > inefficient or too aggressive since it is working on address spacess
+> > > of processes which don't have enough memory the hint can work(e.g.,
+> > > shared addresses, cold address ranges or some special address ranges like
+> > > VM_PFNMAP) so sometime, we can detect regression to find culprit or
+> > > have a chance to look into better ideas to improve.
+> > 
+> > Are you sure this is really meaningful metric? Just consider a large and
+> > sparsely populated mapping. This can be a perfect candidate for user
+> > space reclaim target (e.g. consider a mapping covering a large matrix
+> > or other similar data structure). pghinted/pgscanned would be really
+> > small while the reclaim efficiency could be quite high in that case,
+> > wouldn't it?
+> 
+> Why do you think it's efficient? It need to spend quite CPU cycle to
+> scan a few of pages to evict. I don't see it's efficient if it happens
+> quite a lot.
 
-On Thu, Jan 26, 2023 at 12:58 AM Sanan Hasanov
-<sanan.hasanov@knights.ucf.edu> wrote:
-> We found a bug using a modified kernel configuration file used by syzbot.
->
-> We enhanced the coverage of the configuration file using our tool, klocalizer.
->
-> Kernel Branch: 6.2.0-rc5-next-20230124
-> Kernel config: https://drive.google.com/file/d/1F-LszDAizEEH0ZX0HcSR06v5q8FPl2Uv/view?usp=sharing
-> Reproducer: https://drive.google.com/file/d/1mP1jcLBY7vWCNM60OMf-ogw-urQRjNrm/view?usp=sharing
->
-> Thank you!
->
-> Best regards,
-> Sanan Hasanov
->
-> ================================================================================
-> UBSAN: shift-out-of-bounds in drivers/video/fbdev/core/fbcon.c:2489:33
-> shift exponent 35 is too large for 32-bit type 'int'
+Because it doesn't really matter how many page tables you have to scan
+but how easily you can reclaim the memory behind that. Because it is the
+memory that matters. Just consider THP vs. 4k backed address ranges. You
+are going to scan much more for latter by design. That doesn't really
+mean that this is a worse candidate for reclaim and you should be only
+focusing on THP backed mappings. See?
 
-This looks valid to me: con_font_set() checks the font width and height
-against max_font_width (64) and max_font_height (128), but fbcon has
-stricter limits.
+I suspect you try to mimic pgscan/pgsteal effectivness metric on the
+address space but that is a fundamentally different thing.
 
-fbcon_set_font() should reject fonts with width > 32 or height > 32.
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Michal Hocko
+SUSE Labs
