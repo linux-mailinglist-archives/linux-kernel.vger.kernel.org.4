@@ -2,88 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D00867D8DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F245567D8DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbjAZWyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:54:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S233067AbjAZWyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233054AbjAZWye (ORCPT
+        with ESMTP id S233000AbjAZWye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 Jan 2023 17:54:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8AA7AA8;
-        Thu, 26 Jan 2023 14:54:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF00CB81C5E;
-        Thu, 26 Jan 2023 22:54:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66A2AC433D2;
-        Thu, 26 Jan 2023 22:54:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674773667;
-        bh=A3hJdPRvqNFhvIc040dVHaOyGrcDglgpuQvKqvik2wo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=otj/1MSrw0yysqoNbGEuXeqQMozGhrSqIB9eZlrYgbsXb4hIJbrZMzmFR7/RnYlIQ
-         u5V34KfTKJG9ucf79p0W1+TlGqcCdMG11D1PJxtMXKq3CVYLrD/jxEyVpzZq736mSn
-         D240LUTOUZRvQW1B4b15LN0zrhZoVckt9GfvmDGiIvBCO2AIrqZZOoLIuyF6Cri+8K
-         phI/LbAbDN9O2VSUNn8vSqwMpux/0Fo48+4Gk80UfKowbTCeDINM1rwX7PA3TWGMoz
-         uLixwzi5EQJL6KJSG8Kl6wJ6p0mjzZ/mjg99bBrEaEc6CgkgIi+gQ2K9hdgpf9Ilkw
-         BB5Z8mFI1EN9A==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH v2] printk: Document that CONFIG_BOOT_PRINTK_DELAY required for boot_delay=
-Date:   Thu, 26 Jan 2023 16:54:20 -0600
-Message-Id: <20230126225420.1320276-1-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53D74FAFF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:54:29 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id g15so1444540ild.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:54:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4YOljWyGQiSDuWcg4PQG6vSllKDFhB9jVbes21tjtGs=;
+        b=YK8qP085Bvta3Nfw6rwSlDN3b2YCnwzGBK+SlpHBmCm8Cca5p1UcVmiO+CgBRuaGru
+         mtfMKh8eO+ltKfPoOwqCC75A8aJdkaTZuhM62ADET+LG21AOPi513wU1nIdR1YqTtU1t
+         SNKUbHOdlwb8sHPb32SqisRbzaLS7k8Y2LK1M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4YOljWyGQiSDuWcg4PQG6vSllKDFhB9jVbes21tjtGs=;
+        b=u1w6YRX44ZB0m/YtpgVUDHO46fTz7gZRB+mKFE/mtM00GtPElLWxY0uY8g76K/62x3
+         LxYb3AmgNh/xqXGulFar+3lS3te+I7xVd/G/3U512Ka9Ge3feGZ1rbYXpUQQZBqm+epF
+         2BCSoZ05HvWljopiEVmPpr9+lKxqR4bq4LLhUm/LYMoVSyqSwX1Qu9gnFNbxfbbcRt06
+         IUJZomexJqdeeHDVoX1xwpxyI9kDyBJW3bMtHCeaRRKhU+Wk66wFau1ooZv6hTu5Q3+T
+         tK6AgJ+71peYrEFAWtdFwREVwQ6y3Pw6uHDlcVoFIKMaMfxjwR4SsRIupRiNxm3ZdZpS
+         cCpw==
+X-Gm-Message-State: AO0yUKUImCDJ7vHlzftIATbilcIPX+QfAkSA90j5T4xmEDQ2Lr4zEQ0+
+        NvrwBcqDX1DQZ+jMpOvmGA8JAg==
+X-Google-Smtp-Source: AK7set9imA/gYnoLNO9UwE1NbKQQNZm5PPCorp0iwwdfhgwKqUaGGLBLOCuzHOqwTIU1hvJsLx611Q==
+X-Received: by 2002:a92:6810:0:b0:310:9adc:e1bb with SMTP id d16-20020a926810000000b003109adce1bbmr1453260ilc.0.1674773669138;
+        Thu, 26 Jan 2023 14:54:29 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id h31-20020a022b1f000000b00363f8e0ab41sm836828jaa.152.2023.01.26.14.54.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 14:54:28 -0800 (PST)
+Message-ID: <604dc49a-fd03-4407-0e13-d16022ba81c4@linuxfoundation.org>
+Date:   Thu, 26 Jan 2023 15:54:27 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH] selftests: Fix: search kernel headers in
+ $(KHDR_INCLUDES)
+Content-Language: en-US
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, stable@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230117201724.11869-1-mathieu.desnoyers@efficios.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230117201724.11869-1-mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+On 1/17/23 13:17, Mathieu Desnoyers wrote:
+> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
+> building against kernel headers from the build environment in scenarios
+> where kernel headers are installed into a specific output directory
+> (O=...).
+> 
 
-Document the fact that CONFIG_BOOT_PRINTK_DELAY must be enabled for the
-"boot_delay" kernel parameter to work.  Also mention that "lpj=" may be
-necessary.
+The change looks good to me.
+> [ Hopefully I did not break too many things with this selftests-wide
+>    change. Additional testing would be welcome before merging, especially
+>    given that whenever we get this wrong, it appears to fall-back on the
+>    build environment system headers, which hides issues. This applies on
+>    top of v6.2-rc3. ]
+> 
 
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
-Changes from v1 (https://lore.kernel.org/all/20230123180440.901793-1-helgaas@kernel.org/):
-- Clarify use of "lpj=".  Reword consequences of delay larger than 10000.
+One concern with treewide change is the merge conflicts. Selftests
+go through several trees as you may already know.
 
- Documentation/admin-guide/kernel-parameters.txt | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Would it be possible for you send patch series instead? Patch series
+will help us avoid merge conflict issues.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 6cfa6e3996cf..814e58487239 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -480,8 +480,10 @@
- 			See Documentation/block/cmdline-partition.rst
- 
- 	boot_delay=	Milliseconds to delay each printk during boot.
--			Values larger than 10 seconds (10000) are changed to
--			no delay (0).
-+			Only works if CONFIG_BOOT_PRINTK_DELAY is enabled,
-+			and you may also have to specify "lpj=".  Boot_delay
-+			values larger than 10 seconds (10000) are assumed
-+			erroneous and ignored.
- 			Format: integer
- 
- 	bootconfig	[KNL]
--- 
-2.25.1
+I will run tests on this patch and let you know in the meatime.
 
+thanks,
+-- Shuah
