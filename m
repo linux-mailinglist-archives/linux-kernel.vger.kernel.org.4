@@ -2,82 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3970867CA3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C0067CA42
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237359AbjAZLrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 06:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
+        id S237373AbjAZLtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 06:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237355AbjAZLrt (ORCPT
+        with ESMTP id S237362AbjAZLt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 06:47:49 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D18A6E8D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:47:48 -0800 (PST)
-Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pL0jH-0007Co-LV; Thu, 26 Jan 2023 12:47:43 +0100
-Message-ID: <483d0045-f71c-5a85-fb4d-5eee3010da7c@leemhuis.info>
-Date:   Thu, 26 Jan 2023 12:47:43 +0100
+        Thu, 26 Jan 2023 06:49:28 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E98D3FF21;
+        Thu, 26 Jan 2023 03:49:26 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5E8441FF3F;
+        Thu, 26 Jan 2023 11:49:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674733765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XxsY7YJivcVXv/JzbSrqly22j3+hrQ/gP/mZJ85hOmM=;
+        b=PFl31VywpTHBZGWIgd9uRk3v2XHk0OLkw48lxQB/Gf3mKcK58iqtZ3FZUImQd8Nyga0fYC
+        I05ylbJXSO1YY7P958zJ2LoobK/Eawt+RRMwuU1lwWEjpe2OrTfaHDDtPazu5rH1A6XY3E
+        N8Jrtmby4uUXUY6wJs3SPw1ZmNSAW9g=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3A4912C141;
+        Thu, 26 Jan 2023 11:49:25 +0000 (UTC)
+Date:   Thu, 26 Jan 2023 12:49:24 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Seth Forshee <sforshee@kernel.org>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] vhost: check for pending livepatches from vhost
+ worker kthreads
+Message-ID: <Y9JoxAHLplZoVPea@alley>
+References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
+ <20230120-vhost-klp-switching-v1-2-7c2b65519c43@kernel.org>
+ <Y8/ohzRGcOiqsh69@alley>
+ <Y9ATo5FukOhphwqT@do-x1extreme>
+ <Y9ETwsT4LTXyH/0m@alley>
+ <Y9FfenH/p3qzRlar@do-x1extreme>
+ <Y9JhEJXFRDZjONAH@alley>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [bisected] clang 15 built kernel fails to boot, stuck at "Loading
- Linux 6.1.1 ...", gcc 12 built kernel with same config boots fine
-Content-Language: en-US, de-DE
-From:   "Linux kernel regression tracking (#update)" 
-        <regressions@leemhuis.info>
-To:     "Erhard F." <erhard_f@mailbox.org>, sandipan.das@amd.com
-Cc:     peterz@infradead.org, linux-kernel@vger.kernel.org,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <20230119022303.177052e4@yea>
- <27bd67f4-8b08-6c5b-137c-e9ef543e6d56@leemhuis.info>
-In-Reply-To: <27bd67f4-8b08-6c5b-137c-e9ef543e6d56@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674733668;bb464651;
-X-HE-SMSGID: 1pL0jH-0007Co-LV
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9JhEJXFRDZjONAH@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: a developer afaics forgot to use proper Link: tags when
-submitting changes that apparently address the regression discussed in
-this thread. This forces me to write this mail, which sole purpose it to
-update the state of this tracked Linux kernel regression.]
+On Thu 2023-01-26 12:16:36, Petr Mladek wrote:
+> On Wed 2023-01-25 10:57:30, Seth Forshee wrote:
+> > On Wed, Jan 25, 2023 at 12:34:26PM +0100, Petr Mladek wrote:
+> > > On Tue 2023-01-24 11:21:39, Seth Forshee wrote:
+> > > > On Tue, Jan 24, 2023 at 03:17:43PM +0100, Petr Mladek wrote:
+> > > > > On Fri 2023-01-20 16:12:22, Seth Forshee (DigitalOcean) wrote:
+> > > > > > Livepatch relies on stack checking of sleeping tasks to switch kthreads,
+> > > > > > so a busy kthread can block a livepatch transition indefinitely. We've
+> > > > > > seen this happen fairly often with busy vhost kthreads.
+> > > > > 
+> > > > > > --- a/drivers/vhost/vhost.c
+> > > > > > +++ b/drivers/vhost/vhost.c
+> > > > > > @@ -366,6 +367,9 @@ static int vhost_worker(void *data)
+> > > > > >  			if (need_resched())
+> > > > > >  				schedule();
+> > > > > >  		}
+> > > > > > +
+> > > > > > +		if (unlikely(klp_patch_pending(current)))
+> > > > > > +			klp_switch_current();
+> > > > > 
+> > > > > I suggest to use the following intead:
+> > > > > 
+> > > > > 		if (unlikely(klp_patch_pending(current)))
+> > > > > 			klp_update_patch_state(current);
+> > > > > 
+> > > > > We already use this in do_idle(). The reason is basically the same.
+> > > > > It is almost impossible to livepatch the idle task when a CPU is
+> > > > > very idle.
+> > > > > 
+> > > > Let's say that a livepatch is loaded which replaces vhost_worker(). New
+> > > > vhost worker threads are started which use the replacement function. Now
+> > > > if the patch is disabled, these new worker threads would be switched
+> > > > despite still running the code from the patch module, correct? Could the
+> > > > module then be unloaded, freeing the memory containing the code these
+> > > > kthreads are executing?
+> > > 
+> > > Hmm, the same problem might be when we livepatch a function that calls
+> > > another function that calls klp_update_patch_state(). But in this case
+> > > it would be kthread() from kernel/kthread.c. It would affect any
+> > > running kthread. I doubt that anyone would seriously think about
+> > > livepatching this function.
 
-On 19.01.23 15:44, Linux kernel regression tracking (#adding) wrote:
-> On 19.01.23 02:23, Erhard F. wrote:
->> Hi!
->>
->> I did a kernel bisect for an issue I originally posted on https://github.com/ClangBuiltLinux/linux/issues/1774
->>
->> It is about kernel 6.1.x not booting on my machines when built with clang. A gcc built kernel with the same config just works fine. Turns out kernel v6.2-rc4 and earlier v6.2-rc are still affected.
->>
->> I did a kernel bisect which revealed this commit:
-> [...]
+And I missed something. klp_update_patch_state_safe(), proposed below,
+would not cover the above scenario.
+
+It might be possible to add something similar to kthread()
+function. I think that it is the only "livepatchable" function
+that might call vhost_worker(). We could block
+klp_update_patch_state() for the entire kthread when the kthread()
+function is called from a livepatch.
+
+Well, it is all just the best effort. The reference counting in
+the ftrace handler would be more reliable. But it would require
+adding the trampoline on the return.
+
+> /**
+>  * klp_update_patch_state_safe() - do not update the path state when
+>  *	called from a livepatch.
+>  * @task: task_struct to be updated
+>  * @calller_addr: address of the function which  calls this one
+>  *
+>  * Do not update the patch set when called from a livepatch.
+>  * It would allow to remove the livepatch module even when
+>  * the code still might be in use.
+>  */
+> void klp_update_patch_state_safe(struct task_struct *task, void *caller_addr)
+> {
+> 	static bool checked;
+> 	static bool safe;
 > 
-> #regzbot introduced 706460a96fc654e80b6be ^
-> https://github.com/ClangBuiltLinux/linux/issues/1774
-> #regzbot title perf/x86/amd/core: clang 15 built kernel fails to boot
-> #regzbot ignore-activity
+> 	if (unlikely(!checked)) {
+> 		struct module *mod;
+> 
+> 		preempt_disable();
+> 		mod = __module_address(caller_addr);
+> 		if (!mod || !is_livepatch_module(mod))
+> 			safe = true;
+> 		checked = true;
+> 		preempt_enable();
+> 	}
+> 
+> 	if (safe)
+> 		klp_update_patch_state(task);
+> }
+> 
+> and use in vhost_worker()
+> 
+> 		if (unlikely(klp_patch_pending(current)))
+> 			klp_update_patch_state_safe(current, vhost_worker);
+> 
+> Even better might be to get the caller address using some compiler
+> macro. I guess that it should be possible.
+> 
+> And even better would be to detect this at the compile time. But
+> I do not know how to do so.
+> 
+> > Okay, I can send a v2 which does this, so long as it's okay to export
+> > klp_update_patch_state() to modules.
+> 
+> It would be acceptable for me if we added a warning above the function
+> definition and into the livepatch documentation.
 
-#regzbot monitor:
-https://lore.kernel.org/all/20230123205915.751729592@infradead.org/
-#regzbot fix: x86/static_call: Add support for Jcc tail-calls
-#regzbot ignore-activity
+I would probably go this way after all. Still thinking...
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Best Regards,
+Petr
