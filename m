@@ -2,44 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC6D67D5EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD3C67D5EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232717AbjAZUHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S229674AbjAZUIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:08:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjAZUHk (ORCPT
+        with ESMTP id S232724AbjAZUII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:07:40 -0500
+        Thu, 26 Jan 2023 15:08:08 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C262B0A4;
-        Thu, 26 Jan 2023 12:07:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31BC13DE4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:08:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=JzBJfIDuJxgLM6ciBuV8d8uL0pRgiX7zCopdrnYh1tA=; b=aYC7folrZF7BT0AE63Id9B1VOq
-        Yw4JMILcB6T9obNoUkplrvU80D5/ogqAhcrydQwJ7kDAhCjSIcRnolxUBjm6x4asbkR/X7k3xgbJr
-        Jpaku2xxcRjq2J3ZaR6JUmSA4t/A7b2NA4w6+0kErP08/Eqb2zxIE4no73xKOY0/+cdLN0qsAH7ev
-        bbpTIGbZ/edafMwk/seG2Fhow2nUmhjQJgO2K8/P3ziRBHF0I2o+BzApeiC3MMV2brjHmkME+5DYJ
-        BOs6iKHNuSbp8tWtkaP6+piDDmMiTuDqyEF57n9aNxa0DezAGYPwCA1AIbnKI0VEdTxLVVXvVsJ6v
-        gSP6QANw==;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yLIeRegKr0X7vGwXYffh/Se/fwvXPCTq8z1VBVpsZ3M=; b=wO8H0zWv4XC0Lj0qhFP+52HnYB
+        8DXzNRfWpx1zYL08jWrsf70m8NGRhRdK6jLsdd4Czh3tApW8svxijyo+oVVVUqNPO5lKItdzEGhz4
+        Dxw3mPAUIC5QykqHl6IyToLpYf9VM699EY4ORgT32Hc/FlA7waQEbdyJJ+okQsWcugiGlavaUspmd
+        1slmPM0Oex0M5RKlT64rC67QJtNVn92C0oAYuaGfnnFvFtDuOohVMhomWy0KSJ5JTEEHANxy2ncHC
+        Dp1pBMkh2VBcaWpJBwMpD0U2RSrgX98v670VRWk6P/MnRS/QwzlVrKB9uehpbm7tu3Yd5xYcs3+tO
+        2XjrcLkg==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pL8Wv-00738y-AQ; Thu, 26 Jan 2023 20:07:29 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        stable@vger.kernel.org
-Subject: [PATCH] highmem: Round down the address passed to kunmap_flush_on_unmap()
-Date:   Thu, 26 Jan 2023 20:07:27 +0000
-Message-Id: <20230126200727.1680362-1-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
+        id 1pL8XJ-0073AH-5o; Thu, 26 Jan 2023 20:07:53 +0000
+Date:   Thu, 26 Jan 2023 20:07:53 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Sterba <dsterba@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Al Viro <viro@zeniv.linux.org.uk>, Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH] mm/highmem: Align-down to page the address for
+ kunmap_flush_on_unmap()
+Message-ID: <Y9LdmUw8TkoJOWvM@casper.infradead.org>
+References: <20230126143346.12086-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126143346.12086-1-fmdefrancesco@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -49,41 +59,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We already round down the address in kunmap_local_indexed() which is
-the other implementation of __kunmap_local().  The only implementation
-of kunmap_flush_on_unmap() is PA-RISC which is expecting a page-aligned
-address.  This may be causing PA-RISC to be flushing the wrong addresses
-currently.
+On Thu, Jan 26, 2023 at 03:33:46PM +0100, Fabio M. De Francesco wrote:
+> If ARCH_HAS_FLUSH_ON_KUNMAP is defined (PA-RISC case), __kunmap_local()
+> calls kunmap_flush_on_unmap(). The latter currently flushes the wrong
+> address (as confirmed by Matthew Wilcox and Helge Deller). Al Viro
+> proposed to call kunmap_flush_on_unmap() on an aligned-down to page
+> address in order to fix this issue. Consensus has been reached on this
+> solution.
+> 
+> Therefore, if ARCH_HAS_FLUSH_ON_KUNMAP is defined, call
+> kunmap_flush_on_unmap() on an aligned-down to page address computed with
+> the PTR_ALIGN_DOWN() macro.
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Fixes: 298fa1ad5571 ("highmem: Provide generic variant of kmap_atomic*")
-Cc: stable@vger.kernel.org
----
- include/linux/highmem-internal.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-internal.h
-index 034b1106d022..e098f38422af 100644
---- a/include/linux/highmem-internal.h
-+++ b/include/linux/highmem-internal.h
-@@ -200,7 +200,7 @@ static inline void *kmap_local_pfn(unsigned long pfn)
- static inline void __kunmap_local(const void *addr)
- {
- #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
--	kunmap_flush_on_unmap(addr);
-+	kunmap_flush_on_unmap(PTR_ALIGN_DOWN(addr, PAGE_SIZE));
- #endif
- }
- 
-@@ -227,7 +227,7 @@ static inline void *kmap_atomic_pfn(unsigned long pfn)
- static inline void __kunmap_atomic(const void *addr)
- {
- #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
--	kunmap_flush_on_unmap(addr);
-+	kunmap_flush_on_unmap(PTR_ALIGN_DOWN(addr, PAGE_SIZE));
- #endif
- 	pagefault_enable();
- 	if (IS_ENABLED(CONFIG_PREEMPT_RT))
--- 
-2.35.1
-
+You missed a spot.  Sent the version I've had in my tree for a few days.
