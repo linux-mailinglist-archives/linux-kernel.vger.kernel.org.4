@@ -2,105 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0767167CF0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E5367CF19
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbjAZO7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
+        id S232041AbjAZPAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjAZO7b (ORCPT
+        with ESMTP id S229452AbjAZPAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:59:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EB262249
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:58:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674745124;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l4P3EekWE0wh4v7Y6JRDBM+Ls4fIcP2CQOrYJI/TUYM=;
-        b=DbFSrA4YgucYOC7Jc5zzsl1hBtLqrrXRwmbCRAbEgGnM+O3L0vZWeJ8wZr8pfFZN2WNzWf
-        0h33fFKUujXw+2v62YZ5kfnEc/lNXGaoKoJ7Fia4TuYcI7cSkRwpUzWlQqrW98nYKW+tuW
-        3L8ljezPnSp+tzrwPcup1HKIqKAT1fY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-59-7rfmPQ_DMRWAoDzFO-cLIQ-1; Thu, 26 Jan 2023 09:58:42 -0500
-X-MC-Unique: 7rfmPQ_DMRWAoDzFO-cLIQ-1
-Received: by mail-wm1-f69.google.com with SMTP id r15-20020a05600c35cf00b003d9a14517b2so2944185wmq.2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:58:42 -0800 (PST)
+        Thu, 26 Jan 2023 10:00:37 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D972E62249;
+        Thu, 26 Jan 2023 07:00:35 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so3431724wmb.0;
+        Thu, 26 Jan 2023 07:00:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=76nzNYcvbX35QXLbvfMyhTGZcru6UNYtBlqgYDNzIKU=;
+        b=N9eBWIh7rqM6gnde5S1TbQc2zp+jgfMsAJHG9aj2RmehPIUPOPvKhM1SYVoIJktWd7
+         nD1KAAKL1GVBEAQlbydNgyu4fd7GB2bAl9CO6fiZIvtFByhJPIzYRrYdiPTqCVKojz9h
+         D9mFRJd0biyyi4CVeuK7O7xGfKKgL9XICuKQflqsP5IG4VH3DsYvZdjYlW6aQHEk2kEo
+         aPCKi3/tyIYonUqvfDwACEhXSHu+VQUY9wyahSgQnC2hkXjawhkm0hzR8WRwvfS1V8+T
+         STSQd2cxPFlLMVLurRSZmINmkmJrNjSyySZNOFLMMyjS+ePEriM3G8hE/7cFE106R7AQ
+         nupg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=l4P3EekWE0wh4v7Y6JRDBM+Ls4fIcP2CQOrYJI/TUYM=;
-        b=0TqIq+niYVpG3IR6VsIXpt56BhAQPGOUEUNQV7GDX0OK/41mW0ktAH1fL3TnoEzp9G
-         Ol9rKEpOAE89P3hSghPSOxj62nOfu78XS2xTNhyr/faa8+eAiHO5Ivrz3Azp28AUHSVR
-         ERz8VRj0MIVU3Vi0IYS3e/uHYCF4xay6m1xBBdc02NQtcRvCNb/SAUWkmtZYhHhCISYV
-         iRQELc6o5VQuGC/3qVgqB5fEAObdhj6L/EubAKXOoZvzrTXlDgswtUOzblOOUcLPdn5C
-         5BMtUEBTkxmY/fwtGQl6XS7WTiEf9d7WlDPImPhlHnJFgYPI4mWpgTHLAKdjxRMn7F95
-         dafw==
-X-Gm-Message-State: AFqh2krK0l17JQtrw8aQlKROsw3yDo/s5eyoyDCBa0eU2goBiWAmt8/0
-        OgYcNvq++aon43X290gvgWQ01ETH/ZOSNzj2gFV/yMeHJK0k7SyQcHGGzJLaarIo3BLU9J57blH
-        AhacoDlRXoLknluzCDK6bOj7E
-X-Received: by 2002:a05:600c:1604:b0:3c6:e61e:ae74 with SMTP id m4-20020a05600c160400b003c6e61eae74mr37552767wmn.4.1674745121776;
-        Thu, 26 Jan 2023 06:58:41 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvUHkTSF1aTLNZRATAUakPRX7lKJA20hKwBlcnoeqfg7B5Un3oBMDMpd5xsKa7o2OIjjRAhdA==
-X-Received: by 2002:a05:600c:1604:b0:3c6:e61e:ae74 with SMTP id m4-20020a05600c160400b003c6e61eae74mr37552740wmn.4.1674745121600;
-        Thu, 26 Jan 2023 06:58:41 -0800 (PST)
-Received: from work-vm (ward-16-b2-v4wan-166627-cust863.vm18.cable.virginm.net. [81.97.203.96])
-        by smtp.gmail.com with ESMTPSA id l4-20020a05600c1d0400b003db2e3f2c7csm12219398wms.0.2023.01.26.06.58.40
+        bh=76nzNYcvbX35QXLbvfMyhTGZcru6UNYtBlqgYDNzIKU=;
+        b=HeUJWuczMXV6fVdEdGd+jDxb90g/8f0cSPuWf4tviDX5BfXIZopYJN6QkVicb3se37
+         KcBOb5h8lxdkhrkbeAvpxalbu52NzgGjrHVdmjRZ230tHNRcqTc4muar/u3/a2hPW4vK
+         MwmhQ/TvQXNDKeWN4uu+f4xxZQoYtpCRBHQamTh78VVfJbrncRkSHb6f/rdat8XALydD
+         hpEUC9hRT5wRocbcmRMj2Rr03QNBOkXCmCez3sxbYu0kP3oxjMvneK5YoRzCJHiggJHL
+         uE9jmjQcQSy+U17bzDKU5jESxEKKL8bK9RYbd4yGwCIq2dYS+DdGbxFPxob9aFO9sIJL
+         K8bA==
+X-Gm-Message-State: AFqh2krG3eN+bts1u9FbDHE2OptCJxOwUHmDMqbfLLvF44fX3YFCTfhP
+        AOsEuVypmCD96iw7lv4xDZw=
+X-Google-Smtp-Source: AMrXdXu1y7wrhu8v4ShNof4x6zjjXZT2iGTtyUsMx7I+9W7zX2+dTs+tawjrVWzfoGwAr+9/rG/zPw==
+X-Received: by 2002:a05:600c:6006:b0:3db:21b8:5f58 with SMTP id az6-20020a05600c600600b003db21b85f58mr28431843wmb.2.1674745234130;
+        Thu, 26 Jan 2023 07:00:34 -0800 (PST)
+Received: from localhost.localdomain (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
+        by smtp.googlemail.com with ESMTPSA id g12-20020a05600c310c00b003db012d49b7sm11353115wmo.2.2023.01.26.07.00.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 06:58:41 -0800 (PST)
-Date:   Thu, 26 Jan 2023 14:58:38 +0000
-From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-To:     Richard Weinberger <richard.weinberger@gmail.com>
-Cc:     Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <Y9KVHnHnig4jwNPx@work-vm>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y9EkCvAfNXnJ+ATo@kroah.com>
- <Y9Ex3ZUIFxwOBg1n@work-vm>
- <Y9E5Cg7mreDx737N@redhat.com>
- <CAFLxGvwHRK3vyXiCv5ELvrDSEkcDgV5c6pNnWgWhcATfp1dedA@mail.gmail.com>
+        Thu, 26 Jan 2023 07:00:33 -0800 (PST)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v4 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make cpr bindings optional
+Date:   Thu, 26 Jan 2023 16:00:24 +0100
+Message-Id: <20230126150026.14590-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFLxGvwHRK3vyXiCv5ELvrDSEkcDgV5c6pNnWgWhcATfp1dedA@mail.gmail.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,30 +78,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Richard Weinberger (richard.weinberger@gmail.com) wrote:
-> On Wed, Jan 25, 2023 at 3:22 PM Daniel P. Berrangé <berrange@redhat.com> wrote:
-> > Any virtual device exposed to the guest that can transfer potentially
-> > sensitive data needs to have some form of guest controlled encryption
-> > applied. For disks this is easy with FDE like LUKS, for NICs this is
-> > already best practice for services by using TLS. Other devices may not
-> > have good existing options for applying encryption.
-> 
-> I disagree wrt. LUKS. The cryptography behind LUKS protects persistent data
-> but not transport. If an attacker can observe all IO you better
-> consult a cryptographer.
-> LUKS has no concept of session keys or such, so the same disk sector will
-> always get encrypted with the very same key/iv.
+The qcom-cpufreq-nvmem driver supports 2 kind of devices:
+- pre-cpr that doesn't have power-domains and base everything on nvmem
+  cells and multiple named microvolt bindings.
+  Doesn't need required-opp binding in the opp nodes as they are only
+  used for genpd based devices.
+- cpr-based that require power-domain in the cpu nodes and use various
+  source to decide the correct voltage and freq
+  Require required-opp binding since they need to be linked to the
+  related opp-level.
 
-Are you aware of anything that you'd use instead?
+When the schema was introduced, it was wrongly set to always require these
+binding but this is not the case for pre-cpr devices.
 
-Are you happy with dm-verity for protection against modification?
+Make the power-domain and the required-opp optional and set them required
+only for qcs404 based devices.
 
-Dave
+Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+Changes v4:
+- Explain why required-opp needs to be conditional
+- Split additional ref part
+Changesv3:
+- No change
+Changes v2:
+- Reword commit description
+- Fix condition order
+- Add allOf
 
-> -- 
-> Thanks,
-> //richard
-> 
+ .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 62 +++++++++++--------
+ 1 file changed, 37 insertions(+), 25 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index 9c086eac6ca7..89e99a198281 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -17,6 +17,9 @@ description: |
+   on the CPU OPP in use. The CPUFreq driver sets the CPR power domain level
+   according to the required OPPs defined in the CPU OPP tables.
+ 
++  For old implementation efuses are parsed to select the correct opp table and
++  voltage and CPR is not supported/used.
++
+ select:
+   properties:
+     compatible:
+@@ -33,37 +36,46 @@ select:
+   required:
+     - compatible
+ 
+-properties:
+-  cpus:
+-    type: object
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,qcs404
+ 
+-    patternProperties:
+-      '^cpu@[0-9a-f]+$':
+-        type: object
++    then:
++      properties:
++        cpus:
++          type: object
+ 
+-        properties:
+-          power-domains:
+-            maxItems: 1
++          patternProperties:
++            '^cpu@[0-9a-f]+$':
++              type: object
+ 
+-          power-domain-names:
+-            items:
+-              - const: cpr
++              properties:
++                power-domains:
++                  maxItems: 1
+ 
+-        required:
+-          - power-domains
+-          - power-domain-names
++                power-domain-names:
++                  items:
++                    - const: cpr
++
++              required:
++                - power-domains
++                - power-domain-names
+ 
+-patternProperties:
+-  '^opp-table(-[a-z0-9]+)?$':
+-    if:
+-      properties:
+-        compatible:
+-          const: operating-points-v2-kryo-cpu
+-    then:
+       patternProperties:
+-        '^opp-?[0-9]+$':
+-          required:
+-            - required-opps
++        '^opp-table(-[a-z0-9]+)?$':
++          if:
++            properties:
++              compatible:
++                const: operating-points-v2-kryo-cpu
++          then:
++            patternProperties:
++              '^opp-?[0-9]+$':
++                required:
++                  - required-opps
+ 
+ additionalProperties: true
+ 
 -- 
-Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
+2.38.1
 
