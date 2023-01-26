@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF9D67CC62
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0144C67CC63
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237092AbjAZNjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
+        id S237133AbjAZNj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236377AbjAZNjh (ORCPT
+        with ESMTP id S236377AbjAZNjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:39:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E79442F4;
-        Thu, 26 Jan 2023 05:39:36 -0800 (PST)
+        Thu, 26 Jan 2023 08:39:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E51442FF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:39:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76B7961765;
-        Thu, 26 Jan 2023 13:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20943C4339B;
-        Thu, 26 Jan 2023 13:39:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CD31B81DBB
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:39:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F00CC4339C;
+        Thu, 26 Jan 2023 13:39:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674740375;
-        bh=0BOAZ5CaGFXmsUH+VWdTby2yVDH2z/3lPjynQjnh/9Q=;
+        s=k20201202; t=1674740376;
+        bh=JubJEGHP7L4BLz+Yv107k+IilgVcrBBFP6L7DrL83Qw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ROkQa9zbDqF0znlFG9978f7k+0z6ws5p/kNMMyHyfh86m9tGGXirjSuU/PI5Q7ZDO
-         +vrm0LkT7KTeBZSgGjjHVtPo0opHe+soGQuW5XV6HiS8InAAGHmFDaRM7+E5MbwBQN
-         UeH/e/2fPlb+VMJDfN6NcaZMDpnS3VCSa5ogTPUhhx0tC7hQu4XoZXtxa2sRpmScWL
-         xz/M+XgfjHoKVf71ygjTw0PaNh9nKZJz312GkXjW67OKSB7ui5sd/1gAFCGoPst/5b
-         C7moZHUIo+2FduQKhEdqcW/WPgP5y8xvxPY1CjaL9Q/CVN1VqO/QsFu2LWlMW79hmy
-         9oUBkSjl/r1TQ==
-Date:   Thu, 26 Jan 2023 14:39:30 +0100
-From:   Alexey Gladkov <legion@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, containers@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Val Cowan <vcowan@redhat.com>
-Subject: Re: [RFC PATCH v1 0/6] proc: Add allowlist for procfs files
-Message-ID: <Y9KCkuGqyr5T13XN@example.org>
-References: <cover.1674660533.git.legion@kernel.org>
- <20230125153628.43c12cbe05423fef7d44f0dd@linux-foundation.org>
- <20230126101607.b4de35te7gcf6mkn@wittgenstein>
+        b=hfeuHN+xYiDzBOd1yd65YRHWnHAlwdILwlugc9bJFSxFmDausavMiu5CGyHWc8aub
+         HWgASUXP3tnSVApnsLCjJ8LskitebU1QB+3W2PbZPbi7Yle/BZ/fgU+k+rddLAk9vT
+         E6spsE/p2l4HrRbEhn3damJrxHQne/o0wbAMCK8GsyuOBr/Rh3z4+AkPTOmWDrVuv5
+         emffqnkhgty65XVwGrdS5sfHl9U4IIvAPcBs1HFr2KmSimoOSbbyHCi9nZU3nG+8cD
+         L5InkY4tXsu/QaKG/iP7Caxphgn137B6tEdHWefzBK6z0LrPIrWoJ/PM7LlLAa2hmS
+         CtnJtcIIWTsPQ==
+Date:   Thu, 26 Jan 2023 13:39:30 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     catalin.marinas@arm.com, mark.rutland@arm.com,
+        daniel.thompson@linaro.org, dianders@chromium.org,
+        liwei391@huawei.com, mhiramat@kernel.org, maz@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] arm64: entry: Skip single stepping into interrupt
+ handlers
+Message-ID: <20230126133929.GC29148@willie-the-truck>
+References: <20221219102452.2860088-1-sumit.garg@linaro.org>
+ <20221219102452.2860088-2-sumit.garg@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230126101607.b4de35te7gcf6mkn@wittgenstein>
+In-Reply-To: <20221219102452.2860088-2-sumit.garg@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,100 +58,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:16:07AM +0100, Christian Brauner wrote:
-> On Wed, Jan 25, 2023 at 03:36:28PM -0800, Andrew Morton wrote:
-> > On Wed, 25 Jan 2023 16:28:47 +0100 Alexey Gladkov <legion@kernel.org> wrote:
-> > 
-> > > The patch expands subset= option. If the proc is mounted with the
-> > > subset=allowlist option, the /proc/allowlist file will appear. This file
-> > > contains the filenames and directories that are allowed for this
-> > > mountpoint. By default, /proc/allowlist contains only its own name.
-> > > Changing the allowlist is possible as long as it is present in the
-> > > allowlist itself.
-> > > 
-> > > This allowlist is applied in lookup/readdir so files that will create
-> > > modules after mounting will not be visible.
-> > > 
-> > > Compared to the previous patches [1][2], I switched to a special virtual
-> > > file from listing filenames in the mount options.
-> > > 
-> > 
-> > Changlog doesn't explain why you think Linux needs this feature.  The
-> > [2/6] changelog hints that containers might be involved.  IOW, please
-> > fully describe the requirement and use-case(s).
-> > 
-> > Also, please describe why /proc/allowlist is made available via a mount
-> > option, rather than being permanently present.
-> > 
-> > And why add to subset=, instead of a separate mount option.
-> > 
-> > Does /proc/allowlist work in subdirectories?  Like, permit presence of
-> > /proc/sys/vm/compact_memory?
-> > 
-> > I think the whole thing is misnamed, really.  "allowlist" implies
-> > access permissions.  Some of the test here uses "visibility" and other
-> > places use "presence", which are better.  "presentlist" and
-> > /proc/presentlist might be better.  But why not simply /proc/contents?
+On Mon, Dec 19, 2022 at 03:54:51PM +0530, Sumit Garg wrote:
+> Currently on systems where the timer interrupt (or any other
+> fast-at-human-scale periodic interrupt) is active then it is impossible
+> to step any code with interrupts unlocked because we will always end up
+> stepping into the timer interrupt instead of stepping the user code.
 > 
-> Currently, a lot of container runtimes - even if they mount a new procfs
-> instance - overmount various procfs files and directories to ensure that
-> they're hidden from the container workload. (The motivations for this
-> are mixed and usually it's only needed for containers that run with the
-> same privilege level as the host.)
+> The common user's goal while single stepping is that when they step then
+> the system will stop at PC+4 or PC+I for a branch that gets taken
+> relative to the instruction they are stepping. So, fix broken single step
+> implementation via skipping single stepping into interrupt handlers.
 > 
-> The consequence of overmounting is that we need to refuse mounting
-> procfs again somewhere else otherwise the procfs instance might reveal
-> files and directories that were supposed to be hidden.
+> The methodology is when we receive an interrupt from EL1, check if we
+> are single stepping (pstate.SS). If yes then we save MDSCR_EL1.SS and
+> clear the register bit if it was set. Then unmask only D and leave I set.
+> On return from the interrupt, set D and restore MDSCR_EL1.SS. Along with
+> this skip reschedule if we were stepping.
 > 
-> So this patchset moves the ability to hide entries into the kernel
-> through an allowlist. This way you can hide files and directories while
-> being able to mount procfs again because it will inherit the same
-> allowlist.
+> Suggested-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> Tested-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>  arch/arm64/kernel/entry-common.c | 22 ++++++++++++++++++++--
+>  1 file changed, 20 insertions(+), 2 deletions(-)
 > 
-> I get the motivation. The question is whether this belongs into the
-> kernel at all. I'm unfortunately not convinced.
-> 
-> This adds a lot of string parsing to procfs and I think we would also
-> need to decide what a reasonable maximum limit for such allowlists would
-> be.> The data structure likely shouldn't be a linked list but at least an
-> rbtree especially if the size isn't limited.
+> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+> index cce1167199e3..688d1ef8e864 100644
+> --- a/arch/arm64/kernel/entry-common.c
+> +++ b/arch/arm64/kernel/entry-common.c
+> @@ -231,11 +231,15 @@ DEFINE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
+>  #define need_irq_preemption()	(IS_ENABLED(CONFIG_PREEMPTION))
+>  #endif
+>  
+> -static void __sched arm64_preempt_schedule_irq(void)
+> +static void __sched arm64_preempt_schedule_irq(struct pt_regs *regs)
+>  {
+>  	if (!need_irq_preemption())
+>  		return;
+>  
+> +	/* Don't reschedule in case we are single stepping */
+> +	if (!(regs->pstate & DBG_SPSR_SS))
+> +		return;
 
-There is a limit. So far I've limited the file size to 128k. I think this
-is a reasonable limit.
+Hmm, isn't this the common case? PSTATE.SS will usually be clear, no?
 
-> But fundamentally I think it moves something that should be and
-> currently is a userspace policy into the kernel which I think is wrong.
+>  	 * Note: thread_info::preempt_count includes both thread_info::count
+>  	 * and thread_info::need_resched, and is not equivalent to
+> @@ -471,19 +475,33 @@ static __always_inline void __el1_irq(struct pt_regs *regs,
+>  	do_interrupt_handler(regs, handler);
+>  	irq_exit_rcu();
+>  
+> -	arm64_preempt_schedule_irq();
+> +	arm64_preempt_schedule_irq(regs);
+>  
+>  	exit_to_kernel_mode(regs);
+>  }
+> +
+>  static void noinstr el1_interrupt(struct pt_regs *regs,
+>  				  void (*handler)(struct pt_regs *))
+>  {
+> +	unsigned long mdscr;
+> +
+> +	/* Disable single stepping within interrupt handler */
+> +	if (regs->pstate & DBG_SPSR_SS) {
+> +		mdscr = read_sysreg(mdscr_el1);
+> +		write_sysreg(mdscr & ~DBG_MDSCR_SS, mdscr_el1);
+> +	}
 
-We don't have mechanisms to implement this userspace policy. overmount is
-not a solution but plugging holes in the absence of other ways to control
-the visibility of files in procfs.
+I think this will break the implicit handling of kernel {break,watch}points.
 
-> Sure you can't predict what files show up in procfs over time but then
-> subset=pid is already your friend - even if not as fine-grained.
-> 
-> If this where another simple subset style mount option that allowlists a
-> bunch of well-known global proc files then sure. But making this
-> dynamically configurable from userspace doesn't make sense to me. I
-> mean, users could write /gobble/dy/gook into /proc/allowlist or use it
-> to stash secrets or hashes or whatever as we have no way of figuring out
-> whether the entry they allowlist does or will actually ever exist.
+Sadly, I think any attempts to workaround the issues here are likely just
+to push the problems around. We really need to overhaul the debug exception
+handling logic we have, which means I need to get back to writing up a
+proposal.
 
-BTW I only allow printable data to be written to the file.
-
-We can make this file write-only and then writing any extraneous data
-there will not make sense.
-
-> In general, such flexibility belongs into userspace imho.
-> 
-> Frankly, if that is really required it would almost make more sense to
-> be able to attach a new bpf program type to procfs that would allow to
-> filter procfs entries. Then the filter could be done purely in
-> userspace. If signed bpf lands one could then even ship signed programs
-> that are attachable by userns root.
-
-I'll ask the podman developers how much more comfortable they would be
-using bpf to control file visibility in procfs. thanks for the idea.
-
--- 
-Rgrds, legion
-
+Will
