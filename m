@@ -2,117 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2278E67D3B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F0B67D3B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjAZSCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S231638AbjAZSDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:03:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjAZSCX (ORCPT
+        with ESMTP id S229572AbjAZSC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:02:23 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8CB1298F1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 10:02:22 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E6054B3;
-        Thu, 26 Jan 2023 10:03:04 -0800 (PST)
-Received: from [10.57.76.43] (unknown [10.57.76.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E11B33F71E;
-        Thu, 26 Jan 2023 10:02:20 -0800 (PST)
-Message-ID: <7ec6bd88-7f18-7eca-fa92-cfea9a25a395@arm.com>
-Date:   Thu, 26 Jan 2023 18:02:19 +0000
+        Thu, 26 Jan 2023 13:02:59 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21C323320;
+        Thu, 26 Jan 2023 10:02:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=2fn1f2DBGOfmVNObvGAqQdKxfCARW6QU6WUMMysdb0A=; b=6IUr4h54isdqRSgXZ+fIMyiapA
+        Ld5fGDkEMhmPEPHdAIQopdowK5Gx0iyzrdFwATryqkSfNz2OqNtlvxkE//VUSXwd+di0I8eNtPMKX
+        IAjYjni1HbAvvLg3iLk9TjRjTvpwCyBwsSvbfWFAe1cqpjVWGipNoBaZVRqXOiiFxL9A=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pL6a9-003GdB-3T; Thu, 26 Jan 2023 19:02:41 +0100
+Date:   Thu, 26 Jan 2023 19:02:41 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Wei Fang <wei.fang@nxp.com>, linux-gpio@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fec: convert to gpio descriptor
+Message-ID: <Y9LAQRjb6h+ynXBZ@lunn.ch>
+References: <20230126135339.3488682-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] Coresight: tpda/tpdm: remove incorrect __exit annotation
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Mao Jinlong <quic_jinlmao@quicinc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230126163530.3495413-1-arnd@kernel.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230126163530.3495413-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126135339.3488682-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
-
-On 26/01/2023 16:35, Arnd Bergmann wrote:
+On Thu, Jan 26, 2023 at 02:52:58PM +0100, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> 'remove' callbacks get called whenever a device is unbound from
-> the driver, which can get triggered from user space.
+> The driver can be trivially converted, as it only triggers the gpio
+> pin briefly to do a reset, and it already only supports DT.
 > 
-> Putting it into the __exit section means that the function gets
-> dropped in for built-in drivers, as pointed out by this build
-> warning:
-
-> 
-> `tpda_remove' referenced in section `.data' of drivers/hwtracing/coresight/coresight-tpda.o: defined in discarded section `.exit.text' of drivers/hwtracing/coresight/coresight-tpda.o
-> `tpdm_remove' referenced in section `.data' of drivers/hwtracing/coresight/coresight-tpdm.o: defined in discarded section `.exit.text' of drivers/hwtracing/coresight/coresight-tpdm.o
-> 
-
-Thanks for the fix, I will queue this. Btw, I did try to
-reproduce it locally, but couldn't trigger the warnings,
-even with
-
-CONFIG_WERROR=y
-
-and all CORESIGHT configs builtin. I see other drivers doing the
-same outside coresight too. Just curious to know why is this
-any different. Is it specific to "bus" driver (e.g. AMBA) ?
-
-Suzuki
-
-
-> Fixes: 5b7916625c01 ("Coresight: Add TPDA link driver")
-> Fixes: b3c71626a933 ("Coresight: Add coresight TPDM source driver")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-
 > ---
->   drivers/hwtracing/coresight/coresight-tpda.c | 2 +-
->   drivers/hwtracing/coresight/coresight-tpdm.c | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>  drivers/net/ethernet/freescale/fec_main.c | 25 ++++++++++-------------
+>  1 file changed, 11 insertions(+), 14 deletions(-)
 > 
-> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c b/drivers/hwtracing/coresight/coresight-tpda.c
-> index 19c25c9f6157..382d648529e7 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpda.c
-> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
-> @@ -174,7 +174,7 @@ static int tpda_probe(struct amba_device *adev, const struct amba_id *id)
->   	return 0;
->   }
->   
-> -static void __exit tpda_remove(struct amba_device *adev)
-> +static void tpda_remove(struct amba_device *adev)
->   {
->   	struct tpda_drvdata *drvdata = dev_get_drvdata(&adev->dev);
->   
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-> index 349a82bb3270..9479a5e8c672 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-> @@ -223,7 +223,7 @@ static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
->   	return 0;
->   }
->   
-> -static void __exit tpdm_remove(struct amba_device *adev)
-> +static void tpdm_remove(struct amba_device *adev)
->   {
->   	struct tpdm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
->   
+> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+> index 5ff45b1a74a5..dee2890fd702 100644
+> --- a/drivers/net/ethernet/freescale/fec_main.c
+> +++ b/drivers/net/ethernet/freescale/fec_main.c
+> @@ -56,7 +56,7 @@
+>  #include <linux/fec.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> -#include <linux/of_gpio.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/of_mdio.h>
+>  #include <linux/of_net.h>
+>  #include <linux/regulator/consumer.h>
+> @@ -4035,7 +4035,8 @@ static int fec_enet_init(struct net_device *ndev)
+>  #ifdef CONFIG_OF
+>  static int fec_reset_phy(struct platform_device *pdev)
+>  {
+> -	int err, phy_reset;
+> +	int err;
+> +	struct gpio_desc *phy_reset;
+>  	bool active_high = false;
+>  	int msec = 1, phy_post_delay = 0;
+>  	struct device_node *np = pdev->dev.of_node;
 
+Hi Arnd
+
+netdev drivers are supposed to use 'reverse Christmas tree'. It looks
+like this function is actually using 'Christmas tree' :-) Please could
+you keep with the current coding style.
+
+> @@ -4048,12 +4049,6 @@ static int fec_reset_phy(struct platform_device *pdev)
+>  	if (!err && msec > 1000)
+>  		msec = 1;
+>  
+> -	phy_reset = of_get_named_gpio(np, "phy-reset-gpios", 0);
+> -	if (phy_reset == -EPROBE_DEFER)
+> -		return phy_reset;
+> -	else if (!gpio_is_valid(phy_reset))
+> -		return 0;
+> -
+>  	err = of_property_read_u32(np, "phy-reset-post-delay", &phy_post_delay);
+>  	/* valid reset duration should be less than 1s */
+>  	if (!err && phy_post_delay > 1000)
+> @@ -4061,11 +4056,13 @@ static int fec_reset_phy(struct platform_device *pdev)
+>  
+>  	active_high = of_property_read_bool(np, "phy-reset-active-high");
+>  
+> -	err = devm_gpio_request_one(&pdev->dev, phy_reset,
+> -			active_high ? GPIOF_OUT_INIT_HIGH : GPIOF_OUT_INIT_LOW,
+> -			"phy-reset");
+> -	if (err) {
+> -		dev_err(&pdev->dev, "failed to get phy-reset-gpios: %d\n", err);
+> +	phy_reset = devm_gpiod_get(&pdev->dev, "phy-reset",
+> +			active_high ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW);
+> +	if (IS_ERR(phy_reset)) {
+> +		err = PTR_ERR(phy_reset);
+> +		if (err != -EPROBE_DEFER)
+> +			dev_err(&pdev->dev,
+> +				"failed to get phy-reset-gpios: %d\n", err);
+
+dev_err_probe() looks usable here.
+
+		Andrew
