@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA7B67CFE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C258767CFE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjAZPSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:18:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53784 "EHLO
+        id S232410AbjAZPSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:18:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjAZPS1 (ORCPT
+        with ESMTP id S232397AbjAZPS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 Jan 2023 10:18:27 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9AB30FD
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:17:48 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id v13so2121271eda.11
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:17:48 -0800 (PST)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48975B81
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:17:49 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id v10so2138409edi.8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:17:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FqTPYHx/hvizibC2oIfeh1taRPi/dzef4/4GDfwh7Dc=;
-        b=KsgaCMzJGUttXQbMZMLFzqt5edS2JcAVI4+R1nFjny115+xCxVFm9Kv/SLnAzTzI+E
-         qNGehiy4EkCTNEAe1345QISl0Q0j2ZnUD78xWmYuc3+dBajuWDZyoEOqu8fLkfJa55UX
-         4L9xUKNkjnZWbB0qsV1/L1rFSNzvnY9609dhOZ2MqvpLpw/JNlAvah0sQgwQdrbXehi6
-         SXDrYzDh+9vZPZWsZOxiY9ybCMO5MkxhZUC4IrY4ibe581wfYo5gnT2zxP9g4ZB7mjH/
-         UAqKu0fISq5b09kZoSASxmyq3l3UDjzk0S443DyTsvkuI8w+30YDo56q5TM2y/ugNCPH
-         ufrA==
+        bh=OY08lSRJ0khJ3YSfU40JW9rAgs8VWCIlhnOm90/cUOg=;
+        b=lKSIVY86+zq1xPchzjtResCxNKdOQBD6iUh60NPp69Mm9Vz1hpxXqAJiRUp+UuRoXm
+         rt5+/jiDHZQ1nzJf5+m3JmJM4zM4Zbo6j/u9Vc1w0NqwQo/b0ETnG+rnARcvyzzs3qUh
+         Mq8WNgi3QKGMpG4B7u1/qOeBxXzBErww35/dMfAfILy8tdEusUwccHpXn4UlNxBXbK0F
+         nD0VUFe5qA0F7SIk1rnZ8yWLjk1Cj4hWAPdZxwJSI4BLkbfbkuVwt+XIrkvrNRSyy/uV
+         GZZa4OfbKq246VX45TGaOTQ/rwQCpKh3mFUOxpYZKiCQT2pSKsG2l8229l7wXcHP9GUo
+         4X+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FqTPYHx/hvizibC2oIfeh1taRPi/dzef4/4GDfwh7Dc=;
-        b=8Pe9t0eEYmOGQNpdmSmagWkpeVwz8Qzej0PKiNvLQRi3m3T0tKBsaPXl1CiBio3+EB
-         nJIExziwHtSaZ2+SHGCtqOsbfeW1pukJg13ubH1tPkZAaqZJWKkeRc1cJV9SSgIEq73i
-         lljeyWJNTzmBRQUnwpSIvzWicDknYPDvhGghwdMhK5icCirGejYwc3iyPlA6iIYWUKpg
-         2b0eUcASqsRsfCzCgvdWByRGRQ/PKiUQNnvhGYtX2oM0FvY0ZPmd7ubetFwDtoLYnYLq
-         eMe/rg7Z2yjVSKz2TiRMaP1T3iQuBVf5tIokzWuPAOwLjVnPi2NaS+Lpqhlr8Cn48vcH
-         5vUw==
-X-Gm-Message-State: AO0yUKU7sPuSv0D26MCnfY6o3iiCqbnspzK53FrhO07fSfMcfzTAhhdG
-        OL5fuFtFIzgA679bNN36gzQD/A==
-X-Google-Smtp-Source: AK7set9j/7oS+bafs6ZfNNGeVHpGPgbFsEu7Z9kE7S+kC33GSD1Ulk89vyxivtHiPxAmpydf06Xfng==
-X-Received: by 2002:aa7:c149:0:b0:4a0:91be:1db6 with SMTP id r9-20020aa7c149000000b004a091be1db6mr8227773edp.16.1674746245170;
-        Thu, 26 Jan 2023 07:17:25 -0800 (PST)
+        bh=OY08lSRJ0khJ3YSfU40JW9rAgs8VWCIlhnOm90/cUOg=;
+        b=dTP3cWizSvvH/e5UTF0ZrPkup3AT5luxa4JUKWz5rwsOMJh2m6DQsVmadu1xv6hul6
+         oF3MZStWAermAlJAtsDRPdgqskuwN+aSkAq1/bYtXTmF/1IqNx07im5h4sfyEUE+nx61
+         t2WDgGRjTcv+DR3jtUzwihCVajrECv1tznE2fsdMazos025nQWjozJVc7CUh53nczVwj
+         5Tx9eNrwaKZkWYRlgqgznRQnOio5JzwtM0QO3LWPFQ7aK/IqYbXBo3P/wWsHSf+pZ6sP
+         LAwNm/xO0M1NQn+V3H7WhuYB8EsUFF8PX5kbo15Vnhlvuz/iQW4My1M2T9u+CmYVofv9
+         KciA==
+X-Gm-Message-State: AO0yUKWRldnyuionAOZESTZGIyW/MqEeic5KdFlAuyTnrO0lVYlb+6cD
+        9mANfCwEEV0fB8OCGksRph8Prw==
+X-Google-Smtp-Source: AK7set/prHz6j9mKe+q0SVim8Gk8tLhMF7E/oyiHuu4Cq5/Ipb7BZO9a0zhELcam1t9manYuz9ECKA==
+X-Received: by 2002:aa7:cfc5:0:b0:4a0:b978:4533 with SMTP id r5-20020aa7cfc5000000b004a0b9784533mr3622092edy.32.1674746248802;
+        Thu, 26 Jan 2023 07:17:28 -0800 (PST)
 Received: from localhost.localdomain (abyk108.neoplus.adsl.tpnet.pl. [83.9.30.108])
-        by smtp.gmail.com with ESMTPSA id a16-20020aa7d910000000b00463bc1ddc76sm842808edr.28.2023.01.26.07.17.22
+        by smtp.gmail.com with ESMTPSA id a16-20020aa7d910000000b00463bc1ddc76sm842808edr.28.2023.01.26.07.17.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 07:17:24 -0800 (PST)
+        Thu, 26 Jan 2023 07:17:28 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -61,13 +61,15 @@ Cc:     marijn.suijten@somainline.org,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
         Chia-I Wu <olvaffe@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 04/14] drm/msm/a6xx: Remove both GBIF and RBBM GBIF halt on hw init
-Date:   Thu, 26 Jan 2023 16:16:08 +0100
-Message-Id: <20230126151618.225127-5-konrad.dybcio@linaro.org>
+Subject: [PATCH 05/14] drm/msm/adreno: Disable has_cached_coherent for A610/A619_holi
+Date:   Thu, 26 Jan 2023 16:16:09 +0100
+Message-Id: <20230126151618.225127-6-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230126151618.225127-1-konrad.dybcio@linaro.org>
 References: <20230126151618.225127-1-konrad.dybcio@linaro.org>
@@ -82,37 +84,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently we're only deasserting REG_A6XX_RBBM_GBIF_HALT, but we also
-need REG_A6XX_GBIF_HALT to be set to 0. For GMU-equipped GPUs this is
-done in a6xx_bus_clear_pending_transactions(), but for the GMU-less
-ones we have to do it *somewhere*. Unhalting both side by side sounds
-like a good plan and it won't cause any issues if it's unnecessary.
-
-Also, add a memory barrier to ensure it's gone through.
+These SKUs don't support the feature. Disable it to make the GPU stop
+crashing after almost each and every submission - the received data on
+the GPU end was simply incomplete in garbled, resulting in almost nothing
+being executed properly.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 22dac65cfa8c..158d6453cf3e 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1004,8 +1004,12 @@ static int hw_init(struct msm_gpu *gpu)
- 	}
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+index 36f062c7582f..82757f005a1a 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_device.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+@@ -540,7 +540,13 @@ static int adreno_bind(struct device *dev, struct device *master, void *data)
+ 		config.rev.minor, config.rev.patchid);
  
- 	/* Clear GBIF halt in case GX domain was not collapsed */
--	if (a6xx_has_gbif(adreno_gpu))
-+	if (a6xx_has_gbif(adreno_gpu)) {
-+		gpu_write(gpu, REG_A6XX_GBIF_HALT, 0);
- 		gpu_write(gpu, REG_A6XX_RBBM_GBIF_HALT, 0);
-+		/* Let's make extra sure that the GPU can access the memory.. */
-+		mb();
+ 	priv->is_a2xx = config.rev.core == 2;
+-	priv->has_cached_coherent = config.rev.core >= 6;
++
++	if (config.rev.core >= 6) {
++		/* Exclude A610 and A619_holi */
++		if (!(adreno_cmp_rev(ADRENO_REV(6, 1, 0, ANY_ID), config.rev) ||
++		      adreno_cmp_rev(ADRENO_REV(6, 1, 9, 1), config.rev)))
++			priv->has_cached_coherent = true;
 +	}
  
- 	gpu_write(gpu, REG_A6XX_RBBM_SECVID_TSB_CNTL, 0);
- 
+ 	gpu = info->init(drm);
+ 	if (IS_ERR(gpu)) {
 -- 
 2.39.1
 
