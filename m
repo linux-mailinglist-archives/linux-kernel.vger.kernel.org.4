@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BC267C19D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3108A67C19C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236215AbjAZA3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 19:29:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S236055AbjAZA3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 19:29:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235426AbjAZA3D (ORCPT
+        with ESMTP id S235786AbjAZA3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 19:29:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E971EFC9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:28:58 -0800 (PST)
+        Wed, 25 Jan 2023 19:29:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37431F909;
+        Wed, 25 Jan 2023 16:28:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D443BB81C04
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 00:28:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81687C433D2;
-        Thu, 26 Jan 2023 00:28:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E659616DE;
+        Thu, 26 Jan 2023 00:28:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1668EC433EF;
+        Thu, 26 Jan 2023 00:28:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674692935;
-        bh=ugZ8xqRzG/MXWFMK1A6CKCJ9dwczVVYsZvs+Zqi8Mhk=;
+        s=k20201202; t=1674692938;
+        bh=gd48QQ1G/fofkw08t5Nm1PtKKDKcVePwRYIRZ/2YscM=;
         h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=jBrnHhCJ6JpOpO89l4637NxJyAix4JxyQkDTe1qcS37nBu3QjluVV1fx8JjRs7o7e
-         LAT9sNWMfbh22NXTnjohoTL8Yno8nS8tS6/QXI6qrwsFtTyKQQCylEfABcSu3inmmq
-         zj+1P2zoRSFWHZu/aYhRgXBZ4JcfsZPAEUL9SsM2VSJcr5BZfRhCLg5rRmQd447ZXx
-         fNCFc00KePZyWwG/RUlFzm1k2MaqVw0B1LO1BayW/hJ8nUY+OdO3bJTcRi9Afz2zEb
-         KkPQHfVmLdCuyTf02sep6tRGKpq1ejQrrkqvq9YauPSs9VOV7hlum1YzLBWolK8DAn
-         VVGQH89JWYdhg==
+        b=rriKJ7Q6Cok9gWsDKHoLDJOlzvG7Q8T+zRjYTYlMDBLkFKpkAm4VTSp/smSQijp/B
+         aBkMcMXriYwiT+PfmRL90DzVT3iLkfMHcpmmiKTJxMgvQyoP4q2Hp/S16lNLb3GU+2
+         8AVRTrNGKFY0URApMz890qGMrVxn1ijgzONEfbYB6lcKg+qN6hyARGGzVmQhxr9aCW
+         E016XyIqyHS+eZ2QMFCZxR8BKUCcnZYyHImLq/jOoLuxN51tD/n38Byxy7MiCfHlg0
+         5JWPZspfkMZaNip9uW0VPJ5265ikiqQwUI5isom+LwEEMfLFk6I8e2t/jBJKNhaMxM
+         Yfnx72mo+AcNw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Oder Chiou <oder_chiou@realtek.com>,
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230124163953.345949-1-krzysztof.kozlowski@linaro.org>
-References: <20230124163953.345949-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 1/3] ASoC: codecs: constify static sdw_slave_ops struct
-Message-Id: <167469293316.2696228.10033245530806500019.b4-ty@kernel.org>
-Date:   Thu, 26 Jan 2023 00:28:53 +0000
+In-Reply-To: <20230120153020.320270-1-krzysztof.kozlowski@linaro.org>
+References: <20230120153020.320270-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: samsung,odroid: correct codec
+ DAI phandles
+Message-Id: <167469293574.2696228.16859545876419546902.b4-ty@kernel.org>
+Date:   Thu, 26 Jan 2023 00:28:55 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -59,9 +59,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 17:39:51 +0100, Krzysztof Kozlowski wrote:
-> The struct sdw_slave_ops is not modified and sdw_driver takes pointer to
-> const, so make it a const for code safety.
+On Fri, 20 Jan 2023 16:30:19 +0100, Krzysztof Kozlowski wrote:
+> The order of codec DAI phandles is reversed - first comes HDMI (always
+> present) and then codec (physically not present on Odroid XU4).
 > 
 > 
 
@@ -71,12 +71,10 @@ Applied to
 
 Thanks!
 
-[1/3] ASoC: codecs: constify static sdw_slave_ops struct
-      commit: 65b7b869da9bd3bd0b9fa60e6fe557bfbc0a75e8
-[2/3] ASoC: codecs: constify static sdw_port_config struct
-      commit: 57dc05c4e6faaab5d8e7fb631f285120d7ed4b07
-[3/3] ASoC: codecs: wsa88xx: remove unneeded includes
-      commit: 27681129b089d9a5d597a05f6e1821eb6d82919b
+[1/2] ASoC: dt-bindings: samsung,odroid: correct codec DAI phandles
+      commit: cc5be0e5477f53f2d4b3c9211206f34505ec17ba
+[2/2] ASoC: dt-bindings: samsung-i2s: drop unneeded assigned-clock*
+      commit: 73ab5b3aa59036e0e6689b0a20a5080ef7ab7c03
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
