@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5667067D85F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A54767D86D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbjAZWa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
+        id S233074AbjAZWdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:33:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232725AbjAZWaZ (ORCPT
+        with ESMTP id S233210AbjAZWck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:30:25 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3522359F2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:30:21 -0800 (PST)
+        Thu, 26 Jan 2023 17:32:40 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A806DFF6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:32:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674772221; x=1706308221;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YX8QAiiXUItRHweILuMEEYUWmvws790j6lQ7xYB5yyE=;
-  b=kL1oUOJQOMLXR3huc9DxmJx6tqcg48sf2tU8tq1Gcny9J+P61lXlPOrN
-   VUPKahOMiiJ7xSICgJO2pu7LuY6YofJ/t9qsO4cPaMCnfcLTNIG+rNpmz
-   4ths9YkaDqk5EhKxPdzW9bt3ae04QC6dlHJy3qR7okVZjM/It/Xtt27lT
-   akMeEhBEIckMbrUTzwNGuSCdRM8oFxJJWxK7fU4GKvYPplfv0DurELTLO
-   X4lyEZcwRsP6TRq1spS+RSwp+npQ5lbstI6izjeBAHD0gBcLz6PXrI9wG
-   ey3kCI1GUsdosxJMlGhUZiV7Qlv6bWF+19psqpkKQr2/Zwi2W41yCZr2n
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="389342071"
+  t=1674772341; x=1706308341;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=oJ60TuZ/WAThDiZfd1xgtqkLBDwCMemAxdyGLVSzJlk=;
+  b=Aa3FF7gA9+RqijlcJJtV8cvQQBK4Ha7eqjcjWKnm8GJWnVwF3cwimOS8
+   hLoZ829q40U2WFYXel2GbQzu+b0f0dzfSsAlZzMgPczx68rij0N1BzDfC
+   dm9q506osoe/4iOJZ+hA8A20Do9QzUuvA2kxFys5mn3zYCvW1cXiyiZYX
+   5BeJZevGA8Op0Z/NjYCpLB3PzPGxQm/hwudsXL4tWcRFq0pS/jU+X5HoT
+   1JIjbzELSrx4uByHcRg9tpT/naM9dTDZFfD24VIVbdsKgx8un9iyb2Lqx
+   RB+UXaxRLYK8QmUfJVBWOOCmxt2PRbj9OZXQwQ2DQ/yzWr3fxZhowb0Se
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="391516403"
 X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="389342071"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 14:12:08 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="751770915"
+   d="scan'208";a="391516403"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 14:12:08 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="908411169"
 X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="751770915"
+   d="scan'208";a="908411169"
 Received: from smadjatx-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.210.179])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 14:12:06 -0800
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 14:12:05 -0800
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 4241610DB5B; Fri, 27 Jan 2023 01:12:03 +0300 (+03)
+        id 4945410DB5C; Fri, 27 Jan 2023 01:12:03 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@intel.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -50,10 +50,12 @@ Cc:     Kuppuswamy Sathyanarayanan
         Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
         linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv2, RESEND 0/7] x86/tdx: Changes for TDX guest initialization
-Date:   Fri, 27 Jan 2023 01:11:52 +0300
-Message-Id: <20230126221159.8635-1-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv2, RESEND 1/7] x86/tdx: Fix typo in comment in __tdx_hypercall()
+Date:   Fri, 27 Jan 2023 01:11:53 +0300
+Message-Id: <20230126221159.8635-2-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230126221159.8635-1-kirill.shutemov@linux.intel.com>
+References: <20230126221159.8635-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -65,45 +67,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Resend v2 of the patchset. I believe it is ready to be applied. Changes
-are pretty straight-forward and got tested properly (famous last words).
+Comment in __tdx_hypercall() points that RAX==0 indicates TDVMCALL
+failure which is opposite of the truth: RAX==0 is success.
 
-Changes to __tdx_hypercall() are also required for Hyper-V TDX guest
-enabling.
+Fix the comment. No functional changes.
 
-Several changes to TDX initialization:
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+---
+ arch/x86/coco/tdx/tdcall.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- Make early panic message visible to user;
-
-- Relax SEPT_VE_DISABLE for debug TD. It helps to investigate bugs
-  resulting in access of unaccepted memory.
-
-- Make sure NOTIFY_ENABLES is off to eliminate possible source of random
-  #VE.
-
-The patchset makes use of ReportFatalError TDVMCALL. The definition of
-the TDVMCALL has changed in recent GHCI update[1].
-
-v2:
- - Split the first patch;
- - Introduce is_private_gpa();
- - Apply Reviewed-by from Dave;
-
-Kirill A. Shutemov (7):
-  x86/tdx: Fix typo in comment in __tdx_hypercall()
-  x86/tdx: Add more registers to struct tdx_hypercall_args
-  x86/tdx: Refactor __tdx_hypercall() to allow pass down more arguments
-  x86/tdx: Expand __tdx_hypercall() to handle more arguments
-  x86/tdx: Use ReportFatalError to report missing SEPT_VE_DISABLE
-  x86/tdx: Relax SEPT_VE_DISABLE check for debug TD
-  x86/tdx: Disable NOTIFY_ENABLES
-
- arch/x86/coco/tdx/tdcall.S        | 83 ++++++++++++++++++++++---------
- arch/x86/coco/tdx/tdx.c           | 62 ++++++++++++++++++++++-
- arch/x86/include/asm/shared/tdx.h |  6 +++
- arch/x86/kernel/asm-offsets.c     |  6 +++
- 4 files changed, 131 insertions(+), 26 deletions(-)
-
+diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
+index f9eb1134f22d..74b108e94a0d 100644
+--- a/arch/x86/coco/tdx/tdcall.S
++++ b/arch/x86/coco/tdx/tdcall.S
+@@ -155,7 +155,7 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	tdcall
+ 
+ 	/*
+-	 * RAX==0 indicates a failure of the TDVMCALL mechanism itself and that
++	 * RAX!=0 indicates a failure of the TDVMCALL mechanism itself and that
+ 	 * something has gone horribly wrong with the TDX module.
+ 	 *
+ 	 * The return status of the hypercall operation is in a separate
 -- 
 2.39.1
 
