@@ -2,142 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08C367D1A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C19CF67D1AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjAZQcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
+        id S230046AbjAZQcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:32:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjAZQcF (ORCPT
+        with ESMTP id S229976AbjAZQcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:32:05 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6C0210A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:32:00 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P2mHJ46hQz9xFHQ
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:23:56 +0800 (CST)
-Received: from [10.48.129.37] (unknown [10.48.129.37])
-        by APP1 (Coremail) with SMTP id LxC2BwD3eATbqtJjJCbMAA--.816S2;
-        Thu, 26 Jan 2023 17:31:35 +0100 (CET)
-Message-ID: <10cfb309-4a12-2b57-e367-b5224a442685@huaweicloud.com>
-Date:   Thu, 26 Jan 2023 17:31:20 +0100
+        Thu, 26 Jan 2023 11:32:23 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E980F20691
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:32:19 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id j17so1543131wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:32:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ht6SLMPOXpO5uQjEKRBlkeAFxtNjyW1ofM/NJzMtXes=;
+        b=bQUKqFOePcwq2+andSurp3CyehEw/rCw1c3LYc7LOeoXkGX1+8eWEqskfuK06Ku9cq
+         latkyqL/y3AVFaLVtFzWf55vMnVx49WLM+I434CoMoggsC+6nhlEbJlDvxA5cqTLydzh
+         z8WIoAAvZG9n8B1FVbRtm0sNn9f2fdvXLUYKLtWXs/ZOOtIKyc5SC6bu1A6UOcUSYvg4
+         9VWuqka7d9K/wf0135wn6kZNLCeevbDgrDzryTjmByxjiT6xz/bNsXaaj2+rALWez4WN
+         pweX25STJgKwGIgMxDuqt6TXvs1CjXV+EF5KXICf1sIYgPvu88lCdQrJjhjLde21oxmX
+         76Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ht6SLMPOXpO5uQjEKRBlkeAFxtNjyW1ofM/NJzMtXes=;
+        b=57sNsjcuzVGJ4KLqR/KfcITgnmePtE1TdW02AqoscndZY42BF5OEwO2256EAvFsoRW
+         sijjrvmdz3J0NY3TL3RCdNLO0GaGEgjAp6XwzckywhveFEtv6Iz0a7EQtYy+1Y2X8VJN
+         cH4ClUqftHjP7auu//4GEkoRafooLfphBYlSbRuza7qucUxcEYsDNHtkQaxFp8AtdYn9
+         F7FGokvWTVn+TEFKXTBPJCnRZ13+aexZQ8Dw5FZ6B+yatsCJd3huY7CyesaDJpak3dHM
+         x0PxWujIgY8n5nMLVSJCA4ijJQLILB+p3MZLdxW80XEFgXj5r/dr//Z2RixBsFewPOWQ
+         yujg==
+X-Gm-Message-State: AFqh2kriXLvsmQq9oJ3PA09plgJGeJEws+SuvwqNnNGXH/ge8XuhfRtB
+        ZkhKlWWYOk/Vh1Aq2yGn5745nCvB8jkh+zFG
+X-Google-Smtp-Source: AMrXdXueF3WB3UYX7Y62NPQUcdVtJfLtkKm2OG2DuDdwF6CXMCUWMJCTRgiP0i0grNrhL7mpvJ2Hhg==
+X-Received: by 2002:a05:600c:c10:b0:3da:f5e6:a320 with SMTP id fm16-20020a05600c0c1000b003daf5e6a320mr40747301wmb.22.1674750738488;
+        Thu, 26 Jan 2023 08:32:18 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id ip6-20020a05600ca68600b003d04e4ed873sm5027940wmb.22.2023.01.26.08.32.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 08:32:18 -0800 (PST)
+Message-ID: <b7343ea6-7194-e709-8fed-4a1a17f7beb5@linaro.org>
+Date:   Thu, 26 Jan 2023 16:32:17 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [Patch 2/2] tools/memory-model: Provide exact SRCU semantics
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <Y9GO3xEYkIQq/qSl@rowland.harvard.edu>
- <Y9GPI/g23YWx+0Ce@rowland.harvard.edu> <Y9GPVnK6lQbY6vCK@rowland.harvard.edu>
- <c44183e7-44ae-4be3-bb47-517067a112b5@huaweicloud.com>
- <Y9Gyuj+2UFefUdJS@rowland.harvard.edu>
- <edadb690-e791-0e9c-e641-ea8876abe96e@huaweicloud.com>
- <Y9KkLHWzuIQ8sDwq@rowland.harvard.edu>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y9KkLHWzuIQ8sDwq@rowland.harvard.edu>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Cc:     agross@kernel.org, andersson@kernel.org, djakov@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org
+References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
+ <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
+ <Y86CPmgvAi+kChQI@gerhold.net>
+ <87192098-b7f4-060f-9274-933d974c0a7d@linaro.org>
+ <df4c76eb-aec7-823e-28f9-5ba96cc200c6@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <df4c76eb-aec7-823e-28f9-5ba96cc200c6@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwD3eATbqtJjJCbMAA--.816S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAryrGry3trWUGr4rJry8AFb_yoW5Xw15pF
-        W8tFWfAan8tr1S9r1I934rGry8t3yFqa9Fqrs8GF97J3s8Xr9xGr1xKw45uFy3Gw1fGFWa
-        q3yrtF9xJ3s0yaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUFDGOUUUUU
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 26/01/2023 15:34, Konrad Dybcio wrote:
+>>> To me this looks like a confirmation of what downstream does, that both
+>>> DSI byte clocks are actually sourced from the dsi0_phy and the PLL of
+>> A better name would have been dsiX_phy_pll_out_byteclk.
+> I believe Stephan is just confused what the clock source of both
+> pairs of GCC DSI clocks are, as you're suggesting that:
+> 
+> phy_clock0
+>    |_gcc_clock0
+> 
+> and
+> 
+> phy_clock0 (yes, zero)
+>    |_gcc_clock1
+> 
+> whereas on most other SoCs the following is true:
+> 
+> phy_clock0
+>    |_gcc_clock0
+> 
+> phy_clock1
+>    |_gcc_clock_1
+> 
+> Konrad
 
+The only input clock to GCC is XO or buffered CXO if routed through the 
+PMIC.
 
-On 1/26/2023 5:02 PM, Alan Stern wrote:
-> On Thu, Jan 26, 2023 at 12:30:14PM +0100, Jonas Oberhauser wrote:
->>
->> On 1/25/2023 11:52 PM, Alan Stern wrote:
->>> On Wed, Jan 25, 2023 at 10:04:29PM +0100, Jonas Oberhauser wrote:
->>>> On 1/25/2023 9:21 PM, Alan Stern wrote:
->>>>>     (* Validate nesting *)
->>>>>     flag ~empty Srcu-lock \ domain(srcu-rscs) as unmatched-srcu-lock
->>>>>     flag ~empty Srcu-unlock \ range(srcu-rscs) as unmatched-srcu-unlock
->>>>> +flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-srcu-matches
->>>> [...]
->>>>>     // SRCU
->>>>> -srcu_read_lock(X)  __srcu{srcu-lock}(X)
->>>>> -srcu_read_unlock(X,Y) { __srcu{srcu-unlock}(X,Y); }
->>>>> +srcu_read_lock(X) __load{srcu-lock}(*X)
->>>>> +srcu_read_unlock(X,Y) { __store{srcu-unlock}(*X,Y); }
->>>>> +srcu_down_read(X) __load{srcu-lock}(*X)
->>>>> +srcu_up_read(X,Y) { __store{srcu-unlock}(*X,Y); }
->>>> How do you feel about introducing Srcu-up and Srcu-down with this patch?
->>> Why invent new classes for them?  They are literally the same operation
->>> as Srcu-lock and Srcu-unlock; the only difference is how the kernel's
->>> lockdep checker treats them.
->> I don't think they're necessarily implemented in a compatible way, so
->>
->> r = srcu_lock(s);
->> srcu_up(s,r);
->>
->> might not actually work, but would currently be ok'ed by LKMM.
-> I'll let Paul answer this.
->
->>   With
->> different classes you could state
->>    flag ~empty [Srcu-lock];srcu-rscs;[Srcu-up] as srcu-mismatch-lock-to-up
->>    flag ~empty [Srcu-down];srcu-rscs;[Srcu-unlock] as
->> srcu-mismatch-down-to-unlock
->>
->> I think with the current implementation this code might work, but I don't
->> feel like this is inherently true.
->>
->> You could then also go ahead and define the "same CPU" requirement as a flag
->> for lock and unlock specifically, like
->>    flag ~empty [Srcu-lock];srcu-rscs & ext as srcu-lock-unlock-mismatch-CPU
->> or so.
-> Bear in mind that the herd7 model is not obliged to find and warn about
-> all possible bugs in a litmus test.  Especially if the same code would
-> generate a warning or error when run in the kernel.
+You can select via GCC::RCGR where dsiX_phy_pll_out_byteclk is *sourced* 
+from XO, GPLL0_AUX or P_DSI0_PHYPLL_BYTE.
 
-I  agree, and indeed it may not even possible to do so (even under a 
-hypothetical formal proof that the list of bugs is complete, some might 
-not be formalizable in a satisfactory way in herd).
-Mostly I'm just trying to see if you have considered the possibilities 
-and decided against them intentionally, or if you just hadn't considered 
-it. I don't have a strong opinion either way and would be ok with the 
-patch as written.
+So, obvs the byte clock can be any one of those input sources.
 
-That said, I do like to think of the model as a kind of compact formal 
-specification/documentation, including the assumptions the kernel makes 
-about how these APIs are to be used.
+But the question is, if you select dsi0_phy_pll_out_byteclk - what 
+provides it ?
 
-Best wishes, jonas
+Reviewing the LK bootloader for 3.18, it *looks* to me like the dsi0 pll 
+is always switched on. The downstream kernel tree doesn't represent that.
 
+0x01A9811C MDSS_DSI_0_CLK_CTRL
+Type: RW
+Reset State: 0x00000000 -> BIT(4) -> Turns on/off BYTECLK for the DSI. 
+If set to 1, clock is ON.
+
+Hmm. I think actually it must be the case that DSI1 is a slave of DSI0.
+
+You can have both interfaces running or just DSI0 on its own.
+
+Hmm, I'll change it.
+
+---
+bod
