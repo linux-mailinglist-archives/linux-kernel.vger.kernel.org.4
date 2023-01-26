@@ -2,73 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE3467D9FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA2067DA07
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbjAZXze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
+        id S233383AbjAZXzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232541AbjAZXzb (ORCPT
+        with ESMTP id S233232AbjAZXzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:55:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E404521C;
-        Thu, 26 Jan 2023 15:55:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EA2160F27;
-        Thu, 26 Jan 2023 23:55:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B99C433D2;
-        Thu, 26 Jan 2023 23:55:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674777327;
-        bh=b4RDpwEILaDiIt/LpUYj6ICO+dPIjXDR8ok9CctcPps=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EjNRBD0x7DqI5RWqrQB53Z5Y0dhJERyDmr8qkJ5N0IoJEoVb5kEuCBlXqazqg6NTt
-         6R1V2ndj99lVu1sCQxKtDdEvjIFacZKGSz+Lhy8uRjmFYWsORmUCS1u6B8hKs7DvvJ
-         j1FgWk9FgznH/mM6ARjb4iGeX/fRGcraMjEx28xzEE+9uopEpF5TN4NUx/rv882+aK
-         0qPw/IDwT4whMeGcK+EVs7cfVrMEUVyhvhE8ZLvKc3iXMSWP0zWUKUlOon9CyXo0NJ
-         FLHAStWX96PnCHsfv4ZDYqqht1TBsrX82BA4jCSphv+pENkmWr6WVrpyCmT4VPx0nr
-         kJTXOhmZm70/Q==
-Date:   Thu, 26 Jan 2023 15:55:26 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        dev@openvswitch.org, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH] scripts/spelling.txt: add "exsits" pattern and fix typo
- instances
-Message-ID: <20230126155526.3247785a@kernel.org>
-In-Reply-To: <20230126152205.959277-1-luca.ceresoli@bootlin.com>
-References: <20230126152205.959277-1-luca.ceresoli@bootlin.com>
+        Thu, 26 Jan 2023 18:55:50 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E6749424
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:55:49 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id g11-20020a056e021a2b00b0030da3e7916fso2205863ile.18
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:55:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f/mHGqHnlLOZDTRc/j4sUoCCFZeovVeLFLkYmFL04bs=;
+        b=aDqNlO8dBdm551+krDi8bxuGX7GgXK/LJaN/5pokuJegJEBv+4EHOKiJYmfIx3DdDH
+         fBOpaiFiTujE98ParGNCB+MAEsq3cZA9JvhREEHWCbmqnezK49pSlV2J/F4dTA9f+nMW
+         ++WtvMk1hlTTFVSoWkZN9uhcn0ENAxQBCa2wyNBdg+q1IP7UBpVbsy98hHoExw0pz63x
+         8pSJiJRUMwUMZS/vz7iW5tQ6bgOSiWG1v3uQFIXLJSN0R+Sv4o1EZhNicAdgq1u5W7hc
+         9VJK5vZtBNRSmsDuC0PKXgScRKLIHzoqCzMn/hi5Q/kTB1uHUU5aeDBHPmnnagIYVlu0
+         hzag==
+X-Gm-Message-State: AO0yUKUFksTrdxyT1NyXd5YUO6RQ6oqQ2yVkjVyJepQopGHOYVS5oxVo
+        dObjYhQftbaXY8x5IBEgHGF8LkF5tHGuDpDzhKEUQBia1Xki
+X-Google-Smtp-Source: AK7set9LBHt3fobyke2L4mqXoPyEh5AZP1qBIHcmqh7Kn/LIAqBVKBO/uUeMDncENlcv9Dsh1RMVweA+aSyUuFoW9XxIAiLNtqJI
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:bd0d:0:b0:310:b103:a416 with SMTP id
+ c13-20020a92bd0d000000b00310b103a416mr730073ile.12.1674777348318; Thu, 26 Jan
+ 2023 15:55:48 -0800 (PST)
+Date:   Thu, 26 Jan 2023 15:55:48 -0800
+In-Reply-To: <000000000000a0d7f305eecfcbb9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ecacda05f3337c03@google.com>
+Subject: Re: [syzbot] [vfs?] [ntfs3?] WARNING in path_openat
+From:   syzbot <syzbot+be8872fcb764bf9fea73@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 Jan 2023 16:22:05 +0100 Luca Ceresoli wrote:
-> Fix typos and add the following to the scripts/spelling.txt:
-> 
->   exsits||exists
-> 
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+syzbot has found a reproducer for the following issue on:
 
-You need to split this up per subsystem, I reckon :(
+HEAD commit:    7c46948a6e9c Merge tag 'fs.fuse.acl.v6.2-rc6' of git://git..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=109c0b8e480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c8d5c2ee6c2bd4b8
+dashboard link: https://syzkaller.appspot.com/bug?extid=be8872fcb764bf9fea73
+compiler:       Debian clang version 13.0.1-6~deb11u1, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17346ee1480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=149c16cd480000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/cc51645b6401/disk-7c46948a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/be036b5604a3/vmlinux-7c46948a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/274f5abf2c8f/bzImage-7c46948a.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/afb5c6b7a19b/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+be8872fcb764bf9fea73@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+DEBUG_RWSEMS_WARN_ON((rwsem_owner(sem) != current) && !rwsem_test_oflags(sem, RWSEM_NONSPINNABLE)): count = 0x0, magic = 0xffff88807104ea70, owner = 0x0, curr 0xffff8880196757c0, list empty
+WARNING: CPU: 0 PID: 7935 at kernel/locking/rwsem.c:1361 __up_write kernel/locking/rwsem.c:1360 [inline]
+WARNING: CPU: 0 PID: 7935 at kernel/locking/rwsem.c:1361 up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
+Modules linked in:
+CPU: 0 PID: 7935 Comm: syz-executor316 Not tainted 6.2.0-rc5-syzkaller-00047-g7c46948a6e9c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:__up_write kernel/locking/rwsem.c:1360 [inline]
+RIP: 0010:up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
+Code: c7 00 ad ed 8a 48 c7 c6 a0 af ed 8a 48 8b 54 24 28 48 8b 4c 24 18 4d 89 e0 4c 8b 4c 24 30 31 c0 53 e8 9b 5a e8 ff 48 83 c4 08 <0f> 0b e9 6b fd ff ff 48 c7 c1 18 cb 96 8e 80 e1 07 80 c1 03 38 c1
+RSP: 0018:ffffc9000b7cf860 EFLAGS: 00010296
+RAX: 4643b7f86e564100 RBX: ffffffff8aedade0 RCX: ffff8880196757c0
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc9000b7cf930 R08: ffffffff816f2b8d R09: fffff520016f9ec5
+R10: fffff520016f9ec5 R11: 1ffff920016f9ec4 R12: 0000000000000000
+R13: ffff88807104ea70 R14: 1ffff920016f9f14 R15: dffffc0000000000
+FS:  00007ff043008700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000561cee05f058 CR3: 0000000021d9a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ inode_unlock include/linux/fs.h:761 [inline]
+ open_last_lookups fs/namei.c:3485 [inline]
+ path_openat+0x14ff/0x2dd0 fs/namei.c:3711
+ do_filp_open+0x264/0x4f0 fs/namei.c:3741
+ do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_creat fs/open.c:1402 [inline]
+ __se_sys_creat fs/open.c:1396 [inline]
+ __x64_sys_creat+0x11f/0x160 fs/open.c:1396
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ff04b2814a9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 d1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ff0430082f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
+RAX: ffffffffffffffda RBX: 00007ff04b326790 RCX: 00007ff04b2814a9
+RDX: 00007ff04b2814a9 RSI: 0000000000000106 RDI: 0000000020000200
+RBP: 00007ff04b2f2c88 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000020000600
+R13: 0030656c69662f2e R14: 0000000020000b80 R15: 00007ff04b326798
+ </TASK>
+
