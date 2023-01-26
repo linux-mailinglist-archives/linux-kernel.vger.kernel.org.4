@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5310667CA25
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7533567CA27
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237329AbjAZLix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 06:38:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
+        id S237338AbjAZLjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 06:39:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237305AbjAZLis (ORCPT
+        with ESMTP id S237307AbjAZLis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 Jan 2023 06:38:48 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A663BDBF;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1043E095;
         Thu, 26 Jan 2023 03:38:47 -0800 (PST)
-Date:   Thu, 26 Jan 2023 11:38:44 -0000
+Date:   Thu, 26 Jan 2023 11:38:45 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674733125;
+        s=2020; t=1674733126;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cbK7nIGD/08H7Aeb4a9bD6tyPHJg6ETnqXE4EFES7nQ=;
-        b=cJCqHT8VIYqRVRApNHeskZGd/veQQgUxMsKbgESkHFe/pILBhY3E+flaOGF4PEcl4dURke
-        oiY0ob3zcFCMX5lIq6f1jMHbupePQ1FoJbGLaASxDu0yhDwBT8anY3+Jd829ewj3SmufuM
-        Gb/AZU0wPGPriMUCGx+K05Dkco1NSue2pon5G4yH0zJxAdrsYFsDy9hqpBkejzvqqfH7BS
-        9HnD6g/jalQxXyoawP6Wa8SmlOYb4tQ1IlLwd49K3j03lH8AZEg5baIDaKettyDby+OWBX
-        jDO2OMhXB/kp1gEx+znZMZDHmTX/YyBd5ZKoH8YitarhnzpA5F9HxyzVwblHAw==
+        bh=UxJDEu63Ijg3+35/HItpaVY6j0/2RXO+OkssGdF1C3Y=;
+        b=c/mOJxWCoUpJg9oohAhNcAFZi9hFkxYlhSwEZefLcSfN1rlqSmK4REy4jT8TQyynWdptTT
+        NkLh8RaI2ovvRgxn9bYgc+YjVKo3apc3ttAC4LdpmB6o1PiTWd6rFnjoSl5iIPjkJXFJlq
+        ZPiS0s55876kxbu6I4ORwqK77YYHV2XpCyxS0vhM7Lbp/VxtTulBRcrRgFQK61nHhAAbtH
+        L6WVUliUY4C+LKJ4TyYeuNoxtUeKYWCUfeTmuqMauiJeTchqkqzT7iwK1+hySekEWxRi/+
+        ayMAVJziVZWAk48ZzjkTxhbBA+Q3Vtt34pOgu8fmCXj177JGI2Cf/6bYbmP6tQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674733125;
+        s=2020e; t=1674733126;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cbK7nIGD/08H7Aeb4a9bD6tyPHJg6ETnqXE4EFES7nQ=;
-        b=bXSr65vZ1IyuWmbQfE7Hh+b/4nQwLbCHC6Ik9QJINIFj5eLm7FA4j//ryUu06X+F9VIGa5
-        Ouf5q25G12UxfgBQ==
+        bh=UxJDEu63Ijg3+35/HItpaVY6j0/2RXO+OkssGdF1C3Y=;
+        b=GDx8aomo2ahGQ/EWR5iBq0/On2IzF3hZ8BCjgbSd7csPC2HtzcdIAQ/qTRipsnGEz6mxiB
+        UaK3xPq0va+jxyBg==
 From:   "tip-bot2 for Waiman Long" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] locking/rwsem: Disable preemption in all
- down_read*() and up_read() code paths
-Cc:     Mukesh Ojha <quic_mojha@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230126003628.365092-3-longman@redhat.com>
-References: <20230126003628.365092-3-longman@redhat.com>
+Subject: [tip: locking/core] locking/rwsem: Prevent non-first waiter from
+ spinning in down_write() slowpath
+Cc:     Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+        Mukesh Ojha <quic_mojha@quicinc.com>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230126003628.365092-2-longman@redhat.com>
+References: <20230126003628.365092-2-longman@redhat.com>
 MIME-Version: 1.0
-Message-ID: <167473312497.4906.10689090616417879897.tip-bot2@tip-bot2>
+Message-ID: <167473312559.4906.10064248025918048573.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,133 +67,103 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     3f5245538a1964ae186ab7e1636020a41aa63143
-Gitweb:        https://git.kernel.org/tip/3f5245538a1964ae186ab7e1636020a41aa63143
+Commit-ID:     b613c7f31476c44316bfac1af7cac714b7d6bef9
+Gitweb:        https://git.kernel.org/tip/b613c7f31476c44316bfac1af7cac714b7d6bef9
 Author:        Waiman Long <longman@redhat.com>
-AuthorDate:    Wed, 25 Jan 2023 19:36:26 -05:00
+AuthorDate:    Wed, 25 Jan 2023 19:36:25 -05:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Thu, 26 Jan 2023 11:46:46 +01:00
+CommitterDate: Thu, 26 Jan 2023 11:46:45 +01:00
 
-locking/rwsem: Disable preemption in all down_read*() and up_read() code paths
+locking/rwsem: Prevent non-first waiter from spinning in down_write() slowpath
 
-Commit:
+A non-first waiter can potentially spin in the for loop of
+rwsem_down_write_slowpath() without sleeping but fail to acquire the
+lock even if the rwsem is free if the following sequence happens:
 
-  91d2a812dfb9 ("locking/rwsem: Make handoff writer optimistically spin on owner")
+  Non-first RT waiter    First waiter      Lock holder
+  -------------------    ------------      -----------
+  Acquire wait_lock
+  rwsem_try_write_lock():
+    Set handoff bit if RT or
+      wait too long
+    Set waiter->handoff_set
+  Release wait_lock
+                         Acquire wait_lock
+                         Inherit waiter->handoff_set
+                         Release wait_lock
+					   Clear owner
+                                           Release lock
+  if (waiter.handoff_set) {
+    rwsem_spin_on_owner(();
+    if (OWNER_NULL)
+      goto trylock_again;
+  }
+  trylock_again:
+  Acquire wait_lock
+  rwsem_try_write_lock():
+     if (first->handoff_set && (waiter != first))
+	return false;
+  Release wait_lock
 
-... assumes that when the owner field is changed to NULL, the lock will
-become free soon. But commit:
+A non-first waiter cannot really acquire the rwsem even if it mistakenly
+believes that it can spin on OWNER_NULL value. If that waiter happens
+to be an RT task running on the same CPU as the first waiter, it can
+block the first waiter from acquiring the rwsem leading to live lock.
+Fix this problem by making sure that a non-first waiter cannot spin in
+the slowpath loop without sleeping.
 
-  48dfb5d2560d ("locking/rwsem: Disable preemption while trying for rwsem lock")
-
-... disabled preemption when acquiring rwsem for write.
-
-However, preemption has not yet been disabled when acquiring a read lock
-on a rwsem.  So a reader can add a RWSEM_READER_BIAS to count without
-setting owner to signal a reader, got preempted out by a RT task which
-then spins in the writer slowpath as owner remains NULL leading to live lock.
-
-One easy way to fix this problem is to disable preemption at all the
-down_read*() and up_read() code paths as implemented in this patch.
-
-Fixes: 91d2a812dfb9 ("locking/rwsem: Make handoff writer optimistically spin on owner")
-Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Fixes: d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more consistent")
 Signed-off-by: Waiman Long <longman@redhat.com>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230126003628.365092-3-longman@redhat.com
+Tested-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20230126003628.365092-2-longman@redhat.com
 ---
- kernel/locking/rwsem.c | 30 ++++++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 6 deletions(-)
+ kernel/locking/rwsem.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
 diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index be2df9e..84d5b64 100644
+index 4487359..be2df9e 100644
 --- a/kernel/locking/rwsem.c
 +++ b/kernel/locking/rwsem.c
-@@ -1091,7 +1091,7 @@ queue:
- 			/* Ordered by sem->wait_lock against rwsem_mark_wake(). */
- 			break;
+@@ -624,18 +624,16 @@ static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
+ 			 */
+ 			if (first->handoff_set && (waiter != first))
+ 				return false;
+-
+-			/*
+-			 * First waiter can inherit a previously set handoff
+-			 * bit and spin on rwsem if lock acquisition fails.
+-			 */
+-			if (waiter == first)
+-				waiter->handoff_set = true;
  		}
--		schedule();
-+		schedule_preempt_disabled();
- 		lockevent_inc(rwsem_sleep_reader);
+ 
+ 		new = count;
+ 
+ 		if (count & RWSEM_LOCK_MASK) {
++			/*
++			 * A waiter (first or not) can set the handoff bit
++			 * if it is an RT task or wait in the wait queue
++			 * for too long.
++			 */
+ 			if (has_handoff || (!rt_task(waiter->task) &&
+ 					    !time_after(jiffies, waiter->timeout)))
+ 				return false;
+@@ -651,11 +649,12 @@ static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
+ 	} while (!atomic_long_try_cmpxchg_acquire(&sem->count, &count, new));
+ 
+ 	/*
+-	 * We have either acquired the lock with handoff bit cleared or
+-	 * set the handoff bit.
++	 * We have either acquired the lock with handoff bit cleared or set
++	 * the handoff bit. Only the first waiter can have its handoff_set
++	 * set here to enable optimistic spinning in slowpath loop.
+ 	 */
+ 	if (new & RWSEM_FLAG_HANDOFF) {
+-		waiter->handoff_set = true;
++		first->handoff_set = true;
+ 		lockevent_inc(rwsem_wlock_handoff);
+ 		return false;
  	}
- 
-@@ -1253,14 +1253,20 @@ static struct rw_semaphore *rwsem_downgrade_wake(struct rw_semaphore *sem)
-  */
- static inline int __down_read_common(struct rw_semaphore *sem, int state)
- {
-+	int ret = 0;
- 	long count;
- 
-+	preempt_disable();
- 	if (!rwsem_read_trylock(sem, &count)) {
--		if (IS_ERR(rwsem_down_read_slowpath(sem, count, state)))
--			return -EINTR;
-+		if (IS_ERR(rwsem_down_read_slowpath(sem, count, state))) {
-+			ret = -EINTR;
-+			goto out;
-+		}
- 		DEBUG_RWSEMS_WARN_ON(!is_rwsem_reader_owned(sem), sem);
- 	}
--	return 0;
-+out:
-+	preempt_enable();
-+	return ret;
- }
- 
- static inline void __down_read(struct rw_semaphore *sem)
-@@ -1280,19 +1286,23 @@ static inline int __down_read_killable(struct rw_semaphore *sem)
- 
- static inline int __down_read_trylock(struct rw_semaphore *sem)
- {
-+	int ret = 0;
- 	long tmp;
- 
- 	DEBUG_RWSEMS_WARN_ON(sem->magic != sem, sem);
- 
-+	preempt_disable();
- 	tmp = atomic_long_read(&sem->count);
- 	while (!(tmp & RWSEM_READ_FAILED_MASK)) {
- 		if (atomic_long_try_cmpxchg_acquire(&sem->count, &tmp,
- 						    tmp + RWSEM_READER_BIAS)) {
- 			rwsem_set_reader_owned(sem);
--			return 1;
-+			ret = 1;
-+			break;
- 		}
- 	}
--	return 0;
-+	preempt_enable();
-+	return ret;
- }
- 
- /*
-@@ -1334,6 +1344,7 @@ static inline void __up_read(struct rw_semaphore *sem)
- 	DEBUG_RWSEMS_WARN_ON(sem->magic != sem, sem);
- 	DEBUG_RWSEMS_WARN_ON(!is_rwsem_reader_owned(sem), sem);
- 
-+	preempt_disable();
- 	rwsem_clear_reader_owned(sem);
- 	tmp = atomic_long_add_return_release(-RWSEM_READER_BIAS, &sem->count);
- 	DEBUG_RWSEMS_WARN_ON(tmp < 0, sem);
-@@ -1342,6 +1353,7 @@ static inline void __up_read(struct rw_semaphore *sem)
- 		clear_nonspinnable(sem);
- 		rwsem_wake(sem);
- 	}
-+	preempt_enable();
- }
- 
- /*
-@@ -1661,6 +1673,12 @@ void down_read_non_owner(struct rw_semaphore *sem)
- {
- 	might_sleep();
- 	__down_read(sem);
-+	/*
-+	 * The owner value for a reader-owned lock is mostly for debugging
-+	 * purpose only and is not critical to the correct functioning of
-+	 * rwsem. So it is perfectly fine to set it in a preempt-enabled
-+	 * context here.
-+	 */
- 	__rwsem_set_reader_owned(sem, NULL);
- }
- EXPORT_SYMBOL(down_read_non_owner);
