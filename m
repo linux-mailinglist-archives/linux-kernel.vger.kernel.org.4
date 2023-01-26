@@ -2,120 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED52867C486
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0659F67C488
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbjAZGjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 01:39:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
+        id S234668AbjAZGoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 01:44:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjAZGjq (ORCPT
+        with ESMTP id S229483AbjAZGoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 01:39:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACEA51421
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 22:39:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674715139;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IwnaW40wODo/RPJeJh2TlciTsJYMAL7AVIWQnJnbBqw=;
-        b=HLKTvqZU90pz92lQqtaWwN3nQZXNaBtiMcdVAdjjWIilJUKCNtHq2XZdBUY/0teZDJmnnh
-        tnLlD3G56qdGW07+GRoesmrmj+EqUw79NLEW0/mVXAEiM+EKSIFgnD0wB3jxxIJo490O9i
-        RzSNyFQJXgLq1m0haN/lFpn1aGU9idQ=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-486-dxdZgSm6NuS85QV5QXA4wg-1; Thu, 26 Jan 2023 01:38:56 -0500
-X-MC-Unique: dxdZgSm6NuS85QV5QXA4wg-1
-Received: by mail-qk1-f200.google.com with SMTP id bi7-20020a05620a318700b007091d3fe2d3so527746qkb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 22:38:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IwnaW40wODo/RPJeJh2TlciTsJYMAL7AVIWQnJnbBqw=;
-        b=A3M5Z/tU66uQo6zz4rAInGUEY49xGy1AOJVpzVMU4gk4SsWMfkmnXQrjhOnC6sDTAI
-         aU7g7MHbfBe9Gjpc5Tj0dZ3mVQ/o90yXYqcZVWiuvYAKsrazNAYozpOOtdvJNF7wYzcX
-         yzVn5nZbVubPkd0o+M2LJZHwzW0rX/i0DSnZMHrIXvlXu0bt5rzVBZuhzQNJ3cKCEFcW
-         aNH0jjzuz/I8V7P6SUZaa36wi7GemobknqdwYDO2zCWX9WetoKdkWss0fJ2UyVP1efUn
-         clmHJDYUwIvZVAy1lOq+Csmg8U+ZPgLJXUDGkHTLQTZJMESaIcwEjix9U6P63Jj+c6MH
-         /RkA==
-X-Gm-Message-State: AFqh2kqzd7kiu/yLNMfLQwcV17qDdo+S0UU0kxhEbe8NHV/cmZ1nxcfj
-        j7WxDpNf9hy3IqyuCK2DG/1mnHDVWXyZX+jh32eMuIKI2kjjhv8S0eOtX9G4z2G4s++pT+hHFlj
-        wH0JDneTW28Gg6FlFZK2loiOW
-X-Received: by 2002:a05:622a:1aa5:b0:3b6:a1fd:19cd with SMTP id s37-20020a05622a1aa500b003b6a1fd19cdmr41574773qtc.46.1674715134726;
-        Wed, 25 Jan 2023 22:38:54 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuf7UjZI2ffXZKoGViT9PivCgdjta/q3yUMmhqaU7OtGXYv4rT+XOka9LZmTzNCFQdUCAdNYA==
-X-Received: by 2002:a05:622a:1aa5:b0:3b6:a1fd:19cd with SMTP id s37-20020a05622a1aa500b003b6a1fd19cdmr41574753qtc.46.1674715134495;
-        Wed, 25 Jan 2023 22:38:54 -0800 (PST)
-Received: from [192.168.8.105] (tmo-064-101.customers.d1-online.com. [80.187.64.101])
-        by smtp.gmail.com with ESMTPSA id x8-20020ac84d48000000b003b63b8df24asm247352qtv.36.2023.01.25.22.38.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 22:38:53 -0800 (PST)
-Message-ID: <957489fb-8080-8806-6ddf-8687da469a43@redhat.com>
-Date:   Thu, 26 Jan 2023 07:38:48 +0100
+        Thu, 26 Jan 2023 01:44:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B9D3CE01;
+        Wed, 25 Jan 2023 22:44:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B56AB81CFF;
+        Thu, 26 Jan 2023 06:44:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86912C433D2;
+        Thu, 26 Jan 2023 06:44:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674715453;
+        bh=oSASZYw285oCDWdMnzzDQlAN8ZvzQ9nHMu+oU6hhVqc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uvZM+kj1HL2TO/LWZZlKEnWJloTYJKFVA7qAPp8Ll3xPIQlGyxY2W/URylN8xcJMy
+         4fYSFuHhbZuRjSdK/kbNuzq3KDBGHkIt53GJkUfMDDqsKbJfsNpqV2JSw56Lg3xCV2
+         VbcKGqiI6mag/q3Bd5eLn7PWhiFuFqbHbOL9RFaZDveD1gz2QKSPoJrTr970UTe2HX
+         WgHPdkmd6QYtOl8YeXOrqLNKZ3J0fPn+PgjIu9Lk5kMFWbsOuDwU4vb4ysb4kElYDP
+         V3NX3EGZ3NN7mrEXlTJjPgc9fxNkTLFqVADt3JwmbfBse3wDaRaYfmSj0mRl3RtppO
+         UCZDawujXVOWA==
+Date:   Wed, 25 Jan 2023 22:44:11 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com,
+        John 'Warthog9' Hawley <warthog9@kernel.org>
+Subject: Re: [PATCH net] net: dsa: mt7530: fix tristate and help description
+Message-ID: <20230125224411.5a535817@kernel.org>
+In-Reply-To: <20230125053653.6316-1-arinc.unal@arinc9.com>
+References: <20230125053653.6316-1-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v6 07/14] KVM: s390: selftest: memop: Fix integer literal
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20230125212608.1860251-1-scgl@linux.ibm.com>
- <20230125212608.1860251-8-scgl@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <20230125212608.1860251-8-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2023 22.26, Janis Schoetterl-Glausch wrote:
-> The address is a 64 bit value, specifying a 32 bit value can crash the
-> guest. In this case things worked out with -O2 but not -O0.
-> 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> Fixes: 1bb873495a9e ("KVM: s390: selftests: Add more copy memop tests")
-> ---
->   tools/testing/selftests/kvm/s390x/memop.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-> index 3ec501881c7c..55b856c4d656 100644
-> --- a/tools/testing/selftests/kvm/s390x/memop.c
-> +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> @@ -514,7 +514,7 @@ static void guest_copy_key_fetch_prot_override(void)
->   	GUEST_SYNC(STAGE_INITED);
->   	set_storage_key_range(0, PAGE_SIZE, 0x18);
->   	set_storage_key_range((void *)last_page_addr, PAGE_SIZE, 0x0);
-> -	asm volatile ("sske %[key],%[addr]\n" :: [addr] "r"(0), [key] "r"(0x18) : "cc");
-> +	asm volatile ("sske %[key],%[addr]\n" :: [addr] "r"(0L), [key] "r"(0x18) : "cc");
->   	GUEST_SYNC(STAGE_SKEYS_SET);
->   
->   	for (;;) {
+On Wed, 25 Jan 2023 08:36:53 +0300 Ar=C4=B1n=C3=A7 =C3=9CNAL wrote:
+> Fix description for tristate and help sections which include inaccurate
+> information.
+>=20
+> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
 
-Reviewed-by: Thomas Huth <thuth@redhat.com>
-
+Didn't make it thru to the list again :(
+Double check that none of the addresses in To: or Cc: are missing
+spaces between name and email or after a dot. That seems to be the most
+common cause of trouble. Or try to resend using just emails, no names.
