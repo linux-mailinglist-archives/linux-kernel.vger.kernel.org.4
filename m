@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C8B67D715
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5649467D723
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbjAZVA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:00:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
+        id S232182AbjAZVCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:02:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjAZVAy (ORCPT
+        with ESMTP id S229486AbjAZVB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:00:54 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5AB4ABE2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:00:53 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id k13so3056651plg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:00:53 -0800 (PST)
+        Thu, 26 Jan 2023 16:01:59 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C63B741
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:01:58 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id k13so3059591plg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:01:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k1VrlYk4ybpwtqtLutbYjllW7SLxzj4A88S/3GMWXz0=;
-        b=KyX4GHM239zpw0SLa6ilOemKM4AL8PggjPZAiUmVHmBb6Nqm7v2XL1lIx20APvFvXA
-         WNr0FSBrZIP8fczsUfkSAazN7nhdeHHDBSsvN7uf2yV4lf13N2bfyg1a4maKF7En6ott
-         qt/edecGRpeoHJlrwHexnkNYQgCqvnvjXH00UYHPW9JFJojdJ6kN0elv3idgd9mkCFPe
-         cqsxnchaE3u27JBX/RBTMt4rPqMAc/L1roAj3JYMjQnKKX/OPlG46ugjBCibj2SBAcFM
-         G9QIHmyxbyMSeTUplU5uLSXpbnwUX73XlcA5ATs4mhJPZ/DXykeMKObKIc4tOTlqSq/9
-         p96A==
+        bh=THZwEUQiK9W9hfTlR1IZ+YZoG1qCax7kt7F16wlrB40=;
+        b=Ahmsw977aFNqHyqm4z/gvqU5DqUeygTsIIwOiMBTzj6FhS8MmnARtGIdDxKm99UuAI
+         j2fGen8A6zintJuq6Vm3vUf8qtQP7ids8K2sfcPQaTfOfKB/5ZlPvLC/wAqNZZ2HVQWl
+         u3QKfw69dENs801qrCSkoUMe2HsRiJgz5uQHtpwlsf9GatdC/B5lGpEtntjCmZVbGEtP
+         6VHyPt4PfV1lHUqCfPWaUz1vwHBBpkJUEGTiupxCsQFv0zz2/narzT622eb5c+JejqwK
+         ZsFFhZVFkwZfL8BKcmR/xl4ciMxkkNeVzh/P8pZI4MSpCEv8tJOM5qpyuduE4IiypOsj
+         jrMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=k1VrlYk4ybpwtqtLutbYjllW7SLxzj4A88S/3GMWXz0=;
-        b=7z8SzWs8E1nCMpENUVXYuqr4JUZnzDhd25my4y/SwpQuNy1xVHQB2yo5C09CR11lgW
-         imIZHx4kwxUmLRoLIbNoaRAa+eeqLTBWmScjsY1FRF8YaEc/Bf7DHqMjePQ57a0wBHHR
-         HxosuMOkwFiruDUmNEmBTUWfWVDQz963mSL3ZSBRKp6XPSqxIi01gEQQApfxEhvPiJR/
-         r0GpVCqbSbT/eakAq4QvigGsGcAeyP0gmqFMiH3Ovoz2nfYWGs4/ESWLKa7Q9Ef4zCkB
-         cuOjLd9gYpH2KVOqLY5MIaJJbwUSNE9z5pHF44nmOni3AJyEA/Ju2v460kE7pDbcojuV
-         +GtA==
-X-Gm-Message-State: AO0yUKW7cJrOcq1/1E6/5e1kPyIQJ+fVgJJWrfuyy1rcCjMm6fltSaQD
-        EYZsk9wDRcczX8oPB4wf7nYrcg==
-X-Google-Smtp-Source: AK7set/5KdZbA6hPjRJxJIk6pPmPLbIG/PEZE74cY8csx7Ody/+pmRZuhtGUWixg3VDUMHHJ8swa8A==
-X-Received: by 2002:a17:90a:4b88:b0:219:f970:5119 with SMTP id i8-20020a17090a4b8800b00219f9705119mr1022118pjh.1.1674766852256;
-        Thu, 26 Jan 2023 13:00:52 -0800 (PST)
+        bh=THZwEUQiK9W9hfTlR1IZ+YZoG1qCax7kt7F16wlrB40=;
+        b=RFgjVp2nTLslJyX36oG6e8ZPNCejhksIYA8q+LmneGnu8iUU0fIJY8GvyMXaIDRtSI
+         ZoQsTiU2NryYh8cImA4jKDy8LHT7U5/yO7RHJo9aqVvyVfEDjf1f1soMv2v6SIAIpu/M
+         iIKfYgj8WDuzBtiDJDAYucrSH2lSekxqAqqD+Ogeg62QquzzqoFZn1Akf9JQBYosGGRr
+         ONOhzz9ZbRFZLboVwk5gMz0FUvSgUwPpk14HGAiPsc6NJitFVvy9d0X/83RI0C5VhA6V
+         Y3zf0BjwD9u9Xr1UNow1EdBR87y09VBPnbUjWBoazLmWL3mJbV+oixVAlRTsVO2G115n
+         5mwQ==
+X-Gm-Message-State: AO0yUKXVEoFef9OuZtN4cPQpLeoFO7zbztKGxwOIvIL2l6eM0ziKoIUn
+        pK6nXZF5TtJ3j/I91JyS4tDvug==
+X-Google-Smtp-Source: AK7set/Mr8D/Oa6Sqze6Rgm3W0ZyHgBtXBXB/aso/XOnTiGV6HoBB5yRn2JnbCfb/j/GQd6vusPCjg==
+X-Received: by 2002:a17:90a:690e:b0:22b:b82a:8b5f with SMTP id r14-20020a17090a690e00b0022bb82a8b5fmr1229643pjj.2.1674766917538;
+        Thu, 26 Jan 2023 13:01:57 -0800 (PST)
 Received: from google.com ([2620:15c:9d:2:cb5e:1d39:8f45:c450])
-        by smtp.gmail.com with ESMTPSA id nm16-20020a17090b19d000b0022c0622cc16sm3783971pjb.54.2023.01.26.13.00.50
+        by smtp.gmail.com with ESMTPSA id v26-20020a637a1a000000b004a4f24fbce9sm1150978pgc.5.2023.01.26.13.01.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 13:00:51 -0800 (PST)
-Date:   Thu, 26 Jan 2023 13:00:45 -0800
+        Thu, 26 Jan 2023 13:01:56 -0800 (PST)
+Date:   Thu, 26 Jan 2023 13:01:51 -0800
 From:   Benson Leung <bleung@google.com>
 To:     Prashant Malani <pmalani@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
@@ -62,14 +62,16 @@ Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
         Lee Jones <lee@kernel.org>,
         Tinghan Shen <tinghan.shen@mediatek.com>,
         Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: Re: [PATCH 1/2] platform/chrome: cros_ec: Add VDM attention headers
-Message-ID: <Y9Lp/T5RezpCQ5Zx@google.com>
+Subject: Re: [PATCH 2/2] platform/chrome: cros_typec_vdm: Add Attention
+ support
+Message-ID: <Y9LqP72lQpu3Jwmc@google.com>
 References: <20230126205620.3714994-1-pmalani@chromium.org>
+ <20230126205620.3714994-2-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+Hc6okv4I9ucYZvU"
+        protocol="application/pgp-signature"; boundary="tkjP4j8OLUmOyt4t"
 Content-Disposition: inline
-In-Reply-To: <20230126205620.3714994-1-pmalani@chromium.org>
+In-Reply-To: <20230126205620.3714994-2-pmalani@chromium.org>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -82,20 +84,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---+Hc6okv4I9ucYZvU
+--tkjP4j8OLUmOyt4t
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Prashant,
-
-On Thu, Jan 26, 2023 at 08:55:45PM +0000, Prashant Malani wrote:
-> Incorporate updates to the EC headers to support the retrieval of VDM
-> Attention messages from port partners. These headers are already present
-> in the ChromeOS EC codebase. [1]
->=20
-> [1] https://source.chromium.org/chromium/chromiumos/platform/ec/+/main:in=
-clude/ec_commands.h
+On Thu, Jan 26, 2023 at 08:55:46PM +0000, Prashant Malani wrote:
+> Add support to retrieve VDM attention messages and forward them to the
+> appropriate alt mode driver.
 >=20
 > Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
@@ -103,55 +99,110 @@ Reviewed-by: Benson Leung <bleung@chromium.org>
 
 
 > ---
->  include/linux/platform_data/cros_ec_commands.h | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
+>  drivers/platform/chrome/cros_ec_typec.c  |  8 +++++
+>  drivers/platform/chrome/cros_typec_vdm.c | 40 ++++++++++++++++++++++++
+>  drivers/platform/chrome/cros_typec_vdm.h |  1 +
+>  3 files changed, 49 insertions(+)
 >=20
-> diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/lin=
-ux/platform_data/cros_ec_commands.h
-> index b9c4a3964247..ec327638c6eb 100644
-> --- a/include/linux/platform_data/cros_ec_commands.h
-> +++ b/include/linux/platform_data/cros_ec_commands.h
-> @@ -5862,6 +5862,7 @@ enum tcpc_cc_polarity {
->  #define PD_STATUS_EVENT_MUX_1_SET_DONE		BIT(5)
->  #define PD_STATUS_EVENT_VDM_REQ_REPLY		BIT(6)
->  #define PD_STATUS_EVENT_VDM_REQ_FAILED		BIT(7)
-> +#define PD_STATUS_EVENT_VDM_ATTENTION			BIT(8)
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/c=
+hrome/cros_ec_typec.c
+> index 1abb471840d5..71f5d7d8e055 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -1015,6 +1015,14 @@ static void cros_typec_handle_status(struct cros_t=
+ypec_data *typec, int port_num
+>  		if (ret < 0)
+>  			dev_warn(typec->dev, "Failed VDM Reply event clear, port: %d\n", port=
+_num);
+>  	}
+> +
+> +	if (resp.events & PD_STATUS_EVENT_VDM_ATTENTION) {
+> +		cros_typec_handle_vdm_attention(typec, port_num);
+> +		ret =3D cros_typec_send_clear_event(typec, port_num, PD_STATUS_EVENT_V=
+DM_ATTENTION);
+> +		if (ret < 0)
+> +			dev_warn(typec->dev, "Failed VDM Attenetion event clear, port: %d\n",
+> +				 port_num);
+> +	}
+>  }
 > =20
->  struct ec_params_typec_status {
->  	uint8_t port;
-> @@ -5906,7 +5907,8 @@ struct ec_response_typec_status {
->  } __ec_align1;
+>  static int cros_typec_port_update(struct cros_typec_data *typec, int por=
+t_num)
+> diff --git a/drivers/platform/chrome/cros_typec_vdm.c b/drivers/platform/=
+chrome/cros_typec_vdm.c
+> index 06f4a55999c5..20515ee0a20e 100644
+> --- a/drivers/platform/chrome/cros_typec_vdm.c
+> +++ b/drivers/platform/chrome/cros_typec_vdm.c
+> @@ -13,6 +13,46 @@
+>  #include "cros_ec_typec.h"
+>  #include "cros_typec_vdm.h"
 > =20
+> +/*
+> + * Retrieves pending VDM attention messages from the EC and forwards the=
+m to the altmode driver
+> + * based on SVID.
+> + */
+> +void cros_typec_handle_vdm_attention(struct cros_typec_data *typec, int =
+port_num)
+> +{
+> +	struct ec_response_typec_vdm_response resp;
+> +	struct ec_params_typec_vdm_response req =3D {
+> +		.port =3D port_num,
+> +	};
+> +	struct typec_altmode *amode;
+> +	u16 svid;
+> +	u32 hdr;
+> +	int ret;
+> +
+> +	do {
+> +		ret =3D cros_ec_cmd(typec->ec, 0, EC_CMD_TYPEC_VDM_RESPONSE, &req,
+> +				sizeof(req), &resp, sizeof(resp));
+> +		if (ret < 0) {
+> +			dev_warn(typec->dev, "Failed VDM response fetch, port: %d\n", port_nu=
+m);
+> +			return;
+> +		}
+> +
+> +		hdr =3D resp.vdm_response[0];
+> +		svid =3D PD_VDO_VID(hdr);
+> +		dev_dbg(typec->dev, "Received VDM Attention header: %x, port: %d\n", h=
+dr, port_num);
+> +
+> +		amode =3D typec_match_altmode(typec->ports[port_num]->port_altmode,
+> +					    CROS_EC_ALTMODE_MAX, svid, PD_VDO_OPOS(hdr));
+> +		if (!amode) {
+> +			dev_err(typec->dev,
+> +				"Received VDM for unregistered altmode (SVID:%x), port: %d\n",
+> +				svid, port_num);
+> +			return;
+> +		}
+> +
+> +		typec_altmode_attention(amode, resp.vdm_attention[1]);
+> +	} while (resp.vdm_attention_left);
+> +}
+> +
 >  /*
-> - * Gather the response to the most recent VDM REQ from the AP
-> + * Gather the response to the most recent VDM REQ from the AP, as well
-> + * as popping the oldest VDM:Attention from the DPM queue
+>   * Retrieves a VDM response from the EC and forwards it to the altmode d=
+river based on SVID.
 >   */
->  #define EC_CMD_TYPEC_VDM_RESPONSE 0x013C
+> diff --git a/drivers/platform/chrome/cros_typec_vdm.h b/drivers/platform/=
+chrome/cros_typec_vdm.h
+> index 003587525554..95a6a75d32b6 100644
+> --- a/drivers/platform/chrome/cros_typec_vdm.h
+> +++ b/drivers/platform/chrome/cros_typec_vdm.h
+> @@ -7,6 +7,7 @@
 > =20
-> @@ -5919,10 +5921,18 @@ struct ec_response_typec_vdm_response {
->  	uint8_t vdm_data_objects;
->  	/* Partner to address - see enum typec_partner_type */
->  	uint8_t partner_type;
-> -	/* Reserved */
-> -	uint16_t reserved;
-> +	/* enum ec_status describing VDM response */
-> +	uint16_t vdm_response_err;
->  	/* VDM data, including VDM header */
->  	uint32_t vdm_response[VDO_MAX_SIZE];
-> +	/* Number of 32-bit Attention fields filled in */
-> +	uint8_t vdm_attention_objects;
-> +	/* Number of remaining messages to consume */
-> +	uint8_t vdm_attention_left;
-> +	/* Reserved */
-> +	uint16_t reserved1;
-> +	/* VDM:Attention contents */
-> +	uint32_t vdm_attention[2];
->  } __ec_align1;
+>  extern struct typec_altmode_ops port_amode_ops;
 > =20
->  #undef VDO_MAX_SIZE
+> +void cros_typec_handle_vdm_attention(struct cros_typec_data *typec, int =
+port_num);
+>  void cros_typec_handle_vdm_response(struct cros_typec_data *typec, int p=
+ort_num);
+> =20
+>  #endif /*  __CROS_TYPEC_VDM__ */
 > --=20
 > 2.39.1.456.gfc5497dd1b-goog
+>=20
 >=20
 
 --=20
@@ -163,15 +214,15 @@ bleung@google.com
 Chromium OS Project
 bleung@chromium.org
 
---+Hc6okv4I9ucYZvU
+--tkjP4j8OLUmOyt4t
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY9Lp/QAKCRBzbaomhzOw
-wkAbAQCX71yLAbLh1OxBZwN3ogdzQ1kJauzB/zib0YK6R3LZZQD9EIRAl7YEcjAo
-h+vhn3rZ1HljmiVxXvePEHEJwQWnFQo=
-=ulQ7
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCY9LqPwAKCRBzbaomhzOw
+wsZ4AQDKIk7k/b3AVO7PL8o9ZD8KSnDq0XSlrruiR1oU4UiV8AD/SYVC/7nIUgn5
+zRqN+PlpFmHO67C3cOpY55O8nRae/gY=
+=p74d
 -----END PGP SIGNATURE-----
 
---+Hc6okv4I9ucYZvU--
+--tkjP4j8OLUmOyt4t--
