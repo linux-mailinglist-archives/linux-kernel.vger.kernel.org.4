@@ -2,126 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A40867D005
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82D567D00E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbjAZPWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S232457AbjAZPYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:24:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbjAZPWs (ORCPT
+        with ESMTP id S232004AbjAZPYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:22:48 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7B36BBD6;
-        Thu, 26 Jan 2023 07:22:28 -0800 (PST)
-Received: from booty.fritz.box (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id CCC7724000B;
-        Thu, 26 Jan 2023 15:22:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674746531;
+        Thu, 26 Jan 2023 10:24:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DEC20050
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:22:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674746534;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=y4XXZUb/eXTVLt3Io7nRJONtjd6MFURYEBCczeziRlI=;
-        b=n4O/TPhP8ss3Yw55rWDZdfKA5BDB3pD/eXKOubNenym/Wz0Z3oFGqXygem7AXQ4QxtQUs0
-        aTFUIxv3UvBbXaXdfjKt/+DxdiIH3m9pjffuOqX3kEawUd0mIoICswgkMt7Cl2V+9f/nlP
-        wZtZJUP9mFhHT8NCsMwnF+uxqasFUWG+4xeiWbYsWAqegNctl6/A3D+q+p+1IifdAbD+ru
-        UjJ9ogApnYQW65IA/tLjadQBDynMEBwsEPvMih4MQzWaAqI8kJqr9zHQN6Oc88cQ1ZyKA8
-        qBD027A6BojfXIfwIovLnoGdIEzq5/ovTr1GPKV7MYxKP8XDojIjVN3rfVcGNQ==
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     Colin Ian King <colin.i.king@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        dev@openvswitch.org, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH] scripts/spelling.txt: add "exsits" pattern and fix typo instances
-Date:   Thu, 26 Jan 2023 16:22:05 +0100
-Message-Id: <20230126152205.959277-1-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YiWnUSu55NG/fxtmWuYsdLF85NahVTAKDGkr6o00Vrw=;
+        b=GAPS0MxACAzt40+AR+5rW8E5giq3TTwaA2Jj0Ud+DDFoPc3IrN/kQRggDwQ7kqAp+R0Q4a
+        s9AN3QqJRnJqTfU85ZTtttPQCMtFUgxESRLknVnEuZJj+xSCEi+vP9yzBp9f+9l8NO2vsd
+        mecEpg//R9ZLtLYsHWpDeEaml/OeM4w=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-176-Sq7lQR4tMYqZ22gXIHoA9A-1; Thu, 26 Jan 2023 10:22:13 -0500
+X-MC-Unique: Sq7lQR4tMYqZ22gXIHoA9A-1
+Received: by mail-wm1-f71.google.com with SMTP id k34-20020a05600c1ca200b003db30c3ed63so1194661wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:22:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YiWnUSu55NG/fxtmWuYsdLF85NahVTAKDGkr6o00Vrw=;
+        b=T1fhFBTBjUny50GhXITbq/BrigFJBLM8otpP9m7yjdWf++P+2j0dgqMVG0G5b2bUyO
+         2Tp0+YmihFt4bVwBrKh1L3jvJFdAHs9n8+7RIGpWVZUUaQGNT26jhXe1stIA7KRT97PM
+         Ia6sXUZCoVZ65SlL9FAivd7OlYKHEHWUykBQO92ZNDDEh1ROFYKPDy2DODqoJgewtkEj
+         Kn8c1co6F5d7BwrC5dYwszSCw+i44Oqmy2AFT3pQ4EOAOSpa2xeEM7UF/O3yOegZSTWY
+         UlwEMLfdiGOvLhhD3CrkP9etZgbeQTfyS/RvSHDabj7WV/jbfYqw/pp52RhVf84Jw+K8
+         D/bw==
+X-Gm-Message-State: AFqh2kr58LHP7a7fkPb5eLBPcJr+WzvCwwBUqeF+UglomSZU8xGmqQHk
+        3CNCGCitlHwa41KfAQqUZUlaaAiHqd8d2qlolJ3rtzeIlAR0STDTCypVgUMb54+4NhQ+uslrGu8
+        xs+E2A2vu6tC0IelsIk8ghe4C
+X-Received: by 2002:adf:f0c1:0:b0:2bc:67d:c018 with SMTP id x1-20020adff0c1000000b002bc067dc018mr32580417wro.48.1674746532275;
+        Thu, 26 Jan 2023 07:22:12 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvUoxvlfIjwabTI32l3InDigTpv5ZMbqGg+D9q3vmaeIBrib7FBQMUubpGP2ULG/rDQpSaxDw==
+X-Received: by 2002:adf:f0c1:0:b0:2bc:67d:c018 with SMTP id x1-20020adff0c1000000b002bc067dc018mr32580394wro.48.1674746532076;
+        Thu, 26 Jan 2023 07:22:12 -0800 (PST)
+Received: from work-vm (ward-16-b2-v4wan-166627-cust863.vm18.cable.virginm.net. [81.97.203.96])
+        by smtp.gmail.com with ESMTPSA id c7-20020adfe707000000b002bfb0c5527esm1555390wrm.109.2023.01.26.07.22.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 07:22:11 -0800 (PST)
+Date:   Thu, 26 Jan 2023 15:22:09 +0000
+From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+To:     Richard Weinberger <richard.weinberger@gmail.com>
+Cc:     Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y9KaoZKjyKD8aokf@work-vm>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <Y9Ex3ZUIFxwOBg1n@work-vm>
+ <Y9E5Cg7mreDx737N@redhat.com>
+ <CAFLxGvwHRK3vyXiCv5ELvrDSEkcDgV5c6pNnWgWhcATfp1dedA@mail.gmail.com>
+ <Y9KVHnHnig4jwNPx@work-vm>
+ <CAFLxGvyMncqjkEXiOqenQu+rZW46RP7UorXs36+awmgnBxTGhA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAFLxGvyMncqjkEXiOqenQu+rZW46RP7UorXs36+awmgnBxTGhA@mail.gmail.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix typos and add the following to the scripts/spelling.txt:
+* Richard Weinberger (richard.weinberger@gmail.com) wrote:
+> On Thu, Jan 26, 2023 at 3:58 PM Dr. David Alan Gilbert
+> <dgilbert@redhat.com> wrote:
+> >
+> > * Richard Weinberger (richard.weinberger@gmail.com) wrote:
+> > > On Wed, Jan 25, 2023 at 3:22 PM Daniel P. Berrangé <berrange@redhat.com> wrote:
+> > > > Any virtual device exposed to the guest that can transfer potentially
+> > > > sensitive data needs to have some form of guest controlled encryption
+> > > > applied. For disks this is easy with FDE like LUKS, for NICs this is
+> > > > already best practice for services by using TLS. Other devices may not
+> > > > have good existing options for applying encryption.
+> > >
+> > > I disagree wrt. LUKS. The cryptography behind LUKS protects persistent data
+> > > but not transport. If an attacker can observe all IO you better
+> > > consult a cryptographer.
+> > > LUKS has no concept of session keys or such, so the same disk sector will
+> > > always get encrypted with the very same key/iv.
+> >
+> > Are you aware of anything that you'd use instead?
+> 
+> Well, I'd think towards iSCSI over TLS to protect the IO transport.
 
-  exsits||exists
+Yeh, that's not entirely crazy for VMs which tend to come off some
+remote storage system.
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
- drivers/infiniband/ulp/iser/iscsi_iser.c | 2 +-
- net/openvswitch/flow_table.c             | 2 +-
- scripts/spelling.txt                     | 1 +
- sound/soc/fsl/fsl-asoc-card.c            | 2 +-
- 4 files changed, 4 insertions(+), 3 deletions(-)
+> > Are you happy with dm-verity for protection against modification?
+> 
+> Like LUKS (actually dm-crypt) the crypto behind is designed to protect
+> persistent data not transport.
+> My fear is that an attacker who is able to observe IOs can do bad things.
 
-diff --git a/drivers/infiniband/ulp/iser/iscsi_iser.c b/drivers/infiniband/ulp/iser/iscsi_iser.c
-index 620ae5b2d80d..6b7603765383 100644
---- a/drivers/infiniband/ulp/iser/iscsi_iser.c
-+++ b/drivers/infiniband/ulp/iser/iscsi_iser.c
-@@ -446,7 +446,7 @@ iscsi_iser_conn_create(struct iscsi_cls_session *cls_session,
-  * @is_leading:      indicate if this is the session leading connection (MCS)
-  *
-  * Return: zero on success, $error if iscsi_conn_bind fails and
-- *         -EINVAL in case end-point doesn't exsits anymore or iser connection
-+ *         -EINVAL in case end-point doesn't exists anymore or iser connection
-  *         state is not UP (teardown already started).
-  */
- static int iscsi_iser_conn_bind(struct iscsi_cls_session *cls_session,
-diff --git a/net/openvswitch/flow_table.c b/net/openvswitch/flow_table.c
-index 0a0e4c283f02..cfac54cbafdf 100644
---- a/net/openvswitch/flow_table.c
-+++ b/net/openvswitch/flow_table.c
-@@ -1012,7 +1012,7 @@ static int flow_mask_insert(struct flow_table *tbl, struct sw_flow *flow,
- 
- 	mask = flow_mask_find(tbl, new);
- 	if (!mask) {
--		/* Allocate a new mask if none exsits. */
-+		/* Allocate a new mask if none exists. */
- 		mask = mask_alloc();
- 		if (!mask)
- 			return -ENOMEM;
-diff --git a/scripts/spelling.txt b/scripts/spelling.txt
-index ded8bcfc0247..0147bd8dc6e2 100644
---- a/scripts/spelling.txt
-+++ b/scripts/spelling.txt
-@@ -625,6 +625,7 @@ exeuction||execution
- existance||existence
- existant||existent
- exixt||exist
-+exsits||exists
- exlcude||exclude
- exlcusive||exclusive
- exmaple||example
-diff --git a/sound/soc/fsl/fsl-asoc-card.c b/sound/soc/fsl/fsl-asoc-card.c
-index 8d14b5593658..2f25358196ee 100644
---- a/sound/soc/fsl/fsl-asoc-card.c
-+++ b/sound/soc/fsl/fsl-asoc-card.c
-@@ -811,7 +811,7 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
- 	priv->card.num_links = 1;
- 
- 	if (asrc_pdev) {
--		/* DPCM DAI Links only if ASRC exsits */
-+		/* DPCM DAI Links only if ASRC exists */
- 		priv->dai_link[1].cpus->of_node = asrc_np;
- 		priv->dai_link[1].platforms->of_node = asrc_np;
- 		priv->dai_link[2].codecs->dai_name = codec_dai_name;
+Hmm, OK,  I'd assumed dm-crypt was OK since it's more hashlike and
+unchanging.
+
+Dave
+
 -- 
-2.34.1
+Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
 
