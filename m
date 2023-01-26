@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0659F67C488
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F6567C48C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234668AbjAZGoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 01:44:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
+        id S229472AbjAZGrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 01:47:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjAZGoQ (ORCPT
+        with ESMTP id S235490AbjAZGrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 01:44:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B9D3CE01;
-        Wed, 25 Jan 2023 22:44:15 -0800 (PST)
+        Thu, 26 Jan 2023 01:47:43 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066EC4FC2B;
+        Wed, 25 Jan 2023 22:47:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B56AB81CFF;
-        Thu, 26 Jan 2023 06:44:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86912C433D2;
-        Thu, 26 Jan 2023 06:44:12 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 81B19CE213B;
+        Thu, 26 Jan 2023 06:47:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F1C9C433EF;
+        Thu, 26 Jan 2023 06:47:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674715453;
-        bh=oSASZYw285oCDWdMnzzDQlAN8ZvzQ9nHMu+oU6hhVqc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uvZM+kj1HL2TO/LWZZlKEnWJloTYJKFVA7qAPp8Ll3xPIQlGyxY2W/URylN8xcJMy
-         4fYSFuHhbZuRjSdK/kbNuzq3KDBGHkIt53GJkUfMDDqsKbJfsNpqV2JSw56Lg3xCV2
-         VbcKGqiI6mag/q3Bd5eLn7PWhiFuFqbHbOL9RFaZDveD1gz2QKSPoJrTr970UTe2HX
-         WgHPdkmd6QYtOl8YeXOrqLNKZ3J0fPn+PgjIu9Lk5kMFWbsOuDwU4vb4ysb4kElYDP
-         V3NX3EGZ3NN7mrEXlTJjPgc9fxNkTLFqVADt3JwmbfBse3wDaRaYfmSj0mRl3RtppO
-         UCZDawujXVOWA==
-Date:   Wed, 25 Jan 2023 22:44:11 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com,
-        John 'Warthog9' Hawley <warthog9@kernel.org>
-Subject: Re: [PATCH net] net: dsa: mt7530: fix tristate and help description
-Message-ID: <20230125224411.5a535817@kernel.org>
-In-Reply-To: <20230125053653.6316-1-arinc.unal@arinc9.com>
-References: <20230125053653.6316-1-arinc.unal@arinc9.com>
+        s=k20201202; t=1674715657;
+        bh=U/Lr21J7uETR5Skm9OfM4ZqCMCq4HQhi2ibbyNKSkjc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kaafE+jQbTnGxuLXUHXU31+JU6kuVUhkafuGhIeymDGK5C16crV2eGVuoY1VBI4ev
+         KPXMicohRm+pjemlIz4i+WO77VOO7XFFBU8yyMQE7G0fj6tQPvcp1dlTVzHJpKkX7h
+         i8Fe1cqCd/WQGg7E7YkUXY3WVTl0e4A0ztIxoXlVJLT1DxErgEmeVt/bFSo1gQ0898
+         GLy0XgbgivS/a66BcqPhMUMLirkOPT9orb7DNcFd6SiGS4jNnselL5fwzvarMJ/YEF
+         6tomUg1qd1epL1GXphDTaPXYyb3criFtRwpdgig0ZxBk2O9VmFejG9ls1bzd7Yj9ME
+         tnKaStt8LsrQw==
+Date:   Thu, 26 Jan 2023 14:47:30 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     l.stach@pengutronix.de, bhelgaas@google.com, robh+dt@kernel.org,
+        lorenzo.pieralisi@arm.com, kishon@ti.com, kw@linux.com,
+        frank.li@nxp.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: Re: [PATCH v5 04/14] arm64: dts: Add i.MX8MM PCIe EP support
+Message-ID: <20230126064728.GQ20713@T480>
+References: <1673847684-31893-1-git-send-email-hongxing.zhu@nxp.com>
+ <1673847684-31893-5-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1673847684-31893-5-git-send-email-hongxing.zhu@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,13 +59,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 Jan 2023 08:36:53 +0300 Ar=C4=B1n=C3=A7 =C3=9CNAL wrote:
-> Fix description for tristate and help sections which include inaccurate
-> information.
->=20
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+On Mon, Jan 16, 2023 at 01:41:14PM +0800, Richard Zhu wrote:
+> Add i.MX8MM PCIe EP support.
+> 
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mm.dtsi | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> index 4ee89fdcf59b..8124761f629c 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> @@ -1293,6 +1293,26 @@ pcie0: pcie@33800000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		pcie0_ep: pcie_ep@33800000 {
 
-Didn't make it thru to the list again :(
-Double check that none of the addresses in To: or Cc: are missing
-spaces between name and email or after a dot. That seems to be the most
-common cause of trouble. Or try to resend using just emails, no names.
+Hyphen is more preferable than underscore in name node.
+
+I fixed it (and the other two patches) up, and applied all DTS patches.
+
+Shawn
+
+> +			compatible = "fsl,imx8mm-pcie-ep";
+> +			reg = <0x33800000 0x400000>,
+> +			      <0x18000000 0x8000000>;
+> +			reg-names = "regs", "addr_space";
+> +			num-lanes = <1>;
+> +			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "dma";
+> +			fsl,max-link-speed = <2>;
+> +			power-domains = <&pgc_pcie>;
+> +			resets = <&src IMX8MQ_RESET_PCIE_CTRL_APPS_EN>,
+> +				 <&src IMX8MQ_RESET_PCIE_CTRL_APPS_TURNOFF>;
+> +			reset-names = "apps", "turnoff";
+> +			phys = <&pcie_phy>;
+> +			phy-names = "pcie-phy";
+> +			num-ib-windows = <4>;
+> +			num-ob-windows = <4>;
+> +			status = "disabled";
+> +		};
+> +
+>  		gpu_3d: gpu@38000000 {
+>  			compatible = "vivante,gc";
+>  			reg = <0x38000000 0x8000>;
+> -- 
+> 2.25.1
+> 
