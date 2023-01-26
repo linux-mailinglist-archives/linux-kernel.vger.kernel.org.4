@@ -2,125 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E2167D7DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCEE67D7E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbjAZVlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        id S232648AbjAZVnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjAZVlu (ORCPT
+        with ESMTP id S229510AbjAZVnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:41:50 -0500
-X-Greylist: delayed 21416 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Jan 2023 13:41:48 PST
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FB42197B;
-        Thu, 26 Jan 2023 13:41:47 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 5F23930000CFD;
-        Thu, 26 Jan 2023 22:41:46 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 42A8D2B0CE5; Thu, 26 Jan 2023 22:41:46 +0100 (CET)
-Date:   Thu, 26 Jan 2023 22:41:46 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Samuel Ortiz <sameo@rivosinc.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-pci@vger.kernel.org
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <20230126214146.GA28774@wunner.de>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y9EkCvAfNXnJ+ATo@kroah.com>
- <Y9Ex3ZUIFxwOBg1n@work-vm>
- <Y9E7PNmSTP5w2zuw@kroah.com>
- <Y9FDZPV7qENtNNyk@work-vm>
- <20230125215333.GA18160@wunner.de>
- <CAGXJix9-cXNW7EwJf0PVzj_Qmt5fmQvBX1KvXfRX5NAeEpnMvw@mail.gmail.com>
- <20230126154449.GB4188@wunner.de>
- <20230126112058-mutt-send-email-mst@kernel.org>
+        Thu, 26 Jan 2023 16:43:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52811557D;
+        Thu, 26 Jan 2023 13:42:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91A84B81F30;
+        Thu, 26 Jan 2023 21:42:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE2E9C433D2;
+        Thu, 26 Jan 2023 21:42:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674769375;
+        bh=l3Uyb82BaOWolYcaNG8gvhPvBzloLPhy1u9itF1KnXQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jr9FeX+8ohKfjWMmp5iYnhJ5jis4zsasvr38Cn8JZ4YXcUUh4DbNpVpfPOsngWLPz
+         viEqUJafcH17WCoVLqKdDPBHUgnZc0U2aVAp3lvkTUjcph4SnVj1YaO/A0a6Xs4FY/
+         cgQoBWOhSpJdavhd16k4VP4nJl0Fvaix5KlZzEmrFqYXuv8rSPWKMCyjj/OaIFyami
+         U+F92bi5ltseH60vBD7c//h1OUWB9SDgeK5ShnbRjeuI78YjT692nRyc+6b8x/M63K
+         QWS5s6yOXwKv2hZjPXsOzd7DkZvCvKXQFXQaf8Lj3XrdLx+oM/+qAe6IQqN4Tmc57c
+         jd2yEGMQzOSuw==
+Date:   Thu, 26 Jan 2023 21:42:52 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        stefanb@linux.ibm.com
+Subject: Re: [PATCH v3 2/2] tpm: Add reserved memory event log
+Message-ID: <Y9Lz3EnACr937Oeh@kernel.org>
+References: <20230126210810.881119-1-eajames@linux.ibm.com>
+ <20230126210810.881119-3-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230126112058-mutt-send-email-mst@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230126210810.881119-3-eajames@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:25:21AM -0500, Michael S. Tsirkin wrote:
-> On Thu, Jan 26, 2023 at 04:44:49PM +0100, Lukas Wunner wrote:
-> > Obviously the host can DoS guest access to the device by modifying
-> > exchanged messages, but there are much simpler ways for it to
-> > do that, say, by clearing Bus Master Enable or Memory Space Enable
-> > bits in the Command Register.
+On Thu, Jan 26, 2023 at 03:08:10PM -0600, Eddie James wrote:
+> Some platforms may desire to pass the event log up to Linux in the
+> form of a reserved memory region. In particular, this is desirable
+> for embedded systems or baseboard management controllers (BMCs)
+> booting with U-Boot. IBM OpenBMC BMCs will be the first user.
+> Add support for the reserved memory in the TPM core to find the
+> region and map it.
 > 
-> There's a single key per guest though, isn't it? Also used
-> for regular memory?
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  drivers/char/tpm/eventlog/of.c | 38 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 37 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+> index 741ab2204b11..c815cadf00a4 100644
+> --- a/drivers/char/tpm/eventlog/of.c
+> +++ b/drivers/char/tpm/eventlog/of.c
+> @@ -12,12 +12,48 @@
+>  
+>  #include <linux/device.h>
+>  #include <linux/slab.h>
+> +#include <linux/io.h>
+> +#include <linux/ioport.h>
+>  #include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_reserved_mem.h>
+>  #include <linux/tpm_eventlog.h>
+>  
+>  #include "../tpm.h"
+>  #include "common.h"
+>  
+> +static int tpm_read_log_memory_region(struct tpm_chip *chip)
+> +{
+> +	struct device_node *node;
+> +	struct resource res;
+> +	int rc;
+> +
+> +	node = of_parse_phandle(chip->dev.parent->of_node, "memory-region", 0);
+> +	if (!node) {
+> +		dev_info(&chip->dev, "no phandle\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	rc = of_address_to_resource(node, 0, &res);
+> +	of_node_put(node);
+> +	if (rc) {
+> +		dev_info(&chip->dev, "no mem\n");
+> +		return rc;
+> +	}
+> +
+> +	chip->log.bios_event_log = devm_memremap(&chip->dev, res.start, resource_size(&res),
+> +						 MEMREMAP_WB);
+> +	if (!chip->log.bios_event_log) {
+> +		dev_info(&chip->dev, "err memremap\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	chip->log.bios_event_log_end = chip->log.bios_event_log + resource_size(&res);
+> +
+> +	return chip->flags & TPM_CHIP_FLAG_TPM2 ? EFI_TCG2_EVENT_LOG_FORMAT_TCG_2 :
+> +		EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
+> +}
+> +
+>  int tpm_read_log_of(struct tpm_chip *chip)
+>  {
+>  	struct device_node *np;
+> @@ -39,7 +75,7 @@ int tpm_read_log_of(struct tpm_chip *chip)
+>  	sizep = of_get_property(np, "linux,sml-size", NULL);
+>  	basep = of_get_property(np, "linux,sml-base", NULL);
+>  	if (sizep == NULL && basep == NULL)
+> -		return -ENODEV;
+> +		return tpm_read_log_memory_region(chip);
+>  	if (sizep == NULL || basep == NULL)
+>  		return -EIO;
+>  
+> -- 
+> 2.31.1
+> 
 
-The current design is to have a global keyring (per kernel, i.e. per
-guest).  A device presents a certificate chain and the first certificate
-in that chain needs to be signed by one of the certificates on the keyring.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-This is completely independent from the key used for memory encryption.
-
-A device can have up to 8 certificate chains (called "slots" in the
-SPDM spec) and I've implemented it such that all slots are iterated
-and validation is considered to be successful as soon as a slot with
-a valid signature is found.
-
-We can discuss having a per-device keyring if anyone thinks it makes
-sense.
-
-The PCISIG's idea seems to be that each vendor of PCIe cards publishes
-a trusted root certificate and users would then have to keep all those
-vendor certificates in their global keyring.  This follows from the
-last paragraph of PCIe r6.0.1 sec 6.31.3, which says "it is strongly
-recommended that authentication requesters [i.e. the kernel] confirm
-that the information provided in the Subject Alternative Name entry
-[of the device's leaf certificate] is signed by the vendor indicated
-by the Vendor ID."
-
-The astute reader will notice that for this to work, the Vendor ID
-must be included in the trusted root certificate in a machine-readable
-way.  Unfortunately the PCIe Base Spec fails to specify that.
-So I don't know how to associate a trusted root certificate with a
-Vendor ID.
-
-I'll report this and several other gaps I've found in the spec to the
-editor at the PCISIG so that they can be filled in a future revision.
-
-Thanks,
-
-Lukas
+BR, Jarkko
