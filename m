@@ -2,334 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198BE67D103
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B31F67D0FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232673AbjAZQLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:11:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbjAZQKo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232587AbjAZQKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 26 Jan 2023 11:10:44 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB22611C0;
-        Thu, 26 Jan 2023 08:10:43 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QFZpij022496;
-        Thu, 26 Jan 2023 16:10:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=cq2x6FbUOZx9kgcBjP26F5SrHdNwAFSfsEsk9sJ1R30=;
- b=EYMkPOkbiZfZTXY1HSm/lsOdU5BZDA3HfJDWzYdV+hVDijARy3SJscYruFWF94G2q0QL
- f2kA1JzGTcVrote2K/6A6BPsbmYk0G+aWpo3SJMeGVuciCZst65yKZdvr7an+49dCdvJ
- Zb68hlnhmwVbd5pxu/qfiPf490H3HUatfDSMojcC2zpt3ECophKd76RigC/tcjAeXcxE
- z0iMwJO5kPuuGtokklr6aMQc1G6jo9yNxub8CCSy0E8xd8E8GAXHh7fmP+JKLm+aTGAg
- 49TTL46ZFyi3ZjnMpBN+oi9Qf6SObudE4aoq/LBnJGjLhTS0Um2s2t6DH+L7JsvvrijV 8A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbt6rmnrq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 16:10:38 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QFmMlA032067;
-        Thu, 26 Jan 2023 16:10:38 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbt6rmnqp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 16:10:38 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30Q9weI4010329;
-        Thu, 26 Jan 2023 16:10:35 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6pjpe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 16:10:35 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QGAVAf49479970
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 16:10:31 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E7192004D;
-        Thu, 26 Jan 2023 16:10:31 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EA65720043;
-        Thu, 26 Jan 2023 16:10:30 +0000 (GMT)
-Received: from [9.152.224.253] (unknown [9.152.224.253])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 26 Jan 2023 16:10:30 +0000 (GMT)
-Message-ID: <aa942cf0-6f50-05f5-75a9-278129f00bf6@linux.ibm.com>
-Date:   Thu, 26 Jan 2023 17:10:30 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232360AbjAZQKk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 26 Jan 2023 11:10:40 -0500
+Received: from fx409.security-mail.net (smtpout140.security-mail.net [85.31.212.149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B790A530DA
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:10:38 -0800 (PST)
+Received: from localhost (fx409.security-mail.net [127.0.0.1])
+        by fx409.security-mail.net (Postfix) with ESMTP id 32CEA34979A
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:10:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1674749437;
+        bh=18h0PvVkWw5cOD2tUF5rJDodhNIHFoyGd3swtBhEV9s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=2j+PLAfcFq/dMJAm7QTIXrm0muDDhYaPROPgytN3gaTJa6LkYepek8NuWASCmXbjk
+         BSj8xuje1RDBvbgEdTd13Bs0SSELaXlSeYbazQnkW+tgJ0bzaaR5DZK2kqeKnsxeVO
+         V/F0b4xMun1FYOPN9Q3rOIJWltJMZCMOaHln8qIs=
+Received: from fx409 (fx409.security-mail.net [127.0.0.1]) by
+ fx409.security-mail.net (Postfix) with ESMTP id 6CDFA3496E5; Thu, 26 Jan
+ 2023 17:10:36 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx409.security-mail.net (Postfix) with ESMTPS id 42F9E3496BD; Thu, 26 Jan
+ 2023 17:10:35 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 0E32B27E0492; Thu, 26 Jan 2023
+ 17:10:35 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id E364B27E0431; Thu, 26 Jan 2023 17:10:34 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ DTQUInwcUDo5; Thu, 26 Jan 2023 17:10:34 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 8E3C527E0374; Thu, 26 Jan 2023
+ 17:10:34 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <4f4e.63d2a5fb.40271.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu E364B27E0431
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674749435;
+ bh=9giavlvQOACZW0fqif+Jno6XkcerIxtPM3AoszI6iXA=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=gjg/x2TlOcjiKN3NypFbIHFe/byI2jjV8o3VpLfw+6A29RvT0tO7rhyOLP4RSQBmB
+ x4Tx+6M47/jYTq+5ZLA2uCIUhHGzwDXxt8eUceRV5P9eFpkBGwoYQYAzaEc236wUu9
+ 1kIkSP3K+m+aYLf/4oc9MR/KzKUTElR11/fHsdhg=
+Date:   Thu, 26 Jan 2023 17:10:33 +0100
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Clement Leger <clement@clement-leger.fr>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>,
+        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Alex Michon <amichon@kalray.eu>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <git@xen0n.name>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        John Garry <john.garry@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Atish Patra <atishp@atishpatra.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20230125212608.1860251-1-scgl@linux.ibm.com>
- <20230125212608.1860251-13-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v6 12/14] KVM: s390: Extend MEM_OP ioctl by storage key
- checked cmpxchg
-In-Reply-To: <20230125212608.1860251-13-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kiLQ2uwDw7JHOMfsnVnOHywLdRgnW_2W
-X-Proofpoint-GUID: 41jJLM9WYa5Hpe_QpNKt_7G7rqAKm_48
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_07,2023-01-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 adultscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0
- spamscore=0 clxscore=1015 mlxscore=0 phishscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260156
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        devicetree@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-audit@redhat.com,
+        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH v2 02/31] Documentation: Add binding for
+ kalray,kv3-1-core-intc
+Message-ID: <20230126161032.GH5952@tellis.lin.mbt.kalray.eu>
+References: <20230120141002.2442-1-ysionneau@kalray.eu>
+ <20230120141002.2442-3-ysionneau@kalray.eu>
+ <d4d998ee-1532-c896-df25-195ec9c72e3f@linaro.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <d4d998ee-1532-c896-df25-195ec9c72e3f@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/23 22:26, Janis Schoetterl-Glausch wrote:
-> User space can use the MEM_OP ioctl to make storage key checked reads
-> and writes to the guest, however, it has no way of performing atomic,
-> key checked, accesses to the guest.
-> Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
-> op. For now, support this op for absolute accesses only.
+Hi Krzysztof,
+
+On Sun, Jan 22, 2023 at 12:44:46PM +0100, Krzysztof Kozlowski wrote:
+> On 20/01/2023 15:09, Yann Sionneau wrote:
+> > From: Jules Maselbas <jmaselbas@kalray.eu>
 > 
-> This op can be use, for example, to set the device-state-change
+> Use subject prefixes matching the subsystem (which you can get for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching).
+This will be fixed, sorry for the inconvenience.
 
-s/use/used/
-
-> indicator and the adapter-local-summary indicator atomically.
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
-[...]
-> +/**
-> + * cmpxchg_guest_abs_with_key() - Perform cmpxchg on guest absolute address.
-> + * @kvm: Virtual machine instance.
-> + * @gpa: Absolute guest address of the location to be changed.
-> + * @len: Operand length of the cmpxchg, required: 1 <= len <= 16. Providing a
-> + *       non power of two will result in failure.
-> + * @old_addr: Pointer to old value. If the location at @gpa contains this value,
-> + *            the exchange will succeed. After calling cmpxchg_guest_abs_with_key()
-> + *            *@old_addr contains the value at @gpa before the attempt to
-> + *            exchange the value.
-> + * @new: The value to place at @gpa.
-> + * @access_key: The access key to use for the guest access.
-> + * @success: output value indicating if an exchange occurred.
-> + *
-> + * Atomically exchange the value at @gpa by @new, if it contains *@old.
-> + * Honors storage keys.
-> + *
-> + * Return: * 0: successful exchange
-> + *         * a program interruption code indicating the reason cmpxchg could
-> + *           not be attempted
+> > 
+> > Add documentation for `kalray,kv3-1-core-intc` binding.
+> > 
+> > Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
+> > Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+> > Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+> > ---
+> > 
+> > Notes:
+> >     V1 -> V2: new patch
+> > 
+> >  .../kalray,kv3-1-core-intc.yaml               | 46 +++++++++++++++++++
+> >  1 file changed, 46 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-core-intc.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-core-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-core-intc.yaml
+> > new file mode 100644
+> > index 000000000000..1e3d0593173a
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-core-intc.yaml
+> > @@ -0,0 +1,46 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/interrupt-controller/kalray,kv3-1-core-intc#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Kalray kv3-1 Core Interrupt Controller
+> > +
+> > +description: |
+> > +  The Kalray Core Interrupt Controller is tightly integrated in each kv3 core
+> > +  present in the Coolidge SoC.
+> > +
+> > +  It provides the following features:
+> > +  - 32 independent interrupt sources
+> > +  - 2-bit configurable priority level
+> > +  - 2-bit configurable ownership level
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/interrupt-controller.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: kalray,kv3-1-core-intc
+> 
+> Blank line between each of these,
+Ack
 
-Nit:
- >0: a program interruption code...
+> > +  "#interrupt-cells":
+> > +    const: 1
+> > +    description:
+> > +      The IRQ number.
+> > +  reg:
+> > +    maxItems: 0
+> 
+> ??? No way... What's this?
+This (per CPU) interrupt controller is not memory mapped at all, it is
+controlled and configured through system registers.
+
+I do not have found existing .yaml bindings for such devices, only the
+file snps,archs-intc.txt has something similar.
+
+I do not know what is the best way to represent such devices in the
+device-tree.  Any suggestions are welcome.
+
+> 
+> > +  "kalray,intc-nr-irqs":
+> 
+> Drop quotes.
+> 
+> > +    description: Number of irqs handled by the controller.
+> 
+> Why this is variable per board? Why do you need it ?
+This property is not even used in our device-tree, this will be removed
+from the documentation and from the driver as well.
+
+> > +
+> > +required:
+> > +  - compatible
+> > +  - "#interrupt-cells"
+> > +  - interrupt-controller
+> 
+> missing additionalProperties: false
+> 
+> This binding looks poor, like you started from something odd. Please
+> don't. Take the newest reviewed binding or better example-schema and use
+> it to build yours. This would solve several trivial mistakes and style
+> issues.
+I am starting over from the example-schema.
+
+> > +
+> > +examples:
+> > +  - |
+> > +    intc: interrupt-controller {
+> 
+> What's the IO address space?
+As said above, this is not a memory mapped device, but is accessed
+through system registers.
+
+Thanks,
+-- Jules
 
 
-> + *         * -EINVAL: address misaligned or len not power of two
-> + *         * -EAGAIN: transient failure (len 1 or 2)
-> + *         * -EOPNOTSUPP: read-only memslot (should never occur)
-> + */
-> +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
-> +			       __uint128_t *old_addr, __uint128_t new,
-> +			       u8 access_key, bool *success)
-> +{
-> +	gfn_t gfn = gpa >> PAGE_SHIFT;
 
-  gpa_to_gfn()?
-
-> +	struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
-> +	bool writable;
-> +	hva_t hva;
-> +	int ret;
-> +
-> +	if (!IS_ALIGNED(gpa, len))
-> +		return -EINVAL;
-> +
-> +	hva = gfn_to_hva_memslot_prot(slot, gfn, &writable);
-> +	if (kvm_is_error_hva(hva))
-> +		return PGM_ADDRESSING;
-> +	/*
-> +	 * Check if it's a read-only memslot, even though that cannot occur
-> +	 * since those are unsupported.
-> +	 * Don't try to actually handle that case.
-> +	 */
-> +	if (!writable)
-> +		return -EOPNOTSUPP;
-> +
-> +	hva += offset_in_page(gpa);
-
-Hmm if we don't use a macro to generate these then I'd add an explanation:
-
-cmpxchg_user_key() is a macro that is dependent on the type of "old" so 
-there's no deduplication possible without further macros.
-
-> +	switch (len) {
-> +	case 1: {
-> +		u8 old;
-> +
-> +		ret = cmpxchg_user_key((u8 *)hva, &old, *old_addr, new, access_key);
-> +		*success = !ret && old == *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 2: {
-> +		u16 old;
-> +
-> +		ret = cmpxchg_user_key((u16 *)hva, &old, *old_addr, new, access_key);
-> +		*success = !ret && old == *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 4: {
-> +		u32 old;
-> +
-> +		ret = cmpxchg_user_key((u32 *)hva, &old, *old_addr, new, access_key);
-> +		*success = !ret && old == *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 8: {
-> +		u64 old;
-> +
-> +		ret = cmpxchg_user_key((u64 *)hva, &old, *old_addr, new, access_key);
-> +		*success = !ret && old == *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 16: {
-> +		__uint128_t old;
-> +
-> +		ret = cmpxchg_user_key((__uint128_t *)hva, &old, *old_addr, new, access_key);
-> +		*success = !ret && old == *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	mark_page_dirty_in_slot(kvm, slot, gfn);
-
-Is that needed if we failed the store?
-
-> +	/*
-> +	 * Assume that the fault is caused by protection, either key protection
-> +	 * or user page write protection.
-> +	 */
-> +	if (ret == -EFAULT)
-> +		ret = PGM_PROTECTION;
-> +	return ret;
-> +}
-> +
->   /**
->    * guest_translate_address_with_key - translate guest logical into guest absolute address
->    * @vcpu: virtual cpu
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 4b8b41be7aed..86e9734d5782 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -584,7 +584,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->   	case KVM_CAP_S390_VCPU_RESETS:
->   	case KVM_CAP_SET_GUEST_DEBUG:
->   	case KVM_CAP_S390_DIAG318:
-> -	case KVM_CAP_S390_MEM_OP_EXTENSION:
->   		r = 1;
->   		break;
->   	case KVM_CAP_SET_GUEST_DEBUG2:
-> @@ -598,6 +597,15 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->   	case KVM_CAP_S390_MEM_OP:
->   		r = MEM_OP_MAX_SIZE;
->   		break;
-> +	case KVM_CAP_S390_MEM_OP_EXTENSION:
-> +		/*
-> +		 * Flag bits indicating which extensions are supported.
-> +		 * If r > 0, the base extension must also be supported/indicated,
-> +		 * in order to maintain backwards compatibility.
-> +		 */
-> +		r = KVM_S390_MEMOP_EXTENSION_CAP_BASE |
-> +		    KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG;
-> +		break;
->   	case KVM_CAP_NR_VCPUS:
->   	case KVM_CAP_MAX_VCPUS:
->   	case KVM_CAP_MAX_VCPU_ID:
-> @@ -2840,6 +2848,50 @@ static int kvm_s390_vm_mem_op_abs(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   	return r;
->   }
->   
-> +static int kvm_s390_vm_mem_op_cmpxchg(struct kvm *kvm, struct kvm_s390_mem_op *mop)
-> +{
-> +	void __user *uaddr = (void __user *)mop->buf;
-> +	void __user *old_addr = (void __user *)mop->old_addr;
-> +	union {
-> +		__uint128_t quad;
-> +		char raw[sizeof(__uint128_t)];
-> +	} old = { .quad = 0}, new = { .quad = 0 };
-> +	unsigned int off_in_quad = sizeof(new) - mop->size;
-> +	int r, srcu_idx;
-> +	bool success;
-> +
-> +	r = mem_op_validate_common(mop, KVM_S390_MEMOP_F_SKEY_PROTECTION);
-> +	if (r)
-> +		return r;
-> +	/*
-> +	 * This validates off_in_quad. Checking that size is a power
-> +	 * of two is not necessary, as cmpxchg_guest_abs_with_key
-> +	 * takes care of that
-> +	 */
-> +	if (mop->size > sizeof(new))
-> +		return -EINVAL;
-> +	if (copy_from_user(&new.raw[off_in_quad], uaddr, mop->size))
-> +		return -EFAULT;
-> +	if (copy_from_user(&old.raw[off_in_quad], old_addr, mop->size))
-> +		return -EFAULT;
-> +
-> +	srcu_idx = srcu_read_lock(&kvm->srcu);
-> +
-> +	if (kvm_is_error_gpa(kvm, mop->gaddr)) {
-> +		r = PGM_ADDRESSING;
-> +		goto out_unlock;
-> +	}
-> +
-> +	r = cmpxchg_guest_abs_with_key(kvm, mop->gaddr, mop->size, &old.quad,
-> +				       new.quad, mop->key, &success);
-> +	if (!success && copy_to_user(old_addr, &old.raw[off_in_quad], mop->size))
-> +		r = -EFAULT;
-> +
-> +out_unlock:
-> +	srcu_read_unlock(&kvm->srcu, srcu_idx);
-> +	return r;
-> +}
-> +
->   static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   {
->   	/*
-> @@ -2858,6 +2910,8 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   	case KVM_S390_MEMOP_ABSOLUTE_READ:
->   	case KVM_S390_MEMOP_ABSOLUTE_WRITE:
->   		return kvm_s390_vm_mem_op_abs(kvm, mop);
-> +	case KVM_S390_MEMOP_ABSOLUTE_CMPXCHG:
-> +		return kvm_s390_vm_mem_op_cmpxchg(kvm, mop);
->   	default:
->   		return -EINVAL;
->   	}
 
