@@ -2,77 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DE267D434
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA94667D438
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbjAZSbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
+        id S231855AbjAZSb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:31:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbjAZSa7 (ORCPT
+        with ESMTP id S229722AbjAZSbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:30:59 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98D09029;
-        Thu, 26 Jan 2023 10:30:56 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id h10so1138821ilq.6;
-        Thu, 26 Jan 2023 10:30:56 -0800 (PST)
+        Thu, 26 Jan 2023 13:31:23 -0500
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E7B83D2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 10:31:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BtZAD+XajG4Ff3lpRNxc5VU6XMKBXj9jHvhDyP5qqKs=;
-        b=KPsDp1ZwjFTTJ9gseCa1sE6zHCopqeOf/Sg/pl/lSTGYaq7YbyYzCXFfjgqTaFoz2y
-         /78jOoWSVY8fpqVWeng2kRq1uHlIVfjJo7BnEpJ7D7749rrhv/gM4JQ7e5gNp5OOTSdH
-         efknyTybs2voRsrloxjG8Gs+qgrtOdoGgrjDdP6ayo/IQLrbKCIJAKXfbJCARC22Cwpl
-         N9UuoCUe7mDjrqiLucD+/LF55z+jxisMJ4WSqcBWYYm9fVDz+u3PZVxldCN9GJol1BvT
-         zq2K+sIX0tzzWEKLiZXjq6Xt41mwrgMDI5LT6r7+On7DMs2nuTaFTyLzRfXxAztNrTA6
-         FuYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BtZAD+XajG4Ff3lpRNxc5VU6XMKBXj9jHvhDyP5qqKs=;
-        b=Q7HautlicMRnXFrqA5hxrpjMP6GGtb19j8DP6tSQhAK6m4ymOCIYEpbans2LxQ8xVs
-         r43kBhX6y0AmBy7PSWXHzJHOSfEnWhO/RPRHirTyRqYsdR/lcKqc+WnUuRQKV39xKr2v
-         1Sdhm/MoVr5WQGC/X0IU619kKGG8UX15pq8V2roiJ9izn7R2hq+s7tHv7vi984IUfj7B
-         3eX7QuabzB3I9qZbZB4jdM1HTxKY2UAJV4UhrV+lJjHuKYY90gmewp+xVCA6Xjdu8cE6
-         ccFwGuefCxDMHDbzNan/tSjfY4HSIC4ir037i4KowkAuvfQ1JxIILw6VupXHD5OHuPcs
-         voNQ==
-X-Gm-Message-State: AFqh2kowD5I67IwNFYkCH+dRWAWQIxZjOqKAwcWobNCTU81xvk6tYULp
-        /wkGc02DrQYggg29PzM7XoHLx9xFVdGG5D6y8dtnzBlMaOw=
-X-Google-Smtp-Source: AMrXdXs7ZAjEie6unF52csPKnYMHWPA0TToP3oo+e6ede7qZNmS9Jv0sLRReSaXYHZxccnUNnT9ZZeW+MZ0E6f7JTY8=
-X-Received: by 2002:a92:6a05:0:b0:30d:ba97:90e2 with SMTP id
- f5-20020a926a05000000b0030dba9790e2mr4343477ilc.38.1674757856075; Thu, 26 Jan
- 2023 10:30:56 -0800 (PST)
-MIME-Version: 1.0
-References: <20230125025126.787431-1-gregory.price@memverge.com>
- <20230125025126.787431-2-gregory.price@memverge.com> <20230126003008.GA31684@redhat.com>
- <CANaxB-xn0wW5xA_CT7bA5=jig+td__EDKPBWSpZdfgMgVOezCg@mail.gmail.com>
- <20230126150725.GB4069@redhat.com> <CANaxB-woave9F479O75P9PC+nFO3DVmbeFA1rXf2c=bhRmWoiQ@mail.gmail.com>
- <Y9K92SQnrXhd0qjC@memverge.com>
-In-Reply-To: <Y9K92SQnrXhd0qjC@memverge.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Thu, 26 Jan 2023 10:30:44 -0800
-Message-ID: <CANaxB-yL8-4DWMb4h9bBXSZBJ=RrPQuJw76mz0CFkX-3f4Pq_w@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] ptrace,syscall_user_dispatch: Implement Syscall
- User Dispatch Suspension
-To:     Gregory Price <gregory.price@memverge.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        Gregory Price <gourry.memverge@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1674757882; x=1706293882;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oCBJBsZ3KU0GHlm5m7rsh3Rj24+8kbpEK4BWO2sDYKo=;
+  b=E+iF6XJVCQpstPWVvR6jxBq5Xtt/K/sFhFAp0D/h9eMhq8MhDNvOqEtG
+   OGOH3jb7stBOpDO8ZoGyM2EylGxPRW8Krt0prreQx7mMIRhtZ0KHEM7xU
+   FW48l/wjuMdkgQiua47hrlIMe3uzs0adWRmTOUeEdKSonmGlAsP4sCiST
+   8=;
+X-IronPort-AV: E=Sophos;i="5.97,249,1669075200"; 
+   d="scan'208";a="258074147"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-f323d91c.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 18:31:15 +0000
+Received: from EX13D39EUC004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-m6i4x-f323d91c.us-west-2.amazon.com (Postfix) with ESMTPS id CEDF541D65;
+        Thu, 26 Jan 2023 18:31:13 +0000 (UTC)
+Received: from EX19D033EUC004.ant.amazon.com (10.252.61.133) by
+ EX13D39EUC004.ant.amazon.com (10.43.164.239) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Thu, 26 Jan 2023 18:31:12 +0000
+Received: from u40bc5e070a0153.ant.amazon.com (10.43.160.120) by
+ EX19D033EUC004.ant.amazon.com (10.252.61.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.7; Thu, 26 Jan 2023 18:31:08 +0000
+Date:   Thu, 26 Jan 2023 19:31:02 +0100
+From:   Roman Kagan <rkagan@amazon.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        "Vincent Guittot" <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [bug-report] possible s64 overflow in max_vruntime()
+Message-ID: <Y9LG5vkf/4ufJb35@u40bc5e070a0153.ant.amazon.com>
+Mail-Followup-To: Roman Kagan <rkagan@amazon.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+References: <73e639d5-702b-0d03-16d9-a965b1963ef6@huawei.com>
+ <Y6RRfF5yRew7rdCp@hirez.programming.kicks-ass.net>
+ <Y9GG3N5ivVvyETa2@u40bc5e070a0153.ant.amazon.com>
+ <Y9J25xMrItpeHIxD@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y9J25xMrItpeHIxD@hirez.programming.kicks-ass.net>
+X-Originating-IP: [10.43.160.120]
+X-ClientProxiedBy: EX13D35UWB004.ant.amazon.com (10.43.161.230) To
+ EX19D033EUC004.ant.amazon.com (10.252.61.133)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,72 +86,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 9:52 AM Gregory Price
-<gregory.price@memverge.com> wrote:
->
-> On Thu, Jan 26, 2023 at 09:45:39AM -0800, Andrei Vagin wrote:
-> > On Thu, Jan 26, 2023 at 7:07 AM Oleg Nesterov <oleg@redhat.com> wrote:
-> > >
-> > > On 01/25, Andrei Vagin wrote:
-> > > >
-> > > > On Wed, Jan 25, 2023 at 4:30 PM Oleg Nesterov <oleg@redhat.com> wrote:
-> > > > >
-> > > > > On 01/24, Gregory Price wrote:
-> > > > > >
-> > > > > > Adds PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH to ptrace options, and
-> > > > > > modify Syscall User Dispatch to suspend interception when enabled.
-> > > > > >
-> > > > > > This is modeled after the SUSPEND_SECCOMP feature, which suspends
-> > > > > > SECCOMP interposition.  Without doing this, software like CRIU will
-> > > > > > inject system calls into a process and be intercepted by Syscall
-> > > > > > User Dispatch, either causing a crash (due to blocked signals) or
-> > > > > > the delivery of those signals to a ptracer (not the intended behavior).
-> > > > >
-> > > > > Cough... Gregory, I am sorry ;)
-> > > > >
-> > > > > but can't we drop this patch to ?
-> > > > >
-> > > > > CRIU needs to do PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG and check
-> > > > > config->mode anyway as we discussed.
-> > > > >
-> > > > > Then it can simply set *config->selector = SYSCALL_DISPATCH_FILTER_ALLOW
-> > > > > with the same effect, no?
-> > > >
-> > > > Oleg,
-> > > >
-> > > > PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH is automatically cleared when
-> > > > a tracer detaches. It is critical when tracers detach due to unexpected
-> > > > reasons
-> > >
-> > > IIUC, PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH is needed to run the injected
-> > > code, and this also needs to change the state of the traced process. If
-> > > the tracer (CRIU) dies while the tracee runs this code, I guess the tracee
-> > > will have other problems?
-> >
-> > Our injected code can reheal itself if something goes wrong. The hack
-> > here is that we inject
-> > the code with a signal frame and it calls rt_segreturn to resume the process.
-> >
-> > We want to have this functionality for most cases. I don't expect that
-> > the syscall user dispatch
-> > is used by many applications, so I don't strongly insist on
-> > PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH. In addition, if we know a user dispatch
-> > memory region, it can be enough to inject our code out of this region
-> > without disabling SUD.
-> >
-> > Thanks,
-> > Andrei
->
-> The region is exclusive, so syscalls *outside* [offset, offset+len]
-> produce a dispatch. That means you would have to inject into that region.
+On Thu, Jan 26, 2023 at 01:49:43PM +0100, Peter Zijlstra wrote:
+> On Wed, Jan 25, 2023 at 08:45:32PM +0100, Roman Kagan wrote:
+> 
+> > The calculation is indeed safe against the overflow of the vruntimes
+> > themselves.  However, when the two vruntimes are more than 2^63 apart,
+> > their comparison gets inverted due to that s64 overflow.
+> 
+> Yes, but that's a whole different issue. vruntime are not expected to be
+> *that* far apart.
+> 
+> That is surely the abnormal case. The normal case is wrap around, and
+> that happens 'often' and should continue working.
+> 
+> > And this is what happens here: one scheduling entity has accumulated a
+> > vruntime more than 2^63 ahead of another.  Now the comparison is
+> > inverted due to s64 overflow, and the latter can't get to the cpu,
+> > because it appears to have vruntime (much) bigger than that of the
+> > former.
+> 
+> If it can be 2^63 ahead, it can also be 2^(64+) ahead and nothing will
+> help.
+> 
+> > This situation is reproducible e.g. when one scheduling entity is a
+> > multi-cpu hog, and the other is woken up from a long sleep.  Normally
+> 
+> A very low weight CPU hog?
 
-You are right. I missed that. So it depends how large a region is and
-whether it has enough
-free space to inject our code.
+Right.  In our case this weight was due to the task group consuming
+all 448 cpus on the machine; presumably one can achive this on a smaller
+machine by tweaking shares of the cgroup.
 
-Out of curiosity, do you know any real app that use SUD? I think it
-was implemented for wine,
-but they haven't started using it yet.
+> > when a task is placed on a cfs_rq, its vruntime is pulled to
+> > min_vruntime, to avoid boosting the woken up task.  However in this case
+> > the task is so much behind in vruntime that it appears ahead instead,
+> > its vruntime is not adjusted in place_entity(), and then it looses the
+> > cpu to the current scheduling entity.
+> 
+> What I think might be a way out here is passing the the sleep wall-time
+> (cfs_rq_clock_pelt() time I suppose) to place entity and simply skip the
+> magic if 'big'.
+> 
+> All that only matters for small sleeps anyway.
+> 
+> Something like:
+> 
+>         sleep_time = U64_MAX;
+>         if (se->avg.last_update_time)
+>           sleep_time = cfs_rq_clock_pelt(cfs_rq) - se->avg.last_update_time;
+
+Interesting, why not rq_clock_task(rq_of(cfs_rq)) - se->exec_start, as
+others were suggesting?  It appears to better match the notion of sleep
+wall-time, no?
 
 Thanks,
-Andrei
+Roman.
+
+> 
+>         if (sleep_time > 60*NSEC_PER_SEC) { // 1 minute is huge
+>           se->vruntime = cfs_rq->min_vruntime;
+>           return;
+>         }
+> 
+>         // ... rest of place_entity()
+> 
+> Hmm... ?
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+
