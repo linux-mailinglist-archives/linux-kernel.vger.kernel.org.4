@@ -2,195 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C658A67C659
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E697467C65E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236605AbjAZIx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 03:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
+        id S233020AbjAZIz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 03:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236552AbjAZIxs (ORCPT
+        with ESMTP id S236511AbjAZIzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 03:53:48 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAED139CE2;
-        Thu, 26 Jan 2023 00:53:43 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0C48F6602E8A;
-        Thu, 26 Jan 2023 08:53:32 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674723213;
-        bh=pKMGoeKu4m5DJFVWyByEtDagZ1PUSFRsRa3TlZzOsdw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nJ7Dp18rXaD2PV9bjGm7alMnY0xRZiSN3N9p5TcIvxR5VTV6i/O0VR+aW99bNveuH
-         rTOTug+CjPQAiqqtDJnpikOkJhiCASTHZQhE8ag9xqZG7HiicGlxXwsmC3lPov0GGl
-         Xtg9SRAFsWqIEL6k489ZSK0lyk4a59UNiUUK2eeVz4THuLbt59UMsGeHFkQxJKJvKY
-         EDsHuPUxrxA3OKTERdnc9iVpJXPN15DG8KD2sh9347lNgShJeiAez4AxXnZZ7UHC39
-         3NQPW93pbcQnloqQ7M1jgxqy7TaNABbCDWN93ke7i707wJK89rUp0DzU7YEgiuu/jg
-         E4NW9pyHuFVGg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     sboyd@kernel.org
-Cc:     mturquette@baylibre.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        edward-jw.yang@mediatek.com, johnson.wang@mediatek.com,
-        wenst@chromium.org, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, rex-bc.chen@mediatek.com,
-        jose.exposito89@gmail.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH v2 6/6] clk: mediatek: mt8195: Add support for frequency hopping through FHCTL
-Date:   Thu, 26 Jan 2023 09:53:21 +0100
-Message-Id: <20230126085321.87267-7-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230126085321.87267-1-angelogioacchino.delregno@collabora.com>
-References: <20230126085321.87267-1-angelogioacchino.delregno@collabora.com>
+        Thu, 26 Jan 2023 03:55:24 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 234D442BE9;
+        Thu, 26 Jan 2023 00:54:56 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 37D19C14;
+        Thu, 26 Jan 2023 00:55:27 -0800 (PST)
+Received: from [10.34.100.128] (pierre123.nice.arm.com [10.34.100.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0F7463F71E;
+        Thu, 26 Jan 2023 00:54:42 -0800 (PST)
+Message-ID: <26a57d7f-5917-c54b-2f96-492346a599a1@arm.com>
+Date:   Thu, 26 Jan 2023 09:54:38 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 6/6] arch_topology: Build cacheinfo from primary CPU
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gavin Shan <gshan@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org
+References: <20230104183033.755668-1-pierre.gondois@arm.com>
+ <20230104183033.755668-7-pierre.gondois@arm.com>
+ <CAMuHMdUjgxgOXf5He1x=PLn7MQTjZgFQUHj8JrwbyweT4uOALQ@mail.gmail.com>
+ <20230124140420.4srnufcvamvff77v@bogus> <Y8/tl999NQwbPL/R@wendy>
+ <20230124144839.2szjjv256j3pdaif@bogus>
+ <20230124145541.2xwtr7ro2bjnsjd7@bogus>
+ <20230125145423.pid3hsstswzuez73@bogus>
+ <CAMuHMdWZ+_kdMp+0VfYAJZRHBWiyobQQJwEM_kHN6yeVVGxSvg@mail.gmail.com>
+Content-Language: en-US
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <CAMuHMdWZ+_kdMp+0VfYAJZRHBWiyobQQJwEM_kHN6yeVVGxSvg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add FHCTL parameters and register PLLs through FHCTL to add support
-for frequency hopping and SSC. FHCTL will be enabled only on PLLs
-specified in devicetree.
+Hello Geert, Sudeep,
 
-This commit brings functional changes only upon addition of
-devicetree configuration.
+On 1/25/23 16:28, Geert Uytterhoeven wrote:
+> Hi Sudeep,
+> 
+> On Wed, Jan 25, 2023 at 3:54 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>> On Tue, Jan 24, 2023 at 02:55:41PM +0000, Sudeep Holla wrote:
+>>> Geert, can you please try with the patch Conor pointed out and see if
+>>> that helps to fix the allocation failures[1]
+>>>
+>>
+>> Sorry for the nag, but did you get the chance to test -next with [1]
+>> and see if it fixes the cacheinfo memory failure you were observing ?
+> 
+>> [1] https://lore.kernel.org/all/20230103035316.3841303-1-leyfoon.tan@starfivetech.com/
+> 
+> After applying that patch, the issue is gone.
+> Thanks, sending my Tb!
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                  -- Linus Torvalds
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/clk/mediatek/clk-mt8195-apmixedsys.c | 69 +++++++++++++++++++-
- 1 file changed, 66 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-index 1bc917f2667e..c0db31ce0741 100644
---- a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-+++ b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-@@ -3,9 +3,11 @@
- // Copyright (c) 2021 MediaTek Inc.
- // Author: Chun-Jie Chen <chun-jie.chen@mediatek.com>
- 
-+#include "clk-fhctl.h"
- #include "clk-gate.h"
- #include "clk-mtk.h"
- #include "clk-pll.h"
-+#include "clk-pllfh.h"
- 
- #include <dt-bindings/clock/mt8195-clk.h>
- #include <linux/of_device.h>
-@@ -105,6 +107,61 @@ static const struct mtk_pll_data plls[] = {
- 	    0, 0, 22, 0x0158, 24, 0, 0, 0, 0x0158, 0, 0x0158, 0, 9),
- };
- 
-+enum fh_pll_id {
-+	FH_ARMPLL_LL,
-+	FH_ARMPLL_BL,
-+	FH_MEMPLL,
-+	FH_ADSPPLL,
-+	FH_NNAPLL,
-+	FH_CCIPLL,
-+	FH_MFGPLL,
-+	FH_TVDPLL2,
-+	FH_MPLL,
-+	FH_MMPLL,
-+	FH_MAINPLL,
-+	FH_MSDCPLL,
-+	FH_IMGPLL,
-+	FH_VDECPLL,
-+	FH_TVDPLL1,
-+	FH_NR_FH,
-+};
-+
-+#define FH(_pllid, _fhid, _offset) {					\
-+		.data = {						\
-+			.pll_id = _pllid,				\
-+			.fh_id = _fhid,					\
-+			.fh_ver = FHCTL_PLLFH_V2,			\
-+			.fhx_offset = _offset,				\
-+			.dds_mask = GENMASK(21, 0),			\
-+			.slope0_value = 0x6003c97,			\
-+			.slope1_value = 0x6003c97,			\
-+			.sfstrx_en = BIT(2),				\
-+			.frddsx_en = BIT(1),				\
-+			.fhctlx_en = BIT(0),				\
-+			.tgl_org = BIT(31),				\
-+			.dvfs_tri = BIT(31),				\
-+			.pcwchg = BIT(31),				\
-+			.dt_val = 0x0,					\
-+			.df_val = 0x9,					\
-+			.updnlmt_shft = 16,				\
-+			.msk_frddsx_dys = GENMASK(23, 20),		\
-+			.msk_frddsx_dts = GENMASK(19, 16),		\
-+		},							\
-+	}
-+
-+static struct mtk_pllfh_data pllfhs[] = {
-+	FH(CLK_APMIXED_ADSPPLL, FH_ADSPPLL, 0x78),
-+	FH(CLK_APMIXED_NNAPLL, FH_NNAPLL, 0x8c),
-+	FH(CLK_APMIXED_MFGPLL, FH_MFGPLL, 0xb4),
-+	FH(CLK_APMIXED_TVDPLL2, FH_TVDPLL2, 0xc8),
-+	FH(CLK_APMIXED_MMPLL, FH_MMPLL, 0xf0),
-+	FH(CLK_APMIXED_MAINPLL, FH_MAINPLL, 0x104),
-+	FH(CLK_APMIXED_MSDCPLL, FH_MSDCPLL, 0x118),
-+	FH(CLK_APMIXED_IMGPLL, FH_IMGPLL, 0x12c),
-+	FH(CLK_APMIXED_VDECPLL, FH_VDECPLL, 0x140),
-+	FH(CLK_APMIXED_TVDPLL2, FH_TVDPLL1, 0x154),
-+};
-+
- static const struct of_device_id of_match_clk_mt8195_apmixed[] = {
- 	{ .compatible = "mediatek,mt8195-apmixedsys", },
- 	{}
-@@ -114,13 +171,17 @@ static int clk_mt8195_apmixed_probe(struct platform_device *pdev)
- {
- 	struct clk_hw_onecell_data *clk_data;
- 	struct device_node *node = pdev->dev.of_node;
-+	const u8 *fhctl_node = "mediatek,mt8195-fhctl";
- 	int r;
- 
- 	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
- 	if (!clk_data)
- 		return -ENOMEM;
- 
--	r = mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
-+	fhctl_parse_dt(fhctl_node, pllfhs, ARRAY_SIZE(pllfhs));
-+
-+	r = mtk_clk_register_pllfhs(node, plls, ARRAY_SIZE(plls),
-+				    pllfhs, ARRAY_SIZE(pllfhs), clk_data);
- 	if (r)
- 		goto free_apmixed_data;
- 
-@@ -140,7 +201,8 @@ static int clk_mt8195_apmixed_probe(struct platform_device *pdev)
- unregister_gates:
- 	mtk_clk_unregister_gates(apmixed_clks, ARRAY_SIZE(apmixed_clks), clk_data);
- unregister_plls:
--	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-+	mtk_clk_unregister_pllfhs(plls, ARRAY_SIZE(plls), pllfhs,
-+				  ARRAY_SIZE(pllfhs), clk_data);
- free_apmixed_data:
- 	mtk_free_clk_data(clk_data);
- 	return r;
-@@ -153,7 +215,8 @@ static int clk_mt8195_apmixed_remove(struct platform_device *pdev)
- 
- 	of_clk_del_provider(node);
- 	mtk_clk_unregister_gates(apmixed_clks, ARRAY_SIZE(apmixed_clks), clk_data);
--	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-+	mtk_clk_unregister_pllfhs(plls, ARRAY_SIZE(plls), pllfhs,
-+				  ARRAY_SIZE(pllfhs), clk_data);
- 	mtk_free_clk_data(clk_data);
- 
- 	return 0;
--- 
-2.39.0
-
+Happy to hear the issue disappears with the patch, thanks for solving the issue,
+Regards,
+Pierre
