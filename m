@@ -2,111 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA78967CDFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2FA67CDFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbjAZOZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
+        id S232025AbjAZO0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbjAZOYg (ORCPT
+        with ESMTP id S231836AbjAZO0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:24:36 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A707167E
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:23:54 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id t12so2004978lji.13
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:23:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EM8B7vfyD5Py/MB3Opt1I4SCriH6T8vAGD94Cbdc8VI=;
-        b=HtAcpybS0NIBL3fotWhYtfxr09jYWtTCVGDxlVw3etdAwsOY2pjTKteiChBYWFp25c
-         M5xTsH5caJThm3LbLj7yew7ap5AZqvT6L6DxpUnQolNHQS8N9o82kynnDVByw+X+xHK0
-         ZZBNOcSFhzoDKJvyACDcf1mBUrzQ2g3JjXPOtcQaWmmBl7/8obn8xFaSUKleGLMM0tFz
-         v3zq82JC5Z76pJsk2JqaJu9LlYqdxUuY8h7ek8A35prxW2OiOkytY7H7lLytjXKmV9R6
-         BGePHVznHtAfIvsawcG4By8wGYMpD7WVd65SaxJqX3GTfShCzwyOsRmEF8gzP2Wfq3NH
-         i0Fw==
+        Thu, 26 Jan 2023 09:26:17 -0500
+Received: from mail-io1-xd45.google.com (mail-io1-xd45.google.com [IPv6:2607:f8b0:4864:20::d45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538E212583
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:25:51 -0800 (PST)
+Received: by mail-io1-xd45.google.com with SMTP id b26-20020a056602331a00b00704cb50e151so964542ioz.13
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:25:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EM8B7vfyD5Py/MB3Opt1I4SCriH6T8vAGD94Cbdc8VI=;
-        b=QNF+ZQfc8UJ7KZ7L64raTXmG5yoHenQGtHkjsDGq/e8uJjgQfwdtss7tqkG71SLsR8
-         +FN5yv6Y7tlRio31y7blh+S1D7vJgo0UUhJOuCKP7AbePh0v+9MIKNfDcY0xdFdoyTyb
-         3sG0k9yE1BibXJgWxHJDui6XD+7v5oaYMGrxJGmKT7f7HipZgY2FYXOA01Rq1tOZNVzt
-         v1GRSMvumyBum9w2zgsYFGo42zOWCXIswKwoR00yo9eXDeIwaTlerLe07U3Uwjdmll8J
-         z2dLgnpZKqls2rd6dMroyJzkuFfKF2Thf3RG42Jvr2zb5OUCVvtx/3OfP/wyLfx3Uj8v
-         rOKg==
-X-Gm-Message-State: AFqh2kpWO51KGgX2wkFFE7F3HKKmXyVaCY/hXrmIAMzb3gandtWBYU8t
-        RbPR+Q8/1n++GDbatJFHt/tw3yzCVKB8dMr5J9I=
-X-Google-Smtp-Source: AMrXdXvbWzE9Hn4V0NJC8nCCHk4bKSwM/JdIdOkQ/rCSUe75fkT5Wt2Z/1pvBXsidgROqLCy1NgC8HERP5GUCepO1X4=
-X-Received: by 2002:a2e:9b56:0:b0:279:7164:a0aa with SMTP id
- o22-20020a2e9b56000000b002797164a0aamr3380935ljj.318.1674743028156; Thu, 26
- Jan 2023 06:23:48 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fokMFk2aHN6zddqQgmkFpmX2jguDNP9PGOuf1Cbb47M=;
+        b=YvjAUYZ0LxMueIZd+BI40awnwbZ+DjZcd+whTf51PnpSDIyjsOQk+mFUQG0UU5iM+H
+         uaF4YoH8afBxZzGFnkSzuv0yncU1PBV/n8QBr74NfLK4oObkg8M+43Jl3CVGz7QtF6Kk
+         FKtVZ290Tkkk+Lnwo10kl4L64Lkhj9BaI5e+VyfHB3mQ9g1nmDS/IhcIDrNJ0UrvZsQ8
+         JwZEUt+alIb5fOYPAsOiR7FN4QOhgkzJQ/YjKUY6XuVPFrF1OmeGERWyrGZbFi/D9Ce8
+         U5IarRsEXzE/4MHWa+J/VyuS66yg43Pkk+1DYzLkT28f/tx0OcUI9AA7HorWj83C0aj1
+         iE+g==
+X-Gm-Message-State: AFqh2kqHB3J9w5/elNeyqqIxL3rOGp3MwH1sdAD8VW2FIFBBL+656ri0
+        2+kStlpbJblpB2TbStg5fcLgTpV5TL3T3Mahbpul9/A2wbeD
+X-Google-Smtp-Source: AMrXdXuAP/1Zy0f6YvtK7tUCnhizwYl81TIxyNzmzuoWRm8Y1WgcEv9smpIJCYZZCf6SxEUZnq2XtevM42BDdOwXjgCSH/JblIeR
 MIME-Version: 1.0
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y9EkCvAfNXnJ+ATo@kroah.com> <Y9Ex3ZUIFxwOBg1n@work-vm> <Y9E5Cg7mreDx737N@redhat.com>
-In-Reply-To: <Y9E5Cg7mreDx737N@redhat.com>
-From:   Richard Weinberger <richard.weinberger@gmail.com>
-Date:   Thu, 26 Jan 2023 15:23:34 +0100
-Message-ID: <CAFLxGvwHRK3vyXiCv5ELvrDSEkcDgV5c6pNnWgWhcATfp1dedA@mail.gmail.com>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-To:     =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>
-Cc:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Received: by 2002:a05:6e02:d8e:b0:30f:5c46:f30d with SMTP id
+ i14-20020a056e020d8e00b0030f5c46f30dmr2633257ilj.146.1674743034437; Thu, 26
+ Jan 2023 06:23:54 -0800 (PST)
+Date:   Thu, 26 Jan 2023 06:23:54 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a86a7c05f32b7f91@google.com>
+Subject: [syzbot] [f2fs?] UBSAN: shift-out-of-bounds in f2fs_fill_super (2)
+From:   syzbot <syzbot+fea4bcda5eb938ee88ed@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        terrelln@fb.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 3:22 PM Daniel P. Berrang=C3=A9 <berrange@redhat.co=
-m> wrote:
-> Any virtual device exposed to the guest that can transfer potentially
-> sensitive data needs to have some form of guest controlled encryption
-> applied. For disks this is easy with FDE like LUKS, for NICs this is
-> already best practice for services by using TLS. Other devices may not
-> have good existing options for applying encryption.
+Hello,
 
-I disagree wrt. LUKS. The cryptography behind LUKS protects persistent data
-but not transport. If an attacker can observe all IO you better
-consult a cryptographer.
-LUKS has no concept of session keys or such, so the same disk sector will
-always get encrypted with the very same key/iv.
+syzbot found the following issue on:
 
---=20
-Thanks,
-//richard
+HEAD commit:    2241ab53cbb5 Linux 6.2-rc5
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11e678a9480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c5d89b670f0458d
+dashboard link: https://syzkaller.appspot.com/bug?extid=fea4bcda5eb938ee88ed
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e370de928a15/disk-2241ab53.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a32aa1a12bc4/vmlinux-2241ab53.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/914736862f98/bzImage-2241ab53.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fea4bcda5eb938ee88ed@syzkaller.appspotmail.com
+
+F2FS-fs (loop0): Fix alignment : internally, start(4096) end(16896) block(12288)
+F2FS-fs (loop0): Magic Mismatch, valid(0xf2f52010) - read(0xe8b)
+F2FS-fs (loop0): Can't find valid F2FS filesystem in 2th superblock
+================================================================================
+UBSAN: shift-out-of-bounds in fs/f2fs/super.c:4184:41
+shift exponent 613 is too large for 64-bit type 'loff_t' (aka 'long long')
+CPU: 1 PID: 5467 Comm: syz-executor.0 Not tainted 6.2.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x33d/0x3a0 lib/ubsan.c:321
+ f2fs_fill_super+0x5518/0x6ee0 fs/f2fs/super.c:4184
+ mount_bdev+0x26c/0x3a0 fs/super.c:1359
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1489
+ do_new_mount+0x289/0xad0 fs/namespace.c:3145
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7ad2e8d5fa
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f7ad3bccf88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00000000000054f7 RCX: 00007f7ad2e8d5fa
+RDX: 0000000020000040 RSI: 0000000020000080 RDI: 00007f7ad3bccfe0
+RBP: 00007f7ad3bcd020 R08: 00007f7ad3bcd020 R09: 0000000000000003
+R10: 0000000000000003 R11: 0000000000000202 R12: 0000000020000040
+R13: 0000000020000080 R14: 00007f7ad3bccfe0 R15: 00000000200056c0
+ </TASK>
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
