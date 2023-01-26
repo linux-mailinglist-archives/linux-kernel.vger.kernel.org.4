@@ -2,132 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B4C67D129
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B50B067D12B
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbjAZQTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
+        id S232645AbjAZQTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbjAZQSo (ORCPT
+        with ESMTP id S231682AbjAZQTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:18:44 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620F5233FD
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:18:43 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id c124so2555822ybb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:18:43 -0800 (PST)
+        Thu, 26 Jan 2023 11:19:21 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3432721970
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:19:18 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id r2so2295690wrv.7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:19:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vvEyqxPpR8M4BC65XVopg/XEu9SCivMiAr3QBDUWiyU=;
-        b=H348+fayL/o7ZK4OMOl0X4WP2eMya1R6g3s71mVa0DA8XCsYAD7Mno2OaEE7NA0CmO
-         e4033coOL787sHvi/S6s9OFvGkRHoLaUuJ1duFsKOvl5kj/wYF8+5cRX76ijn0+r9mVN
-         /MK6vYc4x8jCg28wjYXYjcmydOgZp19VGDCnfGGlA3w2bC3Yw6+bgXPCcc6kwlaa/Dld
-         Xkvgt3oautRKkhJGYhlwnO6TvcpaegDMiJu4G7chvMyMJzFUHGEi5AWj6fisELCIR8Mt
-         LiDJG1ULptGXP+W67GIwNcq68sjgGTmxbYOeP0BP5KnuDIfe/tA0SCD/oII/g1WHFURW
-         dp6w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3wxCJ7VH8kcrhyzG9kkuTpUxvya7wMEChRRE8w8/Ur0=;
+        b=xp3EJIj3spQjDcvxuOgJHqeJV7FEvFAT8Yztw76YVLx96+Pb0XADEz9E5ThyFl4g+b
+         Qf4oCoIek8tXfp5ZASw8qFYWjbFfC1lM1vm/G7f+SNlcwJaGStu8kVNqFZyhZGVmE3CU
+         xEtGRDOnpkR/BVcx/q9lctVMntis4p7vAl9fDKzdeKoLm/SD72r6GIV1nuuGil7XU7Bv
+         h3BP67W+8zmboQdGx2DXn2bPl4Wh1FdXFRz0qOySVc5ACatD3IqYBWJhTspRN/dVLKWZ
+         6T6yfT1ffl8FAmsVjH5/1vjdTQE6eCN5gpeOo2Gh5PhAA1AkSghDq3MucU9UkwCHeuF2
+         kvMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vvEyqxPpR8M4BC65XVopg/XEu9SCivMiAr3QBDUWiyU=;
-        b=NrKyNLH4tQpLBbNMBDAohDhcLS/MKSl/dj/ZQyYb4vpdJI4RVu7yqn35TWFvcDJko7
-         zP5i5ctb+FXJLx1da/WUmxC4EzWWOEMZM4KrwIk3HNXlVnoPBFpoopscqdIC7a3TWcUM
-         Owg3j+XDSrUlQz7Ku5uexiNMrxhmm12Pzo4TntFKWgI+M1pzmu6FvPdxcQTaNzbSW41i
-         4VQsdQkkmkPxfEsRSgZUDEcGKTIGBdliWRNj90d4X8XHrb1C5Dl6AZX+2mvi3ulng/KF
-         DVoNibj3tYImX6m4r4JolauiaDwQ7XdLoGAvHLMEY9A4ICwYfFMBG127frU6dXgag82Y
-         3PZA==
-X-Gm-Message-State: AO0yUKXkiM2a+ZXbyl2QkODOW4xF/7sYvIgqHfsxXizVY/N5t2JMzd1V
-        H86LVmM41ZJwfkxaKV7h8PHGTXNfrhgtKBro7BUg/w==
-X-Google-Smtp-Source: AK7set9P+5mtUtKJMZFiPeuyZhPr8TwEdg7FU3uDJVhz4F2UDpdSR6q0zVgkPPrpoaJxmCX2P+Pz2XDq0fuB0xLwifk=
-X-Received: by 2002:a25:6811:0:b0:80b:c92b:ed7c with SMTP id
- d17-20020a256811000000b0080bc92bed7cmr466120ybc.593.1674749922312; Thu, 26
- Jan 2023 08:18:42 -0800 (PST)
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3wxCJ7VH8kcrhyzG9kkuTpUxvya7wMEChRRE8w8/Ur0=;
+        b=JChSX7790WN9PNb0/JWXSn4/R1xiIiF3YLYJM5EnrCGIZ+cxLzGMlF8kKP2uYxCtOq
+         +Ptg0xPT/ez/84HyjwUWAO/eGWhWqoWq+uUFaP5rVU3gdAadgZbF1v35pNXywnWffrb3
+         Hd141eTGNOVG4NFtuuAfl+oeJ3cXtFaBFoIZgVWhO6ndVjceKOLvTxV1hmRC5aHKOBMP
+         Q96z7S5qORbM5KwMCOUyTRU7VK3UMTKmi62urzsN892aKk7roarpGaUYuL6t+UjbFndk
+         CBI7eWAXKWp5RSyr4BHFNuF1XrPRFQ0Ra1foiNKSEZkEiDvmoSk3sGNsKKB+UjcpS6Ic
+         7tHQ==
+X-Gm-Message-State: AO0yUKVNEQrklzy9R25uWOZe0+byYOqPGiY0hpzNFKcZlpHYS3Vl5hNl
+        5OoyD3mJX1+7+PoqZxKSiZG2fA==
+X-Google-Smtp-Source: AK7set/+Wm0+d7pajpb6gFoNTSJKwSFGoowC3GxDPuycC2PVav4CL0uRhdhERMrL3TguV5s9ZGXflw==
+X-Received: by 2002:adf:ea01:0:b0:2bf:b35d:2797 with SMTP id q1-20020adfea01000000b002bfb35d2797mr8733613wrm.11.1674749956662;
+        Thu, 26 Jan 2023 08:19:16 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id h20-20020a05600c351400b003dc1300eab0sm5794537wmq.33.2023.01.26.08.19.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 08:19:16 -0800 (PST)
+Message-ID: <8317ac88-2ff5-9289-9123-0e222d2da905@linaro.org>
+Date:   Thu, 26 Jan 2023 17:19:15 +0100
 MIME-Version: 1.0
-References: <20230125233554.153109-1-surenb@google.com> <20230125233554.153109-7-surenb@google.com>
- <20230126154740.j3a3lu4x557c56yi@techsingularity.net>
-In-Reply-To: <20230126154740.j3a3lu4x557c56yi@techsingularity.net>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 26 Jan 2023 08:18:31 -0800
-Message-ID: <CAJuCfpHP6hQAWZr2exZEXOzLbMNU_c9qNNc7pa2NYAhYLe=EKQ@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] mm: introduce mod_vm_flags_nolock and use it in untrack_pfn
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
+        Yangtao Li <tiny.windzz@gmail.com>, ye.xingchen@zte.com.cn,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal changes for v6.3-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 7:47 AM Mel Gorman <mgorman@techsingularity.net> wrote:
->
-> On Wed, Jan 25, 2023 at 03:35:53PM -0800, Suren Baghdasaryan wrote:
-> > In cases when VMA flags are modified after VMA was isolated and mmap_lock
-> > was downgraded, flags modifications would result in an assertion because
-> > mmap write lock is not held.
->
-> Add note that it's also used during exit when the locking of the VMAs
-> becomes irrelevant (mm users is 0, should be no VMA modifications taking
-> place other than zap).
+Hi Rafael,
 
-Ack.
+please consider pulling:
 
->
-> The typical naming pattern when a caller either knows it holds the necessary
-> lock or knows it does not matter is __mod_vm_flags()
+The following changes since commit 3a151494dc04c76add577ae66e8a04f900638aaf:
 
-Ok. It sounds less explicit but plenty of examples, so I'm fine with
-such rename. Will apply in the next version.
+   thermal/drivers/armada: Use strscpy() to instead of strncpy() 
+(2023-01-06 14:14:48 +0100)
 
->
-> > Introduce mod_vm_flags_nolock to be used in such situation, when VMA is
-> > not part of VMA tree and locking it is not required.
->
-> Instead of such situations, describe in as "used when the caller takes
-> responsibility for the required locking".
+are available in the Git repository at:
 
-Ack.
+   git://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v6.3-rc1
 
->
-> > Pass a hint to untrack_pfn to conditionally use mod_vm_flags_nolock for
-> > flags modification and to avoid assertion.
-> >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
->
-> Patch itself looks ok. It strays close to being "conditional locking"
-> though which might attract some complaints.
+for you to fetch changes up to 8c5ee9155f8ae133070b40ee4be03cafb35c188d:
 
-The description seems to accurately describe what's done here but I'm
-open to better suggestions.
-Thanks!
+   thermal/drivers/armada: Use the thermal_zone_get_crit_temp() 
+(2023-01-24 12:37:56 +0100)
 
->
-> --
-> Mel Gorman
-> SUSE Labs
+----------------------------------------------------------------
+- Fix kerneldoc format errors for Rockchip, Mediatek and Uniphier
+   (Randy Dunlap)
+
+- Add the missing 'qcom,adc-tm7' compatible string in the dt-bindings
+   (Krzysztof Kozlowski)
+
+- Improve the calibration routine by relying on the nvmem to read the
+   values and provide a set of fixes for the QCom tsens driver (Dmitry
+   Baryshkov)
+
+- Remove the duplicate interrupt setting routine in the QCom tsens
+   driver (Daniel Lezcano)
+
+- Fix a wrong loop condition in the i.MX SC thermal driver and add the
+   iMX8QM sensors (Viorel Suman)
+
+- Fix header inclusion asm-generic.h by asm.h for the
+   qcom-spmi-adc-tm5 driver (Andy Shevchenko)
+
+- Use the devm_platform_get_and_ioremap_resource() combo function in
+   all the drivers where the conversion applies (Ye Xingchen)
+
+- Replace a literal mask by an existing corresponding macro (Yangtao
+   Li)
+
+- Add support for MT7986 and MT7981 (Daniel Golle)
+
+- Use thermal_zone_get_crit_temp() for the Armada thermal driver
+   (Daniel Lezcano)
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+       thermal/drivers/qcom-spmi-adc-tm5: Use asm intead of asm-generic
+
+Daniel Golle (2):
+       thermal/drivers/mtk: Use function pointer for raw_to_mcelsius
+       thermal/drivers/mtk: Add support for MT7986 and MT7981
+
+Daniel Lezcano (2):
+       thermal/drivers/qcom: Remove duplicate set next trip point 
+interrupt code
+       thermal/drivers/armada: Use the thermal_zone_get_crit_temp()
+
+Dmitry Baryshkov (14):
+       dt-bindings: thermal: tsens: add msm8956 compat
+       dt-bindings: thermal: tsens: support per-sensor calibration cells
+       dt-bindings: thermal: tsens: add per-sensor cells for msm8974
+       thermal/drivers/tsens: Drop unnecessary hw_ids
+       thermal/drivers/tsens: Drop msm8976-specific defines
+       thermal/drivers/tsens: Sort out msm8976 vs msm8956 data
+       thermal/drivers/tsens: fix slope values for msm8939
+       thermal/drivers/tsens: limit num_sensors to 9 for msm8939
+       thermal/drivers/tsens: Support using nvmem cells for calibration data
+       thermal/drivers/tsens: Support using nvmem cells for msm8974 
+calibration
+       thermal/drivers/tsens: Rework legacy calibration data parsers
+       thermal/drivers/tsens: Drop single-cell code for mdm9607
+       thermal/drivers/tsens: Drop single-cell code for msm8939
+       thermal/drivers/tsens: Drop single-cell code for msm8976/msm8956
+
+Krzysztof Kozlowski (1):
+       dt-bindings: thermal: qcom-spmi-adc-tm5: add qcom,adc-tm7
+
+Rafael J. Wysocki (1):
+       Merge tag 'generic-trip-point' of 
+ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux
+
+Randy Dunlap (3):
+       thermal/drivers/mtk_thermal: Fix kernel-doc function name
+       thermal/drivers/rockchip: Fix kernel-doc warnings
+       thermal/drivers/uniphier: Use regular comment syntax
+
+Viorel Suman (2):
+       thermal/drivers/imx_sc_thermal: Fix the loop condition
+       thermal/drivers/imx_sc_thermal: Add iMX8QM sensors
+
+Yangtao Li (1):
+       thermal/drivers/sun8i: Convert to use macro
+
+ye xingchen (9):
+       thermal/drivers/brcmstb_thermal: Use 
+devm_platform_get_and_ioremap_resource()
+       thermal/drivers/bcm2835: Use devm_platform_get_and_ioremap_resource()
+       thermal/drivers/dove: Use devm_platform_get_and_ioremap_resource()
+       thermal/drivers/armada: Use devm_platform_get_and_ioremap_resource()
+       thermal/drivers/mtk_thermal: Use 
+devm_platform_get_and_ioremap_resource()
+       thermal/drivers/rockchip: Use 
+devm_platform_get_and_ioremap_resource()
+       thermal/drivers/thermal_mmio: Use 
+devm_platform_get_and_ioremap_resource()
+       thermal/drivers/kirkwood: Use 
+devm_platform_get_and_ioremap_resource()
+       thermal/drivers/spear: Use devm_platform_get_and_ioremap_resource()
+
+  .../bindings/thermal/qcom-spmi-adc-tm5.yaml        |   1 +
+  .../devicetree/bindings/thermal/qcom-tsens.yaml    | 153 ++++-
+  drivers/thermal/armada_thermal.c                   |  42 +-
+  drivers/thermal/broadcom/bcm2835_thermal.c         |   4 +-
+  drivers/thermal/broadcom/brcmstb_thermal.c         |   4 +-
+  drivers/thermal/dove_thermal.c                     |   7 +-
+  drivers/thermal/imx_sc_thermal.c                   |   8 +-
+  drivers/thermal/kirkwood_thermal.c                 |   4 +-
+  drivers/thermal/mtk_thermal.c                      | 149 ++++-
+  drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   3 +-
+  drivers/thermal/qcom/tsens-v0_1.c                  | 655 
+++++++---------------
+  drivers/thermal/qcom/tsens-v1.c                    | 340 +++--------
+  drivers/thermal/qcom/tsens.c                       | 219 +++++--
+  drivers/thermal/qcom/tsens.h                       |  46 +-
+  drivers/thermal/rockchip_thermal.c                 |  10 +-
+  drivers/thermal/spear_thermal.c                    |   4 +-
+  drivers/thermal/sun8i_thermal.c                    |   4 +-
+  drivers/thermal/thermal_mmio.c                     |   4 +-
+  drivers/thermal/uniphier_thermal.c                 |   2 +-
+  19 files changed, 800 insertions(+), 859 deletions(-)
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
