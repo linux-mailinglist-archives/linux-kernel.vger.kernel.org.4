@@ -2,167 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2E467D10E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C588D67D112
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232627AbjAZQMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:12:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S232632AbjAZQMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:12:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbjAZQMJ (ORCPT
+        with ESMTP id S232626AbjAZQMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:12:09 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDBD5894E
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:11:50 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id vw16so6288292ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:11:50 -0800 (PST)
+        Thu, 26 Jan 2023 11:12:25 -0500
+Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:404::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494625E514
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:12:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZTuRDxbfWg39Wdf8MzHmSvof5BdyBoYVZ4tVj9C0vdE=;
-        b=k4zXl9wSOzT/hXYVF/RWS+MlEEKZ9rSwfiqCrVzT+5K427yb+3ngGAKiKmE3HZLGLp
-         FIXsamU9iKhdxwfe5chNrwjiKnxYxZP7dzTdjDYdlOJ3pZBjYV4GUlIUUDfqzb1KOJY2
-         RS50VQikH+FNvBbsKC0/bO5gOrhdpl26RbPfotICnImztHHhDzK1vryqLRcKSbaNSbOu
-         otrkbjfn19peb5OMybSS0HrRC4ua3z9ZEXtj6FfyNSBwYtO9nblgJBq0F3fimk0CiIWP
-         qlAhImj/EASE9ScORVLWT4MCwiJ7N5dY/qbUTEWVsOIvz3RvGbqyGYGX1lbt41Atlv2v
-         7Ebg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZTuRDxbfWg39Wdf8MzHmSvof5BdyBoYVZ4tVj9C0vdE=;
-        b=OSChvJDH0eMSbR1fV/saGaoAhBFDbF5K/UKJh88gzLbSDaFaX5YA2//mNDbQcLxFiM
-         oRXX4Jey78YIHIXkQKwXDPaylXFAVEZBPFVAU7Lo/wZGU5SqsilpX0iqN2GJb15GGLUE
-         4iPyKULTf2QAVnMP5U9wbCS8NhrpDE+8hWXJNjRhEL015/DeixCAdeqiExgONv4YRi9t
-         bNy+CTC+Qa1n28fhWCvl+lrKdtw63Wv9bwoObtMPEVqccr2TG33m/APf6jvCsK59KqRN
-         jHAGJ055A4uCtJ1bSA4s0xAF7ZKoSU3QAH96vqeA7xP0NBXtA1PVYtzvaOQFDuxMO3ov
-         G86g==
-X-Gm-Message-State: AFqh2kq+GtYK6wOCb8IBE64NA+Oalv0cfxMkrb/5dZnp+YzXrTpnSzBo
-        VtDFrxM0sDh493ZOtPh8/bggqw==
-X-Google-Smtp-Source: AMrXdXsyyaq9WL28lgCMw2oKhC8d+T2NBMFe+cOw0CLF/8Noh23mi3z88nsbaVwyj37sqzNjaTmCvA==
-X-Received: by 2002:a17:907:c712:b0:7ba:5085:869 with SMTP id ty18-20020a170907c71200b007ba50850869mr41788111ejc.9.1674749508793;
-        Thu, 26 Jan 2023 08:11:48 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id z12-20020a17090655cc00b0084c6581c16fsm793123ejp.64.2023.01.26.08.11.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 08:11:48 -0800 (PST)
-Date:   Thu, 26 Jan 2023 17:11:47 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] RISC-V: KVM: Drop the _MASK suffix from hgatp.VMID
- mask defines
-Message-ID: <20230126161147.6rewhfvlouqn4ual@orel>
-References: <20230112140304.1830648-1-apatel@ventanamicro.com>
- <20230112140304.1830648-4-apatel@ventanamicro.com>
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=YwsGbP8UqP9PCAPALAZHuxiR6vSJEQg7mBCwK/505D4=;
+        b=Qus+ZU4RfOcNTS5rGnxfoQBcYpzPyF+aRz3PIQVZfjvTUjFpmtXeWmvp4rw3S7WD4kIU1isAjNCvI
+         qUFaf54lfngcQlsAyzn24QB3jg6dJQZkwRy6ly958KbRgFoeCt50M1sQ+1V2A0na3zKwfSSZ+BYCfi
+         svYtBApqryHA65/AytjF3mjQIlcOArwXu3tumrruNQocjmqLszEyWasAT29despRAzu0aObcNzXFBK
+         v0ytzr0e6G8s8tDhyint0ydbcValxEsn4ABDRtgPQ0br5+OrWW6rVQPIsnBDgzQ8nRQ8WiuKVDc8U0
+         nHkv92BxdqWcfXVuUnCtBBmCycCDUXg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=YwsGbP8UqP9PCAPALAZHuxiR6vSJEQg7mBCwK/505D4=;
+        b=52qvCSVoaxzKZeZmgUDnZYFeQCCVuo6KfDcOqqSiktTnnPsDDyAxqd+8jTSlziHCfI76MLtMpL0Iy
+         vITTQDACA==
+X-HalOne-ID: 27718327-9d94-11ed-b665-7703b0afff57
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay5 (Halon) with ESMTPSA
+        id 27718327-9d94-11ed-b665-7703b0afff57;
+        Thu, 26 Jan 2023 16:11:58 +0000 (UTC)
+Date:   Thu, 26 Jan 2023 17:11:56 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Helge Deller <deller@gmx.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Antonino Daplas <adaplas@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, Stephen Kitt <steve@sk2.org>
+Subject: Re: [PATCH 15/15] backlight: backlight: Drop the deprecated fb_blank
+ property
+Message-ID: <Y9KmTFl5YbypgMZy@ravnborg.org>
+References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
+ <20230107-sam-video-backlight-drop-fb_blank-v1-15-1bd9bafb351f@ravnborg.org>
+ <Y9KNziZJxMjCffbs@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230112140304.1830648-4-apatel@ventanamicro.com>
+In-Reply-To: <Y9KNziZJxMjCffbs@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 07:33:00PM +0530, Anup Patel wrote:
-> The hgatp.VMID mask defines are used before shifting when extracting
-> VMID value from hgatp CSR value so based on the convention followed
-> in the other parts of asm/csr.h, the hgatp.VMID mask defines should
-> not have a _MASK suffix.
+Hi Lee,
+On Thu, Jan 26, 2023 at 02:27:26PM +0000, Lee Jones wrote:
+> On Sat, 07 Jan 2023, Sam Ravnborg via B4 Submission Endpoint wrote:
 > 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/csr.h | 8 ++++----
->  arch/riscv/kvm/mmu.c         | 3 +--
->  arch/riscv/kvm/vmid.c        | 4 ++--
->  3 files changed, 7 insertions(+), 8 deletions(-)
+> > From: Sam Ravnborg <sam@ravnborg.org>
+> > 
+> > With all users gone remove the deprecated fb_blank member in
+> > backlight_properties.
+> > 
+> > Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> > Cc: Lee Jones <lee@kernel.org>
+> > Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> > Cc: Jingoo Han <jingoohan1@gmail.com>
+> > ---
+> >  drivers/video/backlight/backlight.c |  2 --
+> >  include/linux/backlight.h           | 22 ----------------------
+> >  2 files changed, 24 deletions(-)
 > 
-> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> index d608dac4b19f..36d580528f90 100644
-> --- a/arch/riscv/include/asm/csr.h
-> +++ b/arch/riscv/include/asm/csr.h
-> @@ -131,12 +131,12 @@
->  
->  #define HGATP32_MODE_SHIFT	31
->  #define HGATP32_VMID_SHIFT	22
-> -#define HGATP32_VMID_MASK	_AC(0x1FC00000, UL)
-> +#define HGATP32_VMID		_AC(0x1FC00000, UL)
->  #define HGATP32_PPN		_AC(0x003FFFFF, UL)
->  
->  #define HGATP64_MODE_SHIFT	60
->  #define HGATP64_VMID_SHIFT	44
-> -#define HGATP64_VMID_MASK	_AC(0x03FFF00000000000, UL)
-> +#define HGATP64_VMID		_AC(0x03FFF00000000000, UL)
->  #define HGATP64_PPN		_AC(0x00000FFFFFFFFFFF, UL)
->  
->  #define HGATP_PAGE_SHIFT	12
-> @@ -144,12 +144,12 @@
->  #ifdef CONFIG_64BIT
->  #define HGATP_PPN		HGATP64_PPN
->  #define HGATP_VMID_SHIFT	HGATP64_VMID_SHIFT
-> -#define HGATP_VMID_MASK		HGATP64_VMID_MASK
-> +#define HGATP_VMID		HGATP64_VMID
->  #define HGATP_MODE_SHIFT	HGATP64_MODE_SHIFT
->  #else
->  #define HGATP_PPN		HGATP32_PPN
->  #define HGATP_VMID_SHIFT	HGATP32_VMID_SHIFT
-> -#define HGATP_VMID_MASK		HGATP32_VMID_MASK
-> +#define HGATP_VMID		HGATP32_VMID
->  #define HGATP_MODE_SHIFT	HGATP32_MODE_SHIFT
->  #endif
->  
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 34b57e0be2ef..034746638fa6 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -748,8 +748,7 @@ void kvm_riscv_gstage_update_hgatp(struct kvm_vcpu *vcpu)
->  	unsigned long hgatp = gstage_mode;
->  	struct kvm_arch *k = &vcpu->kvm->arch;
->  
-> -	hgatp |= (READ_ONCE(k->vmid.vmid) << HGATP_VMID_SHIFT) &
-> -		 HGATP_VMID_MASK;
-> +	hgatp |= (READ_ONCE(k->vmid.vmid) << HGATP_VMID_SHIFT) & HGATP_VMID;
->  	hgatp |= (k->pgd_phys >> PAGE_SHIFT) & HGATP_PPN;
->  
->  	csr_write(CSR_HGATP, hgatp);
-> diff --git a/arch/riscv/kvm/vmid.c b/arch/riscv/kvm/vmid.c
-> index 6cd93995fb65..6f4d4979a759 100644
-> --- a/arch/riscv/kvm/vmid.c
-> +++ b/arch/riscv/kvm/vmid.c
-> @@ -26,9 +26,9 @@ void kvm_riscv_gstage_vmid_detect(void)
->  
->  	/* Figure-out number of VMID bits in HW */
->  	old = csr_read(CSR_HGATP);
-> -	csr_write(CSR_HGATP, old | HGATP_VMID_MASK);
-> +	csr_write(CSR_HGATP, old | HGATP_VMID);
->  	vmid_bits = csr_read(CSR_HGATP);
-> -	vmid_bits = (vmid_bits & HGATP_VMID_MASK) >> HGATP_VMID_SHIFT;
-> +	vmid_bits = (vmid_bits & HGATP_VMID) >> HGATP_VMID_SHIFT;
->  	vmid_bits = fls_long(vmid_bits);
->  	csr_write(CSR_HGATP, old);
->  
-> -- 
-> 2.34.1
->
+> Applied, thanks
 
-Could switch to GENMASK too at the same time :-)
+Some of the dependent patches in this series are not yet applied.
+I have them queued up for processing this weekend, but I missed the -rc6
+window for drm-misc so they will likely not hit upstream in the upcoming
+merge window.
+I can try to expedite it.
 
-Anyway,
+But if you have not yet pushed it, please revert this patch.
+Then I will resend only when the remaining patches are upstream.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
+	Sam
