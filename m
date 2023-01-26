@@ -2,117 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D22767CA84
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A97A067CA79
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236741AbjAZMFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 07:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
+        id S237182AbjAZMEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 07:04:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbjAZMFl (ORCPT
+        with ESMTP id S236821AbjAZME3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:05:41 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B991F9;
-        Thu, 26 Jan 2023 04:05:40 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QBMLw8000377;
-        Thu, 26 Jan 2023 12:05:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=bP4Y4aqXV8qGv8U7nj2DVFZz5xfIpgRi6zfbGgdWY/Q=;
- b=iE9TrHBMgYrbSGjrtARv2vEUgSYnSPOIa/uiku5NGQ8fXfwu0fLV0k4zDCJSod1s9BOe
- GEkXPJ4+FRj6h0SLluHh0DJ5qiKDbGBZkmSdStkP6BgE+UxNb2ycuK5L344EHWoCS+Hq
- RcUlv5xwX349PlHHBGmHLan6xnBeDpj+x1jyzK0k8urVUfG5x/ZEK6fKYu9tQf6AD14r
- DX+3513XcQ/tdttbDPMsuFugBg5eA+vJNh4wneKAnMiFAnJLifsQ7xWobUO2ZsWgInZG
- byb9T3PiTTBnVzQ9sr5VxZ3HYLxlwl60MIYmYOlvCmOy4OWE7kU1B2YwXULquWF4h46e gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbrka0wf2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 12:05:35 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QBW1he004572;
-        Thu, 26 Jan 2023 12:04:53 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbrka0uuj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 12:04:53 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QBMXAa010330;
-        Thu, 26 Jan 2023 12:03:39 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6pbf9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 12:03:39 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QC3ZEB49938750
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 12:03:35 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7C68820040;
-        Thu, 26 Jan 2023 12:03:35 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3F91420043;
-        Thu, 26 Jan 2023 12:03:35 +0000 (GMT)
-Received: from [9.152.224.253] (unknown [9.152.224.253])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 26 Jan 2023 12:03:35 +0000 (GMT)
-Message-ID: <e007461e-53b5-bde5-0c69-6d50f62ffe0b@linux.ibm.com>
-Date:   Thu, 26 Jan 2023 13:03:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v6 03/14] KVM: s390: selftest: memop: Move testlist into
- main
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Thu, 26 Jan 2023 07:04:29 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D23E8688;
+        Thu, 26 Jan 2023 04:04:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VOYYOFluZ3iiE3C4UV5w2zwSbmkrX31OvmObcOHb8QY=; b=a4Dxr3QUr9TtmHfliGOtcckkzx
+        BrP5GWkLqc27yiUm4kwh19HaOVWBXahjBqw/wPDcEhVzPchelLHiGctMWCq8KVERaxBV+MzPRs7YD
+        s7xFIhhUHFTBcr0IBv19oaJvydg7OHzPC9cZD3k9h8yXi9iumBnFnHKj7fbxel0aGk6MTYEI8n7rz
+        VJWfPck6gySngS1vUKbLJbhJsn7dmxZonWOTlYAnzhCXODc79DpGm0cv4Ct/FtpQKWmz2xi7E/5Y5
+        mgtej+AQW8D2kRVq+Ru0p5qzcwJ9vdCP54+cxPk9OJYRNIX6YKokDu1hmNfkpTOHL5hQ4w8qDBU6c
+        ml/cqMcw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pL0yo-006hzg-Em; Thu, 26 Jan 2023 12:03:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CDDFC3002BF;
+        Thu, 26 Jan 2023 13:03:44 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 96DF92082E0E1; Thu, 26 Jan 2023 13:03:44 +0100 (CET)
+Date:   Thu, 26 Jan 2023 13:03:44 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Dejin Zheng <zhengdejin5@gmail.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
         Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>
-References: <20230125212608.1860251-1-scgl@linux.ibm.com>
- <20230125212608.1860251-4-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20230125212608.1860251-4-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9dJut2T1WyZ-XF1_j7kPwetwEuZ-dJ6j
-X-Proofpoint-GUID: UzYy-z_wQCQ-vu19EBr8CqfUaoOHmBSX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_04,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 spamscore=0 clxscore=1015
- suspectscore=0 malwarescore=0 lowpriorityscore=0 mlxscore=0
- mlxlogscore=925 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260116
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH resend] iopoll: Call cpu_relax() in busy loops
+Message-ID: <Y9JsIJat3sZU2rl1@hirez.programming.kicks-ass.net>
+References: <8d492ee4a391bd089a01c218b0b4e05cf8ea593c.1674729407.git.geert+renesas@glider.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8d492ee4a391bd089a01c218b0b4e05cf8ea593c.1674729407.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/23 22:25, Janis Schoetterl-Glausch wrote:
-> This allows checking if the necessary requirements for a test case are
-> met via an arbitrary expression. In particular, it is easy to check if
-> certain bits are set in the memop extension capability.
+On Thu, Jan 26, 2023 at 11:45:37AM +0100, Geert Uytterhoeven wrote:
+> It is considered good practice to call cpu_relax() in busy loops, see
+> Documentation/process/volatile-considered-harmful.rst.  This can not
+> only lower CPU power consumption or yield to a hyperthreaded twin
+> processor, but also allows an architecture to mitigate hardware issues
+> (e.g. ARM Erratum 754327 for Cortex-A9 prior to r2p0) in the
+> architecture-specific cpu_relax() implementation.
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> Reviewed-by: Thomas Huth <thuth@redhat.com>
+> As the iopoll helpers lack calls to cpu_relax(), people are sometimes
+> reluctant to use them, and may fall back to open-coded polling loops
+> (including cpu_relax() calls) instead.
+> 
+> Fix this by adding calls to cpu_relax() to the iopoll helpers:
+>   - For the non-atomic case, it is sufficient to call cpu_relax() in
+>     case of a zero sleep-between-reads value, as a call to
+>     usleep_range() is a safe barrier otherwise.
+>   - For the atomic case, cpu_relax() must be called regardless of the
+>     sleep-between-reads value, as there is no guarantee all
+>     architecture-specific implementations of udelay() handle this.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+In addition to these dodgy architecture fails, cpu_relax() is also a
+compiler barrier, it is not immediately obvious that the @op argument
+'function' will result in an actual function call (inlining ftw).
 
+Where a function call is a C sequence point, this is lost on inlining.
+Therefore, with agressive enough optimization it might be possible for
+the compiler to hoist the:
+
+	(val) = op(args);
+
+'load' out of the loop because it doesn't see the value changing. The
+addition of cpu_relax() will inhibit this.
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+> ---
+> Resent with a larger audience due to lack of comments.
+> 
+> This has been discussed before, but I am not aware of any patches moving
+> forward:
+>   - "Re: [PATCH 6/7] clk: renesas: rcar-gen3: Add custom clock for PLLs"
+>     https://lore.kernel.org/all/CAMuHMdWUEhs=nwP+a0vO2jOzkq-7FEOqcJ+SsxAGNXX1PQ2KMA@mail.gmail.com/
+>   - "Re: [PATCH v2] clk: samsung: Prevent potential endless loop in the PLL set_rate ops"
+>     https://lore.kernel.org/all/20200811164628.GA7958@kozik-lap
+> ---
+>  include/linux/iopoll.h | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/include/linux/iopoll.h b/include/linux/iopoll.h
+> index 2c8860e406bd8cae..73132721d1891a2e 100644
+> --- a/include/linux/iopoll.h
+> +++ b/include/linux/iopoll.h
+> @@ -53,6 +53,8 @@
+>  		} \
+>  		if (__sleep_us) \
+>  			usleep_range((__sleep_us >> 2) + 1, __sleep_us); \
+> +		else \
+> +			cpu_relax(); \
+
+There's a simplicitly argument to be had for making it unconditional
+here too I suppose. usleep() is 'slow' anyway.
+
+>  	} \
+>  	(cond) ? 0 : -ETIMEDOUT; \
+>  })
+> @@ -95,6 +97,7 @@
+>  		} \
+>  		if (__delay_us) \
+>  			udelay(__delay_us); \
+> +		cpu_relax(); \
+>  	} \
+>  	(cond) ? 0 : -ETIMEDOUT; \
+>  })
+> -- 
+> 2.34.1
+> 
