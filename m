@@ -2,133 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 708CA67D7D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D6967D7D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbjAZVgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:36:22 -0500
+        id S233061AbjAZVga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:36:30 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233019AbjAZVgM (ORCPT
+        with ESMTP id S231627AbjAZVgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:36:12 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CFE15CA9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:36:10 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id me3so8737109ejb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:36:10 -0800 (PST)
+        Thu, 26 Jan 2023 16:36:21 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371FA74A7F;
+        Thu, 26 Jan 2023 13:36:14 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id be8so3076608plb.7;
+        Thu, 26 Jan 2023 13:36:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WUoBTYLOr108fyfxD4wyJMAOsefZoDsyGTAdmy/lBCE=;
-        b=b2fcFkM1YxdUWa/ELImacpa70REr0lAWiptZA+OMDpGJeO4fIcgrSzGWnK475HSo9b
-         BbAAwGKLhbQyycV2dC/mGs+6+WJ+GasIvz9snUSgLvKjC5iqARo3MBpOGbJtdiGKBbnH
-         FzTtgOf1O8hpYl91GZINbTkw1Xobkym9DMqmrFEeLHWKk3dx9KiCrUzMbHY+xJFqteR6
-         WHdTK3sdbnQ3R+jABiseBIHAiu/I0W7l/csoZnAme32DJigf6cLlv0PLxrJber6TfLgA
-         ne56+sWfx0jOBPCYhTyJBltyyih0wEfWaUFDxfnQnNBxgXpknCLzPyzQg3yTVHBkeku6
-         2e8Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=jUJI1fdtuav4Cmxfz+SpScnfmvuJBA2rMIfNnsJ9wTg=;
+        b=faNLmwoGlghGB/uwCA7ZXvD7dxUT4E53sDMJuugItaNjKqfGxziBpusCjGhdu5vo/V
+         k4FLy+OSddKvuhjIIMRzbtZ9CWH54g5HPQ4ezpK4XrBBRKzmkwru2PDOD1wgc0dLdtO+
+         QUUnkuJzYYcTZKhiY2826e+lKZbyamSK+lfD2/bMr9bjtq/lc6D29SItbrhTTt4iyDti
+         DLLeMq2SwYV8PkzVC0HLLPUGPqMh3u5a/8UdYWwQYCEwx8el9j06USj8ldFStl7Ynz9z
+         448mm16GWdlZRGueL2umT5EpQg8qfPyibzy/gSTLUs9AywF2Pyak9M641k1WWloxS7hq
+         YuyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WUoBTYLOr108fyfxD4wyJMAOsefZoDsyGTAdmy/lBCE=;
-        b=zZRYVsaRX1EqDzWL7CX2DwGysJWsZRLUNafkNZhp/X8yPpOCU7CqFyg7TCUSiGzsq1
-         WG03YIqdXUwazeMim/3ky7Sd41owOH33SffGkzwhiIPBVD6gnVutrLD7MQDp6mcZZCx6
-         WkKv54TQoUHIGiQjz/tYVXAm5up6qBd35ZpfDs3KsKDCofoZh106fmpQB0jXHARS5lR1
-         uJYsRkjfNAlFrTpe/khP48yb6eccj32+S/iCbgfiaf/vOB4c6WLXOgY7bNCXVO55zoZT
-         yRG8AEBNOv08nVyemh8fwi8Iay3/rG+nX3XKSEW7fuLfPRsDLiWmQAlCLRpn7lqD6ArG
-         KzzA==
-X-Gm-Message-State: AFqh2krn1yDtqyBTzX29roZJXsARxmuHDm2YI3+wGKbSxqKrnWU63VO7
-        r4pVQYndIESZrN5ebpWK+wQyOAQ0RiPSVe86mC4=
-X-Google-Smtp-Source: AMrXdXuEM+4fnv0ZhybLPelstCQ+jeWMOqiAT1+pZYf980zA1g3Ur+9wz6z7+YC4nh7CjrWRqxMcrw==
-X-Received: by 2002:a17:907:2106:b0:871:c2e4:2e94 with SMTP id qn6-20020a170907210600b00871c2e42e94mr37184416ejb.2.1674768969356;
-        Thu, 26 Jan 2023 13:36:09 -0800 (PST)
-Received: from Lat-5310.. ([87.116.162.186])
-        by smtp.gmail.com with ESMTPSA id gy4-20020a170906f24400b0083ffb81f01esm1148486ejb.136.2023.01.26.13.36.08
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jUJI1fdtuav4Cmxfz+SpScnfmvuJBA2rMIfNnsJ9wTg=;
+        b=YFvB5ddl/9AqIZXTg+ilsMWN9CHrmS2GQJGh4RDdIvvy+F4/o0K88+3IgEaSEjZbrT
+         x/Esdd7mb9e4pOhundnaLQ5UsNJ507Bw9qAHjdcrXhWIzkNPBWkriDrB1z4m7wDubS8G
+         x84wfXpyg1HhfCOskwIFNRQQY0Wef2Hu4FKvFT0eoJDkGbY2ir6NDcM1MBkARRojqIPO
+         gbeWBQC4RsIwloJYuIJQ/C45q7FjKKRQpfnsWz1phlxvoyNSW9tueQdezjm9JpmG/1Ul
+         MqftAaBi9BZ241JtDsa5LW8XF1RFPRIX7pWxUrCROMJ/kJEJTke7CedkBuqFqwHc4eyW
+         g7Nw==
+X-Gm-Message-State: AO0yUKUgB1ncVvCTUOKoS1RXgrIHZMLBAAtbXueVmUjapaniebBDc2Kl
+        CxJi7hOZ8As0XiUB5qSdyFA=
+X-Google-Smtp-Source: AK7set+KmAOan9mCekLClAkc8E/YBsQCkMbAbS9uvdM1BPM9sV9Fsvhwo5HGUWUiue2IDQVEE5Rtmg==
+X-Received: by 2002:a17:902:d4c3:b0:196:349f:4df3 with SMTP id o3-20020a170902d4c300b00196349f4df3mr7211943plg.50.1674768973506;
+        Thu, 26 Jan 2023 13:36:13 -0800 (PST)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:1f5d:eee8:d409:8a17])
+        by smtp.gmail.com with ESMTPSA id b13-20020a170902d50d00b00172fad607b3sm1408075plg.207.2023.01.26.13.36.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 13:36:09 -0800 (PST)
-From:   Andrey Konovalov <andrey.konovalov@linaro.org>
-To:     vkoul@kernel.org, bhupesh.sharma@linaro.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        andrew@lunn.ch, robh@kernel.org, alexandre.torgue@foss.st.com,
-        peppe.cavallaro@st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Andrey Konovalov <andrey.konovalov@linaro.org>
-Subject: [PATCH 1/1] net: stmmac: do not stop RX_CLK in Rx LPI state for qcs404 SoC
-Date:   Fri, 27 Jan 2023 00:35:39 +0300
-Message-Id: <20230126213539.166298-2-andrey.konovalov@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230126213539.166298-1-andrey.konovalov@linaro.org>
-References: <20230126213539.166298-1-andrey.konovalov@linaro.org>
+        Thu, 26 Jan 2023 13:36:12 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: [PATCH v2] perf script: Add 'cgroup' field for output
+Date:   Thu, 26 Jan 2023 13:36:10 -0800
+Message-Id: <20230126213610.3381147-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently in phy_init_eee() the driver unconditionally configures the PHY
-to stop RX_CLK after entering Rx LPI state. This causes an LPI interrupt
-storm on my qcs404-base board.
+There's no field for the cgroup, let's add one.  To do that, users need to
+specify --all-cgroup option for perf record to capture the cgroup info.
 
-Change the PHY initialization so that for "qcom,qcs404-ethqos" compatible
-device RX_CLK continues to run even in Rx LPI state.
+  $ perf record --all-cgroups -- true
 
-Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+  $ perf script -F comm,pid,cgroup
+            true 337112  /user.slice/user-657345.slice/user@657345.service/...
+            true 337112  /user.slice/user-657345.slice/user@657345.service/...
+            true 337112  /user.slice/user-657345.slice/user@657345.service/...
+            true 337112  /user.slice/user-657345.slice/user@657345.service/...
+
+If it's recorded without the --all-cgroups, it'd complain.
+
+  $ perf script -F comm,pid,cgroup
+  Samples for 'cycles:u' event do not have CGROUP attribute set. Cannot print 'cgroup' field.
+  Hint: run 'perf record --all-cgroups ...'
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c | 2 ++
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c       | 3 ++-
- include/linux/stmmac.h                                  | 1 +
- 3 files changed, 5 insertions(+), 1 deletion(-)
+ tools/perf/Documentation/perf-script.txt |  5 ++++-
+ tools/perf/builtin-script.c              | 22 +++++++++++++++++++++-
+ 2 files changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-index 835caa15d55f..732774645c1a 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-@@ -560,6 +560,8 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
- 	plat_dat->has_gmac4 = 1;
- 	plat_dat->pmt = 1;
- 	plat_dat->tso_en = of_property_read_bool(np, "snps,tso");
-+	if (of_device_is_compatible(np, "qcom,qcs404-ethqos"))
-+		plat_dat->rx_clk_runs_in_lpi = 1;
+diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
+index 8d77182fbf31..a2ebadc9d948 100644
+--- a/tools/perf/Documentation/perf-script.txt
++++ b/tools/perf/Documentation/perf-script.txt
+@@ -134,7 +134,7 @@ OPTIONS
+         srcline, period, iregs, uregs, brstack, brstacksym, flags, bpf-output,
+         brstackinsn, brstackinsnlen, brstackoff, callindent, insn, insnlen, synth,
+         phys_addr, metric, misc, srccode, ipc, data_page_size, code_page_size, ins_lat,
+-        machine_pid, vcpu.
++        machine_pid, vcpu, cgroup.
+         Field list can be prepended with the type, trace, sw or hw,
+         to indicate to which event type the field list applies.
+         e.g., -F sw:comm,tid,time,ip,sym  and -F trace:time,cpu,trace
+@@ -231,6 +231,9 @@ OPTIONS
+ 	perf inject to insert a perf.data file recorded inside a virtual machine into
+ 	a perf.data file recorded on the host at the same time.
  
- 	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
- 	if (ret)
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index b7e5af58ab75..1a5b8dab5e9b 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1080,7 +1080,8 @@ static void stmmac_mac_link_up(struct phylink_config *config,
++	The cgroup fields requires sample having the cgroup id which is saved
++	when "--all-cgroups" option is passed to 'perf record'.
++
+ 	Finally, a user may not set fields to none for all event types.
+ 	i.e., -F "" is not allowed.
  
- 	stmmac_mac_set(priv, priv->ioaddr, true);
- 	if (phy && priv->dma_cap.eee) {
--		priv->eee_active = phy_init_eee(phy, 1) >= 0;
-+		priv->eee_active =
-+			phy_init_eee(phy, !priv->plat->rx_clk_runs_in_lpi) >= 0;
- 		priv->eee_enabled = stmmac_eee_init(priv);
- 		priv->tx_lpi_enabled = priv->eee_enabled;
- 		stmmac_set_eee_pls(priv, priv->hw, true);
-diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
-index 83ca2e8eb6b5..a152678b82b7 100644
---- a/include/linux/stmmac.h
-+++ b/include/linux/stmmac.h
-@@ -252,6 +252,7 @@ struct plat_stmmacenet_data {
- 	int rss_en;
- 	int mac_port_sel_speed;
- 	bool en_tx_lpi_clockgating;
-+	bool rx_clk_runs_in_lpi;
- 	int has_xgmac;
- 	bool vlan_fail_q_en;
- 	u8 vlan_fail_q;
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index 69394ac0a20d..731821fd0d3e 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -59,6 +59,7 @@
+ #include "util/dlfilter.h"
+ #include "util/record.h"
+ #include "util/util.h"
++#include "util/cgroup.h"
+ #include "perf.h"
+ 
+ #include <linux/ctype.h>
+@@ -130,6 +131,7 @@ enum perf_output_field {
+ 	PERF_OUTPUT_BRSTACKINSNLEN  = 1ULL << 36,
+ 	PERF_OUTPUT_MACHINE_PID     = 1ULL << 37,
+ 	PERF_OUTPUT_VCPU            = 1ULL << 38,
++	PERF_OUTPUT_CGROUP          = 1ULL << 39,
+ };
+ 
+ struct perf_script {
+@@ -200,6 +202,7 @@ struct output_option {
+ 	{.str = "brstackinsnlen", .field = PERF_OUTPUT_BRSTACKINSNLEN},
+ 	{.str = "machine_pid", .field = PERF_OUTPUT_MACHINE_PID},
+ 	{.str = "vcpu", .field = PERF_OUTPUT_VCPU},
++	{.str = "cgroup", .field = PERF_OUTPUT_CGROUP},
+ };
+ 
+ enum {
+@@ -542,6 +545,12 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
+ 	    evsel__check_stype(evsel, PERF_SAMPLE_WEIGHT_STRUCT, "WEIGHT_STRUCT", PERF_OUTPUT_INS_LAT))
+ 		return -EINVAL;
+ 
++	if (PRINT_FIELD(CGROUP) &&
++	    evsel__check_stype(evsel, PERF_SAMPLE_CGROUP, "CGROUP", PERF_OUTPUT_CGROUP)) {
++		pr_err("Hint: run 'perf record --all-cgroups ...'\n");
++		return -EINVAL;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -2220,6 +2229,17 @@ static void process_event(struct perf_script *script,
+ 	if (PRINT_FIELD(CODE_PAGE_SIZE))
+ 		fprintf(fp, " %s", get_page_size_name(sample->code_page_size, str));
+ 
++	if (PRINT_FIELD(CGROUP)) {
++		const char *cgrp_name;
++		struct cgroup *cgrp = cgroup__find(machine->env,
++						   sample->cgroup);
++		if (cgrp != NULL)
++			cgrp_name = cgrp->name;
++		else
++			cgrp_name = "unknown";
++		fprintf(fp, " %s", cgrp_name);
++	}
++
+ 	perf_sample__fprintf_ipc(sample, attr, fp);
+ 
+ 	fprintf(fp, "\n");
+@@ -3856,7 +3876,7 @@ int cmd_script(int argc, const char **argv)
+ 		     "brstacksym,flags,data_src,weight,bpf-output,brstackinsn,"
+ 		     "brstackinsnlen,brstackoff,callindent,insn,insnlen,synth,"
+ 		     "phys_addr,metric,misc,srccode,ipc,tod,data_page_size,"
+-		     "code_page_size,ins_lat",
++		     "code_page_size,ins_lat,machine_pid,vcpu,cgroup",
+ 		     parse_output_fields),
+ 	OPT_BOOLEAN('a', "all-cpus", &system_wide,
+ 		    "system-wide collection from all CPUs"),
 -- 
-2.34.1
+2.39.1.456.gfc5497dd1b-goog
 
