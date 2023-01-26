@@ -2,127 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0325467D804
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D1E67D7EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbjAZVzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
+        id S233043AbjAZVvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:51:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbjAZVyp (ORCPT
+        with ESMTP id S232817AbjAZVvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:54:45 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F5A21A14
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:54:43 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 30QJ9NFV028224
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:54:42 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=3bZHL2Z78cKAF6RylfMcYGJJt43dfPQsNy0PbvPE3is=;
- b=lVrUtV7eIfA+pTjKwQ4ayJK+j8lGNrnWZANTogfISnYDcFY9OF80Vn5S04uuKHS/jvMb
- EeIGIEZdjrEWbgNpuS8LBQAaHrWV0XYxLUVb/6Ed1igPwjGL2oDsIWOAwyfA9vMPoAg/
- FSab2TSFYmid8os9V6E+9I8CkMTsyXS9OMoypXZdyoOYM+Eh4FSii6xiMosOSPIu8Ugm
- Fe4yICWSigw/3zCpzzISOciiyvIN1f0JvD8MxwEtigJPCeUM4eEqHqzxGcg0HvCEt4Qy
- y3+QrA+qmX6r+kanWgp4UYVU9/3jM5IO4hErIm4/A4RrjzXCeXZNVhz5SakVnWoRMigx Sw== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3nbe8yye5c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:54:42 -0800
-Received: from twshared1408.04.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 26 Jan 2023 13:54:41 -0800
-Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-        id 72918FE80AA6; Thu, 26 Jan 2023 13:51:26 -0800 (PST)
-From:   Keith Busch <kbusch@meta.com>
-To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <willy@infradead.org>, <hch@lst.de>, <tonyb@cybernetics.com>,
-        <akpm@linux-foundation.org>
-CC:     <kernel-team@meta.com>, Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv4 12/12] dmapool: create/destroy cleanup
-Date:   Thu, 26 Jan 2023 13:51:25 -0800
-Message-ID: <20230126215125.4069751-13-kbusch@meta.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230126215125.4069751-1-kbusch@meta.com>
-References: <20230126215125.4069751-1-kbusch@meta.com>
+        Thu, 26 Jan 2023 16:51:40 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0DC5AB6B
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:51:38 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id m2so8378666ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:51:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MqXh2+E8iJs7wo/kixnLmyAo4vCoE9jx2NshAMdQdhk=;
+        b=bKaK/ctjLrTftCgy6iuhFHsvkcxrlzWwRUDo+YNkZlibgyNBd2PKwG6zJkf3v1F6Ee
+         KbqJ/numtWHVrfY38qrB76My9TGXMDGXD5OrC1Yi5JreUJSsCyV+9vjM1bF/ylYRLdGO
+         sm0psMEJl+tp5dp6TM9jdaTvVeyAS5+U2ZxI3qIkJflUNAkittA7cRR0u7VfvsNMn8ct
+         Vk6HBlOQC7jJTSY7LTvt/nt+ZJXIzuHUY5rdEBN3VswOrrzS7zfjnRwfAYUGV1keT3It
+         kb5BDwZgphSlRvIVFzF5EmIU2vZoVIwHvG/e/ZimszkAkVBTLQU/va0sFO1UehBIy8Ol
+         gy8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MqXh2+E8iJs7wo/kixnLmyAo4vCoE9jx2NshAMdQdhk=;
+        b=Po18jiV44Xk+6FCbTIvDbZkIEKgvpd7ltk3RIV3O33sEd8LOsRz3c5bqIzoO96+ttR
+         sjRfrfdYDMzVnXhD9qO1XB/5vTMlXI/fjqMwkTt6q5s1og3/g4O+q2o2LUIMS1AkY5wJ
+         qe7Yursdzu0MX+JdSMW6F2+3TBQA+UsvYaY63IHpdOf74pRvWrw+12E8YnBne9Jlt/mA
+         GASnU4G6GIofh7B7sEtibmVPH+oL4227/0CHSEighhX8Yc9Ic8U/1txxAKImVX0JX5bt
+         95j/NEMpoa9+oIpMQGEiVYwMdXSNs2w48j9PcAS5VjfyjTcM8ZqiYBUZqIiZC+rTUTcp
+         WoLw==
+X-Gm-Message-State: AFqh2kqy8h8XtEFmEuULj6lK+daFLZNmH4CpmvFbbtxe9XXCI7mEJJKg
+        mqhzN/gV0/NknTDroqZR+SJFYw==
+X-Google-Smtp-Source: AMrXdXs+sAI5Gz3WB8RUn1xMA8MppwykyLLgQIlCxXNtxLmH0SYOO77LdlAY9aiwg7Khf80nqTd4gg==
+X-Received: by 2002:a17:907:75e7:b0:871:3919:cbea with SMTP id jz7-20020a17090775e700b008713919cbeamr38276063ejc.54.1674769897548;
+        Thu, 26 Jan 2023 13:51:37 -0800 (PST)
+Received: from [192.168.118.20] ([87.116.162.186])
+        by smtp.gmail.com with ESMTPSA id ck17-20020a170906c45100b0082000f8d871sm1135489ejb.152.2023.01.26.13.51.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 13:51:37 -0800 (PST)
+Message-ID: <2d0f82c8-231b-7ad2-0366-a1a25f71da8f@linaro.org>
+Date:   Fri, 27 Jan 2023 00:51:35 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: CmWiZxWWIwo4IzqQFJFLEKuRryx8QaqQ
-X-Proofpoint-GUID: CmWiZxWWIwo4IzqQFJFLEKuRryx8QaqQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_09,2023-01-26_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/2] net: stmmac: add DT parameter to keep RX_CLK running
+ in LPI state
+To:     Rob Herring <robh@kernel.org>, Andrew Lunn <andrew@lunn.ch>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
+        alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
+        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230123133747.18896-1-andrey.konovalov@linaro.org>
+ <Y88uleBK5zROcpgc@lunn.ch> <f8b6aca2-c0d2-3aaf-4231-f7a9b13d864d@linaro.org>
+ <Y8/mrhWDa6DuauZY@lunn.ch> <20230125191453.GA2704119-robh@kernel.org>
+Content-Language: en-US
+From:   Andrey Konovalov <andrey.konovalov@linaro.org>
+In-Reply-To: <20230125191453.GA2704119-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keith Busch <kbusch@kernel.org>
+On 25.01.2023 22:14, Rob Herring wrote:
+> On Tue, Jan 24, 2023 at 03:09:50PM +0100, Andrew Lunn wrote:
+>>>> Could
+>>>> dwmac-qcom-ethqos.c just do this unconditionally?
+>>>
+>>> Never stopping RX_CLK in Rx LPI state would always work, but the power
+>>> consumption would somewhat increase (in Rx LPI state). Some people do care
+>>> about it.
+>>>
+>>>> Is the interrupt
+>>>> controller part of the licensed IP, or is it from QCOM? If it is part
+>>>> of the licensed IP, it is probably broken for other devices as well,
+>>>> so maybe it should be a quirk for all devices of a particular version
+>>>> of the IP?
+>>>
+>>> Most probably this is the part of the ethernet MAC IP. And this is quite
+>>> possible that the issue is specific for particular versions of the IP.
+>>> Unfortunately I don't have the documentation related to this particular
+>>> issue.
+>>
+>> Please could you ask around.
 
-Set the 'empty' bool directly from the result of the function that
-determines its value instead of adding additional logic.
+I am on it, but it will take time.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
----
- mm/dmapool.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+>> Do you have contacts in Qualcomm?
+>> Contacts at Synopsys?
 
-diff --git a/mm/dmapool.c b/mm/dmapool.c
-index bb8893b4f4b96..1920890ff8d3d 100644
---- a/mm/dmapool.c
-+++ b/mm/dmapool.c
-@@ -226,7 +226,7 @@ struct dma_pool *dma_pool_create(const char *name, st=
-ruct device *dev,
- {
- 	struct dma_pool *retval;
- 	size_t allocation;
--	bool empty =3D false;
-+	bool empty;
-=20
- 	if (!dev)
- 		return NULL;
-@@ -276,8 +276,7 @@ struct dma_pool *dma_pool_create(const char *name, st=
-ruct device *dev,
- 	 */
- 	mutex_lock(&pools_reg_lock);
- 	mutex_lock(&pools_lock);
--	if (list_empty(&dev->dma_pools))
--		empty =3D true;
-+	empty =3D list_empty(&dev->dma_pools);
- 	list_add(&retval->pools, &dev->dma_pools);
- 	mutex_unlock(&pools_lock);
- 	if (empty) {
-@@ -350,7 +349,7 @@ static struct dma_page *pool_alloc_page(struct dma_po=
-ol *pool, gfp_t mem_flags)
- void dma_pool_destroy(struct dma_pool *pool)
- {
- 	struct dma_page *page, *tmp;
--	bool empty =3D false, busy =3D false;
-+	bool empty, busy =3D false;
-=20
- 	if (unlikely(!pool))
- 		return;
-@@ -358,8 +357,7 @@ void dma_pool_destroy(struct dma_pool *pool)
- 	mutex_lock(&pools_reg_lock);
- 	mutex_lock(&pools_lock);
- 	list_del(&pool->pools);
--	if (list_empty(&pool->dev->dma_pools))
--		empty =3D true;
-+	empty =3D list_empty(&pool->dev->dma_pools);
- 	mutex_unlock(&pools_lock);
- 	if (empty)
- 		device_remove_file(pool->dev, &dev_attr_pools);
---=20
-2.30.2
+In Qualcomm only I am afraid.
 
+>> Ideally it would be nice to fix it for everybody, not just one SoC.
+> 
+> Yes, but to fix for just 1 SoC use the SoC specific compatible to imply
+> the need for this. Then only a kernel update is needed to fix, not a
+> kernel and dtb update.
+
+That's good point! Thanks!
+
+I've just posted such 1 SoC only version:
+https://lore.kernel.org/lkml/20230126213539.166298-1-andrey.konovalov@linaro.org/T/#t
+In case this is a more proper way to go.
+
+> Rob
+
+Thanks,
+Andrey
