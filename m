@@ -2,111 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329AD67C6A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA1D67C6AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236686AbjAZJLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 04:11:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
+        id S236697AbjAZJN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 04:13:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjAZJLV (ORCPT
+        with ESMTP id S230282AbjAZJN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 04:11:21 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607763E60B
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:11:19 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id k4so1286315vsc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:11:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8SNsEiTCGlF2kxvhKH3RS9fyCJmlnEC5RQ9QnmfE1VQ=;
-        b=RmdA+GKDIbOYkibt2Hs4G/Ajp6ngHqBedoH0v8wYpYr62SYcuuUjvA1Af4C/sSWOFW
-         +eLQIS9ahzM9XXkbLXbZFO0Slwmhmr8Bccdvrq8b5ruN5kOUTnAPDK/w2GsXGVLICGFX
-         l5Qutisu7Y1gjSH8l8zb3pdAchm8arCRQ1wG0gUyOFHYnzeno3EBkbsjip3EsHVb5UeX
-         SH+k2cboFgvYIvg7+LQ/jeSyNmbK6vpUv+gzWMP5cQfZPXLvcqcN0x5405dB1u5iQqkN
-         WQHISYPBySBW2eMmHz3ZZ5RBmTNQVVr5oWP1Jvt5JwMkNzc2QQGYyAnIWxY1RCYCercO
-         EuUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8SNsEiTCGlF2kxvhKH3RS9fyCJmlnEC5RQ9QnmfE1VQ=;
-        b=5ZD4K2wms8S2OMvmb5E0c2zbbhzlIW8+JspgvVPPaE2/jJgzNldA5doxNyZjd403sj
-         FSjnsiexV91n6kzqpNNq/jNxFQojuaiu4mIh2Y5i11y/PE1luT7QenpQsImK3JnZDI8y
-         ArBFwcitwZLNokjzu+X0k7VZ00ZlC7f3uFWzjArg8+WyVBTw6osJxsQV1KYCGmyH9YiV
-         MwV1ImUUgzQh7SnYAb+ZYtsW3xtxHnqOAB9WxB4Xkmo3MrJGo00yl0JtQQiVLrxPRgD2
-         cLxIiHvxwoGt36FK/ltMgk3BJCvBMi6h+2FcBj7bh/pWr89u46F/WjavUK2vx8Wb0jvP
-         RFBA==
-X-Gm-Message-State: AFqh2krTPaVL9nu2r20eHvq9rGnrImIxPC/RkFSfh04ZZHbUdul8bv1b
-        /wZY4C7b+OA/KZWQqeapTFuHe0QxAYNgbZ9KF88e3g==
-X-Google-Smtp-Source: AMrXdXtwW1E/r8kShMxieiJt2HZn9ZtIcNFEbyz4hLe6tsg1Wy08G9QeNw++duG4V/VAU3KXoaGXwvIkdWYo4NPyE8Y=
-X-Received: by 2002:a05:6102:3e08:b0:3c5:1ac1:bf38 with SMTP id
- j8-20020a0561023e0800b003c51ac1bf38mr5288497vsv.78.1674724278436; Thu, 26 Jan
- 2023 01:11:18 -0800 (PST)
+        Thu, 26 Jan 2023 04:13:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD285AB5B;
+        Thu, 26 Jan 2023 01:13:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9DAE61769;
+        Thu, 26 Jan 2023 09:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D8DC433EF;
+        Thu, 26 Jan 2023 09:13:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674724406;
+        bh=K75+4I/AEzlBnGR65u1uXoshesabW5aquBFF3e097hE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cgEFonWHQd0j+9vg/6yFSo1TQCFTWPOHgcDUrmOpeSJ1XJmbfX3pORkXx50Lhib3y
+         rnkx3Q6LeDa6Fq7FVBoKP/GAXsAIUoiCyHx7S753ilEzevsOyUYnah4oq0CU55S1kJ
+         QdwjoGMQQPIz8zAeZcWUF3vo3blc+Zx2i1erAMDY=
+Date:   Thu, 26 Jan 2023 10:13:23 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        David Howells <dhowells@redhat.com>,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH 4.14/4.19/5.4/5.10/5.15 1/1] fs: reiserfs: remove useless
+ new_opts in reiserfs_remount
+Message-ID: <Y9JEM9toMBcEfDak@kroah.com>
+References: <20230126085846.466209-1-pchelkin@ispras.ru>
+ <20230126085846.466209-2-pchelkin@ispras.ru>
 MIME-Version: 1.0
-References: <20230118134940.240102-1-brgl@bgdev.pl> <Y9DpbChLZfDONHPz@ninjato> <Y9GpL9RBNM8H2ZSL@shikoro>
-In-Reply-To: <Y9GpL9RBNM8H2ZSL@shikoro>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 26 Jan 2023 10:11:07 +0100
-Message-ID: <CAMRc=McHowkYJBckM1eikcrBUoXXZN+OkozA-dNXZc1Zgd+Kfw@mail.gmail.com>
-Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the kernel
-To:     Wolfram Sang <wsa@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URI_DOTEDU
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126085846.466209-2-pchelkin@ispras.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 11:12 PM Wolfram Sang <wsa@kernel.org> wrote:
->
->
-> > So, this code handled all my stress-testing well so far. I'll try to
-> > think of some more ideas until this evening, but likely I will apply it
-> > later. Nonetheless, more review eyes are still welcome!
->
-> Ah yes, I now recalled why I had the gut feeling that this solution is
-> not complete. See this mail thread from 2015:
->
-> https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
->
-> There are still drivers using i2c_del_adapter()+kfree(), so removing the
-> completion could cause use-after-free there, or?
->
+On Thu, Jan 26, 2023 at 11:58:46AM +0300, Fedor Pchelkin wrote:
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
+> 
+> commit 81dedaf10c20959bdf5624f9783f408df26ba7a4 upstream.
+> 
+> Since the commit c3d98ea08291 ("VFS: Don't use save/replace_mount_options
+> if not using generic_show_options") eliminates replace_mount_options
+> in reiserfs_remount, but does not handle the allocated new_opts,
+> it will cause memory leak in the reiserfs_remount.
+> 
+> Because new_opts is useless in reiserfs_mount, so we fix this bug by
+> removing the useless new_opts in reiserfs_remount.
+> 
+> Fixes: c3d98ea08291 ("VFS: Don't use save/replace_mount_options if not using generic_show_options")
+> Link: https://lore.kernel.org/r/20211027143445.4156459-1-mudongliangabcd@gmail.com
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> Signed-off-by: Jan Kara <jack@suse.cz>
+> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> ---
+>  fs/reiserfs/super.c | 6 ------
+>  1 file changed, 6 deletions(-)
 
-Ugh, what a mess... I was mostly focused on the character device side
-of it but now I realized the true extent of the problem.
+Now queued up, thanks.
 
-It's not like there are just *some* odd drivers that delete the
-adapter struct at .remove() - it's literally all of them one way or
-another.
-
-It's all because the adapter struct really should be allocated by
-i2c_add_adapter() and bus drivers should only really provide some
-structure containing the adapter description for the subsystem the
-lifetime of which would not affect the adapter itself. This way the
-adapter (embedding struct device) would be freed by device type's
-.release() like we do over in the GPIO subsystem. Instead the adapter
-struct is allocated by drivers at .probe() meaning it will get dropped
-at .remove().
-
-I wonder how many more subsystems do that. No wonder people blame
-devres for these user-space device node crashes...
-
-I don't have a good solution. I've been thinking about it for an hour
-and every solution requires sweeping changes across the entire
-subsystem. Or else we'd introduce a parallel solution that would do
-the right thing and wait in perpetuity until all drivers convert -
-like with i2e probe_new() which is after all much simpler.
-
-Anyway, that's all I've got. We probably need to drop this change and
-live with what we have now.
-
-Bart
+greg k-h
