@@ -2,103 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6864467D04F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CDE67D042
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjAZPe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
+        id S232315AbjAZPcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:32:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjAZPeZ (ORCPT
+        with ESMTP id S232263AbjAZPcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:34:25 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954836813A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:34:09 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id DC9263200A3D;
-        Thu, 26 Jan 2023 10:34:08 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 10:34:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1674747248; x=
-        1674833648; bh=Cd7F3OFY9x8v3nIqGqdzEAHen309dXIbhVea8fHwSGQ=; b=D
-        SSBTS0jgEBA83WJxUAEfm7R2lyTZvXkSzmkCQXaMspT2oD8nDwdeYYvXqIj9vPgJ
-        P+yMa6xoxpnCg0zSABip9tIaPmWlYHi0v1PySDcOqSGYPtARIDkzeJP4OY+7qRcY
-        d22Ul4UH0Z3QPzPCkrLAovwCYX0GHbGzQYCO28PSZ4d4oCYCvG8pClTzDejyX0FK
-        Ll9qtwHzIwg26WzoPskzeMrMi/d9BQqL/csO4u0mZjjCFsjP1/hHhNqc5xkotsx2
-        fRsXv+wReHStWBE8N6RAVHn/ijwYSrBUYpqEJWmskGK2SoFRY/jtwkSEUwUeqJqI
-        6QnO6xNs6p1f1HRmqvZ4g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674747248; x=
-        1674833648; bh=Cd7F3OFY9x8v3nIqGqdzEAHen309dXIbhVea8fHwSGQ=; b=r
-        lmla8kdpLQ4d87C8yuCg1z5dNF+Xpctc+IVb/XjKI2fEWAKjKPQBjnPqArL8odDf
-        CDPbWsiKcu7jBIEXUETPV4/gGgJfrSlj4n+KUQK3w1seFT+Gwr1UkxLKvKvzAJfy
-        MYXYpYOCekTQXZ12MRPch0FMa8klZafbM0a0JEZpakpQLNnaYvFsYGG8eXPj0pib
-        9N8PCm3LocqtgrDzr2YAalPvm+5KCV9cqlX339liYbDO2BcZpT8xoRsgZ9QRLjhU
-        xUDUyLg9/Y4aYfsaBdjSG7pkB4gkP6r7aXLxhGHG8dOY1IPdMlo++QREETF7tBwK
-        bGCwnOKh40+5Y7GTggiKg==
-X-ME-Sender: <xms:cJ3SY_lq7Fei4AYFUslqSJrY5YtpWhCezmwSlEY3m2bz2x-dBAIzsA>
-    <xme:cJ3SYy1eR6uKWoOhy7n0HzjdH-NoRi1AVQvuZjxuq52vVfnRUPevNdifI-MYXR5A6
-    2zt702tccqx0Q_eJEU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgjeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:cJ3SY1rf29qGvXzHpuSoiX3DjstkJXW_M3ap8y2nu4Xsf66NcvEa9Q>
-    <xmx:cJ3SY3lhJPK5rQXTtv_IOp0i_ZdLgolU5gVO1rcyDdW6_pv41WWRog>
-    <xmx:cJ3SY9363858UPRbMujXc_2OBMi1dcw7LjJfDwmACGAlOze4qaqYnQ>
-    <xmx:cJ3SY-_CDigfMt0qDnU3YhucjaJf_IUIeYAkT5Ck_Nc_OM3evbavUw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2B355B60086; Thu, 26 Jan 2023 10:34:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <6c6862bc-067a-4f09-9952-9fc7fd75281d@app.fastmail.com>
-In-Reply-To: <20230126152429.580539-1-u.kleine-koenig@pengutronix.de>
-References: <20230126152429.580539-1-u.kleine-koenig@pengutronix.de>
-Date:   Thu, 26 Jan 2023 16:31:41 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Lee Jones" <lee@kernel.org>
-Cc:     "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mfd: Remove .enable() and .disable() callbacks
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 26 Jan 2023 10:32:12 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BC613D48
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:32:11 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id h12so2138909wrv.10
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:32:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jz1yQJDh82hmVQElGHGWfr/ouKY/iJoAmFgYkVIjURw=;
+        b=CWVyglyvdNmFmSjrgGGDhJJYrYauQdQgibOI4/kl+7D0kO8kyPjUmNAkXIfPCdC7Vj
+         V80wClnbqrY2beIlkLJ1Vh9QH7V37IgvU0gt34DovVqXLzqm4T6tHoonZs99RCm84zFI
+         iJdqw2n16VUyp0dg4ssV6te4UhHXJ5ba4uFJWsAdmziiP5xQ1zhefta8prLOgdyXE8SV
+         B7IDYFUur1cKxGe942GwHb0s7sLwII/KYl30pKzd+mNGATpMktX8GNdsCmpFugYegLmt
+         asYOdz3+UCsQ4UioAbl3B8S37n3ErYOHlrK7a1QmY0HUEicJiFBWxVYOfoZoylh+ytre
+         CMAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jz1yQJDh82hmVQElGHGWfr/ouKY/iJoAmFgYkVIjURw=;
+        b=09zXiVWM2s5qP9tC35aCMFVGfsiqbXA5QuAYJ9AJJlxc2mBsCgmAzB72PZrWmsI2hH
+         rvEWlNGFMZMb8iAzPAwvkXr7fAM41ptTNJDhi6SiasDgBxqlDtvvSLTFCelornDQ9vx1
+         hB1uglSxI8xw1AFUAKYxVlmyp2DKJp+nAorfOiChZ9Z1z9xVG/Wtpm/xnYUO1rqY0tx6
+         U//6DpucjYlMLSN8ghYZxwyB8xBP9b0hg4aXX7behVusPZgkk3Yl9kbvORe+hTV7+w25
+         XzXYRYGcRvWey3bM9DXB3Lz78GCUnKsNaSVjj/KB5IDPNJBYqqMlj8QUz/L1u9Pj3s2E
+         n89w==
+X-Gm-Message-State: AFqh2kqSPB4Dyyyr5TUo+hEesBWPf83AhuDmyOv45QzopJGwUEXjALcf
+        CIRvCVL5HuCmTiprFuaxk6hWIQ==
+X-Google-Smtp-Source: AMrXdXvbHP4MU8LW1+p6+/QnuhuohmSQZLuwW60JkdlaAcbwU5Y7GEyF4W4xaywzdk2WMdog6QND6Q==
+X-Received: by 2002:a05:6000:1e18:b0:2bd:d782:c2c1 with SMTP id bj24-20020a0560001e1800b002bdd782c2c1mr35767974wrb.24.1674747129636;
+        Thu, 26 Jan 2023 07:32:09 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n15-20020a5d598f000000b002bdff778d87sm1865447wri.34.2023.01.26.07.32.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 07:32:09 -0800 (PST)
+Message-ID: <67279d92-7a46-8a55-34d1-03d10369d8f5@linaro.org>
+Date:   Thu, 26 Jan 2023 16:32:07 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2 2/6] dt-bindings: clock: mediatek,mt8186-fhctl: Support
+ MT6795, MT8173/92/95
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, sboyd@kernel.org
+Cc:     mturquette@baylibre.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        edward-jw.yang@mediatek.com, johnson.wang@mediatek.com,
+        wenst@chromium.org, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, rex-bc.chen@mediatek.com,
+        jose.exposito89@gmail.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230126085321.87267-1-angelogioacchino.delregno@collabora.com>
+ <20230126085321.87267-3-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230126085321.87267-3-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023, at 16:24, Uwe Kleine-K=C3=B6nig wrote:
-> With commit dd77f5fa97d3 ("mfd: Remove toshiba tmio drivers") the last
-> mfd driver that makes use of these callbacks is gone. The corresponding
-> functions mfd_cell_enable() and mfd_cell_disable() are also unused
-> (apart from the leds-asic3 driver that cannot be enabled any more after
-> the above mentioned remove and will/should be deleted, too).
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+On 26/01/2023 09:53, AngeloGioacchino Del Regno wrote:
+> MT6795, MT8173, MT8192 and MT8195 support Frequency Hopping: add the
+> compatibles for them.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
->  drivers/mfd/mfd-core.c   | 26 --------------------------
->  include/linux/mfd/core.h | 12 ------------
->  2 files changed, 38 deletions(-)
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
