@@ -2,67 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0BA67C387
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 04:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E968367C38D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 04:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235773AbjAZDdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 22:33:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S236219AbjAZDeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 22:34:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjAZDda (ORCPT
+        with ESMTP id S236127AbjAZDeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 22:33:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE00A457F2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 19:33:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45F7F61735
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:33:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82726C433EF;
-        Thu, 26 Jan 2023 03:33:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674704007;
-        bh=CzMVFshXJoCyFHd85N4aDYps2J8K7GRCWKRDTTHk2k8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gzQbSe/XmGgnXqnCQTR0t0omsW2ckdJBpR67gysPD2ph1h6nZl/rgrmjKKMxy1n4b
-         tSFi5ibIK1hfUVPu+rVLq+NWzWIjIsj6b/YjLAgr+9E+vbNfM0oNWe2sMBxPBeQeFi
-         KdGbL8O5HqnaNMBI3X/T98eE3o+xxosV/FQw3CPl944SKrzuVZ3MvitongerEMW5qs
-         I4tW6YjvFH/cELd6XrHqX7p82Se2iXOiMpCF4/03ynJNhFMR62LBpr+5OXLlD757V8
-         01v0y2EVI5nnthXwfdLi1cz5WIdxNttHuh7eR/J74pb9zPHoMU9ZT8hMx1yYIov2gM
-         cTxmi8f+IgvnA==
-Date:   Wed, 25 Jan 2023 19:33:25 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Michal Kubecek <mkubecek@suse.cz>
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] objtool: check that module init/exit function is an
- indirect call target
-Message-ID: <20230126033325.kuww43xyqykikuw4@treble>
-References: <20230118105215.B9DA960514@lion.mk-sys.cz>
+        Wed, 25 Jan 2023 22:34:08 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4452465EF0;
+        Wed, 25 Jan 2023 19:33:54 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pKt1M-0004EY-1k;
+        Thu, 26 Jan 2023 04:33:52 +0100
+Date:   Thu, 26 Jan 2023 03:33:46 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Miles Chen <miles.chen@mediatek.com>
+Subject: [PATCH v5 1/3] dt-bindings: clock: Add compatibles for MT7981
+Message-ID: <cc85ee470c781ff4013f6c21c92c0a21574b12b2.1674703830.git.daniel@makrotopia.org>
+References: <cover.1674703830.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230118105215.B9DA960514@lion.mk-sys.cz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1674703830.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 11:52:15AM +0100, Michal Kubecek wrote:
-> Some out-of-tree modules still do not use module_init() / module_exit()
-> macros and simply create functions with magic names init_module() and
-> cleanup_module() instead. As a result, these functions are not recognized
-> as indirect call targets by objtool and such module fails to load into an
-> IBT enabled kernel.
+Add compatible string for MT7981 to existing bindings at
+ - mediatek,apmixedsys.yaml
+ - mediatek,topckgen.yaml
+ - mediatek,ethsys.txt
+ - mediatek,infracfg.yaml
+ - mediatek,sgmiisys.txt
 
-I'm struggling to understand why a manually created init_module()
-wouldn't create the ENDBR.  Does it only happen when init_module() is
-declared static?
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ .../devicetree/bindings/arm/mediatek/mediatek,ethsys.txt        | 1 +
+ .../devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml     | 1 +
+ .../devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt      | 2 ++
+ .../devicetree/bindings/clock/mediatek,apmixedsys.yaml          | 1 +
+ Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml  | 1 +
+ 5 files changed, 6 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt
+index 0502db73686bf..eccd4b706a78d 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt
+@@ -10,6 +10,7 @@ Required Properties:
+ 	- "mediatek,mt7622-ethsys", "syscon"
+ 	- "mediatek,mt7623-ethsys", "mediatek,mt2701-ethsys", "syscon"
+ 	- "mediatek,mt7629-ethsys", "syscon"
++	- "mediatek,mt7981-ethsys", "syscon"
+ 	- "mediatek,mt7986-ethsys", "syscon"
+ - #clock-cells: Must be 1
+ - #reset-cells: Must be 1
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml
+index 1d7c837d93788..e997635e4fe4e 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml
+@@ -28,6 +28,7 @@ properties:
+               - mediatek,mt6797-infracfg
+               - mediatek,mt7622-infracfg
+               - mediatek,mt7629-infracfg
++              - mediatek,mt7981-infracfg
+               - mediatek,mt7986-infracfg
+               - mediatek,mt8135-infracfg
+               - mediatek,mt8167-infracfg
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+index 29ca7a10b3156..d2c24c2775141 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+@@ -8,6 +8,8 @@ Required Properties:
+ - compatible: Should be:
+ 	- "mediatek,mt7622-sgmiisys", "syscon"
+ 	- "mediatek,mt7629-sgmiisys", "syscon"
++	- "mediatek,mt7981-sgmiisys_0", "syscon"
++	- "mediatek,mt7981-sgmiisys_1", "syscon"
+ 	- "mediatek,mt7986-sgmiisys_0", "syscon"
+ 	- "mediatek,mt7986-sgmiisys_1", "syscon"
+ - #clock-cells: Must be 1
+diff --git a/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml b/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml
+index 731bfe0408c20..dae25dba4ba69 100644
+--- a/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml
++++ b/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml
+@@ -20,6 +20,7 @@ properties:
+       - enum:
+           - mediatek,mt6797-apmixedsys
+           - mediatek,mt7622-apmixedsys
++          - mediatek,mt7981-apmixedsys
+           - mediatek,mt7986-apmixedsys
+           - mediatek,mt8135-apmixedsys
+           - mediatek,mt8173-apmixedsys
+diff --git a/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml b/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml
+index 81531b5b0db79..0fdf564148334 100644
+--- a/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml
++++ b/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml
+@@ -35,6 +35,7 @@ properties:
+               - mediatek,mt6779-topckgen
+               - mediatek,mt6795-topckgen
+               - mediatek,mt7629-topckgen
++              - mediatek,mt7981-topckgen
+               - mediatek,mt7986-topckgen
+               - mediatek,mt8167-topckgen
+               - mediatek,mt8183-topckgen
 -- 
-Josh
+2.39.1
+
