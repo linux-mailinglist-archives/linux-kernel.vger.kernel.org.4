@@ -2,531 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FCE67CCEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D8767CCE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjAZNzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
+        id S231659AbjAZNzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjAZNz0 (ORCPT
+        with ESMTP id S231620AbjAZNzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:55:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEBB166F3;
-        Thu, 26 Jan 2023 05:55:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6EE861812;
-        Thu, 26 Jan 2023 13:54:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44DEC4339E;
-        Thu, 26 Jan 2023 13:54:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674741299;
-        bh=4jg3BQYnlNfbXFXybEf4WThNfxzPDc7cGml3BjaS5kw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=U4O0cQDTk9hp9Mx04/mrCG3eFcd4tVTEjqu8lFPp8qv3HacK8OFXUZdPTAKTaQHS2
-         nqTK2tyxNXlz+RsJqDDoDzAqsCZqndfRydbZbodGw5AnDGIJZln0nWJOVDY82TrzTC
-         ah6X+uDV9N65GCQL6QiKhEtipa/doyzp8seLWhj6aCGYEbYy/fArdJaSkkHbytbHvP
-         h38Tv8Ya85KugzhfqoW9+ga8pJH8bTFxuIfcCJ9u3FaOUKK5v8jpZSHnG0bdjaMvb5
-         2+i05WhVqS5NzTzfSPoJh/xgiHjRmCVpVCHQLHOv3YDEsEnY9oYxhs/7YLi+Vs+4hx
-         wj0L5iyNdOHSA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] wiznet: convert to GPIO descriptors
-Date:   Thu, 26 Jan 2023 14:54:12 +0100
-Message-Id: <20230126135454.3556647-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Thu, 26 Jan 2023 08:55:20 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBE0B2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:54:51 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1166581wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:54:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VOWkcYiJEYSOZi2GcxiIbR4PFJ+2cQXy9po2yEM4hSM=;
+        b=v+tL5e3nxmEUzfro8VIEgJVROZBG/otDR6RgziVLGb1KhQvonKbWDXNabkBdEg+1j+
+         V7HhfOUmaH0V+x3uEOh2veT8ApPyz3pb36i/Odqc/4A/9qL7mLG6Ojgi8q0fuSB9LyE1
+         vQajVyyKyQhiNkPmdWA9O10seinP48xPKvVNSe6abihWUJ9dEY/lWBE6Jyyea2E6m8I1
+         GAUgnXQ+Hcwi8jN97KXk2ct8IYHo6exAgXyP9YQrRhqiy5zbRKXQhOwLwPnCDOD835ar
+         iLJeuWT9s7g/T0PaAtNUHYV11R2AN7bIT994oWYyQGHqBEL/7cWJiY3iwez7C5b3LG7i
+         RVkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VOWkcYiJEYSOZi2GcxiIbR4PFJ+2cQXy9po2yEM4hSM=;
+        b=U8HEwehjVIRE1E2V5derb65q3JQq5H8+JzLm5JvWRm656ooS3GsI/CFs9kf3BfGlWs
+         LI1Y4s7JV2qgsaRsH+dEIwtRYqkW1GL9Q2nfDb5Jtl22lNnMEVjTTHl/dTEdn+puUn4z
+         9EyBwbtc8UN/XwgXQzFqCSqXNR1uQfye6HJg+beHl9GNLTx7e8Rfa7etVkf40YjcLXvP
+         4i1LelNQdW+11ucuSi6/DBP+JvBW/FEm5NwBmVmuONHBNuwo4F33yijec4CLI2GOYA9p
+         41P+0GRlhQTMM8C5ODc4zwImCAEiYATY6BA9YmzX9OPITh8F19j+f38YnX9Hov2waS6y
+         /ogg==
+X-Gm-Message-State: AFqh2krcanLtH7+S57c8gScoPafnMtT+2uQV+ShVUmfoYUR6ebFYdeNW
+        UoiIWMNQmD1RijaX2e0WIXQfTw==
+X-Google-Smtp-Source: AMrXdXteF0iTaHq1hlDgy7GniH4hSyHqI8kOZKBVywiptyRXydiRVvCim8tyKFLJ6pKOUYCzJZ9mhw==
+X-Received: by 2002:a05:600c:6011:b0:3cf:85f7:bbc4 with SMTP id az17-20020a05600c601100b003cf85f7bbc4mr35059143wmb.2.1674741287361;
+        Thu, 26 Jan 2023 05:54:47 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id b32-20020a05600c4aa000b003db0cab0844sm1426678wmp.40.2023.01.26.05.54.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 05:54:46 -0800 (PST)
+Message-ID: <29f1ddef-6165-951c-946c-661adf620442@linaro.org>
+Date:   Thu, 26 Jan 2023 14:54:45 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH] dt-bindings: usb: samsung,exynos-dwc3: allow unit address
+ in DTS
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230125175943.675823-1-krzysztof.kozlowski@linaro.org>
+ <20230125211329.GA2899932-robh@kernel.org>
+ <afce38b0-be90-a3b5-f181-a88ad3025bd9@linaro.org>
+ <CAL_JsqKpibaWgWXwhNFQ4U_tT0cdvUMO4attSsYqoSFmbq4RZQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAL_JsqKpibaWgWXwhNFQ4U_tT0cdvUMO4attSsYqoSFmbq4RZQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 26/01/2023 14:41, Rob Herring wrote:
+> On Thu, Jan 26, 2023 at 4:48 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 25/01/2023 22:13, Rob Herring wrote:
+>>> On Wed, Jan 25, 2023 at 06:59:43PM +0100, Krzysztof Kozlowski wrote:
+>>>> The Samsung Exynos SoC USB 3.0 DWC3 Controller is a simple wrapper of
+>>>> actual DWC3 Controller device node.  It handles necessary Samsung
+>>>> Exynos-specific resources (regulators, clocks), but does not have its
+>>>> own MMIO address space.
+>>>>
+>>>> However neither simple-bus bindings nor dtc W=1 accept device nodes in
+>>>> soc@ node which do not have unit address.  Therefore allow using
+>>>> the address space of child device (actual DWC3 Controller) as the
+>>>> wrapper's address.
+>>>
+>>> The correct fix is 'ranges' should have a value. Though the whole
+>>> wrapper thing when there are no registers I dislike...
+>>
+>> You mean something like this (diff against this patchset):
+>> ----------
+>> diff --git a/arch/arm/boot/dts/exynos54xx.dtsi
+>> b/arch/arm/boot/dts/exynos54xx.dtsi
+>> index 08786fd9c6ea..75b6f9678672 100644
+>> --- a/arch/arm/boot/dts/exynos54xx.dtsi
+>> +++ b/arch/arm/boot/dts/exynos54xx.dtsi
+>> @@ -142,16 +142,15 @@ hsi2c_7: i2c@12cd0000 {
+>>                         status = "disabled";
+>>                 };
+>>
+>> -               usbdrd3_0: usb-wrapper@12000000 {
+>> +               usbdrd3_0: usb-wrapper {
+> 
+> Why did you drop the unit-address? Unit-address is valid with 'reg' or 'ranges'.
 
-The w5100/w5300 drivers only support probing with old platform data in
-MMIO mode, or probing with DT in SPI mode. There are no users of this
-platform data in tree, and from the git history it appears that the only
-users of MMIO mode were on the (since removed) blackfin architecture.
+I misunderstood your comment then. To which problem did you refer with
+"The correct fix is ranges ...."? To my understanding this only changes
+the unit address, so I won't have to change the node name
+usb->usb-wrapper. Except this, my patches having empty ranges are
+equivalent.
 
-Remove the platform data option, as it's unlikely to still be needed, and
-change the internal operation to GPIO descriptors, making the behavior
-the same for SPI and MMIO mode. The other data in the platform_data
-structure is the MAC address, so make that also handled the same for both.
 
-It would probably be possible to just remove the MMIO mode driver
-completely, but it seems fine otherwise, and fixing it to use the modern
-interface seems easy enough.
+> 
+>>                         compatible = "samsung,exynos5250-dwusb3";
+>> -                       reg = <0x12000000 0x10000>;
+>>                         #address-cells = <1>;
+>>                         #size-cells = <1>;
+>> -                       ranges;
+>> +                       ranges = <0x0 0x12000000 0x10000>;
+>>
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- .../devicetree/bindings/net/wiznet,w5x00.txt  |  4 +-
- drivers/net/ethernet/wiznet/w5100-spi.c       | 21 ++-----
- drivers/net/ethernet/wiznet/w5100.c           | 57 ++++++++++---------
- drivers/net/ethernet/wiznet/w5100.h           |  3 +-
- drivers/net/ethernet/wiznet/w5300.c           | 52 ++++++++++-------
- include/linux/platform_data/wiznet.h          | 23 --------
- 6 files changed, 70 insertions(+), 90 deletions(-)
- delete mode 100644 include/linux/platform_data/wiznet.h
 
-diff --git a/Documentation/devicetree/bindings/net/wiznet,w5x00.txt b/Documentation/devicetree/bindings/net/wiznet,w5x00.txt
-index e9665798c4be..e8a802d65817 100644
---- a/Documentation/devicetree/bindings/net/wiznet,w5x00.txt
-+++ b/Documentation/devicetree/bindings/net/wiznet,w5x00.txt
-@@ -1,6 +1,6 @@
- * Wiznet w5x00
- 
--This is a standalone 10/100 MBit Ethernet controller with SPI interface.
-+This is a standalone 10/100 MBit Ethernet controller with SPI or MMIO interface.
- 
- For each device connected to a SPI bus, define a child node within
- the SPI master node.
-@@ -9,6 +9,7 @@ Required properties:
- - compatible: Should be one of the following strings:
- 	      "wiznet,w5100"
- 	      "wiznet,w5200"
-+	      "wiznet,w5300"
- 	      "wiznet,w5500"
- - reg: Specify the SPI chip select the chip is wired to.
- - interrupts: Specify the interrupt index within the interrupt controller (referred
-@@ -25,6 +26,7 @@ Optional properties:
-   According to the w5500 datasheet, the chip allows a maximum of 80 MHz, however,
-   board designs may need to limit this value.
- - local-mac-address: See ethernet.txt in the same directory.
-+- link-gpios: a GPIO line used for the link detection interrupt
- 
- 
- Example (for Raspberry Pi with pin control stuff for GPIO irq):
-diff --git a/drivers/net/ethernet/wiznet/w5100-spi.c b/drivers/net/ethernet/wiznet/w5100-spi.c
-index 7c52796273a4..81ac52f0fe50 100644
---- a/drivers/net/ethernet/wiznet/w5100-spi.c
-+++ b/drivers/net/ethernet/wiznet/w5100-spi.c
-@@ -423,23 +423,12 @@ static int w5100_spi_probe(struct spi_device *spi)
- 	const struct of_device_id *of_id;
- 	const struct w5100_ops *ops;
- 	kernel_ulong_t driver_data;
--	const void *mac = NULL;
--	u8 tmpmac[ETH_ALEN];
- 	int priv_size;
--	int ret;
- 
--	ret = of_get_mac_address(spi->dev.of_node, tmpmac);
--	if (!ret)
--		mac = tmpmac;
--
--	if (spi->dev.of_node) {
--		of_id = of_match_device(w5100_of_match, &spi->dev);
--		if (!of_id)
--			return -ENODEV;
--		driver_data = (kernel_ulong_t)of_id->data;
--	} else {
--		driver_data = spi_get_device_id(spi)->driver_data;
--	}
-+	of_id = of_match_device(w5100_of_match, &spi->dev);
-+	if (!of_id)
-+		return -ENODEV;
-+	driver_data = (kernel_ulong_t)of_id->data;
- 
- 	switch (driver_data) {
- 	case W5100:
-@@ -458,7 +447,7 @@ static int w5100_spi_probe(struct spi_device *spi)
- 		return -EINVAL;
- 	}
- 
--	return w5100_probe(&spi->dev, ops, priv_size, mac, spi->irq, -EINVAL);
-+	return w5100_probe(&spi->dev, ops, priv_size, spi->irq);
- }
- 
- static void w5100_spi_remove(struct spi_device *spi)
-diff --git a/drivers/net/ethernet/wiznet/w5100.c b/drivers/net/ethernet/wiznet/w5100.c
-index 634946e87e5f..11c448f78193 100644
---- a/drivers/net/ethernet/wiznet/w5100.c
-+++ b/drivers/net/ethernet/wiznet/w5100.c
-@@ -11,7 +11,6 @@
- #include <linux/netdevice.h>
- #include <linux/etherdevice.h>
- #include <linux/platform_device.h>
--#include <linux/platform_data/wiznet.h>
- #include <linux/ethtool.h>
- #include <linux/skbuff.h>
- #include <linux/types.h>
-@@ -24,6 +23,7 @@
- #include <linux/interrupt.h>
- #include <linux/irq.h>
- #include <linux/gpio.h>
-+#include <linux/of_net.h>
- 
- #include "w5100.h"
- 
-@@ -139,6 +139,12 @@ MODULE_LICENSE("GPL");
- #define W5500_RX_MEM_START	0x30000
- #define W5500_RX_MEM_SIZE	0x04000
- 
-+#ifndef CONFIG_WIZNET_BUS_SHIFT
-+#define CONFIG_WIZNET_BUS_SHIFT 0
-+#endif
-+
-+#define W5100_BUS_DIRECT_SIZE  (0x8000 << CONFIG_WIZNET_BUS_SHIFT)
-+
- /*
-  * Device driver private data structure
-  */
-@@ -157,7 +163,7 @@ struct w5100_priv {
- 
- 	int irq;
- 	int link_irq;
--	int link_gpio;
-+	struct gpio_desc *link_gpio;
- 
- 	struct napi_struct napi;
- 	struct net_device *ndev;
-@@ -729,8 +735,8 @@ static u32 w5100_get_link(struct net_device *ndev)
- {
- 	struct w5100_priv *priv = netdev_priv(ndev);
- 
--	if (gpio_is_valid(priv->link_gpio))
--		return !!gpio_get_value(priv->link_gpio);
-+	if (priv->link_gpio)
-+		return !!gpiod_get_value(priv->link_gpio);
- 
- 	return 1;
- }
-@@ -943,7 +949,7 @@ static irqreturn_t w5100_detect_link(int irq, void *ndev_instance)
- 	struct w5100_priv *priv = netdev_priv(ndev);
- 
- 	if (netif_running(ndev)) {
--		if (gpio_get_value(priv->link_gpio) != 0) {
-+		if (gpiod_get_value(priv->link_gpio) != 0) {
- 			netif_info(priv, link, ndev, "link is up\n");
- 			netif_carrier_on(ndev);
- 		} else {
-@@ -998,8 +1004,8 @@ static int w5100_open(struct net_device *ndev)
- 	w5100_hw_start(priv);
- 	napi_enable(&priv->napi);
- 	netif_start_queue(ndev);
--	if (!gpio_is_valid(priv->link_gpio) ||
--	    gpio_get_value(priv->link_gpio) != 0)
-+	if (!priv->link_gpio ||
-+	    gpiod_get_value(priv->link_gpio) != 0)
- 		netif_carrier_on(ndev);
- 	return 0;
- }
-@@ -1037,15 +1043,10 @@ static const struct net_device_ops w5100_netdev_ops = {
- 
- static int w5100_mmio_probe(struct platform_device *pdev)
- {
--	struct wiznet_platform_data *data = dev_get_platdata(&pdev->dev);
--	const void *mac_addr = NULL;
- 	struct resource *mem;
- 	const struct w5100_ops *ops;
- 	int irq;
- 
--	if (data && is_valid_ether_addr(data->mac_addr))
--		mac_addr = data->mac_addr;
--
- 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (!mem)
- 		return -EINVAL;
-@@ -1058,8 +1059,7 @@ static int w5100_mmio_probe(struct platform_device *pdev)
- 	if (irq < 0)
- 		return irq;
- 
--	return w5100_probe(&pdev->dev, ops, sizeof(struct w5100_mmio_priv),
--			   mac_addr, irq, data ? data->link_gpio : -EINVAL);
-+	return w5100_probe(&pdev->dev, ops, sizeof(struct w5100_mmio_priv), irq);
- }
- 
- static int w5100_mmio_remove(struct platform_device *pdev)
-@@ -1077,13 +1077,13 @@ void *w5100_ops_priv(const struct net_device *ndev)
- EXPORT_SYMBOL_GPL(w5100_ops_priv);
- 
- int w5100_probe(struct device *dev, const struct w5100_ops *ops,
--		int sizeof_ops_priv, const void *mac_addr, int irq,
--		int link_gpio)
-+		int sizeof_ops_priv, int irq)
- {
- 	struct w5100_priv *priv;
- 	struct net_device *ndev;
- 	int err;
- 	size_t alloc_size;
-+	u8 tmpmac[ETH_ALEN];
- 
- 	alloc_size = sizeof(*priv);
- 	if (sizeof_ops_priv) {
-@@ -1129,7 +1129,9 @@ int w5100_probe(struct device *dev, const struct w5100_ops *ops,
- 	priv->ndev = ndev;
- 	priv->ops = ops;
- 	priv->irq = irq;
--	priv->link_gpio = link_gpio;
-+	priv->link_gpio = gpiod_get_optional(dev, "link", GPIOD_IN);
-+	if (IS_ERR(priv->link_gpio))
-+		return PTR_ERR(priv->link_gpio);
- 
- 	ndev->netdev_ops = &w5100_netdev_ops;
- 	ndev->ethtool_ops = &w5100_ethtool_ops;
-@@ -1156,8 +1158,9 @@ int w5100_probe(struct device *dev, const struct w5100_ops *ops,
- 	INIT_WORK(&priv->setrx_work, w5100_setrx_work);
- 	INIT_WORK(&priv->restart_work, w5100_restart_work);
- 
--	if (mac_addr)
--		eth_hw_addr_set(ndev, mac_addr);
-+	err = of_get_mac_address(dev->of_node, tmpmac);
-+	if (!err)
-+		eth_hw_addr_set(ndev, tmpmac);
- 	else
- 		eth_hw_addr_random(ndev);
- 
-@@ -1182,7 +1185,7 @@ int w5100_probe(struct device *dev, const struct w5100_ops *ops,
- 	if (err)
- 		goto err_hw;
- 
--	if (gpio_is_valid(priv->link_gpio)) {
-+	if (priv->link_gpio) {
- 		char *link_name = devm_kzalloc(dev, 16, GFP_KERNEL);
- 
- 		if (!link_name) {
-@@ -1190,12 +1193,14 @@ int w5100_probe(struct device *dev, const struct w5100_ops *ops,
- 			goto err_gpio;
- 		}
- 		snprintf(link_name, 16, "%s-link", netdev_name(ndev));
--		priv->link_irq = gpio_to_irq(priv->link_gpio);
-+		priv->link_irq = gpiod_to_irq(priv->link_gpio);
- 		if (request_any_context_irq(priv->link_irq, w5100_detect_link,
- 					    IRQF_TRIGGER_RISING |
- 					    IRQF_TRIGGER_FALLING,
--					    link_name, priv->ndev) < 0)
--			priv->link_gpio = -EINVAL;
-+					    link_name, priv->ndev) < 0) {
-+			gpiod_put(priv->link_gpio);
-+			priv->link_gpio = NULL;
-+		}
- 	}
- 
- 	return 0;
-@@ -1219,7 +1224,7 @@ void w5100_remove(struct device *dev)
- 
- 	w5100_hw_reset(priv);
- 	free_irq(priv->irq, ndev);
--	if (gpio_is_valid(priv->link_gpio))
-+	if (priv->link_gpio)
- 		free_irq(priv->link_irq, ndev);
- 
- 	flush_work(&priv->setrx_work);
-@@ -1256,8 +1261,8 @@ static int w5100_resume(struct device *dev)
- 		w5100_hw_start(priv);
- 
- 		netif_device_attach(ndev);
--		if (!gpio_is_valid(priv->link_gpio) ||
--		    gpio_get_value(priv->link_gpio) != 0)
-+		if (!priv->link_gpio ||
-+		    gpiod_get_value(priv->link_gpio) != 0)
- 			netif_carrier_on(ndev);
- 	}
- 	return 0;
-diff --git a/drivers/net/ethernet/wiznet/w5100.h b/drivers/net/ethernet/wiznet/w5100.h
-index 481af3b6d9e8..013ef2835115 100644
---- a/drivers/net/ethernet/wiznet/w5100.h
-+++ b/drivers/net/ethernet/wiznet/w5100.h
-@@ -29,8 +29,7 @@ struct w5100_ops {
- void *w5100_ops_priv(const struct net_device *ndev);
- 
- int w5100_probe(struct device *dev, const struct w5100_ops *ops,
--		int sizeof_ops_priv, const void *mac_addr, int irq,
--		int link_gpio);
-+		int sizeof_ops_priv, int irq);
- void w5100_remove(struct device *dev);
- 
- extern const struct dev_pm_ops w5100_pm_ops;
-diff --git a/drivers/net/ethernet/wiznet/w5300.c b/drivers/net/ethernet/wiznet/w5300.c
-index b0958fe8111e..9fcf50926d62 100644
---- a/drivers/net/ethernet/wiznet/w5300.c
-+++ b/drivers/net/ethernet/wiznet/w5300.c
-@@ -12,7 +12,6 @@
- #include <linux/netdevice.h>
- #include <linux/etherdevice.h>
- #include <linux/platform_device.h>
--#include <linux/platform_data/wiznet.h>
- #include <linux/ethtool.h>
- #include <linux/skbuff.h>
- #include <linux/types.h>
-@@ -24,7 +23,8 @@
- #include <linux/ioport.h>
- #include <linux/interrupt.h>
- #include <linux/irq.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/of_net.h>
- 
- #define DRV_NAME	"w5300"
- #define DRV_VERSION	"2012-04-04"
-@@ -80,6 +80,12 @@ MODULE_LICENSE("GPL");
- #define W5300_S0_RX_FIFO	0x0230	/* S0 Receive FIFO */
- #define W5300_REGS_LEN		0x0400
- 
-+#ifndef CONFIG_WIZNET_BUS_SHIFT
-+#define CONFIG_WIZNET_BUS_SHIFT 0
-+#endif
-+
-+#define W5300_BUS_DIRECT_SIZE  (0x0400 << CONFIG_WIZNET_BUS_SHIFT)
-+
- /*
-  * Device driver private data structure
-  */
-@@ -91,7 +97,7 @@ struct w5300_priv {
- 	void (*write)(struct w5300_priv *priv, u16 addr, u16 data);
- 	int irq;
- 	int link_irq;
--	int link_gpio;
-+	struct gpio_desc *link_gpio;
- 
- 	struct napi_struct napi;
- 	struct net_device *ndev;
-@@ -292,8 +298,8 @@ static u32 w5300_get_link(struct net_device *ndev)
- {
- 	struct w5300_priv *priv = netdev_priv(ndev);
- 
--	if (gpio_is_valid(priv->link_gpio))
--		return !!gpio_get_value(priv->link_gpio);
-+	if (priv->link_gpio)
-+		return !!gpiod_get_value(priv->link_gpio);
- 
- 	return 1;
- }
-@@ -442,7 +448,7 @@ static irqreturn_t w5300_detect_link(int irq, void *ndev_instance)
- 	struct w5300_priv *priv = netdev_priv(ndev);
- 
- 	if (netif_running(ndev)) {
--		if (gpio_get_value(priv->link_gpio) != 0) {
-+		if (gpiod_get_value(priv->link_gpio) != 0) {
- 			netif_info(priv, link, ndev, "link is up\n");
- 			netif_carrier_on(ndev);
- 		} else {
-@@ -485,8 +491,8 @@ static int w5300_open(struct net_device *ndev)
- 	w5300_hw_start(priv);
- 	napi_enable(&priv->napi);
- 	netif_start_queue(ndev);
--	if (!gpio_is_valid(priv->link_gpio) ||
--	    gpio_get_value(priv->link_gpio) != 0)
-+	if (!priv->link_gpio ||
-+	    gpiod_get_value(priv->link_gpio) != 0)
- 		netif_carrier_on(ndev);
- 	return 0;
- }
-@@ -524,7 +530,6 @@ static const struct net_device_ops w5300_netdev_ops = {
- 
- static int w5300_hw_probe(struct platform_device *pdev)
- {
--	struct wiznet_platform_data *data = dev_get_platdata(&pdev->dev);
- 	struct net_device *ndev = platform_get_drvdata(pdev);
- 	struct w5300_priv *priv = netdev_priv(ndev);
- 	const char *name = netdev_name(ndev);
-@@ -533,11 +538,9 @@ static int w5300_hw_probe(struct platform_device *pdev)
- 	int irq;
- 	int ret;
- 
--	if (data && is_valid_ether_addr(data->mac_addr)) {
--		eth_hw_addr_set(ndev, data->mac_addr);
--	} else {
--		eth_hw_addr_random(ndev);
--	}
-+        ret = of_get_ethdev_address(pdev->dev.of_node, ndev);
-+        if (ret)
-+                eth_hw_addr_random(ndev);
- 
- 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	priv->base = devm_ioremap_resource(&pdev->dev, mem);
-@@ -569,17 +572,22 @@ static int w5300_hw_probe(struct platform_device *pdev)
- 		return ret;
- 	priv->irq = irq;
- 
--	priv->link_gpio = data ? data->link_gpio : -EINVAL;
--	if (gpio_is_valid(priv->link_gpio)) {
-+	priv->link_gpio = gpiod_get_optional(&pdev->dev, "link", GPIOD_IN);
-+	if (IS_ERR(priv->link_gpio))
-+		return PTR_ERR(priv->link_gpio);
-+
-+	if (priv->link_gpio) {
- 		char *link_name = devm_kzalloc(&pdev->dev, 16, GFP_KERNEL);
- 		if (!link_name)
- 			return -ENOMEM;
- 		snprintf(link_name, 16, "%s-link", name);
--		priv->link_irq = gpio_to_irq(priv->link_gpio);
-+		priv->link_irq = gpiod_to_irq(priv->link_gpio);
- 		if (request_any_context_irq(priv->link_irq, w5300_detect_link,
- 				IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
--				link_name, priv->ndev) < 0)
--			priv->link_gpio = -EINVAL;
-+				link_name, priv->ndev) < 0) {
-+			priv->link_gpio = NULL;
-+			gpiod_put(priv->link_gpio);
-+		}
- 	}
- 
- 	netdev_info(ndev, "at 0x%llx irq %d\n", (u64)mem->start, irq);
-@@ -634,7 +642,7 @@ static int w5300_remove(struct platform_device *pdev)
- 
- 	w5300_hw_reset(priv);
- 	free_irq(priv->irq, ndev);
--	if (gpio_is_valid(priv->link_gpio))
-+	if (priv->link_gpio)
- 		free_irq(priv->link_irq, ndev);
- 
- 	unregister_netdev(ndev);
-@@ -667,8 +675,8 @@ static int w5300_resume(struct device *dev)
- 		w5300_hw_start(priv);
- 
- 		netif_device_attach(ndev);
--		if (!gpio_is_valid(priv->link_gpio) ||
--		    gpio_get_value(priv->link_gpio) != 0)
-+		if (!priv->link_gpio ||
-+		    gpiod_get_value(priv->link_gpio) != 0)
- 			netif_carrier_on(ndev);
- 	}
- 	return 0;
-diff --git a/include/linux/platform_data/wiznet.h b/include/linux/platform_data/wiznet.h
-deleted file mode 100644
-index 1154c4db8a13..000000000000
---- a/include/linux/platform_data/wiznet.h
-+++ /dev/null
-@@ -1,23 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Ethernet driver for the WIZnet W5x00 chip.
-- */
--
--#ifndef PLATFORM_DATA_WIZNET_H
--#define PLATFORM_DATA_WIZNET_H
--
--#include <linux/if_ether.h>
--
--struct wiznet_platform_data {
--	int	link_gpio;
--	u8	mac_addr[ETH_ALEN];
--};
--
--#ifndef CONFIG_WIZNET_BUS_SHIFT
--#define CONFIG_WIZNET_BUS_SHIFT 0
--#endif
--
--#define W5100_BUS_DIRECT_SIZE	(0x8000 << CONFIG_WIZNET_BUS_SHIFT)
--#define W5300_BUS_DIRECT_SIZE	(0x0400 << CONFIG_WIZNET_BUS_SHIFT)
--
--#endif /* PLATFORM_DATA_WIZNET_H */
--- 
-2.39.0
+Best regards,
+Krzysztof
 
