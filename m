@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D27167C9A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D2C67C9A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237238AbjAZLTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 06:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S236913AbjAZLUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 06:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237249AbjAZLS5 (ORCPT
+        with ESMTP id S229823AbjAZLUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 06:18:57 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A622142DFB
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:18:51 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so3043317wma.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:18:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p3zgwj/N2m78fr4mQomhV+/0L8iV0s8h+XqoJd6wA6U=;
-        b=LXLuoY62A52JG2d1O1qQQxvByARad/iGJzYq2HxpgW8+sUarqND5Kz5zV4gyPoNL1i
-         yq9Mr6mWWPDplbks3qmsHiQPllaKr+R+859bmxlHrnqwGHCvYKV61T8L6KD2TIDB9qkO
-         b4H8Q+jVKPt6Sl9NySyFGKGgb5eAyLUztAkIVNkWxBmVq+Ri6qHYIJ73RMW1tenreXwA
-         Kdp365+K6AFazBHK8Igp2A6JTTEzf9jFdzEZayIwn+ZrZqiCG9SZRbu+wexvfOZcV0aN
-         qpARl0E3/2XT1NKblMYE3xkN8O4r3xMJ8rVtguA2OUUd1SNFcVeObKX34hUczu1mBkzh
-         5zpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p3zgwj/N2m78fr4mQomhV+/0L8iV0s8h+XqoJd6wA6U=;
-        b=O4RhL/t2Z2QqTpNfJ2m86AUb+Ha2UPtctxmFzW0aq1Jx2akjiOWA4y/2eFvSQ/ASV8
-         Id3ziDoYqyfyFexuAbysJT80Nq+4IEg2G7+bvtEMLmhGWzUP9/m6lYOESH5e2GGUqGko
-         oC3KlRzyoEDOY4VTo8zyrxe3eQZMzR9KolQNJ10rjvtqtBDzoRWFUJRNuvaspkdZjcJ4
-         0oj4QBdThbcOG3mwbCWO+sO4B00+VsUXui7MwL2bHzcXnslG41+J7ZtJTrZ6g6VOs7H+
-         1XC/LEFqsKZcbBy07Q75xTbofCHdD69CuXVbUPgtfT2PTzLnhHW+Pn+cXBWQaaGrljCG
-         tr8g==
-X-Gm-Message-State: AO0yUKXPEXg7LXSOasuyQsdQH6+eVCfnHbmX3ZsyJmcFXlrw2FgkRvfF
-        cv1tK5HxQCkCCp1GahKn4o/PGQ==
-X-Google-Smtp-Source: AK7set9lB/2kTVzhBnU62TmJMHNYHvsyX3yIGi3D04EymHpXcSdwKyllD5e8qRMiDwpXFiut+Ar65A==
-X-Received: by 2002:a05:600c:310c:b0:3dc:18de:b20d with SMTP id g12-20020a05600c310c00b003dc18deb20dmr7272177wmo.33.1674731929685;
-        Thu, 26 Jan 2023 03:18:49 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05600c071500b003db1ca20170sm1136755wmn.37.2023.01.26.03.18.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 03:18:49 -0800 (PST)
-Message-ID: <407f1860-faaf-be6e-cde2-17272e65ee87@linaro.org>
-Date:   Thu, 26 Jan 2023 12:18:47 +0100
+        Thu, 26 Jan 2023 06:20:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CFB6592
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:20:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 314BE61799
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:20:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CACC5C433D2;
+        Thu, 26 Jan 2023 11:19:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674731999;
+        bh=HLNfnERh9yqih9lmJtSKLabo136R/CglFwL3l5Rj5Sg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B1P0qk7I1ISxzTc2mfP78KRR9qkhlKvXLycdAcYIJgTq7Z4z+GIN6nmkB9rm6iZcK
+         Nu9Wcfup5flrAI+Aw6onJbejHOwFimvel5O7/Z6+LnfBt/c1k1AF4hEp076Sy/mMgs
+         0Q1UKpiOY7Wqm2lafw0WKMG3Jy0ROLgsHe0cwPJyfY38tFxTQBKNhWhdl+fV7olHVD
+         +FqUZICP/kQVIHUTCgwiVcB1qs4tsrj61CN6QDbM6qnKZ03QCKYezwF1/TxNzLZ0kX
+         0yn1a8OdrPdl4ohdn1rN6XzpFq8KZTRyOU/IBGnp3MSCMbAjQPjeoRW2pdJAOPVSd2
+         Xh2nWWqQM0jSg==
+Date:   Thu, 26 Jan 2023 13:19:55 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y9Jh2x9XJE1KEUg6@unreal>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v3 2/2] dt-bindings: opp: opp-v2-kryo-cpu: enlarge
- opp-supported-hw maximum
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230123193422.15972-1-ansuelsmth@gmail.com>
- <20230123193422.15972-2-ansuelsmth@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230123193422.15972-2-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 20:34, Christian Marangi wrote:
-> Enlarge opp-supported-hw maximum value. In recent SoC we started
-> matching more bit and we currently match mask of 112. The old maximum of
-> 7 was good for old SoC that didn't had complex id, but now this is
-> limiting and we need to enlarge it to support more variants.
+On Wed, Jan 25, 2023 at 03:29:07PM +0000, Reshetova, Elena wrote:
+> Replying only to the not-so-far addressed points. 
 > 
-> Document all the various mask that can be used and limit them to only
-> reasonable values instead of using a generic maximum limit.
+> > On Wed, Jan 25, 2023 at 12:28:13PM +0000, Reshetova, Elena wrote:
+> > > Hi Greg,
+
+<...>
+
+> > > 3) All the tools are open-source and everyone can start using them right away
+> > even
+> > > without any special HW (readme has description of what is needed).
+> > > Tools and documentation is here:
+> > > https://github.com/intel/ccc-linux-guest-hardening
+> > 
+> > Again, as our documentation states, when you submit patches based on
+> > these tools, you HAVE TO document that.  Otherwise we think you all are
+> > crazy and will get your patches rejected.  You all know this, why ignore
+> > it?
 > 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
+> Sorry, I didn’t know that for every bug that is found in linux kernel when
+> we are submitting a fix that we have to list the way how it has been found.
+> We will fix this in the future submissions, but some bugs we have are found by
+> plain code audit, so 'human' is the tool. 
 
+My problem with that statement is that by applying different threat
+model you "invent" bugs which didn't exist in a first place.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+For example, in this [1] latest submission, authors labeled correct
+behaviour as "bug".
 
-Best regards,
-Krzysztof
+[1] https://lore.kernel.org/all/20230119170633.40944-1-alexander.shishkin@linux.intel.com/
 
+Thanks
