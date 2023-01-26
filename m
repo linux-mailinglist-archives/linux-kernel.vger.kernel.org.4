@@ -2,131 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB49D67CBD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF0767CBD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236594AbjAZNPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        id S236701AbjAZNPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:15:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236596AbjAZNOw (ORCPT
+        with ESMTP id S236603AbjAZNOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 Jan 2023 08:14:52 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512806952D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:14:31 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id j17so1116594wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:14:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KLiIzuhLPj2W8HRLu1RLddTMjBu2HLYaLu88JyklILs=;
-        b=f4SkERW1RtNf5h/pePShnuCAaC/+L+ggulKbVjRVcKvjaKAz8ktOCH4I1JsRHP4ccG
-         0G/esHNAzMByXZz0ihwO2e0THIFZsG5Dr2p5ohi20RtAW0c+BGc7MirXpOwWShacxFtR
-         /3gJQ937eIPpFdNAU9UVHwWnIq1KwnOGh1Mb8Tnr67CxruNqXabVsSr/HX4qWACTgVj4
-         urj3wCGmlv76QtW/yWu7lsTnhSeg36W2cU8tb3nQHAgKgQ/Y4Zk4x1NBL+8cG5iIttJV
-         Gt126Wa82Xv1u5tg9sL3wrsl7yFFWJM0Pb0yUTbJs5B4arXCD5zKOovkf2qgDIo1O24L
-         3nQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KLiIzuhLPj2W8HRLu1RLddTMjBu2HLYaLu88JyklILs=;
-        b=XKoghrg+6ZSxUkmxGh8Pu5FLhRMBDxnMPCLu3bbvFkrNb7apSP5ZLTnZaGs6EHr7jQ
-         NBdYuJeWhDRR6O1JmSV4m5GnAuDcqmgvZDHNDdZYRAgNM/gohF24cflRARxikpexMZxt
-         c1LVgeoDRndHt3D8QRqKaZuz3Lwu7QbI2T6ZNX3xqwIl8wCI9Kd/U24CwWwNA2lPOlv+
-         3QmWocWqUiIEGN46XMJIxQss6ATJIgVE4euhLkgevVx3Jx6MrNb5tSRqDgD1FB8a2Uco
-         tO8gkRmU64cVFYUPbLyHzUiX0uU7jrGfMVSCSMWH8LP4kEqUIOgYn7t/gw79TMCnztV6
-         o/Ug==
-X-Gm-Message-State: AO0yUKWRVCKcC26vmu6QSUnAShFUQpRXykawcNusm6R+vwmyP2AniS/P
-        UoVwkBxI+r9t8f87OwfXLGadLw==
-X-Google-Smtp-Source: AK7set97mUdUoUStPMzspZ1HBJa/ogA3H8+v0Skr3C4OKz7dz2a1AIG2oDCQ2nZPfoElAUoUg76n1w==
-X-Received: by 2002:a05:600c:3ca3:b0:3dc:1687:9ba2 with SMTP id bg35-20020a05600c3ca300b003dc16879ba2mr9293190wmb.35.1674738869713;
-        Thu, 26 Jan 2023 05:14:29 -0800 (PST)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id 18-20020a05600c26d200b003da28dfdedcsm1719804wmv.5.2023.01.26.05.14.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 05:14:29 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-phy@lists.infradead.org
-Subject: [PATCH v3 8/8] arm64: dts: qcom: sm8550-mtp: Add USB PHYs and HC nodes
-Date:   Thu, 26 Jan 2023 15:14:15 +0200
-Message-Id: <20230126131415.1453741-9-abel.vesa@linaro.org>
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649636536C
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:14:36 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QDCPGZ030893;
+        Thu, 26 Jan 2023 13:14:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=Xu1V32uapK60jhhMREIdzRlkxvWtwJFAQecaUzUpUWQ=;
+ b=VMsAGn+RFMfyytVXrF+zEWNHq61s++nUPOr5Tcef4JC4o/3bJtbB8C5D5g+ihxc2dnZm
+ jyMRaJoF7TF6emSNI2R3kiYsfTEDZtf7jwjfvcuAB/R+RtlcdOeatztGfvEyrOa635Pe
+ eUWv2f+fsZvqOZpRy7Ciwxt30JVgL1UkMbJ453ZICJakT56QbB5J2lopIdih27QZphdq
+ TFqPSuj0Sz77dGwROyd6EW3lRiDHhoqEmKnTRqWrMdQcLo2k0n/G01qSbXjfdAr1JBEx
+ PhG1yFVd0hdwf5DMZ5TYsJmjKszJAJzGti0on74G8wv6+GcNM+WEYizSJMZBwD3D6iJa SQ== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbt6mr1ue-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 13:14:35 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QBMXF2010330;
+        Thu, 26 Jan 2023 13:14:33 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6pdjb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 13:14:32 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QDETBk50201008
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 26 Jan 2023 13:14:29 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5716420043;
+        Thu, 26 Jan 2023 13:14:29 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 222C420040;
+        Thu, 26 Jan 2023 13:14:29 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 26 Jan 2023 13:14:29 +0000 (GMT)
+From:   Mikhail Zaslonko <zaslonko@linux.ibm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Mikhail Zaslonko <zaslonko@linux.ibm.com>
+Subject: [PATCH 0/8] lib/zlib: Set of s390 DFLTCC related patches for kernel zlib
+Date:   Thu, 26 Jan 2023 14:14:20 +0100
+Message-Id: <20230126131428.1222214-1-zaslonko@linux.ibm.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230126131415.1453741-1-abel.vesa@linaro.org>
-References: <20230126131415.1453741-1-abel.vesa@linaro.org>
-MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: N9_R9_5QbY3cGJL0f2AVpIkN4LojfvBn
+X-Proofpoint-GUID: N9_R9_5QbY3cGJL0f2AVpIkN4LojfvBn
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-26_05,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 malwarescore=0 mlxlogscore=516
+ lowpriorityscore=0 spamscore=0 adultscore=0 suspectscore=0 clxscore=1015
+ bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301260126
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable USB HC and PHYs nodes on SM8550 MTP board.
+Patches 1-7 represent a set of s390 zlib hardware support (DFLTCC) related fixes
+and enhancements integrated from zlib-ng repo relevant to kernel zlib
+(https://github.com/zlib-ng/zlib-ng).
+Since the official zlib repository never got DFLTCC support code merged, all
+the patches have been picked from zlib-ng fork (zlib data compression library
+for the next generation systems). This repo contains new optimizations and
+fixes not getting implemented into the official zlib repository and falls under
+the same zlib License. All of the original patches from zlib-ng were authored
+by Ilya Leoshkevich <iii@linux.ibm.com>. Coding style has been preserved for
+future maintainability.
+Patches 1-2 should have no effect for the kernel zlib but make the code
+closer to zlib-ng for future maintainability.
+Only Patch 3 touches common zlib_deflate code, other patches are relevant to
+s390 tree only.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
+Patch 8 is separate and intends to resolve an issue with kernel PPP driver
+which can use kernel zlib for packet compression. Without this patch PPP
+decompression can fail due to error code returned by hardware (dfltcc_inflate)
+and PPP disables zlib compression for further packets.
 
-Changes since v2:
- * none
+@Andrew, would you pick this patch series yourself (which is totally fine
+with me) or shall we carry it via s390 tree?
 
-NOTE: This patch has been already merged. It is here only to provide
-context for the rest of the patchset. There is a change with respect to the
-clocks, but that will be sent as a separate/individual fix patch.
+Mikhail Zaslonko (8):
+  lib/zlib: Adjust offset calculation for dfltcc_state
+  lib/zlib: Implement switching between DFLTCC and software
+  lib/zlib: Fix DFLTCC not flushing EOBS when creating raw streams
+  lib/zlib: Fix DFLTCC ignoring flush modes when avail_in == 0
+  lib/zlib: DFLTCC not writing header bits when avail_out == 0
+  lib/zlib: Split deflate and inflate states for DFLTCC
+  lib/zlib: DFLTCC support inflate with small window
+  lib/zlib: DFLTCC always switch to software inflate for Z_PACKET_FLUSH
+    option
 
- arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ lib/zlib_deflate/deflate.c       | 23 ++++++---
+ lib/zlib_dfltcc/dfltcc.c         | 25 ++-------
+ lib/zlib_dfltcc/dfltcc.h         | 57 +++++---------------
+ lib/zlib_dfltcc/dfltcc_deflate.c | 89 +++++++++++++++++++++-----------
+ lib/zlib_dfltcc/dfltcc_deflate.h | 21 ++++++++
+ lib/zlib_dfltcc/dfltcc_inflate.c | 24 +++++----
+ lib/zlib_dfltcc/dfltcc_inflate.h | 37 +++++++++++++
+ lib/zlib_inflate/inflate.c       |  2 +-
+ 8 files changed, 163 insertions(+), 115 deletions(-)
+ create mode 100644 lib/zlib_dfltcc/dfltcc_deflate.h
+ create mode 100644 lib/zlib_dfltcc/dfltcc_inflate.h
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-index 31e039f10a1b..cea1f12ce294 100644
---- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-@@ -455,6 +455,28 @@ &ufs_mem_phy {
- 	status = "okay";
- };
- 
-+&usb_1 {
-+	status = "okay";
-+};
-+
-+&usb_1_dwc3 {
-+	dr_mode = "peripheral";
-+};
-+
-+&usb_1_hsphy {
-+	vdd-supply = <&vreg_l1e_0p88>;
-+	vdda12-supply = <&vreg_l3e_1p2>;
-+
-+	status = "okay";
-+};
-+
-+&usb_dp_qmpphy {
-+	vdda-phy-supply = <&vreg_l3e_1p2>;
-+	vdda-pll-supply = <&vreg_l3f_0p91>;
-+
-+	status = "okay";
-+};
-+
- &xo_board {
- 	clock-frequency = <76800000>;
- };
 -- 
 2.34.1
 
