@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2FC867D477
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C64B67D483
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjAZSmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60204 "EHLO
+        id S231993AbjAZSmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjAZSl5 (ORCPT
+        with ESMTP id S229781AbjAZSmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:41:57 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7AD3EFC6;
-        Thu, 26 Jan 2023 10:41:43 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 0AB3E32000D9;
-        Thu, 26 Jan 2023 13:41:39 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 13:41:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674758499; x=1674844899; bh=s/3u3IdhZX
-        LqBuo4DZdO5LrZKWdZJ/fXn8nsI7x5qv8=; b=FpYz1KWomhYBEGMOKTj6x5Kn5l
-        1DHsVSZb3K0d3QkItsPmvcQH31GP710+8Efw1VLHUE6VQK7zAAyEfPBrDIiP0jDM
-        PQ3TjZgWQ4oE6TBlY1dgNQRmb/8N7apPIGJuj8koMiod7r33aCU/2rmK059CJVtL
-        xU6Bs1K0iTE1xuAFTuZH4fvcfgWbkWOJftbuZG6tnePkqoNRrOQQQRasdzqx611H
-        OP8OnqI6I09P0UkQhATWZwhkygZTMtug9kN18+s1NE8oSWEt4CLBLTTZdepswNQc
-        cATI8IKZbxYvV4hxvnqilGcXKiSNoq/HwVnas6wA2dICzDrHeLd4jUNMVuHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674758499; x=1674844899; bh=s/3u3IdhZXLqBuo4DZdO5LrZKWdZ
-        J/fXn8nsI7x5qv8=; b=YuHXoEXx5blFxXBbkw5H+PsaxScEXQIcgdWvf78r0G5L
-        a7n1gL1b1ZgT7be3EZwfF3KT7GxettJlq6PBbTzOvD7RSlW3chK4kXeYps4+eK1O
-        YJywqsEYwpBv0NPndDaIJQI4eZ5tnXfXB9Lzgtgh9zacI7GB4qOJ68UqeDRsILS0
-        U4iaHF4Z9JNaTasGXdzorVoXOoh56P6Wn6Y3e53i3YeFlm3sQQbNppWXO7ZREwcb
-        QBWtCUdJn0fE6+hlozaALBgUY2+OKJKkSm59xkyv+Q63iKdnf052s1ECWPvOnZWQ
-        OBLIY+pq1zGEA+0lHogMZ5IpBPnslMYiPTKP/NxFGg==
-X-ME-Sender: <xms:Y8nSY4OfXRXctYOJ8kHq-RPx3tb87SDkmINi6exFN1daN6301GCYgA>
-    <xme:Y8nSY--45iQ-pBNn1SburrssP3OljWCTAqHk_kh0pfHAb-kOWtcmNtnInaZaTaP91
-    CDZaRwUtdg60IUDEos>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgudduiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:Y8nSY_TPF7alI46nUTidbO_C_DXkOKVUf3pz5mTBEJ224kDe8jhcng>
-    <xmx:Y8nSYwsvzH4ZCb_Cu0zfXRzKTu7rwH8PAtV4SLqZ3CvsSTOfSxil8Q>
-    <xmx:Y8nSYweum5M6XgJ8mO5p4k37gPh00yxW7WmR14j2B9_He2SZnIHj0Q>
-    <xmx:Y8nSY44oR1hLP64jHYL4F4OTVZxWrcoAtQS95dc23hQouyF_hbuZKw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 43B3DB60086; Thu, 26 Jan 2023 13:41:39 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <5313ee39-7313-493b-9b66-a9c697962831@app.fastmail.com>
-In-Reply-To: <Y9LDIvWiG9gSl9f2@unreal>
-References: <20230126135454.3556647-1-arnd@kernel.org>
- <Y9LDIvWiG9gSl9f2@unreal>
-Date:   Thu, 26 Jan 2023 19:41:19 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Leon Romanovsky" <leon@kernel.org>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] wiznet: convert to GPIO descriptors
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 26 Jan 2023 13:42:33 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B312C3EFC6;
+        Thu, 26 Jan 2023 10:42:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674758551; x=1706294551;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=S3DfwWWHVjW08Y4Sj57WtWmKbuBdHRvdkYJVizXcOyE=;
+  b=aH5mUwCy+ipIhItezfxNJ9gWnOXNs/oI/sAqRuUUicTwGa33Uq+ocIF/
+   yqXnlRUp0tmGEzvH/WjWr3QzFoHLk1REd+lnko0ADcJM9aknRv9sdIrM/
+   8yQuCtkSyf4hpc5HzhgH6ltCdW4FlUnjQ/8mQmZGyeKGsUdKewi4Hua/c
+   DPVJaSgDXxI5k7PlmSPiHBrO+v0GF3dhHyCGWfkZSJ2G/bz8+dcGlDRPj
+   YHfzgflN0xxHxjmxVSUyEKvLvaAiM0BmaIxpwcRiVez14tYNli6eNIU2M
+   e74EUMj9i+16SRuGbHpawiswFNBGnYK6rOY4/Z354NJUJU71hydAyFMdb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="354203308"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="354203308"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 10:42:05 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="991745435"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="991745435"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 10:42:05 -0800
+From:   Tony Luck <tony.luck@intel.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Newman <peternewman@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org
+Cc:     Shaopeng Tan <tan.shaopeng@fujitsu.com>,
+        James Morse <james.morse@arm.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, patches@lists.linux.dev,
+        Tony Luck <tony.luck@intel.com>
+Subject: [PATCH 0/7] x86/resctrl: Add support for Sub-NUMA cluster (SNC) systems
+Date:   Thu, 26 Jan 2023 10:41:50 -0800
+Message-Id: <20230126184157.27626-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023, at 19:14, Leon Romanovsky wrote:
-> On Thu, Jan 26, 2023 at 02:54:12PM +0100, Arnd Bergmann wrote:
->>  
->> @@ -139,6 +139,12 @@ MODULE_LICENSE("GPL");
->>  #define W5500_RX_MEM_START	0x30000
->>  #define W5500_RX_MEM_SIZE	0x04000
->>  
->> +#ifndef CONFIG_WIZNET_BUS_SHIFT
->> +#define CONFIG_WIZNET_BUS_SHIFT 0
->> +#endif
->
-> I don't see any define of CONFIG_WIZNET_BUS_SHIFT in the code, so it looks
-> like it always zero and can be removed.
+Intel server systems starting with Skylake support a mode that logically
+partitions each socket. E.g. when partitioned two ways, half the cores,
+L3 cache, and memory controllers are allocated to each of the partitions.
+This may reduce average latency to access L3 cache and memory, with the
+tradeoff that only half the L3 cache is available for subnode-local memory
+access.
 
-Good catch! Evidently the original idea was that this would
-be set to a machine specific value through Kconfig. I've renamed
-the constant, removed the #ifdef and explained it in the changelog
-text now.
+The existing Linux resctrl system mishandles RDT monitoring on systems
+with SNC mode enabled.
 
-     Arnd
+But, with some simple changes, this can be fixed. When SNC mode is
+enabled, the RDT RMID counters are also partitioned with the low numbered
+counters going to the first partition, and the high numbered counters
+to the second partition[1]. The key is to adjust the RMID value written
+to the IA32_PQR_ASSOC MSR on context switch, and the value written to
+the IA32_QM_EVTSEL when reading out counters, and to change the scaling
+factor that was read from CPUID(0xf,1).EBX
+
+E.g. in 2-way Sub-NUMA cluster with 200 RMID counters there are only
+100 available counters to the resctrl code. When running on the first
+SNC node RMID values 0..99 are used as before. But when running on the
+second node, a task that is assigned resctrl rmid=10 must load 10+100
+into IA32_PQR_ASSOC to use RMID counter 110.
+
+There should be no changes to functionality on other architectures,
+or on Intel systems with SNC disabled, where snc_ways == 1.
+
+-Tony
+
+[1] Some systems also support a 4-way split. All the above still
+applies, just need to account for cores, cache, memory controllers
+and RMID counters being divided four ways instead of two.
+
+Tony Luck (7):
+  x86/resctrl: Refactor in preparation for node-scoped resources
+  x86/resctrl: Remove hard code of RDT_RESOURCE_L3 in monitor.c
+  x86/resctrl: Add a new node-scoped resource to rdt_resources_all[]
+  x86/resctrl: Add code to setup monitoring at L3 or NODE scope.
+  x86/resctrl: Add a new "snc_ways" file to the monitoring info
+    directory.
+  x86/resctrl: Update documentation with Sub-NUMA cluster changes
+  x86/resctrl: Determine if Sub-NUMA Cluster is enabled and initialize.
+
+ Documentation/x86/resctrl.rst             | 15 +++-
+ include/linux/resctrl.h                   |  4 +-
+ arch/x86/include/asm/resctrl.h            |  4 +-
+ arch/x86/kernel/cpu/resctrl/internal.h    |  9 +++
+ arch/x86/kernel/cpu/resctrl/core.c        | 83 ++++++++++++++++++++---
+ arch/x86/kernel/cpu/resctrl/monitor.c     | 24 ++++---
+ arch/x86/kernel/cpu/resctrl/pseudo_lock.c |  2 +-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c    | 22 +++++-
+ 8 files changed, 136 insertions(+), 27 deletions(-)
+
+-- 
+2.39.1
+
