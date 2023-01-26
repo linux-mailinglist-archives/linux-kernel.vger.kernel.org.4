@@ -2,190 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4331B67D7A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7326967D7A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:25:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232941AbjAZVWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:22:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S232952AbjAZVZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:25:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbjAZVWm (ORCPT
+        with ESMTP id S232873AbjAZVZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:22:42 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F53301B9;
-        Thu, 26 Jan 2023 13:22:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674768161; x=1706304161;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cCxPUgucea+LDKCkLYswdeqqJgXYQzc1yiOXRjJnzBI=;
-  b=MK0K9dvRso3eLH3EpSczFZTG1L+VqfF6rBP+gt8iZxen+vI+OvfxxoQB
-   M+i0ZnHMQAfIfJQwdau04enGkNgG5HhFVnOJ2ZHEYJHajccC/bhWsxz+H
-   F1YMyl29hNPw1ngQSe+cGV568EBHjpNJFYrIhmi4Stn64AF3AQ7Xhd1Q1
-   8lLXAEPJh7PcJQcl+VRuGS9S1S33sYs8RaMInr9/Pleaj4HGdRPDqBcQw
-   XV4v5xGLz2w3hRBPxG36LzpANKaazbi6tV3L+nRRjnq66QgGtBqUXRShi
-   oRzfaBk90ObaLaGlSqtX0xCP3ZFBqxCOtwZsr8L/Fza0fLJ0fzdzGpsgB
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="413172729"
-X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="413172729"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 13:22:41 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="726414793"
-X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="726414793"
-Received: from jlholden-mobl.amr.corp.intel.com (HELO [10.212.216.202]) ([10.212.216.202])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 13:22:40 -0800
-Message-ID: <8888528f-db70-1fef-71bb-8a3dd1f4380f@linux.intel.com>
-Date:   Thu, 26 Jan 2023 13:22:40 -0800
+        Thu, 26 Jan 2023 16:25:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6966FCA;
+        Thu, 26 Jan 2023 13:25:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2653FB81EEB;
+        Thu, 26 Jan 2023 21:25:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 548D2C433D2;
+        Thu, 26 Jan 2023 21:25:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674768342;
+        bh=l0Zu8iIrldR2UdBT8hZ4gHGIUEy3EDsOun6BQFWhokg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t0YubjSrKMW8vSsWkSdr/4Myl+5dSI9ia2kr4LIeXQ1OQP2FM8Eh/dDexFNEwl5cG
+         8ufJH0uQn3UXphqct9gaEaImNF8ghCGQgqypnch95wp532zrbiUo8ZqMUt77kSYKHs
+         lhYV+gclqQzVbZ+fAPORNgX7uWeY+dWR9Sq8MhQ4rOL+TC8QjvYekGKZEGCNPpfv8b
+         di3MMIexrbGo1alA4a50vLYIMO/d1+gfiHhTAxhOvvkm8DsGHIzUdZLFjeIyuQMlhH
+         zSSPrODVBQCNwfYn5xedaFwqnlA8BeB/I0SxKkuY6VQVpmrxi/u63REoQtkqGnrN0h
+         VezmjkZ07iGmA==
+Date:   Thu, 26 Jan 2023 21:25:40 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, harald@profian.com,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Pavan Kumar Paluri <papaluri@amd.com>
+Subject: Re: [PATCH RFC v7 37/64] KVM: SVM: Add KVM_SNP_INIT command
+Message-ID: <Y9Lv1HjD1FWdH9jg@kernel.org>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-38-michael.roth@amd.com>
+ <Y7BG6pSuoZsBQYrx@kernel.org>
+ <fd23ee51-ec47-717d-7cce-1d79db8b6bd3@amd.com>
+ <16523f06-bb08-c4f9-bdfa-745fee553a43@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH V1] PCI/ASPM: Update saved buffers with latest ASPM
- configuration
-Content-Language: en-US
-To:     Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
-        rafael.j.wysocki@intel.com, kai.heng.feng@canonical.com
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        treding@nvidia.com, jonathanh@nvidia.com, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-References: <20230125133830.20620-1-vidyas@nvidia.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230125133830.20620-1-vidyas@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <16523f06-bb08-c4f9-bdfa-745fee553a43@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 1/25/23 5:38 AM, Vidya Sagar wrote:
-> Many PCIe device drivers save the configuration state of their respective
-> devices during probe and restore the same when their 'slot_reset' hook
-> is called through PCIe Error Recovery System.
-> If the system has a change in ASPM policy after the driver's probe is
-> called and before error event occurred, 'slot_reset' hook restores the
-> PCIe configuration state to what it was at the time of probe but not with
-> what it was just before the occurrence of the error event.
-> This effectively leads to a mismatch in the ASPM configuration between
-> the device and its upstream parent device.
-> This patch addresses that issue by updating the saved configuration state
-> of the device with the latest info whenever there is a change w.r.t ASPM
-> policy.
-
-Do we need two save/restore calls for ASPM function? Is it not possible
-to extend pci_save_aspm_l1ss_state() to meet your need?
-
+On Mon, Jan 23, 2023 at 04:49:14PM -0600, Kalra, Ashish wrote:
+> There was an early firmware issue on Genoa which supported only SNP_INIT or
+> SEV_INIT, but this issue is resolved now.
 > 
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> ---
->  drivers/pci/pci.h       |  4 ++++
->  drivers/pci/pcie/aspm.c | 40 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 44 insertions(+)
+> Now, the main constraints are that SNP_INIT is always required before
+> SEV_INIT in case we want to launch SNP guests. In other words, if only
+> SEV_INIT is done on a platform which supports SNP we won't be able to launch
+> SNP guests after that.
 > 
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index 9ed3b5550043..f4a91d4fe96d 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -566,12 +566,16 @@ bool pcie_wait_for_link(struct pci_dev *pdev, bool active);
->  void pcie_aspm_init_link_state(struct pci_dev *pdev);
->  void pcie_aspm_exit_link_state(struct pci_dev *pdev);
->  void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
-> +void pci_save_aspm_state(struct pci_dev *dev);
-> +void pci_restore_aspm_state(struct pci_dev *dev);
->  void pci_save_aspm_l1ss_state(struct pci_dev *dev);
->  void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
->  #else
->  static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
->  static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
->  static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
-> +static inline void pci_save_aspm_state(struct pci_dev *dev) { }
-> +static inline void pci_restore_aspm_state(struct pci_dev *dev) { }
->  static inline void pci_save_aspm_l1ss_state(struct pci_dev *dev) { }
->  static inline void pci_restore_aspm_l1ss_state(struct pci_dev *dev) { }
->  #endif
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 53a1fa306e1e..f25e0440d36b 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -151,6 +151,7 @@ static void pcie_set_clkpm_nocheck(struct pcie_link_state *link, int enable)
->  						   PCI_EXP_LNKCTL_CLKREQ_EN,
->  						   val);
->  	link->clkpm_enabled = !!enable;
-> +	pci_save_aspm_state(child);
+> So once we have RMP table setup (in BIOS) we will always do an SNP_INIT and
+> SEV_INIT will be ideally done only (on demand) when an SEV guest is
+> launched.
 
-Add some details about this change to the commit log. Currently, you have talked only
-about the ASPM policy change issue.
+OK, thanks for the clarification!
 
->  }
->  
->  static void pcie_set_clkpm(struct pcie_link_state *link, int enable)
-> @@ -757,6 +758,39 @@ static void pcie_config_aspm_l1ss(struct pcie_link_state *link, u32 state)
->  				PCI_L1SS_CTL1_L1SS_MASK, val);
->  }
->  
-> +void pci_save_aspm_state(struct pci_dev *dev)
-> +{
-> +	int i = 0;
-> +	struct pci_cap_saved_state *save_state;
-> +	u16 *cap;
-> +
-> +	if (!pci_is_pcie(dev))
-> +		return;
-> +
-> +	save_state = pci_find_saved_cap(dev, PCI_CAP_ID_EXP);
-> +	if (!save_state)
-> +		return;
-> +
-> +	cap = (u16 *)&save_state->cap.data[0];
-> +	i++;
-> +	pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &cap[i++]);
-> +}
-> +
-> +void pci_restore_aspm_state(struct pci_dev *dev)
-> +{
-> +	int i = 0;
-> +	struct pci_cap_saved_state *save_state;
-> +	u16 *cap;
-> +
-> +	save_state = pci_find_saved_cap(dev, PCI_CAP_ID_EXP);
-> +	if (!save_state)
-> +		return;
-> +
-> +	cap = (u16 *)&save_state->cap.data[0];
-> +	i++;
-> +	pcie_capability_write_word(dev, PCI_EXP_LNKCTL, cap[i++]);
-> +}
-> +
-
-Don't you need to add this restore call in pci_restore_state()?
-
->  void pci_save_aspm_l1ss_state(struct pci_dev *dev)
->  {
->  	struct pci_cap_saved_state *save_state;
-> @@ -849,6 +883,12 @@ static void pcie_config_aspm_link(struct pcie_link_state *link, u32 state)
->  		pcie_config_aspm_dev(parent, upstream);
->  
->  	link->aspm_enabled = state;
-> +
-> +	/* Update latest ASPM configuration in saved context */
-> +	pci_save_aspm_state(link->downstream);
-> +	pci_save_aspm_l1ss_state(link->downstream);
-> +	pci_save_aspm_state(parent);
-> +	pci_save_aspm_l1ss_state(parent);
->  }
->  
->  static void pcie_config_aspm_path(struct pcie_link_state *link)
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+BR, Jarkko
