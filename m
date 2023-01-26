@@ -2,89 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9395467D20B
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D6067D20F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbjAZQpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
+        id S232494AbjAZQpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjAZQpg (ORCPT
+        with ESMTP id S232300AbjAZQpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:45:36 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912364EE1;
-        Thu, 26 Jan 2023 08:45:35 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QGjC0r027852;
-        Thu, 26 Jan 2023 16:45:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0DhafgZeBu6HoCEQt1MHmaUDfE+Qyo6YP+SijjNjXz0=;
- b=UGeVHheLaY+xz1iWUuxipjPRsekOxBu8ossFpFVG1PLVOysG3kCHcXA/IfN8WSUo6lfI
- kNm/NQ/u1aiKClA3dWec7isCoPN1f1NkDTDj+wAGJKtUZ4GVCeWMA1t7xioupJGDeZRw
- ShjFY5fOJqG3Qbf6nq1bSj4z0+ZyPb8qSG60SYpv4VKg8YPH/GDa6xn3UAaGH6wh0tSh
- 9dSZV+tOwSAf25ohsT/++wB9dvn1JKq8CzBHXG2CSkXd9UnICdYSIXb1Ep8QTZECb3V1
- Nfi44kraf+VH3/GCmJ0QrGZz7rXhJ40FJnVV01slM/D4abs99DROAIH9SvyIiS0RjWiO RA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nasr0kkq9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 16:45:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30QGjBVv020425
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 16:45:11 GMT
-Received: from [10.50.43.212] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 26 Jan
- 2023 08:45:03 -0800
-Message-ID: <37fccf60-75e7-3170-4e63-cafa62777596@quicinc.com>
-Date:   Thu, 26 Jan 2023 22:15:00 +0530
+        Thu, 26 Jan 2023 11:45:45 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A51166E1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:45:44 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so4235325wmq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:45:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Enp/w3Qf2+GBmoyJP5YWXCVerkN6XQoAVEmGTL8/Ffk=;
+        b=Xyd0fYZ2Z4Dzdql/uaBJ46hhSoEIk6ggT9SW7hNelJ9d8vwaT/Xy0l0fAkQIgpf2I4
+         PKfY8tBcZE64dUARwFW2rq5uxcbQT8F1Zk9LK9nxb0w3UVpSKA+gIftlV3iNejyfXr4U
+         oehQ5kfsD9r5X5Qxm4tK15vQxNLwcHhPp0LNEgzXpWbnsHvnrvBF8XN/WSS16xKy6PtP
+         592DmMk9cQfMMHttk0gelbDdOmf72iCNh+1vVzAUEKd9iNsJbqCKdmfNxsA8Km3TQQIx
+         k0WE75bQ6r9GJFKuFiSR4hXyBGMTkc7EAMHNQovYjlTX1kFADz86TmpQIKPWNHf4CZr0
+         mSlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Enp/w3Qf2+GBmoyJP5YWXCVerkN6XQoAVEmGTL8/Ffk=;
+        b=1ke8tt/I/ArrRAO1+Dvq7fcj/LPdz4KZQIA50KCL1mHRvcW4iOHrOMy3g4xk+PiNfB
+         iHWMyusEdZUWuGLH+s0fUP/+UxwtFaKCMJy6rS4k9v3KqwgclBE170PkUKksdfha/gq/
+         A49Vq4wT82LlfYLZFnBHeewZIo/A3SvMj6P39vblZSYD6LbcfyqGIj3xm9G+RicRJ8JI
+         IJaoiRAXX1iY7atNuS07vvCi4PRwxP/97Ant4QbVKR2GzNaWGHKkkAMfGOp1JxkZMvAg
+         3dtFIclZME6hGCgJOQMAKnne1bf1M8wOa8Lpt1yJLWKjEYeCiBbCB+bR0r0re5/phe5v
+         k3QA==
+X-Gm-Message-State: AFqh2kopjcAInYLNBYhN9WqBCehJwDRTL/POPdFE7XIMM3yWMAnzGz2y
+        41r12wTYpc1Wvnp/TmLwYk1ypQ==
+X-Google-Smtp-Source: AMrXdXsKsISR6oTne7xdvre6hZVcKLtZaCbJ0x+f/yFt4nW5JdHTj2Y8qWEvDgl0kEkdPIRSNpzWFA==
+X-Received: by 2002:a05:600c:1e1d:b0:3cf:674a:aefe with SMTP id ay29-20020a05600c1e1d00b003cf674aaefemr35700234wmb.22.1674751542929;
+        Thu, 26 Jan 2023 08:45:42 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id bg6-20020a05600c3c8600b003db06493ee7sm6005683wmb.47.2023.01.26.08.45.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 08:45:42 -0800 (PST)
+Message-ID: <ff3aebd7-2932-fd9f-3e82-fe123b770a87@linaro.org>
+Date:   Thu, 26 Jan 2023 16:45:41 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 05/10] clk: qcom: add Global Clock controller (GCC) driver
- for IPQ5332 SoC
-To:     Stephen Boyd <sboyd@kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <arnd@arndb.de>,
-        <bhupesh.sharma@linaro.org>, <broonie@kernel.org>,
-        <catalin.marinas@arm.com>, <devicetree@vger.kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <konrad.dybcio@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <marcel.ziswiler@toradex.com>,
-        <mturquette@baylibre.com>, <nfraprado@collabora.com>,
-        <quic_gurus@quicinc.com>, <robh+dt@kernel.org>,
-        <robimarko@gmail.com>, <shawnguo@kernel.org>,
-        <ulf.hansson@linaro.org>, <will@kernel.org>
-References: <20230125104520.89684-1-quic_kathirav@quicinc.com>
- <20230125104520.89684-6-quic_kathirav@quicinc.com>
- <9cf8a94f7ec4d8912bcf507631991999.sboyd@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
 Content-Language: en-US
-From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-In-Reply-To: <9cf8a94f7ec4d8912bcf507631991999.sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Cc:     agross@kernel.org, andersson@kernel.org, djakov@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org
+References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
+ <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
+ <Y86CPmgvAi+kChQI@gerhold.net>
+ <87192098-b7f4-060f-9274-933d974c0a7d@linaro.org>
+ <df4c76eb-aec7-823e-28f9-5ba96cc200c6@linaro.org>
+ <b7343ea6-7194-e709-8fed-4a1a17f7beb5@linaro.org>
+In-Reply-To: <b7343ea6-7194-e709-8fed-4a1a17f7beb5@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8YFMf9iChCf7TO-g8rvLTswHK1rj14mB
-X-Proofpoint-ORIG-GUID: 8YFMf9iChCf7TO-g8rvLTswHK1rj14mB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_07,2023-01-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- mlxlogscore=999 clxscore=1015 phishscore=0 lowpriorityscore=0 adultscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 impostorscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301260162
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,51 +84,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 26/01/2023 16:32, Bryan O'Donoghue wrote:
+> The only input clock to GCC is XO or buffered CXO if routed through the 
+> PMIC.
+> 
+> You can select via GCC::RCGR where dsiX_phy_pll_out_byteclk is *sourced* 
+> from XO, GPLL0_AUX or P_DSI0_PHYPLL_BYTE.
+> 
+> So, obvs the byte clock can be any one of those input sources.
+> 
+> But the question is, if you select dsi0_phy_pll_out_byteclk - what 
+> provides it ?
+> 
+> Reviewing the LK bootloader for 3.18, it *looks* to me like the dsi0 pll 
+> is always switched on. The downstream kernel tree doesn't represent that.
+> 
+> 0x01A9811C MDSS_DSI_0_CLK_CTRL
+> Type: RW
+> Reset State: 0x00000000 -> BIT(4) -> Turns on/off BYTECLK for the DSI. 
+> If set to 1, clock is ON.
+> 
+> Hmm. I think actually it must be the case that DSI1 is a slave of DSI0.
 
-On 1/26/2023 2:24 AM, Stephen Boyd wrote:
-> Quoting Kathiravan Thirumoorthy (2023-01-25 02:45:15)
->> diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
->> new file mode 100644
->> index 000000000000..8351096a4d32
->> --- /dev/null
->> +++ b/drivers/clk/qcom/gcc-ipq5332.c
->> @@ -0,0 +1,3954 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +#include <linux/clk-provider.h>
->> +#include <linux/module.h>
->> +#include <linux/of_device.h>
->> +#include <linux/regmap.h>
-> [...]
->> +
->> +static const struct freq_tbl ftbl_gcc_pcnoc_bfdcd_clk_src[] = {
->> +       F(24000000, P_XO, 1, 0, 0),
->> +       F(50000000, P_GPLL0_OUT_MAIN, 16, 0, 0),
->> +       F(100000000, P_GPLL0_OUT_MAIN, 8, 0, 0),
->> +       { }
->> +};
->> +
->> +static struct clk_rcg2 gcc_pcnoc_bfdcd_clk_src = {
->> +       .cmd_rcgr = 0x31004,
->> +       .mnd_width = 0,
->> +       .hid_width = 5,
->> +       .parent_map = gcc_parent_map_0,
->> +       .freq_tbl = ftbl_gcc_pcnoc_bfdcd_clk_src,
->> +       .clkr.hw.init = &(const struct clk_init_data){
->> +               .name = "gcc_pcnoc_bfdcd_clk_src",
->> +               .parent_data = gcc_parent_data_0,
->> +               .num_parents = ARRAY_SIZE(gcc_parent_data_0),
->> +               .ops = &clk_rcg2_ops,
->> +               .flags = CLK_IS_CRITICAL,
-> Why not just turn these clks on in probe and never register them with
-> the framework? That saves some memory for clks that there is no desire
-> to control from linux. This is an RCG, so in theory the frequency can
-> change, but does it really? Usually bus clks are controlled by the
-> interconnect driver.
+* If and only if you set P_DSI0_PHYPLL_BYTE::SRC_SEL = 0x01, using 
+SRC_SEL = 0 (XO) or SRC_SEL = 0x02 (GPLL0_AUX) should negate the dependency.
 
-Thanks Stephen for reviewing the patch. I will look into this and make 
-changes appropriately in V2.
+I'll review downstream further - perhaps DSI1 in practice doesn't set 
+P_DSI0_PHYPLL_BYTE as the source clock..
+
+---
+bod
 
