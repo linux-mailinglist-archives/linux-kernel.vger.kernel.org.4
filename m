@@ -2,101 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C391367C26E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 02:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7C067C299
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 02:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235810AbjAZBez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 20:34:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
+        id S230193AbjAZB4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 20:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjAZBex (ORCPT
+        with ESMTP id S229898AbjAZB4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 20:34:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D492128D3D
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:34:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70B75616EA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:34:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 496BCC433D2;
-        Thu, 26 Jan 2023 01:34:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1674696891;
-        bh=LpGTjcYf1DlUk7PNdNctpyCzducpqUJJbAKNiV2Q0RE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Tr9UkL55WPFPewbf2dotzPIKAx3TUEKfjFLxWUGCD+S5BxsFHlxSuYjj7eTneEzDy
-         hjItC983VD+8pWeiiEPpB/3tf8qK72AtPNlJOEAoyJ4PFNQKgIFIHrCqjg9SCXe9/M
-         V9Pk+Y+an8xv+9CG3ZO/wLQU0kLqEOBYfboAzw4o=
-Date:   Wed, 25 Jan 2023 17:34:49 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
-        mingo@redhat.com, will@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH v3 1/7] kernel/fork: convert vma assignment to a memcpy
-Message-Id: <20230125173449.5472cffc989dfab4b83c491d@linux-foundation.org>
-In-Reply-To: <CAJuCfpG5HyMP3RM1jTJxCnN4WUz4APAcxbkOT48ZtJDXcb3z3w@mail.gmail.com>
-References: <20230125233554.153109-1-surenb@google.com>
-        <20230125233554.153109-2-surenb@google.com>
-        <20230125162159.a66e5ef05fecb405e85ffec9@linux-foundation.org>
-        <CAJuCfpG5HyMP3RM1jTJxCnN4WUz4APAcxbkOT48ZtJDXcb3z3w@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 20:56:13 -0500
+X-Greylist: delayed 901 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 Jan 2023 17:56:02 PST
+Received: from symantec12.comsats.net.pk (symantec12.comsats.net.pk [210.56.25.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA8595D11B
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:56:02 -0800 (PST)
+X-AuditID: d238193a-355ff70000001ed1-40-63d1d4445411
+Received: from host201910.comsatshosting.com (host201910.comsatshosting.com [203.124.44.48])
+        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by symantec12.comsats.net.pk (Symantec Messaging Gateway) with SMTP id FB.9B.07889.444D1D36; Thu, 26 Jan 2023 06:15:48 +0500 (PKT)
+Received: from [::1] (port=57614 helo=host201910.comsatshosting.com)
+        by host201910.comsatshosting.com with esmtpa (Exim 4.93)
+        (envelope-from <mgrcpswarehouse@shaheenmedicalservices.com>)
+        id 1pKrEp-0006kj-7A; Thu, 26 Jan 2023 06:39:39 +0500
+MIME-Version: 1.0
+Date:   Thu, 26 Jan 2023 06:39:38 +0500
+From:   mgrcpswarehouse@shaheenmedicalservices.com
+To:     undisclosed-recipients:;
+Subject: payment
+In-Reply-To: <25d2d90c5e9c1697810974bf60d569e9@shaheenmedicalservices.com>
+References: <66237e77f34a94961293a31e78ab6770@shaheenmedicalservices.com>
+ <5d11d9cd77ddde7b1b88d440c62e89f8@shaheenmedicalservices.com>
+ <6f3834096b78812d3b11aa17e220daa1@shaheenmedicalservices.com>
+ <0e4db5e9cd6788014c69321dc600b32d@shaheenmedicalservices.com>
+ <23b6a43ee8193f85bdd62c78bfcab9a6@shaheenmedicalservices.com>
+ <46b75b00fee8e493ca75ca4abc96b8c7@shaheenmedicalservices.com>
+ <146a94cb430d08523763e7684f6e3a0a@shaheenmedicalservices.com>
+ <87cffe0d5102ad3e0cb014584a2bddaf@shaheenmedicalservices.com>
+ <375c1fd763be348e3548d6e78360853b@shaheenmedicalservices.com>
+ <7f27f74afdbaae639d41a808e6c50b0a@shaheenmedicalservices.com>
+ <09815f03a37b1a88a30a99f0e7f120d9@shaheenmedicalservices.com>
+ <5c743be996335913dc290e75a9614a0b@shaheenmedicalservices.com>
+ <af3380a418c13c0adb168708f2934993@shaheenmedicalservices.com>
+ <f257ed979442490527c37031d1d53ffe@shaheenmedicalservices.com>
+ <38b74e673dd5ffe7c04a0e7fe46d0920@shaheenmedicalservices.com>
+ <1c6703298c0b0def33385e3d6c0e905c@shaheenmedicalservices.com>
+ <1bab9ddc537c7dafc37e4ddedae7bd0b@shaheenmedicalservices.com>
+ <c189f40a2263f67cb922b368dc1169ad@shaheenmedicalservices.com>
+ <154e3d930ff663a3b046da3b0f94bb6b@shaheenmedicalservices.com>
+ <8be66b9d5972886986b838d7b5742f61@shaheenmedicalservices.com>
+ <02514ef7b364ff390dd66f4586f4fe69@shaheenmedicalservices.com>
+ <cf8455b976a240dd01475403911dc14c@shaheenmedicalservices.com>
+ <258d65d9404f26cae22c0cbb4b46a5fa@shaheenmedicalservices.com>
+ <2d97d9535f6e9f11b8ff350bfbeb514d@shaheenmedicalservices.com>
+ <dffa4b20d10f29cfe1f6c4ee3cf3bbc7@shaheenmedicalservices.com>
+ <c3280a2bc502872575bb4b1ed5d1e80b@shaheenmedicalservices.com>
+ <6d5626fa84c6720e2464334b8c0ed167@shaheenmedicalservices.com>
+ <2aba07ce3842a3f0d8e2aeee966df84d@shaheenmedicalservices.com>
+ <cc675237a928a5996722cbb48becd271@shaheenmedicalservices.com>
+ <f7f1f6bd117ccc813a306dcd73232572@shaheenmedicalservices.com>
+ <a92cb9132ea416d9eb91cc69d61ecc45@shaheenmedicalservices.com>
+ <9b97861788fbb9087bcdda712828d667@shaheenmedicalservices.com>
+ <7fa9c5df6f2d5e0e45ae9f6d85dec283@shaheenmedicalservices.com>
+ <e041bc3ccbf7802fb2d5a39c33b65048@shaheenmedicalservices.com>
+ <f191bf1be668d75ecabcc8816d8941b9@shaheenmedicalservices.com>
+ <7a1723a2d5ab2252fc0d1569a07b474e@shaheenmedicalservices.com>
+ <f5e62459bbd6c7ab32fbceaf32f6518c@shaheenmedicalservices.com>
+ <d861ec77eddf90a7074a75b53ec1474d@shaheenmedicalservices.com>
+ <5fbc9e57268b3b25f2284d540d57bd8b@shaheenmedicalservices.com>
+ <db73138565212ef92bc09bdcd135fcec@shaheenmedicalservices.com>
+ <b5873b2b68327fe91a6d607d58b3a23c@shaheenmedicalservices.com>
+ <e622217effd6c4c36ede81295b4cfdb7@shaheenmedicalservices.com>
+ <1fa7514a4e98980cc65bc8fe8b536032@shaheenmedicalservices.com>
+ <8bfb77218c7764ed149b8c608438aeef@shaheenmedicalservices.com>
+ <8b0ea7ebc426ab7624c68a920421c530@shaheenmedicalservices.com>
+ <b1b7fa3818150dbc3872af28b283b212@shaheenmedicalservices.com>
+ <b857d5bff8fae0d2c90bcef0f29372a0@shaheenmedicalservices.com>
+ <8593cfded79e06f5343a3486a95f3195@shaheenmedicalservices.com>
+ <2fb83eaeb7094b55ce86df43a48f4997@shaheenmedicalservices.com>
+ <2170f45d608396bae79b440ae7c056aa@shaheenmedicalservices.com>
+ <3b597cdfc59650d77c8a2b0067539f6f@shaheenmedicalservices.com>
+ <9d04a15974839e306aa65c37ce7c22b6@shaheenmedicalservices.com>
+ <03c47b015adac463a242c3083a3e1922@shaheenmedicalservices.com>
+ <fd45216d4a04c6c3087c977e161ce91c@shaheenmedicalservices.com>
+ <071e4782dbb60eb413db70aa126a1614@shaheenmedicalservices.com>
+ <fc55b2781377cb9d1ec24d0548a5f414@shaheenmedicalservices.com>
+ <f853bf82cab977faab24e47cebd37d36@shaheenmedicalservices.com>
+ <7884d58d6f9816c8396c4dea9bdd917f@shaheenmedicalservices.com>
+ <039e29838bd285f27847bc70c12c104d@shaheenmedicalservices.com>
+ <e1e2f98952ea3b19cbb6742540c60b9b@shaheenmedicalservices.com>
+ <7f80ed72218467f095902447bfa4ef39@shaheenmedicalservices.com>
+ <074a17b4d59a8987a8dc64878f1dda1c@shaheenmedicalservices.com>
+ <431a9f7a31b0389c3c7c3cf50077bfbf@shaheenmedicalservices.com>
+ <d07d8bbc70f0a6a1bb6774dd1c26e9a3@shaheenmedicalservices.com>
+ <0be56489072c7a2010a302a7b735c2ea@shaheenmedicalservices.com>
+ <936b6b4d985ce1dbcfdd83ef75df29c3@shaheenmedicalservices.com>
+ <d27d173c2b1384ef8a8e3804e3da7f04@shaheenmedicalservices.com>
+ <3cc305c07f55a47d1f4ce8d6be6124cd@shaheenmedicalservices.com>
+ <32add974f4616e8cdd94f25ecfb09b82@shaheenmedicalservices.com>
+ <14d186a367efa859752c5b9b70979515@shaheenmedicalservices.com>
+ <719d6ad9cf7e07bfa82ebcfcab1e2b4b@shaheenmedicalservices.com>
+ <d61e08de52accd9c1357b66ee5b8bf75@shaheenmedicalservices.com>
+ <9fd26d9c9e96786631318fb6644cce5c@shaheenmedicalservices.com>
+ <304d6f0cc772d39d30798db448bd2532@shaheenmedicalservices.com>
+ <25d2d90c5e9c1697810974bf60d569e9@shaheenmedicalservices.com>
+User-Agent: Roundcube Webmail/1.4.6
+Message-ID: <d608d5ae2fc7e9cee2dcc7a6857f4cb3@shaheenmedicalservices.com>
+X-Sender: mgrcpswarehouse@shaheenmedicalservices.com
+Content-Type: multipart/mixed;
+ boundary="=_fbd1c9601b6cb16d72302df3f8c89940"
+X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_50,DEAR_SOMETHING,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 Jan 2023 16:50:01 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+--=_fbd1c9601b6cb16d72302df3f8c89940
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 
-> On Wed, Jan 25, 2023 at 4:22 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Wed, 25 Jan 2023 15:35:48 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
-> >
-> > > Convert vma assignment in vm_area_dup() to a memcpy() to prevent compiler
-> > > errors when we add a const modifier to vma->vm_flags.
-> > >
-> > > ...
-> > >
-> > > --- a/kernel/fork.c
-> > > +++ b/kernel/fork.c
-> > > @@ -482,7 +482,7 @@ struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
-> > >                * orig->shared.rb may be modified concurrently, but the clone
-> > >                * will be reinitialized.
-> > >                */
-> > > -             *new = data_race(*orig);
-> > > +             memcpy(new, orig, sizeof(*new));
-> >
-> > The data_race() removal is unchangelogged?
-> 
-> True. I'll add a note in the changelog about that. Ideally I would
-> like to preserve it but I could not find a way to do that.
-> 
+Dear Sir,
 
-Perhaps Paul can comment?
+Good day.
 
-I wonder if KCSAN knows how to detect this race, given that it's now in
-a memcpy.  I assume so.
+We are waiting for approval of attached invoice.
+
+for payment purpose, please approve and Confirm Bank details
+
+
+Treat as urgent basis.
+
+
+
+Warms Regards,
+
+С уважением,
+
+Галина Мишкевич
+Координатор Департамента производства
+--=_fbd1c9601b6cb16d72302df3f8c89940
+Content-Transfer-Encoding: base64
+Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document;
+ name=220123-inv-224.docx
+Content-Disposition: attachment;
+ filename=220123-inv-224.docx;
+ size=10360
+
+UEsDBBQABgAIAAAAIQDd/JU3ZgEAACAFAAATAAgCW0NvbnRlbnRfVHlwZXNdLnhtbCCiBAIooAAC
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC0
+VMtuwjAQvFfqP0S+Vomhh6qqCBz6OLZIpR9g7A1Y9Uv28vr7bgJEVQtBKuUSKVnvzOzsxIPR2pps
+CTFp70rWL3osAye90m5Wso/JS37PsoTCKWG8g5JtILHR8PpqMNkESBl1u1SyOWJ44DzJOViRCh/A
+UaXy0Qqk1zjjQchPMQN+2+vdcekdgsMcaww2HDxBJRYGs+c1fd4qiWASyx63B2uukokQjJYCSSlf
+OvWDJd8xFNTZnElzHdINyWD8IENdOU6w63sja6JWkI1FxFdhSQZf+ai48nJhaYaiG+aATl9VWkLb
+X6OF6CWkRJ5bU7QVK7Tb6z+qI+HGQPp/FVvcLnrSOY4+JE57OZsf6s0rUDlZESCihnZ1x0cHRLLs
+EsPvkLvGb1KAlHfgzbN/tgcNzEnKin6JiZgaOJvvV/Ja6JMiVjB9v5j738C7hLT5kz7+wYz9dVF3
+H0gdb+634RcAAAD//wMAUEsDBBQABgAIAAAAIQAekRq38wAAAE4CAAALAAgCX3JlbHMvLnJlbHMg
+ogQCKKAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAjJLbSgNBDIbvBd9hyH032woi0tneSKF3IusDhJnsAXcOzKTavr2jILpQ217m9OfLT9ab
+g5vUO6c8Bq9hWdWg2JtgR99reG23iwdQWchbmoJnDUfOsGlub9YvPJGUoTyMMaui4rOGQSQ+ImYz
+sKNchci+VLqQHEkJU4+RzBv1jKu6vsf0VwOamabaWQ1pZ+9AtcdYNl/WDl03Gn4KZu/Yy4kVyAdh
+b9kuYipsScZyjWop9SwabDDPJZ2RYqwKNuBpotX1RP9fi46FLAmhCYnP83x1nANaXg902aJ5x687
+HyFZLBZ9e/tDg7MvaD4BAAD//wMAUEsDBBQABgAIAAAAIQDWZLNR+gAAADEDAAAcAAgBd29yZC9f
+cmVscy9kb2N1bWVudC54bWwucmVscyCiBAEooAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+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
+--=_fbd1c9601b6cb16d72302df3f8c89940--
