@@ -2,131 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7623567D747
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5037A67D753
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232681AbjAZVGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:06:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S232827AbjAZVI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:08:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbjAZVGr (ORCPT
+        with ESMTP id S232747AbjAZVIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:06:47 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9EB4F352
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:06:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QFRrnx4LCDY1GD06P5WsQ9CvPvNpj3PISn22RJrX6zNPEcXCl/605jjtX3bv571La/jI9Rr87X6ajg5U2CPzq7mlgrUdsl8iBz2dh3R5aRrH775Z9/Jy6YnmmJhZlyrSbHbB+uhMfMdPleLIx8fHB1+Yu6HMerV4GY02LAJwzprJvZk5vkemzmZ7IoRKyopv1b7Fq6wfPCqwvktHMYcIHHLbkxcoGQ4ufuhClrAGVAHnWavnAyz1NMnUVEk/YnyzlDnF5CcXrhUfARt9wvMxVp5o4sVmXpsrKA2bA/3hp+4egtl6wvY8vRM9WWstQIluUtpUgxtcnG3fLZVHTmsQLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mzqhERa5efbN4IvC07pQuK5qTA45433Kx3cs/ajS5ks=;
- b=RGRcrysRm1nJrr1E7kgj21fl0YsdW3Pafn/FHu1OZsQ3J9JknyI//gf8n+CG1j+52bWWxNUDbOt2s5kCQ/nBGKBVN5jif6Kp8s11IimS/N/kYDNgpD69KAlJFaeDr2JIEur4wW3c0DE8VsV/xgl535/622tp+2sp7KrxQo4HsHjypG51wqJrfsK80DjAQ22XcUncvA63kxpuGV8nv1mazOPKVD5KXkuyU28LCIcv9Y/1Z/hglIohu2AfQAYyRHS1QLkZKtWVgOshp+XdwnRDbMlpXtMmxOhAMsYkbozeaR88kmnCdVM1PIhrbMX6PKd04umaGDVj3xkT10tpvLdrxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mzqhERa5efbN4IvC07pQuK5qTA45433Kx3cs/ajS5ks=;
- b=qSJz/Nmnx+MQo+oh+hZk2NLcknhthFhdo7QbmVd+JG0ld6dUk7bCwh7jGWc9itma7PVMRq2sT+NY1ACCYs5ZnPpQ8Nys2B34e3LMjuTHK9GH5BqK/6GjRy4QP9xOo2VJaGTDtMQJ5984N+jchzvBcpIBu/Li8n5GbFFtxv16Rwg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- DS7PR12MB6286.namprd12.prod.outlook.com (2603:10b6:8:95::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.33; Thu, 26 Jan 2023 21:06:23 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::5935:7d8d:e955:6298]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::5935:7d8d:e955:6298%9]) with mapi id 15.20.6043.022; Thu, 26 Jan 2023
- 21:06:23 +0000
-Message-ID: <5ad53f8f-155a-d1e8-68e3-c82577816c76@amd.com>
-Date:   Thu, 26 Jan 2023 16:07:21 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] drm/amdgpu/display/mst: fix an unused-variable warning
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc:     Stylon Wang <stylon.wang@amd.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Roman Li <roman.li@amd.com>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        hersen wu <hersenxs.wu@amd.com>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Wayne Lin <Wayne.Lin@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20230126163605.3524630-1-arnd@kernel.org>
-Content-Language: en-US
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230126163605.3524630-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0181.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:f::24) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Thu, 26 Jan 2023 16:08:20 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAD812F3E;
+        Thu, 26 Jan 2023 13:08:18 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QKKSje019516;
+        Thu, 26 Jan 2023 21:08:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=YN4wQepIscQnrjjeq8TYGcaDHfM6tUB+QuAo5PrqWJM=;
+ b=G0USgGdotVLXdk40XcCePGFJarWkMXvfLutwsK6TwRCjtFOh9+PF9AuKSPcGoyJGyQyB
+ BpdNxaFkc2eR4ogSC82VnDsFyqRiqNa4qiMM+m83ze0q7hLg/QFw6iGv4cvIHtaV4Cpf
+ NPi0NCQzwDT6IgmfuK22nuV8bxgBGO9DMmcoM4PgtVgkiLwPMuDMXIoXUE8j7tXeUjPh
+ +x0z4nPrx6LrZDYjpzN5beGCZgGeJpoVoSyUAomBmRNsdEqrUBGqJGlNFUbvYUALJ36D
+ MtDeEPjvOzs3oqJmKBArKJqasf76ELMO0KvuD3FMo0g52sdSTwOpb+SzI1IjK5Ioyjgc rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nc0fhguy4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 21:08:14 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QKqnoT018446;
+        Thu, 26 Jan 2023 21:08:14 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nc0fhguxp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 21:08:14 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QKCIdl003161;
+        Thu, 26 Jan 2023 21:08:13 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3n87p7fbu8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 21:08:13 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QL8CbD67043734
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 26 Jan 2023 21:08:12 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 41BCA58063;
+        Thu, 26 Jan 2023 21:08:12 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF94B58059;
+        Thu, 26 Jan 2023 21:08:10 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.3.213])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 26 Jan 2023 21:08:10 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        stefanb@linux.ibm.com, eajames@linux.ibm.com
+Subject: [PATCH v3 0/2] tpm: Add reserved memory event log
+Date:   Thu, 26 Jan 2023 15:08:08 -0600
+Message-Id: <20230126210810.881119-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DS7PR12MB6286:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6ae28571-004d-4ab8-78cf-08daffe12dbd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M2tyzLmZqBb0pcCPRDq+U7Fk9mDi67gHnSR6oPKlkFybz+9op65FLSOcKkHOq4SYCTSzn2FahXho+EP59kxlLVoALwkW9bu3FreuctYeJOOubwhZRqN9dfU+W5CVMOVBhrpVs4OxN5OP5EXCiNY141oagYfbjeim44hLTDugQ16tYsKjSgrxQ0Bo4nD3ox4a4vdMkcI2zPPw5NJm1fkV4JKWBQLDSUwKfiTPTacv8Dmed+Gc0Ak4A9rQpAeq0ovpfYBRTl12OrkN/x2beV22qmKHKgi5YFD6pNqpTJXz84+y1cISmXWgQzP5V9SjuRhArjeCE3EVqNXPjBl3AgTGUgamabszJtxC1q0L0/Q8bcTyyafnUrz3j2bx7os+UEfhBiyd3F6q0TgVyatxan6V5wKA8cZWVq69r7pbfQidFijN7zkvzslGadwJuBzrWhhRacbdMdc901FiC15zx0RVLuFJtajySys07aHCQlS0EHvJMArMCR/qY+tbkVuWKPU3ciMkeXCFngWIblgC8TfrMDDV7qcYQBb+Ym5afTJUcb3b3UWI8/kC8XYIxUKLXAmkqtPi+c+TR93qlrwBodSEwq/ctu0rwBniUsQlMM2hgznhHCCyuWNUPXP5bR+yJN7h8ixhj+moC+i6fVznEQNK78I+jsOkFSuIxFFfIFSwq3uTd1wRtdVo9B2LBe594oiIZnL119q2qhZ1Wiw9N6StKQonsSKjEIfBS9XBoyv0pqg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(366004)(346002)(39860400002)(136003)(451199018)(66946007)(8676002)(316002)(86362001)(36756003)(8936002)(54906003)(44832011)(5660300002)(31686004)(38100700002)(31696002)(2906002)(6512007)(66556008)(4326008)(41300700001)(53546011)(26005)(186003)(6506007)(6636002)(2616005)(478600001)(66476007)(110136005)(6486002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dXlTY3hqdlhLU3p6RTBidUM4ajk3RDRJN3Q2dFZ0clkwa0pkTlNyT1FObmhm?=
- =?utf-8?B?bXNQTjd3RlMxY1RWV0RKbUdlSVZ4bkVHMXVzY2lNTm5Rc21oRWZnL3lMUEpu?=
- =?utf-8?B?OWU3Z2xKZ3h5MlFTUHdQWkE0dVE0amh3RmFDMEZjaHZPYno0WG5HakpZZWtR?=
- =?utf-8?B?WVBLWWVQMUh3cE85KzNBY09ac3R5R2lDRkd3eVZHcXZvUVU1VmFmWEU4SDRh?=
- =?utf-8?B?L3NpZ00vVXk4S25ZcGZKOWM3d0RnNE1Kb3ZNSHMxRUVDVUdvc0pnWmdPT2Fl?=
- =?utf-8?B?cC9sN3lXRWkrUlRMV0pwL2dNWW9XMkxPSmdMVEc5SmpuakFXT1lkc0VmMlNi?=
- =?utf-8?B?bUF1dzY5c1FJUlVJRTV1Sno5ZnB1WE5FTmVnWVFtLzl0U2pDWFE5WHEwcnhJ?=
- =?utf-8?B?MVk4NnFGcXFadUEvN3lyTWhEN2ZiT2tPajNEcEFDVXd0VUhPcmUvMkVodXBI?=
- =?utf-8?B?UHFzS0psT0IzQi9LU0VlRlk3VTVLSldnaGZDenBwMHhTZ2JzSnJCWVV4VkhY?=
- =?utf-8?B?WTZvY2MxYUY1RVJHZXBqZ0JVWXovZmJBbEpzN0dZQ092elhVNGp4M1Y1bmdV?=
- =?utf-8?B?UU9ES0xtQXQwUzJLVFpqUEhsV3pFNVdjaDdMVnpiQUQzdlRRNStISDYvM0pV?=
- =?utf-8?B?MDJuU0dxTjVBQ3lLdXJSWTZxZkQ3U3dkcDdIU3h0RUNEUDJ6NGY0NGFwNWsx?=
- =?utf-8?B?Uzg5aTF3bHMwZThDUk01VTZpSzV0bVRIc056R2lwbitXV0J0T016Z3BJc056?=
- =?utf-8?B?M0liQWhaVS82cEpXajZqd2VnaVlQRXFWenZlWWVtNi95S3FZSkM0aWJDUTVu?=
- =?utf-8?B?cmg3TUF4VDVWSnBaYTA3THZUYnpqOVVrN1dwMXpuZ1pSUFVWOW9vVUJZYVJ1?=
- =?utf-8?B?V2I3dVZPeEx6WldJbWZJMGhacis4V1JiRVN2ZWs5SnpKZ2k5WmpLZ2xDREtN?=
- =?utf-8?B?Tys2dXFsQThWN2drSmdhQkdyWW1RczdrK3RzNHVLSElGWXF6RVlwM1ZUMSsy?=
- =?utf-8?B?MldrY21DQTlNSkpCdVovK2FUb2xiUXl5Umg1bXFlODFQWWYva3BzY2lPYzNL?=
- =?utf-8?B?NmNodkJHWDk4RTB2emxsK0toMGJWd3dKVjc4N2Jualhud3VSL3hvTHB6azNT?=
- =?utf-8?B?T3dRRk9sTWtCQm1IbEI5QjhVc09INS8xTXdVMWNVOU55Yjd4OWoyZTFWNXEw?=
- =?utf-8?B?UmtMZVBZR2VmakFjNW0rM05xM054bFQ4M0d4Tk0yZng5M0ZKTnBHYVBGbG9Q?=
- =?utf-8?B?MFVCNzZkOFZhY29KY3dsK1NBbi9SOE10Zklod2NWV1pzaGhnRlVCQnh0b09k?=
- =?utf-8?B?U3laU3E4Zm5xUG1pYi9TOVZaWENjcW5TUm1rK2N4MVB5bGVrWUpCaHJ3Zmgz?=
- =?utf-8?B?UGM5b3ZTTzJCNHYrWno2MkVpc2dOUm9wZitrdGV5TENIT05aQUZaQ3B5RGlP?=
- =?utf-8?B?b1lOUThwcUtQVEp0aGczSG95SitVMk9nZHZOak9YdGdpdjhCUzJ6UnBzR3Yz?=
- =?utf-8?B?cFVvS2VIWE50bzM3V045NlpzYVZnc0JINFprTTVaajN3UUJIbGxSRzZ2dDJ5?=
- =?utf-8?B?dzJ1RUwxTDNHL09GZm9IbzdoTFpETC91TG43c09uL21HamtKdUJ1ZzZoV0x6?=
- =?utf-8?B?bG0wUS9wcXk5U2JtUDF4N045VlMvYWFVTGhDOXNTNisyOEd4MHltRzBOTW9G?=
- =?utf-8?B?M0lHdUszSGVleG14NHorclBiOERJT1VVNk9wV0lkMkhSd21EYkorT0YwUjY1?=
- =?utf-8?B?SWUyY3ZHV0p5aC9mMGJRVkd2WHFaTGYzODRleXRCMmF6YTJ6RnNiZjgzZ0p6?=
- =?utf-8?B?U0FKakdMMTU3NlU0Q0UycmVKNGgybnJsdlNsT3JsWTZwaDVwekVwN0tiOCsw?=
- =?utf-8?B?cVJSWVhKUGVCbGw0b1pTd05QZE03V3VCbnVmY3hjV1ZHdFpKVDVNV3JZaUsw?=
- =?utf-8?B?SUFHT2JHMlY1c0xJZ0FCaktweXNvWGlHVGhKcGdVcG9qNVVGbVlCUVJrTURl?=
- =?utf-8?B?ZjV3RmsyM1UxSmhjRmZIdWEwOHJzeFcxTGtNWTNtZGJNaFhyckJzWkhpMzhh?=
- =?utf-8?B?ZGtOeE1CbnIzbS8yVkIyRmpVTmhRL2FlYWptSTJzaXlmMlc2QWxSU1BSTHdh?=
- =?utf-8?Q?owBXFekAeXqaFNPKWUGaog4cT?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ae28571-004d-4ab8-78cf-08daffe12dbd
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 21:06:22.9431
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1ZF36l8gZNcGrxO4NB9O6XJ/cIOtcI3NNUdSG2knM2BYxiQZEIT0pLqqreGyxVBx7HzuyAUUNn84Tl2rwu3gxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6286
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: cA0NYR5KYYUq_tjkqG5jQP28Au1jsGWy
+X-Proofpoint-GUID: ORLHV1HNL4xE4ctbYlwwid4kIrRKIXMf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-26_09,2023-01-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 impostorscore=0 bulkscore=0 priorityscore=1501
+ mlxlogscore=800 phishscore=0 adultscore=0 mlxscore=0 malwarescore=0
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301260198
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -134,46 +88,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/23 11:35, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The newly added code is in an #ifdef, so the variables that
-> are only used in there cause a warning if CONFIG_DRM_AMD_DC_DCN
-> is disabled:
-> 
-> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'amdgpu_dm_atomic_check':
-> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9698:43: error: unused variable 'mst_state' [-Werror=unused-variable]
->   9698 |         struct drm_dp_mst_topology_state *mst_state;
->        |                                           ^~~~~~~~~
-> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9697:41: error: unused variable 'mgr' [-Werror=unused-variable]
->   9697 |         struct drm_dp_mst_topology_mgr *mgr;
->        |                                         ^~~
-> 
-> Fixes: c689e1e362ea ("drm/amdgpu/display/mst: Fix mst_state->pbn_div and slot count assignments")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Some platforms may desire to pass the event log up to Linux in the
+form of a reserved memory region. In particular, this is desirable
+for embedded systems or baseboard management controllers (BMCs)
+booting with U-Boot. IBM OpenBMC BMCs will be the first user.
+Add support for the reserved memory in the TPM core to find the
+region and map it.
+Since the memory is mapped, not allocated, change all the event log
+allocation functions to managed allocations so that the memory can be
+either automatically freed or unmapped.
 
-Applied, thanks!
+Changes since v2:
+ - Improve commit message for patch 2
 
-> ---
->   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> index be1232356f9e..c966bb05f6c7 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> @@ -9694,8 +9694,10 @@ static int amdgpu_dm_atomic_check(struct drm_device *dev,
->   	struct drm_connector_state *old_con_state, *new_con_state;
->   	struct drm_crtc *crtc;
->   	struct drm_crtc_state *old_crtc_state, *new_crtc_state;
-> +#if defined(CONFIG_DRM_AMD_DC_DCN)
->   	struct drm_dp_mst_topology_mgr *mgr;
->   	struct drm_dp_mst_topology_state *mst_state;
-> +#endif
->   	struct drm_plane *plane;
->   	struct drm_plane_state *old_plane_state, *new_plane_state;
->   	enum dc_status status;
+Changes since v1:
+ - Use managed memory
+
+Eddie James (2):
+  tpm: Use managed allocation for bios event log
+  tpm: Add reserved memory event log
+
+ drivers/char/tpm/eventlog/acpi.c |  5 ++--
+ drivers/char/tpm/eventlog/efi.c  | 13 +++++-----
+ drivers/char/tpm/eventlog/of.c   | 41 ++++++++++++++++++++++++++++++--
+ drivers/char/tpm/tpm-chip.c      |  1 -
+ 4 files changed, 49 insertions(+), 11 deletions(-)
 
 -- 
-Hamza
+2.31.1
 
