@@ -2,116 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D357767D511
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A82B67D517
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbjAZTHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 14:07:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S232440AbjAZTIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 14:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjAZTHI (ORCPT
+        with ESMTP id S232402AbjAZTIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 14:07:08 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E34526F;
-        Thu, 26 Jan 2023 11:07:01 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id k13so2776421plg.0;
-        Thu, 26 Jan 2023 11:07:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:message-id:date:cc:to:from:subject:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uCv4gRxFA6EVdh6HH0URpLxFamW9QobkbMQUcrragFA=;
-        b=d7zk+ziM5pl3fshYkdFnHqJelj/bCdpeh61z0rKS3HyiBOxqqSaSrpmOOjue+oFzkA
-         tiXUtVosjqMu4+mh3INRd10ByCUaavhnwKIzlEMvnLp5j/HmIC4r/1ag9aLrea7cEhn1
-         lqaWCPflpEsHOHnuDKlsFlFhSwNtQymZ9qNJxw8L3ydnUSV4xQUJCK9or+zPVB7z66fD
-         sPApZtNqFXZacMd1MHJny2jBYh1w843FZSMeHa6M5UqTQsL80av6VqgHXS1ev5rU5ATh
-         Oa9uxUgTplrbNV09S3P/iiWdBWBVqn0g+XlLnFQ5dQqzGQm7iw5rRCou6VnaM6it6Hg2
-         t0yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:message-id:date:cc:to:from:subject:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uCv4gRxFA6EVdh6HH0URpLxFamW9QobkbMQUcrragFA=;
-        b=Bx/owZFQZ4eAdH2LA06yalxsjUJ6uZ+WWMAFsIPDV4XfLAzfXQEU+U/OqJYbm5f9ay
-         uIJiCFoYqSGzUtNzLRSGrQi3evvAKXYiYriiKFz2pw9Sii/j3XstHJqouRjMy50sHVDU
-         vu2NsCCCGV5zuuXIYhCi8NwjEZGvqDBcTOUHedjkLT9i+72o0ejPfvaDt3vmfrLh+ypk
-         zFPniaPhLwyWYiUDUr7fEhShinIfePeK8zeojC7yP65aeIM7kb58mWNmd9hbBcSdfYBq
-         0fxaAu7LT/fEyqgd4n7zCwQEotT02yYMhbIX5UC4FMMxgfsU5dtMxFZHBLOWmWwr2y6R
-         HtZQ==
-X-Gm-Message-State: AO0yUKVmzeKSPWxToYF75IuxT+pGIrpvXbJn//i3hyJnG7OVPa8WHTlv
-        8UsKpCmHWkwJM4qQDmTVBW8=
-X-Google-Smtp-Source: AK7set/OLpLWySmoIoTSIuSxTXA7Mlwa8/JW/hSOI/oQhinkbOnkQxACuK0hnP5jEQ99H5J9ABEIaA==
-X-Received: by 2002:a17:90b:4d81:b0:22c:1e60:dc04 with SMTP id oj1-20020a17090b4d8100b0022c1e60dc04mr3291871pjb.16.1674760020927;
-        Thu, 26 Jan 2023 11:07:00 -0800 (PST)
-Received: from localhost.localdomain ([98.97.119.47])
-        by smtp.gmail.com with ESMTPSA id e11-20020a17090a728b00b00229094aabd0sm3632313pjg.35.2023.01.26.11.06.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 11:07:00 -0800 (PST)
-Subject: [net PATCH] skb: Do mix page pool and page referenced frags in GRO
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-To:     nbd@nbd.name
-Cc:     alexander.duyck@gmail.com, davem@davemloft.net,
-        edumazet@google.com, hawk@kernel.org, ilias.apalodimas@linaro.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linyunsheng@huawei.com, lorenzo@kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com
-Date:   Thu, 26 Jan 2023 11:06:59 -0800
-Message-ID: <167475990764.1934330.11960904198087757911.stgit@localhost.localdomain>
-In-Reply-To: <04e27096-9ace-07eb-aa51-1663714a586d@nbd.name>
-References: <04e27096-9ace-07eb-aa51-1663714a586d@nbd.name>
-User-Agent: StGit/1.5
+        Thu, 26 Jan 2023 14:08:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4925BBF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:07:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674760031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HAzPuEtZNKjq1ETKDrru2udxiQbSs8Nq94l8Ylte7oc=;
+        b=YZzK3eutY4l4Hs8tk92djc2MekEIqZ3c8hv7iHrX3aBG6Rvx5ZV2TLALGhouV3we5zhy45
+        2akujpFTXd4wZEssnIATlnsYpdXHSkgwoJs6vFpEiX7mUxE3+hlDALm2ZmwcGJUeKR1Xco
+        2lEM8ef4XGNh8VCHl5K9NSxOpO403+Q=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-186-SSu0E1y2OGuDi9AFpIeu1Q-1; Thu, 26 Jan 2023 14:07:07 -0500
+X-MC-Unique: SSu0E1y2OGuDi9AFpIeu1Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 564F81C05AFC;
+        Thu, 26 Jan 2023 19:07:07 +0000 (UTC)
+Received: from [10.22.33.13] (unknown [10.22.33.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B14112166B26;
+        Thu, 26 Jan 2023 19:07:06 +0000 (UTC)
+Message-ID: <2d0483b4-f94f-8935-1a05-91417e3bfe8d@redhat.com>
+Date:   Thu, 26 Jan 2023 14:07:06 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
+Content-Language: en-US
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>, dsterba@suse.cz,
+        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Chris Murphy <lists@colorremedies.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>
+References: <CABXGCsN+BcaGO0+0bJszDPvA=5JF_bOPfXC=OLzMzsXY2M8hyQ@mail.gmail.com>
+ <20220726164250.GE13489@twin.jikos.cz>
+ <CABXGCsN1rzCoYiB-vN5grzsMdvgm1qv2jnWn0enXq5R-wke8Eg@mail.gmail.com>
+ <20230125171517.GV11562@twin.jikos.cz>
+ <CABXGCsOD7jVGYkFFG-nM9BgNq_7c16yU08EBfaUc6+iNsX338g@mail.gmail.com>
+ <Y9K6m5USnON/19GT@boqun-archlinux>
+ <017f7b9e-323c-f9aa-12fa-9c9a16dabd35@redhat.com>
+ <Y9LNoDtOK4nun968@boqun-archlinux>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y9LNoDtOK4nun968@boqun-archlinux>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Duyck <alexanderduyck@fb.com>
+On 1/26/23 13:59, Boqun Feng wrote:
+> On Thu, Jan 26, 2023 at 01:30:34PM -0500, Waiman Long wrote:
+>> On 1/26/23 12:38, Boqun Feng wrote:
+>>> [Cc lock folks]
+>>>
+>>> On Thu, Jan 26, 2023 at 02:47:42PM +0500, Mikhail Gavrilov wrote:
+>>>> On Wed, Jan 25, 2023 at 10:21 PM David Sterba <dsterba@suse.cz> wrote:
+>>>>> On Wed, Jan 25, 2023 at 01:27:48AM +0500, Mikhail Gavrilov wrote:
+>>>>>> On Tue, Jul 26, 2022 at 9:47 PM David Sterba <dsterba@suse.cz> wrote:
+>>>>>>> On Tue, Jul 26, 2022 at 05:32:54PM +0500, Mikhail Gavrilov wrote:
+>>>>>>>> Hi guys.
+>>>>>>>> Always with intensive writing on a btrfs volume, the message "BUG:
+>>>>>>>> MAX_LOCKDEP_CHAIN_HLOCKS too low!" appears in the kernel logs.
+>>>>>>> Increase the config value of LOCKDEP_CHAINS_BITS, default is 16, 18
+>>>>>>> tends to work.
+>>>>>> Hi,
+>>>>>> Today I was able to get the message "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too
+>>>>>> low!" again even with LOCKDEP_CHAINS_BITS=18 and kernel 6.2-rc5.
+>>>>>>
+>>>>>> ❯ cat /boot/config-`uname -r` | grep LOCKDEP_CHAINS_BITS
+>>>>>> CONFIG_LOCKDEP_CHAINS_BITS=18
+>>>>>>
+>>>>>> [88685.088099] BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
+>>>>>> [88685.088124] turning off the locking correctness validator.
+>>>>>> [88685.088133] Please attach the output of /proc/lock_stat to the bug report
+>>>>>> [88685.088142] CPU: 14 PID: 1749746 Comm: mv Tainted: G        W    L
+>>>>>>     -------  ---  6.2.0-0.rc5.20230123git2475bf0250de.38.fc38.x86_64 #1
+>>>>>> [88685.088154] Hardware name: System manufacturer System Product
+>>>>>> Name/ROG STRIX X570-I GAMING, BIOS 4408 10/28/2022
+>>>>>>
+>>>>>> What's next? Increase this value to 19?
+>>>>> Yes, though increasing the value is a workaround so you may see the
+>>>>> warning again.
+>>>> Is there any sense in this WARNING if we would ignore it and every
+>>>> time increase the threshold value?
+>>> Lockdep uses static allocated array to track lock holdings chains to
+>>> avoid dynmaic memory allocation in its own code. So if you see the
+>>> warning it means your test has more combination of lock holdings than
+>>> the array can record. In other words, you reach the resource limitation,
+>>> and in that sense it makes sense to just ignore it and increase the
+>>> value: you want to give lockdep enough resource to work, right?
+>>>
+>>>> May Be set 99 right away? Or remove such a check condition?
+>>> That requires having 2^99 * 5 * sizeof(u16) memory for lock holding
+>>> chains array..
+>> Note that every increment of LOCKDEP_CHAINS_BITS double the storage space.
+>> With 99, that will likely exceed the total amount of memory you have in your
+>> system.
+>>
+>> Boqun, where does the 5 figure come from. It is just a simple u16 array of
+> 	#define MAX_LOCKDEP_CHAINS_BITS	CONFIG_LOCKDEP_CHAINS_BITS
+> 	#define MAX_LOCKDEP_CHAINS	(1UL << MAX_LOCKDEP_CHAINS_BITS)
+>
+> 	#define MAX_LOCKDEP_CHAIN_HLOCKS (MAX_LOCKDEP_CHAINS*5)
+>
+> I think the last one means we think the average length of a lock chain
+> is 5, in other words, in average, a task hold at most 5 locks. I don't
+> know where the 5 came from either, but it's there ;-)
 
-GSO should not merge page pool recycled frames with standard reference
-counted frames. Traditionally this didn't occur, at least not often.
-However as we start looking at adding support for wireless adapters there
-becomes the potential to mix the two due to A-MSDU repartitioning frames in
-the receive path. There are possibly other places where this may have
-occurred however I suspect they must be few and far between as we have not
-seen this issue until now.
+You are right. I missed that when I looked. So 5 is assumed to the 
+average length of a lock chain.
 
-Fixes: 53e0961da1c7 ("page_pool: add frag page recycling support in page pool")
-Reported-by: Felix Fietkau <nbd@nbd.name>
-Signed-off-by: Alexander Duyck <alexanderduyck@fb.com>
----
- net/core/gro.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/net/core/gro.c b/net/core/gro.c
-index 506f83d715f8..4bac7ea6e025 100644
---- a/net/core/gro.c
-+++ b/net/core/gro.c
-@@ -162,6 +162,15 @@ int skb_gro_receive(struct sk_buff *p, struct sk_buff *skb)
- 	struct sk_buff *lp;
- 	int segs;
- 
-+	/* Do not splice page pool based packets w/ non-page pool
-+	 * packets. This can result in reference count issues as page
-+	 * pool pages will not decrement the reference count and will
-+	 * instead be immediately returned to the pool or have frag
-+	 * count decremented.
-+	 */
-+	if (p->pp_recycle != skb->pp_recycle)
-+		return -ETOOMANYREFS;
-+
- 	/* pairs with WRITE_ONCE() in netif_set_gro_max_size() */
- 	gro_max_size = READ_ONCE(p->dev->gro_max_size);
- 
-
+Thanks,
+Longman
 
