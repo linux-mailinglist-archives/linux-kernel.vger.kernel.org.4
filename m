@@ -2,99 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0569367C839
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE54267C843
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236399AbjAZKQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        id S236739AbjAZKRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236426AbjAZKQG (ORCPT
+        with ESMTP id S236566AbjAZKRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:16:06 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25C12E82E
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:15:42 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id h12so1217323wrv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:15:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=twBtZMn9wKaG/ztRkE/bpJjVZKfP8U9ZlpnQYKgfeeg=;
-        b=XPrI2pHpkgT4ZxgfpxlYrcFBGY2eruA6Db+c5YRDQNdUqMALc+WwDqoqsgwLLXyKSA
-         ekzOULU2MHbSbRLNECuTHzvJGdre8fgZRsg9h2Juz07NCjGNoLmDl1R4HWljo5pwl8xL
-         53X73c46AaUKVN46+cMQnorTeJN8MJesJyBvQ4qgRufpAI/CHHjbCjS7vjRfOnjXzXOC
-         1SRpXr6P3uEgbuki+L3gDtjBk+LBin5HoJCnNUK3t28sQegG7RGCb+dc5rXc5EE03BR6
-         6CQDtkZcPj7PK1vcFU4dkv8xbp8Z7xoneM37+WhYZslJ4QeAKQzSR40cv46lJrS9Fhu+
-         5Evg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=twBtZMn9wKaG/ztRkE/bpJjVZKfP8U9ZlpnQYKgfeeg=;
-        b=NijW1FdgU7lLwzzNIQr6jZbM/sDXqRHGmUs77BMeIK+KEE0UYDVXlq7z0j1G6Y3Haw
-         2efxuQ8SFPrwhHNx0sSHDES2hZFjLVKJBCjQWbZowXoRorvzsER8UP++yeSLkQVW+MQc
-         eDTlarUTkq9OvE9CGdkO/QN7hEJSo6CsO8eIzQV1UbwKsLn3aVsTZbNnOQoQGLpPxRxj
-         ty4UXsJwWLYyfy/IZ/vlEbg7XjXsJI3+Xm+E5xPp0BlfAQhwWMR48OBM+7afl5bsFDXs
-         zFt812B7kWTZeQtVhodd4/CqJgdSu2lf8yGh8O3luIBKogcfAhzT6STspFPwJG6BUEjz
-         kfLw==
-X-Gm-Message-State: AO0yUKW5wh4ClIUIau5N9ewhUOPT5aSGQU+0vJNe8mw8uT63oeVHZcDY
-        +vWgvZz0cCgEROq6YVtlhKMHsQ==
-X-Google-Smtp-Source: AK7set+28IeoLf32k4Lmsk+uscuInUvhlaQAjPA3pU3bPMptPmlY8O2wnZiVU74/5AoUSBadienP3w==
-X-Received: by 2002:adf:f045:0:b0:2bf:b872:cf21 with SMTP id t5-20020adff045000000b002bfb872cf21mr4274135wro.0.1674728141450;
-        Thu, 26 Jan 2023 02:15:41 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h4-20020adfaa84000000b002bfbf4c3f9fsm902958wrc.17.2023.01.26.02.15.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 02:15:41 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] memory: renesas-rpc-if: Remove redundant division of dummy
-Date:   Thu, 26 Jan 2023 11:15:39 +0100
-Message-Id: <167472807936.10495.6129482426397494383.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230112090655.43367-1-wsa+renesas@sang-engineering.com>
-References: <20230112090655.43367-1-wsa+renesas@sang-engineering.com>
+        Thu, 26 Jan 2023 05:17:18 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AD6AD16;
+        Thu, 26 Jan 2023 02:16:47 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id CDA985C00DA;
+        Thu, 26 Jan 2023 05:16:29 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 26 Jan 2023 05:16:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=umbraculum.org;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674728189; x=1674814589; bh=s9W/9MyKgS
+        isyN6zGHmrgn0Oipj/EtVibkHLYyeuDVc=; b=dsge6GPzRlw9MWF79ytfvya17Y
+        BNMGKRZx18MwVo1hntKB9c7cYDONDTJroJUgYjoSSEEq9Upt0dSFkq9Ae7o1mQhq
+        DSywSSlxjhLYa+J7mpNSgZ6J8lLqKKLNLI4i3rcW5hOXcCKm+mHv5WYgZ/Zj3lKO
+        3MuHCpjmt4IlmhIWz+jrFwhwQ2uTvoIPdIG7zZFfLeAVpGle9UQHN5VhtYAOi9b0
+        K3BfahIuiYxcltkguJ+r2AJ6YRrlqj5u/eV4gye4Qpg5wZXjjoUapnr/tZkUo0FI
+        gFsUuk7U2pxz3ppnqAOWnpItq5weeVjpyDCeNHEI07HyD5JuI+3zdgbjDgXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1674728189; x=1674814589; bh=s9W/9MyKgSisyN6zGHmrgn0Oipj/EtVibkH
+        LYyeuDVc=; b=mh6+nV3SaPKHsK0aW9l5M77NSTJfGt5Uy4g5XjB0bDU0G+iU3WN
+        V0ebS2sjZG3zlg3ANlcpUeZnPobLqIBz+oXdcKVUWFyuq6QpRPPoG8LYnw1esfNj
+        42JKSjb28aGdyRd8C7FMUWApsXbsge6rXHyEMWd31+7gRU8GAFxVsWJpxZW5uDMn
+        jgw/K3GAJlPGEzu8VS6tjE80xxKMYWy7285nmBCqcBEtkb6qEIYG8iuRcpMBvBUj
+        EJ43BiVxqXbvIyFosoDT2GxMeQb2z+uNux4Qj8idp5IENx+pVHagirRwqgUYpo3U
+        L81197OrSLeAanrlWqVYwh/WlINw4hfRl/Q==
+X-ME-Sender: <xms:_FLSY2t1UfBzqMPy07pqW3KPYUFLC8F1xFKrZkqD0qK4GO5KpvCKcw>
+    <xme:_FLSY7c8x9IRTk0Iu8R7aQOiQYfz7TpZ6_8OjJ8g3U75I7mOPFKSWjtGaM-u0Hy7W
+    zIkdbw0wNlK70BUjQU>
+X-ME-Received: <xmr:_FLSYxycdWGekEISM8g95bc4aqtPwXtwiTalAg-J0F04y-ovjpDKkXzRkBa2pxsSGofP8SpuejQH39lRNrdzaMABC9W6WyqWmHJcXA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflohhnrghsucfuuhhhrhcuvehhrhhishhtvghnshgvnhcuoehj
+    shgtsehumhgsrhgrtghulhhumhdrohhrgheqnecuggftrfgrthhtvghrnhepfeevgeeihf
+    dttdefvdegleehffevveejgefhtefhhedvjeefudfgfeeigfelgfelnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhstgesuhhmsghrrggtuh
+    hluhhmrdhorhhg
+X-ME-Proxy: <xmx:_FLSYxMMCKAvlGESrxNDxlfI-bdnwQP6kIg-Z8lpCwkOpgl3py9oEQ>
+    <xmx:_FLSY2_6DTbOdQ2qQvdk2xxZAdAyMSwDHpGRLkOPrHUSP56T5BKKZg>
+    <xmx:_FLSY5X3LTTts269_8OSf48XE47ij8px1HXHOech2cUCYtW4SixGdQ>
+    <xmx:_VLSY6TDcx4sRirhqjxL03bR6AG1JZPmYBD16IABWhlYTO5i-B91_w>
+Feedback-ID: i06314781:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 26 Jan 2023 05:16:25 -0500 (EST)
+From:   Jonas Suhr Christensen <jsc@umbraculum.org>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, michal.simek@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        esben@geanix.com, Jonas Suhr Christensen <jsc@umbraculum.org>
+Subject: [PATCH 1/2] net: ll_temac: fix DMA resources leak
+Date:   Thu, 26 Jan 2023 11:16:06 +0100
+Message-Id: <20230126101607.88407-1-jsc@umbraculum.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 10:06:55 +0100, Wolfram Sang wrote:
-> From: Cong Dang <cong.dang.xn@renesas.com>
-> 
-> The dummy cycles value was wrongly calculated if dummy.buswidth > 1,
-> which affects QSPI, OSPI, HyperFlash on various SoCs. We're lucky in
-> Single SPI case since its dummy.buswidth equals to 1, so the result of
-> the division is unchanged
-> 
-> [...]
+Add missing conversion of address when unmapping dma region causing
+unmapping to silently fail. At some point resulting in buffer
+overrun eg. when releasing device.
 
-Applied, thanks!
+Signed-off-by: Jonas Suhr Christensen <jsc@umbraculum.org>
+---
+ drivers/net/ethernet/xilinx/ll_temac_main.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-However it is late in the cycle. I'll try to squeeze it in, but there is a
-chance this might miss upcoming merge window. If that happens, I will keep the
-patch for the next-next merge window.
-
-[1/1] memory: renesas-rpc-if: Remove redundant division of dummy
-      https://git.kernel.org/krzk/linux-mem-ctrl/c/cb1ed99d9520892616c6d566efbe2d92a84a576a
-
-Best regards,
+diff --git a/drivers/net/ethernet/xilinx/ll_temac_main.c b/drivers/net/ethernet/xilinx/ll_temac_main.c
+index 1066420d6a83..66c04027f230 100644
+--- a/drivers/net/ethernet/xilinx/ll_temac_main.c
++++ b/drivers/net/ethernet/xilinx/ll_temac_main.c
+@@ -300,6 +300,7 @@ static void temac_dma_bd_release(struct net_device *ndev)
+ {
+ 	struct temac_local *lp = netdev_priv(ndev);
+ 	int i;
++	struct cdmac_bd *bd;
+ 
+ 	/* Reset Local Link (DMA) */
+ 	lp->dma_out(lp, DMA_CONTROL_REG, DMA_CONTROL_RST);
+@@ -307,9 +308,14 @@ static void temac_dma_bd_release(struct net_device *ndev)
+ 	for (i = 0; i < lp->rx_bd_num; i++) {
+ 		if (!lp->rx_skb[i])
+ 			break;
+-		dma_unmap_single(ndev->dev.parent, lp->rx_bd_v[i].phys,
++
++		bd = &lp->rx_bd_v[1];
++		dma_unmap_single(ndev->dev.parent, be32_to_cpu(bd->phys),
+ 				 XTE_MAX_JUMBO_FRAME_SIZE, DMA_FROM_DEVICE);
++		bd->phys = 0;
++		bd->len = 0;
+ 		dev_kfree_skb(lp->rx_skb[i]);
++		lp->rx_skb[i] = NULL;
+ 	}
+ 	if (lp->rx_bd_v)
+ 		dma_free_coherent(ndev->dev.parent,
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+2.39.1
+
