@@ -2,182 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECC967CF23
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C2667CF2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjAZPDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
+        id S231590AbjAZPEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:04:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbjAZPDs (ORCPT
+        with ESMTP id S231476AbjAZPEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:03:48 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C01C6AF6B;
-        Thu, 26 Jan 2023 07:03:47 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id m15so1315340wms.4;
-        Thu, 26 Jan 2023 07:03:47 -0800 (PST)
+        Thu, 26 Jan 2023 10:04:32 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA136AF5B
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:04:30 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id br9so3447876lfb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:04:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6hGazIFpNgMsQBh0HkRBOxGzy6+XWZOvugjcdhOak+s=;
-        b=mTjsrxvyQ0i5vQW9fiCojh0KHZUVIbFGqjsUGUPayCpoxwkL352L2/Y1YDVlDtbeNp
-         4EG+jagxpkpCGphip07OugfBVauvutCvSS7T+VfT9NP8Gw+iM65hPQOqOdiB/ymCoKbX
-         EYKRHb9XwiIdI7oSGQU3m7BRlU64QwfSn7Qz6QjZUYmbOydFdK5Nm6OVNtgZPnq0xqyE
-         +CmytVW5eFISBkBdraEYNjw0z66ViBU1jvf+C7w2u5h3WZuouzqv+teYwHwpnNRTRLXd
-         E5BC2nfHxSf2afdhVJ9Iw1du3EwUJ5o+oXuNJhx/++1vfMcXuYSYXZeLmyr0sQ1TJvf7
-         vsJQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=85g64dsl/DcFY/LlzFQvHEB0mO6DyTsjvCN0CbsFtNw=;
+        b=RkiI+vwnnL7VCkolwfyJmz2pmhwyz1uPFgE9WrH3eTnJ0h1OjtfKBo3De8gNoeWD+X
+         l3xRPZIq/L9vFJzv6PULtvhXKKJtDa9LLTd2AiHrb4BZ60JZC+IqDP/SwDQlwxNDg3Lu
+         9JvSTWA0sLX1/2yvxrUmgT4h1TvymGWt7fVAn2xOTJDbbM8Feyi8EviAkCrynsKOph1z
+         JlCZLF6rHye2m3z2r22q6SSNhTHJoseOKvgJklu5p9zXC51NgfsruhZVLFQ0SRjjMd8L
+         sQonnT13MfN0mupzXLJTbk49qRIe8hctNAc3jWuKFq37gyG4sRWzTKJCqEAo/+pvSIr+
+         DyPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6hGazIFpNgMsQBh0HkRBOxGzy6+XWZOvugjcdhOak+s=;
-        b=SU0wQpmYxnSOLD9nWXpF9LcbPU0RhzATXZJE5lTr2qy1O1GPUtOXpjzzmkjK3DBLS4
-         6oOsBZmvC6mL8aUi2hOwsHbzQX2shG/ZzxnX2zVd89ydhkCGWWAQtFmrlZJbcyKoVxAW
-         i+7LlWk8qeOQoZg5PP5I+InsfHDpT4WFPtInFEKRbbAZVGtS12O3Q157i8UQhI4lcdJ0
-         qvrxBszr/UNkuR86vtq5PGwiHIm1DfqiKmURd1AwH/5AyeZi8Zp+xP11tDQQR/OWaB50
-         /gwL8AU9BKlUufgQZIIwBWmy3XyV4nFNbiWic0cQioEUQV9/R7w2T6lxUY/eZxlYqwPj
-         aTfw==
-X-Gm-Message-State: AFqh2krbkOJwbdWpBNJlPpGU8bDpxIpdjQn2TBA7Z4aPfcjAdKV59LZB
-        L8+kzAhvVp5oaY2ybHyUQck=
-X-Google-Smtp-Source: AMrXdXtPNYmJpvLc4Nh+1bx72S+PxCPGNH7N8INCFgZPlCPh2qlK8EqT9nBrkWZetRqWumanXKho0Q==
-X-Received: by 2002:a05:600c:19d0:b0:3dc:c05:9db6 with SMTP id u16-20020a05600c19d000b003dc0c059db6mr11626561wmq.33.1674745425630;
-        Thu, 26 Jan 2023 07:03:45 -0800 (PST)
-Received: from DE008-GL-00034.UMK.kls.zentral (p5dda2d96.dip0.t-ipconnect.de. [93.218.45.150])
-        by smtp.gmail.com with ESMTPSA id n13-20020a05600c500d00b003db2b81660esm5254565wmr.21.2023.01.26.07.03.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 07:03:44 -0800 (PST)
-From:   Leif Middelschulte <leif.middelschulte@gmail.com>
-X-Google-Original-From: Leif Middelschulte <Leif.Middelschulte@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     Leif Middelschulte <Leif.Middelschulte@klsmartin.com>,
-        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] pwm: imx27: fix race condition .apply,.get_state
-Date:   Thu, 26 Jan 2023 16:03:13 +0100
-Message-Id: <20230126150313.764284-1-Leif.Middelschulte@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=85g64dsl/DcFY/LlzFQvHEB0mO6DyTsjvCN0CbsFtNw=;
+        b=3um3xrEGEIE5Qmcm1IPcXG00dmpxtaLqp6jZxBqub8xUZ229RYuuhVRCg8StvNjWGp
+         sbCYPpscFEYiMLIKLhlKNvYU6Y/ganX/WiK3xIcikd6TqrCqa+Zs0ZnsOp3xwNfCXwEv
+         tlhTQ+3SUixcPzZD+p82p6mkiZW4To6q5QFZx1kHjfhNnYg9QboI1uGOmtHjzo8qCkks
+         SzQqg7kjOk3+KrokPgHqLrnItbepbu8aER7hby58xW7X0Zg6j9Zww+ntn9RHD0+a/sJL
+         ycI3w5b+/ATMB0wPWqzpufCbWTGaWJkcAjO3pGGgVTi8tFzhLgKNaLwutKLkf95FohqE
+         O7oA==
+X-Gm-Message-State: AFqh2kpNGO9/wSOY8H85vR4KQ5Hf6C/19LmMAfJLfBXn8dOgvdm1AWEn
+        k8+NQ43vl70Z8zaegJFjWYlcsQ==
+X-Google-Smtp-Source: AMrXdXu6eyBeVwquiscq6dc3oKOQoMKYuh59bv0ZswxZ5ffCDxH44vMaC4VrsM+OBs46fi7tYToQIA==
+X-Received: by 2002:ac2:4f0c:0:b0:4ca:f887:fe99 with SMTP id k12-20020ac24f0c000000b004caf887fe99mr9661416lfr.25.1674745468435;
+        Thu, 26 Jan 2023 07:04:28 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id p8-20020adff208000000b002423edd7e50sm1618824wro.32.2023.01.26.07.04.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 07:04:27 -0800 (PST)
+Message-ID: <0a47dfbd-d786-c7bd-e4f5-c71e1b649b9f@linaro.org>
+Date:   Thu, 26 Jan 2023 16:04:25 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 7/9] dt-bindings: timer: mediatek,mtk-timer: add MT8365
+Content-Language: en-US
+To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, lee@kernel.org, linus.walleij@linaro.org,
+        matthias.bgg@gmail.com, gregkh@linuxfoundation.org,
+        chunfeng.yun@mediatek.com, angelogioacchino.delregno@collabora.com,
+        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
+        sean.wang@mediatek.com, zhiyong.tao@mediatek.com
+References: <20230125143503.1015424-1-bero@baylibre.com>
+ <20230125143503.1015424-8-bero@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230125143503.1015424-8-bero@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leif Middelschulte <Leif.Middelschulte@klsmartin.com>
+On 25/01/2023 15:35, Bernhard Rosenkränzer wrote:
+> Add binding description for mediatek,mt8365-systimer
+> 
+> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-With CONFIG_PWM_DEBUG=y after writing a value to the PWMSAR
-register in .apply(), the register is read in .get_state().
-Unless a period completed in the meantime, this read yields the
-previously used duty cycle configuration. As the PWM_DEBUG code
-applies the read out configuration for testing purposes this
-effectively undoes the intended effect by rewriting the previous
-hardware state.
+Applied, thanks
 
-Note that this change merely implements a sensible heuristic.
-The i.MX has a 4 slot FIFO to configure the duty cycle. This FIFO
-cannot be read back in its entirety. The "write x then read back
-x from hw" semantics are therefore not easily applicable.
-With this change, the .get_state() function tries to wait for some
-stabilization in the FIFO (empty state). In this state it keeps
-applying the last value written to the sample register.
-
-Signed-off-by: Leif Middelschulte <Leif.Middelschulte@klsmartin.com>
----
- drivers/pwm/pwm-imx27.c | 50 ++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 47 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/pwm/pwm-imx27.c b/drivers/pwm/pwm-imx27.c
-index 29a3089c534c..32389ca2da3e 100644
---- a/drivers/pwm/pwm-imx27.c
-+++ b/drivers/pwm/pwm-imx27.c
-@@ -75,6 +75,7 @@
- 						   (x)) + 1)
- 
- #define MX3_PWM_SWR_LOOP		5
-+#define MX3_PWM_FIFOAV_EMPTY_LOOP	4
- 
- /* PWMPR register value of 0xffff has the same effect as 0xfffe */
- #define MX3_PWMPR_MAX			0xfffe
-@@ -118,8 +119,28 @@ static void pwm_imx27_clk_disable_unprepare(struct pwm_imx27_chip *imx)
- 	clk_disable_unprepare(imx->clk_ipg);
- }
- 
-+static int pwm_imx27_wait_fifo_empty(struct pwm_chip *chip,
-+				     struct pwm_device *pwm)
-+{
-+	struct pwm_imx27_chip *imx = to_pwm_imx27_chip(chip);
-+	struct device *dev = chip->dev;
-+	unsigned int period_ms = DIV_ROUND_UP_ULL(pwm_get_period(pwm), NSEC_PER_MSEC);
-+	int tries = MX3_PWM_FIFOAV_EMPTY_LOOP;
-+	int fifoav;
-+	u32 sr;
-+
-+	while (tries--) {
-+		sr = readl(imx->mmio_base + MX3_PWMSR);
-+		fifoav = FIELD_GET(MX3_PWMSR_FIFOAV, sr);
-+		if (fifoav == MX3_PWMSR_FIFOAV_EMPTY)
-+			return;
-+		msleep(period_ms);
-+	}
-+	dev_warn(dev, "FIFO has been refilled concurrently\n");
-+}
-+
- static int pwm_imx27_get_state(struct pwm_chip *chip,
--			       struct pwm_device *pwm, struct pwm_state *state)
-+				struct pwm_device *pwm, struct pwm_state *state)
- {
- 	struct pwm_imx27_chip *imx = to_pwm_imx27_chip(chip);
- 	u32 period, prescaler, pwm_clk, val;
-@@ -161,10 +182,33 @@ static int pwm_imx27_get_state(struct pwm_chip *chip,
- 	 * PWMSAR can be read only if PWM is enabled. If the PWM is disabled,
- 	 * use the cached value.
- 	 */
--	if (state->enabled)
-+	if (state->enabled) {
-+		/*
-+		 * From the i.MX PWM reference manual:
-+		 * "A read on the sample register yields the current FIFO value that
-+		 *  is being used, or will be used, by the PWM for generation on the
-+		 *  output signal. Therefore, a write and a subsequent read on the
-+		 *  sample register may result in different values being obtained."
-+		 * Furthermore:
-+		 * "When a new value is written, the duty cycle changes after the
-+		 *  current period is over."
-+		 * Note "changes" vs. "changes to the given value"!
-+		 * Finally:
-+		 * "The PWM will run at the last set duty-cycle setting if all the
-+		 *  values of the FIFO has been utilized, until the FIFO is reloaded
-+		 *  or the PWM is disabled."
-+		 * Try to be at least a bit more deterministic about which value is
-+		 * read by waiting until the FIFO is empty. In this state the last/most
-+		 * recently pushed sample (duty cycle) value is continuously applied.
-+		 * Beware that this approach is still racy, as a new value could have
-+		 * been supplied and a period expired between the call of the wait
-+		 * function and the subsequent readl.
-+		 */
-+		pwm_imx27_wait_fifo_empty(chip, pwm);
- 		val = readl(imx->mmio_base + MX3_PWMSAR);
--	else
-+	} else {
- 		val = imx->duty_cycle;
-+	}
- 
- 	tmp = NSEC_PER_SEC * (u64)(val) * prescaler;
- 	state->duty_cycle = DIV_ROUND_UP_ULL(tmp, pwm_clk);
 -- 
-2.39.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
