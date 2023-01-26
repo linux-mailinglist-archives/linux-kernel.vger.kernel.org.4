@@ -2,273 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CAE67CA64
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1112F67CA69
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236600AbjAZMBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 07:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59140 "EHLO
+        id S237125AbjAZMB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 07:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjAZMBV (ORCPT
+        with ESMTP id S236822AbjAZMBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:01:21 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182FE62263;
-        Thu, 26 Jan 2023 04:01:20 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QBSYd2019195;
-        Thu, 26 Jan 2023 12:01:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Hvz+UF+L+DMyOFKaZrZpB1mZOmQVEMvu/YCePRO6nDU=;
- b=kWrKccPJ6JIFrvNxJzGVOTwGamRt2S60/7p2w8mq6NQ4rsSFz1I9u9kQ89RN6MElRMv5
- dIO0revap6Tm4M1QE4BJqCpsqLJgtvYo8J1GS97SZENT60nJw6QnMZYe4x2GkmIzQptf
- jVl+C8hI96YPyHe3lt2ZgQgc7Cggtj7P3+UedjE+VnANECoGxUeYzUx3YesAqooDppk6
- nLD9QjY8v+dmjcYZiOwzbTNGfjdG12KjIfJllBJ/nRsr1dVg8matbVA7HHtVyBg6TgwM
- ieD9oKBcgqNEa7n3XM1/A3YSdk86NC0jioFZ2gkBPXvFA0mXEgidif8GqH3NHlo92cpw kQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbrp7rpm0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 12:01:15 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QBTbk7023145;
-        Thu, 26 Jan 2023 12:01:04 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbrp7rpd9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 12:01:04 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QB1Hns014950;
-        Thu, 26 Jan 2023 12:00:53 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3n87afebhe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 12:00:52 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QC0n8s40829278
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 12:00:49 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 440EF2004B;
-        Thu, 26 Jan 2023 12:00:49 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F1E6120043;
-        Thu, 26 Jan 2023 12:00:48 +0000 (GMT)
-Received: from [9.152.224.253] (unknown [9.152.224.253])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 26 Jan 2023 12:00:48 +0000 (GMT)
-Message-ID: <147cbcff-b54c-90be-4bd0-6ac02f385528@linux.ibm.com>
-Date:   Thu, 26 Jan 2023 13:00:48 +0100
+        Thu, 26 Jan 2023 07:01:55 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A6466026
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:01:48 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id h12so1513753wrv.10
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:01:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jxZC6LLZuJ2Wkp1f5+/EfRQ8da/gCgTKGWvHnHflOhU=;
+        b=Rswj04CGt0Ro3ujr1S3ZR7Y4N7ASGIziExdcXQQ1t0tAHoOBAp+Rv5Ajen5TTCq6Uz
+         V+gbLHslr8DIqj/sRgvvvf8NUzKPPd6cmc9xvD1L7rcVbwPmzDsw3cAt+hTyMsnIl2PM
+         rgekxtRTULXWNdJGG/boM6Zhy9E4nKwbd+2Nja0PJkbK/LewLdXrLTCKK7crMd27onpI
+         n8C54T/Wl9738vrpLNe2zjqr1R6cr0NVVjTzmHzTSL6zGTDH6BsMb/kPsihpsNZP6JV2
+         4KMrSIN3h6M0XEtV1Vs7I6kkZoOtFnpJKm+11aqUHNkqsMd0Fezu0O+W/aj2Dutu8cc/
+         TFuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jxZC6LLZuJ2Wkp1f5+/EfRQ8da/gCgTKGWvHnHflOhU=;
+        b=ze9gL+fmJFo6ycS4x649yH/v77dSruDoOh2c+UfiD5AdH2FLCe90vjfFpJlQ/wP3vf
+         5XmKToglmxmFk8PD2024lSxCQY7RlKHG+LRFA5Kj3nsSXZD4hpl8iUPr+/5JskSf/nPK
+         SQ/6d4ScNL67WGpujFdkPQ+sUFoCnScKhbOVcmaXBCcZggyJtFHgaGe9YkuzeOvrYPkI
+         0obRn8uWy8uOq3nU0FFfAm2FFi5u5RPqqoOkpdb6qBAvk5/A7S7vd8CP2YnSaisVzYc1
+         e5+aFVA3HRC3f4wBL8GsZEUxcdHC1z8Qm4pS9rKWN10dCQ9jO7+eK0JLZOzMMSJGbWkZ
+         a5Og==
+X-Gm-Message-State: AFqh2kqT7fQ933lPhKN9HxqpoE54SHld7DOhT9/jPp/uDPw91w2gSYQj
+        xCGrfvgNTVUt/9hVzKgC+49B9Q==
+X-Google-Smtp-Source: AMrXdXvJKL26MJpG47M527MVT8QsOcuIjm1qzs/c5EZqKeKst2KGGu2u0oX9JCS35u+WUqsyvQMexQ==
+X-Received: by 2002:a5d:67d2:0:b0:2be:50a7:cfa9 with SMTP id n18-20020a5d67d2000000b002be50a7cfa9mr20937182wrw.63.1674734506461;
+        Thu, 26 Jan 2023 04:01:46 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id z2-20020a5d6542000000b00267bcb1bbe5sm1153739wrv.56.2023.01.26.04.01.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 04:01:46 -0800 (PST)
+Message-ID: <05e55db1-5181-8025-8aee-e398200b047c@linaro.org>
+Date:   Thu, 26 Jan 2023 13:01:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v6 02/14] KVM: s390: selftest: memop: Replace macros by
- functions
+ Thunderbird/102.7.0
+Subject: Re: [RFC PATCH v2 14/22] dt-bindings: usb: dwc3: Add
+ snps,num-hc-interrupters definition
 Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>
-References: <20230125212608.1860251-1-scgl@linux.ibm.com>
- <20230125212608.1860251-3-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20230125212608.1860251-3-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-15-quic_wcheng@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230126031424.14582-15-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: d7Ydl6jYfw7oQVH94g-AP9onMQLGvPGJ
-X-Proofpoint-ORIG-GUID: 3lFDC649xYe4shY4RQySOGtH2BU1GaVf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_04,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- impostorscore=0 adultscore=0 clxscore=1015 suspectscore=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 phishscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301260116
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/23 22:25, Janis Schoetterl-Glausch wrote:
-> Replace the DEFAULT_* test helpers by functions, as they don't
-> need the exta flexibility.
+On 26/01/2023 04:14, Wesley Cheng wrote:
+> Add a new definition for specifying how many XHCI secondary interrupters
+> can be allocated.  XHCI in general can potentially support up to 1024
+> interrupters, which some uses may want to limit depending on how many
+> users utilize the interrupters.
 
-s/exta/extra/
+I cannot find in the code any user of this. Your next patch stores it,
+but which other patch uses stored value?
 
-But if you want I can fix that up.
-
-The __VA_ARGS__ often don't make it easier to understand therefore I'd 
-rather have a function so I'm happy this patch removes a bit of the magic:
-
-Acked-by: Janosch Frank <frankja@linux.ibm.com>
+What I still don't get how is this exactly hardware property, not policy
+or driver choice.
 
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> Reviewed-by: Thomas Huth <thuth@redhat.com>
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > ---
->   tools/testing/selftests/kvm/s390x/memop.c | 82 +++++++++++------------
->   1 file changed, 39 insertions(+), 43 deletions(-)
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-> index 9c05d1205114..df1c726294b2 100644
-> --- a/tools/testing/selftests/kvm/s390x/memop.c
-> +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> @@ -48,6 +48,8 @@ struct mop_desc {
->   	uint8_t key;
->   };
->   
-> +const uint8_t NO_KEY = 0xff;
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index 6d78048c4613..4faaec9655e0 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -349,6 +349,18 @@ properties:
+>      items:
+>        enum: [1, 4, 8, 16, 32, 64, 128, 256]
+>  
+> +  snps,num-hc-interrupters:
+> +    description:
+> +      Defines the maximum number of XHCI host controller interrupters that can
+> +      be supported.  The XHCI host controller has support to allocate multiple
+> +      event rings, which can be assigned to different clients/users.  The DWC3
+> +      controller has a maximum of 8 interrupters.  If this is not defined then
+> +      the value will be defaulted to 1.  This parameter is used only when
+> +      operating in host mode.
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    minimum: 1
+> +    maximum: 8
+
+default: 1
+
 > +
->   static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *desc)
->   {
->   	struct kvm_s390_mem_op ksmo = {
-> @@ -85,7 +87,7 @@ static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *desc)
->   		ksmo.flags |= KVM_S390_MEMOP_F_INJECT_EXCEPTION;
->   	if (desc->_set_flags)
->   		ksmo.flags = desc->set_flags;
-> -	if (desc->f_key) {
-> +	if (desc->f_key && desc->key != NO_KEY) {
->   		ksmo.flags |= KVM_S390_MEMOP_F_SKEY_PROTECTION;
->   		ksmo.key = desc->key;
->   	}
-> @@ -268,34 +270,28 @@ static void prepare_mem12(void)
->   #define ASSERT_MEM_EQ(p1, p2, size) \
->   	TEST_ASSERT(!memcmp(p1, p2, size), "Memory contents do not match!")
->   
-> -#define DEFAULT_WRITE_READ(copy_cpu, mop_cpu, mop_target_p, size, ...)		\
-> -({										\
-> -	struct test_info __copy_cpu = (copy_cpu), __mop_cpu = (mop_cpu);	\
-> -	enum mop_target __target = (mop_target_p);				\
-> -	uint32_t __size = (size);						\
-> -										\
-> -	prepare_mem12();							\
-> -	CHECK_N_DO(MOP, __mop_cpu, __target, WRITE, mem1, __size,		\
-> -			GADDR_V(mem1), ##__VA_ARGS__);				\
-> -	HOST_SYNC(__copy_cpu, STAGE_COPIED);					\
-> -	CHECK_N_DO(MOP, __mop_cpu, __target, READ, mem2, __size,		\
-> -			GADDR_V(mem2), ##__VA_ARGS__);				\
-> -	ASSERT_MEM_EQ(mem1, mem2, __size);					\
-> -})
-> +static void default_write_read(struct test_info copy_cpu, struct test_info mop_cpu,
-> +			       enum mop_target mop_target, uint32_t size, uint8_t key)
-> +{
-> +	prepare_mem12();
-> +	CHECK_N_DO(MOP, mop_cpu, mop_target, WRITE, mem1, size,
-> +		   GADDR_V(mem1), KEY(key));
-> +	HOST_SYNC(copy_cpu, STAGE_COPIED);
-> +	CHECK_N_DO(MOP, mop_cpu, mop_target, READ, mem2, size,
-> +		   GADDR_V(mem2), KEY(key));
-> +	ASSERT_MEM_EQ(mem1, mem2, size);
-> +}
->   
-> -#define DEFAULT_READ(copy_cpu, mop_cpu, mop_target_p, size, ...)		\
-> -({										\
-> -	struct test_info __copy_cpu = (copy_cpu), __mop_cpu = (mop_cpu);	\
-> -	enum mop_target __target = (mop_target_p);				\
-> -	uint32_t __size = (size);						\
-> -										\
-> -	prepare_mem12();							\
-> -	CHECK_N_DO(MOP, __mop_cpu, __target, WRITE, mem1, __size,		\
-> -			GADDR_V(mem1));						\
-> -	HOST_SYNC(__copy_cpu, STAGE_COPIED);					\
-> -	CHECK_N_DO(MOP, __mop_cpu, __target, READ, mem2, __size, ##__VA_ARGS__);\
-> -	ASSERT_MEM_EQ(mem1, mem2, __size);					\
-> -})
-> +static void default_read(struct test_info copy_cpu, struct test_info mop_cpu,
-> +			 enum mop_target mop_target, uint32_t size, uint8_t key)
-> +{
-> +	prepare_mem12();
-> +	CHECK_N_DO(MOP, mop_cpu, mop_target, WRITE, mem1, size, GADDR_V(mem1));
-> +	HOST_SYNC(copy_cpu, STAGE_COPIED);
-> +	CHECK_N_DO(MOP, mop_cpu, mop_target, READ, mem2, size,
-> +		   GADDR_V(mem2), KEY(key));
-> +	ASSERT_MEM_EQ(mem1, mem2, size);
-> +}
->   
->   static void guest_copy(void)
->   {
-> @@ -310,7 +306,7 @@ static void test_copy(void)
->   
->   	HOST_SYNC(t.vcpu, STAGE_INITED);
->   
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size);
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, NO_KEY);
->   
->   	kvm_vm_free(t.kvm_vm);
->   }
-> @@ -357,26 +353,26 @@ static void test_copy_key(void)
->   	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
->   
->   	/* vm, no key */
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, t.size);
-> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, t.size, NO_KEY);
->   
->   	/* vm/vcpu, machting key or key 0 */
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size, KEY(0));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size, KEY(9));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, t.size, KEY(0));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, t.size, KEY(9));
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, 0);
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, 9);
-> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, t.size, 0);
-> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, t.size, 9);
->   	/*
->   	 * There used to be different code paths for key handling depending on
->   	 * if the region crossed a page boundary.
->   	 * There currently are not, but the more tests the merrier.
->   	 */
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, 1, KEY(0));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, 1, KEY(9));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, 1, KEY(0));
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vm, ABSOLUTE, 1, KEY(9));
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, 1, 0);
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, 1, 9);
-> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, 1, 0);
-> +	default_write_read(t.vcpu, t.vm, ABSOLUTE, 1, 9);
->   
->   	/* vm/vcpu, mismatching keys on read, but no fetch protection */
-> -	DEFAULT_READ(t.vcpu, t.vcpu, LOGICAL, t.size, GADDR_V(mem2), KEY(2));
-> -	DEFAULT_READ(t.vcpu, t.vm, ABSOLUTE, t.size, GADDR_V(mem1), KEY(2));
-> +	default_read(t.vcpu, t.vcpu, LOGICAL, t.size, 2);
-> +	default_read(t.vcpu, t.vm, ABSOLUTE, t.size, 2);
->   
->   	kvm_vm_free(t.kvm_vm);
->   }
-> @@ -409,7 +405,7 @@ static void test_copy_key_storage_prot_override(void)
->   	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
->   
->   	/* vcpu, mismatching keys, storage protection override in effect */
-> -	DEFAULT_WRITE_READ(t.vcpu, t.vcpu, LOGICAL, t.size, KEY(2));
-> +	default_write_read(t.vcpu, t.vcpu, LOGICAL, t.size, 2);
->   
->   	kvm_vm_free(t.kvm_vm);
->   }
-> @@ -422,8 +418,8 @@ static void test_copy_key_fetch_prot(void)
->   	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
->   
->   	/* vm/vcpu, matching key, fetch protection in effect */
-> -	DEFAULT_READ(t.vcpu, t.vcpu, LOGICAL, t.size, GADDR_V(mem2), KEY(9));
-> -	DEFAULT_READ(t.vcpu, t.vm, ABSOLUTE, t.size, GADDR_V(mem2), KEY(9));
-> +	default_read(t.vcpu, t.vcpu, LOGICAL, t.size, 9);
-> +	default_read(t.vcpu, t.vm, ABSOLUTE, t.size, 9);
->   
->   	kvm_vm_free(t.kvm_vm);
->   }
+>    port:
+>      $ref: /schemas/graph.yaml#/properties/port
+>      description:
+
+Best regards,
+Krzysztof
 
