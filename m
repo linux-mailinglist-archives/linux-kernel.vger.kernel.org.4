@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F2E67D1E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F01967D1E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbjAZQkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:40:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
+        id S232059AbjAZQke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:40:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjAZQkc (ORCPT
+        with ESMTP id S231710AbjAZQkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 Jan 2023 11:40:32 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08DB4483;
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD8BDA;
         Thu, 26 Jan 2023 08:40:31 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id s67so1416619pgs.3;
-        Thu, 26 Jan 2023 08:40:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zsu1XXuoF2/96aeBfEHXZNf0ZiITGZdQYd8L9imSFJM=;
-        b=G2DhB6J50kohw6MFhszVAkdEzfccit7sgqjhotiBJBmbBC5Rben9zQqn7AkvpSOONC
-         ZmwdNFrBFeY6t67lZ8Z3DEWfCpLc1v3JY1SYQR1hyl5c5UXYdftgi51UrlwIA+g8k4rb
-         Uqn7e8+KvSI29Sii9OK/ek5+NB0ANTzRj/dz0rymJvS1VcnCSnYziAeh407uVfMiBkFv
-         tt+ggp3nhpuSkL0v4WqLZo3+zVYP2/ZnwOXl6+oSoOouDSZxkFgVTqT/QQdvZzmajcYl
-         KjQTgHq2h5eenl/tWx5TXH7yq9hOWqbwDf5Qmc8ursfwWn3ehVfgzC0G0Bc1e+uJTYd9
-         EMTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Zsu1XXuoF2/96aeBfEHXZNf0ZiITGZdQYd8L9imSFJM=;
-        b=JeJ/Dd4qK2T3v2u5K4gWmJJpJl7fSS6fK9QNdndUhjo99iRwTFXAcZLqjCDWhaxxLW
-         F0aaDecAaiWs9Rx2fEeayPrE+D4J4mdp+0vzmap/f+1qG35BnstRXmQiPGX/CGjy3Mkp
-         N/NV1qwK+2cBIHnO4sHQztNZH2FPkPwMlYAoaRVzht+cIrEo8/ERH269j7m9Xp3eH8nt
-         nN27NJlMgHFJLUMbcps+0eWNZcMxm0Sy6z7twV2X5Hn/8G8+JnoKzdEm/Hlmz6nfRzVR
-         UT9VrZOd3Is84bwISbGSxN+9ffvKmITyK/tSzUuEKPMP3ebSRaDSE03DJ1m7sWiP9BqZ
-         otrQ==
-X-Gm-Message-State: AFqh2krXl4uOC+GoiHwYa6jcqzQHAaO947bmUOxoYvZDbD45Kqb4OT2X
-        +8TZ7k4X3y2e43DHEA+sKnAjc2hBXge+TPf51fI=
-X-Google-Smtp-Source: AMrXdXtXMPrQNDhCGq+W1jMAH/lYgZoI1xz+u0p+Ha+FNVeDDc/1UrGzG7S35E2P47oA1JasBEWiaxsV60Utpfl3OAI=
-X-Received: by 2002:aa7:8b57:0:b0:589:1130:d3ce with SMTP id
- i23-20020aa78b57000000b005891130d3cemr4555176pfd.66.1674751231260; Thu, 26
- Jan 2023 08:40:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674751231; x=1706287231;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jjE1KkJgMovuMdFd70jXi/i73o89qDzcwabqBZl3my8=;
+  b=YL6gcJGhZqvQYHMzM3OCXMcNagRQ1rFTBONC4cCpeH4nAyKH96eAIUMQ
+   8hIQRi2oAnEl2SnvPBteR1ENOXBtr09MRxtyNJPGjNo0jU1mfpYByZROr
+   vgGMbH37myJNoT4TI7IXE3jxI8pgYx845E7my7klAI5IpQx7qEya2y6CM
+   Ca6r9bUUFG445+qQrxkazkiJRK8LKv6Ix0K1zlzB/JlDhZJVwuY9qSPqf
+   +u32BOl7cq+N3rkNPXTixqosT2hEt4x428l3qi0rvwePpKRE92EFTLHhI
+   bbY5IDgOtyEEiZ5wC9MCvpbJqE4QZ9u87FWU+0pM/0qMUqHe8QzEPhhhm
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="328966559"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="328966559"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:40:30 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="693374746"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="693374746"
+Received: from ernestom-mobl.amr.corp.intel.com (HELO [10.212.255.13]) ([10.212.255.13])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:40:29 -0800
+Message-ID: <394c92e2-a9aa-37e1-7a34-d7569ac844fd@intel.com>
+Date:   Thu, 26 Jan 2023 08:40:29 -0800
 MIME-Version: 1.0
-References: <20230124124300.94886-1-nbd@nbd.name> <CAC_iWjKAEgUB8Z3WNNVgUK8omXD+nwt_VPSVyFn1i4EQzJadog@mail.gmail.com>
- <19121deb-368f-9786-8700-f1c45d227a4c@nbd.name> <cd35316065cfe8d706ca2730babe3e6519df6034.camel@gmail.com>
- <c7f1ade0-a607-2e55-d106-9acc26cbed94@nbd.name> <49703c370e26ae1a6b19a39dc05e262acf58f6aa.camel@gmail.com>
- <9baecde9-d92b-c18c-daa8-e7a96baa019b@nbd.name> <595c5e36b0260ba16833c2a8d9418fd978ca9300.camel@gmail.com>
- <0c0e96a7-1cf1-b856-b339-1f3df36a562c@nbd.name> <a0b43a978ae43064777d9d240ef38b3567f58e5a.camel@gmail.com>
- <9992e7b5-7f2b-b79d-9c48-cf689807f185@nbd.name> <301aa48a-eb3b-eb56-5041-d6f8d61024d1@nbd.name>
- <148028e75d720091caa56e8b0a89544723fda47e.camel@gmail.com>
- <8ec239d3-a005-8609-0724-f1042659791e@nbd.name> <8a331165-4435-4c2d-70e0-20655019dc51@nbd.name>
- <CAKgT0Ud8npNtncH-KbMtj_R=UZ=aFA9T8U=TZoLG_94eVUxKPA@mail.gmail.com>
-In-Reply-To: <CAKgT0Ud8npNtncH-KbMtj_R=UZ=aFA9T8U=TZoLG_94eVUxKPA@mail.gmail.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Thu, 26 Jan 2023 08:40:19 -0800
-Message-ID: <CAKgT0Uc88xF5AjEhpBnr7m_+gnH5WVAoJFC=AVEPY0+qN1BNsQ@mail.gmail.com>
-Subject: Re: [PATCH] net: page_pool: fix refcounting issues with fragmented allocation
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        netdev@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-kernel@vger.kernel.org, Yunsheng Lin <linyunsheng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] x86: enable Data Operand Independent Timing Mode
+Content-Language: en-US
+To:     Jann Horn <jannh@google.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Roxana Bradescu <roxabee@chromium.org>,
+        Adam Langley <agl@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+References: <20230125012801.362496-1-ebiggers@kernel.org>
+ <14506678-918f-81e1-2c26-2b347ff50701@intel.com>
+ <CAG48ez1NaWarARJj5SBdKKTYFO2MbX7xO75Rk0Q2iK8LX4BwFA@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAG48ez1NaWarARJj5SBdKKTYFO2MbX7xO75Rk0Q2iK8LX4BwFA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,24 +75,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-?
+On 1/26/23 05:52, Jann Horn wrote:
+> On Wed, Jan 25, 2023 at 4:30 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>> Translating from Intel-speak: Intel thinks that DOITM purely a way to
+>> make the CPU run slower if you haven't already written code specifically
+>> to mitigate timing side channels.  All pain, no gain.
+>>
+>> The kernel as a whole is not written that way.
+> 
+> The kernel as a whole also doesn't really use the FPU registers for
+> anything other than checksumming and cryptography and stuff like that
+> (it's disabled in the compiler flags because the FPU registers
+> normally contain userspace state that must not be clobbered). The
+> instructions listed on that Intel help page are all weird PM* and VP*
+> arithmetic instructions that can't be generated from C code in the
+> kernel (except for weird subsystems in which every function is only
+> callable in kernel-FPU-enabled mode and the compiler is set to enable
+> FPU instruction generation, by which I mean amdgpu).
 
-On Thu, Jan 26, 2023 at 8:08 AM Alexander Duyck
-<alexander.duyck@gmail.com> wrote:
->
-> On Thu, Jan 26, 2023 at 1:15 AM Felix Fietkau <nbd@nbd.name> wrote:
-> >
+Maybe I'm totally missing something, but I thought the scope here was
+the "non-data operand independent timing behavior for the listed
+instructions" referenced here:
 
-...
+> https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/best-practices/data-operand-independent-timing-isa-guidance.html
 
-> > - if I return false in skb_try_coalesce, it still crashes:
-> > https://nbd.name/p/18cac078
->
-> Yeah, I wasn't suspecting skb_try_coalesce since we have exercised the
-> code. My thought was something like the function you mentioned above
-> plus cloning or something else.
+where the "listed instructions" is this list:
 
-One question I would have. Is GRO happening after the call to
-ieee80211_amsdu_to_8023s? If so we might want to try switching that
-off to see if it might be aggregating page pool frames and non-page
-pool frames together.
+> https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/resources/data-operand-independent-timing-instructions.html
+
+For example, that includes XOR with the 0x31 and 0x81 opcodes which
+there are plenty of in the kernel.
+
+That's a bit wider scope than the crazy instructions like VPLZCNTD.  The
+crazy instructions list that I _think_ you were grepping for is the
+"Instructions That May Exhibit MCDT Behavior".  That's also a fun one,
+but it is more narrow than the DOITM list.
+
