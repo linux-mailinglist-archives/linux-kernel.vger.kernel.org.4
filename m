@@ -2,129 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A695067CA9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E577B67CAA0
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236534AbjAZMK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 07:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
+        id S236855AbjAZMLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 07:11:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbjAZMK5 (ORCPT
+        with ESMTP id S236627AbjAZMLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:10:57 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7D541080
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:10:55 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id z11so1696592ede.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:10:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=diag.uniroma1.it; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eVbivV8EGu+km89gAq7ikjZD9Nt9wLtDAtt21fJbyIE=;
-        b=Z+Jx3ESL49Z2PCF4IUnISXt1Ax3Bh5RhOtxjA77Q+aTXwdTogaLdApCZ0YageHuLgS
-         qtiYhwM7TJDQQE0gtq3wj3rQUL+qBWAvUl9jsDW1xrQZKGL7EgWvxNPuBBvULej9v72Z
-         uXzY72TclGoeq2vUHaX6eq6+1gn2y/RP7Md/c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eVbivV8EGu+km89gAq7ikjZD9Nt9wLtDAtt21fJbyIE=;
-        b=WkRjNaUeKFmWymZNSX4R51peqDIibnECJ94/XUL66MARZavcPwLlWSYehXP/uwCJMA
-         ZgdFbmhSn7AjxHUE45ro1oVIHK1ihIWIv0sJnhde3TM/LL+b9O36KgPZ/ufXt/4d24hO
-         fYhnBt0G6rfg5D5ZQ7EvsE35ijIhP3ccbzhskBwBpWs7X9cYpUxM6OE6t4iU4ttXSIgv
-         0112AJFYisemyJw2OGFRLeJaUBzqKrjxqDyy5S2PMnTHJG3u5KMxvHb8iGF9mkfqMYmr
-         fxEb1ZMlooob7+YFAkJGFkNeA47/pt2UrIDHP/NVCoAfPqNPELan5KfOIMnVVVREkcPx
-         G9Eg==
-X-Gm-Message-State: AFqh2krbZflVWzUVv/a+x6ABzQkqw9rrmsTt7DrKE/zMHm3ZueqoOl5+
-        CbKElhjpeWbOTTRONZ1TTw5P0w==
-X-Google-Smtp-Source: AMrXdXsukXmzEgZnFOHM0z7on12mUpXq2NJAYUtr0KLvu8zMkX/pzniYGESNkYwGVqZ6WycqNgozXw==
-X-Received: by 2002:a05:6402:3214:b0:49d:bc8c:c3eb with SMTP id g20-20020a056402321400b0049dbc8cc3ebmr43983796eda.15.1674735053993;
-        Thu, 26 Jan 2023 04:10:53 -0800 (PST)
-Received: from pborrello-1.vm.vusec.net (wolkje-127.labs.vu.nl. [130.37.198.127])
-        by smtp.gmail.com with ESMTPSA id j2-20020aa7ca42000000b0049ef56c01d0sm645490edt.79.2023.01.26.04.10.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 04:10:53 -0800 (PST)
-From:   Pietro Borrello <borrello@diag.uniroma1.it>
-To:     Roderick Colenbrander <thunderbird2k@gmail.com>
-Cc:     Pietro Borrello <borrello@diag.uniroma1.it>,
-        linux-leds@vger.kernel.org,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Kosina <jkosina@suse.cz>,
-        Roderick Colenbrander <roderick@gaikai.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Hanno Zulla <kontakt@hanno.de>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>,
-        Roderick Colenbrander <roderick.colenbrander@sony.com>,
-        Sven Eckelmann <sven@narfation.org>
-Subject: [PATCH v2 3/5] HID: dualsense_remove: manually unregister leds
-Date:   Thu, 26 Jan 2023 12:09:18 +0000
-Message-Id: <20230125-hid-unregister-leds-v2-3-514437b19297@diag.uniroma1.it>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAEc3jaDRzvw4wqomWTZ4QiGT7ndm0u+LQuqDTOWB=B-6w=2yzg@mail.gmail.com>
-References: <20230125-hid-unregister-leds-v2-0-514437b19297@diag.uniroma1.it>
+        Thu, 26 Jan 2023 07:11:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EA8410BB;
+        Thu, 26 Jan 2023 04:11:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4FC75B81D89;
+        Thu, 26 Jan 2023 12:11:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C397CC433D2;
+        Thu, 26 Jan 2023 12:11:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674735086;
+        bh=KPkKSD7aWhYpforFO0pJPJv3XA4UUvnD2v1EFugEgqY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=DsfeXP3MPywBfapf1j68U2fsYoRWJr1DaPzWi74NDujNgTDyNgQ1iInlpLvOBPWhZ
+         dgbjF41INaKWSTmLGbC6hUi2hlVxaE3zeJX6nAjNxaHhzv2MWnLknFBp41TOIT81B2
+         ln/BLPiIuK03YBpKim2U/tMG4LCKbrlthnwZlrX9s7FWpYyliW/zSN25yS4zXbq6o1
+         oDeL383myENTyDldeQc8KuV4Re3HOXcuwLoBBFx/2jrf/CCCq6GjCcNSUwdCT4iLtw
+         qDQ0oKQdF6wfufBEEOLwk+7/zpHzn/jpN3EV9/3fihC2XnpD7F9xiZbGBioLd3EI44
+         Yv4H+MnVBlyxQ==
+Date:   Thu, 26 Jan 2023 06:11:24 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Takashi Iwai <tiwai@suse.de>, linux-pci@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        "Zeno R.R. Davatz" <zdavatz@gmail.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Antonino Daplas <adaplas@gmail.com>,
+        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, regressions@lists.linux.dev
+Subject: Re: [REGRESSION] [Bug 216859] New: PCI bridge to bus boot hang at
+ enumeration
+Message-ID: <20230126121124.GA1258686@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.11.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1674734023; l=1556; i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id; bh=I/aK9DcIPRri1R7+BoQmPFot08oQLGwMbJpqlNV1B8M=; b=x78P2ebxLLwLOWOjBnnzLG/enTMXSF9YH3QbZDzWhLC4Tzv7V/zRQOi1YIKOhINhDOkegJK42hLC m1jeKayWD9ELcEL8IQp12s8Y82S82CkgS5gm1+YzswCDoo5jieve
-X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519; pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112200819.GA1785077@bhelgaas>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unregister the LED controllers before device removal, to prevent
-unnecessary runs of dualsense_player_led_set_brightness().
+[+cc folks from 145eed48de27 and framebuffer folks, regression list]
 
-Fixes: 8c0ab553b072 ("HID: playstation: expose DualSense player LEDs through LED class.")
-Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+On Thu, Jan 12, 2023 at 02:08:19PM -0600, Bjorn Helgaas wrote:
+> On Wed, Dec 28, 2022 at 06:02:48AM -0600, Bjorn Helgaas wrote:
+> > On Wed, Dec 28, 2022 at 08:37:52AM +0000, bugzilla-daemon@kernel.org wrote:
+> > > https://bugzilla.kernel.org/show_bug.cgi?id=216859
+> > 
+> > >            Summary: PCI bridge to bus boot hang at enumeration
+> > >     Kernel Version: 6.1-rc1
+> > > ...
+> > 
+> > > With Kernel 6.1-rc1 the enumeration process stopped working for me,
+> > > see attachments.
+> > > 
+> > > The enumeration works fine with Kernel 6.0 and below.
+> > > 
+> > > Same problem still exists with v6.1. and v6.2.-rc1
 
----
+This is a regression between v6.0 and v6.1-rc1.  Console output during
+boot freezes after nvidiafb deactivates the VGA console.
 
-Contrary to the other patches in this series, failing to unregister
-the led controller does not results into a use-after-free thanks
-to the output_worker_initialized variable and the spinlock checks.
+It was a lot of work for Zeno, but we finally isolated this console
+hang to 145eed48de27 ("fbdev: Remove conflicting devices on PCI bus").
 
-Changes in v2:
-- Unregister multicolor led controller
-- Clarify UAF
-- Link to v1: https://lore.kernel.org/all/20230125-hid-unregister-leds-v1-3-9a5192dcef16@diag.uniroma1.it/
----
- drivers/hid/hid-playstation.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+The system actually does continue to boot and is accessible via ssh, 
+but the console appears hung, at least for output.  More details in
+the bugzilla starting at
+https://bugzilla.kernel.org/show_bug.cgi?id=216859#c47 .
 
-diff --git a/drivers/hid/hid-playstation.c b/drivers/hid/hid-playstation.c
-index 27c40894acab..f23186ca2d76 100644
---- a/drivers/hid/hid-playstation.c
-+++ b/drivers/hid/hid-playstation.c
-@@ -1503,11 +1503,17 @@ static void dualsense_remove(struct ps_device *ps_dev)
- {
- 	struct dualsense *ds = container_of(ps_dev, struct dualsense, base);
- 	unsigned long flags;
-+	int i;
- 
- 	spin_lock_irqsave(&ds->base.lock, flags);
- 	ds->output_worker_initialized = false;
- 	spin_unlock_irqrestore(&ds->base.lock, flags);
- 
-+	for (i = 0; i < ARRAY_SIZE(ds->player_leds); i++)
-+		devm_led_classdev_unregister(&ps_dev->hdev->dev, &ds->player_leds[i]);
-+
-+	devm_led_classdev_multicolor_unregister(&ps_dev->hdev->dev, &ds->lightbar);
-+
- 	cancel_work_sync(&ds->output_worker);
- }
- 
-
--- 
-2.25.1
+Bjorn
