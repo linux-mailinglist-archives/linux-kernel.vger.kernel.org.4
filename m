@@ -2,125 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2591567CF85
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB9567CF89
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbjAZPNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:13:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
+        id S231833AbjAZPOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:14:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbjAZPN1 (ORCPT
+        with ESMTP id S230016AbjAZPOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:13:27 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89322EB79
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:13:26 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id d30so3466580lfv.8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:13:26 -0800 (PST)
+        Thu, 26 Jan 2023 10:14:15 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37C118148
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:14:12 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id e16so2213591ljn.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:14:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hc6ZwBnEHfllxJYiT753cJcnxMfaeJjttvRk6qoxRnQ=;
-        b=F1wBM/+4TMypuSmQSIBzjeRJFFyaHQ/0qchQXZcr/y1UPvy/oKavxAnQCmS3lMrKM7
-         LvRmeNXxA8/YJyJtwlt+EfqApeBOS0bN+KqQTMl4fzvJg+5okFap0FyU2HcYivlwX858
-         qJRjg/XQg2t84NUMvaqnxn9c8QaDbakgQCqK9jS+Qq9WsTcsvio+93agkPl9RN5xn2LE
-         G3P1osGYD4WVgvIHIPPRZ2XNTdw9DorvlnCrVtwQLAeiTJ3qxPQdPyOuVQeR9cXBhHo0
-         cqF61Q7e7j9g4UPI+q8h+AKnriHt2Ynt2P2a8DNsuK9vqUgNOIitUN4UYT/Yjc31D9Tn
-         I/Ww==
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=A62Wqcwz3KAe6w9tQ3XXCcSw0l3Me0LjkoGc02NA/6Q=;
+        b=w0vs0Y0Q3/44L5Iaz//Wooo3lPXu2un4N6ox/lN1pIzp3kuwN7Ham8xaEBpbZeIQdA
+         bEw9zD5QGgoWE+ueiVw7Dojz98yRZGhGqHdfIbJeQb6BxPC0ECejFkZt12JhQ4yJ2Wl8
+         +phgHVkV9h7acpThYUUegsH423gqEizBYYq7c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hc6ZwBnEHfllxJYiT753cJcnxMfaeJjttvRk6qoxRnQ=;
-        b=e/8h2wHyoeRVv8p1OnJQYw1h06qzJ7NEq6/Do6v0tXW0ZGbSbBbu4rSj2/So8pfDA7
-         XZrtcyOwzBPDyxqe82BgBcnknjVfoSD1AGweXmpWIdz57vePu9pJDPclEaWSi5kKCinu
-         A8WIbXGoL+ulLeIt0ysZyGFYqCboliy9A/uoyBikF/2/zGVaVKqb/J2jtwEefeV2gIso
-         TdRXIRHhRbONHlOT/l/RQ40bwCiG21jnqCwODYv3SR5RpLf+p5RWcoA1wb2l0rsIH8MS
-         arjzJUJlfOKZ6b9I8PpAV9T5UPFr0x213cb5DrLgH0ta8cBiGqaXCj6fF2b60QvgzuZT
-         xY8g==
-X-Gm-Message-State: AFqh2kqwrSeZXgrIcllDYL/Q8+EWOjl1qysD7JEcdf0Z7QqY8lCO0327
-        xLoFxE9r9bruzdpX4E4EQqwNY5jbETAdGZ4RkBI=
-X-Google-Smtp-Source: AMrXdXuXLi2sgAvR7DVwDeHXnP46pNcE98/obdzUFlb01kXRVZpGWgVhlaA5MI4hdvDdc/Mj43YUXtaznXztN/mcpBk=
-X-Received: by 2002:ac2:5596:0:b0:4cb:334f:85ef with SMTP id
- v22-20020ac25596000000b004cb334f85efmr1675146lfg.67.1674746004845; Thu, 26
- Jan 2023 07:13:24 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A62Wqcwz3KAe6w9tQ3XXCcSw0l3Me0LjkoGc02NA/6Q=;
+        b=Id4Z/8oegrBJ9wsrjofGU0aQ2HQPGPUcIhZWe4JSUm4Bj7N9k20vbizg4DbqoxPEKS
+         tUAbudei+6oACFaw0RVokBweIo9hH+uZw0qyZnDP3t0INkOYXVTUcb8AdsSVcw17ZzDn
+         RNEI/YqmEm29ggXJRlh56Lb58Q9+mGqDaK9FBBKQU/3y26Xfe/9/lr404CjAxlKINhWN
+         bozQSOaNYZleOFlSWXktbS36W7+pU0SfmDwZ2KDt6q/xB2nm+w0NZNuWw/4SBaMq6f+c
+         c63Uxx6siPZ2IefAIlsPqmlakOXpxze66i132fuk69xB4X3vVA/kQFxmxCkYG18RPt7p
+         YxHw==
+X-Gm-Message-State: AFqh2kpJ01LTH6SmOKr58Gm/LVcbFaESoJPX/b7xbRxzEi8142IDckQu
+        qPhEKPUCwO5xVJbxb73exyxkx96NX0K2Vv/IbYLwHA==
+X-Google-Smtp-Source: AMrXdXt1Ac5gzpIfDwY02UjPiREGilxXzFSY3KEOVzAwJot+JGBnZDVEP3SYo1aYFaKbzIEgqze3i4BRfuQQ3/9PQtE=
+X-Received: by 2002:a2e:944c:0:b0:28b:a09b:6135 with SMTP id
+ o12-20020a2e944c000000b0028ba09b6135mr1780273ljh.221.1674746051139; Thu, 26
+ Jan 2023 07:14:11 -0800 (PST)
 MIME-Version: 1.0
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y9EkCvAfNXnJ+ATo@kroah.com> <Y9Ex3ZUIFxwOBg1n@work-vm> <Y9E5Cg7mreDx737N@redhat.com>
- <CAFLxGvwHRK3vyXiCv5ELvrDSEkcDgV5c6pNnWgWhcATfp1dedA@mail.gmail.com> <Y9KVHnHnig4jwNPx@work-vm>
-In-Reply-To: <Y9KVHnHnig4jwNPx@work-vm>
-From:   Richard Weinberger <richard.weinberger@gmail.com>
-Date:   Thu, 26 Jan 2023 16:13:11 +0100
-Message-ID: <CAFLxGvyMncqjkEXiOqenQu+rZW46RP7UorXs36+awmgnBxTGhA@mail.gmail.com>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-Cc:     =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+References: <20230124173126.3492345-1-joel@joelfernandes.org>
+ <20230124225628.GZ2948950@paulmck-ThinkPad-P17-Gen-1> <CAABZP2wa_ZTHUr9tH_6OSpr+TgNACo4kMu3eawsGV5qkCDoAKg@mail.gmail.com>
+ <CAABZP2wk-RiAV4CzG+6cn7=twvgtw-YGt5bLB4qw8gOWU01kkw@mail.gmail.com> <CAABZP2xYL_9zXqw6pEutuNv_hzeezbxPEc8WPZLkPGMozP5C4w@mail.gmail.com>
+In-Reply-To: <CAABZP2xYL_9zXqw6pEutuNv_hzeezbxPEc8WPZLkPGMozP5C4w@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 26 Jan 2023 10:13:59 -0500
+Message-ID: <CAEXW_YSCP+qpXDUvqd3qgftD_c2p-HRgK49eDypaFFUCD4YJdA@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND] tick/nohz: Fix cpu_is_hotpluggable() by
+ checking with nohz subsystem
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Frederic Weisbecker <frederic@kernel.org>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        rcu <rcu@vger.kernel.org>, stable@vger.kernel.org,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NORMAL_HTTP_TO_IP,
+        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 3:58 PM Dr. David Alan Gilbert
-<dgilbert@redhat.com> wrote:
+On Thu, Jan 26, 2023 at 10:01 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
 >
-> * Richard Weinberger (richard.weinberger@gmail.com) wrote:
-> > On Wed, Jan 25, 2023 at 3:22 PM Daniel P. Berrang=C3=A9 <berrange@redha=
-t.com> wrote:
-> > > Any virtual device exposed to the guest that can transfer potentially
-> > > sensitive data needs to have some form of guest controlled encryption
-> > > applied. For disks this is easy with FDE like LUKS, for NICs this is
-> > > already best practice for services by using TLS. Other devices may no=
-t
-> > > have good existing options for applying encryption.
+> On Thu, Jan 26, 2023 at 12:16 PM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
 > >
-> > I disagree wrt. LUKS. The cryptography behind LUKS protects persistent =
-data
-> > but not transport. If an attacker can observe all IO you better
-> > consult a cryptographer.
-> > LUKS has no concept of session keys or such, so the same disk sector wi=
-ll
-> > always get encrypted with the very same key/iv.
->
-> Are you aware of anything that you'd use instead?
+> > On Wed, Jan 25, 2023 at 8:13 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
+> > >
+> > > On Wed, Jan 25, 2023 at 6:56 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >
+> > > > On Tue, Jan 24, 2023 at 05:31:26PM +0000, Joel Fernandes (Google) wrote:
+> > > > > For CONFIG_NO_HZ_FULL systems, the tick_do_timer_cpu cannot be offlined.
+> > > > > However, cpu_is_hotpluggable() still returns true for those CPUs. This causes
+> > > > > torture tests that do offlining to end up trying to offline this CPU causing
+> > > > > test failures. Such failure happens on all architectures.
+> > > > >
+> > > > > Fix it by asking the opinion of the nohz subsystem on whether the CPU can
+> > > > > be hotplugged.
+> > > > >
+> > > > > [ Apply Frederic Weisbecker feedback on refactoring tick_nohz_cpu_down(). ]
+> > > > >
+> > > > > For drivers/base/ portion:
+> > > > > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > >
+> > > > > Cc: Frederic Weisbecker <frederic@kernel.org>
+> > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > > > > Cc: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > > > Cc: Will Deacon <will@kernel.org>
+> > > > > Cc: Marc Zyngier <maz@kernel.org>
+> > > > > Cc: rcu <rcu@vger.kernel.org>
+> > > > > Cc: stable@vger.kernel.org
+> > > > > Fixes: 2987557f52b9 ("driver-core/cpu: Expose hotpluggability to the rest of the kernel")
+> > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > >
+> > > > Queued for further review and testing, thank you both!
+> > > >
+> > > > It might be a few hours until it becomes publicly visible, but it will
+> > > > get there.
+> > > A new round of rcutorture test on fixed linux-5.15.y[3] has been
+> > > performed in the PPC VM of Open Source Lab of Oregon State University
+> > > [1], which will last about 29 hours. The test result on original
+> > > linux-5.15.y is at [2].
+> > From the result of [1], the HOTPLUG failure reports have been
+> > eliminated, but a new kernel null point bug related to scsi module has
+> > been reported [4] ;-(
+> > [    5.178733][    C1] BUG: Kernel NULL pointer dereference on read at
+> > 0x00000008
+> > ...
+> > [    5.231013][    C1] [c00000001ff9fca0] [c0000000009ffbc8]
+> > scsi_end_request+0xd8/0x1f0 (unreliable)^M
+> > [    5.234961][    C1] [c00000001ff9fcf0] [c000000000a00e68]
+> > scsi_io_completion+0x88/0x700^M
+> > [    5.237863][    C1] [c00000001ff9fda0] [c0000000009f5028]
+> > scsi_finish_command+0xe8/0x150^M
+> > [    5.240089][    C1] [c00000001ff9fdf0] [c000000000a00c70]
+> > scsi_complete+0x90/0x140^M
+> > [    5.242481][    C1] [c00000001ff9fe20] [c0000000007e5170]
+> > blk_complete_reqs+0x80/0xa0^M
+> > [    5.245187][    C1] [c00000001ff9fe50] [c000000000f0b5d0]
+> > __do_softirq+0x1e0/0x4e0^M
+> > [    5.248479][    C1] [c00000001ff9ff90] [c0000000000170e8]
+> > do_softirq_own_stack+0x48/0x60^M
+> > [    5.250919][    C1] [c00000000a5e7c40] [c00000000a5e7c80]
+> > 0xc00000000a5e7c80^M
+> > [    5.253792][    C1] [c00000000a5e7c70] [c0000000001534c0]
+> > do_softirq+0xb0/0xc0^M
+> > [    5.256824][    C1] [c00000000a5e7ca0] [c0000000001535ac]
+> > __local_bh_enable_ip+0xdc/0x110^M
+> > [    5.259414][    C1] [c00000000a5e7cc0] [c0000000001d75e8]
+> > irq_forced_thread_fn+0xc8/0xf0^M
+> > [    5.261921][    C1] [c00000000a5e7d00] [c0000000001d7ae4]
+> > irq_thread+0x1b4/0x2a0^M
+> > [    5.265298][    C1] [c00000000a5e7da0] [c00000000017d8c8]
+> > kthread+0x1a8/0x1d0^M
+> > [    5.269184][    C1] [c00000000a5e7e10] [c00000000000cee4]
+> > ret_from_kernel_thread+0x5c/0x64^M
+> >
+> > But when I invoked [5]  by hand, the bug did not show again [6].
+> >
+> > [4] http://140.211.169.189/linux-stable-rc/tools/testing/selftests/rcutorture/res/2023.01.25-00.04.30-torture/results-clocksourcewd-2/TREE03/console.log
+> > [5] http://140.211.169.189/linux-stable-rc/tools/testing/selftests/rcutorture/res/2023.01.25-00.04.30-torture/results-clocksourcewd-2/TREE03/qemu-cmd
+> > [6] http://140.211.169.189/linux-stable-rc/tools/testing/selftests/rcutorture/res/2023.01.25-00.04.30-torture/results-clocksourcewd-2/TREE03/console.zzy.log
+> >
+> > I think the bug is not caused by Joel's patch, there must be some
+> > other reason. I am starting the 29 hours' rcutorture test again. And I
+> > can give ssh access to you if you are interested in it.
+> >
+> > Sorry for the inconvenience that I bring
+> >
+> > Thanks
+> > Zhouyi
+> Hi the above kernel null pointer dereference bug has nothing to do
+> with Joel's fix because I can reproduce it on original 5.15.y [7]
+> using as while loop [8] (after 36 iterations, the bug fires).
+> So, Joel's patch is tested good!
+> Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
 
-Well, I'd think towards iSCSI over TLS to protect the IO transport.
+Interesting. I have been running rcutorture's TREE03 on 5.15.y quite a
+lot and I don't see such an issue.
 
-> Are you happy with dm-verity for protection against modification?
+ However, your logs showed the crash is SCSI related. These were the
+recent SCSI commits in 5.15.y but I am not sure if it causes the
+issue:
 
-Like LUKS (actually dm-crypt) the crypto behind is designed to protect
-persistent data not transport.
-My fear is that an attacker who is able to observe IOs can do bad things.
+13259b6 scsi: mpi3mr: Refer CONFIG_SCSI_MPI3MR in Makefile
+513fdf0 scsi: ufs: Stop using the clock scaling lock in the error handler
+7c26d21 scsi: ufs: core: WLUN suspend SSU/enter hibern
+
+Perhaps report it to the scsi and/or stable lists, or do some web
+searches for if someone else sees it.
+
+- Joel
