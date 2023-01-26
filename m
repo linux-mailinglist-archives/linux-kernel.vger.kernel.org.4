@@ -2,136 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D4967C630
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 391C867C633
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236180AbjAZIum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 03:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
+        id S236274AbjAZIvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 03:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbjAZIul (ORCPT
+        with ESMTP id S233264AbjAZIvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 03:50:41 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D92402FA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 00:50:40 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 013211FEC8;
-        Thu, 26 Jan 2023 08:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674723038; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IvynYn1TeTR37CMNyUJIdJbXjbksPqyXG4Gm0PnotkU=;
-        b=o3nLFQKq7gWk7kZ3BEWxJHkMbjMWpRw3n+rc+6LqXsQOqWJDsrgVJHlecgA8lBwNfz6VJO
-        oPiG8IsYXQqeHLdFldfHPGpXX4glM+e4XVVrXRvt02zvGQYxOGUYc69q3gbgb0lQ7Sqa88
-        CD6YJNavR9sZjhIljGx0RTf8pN+GCwY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9423139B3;
-        Thu, 26 Jan 2023 08:50:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VFUWM90+0mPEQgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 26 Jan 2023 08:50:37 +0000
-Date:   Thu, 26 Jan 2023 09:50:37 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] mm/madvise: add vmstat statistics for
- madvise_[cold|pageout]
-Message-ID: <Y9I+3ZkWRdXdPBxg@dhcp22.suse.cz>
-References: <20230125005457.4139289-1-minchan@kernel.org>
- <Y9DigKf0w712t0OO@dhcp22.suse.cz>
- <Y9FacrcUIaLZq4DL@google.com>
- <Y9FhtBbnlNxAZAS4@dhcp22.suse.cz>
- <Y9Fv9YnNn7bHvLkN@google.com>
- <Y9GhNxqfjTEAFr5V@dhcp22.suse.cz>
- <Y9Grb2rggptkCu+n@google.com>
+        Thu, 26 Jan 2023 03:51:00 -0500
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4F32194B;
+        Thu, 26 Jan 2023 00:50:58 -0800 (PST)
+Received: by mail-qt1-f182.google.com with SMTP id x5so772565qti.3;
+        Thu, 26 Jan 2023 00:50:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+8Yo/HtiEGSzYrRQZv+JkTOd1mtgjj1wSt54yjMvxXA=;
+        b=SZROYySYLQ79ARWLyy+D72ao69fKTTKeJB5Fm5QpQrttbUc9gkNnu7c9oeXh31hjSi
+         K1DvmeThZU1l4vZQz3HLLHl5EnjwdWRH1f2ZRDy9tqCYz8+Tl3Y9KJqRw/220MUjyuSk
+         OffYHePolouldghJSp4/APH7kU0wW1wuNymBU38wB9VLMBcfXl+adUwReOqXJ43StPdR
+         LebN6Pou+r+UYa8cFxDiEwYkRpgmDYyzUS02eWzqSQm/bG5nkUctypy6YF/uA3JvfcQO
+         3J59S8Qj+oXJ95d2jnQHvj8D/U24czvDVrIy5Gxs1bNOh4uatT21At9nEkKae8gPwU7g
+         g7eQ==
+X-Gm-Message-State: AFqh2kotavUKSE/i0kdHggKWJhgb2vnnJ3IsNF4mT9v8n2IBmHKjy9ke
+        cH5Nc/RKlrBWA0t8fphYmDiWuHoGYsto2w==
+X-Google-Smtp-Source: AMrXdXtqPmAMagtNmmrZZmv/mgdDOl34t48Vbh1iMpY2rNSQ9gDDkdfblHXG/sKtNniDa931jv8HIw==
+X-Received: by 2002:a05:622a:4a83:b0:3b6:3931:640d with SMTP id fw3-20020a05622a4a8300b003b63931640dmr50788197qtb.48.1674723057415;
+        Thu, 26 Jan 2023 00:50:57 -0800 (PST)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id 204-20020a3703d5000000b006f9ddaaf01esm551941qkd.102.2023.01.26.00.50.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 00:50:56 -0800 (PST)
+Received: by mail-yb1-f174.google.com with SMTP id e15so1162361ybn.10;
+        Thu, 26 Jan 2023 00:50:55 -0800 (PST)
+X-Received: by 2002:a25:37d4:0:b0:80b:8602:f3fe with SMTP id
+ e203-20020a2537d4000000b0080b8602f3femr1019227yba.36.1674723055416; Thu, 26
+ Jan 2023 00:50:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9Grb2rggptkCu+n@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230124091602.44027-1-krzysztof.kozlowski@linaro.org> <20230124091916.45054-10-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230124091916.45054-10-krzysztof.kozlowski@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 26 Jan 2023 09:50:43 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXfD-G+SYQX5tJ8O-GSO3yTVL00xCX8A-Rc673zNkLbBw@mail.gmail.com>
+Message-ID: <CAMuHMdXfD-G+SYQX5tJ8O-GSO3yTVL00xCX8A-Rc673zNkLbBw@mail.gmail.com>
+Subject: Re: [PATCH v2 12/12] dt-bindings: serial: example cleanup
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Chester Lin <clin@suse.com>, Fugang Duan <fugang.duan@nxp.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Pragnesh Patel <pragnesh.patel@sifive.com>,
+        Le Ray <erwan.leray@foss.st.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 25-01-23 14:21:35, Minchan Kim wrote:
-> On Wed, Jan 25, 2023 at 10:37:59PM +0100, Michal Hocko wrote:
-> > On Wed 25-01-23 10:07:49, Minchan Kim wrote:
-> > > On Wed, Jan 25, 2023 at 06:07:00PM +0100, Michal Hocko wrote:
-> > > > On Wed 25-01-23 08:36:02, Minchan Kim wrote:
-> > > > > On Wed, Jan 25, 2023 at 09:04:16AM +0100, Michal Hocko wrote:
-> > > > > > On Tue 24-01-23 16:54:57, Minchan Kim wrote:
-> > > > > > > madvise LRU manipulation APIs need to scan address ranges to find
-> > > > > > > present pages at page table and provides advice hints for them.
-> > > > > > > 
-> > > > > > > Likewise pg[scan/steal] count on vmstat, madvise_pg[scanned/hinted]
-> > > > > > > shows the proactive reclaim efficiency so this patch adds those
-> > > > > > > two statistics in vmstat.
-> > > > > > > 
-> > > > > > > 	madvise_pgscanned, madvise_pghinted
-> > > > > > > 
-> > > > > > > Since proactive reclaim using process_madvise(2) as userland
-> > > > > > > memory policy is popular(e.g,. Android ActivityManagerService),
-> > > > > > > those stats are helpful to know how efficiently the policy works
-> > > > > > > well.
-> > > > > > 
-> > > > > > The usecase description is still too vague. What are those values useful
-> > > > > > for? Is there anything actionable based on those numbers? How do you
-> > > > > > deal with multiple parties using madvise resp. process_madvise so that
-> > > > > > their stats are combined?
-> > > > > 
-> > > > > The metric helps monitoing system MM health under fleet and experimental
-> > > > > tuning with diffrent policies from the centralized userland memory daemon.
-> > > > 
-> > > > That is just too vague for me to imagine anything more specific then, we
-> > > > have numbers and we can show them in a report. What does it actually
-> > > > mean that madvise_pgscanned is high. Or that pghinted / pgscanned is
-> > > > low (that you tend to manually reclaim sparse mappings)?
-> > > 
-> > > If that's low, it means the userspace daemon's current tune/policy are
-> > > inefficient or too aggressive since it is working on address spacess
-> > > of processes which don't have enough memory the hint can work(e.g.,
-> > > shared addresses, cold address ranges or some special address ranges like
-> > > VM_PFNMAP) so sometime, we can detect regression to find culprit or
-> > > have a chance to look into better ideas to improve.
-> > 
-> > Are you sure this is really meaningful metric? Just consider a large and
-> > sparsely populated mapping. This can be a perfect candidate for user
-> > space reclaim target (e.g. consider a mapping covering a large matrix
-> > or other similar data structure). pghinted/pgscanned would be really
-> > small while the reclaim efficiency could be quite high in that case,
-> > wouldn't it?
-> 
-> Why do you think it's efficient? It need to spend quite CPU cycle to
-> scan a few of pages to evict. I don't see it's efficient if it happens
-> quite a lot.
+On Tue, Jan 24, 2023 at 10:20 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> Adjust example DTS indentation to match recommended style of 4-spaces
+> and use lower-case hex for address in reg.  No functional change.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Because it doesn't really matter how many page tables you have to scan
-but how easily you can reclaim the memory behind that. Because it is the
-memory that matters. Just consider THP vs. 4k backed address ranges. You
-are going to scan much more for latter by design. That doesn't really
-mean that this is a worse candidate for reclaim and you should be only
-focusing on THP backed mappings. See?
+>  .../bindings/serial/renesas,em-uart.yaml      | 10 +++----
+>  .../bindings/serial/renesas,hscif.yaml        | 26 +++++++++----------
+>  .../bindings/serial/renesas,sci.yaml          | 24 ++++++++---------
+>  .../bindings/serial/renesas,scif.yaml         | 24 ++++++++---------
+>  .../bindings/serial/renesas,scifa.yaml        | 22 ++++++++--------
+>  .../bindings/serial/renesas,scifb.yaml        | 12 ++++-----
 
-I suspect you try to mimic pgscan/pgsteal effectivness metric on the
-address space but that is a fundamentally different thing.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
--- 
-Michal Hocko
-SUSE Labs
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
