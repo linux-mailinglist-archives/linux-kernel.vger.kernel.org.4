@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E56E67CCD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9422067CCDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjAZNyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
+        id S231515AbjAZNy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:54:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbjAZNyA (ORCPT
+        with ESMTP id S230146AbjAZNyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:54:00 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14423A9E;
-        Thu, 26 Jan 2023 05:53:30 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5E9C11FF3F;
-        Thu, 26 Jan 2023 13:53:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674741183; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TASGaq4D0/aREdW3TlXyuAFoYuyhnqm8PRS04XWyd/E=;
-        b=Gw0CGjbmIFVsrolICd9MoYiF7WTWxS4kNon5ILuTyVlGZwavd7ERkOVY225VMTDxTpp918
-        +/0cn0U8CKvhACMmcDfL0vR7thY2y8Csck4LuuH5JRnGm0+6CiDc9cwP85l8iz152Cmny+
-        Z/ZKXJDciAe3eGxZiApexDmk5FXdotU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674741183;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TASGaq4D0/aREdW3TlXyuAFoYuyhnqm8PRS04XWyd/E=;
-        b=PfwgB9yATUIkonGA4d+hUa9fZeJTHkeA6XK8y7SyqLOhgidnMPoxz7P0j6WPjdVGxzQBqu
-        +i/P3FDPIpi+1oCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB15A139B3;
-        Thu, 26 Jan 2023 13:53:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uFGJMb6F0mO7bwAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 26 Jan 2023 13:53:02 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 03544A06B4; Thu, 26 Jan 2023 14:52:58 +0100 (CET)
-Date:   Thu, 26 Jan 2023 14:52:58 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@fb.com>, Tejun Heo <tj@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH] writeback: fix call of incorrect macro
-Message-ID: <20230126135258.zpvyfxc2ffhzzsnx@quack3>
-References: <20230119104443.3002-1-korotkov.maxim.s@gmail.com>
+        Thu, 26 Jan 2023 08:54:09 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2F6166C4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:53:42 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id x4so2038691ybp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:53:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bpuj4csXn4X99vb3I/8s21NoXDHeQ/0SUOopiJHmpcA=;
+        b=T1OCixkhNVvyqIZG02I05yLXMmu0eRtoy7a1SbHSvmaUaNSxhw1D3/LIvUbLquayXB
+         yV+BtLGzuQfszCSBlQ9R2P2LmFDhBpW5QHj6vNoet2lRvFj8mHM/2tGpoJwDJnX6vfGq
+         9aG1wkd9GjOd0Qo5EMgr5y9lhqsZraSPNFYsOSMgJ90jdp8NZdl4VDBVh7+UXOdvYoUv
+         aLPu8JIpl49wnMfa+jFlLrcWSoWGWtDdAWA31H+OqdURvRn2fO1wKsC98OoirxOfs102
+         psM27Q4jO2ZFe+Mw/uTheQ0YXYL6e1JXsDMIYsioyjJA6+a0xudWPVol+9wiSlfZMCqZ
+         1Ykw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bpuj4csXn4X99vb3I/8s21NoXDHeQ/0SUOopiJHmpcA=;
+        b=Wv5x5UakNepZEmLoCM385TbFXDQvBwZDpaQp//2pSMPyTjZgY3cmSuxz7COKYLCR8r
+         FeXfnXigvWNsGr4aYrBSaPKUl6qWI3dHh2gOvhPBGqSi+JijEXii4RpqV8xdkLUzX5y1
+         N5kx98441A3Cvj41RsOw1QkG6oyOrPjn/njgX5XlzxkT7PU/NsyI+ZvY5GqSlBCCOybx
+         qQNCfMeW8w2Y1b8w6ASITG+IHxqlEXu/AgrzQqWtSj7JIG8MoCA5PJN37a42wvopBWbW
+         lw04lc/TIBWWAWUAgf3HZBMYjpr6T8WwVclzFyPNPgbmoAd2bB4FO/Sy2/uxnh+clbGc
+         UaZg==
+X-Gm-Message-State: AO0yUKW7mIEfjquljDQlkGBGEMwr4K44QqaUQYzhMGXJWvA1IGKSprm+
+        2KuyNwIm90qnu13BrAmTKqlnlOb6bwq2sPeeryp6Ww==
+X-Google-Smtp-Source: AK7set9K8VEvJWIIsQbzLpHPBdIj6YRdDIIsA2XTX+4WAVIQ5O4wlEhz7CX7+BOEhoz7cif/nbeZ9U+rSHTl2iHnGDQ=
+X-Received: by 2002:a25:f81b:0:b0:80b:821f:b621 with SMTP id
+ u27-20020a25f81b000000b0080b821fb621mr752679ybd.24.1674741217835; Thu, 26 Jan
+ 2023 05:53:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119104443.3002-1-korotkov.maxim.s@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125143503.1015424-1-bero@baylibre.com> <20230125143503.1015424-5-bero@baylibre.com>
+In-Reply-To: <20230125143503.1015424-5-bero@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 26 Jan 2023 14:53:26 +0100
+Message-ID: <CACRpkdYMif0--zeKe-tccUJvjiQAkbzBq2nCYMS8qU_imZmCmg@mail.gmail.com>
+Subject: Re: [PATCH v9 4/9] dt-bindings: pinctrl: add bindings for Mediatek
+ MT8365 SoC
+To:     =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, lee@kernel.org, matthias.bgg@gmail.com,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        chunfeng.yun@mediatek.com, angelogioacchino.delregno@collabora.com,
+        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
+        sean.wang@mediatek.com, zhiyong.tao@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 19-01-23 13:44:43, Maxim Korotkov wrote:
->  the variable 'history' is of type u16, it may be an error 
->  that the hweight32 macro was used for it 
->  I guess macro hweight16 should be used
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Fixes: 2a81490811d0 ("writeback: implement foreign cgroup inode detection")
-> Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
+On Wed, Jan 25, 2023 at 3:35 PM Bernhard Rosenkr=C3=A4nzer <bero@baylibre.c=
+om> wrote:
 
-Looks good to me, although it is mostly a theoretical issue - I don't see
-how hweight32 could do any harm here. Anyway, feel free to add:
+> Add devicetree bindings for Mediatek MT8365 pinctrl driver.
+>
+> Signed-off-by: Bernhard Rosenkr=C3=A4nzer <bero@baylibre.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+This patch applied to the pinctrl tree, decreasing the depth of your
+patch stack by 1!
 
-								Honza
-
-> ---
->  fs/fs-writeback.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> index 6fba5a52127b..fc16123b2405 100644
-> --- a/fs/fs-writeback.c
-> +++ b/fs/fs-writeback.c
-> @@ -829,7 +829,7 @@ void wbc_detach_inode(struct writeback_control *wbc)
->  		 * is okay.  The main goal is avoiding keeping an inode on
->  		 * the wrong wb for an extended period of time.
->  		 */
-> -		if (hweight32(history) > WB_FRN_HIST_THR_SLOTS)
-> +		if (hweight16(history) > WB_FRN_HIST_THR_SLOTS)
->  			inode_switch_wbs(inode, max_id);
->  	}
->  
-> -- 
-> 2.37.2
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Yours,
+Linus Walleij
