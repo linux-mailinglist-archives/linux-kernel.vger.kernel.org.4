@@ -2,172 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B361767C6DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD6C67C6FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236753AbjAZJTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 04:19:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
+        id S236826AbjAZJVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 04:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236802AbjAZJTL (ORCPT
+        with ESMTP id S236664AbjAZJVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 04:19:11 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2123.outbound.protection.outlook.com [40.107.247.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA2517CF7;
-        Thu, 26 Jan 2023 01:19:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X6sa+sKjmO+2KkmUDYJfbnpJilnwT3LEyn2pi4Hb9yO2yjPei+05VcA6T0z9Bemn0powVZatx8KZ2kWtYnBrkZ4v/JSTVOlsHGmDEmwv4TNcQuh82HtReVz+VyFx3zYMmVojoDiTeMTdvzTe7Hboz6tBdhfeBE2xt89sS2J1u9Ub4KF5B67mrFPxqIxm5aDv0n9CsQDxh1377oAjK4Q7/FCWJvngyeu8nhZRDOkW4D8oFP/qqMPHZSguGm0JGzQNgkXjAo8aD1NOoY3GZOkgh6vVr+byyhb8JrCHlSMNIUNWbh8gzl59brYHVX1kuVGt0yS2XPIucx38363ETr6etQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UWEkzbCpBJZ1J6AGtrB4vzIydngUMIOXRQJ2gnoyK40=;
- b=nOvGygV8QBT2VTpXZN58zBIiG4Jxtyh7b8rMVwz25hD7TJveJHp1doV/vkHZCKf7+Sc0myY8Wzcc9TrnA0Nu1W0HihFI0e567fh+S3dUtJMpQcC+Dv+6NlWig6xx4UTak1mp7Mk+1sLOnkvXW/8nsPSGUKIbmU2Gwmlh8CwUaDZ5ImofeYvzcVsucjxZbN12rBIqltFFt+aqtEJPPUMkl+IjYrwZzxORDjoMaD8HAI+7rhnGB93n7K4Ijdsw0sEExNBTm2zAtclkZ4P9XPYvWTs1SBTrF47N/6GgsgcoYp5A8I/9giYIxHBbI1vk65nDDnCwXEyp7eG0yN46RKqcNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
- header.d=mt.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UWEkzbCpBJZ1J6AGtrB4vzIydngUMIOXRQJ2gnoyK40=;
- b=h+CmQX+F7eQi9oFqmsIFFApG2v7eV79/NywulZbEX+aJPQF/7vRpkyKoK6gFS09ysOyRTt8aUUAXOVzhPpjaezuYYOBLLjmp3goL97s6JqdBJ4Gjzdwcuxm/ebs6a69XhRkttHCSiN6iWiuJ+en+YIPIk09e0J1dPSwHUpjMgOqTBw0bHIauffyCUHB3oeWA2aymgyBy31PHy/VtJyyfXlx7a2ejUPslH6GeL22IsBw1zeKcGzsclYENRrmwmK6vrkbZvlnhjM0F3a27BBB3kZCP3FYLDK+kw8GJ+lY84wPSWbeHMKSf5teaeGc4RMQUDYhMNihydSlkeGC6x2xQ2A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mt.com;
-Received: from AS8PR03MB7621.eurprd03.prod.outlook.com (2603:10a6:20b:345::20)
- by AS2PR03MB9516.eurprd03.prod.outlook.com (2603:10a6:20b:598::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Thu, 26 Jan
- 2023 09:18:53 +0000
-Received: from AS8PR03MB7621.eurprd03.prod.outlook.com
- ([fe80::b42f:82f8:24cb:a225]) by AS8PR03MB7621.eurprd03.prod.outlook.com
- ([fe80::b42f:82f8:24cb:a225%9]) with mapi id 15.20.6043.022; Thu, 26 Jan 2023
- 09:18:53 +0000
-From:   Manuel Traut <manuel.traut@mt.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Manuel Traut <manuel.traut@mt.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v8 5/5] input: pwm-beeper: handle module unloading properly
-Date:   Thu, 26 Jan 2023 10:18:25 +0100
-Message-Id: <20230126091825.220646-6-manuel.traut@mt.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230126091825.220646-1-manuel.traut@mt.com>
-References: <20230126091825.220646-1-manuel.traut@mt.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: FRYP281CA0008.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::18)
- To AS8PR03MB7621.eurprd03.prod.outlook.com (2603:10a6:20b:345::20)
+        Thu, 26 Jan 2023 04:21:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7529623C7D;
+        Thu, 26 Jan 2023 01:20:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13DE361729;
+        Thu, 26 Jan 2023 09:20:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7DBC433D2;
+        Thu, 26 Jan 2023 09:19:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674724832;
+        bh=73aMcUob1WYX+/b4rggndOJ7N9caL088plxdfjSDDEQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JmyjvNONg1SgIhjqFFggxa6D/d0DdvOOGuNt2dtDINzMuck9VRm1yrgcKsMjflpW+
+         SwTLsN9QAcAPFlEDt4IXaVuzKuvw/QTFDgiE6iXZrjCF1Dk77N344FV6FZLMxl/SIh
+         YCzWCtWMyri2S/VxFa8w5izmma6QvGZR6W3LW+HhZQLDOEjS2QQ4+yWFtPAWXwzXjB
+         8sjW4u5olaD4DQ8+tTWSGydqMOF+S7T6bSIcqdA9DZQS+/0Qnjc5pNbohtILz6vsxE
+         pH2w8v8IDyyC1JX/SGY55iAqC16GztTVGkZPd8qlGsAwBxzWAs0I60Xu7VFg5IVHwG
+         yDtfzpUFPYi0Q==
+Date:   Thu, 26 Jan 2023 11:19:37 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        chenhuacai@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        qianweili@huawei.com, wangzhou1@hisilicon.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, l.stach@pengutronix.de,
+        krzysztof.kozlowski@linaro.org, patrik.r.jakobsson@gmail.com,
+        matthias.bgg@gmail.com, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        tomba@kernel.org, hjc@rock-chips.com, heiko@sntech.de,
+        ray.huang@amd.com, kraxel@redhat.com, sre@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        dimitri.sivanich@hpe.com, zhangfei.gao@linaro.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        dgilbert@interlog.com, hdegoede@redhat.com, mst@redhat.com,
+        jasowang@redhat.com, alex.williamson@redhat.com, deller@gmx.de,
+        jayalk@intworks.biz, viro@zeniv.linux.org.uk, nico@fluxnic.net,
+        xiang@kernel.org, chao@kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, miklos@szeredi.hu,
+        mike.kravetz@oracle.com, muchun.song@linux.dev, bhe@redhat.com,
+        andrii@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, perex@perex.cz, tiwai@suse.com,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-graphics-maintainer@vmware.com,
+        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org,
+        loongarch@lists.linux.dev, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, nvdimm@lists.linux.dev,
+        dmaengine@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-accelerators@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        devel@lists.orangefs.org, kexec@lists.infradead.org,
+        linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
+        selinux@vger.kernel.org, alsa-devel@alsa-project.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 2/6] mm: replace VM_LOCKED_CLEAR_MASK with
+ VM_LOCKED_MASK
+Message-ID: <Y9JFqaE4n/eGoWWi@kernel.org>
+References: <20230125083851.27759-1-surenb@google.com>
+ <20230125083851.27759-3-surenb@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR03MB7621:EE_|AS2PR03MB9516:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0df6ba51-1538-4936-6cd6-08daff7e57ba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j1hmOApjRY4HdKIelEO3yYp+BED7XfPAeptHLBjS7sEFcnChlBXewlowrCq/flGOABegEUAS0PxsY66ALkbKz4ZFWR3gfzRn+ONGbRbofIHPZUe9lFNBZcwTiUkLiiQ93FeHWGIyBMZoJr8Ib8LDnt7oQ8sRj9o/SoOZhFEUfxSCxpC6FlNA4XHXOkYfMiwSRZBIwrzfiOkxuCDXR5WhhC6+YQ5N9WVNR9skcnhv99/cYqF44fimlc913LR77oCvY42cLBnBYnsNnLe7AeNoGJIZsp2W0f8koU/MMkuqLxM14cdVIIBBxY42Y8tUyAExPj8m5MAt3WRkIu0KHZaiKG4uRwAr20Gu+B5zYqQwghWhG7tdDp66IjQvUKa3eekhINdBEhnnn5XrAo+++UlGZl80nB0xQjvAfYVuDMzXu9bLRLVo7evp8EkEOdQX8LjcXdADg4lBGj/m6mc5tUDfy8b8+dndRZ47EDXpI5n7BHEIPsyzeE9siUOhBekR9SG5y3ZRI1SPBwkDZhO+1YdtUOgxBo1HyZkt/GunND04r0r0qBWFLJu+33U5oKId4XnwErx+jqmQVnRWEAB7vAjcq2EW+TCv08r6isJD7JhHaT2oJWm7fBXYTDjJAhQ3uqP6tkb5mu4wiXwFFjKnK89b7cvY9hEY/zy5EarQcV72L8W3PYzFHMIekrrn2xWXdB7tUNCEtURvhRUilfWbByxofg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB7621.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(346002)(366004)(396003)(136003)(376002)(451199018)(44832011)(2906002)(38350700002)(38100700002)(2616005)(1076003)(6666004)(6506007)(6512007)(186003)(26005)(86362001)(83380400001)(66556008)(66476007)(6916009)(66946007)(8676002)(4326008)(5660300002)(36756003)(41300700001)(8936002)(52116002)(6486002)(478600001)(316002)(54906003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/zXILcEhhvleoKW1/gKlCaFiyQAejEBygnReGxZOcr4UfXhfIuZKweoZ7mhu?=
- =?us-ascii?Q?kRXqFaRU0R3g/MacxjZMjOer/Y9c90W2HQt8VZyM7qky4iRKZYRMMbvjxMUq?=
- =?us-ascii?Q?6eC75x9MoRDrVSrvRl+yeeAsYFNddOsQYH1XVOBJTt3NqGvqvBK7puOIFnEY?=
- =?us-ascii?Q?ACtmD/9bTwE8+708VBtIkmJoYHto/T3Tl6nfJvY6AzcgUIajjXUjIkLukQsv?=
- =?us-ascii?Q?7x5KrNoW02CrtFUhBKWjiryOkvb/M8ixoe/VWDJ1VPdToofFsfcebow8vnua?=
- =?us-ascii?Q?cEpkhXvRj7TZlQj6xt7AkJHyYYgGAoUV7vdjbCLYaiVZfD2wcJp/mhDEVdcW?=
- =?us-ascii?Q?FcXOVAlX1IkgNcjgJeB/jpBLZMKlMbJazSYKF7Ln+yW6DrkR7THNoIfpQAfC?=
- =?us-ascii?Q?Nq15TBwzQgPbzrs0nPIsZQGcv7kgzTUn5cGYX1jdHySnepEQnjIT2c/nJ/FC?=
- =?us-ascii?Q?6GmzMy2fS8nzEj7+Kyjh8ZmB8L1bcHmdUztqhQlt040hjUObEOuucMZwG/oL?=
- =?us-ascii?Q?mDGzg2kJvNK6AwZ5kLWF1wRzCT+A5xrXmHhb6YKp5P/nn8uKEu75DI0Mg5aU?=
- =?us-ascii?Q?TzCuahSzRBRuItA2dVDskcSndMC3lJpBtFg+1m1FROboF7engOHGLdB7Sfyu?=
- =?us-ascii?Q?8mZGA+m6Ki7jKiXn5ui8nGzmkUZus5pFV0/Tqmd59RLGRhQ1feL9EPFYq2b2?=
- =?us-ascii?Q?8aDPrCxRg+6T2bkXs9/ZVg0gQvjTnvm7AMytzqrab1c07NZjnvhaEBaFE3qM?=
- =?us-ascii?Q?WSps223vBJE7bOb5kVDfxa87jtQVF1ZzfjZrcOzkJwO3lkxQ2n/cJD4aC32T?=
- =?us-ascii?Q?O6ghDHTOER9Wk83aUZiB4bvnz87NjACQH/Ca7aKuLmryfiNqptNEyO0Fuqdi?=
- =?us-ascii?Q?9nHkHO3YRa54OSPVc59WELW9UkyJ0du/GB2sivpUEK+OO+WJgWgEoMJEHDI+?=
- =?us-ascii?Q?Wh8ZggBftorKac+2e8kwAgje4Xs568gYA0AZYHIvRQ1ei6th69uOzXDdJdAM?=
- =?us-ascii?Q?i4g3la/cLk5uJEPLvCncMwPQuFsyR6wTdwO5Ldc+4Jn8Je6jZVt+cBa4buTB?=
- =?us-ascii?Q?XBkZed3D55l6Q9b9NNEBRhdIvlELJBOEGx+q6gd2cvjDSyqFDHms1r3KnEB0?=
- =?us-ascii?Q?Ynq6i1/YKOYmMmNsnt7Cp5vtmwa7XMZwLWltTLXN3QIvNHmz/DeRwU5L9Ja/?=
- =?us-ascii?Q?Q6pIjezwMcCvHNC0GgbtBcYUwMJVojXJA1cZl0a/sVQwv1V+LCO0BJuvbJ0m?=
- =?us-ascii?Q?L8jDR3jMzZpWvvOMjZi+ePNFMZPtIy0JytirpK2bPU5wu6DGHL8sZazkH3Bn?=
- =?us-ascii?Q?PqIVVsTwYxFoTwT0T5ow6XETwDvOPu9hDh48wRNI2fTS/rZ2SEXPfR+xSpb8?=
- =?us-ascii?Q?mDL8Zx0aAoT1m/gRfAN8oVdU0D1fI1K1JvQddb/lgiqu5LqxTFDWDHvQLKVq?=
- =?us-ascii?Q?QTVmEFMpM2qjw895h+A4fXgElMFzG3EGtC+8YcydDPJ862Cc7koXxWeZOqpT?=
- =?us-ascii?Q?NnxKD5MKir80EhDq7pNhPtNo32+egAWlga991YcCEu3xG4FnUhh3UYJP9LRA?=
- =?us-ascii?Q?w51EPOt2fQOShF9gnQiv89+ytGssXHjfp15DUkiG?=
-X-OriginatorOrg: mt.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0df6ba51-1538-4936-6cd6-08daff7e57ba
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR03MB7621.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 09:18:53.0081
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XEwsX7IlK08OcPNUvGVMOX+7JVHs548958vDbACKimT5w1A2F/+hvizLnrBtMaB6zG66Rnn0hbBK83G5La47/w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR03MB9516
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125083851.27759-3-surenb@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'input: pwm-beeper: add feature to set volume via sysfs' adds device
-attributes without removing them on error or if the module is unloaded.
+On Wed, Jan 25, 2023 at 12:38:47AM -0800, Suren Baghdasaryan wrote:
+> To simplify the usage of VM_LOCKED_CLEAR_MASK in clear_vm_flags(),
+> replace it with VM_LOCKED_MASK bitmask and convert all users.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-If the module will be unloaded and loaded again it fails:
-[ 1007.918180] sysfs: cannot create duplicate filename '/devices/platform/buzzer/volume'
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-Therefore remove device attributes on module unloading and in case
-registration at the input subsystem fails.
-
-Signed-off-by: Manuel Traut <manuel.traut@mt.com>
----
- drivers/input/misc/pwm-beeper.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/input/misc/pwm-beeper.c b/drivers/input/misc/pwm-beeper.c
-index 82b05f7f4c70..736b89bd1b42 100644
---- a/drivers/input/misc/pwm-beeper.c
-+++ b/drivers/input/misc/pwm-beeper.c
-@@ -299,6 +299,7 @@ static int pwm_beeper_probe(struct platform_device *pdev)
- 
- 	error = input_register_device(beeper->input);
- 	if (error) {
-+		sysfs_remove_group(&pdev->dev.kobj, &pwm_beeper_attribute_group);
- 		dev_err(dev, "Failed to register input device: %d\n", error);
- 		return error;
- 	}
-@@ -308,6 +309,17 @@ static int pwm_beeper_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static int pwm_beeper_remove(struct platform_device *pdev)
-+{
-+	struct pwm_beeper *beeper;
-+
-+	beeper = platform_get_drvdata(pdev);
-+	input_unregister_device(beeper->input);
-+	sysfs_remove_group(&pdev->dev.kobj, &pwm_beeper_attribute_group);
-+
-+	return 0;
-+}
-+
- static int __maybe_unused pwm_beeper_suspend(struct device *dev)
- {
- 	struct pwm_beeper *beeper = dev_get_drvdata(dev);
-@@ -353,6 +365,7 @@ MODULE_DEVICE_TABLE(of, pwm_beeper_match);
- 
- static struct platform_driver pwm_beeper_driver = {
- 	.probe	= pwm_beeper_probe,
-+	.remove	= pwm_beeper_remove,
- 	.driver = {
- 		.name	= "pwm-beeper",
- 		.pm	= &pwm_beeper_pm_ops,
--- 
-2.39.0
-
+> ---
+>  include/linux/mm.h | 4 ++--
+>  kernel/fork.c      | 2 +-
+>  mm/hugetlb.c       | 4 ++--
+>  mm/mlock.c         | 6 +++---
+>  mm/mmap.c          | 6 +++---
+>  mm/mremap.c        | 2 +-
+>  6 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index b71f2809caac..da62bdd627bf 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -421,8 +421,8 @@ extern unsigned int kobjsize(const void *objp);
+>  /* This mask defines which mm->def_flags a process can inherit its parent */
+>  #define VM_INIT_DEF_MASK	VM_NOHUGEPAGE
+>  
+> -/* This mask is used to clear all the VMA flags used by mlock */
+> -#define VM_LOCKED_CLEAR_MASK	(~(VM_LOCKED | VM_LOCKONFAULT))
+> +/* This mask represents all the VMA flag bits used by mlock */
+> +#define VM_LOCKED_MASK	(VM_LOCKED | VM_LOCKONFAULT)
+>  
+>  /* Arch-specific flags to clear when updating VM flags on protection change */
+>  #ifndef VM_ARCH_CLEAR
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 6683c1b0f460..03d472051236 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -669,7 +669,7 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
+>  			tmp->anon_vma = NULL;
+>  		} else if (anon_vma_fork(tmp, mpnt))
+>  			goto fail_nomem_anon_vma_fork;
+> -		tmp->vm_flags &= ~(VM_LOCKED | VM_LOCKONFAULT);
+> +		clear_vm_flags(tmp, VM_LOCKED_MASK);
+>  		file = tmp->vm_file;
+>  		if (file) {
+>  			struct address_space *mapping = file->f_mapping;
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index d20c8b09890e..4ecdbad9a451 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6973,8 +6973,8 @@ static unsigned long page_table_shareable(struct vm_area_struct *svma,
+>  	unsigned long s_end = sbase + PUD_SIZE;
+>  
+>  	/* Allow segments to share if only one is marked locked */
+> -	unsigned long vm_flags = vma->vm_flags & VM_LOCKED_CLEAR_MASK;
+> -	unsigned long svm_flags = svma->vm_flags & VM_LOCKED_CLEAR_MASK;
+> +	unsigned long vm_flags = vma->vm_flags & ~VM_LOCKED_MASK;
+> +	unsigned long svm_flags = svma->vm_flags & ~VM_LOCKED_MASK;
+>  
+>  	/*
+>  	 * match the virtual addresses, permission and the alignment of the
+> diff --git a/mm/mlock.c b/mm/mlock.c
+> index 0336f52e03d7..5c4fff93cd6b 100644
+> --- a/mm/mlock.c
+> +++ b/mm/mlock.c
+> @@ -497,7 +497,7 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
+>  		if (vma->vm_start != tmp)
+>  			return -ENOMEM;
+>  
+> -		newflags = vma->vm_flags & VM_LOCKED_CLEAR_MASK;
+> +		newflags = vma->vm_flags & ~VM_LOCKED_MASK;
+>  		newflags |= flags;
+>  		/* Here we know that  vma->vm_start <= nstart < vma->vm_end. */
+>  		tmp = vma->vm_end;
+> @@ -661,7 +661,7 @@ static int apply_mlockall_flags(int flags)
+>  	struct vm_area_struct *vma, *prev = NULL;
+>  	vm_flags_t to_add = 0;
+>  
+> -	current->mm->def_flags &= VM_LOCKED_CLEAR_MASK;
+> +	current->mm->def_flags &= ~VM_LOCKED_MASK;
+>  	if (flags & MCL_FUTURE) {
+>  		current->mm->def_flags |= VM_LOCKED;
+>  
+> @@ -681,7 +681,7 @@ static int apply_mlockall_flags(int flags)
+>  	for_each_vma(vmi, vma) {
+>  		vm_flags_t newflags;
+>  
+> -		newflags = vma->vm_flags & VM_LOCKED_CLEAR_MASK;
+> +		newflags = vma->vm_flags & ~VM_LOCKED_MASK;
+>  		newflags |= to_add;
+>  
+>  		/* Ignore errors */
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index d4abc6feced1..323bd253b25a 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -2671,7 +2671,7 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
+>  		if ((vm_flags & VM_SPECIAL) || vma_is_dax(vma) ||
+>  					is_vm_hugetlb_page(vma) ||
+>  					vma == get_gate_vma(current->mm))
+> -			vma->vm_flags &= VM_LOCKED_CLEAR_MASK;
+> +			clear_vm_flags(vma, VM_LOCKED_MASK);
+>  		else
+>  			mm->locked_vm += (len >> PAGE_SHIFT);
+>  	}
+> @@ -3340,8 +3340,8 @@ static struct vm_area_struct *__install_special_mapping(
+>  	vma->vm_start = addr;
+>  	vma->vm_end = addr + len;
+>  
+> -	vma->vm_flags = vm_flags | mm->def_flags | VM_DONTEXPAND | VM_SOFTDIRTY;
+> -	vma->vm_flags &= VM_LOCKED_CLEAR_MASK;
+> +	init_vm_flags(vma, (vm_flags | mm->def_flags |
+> +		      VM_DONTEXPAND | VM_SOFTDIRTY) & ~VM_LOCKED_MASK);
+>  	vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
+>  
+>  	vma->vm_ops = ops;
+> diff --git a/mm/mremap.c b/mm/mremap.c
+> index 1b3ee02bead7..35db9752cb6a 100644
+> --- a/mm/mremap.c
+> +++ b/mm/mremap.c
+> @@ -687,7 +687,7 @@ static unsigned long move_vma(struct vm_area_struct *vma,
+>  
+>  	if (unlikely(!err && (flags & MREMAP_DONTUNMAP))) {
+>  		/* We always clear VM_LOCKED[ONFAULT] on the old vma */
+> -		vma->vm_flags &= VM_LOCKED_CLEAR_MASK;
+> +		clear_vm_flags(vma, VM_LOCKED_MASK);
+>  
+>  		/*
+>  		 * anon_vma links of the old vma is no longer needed after its page
+> -- 
+> 2.39.1
+> 
+> 
