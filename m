@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4ECE67C946
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9DB67C948
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237025AbjAZK6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
+        id S237041AbjAZK6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236709AbjAZK6b (ORCPT
+        with ESMTP id S229674AbjAZK6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:58:31 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7BF2E0DD
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:58:30 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id b3so2488548lfv.2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vliCibrNqXv/PIuIH5pntK45iVapQivTMjCbhKKGPN8=;
-        b=FN+ghFAyC2KLxfrbCAo3HfBrVQ9hvknAzghxAMh94Km5lFp7hA/+oMTD4IvwGDy3FN
-         x0LyrRsVCyXce2glIutKobmwCsh5JMBgba+5nyAtAfDHX5Nt1ra/TcsWMKn9khmu0xzI
-         c/Yln503y/fjdZVECWWEwDyzjB6/wfjzUL20XrqWsKxpEBjORunzK3QQooKE6TEIE6Nd
-         esd1LtiZNVEdJuZecjAe5R6EVEI4jfiLWTN7xXVyIFmdxNZ/+QNet6+1z8hOeh908AOQ
-         1TcRZcpZy4qVkqtrQSae9YsRbR9EVPAabifJEue3fhZHG4bhLrxWOIXeOmlKEfxDivDW
-         7AVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vliCibrNqXv/PIuIH5pntK45iVapQivTMjCbhKKGPN8=;
-        b=mab19IzFYq0VKKKqP0VftHAOuatBBJKI6Sevm9wzWg0iW5ycGskL3vjvnKAg+aTWTb
-         RWo0oqDHASw6UX4dYSdXegQR3zJw6A1Mp/Jaqt3AjLQRbXekS+AyoRv3ncOMVBtdvUCP
-         vRCsXKsUXpe8Kub1VbS335u4JPMd21nUBASQ+uMmWY11SoCSgNxrRBy8Ym0lBiJu+tjD
-         VH+e1IqkTlRZpcfMr9rtyRlka1GIa8BMTQPd/cas8LbZnPXZahjhflWT2ZgyGfj7hXRs
-         mcLf/Op/Ci1UETQwGa8vyEUjLID6s1gbwOwbUlh16HyVWquh855OJDWNTj33fvQm7lAI
-         zQvQ==
-X-Gm-Message-State: AFqh2kq31QU3NPmbC6DSHYrM2Wsf1VikQl8lLV9tiHh96HiCtQFcmCzl
-        jjAfECMWyED2yb63cRlaZp/oqmkLlKAU2oYehTq8OQ==
-X-Google-Smtp-Source: AMrXdXtBgbTsBjGNQ7wulcHQ0err7NYcjNcADfAV5ro/lEfwlaKZI9AXHQjL8BtDrTmHeYM7RJVnO/fYK4dcUYfmkc4=
-X-Received: by 2002:ac2:508f:0:b0:4cb:7c2:87ee with SMTP id
- f15-20020ac2508f000000b004cb07c287eemr3483222lfm.165.1674730708246; Thu, 26
- Jan 2023 02:58:28 -0800 (PST)
+        Thu, 26 Jan 2023 05:58:54 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3A4B771;
+        Thu, 26 Jan 2023 02:58:52 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4P2czQ66XDz67bVM;
+        Thu, 26 Jan 2023 18:54:42 +0800 (CST)
+Received: from localhost (10.81.202.191) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 26 Jan
+ 2023 10:58:48 +0000
+Date:   Thu, 26 Jan 2023 10:58:47 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Samuel Ortiz <sameo@rivosinc.com>
+CC:     Lukas Wunner <lukas@wunner.de>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Mika Westerberg" <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        "Cfir Cohen" <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "James Morris" <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <20230126105847.00001b97@Huawei.com>
+In-Reply-To: <CAGXJix9-cXNW7EwJf0PVzj_Qmt5fmQvBX1KvXfRX5NAeEpnMvw@mail.gmail.com>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+        <Y9EkCvAfNXnJ+ATo@kroah.com>
+        <Y9Ex3ZUIFxwOBg1n@work-vm>
+        <Y9E7PNmSTP5w2zuw@kroah.com>
+        <Y9FDZPV7qENtNNyk@work-vm>
+        <20230125215333.GA18160@wunner.de>
+        <CAGXJix9-cXNW7EwJf0PVzj_Qmt5fmQvBX1KvXfRX5NAeEpnMvw@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20221216171807.760147-1-dvyukov@google.com> <20230112112411.813356-1-dvyukov@google.com>
- <20230125124304.GA13746@redhat.com> <20230125151717.GB13746@redhat.com>
- <CACT4Y+YKy_4mBLYomr49+fTm31Y6Q_kXhJz8O-_RTjMe=B-6eg@mail.gmail.com>
- <20230125163137.GC13746@redhat.com> <20230125170708.GE13746@redhat.com>
-In-Reply-To: <20230125170708.GE13746@redhat.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 26 Jan 2023 11:58:16 +0100
-Message-ID: <CACT4Y+ZMOLw0QZ=ssmgs5oU8+jRxt0JZScQzKneG036vWZ=0wg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] posix-timers: Support delivery of signals to the
- current thread
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.202.191]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,68 +79,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 Jan 2023 at 18:07, Oleg Nesterov <oleg@redhat.com> wrote:
->
-> On 01/25, Oleg Nesterov wrote:
-> >
-> > > >  int posix_timer_event(struct k_itimer *timr, int si_private)
-> > > >  {
-> > > >         enum pid_type type;
-> > > > +       struct pid *pid;
-> > > >         int ret;
-> > > >         /*
-> > > >          * FIXME: if ->sigq is queued we can race with
-> > > > @@ -350,8 +351,9 @@ int posix_timer_event(struct k_itimer *timr, int si_private)
-> > > >          */
-> > > >         timr->sigq->info.si_sys_private = si_private;
-> > > >
-> > > > -       type = !(timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_TGID : PIDTYPE_PID;
-> > > > -       ret = send_sigqueue(timr->sigq, timr->it_pid, type);
-> > > > +       type = (timr->it_sigev_notify & SIGEV_THREAD_ID) ? PIDTYPE_PID : PIDTYPE_TGID;
-> > > > +       pid = (type == PIDTYPE_PID) ? timr->it_pid : task_pid(current);
-> > > > +       ret = send_sigqueue(timr->sigq, pid, type);
-> > > >         /* If we failed to send the signal the timer stops. */
-> > > >         return ret > 0;
-> > > >  }
->
-> ...
->
-> > But! I just noticed send_sigqueue() does pid_task(pid, type), so the patch
-> > above needs another change
-> >
-> >       --- a/kernel/signal.c
-> >       +++ b/kernel/signal.c
-> >       @@ -1970,7 +1970,8 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
-> >
-> >               ret = -1;
-> >               rcu_read_lock();
-> >       -       t = pid_task(pid, type);
-> >       +       // comment to explain why don't we use "type"
-> >       +       t = pid_task(pid, PIDTYPE_PID);
-> >               if (!t || !likely(lock_task_sighand(t, &flags)))
-> >                       goto ret;
->
-> So. Unless I missed something (quite possibly) we do not even need the patch
-> above. The one liner change below can work just fine.
->
-> Oleg.
->
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -1970,7 +1970,8 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
->
->         ret = -1;
->         rcu_read_lock();
-> -       t = pid_task(pid, type);
-> +       /* GOOD COMMENT */
-> +       t = type == PIDTYPE_PID ? pid_task(pid, type) : current;
->         if (!t || !likely(lock_task_sighand(t, &flags)))
->                 goto ret;
+On Thu, 26 Jan 2023 10:24:32 +0100
+Samuel Ortiz <sameo@rivosinc.com> wrote:
 
-This works for my use-case.
+> Hi Lukas,
+> 
+> On Wed, Jan 25, 2023 at 11:03 PM Lukas Wunner <lukas@wunner.de> wrote:
+> 
+> > [cc += Jonathan Cameron, linux-pci]
+> >
+> > On Wed, Jan 25, 2023 at 02:57:40PM +0000, Dr. David Alan Gilbert wrote:  
+> > > Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:  
+> > > > Great, so why not have hardware attestation also for your devices you
+> > > > wish to talk to?  Why not use that as well?  Then you don't have to
+> > > > worry about anything in the guest.  
+> > >
+> > > There were some talks at Plumbers where PCIe is working on adding that;
+> > > it's not there yet though.  I think that's PCIe 'Integrity and Data
+> > > Encryption' (IDE - sigh), and PCIe 'Security Prtocol and Data Model' -
+> > > SPDM.   I don't know much of the detail of those, just that they're far
+> > > enough off that people aren't depending on them yet.  
+> >
+> > CMA/SPDM (PCIe r6.0 sec 6.31) is in active development on this branch:
+> >
+> > https://github.com/l1k/linux/commits/doe  
+> 
+> Nice, thanks a lot for that.
+> 
+> 
+> 
+> > The device authentication service afforded here is generic.
+> > It is up to users and vendors to decide how to employ it,
+> > be it for "confidential computing" or something else.
+> >
+> > Trusted root certificates to validate device certificates can be
+> > installed into a kernel keyring using the familiar keyctl(1) utility,
+> > but platform-specific roots of trust (such as a HSM) could be
+> > supported as well.
+> >  
+> 
+> This may have been discussed at LPC, but are there any plans to also
+> support confidential computing flows where the host kernel is not part
+> of the TCB and would not be trusted for validating the device cert chain
+> nor for running the SPDM challenge?
 
-However, this is a bit trickier since current may be completely
-unrelated to the original timer/process (think of monotonic timers).
+There are lots of possible models for this. One simple option if the assigned
+VF supports it is a CMA instance per VF. That will let the guest
+do full attestation including measurement of whether the device is
+appropriately locked down so the hypervisor can't mess with
+configuration that affects the guest (without a reset anyway and that
+is guest visible). Whether anyone builds that option isn't yet clear
+though. If they do, Lukas' work should work there as well as for the
+host OS. (Note I'm not a security expert so may be missing something!)
 
-Please take a look at v3:
-https://lore.kernel.org/lkml/20221216171807.760147-1-dvyukov@google.com/T/#me78642cc096184da681cf91c39932be2bd2b74e1
+For extra fun, why should the device trust the host? Mutual authentication
+fun (there are usecases where that matters)
+
+There are way more complex options supported in PCIe TDISP (Tee Device
+security interface protocols). Anyone have an visibility of open solutions
+that make use of that? May be too new.
+
+Jonathan
+
+
+> 
+> Cheers,
+> Samuel.
+> 
+
