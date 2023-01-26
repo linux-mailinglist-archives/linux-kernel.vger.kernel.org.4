@@ -2,124 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4139D67D545
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:19:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B79A67D544
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbjAZTTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 14:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
+        id S232043AbjAZTTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 14:19:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjAZTTl (ORCPT
+        with ESMTP id S229531AbjAZTTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 14:19:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC99B20686
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:18:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674760737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0fMObdQvzZWrd2jmea2KvQ+KMA1oa3ru9SdLqtXyBe4=;
-        b=Omo4xkbqPn1+n0D3oJ12fWSiDn0VvL8AP9aRkX1YRf8Ff1VQlrcqf/8uGPuKmWjuWBuFZX
-        BKnJGl7D1p/PYDqhwqInHEwxZ1dSfTfaFVwHVwjAvuq9yvfd0O+sIL/pb6Zu/uwCV4OG9z
-        QAzd09faj3UnazO6XqNpgDYPEX5Qilc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-515-xaZKzE-RPK6PWlbnUtR8wQ-1; Thu, 26 Jan 2023 14:18:55 -0500
-X-MC-Unique: xaZKzE-RPK6PWlbnUtR8wQ-1
-Received: by mail-wm1-f70.google.com with SMTP id fl5-20020a05600c0b8500b003db12112fdeso1527368wmb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:18:55 -0800 (PST)
+        Thu, 26 Jan 2023 14:19:17 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D38054209
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:19:15 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id g16so1207254ilr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:19:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cZz77IiOmTXjxpIQn9VIxxQTtn+oWpcv1UvGfAoxk1Y=;
+        b=LAWxeYrVBxWMMwcgBsn7pEWXxE4UGESq9f25C2xP9QvowropQk9kAGLyBGg4ce6A8+
+         oRpFeyw1zE2Pk34nrLKD+UB9topakGySH5ozV3cwcmOVnnwmAhPX+5epVhYu5X0WKS7b
+         3foB3Y9PF88+rA+3huXV9Iub3mQ9bmxGa9ToA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0fMObdQvzZWrd2jmea2KvQ+KMA1oa3ru9SdLqtXyBe4=;
-        b=z/oGs8y3qVSnlNXHDYTDfgZpPKSrJrk0hQ5mKs03RSpyv00TtNTrIHO75UFTo8rOpp
-         WPizHVC87nYjN7wahy+b8F63GFm9OB3H9NC8DroYZLabG+Ta4fLZyQhz2UdSQ0KXtxet
-         7KnoX3Ub+H7FmlcCYjmxtDUqYf05opwQB/2YfdX/M5ikTU4qzTlNhmpBqH2y0dDnSZSQ
-         tqyo6DLsM6i9Ve9Mz5r/5//qIMYVIAoch1cAr/V1zfgyVWzNZf9eeIvlLbJr0X36AOpF
-         odYVGH+6s/QSL3R7CkeFpM8d2NTmwpxn+aYGWTYChMRCBQ9+xl3WXCL+b3F3/G3cujbH
-         u4Zg==
-X-Gm-Message-State: AO0yUKUm00JhkZGE9yCmOf8PU5e0mq8fMISxRLRaPjIagMBRolZbKJs1
-        D/2aXy1alEcCvSA6Vs9V1RxzMpdfm26r7I+ovwxx2oE4sr9vlZoAkWdmgOFGKQ2LYB6K5ajHyZe
-        h74LWQvGKMSs/Sbfsms/uwuO0
-X-Received: by 2002:adf:a50f:0:b0:2bf:bf36:1604 with SMTP id i15-20020adfa50f000000b002bfbf361604mr5661517wrb.35.1674760734857;
-        Thu, 26 Jan 2023 11:18:54 -0800 (PST)
-X-Google-Smtp-Source: AK7set+3EpQgIqyXltSXk5BrveJaffTWXPBze3LY8R7Ub/MqZC5yKZ6KN5yJVNbyyTeFoEed+5tLUQ==
-X-Received: by 2002:adf:a50f:0:b0:2bf:bf36:1604 with SMTP id i15-20020adfa50f000000b002bfbf361604mr5661504wrb.35.1674760734631;
-        Thu, 26 Jan 2023 11:18:54 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p2-20020a5d4582000000b002b6bcc0b64dsm2065409wrq.4.2023.01.26.11.18.53
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cZz77IiOmTXjxpIQn9VIxxQTtn+oWpcv1UvGfAoxk1Y=;
+        b=w8Oi406D1YLpfwLHURBGnHYjB70NeXaGRwvW1W7jgAbut1JZGrFi02FqPatyJ2h7hZ
+         4rBqnVgXONR5u76WxwoXHVcLdKPEddr48EROu1/sFf0QqG8ndej2HN7aNQG1BQB741fZ
+         Qypg/EgxUxekpp15IlzdtssxvCeQPpRjQ5prLOAFb7GRif3hPiYVc20dM5Pt/LsoAf53
+         DHi0eVLabMT7WlkibnRiQCdrQuzXNMKTrmhtmenUw1EMEeOBHdRwshYZLKVF1eN4J+Jk
+         SRc9xX0zXCKqK78cvr5x2H+iOCc71Coj5WUjk8lxS83D457bZNaljAwFjTZ21/yGOUnY
+         PbgA==
+X-Gm-Message-State: AO0yUKXoHnl05n1luR4XQRAwC6ff2HmlwGqRb/YwWGlhR6l5Wa8OhtcV
+        ikOkL+jYofWkLNO6K+uj6Jbi5w==
+X-Google-Smtp-Source: AK7set9a3lo30KgC8wBrwxCGVr9Ul78Wd9CZpSjzGhw/+UNEuPpX66X6l8uMOn8Xdwas6+FgH5Jeuw==
+X-Received: by 2002:a05:6e02:154e:b0:310:a8a0:338d with SMTP id j14-20020a056e02154e00b00310a8a0338dmr5369211ilu.28.1674760754513;
+        Thu, 26 Jan 2023 11:19:14 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id l35-20020a026663000000b0039e5418fb01sm686007jaf.73.2023.01.26.11.19.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 11:18:54 -0800 (PST)
-Message-ID: <d7286bc1-32bb-ac70-113d-04c3a56519bb@redhat.com>
-Date:   Thu, 26 Jan 2023 20:18:53 +0100
+        Thu, 26 Jan 2023 11:19:13 -0800 (PST)
+Date:   Thu, 26 Jan 2023 19:19:13 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Nathan Hebert <nhebert@chromium.org>
+Subject: Re: [PATCH 2/3] venus: firmware: Correct non-pix start and end
+ addresses
+Message-ID: <Y9LSMap+jRxbtpC8@google.com>
+References: <20221005083730.963322-1-stanimir.varbanov@linaro.org>
+ <20221005083730.963322-3-stanimir.varbanov@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] drm/ssd130x: Init display before the SSD130X_DISPLAY_ON
- command
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Cc:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org
-References: <20230125184230.3343206-1-javierm@redhat.com>
- <82ad8c89-9d6a-ffa8-e2ad-7b53ac27cafb@suse.de>
-Content-Language: en-US
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <82ad8c89-9d6a-ffa8-e2ad-7b53ac27cafb@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221005083730.963322-3-stanimir.varbanov@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/23 20:56, Thomas Zimmermann wrote:
-> 
-> 
-> Am 25.01.23 um 19:42 schrieb Javier Martinez Canillas:
->> Commit 622113b9f11f ("drm/ssd130x: Replace simple display helpers with the
->> atomic helpers") changed the driver to just use the atomic helpers instead
->> of the simple KMS abstraction layer.
->>
->> But the commit also made a subtle change on the display power sequence and
->> initialization order, by moving the ssd130x_power_on() call to the encoder
->> .atomic_enable handler and the ssd130x_init() call to CRTC .reset handler.
->>
->> Before this change, both ssd130x_power_on() and ssd130x_init() were called
->> in the simple display pipeline .enable handler, so the display was already
->> initialized by the time the SSD130X_DISPLAY_ON command was sent.
->>
->> For some reasons, it only made the ssd130x SPI driver to fail but the I2C
->> was still working. That is the reason why the bug was not noticed before.
->>
->> To revert to the old driver behavior, move the ssd130x_init() call to the
->> encoder .atomic_enable as well. Besides fixing the panel not being turned
->> on when using SPI, it also gets rid of the custom CRTC .reset callback.
->>
->> Fixes: 622113b9f11f ("drm/ssd130x: Replace simple display helpers with the atomic helpers")
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> 
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> 
+Hi Stanimir,
 
-Applied this to drm-misc (drm-misc-next). Thanks!
+On Wed, Oct 05, 2022 at 11:37:29AM +0300, Stanimir Varbanov wrote:
+> The default values for those registers are zero.
+> 
+> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> ---
+>  drivers/media/platform/qcom/venus/firmware.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
+> index 3851cedc3329..71e43611d1cf 100644
+> --- a/drivers/media/platform/qcom/venus/firmware.c
+> +++ b/drivers/media/platform/qcom/venus/firmware.c
+> @@ -38,8 +38,8 @@ static void venus_reset_cpu(struct venus_core *core)
+>  	writel(fw_size, wrapper_base + WRAPPER_FW_END_ADDR);
+>  	writel(0, wrapper_base + WRAPPER_CPA_START_ADDR);
+>  	writel(fw_size, wrapper_base + WRAPPER_CPA_END_ADDR);
+> -	writel(fw_size, wrapper_base + WRAPPER_NONPIX_START_ADDR);
+> -	writel(fw_size, wrapper_base + WRAPPER_NONPIX_END_ADDR);
+> +	writel(0, wrapper_base + WRAPPER_NONPIX_START_ADDR);
+> +	writel(0, wrapper_base + WRAPPER_NONPIX_END_ADDR);
+>  
+>  	if (IS_V6(core)) {
+>  		/* Bring XTSS out of reset */
 
--- 
-Best regards,
+I found that this commit prevents the AOSS from entering sleep mode during
+system suspend at least on sc7180 and sc7280. AOSS not entering sleep mode
+leads to a (apparently significant) increase in S3 power consumption, on
+trogdor and herobrine it prevents the system from staying suspended, because
+the embedded controller detect the condition and wakes the sytem up again.
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Testing is slightly involved, since unfortunately this is not the only issue
+in v6.2-rcN that impacts AOSS sleep.
 
+To reach AOSS sleep you also have to revert this commit:
+
+3a39049f88e4 soc: qcom: rpmhpd: Use highest corner until sync_state
+
+And apply something like the diff below (or enable the bwmon driver).
+
+On a trogdor device you will see something like this when AOSS doesn't
+enter sleep mode during system suspend:
+
+  [   32.882869] EC detected sleep transition timeout. Total sleep transitions: 0
+  [   32.882886] WARNING: CPU: 7 PID: 5682 at drivers/platform/chrome/cros_ec.c:146 cros_ec_sleep_event+0x100/0x10c
+  [   32.900393] Modules linked in: uinput veth uvcvideo videobuf2_vmalloc venus_enc venus_dec videobuf2_dma_contig videobuf2_memops onboard_usb_hub cros_ec_typec typec hci_uart btqca xt_MASQUERADE venus_core v4l2_mem2mem videobuf2_v4l2 videobuf2_common qcom_q6v5_mss qcom_pil_v
+  [   32.940015] CPU: 7 PID: 5682 Comm: cat Tainted: G        W          6.1.0-rc2+ #295 d14276115b3f6b03fc99220174e5d7724847cbd6
+  [   32.951525] Hardware name: Google Villager (rev1+) with LTE (DT)
+  [   32.957695] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+  [   32.964848] pc : cros_ec_sleep_event+0x100/0x10c
+  [   32.969596] lr : cros_ec_sleep_event+0x100/0x10c
+
+I'm also happy to help with testing if you have a candidate fix.
+
+Thanks
+
+Matthias
+
+--
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 0adf13399e64..c1f6952764c5 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -3488,7 +3488,7 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
+                };
+
+                pmu@9091000 {
+		-                       compatible = "qcom,sc7280-llcc-bwmon";
+		+                       // compatible = "qcom,sc7280-llcc-bwmon";
+		                        reg = <0 0x9091000 0 0x1000>;
+
+                        interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
+			@@ -3528,7 +3528,7 @@ opp-7 {
+			                };
+
+                pmu@90b6400 {
+		-                       compatible = "qcom,sc7280-cpu-bwmon", "qcom,msm8998-bwmon";
+		+                       // compatible = "qcom,sc7280-cpu-bwmon", "qcom,msm8998-bwmon";
+		                        reg = <0 0x090b6400 0 0x600>;
+
+                        interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
