@@ -2,110 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8615D67D1F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B8167D1FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbjAZQl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S232032AbjAZQmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbjAZQlx (ORCPT
+        with ESMTP id S229923AbjAZQmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:41:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B455C0E8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:41:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2181BB81E86
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:41:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535ADC433D2;
-        Thu, 26 Jan 2023 16:41:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674751307;
-        bh=b9mQgsprn6SnJYI/NGJEDkTIYdr2LcFif1cwH7jqO/A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PDFYOns/CrOeMDPKDliK6h8Dv8bj+Aapiub5ryIRnwde2OtOLerCsdNC9X4mPE9ju
-         SGMimr2r4lzgWfRlIf6TBV/a1iJmbLNVYWSCB/VAzRbubZR7t5/0gctw762paDiD9O
-         Xr7WgbA7HjmmT+t2FFTlSFf9s0OMWyot/UqHwl/nPhavxDIPs+GaRXl+nC0zQ8ppzd
-         2xaZkNbsw+jMqfJwNIR/5odoNHKrtJgd+qwkcCZzSBaDRK7f9xLVke1xMoWrK2+OSc
-         xzAkC2DIEm9Y9ufZu7wp8RNcdP4oE6HzQnJ6bxVIsT65xYGzwlJcaIPor3y+/AUhwE
-         FoUETc/dGWU+A==
-Date:   Thu, 26 Jan 2023 16:41:42 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Neill Kapron <nkapron@google.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Chris Zhong <zyw@rock-chips.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: Re: [PATCH] phy: rockchip-typec: fix tcphy_get_mode error case
-Message-ID: <Y9KtRpsioQNTc4oc@google.com>
-References: <20230126001013.3707873-1-nkapron@google.com>
+        Thu, 26 Jan 2023 11:42:51 -0500
+Received: from sp11.canonet.ne.jp (sp11.canonet.ne.jp [210.134.168.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D6FE62D09;
+        Thu, 26 Jan 2023 08:42:43 -0800 (PST)
+Received: from csp11.canonet.ne.jp (unknown [172.21.160.131])
+        by sp11.canonet.ne.jp (Postfix) with ESMTP id A47C11E03E0;
+        Fri, 27 Jan 2023 01:42:42 +0900 (JST)
+Received: from echeck11.canonet.ne.jp ([172.21.160.121])
+        by csp1 with ESMTP
+        id L5KkpbJQT4VyBL5KkpTMg3; Fri, 27 Jan 2023 01:42:42 +0900
+X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=bsjyuGWi c=1 sm=1 tr=0
+ ts=63d2ad82 cx=g_jp:t_eml p=jICtXCb1Bd4A:10 p=WKcvGfCz9DfGexK3dBCb:22
+ a=cYGYO7ts52rupuxT5MoNxg==:117 a=yr9NA9NbXb0B05yJHQEWeQ==:17
+ a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10 a=RvmDmJFTN0MA:10 a=x7bEGLp0ZPQA:10
+ a=QA8zHFxAwLBQ4A9MkZgA:9 a=CjuIK1q_8ugA:10 a=0iaRBTTaEecA:10
+ a=xo5jKAKm-U-Zyk2_beg_:22"
+X-CNT-CMCheck-Score: 100.00
+Received: from echeck11.canonet.ne.jp (localhost [127.0.0.1])
+        by esets.canonet.ne.jp (Postfix) with ESMTP id 4E3CB1C026A;
+        Fri, 27 Jan 2023 01:42:42 +0900 (JST)
+X-Virus-Scanner: This message was checked by ESET Mail Security
+        for Linux/BSD. For more information on ESET Mail Security,
+        please, visit our website: http://www.eset.com/.
+Received: from smtp11.canonet.ne.jp (unknown [172.21.160.101])
+        by echeck11.canonet.ne.jp (Postfix) with ESMTP id 1D91B1C025E;
+        Fri, 27 Jan 2023 01:42:42 +0900 (JST)
+Received: from daime.co.jp (webmail.canonet.ne.jp [210.134.169.250])
+        by smtp11.canonet.ne.jp (Postfix) with ESMTPA id 4E7B515F962;
+        Fri, 27 Jan 2023 01:42:41 +0900 (JST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230126001013.3707873-1-nkapron@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <20230126164241.00005A7D.0667@daime.co.jp>
+Date:   Fri, 27 Jan 2023 01:42:41 +0900
+From:   "Mrs Alice Walton" <daime@daime.co.jp>
+To:     <INQUIRY@daime.co.jp>
+Reply-To: <alicewaltton1@gmail.com>
+Subject: INQUIRY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+ORGANIZATION: Mrs Alice Walton
+X-MAILER: Active! mail
+X-EsetResult: clean, %VIRUSNAME%
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1674751362;VERSION=7944;MC=2013330109;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
+X-I-ESET-AS: RN=0;RNP=
+X-ESET-Antispam: OK
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOCALPART_IN_SUBJECT,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_MR_MRS,UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5006]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [210.134.168.88 listed in wl.mailspike.net]
+        *  1.1 LOCALPART_IN_SUBJECT Local part of To: address appears in
+        *      Subject
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [alicewaltton1[at]gmail.com]
+        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 T_HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  1.0 XPRIO_SHORT_SUBJ Has X Priority header + short subject
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 Jan 2023, Neill Kapron wrote:
 
-> The existing logic in tcphy_get_mode() can cause the phy to be
-> incorrectly configured to USB UFP or DisplayPort mode when
-> extcon_get_state returns an error code.
-> 
-> extcon_get_state() can return 0, 1, or a negative error code.
-> 
-> It is possible to get into the failing state with an extcon driver
-> which does not support the extcon connector id specified as the
-> second argument to extcon_get_state().
-> 
-> tcphy_get_mode()
-> ->extcon_get_state()
-> -->find_cable_index_by_id()
-> --->return -EINVAL;
-> 
-> Fixes: e96be45cb84e ("phy: Add USB Type-C PHY driver for rk3399")
-> Signed-off-by: Neill Kapron <nkapron@google.com>
-> ---
->  drivers/phy/rockchip/phy-rockchip-typec.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Greetings,
 
-Good catch.
+I trust you are well. I sent you an email yesterday, I just want to confirm if you received it.
+Please let me know as soon as possible,
 
-Reviewed-by: Lee Jones <lee@kernel.org>
+Regard
+Mrs Alice Walton
 
-> diff --git a/drivers/phy/rockchip/phy-rockchip-typec.c b/drivers/phy/rockchip/phy-rockchip-typec.c
-> index d76440ae10ff..6aea512e5d4e 100644
-> --- a/drivers/phy/rockchip/phy-rockchip-typec.c
-> +++ b/drivers/phy/rockchip/phy-rockchip-typec.c
-> @@ -821,10 +821,10 @@ static int tcphy_get_mode(struct rockchip_typec_phy *tcphy)
->  	mode = MODE_DFP_USB;
->  	id = EXTCON_USB_HOST;
->  
-> -	if (ufp) {
-> +	if (ufp > 0) {
->  		mode = MODE_UFP_USB;
->  		id = EXTCON_USB;
-> -	} else if (dp) {
-> +	} else if (dp > 0) {
->  		mode = MODE_DFP_DP;
->  		id = EXTCON_DISP_DP;
->  
-> -- 
-> 2.39.1.456.gfc5497dd1b-goog
 
--- 
-Lee Jones [李琼斯]
