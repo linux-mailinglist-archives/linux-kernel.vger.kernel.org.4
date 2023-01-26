@@ -2,263 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF1467D8C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E7367D8C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjAZWtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S232348AbjAZWtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233128AbjAZWtM (ORCPT
+        with ESMTP id S232388AbjAZWtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:49:12 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865804B744
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:49:09 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id k13so3296913plg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:49:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/b7ZzS1i4s6CjWJN1zo056FU3g81hLKlf/seoytWcA=;
-        b=JGCr00yc63rU7CFDVtrCbehOCytzkpxKmlPxfzZAp9HmetjrA4UkDDbbd7djSmQdIM
-         7SYsiJ081AnHLh4PwNVWI/KxUxarcJbYTPvgwic3umNkcquo6wonR/WtChXTJwoShhkE
-         CtBLGBhUNelmdlZ1TQYtvc5SCeZsEoHNHgn1Mq+fYfWRqvRK1zW9tiTt2S01VMFaS4ke
-         YqXDzPoEEcGXv6uszmkti4EPkyz7OG1N4R1//vj4NrCxYF1utc2avUJZJNXEHL+Rqttt
-         oFBzkZwItJT5rq5Nhlv4YCZtERSQkWztNZ92RRnz4rzEAah5aXRNtqtXhCRjyWqzFpI6
-         /U1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X/b7ZzS1i4s6CjWJN1zo056FU3g81hLKlf/seoytWcA=;
-        b=usxD8qyi19hX29gSHKAICPznabV910UbIsE/pOMx7Vo4+nHKCtjkUPZ64qDSq/omEQ
-         AeEid4G9rT8SMpquttiRWtuOV/9PD5FbQjfbbUXItAPj8juzAX2KHJrQfPTyRcPzl7UN
-         Mal1diZn/a8m9eaB5nJyAD2Ji8KoDz3doeyamehpvctosNoaTb1D7b2/PCgPAAMsDluS
-         dbtOpc/s+VmSdtxEd+/JWQUvluffQh4FxxD5Y/wuxhsbR0aZZkGScDCra9m0ReV6RSiJ
-         58/CP6iUnF1XG8yHttCOFLOfWX/Pkg/7HLrPTuY6I7QrTw17sgcZuqYkJZ3GB9WUASg7
-         GPlg==
-X-Gm-Message-State: AO0yUKWaq1+lWDQgZfbeqc+U9eO21TAcpIjMyR1Ot3QsPeKLIq4oK583
-        RrPaUONBW3fER5R8OV3rFyzVfg==
-X-Google-Smtp-Source: AK7set9WMDdESrgaHivOh+QQAp6ucw5TMWWkPy8c7YGvWpjl/vYtSLhsyXtPnm6divUmRfPxlEvZOA==
-X-Received: by 2002:a17:903:18f:b0:196:cea:487a with SMTP id z15-20020a170903018f00b001960cea487amr16072513plg.53.1674773348897;
-        Thu, 26 Jan 2023 14:49:08 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:9115:ddbb:14fe:62e8])
-        by smtp.gmail.com with ESMTPSA id bg6-20020a1709028e8600b00189a50d2a3esm1451007plb.241.2023.01.26.14.49.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 14:49:08 -0800 (PST)
-Date:   Thu, 26 Jan 2023 15:49:05 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "S.J. Wang" <shengjiu.wang@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Paul Olaru <paul.olaru@nxp.com>,
-        Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>,
-        Iuliana Prodan <iuliana.prodan@nxp.com>,
-        linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH] remoteproc: imx_dsp_rproc: add custom memory copy
- implementation for i.MX DSP Cores
-Message-ID: <20230126224905.GA4020499@p14s>
-References: <20230125110100.14647-1-iuliana.prodan@oss.nxp.com>
+        Thu, 26 Jan 2023 17:49:39 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2087.outbound.protection.outlook.com [40.107.244.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFAF577C4;
+        Thu, 26 Jan 2023 14:49:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eJ7JvpXsrwFjOt9+HpB6z9eH79sGY+0+PSzMcrTEcowNzgrWNuCj6C8ouyKqFJg5uGu8GjgYZRNpMIeOsZpcSXSYbanKZa412L1NQX35QMccyUrkwdv+ewLIctL1aiEA3V0DdR/CHL303cJgcHckG5wEi+cOcGBq53DsG1OYpQyMc40bdbr11lHQUSVxg2cKmE1NtoEF/XTtNN6vPDDfoZxnlFNWnNTnNpnZIh95jvSTthY0DOEVeEfo2O4mHqC4DMeuk9i0hmzz1Nn7rQjy7eVsKznyLbocXych8sk6UiJGfU2qBGPj81khNGhPQSrdHtFVTb9NWzVI2JyF5WAHVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=72MlngrVJhO8vi22N2nyiNPWPhFojC+8hVnkjp9yON4=;
+ b=EUoX8164jG5JoMsrzktbsbI5rSeQTWC1pIixo4tJ/7CCRsvQ2BLx2KXW3DPG/fG0dbbsO4nAmu1yhKgmX76h04B5F0+FDgc7g7lTzorLtq+AdmvgUKeUHOtfTT5B5rVupSRcXjyUDD4mz/zKHtpLu1G7vt1RoWXf9L9iaDtJwNZp/VGVWsFl+b6Qc80G8iM+u8DCezUGHnYgcXfy/B9SCpf1l0Y35p30JIGUzteMjY9B6YpaZLE4bW70bXkp5IYxBYKiKjUGLUUp46oN0YAF66qkWigBYqYoFKyy4/SNSCPl18saAFzG6SOztheq2imAdSceb/ms7MmUuS/5s+pbGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=zeniv.linux.org.uk
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=72MlngrVJhO8vi22N2nyiNPWPhFojC+8hVnkjp9yON4=;
+ b=RtyK/11kkuP1qrdWTvco3wocOCGASsIKXoDnEJQMN1xKj1kh10Am1CcGbHDB6Y7DMAer813Sfr/6+0cMi2y+6bF9oDLpjZ4dZA+7gOb+mkRGuZ0IsOMcKFkq2qRm7BXjzMfGibdVxFEaRIxW1Cf1fIQe2nGp03CVU9zUzr44syAshLOtYilBrb+e4glmIioSir4HSw6Kjifusu3bHcNzYu2en4iIcFYl+FwpCHYk1HH75EAcCZaSIexlQE+5gOg1no/go3N7kQ93GdjYep2qKtJefvIukfiA/bwO4HIh45wCtsZSW4mL12it3ApLpDuiH1YPk3lOvKDuNsvB18lJIw==
+Received: from DM6PR13CA0032.namprd13.prod.outlook.com (2603:10b6:5:bc::45) by
+ CY5PR12MB6370.namprd12.prod.outlook.com (2603:10b6:930:20::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6043.22; Thu, 26 Jan 2023 22:49:27 +0000
+Received: from DM6NAM11FT009.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:bc:cafe::f4) by DM6PR13CA0032.outlook.office365.com
+ (2603:10b6:5:bc::45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22 via Frontend
+ Transport; Thu, 26 Jan 2023 22:49:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT009.mail.protection.outlook.com (10.13.173.20) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6043.22 via Frontend Transport; Thu, 26 Jan 2023 22:49:27 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 26 Jan
+ 2023 14:49:18 -0800
+Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 26 Jan
+ 2023 14:49:18 -0800
+Message-ID: <bf3edf11-02d1-128c-ebc0-11bb38404ac9@nvidia.com>
+Date:   Thu, 26 Jan 2023 14:49:17 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125110100.14647-1-iuliana.prodan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v11 2/8] iov_iter: Add a function to extract a page list
+ from an iterator
+Content-Language: en-US
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        David Howells <dhowells@redhat.com>
+CC:     Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Jason Gunthorpe" <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Christoph Hellwig <hch@lst.de>
+References: <20230126141626.2809643-1-dhowells@redhat.com>
+ <20230126141626.2809643-3-dhowells@redhat.com> <Y9L3yA+B1rrnrGK8@ZenIV>
+ <Y9MAbYt6DIRFm954@ZenIV>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <Y9MAbYt6DIRFm954@ZenIV>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT009:EE_|CY5PR12MB6370:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6f665809-61e2-4588-6374-08daffef9443
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0lRFA3zuBlsjKiFn7am25PoK9oeD/TkumaWRLlZ/ZksQmzgLeaWf/Kp8NcfiPaYbLuw17OoVqQYtJResbHDIaVQzDppOX1k/rc8VlvknSNrxltv3VWDIBaUypDJlifR4DMKFhxLXAHIk9/eM1Zwrb50X7WYdxGNXxwM1pk75+sMu1fScuIwfRWNmkqH09ClgwEXjj2ErpJuMEjaD+16sLfdjCkqvtEVOK2C/vChR89d2mey1yJ0Rsw5LJPQUTHy1/y2QvEZUHDomD1vw9pZavZET6g+wCVO61jk5IGCMksPt182lc4sgTP+csfZaX7xiGsB101WhQ/0IL6/y+fgN5RjdmoaaH4bPDOpW3uEiAa6PtuF8P69IfMwEUknb7FaH0x178nbg40PdEzqdtC33W1uKBMoYCywarGVxQWZAfqzjWEGYIncZTRlBZJtwhAYDEEtT5NFZTsmNGytLve1Xa+RdsLBitSwjRhgo5IsOm4coRAnNiF4Hoa7ywACD/jhltboSJ4hkOCKutocSNCf9PCWe8XGMjuTC3C9cpttChKSr6kGTo+l2OFVjScDIfPhkQtW8FHm6v1kYl5fnHbvwWtGLAOL2KvcSkbn9hrE+LH7ep4wcBX2wmN1+z6NBSzFjTR1hZuJl3KVW0wXCb/0e9WWZ9XkHLTrGWSV2UUCsHCcIJzVGAkLIMquzxEZXWUxnmkIgvKfS3RwJaJXKsD5T1cXio55BDRoC3w8C4NlbdBobO4kIXMTqsCT54Q0mBKG9u4pPnpxBQPOIfdOlBz80jKaQjyKhGVItd1hf28pbsK6k4wMJmu8OrYGe3qtfV1/t
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(376002)(346002)(39860400002)(451199018)(40470700004)(46966006)(36840700001)(16526019)(186003)(31686004)(26005)(478600001)(966005)(47076005)(336012)(2616005)(82310400005)(426003)(83380400001)(316002)(54906003)(41300700001)(8676002)(7636003)(356005)(70206006)(53546011)(82740400003)(16576012)(110136005)(86362001)(36756003)(5660300002)(40460700003)(7416002)(8936002)(4326008)(70586007)(31696002)(40480700001)(2906002)(36860700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 22:49:27.4651
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f665809-61e2-4588-6374-08daffef9443
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6370
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 01:01:00PM +0200, Iuliana Prodan (OSS) wrote:
-> From: Iuliana Prodan <iuliana.prodan@nxp.com>
+On 1/26/23 14:36, Al Viro wrote:
+...
+>>> +static inline bool iov_iter_extract_will_pin(const struct iov_iter *iter)
+>>> +{
+>>> +	return user_backed_iter(iter);
+>>> +}
+>>> +
+>>
+>> Wait a sec; why would we want a pin for pages we won't be modifying?
+>> A reference - sure, but...
 > 
-> The IRAM is part of the HiFi DSP.
-> According to hardware specification only 32-bits write are allowed
-> otherwise we get a Kernel panic.
-> 
-> Therefore add a custom memory copy function to deal with the
-> above restriction.
-> 
-> Signed-off-by: Iuliana Prodan <iuliana.prodan@nxp.com>
-> ---
->  drivers/remoteproc/imx_dsp_rproc.c | 122 ++++++++++++++++++++++++++++-
->  1 file changed, 121 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
-> index 95da1cbefacf..a9991d085494 100644
-> --- a/drivers/remoteproc/imx_dsp_rproc.c
-> +++ b/drivers/remoteproc/imx_dsp_rproc.c
-> @@ -715,6 +715,126 @@ static void imx_dsp_rproc_kick(struct rproc *rproc, int vqid)
->  		dev_err(dev, "%s: failed (%d, err:%d)\n", __func__, vqid, err);
->  }
->  
-> +/*
-> + * Custom memory copy implementation for i.MX DSP Cores
-> + *
-> + * The IRAM is part of the HiFi DSP.
-> + * According to hw specs only 32-bits writes are allowed.
-> + */
-> +static int imx_dsp_rproc_memcpy(void *dest, const void *src, size_t size)
-> +{
-> +	const u8 *src_byte = src;
-> +	u32 affected_mask;
-> +	u32 tmp;
-> +	int q, r;
-> +
-> +	q = size / 4;
-> +	r = size % 4;
-> +
-> +	/* __iowrite32_copy use 32bit size values so divide by 4 */
-> +	__iowrite32_copy(dest, src, q);
+> After having looked through the earlier iterations of the patchset -
+> sorry, but that won't fly for (at least) vmsplice().  There we can't
+> pin those suckers; thankfully, we don't need to - they are used only
+> for fetches, so FOLL_GET is sufficient.  With your "we'll just pin them,
+> source or destination" you won't be able to convert at least that
+> call of iov_iter_get_pages2().  And there might be other similar cases;
+> I won't swear there's more, but ISTR running into more than one of
+> the "pin won't be OK here, but fortunately it's a data source" places.
 
-The current driver for imx_dsp_rproc does not provide a rproc_da_to_va()
-operation, meaning that @is_iomem in rproc_elf_load_segments() can't be true,
-forcing a memcpy() operation to be used.  And yet above an _iowrite32_copy() is
-used...  
+Assuming that "page is a data source" means that we are writing out from
+the page to a block device (so, a WRITE operation, which of course
+actually *reads* from the page), then...
 
-In the conversation that came out of[1], Daniel Baluta mentions that
-read/writes should be done in multiples of 32/64 bit but here a blanket 32 bit
-enforcement is done.
+...one thing I'm worried about now is whether Jan's original problem
+report [1] can be fixed, because that involves page writeback. And it
+seems like we need to mark the pages involved as "maybe dma-pinned" via
+FOLL_PIN pins, in order to solve it.
 
-> +
-> +	if (r) {
-> +		affected_mask = (1 << (8 * r)) - 1;
-> +
-> +		/* first read the 32bit data of dest, then change affected
-> +		 * bytes, and write back to dest.
-> +		 * For unaffected bytes, it should not be changed
-> +		 */
-> +		tmp = ioread32(dest + q * 4);
-> +		tmp &= ~affected_mask;
-> +
-> +		tmp |= *(u32 *)(src_byte + q * 4) & affected_mask;
-> +		iowrite32(tmp, dest + q * 4);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * imx_dsp_rproc_elf_load_segments() - load firmware segments to memory
-> + * @rproc: remote processor which will be booted using these fw segments
-> + * @fw: the ELF firmware image
-> + *
-> + * This function loads the firmware segments to memory, where the remote
-> + * processor expects them.
-> + *
-> + * Return: 0 on success and an appropriate error code otherwise
-> + */
-> +static int imx_dsp_rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
-> +{
-> +	struct device *dev = &rproc->dev;
-> +	const void *ehdr, *phdr;
-> +	int i, ret = 0;
-> +	u16 phnum;
-> +	const u8 *elf_data = fw->data;
-> +	u8 class = fw_elf_get_class(fw);
-> +	u32 elf_phdr_get_size = elf_size_of_phdr(class);
-> +
-> +	ehdr = elf_data;
-> +	phnum = elf_hdr_get_e_phnum(class, ehdr);
-> +	phdr = elf_data + elf_hdr_get_e_phoff(class, ehdr);
-> +
-> +	/* go through the available ELF segments */
-> +	for (i = 0; i < phnum; i++, phdr += elf_phdr_get_size) {
-> +		u64 da = elf_phdr_get_p_paddr(class, phdr);
-> +		u64 memsz = elf_phdr_get_p_memsz(class, phdr);
-> +		u64 filesz = elf_phdr_get_p_filesz(class, phdr);
-> +		u64 offset = elf_phdr_get_p_offset(class, phdr);
-> +		u32 type = elf_phdr_get_p_type(class, phdr);
-> +		bool is_iomem = false;
-> +		void *ptr;
-> +
-> +		if (type != PT_LOAD || !memsz)
-> +			continue;
-> +
-> +		dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n",
-> +			type, da, memsz, filesz);
-> +
-> +		if (filesz > memsz) {
-> +			dev_err(dev, "bad phdr filesz 0x%llx memsz 0x%llx\n",
-> +				filesz, memsz);
-> +			ret = -EINVAL;
-> +			break;
-> +		}
-> +
-> +		if (offset + filesz > fw->size) {
-> +			dev_err(dev, "truncated fw: need 0x%llx avail 0x%zx\n",
-> +				offset + filesz, fw->size);
-> +			ret = -EINVAL;
-> +			break;
-> +		}
-> +
-> +		if (!rproc_u64_fit_in_size_t(memsz)) {
-> +			dev_err(dev, "size (%llx) does not fit in size_t type\n",
-> +				memsz);
-> +			ret = -EOVERFLOW;
-> +			break;
-> +		}
-> +
-> +		/* grab the kernel address for this device address */
-> +		ptr = rproc_da_to_va(rproc, da, memsz, &is_iomem);
-> +		if (!ptr) {
-> +			dev_err(dev, "bad phdr da 0x%llx mem 0x%llx\n", da,
-> +				memsz);
-> +			ret = -EINVAL;
-> +			break;
-> +		}
-> +
-> +		/* put the segment where the remote processor expects it */
-> +		if (filesz) {
-> +			ret = imx_dsp_rproc_memcpy(ptr, elf_data + offset, filesz);
-> +			if (ret) {
-> +				dev_err(dev, "memory copy failed for da 0x%llx memsz 0x%llx\n",
-> +					da, memsz);
-> +				break;
-> +			}
-> +		}
+Or am I missing a key point (I hope)?
 
-This patchset from last year[1] goes to great length to avoid using a driver
-specific function and now you are trying to bring that back...  So how was it
-working before and why are things broken now?  Moreover, function
-rproc_elf_load_segments() deals with situations where the memory slot is bigger
-than the file size[2], which is omitted here.
 
-Thanks,
-Mathieu
+[1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz/T/#u
 
-[1]. https://lore.kernel.org/linux-arm-kernel/20220323064944.1351923-1-peng.fan@oss.nxp.com/
-[2]. https://elixir.bootlin.com/linux/v6.2-rc5/source/drivers/remoteproc/remoteproc_elf_loader.c#L221 
-
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  static int imx_dsp_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
->  {
->  	if (rproc_elf_load_rsc_table(rproc, fw))
-> @@ -729,7 +849,7 @@ static const struct rproc_ops imx_dsp_rproc_ops = {
->  	.start		= imx_dsp_rproc_start,
->  	.stop		= imx_dsp_rproc_stop,
->  	.kick		= imx_dsp_rproc_kick,
-> -	.load		= rproc_elf_load_segments,
-> +	.load		= imx_dsp_rproc_elf_load_segments,
->  	.parse_fw	= imx_dsp_rproc_parse_fw,
->  	.sanity_check	= rproc_elf_sanity_check,
->  	.get_boot_addr	= rproc_elf_get_boot_addr,
-> -- 
-> 2.17.1
-> 
+thanks,
+-- 
+John Hubbard
+NVIDIA
