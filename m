@@ -2,100 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9849F67CC0A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0628F67CC12
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236599AbjAZN1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:27:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
+        id S236814AbjAZN1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235634AbjAZN1A (ORCPT
+        with ESMTP id S236210AbjAZN1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:27:00 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D516E424
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:26:40 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id z11so1871788ede.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:26:40 -0800 (PST)
+        Thu, 26 Jan 2023 08:27:34 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093896B991;
+        Thu, 26 Jan 2023 05:27:12 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-50660e2d2ffso22817977b3.1;
+        Thu, 26 Jan 2023 05:27:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZnYbzrB2oVOvcPj1GA9MZ8cG9IrI7N+mO6rE42ejGe8=;
-        b=poRG6H5mXujnQCPfi6t0qKaHjmzYlsKD6nAnuGv75dzANiXZUKpsoMcgaRvXNy9qHW
-         qF5axUmPre9ArcCPSc6NQ7zPmzLqw5HFwx9FApPokbIhbQCmYY1iRku5H36w2wXaALtj
-         tKevhojZPi4i6K5rR4ZIBQX6UNAel3coMmS78=
+        bh=j4qbG6eVB5xuDn3dtmvIgLy/zetvuTGbID3mzZEtD58=;
+        b=DbKlCXK9xeHqYSCz4mS0W9lwiZGx22FO3kIPMku2DRhW+F5+qWwuFyUqw7oysb0vp1
+         h/60OS6dTjUYnX5Yj/+lm1f4vt8YO+4eCEAKUcAjG+udU/h+Yc8b7eYGTpQ8ZyJPGxkX
+         j9SLn5KwdS6HR44ZMiCtFufcuYyCOsv17qPfmStUbdHu1HXS6UUF9wEQUzWbb8m9/c8N
+         LX5zyFIdlELEairpgpLune79Jsx/cARzgYUoM8Y9CgcOjevU1/elo17Ml1S4VDzgw/uI
+         Yp4S2oPaTr+nPY+5kYfkDkGqMT2iTyNqk3+KnGmQID3WJ5U9qcX4qJ8FcRnwBDUvm03l
+         rROw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZnYbzrB2oVOvcPj1GA9MZ8cG9IrI7N+mO6rE42ejGe8=;
-        b=ltoiEumsP4GmBiWVyOE+3VL3j4KNsQLbr4cVi8q8acghvSIviST6IIsHnOFVNL1E6H
-         iNc8P7CD9YysojXouWf7BpmpIWez3aOEdS6GCThLzxamCyAEkxKVcE3RhU2wIbeY0WVs
-         pWEyujPhrUCXtVx24sYhakqfyDjuWyldNZ+TAYcY5RxvZQuqX5vnAJ1iNi1TrBOt+KvT
-         7CpP4pG9edebW6ddvVML1ElfhLDzViCd348p5nBh9Zo9R6DO59KaAByB3SdfrxHSWcdM
-         wlJ011diqDWOoEe2efq2rFzoMnK93D0Frpt+uZYWpA4utTIOPiiuwPLv22L7r5atbYU1
-         9q3w==
-X-Gm-Message-State: AFqh2kpmUfHTkXcV+BWMbLgOOLPPlDwTAqvNG2QM79l8k3OpHP/k7lvz
-        ZwqFLU95Vsb/SWQ8dABfKbcmAHp+TJ/V4vtp4MNfIA==
-X-Google-Smtp-Source: AMrXdXuqt3vOLe0P9mpZBkr8pOK4cwkFuhA96gtRigN/4hZ1Rut2mH43rKwWAoC63/pr/odBwhGf3EPqhS1w13WeLK0=
-X-Received: by 2002:a05:6402:358e:b0:49e:ea1e:ac9c with SMTP id
- y14-20020a056402358e00b0049eea1eac9cmr3886146edc.70.1674739598734; Thu, 26
- Jan 2023 05:26:38 -0800 (PST)
+        bh=j4qbG6eVB5xuDn3dtmvIgLy/zetvuTGbID3mzZEtD58=;
+        b=Q5O1yhHbbCA3HjKsZtuH7fpuxwZRWBUF52NiPwXBAoMg//PZp9g5zac+wNEwUVJOZi
+         Xo665pMX/inCG/QWDwwks3eYwyuCod3d+W0SYh1ab5uZrw6vHDlXiCsjdJXSkctUa43m
+         zta54Ei44WBYZeO1Ij02UX5VfL+KjmgpwHj7mt/OOh4tww+oA1OIcnb/BoTHjx3YULm8
+         3Pk1pY+YVrbn9ZYVJgJxLPAovpWX2a9en7+tJDwhrBePZo6Mjz7z/cUHJLZF69V0RFje
+         YtBTaA28LAyNFp+SYgD7d/TrHkSDu1avX14g/H/8qzigs5OLdOEvtcB7pyTnX7sEXMNq
+         ossA==
+X-Gm-Message-State: AO0yUKXi4/bdH/ICkqEB0zfVw6LFzxazTEtJhTWzi3QQNpuWG5rm5aNK
+        GZVr63U2mO0Jo332SEgn+YX3vlBvvaC9aI+wLxc=
+X-Google-Smtp-Source: AK7set+Zx9yy/BVXoOqFh45ED3u90etOiIl+eS4ys5iYxouATNh8yE1SOaojHW3o/0YIlMrw6dCi3vFpG5ePZXKDkhs=
+X-Received: by 2002:a81:b246:0:b0:506:55d9:3a78 with SMTP id
+ q67-20020a81b246000000b0050655d93a78mr824104ywh.339.1674739631151; Thu, 26
+ Jan 2023 05:27:11 -0800 (PST)
 MIME-Version: 1.0
-References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
- <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
- <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
- <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com> <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
- <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com> <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
- <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
- <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com> <CAHk-=wh5V8tQScw9Bgc8OiD0r5XmfVSCPp2OHPEf0p5T3obuZg@mail.gmail.com>
- <CAJfpeguXB9mAk=jwWQmk3rivYnaWoLrju_hq-LwtYyNXG4JOeg@mail.gmail.com>
- <CAHk-=wg+bpP5cvcaBhnmJKzTmAtgx12UhR4qzFXXb52atn9gDw@mail.gmail.com>
- <56E6CAAE-FF25-4898-8F9D-048164582E7B@kohlschutter.com> <490c5026-27bd-1126-65dd-2ec975aae94c@eitmlabs.org>
-In-Reply-To: <490c5026-27bd-1126-65dd-2ec975aae94c@eitmlabs.org>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Thu, 26 Jan 2023 14:26:27 +0100
-Message-ID: <CAJfpegt7CMMapxD0W41n2SdwiBn8+B08vsov-iOpD=eQEiPN1w@mail.gmail.com>
-Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
- missing in lower/upper fs
-To:     jkatz@eitmlabs.org
-Cc:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+References: <20230118104656.67706-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230118104656.67706-1-wsa+renesas@sang-engineering.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 26 Jan 2023 13:26:44 +0000
+Message-ID: <CA+V-a8vp-oxaQyzPg2YonshdO-j0z+8vXpqgD=P8w94eDNJDOA@mail.gmail.com>
+Subject: Re: [PATCH v2] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 Jan 2023 at 04:41, Jonathan Katz <jkatz@eitmlabs.org> wrote:
+Hi Wolfram,
 
-> I believe that I am still having issues occur within Ubuntu 22.10 with
-> the 5.19 version of the kernel that might be associated with this
-> discussion.  I apologize up front for any faux pas I make in writing
-> this email.
+Thank you for the patch.
 
-No need to apologize.   The fix in question went into v6.0 of the
-upstream kernel.  So apparently it's still missing from the distro you
-are using.
+I am yet to test this patch on g2l (I'll test v3 as you plan to send it today).
 
-> An example error from our syslog:
+On Wed, Jan 18, 2023 at 10:46 AM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
 >
-> kernel: [2702258.538549] overlayfs: failed to retrieve lower fileattr
-> (8020 MeOHH2O
-> RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/analysis.tsf,
-> err=-38)
+> From: Cong Dang <cong.dang.xn@renesas.com>
+>
+> According to the datasheets, the Strobe Timing Adjustment bit (STRTIM)
+> setting is different on R-Car SoCs, i.e.
+>
+> R-Car H3 ES1.*  : STRTIM[2:0] is set to 0x0
+> R-Car M3 ES1.*  : STRTIM[2:0] is set to 0x6
+> other R-Car Gen3: STRTIM[2:0] is set to 0x7
+> other R-Car Gen4: STRTIM[3:0] is set to 0xf
+>
+> To fix this issue, a DT match data was added to specify the setting
+> for special use cases.
+>
+> Signed-off-by: Cong Dang <cong.dang.xn@renesas.com>
+> Signed-off-by: Hai Pham  <hai.pham.ud@renesas.com>
+> [wsa: rebased, restructured a little, added Gen4 support]
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+<snip>
+> +struct rpcif_info {
+> +       enum rpcif_type type;
+> +       u8 strtim;
+> +};
+> +
+>  struct rpcif {
+>         struct device *dev;
+>         void __iomem *base;
+> @@ -71,6 +76,7 @@ struct rpcif {
+>         struct reset_control *rstc;
+>         size_t size;
+>         enum rpcif_type type;
+I think now you can get rid of this member?
 
-Yep, looks like the same bug.
-
-Thanks,
-Miklos
+Cheers,
+Prabhakar
