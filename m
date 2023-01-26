@@ -2,139 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D8767CCE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C8867CD31
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjAZNzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
+        id S231993AbjAZOAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231620AbjAZNzU (ORCPT
+        with ESMTP id S231800AbjAZOAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:55:20 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBE0B2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:54:51 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1166581wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:54:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VOWkcYiJEYSOZi2GcxiIbR4PFJ+2cQXy9po2yEM4hSM=;
-        b=v+tL5e3nxmEUzfro8VIEgJVROZBG/otDR6RgziVLGb1KhQvonKbWDXNabkBdEg+1j+
-         V7HhfOUmaH0V+x3uEOh2veT8ApPyz3pb36i/Odqc/4A/9qL7mLG6Ojgi8q0fuSB9LyE1
-         vQajVyyKyQhiNkPmdWA9O10seinP48xPKvVNSe6abihWUJ9dEY/lWBE6Jyyea2E6m8I1
-         GAUgnXQ+Hcwi8jN97KXk2ct8IYHo6exAgXyP9YQrRhqiy5zbRKXQhOwLwPnCDOD835ar
-         iLJeuWT9s7g/T0PaAtNUHYV11R2AN7bIT994oWYyQGHqBEL/7cWJiY3iwez7C5b3LG7i
-         RVkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VOWkcYiJEYSOZi2GcxiIbR4PFJ+2cQXy9po2yEM4hSM=;
-        b=U8HEwehjVIRE1E2V5derb65q3JQq5H8+JzLm5JvWRm656ooS3GsI/CFs9kf3BfGlWs
-         LI1Y4s7JV2qgsaRsH+dEIwtRYqkW1GL9Q2nfDb5Jtl22lNnMEVjTTHl/dTEdn+puUn4z
-         9EyBwbtc8UN/XwgXQzFqCSqXNR1uQfye6HJg+beHl9GNLTx7e8Rfa7etVkf40YjcLXvP
-         4i1LelNQdW+11ucuSi6/DBP+JvBW/FEm5NwBmVmuONHBNuwo4F33yijec4CLI2GOYA9p
-         41P+0GRlhQTMM8C5ODc4zwImCAEiYATY6BA9YmzX9OPITh8F19j+f38YnX9Hov2waS6y
-         /ogg==
-X-Gm-Message-State: AFqh2krcanLtH7+S57c8gScoPafnMtT+2uQV+ShVUmfoYUR6ebFYdeNW
-        UoiIWMNQmD1RijaX2e0WIXQfTw==
-X-Google-Smtp-Source: AMrXdXteF0iTaHq1hlDgy7GniH4hSyHqI8kOZKBVywiptyRXydiRVvCim8tyKFLJ6pKOUYCzJZ9mhw==
-X-Received: by 2002:a05:600c:6011:b0:3cf:85f7:bbc4 with SMTP id az17-20020a05600c601100b003cf85f7bbc4mr35059143wmb.2.1674741287361;
-        Thu, 26 Jan 2023 05:54:47 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b32-20020a05600c4aa000b003db0cab0844sm1426678wmp.40.2023.01.26.05.54.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 05:54:46 -0800 (PST)
-Message-ID: <29f1ddef-6165-951c-946c-661adf620442@linaro.org>
-Date:   Thu, 26 Jan 2023 14:54:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] dt-bindings: usb: samsung,exynos-dwc3: allow unit address
- in DTS
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 26 Jan 2023 09:00:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A384346A;
+        Thu, 26 Jan 2023 06:00:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97F6D617FF;
+        Thu, 26 Jan 2023 13:54:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3837CC433D2;
+        Thu, 26 Jan 2023 13:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674741298;
+        bh=qPJoATYU5IbJyGJd6/Ve1PWtoOOXsCik8iupkKfBpN8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WuFY7RnE/0lMZgVg+jUM5bGf227ktaQfOw8qa2ODUBaUjgld9CnOddDcXLjly5nLr
+         g6Htr+XCcqPbfkmfetR4QsinHlgslP8AidptY7HFPfXxNPf+C1ug7Yi3gKQdUm4fz6
+         muZvOu4veSaja8hRNnVQ8IfNUF9Fnw1HwqSkEjYwnjTSwk7BM0xMyn16Upx+dXPCga
+         39rz7fu1ianAFqUmOeWCbS8/p2J+Na5myK+DmrVLBOnZvPxLlDL0YR1T5XOwT1Bjdj
+         dkRnmqzvbAhqxOWSMagJnACNZ16jbBFZd7AxlStSZEJ74yVUEMB1MLmMUf9N8qbOuQ
+         ihQwif7LB9iew==
+Date:   Thu, 26 Jan 2023 13:54:50 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Martin Botka <martin.botka@somainline.org>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jamipkettunen@somainline.org>,
+        Paul Bouchara <paul.bouchara@somainline.org>,
+        Jan Trmal <jtrmal@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Martin Botka <martin.botka1@gmail.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230125175943.675823-1-krzysztof.kozlowski@linaro.org>
- <20230125211329.GA2899932-robh@kernel.org>
- <afce38b0-be90-a3b5-f181-a88ad3025bd9@linaro.org>
- <CAL_JsqKpibaWgWXwhNFQ4U_tT0cdvUMO4attSsYqoSFmbq4RZQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAL_JsqKpibaWgWXwhNFQ4U_tT0cdvUMO4attSsYqoSFmbq4RZQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/3] mfd: axp20x: Add support for AXP313a PMIC
+Message-ID: <Y9KGKlhiVjFCSaPs@google.com>
+References: <20230118210319.464371-1-martin.botka@somainline.org>
+ <20230118210319.464371-3-martin.botka@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230118210319.464371-3-martin.botka@somainline.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 14:41, Rob Herring wrote:
-> On Thu, Jan 26, 2023 at 4:48 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 25/01/2023 22:13, Rob Herring wrote:
->>> On Wed, Jan 25, 2023 at 06:59:43PM +0100, Krzysztof Kozlowski wrote:
->>>> The Samsung Exynos SoC USB 3.0 DWC3 Controller is a simple wrapper of
->>>> actual DWC3 Controller device node.  It handles necessary Samsung
->>>> Exynos-specific resources (regulators, clocks), but does not have its
->>>> own MMIO address space.
->>>>
->>>> However neither simple-bus bindings nor dtc W=1 accept device nodes in
->>>> soc@ node which do not have unit address.  Therefore allow using
->>>> the address space of child device (actual DWC3 Controller) as the
->>>> wrapper's address.
->>>
->>> The correct fix is 'ranges' should have a value. Though the whole
->>> wrapper thing when there are no registers I dislike...
->>
->> You mean something like this (diff against this patchset):
->> ----------
->> diff --git a/arch/arm/boot/dts/exynos54xx.dtsi
->> b/arch/arm/boot/dts/exynos54xx.dtsi
->> index 08786fd9c6ea..75b6f9678672 100644
->> --- a/arch/arm/boot/dts/exynos54xx.dtsi
->> +++ b/arch/arm/boot/dts/exynos54xx.dtsi
->> @@ -142,16 +142,15 @@ hsi2c_7: i2c@12cd0000 {
->>                         status = "disabled";
->>                 };
->>
->> -               usbdrd3_0: usb-wrapper@12000000 {
->> +               usbdrd3_0: usb-wrapper {
+On Wed, 18 Jan 2023, Martin Botka wrote:
+
+> The AXP313a is a PMIC chip produced by X-Powers, it can be connected via
+> an I2C bus.
+> The name AXP1530 seems to appear as well, and this is what is used in
+> the BSP driver. From all we know it's the same chip, just a different
+> name. However we have only seen AXP313a chips in the wild, so go with
+> this name.
 > 
-> Why did you drop the unit-address? Unit-address is valid with 'reg' or 'ranges'.
-
-I misunderstood your comment then. To which problem did you refer with
-"The correct fix is ranges ...."? To my understanding this only changes
-the unit address, so I won't have to change the node name
-usb->usb-wrapper. Except this, my patches having empty ranges are
-equivalent.
-
-
+> Compared to the other AXP PMICs it's a rather simple affair: just three
+> DCDC converters, three LDOs, and no battery charging support.
 > 
->>                         compatible = "samsung,exynos5250-dwusb3";
->> -                       reg = <0x12000000 0x10000>;
->>                         #address-cells = <1>;
->>                         #size-cells = <1>;
->> -                       ranges;
->> +                       ranges = <0x0 0x12000000 0x10000>;
->>
+> Describe the regmap and the MFD bits, along with the registers exposed
+> via I2C. Eventually advertise the device using the new compatible
+> string.
+> 
+> Signed-off-by: Martin Botka <martin.botka@somainline.org>
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  drivers/mfd/axp20x-i2c.c   |  2 ++
+>  drivers/mfd/axp20x.c       | 61 ++++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/axp20x.h | 32 ++++++++++++++++++++
+>  3 files changed, 95 insertions(+)
+> 
+> diff --git a/drivers/mfd/axp20x-i2c.c b/drivers/mfd/axp20x-i2c.c
+> index f49fbd307958..f061177cb18e 100644
+> --- a/drivers/mfd/axp20x-i2c.c
+> +++ b/drivers/mfd/axp20x-i2c.c
+> @@ -63,6 +63,7 @@ static const struct of_device_id axp20x_i2c_of_match[] = {
+>  	{ .compatible = "x-powers,axp209", .data = (void *)AXP209_ID },
+>  	{ .compatible = "x-powers,axp221", .data = (void *)AXP221_ID },
+>  	{ .compatible = "x-powers,axp223", .data = (void *)AXP223_ID },
+> +	{ .compatible = "x-powers,axp313a", .data = (void *)AXP313A_ID},
 
+Nit: Formatting error at the end of the line.
 
-Best regards,
-Krzysztof
+>  	{ .compatible = "x-powers,axp803", .data = (void *)AXP803_ID },
+>  	{ .compatible = "x-powers,axp806", .data = (void *)AXP806_ID },
+>  	{ },
+> @@ -76,6 +77,7 @@ static const struct i2c_device_id axp20x_i2c_id[] = {
+>  	{ "axp209", 0 },
+>  	{ "axp221", 0 },
+>  	{ "axp223", 0 },
+> +	{ "axp313a", 0 },
+>  	{ "axp803", 0 },
+>  	{ "axp806", 0 },
+>  	{ },
+> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+> index 01a6bbb6d266..ff15775f3c27 100644
+> --- a/drivers/mfd/axp20x.c
+> +++ b/drivers/mfd/axp20x.c
+> @@ -39,6 +39,7 @@ static const char * const axp20x_model_names[] = {
+>  	"AXP221",
+>  	"AXP223",
+>  	"AXP288",
+> +	"AXP313a",
+>  	"AXP803",
+>  	"AXP806",
+>  	"AXP809",
+> @@ -154,6 +155,24 @@ static const struct regmap_range axp806_writeable_ranges[] = {
+>  	regmap_reg_range(AXP806_REG_ADDR_EXT, AXP806_REG_ADDR_EXT),
+>  };
+>  
+> +static const struct regmap_range axp313a_writeable_ranges[] = {
+> +	regmap_reg_range(AXP313A_ON_INDICATE, AXP313A_IRQ_STATE),
+> +};
+> +
+> +static const struct regmap_range axp313a_volatile_ranges[] = {
+> +	regmap_reg_range(AXP313A_ON_INDICATE, AXP313A_IRQ_STATE),
+> +};
+> +
+> +static const struct regmap_access_table axp313a_writeable_table = {
+> +	.yes_ranges = axp313a_writeable_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(axp313a_writeable_ranges),
+> +};
+> +
+> +static const struct regmap_access_table axp313a_volatile_table = {
+> +	.yes_ranges = axp313a_volatile_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(axp313a_volatile_ranges),
+> +};
+> +
+>  static const struct regmap_range axp806_volatile_ranges[] = {
+>  	regmap_reg_range(AXP20X_IRQ1_STATE, AXP20X_IRQ2_STATE),
+>  };
+> @@ -272,6 +291,15 @@ static const struct regmap_config axp288_regmap_config = {
+>  	.cache_type	= REGCACHE_RBTREE,
+>  };
+>  
+> +static const struct regmap_config axp313a_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.wr_table = &axp313a_writeable_table,
+> +	.volatile_table = &axp313a_volatile_table,
+> +	.max_register = AXP313A_IRQ_STATE,
+> +	.cache_type = REGCACHE_RBTREE,
+> +};
+> +
+>  static const struct regmap_config axp806_regmap_config = {
+>  	.reg_bits	= 8,
+>  	.val_bits	= 8,
+> @@ -415,6 +443,16 @@ static const struct regmap_irq axp288_regmap_irqs[] = {
+>  	INIT_REGMAP_IRQ(AXP288, BC_USB_CHNG,            5, 1),
+>  };
+>  
+> +static const struct regmap_irq axp313a_regmap_irqs[] = {
+> +	INIT_REGMAP_IRQ(AXP313A, PEK_RIS_EDGE,		0, 7),
+> +	INIT_REGMAP_IRQ(AXP313A, PEK_FAL_EDGE,		0, 6),
+> +	INIT_REGMAP_IRQ(AXP313A, PEK_SHORT,		0, 5),
+> +	INIT_REGMAP_IRQ(AXP313A, PEK_LONG,		0, 4),
+> +	INIT_REGMAP_IRQ(AXP313A, DCDC3_V_LOW,		0, 3),
+> +	INIT_REGMAP_IRQ(AXP313A, DCDC2_V_LOW,		0, 2),
+> +	INIT_REGMAP_IRQ(AXP313A, DIE_TEMP_HIGH,		0, 0),
+> +};
+> +
+>  static const struct regmap_irq axp803_regmap_irqs[] = {
+>  	INIT_REGMAP_IRQ(AXP803, ACIN_OVER_V,		0, 7),
+>  	INIT_REGMAP_IRQ(AXP803, ACIN_PLUGIN,		0, 6),
+> @@ -548,6 +586,17 @@ static const struct regmap_irq_chip axp288_regmap_irq_chip = {
+>  
+>  };
+>  
+> +static const struct regmap_irq_chip axp313a_regmap_irq_chip = {
+> +	.name			= "axp313a_irq_chip",
+> +	.status_base		= AXP313A_IRQ_STATE,
+> +	.ack_base		= AXP313A_IRQ_STATE,
+> +	.unmask_base		= AXP313A_IRQ_EN,
+> +	.init_ack_masked	= true,
+> +	.irqs			= axp313a_regmap_irqs,
+> +	.num_irqs		= ARRAY_SIZE(axp313a_regmap_irqs),
+> +	.num_regs		= 1,
+> +};
+> +
+>  static const struct regmap_irq_chip axp803_regmap_irq_chip = {
+>  	.name			= "axp803",
+>  	.status_base		= AXP20X_IRQ1_STATE,
+> @@ -676,6 +725,12 @@ static const struct mfd_cell axp152_cells[] = {
+>  	},
+>  };
+>  
+> +static struct mfd_cell axp313a_cells[] = {
+> +	{
+> +		.name = "axp20x-regulator",
+> +	},
+> +};
 
+Where are the other devices that make this an MFD?
+
+Also, please use: MFD_CELL_NAME()
+
+>  static const struct resource axp288_adc_resources[] = {
+>  	DEFINE_RES_IRQ_NAMED(AXP288_IRQ_GPADC, "GPADC"),
+>  };
+> @@ -892,6 +947,12 @@ int axp20x_match_device(struct axp20x_dev *axp20x)
+>  		axp20x->regmap_irq_chip = &axp288_regmap_irq_chip;
+>  		axp20x->irq_flags = IRQF_TRIGGER_LOW;
+>  		break;
+> +	case AXP313A_ID:
+> +		axp20x->nr_cells = ARRAY_SIZE(axp313a_cells);
+> +		axp20x->cells = axp313a_cells;
+> +		axp20x->regmap_cfg = &axp313a_regmap_config;
+> +		axp20x->regmap_irq_chip = &axp313a_regmap_irq_chip;
+> +		break;
+>  	case AXP803_ID:
+>  		axp20x->nr_cells = ARRAY_SIZE(axp803_cells);
+>  		axp20x->cells = axp803_cells;
+> diff --git a/include/linux/mfd/axp20x.h b/include/linux/mfd/axp20x.h
+> index 2058194807bd..12e4fc3e8391 100644
+> --- a/include/linux/mfd/axp20x.h
+> +++ b/include/linux/mfd/axp20x.h
+> @@ -17,6 +17,7 @@ enum axp20x_variants {
+>  	AXP221_ID,
+>  	AXP223_ID,
+>  	AXP288_ID,
+> +	AXP313A_ID,
+>  	AXP803_ID,
+>  	AXP806_ID,
+>  	AXP809_ID,
+> @@ -91,6 +92,17 @@ enum axp20x_variants {
+>  #define AXP22X_ALDO3_V_OUT		0x2a
+>  #define AXP22X_CHRG_CTRL3		0x35
+>  
+> +#define AXP313A_ON_INDICATE		0x00
+> +#define AXP313A_OUTPUT_CONTROL		0x10
+> +#define AXP313A_DCDC1_CONRTOL		0x13
+> +#define AXP313A_DCDC2_CONRTOL		0x14
+> +#define AXP313A_DCDC3_CONRTOL		0x15
+> +#define AXP313A_ALDO1_CONRTOL		0x16
+> +#define AXP313A_DLDO1_CONRTOL		0x17
+> +#define AXP313A_OUTPUT_MONITOR		0x1d
+> +#define AXP313A_IRQ_EN			0x20
+> +#define AXP313A_IRQ_STATE		0x21
+> +
+>  #define AXP806_STARTUP_SRC		0x00
+>  #define AXP806_CHIP_ID			0x03
+>  #define AXP806_PWR_OUT_CTRL1		0x10
+> @@ -322,6 +334,16 @@ enum {
+>  	AXP22X_REG_ID_MAX,
+>  };
+>  
+> +enum {
+> +	AXP313A_DCDC1 = 0,
+> +	AXP313A_DCDC2,
+> +	AXP313A_DCDC3,
+> +	AXP313A_LDO1,
+> +	AXP313A_LDO2,
+> +	AXP313A_RTC_LDO,
+> +	AXP313A_REG_ID_MAX,
+> +};
+> +
+>  enum {
+>  	AXP806_DCDCA = 0,
+>  	AXP806_DCDCB,
+> @@ -548,6 +570,16 @@ enum axp288_irqs {
+>  	AXP288_IRQ_BC_USB_CHNG,
+>  };
+>  
+> +enum axp313a_irqs {
+> +	AXP313A_IRQ_DIE_TEMP_HIGH,
+> +	AXP313A_IRQ_DCDC2_V_LOW = 2,
+> +	AXP313A_IRQ_DCDC3_V_LOW,
+> +	AXP313A_IRQ_PEK_LONG,
+> +	AXP313A_IRQ_PEK_SHORT,
+> +	AXP313A_IRQ_PEK_FAL_EDGE,
+> +	AXP313A_IRQ_PEK_RIS_EDGE,
+> +};
+> +
+>  enum axp803_irqs {
+>  	AXP803_IRQ_ACIN_OVER_V = 1,
+>  	AXP803_IRQ_ACIN_PLUGIN,
+> -- 
+> 2.39.0
+> 
+
+-- 
+Lee Jones [李琼斯]
