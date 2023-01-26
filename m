@@ -2,129 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAAA67D00D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:24:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC7C67D013
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbjAZPYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:24:11 -0500
+        id S229847AbjAZPY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:24:26 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbjAZPX4 (ORCPT
+        with ESMTP id S232501AbjAZPYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:23:56 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DBB2069E
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:23:32 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso3444109wmn.5
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:23:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OsProH1FLDNaI7BK1VAv3F5PPttHIZQfk9ow0JlU4mM=;
-        b=jA1aIZapv4TbXEQf1jQNWsfVqEmo5Ggy7VU6/5IYzjx+EtuQ59Tj2FwVIpgWgacEcN
-         LCwMPMl6rAx5SnNztLlQ0yydukfIypegA5hzfANAIDAt4zjjOl4VXGjp6H+NQBg+p0s4
-         0rwMJFPYr69/wpjY4lI0n0x5QHv7fxjafyJK2d8He10GFEzZ6eMxBeU8ktgvrRz077wf
-         6js8psJPQ362Kx1m/me5QSi/KOzm+JzuEViqpO8g3ub9x4QJRq9x6f+ybC6JP7ahNqFb
-         Hp42W+nnlmaGYBm7Ei9uVrUtOBvYeCD7RzDzECYqSFhqsosvRf7Ez71f3t9o4FWFJBHv
-         90fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OsProH1FLDNaI7BK1VAv3F5PPttHIZQfk9ow0JlU4mM=;
-        b=q3UQxqEwwIQMgWbjH3nMW/0Vivmm3XFzZ/ZYngE6fWrz669bggYbKhSbCzC7C6s3Hi
-         Ai5BCigcsccKcj41Exausjt5DmIK19zxHLKGCUrkiKJ3MPD86iWi2Y/nwYu0J18BZDzL
-         RlSf2+5EG8pBViMdNx8VXCUJplSMf4tf8nkaCNVTLbgCd6zCu2N3yn8GUKEcH+MROtl+
-         qexfy03PZN+Hm+JfeCObVrINr5cxnaMqDLInRlgZcwBo6SBTzMR0hQ9CZLcE8qqLBUqf
-         q7SuGv8DKYKUUuYx+LPqXKNx/+t/025596klxsxPw0kiFLmVUDmDtIhx5RwDiqeyFwcD
-         6t3Q==
-X-Gm-Message-State: AFqh2krQVzvBA4O5YIYz7TJOSWfHoTxua0onjSVTlztBXp+TBQMeIAf4
-        oOvinh2XAfbpLnPjIsrVKyjIUg==
-X-Google-Smtp-Source: AMrXdXsCXXjCTiIflpPPkWf3wTVp2oNNsqJ+e83FbNBDZM59FqaEVQ9WDFsH7yvv5Ng4srWuycjQFQ==
-X-Received: by 2002:a05:600c:310e:b0:3db:fc3:6de4 with SMTP id g14-20020a05600c310e00b003db0fc36de4mr33027373wmo.35.1674746609151;
-        Thu, 26 Jan 2023 07:23:29 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id e19-20020a05600c439300b003cfd4e6400csm1723340wmn.19.2023.01.26.07.23.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 07:23:28 -0800 (PST)
-Message-ID: <6a54a51b-cf1a-c601-275f-00f825fcec5d@linaro.org>
-Date:   Thu, 26 Jan 2023 16:23:26 +0100
+        Thu, 26 Jan 2023 10:24:10 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE2B420C;
+        Thu, 26 Jan 2023 07:23:53 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QFEiR3004356;
+        Thu, 26 Jan 2023 15:23:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=38Q/0OCGry8peDMSSdqlhdz0+1fJJuYxwowWJYS44go=;
+ b=f0JWtdmKNHHIZwUwiDGJM69eVPs8Y5AjYb3g3BqL94aw5tg1LbDgjTxK9NpBqs5omPfD
+ TWWDJN7GOgxjXPd1iahdemLwBRJahCVwLZpzaU+tTSETaHm9kGOuj7qtBC5QfjlupSCI
+ 3CQjRLWGZ+yD8GxOW+U/2yUeCF8B3XxP0e7wGSYai1vlceE17tdWqDKO0lTlRelg9eKd
+ RVpK/DeNGlqzUrO3YFqB64vrsaciUfCtzTM4gteJtftdeSydjnV3Ni88FPpjCqWDYJeR
+ rwl/e6DDkP91ra6Whr/eTN0A/3hxSO72Vdz6slnBwqvMzcNGk4OVUavZo3ZRGogjc5fE EA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbv06g5rr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 15:23:48 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QFEqEK004557;
+        Thu, 26 Jan 2023 15:23:47 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbv06g5qw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 15:23:47 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30Q2KLlU027371;
+        Thu, 26 Jan 2023 15:23:45 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3n87p6cpay-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 15:23:45 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QFNeUG44827002
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 26 Jan 2023 15:23:40 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A228E2004D;
+        Thu, 26 Jan 2023 15:23:40 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 668CA20043;
+        Thu, 26 Jan 2023 15:23:40 +0000 (GMT)
+Received: from [9.152.224.253] (unknown [9.152.224.253])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 26 Jan 2023 15:23:40 +0000 (GMT)
+Message-ID: <2a21195b-9a13-a332-bab9-e2c023fc37a6@linux.ibm.com>
+Date:   Thu, 26 Jan 2023 16:23:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 5/8] PCI: rockchip: Added dtsi entry for PCIe endpoint
- controller
+ Thunderbird/102.6.0
 Content-Language: en-US
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        alberto.dassatti@heig-vd.ch
-Cc:     xxm@rock-chips.com, wenrui.li@rock-chips.com,
-        rick.wertenbroek@heig-vd.ch, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20230126135049.708524-1-rick.wertenbroek@gmail.com>
- <20230126135049.708524-6-rick.wertenbroek@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230126135049.708524-6-rick.wertenbroek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>
+References: <20230125212608.1860251-1-scgl@linux.ibm.com>
+ <20230125212608.1860251-5-scgl@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v6 04/14] KVM: s390: selftest: memop: Add bad address test
+In-Reply-To: <20230125212608.1860251-5-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: S7x_h8djFowqJrL1JZ7Fwk9QiDnFy7Pd
+X-Proofpoint-ORIG-GUID: RdPz5P2-f5xBlgJ2o1DLR7EfVdsF4d4e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-26_07,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ malwarescore=0 clxscore=1015 mlxscore=0 bulkscore=0 impostorscore=0
+ phishscore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301260146
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 14:50, Rick Wertenbroek wrote:
-> Added missing PCIe endpoint controller entry in the device tree. This
-> entry is documented in :
-> Documentation/devicetree/bindings/pci/rockchip-pcie-ep.txt
+On 1/25/23 22:25, Janis Schoetterl-Glausch wrote:
+> Add test that tries to access, instead of CHECK_ONLY.
+""
+Add a test that tries a real write to a bad address.
+A CHECK_ONLY test doesn't cover all paths.
+""
 
-There is no such file
-
-> The status is disabled by default, so it will not be loaded unless
-> explicitly chosen to.
-
-Use subject prefixes matching the subsystem (which you can get for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching).
+At first I thought you were replacing a test.
 
 > 
-> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
 > ---
->  arch/arm64/boot/dts/rockchip/rk3399.dtsi | 25 ++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
+>   tools/testing/selftests/kvm/s390x/memop.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> index 9d5b0e8c9..5f7251118 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> @@ -265,6 +265,31 @@ pcie0_intc: interrupt-controller {
->  		};
->  	};
->  
-> +	pcie0_ep: pcie-ep@f8000000 {
-> +		compatible = "rockchip,rk3399-pcie-ep";
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> index bbc191a13760..5aae27549437 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -641,7 +641,9 @@ static void _test_errors_common(struct test_info info, enum mop_target target, i
+>   
+>   	/* Bad guest address: */
+>   	rv = ERR_MOP(info, target, WRITE, mem1, size, GADDR((void *)~0xfffUL), CHECK_ONLY);
+> -	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory access");
+> +	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory address");
 
-reg is usually second property...
-> +		#address-cells = <3>;
-> +		#size-cells = <2>;
-Best regards,
-Krzysztof
+"ioctl does not report bad guest memory address on CHECK_ONLY write" ?
+
+> +	rv = ERR_MOP(info, target, WRITE, mem1, size, GADDR((void *)~0xfffUL));
+> +	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory address");
+
+"ioctl does not report bad guest memory address on write" ?
+
+Not really necessary in this case, it just needs to be different from 
+the one on top.
+
+>   
+>   	/* Bad host address: */
+>   	rv = ERR_MOP(info, target, WRITE, 0, size, GADDR_V(mem1));
 
