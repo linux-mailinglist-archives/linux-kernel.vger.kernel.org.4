@@ -2,191 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D47067D5F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD04C67D5F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbjAZUIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:08:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
+        id S231216AbjAZUJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:09:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjAZUIc (ORCPT
+        with ESMTP id S232747AbjAZUIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:08:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB6412042
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:08:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1646161921
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 20:08:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F4FEC433D2;
-        Thu, 26 Jan 2023 20:08:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674763708;
-        bh=rYVXbHt9sfvzBQ3JofKbpIpDUyKamvlUflwEzgDVm48=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OIMu0+2r9BjvE5afhTmrIXqj+SU0rY3dDX+1+sElZC/jGAOdbVTVle3UmFUdQDrMi
-         JIwdxCildcH4iXrKxgB6vqaTXqLT6pAGMQ3r0bBaWlsCJK04igVSsLangPCsdkxe8s
-         Xak19OtHpgxIDepVjzHDZh9HY8N53Ykp4EAHGE163rfqX0FLyKQ5BVFvFu+X/4Ul88
-         PkaViwSyGQHXQXnWdRCVRfWjWB+6QSaMnMbxrarRtHSawnkX6kX3ZT/jVPRP4f5j/j
-         lERpSFc4SF/LSUQgDrDw38DrxxvsKHNl5mPThTWDKyfGqjOMgykTxqFcfzeasUoYGZ
-         KIJ4dcNXWqV/A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1043C5C1C6D; Thu, 26 Jan 2023 12:08:28 -0800 (PST)
-Date:   Thu, 26 Jan 2023 12:08:28 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
-        quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] tools/memory-model: Unify UNLOCK+LOCK pairings to
- po-unlock-lock-po
-Message-ID: <20230126200828.GK2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
- <20230126134604.2160-2-jonas.oberhauser@huaweicloud.com>
- <Y9KsI/PsW4DK083z@rowland.harvard.edu>
+        Thu, 26 Jan 2023 15:08:50 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A747166B;
+        Thu, 26 Jan 2023 12:08:43 -0800 (PST)
+Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
+        by gnuweeb.org (Postfix) with ESMTPSA id 5FF2082F37;
+        Thu, 26 Jan 2023 20:08:37 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1674763722;
+        bh=2uK4PjvwK03HI9Z+rE8QjRWxVNSJBr+QdWaWqL0x9cI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I9aZGjdfHpodIG9EaE0S7ixL3e/iR4Hr+sYIC1sUq4qzwhhjDmj0pG32tpGRNfoOv
+         Wg8yaXBchbgTmPx6/ur8qr6g5HsOBFEca/beD3gGIVscG035d6rFZDWldJFWMPdU3x
+         ypP+R45NYS+7QGDOp2zzXuLC3W1vm6UxCrwRDdRErvuA1U62fGgN/DUXVd/NHg3gvv
+         wO4dqMVGVMlMAZ/40uVuPGmm1RTgj3WC7OPPdheclkiUpHypXD5eV7lN+T3UBVskFQ
+         M3vfF4ZfWiyMWKmegqPs6oZMfRSVIf7OYiLW5JoO1H0+oTk0ozQBSDNdzl1hrigdlE
+         Z7+ZiAHD7mEMw==
+Date:   Fri, 27 Jan 2023 03:08:33 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>,
+        Borislav Petkov <bp@alien8.de>, Shuah Khan <shuah@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        x86 Mailing List <x86@kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v1 1/2] selftests/x86: sysret_rip: Handle syscall in
+ a FRED system
+Message-ID: <Y9LdwVX9BaZA7zmA@biznet-home.integral.gnuweeb.org>
+References: <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
+ <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
+ <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
+ <F554C5FE-5074-410A-B0B5-EFE983D57946@zytor.com>
+ <Y88bhrDoPw5tOyKu@biznet-home.integral.gnuweeb.org>
+ <509443c8-e0fd-935f-63d8-7264f5dd3c05@zytor.com>
+ <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
+ <20230124002625.581323-2-ammarfaizi2@gnuweeb.org>
+ <8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9KsI/PsW4DK083z@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:36:51AM -0500, Alan Stern wrote:
-> On Thu, Jan 26, 2023 at 02:46:03PM +0100, Jonas Oberhauser wrote:
-> > LKMM uses two relations for talking about UNLOCK+LOCK pairings:
-> > 
-> > 	1) po-unlock-lock-po, which handles UNLOCK+LOCK pairings
-> > 	   on the same CPU or immediate lock handovers on the same
-> > 	   lock variable
-> > 
-> > 	2) po;[UL];(co|po);[LKW];po, which handles UNLOCK+LOCK pairs
-> > 	   literally as described in rcupdate.h#L1002, i.e., even
-> > 	   after a sequence of handovers on the same lock variable.
-> > 
-> > The latter relation is used only once, to provide the guarantee
-> > defined in rcupdate.h#L1002 by smp_mb__after_unlock_lock(), which
-> > makes any UNLOCK+LOCK pair followed by the fence behave like a full
-> > barrier.
-> > 
-> > This patch drops this use in favor of using po-unlock-lock-po
-> > everywhere, which unifies the way the model talks about UNLOCK+LOCK
-> > pairings.  At first glance this seems to weaken the guarantee given
-> > by LKMM: When considering a long sequence of lock handovers
-> > such as below, where P0 hands the lock to P1, which hands it to P2,
-> > which finally executes such an after_unlock_lock fence, the mb
-> > relation currently links any stores in the critical section of P0
-> > to instructions P2 executes after its fence, but not so after the
-> > patch.
-> > 
-> > P0(int *x, int *y, spinlock_t *mylock)
-> > {
-> >         spin_lock(mylock);
-> >         WRITE_ONCE(*x, 2);
-> >         spin_unlock(mylock);
-> >         WRITE_ONCE(*y, 1);
-> > }
-> > 
-> > P1(int *y, int *z, spinlock_t *mylock)
-> > {
-> >         int r0 = READ_ONCE(*y); // reads 1
-> >         spin_lock(mylock);
-> >         spin_unlock(mylock);
-> >         WRITE_ONCE(*z,1);
-> > }
-> > 
-> > P2(int *z, int *d, spinlock_t *mylock)
-> > {
-> >         int r1 = READ_ONCE(*z); // reads 1
-> >         spin_lock(mylock);
-> >         spin_unlock(mylock);
-> >         smp_mb__after_unlock_lock();
-> >         WRITE_ONCE(*d,1);
-> > }
-> > 
-> > P3(int *x, int *d)
-> > {
-> >         WRITE_ONCE(*d,2);
-> >         smp_mb();
-> >         WRITE_ONCE(*x,1);
-> > }
-> > 
-> > exists (1:r0=1 /\ 2:r1=1 /\ x=2 /\ d=2)
-> > 
-> > Nevertheless, the ordering guarantee given in rcupdate.h is actually
-> > not weakened.  This is because the unlock operations along the
-> > sequence of handovers are A-cumulative fences.  They ensure that any
-> > stores that propagate to the CPU performing the first unlock
-> > operation in the sequence must also propagate to every CPU that
-> > performs a subsequent lock operation in the sequence.  Therefore any
-> > such stores will also be ordered correctly by the fence even if only
-> > the final handover is considered a full barrier.
-> > 
-> > Indeed this patch does not affect the behaviors allowed by LKMM at
-> > all.  The mb relation is used to define ordering through:
-> > 1) mb/.../ppo/hb, where the ordering is subsumed by hb+ where the
-> >    lock-release, rfe, and unlock-acquire orderings each provide hb
-> > 2) mb/strong-fence/cumul-fence/prop, where the rfe and A-cumulative
-> >    lock-release orderings simply add more fine-grained cumul-fence
-> >    edges to substitute a single strong-fence edge provided by a long
-> >    lock handover sequence
-> > 3) mb/strong-fence/pb and various similar uses in the definition of
-> >    data races, where as discussed above any long handover sequence
-> >    can be turned into a sequence of cumul-fence edges that provide
-> >    the same ordering.
-> > 
-> > Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-> > ---
+On Mon, Jan 23, 2023 at 05:40:23PM -0800, H. Peter Anvin wrote:
+> So as per Andrew's comment, add:
 > 
-> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+> register void * rsp asm("%rsp");
+> 
+> ...
+> 
+> "+r" (rsp)	/* clobber the redzone */
+> 
+> ... as the right way to avoid redzone problems.
 
-A quick spot check showed no change in performance, so thank you both!
+I played with this more. I found something wrong with this. This doesn't
+work for me. The compiler still uses red zone despite I use "+r" (rsp).
 
-Queued for review and further testing.
+What did I do wrong?
 
-							Thanx, Paul
+-----
 
-> >  tools/memory-model/linux-kernel.cat | 15 +++++++++++++--
-> >  1 file changed, 13 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
-> > index 07f884f9b2bf..6e531457bb73 100644
-> > --- a/tools/memory-model/linux-kernel.cat
-> > +++ b/tools/memory-model/linux-kernel.cat
-> > @@ -37,8 +37,19 @@ let mb = ([M] ; fencerel(Mb) ; [M]) |
-> >  	([M] ; fencerel(Before-atomic) ; [RMW] ; po? ; [M]) |
-> >  	([M] ; po? ; [RMW] ; fencerel(After-atomic) ; [M]) |
-> >  	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
-> > -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
-> > -		fencerel(After-unlock-lock) ; [M])
-> > +(*
-> > + * Note: The po-unlock-lock-po relation only passes the lock to the direct
-> > + * successor, perhaps giving the impression that the ordering of the
-> > + * smp_mb__after_unlock_lock() fence only affects a single lock handover.
-> > + * However, in a longer sequence of lock handovers, the implicit
-> > + * A-cumulative release fences of lock-release ensure that any stores that
-> > + * propagate to one of the involved CPUs before it hands over the lock to
-> > + * the next CPU will also propagate to the final CPU handing over the lock
-> > + * to the CPU that executes the fence.  Therefore, all those stores are
-> > + * also affected by the fence.
-> > + *)
-> > +	([M] ; po-unlock-lock-po ;
-> > +		[After-unlock-lock] ; po ; [M])
-> >  let gp = po ; [Sync-rcu | Sync-srcu] ; po?
-> >  let strong-fence = mb | gp
-> >  
-> > -- 
-> > 2.17.1
-> > 
+ammarfaizi2@integral2:/tmp$ gcc -fno-stack-protector -O2 -Wall -Wextra test.c -o test
+ammarfaizi2@integral2:/tmp$ objdump --no-show-raw-insn -d test | grep "a_leaf_func_with_red_zone>:" -A8
+0000000000001180 <a_leaf_func_with_red_zone>:
+    1180:  endbr64 
+    1184:  mov    $0x1,%eax
+    1189:  mov    %rax,-0x8(%rsp)   ## BUG!!!
+    118e:  pushf  
+    118f:  pop    %rax
+    1190:  mov    -0x8(%rsp),%rax   ## BUG!!!
+    1195:  ret
+
+
+ammarfaizi2@integral2:/tmp$ clang -O2 -Wall -Wextra test.c -o test
+ammarfaizi2@integral2:/tmp$ objdump --no-show-raw-insn -d test | grep "a_leaf_func_with_red_zone>:" -A6
+0000000000001140 <a_leaf_func_with_red_zone>:
+    1140:  mov    $0x1,%eax
+    1145:  mov    %rax,-0x8(%rsp)   ## BUG!!!
+    114a:  pushf  
+    114b:  pop    %rax
+    114c:  mov    -0x8(%rsp),%rax   ## BUG!!!
+    1151:  ret
+
+
+-----
+ammarfaizi2@integral2:~$ gcc --version
+gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+ammarfaizi2@integral2:~$ clang --version
+Ubuntu clang version 16.0.0 (++20230124031324+d63e492562f2-1~exp1~20230124151444.705)
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+
+
+-----
+test.c:
+
+#include <stdio.h>
+static inline void clobber_redzone(void)
+{
+        register void *rsp __asm__("%rsp");
+        unsigned long rflags;
+
+        __asm__ volatile ("pushf; popq %1"
+                          : "+r" (rsp), "=r" (rflags));
+}
+
+static inline void set_red_zone(long *mem, long val)
+{
+        __asm__ volatile ("movq %[val], %[mem]"
+                           : [mem] "=m" (*mem)
+                           : [val] "r" (val));
+}
+
+static inline long get_red_zone(long *mem)
+{
+        long ret;
+
+        __asm__ volatile ("movq %[in], %[out]"
+                           : [out] "=r" (ret)
+                           : [in] "m" (*mem));
+        return ret;
+}
+
+__attribute__((__noinline__))
+long a_leaf_func_with_red_zone(void)
+{
+        long x;
+
+        set_red_zone(&x, 1);
+        clobber_redzone();
+        /* The correct retval is 1 */
+        return get_red_zone(&x);
+}
+
+int main(void)
+{
+        printf("ret = %ld\n", a_leaf_func_with_red_zone());
+        return 0;
+}
+
+-- 
+Ammar Faizi
+
