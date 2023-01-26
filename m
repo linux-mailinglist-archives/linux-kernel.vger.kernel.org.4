@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE2767D52F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA8667D535
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbjAZTOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 14:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
+        id S232047AbjAZTQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 14:16:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjAZTOc (ORCPT
+        with ESMTP id S229781AbjAZTQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 14:14:32 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9292720;
-        Thu, 26 Jan 2023 11:14:31 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-4c24993965eso36487737b3.12;
-        Thu, 26 Jan 2023 11:14:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MBaflCYw2m4ZpSYc/L1jwPBbC18VWFzN42/SpYCj2js=;
-        b=bHAnbg1qrvnjFDBq4rDAEAtuPzYtSeM884V5t/BDJUvSPa4oE6QHpUQrdKHepinthY
-         0pb7G2bSubps2A+l0PMZ+helB6y0qtS2IUwGvbHoWxgGhKqhpEzG42wRh512unI5VHt/
-         AmIdu3Eoan6D3ezRzU66gub3AuwNvPhWL+ByBPZCawbS5o2k0XZf/oubwhyIZku8mW2u
-         pwQDz5oLoUzBvnFb+nUf3TBrt1+mS+4OmzMTGO1PMbxOrA+cfQguoHSHhIjo7BvZTjii
-         DC4BmYixGumZlYPOa6RX8hlmusN8cR/YkFINMUfQt92/el5jqRaRU01nOG/RazAz0LbP
-         pMAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MBaflCYw2m4ZpSYc/L1jwPBbC18VWFzN42/SpYCj2js=;
-        b=VOfM8o5eH/aOo6NAkCoElLr8lt1itswUWDlCwzLKxl2Ay7i29PfYsFQ3r257Ks+QT3
-         zvcy1hcLnfstJnLhPTh3UAuukVfJ0Sd8cpj8YItm3WPjBQlgEsiA647mTWT4VOQh4tAM
-         rjiMATeL3ljPWdFoDfogiNpdw03bJZMvNKx9jzJ995r+VMGTWVtdfuhKgs91l+YZJOzR
-         ENua/SO/2AJo0fq+hmBk+Xq0SZLYm4Z4UVDTFpQqZWPCWGpHXZ16iwiWQ7BbWYZOZSrf
-         fpQx1+VWc09EnKqn6KbBY5gfjBWLzxwE8Ct6vXN815u3uy850bdJaSdw5fDUxAoxb+wE
-         XQUA==
-X-Gm-Message-State: AFqh2kpB/tixc+MnV5xxOdrIyJ9x7+LXLYvs068U5DUms08dbrxK4fLc
-        amYBsOH9ogr+DyPUfFQHOj6GrfTu+5KiWNq5KL4=
-X-Google-Smtp-Source: AMrXdXupcW0FnUSj2qcKDJ+i5BekGrYWsKP2NEjPHQ96FZBN7tvseY5dVT/oMmNzyu5LA/vU+un2CYi0wXZ5jEg6QOU=
-X-Received: by 2002:a81:5402:0:b0:3d8:8c0e:6d48 with SMTP id
- i2-20020a815402000000b003d88c0e6d48mr3099310ywb.462.1674760471019; Thu, 26
- Jan 2023 11:14:31 -0800 (PST)
+        Thu, 26 Jan 2023 14:16:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03806577D5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:15:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674760525;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z/6NzXul2HEh42eixvs/tgvbhLjr/JPWRiufbihZODs=;
+        b=CENBYMcDlfPZ6z2FQZc9+BBZsptb+WBhObW8F23bT5In+GeWjKZ6vaUOL3C1mvw5j8/v1H
+        BBkjN9iT0fG9lngTApZV0llj4+0e60Up/+h/ezMaEMs1EhvpxXcYS04nK/vCRNRRbrAdKD
+        AE+CQnEyohq3k8/55flr7d6sLco166c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-112-UnlMdd_YM9eYwBW14uadDA-1; Thu, 26 Jan 2023 14:15:22 -0500
+X-MC-Unique: UnlMdd_YM9eYwBW14uadDA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5DF8787B2A4;
+        Thu, 26 Jan 2023 19:15:21 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (ovpn-194-60.brq.redhat.com [10.40.194.60])
+        by smtp.corp.redhat.com (Postfix) with SMTP id ACBFAC15BA0;
+        Thu, 26 Jan 2023 19:15:18 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 26 Jan 2023 20:15:18 +0100 (CET)
+Date:   Thu, 26 Jan 2023 20:15:15 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Gregory Price <gourry.memverge@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        avagin@gmail.com, peterz@infradead.org, luto@kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, corbet@lwn.net,
+        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
+Subject: Re: [PATCH v7 1/1] ptrace,syscall_user_dispatch: checkpoint/restore
+ support for SUD
+Message-ID: <20230126191515.GE4069@redhat.com>
+References: <20230126190645.18341-1-gregory.price@memverge.com>
+ <20230126190645.18341-2-gregory.price@memverge.com>
 MIME-Version: 1.0
-References: <20230126172516.1580058-1-guoren@kernel.org> <20230126172516.1580058-2-guoren@kernel.org>
-In-Reply-To: <20230126172516.1580058-2-guoren@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 26 Jan 2023 20:14:19 +0100
-Message-ID: <CANiq72=Srm7aBu7Stz8-t1PkhFsPXUyoxaLJCLJHG9b6mVc8sQ@mail.gmail.com>
-Subject: Re: [PATCH -next V15 1/7] compiler_types.h: Add __noinstr_section()
- for noinstr
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
-        bjorn@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126190645.18341-2-gregory.price@memverge.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,16 +67,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 6:25 PM <guoren@kernel.org> wrote:
+On 01/26, Gregory Price wrote:
 >
-> From: Lai Jiangshan <laijs@linux.alibaba.com>
+> Implement ptrace getter/setter interface for syscall user dispatch.
 >
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+> These prctl settings are presently write-only, making it impossible to
+> implement transparent checkpoint/restore via software like CRIU.
+>
+> 'on_dispatch' field is not exposed because it is a kernel-internal
+> only field that cannot be 'true' when returning to userland.
+>
+> Signed-off-by: Gregory Price <gregory.price@memverge.com>
+> ---
+>  .../admin-guide/syscall-user-dispatch.rst     |  5 ++-
+>  include/linux/syscall_user_dispatch.h         | 18 +++++++++
+>  include/uapi/linux/ptrace.h                   |  9 +++++
+>  kernel/entry/syscall_user_dispatch.c          | 39 +++++++++++++++++++
+>  kernel/ptrace.c                               |  9 +++++
+>  5 files changed, 79 insertions(+), 1 deletion(-)
 
-If Lai is the author, but you are submitting it, shouldn't your
-`Signed-off-by` be after his? Or are you co-authors? (but then it
-would need a Co-developed-by tag)
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 
-Cheers,
-Miguel
