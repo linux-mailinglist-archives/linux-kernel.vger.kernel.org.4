@@ -2,132 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD0567C2E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 03:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56A667C2F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 03:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234913AbjAZClL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 21:41:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
+        id S235456AbjAZCyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 21:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjAZClK (ORCPT
+        with ESMTP id S229576AbjAZCye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 21:41:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D031845BD6;
-        Wed, 25 Jan 2023 18:41:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BD2561588;
-        Thu, 26 Jan 2023 02:41:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C94ADC4339B;
-        Thu, 26 Jan 2023 02:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674700866;
-        bh=XPbqSTeptf7tgqTXA+MY73A0B0SBbzewXCpchE//tUo=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=GCraw7pWDawA5eEM1iWFjD4jw7ezL+NpFe5UCksCsqUZRc+aLjC2G9SdExvNu0XVt
-         x36AsztqNgxjAA5NXWB/P5nDqjpF52osXKlYvgQbLTXK44gYtOQkXNEhHphXQDuwk3
-         eHEWSiJHjxeMW+cPdqEBfokd+6b39z+Zi21Uyr7j0YPfoqBtVbV3Cg5FfHcKJDwDwR
-         dfPDhZBovLbHJRY56bh0x/3nXjmOaSI+574uXNU/JMLjaRSdXEgImfcspIXDWUhYAL
-         ylYHycjHWZmbLsKcJaxRzCseXh7Xi61kh3nXwWVei5lQB5M6cN9X3bOuOuLBPK6ZuN
-         Igaimmy0Xnyww==
-Message-ID: <f9bf509f45550996bda8a79ee145f4b1.sboyd@kernel.org>
+        Wed, 25 Jan 2023 21:54:34 -0500
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDC56469A;
+        Wed, 25 Jan 2023 18:54:33 -0800 (PST)
+Received: by mail-ot1-f48.google.com with SMTP id t7-20020a05683014c700b006864760b1caso373833otq.0;
+        Wed, 25 Jan 2023 18:54:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8QcPXEvT1pedH9u1w6Jhv/1gc0FF4O/dQCeQVTVS8ME=;
+        b=zbYmbZAJBHoLJ/Cx1gYC0txJsN3eVyRVtScxdGfGu/WPbIQHE3b84nIZyxNjmXB7KV
+         ORHA7RNxFMkQi0v5vXh9q5ckZq/ljIvXEIzds3xwMhtHIgW/MIlH9ym+EHSPCVEvnMg1
+         nrY4TO2Y4jTK1IJAiDr3V2czKVZCkxufzG4SePCatbmoeEc2YV4/8N9RbrO2D5i7o/oG
+         KPrCa5JcUWIMukrzZ/oqFgAXRXttn51CiFU738iXqSWOQAZv+IKQjpwkO5anXdaBWV1o
+         bB3Gy4exGrD0SltiOEEN92p/jLcUu6gQNwRo02A5XW5bbrEJpYJq3oHRYUggp3wKCRZM
+         2mug==
+X-Gm-Message-State: AFqh2ko5axw2BHu2f35VBcVHzgkAI9ms7g2sgVUutu5KRAatS89tQYWp
+        FWRcwgd0svEmGjRsIjB0kHThmhrNdg==
+X-Google-Smtp-Source: AMrXdXvjBV1/2RxdzlYJsd0JJW8lxTIISk3b0T72zFoE7XSt8A8SwGrjWMs7+1eHfgQnVsPCoE15hA==
+X-Received: by 2002:a9d:4b19:0:b0:66e:c78e:9ac0 with SMTP id q25-20020a9d4b19000000b0066ec78e9ac0mr15986269otf.31.1674701672508;
+        Wed, 25 Jan 2023 18:54:32 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 8-20020a9d0108000000b00684d5bd56dbsm2872550otu.66.2023.01.25.18.54.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 18:54:32 -0800 (PST)
+Received: (nullmailer pid 75020 invoked by uid 1000);
+        Thu, 26 Jan 2023 02:54:29 -0000
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAP6Zq1iPmy-fvqqAwBuoskR18v0dPVwYm0tEcE5h1g8fOiOQvg@mail.gmail.com>
-References: <20221211204324.169991-1-tmaimon77@gmail.com> <20221211204324.169991-2-tmaimon77@gmail.com> <20221216184402.8A426C433D2@smtp.kernel.org> <CAP6Zq1iPmy-fvqqAwBuoskR18v0dPVwYm0tEcE5h1g8fOiOQvg@mail.gmail.com>
-Subject: Re: [PATCH v14 1/1] clk: npcm8xx: add clock controller
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     avifishman70@gmail.com, benjaminfair@google.com, joel@jms.id.au,
-        mturquette@baylibre.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, openbmc@lists.ozlabs.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Date:   Wed, 25 Jan 2023 18:41:04 -0800
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-trace-kernel@vger.kernel.org, jk@ozlabs.org, joel@jms.id.au,
+        rostedt@goodmis.org, mhiramat@kernel.org, alistair@popple.id.au,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org, andrew@aj.id.au,
+        linux-fsi@lists.ozlabs.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20230125225416.4074040-2-eajames@linux.ibm.com>
+References: <20230125225416.4074040-1-eajames@linux.ibm.com>
+ <20230125225416.4074040-2-eajames@linux.ibm.com>
+Message-Id: <167470157981.71746.7854932259135609750.robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: fsi: Document the IBM I2C Responder
+ virtual FSI master
+Date:   Wed, 25 Jan 2023 20:54:29 -0600
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Tomer Maimon (2023-01-17 09:35:33)
-> Hi Stephen,
->=20
-> Very sorry for the late reply.
->=20
-> On Fri, 16 Dec 2022 at 20:44, Stephen Boyd <sboyd@kernel.org> wrote:
-> >
-> > Quoting Tomer Maimon (2022-12-11 12:43:24)
-> > > diff --git a/drivers/clk/clk-npcm8xx.c b/drivers/clk/clk-npcm8xx.c
-> > > new file mode 100644
-> > > index 000000000000..08ee7bea6f3a
-> > > --- /dev/null
-> > > +++ b/drivers/clk/clk-npcm8xx.c
-> > > @@ -0,0 +1,650 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > [...]
-> > > +#define NPCM8XX_CLK_S_RCP        "rcp"
-> > > +
-> > > +static const u32 pll_mux_table[] =3D { 0, 1, 2, 3 };
-> > > +static const struct clk_parent_data pll_mux_parents[] =3D {
-> > > +       { .fw_name =3D NPCM8XX_CLK_S_PLL0, .name =3D NPCM8XX_CLK_S_PL=
-L0 },
-> >
-> > As this is a new driver either you should only have .fw_name here. The
-> > .name field is a backup to migrate code over to a new binding. When
-> > .fw_name is used there should be an associated DT binding update. I
-> What do you mean by associated DT binding? does the.fw_name, for
-> example, NPCM8XX_CLK_S_PLL0 need to represent in the device tree?
 
-Yes it should match a string in the "clock-names" property for this clk
-provider's device node.
+On Wed, 25 Jan 2023 16:54:15 -0600, Eddie James wrote:
+> The I2C Responder translates I2C commands to CFAM or SCOM operations,
+> effectively implementing an FSI master.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  .../bindings/fsi/ibm,i2cr-fsi-master.yaml     | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fsi/ibm,i2cr-fsi-master.yaml
+> 
 
-> > doubt the usage of .fw_name is correct though, because aren't these clks
-> > internal to the controller? The .fw_name field is about describing does=
- the
-> yes the PLL clocks are internal.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Ok.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/fsi/ibm,i2cr-fsi-master.yaml:32:2: [warning] wrong indentation: expected 2 but found 1 (indentation)
 
-> > parents that are an input to the clk controller node in DT (because the
-> > controller is a consumer of these clks that are external to the device).
-> >
-> > So can you use the .hw field for these internal clks? Check out
-> > CLK_HW_INIT_HWS() macro and friends for a possible way to initialize
-> > this.
-> but still, I have used devm_clk_hw_register_mux_parent_data_table
-> function to register the clock mux,
-> should I use  devm_clk_hw_register_mux_parent_hws function instead?
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/fsi/ibm,i2cr-fsi-master.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/fsi/ibm,i2cr-fsi-master.yaml#
 
-Probably, yes.
+doc reference errors (make refcheckdocs):
 
-> Does this modification need to be done in all the mux parent struct?
-> could you point me to some example in the Linux kernel how do you
-> think that I should represent the mux clock in the NPCM8XX clock
-> driver?
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230125225416.4074040-2-eajames@linux.ibm.com
 
-I don't know. If the clk is external to the provider, then it should be
-in .fw_name or .index and be provided through DT. Otherwise, if the clk
-is internal to the clk provider use direct pointers.
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-> >
-> > > +       { .fw_name =3D NPCM8XX_CLK_S_PLL1, .name =3D NPCM8XX_CLK_S_PL=
-L1 },
-> > > +       { .fw_name =3D NPCM8XX_CLK_S_REFCLK, .name =3D NPCM8XX_CLK_S_=
-REFCLK },
-> >
-> > Maybe this is external? If so, it would be great to have this in the
-> > binding as a `clocks` property.
-> O.K.
->=20
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-Is it external? If so, then fw_name would be correct. You can look at
-the kernel-doc above clk_core_get(), but I really just need to spend a
-few hours and write a proper kernel-doc for this stuff.
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
