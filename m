@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6443167CC3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A1167CC3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237007AbjAZNcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:32:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S236971AbjAZNck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:32:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236930AbjAZNcg (ORCPT
+        with ESMTP id S236013AbjAZNcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 Jan 2023 08:32:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117E16E84;
-        Thu, 26 Jan 2023 05:32:35 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF5A6A57;
+        Thu, 26 Jan 2023 05:32:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D34C617EE;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91D5D617E8;
         Thu, 26 Jan 2023 13:32:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0AFCC4339C;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B4DC4339E;
         Thu, 26 Jan 2023 13:32:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1674739953;
-        bh=enToiuVABhYJILMxyVw7rFjKmf1TrVq1GFiY2ZMkd6o=;
+        bh=cdNLMB2rZ4rnBWr3OLqzMglKfyiP3lv+egE4gKxG97I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AYu3+Y4XIEErQXOh0EUi/03Fp6rirwhyn9NmKELQh+bLBssgwwSE9Mc1QIbkwkY94
-         NPVkMG121PccSZIbd7IHlMYY+n2nMabgI+uBdDf2Pn/PAUm5uskxta9IVtm6SdL75Z
-         Pp2ZNeHMUD2KD8NRrirQdL7EmMv4Gte9twXH7XcExO65K7pU52OwuMQWMBQz8JfejI
-         4Dt9CpulCHuhRbRBh4GJXZKhG+ZpOyyp7DVfeOB4WQnDUU6okiVhuyP/4yn0zwDYCG
-         t9FGWd08Q7l87n+FlATApKVJFyEa7esoE3Whb0n+agSsuA6+4JQc0ZlCL6joJTs0E7
-         7lLKyMcXL4SHw==
+        b=M7UEr3ULHzc9Ny5bGEc9BSFwje4IIdaVZv8q8faWKEHtafv8nLQHORkoq/ltNflgq
+         uR/ikpZv/FVLwd8BTUHP/MqJyyV4Ofc46nQLwX177CKpJnnddnpgyItJezzTloW0m9
+         D4RA74ngVihRHIvqMdLWEnmwbEcC8j5r6Dg4ZCKkwuQi+sOdUAWqq+Ke8u2WR8GuHt
+         uUFF6rw6K6FjvLSwpwKaxv9fg81fPHeJ4jcJrWq4UMXINA1+Re4Q+humshUMj+ARVr
+         IZ92vOxuTr+ewuIduHdeAACggjAsLSPYYFx2jBL3wVMHyNW0//aY1HaFJFWJsoLb31
+         3Ne8AKr5KUXzg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pL2Mq-0007Ak-GU; Thu, 26 Jan 2023 14:32:40 +0100
+        id 1pL2Mq-0007Am-Iy; Thu, 26 Jan 2023 14:32:40 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -42,10 +42,10 @@ Cc:     Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH 1/2] nvmem: qcom-spmi-sdam: fix module autoloading
-Date:   Thu, 26 Jan 2023 14:30:33 +0100
-Message-Id: <20230126133034.27491-2-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 2/2] nvmem: qcom-spmi-sdam: register at device init time
+Date:   Thu, 26 Jan 2023 14:30:34 +0100
+Message-Id: <20230126133034.27491-3-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230126133034.27491-1-johan+linaro@kernel.org>
 References: <20230126133034.27491-1-johan+linaro@kernel.org>
@@ -60,28 +60,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing module device table so that the driver can be autoloaded
-when built as a module.
+There are currently no in-tree users of the Qualcomm SDAM nvmem driver
+and there is generally no point in registering a driver that can be
+built as a module at subsys init time.
 
-Fixes: 40ce9798794f ("nvmem: add QTI SDAM driver")
-Cc: stable@vger.kernel.org	# 5.6
+Register the driver at the normal device init time instead and let
+driver core sort out the probe order.
+
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/nvmem/qcom-spmi-sdam.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/nvmem/qcom-spmi-sdam.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
 diff --git a/drivers/nvmem/qcom-spmi-sdam.c b/drivers/nvmem/qcom-spmi-sdam.c
-index 4fcb63507ecd..8499892044b7 100644
+index 8499892044b7..f822790db49e 100644
 --- a/drivers/nvmem/qcom-spmi-sdam.c
 +++ b/drivers/nvmem/qcom-spmi-sdam.c
-@@ -166,6 +166,7 @@ static const struct of_device_id sdam_match_table[] = {
- 	{ .compatible = "qcom,spmi-sdam" },
- 	{},
+@@ -175,18 +175,7 @@ static struct platform_driver sdam_driver = {
+ 	},
+ 	.probe		= sdam_probe,
  };
-+MODULE_DEVICE_TABLE(of, sdam_match_table);
+-
+-static int __init sdam_init(void)
+-{
+-	return platform_driver_register(&sdam_driver);
+-}
+-subsys_initcall(sdam_init);
+-
+-static void __exit sdam_exit(void)
+-{
+-	return platform_driver_unregister(&sdam_driver);
+-}
+-module_exit(sdam_exit);
++module_platform_driver(sdam_driver);
  
- static struct platform_driver sdam_driver = {
- 	.driver = {
+ MODULE_DESCRIPTION("QCOM SPMI SDAM driver");
+ MODULE_LICENSE("GPL v2");
 -- 
 2.39.1
 
