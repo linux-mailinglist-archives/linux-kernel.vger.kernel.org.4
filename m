@@ -2,64 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4266167C694
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B082C67C696
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236700AbjAZJDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 04:03:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
+        id S236448AbjAZJEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 04:04:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236675AbjAZJDE (ORCPT
+        with ESMTP id S230178AbjAZJET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 04:03:04 -0500
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4707240BFC;
-        Thu, 26 Jan 2023 01:02:59 -0800 (PST)
-Received: by mail-ej1-f52.google.com with SMTP id ss4so3240702ejb.11;
-        Thu, 26 Jan 2023 01:02:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zpTA8PogrXlsIUarI4aY2hvRwCUuO/PnjHEhsl7Xlq8=;
-        b=i1r2T5tgBVD1TtXB2M8jXOV3bz0vQ5X/UWHAds/QfAQj5H/0NAijHjnFXLFr4fj7kP
-         6lS32m/cp7RiMUEpEShs1qvATSsIKcZzbSK0KU73LbchxSgu11MiC7TiGLDPavpUac5b
-         1Y/R++JXyRrdD/ydzJsHV4ODJcmOb2yr7pQB2fvCqVdj04KAh+DSU8Ibbw6K789dQItL
-         aSPPOThErHfaGXRnhP3T7Co63qDSeU03KWKmH3kJ8PD+2v9E3Xc4GvBXybPSgZKhc2pG
-         HHK5uYuGegy6fJ4f/JjG0rJ1NhJUDW3Ln2i4mH1Uc2ao6Vd4hXuZsJVUmJLoGdymCJOw
-         WKiA==
-X-Gm-Message-State: AFqh2kp79WoOC8c1+ftkVudNRugqTZJF+EXM9yMOYI5EDXqESb9+xHN9
-        yITErRMERyLbAi01F4xQFi4=
-X-Google-Smtp-Source: AMrXdXvZTr1bl/my1N+x4SHitbZ1MhWds08SNNOyDBFXgOff3S0BXuCoVCAZAMhJfKWBuQ1dj1pmtg==
-X-Received: by 2002:a17:907:2135:b0:86f:fe8a:be with SMTP id qo21-20020a170907213500b0086ffe8a00bemr35892174ejb.4.1674723777426;
-        Thu, 26 Jan 2023 01:02:57 -0800 (PST)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id a15-20020a170906244f00b00877de2def77sm294393ejb.31.2023.01.26.01.02.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 01:02:56 -0800 (PST)
-Message-ID: <3bcd9911-5fdd-2a1a-0a76-55e1b8f7642a@kernel.org>
-Date:   Thu, 26 Jan 2023 10:02:55 +0100
+        Thu, 26 Jan 2023 04:04:19 -0500
+Received: from outbound-smtp46.blacknight.com (outbound-smtp46.blacknight.com [46.22.136.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E451420D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:04:17 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp46.blacknight.com (Postfix) with ESMTPS id 00313FA7FC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:04:15 +0000 (GMT)
+Received: (qmail 29039 invoked from network); 26 Jan 2023 09:04:15 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 26 Jan 2023 09:04:15 -0000
+Date:   Thu, 26 Jan 2023 09:04:13 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chuyi Zhou <zhouchuyi@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 0/4] Fix excessive CPU usage during compaction
+Message-ID: <20230126090413.h6cugx2dh6g55a3z@techsingularity.net>
+References: <20230125134434.18017-1-mgorman@techsingularity.net>
+ <20230125171159.355a770a2e34f78d7664e1f0@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] fbcon: Check font dimension limits
-Content-Language: en-US
-To:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        gregkh@linuxfoundation.org, Daniel Vetter <daniel@ffwll.ch>,
-        Helge Deller <deller@gmx.de>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
-References: <20230126004911.869923511@ens-lyon.org>
- <20230126004921.616264824@ens-lyon.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20230126004921.616264824@ens-lyon.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20230125171159.355a770a2e34f78d7664e1f0@linux-foundation.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,44 +49,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26. 01. 23, 1:49, Samuel Thibault wrote:
-> blit_x and blit_y are uint32_t, so fbcon currently cannot support fonts
-> larger than 32x32.
+On Wed, Jan 25, 2023 at 05:11:59PM -0800, Andrew Morton wrote:
+> On Wed, 25 Jan 2023 13:44:30 +0000 Mel Gorman <mgorman@techsingularity.net> wrote:
 > 
-> The 32x32 case also needs shifting an unsigned int, to properly set bit
-> 31, otherwise we get "UBSAN: shift-out-of-bounds in fbcon_set_font",
-> as reported on
+> > Commit 7efc3b726103 ("mm/compaction: fix set skip in fast_find_migrateblock")
+> > fixed a problem where pageblocks found by fast_find_migrateblock() were
+> > ignored. Unfortunately there were numerous bug reports complaining about high
+> > CPU usage and massive stalls once 6.1 was released. Due to the severity,
+> > the patch was reverted by Vlastimil as a short-term fix[1] to -stable and
+> > is currently sitting in the Andrew's git branch mm/mm-hotfixes-unstable.
+> > 
+> > The underlying problem for each of the bugs is suspected to be the
+> > repeated scanning of the same pageblocks. This series should guarantee
+> > forward progress even with commit 7efc3b726103. More information is in
+> > the changelog for patch 4.
+> > 
+> > If this series is accepted and merged after the revert of 7efc3b726103
+> > then a "revert of the revert" will be needed.
 > 
-> http://lore.kernel.org/all/IA1PR07MB98308653E259A6F2CE94A4AFABCE9@IA1PR07MB9830.namprd07.prod.outlook.com
-> Kernel Branch: 6.2.0-rc5-next-20230124
-> Kernel config: https://drive.google.com/file/d/1F-LszDAizEEH0ZX0HcSR06v5q8FPl2Uv/view?usp=sharing
-> Reproducer: https://drive.google.com/file/d/1mP1jcLBY7vWCNM60OMf-ogw-urQRjNrm/view?usp=sharing
+> If we drop Vlastimil's reversion and apply this, the whole series
+> should be cc:stable and it isn't really designed for that.
 > 
-> Reported-by: Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
-> Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+> So I think either
 > 
-> Index: linux-6.0/drivers/video/fbdev/core/fbcon.c
-> ===================================================================
-> --- linux-6.0.orig/drivers/video/fbdev/core/fbcon.c
-> +++ linux-6.0/drivers/video/fbdev/core/fbcon.c
-> @@ -2489,9 +2489,12 @@ static int fbcon_set_font(struct vc_data
->   	    h > FBCON_SWAP(info->var.rotate, info->var.yres, info->var.xres))
->   		return -EINVAL;
->   
-> +	if (font->width > 32 || font->height > 32)
-> +		return -EINVAL;
-> +
->   	/* Make sure drawing engine can handle the font */
-> -	if (!(info->pixmap.blit_x & (1 << (font->width - 1))) ||
-> -	    !(info->pixmap.blit_y & (1 << (font->height - 1))))
-> +	if (!(info->pixmap.blit_x & (1U << (font->width - 1))) ||
-> +	    !(info->pixmap.blit_y & (1U << (font->height - 1))))
+> a) drop Vlastimil's reversion and persuade Mel to send us a minimal
+>    version of patch #4 for -stable consumption.  Patches 1-3 of this
+>    series come later.
+> 
+> b) go ahead with Vlastimil's revert for -stable, queue up this
+>    series for 6.3-rc1 and redo the original "fix set skip in
+>    fast_find_migrateblock" some time in the future.
+> 
+> If we go with b) then the Fixes: tag in "[PATCH 4/4] mm, compaction:
+> Finish pageblocks on complete migration failure" is inappropriate -
+> fixing a reverted commit which Vlastimil's revert already fixed.
+> 
+> I'll plan on b) for now.
 
-So use BIT() properly then? That should be used in all these shifts 
-anyway. Exactly to avoid UB.
+I think plan b) is more appropriate because Vlastimil's revert contains
+useful information on this class of bug that may be useful again in the
+future. There is no harm preserving that in both the mainline and -stable
+git history.
 
-thanks,
+The series worked for me but that was a limited test case and high CPU
+usage bugs could crop up again in 6.2. If such bugs show up then reverting
+("mm/compaction: fix set skip in fast_find_migrateblock") becomes a
+short-term option again while it is analysed.
+
+I disagee that the Fixes tag is inappropriate. Commit 7efc3b726103 is simply
+a messenger that fast_find_migrateblock() was broken and while it fixed one
+problem, it triggered many more because the fix was incomplete. Vlastimil's
+fix was a short-term "fix" to mitigate the fallout until a proper fix was
+available. This series is a more comprehensive fix but both are "Fixes"
+to commit 7efc3b726103 in terms of what kernel has very obvious problems
+that needs to be fixed. Any kernel including 7efc3b726103 should include
+either Vlastimil's fix, mine or both if git history is being preserved by the
+backports. While there is an older commit that broke fast_find_migrateblock,
+most people simply didn't notice where as commit 7efc3b726103 was noticeable
+by a number of people very quickly.
+
+However, if you disagree then the appropriate fixes would be
+
+Fixes: 70b44595eafe9 ("mm, compaction: use free lists to quickly locate a migration source")
+
+That would at least indicate to anyone doing the backport that they need
+to ensure the backport does not have any hidden dependencies.
+
 -- 
-js
-suse labs
-
+Mel Gorman
+SUSE Labs
