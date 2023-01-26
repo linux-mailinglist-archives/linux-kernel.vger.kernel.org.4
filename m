@@ -2,158 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D6867C5C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA95667C5C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbjAZIbK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 26 Jan 2023 03:31:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
+        id S235506AbjAZIch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 03:32:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjAZIbI (ORCPT
+        with ESMTP id S229491AbjAZIcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 03:31:08 -0500
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AD15E524
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 00:31:03 -0800 (PST)
-Received: by mail-qv1-f54.google.com with SMTP id h10so973419qvq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 00:31:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=to+fldf5qEU+Y7LXRvwtu7CdGLcmlM0u1zfd5smQEg4=;
-        b=omzVyMxzspu8M6Q3RfDiy875M8EuwkEvYU1/y1BTDiOTE+Q5m+lZdN0V9f+HYYK83X
-         T2+SFXQm/zDUBXCoGhrLbks7scdr1Ptcosul4fiHildTKJ8iOVty5W6g5Q1is4YbWPba
-         fOlPUwD+CB2LJLhHThhAMLwNXrnrR5UvzZKk5gSYFGHZZKiuNPBVuk8t3234+8mBpxLf
-         loH7qZ44XLKK3GI87kmJ+nvnuZxt/kUJVA+UT9soUzKSrD7inBnT6K/+GoNMwlLhgK3o
-         zEG/Jn30xU93NTPIvy859ENFFR/I2kEerfOFwiFiMnTBnWDQ7jbRndxyjfGeoOJJ5Coz
-         Cx7g==
-X-Gm-Message-State: AFqh2kr2FlOssoAsE9RjJ0k2j72TWy3HUNcSrK6EWU6V5ufe/dJB6XmW
-        5ISeXOG7dDR5bjnABr4uvC8ZzogLuB5YLg==
-X-Google-Smtp-Source: AMrXdXvzh5dwLy/QyZFiq8kEZVNFXOeAmMHWfBXKqNW6zSdw2QU6c4WAqKJztZidNmfJFDEqgAcUTw==
-X-Received: by 2002:a0c:ef01:0:b0:535:53eb:d1cc with SMTP id t1-20020a0cef01000000b0053553ebd1ccmr34096063qvr.6.1674721862812;
-        Thu, 26 Jan 2023 00:31:02 -0800 (PST)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id i1-20020a37b801000000b00702d1c6e7bbsm507566qkf.130.2023.01.26.00.31.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 00:31:02 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-5063029246dso13783337b3.6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 00:31:02 -0800 (PST)
-X-Received: by 2002:a81:68c4:0:b0:506:6059:e949 with SMTP id
- d187-20020a8168c4000000b005066059e949mr693905ywc.502.1674721861951; Thu, 26
- Jan 2023 00:31:01 -0800 (PST)
+        Thu, 26 Jan 2023 03:32:35 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C605E524;
+        Thu, 26 Jan 2023 00:32:32 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 24569E000C;
+        Thu, 26 Jan 2023 08:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1674721951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1wuQdqFAcUQPL0i7vCvSEJPExBzl3opiq9wKUTSIV/w=;
+        b=oz5ZwIYo2vwegLw/vSHCzDPVdGn7UZUisu9n4UdR0eJHVkIhdCCMQ2Il0qSA32KjiE/22Q
+        3PAnRffhdy/ovQQFdm0EKIbo0ZoxPTrszE68I6okyQUOAaJ6MeCgU3Dqbzt1+x3JHGBEkW
+        ptKHOQ2X69KKBwLFOpE+TbBiXpTljaEqOr8ltmxW0T4CYFylNn9ntuV6q6yhZ3aloKmCh1
+        QpmqM+uy1KE21qwnKOEgSzDx3hvd+0ddmVhJdDVFSV7YvKoK9z5SjmGZmarSU48bGMbJ8+
+        mO5LC6mxkyFjUnNYUWQlxjkWRCKgYJzbiQ14aBHqc3wD4aYoCdgQ0vdH4BDRZg==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v4 00/10] Add the PowerQUICC audio support using the QMC
+Date:   Thu, 26 Jan 2023 09:32:12 +0100
+Message-Id: <20230126083222.374243-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230125083248.1305270-1-victor.liu@nxp.com> <CAMuHMdU0KaRyP0qxJLwit1G=7zMr1k5wpCkG-wD31958mrKRWg@mail.gmail.com>
- <7c84cbd1808dc89f9ddaece13f846c4fbd12935a.camel@nxp.com>
-In-Reply-To: <7c84cbd1808dc89f9ddaece13f846c4fbd12935a.camel@nxp.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 26 Jan 2023 09:30:50 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWCBNctQq8Bg0DQFC-Ap_JRzoMtAFozfaB1OssE7Lr6Bg@mail.gmail.com>
-Message-ID: <CAMuHMdWCBNctQq8Bg0DQFC-Ap_JRzoMtAFozfaB1OssE7Lr6Bg@mail.gmail.com>
-Subject: Re: [PATCH] driver: bus: simple-pm-bus: Add Freescale i.MX8qm/qxp CSR
- compatible strings
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux-imx@nxp.com, Rob Herring <robh@kernel.org>,
-        Lee Jones <lee@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liu,
+Hi,
 
-On Thu, Jan 26, 2023 at 3:55 AM Liu Ying <victor.liu@nxp.com> wrote:
-> On Wed, 2023-01-25 at 10:05 +0100, Geert Uytterhoeven wrote:
-> > On Wed, Jan 25, 2023 at 9:31 AM Liu Ying <victor.liu@nxp.com> wrote:
-> > > Freescale i.MX8qm/qxp CSR module matches with what the simple power
-> > > managed bus driver does, considering it needs an IPG clock to be
-> > > enabled before accessing it's child devices, the child devices need
-> > > to be populated by the CSR module and the child devices' power
-> > > management operations need to be propagated to their parent
-> > > devices.
-> > > Add the CSR module's compatible strings to simple_pm_bus_of_match[]
-> > > table to support the CSR module.
-> > >
-> > > Suggested-by: Rob Herring <robh@kernel.org>
-> > > Suggested-by: Lee Jones <lee@kernel.org>
-> > > Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> >
-> > Thanks for your patch!
->
-> Thanks for your review!
->
-> >
-> > > ---
-> > > The CSR module's dt-binding documentation can be found at
-> > > Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.yaml.
-> > >
-> > > Suggested by Rob and Lee in this thread:
-> > >
-> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchwork.kernel.org%2Fproject%2Flinux-arm-kernel%2Fpatch%2F20221017075702.4182846-1-victor.liu%40nxp.com%2F&data=05%7C01%7Cvictor.liu%40nxp.com%7C3fa98ff270534078019508dafeb34b10%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638102343312884116%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=zm8Z5gWt9yGXakYlxopUfZKLMUJRWTxq1kWHLyqhyww%3D&reserved=0
-> > >
-> > >  drivers/bus/simple-pm-bus.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/drivers/bus/simple-pm-bus.c b/drivers/bus/simple-pm-
-> > > bus.c
-> > > index 7afe1947e1c0..4a7575afe6c6 100644
-> > > --- a/drivers/bus/simple-pm-bus.c
-> > > +++ b/drivers/bus/simple-pm-bus.c
-> > > @@ -120,6 +120,8 @@ static const struct of_device_id
-> > > simple_pm_bus_of_match[] = {
-> > >         { .compatible = "simple-mfd",   .data = ONLY_BUS },
-> > >         { .compatible = "isa",          .data = ONLY_BUS },
-> > >         { .compatible = "arm,amba-bus", .data = ONLY_BUS },
-> > > +       { .compatible = "fsl,imx8qm-lvds-csr", },
-> > > +       { .compatible = "fsl,imx8qxp-mipi-lvds-csr", },
-> >
-> > I did read the thread linked above, and I still think you should just
-> > add "simple-pm-bus" to the compatible value in DTS, so no driver
-> > change
-> > is needed, cfr.
-> > Documentation/devicetree/bindings/bus/renesas,bsc.yaml.
->
-> This means that i.MX8qm/qxp CSR module dt-binding documentation needs
-> to be changed.  I'd like to know how Rob and Krzysztof think about
-> that.
->
-> >
-> > If that doesn't work due to DT binding constraints, the latter should
-> > be fixed.
->
-> Adding "simple-pm-bus" to the compatible value in DTS doesn't work,
-> because "simple-mfd" is matched first and "ONLY_BUS" is set for
+This series adds support for audio using the QMC controller available in
+some Freescale PowerQUICC SoCs.
 
-Is that because you have both "simple-mfd" and "simple-pm-bus",
-and the former is listed first in DTS?
-Does it work if you change the order?
+This series contains three parts in order to show the different blocks
+hierarchy and their usage in this support.
 
-> "simple-mfd".  s/simple-mfd/simple-pm-bus/ for the compatbile value in
-> DTS does work, but it means that fsl,imx8qxp-csr.yaml needs to be
-> changed and moved from mfd directory to bus directory...
+The first one is related to TSA (Time Slot Assigner).
+The TSA handles the data present at the pin level (TDM with up to 64
+time slots) and dispatchs them to one or more serial controller (SCC).
 
-BTW, originally I didn't want to introduce "simple-pm-bus" at all,
-and make it just call pm_runtime_enable() for "simple-bus" (PM is
-everywhere anyway), but that was rejected...
+The second is related to QMC (QUICC Multichannel Controller).
+The QMC handles the data at the serial controller (SCC) level and splits
+again the data to creates some virtual channels.
 
-Gr{oetje,eeting}s,
+The last one is related to the audio component (QMC audio).
+It is the glue between the QMC controller and the ASoC component. It
+handles one or more QMC virtual channels and creates one DAI per QMC
+virtual channels handled.
 
-                        Geert
+Compared to the previous iteration
+  https://lore.kernel.org/linux-kernel/20230113103759.327698-1-herve.codina@bootlin.com/
+this v4 series mainly:
+  - updates code comment format (feedback received on v2 series and
+    forgot to update in v3),
+  - fixes bindings,
+  - Replaces the fsl,tsa phandle and the fsl,tsa-cell-id property by a
+    fsl,tsa-serial phandle and update the TSA related API,
+  - Adds some missing lock in tsa_serial_connect() and
+    tsa_serial_disconnect().
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Best regards,
+Herve Codina
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Changes v3 -> v4
+  - patches 2, 6 and 9
+    Update code comment format.
+
+  - patch 1
+    Fix some description formats.
+    Add 'additionalProperties: false' in subnode.
+    Move fsl,mode to fsl,diagnostic-mode.
+    Change clocks and clock-names properties.
+    Add '#serial-cells' property related to the newly introduced
+    fsl,tsa-serial phandle.
+
+  - patch 2
+    Move fsl,mode to fsl,diagnostic-mode.
+    Replace the	fsl,tsa phandle and the	fsl,tsa-cell-id	property by a
+    fsl,tsa-serial phandle and update the related API.
+    Add missing locks.
+
+  - patch 5
+    Fix some description format.
+    Replace the fsl,tsa phandle and the fsl,tsa-cell-id property by a
+    fsl,tsa-serial phandle.
+    Rename fsl,mode to fsl,operational-mode and update its description.
+
+  - patch 6
+    Replace the	fsl,tsa phandle and the	fsl,tsa-cell-id	property by a
+    fsl,tsa-serial phandle and use the TSA updated API.
+    Rename fsl,mode to fsl,operational-mode.
+
+  - patch 8
+    Add 'Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>'
+
+Changes v2 -> v3
+  - All bindings
+    Rename fsl-tsa.h to fsl,tsa.h
+    Add missing vendor prefix
+    Various fixes (quotes, node names, upper/lower case)
+
+  - patches 1 and 2 (TSA binding specific)
+    Remove 'reserved' values in the routing tables
+    Remove fsl,grant-mode
+    Add a better description for 'fsl,common-rxtx-pins'
+    Fix clocks/clocks-name handling against fsl,common-rxtx-pins
+    Add information related to the delays unit
+    Removed FSL_CPM_TSA_NBCELL
+    Fix license in binding header file fsl,tsa.h
+
+  - patches 5 and 6 (QMC binding specific)
+    Remove fsl,cpm-command property
+    Add interrupt property constraint
+
+  - patches 8 and 9 (QMC audio binding specific)
+    Remove 'items' in compatible property definition
+    Add missing 'dai-common.yaml' reference
+    Fix the qmc_chan phandle definition
+
+  - patch 2 and 6
+    Use io{read,write}be{32,16}
+    Change commit subjects and logs
+
+  - patch 4
+    Add 'Acked-by: Christophe Leroy <christophe.leroy@csgroup.eu>'
+
+Changes v1 -> v2:
+  - patch 2 and 6
+    Fix kernel test robot errors
+
+  - other patches
+    No changes
+
+Herve Codina (10):
+  dt-bindings: soc: fsl: cpm_qe: Add TSA controller
+  soc: fsl: cpm1: Add support for TSA
+  MAINTAINERS: add the Freescale TSA controller entry
+  powerpc/8xx: Use a larger CPM1 command check mask
+  dt-bindings: soc: fsl: cpm_qe: Add QMC controller
+  soc: fsl: cmp1: Add support for QMC
+  MAINTAINERS: add the Freescale QMC controller entry
+  dt-bindings: sound: Add support for QMC audio
+  ASoC: fsl: Add support for QMC audio
+  MAINTAINERS: add the Freescale QMC audio entry
+
+ .../bindings/soc/fsl/cpm_qe/fsl,qmc.yaml      |  167 ++
+ .../bindings/soc/fsl/cpm_qe/fsl,tsa.yaml      |  261 +++
+ .../bindings/sound/fsl,qmc-audio.yaml         |  117 ++
+ MAINTAINERS                                   |   25 +
+ arch/powerpc/platforms/8xx/cpm1.c             |    2 +-
+ drivers/soc/fsl/qe/Kconfig                    |   23 +
+ drivers/soc/fsl/qe/Makefile                   |    2 +
+ drivers/soc/fsl/qe/qmc.c                      | 1533 +++++++++++++++++
+ drivers/soc/fsl/qe/tsa.c                      |  864 ++++++++++
+ drivers/soc/fsl/qe/tsa.h                      |   42 +
+ include/dt-bindings/soc/fsl,tsa.h             |   13 +
+ include/soc/fsl/qe/qmc.h                      |   71 +
+ sound/soc/fsl/Kconfig                         |    9 +
+ sound/soc/fsl/Makefile                        |    2 +
+ sound/soc/fsl/fsl_qmc_audio.c                 |  735 ++++++++
+ 15 files changed, 3865 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,tsa.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
+ create mode 100644 drivers/soc/fsl/qe/qmc.c
+ create mode 100644 drivers/soc/fsl/qe/tsa.c
+ create mode 100644 drivers/soc/fsl/qe/tsa.h
+ create mode 100644 include/dt-bindings/soc/fsl,tsa.h
+ create mode 100644 include/soc/fsl/qe/qmc.h
+ create mode 100644 sound/soc/fsl/fsl_qmc_audio.c
+
+-- 
+2.39.0
+
