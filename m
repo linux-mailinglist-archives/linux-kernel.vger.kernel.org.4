@@ -2,82 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E858C67D81E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86A567D821
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjAZWBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:01:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S233110AbjAZWCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbjAZWBr (ORCPT
+        with ESMTP id S231490AbjAZWCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:01:47 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4956BBCE
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:01:46 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so6748101pjq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:01:46 -0800 (PST)
+        Thu, 26 Jan 2023 17:02:13 -0500
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BD273753;
+        Thu, 26 Jan 2023 14:02:12 -0800 (PST)
+Received: by mail-ua1-x929.google.com with SMTP id g24so657228uap.13;
+        Thu, 26 Jan 2023 14:02:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5JbhjLtl1lcS3CAhxrq5yfKZFfaH2pnSCNdns3oouJU=;
-        b=Q6o4bwROJ1kEixGJhUp0jqak9FsRexuHEWJB31REAWu+8yFk0Z/nylWHAMza2ORvw/
-         ZVv96n0hUrKl0qOeoOLF1G/kFrDFQjLxhap4278oZhDrMQE6s5RX0S3cfvTS7zd3xzFw
-         hGkqVr5qrw/dXSOqvq6RqqbwJjiq45dSI4B2M8WOrKS6ic4mutYoL4uPlTaCevulaVEk
-         +NB3nQTyVh9iHcEYuE7nmEo+2xxSmSWlwp4zCLW2JLsm9zqHf6TsbJI2xmbjveJXXj3M
-         fnYwobI0oia6T6FqjmIsdbJrfyH2Kk/wLLELWlLNLdpWh/kFkrOB0jsyeMFp1bL1hZNe
-         xn8Q==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gPE5wsw9kTeJMIVBRkeaoA5Y8AeOXAR5lGybwcnctWE=;
+        b=DfqC/2DOxwVQbKn//wJRMFPleK1s2QjM3CIffS6psNUB5fnOyY0Wo1pcg2doGk/7uy
+         NvS0jdIcGBl51AMY6GlQrXPExCT4R4wjed/8Rg1CB9YwaycWDfFD7AvLZMjYh0eDvpv+
+         lKvD8w64DwkRWSsKQWZzU26cdrQ12CYQHA/G0QIlok9eMEUHOU1Gp/QALXPXvj1Vh6Jd
+         uTS0R9whpSpTvnL6plrWqPp8MomzUmgo71DSGo7UvGUTfBtiZ4MwCpCC2EyF2UboLra6
+         5g+VfampZOgTENg/iBNJYbGhQ5YxT/36soo8ut8X+aEFT394Wsg027DSMQrVGYQZinLs
+         CC6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5JbhjLtl1lcS3CAhxrq5yfKZFfaH2pnSCNdns3oouJU=;
-        b=0kd8Cf6ehu5IyxsbeiUDo/aMl6fRvWqsvIYEi79diDdzp9HAxydmez5tglT0jg8ame
-         P/l8YcoMFD3xylwm5gS19V/z09fuHmzv4wHyE4Ae5a4VJofiF2kIu5J2bp9wnri+8PX7
-         ayDSh226+0uaWyOiwBXnAbm40szegtmZlh9VO1ZNOUJq0vH3K1Zy3egvuEDrSDWz+Umr
-         Bb7zRWeXrKBj/IZyZfWnSY7fc0+FSw7oJZKHkbLwmJG4/oaDwjq6k2LInQb9H7KajDUC
-         xFD1fcRhGoN4tbC2gW401US+HQsfdPOynql3JiWnHvXWF2H3gWDcWBxgIBUXCfKRy6Zj
-         US/Q==
-X-Gm-Message-State: AO0yUKXbOJUxoiRmnOnhESIIhop3gEnsSU1ESoxQ5HdkQW5qCySRPJzE
-        d3sRk2Y8otrkejTJhRPDX71bnoE7Gpxa3yMprt4=
-X-Google-Smtp-Source: AK7set8tT2B/+o6HazEeWoCdSUXhCPVyrNgyq7+ZObjca9q8KDKZecctFwPiXh//NeBg9EXpFDM/pw==
-X-Received: by 2002:a05:6a20:4c08:b0:a4:efde:2ed8 with SMTP id fm8-20020a056a204c0800b000a4efde2ed8mr1211129pzb.0.1674770505875;
-        Thu, 26 Jan 2023 14:01:45 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id nm16-20020a17090b19d000b0022c0622cc16sm3824842pjb.54.2023.01.26.14.01.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 14:01:45 -0800 (PST)
-Date:   Thu, 26 Jan 2023 22:01:41 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>
-Subject: Re: [PATCH v11 030/113] KVM: x86/mmu: Replace hardcoded value 0 for
- the initial value for SPTE
-Message-ID: <Y9L4RQXuTJ4RTVcF@google.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
- <dee30f0562d8be0102547d8eb9fc77736eae679d.1673539699.git.isaku.yamahata@intel.com>
- <20230125112434.0000512a@gmail.com>
- <Y9Fj/vgPEzfU1eof@google.com>
- <0be55c001aa1a538a02055aa244c655262228ce4.camel@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gPE5wsw9kTeJMIVBRkeaoA5Y8AeOXAR5lGybwcnctWE=;
+        b=v86+RD2W2TUIjBDorvRVBrp2YiHI2SSVXz9PaCpI0Cb9frqD7fi0K62n4D1SNecf47
+         ao1igN70uQIRHzFCIuNshyw1iVSX9iy+aCg22n/3ZHgnROqKKXX9+Ku7ctYXtv33yfDK
+         lFYLyWe+tJEPdAnejryJgfLrwktLNeUcPeMJ3u0QbPXgxkhqIIqvWPdzBfVlhWw8pD9X
+         nVwh+9zFbzNmJXtpVFMw0vdLlRWPyxmTenrwI+s4I99rrEP5xqGfc5VrZIcg//1euPNb
+         57WsDosr40m92BZv7TN7mUMWzRML6BB5BtG/Uazc7nzNNOM1G4qYnMhIj37521kzrFG9
+         BrPA==
+X-Gm-Message-State: AFqh2krly3xEI5Es+aiJsMUfAiNlkU8M74xJQu99uY76VcJHGcmsTTt+
+        OFeuN9AmJk07bXRUog2rT9cFyuUeXMb9YAnJ8j7g5lX7OOE=
+X-Google-Smtp-Source: AMrXdXsAy15hc1gNCU5h1j26Zz4zxtjROSobsIhzRVncLSmFvnUew38RXAgIc/4gUO6deDaukULMkgZP4YcicgktE5M=
+X-Received: by 2002:ab0:2990:0:b0:634:2961:6db with SMTP id
+ u16-20020ab02990000000b00634296106dbmr3193529uap.22.1674770531062; Thu, 26
+ Jan 2023 14:02:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0be55c001aa1a538a02055aa244c655262228ce4.camel@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
+ <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
+ <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
+ <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
+ <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
+ <Y8tcEtr8Kl3p4qtA@kernel.org> <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
+ <5fb9193be57d22131feecf8b39dffbb03af3f60a.camel@linux.ibm.com>
+ <Y9K2mOsmB1+CFk9l@kernel.org> <CAFftDdqq-eeryycv_11m=-1+aR=cgCUU7C_BFDrmYRwFF13i5w@mail.gmail.com>
+ <Y9LxDYYEp0qTfhqN@kernel.org>
+In-Reply-To: <Y9LxDYYEp0qTfhqN@kernel.org>
+From:   William Roberts <bill.c.roberts@gmail.com>
+Date:   Thu, 26 Jan 2023 16:01:55 -0600
+Message-ID: <CAFftDdoSg-kF6fd2Jyz5UuP1pG_bUe0kYy+G9Y1_nfoUkkpW4g@mail.gmail.com>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,44 +86,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023, Huang, Kai wrote:
-> On Wed, 2023-01-25 at 17:22 +0000, Sean Christopherson wrote:
-> > I agree that handling this in the common code would be cleaner, but repurposing
-> > gfp_zero gets kludgy because it would require a magic value to say "don't initialize
-> > the data", e.g. x86's mmu_shadowed_info_cache isn't pre-filled.
+On Thu, Jan 26, 2023 at 3:30 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Thu, Jan 26, 2023 at 11:32:22AM -0600, William Roberts wrote:
+> > On Thu, Jan 26, 2023 at 11:21 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > >
+> > > On Tue, Jan 24, 2023 at 07:38:04AM -0500, James Bottomley wrote:
+> > > > On Mon, 2023-01-23 at 11:48 -0600, William Roberts wrote:
+> > > > > On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org>
+> > > > > wrote:
+> > > > > >
+> > > > > > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
+> > > > > > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
+> > > > > > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
+> > > > > > > > <bill.c.roberts@gmail.com> wrote:
+> > > > > > > >
+> > > > > > > > > What's the use case of using the creation data and ticket in
+> > > > > > > > > this context? Who gets the creationData and the ticket?
+> > > > > > > > > Could a user supplied outsideInfo work? IIRC I saw some
+> > > > > > > > > patches flying around where the sessions will get encrypted
+> > > > > > > > > and presumably correctly as well. This would allow the
+> > > > > > > > > transfer of that outsideInfo, like the NV Index PCR value to
+> > > > > > > > > be included and integrity protected by the session HMAC.
+> > > > > > > >
+> > > > > > > > The goal is to ensure that the key was generated by the kernel.
+> > > > > > > > In the absence of the creation data, an attacker could generate
+> > > > > > > > a hibernation image using their own key and trick the kernel
+> > > > > > > > into resuming arbitrary code. We don't have any way to pass
+> > > > > > > > secret data from the hibernate kernel to the resume kernel, so
+> > > > > > > > I don't think there's any easy way to do it with outsideinfo.
+> > > > > > >
+> > > > > > > Can we go back again to why you can't use locality?  It's exactly
+> > > > > > > designed for this since locality is part of creation data.
+> > > > > > > Currently everything only uses locality 0, so it's impossible for
+> > > > > > > anyone on Linux to produce a key with anything other than 0 in
+> > > > > > > the creation data for locality.  However, the dynamic launch
+> > > > > > > people are proposing that the Kernel should use Locality 2 for
+> > > > > > > all its operations, which would allow you to distinguish a key
+> > > > > > > created by the kernel from one created by a user by locality.
+> > > > > > >
+> > > > > > > I think the previous objection was that not all TPMs implement
+> > > > > > > locality, but then not all laptops have TPMs either, so if you
+> > > > > > > ever come across one which has a TPM but no locality, it's in a
+> > > > > > > very similar security boat to one which has no TPM.
+> > > > > >
+> > > > > > Kernel could try to use locality 2 and use locality 0 as fallback.
+> > > > >
+> > > > > I don't think that would work for Matthew, they need something
+> > > > > reliable to indicate key provenance.
+> > > >
+> > > > No, I think it would be good enough: locality 0 means anyone (including
+> > > > the kernel on a machine which doesn't function correctly) could have
+> > > > created this key.  Locality 2 would mean only the kernel could have
+> > > > created this key.
+> > > >
+> > > > By the time the kernel boots and before it loads the hibernation image
+> > > > it will know the answer to the question "does my TPM support locality
+> > > > 2", so it can use that in its security assessment: if the kernel
+> > > > supports locality 2 and the key wasn't created in locality 2 then
+> > > > assume an attack.  Obviously, if the kernel doesn't support locality 2
+> > > > then the hibernation resume has to accept any old key, but that's the
+> > > > same as the situation today.
+> > >
+> > > This sounds otherwise great to me but why bother even allowing a
+> > > machine with no-locality TPM to be involved with hibernate? Simply
+> > > detect locality support during driver initialization and disallow
+> > > sealed hibernation (or whatever the feature was called) if localities
+> > > were not detected.
+> > >
+> > > I get supporting old hardware with old features but it does not make
+> > > sense to maintain new features with hardware, which clearly does not
+> > > scale, right?
+> > >
+> > > BR, Jarkko
+> >
+> > Here's a thought, what if we had a static/cmd line configurable
+> > no-auth NV Index and writelocked it with the expected key information,
+> > name or something. I guess the problem is atomicity with write/lock,
+> > but can't the kernel lock out all other users?
+> >
+> > An attacker would need to issue tpm2_startup, which in this case would DOS
+> > the kernel in both scenarios. If an attacker already wrote and locked the NV
+> > index, that would also be a DOS. If they already wrote it, the kernel simply
+> > writes whatever they want. Is there an attack I am missing?
+> >
+> > I guess the issue here would be setup, since creating the NV index requires
+> > hierarchy auth, does the kernel have platform auth or is that already shut down
+> > by firmware (I can't recall)? A null hierarchy volatile lockable index would be
+> > nice for this, too bad that doesn't exist.
+>
+> How do you see this would better when compared to finding a way to use
+> locality, which could potentially be made to somewhat simple to setup
+> (practically zero config)?
+>
 
-...
+I never said it was better, I said here is a thought for discussion.
+If we had to support older hardware (I could care less about things
+that don't support localities, but some might not), this could be an
+avenue to support them without walling off a PCR. I pointed out the
+downsides, and argument could be made that when localities is not
+supported then walling off PCR23 is the better approach if older
+hardware is an issue. This all hinges on do we care about things
+that don't support multiple localities. I don't, im for if you have locality
+support you get the feature else you don't.
 
-> > @@ -400,6 +405,13 @@ int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity,
-> >  		if (WARN_ON_ONCE(!capacity))
-> >  			return -EIO;
-> >  
-> > +		/*
-> > +		 * Custom init values can be used only for page allocations,
-> > +		 * and obviously conflict with __GFP_ZERO.
-> > +		 */
-> > +		if (WARN_ON_ONCE(mc->init_value && (mc->kmem_cache || mc->gfp_zero)))
-> > +			return -EIO;
-> > +
-> >  		mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
-> >  		if (!mc->objects)
-> >  			return -ENOMEM;
-> > 
-> > base-commit: 503f0315c97739d3f8e645c500d81757dfbf76be
-> 
-> init_value and gfp_zone is kinda redundant.  How about removing gfp_zero
-> completely?
-> 
-> 	mmu_memory_cache_alloc_obj(...)
-> 	{
-> 		...
-> 		if (!mc->init_value)
-> 			gfp_flags |= __GFP_ZERO;
-> 		...
-> 	}
-> 
-> And in kvm_mmu_create() you initialize all caches' init_value explicitly.
 
-No, as mentioned above there's also a "don't initialize the data" case.  Leaving
-init_value=0 means those users would see unnecessary zeroing, and again I don't
-want to use a magic value to say "don't initialize".
+> BR, Jarkko
