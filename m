@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB01B67C39B
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 04:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BAD167C39C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 04:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbjAZDeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 22:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
+        id S236458AbjAZDeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 22:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236248AbjAZDeP (ORCPT
+        with ESMTP id S236339AbjAZDeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 22:34:15 -0500
+        Wed, 25 Jan 2023 22:34:17 -0500
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D27E46D42;
-        Wed, 25 Jan 2023 19:34:10 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id EBFE75C05BC;
-        Wed, 25 Jan 2023 22:34:09 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A91577CB
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 19:34:12 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 443E25C05B6;
+        Wed, 25 Jan 2023 22:34:12 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 25 Jan 2023 22:34:09 -0500
+  by compute5.internal (MEProxy); Wed, 25 Jan 2023 22:34:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         invisiblethingslab.com; h=cc:cc:content-transfer-encoding:date
         :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1674704049; x=1674790449; bh=x0BohMGPEmmAQv3ZigspASmDgPSDsM1UcU2
-        Bewuui3w=; b=shU7A7QoonmUIxllylGbEv6EGhkh3ywZhyPtFTIJi9Cge9Hx9Ls
-        UhlSQF2iUaG6BwKSu3h0FPwfliYXD4a8HP87jwCImKMcJA14E7ZDcDYPkNl6ZG2T
-        /n75zWlQAsBnaIMRX/7uFYTPNKL20RcmCeuHCmZaPUBtaECY4I/yt2PIIU0+hiE+
-        XxtdD4XKor0xsD6NrdHklI+NDC27+/E/sX3Pc0+1ApGiqOr3HZnFYwEarK1lFlhq
-        1nqTlZH8mg/y2IpjNYDyDg+S3hSVjG39PXN8RAwpHOkFJeE5lzlBXn4J0NlNDdnD
-        P8ewJ4cUaysdFp2K0nPW3ddIUwVz4Zu99xQ==
+        1674704052; x=1674790452; bh=daYdDSxsQizEcNPbMbpsOlpi5qeRBNOt+Bq
+        Qaw5kD0w=; b=Gz2/2XbquxSEsRBwW3i8K6QksQx0hV7tWzYjhpzeocxqrFIM6wh
+        zdx8cHua8jpdXCnntgZk9zP1FpKjVVuxcTDVAAaIPY7uX1HET1rnYyBE/OUveR/a
+        yGltG4jXyOnqQ3XVG9O0oOamWRMfH3jkWh9CTsX8tZPb+D00NjEubF8/Tt1oKf0T
+        JZ5GQO0SLUiYtvCIPUFuvUIvYreccKY7X9UApl1p+dTZHOXZX79hcLfihRLQvAnU
+        L2LTLLdKL1eSL+Y3znx8Cu2IMujQ9I10DgzMdzuqLJO7T/MDOGnT80u2FU12KGEv
+        qRtd/wPKUG+HAcJ8mr/1iDlcnqC4Fitaq+g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1674704049; x=1674790449; bh=x0BohMGPEmmAQ
-        v3ZigspASmDgPSDsM1UcU2Bewuui3w=; b=dSggqvsLBPqOQbwC+RWEeOIhmcoRT
-        4MX2VBxayPzSZP0MIgy/eWWdbnXC+gSo9R/9PI/YLYBrhhcQliJtRtIySnOt+szp
-        3I+23QWpvJiqcCRmVtPLAIQA2zCEfK7GJQlsKg5UVFpHP/m1TliE4zdxLHC3ZXD/
-        xdg80sFRzQW4wnari/b4m7NUE3ooE2PzI0DAEw/3jL4c6LEPbGLWO1Qh9nINu0Nc
-        EzCJlclWFJMEIJKvp2dK0bI6Cy50yQYYGrkLSOa1nTVxE+khbACOxhpJwAoFGoKR
-        jPlKDmMugkqE32uOvxf2i519UuBqPi16f8y75Q4+pTT3+IvUyop08xzSA==
-X-ME-Sender: <xms:sfTRY9qpfS4unN-oG_sfX_RvAodQGAKVhiSMY08k39M5J-dC_5XI1A>
-    <xme:sfTRY_pJCZvLBMCfuhQDJfaMuCwkRI1B8N1YH7K8K641Tc_6CON6hd9bBD0DVhArj
-    KesfMoRAoHkdJA>
-X-ME-Received: <xmr:sfTRY6NzQ1HB2TzHCukYtzQq3pUswSiDndmEdvF1HlhxoKDPqEu9YMk2UqRa-IgDiYzrpARbSXMx>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedgheekucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm3; t=1674704052; x=1674790452; bh=daYdDSxsQizEc
+        NPbMbpsOlpi5qeRBNOt+BqQaw5kD0w=; b=NutHK5vzuBp6vHCz5b862NQHzoAk2
+        QPkv41LPJqzDVYP/LpUDEPi9xtlw73q09xZRZiPm8QzFFgdDD69UZ0AQIvD6Iyin
+        85LXriSm4s570MdKkyAUDRygNHx6uNmuyWaozpY90SnPKK/peQWaQr71aWbms5PT
+        ag17AqsLTL9bUI5y9LRTfpZfB8o9LGxhaklz2PXkKYLw5hhUv7mhxObZ64ZayGhw
+        XtUcsfqkhf+tG8itv9TK6QGxQPMDn4XfaCF3jRe5rvChK1DlDDmx+VOtO7lTXCnD
+        L81I4VkrBnt7l1Rd6zkgQuOxrWiivMc9yxG8JFCUu2gqLnxg5gvv01PTw==
+X-ME-Sender: <xms:tPTRYzwH5BuEHmVC0eMdTGBBHZMvxt9uWC_rqOGS_ycgsaVj53vQiQ>
+    <xme:tPTRY7QY3bnvHhI3rshGztUECyV2lnxUGYKP3bTTB1P8CT0b0uLuAcpcxQKuARE_B
+    AJKSl9rZB4DZCM>
+X-ME-Received: <xmr:tPTRY9WUpZzy3Z8Ck8htOkPkbtAbgBnETUbKfLGw8gZ6vwGJ1SKYiq7n2texQZKLlDNbwtPj-NZx>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedgheelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgvmhhi
@@ -56,22 +56,22 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedgheekucetufdoteggod
     gffhhfffjeetkeelueefffetfffhtdduheetnecuvehluhhsthgvrhfuihiivgeptdenuc
     frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
     lhgrsgdrtghomh
-X-ME-Proxy: <xmx:sfTRY44axGy_vEpaydEMvuJv3aAmNQb4RtCr1eiezO13Zn9a5JkHbA>
-    <xmx:sfTRY86mhlp4thAtALntivo-41VIJ_MchsA-zeQY63SQ-FbUPbDD4A>
-    <xmx:sfTRYwi2AHClU9M9JEQY-WwJ45LWgJ0r-DjiTgzovyKW-asw3OE1hA>
-    <xmx:sfTRY8F_hhevGgA7c7I2BthT8CbLWC_HDk0LQ1hxvzObsOWYkEupng>
+X-ME-Proxy: <xmx:tPTRY9god6WZldkNb6zQxaW-zL3SwrJWz_pk8nteivz3n9Mg372ewQ>
+    <xmx:tPTRY1A40rWLm24WxN8wSZLeSpKTRKkmbS2avRGDKXaJ1MessXz1jw>
+    <xmx:tPTRY2J2wBOPbzFSk35mgosVTMij5PfJyCoi7AEB9vGO0sW2kh1BBQ>
+    <xmx:tPTRY0OGKPUER8o2RS25jDcq9Ina-GirRmaBNRGjT7lspzBd9a80CA>
 Feedback-ID: iac594737:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Jan 2023 22:34:09 -0500 (EST)
+ 25 Jan 2023 22:34:11 -0500 (EST)
 From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Jens Axboe <axboe@kernel.dk>
+To:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com
 Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
         =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 1/7] block: Support creating a struct file from a block device
-Date:   Wed, 25 Jan 2023 22:33:53 -0500
-Message-Id: <20230126033358.1880-2-demi@invisiblethingslab.com>
+        <marmarek@invisiblethingslab.com>, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 2/7] Allow userspace to get an FD to a newly-created DM device
+Date:   Wed, 25 Jan 2023 22:33:54 -0500
+Message-Id: <20230126033358.1880-3-demi@invisiblethingslab.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230126033358.1880-1-demi@invisiblethingslab.com>
 References: <20230126033358.1880-1-demi@invisiblethingslab.com>
@@ -87,172 +87,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The newly added blkdev_get_file() function allows kernel code to create
-a struct file for any block device.  The main use-case is for the
-struct file to be exposed to userspace as a file descriptor.  A future
-patch will modify the DM_DEV_CREATE_CREATE ioctl to allow userspace to
-get a file descriptor to the newly created block device, avoiding nasty
-race conditions.
+This allows creating a device-mapper device, opening it, and setting it
+to be deleted when unused in a single atomic operation.
 
 Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
 ---
- block/bdev.c           | 77 +++++++++++++++++++++++++++++++++++-------
- include/linux/blkdev.h |  5 +++
- 2 files changed, 70 insertions(+), 12 deletions(-)
+ drivers/md/dm-ioctl.c         | 67 +++++++++++++++++++++++++++++------
+ include/uapi/linux/dm-ioctl.h | 16 ++++++++-
+ 2 files changed, 72 insertions(+), 11 deletions(-)
 
-diff --git a/block/bdev.c b/block/bdev.c
-index edc110d90df4041e7d337976951bd0d17525f1f7..09cb5ef900ca9ad5b21250bb63e64cc2a79f9289 100644
---- a/block/bdev.c
-+++ b/block/bdev.c
-@@ -459,10 +459,33 @@ static struct file_system_type bd_type = {
- struct super_block *blockdev_superblock __read_mostly;
- EXPORT_SYMBOL_GPL(blockdev_superblock);
+diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+index 36fc6ae4737a05ab53ab67a8ccee525cb5fda082..05438dedcd17b7cac470fcc5a9721d67daad4bfb 100644
+--- a/drivers/md/dm-ioctl.c
++++ b/drivers/md/dm-ioctl.c
+@@ -853,9 +853,21 @@ static void __dev_status(struct mapped_device *md, struct dm_ioctl *param)
  
-+static struct vfsmount *bd_mnt __read_mostly;
-+
-+struct file *
-+blkdev_get_file(struct block_device *bdev, fmode_t flags, void *holder)
-+{
-+	struct inode *inode;
-+	struct file *filp;
-+	int ret;
-+
-+	ret = blkdev_do_open(bdev, flags, holder);
-+	if (ret)
-+		return ERR_PTR(ret);
-+	inode = bdev->bd_inode;
-+	filp = alloc_file_pseudo(inode, bd_mnt, "[block]", flags | O_CLOEXEC, &def_blk_fops);
-+	if (IS_ERR(filp)) {
-+		blkdev_put(bdev, flags);
-+	} else {
-+		filp->f_mapping = inode->i_mapping;
-+		filp->f_wb_err = filemap_sample_wb_err(filp->f_mapping);
-+	}
-+	return filp;
-+}
-+EXPORT_SYMBOL(blkdev_get_file);
-+
- void __init bdev_cache_init(void)
+ static int dev_create(struct file *filp, struct dm_ioctl *param, size_t param_size)
  {
- 	int err;
--	static struct vfsmount *bd_mnt;
+-	int r, m = DM_ANY_MINOR;
++	int r, m = DM_ANY_MINOR, fd;
+ 	struct mapped_device *md;
  
- 	bdev_cachep = kmem_cache_create("bdev_cache", sizeof(struct bdev_inode),
- 			0, (SLAB_HWCACHE_ALIGN|SLAB_RECLAIM_ACCOUNT|
-@@ -775,7 +798,7 @@ void blkdev_put_no_open(struct block_device *bdev)
-  *
-  * Use this interface ONLY if you really do not have anything better - i.e. when
-  * you are behind a truly sucky interface and all you are given is a device
-- * number.  Everything else should use blkdev_get_by_path().
-+ * number.  Everything else should use blkdev_get_by_path() or blkdev_do_open().
-  *
-  * CONTEXT:
-  * Might sleep.
-@@ -785,9 +808,7 @@ void blkdev_put_no_open(struct block_device *bdev)
-  */
- struct block_device *blkdev_get_by_dev(dev_t dev, fmode_t mode, void *holder)
- {
--	bool unblock_events = true;
- 	struct block_device *bdev;
--	struct gendisk *disk;
- 	int ret;
- 
- 	ret = devcgroup_check_permission(DEVCG_DEV_BLOCK,
-@@ -800,18 +821,52 @@ struct block_device *blkdev_get_by_dev(dev_t dev, fmode_t mode, void *holder)
- 	bdev = blkdev_get_no_open(dev);
- 	if (!bdev)
- 		return ERR_PTR(-ENXIO);
--	disk = bdev->bd_disk;
++	/* Do not allow unknown flags */
++	if (param->flags > (2 * DM_FILE_DESCRIPTOR_FLAG - 1))
++		return -EINVAL;
 +
-+	ret = blkdev_do_open(bdev, mode, holder);
-+	if (ret) {
-+		blkdev_put_no_open(bdev);
-+		return ERR_PTR(ret);
++	/*
++	 * Do not allow creating a device that would just be destroyed
++	 * before the ioctl returns.
++	 */
++	if ((param->flags & DM_DEFERRED_REMOVE) &&
++	    !(param->flags & DM_FILE_DESCRIPTOR_FLAG))
++		return -EINVAL;
++
+ 	r = check_name(param->name);
+ 	if (r)
+ 		return r;
+@@ -867,20 +879,55 @@ static int dev_create(struct file *filp, struct dm_ioctl *param, size_t param_si
+ 	if (r)
+ 		return r;
+ 
+-	r = dm_hash_insert(param->name, *param->uuid ? param->uuid : NULL, md);
+-	if (r) {
+-		dm_put(md);
+-		dm_destroy(md);
+-		return r;
+-	}
+-
+ 	param->flags &= ~DM_INACTIVE_PRESENT_FLAG;
+ 
++	r = dm_hash_insert(param->name, *param->uuid ? param->uuid : NULL, md);
++	if (r)
++		goto out_put;
++
++	if (param->flags & DM_FILE_DESCRIPTOR_FLAG) {
++		struct block_device *bdev = dm_disk(md)->part0;
++		struct file *file;
++
++		fd = get_unused_fd_flags(O_RDWR | O_CLOEXEC);
++		if (fd < 0) {
++			r = fd;
++			goto out_put;
++		}
++
++		file = blkdev_get_file(bdev, O_RDWR|O_CLOEXEC, NULL);
++		if (IS_ERR(file)) {
++			r = PTR_ERR(file);
++			goto out_put_fd;
++		}
++
++		/*
++		 * Simulate opening the device.  The other checks in
++		 * dm_blk_open() are not necessary becuase we have a reference
++		 * to the `struct md`.
++		 */
++		atomic_inc(&md->open_count);
++		fd_install(fd, file);
++		param->file_descriptor = fd;
 +	}
 +
-+	return bdev;
-+}
-+EXPORT_SYMBOL(blkdev_get_by_dev);
++	/*
++	 * If userspace requests it, automatically delete the device
++	 * when it is no longer used
++	 */
++	if (param->flags & DM_DEFERRED_REMOVE)
++		set_bit(DMF_DEFERRED_REMOVE, &md->flags);
 +
-+/**
-+ * blkdev_do_open - open a block device by device pointer
-+ * @bdev: pointer to the device to open
-+ * @mode: FMODE_* mask
-+ * @holder: exclusive holder identifier
-+ *
-+ * Open the block device pointed to by @bdev. If @mode includes
-+ * %FMODE_EXCL, the block device is opened with exclusive access.  Specifying
-+ * %FMODE_EXCL with a %NULL @holder is invalid.  Exclusive opens may nest for
-+ * the same @holder.
-+ *
-+ * Unlike blkdev_get_by_dev() and bldev_get_by_path(), this function does not
-+ * do any permission checks.  The most common use-case is where the device
-+ * was freshly created by userspace.
-+ *
-+ * CONTEXT:
-+ * Might sleep.
-+ *
-+ * RETURNS:
-+ * Reference 0 on success, -errno on failure.
-+ */
-+int blkdev_do_open(struct block_device *bdev, fmode_t mode, void *holder) {
-+	struct gendisk *disk = bdev->bd_disk;
-+	int ret = -ENXIO;
-+	bool unblock_events = true;
- 
- 	if (mode & FMODE_EXCL) {
- 		ret = bd_prepare_to_claim(bdev, holder);
- 		if (ret)
--			goto put_blkdev;
-+			return ret;
- 	}
- 
- 	disk_block_events(disk);
- 
- 	mutex_lock(&disk->open_mutex);
--	ret = -ENXIO;
- 	if (!disk_live(disk))
- 		goto abort_claiming;
- 	if (!try_module_get(disk->fops->owner))
-@@ -842,7 +897,7 @@ struct block_device *blkdev_get_by_dev(dev_t dev, fmode_t mode, void *holder)
- 
- 	if (unblock_events)
- 		disk_unblock_events(disk);
--	return bdev;
-+	return 0;
- put_module:
- 	module_put(disk->fops->owner);
- abort_claiming:
-@@ -850,11 +905,9 @@ struct block_device *blkdev_get_by_dev(dev_t dev, fmode_t mode, void *holder)
- 		bd_abort_claiming(bdev, holder);
- 	mutex_unlock(&disk->open_mutex);
- 	disk_unblock_events(disk);
--put_blkdev:
--	blkdev_put_no_open(bdev);
--	return ERR_PTR(ret);
-+	return ret;
+ 	__dev_status(md, param);
+-
+ 	dm_put(md);
+-
+ 	return 0;
++
++out_put_fd:
++	put_unused_fd(fd);
++out_put:
++	dm_put(md);
++	dm_destroy(md);
++	return r;
  }
--EXPORT_SYMBOL(blkdev_get_by_dev);
-+EXPORT_SYMBOL(blkdev_do_open);
  
- /**
-  * blkdev_get_by_path - open a block device by name
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 43d4e073b1115e4628a001081fbf08b296d342df..04635cb5ee29d22394a34c65eb34bea4e7847d8d 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -325,6 +325,11 @@ typedef int (*report_zones_cb)(struct blk_zone *zone, unsigned int idx,
- 
- void disk_set_zoned(struct gendisk *disk, enum blk_zoned_model model);
- 
-+struct file *
-+blkdev_get_file(struct block_device *bdev, fmode_t flags, void *holder);
+ /*
+diff --git a/include/uapi/linux/dm-ioctl.h b/include/uapi/linux/dm-ioctl.h
+index 7edf335778bae1cb206f6dd4d44e9cf7fb9da35c..30a6260ed7e06ff71fad1675dd4e7f9325d752a6 100644
+--- a/include/uapi/linux/dm-ioctl.h
++++ b/include/uapi/linux/dm-ioctl.h
+@@ -136,7 +136,13 @@ struct dm_ioctl {
+ 	 * For output, the ioctls return the event number, not the cookie.
+ 	 */
+ 	__u32 event_nr;      	/* in/out */
+-	__u32 padding;
 +
-+int blkdev_do_open(struct block_device *bdev, fmode_t flags, void *holder);
-+
- #ifdef CONFIG_BLK_DEV_ZONED
++	union {
++		/* Padding for named devices */
++		__u32 padding;
++		/* For anonymous devices, this is a file descriptor. */
++		__u32 file_descriptor;
++	};
  
- #define BLK_ALL_ZONES  ((unsigned int)-1)
+ 	__u64 dev;		/* in/out */
+ 
+@@ -382,4 +388,12 @@ enum {
+  */
+ #define DM_IMA_MEASUREMENT_FLAG	(1 << 19) /* In */
+ 
++/*
++ * If set in a DM_DEV_CREATE ioctl(), sets the file_descriptor field
++ * to a valid file descriptor.  This can be combined with DM_DEFERRED_REMOVE
++ * to cause the device to be destroyed when the file descriptor is closed
++ * and is otherwise unused.
++ */
++#define DM_FILE_DESCRIPTOR_FLAG		(1 << 20) /* In */
++
+ #endif				/* _LINUX_DM_IOCTL_H */
 -- 
 Sincerely,
 Demi Marie Obenour (she/her/hers)
