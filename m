@@ -2,81 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229D967CBE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BAF67CBEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233473AbjAZNTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:19:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
+        id S236287AbjAZNVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:21:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbjAZNTq (ORCPT
+        with ESMTP id S229558AbjAZNVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:19:46 -0500
-Received: from out-57.mta0.migadu.com (out-57.mta0.migadu.com [IPv6:2001:41d0:1004:224b::39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F907EED
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:19:45 -0800 (PST)
-Date:   Thu, 26 Jan 2023 14:19:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
-        t=1674739182;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7HNJWFqealdvgKRtGiwa2+ioxixWDlOCGthcjmBJ1L8=;
-        b=kDUtiUALGgrW3oJEFAOWS/vsmw6nuZ+Kz6gPA2jNO4/mM6JuFHAOAgbttBjF4QjtccltTm
-        /8mmsdT7+V5mfTHg6nbGHmjvpKx1QZTTOfqzw2Bsz2/GmS3WkmPyRgj7vvERYFc4zEEcIF
-        ySPj47d8ImgZczOsv348w0NLK80XP6Y=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Henrik Grimler <henrik@grimler.se>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        alim.akhtar@samsung.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 0/6] ARM: dts: add mmc aliases for Exynos devices
-Message-ID: <Y9J97CU7f5qoiO/F@grimlerstat>
-References: <20230126103828.481441-1-henrik@grimler.se>
- <0807a4ab-c544-2695-67d4-df9a3b1de4cf@linaro.org>
+        Thu, 26 Jan 2023 08:21:08 -0500
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A666015C8C;
+        Thu, 26 Jan 2023 05:21:06 -0800 (PST)
+Received: by mail-ot1-f48.google.com with SMTP id k44-20020a9d19af000000b00683e176ab01so761238otk.13;
+        Thu, 26 Jan 2023 05:21:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sz002uYQx7aQhD0B5gohM0NDHRbcmYnasPC9rqjmz5M=;
+        b=kgEHLRQ4o0faOl1kSDSbKmg9PdGa8yrHE3grxinWpU9EYFtuoqune15nFhRUnnWGZ3
+         QszEZNtieqWeB35ZBr9Dj4Jws7CfEddu+7TMsKfTBFkSWMIbBabzZZTpTo9HRsxZ+gsx
+         tAnvnYXwbHNPDXLdv5MEArmm2ZT9rPZSB35DmAwPrFkKGijNL6JXVaNqCYT0tTE9q30w
+         kKGlvtLRBEFw7DzWMaQk2Ur0ohQtTYX0CK7zkAEVAxVTHUEjAVpONnYO0cuSZXi0TuTY
+         /l0hsDZ+yThXP8RmbBqw21xLvaRS3/i+aqPb6Pr6y26nT9VWsq4S0UEhsuEEjPhiU2GQ
+         +5lg==
+X-Gm-Message-State: AFqh2kqlhBxAgS2DWsz71WwYRompAez46IIlp0uSEXxZHuvQelSRgh00
+        5UDdFi9FnJtYxgghJJl4Z+dgRC77uw==
+X-Google-Smtp-Source: AMrXdXsLf+Rwe5Nz3iPI8O+/n6gSYE4xtLJAe7CrujKz0yCcKoK7JqtuNqV5sK3LB9AeY04h4SM5+Q==
+X-Received: by 2002:a9d:62d0:0:b0:684:de61:77c9 with SMTP id z16-20020a9d62d0000000b00684de6177c9mr18270353otk.30.1674739265840;
+        Thu, 26 Jan 2023 05:21:05 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z15-20020a4ade4f000000b004fb9a65daf1sm494456oot.43.2023.01.26.05.21.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 05:21:05 -0800 (PST)
+Received: (nullmailer pid 1204337 invoked by uid 1000);
+        Thu, 26 Jan 2023 13:21:04 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0807a4ab-c544-2695-67d4-df9a3b1de4cf@linaro.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Manuel Traut <manuel.traut@mt.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <20230126091825.220646-2-manuel.traut@mt.com>
+References: <20230126091825.220646-1-manuel.traut@mt.com>
+ <20230126091825.220646-2-manuel.traut@mt.com>
+Message-Id: <167473911077.1198926.3684337586701842889.robh@kernel.org>
+Subject: Re: [PATCH v8 1/5] dt-bindings: input: pwm-beeper: Convert txt
+ bindings to yaml
+Date:   Thu, 26 Jan 2023 07:21:04 -0600
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
 
-On Thu, Jan 26, 2023 at 01:22:54PM +0100, Krzysztof Kozlowski wrote:
-> On 26/01/2023 11:38, Henrik Grimler wrote:
-> > It is convenient to have fixed mmcblk numbering of the eMMC and
-> > sdcard, and with these aliases all Exynos 4 and 5 devices (and
-> > probably Exynos 3, but I do not have one of those boards so cannot
-> > verify) will have the eMMC as mmc0 and sdcard as mmc2.
-> > 
-> > I also removed sdhc aliases, as they should not be needed after [1] as
-> > I understand it.
-> > 
-> > [1] https://lkml.kernel.org/lkml/20211124184603.3897245-1-john@metanate.com/
+On Thu, 26 Jan 2023 10:18:21 +0100, Manuel Traut wrote:
+> Converts txt binding to new YAML format.
 > 
-> Marek sent the same in the past:
-> https://lore.kernel.org/all/?q=%22exynos%3A+Use+fixed+index+for+the+MMC+devices%22
+> Signed-off-by: Manuel Traut <manuel.traut@mt.com>
+> ---
+>  .../devicetree/bindings/input/pwm-beeper.txt  | 24 ----------
+>  .../devicetree/bindings/input/pwm-beeper.yaml | 48 +++++++++++++++++++
+>  2 files changed, 48 insertions(+), 24 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/input/pwm-beeper.txt
+>  create mode 100644 Documentation/devicetree/bindings/input/pwm-beeper.yaml
 > 
-> The patches are fine for me except, that these actually do not belong to
-> DTSI. Aliases for board or user-exposable interfaces are actually board
-> specific and each board should customize the ones it uses.
 
-Thanks for reviewing!  I will change the series to only add aliases to
-the boards I am familiar with.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> Best regards,
-> Krzysztof
+yamllint warnings/errors:
 
-Best regards,
-Henrik Grimler
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/input/pwm-beeper.example.dtb: /example-0/amplifier: failed to match any schema with compatible: ['fixed-regulator']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230126091825.220646-2-manuel.traut@mt.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
