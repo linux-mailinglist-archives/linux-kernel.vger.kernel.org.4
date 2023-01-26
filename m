@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D303167D329
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 848DA67D32A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjAZR2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 12:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
+        id S229989AbjAZR3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 12:29:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbjAZR2e (ORCPT
+        with ESMTP id S229554AbjAZR3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:28:34 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62929728DF
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:28:24 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id e10so1506276pgc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:28:24 -0800 (PST)
+        Thu, 26 Jan 2023 12:29:13 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D299F3A89
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:29:11 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5063029246dso32812437b3.6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:29:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u2zLYdjH49JUqfTyi6IT1khQZ+jZFRsuFDpPpb1hjEk=;
-        b=jjC25OrEoCAJRLe9vY8i8hySXJ3NFIKBU9J5m3U69F/Ld37sFTxdlPMQXVniSq0wH/
-         ex+CfOXpbjuVrmfQQj+tFryvzXQR62NQXM/niThnl+JFyN1nljJSKsAnA+XNwKbqCK4y
-         pb8FMhFne71Fifdrvi1nhZQen39JR7QZLLjyR/ZsfPxHl92o13E30Mr77twbhcdTuVNN
-         K1KKMCPFkFJNHzHxPzR6HDHCtqTzg9OzSaHCnQ44BXlfuFcTMgiGayd8KqpgastHJ5yv
-         50TkFb8SKY/VGHWE6Soakfx15WmjyRF4zH2BfRXNGSplQwFIw0OaKi5oRGxCCMpZdlUz
-         PxwA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2gmbLn2mGKjT9Gs0HRiDRhCerJgSSV5gpVvcCzntQ7Y=;
+        b=ilIqDRwk14c77kuNcIb1Za5yA/k9MlZMjOIAG7xgew/iubgJyrG32CmDPzNNMjKVU1
+         0cjAh7/cDiMlBWp7hNnSIwd1PXFNxdlppAGUU7j/d06/fdITUN8na+bPZl4T4FsheJPZ
+         LWsxwR1YcK+FWW2DBQwr6IyKjvLWxbTIMc17+Fd+yndb2sMV2vZnytDbpPDmoBXRB4F7
+         rleLMvYF/2o2GY6lzSau23qOOMOaf7bdkBeK/sWqCfupZvXUJjT0ZY7RKqeTong9fCDN
+         p4I/CcH8n+tGdongz6ryxejse0aGlrrtzoVh6FNqLByFg1N9TkDnjINbfSncpK90ozHN
+         RLPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u2zLYdjH49JUqfTyi6IT1khQZ+jZFRsuFDpPpb1hjEk=;
-        b=MLRhcQq9dxGVQWWuwDDp1sP9MF0dnfILtFQOkXrLllWh5bsI2S98YXBqJ+TIM2EJru
-         ObjxxwgOTKLbWTVsN5L3kpgMp8yCfOjpPhr1ysPKT8tVMov/OjOEsa3TcvH4JrYukB2l
-         L2IruDEQBI0xefX+8lVPrySiUeboihN9fxRxAwlNhJ2FnhPOoIq4zB7GIe+ij13CIqWc
-         akihVE5m1ihirsV0MmQol5SESBYtZPJKMjr9W1qjghpmlPEbe+3WjiviMYsYKpxQhFl4
-         VatqhffXPMkuMcLAvm3xCC6qG8KN+6LR+aTvE+UmVAMNOBXHNOPnq/iudJgenncVm1j/
-         WiZg==
-X-Gm-Message-State: AO0yUKX1BKz2M9zdW4mYB/7z0wRVoqhX8BF9WiwAFjckWUqC7U/H6yQ6
-        JxNF2t5320aSYFZkVO2NyIkLNA==
-X-Google-Smtp-Source: AK7set8Gd77u0bqjUhh8HbLJ0f4hnKKuY9nyuED+kZOSnseRrxpk5yOKkwKURk2LjJmIhlJ6tDyDPg==
-X-Received: by 2002:a05:6a00:b55:b0:576:9252:d06 with SMTP id p21-20020a056a000b5500b0057692520d06mr1435001pfo.0.1674754103575;
-        Thu, 26 Jan 2023 09:28:23 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n15-20020a62e50f000000b0058d90bc57basm1123103pff.90.2023.01.26.09.28.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 09:28:22 -0800 (PST)
-Date:   Thu, 26 Jan 2023 17:28:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "dmatlack@google.com" <dmatlack@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
-        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
-Message-ID: <Y9K4Mnx/Je4j+RsD@google.com>
-References: <Y8ljwsrrBBdh1aYw@google.com>
- <02b0e551647beed9ec3a2fefd3b659eb52c4846c.camel@intel.com>
- <Y8m34OEVBfL7Q4Ns@google.com>
- <1c71eda35e03372f29162c6a5286f5b4d1e1d7e1.camel@intel.com>
- <Y8ndcGHUHQjHfbF9@google.com>
- <CALzav=d4vwHTnXP8wetA_Hqd3Tzc_NLp=3M-akwNSN1-ToL+Eg@mail.gmail.com>
- <Y8st2PjGDQ+Q0LlW@google.com>
- <3951e178bc38191074f5cccadc442212ff15c737.camel@intel.com>
- <Y87GzHrx8vxZLBEJ@google.com>
- <e5912f7d04ce7a27a68ce4328fc50ce594295c6c.camel@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2gmbLn2mGKjT9Gs0HRiDRhCerJgSSV5gpVvcCzntQ7Y=;
+        b=fgug7UqSje3iy+avp9pXnnNt5EVb9339N8yPLGOep5fWOf9NwgtJXTHLSJTaxb5NAF
+         0t5i7BpauHQCQBtBbPKqqYtXMjfK1XkPQIZWvIjNnjt70n+xeVH101TbS59kiZwsCOQm
+         wX391fCn0w2i3vAVZFx/3CBjX6BHCO952OPrIh49F+6ZSMfhWSTBMlXxz4dlQfGXTe0B
+         YMycYDPnPCha8dsxGNN9AwXpZJCRvLMxS0ptyGNKwKCdky8yI+bZcna3ovq8WzLXo6KV
+         fEF0RT10xNiDZX9HkH49TY3tN90KEO5YmDKg3acIms2St+z3IkZjAZ8cMTLhf4ZbG3Uc
+         s2gQ==
+X-Gm-Message-State: AFqh2krPfSzejtjHBbI9Gy6fygwjqeifhfSJUL1yAE7yaLVp/W+5pnn/
+        rTNJou5zFdWIRNmp+dZrsEb18YmFOO7B/g63DIwioQ==
+X-Google-Smtp-Source: AMrXdXs8M6k6K1NpNfukVCVayvEghbuYahYf046uox5fJ76us0EUsA9otKxgNw134ACA+9mbXdAwd6mqx9pXaEYbxgI=
+X-Received: by 2002:a81:1d2:0:b0:433:f1c0:3f1c with SMTP id
+ 201-20020a8101d2000000b00433f1c03f1cmr5000022ywb.438.1674754150775; Thu, 26
+ Jan 2023 09:29:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e5912f7d04ce7a27a68ce4328fc50ce594295c6c.camel@intel.com>
+References: <20230125233554.153109-1-surenb@google.com> <20230125233554.153109-5-surenb@google.com>
+ <20230126151015.ru2m26jkhwib6x6u@techsingularity.net> <CAJuCfpEzAbpy9rZ5KeZXQsqFTPOGYv6CZQfP9SHqcqFi0s7neg@mail.gmail.com>
+ <20230126172657.bmga5hy74ifsbhun@techsingularity.net>
+In-Reply-To: <20230126172657.bmga5hy74ifsbhun@techsingularity.net>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 26 Jan 2023 09:28:59 -0800
+Message-ID: <CAJuCfpGfH9y5NYCBtM=s0uZ5DfRbtLHP=qQHqhahSiUPLEZNgg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/7] mm: replace vma->vm_flags direct modifications
+ with modifier calls
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -89,94 +87,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023, Huang, Kai wrote:
-> On Mon, 2023-01-23 at 17:41 +0000, Sean Christopherson wrote:
-> > I think there's an opportunity and motivation to improve the TDP MMU as a whole on
-> > this front though.  Rather than recursively zap children in handle_removed_pt(),
-> > we can use the RCU callback to queue the page table for removal.  Setting the parent
-> > (target page table) !PRESENT and flushing the TLBs ensures that all children are
-> > unreachable, i.e. KVM doesn't need to immediately set children !PRESENT.  Unlike
-> > the shadow MMU, which maintains a hash table of shadow pages, once a parent page
-> > table is removed from the TDP MMU, its children are unreachabled.
-> 
-> Do you mean something like (pseudo):
-> 
-> 	rcu_callback(&removed_sp->rcu_head, handle_removed_pt);
+On Thu, Jan 26, 2023 at 9:27 AM Mel Gorman <mgorman@techsingularity.net> wrote:
+>
+> On Thu, Jan 26, 2023 at 08:10:26AM -0800, Suren Baghdasaryan wrote:
+> > On Thu, Jan 26, 2023 at 7:10 AM Mel Gorman <mgorman@techsingularity.net> wrote:
+> > >
+> > > On Wed, Jan 25, 2023 at 03:35:51PM -0800, Suren Baghdasaryan wrote:
+> > > > Replace direct modifications to vma->vm_flags with calls to modifier
+> > > > functions to be able to track flag changes and to keep vma locking
+> > > > correctness.
+> > > >
+> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > > Acked-by: Michal Hocko <mhocko@suse.com>
+> > >
+> > > Acked-by: Mel Gorman <mgorman@techsingularity.net>
+> > >
+> > > Minor comments that are safe to ignore.
+> > >
+> > > I think a better name for mod_vm_flags is set_clear_vm_flags to hint that
+> > > the first flags are to be set and the second flags are to be cleared.
+> > > For this patch, it doesn't matter, but it might avoid accidental swapping
+> > > in the future.
+> > >
+> > > reset_vm_flags might also be better named as reinit_vma_flags (or
+> > > vma_flags_reinit). Maybe also encourage the use of [set|clear_mod]_vm_flags
+> > > where possible in the comment to track exactly what is changing and
+> > > why. Some cases like userfaultfd just want to clear __VM_UFFD_FLAGS but
+> > > altering the flow in this patch is inappropriate and error prone. Others
+> > > such as the infiniband changes and madvise are a lot more complex.
+> >
+> > That's a good point, but I don't want people to use mod_vm_flags() for
+> > the cases when the order of set/clear really matters. In such cases
+> > set_vm_flags() and clear_vm_flags() should be explicitly used. Maybe
+> > to make that clear I should add a comment and rewrite the functions
+> > as:
+> >
+> > void mod_vm_flags(vma, set, clear) {
+> >     vma.vm_flags = vma.vm_flags | set & clear;
+> > }
+> >
+>
+> Offhand, I'm not thinking of a case where that really matters and as they
+> are not necessarily ordered, it's raising a read flag so yes, it definitely
+> it needs a comment if the ordering matters.
+>
+> > In this patchset it's not that obvious but mod_vm_flags() was really
+> > introduced in the original per-VMA lock patchset for efficiency to
+> > avoid taking extra per-VMA locks. A combo of
+> > set_vm_flags()+clear_vm_flags() would try to retake the same per-VMA
+> > lock in the second call while mod_vm_flags() takes the lock only once
+> > and does both operations.
+>
+> Ok, that seems fair but still needs a comment on why a mod_vm_flags is
+> not necessarily equivalent to a set_vm_flags + clear_vm_flags in terms of
+> correctness if that is indeed the case.
+>
+> > Not a huge overhead because we check if the
+> > lock is already taken and bail out early but still...
+> > So, would the above modification to mod_vm_flags() address your concern?
+> >
+>
+> My concerns are entirely with the callers, not the implementation. If
+> someone is modifying a call site using mod_vm_flags, they have to read
+> through all the preceding logic to ensure the final combination of flags
+> is valid.  It's a code maintenance issue, not a correctness issue.
 
-Yep.
+Got it. I'll modify the implementation to make a single assignment and
+will add a comment to use only when order doesn't matter.
+Thanks!
 
-> > The RCU callback must run in near-constant time, but that's easy to solve as we
-> > already have a workqueue for zapping page tables, i.e. the RCU callback can simply
-> > add the target page to the zap workqueue.  That would also allow for a (very minor)
-> > simplification of other TDP MMU code: tdp_mmu_zap_root() wouldn't needed to zap in
-> > two passes since zapping children of the top-level SPTEs would be deferred to the
-> > workqueue.
-> 
-> Do you mean zapping the entire page table (from root) doesn't need to be in RCU
-> read-critical section, but can/should be done after grace period?  I think this
-> makes sense since zapping entire root must happen when root is already invalid,
-> which cannot be used anymore when the new faults come in?
-
-Yes, minus the "from root" restriction.  When a page table (call it "branch" to
-continue the analogy) PTE has been zapped/blocked ("pruned"), KVM just needs to
-wait for all potential readers to go away.  That guarantee is provided by RCU;
-software walkers, i.e. KVM itself, are required to hold RCU, and hardware walkers,
-i.e. vCPUs running in the guest, are protected by proxy as the zapper ("arborist"?)
-is required to hold RCU until all running vCPUs have been kicked.
-
-In other words, once the PTE is zapped/blocked (branch is pruned), it's completely
-removed from the paging tree and no other tasks can access the branch (page table
-and its children).  I.e. the only remaining reference to the branch is the pointer
-handed to the RCU callback.  That means the RCU callback has exclusive access to the
-branch, i.e. can operate as if it were holding mmu_lock for write.  Furthermore, the
-RCU callback also doesn't need to flush TLBs because that was again done when
-pruning the branch.
-
-It's the same idea that KVM already uses for root SPs, the only difference is how
-KVM determines that there is exactly one entity that holds a reference to the SP.
-
-> > Back to TDX, to play nice with the restriction that parents are removed only after
-> > children are removed, I believe KVM can use TDH.MEM.RANGE.BLOCK to make the parent
-> > !PRESENT.  That will effectively prune the S-EPT entry and all its children, and
-> > the RCU callback will again ensure all in-flight SEAMCALLs for the children complete
-> > before KVM actually tries to zap the children.
-> 
-> Reading the spec, it seems TDH.MEM.RANGE.BLOCK only sets the Secure EPT entry
-> which points to the entire range as "blocked", but won't go down until leaf to
-> mark all EPT entries as "blocked", which makes sense anyway.
-> 
-> But it seems TDH.MEM.PAGE.REMOVE and TDH.MEM.SEPT.REMOVE both only checks
-> whether that target EPT entry is "blocked", but doesn't check whether any parent
-> has been marked as "blocked".  Not sure whether this will be a problem.  But
-> anyway if this is a problem, we perhaps can get TDX module to fix.
-
-Oh, I didn't mean to suggest KVM skip TDH.MEM.RANGE.BLOCK for children, I simply
-forgot that all S-EPT entries need to be blocked before they can be removed.
-
-> > And if we rework zapping page tables, I suspect we can also address David's concern
-> > (and my not-yet-voiced concern) about polluting the TDP MMU code with logic that is
-> > necessary only for S-EPT (freezing SPTEs before populating them).  Rather than update
-> > S-EPT _after_ the TDP MMU SPTE, do the S-EPT update first, i.e. invoke the KVM TDX
-> > hook before try_cmpxchg64() (or maybe instead of?).  That way KVM TDX can freeze the
-> > to-be-installed SPTE without common TDP MMU needing to be aware of the change.
-> 
-> I don't quite understand how putting SEAMCALL before the try_cmpxchg64() can
-> work.  Let's say one thread is populating a mapping and another is zapping it. 
-> The populating thread makes SEAMCALL successfully but then try_cmpxchg64()
-> fails, in this case how to proceed?
-
-Ah, sorry, that was unclear.  By "invoke the KVM TDX hook" I didn't mean "do the
-SEAMCALL", I meant KVM TDX could do its own manipulation of the KVM-managed SPTEs
-before the common/standard flow.  E.g. something like:
-
-	if (kvm_x86_ops.set_private_spte && private)
-		r = static_call(kvm_x86_set_private_spte(...)
-	else
-		r = try_cmpxchg64(...) ? 0 : -EBUSY;
-
-so that the common code doesn't need to do, or even be aware of, the freezing.
-Then I think we just need another hook in handle_removed_pt(), or maybe in what
-is currently __kvm_tdp_mmu_write_spte()?
-
-I.e. fully replace the "write" operations in the TDP MMU instead of trying to
-smush S-EPT's requirements into the common path.
+>
+> --
+> Mel Gorman
+> SUSE Labs
