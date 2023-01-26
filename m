@@ -2,230 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08B167C992
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FEF67C996
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236403AbjAZLQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 06:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
+        id S237225AbjAZLRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 06:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236502AbjAZLQj (ORCPT
+        with ESMTP id S236746AbjAZLRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 06:16:39 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A18270B;
-        Thu, 26 Jan 2023 03:16:36 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E25A31FF65;
-        Thu, 26 Jan 2023 11:16:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674731794; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VqvJ//mtxUzAL+qZwt9BocGJmjBDoQtWDsm6f0RHcJw=;
-        b=brCnbvCw0yFj2KB2XLQOvhzBW6Pnv5+JFss008p+DODbsTxFtCHWxo09XShJcZe3aG8Xg8
-        BfRTj2syQl/6yCyoMx/mZorf14W6aVLJvmfyfQs/BnHno/9Krlm5Qys3TD57sskrGWFsqp
-        n7zaBtnzD4oinqFzvBdPIGyKD4DlvDY=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B2CC52C141;
-        Thu, 26 Jan 2023 11:16:34 +0000 (UTC)
-Date:   Thu, 26 Jan 2023 12:16:32 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Seth Forshee <sforshee@kernel.org>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] vhost: check for pending livepatches from vhost
- worker kthreads
-Message-ID: <Y9JhEJXFRDZjONAH@alley>
-References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
- <20230120-vhost-klp-switching-v1-2-7c2b65519c43@kernel.org>
- <Y8/ohzRGcOiqsh69@alley>
- <Y9ATo5FukOhphwqT@do-x1extreme>
- <Y9ETwsT4LTXyH/0m@alley>
- <Y9FfenH/p3qzRlar@do-x1extreme>
+        Thu, 26 Jan 2023 06:17:15 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDDD4EF1;
+        Thu, 26 Jan 2023 03:17:08 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pL0Fd-0000bE-VJ; Thu, 26 Jan 2023 12:17:06 +0100
+Message-ID: <0ca02b1f-ab00-9fa6-aecc-c2c46d624e49@leemhuis.info>
+Date:   Thu, 26 Jan 2023 12:17:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9FfenH/p3qzRlar@do-x1extreme>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Content-Language: en-US, de-DE
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Wyatt Childers <kernel.dbwta@haxing.ninja>
+To:     David Sterba <dsterba@suse.com>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: [Regression] Bug 216961 - Severe IO scheduling starvation issues with
+ btrfs
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674731828;befd3ec7;
+X-HE-SMSGID: 1pL0Fd-0000bE-VJ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2023-01-25 10:57:30, Seth Forshee wrote:
-> On Wed, Jan 25, 2023 at 12:34:26PM +0100, Petr Mladek wrote:
-> > On Tue 2023-01-24 11:21:39, Seth Forshee wrote:
-> > > On Tue, Jan 24, 2023 at 03:17:43PM +0100, Petr Mladek wrote:
-> > > > On Fri 2023-01-20 16:12:22, Seth Forshee (DigitalOcean) wrote:
-> > > > > Livepatch relies on stack checking of sleeping tasks to switch kthreads,
-> > > > > so a busy kthread can block a livepatch transition indefinitely. We've
-> > > > > seen this happen fairly often with busy vhost kthreads.
-> > > > 
-> > > > > --- a/drivers/vhost/vhost.c
-> > > > > +++ b/drivers/vhost/vhost.c
-> > > > > @@ -366,6 +367,9 @@ static int vhost_worker(void *data)
-> > > > >  			if (need_resched())
-> > > > >  				schedule();
-> > > > >  		}
-> > > > > +
-> > > > > +		if (unlikely(klp_patch_pending(current)))
-> > > > > +			klp_switch_current();
-> > > > 
-> > > > I suggest to use the following intead:
-> > > > 
-> > > > 		if (unlikely(klp_patch_pending(current)))
-> > > > 			klp_update_patch_state(current);
-> > > > 
-> > > > We already use this in do_idle(). The reason is basically the same.
-> > > > It is almost impossible to livepatch the idle task when a CPU is
-> > > > very idle.
-> > > > 
-> > > > klp_update_patch_state(current) does not check the stack.
-> > > > It switches the task immediately.
-> > > > 
-> > > > It should be safe because the kthread never leaves vhost_worker().
-> > > > It means that the same kthread could never re-enter this function
-> > > > and use the new code.
-> > > 
-> > > My knowledge of livepatching internals is fairly limited, so I'll accept
-> > > it if you say that it's safe to do it this way. But let me ask about one
-> > > scenario.
-> > > 
-> > > Let's say that a livepatch is loaded which replaces vhost_worker(). New
-> > > vhost worker threads are started which use the replacement function. Now
-> > > if the patch is disabled, these new worker threads would be switched
-> > > despite still running the code from the patch module, correct? Could the
-> > > module then be unloaded, freeing the memory containing the code these
-> > > kthreads are executing?
-> > 
-> > The above scenario would require calling klp_update_patch_state() from
-> > the code in the livepatch module. It is not possible at the moment because
-> > this function is not exported for modules.
+Hi, this is your Linux kernel regression tracker.
+
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developer don't keep an eye on it, I decided to forward it by
+mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216961 :
+
+>  Wyatt Childers 2023-01-23 17:44:13 UTC
 > 
-> vhost can be built as a module, so in order to call
-> klp_update_patch_state() from vhost_worker() it would have to be
-> exported to modules.
-
-I see.
-
-> > Hmm, the same problem might be when we livepatch a function that calls
-> > another function that calls klp_update_patch_state(). But in this case
-> > it would be kthread() from kernel/kthread.c. It would affect any
-> > running kthread. I doubt that anyone would seriously think about
-> > livepatching this function.
+> There seems to be an issue with btrfs in Kernel 6 (first seen in at least 6.0.12-300.fc37.x86_64, possibly earlier) and still observed in 6.1 (6.1.5-200.fc37.x86_64).
 > 
-> Yes, there are clearly certain functions that are not safe/practical to
-> patch, and authors need to know what they are doing. Most kthread main()
-> functions probably qualify as impractical at best, at least without a
-> strategy to restart relevant kthreads.
+> This has manifested in prolonged user space hangs. I first noticed this in internal tooling for my employer where simple IO operations like a trivial cp commands that typically take under 100ms (when run with many other concurrent IO operations of a similar ilk) are observing "scheduling starvation" being stalled in a disk sleep state for nearly a minute.
 > 
-> But a livepatch transition will normally stall if patching these
-> functions when a relevant kthread is running (unless the patch is
-> forced), so a patch author who made a mistake should quickly notice.
-> vhost_worker() would behave differently.
-
-Another crazy idea:
-
-/**
- * klp_update_patch_state_safe() - do not update the path state when
- *	called from a livepatch.
- * @task: task_struct to be updated
- * @calller_addr: address of the function which  calls this one
- *
- * Do not update the patch set when called from a livepatch.
- * It would allow to remove the livepatch module even when
- * the code still might be in use.
- */
-void klp_update_patch_state_safe(struct task_struct *task, void *caller_addr)
-{
-	static bool checked;
-	static bool safe;
-
-	if (unlikely(!checked)) {
-		struct module *mod;
-
-		preempt_disable();
-		mod = __module_address(caller_addr);
-		if (!mod || !is_livepatch_module(mod))
-			safe = true;
-		checked = true;
-		preempt_enable();
-	}
-
-	if (safe)
-		klp_update_patch_state(task);
-}
-
-and use in vhost_worker()
-
-		if (unlikely(klp_patch_pending(current)))
-			klp_update_patch_state_safe(current, vhost_worker);
-
-Even better might be to get the caller address using some compiler
-macro. I guess that it should be possible.
-
-And even better would be to detect this at the compile time. But
-I do not know how to do so.
-
-> > A good enough solution might be to document this. Livepatches could
-> > not be created blindly. There are more situations where the
-> > livepatch is tricky or not possible at all.
+> This also seems to be manifesting in hangs to Kwin that correlate with btrfs usage and things as routine and trivial (even on high performance systems) as system updates https://bugs.kde.org/show_bug.cgi?id=463353
 > 
-> I can add this if you like. Is Documentation/livepatch/livepatch.rst the
-> right place for this?
-
-Yes, the best place probably would be "7. Limitations" section in
-Documentation/livepatch/livepatch.rst.
-
-Even better would be to add a document about the best practices.
-We have dreamed about it for years ;-)
-
-> > Crazy idea. We could prevent this problem even technically. A solution
-> > would be to increment a per-process counter in klp_ftrace_handler() when a
-> > function is redirected(). And klp_update_patch_state() might refuse
-> > the migration when this counter is not zero. But it would require
-> > to use a trampoline on return that would decrement the counter.
-> > I am not sure if this is worth the complexity.
-> > 
-> > One the other hand, this counter might actually remove the need
-> > of the reliable backtrace. It is possible that I miss something
-> > or that it is not easy/possible to implement the return trampoline.
+> I would also not be surprised if this behavior is responsible for things like this reddit thread: https://www.reddit.com/r/btrfs/comments/102or0t/btrfs_on_luks_whole_system_freezing_under_high_io/
 > 
-> I agree this should work for unpatching, and even for patching a
-> function which is already patched.
+> [reply] [−] Comment 1 Wyatt Childers 2023-01-23 17:57:47 UTC
 > 
-> Maybe I'm misunderstanding, but this would only work for unpatching or
-> patching an already-patched function, wouldn't it? Because the original
-> functions would not increment the counter so you would not know if tasks
-> still had those on their call stacks.
-
-Right. I knew that it could not be that easy. Otherwise, we would have
-used it. I just did not spent enough cycles on the idea yesterday.
-
-> > Back to the original problem. I still consider calling
-> > klp_update_patch_state(current) in vhost_worker() safe.
+> As additional context, here are some sample kernel traces (echo w > /proc/sysrq-trigger):
 > 
-> Okay, I can send a v2 which does this, so long as it's okay to export
-> klp_update_patch_state() to modules.
+> Dec 16 14:10:02 localhost kernel: sysrq: Show Blocked State
+> Dec 16 14:10:02 localhost kernel: task:kworker/u64:6   state:D stack:    0 pid:2673507 ppid:     2 flags:0x00004000
+> Dec 16 14:10:02 localhost kernel: Workqueue: btrfs-worker btrfs_work_helper
+> Dec 16 14:10:02 localhost kernel: Call Trace:
+> Dec 16 14:10:02 localhost kernel:  <TASK>
+> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+> Dec 16 14:10:02 localhost kernel:  ? __sbitmap_get_word+0x37/0x80
+> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+> Dec 16 14:10:02 localhost kernel:  blk_mq_get_tag+0x10c/0x290
+> Dec 16 14:10:02 localhost kernel:  ? dequeue_task_stop+0x70/0x70
+> Dec 16 14:10:02 localhost kernel:  __blk_mq_alloc_requests+0x183/0x2b0
+> Dec 16 14:10:02 localhost kernel:  blk_mq_submit_bio+0x2b7/0x5b0
+> Dec 16 14:10:02 localhost kernel:  __submit_bio+0xf5/0x180
+> Dec 16 14:10:02 localhost kernel:  submit_bio_noacct_nocheck+0x20d/0x2a0
+> Dec 16 14:10:02 localhost kernel:  btrfs_submit_bio+0x17a/0x3d0
+> Dec 16 14:10:02 localhost kernel:  btrfs_work_helper+0x14b/0x380
+> Dec 16 14:10:02 localhost kernel:  process_one_work+0x1c7/0x380
+> Dec 16 14:10:02 localhost kernel:  worker_thread+0x4d/0x380
+> Dec 16 14:10:02 localhost kernel:  ? _raw_spin_lock_irqsave+0x23/0x50
+> Dec 16 14:10:02 localhost kernel:  ? rescuer_thread+0x380/0x380
+> Dec 16 14:10:02 localhost kernel:  kthread+0xe9/0x110
+> Dec 16 14:10:02 localhost kernel:  ? kthread_complete_and_exit+0x20/0x20
+> Dec 16 14:10:02 localhost kernel:  ret_from_fork+0x22/0x30
+> Dec 16 14:10:02 localhost kernel:  </TASK>
+> Dec 16 14:10:02 localhost kernel: task:cp              state:D stack:    0 pid:2422766 ppid:2410777 flags:0x00000002
+> Dec 16 14:10:02 localhost kernel: Call Trace:
+> Dec 16 14:10:02 localhost kernel:  <TASK>
+> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+> Dec 16 14:10:02 localhost kernel:  ? btrfs_delayed_update_inode+0x102/0x1f0
+> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+> Dec 16 14:10:02 localhost kernel:  folio_wait_bit_common+0x12d/0x3a0
+> Dec 16 14:10:02 localhost kernel:  ? filemap_alloc_folio+0xc0/0xc0
+> Dec 16 14:10:02 localhost kernel:  folio_wait_writeback+0x28/0x80
+> Dec 16 14:10:02 localhost kernel:  __filemap_fdatawait_range+0x7f/0x100
+> Dec 16 14:10:02 localhost kernel:  filemap_fdatawait_range+0xe/0x20
+> Dec 16 14:10:02 localhost kernel:  btrfs_wait_ordered_range+0x7a/0x120
+> Dec 16 14:10:02 localhost kernel:  btrfs_remap_file_range+0x139/0x550
+> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+> Dec 16 14:10:02 localhost kernel:  ovl_copyfile+0x15d/0x180 [overlay]
+> Dec 16 14:10:02 localhost kernel:  ovl_remap_file_range+0x6e/0xa0 [overlay]
+> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+> Dec 16 14:10:02 localhost kernel:  ioctl_file_clone+0x49/0xb0
+> Dec 16 14:10:02 localhost kernel:  do_vfs_ioctl+0x77/0x950
+> Dec 16 14:10:02 localhost kernel:  ? security_file_ioctl+0x3c/0x60
+> Dec 16 14:10:02 localhost kernel:  __x64_sys_ioctl+0x6e/0xd0
+> Dec 16 14:10:02 localhost kernel:  do_syscall_64+0x5b/0x80
+> Dec 16 14:10:02 localhost kernel:  ? syscall_exit_to_user_mode+0x17/0x40
+> Dec 16 14:10:02 localhost kernel:  ? do_syscall_64+0x67/0x80
+> Dec 16 14:10:02 localhost kernel:  ? syscall_exit_to_user_mode+0x17/0x40
+> Dec 16 14:10:02 localhost kernel:  ? do_syscall_64+0x67/0x80
+> Dec 16 14:10:02 localhost kernel:  ? do_user_addr_fault+0x1ef/0x690
+> Dec 16 14:10:02 localhost kernel:  ? do_syscall_64+0x67/0x80
+> Dec 16 14:10:02 localhost kernel:  ? exc_page_fault+0x70/0x170
+> Dec 16 14:10:02 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Dec 16 14:10:02 localhost kernel: RIP: 0033:0x7f07d2d7dbaf
+> Dec 16 14:10:02 localhost kernel: RSP: 002b:00007ffc4ba5bf40 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> Dec 16 14:10:02 localhost kernel: RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f07d2d7dbaf
+> Dec 16 14:10:02 localhost kernel: RDX: 0000000000000003 RSI: 0000000040049409 RDI: 0000000000000004
+> Dec 16 14:10:02 localhost kernel: RBP: 00007ffc4ba5d8cc R08: 0000000000000001 R09: 00000000000001a4
+> Dec 16 14:10:02 localhost kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffc4ba5c3e0
+> Dec 16 14:10:02 localhost kernel: R13: 0000000000000001 R14: 0000000000000014 R15: 00007ffc4ba5c7b0
+> Dec 16 14:10:02 localhost kernel:  </TASK>
+> Dec 16 14:10:02 localhost kernel: task:cp              state:D stack:    0 pid:2422815 ppid:2419287 flags:0x00000002
+> Dec 16 14:10:02 localhost kernel: Call Trace:
+> Dec 16 14:10:02 localhost kernel:  <TASK>
+> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+> Dec 16 14:10:02 localhost kernel:  ? btrfs_dirty_inode+0x91/0xe0
+> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+> Dec 16 14:10:02 localhost kernel:  folio_wait_bit_common+0x12d/0x3a0
+> Dec 16 14:10:02 localhost kernel:  ? filemap_alloc_folio+0xc0/0xc0
+> Dec 16 14:10:02 localhost kernel:  folio_wait_writeback+0x28/0x80
+> Dec 16 14:10:02 localhost kernel:  __filemap_fdatawait_range+0x7f/0x100
+> Dec 16 14:10:02 localhost kernel:  filemap_fdatawait_range+0xe/0x20
+> Dec 16 14:10:02 localhost kernel:  btrfs_wait_ordered_range+0x7a/0x120
+> Dec 16 14:10:02 localhost kernel:  btrfs_remap_file_range+0x139/0x550
+> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+> Dec 16 14:10:02 localhost kernel:  ovl_copyfile+0x15d/0x180 [overlay]
+> Dec 16 14:10:02 localhost kernel:  ovl_remap_file_range+0x6e/0xa0 [overlay]
+> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+> Dec 16 14:10:02 localhost kernel:  ioctl_file_clone+0x49/0xb0
+> Dec 16 14:10:02 localhost kernel:  do_vfs_ioctl+0x77/0x950
+> Dec 16 14:10:02 localhost kernel:  __x64_sys_ioctl+0x6e/0xd0
+> Dec 16 14:10:02 localhost kernel:  do_syscall_64+0x5b/0x80
+> Dec 16 14:10:02 localhost kernel:  ? exc_page_fault+0x70/0x170
+> Dec 16 14:10:02 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Dec 16 14:10:02 localhost kernel: RIP: 0033:0x7f1e8dc22baf
+> Dec 16 14:10:02 localhost kernel: RSP: 002b:00007ffd65479d50 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> Dec 16 14:10:02 localhost kernel: RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f1e8dc22baf
+> Dec 16 14:10:02 localhost kernel: RDX: 0000000000000003 RSI: 0000000040049409 RDI: 0000000000000004
+> Dec 16 14:10:02 localhost kernel: RBP: 00007ffd6547b8cc R08: 0000000000000001 R09: 00000000000001a4
+> Dec 16 14:10:02 localhost kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffd6547a1f0
+> Dec 16 14:10:02 localhost kernel: R13: 0000000000000001 R14: 0000000000000014 R15: 00007ffd6547a5c0
+> Dec 16 14:10:02 localhost kernel:  </TASK>
+> Dec 16 14:10:02 localhost kernel: task:cp              state:D stack:    0 pid:2422818 ppid:2421995 flags:0x00000002
+> Dec 16 14:10:02 localhost kernel: Call Trace:
+> Dec 16 14:10:02 localhost kernel:  <TASK>
+> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+> Dec 16 14:10:02 localhost kernel:  folio_wait_bit_common+0x12d/0x3a0
+> Dec 16 14:10:02 localhost kernel:  ? filemap_alloc_folio+0xc0/0xc0
+> Dec 16 14:10:02 localhost kernel:  folio_wait_writeback+0x28/0x80
+> Dec 16 14:10:02 localhost kernel:  __filemap_fdatawait_range+0x7f/0x100
+> Dec 16 14:10:02 localhost kernel:  filemap_fdatawait_range+0xe/0x20
+> Dec 16 14:10:02 localhost kernel:  btrfs_wait_ordered_range+0x7a/0x120
+> Dec 16 14:10:02 localhost kernel:  btrfs_remap_file_range+0x139/0x550
+> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+> Dec 16 14:10:02 localhost kernel:  ovl_copyfile+0x15d/0x180 [overlay]
+> Dec 16 14:10:02 localhost kernel:  ovl_remap_file_range+0x6e/0xa0 [overlay]
+> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+> Dec 16 14:10:02 localhost kernel:  ioctl_file_clone+0x49/0xb0
+> Dec 16 14:10:02 localhost kernel:  do_vfs_ioctl+0x77/0x950
+> Dec 16 14:10:02 localhost kernel:  __x64_sys_ioctl+0x6e/0xd0
+> Dec 16 14:10:02 localhost kernel:  do_syscall_64+0x5b/0x80
+> Dec 16 14:10:02 localhost kernel:  ? syscall_exit_to_user_mode+0x17/0x40
+> Dec 16 14:10:02 localhost kernel:  ? do_syscall_64+0x67/0x80
+> Dec 16 14:10:02 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Dec 16 14:10:02 localhost kernel: RIP: 0033:0x7ffa2a678baf
+> Dec 16 14:10:02 localhost kernel: RSP: 002b:00007ffe77c03de0 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> Dec 16 14:10:02 localhost kernel: RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007ffa2a678baf
+> Dec 16 14:10:02 localhost kernel: RDX: 0000000000000003 RSI: 0000000040049409 RDI: 0000000000000004
+> Dec 16 14:10:02 localhost kernel: RBP: 00007ffe77c058cc R08: 0000000000000001 R09: 00000000000001a4
+> Dec 16 14:10:02 localhost kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffe77c04280
+> Dec 16 14:10:02 localhost kernel: R13: 0000000000000001 R14: 0000000000000014 R15: 00007ffe77c04650
+> Dec 16 14:10:02 localhost kernel:  </TASK>
+> Dec 16 14:10:02 localhost kernel: task:cp              state:D stack:    0 pid:2422821 ppid:2420167 flags:0x00000002
+> Dec 16 14:10:02 localhost kernel: Call Trace:
+> Dec 16 14:10:02 localhost kernel:  <TASK>
+> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+> Dec 16 14:10:02 localhost kernel:  ? _raw_spin_unlock_irqrestore+0x23/0x40
+> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+> Dec 16 14:10:02 localhost kernel:  folio_wait_bit_common+0x12d/0x3a0
+> Dec 16 14:10:02 localhost kernel:  ? filemap_alloc_folio+0xc0/0xc0
+> Dec 16 14:10:02 localhost kernel:  folio_wait_writeback+0x28/0x80
+> Dec 16 14:10:02 localhost kernel:  __filemap_fdatawait_range+0x7f/0x100
+> Dec 16 14:10:02 localhost kernel:  filemap_fdatawait_range+0xe/0x20
+> Dec 16 14:10:02 localhost kernel:  btrfs_wait_ordered_range+0x7a/0x120
+> Dec 16 14:10:02 localhost kernel:  btrfs_remap_file_range+0x139/0x550
+> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+> Dec 16 14:10:02 localhost kernel:  ovl_copyfile+0x15d/0x180 [overlay]
+> Dec 16 14:10:02 localhost kernel:  ovl_remap_file_range+0x6e/0xa0 [overlay]
+> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+> Dec 16 14:10:02 localhost kernel:  ioctl_file_clone+0x49/0xb0
+> Dec 16 14:10:02 localhost kernel:  do_vfs_ioctl+0x77/0x950
+> Dec 16 14:10:02 localhost kernel:  ? security_file_ioctl+0x3c/0x60
+> Dec 16 14:10:02 localhost kernel:  __x64_sys_ioctl+0x6e/0xd0
+> Dec 16 14:10:02 localhost kernel:  do_syscall_64+0x5b/0x80
+> Dec 16 14:10:02 localhost kernel:  ? do_syscall_64+0x67/0x80
+> Dec 16 14:10:02 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Dec 16 14:10:02 localhost kernel: RIP: 0033:0x7fafe34febaf
+> Dec 16 14:10:02 localhost kernel: RSP: 002b:00007fff79bee930 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> Dec 16 14:10:02 localhost kernel: RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fafe34febaf
+> Dec 16 14:10:02 localhost kernel: RDX: 0000000000000003 RSI: 0000000040049409 RDI: 0000000000000004
+> Dec 16 14:10:02 localhost kernel: RBP: 00007fff79bef8f6 R08: 0000000000000001 R09: 00000000000001a4
+> Dec 16 14:10:02 localhost kernel: R10: 0000000000000004 R11: 0000000000000246 R12: 00007fff79beedd0
+> Dec 16 14:10:02 localhost kernel: R13: 0000000000000001 R14: 0000000000000002 R15: 00007fff79bef1a0
+> Dec 16 14:10:02 localhost kernel:  </TASK>
+> Dec 16 14:10:02 localhost kernel: task:cp              state:D stack:    0 pid:2422911 ppid:2401445 flags:0x00000002
+> Dec 16 14:10:02 localhost kernel: Call Trace:
+> Dec 16 14:10:02 localhost kernel:  <TASK>
+> Dec 16 14:10:02 localhost kernel:  __schedule+0x332/0x12c0
+> Dec 16 14:10:02 localhost kernel:  ? __btrfs_end_transaction+0xf8/0x240
+> Dec 16 14:10:02 localhost kernel:  schedule+0x5d/0xe0
+> Dec 16 14:10:02 localhost kernel:  io_schedule+0x42/0x70
+> Dec 16 14:10:02 localhost kernel:  folio_wait_bit_common+0x12d/0x3a0
+> Dec 16 14:10:02 localhost kernel:  ? filemap_alloc_folio+0xc0/0xc0
+> Dec 16 14:10:02 localhost kernel:  folio_wait_writeback+0x28/0x80
+> Dec 16 14:10:02 localhost kernel:  __filemap_fdatawait_range+0x7f/0x100
+> Dec 16 14:10:02 localhost kernel:  filemap_fdatawait_range+0xe/0x20
+> Dec 16 14:10:02 localhost kernel:  btrfs_wait_ordered_range+0x7a/0x120
+> Dec 16 14:10:02 localhost kernel:  btrfs_remap_file_range+0x139/0x550
+> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+> Dec 16 14:10:02 localhost kernel:  ovl_copyfile+0x15d/0x180 [overlay]
+> Dec 16 14:10:02 localhost kernel:  ovl_remap_file_range+0x6e/0xa0 [overlay]
+> Dec 16 14:10:02 localhost kernel:  do_clone_file_range+0xe9/0x230
+> Dec 16 14:10:02 localhost kernel:  vfs_clone_file_range+0x4d/0x140
+> Dec 16 14:10:02 localhost kernel:  ioctl_file_clone+0x49/0xb0
+> Dec 16 14:10:02 localhost kernel:  do_vfs_ioctl+0x77/0x950
+> Dec 16 14:10:02 localhost kernel:  __x64_sys_ioctl+0x6e/0xd0
+> Dec 16 14:10:02 localhost kernel:  do_syscall_64+0x5b/0x80
+> Dec 16 14:10:02 localhost kernel:  ? exc_page_fault+0x70/0x170
+> Dec 16 14:10:02 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Dec 16 14:10:02 localhost kernel: RIP: 0033:0x7ff280aeebaf
+> Dec 16 14:10:02 localhost kernel: RSP: 002b:00007ffdbfa595c0 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> Dec 16 14:10:02 localhost kernel: RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007ff280aeebaf
+> Dec 16 14:10:02 localhost kernel: RDX: 0000000000000003 RSI: 0000000040049409 RDI: 0000000000000004
+> Dec 16 14:10:02 localhost kernel: RBP: 00007ffdbfa5a8cc R08: 0000000000000001 R09: 00000000000001a4
+> Dec 16 14:10:02 localhost kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffdbfa59a60
+> Dec 16 14:10:02 localhost kernel: R13: 0000000000000001 R14: 0000000000000014 R15: 00007ffdbfa59e30
+> Dec 16 14:10:02 localhost kernel:  </TASK>
+See the ticket for more details.
 
-It would be acceptable for me if we added a warning above the function
-definition and into the livepatch documentation.
 
-But I would prefer klp_update_patch_state_safe() if it worked. It is
-possible that I have missed something.
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
 
-Best Regards,
-Petr
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks (I for now
+assume it was introduced between v5.19..v6.0, even if I don't know for
+sure ):
+
+#regzbot introduced: v5.19..v6.0
+https://bugzilla.kernel.org/show_bug.cgi?id=216961
+#regzbot title: btrfs: severe IO scheduling starvation issues with btrfs
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
