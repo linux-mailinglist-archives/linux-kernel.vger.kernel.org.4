@@ -2,102 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AD767D2F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1F867D300
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjAZRWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 12:22:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
+        id S231516AbjAZRZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 12:25:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjAZRWH (ORCPT
+        with ESMTP id S229437AbjAZRZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:22:07 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87FE4EC6;
-        Thu, 26 Jan 2023 09:22:05 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 3BB6C320025E;
-        Thu, 26 Jan 2023 12:22:04 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 12:22:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674753723; x=1674840123; bh=lchpYIwX9G
-        nBz6PZodYl9e/i17PoYPm7G2B03axTOyA=; b=A8uAcpS8Huw2ox4lR6S4KJpkth
-        7AUJqUp2zCXIYC5IDZS61ZC7L76qZhdbWNXGL56/TpRMhIXcI92fKQuO2bgf3Wr5
-        O+FXQ039sFNm28+7y3uEgUeKXNSSk6KHVvXAHy3n3IpWLf8Vas/Pu1TSpqXy/ygP
-        GjjTgUOjJ67tQY5mToGv25u6Niyjo2q9JydQR02+/+8G9/5tn9n1Jcc7YICfssly
-        WVs7R+bjMis+M1wl5DVJJyBOps9jpoR0chBfgBRxjAHAr6aZPbUMyIntYGPss2cy
-        CrEOyM3C38//egROT0M2+lxrEEa9gWnubfKJiSakdwxjahLn58h2PqohZBig==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674753723; x=1674840123; bh=lchpYIwX9GnBz6PZodYl9e/i17Po
-        YPm7G2B03axTOyA=; b=MX9TL6igSoEDIg7cFuLOnZqBKdwgifBJEhzh5gDeTJVO
-        1+FF1d+uqvJ8RdDwa3Hh8cUYAETskRlVMB/ZuwXuovb8zeIg1LZgAQWiv3SPRmOZ
-        FdW4GkmqaFLFARh0EioGcjd17evb2kDrSUXytEYdE68ydZpWP8jE+N0cVCuIDtLl
-        FX+/7PdkZNbPTeP328Pw7kIq3fewkFpIoz6LqWLMciNo+tS4SFumvIH6n50K+yr3
-        +RqzXsLKSs28cM6CRO6PFihBPWZZVjECBVaHGV5/7OEQAJrpixyZqgmaCwtDCKQY
-        ZCVrm/vnn3tinsSZAwYZI9rUBf+j8GhxYHhiCSrMNg==
-X-ME-Sender: <xms:urbSY2Ea6lOMQQn_TX4uQJgMNRY-Lc0Y0bUyKo7WxEKlDcQmZ86AXA>
-    <xme:urbSY3V9wsUWmxE3jcwvvBFqsdHwBwI9Zem28LC4D3oW_5YBYFsRofZU_QlFOJ6fv
-    -mS8BWzSsBMNksjrBg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedguddttdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:u7bSYwLhwgWinmZK-tFmtjpAhNSlv9JesjDK1sUGulTvr7QyzjavLw>
-    <xmx:u7bSYwEG3fiOLYTlRM_s04Y3VnJsB2L951vYX72KYq_Oc4ClgKzuCA>
-    <xmx:u7bSY8U4sCy-k4ODDQb59EmiireUieZyCBeAQ_SSMjZtxHFtGua6AQ>
-    <xmx:u7bSY1OG2uLvSOdrxhQtlLLzM6KZEG8vFW4_EzkuJoKj8KFaFjYXDA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 756CEB60086; Thu, 26 Jan 2023 12:22:02 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <30d80e40-eab8-4da3-bbf2-be90ebc8f46d@app.fastmail.com>
-In-Reply-To: <20230126164046.4sk5qaqiwgygt2cg@skbuf>
-References: <20230126163647.3554883-1-arnd@kernel.org>
- <20230126164046.4sk5qaqiwgygt2cg@skbuf>
-Date:   Thu, 26 Jan 2023 18:21:43 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Vladimir Oltean" <vladimir.oltean@nxp.com>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Claudiu Manoil" <claudiu.manoil@nxp.com>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, "Andrew Lunn" <andrew@lunn.ch>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, Netdev <netdev@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: mscc: ocelot: add ETHTOOL_NETLINK dependency
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 26 Jan 2023 12:25:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89ED6EF9F;
+        Thu, 26 Jan 2023 09:25:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 264AB618F8;
+        Thu, 26 Jan 2023 17:25:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 478D8C433EF;
+        Thu, 26 Jan 2023 17:25:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674753932;
+        bh=+ygtup1H1Hi1Gj+bbIS1pl26EshplfwU7EhVnXXoFeM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UAIcSb4sK6Ij9EyAudyeCc/0lQ+N6Q74Qphh+wBPc/mzam2PLwYJW4bEokgDeCjG3
+         XWw5/Tp66QgOycRHuCP69IIhpdN+uWOExXdIi1OR31UD91RHEFi3GgVUl5C3gMR8ps
+         m+W16tRVx3j34cPb6wFW7oj9e23r+BnUi7Q725H8VSPrbe/a89lv7jiQtBoxTmnfZi
+         z4igKcvO7eEHL07B8DuH59k+i7NAVmOtHM8fTuM2yr8IUQqMi+o8E1FiwCH6nN/fBC
+         wD++RxkSFw+SPLRJ+VO08LxrqX7K/UonfZhTdplhP4p2uCPteRxrd3BJWdmN4K+e4q
+         cH9IYmXj4fB8g==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        apatel@ventanamicro.com, atishp@atishpatra.org,
+        mark.rutland@arm.com, ben@decadent.org.uk, bjorn@kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH -next V15 0/7] riscv: Add GENERIC_ENTRY support
+Date:   Thu, 26 Jan 2023 12:25:09 -0500
+Message-Id: <20230126172516.1580058-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023, at 17:40, Vladimir Oltean wrote:
+From: Guo Ren <guoren@linux.alibaba.com>
 
-> Thanks for the patch and sorry for the breakage. This is now fixed by 
-> commit:
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=9179f5fe4173
+The patches convert riscv to use the generic entry infrastructure from
+kernel/entry/*. Some optimization for entry.S with new .macro and merge
+ret_from_kernel_thread into ret_from_fork.
 
-Looks good, thanks!
+The 1,2 are the preparation of generic entry. 3~7 are the main part
+of generic entry.
 
-     Arnd
+All tested with rv64, rv32, rv64 + 32rootfs, all are passed.
+
+You can directly try it with:
+[1] https://github.com/guoren83/linux/tree/generic_entry_v15
+
+Any reviews and tests are helpful.
+
+v15:
+ - Fixup compile error for !MMU (Thx Conor)
+ - Rebase on riscv for-next (20230127)
+
+v14:
+https://lore.kernel.org/linux-riscv/20230112095848.1464404-1-guoren@kernel.org/
+ - Fixup W=1 warning reported by kernel test robot <lkp@intel.com>
+
+v13:
+https://lore.kernel.org/linux-riscv/20230107113838.3969149-1-guoren@kernel.org/
+ - Remove noinstr for original do_page_fault
+ - Centralize all the necesarily-noinstr bits in
+   arch/riscv/kernel/traps.c
+
+v12:
+https://lore.kernel.org/linux-riscv/20230103033531.2011112-1-guoren@kernel.org/
+ - Rebase on newest for-next-20230103 (Linux 6.2-rc1)
+ - Add Reviewed-by: Björn Töpel
+
+v11:
+https://lore.kernel.org/linux-riscv/20221210171141.1120123-1-guoren@kernel.org/
+ - Rebase on newest for-next-20221211
+ - Remove stack optimization patch series
+ - Optimize comments
+ - Replace ENTRY with SYM_CODE/FUNC_START in entry.S
+
+v10:
+https://lore.kernel.org/linux-riscv/20221208025816.138712-1-guoren@kernel.org/
+ - Rebase on palmer/for-next branch (20221208)
+ - Remove unrelated patches from the series (Suggested-by: Bjorn)
+ - Fixup Typos. 
+
+v9:
+https://lore.kernel.org/linux-riscv/20221130034059.826599-1-guoren@kernel.org/
+ - Fixup NR_syscalls check (by Ben Hutchings)
+ - Add Tested-by: Jisheng Zhang
+
+v8:
+https://lore.kernel.org/linux-riscv/20221103075047.1634923-1-guoren@kernel.org/
+ - Rebase on palmer/for-next branch (20221102)
+ - Add save/restore_from_x5_to_x31 .macro (JishengZhang)
+ - Consolidate ret_from_kernel_thread into ret_from_fork (JishengZhang)
+ - Optimize __noinstr_section comment (JiangshanLai)
+
+v7:
+https://lore.kernel.org/linux-riscv/20221015114702.3489989-1-guoren@kernel.org/
+ - Fixup regs_irqs_disabled with SR_PIE
+ - Optimize stackleak_erase -> stackleak_erase_on_task_stack (Thx Mark
+   Rutland)
+ - Add BUG_ON(!irqs_disabled()) in trap handlers
+ - Using regs_irqs_disabled in __do_page_fault
+ - Remove unnecessary irq disable in ret_from_exception and add comment
+
+v6:
+https://lore.kernel.org/linux-riscv/20221002012451.2351127-1-guoren@kernel.org/
+ - Use THEAD_SIZE_ORDER for thread size adjustment in kconfig (Thx Arnd)
+ - Move call_on_stack to inline style (Thx Peter Zijlstra)
+ - Fixup fp chain broken (Thx Chen Zhongjin)
+ - Remove common entry modification, and fixup page_fault entry (Thx
+   Peter Zijlstra)
+ - Treat some traps as nmi entry (Thx Peter Zijlstra)
+
+v5:
+https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/
+ - Add riscv own stackleak patch instead of generic entry modification
+   (by Mark Rutland)
+ - Add EXPERT dependency for THREAD_SIZE (by Arnd)
+ - Add EXPERT dependency for IRQ_STACK (by Sebastian, David Laight)
+ - Corrected __trap_section (by Peter Zijlstra)
+ - Add Tested-by (Yipeng Zou)
+ - Use CONFIG_SOFTIRQ_ON_OWN_STACK replace "#ifndef CONFIG_PREEMPT_RT"
+ - Fixup systrace_enter compile error
+ - Fixup exit_to_user_mode_prepare preempt_disable warning
+
+V4:
+https://lore.kernel.org/linux-riscv/20220908022506.1275799-1-guoren@kernel.org/
+ - Fixup entry.S with "la" bug (by Conor.Dooley)
+ - Fixup missing noinstr bug (by Peter Zijlstra)
+
+V3:
+https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
+ - Fixup CONFIG_COMPAT=n compile error
+ - Add THREAD_SIZE_ORDER config
+ - Optimize elf_kexec.c warning fixup
+ - Add static to irq_stack_ptr definition
+
+V2:
+https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
+ - Fixup compile error by include "riscv: ptrace: Remove duplicate
+   operation"
+ - Fixup compile warning
+   Reported-by: kernel test robot <lkp@intel.com>
+ - Add test repo link in cover letter
+
+V1:
+https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
+
+Guo Ren (3):
+  riscv: ptrace: Remove duplicate operation
+  riscv: entry: Add noinstr to prevent instrumentation inserted
+  riscv: entry: Convert to generic entry
+
+Jisheng Zhang (3):
+  riscv: entry: Remove extra level wrappers of trace_hardirqs_{on,off}
+  riscv: entry: Consolidate ret_from_kernel_thread into ret_from_fork
+  riscv: entry: Consolidate general regs saving/restoring
+
+Lai Jiangshan (1):
+  compiler_types.h: Add __noinstr_section() for noinstr
+
+ arch/riscv/Kconfig                      |   1 +
+ arch/riscv/include/asm/asm-prototypes.h |   2 +
+ arch/riscv/include/asm/asm.h            |  63 +++++
+ arch/riscv/include/asm/csr.h            |   1 -
+ arch/riscv/include/asm/entry-common.h   |  11 +
+ arch/riscv/include/asm/ptrace.h         |  10 +-
+ arch/riscv/include/asm/stacktrace.h     |   5 +
+ arch/riscv/include/asm/syscall.h        |  21 ++
+ arch/riscv/include/asm/thread_info.h    |  13 +-
+ arch/riscv/kernel/Makefile              |   2 -
+ arch/riscv/kernel/entry.S               | 324 +++---------------------
+ arch/riscv/kernel/head.h                |   1 -
+ arch/riscv/kernel/mcount-dyn.S          |  56 +---
+ arch/riscv/kernel/process.c             |   5 +-
+ arch/riscv/kernel/ptrace.c              |  44 ----
+ arch/riscv/kernel/signal.c              |  29 +--
+ arch/riscv/kernel/trace_irq.c           |  27 --
+ arch/riscv/kernel/trace_irq.h           |  11 -
+ arch/riscv/kernel/traps.c               | 144 +++++++++--
+ arch/riscv/mm/fault.c                   |   6 +-
+ include/linux/compiler_types.h          |  15 +-
+ 21 files changed, 289 insertions(+), 502 deletions(-)
+ create mode 100644 arch/riscv/include/asm/entry-common.h
+ delete mode 100644 arch/riscv/kernel/trace_irq.c
+ delete mode 100644 arch/riscv/kernel/trace_irq.h
+
+-- 
+2.36.1
+
