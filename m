@@ -2,114 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EA067CE31
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B00967CE2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjAZOdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
+        id S232227AbjAZOdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbjAZOdL (ORCPT
+        with ESMTP id S232182AbjAZOdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:33:11 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D358A47437;
-        Thu, 26 Jan 2023 06:33:06 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.165.226])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 26 Jan 2023 09:33:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC3B44BD5;
+        Thu, 26 Jan 2023 06:32:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A80EE6602E70;
-        Thu, 26 Jan 2023 14:32:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674743585;
-        bh=mV9P8bJmZu6ZoVaX/AoLhr6Mb+mbynE4WbhCFBSCjyE=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=FNbePeBQeO8Fdj/wt46vQOVYphnTBs4KEpYulFjh8hvNua+sMT7opUr8ibsC+Eh93
-         0OQeEXt+yEX3c+Z0t8r2Q9gNHLjgXearU+jHnYfS3oRNcYb+N+/Em2U8UtgyPclSLE
-         vlk/ZrkmCi95r9EKBWKa3Xrw4J4Vj6ODkBva2Q5Ea+X7BNJKCyvUflEpMFUWEz203F
-         wMJuADIlJs3vX2xWykkCRgcMGahtzEAeLo/1AzxnsOogEh325x7/m4ITpd6I1Enq3j
-         QKm4ZnmMS6hH+0lSbMnk6o1qbx7GKkAKA+wqtZTXMA97N1HPH0yAiLNKZO8RyjmLD6
-         NiKy62m6D6/6g==
-Message-ID: <e14875ff-7d59-ae24-9fb0-8169c54c7a17@collabora.com>
-Date:   Thu, 26 Jan 2023 19:32:53 +0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21D4361853;
+        Thu, 26 Jan 2023 14:32:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05A11C433EF;
+        Thu, 26 Jan 2023 14:32:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674743578;
+        bh=f9LSun52cCqwsxuwa0XRp6EZKI8omNUekwnnzl11fN8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ave6yRlotlhXORIulF3rKwxB2SMEGkp2ByNYB9mbtA0UxGyBjfx9KVWjv7uyn1Fet
+         QFNLBjKoUgTS+b9ETtnildtEcVryqs9HpGGntrioow1kQ0E/PLCyUmxjfBrOyAExpp
+         fzOO/fHUBYCur4jyXvTu1twMPS7jMUAbsoBelE5SW7QSVLNqZE83Hkhcyw8w52c2G0
+         UpZEfKAXRq9JRYhTY7N2i5sfLZcCSzjuavKlIIucK6u53prvNqMDwQhvMJsh4nrK+6
+         Q7m531mIBb2XHovpQv/dNv+CzSnEVagWQfHS67PqNrEaw/tQioRhsjeivQRrs/m+8q
+         8ye+itC5yCOrg==
+Date:   Thu, 26 Jan 2023 14:32:53 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jesse Taube <mr.bossman075@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        lee.jones@linaro.org
+Subject: Re: [PATCH v2] drivers/mfd: simple-mfd-i2c: Add generic compatible
+Message-ID: <Y9KPFbZO+FEgU9G6@google.com>
+References: <20221202113226.114465-1-Mr.Bossman075@gmail.com>
+ <20230119175135.GA2085792-robh@kernel.org>
+ <Y8mt6ZCMf4YZvDYA@google.com>
+ <CAL_JsqJQd4W5-8ej48hAebvyA6neH=2hTtzVU5HhFpQ2yKsQFw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v7 3/4] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-To:     Peter Xu <peterx@redhat.com>
-References: <20230109064519.3555250-1-usama.anjum@collabora.com>
- <20230109064519.3555250-4-usama.anjum@collabora.com> <Y8hyqhgx41/ET7bC@x1n>
- <31b71791-66b0-c2d8-81da-e17eff5ffbe8@collabora.com> <Y9AVuF63y9UjEYcj@x1n>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y9AVuF63y9UjEYcj@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_JsqJQd4W5-8ej48hAebvyA6neH=2hTtzVU5HhFpQ2yKsQFw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 10:30 PM, Peter Xu wrote:
-> On Mon, Jan 23, 2023 at 05:18:13PM +0500, Muhammad Usama Anjum wrote:
->>>> +	if (IS_GET_OP(p) && p->max_pages && (p->found_pages == p->max_pages))
->>>> +		return -ENOSPC;
->>>
->>> This is the function to test "whether the walker should walk the vma
->>> specified".  This check should IIUC be meaningless because found_pages
->>> doesn't boost during vma switching, while OTOH your pmd walker fn should do
->>> proper check when increasing found_pages and return -ENOSPC properly when
->>> the same condition met.  That should be enough, IMHO.
->> This check is needed in case we want to abort the walk at once. We return
->> negative value from here which aborts the walk. Returning negative value
->> from pmd_entry doesn't abort the walk. So this check is needed in the
->> test_walk.
-> 
-> Why?  What I see locally is (walk_pmd_range):
-> 
-> 		if (ops->pmd_entry)
-> 			err = ops->pmd_entry(pmd, addr, next, walk);
-> 		if (err)
-> 			break;
-Sorry, mistake on my part. I'll correct it in next version (v9).
+On Fri, 20 Jan 2023, Rob Herring wrote:
 
+> On Thu, Jan 19, 2023 at 2:54 PM Lee Jones <lee@kernel.org> wrote:
+> >
+> > On Thu, 19 Jan 2023, Rob Herring wrote:
+> >
+> > > On Fri, Dec 02, 2022 at 06:32:26AM -0500, Jesse Taube wrote:
+> > > > Some devices may want to use this driver without having a specific
+> > > > compatible string. Add a generic compatible string to allow this.
+> > >
+> > > What devices need this?
+> > >
+> > > Is that no specific compatible string at all or just in the kernel?
+> > > Because the former definitely goes against DT requirements. The latter
+> > > enables the former without a schema.
+> > >
+> > > >
+> > > > Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> > > > ---
+> > > >  drivers/mfd/simple-mfd-i2c.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+> > > > index f4c8fc3ee463..0bda0dd9276e 100644
+> > > > --- a/drivers/mfd/simple-mfd-i2c.c
+> > > > +++ b/drivers/mfd/simple-mfd-i2c.c
+> > > > @@ -73,6 +73,7 @@ static const struct simple_mfd_data silergy_sy7636a = {
+> > > >  };
+> > > >
+> > > >  static const struct of_device_id simple_mfd_i2c_of_match[] = {
+> > > > +   { .compatible = "simple-mfd-i2c-generic" },
+> > >
+> > > Simple and generic? There is no such device. Anywhere.
+> > >
+> > > This is also not documented which is how I found it (make
+> > > dt_compatible_check). But this should be reverted or dropped rather than
+> > > documented IMO.
+> >
+> > I thought it would be better than having a huge list here.
 > 
-> Thanks,
+> What indication is there that the list would be huge? We have 2 out of
+> 137 MFD bindings. Usually if the MFD is simple, we'd make it a single
+> node. It just needs to be clear what the conditions are for using it.
 > 
+> > Devices should *also* be allocated a specific compatible string.
+> >
+> > $ git grep simple-mfd -- arch
+> 
+> Why can't simple-mfd be used here?
+
+Until this is clarified, agreed and documented, I'm dropping the patch.
 
 -- 
-BR,
-Muhammad Usama Anjum
+Lee Jones [李琼斯]
