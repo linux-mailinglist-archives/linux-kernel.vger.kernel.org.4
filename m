@@ -2,134 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09B867D454
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD2667D3FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbjAZSiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:38:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        id S230343AbjAZSUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbjAZSiI (ORCPT
+        with ESMTP id S230051AbjAZST6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:38:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5560B49415
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 10:37:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674758234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GCnG7e8Wg2ZPkYk2BgwcAsCpETyBPYzxTKI98DQimBw=;
-        b=RLMPfmutVWcQ8VoMDSVUNbDQJE0pUMKv8dXM7DGY+cV1KPb78dhEeDeM7h/vr666qnb9sv
-        50ZQUWshZJev3jagPnfFNQbYVSIS1d+7r0OXqDNWkUYoMU2oCvQDIqy5W1pxsQuRlTKx90
-        +0AZE5JEETenMYcwsvvLbTKt/WetG+Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-DfgxT9p-Or6OJ0aCbIzH7w-1; Thu, 26 Jan 2023 13:37:13 -0500
-X-MC-Unique: DfgxT9p-Or6OJ0aCbIzH7w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 26 Jan 2023 13:19:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABA96537D;
+        Thu, 26 Jan 2023 10:19:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7980185D062;
-        Thu, 26 Jan 2023 18:37:12 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3D89340C2064;
-        Thu, 26 Jan 2023 18:37:12 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 0FC7140975B20; Thu, 26 Jan 2023 15:19:45 -0300 (-03)
-Date:   Thu, 26 Jan 2023 15:19:45 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD4086192B;
+        Thu, 26 Jan 2023 18:19:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1940C433EF;
+        Thu, 26 Jan 2023 18:19:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674757196;
+        bh=Yhgs9+A5wKBzRaMRYNnqazTkLbHVQaZOCExLNcxL1Z8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=giu8wG7//Z59qJSKD1YBAEv0EXlZAK8nbm7JsHXvc72vFpdQKFS7VDbMFPSPxx7gq
+         fOteqb4ZulxWqI/5XGZVM3TTizIKH1IeU5pghMxWrp515nS9SZKzAnLoICv5aO9YfU
+         CnUakiJS+SgwLhg+M8k/o3CLx64HVURBiN2wsgROAajf0YIJr9uBuaOz20SkChcof3
+         +mxOSJ1v2bqPTeASWO0Fx2sRomrTNhrQKhM15SqVppJLGNcZegxCBgvlnJanY1PzFj
+         nJN9f16KTBhcA8AfAB+JlPPVOxzfotpx+rNj9Uh3aAvw9tb4hI3dQzr+QjVcX3Bcw5
+         /24S6rj1GgYXw==
+Date:   Thu, 26 Jan 2023 12:19:54 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-Message-ID: <Y9LEQfX5dkEyBOkT@tpad>
-References: <20230125073502.743446-1-leobras@redhat.com>
- <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
- <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
- <Y9FzSBw10MGXm2TK@tpad>
- <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
+Subject: Re: [PATCH v9 24/27] dmaengine: dw-edma: Relax driver config settings
+Message-ID: <20230126181954.GA1290077@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230126163750.ae6z3pkyd3o32byn@mobilestation>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 03:14:48PM -0800, Roman Gushchin wrote:
-> On Wed, Jan 25, 2023 at 03:22:00PM -0300, Marcelo Tosatti wrote:
-> > On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Brás wrote:
-> > > On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
-> > > > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
-> > > > > Disclaimer:
-> > > > > a - The cover letter got bigger than expected, so I had to split it in
-> > > > >     sections to better organize myself. I am not very confortable with it.
-> > > > > b - Performance numbers below did not include patch 5/5 (Remove flags
-> > > > >     from memcg_stock_pcp), which could further improve performance for
-> > > > >     drain_all_stock(), but I could only notice the optimization at the
-> > > > >     last minute.
-> > > > > 
-> > > > > 
-> > > > > 0 - Motivation:
-> > > > > On current codebase, when drain_all_stock() is ran, it will schedule a
-> > > > > drain_local_stock() for each cpu that has a percpu stock associated with a
-> > > > > descendant of a given root_memcg.
-> 
-> Do you know what caused those drain_all_stock() calls? I wonder if we should look
-> into why we have many of them and whether we really need them?
-> 
-> It's either some user's actions (e.g. reducing memory.max), either some memcg
-> is entering pre-oom conditions. In the latter case a lot of drain calls can be
-> scheduled without a good reason (assuming the cgroup contain multiple tasks running
-> on multiple cpus). Essentially each cpu will try to grab the remains of the memory quota
-> and move it locally. I wonder in such circumstances if we need to disable the pcp-caching
-> on per-cgroup basis.
-> 
-> Generally speaking, draining of pcpu stocks is useful only if an idle cpu is holding some
-> charges/memcg references (it might be not completely idle, but running some very special
-> workload which is not doing any kernel allocations or a process belonging to the root memcg).
-> In all other cases pcpu stock will be either drained naturally by an allocation from another
-> memcg or an allocation from the same memcg will "restore" it, making draining useless.
-> 
-> We also can into drain_all_pages() opportunistically, without waiting for the result.
-> On a busy system it's most likely useless, we might oom before scheduled works will be executed.
-> 
-> I admit I planned to do some work around and even started, but then never had enough time to
-> finish it.
-> 
-> Overall I'm somewhat resistant to an idea of making generic allocation & free paths slower
-> for an improvement of stock draining. It's not a strong objection, but IMO we should avoid
-> doing this without a really strong reason.
+On Thu, Jan 26, 2023 at 07:37:50PM +0300, Serge Semin wrote:
+> On Wed, Jan 25, 2023 at 05:23:57PM -0600, Bjorn Helgaas wrote:
 
-The expectation would be that cache locking should not cause slowdown of
-the allocation and free paths:
+> > It's a pretty trivial update, so I just did it myself.  The result is
+> > at https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=pci/ctrl/dwc&id=ecadcaed4ef7
+> > 
+> > I split this patch and tweaked some commit messages for consistency
+> > (including the "DW eDMA PCIe driver" change above).  "git diff -b"
+> > with Lorenzo's current branch (95624672bb3e ("PCI: dwc: Add DW eDMA
+> > engine support")) is empty except for a minor comment change.  
+> 
+> Great! Thanks. Although I've already created v10 beforehand but didn't
+> submitted it yet waiting for your response. The split up patches look
+> exactly like yours.
+> 
+> In addition to that since I was going to re-send v10 I also took into
+> account your comments regarding the patch:
+> [PATCH v9 19/27] dmaengine: dw-edma: Use non-atomic io-64 methods
+> Link: https://lore.kernel.org/linux-pci/20230113171409.30470-20-Sergey.Semin@baikalelectronics.ru/
+> I've dropped unneeded modification and unpinned another fixes patch
+> which turned out to be a part of those modifications. So if you
+> re-based your pci/ctrl/dwc branch with that patch replaced with the
+> patches attached to this email it would have been great. Otherwise
+> it's ok to merge the series as is.
+> 
+> Note in the attached "non-atomic io-64" patch I've already replaced
+> the commit log with the your short version.
 
-https://manualsbrain.com/en/manuals/1246877/?page=313
+Awesome, thanks!  I folded those updates in and updated my branch.
 
-For the P6 and more recent processor families, if the area of memory being locked 
-during a LOCK operation is cached in the processor that is performing the LOCK oper-
-ation as write-back memory and is completely contained in a cache line, the 
-processor may not assert the LOCK# signal on the bus. Instead, it will modify the 
-memory location internally and allow it’s cache coherency mechanism to insure that 
-the operation is carried out atomically. This operation is called “cache locking.” The 
-cache coherency mechanism automatically prevents two or more processors that ...
+And merged the whole thing into the PCI "next" branch.
 
+Thanks for all your work!
 
+Bjorn
