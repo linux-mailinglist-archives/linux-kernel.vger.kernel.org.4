@@ -2,109 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E0E67D52D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E639C67D531
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjAZTOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 14:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
+        id S231826AbjAZTPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 14:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjAZTOG (ORCPT
+        with ESMTP id S229650AbjAZTPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 14:14:06 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501F62D43;
-        Thu, 26 Jan 2023 11:13:49 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0C8AA1F8AA;
-        Thu, 26 Jan 2023 19:13:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674760428; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 26 Jan 2023 14:15:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC444577FE
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:14:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674760448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YnzrMwJWnqV7xEolFqXRf8x90j0rKrmMDrv1KOIfhio=;
-        b=ei5CGv7oFwVoJj4dBnXnDv29lsXPo+m8Uh+bxtoV2rpzhI8Q3sewvDYNPeZ/J56Sf6OI/Q
-        5BPy50FL8QTq/BqhaG6lmuZRaASdcaPCCLxrr2JAro6T5byuInzzNprRAb2ILLPx0l12Cs
-        0UkqAkcvrZYEOQ0rOMzZlDb5OKXRfCA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DC22D13A09;
-        Thu, 26 Jan 2023 19:13:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NRQpNOvQ0mO9FwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 26 Jan 2023 19:13:47 +0000
-Date:   Thu, 26 Jan 2023 20:13:47 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-Message-ID: <Y9LQ615H13RmG7wL@dhcp22.suse.cz>
-References: <20230125073502.743446-1-leobras@redhat.com>
- <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
- <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
- <Y9FzSBw10MGXm2TK@tpad>
- <Y9IvoDJbLbFcitTc@dhcp22.suse.cz>
- <Y9LDAZmApLeffrT8@tpad>
+        bh=ewpetcjXX//uVlbm7naEJ+CbPTwcrgo5uLE7anSGYlQ=;
+        b=CBzeFkvbDCuc+k2tRa9+s0uEoV+SdDMK9/H/DFLQzMsRztQ8oqJ/9KewtqCmWsS3Yoz6ZV
+        89LZhZjsk2xv+nj1HXh0pFfz692UnEbGYDN+VWDvUR7sNxAWg+Jsw37guFNocnRmVLXG7D
+        YKjeO8EhiyvmWqBCU3PJqnmVUkXhPA8=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-12-jDpMpMXkMw26wc4WcSyv4A-1; Thu, 26 Jan 2023 14:14:06 -0500
+X-MC-Unique: jDpMpMXkMw26wc4WcSyv4A-1
+Received: by mail-ej1-f69.google.com with SMTP id du14-20020a17090772ce00b0087108bbcfa6so1843797ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:14:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ewpetcjXX//uVlbm7naEJ+CbPTwcrgo5uLE7anSGYlQ=;
+        b=6qwoO4lgoi/egk+URnu1wRB56HXNqrbeXTnpysYENE4+7crJPRWTb402YzrgojbssY
+         bQkf7SKRsBCO0SV+k0NkG+9wQDt8lE9QwFWQ/IVN2Ro02mp3wYZyRI6JooEDRdnTcH/k
+         OD2QN5mg1XJBvNTQ8TiTuLfWnQvPAIgFDEuYLJMHJzxuJIbDF64GeaOYo1ZSkvVMXXmc
+         7wqNLooqjInRpzaG+yFL48szqLyN01mbZ5ESPh6aLrjNVtsQ5qjCsAq8mHQe856LLn82
+         bWu/GSyh8TljcsUwX1DcaAxO51iPLoY1/OcL6QMIuflMgkUG++btmokmIerTFJFQ/GbX
+         SVnQ==
+X-Gm-Message-State: AFqh2kqILmRAVMiz5ULID838Ubg+bCYr44AcfOkOS5awzrrVikNhlRfx
+        rJ+mY9Hzbu0CN1YGYwPmMdbd6ovx1UuHFFiBLdw1pXmX0KlVo8YlLJyG0D5xOH6s1lyi/NZG7d4
+        ckN1rOM3fBMPLm6Lh/cZt2fqx
+X-Received: by 2002:a17:907:d506:b0:7c0:cc69:571b with SMTP id wb6-20020a170907d50600b007c0cc69571bmr45449528ejc.8.1674760444940;
+        Thu, 26 Jan 2023 11:14:04 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXthLW3WuYOy4V25eXOjf0rSB91MY3+QAG0jSaeD9Auwq3D5kPEWFtkuVLnAC/Qx+fiQxZsaFA==
+X-Received: by 2002:a17:907:d506:b0:7c0:cc69:571b with SMTP id wb6-20020a170907d50600b007c0cc69571bmr45449453ejc.8.1674760443885;
+        Thu, 26 Jan 2023 11:14:03 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id e22-20020a17090658d600b0085214114218sm990274ejs.185.2023.01.26.11.14.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 11:14:03 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id CD8D4942F97; Thu, 26 Jan 2023 20:14:02 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexander Duyck <alexander.duyck@gmail.com>, nbd@nbd.name
+Cc:     alexander.duyck@gmail.com, davem@davemloft.net,
+        edumazet@google.com, hawk@kernel.org, ilias.apalodimas@linaro.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linyunsheng@huawei.com, lorenzo@kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com
+Subject: Re: [net PATCH] skb: Do mix page pool and page referenced frags in GRO
+In-Reply-To: <167475990764.1934330.11960904198087757911.stgit@localhost.localdomain>
+References: <04e27096-9ace-07eb-aa51-1663714a586d@nbd.name>
+ <167475990764.1934330.11960904198087757911.stgit@localhost.localdomain>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 26 Jan 2023 20:14:02 +0100
+Message-ID: <87tu0dkt1h.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9LDAZmApLeffrT8@tpad>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 26-01-23 15:14:25, Marcelo Tosatti wrote:
-> On Thu, Jan 26, 2023 at 08:45:36AM +0100, Michal Hocko wrote:
-> > On Wed 25-01-23 15:22:00, Marcelo Tosatti wrote:
-> > [...]
-> > > Remote draining reduces interruptions whether CPU 
-> > > is marked as isolated or not:
-> > > 
-> > > - Allows isolated CPUs from benefiting of pcp caching.
-> > > - Removes the interruption to non isolated CPUs. See for example 
-> > > 
-> > > https://lkml.org/lkml/2022/6/13/2769
-> > 
-> > This is talking about page allocato per cpu caches, right? In this patch
-> > we are talking about memcg pcp caches. Are you sure the same applies
-> > here?
-> 
-> Both can stall the users of the drain operation.
+Alexander Duyck <alexander.duyck@gmail.com> writes:
 
-Yes. But it is important to consider who those users are. We are
-draining when
-	- we are charging and the limit is hit so that memory reclaim
-	  has to be triggered.
-	- hard, high limits are set and require memory reclaim.
-	- force_empty - full memory reclaim for a memcg
-	- memcg offlining - cgroup removel - quite a heavy operation as
-	  well.
-all those could be really costly kernel operations and they affect
-isolated cpu only if the same memcg is used by both isolated and non-isolated
-cpus. In other words those costly operations would have to be triggered
-from non-isolated cpus and those are to be expected to be stalled. It is
-the side effect of the local cpu draining that is scheduled that affects
-the isolated cpu as well.
+> From: Alexander Duyck <alexanderduyck@fb.com>
+>
+> GSO should not merge page pool recycled frames with standard reference
+> counted frames. Traditionally this didn't occur, at least not often.
+> However as we start looking at adding support for wireless adapters there
+> becomes the potential to mix the two due to A-MSDU repartitioning frames in
+> the receive path. There are possibly other places where this may have
+> occurred however I suspect they must be few and far between as we have not
+> seen this issue until now.
+>
+> Fixes: 53e0961da1c7 ("page_pool: add frag page recycling support in page pool")
+> Reported-by: Felix Fietkau <nbd@nbd.name>
+> Signed-off-by: Alexander Duyck <alexanderduyck@fb.com>
 
-Is that more clear?
--- 
-Michal Hocko
-SUSE Labs
+I know I'm pattern matching a bit crudely here, but we recently had
+another report where doing a get_page() on skb->head didn't seem to be
+enough; any chance they might be related?
+
+See: https://lore.kernel.org/r/Y9BfknDG0LXmruDu@JNXK7M3
+
+-Toke
+
