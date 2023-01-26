@@ -2,127 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FB167D308
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EB667D325
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjAZR0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 12:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
+        id S231866AbjAZR1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 12:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231809AbjAZR0F (ORCPT
+        with ESMTP id S231916AbjAZR1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:26:05 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5386C116
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:25:56 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id fi26so2520090edb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:25:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hWKRlGogYap3CPDI8diqF4ISvAYgz/9ImImC4379uNg=;
-        b=dXWQrb5nhjTHjzjUTHHaj0fP7mIG1swSzaVkGHXGGMUaI+4UAXL3ywsws3BtjRn1Gp
-         aSmxfWLFONn9D274NDwiPm7kF74tLwfLCKOsRjyPNXCwJtqKlgTdx9+NdbjeoeEDA0ef
-         Stldk5VJhWXQ2etNEflTLkQfNBG8duvICregbO8838mj9c8edgB+8N8OoPJfbqRDZ8BZ
-         okLmVP2dX2bBNNr1eHwQ1om0/6Q/VmPK+O4JKAY04EM72p7Lf62qLTb0rlq7S7wF/fB3
-         h6vEZN9I4HYY9A99Y+NYIU0Lnc/wslvZtVH0AjN/bHbOOhVMLftfBN+MBfybOjTy9Uof
-         biRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hWKRlGogYap3CPDI8diqF4ISvAYgz/9ImImC4379uNg=;
-        b=3CfmYHjou4CXVt80Df7LkcZ3pXFaHbsLO2W5qE+T/u1xqS9AfNmGy1VcwP0lJ6l31D
-         u2Pw4eUeunOiRPeTy69BmdKrvsNFODAApWTS5UGUv+q0vBthe1vcKxCCLL/ocn+QzDdy
-         t4cvkyXtPj46bMLBzRe4Ohnvxam/RHaEAuYmImwXhlVGpMGiLDww7KLJUqQKEVa3i+pG
-         HDQDLytM2BvIk6fxc+ch9aQ+5WFyIYMOWBov4Kojd6v/QUusbizeEi7OEbY3jH/tPIET
-         thma/ooctiw5D0SwivBaTdKAJRCEum51BhK8FYSVwWpZUgN79pjimnyEOO4K2Cgt7xGG
-         pzcQ==
-X-Gm-Message-State: AFqh2krAN+vsubyzwbirqdeKD/A5qyVnEyw4oZn8ScElwIPRJKhmU2O9
-        iwlJd0T5Z8zI4o/0+YSFxhafK8qh2TWSyA4B
-X-Google-Smtp-Source: AMrXdXsM2R/sb8iXS1jpA8aP4DxzntghQIgGKnSPt9RmXpzADjyYGWh0nE7O07jmsWks7Oy57Cek1g==
-X-Received: by 2002:a05:6402:5407:b0:483:21d8:87af with SMTP id ev7-20020a056402540700b0048321d887afmr41965472edb.24.1674753954637;
-        Thu, 26 Jan 2023 09:25:54 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05640234cc00b0049fc459ef1fsm998410edc.90.2023.01.26.09.25.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 09:25:54 -0800 (PST)
-Message-ID: <09bf9907-27b9-146f-4a94-dcab51350d5a@linaro.org>
-Date:   Thu, 26 Jan 2023 18:25:52 +0100
+        Thu, 26 Jan 2023 12:27:41 -0500
+Received: from outbound-smtp28.blacknight.com (outbound-smtp28.blacknight.com [81.17.249.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2761728C8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:27:05 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp28.blacknight.com (Postfix) with ESMTPS id 0AFB0CCB32
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:27:02 +0000 (GMT)
+Received: (qmail 17492 invoked from network); 26 Jan 2023 17:27:01 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 26 Jan 2023 17:27:01 -0000
+Date:   Thu, 26 Jan 2023 17:26:57 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 4/7] mm: replace vma->vm_flags direct modifications
+ with modifier calls
+Message-ID: <20230126172657.bmga5hy74ifsbhun@techsingularity.net>
+References: <20230125233554.153109-1-surenb@google.com>
+ <20230125233554.153109-5-surenb@google.com>
+ <20230126151015.ru2m26jkhwib6x6u@techsingularity.net>
+ <CAJuCfpEzAbpy9rZ5KeZXQsqFTPOGYv6CZQfP9SHqcqFi0s7neg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] soc: qcom: llcc: Fix slice configuration values for
- SC8280XP
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Johan Hovold <johan@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20230126171636.2319496-1-abel.vesa@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230126171636.2319496-1-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpEzAbpy9rZ5KeZXQsqFTPOGYv6CZQfP9SHqcqFi0s7neg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 26.01.2023 18:16, Abel Vesa wrote:
-> The new values have been taken from downstream kernel.
+On Thu, Jan 26, 2023 at 08:10:26AM -0800, Suren Baghdasaryan wrote:
+> On Thu, Jan 26, 2023 at 7:10 AM Mel Gorman <mgorman@techsingularity.net> wrote:
+> >
+> > On Wed, Jan 25, 2023 at 03:35:51PM -0800, Suren Baghdasaryan wrote:
+> > > Replace direct modifications to vma->vm_flags with calls to modifier
+> > > functions to be able to track flag changes and to keep vma locking
+> > > correctness.
+> > >
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > Acked-by: Michal Hocko <mhocko@suse.com>
+> >
+> > Acked-by: Mel Gorman <mgorman@techsingularity.net>
+> >
+> > Minor comments that are safe to ignore.
+> >
+> > I think a better name for mod_vm_flags is set_clear_vm_flags to hint that
+> > the first flags are to be set and the second flags are to be cleared.
+> > For this patch, it doesn't matter, but it might avoid accidental swapping
+> > in the future.
+> >
+> > reset_vm_flags might also be better named as reinit_vma_flags (or
+> > vma_flags_reinit). Maybe also encourage the use of [set|clear_mod]_vm_flags
+> > where possible in the comment to track exactly what is changing and
+> > why. Some cases like userfaultfd just want to clear __VM_UFFD_FLAGS but
+> > altering the flow in this patch is inappropriate and error prone. Others
+> > such as the infiniband changes and madvise are a lot more complex.
 > 
-> Fixes: ec69dfbdc426 ("soc: qcom: llcc: Add sc8180x and sc8280xp configurations")
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  drivers/soc/qcom/llcc-qcom.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+> That's a good point, but I don't want people to use mod_vm_flags() for
+> the cases when the order of set/clear really matters. In such cases
+> set_vm_flags() and clear_vm_flags() should be explicitly used. Maybe
+> to make that clear I should add a comment and rewrite the functions
+> as:
 > 
-> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-> index 23ce2f78c4ed..5702354fb946 100644
-> --- a/drivers/soc/qcom/llcc-qcom.c
-> +++ b/drivers/soc/qcom/llcc-qcom.c
-> @@ -183,17 +183,17 @@ static const struct llcc_slice_config sc8280xp_data[] = {
->  	{ LLCC_AUDIO,    6,  1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 0, 0 },
->  	{ LLCC_CMPT,     10, 6144, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 0, 0 },
->  	{ LLCC_GPUHTW,   11, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> -	{ LLCC_GPU,      12, 4096, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 1 },
-> +	{ LLCC_GPU,      12, 4608, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 1 },
-priority (the arg right after 4608) should be 0 per downstream
+> void mod_vm_flags(vma, set, clear) {
+>     vma.vm_flags = vma.vm_flags | set & clear;
+> }
+> 
 
+Offhand, I'm not thinking of a case where that really matters and as they
+are not necessarily ordered, it's raising a read flag so yes, it definitely
+it needs a comment if the ordering matters.
 
->  	{ LLCC_MMUHWT,   13, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
->  	{ LLCC_DISP,     16, 6144, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
->  	{ LLCC_AUDHW,    22, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
->  	{ LLCC_DRE,      26, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
->  	{ LLCC_CVP,      28, 512,  3, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
->  	{ LLCC_APTCM,    30, 1024, 3, 1, 0x0,   0x1, 1, 0, 0, 1, 0, 0 },
-> -	{ LLCC_WRCACHE,  31, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> -	{ LLCC_CVPFW,    32, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> -	{ LLCC_CPUSS1,   33, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> -	{ LLCC_CPUHWT,   36, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> +	{ LLCC_WRCACHE,  31, 512, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> +	{ LLCC_CVPFW,    17, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> +	{ LLCC_CPUSS1,   3, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> +	{ LLCC_CPUHWT,   5, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-CMPT1 (id 34) is still missing.
+> In this patchset it's not that obvious but mod_vm_flags() was really
+> introduced in the original per-VMA lock patchset for efficiency to
+> avoid taking extra per-VMA locks. A combo of
+> set_vm_flags()+clear_vm_flags() would try to retake the same per-VMA
+> lock in the second call while mod_vm_flags() takes the lock only once
+> and does both operations.
 
-With that:
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Ok, that seems fair but still needs a comment on why a mod_vm_flags is
+not necessarily equivalent to a set_vm_flags + clear_vm_flags in terms of
+correctness if that is indeed the case.
 
-Konrad
->  };
->  
->  static const struct llcc_slice_config sdm845_data[] =  {
+> Not a huge overhead because we check if the
+> lock is already taken and bail out early but still...
+> So, would the above modification to mod_vm_flags() address your concern?
+> 
+
+My concerns are entirely with the callers, not the implementation. If
+someone is modifying a call site using mod_vm_flags, they have to read
+through all the preceding logic to ensure the final combination of flags
+is valid.  It's a code maintenance issue, not a correctness issue.
+
+-- 
+Mel Gorman
+SUSE Labs
