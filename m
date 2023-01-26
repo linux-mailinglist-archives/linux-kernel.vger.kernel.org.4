@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7352E67C848
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C68967C841
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236767AbjAZKRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:17:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        id S236629AbjAZKRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:17:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237062AbjAZKRj (ORCPT
+        with ESMTP id S236355AbjAZKRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:17:39 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E2F14491;
-        Thu, 26 Jan 2023 02:17:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674728232; x=1706264232;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6/mVui7KHyg/685hFsXA62gG5MkPwHTsQ8fsOw6kk7o=;
-  b=j58poB+wqVja46qdWNa/H9DDea6SyONu+oXNC262PPzYpehoYZPpDNgg
-   dUuqEcpytvzmL3y8XxxwDrGcT2VSfPhHg6abaK7XRd2ACQWuFji3igkUz
-   IGsJMCaIvxZuPuvOdLiaPDQvokCZxQI5agoQtgRgpvkwQESyea2Qtf8WH
-   HS2hSqb55w97rAnOVgEqS9ca7CdZflIp+Ei/9E585uTaoxubmhevwpU+E
-   ZR8xnDhFHnNi1MqUIBBOpjDaBq1LHy65XO8nBhoWaCAzIhu5NVdWMPlPU
-   ER86munb+p5tbQItq6KyKNjN/xk3GSZo7VNrzkbGl7Z80K1zSMmNUj5TE
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="328029234"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="328029234"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 02:16:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="726223665"
-X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
-   d="scan'208";a="726223665"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jan 2023 02:16:18 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pKzIm-00FKtE-0t;
-        Thu, 26 Jan 2023 12:16:16 +0200
-Date:   Thu, 26 Jan 2023 12:16:16 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v1 5/5] gpio: Clean up headers
-Message-ID: <Y9JS8HEPMu+/zEFb@smile.fi.intel.com>
-References: <20230125201020.10948-1-andriy.shevchenko@linux.intel.com>
- <20230125201020.10948-6-andriy.shevchenko@linux.intel.com>
- <8454db45-a967-4542-8f16-538043542e14@app.fastmail.com>
+        Thu, 26 Jan 2023 05:17:16 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E953430A;
+        Thu, 26 Jan 2023 02:16:47 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 7so762253pga.1;
+        Thu, 26 Jan 2023 02:16:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N25kb8917DsEocMyJFvAiiipeCXaDAmvWVoSKk7Ucb0=;
+        b=J7dO80kzV3/qF3wGrZBEcsJCeJEp5R/pt3hGmXvqpAEmso/l5D0u0sgHZ9RX0xvomZ
+         2dXKQeZ7zV7XD2xGzCpF9px9ss3aPwnTXgST9A0Uwgza423jYi/HHbKXn30hs8pHiu2p
+         A2YvV4WXVMrfd404HQKm2lhJdiefVdJ4hka/Wv7qWnUBsu58j6fWmc6KHywb2EbEnaO/
+         xa6eVNhGPFffCvLG0vLIpx5VjW6WGgpcFIYtC3JAbXzwpovK5GFHnDCw15gLnss4zqiB
+         OZ89/CLLoE1HbK/sNFKMwqmug8CSOfk1w27usyit/ZFFB+ffZtyYuWW5HfDSWLOpaEip
+         1ODA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N25kb8917DsEocMyJFvAiiipeCXaDAmvWVoSKk7Ucb0=;
+        b=d7tT/ZEg+U4KJdUUCbRB/IGawtYqjojxXjpD97tfQUjAMK48sfwlKYqMgsbeuM42ZS
+         UZXMGn0+qzNAdsodTZatfuJcN2PB6yofF1o/Hb3qqSY8GxbUkAH51jnFYeHXvTWhWfsE
+         aU+A+VRC0jgzxfhJfORsDSzmqotu1kA8PaGtclft7A0hLQARNoZarJWBc/9Tc19wJA+B
+         K7KBJryqsnYvYNnNwoLVPtycZ4R30qhToPsF2hgqWkdTsBX+4/M1zb6Wff/Ksb95diyp
+         4gkbjPlw3zEhAX+lM6aawPPnnUViPnJuh44ZNJ8pHjno6ZUNNGNTwy738iNuF988X3nA
+         TnqA==
+X-Gm-Message-State: AFqh2kreLO9SqagSEpc20Rwnl4FoioVCN8YKcSvJHqXcmN1ICYhXLCLq
+        aslU4u8FU4fwJv87StA1c+HBEUb0C4hbYZNQNg0=
+X-Google-Smtp-Source: AMrXdXuMrEBm+4oiJayh39LZrd1yppbt7a1PGYiFSqbjJHTWfkPRXLJ75/k1Yg/4x1L+XesT/pbGxb/r2VgM0gsID0k=
+X-Received: by 2002:aa7:9010:0:b0:578:6897:597c with SMTP id
+ m16-20020aa79010000000b005786897597cmr4172567pfo.35.1674728206647; Thu, 26
+ Jan 2023 02:16:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8454db45-a967-4542-8f16-538043542e14@app.fastmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230124110057.1.I69cf3d56c97098287fe3a70084ee515098390b70@changeid>
+In-Reply-To: <20230124110057.1.I69cf3d56c97098287fe3a70084ee515098390b70@changeid>
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+Date:   Thu, 26 Jan 2023 11:16:35 +0100
+Message-ID: <CAOiHx=niyEho+tJJ-dvOr3wOYiEOsvCvvJbxQvXGGoHbdxFhBQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] wifi: ath11k: Use platform_get_irq() to get the interrupt
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        Youghandhar Chintala <quic_youghand@quicinc.com>,
+        junyuu@chromium.org, Kalle Valo <kvalo@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 09:42:32AM +0100, Arnd Bergmann wrote:
-> On Wed, Jan 25, 2023, at 21:10, Andy Shevchenko wrote:
-> > There is a few things done:
-> > - include only the headers we are direct user of
-> > - when pointer is in use, provide a forward declaration
-> > - add missing headers
-> > - group generic headers and subsystem headers
-> > - sort each group alphabetically
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >  include/asm-generic/gpio.h    |  8 --------
-> >  include/linux/gpio.h          |  9 +++------
-> >  include/linux/gpio/consumer.h | 14 ++++++++++----
-> >  include/linux/gpio/driver.h   | 34 ++++++++++++++++++++++++----------
-> >  4 files changed, 37 insertions(+), 28 deletions(-)
-> 
-> This change looks fine, but it conflicts with a slightly
-> broader cleanup that I meant to have already submitted,
-> folding include/asm-generic/gpio.h into linux/gpio.h and
-> removing the driver-side interface from that.
-> 
-> Let me try to dig out my series again, we should be able to
-> either use my version, or merge parts of this patch into it.
+On Tue, 24 Jan 2023 at 20:05, Douglas Anderson <dianders@chromium.org> wrote:
+>
+> For the same reasons talked about in commit 9503a1fc123d ("ath9k: Use
+> platform_get_irq() to get the interrupt"), we should be using
+> platform_get_irq() in ath11k. Let's make the switch.
+>
+> Without this change, WiFi wasn't coming up on my Qualcomm sc7280-based
+> hardware. Specifically, "platform_get_resource(pdev, IORESOURCE_IRQ,
+> i)" was failing even for i=0. Digging into the platform device there
+> truly were no IRQs present in the list of resources when the call was
+> made.
+>
+> I didn't dig into what changed between 5.15 (where
+> platform_get_resource() seems to work) and mainline Linux (where it
+> doesn't). Given the zeal robot report for ath9k I assume it's a known
+> issue. I'll mark this as "fixing" the patch that introduced the
+> platform_get_resource() call since it should have always been fine to
+> just call platform_get_irq() and that'll make sure it goes back as far
+> as it needs to go.
 
-Can you share your patches, so I will rebase mine on top and see what's left?
+Since I recently stumbled upon this in a different (external) driver,
+it's likely a1a2b7125e10 ("of/platform: Drop static setup of IRQ
+resource from DT core").
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Regards
+Jonas
