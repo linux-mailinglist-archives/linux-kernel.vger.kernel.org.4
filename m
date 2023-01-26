@@ -2,189 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390EC67CA6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D22767CA84
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237262AbjAZMCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 07:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
+        id S236741AbjAZMFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 07:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233130AbjAZMCh (ORCPT
+        with ESMTP id S230505AbjAZMFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:02:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2FA62263;
-        Thu, 26 Jan 2023 04:02:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75DEF617AD;
-        Thu, 26 Jan 2023 12:02:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8E8FC433EF;
-        Thu, 26 Jan 2023 12:02:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674734554;
-        bh=83fTWvpaEiAzVDaeYFz2GUb2OOww4EG+o2MOVi11zGU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=lnaSaz9xP7pd9evixsmXaWhTU8ZegXDyqUAlmc8ci4N4ldJSkHKUm/LDiv76C+wI/
-         VAZcsfEFGwsZ7vEiZl7uaRPzO4iAwPwrHIZbX/B7SQmFvkXiIJHI2aFoAgPKXhYVOV
-         vbNYMAKf938rfJ8pPRRdumhaz4o+o8XZXZSRdgSokJWNywdMWrSlJLCRLlbyTT9MiJ
-         MR4EaTs+0pGmTGeZniK12fbJ9Pdob1oQpmaAtdAsEskRxnKSAxlng8HJjseWLnEsGY
-         gfh2g5MSiUQvE/W+va/0RqGUOImd7/r/EVeGwOSNHaNTcJFAUmBSiNg++yhOB+WonH
-         uT5l6ovxjVpeA==
-Message-ID: <5f27d8b64ad64905ada344e299cf00e55b8ac895.camel@kernel.org>
-Subject: Re: [PATCH v8 RESEND 2/8] fs: clarify when the i_version counter
- must be updated
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, bfields@fieldses.org,
-        brauner@kernel.org, fweimer@redhat.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org, Colin Walters <walters@verbum.org>
-Date:   Thu, 26 Jan 2023 07:02:31 -0500
-In-Reply-To: <20230126113642.eenghs2wvfrlnlak@quack3>
-References: <20230124193025.185781-1-jlayton@kernel.org>
-         <20230124193025.185781-3-jlayton@kernel.org>
-         <20230125160625.zenzybjgie224jf6@quack3>
-         <3c5cf7c7f9e206a3d7c4253de52015dda97ef41e.camel@kernel.org>
-         <20230126113642.eenghs2wvfrlnlak@quack3>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Thu, 26 Jan 2023 07:05:41 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B991F9;
+        Thu, 26 Jan 2023 04:05:40 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QBMLw8000377;
+        Thu, 26 Jan 2023 12:05:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=bP4Y4aqXV8qGv8U7nj2DVFZz5xfIpgRi6zfbGgdWY/Q=;
+ b=iE9TrHBMgYrbSGjrtARv2vEUgSYnSPOIa/uiku5NGQ8fXfwu0fLV0k4zDCJSod1s9BOe
+ GEkXPJ4+FRj6h0SLluHh0DJ5qiKDbGBZkmSdStkP6BgE+UxNb2ycuK5L344EHWoCS+Hq
+ RcUlv5xwX349PlHHBGmHLan6xnBeDpj+x1jyzK0k8urVUfG5x/ZEK6fKYu9tQf6AD14r
+ DX+3513XcQ/tdttbDPMsuFugBg5eA+vJNh4wneKAnMiFAnJLifsQ7xWobUO2ZsWgInZG
+ byb9T3PiTTBnVzQ9sr5VxZ3HYLxlwl60MIYmYOlvCmOy4OWE7kU1B2YwXULquWF4h46e gg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbrka0wf2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 12:05:35 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QBW1he004572;
+        Thu, 26 Jan 2023 12:04:53 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbrka0uuj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 12:04:53 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QBMXAa010330;
+        Thu, 26 Jan 2023 12:03:39 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6pbf9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 12:03:39 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QC3ZEB49938750
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 26 Jan 2023 12:03:35 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7C68820040;
+        Thu, 26 Jan 2023 12:03:35 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F91420043;
+        Thu, 26 Jan 2023 12:03:35 +0000 (GMT)
+Received: from [9.152.224.253] (unknown [9.152.224.253])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 26 Jan 2023 12:03:35 +0000 (GMT)
+Message-ID: <e007461e-53b5-bde5-0c69-6d50f62ffe0b@linux.ibm.com>
+Date:   Thu, 26 Jan 2023 13:03:35 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v6 03/14] KVM: s390: selftest: memop: Move testlist into
+ main
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Huth <thuth@redhat.com>
+References: <20230125212608.1860251-1-scgl@linux.ibm.com>
+ <20230125212608.1860251-4-scgl@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20230125212608.1860251-4-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 9dJut2T1WyZ-XF1_j7kPwetwEuZ-dJ6j
+X-Proofpoint-GUID: UzYy-z_wQCQ-vu19EBr8CqfUaoOHmBSX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-26_04,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 mlxscore=0
+ mlxlogscore=925 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301260116
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-01-26 at 12:36 +0100, Jan Kara wrote:
-> On Thu 26-01-23 05:54:16, Jeff Layton wrote:
-> > On Wed, 2023-01-25 at 17:06 +0100, Jan Kara wrote:
-> > > On Tue 24-01-23 14:30:19, Jeff Layton wrote:
-> > > > The i_version field in the kernel has had different semantics over
-> > > > the decades, but NFSv4 has certain expectations. Update the comment=
-s
-> > > > in iversion.h to describe when the i_version must change.
-> > > >=20
-> > > > Cc: Colin Walters <walters@verbum.org>
-> > > > Cc: NeilBrown <neilb@suse.de>
-> > > > Cc: Trond Myklebust <trondmy@hammerspace.com>
-> > > > Cc: Dave Chinner <david@fromorbit.com>
-> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > >=20
-> > > Looks good to me. But one note below:
-> > >=20
-> > > > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
-> > > > index 6755d8b4f20b..fced8115a5f4 100644
-> > > > --- a/include/linux/iversion.h
-> > > > +++ b/include/linux/iversion.h
-> > > > @@ -9,8 +9,25 @@
-> > > >   * ---------------------------
-> > > >   * The change attribute (i_version) is mandated by NFSv4 and is mo=
-stly for
-> > > >   * knfsd, but is also used for other purposes (e.g. IMA). The i_ve=
-rsion must
-> > > > - * appear different to observers if there was a change to the inod=
-e's data or
-> > > > - * metadata since it was last queried.
-> > > > + * appear larger to observers if there was an explicit change to t=
-he inode's
-> > > > + * data or metadata since it was last queried.
-> > > > + *
-> > > > + * An explicit change is one that would ordinarily result in a cha=
-nge to the
-> > > > + * inode status change time (aka ctime). i_version must appear to =
-change, even
-> > > > + * if the ctime does not (since the whole point is to avoid missin=
-g updates due
-> > > > + * to timestamp granularity). If POSIX or other relevant spec mand=
-ates that the
-> > > > + * ctime must change due to an operation, then the i_version count=
-er must be
-> > > > + * incremented as well.
-> > > > + *
-> > > > + * Making the i_version update completely atomic with the operatio=
-n itself would
-> > > > + * be prohibitively expensive. Traditionally the kernel has update=
-d the times on
-> > > > + * directories after an operation that changes its contents. For r=
-egular files,
-> > > > + * the ctime is usually updated before the data is copied into the=
- cache for a
-> > > > + * write. This means that there is a window of time when an observ=
-er can
-> > > > + * associate a new timestamp with old file contents. Since the pur=
-pose of the
-> > > > + * i_version is to allow for better cache coherency, the i_version=
- must always
-> > > > + * be updated after the results of the operation are visible. Upda=
-ting it before
-> > > > + * and after a change is also permitted.
-> > >=20
-> > > This sounds good but it is not the case for any of the current filesy=
-stems, is
-> > > it? Perhaps the documentation should mention this so that people are =
-not
-> > > confused?
-> >=20
-> > Correct. Currently, all filesystems change the times and version before
-> > a write instead of after. I'm hoping that situation will change soon
-> > though, as I've been working on a patchset to fix this for tmpfs, ext4
-> > and btrfs.
->=20
-> That is good but we'll see how long it takes to get merged. AFAIR it is n=
-ot
-> a complete nobrainer ;)
->=20
-> > If you still want to see something for this though, what would you
-> > suggest for verbiage?
->=20
-> Sure:
->=20
-> ... the i_version must a be updated after the results of the operation ar=
-e
-> visible (note that none of the filesystems currently do this, it is a wor=
-k
-> in progress to fix this).
->=20
-> And once your patches are merged, you can also delete this note :).
->=20
-> 								Honza
+On 1/25/23 22:25, Janis Schoetterl-Glausch wrote:
+> This allows checking if the necessary requirements for a test case are
+> met via an arbitrary expression. In particular, it is easy to check if
+> certain bits are set in the memop extension capability.
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> Reviewed-by: Thomas Huth <thuth@redhat.com>
 
-Sounds good, I folded something similar to that into the patch and
-pushed it into the branch I'm feeding into linux-next.=A0I won't bother
-re-posting for just that though:
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-diff --git a/include/linux/iversion.h b/include/linux/iversion.h
-index fced8115a5f4..f174ff1b59ee 100644
---- a/include/linux/iversion.h
-+++ b/include/linux/iversion.h
-@@ -27,7 +27,8 @@
-  * associate a new timestamp with old file contents. Since the purpose of =
-the
-  * i_version is to allow for better cache coherency, the i_version must al=
-ways
-  * be updated after the results of the operation are visible. Updating it =
-before
-- * and after a change is also permitted.
-+ * and after a change is also permitted. (Note that no filesystems current=
-ly do
-+ * this. Fixing that is a work-in-progress).
-  *
-  * Observers see the i_version as a 64-bit number that never decreases. If=
- it
-  * remains the same since it was last checked, then nothing has changed in=
- the
-
-Thanks!
---=20
-Jeff Layton <jlayton@kernel.org>
