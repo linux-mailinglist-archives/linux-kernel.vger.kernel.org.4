@@ -2,127 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7817267D673
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8DD67D672
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbjAZUcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
+        id S231873AbjAZUco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbjAZUct (ORCPT
+        with ESMTP id S229727AbjAZUcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:32:49 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3737ABD;
-        Thu, 26 Jan 2023 12:32:47 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 000F332003CE;
-        Thu, 26 Jan 2023 15:32:42 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 15:32:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674765162; x=1674851562; bh=tYzr0DaVNR
-        V8HZ6FDJMSiSXhopDpAcTggMPsjwMzShA=; b=md3YN8wU017LIoep1j3PjkZMua
-        k8z4tjYO9KltPBC9q/K2UHLoySjvOrRaF/9I0G3fmt+rOyUMpz19jC2OtI8r8W0/
-        YZtf8iKJ8lxErb06iJqeAJz9MV7EQldRT65AtRESsxLyNEuX4GzP0SRfeqjk0A3s
-        Vku/US6uBQCzxaXGmPzxdFs1Gh82NQ7yFP6XpsacxLQp4+M/0oVTD5vb+uXygR4N
-        A0+BaZBtbdtGqYl3KUbXvymUeCc80qDVDhuUjhRSdSqscEwPTE6UljRD7aaoFkvA
-        H0Zgnu20NeoI6t9Y+WkUu5F2rc65TaTnFygJYUHxuuMVHFxdqo39swySyttQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674765162; x=1674851562; bh=tYzr0DaVNRV8HZ6FDJMSiSXhopDp
-        AcTggMPsjwMzShA=; b=eahcr3+d7ZWhy6X5QvZ/Jn7nZ0ZPLWSUqXLjP3U2BytO
-        7MKMtjjDoEfbEO+E6R6nUVXooNrYoVC3NqRiVdLhp8tVQD31wuTqoUVFCD4AOf6Y
-        USOetT5+gO4x9qxlUWnxB7I6sebzutecpy5dL4KVNs1iWaX0iAR+ZsOUVhFVWeOU
-        GP+3nG3vawhNqRN4lrkOM0+8GRcJ4SJFb1kwD/i26Oytba1IIC4jHT1pxyDt0rRV
-        SmNRoka8R+KgaPU6nOQYxqr0c6zOksOwL5CtqwHBF+gD5fwV5r+LMGOz1qy8hMFk
-        bULu49yX5g+aIi0gj49dKBFw3SxcE1/7D3UQjLmUfw==
-X-ME-Sender: <xms:auPSY5BepBvwxwBuLJtIzViTSqQlW7gjcUkU49JXIBLLHpBN0hdrxg>
-    <xme:auPSY3i_p8bWwEinXrL1DApl0vRkGhIuFhSWaJQgKoF353dB_Jqq4VSDQVZFRc-Ey
-    AmcPzZFCkJBi2x05Qw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgudeflecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:auPSY0muctUVkvGkyQTg99nmD7G0pb3Gee8A9De7Iqw0-lEAVsrjjA>
-    <xmx:auPSYzw3mSgOiVB9LD1Z4dJCEDS55I6a_gJS_Et2tvSyacpL9vFCDw>
-    <xmx:auPSY-QwcCC4g-n-vIa9n6euQ2k82ayBMgUCWqbSw4vtLSP7gd2ZOQ>
-    <xmx:auPSYzLElFRGY4g-mYp4UFZTziCqtTBKD8JKdFUlHEoCaEtDKlbI6Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0429FB60086; Thu, 26 Jan 2023 15:32:41 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <b694c12a-e0f7-47af-85c3-eb527963a7aa@app.fastmail.com>
-In-Reply-To: <Y9LAQRjb6h+ynXBZ@lunn.ch>
-References: <20230126135339.3488682-1-arnd@kernel.org>
- <Y9LAQRjb6h+ynXBZ@lunn.ch>
-Date:   Thu, 26 Jan 2023 21:32:21 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Andrew Lunn" <andrew@lunn.ch>, "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Wei Fang" <wei.fang@nxp.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "Shenwei Wang" <shenwei.wang@nxp.com>,
-        "Clark Wang" <xiaoning.wang@nxp.com>,
-        "NXP Linux Team" <linux-imx@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, Netdev <netdev@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fec: convert to gpio descriptor
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 26 Jan 2023 15:32:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531A94B896;
+        Thu, 26 Jan 2023 12:32:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2A5461935;
+        Thu, 26 Jan 2023 20:32:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F687C433D2;
+        Thu, 26 Jan 2023 20:32:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674765161;
+        bh=y6Sok3t3jR+yv3Qj4HUra7R9HfrmWOMNp3q+9NrPezQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sQNOs+r0a/nh/qi3EnQtfJNsK5HJSmePSJR0S7PBO6/k6kIyI261lNX5zLwKr/LI/
+         W1WVIrKGJw3cVnxy6AiJ6ocm1eWF2AhjGM8dmBu8ISlhHVVOc0J/5lKUsUG4fphtLI
+         v5WoLVLRaxJ2BjnrwHtQGpX36ApEPxux2V9ka/xVxdRW8C4oQvCfWi9uOsfl9PccS/
+         bTZItdsPmk8c4/wqm7K+kJg4wpLIo/aEujm7ZF8pPmaiVxOtcgCY+mcsEZEXEsW+ZN
+         f5+p9i3TtLhLBSoHri+RUm7PnUNw7MalcM0CmpU2sbmfO2q0OsV3tAlTa7vmAMfPsc
+         jAw1OgCuidcrA==
+Received: by mail-lj1-f171.google.com with SMTP id a37so3322999ljq.0;
+        Thu, 26 Jan 2023 12:32:41 -0800 (PST)
+X-Gm-Message-State: AO0yUKUK3ndww/9Q/Myf6a13hbuyOmo8TC5xwRi0do2ivbQ0xA0ZTvWG
+        dn4exveGw1Yh7/XGCQGcY/OZVpWrmU7o5ni7hyM=
+X-Google-Smtp-Source: AK7set9Bhs+pNcgP6w52oyqkvvzqoFggV5VbDVK+JlEeuvCk5/5+aIaXi03TcGW6fmbxqlN4SnaYb0bNaFYa2vElStA=
+X-Received: by 2002:a2e:b604:0:b0:28f:9f99:dd29 with SMTP id
+ r4-20020a2eb604000000b0028f9f99dd29mr150240ljn.234.1674765159356; Thu, 26 Jan
+ 2023 12:32:39 -0800 (PST)
+MIME-Version: 1.0
+References: <20230126112129.4602-1-johan+linaro@kernel.org>
+In-Reply-To: <20230126112129.4602-1-johan+linaro@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 26 Jan 2023 21:32:27 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEUKChvqA8D_T3Bt-pQhvjBmsGxyy69uqDqyn0EBmQ1pw@mail.gmail.com>
+Message-ID: <CAMj1kXEUKChvqA8D_T3Bt-pQhvjBmsGxyy69uqDqyn0EBmQ1pw@mail.gmail.com>
+Subject: Re: [PATCH] efivarfs: fix NULL-deref on mount when no efivars
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Jeremy Kerr <jk@ozlabs.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steev Klimaszewski <steev@kali.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023, at 19:02, Andrew Lunn wrote:
-> On Thu, Jan 26, 2023 at 02:52:58PM +0100, Arnd Bergmann wrote:
->>  static int fec_reset_phy(struct platform_device *pdev)
->>  {
->> -	int err, phy_reset;
->> +	int err;
->> +	struct gpio_desc *phy_reset;
->>  	bool active_high = false;
->>  	int msec = 1, phy_post_delay = 0;
->>  	struct device_node *np = pdev->dev.of_node;
+On Thu, 26 Jan 2023 at 12:23, Johan Hovold <johan+linaro@kernel.org> wrote:
 >
-> Hi Arnd
+> The VFS calls kill_sb() also in case mount fails in get_tree().
 >
-> netdev drivers are supposed to use 'reverse Christmas tree'. It looks
-> like this function is actually using 'Christmas tree' :-) Please could
-> you keep with the current coding style.
-
-My feeling is that the style in this file is just random,
-but having 'err' as the last one fits with the usual style
-and with what some of the other functions do, so I'll do that.
-
->> +			active_high ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW);
->> +	if (IS_ERR(phy_reset)) {
->> +		err = PTR_ERR(phy_reset);
->> +		if (err != -EPROBE_DEFER)
->> +			dev_err(&pdev->dev,
->> +				"failed to get phy-reset-gpios: %d\n", err);
+> Add the missing check to make sure that efivars has been registered also
+> to kill_sb() to avoid dereferencing a NULL pointer when trying to remove
+> efivar entries.
 >
-> dev_err_probe() looks usable here.
+> Fixes: c3fd71b428b8 ("efivarfs: always register filesystem")
+> Reported-by: Steev Klimaszewski <steev@kali.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Ah nice, I've never been able to use that one so far.
+Thanks - I have squashed this with the original patch.
 
-Will send a v2 with both suggestions.
-
-    ARnd
+> ---
+>  fs/efivarfs/super.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
+> index b67d431c861a..482d612b716b 100644
+> --- a/fs/efivarfs/super.c
+> +++ b/fs/efivarfs/super.c
+> @@ -246,6 +246,9 @@ static void efivarfs_kill_sb(struct super_block *sb)
+>  {
+>         kill_litter_super(sb);
+>
+> +       if (!efivar_is_available())
+> +               return;
+> +
+>         /* Remove all entries and destroy */
+>         efivar_entry_iter(efivarfs_destroy, &efivarfs_list, NULL);
+>  }
+> --
+> 2.39.1
+>
