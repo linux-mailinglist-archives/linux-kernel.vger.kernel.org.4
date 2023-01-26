@@ -2,129 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A836C67C481
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED52867C486
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjAZGem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 01:34:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
+        id S229475AbjAZGjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 01:39:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236156AbjAZGee (ORCPT
+        with ESMTP id S229483AbjAZGjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 01:34:34 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B9947417;
-        Wed, 25 Jan 2023 22:34:31 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id CEC30320092E;
-        Thu, 26 Jan 2023 01:34:29 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 01:34:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1674714869; x=1674801269; bh=Ob
-        MekPzegFWo+wBsswL5Mv22V9QXAO26FNLwMRm8iqc=; b=Vm9AXhg0gVaC5/ft9A
-        FqTnAa/U1xCK50dU8Gm3sCRQOk8KYtlElCoIwHgM0d6kr2vwE7JWOdNPOOLFsvYK
-        7DfYdyof2A2CKJI7o5G9lB5+poXkPXztcL1BB2DHF1NrbCq149QZPSvWylfWdYdt
-        fOfZbWtLDHoalO0O+WD8zp6gcFeNzVcBMsVIZiqDWHl5Xuu4jDgFvJp66z/RcAK5
-        Psv2esbZNXYOFF48MlI6MkPUhwbbQkW7yUowsUTNA614sJe12P1maRkKOkXokfCj
-        YSZ9dBElOVdDCboTywPird8nQqJf2at0InanVkBTKtArBkH0hKhBTAff7TGal777
-        RxUQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1674714869; x=1674801269; bh=ObMekPzegFWo+
-        wBsswL5Mv22V9QXAO26FNLwMRm8iqc=; b=CVlFV0P2pFp/0KWpFkP1/4O9AU/kB
-        q5Mb8iXB7YSwa7wIVf9X0lboAMO8Klr6ZErON1x+C+7yjGu+XXD/1xeBjtpyRH4H
-        Kiv0lceVr2ICtFMSYC2con0Hfgh4II4qmnlOsUazFYNMaGW1DhL8V4ToWi06JRyU
-        m9uJWpiQWgT0eE/8X/w76YEL4qWW9ot4lHiS+Ixnhs04ImawUdj428UCRhzjsHyp
-        /zdkI3NPrkZbyOmQ+XotzsrSycF1uz3JMvlZiKZZRcKSoZI0JRtv0qdfLHGp/psN
-        gAMfbDqMtc3TpVH2SpBLJa08U4neqsLX3MYVeBDsolYqiF4hCOqVZJWOg==
-X-ME-Sender: <xms:9R7SY-FrOL0L80cstx81k__ERMc_k5rUmocKJJadgJBOQuRv-iSkYA>
-    <xme:9R7SY_UwVBslMhLx-e8N-kD6HykCYw6hEXvmMT98--FdBO9ZWJc1VIa55UaWdNMbA
-    uNnpCkX4QPHnUSNZg>
-X-ME-Received: <xmr:9R7SY4JOEdaWe3j2XQJjKqIRzX7MctAwUHEW43Df5ZjNyInP4nCTUamF71I3o9soU_y6_l7FQOfH7Qp4zAkohSMXH3Fg1m49B-2pHrdS-H-6A9VmhIzyZE4acfI2SulBw6K7Bg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:9R7SY4GlohJ68L6sBqAgPx9Jds94MKrFYY6wlGzHp2f0MTyi8iF4SQ>
-    <xmx:9R7SY0UiIr26njO3ngbuv-uDVp8OsiG8gcuTB5R1IB8KfwSoYC--Ag>
-    <xmx:9R7SY7Mx1SBLoA7C9yYMTI5Z-b94EuchjqR2nacVnDecpDhQRTkICg>
-    <xmx:9R7SY1VisV61jvPWcNuzczcmowmBbtBpF5a_0cOsx4aRImkqOlw0vA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 26 Jan 2023 01:34:28 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Conor Dooley <conor@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 3/3] riscv: dts: allwinner: d1: Add power controller node
-Date:   Thu, 26 Jan 2023 00:34:19 -0600
-Message-Id: <20230126063419.15971-4-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20230126063419.15971-1-samuel@sholland.org>
-References: <20230126063419.15971-1-samuel@sholland.org>
+        Thu, 26 Jan 2023 01:39:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACEA51421
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 22:39:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674715139;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IwnaW40wODo/RPJeJh2TlciTsJYMAL7AVIWQnJnbBqw=;
+        b=HLKTvqZU90pz92lQqtaWwN3nQZXNaBtiMcdVAdjjWIilJUKCNtHq2XZdBUY/0teZDJmnnh
+        tnLlD3G56qdGW07+GRoesmrmj+EqUw79NLEW0/mVXAEiM+EKSIFgnD0wB3jxxIJo490O9i
+        RzSNyFQJXgLq1m0haN/lFpn1aGU9idQ=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-486-dxdZgSm6NuS85QV5QXA4wg-1; Thu, 26 Jan 2023 01:38:56 -0500
+X-MC-Unique: dxdZgSm6NuS85QV5QXA4wg-1
+Received: by mail-qk1-f200.google.com with SMTP id bi7-20020a05620a318700b007091d3fe2d3so527746qkb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 22:38:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IwnaW40wODo/RPJeJh2TlciTsJYMAL7AVIWQnJnbBqw=;
+        b=A3M5Z/tU66uQo6zz4rAInGUEY49xGy1AOJVpzVMU4gk4SsWMfkmnXQrjhOnC6sDTAI
+         aU7g7MHbfBe9Gjpc5Tj0dZ3mVQ/o90yXYqcZVWiuvYAKsrazNAYozpOOtdvJNF7wYzcX
+         yzVn5nZbVubPkd0o+M2LJZHwzW0rX/i0DSnZMHrIXvlXu0bt5rzVBZuhzQNJ3cKCEFcW
+         aNH0jjzuz/I8V7P6SUZaa36wi7GemobknqdwYDO2zCWX9WetoKdkWss0fJ2UyVP1efUn
+         clmHJDYUwIvZVAy1lOq+Csmg8U+ZPgLJXUDGkHTLQTZJMESaIcwEjix9U6P63Jj+c6MH
+         /RkA==
+X-Gm-Message-State: AFqh2kqzd7kiu/yLNMfLQwcV17qDdo+S0UU0kxhEbe8NHV/cmZ1nxcfj
+        j7WxDpNf9hy3IqyuCK2DG/1mnHDVWXyZX+jh32eMuIKI2kjjhv8S0eOtX9G4z2G4s++pT+hHFlj
+        wH0JDneTW28Gg6FlFZK2loiOW
+X-Received: by 2002:a05:622a:1aa5:b0:3b6:a1fd:19cd with SMTP id s37-20020a05622a1aa500b003b6a1fd19cdmr41574773qtc.46.1674715134726;
+        Wed, 25 Jan 2023 22:38:54 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuf7UjZI2ffXZKoGViT9PivCgdjta/q3yUMmhqaU7OtGXYv4rT+XOka9LZmTzNCFQdUCAdNYA==
+X-Received: by 2002:a05:622a:1aa5:b0:3b6:a1fd:19cd with SMTP id s37-20020a05622a1aa500b003b6a1fd19cdmr41574753qtc.46.1674715134495;
+        Wed, 25 Jan 2023 22:38:54 -0800 (PST)
+Received: from [192.168.8.105] (tmo-064-101.customers.d1-online.com. [80.187.64.101])
+        by smtp.gmail.com with ESMTPSA id x8-20020ac84d48000000b003b63b8df24asm247352qtv.36.2023.01.25.22.38.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 22:38:53 -0800 (PST)
+Message-ID: <957489fb-8080-8806-6ddf-8687da469a43@redhat.com>
+Date:   Thu, 26 Jan 2023 07:38:48 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v6 07/14] KVM: s390: selftest: memop: Fix integer literal
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+References: <20230125212608.1860251-1-scgl@linux.ibm.com>
+ <20230125212608.1860251-8-scgl@linux.ibm.com>
+From:   Thomas Huth <thuth@redhat.com>
+In-Reply-To: <20230125212608.1860251-8-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Allwinner D1 family of SoCs contain a PPU power domain controller
-separate from the PRCM. It can power down the video engine and DSP, and
-it contains special logic for hardware-assisted CPU idle.
+On 25/01/2023 22.26, Janis Schoetterl-Glausch wrote:
+> The address is a 64 bit value, specifying a 32 bit value can crash the
+> guest. In this case things worked out with -O2 but not -O0.
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> Fixes: 1bb873495a9e ("KVM: s390: selftests: Add more copy memop tests")
+> ---
+>   tools/testing/selftests/kvm/s390x/memop.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> index 3ec501881c7c..55b856c4d656 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -514,7 +514,7 @@ static void guest_copy_key_fetch_prot_override(void)
+>   	GUEST_SYNC(STAGE_INITED);
+>   	set_storage_key_range(0, PAGE_SIZE, 0x18);
+>   	set_storage_key_range((void *)last_page_addr, PAGE_SIZE, 0x0);
+> -	asm volatile ("sske %[key],%[addr]\n" :: [addr] "r"(0), [key] "r"(0x18) : "cc");
+> +	asm volatile ("sske %[key],%[addr]\n" :: [addr] "r"(0L), [key] "r"(0x18) : "cc");
+>   	GUEST_SYNC(STAGE_SKEYS_SET);
+>   
+>   	for (;;) {
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
-
-Changes in v2:
- - Include a patch adding the device tree node
-
- arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-index 3723612b1fd8..6fadcee7800f 100644
---- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-@@ -799,6 +799,14 @@ tcon_tv0_out_tcon_top_hdmi: endpoint {
- 			};
- 		};
- 
-+		ppu: power-controller@7001000 {
-+			compatible = "allwinner,sun20i-d1-ppu";
-+			reg = <0x7001000 0x1000>;
-+			clocks = <&r_ccu CLK_BUS_R_PPU>;
-+			resets = <&r_ccu RST_BUS_R_PPU>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		r_ccu: clock-controller@7010000 {
- 			compatible = "allwinner,sun20i-d1-r-ccu";
- 			reg = <0x7010000 0x400>;
--- 
-2.37.4
+Reviewed-by: Thomas Huth <thuth@redhat.com>
 
