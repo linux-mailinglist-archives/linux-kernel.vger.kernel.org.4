@@ -2,156 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAEDB67C49A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:59:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD8667C4A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236040AbjAZG7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 01:59:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
+        id S231612AbjAZHIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 02:08:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjAZG7E (ORCPT
+        with ESMTP id S229510AbjAZHIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 01:59:04 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20609.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::609])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5B25C0EF;
-        Wed, 25 Jan 2023 22:59:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oQM+4CGk1K1XxXL0Pe6oh7FOHkFbHKBxkPnHVqF+9en0V1JieH2UenaP9qpzmyYImdcAxvje+2lIu+Hx1SjnGYicx/xzyS3QrVLCdhsdIPtoek332kJBS9DDnuhHLghZeT2Y9VSDsw4sUpInvBpURSG/bIgHaLF9B7/EZzaskk9DJGCtg3njRN7gNnlhtH7R/fXtXTzP5ey0Cl6sUmX9/0IJFVb+Rj8gG+NmzKTPypSRK+qtg27zuQwddMXTd/DFzAJuCd+ndKZh93HsanxXlvfbOK/8NTo4pPW9deLmJ4P82ossAv/bY5eWAO+D4QT8KvlPKj4buzFJ7rDO82C2mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PNuexUBkUh+A6GNqEqHVPsbMDsnacyJLlHRvY8kEjgU=;
- b=FADZ9xwZyFq1WzuQFBmbLlfBjg5LgXyWl9N0u7GV8DbThs4sm8d6kdK9CpnvBguHwbfMCiLEwpVp4X5ZxtdMEtz1xaBlihc/efQGxEG21YbnD7lNPqB2SKCJnQDG6i+XOrB+oqX+ppyme6zYEQMpB+Fiqk4l04yn5dXRUV6GESdAcyFronKH1Zn4wK8jNHEkQI12/tp/6/K9hqDPXQqYLbjtGcAD+MhNeAyncY4AGg7SSjbxvAhNjbbpkNfyjFAtUyVYER3fLfYX/WJWNmnpAH76c+eiitsolmUMouPoTXwr2STEhRj7cxe1qgFoDDMsaDPDOmEgAp/9x7WRht5zvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PNuexUBkUh+A6GNqEqHVPsbMDsnacyJLlHRvY8kEjgU=;
- b=sC9QJq0Ldi5HsaLS45mCQIBGK5RHLSenx0BwvzuBd4NNAxaTDQqU6AFLnecE6OKKl1zP6b067hq5qVWd6H0W/8YOjfPyvNsu4Mw+HUuaFQ+IHsHnMjnQl2jPTDNytGbhuban58ti9bUme0FKVfNx4fp16VaQhIgsZxiuaLHGg5k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DS7PR12MB8250.namprd12.prod.outlook.com (2603:10b6:8:db::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Thu, 26 Jan
- 2023 06:59:00 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6043.017; Thu, 26 Jan 2023
- 06:59:00 +0000
-Message-ID: <4b13c48e-1677-3947-42e5-5ba241bcb96a@amd.com>
-Date:   Thu, 26 Jan 2023 07:58:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dma-buf: actually set signaling bit for private sub
- fences
-Content-Language: en-US
-To:     Danilo Krummrich <dakr@redhat.com>, Arvind.Yadav@amd.com,
-        sumit.semwal@linaro.org, gustavo@padovan.org
-Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230126002844.339593-1-dakr@redhat.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230126002844.339593-1-dakr@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0113.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9d::8) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Thu, 26 Jan 2023 02:08:21 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F602D4D
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 23:08:19 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4P2WyB0M6Yz9sd7;
+        Thu, 26 Jan 2023 08:08:18 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zR25zrkcDSUr; Thu, 26 Jan 2023 08:08:17 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4P2Wy863Mpz9sdB;
+        Thu, 26 Jan 2023 08:08:16 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BF56E8B76D;
+        Thu, 26 Jan 2023 08:08:16 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 2SJtYN5JNx8I; Thu, 26 Jan 2023 08:08:16 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.5.2])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 800A48B763;
+        Thu, 26 Jan 2023 08:08:16 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 30Q74xEu2764291
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 08:04:59 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 30Q74uJB2764288;
+        Thu, 26 Jan 2023 08:04:56 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH] kasan: Fix Oops due to missing calls to kasan_arch_is_ready()
+Date:   Thu, 26 Jan 2023 08:04:47 +0100
+Message-Id: <150768c55722311699fdcf8f5379e8256749f47d.1674716617.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DS7PR12MB8250:EE_
-X-MS-Office365-Filtering-Correlation-Id: 33da7f99-88eb-4a1b-04a3-08daff6acd20
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bWsJb/KJw/HDtOkEKB8a3rz2d5GSJMMkWHvKJwgOBMSyigzoVuKILtIjgh8xoVNMpAjcWFJxT4EJdit6c7NJH+kMVr/Kz2W1HzR00gEnMTXicmvDWCjtXPhsB/nNTI2IwtPh2ag+85kyx+BZlzXYhCIk1+d8Qm50nASJ4Z7mKDqyRbtu1ZgWtQrJ+e+iWUexDtQK252gAyRUoow9Gg0z0JYm2z9ZRk8i9lgqNK9FO7arr6GipaEWouBzVLu4MrpE0pcF8Sg/YmyV8mlo4Niu4Sqna6BciLBHj8EDpoBqHD/knODLhhiEi2J68+6aWt1btf/lLbP6IXKbHmtZ83pMsGNdxsGmc8ZW+R1atBocdzCD4QqIgVr1JgdUQwJ9gBfZwrlxkt7k7GQxdfyyM/kOof0bCj5lSrbM6vZADfYVy44/mqQU4AGyNXytsbWS8xtUcgm6AxOBU5bjK/zDZeymUigd7XkvGyacmk68y/xvL6jOo17tPOJ9wUtustuHEJQgQqVKArvgN8rpGGB8f6TQgOHHRuHKrIc3YX4NnxXbXvR9utkZW+UooCdtNLYceE1wFXwXj+fl36nlt92jL/MXwfX1ytRmJCyK47lhzhUUBjLWXu6wkGeQJ3oG5mawHQG/w+XlJKxWxuung3zWRIonbUmObkMpW0f/VkNFgFCPVKYQjaMMgevTV9hXI9Z/bo7QcA6OMuNCFm3I6cF6L5h/swpxcwl1/h9A3m0Bs160E0A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(376002)(366004)(136003)(346002)(451199018)(31696002)(36756003)(4326008)(66946007)(66476007)(86362001)(316002)(186003)(66556008)(6506007)(26005)(8676002)(6666004)(6512007)(6486002)(83380400001)(478600001)(5660300002)(31686004)(66574015)(8936002)(2906002)(2616005)(38100700002)(41300700001)(4744005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MDdtQmRBWEVhaHoxZCtWQXVSZGNOTHNZTE9QanpPVWc4YUhwbWRaWXlWMnBI?=
- =?utf-8?B?TGlJOXhpWit6WDQrTXJIN2hMS3p3Z0VKWjZIVVVBajhqRmc3NVByc1NGT085?=
- =?utf-8?B?Rkh3ZTRpQjN6RzZRazh0SVYxU25yeDZEK1h5cHluQmxYVWJjeThyYXBtclNL?=
- =?utf-8?B?dTRLTmV0ZDNlbnh5NVJVRStLNkk0ai9QdWFyalgvK2ZsVUpDeG5vcmlHTllp?=
- =?utf-8?B?dzdIc2pwSExRNU5vczA3R05pYTBZVWlhRW9vNzFVNzdkbXhVd0N1MFBZOG1j?=
- =?utf-8?B?RGJUZnRoNzdadko1elJmYlA2N3JSN2NxT3lXTHVDMjJiMHdIeVV1QWE0akNL?=
- =?utf-8?B?NFdoQUp4WTBXVlNQTGRuWVBtUmxobmk3THI1N2xyMzhtd2FWM2dJQWErRHEy?=
- =?utf-8?B?ZWJuejdGY3AwdHZtN3hKa2g2WE8xWTYvSm83WXhnTDI1UnNBY01XdnRCdlRV?=
- =?utf-8?B?cktFT0ppNWZQejRQcXNmbjBMRFNUdHl6eG1lWFpEK1JMcTVVRzAvblg2b3NU?=
- =?utf-8?B?L1FOSjRSNVp2Z3ArdDE4dEc3VVE0NUgvbGMyTURMSXdXaEpCOVd3bVVjcnBp?=
- =?utf-8?B?c1pzemZaS3dZMnJ4eW1EY0VlRkk4NGFDZVRPMHd6M1l2U3VwYkFrTjYvRmxN?=
- =?utf-8?B?Yi9kYU1POUVrYnM4RHhiY3lEek52THJ4TFF2K3VBSW9laktYZGsxQ2JXclNP?=
- =?utf-8?B?c05nalF3OXFIZlU5eGFZZTk5Z3VMNUR3NWZlaFVYdm5yb3ZFY0huY0R3WTZp?=
- =?utf-8?B?NXNoREw3enF6dTVxajdVb29qOWNacFRabTI4MktEZy9PRTlVMmNGNUh4QWhC?=
- =?utf-8?B?K1BmZmQ5NG1DMk1meEY1ekdBT2pqNm05MXJvaHIxemRaeXBpaGx4YlFFN0Nz?=
- =?utf-8?B?ckpNL2N6aWUxaGFHMjQwVUllZW5PWGJaMTBvLzc3OUVWZU5TWmxWZlczbUQ0?=
- =?utf-8?B?cE1vQjIzWnBvdlpKUHQ1Q0hSV3p1Nmw5N0RWK3daczRrMExxWjZLWnJhajRa?=
- =?utf-8?B?RTFZZ2hIUmhsVmZHb0luNVVyTE01Q2pnb09CWEdoVlphVFdlQlRXd1N1ZHV3?=
- =?utf-8?B?cXQ2a0F0dFVmWFF6d2RJS2RkNWdZbk1rSHluSXRYWVhRTTJlbVk0ZXBiNWFD?=
- =?utf-8?B?L25yRldCT0JwOGVNbXNGVkVqdjB2UE01cjJFakFXY2krOU1BbTh4UDMzK3A4?=
- =?utf-8?B?c3FtTmNkQjA5bXlFc2JnUGdIWGNEVlAzL1pxWFF4SHJ1dkRhRW9xSUIwNTBo?=
- =?utf-8?B?dEI5dkdJTFQ5aVprYkVSbDI3RzVMbGQzVzFFUVJZY3FCR1lIMzZrQ0N3RW8x?=
- =?utf-8?B?clZUMnRpSGpTZUlCcmFGYWxHeFJwUExIR3JzOTFmY0ZsYzA3aE44SDFpbzV6?=
- =?utf-8?B?MEFwMFpmaDlLNmNkWW1aTWpOM3kyempiN2EvZlg2enFEOEU3SjhNT2cvcmVs?=
- =?utf-8?B?WktMVzNNQkFFOVVFWFh1eXhUWFpNZm1kbmlPeUZtQUdqaUQyWllXNmZvSjNI?=
- =?utf-8?B?Ky9ZRk8vNG0ybTgwY1h6NXd0eDI4RmtWRXFzTVVxajVLaXVYbEk0WHRUaXJ4?=
- =?utf-8?B?akgwWGpNNENVa0V2cUgyaGpHWDJkdU5DMURFMU9DUDA2NW8rZnpKUFZiNlZE?=
- =?utf-8?B?Q1NjMzZIb2F3M3V2eWV4TmJwMi8yR2o4Y1VEZWFJMXJVbTJ0MTBoSi8xN3dQ?=
- =?utf-8?B?d2JwZllTcFlUaUxYbHV6U0F0MTVnK2U3bzRua3A4elBNcmI3VFdxZmd5Z1BO?=
- =?utf-8?B?cnhQcUJ2S2I0eDdWR2E5bStJZ282bVpWTXQvZ0NqamQ5WXgrclk2UlozaUNE?=
- =?utf-8?B?YlRnNHBiYWpXWFdBNVJGaVlnc0N5Ymd2WFJrNXJpaEVkV2VsZkY3NGY3ZlpN?=
- =?utf-8?B?Q1VwTWFlQ0dLOFhoT3l5VHY4dlUzY3lVbWZhcWZaYVA1Z0tBdkZxVjByekR3?=
- =?utf-8?B?alZmSTJUbWR4bDRjb1BFTWNFUHlsY0hFejc5N09pTTZqY0JJTjFuUndJeEZv?=
- =?utf-8?B?eHZ6NGtSdDNVZ2pIZ1ZFY2YyMkpDaE1uL08weUJxY1YyZm1xMlROSlVEQU83?=
- =?utf-8?B?cHlHc2tTQzFhMXZhZndOYmFObjRPVGU0YWRaa3lxTVVGbWQ0eGs5WVQrdVcx?=
- =?utf-8?Q?/s+KEhE9gxcZeOEfh1Yz1BbvD?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33da7f99-88eb-4a1b-04a3-08daff6acd20
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 06:59:00.3296
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L9RByopz1bg9iiL3LOgOEVg+qvJ9PrzUWhNHMNw+VDNLFf0IEDp8MSSFcwYmI1oC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8250
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1674716683; l=7054; s=20211009; h=from:subject:message-id; bh=GpOaHGWHkRLK3w+qELfaGMG8mIxKwVDUBSOVaCUA3e0=; b=ur0fVC6TvQtoPHkKCNrcuxg4+ha3+GW2lsw3we8TWNoDIr2bcKf4t9U+usHU28Jq1T1cwH+xi8we gQ/xU8BbDUDZD3kTNEGCjWsEj23j+wSD3T9zmXq7qSmIg6Q5Wby+
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 26.01.23 um 01:28 schrieb Danilo Krummrich:
-> In dma_fence_allocate_private_stub() set the signaling bit of the newly
-> allocated private stub fence rather than the signaling bit of the
-> shared dma_fence_stub.
->
-> Fixes: c85d00d4fd8b ("dma-buf: set signaling bit for the stub fence")
-> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+On powerpc64, you can build a kernel with KASAN as soon as you build it
+with RADIX MMU support. However if the CPU doesn't have RADIX MMU,
+KASAN isn't enabled at init and the following Oops is encountered.
 
-Good catch, Reviewed-by: Christian König <christian.koenig@amd.com>
+  [    0.000000][    T0] KASAN not enabled as it requires radix!
 
-Should I push it upstream as well or do you have commit access?
+  [    4.484295][   T26] BUG: Unable to handle kernel data access at 0xc00e000000804a04
+  [    4.485270][   T26] Faulting instruction address: 0xc00000000062ec6c
+  [    4.485748][   T26] Oops: Kernel access of bad area, sig: 11 [#1]
+  [    4.485920][   T26] BE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
+  [    4.486259][   T26] Modules linked in:
+  [    4.486637][   T26] CPU: 0 PID: 26 Comm: kworker/u2:2 Not tainted 6.2.0-rc3-02590-gf8a023b0a805 #249
+  [    4.486907][   T26] Hardware name: IBM pSeries (emulated by qemu) POWER9 (raw) 0x4e1200 0xf000005 of:SLOF,HEAD pSeries
+  [    4.487445][   T26] Workqueue: eval_map_wq .tracer_init_tracefs_work_func
+  [    4.488744][   T26] NIP:  c00000000062ec6c LR: c00000000062bb84 CTR: c0000000002ebcd0
+  [    4.488867][   T26] REGS: c0000000049175c0 TRAP: 0380   Not tainted  (6.2.0-rc3-02590-gf8a023b0a805)
+  [    4.489028][   T26] MSR:  8000000002009032 <SF,VEC,EE,ME,IR,DR,RI>  CR: 44002808  XER: 00000000
+  [    4.489584][   T26] CFAR: c00000000062bb80 IRQMASK: 0
+  [    4.489584][   T26] GPR00: c0000000005624d4 c000000004917860 c000000001cfc000 1800000000804a04
+  [    4.489584][   T26] GPR04: c0000000003a2650 0000000000000cc0 c00000000000d3d8 c00000000000d3d8
+  [    4.489584][   T26] GPR08: c0000000049175b0 a80e000000000000 0000000000000000 0000000017d78400
+  [    4.489584][   T26] GPR12: 0000000044002204 c000000003790000 c00000000435003c c0000000043f1c40
+  [    4.489584][   T26] GPR16: c0000000043f1c68 c0000000043501a0 c000000002106138 c0000000043f1c08
+  [    4.489584][   T26] GPR20: c0000000043f1c10 c0000000043f1c20 c000000004146c40 c000000002fdb7f8
+  [    4.489584][   T26] GPR24: c000000002fdb834 c000000003685e00 c000000004025030 c000000003522e90
+  [    4.489584][   T26] GPR28: 0000000000000cc0 c0000000003a2650 c000000004025020 c000000004025020
+  [    4.491201][   T26] NIP [c00000000062ec6c] .kasan_byte_accessible+0xc/0x20
+  [    4.491430][   T26] LR [c00000000062bb84] .__kasan_check_byte+0x24/0x90
+  [    4.491767][   T26] Call Trace:
+  [    4.491941][   T26] [c000000004917860] [c00000000062ae70] .__kasan_kmalloc+0xc0/0x110 (unreliable)
+  [    4.492270][   T26] [c0000000049178f0] [c0000000005624d4] .krealloc+0x54/0x1c0
+  [    4.492453][   T26] [c000000004917990] [c0000000003a2650] .create_trace_option_files+0x280/0x530
+  [    4.492613][   T26] [c000000004917a90] [c000000002050d90] .tracer_init_tracefs_work_func+0x274/0x2c0
+  [    4.492771][   T26] [c000000004917b40] [c0000000001f9948] .process_one_work+0x578/0x9f0
+  [    4.492927][   T26] [c000000004917c30] [c0000000001f9ebc] .worker_thread+0xfc/0x950
+  [    4.493084][   T26] [c000000004917d60] [c00000000020be84] .kthread+0x1a4/0x1b0
+  [    4.493232][   T26] [c000000004917e10] [c00000000000d3d8] .ret_from_kernel_thread+0x58/0x60
+  [    4.495642][   T26] Code: 60000000 7cc802a6 38a00000 4bfffc78 60000000 7cc802a6 38a00001 4bfffc68 60000000 3d20a80e 7863e8c2 792907c6 <7c6348ae> 20630007 78630fe0 68630001
+  [    4.496704][   T26] ---[ end trace 0000000000000000 ]---
 
-> ---
->   drivers/dma-buf/dma-fence.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
-> index 406b4e26f538..0de0482cd36e 100644
-> --- a/drivers/dma-buf/dma-fence.c
-> +++ b/drivers/dma-buf/dma-fence.c
-> @@ -167,7 +167,7 @@ struct dma_fence *dma_fence_allocate_private_stub(void)
->   		       0, 0);
->   
->   	set_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
-> -		&dma_fence_stub.flags);
-> +		&fence->flags);
->   
->   	dma_fence_signal(fence);
->   
+The Oops is due to kasan_byte_accessible() not checking the readiness
+of KASAN. Add missing call to kasan_arch_is_ready() and bail out when
+not ready. The same problem is observed with ____kasan_kfree_large()
+so fix it the same.
+
+Also, as KASAN is not available and no shadow area is allocated for
+linear memory mapping, there is no point in allocating shadow mem for
+vmalloc memory as shown below in /sys/kernel/debug/kernel_page_tables
+
+  ---[ kasan shadow mem start ]---
+  0xc00f000000000000-0xc00f00000006ffff  0x00000000040f0000       448K         r  w       pte  valid  present        dirty  accessed
+  0xc00f000000860000-0xc00f00000086ffff  0x000000000ac10000        64K         r  w       pte  valid  present        dirty  accessed
+  0xc00f3ffffffe0000-0xc00f3fffffffffff  0x0000000004d10000       128K         r  w       pte  valid  present        dirty  accessed
+  ---[ kasan shadow mem end ]---
+
+So, also verify KASAN readiness before allocating and poisoning
+shadow mem for VMAs.
+
+Reported-by: Nathan Lynch <nathanl@linux.ibm.com>
+Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ mm/kasan/common.c  |  3 +++
+ mm/kasan/generic.c |  7 ++++++-
+ mm/kasan/shadow.c  | 12 ++++++++++++
+ 3 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+index 833bf2cfd2a3..21e66d7f261d 100644
+--- a/mm/kasan/common.c
++++ b/mm/kasan/common.c
+@@ -246,6 +246,9 @@ bool __kasan_slab_free(struct kmem_cache *cache, void *object,
+ 
+ static inline bool ____kasan_kfree_large(void *ptr, unsigned long ip)
+ {
++	if (!kasan_arch_is_ready())
++		return false;
++
+ 	if (ptr != page_address(virt_to_head_page(ptr))) {
+ 		kasan_report_invalid_free(ptr, ip, KASAN_REPORT_INVALID_FREE);
+ 		return true;
+diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
+index b076f597a378..cb762982c8ba 100644
+--- a/mm/kasan/generic.c
++++ b/mm/kasan/generic.c
+@@ -191,7 +191,12 @@ bool kasan_check_range(unsigned long addr, size_t size, bool write,
+ 
+ bool kasan_byte_accessible(const void *addr)
+ {
+-	s8 shadow_byte = READ_ONCE(*(s8 *)kasan_mem_to_shadow(addr));
++	s8 shadow_byte;
++
++	if (!kasan_arch_is_ready())
++		return true;
++
++	shadow_byte = READ_ONCE(*(s8 *)kasan_mem_to_shadow(addr));
+ 
+ 	return shadow_byte >= 0 && shadow_byte < KASAN_GRANULE_SIZE;
+ }
+diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
+index 2fba1f51f042..15cfb34d16a1 100644
+--- a/mm/kasan/shadow.c
++++ b/mm/kasan/shadow.c
+@@ -291,6 +291,9 @@ int kasan_populate_vmalloc(unsigned long addr, unsigned long size)
+ 	unsigned long shadow_start, shadow_end;
+ 	int ret;
+ 
++	if (!kasan_arch_is_ready())
++		return 0;
++
+ 	if (!is_vmalloc_or_module_addr((void *)addr))
+ 		return 0;
+ 
+@@ -459,6 +462,9 @@ void kasan_release_vmalloc(unsigned long start, unsigned long end,
+ 	unsigned long region_start, region_end;
+ 	unsigned long size;
+ 
++	if (!kasan_arch_is_ready())
++		return;
++
+ 	region_start = ALIGN(start, KASAN_MEMORY_PER_SHADOW_PAGE);
+ 	region_end = ALIGN_DOWN(end, KASAN_MEMORY_PER_SHADOW_PAGE);
+ 
+@@ -502,6 +508,9 @@ void *__kasan_unpoison_vmalloc(const void *start, unsigned long size,
+ 	 * with setting memory tags, so the KASAN_VMALLOC_INIT flag is ignored.
+ 	 */
+ 
++	if (!kasan_arch_is_ready())
++		return (void *)start;
++
+ 	if (!is_vmalloc_or_module_addr(start))
+ 		return (void *)start;
+ 
+@@ -524,6 +533,9 @@ void *__kasan_unpoison_vmalloc(const void *start, unsigned long size,
+  */
+ void __kasan_poison_vmalloc(const void *start, unsigned long size)
+ {
++	if (!kasan_arch_is_ready())
++		return;
++
+ 	if (!is_vmalloc_or_module_addr(start))
+ 		return;
+ 
+-- 
+2.38.1
 
