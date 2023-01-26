@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F5A67D486
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E7967D487
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbjAZSmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
+        id S232251AbjAZSmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:42:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbjAZSmd (ORCPT
+        with ESMTP id S229530AbjAZSme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:42:33 -0500
+        Thu, 26 Jan 2023 13:42:34 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F314474C7;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E65C49022;
         Thu, 26 Jan 2023 10:42:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1674758553; x=1706294553;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lazqj33+wcKOHpjgmXNXHNJZww2MNyt2EHBaLJXRYCw=;
-  b=YZr0bbBfahBUfu/3SAMOQ6hI6BwMxQ8CQFasPDZ5HwLV8kesrv8s24Hl
-   0WtUe9oo8GJn8+c+IALbhD/LlfL/SU3gSzPTB5qofKctBLWJTrqFrUo5O
-   ShanDrlviRiTEOeOGS5wHs2QY8SGYhwixZvyGox93/YAIQOSZJCJHH3wM
-   6od47+f5NrPNwX9WRpbqQrmPETE+U01LzrqGmGjNSnxIknaDJ4HNj07kX
-   Majv+Ly4+zHupenxDshgdJYVAUU1db7mBqhns5iPiMUy8Hn4ii9X7/4H9
-   kygaLFTiKrRg32zbGrA3E4+K1P7LDjFoY0bwfxQ9t/LqnVDxSkRWnGg3k
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="354203361"
+  bh=ivyLAdBKqYQLl3lR+fj5FZ2eFkx8GG4TgMFpd25I12Y=;
+  b=FizYTQwtsAhHSYsGHMFYSBag+jzIr/fw0g/NX7I/LJAgmrAmf2O4MfsJ
+   ksreZLGCDaz9ekhG1ZfcvwbyKfHYhrhhi3le55HoB4xZGBIQvlbaQYwGH
+   r5zAHfUbR8x5EbHCczY4ThYoRa7XxJJXSTlOQiroYGqAQeI0Z9qC7b9tv
+   jZH/vUB9Z+Im4MPMKVR2KHkzdiHgO3Owgss40Ix/ovH0+IFIG/t+Yw+Pl
+   KFTbfz33PGNYXTEgu4sjQgcTsWbQqEUaxLA49Y478CUytOR/FnqopjjDi
+   8nRmdSrnp7QTPsTA3HOM95VGd4j27ZVyYI+tDzz5tq1rIG4iz5r4Wdn9t
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="354203371"
 X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="354203361"
+   d="scan'208";a="354203371"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 10:42:06 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="991745452"
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="991745455"
 X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="991745452"
+   d="scan'208";a="991745455"
 Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
   by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 10:42:06 -0800
 From:   Tony Luck <tony.luck@intel.com>
@@ -49,9 +49,9 @@ Cc:     Shaopeng Tan <tan.shaopeng@fujitsu.com>,
         Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, patches@lists.linux.dev,
         Tony Luck <tony.luck@intel.com>
-Subject: [PATCH 5/7] x86/resctrl: Add a new "snc_ways" file to the monitoring info directory.
-Date:   Thu, 26 Jan 2023 10:41:55 -0800
-Message-Id: <20230126184157.27626-6-tony.luck@intel.com>
+Subject: [PATCH 6/7] x86/resctrl: Update documentation with Sub-NUMA cluster changes
+Date:   Thu, 26 Jan 2023 10:41:56 -0800
+Message-Id: <20230126184157.27626-7-tony.luck@intel.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230126184157.27626-1-tony.luck@intel.com>
 References: <20230126184157.27626-1-tony.luck@intel.com>
@@ -67,47 +67,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make it easy for the user to tell if Sub-NUMA Cluster is enabled by
-providing an info/ file.
+With Sub-NUMA Cluster mode enabled the scope of monitoring resources is
+per-NODE instead of per-L3 cache. Suffices of directories with "L3" in
+their name refer to Sun-NUMA nodes instead of L3 cache ids.
 
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ Documentation/x86/resctrl.rst | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index a0dc64a70d01..392e7a08d083 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -997,6 +997,14 @@ static int rdt_num_rmids_show(struct kernfs_open_file *of,
- 	return 0;
- }
+diff --git a/Documentation/x86/resctrl.rst b/Documentation/x86/resctrl.rst
+index 71a531061e4e..9043a2d2f2d3 100644
+--- a/Documentation/x86/resctrl.rst
++++ b/Documentation/x86/resctrl.rst
+@@ -167,6 +167,11 @@ with the following files:
+ 		bytes) at which a previously used LLC_occupancy
+ 		counter can be considered for re-use.
  
-+static int rdt_snc_ways_show(struct kernfs_open_file *of,
-+			     struct seq_file *seq, void *v)
-+{
-+	seq_printf(seq, "%d\n", snc_ways);
++"snc_ways":
++                A value of "1" marks that SNC mode is disabled.
++                Values of "2" or "4" indicate how many NUMA
++                nodes share an L3 cache.
 +
-+	return 0;
-+}
-+
- static int rdt_mon_features_show(struct kernfs_open_file *of,
- 				 struct seq_file *seq, void *v)
- {
-@@ -1451,6 +1459,13 @@ static struct rftype res_common_files[] = {
- 		.seq_show	= rdt_num_rmids_show,
- 		.fflags		= RF_MON_INFO,
- 	},
-+	{
-+		.name		= "snc_ways",
-+		.mode		= 0444,
-+		.kf_ops		= &rdtgroup_kf_single_ops,
-+		.seq_show	= rdt_snc_ways_show,
-+		.fflags		= RF_MON_INFO,
-+	},
- 	{
- 		.name		= "cbm_mask",
- 		.mode		= 0444,
+ Finally, in the top level of the "info" directory there is a file
+ named "last_cmd_status". This is reset with every "command" issued
+ via the file system (making new directories or writing to any of the
+@@ -254,9 +259,13 @@ When control is enabled all CTRL_MON groups will also contain:
+ When monitoring is enabled all MON groups will also contain:
+ 
+ "mon_data":
+-	This contains a set of files organized by L3 domain and by
+-	RDT event. E.g. on a system with two L3 domains there will
+-	be subdirectories "mon_L3_00" and "mon_L3_01".	Each of these
++	This contains a set of files organized by L3 domain or by NUMA
++	node (depending on whether SNC mode is disabled or enabled
++	respectively) and by RDT event. E.g. on a system with SNC
++	mode disabled with two L3 domains there will be subdirectories
++	"mon_L3_00" and "mon_L3_01" the numerical suffix refers to the
++        L3 cache id.  With SNC enabled the directory names are the same,
++        but the numerical suffix refers to the node id.  Each of these
+ 	directories have one file per event (e.g. "llc_occupancy",
+ 	"mbm_total_bytes", and "mbm_local_bytes"). In a MON group these
+ 	files provide a read out of the current value of the event for
 -- 
 2.39.1
 
