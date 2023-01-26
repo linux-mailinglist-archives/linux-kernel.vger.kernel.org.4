@@ -2,94 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362B167C958
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 227E067C937
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236654AbjAZLCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 06:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S236975AbjAZKyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:54:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233517AbjAZLCr (ORCPT
+        with ESMTP id S236764AbjAZKyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 06:02:47 -0500
-X-Greylist: delayed 607 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Jan 2023 03:02:41 PST
-Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A4B93E4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:02:41 -0800 (PST)
-Received: from asem-TANK-H61.asem.intra ([151.1.184.193])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id KzrppyQ5bn7VrKzrwpdlvQ; Thu, 26 Jan 2023 11:52:37 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1674730357; bh=H9c79j0VtyhTiRS4TnW7zV7MIRdHfFiRAQrVb9wLVoY=;
-        h=From:To:Subject:Date:MIME-Version;
-        b=O3rbeiY+zrMVxTbxh3oMC4P4PXec6OLmpaFUaYqGexZoQ+XcA9+n48HJJBntLH7ZF
-         s9hu/lxR9Ea54dt5iyJOC6DdJApWdYH/CWYmvCJov6L0ejNPZDT+6wZJSZfgfiEHrJ
-         e0+LOfrnZ0sdGdZF+nEDX7M7TlIAbO5/vSEsxXeDqW2UzFYZN4S2Fg4En6Y19rUUG8
-         gOVvPrGZP9y2TGf0ydPaol5gWVEYhFOnGMb7ad5EuoJw0p5oXUN/27WWFFykUCEFdg
-         TzeWhdKkadu59yX4Al9OVcrptfV0mCkmXi63jM0kJT0W6ORD9AOTNDKFrcxN47889o
-         0O9BRk8vCUgCw==
-From:   Luca Ellero <l.ellero@asem.it>
-To:     dmitry.torokhov@gmail.com, daniel@zonque.org,
-        m.felsch@pengutronix.de, andriy.shevchenko@linux.intel.com,
-        u.kleine-koenig@pengutronix.de, mkl@pengutronix.de,
-        miquel.raynal@bootlin.com, imre.deak@nokia.com,
-        luca.ellero@brickedbrain.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luca Ellero <l.ellero@asem.it>
-Subject: [PATCH 3/3] Input: ads7846 - don't check penirq immediately for 7845
-Date:   Thu, 26 Jan 2023 11:52:27 +0100
-Message-Id: <20230126105227.47648-4-l.ellero@asem.it>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230126105227.47648-1-l.ellero@asem.it>
-References: <20230126105227.47648-1-l.ellero@asem.it>
+        Thu, 26 Jan 2023 05:54:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837E35D92A;
+        Thu, 26 Jan 2023 02:54:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11DA161796;
+        Thu, 26 Jan 2023 10:54:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CDCAC433D2;
+        Thu, 26 Jan 2023 10:54:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674730459;
+        bh=dwy0Zrz7JiK4sHx1mULpCKxHI9VXysUBBdDC3Dp9Wik=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=PeokaWZAIAV/kmnDdgg270+335Q2ZF3Qo98/lwZXwU74YYW42eIu8MJNo7dWSntuj
+         RXi41cQHRA5sM9rQvvR0gypNwP2ZXXm9AAPvdRzmTWPzCC97wvWvqTn7ljT8WsbPfG
+         4bWrnGTghannhjWjnWKgWvCcfkhYCLIANTgnDmJJW+/VKfxvAV4gxTMg0UoXQZsXyD
+         dVkULu6CgoJ6gkbRWQqEDAN9kQLAI9BA6AZZc+kE6Nh8iYIsr/WIhrCqGj25u5/f/H
+         DLumQzUn+cwHz754j7bYQrPsTMUfwyJnOkYS5HGFqSMlJJCnHJFcQl6cjiphs2c1nN
+         9nDgNqwBNwGvg==
+Message-ID: <3c5cf7c7f9e206a3d7c4253de52015dda97ef41e.camel@kernel.org>
+Subject: Re: [PATCH v8 RESEND 2/8] fs: clarify when the i_version counter
+ must be updated
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, bfields@fieldses.org,
+        brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org, Colin Walters <walters@verbum.org>
+Date:   Thu, 26 Jan 2023 05:54:16 -0500
+In-Reply-To: <20230125160625.zenzybjgie224jf6@quack3>
+References: <20230124193025.185781-1-jlayton@kernel.org>
+         <20230124193025.185781-3-jlayton@kernel.org>
+         <20230125160625.zenzybjgie224jf6@quack3>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfHuIE2j3bYbK5nB8eUKiELfmmJoV7gdzP7PFvJTlXY4Xl56qJKHKJb088FjYoJkUOYVRgPpTD5KR7VnGDT8bhHEjyC90kwKQ8uawkqsGN0vnVOhLJnk5
- 7CoTpTJr0SBXgEi1BRYUuE/4u4ilXoLEAoqtF0M/AEdAH6gHJ/6eXXw3lH0i+3weLKvmbn0y7rvRjGhDQ3EQpELyTFGNk6/PIeCm3TT8OjIiNhTI+2dc6ILE
- kM3bZMsV9Ew/fi+38tX9HREKBX+sqw+66+fFZDSR3SeprG3qNGGXWop61ErY1V0E75rIEQtdAw0aVbvT106JLx4RDZQnGsBCzPW1kcdhJmqhwlSJBPBsS1u9
- 58QVty2YIlt5Hai2jnrUGXVNr7y9KT4YfRYj7u0iuYDaqr4nKvxW3GxfwpKyRYGuAC04kgb2AAL34HrTgt7gJ9ndp8ad6RGRo5zsZKTm24Lpsv9q6Beoq54O
- IOFfbAr6XFVy0XhRVKublbFj/vwbJaGrAHokHnPfDUDbkzIGSfas0U6ZFGWlrJJOCxX0xx+CUnIG+btP++FZ07Vk5IM+hVi9Uc/AbNr50tQaq4M8heVJmsSD
- SMWI204EqQxoCHssmTJyb2+P
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To discard false readings, one should use "ti,penirq-recheck-delay-usecs".
-Checking get_pendown_state() at the beginning, most of the time fails
-causing malfunctioning.
+On Wed, 2023-01-25 at 17:06 +0100, Jan Kara wrote:
+> On Tue 24-01-23 14:30:19, Jeff Layton wrote:
+> > The i_version field in the kernel has had different semantics over
+> > the decades, but NFSv4 has certain expectations. Update the comments
+> > in iversion.h to describe when the i_version must change.
+> >=20
+> > Cc: Colin Walters <walters@verbum.org>
+> > Cc: NeilBrown <neilb@suse.de>
+> > Cc: Trond Myklebust <trondmy@hammerspace.com>
+> > Cc: Dave Chinner <david@fromorbit.com>
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+>=20
+> Looks good to me. But one note below:
+>=20
+> > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
+> > index 6755d8b4f20b..fced8115a5f4 100644
+> > --- a/include/linux/iversion.h
+> > +++ b/include/linux/iversion.h
+> > @@ -9,8 +9,25 @@
+> >   * ---------------------------
+> >   * The change attribute (i_version) is mandated by NFSv4 and is mostly=
+ for
+> >   * knfsd, but is also used for other purposes (e.g. IMA). The i_versio=
+n must
+> > - * appear different to observers if there was a change to the inode's =
+data or
+> > - * metadata since it was last queried.
+> > + * appear larger to observers if there was an explicit change to the i=
+node's
+> > + * data or metadata since it was last queried.
+> > + *
+> > + * An explicit change is one that would ordinarily result in a change =
+to the
+> > + * inode status change time (aka ctime). i_version must appear to chan=
+ge, even
+> > + * if the ctime does not (since the whole point is to avoid missing up=
+dates due
+> > + * to timestamp granularity). If POSIX or other relevant spec mandates=
+ that the
+> > + * ctime must change due to an operation, then the i_version counter m=
+ust be
+> > + * incremented as well.
+> > + *
+> > + * Making the i_version update completely atomic with the operation it=
+self would
+> > + * be prohibitively expensive. Traditionally the kernel has updated th=
+e times on
+> > + * directories after an operation that changes its contents. For regul=
+ar files,
+> > + * the ctime is usually updated before the data is copied into the cac=
+he for a
+> > + * write. This means that there is a window of time when an observer c=
+an
+> > + * associate a new timestamp with old file contents. Since the purpose=
+ of the
+> > + * i_version is to allow for better cache coherency, the i_version mus=
+t always
+> > + * be updated after the results of the operation are visible. Updating=
+ it before
+> > + * and after a change is also permitted.
+>=20
+> This sounds good but it is not the case for any of the current filesystem=
+s, is
+> it? Perhaps the documentation should mention this so that people are not
+> confused?
+>=20
+> 								Honza
 
-Fixes: ffa458c1bd9b ("spi: ads7846 driver")
-Signed-off-by: Luca Ellero <l.ellero@asem.it>
----
- drivers/input/touchscreen/ads7846.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+Correct. Currently, all filesystems change the times and version before
+a write instead of after. I'm hoping that situation will change soon
+though, as I've been working on a patchset to fix this for tmpfs, ext4
+and btrfs.
 
-diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
-index 15da1047a577..17f11bce8113 100644
---- a/drivers/input/touchscreen/ads7846.c
-+++ b/drivers/input/touchscreen/ads7846.c
-@@ -843,14 +843,8 @@ static void ads7846_report_state(struct ads7846 *ts)
- 	if (x == MAX_12BIT)
- 		x = 0;
- 
--	if (ts->model == 7843) {
-+	if (ts->model == 7843 || ts->model == 7845) {
- 		Rt = ts->pressure_max / 2;
--	} else if (ts->model == 7845) {
--		if (get_pendown_state(ts))
--			Rt = ts->pressure_max / 2;
--		else
--			Rt = 0;
--		dev_vdbg(&ts->spi->dev, "x/y: %d/%d, PD %d\n", x, y, Rt);
- 	} else if (likely(x && z1)) {
- 		/* compute touch pressure resistance using equation #2 */
- 		Rt = z2;
--- 
-2.25.1
+If you still want to see something for this though, what would you
+suggest for verbiage?
 
+Thanks,
+--=20
+Jeff Layton <jlayton@kernel.org>
