@@ -2,94 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD7167C6A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 329AD67C6A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236674AbjAZJIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 04:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S236686AbjAZJLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 04:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjAZJIM (ORCPT
+        with ESMTP id S230282AbjAZJLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 04:08:12 -0500
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2443EC40;
-        Thu, 26 Jan 2023 01:08:11 -0800 (PST)
-Received: by mail-ed1-f53.google.com with SMTP id y19so1272499edc.2;
-        Thu, 26 Jan 2023 01:08:11 -0800 (PST)
+        Thu, 26 Jan 2023 04:11:21 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607763E60B
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:11:19 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id k4so1286315vsc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:11:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8SNsEiTCGlF2kxvhKH3RS9fyCJmlnEC5RQ9QnmfE1VQ=;
+        b=RmdA+GKDIbOYkibt2Hs4G/Ajp6ngHqBedoH0v8wYpYr62SYcuuUjvA1Af4C/sSWOFW
+         +eLQIS9ahzM9XXkbLXbZFO0Slwmhmr8Bccdvrq8b5ruN5kOUTnAPDK/w2GsXGVLICGFX
+         l5Qutisu7Y1gjSH8l8zb3pdAchm8arCRQ1wG0gUyOFHYnzeno3EBkbsjip3EsHVb5UeX
+         SH+k2cboFgvYIvg7+LQ/jeSyNmbK6vpUv+gzWMP5cQfZPXLvcqcN0x5405dB1u5iQqkN
+         WQHISYPBySBW2eMmHz3ZZ5RBmTNQVVr5oWP1Jvt5JwMkNzc2QQGYyAnIWxY1RCYCercO
+         EuUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hMr0xC0YhrqgD1viBDPP26FWvFPbPdmQWji8YbWNKZM=;
-        b=0X8L9XYz/Rmg2XuT+4nhIcHlumh9Tktx6U7JNIpS4wwqm/KeFNC1jX30GKxeEmWXYy
-         /C66Nc7/+kNypk1zDQJqEbidgd6FmCzFns3ctM7ZNMqDxRNOSeMFdg/BDwV+okwfrnz0
-         xSYT6M2oS9S0q4KSP39H5+id18BMLpl8aNyzDYXsMyuWMbHlZNz2PfVXiyG00FNS15Rc
-         qTwan3+LoROfMzqALPvfRJJF6OJc92zpA02i6W3iUXd/HX6x/zqyI63NIIYf4i+xYaAk
-         K+Z5larS6SWLLLOIXxkiLJRiuDlfAnXZqFwUQyXwi6SdlP7V00QfKYN4c0vpLP2/FwOl
-         VNSw==
-X-Gm-Message-State: AFqh2kr6wPP9B6K1mCd1MIiWWeSfpXZNUTnyWdP4FmXBGhjFp7DtrXv+
-        C6ccmfndrmzNcCs9LVkbSQ0DSoW0Xkg=
-X-Google-Smtp-Source: AMrXdXs7LccmnB0bZcinEZc6Pyw0tuNtDY8p4RYr8ArU3wqk/0+yiT/jtfRNjdsb9EbsAtxehuiZ3g==
-X-Received: by 2002:a05:6402:524f:b0:49e:498c:5e16 with SMTP id t15-20020a056402524f00b0049e498c5e16mr43666895edd.30.1674724089094;
-        Thu, 26 Jan 2023 01:08:09 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id y11-20020a50eb0b000000b00467481df198sm434295edp.48.2023.01.26.01.08.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 01:08:08 -0800 (PST)
-Message-ID: <edcf26d4-64a0-04ea-435c-17d9efde7dd9@kernel.org>
-Date:   Thu, 26 Jan 2023 10:08:07 +0100
+        bh=8SNsEiTCGlF2kxvhKH3RS9fyCJmlnEC5RQ9QnmfE1VQ=;
+        b=5ZD4K2wms8S2OMvmb5E0c2zbbhzlIW8+JspgvVPPaE2/jJgzNldA5doxNyZjd403sj
+         FSjnsiexV91n6kzqpNNq/jNxFQojuaiu4mIh2Y5i11y/PE1luT7QenpQsImK3JnZDI8y
+         ArBFwcitwZLNokjzu+X0k7VZ00ZlC7f3uFWzjArg8+WyVBTw6osJxsQV1KYCGmyH9YiV
+         MwV1ImUUgzQh7SnYAb+ZYtsW3xtxHnqOAB9WxB4Xkmo3MrJGo00yl0JtQQiVLrxPRgD2
+         cLxIiHvxwoGt36FK/ltMgk3BJCvBMi6h+2FcBj7bh/pWr89u46F/WjavUK2vx8Wb0jvP
+         RFBA==
+X-Gm-Message-State: AFqh2krTPaVL9nu2r20eHvq9rGnrImIxPC/RkFSfh04ZZHbUdul8bv1b
+        /wZY4C7b+OA/KZWQqeapTFuHe0QxAYNgbZ9KF88e3g==
+X-Google-Smtp-Source: AMrXdXtwW1E/r8kShMxieiJt2HZn9ZtIcNFEbyz4hLe6tsg1Wy08G9QeNw++duG4V/VAU3KXoaGXwvIkdWYo4NPyE8Y=
+X-Received: by 2002:a05:6102:3e08:b0:3c5:1ac1:bf38 with SMTP id
+ j8-20020a0561023e0800b003c51ac1bf38mr5288497vsv.78.1674724278436; Thu, 26 Jan
+ 2023 01:11:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] fbcon: Check font dimension limits
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>
-References: <20230126004911.869923511@ens-lyon.org>
- <20230126004921.616264824@ens-lyon.org> <Y9IvBoAbmh27xl4B@kroah.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <Y9IvBoAbmh27xl4B@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230118134940.240102-1-brgl@bgdev.pl> <Y9DpbChLZfDONHPz@ninjato> <Y9GpL9RBNM8H2ZSL@shikoro>
+In-Reply-To: <Y9GpL9RBNM8H2ZSL@shikoro>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 26 Jan 2023 10:11:07 +0100
+Message-ID: <CAMRc=McHowkYJBckM1eikcrBUoXXZN+OkozA-dNXZc1Zgd+Kfw@mail.gmail.com>
+Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the kernel
+To:     Wolfram Sang <wsa@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URI_DOTEDU
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26. 01. 23, 8:43, Greg KH wrote:
->> --- linux-6.0.orig/drivers/video/fbdev/core/fbcon.c
->> +++ linux-6.0/drivers/video/fbdev/core/fbcon.c
->> @@ -2489,9 +2489,12 @@ static int fbcon_set_font(struct vc_data
->>   	    h > FBCON_SWAP(info->var.rotate, info->var.yres, info->var.xres))
->>   		return -EINVAL;
->>   
->> +	if (font->width > 32 || font->height > 32)
->> +		return -EINVAL;
->> +
->>   	/* Make sure drawing engine can handle the font */
->> -	if (!(info->pixmap.blit_x & (1 << (font->width - 1))) ||
->> -	    !(info->pixmap.blit_y & (1 << (font->height - 1))))
->> +	if (!(info->pixmap.blit_x & (1U << (font->width - 1))) ||
->> +	    !(info->pixmap.blit_y & (1U << (font->height - 1))))
-> 
-> Are you sure this is still needed with the above check added?  If so,
-> why?  What is the difference in the compiled code?
+On Wed, Jan 25, 2023 at 11:12 PM Wolfram Sang <wsa@kernel.org> wrote:
+>
+>
+> > So, this code handled all my stress-testing well so far. I'll try to
+> > think of some more ideas until this evening, but likely I will apply it
+> > later. Nonetheless, more review eyes are still welcome!
+>
+> Ah yes, I now recalled why I had the gut feeling that this solution is
+> not complete. See this mail thread from 2015:
+>
+> https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
+>
+> There are still drivers using i2c_del_adapter()+kfree(), so removing the
+> completion could cause use-after-free there, or?
+>
 
-For font->{width,height} == 32, definitely. IMO, 1 << 31 is undefined as 
-1 << 31 cannot be represented by an (signed) int.
+Ugh, what a mess... I was mostly focused on the character device side
+of it but now I realized the true extent of the problem.
 
--- 
-js
-suse labs
+It's not like there are just *some* odd drivers that delete the
+adapter struct at .remove() - it's literally all of them one way or
+another.
 
+It's all because the adapter struct really should be allocated by
+i2c_add_adapter() and bus drivers should only really provide some
+structure containing the adapter description for the subsystem the
+lifetime of which would not affect the adapter itself. This way the
+adapter (embedding struct device) would be freed by device type's
+.release() like we do over in the GPIO subsystem. Instead the adapter
+struct is allocated by drivers at .probe() meaning it will get dropped
+at .remove().
+
+I wonder how many more subsystems do that. No wonder people blame
+devres for these user-space device node crashes...
+
+I don't have a good solution. I've been thinking about it for an hour
+and every solution requires sweeping changes across the entire
+subsystem. Or else we'd introduce a parallel solution that would do
+the right thing and wait in perpetuity until all drivers convert -
+like with i2e probe_new() which is after all much simpler.
+
+Anyway, that's all I've got. We probably need to drop this change and
+live with what we have now.
+
+Bart
