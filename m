@@ -2,125 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8464667CDEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFF867CD94
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbjAZOXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S231736AbjAZOVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:21:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231939AbjAZOXD (ORCPT
+        with ESMTP id S231603AbjAZOVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:23:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAFD241ED;
-        Thu, 26 Jan 2023 06:23:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2055C61843;
-        Thu, 26 Jan 2023 14:23:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F47C433A1;
-        Thu, 26 Jan 2023 14:23:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674742981;
-        bh=5UwR9QbyWi/Z/2mgCV5ah8EZM6pifSRECiAKO2qRn28=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uoAiN7RLIltAF2itdi3Ajs7/6S33o92wkpcy+qExHZNJo+NeZy1wAm5c8lDdbmCj/
-         Y7/do4gY6riMzI6mBqMH8aJB+0YJkh41cyZeWwHMSOPcx8UKe+94GDN8lYf8ivezIT
-         r2LjK+N8Vwj3ko5OVXCN3gXzffaET5/HLEFbqJ6osHexUbhLeDIx9xSYQX5x2AwGb9
-         GOrRVhWZQIQDcuWCr2FbND7cUkG7AWElZKRBsY+ipbZqu94DFtwIpMLi7d3RQrlqhS
-         J05jHWiqLRMKeyPv8PmleXqtaweyzMgdm3b7hMTlHIAig502LNjiSBg4d5JZYGR8U8
-         tbGdCvx76bkow==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pL39e-0006jI-2J; Thu, 26 Jan 2023 15:23:06 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 24/24] arm64: dts: qcom: sc8280xp-x13s: enable rtc
-Date:   Thu, 26 Jan 2023 15:20:57 +0100
-Message-Id: <20230126142057.25715-25-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230126142057.25715-1-johan+linaro@kernel.org>
-References: <20230126142057.25715-1-johan+linaro@kernel.org>
+        Thu, 26 Jan 2023 09:21:40 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93112D1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 06:21:38 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17B554B3;
+        Thu, 26 Jan 2023 06:22:20 -0800 (PST)
+Received: from [10.57.89.209] (unknown [10.57.89.209])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F25A3F5A1;
+        Thu, 26 Jan 2023 06:21:36 -0800 (PST)
+Message-ID: <ce25dcdc-99a9-61ff-0cad-6c6cd9552680@arm.com>
+Date:   Thu, 26 Jan 2023 14:21:29 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/8] iommu: Decouple iommu_present() from bus ops
+Content-Language: en-GB
+To:     Baolu Lu <baolu.lu@linux.intel.com>, joro@8bytes.org,
+        will@kernel.org
+Cc:     hch@lst.de, jgg@nvidia.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1673978700.git.robin.murphy@arm.com>
+ <1fb168b22cbbb5c24162d29d2a9aca339cda2c72.1673978700.git.robin.murphy@arm.com>
+ <c96aaa6c-0f46-39dc-0c72-f38394e37cc3@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <c96aaa6c-0f46-39dc-0c72-f38394e37cc3@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Lenovo X13s firmware does not implement the UEFI time runtime
-services so the RTC in the PM8280K PMIC needs to be accessed directly.
+On 2023-01-26 13:13, Baolu Lu wrote:
+> On 2023/1/20 3:18, Robin Murphy wrote:
+>> Much as I'd like to remove iommu_present(), the final remaining users
+>> are proving stubbornly difficult to clean up, so kick that can down
+>> the road and just rework it to preserve the current behaviour without
+>> depending on bus ops.
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> ---
+>>   drivers/iommu/iommu.c | 17 ++++++++++++++++-
+>>   1 file changed, 16 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index b189ed345057..a77d58e1b976 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -1871,9 +1871,24 @@ int bus_iommu_probe(struct bus_type *bus)
+>>       return ret;
+>>   }
+>> +static int __iommu_present(struct device *dev, void *unused)
+>> +{
+>> +    return device_iommu_mapped(dev);
+>> +}
+> 
+> /**
+>   * device_iommu_mapped - Returns true when the device DMA is translated
+>   *                       by an IOMMU
+>   * @dev: Device to perform the check on
+>   */
+> static inline bool device_iommu_mapped(struct device *dev)
+> {
+>          return (dev->iommu_group != NULL);
+> }
+> 
+> Perhaps device_iommu_mapped() should be improved. In some cases, the
+> device has an iommu_group filled is not enough to indicate that the
+> device has IOMMU hardware for DMA translation.
+> 
+> For example, VFIO could allocate an iommu_group and add a device into
+> the iommu_group even there's no IOMMU hardware in
+> vfio_noiommu_group_alloc().
+> 
+> Basically iommu_group_add_device() doesn't check the presence of an
+> IOMMU.
 
-To complicate things further, the RTC control and time registers are
-read-only on this platform so an offset must be stored in some other
-machine-specific non-volatile memory which an RTC driver can take into
-account when reading or updating the time.
+/**
+  * iommu_group_add_device [...]
+  *
+  * This function is called by an iommu driver [...]
+  */
 
-The UEFI firmware (and Windows) use a UEFI variable for this:
+The "check" is inherent in the fact that it's been called at all. VFIO 
+noiommu *is* an IOMMU driver in the sense that it provides a bare 
+minimum of IOMMU API functionality (i.e. creating groups), sufficient to 
+support (careful) usage by VFIO drivers. There would not seem to be a 
+legitimate reason for some *other* driver to be specifically querying a 
+device while it is already bound to a VFIO driver (and thus may have a 
+noiommu group).
 
-	882f8c2b-9646-435f-8de5-f208ff80c1bd-RTCInfo
+In terms of this patch, I'm confident that nobody is using VFIO noiommu 
+on old Tegra SoCs; I'm even more confident that they wouldn't be doing 
+it with platform devices; and I'm supremely confident that they're not 
+loading the GPU drivers while already in the middle of using noiommu 
+vfio_platform. Basically "not using VFIO noiommu" is one of the inherent 
+platform-specific assumptions. If anyone else now ignores the first 
+sentence of the documentation and tries to use iommu_present() somewhere 
+that assumption might not hold, returning a meaningless wrong answer is 
+the documented behaviour :)
 
-but the offset can only be accessed via the Qualcomm UEFI Secure
-Application residing in the TEE as the firmware does not implement the
-variable runtime services either.
+Cheers,
+Robin.
 
-While it is possible to access this UEFI variable from Linux on the
-X13s, this requires using a fairly complex and reverse-engineered
-firmware interface. As the only benefit of doing so is to make sure that
-the UEFI (Windows) and Linux time never gets out of sync, it seems
-preferable to use the PMIC scratch registers for storing an offset
-instead. This also avoids flash wear in case of RTC drift, etc.
-
-So instead of using the UEFI RTC offset, reserve four bytes in one of
-the PMIC SDAM blocks to hold the RTC offset.
-
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index db406f7774de..6e88e0bb6871 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -683,6 +683,21 @@ &pmk8280_pon_resin {
- 	status = "okay";
- };
- 
-+&pmk8280_rtc {
-+	nvmem-cells = <&rtc_offset>;
-+	nvmem-cell-names = "offset";
-+
-+	status = "okay";
-+};
-+
-+&pmk8280_sdam_6 {
-+	status = "okay";
-+
-+	rtc_offset: rtc-offset@bc {
-+		reg = <0xbc 0x4>;
-+	};
-+};
-+
- &pmk8280_vadc {
- 	status = "okay";
- 
--- 
-2.39.1
-
+> 
+>> +
+>> +/**
+>> + * iommu_present() - make platform-specific assumptions about an IOMMU
+>> + * @bus: bus to check
+>> + *
+>> + * Do not use this function. You want device_iommu_mapped() instead.
+>> + *
+>> + * Return: true if some IOMMU is present for some device on the given 
+>> bus. In
+>> + * general it may not be the only IOMMU, and it may not be for the 
+>> device you
+>> + * are ultimately interested in.
+>> + */
+>>   bool iommu_present(struct bus_type *bus)
+>>   {
+>> -    return bus->iommu_ops != NULL;
+>> +    return bus_for_each_dev(bus, NULL, NULL, __iommu_present) > 0;
+>>   }
+>>   EXPORT_SYMBOL_GPL(iommu_present);
+> 
+> -- 
+> Best regards,
+> baolu
