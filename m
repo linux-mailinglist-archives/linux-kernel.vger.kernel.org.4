@@ -2,109 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338BF67D987
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 193DE67D992
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbjAZXTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:19:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        id S233053AbjAZXYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:24:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232506AbjAZXTI (ORCPT
+        with ESMTP id S231586AbjAZXYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:19:08 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21826A5F
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:19:07 -0800 (PST)
+        Thu, 26 Jan 2023 18:24:47 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338164C6EF;
+        Thu, 26 Jan 2023 15:24:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674775147; x=1706311147;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DxlPrkYaIFKagw6UlcDQbNMx71f4Jcar7GKHOEvVQIw=;
-  b=OaroDJLk4oOsWsaI7QPoboa2HmhVP4tQLx9RwFzj3fY4vw8zEvadNfaW
-   yK4aSKVy96StvX5mWZgBwpJBe/UVbZqVbOIFgaKAq2rGmlh510UMhqeOw
-   0HQWi0IahY5/2zKfdYT1N3QQOJ9XFVfUPBbOKK8I3k1A8vAxNAd7xeD4I
-   2BJi0BkKyH/7saIEXtdQx14cor6o+4PKxyMGbveaMamKrZFSMEI4z4a1Z
-   LWW9tmkF5aNKfgVBYyfYEppnfvKJWpV6Gb98C/bVnaY/8++SXH6KMh6Uz
-   nvXxf5V9RXdk67dGwIk7w8QCb16cuXekv+GIdLy+4oMOT0ePEH4t5vbaU
+  t=1674775486; x=1706311486;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=t+xT9AgXpdl1/3c5BvBnA3g4wo3hRTBdAyWmjHwNvjU=;
+  b=d8M+Qj9UUwfQMBBTah6DPU7mASgdiUetTRiCBnLrwczpxwuf6gZ6xl2e
+   5E7x9PzO3GMTMgYLCaoBd9pErGmcckhrm2z+KoaMBIJ29yyj6RJh/+dV6
+   FR+7UcGyYTAICO+8w6ztDXy7PZBW3RHwW1Ij/s5yuCHziYJkFGPXjRPkv
+   LSfegyvi6V542g4VzxVTLN2BtRZrIXDleVdekSSjAtLM7w9PFAQL2dabJ
+   y4pDc85XAIQQ2108Gsl0oTUb+zpMshvgwRtRbnkwoUpbPchj3GW46AV3V
+   LoNju85f13VCm6NhzhwXiaJmWGa//WWSu85N32DGvoPzeWb1RFj5RiOZk
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="389357770"
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="329110364"
 X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="389357770"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 15:19:07 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="787022867"
+   d="scan'208";a="329110364"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 15:24:45 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="656387197"
 X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="787022867"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 15:19:06 -0800
-Date:   Thu, 26 Jan 2023 15:22:37 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     joro@8bytes.org, will@kernel.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, hch@lst.de, jgg@nvidia.com,
-        baolu.lu@linux.intel.com, jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2 5/8] iommu: Switch __iommu_domain_alloc() to device
- ops
-Message-ID: <20230126152237.2f8b681f@jacob-builder>
-In-Reply-To: <23b51c84247cb36e96c242d3aef8ef555b6d05cd.1674753627.git.robin.murphy@arm.com>
-References: <cover.1674753627.git.robin.murphy@arm.com>
-        <23b51c84247cb36e96c242d3aef8ef555b6d05cd.1674753627.git.robin.murphy@arm.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+   d="scan'208";a="656387197"
+Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.112.115]) ([10.212.112.115])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 15:24:44 -0800
+Message-ID: <099e9e5b-88dd-ae5f-307d-6ea9f16586f1@intel.com>
+Date:   Thu, 26 Jan 2023 16:24:43 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.0
+Subject: Re: [PATCH] cxl/mbox: Add debug messages for supported mailbox
+ commands
+Content-Language: en-US
+To:     Robert Richter <rrichter@amd.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Jonathan Cameron <jonathan.cameron@huawei.com>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230119130450.107519-1-rrichter@amd.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230119130450.107519-1-rrichter@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
 
-On Thu, 26 Jan 2023 18:26:20 +0000, Robin Murphy <robin.murphy@arm.com>
-wrote:
 
->  
-> +static int __iommu_domain_alloc_dev(struct device *dev, void *data)
-> +{
-> +	struct device **alloc_dev = data;
-> +
-> +	if (!dev_iommu_ops_valid(dev))
-> +		return 0;
-> +
-> +	WARN_ONCE(*alloc_dev && dev_iommu_ops(dev) !=
-> dev_iommu_ops(*alloc_dev),
-> +		"Multiple IOMMU drivers present, which the public IOMMU
-> API can't fully support yet. You may still need to disable one or more to
-> get the expected result here, sorry!\n"); +
-> +	*alloc_dev = dev;
-> +	return 0;
-> +}
-> +
->  struct iommu_domain *iommu_domain_alloc(struct bus_type *bus)
->  {
-> -	return __iommu_domain_alloc(bus, IOMMU_DOMAIN_UNMANAGED);
-> +	struct device *dev = NULL;
-> +
-> +	/* We always check the whole bus, so the return value isn't
-> useful */
-> +	bus_for_each_dev(bus, NULL, &dev, __iommu_domain_alloc_dev);
-> +	if (!dev)
-> +		return NULL;
-Since __iommu_domain_alloc_dev() will always return 0, bus_for_each_dev()
-will never breakout until the whole dev list is iterated over. If so, would
-dev only record the last one? i.e. prior results get overwritten.  Maybe a
-misunderstood the logic.
+On 1/19/23 6:04 AM, Robert Richter wrote:
+> Only unsupported mailbox commands are reported in debug messages. A
+> list of supported commands is useful too. Change debug messages to
+> also report the opcodes of supported commands.
+> 
+> On that occasion also add missing trailing newlines.
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
 
-> +	return __iommu_domain_alloc(dev, IOMMU_DOMAIN_UNMANAGED);
->  }
->  EXPORT_SYMBOL_GPL(iommu_domain_alloc);
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
-Thanks,
-
-Jacob
+> ---
+>   drivers/cxl/core/mbox.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index a48ade466d6a..ffa9f84c2dce 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -629,11 +629,12 @@ static void cxl_walk_cel(struct cxl_dev_state *cxlds, size_t size, u8 *cel)
+>   
+>   		if (!cmd) {
+>   			dev_dbg(cxlds->dev,
+> -				"Opcode 0x%04x unsupported by driver", opcode);
+> +				"Opcode 0x%04x unsupported by driver\n", opcode);
+>   			continue;
+>   		}
+>   
+>   		set_bit(cmd->info.id, cxlds->enabled_cmds);
+> +		dev_dbg(cxlds->dev, "Opcode 0x%04x supported by driver\n", opcode);
+>   	}
+>   }
+>   
+> 
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
