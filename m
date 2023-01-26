@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D957A67D55A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C3867D55D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbjAZT3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 14:29:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
+        id S231878AbjAZTbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 14:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjAZT3E (ORCPT
+        with ESMTP id S232116AbjAZTbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 14:29:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9651166E4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:28:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674761297;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pibdsb1m7bN3Fran8uvYRWJu5eY5gEBJ+VgRn+KTWlk=;
-        b=ObyPMFe0QoKFdj1oWvUyj5s4mY4StHRIEGu9QxUeSnaJrLAyQeWWRRCpINsy7lNpKbyQ0y
-        UJo/zHuihZBlKSlNr+mGBGE0gkQ9W5ISnTnrufin1zWV5svq5y1LJVgMkOzl8ENhhH4Pvc
-        Ge9cLkJoB9zGsPCLvbpaqo4FwRmDQIE=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-441-IZJEDLvdP_KmYl_SBU9tGQ-1; Thu, 26 Jan 2023 14:28:15 -0500
-X-MC-Unique: IZJEDLvdP_KmYl_SBU9tGQ-1
-Received: by mail-io1-f70.google.com with SMTP id f12-20020a056602038c00b00704b6f4685dso1490641iov.9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:28:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pibdsb1m7bN3Fran8uvYRWJu5eY5gEBJ+VgRn+KTWlk=;
-        b=HyxHT5fOYFgND3K2l58ioTpmMJRPXxje8ZOnqlN8+8yuN2wE92SHAw3EWdPH4gpGDL
-         LlUJVGvnjaLlhGEfwy0bgEaIZR3cqmBiOLCVn/gNJoh4TWRHJzjC4ULNXBjVL+dm3Gc4
-         mj9gOk3Vg2dqaOnSWBp1NDooj6rmiyI01C7p4GV4UpKo9KvrOdMz8tR2+5LDSyJhRlHO
-         Q9E2k2qHVBCKN0z3BvwLtwTebHouvikY+gV/gPTLokD17tFIVTCG+oeAFvhqH+YLJDQe
-         16C/zaJHsSIavyn/IPQzW0JgMEUEwU+0iueu7A4lMwUK+6FDvHPjY4pnpdL/5SEBqI6C
-         oCOw==
-X-Gm-Message-State: AO0yUKXweRkiZAs2IooxDWK33heQUp7yVVlsY9egVJ4OinG2SVJfJfru
-        qEGZdbG7tjQIYvtMEZVY8G8TWhmvAc5IFPudr1bnhs5yxoyppmRyokZK5M6oeXAvn47PSiVik8q
-        OK7rgnsAiYp8H1twBtJv7vbAE
-X-Received: by 2002:a92:9403:0:b0:310:a923:772e with SMTP id c3-20020a929403000000b00310a923772emr1682901ili.21.1674761294944;
-        Thu, 26 Jan 2023 11:28:14 -0800 (PST)
-X-Google-Smtp-Source: AK7set82G8yizpFnJomwfaj3Vkzsb/W3hNUrA/Fe/f3rkOfhgB5nSqPOpev8I8m01BTodYQuDtVfBg==
-X-Received: by 2002:a92:9403:0:b0:310:a923:772e with SMTP id c3-20020a929403000000b00310a923772emr1682893ili.21.1674761294698;
-        Thu, 26 Jan 2023 11:28:14 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id k9-20020a02ccc9000000b003a961e5d33fsm596210jaq.49.2023.01.26.11.28.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 11:28:14 -0800 (PST)
-Date:   Thu, 26 Jan 2023 12:28:08 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Longfang Liu <liulongfang@huawei.com>
-Cc:     <jgg@nvidia.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <jonathan.cameron@huawei.com>, <cohuck@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>
-Subject: Re: [PATCH v7 5/5] vfio: update live migration device status
-Message-ID: <20230126122808.3c0963f2.alex.williamson@redhat.com>
-In-Reply-To: <20230120032930.43608-6-liulongfang@huawei.com>
-References: <20230120032930.43608-1-liulongfang@huawei.com>
-        <20230120032930.43608-6-liulongfang@huawei.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Thu, 26 Jan 2023 14:31:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF50A5CFCC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:31:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C40F60B55
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 19:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E25AAC433EF;
+        Thu, 26 Jan 2023 19:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674761468;
+        bh=PGqWzb4wgvcNL+4at+iClbkHPoLojf2NKMh3JxPkiEk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=iX03FAtac96I2DRhYB+Srj8X8jEkbl9mbu4U+p8Vc8qOIPYQcMXMWLy6XK+PGVa+C
+         hg1Q7GffLzwGP1DKiPv6fZfmXT1YOvGbUB5nmg7shzt8PoswHEB7VGHYm9CBptLSNg
+         Uqn/7kCYRw6mtKhjLwr7kCbCk2is1xIYP7dH5gXRKq7x1IqeMb4Y744e7pGGTIPJ9t
+         mW9DZgKoq0sZ3WYuH9RWxuRoc/pV/WQnkHhN1FCeAm3Mk+3qU4K+YVUnCEF54LnFmA
+         Pw7j2u37kNaz2Cyi8DIrFsimKZqQVaGOYcdgaosixfN/fhcCpgHhCE1WhHH6VXyhQy
+         taHFEzHDA09zg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7B8275C0510; Thu, 26 Jan 2023 11:31:08 -0800 (PST)
+Date:   Thu, 26 Jan 2023 11:31:08 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: [Patch 2/2] tools/memory-model: Provide exact SRCU semantics
+Message-ID: <20230126193108.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Y9GO3xEYkIQq/qSl@rowland.harvard.edu>
+ <Y9GPI/g23YWx+0Ce@rowland.harvard.edu>
+ <Y9GPVnK6lQbY6vCK@rowland.harvard.edu>
+ <c44183e7-44ae-4be3-bb47-517067a112b5@huaweicloud.com>
+ <Y9Gyuj+2UFefUdJS@rowland.harvard.edu>
+ <edadb690-e791-0e9c-e641-ea8876abe96e@huaweicloud.com>
+ <20230126173507.GE2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9LQEuUBn3fwZEBe@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9LQEuUBn3fwZEBe@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023 11:29:30 +0800
-Longfang Liu <liulongfang@huawei.com> wrote:
-
-> migration debugfs needs to perform debug operations based on the
-> status of the current device. If the device is not loaded or has
-> stopped, debugfs does not allow operations.
+On Thu, Jan 26, 2023 at 02:10:10PM -0500, Alan Stern wrote:
+> On Thu, Jan 26, 2023 at 09:35:07AM -0800, Paul E. McKenney wrote:
+> > On Thu, Jan 26, 2023 at 12:30:14PM +0100, Jonas Oberhauser wrote:
+> > > I don't think they're necessarily implemented in a compatible way, so
+> > > 
+> > > r = srcu_lock(s);
+> > > srcu_up(s,r);
+> > > 
+> > > might not actually work, but would currently be ok'ed by LKMM.
+> > 
+> > In kernels built with CONFIG_PROVE_LOCKING=y (AKA built with lockdep
+> > enabled), lockdep would complain about having an srcu_read_lock() with
+> > no matching srcu_read_unlock().  Kernels built without lockdep (that is,
+> > kernels actually used in production) would be happy with this.
+> > 
+> > So as Jonas suspects, this should be classified as not actually working.
 > 
-> so, after the live migration function is executed and the device is
-> turned off, the device no longer needs to be accessed. At this time,
-> the status of the device needs to be set to stop.
-> 
-> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> ---
->  drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c | 3 +++
->  drivers/vfio/pci/mlx5/main.c                   | 3 +++
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> index 96e2a021a956..bdb9043f88f1 100644
-> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> @@ -1607,6 +1607,9 @@ static void hisi_acc_vfio_pci_close_device(struct vfio_device *core_vdev)
->  	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(core_vdev);
->  	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
->  
-> +	if (core_vdev->mig_ops)
-> +		hisi_acc_vdev->mig_state = VFIO_DEVICE_STATE_STOP;
-> +
->  	iounmap(vf_qm->io_base);
->  	vfio_pci_core_close_device(core_vdev);
->  }
-> diff --git a/drivers/vfio/pci/mlx5/main.c b/drivers/vfio/pci/mlx5/main.c
-> index 031ac8cc215d..64b2fe58355a 100644
-> --- a/drivers/vfio/pci/mlx5/main.c
-> +++ b/drivers/vfio/pci/mlx5/main.c
-> @@ -1092,6 +1092,9 @@ static void mlx5vf_pci_close_device(struct vfio_device *core_vdev)
->  	struct mlx5vf_pci_core_device *mvdev = container_of(
->  		core_vdev, struct mlx5vf_pci_core_device, core_device.vdev);
->  
-> +	if (mvdev->migrate_cap)
-> +		mvdev->mig_state = VFIO_DEVICE_STATE_STOP;
-> +
->  	mlx5vf_cmd_close_migratable(mvdev);
->  	vfio_pci_core_close_device(core_vdev);
->  }
+> Lockdep complaints don't actually stop things from working (unless you 
+> want them to).  They're just warnings, right?
 
-It seems prone to issues to manipulate the migration state outside of
-the driver state machine.  If the device is closed, shouldn't the
-debugfs state interface return -EINVAL?  Thanks,
+True, but they are taken seriously due to lockdep disabling itself after
+the first warning.  So a warning for this sort of thing could hide some
+other deadlock, which tend to strongly motivate fixing issues leading
+to lockdep warnings.
 
-Alex
-
+							Thanx, Paul
