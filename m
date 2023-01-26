@@ -2,89 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F2367C4EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1FD67C4F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjAZHct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 02:32:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S231516AbjAZHeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 02:34:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjAZHcq (ORCPT
+        with ESMTP id S229642AbjAZHer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 02:32:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A4510C5;
-        Wed, 25 Jan 2023 23:32:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE89A616E8;
-        Thu, 26 Jan 2023 07:32:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C726C433EF;
-        Thu, 26 Jan 2023 07:32:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674718364;
-        bh=uJex7Agm+AtQyHaWdclWSJ1h9HW1dSHugJEqVU/QF5I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bgTvrhPiOZTU1IGYW325iwByxCRk3IW1x4zTic5wg/b8nP+Na0XmPahlFKUG/nVtR
-         LyHYWWLbwiYm0SEynmb8eoe318tgfEQ7UpAUgRhQPAEvwTJo39KJFwn1f8eZUVaxOr
-         vZNyvJCg/FrNwjOMEHZvIqjoc+3RPTJ5oLBTzCSIIAK4tjY/vUGxvkD+SXtyIrW+C0
-         R3u9Yb+A3JHm14ALSD5D/p7k1x10CoV0ivHvsprWFrclE9dL3iK1koaPm/hoTNmSIe
-         GiSSil4yjvt125YQ/uTrHaZ5SMTZl4R25CdVYI5JFryJrpHZe+q8GUPJpzsRpgTO9S
-         Yv4Mled7swbgA==
-Date:   Thu, 26 Jan 2023 15:32:36 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Philippe Schenker <dev@pschenker.ch>
-Cc:     devicetree@vger.kernel.org,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: imx8mm-verdin: Do not power down eth-phy
-Message-ID: <20230126073235.GU20713@T480>
-References: <20230116140153.23938-1-dev@pschenker.ch>
+        Thu, 26 Jan 2023 02:34:47 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A012EF9C
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 23:34:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674718466; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=IQYpRnWWtPK0El+L92Ni4UwuTMux/ljq/Rl4COtsXqBW6K+hfREcfwTZ/bKk14SsvH5SuB4fsqtHo/krSibmO6Xgyku0fRMsuMXDPDFqcLrK2fPRJL4l44ZQ3x8F8GbqhGWHi5COETAXuOAyumRO/n2rycaDE/IFZ1npTFEQZO0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1674718466; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=U65p8hOzdSe3/PC0vg4Oj9gzj+NCyyXs40Dv4ecIoSg=; 
+        b=ltIoxJ2frCbfyZyjop54Yqa04RFbVWO5KZ0luyfPMmj5MWpuKYEaqv37C6GJ9cXWjlcerzPrf1BgeFyRI7zQGs0gnggWJNvSlpJAAoxToXAGrWyszo25SwDkEdH2ljKssDxOT7XD9QDR7Ms7p0sy5x1epCBVKxBb/UUFDruwgOU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674718466;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=U65p8hOzdSe3/PC0vg4Oj9gzj+NCyyXs40Dv4ecIoSg=;
+        b=IV52+0Qd7O9MQ0HkOzjDHlqvpjfMgTQXIqyarOeJv+Nw3BW6tQEfcF9hCG6gdbsR
+        828PGh+UwM1tosFGzLC0tWQzJFGs75H2cjZ1RY9FzJccSsZ1MLAA2VJBr8gJutd87bL
+        npHrTkIUJjmFhSaKXUMkyyb62g32F1xmbOviu5LA=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1674718463412842.8049862602045; Wed, 25 Jan 2023 23:34:23 -0800 (PST)
+Message-ID: <1f0e41f4-edf8-fcb5-9bb6-5b5163afa599@arinc9.com>
+Date:   Thu, 26 Jan 2023 10:34:11 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116140153.23938-1-dev@pschenker.ch>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net] net: dsa: mt7530: fix tristate and help description
+To:     John 'Warthog9' Hawley <warthog9@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com
+References: <20230125053653.6316-1-arinc.unal@arinc9.com>
+ <20230125224411.5a535817@kernel.org>
+ <dd21bd3d-b3bb-c90b-8950-e71f4af6b167@kernel.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <dd21bd3d-b3bb-c90b-8950-e71f4af6b167@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 03:01:52PM +0100, Philippe Schenker wrote:
-> From: Philippe Schenker <philippe.schenker@toradex.com>
+On 26.01.2023 10:23, John 'Warthog9' Hawley wrote:
+> On 1/25/2023 10:44 PM, Jakub Kicinski wrote:
+>> On Wed, 25 Jan 2023 08:36:53 +0300 Arınç ÜNAL wrote:
+>>> Fix description for tristate and help sections which include inaccurate
+>>> information.
+>>>
+>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> Didn't make it thru to the list again :(
+>> Double check that none of the addresses in To: or Cc: are missing
+>> spaces between name and email or after a dot. That seems to be the most
+>> common cause of trouble. Or try to resend using just emails, no names.
+>>
 > 
-> Currently if suspending using either freeze or memory state, the fec
-> driver tries to power down the phy which leads to crash of the kernel
-> and non-responsible kernel with the following call trace:
-> 
-> [   24.839889 ] Call trace:
-> [   24.839892 ]  phy_error+0x18/0x60
-> [   24.839898 ]  kszphy_handle_interrupt+0x6c/0x80
-> [   24.839903 ]  phy_interrupt+0x20/0x2c
-> [   24.839909 ]  irq_thread_fn+0x30/0xa0
-> [   24.839919 ]  irq_thread+0x178/0x2c0
-> [   24.839925 ]  kthread+0x154/0x160
-> [   24.839932 ]  ret_from_fork+0x10/0x20
-> 
-> Since there is currently no functionality in the phy subsystem to power
-> down phys let's just disable the feature of powering-down the ethernet
-> phy.
-> 
-> Fixes: 6a57f224f734 ("arm64: dts: freescale: add initial support for verdin imx8m mini")
-> Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
+> You are also likely to run into trouble if your character set is set to 
+> UTF-8.
 
-Applied, thanks!
+I think that may be the problem here. I just resent this with only Jakub 
+and the lists without names. It didn't make it to netdev. My name 
+includes non-Latin characters. I'm not sure how I can change UTF-8 to 
+something else that works with this list. I had no such issues with 
+linux-mediatek.
+
+Arınç
