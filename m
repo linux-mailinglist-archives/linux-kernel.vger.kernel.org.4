@@ -2,95 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB6267D84E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B14D767D852
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbjAZWZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
+        id S232878AbjAZW0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:26:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjAZWZi (ORCPT
+        with ESMTP id S229813AbjAZW0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:25:38 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AE94A23D;
-        Thu, 26 Jan 2023 14:25:37 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QLePsg024992;
-        Thu, 26 Jan 2023 22:25:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=xvhz7s98kQ6LyPUTtIiOoOJOeYRwStvFiluZ2yyJIUw=;
- b=HlXhTBHhcEkpIV+60fKn8WDIqBSXPIc77UOinbUqBa9SFC/yyDroWD6OQE59Y5y+OYVg
- GeeL96RNgfNiXdhHvKJAIFuTx/XT8Us42oPJtKeBZvAotvBon5jOcgYxz44uOkkIANoe
- 090u5lF6xt7YLg4p/bAbjxcSuX+yzB9F2gmB52yYSy9brKe/UyFZM5sAZE1FxWMJUMbz
- 42TpAtzKJ4KLEmlqqLmdjiYjTJvqVo1wPS/4hjLQxbwJRe1x4tCzo9db7q4XpGulb/F6
- mS3XaDKZwj1bMdigBoLXjYKommLtyi93rsRIM/WaYaiua8sERSYkHkqFeeOvWcuUXgnw MA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nc1aq133k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 22:25:19 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QMAUfW005888;
-        Thu, 26 Jan 2023 22:25:19 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nc1aq1332-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 22:25:19 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QLFf2F025656;
-        Thu, 26 Jan 2023 22:25:18 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3n87p7ydpe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 22:25:18 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QMPGGb2818710
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 22:25:16 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7958258056;
-        Thu, 26 Jan 2023 22:25:16 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA6EF5804C;
-        Thu, 26 Jan 2023 22:25:15 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 26 Jan 2023 22:25:15 +0000 (GMT)
-Message-ID: <5a2b46ef-71de-03f5-3d4d-ef6834a33971@linux.ibm.com>
-Date:   Thu, 26 Jan 2023 17:25:15 -0500
+        Thu, 26 Jan 2023 17:26:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225324DCDE
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:25:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674771954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HklvufQZfBWJQ24G/LaO8a1AhEjWrY545//BpSv4N9I=;
+        b=GBux802Ko/zPFi6LR08sMAZoPbm0ziOBWAJGwPZzm5DQpFEzSRJUKAuIdfJ/VI/CnGhBKB
+        jLW1dc2MslSUQ5e3nmJ0lq8RRamWBHEqyuH94Sdkiyn3CcHcKWMi5j5GQSmJe5MgPh/NQD
+        JBZXFpmivKdVB82CI3ERHrR3JKSp7lk=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-86-NkFDkkY6Ohqi3k6bQQ_LDQ-1; Thu, 26 Jan 2023 17:25:53 -0500
+X-MC-Unique: NkFDkkY6Ohqi3k6bQQ_LDQ-1
+Received: by mail-ed1-f72.google.com with SMTP id h18-20020a05640250d200b0049e0e9382c2so2312081edb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:25:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HklvufQZfBWJQ24G/LaO8a1AhEjWrY545//BpSv4N9I=;
+        b=z+0Bid3vXjjlpEfmHIsErHIpw49RFCzts/p7St2ULU67d4tTKrAfjHDtwxWmx+syzT
+         gSGf5OsZiNFU+VNj1+o3Hr1E8RS3PNjXy6BzZhFUICxSIeC8xmXY0OL4IQEMTjNXZC4z
+         rXnHVOZqwzJC3AbfsSd4n2j/40MS4vtCpq2kXvnNnIJkTnLyMvojQByohWLXzfaZ5EjX
+         UetXUE36Iv9p6GSrm5Pwc3NiuVJp0CzurjjafQATxJcnjN5Q8VXPns5NgP4MFoDF6ruf
+         HnwLIzeDcPiBLgARXlkmq7ISO+g8MKhk7pIX778pA5Tsqp/obt4bM3bKY82KfjNj5JRZ
+         k1yg==
+X-Gm-Message-State: AFqh2kr6g/NBJ0QfBmucDBg+SrdUSYSSqYaYMhNLpaMPnWd7JxOU/Csc
+        TSlBB4WHBmc24ljpSufFZ7PThh/Q6HV35OcpHQTCXvZ5KVRX8sSIb1Wwcl+Gb716eRxmqbdMhua
+        f7Tt74kaVddzBavYZ80oS7/Ko
+X-Received: by 2002:a17:907:8999:b0:877:83ea:2bfc with SMTP id rr25-20020a170907899900b0087783ea2bfcmr29298596ejc.39.1674771951250;
+        Thu, 26 Jan 2023 14:25:51 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu8weu5499CBW7EQXZLSCEzQQ9uDVPguSl7RkTew9/qlc9qQ7QRBuzQoH7Teg0s42R+asqjQg==
+X-Received: by 2002:a17:907:8999:b0:877:83ea:2bfc with SMTP id rr25-20020a170907899900b0087783ea2bfcmr29298582ejc.39.1674771951068;
+        Thu, 26 Jan 2023 14:25:51 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id e14-20020a1709062c0e00b007c0a7286ac8sm1193875ejh.69.2023.01.26.14.25.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 14:25:50 -0800 (PST)
+Message-ID: <5caf64b6-0e3c-4c24-4fe8-9ed2caf43822@redhat.com>
+Date:   Thu, 26 Jan 2023 23:25:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH ima-evm-utils] Add tests for MMAP_CHECK and
- MMAP_CHECK_REQPROT hooks
+Subject: Re: [PATCH] dma-buf: actually set signaling bit for private sub
+ fences
 Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230126163812.1870942-1-roberto.sassu@huaweicloud.com>
- <20230126163812.1870942-3-roberto.sassu@huaweicloud.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230126163812.1870942-3-roberto.sassu@huaweicloud.com>
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Arvind.Yadav@amd.com, sumit.semwal@linaro.org, gustavo@padovan.org
+Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230126002844.339593-1-dakr@redhat.com>
+ <4b13c48e-1677-3947-42e5-5ba241bcb96a@amd.com>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <4b13c48e-1677-3947-42e5-5ba241bcb96a@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -Mw7vpOL2zgx8fWd_5w-IhiqtoV88s2L
-X-Proofpoint-GUID: DLJtTCkGPSqhABZM3YmwNIV8g3FhYvV3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_09,2023-01-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- spamscore=0 malwarescore=0 priorityscore=1501 phishscore=0 suspectscore=0
- mlxscore=0 lowpriorityscore=0 mlxlogscore=718 impostorscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301260207
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,40 +86,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/26/23 11:38, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On 1/26/23 07:58, Christian König wrote:
+> Am 26.01.23 um 01:28 schrieb Danilo Krummrich:
+>> In dma_fence_allocate_private_stub() set the signaling bit of the newly
+>> allocated private stub fence rather than the signaling bit of the
+>> shared dma_fence_stub.
+>>
+>> Fixes: c85d00d4fd8b ("dma-buf: set signaling bit for the stub fence")
+>> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 > 
-> Add tests to ensure that, after applying the kernel patch 'ima: Align
-> ima_file_mmap() parameters with mmap_file LSM hook', the MMAP_CHECK hook
-> checks the protections applied by the kernel and not those requested by the
-> application.
+> Good catch, Reviewed-by: Christian König <christian.koenig@amd.com>
 > 
-> Also ensure that after applying 'ima: Introduce MMAP_CHECK_REQPROT hook',
-> the MMAP_CHECK_REQPROT hook checks the protections requested by the
-> application.
+> Should I push it upstream as well or do you have commit access?
 
-below LGTM
-
-How do you tell the user that the patches need to be applied for the test to
-succeed and not worry about it when the patches are not applied?
-
+Thanks, I can push it to drm-misc-next.
 
 > 
-> Test both with the test_mmap application that by default requests the
-> PROT_READ protection flag. Its syntax is:
+>> ---
+>>   drivers/dma-buf/dma-fence.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+>> index 406b4e26f538..0de0482cd36e 100644
+>> --- a/drivers/dma-buf/dma-fence.c
+>> +++ b/drivers/dma-buf/dma-fence.c
+>> @@ -167,7 +167,7 @@ struct dma_fence 
+>> *dma_fence_allocate_private_stub(void)
+>>                  0, 0);
+>>       set_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
+>> -        &dma_fence_stub.flags);
+>> +        &fence->flags);
+>>       dma_fence_signal(fence);
 > 
 
-> +
-> +check_mmap() {
-> +	local hook="$1"
-> +	local arg="$2"
-> +	local test_file
-> +	local fowner
-> +	local rule
-> +	local result
-> +	local test_file_entry
-> +
-
-you can write them all in one line: 'local test_file fowner rule result test_file_entry'
