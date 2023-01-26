@@ -2,99 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AAF67CA51
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EC267CA55
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237345AbjAZLz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 06:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
+        id S237374AbjAZLzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 06:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjAZLz0 (ORCPT
+        with ESMTP id S237382AbjAZLz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 06:55:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B022CFE5;
+        Thu, 26 Jan 2023 06:55:29 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016772DE63
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:55:28 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id bk16so1492422wrb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:55:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5yP0BywDAnuuMbf+32a07Q6Ygejqs/wXSQRU+sh7FeI=;
+        b=pTbd3ZJCw9QkBCVFBLLz7s12GMYqKUxPMsNWFVb0xVjETIqqg8a1SYtG7M4T4xtcYS
+         EX8QJFOwqFCbF4E0kcBu3fdLUhbzHs0lYk5o1fHs+2wGBXTGxCp2pdy0MSwr3bfpOCtt
+         iwwNN6tBZMLMDlXKZCOoy3whFNnGfh7ZWa0iJirmFc/FIPjpnrWEDYvBvv+OuU+LEfuw
+         UFIOhyHGt4JmN3eq8hs9GR66BgK6PTw7RPxqWg0sp2hQBLBJgBvuidoojbaupcegM6Ha
+         SJiLu8o8nzc+t2IC3ay3yYkX9x5EE2oy9l0eZ9hFy2QnDtBG9skdx+/M0a2JuSZ4u3u6
+         GAmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5yP0BywDAnuuMbf+32a07Q6Ygejqs/wXSQRU+sh7FeI=;
+        b=4+qQXZU8Wmo+RtI+uJyU01wWMPOslsL66G84oSUebvEcJLsDW+FByv0+deH/biGOWB
+         9pbTBxTkjTzibAlgn/AgN8d09VuxMJou8wUNRvwIgCwYarXinKn/DIFhw55OTepjN/Er
+         TNPR9ZiJIrR4++C1spfT422jjenK9HCEd145eHYZfZlu0iz6p1zy2BeeJ3KkX0IEAcsW
+         DrZ+5iZ7QfqKSCkdfjHFcZWFqdIOdwPMjFf0xUybrJK4/tm7H7YHzKAn1ILD1ZLfmzl7
+         X52q3ZH/j+HKqSSUCm+Yck3XUmuR+XqrSVF3LjpkFYI56tSAYwGIJGjM4lw58QC8nGhL
+         tljA==
+X-Gm-Message-State: AO0yUKXA2IB2nZX9DQR/dNvXgy58soLZcv7NNCZ+2wZsy4ooHqTtRFw/
+        n5oQliykxHPc5U+otBZTdHFG8Q==
+X-Google-Smtp-Source: AK7set9qt9nTQzZdQh3JcvKhICbeSSBvdsDbg5AZQS8AybL0RpuPHM+dTgnRZcLj2lVpBsg2yesVVA==
+X-Received: by 2002:a5d:480b:0:b0:2bf:c748:b8bd with SMTP id l11-20020a5d480b000000b002bfc748b8bdmr1588634wrq.53.1674734126483;
         Thu, 26 Jan 2023 03:55:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2392617AB;
-        Thu, 26 Jan 2023 11:55:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F35C433D2;
-        Thu, 26 Jan 2023 11:55:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674734125;
-        bh=dL5oghASIUs6sQ+zp3NQICLvz0qyCSWBkMxIUwPZo80=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zu63a/0yUmFo2AaRMrpSDlDsFf9Lu2P5dQUI5Gq+0h1Q5rcpSgk1WgqDPQzPtvf8Z
-         3JnD0zU+neAXf0VZ33zk7opdAbV9FLKs08JXjfzOUzZLGuNO2ZoiSN9dcFASTCgksy
-         gMqT44MH+fZHJVpn8zslPEW811M51FDQG+GyqE2ujuV+9mmhPaFLcxWOfoOQb8h81B
-         I5RTu/i8lHjmducKJwbgWjHVQ2R6blDTPu8QWHX4ticWZ3NFBFFTyQVF/fPwigkivq
-         W5xnQygl1eHpdEaLXAlFg/KIERbuLsnFJwdSHw/vmVT0CMB4UUiWeKHpgN7q5NZASW
-         L7Tja4/EPK80g==
-Date:   Thu, 26 Jan 2023 19:55:14 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Philippe Schenker <dev@pschenker.ch>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
-        Denys Drozdov <denys.drozdov@toradex.com>,
-        Fabio Estevam <festevam@denx.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Marek Vasut <marex@denx.de>,
-        Matthias Schiffer <matthias.schiffer@tq-group.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Reinhold Mueller <reinhold.mueller@emtrion.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] arm64: dts: imx8m(m|p): Add yavia carrier board
-Message-ID: <20230126115512.GJ20713@T480>
-References: <20230123151734.44184-1-dev@pschenker.ch>
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id h4-20020adfaa84000000b002bfbf4c3f9fsm1149608wrc.17.2023.01.26.03.55.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 03:55:26 -0800 (PST)
+Message-ID: <62207c21-38f2-eb37-ea1d-2f6eef2202ff@linaro.org>
+Date:   Thu, 26 Jan 2023 12:55:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123151734.44184-1-dev@pschenker.ch>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [RFC PATCH v2 08/22] ASoC: dt-bindings: Add USB_RX port
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-9-quic_wcheng@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230126031424.14582-9-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 04:17:31PM +0100, Philippe Schenker wrote:
-> From: Philippe Schenker <philippe.schenker@toradex.com>
-> 
-> 
-> This series adds the new Yavia Carrier Board for the Verdin family.
-> Specifically for Verdin iMX8M Mini and Verdin iMX8M Plus.
-> 
-> Yavia is a compact carrier board providing easy access to the most
-> common features of the Verdin family. The intended use of the carrier
-> board is application software development. The board is compatible with
-> all current and future Verdin SoMs.
-> 
-> https://www.toradex.com/products/carrier-board/yavia
-> 
-> Changes in v2:
-> - Added Krzysztof's Acked-by
-> - Switch deprecated label in led node with color, function and
->   function-enumerator
-> 
-> Philippe Schenker (3):
->   dt-bindings: arm: fsl: Add verdin yavia carrier-board
->   arm64: dts: imx8mm-verdin: Add yavia carrier board
->   arm64: dts: imx8mp-verdin: Add yavia carrier board
+On 26/01/2023 04:14, Wesley Cheng wrote:
+> Q6DSP supports handling of USB playback audio data if USB audio offloading
+> is enabled.  Add a new definition for the USB_RX AFE port, which is
+> referenced when the AFE port is started.
 
-Applied all, thanks!
+Subject prefix:
+ASoC: dt-bindings: qcom,q6dsp-lpass-ports:
+
+because you are not adding USB_RX port to all bindings in ASoC.
+
+With subject fixes:
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
+
