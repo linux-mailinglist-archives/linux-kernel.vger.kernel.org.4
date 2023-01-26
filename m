@@ -2,136 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD8367D68C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1449667D691
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbjAZUhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
+        id S232821AbjAZUiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjAZUhS (ORCPT
+        with ESMTP id S232833AbjAZUh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:37:18 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A45728EC
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:37:16 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id h10so1293139ilq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:37:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=3eT8OlmJ/cvpeFa+CMg7lyhz2OoajpKwuYq94B2ZkiQ=;
-        b=cW9hmEOQ1/8OV4wVUy3XmSkGeoIzCwJ+DKcyUKz1ZGmDgHdGf2xwXE72ELEJvckmZU
-         P14K8LthH+Yv3LUFXX3K2qk8vUZMHYmb8IcQxxd2arJNhuC1c93CaazNLSB4e8dpGv0y
-         v3GLPJEcrz92/H5KCrsJ5VG9g0G9ImqyFB8Xk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3eT8OlmJ/cvpeFa+CMg7lyhz2OoajpKwuYq94B2ZkiQ=;
-        b=FsVH1as2y0q3NSf2r/i2Ip45waPo6DcGA+l7lD8JIm13fkQUmpZFtA5zrLKjr9KN87
-         CLEnAu3X3qrBHTyq31XWczPpIcBvrZ5jTlhBhSWXEvtuYYx8Lj7jy7HJ/hpxfTn5sEdk
-         POtagWoX86GhCyZOOdhUAiR7tIQYzNR/tIyzMW/MJkw09Zz9V8CGeFY9kcldBFmvKFcu
-         6JykZz7kyO2EDo1IbfuSxkmJGttxKwXhWOVIAJhpYFo/GvAs/fgkJ5jBc7Ib21qJp3MJ
-         4SCND0JpIkSLgex1az8RDPaqAHHgo+INIgRkXHqzbXFzTLDyyXrYWtRMlBmoPJF2cXzP
-         gF6w==
-X-Gm-Message-State: AO0yUKU4USmnEJ1Kuo+pFOPP70aBChfSkuX0Tw/Pz8uDNh4TcUJ9TBLz
-        MpQVM2Wi28od3oAK/kX/rKLQug==
-X-Google-Smtp-Source: AK7set+ZAYNF5Gm2Q/PzHEOSck1J/FKk8Wd90kiTp9R+X3GrE7zuFFDhukCNaDrchud6aJTKXaZFgA==
-X-Received: by 2002:a92:7f01:0:b0:310:bcf6:9acd with SMTP id a1-20020a927f01000000b00310bcf69acdmr297671ild.3.1674765436147;
-        Thu, 26 Jan 2023 12:37:16 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id i16-20020a02cc50000000b0039e97f04e1esm742133jaq.155.2023.01.26.12.37.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 12:37:15 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------rtJyWblrBlrD4sA9gfXE41Ey"
-Message-ID: <3bbe9344-4546-5bd1-52ae-ed6532528e6c@linuxfoundation.org>
-Date:   Thu, 26 Jan 2023 13:37:14 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-pm@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest fixes update for Linux 6.2-rc6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 26 Jan 2023 15:37:58 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879971116B
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:37:53 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id E992832007E8;
+        Thu, 26 Jan 2023 15:37:50 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 26 Jan 2023 15:37:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674765469; x=1674851869; bh=PMRahnb2Ak
+        WjbHaXnveaTHzGxVSBrfYNS4b8vo+obi0=; b=imGPK7aNybQBJmap5UxzEIhID0
+        8QfKpJLpADlZ92HHyyIExVfvUsUDgN7WJt2HM7RbcLXGKS2V6LpD5b4S9/BRKe58
+        w9aHLPIy7pye8Ao3kf5K9/QpOGfqBE8JlA9+R2sbk0PoulOgH3NMA9+9IZRV8K95
+        x7tQmE+TYHfWl2gv+xKZl6rluC6PY52klLtBs1A1aJyvBR1E7QfGDZkoCL7p/Qyb
+        4QZHHC2fRe96CPyeA9AP1px0o2TpX/i6Qdatv3qbzc80NmKfRz42HhTra56cp2fs
+        87Yi09zEIawX+7+wSEB0zw6WcZqoMbvCzjkfe1HguhQzyFpQ4ROZRNhJ6gzA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674765469; x=1674851869; bh=PMRahnb2AkWjbHaXnveaTHzGxVSB
+        rfYNS4b8vo+obi0=; b=NUyD36npwB6t0VBzIV9Dtwk7yDh7d9sba6qVz2n90LId
+        s7ooiveSZL3wHIbdVeJOye3zNRe5Rn6Fn9cOVCTH4Bb1VAgwl7Pm2Ip/BAMjFwxg
+        vaYNMaC08kLIs0UrbHvzPO1/Gll8KJW0tn3mjLl034HBHOTfLq5CtD/5KXaAXTXg
+        tY87rtvgKpVNwQJ/f9RXRVTf7EgwDd1sdxIGCKJfQ3ivOcRmZ8qUz6zbF2InLlLy
+        bMR4dASys2Y4aOZYkV29BAODR7FI1n+l06Z56d/Lz30pfBeNnNhr34XMhp2FFTzi
+        EwKNYpFEDmdeyuo/DDbdopGzuju+QM4phY10PxFrKg==
+X-ME-Sender: <xms:nOTSY3Io4aVCPmGra_sSKINg1NEdBFGofiZcuSYRdUfS_L8t6LrJag>
+    <xme:nOTSY7LAQlhDKVI6_tYJRKKq0DSTFPj4c5rNqz9JJLbACkpb-oHdEemL5Q5-wfbyG
+    BL7jBbyc4mMQ7oI-Xw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgudegtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:nOTSY_tPBIUTxnShS-Q5rEoRO11I8aLzADMUbqiy-RiAtcN6Y_07fw>
+    <xmx:nOTSYwb8-Cy1i_-3E3urRJNaEqfQqJL0VQ0o29LiciAYFeJCBBisEQ>
+    <xmx:nOTSY-Z2PJ6mA_5Bs0AmvTeM0n5CNODWILJv5_p7IrCbnbWL8SWCDg>
+    <xmx:neTSY0MtI2RJuWyQ23mYUTrHbsWNmF_kkEeFJ8Lw1q6xdnzLJW-uOg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D5E03B60086; Thu, 26 Jan 2023 15:37:48 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <cd4f23d7-cdd7-49e1-8eff-9ec04dcb36c8@app.fastmail.com>
+In-Reply-To: <7ec6bd88-7f18-7eca-fa92-cfea9a25a395@arm.com>
+References: <20230126163530.3495413-1-arnd@kernel.org>
+ <7ec6bd88-7f18-7eca-fa92-cfea9a25a395@arm.com>
+Date:   Thu, 26 Jan 2023 21:37:29 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+        "Tao Zhang" <quic_taozha@quicinc.com>,
+        "Mao Jinlong" <quic_jinlmao@quicinc.com>
+Cc:     "Mike Leach" <mike.leach@linaro.org>,
+        "Leo Yan" <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Coresight: tpda/tpdm: remove incorrect __exit annotation
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------rtJyWblrBlrD4sA9gfXE41Ey
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Thu, Jan 26, 2023, at 19:02, Suzuki K Poulose wrote:
+> On 26/01/2023 16:35, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+> Thanks for the fix, I will queue this. Btw, I did try to
+> reproduce it locally, but couldn't trigger the warnings,
+> even with
+>
+> CONFIG_WERROR=y
+>
+> and all CORESIGHT configs builtin. I see other drivers doing the
+> same outside coresight too. Just curious to know why is this
+> any different. Is it specific to "bus" driver (e.g. AMBA) ?
 
-Hi Linus,
+The warning comes from postprocessing the object file, it's got
+nothing to do with the bus type, only with a symbol in .data
+referencing a symbol in .init.text. Maybe there are some
+config options that keep the section from getting discarded?
+Or possibly you only built the files in this directory, but did
+not get to the final link?
 
-Please pull the following Kselftest fixes update for Linux 6.2-rc6.
-
-This Kselftest fixes update for Linux 6.2-rc6 consists of a single
-fix to a amd-pstate test Makefile bug that deletes source files
-during make clean run.
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 9fdaca2c1e157dc0a3c0faecf3a6a68e7d8d0c7b:
-
-   kselftest: Fix error message for unconfigured LLVM builds (2023-01-12 13:38:04 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.2-rc6
-
-for you to fetch changes up to a49fb7218ed84a4c5e6c56b9fd933498b9730912:
-
-   selftests: amd-pstate: Don't delete source files via Makefile (2023-01-25 10:01:35 -0700)
-
-----------------------------------------------------------------
-linux-kselftest-fixes-6.2-rc6
-
-This Kselftest fixes update for Linux 6.2-rc6 consists of a single
-fix to a amd-pstate test Makefile bug that deletes source files
-during make clean run.
-
-----------------------------------------------------------------
-Doug Smythies (1):
-       selftests: amd-pstate: Don't delete source files via Makefile
-
-  tools/testing/selftests/amd-pstate/Makefile | 5 -----
-  1 file changed, 5 deletions(-)
-----------------------------------------------------------------
---------------rtJyWblrBlrD4sA9gfXE41Ey
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-fixes-6.2-rc6.diff"
-Content-Disposition: attachment; filename="linux-kselftest-fixes-6.2-rc6.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FtZC1wc3RhdGUvTWFrZWZp
-bGUgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hbWQtcHN0YXRlL01ha2VmaWxlCmluZGV4
-IDVmMTk1ZWU3NTZkNi4uNWZkMTQyNGRiMzdkIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5n
-L3NlbGZ0ZXN0cy9hbWQtcHN0YXRlL01ha2VmaWxlCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzL2FtZC1wc3RhdGUvTWFrZWZpbGUKQEAgLTcsMTEgKzcsNiBAQCBhbGw6CiB1bmFt
-ZV9NIDo9ICQoc2hlbGwgdW5hbWUgLW0gMj4vZGV2L251bGwgfHwgZWNobyBub3QpCiBBUkNI
-ID89ICQoc2hlbGwgZWNobyAkKHVuYW1lX00pIHwgc2VkIC1lIHMvaS44Ni94ODYvIC1lIHMv
-eDg2XzY0L3g4Ni8pCiAKLWlmZXEgKHg4NiwkKEFSQ0gpKQotVEVTVF9HRU5fRklMRVMgKz0g
-Li4vLi4vLi4vcG93ZXIveDg2L2FtZF9wc3RhdGVfdHJhY2VyL2FtZF9wc3RhdGVfdHJhY2Uu
-cHkKLVRFU1RfR0VOX0ZJTEVTICs9IC4uLy4uLy4uL3Bvd2VyL3g4Ni9pbnRlbF9wc3RhdGVf
-dHJhY2VyL2ludGVsX3BzdGF0ZV90cmFjZXIucHkKLWVuZGlmCi0KIFRFU1RfUFJPR1MgOj0g
-cnVuLnNoCiBURVNUX0ZJTEVTIDo9IGJhc2ljLnNoIHRiZW5jaC5zaCBnaXRzb3VyY2Uuc2gK
-IAo=
-
---------------rtJyWblrBlrD4sA9gfXE41Ey--
+      Arnd
