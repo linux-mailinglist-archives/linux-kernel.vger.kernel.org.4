@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573CF67C85E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69EA67C858
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237118AbjAZKT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
+        id S237008AbjAZKTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:19:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237101AbjAZKTJ (ORCPT
+        with ESMTP id S237063AbjAZKSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:19:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50CD7EC1;
-        Thu, 26 Jan 2023 02:18:27 -0800 (PST)
+        Thu, 26 Jan 2023 05:18:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD5B61846;
+        Thu, 26 Jan 2023 02:18:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2681B81D51;
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB635B81D58;
         Thu, 26 Jan 2023 10:18:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7796DC433EF;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 81FA7C4339B;
         Thu, 26 Jan 2023 10:18:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1674728284;
-        bh=SEA+SZj/8CwLwSOICO5ZSda/48TRihR4WgSENpJnHlE=;
+        bh=jQyK54Ac2Nf4g5m1Qyhvp73lWbZ9baHSRpo8ImPR0Tc=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=dKXBx/z7CUYQWYkkmIgOzX28kWhIutpOaJXbSKLxy1EAcSXybiMeuMpjdaYfHKxFk
-         M2m9E4bGDSKaXNzX+opJN0+pg/zl4D4vGv9LIplYBs93JzrUUpFuM6aPuw6G3fJLX9
-         lMhgJDQQd/N3QqCpXflcuXzKqNHazPFQrkooxvPPmyflDWeghKVUk78RVCT0HpuPOd
-         UrHpMOsLUeYFHnWu+kiajluAvoOZrXxFD8qDGNks0zpZ0cnJ1z9SWOxlnmzxSC6UHH
-         Zs1BwsbAgmQFCfUe+p58Y5D1/NmUzJxalk+lgOcgty5SqlSnw9efnTc/X90fEDErdj
-         5/OL1ZUo/KApQ==
+        b=aKoZkWz5/wCTW4C9GZvNGsjrUBj97qXkGfxxJmttMRQ6x5G2TMbntSr9zFZvw4FLa
+         6L/cJF3fkDNQqAd2Z7RnsO3VGgZQ6856UKrbJcDSC1EtHAxBdeiaOVjLlGXYkbEUU2
+         4TI7r5Ddx7n9qbWmYlhsz2/xWPEg24iwr3XXcWYdaNReS8Ak4vkwbUPi7KJL1M89qM
+         vcgWv1EQz68Dangvivk/zIp3YLajvTep1+Vq6qx2KuYK62iTIl2e+nfX6NoFmahNMx
+         h5BcmSyG0vDZYgNjJL83kg3iC1svacBXWcbPQtMmQ63g+z9zqm525xL4sh2sQK4TxN
+         XQr9HoFV9qfMg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id 5F57CC54E94;
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 6C3DEC61DA2;
         Thu, 26 Jan 2023 10:18:04 +0000 (UTC)
 From:   Niall Leonard via B4 Submission Endpoint 
         <devnull+nl250060.ncr.com@kernel.org>
-Date:   Thu, 26 Jan 2023 10:17:22 +0000
-Subject: [PATCH 1/3] gpio: dt-bindings: add new property to wd,mbl-gpio
- bindings
+Date:   Thu, 26 Jan 2023 10:17:23 +0000
+Subject: [PATCH 2/3] gpio: Add new flag BGPIOF_NO_INPUT
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230126-gpio-mmio-fix-v1-1-8a20ce0e8275@ncr.com>
+Message-Id: <20230126-gpio-mmio-fix-v1-2-8a20ce0e8275@ncr.com>
 References: <20230126-gpio-mmio-fix-v1-0-8a20ce0e8275@ncr.com>
 In-Reply-To: <20230126-gpio-mmio-fix-v1-0-8a20ce0e8275@ncr.com>
 To:     Linus Walleij <linus.walleij@linaro.org>,
@@ -53,22 +52,22 @@ To:     Linus Walleij <linus.walleij@linaro.org>,
 Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Niall Leonard <nl250060@ncr.com>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=709; i=nl250060@ncr.com;
- h=from:subject:message-id; bh=TZqj8LOqd2ElAWFa5TLfeyGZqTZ8bzLHl7An5WBxTgA=; 
- =?utf-8?q?b=3DowEBbQKS/ZANAwAKAVGiIrYFD2P/AcsmYgBj0lNa8K940tPfSmc2r9nNjxeac?=
- =?utf-8?q?sEcqV+EBYR7dCIh_eoyWvsuJAjMEAAEKAB0WIQSha1EPjh6hUqdtwZNRoiK2BQ9j/?=
- =?utf-8?q?wUCY9JTWgAKCRBRoiK2BQ9j/3RpD/_4jj77vSlXxpbuPYKFdn0vEZhfXOLPaXlCCs?=
- =?utf-8?q?+CkYcU39mGs9v4OjplKJUVPuuCVERaCmKgdhPtS1D9X_wexpEBPbTOiuECj2lFIWp?=
- =?utf-8?q?6Cv9C3jYDNCaBCsRIZ2mZ70FJiHXJgoSeZ7QK6NJD+ygLtbPGNKjVh9dV_N4kkmiB?=
- =?utf-8?q?naSEuTjXHJ+cfMapEnVNmElK20rRcoxJp+Hldqw+bDCYUrGatqrCxCWwD22XkWSCI?=
- =?utf-8?q?l4pmLp_bwVZvgxTpuvBeC2gE63lwTBNH18cOAYgZ0Bl4kZRmLbEbiYFWEaWI5+tnU?=
- =?utf-8?q?1aPd2dn52rnuKZtcVihJ_P3adT7IxtLs+cDFZC/sIL76sYewxV8T6dwJ7fgo2Eslz?=
- =?utf-8?q?vAksfvo0cHTA+ZzuZRyXgiH7gDH9UozTLs_Ql7nmtvS97ojMeM6lrEY4FUU6V0qGH?=
- =?utf-8?q?yPvFbuzSGJeK/YzMM+Qv5LywW0gWeZLkLBpRulik2xhtkAfc_U/7st71QO4Lp6PU+?=
- =?utf-8?q?Mewz1a2XlZHpTBxnT4q7z2c4BCXbROfy4wCOspiWzy5NmMU5YGIZHaZmUtIJkY_iC?=
- =?utf-8?q?D4NQnRTXvaCgMuscLbRgADLRexTfRekrSnazsftSYN/fiQZOSWLpnqYYzPYiD7BHR?=
- =?utf-8?q?QansuPMq6A4?=
- 4UZCrn2KSFMw0awdyMxc81ntXCmZkmp3lVo9h83HdO8JWZyvfHcxL1R0Madw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=725; i=nl250060@ncr.com;
+ h=from:subject:message-id; bh=TggMaJeCcpeNdUyuVzDRaxsQqKzgRTR7wrZ7HE9dDhg=; 
+ =?utf-8?q?b=3DowEBbQKS/ZANAwAKAVGiIrYFD2P/AcsmYgBj0lNal1QTJQw+z/cl0dkuF4eBM?=
+ =?utf-8?q?GFEgzNxPwt88RAJ_yEncf7CJAjMEAAEKAB0WIQSha1EPjh6hUqdtwZNRoiK2BQ9j/?=
+ =?utf-8?q?wUCY9JTWgAKCRBRoiK2BQ9j/2wzEA_CMVU+Aqyd/S4fxzF9epmJOp+NTI0QKcCM6A?=
+ =?utf-8?q?45WtIHkfL24d6XnOrzA2WFb7Q1vaVC3rQp4+8RfvBMv_sAziC5leMO2WOG9GdYmi/?=
+ =?utf-8?q?if320+fJ607I4yILRKqDhS5MDm4UHSc2m8LTrIpz1XkxpUTOeLQPNiof6_3nXXDMF?=
+ =?utf-8?q?Pv0fekhtnODoKjU0Phjug+zP4mG8pN6eaGSmlLSrMTCrcdX8CPWxOS35eeE7dLmqD?=
+ =?utf-8?q?pafFzP_v+wurMIZ2e82Wr2e+RYw3d/66R95x6ydrRY9V/x4eFFQ5bDGeHSinITtfn?=
+ =?utf-8?q?t2Dbmjwp7vMzKwOWFEtE_Ja1luHGeJXr7Ohj4zK6/GTBqf2Ok12BlSbAkKZqtLXXC?=
+ =?utf-8?q?R8QQ1WBuG7TAYLStl40iYLRakboE7mF11X_7V+AdaEeJmAuDt/3xVTqeq4h8xaEx9?=
+ =?utf-8?q?/ve4saAexZd8BBOnTzusBNLg3/mlJu7pGK5hpaAePb164wpz_3vnCzYB2fQSt9gI5?=
+ =?utf-8?q?jEUPtBbflj2SbU97YRXMhq2du1x28HBoXWn540z/1LNtlcxm4VfDkZkKGJ/bZs_4V?=
+ =?utf-8?q?8Z35PJUWbdcMbiYmnxI4Av4J4wxwb5isvVMpd5txE4xXCIv1C4vIQs1blJ9HWbHs8?=
+ =?utf-8?q?7pQZliGoyIN?=
+ LPjBqKZaMKmtP4STpIsEqABTWONFeEbzXv5LfkPTxKCSQWuh5ye426xXsUdQ==
 X-Developer-Key: i=nl250060@ncr.com; a=openpgp;
  fpr=A16B510F8E1EA152A76DC19351A222B6050F63FF
 X-Endpoint-Received: by B4 Submission Endpoint for nl250060@ncr.com/default with auth_id=26
@@ -85,25 +84,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Niall Leonard <nl250060@ncr.com>
 
-Added optional "no-input" property
-
 Signed-off-by: Niall Leonard <nl250060@ncr.com>
 ---
- Documentation/devicetree/bindings/gpio/wd,mbl-gpio.txt | 1 +
+ include/linux/gpio/driver.h | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/gpio/wd,mbl-gpio.txt b/Documentation/devicetree/bindings/gpio/wd,mbl-gpio.txt
-index 038c3a6a1f4d..9405f9dad522 100644
---- a/Documentation/devicetree/bindings/gpio/wd,mbl-gpio.txt
-+++ b/Documentation/devicetree/bindings/gpio/wd,mbl-gpio.txt
-@@ -18,6 +18,7 @@ Required properties:
+diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+index 44783fc16125..e8e57310e3b8 100644
+--- a/include/linux/gpio/driver.h
++++ b/include/linux/gpio/driver.h
+@@ -682,6 +682,7 @@ int bgpio_init(struct gpio_chip *gc, struct device *dev,
+ #define BGPIOF_READ_OUTPUT_REG_SET	BIT(4) /* reg_set stores output value */
+ #define BGPIOF_NO_OUTPUT		BIT(5) /* only input */
+ #define BGPIOF_NO_SET_ON_INPUT		BIT(6)
++#define BGPIOF_NO_INPUT				BIT(7)	/* only output */
  
- Optional properties:
- 	- no-output: GPIOs are read-only.
-+	- no-input: GPIOs are write-only. Read is via a shadow register.
- 
- Examples:
- 	gpio0: gpio0@e0000000 {
+ int gpiochip_irq_map(struct irq_domain *d, unsigned int irq,
+ 		     irq_hw_number_t hwirq);
 
 -- 
 2.34.1
