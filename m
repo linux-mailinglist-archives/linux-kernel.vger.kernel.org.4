@@ -2,124 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A918167C7E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECB467C7E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236955AbjAZKAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
+        id S236713AbjAZKAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236877AbjAZKA1 (ORCPT
+        with ESMTP id S236537AbjAZKAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:00:27 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F92611FA;
-        Thu, 26 Jan 2023 02:00:24 -0800 (PST)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30Q7Atex013303;
-        Thu, 26 Jan 2023 05:00:05 -0500
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3n8dua4r4u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 05:00:05 -0500
-Received: from m0167089.ppops.net (m0167089.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30Q9qM7j003219;
-        Thu, 26 Jan 2023 05:00:05 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3n8dua4r4p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 05:00:05 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 30QA03eU052988
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 26 Jan 2023 05:00:03 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 26 Jan
- 2023 05:00:02 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 26 Jan 2023 05:00:02 -0500
-Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.156])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 30Q9xajt019197;
-        Thu, 26 Jan 2023 04:59:41 -0500
-From:   Alexandru Tachici <alexandru.tachici@analog.com>
-To:     <andrew@lunn.ch>
-CC:     <alexandru.tachici@analog.com>, <davem@davemloft.net>,
-        <devicetree@vger.kernel.org>, <edumazet@google.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <kuba@kernel.org>,
-        <lennart@lfdomain.com>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <richardcochran@gmail.com>, <robh+dt@kernel.org>,
-        <weiyongjun1@huawei.com>, <yangyingliang@huawei.com>
-Subject: Re: [net-next 1/3] net: ethernet: adi: adin1110: add PTP clock support
-Date:   Thu, 26 Jan 2023 11:59:34 +0200
-Message-ID: <20230126095934.23107-1-alexandru.tachici@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <Y889m+CUSTbuv9Db@lunn.ch>
-References: <Y889m+CUSTbuv9Db@lunn.ch>
+        Thu, 26 Jan 2023 05:00:14 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5DE402C3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:00:13 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso2897551wmn.5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:00:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rRgVXPw5t6QVo2geW3WNhb1rgDC2iA39PRv/GAVQDio=;
+        b=vTcMGyXsf39j1Pv1ktHj9xKL5iJq2HfVCB7ZDr/oA7PxzZWC46OtUb07mNAD5yZMBO
+         p9nPr3PZWB5lLNVS8lpvd2ZQVWNh+1zlHNlyByHZmrUIawF9kgeiP+xG7IzbRNDfUT/U
+         U5Amgws9CsWnwBI7AoThUbiVUETnMsJ8ohSjOHmT0yqvv06GEYytAk00/wIMElspB0UT
+         t0MzSBWCHGNE9Hpgx1H6tJyNRGPTNOSHHf1ObB2SZUx9QcQYbFbVoK0LfbSJHwpzviUf
+         d0SjDF8XGuaKcgz66eQrykR9AALBDeCquTKiYuvUoDMKJeGJliInGycAIpQzTMVaLt9R
+         s/1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rRgVXPw5t6QVo2geW3WNhb1rgDC2iA39PRv/GAVQDio=;
+        b=puDCrP3m1VWEtMMiX2uhjDOXhP4Xjx4821QcO6XC2XbzVSxqZFp+L/IC+WrNWll3l5
+         OwO3XgLO4IJKxvBobRQszqjXMt2RJfJQ4T3OoSqVDiP+WioQbIgX+v2dgpwz2X8hU9jW
+         82m4mJ1HnIrj42GRcukbZO3qLeHITnRAoU9u0IpU80tUIACfO0XYf8klmrqyNC4E7YPQ
+         +DaDUgAbHqHqOuurBS7XVotvY2J8naglkcK8LdExg3SsTYtZTimkDQHSQKKcy7lYxpT1
+         FF9rQB5viQ/31usTDFCQYIhOtN533/qQwAVM2rV54Xa1OvWjgmunFebgfrIa+wfXMEmQ
+         hECQ==
+X-Gm-Message-State: AO0yUKUtekZmXhSCfQeo/eM33Cy/2X2HealkIQ/S5zg2gU/MN6+8c4kc
+        zPhcyaUspxK50JYt7mnC4yLdzA==
+X-Google-Smtp-Source: AK7set/aZLK6a4J5BP5py17o2vPlMYEYYqGkUd/mG6BXhAEOu/N3E4T9mGZDkPE1RSRpaEXhZnwoVQ==
+X-Received: by 2002:a05:600c:3512:b0:3dc:2c7c:6616 with SMTP id h18-20020a05600c351200b003dc2c7c6616mr210993wmq.21.1674727211804;
+        Thu, 26 Jan 2023 02:00:11 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:aa89:e801:e296:9b7c? ([2a01:e0a:982:cbb0:aa89:e801:e296:9b7c])
+        by smtp.gmail.com with ESMTPSA id k20-20020a05600c479400b003da119d7251sm985242wmo.21.2023.01.26.02.00.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 02:00:09 -0800 (PST)
+Message-ID: <6d304884-9e54-6eba-1e2e-882fa6c5b983@linaro.org>
+Date:   Thu, 26 Jan 2023 11:00:06 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: CSdz5-FUxGUAIPzeiM6stx2G47iDicZy
-X-Proofpoint-ORIG-GUID: nTeuF_HGmUaznaKOcJjLfP21ysXkbOPB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_03,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 impostorscore=0 bulkscore=0 malwarescore=0 phishscore=0
- mlxscore=0 spamscore=0 adultscore=0 clxscore=1011 mlxlogscore=926
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260094
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 2/3] arm64: dts: make dts use gpio-fan matrix instead
+ of array
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        David Heidelberg <david@ixit.cz>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        ~okias/devicetree@lists.sr.ht, phone-devel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+References: <20211029114948.41841-1-david@ixit.cz>
+ <20211029114948.41841-2-david@ixit.cz>
+ <CAFBinCBVXNYG62jKABhJJt0m61+vQKqEyC4Mk5Ljg7htN-brTA@mail.gmail.com>
+Content-Language: en-US
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <CAFBinCBVXNYG62jKABhJJt0m61+vQKqEyC4Mk5Ljg7htN-brTA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > +static int adin1110_enable_perout(struct adin1110_priv *priv,
-> > +				  struct ptp_perout_request perout,
-> > +				  int on)
-> > +{
-> > +	u32 on_nsec;
-> > +	u32 phase;
-> > +	u32 mask;
-> > +	int ret;
-> > +
-> > +	if (priv->cfg->id == ADIN2111_MAC) {
-> > +		ret = phy_clear_bits_mmd(priv->ports[0]->phydev, MDIO_MMD_VEND1,
-> > +					 ADIN2111_LED_CNTRL,
-> > +					 ADIN2111_LED_CNTRL_LED0_FUNCTION);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		ret = phy_set_bits_mmd(priv->ports[0]->phydev, MDIO_MMD_VEND1,
-> > +				       ADIN2111_LED_CNTRL,
-> > +				       on ? ADIN2111_LED_CNTRL_TS_TIMER : 0);
-> 
-> I normally say a MAC driver should not be accessing PHY register...
-> 
-> You have the advantage of knowing it is integrated, so you know
-> exactly what PHY it is. But you still have a potential race condition
-> sometime in the future. You are not taking the phydev->lock, which is
-> something phylib nearly always does before accessing a PHY. If you
-> ever add control of the LEDs, that lack of locking could get you in
-> trouble.
-> 
-> Is this functionality always on LED0? It cannot be LED1 or LED2?
-> 
->    Andrew
+Hi David,
 
-Hi Andrew,
+On 31/10/2021 20:39, Martin Blumenstingl wrote:
+> On Sun, Oct 31, 2021 at 5:51 PM David Heidelberg <david@ixit.cz> wrote:
+>>
+>> No functional changes.
+>>
+>> Adjust to comply with dt-schema requirements
+>> and make possible to validate values.
+>>
+>> Signed-off-by: David Heidelberg <david@ixit.cz>
+>> ---
+>>   arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts | 9 +++++----
+> for meson-gxm-khadas-vim2.dts:
+> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-Thanks for the insight. Will add the phylib locking. Device only allows
-LED0 pin or INTN pin to be converted to timer output. Can't lose IRQ capability
-here so only LED0 could possibly be used.
+Would be great if you could re-spin this change but only for the meson-gxm-khadas-vim2.dts file.
 
-Thanks,
-Alexandru 
- 
+Thanks
+Neil
