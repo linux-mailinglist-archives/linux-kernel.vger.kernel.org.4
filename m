@@ -2,108 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDF567D02B
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A32D67D02C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjAZP07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
+        id S232097AbjAZP1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjAZP05 (ORCPT
+        with ESMTP id S231613AbjAZP1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:26:57 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB4D10C5
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:26:38 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id z5so2140272wrt.6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:26:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iDdaSVhd5CpA3qgDsZzi9xAHqh15/HlhGhX8YUuZLwA=;
-        b=HRdDS1V/TLxjS2GGcqYHLy4Y1urFg+5UVtROC9Cioz/CF1HW8qbw0IHcrS8HcYu1ZI
-         wwNTXlVC8gkCWWmjs2QHQf5Zuum5FNomWZ/xkNAx3TrYYDseEAQfxeYwp/kz8IkXgK3r
-         z/UKceE9KqKqD0lpVumd64YZulgQqW4mgty0SLshKP5ljitCesUEbOOmT58UvurbP/4Q
-         MFiISbBqvJJSY0Z+NfZ12/9skiEOFj3v79fZDSCmkgOQVw1N7SJ1YTr0viJGSe2E3prA
-         wXLmUhdv+d+dpGifHxLcf//UGWZH38jjGIYAKU+4L9Y3QkvqZBRLQSrBlMkfM+MMkGtF
-         Mw8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iDdaSVhd5CpA3qgDsZzi9xAHqh15/HlhGhX8YUuZLwA=;
-        b=Uz+s0LraFba6niVXIfJ4hH342JexRVzkmjAVtkh460DzSvJ1rk3UY8QcPb12mjBtZ2
-         GubIWefuFQygjGL7F5TVXVfwM/kIJWuy0tF3geTOQ8L049WRqOFYD56jKJdyTlDTcxSs
-         sYU3E8iJh4kIIcSHELsHRcIt/dxMlMtNV69oIa0bvu0+ZUGs3hHzc6dzUPSla/fWbyoq
-         bRRH9fxz4wyrgH9pD5MUT1wuMzgrP9CUq8TSD9EZ5opa0bCLd2KS32tphzdWVdVfXqXR
-         h5tP+surbgxtSgMy06+9edsXavxYDREohIGgMuFcSuQbZE3jJ0EKEI9esip8Mrwkpo+t
-         1JvA==
-X-Gm-Message-State: AFqh2kp3JUOFLLTEEp4kYl/9yGdmeQm3AA38P7NpdAGJJMNdn6a3PJUb
-        LY+wTyKxqmjimochvrBJRnsT4w==
-X-Google-Smtp-Source: AMrXdXuP4CJtdOq/zPr2e/Xeh1e4qSoa8xWKXlc1G0/HAMne2EK5PtyYKZrwS1u4RNaZ8GVTzdWcMw==
-X-Received: by 2002:adf:edd1:0:b0:2bd:c6ce:7bfc with SMTP id v17-20020adfedd1000000b002bdc6ce7bfcmr33250169wro.42.1674746794182;
-        Thu, 26 Jan 2023 07:26:34 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id y17-20020adffa51000000b002238ea5750csm2032240wrr.72.2023.01.26.07.26.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 07:26:33 -0800 (PST)
-Message-ID: <b2dc1a50-58d2-13a7-2773-21c649b17f1a@linaro.org>
-Date:   Thu, 26 Jan 2023 16:26:31 +0100
+        Thu, 26 Jan 2023 10:27:34 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E2A10251
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:27:14 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pL49h-0003w6-7I; Thu, 26 Jan 2023 16:27:13 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pL49h-000aXL-Gg; Thu, 26 Jan 2023 16:27:12 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pL49f-00G48f-SP; Thu, 26 Jan 2023 16:27:11 +0100
+Date:   Thu, 26 Jan 2023 16:27:09 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 1/2] mfd: Make .disable() callback return void
+Message-ID: <20230126152709.x6l7p3kcecsam3r6@pengutronix.de>
+References: <20230113182427.257484-1-u.kleine-koenig@pengutronix.de>
+ <20230113182427.257484-2-u.kleine-koenig@pengutronix.de>
+ <Y9KBWKNJQo0yCw2I@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 8/8] PCI: rockchip: Fixed MSI generation from PCIe
- endpoint core
-Content-Language: en-US
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        alberto.dassatti@heig-vd.ch
-Cc:     xxm@rock-chips.com, wenrui.li@rock-chips.com,
-        rick.wertenbroek@heig-vd.ch, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20230126135049.708524-1-rick.wertenbroek@gmail.com>
- <20230126135049.708524-9-rick.wertenbroek@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230126135049.708524-9-rick.wertenbroek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="54qicnf4rh3y5ixr"
+Content-Disposition: inline
+In-Reply-To: <Y9KBWKNJQo0yCw2I@google.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 14:50, Rick Wertenbroek wrote:
-> The generation of MSI interrupts from the RK3399 PCIe endpoint core was
-> broken. The main issue came from u16 variables to be used to access u32
-> registers, this would lead to shifts of more than 16 bits moving data
-> out of the variable etc. Address translation for sending the MSI messages
-> over PCIe has also been fixed.
-> 
-> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
 
-Same comments as other fix. Missing Fixes tag, cc-stable, move to the
-beginning of patchset.
+--54qicnf4rh3y5ixr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hello,
 
-Best regards,
-Krzysztof
+On Thu, Jan 26, 2023 at 01:34:16PM +0000, Lee Jones wrote:
+> On Fri, 13 Jan 2023, Uwe Kleine-K=F6nig wrote:
+>=20
+> > All implementations return 0 unconditionally, so change the prototype to
+> > return void. This allows to get rid of error handling in callers that
+> > isn't actually used.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> >  drivers/mfd/asic3.c      | 17 +++++++++--------
+> >  drivers/mfd/htc-pasic3.c |  3 +--
+> >  drivers/mfd/mfd-core.c   |  4 +++-
+> >  drivers/mfd/t7l66xb.c    |  4 +---
+> >  drivers/mfd/tc6387xb.c   |  4 +---
+> >  drivers/mfd/tc6393xb.c   | 16 ++++++++++------
+> >  include/linux/mfd/core.h |  2 +-
+> >  7 files changed, 26 insertions(+), 24 deletions(-)
+>=20
+> Doesn't apply to the MFD tree.
+>=20
+> Please rebase and I'll merge it.
 
+Oh, all the drivers that still provided the .enable() and .disable()
+callbacks are gone now. So my patch series is superseeded by
+
+	http://lore.kernel.org/lkml/20230126152429.580539-1-u.kleine-koenig@pengut=
+ronix.de
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--54qicnf4rh3y5ixr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPSm8kACgkQwfwUeK3K
+7AldPAf7Bch4hhcYiIFdVki+2nRrlgVo/3nQtVHvfXhp81vxSwXiBizcOqMm3An8
+P493WxVtH8or3o6l6GkdrrRBE/emuyAcFf2L9YThmcUueAlO0o0UZAu423vwgqxx
+TZX6B8+wYSFEzL6rT/wefsWmIt2rg6Mj2/Vxw5+brgits3u3KbOFv8acd/ok3cZ8
+ZmvjlfuXIpIMXkzokYhKA4wPXh6uNcRY6hy8/W5EWMmrsGo1uFqN0XQUvLtduIcz
+3SC35yuld5W+AtIOAlbrLkt6rhKdwht0UTn3OXowkGo25eXI+SacEAtiSkknXm0g
+KhTlYcw7LehB1NE/mWl2C5WG+3muMw==
+=hIvW
+-----END PGP SIGNATURE-----
+
+--54qicnf4rh3y5ixr--
