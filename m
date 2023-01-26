@@ -2,98 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C32A67D6BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B72367D6C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjAZUrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:47:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
+        id S229688AbjAZUsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjAZUrE (ORCPT
+        with ESMTP id S231558AbjAZUs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:47:04 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861A624CAC
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:46:29 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id o66so2496005oia.6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:46:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=65oEAScgUYAE8KruWPSkfRMTnDB8eV6fK8VEQc/uLFA=;
-        b=OqPzMccJcZnZGD9WSHYzTRHjKzY/peIuHLKTZxjF1SbpcroX3gmzt1cOZAaiQP3hgg
-         rEuzMwJ/xit6Z5huIjjhSuVMiajhrnubGWfIVXjx4T+t1jke2LskACy5zWmEBSSWo8tg
-         OgSKk5lEsAkCjtQO7/kxN428i4RPZ50qavFbsKL4JS9yry7KYQZmTeqZaH3sfQp460bU
-         FyczWfAVEx012VR5UUajmVfsfT1iW7fmPDFo/1N1n0deBP2zk+bron3Ws9MPuvht0vSi
-         8rdlRN76OWBrwc2N/sUPOWaadU7g5vDdEF867B1zDD246YOr3TD57eO86++Z1koYN4J5
-         DrcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=65oEAScgUYAE8KruWPSkfRMTnDB8eV6fK8VEQc/uLFA=;
-        b=FPE2EEYqupreiex74tO4/Y6cd1NUZVP1OpBNZ7ltgChhbHeBTh/xD37pZcsD4xaRO0
-         J/IyW5qVEDLYtQumdb1KQnJN2Zg4ANeZBArL1KxCwhEMbmUqacPm7kZzOpLaCoXeC3fl
-         neSvmANaVhU75iSQu/a5C3HroFzDLSsLh0oT292N0tYA1r+r4xuclErmVsTzUSgyb+cu
-         OU4iywjYMm5Swo0nPe3ZxNO73o3CDv8MWX1InJy8loi+LuWcTt9mrPJ730LzOvzRFQZV
-         J376rMBXMT0n7uzkw49OCtJxwZbQSGor8nsq9gk1bABqTj00JPPd6rM3sRLRSKdUtzLV
-         AEfw==
-X-Gm-Message-State: AFqh2koI41zlfegPeOwNyUwTivQmIjndWGOWSn9BW52fqRv7JPWRDXYs
-        0GUjhbZrPFJLerlCyxmgD7pteq/otzaJe3xd1fq+0aTV2UkAygLumEM=
-X-Google-Smtp-Source: AMrXdXs/BatnkOGFZ9IZFzSNd4aanhUQg5HHDKCp9DO+wxxsB56W1plvWBP556Lm07LkTjYUGD+fX439sciWUe3T6KA=
-X-Received: by 2002:aca:efc6:0:b0:36e:b85f:6081 with SMTP id
- n189-20020acaefc6000000b0036eb85f6081mr1299293oih.103.1674765970022; Thu, 26
- Jan 2023 12:46:10 -0800 (PST)
+        Thu, 26 Jan 2023 15:48:28 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A5E76B5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:48:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xYyn6gE7F+Ay1oJHev/ISGq5X5rN9LDnA4hf9TFZmgs=; b=C79SkTkUXPHdY1rqmNll246qpm
+        BcZ9KxjPV6sjmvUDLBIB2PCuHKi6e70JMG5bU/DY0o8KZKFsEczGwkoqEvPn/wDajtV0GS8FQJUpt
+        TSg9FVIbJh82hHe3RKQhuIWAIO2jq4CSf5Ixcgl0Tj7f08tplSbFSCdmilzJZ3rcwAEEzZUfWFRFj
+        y+or7Xbh6k9W10ac2Y+sHXZmOffE7BnFb/peBUVwtEK8QQnogKQroWYHb5aOSHXtUsfxU8FQtjig0
+        mBMvtH7AjprYmdoq50OoqLKC9ezBgz+hHVJW0sNvX7HkaA+6A9JwlkQFURfoL12p0zR556EilTHvH
+        iEKJlKdA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pL9AB-0074fm-Ky; Thu, 26 Jan 2023 20:48:03 +0000
+Date:   Thu, 26 Jan 2023 20:48:03 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Sterba <dsterba@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Al Viro <viro@zeniv.linux.org.uk>, Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH] mm/highmem: Align-down to page the address for
+ kunmap_flush_on_unmap()
+Message-ID: <Y9LnAzUP2K/cmqa5@casper.infradead.org>
+References: <20230126143346.12086-1-fmdefrancesco@gmail.com>
+ <20230126123858.42d9377ad6e352a58c81668b@linux-foundation.org>
 MIME-Version: 1.0
-References: <20221027092036.2698180-1-pbonzini@redhat.com> <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
- <3a23db58-3ae1-7457-ed09-bc2e3f6e8dc9@redhat.com> <CALMp9eQ3wZ4dkq_8ErcUdQAs2F96Gvr-g=7-iBteJeuN5aX00A@mail.gmail.com>
- <8bdf22c8-9ef1-e526-df36-9073a150669d@redhat.com> <CALMp9eRKp_4j_Q0j1HYP2itT2+z3pRotQK8LwScMsaGF5FpARA@mail.gmail.com>
- <dec8c012-885a-6ed8-534e-4a5f0a435025@redhat.com> <CALMp9eSyVWGS2HQVwwwViE6S_uweiOiFucqa3keuoUjNz9rKqA@mail.gmail.com>
- <f322cce0-f83a-16d9-9738-f47f265b41d8@redhat.com> <CALMp9eTpbwQP3QsqpOBsDb0soLpsv9FZA=ivZUmf2GJgBxhfmw@mail.gmail.com>
- <b3820c5c-370b-44f1-7dac-544e504bc61a@redhat.com>
-In-Reply-To: <b3820c5c-370b-44f1-7dac-544e504bc61a@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 26 Jan 2023 12:45:58 -0800
-Message-ID: <CALMp9eQe__xPe9JjgpN_jq-zB2UUqBKYrrMpGvJOjohT=gK2=Q@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: x86: Do not return host topology information from KVM_GET_SUPPORTED_CPUID
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126123858.42d9377ad6e352a58c81668b@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 9:47 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 1/26/23 17:06, Jim Mattson wrote:
-> >>> Sadly, there isn't a single kernel involved. People running our VMM on
-> >>> their desktops are going to be impacted as soon as this patch hits
-> >>> that distro. (I don't know if I can say which distro that is.) So, now
-> >>> we have to get the VMM folks to urgently accommodate this change and
-> >>> get a new distribution out.
-> >>
-> >> Ok, this is what is needed to make a more informed choice.  To be clear,
-> >> this is _still_ not public (for example it's not ChromeOS), so there is
-> >> at least some control on what version of the VMM they use?  Would it
-> >> make sense to buy you a few months by deferring this patch to Linux 6.3-6.5?
-> >
-> > Mainline isn't a problem. I'm more worried about 5.19 LTS.
->
-> 5.19 is not LTS, is it?  This patch is only in 6.1.7 and 6.1.8 as far as
-> stable kernels is concerned, should I ask Greg to revert it there?
+On Thu, Jan 26, 2023 at 12:38:58PM -0800, Andrew Morton wrote:
+> On Thu, 26 Jan 2023 15:33:46 +0100 "Fabio M. De Francesco" <fmdefrancesco@gmail.com> wrote:
+> 
+> > If ARCH_HAS_FLUSH_ON_KUNMAP is defined (PA-RISC case), __kunmap_local()
+> > calls kunmap_flush_on_unmap(). The latter currently flushes the wrong
+> > address (as confirmed by Matthew Wilcox and Helge Deller). Al Viro
+> > proposed to call kunmap_flush_on_unmap() on an aligned-down to page
+> > address in order to fix this issue. Consensus has been reached on this
+> > solution.
+> 
+> What are the user-visible runtime effects of this flaw?
 
-It came to my attention when commit 196c6f0c3e21 ("KVM: x86: Do not
-return host topology information from KVM_GET_SUPPORTED_CPUID") broke
-some of our tests under 5.10 LTS.
-
-If it isn't bound for linux-5.19-y, then we have some breathing room.
+The version of this patch I sent out includes this information,
+as well as the missed alignment for kunmap_atomic().
