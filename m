@@ -2,122 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48AB967D1C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C904867D1CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbjAZQg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:36:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
+        id S231795AbjAZQhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:37:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbjAZQgZ (ORCPT
+        with ESMTP id S231485AbjAZQhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:36:25 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2D6AD6F204
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:36:09 -0800 (PST)
-Received: (qmail 265554 invoked by uid 1000); 26 Jan 2023 11:36:08 -0500
-Date:   Thu, 26 Jan 2023 11:36:08 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        Thu, 26 Jan 2023 11:37:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27363EC44;
+        Thu, 26 Jan 2023 08:36:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C644618B9;
+        Thu, 26 Jan 2023 16:36:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CBA2C4339B;
+        Thu, 26 Jan 2023 16:36:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674751012;
+        bh=Zc6e+eUqfPJO+05OsGiTtY0oTOxGFgAZIR3Yj5hlt0k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DEv1NX1vOiHrGyYE5IuvIc04fn6o0YlfYw0nAtVYJIQ9KeS8yzOUWq/+kLv1Dr0/2
+         t41gs0f0I8lNhQvThbzWggkY2wC8fv2UB0J+S3kSGplRk4DOe3KAiqQGqP1kyKjMEA
+         dO1/LR0zCpVA6sIxgL8D53V+NH8NQmC0iNAMcJKBsCVoUb5eI1IsT5IFAlt0sGhkMY
+         HEpu7ijgVmD8xBb4ga+2RBn2QfhfE8KkSizsnGptncBrIuAiJe8GTmGR/jB/7aJ2Ju
+         PZGcSpesBH36VkOJn0LE+sG9y2/6kSFtBfw8wpDSGzBxxE4zAmW8IgrDOUMtnp1uJS
+         lXAxjJlqvjufQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
-References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
- <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
+Subject: [PATCH] net: mscc: ocelot: add ETHTOOL_NETLINK dependency
+Date:   Thu, 26 Jan 2023 17:36:36 +0100
+Message-Id: <20230126163647.3554883-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 02:46:04PM +0100, Jonas Oberhauser wrote:
-> As stated in the documentation and implied by its name, the ppo
-> (preserved program order) relation is intended to link po-earlier
-> to po-later instructions under certain conditions.  However, a
-> corner case currently allows instructions to be linked by ppo that
-> are not executed by the same thread, i.e., instructions are being
-> linked that have no po relation.
-> 
-> This happens due to the mb/strong-fence relations, which (as one
-> case) provide order when locks are passed between threads followed
-> by an smp_mb__after_unlock_lock() fence.  This is illustrated in
-> the following litmus test (as can be seen when using herd7 with
-> `doshow ppo`):
-> 
-> P0(int *x, int *y)
-> {
->     spin_lock(x);
->     spin_unlock(x);
-> }
-> 
-> P1(int *x, int *y)
-> {
->     spin_lock(x);
->     smp_mb__after_unlock_lock();
->     *y = 1;
-> }
-> 
-> The ppo relation will link P0's spin_lock(x) and P1's *y=1, because
-> P0 passes a lock to P1 which then uses this fence.
-> 
-> The patch makes ppo a subrelation of po by eliminating this possibility
-> from mb (but not strong-fence) and relying explicitly on mb|gp instead
-> of strong-fence when defining ppo.
-> 
-> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-> ---
+From: Arnd Bergmann <arnd@arndb.de>
 
-This changes the meaning of the fence relation, which is used in 
-w-pre-bounded, w-post-bounded, ww-vis, wr-vis, and rw-xbstar.  Have you 
-checked that they won't be affected by the change?
+The driver now directly calls into ethtool code, which fails if
+ethtool is disabled:
 
->  tools/memory-model/linux-kernel.cat | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
-> index 6e531457bb73..815fdafacaef 100644
-> --- a/tools/memory-model/linux-kernel.cat
-> +++ b/tools/memory-model/linux-kernel.cat
-> @@ -36,7 +36,9 @@ let wmb = [W] ; fencerel(Wmb) ; [W]
->  let mb = ([M] ; fencerel(Mb) ; [M]) |
->  	([M] ; fencerel(Before-atomic) ; [RMW] ; po? ; [M]) |
->  	([M] ; po? ; [RMW] ; fencerel(After-atomic) ; [M]) |
-> -	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
-> +	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M])
-> +let gp = po ; [Sync-rcu | Sync-srcu] ; po?
-> +let strong-fence = mb | gp |
->  (*
->   * Note: The po-unlock-lock-po relation only passes the lock to the direct
->   * successor, perhaps giving the impression that the ordering of the
-> @@ -50,10 +52,9 @@ let mb = ([M] ; fencerel(Mb) ; [M]) |
->   *)
->  	([M] ; po-unlock-lock-po ;
->  		[After-unlock-lock] ; po ; [M])
-> -let gp = po ; [Sync-rcu | Sync-srcu] ; po?
-> -let strong-fence = mb | gp
->  
-> -let nonrw-fence = strong-fence | po-rel | acq-po
-> +
+arm-linux-gnueabi-ld: drivers/net/ethernet/mscc/ocelot_stats.o: in function `ocelot_port_get_pause_stats':
+ocelot_stats.c:(.text+0xe54): undefined reference to `ethtool_aggregate_pause_stats'
+arm-linux-gnueabi-ld: drivers/net/ethernet/mscc/ocelot_stats.o: in function `ocelot_port_get_rmon_stats':
+ocelot_stats.c:(.text+0x1090): undefined reference to `ethtool_aggregate_rmon_stats'
+arm-linux-gnueabi-ld: drivers/net/ethernet/mscc/ocelot_stats.o: in function `ocelot_port_get_eth_ctrl_stats':
+ocelot_stats.c:(.text+0x1228): undefined reference to `ethtool_aggregate_ctrl_stats'
+arm-linux-gnueabi-ld: drivers/net/ethernet/mscc/ocelot_stats.o: in function `ocelot_port_get_eth_mac_stats':
+ocelot_stats.c:(.text+0x13a8): undefined reference to `ethtool_aggregate_mac_stats'
+arm-linux-gnueabi-ld: drivers/net/ethernet/mscc/ocelot_stats.o: in function `ocelot_port_get_eth_phy_stats':
+ocelot_stats.c:(.text+0x1540): undefined reference to `ethtool_aggregate_phy_stats'
 
-Extra blank line.
+Add a dependency on ETHTOOL_NETLINK, since that controls the
+compilation of the ethtool stats code. It would probably be possible
+to have a more fine-grained symbol there, but in practice this is
+already required.
 
-> +let nonrw-fence = mb | gp | po-rel | acq-po
->  let fence = nonrw-fence | wmb | rmb
->  let barrier = fencerel(Barrier | Rmb | Wmb | Mb | Sync-rcu | Sync-srcu |
->  		Before-atomic | After-atomic | Acquire | Release |
-> -- 
-> 2.17.1
+Fixes: 6505b6805655 ("net: mscc: ocelot: add MAC Merge layer support for VSC9959")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/net/dsa/ocelot/Kconfig    | 2 ++
+ drivers/net/ethernet/mscc/Kconfig | 2 ++
+ 2 files changed, 4 insertions(+)
 
-Alan
+diff --git a/drivers/net/dsa/ocelot/Kconfig b/drivers/net/dsa/ocelot/Kconfig
+index 08db9cf76818..9b0624a1837e 100644
+--- a/drivers/net/dsa/ocelot/Kconfig
++++ b/drivers/net/dsa/ocelot/Kconfig
+@@ -7,6 +7,7 @@ config NET_DSA_MSCC_FELIX
+ 	depends on HAS_IOMEM
+ 	depends on PTP_1588_CLOCK_OPTIONAL
+ 	depends on NET_SCH_TAPRIO || NET_SCH_TAPRIO=n
++	depends on ETHTOOL_NETLINK
+ 	select MSCC_OCELOT_SWITCH_LIB
+ 	select NET_DSA_TAG_OCELOT_8021Q
+ 	select NET_DSA_TAG_OCELOT
+@@ -22,6 +23,7 @@ config NET_DSA_MSCC_SEVILLE
+ 	depends on NET_VENDOR_MICROSEMI
+ 	depends on HAS_IOMEM
+ 	depends on PTP_1588_CLOCK_OPTIONAL
++	depends on ETHTOOL_NETLINK
+ 	select MDIO_MSCC_MIIM
+ 	select MSCC_OCELOT_SWITCH_LIB
+ 	select NET_DSA_TAG_OCELOT_8021Q
+diff --git a/drivers/net/ethernet/mscc/Kconfig b/drivers/net/ethernet/mscc/Kconfig
+index 8dd8c7f425d2..8b1a145971b2 100644
+--- a/drivers/net/ethernet/mscc/Kconfig
++++ b/drivers/net/ethernet/mscc/Kconfig
+@@ -13,6 +13,7 @@ if NET_VENDOR_MICROSEMI
+ 
+ # Users should depend on NET_SWITCHDEV, HAS_IOMEM, BRIDGE
+ config MSCC_OCELOT_SWITCH_LIB
++	depends on ETHTOOL_NETLINK
+ 	select NET_DEVLINK
+ 	select REGMAP_MMIO
+ 	select PACKING
+@@ -25,6 +26,7 @@ config MSCC_OCELOT_SWITCH_LIB
+ config MSCC_OCELOT_SWITCH
+ 	tristate "Ocelot switch driver"
+ 	depends on PTP_1588_CLOCK_OPTIONAL
++	depends on ETHTOOL_NETLINK
+ 	depends on BRIDGE || BRIDGE=n
+ 	depends on NET_SWITCHDEV
+ 	depends on HAS_IOMEM
+-- 
+2.39.0
+
