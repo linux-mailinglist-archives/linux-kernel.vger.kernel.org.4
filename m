@@ -2,81 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958BC67C218
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C55E67C21C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236446AbjAZA4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 19:56:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
+        id S236456AbjAZA6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 19:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjAZA4a (ORCPT
+        with ESMTP id S236448AbjAZA6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 19:56:30 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D309741B6E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:56:29 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id 129so368198ybb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:56:29 -0800 (PST)
+        Wed, 25 Jan 2023 19:58:54 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0EF5D114
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:58:52 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1633e6f83d4so788810fac.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:58:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j6PJ67oAnfzV9PxkuyEMm7X3urH+VAUx7uNIfBIgK8A=;
-        b=VPV23bB/NTAePn3ETVAx/0rZ5RYy1tyqMgRlKO0QViQnGhUmX7jyE5mB35Xi9APjlY
-         DL1Dqno6sd1kt+SACNdRv9yNuwSO4WLY5aSWK1Lo6e1Z5K7hVz05KgRAL08GGJeN8i95
-         VoJ8IJ8WCXFymcNzjmnd6pEwTWFDmHZiuixuMrEkedvabWF0sGRFPCEruskVOmNZ2z9v
-         4MQJZB50jLKj5Qtx9ezhphFW1ZgV+grFYvY4bw1CA898+aH9wE7fT07rW0gZUvs+zBC7
-         /0EjzxiaogGu8EDN1Au38zJws9yGvLda8TtNbSovZLrAXep+lJAoyouy9SaVV9e3LqLB
-         ssUA==
+        bh=erjiEkZ9D43eAKN0jnPh/XHVutvD1e0c37Mj/PZ/I90=;
+        b=LADojTLzWfF4+JTwfjq4BL3FNGteMKzy9i0qwRgH34cA6sGXD/h+1MWzDT9mGzAqAI
+         /ebaYb3SOJdEg9N3FAJ2nTQQewzMEUuMgMd67VNrpnooR9IBwpk8zNToj/GiVVqKNdX4
+         H4qTBOUgt5zf0CN3bQMwVj5vnhOTKv6eJmNiYUjrassnxjYjWgd1K1xzQn/G7za7eTpN
+         e0T0as5FqNXeHC1DsL7FBIJ3tVh96aNrVrrCHVLXA1y9cuKOtPyPfmYsvuGtJaoHJHKh
+         XeUkOaJAQ1Y6TIFLb6eyZF/2p3sRteXIW0k+PG2s5NvA+B8USExLMZQ1Lf5ACvpNDu1l
+         8E3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=j6PJ67oAnfzV9PxkuyEMm7X3urH+VAUx7uNIfBIgK8A=;
-        b=qQokQ6KAR3j8mkvg2O993qIkkpESmh5Gyx6sfynP9dqD98n09HLV3x7ISoIS1bIu83
-         psxM9MWgCAmovd5FaO3EH2NVILNn28DuKcb+XHo2IJglfMJdqsyV9dJDnSskDdVNvv08
-         z5j5VASacSzMwHOXWGyHf1RDA0p06fh4xM6NVHfAA7W7Chg7dAmwKmyLu5i5ZXSCH82r
-         /PGICusRxj2cXmJ4m8Ul+3Bw2idYrmcrgxBUT0cMC5KkuvsczlnXwHN3nKbFCcJweSnK
-         OyM3/kk/tEDAjAsApyKXf/7ajnkDSWGuwk1nIqZeLRfhIMOhgUbno1k3WSYRRzba5K1U
-         9Bvw==
-X-Gm-Message-State: AO0yUKXGY58z6TGDPcnX5VgKic2ttygLOq8zCzU7FACssbSTJq8JZBfQ
-        yBYnEdhxCLydAiKVwEloLprCVtX2zrUGl+w1ci8TYA==
-X-Google-Smtp-Source: AK7set8NIfHhdPuyL1RvDuayyrK39JHTj20Y7CDEMECMUkWmAbcHmsIgGk35BlpCcNAq5/QsmCjbLZ6FgKApKS2x2KE=
-X-Received: by 2002:a25:c247:0:b0:80b:6201:bee7 with SMTP id
- s68-20020a25c247000000b0080b6201bee7mr1062130ybf.340.1674694588781; Wed, 25
- Jan 2023 16:56:28 -0800 (PST)
+        bh=erjiEkZ9D43eAKN0jnPh/XHVutvD1e0c37Mj/PZ/I90=;
+        b=fw797CP7I3IeWT1Yqgsw7fqd+G+arDYczRYeeRVDvry4m/LlnsiuZGlVtkHKY1Ohmh
+         r+qcY1zxurbC3BDo1+Vk04ivLtXbSVpdN00QrMuh+0e0F85pLDXVldGs899wiPdavtDj
+         Nj+bsz/LMX/u59PjGlwRoTyDw0vAczLVS46+WCvl6RkCuYgB8YR+kLcxGVwHSq02vVqo
+         EdIETnF8G1TERBF8ql/0gu1XwMcEZavi8+Lf0hIPHla2fDuq9NR8CGl0v3iT6wGapYYt
+         NGJy+zi2nP2OLmN4af9wFKUpLWpa5LlnNrkbDjOaHWjwnGXH1poeLwHPRYIHkNhyCEYQ
+         Z8vA==
+X-Gm-Message-State: AO0yUKVOOCT6Azq1F1PZEeXN/KEvg2ZATSWE8BmwEdfJvBjYA0q95Ivi
+        tzbvmYWaqxbIAdZ974Aua1rJSImK+iUAZvhWKHakXLSS3r46y4cS
+X-Google-Smtp-Source: AK7set9L6/IA9Gj8L+AYOTlQdt7smnu5QUEFf0dssjEPi4hJqca5hVmTRAjgASZWpf9AlBr/WrV+g5rg4U0dmBFAhhU=
+X-Received: by 2002:a05:6871:6ca5:b0:160:3235:9c33 with SMTP id
+ zj37-20020a0568716ca500b0016032359c33mr675619oab.103.1674694731192; Wed, 25
+ Jan 2023 16:58:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20230125233554.153109-1-surenb@google.com> <20230125233554.153109-3-surenb@google.com>
- <20230125162810.ec222773d13cd26c55991fde@linux-foundation.org>
-In-Reply-To: <20230125162810.ec222773d13cd26c55991fde@linux-foundation.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 25 Jan 2023 16:56:17 -0800
-Message-ID: <CAJuCfpFWTNpz7LB+931Gc+yYwBq3-y+_doH2WdtjhTGnxLxvig@mail.gmail.com>
-Subject: Re: [PATCH v3 2/7] mm: introduce vma->vm_flags wrapper functions
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
-        mingo@redhat.com, will@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
+References: <20221027092036.2698180-1-pbonzini@redhat.com> <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
+ <3a23db58-3ae1-7457-ed09-bc2e3f6e8dc9@redhat.com> <CALMp9eQ3wZ4dkq_8ErcUdQAs2F96Gvr-g=7-iBteJeuN5aX00A@mail.gmail.com>
+ <8bdf22c8-9ef1-e526-df36-9073a150669d@redhat.com> <CALMp9eRKp_4j_Q0j1HYP2itT2+z3pRotQK8LwScMsaGF5FpARA@mail.gmail.com>
+ <dec8c012-885a-6ed8-534e-4a5f0a435025@redhat.com>
+In-Reply-To: <dec8c012-885a-6ed8-534e-4a5f0a435025@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 25 Jan 2023 16:58:40 -0800
+Message-ID: <CALMp9eSyVWGS2HQVwwwViE6S_uweiOiFucqa3keuoUjNz9rKqA@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: x86: Do not return host topology information from KVM_GET_SUPPORTED_CPUID
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,41 +71,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 4:28 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+On Wed, Jan 25, 2023 at 2:44 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
-> On Wed, 25 Jan 2023 15:35:49 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+> On 1/25/23 23:09, Jim Mattson wrote:
+> > The topology leaves returned by KVM_GET_SUPPORTED_CPUID *for over a
+> > decade* have been passed through unmodified from the host. They have
+> > never made sense for KVM_SET_CPUID2, with the unlikely exception of a
+> > whole-host VM.
 >
-> > --- a/include/linux/mm_types.h
-> > +++ b/include/linux/mm_types.h
-> > @@ -491,7 +491,15 @@ struct vm_area_struct {
-> >        * See vmf_insert_mixed_prot() for discussion.
-> >        */
-> >       pgprot_t vm_page_prot;
-> > -     unsigned long vm_flags;         /* Flags, see mm.h. */
-> > +
-> > +     /*
-> > +      * Flags, see mm.h.
-> > +      * To modify use {init|reset|set|clear|mod}_vm_flags() functions.
-> > +      */
-> > +     union {
-> > +             const vm_flags_t vm_flags;
-> > +             vm_flags_t __private __vm_flags;
-> > +     };
+> True, unfortunately people have not read the nonexistent documentation
+> and they are:
 >
-> Typically when making a change like this we'll rename the affected
-> field/variable/function/etc.  This will reliably and deliberately break
-> unconverted usage sites.
+> 1) rarely adjusting correctly all of 0xB, 0x1F and 0x8000001E;
 >
-> This const trick will get us partway there, by breaking setters.  But
-> renaming it will break both setters and getters.
+> 2) never bounding CPUID[EAX=0].EAX to a known CPUID leaf, resulting for
+> example in inconsistencies between 0xB and 0x1F.
+>
+> *But* (2) should not be needed unless you care about maintaining
+> homogeneous CPUID within a VM migration pool.  For something like
+> kvmtool, having to do (2) would be a workaround for the bug that this
+> patch fixes.
 
-My intent here is to break setters but to allow getters to keep
-reading vma->vm_flags directly. We could provide get_vm_flags() and
-convert all getters as well but it would introduce a huge additional
-churn (800+ hits) with no obvious benefits, I think. Does that clarify
-the intent of this trick?
+Maybe we should just populate up to leaf 3. :-)
 
+> > Our VMM populates the topology of the guest CPUID table on its own, as
+> > any VMM must. However, it uses the host topology (which
+> > KVM_GET_SUPPORTED_CPUID has been providing pass-through *for over a
+> > decade*) to see if the requested guest topology is possible.
 >
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> Ok, thanks; this is useful to know.
 >
+> > Changing a long-established ABI in a way that breaks userspace
+> > applications is a bad practice. I didn't think we, as a community, did
+> > that. I didn't realize that we were only catering to open source
+> > implementations here.
+>
+> We aren't.  But the open source implementations provide some guidance as
+> to how the API is being used in the wild, and what the pitfalls are.
+>
+> You wrote it yourself: any VMM must either populate the topology on its
+> own, or possibly fill it with zeros.  Returning a value that is
+> extremely unlikely to be used is worse in pretty much every way (apart
+> from not breaking your VMM, of course).
+
+I've complained about this particular ioctl more than I can remember.
+This is just one of its many problems.
+
+> With a total of six known users (QEMU, crosvm, kvmtool, firecracker,
+> rust-vmm, and the Google VMM), KVM is damned if it reverts the patch and
+> damned if it doesn't.  There is a tension between fixing the one VMM
+> that was using KVM_GET_SUPPORTED_CPUID correctly and now breaks loudly,
+> and fixing 3-4 that were silently broken and are now fixed.  I will
+> probably send a patch to crosvm, though.
+>
+> The VMM being _proprietary_ doesn't really matter, however it does
+> matter to me that it is not _public_: it is only used within Google, and
+> the breakage is neither hard to fix in the VMM nor hard to temporarily
+> avoid by reverting the patch in the Google kernel.
+
+Sadly, there isn't a single kernel involved. People running our VMM on
+their desktops are going to be impacted as soon as this patch hits
+that distro. (I don't know if I can say which distro that is.) So, now
+we have to get the VMM folks to urgently accommodate this change and
+get a new distribution out.
