@@ -2,129 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E33E67CB9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3455F67CBA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236273AbjAZNDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:03:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
+        id S236322AbjAZNF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjAZNDE (ORCPT
+        with ESMTP id S231428AbjAZNFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:03:04 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E35DA274;
-        Thu, 26 Jan 2023 05:02:58 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QCvXaa025500;
-        Thu, 26 Jan 2023 13:02:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=x2zmArNo6Y7grLIZvlBbSayXM/yP7uDyVit9C8eQoY8=;
- b=KLblHCjlBgdanaYXHa6eTrEIP0ibAj0R1xlnKHAoovIdLjWEbThidcXM9KiG8gvDWy2x
- k15r6+tm58yPjBDc6dc2/8rv2d9eLkw8BRQM2YK2u6DSWp6SQpgsLZUgUf3J3fBc9qba
- aM/g4N2ajlk1yiT+xeo8KxKLIuWKx5ow3hBLfMNpzP9P3eox7RIvQB5RKVceFTrpE0my
- eX41/o5g3ZFllloq011R96tTTHvQ2v6wE9tBo5kkcipWiFMA6woQbE71Qg9u9WIhwttN
- BegoKPhKplLQ/Xe4+ND/odbNrET2e7gzDcsq9nUmBweATBRZ2K7d3tVxAUc4uQ9e6r10 IQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbsymr4mg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 13:02:54 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QD0KfQ002383;
-        Thu, 26 Jan 2023 13:02:53 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbsymr4ka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 13:02:53 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QB966G026765;
-        Thu, 26 Jan 2023 13:02:51 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6ee1g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 13:02:50 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QD2lKg24314404
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 13:02:47 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 500B62004B;
-        Thu, 26 Jan 2023 13:02:47 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 144C820040;
-        Thu, 26 Jan 2023 13:02:47 +0000 (GMT)
-Received: from [9.152.224.253] (unknown [9.152.224.253])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 26 Jan 2023 13:02:47 +0000 (GMT)
-Message-ID: <f39adf25-55ad-8acd-543e-b5e38b52ad55@linux.ibm.com>
-Date:   Thu, 26 Jan 2023 14:02:46 +0100
+        Thu, 26 Jan 2023 08:05:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F59165AE
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:05:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26705617D0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:05:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E9C4C433EF;
+        Thu, 26 Jan 2023 13:05:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674738320;
+        bh=tDQ+nCHdEwE/4jiYgtIlBrjarZhJE5C4ooQwzB7BIf4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CSHNJpitMu0/yXRFWW+6TrTMmKV5hUhWXvvXbrsL+cXA2qRwC1LAHlyfqY1szKbig
+         QUmwimRD7tEgZnDLzjUKDsb6AxckOuQ/VX2TYdm9xRmatcWxMbdaW09vIr25sAG/SE
+         Zj9/k6DdQDcc2X7dc/BgleeTZvC62doY0ENOomR74YAl3XmVk1BJ2drxdQJj93Lhq1
+         dvFkU8Nza2YUscbNKlvmksg+V14Z1A9QsgQFIznVOuaGLTDuJq2d8Q/3uW8KVoIbK7
+         pIuVGbKYbCiKadpG5yHqs4Pb/tGwJ764uDcNA7FWRQ8m9reP0eSHHWBehMt26Sjvzz
+         tCMUtyPuoda1w==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        mhiramat@kernel.org, conor.dooley@microchip.com,
+        penberg@kernel.org, mark.rutland@arm.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] riscv: kprobe: Fixup kernel panic when probing an illegal position
+Date:   Thu, 26 Jan 2023 08:05:09 -0500
+Message-Id: <20230126130509.1418251-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     Thomas Huth <thuth@redhat.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20230125212608.1860251-1-scgl@linux.ibm.com>
- <20230125212608.1860251-11-scgl@linux.ibm.com>
- <6594a21f-6372-0b69-3bb3-6ed1b1387e6e@redhat.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v6 10/14] KVM: s390: Refactor absolute vm mem_op function
-In-Reply-To: <6594a21f-6372-0b69-3bb3-6ed1b1387e6e@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iALh7UywSKEmPegeU3NvlBr7s7-ERvHu
-X-Proofpoint-ORIG-GUID: QDDABgO6tZ-_aCKwZiAMfa73ZLi_ep6V
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_05,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 bulkscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
- mlxlogscore=629 spamscore=0 priorityscore=1501 clxscore=1015 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260126
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/23 13:18, Thomas Huth wrote:
-> On 25/01/2023 22.26, Janis Schoetterl-Glausch wrote:
->> Remove code duplication with regards to the CHECK_ONLY flag.
->> Decrease the number of indents.
->> No functional change indented.
->>
->> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
->> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->> ---
->>
->>
->> Cosmetic only, can be dropped.
-> 
-> I'm torn between unnecessary-code-churn and
-> nice-to-get-rid-of-one-indentation-level here ... anyway, patch looks sane
-> to me, so:
-> 
-> Reviewed-by: Thomas Huth <thuth@redhat.com>
-> 
+From: Guo Ren <guoren@linux.alibaba.com>
 
-As long as we're not adding to this function in the future then I'm 
-okish with leaving it as is.
+The kernel would panic when probed for an illegal position. eg:
+
+(CONFIG_RISCV_ISA_C=n)
+
+echo 'p:hello kernel_clone+0x16 a0=%a0' >> kprobe_events
+echo 1 > events/kprobes/hello/enable
+cat trace
+
+Kernel panic - not syncing: stack-protector: Kernel stack
+is corrupted in: __do_sys_newfstatat+0xb8/0xb8
+CPU: 0 PID: 111 Comm: sh Not tainted
+6.2.0-rc1-00027-g2d398fe49a4d #490
+Hardware name: riscv-virtio,qemu (DT)
+Call Trace:
+[<ffffffff80007268>] dump_backtrace+0x38/0x48
+[<ffffffff80c5e83c>] show_stack+0x50/0x68
+[<ffffffff80c6da28>] dump_stack_lvl+0x60/0x84
+[<ffffffff80c6da6c>] dump_stack+0x20/0x30
+[<ffffffff80c5ecf4>] panic+0x160/0x374
+[<ffffffff80c6db94>] generic_handle_arch_irq+0x0/0xa8
+[<ffffffff802deeb0>] sys_newstat+0x0/0x30
+[<ffffffff800158c0>] sys_clone+0x20/0x30
+[<ffffffff800039e8>] ret_from_syscall+0x0/0x4
+---[ end Kernel panic - not syncing: stack-protector:
+Kernel stack is corrupted in: __do_sys_newfstatat+0xb8/0xb8 ]---
+
+That is because the kprobe's ebreak instruction broke the kernel's
+original code. The user should guarantee the correction of the probe
+position, but it couldn't make the kernel panic.
+
+This patch adds arch_check_kprobe in arch_prepare_kprobe to prevent an
+illegal position (Such as the middle of an instruction).
+
+Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+---
+ arch/riscv/kernel/probes/kprobes.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+index f21592d20306..475989f06d6d 100644
+--- a/arch/riscv/kernel/probes/kprobes.c
++++ b/arch/riscv/kernel/probes/kprobes.c
+@@ -48,6 +48,21 @@ static void __kprobes arch_simulate_insn(struct kprobe *p, struct pt_regs *regs)
+ 	post_kprobe_handler(p, kcb, regs);
+ }
+ 
++static bool __kprobes arch_check_kprobe(struct kprobe *p)
++{
++	unsigned long tmp  = (unsigned long)p->addr - p->offset;
++	unsigned long addr = (unsigned long)p->addr;
++
++	while (tmp <= addr) {
++		if (tmp == addr)
++			return true;
++
++		tmp += GET_INSN_LENGTH(*(kprobe_opcode_t *)tmp);
++	}
++
++	return false;
++}
++
+ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+ {
+ 	unsigned long probe_addr = (unsigned long)p->addr;
+@@ -55,6 +70,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+ 	if (probe_addr & 0x1)
+ 		return -EILSEQ;
+ 
++	if (!arch_check_kprobe(p))
++		return -EILSEQ;
++
+ 	/* copy instruction */
+ 	p->opcode = *p->addr;
+ 
+-- 
+2.36.1
+
