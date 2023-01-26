@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7038767C418
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 05:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6753967C419
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 05:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236012AbjAZE6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 23:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
+        id S236034AbjAZE6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 23:58:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234668AbjAZE5s (ORCPT
+        with ESMTP id S235298AbjAZE5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 23:57:48 -0500
+        Wed, 25 Jan 2023 23:57:49 -0500
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5651BD8;
-        Wed, 25 Jan 2023 20:57:45 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 95A575C013C;
-        Wed, 25 Jan 2023 23:57:44 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3B84C25;
+        Wed, 25 Jan 2023 20:57:46 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id E62985C01A4;
+        Wed, 25 Jan 2023 23:57:45 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 25 Jan 2023 23:57:44 -0500
+  by compute6.internal (MEProxy); Wed, 25 Jan 2023 23:57:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1674709064; x=1674795464; bh=Ap
-        1Qz7Te/uXkN1sNZQoZSEgQeAlWB8MwV78PVRtTsT0=; b=iCeLe+tHvYLjvSTWpX
-        2xOFEmw+yG3ohh2vzQmUVs1S6WgRvYmhVzp30Hhu0OxuIyqRgV8KNaR9e8lqZj5Y
-        7CnqNqtAntjr+/TUV2Ltraj4NK7tm/v2WsGxkI32NIbLYkNNbt1kyvCVYf5E2EoH
-        P9RTgtAgnG3hVryaPCXCDQeYnmhCIi5HGlk/wn8ZXLFz1RUAmyPHFnPAJX9NdRPu
-        UJRtKYAvXs+EM0nK7ET5IYXzB3no95kdm5cybfe3NECBsNKg6+M97SoFnAg5fZol
-        /GkttkkwE3XH+SXMi2jiXTjWbDKDhKfDWuJOovmMJ10mQhtD22CPMDkGZ3r8Yk8B
-        cyWA==
+        :subject:subject:to:to; s=fm1; t=1674709065; x=1674795465; bh=J6
+        rVARyJw3muIrcP2dT3zZNyK79SVGldDrAhgT6GSYM=; b=r2/HdDmHCZtKxU2dmj
+        Mp+vqy5ceeqCU1QnnUTxeM2wB+hptfnF8jXsYhcfRsbAbJVCur8fj0EHN6fXJmqH
+        KEZcMnJUJMWZdE/i7yDqph4XCM47ZArQ0R4Z9HLrB/F7K/wpOheWgjZreTYhsVoI
+        pgK6gQQ4ZPHLEQ5VDiMWqWREh2Dd81nN65NUSTsRt+tYmHdb/uNw9x+8cr37FG8z
+        9ZEqd0Zp9Uf4h1J4WdXV7ViewL0tvzPNpstyrhIHOwHd2DsQ8usqVlrfJWUwa84d
+        bUPt7L4/W1CuGYgzpSAZNvSkjL7sPjARPJeipes8e9Y9JqcsOcf35eRSjIfDG3MZ
+        nDPw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1674709064; x=1674795464; bh=Ap1Qz7Te/uXkN
-        1sNZQoZSEgQeAlWB8MwV78PVRtTsT0=; b=cuee5MUlNsBx8HRziLYaZ2PLTZAFK
-        9b3p8RXOcSJm2SMjLvlXL1w+rcUyVU6vBYT84aIBhzFwoKxmlG1Ex1Pz1fJcxZfF
-        vikBrVy/PePDa2tV4SEU0ReWdRClJTkSEvrsRyIsIj8iOPTjjfTO9pkXfS+M+5hq
-        rTBqpMyAuq48JWcqJOkiVQibkcsiUhtjd37ewrG/Ka+ut6r4m0LflSrYYJP99bgh
-        rOFfOIF3TySh4E7xjS3rQSNC2vVPFP/SUh7hBXochzGY7iS1SJlHxRSubD+xC4Ux
-        6mBPJzZdfq6FNKIWcWiHLqkce6iZvIluZC6kLb0Bmj+TI3MkrkXidBIMQ==
-X-ME-Sender: <xms:SAjSY8vyJdVW7PpFSoTKZdigjM14WtKnjgs568wq1H-KyekuaeRrdg>
-    <xme:SAjSY5feZP7Ki4issCvy_Of5jMf3eeU0YdXn_9gtWOYaK45iksh0643Ek9LkdNb0D
-    FMMcDb5Bowx6AMphQ>
-X-ME-Received: <xmr:SAjSY3zIgg0NE6FHVIjdkZ1_qPCfpl5bIU7JKqFrtyJd1oktGDg40USg0vrQCJHjEkeDvo6vcmNlcuT5FBBzNsEU2MN21UEdgIeER5AEqqVUnPjN0aG9c11O0jTTfl9bMkAzYw>
+        :x-sasl-enc; s=fm3; t=1674709065; x=1674795465; bh=J6rVARyJw3muI
+        rcP2dT3zZNyK79SVGldDrAhgT6GSYM=; b=LGJA0otnqEfdPOz0rvUH1h2aTxDuM
+        wtoduHsGCcfF8d5Vi8YwQjm2wA5wm/gNbJvJ7/7hESs7vnFK7XuE8Ol3HDVFBBs1
+        gXe51WntLIDvfAHeOW+WWvKPldqYZIDZ4sASCPQoqNqlAGgBtaWiumn/1joBGaQb
+        ie/+PT2zfBgdBwWkI/FQ5fWbFsa08WhmVpUW1453cbyKIZzBcEdLoaBzy/cLpbzF
+        rZ+hdV4lZx1vOjbgRFhM4JRIXf5RZ/g2L15StNsfLQCzTQHyWodgZAgyryjEtlsp
+        vixxunf/NqPs3gQeO1S6VsYI+EKs0s2iND1YmmC/qZKAoo2cCWPXs69Gg==
+X-ME-Sender: <xms:SQjSY965hSq4AjAWvLfBH6j8hFZkpUqxovMab57WmKSuefHMM7-TbA>
+    <xme:SQjSY66zi2RjeCoEqd_IzMyM4Bk-zODkxA_-dDRqinWw-zEX2CtCytu3AMwSbDSh5
+    cqveVDpd0BfkwhqpA>
+X-ME-Received: <xmr:SQjSY0ctstI6l4FLa5rSwPGn7LcaQMmHO2eec9ZExF1rNVBOOrVFRhjVFsMgmFk9xhDQcUZhfInyh5Srzo6ucu1q6NBX6Luj11VsNtgRz0fv0Fp5gDvDwTajKcJxcPYra9TnMw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedgjeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
     vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    udefiedtveetnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:SAjSY_MwAuBHGW3Qa0KVVAdsvhOi6aveMKh5s_4POi7dB8Yf-G6o6Q>
-    <xmx:SAjSY8_tMG-ta8qYFfsK-MqIAxEbQ1Pv7QfJtAe54qEFdTm2FZQBjw>
-    <xmx:SAjSY3XXN4uzidcvihcI5-4B0loWNJw54Nax-skcW05Utv3l8vGyFA>
-    <xmx:SAjSY_cn00JZ2fvKSqaWCWQPK_3m7KOraY58hweq0q5kmOnKMrr74Q>
+X-ME-Proxy: <xmx:SQjSY2J94l5GHUGcFS1WLAdiXPe2TcQsV3XT7OpdpUoecWBAnCthmQ>
+    <xmx:SQjSYxIzsbFQAUD1EvF4oYstIqpvkOICigPSrU83Tb440gqSs97FxA>
+    <xmx:SQjSY_yG0w0aIs5tJLoz5hWtlHGOWpZMPFiW0qKGZnNUnLTmKvIQBw>
+    <xmx:SQjSY67ipkTaNP5iG-xWClwGOzHOFq-IdxzqOhmU3QoXvfEHB0dH-w>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Jan 2023 23:57:43 -0500 (EST)
+ 25 Jan 2023 23:57:44 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -77,10 +77,11 @@ Cc:     linux-riscv@lists.infradead.org, Heiko Stuebner <heiko@sntech.de>,
         linux-arm-kernel@lists.infradead.org,
         Samuel Holland <samuel@sholland.org>,
         Palmer Dabbelt <palmer@rivosinc.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH v5 05/11] riscv: dts: allwinner: Add MangoPi MQ devicetree
-Date:   Wed, 25 Jan 2023 22:57:32 -0600
-Message-Id: <20230126045738.47903-6-samuel@sholland.org>
+        Guo Ren <guoren@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v5 06/11] riscv: dts: allwinner: Add Allwinner D1 Nezha devicetree
+Date:   Wed, 25 Jan 2023 22:57:33 -0600
+Message-Id: <20230126045738.47903-7-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20230126045738.47903-1-samuel@sholland.org>
 References: <20230126045738.47903-1-samuel@sholland.org>
@@ -96,162 +97,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MangoPi MQ is a tiny SBC built around the Allwinner D1s. Its
-onboard peripherals include two USB Type-C ports (1 device, 1 host)
-and RTL8189FTV WLAN.
-
-A MangoPi MQ-R variant of the board also exists. The MQ-R has a
-different form factor, but the onboard peripherals are the same.
-
-Most D1 and D1s boards use a similar power tree, with the 1.8V rail
-powered by the SoC's internal LDOA, analog domains powered by ALDO,
-and the rest of the board powered by always-on fixed regulators. To
-avoid duplication, factor out the regulator information that is
-common across boards.
-
-The board also exposes GPIO Port E via a FPC connector, which can
-support either a camera or an RMII Ethernet PHY. The additional
-regulators supply that connector.
+"D1 Nezha" is Allwinner's first-party development board for the D1 SoC.
+It was shipped with 512M, 1G, or 2G of DDR3. It supports onboard audio,
+HDMI, gigabit Ethernet, WiFi and Bluetooth, USB 2.0 host and OTG ports,
+plus low-speed I/O from the SoC and a GPIO expander chip.
 
 Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 Reviewed-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
-Changes in v5:
- - Drop the configuration for LDOA and LDOB
+(no changes since v3)
 
 Changes in v3:
- - Drop mmc aliases
- - Change LED_FUNCTION_BACKLIGHT to LED_FUNCTION_STATUS (the backlight
-   regulator is disconnected by default, so this is a standalone LED)
+ - Drop mmc alias
 
 Changes in v2:
- - New patch for v2
+ - Common regulators moved to MangoPi MQ patch, removed analog LDOs
+ - Removed LRADC (depends on analog LDOs)
+ - Added XR829 host-wake interrupt
 
- arch/riscv/boot/dts/Makefile                  |   1 +
- arch/riscv/boot/dts/allwinner/Makefile        |   2 +
- .../allwinner/sun20i-common-regulators.dtsi   |  28 ++++
- .../dts/allwinner/sun20i-d1s-mangopi-mq.dts   | 128 ++++++++++++++++++
- 4 files changed, 159 insertions(+)
- create mode 100644 arch/riscv/boot/dts/allwinner/Makefile
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-common-regulators.dtsi
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1s-mangopi-mq.dts
+ arch/riscv/boot/dts/allwinner/Makefile        |   1 +
+ .../boot/dts/allwinner/sun20i-d1-nezha.dts    | 166 ++++++++++++++++++
+ 2 files changed, 167 insertions(+)
+ create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
 
-diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
-index 0c97d673b775..f0d9f89054f8 100644
---- a/arch/riscv/boot/dts/Makefile
-+++ b/arch/riscv/boot/dts/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
-+subdir-y += allwinner
- subdir-y += sifive
- subdir-y += starfive
- subdir-y += canaan
 diff --git a/arch/riscv/boot/dts/allwinner/Makefile b/arch/riscv/boot/dts/allwinner/Makefile
-new file mode 100644
-index 000000000000..2f2792594f7d
---- /dev/null
+index 2f2792594f7d..277e59d1c907 100644
+--- a/arch/riscv/boot/dts/allwinner/Makefile
 +++ b/arch/riscv/boot/dts/allwinner/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1s-mangopi-mq.dtb
-diff --git a/arch/riscv/boot/dts/allwinner/sun20i-common-regulators.dtsi b/arch/riscv/boot/dts/allwinner/sun20i-common-regulators.dtsi
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
++dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-nezha.dtb
+ dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1s-mangopi-mq.dtb
+diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
 new file mode 100644
-index 000000000000..9b03fca2444c
+index 000000000000..a0769185be97
 --- /dev/null
-+++ b/arch/riscv/boot/dts/allwinner/sun20i-common-regulators.dtsi
-@@ -0,0 +1,28 @@
++++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
+@@ -0,0 +1,166 @@
 +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
 +// Copyright (C) 2021-2022 Samuel Holland <samuel@sholland.org>
 +
-+/ {
-+	reg_vcc: vcc {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+
-+	reg_vcc_3v3: vcc-3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc-3v3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&reg_vcc>;
-+	};
-+};
-+
-+&pio {
-+	vcc-pb-supply = <&reg_vcc_3v3>;
-+	vcc-pc-supply = <&reg_vcc_3v3>;
-+	vcc-pd-supply = <&reg_vcc_3v3>;
-+	vcc-pe-supply = <&reg_vcc_3v3>;
-+	vcc-pf-supply = <&reg_vcc_3v3>;
-+	vcc-pg-supply = <&reg_vcc_3v3>;
-+};
-diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1s-mangopi-mq.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1s-mangopi-mq.dts
-new file mode 100644
-index 000000000000..e6d924f671fd
---- /dev/null
-+++ b/arch/riscv/boot/dts/allwinner/sun20i-d1s-mangopi-mq.dts
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-+// Copyright (C) 2022 Samuel Holland <samuel@sholland.org>
-+
 +#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
++#include <dt-bindings/input/input.h>
 +
 +/dts-v1/;
 +
-+#include "sun20i-d1s.dtsi"
++#include "sun20i-d1.dtsi"
 +#include "sun20i-common-regulators.dtsi"
 +
 +/ {
-+	model = "MangoPi MQ";
-+	compatible = "widora,mangopi-mq", "allwinner,sun20i-d1s";
++	model = "Allwinner D1 Nezha";
++	compatible = "allwinner,d1-nezha", "allwinner,sun20i-d1";
 +
 +	aliases {
-+		ethernet0 = &rtl8189ftv;
-+		serial3 = &uart3;
++		ethernet0 = &emac;
++		ethernet1 = &xr829;
++		serial0 = &uart0;
 +	};
 +
 +	chosen {
-+		stdout-path = "serial3:115200n8";
++		stdout-path = "serial0:115200n8";
 +	};
 +
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			color = <LED_COLOR_ID_BLUE>;
-+			function = LED_FUNCTION_STATUS;
-+			gpios = <&pio 3 22 GPIO_ACTIVE_LOW>; /* PD22 */
-+		};
-+	};
-+
-+	reg_avdd2v8: avdd2v8 {
++	reg_usbvbus: usbvbus {
 +		compatible = "regulator-fixed";
-+		regulator-name = "avdd2v8";
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <2800000>;
-+		vin-supply = <&reg_vcc_3v3>;
++		regulator-name = "usbvbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		gpio = <&pio 3 19 GPIO_ACTIVE_HIGH>; /* PD19 */
++		enable-active-high;
++		vin-supply = <&reg_vcc>;
 +	};
 +
-+	reg_dvdd: dvdd {
++	/*
++	 * This regulator is PWM-controlled, but the PWM controller is not
++	 * yet supported, so fix the regulator to its default voltage.
++	 */
++	reg_vdd_cpu: vdd-cpu {
 +		compatible = "regulator-fixed";
-+		regulator-name = "dvdd";
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+		vin-supply = <&reg_vcc_3v3>;
-+	};
-+
-+	reg_vcc_core: vcc-core {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc-core";
-+		regulator-min-microvolt = <900000>;
-+		regulator-max-microvolt = <900000>;
++		regulator-name = "vdd-cpu";
++		regulator-min-microvolt = <1100000>;
++		regulator-max-microvolt = <1100000>;
 +		vin-supply = <&reg_vcc>;
 +	};
 +
@@ -262,20 +194,57 @@ index 000000000000..e6d924f671fd
 +};
 +
 +&cpu0 {
-+	cpu-supply = <&reg_vcc_core>;
++	cpu-supply = <&reg_vdd_cpu>;
 +};
 +
 +&dcxo {
 +	clock-frequency = <24000000>;
 +};
 +
++&ehci0 {
++	status = "okay";
++};
++
 +&ehci1 {
 +	status = "okay";
 +};
 +
++&emac {
++	pinctrl-0 = <&rgmii_pe_pins>;
++	pinctrl-names = "default";
++	phy-handle = <&ext_rgmii_phy>;
++	phy-mode = "rgmii-id";
++	phy-supply = <&reg_vcc_3v3>;
++	status = "okay";
++};
++
++&i2c2 {
++	pinctrl-0 = <&i2c2_pb0_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++
++	pcf8574a: gpio@38 {
++		compatible = "nxp,pcf8574a";
++		reg = <0x38>;
++		interrupt-parent = <&pio>;
++		interrupts = <1 2 IRQ_TYPE_LEVEL_LOW>; /* PB2 */
++		interrupt-controller;
++		gpio-controller;
++		#gpio-cells = <2>;
++		#interrupt-cells = <2>;
++	};
++};
++
++&mdio {
++	ext_rgmii_phy: ethernet-phy@1 {
++		compatible = "ethernet-phy-ieee802.3-c22";
++		reg = <1>;
++	};
++};
++
 +&mmc0 {
 +	bus-width = <4>;
-+	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>; /* PF6 */
++	cd-gpios = <&pio 5 6 GPIO_ACTIVE_HIGH>; /* PF6 */
 +	disable-wp;
 +	vmmc-supply = <&reg_vcc_3v3>;
 +	vqmmc-supply = <&reg_vcc_3v3>;
@@ -294,7 +263,7 @@ index 000000000000..e6d924f671fd
 +	pinctrl-names = "default";
 +	status = "okay";
 +
-+	rtl8189ftv: wifi@1 {
++	xr829: wifi@1 {
 +		reg = <1>;
 +		interrupt-parent = <&pio>;
 +		interrupts = <6 10 IRQ_TYPE_LEVEL_LOW>; /* PG10 */
@@ -302,26 +271,38 @@ index 000000000000..e6d924f671fd
 +	};
 +};
 +
++&ohci0 {
++	status = "okay";
++};
++
 +&ohci1 {
 +	status = "okay";
 +};
 +
-+&pio {
-+	vcc-pe-supply = <&reg_avdd2v8>;
-+};
-+
-+&uart3 {
-+	pinctrl-0 = <&uart3_pb_pins>;
++&uart0 {
++	pinctrl-0 = <&uart0_pb8_pins>;
 +	pinctrl-names = "default";
 +	status = "okay";
 +};
 +
++&uart1 {
++	uart-has-rtscts;
++	pinctrl-0 = <&uart1_pg6_pins>, <&uart1_pg8_rts_cts_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++
++	/* XR829 bluetooth is connected here */
++};
++
 +&usb_otg {
-+	dr_mode = "peripheral";
++	dr_mode = "otg";
 +	status = "okay";
 +};
 +
 +&usbphy {
++	usb0_id_det-gpios = <&pio 3 21 GPIO_ACTIVE_HIGH>; /* PD21 */
++	usb0_vbus_det-gpios = <&pio 3 20 GPIO_ACTIVE_HIGH>; /* PD20 */
++	usb0_vbus-supply = <&reg_usbvbus>;
 +	usb1_vbus-supply = <&reg_vcc>;
 +	status = "okay";
 +};
