@@ -2,80 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7AA467C524
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B9467C529
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236166AbjAZHsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 02:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
+        id S235582AbjAZHyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 02:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235269AbjAZHsg (ORCPT
+        with ESMTP id S229736AbjAZHyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 02:48:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533F84B1B4;
-        Wed, 25 Jan 2023 23:48:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EED59B81D0C;
-        Thu, 26 Jan 2023 07:48:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21FAEC433EF;
-        Thu, 26 Jan 2023 07:48:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674719312;
-        bh=76XT9aCTD8B8LT/q4agWyU0rMRgv/FmnnUUpPtrX7Go=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sw/vGS+2pAXtLvctCylbRvR+u/imgaZoMtOLeimjFEQNJNjGptMd1vAbA/RlBD7Ki
-         mG0YkGFe3I91Z+mzXfv3Qv0/i2eP19WhP96lYluQ2vPBclUfvgM0UTbmKbwtuiht5+
-         ebwhII+jfGloNGj5Q0x3TfIMFXgDVOqMUbBt7Z8I=
-Date:   Thu, 26 Jan 2023 08:48:29 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Thinh.Nguyen@synopsys.com,
-        broonie@kernel.org, bgoswami@quicinc.com, tiwai@suse.com,
-        robh+dt@kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFC PATCH v2 02/22] xhci: remove xhci_test_trb_in_td_math early
- development check
-Message-ID: <Y9IwTTb7dfkI7C6b@kroah.com>
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-3-quic_wcheng@quicinc.com>
+        Thu, 26 Jan 2023 02:54:01 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC9066EC8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 23:54:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674719640; x=1706255640;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1kryI9fmp/0/7tgRDGf0+gzDLXBckxfaq5aCAfPWxFM=;
+  b=WYSrWSRGWpzcPQddIkKJF2BvO06+SI4Xr7fPy4pApt9Z2wWoudBgBUI9
+   oNW3NUqlmIYfPo0YKQfUZM5uBtX9VYmD6R3TGVboRubHyBYO2gtdysmtS
+   HwQ4t0Ty9wj1W0J1FW0VPEnJwwsF/sN21RZsWEPHoT2JwWGjo+jiJBcxk
+   bm51FLy+LpQxDMT7Zjg3CqplHISihNHFs3lL00aMpLRPs0MwcHpCTcOEs
+   tdho4b2d5jxkKRRVN947NH63o02KdXe3mQv+g+EYzdcLh/6eamvgU5w0n
+   5kHo/eHB4lvsYl/ul5NZvqp1nv9e0wtL9BOQvf5uN6eUOPQZxb/AMpEw4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="325430951"
+X-IronPort-AV: E=Sophos;i="5.97,247,1669104000"; 
+   d="scan'208";a="325430951"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 23:54:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="805294069"
+X-IronPort-AV: E=Sophos;i="5.97,247,1669104000"; 
+   d="scan'208";a="805294069"
+Received: from mericx-mobl.ger.corp.intel.com (HELO [10.252.29.93]) ([10.252.29.93])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 23:53:56 -0800
+Message-ID: <6f0301dd-ce1f-084a-f29b-27bf897804de@linux.intel.com>
+Date:   Thu, 26 Jan 2023 09:54:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126031424.14582-3-quic_wcheng@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+Subject: Re: [PATCH v2 3/5] ASoC: amd: acp: Refactor i2s clocks programming
+ sequence
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
+        broonie@kernel.org, alsa-devel@alsa-project.org
+Cc:     Sunil-kumar.Dommati@amd.com, ssabakar@amd.com,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Vijendar.Mukunda@amd.com,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+References: <20230109132104.1259479-1-venkataprasad.potturu@amd.com>
+ <20230109132104.1259479-4-venkataprasad.potturu@amd.com>
+ <92052eef-3c61-7f3e-75c1-09b76cd38e24@linux.intel.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
+In-Reply-To: <92052eef-3c61-7f3e-75c1-09b76cd38e24@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 07:14:04PM -0800, Wesley Cheng wrote:
-> From: Mathias Nyman <mathias.nyman@linux.intel.com>
-> 
-> Time to remove this test trb in td math check that was added
-> in early stage of xhci driver deveopment.
-> 
-> It verified that the size, alignment and boundaries of the event and
-> command rings the driver itself allocated are correct.
-> 
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> ---
 
-Note, if you pass on a patch from someone else, you HAVE to also
-sign-off on it as well.  For that reason alone this series would have to
-be rejected :(
 
-thanks,
+On 25/01/2023 19:15, Pierre-Louis Bossart wrote:
+> This patch adds new Sparse warnings [1]:
+> 
+> sound/soc/amd/acp/acp-mach-common.c:189:35: error: restricted
+> snd_pcm_format_t degrades to integer
+> sound/soc/amd/acp/acp-mach-common.c:333:35: error: restricted
+> snd_pcm_format_t degrades to integer
+> sound/soc/amd/acp/acp-mach-common.c:478:35: error: restricted
+> snd_pcm_format_t degrades to integer
+> sound/soc/amd/acp/acp-mach-common.c:619:35: error: restricted
+> snd_pcm_format_t degrades to integer
+> 
+>> @@ -193,7 +163,11 @@ static int acp_card_rt5682_hw_params(struct snd_pcm_substream *substream,
+>>  	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
+>>  	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
+>>  	int ret;
+>> -	unsigned int fmt;
+>> +	unsigned int fmt, srate, ch, format;
+>> +
+>> +	srate = params_rate(params);
+>> +	ch = params_channels(params);
+>> +	format = 8 * params_format(params);
+> 
+> This last line looks suspicious, no? format-to-physical-size conversions
+> should be using existing macros.
 
-greg k-h
+not only that, but the "8 * params_format(params)" is certainly not
+correct for the purpose.
+
+params_format() returns SNDRV_PCM_FORMAT_*, which is basically an enum:
+SNDRV_PCM_FORMAT_S8		0
+SNDRV_PCM_FORMAT_S16_LE		2
+SNDRV_PCM_FORMAT_S24_LE		6
+SNDRV_PCM_FORMAT_S24_3LE	32
+SNDRV_PCM_FORMAT_S32_LE		10
+
+include/uapi/sound/asound.h
+
+> Should it be
+> 
+> format = params_physical_width(params);
+
+I believe this was the intention.
+
+> 
+> ?
+> 
+> 
+>> +	/* Set tdm/i2s1 master bclk ratio */
+>> +	ret = snd_soc_dai_set_bclk_ratio(codec_dai, ch * format);
+>> +	if (ret < 0) {
+>> +		dev_err(rtd->dev, "Failed to set rt5682 tdm bclk ratio: %d\n", ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	if (!drvdata->soc_mclk) {
+>> +		ret = acp_clk_enable(drvdata, srate, ch * format);
+>> +		if (ret < 0) {
+>> +			dev_err(rtd->card->dev, "Failed to enable HS clk: %d\n", ret);
+>> +			return ret;
+>> +		}
+> 
+> [1]
+> https://github.com/thesofproject/linux/actions/runs/4005001249/jobs/6874834205
+
+-- 
+Péter
