@@ -2,131 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE81567D376
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C75567D37E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbjAZRpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 12:45:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S231756AbjAZRsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 12:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjAZRpw (ORCPT
+        with ESMTP id S229567AbjAZRsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:45:52 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B46318B0B;
-        Thu, 26 Jan 2023 09:45:51 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id z2so500059ilq.2;
-        Thu, 26 Jan 2023 09:45:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T04Lwt/osJ3z9x91/GQOsUFFhCST0Wo0GTgNZCVXnH0=;
-        b=De6qwAn5MQi8akTue0jKjOs7ZgOKo3hL7mvKewl9zt5UCTKrazNkIcEVM+vQ3KL+2G
-         nQtql5bCwKdFlZepauedfaGfmPOAtgEIQReZN6ZJyCLWzy2h6SPHY3SPNO7XwULp5lwn
-         qfvTlyAFyGp9ElWok5cJs1/ny3Tign6sNSyNzZuljNxbSL8+nstpkiOVbUehz8UUESfB
-         nl77FcB6lMQL9zZvPvCpl4LFBD9Avur9djCkttQeaqcfY3g/cNTfuDptf8gSIa6wQVFI
-         nBggE9DJ1lgnEuymrsVqUYHMhWjbVY79Bs3ExxhjQN6HJW7kBFoHA9sajY9jxry6m6RK
-         4lGA==
+        Thu, 26 Jan 2023 12:48:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398CD227BC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:47:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674755273;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nr3flWHXbUAsZEmbiKK8RDAuSq8Y/JdJBz6u6YpVkyg=;
+        b=G8gNUsX1UZP6au9rd/8BESzgIL6E2NRV5ilMc/7Bf2e6o8ID0eDXymhbiNOnOVFICFfQZX
+        YpdOqYUbhhYnciOMTRN/ni+mICNlpVjN7UZYxtvWP0PBFwE33Re+V0+UmlfTmOlbmgAzNv
+        MrJqrYx2HyQE21oYZpVgs0hM7ylOrJA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-605-2vjqKZhsPvqei3ogoz5R5g-1; Thu, 26 Jan 2023 12:47:52 -0500
+X-MC-Unique: 2vjqKZhsPvqei3ogoz5R5g-1
+Received: by mail-ed1-f70.google.com with SMTP id f11-20020a056402354b00b0049e18f0076dso1867937edd.15
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:47:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T04Lwt/osJ3z9x91/GQOsUFFhCST0Wo0GTgNZCVXnH0=;
-        b=zo68qMV4ml+4SVNnGaTOFI2ZIkwFQP3QPpjbrgwg7bgu3IIMsw7ot5Tjb/k0oDRLXZ
-         Iz22cEfyVO4j9vCAcHPgSRvqZdmYHOKoeZwt1RuZ1sefM8cjvvzx+W4PuFUtVAYHmS0/
-         t3sZrSlKQgO1iK2ZvN/9YJ5tCncEMotOZc7Ec8OuixelADQXVyxWMt/Lf5II+1gYboYy
-         kGZcOZ/sJMOrhOgPUCdW4WREHX/q01BS6141EFwCDEN6gKFiOZ/7RGTnpL9XwxlM1BBj
-         4nt0yDy+WPdOZjzfhNLzQoRgtodekPuzWxDzFYpwZlc9gqnml4GXkwwJl8BWF5ezgjap
-         mFMw==
-X-Gm-Message-State: AFqh2kqKBHnv8vpp0cfW5RmC0ym6K52cZvvFwUNWQV6muFpVRgWyQlQs
-        ys0f68MpxtwEVBu2x25OgQ1B3vdaZ7S8eD1wZ+A=
-X-Google-Smtp-Source: AMrXdXvdEk+Fe1q+esJXTIVOij0pu05ZSglHaVIW6Er7Va3Sc3FL8hEN1czKSfxDdhISkgN0NBd4JbUDMDzmTByCSzY=
-X-Received: by 2002:a92:6a05:0:b0:30d:ba97:90e2 with SMTP id
- f5-20020a926a05000000b0030dba9790e2mr4314331ilc.38.1674755150671; Thu, 26 Jan
- 2023 09:45:50 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nr3flWHXbUAsZEmbiKK8RDAuSq8Y/JdJBz6u6YpVkyg=;
+        b=IXqIab7lBF81k0Tai6xJ2Wr3ITfRLQSH/AwNfWx5yWdRj/pSWAZ9/9eci4y/7vwi/c
+         XOdqnQVl6YcQxyRDkNqUX9uR2lxV69LvmZxzoXCSNixwzHTrGvbTqiuufFBtNwur3g4T
+         jZPudhbTOSIfmb6EDfo1looR0e+jPKMsVuAnvsV2MsDQaWiD2/3Ak3VfHQNvNmmX5OL5
+         PqXqT0zcdVNxJANWOoPsbcybXAhhvfmMFGrR5IglCtKTZJ8blyRjuMGSj4ftfS1SpDWm
+         kHGeOEFvr+JbBR2LbWyQPpHtWkqeoHi3darZBKjhnko0qBlZpxb3gvmYf9QPR43ilsrO
+         nYBw==
+X-Gm-Message-State: AFqh2kq8StBzkWxr6Fp23GAwmYV8dQeqQVjceoiv7OGaCndZ2DOOxlJa
+        0hzL31Wp0ST1kNTw6MPV01Ch2EC6naKW3lL84TzVmeL3pe6F0+45QnenXWq7UCRpC/Z+nWhK25u
+        BcHAF9UuJyKCGZ9w/vBgNeWoZ
+X-Received: by 2002:a17:907:8c14:b0:84c:e9c4:5751 with SMTP id ta20-20020a1709078c1400b0084ce9c45751mr40100920ejc.74.1674755271031;
+        Thu, 26 Jan 2023 09:47:51 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsWPUbMj5DHa+3wZZhr6rEgHS9w6VlREbdPPjsEZW7Qt+zJC0DfHkxXTvhooqeznJf3adRxwQ==
+X-Received: by 2002:a17:907:8c14:b0:84c:e9c4:5751 with SMTP id ta20-20020a1709078c1400b0084ce9c45751mr40100911ejc.74.1674755270816;
+        Thu, 26 Jan 2023 09:47:50 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id f17-20020a1709064dd100b0087853fbb55dsm892986ejw.40.2023.01.26.09.47.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 09:47:50 -0800 (PST)
+Message-ID: <b3820c5c-370b-44f1-7dac-544e504bc61a@redhat.com>
+Date:   Thu, 26 Jan 2023 18:47:49 +0100
 MIME-Version: 1.0
-References: <20230125025126.787431-1-gregory.price@memverge.com>
- <20230125025126.787431-2-gregory.price@memverge.com> <20230126003008.GA31684@redhat.com>
- <CANaxB-xn0wW5xA_CT7bA5=jig+td__EDKPBWSpZdfgMgVOezCg@mail.gmail.com> <20230126150725.GB4069@redhat.com>
-In-Reply-To: <20230126150725.GB4069@redhat.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Thu, 26 Jan 2023 09:45:39 -0800
-Message-ID: <CANaxB-woave9F479O75P9PC+nFO3DVmbeFA1rXf2c=bhRmWoiQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] ptrace,syscall_user_dispatch: Implement Syscall
- User Dispatch Suspension
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Gregory Price <gourry.memverge@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Gregory Price <gregory.price@memverge.com>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2] KVM: x86: Do not return host topology information from
+ KVM_GET_SUPPORTED_CPUID
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, stable@vger.kernel.org
+References: <20221027092036.2698180-1-pbonzini@redhat.com>
+ <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
+ <3a23db58-3ae1-7457-ed09-bc2e3f6e8dc9@redhat.com>
+ <CALMp9eQ3wZ4dkq_8ErcUdQAs2F96Gvr-g=7-iBteJeuN5aX00A@mail.gmail.com>
+ <8bdf22c8-9ef1-e526-df36-9073a150669d@redhat.com>
+ <CALMp9eRKp_4j_Q0j1HYP2itT2+z3pRotQK8LwScMsaGF5FpARA@mail.gmail.com>
+ <dec8c012-885a-6ed8-534e-4a5f0a435025@redhat.com>
+ <CALMp9eSyVWGS2HQVwwwViE6S_uweiOiFucqa3keuoUjNz9rKqA@mail.gmail.com>
+ <f322cce0-f83a-16d9-9738-f47f265b41d8@redhat.com>
+ <CALMp9eTpbwQP3QsqpOBsDb0soLpsv9FZA=ivZUmf2GJgBxhfmw@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CALMp9eTpbwQP3QsqpOBsDb0soLpsv9FZA=ivZUmf2GJgBxhfmw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 7:07 AM Oleg Nesterov <oleg@redhat.com> wrote:
->
-> On 01/25, Andrei Vagin wrote:
-> >
-> > On Wed, Jan 25, 2023 at 4:30 PM Oleg Nesterov <oleg@redhat.com> wrote:
-> > >
-> > > On 01/24, Gregory Price wrote:
-> > > >
-> > > > Adds PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH to ptrace options, and
-> > > > modify Syscall User Dispatch to suspend interception when enabled.
-> > > >
-> > > > This is modeled after the SUSPEND_SECCOMP feature, which suspends
-> > > > SECCOMP interposition.  Without doing this, software like CRIU will
-> > > > inject system calls into a process and be intercepted by Syscall
-> > > > User Dispatch, either causing a crash (due to blocked signals) or
-> > > > the delivery of those signals to a ptracer (not the intended behavior).
-> > >
-> > > Cough... Gregory, I am sorry ;)
-> > >
-> > > but can't we drop this patch to ?
-> > >
-> > > CRIU needs to do PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG and check
-> > > config->mode anyway as we discussed.
-> > >
-> > > Then it can simply set *config->selector = SYSCALL_DISPATCH_FILTER_ALLOW
-> > > with the same effect, no?
-> >
-> > Oleg,
-> >
-> > PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH is automatically cleared when
-> > a tracer detaches. It is critical when tracers detach due to unexpected
-> > reasons
->
-> IIUC, PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH is needed to run the injected
-> code, and this also needs to change the state of the traced process. If
-> the tracer (CRIU) dies while the tracee runs this code, I guess the tracee
-> will have other problems?
+On 1/26/23 17:06, Jim Mattson wrote:
+>>> Sadly, there isn't a single kernel involved. People running our VMM on
+>>> their desktops are going to be impacted as soon as this patch hits
+>>> that distro. (I don't know if I can say which distro that is.) So, now
+>>> we have to get the VMM folks to urgently accommodate this change and
+>>> get a new distribution out.
+>>
+>> Ok, this is what is needed to make a more informed choice.  To be clear,
+>> this is _still_ not public (for example it's not ChromeOS), so there is
+>> at least some control on what version of the VMM they use?  Would it
+>> make sense to buy you a few months by deferring this patch to Linux 6.3-6.5?
+> 
+> Mainline isn't a problem. I'm more worried about 5.19 LTS.
 
-Our injected code can reheal itself if something goes wrong. The hack
-here is that we inject
-the code with a signal frame and it calls rt_segreturn to resume the process.
+5.19 is not LTS, is it?  This patch is only in 6.1.7 and 6.1.8 as far as 
+stable kernels is concerned, should I ask Greg to revert it there?
 
-We want to have this functionality for most cases. I don't expect that
-the syscall user dispatch
-is used by many applications, so I don't strongly insist on
-PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH. In addition, if we know a user dispatch
-memory region, it can be enough to inject our code out of this region
-without disabling SUD.
+Paolo
 
-Thanks,
-Andrei
