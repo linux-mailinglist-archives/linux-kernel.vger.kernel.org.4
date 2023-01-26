@@ -2,129 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FE367D08D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABF367D161
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbjAZPpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S232758AbjAZQ0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbjAZPpF (ORCPT
+        with ESMTP id S232723AbjAZQZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:45:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B044D1726
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:44:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674747853;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1rr0bJKYD7HW0bq2QjmRCIf4xDMJorjCKl6OiT/Ad0U=;
-        b=R5LjEabM67DUeYBa/dbGzbgDBmrgF3ArCH6Fh12ir7f8yoLPhJALwOHVFqcJqtIJ18q/hR
-        W7kObmMFF/vR6k0c3vJ30Gy2QXcOHPBreAbWafEM1Jd89rIhjr7Y0n9nVyuoGpaSX4uqxi
-        Do0oA+5WbiIpJIQUpFjmLvMUjEMXpAc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-435-1URoSKkwPB2aeBwaq-7GZg-1; Thu, 26 Jan 2023 10:44:08 -0500
-X-MC-Unique: 1URoSKkwPB2aeBwaq-7GZg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3B57C855711;
-        Thu, 26 Jan 2023 15:44:04 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6F54A2026E04;
-        Thu, 26 Jan 2023 15:44:02 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <0d53a3cc9f9448298bba04d06f51b23d@AcuMS.aculab.com>
-References: <0d53a3cc9f9448298bba04d06f51b23d@AcuMS.aculab.com> <20230125214543.2337639-1-dhowells@redhat.com> <20230125214543.2337639-9-dhowells@redhat.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     dhowells@redhat.com, Steve French <smfrench@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        "Tom Talpey" <tom@talpey.com>, Stefan Metzmacher <metze@samba.org>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Jeff Layton" <jlayton@kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Steve French <sfrench@samba.org>
-Subject: Re: [RFC 08/13] cifs: Add a function to read into an iter from a socket
+        Thu, 26 Jan 2023 11:25:54 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2273A485B2;
+        Thu, 26 Jan 2023 08:25:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674750310; x=1706286310;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7tKbBPC9aDVVfGKolDI9/dBbPmFzcQG7teudBkR6D2c=;
+  b=ZP0wB5j1ha2Ec0vTdj9teVwj3qnxnZZ/DLfGraTt9gSUqiGphcigBZcB
+   ysmAH7PiM0gPflfzVnti+4ccpvB8QGro4tJIH/dimG+yHZ59qPHXyM5VT
+   SYiVzb0n6XUgsMuNwRezzpzB51hshFyYbnrTqh16fc+l5ma9CjwbvLzVi
+   P4cuCrXJwmnYTqXvE1O2JModJZieY2SvQKVhYe5c5J9zqB9I3RPsaMMot
+   PORGywFOfec6R79MFcjNB9kjFSEUevmVNmwohVeRouuLRNtRN5dSb3OTw
+   WWH9oxnTOzIJIZ+feTyDo0IL35RALkHRPRNRND2crBmD1GSdek8YNtpEf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="354154632"
+X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
+   d="scan'208";a="354154632"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="612855059"
+X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
+   d="scan'208";a="612855059"
+Received: from nmani1-mobl2.amr.corp.intel.com (HELO [10.209.167.178]) ([10.209.167.178])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:34 -0800
+Message-ID: <7f471960-0909-4680-e192-261d1fdfe6d7@linux.intel.com>
+Date:   Thu, 26 Jan 2023 09:44:23 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2862712.1674747841.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 26 Jan 2023 15:44:01 +0000
-Message-ID: <2862713.1674747841@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [RFC PATCH v2 11/22] ASoC: qcom: Add USB backend ASoC driver for
+ Q6
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-12-quic_wcheng@quicinc.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230126031424.14582-12-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Laight <David.Laight@ACULAB.COM> wrote:
 
-> On the face of it that passes a largely uninitialised 'struct msghdr'
-> to cifs_readv_from_socket() in order to pass an iov_iter.
-> That seems to be asking for trouble.
-> =
 
-> If cifs_readv_from_socket() only needs the iov_iter then wouldn't
-> it be better to do the wrapper the other way around?
-> (Probably as an inline function)
-> Something like:
-> =
+On 1/25/23 21:14, Wesley Cheng wrote:
+> Create a USB BE component that will register a new USB port to the ASoC USB
+> framework.  This will handle determination on if the requested audio
+> profile is supported by the USB device currently selected.
 
-> int
-> cifs_readv_from_socket(struct TCP_Server_Info *server, struct msghdr *sm=
-b_msg)
-> {
-> 	return cifs_read_iter_from_socket(server, &smb_msg->msg_iter, smb_msg->=
-msg_iter.count);
-> }
-> =
+Can you clarify how? because ...
 
-> and then changing cifs_readv_from_socket() to just use the iov_iter.
 
-Yeah.  And smbd_recv() only cares about the iterator too.
+> +static struct snd_soc_dai_driver q6usb_be_dais[] = {
+> +	{
+> +		.playback = {
+> +			.stream_name = "USB BE RX",
+> +			.rates = SNDRV_PCM_RATE_8000 | SNDRV_PCM_RATE_11025 |
+> +				SNDRV_PCM_RATE_16000 | SNDRV_PCM_RATE_22050 |
+> +				SNDRV_PCM_RATE_32000 | SNDRV_PCM_RATE_44100 |
+> +				SNDRV_PCM_RATE_48000 | SNDRV_PCM_RATE_96000 |
+> +				SNDRV_PCM_RATE_192000,
+> +			.formats = SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S16_BE |
+> +				SNDRV_PCM_FMTBIT_U16_LE | SNDRV_PCM_FMTBIT_U16_BE |
+> +				SNDRV_PCM_FMTBIT_S24_LE | SNDRV_PCM_FMTBIT_S24_BE |
+> +				SNDRV_PCM_FMTBIT_U24_LE | SNDRV_PCM_FMTBIT_U24_BE,
+> +			.channels_min = 1,
+> +			.channels_max = 2,
+> +			.rate_max =     192000,
+> +			.rate_min =	8000,
+> +		},
+> +		.id = USB_RX,
+> +		.name = "USB_RX_BE",
+> +		.ops = &q6usb_ops,
+> +	},
+> +};
 
-> I'm also not 100% sure that taking a copy of an iov_iter is a good idea.
+... here I see a single DAI, so presumably ONE endpoint can be supported?
 
-It shouldn't matter as the only problematic iterator is ITER_PIPE (advanci=
-ng
-that has side effects) - and splice_read is handled specially by patch 4. =
- The
-problem with splice_read with the way cifs works is that it likes to subdi=
-vide
-its read/write requests across multiple reqs and then subsubdivide them if
-certain types of failure occur.  But you can't do that with ITER_PIPE.
-
-I build an ITER_BVEC from ITER_PIPE, ITER_UBUF and ITER_IOVEC in the top
-levels with pins inserted as appropriate and hand the ITER_BVEC down.  For
-user-backed iterators it has to be done this way because the I/O may get
-shuffled off to a different thread.
-
-Reqs can then just copy the BVEC/XARRAY/KVEC and narrow the region because=
- the
-master request at the top does holds the vector list and the top cifs leve=
-l or
-the caller above the vfs (eg. sys_execve) does what is necessary to retain=
- the
-pages.
-
-David
+I didn't see in the rest of the code how a card with multiple endpoint
+would be rejected, nor how the capabilities are checked?
 
