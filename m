@@ -2,63 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD2667D3FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 945F067D3FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjAZSUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:20:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
+        id S231521AbjAZSUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:20:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjAZST6 (ORCPT
+        with ESMTP id S230414AbjAZSUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:19:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABA96537D;
-        Thu, 26 Jan 2023 10:19:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 26 Jan 2023 13:20:30 -0500
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B855EF9C;
+        Thu, 26 Jan 2023 10:20:29 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD4086192B;
-        Thu, 26 Jan 2023 18:19:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1940C433EF;
-        Thu, 26 Jan 2023 18:19:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674757196;
-        bh=Yhgs9+A5wKBzRaMRYNnqazTkLbHVQaZOCExLNcxL1Z8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=giu8wG7//Z59qJSKD1YBAEv0EXlZAK8nbm7JsHXvc72vFpdQKFS7VDbMFPSPxx7gq
-         fOteqb4ZulxWqI/5XGZVM3TTizIKH1IeU5pghMxWrp515nS9SZKzAnLoICv5aO9YfU
-         CnUakiJS+SgwLhg+M8k/o3CLx64HVURBiN2wsgROAajf0YIJr9uBuaOz20SkChcof3
-         +mxOSJ1v2bqPTeASWO0Fx2sRomrTNhrQKhM15SqVppJLGNcZegxCBgvlnJanY1PzFj
-         nJN9f16KTBhcA8AfAB+JlPPVOxzfotpx+rNj9Uh3aAvw9tb4hI3dQzr+QjVcX3Bcw5
-         /24S6rj1GgYXw==
-Date:   Thu, 26 Jan 2023 12:19:54 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        by ms.lwn.net (Postfix) with ESMTPSA id 748B22D3;
+        Thu, 26 Jan 2023 18:20:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 748B22D3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1674757229; bh=9h5c/Wc/TnQKi8hrEAkk6qxaNidEx19xoyRt26ZvJQQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=TqTY6znsRo+VoXIJG+5iKdD/+S4ir0PYxv+9iwcakv92fm3PV34aPIRNPKNMDD7An
+         KTjC5siMllNZ45tAMThh9FaYw80MRY8DmneyMvQJXXS/RKKEh5LsX/74mZsIgxdOq2
+         YCHAGEH4nKawqTLz1Sgm5m9vayCq/JMV0EthRD2eqakYhsQg3VQNFT5qvCzszdegMn
+         CGBBnXQ8CtSxDXcGQlS8kX7/iNH5Hhz3+G5TGbL1x/G1QZOF3TtnkaQmZezQUFO/U4
+         jb7FxC5UiykidLXKSDGB2C+LddH9qhzeBD9/1dKneJutaTXxlSWdGwPHGqRPH9hv8/
+         s9arfc5auaRkw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 24/27] dmaengine: dw-edma: Relax driver config settings
-Message-ID: <20230126181954.GA1290077@bhelgaas>
+Subject: Re: [PATCH] docs: leds: fix the following docu build warning
+In-Reply-To: <20230125154426.12464-1-skhan@linuxfoundation.org>
+References: <20230125154426.12464-1-skhan@linuxfoundation.org>
+Date:   Thu, 26 Jan 2023 11:20:28 -0700
+Message-ID: <87mt659mz7.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126163750.ae6z3pkyd3o32byn@mobilestation>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,38 +50,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 07:37:50PM +0300, Serge Semin wrote:
-> On Wed, Jan 25, 2023 at 05:23:57PM -0600, Bjorn Helgaas wrote:
+Shuah Khan <skhan@linuxfoundation.org> writes:
 
-> > It's a pretty trivial update, so I just did it myself.  The result is
-> > at https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=pci/ctrl/dwc&id=ecadcaed4ef7
-> > 
-> > I split this patch and tweaked some commit messages for consistency
-> > (including the "DW eDMA PCIe driver" change above).  "git diff -b"
-> > with Lorenzo's current branch (95624672bb3e ("PCI: dwc: Add DW eDMA
-> > engine support")) is empty except for a minor comment change.  
-> 
-> Great! Thanks. Although I've already created v10 beforehand but didn't
-> submitted it yet waiting for your response. The split up patches look
-> exactly like yours.
-> 
-> In addition to that since I was going to re-send v10 I also took into
-> account your comments regarding the patch:
-> [PATCH v9 19/27] dmaengine: dw-edma: Use non-atomic io-64 methods
-> Link: https://lore.kernel.org/linux-pci/20230113171409.30470-20-Sergey.Semin@baikalelectronics.ru/
-> I've dropped unneeded modification and unpinned another fixes patch
-> which turned out to be a part of those modifications. So if you
-> re-based your pci/ctrl/dwc branch with that patch replaced with the
-> patches attached to this email it would have been great. Otherwise
-> it's ok to merge the series as is.
-> 
-> Note in the attached "non-atomic io-64" patch I've already replaced
-> the commit log with the your short version.
+> Add leds-qcom-lpg to Documentation/leds/index.rst to fix the following
+> doc build warning.
+>
+> Documentation/leds/leds-qcom-lpg.rst: WARNING: document isn't included in any toctree
+>
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+>  Documentation/leds/index.rst | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/leds/index.rst b/Documentation/leds/index.rst
+> index e5d63b940045..b9ca081fac71 100644
+> --- a/Documentation/leds/index.rst
+> +++ b/Documentation/leds/index.rst
+> @@ -26,3 +26,4 @@ LEDs
+>     leds-lp55xx
+>     leds-mlxcpld
+>     leds-sc27xx
+> +   leds-qcom-lpg
+> -- 
 
-Awesome, thanks!  I folded those updates in and updated my branch.
+I've been meaning to fix this annoying warning for a long time, but
+never got around to it.  Applied, thanks!
 
-And merged the whole thing into the PCI "next" branch.
-
-Thanks for all your work!
-
-Bjorn
+jon
