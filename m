@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E1C67CE2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EA067CE31
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbjAZOcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
+        id S230001AbjAZOdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbjAZOct (ORCPT
+        with ESMTP id S232228AbjAZOdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:32:49 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5830E3C2D;
-        Thu, 26 Jan 2023 06:32:46 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id me3so5516246ejb.7;
-        Thu, 26 Jan 2023 06:32:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y2O8IXbwntgqpzPKwbw1Aev8+c15Xxh/E8XGeMKjxfY=;
-        b=UoxSsfQ+4YXUyobuuxig3tHEsdLwYpWmEB8Na6HmP/suhG/NdYOfQA3lPi1jcVDGw+
-         8B5UPANUwhsgob+lC5b5tqYaI3XZcNIaS4GntFHiJcLNpNf07U0wDKBtAoeOtAl7G0qr
-         nEhtMO4rmFrW524FR5F1jB2tEYN2fGHrZ6am+pJjcm+fWYqT1oUDoNgnooLnU2Xt/H8L
-         pvG9JexWtfstPuordvp/Ii1x74L4b37K87LWBi34KbGWJC4cuy85DK9fH6j7bz6BszBX
-         xXUDN13U4sObAoR21RwB7+34Sm8HNjO7EZqzlVKTr74Uj61ZwEwaY8PV8+aH7/r4T9rf
-         sbxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y2O8IXbwntgqpzPKwbw1Aev8+c15Xxh/E8XGeMKjxfY=;
-        b=DbrlzEtVvIqytNUxq2sh9ZkJWkiKvBHkjCd4W7151geav7dCtafyr4vQGH9tQVb80y
-         KdSZ57iXemaKq6JNS8/I8eRa4TabqnzdUtOpZyzROnSdR6QSXeX4Um9mGwcLByWAw/uL
-         +LcrLaLjcDAzLmefkFxxIg68I3m6j1pB7A2IMS17a7Nq4W+LHxBuPa3KXAkDpgtzTzil
-         kbIX+wmnEjoC3yOlLkZ0BhIRqWVN2BkU9l6CQVq35g1ZoCKfRum1fHcJGgpoxOY1lF5g
-         tSXUxt1bcdS0fKQeirl4M7VSMfqLd5IkcdiPUlsRf4bk793y+V5Ypk+MgubznB1VnNE1
-         8H2w==
-X-Gm-Message-State: AFqh2koupkCZdGLo5YsXzOIw7G2neB8gmL/zUyqyGhQzEQH+zMY1Fb07
-        zBGib7KtlfLmUkN18C7Jnds=
-X-Google-Smtp-Source: AMrXdXs8jVxgA1YdKfSSwjoisrGGqkjV4MBjiUaAA+cRf3N0uInFrzD0m5uzElZJ6Ja1lQxBDEDKqw==
-X-Received: by 2002:a17:907:7da0:b0:86d:67b0:6292 with SMTP id oz32-20020a1709077da000b0086d67b06292mr53631924ejc.73.1674743564695;
-        Thu, 26 Jan 2023 06:32:44 -0800 (PST)
-Received: from [192.168.1.135] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id o25-20020a170906861900b008675df83251sm670962ejx.34.2023.01.26.06.32.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 06:32:43 -0800 (PST)
-Message-ID: <c4633d6a-9aa5-5c43-bfcb-611cd96e1c5b@gmail.com>
-Date:   Thu, 26 Jan 2023 15:32:42 +0100
+        Thu, 26 Jan 2023 09:33:11 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D358A47437;
+        Thu, 26 Jan 2023 06:33:06 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.165.226])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A80EE6602E70;
+        Thu, 26 Jan 2023 14:32:58 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674743585;
+        bh=mV9P8bJmZu6ZoVaX/AoLhr6Mb+mbynE4WbhCFBSCjyE=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=FNbePeBQeO8Fdj/wt46vQOVYphnTBs4KEpYulFjh8hvNua+sMT7opUr8ibsC+Eh93
+         0OQeEXt+yEX3c+Z0t8r2Q9gNHLjgXearU+jHnYfS3oRNcYb+N+/Em2U8UtgyPclSLE
+         vlk/ZrkmCi95r9EKBWKa3Xrw4J4Vj6ODkBva2Q5Ea+X7BNJKCyvUflEpMFUWEz203F
+         wMJuADIlJs3vX2xWykkCRgcMGahtzEAeLo/1AzxnsOogEh325x7/m4ITpd6I1Enq3j
+         QKm4ZnmMS6hH+0lSbMnk6o1qbx7GKkAKA+wqtZTXMA97N1HPH0yAiLNKZO8RyjmLD6
+         NiKy62m6D6/6g==
+Message-ID: <e14875ff-7d59-ae24-9fb0-8169c54c7a17@collabora.com>
+Date:   Thu, 26 Jan 2023 19:32:53 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v6 1/4] dt-bindings: arm: mediatek: migrate MT8195
- vppsys0/1 to mtk-mmsys driver
+ Thunderbird/102.6.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v7 3/4] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Peter Xu <peterx@redhat.com>
+References: <20230109064519.3555250-1-usama.anjum@collabora.com>
+ <20230109064519.3555250-4-usama.anjum@collabora.com> <Y8hyqhgx41/ET7bC@x1n>
+ <31b71791-66b0-c2d8-81da-e17eff5ffbe8@collabora.com> <Y9AVuF63y9UjEYcj@x1n>
 Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230118031509.29834-1-moudy.ho@mediatek.com>
- <20230118031509.29834-2-moudy.ho@mediatek.com>
- <8ae4469e-ed2c-5019-605b-013a49af77ea@gmail.com>
- <124f081819a80482b3bffd8e12d747fc.sboyd@kernel.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <124f081819a80482b3bffd8e12d747fc.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y9AVuF63y9UjEYcj@x1n>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 26/01/2023 03:05, Stephen Boyd wrote:
-> Quoting Matthias Brugger (2023-01-19 08:08:48)
->>
->>
->> On 18/01/2023 04:15, Moudy Ho wrote:
->>> MT8195 VPPSYS 0/1 should be probed from mtk-mmsys driver to
->>> populate device by platform_device_register_data then start
->>> its own clock driver.
+On 1/24/23 10:30 PM, Peter Xu wrote:
+> On Mon, Jan 23, 2023 at 05:18:13PM +0500, Muhammad Usama Anjum wrote:
+>>>> +	if (IS_GET_OP(p) && p->max_pages && (p->found_pages == p->max_pages))
+>>>> +		return -ENOSPC;
 >>>
->>> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
->>
->> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
->>
->> Stephen, if you want I can take 1/4 and 3/4 through my tree. 3/4 shouldn't be a
->> problem, not sure about this patch. In any case if you want me to do so, I'd
->> need a Acked-by from you.
+>>> This is the function to test "whether the walker should walk the vma
+>>> specified".  This check should IIUC be meaningless because found_pages
+>>> doesn't boost during vma switching, while OTOH your pmd walker fn should do
+>>> proper check when increasing found_pages and return -ENOSPC properly when
+>>> the same condition met.  That should be enough, IMHO.
+>> This check is needed in case we want to abort the walk at once. We return
+>> negative value from here which aborts the walk. Returning negative value
+>> from pmd_entry doesn't abort the walk. So this check is needed in the
+>> test_walk.
 > 
-> Do you need to take them? I'm picking up mediatek patches currently so I
-> can probably just take 1 and 3 if there isn't any build dependency.
+> Why?  What I see locally is (walk_pmd_range):
+> 
+> 		if (ops->pmd_entry)
+> 			err = ops->pmd_entry(pmd, addr, next, walk);
+> 		if (err)
+> 			break;
+Sorry, mistake on my part. I'll correct it in next version (v9).
 
-No I don't need to, no build depencies. Ok, I'll take 1 and 3 then.
+> 
+> Thanks,
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
