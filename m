@@ -2,207 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD51767C5B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA9E67C5BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjAZIYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 03:24:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S232082AbjAZIYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 03:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjAZIYF (ORCPT
+        with ESMTP id S229491AbjAZIYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 03:24:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C176C46162;
-        Thu, 26 Jan 2023 00:24:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59FA161755;
-        Thu, 26 Jan 2023 08:24:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D27F5C433D2;
-        Thu, 26 Jan 2023 08:23:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674721443;
-        bh=+MDfSw8ecbR1iO4aRZGe7ix3d1cZaEFTWeP/rWDj4g4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bxPdHcQ6wYGhz9Hsm6z7f5vj42FNvlg0OtLGUTEyfNHCdyciRjS4dOG3jvHiMFeSx
-         cvUt2BNS2E44e3b1+NlCOji+qgYTsk1F6col1shQvrPdcYVhWPY0xlDwDYyJH24NiT
-         8uwff/PvVc5sIKG3DVggN6qO7giEAPJxCclyNQbzhP/lRJlCA0iAVVGBaAdK5EqmYL
-         Wk4xBzez1fTxPNEGvxGCqLk3Epv1Xxs0bMw3DVF5BzYZDbpDYCG3/R2vSTnSl2azuq
-         X6hvhEXDfC13YO7gBZCVXj7MnWc3Xze5ZzsaWWIwMdCN3vGqJkQKqp7pa9qfx2XYLd
-         JfOeXOPVgKsKg==
-Date:   Thu, 26 Jan 2023 09:23:55 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
-        bfields@fieldses.org, fweimer@redhat.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v8 RESEND 3/8] vfs: plumb i_version handling into struct
- kstat
-Message-ID: <20230126082355.ejgunkoqr4kocz3b@wittgenstein>
-References: <20230124193025.185781-1-jlayton@kernel.org>
- <20230124193025.185781-4-jlayton@kernel.org>
- <20230125155059.u22lmktpylymmruo@wittgenstein>
- <275450f6a909a640a416860b13a35769d253ab1b.camel@kernel.org>
+        Thu, 26 Jan 2023 03:24:43 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413F547ED3;
+        Thu, 26 Jan 2023 00:24:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674721464; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=N1/PuHr01SaJ3PJW5UFbBYRdKwjmrcwjKxL1/v225ZNY2EgNh77MerlphGsETjpjVfbs1REkeg/W8kkvy7oNYgGSX0S0TX738srA+oKuVcHCZkWR0P0xW8wwFfvsFii+HvtC1x48eTM+6xDAj9+jmp4aYt1GuW1sli7E3oAZNDg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1674721464; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=fv+2HZe8J6qly+nq7TOMY/X9ADPVwEXmbRIEwbBP6uc=; 
+        b=MDfglfI3wJSPk/6cvFPOSKB+xAW7CNu8Gw9BUer+gDr6yZhv0kVNaVnpvIQezrMuAR8B33n93Vdxt9ZQmP35hiG0cj3OT1HZODM7SISUp7iUnEGOM0UjcYsTHArpMFHgGUvY8vnWcv1TDy2i/uXAOJnwYX2I8D3cwNxWn+1kPB4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674721464;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=fv+2HZe8J6qly+nq7TOMY/X9ADPVwEXmbRIEwbBP6uc=;
+        b=ffnwY1ugNXeVvpEEYqwPRjRv3I01EOPlEfI5Tw4yemPJ/3HvSHQyrhf5lgKzAKjI
+        fsZ2agOzQ39q1AQyl9lUjJ3SiMvp0cIdtFAz+++YJcnOTcC2sC61C++7DdQToV+pXGu
+        Kag6u2L8Lt2vieWgnYNvVLHEhLAQlgxEXPQrg62s=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1674721464135238.11031232741198; Thu, 26 Jan 2023 00:24:24 -0800 (PST)
+Message-ID: <9ede1ace-4d10-142b-3dc1-6bcd87d9e646@arinc9.com>
+Date:   Thu, 26 Jan 2023 11:24:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <275450f6a909a640a416860b13a35769d253ab1b.camel@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net] net: dsa: mt7530: fix tristate and help description
+Content-Language: en-US
+To:     John 'Warthog9' Hawley <warthog9@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com
+References: <20230125053653.6316-1-arinc.unal@arinc9.com>
+ <20230125224411.5a535817@kernel.org>
+ <dd21bd3d-b3bb-c90b-8950-e71f4af6b167@kernel.org>
+ <1f0e41f4-edf8-fcb5-9bb6-5b5163afa599@arinc9.com>
+ <56b25571-6083-47d6-59e9-259a36dab462@kernel.org>
+ <c4b65e0d-ce10-1fa4-d468-ba50a5441778@arinc9.com>
+ <9539b880-642d-9ac5-ccfa-2b237548f4fc@kernel.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <9539b880-642d-9ac5-ccfa-2b237548f4fc@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 01:30:07PM -0500, Jeff Layton wrote:
-> On Wed, 2023-01-25 at 16:50 +0100, Christian Brauner wrote:
-> > On Tue, Jan 24, 2023 at 02:30:20PM -0500, Jeff Layton wrote:
-> > > The NFS server has a lot of special handling for different types of
-> > > change attribute access, depending on the underlying filesystem. In
-> > > most cases, it's doing a getattr anyway and then fetching that value
-> > > after the fact.
-> > > 
-> > > Rather that do that, add a new STATX_CHANGE_COOKIE flag that is a
-> > > kernel-only symbol (for now). If requested and getattr can implement it,
-> > > it can fill out this field. For IS_I_VERSION inodes, add a generic
-> > > implementation in vfs_getattr_nosec. Take care to mask
-> > > STATX_CHANGE_COOKIE off in requests from userland and in the result
-> > > mask.
-> > > 
-> > > Since not all filesystems can give the same guarantees of monotonicity,
-> > > claim a STATX_ATTR_CHANGE_MONOTONIC flag that filesystems can set to
-> > > indicate that they offer an i_version value that can never go backward.
-> > > 
-> > > Eventually if we decide to make the i_version available to userland, we
-> > > can just designate a field for it in struct statx, and move the
-> > > STATX_CHANGE_COOKIE definition to the uapi header.
-> > > 
-> > > Reviewed-by: NeilBrown <neilb@suse.de>
-> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > ---
-> > >  fs/stat.c            | 17 +++++++++++++++--
-> > >  include/linux/stat.h |  9 +++++++++
-> > >  2 files changed, 24 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/fs/stat.c b/fs/stat.c
-> > > index d6cc74ca8486..f43afe0081fe 100644
-> > > --- a/fs/stat.c
-> > > +++ b/fs/stat.c
-> > > @@ -18,6 +18,7 @@
-> > >  #include <linux/syscalls.h>
-> > >  #include <linux/pagemap.h>
-> > >  #include <linux/compat.h>
-> > > +#include <linux/iversion.h>
-> > >  
-> > >  #include <linux/uaccess.h>
-> > >  #include <asm/unistd.h>
-> > > @@ -122,6 +123,11 @@ int vfs_getattr_nosec(const struct path *path, struct kstat *stat,
-> > >  	stat->attributes_mask |= (STATX_ATTR_AUTOMOUNT |
-> > >  				  STATX_ATTR_DAX);
-> > >  
-> > > +	if ((request_mask & STATX_CHANGE_COOKIE) && IS_I_VERSION(inode)) {
-> > > +		stat->result_mask |= STATX_CHANGE_COOKIE;
-> > > +		stat->change_cookie = inode_query_iversion(inode);
-> > > +	}
-> > > +
-> > >  	mnt_userns = mnt_user_ns(path->mnt);
-> > >  	if (inode->i_op->getattr)
-> > >  		return inode->i_op->getattr(mnt_userns, path, stat,
-> > > @@ -602,9 +608,11 @@ cp_statx(const struct kstat *stat, struct statx __user *buffer)
-> > >  
-> > >  	memset(&tmp, 0, sizeof(tmp));
-> > >  
-> > > -	tmp.stx_mask = stat->result_mask;
-> > > +	/* STATX_CHANGE_COOKIE is kernel-only for now */
-> > > +	tmp.stx_mask = stat->result_mask & ~STATX_CHANGE_COOKIE;
-> > >  	tmp.stx_blksize = stat->blksize;
-> > > -	tmp.stx_attributes = stat->attributes;
-> > > +	/* STATX_ATTR_CHANGE_MONOTONIC is kernel-only for now */
-> > > +	tmp.stx_attributes = stat->attributes & ~STATX_ATTR_CHANGE_MONOTONIC;
-> > >  	tmp.stx_nlink = stat->nlink;
-> > >  	tmp.stx_uid = from_kuid_munged(current_user_ns(), stat->uid);
-> > >  	tmp.stx_gid = from_kgid_munged(current_user_ns(), stat->gid);
-> > > @@ -643,6 +651,11 @@ int do_statx(int dfd, struct filename *filename, unsigned int flags,
-> > >  	if ((flags & AT_STATX_SYNC_TYPE) == AT_STATX_SYNC_TYPE)
-> > >  		return -EINVAL;
-> > >  
-> > > +	/* STATX_CHANGE_COOKIE is kernel-only for now. Ignore requests
-> > > +	 * from userland.
-> > > +	 */
-> > > +	mask &= ~STATX_CHANGE_COOKIE;
-> > > +
-> > >  	error = vfs_statx(dfd, filename, flags, &stat, mask);
-> > >  	if (error)
-> > >  		return error;
-> > > diff --git a/include/linux/stat.h b/include/linux/stat.h
-> > > index ff277ced50e9..52150570d37a 100644
-> > > --- a/include/linux/stat.h
-> > > +++ b/include/linux/stat.h
-> > 
-> > Sorry being late to the party once again...
-> > 
-> > > @@ -52,6 +52,15 @@ struct kstat {
-> > >  	u64		mnt_id;
-> > >  	u32		dio_mem_align;
-> > >  	u32		dio_offset_align;
-> > > +	u64		change_cookie;
-> > >  };
-> > >  
-> > > +/* These definitions are internal to the kernel for now. Mainly used by nfsd. */
-> > > +
-> > > +/* mask values */
-> > > +#define STATX_CHANGE_COOKIE		0x40000000U	/* Want/got stx_change_attr */
-> > > +
-> > > +/* file attribute values */
-> > > +#define STATX_ATTR_CHANGE_MONOTONIC	0x8000000000000000ULL /* version monotonically increases */
-> > 
-> > maybe it would be better to copy what we do for SB_* vs SB_I_* flags and
-> > at least rename them to:
-> > 
-> > STATX_I_CHANGE_COOKIE
-> > STATX_I_ATTR_CHANGE_MONOTONIC
-> > i_change_cookie
+On 26.01.2023 11:12, John 'Warthog9' Hawley wrote:
+> On 1/25/2023 11:48 PM, Arınç ÜNAL wrote:
+>> On 26.01.2023 10:45, John 'Warthog9' Hawley wrote:
+>>> On 1/25/2023 11:34 PM, Arınç ÜNAL wrote:
+>>>> On 26.01.2023 10:23, John 'Warthog9' Hawley wrote:
+>>>>> On 1/25/2023 10:44 PM, Jakub Kicinski wrote:
+>>>>>> On Wed, 25 Jan 2023 08:36:53 +0300 Arınç ÜNAL wrote:
+>>>>>>> Fix description for tristate and help sections which include 
+>>>>>>> inaccurate
+>>>>>>> information.
+>>>>>>>
+>>>>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>>>
+>>>>>> Didn't make it thru to the list again :(
+>>>>>> Double check that none of the addresses in To: or Cc: are missing
+>>>>>> spaces between name and email or after a dot. That seems to be the 
+>>>>>> most
+>>>>>> common cause of trouble. Or try to resend using just emails, no 
+>>>>>> names.
+>>>>>>
+>>>>>
+>>>>> You are also likely to run into trouble if your character set is 
+>>>>> set to UTF-8.
+>>>>
+>>>> I think that may be the problem here. I just resent this with only 
+>>>> Jakub and the lists without names. It didn't make it to netdev. My 
+>>>> name includes non-Latin characters. I'm not sure how I can change 
+>>>> UTF-8 to something else that works with this list. I had no such 
+>>>> issues with linux-mediatek.
+>>>>
+>>>> Arınç
+>>>>
+>>>
+>>> So dug it out of the logs, you aren't running into UTF-8 issues, so 
+>>> that's good.  However your mail client is appending 'Delivered-To:' 
+>>> to the messages, which is a significant indicator of some weird mail 
+>>> problem for lists, I.E. why is a message that's been delivered being 
+>>> passed back through to the list, which is on the published taboo list:
+>>>
+>>> http://vger.kernel.org/majordomo-taboos.txt
+>>>
+>>> What are you using to send these messages, as that's a header I 
+>>> absolutely wouldn't expect to be on messages heading to vger?
+>>
+>> It's just git send-email on git version 2.37.2. Zoho is doing the 
+>> hosting & SMTP.
+>>
+>> Arınç
+>>
 > 
-> An "i_"/"I_" prefix says "inode" to me. Maybe I've been at this too
-> long. ;)
+> Best I can suggest for testing is try sending the patch series to only 
+> the following 2 e-mail addresses:
+>      to: testing@vger.kernel.org
+>      cc: warthog9@eaglescrag.net
 > 
-> > 
-> > to visually distinguish internal and external flags.
-> > 
-> > And also if possible it might be useful to move STATX_I_* flags to the
-> > higher 32 bits and then one can use upper_32_bits to retrieve kernel
-> > internal flags and lower_32_bits for userspace flags in tiny wrappers.
-> > 
-> > (I did something similar for clone3() a few years ago but there to
-> > distinguish between flags available both in clone() and clone3() and
-> > such that are only available in clone3().)
-> > 
-> > But just a thought. I mostly worry about accidently leaking this to
-> > userspace so ideally we'd even have separate fields in struct kstat for
-> > internal and external attributes but that might bump kstat size, though
-> > I don't think struct kstat is actually ever really allocated all that
-> > much.
-> 
-> I'm not sure that the internal/external distinction matters much for
-> filesystem providers or consumers of it. The place that it matters is at
-> the userland interface level, where statx or something similar is
-> called.
-> 
-> At some point we may want to make STATX_CHANGE_COOKIE queryable via
-> statx, at which point we'll have to have a big flag day where we do
-> s/STATX_I_CHANGE_COOKIE/STATX_CHANGE_COOKIE/.
-> 
-> I don't think it's worth it here.
+> That will cut out more or less everything in the interim and might get 
+> me a better look at the series.
 
-I'm not fond of internal and external STATX_* flags having the exact
-same name but fine. :)
+Done, thanks for looking over this.
+
+> 
+> Only other thing I can think of is how is git send-email configured? 
+> Where the 'Delivered-To:' header is in the headers makes me think that 
+> it's added somewhere in what zoho is doing, which doesn't particularly 
+> make any sense, as that would imply you are sending it to yourself and 
+> then it passes it on?
+
+My .gitconfig is as follows, the rest is straight out of apt install 
+git-email.
+
+[user]
+         email = arinc.unal@arinc9.com
+         name = Arınç ÜNAL
+
+[sendemail]
+         smtpEncryption = ssl
+         smtpServer = smtppro.zoho.com
+         smtpUser = arinc.unal@arinc9.com
+         smtpPass =
+         smtpServerPort = 465
+
+> 
+> I'll admit zoho is one of the mail providers that has a tendency to 
+> reject a lot of mail coming from vger and has been unresponsive to any 
+> queries I've made on that front (though I'll note your domain is not on 
+> the list of domains that are having problems there).  Only other thing I 
+> could suggest is pinging zoho technical support and asking them what's 
+> up, as that's a very odd header to have there.
+
+I'll see what I can do. I've been getting suspicious header mails from 
+linux-arm-kernel and pabeni@redhat.com's mail server outright claims 
+Zoho's SMTP IP as spam.
+
+Your mail to 'linux-arm-kernel' with the subject
+
+     [PATCH net] net: ethernet: mtk_eth_soc: disable hardware DSA
+untagging for second MAC
+
+Is being held until the list moderator can review it for approval.
+
+The reason it is being held:
+
+     Message has a suspicious header
+
+---
+
+This message was created automatically by mail delivery software.
+  A message that you sent could not be delivered to one or more of its 
+recipients. This is a permanent error.
+
+pabeni@redhat.com, ERROR CODE :550 - spamcop.mimecast.org Blocked - see 
+https://www.spamcop.net/bl.shtml?136.143.188.14. - 
+https://community.mimecast.com/docs/DOC-1369#550 
+[nSq2mM6RNqWOxCrbHVMv8Q.us380]
+
+Arınç
