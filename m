@@ -2,213 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C83A67D8D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A076167D8D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbjAZWwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:52:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        id S232456AbjAZWv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbjAZWwi (ORCPT
+        with ESMTP id S230205AbjAZWv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:52:38 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279F35867C;
-        Thu, 26 Jan 2023 14:52:30 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id o5so2647724qtr.11;
-        Thu, 26 Jan 2023 14:52:30 -0800 (PST)
+        Thu, 26 Jan 2023 17:51:58 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C447485AF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:51:56 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id u8so1418254ilq.13
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:51:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=5BZjt9Q5+6X8KNTYdrTxRuSx/ZccXhnMaFcoYPpg2Rw=;
-        b=VTTSPLVYHW8w23TDOIqFKauFX6z1pNznKNFw6hDmeGg4GyU3JikWZEdiKsSsbbVSlj
-         AS2+HVXqcudnq3Tle37acqnOXDZOvtq7kQJjwhz/IHd4aVPQ80Uq7asfcqidz0JBzlRE
-         fHkJKUQmccKdLPzqxUjoBzKMTb/dZW4H8JVAV3JDmjriUBBRoY9eXknZpsa9NZDjRCKv
-         k7R+mgtGwPpgE7GtUpb/Lt4nHnjIxYuGJG1CpCQo+ZHPAcJ/cX7QGichZTx0Mx7mlOqi
-         2LsD45V/XMuuyI91EgqMzm7gWQBfNh5kCC5kmOo86g4ZaV0SjfSNyVDdrV7EAnM1Gpxj
-         W3DA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uo4DJ1lMHTQjHl0PyGseokoZraJeV8jwhzCuVW5LRgY=;
+        b=BzaQCkIizxh8plvJG7iydcbwTBB2KmS90zskK8PMkXY+40JZpDWrHFSmX1FvFS8AQq
+         gZW5s9WXuFdHxOnB7dPDwIFBKJpKWAFpm/WPOK1/u4buJPzzYAJK6PNfV6Sw31SOTnwC
+         4F5j8ycoLc2Z7lQo4j0wZgglXF8dtgjNYd99AGLhkPmuFKo3cA4rhOulWrt6Nz+ZO1CH
+         iXlBrWfIY+zg1YY8FeHxA6GeUTvN1pLO082IlYYkVHq2DHK952C8rlvndAlJ4yqgS1Hk
+         dMpRiz3xn0LyB+zCzCv2KAJMq5X9SqND0HLPyhZNUHiP+iqayXPuDYbAdpZJzo1J0ISF
+         0y3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5BZjt9Q5+6X8KNTYdrTxRuSx/ZccXhnMaFcoYPpg2Rw=;
-        b=jjdRZXo3krTGsyOfOeb3UqwoSq0IKU8CDk2ze5tzeHIh9jpSkcY9jMipv8Z6cjk0ZL
-         2kxPLldRNqCrp7w5dhmFVEP6/e9bxSdaZ/WNcwt6KZE9Lal+WDD4X4U6kHfBhK8UjhM2
-         RDTxr1bz//SdzPEpFmSf2Q/zPPXsG2U1Wn3SDBLvc3AgI94g6sC7oCbJh5ESzwL0fbct
-         miJOyKApWf/0aQSpQdxMJBE3D2GoWfHOCqS6jzYUYsNxcFKEhZmavEojvoWj6zwBeAui
-         DFd2j7l9GQmrxZ2bLdrjGmP2AwU5Dmbas1fnh/BYz5l/70WBsDcR0I9+B+w9CBzZ3e6S
-         vcGw==
-X-Gm-Message-State: AFqh2koUTyXR9RtjJZZUXSrSoK/Vpcqssn0tupyqc5olZrF76ohxKxlR
-        BFag7npyxZL5VzeCTH5ULf8=
-X-Google-Smtp-Source: AMrXdXvvg0RsEgDfk2T+eZyAn10yRqkmTXjt2B/K4TVczmMKNC+OrTL/0PrDO0M+/IXigfvGYP8IDg==
-X-Received: by 2002:ac8:6f09:0:b0:3a8:1789:73b1 with SMTP id bs9-20020ac86f09000000b003a8178973b1mr61371500qtb.2.1674773549252;
-        Thu, 26 Jan 2023 14:52:29 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id j7-20020a37b907000000b00706c1fc62desm1720623qkf.112.2023.01.26.14.52.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 14:52:28 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 9295027C0054;
-        Thu, 26 Jan 2023 17:52:27 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 26 Jan 2023 17:52:27 -0500
-X-ME-Sender: <xms:KgTTYyq1VSD0FYjUUW7snQNLy4EU1GF2piejVlTSdoFd0VmPy0Sykw>
-    <xme:KgTTYwr773siaGQMgU5DtGFckFA_EhV1okltRPHnNisPZ7S_zL9iNBZ6Eolytrh3D
-    b_1nx5SJc_2n5hJ3A>
-X-ME-Received: <xmr:KgTTY3M3UXHEiLs-P5sASvIekhljRlVIIUta8dI-ZONrB97WoaTsc-CsUjM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvhedgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhepjefhieekkeffjeeggeeuvefftdegfeduteelgeejledvffetiefhleef
-    hedvgeeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhht
-    hhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquh
-    hnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:KgTTYx5aTVQaZOkYwZmi7UW6u6wPIPBMCbUs7BaHKsrA1M8nWu6aBw>
-    <xmx:KgTTYx4X0rfqfP1eZleeg3wA-yuFmPa98pxF1dBEZ3XqB6q9550ejw>
-    <xmx:KgTTYxhox9kRAgCSyGVIJ34eHjJoFFg_xVr8wvh6LTHkQ_9ETcvBug>
-    <xmx:KwTTY2E-BTUJPUOhScYI9iDawtWyQHAgh7A0cPeeSXcD1pVSqDnPpg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 26 Jan 2023 17:52:26 -0500 (EST)
-Date:   Thu, 26 Jan 2023 14:51:42 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     dsterba@suse.cz, Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Chris Murphy <lists@colorremedies.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
-Message-ID: <Y9MD/q9Z9GbKpJRX@boqun-archlinux>
-References: <CABXGCsN+BcaGO0+0bJszDPvA=5JF_bOPfXC=OLzMzsXY2M8hyQ@mail.gmail.com>
- <20220726164250.GE13489@twin.jikos.cz>
- <CABXGCsN1rzCoYiB-vN5grzsMdvgm1qv2jnWn0enXq5R-wke8Eg@mail.gmail.com>
- <20230125171517.GV11562@twin.jikos.cz>
- <CABXGCsOD7jVGYkFFG-nM9BgNq_7c16yU08EBfaUc6+iNsX338g@mail.gmail.com>
- <Y9K6m5USnON/19GT@boqun-archlinux>
- <CABXGCsMD6nAPpF34c6oMK47kHUQqADQPUCWrxyY7WFiKi1qPNg@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uo4DJ1lMHTQjHl0PyGseokoZraJeV8jwhzCuVW5LRgY=;
+        b=sqLnvqB4NMvqe9Mk4310T0ezmRlm8g17Sq6Rj27L0VqfVlB1GejoWvezFBXN63+Q2j
+         etEtPWuV1Q05of62M6q2FMizPwSV7rDL5nKvAL+eDutBQUOhSNbdQXhQCJxFQSg8Of8u
+         Kalg4hc0L8UXt5AHh3sbBBVPTBwOxtR5S5vkmO7T4ajlWpdAVgE56CkmGKu4utDb41jL
+         Jfgc7XJZyAJWzKQdm5NmHylfNFOgKua3ixGiYphGAWr/Vh7u31+E6zXc9N+8IOXtow4l
+         yFsFshz2+yuRX/+mOa1e0R6/Iv94Amk3QPkEexCmkY/+viVMmbpeq7hnlEP4H7uTJdaa
+         1/AQ==
+X-Gm-Message-State: AFqh2kqrOZbNayb2q54+HXqKNQmqn9NOGO4fIzCcS7uNFaLwQzMxwVcM
+        koLvsgDnjEqZ0NCb/3OUYNYFpg==
+X-Google-Smtp-Source: AMrXdXtchiQCUB3Dd3Ffougvu41joys5qhOIRIUqMHGgA5iHVseRT58AFLQqOicQNrt5nO3h2n27Tg==
+X-Received: by 2002:a92:bd12:0:b0:30f:36d8:e4ca with SMTP id c18-20020a92bd12000000b0030f36d8e4camr21487379ile.21.1674773515927;
+        Thu, 26 Jan 2023 14:51:55 -0800 (PST)
+Received: from [192.168.2.31] ([194.204.33.9])
+        by smtp.gmail.com with ESMTPSA id e5-20020a022105000000b003755aa71fffsm869305jaa.105.2023.01.26.14.51.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 14:51:55 -0800 (PST)
+Message-ID: <7d0582ac-e5c1-7dbf-8063-f6ea8cb59862@linaro.org>
+Date:   Fri, 27 Jan 2023 00:51:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABXGCsMD6nAPpF34c6oMK47kHUQqADQPUCWrxyY7WFiKi1qPNg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 7/7] clk: qcom: add the driver for the MSM8996 APCS
+ clocks
+Content-Language: en-GB
+To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230118132254.2356209-1-dmitry.baryshkov@linaro.org>
+ <20230118132254.2356209-8-dmitry.baryshkov@linaro.org>
+ <7055af43f4a8894ac34e53c5847fb3de.sboyd@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <7055af43f4a8894ac34e53c5847fb3de.sboyd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 03:42:52AM +0500, Mikhail Gavrilov wrote:
-> On Thu, Jan 26, 2023 at 10:39 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > [Cc lock folks]
-> >
-> > On Thu, Jan 26, 2023 at 02:47:42PM +0500, Mikhail Gavrilov wrote:
-> > > On Wed, Jan 25, 2023 at 10:21 PM David Sterba <dsterba@suse.cz> wrote:
-> > > >
-> > > > On Wed, Jan 25, 2023 at 01:27:48AM +0500, Mikhail Gavrilov wrote:
-> > > > > On Tue, Jul 26, 2022 at 9:47 PM David Sterba <dsterba@suse.cz> wrote:
-> > > > > >
-> > > > > > On Tue, Jul 26, 2022 at 05:32:54PM +0500, Mikhail Gavrilov wrote:
-> > > > > > > Hi guys.
-> > > > > > > Always with intensive writing on a btrfs volume, the message "BUG:
-> > > > > > > MAX_LOCKDEP_CHAIN_HLOCKS too low!" appears in the kernel logs.
-> > > > > >
-> > > > > > Increase the config value of LOCKDEP_CHAINS_BITS, default is 16, 18
-> > > > > > tends to work.
-> > > > >
-> > > > > Hi,
-> > > > > Today I was able to get the message "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too
-> > > > > low!" again even with LOCKDEP_CHAINS_BITS=18 and kernel 6.2-rc5.
-> > > > >
-> > > > > ❯ cat /boot/config-`uname -r` | grep LOCKDEP_CHAINS_BITS
-> > > > > CONFIG_LOCKDEP_CHAINS_BITS=18
-> > > > >
-> > > > > [88685.088099] BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
-> > > > > [88685.088124] turning off the locking correctness validator.
-> > > > > [88685.088133] Please attach the output of /proc/lock_stat to the bug report
-> > > > > [88685.088142] CPU: 14 PID: 1749746 Comm: mv Tainted: G        W    L
-> > > > >   -------  ---  6.2.0-0.rc5.20230123git2475bf0250de.38.fc38.x86_64 #1
-> > > > > [88685.088154] Hardware name: System manufacturer System Product
-> > > > > Name/ROG STRIX X570-I GAMING, BIOS 4408 10/28/2022
-> > > > >
-> > > > > What's next? Increase this value to 19?
-> > > >
-> > > > Yes, though increasing the value is a workaround so you may see the
-> > > > warning again.
-> > >
-> > > Is there any sense in this WARNING if we would ignore it and every
-> > > time increase the threshold value?
-> >
-> > Lockdep uses static allocated array to track lock holdings chains to
-> > avoid dynmaic memory allocation in its own code. So if you see the
-> > warning it means your test has more combination of lock holdings than
-> > the array can record. In other words, you reach the resource limitation,
-> > and in that sense it makes sense to just ignore it and increase the
-> > value: you want to give lockdep enough resource to work, right?
+On 25/01/2023 23:38, Stephen Boyd wrote:
+> Quoting Dmitry Baryshkov (2023-01-18 05:22:54)
+>> diff --git a/drivers/clk/qcom/apcs-msm8996.c b/drivers/clk/qcom/apcs-msm8996.c
+>> new file mode 100644
+>> index 000000000000..7e46ea8ed444
+>> --- /dev/null
+>> +++ b/drivers/clk/qcom/apcs-msm8996.c
+>> @@ -0,0 +1,76 @@
+> [...]
+>> +
+>> +static int qcom_apcs_msm8996_clk_probe(struct platform_device *pdev)
+>> +{
+>> +       struct device *dev = &pdev->dev;
+>> +       struct device *parent = dev->parent;
+>> +       struct regmap *regmap;
+>> +       struct clk_hw *hw;
+>> +       unsigned int val;
+>> +       int ret = -ENODEV;
+>> +
+>> +       regmap = dev_get_regmap(parent, NULL);
+>> +       if (!regmap) {
+>> +               dev_err(dev, "failed to get regmap: %d\n", ret);
+>> +               return ret;
+>> +       }
+>> +
+>> +       regmap_read(regmap, APCS_AUX_OFFSET, &val);
+>> +       regmap_update_bits(regmap, APCS_AUX_OFFSET, APCS_AUX_DIV_MASK,
+>> +                          FIELD_PREP(APCS_AUX_DIV_MASK, APCS_AUX_DIV_2));
+>> +
+>> +       /* Hardware mandated delay */
 > 
-> It is needed for correct working btrfs. David, am I right?
-> 
-> >
-> > > May Be set 99 right away? Or remove such a check condition?
-> >
-> > That requires having 2^99 * 5 * sizeof(u16) memory for lock holding
-> > chains array..
-> >
-> > However, a few other options we can try in lockdep are:
-> >
-> > *       warn but not turn off the lockdep: the lock holding chain is
-> >         only a cache for what lock holding combination lockdep has ever
-> >         see, we also record the dependency in the graph. Without the
-> >         lock holding chain, lockdep can still work but just slower.
-> >
-> > *       allow dynmaic memory allocation in lockdep: I think this might
-> >         be OK since we have lockdep_recursion to avoid lockdep code ->
-> >         mm code -> lockdep code -> mm code ... deadlock. But maybe I'm
-> >         missing something. And even we allow it, the use of memory
-> >         doesn't change, you will still need that amout of memory to
-> >         track lock holding chains.
-> >
-> > I'm not sure whether these options are better than just increasing the
-> > number, maybe to unblock your ASAP, you can try make it 30 and make sure
-> > you have large enough memory to test.
-> 
-> About just to increase the LOCKDEP_CHAINS_BITS by 1. Where should this
-> be done? In vanilla kernel on kernel.org? In a specific distribution?
-> or the user must rebuild the kernel himself? Maybe increase
-> LOCKDEP_CHAINS_BITS by 1 is most reliable solution, but it difficult
-> to distribute to end users because the meaning of using packaged
-> distributions is lost (user should change LOCKDEP_CHAINS_BITS in
-> config and rebuild the kernel by yourself).
-> 
+> Delay for what? Setting the divider? What if the register value didn't
+> change at all? Can you skip the delay in that case?
 
-Lockdep is a dev tool to help finding out deadlocks, and it introduces
-cost when enabled, although it's possible, I doubt no one will run
-LOCKDEP enabled kernel in production environment. In other words, it's
-a debug/test-kernel-only option.
+Ack, I'll expand the comment.
 
-Regards,
-Boqun
+> 
+>> +       udelay(5);
+>> +
+>> +       /*
+>> +        * Register the clock as fixed rate instead of being a child of gpll0
+>> +        * to let the driver register probe as early as possible.
+> 
+> The function doesn't block or return EPROBE_DEFER if the clk is orphaned
+> when registered. Why is this necessary? Are you getting defered by the
+> fw_devlink logic thinking it needs to defer probe of this driver until
+> gpll0 provider probes? We should fix fw_devlink to not do that. Maybe if
+> the node is a clk provider (#clock-cells exists) then we don't wait for
+> clocks property to be provided, because the clk core already handles
+> that itself.
 
-> It would be great if the chosen value would simply work always
-> everywhere. 30? ok! But as I understand, btrfs does not have any
-> guarantees for this. David, am I right?
+Letting clock-controllers probe was my idea for the patch, but it was 
+delayed again by Saravana, see [1], [2]
+
+[1] 
+https://lore.kernel.org/all/20230118091122.2205452-1-dmitry.baryshkov@linaro.org/
+
+[2] 
+https://lore.kernel.org/all/CAGETcx8Xy5OzsbW3123esxsbQJq-SqDkP1S5g2mmwzoCz4shtQ@mail.gmail.com/
+
 > 
-> Anyway, thank you for keeping the conversation going.
-> 
-> -- 
-> Best Regards,
-> Mike Gavrilov.
+>> +        */
+>> +       hw = devm_clk_hw_register_fixed_rate(dev, "sys_apcs_aux", NULL, 0, 300000000);
+
+-- 
+With best wishes
+Dmitry
+
