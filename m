@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024AE67C87D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 467C067C881
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237082AbjAZKZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
+        id S237119AbjAZKZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:25:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236992AbjAZKZn (ORCPT
+        with ESMTP id S237072AbjAZKZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:25:43 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AB41AC
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:25:42 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id n7so1263601wrx.5
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:25:42 -0800 (PST)
+        Thu, 26 Jan 2023 05:25:44 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB197A6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:25:43 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so808397wmc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:25:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=h9mbkTJPJgNxRZ4b5KP2ORZT0ooITMMuraelrFYHiEA=;
-        b=NmTwRCotAJRtu4RPUODpdooghL0iLWlfSCpKWrcldSXM478/QCyfnuXytbHCtvRA1K
-         9ZUbJ6/IySsUm6FObDuvOdzYEbVEbT3iyJlFKrs3xyFwuZwFgM0TiIHKm6YJPcqLRNs8
-         xKi8Hr35o/8ITFnMxD5WIXWfnlEBQwh+nhFWBxDvFK1yFXSe7N4MM1tynvocoDyWWAdA
-         8UlyiZQ2+xOz9iB4wsYUiM7n8FqOYvnVmEPmTD98aRkoIbOFwWO4uf9/ilfDRnYHc7lt
-         5TSXZe/ZL6YfzcDcweIHia4VHQqrK0qKQidfmc0Qm/fTnXs4QStQ/GnR/xMlchNpYdBR
-         XuLA==
+        bh=xaR5jhwi5YrHF00X8Cya5skIPkeh6XZxRWs06m04ENk=;
+        b=nt2PilhVrW7itt7C51DeNXeJCTft96sdxsJP836usV9YupnMWLadI8hAO05M3qGBB3
+         iB70BvifIT0o1q4kUwnERNQfjbyHAGQzzSKbObcrA9uZEAmuCP+Fr4l6QLSy/kLKjBJs
+         e1DkkEsGJZuxnmugzMghOmBnly82iYkuzqKIwrV3XTwesH6KxL3Vw0KFFXBj1z1ESwby
+         dkz+CI/jJTfiieICIwYjouZwrpeDjwKEfO3jdXCARhDeM6x0myx29340x7yF7dQO9pkV
+         HRyx67flvr2QzbYV/kr6oH47S3s0iiXSY6LN6M+4yv8LcbCjqqao7q/4qyu0/xR79b3D
+         t76w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h9mbkTJPJgNxRZ4b5KP2ORZT0ooITMMuraelrFYHiEA=;
-        b=aR0dsk5ehOq7imILrYXrs4AkbeEprzwcsGKWP8cAWLZ355X82m8T49Di/pkElXmgFq
-         UkGGhRKCD/qH6M4TUQQJl6bxa+7xpSXD6o8nOGzRFi2myT9qJ704K2y5yvmqMLCDsaNU
-         SngUSWEzzu3uchXGJnvUQSc1hMA2IpW/S8BUbmSUTEqU/KQR5tDRrhsanQyreNxP7FUO
-         FdxVOZdl+IJ3J3GkMcYqf2D5i3NZCYg5rqjTSQrqO7MghpxURAs/dq9YH79xGCmFeacK
-         qn+7ZiJuYEGRd+4HyAuWmdZjQzjg813XFCtvTtVjB2Hb5hi7mQoRiEiP7NLqZrChey8U
-         MK4Q==
-X-Gm-Message-State: AO0yUKUmcppnUdb22VSalY/mN7KO9NFwbCI+SEktTrDyhwWi6+gidfgm
-        siIxHj0x4UTBSLBbaPyD/85jsCQiSKAltE5a
-X-Google-Smtp-Source: AK7set+YiLit3kGDdI6Sv6YQ+BymzvRDcZ0YXW5YWynWAR1pqvzAjRzJBvcr51/JdIRT5U+EaLvf4g==
-X-Received: by 2002:adf:e7d2:0:b0:2bf:b33b:fb7c with SMTP id e18-20020adfe7d2000000b002bfb33bfb7cmr7190186wrn.62.1674728740771;
-        Thu, 26 Jan 2023 02:25:40 -0800 (PST)
+        bh=xaR5jhwi5YrHF00X8Cya5skIPkeh6XZxRWs06m04ENk=;
+        b=77tSGTa7Bsv0gtZePigKtFxcLKcl1OuQPirRgVgMoQXVvrynTuJPnHLWDrnQnZkUmk
+         sQyhRv+xElf0LKCxj5SQwW3F2z2cby9r1A8wAc/FNTBSYKbzoy8F9E0Fj12dtBhBL1+m
+         txHueaNwrStPeD/HO5YIYqlBtFE9mZSFvQGXvyL5nWLO/RggQrU/q/3m47Big8cVZmGr
+         /sHdA5IZ8lwoOtABY4iABdnOvFy5Ofxx+6zyt/bq1Ka6/nFfHGX/u4CWc3hLmVFp+JIv
+         tW0rmdDudvKNOW2sRWJL2FDuxkk4hmMoHsMZqKYxFZLAMOET4WS2ilxPnFVSJq0Jx8UC
+         JYmg==
+X-Gm-Message-State: AFqh2kpNW11/OexvnFzXng5ZSy8pZzgIZ318tn5jjBIuS/Exqbdp5QZV
+        /EdYp5Z/ftwu9CjLjGOl+QmpzjYAGVWffGek
+X-Google-Smtp-Source: AMrXdXtWigPAnLXe8lSFWu0W2aJrN030YjgS8S2EIjXr4oeDrz8kaA7Gf9cMUJ4tMmqNU4vLxZ/gew==
+X-Received: by 2002:a05:600c:ccf:b0:3db:f34:e9e0 with SMTP id fk15-20020a05600c0ccf00b003db0f34e9e0mr32294033wmb.35.1674728742090;
+        Thu, 26 Jan 2023 02:25:42 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t8-20020a5d6908000000b002bc7e5a1171sm886514wru.116.2023.01.26.02.25.39
+        by smtp.gmail.com with ESMTPSA id t8-20020a5d6908000000b002bc7e5a1171sm886514wru.116.2023.01.26.02.25.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 02:25:40 -0800 (PST)
+        Thu, 26 Jan 2023 02:25:41 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Tsahee Zidenberg <tsahee@annapurnalabs.com>,
-        linux-arm-kernel@lists.infradead.org,
+To:     linux-kernel@vger.kernel.org,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] arm64: dts: amazon: drop deprecated serial device_type
-Date:   Thu, 26 Jan 2023 11:25:26 +0100
-Message-Id: <167472873009.13092.2072285159866642904.b4-ty@linaro.org>
+Subject: Re: [PATCH] arm64: dts: apm: drop deprecated serial device_type
+Date:   Thu, 26 Jan 2023 11:25:27 +0100
+Message-Id: <167472873009.13092.17233187905582464583.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230123151547.369791-1-krzysztof.kozlowski@linaro.org>
-References: <20230123151547.369791-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230123151549.369818-1-krzysztof.kozlowski@linaro.org>
+References: <20230123151549.369818-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -77,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 16:15:47 +0100, Krzysztof Kozlowski wrote:
+On Mon, 23 Jan 2023 16:15:49 +0100, Krzysztof Kozlowski wrote:
 > The device_type property is deprecated by Devicetree specification and
 > bindings do not allow it.
 > 
@@ -85,8 +84,8 @@ On Mon, 23 Jan 2023 16:15:47 +0100, Krzysztof Kozlowski wrote:
 
 Applied, thanks!
 
-[1/1] arm64: dts: amazon: drop deprecated serial device_type
-      https://git.kernel.org/krzk/linux-dt/c/91fef8a860faa1ab4c36ab04a789ab60f8caea56
+[1/1] arm64: dts: apm: drop deprecated serial device_type
+      https://git.kernel.org/krzk/linux-dt/c/5fc3037ae3def493360cc1b7844a9971ba2bd08e
 
 Best regards,
 -- 
