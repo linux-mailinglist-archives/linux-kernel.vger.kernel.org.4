@@ -2,175 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D85667D74F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7623567D747
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232676AbjAZVH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
+        id S232681AbjAZVGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232710AbjAZVHx (ORCPT
+        with ESMTP id S232677AbjAZVGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:07:53 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBA740C5;
-        Thu, 26 Jan 2023 13:07:50 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4P2tPT0Sg9z9v7bg;
-        Fri, 27 Jan 2023 04:59:41 +0800 (CST)
-Received: from [10.81.221.86] (unknown [10.81.221.86])
-        by APP2 (Coremail) with SMTP id GxC2BwAX6F6E69Jjh_fKAA--.18178S2;
-        Thu, 26 Jan 2023 22:07:27 +0100 (CET)
-Message-ID: <9da70674-42e0-9aaa-edab-c606ca8dd2e8@huaweicloud.com>
-Date:   Thu, 26 Jan 2023 22:07:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-From:   Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
-Subject: Re: [PATCH] Fix data race in mark_rt_mutex_waiters
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Waiman Long <longman@redhat.com>, paulmck@kernel.org,
-        Arjan van de Ven <arjan@linux.intel.com>, mingo@redhat.com,
-        will@kernel.org, boqun.feng@gmail.com, akpm@osdl.org,
-        tglx@linutronix.de, joel@joelfernandes.org,
-        stern@rowland.harvard.edu, diogo.behrens@huawei.com,
-        jonas.oberhauser@huawei.com, linux-kernel@vger.kernel.org,
-        Hernan Ponce de Leon <hernanl.leon@huawei.com>,
-        stable@vger.kernel.org,
-        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-References: <20230120135525.25561-1-hernan.poncedeleon@huaweicloud.com>
- <562c883b-b2c3-3a27-f045-97e7e3281e0b@linux.intel.com>
- <20230120155439.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <9a1c7959-4b8c-94df-a3e2-e69be72bfd7d@huaweicloud.com>
- <20230123164014.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <f17dcce0-d510-a112-3127-984e8e73f480@huaweicloud.com>
- <d1e28124-b7a7-ae19-87ec-b1dcd3701b61@redhat.com>
- <Y8/+2YBRD4rFySjh@hirez.programming.kicks-ass.net>
- <ae90e931-df19-9d60-610c-57dc34494d8e@redhat.com>
- <c300747a-cf81-0e2d-77ec-f861421291f9@huaweicloud.com>
- <Y9Jv9yL8x7/TAq/X@hirez.programming.kicks-ass.net>
+        Thu, 26 Jan 2023 16:06:47 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9EB4F352
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:06:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QFRrnx4LCDY1GD06P5WsQ9CvPvNpj3PISn22RJrX6zNPEcXCl/605jjtX3bv571La/jI9Rr87X6ajg5U2CPzq7mlgrUdsl8iBz2dh3R5aRrH775Z9/Jy6YnmmJhZlyrSbHbB+uhMfMdPleLIx8fHB1+Yu6HMerV4GY02LAJwzprJvZk5vkemzmZ7IoRKyopv1b7Fq6wfPCqwvktHMYcIHHLbkxcoGQ4ufuhClrAGVAHnWavnAyz1NMnUVEk/YnyzlDnF5CcXrhUfARt9wvMxVp5o4sVmXpsrKA2bA/3hp+4egtl6wvY8vRM9WWstQIluUtpUgxtcnG3fLZVHTmsQLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mzqhERa5efbN4IvC07pQuK5qTA45433Kx3cs/ajS5ks=;
+ b=RGRcrysRm1nJrr1E7kgj21fl0YsdW3Pafn/FHu1OZsQ3J9JknyI//gf8n+CG1j+52bWWxNUDbOt2s5kCQ/nBGKBVN5jif6Kp8s11IimS/N/kYDNgpD69KAlJFaeDr2JIEur4wW3c0DE8VsV/xgl535/622tp+2sp7KrxQo4HsHjypG51wqJrfsK80DjAQ22XcUncvA63kxpuGV8nv1mazOPKVD5KXkuyU28LCIcv9Y/1Z/hglIohu2AfQAYyRHS1QLkZKtWVgOshp+XdwnRDbMlpXtMmxOhAMsYkbozeaR88kmnCdVM1PIhrbMX6PKd04umaGDVj3xkT10tpvLdrxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mzqhERa5efbN4IvC07pQuK5qTA45433Kx3cs/ajS5ks=;
+ b=qSJz/Nmnx+MQo+oh+hZk2NLcknhthFhdo7QbmVd+JG0ld6dUk7bCwh7jGWc9itma7PVMRq2sT+NY1ACCYs5ZnPpQ8Nys2B34e3LMjuTHK9GH5BqK/6GjRy4QP9xOo2VJaGTDtMQJ5984N+jchzvBcpIBu/Li8n5GbFFtxv16Rwg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ DS7PR12MB6286.namprd12.prod.outlook.com (2603:10b6:8:95::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.33; Thu, 26 Jan 2023 21:06:23 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::5935:7d8d:e955:6298]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::5935:7d8d:e955:6298%9]) with mapi id 15.20.6043.022; Thu, 26 Jan 2023
+ 21:06:23 +0000
+Message-ID: <5ad53f8f-155a-d1e8-68e3-c82577816c76@amd.com>
+Date:   Thu, 26 Jan 2023 16:07:21 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] drm/amdgpu/display/mst: fix an unused-variable warning
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc:     Stylon Wang <stylon.wang@amd.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Roman Li <roman.li@amd.com>,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        hersen wu <hersenxs.wu@amd.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Wayne Lin <Wayne.Lin@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20230126163605.3524630-1-arnd@kernel.org>
 Content-Language: en-US
-In-Reply-To: <Y9Jv9yL8x7/TAq/X@hirez.programming.kicks-ass.net>
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <20230126163605.3524630-1-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAX6F6E69Jjh_fKAA--.18178S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF1fuFWUJw15CF47Zr1UKFg_yoWrJr15pF
-        W7Kay7JF4DtF10qryqkF4xZ3y0y3s3KF4UXw1xKryxC3Z8tr4FgrZrCFW2k34kXrZ5AF4a
-        qr4DZa43uF98ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-        n2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
-        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-        zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j
-        6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-        BIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
-X-CM-SenderInfo: xkhu0tnqos00pfhgvzhhrqqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YQBPR0101CA0181.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:f::24) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DS7PR12MB6286:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6ae28571-004d-4ab8-78cf-08daffe12dbd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: M2tyzLmZqBb0pcCPRDq+U7Fk9mDi67gHnSR6oPKlkFybz+9op65FLSOcKkHOq4SYCTSzn2FahXho+EP59kxlLVoALwkW9bu3FreuctYeJOOubwhZRqN9dfU+W5CVMOVBhrpVs4OxN5OP5EXCiNY141oagYfbjeim44hLTDugQ16tYsKjSgrxQ0Bo4nD3ox4a4vdMkcI2zPPw5NJm1fkV4JKWBQLDSUwKfiTPTacv8Dmed+Gc0Ak4A9rQpAeq0ovpfYBRTl12OrkN/x2beV22qmKHKgi5YFD6pNqpTJXz84+y1cISmXWgQzP5V9SjuRhArjeCE3EVqNXPjBl3AgTGUgamabszJtxC1q0L0/Q8bcTyyafnUrz3j2bx7os+UEfhBiyd3F6q0TgVyatxan6V5wKA8cZWVq69r7pbfQidFijN7zkvzslGadwJuBzrWhhRacbdMdc901FiC15zx0RVLuFJtajySys07aHCQlS0EHvJMArMCR/qY+tbkVuWKPU3ciMkeXCFngWIblgC8TfrMDDV7qcYQBb+Ym5afTJUcb3b3UWI8/kC8XYIxUKLXAmkqtPi+c+TR93qlrwBodSEwq/ctu0rwBniUsQlMM2hgznhHCCyuWNUPXP5bR+yJN7h8ixhj+moC+i6fVznEQNK78I+jsOkFSuIxFFfIFSwq3uTd1wRtdVo9B2LBe594oiIZnL119q2qhZ1Wiw9N6StKQonsSKjEIfBS9XBoyv0pqg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(366004)(346002)(39860400002)(136003)(451199018)(66946007)(8676002)(316002)(86362001)(36756003)(8936002)(54906003)(44832011)(5660300002)(31686004)(38100700002)(31696002)(2906002)(6512007)(66556008)(4326008)(41300700001)(53546011)(26005)(186003)(6506007)(6636002)(2616005)(478600001)(66476007)(110136005)(6486002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dXlTY3hqdlhLU3p6RTBidUM4ajk3RDRJN3Q2dFZ0clkwa0pkTlNyT1FObmhm?=
+ =?utf-8?B?bXNQTjd3RlMxY1RWV0RKbUdlSVZ4bkVHMXVzY2lNTm5Rc21oRWZnL3lMUEpu?=
+ =?utf-8?B?OWU3Z2xKZ3h5MlFTUHdQWkE0dVE0amh3RmFDMEZjaHZPYno0WG5HakpZZWtR?=
+ =?utf-8?B?WVBLWWVQMUh3cE85KzNBY09ac3R5R2lDRkd3eVZHcXZvUVU1VmFmWEU4SDRh?=
+ =?utf-8?B?L3NpZ00vVXk4S25ZcGZKOWM3d0RnNE1Kb3ZNSHMxRUVDVUdvc0pnWmdPT2Fl?=
+ =?utf-8?B?cC9sN3lXRWkrUlRMV0pwL2dNWW9XMkxPSmdMVEc5SmpuakFXT1lkc0VmMlNi?=
+ =?utf-8?B?bUF1dzY5c1FJUlVJRTV1Sno5ZnB1WE5FTmVnWVFtLzl0U2pDWFE5WHEwcnhJ?=
+ =?utf-8?B?MVk4NnFGcXFadUEvN3lyTWhEN2ZiT2tPajNEcEFDVXd0VUhPcmUvMkVodXBI?=
+ =?utf-8?B?UHFzS0psT0IzQi9LU0VlRlk3VTVLSldnaGZDenBwMHhTZ2JzSnJCWVV4VkhY?=
+ =?utf-8?B?WTZvY2MxYUY1RVJHZXBqZ0JVWXovZmJBbEpzN0dZQ092elhVNGp4M1Y1bmdV?=
+ =?utf-8?B?UU9ES0xtQXQwUzJLVFpqUEhsV3pFNVdjaDdMVnpiQUQzdlRRNStISDYvM0pV?=
+ =?utf-8?B?MDJuU0dxTjVBQ3lLdXJSWTZxZkQ3U3dkcDdIU3h0RUNEUDJ6NGY0NGFwNWsx?=
+ =?utf-8?B?Uzg5aTF3bHMwZThDUk01VTZpSzV0bVRIc056R2lwbitXV0J0T016Z3BJc056?=
+ =?utf-8?B?M0liQWhaVS82cEpXajZqd2VnaVlQRXFWenZlWWVtNi95S3FZSkM0aWJDUTVu?=
+ =?utf-8?B?cmg3TUF4VDVWSnBaYTA3THZUYnpqOVVrN1dwMXpuZ1pSUFVWOW9vVUJZYVJ1?=
+ =?utf-8?B?V2I3dVZPeEx6WldJbWZJMGhacis4V1JiRVN2ZWs5SnpKZ2k5WmpLZ2xDREtN?=
+ =?utf-8?B?Tys2dXFsQThWN2drSmdhQkdyWW1RczdrK3RzNHVLSElGWXF6RVlwM1ZUMSsy?=
+ =?utf-8?B?MldrY21DQTlNSkpCdVovK2FUb2xiUXl5Umg1bXFlODFQWWYva3BzY2lPYzNL?=
+ =?utf-8?B?NmNodkJHWDk4RTB2emxsK0toMGJWd3dKVjc4N2Jualhud3VSL3hvTHB6azNT?=
+ =?utf-8?B?T3dRRk9sTWtCQm1IbEI5QjhVc09INS8xTXdVMWNVOU55Yjd4OWoyZTFWNXEw?=
+ =?utf-8?B?UmtMZVBZR2VmakFjNW0rM05xM054bFQ4M0d4Tk0yZng5M0ZKTnBHYVBGbG9Q?=
+ =?utf-8?B?MFVCNzZkOFZhY29KY3dsK1NBbi9SOE10Zklod2NWV1pzaGhnRlVCQnh0b09k?=
+ =?utf-8?B?U3laU3E4Zm5xUG1pYi9TOVZaWENjcW5TUm1rK2N4MVB5bGVrWUpCaHJ3Zmgz?=
+ =?utf-8?B?UGM5b3ZTTzJCNHYrWno2MkVpc2dOUm9wZitrdGV5TENIT05aQUZaQ3B5RGlP?=
+ =?utf-8?B?b1lOUThwcUtQVEp0aGczSG95SitVMk9nZHZOak9YdGdpdjhCUzJ6UnBzR3Yz?=
+ =?utf-8?B?cFVvS2VIWE50bzM3V045NlpzYVZnc0JINFprTTVaajN3UUJIbGxSRzZ2dDJ5?=
+ =?utf-8?B?dzJ1RUwxTDNHL09GZm9IbzdoTFpETC91TG43c09uL21HamtKdUJ1ZzZoV0x6?=
+ =?utf-8?B?bG0wUS9wcXk5U2JtUDF4N045VlMvYWFVTGhDOXNTNisyOEd4MHltRzBOTW9G?=
+ =?utf-8?B?M0lHdUszSGVleG14NHorclBiOERJT1VVNk9wV0lkMkhSd21EYkorT0YwUjY1?=
+ =?utf-8?B?SWUyY3ZHV0p5aC9mMGJRVkd2WHFaTGYzODRleXRCMmF6YTJ6RnNiZjgzZ0p6?=
+ =?utf-8?B?U0FKakdMMTU3NlU0Q0UycmVKNGgybnJsdlNsT3JsWTZwaDVwekVwN0tiOCsw?=
+ =?utf-8?B?cVJSWVhKUGVCbGw0b1pTd05QZE03V3VCbnVmY3hjV1ZHdFpKVDVNV3JZaUsw?=
+ =?utf-8?B?SUFHT2JHMlY1c0xJZ0FCaktweXNvWGlHVGhKcGdVcG9qNVVGbVlCUVJrTURl?=
+ =?utf-8?B?ZjV3RmsyM1UxSmhjRmZIdWEwOHJzeFcxTGtNWTNtZGJNaFhyckJzWkhpMzhh?=
+ =?utf-8?B?ZGtOeE1CbnIzbS8yVkIyRmpVTmhRL2FlYWptSTJzaXlmMlc2QWxSU1BSTHdh?=
+ =?utf-8?Q?owBXFekAeXqaFNPKWUGaog4cT?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ae28571-004d-4ab8-78cf-08daffe12dbd
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 21:06:22.9431
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1ZF36l8gZNcGrxO4NB9O6XJ/cIOtcI3NNUdSG2knM2BYxiQZEIT0pLqqreGyxVBx7HzuyAUUNn84Tl2rwu3gxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6286
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/2023 1:20 PM, Peter Zijlstra wrote:
-> On Thu, Jan 26, 2023 at 10:42:07AM +0100, Hernan Ponce de Leon wrote:
->> On 1/24/2023 5:04 PM, Waiman Long wrote:
->>>
->>> On 1/24/23 10:52, Peter Zijlstra wrote:
->>>> On Tue, Jan 24, 2023 at 10:42:24AM -0500, Waiman Long wrote:
->>>>
->>>>> I would suggest to do it as suggested by PeterZ. Instead of set_bit(),
->>>>> however, it is probably better to use atomic_long_or() like
->>>>>
->>>>> atomic_long_or_relaxed(RT_MUTEX_HAS_WAITERS, (atomic_long_t
->>>>> *)&lock->owner)
->>>> That function doesn't exist, atomic_long_or() is implicitly relaxed for
->>>> not returning a value.
->>>>
->>> You are right. atomic_long_or() doesn't have variants like some others.
->>>
->>> Cheers,
->>> Longman
->>>
->>
->> When you say "replace the whole of that function", do you mean "barrier
->> included"? I argue in the other email that I think this should not affect
->> correctness (at least not obviously), but removing the barrier is doing more
->> than just fixing the data race as this patch suggests.
+On 1/26/23 11:35, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Well, set_bit() implies smp_mb(), atomic_long_or() does not and would
-> need to retain the barrier.
+> The newly added code is in an #ifdef, so the variables that
+> are only used in there cause a warning if CONFIG_DRM_AMD_DC_DCN
+> is disabled:
 > 
-> That said, the comments are all batshit. The top comment states relaxed
-> ordering is suffient since holding lock, the comment with the barrier
-> utterly fails to explain what it's ordering against.
-
-I think the top comment became obsolete after 1c0908d8e441 and this just 
-went unnoticed. I agree the comment with the barrier does not say much 
-and getting some more detailed information was one of the goals of my 
-other email.
-
+> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'amdgpu_dm_atomic_check':
+> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9698:43: error: unused variable 'mst_state' [-Werror=unused-variable]
+>   9698 |         struct drm_dp_mst_topology_state *mst_state;
+>        |                                           ^~~~~~~~~
+> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9697:41: error: unused variable 'mgr' [-Werror=unused-variable]
+>   9697 |         struct drm_dp_mst_topology_mgr *mgr;
+>        |                                         ^~~
 > 
-> So all that would need to be updated as well.
+> Fixes: c689e1e362ea ("drm/amdgpu/display/mst: Fix mst_state->pbn_div and slot count assignments")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Applied, thanks!
+
+> ---
+>   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> That said, looking at 1c0908d8e441 I'm not at all sure we need that
-> barrier. Even in the try_to_take_rt_mutex(.waiter=NULL) case, where we
-> skip over the task->pi_lock region, rt_mutex_set_owner(.acquire=true)
-> will be ACQUIRE.
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index be1232356f9e..c966bb05f6c7 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -9694,8 +9694,10 @@ static int amdgpu_dm_atomic_check(struct drm_device *dev,
+>   	struct drm_connector_state *old_con_state, *new_con_state;
+>   	struct drm_crtc *crtc;
+>   	struct drm_crtc_state *old_crtc_state, *new_crtc_state;
+> +#if defined(CONFIG_DRM_AMD_DC_DCN)
+>   	struct drm_dp_mst_topology_mgr *mgr;
+>   	struct drm_dp_mst_topology_state *mst_state;
+> +#endif
+>   	struct drm_plane *plane;
+>   	struct drm_plane_state *old_plane_state, *new_plane_state;
+>   	enum dc_status status;
 
-This sentence states in a clear way the idea I was trying to express in 
-my other email about why the barrier is not necessary. I think the same 
-argument holds if we keep the barrier and relax the store in 
-rt_mutex_set_owner as suggested by Boqun (see patch below).
-
-> 
-> And in case of rt_mutex_owner(), we fail the trylock (return with 0) and
-> a failed trylock does not imply any ordering.
-> 
-> So why are we having this barrier?
-
-I run again the verification with the following patch (I am aware the 
-comments still need to be updated, this was just to be able to run the 
-tool) and the tool still finds no violation.
-
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 010cf4e6d0b8..c62e409906a2 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -107,7 +107,7 @@ rt_mutex_set_owner(struct rt_mutex_base *lock, 
-struct task_struct *owner)
-  	 * lock->wait_lock is held but explicit acquire semantics are needed
-  	 * for a new lock owner so WRITE_ONCE is insufficient.
-  	 */
--	xchg_acquire(&lock->owner, rt_mutex_owner_encode(lock, owner));
-+	WRITE_ONCE(lock->owner, rt_mutex_owner_encode(lock, owner));
-  }
-
-  static __always_inline void rt_mutex_clear_owner(struct rt_mutex_base 
-*lock)
-@@ -232,12 +232,7 @@ static __always_inline bool 
-rt_mutex_cmpxchg_release(struct rt_mutex_base *lock,
-   */
-  static __always_inline void mark_rt_mutex_waiters(struct rt_mutex_base 
-*lock)
-  {
--	unsigned long owner, *p = (unsigned long *) &lock->owner;
--
--	do {
--		owner = *p;
--	} while (cmpxchg_relaxed(p, owner,
--				 owner | RT_MUTEX_HAS_WAITERS) != owner);
-+	atomic_long_or(RT_MUTEX_HAS_WAITERS, (atomic_long_t *)&lock->owner);
-
-  	/*
-  	 * The cmpxchg loop above is relaxed to avoid back-to-back ACQUIRE
 -- 
+Hamza
 
