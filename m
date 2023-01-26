@@ -2,142 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A82B67D517
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FD567D51B
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 20:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbjAZTIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 14:08:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S232461AbjAZTKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 14:10:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjAZTIJ (ORCPT
+        with ESMTP id S229777AbjAZTKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 14:08:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4925BBF
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:07:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674760031;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HAzPuEtZNKjq1ETKDrru2udxiQbSs8Nq94l8Ylte7oc=;
-        b=YZzK3eutY4l4Hs8tk92djc2MekEIqZ3c8hv7iHrX3aBG6Rvx5ZV2TLALGhouV3we5zhy45
-        2akujpFTXd4wZEssnIATlnsYpdXHSkgwoJs6vFpEiX7mUxE3+hlDALm2ZmwcGJUeKR1Xco
-        2lEM8ef4XGNh8VCHl5K9NSxOpO403+Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-186-SSu0E1y2OGuDi9AFpIeu1Q-1; Thu, 26 Jan 2023 14:07:07 -0500
-X-MC-Unique: SSu0E1y2OGuDi9AFpIeu1Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 564F81C05AFC;
-        Thu, 26 Jan 2023 19:07:07 +0000 (UTC)
-Received: from [10.22.33.13] (unknown [10.22.33.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B14112166B26;
-        Thu, 26 Jan 2023 19:07:06 +0000 (UTC)
-Message-ID: <2d0483b4-f94f-8935-1a05-91417e3bfe8d@redhat.com>
-Date:   Thu, 26 Jan 2023 14:07:06 -0500
+        Thu, 26 Jan 2023 14:10:16 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7634F190
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:10:15 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id m14so2325030wrg.13
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 11:10:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XZVlCpe2YPL2TN3TFT9AqKB26L5YrQ2SxKcA4F5aIVA=;
+        b=bqiPNBtPCGC3Dt5ZQRSVrAtgB5YTmuDiUyV/bySZ3En9FH7ZiSa+3d475afcxorzQL
+         BcBlMbWZDlAEDRT8ehVmM0H18jLP84kk0FLIv0Th5HBB0ttBFsp/BuxMDv0O7yaMozMF
+         u1EioQKIUN1hAO89sTx5webSx+SGSqK0BjKDDCKwf+LEh2Mt9LZT2Ou2rHrOOliSxMQQ
+         8BdQXRmTW/3GxO7FNLYC3jipX4GwYJxCAGpsd/nkLjiI4K5ulSdS9vB+ajB9oebDL2Um
+         7//AfPRGk5idWtx1cFt6Rx2JCbX9hZ4je6PhcI3I+7Tzg6wmnKIK8YZAHi+zpsRa8JdP
+         qOsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XZVlCpe2YPL2TN3TFT9AqKB26L5YrQ2SxKcA4F5aIVA=;
+        b=4Sv/AM6vto3HKmkJrKgDxInOBfpsccnUeV9j172DYskAZFY+1s4jCC0wGUDXjNb18R
+         SJKGbq1JIuLOxYtkpbRC1OAjmdvyiQMyKAu6oQjrMVmfUAcoFsPd46UW9Qjv9gUAA1dp
+         Lr5Ea+NwPG+rOGYlMp7NJGaxbK+hXM7tBY0AaAIXXqkBspaGyXuOwl28bcY1p8GB+cdY
+         x+/KnmEPnm5kLPY5r6o5TF7PRMTkZUtZknIHQnsosQ2MBwbkW7LzsHsNwW2F5U38yF8j
+         r1hiN2EabGeswTYDpJuG0Qt0benZR/zFvA8uJ5RbNZjmDcAPQQUQooMyU7YdTgwfj158
+         rq2g==
+X-Gm-Message-State: AO0yUKXlW9gv4tTk3Eo+OwI3HsCDdzz1hSvLAONkRRPPJRZf37s2u0tj
+        p4mPK4QDxVXuO03ESQKb/OZlJlNxLsSUYpzavRFR/w==
+X-Google-Smtp-Source: AK7set/mmUq2VJuJRVgzRa/6Xnzlcx41hw/h5rvmYu2jYOJyL5sIkbF+l18j3dzlNgKOqoIJLVRMJ/NxowqhDSYUYuY=
+X-Received: by 2002:a5d:5341:0:b0:2bf:b79f:73f0 with SMTP id
+ t1-20020a5d5341000000b002bfb79f73f0mr345146wrv.654.1674760213868; Thu, 26 Jan
+ 2023 11:10:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
-Content-Language: en-US
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>, dsterba@suse.cz,
-        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Chris Murphy <lists@colorremedies.com>,
+References: <20230126011854.198243-1-irogers@google.com> <20230126011854.198243-3-irogers@google.com>
+ <e74b8293-5d30-7522-6e5e-a7c7994039c5@oracle.com>
+In-Reply-To: <e74b8293-5d30-7522-6e5e-a7c7994039c5@oracle.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 26 Jan 2023 11:10:01 -0800
+Message-ID: <CAP-5=fUrHqAtP-yRDYi4G4oo-PX-2YF8tyB=BBk2t0iM_U3__g@mail.gmail.com>
+Subject: Re: [PATCH v4 02/12] perf jevents metric: Add ability to rewrite
+ metrics in terms of others
+To:     John Garry <john.g.garry@oracle.com>
+Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-References: <CABXGCsN+BcaGO0+0bJszDPvA=5JF_bOPfXC=OLzMzsXY2M8hyQ@mail.gmail.com>
- <20220726164250.GE13489@twin.jikos.cz>
- <CABXGCsN1rzCoYiB-vN5grzsMdvgm1qv2jnWn0enXq5R-wke8Eg@mail.gmail.com>
- <20230125171517.GV11562@twin.jikos.cz>
- <CABXGCsOD7jVGYkFFG-nM9BgNq_7c16yU08EBfaUc6+iNsX338g@mail.gmail.com>
- <Y9K6m5USnON/19GT@boqun-archlinux>
- <017f7b9e-323c-f9aa-12fa-9c9a16dabd35@redhat.com>
- <Y9LNoDtOK4nun968@boqun-archlinux>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y9LNoDtOK4nun968@boqun-archlinux>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
+        Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/23 13:59, Boqun Feng wrote:
-> On Thu, Jan 26, 2023 at 01:30:34PM -0500, Waiman Long wrote:
->> On 1/26/23 12:38, Boqun Feng wrote:
->>> [Cc lock folks]
->>>
->>> On Thu, Jan 26, 2023 at 02:47:42PM +0500, Mikhail Gavrilov wrote:
->>>> On Wed, Jan 25, 2023 at 10:21 PM David Sterba <dsterba@suse.cz> wrote:
->>>>> On Wed, Jan 25, 2023 at 01:27:48AM +0500, Mikhail Gavrilov wrote:
->>>>>> On Tue, Jul 26, 2022 at 9:47 PM David Sterba <dsterba@suse.cz> wrote:
->>>>>>> On Tue, Jul 26, 2022 at 05:32:54PM +0500, Mikhail Gavrilov wrote:
->>>>>>>> Hi guys.
->>>>>>>> Always with intensive writing on a btrfs volume, the message "BUG:
->>>>>>>> MAX_LOCKDEP_CHAIN_HLOCKS too low!" appears in the kernel logs.
->>>>>>> Increase the config value of LOCKDEP_CHAINS_BITS, default is 16, 18
->>>>>>> tends to work.
->>>>>> Hi,
->>>>>> Today I was able to get the message "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too
->>>>>> low!" again even with LOCKDEP_CHAINS_BITS=18 and kernel 6.2-rc5.
->>>>>>
->>>>>> ❯ cat /boot/config-`uname -r` | grep LOCKDEP_CHAINS_BITS
->>>>>> CONFIG_LOCKDEP_CHAINS_BITS=18
->>>>>>
->>>>>> [88685.088099] BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
->>>>>> [88685.088124] turning off the locking correctness validator.
->>>>>> [88685.088133] Please attach the output of /proc/lock_stat to the bug report
->>>>>> [88685.088142] CPU: 14 PID: 1749746 Comm: mv Tainted: G        W    L
->>>>>>     -------  ---  6.2.0-0.rc5.20230123git2475bf0250de.38.fc38.x86_64 #1
->>>>>> [88685.088154] Hardware name: System manufacturer System Product
->>>>>> Name/ROG STRIX X570-I GAMING, BIOS 4408 10/28/2022
->>>>>>
->>>>>> What's next? Increase this value to 19?
->>>>> Yes, though increasing the value is a workaround so you may see the
->>>>> warning again.
->>>> Is there any sense in this WARNING if we would ignore it and every
->>>> time increase the threshold value?
->>> Lockdep uses static allocated array to track lock holdings chains to
->>> avoid dynmaic memory allocation in its own code. So if you see the
->>> warning it means your test has more combination of lock holdings than
->>> the array can record. In other words, you reach the resource limitation,
->>> and in that sense it makes sense to just ignore it and increase the
->>> value: you want to give lockdep enough resource to work, right?
->>>
->>>> May Be set 99 right away? Or remove such a check condition?
->>> That requires having 2^99 * 5 * sizeof(u16) memory for lock holding
->>> chains array..
->> Note that every increment of LOCKDEP_CHAINS_BITS double the storage space.
->> With 99, that will likely exceed the total amount of memory you have in your
->> system.
->>
->> Boqun, where does the 5 figure come from. It is just a simple u16 array of
-> 	#define MAX_LOCKDEP_CHAINS_BITS	CONFIG_LOCKDEP_CHAINS_BITS
-> 	#define MAX_LOCKDEP_CHAINS	(1UL << MAX_LOCKDEP_CHAINS_BITS)
+On Thu, Jan 26, 2023 at 7:59 AM John Garry <john.g.garry@oracle.com> wrote:
 >
-> 	#define MAX_LOCKDEP_CHAIN_HLOCKS (MAX_LOCKDEP_CHAINS*5)
+> On 26/01/2023 01:18, Ian Rogers wrote:
+> > Add RewriteMetricsInTermsOfOthers that iterates over pairs of names
+> > and expressions trying to replace an expression, within the current
+> > expression, with its name.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 >
-> I think the last one means we think the average length of a lock chain
-> is 5, in other words, in average, a task hold at most 5 locks. I don't
-> know where the 5 came from either, but it's there ;-)
+> hmmm ... did you test this for many python versions?
+>
+> Maybe this patch causes this error:
+>
+> Traceback (most recent call last):
+>   File "pmu-events/jevents.py", line 7, in <module>
+>     import metric
+>   File "/home/john/acme/tools/perf/pmu-events/metric.py", line 549, in
+> <module>
+>     def RewriteMetricsInTermsOfOthers(metrics: list[Tuple[str, Expression]]
+> TypeError: 'type' object is not subscriptable
+> make[3]: *** [pmu-events/Build:26: pmu-events/pmu-events.c] Error 1
+> make[2]: *** [Makefile.perf:676: pmu-events/pmu-events-in.o] Error 2
+> make[2]: *** Waiting for unfinished jobs....
+>
+> I have python 3.6.15
+>
+> Thanks,
+> John
 
-You are right. I missed that when I looked. So 5 is assumed to the 
-average length of a lock chain.
+Apologies, I have to test python3.6 with docker and so if I think the
+change is small enough.. My error, will spin v5.
 
 Thanks,
-Longman
+Ian
 
+>
