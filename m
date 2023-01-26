@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA12367C248
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 02:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7974F67C249
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 02:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236475AbjAZBVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 20:21:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
+        id S236494AbjAZBV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 20:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236310AbjAZBVF (ORCPT
+        with ESMTP id S236492AbjAZBVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 20:21:05 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28D364DB6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:20:34 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-507aac99fdfso3884007b3.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:20:34 -0800 (PST)
+        Wed, 25 Jan 2023 20:21:23 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F5B61D58
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:20:50 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id x188-20020a2531c5000000b00716de19d76bso321332ybx.19
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:20:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LYQmk36LwpH1amM5NS/JZnLvaK2yBpvx1p5Vz+enrHo=;
-        b=g5kNYx2i/3N21JTuAlpQ2Fzr0z4yS5BF5bpwKl6uBD9aJAt61CO1Cxf2wOs6Z6Le4j
-         woG9v16pTQyq6MRJ3l0+3Q8SwZomo4kn2dMJ78fwpX9TiUULdeKPKPQMgJLHQXfeSljh
-         Tz8qAv3zT6uOZvOFT6MlpOMURNETaASAXkZOz5R0qIHG4KfR+qUenefEszI6IbhmlxAo
-         DpbMgACRE0CV+GOVDn/CN0GOTKRfvezhoZgYafaFwo4iXRIsRJVYG9QTqaDNxbb/vvIh
-         VahpBNlPSFCRJFvx7tii4AcdZRcpXXE8FeDomLyGIK6NHSUIJ2OeVzRVYe+oWOrxZQw+
-         LZiA==
+        bh=rjltbgFvPXxNxLiYStYE3VCcVG+pja2QaxGJnpw1y/o=;
+        b=VxQifR4eTm/oiq+AtgXObEPg6PbS+FCbU66oTdjhqZ7NOq5U2vhhVAuJG7CJAmTAx4
+         Lt50WFOtTpTs1TQKLM0aOwhl4/O9QSqsZ7GYnbdd8r+IghyCyr7DL5d6c/hl6Au4KTsM
+         ErRsXqJd/YTXEyZLP90smJmcXZ2wm1RhUX1E2uhwba8PGvyRkWiCtQofEvi/IEOSjYLn
+         WrQqm5BZ6+RZ99ZwhgD8m92fCZeLverYJd/5gsKFa6jFKD1Qm01QpjyXwVbdK1wdSPb8
+         QXHTuTatMmpI9W2nK87lMLio5oAZirIt7fZGwV+avak9PsioHMSqNPVCTS6ndtiPIQqP
+         D5Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LYQmk36LwpH1amM5NS/JZnLvaK2yBpvx1p5Vz+enrHo=;
-        b=uU+r72HbdQqGaGS/T5G3PmNanrxSpTpBuoIRxsKl//bu9wpqGzf5mW8Yotq24JHlQs
-         Ai34joPs+MCxFwXMtq+EERmK/cZFNueUmPt6oAu3qZ9NBlCUHX6jDT5R3UVk5n6QvhUY
-         +XGyKqJnpl1XMgqkP7bsaJW3U4azuR7rCJ92GiBDEImudN9Ipd4LHxDglSPk4ZP7A4Am
-         4I3kJx374qRZDOcemIh8zl964CViMW6FWnTrgi+Wk+Sragf26znC0yQ8pyLZ0RH4ppgs
-         uTTPIefcO2p4S8lSg7U4E6LB37T9hHmGHPLlqTwLbcO65uHPy62O7a3BzEm0LbKKNALm
-         Qjkg==
-X-Gm-Message-State: AFqh2kpp+/XMNvc/CAu1sRdwskWhtLIdsagQC6hJknl3a79OACBV0lNu
-        JmL3lZ0o49LAb4XD4nX4ISVaJ1Kcy0o1
-X-Google-Smtp-Source: AMrXdXtJyXEuVpA/fKT4Gs+OHOHp62Ve2MgKmevUrheQ5iCrugGv01d4Et9NsO/jcVDyYhqORA5ZqbJKTjoZ
+        bh=rjltbgFvPXxNxLiYStYE3VCcVG+pja2QaxGJnpw1y/o=;
+        b=eptuxiCuuK6VLr1YPc2zf7jHWnuL2oU+bgT+dY7W2sCFiVQNTVQVxrlbg4kC9RhFa8
+         4u4qjBkM3MTKHTv61cr0mO9U+vXqxH4h9CewAzQ/dKFCiqYhko1/Jp98SMVbAK6qGN63
+         DV6Un4jp10LaDRfjUnfPWeabgH8bTQf/Wqs9sMzM+LDPSPl7N3zO5TNQqejA3NCoZUzl
+         FxQzewYIJFnmJBfaH0RuASV0Rj44wR+vvPAFjXFI/IPkChs8LMKo9uj+kaKsuI3PwwUf
+         0d1XKjvbB1M7uxSfeKyIqcoakotkihNytgLZPoH97d1EQgY3bp7BpZ86+w6pcDCmXxWc
+         RFAA==
+X-Gm-Message-State: AFqh2kq4h7j/Zc0vBUPUZL/d8D4AJc9I4yP9Bu1/9/UkqbJT0NWR15pS
+        H9Eeev/bjQ1AUftvg1mqsxbaKYfiVScR
+X-Google-Smtp-Source: AMrXdXsACLfASuysaOm2/S/UHYpvgci8aYMjvrQ5T1As6a7u+QStn1ktC49JQqivsGHwIDxUs3nwQIls/UA1
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:568d:4d98:b468:b025])
- (user=irogers job=sendgmr) by 2002:a81:5c02:0:b0:4e2:db5a:2c2c with SMTP id
- q2-20020a815c02000000b004e2db5a2c2cmr4504216ywb.202.1674696032312; Wed, 25
- Jan 2023 17:20:32 -0800 (PST)
-Date:   Wed, 25 Jan 2023 17:18:53 -0800
+ (user=irogers job=sendgmr) by 2002:a81:ec05:0:b0:4fd:413d:204c with SMTP id
+ j5-20020a81ec05000000b004fd413d204cmr2646561ywm.419.1674696041384; Wed, 25
+ Jan 2023 17:20:41 -0800 (PST)
+Date:   Wed, 25 Jan 2023 17:18:54 -0800
 In-Reply-To: <20230126011854.198243-1-irogers@google.com>
-Message-Id: <20230126011854.198243-12-irogers@google.com>
+Message-Id: <20230126011854.198243-13-irogers@google.com>
 Mime-Version: 1.0
 References: <20230126011854.198243-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Subject: [PATCH v4 11/12] perf jevents: Add model list option
+Subject: [PATCH v4 12/12] perf pmu-events: Fix testing with JEVENTS_ARCH=all
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Will Deacon <will@kernel.org>,
@@ -94,73 +94,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows the set of generated jevents events and metrics be limited
-to a subset of the model names. Appropriate if trying to minimize the
-binary size where only a set of models are possible.
+The #slots literal will return NAN when not on ARM64 which causes a
+perf test failure when not on an ARM64 for a JEVENTS_ARCH=all build:
+..
+ 10.4: Parsing of PMU event table metrics with fake PMUs             : FAILED!
+..
+Add an is_test boolean so that the failure can be avoided when running
+as a test.
 
+Fixes: acef233b7ca7 ("perf pmu: Add #slots literal support for arm64")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/Build      |  3 ++-
- tools/perf/pmu-events/jevents.py | 14 ++++++++++++++
- 2 files changed, 16 insertions(+), 1 deletion(-)
+ tools/perf/tests/pmu-events.c | 1 +
+ tools/perf/util/expr.h        | 1 +
+ tools/perf/util/expr.l        | 8 +++++---
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
-index 15b9e8fdbffa..a14de24ecb69 100644
---- a/tools/perf/pmu-events/Build
-+++ b/tools/perf/pmu-events/Build
-@@ -10,6 +10,7 @@ JEVENTS_PY	=  pmu-events/jevents.py
- ifeq ($(JEVENTS_ARCH),)
- JEVENTS_ARCH=$(SRCARCH)
- endif
-+JEVENTS_MODEL ?= all
+diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
+index 962c3c0d53ba..accf44b3d968 100644
+--- a/tools/perf/tests/pmu-events.c
++++ b/tools/perf/tests/pmu-events.c
+@@ -950,6 +950,7 @@ static int metric_parse_fake(const char *metric_name, const char *str)
+ 		pr_debug("expr__ctx_new failed");
+ 		return TEST_FAIL;
+ 	}
++	ctx->sctx.is_test = true;
+ 	if (expr__find_ids(str, NULL, ctx) < 0) {
+ 		pr_err("expr__find_ids failed\n");
+ 		return -1;
+diff --git a/tools/perf/util/expr.h b/tools/perf/util/expr.h
+index 029271540fb0..eaa44b24c555 100644
+--- a/tools/perf/util/expr.h
++++ b/tools/perf/util/expr.h
+@@ -9,6 +9,7 @@ struct expr_scanner_ctx {
+ 	char *user_requested_cpu_list;
+ 	int runtime;
+ 	bool system_wide;
++	bool is_test;
+ };
  
- #
- # Locate/process JSON files in pmu-events/arch/
-@@ -23,5 +24,5 @@ $(OUTPUT)pmu-events/pmu-events.c: pmu-events/empty-pmu-events.c
- else
- $(OUTPUT)pmu-events/pmu-events.c: $(JSON) $(JSON_TEST) $(JEVENTS_PY) pmu-events/metric.py
- 	$(call rule_mkdir)
--	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) pmu-events/arch $@
-+	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVENTS_MODEL) pmu-events/arch $@
- endif
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 627ee817f57f..2bcd07ce609f 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -599,6 +599,8 @@ const struct pmu_events_map pmu_events_map[] = {
-             else:
-               metric_tblname = 'NULL'
-               metric_size = '0'
-+            if event_size == '0' and metric_size == '0':
-+              continue
-             cpuid = row[0].replace('\\', '\\\\')
-             _args.output_file.write(f"""{{
- \t.arch = "{arch}",
-@@ -888,12 +890,24 @@ def main() -> None:
-           action: Callable[[Sequence[str], os.DirEntry], None]) -> None:
-     """Replicate the directory/file walking behavior of C's file tree walk."""
-     for item in os.scandir(path):
-+      if _args.model != 'all' and item.is_dir():
-+        # Check if the model matches one in _args.model.
-+        if len(parents) == _args.model.split(',')[0].count('/'):
-+          # We're testing the correct directory.
-+          item_path = '/'.join(parents) + ('/' if len(parents) > 0 else '') + item.name
-+          if 'test' not in item_path and item_path not in _args.model.split(','):
-+            continue
-       action(parents, item)
-       if item.is_dir():
-         ftw(item.path, parents + [item.name], action)
+ struct expr_parse_ctx {
+diff --git a/tools/perf/util/expr.l b/tools/perf/util/expr.l
+index 0168a9637330..72ff4f3d6d4b 100644
+--- a/tools/perf/util/expr.l
++++ b/tools/perf/util/expr.l
+@@ -84,9 +84,11 @@ static int literal(yyscan_t scanner, const struct expr_scanner_ctx *sctx)
+ 	YYSTYPE *yylval = expr_get_lval(scanner);
  
-   ap = argparse.ArgumentParser()
-   ap.add_argument('arch', help='Architecture name like x86')
-+  ap.add_argument('model', help='''Select a model such as skylake to
-+reduce the code size.  Normally set to "all". For architectures like
-+ARM64 with an implementor/model, the model must include the implementor
-+such as "arm/cortex-a34".''',
-+                  default='all')
-   ap.add_argument(
-       'starting_dir',
-       type=dir_path,
+ 	yylval->num = expr__get_literal(expr_get_text(scanner), sctx);
+-	if (isnan(yylval->num))
+-		return EXPR_ERROR;
+-
++	if (isnan(yylval->num)) {
++		if (!sctx->is_test)
++			return EXPR_ERROR;
++		yylval->num = 1;
++	}
+ 	return LITERAL;
+ }
+ %}
 -- 
 2.39.1.456.gfc5497dd1b-goog
 
