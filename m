@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2649267CC60
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF9D67CC62
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237063AbjAZNjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:39:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S237092AbjAZNjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236377AbjAZNjF (ORCPT
+        with ESMTP id S236377AbjAZNjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:39:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A330E45BD5;
-        Thu, 26 Jan 2023 05:39:02 -0800 (PST)
+        Thu, 26 Jan 2023 08:39:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E79442F4;
+        Thu, 26 Jan 2023 05:39:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F5A3B81DC0;
-        Thu, 26 Jan 2023 13:39:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED866C4339E;
-        Thu, 26 Jan 2023 13:38:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76B7961765;
+        Thu, 26 Jan 2023 13:39:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20943C4339B;
+        Thu, 26 Jan 2023 13:39:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674740340;
-        bh=3gnbHufn8tvtYBXfJcxSBpfzUNOp7H3EkIw2GJIYjgw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YIsCB1IhovlAeELk1XKJOXRwEpG2jdkrlDHnY9J7xy4dvse5eclsKqughFTGv+pkc
-         /mjB7uZ6iUjpiWu7ueVdhwMNZPqtp9YrB4EuP1KLvh/+y0FMs5gJt2yArde37cC4Th
-         pZaJ2A272C3lX85N9wrtbkmtle/5nVuT5axBRBg+ndBAMmuYmVajxysFZn6hOYbn+F
-         +DlJa5zl3VOYDiugu044AMsYqXEPwTc2wg1D+nu5veFzaaW1kZuEDG7lgS0ptDrger
-         ZP8CQFrJwJZHx91A2auvJvF1oIiL7hxywIQgF0c7i7dSSAXpTai+UnJVx28VoY5jAo
-         9q8ZUrr4ighGg==
-Received: by mail-ua1-f50.google.com with SMTP id j1so344822uan.1;
-        Thu, 26 Jan 2023 05:38:59 -0800 (PST)
-X-Gm-Message-State: AFqh2kqzZjIBhTDL0dSYEAA/JHe9pZG42800zrj13BAp8ykyUZxghQ6U
-        0XnW7R+Ms10y8CarsXomPW9kxBpkBEPlg+WPOw==
-X-Google-Smtp-Source: AMrXdXsiGeT85ZR+/u+85VzDpJDX04wnLvJNs+7Dcb8hausx6i/2duWGFT0kGPcnJXbR4OO7GypUU3GwITb3P7nsCC4=
-X-Received: by 2002:ab0:5a32:0:b0:61b:d0f0:406b with SMTP id
- l47-20020ab05a32000000b0061bd0f0406bmr3059624uad.9.1674740338890; Thu, 26 Jan
- 2023 05:38:58 -0800 (PST)
+        s=k20201202; t=1674740375;
+        bh=0BOAZ5CaGFXmsUH+VWdTby2yVDH2z/3lPjynQjnh/9Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ROkQa9zbDqF0znlFG9978f7k+0z6ws5p/kNMMyHyfh86m9tGGXirjSuU/PI5Q7ZDO
+         +vrm0LkT7KTeBZSgGjjHVtPo0opHe+soGQuW5XV6HiS8InAAGHmFDaRM7+E5MbwBQN
+         UeH/e/2fPlb+VMJDfN6NcaZMDpnS3VCSa5ogTPUhhx0tC7hQu4XoZXtxa2sRpmScWL
+         xz/M+XgfjHoKVf71ygjTw0PaNh9nKZJz312GkXjW67OKSB7ui5sd/1gAFCGoPst/5b
+         C7moZHUIo+2FduQKhEdqcW/WPgP5y8xvxPY1CjaL9Q/CVN1VqO/QsFu2LWlMW79hmy
+         9oUBkSjl/r1TQ==
+Date:   Thu, 26 Jan 2023 14:39:30 +0100
+From:   Alexey Gladkov <legion@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, containers@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Val Cowan <vcowan@redhat.com>
+Subject: Re: [RFC PATCH v1 0/6] proc: Add allowlist for procfs files
+Message-ID: <Y9KCkuGqyr5T13XN@example.org>
+References: <cover.1674660533.git.legion@kernel.org>
+ <20230125153628.43c12cbe05423fef7d44f0dd@linux-foundation.org>
+ <20230126101607.b4de35te7gcf6mkn@wittgenstein>
 MIME-Version: 1.0
-References: <20230125184438.28483-1-nick.hawkins@hpe.com> <20230125184438.28483-3-nick.hawkins@hpe.com>
- <20230125211811.GA2902717-robh@kernel.org> <399C2A3B-703A-4D67-818A-27AFA2F1B742@hpe.com>
-In-Reply-To: <399C2A3B-703A-4D67-818A-27AFA2F1B742@hpe.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 26 Jan 2023 07:38:47 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJgoWBmx8-Gcabo_d8R7wqS1pPAu1wauAqq8JRrWMFq3A@mail.gmail.com>
-Message-ID: <CAL_JsqJgoWBmx8-Gcabo_d8R7wqS1pPAu1wauAqq8JRrWMFq3A@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] dt-bindings: i2c: Add hpe,gxp-i2c
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "joel@jms.id.au" <joel@jms.id.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126101607.b4de35te7gcf6mkn@wittgenstein>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,36 +59,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 3:32 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
->
-> > > + hpe,sysreg:
-> > > + $ref: /schemas/types.yaml#/definitions/phandle
-> > > + description:
-> > > + Phandle to the global status and enable interrupt registers shared
-> > > + between each I2C engine controller instance. It enables the I2C
-> > > + engine controller to act as both a master or slave by being able to
-> > > + arm and respond to interrupts from its engine. Each bit in the
-> > > + registers represent the respective bit position.
->
->
-> > Each bit represents the bit position?
->
-> Yes what I mean here is that bit 0 represents engine 0, bit 1 represents
-> engine 1 and so on. I will reword this how you have below.
->
-> > AIUI, each I2C instance has a bit in it needs to control. How does the
-> > driver know what instance (and therefore the correct bit)? Typically you
-> > would have a 2nd cell here with that information.
->
-> We are currently using the memory area designated reg to determine
-> which engine we are on.
->
-> Here is a snippet from patch 1 of this patchset that introduces the driver:
-> /* Use physical memory address to determine which I2C engine this is. */
-> +       drvdata->engine = ((u32)drvdata->base & 0xf00) >> 8;
->
-> This works because each engine is 0x100 apart.
+On Thu, Jan 26, 2023 at 11:16:07AM +0100, Christian Brauner wrote:
+> On Wed, Jan 25, 2023 at 03:36:28PM -0800, Andrew Morton wrote:
+> > On Wed, 25 Jan 2023 16:28:47 +0100 Alexey Gladkov <legion@kernel.org> wrote:
+> > 
+> > > The patch expands subset= option. If the proc is mounted with the
+> > > subset=allowlist option, the /proc/allowlist file will appear. This file
+> > > contains the filenames and directories that are allowed for this
+> > > mountpoint. By default, /proc/allowlist contains only its own name.
+> > > Changing the allowlist is possible as long as it is present in the
+> > > allowlist itself.
+> > > 
+> > > This allowlist is applied in lookup/readdir so files that will create
+> > > modules after mounting will not be visible.
+> > > 
+> > > Compared to the previous patches [1][2], I switched to a special virtual
+> > > file from listing filenames in the mount options.
+> > > 
+> > 
+> > Changlog doesn't explain why you think Linux needs this feature.  The
+> > [2/6] changelog hints that containers might be involved.  IOW, please
+> > fully describe the requirement and use-case(s).
+> > 
+> > Also, please describe why /proc/allowlist is made available via a mount
+> > option, rather than being permanently present.
+> > 
+> > And why add to subset=, instead of a separate mount option.
+> > 
+> > Does /proc/allowlist work in subdirectories?  Like, permit presence of
+> > /proc/sys/vm/compact_memory?
+> > 
+> > I think the whole thing is misnamed, really.  "allowlist" implies
+> > access permissions.  Some of the test here uses "visibility" and other
+> > places use "presence", which are better.  "presentlist" and
+> > /proc/presentlist might be better.  But why not simply /proc/contents?
+> 
+> Currently, a lot of container runtimes - even if they mount a new procfs
+> instance - overmount various procfs files and directories to ensure that
+> they're hidden from the container workload. (The motivations for this
+> are mixed and usually it's only needed for containers that run with the
+> same privilege level as the host.)
+> 
+> The consequence of overmounting is that we need to refuse mounting
+> procfs again somewhere else otherwise the procfs instance might reveal
+> files and directories that were supposed to be hidden.
+> 
+> So this patchset moves the ability to hide entries into the kernel
+> through an allowlist. This way you can hide files and directories while
+> being able to mount procfs again because it will inherit the same
+> allowlist.
+> 
+> I get the motivation. The question is whether this belongs into the
+> kernel at all. I'm unfortunately not convinced.
+> 
+> This adds a lot of string parsing to procfs and I think we would also
+> need to decide what a reasonable maximum limit for such allowlists would
+> be.> The data structure likely shouldn't be a linked list but at least an
+> rbtree especially if the size isn't limited.
 
-Ah, that works fine then.
+There is a limit. So far I've limited the file size to 128k. I think this
+is a reasonable limit.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> But fundamentally I think it moves something that should be and
+> currently is a userspace policy into the kernel which I think is wrong.
+
+We don't have mechanisms to implement this userspace policy. overmount is
+not a solution but plugging holes in the absence of other ways to control
+the visibility of files in procfs.
+
+> Sure you can't predict what files show up in procfs over time but then
+> subset=pid is already your friend - even if not as fine-grained.
+> 
+> If this where another simple subset style mount option that allowlists a
+> bunch of well-known global proc files then sure. But making this
+> dynamically configurable from userspace doesn't make sense to me. I
+> mean, users could write /gobble/dy/gook into /proc/allowlist or use it
+> to stash secrets or hashes or whatever as we have no way of figuring out
+> whether the entry they allowlist does or will actually ever exist.
+
+BTW I only allow printable data to be written to the file.
+
+We can make this file write-only and then writing any extraneous data
+there will not make sense.
+
+> In general, such flexibility belongs into userspace imho.
+> 
+> Frankly, if that is really required it would almost make more sense to
+> be able to attach a new bpf program type to procfs that would allow to
+> filter procfs entries. Then the filter could be done purely in
+> userspace. If signed bpf lands one could then even ship signed programs
+> that are attachable by userns root.
+
+I'll ask the podman developers how much more comfortable they would be
+using bpf to control file visibility in procfs. thanks for the idea.
+
+-- 
+Rgrds, legion
+
