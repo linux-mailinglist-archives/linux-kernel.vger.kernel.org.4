@@ -2,139 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EDF67CCFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E5C67CD0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjAZN56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:57:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        id S231607AbjAZN7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:59:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjAZN5y (ORCPT
+        with ESMTP id S231281AbjAZN7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:57:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82A5A5EE;
-        Thu, 26 Jan 2023 05:57:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6F6361812;
-        Thu, 26 Jan 2023 13:57:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49963C4339E;
-        Thu, 26 Jan 2023 13:57:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674741427;
-        bh=A4FypTxPt7KtjZ3a/ZCUVPqWgiTChOiIy6RcBgD/1JU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gkaXnwVcYEjaV9cKX+jk22movsCf0mow5QoNroNM4enlyYMVrd0BX9SSSpVKG4aKB
-         kKJcyiYU1Ibl/HIC9y+rRzltRAIiFTkyDCnl2iAO9vlc+6Z6pJsKr1Fb6avi6aPMMF
-         Ahq3Vu/tWoCf1/CKnYJCeD9Tp16XP45lf+BTFzvv9BnrkpdYfF9pzx5Lu/JuwSiVzc
-         CW0vbZrYiPEMLAI40mKDt5QDtkrhXGO6hv59TK98b2mxfWa+U8fvKf6gcIE84P12gL
-         WBdnpj7uRr65R5ca5j/N3VHMzdkU9cyQYT4kk9jFQ0EbqmE4oK1RnU+TIU9wnQ8y0C
-         wrYll7Oqn7Xug==
-Received: by mail-vk1-f174.google.com with SMTP id v81so910962vkv.5;
-        Thu, 26 Jan 2023 05:57:07 -0800 (PST)
-X-Gm-Message-State: AFqh2ko+7suRGPphN7Mbvkp0TaD6xBPKO15MW01+etfC+QLLHrnLzOX+
-        XBK2/lcq49J6FDbQko7cw98fZhOjMEVdYSmyVg==
-X-Google-Smtp-Source: AMrXdXvRhY3YBxnwfuP26lobnBE5EYhYWq39LHxcmJlb1XlBGvEHYkW37o5avlOJSpGKu8CjXvG7+ZOtuESLmcYg5mQ=
-X-Received: by 2002:a1f:a002:0:b0:3d5:d30f:81c2 with SMTP id
- j2-20020a1fa002000000b003d5d30f81c2mr4632814vke.14.1674741426154; Thu, 26 Jan
- 2023 05:57:06 -0800 (PST)
+        Thu, 26 Jan 2023 08:59:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E48159988
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:58:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674741488;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f0NzERiZZJGCAkZaTLp1domqOWjoThIpg30kpPJKWMo=;
+        b=Z8Nlk8xkTiVK8PlFmH/lNeVCWqPYfd2d12xIQvmBTLrf3o0kMkPW3nS1Ptjg6Jc6qLXRCd
+        y73sh7ImMmlGxypRMoweYcshAbf2Q98rUH5C6pbbTBKMv4w5KFx+ZfgDsusvuwlFapjWyM
+        H0+BUckQ042Kva579iuOQWJD8IzACdo=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-277-OrogVH02MJyLBpTjWf-1kQ-1; Thu, 26 Jan 2023 08:58:06 -0500
+X-MC-Unique: OrogVH02MJyLBpTjWf-1kQ-1
+Received: by mail-wm1-f71.google.com with SMTP id ay38-20020a05600c1e2600b003da7c41fafcso2849943wmb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:58:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f0NzERiZZJGCAkZaTLp1domqOWjoThIpg30kpPJKWMo=;
+        b=z7dr7p5OAskP5fF5UyGKCeMyJMLMd0gTE7yFh5FLRse+3gjY69FWqsJt7M5wmixenS
+         Je0oiY4ZfBVRGNNwWIvVP2+S1N5kXhcmUU1/hSzZOUGgJJhsLC84FYFrVR89xupCwlKN
+         V4tz87tVMTj6cl6NgViOeUkCIiIOU+cz7MJbT7hOXPvZ05ylVfshR6iRAas0XqfDEp2d
+         u4Jxq9TSFXgAVJgVONKWezcMk34PqPKIfQ+CLD19ko4Kg5RG+pKPKH2YA342Fjary0JI
+         Tp8aQUq+1jV6DrFrAGHMlCiqBvYL/t6RNtHcOfDpJZXPktoPY2iTJ48ubhQL4PlS81VL
+         CVsQ==
+X-Gm-Message-State: AFqh2kqlsmvDPl045SsVOf3b04TH2tDaZiw0GmvM5DOdHc9cHYYMA7F5
+        lyCz2aIPjjIlMDHhbmph0z7+GuH4Rj6EOA0XzBeH4qRkHmgimaF3IlkSmVaUpJlYAxbPiYdnme3
+        CAVrDecmrOy7aR7M5xBDCZCdb
+X-Received: by 2002:a05:6000:1b83:b0:2be:34f5:ac05 with SMTP id r3-20020a0560001b8300b002be34f5ac05mr25116502wru.0.1674741485529;
+        Thu, 26 Jan 2023 05:58:05 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtlfKk39QIucgkeq56V++rcPtefVDWtus3l9sNA/xIhsBFjF2sEE7lcJeosUhyIVDqk2W2mNg==
+X-Received: by 2002:a05:6000:1b83:b0:2be:34f5:ac05 with SMTP id r3-20020a0560001b8300b002be34f5ac05mr25116492wru.0.1674741485326;
+        Thu, 26 Jan 2023 05:58:05 -0800 (PST)
+Received: from work-vm (ward-16-b2-v4wan-166627-cust863.vm18.cable.virginm.net. [81.97.203.96])
+        by smtp.gmail.com with ESMTPSA id l15-20020a5d6d8f000000b002bfb37497a8sm1591489wrs.31.2023.01.26.05.58.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 05:58:04 -0800 (PST)
+Date:   Thu, 26 Jan 2023 13:58:02 +0000
+From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y9KG6g0CHlnKwuW+@work-vm>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9Jh2x9XJE1KEUg6@unreal>
+ <DM8PR11MB5750414F6638169C7097E365E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230124221218.341511-1-william.zhang@broadcom.com>
- <20230124221218.341511-3-william.zhang@broadcom.com> <abedd2e8-3c7e-f347-06af-99f2e5a2412b@linaro.org>
- <ee4727e1-5705-edb0-c724-2ae4d4d1a8e2@broadcom.com> <20230125205123.GA2864330-robh@kernel.org>
- <1489564a-59d3-6d38-fad7-02119bfedbeb@broadcom.com>
-In-Reply-To: <1489564a-59d3-6d38-fad7-02119bfedbeb@broadcom.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 26 Jan 2023 07:56:54 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL3CYCdamv15-kzvMgoYVpftJ0DoyB5L=LGVi-54GXP5Q@mail.gmail.com>
-Message-ID: <CAL_JsqL3CYCdamv15-kzvMgoYVpftJ0DoyB5L=LGVi-54GXP5Q@mail.gmail.com>
-Subject: Re: [PATCH v2 02/14] dt-bindings: spi: Add bcmbca-hsspi controller support
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
-        dregan@mail.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
-        jonas.gorski@gmail.com, dan.beygelman@broadcom.com,
-        joel.peshkin@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DM8PR11MB5750414F6638169C7097E365E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 3:41 PM William Zhang
-<william.zhang@broadcom.com> wrote:
-> On 01/25/2023 12:51 PM, Rob Herring wrote:
-> > On Wed, Jan 25, 2023 at 11:23:52AM -0800, William Zhang wrote:
-> >> On 01/24/2023 11:35 PM, Krzysztof Kozlowski wrote:
-> >>> On 24/01/2023 23:12, William Zhang wrote:
-> >>>> The new Broadcom Broadband BCMBCA SoCs includes a updated HSSPI
-> >>>> controller. Add new compatible strings to differentiate the old and new
-> >>>> controller while keeping MIPS based chip with the old compatible. Update
-> >>>> property requirements for these two revisions of the controller.  Also
-> >>>> add myself and Kursad as the maintainers.
+* Reshetova, Elena (elena.reshetova@intel.com) wrote:
+> > On Wed, Jan 25, 2023 at 03:29:07PM +0000, Reshetova, Elena wrote:
+> > > Replying only to the not-so-far addressed points.
+> > >
+> > > > On Wed, Jan 25, 2023 at 12:28:13PM +0000, Reshetova, Elena wrote:
+> > > > > Hi Greg,
+> > 
+> > <...>
+> > 
+> > > > > 3) All the tools are open-source and everyone can start using them right
+> > away
+> > > > even
+> > > > > without any special HW (readme has description of what is needed).
+> > > > > Tools and documentation is here:
+> > > > > https://github.com/intel/ccc-linux-guest-hardening
+> > > >
+> > > > Again, as our documentation states, when you submit patches based on
+> > > > these tools, you HAVE TO document that.  Otherwise we think you all are
+> > > > crazy and will get your patches rejected.  You all know this, why ignore
+> > > > it?
+> > >
+> > > Sorry, I didn’t know that for every bug that is found in linux kernel when
+> > > we are submitting a fix that we have to list the way how it has been found.
+> > > We will fix this in the future submissions, but some bugs we have are found by
+> > > plain code audit, so 'human' is the tool.
+> > 
+> > My problem with that statement is that by applying different threat
+> > model you "invent" bugs which didn't exist in a first place.
+> > 
+> > For example, in this [1] latest submission, authors labeled correct
+> > behaviour as "bug".
+> > 
+> > [1] https://lore.kernel.org/all/20230119170633.40944-1-
+> > alexander.shishkin@linux.intel.com/
+> 
+> Hm.. Does everyone think that when kernel dies with unhandled page fault 
+> (such as in that case) or detection of a KASAN out of bounds violation (as it is in some
+> other cases we already have fixes or investigating) it represents a correct behavior even if
+> you expect that all your pci HW devices are trusted? What about an error in two 
+> consequent pci reads? What about just some failure that results in erroneous input? 
 
-[...]
+I'm not sure you'll get general agreement on those answers for all
+devices and situations; I think for most devices for non-CoCo
+situations, then people are generally OK with a misbehaving PCI device
+causing a kernel crash, since most people are running without IOMMU
+anyway, a misbehaving device can cause otherwise undetectable chaos.
 
-> >>>>    properties:
-> >>>>      compatible:
-> >>>> -    const: brcm,bcm6328-hsspi
-> >>>> +    oneOf:
-> >>>> +      - const: brcm,bcm6328-hsspi
-> >>>> +      - items:
-> >>>> +          - enum:
-> >>>> +              - brcm,bcm47622-hsspi
-> >>>> +              - brcm,bcm4908-hsspi
-> >>>> +              - brcm,bcm63138-hsspi
-> >>>> +              - brcm,bcm63146-hsspi
-> >>>> +              - brcm,bcm63148-hsspi
-> >>>> +              - brcm,bcm63158-hsspi
-> >>>> +              - brcm,bcm63178-hsspi
-> >>>> +              - brcm,bcm6846-hsspi
-> >>>> +              - brcm,bcm6856-hsspi
-> >>>> +              - brcm,bcm6858-hsspi
-> >>>> +              - brcm,bcm6878-hsspi
-> >>>> +          - const: brcm,bcmbca-hsspi-v1.0
-> >>>> +          - const: brcm,bcmbca-hsspi
-> >>>
-> >>> Why do you need "brcm,bcmbca-hsspi"? Nothing binds to it, so it's
-> >>> useless and very generic.
-> >>>
-> >> This was from Florian's suggestion and Broadcom's convention. See [1] and
-> >> you are okay with that [2].  I added the rev compatible and you were not
-> >> objecting it finally if I understand you correctly.
-> >
-> > Can you have a driver that only understands what 'brcm,bcmbca-hsspi' is
-> > work on all h/w that includes the compatible string? It doesn't seem
-> > like it since v1.1 is a completely new driver. Therefore
-> > 'brcm,bcmbca-hsspi' is pretty much useless.
-> >
-> 'brcm,bcmbca-hsspi' should be added to the binding table of
-> spi-bcm63xx-hsspi.c driver.   This is the initial driver that works for
-> v1.0 controller.  For v1.1 controller, yes it can fallback and work with
-> 1.0 driver spi-bcm63xx-hsspi.c simply not using the new feature in
-> v1.1(chip select signal control through software) and keeping using the
-> prepend mode or dummy cs workaround supported in 1.0 driver.
+I'd say:
+  a) For CoCo, a guest (guaranteed) crash isn't a problem - CoCo doesn't
+  guarantee forward progress or stop the hypervisor doing something
+  truly stupid.
 
-If v1.1 is compatible with v1.0, then say that:
+  b) For CoCo, information disclosure, or corruption IS a problem
 
-soc-compat, "brcm,bcmbca-hsspi-v1.1", "brcm,bcmbca-hsspi-v1.0"
+  c) For non-CoCo some people might care about robustness of the kernel
+  against a failing PCI device, but generally I think they worry about
+  a fairly clean failure, even in the unexpected-hot unplug case.
 
-IOW, 'brcm,bcmbca-hsspi' is redundant with 'brcm,bcmbca-hsspi-v1.0'.
-They have the same meaning. So pick which one you want to use. Not
-both.
+  d) It's not clear to me what 'trust' means in terms of CoCo for a PCIe
+  device; if it's a device that attests OK and we trust it is the device
+  it says it is, do we give it freedom or are we still wary?
 
-Also, if that is the case, you shouldn't be introducing a whole new
-driver for v1.1.
+Dave
 
-Rob
+
+> Best Regards,
+> Elena.
+> 
+-- 
+Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
+
