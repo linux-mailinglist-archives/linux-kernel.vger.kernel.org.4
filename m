@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305F167D7EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B6A67D7F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbjAZVvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
+        id S232913AbjAZVvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjAZVvi (ORCPT
+        with ESMTP id S232660AbjAZVvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 Jan 2023 16:51:38 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D36FF25
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:51:35 -0800 (PST)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 30QLgE90013821
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:51:34 -0800
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A134A1F3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:51:37 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QKqvbB000849
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:51:37 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=VSEPLCQaW+j9aw414roRW/MACaOkh6KNm+59eAETMIQ=;
- b=AzXdRJySlHQeie3ztR4gmxWHNE0EVahHbMlWrOPQKxgiMtKkgZVHpj5b4Ze1Mh88o63s
- UmzYVIONbjmHn4kQq6mPsub7mmVcSLBmQybn4NBHcLTThm/Bg6SbQ/M9n9ATntU/EHJg
- lj4D6+mAYStymhIPBqak56VJiSuld5w7akXU1QzgFQpECq2FXzvt4Wp3t5TCdjUhtpcJ
- ynvGWox3bpv182qWkXoxmW+HwV+O4rI+5EBNx/N2dOZyyIFlBwWJPsBVCQWxqzppW7MP
- sJMb61hpmqpwEV3EumFp7t6tZi6qYpdZVret84w73gNMkxoU0ukCG5ntDaAYNhRQiJHy oQ== 
+ bh=bKgaIgCzl+sBGwA7v3YqE5kXwxl/qwPaI+k5PR78ySk=;
+ b=fMCMSJnsInPjYMhsW+pbka/x8V+e6/LX+0UItt0S9df8MkqWdeQREl3xVMtuF1WAePTK
+ UME9C3Uexi1D7J1HOb6QyNqWYacL3gF7/nyG/smx08AUUmIU/aYXwd/rE7haPzKYOgpn
+ IFkrJNUMDxfPwc0w5nPYQmixyfP8ICmosVwtODZgpkn1YN4g7itlMpAy2lfAGC61G3eu
+ 3ycTb3N8f5wDGZBMxsogKKMojt6srWVK5nMN2i6ZTUUomsO97u3ZtPvNuwcI8QJxfvi1
+ eWe1Uww60gIuB+k3LIBBTzRmKH293wn5EwiRh6hmVOxmD+uPKCxk0u0JmTtZpRUdPdbz Xw== 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3nbw49ttp2-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nb7mbshbn-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:51:34 -0800
-Received: from twshared26225.38.frc1.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:51:37 -0800
+Received: from twshared24547.08.ash9.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 26 Jan 2023 13:51:33 -0800
+ 15.1.2507.17; Thu, 26 Jan 2023 13:51:35 -0800
 Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-        id EC93AFE80A91; Thu, 26 Jan 2023 13:51:25 -0800 (PST)
+        id 0ABA5FE80A93; Thu, 26 Jan 2023 13:51:26 -0800 (PST)
 From:   Keith Busch <kbusch@meta.com>
 To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <willy@infradead.org>, <hch@lst.de>, <tonyb@cybernetics.com>,
         <akpm@linux-foundation.org>
 CC:     <kernel-team@meta.com>, Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv4 02/12] dmapool: remove checks for dev == NULL
-Date:   Thu, 26 Jan 2023 13:51:15 -0800
-Message-ID: <20230126215125.4069751-3-kbusch@meta.com>
+Subject: [PATCHv4 03/12] dmapool: use sysfs_emit() instead of scnprintf()
+Date:   Thu, 26 Jan 2023 13:51:16 -0800
+Message-ID: <20230126215125.4069751-4-kbusch@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230126215125.4069751-1-kbusch@meta.com>
 References: <20230126215125.4069751-1-kbusch@meta.com>
@@ -52,8 +52,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 2kgHYGwFIkdd9tIs9gyhixRtU4iahz_u
-X-Proofpoint-GUID: 2kgHYGwFIkdd9tIs9gyhixRtU4iahz_u
+X-Proofpoint-GUID: Drs3qtSZhX-1CO45sEN_nVklAO4Z158-
+X-Proofpoint-ORIG-GUID: Drs3qtSZhX-1CO45sEN_nVklAO4Z158-
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-26_09,2023-01-26_01,2022-06-22_01
@@ -69,124 +69,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tony Battersby <tonyb@cybernetics.com>
 
-dmapool originally tried to support pools without a device because
-dma_alloc_coherent() supports allocations without a device.  But nobody
-ended up using dma pools without a device, and trying to do so will
-result in an oops.  So remove the checks for pool->dev =3D=3D NULL since =
-they
-are unneeded bloat.
+Use sysfs_emit instead of scnprintf, snprintf or sprintf.
 
 Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
-[added check for null dev on create]
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- mm/dmapool.c | 45 ++++++++++++++-------------------------------
- 1 file changed, 14 insertions(+), 31 deletions(-)
+ mm/dmapool.c | 23 +++++++----------------
+ 1 file changed, 7 insertions(+), 16 deletions(-)
 
 diff --git a/mm/dmapool.c b/mm/dmapool.c
-index a7eb5d0eb2da7..559207e1c3339 100644
+index 559207e1c3339..20616b760bb9c 100644
 --- a/mm/dmapool.c
 +++ b/mm/dmapool.c
-@@ -134,6 +134,9 @@ struct dma_pool *dma_pool_create(const char *name, st=
-ruct device *dev,
- 	size_t allocation;
- 	bool empty =3D false;
+@@ -64,18 +64,11 @@ static DEFINE_MUTEX(pools_reg_lock);
 =20
-+	if (!dev)
-+		return NULL;
-+
- 	if (align =3D=3D 0)
- 		align =3D 1;
- 	else if (align & (align - 1))
-@@ -275,7 +278,7 @@ void dma_pool_destroy(struct dma_pool *pool)
- 	mutex_lock(&pools_reg_lock);
+ static ssize_t pools_show(struct device *dev, struct device_attribute *a=
+ttr, char *buf)
+ {
+-	unsigned temp;
+-	unsigned size;
+-	char *next;
++	int size;
+ 	struct dma_page *page;
+ 	struct dma_pool *pool;
+=20
+-	next =3D buf;
+-	size =3D PAGE_SIZE;
+-
+-	temp =3D scnprintf(next, size, "poolinfo - 0.1\n");
+-	size -=3D temp;
+-	next +=3D temp;
++	size =3D sysfs_emit(buf, "poolinfo - 0.1\n");
+=20
  	mutex_lock(&pools_lock);
- 	list_del(&pool->pools);
--	if (pool->dev && list_empty(&pool->dev->dma_pools))
-+	if (list_empty(&pool->dev->dma_pools))
- 		empty =3D true;
+ 	list_for_each_entry(pool, &dev->dma_pools, pools) {
+@@ -90,16 +83,14 @@ static ssize_t pools_show(struct device *dev, struct =
+device_attribute *attr, cha
+ 		spin_unlock_irq(&pool->lock);
+=20
+ 		/* per-pool info, no real statistics yet */
+-		temp =3D scnprintf(next, size, "%-16s %4u %4zu %4zu %2u\n",
+-				 pool->name, blocks,
+-				 pages * (pool->allocation / pool->size),
+-				 pool->size, pages);
+-		size -=3D temp;
+-		next +=3D temp;
++		size +=3D sysfs_emit_at(buf, size, "%-16s %4u %4zu %4zu %2u\n",
++				      pool->name, blocks,
++				      pages * (pool->allocation / pool->size),
++				      pool->size, pages);
+ 	}
  	mutex_unlock(&pools_lock);
- 	if (empty)
-@@ -284,12 +287,8 @@ void dma_pool_destroy(struct dma_pool *pool)
 =20
- 	list_for_each_entry_safe(page, tmp, &pool->page_list, page_list) {
- 		if (is_page_busy(page)) {
--			if (pool->dev)
--				dev_err(pool->dev, "%s %s, %p busy\n", __func__,
--					pool->name, page->vaddr);
--			else
--				pr_err("%s %s, %p busy\n", __func__,
--				       pool->name, page->vaddr);
-+			dev_err(pool->dev, "%s %s, %p busy\n", __func__,
-+				pool->name, page->vaddr);
- 			/* leak the still-in-use consistent memory */
- 			list_del(&page->page_list);
- 			kfree(page);
-@@ -351,12 +350,8 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t me=
-m_flags,
- 		for (i =3D sizeof(page->offset); i < pool->size; i++) {
- 			if (data[i] =3D=3D POOL_POISON_FREED)
- 				continue;
--			if (pool->dev)
--				dev_err(pool->dev, "%s %s, %p (corrupted)\n",
--					__func__, pool->name, retval);
--			else
--				pr_err("%s %s, %p (corrupted)\n",
--					__func__, pool->name, retval);
-+			dev_err(pool->dev, "%s %s, %p (corrupted)\n",
-+				__func__, pool->name, retval);
+-	return PAGE_SIZE - size;
++	return size;
+ }
 =20
- 			/*
- 			 * Dump the first 4 bytes even if they are not
-@@ -411,12 +406,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
-r, dma_addr_t dma)
- 	page =3D pool_find_page(pool, dma);
- 	if (!page) {
- 		spin_unlock_irqrestore(&pool->lock, flags);
--		if (pool->dev)
--			dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
--				__func__, pool->name, vaddr, &dma);
--		else
--			pr_err("%s %s, %p/%pad (bad dma)\n",
--			       __func__, pool->name, vaddr, &dma);
-+		dev_err(pool->dev, "%s %s, %p/%pad (bad dma)\n",
-+			__func__, pool->name, vaddr, &dma);
- 		return;
- 	}
-=20
-@@ -426,12 +417,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
-r, dma_addr_t dma)
- #ifdef	DMAPOOL_DEBUG
- 	if ((dma - page->dma) !=3D offset) {
- 		spin_unlock_irqrestore(&pool->lock, flags);
--		if (pool->dev)
--			dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
--				__func__, pool->name, vaddr, &dma);
--		else
--			pr_err("%s %s, %p (bad vaddr)/%pad\n",
--			       __func__, pool->name, vaddr, &dma);
-+		dev_err(pool->dev, "%s %s, %p (bad vaddr)/%pad\n",
-+			__func__, pool->name, vaddr, &dma);
- 		return;
- 	}
- 	{
-@@ -442,12 +429,8 @@ void dma_pool_free(struct dma_pool *pool, void *vadd=
-r, dma_addr_t dma)
- 				continue;
- 			}
- 			spin_unlock_irqrestore(&pool->lock, flags);
--			if (pool->dev)
--				dev_err(pool->dev, "%s %s, dma %pad already free\n",
--					__func__, pool->name, &dma);
--			else
--				pr_err("%s %s, dma %pad already free\n",
--				       __func__, pool->name, &dma);
-+			dev_err(pool->dev, "%s %s, dma %pad already free\n",
-+				__func__, pool->name, &dma);
- 			return;
- 		}
- 	}
+ static DEVICE_ATTR_RO(pools);
 --=20
 2.30.2
 
