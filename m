@@ -2,133 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81A467DA12
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7083A67D9FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbjAZX4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
+        id S232943AbjAZXzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbjAZX4d (ORCPT
+        with ESMTP id S233576AbjAZXzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:56:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D70044BCC
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:55:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674777343;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=898ohfdzehorjeXOEBd+HSoOXx0TlEdaod7Ot+z55Ec=;
-        b=Kpzq1e7AR87RRImg/ms868pwPT1j8ZrusOyL4h6v8P2HQwdSDBD6k4cw+y+KYsTTCbcpdq
-        gJxQHvvSvRMgeTG/HRTKKfcP/ijgnsL7OLravGBjH1t2I2JeG+tvICsJVnFp4t4IRK0swb
-        0rzerYW+Xmcs6WAm6sVqOR80oj2y/kI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-84-G0DpR1_uM622mmKCTiCNqA-1; Thu, 26 Jan 2023 18:55:38 -0500
-X-MC-Unique: G0DpR1_uM622mmKCTiCNqA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 26 Jan 2023 18:55:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D79442D3;
+        Thu, 26 Jan 2023 15:55:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 33154858F09;
-        Thu, 26 Jan 2023 23:55:37 +0000 (UTC)
-Received: from gshan.redhat.com (vpn2-54-98.bne.redhat.com [10.64.54.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BCD692166B26;
-        Thu, 26 Jan 2023 23:55:29 +0000 (UTC)
-From:   Gavin Shan <gshan@redhat.com>
-To:     kvmarm@lists.linux.dev
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, pbonzini@redhat.com,
-        corbet@lwn.net, maz@kernel.org, james.morse@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-        yuzhe@nfschina.com, isaku.yamahata@intel.com, seanjc@google.com,
-        ricarkol@google.com, eric.auger@redhat.com, renzhengeek@gmail.com,
-        reijiw@google.com, shan.gavin@gmail.com
-Subject: [PATCH v3 4/4] KVM: arm64: Allow no running vcpu on saving vgic3 pending table
-Date:   Fri, 27 Jan 2023 07:54:51 +0800
-Message-Id: <20230126235451.469087-5-gshan@redhat.com>
-In-Reply-To: <20230126235451.469087-1-gshan@redhat.com>
-References: <20230126235451.469087-1-gshan@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3754DB81ED5;
+        Thu, 26 Jan 2023 23:54:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C1F0C433D2;
+        Thu, 26 Jan 2023 23:54:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674777297;
+        bh=YzzzRHDL4QVRmpFOYM6QjRQ1DxLWZ3rVbZKMIqqZg+U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BWG0lT9TORJXN19/EG8sRb+l0wdAvpItKkRM7s1b+XgPTkpd/qdWHf2NtRjkyYUju
+         +hKJ/taqIlLKS4hlcsUOy0g4WePVWDxoVvUsbBmQofJat5QQ5arl0hST/mh1N8qH/C
+         x23/96voQVjM/oVENaYhR4ClJVyYAmkoGI1OzNjO5kmqVUohJtQaZ8VAQp41ZegZ8C
+         Ezo4swR7Y4vq1yb9hE1PxLlGjhgnNrEhY1Zbl6/MU9tlE7zgTrMyk9sL/cQF5GuxQv
+         FkXBXjadYmIjL5fxehiO++w6EeAv5VynVaxpSgG9oDKK5u9ipKuIWgtkoqG6sr8vJM
+         eeb2DrZ0TqvAA==
+Date:   Thu, 26 Jan 2023 15:54:56 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] mmc: atmel: convert to gpio descriptos
+Message-ID: <20230126155456.78e44420@kernel.org>
+In-Reply-To: <20230126135034.3320638-1-arnd@kernel.org>
+References: <20230126135034.3320638-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We don't have a running VCPU context to save vgic3 pending table due
-to KVM_DEV_ARM_VGIC_{GRP_CTRL, SAVE_PENDING_TABLES} command on KVM
-device "kvm-arm-vgic-v3". The unknown case is caught by kvm-unit-tests.
+On Thu, 26 Jan 2023 14:50:04 +0100 Arnd Bergmann wrote:
+> Subject: [PATCH] mmc: atmel: convert to gpio descriptos
 
-   # ./kvm-unit-tests/tests/its-pending-migration
-   WARNING: CPU: 120 PID: 7973 at arch/arm64/kvm/../../../virt/kvm/kvm_main.c:3325 \
-   mark_page_dirty_in_slot+0x60/0xe0
-    :
-   mark_page_dirty_in_slot+0x60/0xe0
-   __kvm_write_guest_page+0xcc/0x100
-   kvm_write_guest+0x7c/0xb0
-   vgic_v3_save_pending_tables+0x148/0x2a0
-   vgic_set_common_attr+0x158/0x240
-   vgic_v3_set_attr+0x4c/0x5c
-   kvm_device_ioctl+0x100/0x160
-   __arm64_sys_ioctl+0xa8/0xf0
-   invoke_syscall.constprop.0+0x7c/0xd0
-   el0_svc_common.constprop.0+0x144/0x160
-   do_el0_svc+0x34/0x60
-   el0_svc+0x3c/0x1a0
-   el0t_64_sync_handler+0xb4/0x130
-   el0t_64_sync+0x178/0x17c
-
-Use vgic_write_guest_lock() to save vgic3 pending table.
-
-Reported-by: Zenghui Yu <yuzenghui@huawei.com>
-Signed-off-by: Gavin Shan <gshan@redhat.com>
-Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
----
- Documentation/virt/kvm/api.rst | 4 +++-
- arch/arm64/kvm/vgic/vgic-v3.c  | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 40ada313faa3..07f07668995e 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -8074,7 +8074,9 @@ NOTE: Multiple examples of using the backup bitmap: (1) save vgic/its
- tables through command KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_SAVE_TABLES} on
- KVM device "kvm-arm-vgic-its". (2) restore vgic/its tables through
- command KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_RESTORE_TABLES} on KVM device
--"kvm-arm-vgic-its". vgic3 LPI pending status is restored.
-+"kvm-arm-vgic-its". vgic3 LPI pending status is restored. (3) save
-+vgic3 pending table through KVM_DEV_ARM_VGIC_{GRP_CTRL, SAVE_PENDING_TABLES}
-+command on KVM device "kvm-arm-vgic-v3".
- 
- 8.30 KVM_CAP_XEN_HVM
- --------------------
-diff --git a/arch/arm64/kvm/vgic/vgic-v3.c b/arch/arm64/kvm/vgic/vgic-v3.c
-index c94e4d7520fc..558ccc805fff 100644
---- a/arch/arm64/kvm/vgic/vgic-v3.c
-+++ b/arch/arm64/kvm/vgic/vgic-v3.c
-@@ -436,7 +436,7 @@ int vgic_v3_save_pending_tables(struct kvm *kvm)
- 		else
- 			val &= ~(1 << bit_nr);
- 
--		ret = kvm_write_guest_lock(kvm, ptr, &val, 1);
-+		ret = vgic_write_guest_lock(kvm, ptr, &val, 1);
- 		if (ret)
- 			goto out;
- 	}
--- 
-2.23.0
-
+nit: descriptoRs
