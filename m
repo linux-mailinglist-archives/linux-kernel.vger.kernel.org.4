@@ -2,53 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7900767D768
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD3C67D76B
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbjAZVKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
+        id S232859AbjAZVKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:10:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232949AbjAZVJz (ORCPT
+        with ESMTP id S232830AbjAZVKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:09:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0D22B622;
-        Thu, 26 Jan 2023 13:09:42 -0800 (PST)
+        Thu, 26 Jan 2023 16:10:13 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5DB2B622;
+        Thu, 26 Jan 2023 13:10:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75D5AB81E0F;
-        Thu, 26 Jan 2023 21:09:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DE0C433EF;
-        Thu, 26 Jan 2023 21:09:39 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A3984CE2383;
+        Thu, 26 Jan 2023 21:10:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC032C433D2;
+        Thu, 26 Jan 2023 21:10:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674767380;
-        bh=Ivb1qksbftnFFwvDhNXLsTVGImL1pbxAjiwYLOBHQsQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nF6ug6pmpwMcAqKOp/z/tD8sE9npc/WR1N/hE9Y7vQx3dDVnVobGjNK5dTqE5bE1i
-         0YBVBVQom+7UFk+hD/2xL/FGhFiJTuFkq9BfGGdspSYiIf8DCuFHhuib6jq11GlLJy
-         sU4C7ZEMc5g4JnsVWldKWO8o/xtkt5QtyW76SdQY1DNb/GhGmD/nD90U1roBWvM8lr
-         qTuef0W+uUcng+5qUuFTAfLEfISJ5avDNwIDznLsATeN+VEV+BIqU/G55ZMPGKGwWU
-         Cy3qec5Tew/DL1AiukspURbjnllpwFhOeWKMxcxGKA+9d5hHRankRgrqjVUyPLoUTx
-         OqMzjeo4mV3qg==
-Date:   Thu, 26 Jan 2023 13:09:38 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     tytso@mit.edu, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, adilger.kernel@dilger.ca,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        linux-ext4@vger.kernel.org, Alexander Potapenko <glider@google.com>
-Subject: Re: [PATCH 3/5] fs: f2fs: initialize fsdata in pagecache_write()
-Message-ID: <Y9LsEgN3ZdmC1aQp@google.com>
-References: <20221121112134.407362-1-glider@google.com>
- <20221121112134.407362-3-glider@google.com>
- <Y3vXL3Lw+DnVkQYC@gmail.com>
- <Y84wVf+pZ7tRwCh8@sol.localdomain>
+        s=k20201202; t=1674767405;
+        bh=tkiSABT0UAWsdqybXkYF62lpD7oaHL03zSEHpnUw/fU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UVMWHP66VSWqHnxcspBeVcXEndXXWiZ6sTmIiOgygIpouWreE7a1pVXifdoI+og3C
+         A4OtBCxGauRtrS6DxIwN2Lhps1L/5IYcKncr45NPWNuHuQbXYVtbjDfE+Dvk+4iqwt
+         KUfclzlHpZ3Qrvz/Rpw/3l294xY2Eicf5iJA08snfX+IUMj+HveLXrJV8bIZpBigSt
+         4Tky8YmSm54pN9uAg5dO+DUbBf9kZNFB+J5Sc++CKA29YwQEDL77eW+wZJEprmockm
+         TkB3GBDZfAIjeCD3AaDX6n/j/XcsUsD5Tjbkp4MbP0StOVSIHds9eLEimF7o70AKww
+         ckltf65ZWneUw==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH] MAINTAINERS: Move to shared PCI tree
+Date:   Thu, 26 Jan 2023 15:10:03 -0600
+Message-Id: <20230126211003.1310916-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y84wVf+pZ7tRwCh8@sol.localdomain>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,41 +52,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/22, Eric Biggers wrote:
-> On Mon, Nov 21, 2022 at 07:53:19PM +0000, Eric Biggers wrote:
-> > On Mon, Nov 21, 2022 at 12:21:32PM +0100, Alexander Potapenko wrote:
-> > > When aops->write_begin() does not initialize fsdata, KMSAN may report
-> > > an error passing the latter to aops->write_end().
-> > > 
-> > > Fix this by unconditionally initializing fsdata.
-> > > 
-> > > Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> > > Fixes: 95ae251fe828 ("f2fs: add fs-verity support")
-> > > Signed-off-by: Alexander Potapenko <glider@google.com>
-> > > ---
-> > >  fs/f2fs/verity.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/fs/f2fs/verity.c b/fs/f2fs/verity.c
-> > > index c352fff88a5e6..3f4f3295f1c66 100644
-> > > --- a/fs/f2fs/verity.c
-> > > +++ b/fs/f2fs/verity.c
-> > > @@ -81,7 +81,7 @@ static int pagecache_write(struct inode *inode, const void *buf, size_t count,
-> > >  		size_t n = min_t(size_t, count,
-> > >  				 PAGE_SIZE - offset_in_page(pos));
-> > >  		struct page *page;
-> > > -		void *fsdata;
-> > > +		void *fsdata = NULL;
-> > >  		int res;
-> > >  
-> > >  		res = aops->write_begin(NULL, mapping, pos, n, &page, &fsdata);
-> > 
-> > Reviewed-by: Eric Biggers <ebiggers@google.com>
-> > 
-> 
-> Jaegeuk, can you please apply this patch?
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Yup, applied.
+Move PCI subsystem maintenance to a shared git tree to make it easier for
+maintainers to collaborate.  Update MAINTAINERS accordingly.  No change to
+patch submission and patchwork tracking.
 
-> 
-> - Eric
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+---
+ MAINTAINERS | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f61eb221415b..14c0b3e89c63 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16115,7 +16115,7 @@ S:	Supported
+ Q:	https://patchwork.kernel.org/project/linux-pci/list/
+ B:	https://bugzilla.kernel.org
+ C:	irc://irc.oftc.net/linux-pci
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
+ F:	Documentation/PCI/endpoint/*
+ F:	Documentation/misc-devices/pci-endpoint-test.rst
+ F:	drivers/misc/pci_endpoint_test.c
+@@ -16150,7 +16150,7 @@ S:	Supported
+ Q:	https://patchwork.kernel.org/project/linux-pci/list/
+ B:	https://bugzilla.kernel.org
+ C:	irc://irc.oftc.net/linux-pci
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
+ F:	Documentation/driver-api/pci/p2pdma.rst
+ F:	drivers/pci/p2pdma.c
+ F:	include/linux/pci-p2pdma.h
+@@ -16179,7 +16179,7 @@ S:	Supported
+ Q:	https://patchwork.kernel.org/project/linux-pci/list/
+ B:	https://bugzilla.kernel.org
+ C:	irc://irc.oftc.net/linux-pci
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
+ F:	Documentation/devicetree/bindings/pci/
+ F:	drivers/pci/controller/
+ F:	drivers/pci/pci-bridge-emul.c
+@@ -16192,7 +16192,7 @@ S:	Supported
+ Q:	https://patchwork.kernel.org/project/linux-pci/list/
+ B:	https://bugzilla.kernel.org
+ C:	irc://irc.oftc.net/linux-pci
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
+ F:	Documentation/PCI/
+ F:	Documentation/devicetree/bindings/pci/
+ F:	arch/x86/kernel/early-quirks.c
+-- 
+2.25.1
+
