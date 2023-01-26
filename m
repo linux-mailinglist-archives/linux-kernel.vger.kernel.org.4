@@ -2,77 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C4067D89F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7992967D89E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbjAZWjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S232660AbjAZWjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbjAZWjL (ORCPT
+        with ESMTP id S230225AbjAZWjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:39:11 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2672131
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:39:08 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QLZhRl009760;
-        Thu, 26 Jan 2023 22:39:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=G/uaFy5jo3vL+SyVWvMvRTVRDzMfDTlP0hQUCbXqJHY=;
- b=k31POMZ8UVthRdLjJXnIeiQjPMVuns9EsFN2hTKTVzVH76iUgJrTiZu2rYvxg8P/Mtl9
- k1kqi9Th+N42aV7fB08TDojwwRFtIqDnkC9mibN2YhK5LmDZFg4LbCkpQ817O7/WrO2v
- ++6HiDQXEbnVlUC6dWSWqo15vxIZjhc8UTZSqY+8dfnzQY4J5hlXT72Ff1REaQa5/B25
- 59Mfcuqjrsde2SeX2lSrM8u99jpxDPDkeFtMJIJHU1Vd45BHKF6S1nT8OAV+SKobwFOm
- rsrBvG0mlaOzI/7i+xDhyQrvpw29P2at2wsfNHySNzlwm7Tojg2T8cZ059kUHQ6l9B0E 5Q== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbyynb361-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 22:38:59 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QL83Kf006949;
-        Thu, 26 Jan 2023 22:38:58 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3n87p7qerc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 22:38:58 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QMcubN29360630
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 22:38:57 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 91BEA58064;
-        Thu, 26 Jan 2023 22:38:56 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9051B58060;
-        Thu, 26 Jan 2023 22:38:55 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.3.213])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 26 Jan 2023 22:38:55 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, alistair@popple.id.au,
-        joel@jms.id.au, jk@ozlabs.org, Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] fsi: Add aliased device numbering
-Date:   Thu, 26 Jan 2023 16:38:50 -0600
-Message-Id: <20230126223850.901302-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 26 Jan 2023 17:39:07 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2B84EF7;
+        Thu, 26 Jan 2023 14:39:06 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P2wc82gXMz4xwp;
+        Fri, 27 Jan 2023 09:39:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674772744;
+        bh=nAcG/YYvgYCoLwfwltWnqDMCWXVKQpjGcIiUMSGG6w0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hD5aY3Kzkm9INMo1LXVkl0OcHz4/bBV9GwLnOeouAdgLXLhZGX15Bd2hM5QqgkZN2
+         Iw7cqzc1OMPZNe1oLoWDf9TjdN7CsOaQQGb6LINsLYybf8XGi0N1vyp+6QHl3+Pqup
+         fblaVNTAlFQ/k6kArshO3tdoZScM6un9OSEa/5pwjVLmPOaOFMpRbC/26+2wwNSxrq
+         AYZ7mdrmD7ck2XuG17MT53XdgKQj/JzIs8wy62H7UqnR6euagwGoVogG1+gH2LqyHK
+         qr1exx3IeEsYyUAu+dZM3aklNUBUnUEY89kSM0JsSY+s6WEsf2T6UUIWoYNgRpKjkb
+         wgfQsqXL2DPnw==
+Date:   Fri, 27 Jan 2023 09:39:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the hid tree
+Message-ID: <20230127093903.1f60ddb8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: URS7CnJw_KE2itk4gpb4m8TISkT8q2M6
-X-Proofpoint-GUID: URS7CnJw_KE2itk4gpb4m8TISkT8q2M6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_09,2023-01-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=998 clxscore=1015
- malwarescore=0 phishscore=0 bulkscore=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 suspectscore=0 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301260211
+Content-Type: multipart/signed; boundary="Sig_/eC2Nj93nWtQT_kEE.9u_2PW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,118 +52,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The I2C and SPI subsystems can use an aliased name to number the device.
-Add similar support to the FSI subsystem for any device type.
+--Sig_/eC2Nj93nWtQT_kEE.9u_2PW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/fsi/fsi-core.c    | 31 +++++++++++++++++++++++++++++++
- drivers/fsi/fsi-sbefifo.c |  5 ++---
- drivers/fsi/fsi-scom.c    |  3 ++-
- include/linux/fsi.h       |  1 +
- 4 files changed, 36 insertions(+), 4 deletions(-)
+Hi all,
 
-diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
-index 694e80c06665..c3c139c31341 100644
---- a/drivers/fsi/fsi-core.c
-+++ b/drivers/fsi/fsi-core.c
-@@ -971,9 +971,40 @@ static int __fsi_get_new_minor(struct fsi_slave *slave, enum fsi_dev_type type,
- 	return 0;
- }
- 
-+static const char *const fsi_dev_type_names[] = {
-+	"cfam",
-+	"sbefifo",
-+	"scom",
-+	"occ",
-+};
-+
-+const char *fsi_get_dev_type_name(enum fsi_dev_type type)
-+{
-+	return fsi_dev_type_names[type];
-+}
-+EXPORT_SYMBOL_GPL(fsi_get_dev_type_name);
-+
- int fsi_get_new_minor(struct fsi_device *fdev, enum fsi_dev_type type,
- 		      dev_t *out_dev, int *out_index)
- {
-+	if (fdev->dev.of_node) {
-+		int aid = of_alias_get_id(fdev->dev.of_node, fsi_dev_type_names[type]);
-+
-+		if (aid >= 0) {
-+			int id = (aid << 4) | type;
-+
-+			id = ida_simple_get(&fsi_minor_ida, id, id + 1, GFP_KERNEL);
-+			if (id >= 0) {
-+				*out_index = aid;
-+				*out_dev = fsi_base_dev + id;
-+				return 0;
-+			}
-+
-+			if (id != -ENOSPC)
-+				return id;
-+		}
-+	}
-+
- 	return __fsi_get_new_minor(fdev->slave, type, out_dev, out_index);
- }
- EXPORT_SYMBOL_GPL(fsi_get_new_minor);
-diff --git a/drivers/fsi/fsi-sbefifo.c b/drivers/fsi/fsi-sbefifo.c
-index 9912b7a6a4b9..c79396ba982e 100644
---- a/drivers/fsi/fsi-sbefifo.c
-+++ b/drivers/fsi/fsi-sbefifo.c
-@@ -39,7 +39,6 @@
-  * the self boot engine on POWER processors.
-  */
- 
--#define DEVICE_NAME		"sbefifo"
- #define FSI_ENGID_SBE		0x22
- 
- /*
-@@ -1046,7 +1045,7 @@ static int sbefifo_probe(struct device *dev)
- 	if (rc)
- 		goto err;
- 
--	dev_set_name(&sbefifo->dev, "sbefifo%d", didx);
-+	dev_set_name(&sbefifo->dev, "%s%d", fsi_get_dev_type_name(fsi_dev_sbefifo), didx);
- 	cdev_init(&sbefifo->cdev, &sbefifo_fops);
- 	rc = cdev_device_add(&sbefifo->cdev, &sbefifo->dev);
- 	if (rc) {
-@@ -1117,7 +1116,7 @@ static const struct fsi_device_id sbefifo_ids[] = {
- static struct fsi_driver sbefifo_drv = {
- 	.id_table = sbefifo_ids,
- 	.drv = {
--		.name = DEVICE_NAME,
-+		.name = "sbefifo",
- 		.bus = &fsi_bus_type,
- 		.probe = sbefifo_probe,
- 		.remove = sbefifo_remove,
-diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
-index bcb756dc9866..ee2c70906d06 100644
---- a/drivers/fsi/fsi-scom.c
-+++ b/drivers/fsi/fsi-scom.c
-@@ -556,7 +556,8 @@ static int scom_probe(struct device *dev)
- 	if (rc)
- 		goto err;
- 
--	dev_set_name(&scom->dev, "scom%d", didx);
-+	dev_set_name(&scom->dev, "%s%d", fsi_get_dev_type_name(fsi_dev_scom),
-+		     didx);
- 	cdev_init(&scom->cdev, &scom_fops);
- 	rc = cdev_device_add(&scom->cdev, &scom->dev);
- 	if (rc) {
-diff --git a/include/linux/fsi.h b/include/linux/fsi.h
-index 3df8c54868df..a6c6c57e146f 100644
---- a/include/linux/fsi.h
-+++ b/include/linux/fsi.h
-@@ -78,6 +78,7 @@ enum fsi_dev_type {
- 	fsi_dev_occ
- };
- 
-+const char *fsi_get_dev_type_name(enum fsi_dev_type type);
- extern int fsi_get_new_minor(struct fsi_device *fdev, enum fsi_dev_type type,
- 			     dev_t *out_dev, int *out_index);
- extern void fsi_free_minor(dev_t dev);
--- 
-2.31.1
+In commit
 
+  82a3e2fb3e96 ("HID: logitech-hidpp: Hard-code HID++ 1.0 fast scroll suppo=
+rt")
+
+Fixes tag
+
+  Fixes: 908d325 ("HID: logitech-hidpp: Detect hi-res scrolling support")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/eC2Nj93nWtQT_kEE.9u_2PW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTAQcACgkQAVBC80lX
+0GywyQf/WaEHTFdEiVv4BNR5RSQhIJBAu8V5rO1MGvtozQ4G5cynqqvJTyzcIUMi
+TTowkDvOM4MkUcrMgiqAAH14oRsL3M+4x6+UqeuR650TCFWo7f3qOdeCV+ue+iN/
+ZKoIX4YjF+GK1hxvJqkJOBkK0KlXfW6f2cR7luWS3njHGxBZYDG1N1E2bjnsL1sP
+dHteAJWmJJEj4J67eRpOZvXH080dmViGH4Gn0b1kfE63wtthmBAtCYpn0u+TrzSb
+19NLwILAVDC6viIycA604zyraHnuBC41YIu4TsrnGCjZrTgttSdzyQ0pBAS15peY
+wMYC6PufFBWuiWjZzthsOs/URgUUXg==
+=ZNKn
+-----END PGP SIGNATURE-----
+
+--Sig_/eC2Nj93nWtQT_kEE.9u_2PW--
