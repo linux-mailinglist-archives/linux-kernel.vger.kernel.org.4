@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAA867D8AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1222467D8AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbjAZWk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        id S232926AbjAZWlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:41:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbjAZWkw (ORCPT
+        with ESMTP id S233008AbjAZWkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 Jan 2023 17:40:52 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C74A2131
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09384EF7
         for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:40:51 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id j9so2652745qtv.4
+Received: by mail-qt1-x832.google.com with SMTP id o5so2624205qtr.11
         for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:40:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=criticallink.com; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=THHRayynm5AbgmOQpvB3lJW0friOEzmgv0B/wGzZtaA=;
-        b=RF6Mnh/85qLjgyMlDUJSkvImtH9djlYTgKg7XXoQrPUdiKC1uKZs/pj6vNLsC5g/NH
-         HOSjTmW4fvlZ4cKKsAhGL6k9TgT8eKTueFUoDEUTSmu1du0FaUxlEzkqnTVU049591+3
-         e+Til8baR6eC8XUAHdglp5Q4n1pHk+3CtQ7Gv777sAXZYq38ZvBbQhI2uD/q/3FXv6lZ
-         LbtyEw5k+KRc7hTD79sp9vsO6d0elqy6j6Fsxym09JKwRMDHFQaLZAP6aVq9LAOLABHG
-         /GRZcbwUvCjZiZL/nU/53xU4dJsNSmnqzdZAQ9sVDlLwj7jVy0WctKldeq6JE5YPcIbj
-         R2Cw==
+        bh=7++FPNmCT11inHBtqfYJtM4/xAJgiLCvorUz1cWzIv4=;
+        b=FfWgMmXFYEj9lPeH/Vdv0zqG9hIvMC3dzwgFaJPxJPBQ/Bl/fhkUfEOTaV64Fzy4TR
+         QL4milXBTiVyIzRmgCFLJMQjMxFI1fXWYOI9uT/ooir+UY5FQDGo9KkaYI3vaz3v1iXc
+         EyCoq6qPTHK1pNFQv/RSJj6ooLeQe1QU1BjuWnsmrXyltSIXYXbtK/AupdJMGD8ZP2X8
+         ZE/ibew4ToAU5EzVKFkfnmcLGPIr1d4Y8tAW+5vpghVyZAJ+uWORKCxp1HhhNT7LLeHR
+         4Kf4dv5h+c/akVW39GQ3PrMfnysFXSf04gax26PoX9/TEwPnXphQrgEPBYgWaoZbHx+6
+         JooA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=THHRayynm5AbgmOQpvB3lJW0friOEzmgv0B/wGzZtaA=;
-        b=PKDZK0+Tev5vJchqUZUQSMh5NNuxjXpj7hvkTRZzWHa/u5mMP08hsjz59mVeHFHbEi
-         8qHQv2NMNchkyp1sve0zXzyMNhMU6k5r+lDrtm+3q9gOvRpvX65vvCsZFbeTFVrOkAu1
-         0bM6hIDYavz0lv3wprOE3XPaPR2AJqle/X53IyrF06oV+wz2I1unHIB8rNL8Ysg9Zigk
-         j5iphi0R+Zb+5InLgGTA2ZyEUHblebRcZ6I1sLjb9rPCeoaoLj7l5hN+raECJqfJVbxF
-         Clcq5bJS9YDAfMhUw/ZhEqC9h1JlXa9Pf7tMo+uVMgQrwKXgROjaSUX5aDkNNFD6FWF9
-         KB9w==
-X-Gm-Message-State: AFqh2koRp0Euap33psNE6d0jonC0dqdMBZmCx+mJ2i7BuxcmCBVqbnd1
-        X20ySOu9KRQJsiRYC1GHQ2t/OzsMQaA4tGqbLBA=
-X-Google-Smtp-Source: AMrXdXvKN/LjDYlcxc9vCnKH8wEBUcicaEmbvDVyprFDfxm2K55esHvebv8vBoq+T1Yh3H2IWEi0cQ==
-X-Received: by 2002:a05:622a:1f16:b0:3a6:a4ed:7c42 with SMTP id ca22-20020a05622a1f1600b003a6a4ed7c42mr56284841qtb.54.1674772850458;
-        Thu, 26 Jan 2023 14:40:50 -0800 (PST)
+        bh=7++FPNmCT11inHBtqfYJtM4/xAJgiLCvorUz1cWzIv4=;
+        b=mvmjyjQHoQU8kjzV9uD5x619R5VNjZt3tmZpT0nPOJOT5b35uq3E7CWrvmatVEZmSz
+         FNdpLhhbKDJu77zIOIiXSOhClOySVKJpryMFDrKgvpbbMJD/GY6vA7wja47j3HmZtyQV
+         p2X0Yv2iZm0UOq2Qws0y3WacFqaIfMjGNnvW7M0bNxgSaDgn8ysqV9LiWGqOEWzvyo4B
+         F1+AOcK32XrapXXNa4unf+4nR9cO8yqNYJJk8IrQkkNFiqiFjVKJy3VtYTmnxJkGoxrC
+         bR9nMSnPAqv0vR1SfLp263Ut9klEvkacsilaOAbI/+q/OGNwz7jpE1ACKT6dMJ2oNj5+
+         +P0Q==
+X-Gm-Message-State: AFqh2kr7qfM0j047Bc51nAfPNh3Wm1sNgpYVIbFHZXcWd8pW+319DMsl
+        GSiEaUQPmtHW+ruaSiy7Yi4mKQ==
+X-Google-Smtp-Source: AMrXdXtNzkgpHvsmeAGerw4Q2mbncA0QO3CZexfZka0EC7XsZpNsJxDhm0PKWk2L8YK7E1xkZrVDbw==
+X-Received: by 2002:a05:622a:178d:b0:3b6:35cb:b946 with SMTP id s13-20020a05622a178d00b003b635cbb946mr71952397qtk.14.1674772851400;
+        Thu, 26 Jan 2023 14:40:51 -0800 (PST)
 Received: from [127.0.1.1] (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
-        by smtp.gmail.com with ESMTPSA id ek3-20020a05622a4fc300b003b68ea3d5c8sm1505678qtb.41.2023.01.26.14.40.49
+        by smtp.gmail.com with ESMTPSA id ek3-20020a05622a4fc300b003b68ea3d5c8sm1505678qtb.41.2023.01.26.14.40.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 14:40:50 -0800 (PST)
+        Thu, 26 Jan 2023 14:40:51 -0800 (PST)
 From:   Jonathan Cormier <jcormier@criticallink.com>
-Date:   Thu, 26 Jan 2023 17:40:44 -0500
-Subject: [PATCH v2 3/4] drm/bridge: tfp410: Fix logic to configured polled
- HPD
+Date:   Thu, 26 Jan 2023 17:40:45 -0500
+Subject: [PATCH v2 4/4] drm/bridge: tfp410: If connected, use I2C for
+ polled HPD status.
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230125-tfp410_i2c-v2-3-bf22f4dcbcea@criticallink.com>
+Message-Id: <20230125-tfp410_i2c-v2-4-bf22f4dcbcea@criticallink.com>
 References: <20230125-tfp410_i2c-v2-0-bf22f4dcbcea@criticallink.com>
 In-Reply-To: <20230125-tfp410_i2c-v2-0-bf22f4dcbcea@criticallink.com>
 To:     Andrzej Hajda <andrzej.hajda@intel.com>,
@@ -75,25 +75,26 @@ Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         Bob Duke <bduke@criticallink.com>,
         Jonathan Cormier <jcormier@criticallink.com>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1011;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1511;
  i=jcormier@criticallink.com; h=from:subject:message-id;
- bh=mvqilqhA2ozv8fVrZmSQf6YxF7B70T7NT6GdEuGjaz8=;
- b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0wFuYWPQsfYUyfpIcVOrIwiInhKS0eFH53Pn3Wja
- SLuLT/KJAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9MBbgAKCRDc1/0uCzbrqo6VEA
- ClyYJaNl41nKR3DS58OZYnTE5jYasRyURXyHJa0vtk0k0ECOzJeDTpAZaNloUrW46d0xnb4iUSwMoX
- pAGMe/omvBPn66/UHW01DDk3v+l/1eaudv74eRIWpOJ5AVIc7HX8RAFqxKhbE8rFJwBBBjR02tRbtC
- Argdfw6geohKw3j80C7HvhoRqA1rC6RbWuAHgtKreEShgXWjcI3W+KFdtR83pSVBH/RdAOBnY2FD0Q
- 4cbesCtPS4OMOnURLwHsmf5goawW903UWn3gV1LlZhcoB5qnqODMZiGxrtDABSoqZvxgzINLVDZo6o
- jwhilA81CUkpsa0eNO4XYHH4kQP7z3RBi5Q+Scyhz4XFnabzNtUODIciOtQKruDviEpGl+I5ny0f0h
- QWM+5WmnxEE59M3oh1HWi1xgIdg9fVik+prV8hejluk8rMMmaVR4hY4Bvv+hoQnQtQ4Ctte3WB2JBo
- GZlnKPpldX63R2lhh7YDcDOlyquUlnckXlduIeRSRRtx5AAUNLd9sSJVKyPWFbaFxthWbDu2i2d2eO
- Uri1N2J3CEzZ9Jj38+QYj0h1wakCXJ5DYscok+95I/DQJ04mJrqXDdkt1UBIIsS1PhbPwcRaqjY5eW
- JNmuunXjwB/L8f0cMqwOyRAS/t07K76HEffLwtAmKa742XzzFLGgi48R6FBg==
+ bh=mnMRLzTQ5OvUKpoF4H4mdtxVS/UwcOVTBoA/DdsbVck=;
+ b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0wFuvXkSsXrMPuQIuaE7dqR3P3ABer3/DA77uFMa
+ Kse6bIOJAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9MBbgAKCRDc1/0uCzbrqjH0EA
+ CuMWARBsza9msRcHworH1ssy/nFvqzq4JbkaBvAIl0CJb4diN58Mnla1QqnkkqHuSAj/Wta4K9JmJB
+ XPBdPdsr66l2JKinBGdLAJRJHN6r0BM66hlL5RuizDJHFhfU9WgWiQsz4KoidZh/rUcm2yvODPTR2y
+ TS+c4JA5a8mNj6EELvH+dZG3MRdgAot6HEH9yDLjUXz7kMYb5Acz1YmpfKYHnyZUP9OsKopq+iAOs/
+ oEB8kr36y6xylEkJfTZyHcAwKpD/5T3Nlk5FcMGQh5BrXqF9X51He1ns5V5fujw/N7Ybrhn+sAdwcB
+ iA/w6dhTfeuyRRlyGJo7liNOUEVeu9Qx1EVE11AriFjxFxEC9muC2aVQPZT8OmU7ho9okGhDRkmA6K
+ PI9f71y0dUHpZHPzyEoYlwAz/kEVd2U7VnPtJmA//l9AS2z/zk9gLghAMllvkkPgr5ye6khJd+v4O0
+ V89ebxTpges+Kbd/oyShBYwRpSh4gYTM4w+RpKg1tB/3FlTempzoX//3/QMAthGRmygseCSDjWM6UD
+ uUoHgcxV86Dzfnn2WEyQcRS89AXv4DIF45hiPtOpLd/X/ZSgTOhpkF/50WLKHDT7X1MTEKSYjDxii2
+ ivTCGpZLsW6Qv3lF7PR3bbLSzeHEOmUh2MfoYtbMteNMElwBVsJsqY+PIP3g==
 X-Developer-Key: i=jcormier@criticallink.com; a=openpgp;
  fpr=FF328CEA09E66D63136754DFDCD7FD2E0B36EBAA
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -102,29 +103,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Williamson <michael.williamson@criticallink.com>
 
-The logic to configure polling (vs async/irq notification) of hot-plug
-events was not correct.  If the connected bridge requires polling,
-then inform the upstream bridge we also require polling.
+If the I2C bus is connected on the TFP410, then use the register
+status bit to determine connection state.  This is needed, in particular,
+for polling the state when the Hot Plug detect is not connected to
+a controlling CPU via GPIO/IRQ lane.
 
 Signed-off-by: Michael Williamson <michael.williamson@criticallink.com>
 Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
 ---
- drivers/gpu/drm/bridge/ti-tfp410.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/bridge/ti-tfp410.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/gpu/drm/bridge/ti-tfp410.c b/drivers/gpu/drm/bridge/ti-tfp410.c
-index bb3f8d0ff207..41007d05d584 100644
+index 41007d05d584..eeb7202452aa 100644
 --- a/drivers/gpu/drm/bridge/ti-tfp410.c
 +++ b/drivers/gpu/drm/bridge/ti-tfp410.c
-@@ -155,7 +155,7 @@ static int tfp410_attach(struct drm_bridge *bridge,
- 		return -ENODEV;
- 	}
+@@ -28,6 +28,9 @@
+ #define TFP410_BIT_BSEL BIT(2)
+ #define TFP410_BIT_DSEL BIT(3)
  
--	if (dvi->next_bridge->ops & DRM_BRIDGE_OP_DETECT)
-+	if (dvi->next_bridge->ops & DRM_BRIDGE_OP_HPD)
- 		dvi->connector.polled = DRM_CONNECTOR_POLL_HPD;
- 	else
- 		dvi->connector.polled = DRM_CONNECTOR_POLL_CONNECT | DRM_CONNECTOR_POLL_DISCONNECT;
++#define TFP410_REG_CTL_2_MODE	0x09
++#define TFP410_BIT_HTPLG BIT(1)
++
+ static const struct regmap_config tfp410_regmap_config = {
+ 	.reg_bits = 8,
+ 	.val_bits = 8,
+@@ -105,6 +108,15 @@ static enum drm_connector_status
+ tfp410_connector_detect(struct drm_connector *connector, bool force)
+ {
+ 	struct tfp410 *dvi = drm_connector_to_tfp410(connector);
++	int ret;
++
++	if (dvi->i2c) {
++		ret = regmap_test_bits(dvi->regmap, TFP410_REG_CTL_2_MODE, TFP410_BIT_HTPLG);
++		if (ret < 0)
++			dev_err(dvi->dev, "%s failed to read HTPLG bit : %d\n", __func__, ret);
++		else
++			return ret ? connector_status_connected : connector_status_disconnected;
++	}
+ 
+ 	return drm_bridge_detect(dvi->next_bridge);
+ }
 
 -- 
 2.25.1
