@@ -2,185 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0620267D98F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338BF67D987
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbjAZXVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
+        id S232430AbjAZXTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:19:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjAZXVw (ORCPT
+        with ESMTP id S232506AbjAZXTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:21:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5836A5F
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:21:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4C57B81ECD
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:21:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D2CEC4339B;
-        Thu, 26 Jan 2023 23:21:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674775308;
-        bh=Lq6fk+GyGqDaZwOCXFqbZs1aT14bPTbAZD8s9qjgcgA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ppFAvVEBTAx8wB1/3zpJnjQB7YumwwNC4kghzSA5g3H1A6h484f1QVsGvZyfsq4zb
-         tZkAzahbEwrFCbde3zPmhMIis6bNjQg+VD9NexLC4HV1wcVOGTgrRjmKcsXdONBjdZ
-         1pYvVBYvPA5b9oaH6MOLO0MGWac2bBCesNQgDc3ecQHrUpKSwI3LwcwfFxm9O2SGNt
-         OX4IQHe3IJOYVDVdHoHohI+L3yh7XePTnoGVumzIf1O7Q5upwzs0urs4jJSOXbfF8m
-         okyJEfQ2ZtUIK7SuKbnSLuq7T4knmLF8oB3+23pA0ozAUPDZn9fPEC2EqEovSz1CSV
-         pcFnY7m5amVww==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 286795C1C6D; Thu, 26 Jan 2023 15:21:48 -0800 (PST)
-Date:   Thu, 26 Jan 2023 15:21:48 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
-        quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] tools/memory-model: Unify UNLOCK+LOCK pairings to
- po-unlock-lock-po
-Message-ID: <20230126232148.GA855268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
- <20230126134604.2160-2-jonas.oberhauser@huaweicloud.com>
- <Y9KsI/PsW4DK083z@rowland.harvard.edu>
- <20230126200828.GK2948950@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 26 Jan 2023 18:19:08 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21826A5F
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:19:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674775147; x=1706311147;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DxlPrkYaIFKagw6UlcDQbNMx71f4Jcar7GKHOEvVQIw=;
+  b=OaroDJLk4oOsWsaI7QPoboa2HmhVP4tQLx9RwFzj3fY4vw8zEvadNfaW
+   yK4aSKVy96StvX5mWZgBwpJBe/UVbZqVbOIFgaKAq2rGmlh510UMhqeOw
+   0HQWi0IahY5/2zKfdYT1N3QQOJ9XFVfUPBbOKK8I3k1A8vAxNAd7xeD4I
+   2BJi0BkKyH/7saIEXtdQx14cor6o+4PKxyMGbveaMamKrZFSMEI4z4a1Z
+   LWW9tmkF5aNKfgVBYyfYEppnfvKJWpV6Gb98C/bVnaY/8++SXH6KMh6Uz
+   nvXxf5V9RXdk67dGwIk7w8QCb16cuXekv+GIdLy+4oMOT0ePEH4t5vbaU
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="389357770"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="389357770"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 15:19:07 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="787022867"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="787022867"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 15:19:06 -0800
+Date:   Thu, 26 Jan 2023 15:22:37 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     joro@8bytes.org, will@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, hch@lst.de, jgg@nvidia.com,
+        baolu.lu@linux.intel.com, jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v2 5/8] iommu: Switch __iommu_domain_alloc() to device
+ ops
+Message-ID: <20230126152237.2f8b681f@jacob-builder>
+In-Reply-To: <23b51c84247cb36e96c242d3aef8ef555b6d05cd.1674753627.git.robin.murphy@arm.com>
+References: <cover.1674753627.git.robin.murphy@arm.com>
+        <23b51c84247cb36e96c242d3aef8ef555b6d05cd.1674753627.git.robin.murphy@arm.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126200828.GK2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 12:08:28PM -0800, Paul E. McKenney wrote:
-> On Thu, Jan 26, 2023 at 11:36:51AM -0500, Alan Stern wrote:
-> > On Thu, Jan 26, 2023 at 02:46:03PM +0100, Jonas Oberhauser wrote:
-> > > LKMM uses two relations for talking about UNLOCK+LOCK pairings:
-> > > 
-> > > 	1) po-unlock-lock-po, which handles UNLOCK+LOCK pairings
-> > > 	   on the same CPU or immediate lock handovers on the same
-> > > 	   lock variable
-> > > 
-> > > 	2) po;[UL];(co|po);[LKW];po, which handles UNLOCK+LOCK pairs
-> > > 	   literally as described in rcupdate.h#L1002, i.e., even
-> > > 	   after a sequence of handovers on the same lock variable.
-> > > 
-> > > The latter relation is used only once, to provide the guarantee
-> > > defined in rcupdate.h#L1002 by smp_mb__after_unlock_lock(), which
-> > > makes any UNLOCK+LOCK pair followed by the fence behave like a full
-> > > barrier.
-> > > 
-> > > This patch drops this use in favor of using po-unlock-lock-po
-> > > everywhere, which unifies the way the model talks about UNLOCK+LOCK
-> > > pairings.  At first glance this seems to weaken the guarantee given
-> > > by LKMM: When considering a long sequence of lock handovers
-> > > such as below, where P0 hands the lock to P1, which hands it to P2,
-> > > which finally executes such an after_unlock_lock fence, the mb
-> > > relation currently links any stores in the critical section of P0
-> > > to instructions P2 executes after its fence, but not so after the
-> > > patch.
-> > > 
-> > > P0(int *x, int *y, spinlock_t *mylock)
-> > > {
-> > >         spin_lock(mylock);
-> > >         WRITE_ONCE(*x, 2);
-> > >         spin_unlock(mylock);
-> > >         WRITE_ONCE(*y, 1);
-> > > }
-> > > 
-> > > P1(int *y, int *z, spinlock_t *mylock)
-> > > {
-> > >         int r0 = READ_ONCE(*y); // reads 1
-> > >         spin_lock(mylock);
-> > >         spin_unlock(mylock);
-> > >         WRITE_ONCE(*z,1);
-> > > }
-> > > 
-> > > P2(int *z, int *d, spinlock_t *mylock)
-> > > {
-> > >         int r1 = READ_ONCE(*z); // reads 1
-> > >         spin_lock(mylock);
-> > >         spin_unlock(mylock);
-> > >         smp_mb__after_unlock_lock();
-> > >         WRITE_ONCE(*d,1);
-> > > }
-> > > 
-> > > P3(int *x, int *d)
-> > > {
-> > >         WRITE_ONCE(*d,2);
-> > >         smp_mb();
-> > >         WRITE_ONCE(*x,1);
-> > > }
-> > > 
-> > > exists (1:r0=1 /\ 2:r1=1 /\ x=2 /\ d=2)
-> > > 
-> > > Nevertheless, the ordering guarantee given in rcupdate.h is actually
-> > > not weakened.  This is because the unlock operations along the
-> > > sequence of handovers are A-cumulative fences.  They ensure that any
-> > > stores that propagate to the CPU performing the first unlock
-> > > operation in the sequence must also propagate to every CPU that
-> > > performs a subsequent lock operation in the sequence.  Therefore any
-> > > such stores will also be ordered correctly by the fence even if only
-> > > the final handover is considered a full barrier.
-> > > 
-> > > Indeed this patch does not affect the behaviors allowed by LKMM at
-> > > all.  The mb relation is used to define ordering through:
-> > > 1) mb/.../ppo/hb, where the ordering is subsumed by hb+ where the
-> > >    lock-release, rfe, and unlock-acquire orderings each provide hb
-> > > 2) mb/strong-fence/cumul-fence/prop, where the rfe and A-cumulative
-> > >    lock-release orderings simply add more fine-grained cumul-fence
-> > >    edges to substitute a single strong-fence edge provided by a long
-> > >    lock handover sequence
-> > > 3) mb/strong-fence/pb and various similar uses in the definition of
-> > >    data races, where as discussed above any long handover sequence
-> > >    can be turned into a sequence of cumul-fence edges that provide
-> > >    the same ordering.
-> > > 
-> > > Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-> > > ---
-> > 
-> > Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> A quick spot check showed no change in performance, so thank you both!
-> 
-> Queued for review and further testing.
+Hi Robin,
 
-And testing on https://github.com/paulmckrcu/litmus for litmus tests up
-to ten processes and allowing 10 minutes per litmus test got this:
+On Thu, 26 Jan 2023 18:26:20 +0000, Robin Murphy <robin.murphy@arm.com>
+wrote:
 
-Exact output matches: 5208
-!!! Timed out: 38
-!!! Unknown primitive: 7
+>  
+> +static int __iommu_domain_alloc_dev(struct device *dev, void *data)
+> +{
+> +	struct device **alloc_dev = data;
+> +
+> +	if (!dev_iommu_ops_valid(dev))
+> +		return 0;
+> +
+> +	WARN_ONCE(*alloc_dev && dev_iommu_ops(dev) !=
+> dev_iommu_ops(*alloc_dev),
+> +		"Multiple IOMMU drivers present, which the public IOMMU
+> API can't fully support yet. You may still need to disable one or more to
+> get the expected result here, sorry!\n"); +
+> +	*alloc_dev = dev;
+> +	return 0;
+> +}
+> +
+>  struct iommu_domain *iommu_domain_alloc(struct bus_type *bus)
+>  {
+> -	return __iommu_domain_alloc(bus, IOMMU_DOMAIN_UNMANAGED);
+> +	struct device *dev = NULL;
+> +
+> +	/* We always check the whole bus, so the return value isn't
+> useful */
+> +	bus_for_each_dev(bus, NULL, &dev, __iommu_domain_alloc_dev);
+> +	if (!dev)
+> +		return NULL;
+Since __iommu_domain_alloc_dev() will always return 0, bus_for_each_dev()
+will never breakout until the whole dev list is iterated over. If so, would
+dev only record the last one? i.e. prior results get overwritten.  Maybe a
+misunderstood the logic.
 
-This test compared output with and without your patch.
+> +	return __iommu_domain_alloc(dev, IOMMU_DOMAIN_UNMANAGED);
+>  }
+>  EXPORT_SYMBOL_GPL(iommu_domain_alloc);
 
-For the tests with a Results clause, these failed:
+Thanks,
 
-	manual/kernel/C-srcu-nest-7.litmus
-	manual/kernel/C-srcu-nest-5.litmus
-	manual/kernel/C-srcu-nest-6.litmus
-	manual/kernel/C-srcu-nest-8.litmus
-
-But all of these will continue to fail until we get Alan's new-age SRCU
-patch applied.
-
-Therefore, this constitutes success, so good show thus far on testing!  ;-)
-
-Also, I am going to be pushing the scripts I use to mainline.  They might
-not be perfect, but they will be quite useful for this sort of change
-to the memory model.
-
-						Thanx, Paul
+Jacob
