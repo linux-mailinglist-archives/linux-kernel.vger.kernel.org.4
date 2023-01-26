@@ -2,115 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166E867D333
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFA467D339
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjAZRbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 12:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
+        id S231287AbjAZRce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 12:32:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbjAZRbc (ORCPT
+        with ESMTP id S229496AbjAZRcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:31:32 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69B260C8D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:31:26 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id e204so862309iof.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:31:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q9BJJQzoDsnrUeYgDKx6LZgv0cypBSRKCQgn69cO5NY=;
-        b=G2rPmK5wUbasPBB9wP26jHgdhIzDTXImqwlPuLi/CKZj4DtdTEcl5ekusISuKLF0bm
-         CUG+8VQfyZpRAS0shgOK00Zq096xreZcdXRz9S2FNduzrL+gpA/BQHiXNi4V5sPtkeWh
-         L8PJDe2KZFuPxIRwzPFys0/cRYOlyhrG9w4gMHQsolWjmXzFaoRoEBhkbamk4PE6vbF9
-         USXYCFowo3wJg1sdq8/s96EEKtgzVx9oGF4PjjkdDQDV0g0Hj/W7Z+OoGjy8w+s6RngN
-         NGPUwhAV1KJjSsYg70jMM2Bekmc4I4PCWRVL3vHEzja7CwgyTkoDGO3HEL7lHDlNdXAQ
-         6pyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q9BJJQzoDsnrUeYgDKx6LZgv0cypBSRKCQgn69cO5NY=;
-        b=CJnmlUn2OQTDYXL9sGlPtE/IDZSRywEoEI+DaiE0cuHUwHQB27Zi40aKRU7H7sIU+G
-         taf/KwTrxm9NGnOIjDI98xfCswaMzs6scK531j3CPrPPAMCb+DYdBIKANvoYMIArLOg1
-         1VoYMicjJgriZYPJmCziJgcJwIxBriXoI0J6SJ+7EMWA+6vQt4F3uWMIq65yZRUdjz6s
-         cvIwIGHPIilAql4kAdbCaFOtQJRguqxW0zl2dtOItu8L5DPpf3g1KJHpgF7P4Dvig3pg
-         UK/K/RFURKv3Pqoup+I5CG7rkacK5ovEDar34+SxIiENz79rw4GYOACLqeZ9EW6r90HP
-         T68g==
-X-Gm-Message-State: AFqh2krz/P2ErKCTzDiEHfW/xepe8Rna5aBHQWXv47cH0tqn8ldO+zlw
-        0wtrH1yyukQYgoqITXFbSAr6FECPpmxSOn09
-X-Google-Smtp-Source: AMrXdXt9WYOZCub+SRV6z4+V2VsdgVaUgzsgEWT5NgUCzBffkM/vKdVrPBTbP+KBlurR1oo8mG94xw==
-X-Received: by 2002:a5d:9e4d:0:b0:707:6808:45c0 with SMTP id i13-20020a5d9e4d000000b00707680845c0mr4429830ioi.1.1674754285967;
-        Thu, 26 Jan 2023 09:31:25 -0800 (PST)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id n24-20020a02a198000000b0038a434685dbsm641377jah.102.2023.01.26.09.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 09:31:25 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230125065839.191256-1-hch@lst.de>
-References: <20230125065839.191256-1-hch@lst.de>
-Subject: Re: build direct-io.c conditionally
-Message-Id: <167475428508.707060.7530877439951509379.b4-ty@kernel.dk>
-Date:   Thu, 26 Jan 2023 10:31:25 -0700
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 26 Jan 2023 12:32:32 -0500
+Received: from fx403.security-mail.net (smtpout140.security-mail.net [85.31.212.143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA408692
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:32:31 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx403.security-mail.net (Postfix) with ESMTP id DFA615CBF58
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:32:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1674754349;
+        bh=6/90w43OAYgF0Bg+2eZ5gViTyRq0br/gZ7uEalJdF1o=;
+        h=From:To:Cc:Subject:Date;
+        b=qCPCV0jokQHH/m7KMbkFZ4Tv/3vbOCDOCP5qaRop4CLRe7AXOJic5ahtf9XVqvAqC
+         RgTP1k7+sRvviYPJODQ8nnPpq1a6xHDmf0TcBH4TZEKtiA0D2RC3frPQWu+5DpKkjJ
+         9QEaiCOwcYmTZ1Yx2oMO1E8CiXH0EorREk1jRZN4=
+Received: from fx403 (localhost [127.0.0.1])
+        by fx403.security-mail.net (Postfix) with ESMTP id 9E9B45CC142;
+        Thu, 26 Jan 2023 18:32:29 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <a0a7.63d2b92c.c999f.0>
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
+        by fx403.security-mail.net (Postfix) with ESMTPS id CBADB5CC1AF;
+        Thu, 26 Jan 2023 18:32:28 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id A3E7727E0374;
+        Thu, 26 Jan 2023 18:32:28 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 86ABF27E0431;
+        Thu, 26 Jan 2023 18:32:28 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 86ABF27E0431
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674754348;
+        bh=RYbnzhQ3FDTjG3as2uuzmyoOHcgNTEdJzvexnfAGgVg=;
+        h=From:To:Date:Message-Id;
+        b=LLv+IgqaK+miDMpEVHbjdtnjfWQVHM8vtbW5GPTHxilCs8zaSHDBudM45kLJr5I9F
+         B07p/DVVypogPpaRhh5djqAplUKJbLnR+nYpIdxZxlDG6ynEW4gFEEQbGoA70zamie
+         q+2HEbPlkn9myc+QJ7vO36Hv4RpYetuAuivcnMxI=
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Gv4uQcdGM6F0; Thu, 26 Jan 2023 18:32:28 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 71D5527E0374;
+        Thu, 26 Jan 2023 18:32:28 +0100 (CET)
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>,
+        Wu XiangCheng <bobwxc@email.cn>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jules Maselbas <jmaselbas@kalray.eu>
+Subject: [PATCH] Documentation/mm: Fix typo emluation -> emulation
+Date:   Thu, 26 Jan 2023 18:32:17 +0100
+Message-Id: <20230126173217.12912-1-jmaselbas@kalray.eu>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix typo emluation -> emulation
 
-On Wed, 25 Jan 2023 07:58:37 +0100, Christoph Hellwig wrote:
-> this series makes the build of direct-io.c conditional as only
-> about a dozen file systems actually use it.
-> 
-> Diffstat:
->  Kconfig          |    4 ++++
->  Makefile         |    3 ++-
->  affs/Kconfig     |    1 +
->  direct-io.c      |   24 ------------------------
->  exfat/Kconfig    |    1 +
->  ext2/Kconfig     |    1 +
->  fat/Kconfig      |    1 +
->  hfs/Kconfig      |    1 +
->  hfsplus/Kconfig  |    1 +
->  internal.h       |    4 +---
->  jfs/Kconfig      |    1 +
->  nilfs2/Kconfig   |    1 +
->  ntfs3/Kconfig    |    1 +
->  ocfs2/Kconfig    |    1 +
->  reiserfs/Kconfig |    1 +
->  super.c          |   24 ++++++++++++++++++++++++
->  udf/Kconfig      |    1 +
->  17 files changed, 43 insertions(+), 28 deletions(-)
-> 
-> [...]
+Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+---
+ Documentation/mm/numa.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks!
-
-[1/2] fs: move sb_init_dio_done_wq out of direct-io.c
-      commit: 439bc39b3cf0014b1b75075812f7ef0f8baa9674
-[2/2] fs: build the legacy direct I/O code conditionally
-      commit: 9636e650e16f6b01f0044f7662074958c23e4707
-
-Best regards,
+diff --git a/Documentation/mm/numa.rst b/Documentation/mm/numa.rst
+index 99fdeca917ca..e1410974c941 100644
+--- a/Documentation/mm/numa.rst
++++ b/Documentation/mm/numa.rst
+@@ -64,7 +64,7 @@ In addition, for some architectures, again x86 is an example, Linux supports
+ the emulation of additional nodes.  For NUMA emulation, linux will carve up
+ the existing nodes--or the system memory for non-NUMA platforms--into multiple
+ nodes.  Each emulated node will manage a fraction of the underlying cells'
+-physical memory.  NUMA emluation is useful for testing NUMA kernel and
++physical memory.  NUMA emulation is useful for testing NUMA kernel and
+ application features on non-NUMA platforms, and as a sort of memory resource
+ management mechanism when used together with cpusets.
+ [see Documentation/admin-guide/cgroup-v1/cpusets.rst]
 -- 
-Jens Axboe
-
-
+2.17.1
 
