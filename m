@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCAA67CDEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F7D67CDF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbjAZOXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:23:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S231997AbjAZOXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbjAZOXC (ORCPT
+        with ESMTP id S231979AbjAZOXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:23:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2A01D91F;
-        Thu, 26 Jan 2023 06:23:00 -0800 (PST)
+        Thu, 26 Jan 2023 09:23:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94ADB34021;
+        Thu, 26 Jan 2023 06:23:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C5A4B81DF0;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AE43B81DF5;
         Thu, 26 Jan 2023 14:22:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E2BC43324;
-        Thu, 26 Jan 2023 14:22:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15EDDC43339;
+        Thu, 26 Jan 2023 14:22:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674742977;
-        bh=7/HQf6/GGIuDaxy+2slvzMSyzdgxzdXhyFV520wU3YQ=;
+        s=k20201202; t=1674742978;
+        bh=4z6TJNCwS8qAM3wHcv2tU/0WELTPhAMwIRU/5y7TjEE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uAOGAGpNA3ePLe//qEtVZpQq7P/FHcAbDUvjWAtzzuqXNaCArPvXkWSXv4AloYJJ0
-         YzzqlF1q8GUUQITiqe8Z/C9qm/BANog3AMA33CIBYVs27E94yId7Uk940ZdvOS7TCR
-         4FKq61ydVoO39kvuepnXVxJjtc6zasLIr/1N8P18jfCUH5vfzJYfHr7h8y6AHgZbtN
-         9BMXsHFD39o3Hie9tOBN7G+Y6WcZ/8I1n6PuE4c3S3kj4jpSwkUx9EUOvQGaHwrsJ9
-         XNkt9vwwIFraChOyUCXCozyp/z7KHBAAPSo2p4Fe/0y2W2xco+qIsGW92b2CiENBL6
-         /rzdMAa4SpaIQ==
+        b=LBQT9bNAxaKz3msJlHyveDXtH9yd1HKLE5fDUuw8OD2p7etlbFJPb2qRBztfKhuYF
+         rUxQClpzfTQaRpRQa4CSoCp9T/Wl93TVXapwPn+FYBuONDOb74X6RIN37Fj8oD++SG
+         z1AsFAaBUmD783R10QNTVWZR21BwgdyEKS2dZ+oJ9W4IdWROZ/zEDqU8rSj7BqzI7L
+         qGMmjB/v+QqBKj+Up2tC8YiraDoyW0uzoh34MjZN9+L4RcytiIPb9vaft6pSNNhYFD
+         MEbIBK4TO9YL3rH86ppK60lMlB3mW5w1p1Juu/hqcVjinkWL0oREeZXJ1JXegeCHok
+         wi4F9K1A1yubA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pL39c-0006iZ-OG; Thu, 26 Jan 2023 15:23:04 +0100
+        id 1pL39c-0006id-RQ; Thu, 26 Jan 2023 15:23:04 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Bjorn Andersson <andersson@kernel.org>
@@ -47,9 +47,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 09/24] rtc: pm8xxx: rename struct device pointer
-Date:   Thu, 26 Jan 2023 15:20:42 +0100
-Message-Id: <20230126142057.25715-10-johan+linaro@kernel.org>
+Subject: [PATCH 10/24] rtc: pm8xxx: rename alarm irq variable
+Date:   Thu, 26 Jan 2023 15:20:43 +0100
+Message-Id: <20230126142057.25715-11-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230126142057.25715-1-johan+linaro@kernel.org>
 References: <20230126142057.25715-1-johan+linaro@kernel.org>
@@ -64,46 +64,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename the driver-data struct device pointer by dropping the "rtc"
-prefix which is both redundant and misleading (as this is a pointer to
-the platform device and not the rtc class device).
+Clean up the driver somewhat by renaming the driver-data alarm irq
+variable by dropping the redundant "rtc" prefix.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/rtc/rtc-pm8xxx.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-pm8xxx.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-index 8c364e5d3b57..0fdbd233b10e 100644
+index 0fdbd233b10e..ea867b20573a 100644
 --- a/drivers/rtc/rtc-pm8xxx.c
 +++ b/drivers/rtc/rtc-pm8xxx.c
-@@ -48,7 +48,7 @@ struct pm8xxx_rtc_regs {
+@@ -46,7 +46,7 @@ struct pm8xxx_rtc_regs {
+  * @rtc:		rtc device for this driver.
+  * @regmap:		regmap used to access RTC registers
   * @allow_set_time:	indicates whether writing to the RTC is allowed
-  * @rtc_alarm_irq:	rtc alarm irq number.
+- * @rtc_alarm_irq:	rtc alarm irq number.
++ * @alarm_irq:		alarm irq number
   * @regs:		rtc registers description.
-- * @rtc_dev:		device structure.
-+ * @dev:		device structure
+  * @dev:		device structure
   */
- struct pm8xxx_rtc {
+@@ -54,7 +54,7 @@ struct pm8xxx_rtc {
  	struct rtc_device *rtc;
-@@ -56,7 +56,7 @@ struct pm8xxx_rtc {
+ 	struct regmap *regmap;
  	bool allow_set_time;
- 	int rtc_alarm_irq;
+-	int rtc_alarm_irq;
++	int alarm_irq;
  	const struct pm8xxx_rtc_regs *regs;
--	struct device *rtc_dev;
-+	struct device *dev;
+ 	struct device *dev;
  };
+@@ -364,8 +364,8 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+ 		return -ENXIO;
+ 	}
  
- /*
-@@ -372,7 +372,7 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
- 						      "allow-set-time");
+-	rtc_dd->rtc_alarm_irq = platform_get_irq(pdev, 0);
+-	if (rtc_dd->rtc_alarm_irq < 0)
++	rtc_dd->alarm_irq = platform_get_irq(pdev, 0);
++	if (rtc_dd->alarm_irq < 0)
+ 		return -ENXIO;
  
- 	rtc_dd->regs = match->data;
--	rtc_dd->rtc_dev = &pdev->dev;
-+	rtc_dd->dev = &pdev->dev;
+ 	rtc_dd->allow_set_time = of_property_read_bool(pdev->dev.of_node,
+@@ -391,7 +391,7 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+ 	rtc_dd->rtc->range_max = U32_MAX;
  
- 	rc = pm8xxx_rtc_enable(rtc_dd);
+ 	/* Request the alarm IRQ */
+-	rc = devm_request_any_context_irq(&pdev->dev, rtc_dd->rtc_alarm_irq,
++	rc = devm_request_any_context_irq(&pdev->dev, rtc_dd->alarm_irq,
+ 					  pm8xxx_alarm_trigger,
+ 					  IRQF_TRIGGER_RISING,
+ 					  "pm8xxx_rtc_alarm", rtc_dd);
+@@ -404,7 +404,7 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
  	if (rc)
+ 		return rc;
+ 
+-	rc = dev_pm_set_wake_irq(&pdev->dev, rtc_dd->rtc_alarm_irq);
++	rc = dev_pm_set_wake_irq(&pdev->dev, rtc_dd->alarm_irq);
+ 	if (rc)
+ 		return rc;
+ 
 -- 
 2.39.1
 
