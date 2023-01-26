@@ -2,130 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5611C67D7B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE0167D7B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbjAZV1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
+        id S232974AbjAZVbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:31:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbjAZV1m (ORCPT
+        with ESMTP id S232050AbjAZVbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:27:42 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CD93EFED;
-        Thu, 26 Jan 2023 13:27:41 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QKr5qU003063;
-        Thu, 26 Jan 2023 21:27:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=eub/xV2CndV03ABVthGsowvrdm8zTqb73Ay8YAMFLgU=;
- b=EnMCtFwqCgXYn7qv6B4+uwnY25L8e33icayzlkYrvcWoZn5ml+/jvO48LNg+ZpNliGcU
- /slccjyiWkdtX3fuJEJAo5RJ2xeLiTvG7kU6qkOU6hW27BqxlJps4dWv6SpS+nhvTLaU
- 36t6TLuvJnySJ9SfffvkKBphkJY1+iHIoUGIrAh//Lw1QAnPwzHh6wrtSL0ahaHKag3o
- yhbzr2VupoZVjIvhGzirHDwFf6mndVkE3U0dJwfONMNj+DhCPIFoYUJa/JVuHPu4tsxC
- GEQm8KwNs1W3Q13gikhpY6XlQTI9O3hYgD0SzOAMtQlmIRZEkTYWhfLq772omIgzJ58G qQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nbp1v9bh1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 21:27:24 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30QLRNUo021049
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 21:27:23 GMT
-Received: from [10.110.106.42] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 26 Jan
- 2023 13:27:22 -0800
-Message-ID: <6bafae1a-61b3-887a-14fc-77d389509f4f@quicinc.com>
-Date:   Thu, 26 Jan 2023 13:27:22 -0800
+        Thu, 26 Jan 2023 16:31:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31C8D520;
+        Thu, 26 Jan 2023 13:30:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58BE3B81F21;
+        Thu, 26 Jan 2023 21:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728B7C433D2;
+        Thu, 26 Jan 2023 21:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674768656;
+        bh=GakT+DU3G1IWkvYMyHJ7PmIJbKenlLyYfEtm1r43zCo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j8VmXuo6pnreB0wuvLcADBdapg9fUU6jfuDPv6Ga+8hBThdp1Alfl9KSGExC6mJUN
+         7UnnRzf9VDF8arhDtg9scxseA/oSBgWYrvm8FGsrSBJZHfybcEGwJFQ3DryGjE4cxY
+         dQeqFhMVPqPXzzl4CKF3+dedgFDQeRyejXJGC9yRxpy58vChFHcfxlZBEwFsv1qnOU
+         9GyD2yZuYpfPbsTjg2SZZjyl+2R0BKKJJL8G3nY8Ll5V69wugUzkZa4lJrsUF/gq8D
+         td6srB+uQpp08Bnvmsngqr5inFftYH8HyjcQC3S47u1Bbnvey95sm5ZXtU+dwnIvIa
+         Fwx48anoEkmow==
+Date:   Thu, 26 Jan 2023 21:30:53 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     William Roberts <bill.c.roberts@gmail.com>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+Message-ID: <Y9LxDYYEp0qTfhqN@kernel.org>
+References: <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
+ <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
+ <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
+ <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
+ <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
+ <Y8tcEtr8Kl3p4qtA@kernel.org>
+ <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
+ <5fb9193be57d22131feecf8b39dffbb03af3f60a.camel@linux.ibm.com>
+ <Y9K2mOsmB1+CFk9l@kernel.org>
+ <CAFftDdqq-eeryycv_11m=-1+aR=cgCUU7C_BFDrmYRwFF13i5w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v7 10/20] gunyah: rsc_mgr: Add resource manager RPC core
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-acpi@vger.kernel.org>
-References: <20221121140009.2353512-1-quic_eberman@quicinc.com>
- <20221121140009.2353512-11-quic_eberman@quicinc.com>
- <Y3uYRvrCZNnbDiY5@kroah.com>
- <425a8fe9-24b6-26c7-9150-0d3fb76430be@quicinc.com>
- <Y5gbFhVpuDoZ2ZmY@kroah.com>
- <f0f4243f-4cbe-0aa2-19b6-047d791207ab@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <f0f4243f-4cbe-0aa2-19b6-047d791207ab@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: beyvsiomKsGMAhOhYtuXkCyYCDsnp1bK
-X-Proofpoint-GUID: beyvsiomKsGMAhOhYtuXkCyYCDsnp1bK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_09,2023-01-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 clxscore=1015 spamscore=0 phishscore=0 bulkscore=0
- suspectscore=0 adultscore=0 mlxlogscore=663 mlxscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260201
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFftDdqq-eeryycv_11m=-1+aR=cgCUU7C_BFDrmYRwFF13i5w@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/15/2022 6:25 PM, Elliot Berman wrote:
+On Thu, Jan 26, 2023 at 11:32:22AM -0600, William Roberts wrote:
+> On Thu, Jan 26, 2023 at 11:21 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Tue, Jan 24, 2023 at 07:38:04AM -0500, James Bottomley wrote:
+> > > On Mon, 2023-01-23 at 11:48 -0600, William Roberts wrote:
+> > > > On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org>
+> > > > wrote:
+> > > > >
+> > > > > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
+> > > > > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
+> > > > > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
+> > > > > > > <bill.c.roberts@gmail.com> wrote:
+> > > > > > >
+> > > > > > > > What's the use case of using the creation data and ticket in
+> > > > > > > > this context? Who gets the creationData and the ticket?
+> > > > > > > > Could a user supplied outsideInfo work? IIRC I saw some
+> > > > > > > > patches flying around where the sessions will get encrypted
+> > > > > > > > and presumably correctly as well. This would allow the
+> > > > > > > > transfer of that outsideInfo, like the NV Index PCR value to
+> > > > > > > > be included and integrity protected by the session HMAC.
+> > > > > > >
+> > > > > > > The goal is to ensure that the key was generated by the kernel.
+> > > > > > > In the absence of the creation data, an attacker could generate
+> > > > > > > a hibernation image using their own key and trick the kernel
+> > > > > > > into resuming arbitrary code. We don't have any way to pass
+> > > > > > > secret data from the hibernate kernel to the resume kernel, so
+> > > > > > > I don't think there's any easy way to do it with outsideinfo.
+> > > > > >
+> > > > > > Can we go back again to why you can't use locality?  It's exactly
+> > > > > > designed for this since locality is part of creation data.
+> > > > > > Currently everything only uses locality 0, so it's impossible for
+> > > > > > anyone on Linux to produce a key with anything other than 0 in
+> > > > > > the creation data for locality.  However, the dynamic launch
+> > > > > > people are proposing that the Kernel should use Locality 2 for
+> > > > > > all its operations, which would allow you to distinguish a key
+> > > > > > created by the kernel from one created by a user by locality.
+> > > > > >
+> > > > > > I think the previous objection was that not all TPMs implement
+> > > > > > locality, but then not all laptops have TPMs either, so if you
+> > > > > > ever come across one which has a TPM but no locality, it's in a
+> > > > > > very similar security boat to one which has no TPM.
+> > > > >
+> > > > > Kernel could try to use locality 2 and use locality 0 as fallback.
+> > > >
+> > > > I don't think that would work for Matthew, they need something
+> > > > reliable to indicate key provenance.
+> > >
+> > > No, I think it would be good enough: locality 0 means anyone (including
+> > > the kernel on a machine which doesn't function correctly) could have
+> > > created this key.  Locality 2 would mean only the kernel could have
+> > > created this key.
+> > >
+> > > By the time the kernel boots and before it loads the hibernation image
+> > > it will know the answer to the question "does my TPM support locality
+> > > 2", so it can use that in its security assessment: if the kernel
+> > > supports locality 2 and the key wasn't created in locality 2 then
+> > > assume an attack.  Obviously, if the kernel doesn't support locality 2
+> > > then the hibernation resume has to accept any old key, but that's the
+> > > same as the situation today.
+> >
+> > This sounds otherwise great to me but why bother even allowing a
+> > machine with no-locality TPM to be involved with hibernate? Simply
+> > detect locality support during driver initialization and disallow
+> > sealed hibernation (or whatever the feature was called) if localities
+> > were not detected.
+> >
+> > I get supporting old hardware with old features but it does not make
+> > sense to maintain new features with hardware, which clearly does not
+> > scale, right?
+> >
+> > BR, Jarkko
 > 
+> Here's a thought, what if we had a static/cmd line configurable
+> no-auth NV Index and writelocked it with the expected key information,
+> name or something. I guess the problem is atomicity with write/lock,
+> but can't the kernel lock out all other users?
 > 
-> On 12/12/2022 10:26 PM, Greg Kroah-Hartman wrote:
->> On Mon, Dec 12, 2022 at 03:46:53PM -0800, Elliot Berman wrote:
->>>
->>> Reference counting is not needed on the gh_rm_rpc object because its 
->>> only
->>> client (the VM manager) is torn down before the gh_rm_rpc.
->>
->> So again, who controls the lifecycle of it?  Where is the reference
->> count for the structure as it is pointing to reference counted memory?
+> An attacker would need to issue tpm2_startup, which in this case would DOS
+> the kernel in both scenarios. If an attacker already wrote and locked the NV
+> index, that would also be a DOS. If they already wrote it, the kernel simply
+> writes whatever they want. Is there an attack I am missing?
 > 
-> Had some internal review and I think I'm now taking better care of this 
-> (and the device situation in the other mail). I will send out next 
-> revision soon.
+> I guess the issue here would be setup, since creating the NV index requires
+> hierarchy auth, does the kernel have platform auth or is that already shut down
+> by firmware (I can't recall)? A null hierarchy volatile lockable index would be
+> nice for this, too bad that doesn't exist.
 
-Hello Greg,
+How do you see this would better when compared to finding a way to use
+locality, which could potentially be made to somewhat simple to setup
+(practically zero config)?
 
-I've sent v9 series and wanted to get your feedback on the changes to 
-the patches that you had suggested.
-
-https://lore.kernel.org/all/20230120224627.4053418-10-quic_eberman@quicinc.com/
-
-Thanks,
-Elliot
+BR, Jarkko
