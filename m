@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFCE67D6AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C32A67D6BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbjAZUpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:45:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51170 "EHLO
+        id S229731AbjAZUrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbjAZUpX (ORCPT
+        with ESMTP id S229688AbjAZUrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:45:23 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6375D7448A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:45:07 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id c12-20020a056a00248c00b0058e1ca45515so1427452pfv.14
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:45:07 -0800 (PST)
+        Thu, 26 Jan 2023 15:47:04 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861A624CAC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:46:29 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id o66so2496005oia.6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:46:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gau1yQskHf3VXQpkYLtjLur+Qip6kit3p9HDDaJBRs4=;
-        b=f1tvDTkJ9Rdj2sN9ssxN48UvzmplgYwTrZ0hhtRdBm9fRaPLn8g8VcDs0rLpbFcHEO
-         27uS/Yu9hQmGtLZ99VCsQzwNchjpqj2B6r0Xr8JbcX69qEPLXE/ORk0iBr0fjYz0+nu9
-         5FqcIFvNu4h5DsqJ5X6gcJE+XAjXWHcCit7jhK0MSJYvkTi209/LoB2JzX79iYN4FFQm
-         K4XiVxY0vElKce6pOAA4fTVctu57lRe6ssarPx+s4HXm82RDYdSwG6tVPxToUsj+qnzK
-         sNnF9xQEuFU6bWgkzcAgoyJ8kaKUPKPhSg7qXZMzPNbTFJyUSaAxOjzq7Jy1Wce9mH6r
-         SUjA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=65oEAScgUYAE8KruWPSkfRMTnDB8eV6fK8VEQc/uLFA=;
+        b=OqPzMccJcZnZGD9WSHYzTRHjKzY/peIuHLKTZxjF1SbpcroX3gmzt1cOZAaiQP3hgg
+         rEuzMwJ/xit6Z5huIjjhSuVMiajhrnubGWfIVXjx4T+t1jke2LskACy5zWmEBSSWo8tg
+         OgSKk5lEsAkCjtQO7/kxN428i4RPZ50qavFbsKL4JS9yry7KYQZmTeqZaH3sfQp460bU
+         FyczWfAVEx012VR5UUajmVfsfT1iW7fmPDFo/1N1n0deBP2zk+bron3Ws9MPuvht0vSi
+         8rdlRN76OWBrwc2N/sUPOWaadU7g5vDdEF867B1zDD246YOr3TD57eO86++Z1koYN4J5
+         DrcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gau1yQskHf3VXQpkYLtjLur+Qip6kit3p9HDDaJBRs4=;
-        b=1eRZTzgjT9UiBsG6D0HpoZZPHCF7fJ1odRCLxsMbdo84dl45p2W0/51WSLU15LKumz
-         h6yyJPyQ9wrKCHjFDpTzDp2LFBdw2tAQyCW02bH2qeB2YA3f6qVT9/zMYNXRNdBtsjKi
-         +zLAgS4zYE7Id7NqtBG+zuiZa5pMGwwVEoIDclohkpGAUW25OdOIid3w1g3jH7eCiYPF
-         G0SguyXvEQ0rlzrnMVbyr/nkWXQS0kJverTe0YYcHcW+9ebOLsRFoq98F8La++kKwSFP
-         1BaN0pCb0AMFBCOOElSFWVE3wi7j5t8C3XEIK4sSKPPKz8Q2pihizHLn1r1p3chCOpct
-         pJWw==
-X-Gm-Message-State: AO0yUKWbXoRMpRyxVVDGsumwm0eCoKY/mnVqRToNk/nb+Ho2zJpCu5Yx
-        bf9t9zHqZD1D6EgzIVGhbRfqY1fQicnOfoo=
-X-Google-Smtp-Source: AK7set/TbnBjmUgqAAFzQMjbref3OlBWOk5pcb13kQePVWLM6NrlJPmaTSILrlFJ/sogPIbjRGpVECGiCbZN5ng=
-X-Received: from zaidcloud.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5325])
- (user=zalbassam job=sendgmr) by 2002:a17:90a:2983:b0:22c:4174:3ad with SMTP
- id h3-20020a17090a298300b0022c417403admr156376pjd.24.1674765906698; Thu, 26
- Jan 2023 12:45:06 -0800 (PST)
-Date:   Thu, 26 Jan 2023 15:44:44 -0500
-In-Reply-To: <20230126204444.2204061-1-zalbassam@google.com>
-Mime-Version: 1.0
-References: <20230126204444.2204061-1-zalbassam@google.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230126204444.2204061-9-zalbassam@google.com>
-Subject: [PATCH 8/8] ARM: mach-virt: Select PMUv3 driver by default
-From:   Zaid Al-Bassam <zalbassam@google.com>
-To:     Jesus Sanchez-Palencia <jesussanp@google.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu
-Cc:     Marc Zyngier <marc.zyngier@arm.com>,
-        Zaid Al-Bassam <zalbassam@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=65oEAScgUYAE8KruWPSkfRMTnDB8eV6fK8VEQc/uLFA=;
+        b=FPE2EEYqupreiex74tO4/Y6cd1NUZVP1OpBNZ7ltgChhbHeBTh/xD37pZcsD4xaRO0
+         J/IyW5qVEDLYtQumdb1KQnJN2Zg4ANeZBArL1KxCwhEMbmUqacPm7kZzOpLaCoXeC3fl
+         neSvmANaVhU75iSQu/a5C3HroFzDLSsLh0oT292N0tYA1r+r4xuclErmVsTzUSgyb+cu
+         OU4iywjYMm5Swo0nPe3ZxNO73o3CDv8MWX1InJy8loi+LuWcTt9mrPJ730LzOvzRFQZV
+         J376rMBXMT0n7uzkw49OCtJxwZbQSGor8nsq9gk1bABqTj00JPPd6rM3sRLRSKdUtzLV
+         AEfw==
+X-Gm-Message-State: AFqh2koI41zlfegPeOwNyUwTivQmIjndWGOWSn9BW52fqRv7JPWRDXYs
+        0GUjhbZrPFJLerlCyxmgD7pteq/otzaJe3xd1fq+0aTV2UkAygLumEM=
+X-Google-Smtp-Source: AMrXdXs/BatnkOGFZ9IZFzSNd4aanhUQg5HHDKCp9DO+wxxsB56W1plvWBP556Lm07LkTjYUGD+fX439sciWUe3T6KA=
+X-Received: by 2002:aca:efc6:0:b0:36e:b85f:6081 with SMTP id
+ n189-20020acaefc6000000b0036eb85f6081mr1299293oih.103.1674765970022; Thu, 26
+ Jan 2023 12:46:10 -0800 (PST)
+MIME-Version: 1.0
+References: <20221027092036.2698180-1-pbonzini@redhat.com> <CALMp9eQihPhjpoodw6ojgVh_KtvPqQ9qJ3wKWZQyVtArpGkfHA@mail.gmail.com>
+ <3a23db58-3ae1-7457-ed09-bc2e3f6e8dc9@redhat.com> <CALMp9eQ3wZ4dkq_8ErcUdQAs2F96Gvr-g=7-iBteJeuN5aX00A@mail.gmail.com>
+ <8bdf22c8-9ef1-e526-df36-9073a150669d@redhat.com> <CALMp9eRKp_4j_Q0j1HYP2itT2+z3pRotQK8LwScMsaGF5FpARA@mail.gmail.com>
+ <dec8c012-885a-6ed8-534e-4a5f0a435025@redhat.com> <CALMp9eSyVWGS2HQVwwwViE6S_uweiOiFucqa3keuoUjNz9rKqA@mail.gmail.com>
+ <f322cce0-f83a-16d9-9738-f47f265b41d8@redhat.com> <CALMp9eTpbwQP3QsqpOBsDb0soLpsv9FZA=ivZUmf2GJgBxhfmw@mail.gmail.com>
+ <b3820c5c-370b-44f1-7dac-544e504bc61a@redhat.com>
+In-Reply-To: <b3820c5c-370b-44f1-7dac-544e504bc61a@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 26 Jan 2023 12:45:58 -0800
+Message-ID: <CALMp9eQe__xPe9JjgpN_jq-zB2UUqBKYrrMpGvJOjohT=gK2=Q@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: x86: Do not return host topology information from KVM_GET_SUPPORTED_CPUID
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,30 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <marc.zyngier@arm.com>
+On Thu, Jan 26, 2023 at 9:47 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 1/26/23 17:06, Jim Mattson wrote:
+> >>> Sadly, there isn't a single kernel involved. People running our VMM on
+> >>> their desktops are going to be impacted as soon as this patch hits
+> >>> that distro. (I don't know if I can say which distro that is.) So, now
+> >>> we have to get the VMM folks to urgently accommodate this change and
+> >>> get a new distribution out.
+> >>
+> >> Ok, this is what is needed to make a more informed choice.  To be clear,
+> >> this is _still_ not public (for example it's not ChromeOS), so there is
+> >> at least some control on what version of the VMM they use?  Would it
+> >> make sense to buy you a few months by deferring this patch to Linux 6.3-6.5?
+> >
+> > Mainline isn't a problem. I'm more worried about 5.19 LTS.
+>
+> 5.19 is not LTS, is it?  This patch is only in 6.1.7 and 6.1.8 as far as
+> stable kernels is concerned, should I ask Greg to revert it there?
 
-Since 32bit guests are not unlikely to run on an ARMv8 host,
-let's select the PMUv3 driver, which allows the PMU to be used
-on such systems.
+It came to my attention when commit 196c6f0c3e21 ("KVM: x86: Do not
+return host topology information from KVM_GET_SUPPORTED_CPUID") broke
+some of our tests under 5.10 LTS.
 
-Signed-off-by: Marc Zyngier <marc.zyngier@arm.com>
-Signed-off-by: Zaid Al-Bassam <zalbassam@google.com>
----
- arch/arm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 137f89ad0521..3802997fb36e 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -400,6 +400,7 @@ config ARCH_VIRT
- 	select ARM_GIC_V3
- 	select ARM_GIC_V3_ITS if PCI
- 	select ARM_PSCI
-+	select ARM_PMUV3 if PERF_EVENTS
- 	select HAVE_ARM_ARCH_TIMER
- 
- config ARCH_AIROHA
--- 
-2.39.0.246.g2a6d74b583-goog
-
+If it isn't bound for linux-5.19-y, then we have some breathing room.
