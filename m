@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44F367D28F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D8067D290
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbjAZRGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 12:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
+        id S231881AbjAZRGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 12:06:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbjAZRG3 (ORCPT
+        with ESMTP id S231918AbjAZRGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:06:29 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204842F7BD
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:06:25 -0800 (PST)
+        Thu, 26 Jan 2023 12:06:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B63FA6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:06:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 02E63CE2386
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:06:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7439AC4339B;
-        Thu, 26 Jan 2023 17:06:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B3AC61900
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:06:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2676C433EF;
+        Thu, 26 Jan 2023 17:06:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674752782;
-        bh=ZvStsc5ZtEWBoYSz9j8G0L0vCieAFt37Hxf2WaPKWWw=;
+        s=k20201202; t=1674752786;
+        bh=TJzRlX8qvgEiSePWc4rQnWbXyiOPKt8ROYEh5q9ZOX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rb/s6IV3YcxZ4VRJQvCzKHhmseUDBTzSjrE4vMAt2T4RfuOHyH99josgXNwDAZjk4
-         1n5ppRrKyBdEeLEItArSfRfL6vt0zUqPslv/sjyaNQ3aZErHap+aFy6ZdotoNNvoat
-         QwlhZeArvCbJIUdm73XaXSsSQhDQb3MRgN6kcBHAtHRPvIyGr1c2DnKfQaO80IVr+L
-         j/OiOfCE8Ot4T9ULk2AvtHmiLQIFvtCiUuBV5Hg1G/V0GKIucx7skHdI7+9cnVwuuy
-         ECWwGY51kbg8gm6e1YjyOi5bALvymqIfMByitwME+oq9LKdcrCw4ONNLkt69NeB62n
-         qWp/MSASdtLdw==
+        b=Z8vg+Tjd1ExZ+O8g5stUbVMTPL70WkZNIh5WTjGx/wNXUurHpYJxFyvedy0VT6PZU
+         KcV4PrvbOaJlt6BlcQzOBXWZsuXOrqguvA4m8l5U2izzrtcVrE8TGpcMEwwclC1yT8
+         e2mumldyttgfH48A1u0b+qIjOFpckm4UX9/es822Xv2A2xGVwv9x0LeewO8Wxi6Zn0
+         9oMuis5wzFwJdMzmZJTaguSb0m/kGVhILRDnbbVE9fVdl6spkSxY0qT6ofzDdqRVfh
+         cn4Yq4X2NFUAOAK4OAXwHcb1JZybzcYzrEvRq1JCgg379+9+kQU9/RGSaOnQI8mEz7
+         M2ARWsvJzjJKQ==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
         mhiramat@kernel.org, conor.dooley@microchip.com,
         penberg@kernel.org, mark.rutland@arm.com, jrtc27@jrtc27.com,
         andy.chiu@sifive.com, zong.li@sifive.com
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greentime Hu <greentime.hu@sifive.com>
-Subject: [PATCH -next V3 1/2] riscv: jump_label: Fixup unaligned arch_static_branch function
-Date:   Thu, 26 Jan 2023 12:06:06 -0500
-Message-Id: <20230126170607.1489141-2-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH -next V3 2/2] riscv: jump_label: Optimize the code size with compressed instruction
+Date:   Thu, 26 Jan 2023 12:06:07 -0500
+Message-Id: <20230126170607.1489141-3-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230126170607.1489141-1-guoren@kernel.org>
 References: <20230126170607.1489141-1-guoren@kernel.org>
@@ -56,58 +56,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Chiu <andy.chiu@sifive.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Runtime code patching must be done at a naturally aligned address, or we
-may execute on a partial instruction.
+Reduce the size of the static branch instruction and prevent atomic
+update problems when CONFIG_RISCV_ISA_C=y. It also reduces the jump
+range from 1MB to 4KB, but 4KB is enough for the current riscv
+requirement.
 
-We have encountered problems traced back to static jump functions during
-the test. We switched the tracer randomly for every 1~5 seconds on a
-dual-core QEMU setup and found the kernel sucking at a static branch
-where it jumps to itself.
-
-The reason is that the static branch was 2-byte but not 4-byte aligned.
-Then, the kernel would patch the instruction, either J or NOP, with two
-half-word stores if the machine does not have efficient unaligned
-accesses. Thus, moments exist where half of the NOP mixes with the other
-half of the J when transitioning the branch. In our particular case, on
-a little-endian machine, the upper half of the NOP was mixed with the
-lower part of the J when enabling the branch, resulting in a jump that
-jumped to itself. Conversely, it would result in a HINT instruction when
-disabling the branch, but it might not be observable.
-
-ARM64 does not have this problem since all instructions must be 4-byte
-aligned.
-
-Fixes: ebc00dde8a97 ("riscv: Add jump-label implementation")
-Link: https://lore.kernel.org/linux-riscv/20220913094252.3555240-6-andy.chiu@sifive.com/
-Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
-Reviewed-by: Greentime Hu <greentime.hu@sifive.com>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/include/asm/jump_label.h | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/riscv/include/asm/jump_label.h | 16 +++++++++++----
+ arch/riscv/kernel/jump_label.c      | 30 +++++++++++++++++++++++++++--
+ 2 files changed, 40 insertions(+), 6 deletions(-)
 
 diff --git a/arch/riscv/include/asm/jump_label.h b/arch/riscv/include/asm/jump_label.h
-index 6d58bbb5da46..14a5ea8d8ef0 100644
+index 14a5ea8d8ef0..afc58c31d02b 100644
 --- a/arch/riscv/include/asm/jump_label.h
 +++ b/arch/riscv/include/asm/jump_label.h
-@@ -18,6 +18,7 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
+@@ -12,17 +12,23 @@
+ #include <linux/types.h>
+ #include <asm/asm.h>
+ 
++#ifdef CONFIG_RISCV_ISA_C
++#define JUMP_LABEL_NOP_SIZE 2
++#else
+ #define JUMP_LABEL_NOP_SIZE 4
++#endif
+ 
+ static __always_inline bool arch_static_branch(struct static_key * const key,
  					       const bool branch)
  {
  	asm_volatile_goto(
-+		"	.align		2			\n\t"
+-		"	.align		2			\n\t"
  		"	.option push				\n\t"
  		"	.option norelax				\n\t"
- 		"	.option norvc				\n\t"
-@@ -39,6 +40,7 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
+-		"	.option norvc				\n\t"
++#ifdef CONFIG_RISCV_ISA_C
++		"1:	c.nop					\n\t"
++#else
+ 		"1:	nop					\n\t"
++#endif
+ 		"	.option pop				\n\t"
+ 		"	.pushsection	__jump_table, \"aw\"	\n\t"
+ 		"	.align		" RISCV_LGPTR "		\n\t"
+@@ -40,11 +46,13 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
  						    const bool branch)
  {
  	asm_volatile_goto(
-+		"	.align		2			\n\t"
+-		"	.align		2			\n\t"
  		"	.option push				\n\t"
  		"	.option norelax				\n\t"
- 		"	.option norvc				\n\t"
+-		"	.option norvc				\n\t"
++#ifdef CONFIG_RISCV_ISA_C
++		"1:	c.j		%l[label]		\n\t"
++#else
+ 		"1:	jal		zero, %l[label]		\n\t"
++#endif
+ 		"	.option pop				\n\t"
+ 		"	.pushsection	__jump_table, \"aw\"	\n\t"
+ 		"	.align		" RISCV_LGPTR "		\n\t"
+diff --git a/arch/riscv/kernel/jump_label.c b/arch/riscv/kernel/jump_label.c
+index e6694759dbd0..08f42c49e3a0 100644
+--- a/arch/riscv/kernel/jump_label.c
++++ b/arch/riscv/kernel/jump_label.c
+@@ -11,26 +11,52 @@
+ #include <asm/bug.h>
+ #include <asm/patch.h>
+ 
++#ifdef CONFIG_RISCV_ISA_C
++#define RISCV_INSN_NOP 0x0001U
++#define RISCV_INSN_C_J 0xa001U
++#else
+ #define RISCV_INSN_NOP 0x00000013U
+ #define RISCV_INSN_JAL 0x0000006fU
++#endif
+ 
+ void arch_jump_label_transform(struct jump_entry *entry,
+ 			       enum jump_label_type type)
+ {
+ 	void *addr = (void *)jump_entry_code(entry);
++#ifdef CONFIG_RISCV_ISA_C
++	u16 insn;
++#else
+ 	u32 insn;
++#endif
+ 
+ 	if (type == JUMP_LABEL_JMP) {
+ 		long offset = jump_entry_target(entry) - jump_entry_code(entry);
+-
+-		if (WARN_ON(offset & 1 || offset < -524288 || offset >= 524288))
++		if (WARN_ON(offset & 1 || offset < -2048 || offset >= 2048))
+ 			return;
+ 
++#ifdef CONFIG_RISCV_ISA_C
++		/*
++		 * 001 | imm[11|4|9:8|10|6|7|3:1|5] 01 - C.J
++		 */
++		insn = RISCV_INSN_C_J |
++			(((u16)offset & GENMASK(5, 5)) >> (5 - 2)) |
++			(((u16)offset & GENMASK(3, 1)) << (3 - 1)) |
++			(((u16)offset & GENMASK(7, 7)) >> (7 - 6)) |
++			(((u16)offset & GENMASK(6, 6)) << (7 - 6)) |
++			(((u16)offset & GENMASK(10, 10)) >> (10 - 8)) |
++			(((u16)offset & GENMASK(9, 8)) << (9 - 8)) |
++			(((u16)offset & GENMASK(4, 4)) << (11 - 4)) |
++			(((u16)offset & GENMASK(11, 11)) << (12 - 11));
++#else
++		/*
++		 * imm[20|10:1|11|19:12] | rd | 1101111 - JAL
++		 */
+ 		insn = RISCV_INSN_JAL |
+ 			(((u32)offset & GENMASK(19, 12)) << (12 - 12)) |
+ 			(((u32)offset & GENMASK(11, 11)) << (20 - 11)) |
+ 			(((u32)offset & GENMASK(10,  1)) << (21 -  1)) |
+ 			(((u32)offset & GENMASK(20, 20)) << (31 - 20));
++#endif
+ 	} else {
+ 		insn = RISCV_INSN_NOP;
+ 	}
 -- 
 2.36.1
 
