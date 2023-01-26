@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3FF67CFEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E4A67CFEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbjAZPS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
+        id S230227AbjAZPTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbjAZPSb (ORCPT
+        with ESMTP id S231594AbjAZPSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:18:31 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E66D516
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:17:58 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id x10so2131736edd.10
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:17:58 -0800 (PST)
+        Thu, 26 Jan 2023 10:18:34 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5AA13D48
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:18:01 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id u21so2158187edv.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:18:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P78YOJNtNx1A2lMURy8WdPKbNTrzZSXLQJ7yOcKbEYY=;
-        b=wq6GSpyeEMXTOBvJmDHBN5ji4ivXnfV6rihHo/Ne8y99h+jdCSSvCjP2ZeQ/W7x3lY
-         UhHxv6S6ZKxZd8ZJ7O2rARZYrbut5lpyifR3+/AE1HH3Nmd7ZV1IfXoFEpNlmBmhaYQa
-         pTf/SBVgjDTZ/zkzvheoLUoHrWZuIMQndXePLN6Pbc57n0FDAHR/UMhMkOgAVcxL3Uhp
-         CoxBseBttdnGbudshUi7J1tEf2KttUVvNAKKUnHChSzYT0Z/NZJT+mAyMU8P1HicwXFB
-         8ae8PVtNdXzrp1l2YwlRJ3NdQyktm5MAkHxP1yIrhWLh8/q1bf6XaXTmgBZCynaFuNME
-         D8EQ==
+        bh=6J6qSh0efJGQC1MdRpa8Z3puyGuNa/niO8IpMDoxAfU=;
+        b=pgynMWONfLhM61AbGHvi2BqAJ5J1Xt0lJIRNd/X3V5KTx68IDG7Ky0q4fF0pnxAirZ
+         ZTn+DfEhyoj5Nv7pPRd/QmSIXXVWI3tBLs5M4n3pvP2noMVNbxKRcSKtSx/htcVx57Ad
+         6KX+ZcodRD05XU+bzH12czdbGOINh3lSYD5jhNLIodffWAwKURvSHuyDc8NFcIDa7Fi1
+         vz0mskAVszXseJHgNPHTN8bGBobsQKl2i++0IFFaEjTrsjsr9To2Ikc264uNXbECE7o4
+         JNATj6hWF0r+x2S86y+2rADvINXibz9y+84Wz3yZ8yuoqJkL5M3w/LjyRK+q5FfDSONf
+         M4eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=P78YOJNtNx1A2lMURy8WdPKbNTrzZSXLQJ7yOcKbEYY=;
-        b=Si7r6M9KEg5KOnd4T0Bw6h1AVurSPgdBdlb0+MTp2Woy4XU8JlUUvxDdo+vBuwsrU6
-         xflXWSvIZ9zPJ6rqske6j2k5UyVe9Txztk9iVnbiV4vvBy0Tp26Sgip8a8TVdI98dqW9
-         0VbSdWP5lp1Y3rIJmd3l0n7ltzmtyamjOuWePcwQLHbi8oHpmBtWmMjAe1CY4zfLZ0NR
-         qy5FUWXo57bpbUgQbsNouf4OYCPRbFcAWUefXyKrC8C9fhhoF/122tqNzlhPkA02QqFE
-         ffVM4UQLF1EQVLHQiwY4p7EESFN3zb4LBDk9Dd1Hs4VYtK+vDqu5RU7XnsyGKZITU9tc
-         K9sw==
-X-Gm-Message-State: AFqh2kpr1Ne+d0i2+vC4juKDEP3qPo1qzrMi6KgoXxpaLIlkvrEu7VmE
-        0QStunWefXv8gJXW4rtTYRuwdw==
-X-Google-Smtp-Source: AMrXdXtxeY99s2JoW44yFytv4ncyFOE4J6oC7Lu7h/IKDvpmk89qOGy0wDEMAYv+E7HHc7+NFrIgDg==
-X-Received: by 2002:a05:6402:230c:b0:48d:91a9:2cd0 with SMTP id l12-20020a056402230c00b0048d91a92cd0mr32222832eda.29.1674746267542;
-        Thu, 26 Jan 2023 07:17:47 -0800 (PST)
+        bh=6J6qSh0efJGQC1MdRpa8Z3puyGuNa/niO8IpMDoxAfU=;
+        b=OiFITUmNpgjeyw7nusyF65e2JVAX9Iy+Im34/Ta4tiDnF7vTFn0ZybLaRg36flVOH9
+         kWSAY7wpUI9YKPHhVEG9wlQAN/IVLWLX9tcvh6QbvGO7kZ6QE77leV+oDW2svsb3oeYT
+         P8tasATiSE8zokgOexIoTydt5wcFTf0Vf38ORYkNNtQhMb/koTLIPj6dO3un2T/Cm42X
+         9ETaTPyEhLmfGVChKB8Oy2cPdiAg4Ypy+wjoxQ9n0agaV1JrDQ2gcb1UNUlxgpqcV3m+
+         Hhdqiuwuspl9ibXdkTIPmJ95aWJpzwYvqc3g3zef/G2hlV9mU9AyB7pLm52bqQXBi6kD
+         jORw==
+X-Gm-Message-State: AFqh2kopZFeUTJkYLsiHB7y2rw/Sk9LcN43aDeIo+Pd3qjHu+LuhozVu
+        SIgs+OgFLX7TBjNdkbyh2VW2aw==
+X-Google-Smtp-Source: AMrXdXtDsZVGSrVLYoAVLMYnDBYZRSw+ViON3LaOdYRhs80oYnWCOTOQHlrNOkOo7kP/6sPNcnM/Ew==
+X-Received: by 2002:a05:6402:27cf:b0:488:e7ae:5cc4 with SMTP id c15-20020a05640227cf00b00488e7ae5cc4mr45916885ede.41.1674746271060;
+        Thu, 26 Jan 2023 07:17:51 -0800 (PST)
 Received: from localhost.localdomain (abyk108.neoplus.adsl.tpnet.pl. [83.9.30.108])
-        by smtp.gmail.com with ESMTPSA id a16-20020aa7d910000000b00463bc1ddc76sm842808edr.28.2023.01.26.07.17.44
+        by smtp.gmail.com with ESMTPSA id a16-20020aa7d910000000b00463bc1ddc76sm842808edr.28.2023.01.26.07.17.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 07:17:47 -0800 (PST)
+        Thu, 26 Jan 2023 07:17:50 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -63,11 +63,12 @@ Cc:     marijn.suijten@somainline.org,
         Akhil P Oommen <quic_akhilpo@quicinc.com>,
         Chia-I Wu <olvaffe@gmail.com>,
         Douglas Anderson <dianders@chromium.org>,
+        Jonathan Marek <jonathan@marek.ca>,
         dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 09/14] drm/msm/a6xx: Fix some A619 tunables
-Date:   Thu, 26 Jan 2023 16:16:13 +0100
-Message-Id: <20230126151618.225127-10-konrad.dybcio@linaro.org>
+Subject: [PATCH 10/14] drm/msm/a6xx: Fix up A6XX protected registers
+Date:   Thu, 26 Jan 2023 16:16:14 +0100
+Message-Id: <20230126151618.225127-11-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230126151618.225127-1-konrad.dybcio@linaro.org>
 References: <20230126151618.225127-1-konrad.dybcio@linaro.org>
@@ -82,38 +83,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adreno 619 expects some tunables to be set differently. Make up for it.
+One of the protected ranges was too small (compared to the data we
+have downstream). Fix it.
 
-Fixes: b7616b5c69e6 ("drm/msm/adreno: Add A619 support")
+Fixes: 408434036958 ("drm/msm/a6xx: update/fix CP_PROTECT initialization")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 7a480705f407..f34ab3f39f09 100644
+index f34ab3f39f09..62f504ed7ef5 100644
 --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
 +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1171,6 +1171,8 @@ static int hw_init(struct msm_gpu *gpu)
- 		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00200200);
- 	else if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu))
- 		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00300200);
-+	else if (adreno_is_a619(adreno_gpu))
-+		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00018000);
- 	else if (adreno_is_a610(adreno_gpu))
- 		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00080000);
- 	else
-@@ -1188,7 +1190,9 @@ static int hw_init(struct msm_gpu *gpu)
- 	a6xx_set_ubwc_config(gpu);
- 
- 	/* Enable fault detection */
--	if (adreno_is_a610(adreno_gpu))
-+	if (adreno_is_a619(adreno_gpu))
-+		gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL, (1 << 30) | 0x3fffff);
-+	else if (adreno_is_a610(adreno_gpu))
- 		gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL, (1 << 30) | 0x3ffff);
- 	else
- 		gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL, (1 << 30) | 0x1fffff);
+@@ -690,7 +690,7 @@ static const u32 a6xx_protect[] = {
+ 	A6XX_PROTECT_NORDWR(0x00800, 0x0082),
+ 	A6XX_PROTECT_NORDWR(0x008a0, 0x0008),
+ 	A6XX_PROTECT_NORDWR(0x008ab, 0x0024),
+-	A6XX_PROTECT_RDONLY(0x008de, 0x00ae),
++	A6XX_PROTECT_RDONLY(0x008d0, 0x00bc),
+ 	A6XX_PROTECT_NORDWR(0x00900, 0x004d),
+ 	A6XX_PROTECT_NORDWR(0x0098d, 0x0272),
+ 	A6XX_PROTECT_NORDWR(0x00e00, 0x0001),
 -- 
 2.39.1
 
