@@ -2,98 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4E367D1D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F2E67D1E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231933AbjAZQjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:39:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49838 "EHLO
+        id S232101AbjAZQkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:40:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbjAZQjG (ORCPT
+        with ESMTP id S231819AbjAZQkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:39:06 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2932E5BB6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:39:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=vWapLCrdxD4HseM/i98cy1T36B2/
-        HD7eHggH3gi9020=; b=co1iYTXGmC9EKd4RBrwLZeyXoe7s/MzYRp60n/MQsPO8
-        D1gpYMk9gWhMzXYkpAOIse4al3BRTpHcDisR6Eca/0BjJFvFXFjChfRFYnIZAG3m
-        10wcpxngtX3ZOU25EAXKF/Bb7T20plHI8yDwWak3hFPLg05YT3QPazCdaos0R+Y=
-Received: (qmail 3871120 invoked from network); 26 Jan 2023 17:39:01 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Jan 2023 17:39:01 +0100
-X-UD-Smtp-Session: l3s3148p1@M0XYYi3z8pMujnvo
-Date:   Thu, 26 Jan 2023 17:39:00 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
-Message-ID: <Y9KspCXRASZOsEhc@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20230118104656.67706-1-wsa+renesas@sang-engineering.com>
- <CA+V-a8vp-oxaQyzPg2YonshdO-j0z+8vXpqgD=P8w94eDNJDOA@mail.gmail.com>
+        Thu, 26 Jan 2023 11:40:32 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08DB4483;
+        Thu, 26 Jan 2023 08:40:31 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id s67so1416619pgs.3;
+        Thu, 26 Jan 2023 08:40:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zsu1XXuoF2/96aeBfEHXZNf0ZiITGZdQYd8L9imSFJM=;
+        b=G2DhB6J50kohw6MFhszVAkdEzfccit7sgqjhotiBJBmbBC5Rben9zQqn7AkvpSOONC
+         ZmwdNFrBFeY6t67lZ8Z3DEWfCpLc1v3JY1SYQR1hyl5c5UXYdftgi51UrlwIA+g8k4rb
+         Uqn7e8+KvSI29Sii9OK/ek5+NB0ANTzRj/dz0rymJvS1VcnCSnYziAeh407uVfMiBkFv
+         tt+ggp3nhpuSkL0v4WqLZo3+zVYP2/ZnwOXl6+oSoOouDSZxkFgVTqT/QQdvZzmajcYl
+         KjQTgHq2h5eenl/tWx5TXH7yq9hOWqbwDf5Qmc8ursfwWn3ehVfgzC0G0Bc1e+uJTYd9
+         EMTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zsu1XXuoF2/96aeBfEHXZNf0ZiITGZdQYd8L9imSFJM=;
+        b=JeJ/Dd4qK2T3v2u5K4gWmJJpJl7fSS6fK9QNdndUhjo99iRwTFXAcZLqjCDWhaxxLW
+         F0aaDecAaiWs9Rx2fEeayPrE+D4J4mdp+0vzmap/f+1qG35BnstRXmQiPGX/CGjy3Mkp
+         N/NV1qwK+2cBIHnO4sHQztNZH2FPkPwMlYAoaRVzht+cIrEo8/ERH269j7m9Xp3eH8nt
+         nN27NJlMgHFJLUMbcps+0eWNZcMxm0Sy6z7twV2X5Hn/8G8+JnoKzdEm/Hlmz6nfRzVR
+         UT9VrZOd3Is84bwISbGSxN+9ffvKmITyK/tSzUuEKPMP3ebSRaDSE03DJ1m7sWiP9BqZ
+         otrQ==
+X-Gm-Message-State: AFqh2krXl4uOC+GoiHwYa6jcqzQHAaO947bmUOxoYvZDbD45Kqb4OT2X
+        +8TZ7k4X3y2e43DHEA+sKnAjc2hBXge+TPf51fI=
+X-Google-Smtp-Source: AMrXdXtXMPrQNDhCGq+W1jMAH/lYgZoI1xz+u0p+Ha+FNVeDDc/1UrGzG7S35E2P47oA1JasBEWiaxsV60Utpfl3OAI=
+X-Received: by 2002:aa7:8b57:0:b0:589:1130:d3ce with SMTP id
+ i23-20020aa78b57000000b005891130d3cemr4555176pfd.66.1674751231260; Thu, 26
+ Jan 2023 08:40:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ui+4td1bO9KDZD91"
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8vp-oxaQyzPg2YonshdO-j0z+8vXpqgD=P8w94eDNJDOA@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230124124300.94886-1-nbd@nbd.name> <CAC_iWjKAEgUB8Z3WNNVgUK8omXD+nwt_VPSVyFn1i4EQzJadog@mail.gmail.com>
+ <19121deb-368f-9786-8700-f1c45d227a4c@nbd.name> <cd35316065cfe8d706ca2730babe3e6519df6034.camel@gmail.com>
+ <c7f1ade0-a607-2e55-d106-9acc26cbed94@nbd.name> <49703c370e26ae1a6b19a39dc05e262acf58f6aa.camel@gmail.com>
+ <9baecde9-d92b-c18c-daa8-e7a96baa019b@nbd.name> <595c5e36b0260ba16833c2a8d9418fd978ca9300.camel@gmail.com>
+ <0c0e96a7-1cf1-b856-b339-1f3df36a562c@nbd.name> <a0b43a978ae43064777d9d240ef38b3567f58e5a.camel@gmail.com>
+ <9992e7b5-7f2b-b79d-9c48-cf689807f185@nbd.name> <301aa48a-eb3b-eb56-5041-d6f8d61024d1@nbd.name>
+ <148028e75d720091caa56e8b0a89544723fda47e.camel@gmail.com>
+ <8ec239d3-a005-8609-0724-f1042659791e@nbd.name> <8a331165-4435-4c2d-70e0-20655019dc51@nbd.name>
+ <CAKgT0Ud8npNtncH-KbMtj_R=UZ=aFA9T8U=TZoLG_94eVUxKPA@mail.gmail.com>
+In-Reply-To: <CAKgT0Ud8npNtncH-KbMtj_R=UZ=aFA9T8U=TZoLG_94eVUxKPA@mail.gmail.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Thu, 26 Jan 2023 08:40:19 -0800
+Message-ID: <CAKgT0Uc88xF5AjEhpBnr7m_+gnH5WVAoJFC=AVEPY0+qN1BNsQ@mail.gmail.com>
+Subject: Re: [PATCH] net: page_pool: fix refcounting issues with fragmented allocation
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        netdev@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-kernel@vger.kernel.org, Yunsheng Lin <linyunsheng@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+?
 
---ui+4td1bO9KDZD91
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Thu, Jan 26, 2023 at 8:08 AM Alexander Duyck
+<alexander.duyck@gmail.com> wrote:
+>
+> On Thu, Jan 26, 2023 at 1:15 AM Felix Fietkau <nbd@nbd.name> wrote:
+> >
 
-Hi Prabhakar,
+...
 
-> I am yet to test this patch on g2l (I'll test v3 as you plan to send it today).
+> > - if I return false in skb_try_coalesce, it still crashes:
+> > https://nbd.name/p/18cac078
+>
+> Yeah, I wasn't suspecting skb_try_coalesce since we have exercised the
+> code. My thought was something like the function you mentioned above
+> plus cloning or something else.
 
-Awesome, thank you!
-
-> I think now you can get rid of this member?
-
-Good point! I'll remove it in v3.
-
-Happy hacking,
-
-   Wolfram
-
-
---ui+4td1bO9KDZD91
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPSrKAACgkQFA3kzBSg
-KbaSqA/9H18xiwT8rXQEY9z2C0hneAa1l+h3bamcasf1zlUwwBeaPoAR8kGmPbzV
-AURFHc40bcUTJP1TL7bQUApHvqhjVJjhWNHRIjo2G1JZEF08cLXexdXjvqY98l8D
-LvV8oIRVvqbeyb3IhQ1iW1JXuMUI9VrI79E8T4dp185PTwmpvqI8EHbJTgrScOzg
-BB5oavd+HeRyNby+N3FVplMSP1vDTwx8ijrUUmkzWSpg2NBc8cejb0lKoGHRnG71
-AzpyDzF9r2Qaj7zTXZdXmcsZl8L4dxFe68glMb+obE+VlUqaUmA/ilgStq9MyTet
-FxOxNLeWYw9LFIeFzYzACDtT7c+twtSlSVzlSjhb2lbsVFbM6i4zZbs5S4Fcf2rD
-0kg6lJKJXwaOpM3FPt9XbAQNEJB+oQdBT0kAibjCEWtmmN/d/DUhWTM1Gt2P+k48
-OC+hLSMiSa9394LSjJunnCgsit0n/YIBBNQTGR6hxvVR2s0fVS5PCGHeNWW45Qi/
-Vvyp8n0/YnwsgG5zGa34Ibh7dK0KWoVqXZFnSpUv7YmgCXgUo6GUA5SLoZggedZ1
-JUXwTVerWXK7yTKmvwrs5QiX8OzOGd6NP5m1firlB4zhlcVoHI47G3HnLWMmy4E2
-D8Ad3apY4jbdLOUbGTLc5e7d6kVwEmIe43MTlW3O42+AnmFDKtQ=
-=xzXq
------END PGP SIGNATURE-----
-
---ui+4td1bO9KDZD91--
+One question I would have. Is GRO happening after the call to
+ieee80211_amsdu_to_8023s? If so we might want to try switching that
+off to see if it might be aggregating page pool frames and non-page
+pool frames together.
