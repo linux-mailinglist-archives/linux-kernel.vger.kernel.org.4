@@ -2,110 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7271467C80C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4269067C815
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236484AbjAZKME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
+        id S237020AbjAZKMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235664AbjAZKMD (ORCPT
+        with ESMTP id S236541AbjAZKMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:12:03 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F0D6469D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:12:01 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso2923176wmc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:12:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pYSo4b7v2dALfP1Df0eTeEVWxTUa2STQKMUnBqUDxn0=;
-        b=GZjhimnVyB8ABE25BcNMCX4K5cvXKLFX9/7XFJXFmWd0fVzA8xbb5SnF69GHo5Awid
-         U9qfGKNBvE4SqnHKTPF27R4czDFMMTXCeqwW4N7sH4xLI9peB+PdCUBa7LZLRELMINXL
-         e+xsGgQ0uDDYcRJeAum85RbP3xOGsbhTkzHTBcZ8VgFTKNwTcSc709iXSV015GHGXHEc
-         OWoIe3NL33QRhugZfSPeLEEFA0E+Uv4rBSvBPGr+uS/5e0ONz5N4Ro53OXq0yg4BvRE2
-         c/7uKs5wAfg49l35rSQhE6iLlcb41yIY4l3G9YZyq0mYbOefdgyrnAzsf57CDvy2WwJI
-         ptHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pYSo4b7v2dALfP1Df0eTeEVWxTUa2STQKMUnBqUDxn0=;
-        b=TCWzTxa4qbmPUVDtu7XnklxQMRHSdwaCbuIScYfXTPHIBPCXHyBHXoQjiG62vnvzIl
-         3GTosvUKfNBfWMCyaEiWJtGP8JHvIEpFfpEmKiHoXsg3b53UrP/k2KrYgrvlf4yuu7DU
-         KZWMifPa6disKhcfHYNbLuHoNjoJrpF/kr7XhYSjihKrGdKiF9FU+DYa//1juQfERhjj
-         S4e2YcWupfqKgNqKDLXJ+qV+Jle6zPICR9k4Mtq++vqZk12PDpzHIAAf51vdUJIq8GZV
-         4cS8eGgiQkwsTG01aBdVdqj0PxLjRj3JCq3VygnpTRDK/Ow+KEzUIclRM9+FbwTSdxqn
-         Ha4Q==
-X-Gm-Message-State: AFqh2koWffyAUsk+Vc6SOK3YlB14KLvJMXJNFAut9hTqIPuPN7kOccql
-        NdXjhVcjVDMtJHSChoV58QWW8w==
-X-Google-Smtp-Source: AMrXdXty5S+Obsy12gIkRVUQj7xI2d6znJpHk4KEQhPT0VTsyAZdZkekrWjfOSCKqzoz5U1956k6kQ==
-X-Received: by 2002:a05:600c:358b:b0:3db:2e6e:7826 with SMTP id p11-20020a05600c358b00b003db2e6e7826mr23745686wmq.5.1674727920165;
-        Thu, 26 Jan 2023 02:12:00 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id az26-20020a05600c601a00b003d99469ece1sm4387611wmb.24.2023.01.26.02.11.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 02:11:59 -0800 (PST)
-Message-ID: <6a682d68-4fcb-c2c2-3190-2b60d0a636da@linaro.org>
-Date:   Thu, 26 Jan 2023 11:11:58 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] ARM: dts: arm: align UART node name with bindings
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Thu, 26 Jan 2023 05:12:32 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CE365F2D;
+        Thu, 26 Jan 2023 02:12:28 -0800 (PST)
+Date:   Thu, 26 Jan 2023 10:12:24 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1674727945;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ey1fbEfmnHOwFJ4flCOipEsbH7zbtW8pQ6LSfcPHqwM=;
+        b=EFE0QB+d26qkHg6fPPv4IVZjrpfOjEd7ZnPWD06SR8rG1U9ZMmhVEM0s1QxTGca+7DRjxb
+        mPyLJN7eEkvr9JmZVkqtoglIyzei0//WiW7KAV/HIqPZbEFgxCmNvN4ip0iKRzXnGurOFX
+        3TeCW0/YR+7pfUXZu9sene9wgC70iTqEB/hMXPYTg1N+CmqNNynG2xoC0qtzjnFu5fLugZ
+        /Xq0j8giGJGj6v2i56+Dqr8TEEiP7doAgaFd8bKV9+d/YT5L8u71WN8uvMgahQMLqElxQi
+        rz5CtQfCKDqMJwXnfV2klrNiMeoVwYaLp2WyB0DLE8xVnkvSKgj11Mp0fJiMaQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1674727945;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ey1fbEfmnHOwFJ4flCOipEsbH7zbtW8pQ6LSfcPHqwM=;
+        b=QOAqLQdnidJRGlsJ3776qszeDID6C5eLuN0k10i1PeSuo8YlnMneXdFtBymSygh1TCW1Sy
+        ausmr5dspjTkelBg==
+From:   "tip-bot2 for Kim Phillips" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] KVM: x86: Propagate the AMD Automatic IBRS feature to
+ the guest
+Cc:     Kim Phillips <kim.phillips@amd.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Sean Christopherson <seanjc@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230123151533.369533-1-krzysztof.kozlowski@linaro.org>
- <CACRpkdajaDLB6VPTrT93Q8y=k8nvkXUGcipTpA1xwzc6kE_v9A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACRpkdajaDLB6VPTrT93Q8y=k8nvkXUGcipTpA1xwzc6kE_v9A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20230124163319.2277355-9-kim.phillips@amd.com>
+References: <20230124163319.2277355-9-kim.phillips@amd.com>
+MIME-Version: 1.0
+Message-ID: <167472794482.4906.5654390408231835761.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 11:02, Linus Walleij wrote:
-> On Mon, Jan 23, 2023 at 4:15 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> Bindings expect UART/serial node names to be "serial".
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Whoa! This traces back to things like
-> commit 3ba7222ac992d24d09ccd0b55940b54849eef752
-> "arm/versatile: Add device tree support"
-> Grant Likely june 2011 :D
-> 
-> Nice that we put things in order finally.
-> 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> 
-> Do you have a way to queue this to the SoC tree for v6.3?
+The following commit has been merged into the x86/cpu branch of tip:
 
-Yes, I can grab it and send it with few other cleanups. So far my
-cleanup-pulls were not rejected.
+Commit-ID:     8c19b6f257fa71ed3a7a9df6ce466c6be31ca04c
+Gitweb:        https://git.kernel.org/tip/8c19b6f257fa71ed3a7a9df6ce466c6be31ca04c
+Author:        Kim Phillips <kim.phillips@amd.com>
+AuthorDate:    Tue, 24 Jan 2023 10:33:19 -06:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Wed, 25 Jan 2023 17:21:40 +01:00
 
-But if any other or respective SoC maintainer can pick it up, this would
-be preferred (less conflicts, less work for me...).
+KVM: x86: Propagate the AMD Automatic IBRS feature to the guest
 
-Best regards,
-Krzysztof
+Add the AMD Automatic IBRS feature bit to those being propagated to the guest,
+and enable the guest EFER bit.
 
+Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Acked-by: Sean Christopherson <seanjc@google.com>
+Link: https://lore.kernel.org/r/20230124163319.2277355-9-kim.phillips@amd.com
+---
+ arch/x86/kvm/cpuid.c   | 2 +-
+ arch/x86/kvm/svm/svm.c | 3 +++
+ arch/x86/kvm/x86.c     | 3 +++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 28071e9..f1f4fe8 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -743,7 +743,7 @@ void kvm_set_cpu_caps(void)
+ 
+ 	kvm_cpu_cap_mask(CPUID_8000_0021_EAX,
+ 		F(NO_NESTED_DATA_BP) | F(LFENCE_RDTSC) | 0 /* SmmPgCfgLock */ |
+-		F(NULL_SEL_CLR_BASE) | 0 /* PrefetchCtlMsr */
++		F(NULL_SEL_CLR_BASE) | F(AUTOIBRS) | 0 /* PrefetchCtlMsr */
+ 	);
+ 
+ 	/*
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 9a194aa..60c7c88 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -4969,6 +4969,9 @@ static __init int svm_hardware_setup(void)
+ 
+ 	tsc_aux_uret_slot = kvm_add_user_return_msr(MSR_TSC_AUX);
+ 
++	if (boot_cpu_has(X86_FEATURE_AUTOIBRS))
++		kvm_enable_efer_bits(EFER_AUTOIBRS);
++
+ 	/* Check for pause filtering support */
+ 	if (!boot_cpu_has(X86_FEATURE_PAUSEFILTER)) {
+ 		pause_filter_count = 0;
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index da4bbd0..8dd0cb2 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1685,6 +1685,9 @@ static int do_get_msr_feature(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
+ 
+ static bool __kvm_valid_efer(struct kvm_vcpu *vcpu, u64 efer)
+ {
++	if (efer & EFER_AUTOIBRS && !guest_cpuid_has(vcpu, X86_FEATURE_AUTOIBRS))
++		return false;
++
+ 	if (efer & EFER_FFXSR && !guest_cpuid_has(vcpu, X86_FEATURE_FXSR_OPT))
+ 		return false;
+ 
