@@ -2,169 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B46167CCA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A9967CC8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbjAZNtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
+        id S230271AbjAZNrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:47:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbjAZNsk (ORCPT
+        with ESMTP id S229490AbjAZNra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:48:40 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E238C6E425
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:48:18 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id DE0665C049F;
-        Thu, 26 Jan 2023 08:48:17 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 26 Jan 2023 08:48:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1674740897; x=
-        1674827297; bh=EFCszt7mMoi4GmfPSY0XcTDr+E65T3khWEeN25Yggv4=; b=B
-        ZYaycmgbMfTX1BRGlPtMLro/KjywPCJlUY9hdsiNJqRGsNgC63Vh+FcCty0Zo7+v
-        gaIz3YU/njcSZIP0vB7rPSElAYrwOHMAPgErZUbBYLiQ+ABN2Jcl+BEbNkV8UhpO
-        LDtl9RPW0PSqvkilJx4wGmI92AQDSBdhA3hUotGUqpzv0xC5iL1kcqsmwJS6d9Fc
-        x/j/mPxYMrriGvenkBXJeHsoKBH1McIMKp5tekFkvYkqLZxmAaNYZHooxR1DOtJP
-        KZiOMpH5nnV25QYr5BbeBLKa7So5SrmsIfq0zxDjS12ma+suBAZ8mYmu3Yw+V9P8
-        wQaSPoWmUAt3O15o5VtiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674740897; x=
-        1674827297; bh=EFCszt7mMoi4GmfPSY0XcTDr+E65T3khWEeN25Yggv4=; b=g
-        N+p4WnWIggwn1/qGmQdLcGhNvQaKDzxeGGEbN2uicLairbQRP33QRpChJHrZ3ACN
-        EGdg9C0bI4982jR6g57bAw/z9UZ6muqBaxDy9ZWUOXTbShQWJYNPiQtRMNqvjqVF
-        XURPv5AGr0xxIxsBtPlLY4s+JdnrcMCPbISNPPor+eZc+nAMs6qe1xojovq/B/pI
-        frrpnRo1CFLx2Ve0OwCgu+5jrNRTSoOz1p59UdyQo2uJHxVTw53Pi49bbUfxxJSh
-        uXFHFOKpbGY0mYXEJ0YOKiMytxcpdlO8LFspOMSescv86+TVFYx3cKYXUoJNH0Be
-        AphIrggfPnxfk/72vjYIA==
-X-ME-Sender: <xms:oYTSY5Aj6LWvbamQqrBdoUpxf420rQ7XsaaqI8B3NSUg4lWlV7x5IA>
-    <xme:oYTSY3iggPQkYuvaVC2ZV5yjbeeKStz0cHtX9k7RHyz2N32m3hwwp_EDyHzpRW96B
-    J5N33eo14mhKnhXJec>
-X-ME-Received: <xmr:oYTSY0l78KDn5YJ4sBfrLfbnrsKHq-EzlVzWrN--CC-ChI2Q8CO5CvFc5e0tFSiZo-AvRAEfKdd-J9A6MHcYzBHxHN0iJbOe_bwLaM8lJMVC9A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepvedvleeijeegvdekffehkeehieelhfeggfffheetkeeuledvtdeuffeh
-    teeltdffnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:oYTSYzyAV8-WIp-tLJcpKi3jVtM0UZKY0tTeawosEJZGOpq3kKtPzg>
-    <xmx:oYTSY-RFC2HPHoGfEliGbHgXKy_tfsDCXiNHSCRYsF3vwBEjUwO-VA>
-    <xmx:oYTSY2Y2rhlrrpz7ezYjQFOlyqLMTPsPA8ebKOylN7CJRCaevs409g>
-    <xmx:oYTSY3DDPxsNRF5zQe0C6bCqEpf71fhGUrTat_d3tn02qALeASlOdA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 26 Jan 2023 08:48:17 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Thu, 26 Jan 2023 14:46:43 +0100
-Subject: [PATCH v2 9/9] drm/vc4: hdmi: Add BT.2020 Support
+        Thu, 26 Jan 2023 08:47:30 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED8F3C2C
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:47:29 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-50112511ba7so23427507b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aaX7G6f2mcRR6P8FNP02PxE5OsxrexcPBPFfvEKEKAs=;
+        b=CHFI1Z8taQTug7Pk8J6v67+NNDDUaqZu+KuW0124FDvfAkkoV1Q7Na8nGKz6mDwUtb
+         7nWBCg2Eo243/6intxFzS+g+BiHEOLi0Y5chAzu06TfCJRj6Md7+LVhuu+cZcbu5GX5A
+         kKBrdE0U0/g3bDVSTy6cltLs15C95L45A2m+74EG9DlflDa0zdDPdYYSoDuHaQPjfSCG
+         d22Rbf6ksG7ucpQoVGEEH9nreV3e+WxbXFTZ5WstKksg2FEOxYlQoK+pIbiahKJMZM1W
+         5yqmU8RB2q87t2lesencDlMt23hJFnwiZgfxM3bUHMgY/SydiG0WLVoWY2BWTTlHlXLY
+         vmuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aaX7G6f2mcRR6P8FNP02PxE5OsxrexcPBPFfvEKEKAs=;
+        b=PGs9TGoMeTHVVB5gASa5P96arIGvVaUKkOp0eQZgsaMAlsypynHI5hNAwpeCE5LRik
+         gqY6+NiGJQtK6lHQogfd7XrbGv2s2oOf7gq3um9tDmhtvYdz1kUsWPCQwqTK3E2ZWV1L
+         vT46ehKOnOHqBvCekoLxBzSX6N6hCwoktV0xaYrT7RpvHVrUeC13Jubv62GesjH7X5KS
+         5aS5tuzrD0QcasS1ymqBC/LxQVLKyFKHRXIB0hL7EouyDzSLUn/op3QPAod8HINI4HOH
+         /Ov1I6oLbUToMcR/HNayuyVZZehNYxFFG3OjimRUPTKGVjKrgtA17HjPnZGmHlpC83QZ
+         sG6Q==
+X-Gm-Message-State: AO0yUKXsV7XNa/tIE1XPonFMqMMwOLo/eZLCWBys+tQ907svIYXYuebf
+        TRrlRIqKNfpQBwSPuABxYmz470NtUd2EuLi8tsBgQQ==
+X-Google-Smtp-Source: AK7set/2tg+jIXr3a4eARZbcDPJNeIExb1q3XkFjEhWcElv/xkALJatdRGrpFAl9l/Bv3zRXMlFGMwmhvN+PIeLAKzg=
+X-Received: by 2002:a81:784f:0:b0:506:651b:cd0 with SMTP id
+ t76-20020a81784f000000b00506651b0cd0mr925288ywc.273.1674740848566; Thu, 26
+ Jan 2023 05:47:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221207-rpi-hdmi-improvements-v2-9-8ace2d8221ad@cerno.tech>
-References: <20221207-rpi-hdmi-improvements-v2-0-8ace2d8221ad@cerno.tech>
-In-Reply-To: <20221207-rpi-hdmi-improvements-v2-0-8ace2d8221ad@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2176; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=Y/Qg484RrEzTOyvcWs4U+TlZS8r2m4kTGgXaUZsHHeY=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMmXWlyC9pyY61uX+rNOqdB8y9ElS/P5vRx8997asuPyowmb
- 8u/4dZSyMIhxMciKKbLECJsviTs163UnG988mDmsTCBDGLg4BWAifYGMDCcq3F3+vHq/wO9rem3u3x
- 07hK1bo90OfTonuy68/Iq/8SdGhulcz66Vz627Wree1cXofuczrUkzyz++uvH35J/vR2Y4ePEAAA==
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <03627216-54b5-5d9b-f91d-adcd637819e3@gmail.com> <890be9a0-8e82-a8f4-bc15-d5d1597343c2@gmail.com>
+In-Reply-To: <890be9a0-8e82-a8f4-bc15-d5d1597343c2@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 26 Jan 2023 14:47:17 +0100
+Message-ID: <CACRpkdai9tcGNbk_oQ8TbHzk7rfiiSRJyxAukqZ1BH9LsiuguA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/8] gpio: gpio-rockchip: parse gpio-ranges for bank id
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kever.yang@rock-chips.com, sjg@chromium.org,
+        philipp.tomsich@vrull.eu, john@metanate.com,
+        quentin.schulz@theobroma-systems.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+On Sat, Jan 21, 2023 at 12:08 PM Johan Jonker <jbx6244@gmail.com> wrote:
 
-Even though we report that we support the BT.2020 Colorspace, we were
-always using the BT.709 conversion matrices. Let's add the BT.2020 ones.
+> Parse the gpio-ranges property in Rockchip gpio nodes to be
+> independent from aliases and probe order for our bank id.
+>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/gpu/drm/vc4/vc4_hdmi.c | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+I guess there is no pretty way to do this.
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index 5d37952d620b..523b55a18409 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -1300,6 +1300,37 @@ static const u16 vc5_hdmi_csc_full_rgb_to_yuv_bt709[2][3][4] = {
- 	},
- };
- 
-+/*
-+ * Conversion between Full Range RGB and YUV using the BT.2020 Colorspace
-+ *
-+ * Matrices are signed 2p13 fixed point, with signed 9p6 offsets
-+ */
-+static const u16 vc5_hdmi_csc_full_rgb_to_yuv_bt2020[2][3][4] = {
-+	{
-+		/*
-+		 * Full Range
-+		 *
-+		 * [  0.262700  0.678000  0.059300  0   ]
-+		 * [ -0.139630 -0.360370  0.500000  128 ]
-+		 * [  0.500000 -0.459786 -0.040214  128 ]
-+		 */
-+		{ 0x0868, 0x15b2, 0x01e6, 0x0000 },
-+		{ 0xfb89, 0xf479, 0x1000, 0x2000 },
-+		{ 0x1000, 0xf14a, 0xfeb8, 0x2000 },
-+	},
-+	{
-+		/* Limited Range
-+		 *
-+		 * [  0.224732  0.580008  0.050729  16  ]
-+		 * [ -0.122176 -0.315324  0.437500  128 ]
-+		 * [  0.437500 -0.402312 -0.035188  128 ]
-+		 */
-+		{ 0x082f, 0x1012, 0x031f, 0x0400 },
-+		{ 0xfb48, 0xf6ba, 0x0e00, 0x2000 },
-+		{ 0x0e00, 0xf448, 0xfdba, 0x2000 },
-+	},
-+};
-+
- static void vc5_hdmi_set_csc_coeffs(struct vc4_hdmi *vc4_hdmi,
- 				    const u16 coeffs[3][4])
- {
-@@ -1345,6 +1376,13 @@ static const u16
- 	case DRM_MODE_COLORIMETRY_RGB_WIDE_FIXED:
- 	case DRM_MODE_COLORIMETRY_RGB_WIDE_FLOAT:
- 		return vc5_hdmi_csc_full_rgb_to_yuv_bt709[limited];
-+
-+	case DRM_MODE_COLORIMETRY_BT2020_CYCC:
-+	case DRM_MODE_COLORIMETRY_BT2020_YCC:
-+	case DRM_MODE_COLORIMETRY_BT2020_RGB:
-+	case DRM_MODE_COLORIMETRY_DCI_P3_RGB_D65:
-+	case DRM_MODE_COLORIMETRY_DCI_P3_RGB_THEATER:
-+		return vc5_hdmi_csc_full_rgb_to_yuv_bt2020[limited];
- 	}
- }
- 
-
--- 
-2.39.1
+Yours,
+Linus Walleij
