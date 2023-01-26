@@ -2,256 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B31F67D0FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7418B67D106
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232587AbjAZQKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
+        id S232620AbjAZQLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbjAZQKk (ORCPT
+        with ESMTP id S232660AbjAZQK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:10:40 -0500
-Received: from fx409.security-mail.net (smtpout140.security-mail.net [85.31.212.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B790A530DA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:10:38 -0800 (PST)
-Received: from localhost (fx409.security-mail.net [127.0.0.1])
-        by fx409.security-mail.net (Postfix) with ESMTP id 32CEA34979A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:10:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1674749437;
-        bh=18h0PvVkWw5cOD2tUF5rJDodhNIHFoyGd3swtBhEV9s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=2j+PLAfcFq/dMJAm7QTIXrm0muDDhYaPROPgytN3gaTJa6LkYepek8NuWASCmXbjk
-         BSj8xuje1RDBvbgEdTd13Bs0SSELaXlSeYbazQnkW+tgJ0bzaaR5DZK2kqeKnsxeVO
-         V/F0b4xMun1FYOPN9Q3rOIJWltJMZCMOaHln8qIs=
-Received: from fx409 (fx409.security-mail.net [127.0.0.1]) by
- fx409.security-mail.net (Postfix) with ESMTP id 6CDFA3496E5; Thu, 26 Jan
- 2023 17:10:36 +0100 (CET)
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx409.security-mail.net (Postfix) with ESMTPS id 42F9E3496BD; Thu, 26 Jan
- 2023 17:10:35 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 0E32B27E0492; Thu, 26 Jan 2023
- 17:10:35 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id E364B27E0431; Thu, 26 Jan 2023 17:10:34 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
- (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- DTQUInwcUDo5; Thu, 26 Jan 2023 17:10:34 +0100 (CET)
-Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 8E3C527E0374; Thu, 26 Jan 2023
- 17:10:34 +0100 (CET)
-X-Virus-Scanned: E-securemail
-Secumail-id: <4f4e.63d2a5fb.40271.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu E364B27E0431
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674749435;
- bh=9giavlvQOACZW0fqif+Jno6XkcerIxtPM3AoszI6iXA=;
- h=Date:From:To:Message-ID:MIME-Version;
- b=gjg/x2TlOcjiKN3NypFbIHFe/byI2jjV8o3VpLfw+6A29RvT0tO7rhyOLP4RSQBmB
- x4Tx+6M47/jYTq+5ZLA2uCIUhHGzwDXxt8eUceRV5P9eFpkBGwoYQYAzaEc236wUu9
- 1kIkSP3K+m+aYLf/4oc9MR/KzKUTElR11/fHsdhg=
-Date:   Thu, 26 Jan 2023 17:10:33 +0100
-From:   Jules Maselbas <jmaselbas@kalray.eu>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Clement Leger <clement@clement-leger.fr>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>,
-        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Alex Michon <amichon@kalray.eu>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <git@xen0n.name>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        John Garry <john.garry@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-audit@redhat.com,
-        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH v2 02/31] Documentation: Add binding for
- kalray,kv3-1-core-intc
-Message-ID: <20230126161032.GH5952@tellis.lin.mbt.kalray.eu>
-References: <20230120141002.2442-1-ysionneau@kalray.eu>
- <20230120141002.2442-3-ysionneau@kalray.eu>
- <d4d998ee-1532-c896-df25-195ec9c72e3f@linaro.org>
+        Thu, 26 Jan 2023 11:10:58 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18F25E514
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:10:51 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1465331wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:10:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eSRyiXt5jg5xGcNVidvCWdFR0yJusjEp3UTc1PNqimw=;
+        b=D7esD/YspzXO+5fTgFKhqMa1nHMS4BS0Pra6HkU4CBBwGcfvZsn2dfm3E2LZHm+Jlg
+         /ByBj3OMqBE6TYJmVjxF3Fcwn0pJTCundKHDfx7GJgXQW6dvSgWlmG/D6s6nQVI/iBGS
+         3aM3r9jPNoKvu4vQfF4XfTa517/YaLBOHIoAWbWp7LTT+MQpHpUqkS+tXdIrz2HgaEjR
+         Mow+w7HnEYZEmc5piE3dC4YEcICOSPFC49fqxQIHVZtVdjvYv7+nUsJkkS/pa7qolA0Y
+         pN2yxWAyXqco7HEtyXMJJDPHSlSC7YM6br58sZiVSTojuc2JU/GHep+tdY7oxSqc1Gwo
+         FDMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eSRyiXt5jg5xGcNVidvCWdFR0yJusjEp3UTc1PNqimw=;
+        b=HRs2IB3B/rY/ATocyIyFXkvI19tBwSEab2FXpDwddN3v0yl9bA/IfPCsBFQROvRAWU
+         YladCWGam4JhK4MDXa1LODRk9FExq/5wptU7mENXnBCe4h9cimqApLCHC6Q7IQB46qwP
+         V+6/tA0IwVCQ56e4tx2zrnSGGZSDT6th1GcYCu6Nz37yS2YdwalAEyKC70C1oJid62J+
+         CaFBfUZKhtCjyTavbbc9Mq+1O+tFLP+6UXEMsvJxa/shcuIcpkquCOrLoAz6Wwwvdoyh
+         aj6nszlmwslnxvjLLhngkCxU1ORZK3ROiB4aQvo/bRUZ1H1LGhkCJYDPfYQ3dXFTi5vj
+         ovNQ==
+X-Gm-Message-State: AFqh2kpMdYL7hdYgOkR8bJGrX0dQMWCKFlIf1LHYAWS5CogJTYsAk77Z
+        p9JWyD42oHv3D8/x9PKOCYlqIg==
+X-Google-Smtp-Source: AMrXdXvLdNi6h2JhbNJzodbD1T9pYrgKkxDyUs3ZRI02aRBggdz0+dUeKSUN0ZJRa/Fv7sHMoJ80dQ==
+X-Received: by 2002:a05:600c:22c6:b0:3da:fc30:bfc5 with SMTP id 6-20020a05600c22c600b003dafc30bfc5mr36978536wmg.13.1674749450471;
+        Thu, 26 Jan 2023 08:10:50 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-657-1-248-155.w90-24.abo.wanadoo.fr. [90.24.137.155])
+        by smtp.gmail.com with ESMTPSA id q18-20020a05600c2e5200b003d1de805de5sm1782401wmf.16.2023.01.26.08.10.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 08:10:50 -0800 (PST)
+From:   bchihi@baylibre.com
+To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: [PATCH v12 2/6] dt-bindings: thermal: mediatek: Add LVTS thermal controllers dt-binding definition
+Date:   Thu, 26 Jan 2023 17:10:48 +0100
+Message-Id: <20230126161048.94089-1-bchihi@baylibre.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230124131717.128660-3-bchihi@baylibre.com>
+References: <20230124131717.128660-3-bchihi@baylibre.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <d4d998ee-1532-c896-df25-195ec9c72e3f@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-On Sun, Jan 22, 2023 at 12:44:46PM +0100, Krzysztof Kozlowski wrote:
-> On 20/01/2023 15:09, Yann Sionneau wrote:
-> > From: Jules Maselbas <jmaselbas@kalray.eu>
-> 
-> Use subject prefixes matching the subsystem (which you can get for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching).
-This will be fixed, sorry for the inconvenience.
+Add LVTS thermal controllers dt-binding definition for mt8195.
 
-> 
-> > 
-> > Add documentation for `kalray,kv3-1-core-intc` binding.
-> > 
-> > Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
-> > Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
-> > Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
-> > ---
-> > 
-> > Notes:
-> >     V1 -> V2: new patch
-> > 
-> >  .../kalray,kv3-1-core-intc.yaml               | 46 +++++++++++++++++++
-> >  1 file changed, 46 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-core-intc.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-core-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-core-intc.yaml
-> > new file mode 100644
-> > index 000000000000..1e3d0593173a
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/interrupt-controller/kalray,kv3-1-core-intc.yaml
-> > @@ -0,0 +1,46 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/interrupt-controller/kalray,kv3-1-core-intc#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Kalray kv3-1 Core Interrupt Controller
-> > +
-> > +description: |
-> > +  The Kalray Core Interrupt Controller is tightly integrated in each kv3 core
-> > +  present in the Coolidge SoC.
-> > +
-> > +  It provides the following features:
-> > +  - 32 independent interrupt sources
-> > +  - 2-bit configurable priority level
-> > +  - 2-bit configurable ownership level
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/interrupt-controller.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: kalray,kv3-1-core-intc
-> 
-> Blank line between each of these,
-Ack
+Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+---
+Changelog:
+  v12:
+     - Fixed subject prefix
+     - Fixed licences GPL-2.0+ to GPL-2.0
+     - Added dual licenses
+  v11:
+     - Rebase on top of "thermal/linux-next" :
+       base=0d568e144ead70189e7f16066dcb155b78ff9266
+     - Remove unsupported SoC (mt8192) from dt-binding definition
+  v10:
+     - Rebase on top of "thermal/linux-next" : thermal-v6.3-rc1
+  v9:
+     - Rebase on top of 6.0.0-rc1
+     - Update dt-bindings :
+       - Add "allOf:if:then:"
+       - Use mt8192 as example (instead of mt8195)
+       - Fix dt-binding errors
+       - Fix DTS errors
+  v8:
+     - Fix coding style issues
+     - Rebase on top of next-20220803
+     - Add multi-instance support :
+       - Rewrite DT-binding and DTS :
+         - Add DT-binding and DTS for LVTS_v4 (MT8192 and MT8195)
+           - One LVTS node for each HW Domain (AP and MCU)
+         - One SW Instance for each HW Domain
+  v7:
+     - Fix coding style issues
+     - Rewrite dt bindings
+       - was not accurate
+       - Use mt8195 for example (instead of mt8192)
+       - Rename mt6873 to mt8192
+       - Remove clock name
+---
+---
+ .../thermal/mediatek,lvts-thermal.yaml        | 107 ++++++++++++++++++
+ include/dt-bindings/thermal/mediatek-lvts.h   |  19 ++++
+ 2 files changed, 126 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+ create mode 100644 include/dt-bindings/thermal/mediatek-lvts.h
 
-> > +  "#interrupt-cells":
-> > +    const: 1
-> > +    description:
-> > +      The IRQ number.
-> > +  reg:
-> > +    maxItems: 0
-> 
-> ??? No way... What's this?
-This (per CPU) interrupt controller is not memory mapped at all, it is
-controlled and configured through system registers.
-
-I do not have found existing .yaml bindings for such devices, only the
-file snps,archs-intc.txt has something similar.
-
-I do not know what is the best way to represent such devices in the
-device-tree.  Any suggestions are welcome.
-
-> 
-> > +  "kalray,intc-nr-irqs":
-> 
-> Drop quotes.
-> 
-> > +    description: Number of irqs handled by the controller.
-> 
-> Why this is variable per board? Why do you need it ?
-This property is not even used in our device-tree, this will be removed
-from the documentation and from the driver as well.
-
-> > +
-> > +required:
-> > +  - compatible
-> > +  - "#interrupt-cells"
-> > +  - interrupt-controller
-> 
-> missing additionalProperties: false
-> 
-> This binding looks poor, like you started from something odd. Please
-> don't. Take the newest reviewed binding or better example-schema and use
-> it to build yours. This would solve several trivial mistakes and style
-> issues.
-I am starting over from the example-schema.
-
-> > +
-> > +examples:
-> > +  - |
-> > +    intc: interrupt-controller {
-> 
-> What's the IO address space?
-As said above, this is not a memory mapped device, but is accessed
-through system registers.
-
-Thanks,
--- Jules
-
-
-
+diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+new file mode 100644
+index 000000000000..12bfbdd8ff89
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+@@ -0,0 +1,107 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek SoC Low Voltage Thermal Sensor (LVTS)
++
++maintainers:
++  - Balsam CHIHI <bchihi@baylibre.com>
++
++description: |
++  LVTS is a thermal management architecture composed of three subsystems,
++  a Sensing device - Thermal Sensing Micro Circuit Unit (TSMCU),
++  a Converter - Low Voltage Thermal Sensor converter (LVTS), and
++  a Digital controller (LVTS_CTRL).
++
++properties:
++  compatible:
++    enum:
++      - mediatek,mt8195-lvts-ap
++      - mediatek,mt8195-lvts-mcu
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++    description: LVTS reset for clearing temporary data on AP/MCU.
++
++  nvmem-cells:
++    minItems: 1
++    items:
++      - description: Calibration eFuse data 1 for LVTS
++      - description: Calibration eFuse data 2 for LVTS
++
++  nvmem-cell-names:
++    minItems: 1
++    items:
++      - const: lvts-calib-data-1
++      - const: lvts-calib-data-2
++
++  "#thermal-sensor-cells":
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - resets
++  - nvmem-cells
++  - nvmem-cell-names
++  - "#thermal-sensor-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/mt8195-clk.h>
++    #include <dt-bindings/reset/mt8195-resets.h>
++    #include <dt-bindings/thermal/mediatek-lvts.h>
++
++    soc {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      lvts_mcu: thermal-sensor@11278000 {
++        compatible = "mediatek,mt8195-lvts-mcu";
++        reg = <0 0x11278000 0 0x1000>;
++        interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
++        clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
++        resets = <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
++        nvmem-cells = <&lvts_efuse_data1 &lvts_efuse_data2>;
++        nvmem-cell-names = "lvts-calib-data-1", "lvts-calib-data-2";
++        #thermal-sensor-cells = <1>;
++      };
++    };
++
++    thermal_zones: thermal-zones {
++      cpu0-thermal {
++        polling-delay = <1000>;
++        polling-delay-passive = <250>;
++        thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU0>;
++
++        trips {
++          cpu0_alert: trip-alert {
++            temperature = <85000>;
++            hysteresis = <2000>;
++            type = "passive";
++          };
++
++          cpu0_crit: trip-crit {
++            temperature = <100000>;
++            hysteresis = <2000>;
++            type = "critical";
++          };
++        };
++      };
++    };
+diff --git a/include/dt-bindings/thermal/mediatek-lvts.h b/include/dt-bindings/thermal/mediatek-lvts.h
+new file mode 100644
+index 000000000000..902d5b1e4f43
+--- /dev/null
++++ b/include/dt-bindings/thermal/mediatek-lvts.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: (GPL-2.0 or MIT) */
++/*
++ * Copyright (c) 2023 MediaTek Inc.
++ * Author: Balsam CHIHI <bchihi@baylibre.com>
++ */
++
++#ifndef __MEDIATEK_LVTS_DT_H
++#define __MEDIATEK_LVTS_DT_H
++
++#define MT8195_MCU_BIG_CPU0	0
++#define MT8195_MCU_BIG_CPU1	1
++#define MT8195_MCU_BIG_CPU2	2
++#define MT8195_MCU_BIG_CPU3	3
++#define MT8195_MCU_LITTLE_CPU0	4
++#define MT8195_MCU_LITTLE_CPU1	5
++#define MT8195_MCU_LITTLE_CPU2	6
++#define MT8195_MCU_LITTLE_CPU3	7
++
++#endif /* __MEDIATEK_LVTS_DT_H */
+-- 
+2.34.1
 
