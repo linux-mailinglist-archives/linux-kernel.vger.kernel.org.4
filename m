@@ -2,92 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75EF67CAEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00BCE67CAF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbjAZM3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 07:29:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S237169AbjAZMa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 07:30:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237097AbjAZM3s (ORCPT
+        with ESMTP id S236642AbjAZMaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:29:48 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275CC4ED2B
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:29:36 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id c124so1711823ybb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:29:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vnNmJePGJCbbDvROAft9ZF6gM7UoLWWa+rvqMySAcK4=;
-        b=JXeZAZxiBPxXxy94PEdiDOse+N42yw5hsyKv4EBERO3mpUdLAwxHkR/WKve8vcAIea
-         MzAJK4s9sMUMF9MIHgurYeYpVBFAe2RMx1qW33nPoLRkKXKpW6QXVZYxCy8YKAQKo5hQ
-         HAEXrG6gnR6oOKnXwEnpaQkJtUCS0DJ3/bBftrFptQ1CjlmJiM6UdoXztMX7mDqOPm5A
-         fL6mHxSa9SNUUP+R1VQ+quU8ROtyL942Qc7GrKREW0Yqd5LfLat9Dx6eQS6fTF4qzQy/
-         G25cGP6wkB0rhrUw9U49exAu4m6yml6pb/7PIZjuhUCzAUy1mAqGQBkSMEj3AZojOvoA
-         lEUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vnNmJePGJCbbDvROAft9ZF6gM7UoLWWa+rvqMySAcK4=;
-        b=xludjqsp1GBsG3UuLrUvCLJlvF/lVpGy4JmKqf793zk31abq07gWL9ibtar7UFpxXX
-         StXruwn+VHE3a4ZOnQhYFIZVIRRn6SYDPvk82UREN6i9qYD0yfFYKBWrG+zTYyDJtoE8
-         zCMflbqV4ZmM0oygC9//A3pBEJSwhQ9FCY1gyXSOCwtRO+Kq3KQL8aQp+LJY7QwMf4gy
-         vpMVwjVmvkh+sOX8DWPj0Ew5T7R6NwH4j0wWhc9qk30TWnrj3J8h0Ih5aKZmoj/hG2se
-         kxTDgRI2AeKc9zGad02alUd2X64MlxzLHrReMdMfp/ltsVIMnzchcSDkBNapN6lC2XMK
-         3dsQ==
-X-Gm-Message-State: AO0yUKUaM+xecXu7X2l0GBBCl4M1Is9n3qHKE3r33wmgjOB0nKQbbU++
-        2ePClptoDCH6SGagoBxoIcYsnWLi6UU5WjnqqASxcA==
-X-Google-Smtp-Source: AK7set/R1E3VulrFeCGTfBUtG8LxoXpuG58zhcJcdYW89tvuRbDaG2arAuK+pVQHU2FmAebKaJrwFgd0AEKp7UOlw4c=
-X-Received: by 2002:a25:d1d1:0:b0:80b:4d84:b25 with SMTP id
- i200-20020a25d1d1000000b0080b4d840b25mr992515ybg.584.1674736175266; Thu, 26
- Jan 2023 04:29:35 -0800 (PST)
+        Thu, 26 Jan 2023 07:30:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866B049568
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:30:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22B41617B8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF8A1C433EF;
+        Thu, 26 Jan 2023 12:30:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674736223;
+        bh=RMVz0eq5ZX8Yefi/SKmqfnTNPy/3cbwkkEFT1mPYWpk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ybl+10W5nwhEfLsqxE1Lu4Z7A81RDGmQKqTJG8p+04sD8P515JBzLYaJvy2Rh1Lbv
+         /Ga+Rhg6JuPhTQ3Hzb3x20lLggpr9AoydvFxJEv68NSbO1DHT1Rgxt+y2OcEUGYMYe
+         prYrrnY5DRQ4YuzmNi8JWY3OcrpPC3dLzouMO16x+6EFdInqgbRmyTFhg/cfdSG2U/
+         v3TZqWVunkioyz4qhF14J84vaGj8uJWi+RpJqwJNxEwo5xvZsCqpEo+Q0fey9sYIuV
+         iRIz3HH/aDcAEkyUQyIxYYwXlGXh8AJJzU7oP0v3i808doBS31PawVAtWwWdnflDO6
+         Q9Gcia0HHkRAQ==
+Date:   Thu, 26 Jan 2023 14:30:19 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y9JyW5bUqV7gWmU8@unreal>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9Jh2x9XJE1KEUg6@unreal>
+ <DM8PR11MB5750414F6638169C7097E365E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230125201020.10948-1-andriy.shevchenko@linux.intel.com>
- <20230125201020.10948-6-andriy.shevchenko@linux.intel.com>
- <CACRpkdZ1g9BEb28-YzAU8V5geiYzT9drjT3EMxok70ex3fOCKA@mail.gmail.com> <Y9JvCQSi3DB/6un3@smile.fi.intel.com>
-In-Reply-To: <Y9JvCQSi3DB/6un3@smile.fi.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 26 Jan 2023 13:29:23 +0100
-Message-ID: <CACRpkdbMhuW50L6SX1ct4OYOJtcFHD2G1BhqG6_3EMc8gfexQA@mail.gmail.com>
-Subject: Re: [PATCH v1 5/5] gpio: Clean up headers
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DM8PR11MB5750414F6638169C7097E365E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 1:16 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> > Just to add to the confusion I was also pursuing a series of cleanups directed
-> > at just removing <linux/gpio/driver.h> from <linux/gpio.h>:
-> > https://lore.kernel.org/linux-gpio/CACRpkdb6yMqTkrJOg+K46RZ1478-gbxh6=tw4bzWmd--5nj_Bw@mail.gmail.com/
-> >
-> > Right now I don't know what to do :D
->
-> I saw your series and find them very good!
-> Can we have them applied?
+On Thu, Jan 26, 2023 at 11:29:20AM +0000, Reshetova, Elena wrote:
+> > On Wed, Jan 25, 2023 at 03:29:07PM +0000, Reshetova, Elena wrote:
+> > > Replying only to the not-so-far addressed points.
+> > >
+> > > > On Wed, Jan 25, 2023 at 12:28:13PM +0000, Reshetova, Elena wrote:
+> > > > > Hi Greg,
+> > 
+> > <...>
+> > 
+> > > > > 3) All the tools are open-source and everyone can start using them right
+> > away
+> > > > even
+> > > > > without any special HW (readme has description of what is needed).
+> > > > > Tools and documentation is here:
+> > > > > https://github.com/intel/ccc-linux-guest-hardening
+> > > >
+> > > > Again, as our documentation states, when you submit patches based on
+> > > > these tools, you HAVE TO document that.  Otherwise we think you all are
+> > > > crazy and will get your patches rejected.  You all know this, why ignore
+> > > > it?
+> > >
+> > > Sorry, I didn’t know that for every bug that is found in linux kernel when
+> > > we are submitting a fix that we have to list the way how it has been found.
+> > > We will fix this in the future submissions, but some bugs we have are found by
+> > > plain code audit, so 'human' is the tool.
+> > 
+> > My problem with that statement is that by applying different threat
+> > model you "invent" bugs which didn't exist in a first place.
+> > 
+> > For example, in this [1] latest submission, authors labeled correct
+> > behaviour as "bug".
+> > 
+> > [1] https://lore.kernel.org/all/20230119170633.40944-1-
+> > alexander.shishkin@linux.intel.com/
+> 
+> Hm.. Does everyone think that when kernel dies with unhandled page fault 
+> (such as in that case) or detection of a KASAN out of bounds violation (as it is in some
+> other cases we already have fixes or investigating) it represents a correct behavior even if
+> you expect that all your pci HW devices are trusted? 
 
-I see that they will cause conflicts (patching files deleted in the
-big board removal)
-so I don't want to push them for the moment. I will send them out again though.
+This is exactly what I said. You presented me the cases which exist in
+your invented world. Mentioned unhandled page fault doesn't exist in real
+world. If PCI device doesn't work, it needs to be replaced/blocked and not
+left to be operable and accessible from the kernel/user.
 
-Yours,
-Linus Walleij
+> What about an error in two consequent pci reads? What about just some
+> failure that results in erroneous input?
+
+Yes, some bugs need to be fixed, but they are not related to trust/not-trust
+discussion and PCI spec violations.
+
+Thanks
+
+> 
+> Best Regards,
+> Elena.
+> 
