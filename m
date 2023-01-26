@@ -2,136 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1BC67CCE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E56E67CCD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbjAZNyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
+        id S229832AbjAZNyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjAZNyV (ORCPT
+        with ESMTP id S231691AbjAZNyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:54:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD416226A;
-        Thu, 26 Jan 2023 05:53:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 26 Jan 2023 08:54:00 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14423A9E;
+        Thu, 26 Jan 2023 05:53:30 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE3A9B81BEA;
-        Thu, 26 Jan 2023 13:53:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98EB3C433EF;
-        Thu, 26 Jan 2023 13:53:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674741225;
-        bh=W1LnY595Ov6jF+hpZHXAZjn52UQrvhyKdsYdkv/rH60=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hGrguENhWyWwHVtsJzGh4GTTlYEFLeB8iopGwjoPBOAqRsokQc/sxzDHaWysNjHsX
-         jyB/ggwIK8dGtAwiEw4lmFZl3/IsiFaa2KBZyOfSNZnNgkbM+3pF7pkmBxddfkMzY2
-         zy3vaaSFIKVB0bjmwKneIdTWjLjIuq0d1G7cg96KGG1YdukVYLKBTmI1nhd9c30RZo
-         rsERjYQ1rOHAggtqYNLu5C/VDT/4xm3ScmfSPGWWJ3pRuJakMoFrObe2kxdmcdRoNL
-         jbDW2+5pTn2e6HUXw/jPfW7UPnNx7X7A+sJesOxmnXSkskrxuDMvJ3K2o0nirY192A
-         vPxMImCp0iRzg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Wei Fang <wei.fang@nxp.com>
-Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] fec: convert to gpio descriptor
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5E9C11FF3F;
+        Thu, 26 Jan 2023 13:53:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1674741183; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TASGaq4D0/aREdW3TlXyuAFoYuyhnqm8PRS04XWyd/E=;
+        b=Gw0CGjbmIFVsrolICd9MoYiF7WTWxS4kNon5ILuTyVlGZwavd7ERkOVY225VMTDxTpp918
+        +/0cn0U8CKvhACMmcDfL0vR7thY2y8Csck4LuuH5JRnGm0+6CiDc9cwP85l8iz152Cmny+
+        Z/ZKXJDciAe3eGxZiApexDmk5FXdotU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1674741183;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TASGaq4D0/aREdW3TlXyuAFoYuyhnqm8PRS04XWyd/E=;
+        b=PfwgB9yATUIkonGA4d+hUa9fZeJTHkeA6XK8y7SyqLOhgidnMPoxz7P0j6WPjdVGxzQBqu
+        +i/P3FDPIpi+1oCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB15A139B3;
+        Thu, 26 Jan 2023 13:53:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uFGJMb6F0mO7bwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 26 Jan 2023 13:53:02 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 03544A06B4; Thu, 26 Jan 2023 14:52:58 +0100 (CET)
 Date:   Thu, 26 Jan 2023 14:52:58 +0100
-Message-Id: <20230126135339.3488682-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+From:   Jan Kara <jack@suse.cz>
+To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@fb.com>, Tejun Heo <tj@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH] writeback: fix call of incorrect macro
+Message-ID: <20230126135258.zpvyfxc2ffhzzsnx@quack3>
+References: <20230119104443.3002-1-korotkov.maxim.s@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119104443.3002-1-korotkov.maxim.s@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu 19-01-23 13:44:43, Maxim Korotkov wrote:
+>  the variable 'history' is of type u16, it may be an error 
+>  that the hweight32 macro was used for it 
+>  I guess macro hweight16 should be used
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: 2a81490811d0 ("writeback: implement foreign cgroup inode detection")
+> Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
 
-The driver can be trivially converted, as it only triggers the gpio
-pin briefly to do a reset, and it already only supports DT.
+Looks good to me, although it is mostly a theoretical issue - I don't see
+how hweight32 could do any harm here. Anyway, feel free to add:
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/net/ethernet/freescale/fec_main.c | 25 ++++++++++-------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 5ff45b1a74a5..dee2890fd702 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -56,7 +56,7 @@
- #include <linux/fec.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
--#include <linux/of_gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/of_mdio.h>
- #include <linux/of_net.h>
- #include <linux/regulator/consumer.h>
-@@ -4035,7 +4035,8 @@ static int fec_enet_init(struct net_device *ndev)
- #ifdef CONFIG_OF
- static int fec_reset_phy(struct platform_device *pdev)
- {
--	int err, phy_reset;
-+	int err;
-+	struct gpio_desc *phy_reset;
- 	bool active_high = false;
- 	int msec = 1, phy_post_delay = 0;
- 	struct device_node *np = pdev->dev.of_node;
-@@ -4048,12 +4049,6 @@ static int fec_reset_phy(struct platform_device *pdev)
- 	if (!err && msec > 1000)
- 		msec = 1;
- 
--	phy_reset = of_get_named_gpio(np, "phy-reset-gpios", 0);
--	if (phy_reset == -EPROBE_DEFER)
--		return phy_reset;
--	else if (!gpio_is_valid(phy_reset))
--		return 0;
--
- 	err = of_property_read_u32(np, "phy-reset-post-delay", &phy_post_delay);
- 	/* valid reset duration should be less than 1s */
- 	if (!err && phy_post_delay > 1000)
-@@ -4061,11 +4056,13 @@ static int fec_reset_phy(struct platform_device *pdev)
- 
- 	active_high = of_property_read_bool(np, "phy-reset-active-high");
- 
--	err = devm_gpio_request_one(&pdev->dev, phy_reset,
--			active_high ? GPIOF_OUT_INIT_HIGH : GPIOF_OUT_INIT_LOW,
--			"phy-reset");
--	if (err) {
--		dev_err(&pdev->dev, "failed to get phy-reset-gpios: %d\n", err);
-+	phy_reset = devm_gpiod_get(&pdev->dev, "phy-reset",
-+			active_high ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW);
-+	if (IS_ERR(phy_reset)) {
-+		err = PTR_ERR(phy_reset);
-+		if (err != -EPROBE_DEFER)
-+			dev_err(&pdev->dev,
-+				"failed to get phy-reset-gpios: %d\n", err);
- 		return err;
- 	}
- 
-@@ -4074,7 +4071,7 @@ static int fec_reset_phy(struct platform_device *pdev)
- 	else
- 		usleep_range(msec * 1000, msec * 1000 + 1000);
- 
--	gpio_set_value_cansleep(phy_reset, !active_high);
-+	gpiod_set_value_cansleep(phy_reset, !active_high);
- 
- 	if (!phy_post_delay)
- 		return 0;
+								Honza
+
+> ---
+>  fs/fs-writeback.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+> index 6fba5a52127b..fc16123b2405 100644
+> --- a/fs/fs-writeback.c
+> +++ b/fs/fs-writeback.c
+> @@ -829,7 +829,7 @@ void wbc_detach_inode(struct writeback_control *wbc)
+>  		 * is okay.  The main goal is avoiding keeping an inode on
+>  		 * the wrong wb for an extended period of time.
+>  		 */
+> -		if (hweight32(history) > WB_FRN_HIST_THR_SLOTS)
+> +		if (hweight16(history) > WB_FRN_HIST_THR_SLOTS)
+>  			inode_switch_wbs(inode, max_id);
+>  	}
+>  
+> -- 
+> 2.37.2
+> 
 -- 
-2.39.0
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
