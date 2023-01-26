@@ -2,300 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C49867CE00
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F156A67CE06
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbjAZO0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:26:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
+        id S232070AbjAZO0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:26:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbjAZO0W (ORCPT
+        with ESMTP id S232005AbjAZO0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:26:22 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614BE64D9B;
-        Thu, 26 Jan 2023 06:25:56 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3ACD66602D35;
-        Thu, 26 Jan 2023 14:24:31 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674743073;
-        bh=jZLZz1sJIqshnxO6ri0Zy5I0ab3cJATthNe1kU/yfNQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=nsankNL5xUw5oFW6kfARNiIKi/PfUUWDT+rAzA3yFXWFgnZ7IPEErasM7KF4rRElQ
-         YxLw2+Hl4T9/rQdIdcg9phVzxvBXuy1nxlY+vXlLksrDk5hWps3z/jdm9cE2Lh4K0+
-         jqoiDe1v7Eh1JnEJjFeG5LMai1Mg4Xrc8cpOGXxo9YAYBmDb5pAT7sD74A42eZqqQQ
-         jaT8Hb2OgmkO3vH68djTWUgdqIkYTkhJjGacS9rB1PWZsfLxUXcDkidrtz/waaXvNR
-         owPxZ2x3roA7tIb77VlNdX45Gw9YAcbb7dHJScFT77ni8Hfcf7cqWDvH64j1pQHxtv
-         3AKzyOzZGdHtA==
-Message-ID: <76a3cde17a0b05ca563af0a2a89870d4c4ad966f.camel@collabora.com>
-Subject: Re: [PATCH v4 1/2] media: verisilicon: Do not change context bit
- depth before validating the format
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.co.uk
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@collabora.com
-Date:   Thu, 26 Jan 2023 09:24:21 -0500
-In-Reply-To: <20230125172755.1498973-2-benjamin.gaignard@collabora.com>
-References: <20230125172755.1498973-1-benjamin.gaignard@collabora.com>
-         <20230125172755.1498973-2-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Thu, 26 Jan 2023 09:26:36 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6D911679;
+        Thu, 26 Jan 2023 06:26:17 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1229219wms.2;
+        Thu, 26 Jan 2023 06:26:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=N/zj2NLkkvJCQd5BlKbuQt5xCuylxPf8hWYFMpsNH/U=;
+        b=c8FRZoMJJeocgRwS8FAGK4sX7GEVF9IBTBhSvPWd92cn+m2v7UwZziWihnNMYYjjiu
+         Rsq74S5Q1VDl9q800DxtDjI3vbDJz/ojQYWhKp9i8/8Tx3nbpBtMe3U43liHXA7YcAfc
+         uBTnz/ko4LD96ixfdEoDzmhE+2uQmwdxODre39fsHmM4wVwteN7gvzpQvvXnKBq5g2nb
+         EkH6N96NGQIHqanJV3B7gZclLcWt3M0e3nO+2n8GN+CrwjVgkEAdjHzklT4PJxMaTuoX
+         pPzpRDATJloPiVzisKYcXtd+Ea8NtccBQmt2+LO9KvKLMJUpbQk77PubvwjMAhz0encT
+         2MYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N/zj2NLkkvJCQd5BlKbuQt5xCuylxPf8hWYFMpsNH/U=;
+        b=1SQRW0qgRFW3UEfZBWS46CcJNCNYXw2AoV9RilZmk220wqDbQXmvrn01mt4vbOUL3E
+         VZ1aI33nvUfkyAgFDnDPxMVp6M1CejX32VYWNW5QmFDdUE6U1n70oGtT210U2BYjOEBX
+         op3l91kmH4UztjN9oIYZSU+/DVv7u4ktwP5Z8gb0tpNXqbTGDgYOps/nY32Oohnxd0J0
+         auylb9mEBLaqTlMrUhfbjfp8X408aVk7ESKgNRD8qdlkvaDGnnNyum1avftD94l+pOBg
+         ph9AZPMsPc4XZodjRFfqwJ6cDo8itwC32eFhcEVpvNGGJqeqofCzglCFO6Ctt+wLCMpu
+         DtTQ==
+X-Gm-Message-State: AFqh2kpw9EhqoXiM/irl9JmVWQ9zchjFm4yThIupeSm+WJTpPdyjqPJD
+        7ty3l/snKhOu4KhT0eYBYtU=
+X-Google-Smtp-Source: AMrXdXtGExADdDcIuqfZhNrDNq/eJH+XrzYdkLshuY6/JHCgSreV5P5gPtfJiG8Ht8ynnEUDLfKAvg==
+X-Received: by 2002:a05:600c:4e93:b0:3db:d3f:a91f with SMTP id f19-20020a05600c4e9300b003db0d3fa91fmr33815447wmq.23.1674743131157;
+        Thu, 26 Jan 2023 06:25:31 -0800 (PST)
+Received: from Ansuel-xps. (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
+        by smtp.gmail.com with ESMTPSA id l4-20020a05600c1d0400b003db2dede1a2sm5357982wms.26.2023.01.26.06.25.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 06:25:30 -0800 (PST)
+Message-ID: <63d28d5a.050a0220.7afab.f613@mx.google.com>
+X-Google-Original-Message-ID: <Y9KNWZav9rN/2AuJ@Ansuel-xps.>
+Date:   Thu, 26 Jan 2023 15:25:29 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make
+ cpr bindings optional
+References: <20230123193422.15972-1-ansuelsmth@gmail.com>
+ <102e76fd-50bc-9403-b03f-f96a3d3869bd@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <102e76fd-50bc-9403-b03f-f96a3d3869bd@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mercredi 25 janvier 2023 =C3=A0 18:27 +0100, Benjamin Gaignard a =C3=A9c=
-rit=C2=A0:
-> It is needed to check if the proposed pixels format is valid before
-> updating context bit depth and other internal states.
-> Stop using ctx->bit_depth to check format depth match and return
-> result to the caller.
->=20
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+On Thu, Jan 26, 2023 at 12:17:56PM +0100, Krzysztof Kozlowski wrote:
+> On 23/01/2023 20:34, Christian Marangi wrote:
+> > The qcom-cpufreq-nvmem driver supports 2 kind of devices:
+> > - pre-cpr that doesn't have power-domains and base everything on nvmem
+> >   cells and multiple named microvolt bindings
+> > - cpr-based that require power-domain in the cpu nodes and use various
+> >   source to decide the correct voltage and freq
+> > 
+> > When the schema was introduced, it was wrongly set to always require these
+> > binding but this is not the case for pre-cpr devices.
+> > 
+> > Make the power-domain optional and set them required only for qcs404
+> > based devices.
+> > 
+> > While at it also make more clear what the opp-table supports by adding
+> > ref to the opp-v2-kryo-cpu and opp-v2-qcom-level schema.
+> > 
+> > Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
+> > 
+> > Changes v2:
+> > - Reword commit description
+> > - Fix condition order
+> > - Add allOf
+> > 
+> >  .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 81 +++++++++++++------
+> >  1 file changed, 56 insertions(+), 25 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+> > index 9c086eac6ca7..6f5e7904181f 100644
+> > --- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+> > +++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+> > @@ -17,6 +17,9 @@ description: |
+> >    on the CPU OPP in use. The CPUFreq driver sets the CPR power domain level
+> >    according to the required OPPs defined in the CPU OPP tables.
+> >  
+> > +  For old implementation efuses are parsed to select the correct opp table and
+> > +  voltage and CPR is not supported/used.
+> > +
+> >  select:
+> >    properties:
+> >      compatible:
+> > @@ -33,37 +36,65 @@ select:
+> >    required:
+> >      - compatible
+> >  
+> > -properties:
+> > -  cpus:
+> > -    type: object
+> > -
+> > -    patternProperties:
+> > -      '^cpu@[0-9a-f]+$':
+> > -        type: object
+> > -
+> > -        properties:
+> > -          power-domains:
+> > -            maxItems: 1
+> > -
+> > -          power-domain-names:
+> > -            items:
+> > -              - const: cpr
+> > -
+> > -        required:
+> > -          - power-domains
+> > -          - power-domain-names
+> > -
+> >  patternProperties:
+> >    '^opp-table(-[a-z0-9]+)?$':
+> > -    if:
+> > +    allOf:
+> > +      - if:
+> > +          properties:
+> > +            compatible:
+> > +              const: operating-points-v2-kryo-cpu
+> > +        then:
+> > +          $ref: /schemas/opp/opp-v2-kryo-cpu.yaml#
+> > +
+> > +      - if:
+> > +          properties:
+> > +            compatible:
+> > +              const: operating-points-v2-qcom-level
+> > +        then:
+> > +          $ref: /schemas/opp/opp-v2-qcom-level.yaml#
+> 
+> This entire part looks independent, please split it into separate patch
+> with its own explanation. What I still miss here - why do you remove
+> "required-opps" from required properties. It's not clear to me at all.
+> 
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Hi, the required-opps needs to be part of this patch since they are only
+needed for genpd based devices.
 
-I'm not sure if the fixes tag will do a great job, but blame indicated that=
- it
-fixes. Ezequiel, can you provide your feedback on if we need a Fixes and wh=
-ich
-hash should be point to ? My quick blame says this:
+I will split the additional if parts in another patch since they are not
+related.
 
-Fixes: 953aaa1492c5 ("media: rockchip/vpu: Prepare things to support decode=
-rs")
-
-> ---
-> version 4:
-> - Change hantro_check_depth_match() prototype to avoid using
->   ctx->bit_depth
-> - Return the result of hantro_reset_raw_fmt() to the caller.
->=20
->  .../platform/verisilicon/hantro_postproc.c    |  2 +-
->  .../media/platform/verisilicon/hantro_v4l2.c  | 53 +++++++++----------
->  .../media/platform/verisilicon/hantro_v4l2.h  |  3 +-
->  3 files changed, 28 insertions(+), 30 deletions(-)
->=20
-> diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drive=
-rs/media/platform/verisilicon/hantro_postproc.c
-> index 09d8cf942689..6437423ccf3a 100644
-> --- a/drivers/media/platform/verisilicon/hantro_postproc.c
-> +++ b/drivers/media/platform/verisilicon/hantro_postproc.c
-> @@ -197,7 +197,7 @@ int hantro_postproc_alloc(struct hantro_ctx *ctx)
->  	unsigned int i, buf_size;
-> =20
->  	/* this should always pick native format */
-> -	fmt =3D hantro_get_default_fmt(ctx, false);
-> +	fmt =3D hantro_get_default_fmt(ctx, false, ctx->bit_depth);
->  	if (!fmt)
->  		return -EINVAL;
->  	v4l2_fill_pixfmt_mp(&pix_mp, fmt->fourcc, ctx->src_fmt.width,
-> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/m=
-edia/platform/verisilicon/hantro_v4l2.c
-> index 2c7a805289e7..2475bc05dee9 100644
-> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-> @@ -76,17 +76,16 @@ int hantro_get_format_depth(u32 fourcc)
->  }
-> =20
->  static bool
-> -hantro_check_depth_match(const struct hantro_ctx *ctx,
-> -			 const struct hantro_fmt *fmt)
-> +hantro_check_depth_match(const struct hantro_fmt *fmt, int bit_depth)
->  {
-> -	int fmt_depth, ctx_depth =3D 8;
-> +	int fmt_depth, depth =3D 8;
-> =20
->  	if (!fmt->match_depth && !fmt->postprocessed)
->  		return true;
-> =20
->  	/* 0 means default depth, which is 8 */
-> -	if (ctx->bit_depth)
-> -		ctx_depth =3D ctx->bit_depth;
-> +	if (bit_depth)
-> +		depth =3D bit_depth;
-> =20
->  	fmt_depth =3D hantro_get_format_depth(fmt->fourcc);
-> =20
-> @@ -95,9 +94,9 @@ hantro_check_depth_match(const struct hantro_ctx *ctx,
->  	 * It may be possible to relax that on some HW.
->  	 */
->  	if (!fmt->match_depth)
-> -		return fmt_depth <=3D ctx_depth;
-> +		return fmt_depth <=3D depth;
-> =20
-> -	return fmt_depth =3D=3D ctx_depth;
-> +	return fmt_depth =3D=3D depth;
->  }
-> =20
->  static const struct hantro_fmt *
-> @@ -119,7 +118,7 @@ hantro_find_format(const struct hantro_ctx *ctx, u32 =
-fourcc)
->  }
-> =20
->  const struct hantro_fmt *
-> -hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream)
-> +hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream, int=
- bit_depth)
->  {
->  	const struct hantro_fmt *formats;
->  	unsigned int i, num_fmts;
-> @@ -128,7 +127,7 @@ hantro_get_default_fmt(const struct hantro_ctx *ctx, =
-bool bitstream)
->  	for (i =3D 0; i < num_fmts; i++) {
->  		if (bitstream =3D=3D (formats[i].codec_mode !=3D
->  				  HANTRO_MODE_NONE) &&
-> -		    hantro_check_depth_match(ctx, &formats[i]))
-> +		    hantro_check_depth_match(&formats[i], bit_depth))
->  			return &formats[i];
->  	}
->  	return NULL;
-> @@ -203,7 +202,7 @@ static int vidioc_enum_fmt(struct file *file, void *p=
-riv,
-> =20
->  		if (skip_mode_none =3D=3D mode_none)
->  			continue;
-> -		if (!hantro_check_depth_match(ctx, fmt))
-> +		if (!hantro_check_depth_match(fmt, ctx->bit_depth))
->  			continue;
->  		if (j =3D=3D f->index) {
->  			f->pixelformat =3D fmt->fourcc;
-> @@ -223,7 +222,7 @@ static int vidioc_enum_fmt(struct file *file, void *p=
-riv,
->  	for (i =3D 0; i < num_fmts; i++) {
->  		fmt =3D &formats[i];
-> =20
-> -		if (!hantro_check_depth_match(ctx, fmt))
-> +		if (!hantro_check_depth_match(fmt, ctx->bit_depth))
->  			continue;
->  		if (j =3D=3D f->index) {
->  			f->pixelformat =3D fmt->fourcc;
-> @@ -291,7 +290,7 @@ static int hantro_try_fmt(const struct hantro_ctx *ct=
-x,
-> =20
->  	fmt =3D hantro_find_format(ctx, pix_mp->pixelformat);
->  	if (!fmt) {
-> -		fmt =3D hantro_get_default_fmt(ctx, coded);
-> +		fmt =3D hantro_get_default_fmt(ctx, coded, 0);
->  		pix_mp->pixelformat =3D fmt->fourcc;
->  	}
-> =20
-> @@ -379,15 +378,12 @@ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
->  	const struct hantro_fmt *vpu_fmt;
->  	struct v4l2_pix_format_mplane *fmt;
-> =20
-> -	vpu_fmt =3D hantro_get_default_fmt(ctx, true);
-> +	vpu_fmt =3D hantro_get_default_fmt(ctx, true, 0);
-> =20
-> -	if (ctx->is_encoder) {
-> -		ctx->vpu_dst_fmt =3D vpu_fmt;
-> +	if (ctx->is_encoder)
->  		fmt =3D &ctx->dst_fmt;
-> -	} else {
-> -		ctx->vpu_src_fmt =3D vpu_fmt;
-> +	else
->  		fmt =3D &ctx->src_fmt;
-> -	}
-> =20
->  	hantro_reset_fmt(fmt, vpu_fmt);
->  	fmt->width =3D vpu_fmt->frmsize.min_width;
-> @@ -398,20 +394,21 @@ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
->  		hantro_set_fmt_out(ctx, fmt);
->  }
-> =20
-> -static void
-> -hantro_reset_raw_fmt(struct hantro_ctx *ctx)
-> +int
-> +hantro_reset_raw_fmt(struct hantro_ctx *ctx, int bit_depth)
->  {
->  	const struct hantro_fmt *raw_vpu_fmt;
->  	struct v4l2_pix_format_mplane *raw_fmt, *encoded_fmt;
-> =20
-> -	raw_vpu_fmt =3D hantro_get_default_fmt(ctx, false);
-> +	raw_vpu_fmt =3D hantro_get_default_fmt(ctx, false, bit_depth);
-> +
-> +	if (!raw_vpu_fmt)
-> +		return -EINVAL;
-> =20
->  	if (ctx->is_encoder) {
-> -		ctx->vpu_src_fmt =3D raw_vpu_fmt;
->  		raw_fmt =3D &ctx->src_fmt;
->  		encoded_fmt =3D &ctx->dst_fmt;
->  	} else {
-> -		ctx->vpu_dst_fmt =3D raw_vpu_fmt;
->  		raw_fmt =3D &ctx->dst_fmt;
->  		encoded_fmt =3D &ctx->src_fmt;
->  	}
-> @@ -420,15 +417,15 @@ hantro_reset_raw_fmt(struct hantro_ctx *ctx)
->  	raw_fmt->width =3D encoded_fmt->width;
->  	raw_fmt->height =3D encoded_fmt->height;
->  	if (ctx->is_encoder)
-> -		hantro_set_fmt_out(ctx, raw_fmt);
-> +		return hantro_set_fmt_out(ctx, raw_fmt);
->  	else
-> -		hantro_set_fmt_cap(ctx, raw_fmt);
-> +		return hantro_set_fmt_cap(ctx, raw_fmt);
->  }
-> =20
->  void hantro_reset_fmts(struct hantro_ctx *ctx)
->  {
->  	hantro_reset_encoded_fmt(ctx);
-> -	hantro_reset_raw_fmt(ctx);
-> +	hantro_reset_raw_fmt(ctx, 0);
->  }
-> =20
->  static void
-> @@ -528,7 +525,7 @@ static int hantro_set_fmt_out(struct hantro_ctx *ctx,
->  	 * changes to the raw format.
->  	 */
->  	if (!ctx->is_encoder)
-> -		hantro_reset_raw_fmt(ctx);
-> +		hantro_reset_raw_fmt(ctx, hantro_get_format_depth(pix_mp->pixelformat)=
-);
-> =20
->  	/* Colorimetry information are always propagated. */
->  	ctx->dst_fmt.colorspace =3D pix_mp->colorspace;
-> @@ -591,7 +588,7 @@ static int hantro_set_fmt_cap(struct hantro_ctx *ctx,
->  	 * changes to the raw format.
->  	 */
->  	if (ctx->is_encoder)
-> -		hantro_reset_raw_fmt(ctx);
-> +		hantro_reset_raw_fmt(ctx, 0);
-> =20
->  	/* Colorimetry information are always propagated. */
->  	ctx->src_fmt.colorspace =3D pix_mp->colorspace;
-> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.h b/drivers/m=
-edia/platform/verisilicon/hantro_v4l2.h
-> index 64f6f57e9d7a..9ea2fef57dcd 100644
-> --- a/drivers/media/platform/verisilicon/hantro_v4l2.h
-> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.h
-> @@ -21,9 +21,10 @@
->  extern const struct v4l2_ioctl_ops hantro_ioctl_ops;
->  extern const struct vb2_ops hantro_queue_ops;
-> =20
-> +int hantro_reset_raw_fmt(struct hantro_ctx *ctx, int bit_depth);
->  void hantro_reset_fmts(struct hantro_ctx *ctx);
->  int hantro_get_format_depth(u32 fourcc);
->  const struct hantro_fmt *
-> -hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream);
-> +hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream, int=
- bit_depth);
-> =20
->  #endif /* HANTRO_V4L2_H_ */
-
+-- 
+	Ansuel
