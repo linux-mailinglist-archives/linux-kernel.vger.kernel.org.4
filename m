@@ -2,105 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1FE67D0A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0B167D169
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbjAZPuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S232781AbjAZQ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbjAZPuA (ORCPT
+        with ESMTP id S232734AbjAZQ0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:50:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5B24ABF8;
-        Thu, 26 Jan 2023 07:49:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C141618B6;
-        Thu, 26 Jan 2023 15:49:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F9D5C4339B;
-        Thu, 26 Jan 2023 15:49:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674748198;
-        bh=tz37H93KJoXT7koLr1H4HT5GaXKxGQjDxvtFWm7fYOY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jqXQMHePLVFSiJqj0BgbGZMSJfFzBNY1s6BwEQB8uiax+WOjHz0lV4186ZtQdvbU3
-         VlcXlHGw+7BSYxkQhOdJkzk5JGC3Sjei/OXUTgUyXuis2MgcgbNTcTFDhBGwtHsapv
-         BWjzD2QkPbh4tcAjQOAWHKvfEIc7v7GVmCAWqYo0dL1dMpif0lnkTtRgmiIgdyTYnv
-         HVwbngVuGhfvugMn/7DfKFiw47VQtQ6TJQaM9BwGmw6P3Q2Xitjm1qmI9trS1Atlk8
-         JJoBV0NzEojUnCR5P0ARoBsXnZYnZ7iK+BEISeiOB51RuC05DGjF6/mWBB0AUtiM01
-         iL+0jwwg2LTxg==
-Date:   Thu, 26 Jan 2023 09:49:56 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
-        wenrui.li@rock-chips.com, rick.wertenbroek@heig-vd.ch,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 0/8] PCI: rockchip: Fix PCIe endpoint controller driver
-Message-ID: <20230126154956.GA1278063@bhelgaas>
+        Thu, 26 Jan 2023 11:26:04 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E2071659;
+        Thu, 26 Jan 2023 08:25:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674750321; x=1706286321;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vQ5Xq73A77dcWgvpi3junj6Bi2A1oCr2o7H27eKOWOQ=;
+  b=Dos9LDbJJAJWVBAuxEsqIAE/UTLCxaf0teAPFdehrq7/uyLDmvpyetUp
+   T0XmGyejuTrvChUuPl8gM0PTmB3tZkUiNYmRi6h0Zqp/nqKlcTYQSozhE
+   IVkkB2BvveIoq8tHKNXPm+FtaAvRunuF9o0G/7sKaGFwRSIHwcJYhLkvC
+   9/xCp/ohqE1ClwICbBz6Tp0YMF09oNkEsAxpHCPRypPfqQQaj64ki/T+i
+   m5Qp5Zh0U7SGj7x+SfLs6at+j4Wztpav7qwt/UIp13c9Yp6Sn4H/OvhsX
+   0IJRO7K5L9eH8xoQsJgXfuiz21rjLtjHOrFRjSwMRTdMCKr72NetNzfi7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="354154664"
+X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
+   d="scan'208";a="354154664"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:38 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="612855067"
+X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
+   d="scan'208";a="612855067"
+Received: from nmani1-mobl2.amr.corp.intel.com (HELO [10.209.167.178]) ([10.209.167.178])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 08:24:36 -0800
+Message-ID: <1013f667-c11f-25a2-ab2b-87b9368ad456@linux.intel.com>
+Date:   Thu, 26 Jan 2023 09:50:14 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAEEuhq9X0ppqTMp7fnZapbubf9k8xhH=u3gPva3hEpAdawK3w@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [RFC PATCH v2 12/22] sound: usb: card: Introduce USB SND platform
+ op callbacks
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-13-quic_wcheng@quicinc.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230126031424.14582-13-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 04:23:57PM +0100, Rick Wertenbroek wrote:
-> Le jeu. 26 janv. 2023 à 15:52, Bjorn Helgaas <helgaas@kernel.org> a écrit :
-> > Thanks very much for your work.
-> >
-> > On Thu, Jan 26, 2023 at 02:50:40PM +0100, Rick Wertenbroek wrote:
-> > > This is a series of patches that fixes the PCIe endpoint controller driver
-> > > for the Rockchip RK3399 SoC. It is based on Linux kernel 6.0.19
-> > >
-> > > The original driver in mainline had issues and would not allow for the
-> > > RK3399 to operate in PCIe endpoint mode. This patch series fixes that so
-> > > that the PCIe core controller of the RK3399 SoC can now act as a PCIe
-> > > endpoint.
-> >
-> > So we merged cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip
-> > PCIe controller") when it actually didn't work?  Ouch.  Thanks for
-> > fixing it and testing it.
-> 
-> It seems it wasn't fully tested, the code compiles and kernel module loads,
-> but further functionality didn't seem to have been tested
-> (e.g., lspci, and with the pcitest tool and pci_endpoit_test_driver).
 
-OK, I guess that happens sometimes.  Glad you're getting it into
-shape!
 
-> Does this mean I should refer to the commit cf590b078391
-> ("PCI: rockchip: Add EP driver for Rockchip PCIe controller") ?
-> Because it wasn't working in the first place ?
 
-Yes, I think so.
+> +int snd_usb_register_platform_ops(struct snd_usb_platform_ops *ops)
+> +{
+> +	if (platform_ops)
+> +		return -EEXIST;
+> +
+> +	platform_ops = ops;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(snd_usb_register_platform_ops);
+> +
+> +int snd_usb_unregister_platform_ops(void)
+> +{
+> +	platform_ops = NULL;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(snd_usb_unregister_platform_ops);
 
-> Thank you for all the pointers, I'll take them into account for the
-> next iteration. This is the first time I actually submitted a series of
-> patches to the LKML so it's all relatively new to me.
+I find this super-racy.
 
-Welcome to Linux, and great start!
+If the this function is called just before ...
 
-Bjorn
+>  
+>  /*
+>   * disconnect streams
+> @@ -910,6 +928,10 @@ static int usb_audio_probe(struct usb_interface *intf,
+>  	usb_set_intfdata(intf, chip);
+>  	atomic_dec(&chip->active);
+>  	mutex_unlock(&register_mutex);
+> +
+> +	if (platform_ops->connect_cb)
+> +		platform_ops->connect_cb(intf, chip);
+> +
+
+... this, then you have a risk of using a dandling pointer.
+
+You also didn't test that the platform_ops != NULL, so there's a risk of
+dereferencing a NULL pointer.
+
+Not so good, eh?
+
+It's a classic (I've had the same sort of issues with SoundWire), when
+you export ops from one driver than can be removed, then additional
+protection is needed when using those callbacks.
+
+
