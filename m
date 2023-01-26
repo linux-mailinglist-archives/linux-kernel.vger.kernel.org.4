@@ -2,157 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0852467D9A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCAB67D9A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 00:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbjAZXeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 18:34:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
+        id S232887AbjAZXfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 18:35:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjAZXe3 (ORCPT
+        with ESMTP id S232256AbjAZXfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 18:34:29 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB566E8D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:34:28 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id z31so2201880pfw.4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:34:28 -0800 (PST)
+        Thu, 26 Jan 2023 18:35:42 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1771ABE7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:35:41 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id v13so3310490eda.11
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:35:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZmlCUBRCPwLvDMyRKhmvFFYyCxvm8e49EMH29s2svEk=;
-        b=V7pzD6PvMlRTA677LV794Nzyy1S2TBgILbVqqW6ty0pWMAGXaCr9JdjcF4So27okbd
-         lVit+lRnXs05quAU4kmV8NadesAnDUqUDnKSSRv8uFKBvl13EWRY/3jwA4NIc4SW7E1/
-         wbN4UZGtuSLt5Tqu2/oDsQQGyxZzgoV3/g+iG6eGqjhkyCfL1dbMzl3YF0C4+06VhNQq
-         5gq77m4p+7PHXo3V7i5gNUiYcoBov8NDX2ksttB2+xDdKxOj68e0hFOm4zscS7mzILyi
-         /u7b+RecsNMfrR7+jZqk/9L6hBllhwQCV4deoye22sdy6UXWaMV3B65O+2zMckYRV+6v
-         WVgQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Hzo3sFEc0rrT2DBc4hVlM+1SiVGoPIKepFO94/n3CJk=;
+        b=aDDZmr9bRaxGmTx/CMesBvr5efvVLQ0uNblfGbTc3A2Iouva3ybE7fa9mzo8ahJt3q
+         AKlMLCSK2rE0YsfR6bHBeIfr2AKFXJQTH3+3GmlF2ueLU+UBelbYa6NgXDhlxAyHNDHD
+         JE2oHu26ugxiubsGcOTcm6otAa5wXI4IugT/a1ixWzIErQLq616jjZlVkV/m+ZLmJ37S
+         UwmCdok7WWsAbRgb7pfKCb8XFLFgUAgsRpLPcIvura2H69t3waXOvdOfz0L8WZ/IRqyK
+         50w9av/3224OYgWLHBDCMY9flRToQiv9Ly/O1bi6yrXGNJpr5CWEyj00gvNh4qTS5hv0
+         7IhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZmlCUBRCPwLvDMyRKhmvFFYyCxvm8e49EMH29s2svEk=;
-        b=BAt7IdLLpLOUiYwG6NgayhvVfi3IlrPuD4DZsIfNPjKESP8g6tllzrzlcnqzJDHMCC
-         6rSrlwmCLqbf0YZafHxOfLVg0JQPXjjcr+rdnkg+xk+wDlL6PRzzjyEJKjkvaxKIwGw7
-         oKBchbVa3eJyOS6xVKd7eFdHm2MysiCLSAchbv4IYa0mHlatHMQMtpe/DhNwpf1ku16b
-         cAOr/IZ44AoIZp4VGH0IhprI0E5gRfPrtNuSK7CiO55n1cjGPMAvgwC5wgPil3plqNW4
-         iU+bOytMGI89I1FLM80yjb4aXOxxuYqX8usNU/tcEZmE21qBDsAdxO+iRhjsX27N0DEH
-         w5eA==
-X-Gm-Message-State: AO0yUKVU8g7whqIHspGCmx+xQ4hj7zaCo4/d76czo7fDengj4oL2iZjp
-        FcbA2APa2pWr5TXtFgpamSL5yeDaQEy41Tpc84U=
-X-Google-Smtp-Source: AK7set+jurZu+DhTB98Wjvu0Zv3kgBKXskjxfUjFlfo8kCzK0PCeGHCM1YBpxMKkAjD/DohwQdb1WzQR6i+wH7KREwg=
-X-Received: by 2002:a05:6a00:23c2:b0:592:5653:facb with SMTP id
- g2-20020a056a0023c200b005925653facbmr365495pfc.28.1674776067755; Thu, 26 Jan
- 2023 15:34:27 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hzo3sFEc0rrT2DBc4hVlM+1SiVGoPIKepFO94/n3CJk=;
+        b=MxtHJdLiF0JjJGpQGVih1IQLPNBciJEymirtu/c00ipEjJD1CUCaJl7qohFbFUj7gb
+         8x5S8aMhc5fN8K4b3+kgv3mfPrlOY+0usFSEtbsVbt9rG4hiyhDr0kSrQiEU7oBaFrlA
+         TnNu1nHE9ixOqTFJdUtp4Vmi3dBRLtkEn+4w4Ea9oa34bxARXs5xRVR05gO8Zo5SiLpu
+         ctqE9lr1pV6janWTGyyvzv4tBcG4rUaiLqG2164w76c7Rvqg4YStdXO2NOD0e1ni3w9v
+         3lgY1jDZfX1ykLsmG+jarMH4L6qJRzXHJ+rpEdlEuifKmMH7NporWhIkclgt67Qjdb97
+         cXgw==
+X-Gm-Message-State: AFqh2kolynFUYl9BlIHlokkhXoMX+7m+loO/8wqJ4Srt/glzTmf2BvlM
+        2/SMeJCI7nocGbCzkp0vDSGmeg==
+X-Google-Smtp-Source: AMrXdXvx27D+sTT4yn7XqkM6+ujwe2QR+RCFnO1b8ormrj04Pluko4Yf1pUSp7WHdEyfpbxBZoGVdA==
+X-Received: by 2002:a05:6402:27cf:b0:488:e7ae:5cc4 with SMTP id c15-20020a05640227cf00b00488e7ae5cc4mr47577513ede.41.1674776139293;
+        Thu, 26 Jan 2023 15:35:39 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id p11-20020a50cd8b000000b004972644b19fsm1424101edi.16.2023.01.26.15.35.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 15:35:38 -0800 (PST)
+Message-ID: <5a638130-89c3-871b-c233-55048a162870@linaro.org>
+Date:   Fri, 27 Jan 2023 00:35:37 +0100
 MIME-Version: 1.0
-References: <150768c55722311699fdcf8f5379e8256749f47d.1674716617.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <150768c55722311699fdcf8f5379e8256749f47d.1674716617.git.christophe.leroy@csgroup.eu>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Fri, 27 Jan 2023 00:34:16 +0100
-Message-ID: <CA+fCnZcnwN-FGbteoMwFeHrGoM-5Gv5bs2udvRtzk-MT6s+B9w@mail.gmail.com>
-Subject: Re: [PATCH] kasan: Fix Oops due to missing calls to kasan_arch_is_ready()
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sa8295p-adp: Add max20411 on
+ i2c12
+Content-Language: en-US
+To:     Andrew Halaney <ahalaney@redhat.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230124184440.1421074-1-quic_bjorande@quicinc.com>
+ <20230124184440.1421074-4-quic_bjorande@quicinc.com>
+ <20230126225446.rjckq5p35zeozphq@halaney-x13s>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230126225446.rjckq5p35zeozphq@halaney-x13s>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 8:08 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
-> On powerpc64, you can build a kernel with KASAN as soon as you build it
-> with RADIX MMU support. However if the CPU doesn't have RADIX MMU,
-> KASAN isn't enabled at init and the following Oops is encountered.
->
->   [    0.000000][    T0] KASAN not enabled as it requires radix!
->
->   [    4.484295][   T26] BUG: Unable to handle kernel data access at 0xc00e000000804a04
->   [    4.485270][   T26] Faulting instruction address: 0xc00000000062ec6c
->   [    4.485748][   T26] Oops: Kernel access of bad area, sig: 11 [#1]
->   [    4.485920][   T26] BE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
->   [    4.486259][   T26] Modules linked in:
->   [    4.486637][   T26] CPU: 0 PID: 26 Comm: kworker/u2:2 Not tainted 6.2.0-rc3-02590-gf8a023b0a805 #249
->   [    4.486907][   T26] Hardware name: IBM pSeries (emulated by qemu) POWER9 (raw) 0x4e1200 0xf000005 of:SLOF,HEAD pSeries
->   [    4.487445][   T26] Workqueue: eval_map_wq .tracer_init_tracefs_work_func
->   [    4.488744][   T26] NIP:  c00000000062ec6c LR: c00000000062bb84 CTR: c0000000002ebcd0
->   [    4.488867][   T26] REGS: c0000000049175c0 TRAP: 0380   Not tainted  (6.2.0-rc3-02590-gf8a023b0a805)
->   [    4.489028][   T26] MSR:  8000000002009032 <SF,VEC,EE,ME,IR,DR,RI>  CR: 44002808  XER: 00000000
->   [    4.489584][   T26] CFAR: c00000000062bb80 IRQMASK: 0
->   [    4.489584][   T26] GPR00: c0000000005624d4 c000000004917860 c000000001cfc000 1800000000804a04
->   [    4.489584][   T26] GPR04: c0000000003a2650 0000000000000cc0 c00000000000d3d8 c00000000000d3d8
->   [    4.489584][   T26] GPR08: c0000000049175b0 a80e000000000000 0000000000000000 0000000017d78400
->   [    4.489584][   T26] GPR12: 0000000044002204 c000000003790000 c00000000435003c c0000000043f1c40
->   [    4.489584][   T26] GPR16: c0000000043f1c68 c0000000043501a0 c000000002106138 c0000000043f1c08
->   [    4.489584][   T26] GPR20: c0000000043f1c10 c0000000043f1c20 c000000004146c40 c000000002fdb7f8
->   [    4.489584][   T26] GPR24: c000000002fdb834 c000000003685e00 c000000004025030 c000000003522e90
->   [    4.489584][   T26] GPR28: 0000000000000cc0 c0000000003a2650 c000000004025020 c000000004025020
->   [    4.491201][   T26] NIP [c00000000062ec6c] .kasan_byte_accessible+0xc/0x20
->   [    4.491430][   T26] LR [c00000000062bb84] .__kasan_check_byte+0x24/0x90
->   [    4.491767][   T26] Call Trace:
->   [    4.491941][   T26] [c000000004917860] [c00000000062ae70] .__kasan_kmalloc+0xc0/0x110 (unreliable)
->   [    4.492270][   T26] [c0000000049178f0] [c0000000005624d4] .krealloc+0x54/0x1c0
->   [    4.492453][   T26] [c000000004917990] [c0000000003a2650] .create_trace_option_files+0x280/0x530
->   [    4.492613][   T26] [c000000004917a90] [c000000002050d90] .tracer_init_tracefs_work_func+0x274/0x2c0
->   [    4.492771][   T26] [c000000004917b40] [c0000000001f9948] .process_one_work+0x578/0x9f0
->   [    4.492927][   T26] [c000000004917c30] [c0000000001f9ebc] .worker_thread+0xfc/0x950
->   [    4.493084][   T26] [c000000004917d60] [c00000000020be84] .kthread+0x1a4/0x1b0
->   [    4.493232][   T26] [c000000004917e10] [c00000000000d3d8] .ret_from_kernel_thread+0x58/0x60
->   [    4.495642][   T26] Code: 60000000 7cc802a6 38a00000 4bfffc78 60000000 7cc802a6 38a00001 4bfffc68 60000000 3d20a80e 7863e8c2 792907c6 <7c6348ae> 20630007 78630fe0 68630001
->   [    4.496704][   T26] ---[ end trace 0000000000000000 ]---
->
-> The Oops is due to kasan_byte_accessible() not checking the readiness
-> of KASAN. Add missing call to kasan_arch_is_ready() and bail out when
-> not ready. The same problem is observed with ____kasan_kfree_large()
-> so fix it the same.
->
-> Also, as KASAN is not available and no shadow area is allocated for
-> linear memory mapping, there is no point in allocating shadow mem for
-> vmalloc memory as shown below in /sys/kernel/debug/kernel_page_tables
->
->   ---[ kasan shadow mem start ]---
->   0xc00f000000000000-0xc00f00000006ffff  0x00000000040f0000       448K         r  w       pte  valid  present        dirty  accessed
->   0xc00f000000860000-0xc00f00000086ffff  0x000000000ac10000        64K         r  w       pte  valid  present        dirty  accessed
->   0xc00f3ffffffe0000-0xc00f3fffffffffff  0x0000000004d10000       128K         r  w       pte  valid  present        dirty  accessed
->   ---[ kasan shadow mem end ]---
->
-> So, also verify KASAN readiness before allocating and poisoning
-> shadow mem for VMAs.
 
-Hi Cristophe,
 
-Would it possible to unify kasan_arch_is_ready with the already
-existing kasan_enabled check?
+On 26.01.2023 23:54, Andrew Halaney wrote:
+> On Tue, Jan 24, 2023 at 10:44:40AM -0800, Bjorn Andersson wrote:
+>> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>
+>> The SA8295P ADP has a Maxim max20411 step-down converter on i2c12.
+>>
+>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>> ---
+>>
+>> Changes since v1:
+>> - i2c node had changed name
+>>
+>>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 41 ++++++++++++++++++++++++
+>>  1 file changed, 41 insertions(+)
+> 
+> I realized today this has to do with the comment over at:
+> 
+>     https://lore.kernel.org/all/30166208-ba9d-e6e6-1cd2-807a80536052@quicinc.com/
+> 
+> and I just didn't realize that the schematic I've started looking at
+> black boxes the SOM/SIP which holds this... darn I thought I could see
+> more than I could :(
+> 
+> I took a similiar patch for a spin on sa8540p-ride (which I'll later
+> submit), and things worked fine (I'm not really consuming the output of
+> the regulator mind you).
+> 
+> Downstream devicetree indicates all of this looks ok except for possibly
+> the below comment:
+> 
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> index bb4270e8f551..642000d95812 100644
+>> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> @@ -266,6 +266,27 @@ &dispcc1 {
+>>  	status = "okay";
+>>  };
+>>  
+>> +&i2c12 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&i2c12_state>;
+>> +
+>> +	status = "okay";
+>> +
+>> +	vdd_gfx: regulator@39 {
+>> +		compatible = "maxim,max20411";
+>> +		reg = <0x39>;
+>> +
+>> +		regulator-name = "vdd_gfx";
+>> +		regulator-min-microvolt = <800000>;
+> 
+> Is there a reason you chose this instead of the 500000 I see downstream?
+> 
+>> +		regulator-max-microvolt = <968750>;
+> 
+> Likewise, I see in this brief description of the regulator
+> that the upper bound is higher than this (1.275 V). I am not sure if
+> the values in the devicetree are supposed to describe the
+> min/max of the regulator itself, or of what your board can really
+> handle/needs (the latter I guess makes more sense since you wouldn't want to
+> accidentally request a current draw that could melt something.. that can
+> be fun). I do see you've got that min/max in the driver itself (now that
+> I peaked at that patch).
+Yes, your suspicions are correct and the DT sets the actual ranges
+for the voltage regulators on this specific board while the
+hardware reachable ranges are defined in the .c driver.
 
-Both functions seem to be serving a similar purpose: for example this
-patch adds kasan_arch_is_ready into __kasan_poison_vmalloc, which is
-called by kasan_poison_vmalloc when kasan_enabled returns true.
-
-The kasan_enabled is only implemented for HW_TAGS right now, but it
-should be easy enough to make it work other cases by
-kasan_flag_enabled into common.c and adding __wrappers for
-shadow-related functions into include/linux/kasan.h. This way
-architectures won't need to define their own static key and duplicate
-the functionality.
-
-I don't mind having this patch applied as is, considering that it's a
-fix. However, if the unification that I mentioned is possible, that
-would be a nice improvement.
-
-Thanks!
+Konrad
+> 
+> https://www.analog.com/en/products/MAX20411.html#product-overview
+> 
+> For what it is worth, I also see a SIP document that states vdd_gfx min/max
+> is 0.56/1.03 V, which is ultimately what you'd feed this into. The
+> downstream devicetree uses the max value you provide though.
+> 
+> No idea how much faith I should put into the SIP document's bounds, or
+> downstream, but I thought I should at least highlight them.
+> 
+> Thanks,
+> Andrew
+> 
