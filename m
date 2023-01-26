@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BACE67C41E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 05:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8498867C420
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 05:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236177AbjAZE60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 23:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S236201AbjAZE6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 23:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235506AbjAZE55 (ORCPT
+        with ESMTP id S235812AbjAZE56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 23:57:57 -0500
+        Wed, 25 Jan 2023 23:57:58 -0500
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C536CA16;
-        Wed, 25 Jan 2023 20:57:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DE5EB59;
+        Wed, 25 Jan 2023 20:57:52 -0800 (PST)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id BC2AD5C01B6;
-        Wed, 25 Jan 2023 23:57:50 -0500 (EST)
+        by mailout.nyi.internal (Postfix) with ESMTP id 08D9E5C0192;
+        Wed, 25 Jan 2023 23:57:52 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Wed, 25 Jan 2023 23:57:50 -0500
+  by compute6.internal (MEProxy); Wed, 25 Jan 2023 23:57:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1674709070; x=1674795470; bh=9b
-        LZqpHm9uIsrcMILVXhn1yBXMyhRKonXhCCu2xgjyM=; b=a01NR+ZtTMnIKwmvYI
-        HLXmvl9ggXpYf1/hPU7McRXNZYXabG22DUbq0j2/uQQvVNYnVSOC9HkWJsTrwQKr
-        9RfmJ+AiLOyBUjnhKO1eTeFRKxvY7/tC8hV8DZoNvInTzJ0oFU1ZsjWPgwi2scdc
-        ORawMzntB0yrii8LSQlh01MLOKIg2VXnGgRZG9zuS7V2J4r5IlJSoQyaK9qZynn/
-        gcCwnzLrr3V74zQtzr+RiGNNlmxWBijrcqfXIUpEmJ/m7KXS3Ef5+2aRUrqFkBT4
-        YoMMRmtOwsYxsc7zq+lms3unW1PfRU0f7VvnxkU5QybkTiPB5lixmlTNU4Unw5E3
-        KUDA==
+        :subject:subject:to:to; s=fm1; t=1674709072; x=1674795472; bh=q5
+        5XHDGFiOe6tMLk9kS1/GAoI3GRr8K/P8oXRBWx1Qk=; b=C0sa+YjECxsPGDymtA
+        JlvEgv75opaB5hynjYYVHmHNCZz9xaF8OlkrvxtgGTBXg6AvQ41pjw6sqQfwyVzx
+        jP3jfWSD5xql1YIXMMvqgWKI8Gp1xg3Qy4VMqkOVOia6vO9OOFeYqK24TkPgqAtw
+        UaZYo5Fr09IP28MhN2I6oL7urAfsaeDI+Nf1iu1O2OPoWNvobxSqq4koIJTgih0N
+        boAoB8WlCdH/VS418qjK12YC+9YmhiA2yaz7mdZRLxi4kYiXuXN+zzwZ2kFXzsol
+        5VuKCVASlfdmaOAJKYxOSOPB0fnxITPo7ZzGnYx0ODwk4lzD8QhMwGliPNPTNFLJ
+        uM1Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1674709070; x=1674795470; bh=9bLZqpHm9uIsr
-        cMILVXhn1yBXMyhRKonXhCCu2xgjyM=; b=bXG5OVxzHuZofpr9vns9hFkpK71se
-        dXSOgAhNhY8eYtjZG/0jfUV1KRyUxexOIoXJSVyj5PNLtC4dSpOYlW90nfFqq0z5
-        EVD4kALRm3mjrWlFJE6MYoB1b4MNz1+T03X3bByMXLRijPFgioOuN0JP+onat7BR
-        IOCOvlsaq4A3QRds3e7k8nyGHGNt3tD8JerK2LuTTdJrXw69e2VMXS+/G3dRCR8o
-        KPx7U1OYaLSVuj2oDFXuHG5Wlrx3+EjoRWoYR+zFn4Qd24BrZOyTe4oUeSMPvdP9
-        4rENQVmdJQYfyc9fJEumxgIdRam4dj6V6coZbjD3XOMmDdoVjIHjtP35A==
-X-ME-Sender: <xms:TgjSYwxyriklLwpk3vPCqDbc8z0lC6-_RsBqVKHKWtzGmGVrNW2_AQ>
-    <xme:TgjSY0Rzw0yEdwzvdbawCJcSKEAlUNJ2OItk4WoTk4lLVZVGpOwQd_OM8tXEHUxH5
-    Ia_Jz6MHEivOFFdKw>
-X-ME-Received: <xmr:TgjSYyWE13pSwK3UWd4VWjgubgtuGaI2262yqaqEEdi_m0CwyYNVLnO85Q-YJoXcv5-ygBvZc6L01DNpGZnlUQL-tpjSz8Kk3PVZhsbVgm1z22d2w0S9gBXetURrs4cUvsLmsg>
+        :x-sasl-enc; s=fm3; t=1674709072; x=1674795472; bh=q55XHDGFiOe6t
+        MLk9kS1/GAoI3GRr8K/P8oXRBWx1Qk=; b=fM0DXAq+0EFwW/qSiNsIzb9IlehRe
+        vHlTglE3QbVplp97a7w5HkTf4BkieIrxNcLp8fjx+fP1Xp2qdX+Pufzr+QTFxS/J
+        Arh84lFwmwCwb5PdS/j2xV5zwA6XqKCjON0GeAmPmEyNjXYk+8Uu3EuaSKfwg6Z5
+        VYwIXcCEgicaLFn5Vl3sK4Ppo7ANIX9oP5ikOCuSrfGlVdlSrZf14SjkJzJjyi7l
+        R7YYGNZKJBqNA9N71EFLRbw0QkiDMbd4CeBsrT53NY4Ojdnxv1DnnJWRSnBWXRvM
+        IPk35KHEL6xtosL7ZDih9gVuG0EQnsYnx0O+9XmMpLE/LYYLGAoiQstAA==
+X-ME-Sender: <xms:TwjSY7uZi-uDOzpUIRf2vw4Y-NC3aOb19snvXOcKdzP5vOrfBdOJwg>
+    <xme:TwjSY8eS6OAvl5Cy4senta1MBGzn_0Xgl8zBI8pWh2F1Ol43ESv-T4hSYzgG3QUre
+    2ccevbSamKPjTN6aQ>
+X-ME-Received: <xmr:TwjSY-yguY_S57PhwsWhApRxETkQIkstiENAXSkG8hf9IALAd-pT0422yXjxlaKf6Z6t_ItlGZNPNwEuLb0WleKep0S-PxWnwgOBX9npuqT0IBxCvIC5z_6MGfLE4_Sapq8etg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedgjeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
     vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrh
+    udefiedtveetnecuvehluhhsthgvrhfuihiivgepgeenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:TgjSY-jtexuQZCjJlNcMi4qa7nCY3Sa9dOF-9cJOolfCmXEDBlwHmg>
-    <xmx:TgjSYyCApsm2xmG0JbYwy5Fk_Jdbgs3nu_Bt_6spGt2D4xmtErlCMg>
-    <xmx:TgjSY_LpZ9F7r6D2rMaK0FtMYFG05bocoF7ji_ZTTm0xYCc9ZtE6eg>
-    <xmx:TgjSY8xax1QVPV0fTjigq7XVSiCfqiHkwA_eB9xsWMwiSG7mgPtBqA>
+X-ME-Proxy: <xmx:TwjSY6P4ED98xu3-VOXxnwAIPpur6U0Gz9ednMuy1xOhJwNu_HNWcw>
+    <xmx:TwjSY78TJOa1-9H692Vizx-m3PdccJdOsZCnuPkxgOaHJnkPK7alsg>
+    <xmx:TwjSY6WeFL6LOyJVhpnq_Rbl804QaxypwXWcpgQ4UFQHHOqV_Q6r8Q>
+    <xmx:UAjSY4iCgrn5Iyn07QvUAAx7b23IYG4m7oznqXPNKmgtsA1IM1Jy7A>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Jan 2023 23:57:49 -0500 (EST)
+ 25 Jan 2023 23:57:51 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -78,10 +78,11 @@ Cc:     linux-riscv@lists.infradead.org, Heiko Stuebner <heiko@sntech.de>,
         Samuel Holland <samuel@sholland.org>,
         Conor Dooley <conor.dooley@microchip.com>,
         Palmer Dabbelt <palmer@rivosinc.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH v5 10/11] riscv: Add the Allwinner SoC family Kconfig option
-Date:   Wed, 25 Jan 2023 22:57:37 -0600
-Message-Id: <20230126045738.47903-11-samuel@sholland.org>
+        Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: [PATCH v5 11/11] riscv: defconfig: Enable the Allwinner D1 platform and drivers
+Date:   Wed, 25 Jan 2023 22:57:38 -0600
+Message-Id: <20230126045738.47903-12-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20230126045738.47903-1-samuel@sholland.org>
 References: <20230126045738.47903-1-samuel@sholland.org>
@@ -89,7 +90,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UPPERCASE_50_75 autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,64 +98,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allwinner manufactures the sunxi family of application processors. This
-includes the "sun8i" series of ARMv7 SoCs, the "sun50i" series of ARMv8
-SoCs, and now the "sun20i" series of 64-bit RISC-V SoCs.
-
-The first SoC in the sun20i series is D1, containing a single T-HEAD
-C906 core. D1s is a low-pin-count variant of D1 with co-packaged DRAM.
-
-Most peripherals are shared across the entire chip family. In fact, the
-ARMv7 T113 SoC is pin-compatible and almost entirely register-compatible
-with the D1s.
-
-This means many existing device drivers can be reused. To facilitate
-this reuse, name the symbol ARCH_SUNXI, since that is what the existing
-drivers have as their dependency.
+Now that several D1-based boards are supported, enable the platform in
+our defconfig. Build in the drivers which are necessary to boot, such as
+the pinctrl, MMC, RTC (which provides critical clocks), SPI (for flash),
+and watchdog (which may be left enabled by the bootloader). Other common
+onboard peripherals are enabled as modules.
 
 Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 Reviewed-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
+Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
 (no changes since v4)
 
 Changes in v4:
- - Drop the now-redundant 'select SIFIVE_PLIC'
  - Rebase on v6.2-rc1 + soc2arch-immutable
 
-Changes in v3:
- - ARCH_SUNXI depends on MMU && !XIP_KERNEL
+ arch/riscv/configs/defconfig | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-Changes in v2:
- - Sort Kconfig as if we had done s/SOC_/ARCH_/ for future-proofing
-
- arch/riscv/Kconfig.socs | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-index 659140309157..1cf69f958f10 100644
---- a/arch/riscv/Kconfig.socs
-+++ b/arch/riscv/Kconfig.socs
-@@ -32,6 +32,15 @@ config SOC_STARFIVE
- 	help
- 	  This enables support for StarFive SoC platform hardware.
- 
-+config ARCH_SUNXI
-+	bool "Allwinner sun20i SoCs"
-+	depends on MMU && !XIP_KERNEL
-+	select ERRATA_THEAD
-+	select SUN4I_TIMER
-+	help
-+	  This enables support for Allwinner sun20i platform hardware,
-+	  including boards based on the D1 and D1s SoCs.
-+
- config ARCH_VIRT
- 	def_bool SOC_VIRT
- 
+diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+index 128dcf4c0814..d98d6e90b2b8 100644
+--- a/arch/riscv/configs/defconfig
++++ b/arch/riscv/configs/defconfig
+@@ -29,6 +29,7 @@ CONFIG_SOC_MICROCHIP_POLARFIRE=y
+ CONFIG_ARCH_RENESAS=y
+ CONFIG_SOC_SIFIVE=y
+ CONFIG_SOC_STARFIVE=y
++CONFIG_ARCH_SUNXI=y
+ CONFIG_SOC_VIRT=y
+ CONFIG_SMP=y
+ CONFIG_HOTPLUG_CPU=y
+@@ -120,8 +121,10 @@ CONFIG_VIRTIO_NET=y
+ CONFIG_MACB=y
+ CONFIG_E1000E=y
+ CONFIG_R8169=y
++CONFIG_STMMAC_ETH=m
+ CONFIG_MICROSEMI_PHY=y
+ CONFIG_INPUT_MOUSEDEV=y
++CONFIG_KEYBOARD_SUN4I_LRADC=m
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_SERIAL_8250_DW=y
+@@ -130,14 +133,20 @@ CONFIG_SERIAL_SH_SCI=y
+ CONFIG_VIRTIO_CONSOLE=y
+ CONFIG_HW_RANDOM=y
+ CONFIG_HW_RANDOM_VIRTIO=y
++CONFIG_I2C_MV64XXX=m
+ CONFIG_SPI=y
+ CONFIG_SPI_SIFIVE=y
++CONFIG_SPI_SUN6I=y
+ # CONFIG_PTP_1588_CLOCK is not set
+-CONFIG_GPIOLIB=y
+ CONFIG_GPIO_SIFIVE=y
++CONFIG_WATCHDOG=y
++CONFIG_SUNXI_WATCHDOG=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
+ CONFIG_DRM=m
+ CONFIG_DRM_RADEON=m
+ CONFIG_DRM_NOUVEAU=m
++CONFIG_DRM_SUN4I=m
+ CONFIG_DRM_VIRTIO_GPU=m
+ CONFIG_FB=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+@@ -150,21 +159,32 @@ CONFIG_USB_OHCI_HCD=y
+ CONFIG_USB_OHCI_HCD_PLATFORM=y
+ CONFIG_USB_STORAGE=y
+ CONFIG_USB_UAS=y
++CONFIG_USB_MUSB_HDRC=m
++CONFIG_USB_MUSB_SUNXI=m
++CONFIG_NOP_USB_XCEIV=m
+ CONFIG_MMC=y
+ CONFIG_MMC_SDHCI=y
+ CONFIG_MMC_SDHCI_PLTFM=y
+ CONFIG_MMC_SDHCI_CADENCE=y
+ CONFIG_MMC_SPI=y
++CONFIG_MMC_SUNXI=y
+ CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_SUN6I=y
++CONFIG_DMADEVICES=y
++CONFIG_DMA_SUN6I=m
+ CONFIG_VIRTIO_PCI=y
+ CONFIG_VIRTIO_BALLOON=y
+ CONFIG_VIRTIO_INPUT=y
+ CONFIG_VIRTIO_MMIO=y
++CONFIG_SUN8I_DE2_CCU=m
++CONFIG_SUN50I_IOMMU=y
+ CONFIG_RPMSG_CHAR=y
+ CONFIG_RPMSG_CTRL=y
+ CONFIG_RPMSG_VIRTIO=y
+ CONFIG_ARCH_R9A07G043=y
++CONFIG_PHY_SUN4I_USB=m
+ CONFIG_LIBNVDIMM=y
++CONFIG_NVMEM_SUNXI_SID=y
+ CONFIG_EXT4_FS=y
+ CONFIG_EXT4_FS_POSIX_ACL=y
+ CONFIG_EXT4_FS_SECURITY=y
 -- 
 2.37.4
 
