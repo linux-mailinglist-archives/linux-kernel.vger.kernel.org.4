@@ -2,113 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E32C67D009
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A40867D005
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbjAZPXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
+        id S232299AbjAZPWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbjAZPXH (ORCPT
+        with ESMTP id S232259AbjAZPWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:23:07 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6511330FD;
-        Thu, 26 Jan 2023 07:22:53 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QEj31W017888;
-        Thu, 26 Jan 2023 15:22:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2022-7-12; bh=SeU0YEj5vZ+FUQIuJdsMB00oQgNd1En7oY2e1SfIPy4=;
- b=sILhkJmb5uef0HCyoCOCvIRMgCd0xRJbUcaWcfnap+4agR96NGhnvT2I0kxDCm41I228
- leKMROypY38kMW/7jc+diAbhaYPgfFtWcjitaWYCDpBpPTSGBisyAsK96PFoPViAaQTG
- fHO3Yogc94QC7c6isT1hjhQ9SnqH7IzN9tby0NxRJ9tzIrsjzy4WjMDPepwCrCOn6l3I
- VOgyY9MwzAm1VqL6X1JxbIYRCAnLKd4nFiY58/G5NUSY1h0g63BGtG3/r3G2f3qD/u7E
- 3+YTXVrFOSpV3Q1ZUswNPEsdWckIwHBKRdfvor/NwbRUPDeVizEaMPPK3iUST4thRlIY KA== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n88ku2ebj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 15:22:07 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30QFCa4m031876;
-        Thu, 26 Jan 2023 15:22:06 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n86g7yjcq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 15:22:06 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QFM5DD008869;
-        Thu, 26 Jan 2023 15:22:05 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3n86g7yjc3-1;
-        Thu, 26 Jan 2023 15:22:05 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     harshit.m.mogalapalli@oracle.com, error27@gmail.com,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Irina Tirdea <irina.tirdea@intel.com>,
-        Vlad Dogaru <ddvlad@gmail.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iio: accel: mma9551_core: Prevent uninitialized variable in mma9551_read_status_word()
-Date:   Thu, 26 Jan 2023 07:21:46 -0800
-Message-Id: <20230126152147.3585874-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 26 Jan 2023 10:22:48 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7B36BBD6;
+        Thu, 26 Jan 2023 07:22:28 -0800 (PST)
+Received: from booty.fritz.box (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id CCC7724000B;
+        Thu, 26 Jan 2023 15:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1674746531;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=y4XXZUb/eXTVLt3Io7nRJONtjd6MFURYEBCczeziRlI=;
+        b=n4O/TPhP8ss3Yw55rWDZdfKA5BDB3pD/eXKOubNenym/Wz0Z3oFGqXygem7AXQ4QxtQUs0
+        aTFUIxv3UvBbXaXdfjKt/+DxdiIH3m9pjffuOqX3kEawUd0mIoICswgkMt7Cl2V+9f/nlP
+        wZtZJUP9mFhHT8NCsMwnF+uxqasFUWG+4xeiWbYsWAqegNctl6/A3D+q+p+1IifdAbD+ru
+        UjJ9ogApnYQW65IA/tLjadQBDynMEBwsEPvMih4MQzWaAqI8kJqr9zHQN6Oc88cQ1ZyKA8
+        qBD027A6BojfXIfwIovLnoGdIEzq5/ovTr1GPKV7MYxKP8XDojIjVN3rfVcGNQ==
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc:     Colin Ian King <colin.i.king@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        dev@openvswitch.org, alsa-devel@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH] scripts/spelling.txt: add "exsits" pattern and fix typo instances
+Date:   Thu, 26 Jan 2023 16:22:05 +0100
+Message-Id: <20230126152205.959277-1-luca.ceresoli@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_07,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- bulkscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260148
-X-Proofpoint-GUID: 5lKeQ7FKJ8HsXbQC7Guz1oFsmjcBIsJr
-X-Proofpoint-ORIG-GUID: 5lKeQ7FKJ8HsXbQC7Guz1oFsmjcBIsJr
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch Warns: drivers/iio/accel/mma9551_core.c:357
-	mma9551_read_status_word() error: uninitialized symbol 'v'.
+Fix typos and add the following to the scripts/spelling.txt:
 
-When (offset >= 1 << 12) is true mma9551_transfer() will return -EINVAL
-without 'v' being initialized, so check for the error and return.
+  exsits||exists
 
-Fixes: d5b97f5c7dfc ("iio: accel: mma9551: split driver to expose mma955x api")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
-This is detected using static analysis with smatch, and could probably
-be detected by syzkaller fuzzing in future.
----
- drivers/iio/accel/mma9551_core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/infiniband/ulp/iser/iscsi_iser.c | 2 +-
+ net/openvswitch/flow_table.c             | 2 +-
+ scripts/spelling.txt                     | 1 +
+ sound/soc/fsl/fsl-asoc-card.c            | 2 +-
+ 4 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/accel/mma9551_core.c b/drivers/iio/accel/mma9551_core.c
-index 75eee7f7303a..b898f865fb87 100644
---- a/drivers/iio/accel/mma9551_core.c
-+++ b/drivers/iio/accel/mma9551_core.c
-@@ -357,9 +357,12 @@ int mma9551_read_status_word(struct i2c_client *client, u8 app_id,
+diff --git a/drivers/infiniband/ulp/iser/iscsi_iser.c b/drivers/infiniband/ulp/iser/iscsi_iser.c
+index 620ae5b2d80d..6b7603765383 100644
+--- a/drivers/infiniband/ulp/iser/iscsi_iser.c
++++ b/drivers/infiniband/ulp/iser/iscsi_iser.c
+@@ -446,7 +446,7 @@ iscsi_iser_conn_create(struct iscsi_cls_session *cls_session,
+  * @is_leading:      indicate if this is the session leading connection (MCS)
+  *
+  * Return: zero on success, $error if iscsi_conn_bind fails and
+- *         -EINVAL in case end-point doesn't exsits anymore or iser connection
++ *         -EINVAL in case end-point doesn't exists anymore or iser connection
+  *         state is not UP (teardown already started).
+  */
+ static int iscsi_iser_conn_bind(struct iscsi_cls_session *cls_session,
+diff --git a/net/openvswitch/flow_table.c b/net/openvswitch/flow_table.c
+index 0a0e4c283f02..cfac54cbafdf 100644
+--- a/net/openvswitch/flow_table.c
++++ b/net/openvswitch/flow_table.c
+@@ -1012,7 +1012,7 @@ static int flow_mask_insert(struct flow_table *tbl, struct sw_flow *flow,
  
- 	ret = mma9551_transfer(client, app_id, MMA9551_CMD_READ_STATUS,
- 			       reg, NULL, 0, (u8 *)&v, 2);
-+	if (ret < 0)
-+		return ret;
-+
- 	*val = be16_to_cpu(v);
+ 	mask = flow_mask_find(tbl, new);
+ 	if (!mask) {
+-		/* Allocate a new mask if none exsits. */
++		/* Allocate a new mask if none exists. */
+ 		mask = mask_alloc();
+ 		if (!mask)
+ 			return -ENOMEM;
+diff --git a/scripts/spelling.txt b/scripts/spelling.txt
+index ded8bcfc0247..0147bd8dc6e2 100644
+--- a/scripts/spelling.txt
++++ b/scripts/spelling.txt
+@@ -625,6 +625,7 @@ exeuction||execution
+ existance||existence
+ existant||existent
+ exixt||exist
++exsits||exists
+ exlcude||exclude
+ exlcusive||exclusive
+ exmaple||example
+diff --git a/sound/soc/fsl/fsl-asoc-card.c b/sound/soc/fsl/fsl-asoc-card.c
+index 8d14b5593658..2f25358196ee 100644
+--- a/sound/soc/fsl/fsl-asoc-card.c
++++ b/sound/soc/fsl/fsl-asoc-card.c
+@@ -811,7 +811,7 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
+ 	priv->card.num_links = 1;
  
--	return ret;
-+	return 0;
- }
- EXPORT_SYMBOL_NS(mma9551_read_status_word, IIO_MMA9551);
- 
+ 	if (asrc_pdev) {
+-		/* DPCM DAI Links only if ASRC exsits */
++		/* DPCM DAI Links only if ASRC exists */
+ 		priv->dai_link[1].cpus->of_node = asrc_np;
+ 		priv->dai_link[1].platforms->of_node = asrc_np;
+ 		priv->dai_link[2].codecs->dai_name = codec_dai_name;
 -- 
-2.38.1
+2.34.1
 
