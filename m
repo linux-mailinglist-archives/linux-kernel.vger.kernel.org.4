@@ -2,59 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D85167C758
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EC067C75D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237044AbjAZJai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 04:30:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
+        id S236920AbjAZJcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 04:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236966AbjAZJad (ORCPT
+        with ESMTP id S236790AbjAZJcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 04:30:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8DA2A9A3;
-        Thu, 26 Jan 2023 01:30:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83C7861768;
-        Thu, 26 Jan 2023 09:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E4F23C433EF;
-        Thu, 26 Jan 2023 09:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674725418;
-        bh=Ruqnhc+7PYTr7z3FYV5CHCd1hZO25Q6axJqbLEz/kNw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ePWixslcsb/cBxF+1tgycmty6s7EKk0Y2V8hPrMDCYteyhmRHgfA12lyUangY2do0
-         eWdIBogVmEW0d+1fOZo2kwwQzfIYRWs6jSd6cKm3gN7p/jbjBnMurbTs6Wo0Uhm5PZ
-         9M8Ajj04KCT4A64taXieaVXrJ2KRcHVjs6SHUApxsw1GpG029DeL6O7WOWTOjOx5vj
-         KAu7N1wIn2FPV2CujzjPEPqbE9+tguhdfvdyTz3+ybAWNSAdNvYeWLIMmJ2MHU44ix
-         4dhwpReREt1BFyZQA5EFUnCO1pZi8MXg+IWSfhM/GdnaaQcdtMDHluMtDcVknXRcX2
-         hZtGNEMpbBRpQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CDF67E21EE1;
-        Thu, 26 Jan 2023 09:30:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 26 Jan 2023 04:32:00 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E973613DFF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:31:58 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id q5so1158242wrv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:31:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=b6SEUgOOLVttkjjyygG5mdkiQxsZy5JbV8mD91QaKQE=;
+        b=QP6ZJaMSEwt3iT86IvkEkbU/MyVarBbGtLBV9NhNfsC02Ke2CfA9YLvM7caC0p2/pB
+         gBJckIOpkYJsCRDx0eh19/J2RQRGKU6m6J9218NUX9Y4UXzmymgkPImQ+QpGc0t2qfPX
+         Qqfa8bski53LX9/fzwOCPyqgxinPQ59WWCFTTEtbdaF87ITslN1RDsF0Cd5SSJ2p5rao
+         RmtRxXX5fifr3psVVGnPkGEMdB3nAbEpLBGjMxtpHtJ3X48k7aIc4zrPEn5whpAuQ3YN
+         Utbwz1gHkUEJtDJ/9WBHvjjinoJpyOwdruaXCwjK+/YOiOEM+O86bI+CzZkzQmaWLgPg
+         yIwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b6SEUgOOLVttkjjyygG5mdkiQxsZy5JbV8mD91QaKQE=;
+        b=Kjx09sqM+5VE6/g4Sib/4YVQE/ziox3D3c1HoNQw8fElYV2Mb3yHi5/JKcKRmdKs67
+         5qk5mc6r+zOdlbywpKOY+kimb25BLw4oQBSoAiQ9hgP1tD0Svu1rNDMbojHTKbkc2kER
+         Z0NJJHDl3DylPSOwLbYMphHzH86YvW+FGgvjg+NhHPsY77zCbqLs0nv8HXZuV9sAM8W3
+         zjSAyXy77CSDBjctQJn7JMtsbBQtDQNWLibUbojEoVhJXm1i5jwhtomHjT4DoZNfB7sz
+         GEvk5j08o0zHIQOy6uz2SXDUpUCLeLwPZ2/OAqS4LBtVVg4mbh0O9ial8R6r6YJeieWD
+         1uxg==
+X-Gm-Message-State: AFqh2kr9bCF7t7og2y8OEExcbD52Tgnk5qpUQOOwEvLojxNceSwZ7siF
+        CK0JGqJlKtmTJrBzoxnIK+KWBg==
+X-Google-Smtp-Source: AMrXdXu7j8rVDCIiqdsIyxSIbSHnAzH5HwyI7HwoZdj65P+j8DAIwfYwY/edM2IqHVLIM4GnY9EMuw==
+X-Received: by 2002:adf:e109:0:b0:2bd:de40:21f9 with SMTP id t9-20020adfe109000000b002bdde4021f9mr26538982wrz.61.1674725517439;
+        Thu, 26 Jan 2023 01:31:57 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id e4-20020adfef04000000b002bded7da2b8sm754023wro.102.2023.01.26.01.31.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 01:31:57 -0800 (PST)
+Message-ID: <febd59ed-ff7b-ffc4-5568-d856703c9123@linaro.org>
+Date:   Thu, 26 Jan 2023 10:31:55 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/8] Adding Sparx5 IS0 VCAP support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167472541783.8706.4708423989079576378.git-patchwork-notify@kernel.org>
-Date:   Thu, 26 Jan 2023 09:30:17 +0000
-References: <20230124104511.293938-1-steen.hegelund@microchip.com>
-In-Reply-To: <20230124104511.293938-1-steen.hegelund@microchip.com>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, UNGLinuxDriver@microchip.com,
-        rdunlap@infradead.org, casper.casan@gmail.com,
-        rmk+kernel@armlinux.org.uk, wanjiabing@vivo.com, nhuck@google.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Steen.Hegelund@microchip.com,
-        daniel.machon@microchip.com, horatiu.vultur@microchip.com,
-        lars.povlsen@microchip.com, error27@gmail.com, michael@walle.cc
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 2/2] clk: qcom: restrict drivers per ARM/ARM64
+To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230123094925.54824-1-krzysztof.kozlowski@linaro.org>
+ <20230123094925.54824-2-krzysztof.kozlowski@linaro.org>
+ <7ddf5c74de84c5dc291996423cb1eb46.sboyd@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7ddf5c74de84c5dc291996423cb1eb46.sboyd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,42 +79,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Tue, 24 Jan 2023 11:45:03 +0100 you wrote:
-> This provides the Ingress Stage 0 (IS0) VCAP (Versatile Content-Aware
-> Processor) support for the Sparx5 platform.
+On 25/01/2023 21:44, Stephen Boyd wrote:
+> Quoting Krzysztof Kozlowski (2023-01-23 01:49:25)
+>> There is no point to allow selecting pin-controller drivers for Qualcomm
 > 
-> The IS0 VCAP (also known in the datasheet as CLM) is a classifier VCAP that
-> mainly extracts frame information to metadata that follows the frame in the
-> Sparx5 processing flow all the way to the egress port.
+> pin controllers?
+
+Copy-paste, I'll fix it.
+
 > 
-> [...]
+>> ARMv7 SoCs when building ARM64 kernel, and vice versa.  This makes
+>> kernel configuration more difficult as many do not remember the Qualcomm
+>> SoCs model names/numbers.  There won't be a single image for ARMv7 and
+>> ARMv8/9 SoCs, so no features/options are lost.
+> 
+> Are the drivers used in arm32 emulation mode on these SoCs? I recall
+> there are some SoCs they run with the arm architecture.
 
-Here is the summary with links:
-  - [net-next,v2,1/8] net: microchip: sparx5: Add IS0 VCAP model and updated KUNIT VCAP model
-    https://git.kernel.org/netdev/net-next/c/f274a659fb08
-  - [net-next,v2,2/8] net: microchip: sparx5: Add IS0 VCAP keyset configuration for Sparx5
-    https://git.kernel.org/netdev/net-next/c/545609fd4e7f
-  - [net-next,v2,3/8] net: microchip: sparx5: Add actionset type id information to rule
-    https://git.kernel.org/netdev/net-next/c/7306fcd17c0c
-  - [net-next,v2,4/8] net: microchip: sparx5: Add TC support for IS0 VCAP
-    https://git.kernel.org/netdev/net-next/c/542e6e2c20e5
-  - [net-next,v2,5/8] net: microchip: sparx5: Add TC filter chaining support for IS0 and IS2 VCAPs
-    https://git.kernel.org/netdev/net-next/c/88bd9ea70b2e
-  - [net-next,v2,6/8] net: microchip: sparx5: Add automatic selection of VCAP rule actionset
-    https://git.kernel.org/netdev/net-next/c/81e164c4aec5
-  - [net-next,v2,7/8] net: microchip: sparx5: Add support for IS0 VCAP ethernet protocol types
-    https://git.kernel.org/netdev/net-next/c/63e3564507ea
-  - [net-next,v2,8/8] net: microchip: sparx5: Add support for IS0 VCAP CVLAN TC keys
-    https://git.kernel.org/netdev/net-next/c/52df82cc9199
+I did not add it to the few SoCs which have upstream DTS in ARM and
+ARM64. I added only to the ones which are in one specific folder. Also
+my patch does not affect defconfigs (qcom_defconfig and arm64/defconfig).
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Whether downstream could be affected, I do not know. Anyway, what's
+downstream it's the downstream's problem...
 
+
+Best regards,
+Krzysztof
 
