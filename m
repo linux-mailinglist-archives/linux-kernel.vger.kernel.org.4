@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974C867D47F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E52F467D484
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbjAZSmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:42:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S229823AbjAZSmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjAZSmc (ORCPT
+        with ESMTP id S230019AbjAZSmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:42:32 -0500
+        Thu, 26 Jan 2023 13:42:33 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B077366A7;
-        Thu, 26 Jan 2023 10:42:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E4E402D8;
+        Thu, 26 Jan 2023 10:42:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674758551; x=1706294551;
+  t=1674758552; x=1706294552;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bsHRrFSHNHwYzutnGoCpp7L6CsbI7cB3D9T+kZSrwWU=;
-  b=mfHqfGaDmMC6NCYo4PSX4ZkLr/x0RR7UEKkKm100M2cPF3Ntw28aYE9Y
-   JBBpEAK9eVXQ25qjcYZnXhtv6jxytQNn7zUxaQKAuanYulHk8hwaqNfb4
-   Brrbn+gt7uYQLXe/zzxDcnF77ovxsCi7vstuv9VMQknMr5k3wr09Wc/m4
-   iD10aQ95XrgcANut7vD1Q+RY3MPxFi+i3lgcm6GMzQxXuR+ChS/1I/py8
-   EnhLx6LTSa1ifWhKdsjN/5Ylmq0fsiUYBQkWUAkXw5phHLTYyenhRdOsd
-   zf0Y2sZLmPLXnV6xB9KCtI/XVFVJbcyszsgdBvaO1qV3+B20jqKRqLVFP
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="354203330"
+  bh=sfw55e9pOISjtn87W0zcDQDfivg/FZE8hQOsm+yl2hY=;
+  b=TDv94L+z2Z7d5rlAohU44bWNGIfKDhy0ZHcIxF2eo35NDF1AButwlqSb
+   rxOACzKAQbcVJuxNrnGZopohLB2SGb9l8vaKy6O4Je5FhBWeC893Q+KwG
+   9SNKbDKSvGWOL/hJTR6efFf//Dgdr2NjPzN3lbXyS2/25MDQB+M8QiGiV
+   R1rlS7s/8OaNQlbX4Kj2zi+BTl1Tl/25WPwAmEAVaQQPC3BDBaj9JExed
+   U4HDVEIPmLdN21L76PvS9xAk6MkwLJA79YS1fXGuOqtTtGvymP9w16PD4
+   uKlQ44we40M4ptYKseRgXQ0I7iHVP2/P8xBf8htkFhmw/ROdJhc505rd3
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="354203341"
 X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="354203330"
+   d="scan'208";a="354203341"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 10:42:06 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="991745442"
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="991745445"
 X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
-   d="scan'208";a="991745442"
+   d="scan'208";a="991745445"
 Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
   by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 10:42:05 -0800
 From:   Tony Luck <tony.luck@intel.com>
@@ -49,9 +49,9 @@ Cc:     Shaopeng Tan <tan.shaopeng@fujitsu.com>,
         Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, patches@lists.linux.dev,
         Tony Luck <tony.luck@intel.com>
-Subject: [PATCH 2/7] x86/resctrl: Remove hard code of RDT_RESOURCE_L3 in monitor.c
-Date:   Thu, 26 Jan 2023 10:41:52 -0800
-Message-Id: <20230126184157.27626-3-tony.luck@intel.com>
+Subject: [PATCH 3/7] x86/resctrl: Add a new node-scoped resource to rdt_resources_all[]
+Date:   Thu, 26 Jan 2023 10:41:53 -0800
+Message-Id: <20230126184157.27626-4-tony.luck@intel.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230126184157.27626-1-tony.luck@intel.com>
 References: <20230126184157.27626-1-tony.luck@intel.com>
@@ -67,92 +67,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Scope of monitoring may be scoped at L3 cache granularity (legacy) or
-at the node level (systems with Sub NUMA Cluster enabled).
+Add a placeholder in the array of struct rdt_hw_resource to be used
+for event monitoring of systems with Sub-NUMA Cluster enabled.
 
-Save the struct rdt_resource pointer that was used to initialize
-the monitor sections of code and use that value instead of the
-hard-coded RDT_RESOURCE_L3.
-
-No functional change.
+Update get_domain_id() to handle SCOPE_NODE.
 
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- arch/x86/kernel/cpu/resctrl/monitor.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ arch/x86/kernel/cpu/resctrl/internal.h |  2 ++
+ arch/x86/kernel/cpu/resctrl/core.c     | 12 ++++++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index 77538abeb72a..d05bbd4f6b2d 100644
---- a/arch/x86/kernel/cpu/resctrl/monitor.c
-+++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -30,6 +30,8 @@ struct rmid_entry {
- 	struct list_head		list;
+diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+index 15cea517efaa..39a62babd60b 100644
+--- a/arch/x86/kernel/cpu/resctrl/internal.h
++++ b/arch/x86/kernel/cpu/resctrl/internal.h
+@@ -409,12 +409,14 @@ enum resctrl_res_level {
+ 	RDT_RESOURCE_L3,
+ 	RDT_RESOURCE_L2,
+ 	RDT_RESOURCE_MBA,
++	RDT_RESOURCE_NODE,
+ 
+ 	/* Must be the last */
+ 	RDT_NUM_RESOURCES,
  };
  
-+static struct rdt_resource *mon_resource;
-+
- /**
-  * @rmid_free_lru    A least recently used list of free RMIDs
-  *     These RMIDs are guaranteed to have an occupancy less than the
-@@ -251,7 +253,7 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
-  */
- void __check_limbo(struct rdt_domain *d, bool force_free)
- {
--	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
-+	struct rdt_resource *r = mon_resource;
- 	struct rmid_entry *entry;
- 	u32 crmid = 1, nrmid;
- 	bool rmid_dirty;
-@@ -316,7 +318,7 @@ int alloc_rmid(void)
+ enum resctrl_scope {
++	SCOPE_NODE,
+ 	SCOPE_L2_CACHE = 2,
+ 	SCOPE_L3_CACHE = 3
+ };
+diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+index 6914232acf84..19be6fe42ef3 100644
+--- a/arch/x86/kernel/cpu/resctrl/core.c
++++ b/arch/x86/kernel/cpu/resctrl/core.c
+@@ -100,6 +100,16 @@ struct rdt_hw_resource rdt_resources_all[] = {
+ 			.fflags			= RFTYPE_RES_MB,
+ 		},
+ 	},
++	[RDT_RESOURCE_NODE] =
++	{
++		.r_resctrl = {
++			.rid			= RDT_RESOURCE_NODE,
++			.name			= "L3",
++			.scope			= SCOPE_NODE,
++			.domains		= domain_init(RDT_RESOURCE_NODE),
++			.fflags			= RFTYPE_RES_MB,
++		},
++	},
+ };
  
- static void add_rmid_to_limbo(struct rmid_entry *entry)
- {
--	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
-+	struct rdt_resource *r = mon_resource;
- 	struct rdt_domain *d;
- 	int cpu, err;
- 	u64 val = 0;
-@@ -633,7 +635,7 @@ void cqm_handle_limbo(struct work_struct *work)
- 
- 	mutex_lock(&rdtgroup_mutex);
- 
--	r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
-+	r = mon_resource;
- 	d = container_of(work, struct rdt_domain, cqm_limbo.work);
- 
- 	__check_limbo(d, false);
-@@ -669,7 +671,7 @@ void mbm_handle_overflow(struct work_struct *work)
- 	if (!static_branch_likely(&rdt_mon_enable_key))
- 		goto out_unlock;
- 
--	r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
-+	r = mon_resource;
- 	d = container_of(work, struct rdt_domain, mbm_over.work);
- 
- 	list_for_each_entry(prgrp, &rdt_all_groups, rdtgroup_list) {
-@@ -747,9 +749,11 @@ static struct mon_evt mbm_local_event = {
  /*
-  * Initialize the event list for the resource.
-  *
-- * Note that MBM events are also part of RDT_RESOURCE_L3 resource
-+ * Note that MBM events can either be part of RDT_RESOURCE_L3 resource
-  * because as per the SDM the total and local memory bandwidth
-- * are enumerated as part of L3 monitoring.
-+ * are enumerated as part of L3 monitoring, or they may be per NUMA
-+ * node on systems with sub-NUMA cluster enabled and are then in the
-+ * RDT_RESOURCE_NODE resource.
-  */
- static void l3_mon_evt_init(struct rdt_resource *r)
+@@ -464,6 +474,8 @@ static int arch_domain_mbm_alloc(u32 num_rmid, struct rdt_hw_domain *hw_dom)
+ 
+ static int get_domain_id(int cpu, enum resctrl_scope scope)
  {
-@@ -761,6 +765,8 @@ static void l3_mon_evt_init(struct rdt_resource *r)
- 		list_add_tail(&mbm_total_event.list, &r->evt_list);
- 	if (is_mbm_local_enabled())
- 		list_add_tail(&mbm_local_event.list, &r->evt_list);
-+
-+	mon_resource = r;
++	if (scope == SCOPE_NODE)
++		return cpu_to_node(cpu);
+ 	return get_cpu_cacheinfo_id(cpu, scope);
  }
  
- int rdt_get_mon_l3_config(struct rdt_resource *r)
 -- 
 2.39.1
 
