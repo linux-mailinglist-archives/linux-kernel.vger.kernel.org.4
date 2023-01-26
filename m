@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E73C67C187
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2577867C184
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjAZAZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 19:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
+        id S235933AbjAZAZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 19:25:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbjAZAZW (ORCPT
+        with ESMTP id S235788AbjAZAZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 25 Jan 2023 19:25:22 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D3E62D0C
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:25:19 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id rl14so1169367ejb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:25:19 -0800 (PST)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA1662D3E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:25:20 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id vw16so1035160ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:25:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=diag.uniroma1.it; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IWJPaMXoH2PrQS6MMYyiTrpadygd8fEOfJS6Z2yu7Wk=;
-        b=GVfiLyBjO/3PtwYrQ9lPdzDSU16lro04OGdbj/pvVeutN4lQQ/RlpnuTRuK1UVP2iS
-         Xc/i6ZRqCLD1KyXf3DQ5g5yQ2GnuXG3sDADkCtXL7X544EQa++Ma4S5cyS/NKUPQj3NB
-         rVBQ+Kt4N4x5cy9btk3nuMpSnkQYsB9RpZlio=
+        bh=rBEBor+gnsfUYPOUW+OLBqnWMEjDoXQsh85+8ApHEhw=;
+        b=kYwY+kVYV/Q1HAOK4nSWSqU2aS/vnszT5DoWgnuvCPJlFXba9yQLFA32M1r81JvmLW
+         k1po+3OJS2h04DoboLdK9AkYAfNIgjf6/OU6G6hwVSzXajteF2EdZ9HvGJFRvNheNsBh
+         r938rP9fDZbvnBT/zlgk1G3bNX5iZ4ZLw0/Qg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IWJPaMXoH2PrQS6MMYyiTrpadygd8fEOfJS6Z2yu7Wk=;
-        b=JYT44wOspoXJKqQ+Zn4eyeQhj+yd6GkI2wE96q1z4T1pr0l6IxBCpRcMKhpN46PG10
-         fdDb/FSMzISiL51l+AWKkU57G+Fn+iqJaJDL6xojntxAiNvBdf8XNhOix4NThsiuTdFy
-         Tv2C9/qLmC1R3vyZvlERA6k4U+qKif/qY55wcuKQs8l+QaTIyZS3NlojvIKZ9mVXgs8z
-         AFOQA9AmWYX91oTfo/DEMOrO/Z6OX9K/KQS6RqpqTKUajIDMuM+BgKQnHOvuR/tT9GKq
-         v0OQ7JPvAP8ygMWlDj9yWKjECIUOZzuwAs5SNaIQq/nh6AK2YlHODpF9bESEoGwlgnGI
-         F7/g==
-X-Gm-Message-State: AFqh2krTEc6jVWB0rEN/jlcI/nj6vA6pT2NXdCCis5MmQbcPZVYJj2J0
-        AXrt1xJaCPWLqnUqWqSpCtwsIg==
-X-Google-Smtp-Source: AMrXdXv+0BffhjLuqkEBd9lTBLw8uv8bcIerolRnD+gWDGLAHMoX4oyLDYgnS4xQpZ51+Q09mCh2Rw==
-X-Received: by 2002:a17:906:d9db:b0:86e:2c11:9bd5 with SMTP id qk27-20020a170906d9db00b0086e2c119bd5mr37329496ejb.56.1674692718215;
+        bh=rBEBor+gnsfUYPOUW+OLBqnWMEjDoXQsh85+8ApHEhw=;
+        b=n0bcBaQYgujCQcfYf5ji4U3dnHNrQozCfO+4MEMUcgRFGbUUYDJ8kfGV6zEd4pup4o
+         7dzEEEP+rn+A52/iaZNNsdwl3ps6wuHHYSeWhhiKlSA2zmZ0HH5flH9Sl7i+CVWApXX2
+         Y06S9Ylq9AAWaNZg1SE2uXyzOGKAETykB8jX9p4QFVEGUzcf1NRcWSw5vpUS0dhbAtA5
+         4v+eN8FROurlL7pck18X5fQ/ArQ+N7tdM58GgmUjvj3sedhfx+3khs86rjiHytsOJowq
+         sYW4DxdcELEUPCP9BFOdM0srgmi+0rhzz2PXVOXVyA+/+f2GA1lYIsaPrCL63ahfh9PS
+         CdJQ==
+X-Gm-Message-State: AFqh2kpSfmS2qSb18MYGPw94M6dExppj7HD/Ppk+w5VtGbuhMq9rSIBg
+        oYrTFNh5BxuDaBCEHBdUu8cWwA==
+X-Google-Smtp-Source: AMrXdXvJIC2UGnr/1hfI3axwW49AFykjf04VfF8qw+mj4LupHpC31heF7B0mpWUctTgn/O1q9rIN/A==
+X-Received: by 2002:a17:906:6c97:b0:870:34c:97cd with SMTP id s23-20020a1709066c9700b00870034c97cdmr36269656ejr.25.1674692718718;
         Wed, 25 Jan 2023 16:25:18 -0800 (PST)
 Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
-        by smtp.gmail.com with ESMTPSA id jy12-20020a170907762c00b008784e808553sm555707ejc.6.2023.01.25.16.25.17
+        by smtp.gmail.com with ESMTPSA id jy12-20020a170907762c00b008784e808553sm555707ejc.6.2023.01.25.16.25.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 16:25:17 -0800 (PST)
+        Wed, 25 Jan 2023 16:25:18 -0800 (PST)
 From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Date:   Thu, 26 Jan 2023 00:24:56 +0000
-Subject: [PATCH 4/5] HID: dualshock4_remove: manually unregister leds
+Date:   Thu, 26 Jan 2023 00:24:57 +0000
+Subject: [PATCH 5/5] HID: sony_remove: manually unregister leds
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230125-hid-unregister-leds-v1-4-9a5192dcef16@diag.uniroma1.it>
+Message-Id: <20230125-hid-unregister-leds-v1-5-9a5192dcef16@diag.uniroma1.it>
 References: <20230125-hid-unregister-leds-v1-0-9a5192dcef16@diag.uniroma1.it>
 In-Reply-To: <20230125-hid-unregister-leds-v1-0-9a5192dcef16@diag.uniroma1.it>
 To:     Jiri Kosina <jikos@kernel.org>,
@@ -71,11 +71,11 @@ Cc:     linux-leds@vger.kernel.org,
         Roderick Colenbrander <roderick@gaikai.com>,
         Pietro Borrello <borrello@diag.uniroma1.it>
 X-Mailer: b4 0.11.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1674692715; l=1198;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1674692715; l=1310;
  i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
- bh=LeHfl1tt40cP85uXQcC/duWnRACVmqzbUtWz/wcGE/A=;
- b=xsUYK5juv7Wd5lxRVyEZM0ZE5k03Jar9TWnZDsr7679SNhg6ZPP9DAsElhLipGvZoG+8NpBp9OjA
- +it8s7MyANzuraxYDILrnI0OGpiH11w71JNTPyFZts88djtiHerU
+ bh=ZOrIdJOdwJPCFoQ8po11GD9ZIwbv+SiF+0joUOhG2lc=;
+ b=yDx0s+P1ZVx5mqJlSm2mB+LHUgB4rhTcR2ZrYHpbnNZXiW2UzAypHnRsFGPsPUP2VDdK7g70wdPh
+ 6a6ui0PpAfe1uO8u0jYA4LK0oT6VyntdmYWUHPnsYRHg9jDtnQJr
 X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
  pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,35 +88,41 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Unregister the LED controller before device removal, as
-dualshock4_led_set_brightness() may schedule output_worker
+sony_led_set_brightness() may schedule sc->state_worker
 after the structure has been freed, causing a use-after-free.
 
-Fixes: 4521109a8f40 ("HID: playstation: support DualShock4 lightbar.")
+Fixes: 0a286ef27852 ("HID: sony: Add LED support for Sixaxis/Dualshock3 USB")
 Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
 ---
- drivers/hid/hid-playstation.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/hid/hid-sony.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/hid/hid-playstation.c b/drivers/hid/hid-playstation.c
-index 9e23860b7e95..6fae5a24eaad 100644
---- a/drivers/hid/hid-playstation.c
-+++ b/drivers/hid/hid-playstation.c
-@@ -2432,11 +2432,15 @@ static void dualshock4_remove(struct ps_device *ps_dev)
+diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
+index 13125997ab5e..146677c8319c 100644
+--- a/drivers/hid/hid-sony.c
++++ b/drivers/hid/hid-sony.c
+@@ -3083,6 +3083,7 @@ static int sony_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ static void sony_remove(struct hid_device *hdev)
  {
- 	struct dualshock4 *ds4 = container_of(ps_dev, struct dualshock4, base);
- 	unsigned long flags;
-+	int i;
+ 	struct sony_sc *sc = hid_get_drvdata(hdev);
++	int n;
  
- 	spin_lock_irqsave(&ds4->base.lock, flags);
- 	ds4->output_worker_initialized = false;
- 	spin_unlock_irqrestore(&ds4->base.lock, flags);
+ 	if (sc->quirks & (GHL_GUITAR_PS3WIIU | GHL_GUITAR_PS4)) {
+ 		del_timer_sync(&sc->ghl_poke_timer);
+@@ -3100,6 +3101,13 @@ static void sony_remove(struct hid_device *hdev)
+ 	if (sc->hw_version_created)
+ 		device_remove_file(&sc->hdev->dev, &dev_attr_hardware_version);
  
-+	for (i = 0; i < ARRAY_SIZE(ds4->lightbar_leds); i++)
-+		devm_led_classdev_unregister(&ps_dev->hdev->dev, &ds4->lightbar_leds[i]);
++	if (sc->quirks & SONY_LED_SUPPORT) {
++		for (n = 0; n < sc->led_count; n++) {
++			if (sc->leds[n])
++				devm_led_classdev_unregister(&hdev->dev, sc->leds[n]);
++		}
++	}
 +
- 	cancel_work_sync(&ds4->output_worker);
+ 	sony_cancel_work_sync(sc);
  
- 	if (ps_dev->hdev->product == USB_DEVICE_ID_SONY_PS4_CONTROLLER_DONGLE)
+ 	sony_remove_dev_list(sc);
 
 -- 
 2.25.1
