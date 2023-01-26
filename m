@@ -2,171 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1605867C9A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F13C67C9AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237167AbjAZLUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 06:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S236849AbjAZLVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 06:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237237AbjAZLUF (ORCPT
+        with ESMTP id S233130AbjAZLVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 06:20:05 -0500
-Received: from fx403.security-mail.net (smtpout140.security-mail.net [85.31.212.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022F128D3C
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:20:02 -0800 (PST)
+        Thu, 26 Jan 2023 06:21:20 -0500
+Received: from gentwo.de (gentwo.de [161.97.139.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B2C9013
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:21:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
+        t=1674732074; bh=9OAbb+6Iby7ioZj2GSSudmr2Eanm/bGeive3un3bnO8=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=HpMrgwHjh/rRJnbGwExJkLnSMk1A3L9738oqNYw4K/Jzj2CeLC+ZtJ8f1G568ZN3a
+         dQRbzbetlbHFUH+BpqI3NC2eGyzIqNY8rBj5fj3WwOqz7ZUm39lesHTDjYJ/v8issc
+         iXttVG0uDOIxcVIEfDAk3nGHoeIIiWFI8iO3WaVqJ2pgjnViCIXwD+qEdRajU/fZ9f
+         QXTQXng2LxWW8vWcNhDke+z+006jV+GW/nhBXT6n00K39TbRSxlhQ3g47fOns2erXC
+         pvEfaUe9OuKw4+QFbrBhVazSTqQJt0Ycqbu1tC7Cclv8QzpQIBBRaOoFrIiieI5+vO
+         NkCo3wy+Hjzhg==
+Received: by gentwo.de (Postfix, from userid 1001)
+        id A067FB0028E; Thu, 26 Jan 2023 12:21:14 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by fx403.security-mail.net (Postfix) with ESMTP id E7A925A293A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:20:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1674732001;
-        bh=OqCvIwTp55CF55aZkBqjkzrzT0JUeA+LZlEPOgMrjUs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=ItVfUK/SWpZBayLQn9djlHKarvWPtxRbO0LpCIVMyK7PXCdF2oBhm/4CN0E36dJqn
-         Dw+eu+lUqiTEdEMd0mCELfXG+QU46EsibHLGn5jb0aFfz9e/4ex6kocJBkTBGikY9u
-         CgNNWf0E4QSvqVW5rfvJqqQdL5LgNy6EYYM7SrO4=
-Received: from fx403 (localhost [127.0.0.1]) by fx403.security-mail.net
- (Postfix) with ESMTP id 953765A26D0; Thu, 26 Jan 2023 12:20:00 +0100 (CET)
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx403.security-mail.net (Postfix) with ESMTPS id 61FD45A2C93; Thu, 26 Jan
- 2023 12:19:59 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 14ABE27E0494; Thu, 26 Jan 2023
- 12:19:59 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id DF47D27E0492; Thu, 26 Jan 2023 12:19:58 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
- (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- pfciJ45Q2s0p; Thu, 26 Jan 2023 12:19:58 +0100 (CET)
-Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 54C0E27E0491; Thu, 26 Jan 2023
- 12:19:58 +0100 (CET)
-X-Virus-Scanned: E-securemail
-Secumail-id: <15758.63d261df.603f0.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu DF47D27E0492
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674731999;
- bh=WZmMAU5oDXdE8nH21Z9/oEYDB4aJcVI+BZJZRijscoE=;
- h=Date:From:To:Message-ID:MIME-Version;
- b=j1vE3RefRWU+Edbs1N0iE0tzWyYjxl/gZtHYHoLg28itdNE33MgiN2bfdUzmsCNIf
- fGvnQLCt1UYpe9OwO6IsOgMVMGeyfjhuKTk/jBo/Rj9J9XlDnsZIL2Y/krX965mtdP
- 7zbosDMpwSortwRdjow6i9u+UCMvgvCsEuTSJU/k=
-Date:   Thu, 26 Jan 2023 12:19:57 +0100
-From:   Jules Maselbas <jmaselbas@kalray.eu>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Clement Leger <clement@clement-leger.fr>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>,
-        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Alex Michon <amichon@kalray.eu>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <git@xen0n.name>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        John Garry <john.garry@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        by gentwo.de (Postfix) with ESMTP id 9B095B00137;
+        Thu, 26 Jan 2023 12:21:14 +0100 (CET)
+Date:   Thu, 26 Jan 2023 12:21:14 +0100 (CET)
+From:   Christoph Lameter <cl@gentwo.de>
+To:     George Prekas <george@enfabrica.net>
+cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-audit@redhat.com,
-        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH v2 11/31] kvx: Add atomic/locking headers
-Message-ID: <20230126111957.GG5952@tellis.lin.mbt.kalray.eu>
-References: <20230120141002.2442-1-ysionneau@kalray.eu>
- <20230120141002.2442-12-ysionneau@kalray.eu> <Y8qw2MaCJZzu3Ows@FVFF77S0Q05N>
- <20230126095720.GF5952@tellis.lin.mbt.kalray.eu>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>
+Subject: Re: [PATCH 9/9] mm: kmemleak: fix undetected leaks for page aligned
+ objects
+In-Reply-To: <20230123170419.7292-10-george@enfabrica.net>
+Message-ID: <b081dce4-46a7-c3df-30dc-e064f2515a@gentwo.de>
+References: <20230123170419.7292-1-george@enfabrica.net> <20230123170419.7292-10-george@enfabrica.net>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230126095720.GF5952@tellis.lin.mbt.kalray.eu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 10:57:20AM +0100, Jules Maselbas wrote:
-> Hi Mark,
-...
+On Mon, 23 Jan 2023, George Prekas wrote:
 
-> > > +static inline int arch_atomic_add_return(int i, atomic_t *v)
-> > > +{
-> > > +	int new, old, ret;
-> > > +
-> > > +	do {
-> > > +		old = v->counter;
-> > 
-> > Likewise, arch_atomic64_read(v) here.
-> ack, this will bt arch_atomic_read(v) here since this is not atomic64_t
-> here.
-I took a second look at this and I think we are not doing the right
-thing, we do not need to defined arch_atomic_add_return at all since
-we are including the generic atomic right after, which will define
-the macro arch_atomic_add_return as generic_atomic_add_return
+> If kmalloc returns a page aligned object, then the object has 2
+> references: the pointer returned by kmalloc and page->s_mem of the first
+> page of the object. Account for this extra reference, so that kmemleak
+> can correctly detect leaks for page aligned objects.
 
-> 
-> Thanks
-> -- Jules
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
+s_mem is a reference to the array of slab objects in a SLAB page. It is
+not referring to a particular object. s_mem allows access to the Nth
+object in a slab page.
+
+See the function index_to_obj() in slab.c
 
 
 
+static inline void  *index_to_obj(struct kmem_cache *cache,
+                                 const struct slab *slab, unsigned int idx)
+{
 
+        return slab->s_mem + cache->size * idx;
+}
