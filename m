@@ -2,176 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1731A67D8B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D212467D8B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbjAZWnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S233035AbjAZWn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbjAZWnH (ORCPT
+        with ESMTP id S232550AbjAZWnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:43:07 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9A045F6B;
-        Thu, 26 Jan 2023 14:43:04 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id k2so2579550qvd.12;
-        Thu, 26 Jan 2023 14:43:04 -0800 (PST)
+        Thu, 26 Jan 2023 17:43:53 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3F4460B1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:43:51 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id nm12-20020a17090b19cc00b0022c2155cc0bso3159414pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:43:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mQTH5iCah1FP2x9WKr5XrRV0wZBo+AefYkRVKX7uGhg=;
-        b=B3xswdfEcfO/qyMhYpZB3KsgnA7LApXU3UffOfCL8MaKK7LcmlIbnOdyyAutsttOZl
-         9XIiElrB948y+mVlkap8paUXw0Oxy6HP5KcoFsPHCcao2T4mxGNBCCoNLw1NoQpqGKOa
-         bM5vKKA4yxx4ns6mBovlBX6ysJWrf0JvpHD5kAEWrMLCmhmoueoPevWTE/SuelXPKDjB
-         jfxhCcECDPp7a7xj/rQR9CAsFEylf7j+REU0indcK1IOQynUvbUXNVyWCePjIFwOpWqr
-         /w1wZsEAChR/1KZ2Ap39jsiiYGrBeCOP6+fvHMZchQUjIBVYlZLBA+JS8HJaO2G+MZB9
-         wtxg==
+        d=telus.net; s=google;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NFmyaM0qz+rP4yApBEttqduj7Z0OhMB/DfI8H+Cxm7o=;
+        b=ToCn803vC3/2IxDu/GKQ6uEKkfLf2ohR1BjDYu1h0dj3Onrq4G1F98z67g0wI5qure
+         cybGG3OUv832mfxhdAGnSR7dBnUYoYyl/immJn2lYF4rIHeuptoGaxV8+3a4Gj3GBPH2
+         UBmo3T+2eUf+EBzbSsTCZH4WxmiaOKIIatcrWffs6f4NFML9Okq/MyoOWxhcox5B285d
+         570yYtFEo2a4zwD2PLJeiudaTFyJ3MRKPNwzBB/Z9UZyvECXEkqNn9SJu5f5BlQV/oS4
+         4YzHO+9nfo3JRqRw9p9ruu2O67PxCpQyzIk2j68wlkwHs18dUOLF9JIPdWmEg9Rsz1Lg
+         1o6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mQTH5iCah1FP2x9WKr5XrRV0wZBo+AefYkRVKX7uGhg=;
-        b=y3WefQZNP0YvfHRhoTvcN0tZ3S7aC+jVYhLGNu4Vx0wXuetsjjIpJ8CRYlDfcE9TQD
-         ara9teFOZguUVebaMu9iLY9NRr2eDA3vjxzhoE518SprkqDv4CHjKifpFXe7WG8tuSeG
-         7pzQiVEFd6NGv0zeZK75LI/MFQSK6w4laAjwPCfYL4/X+p64021n7zaEBdpeNfSkljXn
-         F8ZOgnNsXvzPFIkXeaHQtQ0ZvkMg9cfw7YNrQUPplyDgTS+Krt1l0HFChsiu1CpSfiuX
-         maN4mKawBVsAdgS6NTxuu9O61R7MjEnbNJpvNTpqlbRykUO8e5ABr5ypkqBGaRzfhXFy
-         3IbQ==
-X-Gm-Message-State: AO0yUKULKavljxVSQlDz0JDFx5eiVY/wzATQ+5O3nRNluG1WcOPO3CEW
-        u/FN6ToIejlM9bFCgZkQh3D/es09JZjy/39tdYQ=
-X-Google-Smtp-Source: AK7set/GP31tlQzIKhQe2uNsROk0VfM6oJ5yONHSQEvGrN3cwpCTVJnp1Jbol4KbNXyYIqaJ4f/8n4AtcRVW31Bpixg=
-X-Received: by 2002:ad4:4b68:0:b0:537:6e55:eeb7 with SMTP id
- m8-20020ad44b68000000b005376e55eeb7mr613764qvx.66.1674772983589; Thu, 26 Jan
- 2023 14:43:03 -0800 (PST)
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NFmyaM0qz+rP4yApBEttqduj7Z0OhMB/DfI8H+Cxm7o=;
+        b=Ht0Ogt7NnAhCvmNKxoUO+LDMZ4df4hdANLBm6gz/Ehgapdt6iVbllAotOyaslWrON0
+         30CVR/LP5uXPmEiis6h8OW0ydEfXxswmyaWua3pxCb+94xEdrV1TCke2mFsdywERUSf6
+         h8oPoupc57r+wg302acofjXHEGbN6HgYwsIONNQS6+agWmpZe29T/VlSZ0+76hSgP+YC
+         hnCoEG3a1yPZYzkaMru/yzsGSsWhlOE2bguvSq6fE2P01QBwSo1qxO2WbnN5NK6/HvG9
+         B93zJ7MNIMDgoWLwWzkd1mrABOHoRuINaROtZCps1WsWKqApFH8obak+vGZwLt62h9R5
+         qz0g==
+X-Gm-Message-State: AFqh2kqMJqe5aTjmwmiLrIGCYHApwoVvuqRFMePGg+MWFzhH3MuzW7Ir
+        DeWYiVGxT2kMiJHNvjP6sw5nHA==
+X-Google-Smtp-Source: AMrXdXuTdeV/8t6XkbnhsD07G5vLYy6Ac3Q2DyKs0AFTVHK8sWOYASSvfvHGsHkc+/vbp9e+OsjJww==
+X-Received: by 2002:a05:6a20:3d09:b0:b8:6fe8:5ed7 with SMTP id y9-20020a056a203d0900b000b86fe85ed7mr53553747pzi.44.1674773031010;
+        Thu, 26 Jan 2023 14:43:51 -0800 (PST)
+Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
+        by smtp.gmail.com with ESMTPSA id y15-20020a056a001c8f00b0059260f01115sm165090pfw.76.2023.01.26.14.43.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 26 Jan 2023 14:43:50 -0800 (PST)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Shuah Khan'" <skhan@linuxfoundation.org>,
+        "'Huang Rui'" <ray.huang@amd.com>, <li.meng@amd.com>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "Doug Smythies" <dsmythies@telus.net>, <sedat.dilek@gmail.com>
+References: <001201d92c93$98c8a040$ca59e0c0$@telus.net> <000601d92db7$39e9d0b0$adbd7210$@telus.net> <c38ba6b9-b748-cf84-92bd-d29211b10f24@linuxfoundation.org>
+In-Reply-To: <c38ba6b9-b748-cf84-92bd-d29211b10f24@linuxfoundation.org>
+Subject: RE: [PATCH v2] selftests: amd-pstate: Don't delete source files via Makefile
+Date:   Thu, 26 Jan 2023 14:43:53 -0800
+Message-ID: <008501d931d7$aaba8360$002f8a20$@telus.net>
 MIME-Version: 1.0
-References: <CABXGCsN+BcaGO0+0bJszDPvA=5JF_bOPfXC=OLzMzsXY2M8hyQ@mail.gmail.com>
- <20220726164250.GE13489@twin.jikos.cz> <CABXGCsN1rzCoYiB-vN5grzsMdvgm1qv2jnWn0enXq5R-wke8Eg@mail.gmail.com>
- <20230125171517.GV11562@twin.jikos.cz> <CABXGCsOD7jVGYkFFG-nM9BgNq_7c16yU08EBfaUc6+iNsX338g@mail.gmail.com>
- <Y9K6m5USnON/19GT@boqun-archlinux>
-In-Reply-To: <Y9K6m5USnON/19GT@boqun-archlinux>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Fri, 27 Jan 2023 03:42:52 +0500
-Message-ID: <CABXGCsMD6nAPpF34c6oMK47kHUQqADQPUCWrxyY7WFiKi1qPNg@mail.gmail.com>
-Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     dsterba@suse.cz, Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Chris Murphy <lists@colorremedies.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQGd7wYRnyVvksQxjZQjWj1dK3j3EwMDsqvcAhOVwtSu/xNR8A==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 10:39 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+On 2023.01.25 09:03 Shuah Khan wrote:
+> On 1/21/23 09:41, Doug Smythies wrote:
+>> Revert the portion of a recent Makefile change that incorrectly
+>> deletes source files when doing "make clean".
+>> 
+>> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+>> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+>> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+>> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+>> Acked-by: Huang Rui <ray.huang@amd.com>
+>> Signed-off-by: Doug Smythies <dsmythies@telus.net>
+>> ---
+>> v2: fix address list.
+>> ---
+>>   tools/testing/selftests/amd-pstate/Makefile | 5 -----
+>>   1 file changed, 5 deletions(-)
+>> 
+>> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+>> index 5f195ee756d6..5fd1424db37d 100644
+>> --- a/tools/testing/selftests/amd-pstate/Makefile
+>> +++ b/tools/testing/selftests/amd-pstate/Makefile
+>> @@ -7,11 +7,6 @@ all:
+>>   uname_M := $(shell uname -m 2>/dev/null || echo not)
+>>   ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+>> 
+>> -ifeq (x86,$(ARCH))
+>> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+>> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+>> -endif
+>> -
 >
-> [Cc lock folks]
->
-> On Thu, Jan 26, 2023 at 02:47:42PM +0500, Mikhail Gavrilov wrote:
-> > On Wed, Jan 25, 2023 at 10:21 PM David Sterba <dsterba@suse.cz> wrote:
-> > >
-> > > On Wed, Jan 25, 2023 at 01:27:48AM +0500, Mikhail Gavrilov wrote:
-> > > > On Tue, Jul 26, 2022 at 9:47 PM David Sterba <dsterba@suse.cz> wrot=
-e:
-> > > > >
-> > > > > On Tue, Jul 26, 2022 at 05:32:54PM +0500, Mikhail Gavrilov wrote:
-> > > > > > Hi guys.
-> > > > > > Always with intensive writing on a btrfs volume, the message "B=
-UG:
-> > > > > > MAX_LOCKDEP_CHAIN_HLOCKS too low!" appears in the kernel logs.
-> > > > >
-> > > > > Increase the config value of LOCKDEP_CHAINS_BITS, default is 16, =
-18
-> > > > > tends to work.
-> > > >
-> > > > Hi,
-> > > > Today I was able to get the message "BUG: MAX_LOCKDEP_CHAIN_HLOCKS =
-too
-> > > > low!" again even with LOCKDEP_CHAINS_BITS=3D18 and kernel 6.2-rc5.
-> > > >
-> > > > =E2=9D=AF cat /boot/config-`uname -r` | grep LOCKDEP_CHAINS_BITS
-> > > > CONFIG_LOCKDEP_CHAINS_BITS=3D18
-> > > >
-> > > > [88685.088099] BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
-> > > > [88685.088124] turning off the locking correctness validator.
-> > > > [88685.088133] Please attach the output of /proc/lock_stat to the b=
-ug report
-> > > > [88685.088142] CPU: 14 PID: 1749746 Comm: mv Tainted: G        W   =
- L
-> > > >   -------  ---  6.2.0-0.rc5.20230123git2475bf0250de.38.fc38.x86_64 =
-#1
-> > > > [88685.088154] Hardware name: System manufacturer System Product
-> > > > Name/ROG STRIX X570-I GAMING, BIOS 4408 10/28/2022
-> > > >
-> > > > What's next? Increase this value to 19?
-> > >
-> > > Yes, though increasing the value is a workaround so you may see the
-> > > warning again.
-> >
-> > Is there any sense in this WARNING if we would ignore it and every
-> > time increase the threshold value?
->
-> Lockdep uses static allocated array to track lock holdings chains to
-> avoid dynmaic memory allocation in its own code. So if you see the
-> warning it means your test has more combination of lock holdings than
-> the array can record. In other words, you reach the resource limitation,
-> and in that sense it makes sense to just ignore it and increase the
-> value: you want to give lockdep enough resource to work, right?
+> This looks good - Do you need these files to run this test and if so
+> do these need to installed when the test is run on a test system?
 
-It is needed for correct working btrfs. David, am I right?
+I do not know.
+It is a question for the AMD people.
 
->
-> > May Be set 99 right away? Or remove such a check condition?
->
-> That requires having 2^99 * 5 * sizeof(u16) memory for lock holding
-> chains array..
->
-> However, a few other options we can try in lockdep are:
->
-> *       warn but not turn off the lockdep: the lock holding chain is
->         only a cache for what lock holding combination lockdep has ever
->         see, we also record the dependency in the graph. Without the
->         lock holding chain, lockdep can still work but just slower.
->
-> *       allow dynmaic memory allocation in lockdep: I think this might
->         be OK since we have lockdep_recursion to avoid lockdep code ->
->         mm code -> lockdep code -> mm code ... deadlock. But maybe I'm
->         missing something. And even we allow it, the use of memory
->         doesn't change, you will still need that amout of memory to
->         track lock holding chains.
->
-> I'm not sure whether these options are better than just increasing the
-> number, maybe to unblock your ASAP, you can try make it 30 and make sure
-> you have large enough memory to test.
+> Now applied to linux-kselftest fixes. I will send this up for the next
+> rc.
 
-About just to increase the LOCKDEP_CHAINS_BITS by 1. Where should this
-be done? In vanilla kernel on kernel.org? In a specific distribution?
-or the user must rebuild the kernel himself? Maybe increase
-LOCKDEP_CHAINS_BITS by 1 is most reliable solution, but it difficult
-to distribute to end users because the meaning of using packaged
-distributions is lost (user should change LOCKDEP_CHAINS_BITS in
-config and rebuild the kernel by yourself).
+Thank you
+... Doug
 
-It would be great if the chosen value would simply work always
-everywhere. 30? ok! But as I understand, btrfs does not have any
-guarantees for this. David, am I right?
 
-Anyway, thank you for keeping the conversation going.
-
---=20
-Best Regards,
-Mike Gavrilov.
