@@ -2,108 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EC067C75D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC05B67C765
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236920AbjAZJcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 04:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
+        id S236890AbjAZJdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 04:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236790AbjAZJcA (ORCPT
+        with ESMTP id S236963AbjAZJc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 04:32:00 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E973613DFF
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:31:58 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id q5so1158242wrv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:31:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=b6SEUgOOLVttkjjyygG5mdkiQxsZy5JbV8mD91QaKQE=;
-        b=QP6ZJaMSEwt3iT86IvkEkbU/MyVarBbGtLBV9NhNfsC02Ke2CfA9YLvM7caC0p2/pB
-         gBJckIOpkYJsCRDx0eh19/J2RQRGKU6m6J9218NUX9Y4UXzmymgkPImQ+QpGc0t2qfPX
-         Qqfa8bski53LX9/fzwOCPyqgxinPQ59WWCFTTEtbdaF87ITslN1RDsF0Cd5SSJ2p5rao
-         RmtRxXX5fifr3psVVGnPkGEMdB3nAbEpLBGjMxtpHtJ3X48k7aIc4zrPEn5whpAuQ3YN
-         Utbwz1gHkUEJtDJ/9WBHvjjinoJpyOwdruaXCwjK+/YOiOEM+O86bI+CzZkzQmaWLgPg
-         yIwQ==
+        Thu, 26 Jan 2023 04:32:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E768B13DFF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:32:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674725530;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wwdoVdvZ1FxySXHtS/y2n7jjp83gxbEJIMQ/l72KDiI=;
+        b=iVtlOVJHJ+phV5pf989dn5C3e5xfbXeZFsoOIBVNwh7shkOKBypNI2RnvRNiSFqBlE4qDy
+        bwZX+Qt9+H3PIjsrYIlUIJMMVFo0Y1oUrjrOpndBA8Z+Ehhz/1CvYn6aMFJmg2AITnLiWT
+        m1GHSwOHsrnUgZ8SkINGlZNjSeKyDf4=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-424-1JJpNODOPu2Ij4Ng1lSB4A-1; Thu, 26 Jan 2023 04:32:08 -0500
+X-MC-Unique: 1JJpNODOPu2Ij4Ng1lSB4A-1
+Received: by mail-wr1-f70.google.com with SMTP id q18-20020adff512000000b002bfc49c299dso160960wro.5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:32:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b6SEUgOOLVttkjjyygG5mdkiQxsZy5JbV8mD91QaKQE=;
-        b=Kjx09sqM+5VE6/g4Sib/4YVQE/ziox3D3c1HoNQw8fElYV2Mb3yHi5/JKcKRmdKs67
-         5qk5mc6r+zOdlbywpKOY+kimb25BLw4oQBSoAiQ9hgP1tD0Svu1rNDMbojHTKbkc2kER
-         Z0NJJHDl3DylPSOwLbYMphHzH86YvW+FGgvjg+NhHPsY77zCbqLs0nv8HXZuV9sAM8W3
-         zjSAyXy77CSDBjctQJn7JMtsbBQtDQNWLibUbojEoVhJXm1i5jwhtomHjT4DoZNfB7sz
-         GEvk5j08o0zHIQOy6uz2SXDUpUCLeLwPZ2/OAqS4LBtVVg4mbh0O9ial8R6r6YJeieWD
-         1uxg==
-X-Gm-Message-State: AFqh2kr9bCF7t7og2y8OEExcbD52Tgnk5qpUQOOwEvLojxNceSwZ7siF
-        CK0JGqJlKtmTJrBzoxnIK+KWBg==
-X-Google-Smtp-Source: AMrXdXu7j8rVDCIiqdsIyxSIbSHnAzH5HwyI7HwoZdj65P+j8DAIwfYwY/edM2IqHVLIM4GnY9EMuw==
-X-Received: by 2002:adf:e109:0:b0:2bd:de40:21f9 with SMTP id t9-20020adfe109000000b002bdde4021f9mr26538982wrz.61.1674725517439;
-        Thu, 26 Jan 2023 01:31:57 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id e4-20020adfef04000000b002bded7da2b8sm754023wro.102.2023.01.26.01.31.56
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wwdoVdvZ1FxySXHtS/y2n7jjp83gxbEJIMQ/l72KDiI=;
+        b=b6zxDNKnreYO3SfD+QG2s7TJrCKvRippIhxE+MEjcU6Wm2LYcLOpWFTBzfExPFOplx
+         PR5r1rrAEQ8AUGm2yTb1jMBmeDVH+mat+O3t9+hONXssIjjaFI0xTYOrap2wFOp/uc9N
+         SU5PkTzaeP21rk7ZMlBQlWTXBGgN02owQzksZLWPIz+AmkRRD9+5mQNXUe94euT/jvuW
+         FfIjNVMrQl25O75VRzGGxFVJBN4HNxJMZPfDsKrymMb8tN86W3KYPYovIP9KwbY+F0dx
+         Hp4cn2rULiMcKJTiCLb9TNhIx18NO+5MOc9Lgq7BJwQhB6IrUbBrWhebw6mb5HV8qEqj
+         P3Ow==
+X-Gm-Message-State: AFqh2kpeQj11F9k2tEb6AP0fOB0OYpEZVBjt9JS2oKyi+1dq+V8bpOuE
+        kIl1ocjbeddgtClD4fnT2m0gbGjmJJ4A4x9noE6nRyJrxPTBFuSyhTEqXq2yppnKSxSInGuAtGe
+        aVj4Gz9foGTRRYYO+hl3drzWR
+X-Received: by 2002:a5d:4350:0:b0:2be:5366:8cdf with SMTP id u16-20020a5d4350000000b002be53668cdfmr19139268wrr.20.1674725527625;
+        Thu, 26 Jan 2023 01:32:07 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvuEnatbeSNJHS0IKM41wypa1ffgMRJyS1j0d/4+OLyN2ZtqLoQlAGksy5c3U4wNl1YCZjPqQ==
+X-Received: by 2002:a5d:4350:0:b0:2be:5366:8cdf with SMTP id u16-20020a5d4350000000b002be53668cdfmr19139245wrr.20.1674725527332;
+        Thu, 26 Jan 2023 01:32:07 -0800 (PST)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id l13-20020adff48d000000b002366e3f1497sm784664wro.6.2023.01.26.01.32.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 01:31:57 -0800 (PST)
-Message-ID: <febd59ed-ff7b-ffc4-5568-d856703c9123@linaro.org>
-Date:   Thu, 26 Jan 2023 10:31:55 +0100
+        Thu, 26 Jan 2023 01:32:06 -0800 (PST)
+Message-ID: <f70c9b67-5284-cd6a-7360-92a883bf9bb5@redhat.com>
+Date:   Thu, 26 Jan 2023 10:32:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 2/2] clk: qcom: restrict drivers per ARM/ARM64
-To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230123094925.54824-1-krzysztof.kozlowski@linaro.org>
- <20230123094925.54824-2-krzysztof.kozlowski@linaro.org>
- <7ddf5c74de84c5dc291996423cb1eb46.sboyd@kernel.org>
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v10 5/8] block: Replace BIO_NO_PAGE_REF with
+ BIO_PAGE_REFFED with inverted logic
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7ddf5c74de84c5dc291996423cb1eb46.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20230125210657.2335748-1-dhowells@redhat.com>
+ <20230125210657.2335748-6-dhowells@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230125210657.2335748-6-dhowells@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2023 21:44, Stephen Boyd wrote:
-> Quoting Krzysztof Kozlowski (2023-01-23 01:49:25)
->> There is no point to allow selecting pin-controller drivers for Qualcomm
+On 25.01.23 22:06, David Howells wrote:
+> From: Christoph Hellwig <hch@lst.de>
 > 
-> pin controllers?
-
-Copy-paste, I'll fix it.
-
+> Replace BIO_NO_PAGE_REF with a BIO_PAGE_REFFED flag that has the inverted
+> meaning is only set when a page reference has been acquired that needs to
+> be released by bio_release_pages().
 > 
->> ARMv7 SoCs when building ARM64 kernel, and vice versa.  This makes
->> kernel configuration more difficult as many do not remember the Qualcomm
->> SoCs model names/numbers.  There won't be a single image for ARMv7 and
->> ARMv8/9 SoCs, so no features/options are lost.
-> 
-> Are the drivers used in arm32 emulation mode on these SoCs? I recall
-> there are some SoCs they run with the arm architecture.
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Jan Kara <jack@suse.cz>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: Logan Gunthorpe <logang@deltatee.com>
+> cc: linux-block@vger.kernel.org
+> ---
 
-I did not add it to the few SoCs which have upstream DTS in ARM and
-ARM64. I added only to the ones which are in one specific folder. Also
-my patch does not affect defconfigs (qcom_defconfig and arm64/defconfig).
+Oh, and I agree with a previous comment that this patch should also hold 
+a Signed-off-by from Christoph above your Signed-off-by, if he is 
+mentioned as the author via "From:".
 
-Whether downstream could be affected, I do not know. Anyway, what's
-downstream it's the downstream's problem...
+I remember stumbling over that in submitting-patches.rst ...
 
+-- 
+Thanks,
 
-Best regards,
-Krzysztof
+David / dhildenb
 
