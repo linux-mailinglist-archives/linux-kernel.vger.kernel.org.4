@@ -2,327 +2,548 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4A067C2FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 04:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D077167C2FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 04:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjAZDA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 22:00:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
+        id S235239AbjAZDIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 22:08:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjAZDAy (ORCPT
+        with ESMTP id S229772AbjAZDIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 22:00:54 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2047.outbound.protection.outlook.com [40.107.100.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F0C5B59D;
-        Wed, 25 Jan 2023 19:00:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KLn9G3Lfr00VOyiXEfc5brWX6LQoak7FARm6ajUebUUGFYY/8INIfHpdaUjA+pwJy7+APNywkBf83v9L+stEU0WfC/cR6ORjdp9hTwfPLN1/CxpfcpV/kJbNvoRwbTnDvaEuBGWPwifwd0gax9n6VPxDe/Zm15hYL3WFX3d42h/NKdYoZZIlh6/ukJOplsDbfAUlSXFB78nses0Vko4i6DcG1vfupul34mWpQ56PRzST9TSpa6NNe6hrvG/w1/toZXeOWHe2bK0EZ3LjUPglAbygHNtnXmG2TXYLFGTzLyLel4/zY66Vq18jtQU8uKHVhXnEMhtMZ25bRpGqX2y/zQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zaN9alzCpC5KbZIB+l0mH91WgDwkYu5YErkjsxncQQE=;
- b=bKG87emfILL/2W+l1jib3FwH1qza2U7ZDKde5DVraL88vzMZHZ7R3s52hjfqxt6kk2QUBetDoZXdaEcwzdfxIt1gT4VwsDaTzuG4QhIsvSxVPWlcPLDB1nq7qCYoh3tMMS3To5ntDPKBKvZhJ7KqBhRWBG/ABXOHjCqys68xFAlztTn5KERPrPoQpjTbayNbzF5lM5sudvO7y+LCDDMtzoEKujV4FEttznHxEbC756bKzYxU+/n8kSPpTiQiGLoEkxV0KLZCv3aLPWDLZyq0f/lWyHbVxHoqZHUvl1lBarTybSqCuzsD42zWPWWlDosrhEP+XtmYyoSxp7l2YL0TtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zaN9alzCpC5KbZIB+l0mH91WgDwkYu5YErkjsxncQQE=;
- b=cTj0EagCt5L3X6v66jFdWzvrUCti0GmGzoMxWBCRoFVRzHHbSfRlxHXaMshqEmqvYxPo4BSpjFO0La3/GOo/eixs8GvWx/wcxbKzAkRJv7IXTB6L8XrdLIm7DLETrlTX31cs1RXDM95HVKKRS1YklbrNkycTlumFj6vuSdCXXT0=
-Received: from DS7PR03CA0343.namprd03.prod.outlook.com (2603:10b6:8:55::17) by
- DS0PR12MB7629.namprd12.prod.outlook.com (2603:10b6:8:13e::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.22; Thu, 26 Jan 2023 03:00:50 +0000
-Received: from DM6NAM11FT100.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:55:cafe::b2) by DS7PR03CA0343.outlook.office365.com
- (2603:10b6:8:55::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.20 via Frontend
- Transport; Thu, 26 Jan 2023 03:00:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT100.mail.protection.outlook.com (10.13.172.247) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6002.13 via Frontend Transport; Thu, 26 Jan 2023 03:00:50 +0000
-Received: from platform-dev1.pensando.io (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 25 Jan 2023 21:00:46 -0600
-From:   Brad Larson <blarson@amd.com>
-To:     <krzysztof.kozlowski@linaro.org>
-CC:     <adrian.hunter@intel.com>, <alcooperx@gmail.com>,
-        <andy.shevchenko@gmail.com>, <arnd@arndb.de>, <blarson@amd.com>,
-        <brad@pensando.io>, <brendan.higgins@linux.dev>,
-        <briannorris@chromium.org>, <brijeshkumar.singh@amd.com>,
-        <broonie@kernel.org>, <catalin.marinas@arm.com>,
-        <davidgow@google.com>, <devicetree@vger.kernel.org>,
-        <fancer.lancer@gmail.com>, <gerg@linux-m68k.org>,
-        <gsomlo@gmail.com>, <krzk@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lee.jones@linaro.org>,
-        <lee@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>,
-        <p.zabel@pengutronix.de>, <piotrs@cadence.com>,
-        <rdunlap@infradead.org>, <robh+dt@kernel.org>,
-        <samuel@sholland.org>, <skhan@linuxfoundation.org>,
-        <suravee.suthikulpanit@amd.com>, <thomas.lendacky@amd.com>,
-        <tonyhuang.sunplus@gmail.com>, <ulf.hansson@linaro.org>,
-        <vaishnav.a@ti.com>, <will@kernel.org>,
-        <yamada.masahiro@socionext.com>
-Subject: Re: [PATCH v9 06/15] dt-bindings: mfd: amd,pensando-elbasr: Add AMD Pensando System Resource chip
-Date:   Wed, 25 Jan 2023 18:59:56 -0800
-Message-ID: <20230126025956.33859-1-blarson@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <a3c4feaf-c98d-5507-11f1-3dd1129f7360@linaro.org>
-References: <a3c4feaf-c98d-5507-11f1-3dd1129f7360@linaro.org>
+        Wed, 25 Jan 2023 22:08:30 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B7064D88
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 19:08:27 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id q9so306931pgq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 19:08:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a2bAE3YZKjYEhl+E1DxTXmRfqoBsR3dCJ9jZsMFgKM0=;
+        b=MiXFTVU/ifrVpub/z1tpDThABp9zRd1MSxVemTf6Rtxocul4O6Bwxrwh7talYJBTlG
+         0JGAHSzaGR/bUnkPNlYbbqcGFSIzqj4+EjsqqgU+0tp9kfV/r/ESItmqUlD0aty4APU/
+         AbAZvU4Xshcr4mZO+7q2/mYyDXqS4550BE++A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a2bAE3YZKjYEhl+E1DxTXmRfqoBsR3dCJ9jZsMFgKM0=;
+        b=ip3q2WmflnQXbWBuzQe+ZbIC2lK2BLRhgcuJu7+QgipG6x6GCg1KqF1HqmcT3n5DdN
+         Ldwyj+lkF/psFzrB7EDcL0Jeo0To4mQXUYROoQNvwveBFQGn4yeThRTqEpljhGRISjQq
+         UISlERvp8zlbgXhpVY7SAio0+VHog7NYA0t7AUCYSyFL+KSCGDmwF7VXSHIB0sbz/YKD
+         sIO7hWWhAKABa0mVNoyTco94ZmNn4xiTBEjW5r67gNVdAGjwRjcVnImtzS4CLzLLdu0i
+         Rux1M2CC7OCgiFQ3YkLurLixvhMIYHV5IWEemicDdJFLH+M6DbfkizvwNSNo+hFrru+1
+         GerA==
+X-Gm-Message-State: AFqh2krNvScqpJJ7mnN0P3Vu9QaCtLltpLbmEnpwotZXFd6+DwruKI8Y
+        Z6O5C1eWkB1SuNklld3Ne4eAfQRbITzmr8NmvEk5
+X-Google-Smtp-Source: AMrXdXsGxFt8EYYsVicP7KH/7PB3yxoJG52JlvnPbz/eG1Oo/eWBBPAF/kuntu98MSZyX8xYs+Htsx0RISO0EoKRuHM=
+X-Received: by 2002:a63:1011:0:b0:4c7:ef33:bbe1 with SMTP id
+ f17-20020a631011000000b004c7ef33bbe1mr3426257pgl.73.1674702507153; Wed, 25
+ Jan 2023 19:08:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT100:EE_|DS0PR12MB7629:EE_
-X-MS-Office365-Filtering-Correlation-Id: 322de92f-8546-49ef-21b7-08daff4987ef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OtsOyJH3itGJHaVWnFql/OVIvXIYxTgGZP6sDxcNFgHGilyE7E6WhlBuFMMmOL6nrU+sNKdjk9kUaxBAr4plbZTCg1rrl172SB/+s88uebRLAVmSZkxV8PEYsEE8XNx9Kpq9iIXqTkkY5O2yCA/b5C62mNNqG1XuEWyld+i/AkZYxSXXYCT7hL+xK8qeDEptio2eFCe7LLi3Srw7Cg+5xlUVgzEpOK0MZRtd3vSE2cAUnfIYIjemElOFzxthnXWZwNxJnHXnLchPnB2zcFhWJpkKV5miEbs3bb5LsxGKgNHsh3Pa6W+OMieOrGSFCWr6yyALNaiEy+xpzdCPvi/gOc3DP80hdr8gP8T2L0D4VpX3BX8khTxete4BX1FxbqZrYMXvsi82jKNYEnMOwbg8aNocUS1rjeaZVvRxVCNpPJ4HKPxZznCh2rjkcXim7KgRVt+92cYVgXQH8FM2qnS1j7diQbMFN/a/B3z6hXBUhm+c5UgRgfDbaKCp/QtYhbOXXmdaACkE2jTS0nlwtafU9pIh6fZki6f+xvBBejjLlP59YpAfaDYNG9t5Oq7q0hlkMMaYGqLWzV+89lVJJRHJFw3P8TmRP5eVXpv1VKW0c9EUwyFBEIB3gCh+VZpAGI3nSoyOMvVGUYAuVLjyZIU0xjBxC+8G92NxIF26y9t96ggv7jsS3mYa/8qD2YcmIbAcDpHCKGqiwT/KK8fcty9VsehG2idyqtqGTBjyi/9l/RV9WNrJZQlQf1Auf0iPvg01rIYOCR6ghBZ2WNBFmu8luuYrCLNQjX6fIz67GPDnFyc=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(39860400002)(396003)(451199018)(40470700004)(46966006)(36840700001)(54906003)(316002)(41300700001)(81166007)(356005)(8676002)(70206006)(6916009)(4326008)(70586007)(40460700003)(7416002)(5660300002)(7406005)(8936002)(36756003)(40480700001)(2906002)(36860700001)(82740400003)(1076003)(6666004)(26005)(186003)(16526019)(966005)(478600001)(426003)(83380400001)(47076005)(336012)(82310400005)(2616005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 03:00:50.3856
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 322de92f-8546-49ef-21b7-08daff4987ef
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT100.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7629
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221215170046.2010255-1-atishp@rivosinc.com> <20221215170046.2010255-12-atishp@rivosinc.com>
+ <20230113120854.axtnxmykmwh2ixeb@orel>
+In-Reply-To: <20230113120854.axtnxmykmwh2ixeb@orel>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Wed, 25 Jan 2023 19:08:15 -0800
+Message-ID: <CAOnJCUJcew7vqJOhKk__yLmxkfZ1tiiZzL4RraSmc6UBnicMCQ@mail.gmail.com>
+Subject: Re: [PATCH v2 11/11] RISC-V: KVM: Implement firmware events
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
+        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        Eric Lin <eric.lin@sifive.com>, Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> diff --git a/Documentation/devicetree/bindings/spi/amd,pensando-sr.yaml b/Documentation/devicetree/bindings/spi/amd,pensando-sr.yaml
->> new file mode 100644
->> index 000000000000..8504652f6e19
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/spi/amd,pensando-sr.yaml
->> @@ -0,0 +1,68 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/spi/amd,pensando-sr.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: AMD Pensando SoC Resource Controller
->> +
->> +description: |
->> +  AMD Pensando SoC Resource Controller is a set of
->> +  control/status registers accessed on four chip-selects.
->> +  This device is present in all Pensando SoC based designs.
->> +
->> +maintainers:
->> +  - Brad Larson <blarson@amd.com>
->> +
->> +properties:
->> +  compatible:
->> +    contains:
+On Fri, Jan 13, 2023 at 4:08 AM Andrew Jones <ajones@ventanamicro.com> wrote:
 >
-> That's not correct syntax. Please start from existing schema or
-> example-schema. Drop contains.
-
-Fixed, see update below.
-
->> +      enum:
->> +        - amd,pensando-sr
->> +
->> +  reg:
->> +    minItems: 1
+> On Thu, Dec 15, 2022 at 09:00:46AM -0800, Atish Patra wrote:
+> > SBI PMU extension defines a set of firmware events which can provide
+> > useful information to guests about number of SBI calls. As hypervisor
+> > implements the SBI PMU extension, these firmware events corresponds
+> > to ecall invocations between VS->HS mode. All other firmware events
+> > will always report zero if monitored as KVM doesn't implement them.
+> >
+> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > ---
+> >  arch/riscv/include/asm/kvm_vcpu_pmu.h |  16 ++++
+> >  arch/riscv/include/asm/sbi.h          |   2 +-
+> >  arch/riscv/kvm/tlb.c                  |   6 +-
+> >  arch/riscv/kvm/vcpu_pmu.c             | 105 ++++++++++++++++++++++----
+> >  arch/riscv/kvm/vcpu_sbi_replace.c     |   7 ++
+> >  5 files changed, 119 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> > index 7a9a8e6..cccc6182 100644
+> > --- a/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> > +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> > @@ -17,6 +17,14 @@
+> >  #define RISCV_KVM_MAX_FW_CTRS 32
+> >  #define RISCV_MAX_COUNTERS      64
+> >
+> > +struct kvm_fw_event {
+> > +     /* Current value of the event */
+> > +     unsigned long value;
+> > +
+> > +     /* Event monitoring status */
+> > +     bool started;
+> > +};
+> > +
+> >  /* Per virtual pmu counter data */
+> >  struct kvm_pmc {
+> >       u8 idx;
+> > @@ -25,11 +33,14 @@ struct kvm_pmc {
+> >       union sbi_pmu_ctr_info cinfo;
+> >       /* Event monitoring status */
+> >       bool started;
+> > +     /* Monitoring event ID */
+> > +     unsigned long event_idx;
+> >  };
+> >
+> >  /* PMU data structure per vcpu */
+> >  struct kvm_pmu {
+> >       struct kvm_pmc pmc[RISCV_MAX_COUNTERS];
+> > +     struct kvm_fw_event fw_event[RISCV_KVM_MAX_FW_CTRS];
+> >       /* Number of the virtual firmware counters available */
+> >       int num_fw_ctrs;
+> >       /* Number of the virtual hardware counters available */
+> > @@ -52,6 +63,7 @@ struct kvm_pmu {
+> >  { .base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
+> >  #endif
+> >
+> > +int kvm_riscv_vcpu_pmu_incr_fw(struct kvm_vcpu *vcpu, unsigned long fid);
+> >  int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
+> >                               unsigned long *val, unsigned long new_val,
+> >                               unsigned long wr_mask);
+> > @@ -81,6 +93,10 @@ struct kvm_pmu {
+> >  #define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
+> >  { .base = 0,      .count = 0, .func = NULL },
+> >
+> > +static inline int kvm_riscv_vcpu_pmu_incr_fw(struct kvm_vcpu *vcpu, unsigned long fid)
+> > +{
+> > +     return 0;
+> > +}
+> >
+> >  static inline int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+> >  {
+> > diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+> > index 2a0ef738..a192a95a 100644
+> > --- a/arch/riscv/include/asm/sbi.h
+> > +++ b/arch/riscv/include/asm/sbi.h
+> > @@ -171,7 +171,7 @@ enum sbi_pmu_fw_generic_events_t {
+> >       SBI_PMU_FW_IPI_SENT             = 6,
+> >       SBI_PMU_FW_IPI_RECVD            = 7,
+> >       SBI_PMU_FW_FENCE_I_SENT         = 8,
+> > -     SBI_PMU_FW_FENCE_I_RECVD        = 9,
+> > +     SBI_PMU_FW_FENCE_I_RCVD         = 9,
 >
-> maxItems. Which example or existing schema pointed you to use minItems?
+> This should probably be in its own patch.
 
-Should have been maxItems.  cs below is dropped and reg is used
-as discussed for the chip selects but throws a too long error, see below.
+done.
 
->> +
->> +  cs:
->> +    minItems: 1
->> +    maxItems: 4
->> +    description:
->> +      Device chip select
 >
-> Drop entire property. Isn't reg for this on SPI bus?
-
-Dropped and using reg, results in too long error for schema snps,dw-apb-ssi.yaml
-
->> +
->> +  '#reset-cells':
->> +    const: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  spi-max-frequency: true
+> >       SBI_PMU_FW_SFENCE_VMA_SENT      = 10,
+> >       SBI_PMU_FW_SFENCE_VMA_RCVD      = 11,
+> >       SBI_PMU_FW_SFENCE_VMA_ASID_SENT = 12,
+> > diff --git a/arch/riscv/kvm/tlb.c b/arch/riscv/kvm/tlb.c
+> > index 309d79b..de81920 100644
+> > --- a/arch/riscv/kvm/tlb.c
+> > +++ b/arch/riscv/kvm/tlb.c
+> > @@ -181,6 +181,7 @@ void kvm_riscv_local_tlb_sanitize(struct kvm_vcpu *vcpu)
+> >
+> >  void kvm_riscv_fence_i_process(struct kvm_vcpu *vcpu)
+> >  {
+> > +     kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_FENCE_I_RCVD);
+> >       local_flush_icache_all();
+> >  }
+> >
+> > @@ -264,15 +265,18 @@ void kvm_riscv_hfence_process(struct kvm_vcpu *vcpu)
+> >                                               d.addr, d.size, d.order);
+> >                       break;
+> >               case KVM_RISCV_HFENCE_VVMA_ASID_GVA:
+> > +                     kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_ASID_RCVD);
+> >                       kvm_riscv_local_hfence_vvma_asid_gva(
+> >                                               READ_ONCE(v->vmid), d.asid,
+> >                                               d.addr, d.size, d.order);
+> >                       break;
+> >               case KVM_RISCV_HFENCE_VVMA_ASID_ALL:
+> > +                     kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_ASID_RCVD);
+> >                       kvm_riscv_local_hfence_vvma_asid_all(
+> >                                               READ_ONCE(v->vmid), d.asid);
+> >                       break;
+> >               case KVM_RISCV_HFENCE_VVMA_GVA:
+> > +                     kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_RCVD);
+> >                       kvm_riscv_local_hfence_vvma_gva(
+> >                                               READ_ONCE(v->vmid),
+> >                                               d.addr, d.size, d.order);
+> > @@ -323,7 +327,7 @@ void kvm_riscv_fence_i(struct kvm *kvm,
+> >                      unsigned long hbase, unsigned long hmask)
+> >  {
+> >       make_xfence_request(kvm, hbase, hmask, KVM_REQ_FENCE_I,
+> > -                         KVM_REQ_FENCE_I, NULL);
+> > +                 KVM_REQ_FENCE_I, NULL);
 >
->Drop. Missing reference to spi-peripheral-props.
-
-Removed and added spi-peripheral-props
-
->> +
->> +required:
->> +  - compatible
->> +  - cs
->> +  - spi-max-frequency
->> +  - '#reset-cells'
->> +
->> +unevaluatedProperties: false
+> stray change, and whitespace was correct before
 >
-> This does not make sense on its own. It works with additional ref. When
-> you add ref to spi props, it will be fine. But without it you should use
-> additionalProperties: false.
 
-The updated binding
+Fixed.
 
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/amd,pensando-sr.yaml
-@@ -0,0 +1,68 @@
-+# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/amd,pensando-sr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: AMD Pensando SoC Resource Controller
-+
-+description: |
-+  AMD Pensando SoC Resource Controller is a set of control/status
-+  registers accessed on four chip-selects.  This device is present
-+  in all Pensando SoC based designs.
-+
-+  CS0 is a set of miscellaneous control/status registers to
-+  include reset control.  CS1/CS2 are for I2C peripherals.
-+  CS3 is to access resource controller internal storage.
-+
-+maintainers:
-+  - Brad Larson <blarson@amd.com>
-+
-+properties:
-+  compatible:
-+    const: amd,pensando-sr
-+
-+  reg:
-+    maxItems: 4
-+    minimum: 0
-+    maximum: 3
-+    description:
-+      Device chip select number
-+
-+  '#reset-cells':
-+    const: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - spi-max-frequency
-+  - '#reset-cells'
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        num-cs = <4>;
-+
-+        system-controller@0 {
-+            compatible = "amd,pensando-sr";
-+            reg = <0 1 2 3>;
-+            spi-max-frequency = <12000000>;
-+            interrupt-parent = <&porta>;
-+            interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
-+            #reset-cells = <1>;
-+        };
-+    };
-+
-+...
+> >  }
+> >
+> >  void kvm_riscv_hfence_gvma_vmid_gpa(struct kvm *kvm,
+> > diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
+> > index 21c1f0f..a64a7ae 100644
+> > --- a/arch/riscv/kvm/vcpu_pmu.c
+> > +++ b/arch/riscv/kvm/vcpu_pmu.c
+> > @@ -170,18 +170,36 @@ static int pmu_get_pmc_index(struct kvm_pmu *pmu, unsigned long eidx,
+> >       return pmu_get_programmable_pmc_index(pmu, eidx, cbase, cmask);
+> >  }
+> >
+> > +int kvm_riscv_vcpu_pmu_incr_fw(struct kvm_vcpu *vcpu, unsigned long fid)
+> > +{
+> > +     struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> > +     struct kvm_fw_event *fevent;
+> > +
+> > +     if (!kvpmu || fid >= SBI_PMU_FW_MAX)
+> > +             return -EINVAL;
+> > +
+> > +     fevent = &kvpmu->fw_event[fid];
+> > +     if (fevent->started)
+> > +             fevent->value++;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static int pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
+> >                       unsigned long *out_val)
+> >  {
+> >       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> >       struct kvm_pmc *pmc;
+> >       u64 enabled, running;
+> > +     int fevent_code;
+> >
+> >       pmc = &kvpmu->pmc[cidx];
+> > -     if (!pmc->perf_event)
+> > -             return -EINVAL;
+> >
+> > -     pmc->counter_val += perf_event_read_value(pmc->perf_event, &enabled, &running);
+> > +     if (pmc->cinfo.type == SBI_PMU_CTR_TYPE_FW) {
+> > +             fevent_code = get_event_code(pmc->event_idx);
+> > +             pmc->counter_val = kvpmu->fw_event[fevent_code].value;
+> > +     } else if (pmc->perf_event)
+> > +             pmc->counter_val += perf_event_read_value(pmc->perf_event, &enabled, &running);
+> >       *out_val = pmc->counter_val;
+> >
+> >       return 0;
+> > @@ -238,6 +256,7 @@ int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> >       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> >       int i, num_ctrs, pmc_index, sbiret = 0;
+> >       struct kvm_pmc *pmc;
+> > +     int fevent_code;
+> >
+> >       num_ctrs = kvpmu->num_fw_ctrs + kvpmu->num_hw_ctrs;
+> >       if (ctr_base + __fls(ctr_mask) >= num_ctrs) {
+> > @@ -253,7 +272,22 @@ int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> >               pmc = &kvpmu->pmc[pmc_index];
+> >               if (flag & SBI_PMU_START_FLAG_SET_INIT_VALUE)
+> >                       pmc->counter_val = ival;
+> > -             if (pmc->perf_event) {
+> > +             if (pmc->cinfo.type == SBI_PMU_CTR_TYPE_FW) {
+> > +                     fevent_code = get_event_code(pmc->event_idx);
+> > +                     if (fevent_code >= SBI_PMU_FW_MAX) {
+> > +                             sbiret = SBI_ERR_INVALID_PARAM;
+> > +                             goto out;
+> > +                     }
+> > +
+> > +                     /* Check if the counter was already started for some reason */
+> > +                     if (kvpmu->fw_event[fevent_code].started) {
+> > +                             sbiret = SBI_ERR_ALREADY_STARTED;
+> > +                             continue;
+> > +                     }
+> > +
+> > +                     kvpmu->fw_event[fevent_code].started = true;
+> > +                     kvpmu->fw_event[fevent_code].value = pmc->counter_val;
+> > +             } else if (pmc->perf_event) {
+> >                       if (unlikely(pmc->started)) {
+> >                               sbiret = SBI_ERR_ALREADY_STARTED;
+> >                               continue;
+> > @@ -281,6 +315,7 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> >       int i, num_ctrs, pmc_index, sbiret = 0;
+> >       u64 enabled, running;
+> >       struct kvm_pmc *pmc;
+> > +     int fevent_code;
+> >
+> >       num_ctrs = kvpmu->num_fw_ctrs + kvpmu->num_hw_ctrs;
+> >       if ((ctr_base + __fls(ctr_mask)) >= num_ctrs) {
+> > @@ -294,7 +329,18 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> >               if (!test_bit(pmc_index, kvpmu->pmc_in_use))
+> >                       continue;
+> >               pmc = &kvpmu->pmc[pmc_index];
+> > -             if (pmc->perf_event) {
+> > +             if (pmc->cinfo.type == SBI_PMU_CTR_TYPE_FW) {
+> > +                     fevent_code = get_event_code(pmc->event_idx);
+> > +                     if (fevent_code >= SBI_PMU_FW_MAX) {
+> > +                             sbiret = SBI_ERR_INVALID_PARAM;
+> > +                             goto out;
+> > +                     }
+> > +
+> > +                     if (!kvpmu->fw_event[fevent_code].started)
+> > +                             sbiret = SBI_ERR_ALREADY_STOPPED;
+> > +
+> > +                     kvpmu->fw_event[fevent_code].started = false;
+> > +             } else if (pmc->perf_event) {
+> >                       if (pmc->started) {
+> >                               /* Stop counting the counter */
+> >                               perf_event_disable(pmc->perf_event);
+> > @@ -307,12 +353,15 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> >                               pmc->counter_val += perf_event_read_value(pmc->perf_event,
+> >                                                                         &enabled, &running);
+> >                               pmu_release_perf_event(pmc);
+> > -                             clear_bit(pmc_index, kvpmu->pmc_in_use);
+> >                       }
+> >               } else {
+> >                       kvm_debug("Can not stop counter due to invalid confiugartion\n");
+> >                       sbiret = SBI_ERR_INVALID_PARAM;
+> >               }
+> > +             if (flag & SBI_PMU_STOP_FLAG_RESET) {
+> > +                     pmc->event_idx = SBI_PMU_EVENT_IDX_INVALID;
+> > +                     clear_bit(pmc_index, kvpmu->pmc_in_use);
+>
+> nit: I'd probably just leave clear_bit where it was and add
+>
+> if (flag & SBI_PMU_STOP_FLAG_RESET)
+>    pmc->event_idx = SBI_PMU_EVENT_IDX_INVALID;
+>
+> to the firmware arm.
+>
 
-any guidance on fixing the following?
+We have to do clear_bit for the firmware as well. That's why I moved it below
+to avoid the same code twice.
 
-$ make ARCH=arm64 dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-  LINT    Documentation/devicetree/bindings
-  CHKDT   Documentation/devicetree/bindings/processed-schema.json
-  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-  DTC_CHK arch/arm64/boot/dts/amd/elba-asic.dtb
-/home/brad/linux.v10/arch/arm64/boot/dts/amd/elba-asic.dtb: spi@2800: system-controller@0:reg: [[0], [1], [2], [3]] is too long
-	From schema: /home/brad/linux.v10/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> > +             }
+> >       }
+> >
+> >  out:
+> > @@ -329,12 +378,12 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
+> >       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> >       struct perf_event *event;
+> >       struct perf_event_attr attr;
+> > -     int num_ctrs, ctr_idx;
+> > +     int num_ctrs, ctr_idx, sbiret = 0;
+> >       u32 etype = pmu_get_perf_event_type(eidx);
+> >       u64 config;
+> > -     struct kvm_pmc *pmc;
+> > -     int sbiret = 0;
+> > -
+> > +     struct kvm_pmc *pmc = NULL;
+> > +     bool is_fevent;
+> > +     unsigned long event_code;
+> >
+> >       num_ctrs = kvpmu->num_fw_ctrs + kvpmu->num_hw_ctrs;
+> >       if (etype == PERF_TYPE_MAX || (ctr_base + __fls(ctr_mask) >= num_ctrs)) {
+> > @@ -342,7 +391,9 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
+> >               goto out;
+> >       }
+> >
+> > -     if (pmu_is_fw_event(eidx)) {
+> > +     event_code = get_event_code(eidx);
+> > +     is_fevent = pmu_is_fw_event(eidx);
+> > +     if (is_fevent && event_code >= SBI_PMU_FW_MAX) {
+> >               sbiret = SBI_ERR_NOT_SUPPORTED;
+> >               goto out;
+> >       }
+> > @@ -357,7 +408,10 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
+> >                       goto out;
+> >               }
+> >               ctr_idx = ctr_base;
+> > -             goto match_done;
+> > +             if (is_fevent)
+> > +                     goto perf_event_done;
+> > +             else
+> > +                     goto match_done;
+> >       }
+> >
+> >       ctr_idx = pmu_get_pmc_index(kvpmu, eidx, ctr_base, ctr_mask);
+> > @@ -366,6 +420,13 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
+> >               goto out;
+> >       }
+> >
+> > +     /*
+> > +      * No need to create perf events for firmware events as the firmware counter
+> > +      * is supposed to return the measurement of VS->HS mode invocations.
+> > +      */
+> > +     if (is_fevent)
+> > +             goto perf_event_done;
+> > +
+> >  match_done:
+> >       pmc = &kvpmu->pmc[ctr_idx];
+> >       pmu_release_perf_event(pmc);
+> > @@ -404,10 +465,19 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
+> >               return -EOPNOTSUPP;
+> >       }
+> >
+> > -     set_bit(ctr_idx, kvpmu->pmc_in_use);
+> >       pmc->perf_event = event;
+> > -     if (flag & SBI_PMU_CFG_FLAG_AUTO_START)
+> > -             perf_event_enable(pmc->perf_event);
+>
+> Maybe we can move the perf setup stuff into a helper function and
+> then guard it with an if-statement rather than have the gotos?
+>
 
-where the pieces are
+Sure. Done.
 
-arch/arm64/boot/dts/amd/elba.dtsi
+> > +perf_event_done:
+> > +     if (flag & SBI_PMU_CFG_FLAG_AUTO_START) {
+> > +             if (is_fevent)
+> > +                     kvpmu->fw_event[event_code].started = true;
+> > +             else
+> > +                     perf_event_enable(pmc->perf_event);
+> > +     }
+> > +     /* This should be only true for firmware events */
+> > +     if (!pmc)
+> > +             pmc = &kvpmu->pmc[ctr_idx];
+> > +     pmc->event_idx = eidx;
+> > +     set_bit(ctr_idx, kvpmu->pmc_in_use);
+> >
+> >       ext_data->out_val = ctr_idx;
+> >  out:
+> > @@ -451,6 +521,7 @@ int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+> >       bitmap_zero(kvpmu->pmc_in_use, RISCV_MAX_COUNTERS);
+> >       kvpmu->num_hw_ctrs = num_hw_ctrs;
+> >       kvpmu->num_fw_ctrs = num_fw_ctrs;
+> > +     memset(&kvpmu->fw_event, 0, SBI_PMU_FW_MAX * sizeof(struct kvm_fw_event));
+>
+> I'm wondering if we need this array. We already have an underused pmc for
+> the fw events which has counter_val and started. Can't we just used those?
+>
 
-                spi0: spi@2800 {
-                        compatible = "amd,pensando-elba-spi";
-                        reg = <0x0 0x2800 0x0 0x100>;
-                        #address-cells = <1>;
-                        #size-cells = <0>;
-                        amd,pensando-elba-syscon = <&syscon>;
-                        clocks = <&ahb_clk>;
-                        interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
-                        num-cs = <2>;
-                        status = "disabled";
-                };
+My initial implementation was doing the same. However, pmc array is
+counter index based
+while fw_event is firmware event id based.
+We need to maintain a mapping between these two or iterate the pmc
+array one by one to find
+correct entry in kvm_riscv_vcpu_pmu_incr_fw.
 
-                syscon: syscon@307c0000 {
-                        compatible = "amd,pensando-elba-syscon", "syscon";
-                        reg = <0x0 0x307c0000 0x0 0x3000>;
-                };
+As the kvm_riscv_vcpu_pmu_incr_fw may be called from a performance
+sensitive path, a separate
+fw_event array helps quick lookup.
 
-arch/arm64/boot/dts/amd/elba-asic-common.dtsi
+> >       /*
+> >        * There is no corelation betwen the logical hardware counter and virtual counters.
+> >        * However, we need to encode a hpmcounter CSR in the counter info field so that
+> > @@ -464,6 +535,7 @@ int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+> >               pmc = &kvpmu->pmc[i];
+> >               pmc->idx = i;
+> >               pmc->counter_val = 0;
+> > +             pmc->event_idx = SBI_PMU_EVENT_IDX_INVALID;
+> >               if (i < kvpmu->num_hw_ctrs) {
+> >                       kvpmu->pmc[i].cinfo.type = SBI_PMU_CTR_TYPE_HW;
+> >                       if (i < 3)
+> > @@ -501,7 +573,10 @@ void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu)
+> >       for_each_set_bit(i, kvpmu->pmc_in_use, RISCV_MAX_COUNTERS) {
+> >               pmc = &kvpmu->pmc[i];
+> >               pmu_release_perf_event(pmc);
+> > +             pmc->counter_val = 0;
+> > +             pmc->event_idx = SBI_PMU_EVENT_IDX_INVALID;
+> >       }
+> > +     memset(&kvpmu->fw_event, 0, SBI_PMU_FW_MAX * sizeof(struct kvm_fw_event));
+> >  }
+> >
+> >  void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu)
+> > diff --git a/arch/riscv/kvm/vcpu_sbi_replace.c b/arch/riscv/kvm/vcpu_sbi_replace.c
+> > index d029136..3f39711 100644
+> > --- a/arch/riscv/kvm/vcpu_sbi_replace.c
+> > +++ b/arch/riscv/kvm/vcpu_sbi_replace.c
+> > @@ -11,6 +11,7 @@
+> >  #include <linux/kvm_host.h>
+> >  #include <asm/sbi.h>
+> >  #include <asm/kvm_vcpu_timer.h>
+> > +#include <asm/kvm_vcpu_pmu.h>
+> >  #include <asm/kvm_vcpu_sbi.h>
+> >
+> >  static int kvm_sbi_ext_time_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> > @@ -26,6 +27,7 @@ static int kvm_sbi_ext_time_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> >               return 0;
+> >       }
+> >
+> > +     kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_SET_TIMER);
+> >  #if __riscv_xlen == 32
+> >       next_cycle = ((u64)cp->a1 << 32) | (u64)cp->a0;
+> >  #else
+> > @@ -58,6 +60,7 @@ static int kvm_sbi_ext_ipi_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> >               return 0;
+> >       }
+> >
+> > +     kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_IPI_SENT);
+> >       kvm_for_each_vcpu(i, tmp, vcpu->kvm) {
+> >               if (hbase != -1UL) {
+> >                       if (tmp->vcpu_id < hbase)
+> > @@ -68,6 +71,7 @@ static int kvm_sbi_ext_ipi_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> >               ret = kvm_riscv_vcpu_set_interrupt(tmp, IRQ_VS_SOFT);
+> >               if (ret < 0)
+> >                       break;
+> > +             kvm_riscv_vcpu_pmu_incr_fw(tmp, SBI_PMU_FW_IPI_RECVD);
+> >       }
+> >
+> >       return ret;
+> > @@ -91,6 +95,7 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
+> >       switch (funcid) {
+> >       case SBI_EXT_RFENCE_REMOTE_FENCE_I:
+> >               kvm_riscv_fence_i(vcpu->kvm, hbase, hmask);
+> > +             kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_FENCE_I_SENT);
+> >               break;
+> >       case SBI_EXT_RFENCE_REMOTE_SFENCE_VMA:
+> >               if (cp->a2 == 0 && cp->a3 == 0)
+> > @@ -98,6 +103,7 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
+> >               else
+> >                       kvm_riscv_hfence_vvma_gva(vcpu->kvm, hbase, hmask,
+> >                                                 cp->a2, cp->a3, PAGE_SHIFT);
+> > +             kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_SENT);
+> >               break;
+> >       case SBI_EXT_RFENCE_REMOTE_SFENCE_VMA_ASID:
+> >               if (cp->a2 == 0 && cp->a3 == 0)
+> > @@ -108,6 +114,7 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
+> >                                                      hbase, hmask,
+> >                                                      cp->a2, cp->a3,
+> >                                                      PAGE_SHIFT, cp->a4);
+> > +             kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_ASID_SENT);
+> >               break;
+> >       case SBI_EXT_RFENCE_REMOTE_HFENCE_GVMA:
+> >       case SBI_EXT_RFENCE_REMOTE_HFENCE_GVMA_VMID:
+> > --
+> > 2.25.1
+> >
+>
+> It think it'd be nice to break the application of
+> kvm_riscv_vcpu_pmu_incr_fw() out of this patch. I.e. introduce
+> kvm_riscv_vcpu_pmu_incr_fw() in this patch and then a second patch
+> applies it to all the ecalls.
+>
 
-&spi0 {
-        #address-cells = <1>;
-        #size-cells = <0>;
-        num-cs = <4>;
-        cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
-                   <&porta 7 GPIO_ACTIVE_LOW>;
-        status = "okay";
+Done.
 
-        rstc: system-controller@0 {
-                compatible = "amd,pensando-sr";
-                reg = <0 1 2 3>;
-                spi-max-frequency = <12000000>;
-                interrupt-parent = <&porta>;
-                interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
-                #reset-cells = <1>;
-        };
-};
+> Thanks,
+> drew
 
-Also should the driver for this SPI device used for every Pensando SoC 
-be in drivers/misc, drivers/spi?  Didn't make sense to leave it in 
-drivers/mfd once the resets was squashed in the parent and only one n
-ode with reg setting which chip selects result in creation of /dev/pensr0.<cs>.  
 
+
+-- 
 Regards,
-Brad
-
+Atish
