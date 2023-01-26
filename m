@@ -2,119 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031A667D084
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 259E567D086
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbjAZPnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:43:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        id S231956AbjAZPoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbjAZPnR (ORCPT
+        with ESMTP id S231825AbjAZPn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:43:17 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3743401F
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:43:07 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id fl24so1416335wmb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:43:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xaZrQvVMTexBK48seT2psGxItVIS/L4zE3c6J55k3h8=;
-        b=jp04WqjEyYm+E2Tkc2ENfbxkh/4b4cMWFdtsFMHJIToG/9FZmnDZ/gC0vYolLvjzDN
-         LTsDQVL579z+vKzZnxymlDvwLVEDgBe9ase7OQTz1ZNpwI+PTJjQK0bRFenOMnVGsT9O
-         6QnmSFMr33MFNEGur7/bmTMkkk8b5NA6aWyz9oYUKymdP84Niq5uq2VGeLubsuEHQJji
-         6UG2BA315Q0TT+gPUNNzXsBiKmUDjw5ZCKIfVrV1qLeU85jiDVZJBCjTvp2Xy25j7vQP
-         N5pKbQbsQTnporgM+/+gREkjUb008iRxWJGISmoBYaD9UB1E5yY+2er2c/np+gzEu0XX
-         6XUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xaZrQvVMTexBK48seT2psGxItVIS/L4zE3c6J55k3h8=;
-        b=gkEvo+wxhal2etofKUEct7yX2C8dJoG36jQ0YBOQI1hj6/5AgMKUe6yFDBs7pc14W2
-         GK/Y94182Xht46HFDDrOhkDEUzS+bX72aCYg40+AtbydOFN5XncE9xmBDTqwekt5t6+O
-         Ye0MOAGHD8c/ioraHWlnTYOhhzTzfvEaH5d7plnK2cfo9uy2vqaSMYMcXY9Eq5VXo0OJ
-         aQN/pGCSZzPF3txmbkuQhjozGH1HnR+ozOROOlltw4nxHyowSQGTgcmJDLOEy/y76roR
-         rsxc0+SlHGEI0U3iQG5bZGJ+W6KKC7NyhqEPjahrBEfaSfuvqqO/jljohIcmFHDfhZ/3
-         fnJQ==
-X-Gm-Message-State: AFqh2kr3z1OdJWK2rIG5hCbiJuyr4dI8lU15UxVQxOhejU754rHhkkl0
-        aGkl7zGbFiX4oJZwJqEo0uodJA==
-X-Google-Smtp-Source: AMrXdXssH15/vKnONbR1ylH/B9IaLwcgbhlzvUsooXAZkMdME223Pi73mbSr4a1nFyzzO0iOryMlCw==
-X-Received: by 2002:a05:600c:4395:b0:3da:2829:2935 with SMTP id e21-20020a05600c439500b003da28292935mr35895070wmn.11.1674747785757;
-        Thu, 26 Jan 2023 07:43:05 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id ip6-20020a05600ca68600b003d04e4ed873sm4909786wmb.22.2023.01.26.07.43.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 07:43:05 -0800 (PST)
-Message-ID: <f8aab3ce-f48d-3e7f-933e-abc7bd4dcc52@linaro.org>
-Date:   Thu, 26 Jan 2023 16:43:02 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 5/8] PCI: rockchip: Added dtsi entry for PCIe endpoint
- controller
-Content-Language: en-US
-To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
-        wenrui.li@rock-chips.com, rick.wertenbroek@heig-vd.ch,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20230126135049.708524-1-rick.wertenbroek@gmail.com>
- <20230126135049.708524-6-rick.wertenbroek@gmail.com>
- <6a54a51b-cf1a-c601-275f-00f825fcec5d@linaro.org>
- <CAAEEuhpOjSUhiQFxKwkhiwDNtmRzzUXmGYKMuHWePJF-Q7R9dQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAAEEuhpOjSUhiQFxKwkhiwDNtmRzzUXmGYKMuHWePJF-Q7R9dQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 26 Jan 2023 10:43:58 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E698C1BC4;
+        Thu, 26 Jan 2023 07:43:56 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id DB5533200034;
+        Thu, 26 Jan 2023 10:43:55 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 26 Jan 2023 10:43:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674747835; x=1674834235; bh=I/B5dP9013
+        /K6fiR+pC7UB5Kl3NMJOpwta5npDBU8Nw=; b=Fu91i5eJPMXWw69oHqyv7MxBY8
+        FywQeNBBn7zl7TY07AmorifK7QrhgOL4D7iKY0KLATdIaZuEMamQEcVgK+VUlscH
+        2U+pHfxKh3p4pyhyyidwHgZLRNDZXkHb6Vqy3gzMuxMXleoVn6aFF9gcc3FTUWi1
+        RnlEOdE5SdLahH9rjyg3PDWNbK3a0bLC5wcTF3BonpV+n3QU//zmU1iIN/Lo3VXB
+        OP1e/CZn/gtz6szquA9tI9jDSgwiAhoE+mBjyY/o7f7zsf9g78K2p8D/WTE29W4t
+        ZprbGkCD6ofpkxAEQnf7g7Shhgfk9w/YHLv/wdVrdUkxp3874XLCkJkOgiHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674747835; x=1674834235; bh=I/B5dP9013/K6fiR+pC7UB5Kl3NM
+        JOpwta5npDBU8Nw=; b=AD++yNlDt6U8pXJY2V0WSEldxaGITObIFXsHmqeFEq6b
+        S2K3P8vPrep7LyoqF4bG4lMDK3nS63hao48yjaNmPJ3J1vmVxpIMk94rCZ4Oo/No
+        BvvQnbYrowEp7FEIAtRR/lEzZNZG5CG9aBw4fQlSDL5MhLC2S+ZbMHn0dOC86fRC
+        7I1P2o+jq/bNoar4H4TWFRJrQZm1d2ZszMfbO0KVmDEoqaq5qPWOLZuzojHHVZGu
+        k2VGbzCvxXqwdXW5vDX6/HIvfm72Z6J5quLQYr8yPQz9LbSpnsaNMjxyKkTXPtBy
+        iRk8n4ty3Stikp/7z7e+hKOUbQgY6w2WQIngX1avSw==
+X-ME-Sender: <xms:u5_SY8crqJnPXrXkXob4DqwDguF9TttzarwztdlEZd_xP4ZBLTS3ng>
+    <xme:u5_SY-OJWbk-E3qNpwK-eR4THKxxytRaCoQ-_c7PfHaa3Vt3aS1j8EPhMF6TT3esh
+    4eELPiUv4U_aY9GU2w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgjeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:u5_SY9j_pUtZvjigBiMgRfvJlmduhxX-okmJXBtIZsMBdMxx1fGHNg>
+    <xmx:u5_SYx9rjckvmqvd8AnTpI6ZWBYqH4OIpEcsbgC4V5_9cLKyPFXiyw>
+    <xmx:u5_SY4s6TL6jN1_o9lvXAd_Zw6O9w05PMo92P-0-YVPPb1hLWlpE6Q>
+    <xmx:u5_SYyUieqvTjWjWFotxvIGG5jj7n_oUQfsM2dVfzkGz78fW_Fn0Qg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 51987B60086; Thu, 26 Jan 2023 10:43:55 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <a717fec9-db2b-47fb-813d-e734e26e51c0@app.fastmail.com>
+In-Reply-To: <Y9KELwugMhV1TCiK@smile.fi.intel.com>
+References: <20230126132801.2042371-1-arnd@kernel.org>
+ <20230126132801.2042371-4-arnd@kernel.org>
+ <Y9KELwugMhV1TCiK@smile.fi.intel.com>
+Date:   Thu, 26 Jan 2023 16:43:35 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/8] gpiolib: remove asm-generic/gpio.h
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 16:30, Rick Wertenbroek wrote:
-> On Thu, Jan 26, 2023 at 4:23 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 26/01/2023 14:50, Rick Wertenbroek wrote:
->>> Added missing PCIe endpoint controller entry in the device tree. This
->>> entry is documented in :
->>> Documentation/devicetree/bindings/pci/rockchip-pcie-ep.txt
->>
->> There is no such file
-> 
-> Sorry but the file exists see :
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/devicetree/bindings/pci/rockchip-pcie-ep.txt?h=v6.0.19
-> It also exists in 6.1 :
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/devicetree/bindings/pci/rockchip-pcie-ep.txt?h=linux-6.1.y
+On Thu, Jan 26, 2023, at 14:46, Andy Shevchenko wrote:
+> On Thu, Jan 26, 2023 at 02:27:56PM +0100, Arnd Bergmann wrote:
 
-It's some old tree. It could have existed in the past. But it does not
-exist. Don't refer to non-existing paths.
+>> --- a/drivers/gpio/gpio-davinci.c
+>> +++ b/drivers/gpio/gpio-davinci.c
+>> @@ -7,6 +7,7 @@
+>>   */
+>
+>>  #include <linux/gpio/driver.h>
+>
+>
+>> +#include <linux/gpio.h>
+>
+> I believe the driver does not need this.
+>
+> I have briefly checked all gpio_ places in it and found nothing that requires
+> this inclusion to be done.
 
-Your code needs then rebasing if you refer to some old trees. Please
-always work on latest maintainer's tree. Optionally on linux-next.
+ok
+  
+>>  #ifdef CONFIG_GPIOLIB
+>>  #include "../gpio/gpiolib.h"
+>> -#include <asm-generic/gpio.h>
+>> +#include <linux/gpio.h>
+>
+> Can we actually swap them?
+>
+> #include <linux/gpio.h>
+> #include "../gpio/gpiolib.h"
+>
+> But hold on, why do we even need gpio.h here?!
+>
+>>  #endif
+>>  
+>>  #include "core.h"
+>
+> ...
 
-Best regards,
-Krzysztof
+I probably did all the above in response to build regressions,
+but I'll try to change them based on your suggestion and see
+what happens.
 
+>> --- a/include/linux/gpio.h
+>> +++ b/include/linux/gpio.h
+>> @@ -54,26 +54,101 @@ struct gpio {
+>>  };
+>>  
+>>  #ifdef CONFIG_GPIOLIB
+>> -#include <asm-generic/gpio.h>
+>> +#include <linux/compiler.h>
+>
+>> +#include <linux/gpio/driver.h>
+>> +#include <linux/gpio/consumer.h>
+>
+> #include <linux/gpio/consumer.h>
+> #include <linux/gpio/driver.h>
+>
+
+Done
+
+>> +/*
+>> + * "valid" GPIO numbers are nonnegative and may be passed to
+>> + * setup routines like gpio_request().  only some valid numbers
+>
+> While at it, '.  only' --> '. Only'.
+
+Done
+
+>> + * can successfully be requested and used.
+>> + *
+>> + * Invalid GPIO numbers are useful for indicating no-such-GPIO in
+>> + * platform data and other tables.
+>> + */
+>
+> ...
+>
+>> +extern int gpio_request(unsigned gpio, const char *label);
+>> +extern void gpio_free(unsigned gpio);
+>
+> While at it, s/extern//.
+
+>> +extern int gpio_request_one(unsigned gpio, unsigned long flags, const char *label);
+>> +extern int gpio_request_array(const struct gpio *array, size_t num);
+>> +extern void gpio_free_array(const struct gpio *array, size_t num);
+
+Done
+
+Thanks for the review,
+
+       Arnd
