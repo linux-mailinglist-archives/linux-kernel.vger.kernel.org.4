@@ -2,90 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E45267C501
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C2267C504
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjAZHna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 02:43:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
+        id S233181AbjAZHok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 02:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjAZHn2 (ORCPT
+        with ESMTP id S229609AbjAZHoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 02:43:28 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887DA1E1C8
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 23:43:27 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id b26-20020a056602331a00b00704cb50e151so504675ioz.13
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 23:43:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7TQjimL8KUZMscO4m3fC34iqwHwmpZuK4STzqhRFKQI=;
-        b=jmwhRC04oLz8K4LclOFS6wc2QEyxwVcNB43dSdPx1KR+XusaI83dayO8BQg1LeiAVW
-         IVCCCKadT6GA8Z88AOnIGM8YovXAxTZMA6PAk2ryiRFAlrdIhTwP/289nkI7FujEbo6e
-         c53dXIhYC/BjwbB7UHYn3FaItWkrPNGUVZ18xwtrPfjhIz9lywuL3abZMo+WP72cyam6
-         u/st/mnfv8MQP5nb2J6gsd1ZQmKdyKDJk5OnZERRsI6HjAs1M6VpnNQaJPwn2SYa68Pr
-         z8YT+z8ybhptjVcNn5K92H3tAEC2Yo7XcDCMEdLu/p3ZqYBJNr0zqWypFbTQoZAuRRRG
-         u2sA==
-X-Gm-Message-State: AO0yUKUShAj4ul25Rs3SWTp5Fzwu4sNFJowWlqjjlEbyNEi8j7NKdPou
-        x0PY0UnZu0N1rQg0cSn3iiMfNQ4GSzKJOMVmu6X0W7zN8bdr
-X-Google-Smtp-Source: AK7set/Vv6ZjO9ahlx0QhgfopXjJRbCub29Q4TxRW0teLnducMO6s47KRgREX7WE/K6uWQ9HZE4kOIcDUx6WGFFyypmZsXUQ6v8e
+        Thu, 26 Jan 2023 02:44:39 -0500
+Received: from smtp-out-06.comm2000.it (smtp-out-06.comm2000.it [212.97.32.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C1F1BAF6;
+        Wed, 25 Jan 2023 23:44:36 -0800 (PST)
+Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: francesco@dolcini.it)
+        by smtp-out-06.comm2000.it (Postfix) with ESMTPSA id 0B1D85611D4;
+        Thu, 26 Jan 2023 08:44:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
+        s=mailsrv; t=1674719072;
+        bh=3G/SbvmzPiZfuAmwVmCOJNiD9b1gSTVCAfILv/DUq/Y=;
+        h=From:To:Cc:Subject:Date;
+        b=bJrxRTYwMAnf3nRk/ayrKGhxD4Hi4mfUPVGG6LkhC43P7HzfszYSEqNX+/OlyPGAM
+         5uQtQsqiauEmeOoXyg3/fwtMuG/G6HsKZ5HXVkHY/4FionmiTJVjgCtZ9fJB0+RcRX
+         WeTu48ANFMU6y/MAtAMUFx4Wuek8MTmWl3D7D744yHMqcxJIn6SyTwzDk+kMTYJHX9
+         rriQfFH+uXAt9GDCv/gRIYxNwVh88d7CUL7tESPqUuF2ptc8H/q053DnlqeXvQqAic
+         YhI7JBUcytJclhzXksDv1NO7AOuS7hQibAxrPyHtDkvZOZFntQe44KPTNWBaEat7/3
+         x7IVRz8jrQq0w==
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH v2 0/5] Bluetooth: hci_mrvl: Add serdev support for 88W8997
+Date:   Thu, 26 Jan 2023 08:43:51 +0100
+Message-Id: <20230126074356.431306-1-francesco@dolcini.it>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:8e05:0:b0:310:b8e9:dfd4 with SMTP id
- c5-20020a928e05000000b00310b8e9dfd4mr103349ild.69.1674719006911; Wed, 25 Jan
- 2023 23:43:26 -0800 (PST)
-Date:   Wed, 25 Jan 2023 23:43:26 -0800
-In-Reply-To: <000000000000f2b07b05d5dc87cc@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000081766205f325e781@google.com>
-Subject: Re: [syzbot] general protection fault in fscache_free_cookie
-From:   syzbot <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com>
-To:     dhowells@redhat.com, dvyukov@google.com,
-        linux-cachefs-bounces@redhat.com, linux-cachefs-owner@redhat.com,
-        linux-cachefs@redhat.com, linux-kernel@vger.kernel.org,
-        mudongliangabcd@gmail.com, nogikh@google.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-fscache: fix GPF in fscache_free_cookie
+From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+Add serdev support for the 88W8997 from NXP (previously Marvell). It includes
+support for changing the baud rate. The command to change the baud rate is
+taken from the user manual UM11483 Rev. 9 in section 7 (Bring-up of Bluetooth
+interfaces) from NXP.
 
-#syz fix: exact-commit-title
+v2:
+ - Fix the subject as pointed out by Krzysztof. Thanks!
+ - Fix indentation in marvell-bluetooth.yaml
+ - Fix compiler warning for kernel builds without CONFIG_OF enabled
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+Stefan Eichenberger (5):
+  dt-bindings: bluetooth: marvell: add 88W8997
+  dt-bindings: bluetooth: marvell: add max-speed property
+  Bluetooth: hci_mrvl: use maybe_unused macro for device tree ids
+  Bluetooth: hci_mrvl: Add serdev support for 88W8997
+  arm64: dts: imx8mp-verdin: add 88W8997 serdev to uart4
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=5b129e8586277719bab3
+ .../bindings/net/marvell-bluetooth.yaml       | 20 +++-
+ .../dts/freescale/imx8mp-verdin-wifi.dtsi     |  5 +
+ drivers/bluetooth/hci_mrvl.c                  | 92 +++++++++++++++++--
+ 3 files changed, 106 insertions(+), 11 deletions(-)
 
----
-[1] I expect the commit to be present in:
+-- 
+2.25.1
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
