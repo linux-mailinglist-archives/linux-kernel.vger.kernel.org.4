@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AD567CE47
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F0367CE4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbjAZOg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
+        id S231847AbjAZOhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjAZOg4 (ORCPT
+        with ESMTP id S229639AbjAZOhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:36:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF872529E;
-        Thu, 26 Jan 2023 06:36:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 938D3B81D12;
-        Thu, 26 Jan 2023 14:36:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63CFAC433EF;
-        Thu, 26 Jan 2023 14:36:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674743813;
-        bh=98SAiW8EasNhUbmpf7pK4esoZxbZJjAiXnvFOnNwpKk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gfCcCUKFz6Gf+RF5hWJAETkkcjsUp4jjQwmKHYRZl2R1mfNN5X7BZhl9yZeLCRiNg
-         9qrLPNiuf8Bdz/n/ZRZc3JoJ3OvC14jm/WyHIvfBNX5i0V7NvEZnfeacpPSGjIaNIn
-         AHCae3F/UGrV+7DYjtBQ5dkOIH88nYZlCTQvOPMu426rpviKIIWWeu4viLSbNukEeS
-         iB6FU32UFkQ6b3sMR+H8g0jGJlwpjgHPjY867Sa3QyKwYkuBsKR1eY6eCoA/3LQSbk
-         iS65fr8vXaIPamQpqApfmdpfVLqYbddK9asoMx3HlrsPURrGIzQNXZPce4al/VqT65
-         gKI4Ve43pwssQ==
-Date:   Thu, 26 Jan 2023 14:36:47 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Jianhua Lu <lujianhua000@gmail.com>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v9 2/2] backlight: ktz8866: Add support for Kinetic
- KTZ8866 backlight
-Message-ID: <Y9KP/0cVKBp6d7qc@google.com>
-References: <20230120155018.15376-1-lujianhua000@gmail.com>
- <20230120155018.15376-2-lujianhua000@gmail.com>
+        Thu, 26 Jan 2023 09:37:22 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792573A592;
+        Thu, 26 Jan 2023 06:37:21 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id y15so1358832edq.13;
+        Thu, 26 Jan 2023 06:37:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=neC2J2NiikFKD1DH99boQHYW1Cc4DcDPvmoJjFl/uiw=;
+        b=XIYectCzSHJAAaa7Bdi8U6Ff08nfXOoYrDHsNb7SbpoNtqPdFF8MkVD8QHIW+EkyLR
+         dXJQWv6k+3+rW4zuLt8EwEyg6A7MS+h1o7Zb4oTE+m9Z9Q7Dg8fM1QZTiJUwXm+KU8SC
+         jNjf7zcRQlNrAM5fLPUAyr7l6+mH3jL5n62mmqgjwOAgPmmtgkFuauSTOz5mFqydVdBy
+         7YQlkcitzbFZBLHYoYPZRFaXdg6z/83VwoOVulICMS+UOxXj2x4D5foljp1T+s6yR8Au
+         srs0Ad3bu7N/RP+gV0QwauU55vYnO2venRkhbqkJtqTCjTZXVuF+R8ailzvgq3CAufGG
+         WvRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=neC2J2NiikFKD1DH99boQHYW1Cc4DcDPvmoJjFl/uiw=;
+        b=y8hh1Zh4JmRmHJvCJnrKh0flPrmE2c2G7lAPCiWRwP27EEa5LC8Ae0pSOtBhWjyGma
+         lhGEHEl6OxTXl0jD2280WZTSMxErY4a8DAIUTwwdGEEJB2hfLC3wLlTlYOZbjniHGCIR
+         UYBgKOrzHNT4G1OjfwktF55dldbLuXqb0mqAU7JFMvG/gO6daBfBlNEb0mBFKUw9HPi3
+         CtV36zorwlGFN/h/mW04sFr9Idxgyi0ul1DDREGQcbOvQGKVJ/6LMSPmbNRXy4E3pg1/
+         4ZdsVjoY+WcZ3/v4wnMWm8l8g5zaxGr8m5vDDrq6I2NgtPc3xHMF3KoGvwZm+QKwDAJH
+         t9+A==
+X-Gm-Message-State: AFqh2krtXQwkYE3J1WMt4OS3r3ZA+yDVCMaG5Gn98ThsRPLYFZu85FwK
+        MNZs4IRiMeBJdvKCY3Uljpw=
+X-Google-Smtp-Source: AMrXdXv65LpAxJbI8nt34DB2ZlyWFFhGPxslQDQj/tP65D8A7gBzAMVLrZAxzV4ggdokLf55fcbbXQ==
+X-Received: by 2002:aa7:de94:0:b0:474:a583:2e1a with SMTP id j20-20020aa7de94000000b00474a5832e1amr37658467edv.12.1674743839858;
+        Thu, 26 Jan 2023 06:37:19 -0800 (PST)
+Received: from localhost (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id r24-20020aa7cfd8000000b00495c3573b36sm834221edy.32.2023.01.26.06.37.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 06:37:19 -0800 (PST)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Mikko Perttunen <cyndis@kapsi.fi>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] arm64: tegra: Mark host1x as dma-coherent on Tegra194/234
+Date:   Thu, 26 Jan 2023 15:37:15 +0100
+Message-Id: <167474380847.1640957.15918634834244629931.b4-ty@nvidia.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230119133901.1892413-1-cyndis@kapsi.fi>
+References: <20230119133901.1892413-1-cyndis@kapsi.fi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230120155018.15376-2-lujianhua000@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023, Jianhua Lu wrote:
+From: Thierry Reding <treding@nvidia.com>
 
-> Add support for Kinetic KTZ8866 backlight, which is used in
-> Xiaomi tablet, Mi Pad 5 series. This driver lightly based on
-> downstream implementation [1].
-> [1] https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/elish-r-oss/drivers/video/backlight/ktz8866.c
+On Thu, 19 Jan 2023 15:38:58 +0200, Mikko Perttunen wrote:
+> From: Mikko Perttunen <mperttunen@nvidia.com>
 > 
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
-> Changes in v2:
->   - Add missing staitc modifier to ktz8866_write function.
+> Ensure appropriate configuration is done to make the host1x device
+> and context devices DMA coherent by adding the dma-coherent flag.
 > 
-> Changes in v3:
->   - Add 2022 to Copyright line.
->   - Sort headers.
->   - Remove meaningless comment.
->   - Use definitions instead of hardcoding.
->   - Add missing maintainer info.
 > 
-> Changes in v4:
->   - Change 2022 to 2023.
->   - Remove useless macro and enum.
->   - Describe settings by devicetree.
->   - Move header file to C file.
-> 
-> Changes in v5:
->   - Change "2023" to "2022, 2023" in Copyright line.
->   - Set scale property for backlight.
-> 
-> Changes in v6:
->   - Correct devicetree property name.
-> 
-> Changes in v7:
->   - Remove unnecessary sleep statement.
->   - Fix code style.
->   - Add vddpos and vddneg supply devicetree parse.
->   - Add enabel-gpio devicetree parse.
-> 
-> Changes in v8:
->   - Modify devicetree parse according to dt bindings.
-> 
-> No changes in v9
-> 
->  MAINTAINERS                       |   6 +
->  drivers/video/backlight/Kconfig   |   8 ++
->  drivers/video/backlight/Makefile  |   1 +
->  drivers/video/backlight/ktz8866.c | 209 ++++++++++++++++++++++++++++++
->  4 files changed, 224 insertions(+)
->  create mode 100644 drivers/video/backlight/ktz8866.c
 
-Applied, thanks
+Applied, thanks!
 
+[1/4] arm64: tegra: Mark host1x as dma-coherent on Tegra194/234
+      (no commit info)
+[2/4] gpu: host1x: Fix mask for syncpoint increment register
+      commit: c42babb37bc2ba84d692d8d13ce900636b19d2b7
+[3/4] gpu: host1x: Don't skip assigning syncpoints to channels
+      commit: 529babe886a29b3e4ffcdc61b755c3d7245c6cf2
+[4/4] drm/tegra: firewall: Check for is_addr_reg existence in IMM check
+      commit: 40aef7daa1bdf73bd66aa97e6e2069e340415a38
+
+Best regards,
 -- 
-Lee Jones [李琼斯]
+Thierry Reding <treding@nvidia.com>
