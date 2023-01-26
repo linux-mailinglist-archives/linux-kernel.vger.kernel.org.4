@@ -2,67 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0774E67CAE7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F7367CAEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236757AbjAZM0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 07:26:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S236966AbjAZM30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 07:29:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235786AbjAZM0a (ORCPT
+        with ESMTP id S235934AbjAZM3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:26:30 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF64A1C310;
-        Thu, 26 Jan 2023 04:26:29 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30QCQOrf017905;
-        Thu, 26 Jan 2023 06:26:24 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674735984;
-        bh=tFW7aRPyTBES8+llQgQYOcg06QbfnuOKflYk0qlDeS0=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=OVqnShcCyGMDaxECBaQtvQ0NwpX9ulb9ZdqISh3DfekLISDhJtfP3mF9ThIFxyaF4
-         AmPczUZzDK1vREd70nXrmpme7sqQHXaEGt4XAVedZg/bF6dHCyvc4ypEPa8Y0gQ933
-         Z/8bVkVHkGDb+JcGFW+Tz36592ZxedLct8s1JxsE=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30QCQOxO039453
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 26 Jan 2023 06:26:24 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 26
- Jan 2023 06:26:24 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 26 Jan 2023 06:26:24 -0600
-Received: from [10.250.234.92] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30QCQKcU012290;
-        Thu, 26 Jan 2023 06:26:21 -0600
-Message-ID: <b61a183e-7316-0cfc-0118-b0cfeea1577f@ti.com>
-Date:   Thu, 26 Jan 2023 17:56:19 +0530
+        Thu, 26 Jan 2023 07:29:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E79B49017
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:28:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674736116;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=LHHI1z3/Zi2ZVpvIelVqZ7oFqL4vmSAmqEC9YF9uobE=;
+        b=AFsYFO4dq3jJSlU97IWa5r5hzmCCBXVQL3We9YbWFmqKnq5RLtihog/cpmkuj8sg4H2c/i
+        uumXEUkhNMwFFAxjrgWA+A5e62tv86eYcKPrA/6eekKkw+nN4olESxjjdmLy2DGZLVNsA9
+        SMiH+96FT1VFOEityEsezZCkjC1mOcc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-641-vru26c0CNEWub7a1oHUaCw-1; Thu, 26 Jan 2023 07:28:33 -0500
+X-MC-Unique: vru26c0CNEWub7a1oHUaCw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1AA4629ABA18;
+        Thu, 26 Jan 2023 12:28:33 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.39.192.60])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F0C442026D76;
+        Thu, 26 Jan 2023 12:28:31 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 6.2-rc6
+Date:   Thu, 26 Jan 2023 13:26:43 +0100
+Message-Id: <20230126122643.379852-1-pabeni@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v8 3/8] arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support
- of OSPI
-Content-Language: en-US
-To:     Ravi Gunasekaran <r-gunasekaran@ti.com>, <nm@ti.com>, <afd@ti.com>,
-        <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <s-vadapalli@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230123095733.31657-1-r-gunasekaran@ti.com>
- <20230123095733.31657-4-r-gunasekaran@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20230123095733.31657-4-r-gunasekaran@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,81 +58,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus!
 
+Notably, this includes the fix for the mctp issue you have been
+notified of.
 
-On 23/01/23 3:27 pm, Ravi Gunasekaran wrote:
-> From: Aswath Govindraju <a-govindraju@ti.com>
-> 
-> Add support for two instance of OSPI in J721S2 SoC.
-> 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> Reviewed-by: Vaishnav Achath <vaishnav.a@ti.com>
-> Link: https://lore.kernel.org/r/20221122101616.770050-4-mranostay@ti.com
-> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
-> ---
->  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> index 0af242aa9816..d404b595316e 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> @@ -306,4 +306,43 @@
->  			ti,cpts-periodic-outputs = <2>;
->  		};
->  	};
-> +
-> +	fss: bus@47000000 {
-> +		compatible = "simple-bus";
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
+There are no known pending regressions to the better of my knowledge.
 
-make dtbs W=12
+The following changes since commit 5deaa98587aca2f0e7605388e89cfa1df4bad5cb:
 
-Warning (unit_address_vs_reg): /bus@100000/bus@28380000/bus@47000000: node has a unit name, but no reg or ranges property
+  Merge tag 'net-6.2-rc5-2' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-01-20 09:58:44 -0800)
 
+are available in the Git repository at:
 
-> +		ospi0: spi@47040000 {
-> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-> +			reg = <0x00 0x47040000 0x00 0x100>,
-> +			      <0x5 0x0000000 0x1 0x0000000>;
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.2-rc6
 
-Also, please follow existing convention
+for you to fetch changes up to 7083df59abbc2b7500db312cac706493be0273ff:
 
-			      <0x05 0x00000000 0x01 0x0000000>;
+  net: mdio-mux-meson-g12a: force internal PHY off on mux switch (2023-01-25 22:46:51 -0800)
 
-> +			interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
-> +			cdns,fifo-depth = <256>;
-> +			cdns,fifo-width = <4>;
-> +			cdns,trigger-address = <0x0>;
-> +			clocks = <&k3_clks 109 5>;
-> +			assigned-clocks = <&k3_clks 109 5>;
-> +			assigned-clock-parents = <&k3_clks 109 7>;
-> +			assigned-clock-rates = <166666666>;
-> +			power-domains = <&k3_pds 109 TI_SCI_PD_EXCLUSIVE>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +
-> +		ospi1: spi@47050000 {
-> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-> +			reg = <0x00 0x47050000 0x00 0x100>,
-> +			      <0x7 0x0000000 0x1 0x0000000>;
+----------------------------------------------------------------
+Networking fixes for 6.2-rc6, including fixes from netfilter.
 
-			      <0x07 0x00000000 0x01 0x0000000>;
+Current release - regressions:
 
-> +			interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
-> +			cdns,fifo-depth = <256>;
-> +			cdns,fifo-width = <4>;
-> +			cdns,trigger-address = <0x0>;
-> +			clocks = <&k3_clks 110 5>;
-> +			power-domains = <&k3_pds 110 TI_SCI_PD_EXCLUSIVE>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +
-> +	};
->  };
+  - sched: sch_taprio: do not schedule in taprio_reset()
+
+Previous releases - regressions:
+
+  - core: fix UaF in netns ops registration error path
+
+  - ipv4: prevent potential spectre v1 gadgets
+
+  - ipv6: fix reachability confirmation with proxy_ndp
+
+  - netfilter: fix for the set rbtree
+
+  - eth: fec: use page_pool_put_full_page when freeing rx buffers
+
+  - eth: iavf: fix temporary deadlock and failure to set MAC address
+
+Previous releases - always broken:
+
+ - netlink: prevent potential spectre v1 gadgets
+
+ - netfilter: fixes for SCTP connection tracking
+
+ - mctp: struct sock lifetime fixes
+
+ - eth: ravb: fix possible hang if RIS2_QFF1 happen
+
+ - eth: tg3: resolve deadlock in tg3_reset_task() during EEH
+
+Misc:
+
+ - Mat stepped out as MPTCP co-maintainer
+
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+
+----------------------------------------------------------------
+Ahmad Fatoum (1):
+      net: dsa: microchip: fix probe of I2C-connected KSZ8563
+
+Alexandru Tachici (1):
+      net: ethernet: adi: adin1110: Fix multicast offloading
+
+David Christensen (1):
+      net/tg3: resolve deadlock in tg3_reset_task() during EEH
+
+David S. Miller (3):
+      Merge branch 'ethtool-mac-merge'
+      Merge branch 'ravb-fixes'
+      Merge branch 'mptcp-fixes'
+
+Eric Dumazet (7):
+      netlink: prevent potential spectre v1 gadgets
+      netlink: annotate data races around nlk->portid
+      netlink: annotate data races around dst_portid and dst_group
+      netlink: annotate data races around sk_state
+      ipv4: prevent potential spectre v1 gadget in ip_metrics_convert()
+      ipv4: prevent potential spectre v1 gadget in fib_metrics_match()
+      net/sched: sch_taprio: do not schedule in taprio_reset()
+
+Gergely Risko (1):
+      ipv6: fix reachability confirmation with proxy_ndp
+
+Gerhard Engleder (1):
+      tsnep: Fix TX queue stop/wake for multiple queues
+
+Haiyang Zhang (1):
+      net: mana: Fix IRQ name - add PCI and queue number
+
+Hyunwoo Kim (1):
+      net/x25: Fix to not accept on connected socket
+
+Ivan Vecera (1):
+      docs: networking: Fix bridge documentation URL
+
+Jakub Kicinski (4):
+      Merge branch 'netlink-annotate-various-data-races'
+      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
+      Merge branch '40GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
+      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
+
+Jeremy Kerr (3):
+      net: mctp: add an explicit reference from a mctp_sk_key to sock
+      net: mctp: move expiry timer delete to unhash
+      net: mctp: mark socks as dead on unhash, prevent re-add
+
+Jerome Brunet (1):
+      net: mdio-mux-meson-g12a: force internal PHY off on mux switch
+
+Kuniyuki Iwashima (1):
+      netrom: Fix use-after-free of a listening socket.
+
+Marcelo Ricardo Leitner (1):
+      sctp: fail if no bound addresses can be used for a given scope
+
+Marcin Szycik (1):
+      iavf: Move netdev_update_features() into watchdog task
+
+Mat Martineau (1):
+      MAINTAINERS: Update MPTCP maintainer list and CREDITS
+
+Michal Schmidt (1):
+      iavf: fix temporary deadlock and failure to set MAC address
+
+Pablo Neira Ayuso (2):
+      netfilter: nft_set_rbtree: Switch to node list walk for overlap detection
+      netfilter: nft_set_rbtree: skip elements in transaction from garbage collection
+
+Paolo Abeni (3):
+      net: fix UaF in netns ops registration error path
+      Revert "Merge branch 'ethtool-mac-merge'"
+      net: mctp: hold key reference when looking up a general key
+
+Paul M Stillwell Jr (1):
+      ice: move devlink port creation/deletion
+
+Sriram Yagnaraman (4):
+      netfilter: conntrack: fix vtag checks for ABORT/SHUTDOWN_COMPLETE
+      netfilter: conntrack: fix bug in for_each_sctp_chunk
+      Revert "netfilter: conntrack: add sctp DATA_SENT state"
+      netfilter: conntrack: unify established states for SCTP paths
+
+Stefan Assmann (1):
+      iavf: schedule watchdog immediately when changing primary MAC
+
+Vladimir Oltean (1):
+      net: ethtool: netlink: introduce ethnl_update_bool()
+
+Wei Fang (1):
+      net: fec: Use page_pool_put_full_page when freeing rx buffers
+
+Yoshihiro Shimoda (3):
+      net: ethernet: renesas: rswitch: Fix ethernet-ports handling
+      net: ravb: Fix lack of register setting after system resumed for Gen3
+      net: ravb: Fix possible hang if RIS2_QFF1 happen
+
+ CREDITS                                            |   7 +
+ Documentation/networking/bridge.rst                |   2 +-
+ Documentation/networking/nf_conntrack-sysctl.rst   |  10 +-
+ MAINTAINERS                                        |   1 -
+ drivers/net/dsa/microchip/ksz9477_i2c.c            |   2 +-
+ drivers/net/ethernet/adi/adin1110.c                |   2 +-
+ drivers/net/ethernet/broadcom/tg3.c                |   8 +-
+ drivers/net/ethernet/engleder/tsnep_main.c         |  15 +-
+ drivers/net/ethernet/freescale/fec_main.c          |   2 +-
+ drivers/net/ethernet/intel/iavf/iavf.h             |   2 +-
+ drivers/net/ethernet/intel/iavf/iavf_ethtool.c     |  10 +-
+ drivers/net/ethernet/intel/iavf/iavf_main.c        | 113 ++++---
+ drivers/net/ethernet/intel/iavf/iavf_virtchnl.c    |  10 +-
+ drivers/net/ethernet/intel/ice/ice_lib.c           |   3 -
+ drivers/net/ethernet/intel/ice/ice_main.c          |  25 +-
+ drivers/net/ethernet/microsoft/mana/gdma_main.c    |   9 +-
+ drivers/net/ethernet/renesas/ravb_main.c           |  10 +-
+ drivers/net/ethernet/renesas/rswitch.c             |  22 +-
+ drivers/net/ethernet/renesas/rswitch.h             |  12 +
+ drivers/net/mdio/mdio-mux-meson-g12a.c             |  23 +-
+ include/net/mana/gdma.h                            |   3 +
+ include/uapi/linux/netfilter/nf_conntrack_sctp.h   |   3 +-
+ include/uapi/linux/netfilter/nfnetlink_cttimeout.h |   3 +-
+ lib/nlattr.c                                       |   3 +
+ net/core/net_namespace.c                           |   2 +-
+ net/ipv4/fib_semantics.c                           |   2 +
+ net/ipv4/metrics.c                                 |   2 +
+ net/ipv6/ip6_output.c                              |  15 +-
+ net/mctp/af_mctp.c                                 |  10 +-
+ net/mctp/route.c                                   |  34 ++-
+ net/netfilter/nf_conntrack_proto_sctp.c            | 170 +++++------
+ net/netfilter/nf_conntrack_standalone.c            |  16 -
+ net/netfilter/nft_set_rbtree.c                     | 332 +++++++++++++--------
+ net/netlink/af_netlink.c                           |  38 ++-
+ net/netrom/nr_timer.c                              |   1 +
+ net/sched/sch_taprio.c                             |   1 -
+ net/sctp/bind_addr.c                               |   6 +
+ net/x25/af_x25.c                                   |   6 +
+ 38 files changed, 535 insertions(+), 400 deletions(-)
+
