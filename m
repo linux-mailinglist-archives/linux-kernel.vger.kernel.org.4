@@ -2,211 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1370A67D11C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5875D67CDFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbjAZQRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
+        id S231908AbjAZOZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjAZQRB (ORCPT
+        with ESMTP id S232070AbjAZOYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:17:01 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A612A1BDC;
-        Thu, 26 Jan 2023 08:16:58 -0800 (PST)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QDiRoN020378;
-        Thu, 26 Jan 2023 14:22:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=QJfYAKlxaCbWQ/+PwFG2Tdx/pAW+XdvxwGrEKmAVKh8=;
- b=UTu8DOrP0DFrroYZcdPu7QYKzEmlHj6hsyKEE2GokGQHjPczlJTJ6vvGoPWgvz3eBCAy
- Njp6ntU+KDLZLRb3a9YmBajtj7DXAuHhvLN7zuMASx2TLqcMEP2JVm3yG45CnMZLMcYn
- ID+plr0KaWXPR33WX4uy/uqnkp8yxXF0J2BlMZewy6DzwlGkFEr9RYQufKM5Foiymxje
- gCIYnbdgUpZbWgPaaNqKeXutjnJ/sbv+V5hftZRn8y4e5CzuVbHkLZp2iJiobB3/O8dQ
- R3CYHnP/AgmekDO7ivaNbX2mGTWg39mno0cSGOoNN+dATUcDL7AY4QR+9JYSVoR6nNM7 mw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n86ybjbtd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 14:22:54 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30QDw3sH028403;
-        Thu, 26 Jan 2023 14:22:54 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2041.outbound.protection.outlook.com [104.47.57.41])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n86g7e48b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 14:22:54 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L8EB//h2NB0NLqaV4Yvht8AujEfS5JIqOuLal/vmRYLb2F+FGsZ7gR7rOzaS1RxTLIMqRMSujUDeEee+02Kv2+M5JgAZQUaHnbyIXjOC5vD44UbFj33izfoywlcv/pkvVs317vjJc0SHlYQ/VycKzTUeXGzg7tJbI8U/E7Qg2yFuARxNPIGFW2S0aaagf9mX4ButInWc9ObnIm/rHfC7+GPMeJIkQDgkUkRP1bOtW4eLP3QZ5Fj/JLpjdkyCFpkzvC6sb78tUEGHMCFc4IFKx11CwcH7MkXTWmxT0rwnc+FvECslMYV7hesokOuUeLsAXFJUHafZLQ8Ydqrmg9whww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QJfYAKlxaCbWQ/+PwFG2Tdx/pAW+XdvxwGrEKmAVKh8=;
- b=BiZ2sJhKimPTta0gxD3ng9/tXSCmNmvGldJoOOYtoyzjT3Yh3bItiqQlM5QOFRmVdVDeZxALED8F9mG8+d9GF4Y3CGwD/BkJ5b3Ikzgwa2mEr05ct7eCjrPqb1jLoBxNb5D+1l9EXxGi0cWRwVs0txxJzmuzNbn6U0jOkNIcw+njcnPUThF9LrIKGSwqbAwp2YljUIrDVPYzLEzwaW+uPN8HD3JoDtdlnicPhy+fZsu3XzJ011Xe5sZNooy1XQD0KGt7zELk8i0dqZBB/GIXktgbQIEyZ4AkibDr+jlrKW+5GOHihX2Qj5I8RJUj6vJ3BuAM9ZxO6uvInIv0Qid5Cg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 26 Jan 2023 09:24:31 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAE770D62;
+        Thu, 26 Jan 2023 06:23:47 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id m7-20020a17090a71c700b0022c0c070f2eso4703655pjs.4;
+        Thu, 26 Jan 2023 06:23:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QJfYAKlxaCbWQ/+PwFG2Tdx/pAW+XdvxwGrEKmAVKh8=;
- b=aSJCz0H64kqxK/wBQBvnERAWSK9pjWmOgfjsK2CjPHyLqQLQ9nQgfBp4fGjNgrPqMK6a2quiegCxivdqa1rZIawql3UaUqf9pYKpUNkXKRXYHXhSC7W3VYNIhxAsAds92zbM7ri+tQ9PHoMjyTfxvBDWRbvwf4GGQ+H/7ec9Pls=
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
- by DM4PR10MB6909.namprd10.prod.outlook.com (2603:10b6:8:103::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Thu, 26 Jan
- 2023 14:22:51 +0000
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::1040:f0e3:c129:cff]) by DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::1040:f0e3:c129:cff%7]) with mapi id 15.20.6043.022; Thu, 26 Jan 2023
- 14:22:51 +0000
-Message-ID: <573c92d7-3ccd-aca1-49f6-acbb105dbba9@oracle.com>
-Date:   Thu, 26 Jan 2023 14:22:45 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 11/12] perf jevents: Add model list option
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Kang Minchul <tegongkang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sandipan Das <sandipan.das@amd.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
-        Stephane Eranian <eranian@google.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>
-References: <20230126011854.198243-1-irogers@google.com>
- <20230126011854.198243-12-irogers@google.com>
- <10ae719f-2549-a367-2d2b-48671a00135e@oracle.com>
- <Y9KMGa1jGW3aLVZG@kernel.org>
-Content-Language: en-US
-From:   John Garry <john.g.garry@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <Y9KMGa1jGW3aLVZG@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0459.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1aa::14) To DM6PR10MB4313.namprd10.prod.outlook.com
- (2603:10b6:5:212::20)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NwoVoQA2ou9ZRpL3U7Nv6BoSj96XgNeTjb66AejG9oo=;
+        b=C7mY4qLZs14JoAswZVkEF5r2W0VbCtBoT8WDTR4NsktGZ2KsL0JQTyyYDzhqGqeMXl
+         CTJFwX6+QXFzQnQNrGrfhEIuvurhS+zkieW2urHA0lEJA5OltK2SCBzcafKxohIhd20Z
+         pRbf5WJuq9Of03ouclf7XM/YdZyarwNVSD1Sy/xyXGD450I/WVDpPCyH9b4vE7vscLUV
+         aIHDbv1/qiyp0frl7XOgmG+2bSKPLlyJZDCdS3IXgkerJNziKNHd1E5+pUDLZDM+EV96
+         XLLBqGKxLd8kAJqcWOce2yCMmJF7Iqn9bmiNMFMtvlUNX1tC/401WHgPlgA+FOS81V8E
+         ujqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NwoVoQA2ou9ZRpL3U7Nv6BoSj96XgNeTjb66AejG9oo=;
+        b=oRsz5tENoCfnQtDkJVjQPuHenVFPBwwOGmJNKV7RWwI7UVzlVuWYTtlIx8DJib/JGI
+         tfhiDnOKnTUhoCGfOcN051obygfBsPaJLIDXnjW43vNLPfzM4ghjXa2jOAZz0pLm57N0
+         N4Mq9ouLWszn3O/bl6NRfdeL2SV8uPX6nV5/hDMiNJJAuBQyi50pupJlLwaXPXfADCDm
+         tljvJRAvIfAh+GtP33JnivusNtkQHNslEsm/HcCeFVygCiRVFf0rsKaYxk8YddeKJtxO
+         JBJ8cDab4YJnMLy2IeHEHm+b8hofN1vAeqGguyly0NyaM06nRLQ3B8j/Jv9jmzDfW9gR
+         fKWQ==
+X-Gm-Message-State: AFqh2kr6bGbzGNp/4PJa27LTtpv7lYjbeHrnYju7r7ajHPoF2krIoLYr
+        gxXegvpXSzWId842NnRW1/g=
+X-Google-Smtp-Source: AMrXdXu1eJSJ4Kajr/piBp62I0tu+/NNq031brXbWC2VMZMEa2QlZId8ebXZgHyk3kNX83hMsvciyg==
+X-Received: by 2002:a17:902:eb44:b0:189:377c:9ab with SMTP id i4-20020a170902eb4400b00189377c09abmr36285630pli.51.1674743024748;
+        Thu, 26 Jan 2023 06:23:44 -0800 (PST)
+Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id c8-20020a170902d48800b001960706141fsm1047268plg.149.2023.01.26.06.23.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 06:23:44 -0800 (PST)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jianhua Lu <lujianhua000@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 1/2] dt-bindings: arm: qcom: Add Xiaomi Mi Pad 5 Pro (xiaomi-elish)
+Date:   Thu, 26 Jan 2023 22:23:33 +0800
+Message-Id: <20230126142334.8080-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|DM4PR10MB6909:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5636b95e-6ec8-4522-6292-08daffa8cea3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QYPdlq0dAd7fGFOmwDlZRP98EvAvGnqJZ9vBDL71nX+BRca2CCvYP6iqVnObFSI/FAoNjTL+yjBDtlqIwCAm1LjMvN46uGX+M7TsVwi4EtOsE2p1pnUfTnvt5gllTVietrHSQ0HNG6QBOQxxAEXNU2oHem71EiRZrMAuuNCi0ApVQUDSAUItKskiIcVGfmm2M5gtOwoIORevabuHL9vKE/RIYImetJ/8O9bmaIyZBx45CaGbrse2aoBxK9S6kt6TjFFn5oC536/TZfBEgv7hxfEMUag8Y3ihanmo6ka56xLDPhe3h12gCd8t8Lh6KQqFUqAm99oYo4rN9Av4yesLgP6jWTVreqOToVAZ1wuQTC36ncKEHKOYUGcVpPs6qq5cj5Cv2B5vXF9UVN1jEX9SXZ83enQAeIpMYZmeT8jorZi6klX40Uk0rAKc5TQRNLEylRMtFKM3xpYs7WXHWXyweEVUnH9BCY8LYv6MY0qLPcIoSx2PthmPa2XG0l4gxso3hf7lEUgOj3KvacyI5ayjeGS/EdS74swIuJ3gd1Jx2+7SCKtzPH8hmP8fKlRdnNga1Df+pvdYoHa4gHFFB9NmfPugpkK4nq7vr4hcT+kSYUGPBQrOB+FkuOq1k4GLGetAmWx6YkkUNcINW1hG+17xck4G052zs8osPN/xRR20hzg46Dc9Ua/xSL7HqTOBZEi8WlmpVv9vfLsD2P6nVZZNaRCvHSuqg6rEMwcL1Z3mIBM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(396003)(39860400002)(346002)(366004)(451199018)(38100700002)(86362001)(66556008)(31696002)(66946007)(41300700001)(4326008)(54906003)(8936002)(7406005)(7416002)(36756003)(316002)(66476007)(6916009)(5660300002)(8676002)(2906002)(4744005)(36916002)(2616005)(83380400001)(6486002)(478600001)(53546011)(186003)(26005)(6512007)(6506007)(6666004)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NWdKWmJaaWZ5R3dxMlJ5c0pCYVlhSkpWVWIzZHRDQVQ4eTcxS3ZkZFFMblM4?=
- =?utf-8?B?RTBKeFh0dkdxbkZMTFhpdFpCT250OEpwR1ZlTzhma3pCWC9yTk8vWmY1dkNU?=
- =?utf-8?B?N2RpcFF5UjZjR1RxZkhPUGUzQmFSNkpWejFZcGN0bGREZ2xSR0xDbXVlSTZQ?=
- =?utf-8?B?MHRLek8zSmJiTzRwR2NIeG5OZ1dSdmMrVW1yVWFFRGFUMUl5YXJrZ3pEaGVG?=
- =?utf-8?B?ZnlVM0xwTXU2RThNWVJkNDdGWDMzWjBnRlBPa2E3UmUxRkdmTS9lWENwQ2VS?=
- =?utf-8?B?ZEVPK1VOZHg1QlluRnlGRFBFV1IyckdKWmZmMnFubWQ0bU40UjVMMHhKd1Vk?=
- =?utf-8?B?cTcxY0k5SGVsVTJld2FwRWlaVklQaXBLZ0xBRU9PYmFXMFB5NnJBTWIyNUJB?=
- =?utf-8?B?bkcvNHZUTEoxMjN0TTNBeUxEK1JCdm1YMk5wNDc0OXRzbFRyanowelhBWkFL?=
- =?utf-8?B?QnlUYUN3ZkNSaElscEVNM0Rxbkt5TnNYbWhUNmRKTHY2NnBrREdrY1lmWDRN?=
- =?utf-8?B?akRkak81R3B1c2VPYnZMdFJld0kyZ3pleGtLTG9zV3h1aW9vZ0J2cE9yT3hV?=
- =?utf-8?B?bWlhYzhkb1hXVHdwT25xbU52cERCclZmYkUvVkdwZjErR00xWEkzVmlhd3lG?=
- =?utf-8?B?MDJjL2xPTzhJQUJFL1BXZGsrTFZ5SVVYcjNvQWNrZDQvTXZrL2FlMCtZaGxP?=
- =?utf-8?B?U1lWeHA5SzMrVHNBbVVJOUJlbzNtSmxvc2t0amJ4LzZ6dGhpT2hUdUI4VWZx?=
- =?utf-8?B?cWx5RExOZ2xEUGh5VUlNNVh6dm9NOEpTcE1hV28vUWhCN1d6QXU5aXRCamZW?=
- =?utf-8?B?azFNN1JWUEhzUlVkdVpOS3ZyQWhjVGV4emh3NUxjcjNhLzRmNzdaOXdRdDZz?=
- =?utf-8?B?UXJ4ZHByMHhvc3BrV05hL1dFVUgwY1dkTy8yTkVsZHRjcDVwZ2gyN1NxVWhy?=
- =?utf-8?B?L2ZCOUJGTlN3Uy9RdnZlM2tXQVdrTmZLOWowaVYvNHNYVFRTUTI3WmR0UkEy?=
- =?utf-8?B?clI3YVdFdnJNWUxiaTNRa0pnb3FKQ2xocjFrYWZRc0pRTDZGdm1BTVdXc05x?=
- =?utf-8?B?cGtlenZHVSs2cHBNL0tvbmV4dm9IdXN2bG5VMmdJSEpTQ21QT3lsUWhSaWps?=
- =?utf-8?B?NTBKcFM0RW1hTm1YN3lIeHFpNEh4eE0zNHdvQ2dZRVFwbFpWb2hqZXBXZkRU?=
- =?utf-8?B?ZzhDMUtaVUdZWWhOa3I3Ulk3ek1icU9Td29JZXNPVFB3M0tlZGx4N09iLzJS?=
- =?utf-8?B?VUg1MHJ0VlN5YlBLUG5zb3VFdWVOQU5FdkdSKzJ3aG5PSDE1d1hwb01nbDRa?=
- =?utf-8?B?RmlreWdhZ2JkQ1JTN3ZZdkVVbFdqemtLTUdpVG04V1VRcFZuaEM5dTlsanNT?=
- =?utf-8?B?UTVHancrREdxeENzZ3M4V2dhVUJsQU41Z0hoeDF1cHRHYmZQNXFvcnR1V3hB?=
- =?utf-8?B?WC8wUHUxa0VLbFUzNWJ2dEJ3bUUrWjNBbVRxRitNQ0hFdzdmdTExamFxWHA4?=
- =?utf-8?B?RitoQmt0czVtbWR4Z0hUTzFveUlIVlhSbmNvK2Myb25uRE4xRnRrNGRLMzF6?=
- =?utf-8?B?K1VIYkFkZ3p1bU8yeFB4Q2t6TmZ4VnRTcWpCUlhFT2tndFFUQ2NqSHIvMVdL?=
- =?utf-8?B?VGRkT1lxMXlJdkErWDV5YkxMV3JjRWNSRHlnWml6OExIVHI0TGVTU1hhYWgv?=
- =?utf-8?B?RTZjZ2JqN1hSSGdvayt2MklaWjV2NFhqTnFUWHNsaVoyTG1CNDFmUzJVeFJT?=
- =?utf-8?B?T1JXaHlJTWluRDdLQkh6aGcyUDBQbTVIQnFOS0l0WVZZTDRVZXVpbTlDQjZv?=
- =?utf-8?B?TVViVVhwdmRMSXJPNThCc3dXSXBsbkltckwwWjBHcWFLVXpJT3VVYWlwek9z?=
- =?utf-8?B?dDJGL1ZKdE90SGpGdGJCWkF5U1RpRWh2WlBvWTl0Z2tSV1ZFQTdsVUNyQjRo?=
- =?utf-8?B?ZFJzTU9BRWdGd0xDQlZmRlRUWXpaSCt1QzZxMExwbzFWQnFFYzJvNlhERTBE?=
- =?utf-8?B?NEtjMTZadTNEbDk4VHA2aGFabVlHUWdBTmZmTGt0dDE4b1NxN2NjcnBrMUpP?=
- =?utf-8?B?ZUlFeVdTMzVkbXJJamo0S255SlYxUTRXKzhDTlpqYWsyR3dwTEFNMThodk9x?=
- =?utf-8?B?elZ6MHp4TzY0SkZEbXp1WEFYQ3p3QkRRVzVoa3dxWnVHYWJERXFTR2lRWjhy?=
- =?utf-8?B?c0E9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?RU12SisyVm1VVVo5ejZPeHBKQjFvTUNLd1NpWm5hUTFvVEJDcWV4TmNLM2t2?=
- =?utf-8?B?RWg0UXdjU1RTZktGaWVhV3BiNklqaEZEeE10blk0bVVZTnJmTlRIL21KUHhI?=
- =?utf-8?B?czc1N1hmeE5uTlNlQVgyRkpuOWtmWHdjZms4bFVpaWR6TVBZT05NWnVmYXlC?=
- =?utf-8?B?a0c0Y3pTbkYwZGljRGtrT3FOVDhmeG9OTU1IMit6Z0xHdkE1Mm9mOHc0OUZS?=
- =?utf-8?B?bE54WjZqYXowY0ZmZDE3NzBieDZzQlRoL0JNZHpZZ25JWlgzUFM5c05OVDJY?=
- =?utf-8?B?UHFWcXZOWkxkR0NtVW1FaHgrNlpsN0NUNHFTVTREaDI2MFR4bnBkV3RnUEtB?=
- =?utf-8?B?VWZvaVZlYlo2Z1RqaER5Q3lhVER2a3JsV0MySHJ5TW1kMzJvVEdLZkZ2d1FE?=
- =?utf-8?B?QlhDaDJ0TXpVbnBTL0ExMzVYU25oMFRuRnVJUXVTVmJuUkVNaWtTVEFsbERT?=
- =?utf-8?B?aER2NVE0MUhXME5vN0g4Z09raGtmM2hYcFNzMGdoL1BEanBRUC94aTUyVFVE?=
- =?utf-8?B?NTl5eHNSU0NVUHU2TTNPeGUwbjV3N2JiUEhXQjFtcXBQL0pLR3dFa1V4V2xq?=
- =?utf-8?B?cmNoSGgrVEU5RnRiOWR2MnZYN2daNEg2R0pkeE1CTjd0ek9zZnkrWWJXcnpx?=
- =?utf-8?B?ZWo0b0ZvR3hITUh3bE5nME5Idys2RmlRQ3hEdWhMT2Y5MDhLelRMbWZDVmpm?=
- =?utf-8?B?REozMU5SV1Myd3RaVEFGNGhVVHhrT0RkekJjQ0tHNE4wdU9JUWp5QjVhUGN1?=
- =?utf-8?B?NDBPaHNUNE91bVV3UkpmRzdOZUREL20zQ2Z0dU9iQ2Q0cDB6R1FtWGlBcXdo?=
- =?utf-8?B?QkwvQXhnYmd4TnN6RGtNTW5XY3lnczVUV2cxTjc2VFlOUTF3Rkt3RVZGTHdG?=
- =?utf-8?B?c1pGc3dXS3RHMXJaQ1lVN2FPMWk2dHZIT0RLaVlDNHh6cU9zMWwrdzNWYk1x?=
- =?utf-8?B?WW9uNkRPZVdPdUQrN3JZVnAwZXFxOXB6WGtkbUgxZ08wRlQrSGhEVnFMeWJW?=
- =?utf-8?B?MENVdWxXR0gyYUZqYW9HcVhTK3R6bkRzWVB1UzRsRDAwRUhUZmp1WmdPOFNw?=
- =?utf-8?B?OXprdGM0UmpkOGRwKzFjMXBvNlNxWFJpdStmQ2VFc09WQ2ljTkNodjE3MXk3?=
- =?utf-8?B?NkdMRy9ocVByK2IrNzVsZGdWeVU2RzBDR2taU2ttaHcvSnI2b2JBSVk0MW1O?=
- =?utf-8?B?cUNBOEFqT3hubW9mT2x1Vm5sdVVIa1RMWGovZVcxRjlERjdaYkd6Zi9JQ2RU?=
- =?utf-8?B?Y1NITmhyMUF1NWV4KytScFJ4UVh1ZWRUYzd3V3JNbXl5Q1lpUWtGTnBtVjg2?=
- =?utf-8?B?eno0S2ZGTmIzZmIvcEdTWHZiYnY0alk3dnN4Z3ArU3ZrVWd5ME81dFE4SGdm?=
- =?utf-8?B?ZXpTSXl5eXR5REpMT0E5Y3dTdU84M2JTWkI1ajJCWDNlZDVqTUw1RXFLNzM4?=
- =?utf-8?B?ZXlLTDBNWHQzTnN6MUtIU3NzZzFxSW5uaVR2OXRqU1RGb1dWR21zb1ROSFRX?=
- =?utf-8?B?anRUWkZvV0t1STA2amJhMFhTK1ZIK0lUUTd1a0ZScXRJdFFLayswWFdWS1cz?=
- =?utf-8?B?alFhc1lTK1BiUUtYc0N6N0llNldTRFBxSVErQ0R3RjVnZU12a3ZCRkMyQTdG?=
- =?utf-8?B?bkR6OE00ZUM1TDdoeGRFY3EwMWxnMjhPZVFrZC9OZHZqT052Q3RBMmJEK3Vt?=
- =?utf-8?Q?+Kymi1M7nMSO6BTiwoQ5?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5636b95e-6ec8-4522-6292-08daffa8cea3
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 14:22:51.5248
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tcx9y8lXDrcOKKkpiMLwiazwtnW09oFXmaIL2wogUC3UO6DntaJ70RifPP7JTLmblG5Ux8GmIcKvhdccyaM8fA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6909
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_06,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- malwarescore=0 mlxscore=0 bulkscore=0 adultscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260138
-X-Proofpoint-GUID: NmiScQEQHaeFTa88iM7IbCKbe9idjo_I
-X-Proofpoint-ORIG-GUID: NmiScQEQHaeFTa88iM7IbCKbe9idjo_I
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -214,29 +79,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 14:20, Arnaldo Carvalho de Melo wrote:
-> Em Thu, Jan 26, 2023 at 01:44:39PM +0000, John Garry escreveu:
->> On 26/01/2023 01:18, Ian Rogers wrote:
->>> This allows the set of generated jevents events and metrics be limited
->>> to a subset of the model names. Appropriate if trying to minimize the
->>> binary size where only a set of models are possible.
->>>
->>> Signed-off-by: Ian Rogers<irogers@google.com>
->> Thanks for this:
->>
->> Reviewed-by: John Garry<john.g.garry@oracle.com>
-> Thanks for reviewing the series John, I see there are a few patches for
-> which you didn't provide your Reviewed-by, 
+Add a compatible for Xiaomi Mi Pad 5 Pro.
 
-Hi Arnaldo,
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Changes in v3:
+  - Pick up Krzysztof's A-b
 
-> are you planning to review
-> those as well?
-> 
+Changes in v2:
+  - Move compatible "xiaomi-elish" down.
 
-I will do when I get a chance over the next day or so. I am just 
-checking the easier ones at the moment :)
+ Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-John
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 22553637c519..398ff26e6e0e 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -875,6 +875,7 @@ properties:
+               - qcom,sm8250-mtp
+               - sony,pdx203-generic
+               - sony,pdx206-generic
++              - xiaomi,elish
+           - const: qcom,sm8250
+ 
+       - items:
+-- 
+2.39.1
 
