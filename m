@@ -2,76 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DDE67CA2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7CF67CA2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237263AbjAZLkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 06:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S237317AbjAZLlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 06:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237243AbjAZLkU (ORCPT
+        with ESMTP id S236303AbjAZLlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 06:40:20 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055905C0C9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:40:20 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so3092430wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 03:40:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=79I3qX7WorpnGCtocTNXJGOFGCxWkI/DAjgFGqY8pmw=;
-        b=zi7czjMCjCY1Xwlr1W4/Dno+Dsq8poXwf5ka+JeXV99URT+aO7gJYo8UWmCw5/0upw
-         jjR4cuLSnmOn7OvlIHObd/SGn4atIsevM/auK6vxoULiXLTtBfQIP9dHl6198xM0CixY
-         DgUVE6gllYqWh5KTedizqP4EstmQ9G23b1ATccR4zR0btlbaIq6QWdpJf0U/4rDw7QQ1
-         4uWVV3r4MLxzuzZijYskvwHlZCZSqdgRqD0cr7V0Pu/15IfdZYLpbXnH8uXh6jwc8Dkc
-         CjOB0FUpL/SF/g/rBvmZiBQTt2Z01ee5tnikI7jid4DKNBzoXjlOuth0AjawOrk59+xW
-         7MCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=79I3qX7WorpnGCtocTNXJGOFGCxWkI/DAjgFGqY8pmw=;
-        b=xFPSMFkmRPosqpyuB3qhxpLUIDQYRPfxBN4LDrVYpWI8jXLDRS/uBcONaLKuvKc6Mo
-         Xihe/W9E5qYkba7kC6MOZcS0z/BSv3U434P2L21koe7pBE8oyNq1Nd+TTWU9XQ5C5Pk8
-         IY1XDFYYWOz8j3J2w/riU1iYd8nCBRbf16kVoZbBEWZzBRppPdLEunWcNbT01IaheWf6
-         Jjh2ScqGFaaEny1O/8YhY+VPSJhXXDw/EzIWmrzZ+bLI6O3UlG1gK3YZaZPXFJCtCMIX
-         ZKyt5RatUMMl3D6W1/JpnBnZ4EsLUkOnXuIdrN1v5rHtudeAM5UKnfR86MiCHb9VVrM3
-         eGZA==
-X-Gm-Message-State: AFqh2kpbRZhKf1eR3FT6J1ymKl2DNMI4LN+eJNrd5qs9P8NVBBlnVeHn
-        ysKdmzOTmUeXoSmdu+NXxyAAYw==
-X-Google-Smtp-Source: AMrXdXuz1X8Z3gE5ArmKdSE9D4XLRnuS5VaeED9k+4FDG6W8uGSdgLX4avRth74OO3so9yFpLw+A7g==
-X-Received: by 2002:a05:600c:3d10:b0:3da:e4c:2a3c with SMTP id bh16-20020a05600c3d1000b003da0e4c2a3cmr35452487wmb.41.1674733218565;
-        Thu, 26 Jan 2023 03:40:18 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id d1-20020adfe2c1000000b002bfba730b0fsm1069898wrj.65.2023.01.26.03.40.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 03:40:18 -0800 (PST)
-Message-ID: <e404760c-6442-7406-c46f-48354adda2e5@linaro.org>
-Date:   Thu, 26 Jan 2023 12:40:16 +0100
+        Thu, 26 Jan 2023 06:41:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AB53401E;
+        Thu, 26 Jan 2023 03:41:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55D71617AA;
+        Thu, 26 Jan 2023 11:41:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFFDC433D2;
+        Thu, 26 Jan 2023 11:41:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674733262;
+        bh=qfPOMQevseGKzABgISEcHtF7Q+YV2186ncy5J7RmObY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ryhKIv0NE1kuQ5Aohznk405P8vNiHaF4shr7HjLkY8LmXXbH6vq+sTwRUU/VpPhfe
+         iDJTaYfAzWXQw4cbmZ79Sj+we6BSe7YQVh7doSFZiZgvYuu94UJjmVDYt7aiyOuw3/
+         6Jmefv+7eb/JtIXs0ZUaGCnIbG5X9F9TcqOhdbRx8IpgJaNJVKD3NRdyGi47W214+l
+         DLQB6YGs3FrZqMe6HpmF6Yo8YM0qUeEBKllufkYksphNFpe9R/wW8r6CfXT8Y4RcsY
+         +aHwdkjVi7dj4ruaeQXTo70D/nJaSuXRuy/XIxe09zP7YLlfy7WVfxrv/WGirxn/jt
+         1yg9M/q7Gs6VQ==
+Date:   Thu, 26 Jan 2023 19:40:55 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Stefan Agner <stefan@agner.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] ARM: dts: imx: use generic node name for rave-sp
+Message-ID: <20230126114054.GI20713@T480>
+References: <20230123151555.369881-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH RESEND linux-next v4.1 4/4] dt-bindings: usb: Fix
- properties for VL817 hub controller
-Content-Language: en-US
-To:     Anand Moon <linux.amoon@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230125143404.1424-1-linux.amoon@gmail.com>
- <20230125143404.1424-5-linux.amoon@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230125143404.1424-5-linux.amoon@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123151555.369881-1-krzysztof.kozlowski@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,23 +60,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2023 15:34, Anand Moon wrote:
-> Cleanup by removing unneeded quotes from refs and
-> add maxItems to reset-gpios and fix the required list.
+On Mon, Jan 23, 2023 at 04:15:54PM +0100, Krzysztof Kozlowski wrote:
+> Use generic "mcu" node name for rave-sp node, as recommended by
+> Devicetree specification.
 > 
-> Fixes: 31360c28dfdd ("dt-bindings: usb: Add binding for Via lab VL817 hub controller")
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Now it's correct.
-
-
-> ---
-
-Subject: dt-bindings: usb: vialab,vl817: Cleanup compatible, reset-gpios
-and required
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Applied both, thanks!
