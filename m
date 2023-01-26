@@ -2,187 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A9C67CBF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9A767CBF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236583AbjAZNXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S236171AbjAZNXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234330AbjAZNXU (ORCPT
+        with ESMTP id S236656AbjAZNXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:23:20 -0500
-Received: from egress-ip4b.ess.de.barracuda.com (egress-ip4b.ess.de.barracuda.com [18.185.115.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8E518A89
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:23:14 -0800 (PST)
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200]) by mx-outbound20-172.eu-central-1b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Thu, 26 Jan 2023 13:23:12 +0000
-Received: by mail-pl1-f200.google.com with SMTP id z10-20020a170902ccca00b001898329db72so1080661ple.21
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:23:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mistralsolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=G6Ajtn/dXFsb1dJwxtMc9cBb7rwqzMHAM/XeIm3RbXo=;
-        b=dLKubE6MdgWycXaqJju4vKd0/kcSXs8DRbRASh4UPjDRiySsPddsy7NQZdipi/04Rc
-         Fi/OrdSOMfIo3bHbMl4gct77HOhlChQcv0SF5OUSZAUttB0lk+pWu4TrxA43CeRCM/Pu
-         xcr9ZmtwKObDu6JI7c/qIN9TL0FnN2HKwugbE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G6Ajtn/dXFsb1dJwxtMc9cBb7rwqzMHAM/XeIm3RbXo=;
-        b=PDrIJ3h9kZISFcIhLrAPmYTDQDyt9O/Y4zMDm+YRQwhcpUxZPpFlXfQpQBWZ//fz3V
-         yUdaSbEQC39lxLnXDH7lMKiDDCFaGWpkr+I7J1TymjB1MeH7h6sA/yOLg1KGCU8jkzmH
-         l5TcIQbzcyWYQct5/AdboGoqN5tls1oFz5xmwBQBaqpkZ3Gm93K8YWSARBC8G/pisXlu
-         Fpx1HEEgVXuYtQ+b0ZKOXkAqfAIO3hhp8jesvh+cMPZxCuXpJIhi5/g+cRCxjK2WdeGL
-         aOPmgbaR9dGwyCRIXlzzSLVDs0vIg453x6VeEURrJzdySTwW8tTOyfgk6hXAMNJgm+oT
-         /SqQ==
-X-Gm-Message-State: AO0yUKX/+9px7ntVOOdJNABwTeKWGMtJxSLN0l4UVe2kZbXKV9wPthhq
-        uPx7okwLf8v4TUhexTs10L0jh4IwVwO2M5k352TKc8U4U17X6xEu9qJvMBBt5N4xSz6WKgKq/Ru
-        ZgKqtTJ4tPhz7RTZQKyyVPjZMgIvzX7LWdgCAVi4NQ2yR8M3nD10MbJbMB0ca
-X-Received: by 2002:a17:902:dccc:b0:192:8cd1:5e79 with SMTP id t12-20020a170902dccc00b001928cd15e79mr1237642pll.41.1674739391263;
+        Thu, 26 Jan 2023 08:23:19 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38192B0BF;
         Thu, 26 Jan 2023 05:23:11 -0800 (PST)
-X-Google-Smtp-Source: AK7set8IQgw7vRA4qsEaaEHQGI+f2pPf6yzXhzjvUm7ljh/Pd1JT6RB0lPlOU7j1jmjyQkcXIIGqMg==
-X-Received: by 2002:a17:902:dccc:b0:192:8cd1:5e79 with SMTP id t12-20020a170902dccc00b001928cd15e79mr1237621pll.41.1674739390872;
-        Thu, 26 Jan 2023 05:23:10 -0800 (PST)
-Received: from localhost.localdomain ([49.207.202.116])
-        by smtp.gmail.com with ESMTPSA id ix12-20020a170902f80c00b00178143a728esm946206plb.275.2023.01.26.05.23.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 05:23:10 -0800 (PST)
-From:   Sinthu Raja <sinthu.raja@mistralsolutions.com>
-X-Google-Original-From: Sinthu Raja <sinthu.raja@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-j721s2-main: Add dts nodes for EHRPWMs
-Date:   Thu, 26 Jan 2023 18:52:43 +0530
-Message-Id: <20230126132243.15695-1-sinthu.raja@ti.com>
-X-Mailer: git-send-email 2.36.1
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=SbkeWeEgW1bNMqYbZ1eBy6sGiKmDUdecQALPl+6OB9U=; b=Pub10WGq94Ss3tqKj+w/kDQomL
+        mJ9yUJ8gSAYOOAIwvXheRuBBpNv2LQWfkKvircaB9Od6RC5TGUobaRU7Qxcbbs7YmRYD+afR9KCX9
+        u3IyafhcGpB8p0Fv9aemss+P3J2m2RGv7anqpvIrA6QeSGBjEa8mqUWgLueZqwsG4VSs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pL2DO-003Eyd-Sx; Thu, 26 Jan 2023 14:22:54 +0100
+Date:   Thu, 26 Jan 2023 14:22:54 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Breno Leitao' <leitao@debian.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "leit@fb.com" <leit@fb.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael van der Westhuizen <rmikey@meta.com>
+Subject: Re: [PATCH v3] netpoll: Remove 4s sleep during carrier detection
+Message-ID: <Y9J+rhRFxbLIWgQv@lunn.ch>
+References: <20230125185230.3574681-1-leitao@debian.org>
+ <6d13242627e84bde8129e75b6324d905@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-BESS-ID: 1674739391-305292-5511-661-1
-X-BESS-VER: 2019.1_20221214.2106
-X-BESS-Apparent-Source-IP: 209.85.214.200
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.245721 [from 
-        cloudscan16-118.eu-central-1b.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND, BSF_SC0_MISMATCH_TO
-X-BESS-BRTS-Status: 1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6d13242627e84bde8129e75b6324d905@AcuMS.aculab.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sinthu Raja <sinthu.raja@ti.com>
+On Thu, Jan 26, 2023 at 09:04:42AM +0000, David Laight wrote:
+> From: Breno Leitao
+> > Sent: 25 January 2023 18:53
+> > This patch removes the msleep(4s) during netpoll_setup() if the carrier
+> > appears instantly.
+> > 
+> > Here are some scenarios where this workaround is counter-productive in
+> > modern ages:
+> > 
+> > Servers which have BMC communicating over NC-SI via the same NIC as gets
+> > used for netconsole. BMC will keep the PHY up, hence the carrier
+> > appearing instantly.
+> > 
+> > The link is fibre, SERDES getting sync could happen within 0.1Hz, and
+> > the carrier also appears instantly.
+> > 
+> > Other than that, if a driver is reporting instant carrier and then
+> > losing it, this is probably a driver bug.
+> 
+> I can't help feeling that this will break something.
+> The 4 second delay does look counter productive though.
+> Obvious alternatives are 'wait a bit before the first check'
+> and 'require carrier to be present for a few checks'.
 
-Add dts nodes for 6 EHRPWM instances on SoC. Disable EHRPWM nodes in the
-dtsi files and only enable the ones that are actually pinned out on a
-given board.
+I'm guessing, but i think the issue is that the MAC reports the
+carrier is up, even though autoneg has not completed, and so packets
+are getting dropped. Autoneg takes around 1.5 seconds, so you need to
+wait this long before starting to send to prevent packets landing in
+the bit bucket. And i guess polling as you suggests does not help,
+since it never returns the true status.
 
-Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 74 ++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+But this is pure guesswork. Maybe some mailing list archaeology can
+help explain this code.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-index 8915132efcc1..68f4fe85085b 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-@@ -26,6 +26,80 @@ l3cache-sram@200000 {
- 		};
- 	};
- 
-+	scm_conf: scm-conf@104000 {
-+		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
-+		reg = <0x00 0x00104000 0x00 0x18000>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0x00 0x00 0x00104000 0x18000>;
-+
-+		ehrpwm_tbclk: clock-controller@140 {
-+			compatible = "ti,am654-ehrpwm-tbclk", "syscon";
-+			reg = <0x140 0x18>;
-+			#clock-cells = <1>;
-+		};
-+	};
-+
-+	main_ehrpwm0: pwm@3000000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x00 0x3000000 0x00 0x100>;
-+		power-domains = <&k3_pds 160 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 0>, <&k3_clks 160 0>;
-+		clock-names = "tbclk", "fck";
-+		status = "disabled";
-+	};
-+
-+	main_ehrpwm1: pwm@3010000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x00 0x3010000 0x00 0x100>;
-+		power-domains = <&k3_pds 161 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 1>, <&k3_clks 161 0>;
-+		clock-names = "tbclk", "fck";
-+		status = "disabled";
-+	};
-+
-+	main_ehrpwm2: pwm@3020000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x00 0x3020000 0x00 0x100>;
-+		power-domains = <&k3_pds 162 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 2>, <&k3_clks 162 0>;
-+		clock-names = "tbclk", "fck";
-+		status = "disabled";
-+	};
-+
-+	main_ehrpwm3: pwm@3030000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x00 0x3030000 0x00 0x100>;
-+		power-domains = <&k3_pds 163 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 3>, <&k3_clks 163 0>;
-+		clock-names = "tbclk", "fck";
-+		status = "disabled";
-+	};
-+
-+	main_ehrpwm4: pwm@3040000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x00 0x3040000 0x00 0x100>;
-+		power-domains = <&k3_pds 164 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 4>, <&k3_clks 164 0>;
-+		clock-names = "tbclk", "fck";
-+		status = "disabled";
-+	};
-+
-+	main_ehrpwm5: pwm@3050000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x00 0x3050000 0x00 0x100>;
-+		power-domains = <&k3_pds 165 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 5>, <&k3_clks 165 0>;
-+		clock-names = "tbclk", "fck";
-+		status = "disabled";
-+	};
-+
- 	gic500: interrupt-controller@1800000 {
- 		compatible = "arm,gic-v3";
- 		#address-cells = <2>;
--- 
-2.36.1
+I guess the likely breaking scenario is that simply the first 1.5
+seconds of the kernel log goes to the bit bucket for broken
+MACs. Which is not fatal, just annoying for somebody trying to debug a
+crash in the first few seconds. I suppose dhcp might also take longer
+for broken MACs, since its first requests also get lost, and it might
+get into exponential back off.
 
+I guess the risks are small here. But i use the word guess a lot...
+
+  Andrew
