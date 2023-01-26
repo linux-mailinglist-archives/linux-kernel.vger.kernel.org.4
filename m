@@ -2,136 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E335A67D8BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A85567D8C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232985AbjAZWr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:47:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S232958AbjAZWtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjAZWrZ (ORCPT
+        with ESMTP id S229813AbjAZWtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:47:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5902245F79
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:47:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5FF361982
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 22:47:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E3CC433D2;
-        Thu, 26 Jan 2023 22:47:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1674773243;
-        bh=Ep/KY1mu+CYgnjaFY9zEbtTygigA8q1n5HTt47g3wsM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZNprl7PhmX2pjn2/SqfKBf/BFgPCmxOFGfb3Xdu65l8w0TIX26cGDy94uq5D2Yk+v
-         sxp3N4d97pMptUV6mSJT8e+iowsH3FpgSEUGnkq/5sU9fZxo38/HTxCxgJNMFn9Cj+
-         izplUSGTZRGb152LzibI/rgC2RuzV871BGLMwg10=
-Date:   Thu, 26 Jan 2023 14:47:22 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
+        Thu, 26 Jan 2023 17:49:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67ECFB463
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:48:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674773291;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vLBfAkoL6ZyX3A8oP3kQ2yLyRZ4PLk/qBUxFp+JImYg=;
+        b=HUQ2mHEq3s3CG1Ww+MBKO9fcfG9/vxGWDM5tppBs+ff1jJiMJM75D+QyL2yJCqgWk5KeFW
+        MtD/yDQQuB3yHUJKMtRmBYVVdN4wFlxPq9ZgarNyTTsKhRoEX8hHLRb1RMorpKSP1zPIk5
+        QZ2LWYBm20JHGbVmKeFdFbMLFM4TwcI=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-539-h6QLkUJ0NVqUeOP5aibHYQ-1; Thu, 26 Jan 2023 17:48:10 -0500
+X-MC-Unique: h6QLkUJ0NVqUeOP5aibHYQ-1
+Received: by mail-qv1-f70.google.com with SMTP id l6-20020ad44446000000b00537721bfd2dso1869851qvt.11
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:48:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vLBfAkoL6ZyX3A8oP3kQ2yLyRZ4PLk/qBUxFp+JImYg=;
+        b=4mNJgaT1wtoFCMRsRpzyUVph6LTXkLft0XCd5L+hn7H3DJUdZdtaEbBSr1LjeiRXVh
+         T0gZ9xSUlTpb7XITEj4j6NlbJfDx2q9KtqOY4B5MoyOrEZa1zg4cjs+j6z65UzdgGpek
+         o66WVA6jAxreuhGuWhFPLirGrZSxtrFO4kTSfXPkOOgFclmL37w1cW8knPdvzsw5wC9j
+         gVXts4/kH4zYWmI42gpN+KahVNWj9iAM0tEyvOqNeTS7fo4s7wbBk8psoX3btL0C2owx
+         iyHuxiSrjj4duSfj1fAEQbSHVJ2/yrHGl+AXgnp3pjdUfghH2fRBCoYkLmTxOsQHlwqF
+         KHsA==
+X-Gm-Message-State: AFqh2kpw7FixWS0Lp5S+M0kyvwbvDyWbGVkly/uEQQVrnhodcfShYwjA
+        obIlCZ2eTmxF+sYZlx19yxAZScg4s+diJWf94a4qfdWyQzhDKYEHLlxrpywmKtfR0YkWGgf+oWe
+        YYfvYJhHD7fHG+3N5tVxRSxMm
+X-Received: by 2002:a05:622a:5086:b0:3b6:3c39:916e with SMTP id fp6-20020a05622a508600b003b63c39916emr54766524qtb.45.1674773289229;
+        Thu, 26 Jan 2023 14:48:09 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuNjDkdcubvsGil3MKn08xe70j/wphCYOerzdAaod5Z1ZjDGjQiL1eur58Xwpkvcx22JnAAtA==
+X-Received: by 2002:a05:622a:5086:b0:3b6:3c39:916e with SMTP id fp6-20020a05622a508600b003b63c39916emr54766502qtb.45.1674773288998;
+        Thu, 26 Jan 2023 14:48:08 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id m15-20020a05620a220f00b006fc9fe67e34sm124647qkh.81.2023.01.26.14.48.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 14:48:08 -0800 (PST)
+Date:   Thu, 26 Jan 2023 17:48:06 -0500
+From:   Peter Xu <peterx@redhat.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Naoya Horiguchi <naoya.horiguchi@linux.dev>,
         James Houghton <jthoughton@google.com>,
-        Peter Xu <peterx@redhat.com>,
         David Hildenbrand <david@redhat.com>,
         Michal Hocko <mhocko@suse.com>, Yang Shi <shy828301@gmail.com>,
         Vishal Moola <vishal.moola@gmail.com>,
         Matthew Wilcox <willy@infradead.org>,
         Muchun Song <songmuchun@bytedance.com>,
-        Vishal Moola (Oracle) <vishal.moola@gmail.com>
-Subject: Re: [PATCH 0/2] Fixes for hugetlb mapcount at most 1 for shared
- PMDs
-Message-Id: <20230126144722.8b84116c488553c79d8623ec@linux-foundation.org>
-In-Reply-To: <20230126222721.222195-1-mike.kravetz@oracle.com>
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 0/2] Fixes for hugetlb mapcount at most 1 for shared PMDs
+Message-ID: <Y9MDJuPWsk9820xD@x1n>
 References: <20230126222721.222195-1-mike.kravetz@oracle.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230126222721.222195-1-mike.kravetz@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 Jan 2023 14:27:19 -0800 Mike Kravetz <mike.kravetz@oracle.com> wrote:
-
+On Thu, Jan 26, 2023 at 02:27:19PM -0800, Mike Kravetz wrote:
+> This issue of mapcount in hugetlb pages referenced by shared PMDs was
+> discussed in [1].  The following two patches address user visible
+> behavior caused by this issue.
+> 
+> Patches apply to mm-stable as they can also target stable backports.
+> 
 > Ongoing folio conversions cause context conflicts in the second patch
 > when applied to mm-unstable/linux-next.  I can create separate patch(es)
 > if people agree with these.
+> 
+> [1] https://lore.kernel.org/linux-mm/Y9BF+OCdWnCSilEu@monkey/
+> Mike Kravetz (2):
+>   mm: hugetlb: proc: check for hugetlb shared PMD in /proc/PID/smaps
+>   migrate: hugetlb: Check for hugetlb shared PMD in node migration
 
-I fixed things up.  queue_folios_hugetlb() is now
+Acked-by: Peter Xu <peterx@redhat.com>
 
-static int queue_folios_hugetlb(pte_t *pte, unsigned long hmask,
-			       unsigned long addr, unsigned long end,
-			       struct mm_walk *walk)
-{
-	int ret = 0;
-#ifdef CONFIG_HUGETLB_PAGE
-	struct queue_pages *qp = walk->private;
-	unsigned long flags = (qp->flags & MPOL_MF_VALID);
-	struct folio *folio;
-	spinlock_t *ptl;
-	pte_t entry;
-
-	ptl = huge_pte_lock(hstate_vma(walk->vma), walk->mm, pte);
-	entry = huge_ptep_get(pte);
-	if (!pte_present(entry))
-		goto unlock;
-	folio = pfn_folio(pte_pfn(entry));
-	if (!queue_folio_required(folio, qp))
-		goto unlock;
-
-	if (flags == MPOL_MF_STRICT) {
-		/*
-		 * STRICT alone means only detecting misplaced folio and no
-		 * need to further check other vma.
-		 */
-		ret = -EIO;
-		goto unlock;
-	}
-
-	if (!vma_migratable(walk->vma)) {
-		/*
-		 * Must be STRICT with MOVE*, otherwise .test_walk() have
-		 * stopped walking current vma.
-		 * Detecting misplaced folio but allow migrating folios which
-		 * have been queued.
-		 */
-		ret = 1;
-		goto unlock;
-	}
-
-	/*
-	 * With MPOL_MF_MOVE, we try to migrate only unshared folios. If it
-	 * is shared it is likely not worth migrating.
-	 *
-	 * To check if the folio is shared, ideally we want to make sure
-	 * every page is mapped to the same process. Doing that is very
-	 * expensive, so check the estimated mapcount of the folio instead.
-	 */
-	if (flags & (MPOL_MF_MOVE_ALL) ||
-	    (flags & MPOL_MF_MOVE && folio_estimated_mapcount(folio) == 1 &&
-	     !hugetlb_pmd_shared(pte))) {
-		if (isolate_hugetlb(folio, qp->pagelist) &&
-			(flags & MPOL_MF_STRICT))
-			/*
-			 * Failed to isolate folio but allow migrating pages
-			 * which have been queued.
-			 */
-			ret = 1;
-	}
-unlock:
-	spin_unlock(ptl);
-#else
-	BUG();
-#endif
-	return ret;
-}
+-- 
+Peter Xu
 
