@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A321267D447
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8E567D459
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbjAZSgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S230227AbjAZSic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:38:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjAZSgV (ORCPT
+        with ESMTP id S232161AbjAZSi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:36:21 -0500
-Received: from kozue.soulik.info (kozue.soulik.info [IPv6:2001:19f0:7000:8404:5054:ff:fe75:428f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A334237F14;
-        Thu, 26 Jan 2023 10:36:20 -0800 (PST)
-Received: from [192.168.0.134] (unknown [192.168.0.134])
-        by kozue.soulik.info (Postfix) with ESMTPSA id 70268100DAB;
-        Fri, 27 Jan 2023 03:35:17 +0900 (JST)
-Message-ID: <02142e8c-7479-1066-b5af-dad954136adc@soulik.info>
-Date:   Fri, 27 Jan 2023 02:36:07 +0800
+        Thu, 26 Jan 2023 13:38:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B71D68133
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 10:38:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF9C3618D3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:38:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A027AC433EF;
+        Thu, 26 Jan 2023 18:38:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674758304;
+        bh=vSN15U4+3V2iFVQFE4V99mWb1+xvL+gAsefhw3kvQB4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pyhlXpy+gTPEM0mgxGScKI/INFrgDmQBa5v5iwCoLZu1SddZOOvmzkzdsJfNyy2YF
+         2HmRVxrlDC26MQVPwEO2JFcW9S9ev2H8UlbgUr+EDIxsSVhTz+aNFfUYA1Gmvdg6fU
+         cE6aMHD3w5SC8P7oQbVg7q02F/32ekGlYEUfoVedSM/80sVRXAsI15KQ6144p9l8gP
+         1n3xVho78oSYpkOLnSoSviXviaG7PeeQskkD6KXWync9WlIFFLmqbVb/j/PUMcNov7
+         u44a8RotUcqUAMz9cq7Dx+It99xEWwyt6FeNEJ7eIEiVfrVfL2+7sADJQRufiP6RtP
+         1AylVxxhxNSSw==
+Date:   Thu, 26 Jan 2023 18:38:20 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        sudeep.holla@arm.com, Jim Quinlan <james.quinlan@broadcom.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>
+Subject: Re: [PATCH] regulator: scmi: Allow for zero voltage domains
+Message-ID: <Y9LInDhFoVkWMe7d@sirena.org.uk>
+References: <20230126180511.766373-1-cristian.marussi@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH v6 03/11] media: v4l2: Add extended buffer (de)queue
- operations for video types
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     randy.li@synaptics.com, Brian.Starkey@arm.com,
-        frkoenig@chromium.org, hans.verkuil@cisco.com,
-        helen.koike@collabora.com, hiroh@chromium.org,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, mchehab@kernel.org,
-        narmstrong@baylibre.com, nicolas@ndufresne.ca, sakari.ailus@iki.fi,
-        stanimir.varbanov@linaro.org, tfiga@chromium.org
-References: <20210114180738.1758707-1-helen.koike@collabora.com>
- <20210114180738.1758707-4-helen.koike@collabora.com>
- <20230125200026.16643-1-ayaka@soulik.info>
- <7609d523-667a-49a8-45f5-8186de20c24b@xs4all.nl>
- <Y9Jd12nYGk2xTYzx@pendragon.ideasonboard.com>
-From:   ayaka <ayaka@soulik.info>
-In-Reply-To: <Y9Jd12nYGk2xTYzx@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="09+FMyE3c5KMLHKA"
+Content-Disposition: inline
+In-Reply-To: <20230126180511.766373-1-cristian.marussi@arm.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,105 +57,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 1/26/23 19:02, Laurent Pinchart wrote:
-> On Thu, Jan 26, 2023 at 09:57:51AM +0100, Hans Verkuil wrote:
->> On 25/01/2023 21:00, ayaka wrote:
->>> I am currently refresh this patchset, but I didn't see the need beyond v4l2_ext_pix_fmt, which I had done.
->>> On 2/23/21 20:58, Hans Verkuil wrote:
->>>> On 14/01/2021 19:07, Helen Koike wrote:
->>>>> Those extended buffer ops have several purpose:
->>>>> 1/ Fix y2038 issues by converting the timestamp into an u64 counting
->>>>>      the number of ns elapsed since 1970
->>> I think application just use the timestamp field for tracking the
->>> buffer. It would be just a sequence buffer.
->>> At least for the most widely cases, the video encoder and decoder
->>> and ISP, this field is not a wall time.
->> For video capture and video output this is typically the monotonic
->> clock value.
->>
->> For memory-to-memory devices it is something that is just copied from
->> output to capture.
->>
->> So ISPs definitely use this as a proper timestamp.
-> There are both inline (live-to-memory) and offline (memory-to-memory)
-> ISPs. The former certainly need a proper timestamp.
->
-I really have not seen a device that has timer starting with the epoch.
+--09+FMyE3c5KMLHKA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I rarely know the ISP has a wall clock timer.
+On Thu, Jan 26, 2023 at 06:05:11PM +0000, Cristian Marussi wrote:
+> SCMI Voltage protocol allows the platform to report no voltage domains
+> on discovery, while warning the user about such an odd configuration.
 
-Timestamp is not my first concern here. Offset is.
+This patch removes all diagnostics in this case?
 
->>>>> 2/ Unify single/multiplanar handling
->>>>> 3/ Add a new start offset field to each v4l2 plane buffer info struct
->>>>>      to support the case where a single buffer object is storing all
->>>>>      planes data, each one being placed at a different offset
->>> I really care about this. But I think the data_offset field in
->>> struct v4l2_plane is enough. The rest is the problem of the kernel
->>> internal API and allocator.
->> data_offset has proven to be very confusing and is rarely used because
->> of that.
-Yes, I didn't know any stateful codec driver support this.
->> We do need some sort of an offset field as proposed here, but it
->> shouldn't be named data_offset.
-Maybe we could just rename it or make a union in the existing struct.
-> The existing data_offset field was indeed added for other purposes, to
-> let drivers report where the actual image data starts for devices that
-> prepend some sort of header.
+--09+FMyE3c5KMLHKA
+Content-Type: application/pgp-signature; name="signature.asc"
 
-For the compressed image, it makes sense. But the most of usage I knew 
-is the upstream would just allocate a large buffer for compression video 
-bitstream,
+-----BEGIN PGP SIGNATURE-----
 
-Then it could tell where the decoder should start.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPSyJsACgkQJNaLcl1U
+h9BfLAf/VnME1mlJ7pDoU0qwhal00UjAby6spW0h1lMeyLOadd/DoI6j03M6VLTl
+dgfisO0xOUNr5JZ1d+onWTj1zMl8ib3JVfTGNJKyTIIztbun6IZ7RE1xhlNg+A5J
+09RSiWKB1YgBqP/4JQn4NmCbtjpl5oGTnhbjCqWqFbY3+1aZRChVP0AiPxXIWhnS
+0SlY27hVvecJ9jaMaUhXR7Gn3Y9usWp9jHKcrB5I4IjoWUQti3bcBbwTCNUPCLE6
+1RxdbZaUrABYl1DJk1pDVQdXfyj7fUHWleDKQTDstF+vFt9AfiNwyV4pWYFjJPCy
+kKCXDwlgGC8AQxy4N4rGThN1l+jKjQ==
+=Sf3V
+-----END PGP SIGNATURE-----
 
->   That's indeed not what we want here, we
-> instead need something similar to the offsets field of struct
-> drm_mode_fb_cmd2.
-
-That leads to another question. Should the offset be fixed from the 
-first enqueued?
-
-For the dmabuf, the v4l2 core framework would detatch then attach the 
-buffer when it found the private of a plane is not same. Although it 
-sounds unnecessary, some devices would a different cache line for the 
-chroma channel, it should be updated.
-
-For the drm_mode_fb_cmd2, unless you remove that fb_id, there is no way 
-to modify the offset. But this would break the existing usage I 
-mentioned before.
-
-We need to consider whether we need to keep the previous offset and a 
-hook for update it.
-
->>> I am thinking just add a field recording the offset input from the user.
->>> When we return the buffer back to the user, the value of the offset
->>> should be same as the it is queued.
->>>
->>> Meanwhile, the API compatible that I want to keep is user using the
->>> ext_pix API could access those drivers support old API.
->>> But I don't want the user would expect they could get correct pixel
->>> format using the old ioctl(). It could create many duplicated pixel
->>> formats. If we want to keep the compatible here, that is the job of
->>> libv4l.
->>>
->>> Besides, I think make the driver using the new API be compatible
->>> with the old ioctl() would lead a huge problem. User won't like to
->>> update its code if it could work even in a less performance mode
->>> because this code are for all the other hardware vendors/models.
->>> Unless we make this a feature, they could make a new branch in their
->>> code(don't count them would upate the kernel of the other products).
->> New drivers that require the additional information that these new ioctls give can
->> decide to just support these new ioctls only. But for existing drivers you want
->> to automatically support the new ioctls.
-
-What I said didn't break that. Application would use the new ioctl() to 
-contact with the existing driver.
-
-What I want to remove is that Application use the old ioctl() to contact 
-with the driver support new ioctl().
-
-I would omit this related patches in the refresh set. We could always 
-add it back. But what I want is a way  to enqueue and dequeue different 
-formats(or usage) of buffers in both OUTPUT and CAPTURE. I may add a 
-more complex API later.
+--09+FMyE3c5KMLHKA--
