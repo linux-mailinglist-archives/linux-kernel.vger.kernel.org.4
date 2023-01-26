@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5804D67CD29
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B733A67CD2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 15:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjAZOAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 09:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
+        id S231772AbjAZOAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 09:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbjAZN7s (ORCPT
+        with ESMTP id S231842AbjAZN7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:59:48 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899DF4A229
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:59:29 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id m7so1850165wru.8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:59:29 -0800 (PST)
+        Thu, 26 Jan 2023 08:59:50 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430B251C7B
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:59:34 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id m7so1850232wru.8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:59:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rTaA87QpYj0Hccvxw80KUesxovjmXPfEg7HwgSeaScQ=;
-        b=URsaELjRqEhjOAT1FJa/ev1zxpWeAFF8XGv+QH2Omde1U5u3d4vXDMCQcOkl3afX1S
-         +y838hu79IPBHSYzd8oYvhppnGfnE40U5d3ly7HE/ujSO5A+JTEzly80QOprh5mcODhx
-         ms6IDzjP/bdYGZEycOQlgWBekeYLx967USblvU3nwWtpOLb6b6Yt+yeFKV5J12GQk2Gh
-         BJjXL+nn9zeIyx1saHxgXAdhQdglTqx/AGsgj5KDa5I4lnpFqcjH7EOzJrfgO3fd1/01
-         5UlFEQgAQCKtib8VBFHmXoRSybzdA9TcMtzgbBq6qpuBysi8btKaV8eruVwAJroMzZWt
-         FdzA==
+        bh=RF2YyGY2PogpnFtO0lOlawE2OSglZRNn+XgKRaj3V+o=;
+        b=uiBLnAVwS2GyS1HRbMqSi5MUkD9pZgyuG5ld57sC3WW/mTf4dgApP6wJ2EFmq8pET/
+         SP9jA0BkIDIZLQXu4hpWFXvU0xHcf52eS8l9tfOB53FdpHg8i4OzcAujAS1dAcJmZhHg
+         ncMf7V9MexDLVepUxHRFKUa2lbtIMwPgphkd22V9dI1SczoqsjVFBE4xz4cVqE2rLzqf
+         a/mFTTdPlEQbH8vZieb+eFqLVvOhDN6cqsD13UDhI7kZgULVeeOr4vVpeuhhDwFs2APQ
+         TpeIkDJ0/tYN2Y6Bfj0sznfA+z42vMfi74FpI88ieIQ1ZkO+kQ4dIVfSRFZ1Ku+8OdTm
+         KowQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rTaA87QpYj0Hccvxw80KUesxovjmXPfEg7HwgSeaScQ=;
-        b=vuh8XyMLzLDBW+SC/CCBFozb+Xu2t8jcG42ZlIA0fI/XnG1WmUCF4mPHuFsMx0skw0
-         M4mQ4jIqIloqdLJE48P1zhl1OYb2AcgABdqBoqkU7ANBDbtEpV41iZhhoRK6gN5lj4Rv
-         isZ0MxR7ofsdYf3X2UTSYzx7r9h0cTiCYrJkbSHYci1uWihv9o8L5nIB64OgYnYFFJH3
-         GKYRT6yWV8it8ngG6CAnRjLLKFsGRfhWtp7PGgGA6e5DngoY11nr4wpwpw29vi3Osdj2
-         PasYtSW1kwFT0QV829o8qS1wIMz64K0JioE2zou61MzRgcIcUhp2rDIALKAjs1hz48kw
-         6Zmg==
-X-Gm-Message-State: AO0yUKV9MOVBVHR24gh6v0Hkc1ExLswm/QxmPgiM9DXmLggpBM3/N1qw
-        pY3UaCUIHzCzCHKt4iWC+7tnzQ==
-X-Google-Smtp-Source: AK7set8Am1+9D/pcuex9EPBOMEbVgzlQMxAh1INAQnKRH5D6aDJJdlB99zj7mjez3xtFhiDUQIOVtQ==
-X-Received: by 2002:a05:6000:1b0a:b0:2bf:c968:d181 with SMTP id f10-20020a0560001b0a00b002bfc968d181mr1440833wrz.27.1674741560387;
-        Thu, 26 Jan 2023 05:59:20 -0800 (PST)
+        bh=RF2YyGY2PogpnFtO0lOlawE2OSglZRNn+XgKRaj3V+o=;
+        b=0C2O3VGKzhb8K57x6iDSvlYGG5ZI2/34CxznaNAr5r6JzWD/hvBlKrGWYxVcA7D/BJ
+         EjB05d7gbCayeTkFLUXOO9mWu8wcvB+krNXRzmEo+Dqv5uEFmat4FPd6M8A4QseY7JHW
+         jCdc6qH6sJbsoae2dD2I59aBC8IxKHPDE3b2BW37faJi/DzmmMo7a6Lqm0ZlSBktXbEY
+         qUXm7S+zgLSaqZgy9rCd9u7RxIE8XTD0rRFwoh//oXLB66QQoQOi+99Mis3uaVnriPnS
+         eW2I47L4CyCNmROzeHlOQk7tDQcP8d/uqllAVf6hTebvjQfq4njc2dNlDrBVdK29SZZb
+         H1HQ==
+X-Gm-Message-State: AFqh2kpvM9PAbfjAWdPGrx34FhI2IB0NEc7VojZnLoPz4/q6IcwuZ5T7
+        5FhhRWeG1K3ZlQ7fIdMnPsAPWw==
+X-Google-Smtp-Source: AMrXdXuCTjk6Okl662FT10hv63OmbQhiMMsNh+o2Utbekk3FmmpF/b+EF+eUGq1xlkBrh4Vkc6YuJg==
+X-Received: by 2002:adf:e3cf:0:b0:2bd:c7c6:d1aa with SMTP id k15-20020adfe3cf000000b002bdc7c6d1aamr30375067wrm.35.1674741561720;
+        Thu, 26 Jan 2023 05:59:21 -0800 (PST)
 Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id l15-20020a5d6d8f000000b002bfb37497a8sm1594067wrs.31.2023.01.26.05.59.19
+        by smtp.gmail.com with ESMTPSA id l15-20020a5d6d8f000000b002bfb37497a8sm1594067wrs.31.2023.01.26.05.59.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 05:59:19 -0800 (PST)
+        Thu, 26 Jan 2023 05:59:21 -0800 (PST)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -62,9 +62,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-phy@lists.infradead.org,
         Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [RFC v2 5/7] phy: qcom: phy-qcom-snps-eusb2: Add support for eUSB2 repeater
-Date:   Thu, 26 Jan 2023 15:59:07 +0200
-Message-Id: <20230126135909.1624890-6-abel.vesa@linaro.org>
+Subject: [RFC v2 6/7] arm64: dts: qcom: pm8550b: Add eUSB2 repeater node
+Date:   Thu, 26 Jan 2023 15:59:08 +0200
+Message-Id: <20230126135909.1624890-7-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230126135909.1624890-1-abel.vesa@linaro.org>
 References: <20230126135909.1624890-1-abel.vesa@linaro.org>
@@ -82,72 +82,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Neil Armstrong <neil.armstrong@linaro.org>
 
-For USB 2.0 compliance, eUSB2 needs a repeater. The PHY needs to
-initialize and reset it. So add repeater support
+Add nodes for the eUSB2 repeater found on the pm8550b SPMI PMIC.
 
-Co-developed-by: Abel Vesa <abel.vesa@linaro.org>
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
- drivers/phy/qualcomm/phy-qcom-snps-eusb2.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/pm8550b.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-snps-eusb2.c b/drivers/phy/qualcomm/phy-qcom-snps-eusb2.c
-index 23ec162cc3bd..dd53880d5b0e 100644
---- a/drivers/phy/qualcomm/phy-qcom-snps-eusb2.c
-+++ b/drivers/phy/qualcomm/phy-qcom-snps-eusb2.c
-@@ -128,6 +128,8 @@ struct qcom_snps_eusb2_hsphy {
- 	struct regulator_bulk_data vregs[EUSB2_NUM_VREGS];
- 
- 	enum phy_mode mode;
+diff --git a/arch/arm64/boot/dts/qcom/pm8550b.dtsi b/arch/arm64/boot/dts/qcom/pm8550b.dtsi
+index 16bcfb64d735..72609f31c890 100644
+--- a/arch/arm64/boot/dts/qcom/pm8550b.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm8550b.dtsi
+@@ -55,5 +55,11 @@ pm8550b_gpios: gpio@8800 {
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+ 		};
 +
-+	struct phy *repeater;
++		pm8550b_eusb2_repeater: phy@fd00 {
++			compatible = "qcom,pm8550b-eusb2-repeater";
++			reg = <0xfd00>;
++			#phy-cells = <0>;
++		};
+ 	};
  };
- 
- static int qcom_snps_eusb2_hsphy_set_mode(struct phy *p, enum phy_mode mode, int submode)
-@@ -136,7 +138,7 @@ static int qcom_snps_eusb2_hsphy_set_mode(struct phy *p, enum phy_mode mode, int
- 
- 	phy->mode = mode;
- 
--	return 0;
-+	return phy_set_mode_ext(phy->repeater, mode, submode);
- }
- 
- static void qcom_snps_eusb2_hsphy_write_mask(void __iomem *base, u32 offset,
-@@ -235,6 +237,11 @@ static int qcom_snps_eusb2_hsphy_init(struct phy *p)
- 	if (ret)
- 		return ret;
- 
-+	ret = phy_init(phy->repeater);
-+	if (ret)
-+		dev_err(&p->dev, "repeater init failed. %d\n", ret);
-+		goto disable_vreg;
-+
- 	ret = clk_prepare_enable(phy->ref_clk);
- 	if (ret) {
- 		dev_err(&p->dev, "failed to enable ref clock, %d\n", ret);
-@@ -342,6 +349,8 @@ static int qcom_snps_eusb2_hsphy_exit(struct phy *p)
- 
- 	regulator_bulk_disable(ARRAY_SIZE(phy->vregs), phy->vregs);
- 
-+	phy_exit(phy->repeater);
-+
- 	return 0;
- }
- 
-@@ -386,6 +395,12 @@ static int qcom_snps_eusb2_hsphy_probe(struct platform_device *pdev)
- 	if (ret)
- 		return dev_err_probe(dev, ret,
- 				     "failed to get regulator supplies\n");
-+
-+	phy->repeater = devm_phy_get(dev, "eusb2-repeater");
-+	if (IS_ERR(phy->repeater))
-+		return dev_err_probe(dev, PTR_ERR(phy->repeater),
-+				     "failed to get repeater\n");
-+
- 	generic_phy = devm_phy_create(dev, NULL, &qcom_snps_eusb2_hsphy_ops);
- 	if (IS_ERR(generic_phy)) {
- 		dev_err(dev, "failed to create phy %d\n", ret);
 -- 
 2.34.1
 
