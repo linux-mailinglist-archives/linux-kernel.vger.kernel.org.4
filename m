@@ -2,181 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC1E67D6CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:49:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A357767D6D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbjAZUtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
+        id S232084AbjAZUup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 15:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjAZUtj (ORCPT
+        with ESMTP id S231862AbjAZUuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:49:39 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0AF171B;
-        Thu, 26 Jan 2023 12:49:38 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F140B975;
-        Thu, 26 Jan 2023 21:49:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674766177;
-        bh=rN41aOWNI6OikK4Y1EV7H5icYuk6/XOyB8mR7h94T+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rZX2itZNzbJ3NbVEquvYOryK8/XgzZc908dZZ14G488wdDwL3WKLJ7nyWBlNMc5JA
-         HLjfoJ3rvsOSBnbYqFFPQ9sOK6izHHgpf5q8qF7Zkbnbw2taX8TFp+bMZ1TlhtwSFe
-         p8IhaXuSPCUUKAQUdKeyXaP2ZsZH4T/YcIuiq+SI=
-Date:   Thu, 26 Jan 2023 22:49:29 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     yuji2.ishikawa@toshiba.co.jp
-Cc:     hverkuil@xs4all.nl, mchehab@kernel.org,
-        nobuhiro1.iwamatsu@toshiba.co.jp, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael.j.wysocki@intel.com,
-        broonie@kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 3/6] media: platform: visconti: Add Toshiba Visconti
- Video Input Interface driver user interace
-Message-ID: <Y9LnWfZb+v17+h+X@pendragon.ideasonboard.com>
-References: <20230111022433.25950-1-yuji2.ishikawa@toshiba.co.jp>
- <20230111022433.25950-4-yuji2.ishikawa@toshiba.co.jp>
- <2b412539-2236-b41f-c777-bc9e9cf99d66@xs4all.nl>
- <Y8dFlFkVJS/6+Ib1@pendragon.ideasonboard.com>
- <TYAPR01MB620161823BA912502CEF0A5992CE9@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+        Thu, 26 Jan 2023 15:50:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEB76A76
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:49:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674766192;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oGi4tyQZKR9EF1nkoMYIGWcX8cZ8bAVtY0RE3pjhZwE=;
+        b=GKf/Nl3sfNlt4pVv9Mtpiex5uXBI9FwaoKY7lPzohEev5HuOJB0puBVcNLit9ei8Izmz6I
+        GUEx6xuNrw4pKxLJZW++Yhqu7CLXC1UNlTKZN53KBlgg7TgyAMt/28wHmOFIAXtuuJilcv
+        oEgkhsadb1Wnus2rTkeAeUZN/fGcCm4=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-124-NS_wVxQqOFWPO4vgXE7RvQ-1; Thu, 26 Jan 2023 15:49:50 -0500
+X-MC-Unique: NS_wVxQqOFWPO4vgXE7RvQ-1
+Received: by mail-qv1-f72.google.com with SMTP id px22-20020a056214051600b00537657b0449so1714249qvb.23
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:49:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oGi4tyQZKR9EF1nkoMYIGWcX8cZ8bAVtY0RE3pjhZwE=;
+        b=ipFYKGpbH2ExKxRNFVJyFejGYQQEdP7RJRRfbKpHu83mI1j2hkSneIKZUsFnH6FLFX
+         dRRNMYWFoKFEiUoc8+6ewXwgCpPSExVBMKwOyAuONKL4LkX4DHwLB2HgwDbTvY1OpKFq
+         UNB8RZOlmRYU6X5Qz3A163sIsgbDqDVFeREreM6AQ6ReykoHu6T3IeT1lOEuQm9eond6
+         Jkoc+BascE0plMc0QTQMcLTY4CWn4ejzPscKcHTgnq7RVwyLjXeG52GZuX0muimh1vhW
+         CrrjaND11PTuxZ4/N++ThlbC2gsciEmYC1/DuP9pdKHqFSnhELPaUq8EBqzvKp/9a4pA
+         iGVg==
+X-Gm-Message-State: AO0yUKVfG1/zqOr7Vyuhhd3so94PgAyoY5cv1RJJDg0QtxpFnXXLvBXx
+        zKWkaV34Gi8SnVpDmh0rHfFmEGfBy13xpnKN5IwsrreMgyoHcQtTLdI3CvMSfL2ryp9MZWzeZuc
+        L2sB4qJdKb741fpFd6NNKH+9o
+X-Received: by 2002:a05:6214:192c:b0:537:708d:3fef with SMTP id es12-20020a056214192c00b00537708d3fefmr11926904qvb.38.1674766190501;
+        Thu, 26 Jan 2023 12:49:50 -0800 (PST)
+X-Google-Smtp-Source: AK7set+ugItgaazXYqO9kQT722ufZwbkvuzBNI79A9vAf2gUEGkugVHZxtq7UGpUs+gPeO2hRZ5rIA==
+X-Received: by 2002:a05:6214:192c:b0:537:708d:3fef with SMTP id es12-20020a056214192c00b00537708d3fefmr11926871qvb.38.1674766190258;
+        Thu, 26 Jan 2023 12:49:50 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id b24-20020a05620a0f9800b006fafaac72a6sm1544573qkn.84.2023.01.26.12.49.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 12:49:49 -0800 (PST)
+From:   Tom Rix <trix@redhat.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, jun.lei@amd.com, Alvin.Lee2@amd.com,
+        Nevenko.Stupar@amd.com, Dillon.Varone@amd.com, george.shen@amd.com,
+        rdunlap@infradead.org, David.Galiffi@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/display: reduce else-if to else in dcn32_calculate_dlg_params()
+Date:   Thu, 26 Jan 2023 12:49:35 -0800
+Message-Id: <20230126204935.819030-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <TYAPR01MB620161823BA912502CEF0A5992CE9@TYAPR01MB6201.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Ishikawa-san,
+cppcheck reports
+drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c:1403:76: style:
+  Expression is always true because 'else if' condition is opposite to previous condition at line 1396. [multiCondition]
+   } else if (context->res_ctx.pipe_ctx[i].stream->mall_stream_config.type == SUBVP_PHANTOM) {
+                                                                           ^
+drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c:1396:69: note: first condition
+   if (context->res_ctx.pipe_ctx[i].stream->mall_stream_config.type != SUBVP_PHANTOM) {
+                                                                    ^
+drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c:1403:76: note: else if condition is opposite to first condition
+   } else if (context->res_ctx.pipe_ctx[i].stream->mall_stream_config.type == SUBVP_PHANTOM) {
 
-On Wed, Jan 25, 2023 at 10:20:27AM +0000, yuji2.ishikawa@toshiba.co.jp wrote:
-> On Wednesday, January 18, 2023 10:04 AM, Laurent Pinchart wrote:
-> > On Tue, Jan 17, 2023 at 12:47:10PM +0100, Hans Verkuil wrote:
-> > > On 11/01/2023 03:24, Yuji Ishikawa wrote:
-> > > > Add support to Video Input Interface on Toshiba Visconti ARM SoCs.
-> > > > The interface device includes CSI2 Receiver, frame grabber, video
-> > > > DMAC and image signal processor.
-> > > > This patch provides the user interface layer.
-> > > >
-> > > > A driver instance provides three /dev/videoX device files; one for
-> > > > RGB image capture, another one for optional RGB capture with
-> > > > different parameters and the last one for RAW capture.
-> > > >
-> > > > Through the device files, the driver provides streaming (DMA-BUF) interface.
-> > > > A userland application should feed DMA-BUF instances for capture buffers.
-> > > >
-> > > > The driver is based on media controller framework.
-> > > > Its operations are roughly mapped to two subdrivers; one for ISP and
-> > > > CSI2 receiver (yields 1 instance), the other for capture (yields 3
-> > > > instances for each capture mode).
-> > > >
-> > > > Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-> > > > ---
-> > > > Changelog v2:
-> > > > - Resend v1 because a patch exceeds size limit.
-> > > >
-> > > > Changelog v3:
-> > > > - Adapted to media control framework
-> > > > - Introduced ISP subdevice, capture device
-> > > > - Remove private IOCTLs and add vendor specific V4L2 controls
-> > > > - Change function name avoiding camelcase and uppercase letters
-> > > >
-> > > > Changelog v4:
-> > > > - Split patches because the v3 patch exceeds size limit
-> > > > - Stop using ID number to identify driver instance:
-> > > >   - Use dynamically allocated structure to hold HW specific context,
-> > > >     instead of static one.
-> > > >   - Call HW layer functions with the context structure instead of ID
-> > > > number
-> > > > - Use pm_runtime to trigger initialization of HW
-> > > >   along with open/close of device files.
-> > > >
-> > > > Changelog v5:
-> > > > - Fix coding style problems in viif.c
-> > > > ---
-> > > >  drivers/media/platform/visconti/Makefile      |    1 +
-> > > >  drivers/media/platform/visconti/viif.c        |  545 ++++++++
-> > > >  drivers/media/platform/visconti/viif.h        |  203 +++
-> > > >  .../media/platform/visconti/viif_capture.c    | 1201 +++++++++++++++++
-> > > >  drivers/media/platform/visconti/viif_isp.c    |  846 ++++++++++++
-> > > >  5 files changed, 2796 insertions(+)  create mode 100644
-> > > > drivers/media/platform/visconti/viif.c
-> > > >  create mode 100644 drivers/media/platform/visconti/viif.h
-> > > >  create mode 100644 drivers/media/platform/visconti/viif_capture.c
-> > > >  create mode 100644 drivers/media/platform/visconti/viif_isp.c
-> > 
-> > [snip]
-> > 
-> > > > +static int viif_s_edid(struct file *file, void *fh, struct
-> > > > +v4l2_edid *edid) {
-> > > > +	struct viif_device *viif_dev = video_drvdata_to_capdev(file)->viif_dev;
-> > > > +	struct viif_subdev *viif_sd = viif_dev->sd;
-> > > > +
-> > > > +	return v4l2_subdev_call(viif_sd->v4l2_sd, pad, set_edid, edid); }
-> > >
-> > > Has this driver been tested with an HDMI receiver? If not, then I
-> > > would recommend dropping support for it until you actually can
-> > > test with such hardware.
-> > >
-> > > The DV_TIMINGS API is for HDMI/DVI/DisplayPort etc. interfaces, it's
-> > > not meant for CSI and similar interfaces.
-> > 
-> > More than that, for MC-based drivers, the video node should *never* forward
-> > ioctls to a connected subdev. The *only* valid calls to
-> > v4l2_subdev_call() in this file are
-> > 
-> > - to video.s_stream() in the start and stop streaming handler
-> > 
-> > - to pad.g_fmt() when starting streaming to validate that the connected
-> >   subdev outputs a format compatible with the format set on the video
-> >   capture device
-> > 
-> > That's it, nothing else, all other calls to v4l2_subdev_call() must be dropped from
-> > the implementation of the video_device.
-> 
-> Thank you for your comment. I understand the restriction.
-> I'll remove following functions corresponding to ioctls.
-> 
-> * viif_enum_input
-> * viif_g_selection
-> * viif_s_selection
-> * viif_dv_timings_cap
-> * viif_enum_dv_timings
-> * viif_g_dv_timings
-> * viif_s_dv_timings
-> * viif_query_dv_timings
-> * viif_g_edid
-> * viif_s_edid
-> * viif_g_parm
-> * viif_s_parm
-> * viif_enum_framesizes
+It is not necessary to explicitly the check != condition, an else is simplier.
 
-This one should stay, it should report the minimum and maximum sizes
-supported by the video nodes, regardless of the configuration of the
-connected subdev.
+Fixes: 238debcaebe4 ("drm/amd/display: Use DML for MALL SS and Subvp allocation calculations")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> * viif_enum_frameintervals
-> 
-> I can call subdevices directly if I need. Is it a correct understanding?
-
-what do you mean exactly by calling subdevices directly ?
-
-> As for viif_try_fmt_vid_cap and viif_s_fmt_vid_cap, 
-> I'll remove pad.g_fmt() call which is for checking pixel format.
-> The check will be moved to viif_capture_link_validate() validation
-> routine triggered by a start streaming event.
-> 
-> > [snip]
-
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
+index 0dc1a03999b6..c96cbd88e20d 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
+@@ -1400,7 +1400,7 @@ static void dcn32_calculate_dlg_params(struct dc *dc, struct dc_state *context,
+ 					/* SS PSR On: all active surfaces part of streams not supporting PSR stored in MALL */
+ 					context->bw_ctx.bw.dcn.mall_ss_psr_active_size_bytes += context->res_ctx.pipe_ctx[i].surface_size_in_mall_bytes;
+ 				}
+-			} else if (context->res_ctx.pipe_ctx[i].stream->mall_stream_config.type == SUBVP_PHANTOM) {
++			} else {
+ 				/* SUBVP: phantom surfaces only stored in MALL */
+ 				context->bw_ctx.bw.dcn.mall_subvp_size_bytes += context->res_ctx.pipe_ctx[i].surface_size_in_mall_bytes;
+ 			}
 -- 
-Regards,
+2.26.3
 
-Laurent Pinchart
