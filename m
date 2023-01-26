@@ -2,60 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2868367D6DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 21:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D95967ED00
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbjAZUyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 15:54:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
+        id S234825AbjA0SD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 13:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbjAZUyD (ORCPT
+        with ESMTP id S232618AbjA0SDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:54:03 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0762B3400D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 12:53:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OfQDUeRRQe7ymNiO1iM8vsACcUSW+Tp2ZTEJpAVyajE=; b=L0TCoGxSSuIqwUAE6SCrH0YYj+
-        rA8UWbiH0gjPbsyHDDO0r+/4PgXWQqT1Xoycxub8JNFHpwdl68MP4dENJG1+EF77u/ewqWpNd7IO8
-        L1/rSHlU6l+gHck2qcTvVw/vI71VP2KMY5Clo0AxNX6rdyFSLjetW/V15B6qQ/K/JtYjiUDpYG7Wj
-        ULaIRGnD9gZeQoGSYsczreTKwKdo0uyhixPguiI7WAxbkeMl6Kl7cFX/lpM6VZdxOV2edbH+F6jTP
-        zueXL6IdJmSHrpyAg3qCYLU3ZTdEzn0+9/sCqVxubKF2v1rB/SARCdkiv8VQgQ85GaJ3sFeRWeXuA
-        twRtBitA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pL9Fd-004JbL-2A;
-        Thu, 26 Jan 2023 20:53:42 +0000
-Date:   Thu, 26 Jan 2023 20:53:41 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        David Sterba <dsterba@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Fri, 27 Jan 2023 13:03:24 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB2415566
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:03:23 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 30RI20YF011202
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 13:02:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1674842528; bh=3mHKkbAH+okU6AHANi/BzVdlU8mAUZv1+jT73lv1OWI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=X1v0PvbJ7JWuw5yg30+68d4U5ZTtRAZLYMVxixtcRgMlJpDCVuQ6acpnX4iLkbDsd
+         btZK2gFujU5B++TxM9WWiqcJnvMY3YDQOLTkglyI7gPbDbgt+uRnkG+bAMT7GNvgF4
+         gPa1cz9Er2Fa6FEs2GNjBOWgxMeXlzMTgEgcxo0d/ItaSxnaGhiVq/AW7hBpuAcG95
+         XNDVKl3+/oCV834rcRv6W+rt14HZj88Did3JOrps9zQJZJc8AALNSSEIHny5OxYppm
+         NB3ucNdAYROr3ctQOUubvQTW+SCY+K4c20hdtOo6PvpbyzQfyOaO4kvIF8KZrfuk6a
+         Ra3qTApqdc4vQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 0407C15C358A; Thu, 26 Jan 2023 15:54:56 -0500 (EST)
+Date:   Thu, 26 Jan 2023 15:54:55 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH] mm/highmem: Align-down to page the address for
- kunmap_flush_on_unmap()
-Message-ID: <Y9LoVRYumhvgjsw5@ZenIV>
-References: <20230126143346.12086-1-fmdefrancesco@gmail.com>
- <63d2d97bce4c7_63e3f29442@iweiny-mobl.notmuch>
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y9Lonw9HzlosUPnS@mit.edu>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9Jh2x9XJE1KEUg6@unreal>
+ <DM8PR11MB5750414F6638169C7097E365E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9JyW5bUqV7gWmU8@unreal>
+ <DM8PR11MB57507D9C941D77E148EE9E87E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <63d2d97bce4c7_63e3f29442@iweiny-mobl.notmuch>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <DM8PR11MB57507D9C941D77E148EE9E87E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,95 +82,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:50:19AM -0800, Ira Weiny wrote:
-> Fabio M. De Francesco wrote:
+On Thu, Jan 26, 2023 at 01:28:15PM +0000, Reshetova, Elena wrote:
+> > This is exactly what I said. You presented me the cases which exist in
+> > your invented world. Mentioned unhandled page fault doesn't exist in real
+> > world. If PCI device doesn't work, it needs to be replaced/blocked and not
+> > left to be operable and accessible from the kernel/user.
 > 
-> FWIW I think I would simplify the subject
-> [PATCH] mm/highmem: Fix kunmap_local() on flush on unmap architectures
-> 
-> Or something like that.
+> Can we really assure correct operation of *all* pci devices out there? 
+> How would such an audit be performed given a huge set of them available? 
+> Isnt it better instead to make a small fix in the kernel behavior that would guard
+> us from such potentially not correctly operating devices?
 
-Make kunmap_local() handle addresses that are not page-aligned
+We assume that hardware works according to the spec; that's why we
+have a specification.  Otherwise, things would be pretty insane, and
+would lead to massive bloat *everywhere*.  If there are broken PCI
+devices out there, then we can blacklist the PCI device.  If a
+manufacturer is consistently creating devices which don't obey the
+spec, we could block all devices from that manufacturer, and have an
+explicit white list for those devices from that manufacturer that
+actually work.
 
-kunmap_local() removes the temporary CPU-local mapping of a page that
-had been created by earlier call of kmap_local_page().  The mapping to
-be removed is identified by the pointer returned by kmap_local_page(),
-i.e. the virtual address assigned to the first byte within the page
-in question.  Often enough the callers had been working with an object
-somewhere in the middle of the page; they have to either keep the
-pointer to the beginning or to round the pointers they are really
-working with down to the beginning of page.
+If we can't count on a floating point instruction to return the right
+value, what are we supposed to do?  Create a code which double checks
+every single floating point instruction just in case 2 + 2 = 3.99999999?   :-)
 
-As it is, for the majority of architectures kunmap_local() does such
-rounding-down anyway (see kunmap_local_indexed()); the only exception
-is if CONFIG_HIGHMEM is *not* defined, but ARCH_HAS_FLUSH_ON_KUNMAP is
-(PA-RISC case).  In that case __kumap_local()
+Ultimately, changing the trust boundary what is considered is a
+fundamentally hard thing, and to try to claim that code that assumes
+that things inside the trust boundary are, well, trusted, is not a
+great way to win friends and influence people.
 
-> > calls kunmap_flush_on_unmap(). The latter currently flushes the wrong
-> > address
+> Let's forget the trust angle here (it only applies to the Confidential Computing 
+> threat model and you clearly implying the existing threat model instead) and stick just to
+> the not-correctly operating device. What you are proposing is to fix *unknown* bugs
+> in multitude of pci devices that (in case of this particular MSI bug) can
+> lead to two different values being read from the config space and kernel incorrectly
+> handing this situation.
 
-if given a pointer that is not page-aligned
+I don't think that's what people are saying.  If there are buggy PCI
+devices, we can put them on block lists.  But checking that every
+single read from the config space is unchanged is not something we
+should do, period.
 
-> > (as confirmed by Matthew Wilcox and Helge Deller). Al Viro
-> > proposed to call kunmap_flush_on_unmap() on an aligned-down to page
-> > address in order to fix this issue. Consensus has been reached on this
-> > solution.
-> > 
-> > Therefore, if ARCH_HAS_FLUSH_ON_KUNMAP is defined, call
-> > kunmap_flush_on_unmap() on an aligned-down to page address computed with
-> > the PTR_ALIGN_DOWN() macro.
+> Isn't it better to do the clear fix in one place to ensure such
+> situation (two subsequent reads with different values) cannot even happen in theory?
+> In security we have a saying that fixing a root cause of the problem is the most efficient
+> way to mitigate the problem. The root cause here is a double-read with different values,
+> so if it can be substituted with an easy and clear patch that probably even improves
+> performance as we do one less pci read and use cached value instead, where is the
+> problem in this particular case? If there are technical issues with the patch, of course we 
+> need to discuss it/fix it, but it seems we are arguing here about whenever or not we want
+> to be fixing kernel code when we notice such cases...
 
-That simplifies life for callers (e.g. filesystems that use kmap_local_page()
-for directory page cache).
+Well, if there is a performance win to cache a read from config space,
+then make the argument from a performance perspective.  But caching
+values takes memory, and will potentially bloat data structures.  It's
+not necessarily cost-free to caching every single config space
+variable to prevent double-read from either buggy or malicious devices.
 
-> > 
-> > Cc: Ira Weiny <ira.weiny@intel.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
-> > Confirmed-by: Helge Deller <deller@gmx.de>
-> > Confirmed-by: Matthew Wilcox <willy@infradead.org>
-> > Fixes: f3ba3c710ac5 ("mm/highmem: Provide kmap_local*")
-> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+So it's one thing if we make each decision from a cost-benefit
+perspective.  But then it's a *optimization*, not a *bug-fix*, and it
+also means that we aren't obligated to cache every single read from
+config space, lest someone wag their fingers at us saying, "Buggy!
+Your code is Buggy!".
 
-Objections?
+Cheers,
 
-> > 
-> > I have (at least) two problems with this patch...
-> > 
-> > 1) checkpatch.pl complains about the use of the non-standard
-> > "Confirmed-by" tags. I don't know how else I can give credit to Helge
-> > and Matthew. However, this is not the first time that I see non-standard
-> > tags in patches applied upstream (I too had a non-standard
-> > "Analysed-by" tag in patch which fixes a SAC bug). Any objections?
-> 
-> I think you can add Matthew and Helge as Suggested-by:  All 3 had input on
-> the solution.
-
-Or simply treat these complaints as per https://dilbert.com/strip/1996-10-04...
-
-> > 2) I'm not sure whether or not the "Fixes" tag is appropriate in this
-> > patch. Can someone either confirm or deny it?
-> 
-> This 'fixes' looks correct to me.  I don't know how many folks are running
-> highmem with parisc but if they are I am sure they would appreciate the
-> extra knowledge.
-
-parisc doesn't have highmem.  That's not what flush_kernel_dcache_page_addr()
-call is about; if you look at the kmap() there you'll see that it does
-*not* create any new mapping - it simply returns page_address().  It's
-really about D-cache flushing there; kunmap() and its ilk serve as
-convenient points for doing the flush.
-
-Not sure about the "fixes" tag, TBH - AFAICS, currently all users supply
-page-aligned addresses anyway.  Their life would be easier if they could
-just pass any pointer within the page in questions and it's easy to overlook
-this corner case and assume that kunmap_local() would handle that as it
-is, but it's more of a "bug waiting to happen, better get rid of the
-corner case and explicitly document that property of kunmap_local()" than
-"there's a broken caller in the current mainline kernel, need to fix
-that".
-
-Anyway, I would rather keep the sysv etc. series independent from that;
-for now dir_put_page() explicitly rounds down there.  Once those series
-*and* your patch are both merged we can do a quick followup removing the
-explicit round-downs, marked as dependent upon your patch.
+						- Ted
