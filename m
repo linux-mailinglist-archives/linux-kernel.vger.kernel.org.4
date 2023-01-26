@@ -2,83 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9418F67C424
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 06:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3685A67C425
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 06:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235501AbjAZFBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 00:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
+        id S229745AbjAZFE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 00:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbjAZFAx (ORCPT
+        with ESMTP id S235786AbjAZFEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 00:00:53 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1EFC162;
-        Wed, 25 Jan 2023 21:00:00 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id z9so521345qtv.5;
-        Wed, 25 Jan 2023 21:00:00 -0800 (PST)
+        Thu, 26 Jan 2023 00:04:53 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F17D25E37
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 21:04:52 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id b1so725955ybn.11
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 21:04:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=E2S3RLfrNyQH49fsnFGoQQ0jF5nvWXPOvFK0VP3Scjo=;
-        b=IWV/X5EtYYc53U1keZc6Iu7v0jyTbAY6l2uYNr2tB7WaZHXvEwhIXcw5VZBulQSL6A
-         6Jvn59mMR6weRaRmLdZ8F/95n+NaBJ9dRVjOjQ19w5aWxL+R6I/zOQkl4hj19hbQKkcg
-         XmaOWJvaFGorOGR6gKFoxWNZ42yq3JI5PBjwnFIMJq9VFbqd+i4rUMftB8vjBgxSsNEW
-         8gniu1Yv79dBtc9rOZbpIC451t5eJqX4pgao5Ha7dYw38DOKNCO4jT0+eG5WUHdqooRu
-         CkQgahq+Ky8sF3BbotZY5uEqwtIQM7xrxtVzCBDUeiEKNovMTvE8/M+lrLSGEv0r5Wgg
-         UqAQ==
+        bh=DiMArbdV/T0/c00vu6b8fiK7TVndbh70egFu73S7mgY=;
+        b=j/LKANNaDiV/aVUigkiPOcRVnzC0NEKIE5OVSqZFXO5PQmA8IB4O6ybyFs7K9nHv5e
+         laSl/lOwAbh+AdgJ1eP2IphhzkEB7ecxZcjDktRE3b7n6EfL5C19sLZ43AqeRBfb0KtA
+         R6bpp2jKN9ETwo60eIyTxSUyaKK5Do9xQQjYLkEb5WyGf3LUpoxQ5pBOAkUzfJdMuySn
+         /86Tg01i6EE+kVVaHoYAzQ0fo3EJsMxn11gTJmXMNVyZ5V6Yfmz133yEbMijwhoIplf+
+         2aV4ifCQegjZ71ujLZnnBTPJJUNRx3qFktIIvJIE/PK6s26dYj4szNUqSVjykNzyKJOV
+         26mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E2S3RLfrNyQH49fsnFGoQQ0jF5nvWXPOvFK0VP3Scjo=;
-        b=fMP5Ut3zw8rZOEixxDwwNw9zm2YQWsZ0OoltQIoJS3YZB7Zeq8RloNjSlSxCarNZ54
-         6SaS7p7HmzrVGm9D/R/g623sMseaPAI/3OUSERm9g4sFUEmJB9dWn9pCkHrfMy21qyQ0
-         Nvdl7DXHuz3IOugOLzeW1DGQELCFdKLW7Fe+WdsyEYmhUrDpVaM3FXoqn2Ogk4XxuQwX
-         gJ+BQogLgsk5XDUvHSAUSBN6/L7BeR6lLTU8h7rrVh/4DmnW+nrzMaMle0JvOey8ltoq
-         r3YFoyLeyq8MqaeRjFqIdnNrEaL3//7KLImdcAgriJOVFlFTZHq8/FjnnT8ZOcj+L6CS
-         pE4g==
-X-Gm-Message-State: AO0yUKVlxmzH5n4Ad63LECSNPQ3oLhc1pRwXFfROaJQ/c+89nN0Nd+NN
-        b2/qMeqPd37FQ4ZFWRKmbMs=
-X-Google-Smtp-Source: AK7set9uZfTD1W3z0cbHBVUg5SVE0mxBEXs/DXbPnm5/hifsR8XEBxaOH/w+lDF8YqDyrPMz+u2j0Q==
-X-Received: by 2002:ac8:6794:0:b0:3b7:ec87:8154 with SMTP id b20-20020ac86794000000b003b7ec878154mr6565219qtp.44.1674709143369;
-        Wed, 25 Jan 2023 20:59:03 -0800 (PST)
-Received: from localhost (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
-        by smtp.gmail.com with ESMTPSA id j7-20020ac806c7000000b003b80a69d353sm120720qth.49.2023.01.25.20.59.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 20:59:02 -0800 (PST)
-Date:   Wed, 25 Jan 2023 23:59:00 -0500
-From:   Trevor Woerner <twoerner@gmail.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        linux-leds@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [RESEND PATCH v7 0/5] leds: Allwinner A100 LED controller support
-Message-ID: <20230126045900.GA7126@localhost>
-References: <20221231235541.13568-1-samuel@sholland.org>
+        bh=DiMArbdV/T0/c00vu6b8fiK7TVndbh70egFu73S7mgY=;
+        b=mNyZyOzPjiOsrHXxXJxj+P0L0QCISTaVtRVtfDKGjR7yrfAZX2hKufUF3Yj0WBK0Gv
+         Y5n7ZnzNR0emxVxZ/NyOF3A8DIMeTW4CrDKvParcfbJ6XLzdm1aw1+b00Gdp+XIQYAdI
+         vVzyjw/SiHTaJQ8bTKZJdzouxw9yU4Oru5EsP2y3RPVkt226soBwsEAdX27Ad6AIZNMR
+         AscS6ZCBJQEy6G/2DKmboFLfh56P3VJsJFpqy2R92jbaP+zepswX6DsTBjnmnz0CyFhw
+         W0GSkatddKx4FJb+tj9EygkkIOqRMDtV++1Pc0+drGIZWjDmz8dhN1ncVSmxjRcALmPb
+         KrEg==
+X-Gm-Message-State: AFqh2koe4Bp8228OXKMrvbHGeSJAelMFUNjuGgSGgLd9VhRdxf6TECH1
+        HEhua6l5z6alwbt8suAev97c55DpveB717Cb6p38
+X-Google-Smtp-Source: AMrXdXvqx4UwR/r3vyZL8yNah3Pa9DYRDPjFsXDYhXUxO9RFX6K9KBd57NKlJxTw0JZEjJN84sol+jsPKtLhpA9OJvo=
+X-Received: by 2002:a5b:84d:0:b0:7ba:e354:5aaf with SMTP id
+ v13-20020a5b084d000000b007bae3545aafmr4010311ybq.37.1674709491637; Wed, 25
+ Jan 2023 21:04:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221231235541.13568-1-samuel@sholland.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CABdmKX3HFuaE0qwcADk-KLtVUdao-uhH-1zn4gv7ezq+bZE94w@mail.gmail.com>
+ <20230117082508.8953-1-jaewon31.kim@samsung.com> <20230117083103epcms1p63382eee1cce1077248a4b634681b0aca@epcms1p6>
+ <CANDhNCpKY5Af059ok8ZcgJ=wt7NaorZxqQXaTS848CwY0LNFiw@mail.gmail.com>
+ <20230125095646epcms1p2a97e403a9589ee1b74a3e7ac7d573f9b@epcms1p2>
+ <20230125101957epcms1p2d06d65a9147e16f3281b13c085e5a74c@epcms1p2>
+ <CGME20230117082521epcas1p22a709521a9e6d2346d06ac220786560d@epcms1p3>
+ <CANDhNCoAKtHmxFomdGfTfXy8ZvFMfMRj4jZ+b8wMMD+5AmAB0g@mail.gmail.com> <20230126044218epcms1p35474178c2f2b18524f35c7d9799e3aed@epcms1p3>
+In-Reply-To: <20230126044218epcms1p35474178c2f2b18524f35c7d9799e3aed@epcms1p3>
+From:   John Stultz <jstultz@google.com>
+Date:   Wed, 25 Jan 2023 21:04:39 -0800
+Message-ID: <CANDhNCo1JRmfouBn985GZLmPY-xLn9JKNJfubY0PAUrCpY8K4g@mail.gmail.com>
+Subject: Re: (2) [PATCH] dma-buf: system_heap: avoid reclaim for order 4
+To:     jaewon31.kim@samsung.com
+Cc:     "T.J. Mercier" <tjmercier@google.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,78 +83,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 2022-12-31 @ 05:55:35 PM, Samuel Holland wrote:
-> [Resending because it has been a couple of months since v7 with no LED
-> maintainer feedback, and LEDs now have an additional maintainer.]
-> 
-> This series adds bindings and a driver for the RGB LED controller found
-> in some Allwinner SoCs, starting with A100. The hardware in the R329 and
-> D1 SoCs appears to be identical.
-> 
-> Patches 4-5 depend on the D1 devicetree series[1], but the rest of this
-> series can/should be merged without them.
-> 
-> This driver was tested on the D1 Nezha board.
-> 
-> [1]: https://lore.kernel.org/lkml/20221231233851.24923-1-samuel@sholland.org/
-> 
-> Changes in v7:
->  - Use DEFINE_SIMPLE_DEV_PM_OPS
-> 
-> Changes in v6:
->  - Drop the A100 DMA controller DT node patch, which was merged via a
->    different series
-> 
-> Changes in v5:
->  - A100 contains the original implementation, so use that as the base
->    compatible string, and rename the binding to match
->  - Add "unevaluatedProperties: false" to the child multi-led binding
->  - Rename the driver R329 -> A100, since that is the actual original
->    implementation
-> 
-> Changes in v4:
->  - Use "default" instead of "maxItems" for timing properties
->  - Depend on LEDS_CLASS_MULTICOLOR
-> 
-> Changes in v3:
->  - Removed quotes from enumeration values
->  - Added vendor prefix to timing/format properties
->  - Renamed "format" property to "pixel-format" for clarity
->  - Dropped "vled-supply" as it is unrelated to the controller hardware
->  - Added vendor prefix to timing/format properties
->  - Renamed "format" property to "pixel-format" for clarity
->  - Dropped "vled-supply" as it is unrelated to the controller hardware
->  - Changed "writesl" to "iowrite32_rep" so the driver builds on hppa
-> 
-> Changes in v2:
->  - Fixed typo leading to duplicate t1h-ns property
->  - Removed "items" layer in definition of dmas/dma-names
->  - Replaced uint32 type reference with maxItems in timing properties
->  - Renamed from sunxi-ledc to sun50i-r329-ledc
->  - Added missing "static" to functions/globals as reported by 0day bot
-> 
-> Samuel Holland (5):
->   dt-bindings: leds: Add Allwinner A100 LED controller
->   leds: sun50i-a100: New driver for the A100 LED controller
->   arm64: dts: allwinner: a100: Add LED controller node
->   riscv: dts: allwinner: d1: Add LED controller node
->   riscv: dts: allwinner: d1: Add RGB LEDs to boards
-> 
->  .../leds/allwinner,sun50i-a100-ledc.yaml      | 139 +++++
->  .../arm64/boot/dts/allwinner/sun50i-a100.dtsi |  14 +
->  .../allwinner/sun20i-d1-lichee-rv-dock.dts    |  12 +
->  .../boot/dts/allwinner/sun20i-d1-nezha.dts    |  13 +
->  arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi  |   6 +
->  .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    |  15 +
->  drivers/leds/Kconfig                          |   9 +
->  drivers/leds/Makefile                         |   1 +
->  drivers/leds/leds-sun50i-a100.c               | 555 ++++++++++++++++++
->  9 files changed, 764 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/allwinner,sun50i-a100-ledc.yaml
->  create mode 100644 drivers/leds/leds-sun50i-a100.c
+On Wed, Jan 25, 2023 at 8:42 PM =EA=B9=80=EC=9E=AC=EC=9B=90 <jaewon31.kim@s=
+amsung.com> wrote:
+> > On Wed, Jan 25, 2023 at 2:20 AM Jaewon Kim <jaewon31.kim@samsung.com> w=
+rote:
+> > > > > On Tue, Jan 17, 2023 at 10:54 PM John Stultz <jstultz@google.com>=
+ wrote:
+> > But because your change is different from what the old ion code did, I
+> > want to be a little cautious. So it would be nice to see some
+> > evaluation of not just the benefits the patch provides you but also of
+> > what negative impact it might have.  And so far you haven't provided
+> > any details there.
+> >
+> > A quick example might be for the use case where mid-order allocations
+> > are causing you trouble, you could see how the performance changes if
+> > you force all mid-order allocations to be single page allocations (so
+> > orders[] =3D {8, 0, 0};) and compare it with the current code when
+> > there's no memory pressure (right after reboot when pages haven't been
+> > fragmented) so the mid-order allocations will succeed.  That will let
+> > us know the potential downside if we have brief / transient pressure
+> > at allocation time that forces small pages.
+> >
+> > Does that make sense?
+>
+> Let me try this. It make take some days. But I guess it depends on memory
+> status as you said. If there were quite many order 4 pages, then 8 4 0
+> should be faster than 8 0 0.
+>
+> I don't know this is a right approach. In my opinion, except the specific
+> cases like right after reboot, there are not many order 4 pages. And
+> in determinisitic allocation time perspective, I think avoiding too long
+> allocations is more important than making faster with already existing
+> free order 4 pages.
 
-this whole series:
-Tested-by: Trevor Woerner <twoerner@gmail.com>
+I suspect you are right, and do think your change will be helpful.
+But I just want to make sure we're doing some due diligence, instead
+of going on just gut instinct.
 
-from: https://github.com/smaeul/linux/tree/d1/all
-test script: https://github.com/twoerner/rgb-led-test
+Thanks so much for helping with this!
+-john
