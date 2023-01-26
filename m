@@ -2,120 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA02967C287
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 02:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBF267C28B
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 02:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjAZBpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 20:45:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S229477AbjAZBpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 20:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjAZBpQ (ORCPT
+        with ESMTP id S230208AbjAZBpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 20:45:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8877E4B1B2;
-        Wed, 25 Jan 2023 17:45:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23B0D6172A;
-        Thu, 26 Jan 2023 01:45:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32671C433D2;
-        Thu, 26 Jan 2023 01:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1674697514;
-        bh=7RpoJrPZS6SJcilZwJlgfOcy8VI5bDbkm1rwJIiWgGs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QrUq5ATjY2oqR+jEAeForg1RvYMYo+bDZxJkpPvGEAQMtF9Wex3AsF6pj45qmjarD
-         FkXgKw35BmzCytgE7GIRGvCG25LoCH1q8w/sqjuafA+hP0s/EWoOXsqZwbktTsZyRq
-         n3OCsv9RwqATlbboWAh4Ya/cfUooerJ2jtkrgbTo=
-Date:   Wed, 25 Jan 2023 17:45:12 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux--csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH 3/3] mm, arch: add generic implementation of pfn_valid()
- for FLATMEM
-Message-Id: <20230125174512.ce5aed444cc8b8870825d8c2@linux-foundation.org>
-In-Reply-To: <20230125190757.22555-4-rppt@kernel.org>
-References: <20230125190757.22555-1-rppt@kernel.org>
-        <20230125190757.22555-4-rppt@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 20:45:46 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 715A2611D2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:45:45 -0800 (PST)
+Received: (qmail 239293 invoked by uid 1000); 25 Jan 2023 20:45:44 -0500
+Date:   Wed, 25 Jan 2023 20:45:44 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <Y9HbSBLrNJ9O2ad6@rowland.harvard.edu>
+References: <20230125022019.GB2948950@paulmck-ThinkPad-P17-Gen-1>
+ <cedf3a39-12cd-1cb1-ad5a-7c10768cee40@huaweicloud.com>
+ <20230125150520.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9FMEATzv3gcTUe2@rowland.harvard.edu>
+ <20230125171832.GH2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9F+SyLpxHwdK0rE@rowland.harvard.edu>
+ <20230125194651.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9GVFkVRRRs5/rBd@rowland.harvard.edu>
+ <20230125213832.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230125233308.GA1552266@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125233308.GA1552266@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 Jan 2023 21:07:57 +0200 Mike Rapoport <rppt@kernel.org> wrote:
-
-> Every architecture that supports FLATMEM memory model defines its own
-> version of pfn_valid() that essentially compares a pfn to max_mapnr.
+On Wed, Jan 25, 2023 at 03:33:08PM -0800, Paul E. McKenney wrote:
+> Ah, and returning to the earlier question as to whether srcu_read_unlock()
+> can use release semantics instead of smp_mb(), at the very least, this
+> portion of the synchronize_srcu() function's header comment must change:
 > 
-> Use mips/powerpc version implemented as static inline as a generic
-> implementation of pfn_valid() and drop its per-architecture definitions
+> 	On systems with more than one CPU, when synchronize_srcu()
+> 	returns, each CPU is guaranteed to have executed a full
+> 	memory barrier since the end of its last corresponding SRCU
+> 	read-side critical section whose beginning preceded the call
+> 	to synchronize_srcu().
 
-arm allnoconfig:
+Yes, that would not be true.  But on the other hand, it would be true 
+that each CPU is guaranteed to have executed a release memory barrier 
+since the end of its last corresponding SRCU read-side critical section 
+whose beginning preceded the call to synchronize_srcu(), _and_ the CPU 
+executing synchronize_srcu() is guaranteed to have executed a full 
+memory barrier after seeing the values from all those release stores.
+This is not quite the same thing but it ought to be just as good.
 
-./include/asm-generic/memory_model.h:23:19: error: static declaration of 'pfn_valid' follows non-static declaration
-   23 | static inline int pfn_valid(unsigned long pfn)
-      |                   ^~~~~~~~~
-./arch/arm/include/asm/page.h:160:12: note: previous declaration of 'pfn_valid' with type 'int(long unsigned int)'
-  160 | extern int pfn_valid(unsigned long);
-      |            ^~~~~~~~~
+> I don't know of any SRCU code that relies on this, but it would be good to
+> check.	There used to (and might still) be RCU code relying on this, which
+> is why this sentence was added to the header comment in the first place.
 
+If there is code relying on that guarantee, it ought to work just as 
+well by relying on the modified guarantee.
 
-I thought of doing
+Of course, there might be code relying on a guarantee that 
+srcu_read_unlock() executes a full memory barrier.  This guarantee would 
+certainly no longer hold.  But as I understand it, this guarantee was 
+never promised by the SRCU subsystem.
 
---- a/arch/arm/include/asm/page.h~mm-arch-add-generic-implementation-of-pfn_valid-for-flatmem-fix
-+++ a/arch/arm/include/asm/page.h
-@@ -156,10 +156,6 @@ extern void copy_page(void *to, const vo
- 
- typedef struct page *pgtable_t;
- 
--#ifdef CONFIG_HAVE_ARCH_PFN_VALID
--extern int pfn_valid(unsigned long);
--#endif
--
- #include <asm/memory.h>
- 
- #endif /* !__ASSEMBLY__ */
-_
-
-but I'm seeing a pfn_valid declaration in arch/arc/include/asm/page.h
-which might be a problem.
-
-v2, please ;)
+Alan
