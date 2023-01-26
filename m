@@ -2,125 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3835667CB3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4013E67CB40
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 13:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbjAZMth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 07:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
+        id S235766AbjAZMuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 07:50:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjAZMte (ORCPT
+        with ESMTP id S231124AbjAZMuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 07:49:34 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2126C12E
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:49:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=C9BRS5jjDoOuJqnAKQEcu4c78RZU
-        KZiobWtbz0yEU68=; b=M8dLHia6RxXnt/vg3FcbOXIF3YgkyjwGYOM7poVbY4wM
-        MHf+X2nyOJSTvsz5bIJdGJi8p79tu2FKuD953qxB701u4ZrznVWHjvCDtOge1AgF
-        OY8sAu7H/+R0F1y6/Cq0Ype5IbsIY3QgBYeYNheOoyQ/0b1SFhH3vhP6gqGzKLk=
-Received: (qmail 3779498 invoked from network); 26 Jan 2023 13:48:32 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Jan 2023 13:48:32 +0100
-X-UD-Smtp-Session: l3s3148p1@sbWWKirzNrsujnvo
-Date:   Thu, 26 Jan 2023 13:48:32 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
-Message-ID: <Y9J2oPHHNQoU+7m7@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20230118104656.67706-1-wsa+renesas@sang-engineering.com>
- <CAMuHMdXY0c4qKCi057CtJdhUJ+443rtyCjwYyK3qGgwWTZ2a0A@mail.gmail.com>
+        Thu, 26 Jan 2023 07:50:10 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63309A6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:50:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:To:From:Date:Sender:Reply-To:Cc:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dHKjrNk/NFGrB7AaN6ANRgp7XpWy3EkjZ2gfuY4MtVk=; b=OKTG92AucWDvcIwAczYeSVilkE
+        kNor1NC+5rArZvbrWxmxxTQ3R7LsLCTKCtMW/x33vaUtWrbmifuSX3Y/nxvjijHRSf2T66ZYpGxF4
+        BXVaHhi+J/RaY5b+9uWkyhCfa+TQt8eq34C14kfuCUkTF9VhHJ7GFxwaoudwQEIrw7JgotK+QqR7L
+        gkhflGFgu9gAcRlTEoJo1qfts7iW9n7cZ+Cj1bdkpzzwQui4aZXa2G42QgHv9VPTBUnj2uti5fbln
+        2R6gMixVf/sql9IYeJPldVhtlSYMLkCRigCncgRmowV8i+a9awV8eeaEs61G+awte7XyE4oIgSIVE
+        +Ajx/8Dg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pL1hK-006jmW-CV; Thu, 26 Jan 2023 12:49:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5EFEB300652;
+        Thu, 26 Jan 2023 13:49:43 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 23531203C2B1E; Thu, 26 Jan 2023 13:49:43 +0100 (CET)
+Date:   Thu, 26 Jan 2023 13:49:43 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Roman Kagan <rkagan@amazon.de>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [bug-report] possible s64 overflow in max_vruntime()
+Message-ID: <Y9J25xMrItpeHIxD@hirez.programming.kicks-ass.net>
+References: <73e639d5-702b-0d03-16d9-a965b1963ef6@huawei.com>
+ <Y6RRfF5yRew7rdCp@hirez.programming.kicks-ass.net>
+ <Y9GG3N5ivVvyETa2@u40bc5e070a0153.ant.amazon.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SBOQttDUaUptgdAG"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdXY0c4qKCi057CtJdhUJ+443rtyCjwYyK3qGgwWTZ2a0A@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y9GG3N5ivVvyETa2@u40bc5e070a0153.ant.amazon.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 25, 2023 at 08:45:32PM +0100, Roman Kagan wrote:
 
---SBOQttDUaUptgdAG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> The calculation is indeed safe against the overflow of the vruntimes
+> themselves.  However, when the two vruntimes are more than 2^63 apart,
+> their comparison gets inverted due to that s64 overflow.
 
-Hi Geert,
+Yes, but that's a whole different issue. vruntime are not expected to be
+*that* far apart.
 
-> > +static const struct soc_device_attribute rpcif_info_match[]  =3D {
-> > +       { .soc_id =3D "r8a7795", .revision =3D "ES1.*", .data =3D &rpci=
-f_info_r8a7795_es1 },
-> > +       { .soc_id =3D "r8a7796", .revision =3D "ES1.*", .data =3D &rpci=
-f_info_r8a7796_es1 },
->=20
-> As we do have a separate compatible value for R-Car M3-W+ aka R-Car M3-W =
-ES3.0
-> ("renesas,r8a77961-rpc-if"), and there is no R-Car M3-W ES2.x (see the PRR
-> screwup handling in renesas_soc_init()), you can just match against
-> "renesas,r8a7796-rpc-if instead.
+That is surely the abnormal case. The normal case is wrap around, and
+that happens 'often' and should continue working.
 
-Right, I missed that! This is awesome news because with us dropping H3
-ES1 support, this means we can drop all the soc_device_match() handling
-now and use compatibles only. There, everybody happy :D
+> And this is what happens here: one scheduling entity has accumulated a
+> vruntime more than 2^63 ahead of another.  Now the comparison is
+> inverted due to s64 overflow, and the latter can't get to the cpu,
+> because it appears to have vruntime (much) bigger than that of the
+> former.
 
-> > +       regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
-> > +                          /* create mask with all affected bits set */
-> > +                          RPCIF_PHYCNT_STRTIM(BIT(fls(rpc->info->strti=
-m)) - 1),
->=20
-> fls(0) =3D 0, and BIT(-1) is undefined, so this won't work for R-Car
-> H3 ES1.x.  So I'm afraid you cannot handle this without storing the
-> actual mask ;-)
+If it can be 2^63 ahead, it can also be 2^(64+) ahead and nothing will
+help.
 
-You misread the parens, it is: BIT(0) - 1 =3D 0
+> This situation is reproducible e.g. when one scheduling entity is a
+> multi-cpu hog, and the other is woken up from a long sleep.  Normally
 
-I actually wrote a program to print out the calculations to make sure I
-got it right. But yeah, ES1 is obsolete now.
+A very low weight CPU hog?
 
-I'll send V3 later today.
+> when a task is placed on a cfs_rq, its vruntime is pulled to
+> min_vruntime, to avoid boosting the woken up task.  However in this case
+> the task is so much behind in vruntime that it appears ahead instead,
+> its vruntime is not adjusted in place_entity(), and then it looses the
+> cpu to the current scheduling entity.
 
-Thanks everyone,
+What I think might be a way out here is passing the the sleep wall-time
+(cfs_rq_clock_pelt() time I suppose) to place entity and simply skip the
+magic if 'big'.
 
-   Wolfram
+All that only matters for small sleeps anyway.
 
+Something like:
 
---SBOQttDUaUptgdAG
-Content-Type: application/pgp-signature; name="signature.asc"
+	sleep_time = U64_MAX;
+	if (se->avg.last_update_time)
+	  sleep_time = cfs_rq_clock_pelt(cfs_rq) - se->avg.last_update_time;
 
------BEGIN PGP SIGNATURE-----
+	if (sleep_time > 60*NSEC_PER_SEC) { // 1 minute is huge
+	  se->vruntime = cfs_rq->min_vruntime;
+	  return;
+	}
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPSdpwACgkQFA3kzBSg
-KbY7IRAAiwQXZG3DVHFKWmGKEXMGRWtzC5nzyYs7xb/taY5bhK/VGaYKgOVSI39w
-GvhkAyv38k1jbDgFcKgBh8OE/ygvHfm3XBk0/X7d3U1sCycQA/Qr715HNN0InEqb
-OaAUy2j5l5KQgEXZZA3QpAvM30eDasi2FTEimMzhsF91zjoGZkw3SagBsU03gd9d
-DIb8hFuinpgOqVrwbzaWDqtj+PbBGvfvz+nQuxtpNEtlF/0ETcuBq2yHoWVm2qZ9
-0aSDGXRl06k+l7SyreqBTfZXnsXUfsiA5P7rYyZ2l4DPo5KVKnsadSCvLzFvVfm3
-84cvz3cPRtGrAL1AbALy1LQ2A3HIYExRRhvDN4/jl8sBAUNqV6FlPs2vF/OzVk/4
-6H5WC/TOq+Zc6Cr0FM2uC541hhKyPeOuJWhsxdIFHy9Ov/kJieaBz9P26UwQKwxI
-4+0609PeBjY63OuvGjRVN8FjDUupmpYmga8HzKRgKdFsP+EVEhCtPGwA6tI4AEfx
-Lrq4OVnD4zCfZBYdJTFvLxMtkLGeME+T4jRGMeWUwltncKm1dC7hvZ6WkRK7FArX
-L+QAZKI5aDW+cPgzjRB9vhK5rb7kxRj+BJC3aGL0ZCtXt9wlzn7z/TNsVB6At3lH
-BjDQ/3O3hKu4v0CbyclklAS+2y65+3qG3uQpr9Nlq87Dd3OPkoo=
-=povj
------END PGP SIGNATURE-----
+	// ... rest of place_entity()
 
---SBOQttDUaUptgdAG--
+Hmm... ?
