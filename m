@@ -2,141 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF8467D238
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF11567D23D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjAZQ4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:56:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S230360AbjAZQ5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAZQ4H (ORCPT
+        with ESMTP id S229629AbjAZQ5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:56:07 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816D04689;
-        Thu, 26 Jan 2023 08:56:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=jcBESO6Kh80MkB8QvNeXhsmM1QYKDdAxBfViCRR9uCU=; b=a3MTeMfaarBv00gkN3NLp/3wse
-        Ali2CXgf55ELu/7UvtEuwAwkgaUIYq5h7MfJ0sE6ybXa54f/PYFDqPxWpVy9sYrGR2FCY6ymZG7W2
-        850DIE8g15PDzPaa0JKxgQodEK1kVKEbhzBHbfUhvmhBjuFv9QNAFI3FMF94gUrXQgYGSGvpbLAAh
-        W/pOp3CGFCTP//IDTRnrjS7+2VX3bprdRXzad64KPlLGWWFxaJum6YlGwXpcL7kJHXFJu7CNhg7gI
-        3xG2SOygpRWDjqJsaJ90jcHFgafRH+BENHeGDyvmFMOWVuSvLH/XwT7k2lCnVxea0t2mQY+EQ60rG
-        UaEMLsQg==;
-Received: from [2601:1c2:d80:3110::9307]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pL5XH-00Bu2H-M4; Thu, 26 Jan 2023 16:55:39 +0000
-Message-ID: <97a939cd-3898-3d54-e496-a8f33a62856a@infradead.org>
-Date:   Thu, 26 Jan 2023 08:55:36 -0800
+        Thu, 26 Jan 2023 11:57:10 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE20BCA16
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:57:08 -0800 (PST)
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 317E53FFEE
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1674752227;
+        bh=AqdG7g/ZZSZ4pNA8kNsOLtm4cZ2nj059acclO2QHloQ=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=DclGZmfeAPz6NdPSTdjaoTnOHdAEMhU8ymwJKe4dVhqKTbNpq6/CVGpCG0TcFUx03
+         1kWAakKEpUqev/VKc23Q6+ZQMM0d+xIzTbtkfUzk5VRK/WZAYcwDLabyrkSCpMbOrK
+         MZ/ObcgZLGHWr7CIah1tvdy4cCI0tInZZeg0ojCFEcDS/xeYQgwkb3bh9K/Hwe8WE5
+         YIFnTuxnpTOA2wkGu65urwlcKsh/Yk4tZWZEzUmUt14OZ1RRt9+32u+Mw4vlFFK2l+
+         Gw4Ih2JusAHeFEUod/B61r1PfZD1awIDhJjvx+fjJgDvAynKMHbSlkVP2tsjb2OSs4
+         LjcAgL3qQX5Mw==
+Received: by mail-wr1-f72.google.com with SMTP id i8-20020a05600011c800b002bfb6712623so453844wrx.6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:57:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AqdG7g/ZZSZ4pNA8kNsOLtm4cZ2nj059acclO2QHloQ=;
+        b=gpwQQpcrVWaLBuKCw+Qu4b10CDGm7eG73ZzntIfvhVA0A54SsjKzahzQLBSHQo/0Ao
+         5HTMJg/HZ6Z7PtyBeeGsYCaHax4gpzyje394ObzUZjAsjzx6M30cBYmZ4nCuMRfLtVEC
+         iqdCDh6d+IouuG0yvX0SEvJqbCpLtye7XaZdgbwYGGaVLnndv5g1V1/tYkCTekovYYzn
+         TEvRgoYihc/JzVoxV/Q55XS5IIXTqqkvJkjF+PMP42QpzXXjsTvzvj0+jnEqqXRUbPU8
+         GoQpszT/2jCD8vhnqZXPmH5/Qyb7xWeYoNOe8lkPVR+wBiAYLIuhvXAWNVIm7cJB5Dn1
+         L2/A==
+X-Gm-Message-State: AO0yUKWT4fpMiCGi/B5vlarqfdWScZzMFocHXztCsdBma2QNEdidDlav
+        pmiRdzD5aiVFfE4PqOJLqU2NU/Xq5CBlV2xpA19yu6xgrX0WqbkApf7nsR8hSIn8RVbvjNp5rR5
+        FhWmeKSgGMT4n1kCU1eekxVw+QrLPKvJyPMP2lYrOnA==
+X-Received: by 2002:a5d:4578:0:b0:2bf:c725:85 with SMTP id a24-20020a5d4578000000b002bfc7250085mr2088193wrc.12.1674752226311;
+        Thu, 26 Jan 2023 08:57:06 -0800 (PST)
+X-Google-Smtp-Source: AK7set+6H2kfXMT7ftWtKu40YIJWufbyLiNwAPLxiuN+FJ6q9L1RwkmEUjFPqgtZSaO3tmoiBUHB5w==
+X-Received: by 2002:a5d:4578:0:b0:2bf:c725:85 with SMTP id a24-20020a5d4578000000b002bfc7250085mr2088187wrc.12.1674752226168;
+        Thu, 26 Jan 2023 08:57:06 -0800 (PST)
+Received: from qwirkle.internal ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id n1-20020a5d6b81000000b002bdc39849d1sm1701946wrx.44.2023.01.26.08.57.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 08:57:05 -0800 (PST)
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     Andrei Gherzan <andrei.gherzan@canonical.com>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftest: net: Improve IPV6_TCLASS/IPV6_HOPLIMIT tests apparmor compatibility
+Date:   Thu, 26 Jan 2023 16:55:48 +0000
+Message-Id: <20230126165548.230453-1-andrei.gherzan@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v6 7/7] cdx: add device attributes
-Content-Language: en-US
-To:     Nipun Gupta <nipun.gupta@amd.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, eric.auger@redhat.com,
-        alex.williamson@redhat.com, cohuck@redhat.com,
-        song.bao.hua@hisilicon.com, mchehab+huawei@kernel.org,
-        maz@kernel.org, f.fainelli@gmail.com, jeffrey.l.hugo@gmail.com,
-        saravanak@google.com, Michael.Srba@seznam.cz, mani@kernel.org,
-        yishaih@nvidia.com, jgg@ziepe.ca, jgg@nvidia.com,
-        robin.murphy@arm.com, will@kernel.org, joro@8bytes.org,
-        masahiroy@kernel.org, ndesaulniers@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     okaya@kernel.org, harpreet.anand@amd.com, nikhil.agarwal@amd.com,
-        michal.simek@amd.com, git@amd.com
-References: <20230126104630.15493-1-nipun.gupta@amd.com>
- <20230126104630.15493-8-nipun.gupta@amd.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230126104630.15493-8-nipun.gupta@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+"tcpdump" is used to capture traffic in these tests while using a random,
+temporary and not suffixed file for it. This can interfere with apparmor
+configuration where the tool is only allowed to read from files with
+'known' extensions.
 
-On 1/26/23 02:46, Nipun Gupta wrote:
-> diff --git a/Documentation/ABI/testing/sysfs-bus-cdx b/Documentation/ABI/testing/sysfs-bus-cdx
-> index 8c2425fdb6d9..69bdbc891743 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-cdx
-> +++ b/Documentation/ABI/testing/sysfs-bus-cdx
-> @@ -10,3 +10,47 @@ Description:
->                  For example::
->  
->  		  # echo 1 > /sys/bus/cdx/rescan
-> +
-> +What:		/sys/bus/cdx/devices/.../vendor
-> +Date:		January 2023
-> +Contact:	nipun.gupta@amd.com
-> +Description:
-> +		Vendor ID for this CDX device. Vendor ID is 16 bit
-> +		identifier which is specific to the device manufacturer.
-> +		Combination of Vendor ID and Device ID identifies a device.
-> +
-> +What:		/sys/bus/cdx/devices/.../device
-> +Date:		January 2023
-> +Contact:	nipun.gupta@amd.com
-> +Description:
-> +		Device ID for this CDX device. Device ID is a 16 bit
-> +		identifier to identify a device type within the range
-> +		of a device manufacturer.
-> +		Combination of Vendor ID and Device ID identifies a device.
-> +
-> +What:		/sys/bus/cdx/devices/.../reset
-> +Date:		January 2023
-> +Contact:	nipun.gupta@amd.com
-> +Description:
+The MINE type application/vnd.tcpdump.pcap was registered with IANA for
+pcap files and .pcap is the extension that is both most common but also
+aligned with standard apparmor configurations. See TCPDUMP(8) for more
+details.
 
-Reads better without "would":
+This improves compatibility with standard apparmor configurations by
+using ".pcap" as the file extension for the tests' temporary files.
 
-> +		Writing a non-zero value to this file would reset the CDX> +		device. On resetting the device, the corresponding driver
-> +		would be notified twice, once before the device is being
-> +		reset, and again after the reset has been complete.
+Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+---
+ tools/testing/selftests/net/cmsg_ipv6.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-		Writing a non-zero value to this file resets the CDX
-		device. On resetting the device, the corresponding driver
-		is notified twice, once before the device is being
-		reset, and again after the reset has been complete.
-
-> +
-> +                For example::
-> +
-> +		  # echo 1 > /sys/bus/cdx/.../reset
-> +
-> +What:		/sys/bus/cdx/devices/.../remove
-> +Date:		January 2023
-> +Contact:	tarak.reddy@amd.com
-> +Description:
-> +		Writing a non-zero value to this file would remove the
-> +		corrosponding device from the CDX bus. If the device is
-> +		to be reconfigured in the Hardware, the device can be
-> +		removed, so that the device driver does not access the
-> +		device while it is being reconfigured.
-
-and: (also fix typo of corresponding)
-
-		Writing a non-zero value to this file removes the
-		corresponding device from the CDX bus. If the device is
-		to be reconfigured in the Hardware, the device can be
-		removed, so that the device driver does not access the
-		device while it is being reconfigured.
-
-> +
-> +		For example::
-> +
-> +		  # echo 1 > /sys/bus/cdx/devices/.../remove
-
+diff --git a/tools/testing/selftests/net/cmsg_ipv6.sh b/tools/testing/selftests/net/cmsg_ipv6.sh
+index 2d89cb0ad288..330d0b1ceced 100755
+--- a/tools/testing/selftests/net/cmsg_ipv6.sh
++++ b/tools/testing/selftests/net/cmsg_ipv6.sh
+@@ -6,7 +6,7 @@ ksft_skip=4
+ NS=ns
+ IP6=2001:db8:1::1/64
+ TGT6=2001:db8:1::2
+-TMPF=`mktemp`
++TMPF=$(mktemp --suffix ".pcap")
+ 
+ cleanup()
+ {
 -- 
-~Randy
+2.34.1
+
