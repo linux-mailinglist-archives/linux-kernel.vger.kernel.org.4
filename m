@@ -2,161 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B172267C86A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECCD67C870
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236737AbjAZKV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
+        id S237193AbjAZKV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:21:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236792AbjAZKVM (ORCPT
+        with ESMTP id S237103AbjAZKVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:21:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1419230D4;
-        Thu, 26 Jan 2023 02:20:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0353BB81D56;
-        Thu, 26 Jan 2023 10:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF96C433A7;
-        Thu, 26 Jan 2023 10:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674728432;
-        bh=nbZD0mbFWOFbBW54KkHJ6dJ39BENcdubynd8h8jvIDY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ttbq0byW9vU7HgjDM5YuVUPEnKuZdMLS0dPDxWC8ZUw+Pm8VDlbilI5UyRDdEjUaf
-         fa5hWN8W9dFr42K0lLsrvT9TCzAbGwUezohGVM88dcsXNlmqD5wYYq0NmhLnjM2roY
-         +iJZzHfsnLZFhAQXhPUPIpnOKbiZjaXlOYdsiuIgfglPeYReiLsDq8SVRcceds1Mvg
-         aeo3h0Ac7TjTe6r9UZdzC//cQNUhWkfaNVRNEoTLLH4xQOhW9khh1nBzS2lLjxbjdf
-         PIEkMTIvkoLsKz8FbH+KqPTe9lIqs4RrinUQSNlQYdAL0Nm4kiCifrsam/ZkC6UqEN
-         oymQMmUkzoKWg==
-Received: by mail-lf1-f43.google.com with SMTP id bp15so2274502lfb.13;
-        Thu, 26 Jan 2023 02:20:32 -0800 (PST)
-X-Gm-Message-State: AFqh2koCxEW2TB1849RLqzv/dnqqq2DgvyWphWvwfqXT0blo6cPfGwcl
-        iYLp+PDEOrp/s1EPM/rPMkQurp7hWVBv7EDSDTA=
-X-Google-Smtp-Source: AMrXdXvdexbfJypyxtSQhhGMLjtDygGf5tMKivVrIgzPI+9yV5w30ETdB4bZqJ1MnFKx8sDEFHzP1ynEqHq8gLr/QBo=
-X-Received: by 2002:a19:6511:0:b0:4cb:bea6:dac6 with SMTP id
- z17-20020a196511000000b004cbbea6dac6mr1991225lfb.344.1674728430655; Thu, 26
- Jan 2023 02:20:30 -0800 (PST)
+        Thu, 26 Jan 2023 05:21:39 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B49CA5EE;
+        Thu, 26 Jan 2023 02:21:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674728477; x=1706264477;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/Wdj5n8WybsZYtkV2jOsasrUUhnq8i1MgcmZSnWSJSg=;
+  b=FyiHZ00AmlV5cMXIVuXLnwRdxqk23SJon6/e8tKZ4jsvncTIYqhj0Bmh
+   Cse5ZiTgtXV5BZn0/9us917oyeiXkTNuygyxvvvEN9JLBpEHQmWeab40z
+   R6wuh1/DOr5/qwlVxx76NNSp5b+NR19c7G8dFSjbk2aD9Q80NBwnxWN+l
+   jsheza8XPogUUS0LpcntvzDCGkaGNedUidC1ad+Pt0J7FfMYfgGuW2r4b
+   F3LkKM2M/MLEZWQl09mNLbfZc5gJFVRhI9n+LbDONNFK9B23gLYTKNBBg
+   22+FS5ANsl5KSISvtQKPTBsKCbCVa8L27mNF6VYEQ0aQKe6h0ZLTLOFY5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="328861727"
+X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
+   d="scan'208";a="328861727"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 02:21:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="662804905"
+X-IronPort-AV: E=Sophos;i="5.97,248,1669104000"; 
+   d="scan'208";a="662804905"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 26 Jan 2023 02:21:09 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pKzNS-00FKzV-1t;
+        Thu, 26 Jan 2023 12:21:06 +0200
+Date:   Thu, 26 Jan 2023 12:21:06 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
+Message-ID: <Y9JUEv66Gze8FjMZ@smile.fi.intel.com>
+References: <Y8gUuqLBXsXQoNUC@smile.fi.intel.com>
+ <aba49d82-c76f-7ff2-751c-d1be7b8f3bca@ideasonboard.com>
+ <Y8rFh6zO7Hp9mLxE@smile.fi.intel.com>
+ <4286abe2-f23f-d4c9-ef18-f351af7a3a8b@ideasonboard.com>
+ <Y9EcRlooHwIjOqiZ@smile.fi.intel.com>
+ <cad92dbb-43ef-fa8c-1962-13c4a8578899@ideasonboard.com>
+ <Y9FBlMl4b3l1zVck@smile.fi.intel.com>
+ <5d208710-f284-e6e9-18dc-f5ef63a9ea44@ideasonboard.com>
+ <Y9FKcoVlgUWR4rhn@smile.fi.intel.com>
+ <04a82b08-524f-8d03-ac47-73d826907fc3@ideasonboard.com>
 MIME-Version: 1.0
-References: <20230125012801.362496-1-ebiggers@kernel.org> <14506678-918f-81e1-2c26-2b347ff50701@intel.com>
- <CAMj1kXEZi1ewVdqXHTi7kWX9aT+j1=rFOVE55LdJYb9LkV9Dkw@mail.gmail.com> <1000ec59-c8b7-e546-5baa-bdd0e878bf76@intel.com>
-In-Reply-To: <1000ec59-c8b7-e546-5baa-bdd0e878bf76@intel.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 26 Jan 2023 11:20:18 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHcUdJQDzF1VYe8uP_-Lb1W6JXxmfTEDYGuMZqSy=2BqA@mail.gmail.com>
-Message-ID: <CAMj1kXHcUdJQDzF1VYe8uP_-Lb1W6JXxmfTEDYGuMZqSy=2BqA@mail.gmail.com>
-Subject: Re: [PATCH] x86: enable Data Operand Independent Timing Mode
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Roxana Bradescu <roxabee@chromium.org>,
-        Adam Langley <agl@google.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <04a82b08-524f-8d03-ac47-73d826907fc3@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 Jan 2023 at 17:46, Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 1/25/23 08:22, Ard Biesheuvel wrote:
-> ...
-> > All the nospec stuff we added for Spectre v1 serves the same purpose,
-> > essentially, although the timing variances due to cache misses are
-> > likely easier to measure. IOW, some of the kernel is now written that
-> > way in fact, although the author of that doc may have had something
-> > else in mind.
-> >
-> > So IMHO, the scope is really not as narrow as you think.
->
-> I've spoken with the folks who wrote that doc.  They've told me
-> repeatedly that the scope is super narrow.  Seriously, look at just
-> *one* thing in the other Intel doc about mitigating timing side-channels[1]:
->
->         be wary of code generated from high-level language source code
->         that appears to adhere to all of these recommendations.
->
-> The kernel has a fair amount of code written in high-level languages.
->
+On Thu, Jan 26, 2023 at 10:41:47AM +0200, Tomi Valkeinen wrote:
+> On 25/01/2023 17:27, Andy Shevchenko wrote:
 
-This is why we have crypto_memneq(), for instance, which is intended
-to be time invariant, whereas the time taken by ordinary memcmp() is
-typically correlated with the byte index of the first unequal byte. So
-what we do there is compare every byte, instead of returning early on
-the first mismatch. We do, however, perform the comparison in the
-native word size and not byte by byte.
+...
 
-So if these optimizations result in word comparisons potentially
-taking less time if the first byte is a mismatch, we definitely have a
-problem. (This particular example may be far fetched but you get my
-point)
+> > But I probably don't understand the ATR structure and what exactly we need to
+> > pass to it, perhaps it also can be replaced with properties (note, that we have
+> > some interesting ones that called references, which is an alternative to DT
+> > phandle).
+> 
+> Well, maybe this needs a Linux bus implementation. I'm not that familiar
+> with implementing a bus, but I think that would make it easier to share data
+> between the deserializer and the serializer. A bus sounds a bit like an
+> overkill for a 1-to-1 connection, used by a few drivers, but maybe it
+> wouldn't be too much code.
 
-> The authors of the DOIT doc truly intend the real-world benefits of
-> DOITM to be exceedingly narrow.
+Have you looked at auxiliary bus (appeared a few releases ago in kernel)?
 
-I understand that this is the intent. But for privileged execution,
-this should really be the other way around: the scope for
-optimizations relying on data dependent timing is exceedingly narrow
-in the kernel, because any data it processes must be assumed to be
-confidential by default (wrt user space), and it will probably be
-rather tricky to identify CPU bound workloads in the kernel where data
-dependent optimizations are guaranteed to be safe and result in a
-significant speedup.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-This is basically the same argument I made for arm64.
 
->  I think it would be fair to say that
-> they think:
->
->         DOITM is basically useless for most code written in C, including
->         basically the entire kernel.
->
-> I'll go forward this on to them and make sure I'm not overstating this
-> _too_ much.
->
-
-C code that was not specifically written with data independent timing
-in mind may still behave that way today,
-C code that *was* specifically written with data independent timing in
-mind (such as crypto_memneq()) could potentially lose that property
-under these optimizations.
-
-> >> That's _meant_ to be really scary and keep folks from turning this on by
-> >> default, aka. what this patch does.  Your new CPU will be really slow if
-> >> you turn this on!  Boo!
-> >
-> > What is the penalty for switching it on and off? On arm64, it is now
-> > on by default in the kernel, and off by default in user space, and
-> > user space can opt into it using an unprivileged instruction.
->
-> Right now, DOITM is controlled by a bit in an MSR and it applies
-> everywhere.  It is (thankfully) one of the cheap MSRs and is not
-> architecturally serializing.
->
-> That's still not ideal and there is a desire to expose the bit to
-> userspace *somehow* to make it much, much cheaper to toggle.  But, it'll
-> still be an extra bit that needs to get managed and context switched.
->
-> When I looked, the arm64 bit seemed to be in some flags register that
-> got naturally saved and restored already on user<->kernel transitions.
-> Was I reading it right?  It seemed like a really nice, simple mechanism
-> to me.
->
-
-Indeed. It is part of PSTATE, which means is gets preserved/restored
-along with the rest of the SPSR (saved program state) when an
-exception is taken.
