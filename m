@@ -2,77 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACC667D0EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E8B67D0EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbjAZQIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
+        id S232584AbjAZQJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:09:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjAZQIb (ORCPT
+        with ESMTP id S230019AbjAZQJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:08:31 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425B54DE2B;
-        Thu, 26 Jan 2023 08:08:29 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id p24so2211386plw.11;
-        Thu, 26 Jan 2023 08:08:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/1kfGCDENEexk/u/WE878S1vFmK7YrVyU78lP11mT4I=;
-        b=PnlF2nDNZWM9a8wGfeyk4sR9KjM/JuZN+qOM68O2X3N0Qx6oXKUjKWCc94BQ764Ntv
-         nQRLnWozuFit5xJ8fpcquvl9xDTPo7MRBkK83/ET9tqe6PDrlHuYcbDmci3ySujwFYdZ
-         0ERraZYpjJAgeZEu8OB4sv+ikChtZNQB9lHON92tF599Auz9GVuLsA/fiP2g07aZUJbL
-         U1oxVZu0lJkK9GuY3P/g435Pq7TqqFwBRV/TSdake+nAe+Ss0OwxWi1xz64jdhl5zMdm
-         d3xDuw1IlarG+/vBf3WeBPsXiZ++OA9DByp0k06JZ1qZsbbM5uW8mOHIw4KyCZNvhYyh
-         kJVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/1kfGCDENEexk/u/WE878S1vFmK7YrVyU78lP11mT4I=;
-        b=V6t1Q49h2vbSOQQz6pq1mrLtZKpok64or5Uk3MayXvnSa5FTnf7uHISxYNI1+cGa2a
-         VAO6xsRF7E1SOcFkArbRq3ZlTNkrbzCWUMyjdB7dMx0/Naw05Gb9JvjxcSK2l13u9RQ7
-         x5/vIiWd5dFy1uNZLjFiuhvvyEQ3H5GdWBPIuS/GQEKRLgTcdIdYd3+syYPtBPAid3kN
-         G82vj/YfrM72OeBT3hgMdu8LYFqbYvtytYWzs7XxdTSrDW8fgNgfgWI3UJH19BtrKIE+
-         DFtRWKi/xwQMuVOGvvVbfze8tRaGTJF+mKiLkSN5LV4fHuMLx3mNHQN+jXIzZg2NrWHa
-         z4ew==
-X-Gm-Message-State: AO0yUKUP7mJEsB6RWf0A8zOvGWZ10DnBRp4TRvCe4zkT9g7qzRQVzqO/
-        LgSRSxNsRZICsmSFoBmS0dJjz1P1FwJRHpFEtvk=
-X-Google-Smtp-Source: AK7set/oCtCa19i19oi+AGbTUXy93/4u3edif4nr3Erc0d2CzBKsgse9kUgmJy4Dnnie07xOg8i9utNCx0PUlbeYQX8=
-X-Received: by 2002:a17:90a:e50f:b0:22c:113f:116f with SMTP id
- t15-20020a17090ae50f00b0022c113f116fmr740446pjy.175.1674749308243; Thu, 26
- Jan 2023 08:08:28 -0800 (PST)
+        Thu, 26 Jan 2023 11:09:04 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2131.outbound.protection.outlook.com [40.107.21.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E442D15561;
+        Thu, 26 Jan 2023 08:09:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cxN3IM0Loo8zX612Y/Ea+8rpQY4OsGXtFXjTFrNxw2sbMdb2eKAFEZkVbtBdQed/8rKhQYPqCWY+kcUf3yxOLbdlcHnlRuNbkc3ckH4RhOAifxNNiROk+OuFpJE22y7M9geBIpSyFdANsxAqbPCQxhGXpnvMBlsGAoWOISmSpGwh6gphDNrRgUcFRWpVmu4pj4xcicEhxiqUmZES+MN0tho22WxRe9iL4dXVCUP5M30NTIh9XCMNOrvUD5+dd+kEIMzxCsksBfm871lQUKobXNVb/2mCiqaEnDZW9Xw655jgRTHHftZysvoNrkMp0zKR1LWiXJpkc2VYTxzOgSdeYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YLetrZWxW/xM1j5laQhmoV0O0ZkZkUaLoNVo4mxYTYQ=;
+ b=dr4TlC+STjg365ue+cP/vSgWHXTk+WLvFKysUaTH9QemMeMpB+KfzYUYfrXKiBGN/S1Ogi7JLSjLU4yb7+T/ZKtq6HJHd9n+sViZ+51Pu9zKWMB61eG+fgdiHBFlOB0Dr6vu1eZNvCm8+X2l11XqChdyiZe6r56fYbwQvLRGMnEEFks3SCPg0YtkmFWjwRcyuidLhlRKOo83DOPDgZaULcLCwTSPuCCQbmMotrUAaDr+pFtbn/aN71UzVl9ajsKgBfsmVyO4V3K9mz80r8vumwDGFMw4G9oUShcCDbHCaIz/SMMh3a+Q16G01iHnZuLohzzuuN/515pLfivBgNxOQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
+ header.d=mt.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YLetrZWxW/xM1j5laQhmoV0O0ZkZkUaLoNVo4mxYTYQ=;
+ b=xk7B+A+ztXqIpFCYoAEsLcXh+83h72y06TbkYtyH+ahuqiMM0LxKroB25DYnthXM0zy5e0KLRJ5kUnnFKj/de9PsGz4Uf42E3v1S26MNMTDoR+V2YZ7+1x/xepzDmNqMfl7APVWzunphknSBlfrhgazxxqv78PrkgIH/d3ll8Yo4iiZCXg+3n7ZDnr8uB/LZ4tBjpIVJYL8GEhqm3dzqt/h5o2J4dHrvYO1OZPQBkbI3mnX7Sm5b1qRUT/NwEkkE3XPCD0ADq0L6HYivlGrkHrj82pzmk+PM4Q6aMiFT/nCmdM3Dd9sxTehoHMJSkd9mKQQ8erjY7tm5yf7KxjlIEA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mt.com;
+Received: from AS8PR03MB7621.eurprd03.prod.outlook.com (2603:10a6:20b:345::20)
+ by DU2PR03MB9886.eurprd03.prod.outlook.com (2603:10a6:10:494::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Thu, 26 Jan
+ 2023 16:09:00 +0000
+Received: from AS8PR03MB7621.eurprd03.prod.outlook.com
+ ([fe80::b42f:82f8:24cb:a225]) by AS8PR03MB7621.eurprd03.prod.outlook.com
+ ([fe80::b42f:82f8:24cb:a225%9]) with mapi id 15.20.6043.022; Thu, 26 Jan 2023
+ 16:09:00 +0000
+Date:   Thu, 26 Jan 2023 17:08:57 +0100
+From:   Manuel Traut <manuel.traut@mt.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v8 4/5] dt-bindings: input: pwm-beeper: add volume
+Message-ID: <Y9KlmY49Zq17HIOI@mt.com>
+References: <20230126091825.220646-1-manuel.traut@mt.com>
+ <20230126091825.220646-5-manuel.traut@mt.com>
+ <c519afe0-0a6f-e262-7a85-a3072a828e62@linaro.org>
+ <Y9KYNSWwlJXPcw0L@mt.com>
+ <b5aea934-4514-6b30-be95-f427d01f54bb@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b5aea934-4514-6b30-be95-f427d01f54bb@linaro.org>
+X-ClientProxiedBy: FR3P281CA0099.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a1::16) To AS8PR03MB7621.eurprd03.prod.outlook.com
+ (2603:10a6:20b:345::20)
 MIME-Version: 1.0
-References: <20230124124300.94886-1-nbd@nbd.name> <CAC_iWjKAEgUB8Z3WNNVgUK8omXD+nwt_VPSVyFn1i4EQzJadog@mail.gmail.com>
- <19121deb-368f-9786-8700-f1c45d227a4c@nbd.name> <cd35316065cfe8d706ca2730babe3e6519df6034.camel@gmail.com>
- <c7f1ade0-a607-2e55-d106-9acc26cbed94@nbd.name> <49703c370e26ae1a6b19a39dc05e262acf58f6aa.camel@gmail.com>
- <9baecde9-d92b-c18c-daa8-e7a96baa019b@nbd.name> <595c5e36b0260ba16833c2a8d9418fd978ca9300.camel@gmail.com>
- <0c0e96a7-1cf1-b856-b339-1f3df36a562c@nbd.name> <a0b43a978ae43064777d9d240ef38b3567f58e5a.camel@gmail.com>
- <9992e7b5-7f2b-b79d-9c48-cf689807f185@nbd.name> <301aa48a-eb3b-eb56-5041-d6f8d61024d1@nbd.name>
- <148028e75d720091caa56e8b0a89544723fda47e.camel@gmail.com>
- <8ec239d3-a005-8609-0724-f1042659791e@nbd.name> <8a331165-4435-4c2d-70e0-20655019dc51@nbd.name>
-In-Reply-To: <8a331165-4435-4c2d-70e0-20655019dc51@nbd.name>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Thu, 26 Jan 2023 08:08:16 -0800
-Message-ID: <CAKgT0Ud8npNtncH-KbMtj_R=UZ=aFA9T8U=TZoLG_94eVUxKPA@mail.gmail.com>
-Subject: Re: [PATCH] net: page_pool: fix refcounting issues with fragmented allocation
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        netdev@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-kernel@vger.kernel.org, Yunsheng Lin <linyunsheng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR03MB7621:EE_|DU2PR03MB9886:EE_
+X-MS-Office365-Filtering-Correlation-Id: 44c61e96-ce9f-4eec-ff62-08daffb7a2cb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ER5MHdg6gEIy0ssTDrJ7aa1FylFasiTcXnjl7Y9CNM3+uFYD/s0nSyVatRA3QqbGS1m0cAuj80Lgnu+nHp0EUzUMKTbVTtu/zjPUmq7XwM5o4uiACH8eCTtr9/GO+uARozcRst21BUyutQkOFXtBtJq2p3mA6be8i5zNwrvcf28W9+RIxMwI9Wfr0QaG9ehejX/pEfo0xWEZfXqfjqKKXcKwpKSjnV/0pllDsKQNuC5eHjhr6ok8EkCiGc7ZHIjtdEvOkKq+yICIFSnvpR9PbJDAEeoEFr4QbJ1gJtoE11wN2nE0bbW6AZ+tNoCJz5W8nrcjTY9q/tlO+83nrp6wYp4f4XIPwVneishFnHCFXCnGePBsOuWKZ4JrGXp1lWz9H4OA9g8UkYVLkhP1OgdEHA7el6l9NS4+GzjEQu98s6ESI2vPdSlF7tnJ3n86mev2xzhMwdzUWemRjRVg5qYcl5zPXYPUGAFC72h4T8RuUndSK/sfyxWG98KYvVlMaHvy81RFvEizJT8Fxy1EPjejb6s51WfX5CVUZ+EnX5qCx9hnBfDGzgE6Gd0CmH/yyLVnfMwLY9gR/Zy7yk+V72FhaM8kGaxcwjaKGLbY3i8D40whCFcH2MVk6zziUDssYnXb/hw6CMha76qsR21aCptmIKJZSAvODezMjJlIBg0WEYyBQk1irGnsff9vOAoZyfbChhXQOPssnXMtAcgAxd1jFQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB7621.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(376002)(396003)(136003)(346002)(366004)(451199018)(4744005)(6506007)(36756003)(4326008)(44832011)(66556008)(66946007)(8936002)(478600001)(5660300002)(41300700001)(6512007)(186003)(54906003)(6486002)(316002)(86362001)(6916009)(26005)(2906002)(6666004)(66476007)(2616005)(52116002)(8676002)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ekN2ZWh1SFVNUzZ4ZXdCS1NSd2NLNERlSUMveGFjamFCMGhoQUlJNGN3bksv?=
+ =?utf-8?B?c3BTNHVPdThyb1FjTFhJZmtzbWk5VENwZll3K2E2Yk1ydmdFWW01ZERpbUk4?=
+ =?utf-8?B?RVJ5MlRnLy82eDJONmtrNlNRUTcyc3Z1MnJsOEN4TDJLNkx6MDQzN3hMVmI2?=
+ =?utf-8?B?bFNBK2xvb08wT0x1SEZ2a3BpVkg3M1I3NEpBZHVJQ3A3c1dMTTFka2M2NGJY?=
+ =?utf-8?B?R1JkS1UzRjJHcUFMWE44YVhHWU1mWFZkOUU5N3d1ODFmRnIyTjBaYUdIaCtI?=
+ =?utf-8?B?ZXpyUi92WkFoWE1KTEhjRHRaWHJIdkFOUDRDVkJvcmppdzJJMXBNK0VDSHd5?=
+ =?utf-8?B?UGhnMDBRSVkrQnV4Z1F6LzNsSExXWDNkRzVGaDQxMjk3bXg0eitzS1QyQVdn?=
+ =?utf-8?B?Qlk4dUkxMHp1Y0lUZTNtUzUvV054SEthMTVEMkVRYTVDWWUycDBscDhpdHdp?=
+ =?utf-8?B?N0tIZHZyM0hWRmZwNTV4SEZWek5tY3BZdmpZbHpIYXBOTWYxei9hcEpWSG12?=
+ =?utf-8?B?OTlwU2FVZ0lKT0ZwMyt4c0ZqWSt4UFZBV3ZEbHZDT21KbGZmUURpcnpNbXEx?=
+ =?utf-8?B?SVhIU043cFdRL3ZJRzdOQ0xZaEpMSWxBU1JEdWFWSm5PM0VSVUdEbFdPaVZ3?=
+ =?utf-8?B?Ky9lMUZVQld6bTlzUnRiTWxCbEpLWWFpaXl1UDlQblFDa0pJc1RzNmNCLzM3?=
+ =?utf-8?B?Tmlha3NnYmdOTHUrQy81ZmxTWCt0bk9CdUtLbkhnSldLRHY3VU5SL0RxQ2Qz?=
+ =?utf-8?B?T0JlcDRvZWRwdVFzTVZRWGx5ai9DdEJEaWNZdllLd21XOC82a3ZlQkcrcGNS?=
+ =?utf-8?B?VVdxd3BaWDBQWlpibS85UE8vS09MbVVTUjc2cWxRZ0RkVnp2RmhRZEw1VlNa?=
+ =?utf-8?B?UzRyY1dYTlJkdXIxOWFzelM5cXp0S1NjTEJ6Yi9XYUMraXpPTW5RNHMwaTRI?=
+ =?utf-8?B?VmZjUVR0dmhYbE00dlQ5MjRCME56cG96U2NyeUxxMGlRb1NUbHF1MmRYc3JS?=
+ =?utf-8?B?VHdnb3BkeEcwRWxCR2FEWXNLenYwdUcvQ09rNkVWL3U4SHN1RzRSczdwNm9T?=
+ =?utf-8?B?dmd3RzFoM0V6czVteWxaS25QNEhWcU5PV1dTV2twUk5tRmtBSmpYM1JSTjhZ?=
+ =?utf-8?B?MCs4Nmljcys5WTFxeGorOU11dzBHbXFwbGVTM0hCTzJpS3FYSDZxWnRPRi91?=
+ =?utf-8?B?MGZoancwYnRqR05iUy9BSjhzMkVFMUNMWTVFcm5xVCs1c0o3UUgzdnZDbUd4?=
+ =?utf-8?B?K3hVNTJuSkRqQ1ZKYU01cnpBa0ViUGU4MmlreFRVb05uZnBLMVNwOWp3YUhQ?=
+ =?utf-8?B?LzdCd2srN2twUUF5bGh0OURhakNCL1VrSDBhbzZhcGJPeUQ1SDVXbmNBZWdu?=
+ =?utf-8?B?cTB0YTBwdWJBZm1yZTZOaEwwb3N4N3RuNFVHU1F0aU9aUlZQc3FvcFpsczFN?=
+ =?utf-8?B?NE53UlBzbmllVXlGWFRHRGcyR3JyU3JXak0yb0RyMC9UNmxieTVScEg0ODE5?=
+ =?utf-8?B?aE95U1NzVGNFU3hxZUh0ejNaNlZuWW5kMzFCZFNSSzlSYXRydWt1aUg2UTZN?=
+ =?utf-8?B?YmVZUzZ0T1FuQ3JjRVdvTzQzOTZWSGFvRGJSZngzVndIOWhIRndTYVJ1L05m?=
+ =?utf-8?B?MjZJRTBEclBmOWtGZzNJMXowV1hEV0VqSUdRYzMyYmJyU2lTVWlsMG5IbS8v?=
+ =?utf-8?B?YUtGeEZPWllWa0JJMUd2UHVYNlpBUjNMZnp3b1RjRC9zMXJHNmVDRUN4VEtW?=
+ =?utf-8?B?RFlFdVF3N1BEa1JJWWJvSmV5bFNIQXNYNUlnQlNIK2phRFJPRzZVREUrdDZ2?=
+ =?utf-8?B?Z05oUFlmaCtMTW42QzI5TitjemVBMitlY1NwZTNJeDNrL2MrY1hsSlFPMnZ6?=
+ =?utf-8?B?Yk5JZlVXd2tHTjJIWWZ3QmxieER3RGd1a3VTSG15Q1ZlaHJ3aHBxWWpHL3pZ?=
+ =?utf-8?B?QWlBS0k5VGlNelM1Y0lnUk5GZnVOVUdsWHg4VU0wSjg1SWxOSSt0MTVpNlo4?=
+ =?utf-8?B?Qmd5dnNqSXlKeURienZZckdLOHg5eWlqY3NaRHhYVkFZb0tUeG5ZaC9CdzFR?=
+ =?utf-8?B?a1lFZ3o3b2E1cnpEQTF1a1FFcXpNU3QxVXRpbnpuaDNVK09ra1Y0QzV3NXRx?=
+ =?utf-8?Q?Cyu2ksi0wIm6K9uV8II8FYSG3?=
+X-OriginatorOrg: mt.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44c61e96-ce9f-4eec-ff62-08daffb7a2cb
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR03MB7621.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 16:09:00.2660
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: STBljzIk8gjNVGad14DMlZTEp3b2bvHTFsT0ilwu9JlFlQqgjVBi1VBR9ra3y0oDg2rxoeqZTQ2uJujwB7Tnew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR03MB9886
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,221 +129,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 1:15 AM Felix Fietkau <nbd@nbd.name> wrote:
->
-> On 26.01.23 07:12, Felix Fietkau wrote:
-> > On 25.01.23 23:14, Alexander H Duyck wrote:
-> >> On Wed, 2023-01-25 at 20:40 +0100, Felix Fietkau wrote:
-> >>> On 25.01.23 20:10, Felix Fietkau wrote:
-> >>> > On 25.01.23 20:02, Alexander H Duyck wrote:
-> >>> > > On Wed, 2023-01-25 at 19:42 +0100, Felix Fietkau wrote:
-> >>> > > > On 25.01.23 19:26, Alexander H Duyck wrote:
-> >>> > > > > On Wed, 2023-01-25 at 18:32 +0100, Felix Fietkau wrote:
-> >>> > > > > > On 25.01.23 18:11, Alexander H Duyck wrote:
-> >>> > > > > > > On Tue, 2023-01-24 at 22:30 +0100, Felix Fietkau wrote:
-> >>> > > > > > > > On 24.01.23 22:10, Alexander H Duyck wrote:
-> >>> > > > > > > > > On Tue, 2023-01-24 at 18:22 +0100, Felix Fietkau wrote:
-> >>> > > > > > > > > > On 24.01.23 15:11, Ilias Apalodimas wrote:
-> >>> > > > > > > > > > > Hi Felix,
-> >>> > > > > > > > > > >
-> >>> > > > > > > > > > > ++cc Alexander and Yunsheng.
-> >>> > > > > > > > > > >
-> >>> > > > > > > > > > > Thanks for the report
-> >>> > > > > > > > > > >
-> >>> > > > > > > > > > > On Tue, 24 Jan 2023 at 14:43, Felix Fietkau <nbd@nbd.name> wrote:
-> >>> > > > > > > > > > > >
-> >>> > > > > > > > > > > > While testing fragmented page_pool allocation in the mt76 driver, I was able
-> >>> > > > > > > > > > > > to reliably trigger page refcount underflow issues, which did not occur with
-> >>> > > > > > > > > > > > full-page page_pool allocation.
-> >>> > > > > > > > > > > > It appears to me, that handling refcounting in two separate counters
-> >>> > > > > > > > > > > > (page->pp_frag_count and page refcount) is racy when page refcount gets
-> >>> > > > > > > > > > > > incremented by code dealing with skb fragments directly, and
-> >>> > > > > > > > > > > > page_pool_return_skb_page is called multiple times for the same fragment.
-> >>> > > > > > > > > > > >
-> >>> > > > > > > > > > > > Dropping page->pp_frag_count and relying entirely on the page refcount makes
-> >>> > > > > > > > > > > > these underflow issues and crashes go away.
-> >>> > > > > > > > > > > >
-> >>> > > > > > > > > > >
-> >>> > > > > > > > > > > This has been discussed here [1].  TL;DR changing this to page
-> >>> > > > > > > > > > > refcount might blow up in other colorful ways.  Can we look closer and
-> >>> > > > > > > > > > > figure out why the underflow happens?
-> >>> > > > > > > > > > I don't see how the approch taken in my patch would blow up. From what I
-> >>> > > > > > > > > > can tell, it should be fairly close to how refcount is handled in
-> >>> > > > > > > > > > page_frag_alloc. The main improvement it adds is to prevent it from
-> >>> > > > > > > > > > blowing up if pool-allocated fragments get shared across multiple skbs
-> >>> > > > > > > > > > with corresponding get_page and page_pool_return_skb_page calls.
-> >>> > > > > > > > > >
-> >>> > > > > > > > > > - Felix
-> >>> > > > > > > > > >
-> >>> > > > > > > > >
-> >>> > > > > > > > > Do you have the patch available to review as an RFC? From what I am
-> >>> > > > > > > > > seeing it looks like you are underrunning on the pp_frag_count itself.
-> >>> > > > > > > > > I would suspect the issue to be something like starting with a bad
-> >>> > > > > > > > > count in terms of the total number of references, or deducing the wrong
-> >>> > > > > > > > > amount when you finally free the page assuming you are tracking your
-> >>> > > > > > > > > frag count using a non-atomic value in the driver.
-> >>> > > > > > > > The driver patches for page pool are here:
-> >>> > > > > > > > https://patchwork.kernel.org/project/linux-wireless/patch/64abb23f4867c075c19d704beaae5a0a2f8e8821.1673963374.git.lorenzo@kernel.org/
-> >>> > > > > > > > https://patchwork.kernel.org/project/linux-wireless/patch/68081e02cbe2afa2d35c8aa93194f0adddbd0f05.1673963374.git.lorenzo@kernel.org/
-> >>> > > > > > > >
-> >>> > > > > > > > They are also applied in my mt76 tree at:
-> >>> > > > > > > > https://github.com/nbd168/wireless
-> >>> > > > > > > >
-> >>> > > > > > > > - Felix
-> >>> > > > > > >
-> >>> > > > > > > So one thing I am thinking is that we may be seeing an issue where we
-> >>> > > > > > > are somehow getting a mix of frag and non-frag based page pool pages.
-> >>> > > > > > > That is the only case I can think of where we might be underflowing
-> >>> > > > > > > negative. If you could add some additional debug info on the underflow
-> >>> > > > > > > WARN_ON case in page_pool_defrag_page that might be useful.
-> >>> > > > > > > Specifically I would be curious what the actual return value is. I'm
-> >>> > > > > > > assuming we are only hitting negative 1, but I would want to verify we
-> >>> > > > > > > aren't seeing something else.
-> >>> > > > > > I'll try to run some more tests soon. However, I think I found the piece
-> >>> > > > > > of code that is incompatible with using pp_frag_count.
-> >>> > > > > > When receiving an A-MSDU packet (multiple MSDUs within a single 802.11
-> >>> > > > > > packet), and it is not split by the hardware, a cfg80211 function
-> >>> > > > > > extracts the individual MSDUs into separate skbs. In that case, a
-> >>> > > > > > fragment can be shared across multiple skbs, and get_page is used to
-> >>> > > > > > increase the refcount.
-> >>> > > > > > You can find this in net/wireless/util.c: ieee80211_amsdu_to_8023s (and
-> >>> > > > > > its helper functions).
-> >>> > > > >
-> >>> > > > > I'm not sure if it is problematic or not. Basically it is trading off
-> >>> > > > > by copying over the frags, calling get_page on each frag, and then
-> >>> > > > > using dev_kfree_skb to disassemble and release the pp_frag references.
-> >>> > > > > There should be other paths in the kernel that are doing something
-> >>> > > > > similar.
-> >>> > > > >
-> >>> > > > > > This code also has a bug where it doesn't set pp_recycle on the newly
-> >>> > > > > > allocated skb if the previous one has it, but that's a separate matter
-> >>> > > > > > and fixing it doesn't make the crash go away.
-> >>> > > > >
-> >>> > > > > Adding the recycle would cause this bug. So one thing we might be
-> >>> > > > > seeing is something like that triggering this error. Specifically if
-> >>> > > > > the page is taken via get_page when assembling the new skb then we
-> >>> > > > > cannot set the recycle flag in the new skb otherwise it will result in
-> >>> > > > > the reference undercount we are seeing. What we are doing is shifting
-> >>> > > > > the references away from the pp_frag_count to the page reference count
-> >>> > > > > in this case. If we set the pp_recycle flag then it would cause us to
-> >>> > > > > decrement pp_frag_count instead of the page reference count resulting
-> >>> > > > > in the underrun.
-> >>> > > > Couldn't leaving out the pp_recycle flag potentially lead to a case
-> >>> > > > where the last user of the page drops it via page_frag_free instead of
-> >>> > > > page_pool_return_skb_page? Is that valid?
-> >>> > >
-> >>> > > No. What will happen is that when the pp_frag_count is exhausted the
-> >>> > > page will be unmapped and evicted from the page pool. When the page is
-> >>> > > then finally freed it will end up going back to the page allocator
-> >>> > > instead of page pool.
-> >>> > >
-> >>> > > Basically the idea is that until pp_frag_count reaches 0 there will be
-> >>> > > at least 1 page reference held.
-> >>> > >
-> >>> > > > > > Is there any way I can make that part of the code work with the current
-> >>> > > > > > page pool frag implementation?
-> >>> > > > >
-> >>> > > > > The current code should work. Basically as long as the references are
-> >>> > > > > taken w/ get_page and skb->pp_recycle is not set then we shouldn't run
-> >>> > > > > into this issue because the pp_frag_count will be dropped when the
-> >>> > > > > original skb is freed and the page reference count will be decremented
-> >>> > > > > when the new one is freed.
-> >>> > > > >
-> >>> > > > > For page pool page fragments the main thing to keep in mind is that if
-> >>> > > > > pp_recycle is set it will update the pp_frag_count and if it is not
-> >>> > > > > then it will just decrement the page reference count.
-> >>> > > > What takes care of DMA unmap and other cleanup if the last reference to
-> >>> > > > the page is dropped via page_frag_free?
-> >>> > > >
-> >>> > > > - Felix
-> >>> > >
-> >>> > > When the page is freed on the skb w/ pp_recycle set it will unmap the
-> >>> > > page and evict it from the page pool. Basically in these cases the page
-> >>> > > goes from the page pool back to the page allocator.
-> >>> > >
-> >>> > > The general idea with this is that if we are using fragments that there
-> >>> > > will be enough of them floating around that if one or two frags have a
-> >>> > > temporeary detour through a non-recycling path that hopefully by the
-> >>> > > time the last fragment is freed the other instances holding the
-> >>> > > additional page reference will have let them go. If not then the page
-> >>> > > will go back to the page allocator and it will have to be replaced in
-> >>> > > the page pool.
-> >>> > Thanks for the explanation, it makes sense to me now. Unfortunately it
-> >>> > also means that I have no idea what could cause this issue. I will
-> >>> > finish my mt76 patch rework which gets rid of the pp vs non-pp
-> >>> > allocation mix and re-run my tests to provide updated traces.
-> >>> Here's the updated mt76 page pool support commit:
-> >>> https://github.com/nbd168/wireless/commit/923cdab6d4c92a0acb3536b3b0cc4af9fee7c808
+> >>> +  default-volume-level:
 > >>
-> >> Yeah, so I don't see anything wrong with the patch in terms of page
-> >> pool.
-> >>
-> >>> And here is the trace that I'm getting with 6.1:
-> >>> https://nbd.name/p/a16957f2
-> >>>
-> >>> If you have any debug patch you'd like me to test, please let me know.
-> >>>
-> >>> - Felix
-> >>
-> >> So looking at the traces I am assuming what we are seeing is the
-> >> deferred freeing from the TCP Rx path since I don't see a driver
-> >> anywhere between net_rx_action and napi_consume skb. So it seems like
-> >> the packets are likely making it all the way up the network stack.
-> >>
-> >> Is this the first wireless driver to add support for page pool? I'm
-> >> thinking we must be seeing something in the wireless path that is
-> >> causing an issue such as the function you called out earlier but I
-> >> can't see anything obvious.
-> > Yes, it's the first driver with page pool support.
-> >
-> >> One thing we need to be on the lookout for is cloned skbs. When an skb
-> >> is cloned the pp_recycle gets copied over. In that case the reference
-> >> is moved over to the skb dataref count. What comes to mind is something
-> >> like commit 1effe8ca4e34c ("skbuff: fix coalescing for page_pool
-> >> fragment recycling").
-> > I suspect that the crash might be related to a bad interaction between
-> > the page reuse in A-MSDU rx + skb coalescing on TCP rx.
-> > If I change the A-MSDU code to copy data instead of reusing fragments,
-> > it doesn't crash anymore.
+> >> I propose to use just the value, not the index, so the name should
+> >> finish with '-bp' and the $ref can be dropped.
+> > 
+> > I am not so happy with this suggestion. What shall be displayed in
+> > sysfs as volume if a user specifies a value that is not defined in
+> > the array.. So I tend to keep this as is.
+> 
+> sysfs is not related to bindings. To rephrase your question: what shall
+> be shown in anywhere if the index is not correct? The same problem, the
+> same solution.
 
-Which piece did you change? My main interest would be trying to narrow
-down the section of this function that is causing this. Did you modify
-__ieee80211_amsdu_copy or some other function within the setup?
+got it, thanks for the hint. I will implement it in v9.
 
-> > I believe the issue must be specific to that codepath, since most
-> > received and processed packets are either not A-MSDU or A-MSDU decap has
-> > already been performed by the hardware.
-> > If I change my test to use 3 client mode interfaces instead of 4, the
-> > hardware is able to offload all A-MSDU rx processing and I don't see any
-> > crashes anymore.
-> >
-> > Could you please take another look at ieee80211_amsdu_to_8023s to see if
-> > there's anything in there that could cause these issues?
-
-The thing is I am not sure it is the only cause for this. I am
-suspecting we are seeing this triggering an issue when combined with
-something else.
-
-If we could add some tracing to dump the skb and list buffers that
-might be helpful. We would want to verify the pp_recycle value, clone
-flag, and for the frags we would want to frag count and page reference
-counts. The expectation would be that the original skb should have the
-pp_recycle flag set and the frag counts consistent through the
-process, and the list skbs should all have taken page references w/ no
-pp_recycle on the skbs in the list.
-
-> Here are clues from a few more tests that I ran:
-> - preventing the reuse of the last skb in ieee80211_amsdu_to_8023s does
-> not prevent the crashes, so the issue is indeed related to taking page
-> references and putting the pages in skb fragments.
-
-You said in the first email it stops it and in the second "does not".
-I am assuming that is some sort of typo since you seem to be implying
-it does resolve it for you. Is that correct?
-
-> - if I return false in skb_try_coalesce, it still crashes:
-> https://nbd.name/p/18cac078
-
-Yeah, I wasn't suspecting skb_try_coalesce since we have exercised the
-code. My thought was something like the function you mentioned above
-plus cloning or something else.
+Regards
+Manuel
