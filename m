@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA7467D407
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6691C67D41B
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjAZSYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:24:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
+        id S230360AbjAZSZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:25:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjAZSYQ (ORCPT
+        with ESMTP id S229721AbjAZSZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:24:16 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F107A2E811;
-        Thu, 26 Jan 2023 10:24:15 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 748872CD;
-        Thu, 26 Jan 2023 18:24:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 748872CD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1674757455; bh=NDkHtT0XjsN48TGbkrZ3csn8ktoYSDEN7MwnP8baIsI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=EfE1CVoBF1Lav23Y8wMwuTM1CGVqLS3IWz+nISXGDdFbPIyEUe7SW+jf3xOlU0DHf
-         lfvBfJEFlncw56/QVROaAgU+gtk7Jpnn70NV8ESfaRX5mO8JhzJfwB1WoyGS8RMSn5
-         U5GsPIv+d523u8tOjZ8PkYMJyA+/B60lO7WiEYnN2SL00p/nwDaLrWPqg/Uh7BynkO
-         +qISNhKnhSfBgZKrRDE7QbaYQ3EN5u10cp5GnZ39YuGnalzCy/IOpt/78fqqQ5Alz5
-         BnEJvGjdOUO/DVh9CMXI0e7rJ24ojMFS0WzKuJ/1N06+dJx+4GHIUAQMsRBeOqqR3a
-         sO9zJRCnposSw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Wang Yong <yongw.kernel@gmail.com>, pbonzini@redhat.com,
-        kchamart@redhat.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Wang Yong <yongw.kernel@gmail.com>
-Subject: Re: [PATCH] Documentation: KVM: fix typos in running-nested-guests.rst
-In-Reply-To: <20230110150046.549755-1-yongw.kernel@gmail.com>
-References: <20230110150046.549755-1-yongw.kernel@gmail.com>
-Date:   Thu, 26 Jan 2023 11:24:14 -0700
-Message-ID: <87edrh9msx.fsf@meer.lwn.net>
+        Thu, 26 Jan 2023 13:25:39 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B1261869;
+        Thu, 26 Jan 2023 10:25:26 -0800 (PST)
+Received: from fedcomp.intra.ispras.ru (unknown [46.242.14.200])
+        by mail.ispras.ru (Postfix) with ESMTPSA id C55AB44C1003;
+        Thu, 26 Jan 2023 18:25:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru C55AB44C1003
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1674757521;
+        bh=Afq4b2X8eBtK6SxOlqW9d62Bwf0KZ0SsOAymNkS7amw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kdpTNvL3PZpEagtlTlMTtFOwQbQ5HB+uXPkNZ5x+X29xL9t2yZpBXyJSIlJ7imTca
+         gIO7l0btapr9pXKIe6Bi5HwqU60PseWBqrXsPbKwq5MAUbNRpIaxN5RUDaQZ4ptbzp
+         TQZxFaGLQZr0s21HG4q4IUfLgwwgsVbTeEOf5VKg=
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Oliver Neukum <oneukum@suse.com>,
+        Mohammed Shafi Shajakhan <mohammed@qca.qualcomm.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        syzbot+555908813b2ea35dae9a@syzkaller.appspotmail.com
+Subject: [PATCH] wifi: ath6kl: reduce WARN to dev_dbg() in callback
+Date:   Thu, 26 Jan 2023 21:24:31 +0300
+Message-Id: <20230126182431.867984-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -51,27 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wang Yong <yongw.kernel@gmail.com> writes:
+The warn is triggered on a known race condition that is correctly handled.
+Using WARN() hinders automated testing. Reducing severity.
 
-> change "gues" to "guest" and remove redundant ")".
->
-> Signed-off-by: Wang Yong <yongw.kernel@gmail.com>
-> ---
->  Documentation/virt/kvm/x86/running-nested-guests.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/virt/kvm/x86/running-nested-guests.rst b/Documentation/virt/kvm/x86/running-nested-guests.rst
-> index a27e6768d900..71136fe1723b 100644
-> --- a/Documentation/virt/kvm/x86/running-nested-guests.rst
-> +++ b/Documentation/virt/kvm/x86/running-nested-guests.rst
-> @@ -150,7 +150,7 @@ able to start an L1 guest with::
->      $ qemu-kvm -cpu host [...]
->  
->  The above will pass through the host CPU's capabilities as-is to the
-> -gues); or for better live migration compatibility, use a named CPU
-> +guest, or for better live migration compatibility, use a named CPU
->  model supported by QEMU. e.g.::
+Fixes: de2070fc4aa7 ("ath6kl: Fix kernel panic on continuous driver load/unload")
+Reported-and-tested-by: syzbot+555908813b2ea35dae9a@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+ drivers/net/wireless/ath/ath6kl/htc_pipe.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thanks.
+diff --git a/drivers/net/wireless/ath/ath6kl/htc_pipe.c b/drivers/net/wireless/ath/ath6kl/htc_pipe.c
+index c68848819a52..9b88d96bfe96 100644
+--- a/drivers/net/wireless/ath/ath6kl/htc_pipe.c
++++ b/drivers/net/wireless/ath/ath6kl/htc_pipe.c
+@@ -960,8 +960,8 @@ static int ath6kl_htc_pipe_rx_complete(struct ath6kl *ar, struct sk_buff *skb,
+ 	 * Thus the possibility of ar->htc_target being NULL
+ 	 * via ath6kl_recv_complete -> ath6kl_usb_io_comp_work.
+ 	 */
+-	if (WARN_ON_ONCE(!target)) {
+-		ath6kl_err("Target not yet initialized\n");
++	if (!target) {
++		ath6kl_dbg(ATH6KL_DBG_HTC, "Target not yet initialized\n");
+ 		status = -EINVAL;
+ 		goto free_skb;
+ 	}
+-- 
+2.34.1
 
-jon
