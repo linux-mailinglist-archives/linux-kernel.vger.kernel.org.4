@@ -2,138 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E968367C38D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 04:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D38667C390
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 04:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236219AbjAZDeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 22:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        id S236393AbjAZDeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 22:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236127AbjAZDeI (ORCPT
+        with ESMTP id S236302AbjAZDeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 22:34:08 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4452465EF0;
-        Wed, 25 Jan 2023 19:33:54 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pKt1M-0004EY-1k;
-        Thu, 26 Jan 2023 04:33:52 +0100
-Date:   Thu, 26 Jan 2023 03:33:46 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Edward-JW Yang <edward-jw.yang@mediatek.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Miles Chen <miles.chen@mediatek.com>
-Subject: [PATCH v5 1/3] dt-bindings: clock: Add compatibles for MT7981
-Message-ID: <cc85ee470c781ff4013f6c21c92c0a21574b12b2.1674703830.git.daniel@makrotopia.org>
-References: <cover.1674703830.git.daniel@makrotopia.org>
+        Wed, 25 Jan 2023 22:34:14 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F283C457F2;
+        Wed, 25 Jan 2023 19:34:08 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D81D35C05B2;
+        Wed, 25 Jan 2023 22:34:05 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Wed, 25 Jan 2023 22:34:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1674704045; x=1674790445; bh=3zrqCCWozEhlE3QduurTIaTnuK8HrtZwnOI
+        /8OAKWhk=; b=itbOC/cn4y/B40q8XnHC36ZK342HhUiZQWzWRilS+UaShH1NhZp
+        1PIxe43uByehOYWScDldnSB68SutvMRyXl/4yQ7STcrYFsYiZxDIdibVrkfQd59y
+        smuG5Op6lc6AP91KJTBaEkXF4J+7yg3MUFiilIMxFP0EiZxs/I016ZoFZFI2tBci
+        9w7zB9ntKgF7oe9mhUDMTKz2pnLewxPQUN2Izy4WUrdvWwVGWHskqPXAtNoOiop+
+        XDLHC8lPhPgqa6XJ8JtDKVoBXB5MRkNV9+BowGxC0SWn5O9gr1KxGin24Vs8sqN+
+        1bBzr/xYHNkhKOCWtfqrdtjly7Jh0E7AK8w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1674704045; x=1674790445; bh=3zrqCCWozEhlE
+        3QduurTIaTnuK8HrtZwnOI/8OAKWhk=; b=oxKex1i2j/0Mco60GksvTldYC42Dd
+        pdUMjSpUSOTpb9z1QAY+WUjYg6ksLLQK2uzbQKUAo1Zg2C+sHtIXBCpAnIbFsAjn
+        4+0oxB0u3bOM25qOS+bHQra+pbeecgVar02jsJ9u+jvTbdz4WMSYw49Jb34aMEYM
+        eA7qAkSX54AjjyHdGvu4vnqfb//Q+JQdEJJN4zQg7/KwK2oz0+Y7dZaj6f58L7TT
+        hs5nF3d73B2HTS3diqakESrrVHJYBme1t58O9mNY2dfhdL+yq37BpqHFilxmkj3P
+        N3TdP1ZHcFZtWcQrp9Tc+rIw7+GJR9krLEHVjqwyH+TQS+i2g8sdlFxCQ==
+X-ME-Sender: <xms:rfTRY6725xmw3M9_wy6VAcPGHbcrIDAAXALC_ezzqGgu8_uRhoPv0w>
+    <xme:rfTRYz54wgPmc9J-m65mihdjNty8KrpH3dOxqxrzqbIl5I_4wleBtSzykLUzL999H
+    yEK2Y9VkVevVew>
+X-ME-Received: <xmr:rfTRY5c-XeYocmJVDOF_vnw6pNbx_lwfvTcuwuxZ1xAZTtge5V4IEydC9RVAweE53XptqUbyW9xj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedgheelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpeffvghmihcu
+    ofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinhhgsh
+    hlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpefhgefgieeitdeijeeguddtkefgteeg
+    heehgeetkeevhfefgfduhedtveelgeeugeenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhgshhl
+    rggsrdgtohhm
+X-ME-Proxy: <xmx:rfTRY3K8BsaR6SikC5jT7-f3d9e22OHeqXhkgePMrLn0y58UnAVNCw>
+    <xmx:rfTRY-JsiC-CmyH3JqmtndM5ovAjIocOp_H5Vnz5xbocvmIcvUB5Vw>
+    <xmx:rfTRY4wEKKzvSMjPN6rg_jb98hKZEXW7biJaskmWaZ9ourLFDq6IKQ>
+    <xmx:rfTRY9_6RGw9FBSqSFdBrKQEovNBIAL-_eHatj1IbfsXY2Q7MP1mdQ>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 Jan 2023 22:34:04 -0500 (EST)
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, Juergen Gross <jgross@suse.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, dm-devel@redhat.com
+Subject: [RFC PATCH 0/7] Allow race-free block device handling
+Date:   Wed, 25 Jan 2023 22:33:52 -0500
+Message-Id: <20230126033358.1880-1-demi@invisiblethingslab.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1674703830.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible string for MT7981 to existing bindings at
- - mediatek,apmixedsys.yaml
- - mediatek,topckgen.yaml
- - mediatek,ethsys.txt
- - mediatek,infracfg.yaml
- - mediatek,sgmiisys.txt
+This work aims to allow userspace to create and destroy block devices
+in a race-free and leak-free way, and to allow them to be exposed to
+other Xen VMs via blkback without leaks or races.  It’s marked as RFC
+for a few reasons:
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- .../devicetree/bindings/arm/mediatek/mediatek,ethsys.txt        | 1 +
- .../devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml     | 1 +
- .../devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt      | 2 ++
- .../devicetree/bindings/clock/mediatek,apmixedsys.yaml          | 1 +
- Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml  | 1 +
- 5 files changed, 6 insertions(+)
+- The code has been only lightly tested.  It might be unstable or
+  insecure.
 
-diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt
-index 0502db73686bf..eccd4b706a78d 100644
---- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt
-+++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt
-@@ -10,6 +10,7 @@ Required Properties:
- 	- "mediatek,mt7622-ethsys", "syscon"
- 	- "mediatek,mt7623-ethsys", "mediatek,mt2701-ethsys", "syscon"
- 	- "mediatek,mt7629-ethsys", "syscon"
-+	- "mediatek,mt7981-ethsys", "syscon"
- 	- "mediatek,mt7986-ethsys", "syscon"
- - #clock-cells: Must be 1
- - #reset-cells: Must be 1
-diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml
-index 1d7c837d93788..e997635e4fe4e 100644
---- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml
-+++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml
-@@ -28,6 +28,7 @@ properties:
-               - mediatek,mt6797-infracfg
-               - mediatek,mt7622-infracfg
-               - mediatek,mt7629-infracfg
-+              - mediatek,mt7981-infracfg
-               - mediatek,mt7986-infracfg
-               - mediatek,mt8135-infracfg
-               - mediatek,mt8167-infracfg
-diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
-index 29ca7a10b3156..d2c24c2775141 100644
---- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
-+++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
-@@ -8,6 +8,8 @@ Required Properties:
- - compatible: Should be:
- 	- "mediatek,mt7622-sgmiisys", "syscon"
- 	- "mediatek,mt7629-sgmiisys", "syscon"
-+	- "mediatek,mt7981-sgmiisys_0", "syscon"
-+	- "mediatek,mt7981-sgmiisys_1", "syscon"
- 	- "mediatek,mt7986-sgmiisys_0", "syscon"
- 	- "mediatek,mt7986-sgmiisys_1", "syscon"
- - #clock-cells: Must be 1
-diff --git a/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml b/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml
-index 731bfe0408c20..dae25dba4ba69 100644
---- a/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml
-+++ b/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml
-@@ -20,6 +20,7 @@ properties:
-       - enum:
-           - mediatek,mt6797-apmixedsys
-           - mediatek,mt7622-apmixedsys
-+          - mediatek,mt7981-apmixedsys
-           - mediatek,mt7986-apmixedsys
-           - mediatek,mt8135-apmixedsys
-           - mediatek,mt8173-apmixedsys
-diff --git a/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml b/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml
-index 81531b5b0db79..0fdf564148334 100644
---- a/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml
-+++ b/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml
-@@ -35,6 +35,7 @@ properties:
-               - mediatek,mt6779-topckgen
-               - mediatek,mt6795-topckgen
-               - mediatek,mt7629-topckgen
-+              - mediatek,mt7981-topckgen
-               - mediatek,mt7986-topckgen
-               - mediatek,mt8167-topckgen
-               - mediatek,mt8183-topckgen
+- The DM_DEV_CREATE ioctl gains a new flag.  Unknown flags were
+  previously ignored, so this could theoretically break buggy userspace
+  tools.
+
+- I have no idea if I got the block device reference counting and
+  locking correct.
+
+Demi Marie Obenour (7):
+  block: Support creating a struct file from a block device
+  Allow userspace to get an FD to a newly-created DM device
+  Implement diskseq checks in blkback
+  Increment diskseq when releasing a loop device
+  If autoclear is set, delete a no-longer-used loop device
+  Minor blkback cleanups
+  xen/blkback: Inform userspace that device has been opened
+
+ block/bdev.c                        |  77 +++++++++++--
+ block/genhd.c                       |   1 +
+ drivers/block/loop.c                |  17 ++-
+ drivers/block/xen-blkback/blkback.c |   8 +-
+ drivers/block/xen-blkback/xenbus.c  | 171 ++++++++++++++++++++++------
+ drivers/md/dm-ioctl.c               |  67 +++++++++--
+ include/linux/blkdev.h              |   5 +
+ include/uapi/linux/dm-ioctl.h       |  16 ++-
+ 8 files changed, 298 insertions(+), 64 deletions(-)
+
 -- 
-2.39.1
-
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
