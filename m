@@ -2,226 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7B467CC68
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A336D67CC64
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237134AbjAZNka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S237126AbjAZNkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237109AbjAZNk2 (ORCPT
+        with ESMTP id S237109AbjAZNkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:40:28 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832356B990
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:40:23 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso5273145pjg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:40:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MLcHj69Cx994vdvNyYZka26Sq1fMSdZUGe0hWxQ2OlA=;
-        b=VdtGasRwZUbjqugPAxobzNYIEPcTqnN9DBGa2eCqiauMce2k6LPUG59MZbx0iTCfXE
-         37aB87oDUBC3tcOMjNBLdsM4sPxp8jSuqVRQSmwlUfH/7EKi408vryuA/SvkcSFWv1hV
-         AoLOttxvSIEaVvbk4c+i+l4ECvvp9P5HWp2w9gImMD9xzj7Ss8lx7QfcVVzbCutFYpgK
-         djrzqymWLNkgiYMbI60IyMo33HhyRGykuwjodhyuQUftmGHfHunW145ZL1wGXb5rq5sY
-         CXRb0GYD+QIRrfo1Ip5njJbEDRDdE3HueQsxlpaRPt67dowD03spJ/tJwXyxMY+8f4SZ
-         0kcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MLcHj69Cx994vdvNyYZka26Sq1fMSdZUGe0hWxQ2OlA=;
-        b=gWkYhxCK5IjxCvifDIWeeAjLBN3of1MBEJ2qOYRP3IeXsUz7+xyuqpSc7N3H9c8+vg
-         4NfxJxhTA5Ju+JyyZRZjXzxOv97W9PxJaVaMrE6aTSjmzNenJ9tCAgLFNzShwbflYwwP
-         r5l+mJJEJBAIOmgbcRjhm7ycjHJY+YbDGY/u7xthWmS/cfiVr/TvqhrutVeIZP5qk9hc
-         fSSZ7ZGlxaxikSXrZ0gJXQsBmSbqnk/b/WelEItEFumEtFqTKCOh1D5vTkVPQDEipVPc
-         TuAhme4+RelL/W7aLgunQSwRZOIwWAJUw/oNenR/ETL/VHUfHyvP5r95H+ra/AL+0Ng5
-         bXuw==
-X-Gm-Message-State: AO0yUKWa0/dWSvkGilOo/Xq7HJtnlZ3+4UQAKCAucTkC01+J5YKLvTjJ
-        oCz7BkUjgMBvG9l52MJr7vCqylRSkeP4lP4ztGQ7e18=
-X-Google-Smtp-Source: AK7set+HMXfE9UkUX2/5adWrCEW2/yvGJJOOgxtZWk2zFqGBkzv3+UyShx+ibu2PPGNya/vElRGUxSJvsq9Ljb+v2aY=
-X-Received: by 2002:a17:90a:9a93:b0:22c:1bd6:77d5 with SMTP id
- e19-20020a17090a9a9300b0022c1bd677d5mr545749pjp.18.1674740422832; Thu, 26 Jan
- 2023 05:40:22 -0800 (PST)
+        Thu, 26 Jan 2023 08:40:11 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF4644BDE
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:40:08 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0F8365C049F;
+        Thu, 26 Jan 2023 08:40:06 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 26 Jan 2023 08:40:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1674740406; x=1674826806; bh=CBiXFVMDAv
+        Nxh7UYGmOLV494Qj440CJpCvkMHt7+Ygs=; b=o5ql+HZEfcWc61BRUIcf8UIHLt
+        dcyrInVEzN8+WZLR5nhODmNIBLfjGWiZO+H9VBOiV4UjmVACFxVaBwqUaiWR5gxG
+        EOZ0Z0cfqyHwsnUjC3G0BT8t0235p/89DabBQf2+RuQdFeg4ahOCi0LjpXSFOy0T
+        7lg/SYm8IJ1yifHbu3pZjHAyTSGDeExGlJdlNTXWRuBPmkIaDQv8wFaJqbkI0pxk
+        Z4UHUkEfMj8gcRrR0woQmBt4QQploi/bBts8hddd7gEF43ddHW1Rus53AwL2mzqD
+        bR06Jb17yQi/ZDBJURXUKjKhRmPgjRxjf2pASLsDv+LeBc9XwB+jjaYjowJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674740406; x=1674826806; bh=CBiXFVMDAvNxh7UYGmOLV494Qj44
+        0CJpCvkMHt7+Ygs=; b=ewAn02uD4RyW9svtZMxx+E98pZJkv0iq+K8awNRjNd3A
+        KMDTb9Fdck80XEnpdBjrfDGb4oru3VEL3LIBGubg/upHXc7GJx1hWJddDmmtD0GC
+        6a4w6qi2Qu4TBZFu02w1NxgyoZv2iJhJ7vpHC7DwpwiYOL2e6VA65RZ1wRbkapyn
+        GgP3sWrfF+Y6v+jldDlgHRf/0ihSMIaT7+FgMvDBwsesfS5V1OopQzQWonxalj90
+        naozKJamSzN80W0RKff6Nx54vg0VhD+Af5W+7eCeavlKRkgaOBpy2i6+BqTy/Iwj
+        4VAVBJ9+qi3Xc7olJc0twzIP8Epm/BMDNHtsjAihjQ==
+X-ME-Sender: <xms:tYLSY7U167LJ0KBExhY1bhst-DETOy7hICUtsqn4yNneZLIXJiUZKw>
+    <xme:tYLSYzmYOEEf0_yIeMYIpq11Z1ukhULBGnzNlHPsh_zOvtEfybzTJU2-sRxZCFp57
+    GYA5UgkWSbuR-TOJYI>
+X-ME-Received: <xmr:tYLSY3ZeyFdG3NOVLLxflboll_7aOFXbWTS24KVP0wUOCe227bkLUl91uSQoQzSl80KP9sbTnYOqJ_mtfDg-nfSvm7xfHhZPqI2r6hDItFzIYw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:tYLSY2Wo2RLw_GB0evFWtfckSHFYlpmrhhrJzf-k7GTdXevm9gFdLA>
+    <xmx:tYLSY1k1V6NfUzmFRBq1F9RWzn45z-mhGSCRbEzleX8p0c5omSdgow>
+    <xmx:tYLSYzdJAsMVSGI5BLvoKzKPtC2bgc2-W2f5nYTEU3Wu4BXn0GOe9w>
+    <xmx:toLSY48GzEHbK7R6TV2MoNQRUtgRt_-g8Y0lSBW0rtadr0ZO6VPiMw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 26 Jan 2023 08:40:05 -0500 (EST)
+Date:   Thu, 26 Jan 2023 14:40:03 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 5/9] drm/vc4: hdmi: Rework the CSC matrices organization
+Message-ID: <20230126134003.74z4iazwcsyl4et7@houat>
+References: <20221207-rpi-hdmi-improvements-v1-0-6b15f774c13a@cerno.tech>
+ <20221207-rpi-hdmi-improvements-v1-5-6b15f774c13a@cerno.tech>
+ <5394a702-20ef-bada-4731-b720b810998d@suse.de>
+ <CAPY8ntCsp_qbjeyYvUQ0jmKh8gecvR-NmYaEPkrsxBhyZrHPxg@mail.gmail.com>
 MIME-Version: 1.0
-From:   Jason Quinn <jason.lee.quinn@gmail.com>
-Date:   Thu, 26 Jan 2023 21:39:46 +0800
-Message-ID: <CALCW2DWLraWsEfhsHH+fz3WnRyQK=upRTeb4iDZcgV+MS9LGdg@mail.gmail.com>
-Subject: improved num_digits() function for x86/lib/misc.c
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Jason Quinn <jason.lee.quinn@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uqgeyzk4fr7m4qsq"
+Content-Disposition: inline
+In-Reply-To: <CAPY8ntCsp_qbjeyYvUQ0jmKh8gecvR-NmYaEPkrsxBhyZrHPxg@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear X86 Architecture (32-bit and 64-bit) Maintainers,
 
-While diving into smpboot.c source to investigate what I believe to be a bug
-that causes listings of CPU numbers to show up as kernel warnings during boot,
-I also checked out the source for lib/misc.c that houses the
-"int num_digits(int val)" function. It seems kernel/smpboot.c is the only file
-in the linux kernel that directly uses this function. The implementation used
-for num_digits() has multiple issues. First there are some bugs:
+--uqgeyzk4fr7m4qsq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-BUG A: For large inputs, the function returns incorrect results, if it returns
-at all. For example, on my amd64 machine, num_digits(1500000000) incorrectly
-returns 16 instead of 10 and the function may simply get stuck in an infinite
-loop as it does with num_digits(2000000000). Both inputs are valid 4-byte
-integers so this should not occur. This problem is triggered whenever the input
-argument has the maximum number of digits of an int variable ( abs(val) >= 1e9
-for 4-byte ints). The faulty behavior occurs because the local variable "m"
-overflows in the while loop for these large (but valid) inputs.
+Hi,
 
-It seems this function is only used to printk() some core and cpu numbers.
-Admittedly, a billion is still far less than the number of core in the largest
-supercomputer today (The Andromeda's 15.5 million) but this function should
-be functionally correct for any input for its domain, especially since
-somebody someday might trustingly use it for other purposes than info messages.
-In other words, this is a bug that should be fixed despite it not currently
-causing a practical problem in the SMP code. The good news is that the function
-itself can be made faster while also extending correctness.
+On Wed, Jan 11, 2023 at 05:00:41PM +0000, Dave Stevenson wrote:
+> Hi Thomas
+>=20
+> Thanks for the review
+>=20
+> On Wed, 11 Jan 2023 at 15:03, Thomas Zimmermann <tzimmermann@suse.de> wro=
+te:
+> >
+> > Hi
+> >
+> > Am 07.12.22 um 17:07 schrieb Maxime Ripard:
+> > > From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> > >
+> > > The CSC matrices were stored as separate matrix for each colorspace, =
+and
+> > > if we wanted a limited or full RGB output.
+> > >
+> > > This created some gaps in our support and we would not always pick the
+> > > relevant matrix.
+> > >
+> > > Let's rework our data structure to store one per colorspace, and then=
+ a
+> > > matrix for limited range and one for full range. This makes us add a =
+new
+> > > matrix to support full range BT709 YUV output, and drops the redundant
+> > > (but somehow different) BT709 YUV444 vs YUV422 matrix.
+> >
+> > The final sentence is confusing and I didn't understand how two
+> > different matrices can now be just one.
+>=20
+> Two changes to accommodate the hardware requirements:
+>=20
+> Firstly the driver was only defining
+> vc5_hdmi_csc_full_rgb_to_limited_yuv444_bt709 and
+> vc5_hdmi_csc_full_rgb_to_limited_yuv422_bt709. There was no matrix for
+> full_rgb_to_full_yuv_bt709, so that had to be added.
+>=20
+> Secondly, for some reason when in 444 mode the hardware wants the
+> matrix rows in a different order. That is why
+> vc5_hdmi_csc_full_rgb_to_limited_yuv444_bt709 differed from
+> vc5_hdmi_csc_full_rgb_to_limited_yuv422_bt709 - it was a simple
+> reordering of the rows.
+>=20
+> This patch dropped the special handling for 444, and in the process
+> programmed the wrong coefficients into the hardware :-(
+> Patch 6/9 then reintroduces this reordering, so really should be
+> squashed into the one patch.
 
-BUG B: For the specific case of num_digits(INT_MIN), the function may enter an
-infinite loop. This occurs because an -INT_MIN calculation, which the
-implementation performs, may be undefined behavior depending on architecture.
-In particular, -INT_MIN is undefined for two's complement signed integers,
-which includes almost all computers nowadays. [NOTE: the upcoming C2x standard
-will REQUIRE the two's complement representation of signed ints.] Compilers
-will often treat -INT_MIN as equal to INT_MIN (see gcc's -ftrapv and -fwrapv
-options) in which case the line "val=-val" doesn't actually change the sign and
-subsequently the function gets trapped in a loop. We must, therefore, handle
-an input of INT_MIN as a special case.
+Thanks to both of you for that feedback. I've chosen a slightly
+different solution since I believe it still makes sens to have the swap
+patch separate. I've move the swap function introduction earlier and
+removed the two redundant matrices in that patch. And now, that patch
+doesn't drop any matrix anymore so I've removed the confusing part of
+the commit log.
 
-IMPROVEMENT: The current implementation of num_digits() (reproduced now):
+> Looking at my more recent work, it looks like I messed up on 6/9 too.
+> One of the patches on [1] corrects that row swapping for yuv444 - I
+> was obviously having a bad day.
+>=20
+> Maxime: Are you OK to fix that up?
 
-int num_digits(int val)
-{
-    int m = 10;
-    int d = 1;
+I've squashed it in for the next revision
 
-    if (val < 0) {
-        d++;
-        val = -val;
-    }
+Thanks!
+maxime
 
-    while (val >= m) {
-        m *= 10;
-        d++;
-    }
+--uqgeyzk4fr7m4qsq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-    return d;
-}
+-----BEGIN PGP SIGNATURE-----
 
-is not only buggy but slow, relying on multiplication operations. It is possible
-to have code of no less clarity (I say even clearer) and without the
-multiplication. Here's my sketch of an improved version that assumes
-(INT_MIN=2147483648 or INT_MIN=-2147483647) and INT_MAX=2147483648:
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY9KCswAKCRDj7w1vZxhR
+xVZVAP9BUveF4g7kHJ31THWzenNzfC5tUhEdCsdRdQQs+9BCAQD/WEdo4PZs5TW5
+iz/FvN1naNwFlq41Z/WAhNBhI3oSjgc=
+=a4Zh
+-----END PGP SIGNATURE-----
 
-int num_digits(int val)
-{
-    int d=0;
-
-    if ( val == INT_MIN ) return 11; /* 10 + extra for minus sign */
-
-    if ( val < 0 ) {
-        val=-val;
-        d++;
-    }
-
-    if ( val < 1e1 ) return d+1;
-    if ( val < 1e2 ) return d+2;
-    if ( val < 1e3 ) return d+3;
-    if ( val < 1e4 ) return d+4;
-    if ( val < 1e5 ) return d+5;
-    if ( val < 1e6 ) return d+6;
-    if ( val < 1e7 ) return d+7;
-    if ( val < 1e8 ) return d+8;
-    if ( val < 1e9 ) return d+9;
-
-    return d+10;
-}
-
-This code is basically just a loop unroll and the INT_MIN special case
-that gets discovered during routine testing. My quick tests suggests it has
-about a 2x speed-up. The binary size will be about 10% bigger but that's
-offset by it not suffering from the two bugs. The only question
-remaining is if to handle INT_MIN and INT_MAX more generally and if so by
-how much. I have yet to come up with a clever version that generalizes without
-starting to make the code ugly but it's probably possible. What set of values
-must we want to handle for INT_MIN and what set of values must we handle for
-INT_MAX? Are just INT_MIN = -2147483648 and INT_MAX = 2147483647 sufficient?
-
-There's a patch attached below. Please test and modify as you like if
-you wish to merge.
-
-Cheers,
-Jason
-
-
---- misc.c    2023-01-26 21:00:02.115701806 +0800
-+++ misc_new.c    2023-01-26 21:04:33.059488195 +0800
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <limits.h>
- #include <asm/misc.h>
-
- /*
-@@ -8,17 +9,31 @@
-  */
- int num_digits(int val)
- {
--    int m = 10;
--    int d = 1;
-+    int d=0; /* initialize minus sign flag */
-
--    if (val < 0) {
--        d++;
--        val = -val;
--    }
-+    /* Special case: -INT_MIN may be undefined behavior on some
-+       architectures like those that use two's complement. Compilers often
-+       implement -INT_MIN such that it equals INT_MIN which mean the
-+       val=-val statement below would not actually reverse the sign. */
-+    if ( val == INT_MIN ) return 11; /* Assuming INT_MIN=-2147483648
-(10 digits plus 1 for the minus sign) */
-
--    while (val >= m) {
--        m *= 10;
--        d++;
-+    if ( val < 0 ) {
-+        val=-val;
-+        d++; // turn on minus sign flag
-     }
--    return d;
-+
-+    if ( val < 1e1 ) return d+1;
-+    if ( val < 1e2 ) return d+2;
-+    if ( val < 1e3 ) return d+3;
-+    if ( val < 1e4 ) return d+4;
-+    if ( val < 1e5 ) return d+5;
-+    if ( val < 1e6 ) return d+6;
-+    if ( val < 1e7 ) return d+7;
-+    if ( val < 1e8 ) return d+8;
-+    if ( val < 1e9 ) return d+9;
-+
-+    /* Assuming INT_MAX=2147483647, at this point 1e9 <= val <= INT_MAX
-+       so all possible values contain ten digits. We can return without
-+       another if-statement because val <= INT_MAX is always true. */
-+    return d+10;
- }
+--uqgeyzk4fr7m4qsq--
