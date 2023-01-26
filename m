@@ -2,410 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3127067C291
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 02:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE5967C293
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 02:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjAZBtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 20:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
+        id S229771AbjAZBtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 20:49:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjAZBtY (ORCPT
+        with ESMTP id S229483AbjAZBtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 20:49:24 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730D55C0F9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:49:22 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id g23so622911plq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:49:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0GIXSkqWsOL4LYeNVjWDqEt8M4vKe5peV/aIO4Q0JxA=;
-        b=IVUCYlXUHWU+ha/IWSmaiUP0Jtu9T8FevanWGooIACSRtHg7fnMIJ+OIK9DrT9WWAW
-         9j7eJsDuwf4/HHY2AlAN/45eJgR812tlJShQDI0JO3KbAaWARXQRb5FZ2OdUqeb/UE0f
-         xqIeVzEIqTRQiBxApMVxXrRPrg8/mRycw5MkwBBkcprY66EX0jmWdJGFID8UCWzgH+1R
-         psx+6eWWBxao4kxvakS/laQ1s1hoj1bLORvWSZWvENDsBOKzQWxBz7Tapn+NL2tetkEd
-         Z6a9Pdb9QP2w9r/uQ/8OBPQbUQ+6fHOWRvhOR+l1RXAYYvMjf3iVnwMUyNqM9M5xmC2a
-         Xjiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0GIXSkqWsOL4LYeNVjWDqEt8M4vKe5peV/aIO4Q0JxA=;
-        b=fG6kqPtCVUgaYRR4dvQWkk3uK5LusIV1SgQjOJ3sxiGUxEiEAJhDWQzG5XjYNLDApY
-         2fwqlTrgNB/h4WabYCUeo0Kufg9L6Ttt2nELTtkabI9LWpGcwSSJbtZHKbGbgCRG5bZz
-         vZ51xxVgqJya927VhAemrggWDr1wpUUYrfB7FVVXK9Gd2feTn1PkUOoxsIQHjg8DDBO6
-         hNPBM4qIjRAXL3JmECS9rkCyA31DgrE9G0SFUdGdJIowCsHxF648hT8CEz0q9FYEa09G
-         n/5AnCL6Wjz1K+i8rLE0iT2jaVxHjittx5ifWOV9hfh87/jsQwvEg1sWWSUGG8QNIc7J
-         D56A==
-X-Gm-Message-State: AO0yUKW35t/orFqc85UGbiZkXslDj3mKgl+agRTPKfEsc7eRqqiCnaFc
-        Oy62Sgr4ZhLrqh30urS88fd1xA==
-X-Google-Smtp-Source: AK7set8J1hVSdsZix/AxSg8sieW2hOiyhSil/L9fQ6UUbBBHASafbnlJcHmafDJbOv6AIzh9x0ealQ==
-X-Received: by 2002:a05:6a20:a696:b0:b8:ca86:f3ab with SMTP id ba22-20020a056a20a69600b000b8ca86f3abmr989768pzb.2.1674697761633;
-        Wed, 25 Jan 2023 17:49:21 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w14-20020a170902e88e00b00194d8a98a20sm64444plg.46.2023.01.25.17.49.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 17:49:21 -0800 (PST)
-Date:   Thu, 26 Jan 2023 01:49:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     David Matlack <dmatlack@google.com>,
-        Vipin Sharma <vipinsh@google.com>, pbonzini@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch] KVM: x86/mmu: Make optimized __handle_changed_spte() for
- clear dirty log
-Message-ID: <Y9HcHRBShQgjxsQb@google.com>
-References: <20230125213857.824959-1-vipinsh@google.com>
- <Y9GmiyRQ6sULCjEG@google.com>
- <CANgfPd9T7jdh1Cjjo4y6DcxC2poTaGhQ7wNLf6OgGtStg-yKJg@mail.gmail.com>
+        Wed, 25 Jan 2023 20:49:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64847611F8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 17:49:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2F87616FD
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 01:49:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9EA1C433D2;
+        Thu, 26 Jan 2023 01:49:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674697784;
+        bh=mkXTZAlnUvQp4xBJz9AaQKaSqMGaCsbGS5FQIjxN6oY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jkpqxWDLvWazYFLkwTru4yD6TRaNks/ERH7h4Tl8NLPua2tImd9+ZWg4ryQKwHlOy
+         +1+g3APugVqo6FdDJT420pPfKZRE2z6g44U/sdAflueoYKz3v0O+Q4blUW+AFfpoJ8
+         kUq3EifCwZ8xcv1Wdn3SU8VP6xwEW+kSZ/vEWvr8ccgVAW7ZwsRZolunzvyYKMa85U
+         wvgiQtARwVD7uaxvSRmt5CFskzxLZB7mxHYzRC7akAPpiFA5ibg79qx85/oSPKDTl/
+         56c24l1WSWHIpzMwU1HfK8Nr1JKm0YIpp9qODTJdGE3J1ttaVfS+vE+iLqw+phWkzE
+         UQsJavsZ0/jUw==
+Date:   Wed, 25 Jan 2023 17:49:42 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Stephane Eranian <eranian@google.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH v3 3/3] objtool: Alter how HOSTCC is forced
+Message-ID: <20230126014942.kuynrl56b2u4npj6@treble>
+References: <20230105090155.357604-1-irogers@google.com>
+ <20230105090155.357604-4-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CANgfPd9T7jdh1Cjjo4y6DcxC2poTaGhQ7wNLf6OgGtStg-yKJg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230105090155.357604-4-irogers@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023, Ben Gardon wrote:
-> On Wed, Jan 25, 2023 at 2:00 PM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Wed, Jan 25, 2023 at 01:38:57PM -0800, Vipin Sharma wrote:
-> > > Use a tone down version of __handle_changed_spte() when clearing dirty
-> > > log. Remove checks which will not be needed when dirty logs are cleared.
-> > >
-> > > This change shows ~13% improvement in clear dirty log calls in
-> > > dirty_log_perf_test
-> > >
-> > > Before tone down version:
-> > > Clear dirty log over 3 iterations took 10.006764203s. (Avg 3.335588067s/iteration)
-> > >
-> > > After tone down version:
-> > > Clear dirty log over 3 iterations took 8.686433554s. (Avg 2.895477851s/iteration)
-> > >
-> > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > > ---
-> > >  arch/x86/kvm/mmu/tdp_mmu.c | 20 +++++++++++++++++++-
-> > >  1 file changed, 19 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > index bba33aea0fb0..ca21b33c4386 100644
-> > > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > @@ -504,6 +504,19 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
-> > >       call_rcu(&sp->rcu_head, tdp_mmu_free_sp_rcu_callback);
-> > >  }
-> > >
-> > > +static void handle_changed_spte_clear_dirty_log(int as_id, gfn_t gfn,
-> > > +                                             u64 old_spte, u64 new_spte,
-> > > +                                             int level)
-> > > +{
-> > > +     if (old_spte == new_spte)
-> > > +             return;
-> > > +
-> > > +     trace_kvm_tdp_mmu_spte_changed(as_id, gfn, level, old_spte, new_spte);
-> > > +
-> > > +     if (is_dirty_spte(old_spte) &&  !is_dirty_spte(new_spte))
-> > > +             kvm_set_pfn_dirty(spte_to_pfn(old_spte));
-> > > +}
-> > > +
-> > >  /**
-> > >   * __handle_changed_spte - handle bookkeeping associated with an SPTE change
-> > >   * @kvm: kvm instance
-> > > @@ -736,7 +749,12 @@ static u64 __tdp_mmu_set_spte(struct kvm *kvm, int as_id, tdp_ptep_t sptep,
-> > >
-> > >       old_spte = kvm_tdp_mmu_write_spte(sptep, old_spte, new_spte, level);
-> > >
-> > > -     __handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
-> > > +     if (record_dirty_log)
-> > > +             __handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte,
-> > > +                                   level, false);
-> > > +     else
-> > > +             handle_changed_spte_clear_dirty_log(as_id, gfn, old_spte,
-> > > +                                                 new_spte, level);
-> >
-> > I find it very non-intuitive to tie this behavior to !record_dirty_log,
-> > even though it happens to work. It's also risky if any future calls are
-> > added that pass record_dirty_log=false but change other bits in the
-> > SPTE.
-> >
-> > I wonder if we could get the same effect by optimizing
-> > __handle_changed_spte() to check for a cleared D-bit *first* and if
-> > that's the only diff between the old and new SPTE, bail immediately
-> > rather than doing all the other checks.
-> 
-> I would also prefer that course. One big lesson I took when building
-> the TDP MMU was the value of having all the changed PTE handling go
-> through one function. That's not always the right choice but the
-> Shadow MMU has a crazy spaghetti code of different functions which
-> handle different parts of responding to a PTE change and it makes the
-> code very hard to read. I agree this path is worth optimizing, but the
-> more we can keep the code together, the better.
+On Thu, Jan 05, 2023 at 01:01:55AM -0800, Ian Rogers wrote:
+> HOSTCC is always wanted when building objtool. Setting CC to HOSTCC
+> happens after tools/scripts/Makefile.include is included, meaning
+> flags are set assuming say CC is gcc, but then it can be later set to
+> HOSTCC which may be clang. tools/scripts/Makefile.include is needed
+> for host set up and common macros in objtool's Makefile. Rather than
+> override CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the
+> libsubcmd builds and the linkage step. This means the Makefiles don't
+> see things like CC changing and tool flag determination, and similar,
+> work properly.
 
-Hrm, not sure I agree on that last point.  I find record_dirty_log and record_acc_track
-to be eye sores and terribly confusing (I always forget when they're true/false).
-I think we would end up with cleaner code overall if we special case clearing A/D
-bits (or their write-protected/access-protect counterparts).
+I'm having trouble parsing this last sentence, can you rephrase or
+restructure it?
 
-handle_changed_spte_dirty_log() takes effect if and only a SPTE becomes newly
-writable, and that should never happen when aging gfns (record_acc_track=%false),
-i.e. neither the "age gfns" nor the "clear dirty" paths need to call
-handle_changed_spte_dirty_log(), which means @record_dirty_log is superfluous.  
+> To avoid mixing CFLAGS from different compilers just
+> the objtool CFLAGS are determined with the exception of
+> EXTRA_WARNINGS.
 
-Similarly, clearing dirty bits should never clear the accessed bit, nor should it
-toggle PRESENT or change the PFN, i.e. neither path needs to call
-handle_changed_spte_acc_track(), which means @record_acc_track is superfluous too.
+I'm not really sure what this one means either.
 
-If we jettison those, then AFAICT the only remaining heuristic is that
-tdp_mmu_set_spte_atomic() doesn't update the dirty bitmaps (the comment about
-that behavior is unhelpful and doesn't explain _why_).  That heuristic is easy to
-handled by looking at @shared.
+> HOSTCFLAGS is added to these so that command line
+> flags can add to the CFLAGS.
 
-Looking through all the other stuff in __handle_changed_spte()...
+Overall this patch description is a big wall of dense text which I found
+hard to decipher.  Please split it up into paragraphs and make it more
+legible and logical.
 
-I'm 100% comfortable skipping these sanity checks:
+For example, un-jumble the ordering, with the background first, then the
+problem(s), then the fix(es).  (At least three paragraphs)
 
-	if (was_leaf && is_leaf && pfn_changed)
-		BUG();
+If possible, the subject should describe the end result for the user,
+something like
 
-	if (is_leaf)
-		check_spte_writable_invariants(new_spte);
+  objtool: Fix HOSTCFLAGS cmdline support
 
-	if (!was_present && !is_present)
-		WARN_ON(!MMIO && !REMOVED);
+... unless I'm misunderstanding the point of the patch.
 
-And none of these are relevant (again assuming we don't have an egregious bug)
-except for the kvm_set_pfn_dirty() case, which is trivial to handle.
+HOSTCFLAGS from the cmdline *used* to work, a git bisect shows it
+stopped working with
 
-	if (is_leaf != was_leaf)
-		kvm_update_page_stats(kvm, level, is_leaf ? 1 : -1);
+  96f14fe738b6 ("kbuild: Rename HOSTCFLAGS to KBUILD_HOSTCFLAGS")
 
-	if (was_leaf && is_dirty_spte(old_spte) &&
-	    (!is_present || !is_dirty_spte(new_spte) || pfn_changed))
-		kvm_set_pfn_dirty(spte_to_pfn(old_spte));
+... so please add a "Fixes" tag for that commit.
 
-	/*
-	 * Recursively handle child PTs if the change removed a subtree from
-	 * the paging structure.  Note the WARN on the PFN changing without the
-	 * SPTE being converted to a hugepage (leaf) or being zapped.  Shadow
-	 * pages are kernel allocations and should never be migrated.
-	 */
-	if (was_present && !was_leaf &&
-	    (is_leaf || !is_present || WARN_ON_ONCE(pfn_changed)))
-		handle_removed_pt(kvm, spte_to_child_pt(old_spte, level), shared);
+> +MAKE = make -S
 
+Why?
 
-So unless I'm missing something, I think we can end up with the below.  Compile
-tested only...
+>  LIBSUBCMD_DIR = $(srctree)/tools/lib/subcmd/
+>  ifneq ($(OUTPUT),)
+>    LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
+> @@ -37,12 +33,19 @@ INCLUDES := -I$(srctree)/tools/include \
+>  	    -I$(srctree)/tools/objtool/arch/$(SRCARCH)/include \
+>  	    -I$(LIBSUBCMD_OUTPUT)/include
+>  WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
+> -CFLAGS   := -Werror $(WARNINGS) $(KBUILD_HOSTCFLAGS) -g $(INCLUDES) $(LIBELF_FLAGS)
+> -LDFLAGS  += $(LIBELF_LIBS) $(LIBSUBCMD) $(KBUILD_HOSTLDFLAGS)
+> +OBJTOOL_CFLAGS := -Werror $(WARNINGS) -g $(INCLUDES) $(LIBELF_FLAGS) $(HOSTCFLAGS)
 
----
- arch/x86/kvm/mmu/tdp_mmu.c | 92 ++++++++++----------------------------
- 1 file changed, 24 insertions(+), 68 deletions(-)
+I *think* I understand the reason for the switch from KBUILD_HOSTCFLAGS
+to HOSTCFLAGS -- because KBUILD_HOSTCFLAGS is defined in the top-level
+kernel Makefile which isn't included here so it's undefined? -- but
+regardless that should be called out more explicitly as a problem being
+fixed in the commit log.
 
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index bba33aea0fb0..2f78ca43a276 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -505,7 +505,7 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
- }
- 
- /**
-- * __handle_changed_spte - handle bookkeeping associated with an SPTE change
-+ * handle_changed_spte - handle bookkeeping associated with an SPTE change
-  * @kvm: kvm instance
-  * @as_id: the address space of the paging structure the SPTE was a part of
-  * @gfn: the base GFN that was mapped by the SPTE
-@@ -519,9 +519,9 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
-  * Handle bookkeeping that might result from the modification of a SPTE.
-  * This function must be called for all TDP SPTE modifications.
-  */
--static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
--				  u64 old_spte, u64 new_spte, int level,
--				  bool shared)
-+static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
-+				u64 old_spte, u64 new_spte, int level,
-+				bool shared)
- {
- 	bool was_present = is_shadow_present_pte(old_spte);
- 	bool is_present = is_shadow_present_pte(new_spte);
-@@ -605,23 +605,18 @@ static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
- 	if (was_present && !was_leaf &&
- 	    (is_leaf || !is_present || WARN_ON_ONCE(pfn_changed)))
- 		handle_removed_pt(kvm, spte_to_child_pt(old_spte, level), shared);
--}
- 
--static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
--				u64 old_spte, u64 new_spte, int level,
--				bool shared)
--{
--	__handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level,
--			      shared);
- 	handle_changed_spte_acc_track(old_spte, new_spte, level);
--	handle_changed_spte_dirty_log(kvm, as_id, gfn, old_spte,
--				      new_spte, level);
-+
-+	/* COMMENT GOES HERE. */
-+	if (!shared)
-+		handle_changed_spte_dirty_log(kvm, as_id, gfn, old_spte,
-+					      new_spte, level);
- }
- 
- /*
-  * tdp_mmu_set_spte_atomic - Set a TDP MMU SPTE atomically
-- * and handle the associated bookkeeping.  Do not mark the page dirty
-- * in KVM's dirty bitmaps.
-+ * and handle the associated bookkeeping.
-  *
-  * If setting the SPTE fails because it has changed, iter->old_spte will be
-  * refreshed to the current value of the spte.
-@@ -658,9 +653,8 @@ static inline int tdp_mmu_set_spte_atomic(struct kvm *kvm,
- 	if (!try_cmpxchg64(sptep, &iter->old_spte, new_spte))
- 		return -EBUSY;
- 
--	__handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
--			      new_spte, iter->level, true);
--	handle_changed_spte_acc_track(iter->old_spte, new_spte, iter->level);
-+	handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
-+			    new_spte, iter->level, true);
- 
- 	return 0;
- }
-@@ -705,23 +699,12 @@ static inline int tdp_mmu_zap_spte_atomic(struct kvm *kvm,
-  * @new_spte:	      The new value that will be set for the SPTE
-  * @gfn:	      The base GFN that was (or will be) mapped by the SPTE
-  * @level:	      The level _containing_ the SPTE (its parent PT's level)
-- * @record_acc_track: Notify the MM subsystem of changes to the accessed state
-- *		      of the page. Should be set unless handling an MMU
-- *		      notifier for access tracking. Leaving record_acc_track
-- *		      unset in that case prevents page accesses from being
-- *		      double counted.
-- * @record_dirty_log: Record the page as dirty in the dirty bitmap if
-- *		      appropriate for the change being made. Should be set
-- *		      unless performing certain dirty logging operations.
-- *		      Leaving record_dirty_log unset in that case prevents page
-- *		      writes from being double counted.
-  *
-  * Returns the old SPTE value, which _may_ be different than @old_spte if the
-  * SPTE had voldatile bits.
-  */
- static u64 __tdp_mmu_set_spte(struct kvm *kvm, int as_id, tdp_ptep_t sptep,
--			      u64 old_spte, u64 new_spte, gfn_t gfn, int level,
--			      bool record_acc_track, bool record_dirty_log)
-+			      u64 old_spte, u64 new_spte, gfn_t gfn, int level)
- {
- 	lockdep_assert_held_write(&kvm->mmu_lock);
- 
-@@ -736,46 +719,18 @@ static u64 __tdp_mmu_set_spte(struct kvm *kvm, int as_id, tdp_ptep_t sptep,
- 
- 	old_spte = kvm_tdp_mmu_write_spte(sptep, old_spte, new_spte, level);
- 
--	__handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
--
--	if (record_acc_track)
--		handle_changed_spte_acc_track(old_spte, new_spte, level);
--	if (record_dirty_log)
--		handle_changed_spte_dirty_log(kvm, as_id, gfn, old_spte,
--					      new_spte, level);
-+	handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
- 	return old_spte;
- }
- 
--static inline void _tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
--				     u64 new_spte, bool record_acc_track,
--				     bool record_dirty_log)
-+static inline void tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
-+				     u64 new_spte)
- {
- 	WARN_ON_ONCE(iter->yielded);
- 
- 	iter->old_spte = __tdp_mmu_set_spte(kvm, iter->as_id, iter->sptep,
- 					    iter->old_spte, new_spte,
--					    iter->gfn, iter->level,
--					    record_acc_track, record_dirty_log);
--}
--
--static inline void tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
--				    u64 new_spte)
--{
--	_tdp_mmu_set_spte(kvm, iter, new_spte, true, true);
--}
--
--static inline void tdp_mmu_set_spte_no_acc_track(struct kvm *kvm,
--						 struct tdp_iter *iter,
--						 u64 new_spte)
--{
--	_tdp_mmu_set_spte(kvm, iter, new_spte, false, true);
--}
--
--static inline void tdp_mmu_set_spte_no_dirty_log(struct kvm *kvm,
--						 struct tdp_iter *iter,
--						 u64 new_spte)
--{
--	_tdp_mmu_set_spte(kvm, iter, new_spte, true, false);
-+					    iter->gfn, iter->level);
- }
- 
- #define tdp_root_for_each_pte(_iter, _root, _start, _end) \
-@@ -925,7 +880,7 @@ bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
- 		return false;
- 
- 	__tdp_mmu_set_spte(kvm, kvm_mmu_page_as_id(sp), sp->ptep, old_spte, 0,
--			   sp->gfn, sp->role.level + 1, true, true);
-+			   sp->gfn, sp->role.level + 1);
- 
- 	return true;
- }
-@@ -1289,8 +1244,7 @@ static bool age_gfn_range(struct kvm *kvm, struct tdp_iter *iter,
- 		new_spte = mark_spte_for_access_track(new_spte);
- 	}
- 
--	tdp_mmu_set_spte_no_acc_track(kvm, iter, new_spte);
--
-+	kvm_tdp_mmu_write_spte(iter->sptep, iter->old_spte, new_spte, iter->level);
- 	return true;
- }
- 
-@@ -1326,7 +1280,7 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
- 	 * Note, when changing a read-only SPTE, it's not strictly necessary to
- 	 * zero the SPTE before setting the new PFN, but doing so preserves the
- 	 * invariant that the PFN of a present * leaf SPTE can never change.
--	 * See __handle_changed_spte().
-+	 * See handle_changed_spte().
- 	 */
- 	tdp_mmu_set_spte(kvm, iter, 0);
- 
-@@ -1351,7 +1305,7 @@ bool kvm_tdp_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- 	/*
- 	 * No need to handle the remote TLB flush under RCU protection, the
- 	 * target SPTE _must_ be a leaf SPTE, i.e. cannot result in freeing a
--	 * shadow page.  See the WARN on pfn_changed in __handle_changed_spte().
-+	 * shadow page.  See the WARN on pfn_changed in handle_changed_spte().
- 	 */
- 	return kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
- }
-@@ -1703,9 +1657,11 @@ static void clear_dirty_pt_masked(struct kvm *kvm, struct kvm_mmu_page *root,
- 				new_spte = iter.old_spte & ~shadow_dirty_mask;
- 			else
- 				continue;
-+
-+			kvm_set_pfn_dirty(spte_to_pfn(iter.old_spte));
- 		}
- 
--		tdp_mmu_set_spte_no_dirty_log(kvm, &iter, new_spte);
-+		kvm_tdp_mmu_write_spte(iter.sptep, iter.old_spte, new_spte, iter.level);
- 	}
- 
- 	rcu_read_unlock();
+This issue really has me scratching my head, as I could have sworn
+objtool was being built with -O2.
 
-base-commit: f15a87c006901e02727bf8ac75b0251cdf8e0ecc
+> +OBJTOOL_LDFLAGS := $(LIBELF_LIBS) $(LIBSUBCMD)
+
+Is there a reason to not include $(HOSTLDFLAGS) here?
+
+>  # Allow old libelf to be used:
+>  elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(CC) $(CFLAGS) -x c -E - | grep elf_getshdr)
+> -CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
+> +OBJTOOL_CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
+> +
+> +# Always want host compilation.
+> +HOST_OVERRIDES := CC="$(HOSTCC)" EXTRA_CFLAGS="$(OBJTOOL_CFLAGS)" \
+> +		  LD="$(HOSTLD)" AR="$(HOSTAR)"
+> +BUILD_HOST_OVERRIDES := CC="$(HOSTCC)" CFLAGS="$(OBJTOOL_CFLAGS)" \
+> +			LD="$(HOSTLD)" LDFLAGS="$(OBJTOOL_LDFLAGS)" \
+> +			AR="$(HOSTAR)"
+
+Maybe it depends on your perspective, but I'm thinking that some of
+these aren't really overrides, but rather normal expected flags.  And
+the distinction between these two variables is muddy: it's not only
+Build vs non-Build, but also objtool vs libsubcmd.
+
+How about just
+
+  HOST_OVERRIDES := CC="$(HOSTCC) "LD="$(HOSTLD)" AR="$(HOSTAR)"
+
+And then specifying the {EXTRA_}CFLAGS and LDFLAGS below where needed.
+
+>  AWK = awk
+>  MKDIR = mkdir
+> @@ -65,10 +68,11 @@ include $(srctree)/tools/build/Makefile.include
+>  
+>  $(OBJTOOL_IN): fixdep FORCE
+>  	$(Q)$(CONFIG_SHELL) ./sync-check.sh
+> -	$(Q)$(MAKE) $(build)=objtool
+> +	$(Q)$(MAKE) $(build)=objtool $(BUILD_HOST_OVERRIDES)
+> +
+>  
+>  $(OBJTOOL): $(LIBSUBCMD) $(OBJTOOL_IN)
+> -	$(QUIET_LINK)$(CC) $(OBJTOOL_IN) $(LDFLAGS) -o $@
+> +	$(QUIET_LINK)$(HOSTCC) $(OBJTOOL_IN) $(KBUILD_HOSTLDFLAGS) $(OBJTOOL_LDFLAGS) -o $@
+
+Does KBUILD_HOSTLDFLAGS even work here?
+
 -- 
-
+Josh
