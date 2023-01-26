@@ -2,151 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E093667CC36
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8709267CC41
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236577AbjAZNcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S236993AbjAZNd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236013AbjAZNcP (ORCPT
+        with ESMTP id S229641AbjAZNd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:32:15 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E25210C
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:32:14 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso4144115wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:32:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hvXTfjErGpMP8uOLDwmTjxkzwIedC4pHfuHn5jXJ8N0=;
-        b=qSz3i+Nk4N2o0AemsRlY4Y1kvJX0QWS/ebt8ampVtbMQJog/GsNN/nHJrdTqc08+KU
-         Uw2lbHFjidj8JTAOcNFi1TpWGyvIB+pj4YDsirHFqftcK7Dae7wFeYYlU3daBS5q6O4J
-         4LOaY6/1cfkafaEzTU8ZXBpFvW9eS1dW0XgjD1dZFFY0tcDI02D237KJn+JXjR6phgnh
-         jOpNbb5SMNwjBwce++SDxth6ZQ+0R2khbjAsXWoKdmHx2k0KD6+r1ky0KnN2BgK40Y4W
-         4UNeq43CoU9gkSfpUFHt4Hyhex0QXygxXvr/3bxMnNx5ZCbSXdiJroNNBuMpfgzNCUnU
-         TOgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hvXTfjErGpMP8uOLDwmTjxkzwIedC4pHfuHn5jXJ8N0=;
-        b=viuJxfifTbDHOYYFuHfYvPUKQajXILm6oiH+iMC4agSY0VBjEyxNHbkgaG1LMGKs9b
-         w4+UFJKU7qXWfTttgnS+t0I6WLiHK3ikjwNG0esZwigntCgNaM1E/BQr11iEPyvs8KRH
-         YdKSRljsgHpXIYYV/kJKsGHTCTdjcE+xCnzCmcVRl83EFrmFVZtW3qxSyvyaNImgeF91
-         4/1IXhx0gSAgDT28torzQ3uC0zKmFTKBXnG9eH1coLApKPOTdqDBSurEQIhNZBguAghb
-         c1z6RHZDok8yQUHlp/qAwUyFHJ2jGGSWvVt+txfDLdvVrO1aHVBPxpeuz7GUZHnnyjqd
-         wSiA==
-X-Gm-Message-State: AFqh2kojgoiB+XPcWjp+5as/SVhpB0nXFv8N0tli7dkPC/nrCW+GB+IL
-        htRvfshno8ohiwvac41t+7bd2A==
-X-Google-Smtp-Source: AMrXdXsvke9/I5SEmOUuX2fmA7FDEbfmJeFpKph8uM2MNd6/2VY4XfLs4JIZluGNUbgzvZmtCNlL8A==
-X-Received: by 2002:a1c:f310:0:b0:3db:15d9:1485 with SMTP id q16-20020a1cf310000000b003db15d91485mr29420414wmq.39.1674739932598;
-        Thu, 26 Jan 2023 05:32:12 -0800 (PST)
-Received: from vermeer ([2a01:cb1d:81a9:dd00:b570:b34c:ffd4:c805])
-        by smtp.gmail.com with ESMTPSA id n13-20020a05600c500d00b003db2b81660esm5006955wmr.21.2023.01.26.05.32.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 05:32:11 -0800 (PST)
-Date:   Thu, 26 Jan 2023 14:32:09 +0100
-From:   Samuel Ortiz <sameo@rivosinc.com>
-To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-Cc:     Lukas Wunner <lukas@wunner.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-pci@vger.kernel.org
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <Y9KA2RNHujabdV/D@vermeer>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y9EkCvAfNXnJ+ATo@kroah.com>
- <Y9Ex3ZUIFxwOBg1n@work-vm>
- <Y9E7PNmSTP5w2zuw@kroah.com>
- <Y9FDZPV7qENtNNyk@work-vm>
- <20230125215333.GA18160@wunner.de>
- <Y9Jakvab14K61b2t@work-vm>
+        Thu, 26 Jan 2023 08:33:26 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AACE1736;
+        Thu, 26 Jan 2023 05:33:25 -0800 (PST)
+Received: from [192.168.1.103] (unknown [103.238.109.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C9C272B3;
+        Thu, 26 Jan 2023 14:33:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674740003;
+        bh=YFa6+v6r11FTCig8slNbwx0QqVKWMnnrcN/kArlf3Es=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DKbSrDb+Kse0kQP2Ghc9KZAXIq8LWPn7Oh+UdoC/rqZDXr3jqK2Cj3GRBjkIb4exD
+         hS8iUwzCny+F2mz9NMkH/nu8kb8WE/PL8ASvfs7/6Kzk03vTca24SZplL3R8tMRa8m
+         Lvz22fHHYF0+VTTV/eByZnDxyPk58fueaH1X6AP4=
+Message-ID: <09309fe8-7cf3-72ea-5118-159e7a1ee302@ideasonboard.com>
+Date:   Thu, 26 Jan 2023 19:03:16 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9Jakvab14K61b2t@work-vm>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v6 0/6] staging: vc04_services: vchiq: Register devices
+ with a custom bus_type
+To:     Phil Elwell <phil@raspberrypi.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrien Thierry <athierry@redhat.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Paul Elder <paul.elder@ideasonboard.com>
+References: <20230120201104.606876-1-umang.jain@ideasonboard.com>
+ <786df750-221e-82fc-a324-d30261296974@i2se.com>
+ <62644cd8-c871-aee0-30b7-2fbab097504c@ideasonboard.com>
+ <Y85MOdAVh/fv5HRt@pendragon.ideasonboard.com>
+ <39f438f8-c41b-17e6-42ba-9d87098a1eee@i2se.com>
+ <2ad50d65-9ce2-de4c-b14f-98c086b2d8c0@raspberrypi.com>
+Content-Language: en-US
+From:   Umang Jain <umang.jain@ideasonboard.com>
+In-Reply-To: <2ad50d65-9ce2-de4c-b14f-98c086b2d8c0@raspberrypi.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 10:48:50AM +0000, Dr. David Alan Gilbert wrote:
-> * Lukas Wunner (lukas@wunner.de) wrote:
-> > [cc += Jonathan Cameron, linux-pci]
-> > 
-> > On Wed, Jan 25, 2023 at 02:57:40PM +0000, Dr. David Alan Gilbert wrote:
-> > > Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:
-> > > > Great, so why not have hardware attestation also for your devices you
-> > > > wish to talk to?  Why not use that as well?  Then you don't have to
-> > > > worry about anything in the guest.
-> > > 
-> > > There were some talks at Plumbers where PCIe is working on adding that;
-> > > it's not there yet though.  I think that's PCIe 'Integrity and Data
-> > > Encryption' (IDE - sigh), and PCIe 'Security Prtocol and Data Model' -
-> > > SPDM.   I don't know much of the detail of those, just that they're far
-> > > enough off that people aren't depending on them yet.
-> > 
-> > CMA/SPDM (PCIe r6.0 sec 6.31) is in active development on this branch:
-> >
-> > https://github.com/l1k/linux/commits/doe
-> 
-> Thanks for the pointer - I'll go and hunt down that spec.
-> 
-> > It will allow for authentication of PCIe devices.  Goal is to submit
-> > this quarter (Q1).  Afterwards we'll look into retrieving measurements
-> > via CMA/SPDM and bringing up IDE encryption.
-> > 
-> > It's a kernel-native implementation which uses the existing crypto and
-> > keys infrastructure and is wired into the appropriate places in the
-> > PCI core to authenticate devices on enumeration and reauthenticate
-> > when CMA/SPDM state is lost (after resume from D3cold, after a
-> > Secondary Bus Reset and after a DPC-induced Hot Reset).
-> > 
-> > The device authentication service afforded here is generic.
-> > It is up to users and vendors to decide how to employ it,
-> > be it for "confidential computing" or something else.
-> 
-> As Samuel asks about who is doing the challenge; but I guess there are
-> also things like what happens when the host controls intermediate
-> switches 
+Hi Phil,
 
-You'd want to protect that through IDE selective streams.
+Thank you for the response
 
-> and BAR access and when only VFs are passed to guests.
+On 1/25/23 1:17 AM, Phil Elwell wrote:
+> On 24/01/2023 8:41, Stefan Wahren wrote:
+>> Hi Phil,
+>>
+>> Am 23.01.23 um 09:58 schrieb Laurent Pinchart:
+>>> On Mon, Jan 23, 2023 at 01:18:30PM +0530, Umang Jain wrote:
+>>>> Hi Stefan,
+>>>>
+>>>> Thank for the testing.
+>>>>
+>>>> On 1/23/23 5:04 AM, Stefan Wahren wrote:
+>>>>> Hi Umang,
+>>>>>
+>>>>> Am 20.01.23 um 21:10 schrieb Umang Jain:
+>>>>>> This series just introduces five extra patches for dropping include
+>>>>>> directives from Makefiles (suggested by Greg KH) and rebased.
+>>>>>>
+>>>>>> The main patch (6/6) removes platform device/driver abuse and moves
+>>>>>> things to standard device/driver model using a custom_bus. Specific
+>>>>>> details are elaborated in the commit message.
+>>>>>>
+>>>>>> The patch series is based on top of d514392f17fd (tag: 
+>>>>>> next-20230120)
+>>>>>> of linux-next.
+>>>>> applied this series on top of linux-next and build it with
+>>>>> arm/multi_v7_defconfig plus the following:
+>>>>>
+>>>>> CONFIG_BCM_VIDEOCORE=y
+>>>>> CONFIG_BCM2835_VCHIQ=m
+>>>>> CONFIG_VCHIQ_CDEV=y
+>>>>> CONFIG_SND_BCM2835=m
+>>>>> CONFIG_VIDEO_BCM2835=m
+>>>>> CONFIG_BCM2835_VCHIQ_MMAL=m
+>>>>>
+>>>>> and the devices doesn't register on Raspberry Pi 3 B Plus:
+>>>>>
+>>>>> [   25.523337] vchiq: module is from the staging directory, the 
+>>>>> quality is unknown, you have been warned.
+>>>>> [   25.541647] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
+>>>>> bcm2835_audio vchiq device
+>>>>> [   25.553692] bcm2835_vchiq 3f00b840.mailbox: Failed to register 
+>>>>> bcm2835-camera vchiq device
+>>>> I was able to reproduce and it seems the issue here is the change
+>>>> mentioned in the cover
+>>>>
+>>>> - drop dma_set_mask_and_coherent
+>>>>
+>>>> in V6.
+>>>>
+>>>> (I usually test patches on RPi 4B with vcsm-cma and bcm2835-isp 
+>>>> applied
+>>>> so my branch has the DMA hunk included while I was testing V6)
+>>>>
+>>>> Below is the hunk which should resolve the issue.
+>>>>
+>>>> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+>>>> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+>>>> @@ -6,6 +6,7 @@
+>>>>     */
+>>>>
+>>>>    #include <linux/device/bus.h>
+>>>> +#include <linux/dma-mapping.h>
+>>>>    #include <linux/slab.h>
+>>>>    #include <linux/string.h>
+>>>>
+>>>> @@ -72,6 +73,12 @@ int vchiq_device_register(struct device *parent,
+>>>> const char *name)
+>>>>           device->dev.type = &vchiq_device_type;
+>>>>           device->dev.release = vchiq_device_release;
+>>>>
+>>>> +       ret = dma_set_mask_and_coherent(&device->dev, 
+>>>> DMA_BIT_MASK(32));
+>>>> +       if (ret < 0) {
+>>>> +               vchiq_device_release(&device->dev);
+>>>> +               return ret;
+>>>> +       }
+>>>> +
+>>>>           ret = device_register(&device->dev);
+>>>>           if (ret) {
+>>>>                   put_device(&device->dev);
+>>>>
+>>>> It seems we need to include the dma_set_mask_and_coherent() even if
+>>>> bcm2835-audio, bcm2835-camera device doesn't do DMA? I need to look 
+>>>> into
+>>>> why is that/
+>>
+>> Do you have an answer for this?
+>
+> That's because vchiq does use DMA for bulk transfers, it's just that 
+> the DMA hardware
+> is driven from the VPU side. And even though the VPU can only address 
+> 1GB, it uses the
+> upper address bits to determine cacheability of accesses, hence the 
+> need for 32-bit
+> DMA addresses.
 
-TDISP aims at addressing that afaiu. Once the VF (aka TDI) is locked,
-any changes to its BAR(s) or any PF MMIO that would affect the VF would
-get the VF back to unlocked (and let the guest reject it).
+Is it worth recording this as a comment  in the patch?
+>
+> Phil
+>
 
-Cheers,
-Samuel.
