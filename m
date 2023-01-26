@@ -2,94 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77DB167D369
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77DA67D36A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbjAZRl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 12:41:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
+        id S231908AbjAZRmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 12:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjAZRlY (ORCPT
+        with ESMTP id S229976AbjAZRme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:41:24 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFBA6BBEA;
-        Thu, 26 Jan 2023 09:41:23 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4P2nzk5c0Dz6J9b8;
-        Fri, 27 Jan 2023 01:40:34 +0800 (CST)
-Received: from localhost (10.81.202.191) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 26 Jan
- 2023 17:41:20 +0000
-Date:   Thu, 26 Jan 2023 17:41:19 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Markuss Broks <markuss.broks@gmail.com>
-CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 2/2] iio: light: Add support for AMS TCS3490 light
- sensor
-Message-ID: <20230126174119.000056da@Huawei.com>
-In-Reply-To: <a782a0d9-c47e-4328-774f-6bef78161d81@gmail.com>
-References: <20230123231028.26073-1-markuss.broks@gmail.com>
-        <20230123231028.26073-3-markuss.broks@gmail.com>
-        <Y8+xamtH/U4vK75e@smile.fi.intel.com>
-        <a782a0d9-c47e-4328-774f-6bef78161d81@gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 26 Jan 2023 12:42:34 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Jan 2023 09:42:33 PST
+Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F7D6D5F7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:42:33 -0800 (PST)
+Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 20230126174128e36964c33bf68108e4
+        for <linux-kernel@vger.kernel.org>;
+        Thu, 26 Jan 2023 18:41:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=florian.bezdeka@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=KO6hf+CPKb+kyZe/tzFWxI+3m1X7vAFdAbD49859oG4=;
+ b=GCJi+ZvDjB/eP4upbG8f1swqFfcq6z7+bddmwQYirJEg6Mp1S2a7VNZr7ILeN28J7Kipb1
+ 09Vq/EM4z3AKrGhKRpayDMz336f2hrKkldbVeWi9qS/Jn7jbMB9M0Z5yaJKF734BC4yGg/YT
+ PiyYJ7w1DJ4lwylzyd8lKf4n0XPFM=;
+Message-ID: <2ad9f8a7528818b9509f62278b42e5bc6d210054.camel@siemens.com>
+Subject: Re: [ANNOUNCE] 5.10.162-rt79
+From:   Florian Bezdeka <florian.bezdeka@siemens.com>
+To:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jeff Brady <jeffreyjbrady@gmail.com>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>
+Date:   Thu, 26 Jan 2023 18:41:27 +0100
+In-Reply-To: <Y9KOvZH61omPpn/3@uudg.org>
+References: <Y9KOvZH61omPpn/3@uudg.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.202.191]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-68982:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 Jan 2023 17:54:56 +0200
-Markuss Broks <markuss.broks@gmail.com> wrote:
+Hi all, especially to stable-rt maintainers,
 
-> Hi Andy,
-> 
-> On 1/24/23 12:22, Andy Shevchenko wrote:
-> > On Tue, Jan 24, 2023 at 01:10:25AM +0200, Markuss Broks wrote:  
-> >> Add a driver for AMS TCS3490 Color Light-to-Digital Converter. This
-> >> device provides color and IR (red, green, blue, clear and IR) light
-> >> sensing. The color sensing can be used for light source detection and
-> >> color temperature measurements.  
-> > ...
-> >  
-> >> +AMS TCS3490 DRIVER
-> >> +M:	Markuss Broks <markuss.broks@gmail.com>
-> >> +L:	linux-iio@vger.kernel.org
-> >> +S:	Maintained
-> >> +F:	Documentation/devicetree/bindings/iio/light/ams,tcs3490.yaml  
-> > Shouldn't actually be added with the schema patch?
-> >  
-> >> +F:	drivers/iio/light/tcs3490.c  
-> > I dunno what's the rules but it feels a bit inconsistent in case the schema
-> > will leave while driver got, for example, rewritten (as brand new) and reverted
-> > (as old one). In such (quite unlikely) circumstances we may end up with the
-> > dangling file.
-> >
-> > Rob, Krzysztof, Jonathan, what is yours take from this?
+On Thu, 2023-01-26 at 11:31 -0300, Luis Claudio R. Goncalves wrote:
+> I'm pleased to announce the 5.10.162-rt79 stable release.
+>=20
+> This release contains a single change, a fix to the aarch64 build failure
+> I introduced while fixing merge conflicts in 5.10.162-rt78.
 
-Ideal is update the file listing as files are added, but I rarely care
-enough to fix it up or complain as the patches almost always go
-together.
+The CIP (see [1] for technical infos about CIP) kernel maintainers
+(especially Pavel) noticed this build failure while trying to prepare
+the next 5.10 based rt-cip release.
+
+Looking at the kernel CI logs [2] this build failure was detected by
+kernel-ci as well but it seems the build result did not make it back to
+the maintainers. Is that correct?
+
+From the CIP projects perspective we would like to improve the
+situation.
+
+From my perspective the following could be done:
+
+  - Instead of (or in addition to) building and testing released -rt
+    branches enable testing of -rt release candidates
+  - Make sure the build results get back to the maintainers
+
+I'm not sure if every -rt branch has a -rc branch. I'm not familiar
+with the -rt release process yet.
+
+What do you think? Does that make sense?
+
+The discussion did not start yet, but it might be possible that I'm
+able to do such kernel-ci improvements under the CIP umbrella.
+
+Best regards,
+Florian
+
+[1] https://wiki.linuxfoundation.org/civilinfrastructureplatform/start
+[2] https://linux.kernelci.org/build/rt-stable/branch/v5.10-rt/kernel/v5.10=
+.162-rt78/
+
+>=20
+> You can get this release via the git tree at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+>=20
+>   branch: v5.10-rt
+>   Head SHA1: 10ea07eb47e2f5a82c5dabba993635c73c11592f
+>=20
