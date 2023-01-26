@@ -2,145 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6C267C4FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC2767C4FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbjAZHlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 02:41:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
+        id S233746AbjAZHnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 02:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjAZHli (ORCPT
+        with ESMTP id S229630AbjAZHnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 02:41:38 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10BA65F2D;
-        Wed, 25 Jan 2023 23:41:36 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 26 Jan 2023 02:43:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599BF1BAEB;
+        Wed, 25 Jan 2023 23:43:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 973622210B;
-        Thu, 26 Jan 2023 07:41:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674718895; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mncfe4kJe4t7mpaj+aaMpUVysMSI3MXidyK6ywAzmc0=;
-        b=UL/28di24psjPcStaP7/ABTZSBwBaZupgJJ4DSVAM8SvNGREBi1UxcQo4kxQu5V3ZGxb/7
-        Ei7mT7wBbYdb4meO0r0bNG1opKAjusHwBxdas9X+gGIjnoIzyVR2Nh0wuaSJ0rT4jArO/G
-        MqUFVoKMoss3rxA7mQ4/uxLXF8J05DM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 783FF1358A;
-        Thu, 26 Jan 2023 07:41:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YUv4Gq8u0mOxHQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 26 Jan 2023 07:41:35 +0000
-Date:   Thu, 26 Jan 2023 08:41:34 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-Message-ID: <Y9Iurktut9B9T+Tl@dhcp22.suse.cz>
-References: <20230125073502.743446-1-leobras@redhat.com>
- <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
- <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
- <Y9FzSBw10MGXm2TK@tpad>
- <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA91B61755;
+        Thu, 26 Jan 2023 07:43:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 054B8C433EF;
+        Thu, 26 Jan 2023 07:43:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674718985;
+        bh=qLBAZG/gbjpAF8cRofsMaVMSoAZk99jH0vp77Yjg1EQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CCVJ9OZWp+IbuYSxY4Rhn4YdBs9okdhqwDqtpOVy68+MBd+rq1Ubx7+xi1unGSH32
+         5g4HSticgDfxZovx6bVoysxu6rzPSUFHNBgRONw3LjBp88gaW7vco2RyJD0AJp5+6T
+         2urMSXVL/wHFwqqo8juti32pvP4KMRGktnoitvv4=
+Date:   Thu, 26 Jan 2023 08:43:02 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Samuel Thibault <samuel.thibault@ens-lyon.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>
+Subject: Re: [PATCH] fbcon: Check font dimension limits
+Message-ID: <Y9IvBoAbmh27xl4B@kroah.com>
+References: <20230126004911.869923511@ens-lyon.org>
+ <20230126004921.616264824@ens-lyon.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230126004921.616264824@ens-lyon.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 25-01-23 15:14:48, Roman Gushchin wrote:
-> On Wed, Jan 25, 2023 at 03:22:00PM -0300, Marcelo Tosatti wrote:
-> > On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Brás wrote:
-> > > On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
-> > > > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
-> > > > > Disclaimer:
-> > > > > a - The cover letter got bigger than expected, so I had to split it in
-> > > > >     sections to better organize myself. I am not very confortable with it.
-> > > > > b - Performance numbers below did not include patch 5/5 (Remove flags
-> > > > >     from memcg_stock_pcp), which could further improve performance for
-> > > > >     drain_all_stock(), but I could only notice the optimization at the
-> > > > >     last minute.
-> > > > > 
-> > > > > 
-> > > > > 0 - Motivation:
-> > > > > On current codebase, when drain_all_stock() is ran, it will schedule a
-> > > > > drain_local_stock() for each cpu that has a percpu stock associated with a
-> > > > > descendant of a given root_memcg.
+On Thu, Jan 26, 2023 at 01:49:12AM +0100, Samuel Thibault wrote:
+> blit_x and blit_y are uint32_t, so fbcon currently cannot support fonts
+> larger than 32x32.
+
+"u32" you mean, right?
+
+> The 32x32 case also needs shifting an unsigned int, to properly set bit
+> 31, otherwise we get "UBSAN: shift-out-of-bounds in fbcon_set_font",
+> as reported on
 > 
-> Do you know what caused those drain_all_stock() calls? I wonder if we should look
-> into why we have many of them and whether we really need them?
+> http://lore.kernel.org/all/IA1PR07MB98308653E259A6F2CE94A4AFABCE9@IA1PR07MB9830.namprd07.prod.outlook.com
+
+Odd blank line?
+
+
+> Kernel Branch: 6.2.0-rc5-next-20230124
+> Kernel config: https://drive.google.com/file/d/1F-LszDAizEEH0ZX0HcSR06v5q8FPl2Uv/view?usp=sharing
+> Reproducer: https://drive.google.com/file/d/1mP1jcLBY7vWCNM60OMf-ogw-urQRjNrm/view?usp=sharing
+
+What are all of these lines for?
+
 > 
-> It's either some user's actions (e.g. reducing memory.max), either some memcg
-> is entering pre-oom conditions. In the latter case a lot of drain calls can be
-> scheduled without a good reason (assuming the cgroup contain multiple tasks running
-> on multiple cpus).
+> Reported-by: Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
+> Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
 
-I believe I've never got a specific answer to that. We
-have discussed that in the previous version submission
-(20221102020243.522358-1-leobras@redhat.com and specifically
-Y2TQLavnLVd4qHMT@dhcp22.suse.cz). Leonardo has mentioned a mix of RT and
-isolcpus. I was wondering about using memcgs in RT workloads because
-that just sounds weird but let's say this is the case indeed. Then an RT
-task or whatever task that is running on an isolated cpu can have pcp
-charges.
+What commit id does this fix?  Should it go to stable kernels?
 
-> Essentially each cpu will try to grab the remains of the memory quota
-> and move it locally. I wonder in such circumstances if we need to disable the pcp-caching
-> on per-cgroup basis.
-
-I think it would be more than sufficient to disable pcp charging on an
-isolated cpu. This is not a per memcg property. I can imagine that
-different tasks running in the same memcg can run on a mix of CPUs (e.g.
-only part of it on isolated CPUs). It is a recipe for all sorts of
-priority inversions but well, memcg and RT is there already.
-
-> Generally speaking, draining of pcpu stocks is useful only if an idle cpu is holding some
-> charges/memcg references (it might be not completely idle, but running some very special
-> workload which is not doing any kernel allocations or a process belonging to the root memcg).
-> In all other cases pcpu stock will be either drained naturally by an allocation from another
-> memcg or an allocation from the same memcg will "restore" it, making draining useless.
 > 
-> We also can into drain_all_pages() opportunistically, without waiting for the result.
-> On a busy system it's most likely useless, we might oom before scheduled works will be executed.
+> Index: linux-6.0/drivers/video/fbdev/core/fbcon.c
+> ===================================================================
+> --- linux-6.0.orig/drivers/video/fbdev/core/fbcon.c
+> +++ linux-6.0/drivers/video/fbdev/core/fbcon.c
+> @@ -2489,9 +2489,12 @@ static int fbcon_set_font(struct vc_data
+>  	    h > FBCON_SWAP(info->var.rotate, info->var.yres, info->var.xres))
+>  		return -EINVAL;
+>  
+> +	if (font->width > 32 || font->height > 32)
+> +		return -EINVAL;
+> +
+>  	/* Make sure drawing engine can handle the font */
+> -	if (!(info->pixmap.blit_x & (1 << (font->width - 1))) ||
+> -	    !(info->pixmap.blit_y & (1 << (font->height - 1))))
+> +	if (!(info->pixmap.blit_x & (1U << (font->width - 1))) ||
+> +	    !(info->pixmap.blit_y & (1U << (font->height - 1))))
 
-I think the primary objective is that no userspace unintended execution
-happens on isolated cpus.
- 
-> I admit I planned to do some work around and even started, but then never had enough time to
-> finish it.
-> 
-> Overall I'm somewhat resistant to an idea of making generic allocation & free paths slower
-> for an improvement of stock draining. It's not a strong objection, but IMO we should avoid
-> doing this without a really strong reason.
+Are you sure this is still needed with the above check added?  If so,
+why?  What is the difference in the compiled code?
 
-Are you OK with a simple opt out on isolated CPUs? That would make
-charges slightly slower (atomic on the hierarchy counters vs. a single
-pcp adjustment) but it would guarantee that the isolated workload is
-predictable which is the primary objective AFAICS.
--- 
-Michal Hocko
-SUSE Labs
+thanks,
+
+greg k-h
