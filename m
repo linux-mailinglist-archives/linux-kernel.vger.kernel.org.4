@@ -2,235 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C95F67D7D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E2167D7DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 22:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbjAZVh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 16:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
+        id S232301AbjAZVlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 16:41:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjAZVhy (ORCPT
+        with ESMTP id S229510AbjAZVlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 16:37:54 -0500
-Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8393AB47A;
-        Thu, 26 Jan 2023 13:37:50 -0800 (PST)
-Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id B56FD7A0081;
-        Thu, 26 Jan 2023 22:37:48 +0100 (CET)
-From:   Ondrej Zary <linux@zary.sk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] bpck_usb_firmware: Micro Solutions Backpack USB firmware loader
-Date:   Thu, 26 Jan 2023 22:37:42 +0100
-Message-Id: <20230126213742.19933-1-linux@zary.sk>
-X-Mailer: git-send-email 2.20.1
+        Thu, 26 Jan 2023 16:41:50 -0500
+X-Greylist: delayed 21416 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Jan 2023 13:41:48 PST
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FB42197B;
+        Thu, 26 Jan 2023 13:41:47 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 5F23930000CFD;
+        Thu, 26 Jan 2023 22:41:46 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 42A8D2B0CE5; Thu, 26 Jan 2023 22:41:46 +0100 (CET)
+Date:   Thu, 26 Jan 2023 22:41:46 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Samuel Ortiz <sameo@rivosinc.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-pci@vger.kernel.org
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <20230126214146.GA28774@wunner.de>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <Y9Ex3ZUIFxwOBg1n@work-vm>
+ <Y9E7PNmSTP5w2zuw@kroah.com>
+ <Y9FDZPV7qENtNNyk@work-vm>
+ <20230125215333.GA18160@wunner.de>
+ <CAGXJix9-cXNW7EwJf0PVzj_Qmt5fmQvBX1KvXfRX5NAeEpnMvw@mail.gmail.com>
+ <20230126154449.GB4188@wunner.de>
+ <20230126112058-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126112058-mutt-send-email-mst@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for loading firmware into Micro Solutions USB optical and
-hard drives. Once the firmware is loaded, they are USB mass storage
-compliant and will be handled by the usb-storage driver.
+On Thu, Jan 26, 2023 at 11:25:21AM -0500, Michael S. Tsirkin wrote:
+> On Thu, Jan 26, 2023 at 04:44:49PM +0100, Lukas Wunner wrote:
+> > Obviously the host can DoS guest access to the device by modifying
+> > exchanged messages, but there are much simpler ways for it to
+> > do that, say, by clearing Bus Master Enable or Memory Space Enable
+> > bits in the Command Register.
+> 
+> There's a single key per guest though, isn't it? Also used
+> for regular memory?
 
-Signed-off-by: Ondrej Zary <linux@zary.sk>
----
- drivers/usb/misc/Kconfig             |   8 ++
- drivers/usb/misc/Makefile            |   1 +
- drivers/usb/misc/bpck_usb_firmware.c | 113 +++++++++++++++++++++++++++
- drivers/usb/misc/ezusb.c             |   6 --
- include/linux/usb/ezusb.h            |   3 +
- 5 files changed, 125 insertions(+), 6 deletions(-)
- create mode 100644 drivers/usb/misc/bpck_usb_firmware.c
+The current design is to have a global keyring (per kernel, i.e. per
+guest).  A device presents a certificate chain and the first certificate
+in that chain needs to be signed by one of the certificates on the keyring.
 
-diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-index a5f7652db7da..4c4e7cf35344 100644
---- a/drivers/usb/misc/Kconfig
-+++ b/drivers/usb/misc/Kconfig
-@@ -311,3 +311,11 @@ config USB_ONBOARD_HUB
- 	  this config will enable the driver and it will automatically
- 	  match the state of the USB subsystem. If this driver is a
- 	  module it will be called onboard_usb_hub.
-+
-+config USB_BACKPACK_FW
-+	tristate "Micro Solutions Backpack firmware loading support"
-+	select USB_EZUSB_FX2
-+	help
-+	  This driver loads firmware for Micro Solutions Backpack USB optical
-+	  and hard drives. Once the firmware is loaded, they're USB mass
-+	  storage compliant and thus handled by the usb-storage driver.
-diff --git a/drivers/usb/misc/Makefile b/drivers/usb/misc/Makefile
-index 93581baec3a8..ef13699f50cc 100644
---- a/drivers/usb/misc/Makefile
-+++ b/drivers/usb/misc/Makefile
-@@ -34,3 +34,4 @@ obj-$(CONFIG_USB_SISUSBVGA)		+= sisusbvga/
- obj-$(CONFIG_USB_LINK_LAYER_TEST)	+= lvstest.o
- obj-$(CONFIG_BRCM_USB_PINMAP)		+= brcmstb-usb-pinmap.o
- obj-$(CONFIG_USB_ONBOARD_HUB)		+= onboard_usb_hub.o
-+obj-$(CONFIG_USB_BACKPACK_FW)		+= bpck_usb_firmware.o
-diff --git a/drivers/usb/misc/bpck_usb_firmware.c b/drivers/usb/misc/bpck_usb_firmware.c
-new file mode 100644
-index 000000000000..d579a8cdc3ae
---- /dev/null
-+++ b/drivers/usb/misc/bpck_usb_firmware.c
-@@ -0,0 +1,113 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for loading firmware into Micro Solutions USB optical and hard drives
-+ *
-+ * Copyright (C) 2023 Ondrej Zary <linux@zary.sk>
-+ *
-+ * Most Micro Solutions external drives are parallel port devices that can be
-+ * connected directly to a parallel port or a PCMCIA card (Model 836 - also acts
-+ * as a parallel port) - and handled by pata_parport driver.
-+ *
-+ * There are also special USB cables that translate the Backpack parallel
-+ * protocol to standard USB mass storage protocol.
-+ * Model 839 - based on Cypress EZ-USB FX (USB 1.1)
-+ * Model 840 - based on Cypress EZ-USB FX2 (USB 2.0)
-+ * Newer drives have integrated USB 2.0 port.
-+ *
-+ * All these USB devices require a firmware to be downloaded to chip's RAM after
-+ * each USB (re)connect. Once the firmware is loaded, they are USB mass storage
-+ * compliant and will be handled by the usb-storage driver.
-+ *
-+ * The cables need various firmware depending on the drive type connected. The
-+ * cable appears first with USB device ID 0x0000 or 0x0001. First, a "scan"
-+ * firmware is loaded that identifies the drive type and changes the USB device
-+ * ID appropriately. Then a final firmware is loaded, depending on the chip
-+ * type, drive version (5 or 6) and drive type (CD or HDD).
-+ *
-+ * The cable is pretty intelligent - if there's no drive connected (or it's not
-+ * powered up), it keeps trying (and blinking its LED), eventually detecting a
-+ * connected drive and changing the USB ID. When the drive is disconnected, the
-+ * cable does an USB reconnect so the "scan" firmware is loaded again.
-+ * This means that drives can be hot-pluggged at the parallel port end of the
-+ * cable.
-+ */
-+
-+#include <linux/usb.h>
-+#include <linux/errno.h>
-+#include <linux/usb/ezusb.h>
-+
-+static const struct usb_device_id id_table[] = {
-+	{ USB_DEVICE(0x0ac9, 0x0000), .driver_info = (unsigned long) "backpack/BP1SCAN.fw" },
-+	{ USB_DEVICE(0x0ac9, 0x0001), .driver_info = (unsigned long) "backpack/BP2SCAN.fw" },
-+	{ USB_DEVICE(0x0ac9, 0x1000), .driver_info = (unsigned long) "backpack/BP1CD5.fw" },
-+	{ USB_DEVICE(0x0ac9, 0x1001), .driver_info = (unsigned long) "backpack/BP1CD6.fw" },
-+	{ USB_DEVICE(0x0ac9, 0x1002), .driver_info = (unsigned long) "backpack/BP1HD5.fw" },
-+	{ USB_DEVICE(0x0ac9, 0x1003), .driver_info = (unsigned long) "backpack/BP1HD6.fw" },
-+	{ USB_DEVICE(0x0ac9, 0x1004), .driver_info = (unsigned long) "backpack/BP2CD5.fw" },
-+	{ USB_DEVICE(0x0ac9, 0x1005), .driver_info = (unsigned long) "backpack/BP2CD6.fw" },
-+	{ USB_DEVICE(0x0ac9, 0x1006), .driver_info = (unsigned long) "backpack/BP2HD5.fw" },
-+	{ USB_DEVICE(0x0ac9, 0x1007), .driver_info = (unsigned long) "backpack/BP2HD6.fw" },
-+	{ USB_DEVICE(0x0ac9, 0x0010), .driver_info = (unsigned long) "backpack/BPINTCD.fw" },
-+	{ USB_DEVICE(0x0ac9, 0x0011), .driver_info = (unsigned long) "backpack/BPINTHD.fw" },
-+	{},
-+};
-+
-+MODULE_DEVICE_TABLE(usb, id_table);
-+
-+static int bpck_usb_fw_load(struct usb_interface *intf,
-+			    const struct usb_device_id *id)
-+{
-+	struct usb_device *dev = interface_to_usbdev(intf);
-+	char *fw_name = (char *)id->driver_info;
-+	int ret;
-+
-+	if (le16_to_cpu(dev->descriptor.bcdUSB) >= 0x0200) {
-+		ezusb_fx2_set_reset(dev, 1);
-+		ret = ezusb_fx2_ihex_firmware_download(dev, fw_name);
-+	} else {
-+		ezusb_fx1_set_reset(dev, 1);
-+		ret = ezusb_fx1_ihex_firmware_download(dev, fw_name);
-+	}
-+
-+	if (ret < 0) {
-+		dev_err(&dev->dev, "failed to load firmware \"%s\"\n", fw_name);
-+		return -ENOENT;
-+	}
-+
-+	return 0;
-+}
-+
-+/* scan firmware */
-+MODULE_FIRMWARE("backpack/BP1SCAN.fw"); /* USB 1.1 cable */
-+MODULE_FIRMWARE("backpack/BP2SCAN.fw"); /* USB 2.0 cable */
-+/* for USB 1.1 chips (integrated in cable) */
-+MODULE_FIRMWARE("backpack/BP1CD5.fw"); /* series 5 optical drives */
-+MODULE_FIRMWARE("backpack/BP1CD6.fw"); /* series 6 optical drives */
-+MODULE_FIRMWARE("backpack/BP1HD5.fw"); /* series 5 hard drives */
-+MODULE_FIRMWARE("backpack/BP1HD6.fw"); /* series 6 hard drives */
-+/* for USB 2.0 chips (integrated in cable) */
-+MODULE_FIRMWARE("backpack/BP2CD5.fw"); /* series 5 optical drives */
-+MODULE_FIRMWARE("backpack/BP2CD6.fw"); /* series 6 optical drives */
-+MODULE_FIRMWARE("backpack/BP2HD5.fw"); /* series 5 hard drives */
-+MODULE_FIRMWARE("backpack/BP2HD6.fw"); /* series 6 hard drives */
-+/* for device-integrated USB 2.0 chips */
-+MODULE_FIRMWARE("backpack/BPINTCD.fw"); /* optical drives */
-+MODULE_FIRMWARE("backpack/BPINTHD.fw"); /* hard drives */
-+
-+static void bpck_usb_fw_disconnect(struct usb_interface *intf)
-+{
-+	/* nothing to do here but mandatory */
-+}
-+
-+static struct usb_driver bpck_usb_fw_driver = {
-+	.name = "bpck_usb_firwmare",
-+	.probe = bpck_usb_fw_load,
-+	.disconnect = bpck_usb_fw_disconnect,
-+	.id_table = id_table,
-+};
-+
-+module_usb_driver(bpck_usb_fw_driver);
-+
-+MODULE_AUTHOR("Ondrej Zary");
-+MODULE_DESCRIPTION("Micro Solutions Backpack USB firmware loader");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/usb/misc/ezusb.c b/drivers/usb/misc/ezusb.c
-index 78aaee56c2b7..30d6b1d8e265 100644
---- a/drivers/usb/misc/ezusb.c
-+++ b/drivers/usb/misc/ezusb.c
-@@ -124,11 +124,6 @@ int ezusb_fx1_ihex_firmware_download(struct usb_device *dev,
- }
- EXPORT_SYMBOL_GPL(ezusb_fx1_ihex_firmware_download);
- 
--#if 0
--/*
-- * Once someone one needs these fx2 functions, uncomment them
-- * and add them to ezusb.h and all should be good.
-- */
- static struct ezusb_fx_type ezusb_fx2 = {
- 	.cpucs_reg = 0xE600,
- 	.max_internal_adress = 0x3FFF,
-@@ -146,6 +141,5 @@ int ezusb_fx2_ihex_firmware_download(struct usb_device *dev,
- 	return ezusb_ihex_firmware_download(dev, ezusb_fx2, firmware_path);
- }
- EXPORT_SYMBOL_GPL(ezusb_fx2_ihex_firmware_download);
--#endif
- 
- MODULE_LICENSE("GPL");
-diff --git a/include/linux/usb/ezusb.h b/include/linux/usb/ezusb.h
-index 487047162ca8..f00895cc7a8e 100644
---- a/include/linux/usb/ezusb.h
-+++ b/include/linux/usb/ezusb.h
-@@ -5,5 +5,8 @@
- extern int ezusb_fx1_set_reset(struct usb_device *dev, unsigned char reset_bit);
- extern int ezusb_fx1_ihex_firmware_download(struct usb_device *dev,
- 					    const char *firmware_path);
-+extern int ezusb_fx2_set_reset(struct usb_device *dev, unsigned char reset_bit);
-+extern int ezusb_fx2_ihex_firmware_download(struct usb_device *dev,
-+				     const char *firmware_path);
- 
- #endif /* __EZUSB_H */
--- 
-Ondrej Zary
+This is completely independent from the key used for memory encryption.
 
+A device can have up to 8 certificate chains (called "slots" in the
+SPDM spec) and I've implemented it such that all slots are iterated
+and validation is considered to be successful as soon as a slot with
+a valid signature is found.
+
+We can discuss having a per-device keyring if anyone thinks it makes
+sense.
+
+The PCISIG's idea seems to be that each vendor of PCIe cards publishes
+a trusted root certificate and users would then have to keep all those
+vendor certificates in their global keyring.  This follows from the
+last paragraph of PCIe r6.0.1 sec 6.31.3, which says "it is strongly
+recommended that authentication requesters [i.e. the kernel] confirm
+that the information provided in the Subject Alternative Name entry
+[of the device's leaf certificate] is signed by the vendor indicated
+by the Vendor ID."
+
+The astute reader will notice that for this to work, the Vendor ID
+must be included in the trusted root certificate in a machine-readable
+way.  Unfortunately the PCIe Base Spec fails to specify that.
+So I don't know how to associate a trusted root certificate with a
+Vendor ID.
+
+I'll report this and several other gaps I've found in the spec to the
+editor at the PCISIG so that they can be filled in a future revision.
+
+Thanks,
+
+Lukas
