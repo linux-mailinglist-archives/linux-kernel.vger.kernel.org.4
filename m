@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D86967C1FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B0E67C1FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236439AbjAZAvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 19:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
+        id S236250AbjAZAv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 19:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236353AbjAZAvd (ORCPT
+        with ESMTP id S236057AbjAZAv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 19:51:33 -0500
-Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7391FFF14;
-        Wed, 25 Jan 2023 16:51:32 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id 43C6D20153;
-        Thu, 26 Jan 2023 01:51:31 +0100 (CET)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Okn7r1ewCpFJ; Thu, 26 Jan 2023 01:51:31 +0100 (CET)
-Received: from begin (adijon-658-1-86-31.w86-204.abo.wanadoo.fr [86.204.233.31])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 0F8EC20145;
-        Thu, 26 Jan 2023 01:51:31 +0100 (CET)
-Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1pKqUE-00HVSI-2C;
-        Thu, 26 Jan 2023 01:51:30 +0100
-Date:   Thu, 26 Jan 2023 01:51:30 +0100
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     gregkh@linuxfoundation.org, Daniel Vetter <daniel@ffwll.ch>,
-        Helge Deller <deller@gmx.de>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
-Subject: Re: [PATCH] fbcon: Check font dimension limits
-Message-ID: <20230126005130.t4krica4lfv3p6sc@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        gregkh@linuxfoundation.org, Daniel Vetter <daniel@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
-References: <20230126004911.869923511@ens-lyon.org>
- <20230126004921.616264824@ens-lyon.org>
+        Wed, 25 Jan 2023 19:51:57 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDD75EFAC
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:51:56 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id c124so265375ybb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 16:51:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=erqaH/f6aiKK2Y2revDVg8Kw4fhimJKEevbWpDvyDBg=;
+        b=hw634KVELmZovB0koBFlTAd5HhJuv9a7pYcJyRWRKHoGtoQdRC7yF8vjOQ2U0bypmG
+         bxJMDOSqi6YCIMq0O0u7h7DlvsucKb2iKlM/NvE7Dmx0WmnHc7FtctOsvR0ZSG7Pdi/c
+         RIAivTP216iTEOjdE9b7cFfM4NXSuPy059FKCQhl9h+cH8k+Q2vVGluOc8e9Sq0ojcpT
+         3LP64M2kOZduDnYP/DTPERa7qITWr9LoSvGDwwlcByzhMus0GTtyhtr99lMEUJLUgkVM
+         Nvw0hslXpJWDqz1wU+kVDqiaq4XhMZ7lGAb1fmx6jFLYgoaep29ldxo9/UK06Uu6JPcS
+         mLDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=erqaH/f6aiKK2Y2revDVg8Kw4fhimJKEevbWpDvyDBg=;
+        b=QAyxDXyPjei6StZg6qHuIQF4CZQ5SKPHlHsg//CLKvigcCWnZmk2FoDfyyS5j+LTnV
+         n2GjoaroKfpTP9rI9HI7sNxBbm9xoZtkmQXpofPct7cRpE9cbo5fMKGn/FOJuM3yCW4F
+         xqTlRLy8xPbDf0c/LJ9xa/AEbgW6jdF8s/HF4xQV/TcKr0KZEjbAb5MgjPZMV0ieUmu8
+         +/Xug4jX0iIMBAPiQe+apfFauDu1bDnNsZGRDWS3SP16hXVgZ7BN5iyP4DuL/TwL4OKn
+         sp8zCDNVlSb9i/WNB+JwOAFQKcJK8pcgLxkWoY1IoOr+gKHqq+CcqzG9IOPAvEnnULi9
+         BDDQ==
+X-Gm-Message-State: AFqh2krSQ7bmM9fss6K4c9z3epTPGoUuMzpE5OfqtI6RiPYYQfgJmDrw
+        SEYvPkbBpb9TNrLA32MPleZXmMwS9lHC6Va7HAwAnA==
+X-Google-Smtp-Source: AMrXdXuWS62n/voZpqLFx7lY106TWS0DFfvcP0at+KMVcEseFA31+u6DR/UW+7IKRl7uOX0L8iaQWbLpM1VsRjvwvbM=
+X-Received: by 2002:a25:f305:0:b0:7b8:6d00:ef23 with SMTP id
+ c5-20020a25f305000000b007b86d00ef23mr3939970ybs.119.1674694315876; Wed, 25
+ Jan 2023 16:51:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126004921.616264824@ens-lyon.org>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125233554.153109-1-surenb@google.com> <20230125233554.153109-3-surenb@google.com>
+ <20230125162419.13379944d6c0d4253d7bc88c@linux-foundation.org>
+In-Reply-To: <20230125162419.13379944d6c0d4253d7bc88c@linux-foundation.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 25 Jan 2023 16:51:44 -0800
+Message-ID: <CAJuCfpF21a7seLpEcoWbDLDWUznAOdQo9P6LERmi-iyKMgQGXA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/7] mm: introduce vma->vm_flags wrapper functions
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
+        mingo@redhat.com, will@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(FYI, the UB was already a problem before my big-font patch submission,
-the checks I add here are already making sense in previous versions
-anyway)
+On Wed, Jan 25, 2023 at 4:24 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Wed, 25 Jan 2023 15:35:49 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> > vm_flags are among VMA attributes which affect decisions like VMA merging
+> > and splitting. Therefore all vm_flags modifications are performed after
+> > taking exclusive mmap_lock to prevent vm_flags updates racing with such
+> > operations. Introduce modifier functions for vm_flags to be used whenever
+> > flags are updated. This way we can better check and control correct
+> > locking behavior during these updates.
+> >
+> > ...
+> >
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > +static inline void init_vm_flags(struct vm_area_struct *vma,
+> > +static inline void reset_vm_flags(struct vm_area_struct *vma,
+> > +static inline void set_vm_flags(struct vm_area_struct *vma,
+> > +static inline void clear_vm_flags(struct vm_area_struct *vma,
+> > +static inline void mod_vm_flags(struct vm_area_struct *vma,
+>
+> vm_flags_init(), vm_flags_reset(), etc?
+>
+> This would be more idiomatic and I do think the most-significant-first
+> naming style is preferable.
 
-Samuel Thibault, le jeu. 26 janv. 2023 01:49:12 +0100, a ecrit:
-> blit_x and blit_y are uint32_t, so fbcon currently cannot support fonts
-> larger than 32x32.
-> 
-> The 32x32 case also needs shifting an unsigned int, to properly set bit
-> 31, otherwise we get "UBSAN: shift-out-of-bounds in fbcon_set_font",
-> as reported on
-> 
-> http://lore.kernel.org/all/IA1PR07MB98308653E259A6F2CE94A4AFABCE9@IA1PR07MB9830.namprd07.prod.outlook.com
-> Kernel Branch: 6.2.0-rc5-next-20230124
-> Kernel config: https://drive.google.com/file/d/1F-LszDAizEEH0ZX0HcSR06v5q8FPl2Uv/view?usp=sharing
-> Reproducer: https://drive.google.com/file/d/1mP1jcLBY7vWCNM60OMf-ogw-urQRjNrm/view?usp=sharing
-> 
-> Reported-by: Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
-> Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
-> 
-> Index: linux-6.0/drivers/video/fbdev/core/fbcon.c
-> ===================================================================
-> --- linux-6.0.orig/drivers/video/fbdev/core/fbcon.c
-> +++ linux-6.0/drivers/video/fbdev/core/fbcon.c
-> @@ -2489,9 +2489,12 @@ static int fbcon_set_font(struct vc_data
->  	    h > FBCON_SWAP(info->var.rotate, info->var.yres, info->var.xres))
->  		return -EINVAL;
->  
-> +	if (font->width > 32 || font->height > 32)
-> +		return -EINVAL;
-> +
->  	/* Make sure drawing engine can handle the font */
-> -	if (!(info->pixmap.blit_x & (1 << (font->width - 1))) ||
-> -	    !(info->pixmap.blit_y & (1 << (font->height - 1))))
-> +	if (!(info->pixmap.blit_x & (1U << (font->width - 1))) ||
-> +	    !(info->pixmap.blit_y & (1U << (font->height - 1))))
->  		return -EINVAL;
->  
->  	/* Make sure driver can handle the font length */
-> 
-> 
+Thanks for the suggestion! I will rename them in the next version.
+
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>
