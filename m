@@ -2,79 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C1567CC48
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:34:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC01167CC57
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237070AbjAZNeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:34:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
+        id S236903AbjAZNge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:36:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235298AbjAZNeX (ORCPT
+        with ESMTP id S235465AbjAZNga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:34:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF49B2719
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:34:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AF4D617D6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 13:34:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE09C433D2;
-        Thu, 26 Jan 2023 13:34:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674740061;
-        bh=to53vRo2E8+ZQwfM2dAtJdAuNh/BZOwCkTPbJBBxk1k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PbiydQE7PhGniIW4YlGyCqYEdUPSvHGpYDQNqRRKOOFN9Nu0JgHMHLPO3MVvXyNvC
-         iLZgSCatCaMRIbA4uBuvpuo3sXwQxxNtHkPG5m6XNVmFk/HbHmcODUuQrPqWejdJ2W
-         LOv6gCsKbtBnnDk0WAOAq6Dq5Qu4ID3WcMjxIiJQJBDeOljAYzmorxiLeEzqmt2Ig6
-         aGec/EgJznklvoKAwsuyIFcShg81qx0XKZGqVkWjtnOMwzKJaemOkRRTd38ymFsebW
-         NiTJUrX22V/RjUhgz8hkMhfL0mBW2zsWxN2fpFr4MfLfXZVKTpOXiXeDyA6/PLvGuH
-         EHLShs/Y5pEkg==
-Date:   Thu, 26 Jan 2023 13:34:16 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 1/2] mfd: Make .disable() callback return void
-Message-ID: <Y9KBWKNJQo0yCw2I@google.com>
-References: <20230113182427.257484-1-u.kleine-koenig@pengutronix.de>
- <20230113182427.257484-2-u.kleine-koenig@pengutronix.de>
+        Thu, 26 Jan 2023 08:36:30 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9251739;
+        Thu, 26 Jan 2023 05:36:29 -0800 (PST)
+Received: from fedcomp.intra.ispras.ru (unknown [46.242.14.200])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 503B740D403D;
+        Thu, 26 Jan 2023 13:36:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 503B740D403D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1674740185;
+        bh=0b43UeQLqG/CbFnOsMwNF1eMzXNA9GcQsvNOir8rjrQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hXpJvfU9DuJrhnOG9b4M9+BSbCzhZMXVr4Lt4Dp+DURGkHi6SOSPFWLz+LSQLuqw9
+         66kKeuiPs8pM1zVpTDNtulWfDorF1E07OGIoAGXfgSzMflxgidrQ+gEuiP2mdAaUfb
+         lYFRmExq3nKQqx+gN5pmr38Nj7omkcjUwFuG2XUk=
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
+        Archie Pusaka <apusaka@chromium.org>,
+        Abhishek Pandit-Subedi <abhishekpandit@google.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: [PATCH 6.1 0/1] Bluetooth: hci_sync: cancel cmd_timer if hci_open failed
+Date:   Thu, 26 Jan 2023 16:36:12 +0300
+Message-Id: <20230126133613.815127-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230113182427.257484-2-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 Jan 2023, Uwe Kleine-König wrote:
+Syzkaller reports use-after-free in hci_cmd_timeout(). The bug was fixed
+in the following patch and can be cleanly applied to 6.1 stable tree.
 
-> All implementations return 0 unconditionally, so change the prototype to
-> return void. This allows to get rid of error handling in callers that
-> isn't actually used.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/mfd/asic3.c      | 17 +++++++++--------
->  drivers/mfd/htc-pasic3.c |  3 +--
->  drivers/mfd/mfd-core.c   |  4 +++-
->  drivers/mfd/t7l66xb.c    |  4 +---
->  drivers/mfd/tc6387xb.c   |  4 +---
->  drivers/mfd/tc6393xb.c   | 16 ++++++++++------
->  include/linux/mfd/core.h |  2 +-
->  7 files changed, 26 insertions(+), 24 deletions(-)
-
-Doesn't apply to the MFD tree.
-
-Please rebase and I'll merge it.
-
--- 
-Lee Jones [李琼斯]
+Due to some technical rearrangement, the fix for older stable branches
+requires a different patch which I'll send you in another thread.
