@@ -2,123 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3685A67C425
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 06:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED36767C435
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 06:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjAZFE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 00:04:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S235065AbjAZFRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 00:17:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235786AbjAZFEx (ORCPT
+        with ESMTP id S229898AbjAZFRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 00:04:53 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F17D25E37
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 21:04:52 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id b1so725955ybn.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 21:04:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DiMArbdV/T0/c00vu6b8fiK7TVndbh70egFu73S7mgY=;
-        b=j/LKANNaDiV/aVUigkiPOcRVnzC0NEKIE5OVSqZFXO5PQmA8IB4O6ybyFs7K9nHv5e
-         laSl/lOwAbh+AdgJ1eP2IphhzkEB7ecxZcjDktRE3b7n6EfL5C19sLZ43AqeRBfb0KtA
-         R6bpp2jKN9ETwo60eIyTxSUyaKK5Do9xQQjYLkEb5WyGf3LUpoxQ5pBOAkUzfJdMuySn
-         /86Tg01i6EE+kVVaHoYAzQ0fo3EJsMxn11gTJmXMNVyZ5V6Yfmz133yEbMijwhoIplf+
-         2aV4ifCQegjZ71ujLZnnBTPJJUNRx3qFktIIvJIE/PK6s26dYj4szNUqSVjykNzyKJOV
-         26mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DiMArbdV/T0/c00vu6b8fiK7TVndbh70egFu73S7mgY=;
-        b=mNyZyOzPjiOsrHXxXJxj+P0L0QCISTaVtRVtfDKGjR7yrfAZX2hKufUF3Yj0WBK0Gv
-         Y5n7ZnzNR0emxVxZ/NyOF3A8DIMeTW4CrDKvParcfbJ6XLzdm1aw1+b00Gdp+XIQYAdI
-         vVzyjw/SiHTaJQ8bTKZJdzouxw9yU4Oru5EsP2y3RPVkt226soBwsEAdX27Ad6AIZNMR
-         AscS6ZCBJQEy6G/2DKmboFLfh56P3VJsJFpqy2R92jbaP+zepswX6DsTBjnmnz0CyFhw
-         W0GSkatddKx4FJb+tj9EygkkIOqRMDtV++1Pc0+drGIZWjDmz8dhN1ncVSmxjRcALmPb
-         KrEg==
-X-Gm-Message-State: AFqh2koe4Bp8228OXKMrvbHGeSJAelMFUNjuGgSGgLd9VhRdxf6TECH1
-        HEhua6l5z6alwbt8suAev97c55DpveB717Cb6p38
-X-Google-Smtp-Source: AMrXdXvqx4UwR/r3vyZL8yNah3Pa9DYRDPjFsXDYhXUxO9RFX6K9KBd57NKlJxTw0JZEjJN84sol+jsPKtLhpA9OJvo=
-X-Received: by 2002:a5b:84d:0:b0:7ba:e354:5aaf with SMTP id
- v13-20020a5b084d000000b007bae3545aafmr4010311ybq.37.1674709491637; Wed, 25
- Jan 2023 21:04:51 -0800 (PST)
+        Thu, 26 Jan 2023 00:17:20 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501A339B94
+        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 21:17:17 -0800 (PST)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230126051714epoutp024ee8b2d0fd23b9808f57ee7d7609ac60~9xBXe0wpx1433914339epoutp02I
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:17:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230126051714epoutp024ee8b2d0fd23b9808f57ee7d7609ac60~9xBXe0wpx1433914339epoutp02I
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1674710234;
+        bh=tf47z4WkEzIq8ucn2BQHkI5enJGJBrM1Pg/KrVuZF8E=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=bPEwFNVXjY7q5lqGrIPoMm2CArZ0LcZlrfPXDdZpBrTiElGLiVqHLaDKKBE4PP+YB
+         v+clWVnNAWVglDaFYMgkD0XMTyg7WdB0ixz160G9dBzT7YR8uWA8fTDAztTz3CZsXa
+         DD5WOgiGGO0pRoQlY56G6hCAEIypAcpm9f5MVNpc=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20230126051714epcas1p39001e95eed4de08843e9c2e357600e8f~9xBXCg4Tu2675926759epcas1p3f;
+        Thu, 26 Jan 2023 05:17:14 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.36.225]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4P2TV15jWqz4x9QC; Thu, 26 Jan
+        2023 05:17:13 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C7.22.37890.9DC02D36; Thu, 26 Jan 2023 14:17:13 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230126051713epcas1p10a9005ad21887893a486100cbbd376e5~9xBWBHD_Z3046130461epcas1p1Z;
+        Thu, 26 Jan 2023 05:17:13 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230126051713epsmtrp29ef211aaf6049ac09c8c004a60e32bed~9xBV-ff9B0640206402epsmtrp2B;
+        Thu, 26 Jan 2023 05:17:12 +0000 (GMT)
+X-AuditID: b6c32a38-5fbfa70000029402-cd-63d20cd9145c
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E0.49.05839.8DC02D36; Thu, 26 Jan 2023 14:17:12 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.88.98.193]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230126051712epsmtip11db06bc5c3a7856d664ffbc5c3c40efa~9xBVsnohH1081310813epsmtip1C;
+        Thu, 26 Jan 2023 05:17:12 +0000 (GMT)
+From:   Huijin Park <huijin.park@samsung.com>
+To:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>
+Cc:     Ming Lei <ming.lei@canonical.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huijin.park@samsung.com,
+        bbanghj.park@gmail.com
+Subject: [PATCH] loop: change fsync to fdatasync when update dio
+Date:   Thu, 26 Jan 2023 14:16:57 +0900
+Message-Id: <20230126051657.163497-1-huijin.park@samsung.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CABdmKX3HFuaE0qwcADk-KLtVUdao-uhH-1zn4gv7ezq+bZE94w@mail.gmail.com>
- <20230117082508.8953-1-jaewon31.kim@samsung.com> <20230117083103epcms1p63382eee1cce1077248a4b634681b0aca@epcms1p6>
- <CANDhNCpKY5Af059ok8ZcgJ=wt7NaorZxqQXaTS848CwY0LNFiw@mail.gmail.com>
- <20230125095646epcms1p2a97e403a9589ee1b74a3e7ac7d573f9b@epcms1p2>
- <20230125101957epcms1p2d06d65a9147e16f3281b13c085e5a74c@epcms1p2>
- <CGME20230117082521epcas1p22a709521a9e6d2346d06ac220786560d@epcms1p3>
- <CANDhNCoAKtHmxFomdGfTfXy8ZvFMfMRj4jZ+b8wMMD+5AmAB0g@mail.gmail.com> <20230126044218epcms1p35474178c2f2b18524f35c7d9799e3aed@epcms1p3>
-In-Reply-To: <20230126044218epcms1p35474178c2f2b18524f35c7d9799e3aed@epcms1p3>
-From:   John Stultz <jstultz@google.com>
-Date:   Wed, 25 Jan 2023 21:04:39 -0800
-Message-ID: <CANDhNCo1JRmfouBn985GZLmPY-xLn9JKNJfubY0PAUrCpY8K4g@mail.gmail.com>
-Subject: Re: (2) [PATCH] dma-buf: system_heap: avoid reclaim for order 4
-To:     jaewon31.kim@samsung.com
-Cc:     "T.J. Mercier" <tjmercier@google.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFJsWRmVeSWpSXmKPExsWy7bCmru5NnkvJBkd7tS1W3+1ns3i59xCz
+        xcrVR5ksOi66WDy9OovJYu8tbYvLu+awWex6+J3dgcNjVkMvm8fOWXfZPS6fLfXYfbOBzaO3
+        +R2bR9+WVYwenzfJBbBHNTDaJBYlZ2SWpSqk5iXnp2TmpdsqhYa46VooKWTkF5fYKkUbGhrp
+        GRqY6xkZGemZGsVaGZkqKeQl5qbaKlXoQvUqKRQlFwDV5lYWAw3ISdWDiusVp+alOGTll4L8
+        oVecmFtcmpeul5yfq6RQlphTCjRCST/hG2PGxPXt7AX7WSvWH2tlamDcx9LFyMkhIWAi0X73
+        BWMXIxeHkMAORokdu68zQzifGCV2/zvPCFIlJPCNUeLlogSYjp5919ggivYySizfdYgFruPI
+        uwVsIFVsAtoS19duBesWEUiXOPhnPdgOZoGpjBILZ+4HKxIWcJDY8PA5K4jNIqAq8f7xZ7Cj
+        eAVsJbY2zmWEWCcvMfPSd3aIuKDEyZlPwGqYgeLNW2czQ9TcY5fo+5fUxcgBZLtIrL+QCxEW
+        lnh1fAs7hC0l8fndXjYIO11iw+SjUP8XSKyYuwYqbizx7u1aZpAxzAKaEut36UOEFSV2/oa5
+        RlDi9LVuZogL+CTefe1hhdjKK9HRJgRRoiqx+OpHVghbWuLQg7tQrR4SLU//s4OUCwnESjT8
+        FZ3AqDALyVuzkLw1C+GGBYzMqxjFUguKc9NTiw0LTJBjeBMjONlqWexgnPv2g94hRiYOxkOM
+        EhzMSiK8PbPPJwvxpiRWVqUW5ccXleakFh9iTAYG9ERmKdHkfGC6zyuJNzQzs7SwNDIxNDYz
+        NCQsbGJpYGJmZGJhbGlspiTOK257MllIID2xJDU7NbUgtQhmCxMHp1QD0wwmnsvbD06wqsq6
+        wlf4Ncg3u2K6UNf2R+dj4p0S9Z0tGeckzq7bacuvfpBBdk1o9YkjFz6Jat/vypmhcLLHpa5c
+        O4J/L9PBtsxL6h73Jk8V3ReXlCWf0rI6+Vkx/6cie+XCRQ+jDjEenhrxs8vWK/hgzF7uTwcF
+        P599257E6fW66fv+I5fSvmdkGy9r80iczHLv/j6R9rjFb87Ir3oXkrr29+6jXZf2T8hrk+n/
+        WrHV/4DQxkCdvBS3I7MuHfz3Szjrb6byN/dfO/YXmS3JXhJhx5x36Pjqd367mnvf2Efu5lyi
+        a1Of72HWtSUyI9Lgxf7Olqx/DmetmJb0vv0puUj+1TedBKEN1s1LytcwKbEUZyQaajEXFScC
+        AG5zCyhtBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNLMWRmVeSWpSXmKPExsWy7bCSnO4NnkvJBhvbjS1W3+1ns3i59xCz
+        xcrVR5ksOi66WDy9OovJYu8tbYvLu+awWex6+J3dgcNjVkMvm8fOWXfZPS6fLfXYfbOBzaO3
+        +R2bR9+WVYwenzfJBbBHcdmkpOZklqUW6dslcGVMXN/OXrCftWL9sVamBsZ9LF2MnBwSAiYS
+        PfuusXUxcnEICexmlDj46x5UQlri3c7rrF2MHEC2sMThw8UQNR8YJXqPrAGrYRPQlri+disj
+        iC0ikCnRtfcgI0gRs8BMRon3E7+wgiSEBRwkNjx8DmazCKhKvH/8GayZV8BWYmvjXEaIZfIS
+        My99Z4eIC0qcnPkErIYZKN68dTbzBEa+WUhSs5CkFjAyrWKUTC0ozk3PLTYsMMxLLdcrTswt
+        Ls1L10vOz93ECA5fLc0djNtXfdA7xMjEwXiIUYKDWUmEt2f2+WQh3pTEyqrUovz4otKc1OJD
+        jNIcLErivBe6TsYLCaQnlqRmp6YWpBbBZJk4OKUamA5XyuziKdjxqzRyabjVsjf1D3+tK1cW
+        s/r/XOWBwC8rb2utY/yMr16yy0d2tBqrTJpgtEFD8+YVmV2P5h4QXlTe/Udn8dvqs0/2Bxon
+        LHmjN6Nw7vaFzBFb33W5re1taXzey75rv1OkccTla3qTMrKUFu7lagvXyIs8X3hiwTvmK+yf
+        OR7UXI91+GLsvHCJHeP+FQ9frJjj3qimfWzSoX895Zs0HFkuxGYfOBZ348ALo+urucWm1Sye
+        38h34JVZxuRuTsP01bdKFKRiku5LSOguWmjWcZ775uuDc3I+F6dPDNzLbdeo+2RSdZeJ/s68
+        aI6tt3632O494rEoxI0tJ+r0X139uPfJ37xTZJmjK5VYijMSDbWYi4oTAenrUo/OAgAA
+X-CMS-MailID: 20230126051713epcas1p10a9005ad21887893a486100cbbd376e5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-ArchiveUser: EV
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230126051713epcas1p10a9005ad21887893a486100cbbd376e5
+References: <CGME20230126051713epcas1p10a9005ad21887893a486100cbbd376e5@epcas1p1.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 8:42 PM =EA=B9=80=EC=9E=AC=EC=9B=90 <jaewon31.kim@s=
-amsung.com> wrote:
-> > On Wed, Jan 25, 2023 at 2:20 AM Jaewon Kim <jaewon31.kim@samsung.com> w=
-rote:
-> > > > > On Tue, Jan 17, 2023 at 10:54 PM John Stultz <jstultz@google.com>=
- wrote:
-> > But because your change is different from what the old ion code did, I
-> > want to be a little cautious. So it would be nice to see some
-> > evaluation of not just the benefits the patch provides you but also of
-> > what negative impact it might have.  And so far you haven't provided
-> > any details there.
-> >
-> > A quick example might be for the use case where mid-order allocations
-> > are causing you trouble, you could see how the performance changes if
-> > you force all mid-order allocations to be single page allocations (so
-> > orders[] =3D {8, 0, 0};) and compare it with the current code when
-> > there's no memory pressure (right after reboot when pages haven't been
-> > fragmented) so the mid-order allocations will succeed.  That will let
-> > us know the potential downside if we have brief / transient pressure
-> > at allocation time that forces small pages.
-> >
-> > Does that make sense?
->
-> Let me try this. It make take some days. But I guess it depends on memory
-> status as you said. If there were quite many order 4 pages, then 8 4 0
-> should be faster than 8 0 0.
->
-> I don't know this is a right approach. In my opinion, except the specific
-> cases like right after reboot, there are not many order 4 pages. And
-> in determinisitic allocation time perspective, I think avoiding too long
-> allocations is more important than making faster with already existing
-> free order 4 pages.
+In general, fsync has a larger overhead than fdatasync. And since the
+dio option is for data, it seems like fdatasync is enough.
+So this patch changes it to fdatasync which has little load relatively.
 
-I suspect you are right, and do think your change will be helpful.
-But I just want to make sure we're doing some due diligence, instead
-of going on just gut instinct.
+Signed-off-by: Huijin Park <huijin.park@samsung.com>
 
-Thanks so much for helping with this!
--john
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index 1518a6423279..6c7ce8be8c0c 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -203,7 +203,7 @@ static void __loop_update_dio(struct loop_device *lo, bool dio)
+ 		return;
+ 
+ 	/* flush dirty pages before changing direct IO */
+-	vfs_fsync(file, 0);
++	vfs_fsync(file, 1);
+ 
+ 	/*
+ 	 * The flag of LO_FLAGS_DIRECT_IO is handled similarly with
+-- 
+2.17.1
+
