@@ -2,127 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4DF67D326
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D303167D329
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 18:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjAZR2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 12:28:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
+        id S231836AbjAZR2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 12:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbjAZR2B (ORCPT
+        with ESMTP id S232132AbjAZR2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 12:28:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C08569B0A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:27:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C70CB81EC3;
-        Thu, 26 Jan 2023 17:27:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1273EC433D2;
-        Thu, 26 Jan 2023 17:27:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674754047;
-        bh=C9DPduSJN49w2aJL07oo9HEwA59sZ5h+51ZoAP6pWmk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=mlhONz+YVANknW+/iMcnirDtC6dO3xyzjm3nJYRzU0F6DqW7fAAdspeFnq5ApVpqU
-         Yq2FkJiO4Rua69tMlM7obKQe1TS/ks3E1MaxZDd3l887LTVFRbJ8rvRK50yA8rX+G5
-         2Zny67+NCrk54BZJVc9bzvkN1FLByAarCaE7ApKq663ecrkaK1jtFWgydyrP/dPKX4
-         WTnrYtu9O1KzwNfR52+J6AB18LXI7tjZLwpmcaKY9uLDYoSF8mrhXSFOSjs2Qux2us
-         Oz6TWX6/34uOAePk5LKHlLRPBoNFLhLl7wq+bmJrY1iACaf2t9Tjc26kiTWvRO6NB5
-         xlmU8DNaGJQyQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B2AE15C0510; Thu, 26 Jan 2023 09:27:26 -0800 (PST)
-Date:   Thu, 26 Jan 2023 09:27:26 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, mingo@redhat.com, will@kernel.org,
-        luto@kernel.org, songliubraving@fb.com, peterx@redhat.com,
-        david@redhat.com, dhowells@redhat.com, hughd@google.com,
-        bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com, elver@go
-Subject: Re: [PATCH v3 1/7] kernel/fork: convert vma assignment to a memcpy
-Message-ID: <20230126172726.GA682281@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230125233554.153109-1-surenb@google.com>
- <20230125233554.153109-2-surenb@google.com>
- <20230125162159.a66e5ef05fecb405e85ffec9@linux-foundation.org>
- <CAJuCfpG5HyMP3RM1jTJxCnN4WUz4APAcxbkOT48ZtJDXcb3z3w@mail.gmail.com>
- <20230125173449.5472cffc989dfab4b83c491d@linux-foundation.org>
+        Thu, 26 Jan 2023 12:28:34 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62929728DF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:28:24 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id e10so1506276pgc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 09:28:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u2zLYdjH49JUqfTyi6IT1khQZ+jZFRsuFDpPpb1hjEk=;
+        b=jjC25OrEoCAJRLe9vY8i8hySXJ3NFIKBU9J5m3U69F/Ld37sFTxdlPMQXVniSq0wH/
+         ex+CfOXpbjuVrmfQQj+tFryvzXQR62NQXM/niThnl+JFyN1nljJSKsAnA+XNwKbqCK4y
+         pb8FMhFne71Fifdrvi1nhZQen39JR7QZLLjyR/ZsfPxHl92o13E30Mr77twbhcdTuVNN
+         K1KKMCPFkFJNHzHxPzR6HDHCtqTzg9OzSaHCnQ44BXlfuFcTMgiGayd8KqpgastHJ5yv
+         50TkFb8SKY/VGHWE6Soakfx15WmjyRF4zH2BfRXNGSplQwFIw0OaKi5oRGxCCMpZdlUz
+         PxwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u2zLYdjH49JUqfTyi6IT1khQZ+jZFRsuFDpPpb1hjEk=;
+        b=MLRhcQq9dxGVQWWuwDDp1sP9MF0dnfILtFQOkXrLllWh5bsI2S98YXBqJ+TIM2EJru
+         ObjxxwgOTKLbWTVsN5L3kpgMp8yCfOjpPhr1ysPKT8tVMov/OjOEsa3TcvH4JrYukB2l
+         L2IruDEQBI0xefX+8lVPrySiUeboihN9fxRxAwlNhJ2FnhPOoIq4zB7GIe+ij13CIqWc
+         akihVE5m1ihirsV0MmQol5SESBYtZPJKMjr9W1qjghpmlPEbe+3WjiviMYsYKpxQhFl4
+         VatqhffXPMkuMcLAvm3xCC6qG8KN+6LR+aTvE+UmVAMNOBXHNOPnq/iudJgenncVm1j/
+         WiZg==
+X-Gm-Message-State: AO0yUKX1BKz2M9zdW4mYB/7z0wRVoqhX8BF9WiwAFjckWUqC7U/H6yQ6
+        JxNF2t5320aSYFZkVO2NyIkLNA==
+X-Google-Smtp-Source: AK7set8Gd77u0bqjUhh8HbLJ0f4hnKKuY9nyuED+kZOSnseRrxpk5yOKkwKURk2LjJmIhlJ6tDyDPg==
+X-Received: by 2002:a05:6a00:b55:b0:576:9252:d06 with SMTP id p21-20020a056a000b5500b0057692520d06mr1435001pfo.0.1674754103575;
+        Thu, 26 Jan 2023 09:28:23 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n15-20020a62e50f000000b0058d90bc57basm1123103pff.90.2023.01.26.09.28.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 09:28:22 -0800 (PST)
+Date:   Thu, 26 Jan 2023 17:28:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "dmatlack@google.com" <dmatlack@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
+Message-ID: <Y9K4Mnx/Je4j+RsD@google.com>
+References: <Y8ljwsrrBBdh1aYw@google.com>
+ <02b0e551647beed9ec3a2fefd3b659eb52c4846c.camel@intel.com>
+ <Y8m34OEVBfL7Q4Ns@google.com>
+ <1c71eda35e03372f29162c6a5286f5b4d1e1d7e1.camel@intel.com>
+ <Y8ndcGHUHQjHfbF9@google.com>
+ <CALzav=d4vwHTnXP8wetA_Hqd3Tzc_NLp=3M-akwNSN1-ToL+Eg@mail.gmail.com>
+ <Y8st2PjGDQ+Q0LlW@google.com>
+ <3951e178bc38191074f5cccadc442212ff15c737.camel@intel.com>
+ <Y87GzHrx8vxZLBEJ@google.com>
+ <e5912f7d04ce7a27a68ce4328fc50ce594295c6c.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125173449.5472cffc989dfab4b83c491d@linux-foundation.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e5912f7d04ce7a27a68ce4328fc50ce594295c6c.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 05:34:49PM -0800, Andrew Morton wrote:
-> On Wed, 25 Jan 2023 16:50:01 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+On Thu, Jan 26, 2023, Huang, Kai wrote:
+> On Mon, 2023-01-23 at 17:41 +0000, Sean Christopherson wrote:
+> > I think there's an opportunity and motivation to improve the TDP MMU as a whole on
+> > this front though.  Rather than recursively zap children in handle_removed_pt(),
+> > we can use the RCU callback to queue the page table for removal.  Setting the parent
+> > (target page table) !PRESENT and flushing the TLBs ensures that all children are
+> > unreachable, i.e. KVM doesn't need to immediately set children !PRESENT.  Unlike
+> > the shadow MMU, which maintains a hash table of shadow pages, once a parent page
+> > table is removed from the TDP MMU, its children are unreachabled.
 > 
-> > On Wed, Jan 25, 2023 at 4:22 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > >
-> > > On Wed, 25 Jan 2023 15:35:48 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
-> > >
-> > > > Convert vma assignment in vm_area_dup() to a memcpy() to prevent compiler
-> > > > errors when we add a const modifier to vma->vm_flags.
-> > > >
-> > > > ...
-> > > >
-> > > > --- a/kernel/fork.c
-> > > > +++ b/kernel/fork.c
-> > > > @@ -482,7 +482,7 @@ struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
-> > > >                * orig->shared.rb may be modified concurrently, but the clone
-> > > >                * will be reinitialized.
-> > > >                */
-> > > > -             *new = data_race(*orig);
-> > > > +             memcpy(new, orig, sizeof(*new));
-> > >
-> > > The data_race() removal is unchangelogged?
-> > 
-> > True. I'll add a note in the changelog about that. Ideally I would
-> > like to preserve it but I could not find a way to do that.
+> Do you mean something like (pseudo):
 > 
-> Perhaps Paul can comment?
+> 	rcu_callback(&removed_sp->rcu_head, handle_removed_pt);
+
+Yep.
+
+> > The RCU callback must run in near-constant time, but that's easy to solve as we
+> > already have a workqueue for zapping page tables, i.e. the RCU callback can simply
+> > add the target page to the zap workqueue.  That would also allow for a (very minor)
+> > simplification of other TDP MMU code: tdp_mmu_zap_root() wouldn't needed to zap in
+> > two passes since zapping children of the top-level SPTEs would be deferred to the
+> > workqueue.
 > 
-> I wonder if KCSAN knows how to detect this race, given that it's now in
-> a memcpy.  I assume so.
+> Do you mean zapping the entire page table (from root) doesn't need to be in RCU
+> read-critical section, but can/should be done after grace period?  I think this
+> makes sense since zapping entire root must happen when root is already invalid,
+> which cannot be used anymore when the new faults come in?
 
-I ran an experiment memcpy()ing between a static array and an onstack
-array, and KCSAN did not complain.  But maybe I was setting it up wrong.
+Yes, minus the "from root" restriction.  When a page table (call it "branch" to
+continue the analogy) PTE has been zapped/blocked ("pruned"), KVM just needs to
+wait for all potential readers to go away.  That guarantee is provided by RCU;
+software walkers, i.e. KVM itself, are required to hold RCU, and hardware walkers,
+i.e. vCPUs running in the guest, are protected by proxy as the zapper ("arborist"?)
+is required to hold RCU until all running vCPUs have been kicked.
 
-This is what I did:
+In other words, once the PTE is zapped/blocked (branch is pruned), it's completely
+removed from the paging tree and no other tasks can access the branch (page table
+and its children).  I.e. the only remaining reference to the branch is the pointer
+handed to the RCU callback.  That means the RCU callback has exclusive access to the
+branch, i.e. can operate as if it were holding mmu_lock for write.  Furthermore, the
+RCU callback also doesn't need to flush TLBs because that was again done when
+pruning the branch.
 
-	long myid = (long)arg; /* different value for each task */
-	static unsigned long z1[10] = { 0 };
-	unsigned long z2[10];
+It's the same idea that KVM already uses for root SPs, the only difference is how
+KVM determines that there is exactly one entity that holds a reference to the SP.
 
-	...
+> > Back to TDX, to play nice with the restriction that parents are removed only after
+> > children are removed, I believe KVM can use TDH.MEM.RANGE.BLOCK to make the parent
+> > !PRESENT.  That will effectively prune the S-EPT entry and all its children, and
+> > the RCU callback will again ensure all in-flight SEAMCALLs for the children complete
+> > before KVM actually tries to zap the children.
+> 
+> Reading the spec, it seems TDH.MEM.RANGE.BLOCK only sets the Secure EPT entry
+> which points to the entire range as "blocked", but won't go down until leaf to
+> mark all EPT entries as "blocked", which makes sense anyway.
+> 
+> But it seems TDH.MEM.PAGE.REMOVE and TDH.MEM.SEPT.REMOVE both only checks
+> whether that target EPT entry is "blocked", but doesn't check whether any parent
+> has been marked as "blocked".  Not sure whether this will be a problem.  But
+> anyway if this is a problem, we perhaps can get TDX module to fix.
 
-	memcpy(z1, z2, ARRAY_SIZE(z1) * sizeof(z1[0]));
-	for (zi = 0; zi < ARRAY_SIZE(z1); zi++)
-		z2[zi] += myid;
-	memcpy(z2, z1, ARRAY_SIZE(z1) * sizeof(z1[0]));
+Oh, I didn't mean to suggest KVM skip TDH.MEM.RANGE.BLOCK for children, I simply
+forgot that all S-EPT entries need to be blocked before they can be removed.
 
-Adding Marco on CC for his thoughts.
+> > And if we rework zapping page tables, I suspect we can also address David's concern
+> > (and my not-yet-voiced concern) about polluting the TDP MMU code with logic that is
+> > necessary only for S-EPT (freezing SPTEs before populating them).  Rather than update
+> > S-EPT _after_ the TDP MMU SPTE, do the S-EPT update first, i.e. invoke the KVM TDX
+> > hook before try_cmpxchg64() (or maybe instead of?).  That way KVM TDX can freeze the
+> > to-be-installed SPTE without common TDP MMU needing to be aware of the change.
+> 
+> I don't quite understand how putting SEAMCALL before the try_cmpxchg64() can
+> work.  Let's say one thread is populating a mapping and another is zapping it. 
+> The populating thread makes SEAMCALL successfully but then try_cmpxchg64()
+> fails, in this case how to proceed?
 
-						Thanx, Paul
+Ah, sorry, that was unclear.  By "invoke the KVM TDX hook" I didn't mean "do the
+SEAMCALL", I meant KVM TDX could do its own manipulation of the KVM-managed SPTEs
+before the common/standard flow.  E.g. something like:
+
+	if (kvm_x86_ops.set_private_spte && private)
+		r = static_call(kvm_x86_set_private_spte(...)
+	else
+		r = try_cmpxchg64(...) ? 0 : -EBUSY;
+
+so that the common code doesn't need to do, or even be aware of, the freezing.
+Then I think we just need another hook in handle_removed_pt(), or maybe in what
+is currently __kvm_tdp_mmu_write_spte()?
+
+I.e. fully replace the "write" operations in the TDP MMU instead of trying to
+smush S-EPT's requirements into the common path.
