@@ -2,164 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8C267C3A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 04:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B0667C39D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 04:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236538AbjAZDeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 22:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
+        id S236472AbjAZDe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 22:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbjAZDei (ORCPT
+        with ESMTP id S236376AbjAZDeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 22:34:38 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726D256EFE;
-        Wed, 25 Jan 2023 19:34:22 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id CBD635C0153;
-        Wed, 25 Jan 2023 22:34:21 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 25 Jan 2023 22:34:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1674704061; x=1674790461; bh=V4qU6xBczXYBxuAJBBtWt5596TfV6Bd4Dyk
-        +YpmwRl4=; b=CuRQlVlIShgx+Q3OebmHVhmoUi/3WbvG8C7kvnQPwXe1QU0tnFD
-        XmXhEOq6gJBc6ipUhy7jKIip+gM3ffn5Znohlz62xTB8F1yHGTtB13fNiydmxq8e
-        2NjBisXqiKFl0vK9uPtshH9lj1xhj6MDUbOxxBL4KbfXVOMP7KwQ4DrSGSnoqz5v
-        d6dv73iHBERop8YVJX5LqtEdHvUdr0xm4S09J7FjPLp5bR7H52os2QZqiFTm67i9
-        WSyDDhKmA7AG5cp7E0sqeAwVvYFz7eBL5YnZTmc2OuyQSug0g4Q6R7UsbbvzwEBp
-        VBXdD9UALLDVFotjfYSfUvP34A7I/PNUiFw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1674704061; x=1674790461; bh=V4qU6xBczXYBx
-        uAJBBtWt5596TfV6Bd4Dyk+YpmwRl4=; b=G9bxwKaZXTcN/J3Y2b7exagftg8il
-        c5jEtm6ch7lOIR5yCje41RguRYT6IRbn7gpcD3VHhIl+gCjLBkRtp4h/UAu98A0e
-        7H98igegXsNN79gnXc7QzoSxLZLguaUyAYegjyRxUITnysoDIeVqdrWD/iyE9DUJ
-        01Hj38zqEP6unZz26qbaMVQ0cu7ymak7KVLI3QeEssr7vVUZp21eJAhutlVu6KV/
-        KL9QJ9/r/Mba6IKukxPiuLInp9TnFA58SK240NHNIxaXY2vb4wxe4pklBQI9NGVt
-        5avPzNEuaIKk0yRBDDkmAc1gSsTYrCTxsk0OSevDGJ1k8LPKZX83qcDtw==
-X-ME-Sender: <xms:vfTRYxA6-Mngv9kVvNeKYFelujd9X3hxqrxnsQQgQoRXnx4akNDqMA>
-    <xme:vfTRY_g0kbEZ2GK9NWaXaIW2jukfJa_e8DoKuK0Qs1K8To3jRJqmKJfnAJm8He6OV
-    OClK6S6edNa1b0>
-X-ME-Received: <xmr:vfTRY8m1auzzdb8jSU39w5zp7FT0b4qePSogOj96JXeuvMIR8ldPIDUslbahgUZ95JUqh_QZYJQn>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedgheekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepjeffjefggfeugeduvedvjeekgfeh
-    gffhhfffjeetkeelueefffetfffhtdduheetnecuvehluhhsthgvrhfuihiivgepudenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:vfTRY7xo8bC9Gr4gUIjDd84JXD5A1aGSZY1WcD3a0S1k6pWQFfviyg>
-    <xmx:vfTRY2REdgxnXQkrWOt5bdeY1R2H8D3OLGT6Jgnwvyz-LF6f9vLeNg>
-    <xmx:vfTRY-aS49RRI1jZpvQNiqfXM3wRVucZ3oNnZ3i3OTk5w4kJRrQnCg>
-    <xmx:vfTRYzI9BQbkoretVj3UW_QFpClo_dTyXivnEBXZLbRkgvC5qIZA_A>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Jan 2023 22:34:21 -0500 (EST)
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
-        Juergen Gross <jgross@suse.com>
-Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, xen-devel@lists.xenproject.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 7/7] xen/blkback: Inform userspace that device has been opened
-Date:   Wed, 25 Jan 2023 22:33:58 -0500
-Message-Id: <20230126033358.1880-7-demi@invisiblethingslab.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230126033358.1880-1-demi@invisiblethingslab.com>
-References: <20230126033358.1880-1-demi@invisiblethingslab.com>
+        Wed, 25 Jan 2023 22:34:18 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273B95DC0E;
+        Wed, 25 Jan 2023 19:34:14 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pKt1f-0004Ez-2G;
+        Thu, 26 Jan 2023 04:34:11 +0100
+Date:   Thu, 26 Jan 2023 03:34:05 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Miles Chen <miles.chen@mediatek.com>
+Subject: [PATCH v5 2/3] dt-bindings: clock: mediatek: add mt7981 clock IDs
+Message-ID: <e353d32b5a4481766519a037afe1ed44e31ece1a.1674703830.git.daniel@makrotopia.org>
+References: <cover.1674703830.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1674703830.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows userspace to use block devices with delete-on-close
-behavior, which is necessary to ensure virtual devices (such as loop or
-device-mapper devices) are cleaned up automatically.  Protocol details
-are included in comments.
+Add MT7981 clock dt-bindings, include topckgen, apmixedsys,
+infracfg, and ethernet subsystem clocks.
 
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- drivers/block/xen-blkback/xenbus.c | 34 ++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ .../dt-bindings/clock/mediatek,mt7981-clk.h   | 215 ++++++++++++++++++
+ 1 file changed, 215 insertions(+)
+ create mode 100644 include/dt-bindings/clock/mediatek,mt7981-clk.h
 
-diff --git a/drivers/block/xen-blkback/xenbus.c b/drivers/block/xen-blkback/xenbus.c
-index 2c43bfc7ab5ba6954f11d4b949a5668660dbd290..ca8dae05985038da490c5ac93364509913f6b4c7 100644
---- a/drivers/block/xen-blkback/xenbus.c
-+++ b/drivers/block/xen-blkback/xenbus.c
-@@ -3,6 +3,19 @@
-     Copyright (C) 2005 Rusty Russell <rusty@rustcorp.com.au>
-     Copyright (C) 2005 XenSource Ltd
- 
-+In addition to the XenStore nodes required by the Xen block device
-+specification, this implementation of blkback uses a new XenStore
-+node: "opened".  blkback sets "opened" to "0" before the hotplug script
-+is called.  Once the device node has been opened, blkback sets "opened"
-+to "1".
+diff --git a/include/dt-bindings/clock/mediatek,mt7981-clk.h b/include/dt-bindings/clock/mediatek,mt7981-clk.h
+new file mode 100644
+index 0000000000000..192f8cefb589f
+--- /dev/null
++++ b/include/dt-bindings/clock/mediatek,mt7981-clk.h
+@@ -0,0 +1,215 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2021 MediaTek Inc.
++ * Author: Wenzhen.Yu <wenzhen.yu@mediatek.com>
++ * Author: Jianhui Zhao <zhaojh329@gmail.com>
++ * Author: Daniel Golle <daniel@makrotopia.org>
++ */
 +
-+"opened" is used exclusively by userspace.  It serves two purposes:
++#ifndef _DT_BINDINGS_CLK_MT7981_H
++#define _DT_BINDINGS_CLK_MT7981_H
 +
-+1. It tells userspace that diskseq@major:minor syntax for "physical-device" is
-+   supported.
-+2. It tells userspace that it can wait for "opened" to be set to 1.  Once
-+   "opened" is 1, blkback has a reference to the device, so userspace doesn't
-+   need to keep one.
- 
- */
- 
-@@ -698,6 +711,14 @@ static int xen_blkbk_probe(struct xenbus_device *dev,
- 	if (err)
- 		pr_warn("%s write out 'max-ring-page-order' failed\n", __func__);
- 
-+	/*
-+	 * This informs userspace that the "opened" node will be set to "1" when
-+	 * the device has been opened successfully.
-+	 */
-+	err = xenbus_write(XBT_NIL, dev->nodename, "opened", "0");
-+	if (err)
-+		goto fail;
++/* TOPCKGEN */
++#define CLK_TOP_CB_CKSQ_40M		0
++#define CLK_TOP_CB_M_416M		1
++#define CLK_TOP_CB_M_D2			2
++#define CLK_TOP_CB_M_D3			3
++#define CLK_TOP_M_D3_D2			4
++#define CLK_TOP_CB_M_D4			5
++#define CLK_TOP_CB_M_D8			6
++#define CLK_TOP_M_D8_D2			7
++#define CLK_TOP_CB_MM_720M		8
++#define CLK_TOP_CB_MM_D2		9
++#define CLK_TOP_CB_MM_D3		10
++#define CLK_TOP_CB_MM_D3_D5		11
++#define CLK_TOP_CB_MM_D4		12
++#define CLK_TOP_CB_MM_D6		13
++#define CLK_TOP_MM_D6_D2		14
++#define CLK_TOP_CB_MM_D8		15
++#define CLK_TOP_CB_APLL2_196M		16
++#define CLK_TOP_APLL2_D2		17
++#define CLK_TOP_APLL2_D4		18
++#define CLK_TOP_NET1_2500M		19
++#define CLK_TOP_CB_NET1_D4		20
++#define CLK_TOP_CB_NET1_D5		21
++#define CLK_TOP_NET1_D5_D2		22
++#define CLK_TOP_NET1_D5_D4		23
++#define CLK_TOP_CB_NET1_D8		24
++#define CLK_TOP_NET1_D8_D2		25
++#define CLK_TOP_NET1_D8_D4		26
++#define CLK_TOP_CB_NET2_800M		27
++#define CLK_TOP_CB_NET2_D2		28
++#define CLK_TOP_CB_NET2_D4		29
++#define CLK_TOP_NET2_D4_D2		30
++#define CLK_TOP_NET2_D4_D4		31
++#define CLK_TOP_CB_NET2_D6		32
++#define CLK_TOP_CB_WEDMCU_208M		33
++#define CLK_TOP_CB_SGM_325M		34
++#define CLK_TOP_CKSQ_40M_D2		35
++#define CLK_TOP_CB_RTC_32K		36
++#define CLK_TOP_CB_RTC_32P7K		37
++#define CLK_TOP_USB_TX250M		38
++#define CLK_TOP_FAUD			39
++#define CLK_TOP_NFI1X			40
++#define CLK_TOP_USB_EQ_RX250M		41
++#define CLK_TOP_USB_CDR_CK		42
++#define CLK_TOP_USB_LN0_CK		43
++#define CLK_TOP_SPINFI_BCK		44
++#define CLK_TOP_SPI			45
++#define CLK_TOP_SPIM_MST		46
++#define CLK_TOP_UART_BCK		47
++#define CLK_TOP_PWM_BCK			48
++#define CLK_TOP_I2C_BCK			49
++#define CLK_TOP_PEXTP_TL		50
++#define CLK_TOP_EMMC_208M		51
++#define CLK_TOP_EMMC_400M		52
++#define CLK_TOP_DRAMC_REF		53
++#define CLK_TOP_DRAMC_MD32		54
++#define CLK_TOP_SYSAXI			55
++#define CLK_TOP_SYSAPB			56
++#define CLK_TOP_ARM_DB_MAIN		57
++#define CLK_TOP_AP2CNN_HOST		58
++#define CLK_TOP_NETSYS			59
++#define CLK_TOP_NETSYS_500M		60
++#define CLK_TOP_NETSYS_WED_MCU		61
++#define CLK_TOP_NETSYS_2X		62
++#define CLK_TOP_SGM_325M		63
++#define CLK_TOP_SGM_REG			64
++#define CLK_TOP_F26M			65
++#define CLK_TOP_EIP97B			66
++#define CLK_TOP_USB3_PHY		67
++#define CLK_TOP_AUD			68
++#define CLK_TOP_A1SYS			69
++#define CLK_TOP_AUD_L			70
++#define CLK_TOP_A_TUNER			71
++#define CLK_TOP_U2U3_REF		72
++#define CLK_TOP_U2U3_SYS		73
++#define CLK_TOP_U2U3_XHCI		74
++#define CLK_TOP_USB_FRMCNT		75
++#define CLK_TOP_NFI1X_SEL		76
++#define CLK_TOP_SPINFI_SEL		77
++#define CLK_TOP_SPI_SEL			78
++#define CLK_TOP_SPIM_MST_SEL		79
++#define CLK_TOP_UART_SEL		80
++#define CLK_TOP_PWM_SEL			81
++#define CLK_TOP_I2C_SEL			82
++#define CLK_TOP_PEXTP_TL_SEL		83
++#define CLK_TOP_EMMC_208M_SEL		84
++#define CLK_TOP_EMMC_400M_SEL		85
++#define CLK_TOP_F26M_SEL		86
++#define CLK_TOP_DRAMC_SEL		87
++#define CLK_TOP_DRAMC_MD32_SEL		88
++#define CLK_TOP_SYSAXI_SEL		89
++#define CLK_TOP_SYSAPB_SEL		90
++#define CLK_TOP_ARM_DB_MAIN_SEL		91
++#define CLK_TOP_AP2CNN_HOST_SEL		92
++#define CLK_TOP_NETSYS_SEL		93
++#define CLK_TOP_NETSYS_500M_SEL		94
++#define CLK_TOP_NETSYS_MCU_SEL		95
++#define CLK_TOP_NETSYS_2X_SEL		96
++#define CLK_TOP_SGM_325M_SEL		97
++#define CLK_TOP_SGM_REG_SEL		98
++#define CLK_TOP_EIP97B_SEL		99
++#define CLK_TOP_USB3_PHY_SEL		100
++#define CLK_TOP_AUD_SEL			101
++#define CLK_TOP_A1SYS_SEL		102
++#define CLK_TOP_AUD_L_SEL		103
++#define CLK_TOP_A_TUNER_SEL		104
++#define CLK_TOP_U2U3_SEL		105
++#define CLK_TOP_U2U3_SYS_SEL		106
++#define CLK_TOP_U2U3_XHCI_SEL		107
++#define CLK_TOP_USB_FRMCNT_SEL		108
++#define CLK_TOP_AUD_I2S_M		109
 +
- 	err = xenbus_switch_state(dev, XenbusStateInitWait);
- 	if (err)
- 		goto fail;
-@@ -824,6 +845,19 @@ static void backend_changed(struct xenbus_watch *watch,
- 		goto fail;
- 	}
- 
-+	/*
-+	 * Tell userspace that the device has been opened and that blkback has a
-+	 * reference to it.  Userspace can then close the device or mark it as
-+	 * delete-on-close, knowing that blkback will keep the device open as
-+	 * long as necessary.
-+	 */
-+	err = xenbus_write(XBT_NIL, dev->nodename, "opened", "1");
-+	if (err) {
-+		xenbus_dev_fatal(dev, err, "%s: notifying userspace device has been opened",
-+				 dev->nodename);
-+		goto free_vbd;
-+	}
++/* INFRACFG */
++#define CLK_INFRA_66M_MCK		0
++#define CLK_INFRA_UART0_SEL		1
++#define CLK_INFRA_UART1_SEL		2
++#define CLK_INFRA_UART2_SEL		3
++#define CLK_INFRA_SPI0_SEL		4
++#define CLK_INFRA_SPI1_SEL		5
++#define CLK_INFRA_SPI2_SEL		6
++#define CLK_INFRA_PWM1_SEL		7
++#define CLK_INFRA_PWM2_SEL		8
++#define CLK_INFRA_PWM3_SEL		9
++#define CLK_INFRA_PWM_BSEL		10
++#define CLK_INFRA_PCIE_SEL		11
++#define CLK_INFRA_GPT_STA		12
++#define CLK_INFRA_PWM_HCK		13
++#define CLK_INFRA_PWM_STA		14
++#define CLK_INFRA_PWM1_CK		15
++#define CLK_INFRA_PWM2_CK		16
++#define CLK_INFRA_PWM3_CK		17
++#define CLK_INFRA_CQ_DMA_CK		18
++#define CLK_INFRA_AUD_BUS_CK		19
++#define CLK_INFRA_AUD_26M_CK		20
++#define CLK_INFRA_AUD_L_CK		21
++#define CLK_INFRA_AUD_AUD_CK		22
++#define CLK_INFRA_AUD_EG2_CK		23
++#define CLK_INFRA_DRAMC_26M_CK		24
++#define CLK_INFRA_DBG_CK		25
++#define CLK_INFRA_AP_DMA_CK		26
++#define CLK_INFRA_SEJ_CK		27
++#define CLK_INFRA_SEJ_13M_CK		28
++#define CLK_INFRA_THERM_CK		29
++#define CLK_INFRA_I2C0_CK		30
++#define CLK_INFRA_UART0_CK		31
++#define CLK_INFRA_UART1_CK		32
++#define CLK_INFRA_UART2_CK		33
++#define CLK_INFRA_SPI2_CK		34
++#define CLK_INFRA_SPI2_HCK_CK		35
++#define CLK_INFRA_NFI1_CK		36
++#define CLK_INFRA_SPINFI1_CK		37
++#define CLK_INFRA_NFI_HCK_CK		38
++#define CLK_INFRA_SPI0_CK		39
++#define CLK_INFRA_SPI1_CK		40
++#define CLK_INFRA_SPI0_HCK_CK		41
++#define CLK_INFRA_SPI1_HCK_CK		42
++#define CLK_INFRA_FRTC_CK		43
++#define CLK_INFRA_MSDC_CK		44
++#define CLK_INFRA_MSDC_HCK_CK		45
++#define CLK_INFRA_MSDC_133M_CK		46
++#define CLK_INFRA_MSDC_66M_CK		47
++#define CLK_INFRA_ADC_26M_CK		48
++#define CLK_INFRA_ADC_FRC_CK		49
++#define CLK_INFRA_FBIST2FPC_CK		50
++#define CLK_INFRA_I2C_MCK_CK		51
++#define CLK_INFRA_I2C_PCK_CK		52
++#define CLK_INFRA_IUSB_133_CK		53
++#define CLK_INFRA_IUSB_66M_CK		54
++#define CLK_INFRA_IUSB_SYS_CK		55
++#define CLK_INFRA_IUSB_CK		56
++#define CLK_INFRA_IPCIE_CK		57
++#define CLK_INFRA_IPCIE_PIPE_CK		58
++#define CLK_INFRA_IPCIER_CK		59
++#define CLK_INFRA_IPCIEB_CK		60
 +
- 	err = xenvbd_sysfs_addif(dev);
- 	if (err) {
- 		xenbus_dev_fatal(dev, err, "creating sysfs entries");
++/* APMIXEDSYS */
++#define CLK_APMIXED_ARMPLL		0
++#define CLK_APMIXED_NET2PLL		1
++#define CLK_APMIXED_MMPLL		2
++#define CLK_APMIXED_SGMPLL		3
++#define CLK_APMIXED_WEDMCUPLL		4
++#define CLK_APMIXED_NET1PLL		5
++#define CLK_APMIXED_MPLL		6
++#define CLK_APMIXED_APLL2		7
++
++/* SGMIISYS_0 */
++#define CLK_SGM0_TX_EN			0
++#define CLK_SGM0_RX_EN			1
++#define CLK_SGM0_CK0_EN			2
++#define CLK_SGM0_CDR_CK0_EN		3
++
++/* SGMIISYS_1 */
++#define CLK_SGM1_TX_EN			0
++#define CLK_SGM1_RX_EN			1
++#define CLK_SGM1_CK1_EN			2
++#define CLK_SGM1_CDR_CK1_EN		3
++
++/* ETHSYS */
++#define CLK_ETH_FE_EN			0
++#define CLK_ETH_GP2_EN			1
++#define CLK_ETH_GP1_EN			2
++#define CLK_ETH_WOCPU0_EN		3
++
++#endif /* _DT_BINDINGS_CLK_MT7981_H */
 -- 
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+2.39.1
 
