@@ -2,147 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9321467C4B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4697967C4CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233157AbjAZHMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 02:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
+        id S233583AbjAZHVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 02:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjAZHM2 (ORCPT
+        with ESMTP id S229674AbjAZHVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 02:12:28 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3772D44;
-        Wed, 25 Jan 2023 23:12:27 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30Q7CBWU111108;
-        Thu, 26 Jan 2023 01:12:11 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674717131;
-        bh=x/FjT4ucuuDO/GzDfCuYukxslZ1OhZAfhowzpA1/hZw=;
-        h=From:To:CC:Subject:Date;
-        b=O76xqvG2wP/r3zFEDkCxCMD0g0TZKBNxoPA9OmACVY4nUIaXijNED1dmlE6FR2w+h
-         qmZfZsIXuTxk3uo/br/A8LSCJhw9WBE7K7GPSs5iZ5rJRtX7Z+BgcHTLSRNs1Vho/j
-         X8HO/Sw8PS6MW6k5ry9wD7aPfyJReO8lhLoQArVE=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30Q7CBvQ027837
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 26 Jan 2023 01:12:11 -0600
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 26
- Jan 2023 01:12:11 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 26 Jan 2023 01:12:11 -0600
-Received: from uda0132425.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30Q7C7ZZ019592;
-        Thu, 26 Jan 2023 01:12:08 -0600
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>
-Subject: [PATCH] arm64: dts: ti: Makefile: Rearrange entries alphabetically
-Date:   Thu, 26 Jan 2023 12:41:59 +0530
-Message-ID: <20230126071159.2337584-1-vigneshr@ti.com>
-X-Mailer: git-send-email 2.39.1
+        Thu, 26 Jan 2023 02:21:35 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2092.outbound.protection.outlook.com [40.107.243.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC365E52C;
+        Wed, 25 Jan 2023 23:21:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QGr2z6ysbE0KccQBd6YtsVJib5biIou7dbLVF1LJEmojHtQ4amOU5NWA/NMdm0ye7TPoMgmo/moV7HqdltgBeLur5RSeyAjqHgdn9nATGEaAOWSomlKDW+5Fagi/Q8K45LLSYKu34EzR8sD/iNh/2+lWFz1UeH7DzvbzLU4jeymkTEQ0BR3ihd1Ywd1d0U5IdQAZTS6iAqrcbO7kNZomjCTUZyg7WeDgRSb8YuvunC+QjOAyeU8GrgiZicj2C4bb0DGpqHuxOIbG0uhIuT0sbRjwYti0J805ROTZ/3cIY50ni09kmoVvyvLp6DUuHs0Ag/SH1DSYBGfAqlccxwWUHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vYkWc+rnU/SNzUaCIQB0O2M+CSLSJ3ATWvUlOU/gBBY=;
+ b=UJM9v1UPIafgqd6JuUwTIDKec/3H5kCSvy2GjyZx3r1zZPwagnlDaJNrCLp76jibCL+DKWTqQoIshxtjVVrcA26nmUkz5cnwUSsJudddCICiOVdvm1bn2a0rKVxCPr/YVw7jPGUd0Zkl3tjFcJHOia5ojQfcClu02x34ZWsF3DWYmHLZsInNSHopw4R6FD0fRaBTNr9jqIBri6/mJBQ+ORiQaH5zcZA+xkkNyFHrdCLaKOHzi8ki9Uf9h1TYPD3MsL2UkhXaaFmfbDxWEiYymNAHYeyND3HCWuv5Iil/fx8dnUAEIsZbNKXyKRuM41rFjj52SVCzsu9ShVIcLGSBNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vYkWc+rnU/SNzUaCIQB0O2M+CSLSJ3ATWvUlOU/gBBY=;
+ b=pShNAH1yrlSBKQ+fVIhvALoPnWId8j+5UB5QLSkP5CWArwpgwY6ALmes6t9X0yOOJUkt5vp67p0kocvohbDES9zpzUnQ2n0Pqdxh/MkPbC01nLZtXvxm4Xp8DoVG1n0KMMX7Hg5aQiXKPqT04XHy22D864Yg1iFhDmqVHm51fiI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BY5PR13MB4486.namprd13.prod.outlook.com (2603:10b6:a03:1d7::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.21; Thu, 26 Jan
+ 2023 07:21:30 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65%6]) with mapi id 15.20.6043.021; Thu, 26 Jan 2023
+ 07:21:30 +0000
+Date:   Thu, 26 Jan 2023 08:21:24 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Andre Kalb <andre.kalb@sma.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Felix Riemann <felix.riemann@sma.de>
+Subject: Re: [PATCH net] net: phy: dp83822: Fix null pointer access on
+ DP83825/DP83826 devices
+Message-ID: <Y9Ip9Ikluruosxb5@corigine.com>
+References: <Y9FzniUhUtbaGKU7@pc6682>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9FzniUhUtbaGKU7@pc6682>
+X-ClientProxiedBy: AM0PR10CA0086.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:15::39) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY5PR13MB4486:EE_
+X-MS-Office365-Filtering-Correlation-Id: 05f8462d-6eaf-4aa1-21a9-08daff6df1f2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ut0JJy7piuCnSGjyoZN7x47QG/ow7q1hm1ix9RA0MsoIVRuregxWE4z5LqdTgdFJX5QqklGN/4g0+p1sOjPNpH6dLNJ87Dpbr9GJ0ZHmXjvSMEpiAw4hR0XkazJ0i5kbU8/DsqnahnJHx7TqaGJrtFNGhkJKq0oYuICRWA5JF33Crf9WIcsn/lHPL1M416VsJNkLPk6gOKNOdbqeV7KSTurMzItS2y80UWc1yy/vEtyEYfzY2iMPv5UBtHDqoNv3c0W7Mhq9xv9vICELLwW8eNhmsgJtUcySZFilUOdzoVf9WPSG24lGHsL1dKxYJ9CtFA5rpWcS5meUR/XrSbqbyfHO2TmX0Zk+x3+4vbfz25u5hFqy5AVE6wLU2sDLZRoP2RFwBipF8iHE1yI1eMlJlMuk+CPIOGyLW5e58puakqmvVhOzlf/56AQkWFhu0L6EJSbxNDq+5AzANW6vSO7hBnGfYnyiHtbaEJ4bgrR5L0Co/lRh13ifl3ylT9AYBomlxpgjCCTHDwXXTpndGlC2ptvw1tpCI/ZY542rVCGe1v9fB0Hvig9Vhb7qtvr4ZZPucTsHN0bIJJoEcpDujCVqYknRDHCiQnpAZ8oR/ijxITyPL+lby3JGUk43NcHGs8XgEXv5IhirFSkCaET6zQsUXCxdg7lpXxFGmLB8DdtMNRXC6X2S/nq7uCjusp3p9K+/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(366004)(396003)(39830400003)(136003)(451199018)(66476007)(8936002)(2906002)(44832011)(4744005)(5660300002)(36756003)(66556008)(41300700001)(6916009)(66946007)(38100700002)(54906003)(4326008)(478600001)(6486002)(8676002)(86362001)(83380400001)(316002)(2616005)(6512007)(186003)(6506007)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5WludPu/JoGTkmUO+HCpkw6cF9G0Dy7gxMVrS1NnsprbRRDLRD9ArhOlhL/F?=
+ =?us-ascii?Q?y51qjVYi31P/23W2CWhDTuITYCPm2CHDy9+Ls7kIOhwjHDEvSJF6OFqFYN0g?=
+ =?us-ascii?Q?kDiMAD8UBk4QQCpA5tyZ99bpXrUE6fD4j4ZBIOEbe1PmM389e5HLbBEHC1HR?=
+ =?us-ascii?Q?Vv0t71yfAkPD4G+kOMQ4gio4Srko/QUniJRGf0DD9mNiFzlFILlDGsF0MSTk?=
+ =?us-ascii?Q?g8wdBlEGh29w5/QrvjTT0bcmU97dOi9W8U+h8RbT9I4IfB9KHZmH4iciJYaP?=
+ =?us-ascii?Q?wgI99+R8ythcmJ78hGYoj5kPlVmac9p80yRzydVOQIOx2kpiqf3p2O7fsjyW?=
+ =?us-ascii?Q?8xCDX8ppdQbGVah4fRqWXUPtwnlxHTeUwYcD8xH6t29uAXfdTYPjjKFOoWwG?=
+ =?us-ascii?Q?f65V723aNXGxraRhPZN5od9YDN1rzjte0tksqEqC8Ly8twVcBUAEJRWlp2SY?=
+ =?us-ascii?Q?2cP010ecuasrthYKWUQ7pZssyH0+39lFB8FszBD7DEJM7F84rk/f6INsbZcY?=
+ =?us-ascii?Q?Faf859bNZir+vrAAB65LY7WWoyKfMtLKzMOTqM5oMebw7ojpxqLI1/KVnip7?=
+ =?us-ascii?Q?v6+qJ+AlYjXY5EwOuumTLNNt7cLPJoH/UC9JSFiktCjXpFFC6M4/OSjNhrVF?=
+ =?us-ascii?Q?9qysuJ0QrkVwoDLxAVPUi66UwFfGjeMDlGbpuEpR6jnOfelPlxbgsgEURa0G?=
+ =?us-ascii?Q?I8P+y0yS+TknNC+yALLt+4HDM3Y/fUoOMNd/P2KtonER426wkgjUZ4uatugr?=
+ =?us-ascii?Q?uCMH9wd+EwAV6TLEdk5tGbEiM93u1AeMZDYQJHagxHNdOKkZOyXA2E3c2zur?=
+ =?us-ascii?Q?+rgbkP6zRTwvp1RC9Vs7OYKpJjDwxbuQ6f20ZUtJKFpDMwbiDI0thMnukesn?=
+ =?us-ascii?Q?uUR8zFhvnTMggc+7HanvumjwIR/n19FrltNn6GEj3tpgBAmAmdgy+eBQMenY?=
+ =?us-ascii?Q?Eo4Bjy4qvN+nzKugj7D51y6xeDgAz+MpEKu1NmU8DKEa+zGOx15Z2aQLiNAf?=
+ =?us-ascii?Q?9N65PIqk+o4j81KDS3hPg7RIi0AqTI1ZTyB9ZEzN+iTzt7RWoCuzf7+8T4ll?=
+ =?us-ascii?Q?UgFz+/CUWYTY6EwKIS9EQI+31CDkoyBNgpwyA6+YeVSP/ExrS37OCC1nu2x6?=
+ =?us-ascii?Q?v6+ZFgeDoDabO/8E+QfnaPAFSuG2Y5LxmpasmXmmaxPUgOsNopyMZj1oqyCw?=
+ =?us-ascii?Q?ole5czODvlFThwpV3JgAT7LaaC+aNu9/iTJPJisGmRk58TtJLFhGv+AHdj2X?=
+ =?us-ascii?Q?DZDj+SfS8ikMvjOEIiDOIs/S1+sO+d1fn+S6oBTgQDqUFxPj0+A4s6XfprjZ?=
+ =?us-ascii?Q?e4cHNTkbfyQij7agGixNypdEHvS5ofPDOzT/Ewb/puyz2qCilZEZvGOHsvEb?=
+ =?us-ascii?Q?F1isSmXCoNcAM7CbEN3qkH9T5kbDWdGmHGR7ymYRx4ROMdVabdXniENCdKdq?=
+ =?us-ascii?Q?YVYjjhEW+1ucLyy9YNWyCCe+vd4jLNuItnhjkg4ArxG8ARZV6HxoIJ09dqjD?=
+ =?us-ascii?Q?99A0g+WWDDtgeUoE8F9IQeEpHmYjdHbyV3738FnpWy+F+pndzEDfEI3Kw8hF?=
+ =?us-ascii?Q?dgxEnLPBsC2fAgZ/HkeOXOQHqkiuYODYBDpA7rwt43KjlXGdy8Wy99g9mlsQ?=
+ =?us-ascii?Q?2DFIiqUG3AhgxWq4DKwd6lFvFuJkUmQrjzuWp1VZpWbpkXV5pGhT7ZaTo5ry?=
+ =?us-ascii?Q?CvV8vA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05f8462d-6eaf-4aa1-21a9-08daff6df1f2
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 07:21:30.4697
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3UMHteiHrJT4BaALxe6L1XdafE2UPGasjFiNNh/vdVtl91UVZLmmnFq30w+Kf9cWJ1pNCdy6FsufbHsEzyyRjhFEA3QXHQuhtHj0S/Jel3E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB4486
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Entries are first grouped as per SoC present on the board. Groups are
-sorted alphabetically. This makes it easy to know SoC to board mapping
-and also add new entries in alphabetical order.
+On Wed, Jan 25, 2023 at 07:23:26PM +0100, Andre Kalb wrote:
+> From: Andre Kalb <andre.kalb@sma.de>
+> 
+> The probe() function is only used for the DP83822 PHY, leaving the
+> private data pointer uninitialized for the smaller DP83825/26 models.
+> While all uses of the private data structure are hidden in 82822 specific
+> callbacks, configuring the interrupt is shared across all models.
+> This causes a NULL pointer dereference on the smaller PHYs as it accesses
+> the private data unchecked. Verifying the pointer avoids that.
+> 
+> Fixes: 5dc39fd5ef35 ("net: phy: DP83822: Add ability to advertise Fiber connection")
+> Signed-off-by: Andre Kalb <andre.kalb@sma.de>
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
----
-Based on top of linux-next + iot2050 m.2 board[1][2]
-
-[1] lore.kernel.org/r/878e3a023767b5a6d9d2cff09015678aaba13fce.1674110442.git.jan.kiszka@siemens.com
-[2] lore.kernel.org/r/20230119132958.124435-3-sabiya.d@ti.com
-
-Here is what file looks like:
-https://gist.github.com/r-vignesh/d54e6446b0615e0818c142d9ea152e27
-
- arch/arm64/boot/dts/ti/Makefile | 36 +++++++++++++++++++++------------
- 1 file changed, 23 insertions(+), 13 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index 74c71d25e406..6acd12409d59 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -5,33 +5,43 @@
- #
- # Copyright (C) 2016-2021 Texas Instruments Incorporated - https://www.ti.com/
- #
-+# Entries are grouped as per SoC present on the board. Groups are sorted
-+# alphabetically.
- 
--dtb-$(CONFIG_ARCH_K3) += k3-am654-base-board.dtb
-+# Boards with AM62x SoC
-+dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
-+
-+# Boards with AM62Ax SoC
-+dtb-$(CONFIG_ARCH_K3) += k3-am62a7-sk.dtb
-+
-+# Boards with AM64x SoC
-+dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-am642-phyboard-electra-rdk.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
-+
-+# Boards with AM65x SoC
- dtb-$(CONFIG_ARCH_K3) += k3-am6528-iot2050-basic.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am6528-iot2050-basic-pg2.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced-m2.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced-pg2.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-am654-base-board.dtb
- 
--DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
--
--dtb-$(CONFIG_ARCH_K3) += k3-am68-sk-base-board.dtb
-+# Boards with J7200 SoC
-+dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
- 
-+# Boards with J721e SoC
- dtb-$(CONFIG_ARCH_K3) += k3-j721e-beagleboneai64.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j721e-common-proc-board.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j721e-sk.dtb
- 
--dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
--
-+# Boards with J721s2 SoC
-+dtb-$(CONFIG_ARCH_K3) += k3-am68-sk-base-board.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
- 
-+# Boards with J784s4 SoC
- dtb-$(CONFIG_ARCH_K3) += k3-am69-sk.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
- 
--dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
--dtb-$(CONFIG_ARCH_K3) += k3-am642-phyboard-electra-rdk.dtb
--dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
--
--dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
--
--dtb-$(CONFIG_ARCH_K3) += k3-am62a7-sk.dtb
-+# Enable support for device-tree overlays
-+DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
--- 
-2.39.1
-
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
