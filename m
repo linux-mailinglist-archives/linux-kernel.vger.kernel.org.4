@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989B867D1AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:33:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A41B67D199
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjAZQdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:33:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
+        id S231620AbjAZQ1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:27:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjAZQds (ORCPT
+        with ESMTP id S232816AbjAZQ13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:33:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC9916AE3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:33:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674750780;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CyqC4HBKoEgyHHDtYb2+ga2T4D19HRBTg8u+WniVOaQ=;
-        b=ina2piJFWXlFGrmY00Oh76hBYD3Ot4A56CWMmj58vpUebYO06P5sKEZszmLHZIgqx2X9rU
-        qeTMfDgn3Nko++dH1Ufe1UXZWyES3G7ADxlgLl2SkweHdigSdW8y+sSAcM7N4kpyhvjKLs
-        6i/dyQFQroPblWKpG8g9xTciuILV660=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-204-CPGuSA0aPUiAf8g2i5OztQ-1; Thu, 26 Jan 2023 11:25:29 -0500
-X-MC-Unique: CPGuSA0aPUiAf8g2i5OztQ-1
-Received: by mail-wr1-f71.google.com with SMTP id w23-20020adf8bd7000000b002bfbf6f23feso426182wra.18
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:25:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CyqC4HBKoEgyHHDtYb2+ga2T4D19HRBTg8u+WniVOaQ=;
-        b=7TOkUgR6KjldN6yzyWD6TCaIi2BgmnlL4azD2+a9GqWGeW91/+Z+ipnwgZk/0o3moi
-         RSWuEErGZaIsagbBg8EdcqIjBohjznBqurgy904ZCSS1goOt61qB7hgliJ9xFgK4BxxJ
-         ShkR11zzbSZ3zai1wp9zA8ieh/LZKSeXX/Q9f2Ix5CDkbvJvOHN1kPZ3yCni+f0E1Je+
-         dO4LM9SLNVzAJ1vvXMhCdfiVbtBI00ySk/YVBHqcompvZMTDRtF8cxO3n7ZYjDDgAJpx
-         6hodawW/DOmhjlfVEi4foKn2K45oeMLdKlH+YThBq1LGGPjXt7AjKnTFAqylQrRxxDg4
-         jSpA==
-X-Gm-Message-State: AFqh2kqOzJidLAs41ni3l5iyYATiFUfwhNqwlbEizJbFYkGZ2IrrV39d
-        vgS1K1s9BXrTa9USJAiyBoneyjw1rRkIgR5shbAEY2JprlPKyLlzx70i+Uquvxo+HAoGvUg4yby
-        R9NkSqrY06KMmApv+ip2itE28
-X-Received: by 2002:a05:600c:3488:b0:3cf:68f8:790b with SMTP id a8-20020a05600c348800b003cf68f8790bmr33587598wmq.11.1674750327871;
-        Thu, 26 Jan 2023 08:25:27 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv5e8MKjFsCkVUne5IjgyuScDl6uyyRaHtc0mBQA3MKSQ6ykJ/gLCNS/1L73hNUG/JIUAeP8g==
-X-Received: by 2002:a05:600c:3488:b0:3cf:68f8:790b with SMTP id a8-20020a05600c348800b003cf68f8790bmr33587572wmq.11.1674750327685;
-        Thu, 26 Jan 2023 08:25:27 -0800 (PST)
-Received: from redhat.com ([2.52.137.69])
-        by smtp.gmail.com with ESMTPSA id c11-20020adfa30b000000b002bfb5ebf8cfsm1822818wrb.21.2023.01.26.08.25.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 08:25:26 -0800 (PST)
-Date:   Thu, 26 Jan 2023 11:25:21 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Samuel Ortiz <sameo@rivosinc.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-pci@vger.kernel.org
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <20230126112058-mutt-send-email-mst@kernel.org>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y9EkCvAfNXnJ+ATo@kroah.com>
- <Y9Ex3ZUIFxwOBg1n@work-vm>
- <Y9E7PNmSTP5w2zuw@kroah.com>
- <Y9FDZPV7qENtNNyk@work-vm>
- <20230125215333.GA18160@wunner.de>
- <CAGXJix9-cXNW7EwJf0PVzj_Qmt5fmQvBX1KvXfRX5NAeEpnMvw@mail.gmail.com>
- <20230126154449.GB4188@wunner.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126154449.GB4188@wunner.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        Thu, 26 Jan 2023 11:27:29 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79047375F;
+        Thu, 26 Jan 2023 08:26:34 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 876E73200A2D;
+        Thu, 26 Jan 2023 11:25:48 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 26 Jan 2023 11:25:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674750348; x=1674836748; bh=NaFVoqTHQH
+        cJ9HsTieBYpGZYHbu5p65aAcMF7VEyI5Y=; b=Gt3QmEPraM1rPycnoOri4/0nGN
+        7mUdA2sAei0oxfsCFgnhOnm1qSIIUDGBcVeLUgKPtgTIuvFozT5ZaBd9df5Jv2zz
+        azFQ0VYqFiA8kqr+uzh+W+psPianbxAPaquRbwKg3SVMFZZAlzsvMoinbqKC/Qyl
+        Pse/y5/pWbrKWvwIFvS5o0DWtjeITeeMy0K7qCVRar6BKI34gJFLZntz4Qi9nLay
+        IBk3D3qVtccFCajKELtxStv0Q0OsSBvTy5IZQj1ZA2jAKhGXBDcWw4cGjn6QDSKr
+        NZ2YHc/o3CU4SvxOVn7RFKJi2JyZcmQ8BaQ15z5NyHCKzY9P/Irbvz0SteYA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674750348; x=1674836748; bh=NaFVoqTHQHcJ9HsTieBYpGZYHbu5
+        p65aAcMF7VEyI5Y=; b=C5WHYpbhjgF/YWASYwjPKeeBI2bGnI6sqQGX8GZyAgMo
+        gwcVJQqX28VGbHYU7fI/wT50bCNs9FqiyD+w4CMQAL0tiasOgbrx9MemErPqX8ZD
+        JmL0kmEiwNuY5GJy1hGh5bwDxobxFtNGWCQ9YwnJonCfYaI7c8voxrrFn4gSNn8m
+        Mz4PD1eYR8hjQHFLLG8r1rOs+/ciSFdU5z+5nxAzjY7OHla3FGxVd/M9r4fmd7Aw
+        l3bp/8UDx395g+RSYiQTh9khlV1sXdEmrLJyh3hQ2k3iwtIjA+ug2xAKEOzClG1U
+        zCvQHAYhzgdzY4DLBm0kHiF2dDXQYxbrPIUC3sZcbg==
+X-ME-Sender: <xms:i6nSY7UiCSclozXycVbFBgBP1UA8KqcX5NTOeEFR7yN6a2-h90e12w>
+    <xme:i6nSYzmB5BB8r6I_kqnEmrxVpzLxmZ5Xkze7-AAB_UdbqGRq7DR4CgMhFF0NG5TrM
+    WsFHUw6vOq0_uQTpKg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgkeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:i6nSY3aTUANaj2paDIXomCPxZNWrEG4B1kjqr1HE3ah8z3AVy1NiNw>
+    <xmx:i6nSY2U5dleINlyZmm24tEMr_GM0fru-Ukl6pN44kZf1qFUdaH18lA>
+    <xmx:i6nSY1nyRjBJJfqP8_fZZPtzJvmJFYnFVsqSNXkqtrZFbY5sD2IQhQ>
+    <xmx:jKnSY2h9UCDwWxEnc8YyWi-_v66mQ3pM15bW3kJvg0y2vTF6z_EW7A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 675D6B60086; Thu, 26 Jan 2023 11:25:47 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <57e74219-d439-4d10-9bb5-53fe7b30b46f@app.fastmail.com>
+In-Reply-To: <20230126161737.2985704-1-arnd@kernel.org>
+References: <20230126161737.2985704-1-arnd@kernel.org>
+Date:   Thu, 26 Jan 2023 17:25:29 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Arnd Bergmann" <arnd@kernel.org>,
+        "Alexander Aring" <alex.aring@gmail.com>,
+        "Stefan Schmidt" <stefan@datenfreihafen.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Hauke Mehrtens" <hauke@hauke-m.de>, linux-wpan@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ca8210: move to gpio descriptors
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,16 +90,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 04:44:49PM +0100, Lukas Wunner wrote:
-> Obviously the host can DoS guest access to the device by modifying
-> exchanged messages, but there are much simpler ways for it to
-> do that, say, by clearing Bus Master Enable or Memory Space Enable
-> bits in the Command Register.
+On Thu, Jan 26, 2023, at 17:17, Arnd Bergmann wrote:
 
-There's a single key per guest though, isn't it? Also used
-for regular memory?
+>  	if (ret) {
+> -		dev_crit(&spi->dev, "request_irq %d failed\n", pdata->irq_id);
+> -		gpiod_unexport(gpio_to_desc(pdata->gpio_irq));
+> -		gpio_free(pdata->gpio_irq);
+> +		dev_crit(&spi->dev, "request_irq %d failed\n", priv->irq_id);
+> +		gpiod_put(priv->gpio_irq);
+>  	}
 
+I just realized that this bit depends on the "gpiolib: remove
+legacy gpio_export" patch I sent to the gpio mailing list earlier.
 
--- 
-MST
+We can probably just defer this change until that is merged,
+or alternatively I can rebase this patch to avoid the
+dependency.
 
+   Arnd
