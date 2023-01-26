@@ -2,256 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0922D67C3EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 05:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5970A67C400
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 05:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjAZEmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 23:42:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
+        id S230250AbjAZEng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 23:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjAZEm2 (ORCPT
+        with ESMTP id S229446AbjAZEnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 23:42:28 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848E22B091
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 20:42:25 -0800 (PST)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230126044220epoutp013dbc98149ecd8da64d537f1d6718c269~9wi5Ez3zT2471024710epoutp01H
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 04:42:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230126044220epoutp013dbc98149ecd8da64d537f1d6718c269~9wi5Ez3zT2471024710epoutp01H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1674708140;
-        bh=7lDN2+fTV0lZSoHxJGXzSMIMGZo84ZvuL8MBg+RRh9I=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=tVxRu2E+PZ0mPHv0sO4tgQCrk6zVgJZ5ogsv9qqAPth7pcYMuj0CIMOKlHNT0iol0
-         wlgm2xHo82eOcB5Q0iLsGPsNG5HrjsVnLVnS9VueiXvUnfOvy0rRTXW9DkVbkJ6AO/
-         WOV4Y7T54Jy+SRCxHGTrxKDgTZPEZBvFkdtduujc=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230126044219epcas1p154503707da31ac0842415a005dd8e29c~9wi4cs1Ce0057700577epcas1p1N;
-        Thu, 26 Jan 2023 04:42:19 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.38.241]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4P2Sjl2nbQz4x9Q5; Thu, 26 Jan
-        2023 04:42:19 +0000 (GMT)
-X-AuditID: b6c32a39-a97ff7000000d627-07-63d204ab06ca
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        03.E3.54823.BA402D36; Thu, 26 Jan 2023 13:42:19 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH] dma-buf: system_heap: avoid reclaim for order 4
-Reply-To: jaewon31.kim@samsung.com
-Sender: =?UTF-8?B?6rmA7J6s7JuQ?= <jaewon31.kim@samsung.com>
-From:   =?UTF-8?B?6rmA7J6s7JuQ?= <jaewon31.kim@samsung.com>
-To:     John Stultz <jstultz@google.com>
-CC:     "T.J. Mercier" <tjmercier@google.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <CANDhNCoAKtHmxFomdGfTfXy8ZvFMfMRj4jZ+b8wMMD+5AmAB0g@mail.gmail.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230126044218epcms1p35474178c2f2b18524f35c7d9799e3aed@epcms1p3>
-Date:   Thu, 26 Jan 2023 13:42:18 +0900
-X-CMS-MailID: 20230126044218epcms1p35474178c2f2b18524f35c7d9799e3aed
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrIJsWRmVeSWpSXmKPExsWy7bCmru5qlkvJBn/+CVrMWb+GzWLhw7vM
-        Fqs3+Vp0b57JaNH7/hWTxZ8TG9ksLu+aw2Zxb81/VovX35YxW5y6+5nd4t36L2wO3B6H37xn
-        9tj7bQGLx85Zd9k9Fmwq9di0qpPNY9OnSewed67tYfM4MeM3i0ffllWMHp83yQVwRWXbZKQm
-        pqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gBdrKRQlphTChQK
-        SCwuVtK3synKLy1JVcjILy6xVUotSMkpMCvQK07MLS7NS9fLSy2xMjQwMDIFKkzIzrj1/zBT
-        wQOzihWz97A0MB7T7GLk4JAQMJHYcEu6i5GLQ0hgB6PE/S07mUHivAKCEn93CHcxcnIIC7hL
-        bPv6hhnEFhJQkjj74wo7RNxaYv+iGUwgNpuApcT2mxMZQWwRARWJh3N/soHMZBY4ySxx5cUL
-        sGYJAV6JGe1PWSBsaYnty7eCNXAKBEp0/37BCBEXlbi5+i07jP3+2HyouIhE672zUHMEJR78
-        3A0Vl5I4132cCcIul9gxZz8bhF0h8bt/GdQcfYkr/TPBangFfCXmNP8Hm8MioCrR8GAVMyQc
-        XCSOPDIGCTMLyEtsfzsHLMwsoCmxfpc+xBRFiZ2/5zJClPBJvPvawwrz1Y55T6AuUJNoefYV
-        Ki4j8fffMyjbQ6J5TRMLJJiXskg0L77JNoFRYRYipGch2TwLYfMCRuZVjGKpBcW56anFhgWm
-        8LhNzs/dxAhOu1qWOxinv/2gd4iRiYPxEKMEB7OSCG/P7PPJQrwpiZVVqUX58UWlOanFhxhN
-        gV6eyCwlmpwPTPx5JfGGJpYGJmZGJhbGlsZmSuK84rYnk4UE0hNLUrNTUwtSi2D6mDg4pRqY
-        GOw6QyZOvN928+eiTy6ZDhvdJLcxXnG29Pi9cXebhlN4hP41IculC543W0nHaLu2L+IxUNwh
-        8fnwKWUD/vNK6zgqdCTv8U7eE5ktuHtlte3xn3+KhA0uftP76ZPx9fAPTvuVnPGcHGoLdYpP
-        8jHGaJUsVdndyZ7o5a3N8e930uleF+/vvgGzxJ8r1T1b5/r6Zq9la4ZBMz+j/NWzuvIvM41M
-        P00zDZo8M0x6dsyO0oUNmlLPbizf4aW/uO/1IvPV7WvXGxksOHYkX96r/4l/5Ae38MAlCddm
-        W75uX/XiS3kmMwf/zDDhgpDjf089vr3yS0Je9KZQIRu+vcGcSm2R1Rt3pyjbWJcFRfWntiix
-        FGckGmoxFxUnAgBGCDC3RAQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230117082521epcas1p22a709521a9e6d2346d06ac220786560d
-References: <CANDhNCoAKtHmxFomdGfTfXy8ZvFMfMRj4jZ+b8wMMD+5AmAB0g@mail.gmail.com>
-        <CABdmKX3HFuaE0qwcADk-KLtVUdao-uhH-1zn4gv7ezq+bZE94w@mail.gmail.com>
-        <20230117082508.8953-1-jaewon31.kim@samsung.com>
-        <20230117083103epcms1p63382eee1cce1077248a4b634681b0aca@epcms1p6>
-        <CANDhNCpKY5Af059ok8ZcgJ=wt7NaorZxqQXaTS848CwY0LNFiw@mail.gmail.com>
-        <20230125095646epcms1p2a97e403a9589ee1b74a3e7ac7d573f9b@epcms1p2>
-        <20230125101957epcms1p2d06d65a9147e16f3281b13c085e5a74c@epcms1p2>
-        <CGME20230117082521epcas1p22a709521a9e6d2346d06ac220786560d@epcms1p3>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 Jan 2023 23:43:32 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2083.outbound.protection.outlook.com [40.107.93.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB8D7DB8;
+        Wed, 25 Jan 2023 20:43:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lxjHi8xCdsQ6sLf3zuDSRuFUe2uBX3rcgf0w95MJnKIF0UyTPa5Byrz8HNy8zYtdQWZFWQ3h2dR+ODWn0+c5d8Fxz+xk7L37fTKn4h28dWenV24NYFfPC4iPKKPazQvWTDHRQpV+6VywPuoEg9Q0SSRCThSm3EU5EGd69W6APc56UZRvVFf3k2i/PlW3y1rI8UboGeIZK9VPpM3OCkDfbkhSaCFyGKHP7GybkgTrOXOnrSENm+XuhuEb3TxbU0jqvHizivHIJUxrnlHcNXz21AItwl0dnV0H0jpHz/bQsf0VTYoYMdCbD9tEyWf3UdbwHnpBgeq0Bo9tS7QmM2wbMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LenMtkMaUOie3PCzbVdzSBBbokNi88XcC8DwVG6zJyM=;
+ b=Qgm4fZoDEye/lcaYFRizoTRJ3RYDE2dReVU9jDNiUrA+JV2cQUXGpdrLHkBBtczatQSpf3jj23U6veX8ohcsS0ZF/h7IWoNMpezIZwUV49jBBNl6iU8p4EtciGOy/PUuWJnP2uaejwwnVPgMXOGp6YgCKgWrbIUBz56HEIYfeQ9UcXbu+MtAO575VbY9fZUkQMIdV651xfF5q5dN3RXdtoDYPU7e8FvBpBl3z/zQtHDAYYIhCPSQgJxSByBtqektpncvp2cT5HpoL4NF4D51jyVb7lDPS8DecEgAatbyPkm1t4YDrDwnYHhRDomKecrh43YFodj3whZxE0cCU/iRjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
+ dkim=pass header.d=memverge.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LenMtkMaUOie3PCzbVdzSBBbokNi88XcC8DwVG6zJyM=;
+ b=WSzeHhKV63skckg/dfSUfxhU1FF3hvpmTW/nODN2wOzoZUnSnx0boP1KCwCkbbrD2lVMtTzBJ755bLB7jQobpbNu3rAC4Bh1JnhLj19tS9ANik5ZV1x/FtvdVIhDlo1B2t0LAY3zwDPz772zhPsyNWBvLNDpKhr/CNiY8Q4Zlm8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=memverge.com;
+Received: from BN6PR17MB3121.namprd17.prod.outlook.com (2603:10b6:405:7c::19)
+ by SJ0PR17MB5857.namprd17.prod.outlook.com (2603:10b6:a03:40c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Thu, 26 Jan
+ 2023 04:43:28 +0000
+Received: from BN6PR17MB3121.namprd17.prod.outlook.com
+ ([fe80::d253:1eb3:9347:c660]) by BN6PR17MB3121.namprd17.prod.outlook.com
+ ([fe80::d253:1eb3:9347:c660%4]) with mapi id 15.20.6002.033; Thu, 26 Jan 2023
+ 04:43:28 +0000
+Date:   Wed, 25 Jan 2023 23:43:18 -0500
+From:   Gregory Price <gregory.price@memverge.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        avagin@gmail.com, peterz@infradead.org, luto@kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, corbet@lwn.net,
+        shuah@kernel.org
+Subject: Re: [PATCH v6 1/2] ptrace,syscall_user_dispatch: Implement Syscall
+ User Dispatch Suspension
+Message-ID: <Y9IE5tBjY1GlFCFH@memverge.com>
+References: <20230125025126.787431-1-gregory.price@memverge.com>
+ <20230125025126.787431-2-gregory.price@memverge.com>
+ <20230126003008.GA31684@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126003008.GA31684@redhat.com>
+X-ClientProxiedBy: BYAPR02CA0006.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::19) To BN6PR17MB3121.namprd17.prod.outlook.com
+ (2603:10b6:405:7c::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN6PR17MB3121:EE_|SJ0PR17MB5857:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3d04389-0a7c-48c7-79c6-08daff57de1d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yQfgNqZruqb9BRdm+ZSnUmrIwniMq6xl6zxQ0zK7pBL84NNJH1tr67hm2oPYuzuq86Zrvzr0rVf7l+JMiIwlSGfhk2ZaqFCsCRO96Z0zmuFk6hieNJl9uEk1AJ++v9gEsPJzFNuL47tGwUuUtcVw3OD0DmwFc5i/XQCRBel9/6kx0DmdpUqY+X7DdFPOdavNqUpJN7VheGot9XiHb2svy8UfWazwUhqlUBiqdVhafhtuDs2JaWQwjVzv4NSXj1kIa+NCW8e2xpTlj33KnKU30zLXBbFO0sdb6KCzDDoUMGWgER44B2Ph5Uq5+uCC8p+OaXdK46Z2BcUicTex27axpd5ALvykhbrwa3UafJoAWZa3rKwnS4QiuYEfn4qE6NfLs+ltaaIO2mlKkk1uEmQ2MR4kYjx+wy/kqs1dFboJR/0a4YI8iZ31tjfFnnP+OJebjeW76er7IU1aydpkOo13Job3ZIcMFpUt4+PFPRWVACNkXXftk6SynCtMSi1BN2T97ZZkYgxlzj8zxFjKiDyUlXqLno9P/wezGksSHbptRM263Z5GFoGhNf9Z7N0bozlXt/JljZfWBE8REWm+O3UpSjYWqSN5jXhZ41GQ+qYYSdE8TDzUZsEn2mUzJk2KI9AR+S4HGs0KNAuEvl5GOCWBgg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR17MB3121.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(39840400004)(376002)(136003)(396003)(451199018)(2616005)(36756003)(2906002)(86362001)(4326008)(83380400001)(44832011)(8936002)(66476007)(316002)(478600001)(38100700002)(7416002)(6486002)(5660300002)(6506007)(186003)(6916009)(8676002)(26005)(6512007)(66946007)(66556008)(41300700001)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UDXE8rul8qXVhfn0umWIZ1yHHOFVJVPxbidN1ZLpJfm0fXhl1uEQ8P6wnuW0?=
+ =?us-ascii?Q?dmWdTe2QD0H5L1LAsmJW8goDvzU0NYSTubGo/hs3xsBg9stplifzS0iPyxG/?=
+ =?us-ascii?Q?D7SUmQjxC5sYoz0uxt6x1dSrqbmYyxK3JvS/y2U/DOGvJ3G8eNGi8paaWlHj?=
+ =?us-ascii?Q?T6qHjCBO+BgXplgIopnFVIKBzazw0Zg6Lob5FaLziuZrvE5vjYRzFHR7dDSf?=
+ =?us-ascii?Q?rZYHumhj/xQAY2knSy/jaq27KDpxUGQaAu+eOyMsC+WvvdgoUQKYEliPV2as?=
+ =?us-ascii?Q?7hAGjk621bi0HWn849w6GuGCAahvdw4zmEyfrPlswdHmex0eMTlZ79ULhev2?=
+ =?us-ascii?Q?r+kG56GuAo5v3iz91xicty6LOXsDvxRUXF1+1NGbt28LiJ3fEOb6Yq3GX3YJ?=
+ =?us-ascii?Q?q1T+A7vkazYE1j/3cvmlD0gUzgvwX+U1pmGGJO7Rr3S2rk0/beSuQs14IJa9?=
+ =?us-ascii?Q?rN1NDHnk46c1IqcWhh9SNDZcvn+sF+G0swUDdKMKQ2u9Cpi7s2Z/uJULX4vU?=
+ =?us-ascii?Q?ZLLwfg6poqDrC+GAIisxwhEHb90rYIRuT71H4B9EPiGAVkAJna/GKPGKacQj?=
+ =?us-ascii?Q?FGeV1hgZT6/0lehjD7KFO3q7HALAsDp9WKijPZ+XeZ4Qvea/QqfChJiy6RoM?=
+ =?us-ascii?Q?Qzd6u/DYxEw6mDG9vLsdzcfoyyI0HvHX5X9Jb3hNd/Dpnag+MDzK86FwHxah?=
+ =?us-ascii?Q?o+iwvg94Miq5UDYyJXgJl5UH/Ixvg73lZL9l3CXulRBbkO3UozOR1ObP8jod?=
+ =?us-ascii?Q?4jEtzORjM/x55Erecc1/8mYxMfrOqG9BlMuNX1IE9MlxwTBTG9tri4QuRnkK?=
+ =?us-ascii?Q?CXSMaBWDJVYxMAVM2MvTlg+GVvnAgtVbe6swft7OXQ6qwNyjPfAMUxQmjTsk?=
+ =?us-ascii?Q?B21gwTXiS4v5tAiKH8jclaKJ5PzmquAtUvBx2Xy+IM6tlVjf4bklSoREWJoV?=
+ =?us-ascii?Q?RGfb2qWwxhWU89W5+SvR+3GiIUE/Byx4AjzVqhoOMp0qfEei7zocJ5nJWxPA?=
+ =?us-ascii?Q?QM9a6jDoAfjBrjNv14yF9R7cJoRQvZTuXSvA/F4old/8f33x+GH8k2jXIDu/?=
+ =?us-ascii?Q?b82VRqQHTt2ZAOCyUgmmEBOWd/orJZgMg9rJ0T6TYJL3O8jjb4L1cs8h/Ply?=
+ =?us-ascii?Q?RnxIl1LwywSL26foX+gksCtoS7YUkYOxMZ7Z8oMG+nxfeMWdSLAOJEAmloSB?=
+ =?us-ascii?Q?s8ylvwUJ7sqoZRtDlwdJ6oWlfs7ZnDmxQZgCQOmqiDIaUQmEVbr8vPr4RUle?=
+ =?us-ascii?Q?jcu6Xpxo+DCqWwitsVu+aw5+gqwBQQfxuc8T2LqAjbI5DeHt4spYbscJZ7cA?=
+ =?us-ascii?Q?PFZG7BmgDHzncETDdnRmPC91BrkmZzRcxyI8DHHkeoxOsScYOKG3ixRoEjS5?=
+ =?us-ascii?Q?ab0/02qEx4pl+sojEkfU4GtZrwb/bur62Z6WCKDbcVohnVxBgx/SdwH3BfKw?=
+ =?us-ascii?Q?km5vF5hT9wEjNojjQxLqgbHKFzNnX2u6dbc9K722uY4jgUNpkrIARK+K0Fji?=
+ =?us-ascii?Q?jg52Xs2LitgiBvyX6sUrenyQ4pIb8zWrejT8dnXnC0waZClZd2WvMqKqroI5?=
+ =?us-ascii?Q?wuZVq+rYxzk/K2UMlDVDmUPiyZYbIF4WWQqYFDokYzWBmhBleSGAco9Q2UR8?=
+ =?us-ascii?Q?fA=3D=3D?=
+X-OriginatorOrg: memverge.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3d04389-0a7c-48c7-79c6-08daff57de1d
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR17MB3121.namprd17.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 04:43:28.2245
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: s+iXwA9uAuqZrPvFZzkYLZNx6DS9kyL4u+f/jXunFZMsoLos857rV3G237I511YVB6M/Nv1gQaY23QVBNdiUH3z4VREfE7mD59HqhiuEGqo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR17MB5857
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed, Jan 25, 2023 at 2:20 AM Jaewon Kim <jaewon31.kim@samsung.com> wrote:
-> > > > On Tue, Jan 17, 2023 at 10:54 PM John Stultz <jstultz@google.com> wrote:
-> > > > >
-> > > > > On Tue, Jan 17, 2023 at 12:31 AM Jaewon Kim <jaewon31.kim@samsung.com> wrote:
-> > > > > > > Using order 4 pages would be helpful for many IOMMUs, but it could spend
-> > > > > > > quite much time in page allocation perspective.
-> > > > > > >
-> > > > > > > The order 4 allocation with __GFP_RECLAIM may spend much time in
-> > > > > > > reclaim and compation logic. __GFP_NORETRY also may affect. These cause
-> > > > > > > unpredictable delay.
-> > > > > > >
-> > > > > > > To get reasonable allocation speed from dma-buf system heap, use
-> > > > > > > HIGH_ORDER_GFP for order 4 to avoid reclaim.
-> > > > >
-> > > > > Thanks for sharing this!
-> > > > > The case where the allocation gets stuck behind reclaim under pressure
-> > > > > does sound undesirable, but I'd be a bit hesitant to tweak numbers
-> > > > > that have been used for a long while (going back to ion) without a bit
-> > > > > more data.
-> > > > >
-> > > > > It might be good to also better understand the tradeoff of potential
-> > > > > on-going impact to performance from using low order pages when the
-> > > > > buffer is used.  Do you have any details like or tests that you could
-> > > > > share to help ensure this won't impact other users?
-> > > > >
-> > > > > TJ: Do you have any additional thoughts on this?
-> > > > >
-> > > > I don't have any data on how often we hit reclaim for mid order
-> > > > allocations. That would be interesting to know. However the 70th
-> > > > percentile of system-wide buffer sizes while running the camera on my
-> > > > phone is still only 1 page, so it looks like this change would affect
-> > > > a subset of use-cases.
-> > > >
-> > > > Wouldn't this change make it less likely to get an order 4 allocation
-> > > > (under memory pressure)? The commit message makes me think the goal of
-> > > > the change is to get more of them.
-> > >
-> > > Hello John Stultz
-> > >
-> > > I've been waiting for your next reply.
-> 
-> Sorry, I was thinking you were gathering data on the tradeoffs. Sorry
-> for my confusion.
-> 
-> > > With my commit, we may gather less number of order 4 pages and fill the
-> > > requested size with more number of order 0 pages. I think, howerver, stable
-> > > allocation speed is quite important so that corresponding user space
-> > > context can move on within a specific time.
-> > >
-> > > Not only compaction but reclaim also, I think, would be invoked more if the
-> > > __GFP_RECLAIM is added on order 4. I expect the reclaim could be decreased
-> > > if we move to order 0.
-> > >
+On Thu, Jan 26, 2023 at 01:30:08AM +0100, Oleg Nesterov wrote:
+> On 01/24, Gregory Price wrote:
 > >
-> > Additionally I'd like to say the old legacy ion system heap also used the
-> > __GFP_RECLAIM only for order 8, not for order 4.
+> > Adds PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH to ptrace options, and
+> > modify Syscall User Dispatch to suspend interception when enabled.
 > >
-> > drivers/staging/android/ion/ion_system_heap.c
-> >
-> > static gfp_t high_order_gfp_flags = (GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN |
-> >                                     __GFP_NORETRY) & ~__GFP_RECLAIM;
-> > static gfp_t low_order_gfp_flags  = GFP_HIGHUSER | __GFP_ZERO;
-> > static const unsigned int orders[] = {8, 4, 0};
-> >
-> > static int ion_system_heap_create_pools(struct ion_page_pool **pools)
-> > {
-> >        int i;
-> >
-> >        for (i = 0; i < NUM_ORDERS; i++) {
-> >                struct ion_page_pool *pool;
-> >                gfp_t gfp_flags = low_order_gfp_flags;
-> >
-> >                if (orders[i] > 4)
-> >                        gfp_flags = high_order_gfp_flags;
+> > This is modeled after the SUSPEND_SECCOMP feature, which suspends
+> > SECCOMP interposition.  Without doing this, software like CRIU will
+> > inject system calls into a process and be intercepted by Syscall
+> > User Dispatch, either causing a crash (due to blocked signals) or
+> > the delivery of those signals to a ptracer (not the intended behavior).
 > 
+> Cough... Gregory, I am sorry ;)
 > 
-> This seems a bit backwards from your statement. It's only removing
-> __GFP_RECLAIM on order 8 (high_order_gfp_flags).
+> but can't we drop this patch to ?
+> 
+> CRIU needs to do PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG and check
+> config->mode anyway as we discussed.
+> 
+> Then it can simply set *config->selector = SYSCALL_DISPATCH_FILTER_ALLOW
+> with the same effect, no?
+> 
+> Oleg.
+> 
 
-Oh sorry, my fault. I also read wrongly. But as far as I know, most of
-AP chipset vendors have been using __GFP_RECLAIM only for order 0.
-I can't say in detail though.
+After further investigation, I believe we can drop 1/2, but for a
+different reason:  It's actually insane behavior during the quiesce
+phase.  Quiesce allows the program to run until a particular state,
+which means we can't turn it off lest we interfere with intended
+behavior - (cough cough prior review said this cough cough i'm dumb).
 
-> 
-> So apologies again, but how is that different from the existing code?
-> 
-> #define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP)
-> #define MID_ORDER_GFP (LOW_ORDER_GFP | __GFP_NOWARN)
-> #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
->                                 | __GFP_NORETRY) & ~__GFP_RECLAIM) \
->                                 | __GFP_COMP)
-> static gfp_t order_flags[] = {HIGH_ORDER_GFP, MID_ORDER_GFP, LOW_ORDER_GFP};
-> 
-> Where the main reason we introduced the mid-order flags is to avoid
-> the warnings on order 4 allocation failures when we'll fall back to
-> order 0
-> 
-> The only substantial difference I see between the old ion code and
-> what we have now is the GFP_COMP addition, which is a bit hazy in my
-> memory. I unfortunately don't have a record of why it was added (don't
-> have access to my old mail box), so I suspect it was something brought
-> up in private review.  Dropping that from the low order flags probably
-> makes sense as TJ pointed out, but this isn't what your patch is
-> changing.
-> 
-> Your patch is changing that for mid-order allocations we'll use the
-> high order flags, so we'll not retry and not reclaim, so there will be
-> more failing and falling back to single page allocations.
-> This makes sense to make allocation time faster and more deterministic
-> (I like it!), but potentially has the tradeoff of losing the
-> performance benefit of using mid order page sizes.
-> 
-> I suspect your change is a net win overall, as the cumulative effect
-> of using larger pages probably won't benefit more than the large
-> indeterministic allocation time, particularly under pressure.
-> 
-> But because your change is different from what the old ion code did, I
-> want to be a little cautious. So it would be nice to see some
-> evaluation of not just the benefits the patch provides you but also of
-> what negative impact it might have.  And so far you haven't provided
-> any details there.
-> 
-> A quick example might be for the use case where mid-order allocations
-> are causing you trouble, you could see how the performance changes if
-> you force all mid-order allocations to be single page allocations (so
-> orders[] = {8, 0, 0};) and compare it with the current code when
-> there's no memory pressure (right after reboot when pages haven't been
-> fragmented) so the mid-order allocations will succeed.  That will let
-> us know the potential downside if we have brief / transient pressure
-> at allocation time that forces small pages.
-> 
-> Does that make sense?
+I'll drop patch 1/2 and resubmit (there's an unused variable warning i
+need to clean up).
 
-Let me try this. It make take some days. But I guess it depends on memory
-status as you said. If there were quite many order 4 pages, then 8 4 0
-should be faster than 8 0 0.
-
-I don't know this is a right approach. In my opinion, except the specific
-cases like right after reboot, there are not many order 4 pages. And
-in determinisitic allocation time perspective, I think avoiding too long
-allocations is more important than making faster with already existing
-free order 4 pages.
-
-BR
-Jaewon Kim
-
-> 
-> thanks
-> -john
+Thanks again for the reviews all
+~Gregory
