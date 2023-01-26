@@ -2,366 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1313B67D120
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A042067D11A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbjAZQRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:17:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
+        id S231689AbjAZQQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:16:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbjAZQRI (ORCPT
+        with ESMTP id S229475AbjAZQQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:17:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A466A35A8;
-        Thu, 26 Jan 2023 08:17:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 26 Jan 2023 11:16:16 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD4F359A;
+        Thu, 26 Jan 2023 08:16:15 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F483B81E84;
-        Thu, 26 Jan 2023 16:17:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EBB7C433EF;
-        Thu, 26 Jan 2023 16:17:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674749824;
-        bh=il9nEzHQefCpXbKAxdsRaVuBE+i1m12IQ1FVPUbBB5U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VYJ0hCgxkWYFhdQayaqAd+NRTEZ0J+iD/iMUMbTqTlslkBpKPMdQrdlYx60+96vQa
-         Kv8De8LuYAec9m1uv3Fe27NtET72SRMBynIBv4p/hdI9IhJ44QumSRo1z82S8VX+Ji
-         5Mr5gzW+nQygR7tyoyit2Vld6kpvsJ8h9EIaOAOM5aDz7CCVRydX2swsR9gwWuHVr+
-         EwAZfuYOW1qsydeqzr2Jvg3n08+sQP4yLhewPzB7snyIBEt3O5vlw/1xs2Ycsh++JX
-         qeWfwwHytK+h5n5Go8K8XdUVIyc9OyGyfTF2GjPWKDjkFlarjPehny8PnQeCQnqCFc
-         D7bdKtLSzr9TA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Varka Bhadram <varkabhadram@gmail.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH] cc2520: move to gpio descriptors
-Date:   Thu, 26 Jan 2023 17:15:59 +0100
-Message-Id: <20230126161658.2983292-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5CFAC6602E7A;
+        Thu, 26 Jan 2023 16:16:13 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674749773;
+        bh=V0gLbpx5AMKGj7vJSigmDaOo8Wzyv86wPBOn8FimbE4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Q77sY0Tis2lsA5SbxnzsuZmN0xkug9r4USlDwoFZ5VBJDNVFhw5Ny0tsUW+wnByOx
+         tbn5ToaTzOJjZrl2M087Zz8I2m+Z4DImVkC3sKjb8EQuWskUySmLVMs6IYAsQqfRB4
+         APYWxGqowLryBr6RCJ6sDyJL8IltywJJOXVldYzOEjAKzVV9QsMf9MgN1MPyuOyDmu
+         yHsOVE2ZSIN9CW2i8I//G1SXMqfcYs0oC+AR3j+vwJ5/5dNpYlD7OlUI3xcrWgW6vF
+         2hMMxCZI4NE5DjVW31C8ZByEBt6zQIpAU3IBQSjaj/CYC4S2Uglg3GR1RxVfLX+pzk
+         JODVKxntoMbjg==
+Message-ID: <e9fc3199-234e-911e-fff8-734225c3f346@collabora.com>
+Date:   Thu, 26 Jan 2023 17:16:10 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/2] pwm: mtk-disp: Configure double buffering before
+ reading in .get_state()
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        matthias.bgg@gmail.com, weiqing.kong@mediatek.com,
+        jitao.shi@mediatek.com, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230123160615.375969-1-angelogioacchino.delregno@collabora.com>
+ <20230123160615.375969-3-angelogioacchino.delregno@collabora.com>
+ <20230126151914.rhwhioz6yyhaq3z2@notapiano>
+ <aa17fa46-0f16-2102-1bd3-6d76cee90ee1@collabora.com>
+ <20230126160927.4hgifpmybvsgshro@notapiano>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230126160927.4hgifpmybvsgshro@notapiano>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Il 26/01/23 17:09, Nícolas F. R. A. Prado ha scritto:
+> On Thu, Jan 26, 2023 at 04:24:29PM +0100, AngeloGioacchino Del Regno wrote:
+>> Il 26/01/23 16:19, Nícolas F. R. A. Prado ha scritto:
+>>> On Mon, Jan 23, 2023 at 05:06:15PM +0100, AngeloGioacchino Del Regno wrote:
+>>>> The DISP_PWM controller's default behavior is to always use register
+>>>> double buffering: all reads/writes are then performed on shadow
+>>>> registers instead of working registers and this becomes an issue
+>>>> in case our chosen configuration in Linux is different from the
+>>>> default (or from the one that was pre-applied by the bootloader).
+>>>>
+>>>> An example of broken behavior is when the controller is configured
+>>>> to use shadow registers, but this driver wants to configure it
+>>>> otherwise: what happens is that the .get_state() callback is called
+>>>> right after registering the pwmchip and checks whether the PWM is
+>>>> enabled by reading the DISP_PWM_EN register;
+>>>> At this point, if shadow registers are enabled but their content
+>>>> was not committed before booting Linux, we are *not* reading the
+>>>> current PWM enablement status, leading to the kernel knowing that
+>>>> the hardware is actually enabled when, in reality, it's not.
+>>>>
+>>>> The aforementioned issue emerged since this driver was fixed with
+>>>> commit 0b5ef3429d8f ("pwm: mtk-disp: Fix the parameters calculated
+>>>> by the enabled flag of disp_pwm") making it to read the enablement
+>>>> status from the right register.
+>>>>
+>>>> Configure the controller in the .get_state() callback to avoid
+>>>> this desync issue and get the backlight properly working again.
+>>>>
+>>>> Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
+>>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>> ---
+>>>>    drivers/pwm/pwm-mtk-disp.c | 10 ++++++++++
+>>>>    1 file changed, 10 insertions(+)
+>>>>
+>>>> diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
+>>>> index 82b430d881a2..fe9593f968ee 100644
+>>>> --- a/drivers/pwm/pwm-mtk-disp.c
+>>>> +++ b/drivers/pwm/pwm-mtk-disp.c
+>>>> @@ -196,6 +196,16 @@ static int mtk_disp_pwm_get_state(struct pwm_chip *chip,
+>>>>    		return err;
+>>>>    	}
+>>>> +	/*
+>>>> +	 * Apply DISP_PWM_DEBUG settings to choose whether to enable or disable
+>>>> +	 * registers double buffer and manual commit to working register before
+>>>> +	 * performing any read/write operation
+>>>> +	 */
+>>>> +	if (mdp->data->bls_debug)
+>>>
+>>> I feel like this condition should be the same as in the apply() callback, since
+>>> they're doing the same write operation, so also have '&& !has_commit'.
+>>>
+>>
+>> The bls_debug register is used to both enable and/or disable various features,
+>> including the one that I'm targeting in this commit, which is disabling shadow
+>> registers.
+>>
+>> As I explained in the commit message, we don't want to - and cannot - assume that
+>> the bootloader doesn't *reset* the backlight controller before booting Linux: a
+>> reset would re-enable the shadow registers, and this function being called as
+>> first to check the backlight EN status may fail to do so.
+>>
+>> This is as well true in the opposite situation where, in the future, we may want
+>> to set shadow registers ON, while the bootloader sets them OFF before booting:
+>> adding a (x && !has_commit) check in this branch would defeat that purpose and
+>> make this commit... well.. partially broken! :-)
+> 
+> Makes sense, but in that case shouldn't we drop the (&& !has_commit) in the
+> check of the previous commit too? I get that in the pwm's core current logic,
 
-cc2520 supports both probing from static platform_data and
-from devicetree, but there have never been any definitions
-of the platform data in the mainline kernel, so it's safe
-to assume that only the DT path is used.
+No. The previous commit checks !has_commit to select a register write strategy
+between "shadow -> commit" and "working registers - no commit necessary".
 
-After folding cc2520_platform_data into the driver itself,
-the GPIO handling can be simplified by moving to the modern
-gpiod interface.
+If you drop that check from the previous commit, how can you choose the write
+strategy to use?! :-)
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- MAINTAINERS                     |   1 -
- drivers/net/ieee802154/cc2520.c | 136 +++++++++-----------------------
- include/linux/spi/cc2520.h      |  21 -----
- 3 files changed, 37 insertions(+), 121 deletions(-)
- delete mode 100644 include/linux/spi/cc2520.h
+You can't rely on reading the bls_debug register, either, because it may be
+holding different values compared to what we want due to, for example, a reset
+and you can't rely on checking bls_debug_mask because in the future this kind
+of selector may be residing in an entirely different register.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index acda33cbd689..a36ead3ce7a3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4650,7 +4650,6 @@ L:	linux-wpan@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/net/ieee802154/cc2520.txt
- F:	drivers/net/ieee802154/cc2520.c
--F:	include/linux/spi/cc2520.h
- 
- CCREE ARM TRUSTZONE CRYPTOCELL REE DRIVER
- M:	Gilad Ben-Yossef <gilad@benyossef.com>
-diff --git a/drivers/net/ieee802154/cc2520.c b/drivers/net/ieee802154/cc2520.c
-index edc769daad07..a94d8dd71aad 100644
---- a/drivers/net/ieee802154/cc2520.c
-+++ b/drivers/net/ieee802154/cc2520.c
-@@ -7,14 +7,13 @@
-  */
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/delay.h>
- #include <linux/spi/spi.h>
--#include <linux/spi/cc2520.h>
-+#include <linux/property.h>
- #include <linux/workqueue.h>
- #include <linux/interrupt.h>
- #include <linux/skbuff.h>
--#include <linux/of_gpio.h>
- #include <linux/ieee802154.h>
- #include <linux/crc-ccitt.h>
- #include <asm/unaligned.h>
-@@ -206,7 +205,7 @@ struct cc2520_private {
- 	struct mutex buffer_mutex;	/* SPI buffer mutex */
- 	bool is_tx;			/* Flag for sync b/w Tx and Rx */
- 	bool amplified;			/* Flag for CC2591 */
--	int fifo_pin;			/* FIFO GPIO pin number */
-+	struct gpio_desc *fifo_pin;	/* FIFO GPIO pin number */
- 	struct work_struct fifop_irqwork;/* Workqueue for FIFOP */
- 	spinlock_t lock;		/* Lock for is_tx*/
- 	struct completion tx_complete;	/* Work completion for Tx */
-@@ -875,7 +874,7 @@ static void cc2520_fifop_irqwork(struct work_struct *work)
- 
- 	dev_dbg(&priv->spi->dev, "fifop interrupt received\n");
- 
--	if (gpio_get_value(priv->fifo_pin))
-+	if (gpiod_get_value(priv->fifo_pin))
- 		cc2520_rx(priv);
- 	else
- 		dev_dbg(&priv->spi->dev, "rxfifo overflow\n");
-@@ -912,49 +911,11 @@ static irqreturn_t cc2520_sfd_isr(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
--static int cc2520_get_platform_data(struct spi_device *spi,
--				    struct cc2520_platform_data *pdata)
--{
--	struct device_node *np = spi->dev.of_node;
--	struct cc2520_private *priv = spi_get_drvdata(spi);
--
--	if (!np) {
--		struct cc2520_platform_data *spi_pdata = spi->dev.platform_data;
--
--		if (!spi_pdata)
--			return -ENOENT;
--		*pdata = *spi_pdata;
--		priv->fifo_pin = pdata->fifo;
--		return 0;
--	}
--
--	pdata->fifo = of_get_named_gpio(np, "fifo-gpio", 0);
--	priv->fifo_pin = pdata->fifo;
--
--	pdata->fifop = of_get_named_gpio(np, "fifop-gpio", 0);
--
--	pdata->sfd = of_get_named_gpio(np, "sfd-gpio", 0);
--	pdata->cca = of_get_named_gpio(np, "cca-gpio", 0);
--	pdata->vreg = of_get_named_gpio(np, "vreg-gpio", 0);
--	pdata->reset = of_get_named_gpio(np, "reset-gpio", 0);
--
--	/* CC2591 front end for CC2520 */
--	if (of_property_read_bool(np, "amplified"))
--		priv->amplified = true;
--
--	return 0;
--}
--
- static int cc2520_hw_init(struct cc2520_private *priv)
- {
- 	u8 status = 0, state = 0xff;
- 	int ret;
- 	int timeout = 100;
--	struct cc2520_platform_data pdata;
--
--	ret = cc2520_get_platform_data(priv->spi, &pdata);
--	if (ret)
--		goto err_ret;
- 
- 	ret = cc2520_read_register(priv, CC2520_FSMSTAT1, &state);
- 	if (ret)
-@@ -1071,7 +1032,11 @@ static int cc2520_hw_init(struct cc2520_private *priv)
- static int cc2520_probe(struct spi_device *spi)
- {
- 	struct cc2520_private *priv;
--	struct cc2520_platform_data pdata;
-+	struct gpio_desc *fifop;
-+	struct gpio_desc *cca;
-+	struct gpio_desc *sfd;
-+	struct gpio_desc *reset;
-+	struct gpio_desc *vreg;
- 	int ret;
- 
- 	priv = devm_kzalloc(&spi->dev, sizeof(*priv), GFP_KERNEL);
-@@ -1080,11 +1045,11 @@ static int cc2520_probe(struct spi_device *spi)
- 
- 	spi_set_drvdata(spi, priv);
- 
--	ret = cc2520_get_platform_data(spi, &pdata);
--	if (ret < 0) {
--		dev_err(&spi->dev, "no platform data\n");
--		return -EINVAL;
--	}
-+	/* CC2591 front end for CC2520 */
-+	/* Assumption that CC2591 is not connected */
-+	priv->amplified = false;
-+	if (device_property_read_bool(&spi->dev, "amplified"))
-+		priv->amplified = true;
- 
- 	priv->spi = spi;
- 
-@@ -1098,80 +1063,53 @@ static int cc2520_probe(struct spi_device *spi)
- 	spin_lock_init(&priv->lock);
- 	init_completion(&priv->tx_complete);
- 
--	/* Assumption that CC2591 is not connected */
--	priv->amplified = false;
--
- 	/* Request all the gpio's */
--	if (!gpio_is_valid(pdata.fifo)) {
-+	priv->fifo_pin = devm_gpiod_get(&spi->dev, "fifo", GPIOD_IN);
-+	if (IS_ERR(priv->fifo_pin)) {
- 		dev_err(&spi->dev, "fifo gpio is not valid\n");
--		ret = -EINVAL;
-+		ret = PTR_ERR(priv->fifo_pin);
- 		goto err_hw_init;
- 	}
- 
--	ret = devm_gpio_request_one(&spi->dev, pdata.fifo,
--				    GPIOF_IN, "fifo");
--	if (ret)
--		goto err_hw_init;
--
--	if (!gpio_is_valid(pdata.cca)) {
-+	cca = devm_gpiod_get(&spi->dev, "cca", GPIOD_IN);
-+	if (IS_ERR(cca)) {
- 		dev_err(&spi->dev, "cca gpio is not valid\n");
--		ret = -EINVAL;
-+		ret = PTR_ERR(cca);
- 		goto err_hw_init;
- 	}
- 
--	ret = devm_gpio_request_one(&spi->dev, pdata.cca,
--				    GPIOF_IN, "cca");
--	if (ret)
--		goto err_hw_init;
--
--	if (!gpio_is_valid(pdata.fifop)) {
-+	fifop = devm_gpiod_get(&spi->dev, "fifop", GPIOD_IN);
-+	if (IS_ERR(fifop)) {
- 		dev_err(&spi->dev, "fifop gpio is not valid\n");
--		ret = -EINVAL;
-+		ret = PTR_ERR(fifop);
- 		goto err_hw_init;
- 	}
- 
--	ret = devm_gpio_request_one(&spi->dev, pdata.fifop,
--				    GPIOF_IN, "fifop");
--	if (ret)
--		goto err_hw_init;
--
--	if (!gpio_is_valid(pdata.sfd)) {
-+	sfd = devm_gpiod_get(&spi->dev, "sfd", GPIOD_IN);
-+	if (IS_ERR(sfd)) {
- 		dev_err(&spi->dev, "sfd gpio is not valid\n");
--		ret = -EINVAL;
-+		ret = PTR_ERR(sfd);
- 		goto err_hw_init;
- 	}
- 
--	ret = devm_gpio_request_one(&spi->dev, pdata.sfd,
--				    GPIOF_IN, "sfd");
--	if (ret)
--		goto err_hw_init;
--
--	if (!gpio_is_valid(pdata.reset)) {
-+	reset = devm_gpiod_get(&spi->dev, "reset", GPIOD_OUT_LOW);
-+	if (IS_ERR(reset)) {
- 		dev_err(&spi->dev, "reset gpio is not valid\n");
--		ret = -EINVAL;
-+		ret = PTR_ERR(reset);
- 		goto err_hw_init;
- 	}
- 
--	ret = devm_gpio_request_one(&spi->dev, pdata.reset,
--				    GPIOF_OUT_INIT_LOW, "reset");
--	if (ret)
--		goto err_hw_init;
--
--	if (!gpio_is_valid(pdata.vreg)) {
-+	vreg = devm_gpiod_get(&spi->dev, "vreg", GPIOD_OUT_LOW);
-+	if (IS_ERR(vreg)) {
- 		dev_err(&spi->dev, "vreg gpio is not valid\n");
--		ret = -EINVAL;
-+		ret = PTR_ERR(vreg);
- 		goto err_hw_init;
- 	}
- 
--	ret = devm_gpio_request_one(&spi->dev, pdata.vreg,
--				    GPIOF_OUT_INIT_LOW, "vreg");
--	if (ret)
--		goto err_hw_init;
--
--	gpio_set_value(pdata.vreg, HIGH);
-+	gpiod_set_value(vreg, HIGH);
- 	usleep_range(100, 150);
- 
--	gpio_set_value(pdata.reset, HIGH);
-+	gpiod_set_value(reset, HIGH);
- 	usleep_range(200, 250);
- 
- 	ret = cc2520_hw_init(priv);
-@@ -1180,7 +1118,7 @@ static int cc2520_probe(struct spi_device *spi)
- 
- 	/* Set up fifop interrupt */
- 	ret = devm_request_irq(&spi->dev,
--			       gpio_to_irq(pdata.fifop),
-+			       gpiod_to_irq(fifop),
- 			       cc2520_fifop_isr,
- 			       IRQF_TRIGGER_RISING,
- 			       dev_name(&spi->dev),
-@@ -1192,7 +1130,7 @@ static int cc2520_probe(struct spi_device *spi)
- 
- 	/* Set up sfd interrupt */
- 	ret = devm_request_irq(&spi->dev,
--			       gpio_to_irq(pdata.sfd),
-+			       gpiod_to_irq(sfd),
- 			       cc2520_sfd_isr,
- 			       IRQF_TRIGGER_FALLING,
- 			       dev_name(&spi->dev),
-@@ -1241,7 +1179,7 @@ MODULE_DEVICE_TABLE(of, cc2520_of_ids);
- static struct spi_driver cc2520_driver = {
- 	.driver = {
- 		.name = "cc2520",
--		.of_match_table = of_match_ptr(cc2520_of_ids),
-+		.of_match_table = cc2520_of_ids,
- 	},
- 	.id_table = cc2520_ids,
- 	.probe = cc2520_probe,
-diff --git a/include/linux/spi/cc2520.h b/include/linux/spi/cc2520.h
-deleted file mode 100644
-index 449bacf10700..000000000000
---- a/include/linux/spi/cc2520.h
-+++ /dev/null
-@@ -1,21 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/* Header file for cc2520 radio driver
-- *
-- * Copyright (C) 2014 Varka Bhadram <varkab@cdac.in>
-- *                    Md.Jamal Mohiuddin <mjmohiuddin@cdac.in>
-- *                    P Sowjanya <sowjanyap@cdac.in>
-- */
--
--#ifndef __CC2520_H
--#define __CC2520_H
--
--struct cc2520_platform_data {
--	int fifo;
--	int fifop;
--	int cca;
--	int sfd;
--	int reset;
--	int vreg;
--};
--
--#endif
--- 
-2.39.0
+> get_state() is run before apply(), but given that we also write the debug
+> register in apply(), we're not relying on that. So as it currently stands, if in
+> the future the bootloader sets shadow registers OFF, and we want to set them ON,
+> and we call apply() before having called get_state(), we'd be back to the broken
+> behavior.
+
+No, because the default BLS_DEBUG register value at IP reset is 0 - where 0 means
+"do not disable commit, do not disable shadow register read, do not disable shadow
+register write" :-)
+
+Cheers,
+Angelo
+
+> 
+> Thanks,
+> Nícolas
+> 
+>>
+>> Cheers!
+>> Angelo
+>>
+>>> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>>
+>>> On MT8192 Asurada Spherion.
+>>>
+>>> Thanks,
+>>> Nícolas
+>>>
+>>>> +		mtk_disp_pwm_update_bits(mdp, mdp->data->bls_debug,
+>>>> +					 mdp->data->bls_debug_mask,
+>>>> +					 mdp->data->bls_debug_mask);
+>>>> +
+>>>>    	rate = clk_get_rate(mdp->clk_main);
+>>>>    	con0 = readl(mdp->base + mdp->data->con0);
+>>>>    	con1 = readl(mdp->base + mdp->data->con1);
+>>>> -- 
+>>>> 2.39.0
+>>>>
+>>>>
+>>
+>>
+
 
