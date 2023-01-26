@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118DE67CA20
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B16467CA26
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 12:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237311AbjAZLit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 06:38:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S237333AbjAZLi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 06:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236303AbjAZLir (ORCPT
+        with ESMTP id S237304AbjAZLis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 06:38:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D14012F3E;
+        Thu, 26 Jan 2023 06:38:48 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9573401E;
         Thu, 26 Jan 2023 03:38:46 -0800 (PST)
-Date:   Thu, 26 Jan 2023 11:38:43 -0000
+Date:   Thu, 26 Jan 2023 11:38:44 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674733124;
+        s=2020; t=1674733125;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gPz9swyqZgOYPLbSHH2/c/M8L2Y4Ct7oaZFQAiHlevs=;
-        b=mtLlOIjOnVSyM0JhlMa1bU5KDiA0DcJlaeR69tZHxtl8f8bqV/dANNauSQRiA0jH0Y5rRs
-        o9FU2+aypa4ozLxMbQcOzlKzB09SoiT0mTszQcoebzFEYqp1/gRFtVcRn2dcY75hwTGBfU
-        pb6XunMkLrX+7zNWwm25plWDovGOhC9I8e0Jkr4SnwRsjRyN3QyMm7i5LHAsRhTcqOxSa4
-        WZi60vL1xT5+TjjEdpcig9WCYPbdBHcM++vKD2vI8hKxux8PkyWCrQic9QVe2B9pVmWZnq
-        mgp0bsr9IvA2UvovWq00ffC+MZWWPqlmn/ANGHgPMQUWVb1ZTjh3uM90qN9MBw==
+        bh=gJLQqfA5vkDSUS4jl9BluXFKJ9xqyAl7hld0tHalXCg=;
+        b=Dg5hXLl2ZmnEkpFUz/yAatMb+gRxJ3OgMX57DXUh1/Yk+FbWQg9VEbgzwyMc0grMUjwall
+        SFoIuHwEsz1pFZVXOIC7EPBD4z7sKeE6RocabmXkw8n6PF5/THw/eVb0YyFYuXc65wIPwH
+        l8c+bx/I6bJZwwzGtI150Ge4Q9TxijquSdfx3orTVLvhoH/LS+0KGUVAPN3dHbhxV/FqyP
+        ajIaifHbRKdPRVvpY0xNc4LNhP558yOVMe4SVNVCbo3oxZbMgJwZTYoUtThed1nN+VC7pB
+        +13zij2CBR0F/Q/wM+J8Cbp/qPC3z9n7GjfUCaUQwuM9ISgF94UzgqN5B+ovxw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674733124;
+        s=2020e; t=1674733125;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gPz9swyqZgOYPLbSHH2/c/M8L2Y4Ct7oaZFQAiHlevs=;
-        b=FXpZcnzTHJ1PHLmj7cVEfSiuav08BB5hhMFJXsoOtE9DTB5RqG65NIJTHtdHqDiwmmsVXq
-        3bipYeWKbaogPYAA==
-From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
+        bh=gJLQqfA5vkDSUS4jl9BluXFKJ9xqyAl7hld0tHalXCg=;
+        b=k+FeOJJFtoEjvNEJs6X7UfYlBgAlJbZfRfMFq/B87KISAj/CfVWd9SqO4/ru0kjvUxMHEH
+        4r4OmDyqU7yM4NDQ==
+From:   "tip-bot2 for Waiman Long" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] x86/PAT: Use try_cmpxchg() in set_page_memtype()
-Cc:     Uros Bizjak <ubizjak@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230116163446.4734-1-ubizjak@gmail.com>
-References: <20230116163446.4734-1-ubizjak@gmail.com>
+Subject: [tip: locking/core] locking/rwsem: Disable preemption in all
+ down_write*() and up_write() code paths
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230126003628.365092-4-longman@redhat.com>
+References: <20230126003628.365092-4-longman@redhat.com>
 MIME-Version: 1.0
-Message-ID: <167473312377.4906.2715991801418807356.tip-bot2@tip-bot2>
+Message-ID: <167473312444.4906.10267318646906255601.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,49 +68,161 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     50fd4d5e6914b60ea6f89c2cbff7a07799414c62
-Gitweb:        https://git.kernel.org/tip/50fd4d5e6914b60ea6f89c2cbff7a07799414c62
-Author:        Uros Bizjak <ubizjak@gmail.com>
-AuthorDate:    Mon, 16 Jan 2023 17:34:46 +01:00
+Commit-ID:     1d61659ced6bd8881cf2fb5cbcb28f9541fc7430
+Gitweb:        https://git.kernel.org/tip/1d61659ced6bd8881cf2fb5cbcb28f9541fc7430
+Author:        Waiman Long <longman@redhat.com>
+AuthorDate:    Wed, 25 Jan 2023 19:36:27 -05:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Thu, 26 Jan 2023 11:49:39 +01:00
+CommitterDate: Thu, 26 Jan 2023 11:46:46 +01:00
 
-x86/PAT: Use try_cmpxchg() in set_page_memtype()
+locking/rwsem: Disable preemption in all down_write*() and up_write() code paths
 
-Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
-set_page_memtype.  x86 CMPXCHG instruction returns success in ZF flag,
-so this change saves a compare after cmpxchg (and related move
-instruction in front of cmpxchg).
+The previous patch has disabled preemption in all the down_read() and
+up_read() code paths. For symmetry, this patch extends commit:
 
-Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
-fails. There is no need to re-read the value in the loop.
+  48dfb5d2560d ("locking/rwsem: Disable preemption while trying for rwsem lock")
 
-Note that the value from *ptr should be read using READ_ONCE to prevent
-the compiler from merging, refetching or reordering the read.
+... to have preemption disabled in all the down_write() and up_write()
+code paths, including downgrade_write().
 
-No functional change intended.
-
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Waiman Long <longman@redhat.com>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230116163446.4734-1-ubizjak@gmail.com
+Link: https://lore.kernel.org/r/20230126003628.365092-4-longman@redhat.com
 ---
- arch/x86/mm/pat/memtype.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/locking/rwsem.c | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
-index fb4b1b5..6d1ba2d 100644
---- a/arch/x86/mm/pat/memtype.c
-+++ b/arch/x86/mm/pat/memtype.c
-@@ -159,10 +159,10 @@ static inline void set_page_memtype(struct page *pg,
- 		break;
+diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
+index 84d5b64..acb5a50 100644
+--- a/kernel/locking/rwsem.c
++++ b/kernel/locking/rwsem.c
+@@ -256,16 +256,13 @@ static inline bool rwsem_read_trylock(struct rw_semaphore *sem, long *cntp)
+ static inline bool rwsem_write_trylock(struct rw_semaphore *sem)
+ {
+ 	long tmp = RWSEM_UNLOCKED_VALUE;
+-	bool ret = false;
+ 
+-	preempt_disable();
+ 	if (atomic_long_try_cmpxchg_acquire(&sem->count, &tmp, RWSEM_WRITER_LOCKED)) {
+ 		rwsem_set_owner(sem);
+-		ret = true;
++		return true;
  	}
  
-+	old_flags = READ_ONCE(pg->flags);
- 	do {
--		old_flags = pg->flags;
- 		new_flags = (old_flags & _PGMT_CLEAR_MASK) | memtype_flags;
--	} while (cmpxchg(&pg->flags, old_flags, new_flags) != old_flags);
-+	} while (!try_cmpxchg(&pg->flags, &old_flags, new_flags));
+-	preempt_enable();
+-	return ret;
++	return false;
  }
- #else
- static inline enum page_cache_mode get_page_memtype(struct page *pg)
+ 
+ /*
+@@ -716,7 +713,6 @@ static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
+ 		return false;
+ 	}
+ 
+-	preempt_disable();
+ 	/*
+ 	 * Disable preemption is equal to the RCU read-side crital section,
+ 	 * thus the task_strcut structure won't go away.
+@@ -728,7 +724,6 @@ static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
+ 	if ((flags & RWSEM_NONSPINNABLE) ||
+ 	    (owner && !(flags & RWSEM_READER_OWNED) && !owner_on_cpu(owner)))
+ 		ret = false;
+-	preempt_enable();
+ 
+ 	lockevent_cond_inc(rwsem_opt_fail, !ret);
+ 	return ret;
+@@ -828,8 +823,6 @@ static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
+ 	int loop = 0;
+ 	u64 rspin_threshold = 0;
+ 
+-	preempt_disable();
+-
+ 	/* sem->wait_lock should not be held when doing optimistic spinning */
+ 	if (!osq_lock(&sem->osq))
+ 		goto done;
+@@ -937,7 +930,6 @@ static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
+ 	}
+ 	osq_unlock(&sem->osq);
+ done:
+-	preempt_enable();
+ 	lockevent_cond_inc(rwsem_opt_fail, !taken);
+ 	return taken;
+ }
+@@ -1178,15 +1170,12 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
+ 		if (waiter.handoff_set) {
+ 			enum owner_state owner_state;
+ 
+-			preempt_disable();
+ 			owner_state = rwsem_spin_on_owner(sem);
+-			preempt_enable();
+-
+ 			if (owner_state == OWNER_NULL)
+ 				goto trylock_again;
+ 		}
+ 
+-		schedule();
++		schedule_preempt_disabled();
+ 		lockevent_inc(rwsem_sleep_writer);
+ 		set_current_state(state);
+ trylock_again:
+@@ -1310,12 +1299,15 @@ static inline int __down_read_trylock(struct rw_semaphore *sem)
+  */
+ static inline int __down_write_common(struct rw_semaphore *sem, int state)
+ {
++	int ret = 0;
++
++	preempt_disable();
+ 	if (unlikely(!rwsem_write_trylock(sem))) {
+ 		if (IS_ERR(rwsem_down_write_slowpath(sem, state)))
+-			return -EINTR;
++			ret = -EINTR;
+ 	}
+-
+-	return 0;
++	preempt_enable();
++	return ret;
+ }
+ 
+ static inline void __down_write(struct rw_semaphore *sem)
+@@ -1330,8 +1322,14 @@ static inline int __down_write_killable(struct rw_semaphore *sem)
+ 
+ static inline int __down_write_trylock(struct rw_semaphore *sem)
+ {
++	int ret;
++
++	preempt_disable();
+ 	DEBUG_RWSEMS_WARN_ON(sem->magic != sem, sem);
+-	return rwsem_write_trylock(sem);
++	ret = rwsem_write_trylock(sem);
++	preempt_enable();
++
++	return ret;
+ }
+ 
+ /*
+@@ -1374,9 +1372,9 @@ static inline void __up_write(struct rw_semaphore *sem)
+ 	preempt_disable();
+ 	rwsem_clear_owner(sem);
+ 	tmp = atomic_long_fetch_add_release(-RWSEM_WRITER_LOCKED, &sem->count);
+-	preempt_enable();
+ 	if (unlikely(tmp & RWSEM_FLAG_WAITERS))
+ 		rwsem_wake(sem);
++	preempt_enable();
+ }
+ 
+ /*
+@@ -1394,11 +1392,13 @@ static inline void __downgrade_write(struct rw_semaphore *sem)
+ 	 * write side. As such, rely on RELEASE semantics.
+ 	 */
+ 	DEBUG_RWSEMS_WARN_ON(rwsem_owner(sem) != current, sem);
++	preempt_disable();
+ 	tmp = atomic_long_fetch_add_release(
+ 		-RWSEM_WRITER_LOCKED+RWSEM_READER_BIAS, &sem->count);
+ 	rwsem_set_reader_owned(sem);
+ 	if (tmp & RWSEM_FLAG_WAITERS)
+ 		rwsem_downgrade_wake(sem);
++	preempt_enable();
+ }
+ 
+ #else /* !CONFIG_PREEMPT_RT */
