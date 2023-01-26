@@ -2,87 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B5B67CF57
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD30C67CF71
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 16:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjAZPKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 10:10:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
+        id S229745AbjAZPLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 10:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjAZPKX (ORCPT
+        with ESMTP id S231478AbjAZPLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:10:23 -0500
-Received: from outbound-smtp18.blacknight.com (outbound-smtp18.blacknight.com [46.22.139.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F69E173F
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:10:21 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp18.blacknight.com (Postfix) with ESMTPS id 816071C3F8F
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 15:10:19 +0000 (GMT)
-Received: (qmail 15379 invoked from network); 26 Jan 2023 15:10:19 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 26 Jan 2023 15:10:18 -0000
-Date:   Thu, 26 Jan 2023 15:10:15 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        jannh@google.com, shakeelb@google.com, tatashin@google.com,
-        edumazet@google.com, gthelen@google.com, gurua@google.com,
-        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v3 4/7] mm: replace vma->vm_flags direct modifications
- with modifier calls
-Message-ID: <20230126151015.ru2m26jkhwib6x6u@techsingularity.net>
-References: <20230125233554.153109-1-surenb@google.com>
- <20230125233554.153109-5-surenb@google.com>
+        Thu, 26 Jan 2023 10:11:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0FB59E6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 07:10:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674745847;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7QG6Sd9tYt9i9oyjRZB/m7JGOx0vpbuKAr/nqEOLMCI=;
+        b=Svy8oPBa6R/lOtMNGNcXMySQozg5ub5rnBWuJ1H9hrjSvtsADvK12mWDUzv3coTGU3qZMu
+        4rl1dzwHIYzGvVL0bKu4stfTtyQOWVhm4pFaYLnoW/deG3wu4fDFiccO7oEn6CCQyrAxPk
+        dtAN9e18QsKvwYJxbPZ3CIkXJN4kMOo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-456-Pq3b_L0CMSSNTmEXsBRC9w-1; Thu, 26 Jan 2023 10:10:43 -0500
+X-MC-Unique: Pq3b_L0CMSSNTmEXsBRC9w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8381181E3F4;
+        Thu, 26 Jan 2023 15:10:41 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (ovpn-194-60.brq.redhat.com [10.40.194.60])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 763A9140EBF5;
+        Thu, 26 Jan 2023 15:10:39 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 26 Jan 2023 16:10:39 +0100 (CET)
+Date:   Thu, 26 Jan 2023 16:10:36 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Gregory Price <gregory.price@memverge.com>
+Cc:     Andrei Vagin <avagin@gmail.com>,
+        Gregory Price <gourry.memverge@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v6 1/2] ptrace,syscall_user_dispatch: Implement Syscall
+ User Dispatch Suspension
+Message-ID: <20230126151035.GC4069@redhat.com>
+References: <20230125025126.787431-1-gregory.price@memverge.com>
+ <20230125025126.787431-2-gregory.price@memverge.com>
+ <20230126003008.GA31684@redhat.com>
+ <CANaxB-xn0wW5xA_CT7bA5=jig+td__EDKPBWSpZdfgMgVOezCg@mail.gmail.com>
+ <Y9IPCpYzfGb6k0sF@memverge.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125233554.153109-5-surenb@google.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9IPCpYzfGb6k0sF@memverge.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 03:35:51PM -0800, Suren Baghdasaryan wrote:
-> Replace direct modifications to vma->vm_flags with calls to modifier
-> functions to be able to track flag changes and to keep vma locking
-> correctness.
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Acked-by: Michal Hocko <mhocko@suse.com>
+On 01/26, Gregory Price wrote:
+>
+> So basic questions are:
+> 1) Andrei do you think any injection occurs during quiesce that can't be
+>    worked around?
+>
+> 2) Oleg is the auto-clearing nature of the flag sufficient justification
+>    for keeping SUSPEND?
 
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
+I understand that SUSPEND is more convenient for CRIU and more "safe".
 
-Minor comments that are safe to ignore.
+But. This kernel is already overbloated ;) IMO, if SUSPEND is not strictly
+necessary, it should be dropped.
 
-I think a better name for mod_vm_flags is set_clear_vm_flags to hint that
-the first flags are to be set and the second flags are to be cleared.
-For this patch, it doesn't matter, but it might avoid accidental swapping
-in the future.
+Oleg.
 
-reset_vm_flags might also be better named as reinit_vma_flags (or
-vma_flags_reinit). Maybe also encourage the use of [set|clear_mod]_vm_flags
-where possible in the comment to track exactly what is changing and
-why. Some cases like userfaultfd just want to clear __VM_UFFD_FLAGS but
-altering the flow in this patch is inappropriate and error prone. Others
-such as the infiniband changes and madvise are a lot more complex.
-
--- 
-Mel Gorman
-SUSE Labs
