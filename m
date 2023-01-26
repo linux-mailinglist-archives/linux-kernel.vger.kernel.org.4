@@ -2,275 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2291467C8A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E93F67C8A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 11:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236038AbjAZKep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 05:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
+        id S236480AbjAZKee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 05:34:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbjAZKej (ORCPT
+        with ESMTP id S236038AbjAZKeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 05:34:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED619518E4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:33:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674729237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rqDrgvW0/XSyvREeFRhVWr1s+J3PuS70wJQAmFfHvFE=;
-        b=R4FxSqQWCsFBvPgbbQtfJXrT3L5M5Nkia4zmkjECTJcxfLjRUkR10h4rZrZTA0IoZYaDeE
-        jM4Si5JYJuVUNB7KrI5yvRs1Ho1IqILbalmk7RfUp1omqMMkDYPfqVUYeiO5k27wMSFLUL
-        NOR1IxYA/jZd2MrMKazlnmKp4QJ5bAo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-636-vC3dEYFRPuSe4qxu2tWBmA-1; Thu, 26 Jan 2023 05:33:54 -0500
-X-MC-Unique: vC3dEYFRPuSe4qxu2tWBmA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5DD55801779;
-        Thu, 26 Jan 2023 10:33:53 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5E2E2492C14;
-        Thu, 26 Jan 2023 10:33:51 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <e7d476d7-e201-86a3-9683-c2a559fc2f5b@redhat.com>
-References: <e7d476d7-e201-86a3-9683-c2a559fc2f5b@redhat.com> <af0e448a-9559-32c0-cc59-10b159459495@redhat.com> <20230125210657.2335748-1-dhowells@redhat.com> <20230125210657.2335748-2-dhowells@redhat.com> <2613249.1674726566@warthog.procyon.org.uk>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH] iov_iter: Use __bitwise with the extraction_flags
+        Thu, 26 Jan 2023 05:34:31 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E043D577DC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:34:27 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id kt14so3912212ejc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 02:34:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yNKGiFVF7gZl8W9gtBpFjfAaHbcRzsNNp7MAmipi5tM=;
+        b=sUSCEuKpo0FtzU8NNmxCzR/r2KwAtc7S3/o1ClFq6L9vLkC3QIXXqEZ1opixeisU2G
+         iQTu9Eem/CRw6cJOSeu7z6mPcb7H/FVOfoZ44gOSFpxE8OI6Gwzrgh5AEeogGN8s+g4i
+         KCHz5FZ76MAQjOHnzVRtA3LXcGWipp0RxLRwDT/QDXulGWbSn6K0iQT23A+suDeAfldL
+         ZlqmQnVFVyHgdNSeaLuxDM27lWzd7rcg7/8h+i2P943Mv4R0tr4a03cqFezJDRNzYFec
+         U2fF6z/pk8rZeVEQD1pEE4HvcznmUxdp79rYtx0UoQRipTTEKRNGgyHYqLf3I5Fma1c5
+         r06A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yNKGiFVF7gZl8W9gtBpFjfAaHbcRzsNNp7MAmipi5tM=;
+        b=lv+mpXOakK790BUDnrL8v5SNxtD7H4C1VXNL3erZGSaQJ5dUmW4LKRUA1SF/W4D9wp
+         NuE8qJvg5iOmWT/2ETtDreEiyeh12JL9ya2p4kpdU0ihSbCZCr1CAFOJYlpHqm3eTWDZ
+         q/c6cUih22GK0HpkMNzWoWu6mSw1bG/AT6RonHoMmSFg0CIy1fDs6So+Eb85jVobirla
+         o9BorYKjMcJUJG0nnXdpRb2eM2R291dK5JDCVR98p0JMx0+7ayrHGjH7zr5kWKyKDYt8
+         p8Rqw/A4XXg55xcudJ6Y9t3hZ4PlEPP5XWIdj+pddUNj5EU3s/yQ31yoxiulwn9Hzcf5
+         0NNQ==
+X-Gm-Message-State: AFqh2krUEwkQzDaLR8o4nBrVPXEqvcc/eyuj769vsED67MIuSlV4tE0i
+        Xr/HO18ulR/MDI07/2f+m6FfCyzist857VLEiNz4Mw==
+X-Google-Smtp-Source: AMrXdXu0EMTejStEvfuw0MDinG//EO3AdM5XPHW4c5XWtjDfz8npqgxmZS5z1qRVIzw1wvFeVznkiNtOTi4NmJ3dBNA=
+X-Received: by 2002:a17:906:80da:b0:872:618e:b01c with SMTP id
+ a26-20020a17090680da00b00872618eb01cmr3636438ejx.275.1674729266315; Thu, 26
+ Jan 2023 02:34:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2638927.1674729230.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 26 Jan 2023 10:33:50 +0000
-Message-ID: <2638928.1674729230@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230124131717.128660-1-bchihi@baylibre.com> <20230124131717.128660-3-bchihi@baylibre.com>
+ <20230125203420.GA2855708-robh@kernel.org>
+In-Reply-To: <20230125203420.GA2855708-robh@kernel.org>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Thu, 26 Jan 2023 11:33:50 +0100
+Message-ID: <CAGuA+oq1F4UnEz+ujjtaj=+WCMZOky38B4z4go7TXhMYt1EeEw@mail.gmail.com>
+Subject: Re: [PATCH v11 2/6] dt-bindings/thermal/mediatek: Add LVTS thermal
+ controllers dt-binding definition
+To:     Rob Herring <robh@kernel.org>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-X-Mailer: MH-E 8.6+git; nmh 1.7.1; GNU Emacs 28.2
---------
-David Hildenbrand <david@redhat.com> wrote:
+Hi Rob,
 
-> >> Just a note that the usage of new __bitwise types instead of "unsigne=
-d" is
-> >> encouraged for flags.
+On Wed, Jan 25, 2023 at 9:34 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Jan 24, 2023 at 02:17:13PM +0100, bchihi@baylibre.com wrote:
+> > From: Balsam CHIHI <bchihi@baylibre.com>
+> >
+>
+> dt-bindings: thermal: ... for the subject
 
-Something like the attached?
+I will fix it.
 
-> $ git grep "typedef int" | grep __bitwise | wc -l
-> 27
-> $ git grep "typedef unsigned" | grep __bitwise | wc -l
-> 23
+>
+> > Add LVTS thermal controllers dt-binding definition for mt8195.
+> >
+> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> > ---
+> >  .../thermal/mediatek,lvts-thermal.yaml        | 107 ++++++++++++++++++
+> >  include/dt-bindings/thermal/mediatek-lvts.h   |  19 ++++
+> >  2 files changed, 126 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> >  create mode 100644 include/dt-bindings/thermal/mediatek-lvts.h
+> >
+> > diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> > new file mode 100644
+> > index 000000000000..12bfbdd8ff89
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> > @@ -0,0 +1,107 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: MediaTek SoC Low Voltage Thermal Sensor (LVTS)
+> > +
+> > +maintainers:
+> > +  - Balsam CHIHI <bchihi@baylibre.com>
+> > +
+> > +description: |
+> > +  LVTS is a thermal management architecture composed of three subsystems,
+> > +  a Sensing device - Thermal Sensing Micro Circuit Unit (TSMCU),
+> > +  a Converter - Low Voltage Thermal Sensor converter (LVTS), and
+> > +  a Digital controller (LVTS_CTRL).
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mediatek,mt8195-lvts-ap
+> > +      - mediatek,mt8195-lvts-mcu
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +    description: LVTS reset for clearing temporary data on AP/MCU.
+> > +
+> > +  nvmem-cells:
+> > +    minItems: 1
+> > +    items:
+> > +      - description: Calibration eFuse data 1 for LVTS
+> > +      - description: Calibration eFuse data 2 for LVTS
+> > +
+> > +  nvmem-cell-names:
+> > +    minItems: 1
+> > +    items:
+> > +      - const: lvts-calib-data-1
+> > +      - const: lvts-calib-data-2
+> > +
+> > +  "#thermal-sensor-cells":
+> > +    const: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - resets
+> > +  - nvmem-cells
+> > +  - nvmem-cell-names
+> > +  - "#thermal-sensor-cells"
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/clock/mt8195-clk.h>
+> > +    #include <dt-bindings/reset/mt8195-resets.h>
+> > +    #include <dt-bindings/thermal/mediatek-lvts.h>
+> > +
+> > +    soc {
+> > +      #address-cells = <2>;
+> > +      #size-cells = <2>;
+> > +
+> > +      lvts_mcu: thermal-sensor@11278000 {
+> > +        compatible = "mediatek,mt8195-lvts-mcu";
+> > +        reg = <0 0x11278000 0 0x1000>;
+> > +        interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +        clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
+> > +        resets = <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
+> > +        nvmem-cells = <&lvts_efuse_data1 &lvts_efuse_data2>;
+> > +        nvmem-cell-names = "lvts-calib-data-1", "lvts-calib-data-2";
+> > +        #thermal-sensor-cells = <1>;
+> > +      };
+> > +    };
+> > +
+> > +    thermal_zones: thermal-zones {
+> > +      cpu0-thermal {
+> > +        polling-delay = <1000>;
+> > +        polling-delay-passive = <250>;
+> > +        thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU0>;
+> > +
+> > +        trips {
+> > +          cpu0_alert: trip-alert {
+> > +            temperature = <85000>;
+> > +            hysteresis = <2000>;
+> > +            type = "passive";
+> > +          };
+> > +
+> > +          cpu0_crit: trip-crit {
+> > +            temperature = <100000>;
+> > +            hysteresis = <2000>;
+> > +            type = "critical";
+> > +          };
+> > +        };
+> > +      };
+> > +    };
+> > diff --git a/include/dt-bindings/thermal/mediatek-lvts.h b/include/dt-bindings/thermal/mediatek-lvts.h
+> > new file mode 100644
+> > index 000000000000..428a95c18509
+> > --- /dev/null
+> > +++ b/include/dt-bindings/thermal/mediatek-lvts.h
+> > @@ -0,0 +1,19 @@
+> > +/* SPDX-License-Identifier: GPL-2.0+ */
+>
+> Okay with GPL 4? GPL-2.0-only
+>
+> Dual license please. Consistent with your .dts files.
 
-git grep __bitwise | grep typedef | grep __u | wc -l
-62
+I will fix this too.
 
-*shrug*
+>
+> > +/*
+> > + * Copyright (c) 2023 MediaTek Inc.
+> > + * Author: Balsam CHIHI <bchihi@baylibre.com>
+> > + */
+> > +
+> > +#ifndef __MEDIATEK_LVTS_DT_H
+> > +#define __MEDIATEK_LVTS_DT_H
+> > +
+> > +#define MT8195_MCU_BIG_CPU0  0
+> > +#define MT8195_MCU_BIG_CPU1  1
+> > +#define MT8195_MCU_BIG_CPU2  2
+> > +#define MT8195_MCU_BIG_CPU3  3
+> > +#define MT8195_MCU_LITTLE_CPU0       4
+> > +#define MT8195_MCU_LITTLE_CPU1       5
+> > +#define MT8195_MCU_LITTLE_CPU2       6
+> > +#define MT8195_MCU_LITTLE_CPU3       7
+> > +
+> > +#endif /* __MEDIATEK_LVTS_DT_H */
+> > --
+> > 2.34.1
+> >
 
-Interestingly, things like __be32 are __bitwise.  I wonder if that actuall=
-y
-makes sense or if it was just convenient so stop people doing arithmetic o=
-n
-them.  I guess doing AND/OR/XOR on them isn't a problem provided both
-arguments are appropriately byte-swapped.
+Thank you for the review.
 
-David
----
- block/bio.c         |    2 +-
- block/blk-map.c     |    2 +-
- include/linux/uio.h |   13 ++++++++-----
- lib/iov_iter.c      |   14 +++++++-------
- 4 files changed, 17 insertions(+), 14 deletions(-)
-
-diff --git a/block/bio.c b/block/bio.c
-index 466956779d2c..fc57f0aa098e 100644
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -1244,11 +1244,11 @@ static int bio_iov_add_zone_append_page(struct bio=
- *bio, struct page *page,
-  */
- static int __bio_iov_iter_get_pages(struct bio *bio, struct iov_iter *ite=
-r)
- {
-+	iov_iter_extraction_t extraction_flags =3D 0;
- 	unsigned short nr_pages =3D bio->bi_max_vecs - bio->bi_vcnt;
- 	unsigned short entries_left =3D bio->bi_max_vecs - bio->bi_vcnt;
- 	struct bio_vec *bv =3D bio->bi_io_vec + bio->bi_vcnt;
- 	struct page **pages =3D (struct page **)bv;
--	unsigned int extraction_flags =3D 0;
- 	ssize_t size, left;
- 	unsigned len, i =3D 0;
- 	size_t offset, trim;
-diff --git a/block/blk-map.c b/block/blk-map.c
-index 9c7ccea3f334..0f1593e144da 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -265,9 +265,9 @@ static struct bio *blk_rq_map_bio_alloc(struct request=
- *rq,
- static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 		gfp_t gfp_mask)
- {
-+	iov_iter_extraction_t extraction_flags =3D 0;
- 	unsigned int max_sectors =3D queue_max_hw_sectors(rq->q);
- 	unsigned int nr_vecs =3D iov_iter_npages(iter, BIO_MAX_VECS);
--	unsigned int extraction_flags =3D 0;
- 	struct bio *bio;
- 	int ret;
- 	int j;
-diff --git a/include/linux/uio.h b/include/linux/uio.h
-index 47ebb59a0202..b1be128bb2fa 100644
---- a/include/linux/uio.h
-+++ b/include/linux/uio.h
-@@ -13,6 +13,8 @@
- struct page;
- struct pipe_inode_info;
- =
-
-+typedef unsigned int iov_iter_extraction_t;
-+
- struct kvec {
- 	void *iov_base; /* and that should *never* hold a userland pointer */
- 	size_t iov_len;
-@@ -252,12 +254,12 @@ void iov_iter_xarray(struct iov_iter *i, unsigned in=
-t direction, struct xarray *
- 		     loff_t start, size_t count);
- ssize_t iov_iter_get_pages(struct iov_iter *i, struct page **pages,
- 		size_t maxsize, unsigned maxpages, size_t *start,
--		unsigned extraction_flags);
-+		iov_iter_extraction_t extraction_flags);
- ssize_t iov_iter_get_pages2(struct iov_iter *i, struct page **pages,
- 			size_t maxsize, unsigned maxpages, size_t *start);
- ssize_t iov_iter_get_pages_alloc(struct iov_iter *i,
- 		struct page ***pages, size_t maxsize, size_t *start,
--		unsigned extraction_flags);
-+		iov_iter_extraction_t extraction_flags);
- ssize_t iov_iter_get_pages_alloc2(struct iov_iter *i, struct page ***page=
-s,
- 			size_t maxsize, size_t *start);
- int iov_iter_npages(const struct iov_iter *i, int maxpages);
-@@ -359,13 +361,14 @@ static inline void iov_iter_ubuf(struct iov_iter *i,=
- unsigned int direction,
- 		.count =3D count
- 	};
- }
--
- /* Flags for iov_iter_get/extract_pages*() */
--#define ITER_ALLOW_P2PDMA	0x01	/* Allow P2PDMA on the extracted pages */
-+/* Allow P2PDMA on the extracted pages */
-+#define ITER_ALLOW_P2PDMA	((__force iov_iter_extraction_t)0x01)
- =
-
- ssize_t iov_iter_extract_pages(struct iov_iter *i, struct page ***pages,
- 			       size_t maxsize, unsigned int maxpages,
--			       unsigned int extraction_flags, size_t *offset0);
-+			       iov_iter_extraction_t extraction_flags,
-+			       size_t *offset0);
- =
-
- /**
-  * iov_iter_extract_will_pin - Indicate how pages from the iterator will =
-be retained
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index cea503b2ec30..d70496019b1d 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -1432,7 +1432,7 @@ static struct page *first_bvec_segment(const struct =
-iov_iter *i,
- static ssize_t __iov_iter_get_pages_alloc(struct iov_iter *i,
- 		   struct page ***pages, size_t maxsize,
- 		   unsigned int maxpages, size_t *start,
--		   unsigned int extraction_flags)
-+		   iov_iter_extraction_t extraction_flags)
- {
- 	unsigned int n, gup_flags =3D 0;
- =
-
-@@ -1929,7 +1929,7 @@ void iov_iter_restore(struct iov_iter *i, struct iov=
-_iter_state *state)
- static ssize_t iov_iter_extract_pipe_pages(struct iov_iter *i,
- 					   struct page ***pages, size_t maxsize,
- 					   unsigned int maxpages,
--					   unsigned int extraction_flags,
-+					   iov_iter_extraction_t extraction_flags,
- 					   size_t *offset0)
- {
- 	unsigned int nr, offset, chunk, j;
-@@ -1971,7 +1971,7 @@ static ssize_t iov_iter_extract_pipe_pages(struct io=
-v_iter *i,
- static ssize_t iov_iter_extract_xarray_pages(struct iov_iter *i,
- 					     struct page ***pages, size_t maxsize,
- 					     unsigned int maxpages,
--					     unsigned int extraction_flags,
-+					     iov_iter_extraction_t extraction_flags,
- 					     size_t *offset0)
- {
- 	struct page *page, **p;
-@@ -2017,7 +2017,7 @@ static ssize_t iov_iter_extract_xarray_pages(struct =
-iov_iter *i,
- static ssize_t iov_iter_extract_bvec_pages(struct iov_iter *i,
- 					   struct page ***pages, size_t maxsize,
- 					   unsigned int maxpages,
--					   unsigned int extraction_flags,
-+					   iov_iter_extraction_t extraction_flags,
- 					   size_t *offset0)
- {
- 	struct page **p, *page;
-@@ -2060,7 +2060,7 @@ static ssize_t iov_iter_extract_bvec_pages(struct io=
-v_iter *i,
- static ssize_t iov_iter_extract_kvec_pages(struct iov_iter *i,
- 					   struct page ***pages, size_t maxsize,
- 					   unsigned int maxpages,
--					   unsigned int extraction_flags,
-+					   iov_iter_extraction_t extraction_flags,
- 					   size_t *offset0)
- {
- 	struct page **p, *page;
-@@ -2125,7 +2125,7 @@ static ssize_t iov_iter_extract_user_pages(struct io=
-v_iter *i,
- 					   struct page ***pages,
- 					   size_t maxsize,
- 					   unsigned int maxpages,
--					   unsigned int extraction_flags,
-+					   iov_iter_extraction_t extraction_flags,
- 					   size_t *offset0)
- {
- 	unsigned long addr;
-@@ -2207,7 +2207,7 @@ ssize_t iov_iter_extract_pages(struct iov_iter *i,
- 			       struct page ***pages,
- 			       size_t maxsize,
- 			       unsigned int maxpages,
--			       unsigned int extraction_flags,
-+			       iov_iter_extraction_t extraction_flags,
- 			       size_t *offset0)
- {
- 	maxsize =3D min_t(size_t, min_t(size_t, maxsize, i->count), MAX_RW_COUNT=
-);
-
+Best regards,
+Balsam
