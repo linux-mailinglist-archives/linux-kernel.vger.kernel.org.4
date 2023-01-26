@@ -2,115 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B10F67D3F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F09B867D454
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 19:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjAZSTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 13:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        id S232100AbjAZSiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 13:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjAZSTl (ORCPT
+        with ESMTP id S231557AbjAZSiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:19:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B585E504;
-        Thu, 26 Jan 2023 10:19:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 26 Jan 2023 13:38:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5560B49415
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 10:37:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674758234;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GCnG7e8Wg2ZPkYk2BgwcAsCpETyBPYzxTKI98DQimBw=;
+        b=RLMPfmutVWcQ8VoMDSVUNbDQJE0pUMKv8dXM7DGY+cV1KPb78dhEeDeM7h/vr666qnb9sv
+        50ZQUWshZJev3jagPnfFNQbYVSIS1d+7r0OXqDNWkUYoMU2oCvQDIqy5W1pxsQuRlTKx90
+        +0AZE5JEETenMYcwsvvLbTKt/WetG+Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-321-DfgxT9p-Or6OJ0aCbIzH7w-1; Thu, 26 Jan 2023 13:37:13 -0500
+X-MC-Unique: DfgxT9p-Or6OJ0aCbIzH7w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2258DB81EC9;
-        Thu, 26 Jan 2023 18:19:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22712C433EF;
-        Thu, 26 Jan 2023 18:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674757177;
-        bh=fMbvpdY4LhT/plsYFJopPqhOxAufgim8fKxCWytJLaQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rcILIp7kPxYF23bBgm/G20DBJ9ES7nqnnZX4jep/Ttz/YQIA6rYoViK0wToZ+aRiS
-         FmchqdUTmyQn5u+t3FWe64ZJwf0vaBvLH+axoImbEOK1lQirPGXRxEeqiJn282cCL8
-         tUfkku3R5jQwEl4AmjVrA308mKS5Rwatj6rUjxctbYlFDx66cOwWUdD5SLbVh8zX8V
-         RzQ+2M31UdObPbquc7jk0CYZyoDZIFiND4wGLdCvG9VVfn8TlCmVjZ6/60imsqCQA8
-         va6Ny9rMFUieaUxczbUwHyDRfFDLnJZgD3hWXRQM4hCx7KQndmfs4dlCvSZ0rBUJko
-         ja3VL4rnEDlSw==
-Date:   Thu, 26 Jan 2023 12:19:35 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH 2/6] clk: qcom: Add GPU clock controller driver for SM6125
-Message-ID: <20230126181935.mg7eida2e5vp42hc@builder.lan>
-References: <20230126144033.216206-1-konrad.dybcio@linaro.org>
- <20230126144033.216206-3-konrad.dybcio@linaro.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7980185D062;
+        Thu, 26 Jan 2023 18:37:12 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3D89340C2064;
+        Thu, 26 Jan 2023 18:37:12 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 0FC7140975B20; Thu, 26 Jan 2023 15:19:45 -0300 (-03)
+Date:   Thu, 26 Jan 2023 15:19:45 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+Message-ID: <Y9LEQfX5dkEyBOkT@tpad>
+References: <20230125073502.743446-1-leobras@redhat.com>
+ <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+ <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+ <Y9FzSBw10MGXm2TK@tpad>
+ <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230126144033.216206-3-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 03:40:29PM +0100, Konrad Dybcio wrote:
-> diff --git a/drivers/clk/qcom/gpucc-sm6125.c b/drivers/clk/qcom/gpucc-sm6125.c
-[..]
-> +static int gpu_cc_sm6125_probe(struct platform_device *pdev)
-> +{
-> +	struct regmap *regmap;
-> +	unsigned int value, mask;
-> +
-> +	regmap = qcom_cc_map(pdev, &gpu_cc_sm6125_desc);
-> +	if (IS_ERR(regmap))
-> +		return PTR_ERR(regmap);
-> +
-> +	clk_alpha_pll_configure(&gpu_cc_pll0_out_aux2, regmap, &gpu_pll0_config);
-> +	clk_alpha_pll_configure(&gpu_cc_pll1_out_aux2, regmap, &gpu_pll1_config);
-> +
-> +	/* Recommended WAKEUP/SLEEP settings for the gpu_cc_cx_gmu_clk */
-> +	mask = CX_GMU_CBCR_WAKE_MASK << CX_GMU_CBCR_WAKE_SHIFT;
-> +	mask |= CX_GMU_CBCR_SLEEP_MASK << CX_GMU_CBCR_SLEEP_SHIFT;
-> +	value = 0xf << CX_GMU_CBCR_WAKE_SHIFT | 0xf << CX_GMU_CBCR_SLEEP_SHIFT;
+On Wed, Jan 25, 2023 at 03:14:48PM -0800, Roman Gushchin wrote:
+> On Wed, Jan 25, 2023 at 03:22:00PM -0300, Marcelo Tosatti wrote:
+> > On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Brás wrote:
+> > > On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
+> > > > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
+> > > > > Disclaimer:
+> > > > > a - The cover letter got bigger than expected, so I had to split it in
+> > > > >     sections to better organize myself. I am not very confortable with it.
+> > > > > b - Performance numbers below did not include patch 5/5 (Remove flags
+> > > > >     from memcg_stock_pcp), which could further improve performance for
+> > > > >     drain_all_stock(), but I could only notice the optimization at the
+> > > > >     last minute.
+> > > > > 
+> > > > > 
+> > > > > 0 - Motivation:
+> > > > > On current codebase, when drain_all_stock() is ran, it will schedule a
+> > > > > drain_local_stock() for each cpu that has a percpu stock associated with a
+> > > > > descendant of a given root_memcg.
+> 
+> Do you know what caused those drain_all_stock() calls? I wonder if we should look
+> into why we have many of them and whether we really need them?
+> 
+> It's either some user's actions (e.g. reducing memory.max), either some memcg
+> is entering pre-oom conditions. In the latter case a lot of drain calls can be
+> scheduled without a good reason (assuming the cgroup contain multiple tasks running
+> on multiple cpus). Essentially each cpu will try to grab the remains of the memory quota
+> and move it locally. I wonder in such circumstances if we need to disable the pcp-caching
+> on per-cgroup basis.
+> 
+> Generally speaking, draining of pcpu stocks is useful only if an idle cpu is holding some
+> charges/memcg references (it might be not completely idle, but running some very special
+> workload which is not doing any kernel allocations or a process belonging to the root memcg).
+> In all other cases pcpu stock will be either drained naturally by an allocation from another
+> memcg or an allocation from the same memcg will "restore" it, making draining useless.
+> 
+> We also can into drain_all_pages() opportunistically, without waiting for the result.
+> On a busy system it's most likely useless, we might oom before scheduled works will be executed.
+> 
+> I admit I planned to do some work around and even started, but then never had enough time to
+> finish it.
+> 
+> Overall I'm somewhat resistant to an idea of making generic allocation & free paths slower
+> for an improvement of stock draining. It's not a strong objection, but IMO we should avoid
+> doing this without a really strong reason.
 
-Perhaps I'm missing something here, but isn't mask == value after this?
+The expectation would be that cache locking should not cause slowdown of
+the allocation and free paths:
 
-Feels like this could be written cleaner using FIELD_PREP(), or perhaps
-even moved to a helper function, so that we don't need to open code this
-if it's needed in other places?
+https://manualsbrain.com/en/manuals/1246877/?page=313
 
-> +	regmap_update_bits(regmap, gpu_cc_cx_gmu_clk.clkr.enable_reg, mask, value);
-> +
-> +	/* Set up PERIPH/MEM retain on the GPU core clock */
-> +	regmap_update_bits(regmap, gpu_cc_gx_gfx3d_clk.halt_reg,
-> +			   (BIT(14) | BIT(13)), (BIT(14) | BIT(13)));
+For the P6 and more recent processor families, if the area of memory being locked 
+during a LOCK operation is cached in the processor that is performing the LOCK oper-
+ation as write-back memory and is completely contained in a cache line, the 
+processor may not assert the LOCK# signal on the bus. Instead, it will modify the 
+memory location internally and allow it’s cache coherency mechanism to insure that 
+the operation is carried out atomically. This operation is called “cache locking.” The 
+cache coherency mechanism automatically prevents two or more processors that ...
 
-You don't need the extra parenthesis here.
 
-> +
-> +	return qcom_cc_really_probe(pdev, &gpu_cc_sm6125_desc, regmap);
-> +}
-> +
-> +static struct platform_driver gpu_cc_sm6125_driver = {
-> +	.probe = gpu_cc_sm6125_probe,
-> +	.driver = {
-> +		.name = "gpucc-sm6125",
-> +		.of_match_table = gpu_cc_sm6125_match_table,
-> +	},
-> +};
-> +
-> +static int __init gpu_cc_sm6125_init(void)
-> +{
-> +	return platform_driver_register(&gpu_cc_sm6125_driver);
-> +}
-> +subsys_initcall(gpu_cc_sm6125_init);
-
-You don't need GPU at subsys, module_platform_driver() should be
-sufficient (and =m in defconfig).
-
-Thanks,
-Bjorn
