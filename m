@@ -2,102 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7950667D1C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AB967D1C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbjAZQgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:36:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
+        id S231667AbjAZQg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:36:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbjAZQgb (ORCPT
+        with ESMTP id S231485AbjAZQgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:36:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E8B6B9A2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:36:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39A91618D3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:36:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DACFAC433D2;
-        Thu, 26 Jan 2023 16:36:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674750971;
-        bh=NHe7c07kpgMGuREH7WhzPdLzzHD/XoCu9aMEENUsRB8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Jq6Mu7X3Hczk8L8xJev1HNltLPLpnttt8192JQyVScT0Kl5l9lHE7IKY5InhnkXip
-         orDbczFBsTVbdfrrtDFaZVac4GQjK4YPhbX/2xPHcTMHcBG+2vbSu8JaT7xsW/8CmC
-         jLNwog3vS7+Cw2iZ/rMcobUqrowChSuEttq6XlnJeVTIrXgrfSYGPUciQqyqs4rh1C
-         JRxhmCinFJy5V9r78IpLrGkshwkajTNXpKef9gbyfM5cEwyZZGhziVUeVNFinQAsnO
-         nQPO4RIOoc8vKMIStOO994qTh8heSri8qd8H1ZmJwar+k+iRJHZajuZizdFKZEUvli
-         SVWtx9/qme7pQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Roman Li <roman.li@amd.com>,
-        Wayne Lin <Wayne.Lin@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Stylon Wang <stylon.wang@amd.com>,
-        hersen wu <hersenxs.wu@amd.com>, Lyude Paul <lyude@redhat.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Thu, 26 Jan 2023 11:36:25 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2D6AD6F204
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:36:09 -0800 (PST)
+Received: (qmail 265554 invoked by uid 1000); 26 Jan 2023 11:36:08 -0500
+Date:   Thu, 26 Jan 2023 11:36:08 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amdgpu/display/mst: fix an unused-variable warning
-Date:   Thu, 26 Jan 2023 17:35:54 +0100
-Message-Id: <20230126163605.3524630-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
+References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
+ <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Jan 26, 2023 at 02:46:04PM +0100, Jonas Oberhauser wrote:
+> As stated in the documentation and implied by its name, the ppo
+> (preserved program order) relation is intended to link po-earlier
+> to po-later instructions under certain conditions.  However, a
+> corner case currently allows instructions to be linked by ppo that
+> are not executed by the same thread, i.e., instructions are being
+> linked that have no po relation.
+> 
+> This happens due to the mb/strong-fence relations, which (as one
+> case) provide order when locks are passed between threads followed
+> by an smp_mb__after_unlock_lock() fence.  This is illustrated in
+> the following litmus test (as can be seen when using herd7 with
+> `doshow ppo`):
+> 
+> P0(int *x, int *y)
+> {
+>     spin_lock(x);
+>     spin_unlock(x);
+> }
+> 
+> P1(int *x, int *y)
+> {
+>     spin_lock(x);
+>     smp_mb__after_unlock_lock();
+>     *y = 1;
+> }
+> 
+> The ppo relation will link P0's spin_lock(x) and P1's *y=1, because
+> P0 passes a lock to P1 which then uses this fence.
+> 
+> The patch makes ppo a subrelation of po by eliminating this possibility
+> from mb (but not strong-fence) and relying explicitly on mb|gp instead
+> of strong-fence when defining ppo.
+> 
+> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> ---
 
-The newly added code is in an #ifdef, so the variables that
-are only used in there cause a warning if CONFIG_DRM_AMD_DC_DCN
-is disabled:
+This changes the meaning of the fence relation, which is used in 
+w-pre-bounded, w-post-bounded, ww-vis, wr-vis, and rw-xbstar.  Have you 
+checked that they won't be affected by the change?
 
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'amdgpu_dm_atomic_check':
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9698:43: error: unused variable 'mst_state' [-Werror=unused-variable]
- 9698 |         struct drm_dp_mst_topology_state *mst_state;
-      |                                           ^~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9697:41: error: unused variable 'mgr' [-Werror=unused-variable]
- 9697 |         struct drm_dp_mst_topology_mgr *mgr;
-      |                                         ^~~
+>  tools/memory-model/linux-kernel.cat | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+> index 6e531457bb73..815fdafacaef 100644
+> --- a/tools/memory-model/linux-kernel.cat
+> +++ b/tools/memory-model/linux-kernel.cat
+> @@ -36,7 +36,9 @@ let wmb = [W] ; fencerel(Wmb) ; [W]
+>  let mb = ([M] ; fencerel(Mb) ; [M]) |
+>  	([M] ; fencerel(Before-atomic) ; [RMW] ; po? ; [M]) |
+>  	([M] ; po? ; [RMW] ; fencerel(After-atomic) ; [M]) |
+> -	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
+> +	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M])
+> +let gp = po ; [Sync-rcu | Sync-srcu] ; po?
+> +let strong-fence = mb | gp |
+>  (*
+>   * Note: The po-unlock-lock-po relation only passes the lock to the direct
+>   * successor, perhaps giving the impression that the ordering of the
+> @@ -50,10 +52,9 @@ let mb = ([M] ; fencerel(Mb) ; [M]) |
+>   *)
+>  	([M] ; po-unlock-lock-po ;
+>  		[After-unlock-lock] ; po ; [M])
+> -let gp = po ; [Sync-rcu | Sync-srcu] ; po?
+> -let strong-fence = mb | gp
+>  
+> -let nonrw-fence = strong-fence | po-rel | acq-po
+> +
 
-Fixes: c689e1e362ea ("drm/amdgpu/display/mst: Fix mst_state->pbn_div and slot count assignments")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 ++
- 1 file changed, 2 insertions(+)
+Extra blank line.
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index be1232356f9e..c966bb05f6c7 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -9694,8 +9694,10 @@ static int amdgpu_dm_atomic_check(struct drm_device *dev,
- 	struct drm_connector_state *old_con_state, *new_con_state;
- 	struct drm_crtc *crtc;
- 	struct drm_crtc_state *old_crtc_state, *new_crtc_state;
-+#if defined(CONFIG_DRM_AMD_DC_DCN)
- 	struct drm_dp_mst_topology_mgr *mgr;
- 	struct drm_dp_mst_topology_state *mst_state;
-+#endif
- 	struct drm_plane *plane;
- 	struct drm_plane_state *old_plane_state, *new_plane_state;
- 	enum dc_status status;
--- 
-2.39.0
+> +let nonrw-fence = mb | gp | po-rel | acq-po
+>  let fence = nonrw-fence | wmb | rmb
+>  let barrier = fencerel(Barrier | Rmb | Wmb | Mb | Sync-rcu | Sync-srcu |
+>  		Before-atomic | After-atomic | Acquire | Release |
+> -- 
+> 2.17.1
 
+Alan
