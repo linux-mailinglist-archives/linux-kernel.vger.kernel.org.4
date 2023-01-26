@@ -2,244 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4564567C491
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:49:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEDB67C49A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 07:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235949AbjAZGtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 01:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
+        id S236040AbjAZG7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 01:59:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjAZGtj (ORCPT
+        with ESMTP id S230233AbjAZG7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 01:49:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253F0271B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 22:48:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674715733;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NmaQytAd5teTparcEG1b1oyi2EiAKphXrn+FZrXb+Qo=;
-        b=IiipaUj2gmTNVi6mNaCWfkA34xEPki2kbGnVYbpNkmNXpdUXWDNcceFxzsfPSa7rj3xKa9
-        uPX0DNFaIdB9xdq82zMtxb4ggq3qQ3fAnqkWPJ/eDYwzfD9nlCaAysfL1ylVi33ScjGcFQ
-        9e2wFcYKpdpl94kRNKJcw1chHFe++rQ=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-263-iK1wgk06PIyXgcSC_J77FA-1; Thu, 26 Jan 2023 01:48:52 -0500
-X-MC-Unique: iK1wgk06PIyXgcSC_J77FA-1
-Received: by mail-qv1-f71.google.com with SMTP id k15-20020a0cd68f000000b00535261af1b1so611953qvi.13
-        for <linux-kernel@vger.kernel.org>; Wed, 25 Jan 2023 22:48:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NmaQytAd5teTparcEG1b1oyi2EiAKphXrn+FZrXb+Qo=;
-        b=dMXo7pw/x3Bo/ONP0J9AHFr7NssUjlSk8S97wsOXh1wuWs+G12KDFPWmoA70ltGL3I
-         VvDoidBBEjKwD+CR64UevO+KCw5qdWyB+0Dw88cJW9fJ9+4RhgHupwlJixa3K44zL4Pr
-         Te+uYJRs7pEhBK1uXbsq+l8V8gUC8PUhvnQ6LViUnY7+FvNCq7n2LCW67XugNVX1VIBK
-         yheodrjv4vcYlsR5k7TF18wtKOY3I88A0Z9eNoWWZVrr/5pWOsHE5gD2YbtvGcnk04CK
-         yMXr39lJxXp9bF9uV4qSJBtQOmGEm67Q0Nb+GG6zkcsWpbN5ZbQUDtSOtc1XCKaMEY9O
-         G22w==
-X-Gm-Message-State: AO0yUKWu1N3QGAizuKrTTp05S5ZVApx28Uqqm1D2tgxnlhAJLxtJ6i9h
-        78tIWDuXWqhx9SbNGfWIyDPamZmVu1OfWSTDdyClWJQfwvbKZpqFLHz42YVw3oipKD4ODotv89U
-        PI/CDlnF2LcdwClxCWrwyQHZ9
-X-Received: by 2002:ac8:7dd5:0:b0:3b0:d422:1cbe with SMTP id c21-20020ac87dd5000000b003b0d4221cbemr2751011qte.10.1674715731563;
-        Wed, 25 Jan 2023 22:48:51 -0800 (PST)
-X-Google-Smtp-Source: AK7set90BkmPDKwMD/1Qt0FIfZGx66CPV1T0quAs3f1ZGGwe1yW0KU3JJXf3B7GHqjaXgkSzLHxxOw==
-X-Received: by 2002:ac8:7dd5:0:b0:3b0:d422:1cbe with SMTP id c21-20020ac87dd5000000b003b0d4221cbemr2751000qte.10.1674715731308;
-        Wed, 25 Jan 2023 22:48:51 -0800 (PST)
-Received: from [192.168.8.105] (tmo-064-101.customers.d1-online.com. [80.187.64.101])
-        by smtp.gmail.com with ESMTPSA id fb23-20020a05622a481700b003b62cd6e60esm253556qtb.43.2023.01.25.22.48.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 22:48:50 -0800 (PST)
-Message-ID: <a1141cf5-8c44-5e9e-688c-c9dab3ebe8d4@redhat.com>
-Date:   Thu, 26 Jan 2023 07:48:46 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
+        Thu, 26 Jan 2023 01:59:04 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20609.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::609])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5B25C0EF;
+        Wed, 25 Jan 2023 22:59:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oQM+4CGk1K1XxXL0Pe6oh7FOHkFbHKBxkPnHVqF+9en0V1JieH2UenaP9qpzmyYImdcAxvje+2lIu+Hx1SjnGYicx/xzyS3QrVLCdhsdIPtoek332kJBS9DDnuhHLghZeT2Y9VSDsw4sUpInvBpURSG/bIgHaLF9B7/EZzaskk9DJGCtg3njRN7gNnlhtH7R/fXtXTzP5ey0Cl6sUmX9/0IJFVb+Rj8gG+NmzKTPypSRK+qtg27zuQwddMXTd/DFzAJuCd+ndKZh93HsanxXlvfbOK/8NTo4pPW9deLmJ4P82ossAv/bY5eWAO+D4QT8KvlPKj4buzFJ7rDO82C2mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PNuexUBkUh+A6GNqEqHVPsbMDsnacyJLlHRvY8kEjgU=;
+ b=FADZ9xwZyFq1WzuQFBmbLlfBjg5LgXyWl9N0u7GV8DbThs4sm8d6kdK9CpnvBguHwbfMCiLEwpVp4X5ZxtdMEtz1xaBlihc/efQGxEG21YbnD7lNPqB2SKCJnQDG6i+XOrB+oqX+ppyme6zYEQMpB+Fiqk4l04yn5dXRUV6GESdAcyFronKH1Zn4wK8jNHEkQI12/tp/6/K9hqDPXQqYLbjtGcAD+MhNeAyncY4AGg7SSjbxvAhNjbbpkNfyjFAtUyVYER3fLfYX/WJWNmnpAH76c+eiitsolmUMouPoTXwr2STEhRj7cxe1qgFoDDMsaDPDOmEgAp/9x7WRht5zvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PNuexUBkUh+A6GNqEqHVPsbMDsnacyJLlHRvY8kEjgU=;
+ b=sC9QJq0Ldi5HsaLS45mCQIBGK5RHLSenx0BwvzuBd4NNAxaTDQqU6AFLnecE6OKKl1zP6b067hq5qVWd6H0W/8YOjfPyvNsu4Mw+HUuaFQ+IHsHnMjnQl2jPTDNytGbhuban58ti9bUme0FKVfNx4fp16VaQhIgsZxiuaLHGg5k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DS7PR12MB8250.namprd12.prod.outlook.com (2603:10b6:8:db::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Thu, 26 Jan
+ 2023 06:59:00 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6043.017; Thu, 26 Jan 2023
+ 06:59:00 +0000
+Message-ID: <4b13c48e-1677-3947-42e5-5ba241bcb96a@amd.com>
+Date:   Thu, 26 Jan 2023 07:58:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] dma-buf: actually set signaling bit for private sub
+ fences
 Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20230125212608.1860251-1-scgl@linux.ibm.com>
- <20230125212608.1860251-9-scgl@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-Subject: Re: [PATCH v6 08/14] KVM: s390: Move common code of mem_op functions
- into functions
-In-Reply-To: <20230125212608.1860251-9-scgl@linux.ibm.com>
+To:     Danilo Krummrich <dakr@redhat.com>, Arvind.Yadav@amd.com,
+        sumit.semwal@linaro.org, gustavo@padovan.org
+Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230126002844.339593-1-dakr@redhat.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230126002844.339593-1-dakr@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR2P281CA0113.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9d::8) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DS7PR12MB8250:EE_
+X-MS-Office365-Filtering-Correlation-Id: 33da7f99-88eb-4a1b-04a3-08daff6acd20
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bWsJb/KJw/HDtOkEKB8a3rz2d5GSJMMkWHvKJwgOBMSyigzoVuKILtIjgh8xoVNMpAjcWFJxT4EJdit6c7NJH+kMVr/Kz2W1HzR00gEnMTXicmvDWCjtXPhsB/nNTI2IwtPh2ag+85kyx+BZlzXYhCIk1+d8Qm50nASJ4Z7mKDqyRbtu1ZgWtQrJ+e+iWUexDtQK252gAyRUoow9Gg0z0JYm2z9ZRk8i9lgqNK9FO7arr6GipaEWouBzVLu4MrpE0pcF8Sg/YmyV8mlo4Niu4Sqna6BciLBHj8EDpoBqHD/knODLhhiEi2J68+6aWt1btf/lLbP6IXKbHmtZ83pMsGNdxsGmc8ZW+R1atBocdzCD4QqIgVr1JgdUQwJ9gBfZwrlxkt7k7GQxdfyyM/kOof0bCj5lSrbM6vZADfYVy44/mqQU4AGyNXytsbWS8xtUcgm6AxOBU5bjK/zDZeymUigd7XkvGyacmk68y/xvL6jOo17tPOJ9wUtustuHEJQgQqVKArvgN8rpGGB8f6TQgOHHRuHKrIc3YX4NnxXbXvR9utkZW+UooCdtNLYceE1wFXwXj+fl36nlt92jL/MXwfX1ytRmJCyK47lhzhUUBjLWXu6wkGeQJ3oG5mawHQG/w+XlJKxWxuung3zWRIonbUmObkMpW0f/VkNFgFCPVKYQjaMMgevTV9hXI9Z/bo7QcA6OMuNCFm3I6cF6L5h/swpxcwl1/h9A3m0Bs160E0A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(376002)(366004)(136003)(346002)(451199018)(31696002)(36756003)(4326008)(66946007)(66476007)(86362001)(316002)(186003)(66556008)(6506007)(26005)(8676002)(6666004)(6512007)(6486002)(83380400001)(478600001)(5660300002)(31686004)(66574015)(8936002)(2906002)(2616005)(38100700002)(41300700001)(4744005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MDdtQmRBWEVhaHoxZCtWQXVSZGNOTHNZTE9QanpPVWc4YUhwbWRaWXlWMnBI?=
+ =?utf-8?B?TGlJOXhpWit6WDQrTXJIN2hMS3p3Z0VKWjZIVVVBajhqRmc3NVByc1NGT085?=
+ =?utf-8?B?Rkh3ZTRpQjN6RzZRazh0SVYxU25yeDZEK1h5cHluQmxYVWJjeThyYXBtclNL?=
+ =?utf-8?B?dTRLTmV0ZDNlbnh5NVJVRStLNkk0ai9QdWFyalgvK2ZsVUpDeG5vcmlHTllp?=
+ =?utf-8?B?dzdIc2pwSExRNU5vczA3R05pYTBZVWlhRW9vNzFVNzdkbXhVd0N1MFBZOG1j?=
+ =?utf-8?B?RGJUZnRoNzdadko1elJmYlA2N3JSN2NxT3lXTHVDMjJiMHdIeVV1QWE0akNL?=
+ =?utf-8?B?NFdoQUp4WTBXVlNQTGRuWVBtUmxobmk3THI1N2xyMzhtd2FWM2dJQWErRHEy?=
+ =?utf-8?B?ZWJuejdGY3AwdHZtN3hKa2g2WE8xWTYvSm83WXhnTDI1UnNBY01XdnRCdlRV?=
+ =?utf-8?B?cktFT0ppNWZQejRQcXNmbjBMRFNUdHl6eG1lWFpEK1JMcTVVRzAvblg2b3NU?=
+ =?utf-8?B?L1FOSjRSNVp2Z3ArdDE4dEc3VVE0NUgvbGMyTURMSXdXaEpCOVd3bVVjcnBp?=
+ =?utf-8?B?c1pzemZaS3dZMnJ4eW1EY0VlRkk4NGFDZVRPMHd6M1l2U3VwYkFrTjYvRmxN?=
+ =?utf-8?B?Yi9kYU1POUVrYnM4RHhiY3lEek52THJ4TFF2K3VBSW9laktYZGsxQ2JXclNP?=
+ =?utf-8?B?c05nalF3OXFIZlU5eGFZZTk5Z3VMNUR3NWZlaFVYdm5yb3ZFY0huY0R3WTZp?=
+ =?utf-8?B?NXNoREw3enF6dTVxajdVb29qOWNacFRabTI4MktEZy9PRTlVMmNGNUh4QWhC?=
+ =?utf-8?B?K1BmZmQ5NG1DMk1meEY1ekdBT2pqNm05MXJvaHIxemRaeXBpaGx4YlFFN0Nz?=
+ =?utf-8?B?ckpNL2N6aWUxaGFHMjQwVUllZW5PWGJaMTBvLzc3OUVWZU5TWmxWZlczbUQ0?=
+ =?utf-8?B?cE1vQjIzWnBvdlpKUHQ1Q0hSV3p1Nmw5N0RWK3daczRrMExxWjZLWnJhajRa?=
+ =?utf-8?B?RTFZZ2hIUmhsVmZHb0luNVVyTE01Q2pnb09CWEdoVlphVFdlQlRXd1N1ZHV3?=
+ =?utf-8?B?cXQ2a0F0dFVmWFF6d2RJS2RkNWdZbk1rSHluSXRYWVhRTTJlbVk0ZXBiNWFD?=
+ =?utf-8?B?L25yRldCT0JwOGVNbXNGVkVqdjB2UE01cjJFakFXY2krOU1BbTh4UDMzK3A4?=
+ =?utf-8?B?c3FtTmNkQjA5bXlFc2JnUGdIWGNEVlAzL1pxWFF4SHJ1dkRhRW9xSUIwNTBo?=
+ =?utf-8?B?dEI5dkdJTFQ5aVprYkVSbDI3RzVMbGQzVzFFUVJZY3FCR1lIMzZrQ0N3RW8x?=
+ =?utf-8?B?clZUMnRpSGpTZUlCcmFGYWxHeFJwUExIR3JzOTFmY0ZsYzA3aE44SDFpbzV6?=
+ =?utf-8?B?MEFwMFpmaDlLNmNkWW1aTWpOM3kyempiN2EvZlg2enFEOEU3SjhNT2cvcmVs?=
+ =?utf-8?B?WktMVzNNQkFFOVVFWFh1eXhUWFpNZm1kbmlPeUZtQUdqaUQyWllXNmZvSjNI?=
+ =?utf-8?B?Ky9ZRk8vNG0ybTgwY1h6NXd0eDI4RmtWRXFzTVVxajVLaXVYbEk0WHRUaXJ4?=
+ =?utf-8?B?akgwWGpNNENVa0V2cUgyaGpHWDJkdU5DMURFMU9DUDA2NW8rZnpKUFZiNlZE?=
+ =?utf-8?B?Q1NjMzZIb2F3M3V2eWV4TmJwMi8yR2o4Y1VEZWFJMXJVbTJ0MTBoSi8xN3dQ?=
+ =?utf-8?B?d2JwZllTcFlUaUxYbHV6U0F0MTVnK2U3bzRua3A4elBNcmI3VFdxZmd5Z1BO?=
+ =?utf-8?B?cnhQcUJ2S2I0eDdWR2E5bStJZ282bVpWTXQvZ0NqamQ5WXgrclk2UlozaUNE?=
+ =?utf-8?B?YlRnNHBiYWpXWFdBNVJGaVlnc0N5Ymd2WFJrNXJpaEVkV2VsZkY3NGY3ZlpN?=
+ =?utf-8?B?Q1VwTWFlQ0dLOFhoT3l5VHY4dlUzY3lVbWZhcWZaYVA1Z0tBdkZxVjByekR3?=
+ =?utf-8?B?alZmSTJUbWR4bDRjb1BFTWNFUHlsY0hFejc5N09pTTZqY0JJTjFuUndJeEZv?=
+ =?utf-8?B?eHZ6NGtSdDNVZ2pIZ1ZFY2YyMkpDaE1uL08weUJxY1YyZm1xMlROSlVEQU83?=
+ =?utf-8?B?cHlHc2tTQzFhMXZhZndOYmFObjRPVGU0YWRaa3lxTVVGbWQ0eGs5WVQrdVcx?=
+ =?utf-8?Q?/s+KEhE9gxcZeOEfh1Yz1BbvD?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33da7f99-88eb-4a1b-04a3-08daff6acd20
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 06:59:00.3296
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: L9RByopz1bg9iiL3LOgOEVg+qvJ9PrzUWhNHMNw+VDNLFf0IEDp8MSSFcwYmI1oC
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8250
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2023 22.26, Janis Schoetterl-Glausch wrote:
-> The vcpu and vm mem_op ioctl implementations share some functionality.
-> Move argument checking and buffer allocation into functions and call
-> them from both implementations.
-> This allows code reuse in case of additional future mem_op operations.
-> 
-> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Am 26.01.23 um 01:28 schrieb Danilo Krummrich:
+> In dma_fence_allocate_private_stub() set the signaling bit of the newly
+> allocated private stub fence rather than the signaling bit of the
+> shared dma_fence_stub.
+>
+> Fixes: c85d00d4fd8b ("dma-buf: set signaling bit for the stub fence")
+> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+
+Good catch, Reviewed-by: Christian König <christian.koenig@amd.com>
+
+Should I push it upstream as well or do you have commit access?
+
 > ---
->   arch/s390/kvm/kvm-s390.c | 80 +++++++++++++++++++++-------------------
->   1 file changed, 42 insertions(+), 38 deletions(-)
-> 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index e4890e04b210..e0dfaa195949 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -2764,24 +2764,44 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
->   	return r;
->   }
+>   drivers/dma-buf/dma-fence.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+> index 406b4e26f538..0de0482cd36e 100644
+> --- a/drivers/dma-buf/dma-fence.c
+> +++ b/drivers/dma-buf/dma-fence.c
+> @@ -167,7 +167,7 @@ struct dma_fence *dma_fence_allocate_private_stub(void)
+>   		       0, 0);
 >   
-> -static bool access_key_invalid(u8 access_key)
-> +static int mem_op_validate_common(struct kvm_s390_mem_op *mop, u64 supported_flags)
->   {
-> -	return access_key > 0xf;
-> +	if (mop->flags & ~supported_flags || !mop->size)
-> +		return -EINVAL;
-> +	if (mop->size > MEM_OP_MAX_SIZE)
-> +		return -E2BIG;
-> +	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> +		if (mop->key > 0xf)
-> +			return -EINVAL;
-> +	} else {
-> +		mop->key = 0;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static void *mem_op_alloc_buf(struct kvm_s390_mem_op *mop)
-> +{
-> +	void *buf;
-> +
-> +	if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)
-> +		return NULL;
-> +	buf = vmalloc(mop->size);
-> +	if (!buf)
-> +		return ERR_PTR(-ENOMEM);
-> +	return buf;
->   }
+>   	set_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
+> -		&dma_fence_stub.flags);
+> +		&fence->flags);
 >   
->   static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   {
->   	void __user *uaddr = (void __user *)mop->buf;
-> -	u64 supported_flags;
->   	void *tmpbuf = NULL;
-
-You likely can now remove the "= NULL" here, I guess?
-
->   	int r, srcu_idx;
+>   	dma_fence_signal(fence);
 >   
-> -	supported_flags = KVM_S390_MEMOP_F_SKEY_PROTECTION
-> -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
-> -	if (mop->flags & ~supported_flags || !mop->size)
-> -		return -EINVAL;
-> -	if (mop->size > MEM_OP_MAX_SIZE)
-> -		return -E2BIG;
-> +	r = mem_op_validate_common(mop, KVM_S390_MEMOP_F_SKEY_PROTECTION |
-> +					KVM_S390_MEMOP_F_CHECK_ONLY);
-> +	if (r)
-> +		return r;
-> +
->   	/*
->   	 * This is technically a heuristic only, if the kvm->lock is not
->   	 * taken, it is not guaranteed that the vm is/remains non-protected.
-> @@ -2793,17 +2813,9 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   	 */
->   	if (kvm_s390_pv_get_handle(kvm))
->   		return -EINVAL;
-> -	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> -		if (access_key_invalid(mop->key))
-> -			return -EINVAL;
-> -	} else {
-> -		mop->key = 0;
-> -	}
-> -	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
-> -		tmpbuf = vmalloc(mop->size);
-> -		if (!tmpbuf)
-> -			return -ENOMEM;
-> -	}
-> +	tmpbuf = mem_op_alloc_buf(mop);
-> +	if (IS_ERR(tmpbuf))
-> +		return PTR_ERR(tmpbuf);
->   
->   	srcu_idx = srcu_read_lock(&kvm->srcu);
->   
-> @@ -5250,28 +5262,20 @@ static long kvm_s390_vcpu_mem_op(struct kvm_vcpu *vcpu,
->   {
->   	void __user *uaddr = (void __user *)mop->buf;
->   	void *tmpbuf = NULL;
-
-... and here, too.
-
-But I have to admit that I'm also not sure whether I like the 
-mem_op_alloc_buf() part or not (the mem_op_validate_common() part looks fine 
-to me) : mem_op_alloc_buf() is a new function with 11 lines of code, and the 
-old spots that allocate memory were only 5 lines of code each, so you now 
-increased the LoC count and additionally have to fiddly with IS_ERR and 
-PTR_ERR which is always a little bit ugly in my eyes ... IMHO I'd rather 
-keep the old code here. But that's just my 0.02 €, if you think it's nicer 
-with mem_op_alloc_buf(), I won't insist on keeping the old code.
-
-  Thomas
-
-
-> -	int r = 0;
-> -	const u64 supported_flags = KVM_S390_MEMOP_F_INJECT_EXCEPTION
-> -				    | KVM_S390_MEMOP_F_CHECK_ONLY
-> -				    | KVM_S390_MEMOP_F_SKEY_PROTECTION;
-> +	int r;
->   
-> -	if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size)
-> +	r = mem_op_validate_common(mop, KVM_S390_MEMOP_F_INJECT_EXCEPTION |
-> +					KVM_S390_MEMOP_F_CHECK_ONLY |
-> +					KVM_S390_MEMOP_F_SKEY_PROTECTION);
-> +	if (r)
-> +		return r;
-> +	if (mop->ar >= NUM_ACRS)
->   		return -EINVAL;
-> -	if (mop->size > MEM_OP_MAX_SIZE)
-> -		return -E2BIG;
->   	if (kvm_s390_pv_cpu_is_protected(vcpu))
->   		return -EINVAL;
-> -	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> -		if (access_key_invalid(mop->key))
-> -			return -EINVAL;
-> -	} else {
-> -		mop->key = 0;
-> -	}
-> -	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
-> -		tmpbuf = vmalloc(mop->size);
-> -		if (!tmpbuf)
-> -			return -ENOMEM;
-> -	}
-> +	tmpbuf = mem_op_alloc_buf(mop);
-> +	if (IS_ERR(tmpbuf))
-> +		return PTR_ERR(tmpbuf);
->   
->   	switch (mop->op) {
->   	case KVM_S390_MEMOP_LOGICAL_READ:
 
