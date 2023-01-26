@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92B567C511
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD51C67C51C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235804AbjAZHpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 02:45:24 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:40684 "EHLO
-        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234723AbjAZHpQ (ORCPT
+        id S234056AbjAZHqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 02:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235859AbjAZHqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 02:45:16 -0500
-Received: from [IPV6:2620:137:e001:0:a10c:af48:696f:8164] (unknown [IPv6:2620:137:e001:0:a10c:af48:696f:8164])
-        by mail.monkeyblade.net (Postfix) with ESMTPSA id B5CC083ED016;
-        Wed, 25 Jan 2023 23:45:15 -0800 (PST)
-Message-ID: <56b25571-6083-47d6-59e9-259a36dab462@kernel.org>
-Date:   Wed, 25 Jan 2023 23:45:13 -0800
+        Thu, 26 Jan 2023 02:46:24 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05166A314;
+        Wed, 25 Jan 2023 23:45:55 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9302421C4F;
+        Thu, 26 Jan 2023 07:45:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674719137; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nyfyICH/nuaTPIMu2gFSl4YjBW5PkhozqayimXZNZ+M=;
+        b=nOpFGD4S/OURsfQXM1js173kpvKGKBzy0EeLOpXOxAzYIbZjud1LGPWcyGCuzPRfv/15rr
+        gFZGxHj5K5Asa+oAsIcqDRgvHdi1gPKbeE5F1s5wcpevANvW4xN9xRwUSA7xKzxLfAmSkK
+        Va8Nmt8liDThwSi9/UjWWiRx6zUox0A=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D2991358A;
+        Thu, 26 Jan 2023 07:45:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id x20gE6Ev0mOwHwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 26 Jan 2023 07:45:37 +0000
+Date:   Thu, 26 Jan 2023 08:45:36 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+Message-ID: <Y9IvoDJbLbFcitTc@dhcp22.suse.cz>
+References: <20230125073502.743446-1-leobras@redhat.com>
+ <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+ <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+ <Y9FzSBw10MGXm2TK@tpad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH net] net: dsa: mt7530: fix tristate and help description
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com
-References: <20230125053653.6316-1-arinc.unal@arinc9.com>
- <20230125224411.5a535817@kernel.org>
- <dd21bd3d-b3bb-c90b-8950-e71f4af6b167@kernel.org>
- <1f0e41f4-edf8-fcb5-9bb6-5b5163afa599@arinc9.com>
-From:   John 'Warthog9' Hawley <warthog9@kernel.org>
-In-Reply-To: <1f0e41f4-edf8-fcb5-9bb6-5b5163afa599@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Wed, 25 Jan 2023 23:45:16 -0800 (PST)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9FzSBw10MGXm2TK@tpad>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/2023 11:34 PM, Arınç ÜNAL wrote:
-> On 26.01.2023 10:23, John 'Warthog9' Hawley wrote:
->> On 1/25/2023 10:44 PM, Jakub Kicinski wrote:
->>> On Wed, 25 Jan 2023 08:36:53 +0300 Arınç ÜNAL wrote:
->>>> Fix description for tristate and help sections which include inaccurate
->>>> information.
->>>>
->>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>
->>> Didn't make it thru to the list again :(
->>> Double check that none of the addresses in To: or Cc: are missing
->>> spaces between name and email or after a dot. That seems to be the most
->>> common cause of trouble. Or try to resend using just emails, no names.
->>>
->>
->> You are also likely to run into trouble if your character set is set 
->> to UTF-8.
+On Wed 25-01-23 15:22:00, Marcelo Tosatti wrote:
+[...]
+> Remote draining reduces interruptions whether CPU 
+> is marked as isolated or not:
 > 
-> I think that may be the problem here. I just resent this with only Jakub 
-> and the lists without names. It didn't make it to netdev. My name 
-> includes non-Latin characters. I'm not sure how I can change UTF-8 to 
-> something else that works with this list. I had no such issues with 
-> linux-mediatek.
+> - Allows isolated CPUs from benefiting of pcp caching.
+> - Removes the interruption to non isolated CPUs. See for example 
 > 
-> Arınç
-> 
+> https://lkml.org/lkml/2022/6/13/2769
 
-So dug it out of the logs, you aren't running into UTF-8 issues, so 
-that's good.  However your mail client is appending 'Delivered-To:' to 
-the messages, which is a significant indicator of some weird mail 
-problem for lists, I.E. why is a message that's been delivered being 
-passed back through to the list, which is on the published taboo list:
-
-http://vger.kernel.org/majordomo-taboos.txt
-
-What are you using to send these messages, as that's a header I 
-absolutely wouldn't expect to be on messages heading to vger?
-
-- John 'Warthog9' Hawley
+This is talking about page allocato per cpu caches, right? In this patch
+we are talking about memcg pcp caches. Are you sure the same applies
+here?
+-- 
+Michal Hocko
+SUSE Labs
