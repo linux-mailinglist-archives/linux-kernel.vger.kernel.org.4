@@ -2,110 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F6667C58B
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 630A867C58D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236315AbjAZIKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 03:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
+        id S236321AbjAZILI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 03:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236310AbjAZIKL (ORCPT
+        with ESMTP id S231276AbjAZILH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 03:10:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7BE69B10;
-        Thu, 26 Jan 2023 00:10:11 -0800 (PST)
+        Thu, 26 Jan 2023 03:11:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7115677AB;
+        Thu, 26 Jan 2023 00:11:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8C3FB81CC4;
-        Thu, 26 Jan 2023 08:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26FD7C433EF;
-        Thu, 26 Jan 2023 08:10:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51246616D6;
+        Thu, 26 Jan 2023 08:11:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B627AC433D2;
+        Thu, 26 Jan 2023 08:11:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674720608;
-        bh=8N0004Ksl54/+9j2hPsSyRkAcDEsg7JhyNVs9HdSx/U=;
+        s=k20201202; t=1674720664;
+        bh=7RFmWVvOCNPUgexHV5lN4KjzajuBanl+5PUPmWiJx24=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Nb1qE0LYFJSdahhI/hjhx4Bn+9N0xfzHaKzF78swyiLpJLX+Ja5NgGpNlqrQjZxE7
-         lajWN3P8d3tnkP8Pku3FZZX55RKBdvsgA6OYgr0RnnNntPOd98VD2/AYwgUD2Qkp/Z
-         Vd9C13vVHavMCWQWtYJBwPgmKQyawP5YBNTQvgkMkIfBs2Oslzh8n9H9uqQh9pgDGG
-         IA/5TLw7ug62ADl9GJ0GPI/y90j0msxPH4yVfmKi2/c5zDAozBGOCfS7A4FSWUZU2N
-         Llgp5rveODYs0zWCgaYCamrtbi++OVn16f1MHH3EtHmk9dnGECdk5/FIu10YzSAvVC
-         kucg3GPA1sbnw==
-Date:   Thu, 26 Jan 2023 09:10:02 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Yu Chen <chenyu56@huawei.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-usb@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: phy: hisilicon: Fix
- 'hisilicon,eye-diagram-param' differing types
-Message-ID: <20230126091002.01f58b94@coco.lan>
-In-Reply-To: <20230125221444.3058631-1-robh@kernel.org>
-References: <20230125221444.3058631-1-robh@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
+        b=b3PgGFG0hp15kD6X7eejX9t2P5bTRYkYl38joZjSPLLVq/RZYHA6GRlVjmT8ar2Xp
+         4gFWDqOT5jmuyCurXR03n3fb9jFXxn2NRB4rYaIJIANaE3N2DMzuukJYv43Q9/WJ6M
+         9yN6hjKvTKKrC8A76v4qsa07nO/RxQptebVEhKygllC7VbTV0IWcXesRDNtTv3wbY0
+         5+j0Jvy13PAHAf1+uSXo8xCEJe0+/oB9ZhziJs7rEEyCQilgDQ82vlx5dS8ak20iyG
+         Nys9rZQIGY+3FTjcGoOZqMmxU302X+utyjowbNcYMN/4wnImZQPlqyTY698X3DwF/6
+         E1sekXv1J2IdA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pKxLa-004kk0-8m;
+        Thu, 26 Jan 2023 08:11:02 +0000
+Date:   Thu, 26 Jan 2023 08:10:08 +0000
+Message-ID: <87a625emxr.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH] genirq/msi: Fix fwnode leak
+In-Reply-To: <167468839713.2297784.1309086853550595503.stgit@omen>
+References: <167468839713.2297784.1309086853550595503.stgit@omen>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: alex.williamson@redhat.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, 25 Jan 2023 16:14:43 -0600
-Rob Herring <robh@kernel.org> escreveu:
-
-> 'hisilicon,eye-diagram-param' is also defined in
-> hisilicon,phy-hi3670-pcie.yaml as a 'uint32-array'. Unify it to use
-> 'uint32-array' everywhere.
+On Wed, 25 Jan 2023 23:13:48 +0000,
+Alex Williamson <alex.williamson@redhat.com> wrote:
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-
-> ---
->  .../devicetree/bindings/phy/hisilicon,hi3660-usb3.yaml         | 3 ++-
->  .../devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml         | 3 ++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+> kmemleak is reporting pairs of leaked buffers when PCI devices are
+> unbound from their drivers.  One of these buffers contains the name of
+> the interrupt as generated for the msi_domain_template bundle in
+> msi_create_device_irq_domain().  This name is passed through
+> irq_domain_alloc_named_fwnode(), where an irqchip_rwid is allocated,
+> along with a separate allocation via kasprintf() for another copy of
+> the name.  These are the two leaked buffers.
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/hisilicon,hi3660-usb3.yaml b/Documentation/devicetree/bindings/phy/hisilicon,hi3660-usb3.yaml
-> index 20b79e2e8b82..b11d9873854a 100644
-> --- a/Documentation/devicetree/bindings/phy/hisilicon,hi3660-usb3.yaml
-> +++ b/Documentation/devicetree/bindings/phy/hisilicon,hi3660-usb3.yaml
-> @@ -27,7 +27,8 @@ properties:
->      description: phandle of syscon used to control usb tcxo.
->  
->    hisilicon,eye-diagram-param:
-> -    $ref: /schemas/types.yaml#/definitions/uint32
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    maxItems: 1
->      description: Eye diagram for phy.
->  
->  required:
-> diff --git a/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml b/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
-> index 1cb00dbcd4c5..3c69aca6c7eb 100644
-> --- a/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
-> +++ b/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
-> @@ -32,7 +32,8 @@ properties:
->      description: phandle of syscon used to control phy deep sleep.
->  
->    hisilicon,eye-diagram-param:
-> -    $ref: /schemas/types.yaml#/definitions/uint32
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    maxItems: 1
->      description: Eye diagram for phy.
->  
->    hisilicon,tx-vboost-lvl:
+> Resolve this by adding the missing call to irq_domain_free_fwnode() in
+> msi_remove_device_irq_domain().
+> 
+> Fixes: 27a6dea3ebaa ("genirq/msi: Provide msi_create/free_device_irq_domain()")
+> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
 
+Thomas has already queued this:
 
+commit ac8f29aef2f1695956ff6773b33f975290437f29 (tip/irq/urgent)
+Author: Jason Gunthorpe <jgg@ziepe.ca>
+Date:   Tue Jan 17 15:16:17 2023 -0400
+
+    genirq/msi: Free the fwnode created by msi_create_device_irq_domain()
+
+which I assume will make it into Linus' tree shortly.
 
 Thanks,
-Mauro
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
