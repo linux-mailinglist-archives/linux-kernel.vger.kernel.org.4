@@ -2,194 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2ED67CBB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D8F67CBBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236343AbjAZNNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:13:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S236405AbjAZNOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236182AbjAZNNs (ORCPT
+        with ESMTP id S232760AbjAZNOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:13:48 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DC865EDA;
-        Thu, 26 Jan 2023 05:13:46 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id cd0bcdb537e2997b; Thu, 26 Jan 2023 14:13:44 +0100
-Received: from kreacher.localnet (unknown [213.134.163.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id B32E9781613;
-        Thu, 26 Jan 2023 14:13:43 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH v1 0/3] thermal: intel: int340x: Use generic trip points table
-Date:   Thu, 26 Jan 2023 14:13:43 +0100
-Message-ID: <5926007.lOV4Wx5bFT@kreacher>
-In-Reply-To: <10ad845597c47b8b7d1ba1aa9fe93825d249f56e.camel@linux.intel.com>
-References: <5665899.DvuYhMxLoT@kreacher> <CAJZ5v0iVqGoVq1TVvYoQLxRWnP1nTPe7seeQvbVPancxH_6J1g@mail.gmail.com> <10ad845597c47b8b7d1ba1aa9fe93825d249f56e.camel@linux.intel.com>
+        Thu, 26 Jan 2023 08:14:45 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E936601D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:14:20 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so3223999wma.1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:14:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OHA/1FBnLe/DjBL2RAHOE/0kR+mnf0skty5y8z89TXU=;
+        b=t2Ezs4aR0xtOSuPyHKtDtlcugo0TiOWoAwWPyHdZ6npNMNkpe9KiTfD94IA+vVNUaG
+         Y9JkZAKBEhbARn5TAWXNLxS3FNCfsqYLdt8WzHxpZtZP0SqGy0pCbiaj40YEsi+BBeUb
+         jFNE2F04PCkqVh8zsvhnkAd5OFroNXlSLm6nL++WONWIx41velTvLpvUElzH0yCypRiH
+         MYyLLf4v5WouNG+OzEZ45asnbXqjKBAJj6fGFYqRCyNiFPCRo7RKI+8JjTFrvprO4aYm
+         4qdvFj0v9+860LiMQ7ECol1cASOuK3ZE6ttMAiLim/GGPr4FonjvAB8dHIu2FaanRnZz
+         R2fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OHA/1FBnLe/DjBL2RAHOE/0kR+mnf0skty5y8z89TXU=;
+        b=Sv8F0L4UlnS4SjMydkTRa+41diadFkuSNyaG6d256sWwlmeoF5SXqyZGmmrWf2nnAw
+         3rqQ20csXumF+Noyccn2u2kdbEEpS5POkWbZhzknOQ4UDG4IJcKzVlQD1mK3bTZKlluL
+         LtDZi1aclWkpTOWA3MuwyNcJqxoZGWpEK/I7Gi1jv7ZrN6l/Qrs+ejLSx5JZBx6GLjjH
+         fSHEtM0oV3g55KT2mFCZ0okWnio7/Z+geII6KftTOf8FANCOVluNBI7TcfOLMreejtJ2
+         hG/0VYacylTmk5mUjaXJyiJlgez+d60K9FEut12/BCu4/M2EQIzhgwZkM/tbjOyEqdey
+         oKjQ==
+X-Gm-Message-State: AFqh2kofkyEv5fGxbSzbATuK675uC50JGO0vNCzjl26KJPoI+EdIaBbI
+        ajU0oeBO7VJWimsItQFGbDusyA==
+X-Google-Smtp-Source: AMrXdXsB2dypJgZRyLvldnL3MwIjk8JmDxYB3+vK96DnfnuoFbKtG7UDBJzgY5JAKnZdC/FdKnBOEw==
+X-Received: by 2002:a7b:c4d0:0:b0:3d1:f6b3:2ce3 with SMTP id g16-20020a7bc4d0000000b003d1f6b32ce3mr37326986wmk.35.1674738859147;
+        Thu, 26 Jan 2023 05:14:19 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id 18-20020a05600c26d200b003da28dfdedcsm1719804wmv.5.2023.01.26.05.14.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 05:14:18 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-phy@lists.infradead.org
+Subject: [PATCH v3 0/8] sm8550: Add USB HC and PHYs support
+Date:   Thu, 26 Jan 2023 15:14:07 +0200
+Message-Id: <20230126131415.1453741-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.174
-X-CLIENT-HOSTNAME: 213.134.163.174
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedggeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudeifedrudejgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddujeegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgv
- rhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, January 26, 2023 1:02:59 AM CET srinivas pandruvada wrote:
-> Hi Rafael,
-> 
-> 
-> On Wed, 2023-01-25 at 16:20 +0100, Rafael J. Wysocki wrote:
-> > Hi Srinivas,
-> > 
-> > On Wed, Jan 25, 2023 at 3:55 PM Rafael J. Wysocki <rjw@rjwysocki.net>
-> > wrote:
-> > > 
-> > > Hi All,
-> > > 
-> > > This series replaces the following patch:
-> > > 
-> > > https://patchwork.kernel.org/project/linux-pm/patch/2147918.irdbgypaU6@kreacher/
-> > > 
-> > > but it has been almost completely rewritten, so I've dropped all
-> > > tags from it.
-> > > 
-> > > 
-> 
-> [...]
-> 
-> > > The series is on top of this patch:
-> > > 
-> > > https://patchwork.kernel.org/project/linux-pm/patch/2688799.mvXUDI8C0e@kreacher/
-> > > 
-> > > which applies on top of the linux-next branch in linux-pm.git from
-> > > today.
-> > 
-> > There are two additional branches in linux-pm.git:
-> > 
-> > thermal-intel-fixes
-> On two systems test, no issues are observed.
+This patchset adds support for USB for Qualcomm SM8550 platform.
 
-Great!  I'll move this to linux-next then.
+This patchset is based on top of the following patchset:
+https://lore.kernel.org/all/20230124124714.3087948-1-abel.vesa@linaro.org/
 
-> > thermal-intel-testing
-> branch: thermal-intel-test
-> 
-> No issues, but number of trips are not same as invalid trips are not
-> registered.
-> Not sure if this is correct.
+For changelogs please look at each patch individually.
 
-It may not be.  At least it is a change in behavior that is not expected to
-happen after these changes.
+Abel Vesa (8):
+  dt-bindings: phy: Add qcom,snps-eusb2-phy schema file
+  phy: qcom: Add QCOM SNPS eUSB2 driver
+  dt-bindings: phy: qcom,qmp-usb: Document SM8550 compatible
+  phy: qcom-qmp: pcs-usb: Add v6 register offsets
+  phy: qcom-qmp: Add v6 DP register offsets
+  phy: qcom-qmp-combo: Add support for SM8550
+  arm64: dts: qcom: sm8550: Add USB PHYs and controller nodes
+  arm64: dts: qcom: sm8550-mtp: Add USB PHYs and HC nodes
 
-> At boot up they may be invalid, but
-> firmware may update later (Not aware of such scenario).
-> 
-> For example, the hot is not registered.
-> 
-> Current:
-> 
-> thermal_zone9/trip_point_0_type:critical
-> thermal_zone9/trip_point_0_temp:125050
-> thermal_zone9/trip_point_0_hyst:0
-> 
-> thermal_zone9/trip_point_1_type:hot
-> thermal_zone9/trip_point_1_temp:-273250
-> thermal_zone9/trip_point_1_hyst:0
+ .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml    |   1 +
+ .../bindings/phy/qcom,snps-eusb2-phy.yaml     |  78 ++++
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts       |  22 +
+ arch/arm64/boot/dts/qcom/sm8550.dtsi          |  92 +++-
+ drivers/phy/qualcomm/Kconfig                  |   9 +
+ drivers/phy/qualcomm/Makefile                 |   1 +
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c     | 406 ++++++++++++++++-
+ .../phy/qualcomm/phy-qcom-qmp-pcs-usb-v6.h    |  31 ++
+ drivers/phy/qualcomm/phy-qcom-qmp.h           |   4 +
+ drivers/phy/qualcomm/phy-qcom-snps-eusb2.c    | 423 ++++++++++++++++++
+ 10 files changed, 1063 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,snps-eusb2-phy.yaml
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v6.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-snps-eusb2.c
 
-So this means that _HOT is evaluated successfully (or the trip point index
-would be negative), but it probably returned an invalid temperature (likely 0)
-that has been turned into an error by the temperature range check in the
-new ACPI helper introduced by the change.
-
-OK, thanks for testing!
-
-I've added the appended patch to the thermal-intel-test branch.  Can you please
-check if it makes that difference in behavior go away?
-
----
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH] thermal: ACPI: Initialize trips if temperature is out of range
-
-In some cases it is still useful to register a trip point if the
-temperature returned by the corresponding ACPI thermal object (for
-example, _HOT) is invalid to start with, because the same ACPI
-thermal object may start to return a valid temperature after a
-system configuration change (for example, from an AC power source
-to battery an vice versa).
-
-For this reason, if the ACPI thermal object evaluated by
-thermal_acpi_trip_init() successfully returns a temperature value that
-is out of the range of values taken into account, initialize the trip
-point using THERMAL_TEMP_INVALID as the temperature value instead of
-returning an error to allow the user of the trip point to decide what
-to do with it.
-
-Also update pch_wpt_add_acpi_psv_trip() to reject trip points with
-invalid temperature values.
-
-Fixes: 7a0e39748861 ("thermal: ACPI: Add ACPI trip point routines")
-Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/intel_pch_thermal.c |    2 +-
- drivers/thermal/thermal_acpi.c            |    7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_acpi.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_acpi.c
-+++ linux-pm/drivers/thermal/thermal_acpi.c
-@@ -64,13 +64,14 @@ static int thermal_acpi_trip_init(struct
- 		return -ENODATA;
- 	}
- 
--	if (temp < TEMP_MIN_DECIK || temp >= TEMP_MAX_DECIK) {
-+	if (temp >= TEMP_MIN_DECIK && temp <= TEMP_MAX_DECIK) {
-+		trip->temperature = deci_kelvin_to_millicelsius(temp);
-+	} else {
- 		acpi_handle_debug(adev->handle, "%s result %llu out of range\n",
- 				  obj_name, temp);
--		return -ENODATA;
-+		trip->temperature = THERMAL_TEMP_INVALID;
- 	}
- 
--	trip->temperature = deci_kelvin_to_millicelsius(temp);
- 	trip->hysteresis = 0;
- 	trip->type = type;
- 
-Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-@@ -107,7 +107,7 @@ static void pch_wpt_add_acpi_psv_trip(st
- 		return;
- 
- 	ret = thermal_acpi_trip_passive(adev, &ptd->trips[*nr_trips]);
--	if (ret)
-+	if (ret || ptd->trips[*nr_trips].temperature <= 0)
- 		return;
- 
- 	++(*nr_trips);
-
-
+-- 
+2.34.1
 
