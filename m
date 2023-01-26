@@ -2,307 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462B167CBFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7912867CC0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 14:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbjAZN0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 08:26:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
+        id S236810AbjAZN1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 08:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjAZN0E (ORCPT
+        with ESMTP id S236013AbjAZN1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 08:26:04 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056741700
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:26:03 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id h5so1903677ybj.8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 05:26:02 -0800 (PST)
+        Thu, 26 Jan 2023 08:27:23 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4C76C54F;
+        Thu, 26 Jan 2023 05:26:50 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id bj29so802471qkb.9;
+        Thu, 26 Jan 2023 05:26:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/8yNK2kX9YWdGIDCnUsvQH82+dlm6dp9hInv0MG2rDk=;
-        b=o48o7jrnYs+lpORSn3isAnckevWumyFfoeaD4HP+dcF+CgyAYbucZPQLc5G5DpPDiz
-         HXpr6cmMqN0AG36LXC4k0FNPWfZPUR4wL6PIg5m4vU3nQGOlgGU+iZQ8RW78RdnPNftg
-         2mBh9QLB/nag4F/WTncHo8J1/E/znGR+Geq7BqftvyRwdxREt/QBKHt8p+1EluUClGXP
-         sjlh2I44KpQb+sEyWE1RJwIM52JENQJWC3FdfIRAkqml/R55QOO9wpgL647YI5ALvgYL
-         KA4lj98na3WEi5tf4M8Gtk09WOyPTaxKQPhKSswS4+nLNyy8ZIB/93jT4I1wwUlK2htv
-         JEjA==
+        bh=iS5gLAw/H6/fWLmGuUysv3SJVS506G2gVAortGqtf4A=;
+        b=LgsH1UP33hyJB7BztyI3/0Su7D8u3LyyIqofTCvByh9kkRYTsKCH+PNlZXyDji8xUp
+         wO885SfFOYPld6sXcvHlAf2TfjsWFx90RvMXDajdYwokRu89ciZlxbcizvVwvx7NieFy
+         NxE7KPa8H2Tb7QRrt7Erh51ZXGv/Tz4HxG8gKa4b9iRm1MPEJlHJt7ADjsFn8uRcu03L
+         oN6Ul5Y4UN6Us3mS3fkTUmI5YQmZErDWhzgKKvMFqbQV72zzOokP5ZwkeP/7eFDrmXLO
+         2W4JOMXofKUTilILLEvaJrmFUvUHRrNJKcwmPR3R4r5yZJboqEplSvLJRtYQXzH0+CSg
+         MQaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/8yNK2kX9YWdGIDCnUsvQH82+dlm6dp9hInv0MG2rDk=;
-        b=rFKu4dl67VXb6ikAP27GcQQkq4EGE62lhaY/IOYIV5GDXWmdUChWQehRRqTnbUwxdJ
-         p+xQov3Fdy9niipPrWbziMqXuci8xOnWzSYAP4jY0ZpIxMDfcJnUmWGuz5AionSmnDvV
-         djDqZWdsOhdQYQOis5AQ0moRl/rrvbc9AVdzCG3SlWOhodadpfSyD3HqTJ3ezmN72x7O
-         vmGPvvP1DxI3V7ASTZ2jCltXTsuE4UHwIuxtnJzUGYW6l+mE998HLT6TGrlB8yN1sPA8
-         4pQIgFCz9OGQYsesozz6eAxomo1ICxV4GwjApvKlDgltHXSAoACSf2GPlUS5ZD6Xziyp
-         DGDw==
-X-Gm-Message-State: AFqh2kroL+dI6TmZQ08A8awRoa7XuozTJuegbJXR5jy7hGRBcOGGmGKM
-        zvDZkMDCg1p4qKqfwQcsko7vyM2sCD0cC+Ih8YigRA==
-X-Google-Smtp-Source: AMrXdXsu8qqw0tHjvKv+se62HO30MlCFatIwl/tC9pepudY+t2hytHaDucaZJ0hNLoCk+oGK5ku28DE0oE0f5gHnGNw=
-X-Received: by 2002:a5b:38b:0:b0:7ca:9b40:72a7 with SMTP id
- k11-20020a5b038b000000b007ca9b4072a7mr4443316ybp.130.1674739562186; Thu, 26
- Jan 2023 05:26:02 -0800 (PST)
+        bh=iS5gLAw/H6/fWLmGuUysv3SJVS506G2gVAortGqtf4A=;
+        b=LL6VJnM0A8KtwVccaaaQHm4XXMmR02Dh3aqmmZPVwBgtItAktqWuVj3Pi4iPxH7D/T
+         0AENxOCe3jl+Ez+bAfXMqyolxmRzyJMpaIIu9+ipV38XL+k3rRJ1VviMAN3fR1juTKOI
+         bTffN6+pcGCSy+QBWAWMc04addLBFrOZykorEE1VOjCGESgAxIc9pDosMKRK0p3FEyi1
+         RNY4PS2xrklE852MWiLixNVAp0OfUjRaG7x31+gCN5S76w6fNB8/ynJGiZVa5qUYh9JJ
+         nMhKQjOwYWwoToXxft9CPmBLiUicKB2ZdWy8ThGdB0IL5w85iWaQT96z3hFlzAWYyP+C
+         ChVQ==
+X-Gm-Message-State: AFqh2koMRL5UQWOIfPNqIQW918iof6aWwsCE0kjem0tV8MeMVCvDuUAu
+        +6jUSMsvVTou3Of0cqnSHkJoGE4gixrgVpv+j7Gd39c7sDEyeA==
+X-Google-Smtp-Source: AMrXdXs6uUd3T/BHbcdaOVm+BVLBSoZevf9xCbAghuT8tW4+LkTo0Z2SFBAL2oGqENb/B9BRpYnGGSLKYQBCjEkrNX0=
+X-Received: by 2002:a05:620a:999:b0:706:72ba:9f22 with SMTP id
+ x25-20020a05620a099900b0070672ba9f22mr2484795qkx.401.1674739609372; Thu, 26
+ Jan 2023 05:26:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20230118094728.3814-1-clin@suse.com> <20230118094728.3814-3-clin@suse.com>
-In-Reply-To: <20230118094728.3814-3-clin@suse.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 26 Jan 2023 14:25:50 +0100
-Message-ID: <CACRpkdZgjoxV-PPUcVHp=e0uMzx8UnvLoLMLXynm8X4VtBdN7g@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] pinctrl: add NXP S32 SoC family support
-To:     Chester Lin <clin@suse.com>
-Cc:     =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, s32@nxp.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Larisa Grigore <larisa.grigore@nxp.com>,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
-        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Matthew Nunez <matthew.nunez@nxp.com>,
-        Phu Luu An <phu.luuan@nxp.com>,
-        Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+References: <20230126131033.23011-1-ivoshopov@gmail.com>
+In-Reply-To: <20230126131033.23011-1-ivoshopov@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 26 Jan 2023 15:26:13 +0200
+Message-ID: <CAHp75VcsdPfYt9O8GFDa1r8EzUy9dTDH09ttb50qBWPNkJuokQ@mail.gmail.com>
+Subject: Re: [PATCH] tools: gpio: fix -c option of gpio-event-mon
+To:     Ivo Borisov Shopov <ivoshopov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Kent Gibson <warthog618@gmail.com>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chester!
-
-thanks for your patch!
-
-This looks much better and the DT bindings are finished which is
-nice. As the driver is pretty big I need to find time to do review and
-look closer.
-
-Here follows some concerns:
-
-On Wed, Jan 18, 2023 at 10:47 AM Chester Lin <clin@suse.com> wrote:
-
-> Add the pinctrl driver for NXP S32 SoC family. This driver is mainly based
-> on NXP's downstream implementation on nxp-auto-linux repo[1].
+On Thu, Jan 26, 2023 at 3:11 PM Ivo Borisov Shopov <ivoshopov@gmail.com> wrote:
 >
-> [1] https://github.com/nxp-auto-linux/linux/tree/bsp35.0-5.15.73-rt/drivers/pinctrl/freescale
+> Following line should listen for a rising edge and exit after the first
+> one since '-c 1' is provided.
 >
-> Signed-off-by: Matthew Nunez <matthew.nunez@nxp.com>
-> Signed-off-by: Phu Luu An <phu.luuan@nxp.com>
-> Signed-off-by: Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-> Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
-> Signed-off-by: Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>
-> Signed-off-by: Andrei Stefanescu <andrei.stefanescu@nxp.com>
-> Signed-off-by: Radu Pirea <radu-nicolae.pirea@nxp.com>
-> Signed-off-by: Chester Lin <clin@suse.com>
+>     # gpio-event-mon -n gpiochip1 -o 0 -r -c 1
+>
+> It works with kernel 4.19 but it doesn't work with 5.10. In 5.10 the
+> above command doesn't exit after the first rising edge it keep listening
+> for an event forever. The '-c 1' is not taken into an account.
+> The problem is in commit 62757c32d5db ("tools: gpio: add multi-line
+> monitoring to gpio-event-mon").
+> Before this commit the iterator 'i' in monitor_device() is used for
+> counting of the events (loops). In the case of the above command (-c 1)
+> we should start from 0 and increment 'i' only ones and hit the 'break'
+> statement and exit the process. But after the above commit counting
+> doesn't start from 0, it start from 1 when we listen on one line.
+> It is because 'i' is used from one more purpose, counting of lines
+> (num_lines) and it isn't restore to 0 after following code
+>
+>     for (i = 0; i < num_lines; i++)
+>         gpiotools_set_bit(&values.mask, i);
+>
+> This patch just restore the initial value of the iterator to 0 in
 
-(...)
+s/This patch just restore/Restore/
 
-> +++ b/drivers/pinctrl/nxp/Kconfig
-> @@ -0,0 +1,14 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config PINCTRL_S32CC
-> +       bool
-> +       depends on ARCH_S32 && OF
-> +       select GENERIC_PINCTRL_GROUPS
-> +       select GENERIC_PINMUX_FUNCTIONS
-> +       select GENERIC_PINCONF
+> order to allow counting of loops to work for any cases.
 
-Maybe select REGMAP_MMIO
-Maybe select GPIO_GENERIC or GPIO_REGMAP
-see further below.
+Very good explanation for the issue, thanks!
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-> +#ifdef CONFIG_PM_SLEEP
-> +int s32_pinctrl_resume(struct device *dev);
-> +int s32_pinctrl_suspend(struct device *dev);
-> +#endif
+P.S. No need to resend to address above, I think Bart can amend that
+when applying.
 
-I think these are usually handled by tagging the functions with __maybe_unused.
+> Fixes: 62757c32d5db ("tools: gpio: add multi-line monitoring to gpio-event-mon")
+> Signed-off-by: Ivo Borisov Shopov <ivoshopov@gmail.com>
+> ---
+>  tools/gpio/gpio-event-mon.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/gpio/gpio-event-mon.c b/tools/gpio/gpio-event-mon.c
+> index 6c122952c589..5dee2b98ab60 100644
+> --- a/tools/gpio/gpio-event-mon.c
+> +++ b/tools/gpio/gpio-event-mon.c
+> @@ -86,6 +86,7 @@ int monitor_device(const char *device_name,
+>                         gpiotools_test_bit(values.bits, i));
+>         }
+>
+> +       i = 0;
+>         while (1) {
+>                 struct gpio_v2_line_event event;
+>
+> --
+> 2.20.1
+>
 
-> +static u32 get_pin_no(u32 pinmux)
-> +{
-> +       return pinmux >> S32CC_PIN_NO_SHIFT;
 
-Maybe add a mask too so it is clear that you just rely
-on bits being shifted out to the righy.
-
-> +static inline int s32_pinctrl_readl_nolock(struct pinctrl_dev *pctldev,
-> +                                          unsigned int pin,
-> +                                          unsigned long *config)
-> +{
-> +       struct s32_pinctrl_mem_region *region;
-> +       unsigned int offset;
-> +
-> +       region = s32_get_region(pctldev, pin);
-> +       if (!region)
-> +               return -EINVAL;
-> +
-> +       offset = pin - region->pin_range->start;
-> +
-> +       *config = readl(region->base + S32_PAD_CONFIG(offset));
-> +
-> +       return 0;
-> +}
-> +
-> +static inline int s32_pinctrl_readl(struct pinctrl_dev *pctldev,
-> +                                   unsigned int pin,
-> +                                   unsigned long *config)
-> +{
-> +       struct s32_pinctrl *ipctl = pinctrl_dev_get_drvdata(pctldev);
-> +       unsigned long flags;
-> +       int ret;
-> +
-> +       spin_lock_irqsave(&ipctl->reg_lock, flags);
-> +       ret = s32_pinctrl_readl_nolock(pctldev, pin, config);
-> +       spin_unlock_irqrestore(&ipctl->reg_lock, flags);
-> +
-> +       return ret;
-> +}
-> +
-> +static inline int s32_pinctrl_writel_nolock(struct pinctrl_dev *pctldev,
-> +                                           unsigned int pin,
-> +                                           unsigned long config)
-> +{
-> +       struct s32_pinctrl_mem_region *region;
-> +       unsigned int offset;
-> +
-> +       region = s32_get_region(pctldev, pin);
-> +       if (!region)
-> +               return -EINVAL;
-> +
-> +       offset = pin - region->pin_range->start;
-> +
-> +       writel(config, region->base + S32_PAD_CONFIG(offset));
-> +
-> +       return 0;
-> +
-> +}
-> +
-> +static inline int s32_pinctrl_writel(unsigned long config,
-> +                                    struct pinctrl_dev *pctldev,
-> +                                    unsigned int pin)
-> +{
-> +       struct s32_pinctrl *ipctl = pinctrl_dev_get_drvdata(pctldev);
-> +       unsigned long flags;
-> +       int ret;
-> +
-> +       spin_lock_irqsave(&ipctl->reg_lock, flags);
-> +       ret = s32_pinctrl_writel_nolock(pctldev, pin, config);
-> +       spin_unlock_irqrestore(&ipctl->reg_lock, flags);
-> +
-> +       return ret;
-> +}
-
-If you turn this around, *first* get the offset and *then* issye the read/write
-to respective registers, you will find that you have re-implemented
-regmap_mmio, which will take care of serializing your writes so that
-you do not need a lock either. At least consider it.
-
-> +static int s32_update_pin_mscr(struct pinctrl_dev *pctldev, unsigned int pin,
-> +                              unsigned long mask, unsigned long new_mask)
-> +{
-> +       struct s32_pinctrl *ipctl = pinctrl_dev_get_drvdata(pctldev);
-> +       unsigned long config, flags;
-> +       int ret;
-> +
-> +       spin_lock_irqsave(&ipctl->reg_lock, flags);
-> +
-> +       ret = s32_pinctrl_readl_nolock(pctldev, pin, &config);
-> +       if (ret)
-> +               goto unlock;
-> +
-> +       config &= ~mask;
-> +       config |= new_mask;
-> +
-> +       ret = s32_pinctrl_writel_nolock(pctldev, pin, config);
-> +       if (ret)
-> +               goto unlock;
-
-And after having pointed out how regmap MMIO was reimplemented,
-here you re-implement regmap_update_bits() which performs mask
-and set.
-
-> +static int s32_pinconf_get(struct pinctrl_dev *pctldev,
-> +                          unsigned int pin_id,
-> +                          unsigned long *config)
-> +{
-> +       int ret = s32_pinctrl_readl(pctldev, pin_id, config);
-> +
-> +       if (ret)
-> +               return -EINVAL;
-> +
-> +       return 0;
-
-This looks like unnecessary indirection since every call site has
-to check the return code anyway, can't you just inline the s32_pinctrl_readl()
-calls?
-
-(...)
-> +#ifdef CONFIG_PM_SLEEP
-
-Use __maybe_unused and compile in unconditionally.
-
-> +static void s32_pinctrl_parse_groups(struct device_node *np,
-> +                                    struct s32_pin_group *grp,
-> +                                    struct s32_pinctrl_soc_info *info)
-> +{
-> +       const __be32 *p;
-> +       struct device *dev;
-> +       struct property *prop;
-> +       int i, npins;
-> +       u32 pinmux;
-> +
-> +       dev = info->dev;
-> +
-> +       dev_dbg(dev, "group: %s\n", np->name);
-> +
-> +       /* Initialise group */
-> +       grp->name = np->name;
-> +
-> +       npins = of_property_count_elems_of_size(np, "pinmux", sizeof(u32));
-
-There is a lot of code here for handling the funky pinmux stuff. Don't we have
-generic helpers for this? Well maybe not :/
-
-> +static void s32_pinctrl_parse_functions(struct device_node *np,
-> +                                       struct s32_pinctrl_soc_info *info,
-> +                                       u32 index)
-> +{
-> +       struct device_node *child;
-> +       struct s32_pmx_func *func;
-> +       struct s32_pin_group *grp;
-> +       u32 i = 0;
-> +
-> +       dev_dbg(info->dev, "parse function(%d): %s\n", index, np->name);
-> +
-> +       func = &info->functions[index];
-> +
-> +       /* Initialise function */
-> +       func->name = np->name;
-> +       func->num_groups = of_get_child_count(np);
-> +       if (func->num_groups == 0) {
-> +               dev_err(info->dev, "no groups defined in %s\n", np->full_name);
-> +               return;
-> +       }
-> +       func->groups = devm_kzalloc(info->dev,
-> +                       func->num_groups * sizeof(char *), GFP_KERNEL);
-> +
-> +       for_each_child_of_node(np, child) {
-> +               func->groups[i] = child->name;
-> +               grp = &info->groups[info->grp_index++];
-> +               s32_pinctrl_parse_groups(child, grp, info);
-> +               i++;
-> +       }
-> +}
-
-This also looks like helpers we should already have, can you look around
- a bit in other recently merged drivers?
-
-Yours,
-Linus Walleij
+-- 
+With Best Regards,
+Andy Shevchenko
