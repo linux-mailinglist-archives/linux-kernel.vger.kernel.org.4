@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AD967D876
+	by mail.lfdr.de (Postfix) with ESMTP id 0670D67D874
 	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 23:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbjAZWdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 17:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        id S232216AbjAZWd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 17:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbjAZWcu (ORCPT
+        with ESMTP id S233175AbjAZWcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 17:32:50 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47516E416
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:32:28 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id i12so2618459qvs.2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:32:28 -0800 (PST)
+        Thu, 26 Jan 2023 17:32:52 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93C371647
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:32:29 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id jr19so2620090qtb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 14:32:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=criticallink.com; s=google;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SypAcRsRGzHhFPMDy6VkPjsCL8zFvVsNw/XJ5tPEVcY=;
-        b=efuaVL0Qm37vcUypEIcgbVoS1Vqqe488UZ8MTte6T0J7ssEwQ7fEY1dkzJIbj8S7E8
-         1aUD44gCPB7puYCswzn1ztv8km0VbM53zvi9+uFVtlUmdH2Xo8L2fr5mYKS/m0Obd7E4
-         m6ofpouoXgvh74lfLmHDrUYk66up3W/YQEV5RAyERXF2OEGmnHeXGRTUoLlL2mee6Zcn
-         WsDucOBTJFm5836z0UAe67+n5M/fpd2evCUpI8rHNsbIiHvPRB47z49nkkUfm46SDKcB
-         ll+XD12STjyOaw4Ka0Ne4Jt4gzXgnpOfZoqw/0tX2HJiB2ENPgA0Vu/aW+nk7iN6Z9uA
-         dXsA==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3zFvxOAC0q2c06nWzVmCaxdWpCqkl5RVXm0xsv73DMs=;
+        b=o7lK4z8o7B55iaeb/QVxMD9CSLSJVLJ+w6AHvvYrEztgbkkhfDpccJL5XYVNWY5yui
+         +n0LYYi+DDKn9qEfjUU1fed+Owwzbpf431Fleqr10EISUzsNi/sYpeoW4JW0EdyTnLtA
+         mN4zxcQwsQi+LujmWk6kqP5n6TnS4IdRoZidGWsoJuBNKxkooKtpibgK5X67u2OPXYnE
+         5aCgFsC39nIysvoepqn5YPwDt3Ba+Mk+ozWkw1JaJ5H5YHRPlouCaLKD/EOIbluy7VQ6
+         xHsqrviK+JXTKv8fC6fUqXrOHDIFvipPMtwKDJ7aHmziSOxO6aKbOBnhANESRq/3xpyI
+         ejBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SypAcRsRGzHhFPMDy6VkPjsCL8zFvVsNw/XJ5tPEVcY=;
-        b=udIVMQ7B2gDw99VfRoBxp2m5DXPLknCnXuzbcytNswZz22SOZ/CEhowl1zv2X7mQNZ
-         XJ+8lu3H95Bdf3ijIMdshZ/qIQnNEvMkflV2yyoKAkwNcX+IjyjM4gTPn67nUjKrnbY9
-         YLk8gyXsHtpColwwRG46RCMbn8Um5NcrnBRQu3jm5JA1jEMebNhXzJKul0O53Z6FnLzZ
-         0LjqW8P+eTot261/Bp9Kj19vw0eq9MuHAs8M/Zkwy3qGuMUpcqO/cIlekS0swwsRtKee
-         Ts8fOE9NkBWsd4Kzfu8B5sHwjk6O/RqpZyZGZpGCYVIMb4coinWoKVLaY2k3yVxLzxXC
-         x0Uw==
-X-Gm-Message-State: AO0yUKWCLuskCVU65opfWwtd1kd4VSOGGohb5Z80cn0fjIdO5VVdD+MG
-        gZmT9W2Lpt2ITxsf93pSyoK40Q==
-X-Google-Smtp-Source: AK7set8j39WFl26zDOVkE8AB9B9BKmg0mfHSyv5sD9/kg17OgAvML4uOSTenWt/JZjRGg2pSQ4i87g==
-X-Received: by 2002:a05:6214:192c:b0:537:708d:3fef with SMTP id es12-20020a056214192c00b00537708d3fefmr12386015qvb.38.1674772347729;
-        Thu, 26 Jan 2023 14:32:27 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3zFvxOAC0q2c06nWzVmCaxdWpCqkl5RVXm0xsv73DMs=;
+        b=eOVu8Io6lFaAP0Bz2+cNVH/aeDuXMcVY6Abntyhdnj6ySWD9CgvbwJPsD+yMGKx7Jz
+         vux9mD/wtXnkwuaLlUyny3a0Ws9uCuqRYy4xNUJbIqSCPYOauuGpGjHAKQ8l/E46Q4dK
+         X96wqdDXmYJvA6Rop4Pa0pyvHnrh3Bu19NRlUjsXRMhcOeqsXt1TRwcnDZTKlRMdA5/m
+         OGoXpAv/jrsBYZj2CDVWRKbtxWZsCBkBScdbOR7WToa26GaeIvULao4kWHqJemA5fSaP
+         Cu38U/czehVHNHgS7ZJ3UW5nE4PeaZfr/PLvR0VCeBks5Uvdj/dBq3vUWeNN5LpyNs/4
+         V/pg==
+X-Gm-Message-State: AFqh2kqopmlCHQVnsOT5BpArTgmcSHLtlyNqeOl1k5xkWH0ov3B0swbh
+        ZFQd95zH/W4EGYMD/SAZkTRSag==
+X-Google-Smtp-Source: AMrXdXufwfJoYgTc3AtPHx009XAQsWrjQR/+95PfexQQA6FT3nNVJvVyXh7gdStBGf9RlJoP3weqew==
+X-Received: by 2002:a05:622a:1995:b0:3b2:4309:99e with SMTP id u21-20020a05622a199500b003b24309099emr73641310qtc.54.1674772348797;
+        Thu, 26 Jan 2023 14:32:28 -0800 (PST)
 Received: from [127.0.1.1] (static-72-90-70-109.syrcny.fios.verizon.net. [72.90.70.109])
-        by smtp.gmail.com with ESMTPSA id m7-20020a05620a220700b006ff8a122a1asm1723091qkh.78.2023.01.26.14.32.26
+        by smtp.gmail.com with ESMTPSA id m7-20020a05620a220700b006ff8a122a1asm1723091qkh.78.2023.01.26.14.32.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 14:32:27 -0800 (PST)
+        Thu, 26 Jan 2023 14:32:28 -0800 (PST)
 From:   Jonathan Cormier <jcormier@criticallink.com>
-Subject: [PATCH v4 0/5] hwmon: ltc2945: Add binding and shunt resistor
- support
-Date:   Thu, 26 Jan 2023 17:32:22 -0500
-Message-Id: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
+Date:   Thu, 26 Jan 2023 17:32:23 -0500
+Subject: [PATCH v4 1/5] dt-bindings: hwmon: adi,ltc2945: Add binding
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHb/0mMC/y2Nyw6CMBQFf8V0bUnpA4Mr/8MQUmqxV0trbgvRE
- P7dSlzOJOfMSpJFsImcDytBu0CCGArI44EYp8PdUrgVJpxxwWre0EFSnw1vpeqTm0Pu0SZIOSI
- dG9kqxaQUjSJlP+hk6YA6GFcewux9kS+0I7z34LUr7PbtZ+8v4mf/KdZyIZSQVd0KLk6M1vRhI
- k5g8WIQMhjtPYRnZeJEum3bvnnfqJbLAAAA
+Message-Id: <20230126-b4-ltc2945_shunt_resistor-v4-1-bb913470d8da@criticallink.com>
+References: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
+In-Reply-To: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
@@ -71,78 +69,95 @@ Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         Jonathan Cormier <jcormier@criticallink.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1912;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1715;
  i=jcormier@criticallink.com; h=from:subject:message-id;
- bh=V0FNKX9YAVgdV6qQtndh4lVLUCURCHYt+xc2qtMk9AU=;
- b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0v96YYBjH5bl7+oD5yN3Mu+4Qfb2R9YVuyoeBN+Y
- Od/xXU6JAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9L/egAKCRDc1/0uCzbrqgKyD/
- 0anhM64UpBpa8TtU69DKDW0uL3AU4HuKH2i3UEaV85FS3f2PFwWpk+Oq41YDikbRb6sF+ugr+/uq4U
- j5rpdJvtfXQxVZjrmIaqn2BBYqBnD563Kejkkuf8bqmaCELW4GetrUODdj2QNlm4RtRixFASRn67GB
- RyBlssv12Jk8Twvfp2ORa/z8iStY9QesiB37n9ii89ye5gXDmbH+owGjN9OQNcf810aRgFn74iZnqB
- /lKLFfI44cn/vNt6qTtPrkYpugwSuPeElX8wXqUAfze7kPd42stfkPaCjU4bfmyhrCec65PpodIrN+
- nFYzQ7NfRKx0I+OQzEq8RQj+Rq1LJNQnd7Q245eOCWqdAIjtPNwguLXIHPfLOtMXRrMpqS/IppUAJJ
- YNmw/Azd1om/RmRM14/QsSB/sS1S5uqczNmZKBzQ2VaX5LRifE5uQVBkoSoFJmAekDHb0yub3HTZnT
- MCq/BjBvN4O3J7goK0e8RFFW3HNxlE2nJjYsvIdZl/AXz3lf4kYpsQd2rHzFW82BgZbXf/kLQskvyj
- Y1+0p15b5OZhkxg9dZJVmQqE1CQa9L6IHllMtjORyWCXoR1r9WKkZtldp+CGPl/9eI3eBC/512z/kR
- N5d7Cb9bsMmi8vHrjNyR4FLIqhZVPMAo5jF85hpLAOnSPHFKpZnKfi3Lp1CQ==
+ bh=zommGdK1AE/P2wkRC+Wfs7Ff5ewrg2oHpdh2GCpmvb4=;
+ b=owEBbQKS/ZANAwAKAdzX/S4LNuuqAcsmYgBj0v96zdNvjLqjJDJT6uP55wg3FfQKjVKHekgLyJ/H
+ g9+UYSiJAjMEAAEKAB0WIQT/MozqCeZtYxNnVN/c1/0uCzbrqgUCY9L/egAKCRDc1/0uCzbrqm5FEA
+ CGCashV5T/gehXbDpyC6N+qeRK93QJKBK3yy4ryoch6+CQLU1jV1e2Nm2Lget6jA7r8WvFD/JYiktZ
+ EA1YE0dvxdntUT5l92NeBnRsnvF/osVZOWiy//mp363XuQ1XmqWSjdV49lmiEV8U3MtR7T6v3Un3pf
+ +qHaF6h9BkSCjoZDuo4yi3ZrWHTHQz7YHPhcRnwo1hJ81wVt0K1+L0Pvch2cK3oWgrqQzto4f2JeBe
+ vWuMn528NyfLnC5HJMOc5fjbDUoADlE7dcEmnyitrRTx4xZOHL0V+Y1WeZsdV2OhYLCeHZd2bTS2I0
+ 1PRBgpUMfDI51vJftqm4DH6BNTDRYF2n0ar9J/7KEA+L32eU+/GhejGGzSONu2rW1/6rQXBxcAJXiE
+ OKec5CU7dcXLN0j2RU2qSD6cZpTSRsRlh8aGO6o3lNiBD2rDz0+9+OeN9rDxz0mCBdKVu94zBNdJG3
+ VpiUkoaolGWhqWvje6zIb1VCY9u/0i//+6NB/+pofpwFR8XqrDyf0OvRsjIXFH3svI0Y78wwhBpops
+ egwbN3FeiEMaa2z5KRrO1iuR46IAoBYDzDsbPiREr4fi7RRMqVHxe3GvlhxMIQu+wtolpWq0U3cVMg
+ TUOxQXklybtJEvajU54xYWmzKoC850y9iYg/ZjT2dYI7V9Uu3PV2/+y3ZA2Q==
 X-Developer-Key: i=jcormier@criticallink.com; a=openpgp;
  fpr=FF328CEA09E66D63136754DFDCD7FD2E0B36EBAA
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added the ability to specify the value of the shunt resistor in the
-device tree instead of assuming it is 1 milliOhm.
+Create initial binding for the LTC2945 I2C power monitor.
 
-Would be good to backport as well
-
-Changes since v3:
-- Remove shunt-resistor-micro-ohms in binding commit message
-- Simplify ltc2945_value_store fix
-- Validate overflow
-- ltc2945_value_store accept only 32-bit uint from user to avoid overflow
-- Link to v3: https://lore.kernel.org/r/20230109233534.1932370-1-jcormier@criticallink.com
-Changes since v2:
-- Remove newline
-- Combined overflow fix with "Allow setting shunt resistor" commit
-- Add description to "Add devicetree match table"
-- Add fix for unhandled error case in ltc2945_value_store
-- Use imperative in descriptions
-- Remove unneeded overflow check from ltc2945_reg_to_val
-- Fix up DIV_ROUND_CLOSEST_ULL calls, per docs divisor should be 32-bit
-- Split one DIV_ROUND_CLOSEST_ULL change into separate commit per
- Guenter Roeck's comment
-Changes since v1:
-- Add devicetree match table
-- Add kerneldoc for the ltc2945_data struct
-- Cleanup excesive comments about the shunt resistor
-- Switch to device_property_read_u32()
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
 ---
-John Pruitt (1):
-      hwmon: ltc2945: Allow setting shunt resistor
+ .../devicetree/bindings/hwmon/adi,ltc2945.yaml     | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-Jonathan Cormier (4):
-      dt-bindings: hwmon: adi,ltc2945: Add binding
-      hwmon: ltc2945: Add devicetree match table
-      hwmon: ltc2945: Handle error case in ltc2945_value_store
-      hwmon: ltc2945: Convert division to DIV_ROUND_CLOSEST_ULL
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
+new file mode 100644
+index 000000000000..5cb66e97e816
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/adi,ltc2945.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices LTC2945 wide range i2c power monitor
++
++maintainers:
++  - Guenter Roeck <linux@roeck-us.net>
++
++description: |
++  Analog Devices LTC2945 wide range i2c power monitor over I2C.
++
++  https://www.analog.com/media/en/technical-documentation/data-sheets/LTC2945.pdf
++
++properties:
++  compatible:
++    enum:
++      - adi,ltc2945
++
++  reg:
++    maxItems: 1
++
++  shunt-resistor-micro-ohms:
++    description:
++      Shunt resistor value in micro-Ohms
++    default: 1000
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        power-monitor@6e {
++            compatible = "adi,ltc2945";
++            reg = <0x6e>;
++            /* 10 milli-Ohm shunt resistor */
++            shunt-resistor-micro-ohms = <10000>;
++        };
++    };
++...
 
- .../devicetree/bindings/hwmon/adi,ltc2945.yaml     |  49 ++++++++
- drivers/hwmon/ltc2945.c                            | 132 ++++++++++++++-------
- 2 files changed, 136 insertions(+), 45 deletions(-)
----
-base-commit: 93f875a8526a291005e7f38478079526c843cbec
-change-id: 20230126-b4-ltc2945_shunt_resistor-f64955044365
-
-Best regards,
 -- 
-Jonathan Cormier <jcormier@criticallink.com>
+2.25.1
 
