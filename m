@@ -2,145 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2C567C611
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1F767C619
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 09:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234351AbjAZIkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 03:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        id S235905AbjAZIl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 03:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236266AbjAZIkn (ORCPT
+        with ESMTP id S234095AbjAZIlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 03:40:43 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351629757;
-        Thu, 26 Jan 2023 00:40:40 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6F66A5C0447;
-        Thu, 26 Jan 2023 03:40:38 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 03:40:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1674722438; x=
-        1674808838; bh=38uolB1vu5XeoWuDZOwJpjEX8L1LM6DR5gOOaFH+JRY=; b=P
-        W9Qq3+ikzD50MnIhGp+6w7yxU7DCMwbcLpXaMcSTXgjwMlxnaEWqt6+NqkuC5eoD
-        nYW3rXul89VG3BidL4Hd2NLs7VU62p1xU3hi2RdQTBN8MoPO8gbqignWCysAhaTv
-        JANZj87X8y6kV4WuPWYEDs1iSQnbyLOmobOqBeEQkQByit56C+8E9fj/XVUywduA
-        KXChSJbCOYkgaDa8IQmzQuZOubJH/mxGFDHYZoIPUwP/X1m1ij/4AJvFjBD9C3s9
-        Q39ZCRzuw509DNBAqxgpU1qwN86GuRKKHJhEr0obsd/bTwt3DvOTUsJ1q0HGxoWE
-        RWVERBJRevoXSTwPBfnWw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674722438; x=
-        1674808838; bh=38uolB1vu5XeoWuDZOwJpjEX8L1LM6DR5gOOaFH+JRY=; b=g
-        OL2S3NaCdUeLQQ3zdm66oO+fVjYFAvSezYBOypuB9ZG4UgR8f6TPi0utD256JH7G
-        /hZboE+aj7pgrT1PwEbK635qwUeSX3DArPzMhapzHpwGEV4eTJBfgU6LdE23/aoW
-        CCflKZ2Kb1Uyhj9A/mgE/ny/8ZJkmDsECuMY6DROtPXAFStOW9kH5teQr52KaaBm
-        uoXh40xYdUwLF9TmnFt6NBq80aV2M9yWC/eKr9IjT8HtUDcxvu0QWcn3/zwlaYr/
-        cOvpAjW58J6gl2DnDOBJSv/ZMZtpl/c+HVy7E4M4wkjs+PPWmIuxuzSPMNLzkCYL
-        1DP6C4OkdylIXFxbhSh4A==
-X-ME-Sender: <xms:hTzSY0PlCbpEW3h6nZG8wInC-pGYuuks1FtcXxqHM9gGR0oHrltPpg>
-    <xme:hTzSY6_r6tWlMjcQvkSmGFwJaHaPJfasAgVHOna0OHmncWRFuwAluQUqEtTNb0qoB
-    pi-uGUU6E4b9WwjYQk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
-    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:hTzSY7TreSNU8U_mEJw_a6a65ls3Re6gVeJWnFV5ZsJku8_VAss46g>
-    <xmx:hTzSY8t_gEu-ehMEcv2MPNG2wwBGZwK-aEiqJNy0rMAxPed9rB6Xzg>
-    <xmx:hTzSY8eP7q1vxz9jr1RYMXQx8JxYCiiEh37wAPPq9eRnZROxq1L-_A>
-    <xmx:hjzSYzwpC3vfHuKtTQlh_I4cdLdfien7Q1gMLWai5uII-xjEXtmEeQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DC027B60086; Thu, 26 Jan 2023 03:40:37 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <05d32a58-c119-4abb-8e62-9d79bd95324f@app.fastmail.com>
-In-Reply-To: <ca399c86-5bfc-057b-6f9f-50614b91a9b9@csgroup.eu>
-References: <20230125201020.10948-1-andriy.shevchenko@linux.intel.com>
- <20230125201020.10948-2-andriy.shevchenko@linux.intel.com>
- <ca399c86-5bfc-057b-6f9f-50614b91a9b9@csgroup.eu>
-Date:   Thu, 26 Jan 2023 09:40:18 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        "Pierluigi Passaro" <pierluigi.p@variscite.com>,
-        "kernel test robot" <lkp@intel.com>
-Subject: Re: [PATCH v1 1/5] gpiolib: fix linker errors when GPIOLIB is disabled
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 26 Jan 2023 03:41:55 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42554101;
+        Thu, 26 Jan 2023 00:41:54 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B8A802B3;
+        Thu, 26 Jan 2023 09:41:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674722511;
+        bh=3Sn2T7DMDWtvzEED2cak6HvLalouEIQ7lEIkSxU3JQA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gjKVterZbX4h4nkyhb0l49OHnESdB5QVCQpmCzl7sH0SfkVlFGElC3gCBMGaF5JSB
+         89TpgOOCGNLfvDf1Wx+c4q310/yfCIbpFq1nwU0ih+pzuwv9fP8ILxNlXdZ+BkQD3p
+         +fWYWm0c3ojmvv0vWPmzpXYKDS1T1kas4Ag1Y86U=
+Message-ID: <04a82b08-524f-8d03-ac47-73d826907fc3@ideasonboard.com>
+Date:   Thu, 26 Jan 2023 10:41:47 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+References: <20230118124031.788940-1-tomi.valkeinen@ideasonboard.com>
+ <20230118124031.788940-6-tomi.valkeinen@ideasonboard.com>
+ <Y8gUuqLBXsXQoNUC@smile.fi.intel.com>
+ <aba49d82-c76f-7ff2-751c-d1be7b8f3bca@ideasonboard.com>
+ <Y8rFh6zO7Hp9mLxE@smile.fi.intel.com>
+ <4286abe2-f23f-d4c9-ef18-f351af7a3a8b@ideasonboard.com>
+ <Y9EcRlooHwIjOqiZ@smile.fi.intel.com>
+ <cad92dbb-43ef-fa8c-1962-13c4a8578899@ideasonboard.com>
+ <Y9FBlMl4b3l1zVck@smile.fi.intel.com>
+ <5d208710-f284-e6e9-18dc-f5ef63a9ea44@ideasonboard.com>
+ <Y9FKcoVlgUWR4rhn@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y9FKcoVlgUWR4rhn@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023, at 09:14, Christophe Leroy wrote:
-> Le 25/01/2023 =C3=A0 21:10, Andy Shevchenko a =C3=A9crit=C2=A0:
->> From: Pierluigi Passaro <pierluigi.p@variscite.com>
->>=20
->> Both the functions gpiochip_request_own_desc and
->> gpiochip_free_own_desc are exported from
->>      drivers/gpio/gpiolib.c
->> but this file is compiled only when CONFIG_GPIOLIB is enabled.
->> Move the prototypes under "#ifdef CONFIG_GPIOLIB" and provide
->> reasonable definitions and includes in the "#else" branch.
->
-> Can you give more details on when and why link fails ?
->
-> You are adding a WARN(), I understand it mean the function should neve=
-r=20
-> ever be called. Shouldn't it be dropped completely by the compiler ? I=
-n=20
-> that case, no call to gpiochip_request_own_desc() should be emitted an=
-d=20
-> so link should be ok.
->
-> If link fails, it means we still have unexpected calls to=20
-> gpiochip_request_own_desc() or gpiochip_free_own_desc(), and we should=20
-> fix the root cause instead of hiding it with a WARN().
+On 25/01/2023 17:27, Andy Shevchenko wrote:
 
-There are only a handful of files calling these functions:
+>>>>>>>>>> +struct ds90ub9xx_platform_data {
+>>>>>>>>>> +	u32 port;
+>>>>>>>>>> +	struct i2c_atr *atr;
+>>>>>>>>>> +	unsigned long bc_rate;
+>>>>>>>>>
+>>>>>>>>> Not sure why we need this to be public except, probably, atr...
+>>>>>>>>
+>>>>>>>> The port and atr are used by the serializers, for atr. The bc_rate is used
+>>>>>>>> by the serializers to figure out the clocking (they may use the FPD-Link's
+>>>>>>>> frequency internally).
+>>>>>>>
+>>>>>>> The plain numbers can be passed as device properties. That's why the question
+>>>>>>> about platform data. Platform data in general is discouraged to be used in a
+>>>>>>> new code.
+>>>>>>
+>>>>>> Device properties, as in, coming from DT?
+>>>>>
+>>>>>    From anywhere.
+>>>>>
+>>>>>> The port could be in the DT, but
+>>>>>> the others are not hardware properties.
+>>>>>
+>>>>> Why do we need them? For example, bc_rate.
+>>>>
+>>>> The atr pointer is needed so that the serializers (ub913, ub953) can add
+>>>> their i2c adapter to the deserializer's i2c-atr. The port is also needed for
+>>>> that.
+>>>>
+>>>> The bc rate (back-channel rate) is the FPD-Link back-channel rate which the
+>>>> serializers use for various functionalities. At the moment only the ub953
+>>>> uses it for calculating an output clock rate.
+>>>>
+>>>> The bc-rate could be implemented using the clock framework, even if it's not
+>>>> quite a plain clock. I had that code at some point, but it felt a bit off
+>>>> and as we needed the pdata for the ATR, I added the bc-rate there.
+>>>
+>>> And I don't see why it is not a property of the device.
+>>
+>> It with a "property of the device" you mean a hardware property, it's not
+>> because we don't know it, it can be changed at runtime. It's not supposed to
+>> change after probing the serializer, but up to that point it can change.
+> 
+> Yes, which is still property of the device, isn't it?
 
-$ git grep -l gpiochip_request_own_desc
-Documentation/driver-api/gpio/driver.rst
-arch/arm/mach-omap1/ams-delta-fiq.c
-arch/arm/mach-omap1/board-ams-delta.c
-drivers/gpio/gpio-mvebu.c
-drivers/gpio/gpiolib-acpi.c
-drivers/gpio/gpiolib.c
-drivers/hid/hid-cp2112.c
-drivers/memory/omap-gpmc.c
-drivers/net/wireless/broadcom/brcm80211/brcmsmac/led.c
-drivers/power/supply/collie_battery.c
-drivers/spi/spi-bcm2835.c
-include/linux/gpio/driver.h
+No, I don't see it as a property of the serializer device.
 
-All of these should already prevent the link failure through
-a Kconfig 'depends on GPIOLIB' for the driver, or 'select GPIOLIB'
-for the platform code. I checked all of the above and they seem fine.
-If anything else calls the function, I'd add the same dependency
-there.
+The deserializer sends messages to the serializer over the back-channel. 
+The rate of the back-channel is defined by the clock used for 
+deserializer's refclock, and internal deserializer configuration. The 
+serializer may use the back-channel rate for its own operations.
 
-      Arnd
+>>>>>> Yes, I don't like using platform data. We need some way to pass information
+>>>>>> between the drivers.
+>>>>>
+>>>>> Device properties allow that and targeting to remove the legacy platform data
+>>>>> in zillions of the drivers.
+>>>>
+>>>> Do you have any pointers to guide me into the right direction? I couldn't
+>>>> find anything with some grepping and googling.
+>>>>
+>>>> If you mean "device properties" as in ACPI, and so similar to DT properties,
+>>>> aren't those hardware properties? Only the port here is about the hardware.
+>>>
+>>> About hardware, or PCB, or as quirks for missing DT/ACPI/any FW properties,
+>>> like clock rates.
+>>>
+>>> The Linux kernel layer for that is called software nodes. The rough
+>>> approximation to see where and how it's being used can be achieved
+>>> by grepping for specific macros:
+>>>
+>>> 	git grep -lw PROPERTY_ENTRY_.*
+>>>
+>>> E.g. arch/arm/mach-tegra/board-paz00.c tegra_paz00_wifikill_init()
+>>> implementation.
+>>
+>> Thanks, I'll have a look. But I presume we can only pass "plain" values, so
+>> it won't work for the ATR pointer anyway.
+> 
+> Yes, that's what I have told at the very beginning when answering to your
+> patch.
+> 
+> But I probably don't understand the ATR structure and what exactly we need to
+> pass to it, perhaps it also can be replaced with properties (note, that we have
+> some interesting ones that called references, which is an alternative to DT
+> phandle).
+
+Well, maybe this needs a Linux bus implementation. I'm not that familiar 
+with implementing a bus, but I think that would make it easier to share 
+data between the deserializer and the serializer. A bus sounds a bit 
+like an overkill for a 1-to-1 connection, used by a few drivers, but 
+maybe it wouldn't be too much code.
+
+  Tomi
+
