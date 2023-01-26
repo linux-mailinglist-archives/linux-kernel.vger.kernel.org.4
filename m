@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456C267C4D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1735867C4E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 08:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjAZHXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 02:23:40 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:46862 "EHLO
-        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjAZHXg (ORCPT
+        id S234639AbjAZHa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 02:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229554AbjAZHam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 02:23:36 -0500
-Received: from [IPV6:2620:137:e001:0:a10c:af48:696f:8164] (unknown [IPv6:2620:137:e001:0:a10c:af48:696f:8164])
-        by mail.monkeyblade.net (Postfix) with ESMTPSA id 7ADC383ED016;
-        Wed, 25 Jan 2023 23:23:35 -0800 (PST)
-Message-ID: <dd21bd3d-b3bb-c90b-8950-e71f4af6b167@kernel.org>
-Date:   Wed, 25 Jan 2023 23:23:33 -0800
+        Thu, 26 Jan 2023 02:30:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E6065F1B;
+        Wed, 25 Jan 2023 23:30:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F1EBB819AE;
+        Thu, 26 Jan 2023 07:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F193FC433A0;
+        Thu, 26 Jan 2023 07:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674718217;
+        bh=776WbdgvlSo/2M9QNlKZAn4tbX+UBjrD/DU9D2Ead1s=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KeVtGagKIyDL2p8YHBgQnslbvPBRrtnl5KzT6dGOMTUQ1RsAPXh65i0ug1intyUKT
+         n6BIh3W39qB62s8p6nfTBQjYkMQ1RD3oP+ZVTZL4z2hhlIUXipdkOLwMzwRGN25+Xq
+         Qxq64SC5vyUBPySQY2EPEHcY4eQ5x8M8z5e8GMyUfWeCtkPbB7adFJIbZENb61yHxp
+         7neJFFGfUOFwmLO99pWNwca7D6LXpS8kZBzauCZ590KS/ewfFLB7Mo7yKj0px2TP8C
+         IYqxN2J2UI3WGpBQjKa/Sr3i2+ut/9Mf6JNZJH26q8SBice05E8EGe8khq5s0CC87m
+         5gZqAWdabsOsw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C806CE52508;
+        Thu, 26 Jan 2023 07:30:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH net] net: dsa: mt7530: fix tristate and help description
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, erkin.bozoglu@xeront.com
-References: <20230125053653.6316-1-arinc.unal@arinc9.com>
- <20230125224411.5a535817@kernel.org>
-From:   John 'Warthog9' Hawley <warthog9@kernel.org>
-In-Reply-To: <20230125224411.5a535817@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Wed, 25 Jan 2023 23:23:35 -0800 (PST)
+Subject: Re: [PATCH net-next] docs: networking: Fix bridge documentation URL
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167471821681.31738.8649419403734415514.git-patchwork-notify@kernel.org>
+Date:   Thu, 26 Jan 2023 07:30:16 +0000
+References: <20230124145127.189221-1-ivecera@redhat.com>
+In-Reply-To: <20230124145127.189221-1-ivecera@redhat.com>
+To:     Ivan Vecera <ivecera@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        corbet@lwn.net, netdev@vger.kernel.org, linux-doc@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/2023 10:44 PM, Jakub Kicinski wrote:
-> On Wed, 25 Jan 2023 08:36:53 +0300 Arınç ÜNAL wrote:
->> Fix description for tristate and help sections which include inaccurate
->> information.
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> Didn't make it thru to the list again :(
-> Double check that none of the addresses in To: or Cc: are missing
-> spaces between name and email or after a dot. That seems to be the most
-> common cause of trouble. Or try to resend using just emails, no names.
-> 
+Hello:
 
-You are also likely to run into trouble if your character set is set to 
-UTF-8.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-- John 'Warthog9' Hawley
+On Tue, 24 Jan 2023 15:51:26 +0100 you wrote:
+> Current documentation URL [1] is no longer valid.
+> 
+> [1] https://www.linuxfoundation.org/collaborate/workgroups/networking/bridge
+> 
+> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+> ---
+>  Documentation/networking/bridge.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - [net-next] docs: networking: Fix bridge documentation URL
+    https://git.kernel.org/netdev/net/c/aee2770d199a
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
