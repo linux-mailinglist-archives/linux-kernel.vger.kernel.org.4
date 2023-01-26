@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F7667C67D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2373367C688
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 10:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236633AbjAZJAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 04:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
+        id S236662AbjAZJCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 04:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236657AbjAZI7w (ORCPT
+        with ESMTP id S236359AbjAZJB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 03:59:52 -0500
+        Thu, 26 Jan 2023 04:01:56 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6304C6C119;
-        Thu, 26 Jan 2023 00:59:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9E883EE;
+        Thu, 26 Jan 2023 01:01:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1AA39B81CB7;
-        Thu, 26 Jan 2023 08:59:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C5DC433EF;
-        Thu, 26 Jan 2023 08:59:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674723586;
-        bh=v3w9KN+/EXtKdKP/cxgLT2pEpAH9qvQ39rctUq6PiHE=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16739B81CB7;
+        Thu, 26 Jan 2023 09:01:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82744C433EF;
+        Thu, 26 Jan 2023 09:01:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674723712;
+        bh=wBnjmjQh2vLWg8ruFlIrkQaOOJ5szfKc3c80Hf2YGls=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rcvt4K9mWAV5Q9aukHLQmKR+aRBP48i+zvD+s/B4VxsdKtfShdcyjlWuPZpn9VisU
-         vcejLxN3z09cSJ6rF8QRf/oWIcXoWPH3uy/ZZ1t/7dQbNmYGns14yYG1qYZQKo/+D/
-         tDWorCu5WpKeUk+oo09ikve4sACZumUo2UkM8cf8=
-Date:   Thu, 26 Jan 2023 09:59:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.19 00/37] 4.19.271-rc1 review
-Message-ID: <Y9JBAPjj1+aj++Ro@kroah.com>
-References: <20230122150219.557984692@linuxfoundation.org>
- <20230124024734.GB1495310@roeck-us.net>
+        b=L6+mNiTYoKjZFk6ChDgw205RkAxTiEvA918Ls9UD8TNdXbePY+8N3GLlKJMTUBSLr
+         YZjf5zenz8WVg00G+oVRwOU9dA+bGq9oMZ1fTip1CU6qzW98y/CmmJFGBpsHShBfOc
+         h8YfW/f41aIOXqCaQcvohOiD+SNpO4L3U/3OrF8DV4pvZZqQBh8yvxi5vVaEdDE15b
+         zMZgiApO0O2YyQhIs8Nh5ibDULjBiW8wtEf5y0cMkQv+y/PlzBrcU4DtHTZGp+Pxro
+         VeyjuNCyVX+f70635HUBJhgvwWBF+a/Hwh2TRqlfB7v2RtbKEcTOzLTg+Llgexc4fy
+         cNfCZVp+AUmSg==
+Date:   Thu, 26 Jan 2023 10:01:44 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org, Colin Walters <walters@verbum.org>
+Subject: Re: [PATCH v8 RESEND 2/8] fs: clarify when the i_version counter
+ must be updated
+Message-ID: <20230126090144.elcyprja23wmgcit@wittgenstein>
+References: <20230124193025.185781-1-jlayton@kernel.org>
+ <20230124193025.185781-3-jlayton@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230124024734.GB1495310@roeck-us.net>
+In-Reply-To: <20230124193025.185781-3-jlayton@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,41 +62,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 06:47:34PM -0800, Guenter Roeck wrote:
-> On Sun, Jan 22, 2023 at 04:03:57PM +0100, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 4.19.271 release.
-> > There are 37 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Tue, 24 Jan 2023 15:02:08 +0000.
-> > Anything received after that time might be too late.
-> > 
+On Tue, Jan 24, 2023 at 02:30:19PM -0500, Jeff Layton wrote:
+> The i_version field in the kernel has had different semantics over
+> the decades, but NFSv4 has certain expectations. Update the comments
+> in iversion.h to describe when the i_version must change.
 > 
-> Build results:
-> 	total: 155 pass: 154 fail: 1
-> Failed builds:
-> 	i386:tools/perf
-> Qemu test results:
-> 	total: 426 pass: 426 fail: 0
-> 
-> perf build failure:
-> 
-> util/env.c: In function ‘perf_env__arch’:
-> cc1: error: function may return address of local variable [-Werror=return-local-addr]
-> util/env.c:166:17: note: declared here
->   166 |  struct utsname uts;
->       |                 ^~~
-> 
-> No one to blame but me, for switching the gcc version used to build perf
-> to gcc 10.3.0 (from 9.4.0). The problem is fixed in the upstream kernel
-> with commit ebcb9464a2ae3 ("perf env: Do not return pointers to local
-> variables"). This patch applies to v5.4.y and earlier kernels.
+> Cc: Colin Walters <walters@verbum.org>
+> Cc: NeilBrown <neilb@suse.de>
+> Cc: Trond Myklebust <trondmy@hammerspace.com>
+> Cc: Dave Chinner <david@fromorbit.com>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
 
-It's already in the 5.4.y tree (in release 5.4.56), and it applies to
-4.19.y so I'll add it there, but it does not apply to 4.14.y so I would
-need a working backport for that tree if you want it there.
-
-thanks,
-
-greg k-h
+Looks good to me,
+Reviewed-by: Christian Brauner <brauner@kernel.org>
