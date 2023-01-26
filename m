@@ -2,117 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DCE67D1F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8615D67D1F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 17:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232255AbjAZQma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 11:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
+        id S232273AbjAZQl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 11:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjAZQm3 (ORCPT
+        with ESMTP id S232255AbjAZQlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:42:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E2A56188
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:41:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674751297;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/KtFX/q2/0OOZvzDHVqjHXs3eBRAU+KUlsybGLpin4A=;
-        b=SfjOHBTc+BGVCuJ/u8dMvzkwX0WiilIAyCfmm4w3nIpK71Rjxce+Ltleo4ZOVbFOl8htCb
-        PjSH5CKZDSi1/RAwOZtOengZzTNeNm+FE1e6bJIRqKMHT8xG8XuZHVWMYlr7YkTGOXjVaQ
-        GA6sV7G6we4EFHFjrxb+LzfBAgJO4bo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-199-3lTw8DidPgaiMarBdmojow-1; Thu, 26 Jan 2023 11:41:32 -0500
-X-MC-Unique: 3lTw8DidPgaiMarBdmojow-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 26 Jan 2023 11:41:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B455C0E8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 08:41:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BE65B3C38FEF;
-        Thu, 26 Jan 2023 16:41:31 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 02F4AC15BA0;
-        Thu, 26 Jan 2023 16:41:29 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <5d0bc437eebb4d5aa4774962a4970095@AcuMS.aculab.com>
-References: <5d0bc437eebb4d5aa4774962a4970095@AcuMS.aculab.com> <0d53a3cc9f9448298bba04d06f51b23d@AcuMS.aculab.com> <20230125214543.2337639-1-dhowells@redhat.com> <20230125214543.2337639-9-dhowells@redhat.com> <2862713.1674747841@warthog.procyon.org.uk>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     dhowells@redhat.com, Steve French <smfrench@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Steve French <sfrench@samba.org>
-Subject: Re: [RFC 08/13] cifs: Add a function to read into an iter from a socket
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2181BB81E86
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:41:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535ADC433D2;
+        Thu, 26 Jan 2023 16:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674751307;
+        bh=b9mQgsprn6SnJYI/NGJEDkTIYdr2LcFif1cwH7jqO/A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PDFYOns/CrOeMDPKDliK6h8Dv8bj+Aapiub5ryIRnwde2OtOLerCsdNC9X4mPE9ju
+         SGMimr2r4lzgWfRlIf6TBV/a1iJmbLNVYWSCB/VAzRbubZR7t5/0gctw762paDiD9O
+         Xr7WgbA7HjmmT+t2FFTlSFf9s0OMWyot/UqHwl/nPhavxDIPs+GaRXl+nC0zQ8ppzd
+         2xaZkNbsw+jMqfJwNIR/5odoNHKrtJgd+qwkcCZzSBaDRK7f9xLVke1xMoWrK2+OSc
+         xzAkC2DIEm9Y9ufZu7wp8RNcdP4oE6HzQnJ6bxVIsT65xYGzwlJcaIPor3y+/AUhwE
+         FoUETc/dGWU+A==
+Date:   Thu, 26 Jan 2023 16:41:42 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Neill Kapron <nkapron@google.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Chris Zhong <zyw@rock-chips.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: Re: [PATCH] phy: rockchip-typec: fix tcphy_get_mode error case
+Message-ID: <Y9KtRpsioQNTc4oc@google.com>
+References: <20230126001013.3707873-1-nkapron@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2878214.1674751289.1@warthog.procyon.org.uk>
-Date:   Thu, 26 Jan 2023 16:41:29 +0000
-Message-ID: <2878215.1674751289@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230126001013.3707873-1-nkapron@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Laight <David.Laight@ACULAB.COM> wrote:
+On Thu, 26 Jan 2023, Neill Kapron wrote:
 
-> > It shouldn't matter as the only problematic iterator is ITER_PIPE
-> > (advancing that has side effects) - and splice_read is handled specially
-> > by patch 4.  The problem with splice_read with the way cifs works is that
-> > it likes to subdivide its read/write requests across multiple reqs and
-> > then subsubdivide them if certain types of failure occur.  But you can't
-> > do that with ITER_PIPE.
+> The existing logic in tcphy_get_mode() can cause the phy to be
+> incorrectly configured to USB UFP or DisplayPort mode when
+> extcon_get_state returns an error code.
 > 
-> I was thinking that even if ok at the moment it might be troublesome later.
-> Somewhere I started writing a patch to put the iov_cache[] for user
-> requests into the same structure as the iterator.
-> Copying those might cause oddities.
-
-Well, there is dup_iter(), but that copies the vector table, which isn't what
-we want in a number of cases.  You probably need to come up with a wrapper for
-that.
-
-But we copy iters by assignment in a lot of places.  With regards to msg_hdr,
-it might be worth giving it an iterator pointer rather than its own iterator.
-
-I've just had a go at attempting to modify the code.
-cifs_read_iter_from_socket() wants to copy the iterator and truncate the copy,
-which makes things slightly trickier.  For both of the call sites,
-receive_encrypted_read() and cifs_readv_receive(), it can do the truncation
-before calling cifs_read_iter_from_socket(), I think - but it may have to undo
-the truncation afterwards.
-
-> > I build an ITER_BVEC from ITER_PIPE, ITER_UBUF and ITER_IOVEC in the top
-> > levels with pins inserted as appropriate and hand the ITER_BVEC down.  For
-> > user-backed iterators it has to be done this way because the I/O may get
-> > shuffled off to a different thread.
+> extcon_get_state() can return 0, 1, or a negative error code.
 > 
-> For sub-page sided transfers it is probably worth doing a bounce buffer
-> copy of user requests - just to save all the complex page pinning code.
+> It is possible to get into the failing state with an extcon driver
+> which does not support the extcon connector id specified as the
+> second argument to extcon_get_state().
+> 
+> tcphy_get_mode()
+> ->extcon_get_state()
+> -->find_cable_index_by_id()
+> --->return -EINVAL;
+> 
+> Fixes: e96be45cb84e ("phy: Add USB Type-C PHY driver for rk3399")
+> Signed-off-by: Neill Kapron <nkapron@google.com>
+> ---
+>  drivers/phy/rockchip/phy-rockchip-typec.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-You can't avoid it for async DIO reads.  But that sort of thing I'm intending
-to do in netfslib.
+Good catch.
 
-David
+Reviewed-by: Lee Jones <lee@kernel.org>
 
+> diff --git a/drivers/phy/rockchip/phy-rockchip-typec.c b/drivers/phy/rockchip/phy-rockchip-typec.c
+> index d76440ae10ff..6aea512e5d4e 100644
+> --- a/drivers/phy/rockchip/phy-rockchip-typec.c
+> +++ b/drivers/phy/rockchip/phy-rockchip-typec.c
+> @@ -821,10 +821,10 @@ static int tcphy_get_mode(struct rockchip_typec_phy *tcphy)
+>  	mode = MODE_DFP_USB;
+>  	id = EXTCON_USB_HOST;
+>  
+> -	if (ufp) {
+> +	if (ufp > 0) {
+>  		mode = MODE_UFP_USB;
+>  		id = EXTCON_USB;
+> -	} else if (dp) {
+> +	} else if (dp > 0) {
+>  		mode = MODE_DFP_DP;
+>  		id = EXTCON_DISP_DP;
+>  
+> -- 
+> 2.39.1.456.gfc5497dd1b-goog
+
+-- 
+Lee Jones [李琼斯]
