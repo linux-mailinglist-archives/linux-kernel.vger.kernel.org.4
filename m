@@ -2,184 +2,549 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA9867C1BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9639067C1C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 Jan 2023 01:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236301AbjAZAeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 Jan 2023 19:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S236330AbjAZAem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 Jan 2023 19:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236228AbjAZAeB (ORCPT
+        with ESMTP id S236228AbjAZAek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 Jan 2023 19:34:01 -0500
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B583C2AE;
-        Wed, 25 Jan 2023 16:34:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1674693241; x=1706229241;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   content-transfer-encoding;
-  bh=nuFZ7JWueZSk4ZKs2v/HsBakEfBEo8m7KeqzL4CyUT4=;
-  b=WTntRHfkfxbWhMoiYdHNfQDVgNhbj9QdLCSICQuwBFKztyd2UjkAPFil
-   NqwYu+zIAv3tfF085gFpZxZ3rSlbybdCi+Mpv05ky1M3stdyNrL1GhKUl
-   Oqd09OFuqRNHKU8WFmjkznSHXsQ7YrgQgAaMs2kdg3gJWDGelPE//u7+w
-   I=;
-X-IronPort-AV: E=Sophos;i="5.97,246,1669075200"; 
-   d="scan'208";a="175195278"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 00:34:01 +0000
-Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com (Postfix) with ESMTPS id D7CFE81A79;
-        Thu, 26 Jan 2023 00:33:59 +0000 (UTC)
-Received: from EX19D002UWC004.ant.amazon.com (10.13.138.186) by
- EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Thu, 26 Jan 2023 00:33:56 +0000
-Received: from [192.168.18.75] (10.43.162.56) by EX19D002UWC004.ant.amazon.com
- (10.13.138.186) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7; Thu, 26 Jan 2023
- 00:33:55 +0000
-Message-ID: <053b60a6-133e-5d59-0732-464d5160772a@amazon.com>
-Date:   Wed, 25 Jan 2023 16:33:54 -0800
+        Wed, 25 Jan 2023 19:34:40 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D580B62D00;
+        Wed, 25 Jan 2023 16:34:25 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pKqDg-00039N-0p;
+        Thu, 26 Jan 2023 01:34:24 +0100
+Date:   Thu, 26 Jan 2023 00:34:15 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>
+Subject: [PATCH v2 1/2] dt-bindings: pinctrl: add bindings for MT7981 SoC
+Message-ID: <3f0fd0becc338eef66caeb7244c3c432b8d1ef7a.1674693008.git.daniel@makrotopia.org>
+References: <cover.1674693008.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Content-Language: en-US
-From:   "Bhatnagar, Rishabh" <risbhat@amazon.com>
-Subject: EXT4 IOPS degradation between 4.14 and 5.10
-To:     Jan Kara <jack@suse.cz>, <tytso@mit.edu>,
-        <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <abuehaze@amazon.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.43.162.56]
-X-ClientProxiedBy: EX13D31UWA002.ant.amazon.com (10.43.160.82) To
- EX19D002UWC004.ant.amazon.com (10.13.138.186)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1674693008.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jan
+Add bindings for the MT7981 pinctrl driver. As MT7981 has most features
+in common with MT7986 (but has a different layout in terms on pinctrl
+and clocks), the existing mediatek,mt7986-pinctrl.yaml was used as an
+example to create a similar document covering MT7981.
 
-As discussed in the previous thread I'm chasing IOPS regression between 
-4.14 -> 5.10 kernels.
-https://lore.kernel.org/lkml/20230112113820.hjwvieq3ucbwreql@quack3/T/
-<https://lore.kernel.org/lkml/20230112113820.hjwvieq3ucbwreql@quack3/T/>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ .../pinctrl/mediatek,mt7981-pinctrl.yaml      | 475 ++++++++++++++++++
+ 1 file changed, 475 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml
 
-Last issue we discussed was difficult to resolve so keeping it on the 
-back burner for now.
-
-I did some more bisecting and saw another series of patches that 
-potentially impacts iops score:
-72b045aecdd856b083521f2a963705b4c2e59680 (mm: implement 
-find_get_pages_range_tag())
-
-Running fio tests on tip as 9c19a9cb1642c074aa8bc7693cd4c038643960ae 
-(including the 16 patch series) vs tip as
-6b4c54e3787bc03e810062bd257a3b05fd9c72d6 (without the above series) 
-shows an IOPS jump.
-
-Fio with buffered io/fsync=1/randwrite
-
-With HEAD as 9c19a9cb1642c074aa8bc7693cd4c038643960ae (with the above 
-series)
-
-write: io=445360KB, bw=7418.6KB/s, *iops=463*, runt= 60033msec
-clat (usec): min=4, max=32132, avg=311.90, stdev=1812.74
-lat (usec): min=5, max=32132, avg=312.28, stdev=1812.74
-clat percentiles (usec):
-| 1.00th=[ 8], 5.00th=[ 10], 10.00th=[ 16], 20.00th=[ 25],
-| 30.00th=[ 36], 40.00th=[ 47], 50.00th=[ 60], 60.00th=[ 71],
-| 70.00th=[ 84], 80.00th=[ 97], 90.00th=[ 111], 95.00th=[ 118],
-| 99.00th=[11840], 99.50th=[15936], 99.90th=[21888], 99.95th=[23936],
-
-With HEAD as 6b4c54e3787bc03e810062bd257a3b05fd9c72d6(without the above 
-series)
-
-write: io=455184KB, bw=7583.4KB/s, *iops=473*, runt= 60024msec
-clat (usec): min=6, max=24325, avg=319.72, stdev=1694.52
-lat (usec): min=6, max=24326, avg=319.99, stdev=1694.53
-clat percentiles (usec):
-| 1.00th=[ 9], 5.00th=[ 11], 10.00th=[ 17], 20.00th=[ 26],
-| 30.00th=[ 38], 40.00th=[ 50], 50.00th=[ 60], 60.00th=[ 73],
-| 70.00th=[ 85], 80.00th=[ 98], 90.00th=[ 111], 95.00th=[ 118],
-| 99.00th=[ 9792], 99.50th=[14016], 99.90th=[21888], 99.95th=[22400],
-| 99.99th=[24192]
-
-
-I also see that number of handles per transaction were much higher 
-before this patch series
-
-0ms waiting for transaction
-0ms request delay
-20ms running transaction
-0ms transaction was being locked
-0ms flushing data (in ordered mode)
-10ms logging transaction
-*13524us average transaction commit time*
-*73 handles per transaction*
-0 blocks per transaction
-1 logged blocks per transaction
-
-vs after the patch series.
-
-0ms waiting for transaction
-0ms request delay
-20ms running transaction
-0ms transaction was being locked
-0ms flushing data (in ordered mode)
-20ms logging transaction
-*21468us average transaction commit time*
-*66 handles per transaction*
-1 blocks per transaction
-1 logged blocks per transaction
-
-This is probably again helping in bunching the writeback transactions 
-and increasing throughput.
-
-I looked at the code to understand what might be going on.
-It seems like commit 72b045aecdd856b083521f2a963705b4c2e59680 changes 
-the behavior of find_get_pages_range_tag.
-Before this commit if find_get_pages_tag cannot find nr_pages 
-(PAGEVEC_SIZE) it returns the number of pages found as ret and
-sets the *index to the last page it found + 1. After the commit the 
-behavior changes such that if we don’t find nr_pages pages
-we set the index to end and not to the last found page. (added diff from 
-above commit)
-Since pagevec_lookup_range_tag is always called in a while loop (index 
-<= end) the code before the commit helps in coalescing
-writeback of pages if there are multiple threads doing write as it might 
-keep finding new dirty (tagged) pages since it doesn’t set index to end.
-
-+ /*
-+ * We come here when we got at @end. We take care to not overflow the
-+ * index @index as it confuses some of the callers. This breaks the
-+ * iteration when there is page at index -1 but that is already broken
-+ * anyway.
-+ */
-+ if (end == (pgoff_t)-1)
-+ *index = (pgoff_t)-1;
-+ else
-+ *index = end + 1;
-+out:
-rcu_read_unlock();
-
-- if (ret)
-- *index = pages[ret - 1]->index + 1;
--
-
- From the description of the patch i didn't see any mention of this 
-functional change.
-Was this change intentional and did help some usecase or general 
-performance improvement?
-
-Thanks
-Rishabh
+diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml
+new file mode 100644
+index 0000000000000..74c66fbcb2ae6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7981-pinctrl.yaml
+@@ -0,0 +1,475 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/mediatek,mt7981-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek MT7981 Pin Controller
++
++maintainers:
++  - Daniel Golle <daniel@makrotopia.org>
++
++description:
++  The MediaTek's MT7981 Pin controller is used to control SoC pins.
++
++properties:
++  compatible:
++    enum:
++      - mediatek,mt7981-pinctrl
++
++  reg:
++    minItems: 9
++    maxItems: 9
++
++  reg-names:
++    items:
++      - const: gpio
++      - const: iocfg_rt
++      - const: iocfg_rm
++      - const: iocfg_rb
++      - const: iocfg_lb
++      - const: iocfg_bl
++      - const: iocfg_tm
++      - const: iocfg_tl
++      - const: eint
++
++  gpio-controller: true
++
++  "#gpio-cells":
++    const: 2
++    description: >
++      Number of cells in GPIO specifier. Since the generic GPIO binding is used,
++      the amount of cells must be specified as 2. See the below mentioned gpio
++      binding representation for description of particular cells.
++
++  gpio-ranges:
++    minItems: 1
++    maxItems: 5
++    description: GPIO valid number range.
++
++  interrupt-controller: true
++
++  interrupts:
++    maxItems: 1
++
++  "#interrupt-cells":
++    const: 2
++
++allOf:
++  - $ref: pinctrl.yaml#
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - gpio-controller
++  - "#gpio-cells"
++
++patternProperties:
++  '-pins$':
++    type: object
++    additionalProperties: false
++
++    patternProperties:
++      '^.*mux.*$':
++        type: object
++        additionalProperties: false
++        description: |
++          pinmux configuration nodes.
++
++          The following table shows the effective values of "group", "function"
++          properties and chip pinout pins
++
++          groups                 function    pins (in pin#)
++          ---------------------------------------------------------------------
++          "wa_aice1"             "wa_aice"   0, 1
++          "wa_aice2"             "wa_aice"   0, 1
++          "wm_uart_0"            "uart"      0, 1
++          "dfd"                  "dfd"       0, 1, 4, 5
++          "watchdog"             "watchdog"  2
++          "pcie_pereset"         "pcie"      3
++          "jtag"                 "jtag"      4, 5, 6, 7, 8
++          "wm_jtag_0"            "jtag"      4, 5, 6, 7, 8
++          "wo0_jtag_0"           "jtag"      9, 10, 11, 12, 13
++          "uart2_0"              "uart"      4, 5, 6, 7
++          "gbe_led0"             "led"       8
++          "pta_ext_0"            "pta"       4, 5, 6
++          "pwm2"                 "pwm"       7
++          "net_wo0_uart_txd_0"   "uart"      8
++          "spi1_0"               "spi"       4, 5, 6, 7
++          "i2c0_0"               "i2c"       6, 7
++          "dfd_ntrst"            "dfd"       8
++          "wm_aice1"             "wa_aice"   9, 10
++          "pwm0_0"               "pwm"       13
++          "pwm0_1"               "pwm"       15
++          "pwm1_0"               "pwm"       14
++          "pwm1_1"               "pwm"       15
++          "net_wo0_uart_txd_1"   "uart"      14
++          "net_wo0_uart_txd_2"   "uart"      15
++          "gbe_led1"             "led"       13
++          "pcm"                  "pcm"       9, 10, 11, 12, 13, 25
++          "watchdog1"            "watchdog"  13
++          "udi"                  "udi"       9, 10, 11, 12, 13
++          "drv_vbus"             "usb"       14
++          "emmc_45"              "flash"     15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25
++          "snfi"                 "flash"     16, 17, 18, 19, 20, 21
++          "spi0"                 "spi"       16, 17, 18, 19
++          "spi0_wp_hold"         "spi"       20, 21
++          "spi1_1"               "spi"       22, 23, 24, 25
++          "spi2"                 "spi"       26, 27, 28, 29
++          "spi2_wp_hold"         "spi"       30, 31
++          "uart1_0"              "uart"      16, 17, 18, 19
++          "uart1_1"              "uart"      26, 27, 28, 29
++          "uart2_1"              "uart"      22, 23, 24, 25
++          "pta_ext_1"            "pta"       22, 23, 24
++          "wm_aurt_1"            "uart"      20, 21
++          "wm_aurt_2"            "uart"      30, 31
++          "wm_jtag_1"            "jtag"      20, 21, 22, 23, 24
++          "wo0_jtag_1"           "jtag"      25, 26, 27, 28, 29
++          "wa_aice3"             "wa_aice"   28, 20
++          "wm_aice2"             "wa_aice"   30, 31
++          "i2c0_1"               "i2c"       30, 31
++          "u2_phy_i2c"           "i2c"       30, 31
++          "uart0"                "uart"      32, 33
++          "sgmii1_phy_i2c"       "i2c"       32, 33
++          "u3_phy_i2c"           "i2c"       32, 33
++          "sgmii0_phy_i2c"       "i2c"       32, 33
++          "pcie_clk"             "pcie"      34
++          "pcie_wake"            "pcie"      35
++          "i2c0_2"               "i2c"       36, 37
++          "smi_mdc_mdio"         "eth"       36, 37
++          "gbe_ext_mdc_mdio"     "eth"       36, 37
++          "wf0_mode1"            "eth"       40, 41, 42, 43, 44, 45, 46, 47, 48,
++                                             49, 50, 51, 52, 53, 54, 55, 56
++
++          "wf0_mode3"            "eth"       45, 46, 47, 48, 49, 51
++          "wf2g_led0"            "led"       30
++          "wf2g_led1"            "led"       34
++          "wf5g_led0"            "led"       31
++          "wf5g_led1"            "led"       35
++          "mt7531_int"           "eth"       38
++          "ant_sel"              "ant"       14, 15, 16, 17, 18, 19, 20, 21, 22
++                                             23, 24, 25, 34, 35
++
++        $ref: /schemas/pinctrl/pinmux-node.yaml
++        properties:
++          function:
++            description:
++              A string containing the name of the function to mux to the group.
++            enum: [wa_aice, dfd, jtag, pta, pcm, udi, usb, ant, eth, i2c, led,
++                   pwm, spi, uart, watchdog, flash, pcie]
++          groups:
++            description:
++              An array of strings. Each string contains the name of a group.
++
++        required:
++          - function
++          - groups
++
++        allOf:
++          - if:
++              properties:
++                function:
++                  const: wa_aice
++            then:
++              properties:
++                groups:
++                  enum: [wa_aice1, wa_aice2, wm_aice1_1, wa_aice3, wm_aice1_2]
++          - if:
++              properties:
++                function:
++                  const: dfd
++            then:
++              properties:
++                groups:
++                  enum: [dfd, dfd_ntrst]
++          - if:
++              properties:
++                function:
++                  const: jtag
++            then:
++              properties:
++                groups:
++                  enum: [jtag, wm_jtag_0, wo0_jtag_0, wo0_jtag_1, wm_jtag_1]
++          - if:
++              properties:
++                function:
++                  const: pta
++            then:
++              properties:
++                groups:
++                  enum: [pta_ext_0, pta_ext_1]
++          - if:
++              properties:
++                function:
++                  const: pcm
++            then:
++              properties:
++                groups:
++                  enum: [pcm]
++          - if:
++              properties:
++                function:
++                  const: udi
++            then:
++              properties:
++                groups:
++                  enum: [udi]
++          - if:
++              properties:
++                function:
++                  const: usb
++            then:
++              properties:
++                groups:
++                  enum: [drv_vbus]
++          - if:
++              properties:
++                function:
++                  const: ant
++            then:
++              properties:
++                groups:
++                  enum: [ant_sel]
++          - if:
++              properties:
++                function:
++                  const: eth
++            then:
++              properties:
++                groups:
++                  enum: [smi_mdc_mdio, gbe_ext_mdc_mdio, wf0_mode1, wf0_mode3,
++                         mt7531_int]
++          - if:
++              properties:
++                function:
++                  const: i2c
++            then:
++              properties:
++                groups:
++                  enum: [i2c0_0, i2c0_1, u2_phy_i2c, sgmii1_phy_i2c, u3_phy_i2c,
++                         sgmii0_phy_i2c, i2c0_2]
++          - if:
++              properties:
++                function:
++                  const: led
++            then:
++              properties:
++                groups:
++                  enum: [gbe_led0, gbe_led1, wf2g_led0, wf2g_led1, wf5g_led0, wf5g_led1]
++          - if:
++              properties:
++                function:
++                  const: pwm
++            then:
++              properties:
++                groups:
++                  items:
++                    enum: [pwm2, pwm0_0, pwm0_1, pwm1_0, pwm1_1]
++                  maxItems: 3
++          - if:
++              properties:
++                function:
++                  const: spi
++            then:
++              properties:
++                groups:
++                  items:
++                    enum: [spi1_0, spi0, spi0_wp_hold, spi1_1, spi2, spi2_wp_hold]
++                  maxItems: 4
++          - if:
++              properties:
++                function:
++                  const: uart
++            then:
++              properties:
++                groups:
++                  items:
++                    enum: [wm_uart_0, uart2_0, net_wo0_uart_txd_0,
++                           net_wo0_uart_txd_1, net_wo0_uart_txd_2, uart1_0,
++                           uart1_1, uart2_1, wm_aurt_1, wm_aurt_2, uart0]
++          - if:
++              properties:
++                function:
++                  const: watchdog
++            then:
++              properties:
++                groups:
++                  enum: [watchdog]
++          - if:
++              properties:
++                function:
++                  const: flash
++            then:
++              properties:
++                groups:
++                  items:
++                    enum: [emmc_45, snfi]
++                  maxItems: 1
++          - if:
++              properties:
++                function:
++                  const: pcie
++            then:
++              properties:
++                groups:
++                  items:
++                    enum: [pcie_clk, pcie_wake, pcie_pereset]
++                  maxItems: 3
++
++      '^.*conf.*$':
++        type: object
++        additionalProperties: false
++        description: pinconf configuration nodes.
++        $ref: /schemas/pinctrl/pincfg-node.yaml
++
++        properties:
++          pins:
++            description:
++              An array of strings. Each string contains the name of a pin.
++            items:
++              enum: [GPIO_WPS, GPIO_RESET, SYS_WATCHDOG, PCIE_PERESET_N,
++                     JTAG_JTDO, JTAG_JTDI, JTAG_JTMS, JTAG_JTCLK, JTAG_JTRST_N,
++                     WO_JTAG_JTDO, WO_JTAG_JTDI, WO_JTAG_JTMS, WO_JTAG_JTCLK,
++                     WO_JTAG_JTRST_N, USB_VBUS, PWM0, SPI0_CLK, SPI0_MOSI,
++                     SPI0_MISO, SPI0_CS, SPI0_HOLD, SPI0_WP, SPI1_CLK, SPI1_MOSI,
++                     SPI1_MISO, SPI1_CS, SPI2_CLK, SPI2_MOSI, SPI2_MISO, SPI2_CS,
++                     SPI2_HOLD, SPI2_WP, UART0_RXD, UART0_TXD, PCIE_CLK_REQ,
++                     PCIE_WAKE_N, SMI_MDC, SMI_MDIO, GBE_INT, GBE_RESET,
++                     WF_DIG_RESETB, WF_CBA_RESETB, WF_XO_REQ, WF_TOP_CLK,
++                     WF_TOP_DATA, WF_HB1, WF_HB2, WF_HB3, WF_HB4, WF_HB0,
++                     WF_HB0_B, WF_HB5, WF_HB6, WF_HB7, WF_HB8, WF_HB9, WF_HB10]
++            maxItems: 57
++
++          bias-disable: true
++
++          bias-pull-up:
++            oneOf:
++              - type: boolean
++                description: normal pull up.
++              - enum: [100, 101, 102, 103]
++                description: >
++                  PUPD/R1/R0 pull down type. See MTK_PUPD_SET_R1R0 defines in
++                  dt-bindings/pinctrl/mt65xx.h.
++
++          bias-pull-down:
++            oneOf:
++              - type: boolean
++                description: normal pull down.
++              - enum: [100, 101, 102, 103]
++                description: >
++                  PUPD/R1/R0 pull down type. See MTK_PUPD_SET_R1R0 defines in
++                  dt-bindings/pinctrl/mt65xx.h.
++
++          input-enable: true
++
++          input-disable: true
++
++          output-enable: true
++
++          output-low: true
++
++          output-high: true
++
++          input-schmitt-enable: true
++
++          input-schmitt-disable: true
++
++          drive-strength:
++            enum: [2, 4, 6, 8, 10, 12, 14, 16]
++
++          mediatek,pull-up-adv:
++            description: |
++              Valid arguments for 'mediatek,pull-up-adv' are '0', '1', '2', '3'
++              Pull up setings for 2 pull resistors, R0 and R1. Valid arguments
++              are described as below:
++              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
++              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
++              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
++              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
++            $ref: /schemas/types.yaml#/definitions/uint32
++            enum: [0, 1, 2, 3]
++
++          mediatek,pull-down-adv:
++            description: |
++              Valid arguments for 'mediatek,pull-up-adv' are '0', '1', '2', '3'
++              Pull down setings for 2 pull resistors, R0 and R1. Valid arguments
++              are described as below:
++              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
++              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
++              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
++              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
++            $ref: /schemas/types.yaml#/definitions/uint32
++            enum: [0, 1, 2, 3]
++
++        required:
++          - pins
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/pinctrl/mt65xx.h>
++
++    soc {
++      #address-cells = <2>;
++      #size-cells = <2>;
++      pio: pinctrl@11d00000 {
++        compatible = "mediatek,mt7981-pinctrl";
++        reg = <0 0x11d00000 0 0x1000>,
++              <0 0x11c00000 0 0x1000>,
++              <0 0x11c10000 0 0x1000>,
++              <0 0x11d20000 0 0x1000>,
++              <0 0x11e00000 0 0x1000>,
++              <0 0x11e20000 0 0x1000>,
++              <0 0x11f00000 0 0x1000>,
++              <0 0x11f10000 0 0x1000>,
++              <0 0x1000b000 0 0x1000>;
++        reg-names = "gpio", "iocfg_rt", "iocfg_rm",
++                    "iocfg_rb", "iocfg_lb", "iocfg_bl",
++                    "iocfg_tm", "iocfg_tl", "eint";
++        gpio-controller;
++        #gpio-cells = <2>;
++        gpio-ranges = <&pio 0 0 56>;
++        interrupt-controller;
++        interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
++        interrupt-parent = <&gic>;
++        #interrupt-cells = <2>;
++
++        mdio_pins: mdio-pins {
++          mux {
++            function = "eth";
++            groups = "smi_mdc_mdio";
++          };
++        };
++
++        spi0_flash_pins: spi0-pins {
++          mux {
++            function = "spi";
++            groups = "spi0", "spi0_wp_hold";
++          };
++
++          conf-pu {
++            pins = "SPI0_CS", "SPI0_HOLD", "SPI0_WP";
++            drive-strength = <MTK_DRIVE_8mA>;
++            bias-pull-up = <MTK_PUPD_SET_R1R0_11>;
++          };
++
++          conf-pd {
++            pins = "SPI0_CLK", "SPI0_MOSI", "SPI0_MISO";
++            drive-strength = <MTK_DRIVE_8mA>;
++            bias-pull-down = <MTK_PUPD_SET_R1R0_11>;
++          };
++        };
++
++        pcie_pins: pcie-pins {
++          mux {
++            function = "pcie";
++            groups = "pcie_clk", "pcie_wake", "pcie_pereset";
++          };
++        };
++
++      };
++    };
+-- 
+2.39.1
 
