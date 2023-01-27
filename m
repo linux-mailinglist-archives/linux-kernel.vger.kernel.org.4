@@ -2,88 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FF167E1CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F7767E1CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbjA0Khm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S231938AbjA0Khw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjA0Khk (ORCPT
+        with ESMTP id S231968AbjA0Khr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:37:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB47984B65;
-        Fri, 27 Jan 2023 02:37:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 27 Jan 2023 05:37:47 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D35EA84B58
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:37:40 -0800 (PST)
+Received: from 8bytes.org (p5b006afb.dip0.t-ipconnect.de [91.0.106.251])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AFC961AC8;
-        Fri, 27 Jan 2023 10:37:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F364FC433D2;
-        Fri, 27 Jan 2023 10:37:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674815856;
-        bh=pCrqKbNu6hlxmQ1HVuabbKLuxn3WATXpfYLfUrmMBSM=;
+        by mail.8bytes.org (Postfix) with ESMTPSA id 434BB262DAE;
+        Fri, 27 Jan 2023 11:37:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1674815859;
+        bh=R/vzonbPGqlI/fZmSZV7Oq3KpncVikgbGOtJc5uDHsA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RqHAC/aPfKIS1iDdJ8euU5kEPYkAQnojw0f7fuWzupygQed9o7DH48eTo7mVDsulY
-         eE5+7iRTI/pyX1txoD2kbkgbrDjTmJ0OotR6+gqoFB/DtzFIzM+337FdUC96dcenVg
-         aSBs/S8EKVU4wsMrJ1wb0L6JRR8NsDMTfRRniZSiByJZJaR7yLa4bYgsXjeOj/xul1
-         YtWL8zaxyum8koF3iXEtEne1zpWkC4iV5s3XzVnYCINQ9zPH/Qd+kKaoHGPII/8hNT
-         ZjsSHvvFopdzMyU4AHIeMB/bCA/pjMQGwL421aNhV6kT6MkJoB6mehGZTpiJGWaWV2
-         t+kAVGpqvbXkw==
-Date:   Fri, 27 Jan 2023 10:37:30 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 06/11] fpga: intel-m10-bmc: Rework flash read/write
-Message-ID: <Y9Opau9cyEmP7zlN@google.com>
-References: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
- <20230116100845.6153-7-ilpo.jarvinen@linux.intel.com>
+        b=uiyg7VAqvx1KvY6pAty0HyViBFPcPNKJa7yPW1NGoUvjsD/KZbw2NK8bf1v3p0bVG
+         jcQSMu+XiQg8Qh5XzZvnyQ63ZLUp8Rzzr1OaPIssfgw7VRKjbqX/PVHKO7TRJlMMES
+         0e+iuWQVzRR3UU8f7raFD7bhHsn1ILcyoAiHaZc0AmX1168uJHCZo6ocJEo+PXvhpM
+         EqgjfxweSWpCZKwPpokCPzZBIJ9sKZ00feXY27b5sV1ns88FfocHRatiqO562iG7aC
+         sQ6SmA57DlPOXDryPlYaO2YvJ238p96W5LqGxvU28h605f4T2coCgYS6C2tlrPA8sD
+         ZcMfICSYsqTFQ==
+Date:   Fri, 27 Jan 2023 11:37:38 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Jiri Kosina <jkosina@suse.cz>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [Question PATCH kernel] x86/amd/sev/nmi+vc: Fix stack handling
+ (why is this happening?)
+Message-ID: <Y9OpcoSacyOkPkvl@8bytes.org>
+References: <20230127035616.508966-1-aik@amd.com>
+ <Y9OUfofjxDtTmwyV@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230116100845.6153-7-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9OUfofjxDtTmwyV@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 Jan 2023, Ilpo Järvinen wrote:
-
-> Access to flash staging area is different for N6000 from that of the
-> SPI interfaced counterparts. To make it easier to differentiate flash
-> access path, move read/write into new functions where the new access
-> path can be easily placed into. Rework the unaligned access such the
-> behavior it matches for both read and write.
+On Fri, Jan 27, 2023 at 10:08:14AM +0100, Peter Zijlstra wrote:
+> Welcome to the wonderful shit show that is x86 exceptions :/
 > 
-> This change also renames m10bmc_sec_write() to m10bmc_sec_fw_write() as
-> it would have a name conflict otherwise.
-> 
-> Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Acked-by: Xu Yilun <yilun.xu@intel.com>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/fpga/intel-m10-bmc-sec-update.c | 143 +++++++++++++-----------
->  1 file changed, 79 insertions(+), 64 deletions(-)
+> I thought sev_es_*() is supposed to fix this. Joerg, any clue?
 
-Applied, thanks
+Hmm, no, not yet, the stack-trace doesn't make much sense to me. The
+sev_es_* function calls in the NMI path are for re-enabling NMI and
+adjusting the #VC IST stack to allow nested VCs.
 
--- 
-Lee Jones [李琼斯]
+Alexey, can you try to get a more stable backtrace? For example by
+building the kernel with frame pointers?
+
+Regards,
+
+	Joerg
