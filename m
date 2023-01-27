@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B3E67ECE2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCC167ECE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbjA0R6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
+        id S234559AbjA0R7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234559AbjA0R6p (ORCPT
+        with ESMTP id S234735AbjA0R7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:58:45 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A637D2BD;
-        Fri, 27 Jan 2023 09:58:44 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id fi26so5424670edb.7;
-        Fri, 27 Jan 2023 09:58:44 -0800 (PST)
+        Fri, 27 Jan 2023 12:59:09 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8400B80029
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:58:59 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id fl24so4021976wmb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:58:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=17/xEWC1WmOjlte8h0eDRTmEFdiv+lS1lWx2rWU4nVc=;
-        b=lXG0lVpDyWFmskbnUS03gA72O+I5FXCzECuk+XOYf33HOHpv1AvKHBp9VBTv52jA+W
-         GRxq7EP4pkvXeZYbXpRaMUJGxqtrDItw0c1t0Fij7ny/38Pm8a0Ex94EEkQZwYvwyCJn
-         VBnFdRJbGmNfyBH3XZ6Obni3BhSmC4Tc+QLIx97O1rUBmIPG5vRn8YkVKRIIPN+NgZ+O
-         x8/MHATBonft0FENTqEz2wZcWPywNNLy7DwbFFf6ywJHVSxVsp/mbhPmfy2T4iqyCM63
-         MVfnBzjA3GOMIfg7WPnzSZd/QRPqty4Vg9iOtDIlAi3hHcOUykPfjqhQDs213I+6dS+c
-         Rkvg==
+        bh=Z4/3pp0HtNFhDGsx2C/KQB+H4Bh6uN2vy4tMssC8orA=;
+        b=QxKKB9s46hophXakrt/hDNgI5V23ayIGQVuMDVyYv60I1k/sJ6jhP1maC+4IiGRxgp
+         lQShEzXuxbIAvd7iXsWanMUdEYbnISFnsOWbC6VJskcs3PHRIb5Bf9r2uhYWIRm74Dzw
+         tdueKlrFFv/CBNwrnGc9iwrKzvaGXrTrzC3CJwyiVYkMaqonAl7MynZaO1hj9gvEWkcI
+         QmoWVbniUi8zkgp2oD0qUVpE9Q3E/Byw7o+wYhGcJIUP/K/2u89673w4WJpL/0cWrQUe
+         UTn+3+j99wPBjMZFsnDZa8o80zQMLYWbeBq/TaAS54kVNt5cEXd2n/b6xjpMnkkDI6JT
+         Gtfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=17/xEWC1WmOjlte8h0eDRTmEFdiv+lS1lWx2rWU4nVc=;
-        b=LJFfyvhZMPXpWomsYoHp6CBTljtBSpkcFpw5sCkoPppLRhyoGoVjI/DCJ6N75q6W5H
-         ejUnC94iqg73UUZ6Q6CkAJl355y9/BcS3iryLH0Qy2xBEjPeOe+YtaSYU1mWdtAxiR8c
-         Ay2e0pJRf2n5Fk2Gc5aQVLKtDJ+Q0BWE2+UzJ+0JBgI5QDLdYD+/yzimLxZnuIrZC1cS
-         Pi9x6Pj0qePkfQcgksIwdy8lA0cqMBBS0aBi1M26aztGwsP2Jq3VEf56vjlcc2wGH/ql
-         t/B5L5leFbRcV2o/c6NXXVgaeUkwO+UX0DLvh+6r4DryQIrMdqSf1wfHdX5ac5XbfYUI
-         nsVw==
-X-Gm-Message-State: AFqh2koTdjWofTfEUFN2+UJQ3EguftZw7gJHtYQ0QYh4YkVNOim6ZzTo
-        bbuZdghvLMMiRPN+tR6dWuE=
-X-Google-Smtp-Source: AMrXdXthBjfeJGbjwTfS/yY7ImMNDD+PXI0nFRdpjGlUGxb66VhdMue8cgJPy/yV/1yZEzlOg/ya0g==
-X-Received: by 2002:aa7:cc81:0:b0:47e:eaae:9a5b with SMTP id p1-20020aa7cc81000000b0047eeaae9a5bmr41321458edt.42.1674842322849;
-        Fri, 27 Jan 2023 09:58:42 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id z22-20020a1709067e5600b0087276f66c6asm2600508ejr.115.2023.01.27.09.58.41
+        bh=Z4/3pp0HtNFhDGsx2C/KQB+H4Bh6uN2vy4tMssC8orA=;
+        b=amsQC3nAQKc2HN/Z2oWsAiTzYA/TH0C/p8WX/8xbXw1ow71UWZlCzZ7ZN0JoPxC6XA
+         Z4UBI09+kOqWJ57ZzgAGly2CRiwNqpkNI8QZnNZVf7LmsOFelswwvPyuIyYXSSkaUi8X
+         ptZNgCdS7FHCOHdGjPIDpaH1/jrtXB9aHmIJlvBCeBId/WpC0fcSAGOjTRArb9slHCZl
+         UchCJVEO/HC0yWZOTXYNSibIUTSjxlrqUayyseDkeDlCATEWjY6yqmUYGxCYvz3oGOjT
+         gj++R41m04rXnrs8AjJFs7NgBAFH+hUZIhFhUKP0Fo9AZ00rtEft/+N2qPoi6dWY6WqG
+         PSWg==
+X-Gm-Message-State: AFqh2krezLeenBh27xgUmoNgZOfGj8aF4QwIuj93am6UrO8Aiey2JG/s
+        b6S7c8yO1e/IiwE3QOd7vLo=
+X-Google-Smtp-Source: AMrXdXvNTPwj4cemkaOMxVKHEhwQGm4HuykOww+mQpA07rnd2kqZWmX31ukrCrdwsHUUU6ClEmdUpQ==
+X-Received: by 2002:a05:600c:a4c:b0:3dc:d5b:5f73 with SMTP id c12-20020a05600c0a4c00b003dc0d5b5f73mr14881327wmq.19.1674842337893;
+        Fri, 27 Jan 2023 09:58:57 -0800 (PST)
+Received: from suse.localnet (host-82-60-215-65.retail.telecomitalia.it. [82.60.215.65])
+        by smtp.gmail.com with ESMTPSA id a18-20020a05600c069200b003db305bece4sm4888766wmn.45.2023.01.27.09.58.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 09:58:42 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH 2/2] nvmem: add generic driver for devices with I/O based access
-Date:   Fri, 27 Jan 2023 18:58:31 +0100
-Message-Id: <20230127175831.26753-2-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230127175831.26753-1-zajec5@gmail.com>
-References: <20230127175831.26753-1-zajec5@gmail.com>
+        Fri, 27 Jan 2023 09:58:57 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Sterba <dsterba@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Al Viro <viro@zeniv.linux.org.uk>, Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH] mm/highmem: Align-down to page the address for
+ kunmap_flush_on_unmap()
+Date:   Fri, 27 Jan 2023 18:58:55 +0100
+Message-ID: <1920277.PYKUYFuaPT@suse>
+In-Reply-To: <Y9LdmUw8TkoJOWvM@casper.infradead.org>
+References: <20230126143346.12086-1-fmdefrancesco@gmail.com>
+ <Y9LdmUw8TkoJOWvM@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,136 +84,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On gioved=EC 26 gennaio 2023 21:07:53 CET Matthew Wilcox wrote:
+> On Thu, Jan 26, 2023 at 03:33:46PM +0100, Fabio M. De Francesco wrote:
+> > If ARCH_HAS_FLUSH_ON_KUNMAP is defined (PA-RISC case), __kunmap_local()
+> > calls kunmap_flush_on_unmap(). The latter currently flushes the wrong
+> > address (as confirmed by Matthew Wilcox and Helge Deller). Al Viro
+> > proposed to call kunmap_flush_on_unmap() on an aligned-down to page
+> > address in order to fix this issue. Consensus has been reached on this
+> > solution.
+> >=20
+> > Therefore, if ARCH_HAS_FLUSH_ON_KUNMAP is defined, call
+> > kunmap_flush_on_unmap() on an aligned-down to page address computed with
+> > the PTR_ALIGN_DOWN() macro.
+>=20
+> You missed a spot.  Sent the version I've had in my tree for a few days.
 
-With nvmem layouts in place we should now work on plain content access
-NVMEM drivers (e.g. IO one). Actual NVMEM content handling should go to
-layout drivers.
+I'm sorry for missing the other call site.
+=46urthermore, your patch has a better commit message.=20
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- drivers/nvmem/Kconfig  |  7 ++++
- drivers/nvmem/Makefile |  2 ++
- drivers/nvmem/io.c     | 79 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 88 insertions(+)
- create mode 100644 drivers/nvmem/io.c
+However, I'm also sorry because I would have expected a different kind of=20
+support from you. My patch could have been improved with v2.
 
-diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index 789729ff7e50..e77bfe6eb52e 100644
---- a/drivers/nvmem/Kconfig
-+++ b/drivers/nvmem/Kconfig
-@@ -90,6 +90,13 @@ config NVMEM_IMX_OCOTP_SCU
- 	  This is a driver for the SCU On-Chip OTP Controller (OCOTP)
- 	  available on i.MX8 SoCs.
- 
-+config NVMEM_IO
-+	tristate "IO access based NVMEM support"
-+	depends on HAS_IOMEM
-+	help
-+	  This driver provides support for NVMEM devices that can be accessed
-+	  using I/O mapping.
-+
- config NVMEM_JZ4780_EFUSE
- 	tristate "JZ4780 EFUSE Memory Support"
- 	depends on MACH_INGENIC || COMPILE_TEST
-diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index 442f9a4876a5..82db0a89c4d6 100644
---- a/drivers/nvmem/Makefile
-+++ b/drivers/nvmem/Makefile
-@@ -20,6 +20,8 @@ obj-$(CONFIG_NVMEM_IMX_OCOTP)		+= nvmem-imx-ocotp.o
- nvmem-imx-ocotp-y			:= imx-ocotp.o
- obj-$(CONFIG_NVMEM_IMX_OCOTP_SCU)	+= nvmem-imx-ocotp-scu.o
- nvmem-imx-ocotp-scu-y			:= imx-ocotp-scu.o
-+obj-$(CONFIG_NVMEM_IO)			+= nvmem-io.o
-+nvmem-io-y				:= io.o
- obj-$(CONFIG_NVMEM_JZ4780_EFUSE)	+= nvmem_jz4780_efuse.o
- nvmem_jz4780_efuse-y			:= jz4780-efuse.o
- obj-$(CONFIG_NVMEM_LAN9662_OTPC)	+= nvmem-lan9662-otpc.o
-diff --git a/drivers/nvmem/io.c b/drivers/nvmem/io.c
-new file mode 100644
-index 000000000000..307526fda036
---- /dev/null
-+++ b/drivers/nvmem/io.c
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Rafał Miłecki <rafal@milecki.pl>
-+ */
-+
-+#include <linux/io.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-provider.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
-+#include <linux/slab.h>
-+
-+struct io_nvmem {
-+	void __iomem *base;
-+};
-+
-+static int io_nvmem_read(void *context, unsigned int offset, void *val, size_t bytes)
-+{
-+	struct io_nvmem *priv = context;
-+	u8 *dst = val;
-+
-+	while (bytes--)
-+		*dst++ = readb(priv->base + offset++);
-+
-+	return 0;
-+}
-+
-+static int io_nvmem_probe(struct platform_device *pdev)
-+{
-+	struct nvmem_config config = {
-+		.name = "io-nvmem",
-+		.reg_read = io_nvmem_read,
-+	};
-+	struct device *dev = &pdev->dev;
-+	struct resource *res;
-+	struct io_nvmem *priv;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	config.dev = dev;
-+	config.priv = priv;
-+	config.size = resource_size(res);
-+
-+	if (!device_property_present(dev, "read-only"))
-+		dev_warn(dev, "Writing is not supported yet");
-+
-+	return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &config));
-+}
-+
-+static const struct of_device_id io_nvmem_of_match_table[] = {
-+	{ .compatible = "io-nvmem", },
-+	{},
-+};
-+
-+static struct platform_driver io_nvmem_driver = {
-+	.probe = io_nvmem_probe,
-+	.driver = {
-+		.name = "io_nvmem",
-+		.of_match_table = io_nvmem_of_match_table,
-+	},
-+};
-+
-+static int __init io_nvmem_init(void)
-+{
-+	return platform_driver_register(&io_nvmem_driver);
-+}
-+
-+subsys_initcall_sync(io_nvmem_init);
-+
-+MODULE_AUTHOR("Rafał Miłecki");
-+MODULE_LICENSE("GPL");
-+MODULE_DEVICE_TABLE(of, io_nvmem_of_match_table);
--- 
-2.34.1
+Anyway, I assume that you missed that I had asked you and Al if anybody wer=
+e=20
+interested in doing these changes and probably you missed also that Ira=20
+encouraged me to send a patch, whereas you did not show any interest...
+https://lore.kernel.org/lkml/3146373.5fSG56mABF@suse/
+
+=46abio
+
+P.S.: Helge wrote to me privately but you cannot know it.
+
 
