@@ -2,112 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EEB767DCBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 04:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A7967DCBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 04:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjA0DvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 22:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S230236AbjA0Dxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 22:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjA0DvR (ORCPT
+        with ESMTP id S229481AbjA0Dxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 22:51:17 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F559B78
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 19:51:16 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id m2so9935752ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 19:51:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AhXH+LjnQJy+TeeqGL7rkW4DgM2MxsYFE7DG5vchcB4=;
-        b=B+rvX7pOPdV39M9bsZ5xmu8dal+4X8Dr2wK27ARpXKBZ9kCTugreLcVmkwC14GBYIK
-         K7Hl+gvoQConiXD4xzaPTWkQQ4q4RqDvOyff4kLX6KliTYCaHFe3MpL7b4IrxD9+i65o
-         WGTVg9zfptYSXi+4pboUALk01gTvBU5PTLBsU3GEy8W7VPH/Sp8uDPTscQXdFz9tNxWu
-         n5/C8eS5NCw9fTouHYJB7BybpsVGHipyytc0KhI0MxHlJCFcpjX8BM2RA/NKob8pYscl
-         gTnn5yBNrWnIkfH7VoYdmOyOSy3xiiCSL3Pu20GqzTaAVyTDcs4yrcSpqaQxvqsT/ZuS
-         p93w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AhXH+LjnQJy+TeeqGL7rkW4DgM2MxsYFE7DG5vchcB4=;
-        b=0dHDQmeT+lCRKU/yaUXnSroHnQ/Y3htxT1uffLOAhganiJjr67lKMmGJI8y/Cm7Gqo
-         ZVwpz0k1ZPcXDcIMqeYVPN55Qplqi9/jJ91aV9mH+lXlprDLJ0FR2yASy/4i5CullI05
-         O1Vghvn7CTJAoysWanplZa+dvZte/UO3KZ2jjvN4vJMp4fyIFCX002CWnI4yJZebUQ0l
-         rMfngu29XT/x8JwbUdVGKoYQraf8eAYDohlvDseTHicGpVOBwgQxvgxwNsnDwFpMXkbJ
-         HdvDH9phkiFxZQ+gw9tSLqn2rFfm7V2XWoYumAokMYNBNZyvlm/j7ziqCn2R+6dZgY1d
-         m2bQ==
-X-Gm-Message-State: AFqh2kokTyH1L3nJ0UObCOEu+Um/b064zFvbwvifDLDEjyTnWI2FxQkj
-        d1KA+GWvxZOPTeodiykypYkVMth8Me5JOwMWz9hwgA==
-X-Google-Smtp-Source: AMrXdXum5zSZENCqc9aXWct0JbjZ6VxCYt8cvgWug1VNIFkR20MtvAjaz8ZeEdwf9D5wKNWAd8lJDuBRkh/bbbmtkEw=
-X-Received: by 2002:a17:906:3799:b0:781:541:8f1d with SMTP id
- n25-20020a170906379900b0078105418f1dmr4914571ejc.117.1674791475248; Thu, 26
- Jan 2023 19:51:15 -0800 (PST)
+        Thu, 26 Jan 2023 22:53:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2968D62240
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 19:53:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABF7AB81F95
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:53:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1A7BC433EF;
+        Fri, 27 Jan 2023 03:53:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674791616;
+        bh=QiRQ0Fl6+onHpSDTLUrFMpUAIIfVHseS/iKmIXAYaWc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OzyjQCSOa1wVfANYW40qX3EScWWACX6fBwykJNrXTF2hDppVqv8V3BkTjJiH/eXQY
+         rhe7qgjnq8pCOqvYRBxX5C3gg1JWPluGlnbV2/cohPk+ibiC5Il4sqSQF38cACs4lH
+         S/hS0gG1MCioogE0Psv0YFrcrlacf86vBgEZ+gwLwzkgs/R4vJXppqxYRLNa09ypq7
+         PwqSEKrEl7k8Tn98U2JIAw+37ojxZ7D4gYF40hJNHO0+uG6FH1OSsddXYQen8KO3hq
+         V9Wg9IvpS2BhPTyjOm//TSDz1+eUOYHuOlxHE2HEdlMmFCufTmBO1w2CcU5V7HcxrI
+         rjYgYYSBgstbw==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, palmer@rivosinc.com, conor.dooley@microchip.com,
+        apatel@ventanamicro.com, atishp@atishpatra.org,
+        mark.rutland@arm.com, bjorn@kernel.org, guoren@kernel.org,
+        tongtiangen@huawei.com, ajones@ventanamicro.com, andrew@sifive.com
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V2] riscv: Fixup race condition on PG_dcache_clean in flush_icache_pte
+Date:   Thu, 26 Jan 2023 22:53:06 -0500
+Message-Id: <20230127035306.1819561-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20230115154953.831-1-jszhang@kernel.org> <20230115154953.831-13-jszhang@kernel.org>
-In-Reply-To: <20230115154953.831-13-jszhang@kernel.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 27 Jan 2023 09:21:03 +0530
-Message-ID: <CAAhSdy3DmSt1-i5AoeOt0e9snD+P8XpazAUTr0LoNfFCuA3+pw@mail.gmail.com>
-Subject: Re: [PATCH v4 12/13] riscv: KVM: Switch has_svinval() to riscv_has_extension_unlikely()
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        Guo Ren <guoren@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 9:30 PM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> From: Andrew Jones <ajones@ventanamicro.com>
->
-> Switch has_svinval() from static branch to the new helper
-> riscv_has_extension_unlikely().
->
-> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-> Reviewed-by: Guo Ren <guoren@kernel.org>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-For KVM RISC-V:
-Acked-by: Anup Patel <anup@brainfault.org>
+In commit 588a513d3425 ("arm64: Fix race condition on PG_dcache_clean
+in __sync_icache_dcache()"), we found RISC-V has the same issue as the
+previous arm64. The previous implementation didn't guarantee the correct
+sequence of operations, which means flush_icache_all() hasn't been
+called when the PG_dcache_clean was set. That would cause a risk of page
+synchronization.
 
-Regards,
-Anup
+Fixes: 08f051eda33b ("RISC-V: Flush I$ when making a dirty page executable")
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+---
+Changelog:
+V2:
+ - Optimize commit log
+ - Rebase on riscv for-next (20230127)
 
-> ---
->  arch/riscv/kvm/tlb.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/kvm/tlb.c b/arch/riscv/kvm/tlb.c
-> index 309d79b3e5cd..aa3da18ad873 100644
-> --- a/arch/riscv/kvm/tlb.c
-> +++ b/arch/riscv/kvm/tlb.c
-> @@ -15,8 +15,7 @@
->  #include <asm/hwcap.h>
->  #include <asm/insn-def.h>
->
-> -#define has_svinval()  \
-> -       static_branch_unlikely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_SVINVAL])
-> +#define has_svinval()  riscv_has_extension_unlikely(RISCV_ISA_EXT_SVINVAL)
->
->  void kvm_riscv_local_hfence_gvma_vmid_gpa(unsigned long vmid,
->                                           gpa_t gpa, gpa_t gpsz,
-> --
-> 2.38.1
->
+V1:
+https://lore.kernel.org/linux-riscv/20221023133205.3493564-2-guoren@kernel.org/
+---
+ arch/riscv/mm/cacheflush.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
+index 3cc07ed45aeb..fcd6145fbead 100644
+--- a/arch/riscv/mm/cacheflush.c
++++ b/arch/riscv/mm/cacheflush.c
+@@ -90,8 +90,10 @@ void flush_icache_pte(pte_t pte)
+ 	if (PageHuge(page))
+ 		page = compound_head(page);
+ 
+-	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
++	if (!test_bit(PG_dcache_clean, &page->flags)) {
+ 		flush_icache_all();
++		set_bit(PG_dcache_clean, &page->flags);
++	}
+ }
+ #endif /* CONFIG_MMU */
+ 
+-- 
+2.36.1
+
