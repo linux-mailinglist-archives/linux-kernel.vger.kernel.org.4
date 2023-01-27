@@ -2,60 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA0867E425
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E4C67E4B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbjA0LvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:51:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S233556AbjA0MKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:10:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234653AbjA0Lub (ORCPT
+        with ESMTP id S233763AbjA0MJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:50:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EED7DBF1;
-        Fri, 27 Jan 2023 03:48:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0610E61B48;
-        Fri, 27 Jan 2023 11:45:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA25EC433EF;
-        Fri, 27 Jan 2023 11:45:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674819955;
-        bh=+HZedC1yYWn9RpT0uEg90it6dWEPBAOVrFjpfrJEmQA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gXiPe9Dgc9ISKhiSOrlvRd3vLkCrFPKbID9Sdqb8YTmyUV5MkO+qxCXN0rHEb/eSp
-         q6Nu+oZWk7Z+bnW8piP441ATYZ0bgF8mB1wY/+gqEh/LoquSECvV9RNKpLJFsaaPPS
-         aSDMWgOBNEd5cIzWxcjZXzjRMhgQ+tTvJrgG5zyQ=
-Date:   Fri, 27 Jan 2023 12:45:52 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH 571/606] serial: sc16is7xx: Convert to i2c's .probe_new()
-Message-ID: <Y9O5cMnC+uKrPToz@kroah.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-572-uwe@kleine-koenig.org>
- <536ac08e-bdbd-b4d6-8309-8f6763f8db12@kernel.org>
- <20221121070757.cqiybt5uk4qiczmr@pengutronix.de>
- <0bfea903-5efd-a76d-5944-16a2c9362adb@kernel.org>
- <20221123080912.lbmfgnco67psdu27@pengutronix.de>
- <20230127101025.evefhpwpfikahd3k@pengutronix.de>
+        Fri, 27 Jan 2023 07:09:51 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6D186250
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:03:32 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id ud5so13127717ejc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:03:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IXd1Cay0PuoVNLquWy4+5A9Hje1OZ6HIZgO3KYLNKCU=;
+        b=EM+BulHUseAsmgsDpFK679ddP8Z3AeuM8tLmktr0DE2abRVZJ5wKMKNsz/nK3VPE30
+         OHzifBu8lcuElJLZ/r83ZfXSGbz/jju0ZVtRUuyOodRDgKYRUJVg3dmfiVfNWyqrSvpB
+         Vhyu2yeRGICk4vclE5hwkNNByXgNlwuDEHwlaD+n5oYnkWqIBkDPYKPqmnW8l4vBli1y
+         jRkIWbUUIFh5eIHXaIBIBByJk7zDU7ESsYtndEVGMKz8BBWorqXSuhHZq4Kysc314DI7
+         wWUFay+YPLrKHhMn3KMex813AlP9Q25mxEHDb3rI11K6+kC6SuquhPHXrjKZVaHQHIfJ
+         sChQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IXd1Cay0PuoVNLquWy4+5A9Hje1OZ6HIZgO3KYLNKCU=;
+        b=LGeVxh4ki3y+fANSGFxFsOxFsMrqDXwr2s3eFFhg7D2irKYZ+D1iE0utKP5vRCQa86
+         LTWy0FeN+ViloeyGUxNcgs6ex/qJtR03dygzO+dGnV+08GjSergUam10mHkKy/NMGMLY
+         SbOYiHydcOOGZ08LFDlEcwZjSY4E+j0AYqk0vzHioTk7urp124/ogubySATfp1B3qpUU
+         V7n3R6/moO7ySLZzthCkA1L8MiXdVeOVwnV6Dppl5pru/DqBuYAmDWwNnrrLzjhCXoTl
+         Qs/8ka7l2TjjIS1w20CmYZnpG0yoZMhDSpKC4qdlXaVhYSLSRzFsm3QBjasMjbMx5Yd9
+         t0rQ==
+X-Gm-Message-State: AFqh2ko/kWq+CNAnVd3sVTdGI2DcEsNlv5VE7HKQl50e/22WB2x8ZviJ
+        j6s+3QSPoRT9baZf6PCvmuZpij8KFSGsQbF8
+X-Google-Smtp-Source: AMrXdXs1krk+6o/FfFny7AmBPlSTXvn2eo0l3icgMKTakzX2LZT41di38a+DLnWs8FhhuiSaNmhY8g==
+X-Received: by 2002:a05:600c:4e16:b0:3db:15b1:fafd with SMTP id b22-20020a05600c4e1600b003db15b1fafdmr32933179wmq.24.1674820175891;
+        Fri, 27 Jan 2023 03:49:35 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id p20-20020a05600c2e9400b003d9862ec435sm4075479wmn.20.2023.01.27.03.49.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 03:49:35 -0800 (PST)
+Message-ID: <9f4666db-9b0b-77d4-e02b-708c2a1ebb4e@linaro.org>
+Date:   Fri, 27 Jan 2023 12:49:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230127101025.evefhpwpfikahd3k@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 7/8] arm64: dts: qcom: sm8550: Add USB PHYs and
+ controller nodes
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-phy@lists.infradead.org
+References: <20230126131415.1453741-1-abel.vesa@linaro.org>
+ <20230126131415.1453741-8-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230126131415.1453741-8-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,79 +84,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:10:25AM +0100, Uwe Kleine-König wrote:
-> Hello,
+On 26/01/2023 14:14, Abel Vesa wrote:
+> Add USB host controller and PHY nodes.
 > 
-> On Wed, Nov 23, 2022 at 09:09:12AM +0100, Uwe Kleine-König wrote:
-> > On Wed, Nov 23, 2022 at 07:36:52AM +0100, Jiri Slaby wrote:
-> > > On 21. 11. 22, 8:07, Uwe Kleine-König wrote:
-> > > > On Mon, Nov 21, 2022 at 07:03:41AM +0100, Jiri Slaby wrote:
-> > > > > On 18. 11. 22, 23:45, Uwe Kleine-König wrote:
-> > > > > > From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > > > > > 
-> > > > > > .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> > > > > > that explicitly in the probe function.
-> > > > > 
-> > > > > I wonder why -- is this a new approach to probe functions? Or is only i2c
-> > > > > affected? And why? Could you point to the commit introducing and describing
-> > > > > the change in the i2c core?
-> > > > 
-> > > > I didn't sent the cover letter to all recipents of the individual
-> > > > patches, so flow of information is a bit rough. Sorry about that.
-> > > > 
-> > > > You can find it at
-> > > > https://lore.kernel.org/lkml/20221118224540.619276-1-uwe@kleine-koenig.org/,
-> > > > it should answer your question.
-> > > 
-> > > Yes, I looked up that beforehand, but was no more clever after reading it.
-> > > 
-> > > > The short version is: The i2c framework does a more or less expensive
-> > > > lookup for each call to .probe() to provide the id parameter. A relevant
-> > > > part of the drivers however doesn't use this parameter, so the idea is
-> > > > to let the drivers who actually need it, determine it themselves.
-> > > > 
-> > > > Statistics for the current state of this series in my tree:
-> > > > Among the 602 converted drivers, 404 don't make use of the parameter.
-> > > 
-> > > So doesn't it make sense to provide both probe with no id and "probe_id"
-> > > then? 200 is quite a few (a third to be precise).
-> > 
-> > Having the probe callback with the id parameter is only temporary. As
-> > soon as all drivers are converted, the variant with the id parameter
-> > will go away.
-> > 
-> > > BTW is this a performance issue? I.e. does it slow down the boot?
-> > 
-> > I don't know the start motivation for Lee (who triggered the conversion
-> > in b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back
-> > type")).
-> > Looking at the git history, he created 1e98dcd77970 ("mfd: 88pm860x:
-> > Move over to new I2C device .probe() call") converting a driver that
-> > doesn't benefit immensely. The lookup is more expensive for drivers with
-> > big .id_table, the converted driver has only one entry.
-> > 
-> > I think in the end is a mixture between:
-> > 
-> >  - A big part of the drivers doesn't benefit from the lookup.
-> >  - For most other busses the probe function only gets a device parameter
-> >    and no id (spi, platform, i3c). There are counter examples though:
-> >    amba, usb. Didn't check further.
-> 
-> The discussion somehow ended here without a real result.
-> 
-> As of today's next master there are only 9 drivers left using .probe().
-> So I'd like to stop this discussion and ask to apply the conversion for
-> the sc16is7xx driver to be able to complete the conversion.
-> 
-> My plan is to drop the .probe callback as it is today after the next
-> merge window. So I ask the serial maintainers to either take the patch
-> under discussion for the next merge window or accept that the conversion
-> is done together with the patch that drops .probe() that probably will
-> go in via the i2c tree.
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
 
-I don't see the patch anymore, so I have no objection for it going
-through the i2c tree.
 
-thanks,
+(...)
 
-greg k-h
+> +		usb_1: usb@a6f8800 {
+> +			compatible = "qcom,sm8550-dwc3", "qcom,dwc3";
+> +			reg = <0x0 0x0a6f8800 0x0 0x400>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
+> +				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
+> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
+> +				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>,
+> +				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+> +				 <&rpmhcc TCSR_USB3_CLKREF_EN>;
+> +			clock-names = "cfg_noc",
+> +				      "core",
+> +				      "iface",
+> +				      "sleep",
+> +				      "mock_utmi",
+> +				      "xo";
+> +
+> +			assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+> +					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
+> +			assigned-clock-rates = <19200000>, <200000000>;
+> +
+> +			interrupts-extended = <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 15 IRQ_TYPE_EDGE_RISING>,
+> +					      <&pdc 14 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "hs_phy_irq",
+> +					  "ss_phy_irq",
+> +					  "dm_hs_phy_irq",
+> +					  "dp_hs_phy_irq";
+> +
+> +			power-domains = <&gcc USB30_PRIM_GDSC>;
+> +			required-opps = <&rpmhpd_opp_nom>;
+
+This is not accepted, so far. Can we drop it?
+
+Or revive:
+https://lore.kernel.org/all/YXcBK7zqny0s4gd4@ripper/
+
+Best regards,
+Krzysztof
+
