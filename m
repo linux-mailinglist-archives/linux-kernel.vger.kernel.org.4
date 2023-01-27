@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE8167F08E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 868C667F097
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbjA0Vmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
+        id S231726AbjA0VoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:44:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjA0Vmn (ORCPT
+        with ESMTP id S231738AbjA0VoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:42:43 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025BB2007C
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:42:42 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id z31so4179614pfw.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:42:41 -0800 (PST)
+        Fri, 27 Jan 2023 16:44:04 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB7D7B415
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:44:03 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso9184906pju.0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:44:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0d6n6AuTepafE8zRxy7R/0YUNfUjkxK2wRxr8ePG2TQ=;
-        b=Xd70rP95v9OOS8VZ/k+iLrWA61DJSoLEWwTfHLmKtArj4JixnNl/00BMvWM37/4e+q
-         zGYB8Qmj7+tqiBw/oie2xjCoKmJOV4JLfcRpzTN1rJwKPa420g1lyElw9YfS0VV3bh5n
-         YxeNAf6j2ugwdK5SUsUm16EANlytaNu7GucQ2LEe5EozOKNuxeSmK2/3Bcf9W61yKC5r
-         X9uHCqNIqzxTedojEN8KcjAi8z6eDqGBz/yOpoehWCRX0wNawVwTSkFa8zbKArGD7Wy4
-         K4H3c9nhbChl8jEbqQdVpQ4v1gsTkCEQBne//T6X46bRuNh3i8YFC+xoOXD9pmM8/NFq
-         GLFw==
+        bh=5rTEgEodGL6cJpjtjTY5gAIMYsmuHr6YRAB19Z1yLCA=;
+        b=glyL4fEbkcoiT1zpTlvzCLd1l5FE6mDeHUOC3B+TtxRjCtpKi0/ECPvRa9Y1yd13e9
+         uAxyLN6sABt1ZWig/80O//SaF7BnJYu2ABPPJVJ8vHmrsHldonIZfXNCjBurtuRNPDDG
+         jeXowVW07ZI7DZe4sdqHd8AySGL6k8fADedc3ndl5r+GJGh7GlpYiLBPSMFIG6buztH+
+         CKy29hKdjFpAjk10EGzjxXs4PkrpCac26ZYScJxYEqNFoR5Adaza2HJBQckue+V1JYl1
+         7jd4WKS+TeEv9Pvhfro/Fenlo7j1yHMeDM9oorqW1nIvlhHvyWdwytFm/TQ7pFqwrD+P
+         /nHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0d6n6AuTepafE8zRxy7R/0YUNfUjkxK2wRxr8ePG2TQ=;
-        b=Pj8RaKjeqsybEXa8cROSMvsE/ZLgW3dviBskvXrghVIulMDWHbeyVLZvI1+/aQ3rJE
-         DgTvDhXkltRErXX9tUDocNjGrul0+sZEmuYC6BX4J81+EckpUgkyXs/TVA3hULh5/rEg
-         IKa7vy6toEh86jZ7q/3iqlzgIs+bUXvL8ohO/LAvCxXxGjtDSqjpd5ot0jRD3PzIaPSw
-         F/Tc4+gzupBLJDkzU112GaAD5C9wLS+4/+Opg+7Q/yzZnl+/nFxuGZt4etcJACfsJzu+
-         AN/2z09lkEU9+sC0avc1QRkxu4puW1RG13F3zYoUqVNl5u/ZztI3tOUApWNOXJ7VMnrw
-         gdWQ==
-X-Gm-Message-State: AO0yUKUJ5iLjyOTOaada26JPJKpBHnKf3FPLNTC0T3dXhnWD4RUNAWMO
-        4PNtHKd5/0aYhIOmdLjbGwROnA==
-X-Google-Smtp-Source: AK7set8ixdj3l9QJrIJEUtMxmDMBJN5pHM3X69PpntwQqq16lvP6YGflFCI+1AxN2EQZal+YPsNxaw==
-X-Received: by 2002:a05:6a00:1884:b0:581:bfac:7a52 with SMTP id x4-20020a056a00188400b00581bfac7a52mr131735pfh.1.1674855761263;
-        Fri, 27 Jan 2023 13:42:41 -0800 (PST)
+        bh=5rTEgEodGL6cJpjtjTY5gAIMYsmuHr6YRAB19Z1yLCA=;
+        b=X/REeZtcaAQdWgfyzsZwNbCYXY4q4lDKCjxQbrKyoePDQjn1Gwqxg2br2LgC7Mc82D
+         d8SCThHdS4a0caPHRIf52UlJc9uKqBQ+M+Hpxklwt1rJWazLuOZeH4+SUu2IgWE9TpXy
+         J0vpljXgPQz+1S7qtvmfZqL5WlhMMSkWbTdEK4qGg0wCHm+Z5iSLlU3NrN1xLBAEBjSu
+         0hgKKGGXKFK8+LdQClFbSU07cOTXxm3CGbM97W8ma1uqzFXk4JR9Lj0xOTO6GwEVgIhE
+         e4b2gp8+Nt4/lKcvcCz3R8p/TdlWvnuCAUIiDfipztvadk2txUIuO+1rwqmS0wOPzpY7
+         cC2Q==
+X-Gm-Message-State: AO0yUKWlmMUz9f0VeCc/+P9mYRShmjBk/wO4Xzze25hKmN7MFUbx/TkS
+        lVCSS22hhCev39dYCEGQal5tRw==
+X-Google-Smtp-Source: AK7set+7JgBQ1Sq3kzSRF91nzW4KSdasZb2TcQ2Z0Jccvdhq19WBLvPaZ1dYZeltOnbY8FuSTH8OlQ==
+X-Received: by 2002:a17:90a:6949:b0:219:f970:5119 with SMTP id j9-20020a17090a694900b00219f9705119mr143951pjm.1.1674855842543;
+        Fri, 27 Jan 2023 13:44:02 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f186-20020a62dbc3000000b0058a72925687sm3040476pfg.212.2023.01.27.13.42.40
+        by smtp.gmail.com with ESMTPSA id b10-20020a17090a9bca00b00218cd71781csm3189800pjw.51.2023.01.27.13.44.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 13:42:40 -0800 (PST)
-Date:   Fri, 27 Jan 2023 21:42:37 +0000
+        Fri, 27 Jan 2023 13:44:02 -0800 (PST)
+Date:   Fri, 27 Jan 2023 21:43:58 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Yang Weijiang <weijiang.yang@intel.com>
 Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org, like.xu.linux@gmail.com,
-        kan.liang@linux.intel.com, wei.w.wang@intel.com,
-        Like Xu <like.xu@linux.intel.com>
-Subject: Re: [PATCH v2 06/15] KVM: vmx/pmu: Emulate MSR_ARCH_LBR_CTL for
- guest Arch LBR
-Message-ID: <Y9RFTUqdS05WBCaW@google.com>
+        kan.liang@linux.intel.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v2 08/15] KVM: x86: Add Arch LBR MSRs to msrs_to_save_all
+ list
+Message-ID: <Y9RFngDO3ip9vTwi@google.com>
 References: <20221125040604.5051-1-weijiang.yang@intel.com>
- <20221125040604.5051-7-weijiang.yang@intel.com>
+ <20221125040604.5051-9-weijiang.yang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221125040604.5051-7-weijiang.yang@intel.com>
+In-Reply-To: <20221125040604.5051-9-weijiang.yang@intel.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -77,172 +76,13 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Thu, Nov 24, 2022, Yang Weijiang wrote:
-> @@ -345,6 +346,30 @@ static bool intel_pmu_handle_lbr_msrs_access(struct kvm_vcpu *vcpu,
->  	return true;
->  }
->  
-> +static bool arch_lbr_ctl_is_valid(struct kvm_vcpu *vcpu, u64 ctl)
-> +{
-> +	struct kvm_cpuid_entry2 *entry;
-> +	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-> +
-> +	if (!pmu->kvm_arch_lbr_depth)
-> +		return false;
-> +
-> +	if (ctl & ~KVM_ARCH_LBR_CTL_MASK)
-> +		return false;
-> +
-> +	entry = kvm_find_cpuid_entry(vcpu, 0x1c);
+> Arch LBR MSR_ARCH_LBR_DEPTH and MSR_ARCH_LBR_CTL are queried by
+> userspace application before it wants to {save|restore} the Arch LBR
+> data. Other LBR related data MSRs are omitted here intentionally due
+> to lengthy list(32*3). Userspace can still use KVM_{GET|SET}_MSRS to
+> access them if necessary.
 
-Why!?!?!  Why does this series reinvent the wheel so many times.  We already have
-a huge pile of reserved bits masks that are computed in intel_pmu_refresh(), just
-do the easy thing and follow the established pattern.
-
-> +	if (!entry)
-> +		return false;
-> +
-> +	if (!(entry->ebx & BIT(0)) && (ctl & ARCH_LBR_CTL_CPL))
-> +		return false;
-> +	if (!(entry->ebx & BIT(2)) && (ctl & ARCH_LBR_CTL_STACK))
-> +		return false;
-> +	if (!(entry->ebx & BIT(1)) && (ctl & ARCH_LBR_CTL_FILTER))
-> +		return false;
-> +	return true;
-> +}
-> +
->  static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  {
->  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-> @@ -377,6 +402,14 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  	case MSR_ARCH_LBR_DEPTH:
->  		msr_info->data = lbr_desc->records.nr;
->  		return 0;
-> +	case MSR_ARCH_LBR_CTL:
-> +		if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR)) {
-
-So I assume the point of this code is to allow reading MSR_ARCH_LBR_CTL from
-userspace before doing KVM_SET_CPUID2, but I would much rather do that in a
-generic way, i.e. build this series on 
-https://lore.kernel.org/all/20230124234905.3774678-7-seanjc@google.com
-
-> +			WARN_ON_ONCE(!msr_info->host_initiated);
-> +			msr_info->data = 0;
-> +		} else {
-> +			msr_info->data = vmcs_read64(GUEST_IA32_LBR_CTL);
-> +		}
-> +		return 0;
->  	default:
->  		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
->  		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
-> @@ -483,6 +516,18 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  		if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
->  			wrmsrl(MSR_ARCH_LBR_DEPTH, lbr_desc->records.nr);
->  		return 0;
-> +	case MSR_ARCH_LBR_CTL:
-> +		if (msr_info->host_initiated && !pmu->kvm_arch_lbr_depth)
-> +			return data != 0;
-> +
-> +		if (!arch_lbr_ctl_is_valid(vcpu, data))
-> +			break;
-> +
-> +		vmcs_write64(GUEST_IA32_LBR_CTL, data);
-> +		if (intel_pmu_lbr_is_enabled(vcpu) && !lbr_desc->event &&
-> +		    (data & ARCH_LBR_CTL_LBREN))
-> +			intel_pmu_create_guest_lbr_event(vcpu);
-> +		return 0;
->  	default:
->  		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
->  		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
-> @@ -727,12 +772,16 @@ static void intel_pmu_reset(struct kvm_vcpu *vcpu)
->   */
->  static void intel_pmu_legacy_freezing_lbrs_on_pmi(struct kvm_vcpu *vcpu)
->  {
-> -	u64 data = vmcs_read64(GUEST_IA32_DEBUGCTL);
-> +	u32 lbr_ctl_field = GUEST_IA32_DEBUGCTL;
->  
-> -	if (data & DEBUGCTLMSR_FREEZE_LBRS_ON_PMI) {
-> -		data &= ~DEBUGCTLMSR_LBR;
-> -		vmcs_write64(GUEST_IA32_DEBUGCTL, data);
-> -	}
-> +	if (!(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_FREEZE_LBRS_ON_PMI))
-> +		return;
-> +
-> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
-> +	    guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
-> +		lbr_ctl_field = GUEST_IA32_LBR_CTL;
-
-Similar to other comments, just rely on KVM not allowing LBRs to be enabled unless
-the guest is configured with the correct flavor.
-
-> +
-> +	vmcs_write64(lbr_ctl_field, vmcs_read64(lbr_ctl_field) & ~0x1ULL);
-
-Open coding a bit just because it happens to be in the same position in both fields
-is ridiculous.
-
-	u64 debugctl = vmcs_read64(GUEST_IA32_DEBUGCTL);
-
-	if (!debugctl & DEBUGCTLMSR_FREEZE_LBRS_ON_PMI))
-		return;
-
-	if (cpu_feature_enabled(X86_FEATURE_ARCH_LBR))
-		vmcs_clear_bits64(GUEST_IA32_LBR_CTL, ARCH_LBR_CTL_LBREN);
-	else
-		vmcs_write64(GUEST_IA32_DEBUGCTL, debugctl & ~DEBUGCTLMSR_LBR);
-
->  }
->  
->  static void intel_pmu_deliver_pmi(struct kvm_vcpu *vcpu)
-> @@ -801,7 +850,8 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
->  	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
-> -	bool lbr_enable = !guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
-> +	bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
-> +		(vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
->  		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
->  
->  	if (!lbr_desc->event) {
-> @@ -829,7 +879,8 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
->  
->  static void intel_pmu_cleanup(struct kvm_vcpu *vcpu)
->  {
-> -	bool lbr_enable = !guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
-> +	bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
-> +		(vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
->  		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
-
-Instead of open coding the same ugly ternary operator in multiple locations, add
-a helper.
-
->  
->  	if (!lbr_enable)
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index cea8c07f5229..1ae2efc29546 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2120,6 +2120,13 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  						VM_EXIT_SAVE_DEBUG_CONTROLS)
->  			get_vmcs12(vcpu)->guest_ia32_debugctl = data;
->  
-> +		/*
-> +		 * For Arch LBR, IA32_DEBUGCTL[bit 0] has no meaning.
-> +		 * It can be written to 0 or 1, but reads will always return 0.
-> +		 */
-> +		if (guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
-
-This can be dependent solely on the host CPU.  If LBRs are unsupported, the bit
-will be marked invalid and cleared above.  And as mentioned multiple times, KVM
-needs to allow enabling LBRs iff the guest and host flavors match.
-
-> +			data &= ~DEBUGCTLMSR_LBR;
-
-This needs to be done before shoving the value into vmcs12.
-
-> +
->  		vmcs_write64(GUEST_IA32_DEBUGCTL, data);
->  		if (intel_pmu_lbr_is_enabled(vcpu) && !to_vmx(vcpu)->lbr_desc.event &&
->  		    (data & DEBUGCTLMSR_LBR))
-> -- 
-> 2.27.0
-> 
+Absolutely not.  "there are a lot of them" isn't sufficient justification.  If
+the MSRs need to be migrated, then KVM needs to report them.  If the expectation
+is that XSAVES will handle them, then KVM needs to take a dependency on XSAVES
+when enabling arch LBRs.
