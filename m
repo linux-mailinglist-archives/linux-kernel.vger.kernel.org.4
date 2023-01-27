@@ -2,135 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359DE67E8A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DEA67E8AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233998AbjA0OxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
+        id S234010AbjA0OyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233973AbjA0OxP (ORCPT
+        with ESMTP id S230244AbjA0OyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:53:15 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2335223657;
-        Fri, 27 Jan 2023 06:53:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5383ACE28BB;
-        Fri, 27 Jan 2023 14:53:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57053C433D2;
-        Fri, 27 Jan 2023 14:53:08 +0000 (UTC)
-Message-ID: <9f34a103-2dab-39bc-43c6-ea9ca494d7ad@xs4all.nl>
-Date:   Fri, 27 Jan 2023 15:53:06 +0100
+        Fri, 27 Jan 2023 09:54:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB39A35B3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:53:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674831210;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=O4CJ3o8SwPvw9JAPwWMxi0hbq7glhKayvo3+sTVOOds=;
+        b=SvVjmBJ9omriubF+KnqDXnGa9J0UvIhXsP7XBddcAFTpXhUdfBE7vaG+6yl0pdCn0WGcAf
+        UOdw+OhKzO5wx6FLmYsU2GsYHnf3nRXFUVBJ5u0R0xuRaFC3URItcP9xSq3qzHkJ+axM5r
+        uG7fk33Q4kToOWNBQRv+IAmWkoMQHZg=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-86-fyTVgroWNre8_ganqcBfKQ-1; Fri, 27 Jan 2023 09:53:28 -0500
+X-MC-Unique: fyTVgroWNre8_ganqcBfKQ-1
+Received: by mail-ej1-f71.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso3566914ejb.14
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:53:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O4CJ3o8SwPvw9JAPwWMxi0hbq7glhKayvo3+sTVOOds=;
+        b=2Wl4AmQQvBbJVgiRt3hkfZOlzGiHdtdkD/3J3aEL5UcqkVrZC5QuN/Cy3xOqW2Zrsr
+         svvQI4nontl6y+3EMTt2yvr4GLStcZkjUXJl4dbV73/uOUXN4Il+jhdNOSJPSKtWbmrd
+         Ti5Mc0TI7QPKPsgSLpAxMhPPUNXycslNjoHb6x8HSofsuCTqIepoergp0Mhrsjl1L9qJ
+         ocvWSEg9paeLcohS/eW1QvLR/t8DqAEg1hQ5l7NMAylEtnUUtQvNwZfNQyXByKQPXGXv
+         6+shU+Tc0l4oR8pPmjwLZxIooKA7DU0DiDpykDxMfxbz42QmepQxvDQoOV144IulT1xt
+         RAfA==
+X-Gm-Message-State: AFqh2koGU+O1997B12jsDRTtt9U+9xgp80FLbi8VqczsQPUcg8MuApGz
+        qk0cOXBTa/kP8OIa0YLcV6v7VBL2lCqmhOPUMhDh7GYQD6VMTZVyG5DRRkufZnjVDvU1CQiDo+w
+        OGOJi4rIAwGAtKhctlPC4Pi/9
+X-Received: by 2002:a17:907:2910:b0:86f:9fb1:307b with SMTP id eq16-20020a170907291000b0086f9fb1307bmr36437575ejc.31.1674831207486;
+        Fri, 27 Jan 2023 06:53:27 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXs3lmUJfXCsL0vxaEyFuB+wjhQkLdYV/HlYTb++NiWJcPsVBn8ESe4mgXBk9E1XlSzlDrVsNg==
+X-Received: by 2002:a17:907:2910:b0:86f:9fb1:307b with SMTP id eq16-20020a170907291000b0086f9fb1307bmr36437560ejc.31.1674831207200;
+        Fri, 27 Jan 2023 06:53:27 -0800 (PST)
+Received: from redhat.com ([2.52.137.69])
+        by smtp.gmail.com with ESMTPSA id 9-20020a170906200900b0087848a5daf5sm2308443ejo.225.2023.01.27.06.53.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 06:53:26 -0800 (PST)
+Date:   Fri, 27 Jan 2023 09:53:22 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Laurent Vivier <lvivier@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        Eli Cohen <elic@nvidia.com>, Cindy Lu <lulu@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Parav Pandit <parav@nvidia.com>
+Subject: Re: [PATCH v2 1/1] virtio_net: notify MAC address change on device
+ initialization
+Message-ID: <20230127095125-mutt-send-email-mst@kernel.org>
+References: <20230123120022.2364889-1-lvivier@redhat.com>
+ <20230123120022.2364889-2-lvivier@redhat.com>
+ <20230124024711-mutt-send-email-mst@kernel.org>
+ <971beeaf-5e68-eb4a-1ceb-63a5ffa74aff@redhat.com>
+ <20230127060453-mutt-send-email-mst@kernel.org>
+ <5d82047d-411b-a98d-ce0e-1195838db42c@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 06/10] media: Add B412 video format
-Content-Language: en-US
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        mirela.rabulea@oss.nxp.com
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <cover.1671071730.git.ming.qian@nxp.com>
- <86983e95cfd05ba9b3b4688e25b58e96ab23d185.1671071730.git.ming.qian@nxp.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <86983e95cfd05ba9b3b4688e25b58e96ab23d185.1671071730.git.ming.qian@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d82047d-411b-a98d-ce0e-1195838db42c@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/2022 04:11, Ming Qian wrote:
-> B412 is a reversed RGB format with alpha channel last,
-> 12 bits per component like ABGR32,
-> expanded to 16bits.
-> Data in the 12 high bits, zeros in the 4 low bits,
-> arranged in little endian order.
+On Fri, Jan 27, 2023 at 01:28:01PM +0100, Laurent Vivier wrote:
+> On 1/27/23 12:08, Michael S. Tsirkin wrote:
+> > On Tue, Jan 24, 2023 at 12:04:24PM +0100, Laurent Vivier wrote:
+> > > On 1/24/23 11:15, Michael S. Tsirkin wrote:
+> > > > On Mon, Jan 23, 2023 at 01:00:22PM +0100, Laurent Vivier wrote:
+> > > > > In virtnet_probe(), if the device doesn't provide a MAC address the
+> > > > > driver assigns a random one.
+> > > > > As we modify the MAC address we need to notify the device to allow it
+> > > > > to update all the related information.
+> > > > > 
+> > > > > The problem can be seen with vDPA and mlx5_vdpa driver as it doesn't
+> > > > > assign a MAC address by default. The virtio_net device uses a random
+> > > > > MAC address (we can see it with "ip link"), but we can't ping a net
+> > > > > namespace from another one using the virtio-vdpa device because the
+> > > > > new MAC address has not been provided to the hardware.
+> > > > 
+> > > > And then what exactly happens? Does hardware drop the outgoing
+> > > > or the incoming packets? Pls include in the commit log.
+> > > 
+> > > I don't know. There is nothing in the kernel logs.
+> > > 
+> > > The ping error is: "Destination Host Unreachable"
+> > > 
+> > > I found the problem with the mlx5 driver as in "it doesn't work when MAC
+> > > address is not set"...
+> > > 
+> > > Perhaps Eli can explain what happens when the MAC address is not set?
+> > > 
+> > > > 
+> > > > > Signed-off-by: Laurent Vivier <lvivier@redhat.com>
+> > > > > ---
+> > > > >    drivers/net/virtio_net.c | 14 ++++++++++++++
+> > > > >    1 file changed, 14 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > > > index 7723b2a49d8e..4bdc8286678b 100644
+> > > > > --- a/drivers/net/virtio_net.c
+> > > > > +++ b/drivers/net/virtio_net.c
+> > > > > @@ -3800,6 +3800,8 @@ static int virtnet_probe(struct virtio_device *vdev)
+> > > > >    		eth_hw_addr_set(dev, addr);
+> > > > >    	} else {
+> > > > >    		eth_hw_addr_random(dev);
+> > > > > +		dev_info(&vdev->dev, "Assigned random MAC address %pM\n",
+> > > > > +			 dev->dev_addr);
+> > > > >    	}
+> > > > >    	/* Set up our device-specific information */
+> > > > > @@ -3956,6 +3958,18 @@ static int virtnet_probe(struct virtio_device *vdev)
+> > > > >    	pr_debug("virtnet: registered device %s with %d RX and TX vq's\n",
+> > > > >    		 dev->name, max_queue_pairs);
+> > > > > +	/* a random MAC address has been assigned, notify the device */
+> > > > > +	if (!virtio_has_feature(vdev, VIRTIO_NET_F_MAC) &&
+> > > > > +	    virtio_has_feature(vi->vdev, VIRTIO_NET_F_CTRL_MAC_ADDR)) {
+> > > > 
+> > > > Maybe add a comment explaining that we don't fail probe if
+> > > > VIRTIO_NET_F_CTRL_MAC_ADDR is not there because
+> > > > many devices work fine without getting MAC explicitly.
+> > > 
+> > > OK
+> > > 
+> > > > 
+> > > > > +		struct scatterlist sg;
+> > > > > +
+> > > > > +		sg_init_one(&sg, dev->dev_addr, dev->addr_len);
+> > > > > +		if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MAC,
+> > > > > +					  VIRTIO_NET_CTRL_MAC_ADDR_SET, &sg)) {
+> > > > > +			dev_warn(&vdev->dev, "Failed to update MAC address.\n");
+> > > > 
+> > > > Here, I'm not sure we want to proceed. Is it useful sometimes?
+> > > 
+> > > I think reporting an error is always useful, but I can remove that if you prefer.
+> > 
+> > No the question was whether we should fail probe not
+> > whether we print the warning.
 > 
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> ---
->  Documentation/userspace-api/media/v4l/pixfmt-rgb.rst | 9 +++++++++
->  drivers/media/v4l2-core/v4l2-common.c                | 1 +
->  drivers/media/v4l2-core/v4l2-ioctl.c                 | 1 +
->  include/uapi/linux/videodev2.h                       | 1 +
->  4 files changed, 12 insertions(+)
+> Good question.
 > 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
-> index f7785c93292a..b9d1e48c0224 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
-> @@ -793,6 +793,15 @@ arranged in little endian order.
->        - G\ :sub:`15-4`
->        - R\ :sub:`15-4`
->        -
-> +    * .. _V4L2-PIX-FMT-B412:
-> +
-> +      - ``V4L2_PIX_FMT_B412``
-> +      - 'B412'
-> +
-> +      - B\ :sub:`15-4`
-> +      - G\ :sub:`15-4`
-> +      - R\ :sub:`15-4`
-> +      - A\ :sub:`15-4`
->  
->  .. raw:: latex
->  
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> index 0cc58abae562..5384648903a9 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -253,6 +253,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
->  		{ .format = V4L2_PIX_FMT_RGB555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_BGR666,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_B312,    .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 6, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_B412,    .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 8, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  
->  		/* YUV packed formats */
->  		{ .format = V4L2_PIX_FMT_YUYV,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index 8c3d40d3acf5..8cb21024bd96 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1299,6 +1299,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_RGBA32:	descr = "32-bit RGBA 8-8-8-8"; break;
->  	case V4L2_PIX_FMT_RGBX32:	descr = "32-bit RGBX 8-8-8-8"; break;
->  	case V4L2_PIX_FMT_B312:		descr = "12-bit Depth BGR"; break;
-> +	case V4L2_PIX_FMT_B412:		descr = "12-bit Depth BGRA"; break;
->  	case V4L2_PIX_FMT_GREY:		descr = "8-bit Greyscale"; break;
->  	case V4L2_PIX_FMT_Y4:		descr = "4-bit Greyscale"; break;
->  	case V4L2_PIX_FMT_Y6:		descr = "6-bit Greyscale"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index c67f895210de..a26ff16a52c8 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -579,6 +579,7 @@ struct v4l2_pix_format {
->  
->  /* RGB formats (6 or 8 bytes per pixel) */
->  #define V4L2_PIX_FMT_B312    v4l2_fourcc('B', '3', '1', '2') /* 48  BGR 12-bit per component */
-> +#define V4L2_PIX_FMT_B412    v4l2_fourcc('B', '4', '1', '2') /* 64  BGRA 12-bit per component */
+> After all, as VIRTIO_NET_F_CTRL_MAC_ADDR is set, if
+> VIRTIO_NET_CTRL_MAC_ADDR_SET fails it means there is a real problem, so yes,
+> we should fail.
+> 
+> > 
+> > 
+> > > > I note that we deny with virtnet_set_mac_address.
+> > > > 
+> > > > > +		}
+> > > > > +	}
+> > > > > +
+> > > > >    	return 0;
+> > > > 
+> > > > 
+> > > > 
+> > > > Also, some code duplication with virtnet_set_mac_address here.
+> > > > 
+> > > > Also:
+> > > > 	When using the legacy interface, \field{mac} is driver-writable
+> > > > 	which provided a way for drivers to update the MAC without
+> > > > 	negotiating VIRTIO_NET_F_CTRL_MAC_ADDR.
+> > > > 
+> > > > How about factoring out code in virtnet_set_mac_address
+> > > > and reusing that?
+> > > > 
+> > > 
+> > > In fact, we can write in the field only if we have VIRTIO_NET_F_MAC
+> > > (according to virtnet_set_mac_address(), and this code is executed only if
+> > > we do not have VIRTIO_NET_F_MAC. So I think it's better not factoring the
+> > > code as we have only the control queue case to manage.
+> > > 
+> > > > This will also handle corner cases such as VIRTIO_NET_F_STANDBY
+> > > > which are not currently addressed.
+> > > 
+> > > F_STANDBY is only enabled when virtio-net device MAC address is equal to the
+> > > VFIO device MAC address, I don't think it can be enabled when the MAC
+> > > address is randomly assigned (in this case it has already failed in
+> > > net_failover_create(), as it has been called using the random mac address),
+> > > it's why I didn't check for it.
+> > 
+> > But the spec did not say there's a dependency :(.
+> > My point is what should we do if there's F_STANDBY but no MAC?
+> > Maybe add a separate patch clearing F_STANDBY in this case?
+> 
+> The simplest would be to add at the beginning of the probe function:
+> 
+> if (!virtio_has_feature(vdev, VIRTIO_NET_F_MAC) &&
+>     virtio_has_feature(vdev, VIRTIO_NET_F_STANDBY)) {
+> 	pr_err("virtio-net: a standby device cannot be used without a MAC address");
+> 	return -EOPNOTSUPP;
+> }
+> 
+> And I think it would help a lot to debug misconfiguration of the interface.
+> 
+> Thanks,
+> Laurent
 
-This would be ABGR32_12, to correspond with the 8 bit ABGR32.
-Unfortunately, that define has a terrible mismatch with the actual component
-order (alpha comes last in memory, not first as the name suggests).
+I would rather add these checks in virtnet_validate.
+And I think it's cleaner to just do __virtio_clear_bit on
+VIRTIO_NET_F_STANDBY rather than failing simply because
+we previously did not prohibit it so there could be
+devices like these out there.
 
-It would be nice to be able to fix this, but I think that would be even
-more confusing.
+A spec patch saying VIRTIO_NET_F_STANDBY should also have
+VIRTIO_NET_F_MAC is also welcome.
 
-Regards,
-
-	Hans
-
->  
->  /* Grey formats */
->  #define V4L2_PIX_FMT_GREY    v4l2_fourcc('G', 'R', 'E', 'Y') /*  8  Greyscale     */
+> > 
+> > > > 
+> > > > 
+> > > > >    free_unregister_netdev:
+> > > > > -- 
+> > > > > 2.39.0
+> > > > 
+> > > 
+> > > Thanks,
+> > > Laurent
+> > 
 
