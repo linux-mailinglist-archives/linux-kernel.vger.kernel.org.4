@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B90E867E128
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5146967E12A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233408AbjA0KMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
+        id S231922AbjA0KMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjA0KMM (ORCPT
+        with ESMTP id S233421AbjA0KMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:12:12 -0500
+        Fri, 27 Jan 2023 05:12:15 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A07F4DBD6;
-        Fri, 27 Jan 2023 02:12:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1605B58B;
+        Fri, 27 Jan 2023 02:12:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC67161AAF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59D2461AAF;
+        Fri, 27 Jan 2023 10:12:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E2A6C433D2;
         Fri, 27 Jan 2023 10:12:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E65FAC4339B;
-        Fri, 27 Jan 2023 10:12:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674814330;
-        bh=4dQ7nHYJ98q19ZMod1DMiWnCXOcE2qsLTAcpzyaMqNI=;
+        s=k20201202; t=1674814332;
+        bh=RZ1fmdMVmu1ZL5T1WHPOBBM4KWGHMMX/CdeGvQ6/1fI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l/lmYw3EZMVe5BhkZEN2SJuE3xNgUAmzb24vOBLmHt20I6lyZGaDuYjfnpTsgZR9e
-         UIVHM0INLHukfZBRgs/B3hmXJANuQobI/Zu2PxzCip+Bh3u2gHWsLZis3gXJLMg8Rw
-         bvCoK9THT0i3osELPS1r+7SnPLG51bLMieKQVQWjhHlU8ei0K+g76siil/Q8Co+tsW
-         YP/cj/Lq4bbPmaFG3HEQSWLVl6BjvRP0wTqZdWR73D8vw7n4AJMgFYZyu3411+Imfz
-         vePnibJEBhi/hXRm6gvM17ikEpIYwosYpJVq/cq9j94xEzBT7ZADU7FOkmx+sO3fdn
-         3ilv7QBPG/hrQ==
+        b=iXIPoorZLArK1+POCT5OBBv55IBYs1WqBPwURlLb6My4OTF9Rls5g3g/+gzqNfTNd
+         r2U6Cl06P60DG/aKbqmYbJMwOjwF5zGPdC1ctkWt8pqOluTitY+Ed03G+6w+TEqAUF
+         yvbQoE5zASFGhRJydL3aslFWAMr4VTF8gNtzvZfpfstILV8hAdL68DS4I7AlMFyQRB
+         npGiEJiu78vdHclzCFPGbXbu4+dIeAHp4zeijtQmADD9GQXgVuc+WMtkLcRZ/aCs5u
+         hWYNJaroQjpCVfG9VykoAPuShBEw+9gML/VdnfNUUTo+h1/j6sFe9cRQUQ4zJj0TFi
+         a5exwqny+ipbg==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-gpio@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -41,11 +41,11 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2 1/7] gpiolib: remove empty asm/gpio.h files
-Date:   Fri, 27 Jan 2023 11:11:43 +0100
-Message-Id: <20230127101149.3475929-2-arnd@kernel.org>
+Subject: [PATCH v2 2/7] gpiolib: coldfire: remove custom asm/gpio.h
+Date:   Fri, 27 Jan 2023 11:11:44 +0100
+Message-Id: <20230127101149.3475929-3-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230127101149.3475929-1-arnd@kernel.org>
 References: <20230127101149.3475929-1-arnd@kernel.org>
@@ -62,142 +62,188 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The arm and sh versions of this file are identical to the generic
-versions and can just be removed.
+Now that coldfire is the only user of a custom asm/gpio.h, it seems
+better to remove this as well, and have the same interface everywhere.
 
-The drivers that actually use the sh3 specific version also include
-cpu/gpio.h directly, with the exception of magicpanelr2, which is
-easily fixed. This leaves coldfire as the only gpio driver
-that needs something custom for gpiolib.
+For the gpio_get_value()/gpio_set_value()/gpio_to_irq(), gpio_cansleep()
+functions, the custom version is only a micro-optimization to inline the
+function for constant GPIO numbers. However, in the coldfire defconfigs,
+I was unable to find a single instance where this micro-optimization
+was even used, and according to Geert the only user appears to be the
+QSPI chip that is disabled everywhere.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+The custom gpio_request_one() function is even less useful, as it is
+guarded by an #ifdef that is never true.
+
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/Kconfig                    |  1 -
- arch/arm/include/asm/gpio.h         | 21 --------------
- arch/sh/Kconfig                     |  1 -
- arch/sh/boards/board-magicpanelr2.c |  1 +
- arch/sh/include/asm/gpio.h          | 45 -----------------------------
- 5 files changed, 1 insertion(+), 68 deletions(-)
- delete mode 100644 arch/arm/include/asm/gpio.h
- delete mode 100644 arch/sh/include/asm/gpio.h
+ arch/m68k/Kconfig.cpu        |  1 -
+ arch/m68k/include/asm/gpio.h | 95 ------------------------------------
+ drivers/gpio/Kconfig         |  8 ---
+ include/linux/gpio.h         |  7 ---
+ 4 files changed, 111 deletions(-)
+ delete mode 100644 arch/m68k/include/asm/gpio.h
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 5c8bab8d6009..b4447a055029 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -24,7 +24,6 @@ config ARM
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_TEARDOWN_DMA_OPS if MMU
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
--	select ARCH_HAVE_CUSTOM_GPIO_H
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if CPU_LDREX
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_KEEP_MEMBLOCK
-diff --git a/arch/arm/include/asm/gpio.h b/arch/arm/include/asm/gpio.h
-deleted file mode 100644
-index 4ebbb58f06ea..000000000000
---- a/arch/arm/include/asm/gpio.h
-+++ /dev/null
-@@ -1,21 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _ARCH_ARM_GPIO_H
--#define _ARCH_ARM_GPIO_H
--
--#include <asm-generic/gpio.h>
--
--/* The trivial gpiolib dispatchers */
--#define gpio_get_value  __gpio_get_value
--#define gpio_set_value  __gpio_set_value
--#define gpio_cansleep   __gpio_cansleep
--
--/*
-- * Provide a default gpio_to_irq() which should satisfy every case.
-- * However, some platforms want to do this differently, so allow them
-- * to override it.
-- */
--#ifndef gpio_to_irq
--#define gpio_to_irq	__gpio_to_irq
--#endif
--
--#endif /* _ARCH_ARM_GPIO_H */
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index 0665ac0add0b..ccb866750a88 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -4,7 +4,6 @@ config SUPERH
- 	select ARCH_32BIT_OFF_T
- 	select ARCH_ENABLE_MEMORY_HOTPLUG if SPARSEMEM && MMU
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE if SPARSEMEM && MMU
--	select ARCH_HAVE_CUSTOM_GPIO_H
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if (GUSA_RB || CPU_SH4A)
- 	select ARCH_HAS_BINFMT_FLAT if !MMU
- 	select ARCH_HAS_CURRENT_STACK_POINTER
-diff --git a/arch/sh/boards/board-magicpanelr2.c b/arch/sh/boards/board-magicpanelr2.c
-index c3434f0ffc7d..626c716c086c 100644
---- a/arch/sh/boards/board-magicpanelr2.c
-+++ b/arch/sh/boards/board-magicpanelr2.c
-@@ -21,6 +21,7 @@
- #include <linux/sh_intc.h>
- #include <mach/magicpanelr2.h>
- #include <asm/heartbeat.h>
-+#include <cpu/gpio.h>
- #include <cpu/sh7720.h>
+diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
+index 9380f6e3bb66..96a0fb4f1af5 100644
+--- a/arch/m68k/Kconfig.cpu
++++ b/arch/m68k/Kconfig.cpu
+@@ -24,7 +24,6 @@ config M68KCLASSIC
  
- /* Dummy supplies, where voltage doesn't matter */
-diff --git a/arch/sh/include/asm/gpio.h b/arch/sh/include/asm/gpio.h
+ config COLDFIRE
+ 	bool "Coldfire CPU family support"
+-	select ARCH_HAVE_CUSTOM_GPIO_H
+ 	select CPU_HAS_NO_BITFIELDS
+ 	select CPU_HAS_NO_CAS
+ 	select CPU_HAS_NO_MULDIV64
+diff --git a/arch/m68k/include/asm/gpio.h b/arch/m68k/include/asm/gpio.h
 deleted file mode 100644
-index 588c1380e4cb..000000000000
---- a/arch/sh/include/asm/gpio.h
+index 5cfc0996ba94..000000000000
+--- a/arch/m68k/include/asm/gpio.h
 +++ /dev/null
-@@ -1,45 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0
+@@ -1,95 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Coldfire generic GPIO support
 - *
-- *  include/asm-sh/gpio.h
+- * (C) Copyright 2009, Steven King <sfking@fdwdc.com>
+-*/
+-
+-#ifndef coldfire_gpio_h
+-#define coldfire_gpio_h
+-
+-#include <linux/io.h>
+-#include <asm/coldfire.h>
+-#include <asm/mcfsim.h>
+-#include <asm/mcfgpio.h>
+-/*
+- * The Generic GPIO functions
 - *
-- * Generic GPIO API and pinmux table support for SuperH.
-- *
-- * Copyright (c) 2008 Magnus Damm
+- * If the gpio is a compile time constant and is one of the Coldfire gpios,
+- * use the inline version, otherwise dispatch thru gpiolib.
 - */
--#ifndef __ASM_SH_GPIO_H
--#define __ASM_SH_GPIO_H
--
--#include <linux/kernel.h>
--#include <linux/errno.h>
--
--#if defined(CONFIG_CPU_SH3)
--#include <cpu/gpio.h>
--#endif
--
--#include <asm-generic/gpio.h>
--
--#ifdef CONFIG_GPIOLIB
 -
 -static inline int gpio_get_value(unsigned gpio)
 -{
--	return __gpio_get_value(gpio);
+-	if (__builtin_constant_p(gpio) && gpio < MCFGPIO_PIN_MAX)
+-		return mcfgpio_read(__mcfgpio_ppdr(gpio)) & mcfgpio_bit(gpio);
+-	else
+-		return __gpio_get_value(gpio);
 -}
 -
 -static inline void gpio_set_value(unsigned gpio, int value)
 -{
--	__gpio_set_value(gpio, value);
--}
+-	if (__builtin_constant_p(gpio) && gpio < MCFGPIO_PIN_MAX) {
+-		if (gpio < MCFGPIO_SCR_START) {
+-			unsigned long flags;
+-			MCFGPIO_PORTTYPE data;
 -
--static inline int gpio_cansleep(unsigned gpio)
--{
--	return __gpio_cansleep(gpio);
+-			local_irq_save(flags);
+-			data = mcfgpio_read(__mcfgpio_podr(gpio));
+-			if (value)
+-				data |= mcfgpio_bit(gpio);
+-			else
+-				data &= ~mcfgpio_bit(gpio);
+-			mcfgpio_write(data, __mcfgpio_podr(gpio));
+-			local_irq_restore(flags);
+-		} else {
+-			if (value)
+-				mcfgpio_write(mcfgpio_bit(gpio),
+-						MCFGPIO_SETR_PORT(gpio));
+-			else
+-				mcfgpio_write(~mcfgpio_bit(gpio),
+-						MCFGPIO_CLRR_PORT(gpio));
+-		}
+-	} else
+-		__gpio_set_value(gpio, value);
 -}
 -
 -static inline int gpio_to_irq(unsigned gpio)
 -{
--	return __gpio_to_irq(gpio);
+-#if defined(MCFGPIO_IRQ_MIN)
+-	if ((gpio >= MCFGPIO_IRQ_MIN) && (gpio < MCFGPIO_IRQ_MAX))
+-#else
+-	if (gpio < MCFGPIO_IRQ_MAX)
+-#endif
+-		return gpio + MCFGPIO_IRQ_VECBASE;
+-	else
+-		return __gpio_to_irq(gpio);
 -}
 -
--#endif /* CONFIG_GPIOLIB */
+-static inline int gpio_cansleep(unsigned gpio)
+-{
+-	return gpio < MCFGPIO_PIN_MAX ? 0 : __gpio_cansleep(gpio);
+-}
 -
--#endif /* __ASM_SH_GPIO_H */
+-#ifndef CONFIG_GPIOLIB
+-static inline int gpio_request_one(unsigned gpio, unsigned long flags, const char *label)
+-{
+-	int err;
+-
+-	err = gpio_request(gpio, label);
+-	if (err)
+-		return err;
+-
+-	if (flags & GPIOF_DIR_IN)
+-		err = gpio_direction_input(gpio);
+-	else
+-		err = gpio_direction_output(gpio,
+-			(flags & GPIOF_INIT_HIGH) ? 1 : 0);
+-
+-	if (err)
+-		gpio_free(gpio);
+-
+-	return err;
+-}
+-#endif /* !CONFIG_GPIOLIB */
+-#endif
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 218d7e4c27ff..06a268d56800 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -3,14 +3,6 @@
+ # GPIO infrastructure and drivers
+ #
+ 
+-config ARCH_HAVE_CUSTOM_GPIO_H
+-	bool
+-	help
+-	  Selecting this config option from the architecture Kconfig allows
+-	  the architecture to provide a custom asm/gpio.h implementation
+-	  overriding the default implementations.  New uses of this are
+-	  strongly discouraged.
+-
+ menuconfig GPIOLIB
+ 	bool "GPIO Support"
+ 	help
+diff --git a/include/linux/gpio.h b/include/linux/gpio.h
+index 85beb236c925..2b75017b3aad 100644
+--- a/include/linux/gpio.h
++++ b/include/linux/gpio.h
+@@ -54,11 +54,6 @@ struct gpio {
+ };
+ 
+ #ifdef CONFIG_GPIOLIB
+-
+-#ifdef CONFIG_ARCH_HAVE_CUSTOM_GPIO_H
+-#include <asm/gpio.h>
+-#else
+-
+ #include <asm-generic/gpio.h>
+ 
+ static inline int gpio_get_value(unsigned int gpio)
+@@ -81,8 +76,6 @@ static inline int gpio_to_irq(unsigned int gpio)
+ 	return __gpio_to_irq(gpio);
+ }
+ 
+-#endif /* ! CONFIG_ARCH_HAVE_CUSTOM_GPIO_H */
+-
+ /* CONFIG_GPIOLIB: bindings for managed devices that want to request gpios */
+ 
+ struct device;
 -- 
 2.39.0
 
