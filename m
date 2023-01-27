@@ -2,161 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3537667F186
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06F467F18A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbjA0Wzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
+        id S232041AbjA0W4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:56:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbjA0Wzb (ORCPT
+        with ESMTP id S231874AbjA0W4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:55:31 -0500
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FF68B075;
-        Fri, 27 Jan 2023 14:55:02 -0800 (PST)
-Received: by mail-io1-f51.google.com with SMTP id e204so2496225iof.1;
-        Fri, 27 Jan 2023 14:55:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oYF/yXTRINjRoA9CarrAExdf6+EpqrCOoU1zTz5/EqA=;
-        b=PasfAHlV6CaqHDOp3wGkUpNGHecaCrLyrwlsA62WiaJK+asQLoarQLCsefeUBTnFK/
-         6RuOtYVBMpFB+FRm52jWMdq/seSEZ5SXfbRoP04LMZIqPwMjhbtCx3zUR55yEzOwBUUx
-         E4X8DQP6MY+pvtLw5frOzARcdElbH+WzkFV6y7xEpscAX4y0hwuPNBXAvadVVPw1b27X
-         NCENLj+2LRAiIp+QHOEeYpZ9jVDz63aSrhw7537lDCnl47IMa6KDh4p/s9hUGymjFQ4L
-         1yVHnyunMsNO33Dha9gun/D+6tKqGtiuDvVxEAzjBxkcS/DEkLYb6nMzi7RKX4XwpB8z
-         oA7A==
-X-Gm-Message-State: AFqh2kq4x3laorEeFT+i7ufEpFQICPBVao8iW7xTuf/28evTjOqM/mTc
-        uAWNvrwP8lR3v1S3S/3gBHInhj8zlCApV0Rehq17Toa6
-X-Google-Smtp-Source: AMrXdXtaKWbOEfc5hzWTJDhNksyqdJuTXYE+DJ+OBagKo+g/+vNdUaXpyMjpAGd/ZTFuY72pTeSOBOjsWWv7ndqDlOY=
-X-Received: by 2002:a05:6638:4916:b0:375:c16b:7776 with SMTP id
- cx22-20020a056638491600b00375c16b7776mr4787211jab.54.1674860087574; Fri, 27
- Jan 2023 14:54:47 -0800 (PST)
+        Fri, 27 Jan 2023 17:56:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81318B076
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:55:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674860113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TBTNNrJ5H6EIuuMcTERsk2lhrSBPK+9yag5Mpha8Oo4=;
+        b=NSDaN9pe5GeAhytCIY2jmltLV/AoDuAuEHA1NOLZsdzAzAH4N+wIgFKdpCONoxWRl4v+/Z
+        ngXh042qx6JEjx322xxbqgI1rGvIX98H+dKzh2uUcRHhoOGUv86HFziDwYB3FYHtWc9um3
+        pyALoFwGgwCjOJr17qhy/LQv6n9vq2c=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-57-zpUWEGnYOdO8AhFhqMBwyw-1; Fri, 27 Jan 2023 17:55:10 -0500
+X-MC-Unique: zpUWEGnYOdO8AhFhqMBwyw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9035229AA3B3;
+        Fri, 27 Jan 2023 22:55:09 +0000 (UTC)
+Received: from madcap2.tricolour.ca (ovpn-0-3.rdu2.redhat.com [10.22.0.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F05D318EC1;
+        Fri, 27 Jan 2023 22:55:07 +0000 (UTC)
+Date:   Fri, 27 Jan 2023 17:55:05 -0500
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: Re: [PATCH v1 1/2] io_uring,audit: audit IORING_OP_FADVISE but not
+ IORING_OP_MADVISE
+Message-ID: <Y9RWSZJt7NruCPZ+@madcap2.tricolour.ca>
+References: <cover.1674682056.git.rgb@redhat.com>
+ <68eb0c2dd50bca1af91203669f7f1f8312331f38.1674682056.git.rgb@redhat.com>
+ <CAHC9VhSZNGs+SQU7WCD+ObMcwv-=1ZkBts8oHn40qWsQ=n0pXA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230127001951.3432374-1-namhyung@kernel.org> <bda606c2-2b1b-de9f-1386-8ee2bf925b4b@intel.com>
-In-Reply-To: <bda606c2-2b1b-de9f-1386-8ee2bf925b4b@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 27 Jan 2023 14:54:36 -0800
-Message-ID: <CAM9d7cg_7LNKrXtBuo2QUR1Voi9NKM98qYLC+pznMf4-5yo4Dg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] perf intel-pt: Fix the pipe mode (v1)
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhSZNGs+SQU7WCD+ObMcwv-=1ZkBts8oHn40qWsQ=n0pXA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
-
-On Thu, Jan 26, 2023 at 11:22 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 27/01/23 02:19, Namhyung Kim wrote:
-> > Hello,
+On 2023-01-27 17:35, Paul Moore wrote:
+> On Fri, Jan 27, 2023 at 12:24 PM Richard Guy Briggs <rgb@redhat.com> wrote:
 > >
-> > I found some problems in Intel-PT and auxtrace in general with pipe.
-> > In the past it used to work with pipe, but recent code fails.
->
-> Pipe mode is a problem for Intel PT and possibly other auxtrace users.
-> Essentially the auxtrace buffers do not behave like the regular perf
-> event buffers.  That is because the head and tail are updated by
-> software, but in the auxtrace case the data is written by hardware.
-> So the head and tail do not get updated as data is written.  In the
-> Intel PT case, the head and tail are updated only when the trace is
-> disabled by software, for example:
->     - full-trace, system wide : when buffer passes watermark
->     - full-trace, not system-wide : when buffer passes watermark or
->     context switches
->     - snapshot mode : as above but also when a snapshot is made
->     - sample mode : as above but also when a sample is made
->
-> That means finished-round ordering doesn't work.  An auxtrace buffer
-> can turn up that has data that extends back in time, possibly to the
-> very beginning of tracing.
-
-Ok, IIUC we want to process the main buffer and auxtrace buffer
-together in time order but there's no guarantee to get the auxtrace
-data in time, right?
-
-I wonder if it's possible to use 2 pass processing for pipe mode.
-We may keep the events in the ordered queue and auxtrace queue
-in the first pass, and process together from the beginning in the
-second pass. But I guess the data size would be a problem.
-
-Or, assuming that the auxtrace buffer comes later than (or equal to)
-the main buffer, we may start processing the main buffer as soon as
-every auxtrace queue gets some data.  Thoughts?
-
->
-> For a perf.data file, that problem is solved by going through the trace
-> and queuing up the auxtrace buffers in advance.
->
-> For pipe mode, the order of events and timestamps can presumably
-> be messed up.
->
-> For Intel PT, it is a bit of a surprise that there is not
-> validation to error out in pipe mode.
-
-What kind of validation do you have in mind?  Checking pid/tid?
-
->
-> At the least, a warning is needed, and the above explanation needs
-> to be added to the documentation.
-
-Thanks, I'll add it to the documentation.
-
-How about showing something like this for pipe mode?
-
-  WARNING: Intel-PT with pipe mode may not work correctly.
-
-Thanks,
-Namhyung
-
-
->
-> >                                                                As it
-> > also touches the generic code, other auxtrace users like ARM SPE will
-> > be affected too.  I added a test case to verify it works with pipes.
+> > Since FADVISE can truncate files and MADVISE operates on memory, reverse
+> > the audit_skip tags.
 > >
-> > At last, I can run this command without a problem.
+> > Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > ---
+> >  io_uring/opdef.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> >   $ perf record -o- -e intel_pt// true | perf inject -b | perf report -i- --itrace=i1000
-> >
-> > The code is available at 'perf/auxtrace-pipe-v1' branch in
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-> >
-> > Thanks,
-> > Namhyung
-> >
-> > Namhyung Kim (4):
-> >   perf inject: Use perf_data__read() for auxtrace
-> >   perf intel-pt: Do not try to queue auxtrace data on pipe
-> >   perf session: Avoid calling lseek(2) for pipe
-> >   perf test: Add pipe mode test to the Intel PT test suite
-> >
-> >  tools/perf/builtin-inject.c             |  6 +++---
-> >  tools/perf/tests/shell/test_intel_pt.sh | 17 +++++++++++++++++
-> >  tools/perf/util/auxtrace.c              |  3 +++
-> >  tools/perf/util/session.c               |  9 +++++++--
-> >  4 files changed, 30 insertions(+), 5 deletions(-)
-> >
-> >
-> > base-commit: 5670ebf54bd26482f57a094c53bdc562c106e0a9
-> > prerequisite-patch-id: 4ccdf9c974a3909075051f4ffe498faecab7567b
->
+> > diff --git a/io_uring/opdef.c b/io_uring/opdef.c
+> > index 3aa0d65c50e3..a2bf53b4a38a 100644
+> > --- a/io_uring/opdef.c
+> > +++ b/io_uring/opdef.c
+> > @@ -306,12 +306,12 @@ const struct io_op_def io_op_defs[] = {
+> >         },
+> >         [IORING_OP_FADVISE] = {
+> >                 .needs_file             = 1,
+> > -               .audit_skip             = 1,
+> >                 .name                   = "FADVISE",
+> >                 .prep                   = io_fadvise_prep,
+> >                 .issue                  = io_fadvise,
+> >         },
+> 
+> I've never used posix_fadvise() or the associated fadvise64*()
+> syscalls, but from quickly reading the manpages and the
+> generic_fadvise() function in the kernel I'm missing where the fadvise
+> family of functions could be used to truncate a file, can you show me
+> where this happens?  The closest I can see is the manipulation of the
+> page cache, but that shouldn't actually modify the file ... right?
+
+I don't know.  I was going on the advice of Steve Grubb.  I'm looking
+for feedback, validation, correction, here.
+
+> >         [IORING_OP_MADVISE] = {
+> > +               .audit_skip             = 1,
+> >                 .name                   = "MADVISE",
+> >                 .prep                   = io_madvise_prep,
+> >                 .issue                  = io_madvise,
+> 
+> I *think* this should be okay, what testing/verification have you done
+> on this?  One of the things I like to check is to see if any LSMs
+> might perform an access check and/or generate an audit record on an
+> operation, if there is a case where that could happen we should setup
+> audit properly.  I did a very quick check of do_madvise() and nothing
+> jumped out at me, but I would be interested in knowing what testing or
+> verification you did here.
+
+No testing other than build/boot/audit-testsuite.  You had a test you
+had developed that went through several iterations?
+
+> paul-moore.com
+
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+IRC: rgb, SunRaycer
+Voice: +1.647.777.2635, Internal: (81) 32635
+
