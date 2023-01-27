@@ -2,169 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC5167E71F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 859C867E725
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbjA0Nxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:53:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
+        id S233214AbjA0NzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:55:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjA0Nx2 (ORCPT
+        with ESMTP id S232599AbjA0NzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:53:28 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E447C703
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:53:26 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id h19so3567932vsv.13
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:53:26 -0800 (PST)
+        Fri, 27 Jan 2023 08:55:00 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DA51EBF9
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:54:57 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id z5so5042736wrt.6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:54:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RzUBqryTptYUzEfhbyg+Lbcb+hwacEV+TO0IK7LNXU8=;
-        b=Nj0//xHZCol4X/4LoPRHBLp04mZ6EyoR6ifMGAJyZKXqDQ2DDO+UCVf7oXmiq8NKlv
-         uZhMC6w+AZvGFtaDvUzwidx8Sj6lRH4ps0RND4mC75QLASrACcarZbZAwCO+OrbBgA2a
-         g6FO/H9UpLopISqqI4EpbAT5FHiezaN0Fh8eq1vv3wpFDi1xJ1DxrF1FbWDGq1iQM8db
-         jhsXmwcthCd/L7yBe0BjwKvAfI5jGJEJ22/YXzrIkm6RnhG1QA/BRHhzDOqjpj8yDCHA
-         D4eYt52pTgdUF+rDhhr2qje3A/dPZp0eHCoQb4UOKqcPObAZwnduqaFfm0Ypw1PKn7gw
-         EiTg==
+        d=nexus-software-ie.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AvWGdXV/thMosfYPTWfHg4iggB9oYYlKgsQ4IGe6GwM=;
+        b=zJTsB5rxzOcR/IQYI9B8TxrquxjCdAbnkHrTFD8HEyhKVAeUU0jRRpKo5Onkmgw+8f
+         LecJidjIYiWCZ5uOeBhO+LrbIofHOyJjGmRONA5EbKaB3OvpeGJsni6GpV9RPj2X2zJK
+         zmf41T0tUELAUdLRqRexXHiVBwbFmp+pp9i1m3klI4+GhOLbQFnpqtIGLeXAOwZnEFWg
+         V4hxqgs5YYzT5o1wU+W2H01NRiD0I76vFvd87pbAjZV/+Qp5eda/WReQe3ykkQc92Hx1
+         2y9mI+x+37TnvknkQiiRR5+x4FpS22rkz7euvU4biICD3IIgIVLmqAMv700+7+8k7qx3
+         vO8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RzUBqryTptYUzEfhbyg+Lbcb+hwacEV+TO0IK7LNXU8=;
-        b=Z83tuQBBfmH+BR+HJIOdmefHlxh8MIiNdI+q6HjRlt/5eWW5NxeiUwK0G2Qw871GXt
-         +Ud1LZZo0YKc8jF5FN+0em4vSBcfcbJNydkV33u4/tWyjd7qI6SSRv62v9gqd1qGPBKb
-         4DUvzDJwYApJLZKE8eKeJbjKgf9NLoLuxZ5nOmtCr/YtwsOSCB5YC2MynkcNz3fx5yiH
-         es8NdhRJcJQJBWMQYxdK3B9jAT5zxbitxEFACUvtXk0LoM4Iy+m+RBOnNL6AY7ExVg+4
-         +vPpPpjy7BOoY+peUe6BUDIIY3otVTTxIgNIscI00/ewocPIxNxW/eNwp4Hsz1EvkzNG
-         tnRQ==
-X-Gm-Message-State: AO0yUKUr9ySKYE64lXGfdXyyiXHizvWPNP8Mk7/uwQEjYTne/4Lczq3E
-        MhFeuY9/XaDCLo8rXw1SLFnZXQBXyD8gOrR+ZfPiDA==
-X-Google-Smtp-Source: AK7set+G91Acv+61aPdZ7vz54qMR8TqpiXkerxphHeLdypTJtL9kTh+QKLLarGjOUcQbXe2xYcQWJXCbqIL8IuEg6ZM=
-X-Received: by 2002:a05:6102:3098:b0:3ec:1029:9eae with SMTP id
- l24-20020a056102309800b003ec10299eaemr661243vsb.10.1674827605343; Fri, 27 Jan
- 2023 05:53:25 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AvWGdXV/thMosfYPTWfHg4iggB9oYYlKgsQ4IGe6GwM=;
+        b=vagmdZg0NR05M63clZmY+Wv4ZQHwkuSE/pUKGJ9FHnsUBFmJ6ZPHTvFcxj/MLclEGb
+         Fq95x5LuXR26Gt0puGWpkB6kn+ySoAoKxr+2PwuLKMy442zGTk74MEOdC6opBH+O886s
+         E7a9JD/08nMae9bMO/GcnnBtu51MqV9RvCkMLwsURtthQxj3Zyq5oh0yOa+QVjB3ew/i
+         OeL9g0x777/FsRGEtYaGr+MqGhK7i2tb0kOSu5F2I+PwAlLxjyO05E3Jh6YR/44quiaH
+         XrkH95xS2fMVcGoqYi+QV8pNPLwP9I0cbLGwsy9x2IJSbCXrUkBeP5yqXwz3hOu+sR/+
+         xNIw==
+X-Gm-Message-State: AO0yUKVTdOQyh0i78O/a8n3bM/OgzKBCo1K+QLl9FnXgzKzIteLOBYFV
+        xoUicQxlDMH3tJ7k8FPPGhX32Q==
+X-Google-Smtp-Source: AK7set/VMRyDDltG22cGu8ihRDW1/IpQliCrs2cHrRkWoMH5gk2TrOoECuH9qH4INUYj9vpys2Hgew==
+X-Received: by 2002:a5d:4988:0:b0:2bf:b3e9:d338 with SMTP id r8-20020a5d4988000000b002bfb3e9d338mr11210015wrq.31.1674827696348;
+        Fri, 27 Jan 2023 05:54:56 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id s5-20020a5d5105000000b002bdfcd8c77csm4073373wrt.101.2023.01.27.05.54.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 05:54:55 -0800 (PST)
+Message-ID: <951e4459-6d98-f083-1dd9-fc0b12e53c96@nexus-software.ie>
+Date:   Fri, 27 Jan 2023 13:54:54 +0000
 MIME-Version: 1.0
-References: <20230112140304.1830648-1-apatel@ventanamicro.com>
- <20230112140304.1830648-4-apatel@ventanamicro.com> <20230126161147.6rewhfvlouqn4ual@orel>
-In-Reply-To: <20230126161147.6rewhfvlouqn4ual@orel>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Fri, 27 Jan 2023 19:23:13 +0530
-Message-ID: <CAK9=C2XzTdqXr+vWZ4Ua=HET1gvskAY+y9yFtGbmR2LGg87asQ@mail.gmail.com>
-Subject: Re: [PATCH 3/7] RISC-V: KVM: Drop the _MASK suffix from hgatp.VMID
- mask defines
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sm6350: Add camera clock
+ controller
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221213-sm6350-cci-v2-0-15c2c14c34bb@fairphone.com>
+ <20221213-sm6350-cci-v2-2-15c2c14c34bb@fairphone.com>
+ <e5ff49d4-45c7-8c4a-d624-d8f7cc9ce2cb@linaro.org>
+ <CQ0I4ONEI6J4.3KWS1KBE7RTKD@otso>
+ <3ae863df-3260-4863-d88f-da4d3f442174@linaro.org>
+ <CQ2ZDQKO11XZ.HA5CXLK5MTFB@otso>
+ <2989138a-8f4b-50a0-3e90-98b6785f2690@linaro.org>
+ <CQ2ZY0W1M4F5.32SLTSYMILGOS@otso>
+From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
+In-Reply-To: <CQ2ZY0W1M4F5.32SLTSYMILGOS@otso>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 9:41 PM Andrew Jones <ajones@ventanamicro.com> wrote:
->
-> On Thu, Jan 12, 2023 at 07:33:00PM +0530, Anup Patel wrote:
-> > The hgatp.VMID mask defines are used before shifting when extracting
-> > VMID value from hgatp CSR value so based on the convention followed
-> > in the other parts of asm/csr.h, the hgatp.VMID mask defines should
-> > not have a _MASK suffix.
-> >
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > ---
-> >  arch/riscv/include/asm/csr.h | 8 ++++----
-> >  arch/riscv/kvm/mmu.c         | 3 +--
-> >  arch/riscv/kvm/vmid.c        | 4 ++--
-> >  3 files changed, 7 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> > index d608dac4b19f..36d580528f90 100644
-> > --- a/arch/riscv/include/asm/csr.h
-> > +++ b/arch/riscv/include/asm/csr.h
-> > @@ -131,12 +131,12 @@
-> >
-> >  #define HGATP32_MODE_SHIFT   31
-> >  #define HGATP32_VMID_SHIFT   22
-> > -#define HGATP32_VMID_MASK    _AC(0x1FC00000, UL)
-> > +#define HGATP32_VMID         _AC(0x1FC00000, UL)
-> >  #define HGATP32_PPN          _AC(0x003FFFFF, UL)
-> >
-> >  #define HGATP64_MODE_SHIFT   60
-> >  #define HGATP64_VMID_SHIFT   44
-> > -#define HGATP64_VMID_MASK    _AC(0x03FFF00000000000, UL)
-> > +#define HGATP64_VMID         _AC(0x03FFF00000000000, UL)
-> >  #define HGATP64_PPN          _AC(0x00000FFFFFFFFFFF, UL)
-> >
-> >  #define HGATP_PAGE_SHIFT     12
-> > @@ -144,12 +144,12 @@
-> >  #ifdef CONFIG_64BIT
-> >  #define HGATP_PPN            HGATP64_PPN
-> >  #define HGATP_VMID_SHIFT     HGATP64_VMID_SHIFT
-> > -#define HGATP_VMID_MASK              HGATP64_VMID_MASK
-> > +#define HGATP_VMID           HGATP64_VMID
-> >  #define HGATP_MODE_SHIFT     HGATP64_MODE_SHIFT
-> >  #else
-> >  #define HGATP_PPN            HGATP32_PPN
-> >  #define HGATP_VMID_SHIFT     HGATP32_VMID_SHIFT
-> > -#define HGATP_VMID_MASK              HGATP32_VMID_MASK
-> > +#define HGATP_VMID           HGATP32_VMID
-> >  #define HGATP_MODE_SHIFT     HGATP32_MODE_SHIFT
-> >  #endif
-> >
-> > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> > index 34b57e0be2ef..034746638fa6 100644
-> > --- a/arch/riscv/kvm/mmu.c
-> > +++ b/arch/riscv/kvm/mmu.c
-> > @@ -748,8 +748,7 @@ void kvm_riscv_gstage_update_hgatp(struct kvm_vcpu *vcpu)
-> >       unsigned long hgatp = gstage_mode;
-> >       struct kvm_arch *k = &vcpu->kvm->arch;
-> >
-> > -     hgatp |= (READ_ONCE(k->vmid.vmid) << HGATP_VMID_SHIFT) &
-> > -              HGATP_VMID_MASK;
-> > +     hgatp |= (READ_ONCE(k->vmid.vmid) << HGATP_VMID_SHIFT) & HGATP_VMID;
-> >       hgatp |= (k->pgd_phys >> PAGE_SHIFT) & HGATP_PPN;
-> >
-> >       csr_write(CSR_HGATP, hgatp);
-> > diff --git a/arch/riscv/kvm/vmid.c b/arch/riscv/kvm/vmid.c
-> > index 6cd93995fb65..6f4d4979a759 100644
-> > --- a/arch/riscv/kvm/vmid.c
-> > +++ b/arch/riscv/kvm/vmid.c
-> > @@ -26,9 +26,9 @@ void kvm_riscv_gstage_vmid_detect(void)
-> >
-> >       /* Figure-out number of VMID bits in HW */
-> >       old = csr_read(CSR_HGATP);
-> > -     csr_write(CSR_HGATP, old | HGATP_VMID_MASK);
-> > +     csr_write(CSR_HGATP, old | HGATP_VMID);
-> >       vmid_bits = csr_read(CSR_HGATP);
-> > -     vmid_bits = (vmid_bits & HGATP_VMID_MASK) >> HGATP_VMID_SHIFT;
-> > +     vmid_bits = (vmid_bits & HGATP_VMID) >> HGATP_VMID_SHIFT;
-> >       vmid_bits = fls_long(vmid_bits);
-> >       csr_write(CSR_HGATP, old);
-> >
-> > --
-> > 2.34.1
-> >
->
-> Could switch to GENMASK too at the same time :-)
+On 27/01/2023 13:11, Luca Weiss wrote:
+>> Doh I meant to say a power-domain to an mmcx a la
+>>
+>> power-domains = <&rpmhpd SM8250_MMCX>;
+>> required-opps = <&rpmhpd_opp_low_svs>;
+>>
+>> TITAN_TOP should be in your cci and camss dt nodes.
+> Okay, that makes more sense.
+> 
+> What I don't quite understand is why sm8250 only has MMCX listed there
+> since downstream has both vdd_mx-supply = <&VDD_MX_LEVEL> and
+> vdd_mm-supply = <&VDD_MMCX_LEVEL> and both "supplies" are used for
+> different clocks using .vdd_class
 
-Okay, I will update.
+power-domains = <&rpmhpd SM8250_MMCX>; == MMCX_LEVEL required for camcc
+power-domains = <&camcc TITAN_TOP_GDSC>; required for cci/camss
 
->
-> Anyway,
->
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
->
+now that you ask the question about MX_LEVEL you're making me doubt we 
+have a 100% complete representation upstream TB perfectly honest, 
+warrants a deep dive..
 
-Thanks,
-Anup
+I just remember that on 8250 we tripped over MMCX not being switched on 
+when - display I think was switched off.
+
+---
+bod
+
