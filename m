@@ -2,243 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83F967E154
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD8567E158
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbjA0KQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        id S233168AbjA0KRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:17:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233081AbjA0KQD (ORCPT
+        with ESMTP id S233022AbjA0KRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:16:03 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C257922014;
-        Fri, 27 Jan 2023 02:15:58 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30R9Dsnm030800;
-        Fri, 27 Jan 2023 10:15:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=klYU2WW6Oj610KyLuzELQMiZ3+aP6za33DGSZGfHcZo=;
- b=S3JoyMCDkVXbXtIyEhSsW0Pa8bk4a/r2x6vWeD3TRcdK0068ULBS21A6D/lNxnzCvCvL
- KTva5q6+l/kMhVCU2YCkJqo19BDwY0+GoPuGI3hpftkxfUC537dt+x6O5tIsHGGlgqMA
- zaTSzNzOfylvRS+ZF3Qgt9UFcXpzEnbTCfFzAji+0OktYcRPP6HPrAPRbC8GRE4yINFr
- t4kj95YfWaWyRLgDABVV70Ykg6QW8LMUxNg0nbY/0j/HQ0juNJKPfC7h/bH7Q0JXTPEH
- vO3cz9oR2tP93IQLy422M2eaikM9EYc59lG5zhXk4fQwUKhm5DJbq1WRm9NyAHyiilp0 pg== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncavc05c6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 10:15:54 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 30RAFlU9002355;
-        Fri, 27 Jan 2023 10:15:51 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3n894m35kg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 27 Jan 2023 10:15:51 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30RAEo5i001332;
-        Fri, 27 Jan 2023 10:15:50 GMT
-Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 30RAFokw002416;
-        Fri, 27 Jan 2023 10:15:50 +0000
-Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
-        id B5F224B79; Fri, 27 Jan 2023 02:15:49 -0800 (PST)
-From:   Kalyan Thota <quic_kalyant@quicinc.com>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@chromium.org,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com, marijn.suijten@somainline.org
-Subject: [PATCH 3/3] drm/msm/disp/dpu1: reserve the resources on topology change
-Date:   Fri, 27 Jan 2023 02:15:45 -0800
-Message-Id: <1674814545-9453-4-git-send-email-quic_kalyant@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1674814545-9453-1-git-send-email-quic_kalyant@quicinc.com>
-References: <1674814545-9453-1-git-send-email-quic_kalyant@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eFjpw4bID8rvCmAFgyOx3L17SupeGxfD
-X-Proofpoint-ORIG-GUID: eFjpw4bID8rvCmAFgyOx3L17SupeGxfD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-27_06,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 phishscore=0 suspectscore=0 adultscore=0
- mlxlogscore=999 impostorscore=0 priorityscore=1501 bulkscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301270096
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Fri, 27 Jan 2023 05:17:06 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E43712065
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:16:53 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id ss4so12313323ejb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:16:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4tXAzYx6U2zYvFQaL0R9LDwvLsVYQ0QOtKqWLpi2ZpY=;
+        b=taG/DcTLzWRqxJ67PXr4isASG3VtleUdmICNBQ5dB1fbIhAkjeAPCLn+pedlUYRyev
+         /9S1EfpKEjergkzhAObSRpDaXifNzAc0T8m+T2Oq1JLTCHVW7q+72ux1tw5QyS3Sa1Dj
+         2SwMPsCzm2m9dcz/2cewiYM7u963IUZ9GJLJOARXogBnRFibHfbUjmVwMcs/SyRq3CZV
+         /2uBkkkSizbILaPWBNQtp6DukBX+gifschimBTyLeYF/iAn13U7k4rcDaL5T+Ce6wHkz
+         R/9VMf0Bj78oDfA2NjI8MA+M2PhanmuYxQTd1R+JN9mCALbMw7XUWbBmRZIAHT2SqL0B
+         iakg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4tXAzYx6U2zYvFQaL0R9LDwvLsVYQ0QOtKqWLpi2ZpY=;
+        b=Bsr0RLwXjGZ2lyAOuANGU/mKtRHgAQc47EH4+Tj3rpcHKnYcRdc0I1X3j9XJ1ZNpTa
+         Vq8rcIRIOsBmKwOGwiP2USPE4RC/dt2V+MtnWlEJJTLOp/C8IyHJYteLaEM3NzloUiEk
+         LfA6lm7mS4BXDjV2gJdZt+kcylL6DDp9IvCtc42Hxo3bdtCK/UENxZX6qngZ2oWqVAeH
+         KwGsCKVmxzS3CU7LbxDL4OaJaAVL72+QP6KSdwFRyW7Yxn2NOmgXH5AG8FkkhPzjE4qo
+         qBY4Qf2WJxLzSlq2m4yodepm2tbfRO3eOkGAFSluCVWLZL3fl7Wu7Nu44UOWNYgzspif
+         RHng==
+X-Gm-Message-State: AFqh2kqQR3ILAox5qNK0HYOSbPKGsGiiZ5lDk8aogkt+EIiRnRkxui7I
+        Q1l76MUUooYqH6pB1CxnJeeiIQ==
+X-Google-Smtp-Source: AMrXdXuf8yj5DMQWmDiZ3HjEhnlQNd5W99OizjfxqoE+pwicLOIdI76Ept81fwYgmd8WT3KUtWAZMQ==
+X-Received: by 2002:a17:907:8999:b0:877:83ea:2bfc with SMTP id rr25-20020a170907899900b0087783ea2bfcmr31382892ejc.39.1674814612066;
+        Fri, 27 Jan 2023 02:16:52 -0800 (PST)
+Received: from localhost.localdomain ([2a02:85f:fc9d:e4b5:fb9c:6b1a:cf38:9393])
+        by smtp.gmail.com with ESMTPSA id h16-20020a50ed90000000b0049ef04ad502sm2073718edr.40.2023.01.27.02.16.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 02:16:51 -0800 (PST)
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+To:     netdev@vger.kernel.org
+Cc:     alexander.duyck@gmail.com,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] page_pool: add a comment explaining the fragment counter usage
+Date:   Fri, 27 Jan 2023 12:16:27 +0200
+Message-Id: <20230127101627.891614-1-ilias.apalodimas@linaro.org>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some features like ctm can be enabled dynamically. Release and reserve
-the dpu resources whenever a topology change occurs such that
-required hw blocks are allocated appropriately.
+When reading the page_pool code the first impression is that keeping
+two separate counters, one being the page refcnt and the other being
+fragment pp_frag_count, is counter-intuitive.
 
-Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+However without that fragment counter we don't know when to reliably
+destroy or sync the outstanding DMA mappings.  So let's add a comment
+explaining this part.
+
+Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    |  1 +
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 41 ++++++++++++++++++++++++++---
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  4 ++-
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c      |  4 ---
- 5 files changed, 42 insertions(+), 10 deletions(-)
+ include/net/page_pool.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-index 539b68b..89afe04 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-@@ -225,6 +225,7 @@ struct dpu_crtc_state {
+diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+index 813c93499f20..115dbce6d431 100644
+--- a/include/net/page_pool.h
++++ b/include/net/page_pool.h
+@@ -277,6 +277,14 @@ void page_pool_put_defragged_page(struct page_pool *pool, struct page *page,
+ 				  unsigned int dma_sync_size,
+ 				  bool allow_direct);
  
- 	enum dpu_crtc_crc_source crc_source;
- 	int crc_frame_skip_count;
-+	struct msm_display_topology topology;
- };
- 
- #define to_dpu_crtc_state(x) \
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 8d76cb3..db417f5 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -217,6 +217,18 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
- 	15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
- };
- 
-+static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
-+					     struct drm_crtc_state *crtc_state,
-+					     struct drm_connector_state *conn_state);
-+
-+static bool _dpu_enc_is_topology_changed(struct drm_crtc_state *crtc_state,
-+	struct msm_display_topology topology)
-+{
-+	struct dpu_crtc_state *cstate = to_dpu_crtc_state(crtc_state);
-+
-+	return !!memcmp(&cstate->topology,
-+		&topology, sizeof(struct msm_display_topology));
-+}
- 
- bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc)
++/* pp_frag_count is our number of outstanding DMA maps.  We can't rely on the
++ * page refcnt for that as we don't know who might be holding page references
++ * and we can't reliably destroy or sync DMA mappings of the fragments.
++ *
++ * When pp_frag_count reaches 0 we can either recycle the page, if the page
++ * refcnt is 1, or return it back to the memory allocator and destroy any
++ * mappings we have.
++ */
+ static inline void page_pool_fragment_page(struct page *page, long nr)
  {
-@@ -650,12 +662,16 @@ static int dpu_encoder_virt_atomic_check(
- 		 * Release and Allocate resources on every modeset
- 		 * Dont allocate when active is false.
- 		 */
--		if (drm_atomic_crtc_needs_modeset(crtc_state)) {
-+		if (drm_atomic_crtc_needs_modeset(crtc_state) ||
-+			_dpu_enc_is_topology_changed(crtc_state, topology)) {
- 			dpu_rm_release(global_state, drm_enc);
- 
--			if (!crtc_state->active_changed || crtc_state->active)
-+			if (crtc_state->enable) {
- 				ret = dpu_rm_reserve(&dpu_kms->rm, global_state,
- 						drm_enc, crtc_state, topology);
-+				if (!ret)
-+					dpu_enc->topology = topology;
-+			}
- 		}
- 	}
- 
-@@ -1089,7 +1105,7 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
- 	}
- 
- 	cstate->num_mixers = num_lm;
--
-+	cstate->topology = dpu_enc->topology;
- 	dpu_enc->connector = conn_state->connector;
- 
- 	for (i = 0; i < dpu_enc->num_phys_encs; i++) {
-@@ -2076,11 +2092,14 @@ void dpu_encoder_helper_phys_cleanup(struct dpu_encoder_phys *phys_enc)
- 	ctl->ops.clear_pending_flush(ctl);
- }
- 
--void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc)
-+void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc,
-+	struct drm_crtc_state *crtc_state)
- {
- 	struct dpu_encoder_virt *dpu_enc;
- 	struct dpu_encoder_phys *phys;
- 	int i;
-+	struct list_head *connector_list;
-+	struct drm_connector *conn = NULL, *conn_iter;
- 
- 	if (!drm_enc) {
- 		DPU_ERROR("invalid encoder\n");
-@@ -2088,6 +2107,20 @@ void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc)
- 	}
- 	dpu_enc = to_dpu_encoder_virt(drm_enc);
- 
-+	connector_list = &drm_enc->dev->mode_config.connector_list;
-+	list_for_each_entry(conn_iter, connector_list, head)
-+		if (conn_iter->state->best_encoder == drm_enc)
-+			conn = conn_iter;
-+
-+	/*
-+	 * In case of modeset, DRM kernel will trigger a atomic_mode_set
-+	 * call back, for usecases where there is no mode change but a topology
-+	 * change, update the resources from here.
-+	 */
-+	if (!drm_atomic_crtc_needs_modeset(crtc_state) &&
-+		_dpu_enc_is_topology_changed(crtc_state, dpu_enc->topology))
-+		dpu_encoder_virt_atomic_mode_set(drm_enc, crtc_state, conn->state);
-+
- 	for (i = 0; i < dpu_enc->num_phys_encs; i++) {
- 		phys = dpu_enc->phys_encs[i];
- 		if (phys->ops.prepare_commit)
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-index 9e7236e..4cbe20c 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-@@ -150,8 +150,10 @@ int dpu_encoder_setup(struct drm_device *dev, struct drm_encoder *enc,
-  * dpu_encoder_prepare_commit - prepare encoder at the very beginning of an
-  *	atomic commit, before any registers are written
-  * @drm_enc:    Pointer to previously created drm encoder structure
-+ * @crtc_state: Pointer to drm crtc state
-  */
--void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc);
-+void dpu_encoder_prepare_commit(struct drm_encoder *drm_enc,
-+		struct drm_crtc_state *crtc_state);
- 
- /**
-  * dpu_encoder_set_idle_timeout - set the idle timeout for video
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index 7a5fabc..f111120 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -455,7 +455,7 @@ static void dpu_kms_prepare_commit(struct msm_kms *kms,
- 	for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
- 		drm_for_each_encoder_mask(encoder, crtc->dev,
- 					  crtc_state->encoder_mask) {
--			dpu_encoder_prepare_commit(encoder);
-+			dpu_encoder_prepare_commit(encoder, crtc_state);
- 		}
- 	}
- }
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-index 718ea0a..341c3af 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-@@ -586,10 +586,6 @@ int dpu_rm_reserve(
- 	struct dpu_rm_requirements reqs;
- 	int ret;
- 
--	/* Check if this is just a page-flip */
--	if (!drm_atomic_crtc_needs_modeset(crtc_state))
--		return 0;
--
- 	if (IS_ERR(global_state)) {
- 		DPU_ERROR("failed to global state\n");
- 		return PTR_ERR(global_state);
+ 	atomic_long_set(&page->pp_frag_count, nr);
 -- 
-2.7.4
+2.38.1
 
