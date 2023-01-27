@@ -2,75 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD12767E1E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DB767E1E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbjA0Kj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:39:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
+        id S232181AbjA0KkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:40:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231592AbjA0Kjw (ORCPT
+        with ESMTP id S230493AbjA0Kj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:39:52 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73BC1735
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:39:43 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id m2so12061695ejb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:39:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SHUCKrA1MY38l7jRww/OzcG36j2wbt8exUM91ClGZ4Y=;
-        b=5d6apryI9mFbBoUjZOS8Xx1ePaL4MxM3dEbE5pWtVW8mPdMWkqpsB84y55XhvLEkAs
-         E1r7D3SNDM4nhNiRs43v4lYkMD7jYBz9gVlGfCxWEQRyUs+rPmnbSwzif5IeGeyjcN8C
-         Zcu9pP4M5yYJSdL5O1qezEhrzlf8fvahLBwReFvKawehm7xtpz+bfx5VtcGaa4umgjOm
-         s1kUiIrWx73bFXL9Id4uzksKiSdNuxYrUhe7G/78yTG5ESqjvYfcdJG/RRzT+1bcDMCU
-         v4gSITujqY5K7DrOI8KgkxsNVaG/MjXnndyCsQ9wVak5ppj6a34t0k3d8xN/eYb4xSvB
-         8uzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SHUCKrA1MY38l7jRww/OzcG36j2wbt8exUM91ClGZ4Y=;
-        b=aELMUNFB1ZteJ7+Xs2yvnsee39lqbThDfraE9oqgmd0dpOpjjKLUE4xFFeT9CvdhTk
-         +j+ngFltt8SCpLcTjg4rYSeDFCnHLp+gIuQP1IhgapSYB/UV1CHiX7z1tBd9VyJbYCNg
-         xzHg2iPnS+7UhvRnBKcDov1r4ekmjKUuD5zyGXV/semgQMnRWptso7cxFwMWGqtJwNOr
-         mWBoBDdvM2vuRv+LVR9LyZ1IrUhkyDamc+q0AU1n2VsUpVv5MjeNLqZI4kbwcZm+CEhm
-         C5kRXN7DqOpyQ5FqDpa9j3PCCxhGfNMkgd+9FmfOAy8UbfRcbw8w6soDyBEUgmX6tUbr
-         e7Qg==
-X-Gm-Message-State: AFqh2krl7IT5Fyz50FtslBhJlQc/m3I4kbnuL2zAY8X150QuadN8WADu
-        M9oSjcuLDx9ZUq8nVRkqGZ/SQQ==
-X-Google-Smtp-Source: AMrXdXukb3OHj8+zRZM4EDwTZoRvm5RlruWK3CW5QoarRIhNICqbspdxta5wCU8TbbyusGrXGZr2Mw==
-X-Received: by 2002:a17:906:8608:b0:86b:9216:2ddb with SMTP id o8-20020a170906860800b0086b92162ddbmr42868059ejx.52.1674815982304;
-        Fri, 27 Jan 2023 02:39:42 -0800 (PST)
-Received: from [10.44.2.5] ([81.246.10.41])
-        by smtp.gmail.com with ESMTPSA id hd16-20020a170907969000b0087854d35687sm2049640ejc.172.2023.01.27.02.39.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 02:39:41 -0800 (PST)
-Message-ID: <1de50d67-1c1d-bf5e-5409-d0cc19aeda73@tessares.net>
-Date:   Fri, 27 Jan 2023 11:39:41 +0100
+        Fri, 27 Jan 2023 05:39:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAA61E1E8;
+        Fri, 27 Jan 2023 02:39:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9A0661AA9;
+        Fri, 27 Jan 2023 10:39:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7185FC433EF;
+        Fri, 27 Jan 2023 10:39:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674815990;
+        bh=ALDAy1u9uqiOZ0CXMkXqHHSRRnaNCgcLwgBuqJuhpyA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CEyE+Hg6ZwVr4FFL3ZdKZB67SXIVQo3LQz5SypDXWOlzUXpZa4itb+2VEP2WV8qpq
+         vGf/V0/NEmGkqWy2v525AUxEcqf7J6X3uvldq0sx6Eo+nVQjnIlER45zhci3yvOKWx
+         mrOzN6Qm+0IiKssaWOVyC+0gug94wj0DErX18aeEKib6m9PbQdpeEmB/OBv7/jsAIP
+         rwVkno2tLc2bcPfNSMQoPuoJyY2FyXwLmATVNlzJoWEfQ7SkqUyON64BV5YPMkd9pW
+         XG2JDdHAeAeN6tm+q7sJRrtbbCA8llIMQnFJ7CNnfrH9ePGhGCFjU2l9cbSg2Bz0Y8
+         F+03rMJdTr45Q==
+Date:   Fri, 27 Jan 2023 10:39:44 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 08/11] fpga: m10bmc-sec: Create helpers for rsu
+ status/progress checks
+Message-ID: <Y9Op8N4j+mQWrJlN@google.com>
+References: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
+ <20230116100845.6153-9-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-Content-Language: en-GB
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230127123604.36bb3e99@canb.auug.org.au>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20230127123604.36bb3e99@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230116100845.6153-9-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,33 +63,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Mon, 16 Jan 2023, Ilpo Järvinen wrote:
 
-On 27/01/2023 02:36, Stephen Rothwell wrote:
-> Hi all,
+> RSU_STAT_* and RSU_PROG_* checks are done in more than one place in the sec
+> update code. Move the checks into new helper functions.
 > 
-> Today's linux-next merge of the net-next tree got a conflict in:
+> No function changes intended.
 > 
->   drivers/net/ethernet/engleder/tsnep_main.c
-> 
-> between commit:
-> 
->   3d53aaef4332 ("tsnep: Fix TX queue stop/wake for multiple queues")
-> 
-> from the net tree and commit:
-> 
->   25faa6a4c5ca ("tsnep: Replace TX spin_lock with __netif_tx_lock")
-> 
-> from the net-next tree.
+> Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Acked-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/fpga/intel-m10-bmc-sec-update.c | 59 +++++++++++++------------
+>  1 file changed, 31 insertions(+), 28 deletions(-)
 
-Thank you for the proposed patch. I had the same conflict on my side
-with MPTCP when merging net-next with -net and your fix seems to do the
-job correctly!
+Applied, thanks
 
-Tested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-
-Cheers,
-Matt
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Lee Jones [李琼斯]
