@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D5E67E60C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DFC67E60E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234512AbjA0NFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S233025AbjA0NFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:05:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233250AbjA0NEn (ORCPT
+        with ESMTP id S233024AbjA0NFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:04:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31917CCAD;
-        Fri, 27 Jan 2023 05:04:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03523B81F21;
-        Fri, 27 Jan 2023 13:04:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C603C433EF;
-        Fri, 27 Jan 2023 13:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674824678;
-        bh=s2Kl2DFTjPfURrm0RC4TBfPUoYKL+iGruFychEwP8JI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BJghCqq5cgDU8pgSAyW0RJujDszQQxmqA3HnnnVs5m3L9NegM1AByLIVMFfiTncv6
-         Fm0HqtN9qnv1bMftwkPxidpLn5FuyLBjprgYUpUigPUtLFrMEwoJDjNREKhTy40xCu
-         3BakLwyCN/bGXcF7vYp5EAjRAu9ZWTeukbfIE9qguUJptfBzTNjBmKKQaaRi2hC8EL
-         J0c3ujHb29vhPyZm4oxQ3hi0LmiAhu+9TgEGyezNnQ/fU1SS0/TxNu5+K9L+2bOn6q
-         2gGqzb91/x7eKybEVBg628llCRZKLd/TBKG3XEABgLes0+MSqWLNkmMtSmIyCJlh8y
-         HeRFLmuymua3w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pLOPP-0008L8-Li; Fri, 27 Jan 2023 14:04:47 +0100
-Date:   Fri, 27 Jan 2023 14:04:47 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 17/24] rtc: pm8xxx: add copyright notice
-Message-ID: <Y9PL73mTJZ3hayur@hovoldconsulting.com>
-References: <20230126142057.25715-1-johan+linaro@kernel.org>
- <20230126142057.25715-18-johan+linaro@kernel.org>
- <Y9Kk/AYBUfnoPCcP@mail.local>
+        Fri, 27 Jan 2023 08:05:34 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6005CFD6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:05:33 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-4c24993965eso65550977b3.12
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:05:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YcHgor3j7sfq7dG9lZ+zfqfv+wWvZ14MjhutrsPuTTA=;
+        b=O3319HV9toGkg3HbQwjbfh1ww6CsLiLwYEhFhvZoFbvRYOK+jMsmQBQAnaq115PkOw
+         7ViauIGtWT0feZpYCv0MzDoaX9zjOx3I18pFLU/5xGWIvqq1Yo19U7wT5CEeuCW2n8hf
+         8UblEAJj7VNPXR6ZQe2Ex32cIXj/Dx7FWqEsBJ9QKAkoNI1GHNXW1uol38R0v4wvgdDG
+         KVKtCgtl9lk+L3wa4U1Umk673SwGgAm5mmK+sH/t1J77Ah+2PJOUDzY7CIXGR3YaNsWK
+         DEKb9/3MtfYmzBjhON48ZLeRz3onlPSuBPDiD5C8nGGm0RW9kjBjPkIRjBbSZnEGH6Ny
+         EXFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YcHgor3j7sfq7dG9lZ+zfqfv+wWvZ14MjhutrsPuTTA=;
+        b=bn55T9BZyL5V6fzYlZ9HMLBQQloXhjHm9zyfc72HPPdZObn6DAw2VnB5IwnEpCrxIb
+         oo5E4TESC9bWlS1RcC9R/+M0qoA4usZolcMeyqXdcw0ZM4F66vfjlpZXDGfb7adY2Ihl
+         IWS00aMxcIHXfl6ypA3JF3F8OrZXumk6zNEwvbtfpc67Rx9Lr9MT4+ZAxl0/DfH8BFPX
+         sXsnv+BqgfWWlgpEuY0hemEV5h5Lq9TOLjMD1nQm2Wk2XaoWktrzDx9+c2PY2OXBkrDn
+         iQfU/GFya83M/wRGZK2W5PiNcf7Yp8EdyWNgamXGG9OT/u1WdeAHbg8yp4Ax0fex18bx
+         awZw==
+X-Gm-Message-State: AO0yUKXN7MSSFNpN+DyjEMVkbz25ph+0wMb1uxv18hTJInVRbzlJWolV
+        4C/A/AvsEsue3mLPzp1KbDu5K/OrNKYGdOlKHIHaqw==
+X-Google-Smtp-Source: AK7set8kwuYwONuHAxV11qnYxf7knSTf12gek0e1T4t1E7vn16gXKGCnI0SCcutrPehtW336Qc9npmTwy76/MuE04fQ=
+X-Received: by 2002:a81:784f:0:b0:506:651b:cd0 with SMTP id
+ t76-20020a81784f000000b00506651b0cd0mr1461691ywc.273.1674824733210; Fri, 27
+ Jan 2023 05:05:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9Kk/AYBUfnoPCcP@mail.local>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230126132801.2042371-1-arnd@kernel.org> <20230126132801.2042371-3-arnd@kernel.org>
+In-Reply-To: <20230126132801.2042371-3-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Jan 2023 14:05:22 +0100
+Message-ID: <CACRpkdZ1R6hi_RGD7zjkc2iNVL1my=gGDr734ED7S19im9+MBw@mail.gmail.com>
+Subject: Re: [PATCH 2/8] gpiolib: coldfire: remove custom asm/gpio.h
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 05:06:20PM +0100, Alexandre Belloni wrote:
-> On 26/01/2023 15:20:50+0100, Johan Hovold wrote:
-> > Add a copyright notice for Linaro and add myself as a (primary) author
-> > of this driver.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  drivers/rtc/rtc-pm8xxx.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-> > index 09816b9f6282..25bdd804b4d2 100644
-> > --- a/drivers/rtc/rtc-pm8xxx.c
-> > +++ b/drivers/rtc/rtc-pm8xxx.c
-> > @@ -1,5 +1,9 @@
-> >  // SPDX-License-Identifier: GPL-2.0-only
-> > -/* Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
-> > +/*
-> > + * pm8xxx RTC driver
-> > + *
-> > + * Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
-> > + * Copyright (c) 2023, Linaro Limited
-> 
-> Is this really useful? The authoritative source is going to be git
-> anyway.
+On Thu, Jan 26, 2023 at 2:28 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
-Sure, but in this case the driver ended up being almost completely
-reworked so I think it is warranted.
- 
-> >   */
-> >  #include <linux/of.h>
-> >  #include <linux/module.h>
-> > @@ -551,3 +555,4 @@ MODULE_ALIAS("platform:rtc-pm8xxx");
-> >  MODULE_DESCRIPTION("PMIC8xxx RTC driver");
-> >  MODULE_LICENSE("GPL v2");
-> >  MODULE_AUTHOR("Anirudh Ghayal <aghayal@codeaurora.org>");
-> > +MODULE_AUTHOR("Johan Hovold <johan@kernel.org>");
-> > -- 
-> > 2.39.1
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Now that coldfire is the only user of a custom asm/gpio.h, it seems
+> better to remove this as well, and have the same interface everywhere.
+>
+> For the gpio_get_value()/gpio_set_value()/gpio_to_irq(), gpio_cansleep()
+> functions, the custom version is only a micro-optimization to inline the
+> function for constant GPIO numbers. However, in the coldfire defconfigs,
+> I was unable to find a single instance where this micro-optimization
+> was even used, and according to Geert the only user appears to be the
+> QSPI chip that is disabled everywhere.
+>
+> The custom gpio_request_one() function is even less useful, as it is
+> guarded by an #ifdef that is never true.
+>
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Johan
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
