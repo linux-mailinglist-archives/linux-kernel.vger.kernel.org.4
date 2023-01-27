@@ -2,167 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E4E67E975
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BD967E97F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbjA0P3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:29:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S234509AbjA0PcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:32:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbjA0P3l (ORCPT
+        with ESMTP id S232439AbjA0PcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:29:41 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86F51F91E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:29:39 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id j17so3742940wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:29:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O1suuUkzT2SD8pmtmuon89jC62J3QtPypnaFKVAj0JU=;
-        b=bwY38uJB+sriymVN1affGyIH3e8EGQcrs8YKjvh5MGKqKsxw6S457orZdVhke9kKXe
-         JFN3iG/hZYsCH1yFkY55DPzQu/hCMkuaYv2lJ0zIxRSGde2xfMnfSsEzpAlAa7K2zl5O
-         XAHOlxaKN4Exj1XlBCMKtURAeuWmV7dKvmPu2/GLXzBa1e0PMjxPcsSqTs2DnT4k7T3/
-         n4MVNJder0ih+AU/e5dHcPdnAlkEN54K9J7tQkx1smzT1plVkcicETKvBkiVZ8JS0e3h
-         my2SABlbe1PZj0hALj/EC6MbjYwG25h35lC1cQP4PSB018xOy8/3zjFhcOr7MpimDzMs
-         8MlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1suuUkzT2SD8pmtmuon89jC62J3QtPypnaFKVAj0JU=;
-        b=IUVBBdgN0UFKC8WnoLy+I/PZc1I0hCB/qfIz/+eYiaDVBd3m+Xe57xU8E7OUzU8ym6
-         tA08LPcW1CbCvH3x9+oDkwsyfeOJriEkSxJ5SK47lr1WjOwcxEiLqdzIwt1v5ogQ1RcI
-         NVhzbb9mU+yaujLnCUTVM+23/5vxEDIoXViWeMWOKa00bHXw8AW69VyZIGATrd9BufaC
-         QFkTK0dN+ISbtEwJQCIXKAQlOLunkGFsH88rTHOjyjVqS62VQUPCD6gTHu5bYa9ojes9
-         wyj7DjKa+hYM6sIr8TsoAmPxWuTRSbKbVxBs4YrFiywNXbWC/LfdRRq1LaHB7DtPvnd5
-         Bagw==
-X-Gm-Message-State: AFqh2krUsknxto7H6u6D7V5ToLu/Tqj39rgjrNYHi4GXJJyPv22oyoWF
-        o0Vf+KnYhnQHfJ5M1/UuHxwVvQ==
-X-Google-Smtp-Source: AMrXdXu3It+BDt9Fk5ZVJ6Wg+8jB7MrEqaO8ptgkjTk7HV5zV8bW1yAZRWRGkLqOzHVqCQBoQ74/5g==
-X-Received: by 2002:a05:600c:a29e:b0:3d9:ee01:ae5b with SMTP id hu30-20020a05600ca29e00b003d9ee01ae5bmr39390660wmb.12.1674833378435;
-        Fri, 27 Jan 2023 07:29:38 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id r7-20020a05600c434700b003dc3f195abesm1262902wme.39.2023.01.27.07.29.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 07:29:37 -0800 (PST)
-Message-ID: <7ce28c64-9d5f-78dc-6f81-665c32c3e00c@linaro.org>
-Date:   Fri, 27 Jan 2023 16:29:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 1/2] dt-bindings: ramoops: Inherit reserve memory
- property
-Content-Language: en-US
-To:     Mukesh Ojha <quic_mojha@quicinc.com>,
-        linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>, Tony Luck <tony.luck@intel.com>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Fri, 27 Jan 2023 10:32:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8AF1F91E;
+        Fri, 27 Jan 2023 07:32:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81AD861CB1;
+        Fri, 27 Jan 2023 15:32:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5BF0C433D2;
+        Fri, 27 Jan 2023 15:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674833529;
+        bh=Z2iqEMIhEJct0i4hJR+FbRDHoDL2SDX5PExgGOdBZHE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aWdfQA8Trz6dfaYjQIE9SN1VapQVhi/7rcpMdmYajLyTwh+o3ZNxBiHQyFu0Epi7s
+         o2kAKgLG09Bf1dTKxaEyQ9wNc/yu7qD84i7WOOjpn7ymox0y2WWv8LS1HX54z7kZci
+         TzIjZF968TS5GNFn+GThsza46v8bGRJn5jehv6a6Vwx51e3MSugMEQnraC+YSbE7Rx
+         ecJBPaXrp0rWRKiwSsxKEWx/I7qBeQ1A8SoRLOT5zvmDPsEFgcjgXlP9t7OzVA+Ef4
+         qxkn236YJlRf5zg1mRP2PDo8Jra3p0zqq2elbibnE8H7O5otpaHxgvbC4wgOy1WzCT
+         +sP3fK+n5fMfA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pLQiA-0001GM-EI; Fri, 27 Jan 2023 16:32:19 +0100
+Date:   Fri, 27 Jan 2023 16:32:18 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <1674832236-6754-1-git-send-email-quic_mojha@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1674832236-6754-1-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 16/24] rtc: pm8xxx: add support for nvmem offset
+Message-ID: <Y9PugpnzsqZpzSGE@hovoldconsulting.com>
+References: <20230126142057.25715-1-johan+linaro@kernel.org>
+ <20230126142057.25715-17-johan+linaro@kernel.org>
+ <85481368-b32e-61aa-f83a-fb42d58c351a@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <85481368-b32e-61aa-f83a-fb42d58c351a@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 16:10, Mukesh Ojha wrote:
-> The reserved memory region for ramoops is assumed to be at a
-> fixed and known location when read from the devicetree. This
-> is not desirable in an environment where it is preferred the
-> region to be dynamically allocated at runtime, as opposed to
-> being fixed at compile time.
-> 
-> So, update the ramoops binding by inheriting some reserve memory
-> property to allocate the ramoops region dynamically.
-> 
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
-> Changes in v3:
->  - Fixed yaml error and updated commit text as per comment.
-> 
-> Change in v2:
->   - Added this patch as per changes going to be done in patch 3/3
-> 
->  .../bindings/reserved-memory/ramoops.yaml          | 34 ++++++++++++++++++++--
->  1 file changed, 32 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
-> index 0391871..8741626 100644
-> --- a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
-> +++ b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
-> @@ -10,7 +10,8 @@ description: |
->    ramoops provides persistent RAM storage for oops and panics, so they can be
->    recovered after a reboot. This is a child-node of "/reserved-memory", and
->    is named "ramoops" after the backend, rather than "pstore" which is the
-> -  subsystem.
-> +  subsystem. This region can be reserved both statically or dynamically by
-> +  using appropriate property in device tree.
->  
->    Parts of this storage may be set aside for other persistent log buffers, such
->    as kernel log messages, or for optional ECC error-correction data.  The total
-> @@ -112,7 +113,13 @@ unevaluatedProperties: false
->  
->  required:
->    - compatible
-> -  - reg
-> +
-> +oneOf:
-> +  - required:
-> +      - reg
-> +
-> +  - required:
-> +      - size
->  
->  anyOf:
->    - required: [record-size]
-> @@ -142,3 +149,26 @@ examples:
->              };
->          };
->      };
-> +
-> +  - |
-> +    / {
-> +        compatible = "foo";
-> +        model = "foo";
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        reserved-memory {
-> +            #address-cells = <1>;
-> +            #size-cells = <1>;
-> +            ranges;
-> +
-> +            ramoops: ramoops_region {
+On Fri, Jan 27, 2023 at 02:13:21PM +0000, Srinivas Kandagatla wrote:
+> On 26/01/2023 14:20, Johan Hovold wrote:
+> > On many Qualcomm platforms the PMIC RTC control and time registers are
+> > read-only so that the RTC time can not be updated. Instead an offset
+> > needs be stored in some machine-specific non-volatile memory, which the
+> > driver can take into account.
+> > 
+> > Add support for storing a 32-bit offset from the Epoch in an nvmem cell
+> > so that the RTC time can be set on such platforms.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> >   drivers/rtc/rtc-pm8xxx.c | 134 +++++++++++++++++++++++++++++++++++----
+> >   1 file changed, 123 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
+> > index 922aef0f0241..09816b9f6282 100644
+> > --- a/drivers/rtc/rtc-pm8xxx.c
+> > +++ b/drivers/rtc/rtc-pm8xxx.c
+> > @@ -3,6 +3,7 @@
+> >    */
+> > +static int pm8xxx_rtc_read_nvmem_offset(struct pm8xxx_rtc *rtc_dd)
+> > +{
+> > +	size_t len;
+> > +	void *buf;
+> > +	int rc;
+> > +
+> > +	buf = nvmem_cell_read(rtc_dd->nvmem_cell, &len);
+> > +	if (IS_ERR(buf)) {
+> > +		rc = PTR_ERR(buf);
+> > +		dev_err(rtc_dd->dev, "failed to read nvmem offset: %d\n", rc);
+> > +		return rc;
+> > +	}
+> > +
+> > +	if (len != sizeof(u32)) {
+> > +		dev_err(rtc_dd->dev, "unexpected nvmem cell size %zu\n", len);
+> > +		kfree(buf);
+> > +		return -EINVAL;
+> > +	}
 
-This is a friendly reminder during the review process.
+> how about us nvmem_cell_read_u32()
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
+I considered that, but did not like the asymmetry of the interface.
 
-Thank you.
+Specifically, nvmem_cell_read_u32() would go out and look up the nvmem
+cell again even though I already have and need a reference for
+nvmem_cell_write().
 
-Best regards,
-Krzysztof
+nvmem_cell_read_u32() seems to be a better fit as a convenience wrapper
+for drivers that only need to do a single read at probe.
 
+Johan
