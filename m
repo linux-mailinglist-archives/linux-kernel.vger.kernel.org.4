@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A330F67F0D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE83967F0D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbjA0WCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:02:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
+        id S231564AbjA0WCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbjA0WCO (ORCPT
+        with ESMTP id S232266AbjA0WCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:02:14 -0500
+        Fri, 27 Jan 2023 17:02:35 -0500
 Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59547E6B6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:02:12 -0800 (PST)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230127220211euoutp02557ec0a6ff8996404ffa0fca92ad2c66~_SYFng9lE2612926129euoutp02R
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 22:02:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230127220211euoutp02557ec0a6ff8996404ffa0fca92ad2c66~_SYFng9lE2612926129euoutp02R
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A643D80020
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:02:23 -0800 (PST)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230127220222euoutp0279041ada3c1b4c76e7dd8638b7c408ba~_SYP3O6sz1471914719euoutp02R
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 22:02:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230127220222euoutp0279041ada3c1b4c76e7dd8638b7c408ba~_SYP3O6sz1471914719euoutp02R
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1674856931;
-        bh=GtHOMbt1x+T7/SsXR+6a4k1idSFUP669cFJ9Of9wi5A=;
+        s=mail20170921; t=1674856942;
+        bh=4/+IICDVxze4R+boTammad7oJB4qDwWiimXaU/Tj3Ts=;
         h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=TCLEc5AZEgxc7Fyak/gTDe9W5t+plKDpdRcsND8hc7brFXYxNarZtrkKpSGhZwcnb
-         poGF84SZ31WMaPIfmTS8gFTpWLAlwTh5PMftlQjaepYFEd8gZtE0hG8l3a2vRI9Kh+
-         D9EkPhzQW0g4EElhkdLMCZD8CWeMllkKrZ0sWmWk=
+        b=CMNpTAiIIMcQd5vjH/3QsnmvJrsLwz2Ysj97euqyTsPedpAlwe6gb9PwRUt5S84+C
+         f4GsO1JoH5PqzAwm7Oml17wucDbzZZBdEpQsOrFY07meulKn/KNqMYeRr3oz8807GJ
+         9hVEK6G6PtVWZEdJXeCoCfvNI2foHI4XwHkecO00=
 Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
         eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230127220210eucas1p139fb4da8a948106e635bae5ba47d7cac~_SYEjc7002141821418eucas1p1O;
-        Fri, 27 Jan 2023 22:02:10 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 53.9E.13597.2E944D36; Fri, 27
-        Jan 2023 22:02:10 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        20230127220221eucas1p138e31e7df0a5bf68011fa4c896847e2f~_SYPLtv092141421414eucas1p16;
+        Fri, 27 Jan 2023 22:02:21 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id F4.9E.13597.DE944D36; Fri, 27
+        Jan 2023 22:02:21 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
         eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230127220210eucas1p19f18ee2162405bb0754a621b3e26f991~_SYEMZWYq2139321393eucas1p1G;
-        Fri, 27 Jan 2023 22:02:10 +0000 (GMT)
+        20230127220221eucas1p1d2caad0ed56be4a43f15bff00a1d5ef5~_SYOiDtpu2139421394eucas1p1D;
+        Fri, 27 Jan 2023 22:02:21 +0000 (GMT)
 Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230127220210eusmtrp18c40e12feec7d9f7fd1bb4683a740a62~_SYELl4A71244412444eusmtrp1b;
-        Fri, 27 Jan 2023 22:02:10 +0000 (GMT)
-X-AuditID: cbfec7f4-1f1ff7000000351d-6e-63d449e26b33
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 65.9F.02722.1E944D36; Fri, 27
-        Jan 2023 22:02:09 +0000 (GMT)
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230127220221eusmtrp2d712e07a4a3adbeac0fcd54ebab1331c~_SYOhaG1g3022330223eusmtrp2Z;
+        Fri, 27 Jan 2023 22:02:21 +0000 (GMT)
+X-AuditID: cbfec7f4-207ff7000000351d-7f-63d449ed7433
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 76.9F.02722.CE944D36; Fri, 27
+        Jan 2023 22:02:20 +0000 (GMT)
 Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230127220209eusmtip2ddecf800f7f5ef63d120b3a161cd48f4~_SYDWoPRW0088800888eusmtip2b;
-        Fri, 27 Jan 2023 22:02:09 +0000 (GMT)
-Message-ID: <92d08e49-2112-3360-0f0f-eba849000645@samsung.com>
-Date:   Fri, 27 Jan 2023 23:02:10 +0100
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230127220220eusmtip1f3bcef7d420ef4a31e686a7e21c09546~_SYNsMne62478524785eusmtip1b;
+        Fri, 27 Jan 2023 22:02:20 +0000 (GMT)
+Message-ID: <c2094a98-1a99-14c6-40a6-0c671a6035db@samsung.com>
+Date:   Fri, 27 Jan 2023 23:02:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
         Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [RFT PATCH v3 2/4] ARM: dts: exynos: add unit address to DWC3
- node wrapper in Exynos54xx
+Subject: Re: [RFT PATCH v3 3/4] arm64: dts: exynos: add unit address to DWC3
+ node wrapper in Exynos5433
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -71,51 +71,51 @@ Cc:     replicant@osuosl.org, phone-devel@vger.kernel.org,
         Chanho Park <chanho61.park@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>
 From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20230127212713.267014-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230127212713.267014-3-krzysztof.kozlowski@linaro.org>
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNKsWRmVeSWpSXmKPExsWy7djP87qPPK8kG1yfJWrxYN42NovL+7Ut
-        rn95zmox/8g5Vou3S3YxWvS9eMhssff1VnaLTY+vsVpc3jWHzWLG+X1MFmf+TWWxWPDHzmLd
-        GkGL1r1H2C2e9wGFN3//y+gg4LFz1l12j6NX7rF6bFrVyeZx59oeNo/NS+o9/t9Zy+7xpbmb
-        1aNvyypGj8+b5AI4o7hsUlJzMstSi/TtErgyjl1dwF6wTbji8pTTzA2MrfxdjJwcEgImElNv
-        v2LtYuTiEBJYwSgxoeUiK0hCSOALo0TPLQmIxGdGiYMbzjN2MXKAdRy+WA8RX84oseXVcTYI
-        5yOjxPYpx9hBunkF7CTmTOpmA7FZBFQl7v8/ChUXlDg58wkLyCBRgRSJTX/KQMLCAukSOy/c
-        YgaxmQXEJW49mc8EMlNE4CiTxNIZP8EcZoF9TBJHzpwHq2ITMJToetsFtoBTwFXi06S1rBDd
-        8hLb385hBmmQENjNKdF7+RQjxKMuEh9/PmKBsIUlXh3fwg5hy0icntzDAtHQziix4Pd9Jghn
-        AqNEw/NbUN3WEnfO/WIDuZtZQFNi/S59iLCjxPsXm5gh4cInceOtIMQRfBKTtk2HCvNKdLQJ
-        QVSrScw6vg5u7cELl5gnMCrNQgqXWUgBMAvJO7MQ9i5gZFnFKJ5aWpybnlpslJdarlecmFtc
-        mpeul5yfu4kRmP5O/zv+ZQfj8lcf9Q4xMnEwHmKU4GBWEuHd6ngpWYg3JbGyKrUoP76oNCe1
-        +BCjNAeLkjivtu3JZCGB9MSS1OzU1ILUIpgsEwenVANTw77/y35aP60Rvt456eainYXr+//P
-        +LZlnvDpLxf2X4+ZNov1nKRTwrbuKKErV5ZJsDbKlR+VXvZu6f3XBvtWiklasotdr9nUWHf7
-        VUS/m5fCnd7bXSeS74j//ijBE7M322b3xMud04IXT9x+kONOzsWXzi++yp3Yfnj98ftLkqec
-        zGUsbdfWspirX2x8wHrCM0WJV64HeAI/Rz5dGZM9rdIgLkH3yscHBurtrR6nMt/2t83nfn/o
-        qGGysNDSirgp7zS1t4XeM1k6+cby6pJgjvdb/zZoxjrOZ+Y45KlvXSK785xTYUGOVX/RIcGH
-        23dx/u+o/madYPpBSr5QgOX5y18znv+4nd2j63Zqk+jXk0osxRmJhlrMRcWJABT3ktruAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPIsWRmVeSWpSXmKPExsVy+t/xe7oPPa8kGxy8a2nxYN42NovL+7Ut
-        rn95zmox/8g5Vou3S3YxWvS9eMhssff1VnaLTY+vsVpc3jWHzWLG+X1MFmf+TWWxWPDHzmLd
-        GkGL1r1H2C2e9wGFN3//y+gg4LFz1l12j6NX7rF6bFrVyeZx59oeNo/NS+o9/t9Zy+7xpbmb
-        1aNvyypGj8+b5AI4o/RsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyNzWOtjEyV9O1sUlJz
-        MstSi/TtEvQyjl1dwF6wTbji8pTTzA2MrfxdjBwcEgImEocv1ncxcnEICSxllFj0aDljFyMn
-        UFxG4uS0BlYIW1jiz7UuNoii94wSzzbeYAdJ8ArYScyZ1M0GYrMIqErc/38UKi4ocXLmExYQ
-        W1QgRaL5+UmwQcIC6RI7L9xiBrGZBcQlbj2ZzwQyVETgOJPEp0kLmEEcZoEDTBKT9v9hgVh3
-        mVGi4dJtsLFsAoYSXW+7wNZxCrgCdaxlhRhlJtG1tYsRwpaX2P52DvMERqFZSC6ZhWTjLCQt
-        s5C0LGBkWcUoklpanJueW2yoV5yYW1yal66XnJ+7iREY89uO/dy8g3Heq496hxiZOBgPMUpw
-        MCuJ8G51vJQsxJuSWFmVWpQfX1Sak1p8iNEUGBwTmaVEk/OBSSevJN7QzMDU0MTM0sDU0sxY
-        SZzXs6AjUUggPbEkNTs1tSC1CKaPiYNTqoHJdalR0MuE9+fDIi9sLFdZojph5Xp7k+4Qh03/
-        A738/3rzR973nheR/nWJdsDEuTVmCUX9nDOCZr4+ULro3cqPFjx7rEWMzr5pVWHQ2atey/tw
-        Q0LlEqdkSaG5d1wNuY4taL+S4x2qNsf0nMSNZfs6lPjZnre9uZYyc3fo+dq1nh6sWVq3TIxP
-        qp7asl+86cmfvl31nZtNhMLLL5/cvZNbdwuPkd1W9Tv9jZxGDbqBfjvSb21yfWrMJdm0ZtV6
-        1tXrjyZZnY7aKaIv//RNyMlTx/0mBHguMp/18y1n6K2EBmkjCW2nJa4nRJZePaSfdH/DV9+G
-        Up1f39f9S9jAHF3yXCBWXmqF2Y8fHpZbPHcosRRnJBpqMRcVJwIAmumkr4IDAAA=
-X-CMS-MailID: 20230127220210eucas1p19f18ee2162405bb0754a621b3e26f991
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SYUxTZxT1e6/v9bVb8aOoXGXT2ESTSSzTMH2EQSRq9vxjHHH+IFm2Wl4q
+        gQJrrUqjsUSpWkeDbA5oUJCBOMK6rViUIggMRlACDBmuUlEzTB2mC5VaqQiM8nDj3z3nnnvP
+        uV8+hpR7qDVMRvZhXpetylLQUlHjb6G+zb49Q+oP+92x7OPLjTR773Ysez/gpdiKzj6K9VW7
+        EGt99oRkW547xazjr2GKvecqp9nS/laC7Z29KGIr3ySz9vpItqClU8x6rfN0w6sZtANzTbaH
+        Yq5raJTiHHXnaM4zfIvmGqpPcnOeH8Vc4NR5irNer0PcpGPtPkma9ON0PivjCK+LS/5Seqi9
+        ZorIrVp9bMbyjDAhV5QFSRjA8WD+vpyyICkjx9cQ/O0pQwIIIChqekQLYBJBTf4Q+Xakudmy
+        OFKLwH3tV1IAfgQhs40Kq2Q4GUavFovCtQhvAPOLUiTwkdBTNjbPM8xKnA6ON0fCdBTOgKqf
+        zy7ISRwND8YqiPDOFbiLgJrS0AIgcSsBnb39CzFovAUsPgsdriV4N5TMmBan18ENX/lCIsA3
+        JPC44jQVdgO8C4rOiIQTomC8+7pYqN+DuSbBDfAZBJXTjxZBEQKT9wESVIng6XtNhxeR+AP4
+        yRUn0CngsZQjYX8E/OmLFDJEQHFjCSnQMjhrlgvqjWDrtv9n2z4wSBYhhW3Js9iW3G9bco3t
+        f99KJKpD0bxBr9Xw+q3Z/FGlXqXVG7I1SnWO1oHmP+Dd2e7ATVQ77ld2IIJBHQgYUrFC5kwZ
+        VMtl6ao8I6/L+UJnyOL1HSiGESmiZbFJPWo51qgO85k8n8vr3nYJRrLGRGSMbO5ldhT8s36f
+        67ys/gCdNSJDezn/lP15d2oCNZDKdSagr4pbjMvcifbjF7TGtqe/xJkPFn56/+u0l8HSk3e+
+        gWlH5g9kW0dr4bGPPlc2ZJ44MKx1fJuc305N5s2NM713Ji7qLQ+Nw2WfHL0ZYUzfcFcZarAn
+        qltt/aelr9p2Dir81lP1F3YmjMw91V4pcOZ53j8R+/vVwdU526x797i3tWxPS4mPSXtnqPBS
+        VbV8aldJwmd1Qe9xTXAMmXKdeG1SVP7+7wLT7cXLg6NlmmW1yj6NOBTpDE68uz3VXumvuOQe
+        qOrazXtDBs3YRM9GPv6coTl61rBqPZEUw7zw/KEQ6Q+ptmwidXrVv9X9i+3vAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAIsWRmVeSWpSXmKPExsVy+t/xu7pvPK8kG8xusrV4MG8bm8Xl/doW
+        1788Z7WYf+Qcq8XbJbsYLfpePGS22Pt6K7vFpsfXWC0u75rDZjHj/D4mizP/prJYLPhjZ7Fu
+        jaBF694j7BbP+4DCm7//ZXQQ8Ng56y67x9Er91g9Nq3qZPO4c20Pm8fmJfUe/++sZff40tzN
+        6tG3ZRWjx+dNcgGcUXo2RfmlJakKGfnFJbZK0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2Kak5
+        mWWpRfp2CXoZB5f+YCpYJFnxt+sFUwPjLuEuRk4OCQETid27u1i7GLk4hASWMkrs/3CYGSIh
+        I3FyWgMrhC0s8edaFxtE0XtGiSXTLjCBJHgF7CTuLZvEAmKzCKhKtH2awQgRF5Q4OfMJWFxU
+        IEWi+flJsEHCApkSizZ0gMWZBcQlbj2ZzwQyVETgOJPEp0kLmEEcZoEDTBKT9v9hgVh3mVGi
+        8dlKsHVsAoYSXW9B7uDk4BRwlZj+twFqlJlE19YuRghbXmL72znMExiFZiG5ZBaSjbOQtMxC
+        0rKAkWUVo0hqaXFuem6xoV5xYm5xaV66XnJ+7iZGYNRvO/Zz8w7Gea8+6h1iZOJgPMQowcGs
+        JMK71fFSshBvSmJlVWpRfnxRaU5q8SFGU2BwTGSWEk3OB6advJJ4QzMDU0MTM0sDU0szYyVx
+        Xs+CjkQhgfTEktTs1NSC1CKYPiYOTqkGJkfrV+sN/sfHz5t4ymFyf7DFmnsmms8P8hYz7Ck7
+        Ul2xenvuEm+f2cHpmmZztda8tb66+uptZ8Ub3+t31xh+OV6uNPd96eLgtrpFYsVLmIP9Pr7K
+        cY++cCn2rHm6Q/77L/tS3J8cbLwy2WGng+RjT88llq+kG1TXnn6s1526xOrnIb0Fu1497b+w
+        +XR7ff3qH6ea9vvX2T5wuFbF/TjObW/JVM0zNgsVGEoKvB9uVuGeJ2yyPqT2Q2zz9L6eiIR/
+        8Vv6LyQtPVgo1lZv/aD/2YcL7HopCp+d//rU6ys/ZOsy2PDlUHerwMTgP9PME0sdY3Y7T5Fe
+        N/27qF71Ea55/o+9nlglfv/yf5nYweQzb5RYijMSDbWYi4oTAfcLQaSDAwAA
+X-CMS-MailID: 20230127220221eucas1p1d2caad0ed56be4a43f15bff00a1d5ef5
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230127212730eucas1p1dd8fc493954402ab5360052f4bd9a5b2
+X-RootMTR: 20230127212730eucas1p1c7553326fe55355c303e2b79480f6a12
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20230127212730eucas1p1dd8fc493954402ab5360052f4bd9a5b2
+X-CMS-RootMailID: 20230127212730eucas1p1c7553326fe55355c303e2b79480f6a12
 References: <20230127212713.267014-1-krzysztof.kozlowski@linaro.org>
-        <CGME20230127212730eucas1p1dd8fc493954402ab5360052f4bd9a5b2@eucas1p1.samsung.com>
-        <20230127212713.267014-2-krzysztof.kozlowski@linaro.org>
+        <CGME20230127212730eucas1p1c7553326fe55355c303e2b79480f6a12@eucas1p1.samsung.com>
+        <20230127212713.267014-3-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
@@ -132,66 +132,84 @@ On 27.01.2023 22:27, Krzysztof Kozlowski wrote:
 > of child device (actual DWC3 Controller) as the wrapper's address to
 > fix:
 >
->    exynos5422-odroidhc1.dtb: soc: usb3-0: {'compatible': ['samsung,exynos5250-dwusb3'],
->      ... } should not be valid under {'type': 'object'}
->
->    exynos54xx.dtsi:145.21-159.5: Warning (simple_bus_reg): /soc/usb3-0: missing or empty reg/ranges property
+>    exynos5433-tm2e.dtb: soc@0: usbdrd: {'compatible': ['samsung,exynos5433-dwusb3'], ...
+>      should not be valid under {'type': 'object'}
 >
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
 >
+> Changes since v2:
+> 1. Fix typo/build error.
+>
 > Changes since v1:
-> 1. Use ranges with values and drop reg from usb-wrapper node.
-> 2. Keep "usb" as wrapper's node name.
+> 1. New patch
 > ---
->   arch/arm/boot/dts/exynos54xx.dtsi | 16 ++++++++--------
+>   arch/arm64/boot/dts/exynos/exynos5433.dtsi | 16 ++++++++--------
 >   1 file changed, 8 insertions(+), 8 deletions(-)
 >
-> diff --git a/arch/arm/boot/dts/exynos54xx.dtsi b/arch/arm/boot/dts/exynos54xx.dtsi
-> index 3ec43761d8b9..5c799886c275 100644
-> --- a/arch/arm/boot/dts/exynos54xx.dtsi
-> +++ b/arch/arm/boot/dts/exynos54xx.dtsi
-> @@ -142,15 +142,15 @@ hsi2c_7: i2c@12cd0000 {
+> diff --git a/arch/arm64/boot/dts/exynos/exynos5433.dtsi b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
+> index 9da24fe958a3..5519a80576c5 100644
+> --- a/arch/arm64/boot/dts/exynos/exynos5433.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
+> @@ -1742,7 +1742,7 @@ hsi2c_11: i2c@14df0000 {
 >   			status = "disabled";
 >   		};
 >   
-> -		usbdrd3_0: usb3-0 {
-> +		usbdrd3_0: usb@12000000 {
->   			compatible = "samsung,exynos5250-dwusb3";
+> -		usbdrd30: usbdrd {
+> +		usbdrd30: usb@15400000 {
+>   			compatible = "samsung,exynos5433-dwusb3";
+>   			clocks = <&cmu_fsys CLK_ACLK_USBDRD30>,
+>   				<&cmu_fsys CLK_SCLK_USBDRD30>,
+> @@ -1751,16 +1751,16 @@ usbdrd30: usbdrd {
+>   			clock-names = "aclk", "susp_clk", "phyclk", "pipe_pclk";
 >   			#address-cells = <1>;
 >   			#size-cells = <1>;
 > -			ranges;
-> +			ranges = <0x0 0x12000000 0x10000>;
+> +			ranges = <0x0 0x15400000 0x10000>;
+>   			status = "disabled";
 >   
-> -			usbdrd_dwc3_0: usb@12000000 {
-> +			usbdrd_dwc3_0: usb@0 {
+> -			usbdrd_dwc3: usb@15400000 {
+> +			usbdrd_dwc3: usb@0 {
 >   				compatible = "snps,dwc3";
-> -				reg = <0x12000000 0x10000>;
+>   				clocks = <&cmu_fsys CLK_SCLK_USBDRD30>,
+>   					<&cmu_fsys CLK_ACLK_USBDRD30>,
+>   					<&cmu_fsys CLK_SCLK_USBDRD30>;
+>   				clock-names = "ref", "bus_early", "suspend";
+> -				reg = <0x15400000 0x10000>;
 > +				reg = <0x0 0x10000>;
->   				interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
->   				phys = <&usbdrd_phy0 0>, <&usbdrd_phy0 1>;
+>   				interrupts = <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>;
+>   				phys = <&usbdrd30_phy 0>, <&usbdrd30_phy 1>;
 >   				phy-names = "usb2-phy", "usb3-phy";
-> @@ -164,15 +164,15 @@ usbdrd_phy0: phy@12100000 {
->   			#phy-cells = <1>;
+> @@ -1795,7 +1795,7 @@ usbhost30_phy: phy@15580000 {
+>   			status = "disabled";
 >   		};
 >   
-> -		usbdrd3_1: usb3-1 {
-> +		usbdrd3_1: usb@12400000 {
->   			compatible = "samsung,exynos5250-dwusb3";
+> -		usbhost30: usbhost {
+> +		usbhost30: usb@15a00000 {
+>   			compatible = "samsung,exynos5433-dwusb3";
+>   			clocks = <&cmu_fsys CLK_ACLK_USBHOST30>,
+>   				<&cmu_fsys CLK_SCLK_USBHOST30>,
+> @@ -1804,16 +1804,16 @@ usbhost30: usbhost {
+>   			clock-names = "aclk", "susp_clk", "phyclk", "pipe_pclk";
 >   			#address-cells = <1>;
 >   			#size-cells = <1>;
 > -			ranges;
-> +			ranges = <0x0 0x12400000 0x10000>;
+> +			ranges = <0x0 0x15a00000 0x10000>;
+>   			status = "disabled";
 >   
-> -			usbdrd_dwc3_1: usb@12400000 {
-> +			usbdrd_dwc3_1: usb@0 {
+> -			usbhost_dwc3: usb@15a00000 {
+> +			usbhost_dwc3: usb@0 {
 >   				compatible = "snps,dwc3";
-> -				reg = <0x12400000 0x10000>;
+>   				clocks = <&cmu_fsys CLK_SCLK_USBHOST30>,
+>   					<&cmu_fsys CLK_ACLK_USBHOST30>,
+>   					<&cmu_fsys CLK_SCLK_USBHOST30>;
+>   				clock-names = "ref", "bus_early", "suspend";
+> -				reg = <0x15a00000 0x10000>;
 > +				reg = <0x0 0x10000>;
->   				phys = <&usbdrd_phy1 0>, <&usbdrd_phy1 1>;
+>   				interrupts = <GIC_SPI 244 IRQ_TYPE_LEVEL_HIGH>;
+>   				phys = <&usbhost30_phy 0>, <&usbhost30_phy 1>;
 >   				phy-names = "usb2-phy", "usb3-phy";
->   				snps,dis_u3_susphy_quirk;
 
 Best regards
 -- 
