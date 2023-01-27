@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE3767E40C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB7867E4AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbjA0LsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
+        id S233077AbjA0MJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234029AbjA0LrU (ORCPT
+        with ESMTP id S232777AbjA0MI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:47:20 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D5878ACD
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:45:23 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id k16so3252950wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:45:23 -0800 (PST)
+        Fri, 27 Jan 2023 07:08:58 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B286C7C313
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:02:31 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id ss4so13033294ejb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:02:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wX2OJmIw4fW8hzsA4eBDxt2dLhXvxptu+5S1yeJoeUQ=;
-        b=rAww8Zwc7rkkkYUUfC/GBky7PmY/f8hUJg1BJeWaLRXg/bbJ7tnIbloo9gN1pLrYqc
-         poETS8IKbjHG1Ya4CB4b+UWxMQnSoWm7hhSiITU9ybPq0cDv57MCXX/Wkw9T4onFF/ME
-         gi0Y+76dxJ1u3oRif6RqqHDcL+CNrDW2xiwbzvKHfBYFuuiuh2c0UZvoRet5mVws/PQn
-         V9egekhIzO056TXUkXxtumEs9ons55vuABOhGSEGi/MoaHXEf9/GJXwqZZC5Hycr58S7
-         8I4sheMNJ6ZBR+yUkpYLl/Fcrhg9YRyw3ClbNf2Z7ZC8kaFPoiGUz12spt1QZbXXAuQa
-         veGQ==
+        bh=CXHSr/fS02j1rKaP8taZ8uB8fq7HnfewxcqVIRr5kHo=;
+        b=TpJ2a37arH53oBmRWcN0p58sWdpypizl5gE4s7xHIw1CiiQldMUmUexbopijccGnO6
+         Cy+k/OdT/SgK/5C16/PkKqjEQOCtERtsbiMXosEuzeKMWiJKy3eLY+jwssChHW1gMvzN
+         IjMkTwGhm48BrbHsEf7YKayH8g270Y3mckQTyyTHZgvQkzCBxlYlGAurcIP0KWQ9SdNG
+         yiFFCK5vN6Xbw7fkIlerlL2m80uoxjwAPsW15dv353aAWfXUYIpG69mfkIKEygoBb32j
+         C4+rJd/QAEVYRVfoYG7yLoIT84bPYDo9QfGON806l+X6rm+76X57sLFuy9/i2Rhtq11Q
+         BruQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wX2OJmIw4fW8hzsA4eBDxt2dLhXvxptu+5S1yeJoeUQ=;
-        b=B2rXIbS73rm1p36vtBR8uyFugoiuDrYd3rBoCxYDpejA3UpfQstbsZ7mNkPGRlfrv5
-         QSZSCjNAM+ojjRW9tFqlkHavfak+UIB3ixH9C1bDp8Kkzl7xrvNFjzvS/yH4MvkV3K8+
-         SXd7K5WKwzOOWPl3CglnRo2RzA2MpijoNuFQN9AlaT/DUDdr4Soa4cI0ygLviFlMRr9N
-         3/g6bZUjWGfg6oc5ONP6KtgQlKwxjfRBZIsCEKuffUPfRRPkmyLSuwvNWEdavZl1SkEJ
-         O1aoJptirJTwn0KXSuUTi5J3a0fq2OmLNwq03/3m1bQLX+kBOzw/1/kO3sEZcZHN3lD8
-         zjZA==
-X-Gm-Message-State: AFqh2kptyOt3QTcuGMWW9rhC4rgjVm/mr0oezu47T0Ch1jlGx7Bxr19l
-        ib/oRcfjkTaVErKUPRWcAVYF5A==
-X-Google-Smtp-Source: AMrXdXsAFGqbRqEyK5okLcEONXDGmn6fK9eqtTgcX3K7V89w7XMwX7RDLSTuk8h4dUlmh+hcbQzkzg==
-X-Received: by 2002:a05:600c:a687:b0:3d2:2a72:2573 with SMTP id ip7-20020a05600ca68700b003d22a722573mr39212052wmb.11.1674819856109;
-        Fri, 27 Jan 2023 03:44:16 -0800 (PST)
+        bh=CXHSr/fS02j1rKaP8taZ8uB8fq7HnfewxcqVIRr5kHo=;
+        b=feSgmMNzhynWd++PESiJ0CWZMcWyBk+HYnS2NJcXNNuSI8ny2Ey2E5cU5zSJbY9uBn
+         Q/qXPpFRSYQQU7JfXRcpykLdyMWnWcHMLZ37x0SuT+WNi9SE2/S5iJr99BsZU7HumYqF
+         o4ETDGLYKXII0qmDi/VpuOlBesEciuj4131Gv+JwwN76V8+v54ih2HieLKyOkCbrw/7H
+         LpLO2UqFpM8jrDleRvUPKsoF37w3rzJPQgnz/7eFnb0uwah8FHjQvAS2z9v+P8wlYbEG
+         wXMnpbJMUy1z9ueGBSOwDMbUgFtJdFHBYzAP7w2Pwe/1yS5sdx5LJKmJ4eW4RuUbVheA
+         QMXg==
+X-Gm-Message-State: AO0yUKXInvL1Swa/ymDZhfliFdsX5Cun7UYWw6QaPNbEtPxuIuQqVXwf
+        vRBRKItDUBafNA/mbImUY7/mA9A9WR5asAyN
+X-Google-Smtp-Source: AMrXdXstYaxVq/y0CPfeCXYOirMJcFr5cuF7T2HGwNwV3a5ptZWE8vrQSJvhwa7Ta/d+hPzBpT9LhQ==
+X-Received: by 2002:a05:6000:383:b0:2bc:7ef0:53bd with SMTP id u3-20020a056000038300b002bc7ef053bdmr48272310wrf.17.1674819857575;
+        Fri, 27 Jan 2023 03:44:17 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id z14-20020a5d4c8e000000b002bfc2d0eff0sm3807760wrs.47.2023.01.27.03.44.14
+        by smtp.gmail.com with ESMTPSA id z14-20020a5d4c8e000000b002bfc2d0eff0sm3807760wrs.47.2023.01.27.03.44.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 03:44:15 -0800 (PST)
+        Fri, 27 Jan 2023 03:44:17 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 04/11] arm64: dts: qcom: sc7180: align RPMh regulator nodes with bindings
-Date:   Fri, 27 Jan 2023 12:43:40 +0100
-Message-Id: <20230127114347.235963-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 05/11] arm64: dts: qcom: sc8280xp: align RPMh regulator nodes with bindings
+Date:   Fri, 27 Jan 2023 12:43:41 +0100
+Message-Id: <20230127114347.235963-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230127114347.235963-1-krzysztof.kozlowski@linaro.org>
 References: <20230127114347.235963-1-krzysztof.kozlowski@linaro.org>
@@ -82,53 +82,71 @@ for RPMh regulator nodes.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sc7180-idp.dts      | 4 ++--
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts                  | 6 +++---
+ arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-idp.dts b/arch/arm64/boot/dts/qcom/sc7180-idp.dts
-index 6ea8dd7d3e01..c3bdd3295c02 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-idp.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-idp.dts
-@@ -90,7 +90,7 @@ mdata_mem: mpss-metadata {
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+index 20c629172477..2f43b2fbc2a1 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+@@ -142,7 +142,7 @@ linux,cma {
  };
  
  &apps_rsc {
--	pm6150-rpmh-regulators {
+-	pmc8280-1-rpmh-regulators {
 +	regulators-0 {
- 		compatible = "qcom,pm6150-rpmh-regulators";
- 		qcom,pmic-id = "a";
+ 		compatible = "qcom,pm8350-rpmh-regulators";
+ 		qcom,pmic-id = "b";
  
-@@ -212,7 +212,7 @@ vreg_l19a_2p9: ldo19 {
+@@ -179,7 +179,7 @@ vreg_l6b: ldo6 {
  		};
  	};
  
--	pm6150l-rpmh-regulators {
+-	pmc8280c-rpmh-regulators {
 +	regulators-1 {
- 		compatible = "qcom,pm6150l-rpmh-regulators";
+ 		compatible = "qcom,pm8350c-rpmh-regulators";
  		qcom,pmic-id = "c";
  
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index dcb179b2a3fb..423630c4d02c 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -438,7 +438,7 @@ flash@0 {
+@@ -208,7 +208,7 @@ vreg_l13c: ldo13 {
+ 		};
+ 	};
+ 
+-	pmc8280-2-rpmh-regulators {
++	regulators-2 {
+ 		compatible = "qcom,pm8350-rpmh-regulators";
+ 		qcom,pmic-id = "d";
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+index b60185d9bdea..e41b630141fc 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+@@ -287,7 +287,7 @@ map1 {
  };
  
  &apps_rsc {
--	pm6150-rpmh-regulators {
+-	pmc8280-1-rpmh-regulators {
 +	regulators-0 {
- 		compatible = "qcom,pm6150-rpmh-regulators";
- 		qcom,pmic-id = "a";
+ 		compatible = "qcom,pm8350-rpmh-regulators";
+ 		qcom,pmic-id = "b";
  
-@@ -551,7 +551,7 @@ pp2850_l19a: ldo19 {
+@@ -338,7 +338,7 @@ vreg_l6b: ldo6 {
  		};
  	};
  
--	pm6150l-rpmh-regulators {
+-	pmc8280c-rpmh-regulators {
 +	regulators-1 {
- 		compatible = "qcom,pm6150l-rpmh-regulators";
+ 		compatible = "qcom,pm8350c-rpmh-regulators";
  		qcom,pmic-id = "c";
+ 		vdd-bob-supply = <&vreg_vph_pwr>;
+@@ -372,7 +372,7 @@ vreg_bob: bob {
+ 		};
+ 	};
+ 
+-	pmc8280-2-rpmh-regulators {
++	regulators-2 {
+ 		compatible = "qcom,pm8350-rpmh-regulators";
+ 		qcom,pmic-id = "d";
  
 -- 
 2.34.1
