@@ -2,125 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945F167E841
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B68A467E6DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233034AbjA0O1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
+        id S234808AbjA0Ng3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232974AbjA0O11 (ORCPT
+        with ESMTP id S233822AbjA0Ng1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:27:27 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140E78000C;
-        Fri, 27 Jan 2023 06:27:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674829633; x=1706365633;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tQHYwsHuQmv3UmxqSGxgXFuhINcA80Abo3LA82di77s=;
-  b=Y7pVM78jO0HE/dAFn2MC+n1QPcxTlf+t0PCaJgf3dKQnetze2zawxNAu
-   q69c0J2MEFcOOMiANVxtmQN2YSFCzI/yfSYFrFoL7gih1s6pI1UX1Lqaz
-   ebdR9lldf4LLky8ii0uGc63YhYJQVTcR9ws1tNEIry4m1eMLhDDqwUp5h
-   Dn9yFRdfhdeLgVSXSJmR1xO7oCDOs3QbxeZ123IW4PXfOd7qfIuuTudvF
-   iPudNFbwLbGMIXMiu/sYVEGsJEIRIYeTvL0d017HIw/NebZuJStEhhnyK
-   d7tN/yT832fJekgxfUe0dhJ/ea4EwWLWoVmk9sHsrPdEmlplLDFYsFgyp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="310716130"
-X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="310716130"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 06:27:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="731859354"
-X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="731859354"
-Received: from skxmcp01.bj.intel.com ([10.240.193.86])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Jan 2023 06:27:10 -0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
-        kvm@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: selftest: Add dependency rules in makefile for C source code
-Date:   Fri, 27 Jan 2023 21:36:01 +0800
-Message-Id: <20230127133601.1165472-1-yu.c.zhang@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 Jan 2023 08:36:27 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C02416AE2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:36:25 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-50660e2d2ffso67386197b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:36:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lm/eKWA7nHZbFTBeP8HSFE1ZhC80UbaJbWzWM/DYvEY=;
+        b=BisZtvp+WU+ShLvP3I22aaq18YE/l/TkOw+2mCy4ukjPx6MncMr3F9Daz1CCvviroc
+         iXvzrCfp3Xi7y6KwebzWm/c2OkAk2REum6hp9Z5cRuZOe8WHWSHG62dgDgu2EY0QBjtU
+         gGHj1fHgzErEQ0A59YAzSnD6gjCdGpwr7IAiN0xyfXAwgLDcBS5YZVH7Ln/mjEwRXzGG
+         0G+7uw3p/BamzKZyP9Jk3FUU4maF5JVmRlFe9qAbVAndg706C5knJw68LFlcaDjSGX2r
+         VW6QCPJ9QpxRGV+P3FyDncclkjGaXfpCfPBk5yqdtpTZrbE8dGHNatviN9MhYlsY+yOE
+         WOcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lm/eKWA7nHZbFTBeP8HSFE1ZhC80UbaJbWzWM/DYvEY=;
+        b=6IFYzF6E5NeMfn11M5WTmP5MAesZipw/k8Ys5qYMRvvQMIhEnmgy2xXWQ1oBeNjURN
+         08pFG6NeWXeA/ugzOpb+oiVeUd2eeHrqT16OMCgi4kRD869XwjzsJR4ncA/GiQoUabX0
+         wTe+r20Qz+F/bTi5S8AgmGlgjTLtwJ9xO4Mllr0vhcnWzOdD6aYyEVH259j3QaV9WTSI
+         m01gBvn/+4Rf9jKe2hoDFS2QdKtPlnKNaHcboHQVwVfJ3U4mUiFioYrCZptmfKf6oJL9
+         Ju8IK+ev3Xl8EmstCoVm6uxV9lIAAA+GAv7BTyJ4bq3132j+ZFtmtyaWI92mkCb8ff+X
+         mTMg==
+X-Gm-Message-State: AFqh2kr3aw7rqbR2vVXAwDCka0BLS98QseYTb2yiKbWspN8fFRbM3wEu
+        7zqvQB3EliovXmX/UrGVL/6SFmcW8MotKGUveou8qA==
+X-Google-Smtp-Source: AMrXdXsvsMo+RSYvpOF8LTfpgwn21rd/yE1KiL3zhHjBbnv+ngzGNNuYOcljzya2rYscdB+tNAcQ8WeslCISgqryo9I=
+X-Received: by 2002:a81:6842:0:b0:4ff:e4bc:b56f with SMTP id
+ d63-20020a816842000000b004ffe4bcb56fmr3635887ywc.488.1674826584821; Fri, 27
+ Jan 2023 05:36:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127101149.3475929-1-arnd@kernel.org> <20230127101149.3475929-6-arnd@kernel.org>
+In-Reply-To: <20230127101149.3475929-6-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Jan 2023 14:36:13 +0100
+Message-ID: <CACRpkdaUfjWp=DFajpacyfK7vi==r1YSZ27m3ERiuZj7SB7Dww@mail.gmail.com>
+Subject: Re: [PATCH v2 5/7] gpiolib: remove legacy gpio_export
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, KVM selftests have to run "make clean && make" to rebuild the
-entire test suite each time a header file is modified. Define "-MD" as
-an EXTRA_CFLAGS, so we can generate the dependency rules for each target
-object, whose prerequisites contains the source file and the included header
-files as well. And including those dependency files in KVM selftests' makefile
-will release us from such annoyance.
+On Fri, Jan 27, 2023 at 11:12 AM Arnd Bergmann <arnd@kernel.org> wrote:
 
-Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
----
- tools/testing/selftests/kvm/Makefile | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> There are only a handful of users of gpio_export() and
+> related functions.
+>
+> As these are just wrappers around the modern gpiod_export()
+> helper, remove the wrappers and open-code the gpio_to_desc
+> in all callers to shrink the legacy API.
+>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 1750f91dd936..b329e0d1a460 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -180,6 +180,8 @@ TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(ARCH_DIR))
- TEST_GEN_PROGS_EXTENDED += $(TEST_GEN_PROGS_EXTENDED_$(ARCH_DIR))
- LIBKVM += $(LIBKVM_$(ARCH_DIR))
- 
-+OVERRIDE_TARGETS = 1
-+
- # lib.mak defines $(OUTPUT), prepends $(OUTPUT)/ to $(TEST_GEN_PROGS), and most
- # importantly defines, i.e. overwrites, $(CC) (unless `make -e` or `make CC=`,
- # which causes the environment variable to override the makefile).
-@@ -198,9 +200,11 @@ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
- 	-fno-builtin-memcmp -fno-builtin-memcpy -fno-builtin-memset \
- 	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
- 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
--	-I$(<D) -Iinclude/$(ARCH_DIR) -I ../rseq -I.. $(EXTRA_CFLAGS) \
-+	-I$(<D) -Iinclude/$(ARCH_DIR) -I ../rseq -I.. \
- 	$(KHDR_INCLUDES)
- 
-+EXTRA_CFLAGS += -MD
-+
- no-pie-option := $(call try-run, echo 'int main(void) { return 0; }' | \
-         $(CC) -Werror $(CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
- 
-@@ -218,11 +222,22 @@ LIBKVM_S_OBJ := $(patsubst %.S, $(OUTPUT)/%.o, $(LIBKVM_S))
- LIBKVM_STRING_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_STRING))
- LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ)
- 
--EXTRA_CLEAN += $(LIBKVM_OBJS) cscope.*
-+TEST_GEN_OBJ = $(patsubst %, %.o, $(TEST_GEN_PROGS))
-+TEST_GEN_OBJ += $(patsubst %, %.o, $(TEST_GEN_PROGS_EXTENDED))
-+TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_OBJ))
-+TEST_DEP_FILES += $(patsubst %.o, %.d, $(LIBKVM_OBJS))
-+-include $(TEST_DEP_FILES)
-+
-+$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM_OBJS) $(LDLIBS) -o $@
-+$(TEST_GEN_OBJ): %.o: %.c
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(EXTRA_CFLAGS) $(TARGET_ARCH) -c $< -o $@
-+
-+EXTRA_CLEAN += $(LIBKVM_OBJS) $(TEST_DEP_FILES) $(TEST_GEN_OBJ) cscope.*
- 
- x := $(shell mkdir -p $(sort $(dir $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ))))
- $(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c
--	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(EXTRA_CFLAGS) $(TARGET_ARCH) -c $< -o $@
- 
- $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
--- 
-2.25.1
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
+Yours,
+Linus Walleij
