@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F0067E96A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF2767E966
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234492AbjA0P0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
+        id S234462AbjA0P0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234478AbjA0P0f (ORCPT
+        with ESMTP id S229456AbjA0P0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:26:35 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA237C704
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:26:32 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id me3so14653544ejb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:26:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9lCm2tMGNVKG6SWJp8e+YHP+g7R9bSQ20DL1jjRz9r0=;
-        b=bbjGC6z9OVURgKt9VG4FKQztxD1j00SaCwSLpdaFsCfe20fjvGBgYkKNYV6QnSvb5U
-         mmMjeNscAdpiKrqEuEotSNiPB7c7sAExKvVpYBbUuZZUmZsfwtNVtXVqXNbDj4fvNjmY
-         MdG+81V/FPZXqhHnAP8sdtMbLPIsHS1gd4WuA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9lCm2tMGNVKG6SWJp8e+YHP+g7R9bSQ20DL1jjRz9r0=;
-        b=vtGi7DYQ2xbpIgEyQn8eIqsiWFogcHE6tp9reJjJguDgi0QGr9vYAZjK2Gg26Q+ohk
-         MssQUvUqUCBSOvIKJ/WehM63WqVih8fsbpC/OiZO2eBBQJay22153l6HBndvqFxBqVOq
-         OXqcTgyVyDFJ7MzrXMpar6Dp0mxPtRdKfIRbEOF3w0OK/vmvsjjCYlJy3s5BdofEeENS
-         nNa4cGl8UxO4fX5ZEnHc1Q/+wBPw3fzoW23gkv7/Ya8vLia/0lSQxXPF2/oChznEBaWg
-         5kbTGNGPuqhusfTI58hGGzpSqIFayR26p8tKePLmQsFgJXrMZeY8DVcKnGAFqFfuznEu
-         XniQ==
-X-Gm-Message-State: AFqh2kqx1LCkdn6JdPm+KrHXZq7luA5dK3jQTqa+xZmXoOg1cR7mZPoA
-        S9tS2RV+oqBkPmIAif26uOB3DvYFPJun1hmClP1pdg==
-X-Google-Smtp-Source: AMrXdXsTaQwz9TAD4rVJPOzzyithzlpBYYsLgWwxH4XVWPutH94i7xmf530C53weISltIhZ9TNtMoQ7rNydz0nbu+IE=
-X-Received: by 2002:a17:906:2e94:b0:84d:ac8:ec37 with SMTP id
- o20-20020a1709062e9400b0084d0ac8ec37mr6058289eji.138.1674833190571; Fri, 27
- Jan 2023 07:26:30 -0800 (PST)
+        Fri, 27 Jan 2023 10:26:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F28126C7;
+        Fri, 27 Jan 2023 07:26:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C293461CB1;
+        Fri, 27 Jan 2023 15:26:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CED7C433D2;
+        Fri, 27 Jan 2023 15:26:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674833177;
+        bh=Z5ZP4DaoVQ2QC+fknVQWZA212TOY3bzBXTC09PEvXyk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UNQtfsRxBJ762s3ZPwg0veDwjdbh9f/dsZi1AmCtvr9IPvhA0QgR1W5fc+eJTaAt3
+         3fIhlHDoqClG+KAB/H/wAuUrSuNj0LJHqLMV/uBDfyjwHiuKiERks4NM9NM+em8apV
+         w5G6CF+0nK2wp/CaTdxUqAYilQ43XOrMMdWOp8jh9v31Ct+xn41MVrhcIwRv206g44
+         qYy/imjKEgDdF5TwocAS4hjWK9xw6Tq23xSVFKGKCip7+qJwObU+WFo7VEheZUAZiH
+         Gvyj1Mpgtq8tKz37ECKoD/HX2f6lleyoY3nC1qGP5ilt2/h8ZreM+2QjJB8jm2X6hL
+         Rh80pil6+W1Hg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pLQcU-0001Cp-Fp; Fri, 27 Jan 2023 16:26:26 +0100
+Date:   Fri, 27 Jan 2023 16:26:26 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 19/24] rtc: pm8xxx: add support for uefi offset
+Message-ID: <Y9PtIiD1o8eBq2wk@hovoldconsulting.com>
+References: <20230126142057.25715-1-johan+linaro@kernel.org>
+ <20230126142057.25715-20-johan+linaro@kernel.org>
+ <Y9PrdqLHZpZrdGJ4@mail.local>
 MIME-Version: 1.0
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Fri, 27 Jan 2023 16:26:19 +0100
-Message-ID: <CAJfpeguv6BpewqDjDLqQv2yaR+nPLmmAp++JWNquWpXt7eiepQ@mail.gmail.com>
-Subject: [GIT PULL] overlayfs fixes for 6.2-rc6
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        overlayfs <linux-unionfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9PrdqLHZpZrdGJ4@mail.local>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,24 +66,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Jan 27, 2023 at 04:19:18PM +0100, Alexandre Belloni wrote:
+> On 26/01/2023 15:20:52+0100, Johan Hovold wrote:
+> > On many Qualcomm platforms the PMIC RTC control and time registers are
+> > read-only so that the RTC time can not be updated. Instead an offset
+> > needs be stored in some machine-specific non-volatile memory, which the
+> > driver can take into account.
+> > 
+> > Add support for storing a 32-bit offset from the GPS time epoch in a
+> > UEFI variable so that the RTC time can be set on such platforms.
+> > 
+> 
+> Why are you using the GPS epoch? This seems pretty random.
 
-Please pull from:
+Tell that to the Qualcomm firmware team. ;)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/vfs.git
-tags/ovl-fixes-6.2-rc6
+Perhaps I could have made it more clear, but this is the format that the
+firmware uses so Linux is not free to pick a different base here (or
+time would differ ten years between UEFI/Windows and Linux).
 
-Fix two bugs, a recent one introduced in the last cycle, and an older
-one from v5.11.
+> > The UEFI variable is
+> > 
+> >             882f8c2b-9646-435f-8de5-f208ff80c1bd-RTCInfo
+> > 
+> > and holds a 12-byte structure where the first four bytes is a GPS time
+> > offset in little-endian byte order.
 
-Thanks,
-Miklos
-
----
-Miklos Szeredi (2):
-      ovl: fix tmpfile leak
-      ovl: fail on invalid uid/gid mapping at copy up
-
----
- fs/overlayfs/copy_up.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Johan
