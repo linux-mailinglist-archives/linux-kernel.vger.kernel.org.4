@@ -2,169 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3297367E0D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F12F67E0DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjA0JzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
+        id S232913AbjA0J4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:56:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbjA0JzO (ORCPT
+        with ESMTP id S232616AbjA0J4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:55:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2481A48F;
-        Fri, 27 Jan 2023 01:55:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9295E61AB8;
-        Fri, 27 Jan 2023 09:55:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6AF0C4339B;
-        Fri, 27 Jan 2023 09:55:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674813313;
-        bh=5+bs5aiGTjY9WC1x5uledKU4mJCnDHuXC5DFVXe6lAo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jtRni5CDnfZswzaTTsnrQcnBvMwBcF6WAEshIJsnoyDw/tjbw9drJLNUSvrYkNFXi
-         BS0xZjgibbv3Q2j2hhENXhn+MC1sY0biL2oMMjQfiwPSzBy3DhkmoCYH1ODGdqwubE
-         fYIH411f+C7ZqWaz+MwQpsXewSfTMrDLWp+nSlF5uVPmOCw6Kkzyr2ySi+H5Wos8d0
-         cNj0Gi3jYZFttwfeiPYLfnf7+fL3vXPLkd7DwScf8MePV28b2OOZI5KNLaWSbKUUqB
-         xx/uX1UEcGhWpme6N37oeQfjCSNwMobv/NOYRmJXVI1doysddq5cie2g/SfFRvIyZ+
-         byBxteYY7PyLw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pLLS5-0005Tk-KY; Fri, 27 Jan 2023 10:55:21 +0100
-Date:   Fri, 27 Jan 2023 10:55:21 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sa8295p-adp: Add max20411 on
- i2c12
-Message-ID: <Y9OfiTDwFHN0RR5G@hovoldconsulting.com>
-References: <20230124184440.1421074-1-quic_bjorande@quicinc.com>
- <20230124184440.1421074-4-quic_bjorande@quicinc.com>
+        Fri, 27 Jan 2023 04:56:20 -0500
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7EA1A48F;
+        Fri, 27 Jan 2023 01:56:19 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id b18-20020a056830311200b0068aed2e014fso1089676ots.13;
+        Fri, 27 Jan 2023 01:56:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9l2Z180oEHBv0ophrRyrSwGxvlM3VzZAmGs8B6dfBoE=;
+        b=EFJVjM1tzgT+IwjAlmwyaVLUgAC1QrboMm9WndKfAG47m9Yv90ZJfyO1j2wdQvDCKk
+         FsXq8jvjdjR9dFm3/ZfYnle/WHinL1cI+I2GhWsYp0K1/O1WFJ+0T6IJAQDkcK5wrcS0
+         ugrNVNnqaJvKin0ygvxVcf6CTTwG0J0pvTKG906uBNzoPgI+/eSjvJqXizRqQRTM8mEV
+         yD8/9U/JD3gZtDIyya6BnYOaZG+F4/psvtvJCJicmRmquYQmrZ/MfYzLmuk1Mbc6Kvw+
+         aIV+ir6US0QvBJdKeHy9xS+nWjqaGTkVRxt/gI6S3T6H06Jqia/tZznfw8GpszFfPgcH
+         D5xg==
+X-Gm-Message-State: AFqh2kptM96IAsGd3UNyk2Z3t/CDb71lLWCMis01NAM7ODQuJeXQd8YX
+        i/XUhyxxupU0+MDUZaghCU70bh5OiuW4Bw==
+X-Google-Smtp-Source: AMrXdXs3hW/pFHKwBqsnwhe8tFX9M7xVr0nOBzkm69iU1b8T1/DgRbBAa866hqzyjLRDSC1kYcjRIg==
+X-Received: by 2002:a9d:6b0c:0:b0:684:c12a:c2f0 with SMTP id g12-20020a9d6b0c000000b00684c12ac2f0mr23743344otp.28.1674813378843;
+        Fri, 27 Jan 2023 01:56:18 -0800 (PST)
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com. [209.85.210.44])
+        by smtp.gmail.com with ESMTPSA id g20-20020a9d6b14000000b0068848d6b231sm1558104otp.30.2023.01.27.01.56.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 01:56:18 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id u13-20020a056830118d00b00686def09868so1936148otq.7;
+        Fri, 27 Jan 2023 01:56:18 -0800 (PST)
+X-Received: by 2002:a81:1216:0:b0:506:6b5d:523c with SMTP id
+ 22-20020a811216000000b005066b5d523cmr743466yws.283.1674813367375; Fri, 27 Jan
+ 2023 01:56:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124184440.1421074-4-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127001141.407071-1-saravanak@google.com> <20230127001141.407071-6-saravanak@google.com>
+ <Y9OZh0ZqtnqmKcvT@smile.fi.intel.com>
+In-Reply-To: <Y9OZh0ZqtnqmKcvT@smile.fi.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 27 Jan 2023 10:55:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU2eUkpRDD_4u71pfXQd_GixStJh56NJ0Kh+dR6h9phiA@mail.gmail.com>
+Message-ID: <CAMuHMdU2eUkpRDD_4u71pfXQd_GixStJh56NJ0Kh+dR6h9phiA@mail.gmail.com>
+Subject: Re: [PATCH v2 05/11] driver core: fw_devlink: Add DL_FLAG_CYCLE
+ support to device links
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maxim Kiselev <bigunclemax@gmail.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 10:44:40AM -0800, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> The SA8295P ADP has a Maxim max20411 step-down converter on i2c12.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Changes since v1:
-> - i2c node had changed name
-> 
->  arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 41 ++++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> index bb4270e8f551..642000d95812 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> @@ -266,6 +266,27 @@ &dispcc1 {
->  	status = "okay";
->  };
->  
-> +&i2c12 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&i2c12_state>;
-> +
-> +	status = "okay";
-> +
-> +	vdd_gfx: regulator@39 {
+On Fri, Jan 27, 2023 at 10:30 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Thu, Jan 26, 2023 at 04:11:32PM -0800, Saravana Kannan wrote:
 
-Nit: Should the label be named 'vreg_gfx' (or 'vreg_vdd_gfx)') for
-consistency with rest of the file?
+> >                              DL_FLAG_AUTOREMOVE_SUPPLIER | \
+> >                              DL_FLAG_AUTOPROBE_CONSUMER  | \
+> >                              DL_FLAG_SYNC_STATE_ONLY | \
+> > -                            DL_FLAG_INFERRED)
+> > +                            DL_FLAG_INFERRED | \
+> > +                            DL_FLAG_CYCLE)
+>
+> You can make less churn by squeezing the new one above the last one.
 
-> +		compatible = "maxim,max20411";
-> +		reg = <0x39>;
-> +
-> +		regulator-name = "vdd_gfx";
-> +		regulator-min-microvolt = <800000>;
-> +		regulator-max-microvolt = <968750>;
-> +
-> +		enable-gpios = <&pmm8540a_gpios 2 GPIO_ACTIVE_HIGH>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&vdd_gfx_enable_state>;
-> +	};
-> +};
-> +
->  &mdss0 {
->  	status = "okay";
->  };
-> @@ -476,6 +497,10 @@ &pcie4_phy {
->  	status = "okay";
->  };
->  
-> +&qup1 {
-> +	status = "okay";
-> +};
-> +
->  &qup2 {
->  	status = "okay";
->  };
-> @@ -636,7 +661,23 @@ &xo_board_clk {
->  
->  /* PINCTRL */
->  
-> +&pmm8540a_gpios {
-> +	vdd_gfx_enable_state: vdd-gfx-enable-state {
+And avoiding some future churn by introducing alphabetical order.
 
-For consistency with the rest of sc8280xp, can you rename this
+Gr{oetje,eeting}s,
 
-	vdd_gfx_en: vdd-gfx-en-state {
+                        Geert
 
-(i.e. drop the 'state' from the label and shorten 'enable')?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> +		pins = "gpio2";
-> +		function = "normal";
-> +		output-enable;
-> +	};
-> +};
-> +
->  &tlmm {
-> +	i2c12_state: i2c12-state {
-
-Similar here, this should be
-
-	i2c12_default: i2c12-default-state {
-
-> +		pins = "gpio0", "gpio1";
-> +		function = "qup12";
-> +
-
-And this newline can be removed.
-
-> +		drive-strength = <2>;
-> +		bias-pull-up;
-> +	};
-> +
->  	pcie2a_default: pcie2a-default-state {
->  		clkreq-n-pins {
->  			pins = "gpio142";
-
-Johan
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
