@@ -2,115 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD8867EA16
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D618167EA69
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbjA0P5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:57:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S231382AbjA0QIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbjA0P5v (ORCPT
+        with ESMTP id S232727AbjA0QH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:57:51 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFD5FF31;
-        Fri, 27 Jan 2023 07:57:50 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RFVHkI018014;
-        Fri, 27 Jan 2023 15:57:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=yu37LESpuJzTHACVz2qu9ifN28/IfF4Kd6w+Kg375ec=;
- b=kpQkie2qInefAzJMG/T1Khbae0NotYO5QZDj5IXypGlg7xVKiu13HZ1wsmhUP4pSHYUc
- +7TJM9VVmgHcogNnMUEHwoQBldna5JUeEViveVRO49rM1r3lav2PL8MJrwtkY2sYri7a
- Fr5cjXLA7K6pTEdn9oaT4Z+Bf+HJN8c9TSBIYl8zdNiarYQCPapMgWoHx1tkl5LLZt99
- r9mObCDS2n7oD9BTELq3r/ooV8zosmPYTrFqyb4BuDL6n1O2JJ/MdZx+QyYRJnedFRDG
- YKaxINcOLPwGWJQm5ig2clgDXfj7WQcjmpDsbdBktbvh876XhZN9dkWlQBtjDgMM9djr kg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nc956rt24-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 15:57:46 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30RFvj1p030736
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 15:57:45 GMT
-Received: from [10.50.41.100] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 27 Jan
- 2023 07:57:40 -0800
-Message-ID: <4829f14a-5d00-3c00-f963-25f039ee74bd@quicinc.com>
-Date:   Fri, 27 Jan 2023 21:27:37 +0530
+        Fri, 27 Jan 2023 11:07:58 -0500
+X-Greylist: delayed 573 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 Jan 2023 08:07:56 PST
+Received: from out-227.mta0.migadu.com (out-227.mta0.migadu.com [91.218.175.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E066820691
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:07:52 -0800 (PST)
+Message-ID: <a4b3ee35-a0d7-80f6-c64f-f9056c5b6110@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1674835097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gvi6m70GbKqrQkpAzMUr7WtmhWXUZdYOPES9ccn9egI=;
+        b=KRE4nOsctuEOl2LC2RDrgOWHYDOICSl9b3eAwTINeDAKX61JelkAi9iTzhDSLN6i0N4x/C
+        8V/akap4D9bywbnfxgFBx/MT1rGL7DIrtaCptD2OExsatEpXKZ+6pjRJFX1M9/SrT2CaWU
+        v98jc0dGUQ1VNvLSaosQbnwToi+t2Xs=
+Date:   Fri, 27 Jan 2023 23:57:40 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/6] soc: qcom: smd-rpm: Add IPQ9574 compatible
+Subject: Re: [PATCH v3 2/4] KVM: arm64: Add helper vgic_write_guest_lock()
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <lgirdwood@gmail.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_srichara@quicinc.com>,
-        <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <20230113150310.29709-1-quic_devipriy@quicinc.com>
- <20230113150310.29709-2-quic_devipriy@quicinc.com>
- <37755ba1-e8d0-cd9e-73a4-6501746022d8@linaro.org>
- <Y8UxHZx6Mkt3sHXq@sirena.org.uk>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <Y8UxHZx6Mkt3sHXq@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.linux.dev
+Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, pbonzini@redhat.com,
+        corbet@lwn.net, maz@kernel.org, james.morse@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org,
+        yuzhe@nfschina.com, isaku.yamahata@intel.com, seanjc@google.com,
+        ricarkol@google.com, eric.auger@redhat.com, renzhengeek@gmail.com,
+        reijiw@google.com, shan.gavin@gmail.com
+References: <20230126235451.469087-1-gshan@redhat.com>
+ <20230126235451.469087-3-gshan@redhat.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Zenghui Yu <zenghui.yu@linux.dev>
+In-Reply-To: <20230126235451.469087-3-gshan@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fcOXEIAyNG8v0BpcuzC6TTUrnYjkQmu4
-X-Proofpoint-ORIG-GUID: fcOXEIAyNG8v0BpcuzC6TTUrnYjkQmu4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-27_09,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- lowpriorityscore=0 phishscore=0 impostorscore=0 priorityscore=1501
- bulkscore=0 suspectscore=0 malwarescore=0 clxscore=1015 mlxscore=0
- mlxlogscore=549 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301270148
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[ just coming back from holiday, sorry for the late reply ]
 
+On 2023/1/27 07:54, Gavin Shan wrote:
+> Currently, the unknown no-running-vcpu sites are reported when a
+> dirty page is tracked by mark_page_dirty_in_slot(). Until now, the
+> only known no-running-vcpu site is saving vgic/its tables through
+> KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_SAVE_TABLES} command on KVM device
+> "kvm-arm-vgic-its". Unfortunately, there are more unknown sites to
+> be handled and no-running-vcpu context will be allowed in these
+> sites: (1) KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_RESTORE_TABLES} command
+> on KVM device "kvm-arm-vgic-its" to restore vgic/its tables. The
+> vgic3 LPI pending status could be restored. (2) Save vgic3 pending
 
-On 1/16/2023 4:42 PM, Mark Brown wrote:
-> On Fri, Jan 13, 2023 at 05:42:36PM +0100, Krzysztof Kozlowski wrote:
->> On 13/01/2023 16:03, devi priya wrote:
->>> Adding compatible string to support RPM communication over SMD for
->>> IPQ9574 SoC
->>>
->>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>
->> What exactly was developed here but the other author?
+We typically write it as "VGICv3".
+
+> table through KVM_DEV_ARM_{VGIC_GRP_CTRL, VGIC_SAVE_PENDING_TABLES}
+> command on KVM device "kvm-arm-vgic-v3".
 > 
-> It's fairly clear looking at this in the context of the series
-> that the same tags have been applied to every patch in the
-> series.  Probably a patch like this was actually written by just
-> one person but there's a decent chance that it's just been
-> forgotten who it was and fundamentally it just doesn't matter
-> that much.
+> In order to handle those unknown cases, we need a unified helper
+> vgic_write_guest_lock(). struct vgic_dist::save_its_tables_in_progress
+> is also renamed to struct vgic_dist::save_tables_in_progress.
 
-Yeah!
-Will drop the tag
+How about renaming it to 'write_tables_in_progress' which would look a
+bit more generic? The rest looks good to me.
 
-
-Best Regards,
-Devi Priya
+Thanks,
+Zenghui
