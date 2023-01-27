@@ -2,214 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9C167DD64
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 564CC67DD67
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjA0GWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 01:22:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        id S231655AbjA0GXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 01:23:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbjA0GV3 (ORCPT
+        with ESMTP id S231829AbjA0GW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 01:21:29 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FF659B78
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 22:21:28 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id v81so2006637vkv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 22:21:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tt+YDrfHwbP/tcqrYWX78c8eWt6PlwIsaHwmczL9W/8=;
-        b=Lc0HoLn4SumSw3g/7Q0fmfwQdUGLwQtH9azFyLymVbaroIbQr9j361vb7I7LVPwNoZ
-         khlpsS+0BcPw9FSegocOalyL0J8VRO05esrxqf6ptVdK6HOjA3L519+IYIorqNuxDpGs
-         ECTacR/nUdVmKWrXTWtaL/BxFTkJi++aZP3A/zsLrZU0jbRZpV9sl1/A9CcOca00uWQO
-         vVeSAyUzrTD1IV0jFO+gYDudj6sxQQTFLXyPNKrbgpeyuh84/tk3XPkjymUWub/5bz34
-         RStm890CYMcZUuKTZQnDXYB1WSwfd0q9BNOzgz9sjkvh24e5nE/s5WMaySsz5RXHA/53
-         VliA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tt+YDrfHwbP/tcqrYWX78c8eWt6PlwIsaHwmczL9W/8=;
-        b=UxMYmdNofPoftoc3yPy7iIcUY6z7RdaVW7ejWPqqXLym5Wzfd1qezd+6+OXiMLRSpI
-         U0x1OWpoju8rl2MfsXeL+rlM2gsjuf9Wjx6gTisAy3M4e9JdNxbtLs+vaa3Y1rfXANIo
-         Y4GE+Jt2FzdpfhhqkjEf2838A0pAT7QBHt0yuHR+yFcdSBT7EW1/rDF+pmbZW7rZWTPC
-         AUhOILec2GBu8k2+Pydy+WKr9E2F3A2PwVUShG7KsXG38Mmdyfas9w4XydqO0/NU7uGY
-         sUjKlRIifaMI6yKRR6XT7o5a92DjTwTmvlPfyNE33KHCXz/tm6FTwAVDSTEsO2lzz3lg
-         rKJg==
-X-Gm-Message-State: AO0yUKVv+TVr6I794Vy9YcF89+eLnXBpyJyxWg/zUmXqmCmgSmlPfRQA
-        mETrvNnt4WwQBZWrYblGHPd2q8V0h0CqrEhEPn/cRw==
-X-Google-Smtp-Source: AK7set8AcJdo7lxMknpIr8EMrr/k6YI700Ac3qvKocMqzX82hKGCVFSAaduSx6qZuz8Jvaoa45m6sSpYNNwMQI5oicM=
-X-Received: by 2002:ac5:c193:0:b0:3e8:35d9:7a6f with SMTP id
- z19-20020ac5c193000000b003e835d97a6fmr569665vkb.34.1674800487107; Thu, 26 Jan
- 2023 22:21:27 -0800 (PST)
+        Fri, 27 Jan 2023 01:22:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84689359C;
+        Thu, 26 Jan 2023 22:22:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D1C8B80B19;
+        Fri, 27 Jan 2023 06:22:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77553C433D2;
+        Fri, 27 Jan 2023 06:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674800573;
+        bh=QUqtfU/P3ivnDBusScut971BX1chlQ7xKCkHREbxHkk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z68xagY6Yt3NyLoWbSYVy8V0DsBeB8/Lzemv0q3NBvo6Fdjn9gU9M1L8P+RzfwHQe
+         8rY8MTIOnus5gdjNsuYlA013fywv+SMG5lKUSAzfk0Yw785xtBkIatqmZ7WES4KdT1
+         rRNO2K/o3Gt3jkJwFBje9BhQZQORF0gezxorr1Ik=
+Date:   Fri, 27 Jan 2023 07:22:52 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: MAX3421: Handle USB NAK correctly
+Message-ID: <Y9NtvKbY1nfoVtw9@kroah.com>
+References: <20230127024734.8777-1-mark.tomlinson@alliedtelesis.co.nz>
 MIME-Version: 1.0
-References: <20230124080350.2275652-1-davidgow@google.com> <CAGS_qxq4vWvRJ89477S+rxHYLvnc2xN435GQ4+BvpLgqon8miw@mail.gmail.com>
-In-Reply-To: <CAGS_qxq4vWvRJ89477S+rxHYLvnc2xN435GQ4+BvpLgqon8miw@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 27 Jan 2023 14:21:15 +0800
-Message-ID: <CABVgOSn+F3WOA5hR+H5x_fW=jRTGATmO+nycZ7R7mXN8X7qNvw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] kunit: Add "hooks" to call into KUnit when it's
- built as a module
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Rae Moar <rmoar@google.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127024734.8777-1-mark.tomlinson@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 at 13:38, 'Daniel Latypov' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> On Tue, Jan 24, 2023 at 12:04 AM David Gow <davidgow@google.com> wrote:
-> >
-> > KUnit has several macros and functions intended for use from non-test
-> > code. These hooks, currently the kunit_get_current_test() and
-> > kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=m.
-> >
-> > In order to support this case, the required functions and static data
-> > need to be available unconditionally, even when KUnit itself is not
-> > built-in. The new 'hooks.c' file is therefore always included, and has
-> > both the static key required for kunit_get_current_test(), and a
-> > function pointer to the real implementation of
-> > __kunit_fail_current_test(), which is populated when the KUnit module is
-> > loaded.
-> >
-> > A new header, kunit/hooks-table.h, contains a table of all hooks, and is
-> > repeatedly included with different definitions of the KUNIT_HOOK() in
-> > order to automatically generate the needed function pointer tables. When
->
-> Perhaps I'm overlooking something and this is a dumb question.
->
-> Is there a reason we can't go with a less-clever approach?
-> Like have a global struct?
-> We could memset it to 0 to clear it instead of defining a macro to set
-> individual variables to NULL?
->
+On Fri, Jan 27, 2023 at 03:47:34PM +1300, Mark Tomlinson wrote:
+> A USB peripheral can respond with a NAK if it is not yet ready to
+> send/receive data. In this case, the transaction should be retried. The
+> MAX3421 driver did do this, and switched to a different type of retry
+> after a number of 'fast' retries. On at least some USB flash devices,
+> this second type of retry never succeeds. This patch changes the
+> behaviour so that 'fast' retries continue.
+> 
+> Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+> ---
+>  drivers/usb/host/max3421-hcd.c | 13 ++-----------
+>  1 file changed, 2 insertions(+), 11 deletions(-)
 
-I didn't think of that: it'd definitely fix the need to have a macro
-for resetting the pointers to NULL, as well as the definitions.
+What commit id does this fix?  And should it be backported to older
+kernel trees?
 
-We'd still have the repetition of the function names in the
-kunit_set_hooks function and the table definition. (As well as needing
-all of the implementation functions around.)
+thanks,
 
-Still, I think there's value in putting this in a struct, even if we
-also use the macro magic for other things. If we, for instance,
-instead of setting individual members of struct kunit_hook_table, we
-re-initialised it in one go, that might give the compiler enough
-context to warn about uninitialised values if we missed one.
-
-The only downside of the struct is that it's slightly uglier if people
-want to call the hook function pointer directly. This is not as likely
-at the moment, as it could be NULL, but it'd be possible to extend the
-macro to generate a stub implementation which just returned nothing.
-(Still, it'd be equally possible to autogenerate a wrapper function
-which checks kunit_running, so this isn't a dealbreaker.)
-
-> i.e.
->
-> // hooks.h
-> extern struct kunit_hook_table {
->         __printf(3, 4) void (*fail_current_test)(const char*, int,
-> const char*, ...);
-> } kunit_hooks;
->
-> //hooks.c
-> struct kunit_hook_table kunit_hooks;
->
-> // in test.c
-> // here all the functions should be in scope for us to use
-
-This is actually the bit which pushed me over the line and made me
-write the macro-based version: if the hook implementations are not all
-in test.c (and the static stub ones are in static_stub.c), we'd have
-to declare the hook implementation function somewhere, either
-introducing a new hooks-impl.h or having a bunch of function
-declarations in test.c.
-
-My thought was, if we were going to need an extra header with more
-definitions, we might as well just have one, which would also stop us
-from worrying about missing an assignment in one place or the other.
-
-> static void kunit_set_hooks(void)
-> {
->   kunit_hooks.fail_current_test = __kunit_fail_current_test;
->   ...
-> }
->
->  static int __init kunit_init(void)
->  {
->   ...
->   kunit_set_hooks();
->   ...
-> }
->
-> static void __exit kunit_exit(void)
-> {
->   ...
->   memset(&kunit_hooks, 0, sizeof(kunit_hooks));
-> }
->
-
-I'll give moving this to a struct a go, it should be an improvement
-even if I still use the macros to generate the struct.
-
-The real advantage of the macro is only having to add the new hook in
-two or three places:
-- The hooks-table.h entry
-- The _impl function (which can be in any file)
-- (Optionally) a wrapper so that people don't need to check for NULL /
-kunit_running themselves.
-
-Without it, they'll have to:
-- Add an entry to the struct kunit_hooks_table
-- Write the implementation function.
-- Add a declaration for the _impl function in test.c, if the function
-isn't defined there.
-- Add an entry to kunit_set_hooks()
-- (Optionally) a wrapper, etc.
-
-That's potentially twice as many things to get right. Still, it's a
-lot better with the struct than doing each function individually, so
-it's a closer tradeoff.
-Personally, I still feel the macro-based version will eventually be
-useful, but it's probably 50/50 whether it's worth it for just two or
-three hooks.
-
-Worst-case, we can do just the manual struct-based version, and
-replace it with the macro one later.
-
-Thanks,
--- David
-
-> > KUnit is disabled, or the module is not loaded, these function pointers
-> > are all NULL. This shouldn't be a problem, as they're all used behind
-> > wrappers which check kunit_running and/or that the pointer is non-NULL.
-> >
-> > This can then be extended for future features which require similar
-> > "hook" behaviour, such as static stubs:
-> > https://lore.kernel.org/all/20221208061841.2186447-1-davidgow@google.com/
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/CAGS_qxq4vWvRJ89477S%2BrxHYLvnc2xN435GQ4%2BBvpLgqon8miw%40mail.gmail.com.
+greg k-h
