@@ -2,252 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F7D67E504
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C79867E507
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbjA0MVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
+        id S232785AbjA0MWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:22:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233621AbjA0MUp (ORCPT
+        with ESMTP id S234213AbjA0MVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:20:45 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7147F8661A;
-        Fri, 27 Jan 2023 04:17:24 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4490721EB7;
-        Fri, 27 Jan 2023 12:17:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674821842; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/4KpuuqdrAykh+DBTA8CxdH9dCzIxdOHKTS53nbzPEc=;
-        b=l4MILwDzhgtG6BvXoJQomLlRvEQKucaRuH8JQbUqZJBQoASoxcCB0nxUeUGNYBZzO4P4Y/
-        Rf9Z45ukYja4xmv98mGJrYUaYPiVYg/QPBA8IGT7DKGhSCDz6sd2eDrclpFNknbnDwVy6+
-        F7tGj+GzHXwUVOqmcNm6aoZ65e9ztdw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674821842;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/4KpuuqdrAykh+DBTA8CxdH9dCzIxdOHKTS53nbzPEc=;
-        b=dD8ABIgHhnqcw3aTmcv6VuS+cKk6EPeD18V+IyTQVCgrECeFGXblfU4otWWcO8/5yxQsaY
-        HeStgSCudTC4IoAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 28D78138E3;
-        Fri, 27 Jan 2023 12:17:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kEnsCdLA02OfegAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 27 Jan 2023 12:17:22 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 9F0D9A06B4; Fri, 27 Jan 2023 13:17:21 +0100 (CET)
-Date:   Fri, 27 Jan 2023 13:17:21 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     "Bhatnagar, Rishabh" <risbhat@amazon.com>
-Cc:     Jan Kara <jack@suse.cz>, tytso@mit.edu, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, abuehaze@amazon.com
-Subject: Re: EXT4 IOPS degradation between 4.14 and 5.10
-Message-ID: <20230127121721.lerrb36nhj7gdiwm@quack3>
-References: <053b60a6-133e-5d59-0732-464d5160772a@amazon.com>
- <20230126093231.ujn6yaxhexwzizp5@quack3>
- <b948ed49-1bdf-b17e-d03a-7ec8dfdb1afc@amazon.com>
+        Fri, 27 Jan 2023 07:21:55 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA9380167
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:19:00 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id b7so4819154wrt.3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:19:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Da0qeWnQKms+lCstAxZwJwpzXqE2bzgXMZ3t/w2tyj0=;
+        b=eaVeZzCI1Sv333gDqppfbEwTaDZ90FAGty0Z4HK5jkFr21cS9Mrib9NDGLNS2Y0hfj
+         6cSXQNDMM8ScXlSn6T5YZAMZRFhg2t9sDVuxx75wuVxSdTaTW5adzeGaS7UV8zdBf/Fc
+         AsPgsH8zYH7/dd3vbQRRYObDSKV79sW8MgYca71DxqE7CfJtPQMkoTTY0Taf6oJJ8u+6
+         22adjHBWV5MSkPByjnnKQvIinZ9RGTykqWKRJvVCJdFrReRthRK+ci9Xv7eACHDLThKD
+         fAyQ1/Jp0+RKlvSDIW1VgOyPtxrQ4K1cSg/TCOAGZ19x4ppOtnzNuuqNrywBM04f+PAh
+         yReA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Da0qeWnQKms+lCstAxZwJwpzXqE2bzgXMZ3t/w2tyj0=;
+        b=5VnZgKRbBYq0A3yFBx7uojzRlOYpQxkqM4qRUDT8PONnNNnvYjK/HORAnKvoOsVOT0
+         FyW8zvw1wsu5b4vGplFlzdJ7IpGivs8EG2jK9cIB13la1X11gRKhkB8s9naK87EsNBa3
+         XA+OCyVALod4BlfDhuW+0liV/DnLV4JvjmT3gfCjdENrj9B0jFxFnr0qSQNMr0B3Vkxy
+         8Fn1hujXoh9W5sHvngs3zOH4Cn7z3vQoAQ/YhNRtMcZuclwNhhz1Uv94r7kadrmMZxqw
+         Ng04thjRbhTKPdXYevYQDpFRWD7u1FOR4UmJFFDFBnASZDEyIdu1eJSRi5vNQGUjoerB
+         mCBw==
+X-Gm-Message-State: AFqh2krnLmaHuBqrPxJLeDAyGNWVe2dMIlwEItu1zyeD0b0D2DZIVQfZ
+        vCpf+6njBQ/f/G57Hf7NF6BRRg==
+X-Google-Smtp-Source: AMrXdXtlNeEkyvIfAzqBAjQjp4sDKXkPfSH7UOmRMdZoDDkMQVba4IXTSXZT66zMtkMYguiDJmypxg==
+X-Received: by 2002:adf:b60f:0:b0:2bd:f71a:5b32 with SMTP id f15-20020adfb60f000000b002bdf71a5b32mr33949862wre.58.1674821938820;
+        Fri, 27 Jan 2023 04:18:58 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n1-20020a5d6b81000000b002bdc39849d1sm3731089wrx.44.2023.01.27.04.18.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 04:18:58 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] arm64: dts: qcom: sm8550-mtp: correct vdd-l5-l16-supply
+Date:   Fri, 27 Jan 2023 13:18:43 +0100
+Message-Id: <20230127121843.349738-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b948ed49-1bdf-b17e-d03a-7ec8dfdb1afc@amazon.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 26-01-23 10:23:07, Bhatnagar, Rishabh wrote:
-> On 1/26/23 1:32 AM, Jan Kara wrote:
-> > On Wed 25-01-23 16:33:54, Bhatnagar, Rishabh wrote:
-> > > Fio with buffered io/fsync=1/randwrite
-> > So I'm curious. Do you have any workload that actually does these
-> > synchronous random buffered IOs? Or is it just a benchmarking exercise?
-> > 
-> So database team was a running benchmark called hammerdb with 16 connections
-> where they started noticing dropped
-> performance for 5.10. We traced it back to filesystem with this benchmark.
-> Although the database workload would be something similar
->  I guess.
+Fix typo in vdd-l5-l16 supply of qcom,pm8550-rpmh-regulators.
 
-HammerDB is a TPC-C and TPC-H benchmark but details of the IO depend more
-on the database it is hammering. Do you know which one? Anyway the most
-important fact for me is that it is visible in a real world workload (well,
-as much as DB benchmarking is real-world ;)).
+Fixes: 71342fb91eae ("arm64: dts: qcom: Add base SM8550 MTP dts")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> > > With HEAD as 9c19a9cb1642c074aa8bc7693cd4c038643960ae (with the above
-> > > series)
-> > > 
-> > > write: io=445360KB, bw=7418.6KB/s, *iops=463*, runt= 60033msec
-> > > clat (usec): min=4, max=32132, avg=311.90, stdev=1812.74
-> > > lat (usec): min=5, max=32132, avg=312.28, stdev=1812.74
-> > > clat percentiles (usec):
-> > > | 1.00th=[ 8], 5.00th=[ 10], 10.00th=[ 16], 20.00th=[ 25],
-> > > | 30.00th=[ 36], 40.00th=[ 47], 50.00th=[ 60], 60.00th=[ 71],
-> > > | 70.00th=[ 84], 80.00th=[ 97], 90.00th=[ 111], 95.00th=[ 118],
-> > > | 99.00th=[11840], 99.50th=[15936], 99.90th=[21888], 99.95th=[23936],
-> > > 
-> > > With HEAD as 6b4c54e3787bc03e810062bd257a3b05fd9c72d6(without the above
-> > > series)
-> > > 
-> > > write: io=455184KB, bw=7583.4KB/s, *iops=473*, runt= 60024msec
-> > > clat (usec): min=6, max=24325, avg=319.72, stdev=1694.52
-> > > lat (usec): min=6, max=24326, avg=319.99, stdev=1694.53
-> > > clat percentiles (usec):
-> > > | 1.00th=[ 9], 5.00th=[ 11], 10.00th=[ 17], 20.00th=[ 26],
-> > > | 30.00th=[ 38], 40.00th=[ 50], 50.00th=[ 60], 60.00th=[ 73],
-> > > | 70.00th=[ 85], 80.00th=[ 98], 90.00th=[ 111], 95.00th=[ 118],
-> > > | 99.00th=[ 9792], 99.50th=[14016], 99.90th=[21888], 99.95th=[22400],
-> > > | 99.99th=[24192]
-> > OK, about 2% regression. How stable is that across multiple runs?
-> This is quite consistent. The thing to note here is this test is on 4.14+
-> tip with and without
-> these patch series.
-> I tried reverting to the same behavior in 5.10 with the following patch but
-> i only see a very low improvement. (~1%)
+---
 
-I see. Thanks for experiments.
+Changes since v1:
+1. Correct, not drop (Abel, Konrad).
+---
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> This is because on 5.10 we also have this patch
-> ext4: avoid unnecessary transaction starts during writeback. (This limits
-> the invocation of this function within the while loop)
-> If i revert the above patch as well along with applying below patch i get
-> back around 4% IOPS.
-> 
-> -       if (end == (pgoff_t)-1)
-> -               *index = (pgoff_t)-1;
-> -       else
-> -               *index = end + 1;
-> +       if (xas.xa_index > end) {
-> +               if (end == (pgoff_t)-1)
-> +                       *index = (pgoff_t)-1;
-> +               else
-> +                       *index = end + 1;
-> +       }
-> +       else if (ret)
-> +               *index = xas.xa_index + 1;
-
-Yes, so these patches have kind of magnifying effect together as each
-multiplies the number of scanning by 2. So with both of them we get like 4
-scans of the inode for dirty pages in one writeback round instead of 1.
-
-> > > I also see that number of handles per transaction were much higher before
-> > > this patch series
-> > > 
-> > > 0ms waiting for transaction
-> > > 0ms request delay
-> > > 20ms running transaction
-> > > 0ms transaction was being locked
-> > > 0ms flushing data (in ordered mode)
-> > > 10ms logging transaction
-> > > *13524us average transaction commit time*
-> > > *73 handles per transaction*
-> > > 0 blocks per transaction
-> > > 1 logged blocks per transaction
-> > > 
-> > > vs after the patch series.
-> > > 
-> > > 0ms waiting for transaction
-> > > 0ms request delay
-> > > 20ms running transaction
-> > > 0ms transaction was being locked
-> > > 0ms flushing data (in ordered mode)
-> > > 20ms logging transaction
-> > > *21468us average transaction commit time*
-> > > *66 handles per transaction*
-> > > 1 blocks per transaction
-> > > 1 logged blocks per transaction
-> > > 
-> > > This is probably again helping in bunching the writeback transactions and
-> > > increasing throughput.
-> > Yeah, probably.
-> > 
-> > > I looked at the code to understand what might be going on.
-> > > It seems like commit 72b045aecdd856b083521f2a963705b4c2e59680 changes the
-> > > behavior of find_get_pages_range_tag.
-> > > Before this commit if find_get_pages_tag cannot find nr_pages (PAGEVEC_SIZE)
-> > > it returns the number of pages found as ret and
-> > > sets the *index to the last page it found + 1. After the commit the behavior
-> > > changes such that if we don’t find nr_pages pages
-> > > we set the index to end and not to the last found page. (added diff from
-> > > above commit)
-> > > Since pagevec_lookup_range_tag is always called in a while loop (index <=
-> > > end) the code before the commit helps in coalescing
-> > > writeback of pages if there are multiple threads doing write as it might
-> > > keep finding new dirty (tagged) pages since it doesn’t set index to end.
-> > > 
-> > > + /*
-> > > + * We come here when we got at @end. We take care to not overflow the
-> > > + * index @index as it confuses some of the callers. This breaks the
-> > > + * iteration when there is page at index -1 but that is already broken
-> > > + * anyway.
-> > > + */
-> > > + if (end == (pgoff_t)-1)
-> > > + *index = (pgoff_t)-1;
-> > > + else
-> > > + *index = end + 1;
-> > > +out:
-> > > rcu_read_unlock();
-> > > 
-> > > - if (ret)
-> > > - *index = pages[ret - 1]->index + 1;
-> > > -
-> > > 
-> > >  From the description of the patch i didn't see any mention of this
-> > > functional change.
-> > > Was this change intentional and did help some usecase or general performance
-> > > improvement?
-> > So the change was intentional. When I was working on the series, I was
-> > somewhat concerned that the old code could end up in a pathological
-> > situation like:
-> >    We scan range 0-1000000, find the only dirty page at index 0, return it.
-> >    We scan range 1-1000000, find the only dirty page at index 1, return it.
-> >    ...
-> > 
-> > This way we end up with rather inefficient scanning and in theory malicious
-> > user could livelock writeback like this. That being said this was/is mostly
-> > a theoretical concern.
-> 
-> Ok so its more of a security concern. But do you think this has a latency
-> impact? I didn't see
-> much latency impact between the two sets and throughput is higher.
-
-Yes, I expect there will be latency impact but for this workload probably
-relatively small. I expect the expensive part on your workload is the
-fsync(2) call, in particular the committing of the transaction and the
-flushing of the disk caches as a result of that. Data writes themselves are
-relatively cheap. If you had say 1MB blocks instead of 16k ones, I'd expect
-the numbers to start looking differently as the cost of IO and of cache
-flushing becomes for comparable - obviously it all depends on the details
-of the backing storage as well. Perhaps could you measure how much time we
-spend in file_write_and_wait_range() calls vs in the whole ext4_sync_file()
-call to confirm that?
-
-Overall your tests show we could gain some throughput without sacrificing
-too much latency if we somehow batch tiny fsync requests more. The trick is
-how to do this without regressing other workloads and also across various
-storage types which are going to have very different properties.
-
-								Honza
+diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+index 725d3bc3ee72..5db6e789e6b8 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
++++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+@@ -47,7 +47,7 @@ regulators-0 {
+ 		vdd-bob2-supply = <&vph_pwr>;
+ 		vdd-l2-l13-l14-supply = <&vreg_bob1>;
+ 		vdd-l3-supply = <&vreg_s4g_1p3>;
+-		vdd-l6-l16-supply = <&vreg_bob1>;
++		vdd-l5-l16-supply = <&vreg_bob1>;
+ 		vdd-l6-l7-supply = <&vreg_bob1>;
+ 		vdd-l8-l9-supply = <&vreg_bob1>;
+ 		vdd-l11-supply = <&vreg_s4g_1p3>;
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.34.1
+
