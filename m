@@ -2,74 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C69967F0EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D2567F0EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjA0WJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
+        id S232311AbjA0WKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:10:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjA0WJp (ORCPT
+        with ESMTP id S231945AbjA0WKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:09:45 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E5C1555A
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:09:44 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d3so6322510plr.10
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:09:44 -0800 (PST)
+        Fri, 27 Jan 2023 17:10:35 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9C023310;
+        Fri, 27 Jan 2023 14:10:34 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id h24so5291407qta.12;
+        Fri, 27 Jan 2023 14:10:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YE+20ePuR5Q/rSYA8Kgx1qIQvuBjNbnsIq3ynDe/WNA=;
-        b=lrPE+NQJISKzbSzuSk7SXCzc7j/+D9EpaJD9K7rzwRWNg1kSVQNYFtP1rQ0l84SpST
-         rRyMv3exis4Bu4Mpm1x2KAq90VRt3XpaBN+ZNdbAjDbtqUwBa8wvYFUNUuDklKESaE7r
-         I8G7soOT/vdp4aGepBWXgqIvgelXysNDiHs6Sx6SzPOSC2P6xo8isrjFK99t4iF0pRgn
-         qIg69R5L2CZ5mSGbigoxw2wC+Ryl15wK/J5+DDaSAcyG167+uPY4z7BZWCG5LujUY3I0
-         pFtbL+TdJDVbVFk68Wd5jUHG2+6VAtXhfeyeDmiUTxjA+SOVGHAEKefreamLZtNve1Kt
-         8MLw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dZLmfJMC28tXt+sGHzZ5Z2Y6DK9vpc4DYDueqKPsdJY=;
+        b=cuSCnx1306BDvmvMa/lQuqvGBSxZAg/B9bIDYhAy+BHIobj3tfenExV/lS55V5fknO
+         BFVufAJW88d0hRo5qNv/3Cj/5WKRlJV8jqQIkDML5mSqjIXN4oqGsD4jZwF2v27bYQ2c
+         sM+Vv+KhYW0Qbg2JIU5Ep+4+a13/s29/YjZzUPY3eDgEqZ8QcjqE4TU0cf5SJ8RB/r9e
+         wPG+ZbhOhyQ/67L537tLdbL/25Q2GXpgvD76/tcj7Hk44LEhP7EvOfMtmqsyBWpaIszZ
+         5PYNEqDptHT4ckBd82IwheMgUh1ikYoX5wO2ym5jRI6jlbaaY/HgEmx8tzHBZ0+ISNCJ
+         IQxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YE+20ePuR5Q/rSYA8Kgx1qIQvuBjNbnsIq3ynDe/WNA=;
-        b=czDmmPR7BHZU53Ormr754rNq3ZPZn+cy7U0Tqm02QI6mb5r9Xvy3pqt57yox/84F1x
-         3ow+O+ym6m39ppizGfYJ1CruMA8ZuJi99Le1LRMYji1mwARQt0yzvbz3gx+3uAp6sviB
-         Buj+HIJ0K75TTPx6LNShUR6nvy05/tuUlMTRg8LjxCc5iYD/gCJ+nenYciY6bdtdhF0A
-         afwRzuw9Cy02WLXI5P58rnMhtvH/Oj3Ti5x/VpMEyfLodlLPcU3SJ4qAJ7N6q0gRc+k5
-         cCd/+8X7Q1RMeF43OATedCliZivQyvQtInhm4yxrq2urVpcvLiOJAaU5THUi7dlpKdAo
-         LTiQ==
-X-Gm-Message-State: AO0yUKVZ0ZE2nOQZsWdnogiMaE1m1n57evH5v/JEHglfP5S9qKyT6Y9R
-        NJzkZ9KKsUGVEo1jzWTrixIDRg==
-X-Google-Smtp-Source: AK7set8qBf7H7/N8KBYOlsoFn/st9/Zevw7PG0vkJYPKrtvPFqWTu5e70qoyxrKgou2jY23lLsL7mQ==
-X-Received: by 2002:a05:6a20:3ca8:b0:b8:c859:7fc4 with SMTP id b40-20020a056a203ca800b000b8c8597fc4mr162205pzj.1.1674857383797;
-        Fri, 27 Jan 2023 14:09:43 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y12-20020a17090a2b4c00b002293b1aa2b6sm5441275pjc.30.2023.01.27.14.09.42
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dZLmfJMC28tXt+sGHzZ5Z2Y6DK9vpc4DYDueqKPsdJY=;
+        b=52NVyS2STL3I+o7EUYokoauCqYFqSsJ81+ReG/JRlYL/4Ixga9pVydLBSUV3rP6fxe
+         nHpFuMs1aOSslsQ/sno1ku4wyaeyhMDmkx2Zs7ENO9kdcUOP8Uc8xl1NGe4x9dPWBKh4
+         UcvG09mFW8/u2CFBu0ATIJK8hcOsabB6bfK8uvJCR1qP9xnKC4RcUrmLHgFNdw5cuc6r
+         lCIWQw8im38z/3FoV1whlRHvNFV9+dMS5vrHaBLpJMXM3AjjpcxhqiphRkJmFvQvq9Ez
+         dBisSpHpwgzON43RnpaDkAakXuIWvAU3q5CVqHa85Vs9FKccjy9v+sa5vA8S5j4Wf7jw
+         GIbQ==
+X-Gm-Message-State: AFqh2kpRaaAVqOBtfeK9wJTDpcwTsuq6KTJywsS5ekgv+qyNDNT9qTFo
+        byzdd5UePL9gQzWniOZPoJU=
+X-Google-Smtp-Source: AMrXdXuaf6ymtpumT6wT3hHq4hE5I6IgbvXFbj6nhtc7tFhAQ1FUkYURQrDHiAY3ZIqDTuZx8Zypog==
+X-Received: by 2002:a05:622a:2519:b0:3b6:31e2:f53c with SMTP id cm25-20020a05622a251900b003b631e2f53cmr55849011qtb.3.1674857433750;
+        Fri, 27 Jan 2023 14:10:33 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id b1-20020ac85bc1000000b003b6325dfc4esm3525603qtb.67.2023.01.27.14.10.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 14:09:42 -0800 (PST)
-Date:   Fri, 27 Jan 2023 22:09:39 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yang Weijiang <weijiang.yang@intel.com>
-Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, like.xu.linux@gmail.com,
-        kan.liang@linux.intel.com, wei.w.wang@intel.com
-Subject: Re: [PATCH v2 12/15] KVM: x86/vmx: Disable Arch LBREn bit in #DB and
- warm reset
-Message-ID: <Y9RLowPBbQFCqLRf@google.com>
-References: <20221125040604.5051-1-weijiang.yang@intel.com>
- <20221125040604.5051-13-weijiang.yang@intel.com>
+        Fri, 27 Jan 2023 14:10:32 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 39D6527C0054;
+        Fri, 27 Jan 2023 17:10:30 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 27 Jan 2023 17:10:31 -0500
+X-ME-Sender: <xms:1UvUYzBtR2_vwCoKR0L_crza-US5_weopUfFW-r6ORptvHAO_69eqA>
+    <xme:1UvUY5i5uB2hEXsbxU7qjWv3WmL8aWCIVt6cWyO1dtBcCHsSIBF1NNvDM9Ym7ynST
+    TsjAeeR_gfoQrpPmg>
+X-ME-Received: <xmr:1UvUY-nt5X2ebgtJE0vNlgzRc7JgEc0j1YQtg7nolL1ZmnTdfdxNqQNP3Ss>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddviedgudehkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnheptefghedviefhheffteegffffledvhedukeegkedtudehhfeluefhveeu
+    tdejfffgnecuffhomhgrihhnpehophgvnhdqshhtugdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgr
+    uhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsoh
+    hquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:1UvUY1wOVdRwqNBGxyNAY1cOfCrmcC1iddthOZF63Ns4bNEnYfaE8g>
+    <xmx:1UvUY4SJMRRypuOJqlwoRt-Lm-0QPlAdPxttB4254oZ70V-iGZ1SSw>
+    <xmx:1UvUY4bBOtlb8VAlyc9xqBbXcGPljxD66JeujRC6Efvt01ktvzYpeA>
+    <xmx:1kvUY0ryhrUNAZCUYH6WWaHUh44EBCsd05skl16Q5CnIRrJE5q6Z3g>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 27 Jan 2023 17:10:29 -0500 (EST)
+Date:   Fri, 27 Jan 2023 14:09:41 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
+        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
+        Marco Elver <elver@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
+Subject: Re: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in
+ generic atomic ops
+Message-ID: <Y9RLpYGmzW1KPksE@boqun-archlinux>
+References: <20230126173354.13250-1-jmaselbas@kalray.eu>
+ <Y9Oy9ZAj/DQ7O+6e@hirez.programming.kicks-ass.net>
+ <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
+ <Y9Pg+aNM9f48SY5Z@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221125040604.5051-13-weijiang.yang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <Y9Pg+aNM9f48SY5Z@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,86 +124,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022, Yang Weijiang wrote:
-> Per SDM 3B, Chapter 18:
-> “On a debug breakpoint event (#DB), IA32_LBR_CTL.LBREn is cleared.”
-> and "On a warm reset, all LBR MSRs, including IA32_LBR_DEPTH, have their
-> values preserved. However, IA32_LBR_CTL.LBREn is cleared to 0, disabling
-> LBRs.", clear the bit manually before inject #DB or when vCPU is in warm
-> reset.
+On Fri, Jan 27, 2023 at 03:34:33PM +0100, Peter Zijlstra wrote:
+> > I also noticed that GCC has some builtin/extension to do such things,
+> > __atomic_OP_fetch and __atomic_fetch_OP, but I do not know if this
+> > can be used in the kernel.
 > 
-> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 24 +++++++++++++++++++++++-
->  1 file changed, 23 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 3bc892e8cf7a..6ad765ea4059 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -1695,6 +1695,20 @@ static void vmx_clear_hlt(struct kvm_vcpu *vcpu)
->  		vmcs_write32(GUEST_ACTIVITY_STATE, GUEST_ACTIVITY_ACTIVE);
->  }
->  
-> +static void disable_arch_lbr_ctl(struct kvm_vcpu *vcpu)
-> +{
-> +	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
-> +	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-> +
-> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
-> +	    test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use) &&
-> +	    lbr_desc->event) {
+> On a per-architecture basis only, the C/C++ memory model does not match
+> the Linux Kernel memory model so using the compiler to generate the
+> atomic ops is somewhat tricky and needs architecture audits.
 
-I don't see any reason to check that an event is actually assigned.  The behavior
-is architectural, whether or not KVM is actively exposing LBRs to the guest is
-irrelevant.
+Hijack this thread a little bit, but while we are at it, do you think it
+makes sense that we have a config option that allows archs to
+implement LKMM atomics via C11 (volatile) atomics? I know there are gaps
+between two memory models, but the option is only for fallback/generic
+implementation so we can put extra barriers/orderings to make things
+guaranteed to work.
 
-> +		u64 ctl = vmcs_read64(GUEST_IA32_LBR_CTL);
-> +
-> +		vmcs_write64(GUEST_IA32_LBR_CTL, ctl & ~ARCH_LBR_CTL_LBREN);
-> +	}
-> +}
-> +
->  static void vmx_inject_exception(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_queued_exception *ex = &vcpu->arch.exception;
-> @@ -1738,6 +1752,9 @@ static void vmx_inject_exception(struct kvm_vcpu *vcpu)
->  	vmcs_write32(VM_ENTRY_INTR_INFO_FIELD, intr_info);
->  
->  	vmx_clear_hlt(vcpu);
-> +
-> +	if (ex->vector == DB_VECTOR)
-> +		disable_arch_lbr_ctl(vcpu);
->  }
->  
->  static void vmx_setup_uret_msr(struct vcpu_vmx *vmx, unsigned int msr,
-> @@ -4796,7 +4813,9 @@ static void vmx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->  
->  	vmx_update_fb_clear_dis(vcpu, vmx);
->  
-> -	if (!init_event && cpu_has_vmx_arch_lbr())
-> +	if (init_event)
+It'll be a code version of this document:
 
-INIT and warm RESET are not the same thing, i.e. this is flat out wrong.
+	https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0124r7.html
 
-> +		disable_arch_lbr_ctl(vcpu);
-> +	else if (cpu_has_vmx_arch_lbr())
->  		vmcs_write64(GUEST_IA32_LBR_CTL, 0);
->  }
->  
-> @@ -4873,6 +4892,9 @@ static void vmx_inject_nmi(struct kvm_vcpu *vcpu)
->  			INTR_TYPE_NMI_INTR | INTR_INFO_VALID_MASK | NMI_VECTOR);
->  
->  	vmx_clear_hlt(vcpu);
-> +
-> +	if (vcpu->arch.exception.vector == DB_VECTOR)
+(although I realise there may be a few mistakes in that doc since I
+wasn't familiar with C11 memory model when I wrote part of the doc, but
+these can be fixed)
 
-Huh?  This is _very_ obviously injecting NMIs, not #DBs.
+Another reason I ask is that since Rust is coming, we need to provide
+our LKMM atomics in Rust so that C code and Rust code can talk via same
+atomic variables, since both sides need to use the same memory model.
+My choices are:
 
-> +		disable_arch_lbr_ctl(vcpu);
->  }
->  
->  bool vmx_get_nmi_mask(struct kvm_vcpu *vcpu)
-> -- 
-> 2.27.0
-> 
+1.	Using FFI to call Linux atomic APIs: not inline therefore not
+	efficient.
+
+2.	Implementing Rust LKMM atomics in asm: much more work although
+	I'm OK if we have to do it.
+
+3.	Implementing Rust LKMM atomics with standard atomics (i.e. C/C++
+	atomics):
+
+	*	Requires Rust has "volatile" atomics, which is WIP but
+		looks promising
+	
+	*	Less efficient compared to choice #2 but more efficient
+		compared to choice #1
+
+Ideally, choice #2 is the best option for all architectures, however, if
+we have the generic implementation based on choice #3, for some archs it
+may be good enough.
+
+Thoughts?
+
+[Cc LKMM and Rust people]
+
+Regards,
+Boqun
