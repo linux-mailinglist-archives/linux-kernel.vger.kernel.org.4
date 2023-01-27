@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85A667DD1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 06:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AD667DD23
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 06:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbjA0FgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 00:36:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
+        id S231599AbjA0Fil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 00:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjA0FgE (ORCPT
+        with ESMTP id S229481AbjA0Fij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 00:36:04 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AAA46D48;
-        Thu, 26 Jan 2023 21:36:03 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id x26so1861938qkj.4;
-        Thu, 26 Jan 2023 21:36:03 -0800 (PST)
+        Fri, 27 Jan 2023 00:38:39 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8EF24498
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:38:37 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id v10so3784287edi.8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:38:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OrbhxDljA7pofoDZLQ8+ctV2VLccAZizxJoTKGIdHlI=;
-        b=IgBtvIuRfHldaNygLhEAmOZ9nQY14FlO3CRcB5W6td+P90sJCDjX1Lzz3VJbXQy+C7
-         1pSpenVD+kEBrI9svCD/1Rb779PMKD+JFKSeGB6BkJZYa/oCPiRqI0YTnkQkGXC6Z+hN
-         /L8RSC7d7/wa3jug33EXSdEnKXF1aeQU2xuFFXpgG6BKyoO2LjWsAPCc1Jo/SwU4LJiY
-         na0X9yMOLpcUXfyvaixgIn4mdiNzAhlqpYY1dTO0EgQ6Hv7n0DlIf6BVf/Xd1fDmd9cs
-         ejmoT1r4MU2jyAj/h8+1t3YNHjOJyGohkD2TPbh6ytzABBLUuv3y4TF3b5fF3u9+2/oP
-         pTcw==
+        bh=JFUPc+lU7HPxppOgMcNwGj0PM3SP5fzaDIR99v18sAU=;
+        b=GAsAwJWc2omReq9wRMhsy8ixlevj5d66DwqJ4FlkYBhSNpcSidZ6gdah1QzYIeOaV3
+         Dzf6TpzLYPPm0JMNGHeusI3nRUQxowVHj18tdwIEeXObFXSprtyKJbTkw5CjDeUI7DVA
+         KgIbxI88i75Zu2Nxj0qBuhmTGlOTSGk19dtnbts8+G/Xi6dElnsUayJJ4VneM4tJR6Hb
+         P0RwvokuJguAkKGx/SdkpK5vS2sg825BSiMS5Lm5U7v0T7UrQ2yciAwHbx3oMLmNQTj2
+         A51zvAh3EzkgMBbA+uEfsUqISLSiaFBhhhNtaFrkboKMdy2hD6npK5NwkXmbjSnLwHr0
+         Wmug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OrbhxDljA7pofoDZLQ8+ctV2VLccAZizxJoTKGIdHlI=;
-        b=JPGn2AnZ204hcKzmxi1OCd0Q3qmYoXIxKxgF526U/XkpQUsb8MQ2WD0iZEhHnOk/wd
-         aJ9vC9OepzcH9qhOEPIUjeGYsKztWnf+TZbK822R1ZO1nVFzj2ammiUtXZiX8UyWVF0w
-         oWlol4MRKMCLhumwgfQoe1K5aHDOxRGPHeW1w2kWBAfOU+mXEGZ8wgEmzpyR0Hf2/JCw
-         ABGm6KQIi9UFkoFn0EkYmoltVYBQRNFdz8ZqX40H0DPbrvhfxhgpS/PcbmCjucQKL6Ez
-         92S4tcAf8Va+MLbqQBC/QT824PXmK3LBSyYTpTTBbqMZHF3eepwI2st3OMFCa29zKMFO
-         SJ9A==
-X-Gm-Message-State: AFqh2kogMjQlcS1W9vPECI5mFdhZJQ3KpjwvWHr8yLT04Jr8jeMyNNcR
-        eo2bRv+LyngRO1rxxru25Mbch4brWhHQTPssSgk=
-X-Google-Smtp-Source: AMrXdXsgwVeLFLDjD7X7ZFoMFXRc2M1F1eFpuydvYpQOzzOwCXP5hrBRJcwv5wQrbWC5QRrDXLb5YwAiALHd5Q6zEy0=
-X-Received: by 2002:a05:620a:5371:b0:6fe:e6c3:2d3e with SMTP id
- op49-20020a05620a537100b006fee6c32d3emr2215285qkn.365.1674797762204; Thu, 26
- Jan 2023 21:36:02 -0800 (PST)
+        bh=JFUPc+lU7HPxppOgMcNwGj0PM3SP5fzaDIR99v18sAU=;
+        b=rxQKBCzS2VUt4Lu6a4gYspNG48lG2SkbweIVVbQuDqPr984XHH6J/eBVIqlvP4hc0k
+         wknn+7RvR7GCuZ2b7+3bEQ4u73/3IZRZwuy+mVHifR0h15C7HhOgqsSEc1UOrleDI2Z+
+         Qm8ymKy8U/PYGivJCr/euxE37tswgvvPZSrHYOMnIyiN5PBWE+MvAkh2w53Z/MYaCPEn
+         hGSI9V5raU6J9AXHshDUWNX8xHxnIkw3C85lN1p+fR5Sd0ypGtERYHiFsLy/GCB8g4v/
+         9ePMxVBqWzSf1u9bLOYAjybwl46ZRsoQ//2vCgo78OkiG1b1DkbPUcnYKvMnwSvN1Kdk
+         aVxw==
+X-Gm-Message-State: AFqh2kq0KDbaXVNH3fpMSZ9pClc272TcGrTXxDLkgVI2r/q2BuP2+V35
+        5PFKGYlrpYDEpcxBmG+49/EOpvupMZeD9XcSbI95wTcAwU83w9tK
+X-Google-Smtp-Source: AMrXdXs7S9OHnQa8OaHPiBaDup6GXNYIWliRtThREoOzhrNSBrUwL1ewg84TBMC8dceoEWYGm6yAB/X6MnGnHTNAhG4=
+X-Received: by 2002:a05:6402:1008:b0:499:f0f:f788 with SMTP id
+ c8-20020a056402100800b004990f0ff788mr6180622edu.25.1674797916410; Thu, 26 Jan
+ 2023 21:38:36 -0800 (PST)
 MIME-Version: 1.0
-References: <CABXGCsN+BcaGO0+0bJszDPvA=5JF_bOPfXC=OLzMzsXY2M8hyQ@mail.gmail.com>
- <20220726164250.GE13489@twin.jikos.cz> <CABXGCsN1rzCoYiB-vN5grzsMdvgm1qv2jnWn0enXq5R-wke8Eg@mail.gmail.com>
- <20230125171517.GV11562@twin.jikos.cz> <CABXGCsOD7jVGYkFFG-nM9BgNq_7c16yU08EBfaUc6+iNsX338g@mail.gmail.com>
- <Y9K6m5USnON/19GT@boqun-archlinux> <CABXGCsMD6nAPpF34c6oMK47kHUQqADQPUCWrxyY7WFiKi1qPNg@mail.gmail.com>
- <a8992f62-06e6-b183-3ab5-8118343efb3f@redhat.com> <7e48c1ec-c653-484e-88fb-69f3deb40b1d@app.fastmail.com>
- <Y9NN9CFWc40oxmzP@boqun-archlinux>
-In-Reply-To: <Y9NN9CFWc40oxmzP@boqun-archlinux>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Fri, 27 Jan 2023 10:35:51 +0500
-Message-ID: <CABXGCsNmQEyvPxL0-BT4Cz0xGuawQz1TjtbbOSjDqvV_H=Z6ew@mail.gmail.com>
-Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Chris Murphy <lists@colorremedies.com>,
-        Waiman Long <longman@redhat.com>,
-        David Sterba <dsterba@suse.cz>,
-        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
+References: <20230123092928.808014-1-alexghiti@rivosinc.com>
+ <bdabafb1-53f3-403c-ab9c-1c2d00421690@ghiti.fr> <CAAhSdy1grLz2EXEJUicGFZO7md7F=Hbnhv7ZqBFFx-vtnkpmmA@mail.gmail.com>
+ <CAHVXubjHBu7F9xaERTR6vppsUph2U8JX1DRSrFUAWs-jJ_8ncQ@mail.gmail.com>
+In-Reply-To: <CAHVXubjHBu7F9xaERTR6vppsUph2U8JX1DRSrFUAWs-jJ_8ncQ@mail.gmail.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Fri, 27 Jan 2023 11:08:24 +0530
+Message-ID: <CAAhSdy1FdXvZQo9+bpfqHUA0FD-6NnxbL59Cs-+7zrw8EBcmJg@mail.gmail.com>
+Subject: Re: [PATCH] KVM: RISC-V: Fix wrong usage of PGDIR_SIZE to check page sizes
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Alexandre Ghiti <alex@ghiti.fr>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,47 +73,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 9:08 AM Boqun Feng <boqun.feng@gmail.com> wrote:
+On Mon, Jan 23, 2023 at 8:04 PM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
 >
-> On Thu, Jan 26, 2023 at 10:37:56PM -0500, Chris Murphy wrote:
+> On Mon, Jan 23, 2023 at 12:28 PM Anup Patel <anup@brainfault.org> wrote:
 > >
-> >
-> > On Thu, Jan 26, 2023, at 7:20 PM, Waiman Long wrote:
-> > > On 1/26/23 17:42, Mikhail Gavrilov wrote:
-> > >>> I'm not sure whether these options are better than just increasing the
-> > >>> number, maybe to unblock your ASAP, you can try make it 30 and make sure
-> > >>> you have large enough memory to test.
-> > >> About just to increase the LOCKDEP_CHAINS_BITS by 1. Where should this
-> > >> be done? In vanilla kernel on kernel.org? In a specific distribution?
-> > >> or the user must rebuild the kernel himself? Maybe increase
-> > >> LOCKDEP_CHAINS_BITS by 1 is most reliable solution, but it difficult
-> > >> to distribute to end users because the meaning of using packaged
-> > >> distributions is lost (user should change LOCKDEP_CHAINS_BITS in
-> > >> config and rebuild the kernel by yourself).
+> > On Mon, Jan 23, 2023 at 3:01 PM Alexandre Ghiti <alex@ghiti.fr> wrote:
 > > >
-> > > Note that lockdep is typically only enabled in a debug kernel shipped by
-> > > a distro because of the high performance overhead. The non-debug kernel
-> > > doesn't have lockdep enabled. When LOCKDEP_CHAINS_BITS isn't big enough
-> > > when testing on the debug kernel, you can file a ticket to the distro
-> > > asking for an increase in CONFIG_LOCKDEP_CHAIN_BITS. Or you can build
-> > > your own debug kernel with a bigger CONFIG_LOCKDEP_CHAIN_BITS.
+> > > @Anup: Sorry, forgot to add -fixes to the patch title, as I think this
+> > > should go into your fixes branch for 6.2.
 > >
-> > Fedora bumped CONFIG_LOCKDEP_CHAINS_BITS=17 to 18 just 6 months ago for debug kernels.
-> > https://gitlab.com/cki-project/kernel-ark/-/merge_requests/1921
-> >
-> > If 19 the recommended value I don't mind sending an MR for it. But if
-> > the idea is we're going to be back here talking about bumping it to 20
-> > in six months, I'd like to avoid that.
-> >
+> > Can you provide the Fixes: line here ? I will include it at time of
+> > adding this patch to my fixes branch.
 >
-> How about a boot parameter then?
+> It actually fixes 2 commits: 9955371cc014 ("RISC-V: KVM: Implement MMU
+> notifiers") and 9d05c1fee837 ("RISC-V: KVM: Implement stage2 page
+> table programming"). But they were both part of the first KVM
+> patchset, so I only took the oldest one, but tell me if you want me to
+> split the patch into 2 different patches that fix one commit at a
+> time.
+>
+> Fixes: 9d05c1fee837 ("RISC-V: KVM: Implement stage2 page table programming")
 
-I would like this option.
-This is better than rebuilding the kernel yourself and asking the
-distribution's maintainers to increase this value.
+The Linux-6.3 merge window is near so I have queued this patch
+for Linux-6.3
 
-Thanks.
+Thanks,
+Anup
 
--- 
-Best Regards,
-Mike Gavrilov.
+>
+> Thanks,
+>
+> Alex
+>
+> >
+> > Regards,
+> > Anup
+> >
+> > >
+> > > On 1/23/23 10:29, Alexandre Ghiti wrote:
+> > > > At the moment, riscv only supports PMD and PUD hugepages. For sv39,
+> > > > PGDIR_SIZE == PUD_SIZE but not for sv48 and sv57. So fix this by changing
+> > > > PGDIR_SIZE into PUD_SIZE.
+> > > >
+> > > > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > > > ---
+> > > >   arch/riscv/kvm/mmu.c | 8 ++++----
+> > > >   1 file changed, 4 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> > > > index 34b57e0be2ef..dbc4ca060174 100644
+> > > > --- a/arch/riscv/kvm/mmu.c
+> > > > +++ b/arch/riscv/kvm/mmu.c
+> > > > @@ -585,7 +585,7 @@ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+> > > >       if (!kvm->arch.pgd)
+> > > >               return false;
+> > > >
+> > > > -     WARN_ON(size != PAGE_SIZE && size != PMD_SIZE && size != PGDIR_SIZE);
+> > > > +     WARN_ON(size != PAGE_SIZE && size != PMD_SIZE && size != PUD_SIZE);
+> > > >
+> > > >       if (!gstage_get_leaf_entry(kvm, range->start << PAGE_SHIFT,
+> > > >                                  &ptep, &ptep_level))
+> > > > @@ -603,7 +603,7 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+> > > >       if (!kvm->arch.pgd)
+> > > >               return false;
+> > > >
+> > > > -     WARN_ON(size != PAGE_SIZE && size != PMD_SIZE && size != PGDIR_SIZE);
+> > > > +     WARN_ON(size != PAGE_SIZE && size != PMD_SIZE && size != PUD_SIZE);
+> > > >
+> > > >       if (!gstage_get_leaf_entry(kvm, range->start << PAGE_SHIFT,
+> > > >                                  &ptep, &ptep_level))
+> > > > @@ -645,12 +645,12 @@ int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
+> > > >       if (logging || (vma->vm_flags & VM_PFNMAP))
+> > > >               vma_pagesize = PAGE_SIZE;
+> > > >
+> > > > -     if (vma_pagesize == PMD_SIZE || vma_pagesize == PGDIR_SIZE)
+> > > > +     if (vma_pagesize == PMD_SIZE || vma_pagesize == PUD_SIZE)
+> > > >               gfn = (gpa & huge_page_mask(hstate_vma(vma))) >> PAGE_SHIFT;
+> > > >
+> > > >       mmap_read_unlock(current->mm);
+> > > >
+> > > > -     if (vma_pagesize != PGDIR_SIZE &&
+> > > > +     if (vma_pagesize != PUD_SIZE &&
+> > > >           vma_pagesize != PMD_SIZE &&
+> > > >           vma_pagesize != PAGE_SIZE) {
+> > > >               kvm_err("Invalid VMA page size 0x%lx\n", vma_pagesize);
