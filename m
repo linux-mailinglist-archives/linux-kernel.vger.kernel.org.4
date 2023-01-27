@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6DB67EDC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D7B67EDCC
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234935AbjA0SrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 13:47:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
+        id S235210AbjA0SrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 13:47:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234759AbjA0SrF (ORCPT
+        with ESMTP id S235017AbjA0SrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 13:47:05 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F33B761D7;
-        Fri, 27 Jan 2023 10:47:03 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id q8so4082275wmo.5;
-        Fri, 27 Jan 2023 10:47:03 -0800 (PST)
+        Fri, 27 Jan 2023 13:47:07 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821D775790;
+        Fri, 27 Jan 2023 10:47:04 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so6016262wma.1;
+        Fri, 27 Jan 2023 10:47:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g4VhdspxWWSHGP3yOMJ0VuBU6Kq/U6ZEVwsSTq6j1VI=;
-        b=mm9Xzpoo2Q3mKBOjQwDTYKCB5bqNsf7javpjLuvaheBSn9nNNggCNyCAM2+yzSvfaR
-         RKPj1DeIyPyiLw7oH2sjh2N3pe3H0iFettUzNgOfESXn+ig2B6enie5RHgSN2SISnG6f
-         0mJHn9YMhXuc7rkEI0bSU8mNGsQJiB9Qw/zYW7xLwOWUklqFQ5NITUXqbd5xLSkPfPS0
-         0CiPxY15m68RSCyxV4RsXcMLeelw6573kZthuy/fMr81EmMaLajlXCl75TWm5OTBe0aH
-         /MQyA+2JEX0Ztw/39bCpm6FUdZ6rGaQuS55Mi3Ks3j4pgdvp0rjtVl56FfVu++IU8jFK
-         +GHQ==
+        bh=mpe+bVeYsi0cP/h3pLpQx4qS1D1xnS2ts9XErjiPfKI=;
+        b=qqyGyqcqXg+TOV0KOCjfUky6Ur+3GADtp2S96S8xIkauyXfBB0wQDqNgsh6T2/GUDM
+         S/HERvbYwGKTIIX1fp9RxOCB46v8k+lNwIJbLTlcp4h2111nN7sNvSD6XB/hPh9NAI6r
+         889DlT/swG/rXKdTmbZKiWuFcZbV+8NqHrm/JcIEcfD6v8mHTj4KDQJYJwN82Rdhunxu
+         hu3eJRFolokmMk2dS34NkJDOuqfAWlOaaUyqH/V9TkgA5ohRUkQnJkBRbpPPaF3ZUIP6
+         foM5NNnX4Q9YQjvL8G/nufWOCDsUyqIQgH4D3fZ38UfngWablIINYqd7Ni5Jr+F5tBOe
+         4WZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g4VhdspxWWSHGP3yOMJ0VuBU6Kq/U6ZEVwsSTq6j1VI=;
-        b=xTv7jemoOgR9gYiL9JUxCvywumI91TTRBBJbodxPm3d09A8990AKe5kAvZ1zO6RJ9g
-         u2xuKHTMVo8sNqRB+jA7NNSuXBBaanHYIJN/1AU7YTDLlExMTGIB5BW2AYckk2raitZw
-         B8wZwRPUXXboS/v+4CegguoX4u75/YTYG9XUImkj66V49mCNev9dZAy2ry2Sgq6G+cQu
-         2c+8pVk7/4LCzkyqRMerSFCYLgT4Bv5E+e4c1CNeILZQ8ph2Mrzsc5ngTPvHtrwW/VeU
-         Qekr/Ca1dg8CDxCTHw6x0LH1whwazvm0SIwSu+nP5a/j/uuNM10IlyBDDEMU8pdpQ46n
-         p3uQ==
-X-Gm-Message-State: AFqh2kpyTYBES77EOr/7WFHa74JTccNCNWK0JT3W+vDTq0mRTp2TojWd
-        CYuPGOAH6OL3Bxyaq5fOQnU=
-X-Google-Smtp-Source: AMrXdXslDjUO4psN1hA2GZJ3qXmVgaQFwaZH6LQDBwJItUU9i/5Q30GvItJKkiOg9Ty6Cx7V2+BanQ==
-X-Received: by 2002:a05:600c:4e05:b0:3c6:e61e:ae71 with SMTP id b5-20020a05600c4e0500b003c6e61eae71mr43137606wmq.1.1674845221484;
-        Fri, 27 Jan 2023 10:47:01 -0800 (PST)
+        bh=mpe+bVeYsi0cP/h3pLpQx4qS1D1xnS2ts9XErjiPfKI=;
+        b=fkW2YXydWgEQl/zPOUCHDs2BbZNZqKB3TGWn4ZCJNTxOzsfSHkejFeIp836XkC9OMg
+         WFyM402HMaqYzfQdqXzm6c6fn7HKkrExaywTIVRIQ4xU6ahGLOlH/XVA7G1OywpsZ4ms
+         wpSVKbkctLXitsfFlRgLs4zAhV8H38pQeFOnDTUDbmgUuGa/k9EKpreRz5mPkhtF7rJV
+         gY6ITB2ErKZYvGDEt8ih/sc0IF+68zXe++wImFmS3Vg2La8IckcipSjDbr8SbDSI5s/B
+         GHINXUbBI9ikjBrSMg0xozfDILIbWMP1PNdLim9CWfgWOpv8tS0piELnf40W0ktvGm8M
+         ZlVA==
+X-Gm-Message-State: AFqh2kr9JjB0wylCHMz1o1zjzR8Q2SZfytX0LCCGfI7inlW2Z7PxdIsu
+        2d5xJg2JaVTFdBRLvPEfc/8=
+X-Google-Smtp-Source: AMrXdXtTpaQj9B3jDtpqC4wXUhZ73jOnhGVdE6Fn5KwR7HSJYKQJkrYoWZzKvOEwcrsBpwnfQe2gaw==
+X-Received: by 2002:a05:600c:4b9a:b0:3da:fcdc:cafd with SMTP id e26-20020a05600c4b9a00b003dafcdccafdmr40290663wmp.13.1674845222937;
+        Fri, 27 Jan 2023 10:47:02 -0800 (PST)
 Received: from xws.localdomain (pd9ea339c.dip0.t-ipconnect.de. [217.234.51.156])
-        by smtp.gmail.com with ESMTPSA id g12-20020a05600c310c00b003db012d49b7sm16234208wmo.2.2023.01.27.10.47.00
+        by smtp.gmail.com with ESMTPSA id g12-20020a05600c310c00b003db012d49b7sm16234208wmo.2.2023.01.27.10.47.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 10:47:00 -0800 (PST)
+        Fri, 27 Jan 2023 10:47:02 -0800 (PST)
 From:   Maximilian Luz <luzmaximilian@gmail.com>
 To:     Bjorn Andersson <andersson@kernel.org>
 Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
@@ -65,9 +65,9 @@ Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
         Sumit Garg <sumit.garg@linaro.org>,
         Steev Klimaszewski <steev@kali.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/4] firmware: qcom_scm: Export SCM call functions
-Date:   Fri, 27 Jan 2023 19:46:47 +0100
-Message-Id: <20230127184650.756795-2-luzmaximilian@gmail.com>
+Subject: [PATCH v2 2/4] firmware: Add support for Qualcomm Secure Execution Environment SCM interface
+Date:   Fri, 27 Jan 2023 19:46:48 +0100
+Message-Id: <20230127184650.756795-3-luzmaximilian@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230127184650.756795-1-luzmaximilian@gmail.com>
 References: <20230127184650.756795-1-luzmaximilian@gmail.com>
@@ -83,499 +83,613 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make qcom_scm_call, qcom_scm_call_atomic and associated types accessible
-to other modules.
+Add support for SCM calls to Secure OS and the Secure Execution
+Environment (SEE) residing in the TrustZone (TZ) via the QSEECOM
+interface. This allows communication with Secure/TZ applications, for
+example 'uefisecapp' managing access to UEFI variables.
+
+The interface is managed by a platform device to ensure correct lifetime
+and establish a device link to the Qualcomm SCM device.
+
+While this patch introduces only a very basic interface without the more
+advanced features (such as re-entrant and blocking SCM calls and
+listeners/callbacks), this is enough to talk to the aforementioned
+'uefisecapp'.
 
 Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
 ---
 
 Changes in v2:
- - No functional changes
+ - Bind the interface to a device.
+ - Establish a device link to the SCM device to ensure proper ordering.
+ - Register client apps as child devices instead of requiring them to be
+   specified in the device tree.
+ - Rename (qctree -> qseecom) to allow differentiation between old
+   (qseecom) and new (smcinvoke) interfaces to the trusted execution
+   environment.
 
 ---
- drivers/firmware/qcom_scm.c | 118 ++++++++++++++++++++++++------------
- drivers/firmware/qcom_scm.h |  47 --------------
- include/linux/qcom_scm.h    |  49 +++++++++++++++
- 3 files changed, 128 insertions(+), 86 deletions(-)
+ MAINTAINERS                     |   7 +
+ drivers/firmware/Kconfig        |  15 ++
+ drivers/firmware/Makefile       |   1 +
+ drivers/firmware/qcom_qseecom.c | 314 ++++++++++++++++++++++++++++++++
+ include/linux/qcom_qseecom.h    | 190 +++++++++++++++++++
+ 5 files changed, 527 insertions(+)
+ create mode 100644 drivers/firmware/qcom_qseecom.c
+ create mode 100644 include/linux/qcom_qseecom.h
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index 2000323722bf..7305756d02b0 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -212,16 +212,17 @@ static enum qcom_scm_convention __get_convention(void)
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f2c3d471fe8f..846d6c927840 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17387,6 +17387,13 @@ F:	Documentation/networking/device_drivers/cellular/qualcomm/rmnet.rst
+ F:	drivers/net/ethernet/qualcomm/rmnet/
+ F:	include/linux/if_rmnet.h
  
- /**
-- * qcom_scm_call() - Invoke a syscall in the secure world
-- * @dev:	device
-+ * __qcom_scm_call() - Invoke a syscall in the secure world
-+ * @dev:	Device. Depending on the command and number of arguments, this
-+ *		is optional.
-  * @desc:	Descriptor structure containing arguments and return values
-  * @res:        Structure containing results from SMC/HVC call
-  *
-  * Sends a command to the SCM and waits for the command to finish processing.
-  * This should *only* be called in pre-emptible context.
-  */
--static int qcom_scm_call(struct device *dev, const struct qcom_scm_desc *desc,
--			 struct qcom_scm_res *res)
-+static int __qcom_scm_call(struct device *dev, const struct qcom_scm_desc *desc,
-+			   struct qcom_scm_res *res)
- {
- 	might_sleep();
- 	switch (__get_convention()) {
-@@ -236,18 +237,39 @@ static int qcom_scm_call(struct device *dev, const struct qcom_scm_desc *desc,
- 	}
- }
++QUALCOMM SECURE EXECUTION ENVIRONMENT COMMUNICATION DRIVER
++M:	Maximilian Luz <luzmaximilian@gmail.com>
++L:	linux-arm-msm@vger.kernel.org
++S:	Maintained
++F:	drivers/firmware/qcom_qseecom.c
++F:	include/linux/qcom_qseecom.h
++
+ QUALCOMM TSENS THERMAL DRIVER
+ M:	Amit Kucheria <amitk@kernel.org>
+ M:	Thara Gopinath <thara.gopinath@gmail.com>
+diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+index b59e3041fd62..22eec0835abf 100644
+--- a/drivers/firmware/Kconfig
++++ b/drivers/firmware/Kconfig
+@@ -226,6 +226,21 @@ config QCOM_SCM_DOWNLOAD_MODE_DEFAULT
  
-+/**
-+ * qcom_scm_call() - Invoke a syscall in the secure world
-+ * @desc:	Descriptor structure containing arguments and return values
-+ * @res:        Structure containing results from SMC/HVC call
+ 	  Say Y here to enable "download mode" by default.
+ 
++config QCOM_QSEECOM
++	tristate "Qualcomm QSEECOM interface driver"
++	select MFD_CORE
++	select QCOM_SCM
++	help
++	  Various Qualcomm SoCs have a Secure Execution Environment (SEE) running
++	  in the Trust Zone. This module provides an interface to that via the
++	  QSEECOM mechanism, using SCM calls.
++
++	  The QSEECOM interface allows, among other things, access to applications
++	  running in the SEE. An example of such an application is 'uefisecapp',
++	  which is required to access UEFI variables on certain systems.
++
++	  Select M or Y here to enable the QSEECOM interface driver.
++
+ config SYSFB
+ 	bool
+ 	select BOOT_VESA_SUPPORT
+diff --git a/drivers/firmware/Makefile b/drivers/firmware/Makefile
+index 28fcddcd688f..aa48e0821b7d 100644
+--- a/drivers/firmware/Makefile
++++ b/drivers/firmware/Makefile
+@@ -20,6 +20,7 @@ obj-$(CONFIG_RASPBERRYPI_FIRMWARE) += raspberrypi.o
+ obj-$(CONFIG_FW_CFG_SYSFS)	+= qemu_fw_cfg.o
+ obj-$(CONFIG_QCOM_SCM)		+= qcom-scm.o
+ qcom-scm-objs += qcom_scm.o qcom_scm-smc.o qcom_scm-legacy.o
++obj-$(CONFIG_QCOM_QSEECOM)	+= qcom_qseecom.o
+ obj-$(CONFIG_SYSFB)		+= sysfb.o
+ obj-$(CONFIG_SYSFB_SIMPLEFB)	+= sysfb_simplefb.o
+ obj-$(CONFIG_TI_SCI_PROTOCOL)	+= ti_sci.o
+diff --git a/drivers/firmware/qcom_qseecom.c b/drivers/firmware/qcom_qseecom.c
+new file mode 100644
+index 000000000000..2553742ccc43
+--- /dev/null
++++ b/drivers/firmware/qcom_qseecom.c
+@@ -0,0 +1,314 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Interface driver for the Qualcomm Secure Execution Environment (SEE) /
++ * TrustZone OS (TzOS). Manages communication via the QSEECOM interface, using
++ * Secure Channel Manager (SCM) calls.
 + *
-+ * Sends a command to the SCM and waits for the command to finish processing.
-+ * This should *only* be called in pre-emptible context.
-+ *
-+ * Returns zero on success, -ENODEV if the SCM device has not been set up yet,
-+ * or other non-zero status codes on failure.
++ * Copyright (C) 2023 Maximilian Luz <luzmaximilian@gmail.com>
 + */
-+int qcom_scm_call(const struct qcom_scm_desc *desc, struct qcom_scm_res *res)
++
++#include <asm/barrier.h>
++#include <linux/device.h>
++#include <linux/kernel.h>
++#include <linux/mfd/core.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/qcom_scm.h>
++#include <linux/string.h>
++
++#include <linux/qcom_qseecom.h>
++
++
++/* -- Secure-OS SCM call interface. ----------------------------------------- */
++
++static int __qseecom_scm_call(const struct qcom_scm_desc *desc,
++			      struct qseecom_scm_resp *res)
 +{
-+	if (!__scm)
++	struct qcom_scm_res scm_res = {};
++	int status;
++
++	status = qcom_scm_call(desc, &scm_res);
++
++	res->status = scm_res.result[0];
++	res->resp_type = scm_res.result[1];
++	res->data = scm_res.result[2];
++
++	if (status)
++		return status;
++
++	return 0;
++}
++
++/**
++ * qseecom_scm_call() - Perform a QSEECOM SCM call.
++ * @qsee: The QSEECOM device.
++ * @desc: SCM call descriptor.
++ * @res:  SCM call response (output).
++ *
++ * Performs the QSEECOM SCM call described by @desc, returning the response in
++ * @rsp.
++ *
++ * Return: Returns zero on success, nonzero on failure.
++ */
++int qseecom_scm_call(struct qseecom_device *qsee, const struct qcom_scm_desc *desc,
++		     struct qseecom_scm_resp *res)
++{
++	int status;
++
++	/*
++	 * Note: Multiple QSEECOM SCM calls should not be executed same time,
++	 * so lock things here. This needs to be extended to callback/listener
++	 * handling when support for that is implemented.
++	 */
++
++	mutex_lock(&qsee->scm_call_lock);
++	status = __qseecom_scm_call(desc, res);
++	mutex_unlock(&qsee->scm_call_lock);
++
++	dev_dbg(qsee->dev, "%s: owner=%x, svc=%x, cmd=%x, status=%lld, type=%llx, data=%llx",
++		__func__, desc->owner, desc->svc, desc->cmd, res->status,
++		res->resp_type, res->data);
++
++	if (status) {
++		dev_err(qsee->dev, "qcom_scm_call failed with error %d\n", status);
++		return status;
++	}
++
++	/*
++	 * TODO: Handle incomplete and blocked calls:
++	 *
++	 * Incomplete and blocked calls are not supported yet. Some devices
++	 * and/or commands require those, some don't. Let's warn about them
++	 * prominently in case someone attempts to try these commands with a
++	 * device/command combination that isn't supported yet.
++	 */
++	WARN_ON(res->status == QSEECOM_RESULT_INCOMPLETE);
++	WARN_ON(res->status == QSEECOM_RESULT_BLOCKED_ON_LISTENER);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(qseecom_scm_call);
++
++
++/* -- Secure App interface. ------------------------------------------------- */
++
++/**
++ * qseecom_app_get_id() - Query the app ID for a given SEE app name.
++ * @qsee:     The QSEECOM device.
++ * @app_name: The name of the app.
++ * @app_id:   The returned app ID.
++ *
++ * Query and return the application ID of the SEE app identified by the given
++ * name. This returned ID is the unique identifier of the app required for
++ * subsequent communication.
++ *
++ * Return: Returns zero on success, nonzero on failure. Returns -ENOENT if the
++ * app has not been loaded or could not be found.
++ */
++int qseecom_app_get_id(struct qseecom_device *qsee, const char *app_name, u32 *app_id)
++{
++	unsigned long name_buf_size = QSEECOM_MAX_APP_NAME_SIZE;
++	unsigned long app_name_len = strlen(app_name);
++	struct qcom_scm_desc desc = {};
++	struct qseecom_scm_resp res = {};
++	dma_addr_t name_buf_phys;
++	char *name_buf;
++	int status;
++
++	if (app_name_len >= name_buf_size)
++		return -EINVAL;
++
++	name_buf = kzalloc(name_buf_size, GFP_KERNEL);
++	if (!name_buf)
++		return -ENOMEM;
++
++	memcpy(name_buf, app_name, app_name_len);
++
++	name_buf_phys = dma_map_single(qsee->dev, name_buf, name_buf_size, DMA_TO_DEVICE);
++	if (dma_mapping_error(qsee->dev, name_buf_phys)) {
++		kfree(name_buf);
++		dev_err(qsee->dev, "failed to map dma address\n");
++		return -EFAULT;
++	}
++
++	desc.owner = QSEECOM_TZ_OWNER_QSEE_OS;
++	desc.svc = QSEECOM_TZ_SVC_APP_MGR;
++	desc.cmd = 0x03;
++	desc.arginfo = QCOM_SCM_ARGS(2, QCOM_SCM_RW, QCOM_SCM_VAL);
++	desc.args[0] = name_buf_phys;
++	desc.args[1] = app_name_len;
++
++	status = qseecom_scm_call(qsee, &desc, &res);
++	dma_unmap_single(qsee->dev, name_buf_phys, name_buf_size, DMA_TO_DEVICE);
++	kfree(name_buf);
++
++	if (status)
++		return status;
++
++	if (res.status != QSEECOM_RESULT_SUCCESS)
++		return -ENOENT;
++
++	*app_id = res.data;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(qseecom_app_get_id);
++
++/**
++ * qseecom_app_send() - Send to and receive data from a given SEE app.
++ * @qsee:   The QSEECOM device.
++ * @app_id: The ID of the app to communicate with.
++ * @req:    DMA region of the request sent to the app.
++ * @rsp:    DMA region of the response returned by the app.
++ *
++ * Sends a request to the SEE app identified by the given ID and read back its
++ * response. The caller must provide two DMA memory regions, one for the
++ * request and one for the response, and fill out the @req region with the
++ * respective (app-specific) request data. The SEE app reads this and returns
++ * its response in the @rsp region.
++ *
++ * Return: Returns zero on success, nonzero on failure.
++ */
++int qseecom_app_send(struct qseecom_device *qsee, u32 app_id, struct qseecom_dma *req,
++		     struct qseecom_dma *rsp)
++{
++	struct qseecom_scm_resp res = {};
++	int status;
++
++	struct qcom_scm_desc desc = {
++		.owner = QSEECOM_TZ_OWNER_TZ_APPS,
++		.svc = QSEECOM_TZ_SVC_APP_ID_PLACEHOLDER,
++		.cmd = 0x01,
++		.arginfo = QCOM_SCM_ARGS(5, QCOM_SCM_VAL,
++					 QCOM_SCM_RW, QCOM_SCM_VAL,
++					 QCOM_SCM_RW, QCOM_SCM_VAL),
++		.args[0] = app_id,
++		.args[1] = req->phys,
++		.args[2] = req->size,
++		.args[3] = rsp->phys,
++		.args[4] = rsp->size,
++	};
++
++	/* Make sure the request is fully written before sending it off. */
++	dma_wmb();
++
++	status = qseecom_scm_call(qsee, &desc, &res);
++
++	/* Make sure we don't attempt any reads before the SCM call is done. */
++	dma_rmb();
++
++	if (status)
++		return status;
++
++	if (res.status != QSEECOM_RESULT_SUCCESS)
++		return -EIO;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(qseecom_app_send);
++
++
++/* -- Platform specific data. ----------------------------------------------- */
++
++struct qseecom_data {
++	const struct mfd_cell *cells;
++	int num_cells;
++};
++
++static const struct of_device_id qseecom_dt_match[] = {
++	{ .compatible = "qcom,qseecom-sc8280xp", },
++	{ .compatible = "qcom,qseecom", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, qseecom_dt_match);
++
++
++/* -- Driver setup. --------------------------------------------------------- */
++
++static int qseecom_setup_scm_link(struct platform_device *pdev)
++{
++	const u32 flags = DL_FLAG_PM_RUNTIME | DL_FLAG_AUTOREMOVE_CONSUMER;
++	struct platform_device *scm_dev;
++	struct device_node *scm_node;
++	struct device_link *link;
++	int status = 0;
++
++	if (!pdev->dev.of_node)
 +		return -ENODEV;
 +
-+	return __qcom_scm_call(__scm->dev, desc, res);
-+}
-+EXPORT_SYMBOL_GPL(qcom_scm_call);
++	/* Find the SCM device. */
++	scm_node = of_parse_phandle(pdev->dev.of_node, "qcom,scm", 0);
++	if (!scm_node)
++		return -ENOENT;
 +
- /**
-  * qcom_scm_call_atomic() - atomic variation of qcom_scm_call()
-- * @dev:	device
-+ * @dev:	Device. Depending on the command and number of arguments, this
-+ *		is optional.
-  * @desc:	Descriptor structure containing arguments and return values
-  * @res:	Structure containing results from SMC/HVC call
-  *
-  * Sends a command to the SCM and waits for the command to finish processing.
-  * This can be called in atomic context.
-  */
--static int qcom_scm_call_atomic(struct device *dev,
--				const struct qcom_scm_desc *desc,
--				struct qcom_scm_res *res)
-+static int __qcom_scm_call_atomic(struct device *dev,
-+				  const struct qcom_scm_desc *desc,
-+				  struct qcom_scm_res *res)
- {
- 	switch (__get_convention()) {
- 	case SMC_CONVENTION_ARM_32:
-@@ -261,6 +283,26 @@ static int qcom_scm_call_atomic(struct device *dev,
- 	}
- }
- 
-+/**
-+ * qcom_scm_call_atomic() - atomic variation of qcom_scm_call()
-+ * @desc:	Descriptor structure containing arguments and return values
-+ * @res:	Structure containing results from SMC/HVC call
-+ *
-+ * Sends a command to the SCM and waits for the command to finish processing.
-+ * This can be called in atomic context.
-+ *
-+ * Returns zero on success, -ENODEV if the SCM device has not been set up yet,
-+ * or other non-zero status codes on failure.
-+ */
-+int qcom_scm_call_atomic(const struct qcom_scm_desc *desc, struct qcom_scm_res *res)
++	scm_dev = of_find_device_by_node(scm_node);
++	if (!scm_dev) {
++		status = -ENODEV;
++		goto put;
++	}
++
++	/* Establish the device link. */
++	link = device_link_add(&pdev->dev, &scm_dev->dev, flags);
++	if (!link) {
++		status = -EINVAL;
++		goto put;
++	}
++
++	/* Make sure SCM has a driver bound, otherwise defer probe. */
++	if (link->supplier->links.status != DL_DEV_DRIVER_BOUND) {
++		status = -EPROBE_DEFER;
++		goto put;
++	}
++
++put:
++	of_node_put(scm_node);
++	return status;
++}
++
++static int qseecom_probe(struct platform_device *pdev)
 +{
-+	if (!__scm)
-+		return -ENODEV;
++	const struct qseecom_data *data;
++	struct qseecom_device *qsee;
++	int status;
 +
-+	return __qcom_scm_call_atomic(__scm->dev, desc, res);
++	/* Get platform data. */
++	data = of_device_get_match_data(&pdev->dev);
++
++	/* Set up device link. */
++	status = qseecom_setup_scm_link(pdev);
++	if (status)
++		return status;
++
++	/* Set up QSEECOM device. */
++	qsee = devm_kzalloc(&pdev->dev, sizeof(*qsee), GFP_KERNEL);
++	if (!qsee)
++		return -ENOMEM;
++
++	qsee->dev = &pdev->dev;
++	mutex_init(&qsee->scm_call_lock);
++
++	platform_set_drvdata(pdev, qsee);
++
++	/* Add child devices. */
++	if (data) {
++		status = devm_mfd_add_devices(&pdev->dev, PLATFORM_DEVID_NONE, data->cells,
++					      data->num_cells, NULL, 0, NULL);
++	}
++
++	return status;
 +}
-+EXPORT_SYMBOL_GPL(qcom_scm_call_atomic);
 +
- static bool __qcom_scm_is_call_available(struct device *dev, u32 svc_id,
- 					 u32 cmd_id)
- {
-@@ -287,7 +329,7 @@ static bool __qcom_scm_is_call_available(struct device *dev, u32 svc_id,
- 		return false;
- 	}
- 
--	ret = qcom_scm_call(dev, &desc, &res);
-+	ret = __qcom_scm_call(dev, &desc, &res);
- 
- 	return ret ? false : !!res.result[0];
- }
-@@ -312,7 +354,7 @@ static int qcom_scm_set_boot_addr(void *entry, const u8 *cpu_bits)
- 	desc.args[0] = flags;
- 	desc.args[1] = virt_to_phys(entry);
- 
--	return qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
-+	return __qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
- }
- 
- static int qcom_scm_set_boot_addr_mc(void *entry, unsigned int flags)
-@@ -334,7 +376,7 @@ static int qcom_scm_set_boot_addr_mc(void *entry, unsigned int flags)
- 	if (!__scm || __get_convention() == SMC_CONVENTION_LEGACY)
- 		return -EOPNOTSUPP;
- 
--	return qcom_scm_call(__scm->dev, &desc, NULL);
-+	return __qcom_scm_call(__scm->dev, &desc, NULL);
- }
- 
- /**
-@@ -384,7 +426,7 @@ void qcom_scm_cpu_power_down(u32 flags)
- 		.owner = ARM_SMCCC_OWNER_SIP,
- 	};
- 
--	qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
-+	__qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
- }
- EXPORT_SYMBOL(qcom_scm_cpu_power_down);
- 
-@@ -401,7 +443,7 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
- 	struct qcom_scm_res res;
- 	int ret;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	ret = qcom_scm_call(&desc, &res);
- 
- 	return ret ? : res.result[0];
- }
-@@ -419,7 +461,7 @@ static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
- 
- 	desc.args[1] = enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
- 
--	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
-+	return qcom_scm_call_atomic(&desc, NULL);
- }
- 
- static void qcom_scm_set_download_mode(bool enable)
-@@ -499,7 +541,7 @@ int qcom_scm_pas_init_image(u32 peripheral, const void *metadata, size_t size,
- 
- 	desc.args[1] = mdata_phys;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	ret = __qcom_scm_call(__scm->dev, &desc, &res);
- 
- 	qcom_scm_bw_disable();
- 	qcom_scm_clk_disable();
-@@ -565,7 +607,7 @@ int qcom_scm_pas_mem_setup(u32 peripheral, phys_addr_t addr, phys_addr_t size)
- 	if (ret)
- 		return ret;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	ret = qcom_scm_call(&desc, &res);
- 	qcom_scm_bw_disable();
- 	qcom_scm_clk_disable();
- 
-@@ -600,7 +642,7 @@ int qcom_scm_pas_auth_and_reset(u32 peripheral)
- 	if (ret)
- 		return ret;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	ret = qcom_scm_call(&desc, &res);
- 	qcom_scm_bw_disable();
- 	qcom_scm_clk_disable();
- 
-@@ -634,7 +676,7 @@ int qcom_scm_pas_shutdown(u32 peripheral)
- 	if (ret)
- 		return ret;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	ret = qcom_scm_call(&desc, &res);
- 
- 	qcom_scm_bw_disable();
- 	qcom_scm_clk_disable();
-@@ -666,7 +708,7 @@ bool qcom_scm_pas_supported(u32 peripheral)
- 					  QCOM_SCM_PIL_PAS_IS_SUPPORTED))
- 		return false;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	ret = __qcom_scm_call(__scm->dev, &desc, &res);
- 
- 	return ret ? false : !!res.result[0];
- }
-@@ -685,7 +727,7 @@ static int __qcom_scm_pas_mss_reset(struct device *dev, bool reset)
- 	struct qcom_scm_res res;
- 	int ret;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	ret = qcom_scm_call(&desc, &res);
- 
- 	return ret ? : res.result[0];
- }
-@@ -725,8 +767,7 @@ int qcom_scm_io_readl(phys_addr_t addr, unsigned int *val)
- 	struct qcom_scm_res res;
- 	int ret;
- 
--
--	ret = qcom_scm_call_atomic(__scm->dev, &desc, &res);
-+	ret = qcom_scm_call_atomic(&desc, &res);
- 	if (ret >= 0)
- 		*val = res.result[0];
- 
-@@ -745,7 +786,7 @@ int qcom_scm_io_writel(phys_addr_t addr, unsigned int val)
- 		.owner = ARM_SMCCC_OWNER_SIP,
- 	};
- 
--	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
-+	return qcom_scm_call_atomic(&desc, NULL);
- }
- EXPORT_SYMBOL(qcom_scm_io_writel);
- 
-@@ -775,7 +816,7 @@ int qcom_scm_restore_sec_cfg(u32 device_id, u32 spare)
- 	struct qcom_scm_res res;
- 	int ret;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	ret = qcom_scm_call(&desc, &res);
- 
- 	return ret ? : res.result[0];
- }
-@@ -793,7 +834,7 @@ int qcom_scm_iommu_secure_ptbl_size(u32 spare, size_t *size)
- 	struct qcom_scm_res res;
- 	int ret;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	ret = qcom_scm_call(&desc, &res);
- 
- 	if (size)
- 		*size = res.result[0];
-@@ -816,7 +857,7 @@ int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare)
- 	};
- 	int ret;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, NULL);
-+	ret = qcom_scm_call(&desc, NULL);
- 
- 	/* the pg table has been initialized already, ignore the error */
- 	if (ret == -EPERM)
-@@ -837,7 +878,7 @@ int qcom_scm_iommu_set_cp_pool_size(u32 spare, u32 size)
- 		.owner = ARM_SMCCC_OWNER_SIP,
- 	};
- 
--	return qcom_scm_call(__scm->dev, &desc, NULL);
-+	return qcom_scm_call(&desc, NULL);
- }
- EXPORT_SYMBOL(qcom_scm_iommu_set_cp_pool_size);
- 
-@@ -859,7 +900,7 @@ int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
- 	};
- 	struct qcom_scm_res res;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	ret = qcom_scm_call(&desc, &res);
- 
- 	return ret ? : res.result[0];
- }
-@@ -887,7 +928,7 @@ static int __qcom_scm_assign_mem(struct device *dev, phys_addr_t mem_region,
- 	};
- 	struct qcom_scm_res res;
- 
--	ret = qcom_scm_call(dev, &desc, &res);
-+	ret = __qcom_scm_call(dev, &desc, &res);
- 
- 	return ret ? : res.result[0];
- }
-@@ -1004,7 +1045,7 @@ int qcom_scm_ocmem_lock(enum qcom_scm_ocmem_client id, u32 offset, u32 size,
- 		.arginfo = QCOM_SCM_ARGS(4),
- 	};
- 
--	return qcom_scm_call(__scm->dev, &desc, NULL);
-+	return qcom_scm_call(&desc, NULL);
- }
- EXPORT_SYMBOL(qcom_scm_ocmem_lock);
- 
-@@ -1027,7 +1068,7 @@ int qcom_scm_ocmem_unlock(enum qcom_scm_ocmem_client id, u32 offset, u32 size)
- 		.arginfo = QCOM_SCM_ARGS(3),
- 	};
- 
--	return qcom_scm_call(__scm->dev, &desc, NULL);
-+	return qcom_scm_call(&desc, NULL);
- }
- EXPORT_SYMBOL(qcom_scm_ocmem_unlock);
- 
-@@ -1068,7 +1109,7 @@ int qcom_scm_ice_invalidate_key(u32 index)
- 		.owner = ARM_SMCCC_OWNER_SIP,
- 	};
- 
--	return qcom_scm_call(__scm->dev, &desc, NULL);
-+	return qcom_scm_call(&desc, NULL);
- }
- EXPORT_SYMBOL(qcom_scm_ice_invalidate_key);
- 
-@@ -1129,7 +1170,7 @@ int qcom_scm_ice_set_key(u32 index, const u8 *key, u32 key_size,
- 	memcpy(keybuf, key, key_size);
- 	desc.args[1] = key_phys;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, NULL);
-+	ret = qcom_scm_call(&desc, NULL);
- 
- 	memzero_explicit(keybuf, key_size);
- 
-@@ -1198,7 +1239,7 @@ int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt, u32 *resp)
- 	if (ret)
- 		return ret;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	ret = qcom_scm_call(&desc, &res);
- 	*resp = res.result[0];
- 
- 	qcom_scm_clk_disable();
-@@ -1219,7 +1260,7 @@ int qcom_scm_iommu_set_pt_format(u32 sec_id, u32 ctx_num, u32 pt_fmt)
- 		.owner = ARM_SMCCC_OWNER_SIP,
- 	};
- 
--	return qcom_scm_call(__scm->dev, &desc, NULL);
-+	return qcom_scm_call(&desc, NULL);
- }
- EXPORT_SYMBOL(qcom_scm_iommu_set_pt_format);
- 
-@@ -1234,8 +1275,7 @@ int qcom_scm_qsmmu500_wait_safe_toggle(bool en)
- 		.owner = ARM_SMCCC_OWNER_SIP,
- 	};
- 
--
--	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
-+	return qcom_scm_call_atomic(&desc, NULL);
- }
- EXPORT_SYMBOL(qcom_scm_qsmmu500_wait_safe_toggle);
- 
-@@ -1255,7 +1295,7 @@ int qcom_scm_lmh_profile_change(u32 profile_id)
- 		.owner = ARM_SMCCC_OWNER_SIP,
- 	};
- 
--	return qcom_scm_call(__scm->dev, &desc, NULL);
-+	return qcom_scm_call(&desc, NULL);
- }
- EXPORT_SYMBOL(qcom_scm_lmh_profile_change);
- 
-@@ -1290,7 +1330,7 @@ int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
- 
- 	desc.args[0] = payload_phys;
- 
--	ret = qcom_scm_call(__scm->dev, &desc, NULL);
-+	ret = __qcom_scm_call(__scm->dev, &desc, NULL);
- 
- 	dma_free_coherent(__scm->dev, payload_size, payload_buf, payload_phys);
- 	return ret;
-diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-index e6e512bd57d1..87eb726be7d0 100644
---- a/drivers/firmware/qcom_scm.h
-+++ b/drivers/firmware/qcom_scm.h
-@@ -13,53 +13,6 @@ enum qcom_scm_convention {
- 
- extern enum qcom_scm_convention qcom_scm_convention;
- 
--#define MAX_QCOM_SCM_ARGS 10
--#define MAX_QCOM_SCM_RETS 3
--
--enum qcom_scm_arg_types {
--	QCOM_SCM_VAL,
--	QCOM_SCM_RO,
--	QCOM_SCM_RW,
--	QCOM_SCM_BUFVAL,
--};
--
--#define QCOM_SCM_ARGS_IMPL(num, a, b, c, d, e, f, g, h, i, j, ...) (\
--			   (((a) & 0x3) << 4) | \
--			   (((b) & 0x3) << 6) | \
--			   (((c) & 0x3) << 8) | \
--			   (((d) & 0x3) << 10) | \
--			   (((e) & 0x3) << 12) | \
--			   (((f) & 0x3) << 14) | \
--			   (((g) & 0x3) << 16) | \
--			   (((h) & 0x3) << 18) | \
--			   (((i) & 0x3) << 20) | \
--			   (((j) & 0x3) << 22) | \
--			   ((num) & 0xf))
--
--#define QCOM_SCM_ARGS(...) QCOM_SCM_ARGS_IMPL(__VA_ARGS__, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
--
--
--/**
-- * struct qcom_scm_desc
-- * @arginfo:	Metadata describing the arguments in args[]
-- * @args:	The array of arguments for the secure syscall
-- */
--struct qcom_scm_desc {
--	u32 svc;
--	u32 cmd;
--	u32 arginfo;
--	u64 args[MAX_QCOM_SCM_ARGS];
--	u32 owner;
--};
--
--/**
-- * struct qcom_scm_res
-- * @result:	The values returned by the secure syscall
-- */
--struct qcom_scm_res {
--	u64 result[MAX_QCOM_SCM_RETS];
--};
--
- int qcom_scm_wait_for_wq_completion(u32 wq_ctx);
- int scm_get_wq_ctx(u32 *wq_ctx, u32 *flags, u32 *more_pending);
- 
-diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-index 1e449a5d7f5c..162746467c22 100644
---- a/include/linux/qcom_scm.h
-+++ b/include/linux/qcom_scm.h
-@@ -11,6 +11,55 @@
- 
- #include <dt-bindings/firmware/qcom,scm.h>
- 
-+#define QCOM_SCM_ARGS_IMPL(num, a, b, c, d, e, f, g, h, i, j, ...) (\
-+			   (((a) & 0x3) << 4) | \
-+			   (((b) & 0x3) << 6) | \
-+			   (((c) & 0x3) << 8) | \
-+			   (((d) & 0x3) << 10) | \
-+			   (((e) & 0x3) << 12) | \
-+			   (((f) & 0x3) << 14) | \
-+			   (((g) & 0x3) << 16) | \
-+			   (((h) & 0x3) << 18) | \
-+			   (((i) & 0x3) << 20) | \
-+			   (((j) & 0x3) << 22) | \
-+			   ((num) & 0xf))
++static struct platform_driver qseecom_driver = {
++	.probe = qseecom_probe,
++	.driver = {
++		.name = "qcom_qseecom",
++		.of_match_table = qseecom_dt_match,
++		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
++	},
++};
++module_platform_driver(qseecom_driver);
 +
-+#define QCOM_SCM_ARGS(...) QCOM_SCM_ARGS_IMPL(__VA_ARGS__, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
++MODULE_AUTHOR("Maximilian Luz <luzmaximilian@gmail.com>");
++MODULE_DESCRIPTION("Driver for Qualcomm QSEECOM secure OS and secure application interface");
++MODULE_LICENSE("GPL");
+diff --git a/include/linux/qcom_qseecom.h b/include/linux/qcom_qseecom.h
+new file mode 100644
+index 000000000000..4bee5e551d6e
+--- /dev/null
++++ b/include/linux/qcom_qseecom.h
+@@ -0,0 +1,190 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * Interface driver for the Qualcomm Secure Execution Environment (SEE) /
++ * TrustZone OS (TzOS). Manages communication via the QSEECOM interface, using
++ * Secure Channel Manager (SCM) calls.
++ *
++ * Copyright (C) 2023 Maximilian Luz <luzmaximilian@gmail.com>
++ */
 +
-+#define MAX_QCOM_SCM_ARGS 10
-+#define MAX_QCOM_SCM_RETS 3
++#ifndef _LINUX_QCOM_QSEECOM_H
++#define _LINUX_QCOM_QSEECOM_H
 +
-+enum qcom_scm_arg_types {
-+	QCOM_SCM_VAL,
-+	QCOM_SCM_RO,
-+	QCOM_SCM_RW,
-+	QCOM_SCM_BUFVAL,
++#include <linux/device.h>
++#include <linux/dma-mapping.h>
++#include <linux/kernel.h>
++#include <linux/mm.h>
++#include <linux/mutex.h>
++#include <linux/qcom_scm.h>
++#include <linux/types.h>
++
++
++/* -- DMA helpers. ---------------------------------------------------------- */
++
++/* DMA requirements for QSEECOM SCM calls. */
++#define QSEECOM_DMA_ALIGNMENT		8
++#define QSEECOM_DMA_ALIGN(ptr)		ALIGN(ptr, QSEECOM_DMA_ALIGNMENT)
++
++/**
++ * struct qseecom_dma - DMA memory region.
++ * @size: Size of the memory region, in bytes.
++ * @virt: Pointer / virtual address to the memory, accessible by the kernel.
++ * @phys: Physical address of the memory region.
++ */
++struct qseecom_dma {
++	unsigned long size;
++	void *virt;
++	dma_addr_t phys;
 +};
 +
 +/**
-+ * struct qcom_scm_desc - SCM call descriptor.
-+ * @arginfo:	Metadata describing the arguments in args[]
-+ * @args:	The array of arguments for the secure syscall
++ * qseecom_dma_alloc() - Allocate a DMA-able memory region suitable for QSEECOM
++ * SCM calls.
++ * @dev:  The device used for DMA memory allocation.
++ * @dma:  Where to write the allocated memory addresses and size to.
++ * @size: Minimum size of the memory to be allocated.
++ * @gfp:  Flags used for allocation.
++ *
++ * Allocate a DMA-able memory region suitable for interaction with SEE
++ * services/applications and the TzOS. The provided size is treated as the
++ * minimum required size and rounded up, if necessary. The actually allocated
++ * memory region will be stored in @dma. Allocated memory must be freed via
++ * qseecom_dma_free().
++ *
++ * Return: Returns zero on success, -ENOMEM on allocation failure.
 + */
-+struct qcom_scm_desc {
-+	u32 svc;
-+	u32 cmd;
-+	u32 arginfo;
-+	u64 args[MAX_QCOM_SCM_ARGS];
-+	u32 owner;
++static inline int qseecom_dma_alloc(struct device *dev, struct qseecom_dma *dma,
++				    unsigned long size, gfp_t gfp)
++{
++	size = PAGE_ALIGN(size);
++
++	dma->virt = dma_alloc_coherent(dev, size, &dma->phys, GFP_KERNEL);
++	if (!dma->virt)
++		return -ENOMEM;
++
++	dma->size = size;
++	return 0;
++}
++
++/**
++ * qseecom_dma_free() - Free a DMA memory region.
++ * @dev: The device used for allocation.
++ * @dma: The DMA region to be freed.
++ *
++ * Free a DMA region previously allocated via qseecom_dma_alloc(). Note that
++ * freeing sub-regions is not supported.
++ */
++static inline void qseecom_dma_free(struct device *dev, struct qseecom_dma *dma)
++{
++	dma_free_coherent(dev, dma->size, dma->virt, dma->phys);
++}
++
++/**
++ * qseecom_dma_realloc() - Re-allocate DMA memory region with the requested size.
++ * @dev:  The device used for allocation.
++ * @dma:  The region descriptor to be updated.
++ * @size: The new requested size.
++ * @gfp:  Flags used for allocation.
++ *
++ * Re-allocates a DMA memory region suitable for QSEECOM SCM calls to fit the
++ * requested amount of bytes, if necessary. Does nothing if the provided region
++ * already has enough space to store the requested data.
++ *
++ * See qseecom_dma_alloc() for details.
++ *
++ * Return: Returns zero on success, -ENOMEM on allocation failure.
++ */
++static inline int qseecom_dma_realloc(struct device *dev, struct qseecom_dma *dma,
++				      unsigned long size, gfp_t gfp)
++{
++	if (PAGE_ALIGN(size) <= dma->size)
++		return 0;
++
++	qseecom_dma_free(dev, dma);
++	return qseecom_dma_alloc(dev, dma, size, gfp);
++}
++
++/**
++ * qseecom_dma_aligned() - Create a aligned DMA memory sub-region suitable for
++ * QSEECOM SCM calls.
++ * @base:   Base DMA memory region, in which the new region will reside.
++ * @out:    Descriptor to store the aligned sub-region in.
++ * @offset: The offset inside base region at which to place the new sub-region.
++ *
++ * Creates an aligned DMA memory region suitable for QSEECOM SCM calls at or
++ * after the given offset. The size of the sub-region will be set to the
++ * remaining size in the base region after alignment, i.e., the end of the
++ * sub-region will be equal the end of the base region.
++ *
++ * Return: Returns zero on success or -EINVAL if the new aligned memory address
++ * would point outside the base region.
++ */
++static inline int qseecom_dma_aligned(const struct qseecom_dma *base, struct qseecom_dma *out,
++				      unsigned long offset)
++{
++	void *aligned = (void *)QSEECOM_DMA_ALIGN((uintptr_t)base->virt + offset);
++
++	if (aligned - base->virt > base->size)
++		return -EINVAL;
++
++	out->virt = aligned;
++	out->phys = base->phys + (out->virt - base->virt);
++	out->size = base->size - (out->virt - base->virt);
++
++	return 0;
++}
++
++
++/* -- Common interface. ----------------------------------------------------- */
++
++struct qseecom_device {
++	struct device *dev;
++	struct mutex scm_call_lock;	/* Guards QSEECOM SCM calls. */
++};
++
++
++/* -- Secure-OS SCM call interface. ----------------------------------------- */
++
++#define QSEECOM_TZ_OWNER_TZ_APPS		48
++#define QSEECOM_TZ_OWNER_QSEE_OS		50
++
++#define QSEECOM_TZ_SVC_APP_ID_PLACEHOLDER	0
++#define QSEECOM_TZ_SVC_APP_MGR			1
++
++enum qseecom_scm_result {
++	QSEECOM_RESULT_SUCCESS			= 0,
++	QSEECOM_RESULT_INCOMPLETE		= 1,
++	QSEECOM_RESULT_BLOCKED_ON_LISTENER	= 2,
++	QSEECOM_RESULT_FAILURE			= 0xFFFFFFFF,
++};
++
++enum qseecom_scm_resp_type {
++	QSEECOM_SCM_RES_APP_ID			= 0xEE01,
++	QSEECOM_SCM_RES_QSEOS_LISTENER_ID	= 0xEE02,
 +};
 +
 +/**
-+ * struct qcom_scm_res - SCM call response.
-+ * @result:	The values returned by the secure syscall
++ * struct qseecom_scm_resp - QSEECOM SCM call response.
++ * @status:    Status of the SCM call. See &enum qseecom_scm_result.
++ * @resp_type: Type of the response. See &enum qseecom_scm_resp_type.
++ * @data:      Response data. The type of this data is given in @resp_type.
 + */
-+struct qcom_scm_res {
-+	u64 result[MAX_QCOM_SCM_RETS];
++struct qseecom_scm_resp {
++	u64 status;
++	u64 resp_type;
++	u64 data;
 +};
 +
-+int qcom_scm_call(const struct qcom_scm_desc *desc, struct qcom_scm_res *res);
-+int qcom_scm_call_atomic(const struct qcom_scm_desc *desc, struct qcom_scm_res *res);
++int qseecom_scm_call(struct qseecom_device *qsee, const struct qcom_scm_desc *desc,
++		     struct qseecom_scm_resp *res);
 +
- #define QCOM_SCM_VERSION(major, minor)	(((major) << 16) | ((minor) & 0xFF))
- #define QCOM_SCM_CPU_PWR_DOWN_L2_ON	0x0
- #define QCOM_SCM_CPU_PWR_DOWN_L2_OFF	0x1
++
++/* -- Secure App interface. ------------------------------------------------- */
++
++#define QSEECOM_MAX_APP_NAME_SIZE			64
++
++int qseecom_app_get_id(struct qseecom_device *qsee, const char *app_name, u32 *app_id);
++int qseecom_app_send(struct qseecom_device *qsee, u32 app_id, struct qseecom_dma *req,
++		     struct qseecom_dma *rsp);
++
++#endif /* _LINUX_QCOM_QSEECOM_H */
 -- 
 2.39.0
 
