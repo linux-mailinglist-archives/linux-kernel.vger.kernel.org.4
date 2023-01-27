@@ -2,231 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C9B67DE05
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B7B67DE07
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbjA0G4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 01:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
+        id S231908AbjA0G4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 01:56:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjA0G4A (ORCPT
+        with ESMTP id S231868AbjA0G4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 01:56:00 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51E718B;
-        Thu, 26 Jan 2023 22:55:58 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30R6pu80019129;
-        Fri, 27 Jan 2023 06:55:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=HGwzQi8eBbFgB7XgKrIxnk5MJfxXDdJjWi+i8hCwJS4=;
- b=TtIRBsmLph0bkbnDDaXOUZTVI4huQN50oB4uyyCVoaAtrw+2IejvXZAuzPjKgIdcoAax
- nvTfvG2ogIRoqbO5O33jEZ9ekweqECq6GYQz9+xv012kztoHQiBF/WQesRq7v3Igu6pO
- bZtjhADPx/ietH76c6Qj0nCVcglrjU+sJ7HyVBtxuvGqYn+vHemqSyoxeGh6mOGoNM4q
- Jmcc46ekI2tT3iklfNMtqtuJ7mZpOF57pt2tDt6NXNpiUu2sP1ms3WP+jY3nJLjxNMyf
- fn7MVnBuvyeXdlxI6GbGmLn05SfjpDwga8yOsw7zwyJ6Prr6kHxOQNUWYNMJIs87MZ6I 2g== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nb5ynbuqa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 06:55:45 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30R6tihC018284
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 06:55:44 GMT
-Received: from [10.216.47.84] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 26 Jan
- 2023 22:55:42 -0800
-Message-ID: <3d99cf40-b5e2-21da-cc37-cd2e17ce10ad@quicinc.com>
-Date:   Fri, 27 Jan 2023 12:25:32 +0530
+        Fri, 27 Jan 2023 01:56:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DC31BE7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 22:55:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674802548;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NDdEzZIJpaMrus45LhANj9u0TRucPAk/LF4N1hRhX9Q=;
+        b=Ek6bNeGb0rbdnCflSSVmTSezMoT3n60chl1bkI21cGP8fYsXhx0h/QcVgTrsLCFq8i5LVu
+        zl9XTPugNIPewlwPikQHXvxWP08Xtl5U9bAaQwrQoZV0UGUKrCIqMfxZaBKnXfTNJ7NWNH
+        UG/UZeU5QzmUWtrU78vFomE9s3ClS90=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-630-FxQ-k2xiNpKxFgBJRZaMlA-1; Fri, 27 Jan 2023 01:55:46 -0500
+X-MC-Unique: FxQ-k2xiNpKxFgBJRZaMlA-1
+Received: by mail-ot1-f71.google.com with SMTP id a22-20020a9d6e96000000b00689e7445761so1546123otr.17
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 22:55:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NDdEzZIJpaMrus45LhANj9u0TRucPAk/LF4N1hRhX9Q=;
+        b=uUy4Y3+BKc475ME/ldnjjHoz8hh0sslSvViy0wm5w2mcNOU4pNdod36aTI/oyy4a0H
+         GLqYecW9rbmTqpTehydV977GZmx9WfNxEOVlLSgDo9YsLpJFjsQZ/uKVfsu+i//7OUAr
+         nvWhtnCd6KS1MFvcoLytI64IuW4AE/Lfb3qdisUzZfRNPz1btmvXZhCOoGTins6D2gC1
+         h9g5iz4ieN0jNhRW6x52JQfl3YAmYBDud2/7T4CKieTISJourcUDdq7YiNDQcSYrzmAN
+         ab49mzNL7fxpO1HM/MLCXryj0jyU+pioPwiWMiEyZ5tSuuvIxJMfSj8AON+EuVlOyIRk
+         1BEQ==
+X-Gm-Message-State: AFqh2kpDS2K/eKhG9hdby3HKGpov43p5FDYNV/P/W6bybpYps7BYPJVb
+        kSHC5hfJU9gT4H5t36Z3Yga0S025Z+ji4ecfNR23zwQUB0b2l/RZaXTSq0WaN0RpFPk3IqElJA+
+        ZaoO+UEfGmKX+JojK5Ozzo+tE
+X-Received: by 2002:a05:6830:1bdb:b0:686:56e2:2e41 with SMTP id v27-20020a0568301bdb00b0068656e22e41mr16544498ota.38.1674802545987;
+        Thu, 26 Jan 2023 22:55:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvfswXh7DppF1VeSoZqsSmPMJugeFI1r9Oj3sddFZy7IuwLtSHny7FBVdKerPF7Mn9vk6qEzw==
+X-Received: by 2002:a05:6830:1bdb:b0:686:56e2:2e41 with SMTP id v27-20020a0568301bdb00b0068656e22e41mr16544488ota.38.1674802545731;
+        Thu, 26 Jan 2023 22:55:45 -0800 (PST)
+Received: from ?IPv6:2804:1b3:a800:6912:c477:c73a:cf7c:3a27? ([2804:1b3:a800:6912:c477:c73a:cf7c:3a27])
+        by smtp.gmail.com with ESMTPSA id bm11-20020a0568081a8b00b0035a2f3e423esm1294570oib.32.2023.01.26.22.55.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 22:55:45 -0800 (PST)
+Message-ID: <0122005439ffb7895efda7a1a67992cbe41392fe.camel@redhat.com>
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     Michal Hocko <mhocko@suse.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 27 Jan 2023 03:55:39 -0300
+In-Reply-To: <Y9LQ615H13RmG7wL@dhcp22.suse.cz>
+References: <20230125073502.743446-1-leobras@redhat.com>
+         <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+         <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+         <Y9FzSBw10MGXm2TK@tpad> <Y9IvoDJbLbFcitTc@dhcp22.suse.cz>
+         <Y9LDAZmApLeffrT8@tpad> <Y9LQ615H13RmG7wL@dhcp22.suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH 02/35] Documentation: arm: correct spelling
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Russell King <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
-References: <20230127064005.1558-1-rdunlap@infradead.org>
- <20230127064005.1558-2-rdunlap@infradead.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230127064005.1558-2-rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: fUz_eJxNtqxoY0BFYwge7aDbau9S8lhX
-X-Proofpoint-GUID: fUz_eJxNtqxoY0BFYwge7aDbau9S8lhX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-27_02,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=890 phishscore=0
- malwarescore=0 impostorscore=0 spamscore=0 clxscore=1011 mlxscore=0
- adultscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301270065
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 2023-01-26 at 20:13 +0100, Michal Hocko wrote:
+> On Thu 26-01-23 15:14:25, Marcelo Tosatti wrote:
+> > On Thu, Jan 26, 2023 at 08:45:36AM +0100, Michal Hocko wrote:
+> > > On Wed 25-01-23 15:22:00, Marcelo Tosatti wrote:
+> > > [...]
+> > > > Remote draining reduces interruptions whether CPU=20
+> > > > is marked as isolated or not:
+> > > >=20
+> > > > - Allows isolated CPUs from benefiting of pcp caching.
+> > > > - Removes the interruption to non isolated CPUs. See for example=
+=20
+> > > >=20
+> > > > https://lkml.org/lkml/2022/6/13/2769
+> > >=20
+> > > This is talking about page allocato per cpu caches, right? In this pa=
+tch
+> > > we are talking about memcg pcp caches. Are you sure the same applies
+> > > here?
+> >=20
+> > Both can stall the users of the drain operation.
+>=20
+> Yes. But it is important to consider who those users are. We are
+> draining when
+> 	- we are charging and the limit is hit so that memory reclaim
+> 	  has to be triggered.
+> 	- hard, high limits are set and require memory reclaim.
+> 	- force_empty - full memory reclaim for a memcg
+> 	- memcg offlining - cgroup removel - quite a heavy operation as
+> 	  well.
+> all those could be really costly kernel operations and they affect
+> isolated cpu only if the same memcg is used by both isolated and non-isol=
+ated
+> cpus. In other words those costly operations would have to be triggered
+> from non-isolated cpus and those are to be expected to be stalled. It is
+> the side effect of the local cpu draining that is scheduled that affects
+> the isolated cpu as well.
+>=20
+> Is that more clear?
 
-Thanks for the patch.
+I think so, please help me check:
 
-On 1/27/2023 12:09 PM, Randy Dunlap wrote:
-> Correct spelling problems for Documentation/arm/ as reported
-> by codespell.
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> ---
->   Documentation/arm/arm.rst                           |    2 +-
->   Documentation/arm/ixp4xx.rst                        |    4 ++--
->   Documentation/arm/keystone/knav-qmss.rst            |    2 +-
->   Documentation/arm/stm32/stm32-dma-mdma-chaining.rst |    6 +++---
->   Documentation/arm/sunxi/clocks.rst                  |    2 +-
->   Documentation/arm/swp_emulation.rst                 |    2 +-
->   Documentation/arm/tcm.rst                           |    2 +-
->   Documentation/arm/vlocks.rst                        |    2 +-
->   8 files changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff -- a/Documentation/arm/ixp4xx.rst b/Documentation/arm/ixp4xx.rst
-> --- a/Documentation/arm/ixp4xx.rst
-> +++ b/Documentation/arm/ixp4xx.rst
-> @@ -78,9 +78,9 @@ IXP4xx provides two methods of accessing
->   1) A direct mapped window from 0x48000000 to 0x4bffffff (64MB).
->      To access PCI via this space, we simply ioremap() the BAR
->      into the kernel and we can use the standard read[bwl]/write[bwl]
-> -   macros. This is the preffered method due to speed but it
-> +   macros. This is the preferred method due to speed but it
->      limits the system to just 64MB of PCI memory. This can be
-> -   problamatic if using video cards and other memory-heavy devices.
-> +   problematic if using video cards and other memory-heavy devices.
->   
->   2) If > 64MB of memory space is required, the IXP4xx can be
->      configured to use indirect registers to access PCI This allows
-> diff -- a/Documentation/arm/swp_emulation.rst b/Documentation/arm/swp_emulation.rst
-> --- a/Documentation/arm/swp_emulation.rst
-> +++ b/Documentation/arm/swp_emulation.rst
-> @@ -1,7 +1,7 @@
->   Software emulation of deprecated SWP instruction (CONFIG_SWP_EMULATE)
->   ---------------------------------------------------------------------
->   
-> -ARMv6 architecture deprecates use of the SWP/SWPB instructions, and recommeds
-> +ARMv6 architecture deprecates use of the SWP/SWPB instructions, and recommends
->   moving to the load-locked/store-conditional instructions LDREX and STREX.
->   
->   ARMv7 multiprocessing extensions introduce the ability to disable these
-> diff -- a/Documentation/arm/tcm.rst b/Documentation/arm/tcm.rst
-> --- a/Documentation/arm/tcm.rst
-> +++ b/Documentation/arm/tcm.rst
-> @@ -71,7 +71,7 @@ in <asm/tcm.h>. Using this interface it
->   
->   - Have the remaining TCM RAM added to a special
->     allocation pool with gen_pool_create() and gen_pool_add()
-> -  and provice tcm_alloc() and tcm_free() for this
-> +  and provide tcm_alloc() and tcm_free() for this
->     memory. Such a heap is great for things like saving
->     device state when shutting off device power domains.
->   
-> diff -- a/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
-> --- a/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
-> +++ b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
-> @@ -359,7 +359,7 @@ Driver updates for STM32 DMA-MDMA chaini
->       descriptor you want a callback to be called at the end of the transfer
->       (dmaengine_prep_slave_sg()) or the period (dmaengine_prep_dma_cyclic()).
->       Depending on the direction, set the callback on the descriptor that finishes
-> -    the overal transfer:
-> +    the overall transfer:
->   
->       * DMA_DEV_TO_MEM: set the callback on the "MDMA" descriptor
->       * DMA_MEM_TO_DEV: set the callback on the "DMA" descriptor
-> @@ -371,7 +371,7 @@ Driver updates for STM32 DMA-MDMA chaini
->     As STM32 MDMA channel transfer is triggered by STM32 DMA, you must issue
->     STM32 MDMA channel before STM32 DMA channel.
->   
-> -  If any, your callback will be called to warn you about the end of the overal
-> +  If any, your callback will be called to warn you about the end of the overall
->     transfer or the period completion.
->   
->     Don't forget to terminate both channels. STM32 DMA channel is configured in
-> @@ -412,4 +412,4 @@ Resources
->   
->   :Authors:
->   
-> -- Amelie Delaunay <amelie.delaunay@foss.st.com>
-> \ No newline at end of file
-> +- Amelie Delaunay <amelie.delaunay@foss.st.com>
-> diff -- a/Documentation/arm/arm.rst b/Documentation/arm/arm.rst
-> --- a/Documentation/arm/arm.rst
-> +++ b/Documentation/arm/arm.rst
-> @@ -141,7 +141,7 @@ ST506 hard drives
->     `*configure` harddrive set to 2). I've got an internal 20MB and a great
->     big external 5.25" FH 64MB drive (who could ever want more :-) ).
->   
-> -  I've just got 240K/s off it (a dd with bs=128k); thats about half of what
-> +  I've just got 240K/s off it (a dd with bs=128k); that's about half of what
->     RiscOS gets; but it's a heck of a lot better than the 50K/s I was getting
->     last week :-)
->   
-> diff -- a/Documentation/arm/keystone/knav-qmss.rst b/Documentation/arm/keystone/knav-qmss.rst
-> --- a/Documentation/arm/keystone/knav-qmss.rst
-> +++ b/Documentation/arm/keystone/knav-qmss.rst
-> @@ -39,7 +39,7 @@ CPPI/QMSS Low Level Driver document (doc
->   
->   	git://git.ti.com/keystone-rtos/qmss-lld.git
->   
-> -k2_qmss_pdsp_acc48_k2_le_1_0_0_9.bin firmware supports upto 48 accumulator
-> +k2_qmss_pdsp_acc48_k2_le_1_0_0_9.bin firmware supports up to 48 accumulator
->   channels. This firmware is available under ti-keystone folder of
->   firmware.git at
->   
-> diff -- a/Documentation/arm/sunxi/clocks.rst b/Documentation/arm/sunxi/clocks.rst
-> --- a/Documentation/arm/sunxi/clocks.rst
-> +++ b/Documentation/arm/sunxi/clocks.rst
-> @@ -5,7 +5,7 @@ Frequently asked questions about the sun
->   This document contains useful bits of information that people tend to ask
->   about the sunxi clock system, as well as accompanying ASCII art when adequate.
->   
-> -Q: Why is the main 24MHz oscillator gatable? Wouldn't that break the
-> +Q: Why is the main 24MHz oscillator gateable? Wouldn't that break the
->      system?
->   
->   A: The 24MHz oscillator allows gating to save power. Indeed, if gated
-> diff -- a/Documentation/arm/vlocks.rst b/Documentation/arm/vlocks.rst
-> --- a/Documentation/arm/vlocks.rst
-> +++ b/Documentation/arm/vlocks.rst
-> @@ -155,7 +155,7 @@ the basic algorithm:
->      optimisation.
->   
->      If there are too many CPUs to read the currently_voting array in
-> -   one transaction then multiple transations are still required.  The
-> +   one transaction then multiple transactions are still required.  The
->      implementation uses a simple loop of word-sized loads for this
->      case.  The number of transactions is still fewer than would be
->      required if bytes were loaded individually.
-> 
+IIUC, we can approach this by dividing the problem in two working modes:
+1 - Normal, meaning no drain_all_stock() running.
+2 - Draining, grouping together pre-OOM and userspace 'config' : changing,
+destroying, reconfiguring a memcg.
 
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+For (1), we will have (ideally) only local cpu working on the percpu struct=
+.
+This mode will not have any kind of contention, because each CPU will hold =
+it's
+own spinlock only.=20
 
--Mukesh
+For (2), we will have a lot of drain_all_stock() running. This will mean a =
+lot
+of schedule_work_on() running (on upstream) or possibly causing contention,=
+ i.e.
+local cpus having to wait for a lock to get their cache, on the patch propo=
+sal.
 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Ok, given the above is correct:
+
+# Some arguments point that (1) becomes slower with this patch.
+
+This is partially true: while test 2.2 pointed that local cpu functions run=
+ning
+time had became slower by a few cycles, test 2.4 points that the userspace
+perception of it was that the syscalls and pagefaulting actually became fas=
+ter:
+
+During some debugging tests before getting the performance on test 2.4, I
+noticed that the 'syscall + write' test would call all those functions that
+became slower on test 2.2. Those functions were called multiple millions of
+times during a single test, and still the patched version performance test
+returned faster for test 2.4 than upstream version. Maybe the functions bec=
+ame
+slower, but overall the usage of them in the usual context became faster.
+
+Is not that a small improvement?
+
+# Regarding (2), I notice that we fear contention=20
+
+While this seems to be the harder part of the discussion, I think we have e=
+nough
+data to deal with it.=20
+
+In which case contention would be a big problem here?=C2=A0
+IIUC it would be when a lot of drain_all_stock() get running because the me=
+mory
+limit is getting near.=C2=A0I mean, having the user to create / modify a me=
+mcg
+multiple times a second for a while is not something that is expected, IMHO=
+.
+
+Now, if I assumed correctly and the case where contention could be a proble=
+m is
+on a memcg with high memory pressure, then we have the argument that Marcel=
+o
+Tosatti brought to the discussion[P1]: using spinlocks on percpu caches for=
+ page
+allocation brought better results than local_locks + schedule_work_on().
+
+I mean, while contention would cause the cpu to wait for a while before get=
+ting
+the lock for allocating a page from cache, something similar would happen w=
+ith
+schedule_work_on(), which would force the current task to wait while the
+draining happens locally.=C2=A0
+
+What I am able to see is that, for each drain_all_stock(), for each cpu get=
+ting
+drained we have the option to (a) (sometimes) wait for a lock to be freed, =
+or
+(b) wait for a whole context switch to happen.
+And IIUC, (b) is much slower than (a) on average, and this is what causes t=
+he
+improved performance seen in [P1].
+
+(I mean, waiting while drain_local_stock() runs in the local CPU vs waiting=
+ for
+it to run on the remote CPU may not be that different, since the cacheline =
+is
+already writen to by the remote cpu on Upstream)
+
+Also according to test 2.2, for the patched version, drain_local_stock() ha=
+ve
+gotten faster (much faster for 128 cpus), even though it does all the drain=
+ing
+instead of just scheduling it on the other cpus.=C2=A0
+I mean, summing that to the brief nature of local cpu functions, we may not=
+ hit
+contention as much as we are expected.
+
+##
+
+Sorry for the long text.
+I may be missing some point, please let me know if that's the case.
+
+Thanks a lot for reviewing!
+Leo
+
+[P1]: https://lkml.org/lkml/2022/6/13/2769
+
