@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5789167DD02
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 06:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F4E67DD04
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 06:09:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjA0FE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 00:04:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
+        id S231129AbjA0FJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 00:09:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjA0FE4 (ORCPT
+        with ESMTP id S229448AbjA0FJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 00:04:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D315CE74
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:04:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 27 Jan 2023 00:09:17 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A13834329;
+        Thu, 26 Jan 2023 21:09:16 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4AD5FB81F87
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:04:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6801C433EF;
-        Fri, 27 Jan 2023 05:04:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674795893;
-        bh=/HLKprgFCkbwfasw3ymLCwPg8rX60Yypp+3lYT3FCJ4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Mp/rTFaZrIswP/zPyxJsexO6HD1kJWsmPpq+Dl17E8g8+5vNo28eKn/wnbal/dq+9
-         ue1W8sWQZARzTxdJxD6tWGlMycrf0stBW/c7G7KK/kcP6+66EeJei/Z9Zi4wMHLoM6
-         nbjjXIAZo0T+MSGYbJ24kPTSIRpWwwZ3lqEhgQvQfLV9n3Je9q25UJf2/w8NXrWgJz
-         ec7ljPaw+1OEHlYYuOawmSCkTUEeJ8MbV1+hZQmJMBXMrlUqZN0/9hHe7xJMt1/vqP
-         hYlq3slKHiZe3SDP9+qiaDFB969ICKH9rAnBhfUQ+nYmjrK6Up8PxAvs9+9CW+ZgkA
-         VvNYgMm89j8TA==
-From:   guoren@kernel.org
-To:     tongtiangen@huawei.com, alexandre.ghiti@canonical.com,
-        muchun.song@linux.dev, palmer@rivosinc.com, guoren@kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH -next V2] riscv: mm: hugetlb: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-Date:   Fri, 27 Jan 2023 00:04:21 -0500
-Message-Id: <20230127050421.1920048-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P35GL28F9z4xGM;
+        Fri, 27 Jan 2023 16:09:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674796155;
+        bh=oyvYq/rnPJ6Ikzr/O72Nrz44EJkmyLrzNOYT4oDOEvg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aJfHHeaqDcfX7kFX98QqBMcz9VQzq8ppDHdYgRUh23O3HfIYyKEbg+ZAWD2TLVGLV
+         eRudjNl03sQ1EecpZyjPVoVhA0DOj/mWwMLaQebFJ5B2A8qS8SHYGnzm/2H4LLy5gN
+         aiU6LLiGq7qIfx5rkSqNygA3W6fHk3GErQfMKw/a2+t6UgdroEFlcu0FYVY348tIhh
+         5vdZLgmiRvxB8D1iKknA+NL+3phy78BgVQ9gseWluVd2O5d+6cJezhe1Pn75z7vFsx
+         8SFutJ5LypamaIWq7EGolyVpLnSuwccLBkSJ9JyizfilFvWe6Zy0Lv5otJK2DPvuJu
+         m1J0cNNakS2uA==
+Date:   Fri, 27 Jan 2023 16:09:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the mfd tree
+Message-ID: <20230127160913.7deebd22@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/lJTMJh6_EIjD0WGjUOa+wOj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+--Sig_/lJTMJh6_EIjD0WGjUOa+wOj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Add HVO support for RISC-V; see commit 6be24bed9da3 ("mm: hugetlb:
-introduce a new config HUGETLB_PAGE_FREE_VMEMMAP"). This patch is
-similar to commit 1e63ac088f20 ("arm64: mm: hugetlb: enable
-HUGETLB_PAGE_FREE_VMEMMAP for arm64"), and riscv's motivation is the
-same as arm64. The current riscv was ready to enable HVO after fixup,
-ref commit d33deda095d3 ("riscv/mm: hugepage's PG_dcache_clean flag
-is only set in head page").
+Hi all,
 
-The HugeTLB VmemmapvOptimization (HVO) defaults to off in Kconfig.
+The following commit is also in the arm-soc tree as a different commit
+(but the same patch):
 
-Here is the riscv test log:
-cat /proc/sys/vm/hugetlb_optimize_vmemmap
-echo 8 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
-mount -t hugetlbfs none test/ -o pagesize=2048k
-<Try some simple hugetlb test in test dir, no problem found.>
+  dd77f5fa97d3 ("mfd: Remove toshiba tmio drivers")
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Link: https://lore.kernel.org/linux-riscv/1F5AF29D-708A-483B-A29F-CAEE6F554866@linux.dev/
-Acked-by: Muchun Song <songmuchun@bytedance.com>
----
-Changelog:
-V2:
- - Optimize the commit log
- - Remove riscv page compound_head fixup which has been merged.
- - Rebase on riscv for-next (20230127)
- - Add HVO author's acked-by
+This is commit
 
-V1:
-https://lore.kernel.org/linux-riscv/20221023133205.3493564-1-guoren@kernel.org/
----
- arch/riscv/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+  e9b016cfd62d ("mfd: remove toshiba tmio drivers")
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index e2b656043abf..949974a38a41 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -46,6 +46,7 @@ config RISCV
- 	select ARCH_WANT_FRAME_POINTERS
- 	select ARCH_WANT_GENERAL_HUGETLB
- 	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
-+	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	select ARCH_WANTS_THP_SWAP if HAVE_ARCH_TRANSPARENT_HUGEPAGE
- 	select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
- 	select BUILDTIME_TABLE_SORT if MMU
--- 
-2.36.1
+in the arm-soc tree.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/lJTMJh6_EIjD0WGjUOa+wOj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTXHkACgkQAVBC80lX
+0GyHlwf/VATY64RaG45l5zcjtbVL99aZaKmo8Gqy7QV9ocuLNfrXdlD/s9/jXf41
+wVUBkYC9sAGjlkxVNNTEK6XjKAb1hTpjHhLYPFH3L3nHsKr/tcYLNeIooXXicySV
+gJYNOvInwlnNg0mgV53Ah8lBTLGHAfMIqvPATa9wh4XkMJQPzttwyaygrrtcjRdR
+wZ8pLQFjZLciZJyUZBnJW52MwkcH9Jqqd8qhz3+j9J7QegcvBDtv7LmlglZ8vPW2
+TeALEVBZUjgybcOaVa3O8mwbcq1SpwnrwQe9IGh9IKzosfwqmdvMPxns5rdV9rLT
+LRjJ8yC6YxWsiwXgP9onXzhNXd72MA==
+=T4pO
+-----END PGP SIGNATURE-----
+
+--Sig_/lJTMJh6_EIjD0WGjUOa+wOj--
