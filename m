@@ -2,109 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A406F67E5A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB8967E5A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234345AbjA0Mmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:42:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
+        id S234163AbjA0Mnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234226AbjA0MmU (ORCPT
+        with ESMTP id S233119AbjA0Mnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:42:20 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AF872654;
-        Fri, 27 Jan 2023 04:41:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uvHj20TTbrgV/IPd1XkJDIUiQVnvExKvw3Gg+WnioGs=; b=BI+rt7XWOFM9StS4hVcOPsbWdO
-        7klkyntzhCbOv+Mp3WJ/zhRaJoZ/CYX356tINw55C/faKAW9kAgQRo9fFgMLuo0LQWDHnvP6dN2E7
-        7GCRy22m7smpfS82g52sTmeBGN0DMeDdDqvVkbTfwwVS8W83mpcmPcttWRstIsahxQkQL+mjja/Cb
-        yqsgIqgc+0DKwYBaUo49sDIaq0vTeVOAWN1UO3+fRv6DFp0RwTmkOlvsSn9RVVVfVkxqhVqe+4egS
-        a41vmRYcY2VasjsZiTXcPK8M9dLjw82UHtMuMK5Cy1hQsa/cDxiCqZsutREEpkFSitvlBI6e3qGBS
-        l2wQNyTQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pLO2S-002meV-1p;
-        Fri, 27 Jan 2023 12:41:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8970A30036B;
-        Fri, 27 Jan 2023 13:41:34 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 14E1B20D3CC56; Fri, 27 Jan 2023 13:41:34 +0100 (CET)
-Date:   Fri, 27 Jan 2023 13:41:34 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexey Kardashevskiy <aik@amd.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Jiri Kosina <jkosina@suse.cz>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, joro@8bytes.org
-Subject: Re: [Question PATCH kernel] x86/amd/sev/nmi+vc: Fix stack handling
- (why is this happening?)
-Message-ID: <Y9PGfjiMyZFnhnvf@hirez.programming.kicks-ass.net>
-References: <20230127035616.508966-1-aik@amd.com>
- <Y9OUfofjxDtTmwyV@hirez.programming.kicks-ass.net>
- <c2716284-a8f2-9494-e130-cbda2a1dccfb@amd.com>
+        Fri, 27 Jan 2023 07:43:31 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 165E8977C
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:43:23 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB6642F;
+        Fri, 27 Jan 2023 04:44:04 -0800 (PST)
+Received: from [10.57.88.221] (unknown [10.57.88.221])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 993FF3F5A1;
+        Fri, 27 Jan 2023 04:43:21 -0800 (PST)
+Message-ID: <d454c9a2-5300-b600-a2ae-21d82d338470@arm.com>
+Date:   Fri, 27 Jan 2023 12:43:17 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c2716284-a8f2-9494-e130-cbda2a1dccfb@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V2] arm64/mm: Intercept pfn changes in set_pte_at()
+Content-Language: en-GB
+To:     Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+References: <20230109052816.405335-1-anshuman.khandual@arm.com>
+ <e924c1aa-5f04-fd7f-52d4-7cf22c476016@arm.com>
+ <20230126133321.GB29148@willie-the-truck>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230126133321.GB29148@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:13:38PM +1100, Alexey Kardashevskiy wrote:
+On 2023-01-26 13:33, Will Deacon wrote:
+> On Tue, Jan 24, 2023 at 11:11:49AM +0530, Anshuman Khandual wrote:
+>> On 1/9/23 10:58, Anshuman Khandual wrote:
+>>> Changing pfn on a user page table mapped entry, without first going through
+>>> break-before-make (BBM) procedure is unsafe. This just updates set_pte_at()
+>>> to intercept such changes, via an updated pgattr_change_is_safe(). This new
+>>> check happens via __check_racy_pte_update(), which has now been renamed as
+>>> __check_safe_pte_update().
+>>>
+>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>>> Cc: Will Deacon <will@kernel.org>
+>>> Cc: Mark Rutland <mark.rutland@arm.com>
+>>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>>> Cc: linux-arm-kernel@lists.infradead.org
+>>> Cc: linux-kernel@vger.kernel.org
+>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>>> ---
+>>> This applies on v6.2-rc3. This patch had some test time on an internal CI
+>>> system without any issues being reported.
+>>
+>> Gentle ping, any updates on this patch ? Still any concerns ?
+> 
+> I don't think we really got to the bottom of Mark's concerns with
+> unreachable ptes on the stack, did we? I also have vague recollections
+> of somebody (Robin?) running into issues with the vmap code not honouring
+> BBM.
 
-> > This is broken, and building with DEBUG_ENTRY=y would've told you.
-> 
-> 
-> Huh, good to know. Is this it telling me so?
-> 
-> vmlinux.o: warning: objtool: exc_nmi+0x73: call to native_get_debugreg7()
-> leaves .noinstr.text section
-> 
+Doesn't ring a bell, so either it wasn't me, or it was many years ago 
+and about 5 levels deep into trying to fix something else :/
 
-Yep. The ramification of all that is that by calling non-noinstr code
-(double negative, iow, regular instrumented code) is that you can end up
-in the tracers/*SAN/breakpoints etc.. code -- something we're very much
-not ready for at this point.
+> So I think we should confirm/fix the vmap issue before we enable this check
+> and also try to get some testing coverage to address Mark's worries. I think
+> he has a syzkaller instance set up, so that sound like a good place to
+> start.
 
-> > > +
-> > >   #ifdef CONFIG_CPU_SUP_AMD
-> > >   extern void set_dr_addr_mask(unsigned long mask, int dr);
-> > >   #else
-> > > diff --git a/arch/x86/kernel/nmi.c b/arch/x86/kernel/nmi.c
-> > > index cec0bfa3bc04..400b5b6b74f6 100644
-> > > --- a/arch/x86/kernel/nmi.c
-> > > +++ b/arch/x86/kernel/nmi.c
-> > > @@ -503,7 +503,7 @@ DEFINE_IDTENTRY_RAW(exc_nmi)
-> > >   	 */
-> > >   	sev_es_ist_enter(regs);
-> > > -	this_cpu_write(nmi_dr7, local_db_save());
-> > > +	this_cpu_write(nmi_dr7, local_db_save_exc_nmi());
-> > >   	irq_state = irqentry_nmi_enter(regs);
-> > 
-> > So what I don't get is why sev_es_ist_enter() doesn't cause us to make a
-> > stack frame, that has an actual call in it (although admittedly
-> > conditional).
-> 
-> Is not the frame gone when sev_es_ist_enter() (which does not get inlined as
-> per objdump's "ffffffff81bd4550 <__sev_es_ist_enter>:
-> ") returned?
+I think we're also missing a subtlety here in that this restriction 
+doesn't *always* apply. For instance if someone wants to move a page by 
+making the mapping read-only, copying the contents to a new page, then 
+pointing the RO mapping at that new page, that should technically not 
+require BBM.
 
-Well, returning would consume the callframe, but the stack setup of the
-caller should remain. Let me go stare at some asm.
+Thanks,
+Robin.
