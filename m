@@ -2,168 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D421967E11B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B02267E119
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233407AbjA0KKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S232816AbjA0KKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232720AbjA0KKu (ORCPT
+        with ESMTP id S232538AbjA0KKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:10:50 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C94C4B1B4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:10:46 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pLLgk-0007Ty-D4; Fri, 27 Jan 2023 11:10:30 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pLLgk-000lKa-4u; Fri, 27 Jan 2023 11:10:29 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pLLgi-00GGT2-ES; Fri, 27 Jan 2023 11:10:28 +0100
-Date:   Fri, 27 Jan 2023 11:10:25 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH 571/606] serial: sc16is7xx: Convert to i2c's .probe_new()
-Message-ID: <20230127101025.evefhpwpfikahd3k@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-572-uwe@kleine-koenig.org>
- <536ac08e-bdbd-b4d6-8309-8f6763f8db12@kernel.org>
- <20221121070757.cqiybt5uk4qiczmr@pengutronix.de>
- <0bfea903-5efd-a76d-5944-16a2c9362adb@kernel.org>
- <20221123080912.lbmfgnco67psdu27@pengutronix.de>
+        Fri, 27 Jan 2023 05:10:44 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC4B4B89E;
+        Fri, 27 Jan 2023 02:10:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674814242; x=1706350242;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Qg/3JDFsC2nzbd86XepCeae+28Y0mZGY4eLCR4gfcsI=;
+  b=EHmNzsNUXbZ20M83kZzhtWO/+kfcv+EgSdi4z+c/kHxxMUs3Py+XQZv9
+   tU+nXiYTmyuo85p4su8bKJqJkhJyfZAgtnZU0S5vhflXJ9baT8RMjJo7/
+   hD2ERE+pYOskdxLmbODtQxp/HKtNs6yIgQrmcDX8YzVCXNqLDRM1noyFy
+   wpZw3sbZI6VMeIt+Q2wiR5eiaJ4hteXdCT23Ok7IlwTyvr+Qtdr/jLU6O
+   16yZ6aZaRDYiWOokh2S0Qr2tORZDD3bv3cRVYNJzFqtkJS45KFIwqGZs4
+   YNGNlnT5BFvkPsQt7Ap4p81G4mVw6KAeNkP5jgejseCfGfDlY4+Fcp8gJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="307403875"
+X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
+   d="scan'208";a="307403875"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 02:10:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="695462376"
+X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
+   d="scan'208";a="695462376"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 27 Jan 2023 02:10:31 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pLLgh-00FuQp-2J;
+        Fri, 27 Jan 2023 12:10:27 +0200
+Date:   Fri, 27 Jan 2023 12:10:27 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maxim Kiselev <bigunclemax@gmail.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 08/11] driver core: fw_devlink: Make cycle detection
+ more robust
+Message-ID: <Y9OjE+bJquDcCpJ8@smile.fi.intel.com>
+References: <20230127001141.407071-1-saravanak@google.com>
+ <20230127001141.407071-9-saravanak@google.com>
+ <Y9OcqGTocu8ZlFqy@smile.fi.intel.com>
+ <CAMuHMdXRbiNW9nd_N_=+OTo-uCmy2ePfOmREEHcqLyEn1H=Rhg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i5ziuturpean4nw6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221123080912.lbmfgnco67psdu27@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdXRbiNW9nd_N_=+OTo-uCmy2ePfOmREEHcqLyEn1H=Rhg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 27, 2023 at 10:52:02AM +0100, Geert Uytterhoeven wrote:
+> On Fri, Jan 27, 2023 at 10:43 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Thu, Jan 26, 2023 at 04:11:35PM -0800, Saravana Kannan wrote:
+> > > + * Check if @sup_handle or any of its ancestors or suppliers direct/indirectly
+> > > + * depend on @con.  This function can detect multiple cyles between @sup_handle
+> >
+> > A single space is enough.
+> 
+> It's very common to write two spaces after a full stop.
+> When joining two sentences on separate lines in vim using SHIFT-J,
+> vim will make sure there are two spaces.
 
---i5ziuturpean4nw6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+But is this consistent with all kernel doc comments in the core.c?
 
-Hello,
+I'm fine with either as long as it's consistent.
 
-On Wed, Nov 23, 2022 at 09:09:12AM +0100, Uwe Kleine-K=F6nig wrote:
-> On Wed, Nov 23, 2022 at 07:36:52AM +0100, Jiri Slaby wrote:
-> > On 21. 11. 22, 8:07, Uwe Kleine-K=F6nig wrote:
-> > > On Mon, Nov 21, 2022 at 07:03:41AM +0100, Jiri Slaby wrote:
-> > > > On 18. 11. 22, 23:45, Uwe Kleine-K=F6nig wrote:
-> > > > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > > > >=20
-> > > > > .probe_new() doesn't get the i2c_device_id * parameter, so determ=
-ine
-> > > > > that explicitly in the probe function.
-> > > >=20
-> > > > I wonder why -- is this a new approach to probe functions? Or is on=
-ly i2c
-> > > > affected? And why? Could you point to the commit introducing and de=
-scribing
-> > > > the change in the i2c core?
-> > >=20
-> > > I didn't sent the cover letter to all recipents of the individual
-> > > patches, so flow of information is a bit rough. Sorry about that.
-> > >=20
-> > > You can find it at
-> > > https://lore.kernel.org/lkml/20221118224540.619276-1-uwe@kleine-koeni=
-g.org/,
-> > > it should answer your question.
-> >=20
-> > Yes, I looked up that beforehand, but was no more clever after reading =
-it.
-> >=20
-> > > The short version is: The i2c framework does a more or less expensive
-> > > lookup for each call to .probe() to provide the id parameter. A relev=
-ant
-> > > part of the drivers however doesn't use this parameter, so the idea is
-> > > to let the drivers who actually need it, determine it themselves.
-> > >=20
-> > > Statistics for the current state of this series in my tree:
-> > > Among the 602 converted drivers, 404 don't make use of the parameter.
-> >=20
-> > So doesn't it make sense to provide both probe with no id and "probe_id"
-> > then? 200 is quite a few (a third to be precise).
->=20
-> Having the probe callback with the id parameter is only temporary. As
-> soon as all drivers are converted, the variant with the id parameter
-> will go away.
->=20
-> > BTW is this a performance issue? I.e. does it slow down the boot?
->=20
-> I don't know the start motivation for Lee (who triggered the conversion
-> in b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back
-> type")).
-> Looking at the git history, he created 1e98dcd77970 ("mfd: 88pm860x:
-> Move over to new I2C device .probe() call") converting a driver that
-> doesn't benefit immensely. The lookup is more expensive for drivers with
-> big .id_table, the converted driver has only one entry.
->=20
-> I think in the end is a mixture between:
->=20
->  - A big part of the drivers doesn't benefit from the lookup.
->  - For most other busses the probe function only gets a device parameter
->    and no id (spi, platform, i3c). There are counter examples though:
->    amba, usb. Didn't check further.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-The discussion somehow ended here without a real result.
 
-As of today's next master there are only 9 drivers left using .probe().
-So I'd like to stop this discussion and ask to apply the conversion for
-the sc16is7xx driver to be able to complete the conversion.
-
-My plan is to drop the .probe callback as it is today after the next
-merge window. So I ask the serial maintainers to either take the patch
-under discussion for the next merge window or accept that the conversion
-is done together with the patch that drops .probe() that probably will
-go in via the i2c tree.
-
-Best regards and thanks,
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---i5ziuturpean4nw6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPTow4ACgkQwfwUeK3K
-7AkDjgf/bGlrPS14Vrw528SZq8vdldQzanU2poJRJqgQYinIcKWTSMqXJHrz234b
-QByNemRKfQZZ0RAdu8+yiVkID9M+vGjrBkHC1p8gCqRpJWkvUELqsXt9CcYVZIf/
-dTR6jfjESsuZRdWPt1i0lW982YvY+zR6479je/oc11qxmdiak5tNYEaCzP86uHae
-sT4qTOkz2fW+8p4NO9WuHFKN14e54XED6MLIiEsB0YnPLLedXXq8cCpPLP5xi6Pg
-F8D/FkD4Wm3aHYK6joOYAE5zKOBbJooEJ75l4sRsmsiNlC3K4FC39YhbAqxqiEbj
-goKrY6Kw49aZs/ritMnPFEQDghHY7Q==
-=Q545
------END PGP SIGNATURE-----
-
---i5ziuturpean4nw6--
