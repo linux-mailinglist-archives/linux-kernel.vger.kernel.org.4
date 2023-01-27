@@ -2,102 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4236D67E651
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D98E367E654
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:15:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234295AbjA0NNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:13:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
+        id S234541AbjA0NPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234012AbjA0NNs (ORCPT
+        with ESMTP id S234707AbjA0NOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:13:48 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0434351421
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:13:11 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id i188so5222283vsi.8
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:13:10 -0800 (PST)
+        Fri, 27 Jan 2023 08:14:55 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAED977DD0;
+        Fri, 27 Jan 2023 05:14:17 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id f5-20020a9d5f05000000b00684c0c2eb3fso2093872oti.10;
+        Fri, 27 Jan 2023 05:14:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H5OjDI+BmuahlrrPemGCNzWK2D1S3Y5Nfa98DDI8/8k=;
-        b=3FNkY8nqZHleZUzbXb0ruzpHilbOFCvkA34g4Qc7SGxbjZHQsXwRHueCfp5zGyjwXI
-         lY7ES/g3q0/X/bd0wBh9hEpvZIPccbc6zOwT+p3xZiDqtr6t4qY9RCi1zXW90wgIk5sM
-         26P1xqt/PmTMxbkZL6xVJ0ZPWlaPb7aQY1JP8O3FSv2/1LzP2m4n+1EcCCeY/c8uuuia
-         6dkuDkjEN9ux5tf3IYSUP7aK+g+Xim8o45dKXXWBxsy2Q2Nf2bHw9ws7CX1u+vi8sJj0
-         9VJAXOjuVmP0Ynp+LB8v8HHzuYPN3RRdQ1zrdMWHZjIlYR1s012J4rNL3CNsC5YBSyei
-         edTA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gJxS5HZhwkBpszh7vWIw8lli9f4o81OwCgf69fEDo9o=;
+        b=CMMkwAyUYBWTxxd5dJkVyPDqOa5h8W+HgmziPzS3Z9PEKz8ZArlRzKI3WWW0xf21Ia
+         zBaArFlGbh+lA7F+OpmmNOXvxaGw44l+w0c/LyM0f/sSWyZ/N6FAytskWE5sa4odQ843
+         3jQ4iHJiP9Vyae9GtetOTI9xuYIIFZK16lEbbBNlshorrW4b2OXEJOfwFL8B24fd724O
+         XQRoGef6qdSsoQ9naUiyitCl0GRTiyS5iA+R16PUDBmwpOTTqxbh2AQud0aXOh2MwiBt
+         +7CSnctnzHE/Lb30Nmd0PLm5E24M7YxS9VtEMV7wAnUlH5LApwYJJkNlDMIKdonKun8j
+         U5TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H5OjDI+BmuahlrrPemGCNzWK2D1S3Y5Nfa98DDI8/8k=;
-        b=C8DoPUpC2UOtpH7qVif3VS7atenqPzdcJNEAsZdliZ/5kZnoQLxPMkMDUMkX9owaa2
-         nkVjnYbMmkBQJwu/p7JLDzYF2p3JplXhvqaeIqbhez0BImgGnNare3gwLFSkTyqOnMRl
-         hU40wXI9GwEDSQgpNRPUhV/VkVaMrTGRCO7uST4VYPo1eG5lC2dzKLD0GRxVDUXGugWJ
-         YHJ6eir4GqTFANkPvQFkI1qqYlcOvcd9BcnUySGUQHP5b2FmnhC7VbTmTCuox/cQ1Czp
-         0r3GFHtR49685nmIbRD6K8feTJDZEc7loqCg1V13nfEcPPvHsqxdakcI+8HkBcwyuZfs
-         Ujxw==
-X-Gm-Message-State: AO0yUKVwOb+EfaSfLibrwJ7OJTtjHbUwIznNjg9s9722ow/emrRdUK7L
-        z5230rdqAhVUkrQ9nBnFC1fNe6kMsowh7Bd2a8h7EXphjTuD/A==
-X-Google-Smtp-Source: AK7set8NJm64JXj8Sonnt3qwTZmV9E5ZtjWIbL/cJOBHCzm8vy8F9tlY1BhQrUCkPFmsLvz/ZCQap95kemwTg5GmAbA=
-X-Received: by 2002:a67:c384:0:b0:3e8:d5a8:3fbe with SMTP id
- s4-20020a67c384000000b003e8d5a83fbemr1347040vsj.9.1674825145903; Fri, 27 Jan
- 2023 05:12:25 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gJxS5HZhwkBpszh7vWIw8lli9f4o81OwCgf69fEDo9o=;
+        b=q6VpKxa62ULut+4o0KUiwJxQKvcrRTePvrEiY+TBdTL2nH6KwCb78x/MuY9yUDb2TF
+         HRzbaQWZiKFeDyFOB0tRqKSbqSV5UJaMV0PfbjwYB85WKSpGz745pdohCcmTJ5+nyVuA
+         mH/T/6zd+L4/8bPger5tVqR9XitLaHj+tAVohG3VYQiDeergi4ymeFpg8RqiUiYOApi7
+         XCOEca22CCHIPcIWn1H0oLVdOMiXJ2mAMkwN+O0RqMgSC90r6la6IyhrsPHIeo3Il7nv
+         TNnYKtJkHZqyJlprm/4C0PL+2RerzLcrldGoZ1VYT8ywZuYggph+bdyN/a9ugvXWuCP5
+         iSXQ==
+X-Gm-Message-State: AFqh2kpE8vuKiVzyr9gLdoAHzTk+7Qypg3mLOCSWlIeN9QxXXT7FjNdp
+        +8Jchw8RQ3BVlYrThlzRNmCHPlvSXEI=
+X-Google-Smtp-Source: AMrXdXus/i4eYuc+3ovyb/yHMjbP6BrOxfmcV92S5T6HSgSttWglzHwyLd84Mzkpo9mwC9mqm9gq9A==
+X-Received: by 2002:a05:6830:6993:b0:670:4588:f8c4 with SMTP id cy19-20020a056830699300b006704588f8c4mr24361037otb.18.1674825233283;
+        Fri, 27 Jan 2023 05:13:53 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p18-20020a9d76d2000000b0068655f477a6sm1720983otl.50.2023.01.27.05.13.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 05:13:52 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 27 Jan 2023 05:13:51 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Song Liu <song@kernel.org>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2] module: replace module_layout with module_memory
+Message-ID: <20230127131351.GB3911997@roeck-us.net>
+References: <20230125185004.254742-1-song@kernel.org>
+ <Y9IYTI3pWuKbJ3bC@bombadil.infradead.org>
+ <CAPhsuW7ipGS=RhowYSp06DBYOY31sYoup7-Je+CEuKCxJsHavQ@mail.gmail.com>
+ <Y9Lp+5mqxP0bgvrM@bombadil.infradead.org>
 MIME-Version: 1.0
-References: <20230127101836.93845-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230127101836.93845-1-krzysztof.kozlowski@linaro.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 27 Jan 2023 14:12:15 +0100
-Message-ID: <CAMRc=MdgOnmT2PRVN1Dejf97iFYTuKWSK==oX=e1MWg3WJUiHw@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: ti: use "okay" for status
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9Lp+5mqxP0bgvrM@bombadil.infradead.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:18 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> "okay" over "ok" is preferred for status property.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm/boot/dts/da850-evm.dts         | 2 +-
->  arch/arm/boot/dts/keystone-k2e-evm.dts  | 2 +-
->  arch/arm/boot/dts/keystone-k2g-evm.dts  | 2 +-
->  arch/arm/boot/dts/keystone-k2hk-evm.dts | 2 +-
->  arch/arm/boot/dts/keystone-k2l-evm.dts  | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/arm/boot/dts/da850-evm.dts b/arch/arm/boot/dts/da850-evm.dts
-> index 1fdd9a249165..0ca849885d1f 100644
-> --- a/arch/arm/boot/dts/da850-evm.dts
-> +++ b/arch/arm/boot/dts/da850-evm.dts
-> @@ -415,7 +415,7 @@ &edma1 {
->  &aemif {
->         pinctrl-names = "default";
->         pinctrl-0 = <&nand_pins>;
-> -       status = "ok";
-> +       status = "okay";
->         cs3 {
->                 #address-cells = <2>;
->                 #size-cells = <1>;
+On Thu, Jan 26, 2023 at 01:00:43PM -0800, Luis Chamberlain wrote:
+> Guenter Roeck,
+> 
+> Any chance you can give this branch a good spin on your multi-arch setup
+> to see what may below up?
+> 
+I assume I shoud test v3 ?
 
-For DaVinci:
+Guenter
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-testing
+> 
+> On Thu, Jan 26, 2023 at 12:01:40PM -0800, Song Liu wrote:
+> > Hi Luis,
+> > 
+> > Thanks for your kind review!
+> > 
+> > On Wed, Jan 25, 2023 at 10:06 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > >
+> > [...]
+> > > >
+> > > >         MOD_MEM_TYPE_TEXT,
+> > > >         MOD_MEM_TYPE_DATA,
+> > > >         MOD_MEM_TYPE_RODATA,
+> > > >         MOD_MEM_TYPE_RO_AFTER_INIT,
+> > > >         MOD_MEM_TYPE_INIT_TEXT,
+> > > >         MOD_MEM_TYPE_INIT_DATA,
+> > > >         MOD_MEM_TYPE_INIT_RODATA,
+> > > >
+> > > > and allocating them separately.
+> > >
+> > > First thanks for doing this work!
+> > >
+> > > This seems to not acknolwedge the original goal of the first module_layout and
+> > > the latched rb-tree use, and that was was for speeding up __module_address()
+> > > since it *can* even be triggered on NMIs. I say this because the first question
+> > > that comes to me is the impact to performance on __module_address() I can't
+> > > see that changing much here, but mention it as it similar consideration
+> > > should be made in case future changes modify this path.
+> > 
+> > To make sure I understand this correctly. Do you mean we need something like
+> > the following in the commit log?
+> > 
+> > """
+> > This adds slightly more entries to mod_tree (from up to 3 entries per module, to
+> > up to 7 entries per module). However, this at most adds a small constant
+> > overhead to __module_address(), which is expected to be fast.
+> > """
+> 
+> Yes I think this is very useful information for the reviewier.
+> 
+> > > Microbenching something so trivial as __module_address() may not be as useful
+> > > for an idle system, at the very least being able to compare before and after
+> > > even on idle may be useful *if* you eventually do some more radical changes
+> > > here. Modules-related kernel/kallsyms_selftest.c did that for kallsyms_lookup_name()
+> > > and friend just recently for a minor performance enhancement.
+> > 
+> > kernel/kallsyms_selftest.c is new to me. I will give it a try.
+> 
+> It was just merged, be sure to have da35048f2600 ("kallsyms: Fix
+> scheduling with interrupts disabled in self-test").
+> 
+> > > > Signed-off-by: Song Liu <song@kernel.org>
+> > > > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > >
+> > > > ---
+> > > >
+> > > > This is the preparation work for the type aware module_alloc() discussed
+> > > > in [1]. While this work is not covered much in the discussion, it is a
+> > > > critical step of the effort.
+> > > >
+> > > > As this part grows pretty big (~1000 lines, + and -), I would like get
+> > > > some feedback on it, so that I know it is on the right track.
+> > > >
+> > > > Please share your comments. Thanks!
+> > > >
+> > > > Test coverage: Tested on x86_64.
+> > >
+> > > I will likely merge this onto modules-next soon, not because I think it is
+> > > ready, but just because I think it *is* mostly ready and the next thing
+> > > we need is exposure and testing. rc5 is pretty late to consider this
+> > > for v6.3 and so hopefully for this cycle we can at least settle on
+> > > something which will sit in linux-next since the respective linux-next
+> > > after v6.3-rc1 is released.
+> > 
+> > Yes, this definitely needs more tests. Given different archs use
+> > module_layout in all sorts of ways. I will be very surprised if I updated
+> > all them correctly (though I tried hard to).
+> 
+> OK so let's be patient with testing. Getting help from Guenter here
+> can probably speed up finding issues.
+> 
+> > > > Build tested by kernel test bot in [2]. The only regression in [2] was a
+> > > > typo in parisc, which is also fixed.
+> > > >
+> > > > [1] https://lore.kernel.org/linux-mm/20221107223921.3451913-1-song@kernel.org/T/#u
+> > >
+> > > You still never addressed my performance suggestions so don't be
+> > > surprised if I insist later. Yes you can use existing performance
+> > > benchmarks, specially now with modules as a hard requirement, to
+> > > show gains. So I'd like to clarify that if I'm reviewing late it is
+> > > because:
+> > >
+> > > a) my modules patch review queue has been high as of late
+> > > b) you seem to not have taken these performance suggestions into consideration
+> > >    before and so I tend to put it at my end of my queue for review.
+> > 
+> > I think it will be a lot easier to run performance tests with the
+> > module support. Let's see what we can do when we get to the
+> > performance test part.
+> 
+> Fantastic, clearly I'm interested in being able to reproduce so I will
+> email you offline about some techniques I've used to reproduce some
+> things easily for testing things with modules.
+> 
+>   Luis
