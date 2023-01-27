@@ -2,75 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3ED467E059
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95AD567E05C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbjA0JeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:34:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
+        id S232913AbjA0JfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbjA0JeN (ORCPT
+        with ESMTP id S232160AbjA0JfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:34:13 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD3E30E80
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:33:44 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id a11so7330459lfg.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:33:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=soCJk/9uoz+KgQdqW+wxg6SrKosE5IXTc6rEokgR5tQ=;
-        b=nmx1zldl8cWuQyK0N1qgKg6BmyRFI+kb+zi/9Gh+JmAGnpiZx8TKP/iUSuWxDTugNT
-         4ApVSh+H2nLh6wYsv/zecBYs7qmCoIjMI2VN0qiy/N321v122T65GUOHEjvzeQL/ZCWb
-         iqrYTUEmQOXJi3WzMGtT4d9upHBSn48afH96k4qOdLPpObxbwGEfbrlW0viMZNIiXF+I
-         KBvLSDUeQg+9akyNMFkrVPYd9AWKEqhEFqQVqyI80QHA5xUs+QQXTlDg005MtJl8jYe4
-         VmUrO3+XR/RyED9zU5X2nWPn7Xtf6xvCwea7+DOAqYPIccf49tuelr7eOBoHJNPc10y6
-         oT3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=soCJk/9uoz+KgQdqW+wxg6SrKosE5IXTc6rEokgR5tQ=;
-        b=h7h9M0Ysj9RxlT7PpwjVpLTJNcQKSRpJ2V7NujFB8Uq55a2EOfA4C3rWlX0Hd9NqH5
-         Qpw0IYJ7FypUmfljCmubugWCjUtlNripfuLs255G+xrBaWYFGVr2cSZb2TPriNB3uXty
-         vGS5CsBCevZUD60KJiZdJ/BnPj/5N9ZuRidsp0f0Hrznlz/R3YBHYLtwaoyJm2X44qx4
-         YBbeN3sUih2TIir3EYisdpjYACZp+95MAI41vGeXm80NZ8Yvx/pJI7YVG05H2C3RFG2x
-         rcalW9bJWDYXG9nIFRvKCPqkViooRjEeC66ZpNB4AAtUP/JHydG/NQq2XK256mRxNupr
-         qmfg==
-X-Gm-Message-State: AFqh2koKRKRBx+W1W+g7rd5PIC2DLr2npzWv0wPTyX1zt26blxATv32/
-        6fggEWv0sqZhXs9h1H3E/1Vj3iHPYZQRWviIj2cQPn8W
-X-Google-Smtp-Source: AMrXdXvYCB/YyX8cXrhjlYamC83gUruSrIydgGTh/NwquX1nwVfbE3S8e8OFgGX/agTLQyFtTUAZYvAjrUF5HZvpJio=
-X-Received: by 2002:a05:6512:2241:b0:4d5:8342:9424 with SMTP id
- i1-20020a056512224100b004d583429424mr2316557lfu.330.1674812022561; Fri, 27
- Jan 2023 01:33:42 -0800 (PST)
+        Fri, 27 Jan 2023 04:35:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9FD12E;
+        Fri, 27 Jan 2023 01:35:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10B80B81FFC;
+        Fri, 27 Jan 2023 09:35:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 235ECC433EF;
+        Fri, 27 Jan 2023 09:35:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674812116;
+        bh=LPd2/+DNZCkY5p5deZreyittH8sSRzRvsSNwqIpMuYA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Nf2qF5iW5lj87KbIONJvmol6A9SpHMRLErxIiND8HR5I+m7gOhlPosNfV8Vz6OX34
+         dCjpgjj4iVL4WfAioaK2oKhnbH12MGO0Qllo+momxq3pCdKCcBRcb1elbhtOrguvUS
+         7IvEJ0eeXEcecMon+Llk/3T5BO1sNTLAgHF7HyvJk0seSHZYzmnuHkefnS/gIqjahI
+         ExTM4Srqpe9Rk/kZIKa7t7L2Q8UYxadClJJO2VKlWkZzv4kOMoeZVZd8wCScVP833/
+         4YnmsbbmeZbpfyIbWVUrkcMabP/iE7fGMeQr82YMjGhxdzOG8FBf2xU8cg2KtgMsIm
+         veUsXcWJ3yl2A==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] gpio: ep93xx: remove unused variable
+Date:   Fri, 27 Jan 2023 10:35:05 +0100
+Message-Id: <20230127093512.2066158-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Received: by 2002:ab3:71da:0:b0:218:462c:35c with HTTP; Fri, 27 Jan 2023
- 01:33:41 -0800 (PST)
-Reply-To: www.pbox.tg@gmail.com
-From:   "PROXY & CONSULTATION" <www.proconsult.togo@gmail.com>
-Date:   Fri, 27 Jan 2023 09:33:41 +0000
-Message-ID: <CAOOF-dBE-pzvar0JWo0fGjcqc79xtMpYqy_rois9OkRuTbG5iA@mail.gmail.com>
-Subject: TOP PRIORITY
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello sir,
-How are you doing?
-I have been contacting you for quite some time now without any response.
-Could you please confirm if this still remains your email address.
-There is an important information I want to share with you.
-Awaiting your feedback.
-Thanks,
-AB Lussy
+From: Arnd Bergmann <arnd@arndb.de>
+
+This one was left behind by a previous cleanup patch:
+
+drivers/gpio/gpio-ep93xx.c: In function 'ep93xx_gpio_add_bank':
+drivers/gpio/gpio-ep93xx.c:366:34: error: unused variable 'ic' [-Werror=unused-variable]
+
+Fixes: 216f37366e86 ("gpio: ep93xx: Make irqchip immutable")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/gpio/gpio-ep93xx.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/gpio/gpio-ep93xx.c b/drivers/gpio/gpio-ep93xx.c
+index 192be99b1392..6cedf46efec6 100644
+--- a/drivers/gpio/gpio-ep93xx.c
++++ b/drivers/gpio/gpio-ep93xx.c
+@@ -363,8 +363,6 @@ static int ep93xx_gpio_add_bank(struct ep93xx_gpio_chip *egc,
+ 
+ 	girq = &gc->irq;
+ 	if (bank->has_irq || bank->has_hierarchical_irq) {
+-		struct irq_chip *ic;
+-
+ 		gc->set_config = ep93xx_gpio_set_config;
+ 		egc->eic = devm_kcalloc(dev, 1,
+ 					sizeof(*egc->eic),
+-- 
+2.39.0
+
