@@ -2,179 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5332967F0AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C65D67F0AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbjA0Vw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:52:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60070 "EHLO
+        id S231962AbjA0VzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjA0Vw5 (ORCPT
+        with ESMTP id S231611AbjA0VzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:52:57 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FB4126E3;
-        Fri, 27 Jan 2023 13:52:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674856371; x=1706392371;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9Ii69Mw+ITtCryrVzceNJaInNNbxTdiKPALVlpnKbxQ=;
-  b=XFPKmMzzNIuVcBOniXO0gyo+vU5RrngZfQNvUmlLJo/aEN87SMMYJHKI
-   f9eHP0yGjBDaCi5bwvIxG1PCyh/LD8saF/HdsAEfZQC+Sdefb+vpiGVRB
-   +gPQOzcj58xrAzjcmtwo3W3XMZRS0Lsza4X8dcqZbKpeWXFCqL1czVyjU
-   zmAwlN/xh4cNz09W2fzbtVheAz8FqHLZ2Np+UR4P6qr6ts4u6h1pbQrC/
-   yjjR3k9YhVZNIDkLr/YWY9Uo+HmhW9sCTNBOqPmR6P+c/7ZDDPtvzEh7F
-   Ppz1MjMuESFO3gE8JYrook+T1x3JOC7BXldlbkAVi6DpVy61ENi2F+PfO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="389581092"
-X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
-   d="scan'208";a="389581092"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 13:52:49 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="693858269"
-X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
-   d="scan'208";a="693858269"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.161.50])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 13:52:49 -0800
-Date:   Fri, 27 Jan 2023 13:52:47 -0800
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v5 3/5] cxl/memdev: Add trigger_poison_list sysfs
- attribute
-Message-ID: <Y9RHr0kQqfLiT3Cq@aschofie-mobl2>
-References: <cover.1674070170.git.alison.schofield@intel.com>
- <fc1a2f51834888c2ea585efb0b4fa41cd251e52d.1674070170.git.alison.schofield@intel.com>
- <63d429435984f_3a36e5294b2@dwillia2-xfh.jf.intel.com.notmuch>
+        Fri, 27 Jan 2023 16:55:00 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B92716AF5;
+        Fri, 27 Jan 2023 13:54:59 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so6318360wmb.0;
+        Fri, 27 Jan 2023 13:54:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3sUXq/W8BEZIBDYYVZQ1mnxogvWQtdcjY0PJMAjAJSM=;
+        b=UwI8uf9zgKWWBCv5264lTfvKd7BbaCbH15YY4LLLbTx2uLxQPSjpuuXSwtkFO8BjeH
+         62Ag4W1HOQ3hsdfQxVDehNVVb5PJod899hLGE0H94l7b7k6v7Ai8mIO1gBJrNuU2vJ1c
+         1DUEYx/PPTGEzn7SmOh/nxPks43Z3gCOfd26P7LJCJ/jUSPnmHFJz5WrYjDsXFhd2gTW
+         dezaQE6/SidtcpiYSQH6Fqpm1uHJ8qiwmkNKYSCLiMO24G2mWxl52bO2IHhOrO1S48+W
+         UxJ82P7mZ+K9WIyWD3qPZQuKqE0B0Ao5kgOH98WLfteeW9MJU0uFNQjb7WByaKwhuOqK
+         sTLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3sUXq/W8BEZIBDYYVZQ1mnxogvWQtdcjY0PJMAjAJSM=;
+        b=nxqAGYR5ws+skvjFabK0T4LhQou49hKWU0bBudgbg1mLtUmFIg/Oa4saefOnJ1t2zU
+         pCN8CauhvmMHWriv1SLNWG1oQMYu3zBAFwaUAzxB96uVtSz6XvkIYyNxEsNBTDiDEh26
+         mh4Zkar13OqqWj454EkDatdL9LXMwZNiiYX3GO0rW54xBMcJKRCTsiIjlHPkuwVNrN28
+         ZH9EKHMwcIaA822aR3Qx4pwX0A9OPbFU2jhnWA4AZlp4J+IufKUUL9EKvbvrW+1mUz6p
+         X8BYVHFZt05wR3PSk4xHnHQaHwMEEkDXvr4LSbiw8w64LuD6SLDKX70ncY8HDieR3NFj
+         NmGg==
+X-Gm-Message-State: AFqh2kqqSbuF9WCj65E1Fs/luo4poEW2Co3v+fTnXu5PgWgiegO8+JtH
+        6676nVorMvl0nSc3EVbUWzc=
+X-Google-Smtp-Source: AMrXdXu8k0vp+ioGOVn9ul8IRoSc2tgoAWt1mbIs2ouKiCtWeiO/aYu0n8tOumMgfrc8tghf4YgVbg==
+X-Received: by 2002:a05:600c:510b:b0:3db:d3f:a919 with SMTP id o11-20020a05600c510b00b003db0d3fa919mr39209411wms.1.1674856497629;
+        Fri, 27 Jan 2023 13:54:57 -0800 (PST)
+Received: from localhost.localdomain (host-82-60-215-65.retail.telecomitalia.it. [82.60.215.65])
+        by smtp.gmail.com with ESMTPSA id n20-20020a05600c465400b003dc43a10fa5sm859717wmo.13.2023.01.27.13.54.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 13:54:56 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Olga Kornievskaia <olga.kornievskaia@gmail.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] fs/nfs: Replace kmap_atomic() with kmap_local_page() in dir.c
+Date:   Fri, 27 Jan 2023 22:54:52 +0100
+Message-Id: <20230127215452.6399-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63d429435984f_3a36e5294b2@dwillia2-xfh.jf.intel.com.notmuch>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:42:59AM -0800, Dan Williams wrote:
-> alison.schofield@ wrote:
-> > From: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > When a boolean 'true' is written to this attribute the memdev driver
-> > retrieves the poison list from the device. The list consists of
-> > addresses that are poisoned, or would result in poison if accessed,
-> > and the source of the poison. This attribute is only visible for
-> > devices supporting the capability. The retrieved errors are logged
-> > as kernel trace events with the label 'cxl_poison'.
-> > 
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-bus-cxl | 14 ++++++++
-> >  drivers/cxl/core/memdev.c               | 45 +++++++++++++++++++++++++
-> >  drivers/cxl/cxlmem.h                    |  2 +-
-> >  3 files changed, 60 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
-> > index 8494ef27e8d2..df40ed09ea67 100644
-> > --- a/Documentation/ABI/testing/sysfs-bus-cxl
-> > +++ b/Documentation/ABI/testing/sysfs-bus-cxl
-> > @@ -388,3 +388,17 @@ Description:
-> >  		1), and checks that the hardware accepts the commit request.
-> >  		Reading this value indicates whether the region is committed or
-> >  		not.
-> > +
-> > +
-> > +What:		/sys/bus/cxl/devices/memX/trigger_poison_list
-> > +Date:		November, 2022
-> > +KernelVersion:	v6.2
-> > +Contact:	linux-cxl@vger.kernel.org
-> > +Description:
-> > +		(WO) When a boolean 'true' is written to this attribute the
-> > +		memdev driver retrieves the poison list from the device. The
-> > +		list consists of addresses that are poisoned, or would result
-> > +		in poison if accessed, and the source of the poison. This
-> > +		attribute is only visible for devices supporting the
-> > +		capability. The retrieved errors are logged as kernel
-> > +		trace events with the label 'cxl_poison'.
-> > diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
-> > index a74a93310d26..e0af7e9c9989 100644
-> > --- a/drivers/cxl/core/memdev.c
-> > +++ b/drivers/cxl/core/memdev.c
-> > @@ -106,12 +106,49 @@ static ssize_t numa_node_show(struct device *dev, struct device_attribute *attr,
-> >  }
-> >  static DEVICE_ATTR_RO(numa_node);
-> >  
-> > +static ssize_t trigger_poison_list_store(struct device *dev,
-> > +					 struct device_attribute *attr,
-> > +					 const char *buf, size_t len)
-> > +{
-> > +	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
-> > +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
-> > +	u64 offset, length;
-> > +	bool tmp;
-> > +	int rc;
-> > +
-> > +	if (kstrtobool(buf, &tmp))
-> > +		return -EINVAL;
-> 
-> Wait, where's the check for "if (tmp)"? Otherwise I can do "echo N >
-> trigger_poison_list" and it will still run. Should probably
-> s/tmp/trigger/.
+kmap_atomic() is deprecated in favor of kmap_local_page().
 
-Got it.
-(I guess I was too loose w the trigger, thinking you write anything to
-it, I'm triggering.)
-> 
-> > +
-> > +	/* CXL 3.0 Spec 8.2.9.8.4.1 Separate pmem and ram poison requests */
-> > +	if (resource_size(&cxlds->pmem_res)) {
-> > +		offset = cxlds->pmem_res.start;
-> > +		length = resource_size(&cxlds->pmem_res);
-> > +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
-> 
-> Ah now I see why the region information is not provided in the memdev
-> triggers. I think while the scan needs to be done on partition boundary
-> basis, like you have here, I think the region lookup needs to happen on
-> a per-record basis.
-> 
-> However, that's a significant architectural change, so I am going to
-> think out loud about the implications.
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page-faults, and can be called from any context (including interrupts).
+Furthermore, the tasks can be preempted and, when they are scheduled to
+run again, the kernel virtual addresses are restored and still valid.
 
-I'm thinking that adding region info to the trace event isn't starting
-here. That will be looked up when we log the event. Basically assuming
-assuming find regions memdev participates in, and look for which one
-maps this DPA.
+kmap_atomic() is implemented like a kmap_local_page() which also disables
+page-faults and preemption (the latter only for !PREEMPT_RT kernels,
+otherwise it only disables migration).
 
-> 
-> A site operator wants to know "is FRU (field-replaceable-unit) X bad,
-> and if so what's the damage?". In that report I expect they want to know
-> if poison impacts media that is allocated to a region (an imminent
-> danger) or is in free space (a problem for a later date). If the memdev
-> trigger does all the region lookup per record it provides that
-> information. Further if the memdev trigger reliably provides region
-> information it allows the region trigger ABI to be deleted. The region
-> trigger can be replaced in userspace with logic that does:
-> 
->    set tracepoint filter to look for region_id == $region
->    for endpoint decoder in $region
->        trigger associated memdev
-> 
-> ...so I do think the arch change is worth it, but I am willing to hear
-> counter arguments.
+The code within the mappings/un-mappings in the functions of dir.c don't
+depend on the above-mentioned side effects of kmap_atomic(), so that mere
+replacements of the old API with the new one is all that is required
+(i.e., there is no need to explicitly add calls to pagefault_disable()
+and/or preempt_disable()).
 
-My only counter argument was that we could let them have it both ways,
-but, simplifying and reducing code in kernel is good!
+Therefore, replace kmap_atomic() with kmap_local_page() in fs/nfs/dir.c.
 
+Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
+HIGHMEM64GB enabled.
+
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ fs/nfs/dir.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+index f7e4a88d5d92..dec18c9f7650 100644
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -203,14 +203,14 @@ static void nfs_readdir_page_init_array(struct page *page, u64 last_cookie,
+ {
+ 	struct nfs_cache_array *array;
+ 
+-	array = kmap_atomic(page);
++	array = kmap_local_page(page);
+ 	array->change_attr = change_attr;
+ 	array->last_cookie = last_cookie;
+ 	array->size = 0;
+ 	array->page_full = 0;
+ 	array->page_is_eof = 0;
+ 	array->cookies_are_ordered = 1;
+-	kunmap_atomic(array);
++	kunmap_local(array);
+ }
+ 
+ /*
+@@ -221,11 +221,11 @@ static void nfs_readdir_clear_array(struct page *page)
+ 	struct nfs_cache_array *array;
+ 	unsigned int i;
+ 
+-	array = kmap_atomic(page);
++	array = kmap_local_page(page);
+ 	for (i = 0; i < array->size; i++)
+ 		kfree(array->array[i].name);
+ 	array->size = 0;
+-	kunmap_atomic(array);
++	kunmap_local(array);
+ }
+ 
+ static void nfs_readdir_free_folio(struct folio *folio)
+@@ -371,14 +371,14 @@ static pgoff_t nfs_readdir_page_cookie_hash(u64 cookie)
+ static bool nfs_readdir_page_validate(struct page *page, u64 last_cookie,
+ 				      u64 change_attr)
+ {
+-	struct nfs_cache_array *array = kmap_atomic(page);
++	struct nfs_cache_array *array = kmap_local_page(page);
+ 	int ret = true;
+ 
+ 	if (array->change_attr != change_attr)
+ 		ret = false;
+ 	if (nfs_readdir_array_index_cookie(array) != last_cookie)
+ 		ret = false;
+-	kunmap_atomic(array);
++	kunmap_local(array);
+ 	return ret;
+ }
+ 
+@@ -418,9 +418,9 @@ static u64 nfs_readdir_page_last_cookie(struct page *page)
+ 	struct nfs_cache_array *array;
+ 	u64 ret;
+ 
+-	array = kmap_atomic(page);
++	array = kmap_local_page(page);
+ 	ret = array->last_cookie;
+-	kunmap_atomic(array);
++	kunmap_local(array);
+ 	return ret;
+ }
+ 
+@@ -429,9 +429,9 @@ static bool nfs_readdir_page_needs_filling(struct page *page)
+ 	struct nfs_cache_array *array;
+ 	bool ret;
+ 
+-	array = kmap_atomic(page);
++	array = kmap_local_page(page);
+ 	ret = !nfs_readdir_array_is_full(array);
+-	kunmap_atomic(array);
++	kunmap_local(array);
+ 	return ret;
+ }
+ 
+@@ -439,9 +439,9 @@ static void nfs_readdir_page_set_eof(struct page *page)
+ {
+ 	struct nfs_cache_array *array;
+ 
+-	array = kmap_atomic(page);
++	array = kmap_local_page(page);
+ 	nfs_readdir_array_set_eof(array);
+-	kunmap_atomic(array);
++	kunmap_local(array);
+ }
+ 
+ static struct page *nfs_readdir_page_get_next(struct address_space *mapping,
+@@ -568,14 +568,14 @@ static int nfs_readdir_search_array(struct nfs_readdir_descriptor *desc)
+ 	struct nfs_cache_array *array;
+ 	int status;
+ 
+-	array = kmap_atomic(desc->page);
++	array = kmap_local_page(desc->page);
+ 
+ 	if (desc->dir_cookie == 0)
+ 		status = nfs_readdir_search_for_pos(array, desc);
+ 	else
+ 		status = nfs_readdir_search_for_cookie(array, desc);
+ 
+-	kunmap_atomic(array);
++	kunmap_local(array);
+ 	return status;
+ }
+ 
+-- 
+2.39.1
 
