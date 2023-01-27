@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9436F67DE41
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:09:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2098667DE49
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbjA0HJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 02:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S232053AbjA0HLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 02:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbjA0HJW (ORCPT
+        with ESMTP id S230516AbjA0HLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 02:09:22 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A523928B
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:09:21 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id o20so6770808lfk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:09:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WemP22SNSMVMbLWy+Pc4nysxoGXi6mbk91cpruNFrDU=;
-        b=E1MVf/aQXs+c4b3AC/WhtICxVhvPHRbx3ZYDVojqsIgNloReWpa6Z9wbGURFKohm6i
-         +Lcj/4AxwcN61+pn+ZVDUY80BhrTEI9DZADjx21rJYtjd7Q2Q1n6ORlMJTUgY8cx0CdS
-         5AsfCIO8ZdkXKbInYPUeydRKgYwR+YUW4tqU2jdxy5a3uf6w/D2v1d+4ojTf3eG2rKXm
-         z61NptGViFXeCptS2VvwJPLaeWPm1Vuony7VgmeGNl7EzIxDNwm4b7B4iAVheLet4OaL
-         T/6yo2dLI8cLsHu/4gYzGoNrcWeH4KwHVFMIwUQRxfCDEr5QKQjso0H8HPcNNPPzGzZ5
-         mmeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WemP22SNSMVMbLWy+Pc4nysxoGXi6mbk91cpruNFrDU=;
-        b=dZQZaRdf0cllo4XJ0uw/4Egy9e7YiG6hvUIZwKOFXWYeByvceebNxkdFucc61V7rDN
-         dzNmuq0IUcG96QV4wqaqpEoRQ84Zgi1YO2RT9MszZzKjhetNYk+jfq9xYpfH8QCnLLtM
-         tAjuUj7RZVVXL9PiJQ4oV577f+psiQhjBhXyR6f+gCPOTTkAjZcKhUw79wDk+mTG9NIF
-         oCPKwe/jx+apMlFxb2CoTBCruooGc6cE0cqVM8AeddgZxlbmSxKjls+2A7u2UbLCRqjN
-         VqAWQ8wvl8Dhki9usgtE5ezvXOZWyckYErgoNzF609uywT6IW5Q49U/qAU1N7vDKm5iz
-         +1sg==
-X-Gm-Message-State: AFqh2kogXahPtrXPoyEZ+9nww5clvS5ck3zQ/AkHZXWcsbPqbYF7Pr69
-        AeEBsA8Z22CrRpqlTE9YLHU8bHStg4AhqwBZh8gNjQ==
-X-Google-Smtp-Source: AMrXdXtU8P5hhlqeiJHPIC4HN23au/K/crO29UIaMieQS5VJNVl9PP2xWiYFAsjJY5jbTyxF2z6gILNBjNQ6CiBxs5Y=
-X-Received: by 2002:a19:7712:0:b0:4cc:9c4b:6dfa with SMTP id
- s18-20020a197712000000b004cc9c4b6dfamr1998600lfc.307.1674803359488; Thu, 26
- Jan 2023 23:09:19 -0800 (PST)
+        Fri, 27 Jan 2023 02:11:07 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345603928B;
+        Thu, 26 Jan 2023 23:11:06 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E330D21D76;
+        Fri, 27 Jan 2023 07:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674803464; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6JbbjV8XPl8L1h6/eaMpCzQteeSN53ss/rnYjmgTrXA=;
+        b=nFLaAeUQ5whgylpP8TWBYrurt2mzJIePEHISY2sElbE/wV9zCG0kZLTksxYkCGkDMJ7/e/
+        3puaE1H2LxgFT2FnCyyJCM4ifWQt1a4LNfl8BvN/MsCuVlN/GJYyr42sQpyKXrL+diYIO4
+        uUAvQrDLDXGn7N/8wzS93CpH+RrBNFs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B78091336F;
+        Fri, 27 Jan 2023 07:11:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +x5rKgh502M7VgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 27 Jan 2023 07:11:04 +0000
+Date:   Fri, 27 Jan 2023 08:11:04 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
+        Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <fweisbecker@suse.de>
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+Message-ID: <Y9N5CI8PpsfiaY9c@dhcp22.suse.cz>
+References: <20230125073502.743446-1-leobras@redhat.com>
+ <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+ <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+ <Y9FzSBw10MGXm2TK@tpad>
+ <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
+ <Y9Iurktut9B9T+Tl@dhcp22.suse.cz>
+ <Y9MI42NSLooyVZNu@P9FQF9L96D.corp.robot.car>
 MIME-Version: 1.0
-References: <0000000000009ecbf205dda227bd@google.com> <0000000000004dc42605f31dd05c@google.com>
- <20230126131424.ufk6zspn6fyzw5l6@revolver>
-In-Reply-To: <20230126131424.ufk6zspn6fyzw5l6@revolver>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 27 Jan 2023 08:09:07 +0100
-Message-ID: <CACT4Y+b3P8=0aehSvEhX09A5vTNFTaME1Qse93J-zCR6zns6HQ@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in mas_next_nentry
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     syzbot <syzbot+7170d66493145b71afd4@syzkaller.appspotmail.com>,
-        brauner@kernel.org, dan.carpenter@oracle.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
-        viro@zeniv.linux.org.uk, wanjiabing@vivo.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9MI42NSLooyVZNu@P9FQF9L96D.corp.robot.car>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 Jan 2023 at 14:14, Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
->
-> syz fix: fs/userfaultfd: Fix maple tree iterator in userfaultfd_unregister()
->
-> * syzbot <syzbot+7170d66493145b71afd4@syzkaller.appspotmail.com> [230125 17:04]:
-> > syzbot suspects this issue was fixed by commit:
+[Cc Frederic]
 
-syzbot needs the hash to parse the command:
+On Thu 26-01-23 15:12:35, Roman Gushchin wrote:
+> On Thu, Jan 26, 2023 at 08:41:34AM +0100, Michal Hocko wrote:
+[...]
+> > > Essentially each cpu will try to grab the remains of the memory quota
+> > > and move it locally. I wonder in such circumstances if we need to disable the pcp-caching
+> > > on per-cgroup basis.
+> > 
+> > I think it would be more than sufficient to disable pcp charging on an
+> > isolated cpu.
+> 
+> It might have significant performance consequences.
 
-#syz fix: fs/userfaultfd: Fix maple tree iterator in userfaultfd_unregister()
+Is it really significant?
 
-> > commit 59f2f4b8a757412fce372f6d0767bdb55da127a8
-> > Author: Liam Howlett <liam.howlett@oracle.com>
-> > Date:   Mon Nov 7 20:11:42 2022 +0000
-> >
-> >     fs/userfaultfd: Fix maple tree iterator in userfaultfd_unregister()
-> >
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=129e8afe480000
-> > start commit:   b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-> > git tree:       upstream
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=7170d66493145b71afd4
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11bfb2a9880000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b1d319880000
-> >
-> > If the result looks correct, please mark the issue as fixed by replying with:
-> >
-> > #syz fix: fs/userfaultfd: Fix maple tree iterator in userfaultfd_unregister()
-> >
-> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> I'd rather opt out of stock draining for isolated cpus: it might slightly reduce
+> the accuracy of memory limits and slightly increase the memory footprint (all
+> those dying memcgs...), but the impact will be limited. Actually it is limited
+> by the number of cpus.
+
+Hmm, OK, I have misunderstood your proposal. Yes, the overal pcp charges
+potentially left behind should be small and that shouldn't really be a
+concern for memcg oom situations (unless the limit is very small and
+workloads on isolated cpus using small hard limits is way beyond my
+imagination).
+
+My first thought was that those charges could be left behind without any
+upper bound but in reality sooner or later something should be running
+on those cpus and if the memcg is gone the pcp cache would get refilled
+and old charges gone.
+
+So yes, this is actually a better and even simpler solution. All we need
+is something like this
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index ab457f0394ab..13b84bbd70ba 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2344,6 +2344,9 @@ static void drain_all_stock(struct mem_cgroup *root_memcg)
+ 		struct mem_cgroup *memcg;
+ 		bool flush = false;
+ 
++		if (cpu_is_isolated(cpu))
++			continue;
++
+ 		rcu_read_lock();
+ 		memcg = stock->cached;
+ 		if (memcg && stock->nr_pages &&
+
+There is no such cpu_is_isolated() AFAICS so we would need a help from
+NOHZ and cpuisol people to create one for us. Frederic, would such an
+abstraction make any sense from your POV?
+-- 
+Michal Hocko
+SUSE Labs
