@@ -2,52 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6198367DC46
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E414567DC55
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbjA0C2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 21:28:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
+        id S233525AbjA0CkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 21:40:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233242AbjA0C2J (ORCPT
+        with ESMTP id S232017AbjA0Cj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 21:28:09 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC0542BF5;
-        Thu, 26 Jan 2023 18:28:07 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P31hP2vbqz4xN1;
-        Fri, 27 Jan 2023 13:28:05 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674786486;
-        bh=DvR++yNqf5j2bKXvDXzXqvFKPNIHalGVvCBtT8bOoKs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GuBKfdcHIyWWLQm2TG/hdPWQJ1Zw4xMb7Bi6F3LttJfzp4TOdvZS7+uO/Th1rhA/r
-         VR5GeucHuY6NT5i1Iusvm46wYTz3qrpgnUZMd0e3cZDW2eL9bmVJ9Wk6Y+mQKiDPNw
-         ac1hLShhQKv4n4f1DmkdpRqWZcVc887PNGFnVyi9P9YCU4zx6jei224pavk2wwmuRZ
-         iutQmvGtJSrNHxgr1VyKfks3lKhdXGMCvnDOArvNVk6WQR3yr8Y9HWMrSO/IkyJeM9
-         jdyLYo6UeIK8JYvz1xhgqxBfpRnE3Jf/WLlHX+PQdV/xCkoA6O+WW7fu1uo8WXrR8h
-         Xvjt7ONz1cz4A==
-Date:   Fri, 27 Jan 2023 13:28:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: linux-next: manual merge of the drm-misc tree with the
- drm-misc-fixes tree
-Message-ID: <20230127132804.636960bb@canb.auug.org.au>
+        Thu, 26 Jan 2023 21:39:59 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FD6539AE
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:39:58 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso7260702pjg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:39:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JmA1hDZ+MeoPFm9Yjjv0t7YVH1mZV4xy4MwoNik2CbQ=;
+        b=tBLISifPko9ljpQXoRW1C/WvYxncmvA27w9hF/z1oOC3769navvqXQ2aSLcOoi15GZ
+         NMbjqKBRBg5qrDhIbEaTz89p7VEUm2IiZ53NJiV2N4c9DR+gVc0dLpE0J5t5WX5V2nvl
+         /Vpqb/uAenFA74Ffkfoppsdig9IWA0kEjOz4Q2VJd0qzGDwH5J8ji2NYRQFz7HfjjLrr
+         wS8RA76snYI8CxEOx0JHnlFfD7kPaNhgQTlCQgBxM512r8WQNwjdLNlBkQU0a4Riv+8H
+         5PVfPhsJyR6qFKi+jcYoMGmf5EvcPqOga2/4u2hDutt9h2VwPYX7or0dIQXLyXUiNJ1A
+         MLgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JmA1hDZ+MeoPFm9Yjjv0t7YVH1mZV4xy4MwoNik2CbQ=;
+        b=wlghT+4dSKvazyS7/mPziQHhKUSN/ws8j0PvgHmX3iU9hLD/r7HXpP9NQsa+suvyTm
+         6hLQhKFsENlkUxOBT2lI3WStgerK3OF6u5p4k1C6wrxeOU/hxVEzKUwrImMAu/wzdqhY
+         bCMR7dhKz3HCKI1FtXM06r0n0sO9Fifwgc5nD2UbdTJ/HympCCnfGrUPRnzg6FAtWnbJ
+         hDDwIiHDRvAI1/B0qB0xbN5KwXQBcWhjCvQ+YOz4UoYh0pC/tsx3PHAKmJ3q/YtMEueL
+         l35ZGDt0kr0U6tz+F2LAEF5oEUL9YgwP3Z/tu87Tnyh47ZAitFftKQ15om8RxpeOiuKx
+         0mpw==
+X-Gm-Message-State: AO0yUKV36weyqSfedG2Q2RKLNV0YsoFMlU60yuHNXvwhqxVllWLlwdLe
+        mWlWDkVCI02c5V3V+YwdfoaEZA==
+X-Google-Smtp-Source: AK7set9gr8/5ImFQDM4ddHsTo3zTKcVeS38DHQOR23X+Tb9p8uf/UMnwHvYLYorFup38S3BtMufcXw==
+X-Received: by 2002:a17:902:7886:b0:194:d5ff:3ae3 with SMTP id q6-20020a170902788600b00194d5ff3ae3mr1228848pll.2.1674787197920;
+        Thu, 26 Jan 2023 18:39:57 -0800 (PST)
+Received: from google.com ([2620:15c:2d:3:497:8b7d:bb75:1c3])
+        by smtp.gmail.com with ESMTPSA id y14-20020a17090322ce00b00196191b6b29sm1649839plg.140.2023.01.26.18.39.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 18:39:57 -0800 (PST)
+Date:   Thu, 26 Jan 2023 18:39:53 -0800
+From:   Isaac Manjarres <isaacmanjarres@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        kernel-team@android.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH v1 0/2] Fixes for kmemleak tracking with CMA regions
+Message-ID: <Y9M5eYzJcFbwlC9g@google.com>
+References: <20230109221624.592315-1-isaacmanjarres@google.com>
+ <Y8gpfgEXtialPVLk@arm.com>
+ <Y8neaPB2y689WKOf@google.com>
+ <Y8/96eIu47UfqsWO@arm.com>
+ <Y9BLfUz5GY69zmjn@google.com>
+ <Y9Eb2k3COoUXJ0CB@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uuTcGR_pR=i0SrKlg7E3+B/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9Eb2k3COoUXJ0CB@arm.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,104 +80,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/uuTcGR_pR=i0SrKlg7E3+B/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jan 25, 2023 at 12:08:58PM +0000, Catalin Marinas wrote:
+> That's an option. If there's too much churn to add a flag, an
+> alternative is to use the bottom bit of 'end' to set the noleaktrace
+> flag.
+Using the least significant bit won't work; there are allocations for
+CMA regions that can be specified to occur within the first 4 GB of
+memory, and would have an alloc-ranges of [0 0xffff_ffff]. I also don't
+think there's anything in the memblock documentation that ensures that
+those bits are supposed to be clear all the time.
 
-Hi all,
+> Yet another idea is to avoid the kmemleak callback on all the 'phys'
+> memblock allocations. We can add the callback to the higher level
+> memblock_alloc() which returns a VA but the lower level 'phys' variants
+> could simply avoid it. However, I think we still need the
+> MEMBLOCK_ALLOC_NOLEAKTRACE flag for the kasan shadow allocation. Well,
+> given that this flag is not widely used, we can add explicit
+> kmemleak_ignore() calls in those four places.
+> 
+> I think the latter, if it works, would be the least intrusive.
 
-Today's linux-next merge of the drm-misc tree got a conflict in:
+I agree; I think using kmemleak_ignore() would be best. I will
+split that into series: 1 series that fixes the kmemleak issue
+with CMA regions by reverting Calvin's patch and adding a call
+to kmemleak_ignore in the call-stack I referenced earlier, and
+then another series that cleans up the usage of the flag.
 
-  drivers/gpu/drm/drm_fbdev_generic.c
-
-between commits:
-
-  cc88ad784e42 ("drm/fb-helper: Check fb_deferred_io_init() return value")
-  d6591da5f3ff ("drm/fb-helper: Use a per-driver FB deferred I/O handler")
-
-from the drm-misc-fixes tree and commit:
-
-  6ca80b9e5cc0 ("drm/fbdev-generic: Rename struct fb_info 'fbi' to 'info'")
-
-from the drm-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/drm_fbdev_generic.c
-index bd1f8f28297c,43f94aa9e015..000000000000
---- a/drivers/gpu/drm/drm_fbdev_generic.c
-+++ b/drivers/gpu/drm/drm_fbdev_generic.c
-@@@ -200,31 -189,25 +184,31 @@@ static int drm_fbdev_fb_probe(struct dr
-  	fb_helper->fb =3D buffer->fb;
-  	fb =3D buffer->fb;
- =20
-- 	fbi =3D drm_fb_helper_alloc_info(fb_helper);
-- 	if (IS_ERR(fbi))
-- 		return PTR_ERR(fbi);
-+ 	info =3D drm_fb_helper_alloc_info(fb_helper);
-+ 	if (IS_ERR(info))
-+ 		return PTR_ERR(info);
- =20
-- 	fbi->fbops =3D &drm_fbdev_fb_ops;
-- 	fbi->screen_size =3D sizes->surface_height * fb->pitches[0];
-- 	fbi->fix.smem_len =3D fbi->screen_size;
-- 	fbi->flags =3D FBINFO_DEFAULT;
-+ 	info->fbops =3D &drm_fbdev_fb_ops;
-+ 	info->screen_size =3D sizes->surface_height * fb->pitches[0];
-+ 	info->fix.smem_len =3D info->screen_size;
-+ 	info->flags =3D FBINFO_DEFAULT;
- =20
-- 	drm_fb_helper_fill_info(fbi, fb_helper, sizes);
-+ 	drm_fb_helper_fill_info(info, fb_helper, sizes);
- =20
-  	if (drm_fbdev_use_shadow_fb(fb_helper)) {
-- 		fbi->screen_buffer =3D vzalloc(fbi->screen_size);
-- 		if (!fbi->screen_buffer)
-+ 		info->screen_buffer =3D vzalloc(info->screen_size);
-+ 		if (!info->screen_buffer)
-  			return -ENOMEM;
-- 		fbi->flags |=3D FBINFO_VIRTFB | FBINFO_READS_FAST;
-+ 		info->flags |=3D FBINFO_VIRTFB | FBINFO_READS_FAST;
- =20
- -		info->fbdefio =3D &drm_fbdev_defio;
- -		fb_deferred_io_init(info);
- +		/* Set a default deferred I/O handler */
- +		fb_helper->fbdefio.delay =3D HZ / 20;
- +		fb_helper->fbdefio.deferred_io =3D drm_fb_helper_deferred_io;
- +
-- 		fbi->fbdefio =3D &fb_helper->fbdefio;
-- 		ret =3D fb_deferred_io_init(fbi);
-++		info->fbdefio =3D &fb_helper->fbdefio;
-++		ret =3D fb_deferred_io_init(info);
- +		if (ret)
- +			return ret;
-  	} else {
-  		/* buffer is mapped for HW framebuffer */
-  		ret =3D drm_client_buffer_vmap(fb_helper->buffer, &map);
-
---Sig_/uuTcGR_pR=i0SrKlg7E3+B/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTNrQACgkQAVBC80lX
-0GyWXAf+OHhK8GDvQmPeit0XGXCqRhnV89RNnebh0SmsRLp3Eft/z8y7sayTC3eN
-3nN3Pd8YJRPe+0kHC5FV7zXDW/ZV3gnoTtj72pekA0sMVTQVwzH9GfamLew7DQMv
-rsNp6xvXPQ8mxRrY74wqgcoDlOqLomFXwDdhiZ9btc6rUv9uuKsqb4F54sJRoDAe
-HBzd8x10ykgsTM98YJWaA2kJEfkXXuhy0DfCrTFkLxrGgiuNe8RDNP1LDZ17wnbX
-JHcMv1oT9dK9ed+Ig9unRsAVE3jk+MUFWnrADhAlqNXXVrdD4zXLPG+C2F/K++0w
-3LIwJ5d1HwdKwqphJikcdLsv9IUeQw==
-=ZvkD
------END PGP SIGNATURE-----
-
---Sig_/uuTcGR_pR=i0SrKlg7E3+B/--
+--Isaac
