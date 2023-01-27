@@ -2,97 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622CC67DB1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 02:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EBE67DB2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 02:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbjA0BMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 20:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48306 "EHLO
+        id S232400AbjA0BUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 20:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjA0BMR (ORCPT
+        with ESMTP id S229510AbjA0BUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 20:12:17 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5481550840;
-        Thu, 26 Jan 2023 17:12:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=4li8EqnqSTnx1d7CO/b/vL4I87sOQhY49XfTNCTRj0A=; b=Mg9u+WYhHciOxQ8zud7hLB9wLG
-        pmOk/ySfXKPE8YbfreaimjAB0kY4Dbt/q+mL1v0jtTd3gby6kmeGmEFFEQTKPudoQgfjy1e8R62/c
-        bRopvhAqgpt0z0nBYKddDZ4Vsx2xjnYjcCCX1+fK+gxrzFBf7ul9WP1/hvPqYYWiemo1bK4OLZ85g
-        w5c3dFMq+Q6qP4UHXlxYJH5ekS2O67U7RsFmdPRpmggA97LjsQa70UXjJU0WrcUJWXa65nZJT/0Pj
-        nQjdg/aC+0V8tIsrsT7Y6CbCWAPlnOLocC7FEnjndTHbZarkONNoVsIScLNsmq6/axrRalUtuMjaU
-        Y9LslHEg==;
-Received: from [2601:1c2:d80:3110::9307]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pLDHo-00D3ft-01; Fri, 27 Jan 2023 01:12:12 +0000
-Message-ID: <641836b3-2378-c728-696a-03a42ab11bc8@infradead.org>
-Date:   Thu, 26 Jan 2023 17:12:10 -0800
+        Thu, 26 Jan 2023 20:20:09 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9151E35A0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:20:07 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id vw16so9759856ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:20:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CF01fh/f0hITGD+MQzyiKhCXqnGsvJyZ9uRxx+H98MU=;
+        b=dvJ1aGnFt1pS3es/e/WqL8ToqRyNvrS6b+rH6MEGmZD2ICAYISfVAHWE3cpKE8+7AW
+         rXDdDtrUF5/yOT3M2hz8YMcS3jrmIIqXTZdHjOHsFunoFUw51j2DqWgQxG4apAXVW7Mm
+         c7mQEq8JDpOf+Mwf4us1d/to+qbbqh+uzkQzg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CF01fh/f0hITGD+MQzyiKhCXqnGsvJyZ9uRxx+H98MU=;
+        b=MA3OMVWElI+DjuiR6oG8Chv81x5ISD743mE+hNoPi5zGl5KUmwX2DsIFn76LKh/1HA
+         rsTDQpqn+XWLceec0+9EDlkFTeVZkJ2Vxgrgz7laHxSBxKRB22xoVA/Auo1aIZqif9Kd
+         HFxzPpyglZpEzhmINLPiuUqiDdTdyMfDUjs4LiVBm1pRLnrLQ52/40L6t3Hd+7XezisN
+         tvCl9coOBeNAh4SuUooaDLcXRYYhyPfTqV5IlbB2NbbTMKzwmhAnCJ2EbJy4BE9BayMh
+         UJ5G+3qyB28yMIq+hGsslw70kEhFBNPjuT2rjiX+RiG3PmVcqlnbwKgRRxz6lsYQsnVM
+         8TDA==
+X-Gm-Message-State: AO0yUKWgys1p7xwgnY1P4KijemN4eMBcHbKIorajcyBvLPvebZUMCu0+
+        45mhVV7qy/C8C/tdf0FLTDCs5h6avbU9vGTPdpI=
+X-Google-Smtp-Source: AK7set/CNgv2vlifgvsMDefYaYLLLRYqkpKODxzgdlWPzuQVEEOXnzcPujVUlP+6OBjt7mxVGWZobg==
+X-Received: by 2002:a17:906:f1cb:b0:878:78bc:975c with SMTP id gx11-20020a170906f1cb00b0087878bc975cmr3234870ejb.36.1674782405969;
+        Thu, 26 Jan 2023 17:20:05 -0800 (PST)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id cm20-20020a170907939400b0086f40238403sm1345630ejc.223.2023.01.26.17.20.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 17:20:05 -0800 (PST)
+Received: by mail-wr1-f46.google.com with SMTP id m7so3628384wru.8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:20:05 -0800 (PST)
+X-Received: by 2002:a5d:6b51:0:b0:2bf:c5cc:e1d6 with SMTP id
+ x17-20020a5d6b51000000b002bfc5cce1d6mr99974wrw.659.1674782025133; Thu, 26 Jan
+ 2023 17:13:45 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] printk: Document that CONFIG_BOOT_PRINTK_DELAY
- required for boot_delay=
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-References: <20230126225420.1320276-1-helgaas@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230126225420.1320276-1-helgaas@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230113155547.RFT.1.I723a3761d57ea60c5dd754c144aed6c3b2ea6f5a@changeid>
+ <20230113155547.RFT.2.I4cfeab9d0e07e98ead23dd0736ab4461e6c69002@changeid>
+In-Reply-To: <20230113155547.RFT.2.I4cfeab9d0e07e98ead23dd0736ab4461e6c69002@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 26 Jan 2023 17:13:33 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=U_FhzyZFiJT3hYnURpuM7VvnR_RDBufCcwXu+H2obxgw@mail.gmail.com>
+Message-ID: <CAD=FV=U_FhzyZFiJT3hYnURpuM7VvnR_RDBufCcwXu+H2obxgw@mail.gmail.com>
+Subject: Re: [RFT PATCH 2/2] drm/msm/dsi: Stop unconditionally powering up DSI
+ hosts at modeset
+To:     dri-devel@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 1/26/23 14:54, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Document the fact that CONFIG_BOOT_PRINTK_DELAY must be enabled for the
-> "boot_delay" kernel parameter to work.  Also mention that "lpj=" may be
-> necessary.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
+On Fri, Jan 13, 2023 at 3:56 PM Douglas Anderson <dianders@chromium.org> wrote:
+>
+> In commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset
+> time"), we moved powering up DSI hosts to modeset time. This wasn't
+> because it was an elegant design, but there were no better options.
+>
+> That commit actually ended up breaking ps8640, and thus was born
+> commit ec7981e6c614 ("drm/msm/dsi: don't powerup at modeset time for
+> parade-ps8640") as a temporary hack to un-break ps8640 by moving it to
+> the old way of doing things. It turns out that ps8640 _really_ doesn't
+> like its pre_enable() function to be called after
+> dsi_mgr_bridge_power_on(). Specifically (from experimentation, not
+> because I have any inside knowledge), it looks like the assertion of
+> "RST#" in the ps8640 runtime resume handler seems like it's not
+> allowed to happen after dsi_mgr_bridge_power_on()
+>
+> Recently, Dave Stevenson's series landed allowing bridges some control
+> over pre_enable ordering. The meaty commit for our purposes is commit
+> 4fb912e5e190 ("drm/bridge: Introduce pre_enable_prev_first to alter
+> bridge init order"). As documented by that series, if a bridge doesn't
+> set "pre_enable_prev_first" then we should use the old ordering.
+>
+> Now that we have the commit ("drm/bridge: tc358762: Set
+> pre_enable_prev_first") we can go back to the old ordering, which also
+> allows us to remove the ps8640 special case.
+>
+> One last note is that even without reverting commit 7d8e9a90509f
+> ("drm/msm/dsi: move DSI host powerup to modeset time"), if you _just_
+> revert the ps8640 special case and try it out then it doesn't seem to
+> fail anymore. I spent time bisecting / debugging this and it turns out
+> to be mostly luck, so we still want this patch to make sure it's
+> solid. Specifically the reason it sorta works these days is because
+> we implemented wait_hpd_asserted() in ps8640 now, plus the magic of
+> "pm_runtime" autosuspend. The fact that we have wait_hpd_asserted()
+> implemented means that we actually power the bridge chip up just a wee
+> bit earlier and then the bridge happens to stay on because of
+> autosuspend and thus ends up powered before dsi_mgr_bridge_power_on().
+>
+> Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 > ---
-> Changes from v1 (https://lore.kernel.org/all/20230123180440.901793-1-helgaas@kernel.org/):
-> - Clarify use of "lpj=".  Reword consequences of delay larger than 10000.
-> 
->  Documentation/admin-guide/kernel-parameters.txt | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 6cfa6e3996cf..814e58487239 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -480,8 +480,10 @@
->  			See Documentation/block/cmdline-partition.rst
->  
->  	boot_delay=	Milliseconds to delay each printk during boot.
-> -			Values larger than 10 seconds (10000) are changed to
-> -			no delay (0).
-> +			Only works if CONFIG_BOOT_PRINTK_DELAY is enabled,
-> +			and you may also have to specify "lpj=".  Boot_delay
-> +			values larger than 10 seconds (10000) are assumed
-> +			erroneous and ignored.
->  			Format: integer
->  
->  	bootconfig	[KNL]
+>
+>  drivers/gpu/drm/msm/dsi/dsi_manager.c | 68 +++++----------------------
+>  1 file changed, 11 insertions(+), 57 deletions(-)
 
--- 
-~Randy
+Does anyone have any comments on this patch series? It would probably
+make sense to wait to land until early in a kernel's release cycle, so
+perhaps there is no hurry. That being said, it would still be good to
+know what the plan is.
+
+Abhinav: I think you're the one that was most concerned with removing
+the special case for ps8640. Does that mean you'd be willing to review
+this patch?
+
+For whether or not the "tc358762" panel works with the MSM display
+driver after this series, are the correct people on this thread?
+
+Thanks!
+
+-Doug
