@@ -2,78 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C9F67E993
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8947B67E99A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234586AbjA0PfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:35:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S233538AbjA0Pgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:36:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234615AbjA0PfO (ORCPT
+        with ESMTP id S231991AbjA0Pgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:35:14 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDBA83949;
-        Fri, 27 Jan 2023 07:35:07 -0800 (PST)
+        Fri, 27 Jan 2023 10:36:45 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B01222D2;
+        Fri, 27 Jan 2023 07:36:44 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id g23so5294442plq.12;
+        Fri, 27 Jan 2023 07:36:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1674833708;
-  x=1706369708;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=knTxw+HOO+Mu4udu1BTSisM/sBDYJVdlFnR7EzrCZEE=;
-  b=i+iOX1Ph5Cp5dG9d2fXKa1WHuGutzJKJ1OMyd1fSqKNXkIY3tqKKhCT4
-   jazj+h6ylgCjgcDws6hq6CWoP/v62JXCpmtLgT3+SpAi0fmulq/GBUNZg
-   WG2Bs8l+rdZh5p+l1j99oU3csgy3DT2IQdvBOXbfKssaMEZM8RQRWJTaa
-   kXlmszHu6OfRfmFqvVcnld3+BPpLQ0B7OVgKzac61YhsxwNFGo41UyOGL
-   8HqRLfTjW0FSh8sqPNpKCnjEzKbbHhdtMmJ2nWyFTE8U3bwHVoBrNVEgM
-   jTHOH4FCL4nmchVOrOOfcqi51lrwWZjkdYj0Ss0wGBe8WKs8ap4IJgNB7
-   Q==;
-Date:   Fri, 27 Jan 2023 16:35:06 +0100
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        Jesper Nilsson <Jesper.Nilsson@axis.com>,
-        Lars Persson <Lars.Persson@axis.com>, kernel <kernel@axis.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 01/12] crypto: axis - do not DMA to ahash_request.result
-Message-ID: <Y9PvKurcZLva8Vws@axis.com>
-References: <20230110135042.2940847-1-vincent.whitchurch@axis.com>
- <20230110135042.2940847-2-vincent.whitchurch@axis.com>
- <Y8paPhBZqzipaMEL@gondor.apana.org.au>
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tD8oSVYhnxG/S8yW3kIWIJCg9bTAW+68+2JbtNleSCo=;
+        b=RMDP1kGzSOTJJ3aNoxIVuxO9AxlFf855MBul/yaIxbGi0fcchvjqg+TkbOKK8lCVYg
+         +ffs7bTNtnb6C5jrICrCL2e38SG4P43naHmpWb8oLRW34HNeT2+6orRNTHT412N43dov
+         vYX6ic3MDQ9hpH5RQPCVySrQLph44iwS4l7QytycWeyZC51wqAnIdXNNuceBW1gn3KKk
+         0izYFqUDfto1vu0j5hM7h7XBPmRP1TujbnUtpLuWYe32uOC3ZzXDOrzPa1iW1Y7pd9+f
+         fmW2u9EMYawkPVAeZt+nqy2uEh4pdwnyEcwoxEMm8E6hxzZmU9q0mZX1rEuA34duI2Pz
+         Ho9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tD8oSVYhnxG/S8yW3kIWIJCg9bTAW+68+2JbtNleSCo=;
+        b=IlBgVc9VPTQ+/EqYJ1IBfs3VhXLr/9dr8i7tP3bpMbdYGtyN1hfnkEaQlfuPBYvXE5
+         SVTFRSYaRcwuJ+3UN0S4jlMu/V4jpnOVgvoM1+fk06YtZf110aop1iqCYMHMEyyI5MU+
+         Ke53I468/PQQlyOT+DKSrm4gioltmWFiACFLUHU+xym4eb/wykg9UNwcIiszu8khp973
+         QdBR6pKWtnzqb+yOC5JgM5USV458vKokhB17zgbWcodfsfKDW1bc7WJz/BW2z8qMwojt
+         sOkfwce463BtNXTF2ApxjnJGjp/ADSDskzBa1dq9U8wUuVlrL9cJoekaKekmQisGifcI
+         NczQ==
+X-Gm-Message-State: AO0yUKUVD13ollpcqHY0QPdhq5L5jliFXp+DdPEMGrCLN6FdHHUwH0xJ
+        h9wksIah1dNAAlbeycWnT4JEFuV9LTkvcDwH8yp7NqYy
+X-Google-Smtp-Source: AK7set+y7XUzy08N/G4vmB5/kI1OzTqGqppCVHGtgiFEF8RsGlKNvFXzRWOE9vzbZon0RcoXgvrjk+0gJACobrSkvNU=
+X-Received: by 2002:a17:90a:e50f:b0:22c:113f:116f with SMTP id
+ t15-20020a17090ae50f00b0022c113f116fmr1268497pjy.175.1674833803705; Fri, 27
+ Jan 2023 07:36:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y8paPhBZqzipaMEL@gondor.apana.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127101627.891614-1-ilias.apalodimas@linaro.org>
+In-Reply-To: <20230127101627.891614-1-ilias.apalodimas@linaro.org>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Fri, 27 Jan 2023 07:36:32 -0800
+Message-ID: <CAKgT0UdGMbaNDX4xEknXa9MAXAW6PoU1y4ogVFycn6jBFuDYiQ@mail.gmail.com>
+Subject: Re: [PATCH] page_pool: add a comment explaining the fragment counter usage
+To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Cc:     netdev@vger.kernel.org, Jesper Dangaard Brouer <hawk@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 10:09:18AM +0100, Herbert Xu wrote:
-> On Tue, Jan 10, 2023 at 02:50:31PM +0100, Vincent Whitchurch wrote:
-> >
-> > @@ -2216,6 +2220,14 @@ static void artpec6_crypto_complete_aead(struct crypto_async_request *req)
-> >  
-> >  static void artpec6_crypto_complete_hash(struct crypto_async_request *req)
-> >  {
-> > +	struct ahash_request *areq = container_of(req, struct ahash_request, base);
-> > +	struct artpec6_hash_request_context *ctx = ahash_request_ctx(areq);
-> > +	struct crypto_ahash *ahash = crypto_ahash_reqtfm(areq);
-> > +	size_t digestsize = crypto_ahash_digestsize(ahash);
-> > +
-> > +	if (ctx->hash_flags & HASH_FLAG_FINALIZED)
-> > +		memcpy(areq->result, ctx->digeststate, digestsize);
-> > +
-> 
-> I was just looking through the driver and digeststate does not
-> appear to be aligned to the DMA cacheline, should it be?
+On Fri, Jan 27, 2023 at 2:16 AM Ilias Apalodimas
+<ilias.apalodimas@linaro.org> wrote:
+>
+> When reading the page_pool code the first impression is that keeping
+> two separate counters, one being the page refcnt and the other being
+> fragment pp_frag_count, is counter-intuitive.
+>
+> However without that fragment counter we don't know when to reliably
+> destroy or sync the outstanding DMA mappings.  So let's add a comment
+> explaining this part.
+>
+> Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+> ---
+>  include/net/page_pool.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+> index 813c93499f20..115dbce6d431 100644
+> --- a/include/net/page_pool.h
+> +++ b/include/net/page_pool.h
+> @@ -277,6 +277,14 @@ void page_pool_put_defragged_page(struct page_pool *pool, struct page *page,
+>                                   unsigned int dma_sync_size,
+>                                   bool allow_direct);
+>
+> +/* pp_frag_count is our number of outstanding DMA maps.  We can't rely on the
+> + * page refcnt for that as we don't know who might be holding page references
+> + * and we can't reliably destroy or sync DMA mappings of the fragments.
+> + *
 
-Yes, you're right, thanks, that buffer and a few others are missing
-alignment annotations.  I'll add a patch to fix that when I respin the
-series.
+This isn't quite right. Basically each frag is writable by the holder
+of the frag. As such pp_frag_count represents the number of writers
+who could still update the page either in the form of updating
+skb->data or via DMA from the device.
+
+> + * When pp_frag_count reaches 0 we can either recycle the page, if the page
+> + * refcnt is 1, or return it back to the memory allocator and destroy any
+> + * mappings we have.
+> + */
+>  static inline void page_pool_fragment_page(struct page *page, long nr)
+>  {
+>         atomic_long_set(&page->pp_frag_count, nr);
+
+The rest of this looks good to me.
