@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C629267EA18
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0798F67EA1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbjA0P6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:58:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
+        id S234013AbjA0P6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbjA0P6T (ORCPT
+        with ESMTP id S233491AbjA0P6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:58:19 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF9B7643F
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:58:18 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id p26so3669070ejx.13
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:58:18 -0800 (PST)
+        Fri, 27 Jan 2023 10:58:47 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134D78663D
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:58:41 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id g9so3552748pfo.5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:58:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mlg45T4/VC+7LmAsgOWK4bw3SsjPwjm5InA1atd5cbM=;
-        b=Lb5onOMPT75+MY3z7ZObqs5E6eGtXjhmibCMQ+TiXHxDJcjGv3MQCb44+itMUg6MrT
-         YkmJGmVNLkEfIjjTp+Z7Ew5Xbg0s9VQTl3COKoI/4tuXyHHg+xK9/Cq/FI6iV6nvM7PV
-         yPsNLyT0miE6du9DKnP5DnHU+uEJOfYt76j9w=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qLM9fJV2OakKqd36YJxxEJYAlIbXLOshTjOPLX8PU4c=;
+        b=VpL/jhAfmgxTZiKa9pK4rSG5AUZUiNfO1qMX9Z/MFlW2cTsUwk2IEUji//2c37ACVW
+         87jg3kuYQscpybE7Xk5XWJYixUvz5AG71KBllyuo+hG4t4zbJxmHwf5wKGr33bwFkaH/
+         WFbRWD62OenZYXyv0FR4CUzsbm8md7tTo4KcRO+9EXs4tKFYmfp4N4tHIJCblBU8RgeL
+         YaxSWz8q6b0wDDTTUQ8fkc2qu1OkgEvB4q2m+fSnILZF72EviUkk2xIkUtkzcvdXWmZB
+         o6nHG1ZcHPU4T0Ea3StcApx/ZFhaBTUCVSwMN0yTNrYWTinH5K7MuFDaKA9GThTtc2Wp
+         Gsww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mlg45T4/VC+7LmAsgOWK4bw3SsjPwjm5InA1atd5cbM=;
-        b=DhBR5qLYeZfeR3k3uomQMkcyw1TUAu7ogxadC9BC69xLpNSTw9XOz2p3U58xG5CYSG
-         qEyEjwcKpW2B9/BH4wDfLEwCsEZ47LsEJvEpSy86pOXrJtNRVcPxDgdNUt76Vehwdh3k
-         KpnpsH7GslonkS8p/OVr7Gru8eu/1ch0phme+Wsp5doZnKKqQIEfTwoe0T2M+PjOzLjE
-         bJg82wJ0xag4YPmNB4/VaU6ha6VggBMrjZ6/dpmvHra7F7zxjKYu9cwEX8RUQSZCUN+2
-         4Kl4HC8WNZQQAN5h8zWIrPXqbYHdGDpX7IWHTdZ7rq7e1Zt5F4DYZkdnJVqncm9caurm
-         kpzw==
-X-Gm-Message-State: AFqh2kpqxuCvF4/ExIV5lmBrCzZRqyl/Zi+RUrpJJHgHtIidGfBzHKb8
-        m0G7LIZijmaG3qYi2pf/bG+CxTA/2a7DbiZwavQ=
-X-Google-Smtp-Source: AMrXdXt9+7rEBjaft3TYYfboyapwXwtO82k8RVPysFSnYA/aRvvE3uauu/Fo+nP1x5NbawW6g7nlyg==
-X-Received: by 2002:a17:906:4ad5:b0:7ad:e67d:f15c with SMTP id u21-20020a1709064ad500b007ade67df15cmr52639571ejt.48.1674835097164;
-        Fri, 27 Jan 2023 07:58:17 -0800 (PST)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id o25-20020a170906861900b008675df83251sm2425636ejx.34.2023.01.27.07.58.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 07:58:16 -0800 (PST)
-Received: by mail-wr1-f52.google.com with SMTP id bk16so5352683wrb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:58:15 -0800 (PST)
-X-Received: by 2002:adf:f10b:0:b0:2bd:ef96:3889 with SMTP id
- r11-20020adff10b000000b002bdef963889mr1582683wro.138.1674835095329; Fri, 27
- Jan 2023 07:58:15 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qLM9fJV2OakKqd36YJxxEJYAlIbXLOshTjOPLX8PU4c=;
+        b=rQUvJ8eN/xgxLXDWbrIR1QVJgiuxw0fDdExBdul5oqa8wRRRJ0qEMdPQ/tCJQizpzX
+         qj1xJQNdX5zbKaEbF5eFbuD3Jtf0Mj6xeQErbZ/IjEKA1EriRqzwm4MuLpzUvWNHSD9p
+         if2gjb/zYshjlIBYOtE//S8E79RP4oiSvgM7jHAdHiIDxJYFKOlulSjTMZTT/6ykGMDK
+         0qTrB3mH3OUlh7YIONpUepX2a6G6WTDjY51WWQtQ1DFpnXTFFmUo2Ex7huDSeE1UDbU4
+         xYy0kN40CMOI3HESe0rOXsiGg+dI/Ia/QSYB+3xpO67Xp3+4zXNpTM1pAcxs9FpXBugl
+         dvpA==
+X-Gm-Message-State: AO0yUKX1IdwqNT2VjXlCaQxYsmCfY26072m9+ZvBQIfHnHFxY1t6z+hs
+        z629T0k6HgR+3/lbpWUVT+qhHcXVKnuSvNUTutsGcg==
+X-Google-Smtp-Source: AK7set8Lvh1ZvALlREZDK1x12Ja5QDTTn/XlXrMHn/IHabRBY+Ekk/B6e9azuI+e7w5Vjk85sHbngcoBtygXHUBUmbQ=
+X-Received: by 2002:a62:1a4c:0:b0:592:5cbf:c71f with SMTP id
+ a73-20020a621a4c000000b005925cbfc71fmr700905pfa.29.1674835120584; Fri, 27 Jan
+ 2023 07:58:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20230119224052.2879106-1-robdclark@gmail.com>
-In-Reply-To: <20230119224052.2879106-1-robdclark@gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 27 Jan 2023 07:58:02 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XqWzrgss7HAsYJASuJjNr3gBgtM7b3rNU=NtGuVgJ+ew@mail.gmail.com>
-Message-ID: <CAD=FV=XqWzrgss7HAsYJASuJjNr3gBgtM7b3rNU=NtGuVgJ+ew@mail.gmail.com>
-Subject: Re: [PATCH] drm/mediatek: Remove dependency on GEM DMA helper
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:DRM DRIVERS FOR MEDIATEK" 
-        <linux-mediatek@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>
+References: <20230127154339.157460-1-ulf.hansson@linaro.org> <5743fb1b-eb4b-d169-a467-ee618bcd75f5@kernel.dk>
+In-Reply-To: <5743fb1b-eb4b-d169-a467-ee618bcd75f5@kernel.dk>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 27 Jan 2023 16:58:04 +0100
+Message-ID: <CAPDyKFqFrB4h21F0901nBp-mpiP70nObOrCpRA0ZRfOD_kD5ug@mail.gmail.com>
+Subject: Re: [PATCH] block: Default to build the BFQ I/O scheduler
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Jan 19, 2023 at 2:40 PM Rob Clark <robdclark@gmail.com> wrote:
+On Fri, 27 Jan 2023 at 16:48, Jens Axboe <axboe@kernel.dk> wrote:
 >
-> From: Rob Clark <robdclark@chromium.org>
+> On 1/27/23 8:43=E2=80=AFAM, Ulf Hansson wrote:
+> > Today BFQ is widely used and it's also the default choice for some of t=
+he
+> > single-queue-based storage devices. Therefore, let's make it more
+> > convenient to build it as default, along with the other I/O schedulers.
+> >
+> > Let's also build the cgroup support for BFQ as default, as it's likely =
+that
+> > it's wanted too, assuming CONFIG_BLK_CGROUP is also set, of course.
 >
-> It appears that the dependency on the DMA helpers was only for
-> drm_gem_dma_vm_ops.
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/mediatek/Kconfig       | 1 -
->  drivers/gpu/drm/mediatek/mtk_drm_gem.c | 7 ++++++-
->  2 files changed, 6 insertions(+), 2 deletions(-)
+> This won't make much of a difference, when the symbols are already in
+> the .config. So let's please not. It may be a 'y' for you by default,
+> but for lots of others it is not. Don't impose it on folks.
 
-Drive-by comment: can you post a follow-up patch that also removes the
-"#include <drm/drm_gem_dma_helper.h>" from "mtk_drm_gem.c", assuming
-that still compiles? If it doesn't compile, that might be a bad sign
-that we missed something. ;-)
+This isn't about folkz, but HW. :-)
 
--Doug
+I was thinking that it makes sense for the similar reason to why kyber
+and deadline are being built as default. Or are there any particular
+other reasons to why we build those in as default, but not BFQ?
+
+Kind regards
+Uffe
