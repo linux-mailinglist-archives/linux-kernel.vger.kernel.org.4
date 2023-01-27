@@ -2,73 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B078A67E711
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E25767E71D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbjA0Nu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:50:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S233144AbjA0NxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:53:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbjA0Nu4 (ORCPT
+        with ESMTP id S233086AbjA0NxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:50:56 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3291E1420D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:50:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674827455; x=1706363455;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ssj3B8e8skHTVBIpV4x8AC0AZSa8szTkYCtA0AUVYFU=;
-  b=JPHEDEgUWRyuxhxZdeq82ROlgaazijhIaDosKGNE+qG0odD3VFj4YWOR
-   oo7jI6PA6k3AmOq0aVmL9XoR83E9pprflbDGyTh5z571pbj/XjItqUHMQ
-   GIZrcQLEMhm24GbqixLaXx8+fm6iuxOtzLHvfcOYB8lQV5XNAX2knFsAy
-   TL7IPXPlBawW0M2ATxr2QICJZ0f4k6UWVzF6fD8+pChB6FzZQc5EZeX72
-   gTKmoTR7eg4/eOAkBStPGY8Ynho3SUl5X1XLTgIp9KbiGkN5tK1qC2Pz1
-   LzH6OAmuvyWnt2Lg+rfJiGoGVF0+yHJqrWMMeLGohaHe6pVLs0bhi3nwx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="325760643"
-X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="325760643"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 05:50:54 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="656600167"
-X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="656600167"
-Received: from jgeary-mobl1.ger.corp.intel.com (HELO [10.213.233.162]) ([10.213.233.162])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 05:50:51 -0800
-Message-ID: <314aff2e-c1be-61b1-d764-330f1c276f92@linux.intel.com>
-Date:   Fri, 27 Jan 2023 13:50:49 +0000
+        Fri, 27 Jan 2023 08:53:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C06757B4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:52:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674827538;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R7PwQQfaQAAI4cWcMcSVvB/9kkzepsIAiNqYaNg7Vqg=;
+        b=Bicu/tFl0PtlK5OTJuX7LIHSyGAAcNJXDlLyGYYGHpN1rKaTfR12/9o0HNmKV4giPqrVpC
+        fHHSL5ytvK33RDdsCHy1Vk9qBh1dFqLgn3gh4cZmswA5Ju/frkowqorDWA7TpQAmzsiYgt
+        2UBx3emKB6O+O1sIRy6xmccN8pZhbNg=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-640-CiZ0Q0-HMPOxhds0MMtB1A-1; Fri, 27 Jan 2023 08:52:17 -0500
+X-MC-Unique: CiZ0Q0-HMPOxhds0MMtB1A-1
+Received: by mail-ej1-f69.google.com with SMTP id qf20-20020a1709077f1400b0086ec9755517so3434800ejc.15
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:52:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R7PwQQfaQAAI4cWcMcSVvB/9kkzepsIAiNqYaNg7Vqg=;
+        b=FGk3NoJIVKfMLbeMHaevEJGaeDKTLGTCRXaKGFrf9KaLptON9TLw4b549FtcVRuVFa
+         NTf4TWpLMMpT11LAjRF1/zggOP0bt4tQnZqT7fSh+MsF8r7XH/axA4nW1MPm6SBYWdpM
+         f+gHzOmTVyu6UP3X7K9c0VA6iAarm29rj/FnfuNX4UGV3wT2GRHfMA2t9NKTMVApy8Ed
+         2DLGRefIBs6VuaKL9wJ/CcP3OE89iiOvM2m656NpFpCgRc5cdXEQzCDfSgBNGGZtW5at
+         bNfS5RJ4waUlpa5LWE1jzNccqTPo8PCKheDo67i8rFFQGUnHPU/+YgA69miaQxjD6vEu
+         PlPg==
+X-Gm-Message-State: AFqh2koSkOTudE/o2TDfyaxo6De7hTwS3CRv/iB8crDDquHafmY4Bv7c
+        vzd1O8SuCYXhq7vRh08IeTQMC62FhygBzH/pGWt+UNNe71Af0SUyI9gqX6NmclRL96fdZKTpaXC
+        7z2Y1hPmVi8Am/CuHBa9T0TP3
+X-Received: by 2002:a17:906:9f1c:b0:870:3c70:8c8d with SMTP id fy28-20020a1709069f1c00b008703c708c8dmr35780276ejc.17.1674827535253;
+        Fri, 27 Jan 2023 05:52:15 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXv6Rvl5hVCAcmib+Ajlnf9hxYLH9FQSlnb3lj94uj3kByJbvLhBcQF3Wx5PXW8TJDK2Yh5ogw==
+X-Received: by 2002:a17:906:9f1c:b0:870:3c70:8c8d with SMTP id fy28-20020a1709069f1c00b008703c708c8dmr35780264ejc.17.1674827535048;
+        Fri, 27 Jan 2023 05:52:15 -0800 (PST)
+Received: from redhat.com ([2.52.137.69])
+        by smtp.gmail.com with ESMTPSA id sb25-20020a1709076d9900b0086faa5b06d4sm2262152ejc.181.2023.01.27.05.52.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 05:52:14 -0800 (PST)
+Date:   Fri, 27 Jan 2023 08:52:09 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
+        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
+        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v1 2/6] virtio console: Harden port adding
+Message-ID: <20230127085006-mutt-send-email-mst@kernel.org>
+References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
+ <20230119135721.83345-3-alexander.shishkin@linux.intel.com>
+ <Y8lfz8C5uvx2w4fC@kroah.com>
+ <87ilh2quto.fsf@ubik.fi.intel.com>
+ <Y8mSs68JfW6t4mjl@kroah.com>
+ <87a62eqo4h.fsf@ubik.fi.intel.com>
+ <20230127055944-mutt-send-email-mst@kernel.org>
+ <87k018p4xs.fsf@ubik.fi.intel.com>
+ <20230127071152-mutt-send-email-mst@kernel.org>
+ <87edrgp2is.fsf@ubik.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [Intel-gfx] [PATCH] drm/i915: Avoid potential vm use-after-free
-Content-Language: en-US
-To:     Matthew Auld <matthew.william.auld@gmail.com>
-Cc:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        katrinzhou <katrinzhou@tencent.com>
-References: <20230119173321.2825472-1-robdclark@gmail.com>
- <f24be4ca-edde-819a-5bcc-070e0d2e23d1@linux.intel.com>
- <CAM0jSHMwbUHu4kH-Y7F956+Us=TiQLJm_7y+1JbGNDaD-2J8pA@mail.gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <CAM0jSHMwbUHu4kH-Y7F956+Us=TiQLJm_7y+1JbGNDaD-2J8pA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87edrgp2is.fsf@ubik.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,88 +89,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 27/01/2023 13:10, Matthew Auld wrote:
-> On Mon, 23 Jan 2023 at 16:57, Tvrtko Ursulin
-> <tvrtko.ursulin@linux.intel.com> wrote:
->>
->>
->> + some more people based on e1a7ab4fca0c
->>
->> On 19/01/2023 17:32, Rob Clark wrote:
->>> From: Rob Clark <robdclark@chromium.org>
->>>
->>> Adding the vm to the vm_xa table makes it visible to userspace, which
->>> could try to race with us to close the vm.  So we need to take our extra
->>> reference before putting it in the table.
->>>
->>> Signed-off-by: Rob Clark <robdclark@chromium.org>
->>> ---
->>> Note, you could list commit e1a7ab4fca0c ("drm/i915: Remove the vm open
->>> count") as the "fixed" commit, but really the issue seems to go back
->>> much further (with the fix needing some backporting in the process).
->>
->> It would probably be rather essential to identify the correct Fixes: tag.
->>
->> Since Thomas, Matt and Niranjana you were directly involved in the patch
->> which changed significantly how this works, perhaps there is something
->> still somewhat easily retrievable from your memory lanes to help with this?
+On Fri, Jan 27, 2023 at 02:47:55PM +0200, Alexander Shishkin wrote:
+> "Michael S. Tsirkin" <mst@redhat.com> writes:
 > 
-> Sorry for the delay. Fix looks good to me,
-> Reviewed-by: Matthew Auld <matthew.auld@intel.com>
+> > On Fri, Jan 27, 2023 at 01:55:43PM +0200, Alexander Shishkin wrote:
+> >> "Michael S. Tsirkin" <mst@redhat.com> writes:
+> >> 
+> >> > On Thu, Jan 19, 2023 at 10:13:18PM +0200, Alexander Shishkin wrote:
+> >> >> When handling control messages, instead of peeking at the device memory
+> >> >> to obtain bits of the control structure,
+> >> >
+> >> > Except the message makes it seem that we are getting data from
+> >> > device memory, when we do nothing of the kind.
+> >> 
+> >> We can be, see below.
+> >> 
+> >> >> take a snapshot of it once and
+> >> >> use it instead, to prevent it from changing under us. This avoids races
+> >> >> between port id validation and control event decoding, which can lead
+> >> >> to, for example, a NULL dereference in port removal of a nonexistent
+> >> >> port.
+> >> >> 
+> >> >> The control structure is small enough (8 bytes) that it can be cached
+> >> >> directly on the stack.
+> >> >
+> >> > I still have no real idea why we want a copy here.
+> >> > If device can poke anywhere at memory then it can crash kernel anyway.
+> >> > If there's a bounce buffer or an iommu or some other protection
+> >> > in place, then this memory can no longer change by the time
+> >> > we look at it.
+> >> 
+> >> We can have shared pages between the host and guest without bounce
+> >> buffers in between, so they can be both looking directly at the same
+> >> page.
+> >> 
+> >> Regards,
+> >
+> > How does this configuration work? What else is in this page?
 > 
-> Looking at the git history, the fixes tag I think needs to be:
+> So, for example in TDX, you have certain pages as "shared", as in
+> between guest and hypervisor. You can have virtio ring(s) in such
+> pages.
+
+That one's marked as dma coherent.
+
+> It's likely that there'd be a swiotlb buffer there instead, but
+> sharing pages between host virtio and guest virtio drivers is possible.
+
+It's not something console does though, does it?
+
+> Apologies if the language is confusing, I hope I'm answering the
+> question.
 > 
-> Fixes: 9ec8795e7d91 ("drm/i915: Drop __rcu from gem_context->vm")
-> Cc: <stable@vger.kernel.org> # v5.16+
+> Regards,
+> --
+> Alex
 
-As discussed offline this looks correct to me too. Thanks for looking 
-into it!
+I'd like an answer to when does the console driver share the buffer
+in question, not when generally some pages shared.
 
-Since the CI was green I have now merged the patch. Thanks for the fix Rob!
+-- 
+MST
 
-Regards,
-
-Tvrtko
-
-P.S. Backport to kernels which do not contain e1a7ab4fca0c ("drm/i915: 
-Remove the vm open count"), so 5.16 to 5.18, will require a slightly 
-different patch as Matt has also mentioned offline.
-
-> 
->>
->> Regards,
->>
->> Tvrtko
->>
->>>
->>>    drivers/gpu/drm/i915/gem/i915_gem_context.c | 14 +++++++++++---
->>>    1 file changed, 11 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
->>> index 6250de9b9196..e4b78ab4773b 100644
->>> --- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
->>> +++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
->>> @@ -1861,11 +1861,19 @@ static int get_ppgtt(struct drm_i915_file_private *file_priv,
->>>        vm = ctx->vm;
->>>        GEM_BUG_ON(!vm);
->>>
->>> +     /*
->>> +      * Get a reference for the allocated handle.  Once the handle is
->>> +      * visible in the vm_xa table, userspace could try to close it
->>> +      * from under our feet, so we need to hold the extra reference
->>> +      * first.
->>> +      */
->>> +     i915_vm_get(vm);
->>> +
->>>        err = xa_alloc(&file_priv->vm_xa, &id, vm, xa_limit_32b, GFP_KERNEL);
->>> -     if (err)
->>> +     if (err) {
->>> +             i915_vm_put(vm);
->>>                return err;
->>> -
->>> -     i915_vm_get(vm);
->>> +     }
->>>
->>>        GEM_BUG_ON(id == 0); /* reserved for invalid/unassigned ppgtt */
->>>        args->value = id;
