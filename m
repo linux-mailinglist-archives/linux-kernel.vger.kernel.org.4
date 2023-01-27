@@ -2,150 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9D267DD5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4B967DD5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbjA0GQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 01:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
+        id S231506AbjA0GQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 01:16:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjA0GQL (ORCPT
+        with ESMTP id S231480AbjA0GQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 01:16:11 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC8059995
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 22:16:09 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id 3so4296768vsq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 22:16:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rlEPecTLwN3aXhkWIpbJ727AOVtBMW9dFqDKEbVST3Y=;
-        b=SxSAU5wU3Q3dN1ZzOJSRsHrPqKoDYVy+1dpYu+PY9tkCYe/4iB8S4FaE7xOIHba1N9
-         DNhM+qlp1YaL5WT4DVDIrNKS8Wk3lJfmVTvt0TQ79hJFp6nr2P0IuTFNikA0PEk6OwyU
-         7RRIZJDCyVl3zzLrPSupxVBNQYvYOpZHIsaAFMk74+4BOI59tHjCIRpRTQovnNZIjnJZ
-         CqMz9twr+3Shrn5C4xDzFxw9ViVksJXQJdlkHnQyFZKwY+aTxbnh9lIrd4Z0SDCIyUuc
-         U1TPuYxEt/4KF6x4ksCvvbQp4OqHFf+SN7xQFBt4fN4Ifyfr/ilZcyQ4/DcqCQiwe4h6
-         2VmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rlEPecTLwN3aXhkWIpbJ727AOVtBMW9dFqDKEbVST3Y=;
-        b=iypC/JrHtt6Ol5jAnOQ90JrT6t+dC9kFrNsgArmupN+XRXTVwvldFKPtdueHjiX6v0
-         UKEvecjYZ0yue6mMfu527iFIxzdyviA0qRIZFw6Fta2hUHzfIWAotfTI6TYZi6CJZPBy
-         VxMA+WSUDSJRwpZs3WMfJPOxvMEoZwuiO2Z0ZQCblUzAdOdMtEdd7M0/ujsE8Cwnxtgy
-         drQIxc22oXMNfFZ593sEDmldVLUpca5eLYvJ1BdFf+PoiIv3nUHJ9puRvdHZTPPHt1Il
-         4cghq3TS6xhk772t+3TlnDKcAjNeWBv2eB5lrqS3sw7LJQ3/JFaaf6FUlW8yFro3Xv55
-         7yvw==
-X-Gm-Message-State: AFqh2kqVbeoRSvPT1TQZ6ny0+O+oeUIMbm97mofXs5gK2UibxQwyJEbD
-        bNksj2qn9EGIoWV3mxU7IqLpPVe6hBi80PGpkrihBg==
-X-Google-Smtp-Source: AMrXdXvLEmqxBN/QcD5pknzRXRjn9K7V6E2J+enieZkQ42cCt/OxiBZAHHyvc446AfpfJKy4sI66EbTL1wsz2FMzSaw=
-X-Received: by 2002:a67:ea03:0:b0:3d0:d172:3a02 with SMTP id
- g3-20020a67ea03000000b003d0d1723a02mr5288645vso.41.1674800168420; Thu, 26 Jan
- 2023 22:16:08 -0800 (PST)
+        Fri, 27 Jan 2023 01:16:26 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A6B599A5;
+        Thu, 26 Jan 2023 22:16:22 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P36ll1z3Cz4xGM;
+        Fri, 27 Jan 2023 17:16:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674800181;
+        bh=VhTAOPrR41Xg1IzRQ17uQEaagP6uPDMc4j791sT8zEA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=r6bc8cFO/RdP1CxwcD75JPkpbxG4nBrymxSzuPj7IrlcntYBSc7BPqe/cLAjWcAUs
+         vOn+pcsfSgmTGIf6RPv2bkR4mZ3YxeyUurDRHevvW71Blik/2V2/IwJG8pEu8lUK7A
+         FVv9XCWVoKmcH471pfx9xQuKfBUStu74i0lOZsVFUl3f5yPWYwi0jB6XtvSMtqB/Jq
+         k/ukKGp4MV9pqXIQERVzdjlnHY7WftvIey4VecmxhyCbrBwP5iDBZsqsjL53x3isMm
+         LN8on3aSyI7zghDPLbzztn8Bb77SdTEhdENG3zpll9V/DilUE2Ji0voEiHjM9/vBbm
+         qKVKFBcsSKRTQ==
+Date:   Fri, 27 Jan 2023 17:16:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Dave Airlie <airlied@redhat.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20230127171618.79cead50@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20221219102452.2860088-1-sumit.garg@linaro.org>
- <CAFA6WYOucB3JdVATbydxYuAb0Q5P7ff_JMb=-BgiF+uip8pdpg@mail.gmail.com>
- <Y9AdunpawWzWKIXN@aspen.lan> <d6a92e81-0f67-68ce-744d-149bbcdc06d9@arm.com>
-In-Reply-To: <d6a92e81-0f67-68ce-744d-149bbcdc06d9@arm.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 27 Jan 2023 11:45:57 +0530
-Message-ID: <CAFA6WYN=no8NEWYmjxZRk2p5eEnCVyu+5Dw1DNxKaPijXcrByQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/2] arm64: Fix pending single-step debugging issues
-To:     Luis Machado <luis.machado@arm.com>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>, will@kernel.org,
-        catalin.marinas@arm.com, liwei391@huawei.com, mhiramat@kernel.org,
-        maz@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mark.rutland@arm.com,
-        dianders@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/yAe8Kl73kuJv_dCjTOMdg.Q";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luis,
+--Sig_/yAe8Kl73kuJv_dCjTOMdg.Q
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 25 Jan 2023 at 14:48, Luis Machado <luis.machado@arm.com> wrote:
->
-> Hi,
->
-> Is this expected to change single-stepping operation in usespace for debuggers (gdb/lldb)?
+Hi all,
 
-No it won't affect user-space debuggers as we are only touching the
-interrupt path in EL1 mode.
+After merging the mm tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
--Sumit
+drivers/accel/ivpu/ivpu_gem.c: In function 'ivpu_bo_mmap':
+drivers/accel/ivpu/ivpu_gem.c:449:23: error: assignment of read-only member=
+ 'vm_flags'
+  449 |         vma->vm_flags |=3D VM_PFNMAP | VM_DONTEXPAND;
+      |                       ^~
 
-> If so, it would be nice to at least
-> test it a little to make sure it works.
->
-> On 1/24/23 18:04, Daniel Thompson wrote:
-> > On Thu, Jan 12, 2023 at 02:52:49PM +0530, Sumit Garg wrote:
-> >> Hi Will, Catalin,
-> >>
-> >> On Mon, 19 Dec 2022 at 15:55, Sumit Garg <sumit.garg@linaro.org> wrote:
-> >>>
-> >>> This patch-set reworks pending fixes from Wei's series [1] to make
-> >>> single-step debugging via kgdb/kdb on arm64 work as expected. There was
-> >>> a prior discussion on ML [2] regarding if we should keep the interrupts
-> >>> enabled during single-stepping. So patch #1 follows suggestion from Will
-> >>> [3] to not disable interrupts during single stepping but rather skip
-> >>> single stepping within interrupt handler.
-> >>>
-> >>> [1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
-> >>> [2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
-> >>> [3] https://lore.kernel.org/all/20200626095551.GA9312@willie-the-truck/
-> >>>
-> >>> Changes in v5:
-> >>> - Incorporated misc. comments from Mark.
-> >>>
-> >>
-> >> Since patch #1 has already been reviewed/acked by Mark and the
-> >> complete patchset has been tested by Doug, would it be fine for you to
-> >> pick up this patchset? It fixes a real single stepping problem for
-> >> kgdb on arm64.
-> >
-> > Sorry to be quiet for so long.
-> >
-> > Testing this patch set has proven to be a little difficult.
-> >
-> > It certainly fixes the single step tests in the kgdbtest suite.
-> > That's a good start.
-> >
-> > Unfortunately when testing using qemu/KVM (hosted on NXP
-> > 2k/Solidrun Honeycomb) the patch set is resulting in instability
-> > running the built-in self tests (specifically this one:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/misc/kgdbts.c#n74 ). Running this test using the kgdbtest harness
-> > results in the test failing roughly a third of the time.
-> >
-> > The error reported is that the trap handler tried to unlock a spinlock
-> > that isn't currently locked. To be honest I suspect this is a generic
-> > problem that the new feature happens to tickle (this test has
-> > historically been unreliable on x86 too... and x86 is noteworthy for
-> > being the only other platform I test using KVM rather than pure qemu).
-> > Of course the only way to prove that would be to find and fix the
-> > problem in the trap handler (which probably involves rewriting it) and I
-> > haven't managed to do that yet.
-> >
-> > In short, I think the debugger is more useful with this patchset than
-> > without so, although it is caveated by the above, I'd call this:
-> >
-> > Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
-> > Tested-by: Daniel Thompson <daniel.thompson@linaro.org>
-> >
-> >
-> > Daniel.
-> >
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
->
+Caused by commit
+
+  b95a895848b9 ("mm: introduce vma->vm_flags wrapper functions")
+
+interacting with commit
+
+  647371a6609d ("accel/ivpu: Add GEM buffer object management")
+
+from the drm tree.
+
+I have applied the following merge fix patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 27 Jan 2023 17:12:37 +1100
+Subject: [PATCH] accel/ivpu: fix up for "mm: introduce vma->vm_flags wrappe=
+r functions"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/accel/ivpu/ivpu_gem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/accel/ivpu/ivpu_gem.c b/drivers/accel/ivpu/ivpu_gem.c
+index d1f923971b4c..12b219dd4f36 100644
+--- a/drivers/accel/ivpu/ivpu_gem.c
++++ b/drivers/accel/ivpu/ivpu_gem.c
+@@ -446,7 +446,7 @@ static int ivpu_bo_mmap(struct drm_gem_object *obj, str=
+uct vm_area_struct *vma)
+ 		return dma_buf_mmap(obj->dma_buf, vma, 0);
+ 	}
+=20
+-	vma->vm_flags |=3D VM_PFNMAP | VM_DONTEXPAND;
++	vm_flags_set(vma, VM_PFNMAP | VM_DONTEXPAND);
+ 	vma->vm_page_prot =3D ivpu_bo_pgprot(bo, vm_get_page_prot(vma->vm_flags));
+=20
+ 	return 0;
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/yAe8Kl73kuJv_dCjTOMdg.Q
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTbDIACgkQAVBC80lX
+0GzSIgf/b7KHPO4scsTzokPV5z4OBxlpegEhuzziCz19qpHAQyMW+AgBCS7jziDr
+eljFLxzebi0p8vzsRmwVtsQXFt9PH8KPZsOAbOUqQxYMnFwoTZbF/gIZU2BamVJI
+c6BHCxxXxRmlj862Edds7VlSUZQ0YdIuv8jqg28yonguHQ+5zWf4TFYmLs2Zi2nC
+HEMHQtJNCkkWh1FVsxL6zJz0nXGC5w/KK6x/+Lidh6TtNmAefXaIUwJXIbay9Dr6
+Ph+grPflixawhg/QHkKphbl0JjPlXlxSlZYtyoRd5iCBuTAnh5/OkhqlL0jDYmew
+0nEJWVhNnh78pWLCUq3Aa6XA6B3Uzw==
+=Z4ND
+-----END PGP SIGNATURE-----
+
+--Sig_/yAe8Kl73kuJv_dCjTOMdg.Q--
