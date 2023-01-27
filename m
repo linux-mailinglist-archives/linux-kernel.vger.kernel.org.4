@@ -2,99 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E3C67E31F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6509667E511
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbjA0LVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:21:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
+        id S234109AbjA0MXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:23:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbjA0LUo (ORCPT
+        with ESMTP id S233484AbjA0MWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:20:44 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4641A7AE6E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:19:32 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id bk16so4643959wrb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:19:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UHPOSXcl0PvUmCRJGe++fk0HPlizptRgv2FYZzA8BdM=;
-        b=SZSZC43JlERBqyAp9tfew+eUJBbA43EsO5khxkd+BuRYoVSrnKE3/RcuNe6kLPBHPW
-         JiL4/FbmThbpEkU7p+o4+sJXFdZwyV2rq1mEjLx6YIcjHwzGId7+sAnJRtxc/+KwaG4w
-         udafqMLhPKNMTraaDLqdHzPx11rCc3EzB8i5SlzygWrkJSWHJKXMP3BYpP/Us6R73Hu/
-         gSsMmlxah56UeIZu0J+lPscAiQsEza3DryaUHfJuBcd4SPOaZwzdAhcQ6z7Z9BiSfzFS
-         sd8Qe78eddnxcNU9kqHlcvNwleB8CBDD+3xHxP4yho+WYTEy8Q5b0J0ZxRh6g2SOKS8h
-         tD8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UHPOSXcl0PvUmCRJGe++fk0HPlizptRgv2FYZzA8BdM=;
-        b=EBjD5udDACHvxX5hQCqGun7TslgMBdOUfSuUnJxtJ6Aul1tAd+tx5vAcQUF1BLmSLv
-         UIXUWlr/tOZG+DonsolsYKnxkv+dZd91Lh6Q+Xd01Wi6nLng+14/49FbufvouE9PtuX4
-         RQTFEVShwA/F3Px6z9DiiysXY38oTNFA2dol1tdxqnFv56iUxMO76SNGIY7gmMb5Foxx
-         IrBj2IMshJkRnqAwYs5NIovQJ7zOzJCGLIUrYZh+/z46/0qQioCwOg7G5OCqEy68ZFa8
-         KndaGWcUruu5xHnMfiVOSL3BqO41NYTetFma67Q+iPD3+igI89wl193mKsJ5hDfoUp4L
-         RinA==
-X-Gm-Message-State: AFqh2kpBZX22qKZ0SXW+qluHgCNz3M5y+c9CeEFoqw4pLCMM2o1NH32/
-        moooZGwQCk3yCcDQ+Vk6RaL3PQ==
-X-Google-Smtp-Source: AMrXdXtZvYUmimVob4GRlbfZ1q03+OU88lXorrqvQgya3LHTNzI8WFF5gCfot/o1U0GDuqK6Wh3U8w==
-X-Received: by 2002:adf:e310:0:b0:2bd:d8f1:2edf with SMTP id b16-20020adfe310000000b002bdd8f12edfmr35173274wrj.49.1674818357628;
-        Fri, 27 Jan 2023 03:19:17 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l15-20020a5d6d8f000000b002bfb37497a8sm4157584wrs.31.2023.01.27.03.19.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 03:19:17 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: qcom: sm8550-mtp: drop incorrect vdd-l6-l16-supply
-Date:   Fri, 27 Jan 2023 12:19:13 +0100
-Message-Id: <20230127111913.117036-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 27 Jan 2023 07:22:40 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE697EFF7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:20:05 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pLMmF-0007Yu-MG; Fri, 27 Jan 2023 12:20:15 +0100
+Message-ID: <b21fa1f6-a71d-5657-8596-ee0be73185ea@leemhuis.info>
+Date:   Fri, 27 Jan 2023 12:20:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+Content-Language: en-US, de-DE
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     bskeggs@redhat.com, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>
+Cc:     Chris Clayton <chris2553@googlemail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info>
+In-Reply-To: <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674822005;0e4f83c3;
+X-HE-SMSGID: 1pLMmF-0007Yu-MG
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no vdd-l6-l16 supply in qcom,pm8550-rpmh-regulators.
+Hi, this is your Linux kernel regression tracker. Top-posting for once,
+to make this easily accessible to everyone.
 
-Fixes: 71342fb91eae ("arm64: dts: qcom: Add base SM8550 MTP dts")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 1 -
- 1 file changed, 1 deletion(-)
+@nouveau-maintainers, did anyone take a look at this? The report is
+already 8 days old and I don't see a single reply. Sure, we'll likely
+get a -rc8, but still it would be good to not fix this on the finish line.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-index 725d3bc3ee72..d6ae80414654 100644
---- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-@@ -47,7 +47,6 @@ regulators-0 {
- 		vdd-bob2-supply = <&vph_pwr>;
- 		vdd-l2-l13-l14-supply = <&vreg_bob1>;
- 		vdd-l3-supply = <&vreg_s4g_1p3>;
--		vdd-l6-l16-supply = <&vreg_bob1>;
- 		vdd-l6-l7-supply = <&vreg_bob1>;
- 		vdd-l8-l9-supply = <&vreg_bob1>;
- 		vdd-l11-supply = <&vreg_s4g_1p3>;
--- 
-2.34.1
+Chris, btw, did you try if you can revert the commit on top of latest
+mainline? And if so, does it fix the problem?
 
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
+
+On 19.01.23 15:33, Linux kernel regression tracking (Thorsten Leemhuis)
+wrote:
+> [adding various lists and the two other nouveau maintainers to the list
+> of recipients]
+
+> On 18.01.23 21:59, Chris Clayton wrote:
+>> Hi.
+>>
+>> I build and installed the lastest development kernel earlier this week. I've found that when I try the laptop down (or
+>> reboot it), it hangs right at the end of closing the current session. The last line I see on  the screen when rebooting is:
+>>
+>> 	sd 4:0:0:0: [sda] Synchronising SCSI cache
+>>
+>> when closing down I see one additional line:
+>>
+>> 	sd 4:0:0:0 [sda]Stopping disk
+>>
+>> In both cases the machine then hangs and I have to hold down the power button fot a few seconds to switch it off.
+>>
+>> Linux 6.1 is OK but 6.2-rc1 hangs, so I bisected between this two and landed on:
+>>
+>> 	# first bad commit: [0e44c21708761977dcbea9b846b51a6fb684907a] drm/nouveau/flcn: new code to load+boot simple HS FWs
+>> (VPR scrubber)
+>>
+>> I built and installed a kernel with f15cde64b66161bfa74fb58f4e5697d8265b802e (the parent of the bad commit) checked out
+>> and that shuts down and reboots fine. It the did the same with the bad commit checked out and that does indeed hang, so
+>> I'm confident the bisect outcome is OK.
+>>
+>> Kernels 6.1.6 and 5.15.88 are also OK.
+>>
+>> My system had dual GPUs - one intel and one NVidia. Related extracts from 'lscpi -v' is:
+>>
+>> 00:02.0 VGA compatible controller: Intel Corporation CometLake-H GT2 [UHD Graphics] (rev 05) (prog-if 00 [VGA controller])
+>>         Subsystem: CLEVO/KAPOK Computer CometLake-H GT2 [UHD Graphics]
+>>
+>>         Flags: bus master, fast devsel, latency 0, IRQ 142
+>>
+>>         Memory at c2000000 (64-bit, non-prefetchable) [size=16M]
+>>
+>>         Memory at a0000000 (64-bit, prefetchable) [size=256M]
+>>
+>>         I/O ports at 5000 [size=64]
+>>
+>>         Expansion ROM at 000c0000 [virtual] [disabled] [size=128K]
+>>
+>>         Capabilities: [40] Vendor Specific Information: Len=0c <?>
+>>
+>>         Capabilities: [70] Express Root Complex Integrated Endpoint, MSI 00
+>>
+>>         Capabilities: [ac] MSI: Enable+ Count=1/1 Maskable- 64bit-
+>>
+>>         Capabilities: [d0] Power Management version 2
+>>
+>>         Kernel driver in use: i915
+>>
+>>         Kernel modules: i915
+>>
+>>
+>> 01:00.0 VGA compatible controller: NVIDIA Corporation TU117M [GeForce GTX 1650 Ti Mobile] (rev a1) (prog-if 00 [VGA
+>> controller])
+>>         Subsystem: CLEVO/KAPOK Computer TU117M [GeForce GTX 1650 Ti Mobile]
+>>         Flags: bus master, fast devsel, latency 0, IRQ 141
+>>         Memory at c4000000 (32-bit, non-prefetchable) [size=16M]
+>>         Memory at b0000000 (64-bit, prefetchable) [size=256M]
+>>         Memory at c0000000 (64-bit, prefetchable) [size=32M]
+>>         I/O ports at 4000 [size=128]
+>>         Expansion ROM at c3000000 [disabled] [size=512K]
+>>         Capabilities: [60] Power Management version 3
+>>         Capabilities: [68] MSI: Enable+ Count=1/1 Maskable- 64bit+
+>>         Capabilities: [78] Express Legacy Endpoint, MSI 00
+>>         Kernel driver in use: nouveau
+>>         Kernel modules: nouveau
+>>
+>> DRI_PRIME=1 is exported in one of my init scripts (yes, I am still using sysvinit).
+>>
+>> I've attached the bisect.log, but please let me know if I can provide any other diagnostics. Please cc me as I'm not
+>> subscribed.
+> 
+> Thanks for the report. To be sure the issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+> tracking bot:
+> 
+> #regzbot ^introduced e44c2170876197
+> #regzbot title drm: nouveau: hangs on poweroff/reboot
+> #regzbot ignore-activity
+> 
+> This isn't a regression? This issue or a fix for it are already
+> discussed somewhere else? It was fixed already? You want to clarify when
+> the regression started to happen? Or point out I got the title or
+> something else totally wrong? Then just reply and tell me -- ideally
+> while also telling regzbot about it, as explained by the page listed in
+> the footer of this mail.
+> 
+> Developers: When fixing the issue, remember to add 'Link:' tags pointing
+> to the report (the parent of this mail). See page linked in footer for
+> details.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> That page also explains what to do if mails like this annoy you.
