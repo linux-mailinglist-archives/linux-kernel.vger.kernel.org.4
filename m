@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193E667E54A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 584DD67E54E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbjA0MeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
+        id S233793AbjA0MeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:34:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233075AbjA0MeC (ORCPT
+        with ESMTP id S233285AbjA0MeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:34:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E6F43467;
-        Fri, 27 Jan 2023 04:34:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0646B81F99;
-        Fri, 27 Jan 2023 12:34:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA3CDC433D2;
-        Fri, 27 Jan 2023 12:33:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674822839;
-        bh=TS2+CpKa2cp61H4L2xyxqqO1Xa+9EPd/tgoYGYbo2PU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AOIO/dmBppqhBtGmbssqspC6gF08zWXRP3blx3PpWb0QrYlXVWOIZA8xnJc3C+eWu
-         5kyaDq09s3nJoxaQTN1VT1ciyn4JxcwsT9/Jl/kmN/S2+jN0xhoMHwTeCOCpIUG7wd
-         bvY4O/P0xk2eSogKpMu0lC1ZQFj2jr5pjAoJdOX4=
-Date:   Fri, 27 Jan 2023 13:33:56 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Liang He <windhl@126.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Zou Wei <zou_wei@huawei.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 01/16] of: device: make of_device_uevent_modalias()
- take a const device *
-Message-ID: <Y9PEtP7oLjRJTxFM@kroah.com>
-References: <20230111113018.459199-1-gregkh@linuxfoundation.org>
- <20230111113018.459199-2-gregkh@linuxfoundation.org>
- <CAL_JsqJ4QsLym-bQGGjUpzT14MYuTE1n8BQkGn6Ey9NiFF7u7w@mail.gmail.com>
+        Fri, 27 Jan 2023 07:34:07 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5711284D
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:34:03 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso5300934wmn.5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:34:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gkkZWm0jYbAzVOnv75XVFVpaSeVft9HvU2ScU/AepsU=;
+        b=k6DtoBkkWQ+VKkR925OP60Ow6nAWC9Su+jNMeYPJyLL+L5/wosMlLGEb82S51fkfSq
+         zyyx16z7Tv2m3eiK4sWoBzVBMd8ERfg/aLU4JhtDgjIjTKdNFLGhmZ+2vZTh/gaMJtpE
+         G8u+d2x8p8DN3pt6V0hVTbQ/tpOo62seP4JwSZyk33zeCKc4lBOCKNYi1zfBZrkWhHqL
+         /HJwtNSlGZYbHKsAbA5j4Wyu6ZL0rwo0qU3W6KbsK6WtrFQLd1whgD5Zzr2RCPPIyHeb
+         cAk3CKYIX32eulJXfS330bmChr2irCoU+Sa3Xg/VP/oyYjCLPHoMsQrhLnIMA/Vwrn9W
+         VHhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gkkZWm0jYbAzVOnv75XVFVpaSeVft9HvU2ScU/AepsU=;
+        b=ga97dOLT5qXTciFsUtp9x+qMZqZrb10tBG4jCTdx0tHk8WLIipErUnyl+GoXtGDZ7x
+         XTgs0EMSFTBWF65vJob2X/MlpLqONJN4XFDy2enuYdYl15dJm2v2z4xNdhK4PvYSeWUP
+         5LlckeBe1mW700h0ijxUVp4ZrjRCqzRJf+YQ4CQLN3G1Pe0xJKyQSSROJe8zNj9cJZKF
+         7BmHkQbuhKqPeQrHblEZVJ/rhdOht8HxuFVGVaJPOgm1h7ZuoSB24MYbNG8v/oaukigh
+         2X+/iDKjNbXEVP+mt7PjeWLB5Yzje1+O/D1hcrYDvzZOfyUMAfPU8gQOOaVYNs8eNLUG
+         1hOA==
+X-Gm-Message-State: AO0yUKVhhFWGKVzVBX7ZjjpfZkrOFTEGy63CCTsZ3mFlEiwVkhCEIqJb
+        +eQswRsaVnrrkk6w8HKeH4UhoQ==
+X-Google-Smtp-Source: AK7set9syTDWnXModInkzSuSIyW5gANkugJsvCMPlZofBuFLNZbDcKgQgsf9aTY2EMbgJHQmE9bfng==
+X-Received: by 2002:a05:600c:b56:b0:3dc:353c:8b34 with SMTP id k22-20020a05600c0b5600b003dc353c8b34mr2357486wmr.7.1674822841774;
+        Fri, 27 Jan 2023 04:34:01 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id g9-20020a05600c308900b003db0dbbea53sm4016008wmn.30.2023.01.27.04.34.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 04:34:01 -0800 (PST)
+Date:   Fri, 27 Jan 2023 14:34:00 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sm8550: add specific SMMU compatible
+Message-ID: <Y9PEuMD6TIHghzTo@linaro.org>
+References: <20230127115513.268843-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAL_JsqJ4QsLym-bQGGjUpzT14MYuTE1n8BQkGn6Ey9NiFF7u7w@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230127115513.268843-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 08:54:04AM -0600, Rob Herring wrote:
-> On Wed, Jan 11, 2023 at 5:30 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > of_device_uevent_modalias() does not modify the device pointer passed to
-> > it, so mark it constant.  In order to properly do this, a number of
-> > busses need to have a modalias function added as they were attempting to
-> > just point to of_device_uevent_modalias instead of their bus-specific
-> > modalias function.  This is fine except if the prototype for a bus and
-> > device type modalias function diverges and then problems could happen.  To
-> > prevent all of that, just wrap the call to of_device_uevent_modalias()
-> > directly for each bus and device type individually.
+On 23-01-27 12:55:13, Krzysztof Kozlowski wrote:
+> Generic SMMU compatibles are not allowed alone and we expect specific
+> one.
 > 
-> Why not just put the wrapper function in the DT code instead of making
-> 4 copies of it?
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 
-Ok, I looked at doing this today, but in the end, making "4" copies of
-this is simpler overall.  To do it your way would require a "const"
-version of the function be added to the core, and then convert these 4
-busses to use that, and then when the real function is converted to be
-const, move all of these functions back over to use that again.
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
 
-Lots of churn, and then in the end, we still have the mismatch of a
-the same function callback being used in two different types of
-callbacks (one a bus, one a class).  This way we separate them to make
-things much more obvious and self-contained.
-
-So I'll keep this as-is for now, thanks.
-
-greg k-h
+> ---
+> 
+> Compatible is documented here:
+> https://lore.kernel.org/all/20221116114001.2669003-1-abel.vesa@linaro.org/
+> ---
+>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index 0307b853ec4f..e385432e7a22 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -3053,7 +3053,7 @@ data-pins {
+>  		};
+>  
+>  		apps_smmu: iommu@15000000 {
+> -			compatible = "qcom,smmu-500", "arm,mmu-500";
+> +			compatible = "qcom,sm8550-smmu-500", "qcom,smmu-500", "arm,mmu-500";
+>  			reg = <0 0x15000000 0 0x100000>;
+>  			#iommu-cells = <2>;
+>  			#global-interrupts = <1>;
+> -- 
+> 2.34.1
+> 
