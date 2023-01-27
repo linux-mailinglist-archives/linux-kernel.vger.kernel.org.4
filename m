@@ -2,63 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C3367F172
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23EE667F175
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbjA0WxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S231848AbjA0Wxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjA0WxU (ORCPT
+        with ESMTP id S230502AbjA0Wxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:53:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6B52CC43;
-        Fri, 27 Jan 2023 14:53:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9B1761DD6;
-        Fri, 27 Jan 2023 22:53:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A201C433EF;
-        Fri, 27 Jan 2023 22:53:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674859991;
-        bh=AlW+shdolVDZD+HbkKOCpGj3Nr78aWfSzEIvsiWfq3w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T7+IRG0Himjk8sh4eB2oOCBXhhL8B83WBfjC9K55BXmnGc8qPx9gabg++Do+JyIrL
-         JdxglCUACcWNcWW1uazinfWHZiJgGKNGmrn0QCIgg3OXB6FeBWUw/58+XSKjlJtWEH
-         IBUkiaB7wO0Suvl7i0nx4R2XkQwkBhYr5GTEiYUx7CzveTKMTyB5SopUiMpFLPTTJ1
-         nk9XxWBp1qcJze5iL+kuwuNoYIoSERSKi+cF2UXz5nL+LRHNwQHVbXkFfchDUZe4rg
-         4INLIZfopNKkQR+4nnde1GV6DiyJRyqniCeR+FZDRM7RkttnP6T9Q5ifqkA6CQUxz5
-         qYAFFTkRbopOw==
-Date:   Fri, 27 Jan 2023 22:53:05 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 03/14] RISC-V: Improve SBI PMU extension related
- definitions
-Message-ID: <Y9RV0cOMld20EFBI@spud>
-References: <20230127182558.2416400-1-atishp@rivosinc.com>
- <20230127182558.2416400-4-atishp@rivosinc.com>
+        Fri, 27 Jan 2023 17:53:46 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C397448F
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:53:36 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id b10so5994047pjo.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:53:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IV1QL6twj3JbhXkP12EpxrGpBWc/55NNcKUr7Mxc/IE=;
+        b=bt7Qt8azkZwjE0NJyI8sPmgV4yiJByc5P86rPhjdkunG0MmxfGbStzBGdljJs2oU07
+         hn2hq+STrYhE0og7JZ2V327nYR1cJyX+8bzKYIljMTixoX9lGry2Dc2u/cUVZcMyPedR
+         dQfDs8RdUsGByiUaFCeq6k5Wcg2d6qNOpU4BNqSPvcABnA0WyiibkmV3WZpaSIvPQ4G2
+         9rhj+b2osuwrYhkkC3t3I0l8bFYMpPhGxUydi81FwoQiwbmmGJfFqmionWukazpm9eX9
+         KwBnhk3MrCZ+QeByvDpHRJL6P43hK1vAcn1nBY+MynI+gPBJXdIykzSFoxb+BC5jkuh4
+         33Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IV1QL6twj3JbhXkP12EpxrGpBWc/55NNcKUr7Mxc/IE=;
+        b=trVUrZKEds73cel9mTKy2NqelRESFJvoJR/VJR3eP8Z4pYXLZ4G84T0YWX8qw8tVM1
+         4jAVwzok6aASd0Bvr0VKYbatpEscTgLIZx9/Tcp4WHY/707pPmAO3S1bwtBdBdkfGq5T
+         G0e+c1YEzQN//tpqy7kdtoEpjlrRJwHdCWZLjd+GKMhwEx5+XzepAVWKyGLb19UqEFJV
+         aN1mq0QZshPQ7T7OtFe7VxazSXi1rfnoviqmvMPVVfpIx2n0r3uQuG4BvYPMKCjt5qms
+         op9ZmmEcjvi9CmVjpRlEUCA05Q2Ja18PawG4I4IJRMemjx6iNaiesQzy55gcD3rqtGli
+         cpzw==
+X-Gm-Message-State: AFqh2krf8FpEjLu+sfvEeXY+h5XQpAS9xrTo5IWFYIjhr9yax91YNhEr
+        /9zjMK3/IDM5lNvleUjG0DIWxfj7YXdu7osZsCqL
+X-Google-Smtp-Source: AMrXdXufkx+kARXGM/WQldtmYWplok4guDRE8z7yAssUVY4SPs2oyYPKUpHQdS8QvQhpPla60vomTv3S+RkjSqPlqy4=
+X-Received: by 2002:a17:90a:5b0c:b0:223:fa07:7bfb with SMTP id
+ o12-20020a17090a5b0c00b00223fa077bfbmr5377808pji.38.1674860016129; Fri, 27
+ Jan 2023 14:53:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SXHZm0283L6wqZyc"
-Content-Disposition: inline
-In-Reply-To: <20230127182558.2416400-4-atishp@rivosinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <cover.1674682056.git.rgb@redhat.com> <da695bf4-bd9b-a03d-3fbc-686724a7b602@kernel.dk>
+ <CAHC9VhSRbay5bEUMJngpj+6Ss=WLeRoyJaNNMip+TyTkTJ6=Lg@mail.gmail.com>
+ <24fbe6cb-ee80-f726-b260-09f394ead764@kernel.dk> <CAHC9VhRuvV9vjhmTM4eGJkWmpZmSkgVaoQ=L6g3cahej-F52tQ@mail.gmail.com>
+ <d9da8035-ed81-fb28-bf3a-f98c8a1e044a@kernel.dk>
+In-Reply-To: <d9da8035-ed81-fb28-bf3a-f98c8a1e044a@kernel.dk>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 27 Jan 2023 17:53:24 -0500
+Message-ID: <CAHC9VhRpu7WZDqWKcLDj18A0Z5FJdUU=eUL3wbJH1CnEBWB4GA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] two suggested iouring op audit updates
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Richard Guy Briggs <rgb@redhat.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,45 +76,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 27, 2023 at 5:46 PM Jens Axboe <axboe@kernel.dk> wrote:
+> On 1/27/23 3:38=E2=80=AFPM, Paul Moore wrote:
+> > On Fri, Jan 27, 2023 at 2:43 PM Jens Axboe <axboe@kernel.dk> wrote:
+> >> On 1/27/23 12:42=E2=80=AFPM, Paul Moore wrote:
+> >>> On Fri, Jan 27, 2023 at 12:40 PM Jens Axboe <axboe@kernel.dk> wrote:
+> >>>> On 1/27/23 10:23=E2=80=AFAM, Richard Guy Briggs wrote:
+> >>>>> A couple of updates to the iouring ops audit bypass selections sugg=
+ested in
+> >>>>> consultation with Steve Grubb.
+> >>>>>
+> >>>>> Richard Guy Briggs (2):
+> >>>>>   io_uring,audit: audit IORING_OP_FADVISE but not IORING_OP_MADVISE
+> >>>>>   io_uring,audit: do not log IORING_OP_*GETXATTR
+> >>>>>
+> >>>>>  io_uring/opdef.c | 4 +++-
+> >>>>>  1 file changed, 3 insertions(+), 1 deletion(-)
+> >>>>
+> >>>> Look fine to me - we should probably add stable to both of them, jus=
+t
+> >>>> to keep things consistent across releases. I can queue them up for 6=
+.3.
+> >>>
+> >>> Please hold off until I've had a chance to look them over ...
+> >>
+> >> I haven't taken anything yet, for things like this I always let it
+> >> simmer until people have had a chance to do so.
+> >
+> > Thanks.  FWIW, that sounds very reasonable to me, but I've seen lots
+> > of different behaviors across subsystems and wanted to make sure we
+> > were on the same page.
+>
+> Sounds fair. BTW, can we stop CC'ing closed lists on patch
+> submissions? Getting these:
+>
+> Your message to Linux-audit awaits moderator approval
+>
+> on every reply is really annoying.
 
---SXHZm0283L6wqZyc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We kinda need audit related stuff on the linux-audit list, that's our
+mailing list for audit stuff.
 
-Yo Atish,
+However, I agree that it is crap that the linux-audit list is
+moderated, but unfortunately that isn't something I control (I haven't
+worked for RH in years, and even then the list owner was really weird
+about managing the list).  Occasionally I grumble about moving the
+kernel audit development to a linux-audit list on vger but haven't
+bothered yet, perhaps this is as good a reason as any.
 
-On Fri, Jan 27, 2023 at 10:25:47AM -0800, Atish Patra wrote:
-> This patch fixes/improve few minor things in SBI PMU extension
-> definition.
->=20
-> 1. Align all the firmware event names.
+Richard, Steve - any chance of opening the linux-audit list?
 
-> @@ -171,7 +171,7 @@ enum sbi_pmu_fw_generic_events_t {
->  	SBI_PMU_FW_IPI_RECVD		=3D 7,
-> -	SBI_PMU_FW_FENCE_I_RECVD	=3D 9,
-> +	SBI_PMU_FW_FENCE_I_RCVD		=3D 9,
->  	SBI_PMU_FW_SFENCE_VMA_RCVD	=3D 11,
-
-Alignment looks incomplete to me! Looks like you went from 2 RECVD and
-1 RCVD to 2 RCVD and 1 RECVD! FWIW, the spec uses RECEIVED for all of
-these:
-https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/riscv-sbi.adoc#1=
-14-event-firmware-events-type-15
-
-Thanks,
-Conor.
-
-
---SXHZm0283L6wqZyc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9RV0QAKCRB4tDGHoIJi
-0uAcAQDWSusshNSb8//8SiCdQXkPLrC/kJDsiYKg3vrNJmwohAEAjsDGGzhx00ZF
-YUzKIx2KVlPQFXJ9hBhCmjsG1KfQ4AE=
-=wHrk
------END PGP SIGNATURE-----
-
---SXHZm0283L6wqZyc--
+--=20
+paul-moore.com
