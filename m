@@ -2,122 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA02667E70F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0516267E710
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232997AbjA0Nt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:49:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
+        id S233052AbjA0Nui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233042AbjA0Ntx (ORCPT
+        with ESMTP id S230217AbjA0Nug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:49:53 -0500
-Received: from fx403.security-mail.net (smtpout140.security-mail.net [85.31.212.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B147EFC7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:49:51 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by fx403.security-mail.net (Postfix) with ESMTP id ECCE060B3D7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:49:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1674827389;
-        bh=7rslGuy0LFs/A27KvXbfl/OcHHEbOozB3Cd0Um3yM3E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=6Avy69S5RNTqS7J0o2lpN+kauDQVZh3g71+X+xooST+Et8ZYPPSpzCbUqLb6n9qK1
-         4zUVC6vQK0dTrbRU9Nn2ILW+uzYn4931QS5Ma8pnrnU1ZuYMkKdSzKT1lF1tltZS5M
-         1C4YBKImrGmL2gbijW+gsvw7/23kGExj1wTj97Oc=
-Received: from fx403 (localhost [127.0.0.1]) by fx403.security-mail.net
- (Postfix) with ESMTP id A91B660B267; Fri, 27 Jan 2023 14:49:48 +0100 (CET)
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx403.security-mail.net (Postfix) with ESMTPS id EB78B60BA03; Fri, 27 Jan
- 2023 14:49:47 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id BC10327E02A1; Fri, 27 Jan 2023
- 14:49:47 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id 9E91427E0493; Fri, 27 Jan 2023 14:49:47 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
- (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- yK0vAahdc_IY; Fri, 27 Jan 2023 14:49:47 +0100 (CET)
-Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 84D7A27E02A1; Fri, 27 Jan 2023
- 14:49:47 +0100 (CET)
-X-Virus-Scanned: E-securemail
-Secumail-id: <7d71.63d3d67b.e9b37.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 9E91427E0493
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674827387;
- bh=Anms8fnf94ipa7tBFX00h5M9wZzd+Ui5LYvmjbIH5Dw=;
- h=Date:From:To:Message-ID:MIME-Version;
- b=m8Ymrxrvt0SQhMyg0saq0caQjx7MXgK/KCJLgHZ+0fqtM8w9rVeNCXsZGXSoTFU7Y
- h1TwiEcH0RIiw7kuUeKgGTu+636qAb/X2GG081yS93orpsXLA1LzRQ/EY3fpoFNX0C
- +2YYajHmC8s9THtKQdollNlOoKcqr9qJzIapo/go=
-Date:   Fri, 27 Jan 2023 14:49:46 +0100
-From:   Jules Maselbas <jmaselbas@kalray.eu>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in
- generic atomic ops
-Message-ID: <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
-References: <20230126173354.13250-1-jmaselbas@kalray.eu>
- <Y9Oy9ZAj/DQ7O+6e@hirez.programming.kicks-ass.net>
+        Fri, 27 Jan 2023 08:50:36 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF25511142
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:50:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674827435; x=1706363435;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1HoU09wxIsmJZMeT/Je08YK0drRTOVXFBoeOmomdWNc=;
+  b=L9n4goxYbtiy7hZ8/Wa7KKScZV4SDVSTjZ6AOpmuoVHvU01UyrG4fc2L
+   hW6Mtf+sWZP7a9FDXDdZ4YsPlnwNVEJGW6oZep+GYHXx+TQaNt8EMizvl
+   +0UBSM6pY4sm/lukiPpJh9vSZOBo0CYnPvfCH/o6zGXfMIAaWAeOCPFiD
+   zE+cBBmXEZnAQHRlG0c0axd8EsinXVi1TBWlYsF73CW+jwkODEL7pMvky
+   iZTPxJQQQGvqYf4JEdukqQfRFD283eBs7rA6tLYGoryE7/ReHFyv9kjdJ
+   ueUoagP3HQarHg+/6BtGeLQiZKJ32gCdv+mXAxoqBY5pCDA0+P8saJOyF
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="325760611"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="325760611"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 05:50:35 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="656599660"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="656599660"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.191.130]) ([10.252.191.130])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 05:50:32 -0800
+Message-ID: <b6b55688-1390-4e92-8184-770154a8955d@linux.intel.com>
+Date:   Fri, 27 Jan 2023 21:50:29 +0800
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <Y9Oy9ZAj/DQ7O+6e@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com, joro@8bytes.org, will@kernel.org,
+        hch@lst.de, iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] iommu: Decouple iommu_present() from bus ops
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <cover.1673978700.git.robin.murphy@arm.com>
+ <1fb168b22cbbb5c24162d29d2a9aca339cda2c72.1673978700.git.robin.murphy@arm.com>
+ <c96aaa6c-0f46-39dc-0c72-f38394e37cc3@linux.intel.com>
+ <ce25dcdc-99a9-61ff-0cad-6c6cd9552680@arm.com> <Y9KRBRKdwSIRrvQw@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Y9KRBRKdwSIRrvQw@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
-
-On Fri, Jan 27, 2023 at 12:18:13PM +0100, Peter Zijlstra wrote:
-> On Thu, Jan 26, 2023 at 06:33:54PM +0100, Jules Maselbas wrote:
+On 2023/1/26 22:41, Jason Gunthorpe wrote:
+> On Thu, Jan 26, 2023 at 02:21:29PM +0000, Robin Murphy wrote:
 > 
-> > @@ -58,9 +61,11 @@ static inline int generic_atomic_fetch_##op(int i, atomic_t *v)		\
-> >  static inline void generic_atomic_##op(int i, atomic_t *v)		\
-> >  {									\
-> >  	unsigned long flags;						\
-> > +	int c;								\
-> >  									\
-> >  	raw_local_irq_save(flags);					\
-> > -	v->counter = v->counter c_op i;					\
-> > +	c = arch_atomic_read(v);					\
-> > +	arch_atomic_set(v, c c_op i);					\
-> >  	raw_local_irq_restore(flags);					\
-> >  }
+>> The "check" is inherent in the fact that it's been called at all. VFIO
+>> noiommu*is*  an IOMMU driver in the sense that it provides a bare minimum of
+>> IOMMU API functionality (i.e. creating groups), sufficient to support
+>> (careful) usage by VFIO drivers. There would not seem to be a legitimate
+>> reason for some*other*  driver to be specifically querying a device while it
+>> is already bound to a VFIO driver (and thus may have a noiommu group).
+> Yes, the devices that VFIO assigns to its internal groups never leak
+> outside VFIO's control during their assignment - ie they are
+> continuously bound to VFIO never another driver.
 > 
-> This and the others like it are a bit sad, it explicitly dis-allows the
-> compiler from using memops and forces a load-store.
-Good point, I don't know much about atomic memops but this is indeed a
-bit sad to prevent such instructions to be used.
+> So no other driver can ever see the internal groups unless it is
+> messing around with devices it is not bound to 😄
 
-> The alternative is writing it like:
-> 
-> 	*(volatile int *)&v->counter c_op i;
-I wonder if it could be possible to write something like:
+Fair enough. I was thinking that probably we could make it like below:
 
-        *(volatile int *)&v->counter += i;
+/**
+  * device_iommu_mapped - Returns true when the device DMA is translated
+  *                       by an IOMMU
+  * @dev: Device to perform the check on
+  */
+static inline bool device_iommu_mapped(struct device *dev)
+{
+         return (dev->iommu && dev->iommu->iommu_dev);
+}
 
-I also noticed that GCC has some builtin/extension to do such things,
-__atomic_OP_fetch and __atomic_fetch_OP, but I do not know if this
-can be used in the kernel.
+The iommu probe device code guarantees that dev->iommu->iommu_dev is
+valid only after the IOMMU driver's .probe_device returned successfully.
 
+Any thoughts?
 
-Thanks,
--- Jules
-
-
-
-
-
+Best regards,
+baolu
