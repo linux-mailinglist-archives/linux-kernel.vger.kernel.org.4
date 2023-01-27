@@ -2,148 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E18367E880
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0CE67E881
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbjA0OmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
+        id S233745AbjA0Omf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbjA0OmM (ORCPT
+        with ESMTP id S232369AbjA0Ome (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:42:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F771711;
-        Fri, 27 Jan 2023 06:42:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42834B82128;
-        Fri, 27 Jan 2023 14:42:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9791CC433D2;
-        Fri, 27 Jan 2023 14:42:05 +0000 (UTC)
-Message-ID: <a46040a4-f274-1e07-0829-86facf550496@xs4all.nl>
-Date:   Fri, 27 Jan 2023 15:42:04 +0100
+        Fri, 27 Jan 2023 09:42:34 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F2B41711;
+        Fri, 27 Jan 2023 06:42:32 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC58A2B;
+        Fri, 27 Jan 2023 06:43:13 -0800 (PST)
+Received: from [10.57.48.133] (unknown [10.57.48.133])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 728C13F5A1;
+        Fri, 27 Jan 2023 06:42:30 -0800 (PST)
+Message-ID: <317a91ff-70c5-57a5-8447-7543057e4055@arm.com>
+Date:   Fri, 27 Jan 2023 14:42:28 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 04/10] media: Add Y312 video format
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/4] perf intel-pt: Fix the pipe mode (v1)
 Content-Language: en-US
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        mirela.rabulea@oss.nxp.com
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <cover.1671071730.git.ming.qian@nxp.com>
- <4eb46df4bb84da00560c6c757cd661a1d00e76fb.1671071730.git.ming.qian@nxp.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <4eb46df4bb84da00560c6c757cd661a1d00e76fb.1671071730.git.ming.qian@nxp.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Stephane Eranian <eranian@google.com>
+References: <20230127001951.3432374-1-namhyung@kernel.org>
+ <bda606c2-2b1b-de9f-1386-8ee2bf925b4b@intel.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <bda606c2-2b1b-de9f-1386-8ee2bf925b4b@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/2022 04:11, Ming Qian wrote:
-> Y312 is a YUV format with 12-bits per component like YUV24,
-> expanded to 16bits.
-> Data in the 12 high bits, zeros in the 4 low bits,
-> arranged in little endian order.
+
+
+On 27/01/2023 07:22, Adrian Hunter wrote:
+> On 27/01/23 02:19, Namhyung Kim wrote:
+>> Hello,
+>>
+>> I found some problems in Intel-PT and auxtrace in general with pipe.
+>> In the past it used to work with pipe, but recent code fails.
 > 
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> ---
->  .../media/v4l/pixfmt-packed-yuv.rst           | 28 +++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-common.c         |  1 +
->  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
->  include/uapi/linux/videodev2.h                |  1 +
->  4 files changed, 31 insertions(+)
+> Pipe mode is a problem for Intel PT and possibly other auxtrace users.
+
+Just some info from my side: For Arm Coresight we ended up deprecating
+pipe mode, then not supporting it altogether. First was when we added an
+optional step to peek through all of the data to help with an edge case.
+Then we added a requirement to receive a HW_ID packet before decoding
+which necessitated the peek. You can't peek in pipe mode because you
+need to be able to seek, so it's not supported at all anymore.
+
+For Arm SPE I never tested it with piped data. I suppose I could add a
+test at some point, but I don't really see the usecase.
+
+James
+
+> Essentially the auxtrace buffers do not behave like the regular perf
+> event buffers.  That is because the head and tail are updated by
+> software, but in the auxtrace case the data is written by hardware.
+> So the head and tail do not get updated as data is written.  In the
+> Intel PT case, the head and tail are updated only when the trace is
+> disabled by software, for example:
+>     - full-trace, system wide : when buffer passes watermark
+>     - full-trace, not system-wide : when buffer passes watermark or
+>     context switches
+>     - snapshot mode : as above but also when a snapshot is made
+>     - sample mode : as above but also when a sample is made
 > 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-> index 39ded0b1e65c..a91c30ba6b73 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-> @@ -257,6 +257,34 @@ the second byte and Y'\ :sub:`7-0` in the third byte.
->      - The padding bits contain undefined values that must be ignored by all
->        applications and drivers.
->  
-> +The next lists the packed YUV 4:4:4 formats with more than 8 bits per component.
-> +expand the bits per component to 16 bits, data in the high bits, zeros in the low bits,
-> +arranged in little endian order. storing 1 pixels in 6 bytes.
-> +
-> +.. flat-table:: Packed YUV 4:4:4 Image Formats (more than 8bpc)
-> +    :header-rows: 1
-> +    :stub-columns: 0
-> +
-> +    * - Identifier
-> +      - Code
-> +      - Byte 1-0
-> +      - Byte 3-2
-> +      - Byte 5-4
-> +      - Byte 7-6
-> +      - Byte 9-8
-> +      - Byte 11-10
-> +
-> +    * .. _V4L2-PIX-FMT-Y312:
-> +
-> +      - ``V4L2_PIX_FMT_Y312``
-> +      - 'Y312'
-> +
-> +      - Y'\ :sub:`0`
-> +      - Cb\ :sub:`0`
-> +      - Cr\ :sub:`0`
-> +      - Y'\ :sub:`1`
-> +      - Cb\ :sub:`1`
-> +      - Cr\ :sub:`1`
->  
->  4:2:2 Subsampling
->  =================
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> index 21ace56fac04..332d4b11bc1b 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -259,6 +259,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
->  		{ .format = V4L2_PIX_FMT_UYVY,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_VYUY,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_Y212,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_Y312,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 6, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  
->  		/* YUV planar formats */
->  		{ .format = V4L2_PIX_FMT_NV12,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index 4d5f722b674a..5b97d7e5dbbf 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1343,6 +1343,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_HI240:	descr = "8-bit Dithered RGB (BTTV)"; break;
->  	case V4L2_PIX_FMT_M420:		descr = "YUV 4:2:0 (M420)"; break;
->  	case V4L2_PIX_FMT_Y212:		descr = "12-bit Depth YUYV 4:2:2"; break;
-> +	case V4L2_PIX_FMT_Y312:		descr = "12-bit Depth YUV 4:4:4"; break;
->  	case V4L2_PIX_FMT_NV12:		descr = "Y/UV 4:2:0"; break;
->  	case V4L2_PIX_FMT_NV21:		descr = "Y/VU 4:2:0"; break;
->  	case V4L2_PIX_FMT_NV16:		descr = "Y/UV 4:2:2"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index b8a501dccfa4..3475331737af 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -619,6 +619,7 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_YUVX32  v4l2_fourcc('Y', 'U', 'V', 'X') /* 32  YUVX-8-8-8-8  */
->  #define V4L2_PIX_FMT_M420    v4l2_fourcc('M', '4', '2', '0') /* 12  YUV 4:2:0 2 lines y, 1 line uv interleaved */
->  #define V4L2_PIX_FMT_Y212    v4l2_fourcc('Y', '2', '1', '2') /* 32  YUYV 12-bit per component */
-> +#define V4L2_PIX_FMT_Y312    v4l2_fourcc('Y', '3', '1', '2') /* 48  YUV 4:4:4 12-bit per component */
-
-YUV24_12 would work, I think. Y312 suggests a greyscale format, so that's definitely wrong.
-
-Regards,
-
-	Hans
-
->  
->  /* two planes -- one Y, one Cr + Cb interleaved  */
->  #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/CbCr 4:2:0  */
-
+> That means finished-round ordering doesn't work.  An auxtrace buffer
+> can turn up that has data that extends back in time, possibly to the
+> very beginning of tracing.
+> 
+> For a perf.data file, that problem is solved by going through the trace
+> and queuing up the auxtrace buffers in advance.
+> 
+> For pipe mode, the order of events and timestamps can presumably
+> be messed up.
+> 
+> For Intel PT, it is a bit of a surprise that there is not 
+> validation to error out in pipe mode.
+> 
+> At the least, a warning is needed, and the above explanation needs
+> to be added to the documentation.
+> 
+>>                                                                As it
+>> also touches the generic code, other auxtrace users like ARM SPE will
+>> be affected too.  I added a test case to verify it works with pipes.
+>>
+>> At last, I can run this command without a problem.
+>>
+>>   $ perf record -o- -e intel_pt// true | perf inject -b | perf report -i- --itrace=i1000
+>>
+>> The code is available at 'perf/auxtrace-pipe-v1' branch in
+>>
+>>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+>>
+>> Thanks,
+>> Namhyung
+>>
+>> Namhyung Kim (4):
+>>   perf inject: Use perf_data__read() for auxtrace
+>>   perf intel-pt: Do not try to queue auxtrace data on pipe
+>>   perf session: Avoid calling lseek(2) for pipe
+>>   perf test: Add pipe mode test to the Intel PT test suite
+>>
+>>  tools/perf/builtin-inject.c             |  6 +++---
+>>  tools/perf/tests/shell/test_intel_pt.sh | 17 +++++++++++++++++
+>>  tools/perf/util/auxtrace.c              |  3 +++
+>>  tools/perf/util/session.c               |  9 +++++++--
+>>  4 files changed, 30 insertions(+), 5 deletions(-)
+>>
+>>
+>> base-commit: 5670ebf54bd26482f57a094c53bdc562c106e0a9
+>> prerequisite-patch-id: 4ccdf9c974a3909075051f4ffe498faecab7567b
+> 
