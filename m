@@ -2,631 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E309267EAD7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9AA67EAD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234727AbjA0QZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
+        id S234862AbjA0Q0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:26:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234841AbjA0QZX (ORCPT
+        with ESMTP id S234917AbjA0Q0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:25:23 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4868C84186
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:25:15 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so5790714wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:25:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ycqOZgZuCa8vbhM6g8P0hGkZae/kbPgVmiey3UU4r9o=;
-        b=jvI1/AnTMW22GLSVp9L+worgIm3Q45czSB46aD6SGV9AH28HrrCT9o1cQU4pMzjmG7
-         lhwYKGiyvKndq4QJsm35Q30SPW61M+uX6qIIPVNSKAct57TowarqgMHv/InzYDGi9iPJ
-         eEamLdYuhhdStHwz1fUsLhYMMEWRyX9T5NRaK5TUCdAzDn2QaU4atKMbocjWTX7PR2D4
-         txH7jvNH6AISKK9WYsNZxvnduRJjxO+KhY65+C15qWW/B8/qFZ8bWqdEOCvilifAzC7l
-         eZ5hfq9Q07Cjj7lw8dEpAI9y6rwhZVkexm8r36gcARIkU+DTFUyXgWkYYe/x2dAQoUzc
-         RqIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ycqOZgZuCa8vbhM6g8P0hGkZae/kbPgVmiey3UU4r9o=;
-        b=sspCBiX3l/DJdl4k2b20QyXwdjY1k3HuKvd8zkpgqAhEe21D/nOiAJH7FNb3PoAQ0y
-         aG8iZcioNV7W3pY23eqSZZ+/S43bIHv8lAJMDtLWv3p2kEejx6rPqIFf3FR/ovNCd6lg
-         OIMEreZarVOOqBYIMY4YS2JEf72motmsu/pEQlE+KqlQXiuJTpyINH655FzdRUTEVYTh
-         8UclQe1SMIQWqbIS+0TjPEHEajvgBPjn1IqSng5Ua7vejLrT9zR1CzhOs+dI0gMdDRa4
-         eH3gPRqNEjunwwhd56sqrjWFOlNdBTsR7rW0tOBXhrM0ztKfnbg9gUOHKvGMrtznUxKz
-         tzww==
-X-Gm-Message-State: AFqh2kpUxa0wUIRS8mGJbd8X8wkXExsAOBVHkcD1XJCTwE0jZub+YWY2
-        AaW1u/EoMrV9rxuYBenU+a4kAQ==
-X-Google-Smtp-Source: AMrXdXsVVMHx9UQ89PmsVSuLXdC1hx4DwhRHTKxClaBQus6g9n1BqmXVkaRA2f2QRSNi+kGzVPIaOw==
-X-Received: by 2002:a05:600c:4248:b0:3d9:7667:c0e4 with SMTP id r8-20020a05600c424800b003d97667c0e4mr39433144wmm.31.1674836713775;
-        Fri, 27 Jan 2023 08:25:13 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:d4ec:15ea:873c:61e6? ([2a01:e0a:982:cbb0:d4ec:15ea:873c:61e6])
-        by smtp.gmail.com with ESMTPSA id az26-20020a05600c601a00b003d99469ece1sm8440508wmb.24.2023.01.27.08.25.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 08:25:13 -0800 (PST)
-Message-ID: <7fb4506b-47ff-3ff8-2c3a-dadeb1cbed4d@linaro.org>
-Date:   Fri, 27 Jan 2023 17:25:12 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 2/2] arm64: dts: meson: add support for Radxa Zero2
+        Fri, 27 Jan 2023 11:26:06 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2068.outbound.protection.outlook.com [40.107.223.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC048663A
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:25:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=erBTSy0ljUfoCHVSeWP8XoeBIssX2gyZK0JcNeujRRsDIIbhoekDyWbCxKN8PKnCQyVmodYPkO4vjOSCrtvaE12Zk+F/eHWrey0ZgHLOTcZ7tgBeI8IgqT3VoGCxBNbShknEzbD0P73/v5w34dpvub2htqOMwPPcLja3+MntuQnKqn1cnJGYwq8iQbeab83vOHoUzgNgWsEP5i0VUhKHzELqNBqWq6rLgqS0IJTsq1+Jh0aN/r8UuLkApb9F5YymdO+iuHp3GHmKR97yJhtKRwAOZ3IGzwL3EZnOMEW4FwWNAWvVOjkoSX8FhU4PIzzhYJHnbrre+AtoBcPCwTQQ/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kVvAlARF1BaQYFNbk9iQr9kla/Dg5yykDvQL8pRidfQ=;
+ b=kr2BeK7og2nROHp+KGmjXI9fybxy81wt3OIvdtcOxXb0b0dUk0FLc3HlUD6HLddaqa3EQu+nMBpwgUpnRx7J5Non2cAodu/Sjx54J0LVX+C1YJUsZznHXmFpptC2m4Himn/p4K5h9OPWF4LNsfjOdq1HeE+ejFr/Xbkvk4DNIhMTFrXITEkEScbR8BzprVhecf3tZteKr41OBwY5Fzm1Tc74mdoDapXxe9PfnJ+/vJe+RqW2PiP7f5qkywTU4j4KMeHGKPtmZf39wotNLMzl5ROYj7zHRRQRs/X5vbXFQoa/nzdxmxnkIshZkiRJ94E06zc0Ep/HeXDeiiGoyWLMKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kVvAlARF1BaQYFNbk9iQr9kla/Dg5yykDvQL8pRidfQ=;
+ b=3zbkaHRcdFUNkW4DOTSny2qo8FwR2eDGxN5b282P6jmlkQeLw3H77tViIwvk5VROsB60gnMYGaM957yTl+OE84I/xf2MstvSoXADyqTNR2odKkD+4VFWvr34voDuqBWbK9M0ZVlIicqMcXSYpK6OFZ9yh+EsSLBydqmgtIY0VXg=
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by PH7PR12MB7281.namprd12.prod.outlook.com (2603:10b6:510:208::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Fri, 27 Jan
+ 2023 16:25:45 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::a59e:bafb:f202:313c]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::a59e:bafb:f202:313c%7]) with mapi id 15.20.6043.022; Fri, 27 Jan 2023
+ 16:25:45 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Jaroslav Kysela <perex@perex.cz>,
+        "Mukunda, Vijendar" <Vijendar.Mukunda@amd.com>,
+        "Saba Kareem, Syed" <Syed.SabaKareem@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "Pananchikkal, Renjith" <Renjith.Pananchikkal@amd.com>,
+        Mark Pearson <mpearson@lenovo.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+Subject: RE: [PATCH 2/6] ASoC: amd: yc: Add a module parameter to influence
+ pdm_gain
+Thread-Topic: [PATCH 2/6] ASoC: amd: yc: Add a module parameter to influence
+ pdm_gain
+Thread-Index: AQHZMmi5+tAOEc/Tz0G4/BqTqLH7eq6ycnsAgAAAVTA=
+Date:   Fri, 27 Jan 2023 16:25:45 +0000
+Message-ID: <MN0PR12MB61014C004C798F7DE8682AAFE2CC9@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20230127160134.2658-1-mario.limonciello@amd.com>
+ <20230127160134.2658-3-mario.limonciello@amd.com>
+ <2e9f4301-0211-04f5-5b38-caf2be9f4fd1@perex.cz>
+In-Reply-To: <2e9f4301-0211-04f5-5b38-caf2be9f4fd1@perex.cz>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Yuntian Zhang <yt@radxa.com>
-References: <20230127150536.3719090-1-christianshewitt@gmail.com>
- <20230127150536.3719090-2-christianshewitt@gmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230127150536.3719090-2-christianshewitt@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-01-27T16:25:43Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=26646a59-9f6e-4089-96b6-cd04e644e238;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2023-01-27T16:25:43Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 948d44bb-d9b5-4727-864a-5107af9756ed
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|PH7PR12MB7281:EE_
+x-ms-office365-filtering-correlation-id: 361ca698-63fb-4b2a-58ee-08db00832476
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: d0zuCIJqusuuSiyVFP5Wt/F6cJe9P84UmWwRU3KPJxpuiZl3Jh9ArfodIZ1hF2g1d0iqM95mvcwdlo5FG8ZRj99CXVu64ywxCmoW6tioA9b5b7Pvefn+VFxngsdpvXzxGVXmWl10D+wHQqqU0NJUrDFPKW3Qv76NZ93HDBb2ItJq9R8KF8xU9/XyvQm74m99CBzTAaf6SxKD+Ca2PKBb5I1ev4CLHv8jbEINEBa1fGdy9eMCu412HvORDoNwhLY4f5y9/c94FS6Ib2Cyu49cgmhFSrMwOOf8QB7/SRAVNY/CDLw/iuykwzxu+lVw5KMff4PaH5Z9svi/++pkO8KvVR8uh8vKm+UrkdMCHTbfGC2PpqEf+O+aBTPNSVmVbt2tW5Vh+pZDMfAeGKZ3BIpl4Uxx6CISgGbsLGgNVLJVJzGakpmbD3r6FGUNrvPmaVLWcs9Fjh7/PWIPDXfvn7S4xG6Qc2/6c7bXIL0bBu8gYwDNEzG99U+WfvAH1nQpT4tN7rhhntsE2gc+d5FNV68h1zqBz3yUieZYAQljbHhGfRksGLlj6dSFZYjHIJ937DBXuecyO3z+cwIEloTFVYhkXEyrdWxSQa9CWz0mRo02M7RotmnYOpaIk21bvy5y2aukNAwpFC6FN4NXeJgwjCFNtVrb6daNak7lHHmzE4IkhJgFg2sYjNFFDtqXqx2pTGBC9LKaObirSjJyX7gLnP93zw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(376002)(366004)(396003)(39860400002)(451199018)(41300700001)(66556008)(76116006)(66946007)(64756008)(4326008)(66446008)(122000001)(83380400001)(38100700002)(2906002)(52536014)(8936002)(8676002)(5660300002)(26005)(71200400001)(7696005)(86362001)(9686003)(478600001)(53546011)(6506007)(66476007)(33656002)(186003)(38070700005)(110136005)(54906003)(316002)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NlZtMUJOZC9GUFRBblNoalpjWUxWZVRXYUFsQVJXQnZIdXpheFZUQmRSUGUy?=
+ =?utf-8?B?d09LSUdCS21DT0ppajN0eE16MzJUZ2E5SGVqUi9Mc1dHNWpGcUhucFZoYVpI?=
+ =?utf-8?B?bjgrR3FnSHJoSzZEZDVuUmpPNkRVUndvTVl6RHBsa0tRSktPYU5NdlBaOXZu?=
+ =?utf-8?B?dVh1R0ZWUXRrb0wwZUhtZ2hqb0h0ait2L0xSZkQ0ZXpQNDc4OUZQM2xxTDFq?=
+ =?utf-8?B?OU10WjZuQ2tmWEhiOWlaOWpxS0NBcmI2QUNjNjAweU1jcm1oKzJnQWVia2Zt?=
+ =?utf-8?B?NGxJNTVUNWdOVWx6b0hHeUR3OHUzaFZXSlF1czVMYVlIem9YSm92ZDZzUDAv?=
+ =?utf-8?B?V1pMbUJHbWlod1ZMVlhVank2S1lLWjUveWdjeXBrSUcvRDFsVmRlR2RydVZi?=
+ =?utf-8?B?K29YSlpNbzFjU1dvRWVUa0tHODg5SUtST0NxbWlJYUl6YmU2bnBmTHJFODlM?=
+ =?utf-8?B?RGIrWXFkSGhtQ2dKTm9pb0RHYXVRNzBCT0JQWWd6SlpSQklqM2hJK1BRMFNz?=
+ =?utf-8?B?Ym9ZUTVxWXdoWkJ5WFZuOVZwMExia3ZybW1ldWNrVDFrYXBKN20xcTZrZ1FS?=
+ =?utf-8?B?ci9yc2l1RVVzc0ZNSmZqN01jMC9rQkRIK0d6VGZtdGJiMmdxOW1ZNnVlUlo5?=
+ =?utf-8?B?dW9wcHdJVE03MmVQQUpDMW1qeVJvWEw5eGsvUEI5Z004dEZycUsvNFl2S2Nu?=
+ =?utf-8?B?akd4NTN3NnhuYTk0UnRFQyt2azdjaGhvVkljRFZpblNlYmswSEdlU0JRQm5u?=
+ =?utf-8?B?NnZuZDJqV3JIa2EwbXJRdjY0MDl6K04zd0h0ZlFDYUpNdzFKMzUzRm05M2Ew?=
+ =?utf-8?B?ZW83Y3FvSEZ5WkxFaStJajJkN3l2VjFPOVRwS3g0ZGNDSFJlK2tWREdnVmFj?=
+ =?utf-8?B?YnFTd1BsUkdLOEkwNHFab1AxSWtZUXZDVG9ERkR0ZER1ODRML1pSYUFGbEJo?=
+ =?utf-8?B?VTBDT3dFOHdWVTNvSEk4Vjc5U2c0aWVua0J4MjN2T0pnd1VGOURvbnVMb1J2?=
+ =?utf-8?B?NEdKUThnckhPMDgzVWgxQVY0WmRXdktaL0NtSHFXbGJzblRsTkY2blk4eHRQ?=
+ =?utf-8?B?KzlPVUtRbVpHVWpSaytyNGhVNkM5aWNoMGVvczZwUkFZUENRZHlEU2RyVDNh?=
+ =?utf-8?B?Y1RmbGxybkdOVUZlUUIxQmZ3WHZWckRFYVJmVjlhTDlVQ0VKTHlSZytocFpo?=
+ =?utf-8?B?Q3kycDh6SFIrZ1FBaU0xQjRNeDZlYnZwWUJwd2p5bnNMcUtVZXVrZy9MNmVO?=
+ =?utf-8?B?S2JtaUUrUVlYbE55QTVsek1FTk5LZkdNM1NybDdmL0I5MTZpR3V4STV2MjY2?=
+ =?utf-8?B?UFVtWkx2L2E3NjI4dEpBS0dpUDJHbGl0WXZHdVZ6QUpTRlFUWm4yTmI0ekV1?=
+ =?utf-8?B?VllWU2J5OHRjN1dlbDgrd0hFaVJId3crZXFSR0ExY1I2UTdzVy9DUjJvRDB2?=
+ =?utf-8?B?RFBWek9kakoySEVwbjAxSkNLYjZnWEFDTXZML09abm1XTHFCYTRSdERodjF3?=
+ =?utf-8?B?aUVpa1FBNDRCUFNkZnBpMWMyVVpDZGFUVUdyNVFrVlpiWG41ZHpXQzFDS01M?=
+ =?utf-8?B?eURCMndDQ081S1RWVUJKdVBUdXgzK1VKeDV5TFp3OWQzMkV6WFE0S2pucHZl?=
+ =?utf-8?B?N082QkpYZGpzK3J3QSt5NlZITHQvc3NTbHFiOXAzbTRWcGEwQUNKa0ZSRXlI?=
+ =?utf-8?B?M0hZRjEvWnJuRUYwdWdLaGwxOU5TOUJNRjF4azRMdXp6MHYrSGs5WG03aVZi?=
+ =?utf-8?B?UTgvODVJMTRpTGZibC8yTTRwSnp1alRXQlRoUzZBb0NZOWkyNm5CY0UxUjVL?=
+ =?utf-8?B?T2FGTGc1UXNOY0lMMllWN2owak1EOXRzdjNsZXRuRTJ5aU5IWVc2VmMvSG0z?=
+ =?utf-8?B?bGFHODNZcXFiTXlMb1BqU1NpRGhRRDRIVWpHTzhYV2hhSyt4bXFncDhlNFlk?=
+ =?utf-8?B?Nlh1Yng1YUxGdlBlQWQwdDJyc1NCandmK3JtQmpmT0craU5jRWZFRmxxUjEw?=
+ =?utf-8?B?TVNFd1hENDhJTnpkRHMweE04NmkvaEFTZ0tEemlkTkNmZk1zOC9zZ1lxSktS?=
+ =?utf-8?B?S2VFS1ZnWEtkNU9hazdQcmhPeWtsUXkzK25WSlpLemY4UzRWTElxaDd0THBI?=
+ =?utf-8?Q?syB4=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 361ca698-63fb-4b2a-58ee-08db00832476
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jan 2023 16:25:45.5195
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IZxDUFYA/xEzgeA6ABeJdYuBe40BYDR6c9rrsxEgIFRqB5+wyxNsJIfoBisIMVAxf3bFNqXJKOSp8/HhiJTPqw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7281
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 16:05, Christian Hewitt wrote:
-> From: Yuntian Zhang <yt@radxa.com>
-> 
-> Radxa Zero2 is a small form factor SBC based on the Amlogic A311D
-> chipset that ships in a number of eMMC configurations:
-> 
-> - Amlogic A311D (Quad A73 + Dual A53) CPU
-> - 4GB LPDDR4 RAM
-> - 32/64/128GB eMMC
-> - Mali G52-MP4 GPU
-> - HDMI 2.1 output (micro)
-> - BCM4345 WiFi (2.4/5GHz a/b/g/n/ac) and BT 5.0
-> - 1x USB 2.0 port - Type C (OTG)
-> - 1x USB 3.0 port - Type C (Host)
-> - 1x micro SD Card slot
-> - 40 Pin GPIO header
-> 
-> Signed-off-by: Yuntian Zhang <yt@radxa.com>
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
-> The original dts from Yuntian contains some additional content for
-> the USB-C device, but this is not working for me so I have ommited
-> it and kept things simple. I've also left out some pwm-fan/thermal
-> content; while the board does not ship with a fan the A311D chip
-> should be used with one and I believe the board has a connector to
-> add a fan, but until this is confirmed (and production boards are
-> available) it's best left out.
-> 
-> Changes from v1:
-> - Corrected underscores in node names
-> - Corrected wifi32k clock node name
-> 
->   arch/arm64/boot/dts/amlogic/Makefile          |   1 +
->   .../dts/amlogic/meson-g12b-radxa-zero2.dts    | 489 ++++++++++++++++++
->   2 files changed, 490 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-> index 04114e8c9992..bb1af1d80c21 100644
-> --- a/arch/arm64/boot/dts/amlogic/Makefile
-> +++ b/arch/arm64/boot/dts/amlogic/Makefile
-> @@ -16,6 +16,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-go-ultra.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2-plus.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2l.dtb
-> +dtb-$(CONFIG_ARCH_MESON) += meson-g12b-radxa-zero2.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-khadas-vim3.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-ugoos-am6.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-kii-pro.dtb
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts
-> new file mode 100644
-> index 000000000000..9a60c5ec2072
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts
-> @@ -0,0 +1,489 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2019 BayLibre, SAS
-> + * Author: Neil Armstrong <narmstrong@baylibre.com>
-> + * Copyright (c) 2019 Christian Hewitt <christianshewitt@gmail.com>
-> + * Copyright (c) 2022 Radxa Limited
-> + * Author: Yuntian Zhang <yt@radxa.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "meson-g12b-a311d.dtsi"
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/gpio/meson-g12a-gpio.h>
-> +#include <dt-bindings/sound/meson-g12a-tohdmitx.h>
-> +
-> +/ {
-> +	compatible = "radxa,zero2", "amlogic,a311d", "amlogic,g12b";
-> +	model = "Radxa Zero2";
-> +
-> +	aliases {
-> +		serial0 = &uart_AO;
-> +		serial2 = &uart_A;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	memory@0 {
-> +		device_type = "memory";
-> +		reg = <0x0 0x0 0x0 0x80000000>;
-> +	};
-> +
-> +	gpio-keys-polled {
-> +		compatible = "gpio-keys-polled";
-> +		poll-interval = <100>;
-> +		power-button {
-> +			label = "power";
-> +			linux,code = <KEY_POWER>;
-> +			gpios = <&gpio_ao GPIOAO_3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led-green {
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			function = LED_FUNCTION_STATUS;
-> +			gpios = <&gpio GPIOA_12 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "heartbeat";
-> +		};
-> +	};
-> +
-> +	hdmi-connector {
-> +		compatible = "hdmi-connector";
-> +		type = "a";
-> +
-> +		port {
-> +			hdmi_connector_in: endpoint {
-> +				remote-endpoint = <&hdmi_tx_tmds_out>;
-> +			};
-> +		};
-> +	};
-> +
-> +	emmc_pwrseq: emmc-pwrseq {
-> +		compatible = "mmc-pwrseq-emmc";
-> +		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
-> +	};
-> +
-> +	sdio_pwrseq: sdio-pwrseq {
-> +		compatible = "mmc-pwrseq-simple";
-> +		reset-gpios = <&gpio GPIOX_6 GPIO_ACTIVE_LOW>;
-> +		clocks = <&wifi32k>;
-> +		clock-names = "ext_clock";
-> +	};
-> +
-> +	ao_5v: regulator-ao-5v {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "AO_5V";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vcc_1v8: regulator-vcc-1v8 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VCC_1V8";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		vin-supply = <&vcc_3v3>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vcc_3v3: regulator-vcc-3v3 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VCC_3V3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&vddao_3v3>;
-> +		regulator-always-on;
-> +		/* FIXME: actually controlled by VDDCPU_B_EN */
-> +	};
-> +
-> +	vddao_1v8: regulator-vddao-1v8 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VDDIO_AO1V8";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		vin-supply = <&vddao_3v3>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddao_3v3: regulator-vddao-3v3 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VDDAO_3V3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&ao_5v>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddcpu_a: regulator-vddcpu-a {
-> +		/*
-> +		 * MP8756GD Regulator.
-> +		 */
-> +		compatible = "pwm-regulator";
-> +
-> +		regulator-name = "VDDCPU_A";
-> +		regulator-min-microvolt = <730000>;
-> +		regulator-max-microvolt = <1022000>;
-> +
-> +		pwm-supply = <&ao_5v>;
-> +
-> +		pwms = <&pwm_ab 0 1250 0>;
-> +		pwm-dutycycle-range = <100 0>;
-> +
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddcpu_b: regulator-vddcpu-b {
-> +		/*
-> +		 * Silergy SY8120B1ABC Regulator.
-> +		 */
-> +		compatible = "pwm-regulator";
-> +
-> +		regulator-name = "VDDCPU_B";
-> +		regulator-min-microvolt = <730000>;
-> +		regulator-max-microvolt = <1022000>;
-> +
-> +		pwm-supply = <&ao_5v>;
-> +
-> +		pwms = <&pwm_AO_cd 1 1250 0>;
-> +		pwm-dutycycle-range = <100 0>;
-> +
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +	};
-> +
-> +	sound {
-> +		compatible = "amlogic,axg-sound-card";
-> +		model = "RADXA-ZERO2";
-> +		audio-aux-devs = <&tdmout_b>;
-> +		audio-routing = "TDMOUT_B IN 0", "FRDDR_A OUT 1",
-> +				"TDMOUT_B IN 1", "FRDDR_B OUT 1",
-> +				"TDMOUT_B IN 2", "FRDDR_C OUT 1",
-> +				"TDM_B Playback", "TDMOUT_B OUT";
-> +
-> +		assigned-clocks = <&clkc CLKID_MPLL2>,
-> +				  <&clkc CLKID_MPLL0>,
-> +				  <&clkc CLKID_MPLL1>;
-> +		assigned-clock-parents = <0>, <0>, <0>;
-> +		assigned-clock-rates = <294912000>,
-> +				       <270950400>,
-> +				       <393216000>;
-> +
-> +		dai-link-0 {
-> +			sound-dai = <&frddr_a>;
-> +		};
-> +
-> +		dai-link-1 {
-> +			sound-dai = <&frddr_b>;
-> +		};
-> +
-> +		dai-link-2 {
-> +			sound-dai = <&frddr_c>;
-> +		};
-> +
-> +		/* 8ch hdmi interface */
-> +		dai-link-3 {
-> +			sound-dai = <&tdmif_b>;
-> +			dai-format = "i2s";
-> +			dai-tdm-slot-tx-mask-0 = <1 1>;
-> +			dai-tdm-slot-tx-mask-1 = <1 1>;
-> +			dai-tdm-slot-tx-mask-2 = <1 1>;
-> +			dai-tdm-slot-tx-mask-3 = <1 1>;
-> +			mclk-fs = <256>;
-> +
-> +			codec {
-> +				sound-dai = <&tohdmitx TOHDMITX_I2S_IN_B>;
-> +			};
-> +		};
-> +
-> +		/* hdmi glue */
-> +		dai-link-4 {
-> +			sound-dai = <&tohdmitx TOHDMITX_I2S_OUT>;
-> +
-> +			codec {
-> +				sound-dai = <&hdmi_tx>;
-> +			};
-> +		};
-> +	};
-> +
-> +	wifi32k: clock-0 {
-> +		compatible = "pwm-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <32768>;
-> +		pwms = <&pwm_ef 0 30518 0>; /* PWM_E at 32.768KHz */
-> +	};
-> +};
-> +
-> +&arb {
-> +	status = "okay";
-> +};
-> +
-> +&cec_AO {
-> +	pinctrl-0 = <&cec_ao_a_h_pins>;
-> +	pinctrl-names = "default";
-> +	status = "disabled";
-> +	hdmi-phandle = <&hdmi_tx>;
-> +};
-> +
-> +&cecb_AO {
-> +	pinctrl-0 = <&cec_ao_b_h_pins>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +	hdmi-phandle = <&hdmi_tx>;
-> +};
-> +
-> +&clkc_audio {
-> +	status = "okay";
-> +};
-> +
-> +&cpu0 {
-> +	cpu-supply = <&vddcpu_b>;
-> +	operating-points-v2 = <&cpu_opp_table_0>;
-> +	clocks = <&clkc CLKID_CPU_CLK>;
-> +	clock-latency = <50000>;
-> +};
-> +
-> +&cpu1 {
-> +	cpu-supply = <&vddcpu_b>;
-> +	operating-points-v2 = <&cpu_opp_table_0>;
-> +	clocks = <&clkc CLKID_CPU_CLK>;
-> +	clock-latency = <50000>;
-> +};
-> +
-> +&cpu100 {
-> +	cpu-supply = <&vddcpu_a>;
-> +	operating-points-v2 = <&cpub_opp_table_1>;
-> +	clocks = <&clkc CLKID_CPUB_CLK>;
-> +	clock-latency = <50000>;
-> +};
-> +
-> +&cpu101 {
-> +	cpu-supply = <&vddcpu_a>;
-> +	operating-points-v2 = <&cpub_opp_table_1>;
-> +	clocks = <&clkc CLKID_CPUB_CLK>;
-> +	clock-latency = <50000>;
-> +};
-> +
-> +&cpu102 {
-> +	cpu-supply = <&vddcpu_a>;
-> +	operating-points-v2 = <&cpub_opp_table_1>;
-> +	clocks = <&clkc CLKID_CPUB_CLK>;
-> +	clock-latency = <50000>;
-> +};
-> +
-> +&cpu103 {
-> +	cpu-supply = <&vddcpu_a>;
-> +	operating-points-v2 = <&cpub_opp_table_1>;
-> +	clocks = <&clkc CLKID_CPUB_CLK>;
-> +	clock-latency = <50000>;
-> +};
-> +
-> +&frddr_a {
-> +	status = "okay";
-> +};
-> +
-> +&frddr_b {
-> +	status = "okay";
-> +};
-> +
-> +&frddr_c {
-> +	status = "okay";
-> +};
-> +
-> +&gpio {
-> +	gpio-line-names =
-> +		/* GPIOZ */
-> +		"PIN_27", "PIN_28", "PIN_7", "PIN_11", "PIN_13", "PIN_15", "PIN_18", "PIN_40",
-> +		"", "", "", "", "", "", "", "",
-> +		/* GPIOH */
-> +		"", "", "", "", "PIN_19", "PIN_21", "PIN_24", "PIN_23",
-> +		"",
-> +		/* BOOT */
-> +		"", "", "", "", "", "", "", "",
-> +		"", "", "", "", "EMMC_PWRSEQ", "", "", "",
-> +		/* GPIOC */
-> +		"", "", "", "", "", "", "SD_CD", "PIN_36",
-> +		/* GPIOA */
-> +		"PIN_32", "PIN_12", "PIN_35", "", "", "PIN_38", "", "",
-> +		"", "", "", "", "LED_GREEN", "PIN_31", "PIN_3", "PIN_5",
-> +		/* GPIOX */
-> +		"", "", "", "", "", "", "SDIO_PWRSEQ", "",
-> +		"", "", "", "", "", "", "", "",
-> +		"", "BT_SHUTDOWN", "", "";
-> +};
-> +
-> +&gpio_ao {
-> +	gpio-line-names =
-> +		/* GPIOAO */
-> +		"PIN_8", "PIN_10", "", "BTN_POWER", "", "", "", "PIN_29",
-> +		"PIN_33", "PIN_37", "FAN", "",
-> +		/* GPIOE */
-> +		"", "", "";
-> +};
-> +
-> +&hdmi_tx {
-> +	status = "okay";
-> +	pinctrl-0 = <&hdmitx_hpd_pins>, <&hdmitx_ddc_pins>;
-> +	pinctrl-names = "default";
-> +	hdmi-supply = <&ao_5v>;
-> +};
-> +
-> +&hdmi_tx_tmds_port {
-> +	hdmi_tx_tmds_out: endpoint {
-> +		remote-endpoint = <&hdmi_connector_in>;
-> +	};
-> +};
-> +
-> +&ir {
-> +	status = "disabled";
-> +	pinctrl-0 = <&remote_input_ao_pins>;
-> +	pinctrl-names = "default";
-> +};
-> +
-> +&pwm_ab {
-> +	pinctrl-0 = <&pwm_a_e_pins>;
-> +	pinctrl-names = "default";
-> +	clocks = <&xtal>;
-> +	clock-names = "clkin0";
-> +	status = "okay";
-> +};
-> +
-> +&pwm_ef {
-> +	pinctrl-0 = <&pwm_e_pins>;
-> +	pinctrl-names = "default";
-> +	clocks = <&xtal>;
-> +	clock-names = "clkin2";
-> +	status = "okay";
-> +};
-> +
-> +&pwm_AO_ab {
-> +	pinctrl-0 = <&pwm_ao_a_pins>;
-> +	pinctrl-names = "default";
-> +	clocks = <&xtal>;
-> +	clock-names = "clkin3";
-> +	status = "okay";
-> +};
-> +
-> +&pwm_AO_cd {
-> +	pinctrl-0 = <&pwm_ao_d_e_pins>;
-> +	pinctrl-names = "default";
-> +	clocks = <&xtal>;
-> +	clock-names = "clkin4";
-> +	status = "okay";
-> +};
-> +
-> +&saradc {
-> +	status = "okay";
-> +	vref-supply = <&vddao_1v8>;
-> +};
-> +
-> +/* SDIO */
-> +&sd_emmc_a {
-> +	status = "okay";
-> +	pinctrl-0 = <&sdio_pins>;
-> +	pinctrl-1 = <&sdio_clk_gate_pins>;
-> +	pinctrl-names = "default", "clk-gate";
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +
-> +	bus-width = <4>;
-> +	cap-sd-highspeed;
-> +	max-frequency = <100000000>;
-> +
-> +	non-removable;
-> +	disable-wp;
-> +
-> +	/* WiFi firmware requires power to be kept while in suspend */
-> +	keep-power-in-suspend;
-> +
-> +	mmc-pwrseq = <&sdio_pwrseq>;
-> +
-> +	vmmc-supply = <&vddao_3v3>;
-> +	vqmmc-supply = <&vddao_1v8>;
-> +
-> +	brcmf: wifi@1 {
-> +		reg = <1>;
-> +		compatible = "brcm,bcm4329-fmac";
-> +	};
-> +};
-> +
-> +/* SD card */
-> +&sd_emmc_b {
-> +	status = "okay";
-> +	pinctrl-0 = <&sdcard_c_pins>;
-> +	pinctrl-1 = <&sdcard_clk_gate_c_pins>;
-> +	pinctrl-names = "default", "clk-gate";
-> +
-> +	bus-width = <4>;
-> +	cap-sd-highspeed;
-> +	max-frequency = <50000000>;
-> +	disable-wp;
-> +
-> +	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
-> +	vmmc-supply = <&vddao_3v3>;
-> +	vqmmc-supply = <&vddao_3v3>;
-> +};
-> +
-> +/* eMMC */
-> +&sd_emmc_c {
-> +	status = "okay";
-> +	pinctrl-0 = <&emmc_ctrl_pins>, <&emmc_data_8b_pins>, <&emmc_ds_pins>;
-> +	pinctrl-1 = <&emmc_clk_gate_pins>;
-> +	pinctrl-names = "default", "clk-gate";
-> +
-> +	bus-width = <8>;
-> +	cap-mmc-highspeed;
-> +	mmc-ddr-1_8v;
-> +	mmc-hs200-1_8v;
-> +	max-frequency = <200000000>;
-> +	disable-wp;
-> +
-> +	mmc-pwrseq = <&emmc_pwrseq>;
-> +	vmmc-supply = <&vcc_3v3>;
-> +	vqmmc-supply = <&vcc_1v8>;
-> +};
-> +
-> +&tdmif_b {
-> +	status = "okay";
-> +};
-> +
-> +&tdmout_b {
-> +	status = "okay";
-> +};
-> +
-> +&tohdmitx {
-> +	status = "okay";
-> +};
-> +
-> +&uart_A {
-> +	status = "okay";
-> +	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
-> +	pinctrl-names = "default";
-> +	uart-has-rtscts;
-> +
-> +	bluetooth {
-> +		compatible = "brcm,bcm43438-bt";
-> +		shutdown-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
-> +		max-speed = <2000000>;
-> +		clocks = <&wifi32k>;
-> +		clock-names = "lpo";
-> +	};
-> +};
-> +
-> +&uart_AO {
-> +	status = "okay";
-> +	pinctrl-0 = <&uart_ao_a_pins>;
-> +	pinctrl-names = "default";
-> +};
-> +
-> +&usb {
-> +	status = "okay";
-> +};
-
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCg0KDQo+IC0tLS0tT3JpZ2luYWwg
+TWVzc2FnZS0tLS0tDQo+IEZyb206IEphcm9zbGF2IEt5c2VsYSA8cGVyZXhAcGVyZXguY3o+DQo+
+IFNlbnQ6IEZyaWRheSwgSmFudWFyeSAyNywgMjAyMyAxMDoyMw0KPiBUbzogTGltb25jaWVsbG8s
+IE1hcmlvIDxNYXJpby5MaW1vbmNpZWxsb0BhbWQuY29tPjsgTXVrdW5kYSwgVmlqZW5kYXINCj4g
+PFZpamVuZGFyLk11a3VuZGFAYW1kLmNvbT47IFNhYmEgS2FyZWVtLCBTeWVkDQo+IDxTeWVkLlNh
+YmFLYXJlZW1AYW1kLmNvbT47IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IFBh
+bmFuY2hpa2thbCwgUmVuaml0aCA8UmVuaml0aC5QYW5hbmNoaWtrYWxAYW1kLmNvbT47IE1hcmsg
+UGVhcnNvbg0KPiA8bXBlYXJzb25AbGVub3ZvLmNvbT47IExpYW0gR2lyZHdvb2QgPGxnaXJkd29v
+ZEBnbWFpbC5jb20+OyBNYXJrDQo+IEJyb3duIDxicm9vbmllQGtlcm5lbC5vcmc+OyBUYWthc2hp
+IEl3YWkgPHRpd2FpQHN1c2UuY29tPjsgYWxzYS0NCj4gZGV2ZWxAYWxzYS1wcm9qZWN0Lm9yZw0K
+PiBTdWJqZWN0OiBSZTogW1BBVENIIDIvNl0gQVNvQzogYW1kOiB5YzogQWRkIGEgbW9kdWxlIHBh
+cmFtZXRlciB0bw0KPiBpbmZsdWVuY2UgcGRtX2dhaW4NCj4gDQo+IE9uIDI3LiAwMS4gMjMgMTc6
+MDEsIE1hcmlvIExpbW9uY2llbGxvIHdyb3RlOg0KPiA+IEluIGNhc2Ugb2YgcmVncmVzc2lvbnMg
+Zm9yIGFueSB1c2VycyB0aGF0IHRoZSBuZXcgcGRtX2dhaW4gdmFsdWUgaXMNCj4gPiB0b28gaGln
+aCBhbmQgZm9yIGFkZGl0aW9uYWwgZGVidWdnaW5nLCBpbnRyb2R1Y2UgYSBtb2R1bGUgcGFyYW1l
+dGVyDQo+ID4gdGhhdCB3b3VsZCBsZXQgdGhlbSBjb25maWd1cmUgaXQuDQo+ID4NCj4gPiBTaWdu
+ZWQtb2ZmLWJ5OiBNYXJpbyBMaW1vbmNpZWxsbyA8bWFyaW8ubGltb25jaWVsbG9AYW1kLmNvbT4N
+Cj4gPiAtLS0NCj4gPiAgIHNvdW5kL3NvYy9hbWQveWMvYWNwNngtcGRtLWRtYS5jIHwgNyArKysr
+KystDQo+ID4gICBzb3VuZC9zb2MvYW1kL3ljL2FjcDZ4LmggICAgICAgICB8IDIgKy0NCj4gPiAg
+IDIgZmlsZXMgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiANCj4g
+Li4uDQo+IA0KPiA+ICAgCXBkbV9jdHJsID0gYWNwNnhfcmVhZGwoYWNwX2Jhc2UgKyBBQ1BfV09W
+X01JU0NfQ1RSTCk7DQo+ID4gLQlwZG1fY3RybCB8PSBBQ1BfV09WX01JU0NfQ1RSTF9NQVNLOw0K
+PiA+ICsJcGRtX2N0cmwgfD0gRklFTERfUFJFUChBQ1BfV09WX0dBSU5fQ09OVFJPTCwgcGRtX2dh
+aW4pOw0KPiANCj4gVGhlIGJpdHMgc2hvdWxkIGJlIHplcm9lZCAoQU5EIC0gJikgYmVmb3JlIE9S
+IHRvIG1ha2Ugc3VyZSB0aGF0IHRoZSBjb3JyZWN0DQo+IHZhbHVlIGlzIHdyaXR0ZW4gdG8gdGhl
+IHJlZ2lzdGVyLiBNb3JlIHJlbGF0ZWQgcGF0Y2hlcyBhcmUgYWZmZWN0ZWQuDQoNCkkgaGFkIGNv
+bnNpZGVyIHRoaXMsIGJ1dCB0aGUgaGFyZHdhcmUgZGVmYXVsdCBhdCByZXNldCBpcyAweDAuICBE
+byB5b3UgdGhpbmsgaXQncw0Kc3RpbGwgbmVjZXNzYXJ5IGZvciBwb3N0ZXJpdHk/DQo=
