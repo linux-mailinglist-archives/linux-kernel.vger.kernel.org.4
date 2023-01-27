@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C83167E700
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5FF67E6FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjA0Nqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
+        id S232521AbjA0NqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbjA0Nqb (ORCPT
+        with ESMTP id S232364AbjA0NqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:46:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FFF3FF24
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:45:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674827152;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZL6syL4gm2H3QLJOVyJqOMOKMhyc7AUkpoBTr0bkmxU=;
-        b=FWG2Ms1f9c5AjnQ2uS3SSt84nhP3sSMF3F6o/TKrjK2HqwFNRZ7DE3j7OytDynN8LqQgkb
-        ZSppyLiLU0n3AN563oyCtv4b+Kw9+bn9Rtz3iJgouJ7hxwwxJ7x1jvGkDxxEfDrxbquepZ
-        1Qfqh0r7BGMHpESD5oT7ecYhwX2YIG4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-171-I19kgIIjOTS9LbaUZ_z72g-1; Fri, 27 Jan 2023 08:45:50 -0500
-X-MC-Unique: I19kgIIjOTS9LbaUZ_z72g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9F4C31818E52;
-        Fri, 27 Jan 2023 13:45:49 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.33.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3FEB72166B29;
-        Fri, 27 Jan 2023 13:45:49 +0000 (UTC)
-Date:   Fri, 27 Jan 2023 08:45:47 -0500
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, x86@kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v11 1/2] x86/module: remove unused code in
- __apply_relocate_add
-Message-ID: <Y9PVi7WoaBu8KdR2@redhat.com>
-References: <20230125185401.279042-1-song@kernel.org>
+        Fri, 27 Jan 2023 08:46:10 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A43768AC7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:46:04 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id 7so3250431pga.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:46:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YTaxy2TnPiRYJ0TKsln4Bi8WHW10ryilnxtI3oqi5QY=;
+        b=zwHRs1Ei802Vb9no/UBDk4nyvDIsa8z0aiIsZLwZ9pympF/lz5acogC3JN2nWyu/9U
+         3S9tGvXoCsrlnZMfsC3UjsG4smKdI8+4wRRJoZdf7nr9l8mE30vlEkkZALb2lxQfoFHz
+         0TMrLz5QDSXemYRJxwuLzcNrtq45oCapUrNYuWXaOXl39N81BttTTRmGLf3ucP3XlwFb
+         3XPiYPrW+zt3UnbPF7DTRTt4PFTe2vInB44hNlpA7/yEn2OAnrTRH0SlUox+gOEZ8QSe
+         Jt3TmEXFmucyDv6iaRqbkTnqO04KqTJlwaVPTEDf4lGiKKvge9YqIuA0CwnFYHSI3hja
+         Slgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YTaxy2TnPiRYJ0TKsln4Bi8WHW10ryilnxtI3oqi5QY=;
+        b=NnSJrQAfJfJeD7R5adWMLle9FELl243NP1hI3KkmRokVHm3TgivkmYJtUKRIsbB1N+
+         Gn0cV34gtZqye3grzE7vg3vtyawuZxE5+BrVmJt0rJoBccVFvpJLxhps07V/IEyHI7kd
+         8kK2IbtdDEJnayAyf/u7KtAN8XZ4frQeZMPltC4rHaJFL7joLoOaSEuOXmixxo0fry09
+         bj8aVazKyJlhm6ZNploN5aZPlZ+71KYnd2m3+C6Gi5KJG8yKINHJav5Tf7V6ZwT3R9BF
+         S7Qs+jUcXFlyOaA3hxVrUofc6h+ywIRvEf5ONg2iASKbfZYI9EWsQ6eIGrpYCXwFwQlV
+         htPw==
+X-Gm-Message-State: AFqh2krx+SIFhmxkUs0tU2p7Gl+RVWI2pSIoetUybTRPtBx74L1uBkXN
+        QewHLH9ebGbqJVy3DK0v+jeCzQ==
+X-Google-Smtp-Source: AMrXdXu/rw9R+blC7zGSLJiHnv/+xU+Pp5JXlaMt4HY9oYtf6XrqmtOQVOw2pRTXl+awfZfDtJ0VuA==
+X-Received: by 2002:a62:e919:0:b0:58d:be61:7d9e with SMTP id j25-20020a62e919000000b0058dbe617d9emr8848731pfh.0.1674827163722;
+        Fri, 27 Jan 2023 05:46:03 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id b25-20020a056a0002d900b0058bbe1240easm2602912pft.190.2023.01.27.05.46.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 05:46:02 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        Dylan Yudaken <dylany@meta.com>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, stable@vger.kernel.org
+In-Reply-To: <20230127105911.2420061-1-dylany@meta.com>
+References: <20230127105911.2420061-1-dylany@meta.com>
+Subject: Re: [PATCH] io_uring: always prep_async for drain requests
+Message-Id: <167482716231.273660.4883362917562226118.b4-ty@kernel.dk>
+Date:   Fri, 27 Jan 2023 06:46:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125185401.279042-1-song@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 10:54:00AM -0800, Song Liu wrote:
-> This "#if 0" block has been untouched for many years. Remove it to clean
-> up the code.
-> 
-> Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> Signed-off-by: Song Liu <song@kernel.org>
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> ---
->  arch/x86/kernel/module.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-> index 705fb2a41d7d..1dee3ad82da2 100644
-> --- a/arch/x86/kernel/module.c
-> +++ b/arch/x86/kernel/module.c
-> @@ -188,10 +188,6 @@ static int __apply_relocate_add(Elf64_Shdr *sechdrs,
->  				goto invalid_relocation;
->  			val -= (u64)loc;
->  			write(loc, &val, 4);
-> -#if 0
-> -			if ((s64)val != *(s32 *)loc)
-> -				goto overflow;
-> -#endif
->  			break;
->  		case R_X86_64_PC64:
->  			if (*(u64 *)loc != 0)
-> -- 
-> 2.30.2
-> 
 
-Reviewed-by: Joe Lawrence <joe.lawrence@redhat.com>
+On Fri, 27 Jan 2023 02:59:11 -0800, Dylan Yudaken wrote:
+> Drain requests all go through io_drain_req, which has a quick exit in case
+> there is nothing pending (ie the drain is not useful). In that case it can
+> run the issue the request immediately.
+> 
+> However for safety it queues it through task work.
+> The problem is that in this case the request is run asynchronously, but
+> the async work has not been prepared through io_req_prep_async.
+> 
+> [...]
 
---
-Joe
+Applied, thanks!
+
+[1/1] io_uring: always prep_async for drain requests
+      commit: ef5c600adb1d985513d2b612cc90403a148ff287
+
+Best regards,
+-- 
+Jens Axboe
+
+
 
