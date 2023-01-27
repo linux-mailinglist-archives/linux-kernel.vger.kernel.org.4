@@ -2,101 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB8A67F004
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFB167F00A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjA0U7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 15:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
+        id S231819AbjA0VAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjA0U7P (ORCPT
+        with ESMTP id S229933AbjA0U77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:59:15 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11hn2200.outbound.protection.outlook.com [52.100.171.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A524F7B422;
-        Fri, 27 Jan 2023 12:59:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NMjYr/R3pATGWWTljO+Y3OJlJPOzo7bOP/ysppgNxZduvzFMv6MD2Jf1eNfnsmARKHrAR9hXNCOnHR/8D0bk6A9wFyzH4QYsGz4Q0KUw6BRAFfInW7piDa5qPLWDK6V5yOw6ixJ+qVO3At7skylGw2fUHymQ8O/lAAlXTfy1pKxHn1LuopX73SlY3Igr8aQa5mCWTdArbDPrgfRhjvIvwwRtiTJd22Xpu04szmMRi0Bk3+eCsNxLTxlLhl4QEyKI574KbmjZXNNhNpL1JJZLsx7XoFvH+ohkgIVlA+/aZ0HFJZIEQ6RVj4R8F19Xleb1B2u9x40u3XwoULRS8sH/tQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M2/L5SA7pbHH1eJAZORlTGunDK/ti3B9MraHx7pWfaQ=;
- b=OqX+OXbZeXA0bA5OByGN9kmh7x65xU8IqbkalN3MfnGC6LDZ86MSsgxit9kEGLUxUATUy9YW/mEj8zX59TVNXfUoy5m9J/rbwJoVlUv3U+JCPhWQNzxGQIdEb8vCt6v17uufbjCGtbn8Zws5HS9TzibgxUu7te6bwBzABqF9lSFrkEb4bG9vIs4ZdGuOfu5FcKT9csn45TznEMPWUCv6OZlPHiHu3eQZ5glk5jMfCI5eGi7m4Tyj4K29Zqy2JZmgCh4S1SFVYiCDm6PDkUpYYuZP+3FZpKITOELT6uW4+lU/PVpUrNKSoFECEZwIRcvcfLvGZHxiCtNCEoy/FY8ZLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M2/L5SA7pbHH1eJAZORlTGunDK/ti3B9MraHx7pWfaQ=;
- b=XnqBtmmhG/4NYeOOwULmDPF+YPFqDt2ueewn5mqvO1PhCtanHefS1d12mIUlnkGeBpEqkpwoKXA9YVFLJOsdrPyd2qaf9Ks8MOhPHly+cOhkivRQSm/y+12Llxc31xAg8ZgiPOzgHHkZITYyEioECdY4Dd3PRHRIft9GAaVeP50=
-Received: from MW4PR04CA0231.namprd04.prod.outlook.com (2603:10b6:303:87::26)
- by MW4PR12MB6826.namprd12.prod.outlook.com (2603:10b6:303:20c::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.21; Fri, 27 Jan
- 2023 20:59:08 +0000
-Received: from CO1NAM11FT108.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:87:cafe::f5) by MW4PR04CA0231.outlook.office365.com
- (2603:10b6:303:87::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.25 via Frontend
- Transport; Fri, 27 Jan 2023 20:59:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT108.mail.protection.outlook.com (10.13.175.226) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6043.22 via Frontend Transport; Fri, 27 Jan 2023 20:59:08 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 27 Jan
- 2023 14:59:05 -0600
-Date:   Fri, 27 Jan 2023 21:59:02 +0100
-From:   Robert Richter <rrichter@amd.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] cxl/mbox: Fix Payload Length check for Get Log command
-Message-ID: <Y9Q66azCa9wRuH7h@rric.localdomain>
-References: <20230119094934.86067-1-rrichter@amd.com>
- <63d42aaaef012_3a36e52942f@dwillia2-xfh.jf.intel.com.notmuch>
+        Fri, 27 Jan 2023 15:59:59 -0500
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1212078AC7;
+        Fri, 27 Jan 2023 12:59:58 -0800 (PST)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-15085b8a2f7so8143232fac.2;
+        Fri, 27 Jan 2023 12:59:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UgCIzyZ1uXoig+M3du7hOj+YSCBLDMUCra02vD8O8os=;
+        b=BHtDZ/DddZTTKlp2i3zDeFyrJXEfigDbsrSLvL+cEwjBBBEfjwNag256Mkl8l0MO/4
+         4OPiAUP3g1guKWzQmnCYFQzQM6kzl89NZJ3+QtfI0tR+QPjXz09v88tICLOeYmTUFhgp
+         Zce2XkDjHRWAnCTbL3j4Uwv6LWkQHrOqgWnZwLDwJ5BaVVcld9B09FPDqDtAdE9w/wFR
+         2VE6GoM6ibZcGZJNl5/0S9rkoMmhrSB3AvrXpETkKDkm34U2RILUpk341XzwsLubXPc5
+         S1RNre2wibQvt+tFprqhv3HIxFVEGnAqLyUsjv4245Wbx4q/8cbh8b62qTcbTIC8cUY4
+         DypQ==
+X-Gm-Message-State: AO0yUKVjC6xMihqLYxJr444qRHPn1VPGzJOu9qDUHAj3x3jDhb6BJ0h9
+        8V0rOkYdYixfHghPt2rqSg==
+X-Google-Smtp-Source: AK7set9yiHwcCjUqkk9qrXPSP2PS8fDIfxq4G9mbG19hiKCSbd8EpZfLDrnJm/GFw1JgRGB1IDQkPg==
+X-Received: by 2002:a05:6870:3312:b0:163:4aa1:a92a with SMTP id x18-20020a056870331200b001634aa1a92amr4569506oae.10.1674853197128;
+        Fri, 27 Jan 2023 12:59:57 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p1-20020a4aa241000000b004fde329b944sm2082031ool.28.2023.01.27.12.59.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 12:59:56 -0800 (PST)
+Received: (nullmailer pid 673390 invoked by uid 1000);
+        Fri, 27 Jan 2023 20:59:56 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     James Clark <james.clark@arm.com>, Will Deacon <will@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf arm-spe: Add raw decoding for SPEv1.2 previous branch address
+Date:   Fri, 27 Jan 2023 14:59:51 -0600
+Message-Id: <20230127205951.673253-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <63d42aaaef012_3a36e52942f@dwillia2-xfh.jf.intel.com.notmuch>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT108:EE_|MW4PR12MB6826:EE_
-X-MS-Office365-Filtering-Correlation-Id: fbbccaed-a31a-4a11-70e4-08db00a95550
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0vW1qVOS7+JY7D7FyRqyzkdQd6j/j9y0NIA/e/qF5ybQ20zk5+YSugbVYtZBc8lrGijrWxMeCKdk8YtoKIQsnC2q5XKX9DxI5Qz1l+X9DR/CIs64Rk8ju8V1RdXlO0IFKka+YVJ+lQCYqVgNyZ6/Of1qxmzXI3VPZA+/qwdziSR2Z42VIjOvtadrrGFA5CY1trTzAoCRVoaZZsFhBoiGmNcsa+Y1xSBQNj3N36hlJ+LgjtfAl/9xjSiGOt7CQXpvF6ZV4iOKSQoay6aqCUYrx4PADQRg8ZMOA7ysDe3+Ie+8cA8xuKMYRfk0utJFB0veBwyzhTWIXFWGUAL/hpUG6NKdgRpQ6u8dEugW97M4YlavQE0c7YIHIIfyTpF48Ct4wi7Z20vbUd+Ol6HaXZ09MZAtb/gNA3a14/wvnxyfytU8TtY5ILZa0QZIqY5qCnYarXcX4DvA5NAUb1zZWIvw/XrXQ5EH7BpcDachNBHJOe9//PPqpRLnOWW/Km157v9Cp9SKBLae0P3NuzOZXXyq/+sjtRrko8i6J8/QzG6oUPhaUYuMSbWU1qBCHA1MRtD6DUZCK4Erlxb/wmgVAzNiOqcInuJiCDOcbzLfcS2kKuzbwG39FPHMVWZrGWwXymwq/hfRFml89yvFlb2JVYlCMmE6W7XPX4WyVDJzAK67I7G5z5cxePi+vZ068IsM1pk+iVsxLt3Yw+S4BS8Af/nhgiKynkkSCA8rs1jhxRYfuoQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(396003)(346002)(39860400002)(34036004)(451199018)(36840700001)(40470700004)(46966006)(41300700001)(336012)(426003)(8936002)(47076005)(356005)(83380400001)(2906002)(810100004)(5660300002)(53546011)(186003)(82310400005)(26005)(6666004)(9686003)(7696005)(41320700001)(508600001)(70586007)(55016003)(4326008)(70206006)(8676002)(81166007)(6916009)(16526019)(316002)(36860700001)(40460700003)(54906003)(40480700001)(36900700001);DIR:OUT;SFP:1501;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 20:59:08.2146
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fbbccaed-a31a-4a11-70e4-08db00a95550
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT108.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6826
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,61 +66,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.01.23 11:48:59, Dan Williams wrote:
-> Robert Richter wrote:
-> > Commit 2aeaf663b85e introduced strict checking for variable length
-> > payload size validation. The payload length of received data must
-> > match the size of the requested data by the caller except for the case
-> > where the min_out value is set.
-> > 
-> > The Get Log command does not have a header with a length field set.
-> > The Log size is determined by the Get Supported Logs command (CXL 3.0,
-> > 8.2.9.5.1). However, the actual size can be smaller and the number of
-> > valid bytes in the payload output must be determined reading the
-> > Payload Length field (CXL 3.0, Table 8-36, Note 2).
-> > 
-> > Two issues arise: The command can successfully complete with a payload
-> > length of zero. And, the valid payload length must then also be
-> > consumed by the caller.
-> > 
-> > Change cxl_xfer_log() to pass the number of payload bytes back to the
-> > caller to determine the number of log entries. Implement the payload
-> > handling as a special case where mbox_cmd->size_out is consulted when
-> > cxl_internal_send_cmd() returns -EIO. A WARN_ONCE() is added to check
-> > that -EIO is only returned in case of an unexpected output size.
-> > 
-> > Logs can be bigger than the maximum payload length and multiple Get
-> > Log commands can be issued. If the received payload size is smaller
-> > than the maximum payload size we can assume all valid bytes have been
-> > fetched. Stop sending further Get Log commands then.
-> > 
-> > On that occasion, change debug messages to also report the opcodes of
-> > supported commands.
-> > 
-> > The variable payload commands GET_LSA and SET_LSA are not affected by
-> > this strict check: SET_LSA cannot be broken because SET_LSA does not
-> > return an output payload, and GET_LSA never expects short reads.
-> > 
-> > Fixes: 2aeaf663b85e ("cxl/mbox: Add variable output size validation for internal commands")
-> > Signed-off-by: Robert Richter <rrichter@amd.com>
-> > ---
-> > v4:
-> >  * Fixed a build issue.
-> > v3:
-> >  * Added comment to the WARN_ONCE(). (Jonathan)
-> >  * Passing a size pointer to report the payload size back. (Jonathan)
-> >  * Moved logging of supported opcodes out of this patch for a separate
-> >    change. (Jonathan)
-> > 
-> >  drivers/cxl/core/mbox.c | 25 ++++++++++++++++++++++---
-> >  1 file changed, 22 insertions(+), 3 deletions(-)
-> 
-> Looks good Robert. Do you think this is v6.2-rc material or can it wait
-> for v6.3? It sounds like you have a real device that needs, so I am
-> inclined to add it to cxl/fixes for this cycle.
+Arm SPEv1.2 adds a new optional address packet type: previous branch
+target. The recorded address is the target virtual address of the most
+recently taken branch in program order.
 
-6.3 is ok to me.
+Add support for decoding the address packet in raw dumps.
 
-Thanks,
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c | 4 +++-
+ tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.h | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
--Robert
+diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c b/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c
+index 2f311189c6e8..e92e1a7c8a8e 100644
+--- a/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c
++++ b/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.c
+@@ -422,16 +422,18 @@ static int arm_spe_pkt_desc_addr(const struct arm_spe_pkt *packet,
+ 	int ch, pat;
+ 	u64 payload = packet->payload;
+ 	int err = 0;
++	static const char *idx_name[] = {"PC", "TGT", "VA", "PA", "LBR" };
+ 
+ 	switch (idx) {
+ 	case SPE_ADDR_PKT_HDR_INDEX_INS:
+ 	case SPE_ADDR_PKT_HDR_INDEX_BRANCH:
++	case SPE_ADDR_PKT_HDR_INDEX_PREV_BRANCH:
+ 		ns = !!SPE_ADDR_PKT_GET_NS(payload);
+ 		el = SPE_ADDR_PKT_GET_EL(payload);
+ 		payload = SPE_ADDR_PKT_ADDR_GET_BYTES_0_6(payload);
+ 		arm_spe_pkt_out_string(&err, &buf, &buf_len,
+ 				"%s 0x%llx el%d ns=%d",
+-				(idx == 1) ? "TGT" : "PC", payload, el, ns);
++				idx_name[idx], payload, el, ns);
+ 		break;
+ 	case SPE_ADDR_PKT_HDR_INDEX_DATA_VIRT:
+ 		arm_spe_pkt_out_string(&err, &buf, &buf_len,
+diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.h b/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.h
+index 9b970e7bf1e2..f75ed3a8a050 100644
+--- a/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.h
++++ b/tools/perf/util/arm-spe-decoder/arm-spe-pkt-decoder.h
+@@ -65,6 +65,7 @@ struct arm_spe_pkt {
+ #define SPE_ADDR_PKT_HDR_INDEX_BRANCH		0x1
+ #define SPE_ADDR_PKT_HDR_INDEX_DATA_VIRT	0x2
+ #define SPE_ADDR_PKT_HDR_INDEX_DATA_PHYS	0x3
++#define SPE_ADDR_PKT_HDR_INDEX_PREV_BRANCH	0x4
+ 
+ /* Address packet payload */
+ #define SPE_ADDR_PKT_ADDR_BYTE7_SHIFT		56
+-- 
+2.39.0
+
