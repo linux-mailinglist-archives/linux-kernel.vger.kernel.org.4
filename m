@@ -2,89 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA3167E1C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B8067E1C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbjA0KgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:36:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
+        id S231847AbjA0Kgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbjA0KgS (ORCPT
+        with ESMTP id S231876AbjA0Kgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:36:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5400079630;
-        Fri, 27 Jan 2023 02:36:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0A0061AE4;
-        Fri, 27 Jan 2023 10:36:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BE0DC4339B;
-        Fri, 27 Jan 2023 10:36:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674815772;
-        bh=vw0iiYxGTCesFwa72RlwSdRCpxQWJUUPK745DxXrCUA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Id6qV15kooUPWdHl4wyDEwnRgvOc2+29dUbHInSpAvRIRX6L27wWP4F9gYc/qx2Wx
-         yLrku+TkgmP/GZ5Q29QiGdwH3Cpv410ahtzDpayjiYIcdGoqUueGnsBhNom6pO3XtO
-         40CkRIns8lVuV/VWzJf2nFLfYFBusSqUmFZkRikBXlzl8JhOIPZyBu2DxMKmA8qSg/
-         94pX7quhPoYH+7U1EKPZOV1KSTBSITsAY2jXTB20+B6uIRFBYYXg91CSVCRQVQ6SMv
-         K/r8TuZIDqNyGXERee86EJkfDF/sQMtp72RXoa+3B+2koH0cZxzvXaXgufubDrIPRn
-         PHg05faGWWHGA==
-Date:   Fri, 27 Jan 2023 10:36:06 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 05/11] mfd: intel-m10-bmc: Support multiple CSR
- register layouts
-Message-ID: <Y9OpFg1guvR1cByY@google.com>
-References: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
- <20230116100845.6153-6-ilpo.jarvinen@linux.intel.com>
+        Fri, 27 Jan 2023 05:36:36 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13EB79621
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:36:31 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id h17-20020a5d9e11000000b007049a892316so2470297ioh.7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:36:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l1+xVltypcnxAkvWPCQxFM0n2XimN1lwperOL1Mtxsc=;
+        b=rRiP/a9hQvL2cU8Nmtkn2tshYqOxA2euRjMwv7dQ/oOXL3YitOPYVp+2QSdssRP5Mu
+         4h6wilnlZk+QlacNu+4kL9nE2djKJLG3UCcJ/JEGWwNR8E85zUstsnM6VGR1UJzEHhod
+         2MqtBwqpDPdME2DJsoKA84iFzdgr1TTIZSV+0APWCCzdYuWoVN28iqqMcnBuvFcpcjdZ
+         i2ElBvtU7r3SnggPp6Z5YYRhkBSpXS1dRt6NvHxbqlsqseGBtzHf2ZC/HDXYoINCPQUl
+         6lMMjdgKm6cSl2BWRTwXs/cREVaUP6NpscCkxL9YlYu9Cx8r0XstdAf8WY9tEEUhipjM
+         MQrA==
+X-Gm-Message-State: AO0yUKWiE7VzQ0oCTO6YfWhEIwrTMe1ZENfzfnRtqG4uElcbaV94LnGA
+        /vZBcZoRWlN3zEZ/bx02xocuAUvISDbv1ENAqmyC+3BPlrdM
+X-Google-Smtp-Source: AK7set/LRjnKN3c3QPuyatvHLLG5RJKQV+J+jrRWeqchw7/XkjSPAx+OlYIsIezViEiSxTHqMMHTc0HR/QmM25RqTNZHS3j2E2Q8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230116100845.6153-6-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:8e4d:0:b0:310:c52c:81ff with SMTP id
+ k13-20020a928e4d000000b00310c52c81ffmr294320ilh.50.1674815791087; Fri, 27 Jan
+ 2023 02:36:31 -0800 (PST)
+Date:   Fri, 27 Jan 2023 02:36:31 -0800
+In-Reply-To: <00000000000015ac7905e97ebaed@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004acbb005f33c7013@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in rdma_close
+From:   syzbot <syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com>
+To:     asmadeus@codewreck.org, dan.carpenter@oracle.com,
+        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
+        kuba@kernel.org, leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 Jan 2023, Ilpo Järvinen wrote:
+This bug is marked as fixed by commit:
+9p: client_create/destroy: only call trans_mod->close after create
 
-> There are different addresses for the MAX10 CSR registers. Introducing
-> a new data structure m10bmc_csr_map for the register definition of
-> MAX10 CSR.
-> 
-> Provide the csr_map for SPI.
-> 
-> Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
-> Acked-for-MFD-by: Lee Jones <lee@kernel.org>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/fpga/intel-m10-bmc-sec-update.c | 73 +++++++++++++++++--------
->  drivers/mfd/intel-m10-bmc-core.c        | 10 ++--
->  drivers/mfd/intel-m10-bmc-spi.c         | 23 ++++++++
->  include/linux/mfd/intel-m10-bmc.h       | 38 +++++++++++--
->  4 files changed, 111 insertions(+), 33 deletions(-)
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-Applied, thanks
+#syz fix: exact-commit-title
 
--- 
-Lee Jones [李琼斯]
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
+
+Kernel: Linux
+Dashboard link: https://syzkaller.appspot.com/bug?extid=67d13108d855f451cafc
+
+---
+[1] I expect the commit to be present in:
+
+1. for-kernelci branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+
+2. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+3. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+4. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+
+The full list of 10 trees can be found at
+https://syzkaller.appspot.com/upstream/repos
