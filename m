@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E414567DC55
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F62567DC59
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233525AbjA0CkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 21:40:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
+        id S231842AbjA0Crq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 21:47:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbjA0Cj7 (ORCPT
+        with ESMTP id S229582AbjA0Cro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 21:39:59 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FD6539AE
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:39:58 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso7260702pjg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:39:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JmA1hDZ+MeoPFm9Yjjv0t7YVH1mZV4xy4MwoNik2CbQ=;
-        b=tBLISifPko9ljpQXoRW1C/WvYxncmvA27w9hF/z1oOC3769navvqXQ2aSLcOoi15GZ
-         NMbjqKBRBg5qrDhIbEaTz89p7VEUm2IiZ53NJiV2N4c9DR+gVc0dLpE0J5t5WX5V2nvl
-         /Vpqb/uAenFA74Ffkfoppsdig9IWA0kEjOz4Q2VJd0qzGDwH5J8ji2NYRQFz7HfjjLrr
-         wS8RA76snYI8CxEOx0JHnlFfD7kPaNhgQTlCQgBxM512r8WQNwjdLNlBkQU0a4Riv+8H
-         5PVfPhsJyR6qFKi+jcYoMGmf5EvcPqOga2/4u2hDutt9h2VwPYX7or0dIQXLyXUiNJ1A
-         MLgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JmA1hDZ+MeoPFm9Yjjv0t7YVH1mZV4xy4MwoNik2CbQ=;
-        b=wlghT+4dSKvazyS7/mPziQHhKUSN/ws8j0PvgHmX3iU9hLD/r7HXpP9NQsa+suvyTm
-         6hLQhKFsENlkUxOBT2lI3WStgerK3OF6u5p4k1C6wrxeOU/hxVEzKUwrImMAu/wzdqhY
-         bCMR7dhKz3HCKI1FtXM06r0n0sO9Fifwgc5nD2UbdTJ/HympCCnfGrUPRnzg6FAtWnbJ
-         hDDwIiHDRvAI1/B0qB0xbN5KwXQBcWhjCvQ+YOz4UoYh0pC/tsx3PHAKmJ3q/YtMEueL
-         l35ZGDt0kr0U6tz+F2LAEF5oEUL9YgwP3Z/tu87Tnyh47ZAitFftKQ15om8RxpeOiuKx
-         0mpw==
-X-Gm-Message-State: AO0yUKV36weyqSfedG2Q2RKLNV0YsoFMlU60yuHNXvwhqxVllWLlwdLe
-        mWlWDkVCI02c5V3V+YwdfoaEZA==
-X-Google-Smtp-Source: AK7set9gr8/5ImFQDM4ddHsTo3zTKcVeS38DHQOR23X+Tb9p8uf/UMnwHvYLYorFup38S3BtMufcXw==
-X-Received: by 2002:a17:902:7886:b0:194:d5ff:3ae3 with SMTP id q6-20020a170902788600b00194d5ff3ae3mr1228848pll.2.1674787197920;
-        Thu, 26 Jan 2023 18:39:57 -0800 (PST)
-Received: from google.com ([2620:15c:2d:3:497:8b7d:bb75:1c3])
-        by smtp.gmail.com with ESMTPSA id y14-20020a17090322ce00b00196191b6b29sm1649839plg.140.2023.01.26.18.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 18:39:57 -0800 (PST)
-Date:   Thu, 26 Jan 2023 18:39:53 -0800
-From:   Isaac Manjarres <isaacmanjarres@google.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        kernel-team@android.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH v1 0/2] Fixes for kmemleak tracking with CMA regions
-Message-ID: <Y9M5eYzJcFbwlC9g@google.com>
-References: <20230109221624.592315-1-isaacmanjarres@google.com>
- <Y8gpfgEXtialPVLk@arm.com>
- <Y8neaPB2y689WKOf@google.com>
- <Y8/96eIu47UfqsWO@arm.com>
- <Y9BLfUz5GY69zmjn@google.com>
- <Y9Eb2k3COoUXJ0CB@arm.com>
+        Thu, 26 Jan 2023 21:47:44 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E891C2CFC3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:47:41 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A86FB2C05E7;
+        Fri, 27 Jan 2023 15:47:36 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1674787656;
+        bh=QyC5brkWOEg2sGCBNL5g61P1BXRxZYyIv/BCYwztIz0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gc7pHncOBDsVCo+PXjsGrakOPehtcFNHQ0c3+/KXuqQ2XmN12KwYDsx6iyZbvFQXP
+         riAgekRRLCj4lEj8Km6hU3kegONuUO6yL1BNYpYfkQN3JaTis1Z9VA923oU2qy9QOA
+         mAQ5KQ9XsMjLLCRyYIN8fWA6zg67e+xEDSk6HDy70f8cKaYi/PRrS5fPaK6vxZok+Q
+         ueY0xApMIINPh6WAPemP4JWFflZj2+xRdUwv+Aqy37H47vuwzynX7pUo2eEM8yxNqa
+         fghE22ydgMfAugP+U0nUnxP32MNh/Q0rdMdJkT2Y9bCaz8F0/rmtFjufTuIP1JY5Ds
+         oVk9YdO9431wA==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B63d33b480000>; Fri, 27 Jan 2023 15:47:36 +1300
+Received: from markto-dl.ws.atlnz.lc (markto-dl.ws.atlnz.lc [10.33.23.25])
+        by pat.atlnz.lc (Postfix) with ESMTP id 81B1D13ED8D;
+        Fri, 27 Jan 2023 15:47:36 +1300 (NZDT)
+Received: by markto-dl.ws.atlnz.lc (Postfix, from userid 1155)
+        id 7DDB433F3EE; Fri, 27 Jan 2023 15:47:36 +1300 (NZDT)
+From:   Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+Subject: [PATCH] USB: MAX3421: Handle USB NAK correctly
+Date:   Fri, 27 Jan 2023 15:47:34 +1300
+Message-Id: <20230127024734.8777-1-mark.tomlinson@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9Eb2k3COoUXJ0CB@arm.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=a6lOCnaF c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=RvmDmJFTN0MA:10 a=dCw1JWjCaN3HBHM-yk0A:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 12:08:58PM +0000, Catalin Marinas wrote:
-> That's an option. If there's too much churn to add a flag, an
-> alternative is to use the bottom bit of 'end' to set the noleaktrace
-> flag.
-Using the least significant bit won't work; there are allocations for
-CMA regions that can be specified to occur within the first 4 GB of
-memory, and would have an alloc-ranges of [0 0xffff_ffff]. I also don't
-think there's anything in the memblock documentation that ensures that
-those bits are supposed to be clear all the time.
+A USB peripheral can respond with a NAK if it is not yet ready to
+send/receive data. In this case, the transaction should be retried. The
+MAX3421 driver did do this, and switched to a different type of retry
+after a number of 'fast' retries. On at least some USB flash devices,
+this second type of retry never succeeds. This patch changes the
+behaviour so that 'fast' retries continue.
 
-> Yet another idea is to avoid the kmemleak callback on all the 'phys'
-> memblock allocations. We can add the callback to the higher level
-> memblock_alloc() which returns a VA but the lower level 'phys' variants
-> could simply avoid it. However, I think we still need the
-> MEMBLOCK_ALLOC_NOLEAKTRACE flag for the kasan shadow allocation. Well,
-> given that this flag is not widely used, we can add explicit
-> kmemleak_ignore() calls in those four places.
-> 
-> I think the latter, if it works, would be the least intrusive.
+Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+---
+ drivers/usb/host/max3421-hcd.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-I agree; I think using kmemleak_ignore() would be best. I will
-split that into series: 1 series that fixes the kmemleak issue
-with CMA regions by reverting Calvin's patch and adding a call
-to kmemleak_ignore in the call-stack I referenced earlier, and
-then another series that cleans up the usage of the flag.
+diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hc=
+d.c
+index 352e3ac2b377..9a87056fc738 100644
+--- a/drivers/usb/host/max3421-hcd.c
++++ b/drivers/usb/host/max3421-hcd.c
+@@ -72,12 +72,6 @@
+ #define USB_MAX_FRAME_NUMBER	0x7ff
+ #define USB_MAX_RETRIES		3 /* # of retries before error is reported */
+=20
+-/*
+- * Max. # of times we're willing to retransmit a request immediately in
+- * resposne to a NAK.  Afterwards, we fall back on trying once a frame.
+- */
+-#define NAK_MAX_FAST_RETRANSMITS	2
+-
+ #define POWER_BUDGET	500	/* in mA; use 8 for low-power port testing */
+=20
+ /* Port-change mask: */
+@@ -924,11 +918,8 @@ max3421_handle_error(struct usb_hcd *hcd, u8 hrsl)
+ 		 * Device wasn't ready for data or has no data
+ 		 * available: retry the packet again.
+ 		 */
+-		if (max3421_ep->naks++ < NAK_MAX_FAST_RETRANSMITS) {
+-			max3421_next_transfer(hcd, 1);
+-			switch_sndfifo =3D 0;
+-		} else
+-			max3421_slow_retransmit(hcd);
++		max3421_next_transfer(hcd, 1);
++		switch_sndfifo =3D 0;
+ 		break;
+ 	}
+ 	if (switch_sndfifo)
+--=20
+2.39.1
 
---Isaac
