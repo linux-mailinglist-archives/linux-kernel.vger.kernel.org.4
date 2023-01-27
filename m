@@ -2,111 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D6767DC73
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F80A67DC7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 04:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjA0C7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 21:59:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S232111AbjA0DAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 22:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjA0C73 (ORCPT
+        with ESMTP id S233460AbjA0C7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 21:59:29 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117362E825
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:59:28 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id x10so3598527edd.10
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:59:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=profian-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/AfdCkm99SUvFdMCwe3pmsh5HVt3esnvMEJqsrZ3avo=;
-        b=Lw1+9lxRR1sCal3wO6yNlAF8+j0tzSaG6hT7ZAC0A3jRdh3kWNAYuNi3k9VAtAYzwz
-         cRRJvKXPtkUVoLy/D4sdhQonLjdbrnM4mhrp0qX7BmIVcJz4YsvPn/shgWzCi/Kzvm3C
-         zpETtZRlY4wgwyw/2mQql77cpoS9qrXsPAJOc+BhpfV2SqlFEoOfsSObsrF/5Bsa8Y+S
-         mnG+KiJZf0Aa+/VD4SsSLw3xKHxqWyxTVE2W1bcgLbn1EtsmXP73vWqxmOUKsZS1wOkJ
-         jddWmBuUWcevsiwNrV8QVHDtc5yDnT567smEvCwgTyrXSZe42zwVI/i3JGnOeVJLJVkO
-         2buw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/AfdCkm99SUvFdMCwe3pmsh5HVt3esnvMEJqsrZ3avo=;
-        b=ZzFfhFXsNJCnr6/JwkDkCxCJb6sOu+eySndCUwPrTz52MFtFEjn5GuYV7oPzjbVblr
-         oyS+E2xl1G97kkTCfaeLEtIudGWDh321b8zLR+zdOLANPjf0N/3TXxYnA811OfhYJcw6
-         YKiGIUiLkFq7bkL5HMF787sTvpxZct2pOFx1AwvJPy0xrxS1yuTJE1r3lIbIfOCOveoh
-         7W34YpLDFy3EjMDTvoyqM3VjOP4rw65W3hl4/x/n8S8nAbo//djukA2rDT0jBEEW7Oba
-         czFrDHyoUv4sHLT0ko63O0b1ciKIN4iVtATg7aGeHUT4tF67QywmAuIg00XSqiLxzdBd
-         VGIw==
-X-Gm-Message-State: AO0yUKVZezsUuKNDHuAVVwRvwTqHxr8bDCVblMgX8ur/p7Dn8jZ4ZDLz
-        Srx1ZpeLkcvCHPqmOaHafr+GFg==
-X-Google-Smtp-Source: AK7set+kjf7R52Itk1uYZWSVD4lmM+dajN2l5hFV3IOKd8xZCRy/syQHhhueg9DbhXmkvK6dFOjXUw==
-X-Received: by 2002:a05:6402:1946:b0:4a0:bb2e:3af0 with SMTP id f6-20020a056402194600b004a0bb2e3af0mr5605958edz.1.1674788366587;
-        Thu, 26 Jan 2023 18:59:26 -0800 (PST)
-Received: from localhost (88-113-101-73.elisa-laajakaista.fi. [88.113.101.73])
-        by smtp.gmail.com with ESMTPSA id p11-20020a50cd8b000000b004972644b19fsm1614757edi.16.2023.01.26.18.59.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 18:59:26 -0800 (PST)
-From:   Jarkko Sakkinen <jarkko@profian.com>
-Cc:     Harald Hoyer <harald@profian.com>, Tom Dohrmann <erbse.13@gmx.de>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@profian.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH RFC 0/8] Enarx fixes for AMD SEV-SNP hypervisor v7
-Date:   Fri, 27 Jan 2023 02:59:22 +0000
-Message-Id: <20230127025922.270463-1-jarkko@profian.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 26 Jan 2023 21:59:54 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F4E3432D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:59:47 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D19FB2C01FC;
+        Fri, 27 Jan 2023 15:59:45 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1674788385;
+        bh=2xMEbOKhtIY1n5O8ShroG3k1FtbRxbMYyFn8oh9S9AQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=k69MYEcOzVrTTVfDaCal4UcJQhJ6lSh8R9/voxaKjlo4OT1lzMRxv0NCUBNZN4j7j
+         XSdgGvnO9+qNH45aT1c7q4ZS6mM8XWZHJ0Pub+71XeBgsCQ43uIH5Wt8krOiiv1Jfr
+         W/PlUlXi/fjU0JgrginE8SY/xBP3qw6B5/xBqpbnwumaDAvmkvAEZ2ly6b+N5DdbSP
+         zMT4nBsVyLmJvWXnNgh+iZSmRCqWRp3NTzoY/5/wop109cVRLJMTAzqhp6ziUc2EIP
+         qTd7tlWS2jbCosUsPSSd7lCPQpZjvgEMmJ4pgDArJTGfsVx9vWuikJZONfQDhMUkkM
+         Vssfl6pMpoC6A==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B63d33e210000>; Fri, 27 Jan 2023 15:59:45 +1300
+Received: from thomaswi-dl.ws.atlnz.lc (thomaswi-dl.ws.atlnz.lc [10.33.25.46])
+        by pat.atlnz.lc (Postfix) with ESMTP id ACAC713ED8D;
+        Fri, 27 Jan 2023 15:59:45 +1300 (NZDT)
+Received: by thomaswi-dl.ws.atlnz.lc (Postfix, from userid 1719)
+        id AB8E33E08C3; Fri, 27 Jan 2023 15:59:45 +1300 (NZDT)
+From:   Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
+To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        pabeni@redhat.com, edumazet@google.com, kuba@kernel.org,
+        a@unstable.cc, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
+Subject: [PATCH v4 0/2] ip/ip6_gre: Fix GRE tunnels not generating IPv6 link local addresses
+Date:   Fri, 27 Jan 2023 15:59:39 +1300
+Message-Id: <20230127025941.2813766-1-Thomas.Winter@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=a6lOCnaF c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=RvmDmJFTN0MA:10 a=IpZYufPWUN2N8bb5Va0A:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A set of fixes that we've applied on top of SNP v7 patches for running Enarx.
+For our point-to-point GRE tunnels, they have IN6_ADDR_GEN_MODE_NONE
+when they are created then we set IN6_ADDR_GEN_MODE_EUI64 when they
+come up to generate the IPv6 link local address for the interface.
+Recently we found that they were no longer generating IPv6 addresses.
 
-References:
-* https://github.com/enarx/linux/releases/tag/v6.1-enarx-upm-1
-* https://hackmd.io/@enarx/HJKSlW2Lo
+Also, non-point-to-point tunnels were not generating any IPv6 link
+local address and instead generating an IPv6 compat address,
+breaking IPv6 communication on the tunnel.
 
-Jarkko Sakkinen (3):
-  KVM: SVM: KVM_SEV_SNP_LAUNCH_RESET_VECTOR
-  crypto: ccp: Prevent a spurious SEV_CMD_SNP_INIT triggered by
-    sev_guest_init()
-  crypto: ccp: Move __sev_snp_init_locked() call inside
-    __sev_platform_init_locked()
+These failures were caused by commit e5dd729460ca and this patch set
+aims to resolve these issues.
 
-Tom Dohrmann (5):
-  KVM: SVM: fix: calculate end instead of passing size
-  KVM: SVM: fix: initialize `npinned`
-  KVM: SVM: write back corrected CPUID page
-  KVM: SVM: fix: add separate error for missing slot
-  KVM: SVM: fix: Don't return an error for `GHCB_MSR_PSC_REQ`
+Thomas Winter (2):
+  ip/ip6_gre: Fix changing addr gen mode not generating IPv6 link local
+    address
+  ip/ip6_gre: Fix non-point-to-point tunnel not generating IPv6 link
+    local address
 
- arch/x86/include/asm/svm.h   | 15 ++++--
- arch/x86/kvm/svm/sev.c       | 89 +++++++++++++++++++++++++++++-------
- arch/x86/kvm/svm/svm.h       |  1 +
- drivers/crypto/ccp/sev-dev.c | 63 ++++++++++---------------
- include/linux/psp-sev.h      | 15 ------
- include/uapi/linux/kvm.h     |  5 ++
- 6 files changed, 113 insertions(+), 75 deletions(-)
+ net/ipv6/addrconf.c | 61 ++++++++++++++++++++++++---------------------
+ 1 file changed, 33 insertions(+), 28 deletions(-)
 
--- 
-2.38.1
+--=20
+2.39.0
 
