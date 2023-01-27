@@ -2,205 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CE067EED4
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D2F67EE99
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjA0Tyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 14:54:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S232129AbjA0ToK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232788AbjA0TyP (ORCPT
+        with ESMTP id S231838AbjA0TnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 14:54:15 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F41D8BBB4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:51:27 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id br9so9812887lfb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:51:27 -0800 (PST)
+        Fri, 27 Jan 2023 14:43:19 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606A14C08
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:42:52 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5066df312d7so65757957b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:42:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OTbIA/qsw+iEJ2j+G0MzDhcSxbI2hiwezMO1CX++Hek=;
-        b=UiNtolU4E4LMirZ4Bc6hCbF2Jcz5w1QeiV10veN90X6hOIKK6DxgcHncK03SxrGbJm
-         /sKRRXKFATHToB6UbvzOI6DakGvCBirwe1kIXq/2TgIYNH6wmNJijrbE9FDSYzHQN6/l
-         7OSjUm4C8UrSXDLHi2D2oWYMcrIk8xYxY0Kjfr/y1HOuMlCbtilFiPYiQf9e2y55r7yX
-         ghfx0IWmgbsvSZcPtiuvRPp6De5wdvuVrGDXfVqn92uOUfyWQrnB7Q4OcK4TGqN29mUC
-         X0URPMHiV9YBbge0/mJIrfUgH6wuXfK3YEUKnmCoyZz0RiHwmlvgPSzbFqCspJwiJQbf
-         lj0A==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Tx+qt9ZwCfzeziH+AxLsfIEHPwRgvIaxjFEfdwiAVs=;
+        b=MwDUDcWNdtFYfmhAuC43tEYj+bx0/7zv78dJ0hpiWDqIAfrnPySCh31pwGtES+llPo
+         g9aJ1BaJcPmj6QIFKuJtNB4+OKnKX4w74YBlWwFtrSbaxVsErI4QpqtlUvrQKvku3x0Y
+         fv8bSpOOjUv/1+/JuPfz5M6ciXa9EK4OZHTaoyyN5QHozfr1J0btP+Cb6s+q8s6DTvgx
+         Eb/YBgAB71iKrit1/2Z+f0K+0VaK6nNNkqEz24OPAMCTiIMwYOn1N+e1hh+02mLm2qhR
+         X0SB7IZ09+W7stQU0DgYwMtwYdWCgN82KCjbLOZQQ4WgzpAt4BTc4SEqK+AY1F70NhR7
+         prsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OTbIA/qsw+iEJ2j+G0MzDhcSxbI2hiwezMO1CX++Hek=;
-        b=qJtFEWombrkG1bpmvHIEVO29Lz7/TZQPppfUhBRYj/eTOki0/GqLXRVemF+a0JeOMc
-         JEoD/DEfceA/fxuGos8mnTjtEmCJitWrXl+YBJX5IL4PKerQNmqUa2jgv/vEmaeZBEn7
-         K8MzF/FBhjET53+nOLLk5vtH3CqKsOdzgjSPb50e1tHFF/0ranFFUGsOBR6CBCh560Ba
-         Z+WTer5Itq7rL8ZWyhM/KZPlDbk6FKafeeqQEsYY0HCxNKAng1Jg2uSPxsOzEvtqOUeM
-         LuFj0ZWVX0IWwGkPQmepuEVC/HaN+ZFGvUsBJGur1PFpFKD845dQzzQ1/IwDoLzbkowJ
-         2VSg==
-X-Gm-Message-State: AFqh2kqe/12LmIww/cwEr84XsO/36Ec7R1ywfdOl5ir3jQC1NLY7N3i3
-        AshLmQ+8yU0Tk8iE6sC4SX2Umssuf2SkCDoz
-X-Google-Smtp-Source: AK7set8phgbSxSEwh8u2STG/34e8GAiaEpnPycQ0+6PFVjzYXOkOdLXAox+v4Bj7Ov9boXJSQBqgbw==
-X-Received: by 2002:a05:6000:1001:b0:2bf:dafe:43d7 with SMTP id a1-20020a056000100100b002bfdafe43d7mr129204wrx.16.1674848468608;
-        Fri, 27 Jan 2023 11:41:08 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id y17-20020adffa51000000b002238ea5750csm5822417wrr.72.2023.01.27.11.41.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 11:41:08 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     replicant@osuosl.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>,
-        Henrik Grimler <henrik@grimler.se>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/8] dt-bindings: soc: samsung: exynos-pmu: allow phys as child
-Date:   Fri, 27 Jan 2023 20:40:50 +0100
-Message-Id: <20230127194057.186458-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230127194057.186458-1-krzysztof.kozlowski@linaro.org>
-References: <20230127194057.186458-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Tx+qt9ZwCfzeziH+AxLsfIEHPwRgvIaxjFEfdwiAVs=;
+        b=V0BaELmMQZ69LYaSXhJDxSjpLq08iRF43H36xf+HTJhHeKFU94MN+Yypdg/U1ec0vy
+         MqoNopfj2scoG2kitq6Lo/Qtnp2SrAGoCWIX1fMpftOlfYhnPnQgoH/+g03vUeYZI5fS
+         Yd2pcWbR+LdMssq8OfmMlzC9feazNCfyRzjUFEKo1mzbCyDkmMOBmiawpsYls4Wi6dUo
+         hyPo4QoPkuICVMcymrxgUXhdHzi14ddFAxFXtxTgle3KKQWOua7vsTFYogcLDhzV7rN1
+         w3qyFenVl8AozhAo0vUd4/XOZT8u/aKSjJuWKdOg9T1vsyfEsUF9Zuy8aYyvTLKchS2a
+         CL2Q==
+X-Gm-Message-State: AO0yUKVZKKh0JMCEWiABt0r/SCEcmWcKNEA4V8AAEJdiQbVcddRjAcFo
+        5QW8M/0oTahlvpg13KbNeT/q2PnYEKs=
+X-Google-Smtp-Source: AK7set+eTaGDRvBxQnOso6u8cp6LCvB6g6dz+di36ExTAmlNkOKvBeltyp9kLCTqVY9tlqnocHmCi479DpA=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:4e19:be9:c5d0:8483])
+ (user=surenb job=sendgmr) by 2002:a81:6008:0:b0:506:833a:c32e with SMTP id
+ u8-20020a816008000000b00506833ac32emr1175163ywb.50.1674848507730; Fri, 27 Jan
+ 2023 11:41:47 -0800 (PST)
+Date:   Fri, 27 Jan 2023 11:40:51 -0800
+In-Reply-To: <20230127194110.533103-1-surenb@google.com>
+Mime-Version: 1.0
+References: <20230127194110.533103-1-surenb@google.com>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230127194110.533103-15-surenb@google.com>
+Subject: [PATCH v2 14/33] mm/khugepaged: write-lock VMA while collapsing a
+ huge page
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com, paulmck@kernel.org,
+        mingo@redhat.com, will@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MIPI and DisplayPort phys are actually part of the Power Management
-Unit system controller, thus allow them as its children, instead of
-specifying as separate device nodes with syscon phandle.
+Protect VMA from concurrent page fault handler while collapsing a huge
+page. Page fault handler needs a stable PMD to use PTL and relies on
+per-VMA lock to prevent concurrent PMD changes. pmdp_collapse_flush(),
+set_huge_pmd() and collapse_and_free_pmd() can modify a PMD, which will
+not be detected by a page fault handler without proper locking.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Before this patch, page tables can be walked under any one of the
+mmap_lock, the mapping lock, and the anon_vma lock; so when khugepaged
+unlinks and frees page tables, it must ensure that all of those either
+are locked or don't exist. This patch adds a fourth lock under which
+page tables can be traversed, and so khugepaged must also lock out that
+one.
+
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- .../bindings/soc/samsung/exynos-pmu.yaml      | 71 +++++++++++++++----
- 1 file changed, 57 insertions(+), 14 deletions(-)
+ mm/khugepaged.c |  5 +++++
+ mm/rmap.c       | 31 ++++++++++++++++---------------
+ 2 files changed, 21 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-index 13bb8dfcefe6..f7c141dd11ec 100644
---- a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-+++ b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-@@ -31,20 +31,28 @@ select:
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index eb38bd1b1b2f..b938b286cdc3 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1134,6 +1134,7 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
+ 	if (result != SCAN_SUCCEED)
+ 		goto out_up_write;
  
- properties:
-   compatible:
--    items:
--      - enum:
--          - samsung,exynos3250-pmu
--          - samsung,exynos4210-pmu
--          - samsung,exynos4412-pmu
--          - samsung,exynos5250-pmu
--          - samsung,exynos5260-pmu
--          - samsung,exynos5410-pmu
--          - samsung,exynos5420-pmu
--          - samsung,exynos5433-pmu
--          - samsung,exynos7-pmu
--          - samsung,exynos850-pmu
--          - samsung-s5pv210-pmu
--      - const: syscon
-+    oneOf:
-+      - items:
-+          - enum:
-+              - samsung,exynos3250-pmu
-+              - samsung,exynos4210-pmu
-+              - samsung,exynos4412-pmu
-+              - samsung,exynos5250-pmu
-+              - samsung,exynos5260-pmu
-+              - samsung,exynos5410-pmu
-+              - samsung,exynos5420-pmu
-+              - samsung,exynos5433-pmu
-+              - samsung,exynos7-pmu
-+              - samsung,exynos850-pmu
-+              - samsung-s5pv210-pmu
-+          - const: syscon
-+      - items:
-+          - enum:
-+              - samsung,exynos5250-pmu
-+              - samsung,exynos5420-pmu
-+              - samsung,exynos5433-pmu
-+          - const: simple-mfd
-+          - const: syscon
++	vma_start_write(vma);
+ 	anon_vma_lock_write(vma->anon_vma);
  
-   reg:
-     maxItems: 1
-@@ -64,6 +72,10 @@ properties:
-     minItems: 1
-     maxItems: 32
+ 	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm, address,
+@@ -1601,6 +1602,9 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 		goto drop_hpage;
+ 	}
  
-+  dp-phy:
-+    $ref: /schemas/phy/samsung,dp-video-phy.yaml
-+    unevaluatedProperties: false
++	/* Lock the vma before taking i_mmap and page table locks */
++	vma_start_write(vma);
 +
-   interrupt-controller:
-     description:
-       Some PMUs are capable of behaving as an interrupt controller (mostly
-@@ -74,6 +86,10 @@ properties:
-       Must be identical to the that of the parent interrupt controller.
-     const: 3
- 
-+  mipi-phy:
-+    $ref: /schemas/phy/samsung,mipi-video-phy.yaml
-+    unevaluatedProperties: false
-+
-   reboot-mode:
-     $ref: /schemas/power/reset/syscon-reboot-mode.yaml
-     type: object
-@@ -117,6 +133,23 @@ allOf:
-         - clock-names
-         - clocks
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - samsung,exynos5250-pmu
-+              - samsung,exynos5420-pmu
-+              - samsung,exynos5433-pmu
-+    then:
-+      properties:
-+        dp-phy: true
-+        mipi-phy: true
-+    else:
-+      properties:
-+        dp-phy: false
-+        mipi-phy: false
-+
- examples:
-   - |
-     #include <dt-bindings/clock/exynos5250.h>
-@@ -130,4 +163,14 @@ examples:
-         #clock-cells = <1>;
-         clock-names = "clkout16";
-         clocks = <&clock CLK_FIN_PLL>;
-+
-+        dp-phy {
-+            compatible = "samsung,exynos5250-dp-video-phy";
-+            #phy-cells = <0>;
-+        };
-+
-+        mipi-phy {
-+            compatible = "samsung,s5pv210-mipi-video-phy";
-+            #phy-cells = <1>;
-+        };
-     };
+ 	/*
+ 	 * We need to lock the mapping so that from here on, only GUP-fast and
+ 	 * hardware page walks can access the parts of the page tables that
+@@ -1806,6 +1810,7 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+ 				result = SCAN_PTE_UFFD_WP;
+ 				goto unlock_next;
+ 			}
++			vma_start_write(vma);
+ 			collapse_and_free_pmd(mm, vma, addr, pmd);
+ 			if (!cc->is_khugepaged && is_target)
+ 				result = set_huge_pmd(vma, addr, pmd, hpage);
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 15ae24585fc4..8e1a2ad9ca53 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -25,21 +25,22 @@
+  *     mapping->invalidate_lock (in filemap_fault)
+  *       page->flags PG_locked (lock_page)
+  *         hugetlbfs_i_mmap_rwsem_key (in huge_pmd_share, see hugetlbfs below)
+- *           mapping->i_mmap_rwsem
+- *             anon_vma->rwsem
+- *               mm->page_table_lock or pte_lock
+- *                 swap_lock (in swap_duplicate, swap_info_get)
+- *                   mmlist_lock (in mmput, drain_mmlist and others)
+- *                   mapping->private_lock (in block_dirty_folio)
+- *                     folio_lock_memcg move_lock (in block_dirty_folio)
+- *                       i_pages lock (widely used)
+- *                         lruvec->lru_lock (in folio_lruvec_lock_irq)
+- *                   inode->i_lock (in set_page_dirty's __mark_inode_dirty)
+- *                   bdi.wb->list_lock (in set_page_dirty's __mark_inode_dirty)
+- *                     sb_lock (within inode_lock in fs/fs-writeback.c)
+- *                     i_pages lock (widely used, in set_page_dirty,
+- *                               in arch-dependent flush_dcache_mmap_lock,
+- *                               within bdi.wb->list_lock in __sync_single_inode)
++ *           vma_start_write
++ *             mapping->i_mmap_rwsem
++ *               anon_vma->rwsem
++ *                 mm->page_table_lock or pte_lock
++ *                   swap_lock (in swap_duplicate, swap_info_get)
++ *                     mmlist_lock (in mmput, drain_mmlist and others)
++ *                     mapping->private_lock (in block_dirty_folio)
++ *                       folio_lock_memcg move_lock (in block_dirty_folio)
++ *                         i_pages lock (widely used)
++ *                           lruvec->lru_lock (in folio_lruvec_lock_irq)
++ *                     inode->i_lock (in set_page_dirty's __mark_inode_dirty)
++ *                     bdi.wb->list_lock (in set_page_dirty's __mark_inode_dirty)
++ *                       sb_lock (within inode_lock in fs/fs-writeback.c)
++ *                       i_pages lock (widely used, in set_page_dirty,
++ *                                 in arch-dependent flush_dcache_mmap_lock,
++ *                                 within bdi.wb->list_lock in __sync_single_inode)
+  *
+  * anon_vma->rwsem,mapping->i_mmap_rwsem   (memory_failure, collect_procs_anon)
+  *   ->tasklist_lock
 -- 
-2.34.1
+2.39.1
 
