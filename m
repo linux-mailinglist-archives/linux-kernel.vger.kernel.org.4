@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9A167E8E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6BC67E8E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233998AbjA0PDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:03:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
+        id S234119AbjA0PFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:05:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbjA0PDb (ORCPT
+        with ESMTP id S229687AbjA0PFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:03:31 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011217BE6E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:03:28 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id b10so4876295pjo.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:03:28 -0800 (PST)
+        Fri, 27 Jan 2023 10:05:43 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1824A7BE69;
+        Fri, 27 Jan 2023 07:05:43 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso3680011wmq.5;
+        Fri, 27 Jan 2023 07:05:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n31FklM0OYREnHA1tP1e3LSdaHgDa9JeETQaAtpDNx0=;
-        b=M6SSWaRKvHYyXnHeqRhKyDiua1oMz8Hd3PukoMuD6rBmopInZtl50XdRMj6ER5UXOv
-         RLP15t2X51gbC98s/9gPou7TistUJOmaDVU6OqMgrl2l7qxgftafZmdGPY9Yz34GIPxP
-         YK2CuOV46j3Vrbn9ayuLfteOAltptj+Xdk15vmSkmo902j9QETHVjAAF3k2EhL9N42kl
-         qpUh3S4rTSAVhq3SbRFcf8jdAy9W+Cv9c8cITddHJQ9guoLJFU+82ncQiOYpnznCreHg
-         4mfZmNYqI0wROQWoQy7otgEd9hr8NXVVRPBGip6GQMsadaSA5DfZrXOPILlXqAmCbiuV
-         coPA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gepcoh1/hxUv6nKXHcQhtixyQIosb0XKZ35X3906qAc=;
+        b=NWDPk6+RdbArgGiYL2c5OoIy8HWhZyEEVG07FXCpyTehvXUE2Pbj6JtRkyyb+fAKkj
+         lmL1qZoIP+vYKEdjggclryVwDP34zv6/ghLS2wSes30w3la4h71562IhnhZkGr9PVnnB
+         AaWKkRvl3/CTBMCme5T4jjoQLn1gwPfhHachm8k2qF8bPt/2CUW+Ap30AsPBzy0xtUNA
+         QKi+CENchAych+BeBIREvESp9b3OPZYugMqUsiCkaSayIU3Vlok0qot4UdwlAl6Sw9Wy
+         3m8qFBVykVI5Fs43V7I4q4BMd79W2bURAEaKzdmJAgGV4R65Ssk+giv5+pbTaEyJv0Bh
+         Om5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n31FklM0OYREnHA1tP1e3LSdaHgDa9JeETQaAtpDNx0=;
-        b=cTs80LtbdGR9wJIJfSiY/P606JaDBSwP4NQomBMBIZggg3vxfoSZOQrUucVeBZXVuT
-         ypgoBrqJyf+gLGwZU/yr8t/uIMXU88QQB+Ul3ikk+q4Ftkj13zyOITvsLwujWRuq/sQ8
-         KqxHtGQ5xOTpmbVZfOvDWZZwCKngSiixMLiBKWXgM6D0f5OxuiiTTOTApyO5NOrseP0Q
-         uzmOFbbk0Z2nHocbvDH2ddsRLEznTnJEgc6GB9C9dRQkLER0jmLpM3M2tLAl8q1gcOdf
-         PWi2MQIUuPxlgK8nT2TSLoFf6AFNG+wNIvav6cyYkpHQSbtiU3O6Z8fFpP27GuwGeBCA
-         0wtw==
-X-Gm-Message-State: AFqh2kogTQTM0n8uqr/hKDqdtts3yfyRZR65wSlIFqrrO3qOBNsjHthz
-        OFUKUeZEYdn+qPx4WTL0u5U=
-X-Google-Smtp-Source: AMrXdXu8fOFjL0+xdFqgqCe+WGF6zeplIVby1Vxp1yf0RzVYaCVenBITz8K3fDdfqv0cIcld35fvHw==
-X-Received: by 2002:a17:903:124c:b0:194:d664:be3a with SMTP id u12-20020a170903124c00b00194d664be3amr36226903plh.16.1674831808380;
-        Fri, 27 Jan 2023 07:03:28 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id t18-20020a1709028c9200b0017a032d7ae4sm2983879plo.104.2023.01.27.07.03.25
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gepcoh1/hxUv6nKXHcQhtixyQIosb0XKZ35X3906qAc=;
+        b=chIPXrRu6D5KSzRf74/pqy6xpVxD8KHG7oLSn9JKZPEdAgWd+1NEWCWJ4hMeh8/7ob
+         1bnJBhBA254tzP7oWulxVRXqLIT6ADVw7xfVGQnsqIgdfIl5xr20AQTPH7skfQLfyeR9
+         oueepp8X7SiB8eIubEm+Lvn17tKQbBeIUMQhsNIFRoauNllQJsiZvewFF1f7bdmxt1ef
+         mMd41QWEkLZgRIhpmZ/aWcc6TA0hefUyL+yNhEicOUXalaSNOEwNkuZXk7W6shZ0XyJm
+         xNOQCTRLEYgQQS3XqNEqajl+Xc07bS/E0Kp9vNFs5C1ABW1c/OdnT9SfBl2SHYehD/AR
+         Pm4A==
+X-Gm-Message-State: AFqh2kqXmMXnW3FWfzNtOON0H/K2wkXeeV3xj0WdeFzt05dnSZ/N52CU
+        awWAEBjqmJQh3ddUP1dR/bs=
+X-Google-Smtp-Source: AMrXdXuSp44ZwmQGg0LnuJYoMK1vu0OceJljCbHt02EaiC/wLkMHGzV3oBGBHANWrskj1koMT2WeAQ==
+X-Received: by 2002:a05:600c:5386:b0:3cf:9844:7b11 with SMTP id hg6-20020a05600c538600b003cf98447b11mr41889835wmb.23.1674831941414;
+        Fri, 27 Jan 2023 07:05:41 -0800 (PST)
+Received: from toolbox.. ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id l4-20020a7bc444000000b003db03725e86sm4573395wmi.8.2023.01.27.07.05.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 07:03:27 -0800 (PST)
-Date:   Sat, 28 Jan 2023 00:03:19 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Hyunmin Lee <hn.min.lee@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] replace BUG_ON to WARN_ON
-Message-ID: <Y9PntwfqtarxWFUq@hyeyoo>
-References: <20230127115844.GA1124261@min-iamroot>
+        Fri, 27 Jan 2023 07:05:40 -0800 (PST)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/2] dt-bindings: arm: amlogic: add support for Radxa Zero2
+Date:   Fri, 27 Jan 2023 15:05:35 +0000
+Message-Id: <20230127150536.3719090-1-christianshewitt@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127115844.GA1124261@min-iamroot>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,65 +76,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Hyunmin.
+The Radxa Zero2 is a small form-factor SBC using the Amlogic
+A311D chip.
 
-the subject line could be "mm/vmalloc: replace BUG_ON() with WARN_ON()".
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Changes from v1:
+- Add Krzysztof's Ack
 
-On Fri, Jan 27, 2023 at 08:58:44PM +0900, Hyunmin Lee wrote:
-> Replace unnacessary BUG_ON to WARN_ON. These BUG_ONs verify aruguments of a function. Thus, the WARN_ONs return an EINVAL error when their condition is true.
-> 
-> Co-Developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-> Co-Developed-by: Jeungwoo Yoo <casionwoo@gmail.com>
-> Co-Developed-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
-> Signed-off-by: Hyunmin Lee <hn.min.lee@gmail.com>
-> Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-> Signed-off-by: Jeungwoo Yoo <casionwoo@gmail.com>
-> Signed-off-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
-> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+ Documentation/devicetree/bindings/arm/amlogic.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-could be rephrased a little, like:
+diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml b/Documentation/devicetree/bindings/arm/amlogic.yaml
+index 8aa6b6a92c29..6e3cb5a0d879 100644
+--- a/Documentation/devicetree/bindings/arm/amlogic.yaml
++++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
+@@ -154,6 +154,7 @@ properties:
+         items:
+           - enum:
+               - khadas,vim3
++              - radxa,zero2
+           - const: amlogic,a311d
+           - const: amlogic,g12b
+ 
+-- 
+2.34.1
 
-"As per the coding standards, in the event of an abnormal condition that
-should not occur under normal circumstances, the kernel should attempt
-recovery and proceed with execution, rather than halting the machine.
-
-Specifically, in the alloc_vmap_area() function, use WARN_ON()
-and fail the request instead of using BUG_ON() to halt the machine."
-
-> ---
->  mm/vmalloc.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 74afa2208558..9f9dba3132c5 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -1587,9 +1587,14 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
->  	int purged = 0;
->  	int ret;
->  
-> -	BUG_ON(!size);
-> -	BUG_ON(offset_in_page(size));
-> -	BUG_ON(!is_power_of_2(align));
-> +	if (WARN_ON(!size))
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	if (WARN_ON(offset_in_page(size)))
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	if (WARN_ON(!is_power_of_2(align)))
-> +		return ERR_PTR(-EINVAL);
->  
->  	if (unlikely(!vmap_initialized))
->  		return ERR_PTR(-EBUSY);
-> -- 
-> 2.25.1
-
-The code change itself looks fine to me.
-
-Even if BUG*() -> WARN*() conversion may not be a high priority task,
-I see no reason to reject such changes.
-
---
-Thanks,
-Hyeonggon
