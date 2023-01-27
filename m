@@ -2,73 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6E567DABE
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF90B67DCE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 05:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbjA0A1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 19:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S229620AbjA0EjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 23:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232413AbjA0A1t (ORCPT
+        with ESMTP id S229448AbjA0EjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 19:27:49 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E90422D;
-        Thu, 26 Jan 2023 16:27:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4tsT3/dH8/GvxCkoJ1Hrq2573zBWw14jX8XahqqhkXs=; b=jb9voXpfNEv7q8s+ZARwZ//4C+
-        pWX9ZeeD363nsjjTWWcxk50UOO0LPdtz2EUiVwsIOwRw5gr3RsJv3k2R/YVgciXdghCvIaR7L6oid
-        S+Fv4zP/64rAPI2h3IvHYudgJl/PjZwAKcqwBXqFQHPsL8h+maQ4xedxwWTXxuORsLjrBE+1HFta9
-        7GISKkRpshMOx3DhE2R05N2eUnC6IUHaNfyV7G3qvY5M6atGkYp7ZYTtKUiqY1Wb6zR3L/2nKwFf4
-        qohEapgYWvUwN0px0O7ZMw+/dCQdFLvPEv98pdZnogzSa3iH6xWKPgQLDvMitW4NHf9azXJLewNh5
-        BPzycLRg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pLCap-00Czd1-Ok; Fri, 27 Jan 2023 00:27:47 +0000
-Date:   Thu, 26 Jan 2023 16:27:47 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        Nick Kossifidis <mickflemm@gmail.com>,
-        Youghandhar Chintala <quic_youghand@quicinc.com>,
-        junyuu@chromium.org, Kalle Valo <kvalo@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/2] wifi: ath11k: Use platform_get_irq() to get the
- interrupt
-Message-ID: <Y9Mag0CmfhRKdmZD@bombadil.infradead.org>
-References: <20230124110057.1.I69cf3d56c97098287fe3a70084ee515098390b70@changeid>
- <Y9LODwJPQpPs32Ds@bombadil.infradead.org>
- <CAD=FV=WEQL+Kik9ZkvtzNKN+-ofZ=-g3OzyUnnJc7PWnRzLdEw@mail.gmail.com>
+        Thu, 26 Jan 2023 23:39:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2DE39B9E
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 20:38:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674794290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8CP3YQJy/1BqI0NOeozKEh6zQUilSGJ56jPhvOdxgCg=;
+        b=JznjTcYp6it8SZ82QS+BgPzJO/VDSHyRTlK8q2jAQln/zJRPHXlamzPJ+Kj00AoZ0siKUq
+        ZoPhzzmLrnjAJPcjOqQJeijhCyTgn53d5ASMNs4josDLnb13EzaA/M72FAAnvS4CRFIiK8
+        TiQuXRfloS8kDXRkTCNnxoc/+y9KNbo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-434-5yczKWEpPFuzhKGqukOaPg-1; Thu, 26 Jan 2023 23:38:06 -0500
+X-MC-Unique: 5yczKWEpPFuzhKGqukOaPg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2981C80D0E6;
+        Fri, 27 Jan 2023 04:38:06 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B27824014CE2;
+        Fri, 27 Jan 2023 04:38:05 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 9D38042627607; Thu, 26 Jan 2023 21:32:18 -0300 (-03)
+Date:   Thu, 26 Jan 2023 21:32:18 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+Message-ID: <Y9MbkuBDI+08AtgN@tpad>
+References: <20230125073502.743446-1-leobras@redhat.com>
+ <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+ <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+ <Y9FzSBw10MGXm2TK@tpad>
+ <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
+ <Y9Iurktut9B9T+Tl@dhcp22.suse.cz>
+ <Y9LAf4pRyClZ1vfx@tpad>
+ <Y9LSjnNEEUiF/70R@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=WEQL+Kik9ZkvtzNKN+-ofZ=-g3OzyUnnJc7PWnRzLdEw@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9LSjnNEEUiF/70R@dhcp22.suse.cz>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 04:14:42PM -0800, Doug Anderson wrote:
-> > To that end. Why not write an SmPL Coccinelle grammer patch for this
-> > and put it on scripts/coccinelle/api ? Then hunt / convert things which
-> > will use DT as well and where this is actually useful / likely buggy.
+On Thu, Jan 26, 2023 at 08:20:46PM +0100, Michal Hocko wrote:
+> On Thu 26-01-23 15:03:43, Marcelo Tosatti wrote:
+> > On Thu, Jan 26, 2023 at 08:41:34AM +0100, Michal Hocko wrote:
+> > > On Wed 25-01-23 15:14:48, Roman Gushchin wrote:
+> > > > On Wed, Jan 25, 2023 at 03:22:00PM -0300, Marcelo Tosatti wrote:
+> > > > > On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Brás wrote:
+> > > > > > On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
+> > > > > > > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
+> > > > > > > > Disclaimer:
+> > > > > > > > a - The cover letter got bigger than expected, so I had to split it in
+> > > > > > > >     sections to better organize myself. I am not very confortable with it.
+> > > > > > > > b - Performance numbers below did not include patch 5/5 (Remove flags
+> > > > > > > >     from memcg_stock_pcp), which could further improve performance for
+> > > > > > > >     drain_all_stock(), but I could only notice the optimization at the
+> > > > > > > >     last minute.
+> > > > > > > > 
+> > > > > > > > 
+> > > > > > > > 0 - Motivation:
+> > > > > > > > On current codebase, when drain_all_stock() is ran, it will schedule a
+> > > > > > > > drain_local_stock() for each cpu that has a percpu stock associated with a
+> > > > > > > > descendant of a given root_memcg.
+> > > > 
+> > > > Do you know what caused those drain_all_stock() calls? I wonder if we should look
+> > > > into why we have many of them and whether we really need them?
+> > > > 
+> > > > It's either some user's actions (e.g. reducing memory.max), either some memcg
+> > > > is entering pre-oom conditions. In the latter case a lot of drain calls can be
+> > > > scheduled without a good reason (assuming the cgroup contain multiple tasks running
+> > > > on multiple cpus).
+> > > 
+> > > I believe I've never got a specific answer to that. We
+> > > have discussed that in the previous version submission
+> > > (20221102020243.522358-1-leobras@redhat.com and specifically
+> > > Y2TQLavnLVd4qHMT@dhcp22.suse.cz). Leonardo has mentioned a mix of RT and
+> > > isolcpus. I was wondering about using memcgs in RT workloads because
+> > > that just sounds weird but let's say this is the case indeed. 
+> > 
+> > This could be the case. You can consider an "edge device" where it is
+> > necessary to run a RT workload. It might also be useful to run 
+> > non realtime applications on the same system.
+> > 
+> > > Then an RT task or whatever task that is running on an isolated
+> > > cpu can have pcp charges.
+> > 
+> > Usually the RT task (or more specifically the realtime sensitive loop
+> > of the application) runs entirely on userspace. But i suppose there
+> > could be charges on application startup.
 > 
-> That sounds like a great idea. ...but not something I'm going to do.
+> What is the role of memcg then? If the memory limit is in place and the
+> workload doesn't fit in then it will get reclaimed during start up and
+> memory would need to be refaulted if not mlocked. If it is mlocked then
+> the limit cannot be enforced and the start up would likely fail as a
+> result of the memcg oom killer.
 
-:*(
+1) Application which is not time sensitive executes on isolated CPU,
+with memcg control enabled. Per-CPU stock is created.
 
-  Luis
+2) App with memcg control enabled exits, per-CPU stock is not drained.
+
+3) Latency sensitive application starts, isolated per-CPU has stock to
+be drained, and:
+
+/*
+ * Drains all per-CPU charge caches for given root_memcg resp. subtree
+ * of the hierarchy under it.
+ */
+static void drain_all_stock(struct mem_cgroup *root_memcg)
+{
+        int cpu, curcpu;
+
+        /* If someone's already draining, avoid adding running more workers. */
+        if (!mutex_trylock(&percpu_charge_mutex))
+                return;
+        /*
+         * Notify other cpus that system-wide "drain" is running
+         * We do not care about races with the cpu hotplug because cpu down
+         * as well as workers from this path always operate on the local
+         * per-cpu data. CPU up doesn't touch memcg_stock at all.
+         */
+        migrate_disable();
+        curcpu = smp_processor_id();
+        for_each_online_cpu(cpu) {
+                struct memcg_stock_pcp *stock = &per_cpu(memcg_stock, cpu);
+                struct mem_cgroup *memcg;
+                bool flush = false;
+
+                rcu_read_lock();
+                memcg = stock->cached;
+                if (memcg && stock->nr_pages &&
+                    mem_cgroup_is_descendant(memcg, root_memcg))
+                        flush = true;
+                else if (obj_stock_flush_required(stock, root_memcg))
+                        flush = true;
+                rcu_read_unlock();
+
+                if (flush &&
+                    !test_and_set_bit(FLUSHING_CACHED_CHARGE, &stock->flags)) {
+                        if (cpu == curcpu)
+                                drain_local_stock(&stock->work);
+                        else
+                                schedule_work_on(cpu, &stock->work);
+                }
+        }
+        migrate_enable();
+        mutex_unlock(&percpu_charge_mutex);
+}
+
+> [...]
+> > > > Overall I'm somewhat resistant to an idea of making generic allocation & free paths slower
+> > > > for an improvement of stock draining. It's not a strong objection, but IMO we should avoid
+> > > > doing this without a really strong reason.
+> > > 
+> > > Are you OK with a simple opt out on isolated CPUs? That would make
+> > > charges slightly slower (atomic on the hierarchy counters vs. a single
+> > > pcp adjustment) but it would guarantee that the isolated workload is
+> > > predictable which is the primary objective AFAICS.
+> > 
+> > This would make isolated CPUs "second class citizens": it would be nice
+> > to be able to execute non realtime apps on isolated CPUs as well
+> > (think of different periods of time during a day, one where 
+> > more realtime apps are required, another where less 
+> > realtime apps are required).
+> 
+> An alternative requires to make the current implementation that is
+> lockless to use locks and introduce potential lock contention. This
+> could be harmful to regular workloads. Not using pcp caching would make
+> a fast path using few atomics rather than local pcp update. That is not
+> a terrible cost to pay for special cased workloads which use isolcpus.
+> Really we are not talking about a massive cost to be payed. At least
+> nobody has shown that in any numbers.
+> 
+> > Concrete example: think of a computer handling vRAN traffic near a 
+> > cell tower. The traffic (therefore amount of processing required
+> > by realtime applications) might vary during the day.
+> > 
+> > User might want to run containers that depend on good memcg charging
+> > performance on isolated CPUs.
+> 
+> What kind of role would memcg play here? Do you want to memory constrain
+> that workload?
+
+See example above.
+
+> -- 
+> Michal Hocko
+> SUSE Labs
+> 
+> 
+
