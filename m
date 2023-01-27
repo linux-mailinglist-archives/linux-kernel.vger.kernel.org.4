@@ -2,87 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2133E67DB37
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 02:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB5567DB3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 02:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjA0B0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 20:26:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        id S233103AbjA0B1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 20:27:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjA0B0H (ORCPT
+        with ESMTP id S229446AbjA0B1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 20:26:07 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194A870D4B;
-        Thu, 26 Jan 2023 17:26:03 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7494B5C0135;
-        Thu, 26 Jan 2023 20:26:02 -0500 (EST)
-Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 20:26:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674782762; x=1674869162; bh=Uyn0GCb5o1
-        bYMEPxxSY7qoZaJF2u/eBouvclgqEGYes=; b=rhat66Sh6eYyGObGxIkD/EWNQg
-        JKvbUVYX10pRzk9Ged0gEkz0f9LhlTQA1l7TC5/6pMwYp92TfY+2xJs2Q44tadj+
-        Ls6riwBS9xH5Eewf7dhMpooVqKwUk10aWzstBs29fQVAKW41xEAxE3mLxFybRSQe
-        4spyHFJHPjaT/Arkh6Zkof0Y34QH97vRKb42E8mxtrqNIGzefyZHFemaM0NEDz3K
-        rDGnxjuOzQ20qKF2cXltrusbS1pj6mzcjUl+FF8FpGyNUkS0uba4I0hod9cX9skW
-        Rhwmqs+W5+OYFtTq2bpWnF3smqzLx0pqFE2SaO5Yymy2KDsllFfsXmDI8Hqw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674782762; x=1674869162; bh=Uyn0GCb5o1bYMEPxxSY7qoZaJF2u
-        /eBouvclgqEGYes=; b=rAj+HX9Qw8w2KD1Z/zkagCzwp+IvHeUWzcy9RwuQCmk2
-        mtJyBbpWJySHgAgBeY3uoAcjxETMLJg18x7063vMHnWUMlO2Iz2g7Ww0gwPqws48
-        z5XftvKHknrdl1Q04Tw8hJNZwgtapGrxGQomSemb1ApeGePeWHvt90HvuVXkpmTB
-        5gVcfjYK3FVghntv6bLsvlXn6cAmEv1FxV4k394pzYCMCl1LT8KHsAL+vct5b51y
-        P9bvygBd851MjrvPdAGpGCgiE2b6Wh7DZ8VZu1T6L0cLqPQnc6cP8sipsKF+KsCe
-        hMiQC5Jeb7XsEUXvkej9a93mlq6ud0v/EOMooLonOg==
-X-ME-Sender: <xms:KSjTY2eXS2BWDg6iWEiKJEcgNNczN8Ro_DGxrwUtttcN8ujdRIjp8Q>
-    <xme:KSjTYwMdIBexrBocVFbDv3P3-Gb6cXl2rENw57Zcbby64zQw2ufVHa8euJWNZjFCT
-    rFqtbBTWX_hlZ3Xxg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvhedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
-    frrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeetteduvedtffdtledutdfhheev
-    feetkeeiteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
-X-ME-Proxy: <xmx:KSjTY3hk4QJ_1VhEhLWVC_ChfvvqVR_iVhNtrwfejk3O7cHrKiH_zw>
-    <xmx:KSjTYz8Dv62T01pmZb6kEUJeppEEGaywzL-_yhMe2QNxl3A09BepQg>
-    <xmx:KSjTYyvAlnMElN35EvEaYj32Es1RjatiwgkrnY4DpPuqINly20W48Q>
-    <xmx:KijTY8JxJ9GqcebEM87A2J_LH4iu6eikdwlg3wFYO8USb00IlLSaJA>
-Feedback-ID: idfb84289:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B5F621700090; Thu, 26 Jan 2023 20:26:01 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <47d97eb4-cb75-4697-827d-4985012b3c0a@app.fastmail.com>
-In-Reply-To: <20230126213123.884125-3-eajames@linux.ibm.com>
-References: <20230126213123.884125-1-eajames@linux.ibm.com>
- <20230126213123.884125-3-eajames@linux.ibm.com>
-Date:   Fri, 27 Jan 2023 11:55:11 +1030
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Eddie James" <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
-Cc:     linux-trace-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Alistair Popple" <alistair@popple.id.au>,
-        "Joel Stanley" <joel@jms.id.au>, "Jeremy Kerr" <jk@ozlabs.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v3 2/2] fsi: Add IBM I2C Responder virtual FSI master
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        Thu, 26 Jan 2023 20:27:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576E9728C1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:26:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674782790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hbvey5wHHvjs/oXB5rGmtyX2nEk7d2EsdqbZiV/BBWQ=;
+        b=Tm8aQrofQY+hN1ujG6HAptOoTxUwnobxz99+isUELGJCaxIwtjNAOYqu0Nu63mUbSit8A8
+        HHL99m7DOyWY4YXAnV1RUzC4PMMc5lg32d1QSjFN92k07sfNWE97GbzXOekW/bKZiS8cc5
+        PN3Jr5OrpNQccIB+14qX8Kt+du9M8Fc=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-265-xW-AEiVIOIunJl2AYFsUNw-1; Thu, 26 Jan 2023 20:26:28 -0500
+X-MC-Unique: xW-AEiVIOIunJl2AYFsUNw-1
+Received: by mail-ed1-f72.google.com with SMTP id b15-20020a056402350f00b0049e42713e2bso2561519edd.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:26:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hbvey5wHHvjs/oXB5rGmtyX2nEk7d2EsdqbZiV/BBWQ=;
+        b=Q2Qglo/TcL4qRPOIFIdMxKhAAJZYe8sQcu9GOd7Y4hI39Wx/cHfqzkPnzQLOogZvxF
+         H7ES5Ghdy9oR65oLtHDYLPUkGiMazXilQuhtlHPWbBP5R/IJJK8Qp0ioXT9z8vqMg0T2
+         +G2Xr1bWFPL6AiQdTjtLZBvsJYwo+HBh/c0tu8p54j+PBgw3/vvq7MrDNCFXePYT+u4G
+         oQW36yWXiKM2top3kUXH2g8fxmxNfFBPHEpOJ9HLc/Q1hOFoaFSEHPnYFjLAs3Y9Bk8B
+         0VZbWeglatSmawnXHccql8pXq2vfaNdQ+J7ronLfr5YannMyKGS69YsuikxEyI7s3XYM
+         sSNg==
+X-Gm-Message-State: AFqh2kpLL/JOrM13OHKXbTRtK/hFml6txXcozuMpoL/ZF6yP3zemv6vE
+        U3HG4zHZ8Q3c0nqyiOiTaNepVR2h6P/+mIPPxYu8hcmjzI5ONj3gyU9Q6CNxkJfhbVrfOCqPEUg
+        yXl4dnDSY8o1HF6Ne13ZzJtFw
+X-Received: by 2002:aa7:c845:0:b0:497:b6bc:b811 with SMTP id g5-20020aa7c845000000b00497b6bcb811mr37913421edt.33.1674782787022;
+        Thu, 26 Jan 2023 17:26:27 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu6lha1mIb8CVkXNvveMAnSWzbNPvcCRf2xMZqXV2fpjBOJrCyBsekrS27Y2oQ8i/77wGdXrA==
+X-Received: by 2002:aa7:c845:0:b0:497:b6bc:b811 with SMTP id g5-20020aa7c845000000b00497b6bcb811mr37913404edt.33.1674782786693;
+        Thu, 26 Jan 2023 17:26:26 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id j23-20020aa7c0d7000000b0046892e493dcsm1530377edp.26.2023.01.26.17.26.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 17:26:26 -0800 (PST)
+Message-ID: <7c046ff9-728d-7634-9d77-8536308c7481@redhat.com>
+Date:   Fri, 27 Jan 2023 02:26:24 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH drm-next 05/14] drm/nouveau: new VM_BIND uapi interfaces
+Content-Language: en-US
+To:     Matthew Brost <matthew.brost@intel.com>
+Cc:     daniel@ffwll.ch, airlied@redhat.com, christian.koenig@amd.com,
+        bskeggs@redhat.com, jason@jlekstrand.net, tzimmermann@suse.de,
+        mripard@kernel.org, corbet@lwn.net, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org
+References: <20230118061256.2689-1-dakr@redhat.com>
+ <20230118061256.2689-6-dakr@redhat.com>
+ <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,264 +88,332 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eddie,
-
-On Fri, 27 Jan 2023, at 08:01, Eddie James wrote:
-> The I2C Responder (I2CR) is an I2C device that translates I2C commands
-> to CFAM or SCOM operations, effectively implementing an FSI master and
-> bus.
->
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  drivers/fsi/Kconfig                    |   9 +
->  drivers/fsi/Makefile                   |   1 +
->  drivers/fsi/fsi-master-i2cr.c          | 225 +++++++++++++++++++++++++
->  include/trace/events/fsi_master_i2cr.h |  96 +++++++++++
->  4 files changed, 331 insertions(+)
->  create mode 100644 drivers/fsi/fsi-master-i2cr.c
->  create mode 100644 include/trace/events/fsi_master_i2cr.h
->
-> diff --git a/drivers/fsi/Kconfig b/drivers/fsi/Kconfig
-> index e6668a869913..999be82720c5 100644
-> --- a/drivers/fsi/Kconfig
-> +++ b/drivers/fsi/Kconfig
-> @@ -62,6 +62,15 @@ config FSI_MASTER_ASPEED
+On 1/27/23 02:05, Matthew Brost wrote:
+> On Wed, Jan 18, 2023 at 07:12:47AM +0100, Danilo Krummrich wrote:
+>> This commit provides the interfaces for the new UAPI motivated by the
+>> Vulkan API. It allows user mode drivers (UMDs) to:
+>>
+>> 1) Initialize a GPU virtual address (VA) space via the new
+>>     DRM_IOCTL_NOUVEAU_VM_INIT ioctl. UMDs can provide a kernel reserved
+>>     VA area.
+>>
+>> 2) Bind and unbind GPU VA space mappings via the new
+>>     DRM_IOCTL_NOUVEAU_VM_BIND ioctl.
+>>
+>> 3) Execute push buffers with the new DRM_IOCTL_NOUVEAU_EXEC ioctl.
+>>
+>> Both, DRM_IOCTL_NOUVEAU_VM_BIND and DRM_IOCTL_NOUVEAU_EXEC support
+>> asynchronous processing with DRM syncobjs as synchronization mechanism.
+>>
+>> The default DRM_IOCTL_NOUVEAU_VM_BIND is synchronous processing,
+>> DRM_IOCTL_NOUVEAU_EXEC supports asynchronous processing only.
+>>
+>> Co-authored-by: Dave Airlie <airlied@redhat.com>
+>> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+>> ---
+>>   Documentation/gpu/driver-uapi.rst |   8 ++
+>>   include/uapi/drm/nouveau_drm.h    | 216 ++++++++++++++++++++++++++++++
+>>   2 files changed, 224 insertions(+)
+>>
+>> diff --git a/Documentation/gpu/driver-uapi.rst b/Documentation/gpu/driver-uapi.rst
+>> index 4411e6919a3d..9c7ca6e33a68 100644
+>> --- a/Documentation/gpu/driver-uapi.rst
+>> +++ b/Documentation/gpu/driver-uapi.rst
+>> @@ -6,3 +6,11 @@ drm/i915 uAPI
+>>   =============
+>>   
+>>   .. kernel-doc:: include/uapi/drm/i915_drm.h
+>> +
+>> +drm/nouveau uAPI
+>> +================
+>> +
+>> +VM_BIND / EXEC uAPI
+>> +-------------------
+>> +
+>> +.. kernel-doc:: include/uapi/drm/nouveau_drm.h
+>> diff --git a/include/uapi/drm/nouveau_drm.h b/include/uapi/drm/nouveau_drm.h
+>> index 853a327433d3..f6e7d40201d4 100644
+>> --- a/include/uapi/drm/nouveau_drm.h
+>> +++ b/include/uapi/drm/nouveau_drm.h
+>> @@ -126,6 +126,216 @@ struct drm_nouveau_gem_cpu_fini {
+>>   	__u32 handle;
+>>   };
+>>   
+>> +/**
+>> + * struct drm_nouveau_sync - sync object
+>> + *
+>> + * This structure serves as synchronization mechanism for (potentially)
+>> + * asynchronous operations such as EXEC or VM_BIND.
+>> + */
+>> +struct drm_nouveau_sync {
+>> +	/**
+>> +	 * @flags: the flags for a sync object
+>> +	 *
+>> +	 * The first 8 bits are used to determine the type of the sync object.
+>> +	 */
+>> +	__u32 flags;
+>> +#define DRM_NOUVEAU_SYNC_SYNCOBJ 0x0
+>> +#define DRM_NOUVEAU_SYNC_TIMELINE_SYNCOBJ 0x1
+>> +#define DRM_NOUVEAU_SYNC_TYPE_MASK 0xf
+>> +	/**
+>> +	 * @handle: the handle of the sync object
+>> +	 */
+>> +	__u32 handle;
+>> +	/**
+>> +	 * @timeline_value:
+>> +	 *
+>> +	 * The timeline point of the sync object in case the syncobj is of
+>> +	 * type DRM_NOUVEAU_SYNC_TIMELINE_SYNCOBJ.
+>> +	 */
+>> +	__u64 timeline_value;
+>> +};
+>> +
+>> +/**
+>> + * struct drm_nouveau_vm_init - GPU VA space init structure
+>> + *
+>> + * Used to initialize the GPU's VA space for a user client, telling the kernel
+>> + * which portion of the VA space is managed by the UMD and kernel respectively.
+>> + */
+>> +struct drm_nouveau_vm_init {
+>> +	/**
+>> +	 * @unmanaged_addr: start address of the kernel managed VA space region
+>> +	 */
+>> +	__u64 unmanaged_addr;
+>> +	/**
+>> +	 * @unmanaged_size: size of the kernel managed VA space region in bytes
+>> +	 */
+>> +	__u64 unmanaged_size;
+>> +};
+>> +
+>> +/**
+>> + * struct drm_nouveau_vm_bind_op - VM_BIND operation
+>> + *
+>> + * This structure represents a single VM_BIND operation. UMDs should pass
+>> + * an array of this structure via struct drm_nouveau_vm_bind's &op_ptr field.
+>> + */
+>> +struct drm_nouveau_vm_bind_op {
+>> +	/**
+>> +	 * @op: the operation type
+>> +	 */
+>> +	__u32 op;
+>> +/**
+>> + * @DRM_NOUVEAU_VM_BIND_OP_ALLOC:
+>> + *
+>> + * The alloc operation is used to reserve a VA space region within the GPU's VA
+>> + * space. Optionally, the &DRM_NOUVEAU_VM_BIND_SPARSE flag can be passed to
+>> + * instruct the kernel to create sparse mappings for the given region.
+>> + */
+>> +#define DRM_NOUVEAU_VM_BIND_OP_ALLOC 0x0
 > 
->  	 Enable it for your BMC kernel in an OpenPower or IBM Power system.
+> Do you really need this operation? We have no concept of this in Xe,
+> e.g. we can create a VM and the entire address space is managed exactly
+> the same.
+
+The idea for alloc/free is to let UMDs allocate a portion of the VA 
+space (which I call a region), basically the same thing Vulkan 
+represents with a VKBuffer.
+
+It serves two purposes:
+
+1. It gives the kernel (in particular the GPUVA manager) the bounds in 
+which it is allowed to merge mappings. E.g. when a user request asks for 
+a new mapping and we detect we could merge this mapping with an existing 
+one (used in another VKBuffer than the mapping request came for) the 
+driver is not allowed to change the page table for the existing mapping 
+we want to merge with (assuming that some drivers would need to do this 
+in order to merge), because the existing mapping could already be in use 
+and by re-mapping it we'd potentially cause a fault on the GPU.
+
+2. It is used for sparse residency in a way that such an allocated VA 
+space region can be flagged as sparse, such that the kernel always keeps 
+sparse mappings around for the parts of the region that do not contain 
+actual memory backed mappings.
+
+If for your driver merging is always OK, creating a single huge region 
+would do the trick I guess. Otherwise, we could also add an option to 
+the GPUVA manager (or a specific region, which could also be a single 
+huge one) within which it never merges.
+
 > 
-> +config FSI_MASTER_I2CR
-> +	tristate "IBM I2C Responder virtual FSI master"
-> +	depends on I2C
-> +	help
-> +	  This option enables a virtual FSI master in order to access a CFAM
-> +	  behind an IBM I2C Responder (I2CR) chip. The I2CR is an I2C device
-> +	  that translates I2C commands to CFAM or SCOM operations, effectively
-> +	  implementing an FSI master and bus.
-> +
->  config FSI_SCOM
->  	tristate "SCOM FSI client device driver"
->  	help
-> diff --git a/drivers/fsi/Makefile b/drivers/fsi/Makefile
-> index da218a1ad8e1..34dbaa1c452e 100644
-> --- a/drivers/fsi/Makefile
-> +++ b/drivers/fsi/Makefile
-> @@ -4,6 +4,7 @@ obj-$(CONFIG_FSI) += fsi-core.o
->  obj-$(CONFIG_FSI_MASTER_HUB) += fsi-master-hub.o
->  obj-$(CONFIG_FSI_MASTER_ASPEED) += fsi-master-aspeed.o
->  obj-$(CONFIG_FSI_MASTER_GPIO) += fsi-master-gpio.o
-> +obj-$(CONFIG_FSI_MASTER_I2CR) += fsi-master-i2cr.o
->  obj-$(CONFIG_FSI_MASTER_AST_CF) += fsi-master-ast-cf.o
->  obj-$(CONFIG_FSI_SCOM) += fsi-scom.o
->  obj-$(CONFIG_FSI_SBEFIFO) += fsi-sbefifo.o
-> diff --git a/drivers/fsi/fsi-master-i2cr.c 
-> b/drivers/fsi/fsi-master-i2cr.c
-> new file mode 100644
-> index 000000000000..0eadc9b26063
-> --- /dev/null
-> +++ b/drivers/fsi/fsi-master-i2cr.c
-> @@ -0,0 +1,225 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (C) IBM Corporation 2023 */
-> +
-> +#include <linux/device.h>
-> +#include <linux/fsi.h>
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/mutex.h>
-> +
-> +#include "fsi-master.h"
-> +
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/fsi_master_i2cr.h>
-> +
-> +#define I2CR_ADDRESS_CFAM(a)	((a) >> 2)
-> +#define I2CR_STATUS		0x30001
-> +#define  I2CR_STATUS_ERR	 BIT_ULL(61)
-> +#define I2CR_ERROR		0x30002
-> +
-> +struct fsi_master_i2cr {
-> +	struct fsi_master master;
-> +	struct mutex lock;	/* protect HW access */
-> +	struct i2c_client *client;
-> +};
-> +
-> +static bool i2cr_check_parity(u32 v, bool parity)
-> +{
-> +	u32 i;
-> +
-> +	for (i = 0; i < 32; ++i) {
-> +		if (v & (1 << i))
-> +			parity = !parity;
-> +	}
-> +
-> +	return parity;
-> +}
-> +
-> +static __be32 i2cr_get_command(u32 address, bool parity)
-> +{
-> +	__be32 command;
-> +
-> +	address <<= 1;
-> +
-> +	if (i2cr_check_parity(address, parity))
-> +		address |= 1;
-> +
-> +	command = cpu_to_be32(address);
-> +	trace_i2cr_command((__force uint32_t)command);
-> +
-> +	return command;
-> +}
-> +
-> +static int i2cr_transfer(struct i2c_client *client, u32 address, 
-> __be64 *data)
-> +{
-> +	struct i2c_msg msgs[2];
-> +	__be32 command;
-> +	int ret;
-> +
-> +	command = i2cr_get_command(address, true);
-> +	msgs[0].addr = client->addr;
-> +	msgs[0].flags = 0;
-> +	msgs[0].len = sizeof(command);
-> +	msgs[0].buf = (__u8 *)&command;
-> +	msgs[1].addr = client->addr;
-> +	msgs[1].flags = I2C_M_RD;
-> +	msgs[1].len = sizeof(*data);
-> +	msgs[1].buf = (__u8 *)data;
-> +
-> +	ret = i2c_transfer(client->adapter, msgs, 2);
-> +	if (ret == 2)
-> +		return 0;
-> +
-> +	trace_i2cr_i2c_error(ret);
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return -EIO;
-> +}
-> +
-> +static int i2cr_check_status(struct i2c_client *client)
-> +{
-> +	__be64 status_be = 0;
-> +	u64 status;
-> +	int ret;
-> +
-> +	ret = i2cr_transfer(client, I2CR_STATUS, &status_be);
-> +	if (ret)
-> +		return ret;
-> +
-> +	status = be64_to_cpu(status_be);
-> +	if (status & I2CR_STATUS_ERR) {
-> +		__be64 error_be = 0;
-> +		u64 error;
-> +
-> +		i2cr_transfer(client, I2CR_ERROR, &error_be);
-> +		error = be64_to_cpu(error_be);
-> +		trace_i2cr_status_error(status, error);
-> +		dev_err(&client->dev, "status:%016llx error:%016llx\n", status, 
-> error);
-> +		return -EREMOTEIO;
-> +	}
-> +
-> +	trace_i2cr_status(status);
-> +	return 0;
-> +}
-> +
-> +static int i2cr_read(struct fsi_master *master, int link, uint8_t id, 
-> uint32_t addr, void *val,
-> +		     size_t size)
-> +{
-> +	struct fsi_master_i2cr *i2cr = container_of(master, struct 
-> fsi_master_i2cr, master);
-> +	__be64 data = 0;
-> +	int ret;
-> +
-> +	if (link || id || (addr & 0xffff0000) || !(size == 1 || size == 2 || 
-> size == 4))
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&i2cr->lock);
-> +
-> +	ret = i2cr_transfer(i2cr->client, I2CR_ADDRESS_CFAM(addr), &data);
-> +	if (ret)
-> +		goto unlock;
-> +
-> +	ret = i2cr_check_status(i2cr->client);
-> +	if (ret)
-> +		goto unlock;
-> +
-> +	trace_i2cr_read(addr, size, (__force uint32_t)data);
-> +	memcpy(val, &data, size);
-> +
-> +unlock:
-> +	mutex_unlock(&i2cr->lock);
-> +	return ret;
-> +}
-> +
-> +static int i2cr_write(struct fsi_master *master, int link, uint8_t id, 
-> uint32_t addr,
-> +		      const void *val, size_t size)
-> +{
-> +	struct fsi_master_i2cr *i2cr = container_of(master, struct 
-> fsi_master_i2cr, master);
-> +	struct {
-> +		__be32 command;
-> +		u32 val;
-> +		u32 rsvd;
-> +	} __packed data = { 0, 0, 0 };
-> +	int ret;
-> +
-> +	if (link || id || (addr & 0xffff0000) || !(size == 1 || size == 2 || 
-> size == 4))
-> +		return -EINVAL;
-> +
-> +	memcpy(&data.val, val, size);
+> If this can be removed then the entire concept of regions in the GPUVA
+> can be removed too (drop struct drm_gpuva_region). I say this because
+> in Xe as I'm porting over to GPUVA the first thing I'm doing after
+> drm_gpuva_manager_init is calling drm_gpuva_region_insert on the entire
+> address space. To me this seems kinda useless but maybe I'm missing why
+> you need this for Nouveau.
+> 
+> Matt
+> 
+>> +/**
+>> + * @DRM_NOUVEAU_VM_BIND_OP_FREE: Free a reserved VA space region.
+>> + */
+>> +#define DRM_NOUVEAU_VM_BIND_OP_FREE 0x1
+>> +/**
+>> + * @DRM_NOUVEAU_VM_BIND_OP_MAP:
+>> + *
+>> + * Map a GEM object to the GPU's VA space. The mapping must be fully enclosed by
+>> + * a previously allocated VA space region. If the region is sparse, existing
+>> + * sparse mappings are overwritten.
+>> + */
+>> +#define DRM_NOUVEAU_VM_BIND_OP_MAP 0x2
+>> +/**
+>> + * @DRM_NOUVEAU_VM_BIND_OP_UNMAP:
+>> + *
+>> + * Unmap an existing mapping in the GPU's VA space. If the region the mapping
+>> + * is located in is a sparse region, new sparse mappings are created where the
+>> + * unmapped (memory backed) mapping was mapped previously.
+>> + */
+>> +#define DRM_NOUVEAU_VM_BIND_OP_UNMAP 0x3
+>> +	/**
+>> +	 * @flags: the flags for a &drm_nouveau_vm_bind_op
+>> +	 */
+>> +	__u32 flags;
+>> +/**
+>> + * @DRM_NOUVEAU_VM_BIND_SPARSE:
+>> + *
+>> + * Indicates that an allocated VA space region should be sparse.
+>> + */
+>> +#define DRM_NOUVEAU_VM_BIND_SPARSE (1 << 8)
+>> +	/**
+>> +	 * @handle: the handle of the DRM GEM object to map
+>> +	 */
+>> +	__u32 handle;
+>> +	/**
+>> +	 * @addr:
+>> +	 *
+>> +	 * the address the VA space region or (memory backed) mapping should be mapped to
+>> +	 */
+>> +	__u64 addr;
+>> +	/**
+>> +	 * @bo_offset: the offset within the BO backing the mapping
+>> +	 */
+>> +	__u64 bo_offset;
+>> +	/**
+>> +	 * @range: the size of the requested mapping in bytes
+>> +	 */
+>> +	__u64 range;
+>> +};
+>> +
+>> +/**
+>> + * struct drm_nouveau_vm_bind - structure for DRM_IOCTL_NOUVEAU_VM_BIND
+>> + */
+>> +struct drm_nouveau_vm_bind {
+>> +	/**
+>> +	 * @op_count: the number of &drm_nouveau_vm_bind_op
+>> +	 */
+>> +	__u32 op_count;
+>> +	/**
+>> +	 * @flags: the flags for a &drm_nouveau_vm_bind ioctl
+>> +	 */
+>> +	__u32 flags;
+>> +/**
+>> + * @DRM_NOUVEAU_VM_BIND_RUN_ASYNC:
+>> + *
+>> + * Indicates that the given VM_BIND operation should be executed asynchronously
+>> + * by the kernel.
+>> + *
+>> + * If this flag is not supplied the kernel executes the associated operations
+>> + * synchronously and doesn't accept any &drm_nouveau_sync objects.
+>> + */
+>> +#define DRM_NOUVEAU_VM_BIND_RUN_ASYNC 0x1
+>> +	/**
+>> +	 * @wait_count: the number of wait &drm_nouveau_syncs
+>> +	 */
+>> +	__u32 wait_count;
+>> +	/**
+>> +	 * @sig_count: the number of &drm_nouveau_syncs to signal when finished
+>> +	 */
+>> +	__u32 sig_count;
+>> +	/**
+>> +	 * @wait_ptr: pointer to &drm_nouveau_syncs to wait for
+>> +	 */
+>> +	__u64 wait_ptr;
+>> +	/**
+>> +	 * @sig_ptr: pointer to &drm_nouveau_syncs to signal when finished
+>> +	 */
+>> +	__u64 sig_ptr;
+>> +	/**
+>> +	 * @op_ptr: pointer to the &drm_nouveau_vm_bind_ops to execute
+>> +	 */
+>> +	__u64 op_ptr;
+>> +};
+>> +
+>> +/**
+>> + * struct drm_nouveau_exec_push - EXEC push operation
+>> + *
+>> + * This structure represents a single EXEC push operation. UMDs should pass an
+>> + * array of this structure via struct drm_nouveau_exec's &push_ptr field.
+>> + */
+>> +struct drm_nouveau_exec_push {
+>> +	/**
+>> +	 * @va: the virtual address of the push buffer mapping
+>> +	 */
+>> +	__u64 va;
+>> +	/**
+>> +	 * @va_len: the length of the push buffer mapping
+>> +	 */
+>> +	__u64 va_len;
+>> +};
+>> +
+>> +/**
+>> + * struct drm_nouveau_exec - structure for DRM_IOCTL_NOUVEAU_EXEC
+>> + */
+>> +struct drm_nouveau_exec {
+>> +	/**
+>> +	 * @channel: the channel to execute the push buffer in
+>> +	 */
+>> +	__u32 channel;
+>> +	/**
+>> +	 * @push_count: the number of &drm_nouveau_exec_push ops
+>> +	 */
+>> +	__u32 push_count;
+>> +	/**
+>> +	 * @wait_count: the number of wait &drm_nouveau_syncs
+>> +	 */
+>> +	__u32 wait_count;
+>> +	/**
+>> +	 * @sig_count: the number of &drm_nouveau_syncs to signal when finished
+>> +	 */
+>> +	__u32 sig_count;
+>> +	/**
+>> +	 * @wait_ptr: pointer to &drm_nouveau_syncs to wait for
+>> +	 */
+>> +	__u64 wait_ptr;
+>> +	/**
+>> +	 * @sig_ptr: pointer to &drm_nouveau_syncs to signal when finished
+>> +	 */
+>> +	__u64 sig_ptr;
+>> +	/**
+>> +	 * @push_ptr: pointer to &drm_nouveau_exec_push ops
+>> +	 */
+>> +	__u64 push_ptr;
+>> +};
+>> +
+>>   #define DRM_NOUVEAU_GETPARAM           0x00 /* deprecated */
+>>   #define DRM_NOUVEAU_SETPARAM           0x01 /* deprecated */
+>>   #define DRM_NOUVEAU_CHANNEL_ALLOC      0x02 /* deprecated */
+>> @@ -136,6 +346,9 @@ struct drm_nouveau_gem_cpu_fini {
+>>   #define DRM_NOUVEAU_NVIF               0x07
+>>   #define DRM_NOUVEAU_SVM_INIT           0x08
+>>   #define DRM_NOUVEAU_SVM_BIND           0x09
+>> +#define DRM_NOUVEAU_VM_INIT            0x10
+>> +#define DRM_NOUVEAU_VM_BIND            0x11
+>> +#define DRM_NOUVEAU_EXEC               0x12
+>>   #define DRM_NOUVEAU_GEM_NEW            0x40
+>>   #define DRM_NOUVEAU_GEM_PUSHBUF        0x41
+>>   #define DRM_NOUVEAU_GEM_CPU_PREP       0x42
+>> @@ -197,6 +410,9 @@ struct drm_nouveau_svm_bind {
+>>   #define DRM_IOCTL_NOUVEAU_GEM_CPU_FINI       DRM_IOW (DRM_COMMAND_BASE + DRM_NOUVEAU_GEM_CPU_FINI, struct drm_nouveau_gem_cpu_fini)
+>>   #define DRM_IOCTL_NOUVEAU_GEM_INFO           DRM_IOWR(DRM_COMMAND_BASE + DRM_NOUVEAU_GEM_INFO, struct drm_nouveau_gem_info)
+>>   
+>> +#define DRM_IOCTL_NOUVEAU_VM_INIT            DRM_IOWR(DRM_COMMAND_BASE + DRM_NOUVEAU_VM_INIT, struct drm_nouveau_vm_init)
+>> +#define DRM_IOCTL_NOUVEAU_VM_BIND            DRM_IOWR(DRM_COMMAND_BASE + DRM_NOUVEAU_VM_BIND, struct drm_nouveau_vm_bind)
+>> +#define DRM_IOCTL_NOUVEAU_EXEC               DRM_IOWR(DRM_COMMAND_BASE + DRM_NOUVEAU_EXEC, struct drm_nouveau_exec)
+>>   #if defined(__cplusplus)
+>>   }
+>>   #endif
+>> -- 
+>> 2.39.0
+>>
+> 
 
-Still nervous about endian mixups here given the buffers in val tend to 
-be pointers to big-endian values but data.val is native-endian (likely 
-little-endian). It probably doesn't matter functionally given we pass 
-the pointer to the packed struct through i2c_master_send(), but do the 
-values come out right in the trace data?
-
-What do you think about adding some commentary outlining the value 
-representations to help with confidence here?
-
-> +	data.command = i2cr_get_command(I2CR_ADDRESS_CFAM(addr),
-> +					i2cr_check_parity(data.val, true));
-> +
-> +	mutex_lock(&i2cr->lock);
-> +
-> +	ret = i2c_master_send(i2cr->client, (const char *)&data, 
-> sizeof(data));
-> +	if (ret == sizeof(data)) {
-> +		ret = i2cr_check_status(i2cr->client);
-> +		if (!ret)
-> +			trace_i2cr_write(addr, size, data.val);
-> +	} else {
-> +		trace_i2cr_i2c_error(ret);
-> +
-> +		if (ret >= 0)
-> +			ret = -EIO;
-> +	}
-
-The i2cr_transfer() call in i2cr_check_status() can error but that 
-won't be traced. Is that intentional? What about this instead?
-
-ret = i2c_master_send(...)
-if (ret == sizeof(data)) {
-    ret = i2cr_check_status(i2cr->client);
-} else {
-    ret = -EIO;
-}
-
-if (ret) {
-    trace_i2cr_i2c_error(ret);
-} else {
-    trace_i2cr_write(addr, size, data.val);
-}
-
-Cheers,
-
-Andrew
