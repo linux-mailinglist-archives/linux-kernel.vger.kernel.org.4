@@ -2,63 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D65267EF24
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B88E67EF26
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbjA0UFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 15:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
+        id S232783AbjA0UF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 15:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233045AbjA0UER (ORCPT
+        with ESMTP id S233599AbjA0UEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:04:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6FF1ABEB;
-        Fri, 27 Jan 2023 12:02:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F14EB821D3;
-        Fri, 27 Jan 2023 20:02:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A449CC433EF;
-        Fri, 27 Jan 2023 20:02:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674849761;
-        bh=ca4jPTCUeRFLCFAPxpZ4gedA/tBamy844ut60yl7Vu0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KoEmrQnaU3o0ETgjT0tTMaPW3aJq0YfRxSse5aoARQu7GzJBPgIt0xWAMnrH0l7nY
-         ZHyo2KKDgGA28F+aJSTJ6Pxfl+dq+MsjvF52GUwgXMR0W6IJXrO912Fi8iaXAHU4VN
-         Sxx5WAkaD84lkZSGctX1sjJWjxoVsS/P6h71DDEEBaHHgE0BQUXlsOBtdcq4nVKUZ1
-         Zp1v0o/32Jbm3Dr5UxD8hRqI0+DcajE+ojat/yxLfWuQ9UfjVq2dcZVk0PCAe8bPvC
-         z7RsXQBl1YACHxA0q2ubF3fbQviB/9NveMb1EDCNehwhv8UlzZtc27mfbVg/Fk6SrY
-         XNavTv6Ocl5Tg==
-Date:   Fri, 27 Jan 2023 14:02:40 -0600
-From:   Seth Forshee <sforshee@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] vhost: improve livepatch switching for heavily
- loaded vhost worker kthreads
-Message-ID: <Y9Qt4BT2WXK2dToL@do-x1extreme>
-References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
- <Y9KyVKQk3eH+RRse@alley>
- <Y9LswwnPAf+nOVFG@do-x1extreme>
- <20230127044355.frggdswx424kd5dq@treble>
- <Y9OpTtqWjAkC2pal@hirez.programming.kicks-ass.net>
+        Fri, 27 Jan 2023 15:04:54 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D5A8B074
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:03:19 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id j36-20020a05600c1c2400b003dc39cb9c33so1881993wms.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:03:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=reEnc4EOAASI0Khp6pR/r9Av8Biua9MumoNI5XALfvY=;
+        b=AERwUFt1/QB4neVHHtnbkmA3v/kn9W/xkJO+ohHV+yUI/ZjsfVSObqYLnA9Onz7w+d
+         /FZZQyn06DRK0zivM71Gt6ZoOcvqv36UJzlPJFIuGB9PiqFgfDmqmJBXMz3jhTVYS+Q3
+         109CsZsJlhhb62GNcvOnQvSxtF3ZregYPC7+/nHuOI+hisVJV696zCXuQdcMA8WD7uuw
+         zT56RDzALQ3LjdQbYgV4OhcJ9NJ2NrPaIxGgoXrIug0Ho4VTO8FtXB/1huPZAxMFvNU0
+         dYCMu5jms/mxbaTid21JdgH4fkKR0ndeSwrM2gx7yrp6zdUNuG0mY4zMgaabz774d4mu
+         cyNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=reEnc4EOAASI0Khp6pR/r9Av8Biua9MumoNI5XALfvY=;
+        b=XyJjTbWjOXwWRhsnbcfPJ8ooxIaaMnw9pRMXcgddgQyWkSfhdzB5HguK8pJs+jvHdT
+         RCTQf6Afy4IZ9T1TG8jAIzkoaLQlf2UCoRCMEVDdvI82o9sjf4H7sS3OD6WYqyXVxJTe
+         t/iuvimLu6xEWRTWe4Yh/xHxFCOs3HrhjkDIoZ2rrhBEhJc8dqwj76v5poMqqPwS7B0u
+         TV/skeXmGnMVVbP6Gfh9ODlz0PAPFy5NtkZsKrI8qmDYqX7O2gw7rI3SPf6/+jWLFiL5
+         6IsHrbp1tVXqnf4y1AQd22G5jtxvqCEqKXHVjlZXqwIE71rEGaxDtwyc68GHGwf2ETfo
+         JmlQ==
+X-Gm-Message-State: AFqh2ko1XssKndFuEo8C4FzwJ/pFn1t/dpBLSVn0KcM2tFqH/9QrrM0i
+        LFX78zD4k+cCnkLWkOS6uOVcaA==
+X-Google-Smtp-Source: AMrXdXsASHraCdry4BHxBnY6w52haRZylQxGuF6RmkUFl4Ax5qoaKDhSkUSxOPl+HdLKwZM2OACqPA==
+X-Received: by 2002:a05:600c:3b13:b0:3db:26b8:5023 with SMTP id m19-20020a05600c3b1300b003db26b85023mr33006741wms.10.1674849797768;
+        Fri, 27 Jan 2023 12:03:17 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n13-20020a05600c500d00b003db2b81660esm9165980wmr.21.2023.01.27.12.03.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 12:03:17 -0800 (PST)
+Message-ID: <637fe4cd-f9e9-ae22-0085-30ea3f1dd5af@linaro.org>
+Date:   Fri, 27 Jan 2023 21:03:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9OpTtqWjAkC2pal@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: ramoops: Inherit reserve memory
+ property
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>,
+        linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>, Tony Luck <tony.luck@intel.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <1674835252-31954-1-git-send-email-quic_mojha@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1674835252-31954-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,131 +79,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:37:02AM +0100, Peter Zijlstra wrote:
-> On Thu, Jan 26, 2023 at 08:43:55PM -0800, Josh Poimboeuf wrote:
-> > On Thu, Jan 26, 2023 at 03:12:35PM -0600, Seth Forshee (DigitalOcean) wrote:
-> > > On Thu, Jan 26, 2023 at 06:03:16PM +0100, Petr Mladek wrote:
-> > > > On Fri 2023-01-20 16:12:20, Seth Forshee (DigitalOcean) wrote:
-> > > > > We've fairly regularaly seen liveptches which cannot transition within kpatch's
-> > > > > timeout period due to busy vhost worker kthreads.
-> > > > 
-> > > > I have missed this detail. Miroslav told me that we have solved
-> > > > something similar some time ago, see
-> > > > https://lore.kernel.org/all/20220507174628.2086373-1-song@kernel.org/
-> > > 
-> > > Interesting thread. I had thought about something along the lines of the
-> > > original patch, but there are some ideas in there that I hadn't
-> > > considered.
-> > 
-> > Here's another idea, have we considered this?  Have livepatch set
-> > TIF_NEED_RESCHED on all kthreads to force them into schedule(), and then
-> > have the scheduler call klp_try_switch_task() if TIF_PATCH_PENDING is
-> > set.
-> > 
-> > Not sure how scheduler folks would feel about that ;-)
+On 27/01/2023 17:00, Mukesh Ojha wrote:
+> The reserved memory region for ramoops is assumed to be at a
+> fixed and known location when read from the devicetree. This
+> is not desirable in an environment where it is preferred the
+> region to be dynamically allocated at runtime, as opposed to
+> being fixed at compile time.
 > 
-> So, let me try and page all that back in.... :-)
-> 
-> KLP needs to unwind the stack to see if any of the patched functions are
-> active, if not, flip task to new set.
-> 
-> Unwinding the stack of a task can be done when:
-> 
->  - task is inactive (stable reg and stack) -- provided it stays inactive
->    while unwinding etc..
-> 
->  - task is current (guarantees stack doesn't dip below where we started
->    due to being busy on top etc..)
-> 
-> Can NOT be done from interrupt context, because can hit in the middle of
-> setting up stack frames etc..
-> 
-> The issue at hand is that some tasks run for a long time without passing
-> through an explicit check.
-> 
-> The thread above tried sticking something in cond_resched() which is a
-> problem for PREEMPT=y since cond_resched() is a no-op.
-> 
-> Preempt notifiers were raised, and those would actually be nice, except
-> you can only install a notifier on current and you need some memory
-> allocated per task, which makes it less than ideal. Plus ...
-> 
-> ... putting something in finish_task_switch() wouldn't be the end of the
-> world I suppose, but then you still need to force schedule the task --
-> imagine it being the only runnable task on the CPU, there's nothing
-> going to make it actually switch.
-> 
-> Which then leads me to suggest something daft like this.. does that
-> help?
+> So, update the ramoops binding by inheriting some reserve memory
+> property to allocate the ramoops region dynamically.
 
-The changes below are working well for me. The context has a read lock
-on tasklist_lock so it can't sleep, so I'm using stop_one_cpu_nowait()
-with per-CPU state.
+Where is the update which adds "inheriting"?
 
-Based on Josh's comments it sounds like the klp_have_reliable_stack()
-check probably isn't quite right, and we might want to add something
-else for PREEMPT+!ORC. But I wanted to go ahead and see if this approach
-seems reasonable to everyone.
+> 
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+> Changes in v4:
+>  - Addressed comment made by Krzysztof on ramoops node name.
+> 
+> Changes in v3:
+>  - Fixed yaml error and updated commit text as per comment.
+> 
+> Change in v2:
+>   - Added this patch as per changes going to be done in patch 3/3
+> 
+>  .../bindings/reserved-memory/ramoops.yaml          | 34 ++++++++++++++++++++--
+>  1 file changed, 32 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+> index 0391871..8741626 100644
+> --- a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+> +++ b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+> @@ -10,7 +10,8 @@ description: |
+>    ramoops provides persistent RAM storage for oops and panics, so they can be
+>    recovered after a reboot. This is a child-node of "/reserved-memory", and
+>    is named "ramoops" after the backend, rather than "pstore" which is the
+> -  subsystem.
+> +  subsystem. This region can be reserved both statically or dynamically by
+> +  using appropriate property in device tree.
+>  
+>    Parts of this storage may be set aside for other persistent log buffers, such
+>    as kernel log messages, or for optional ECC error-correction data.  The total
+> @@ -112,7 +113,13 @@ unevaluatedProperties: false
+>  
+>  required:
+>    - compatible
+> -  - reg
 
-Thanks,
-Seth
+This is okay, but:
 
+> +
+> +oneOf:
+> +  - required:
+> +      - reg
+> +
+> +  - required:
+> +      - size
 
-diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-index f1b25ec581e0..9f3898f02828 100644
---- a/kernel/livepatch/transition.c
-+++ b/kernel/livepatch/transition.c
-@@ -9,6 +9,7 @@
- 
- #include <linux/cpu.h>
- #include <linux/stacktrace.h>
-+#include <linux/stop_machine.h>
- #include "core.h"
- #include "patch.h"
- #include "transition.h"
-@@ -334,9 +335,16 @@ static bool klp_try_switch_task(struct task_struct *task)
- 	return !ret;
- }
- 
-+static int __try_switch_kthread(void *arg)
-+{
-+	return klp_try_switch_task(arg) ? 0 : -EBUSY;
-+}
-+
-+static DEFINE_PER_CPU(struct cpu_stop_work, klp_stop_work);
-+
- /*
-  * Sends a fake signal to all non-kthread tasks with TIF_PATCH_PENDING set.
-- * Kthreads with TIF_PATCH_PENDING set are woken up.
-+ * Kthreads with TIF_PATCH_PENDING set are preempted or woken up.
-  */
- static void klp_send_signals(void)
- {
-@@ -357,11 +365,22 @@ static void klp_send_signals(void)
- 		 * would be meaningless. It is not serious though.
- 		 */
- 		if (task->flags & PF_KTHREAD) {
--			/*
--			 * Wake up a kthread which sleeps interruptedly and
--			 * still has not been migrated.
--			 */
--			wake_up_state(task, TASK_INTERRUPTIBLE);
-+			if (task_curr(task) && klp_have_reliable_stack()) {
-+				/*
-+				 * kthread is currently running on a CPU; try
-+				 * to preempt it.
-+				 */
-+				stop_one_cpu_nowait(task_cpu(task),
-+						    __try_switch_kthread,
-+						    task,
-+						    this_cpu_ptr(&klp_stop_work));
-+			} else {
-+				/*
-+				 * Wake up a kthread which sleeps interruptedly
-+				 * and still has not been migrated.
-+				 */
-+				wake_up_state(task, TASK_INTERRUPTIBLE);
-+			}
- 		} else {
- 			/*
- 			 * Send fake signal to all non-kthread tasks which are
+I now keep wondering - why do you need this?
+
+>  
+>  anyOf:
+>    - required: [record-size]
+> @@ -142,3 +149,26 @@ examples:
+>              };
+>          };
+>      };
+> +
+> +  - |
+> +    / {
+> +        compatible = "foo";
+> +        model = "foo";
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        reserved-memory {
+> +            #address-cells = <1>;
+> +            #size-cells = <1>;
+> +            ranges;
+> +
+> +            ramoops_region: ramoops {
+> +                compatible = "ramoops";
+> +                alloc-ranges = <0x00000000 0xffffffff>;
+> +                size = <0x0 0x10000>;       /* 64kB */
+> +                console-size = <0x8000>;    /* 32kB */
+> +                record-size = <0x400>;      /*  1kB */
+> +                ecc-size = <16>;
+> +            };
+> +        };
+> +    };
+
+This example does not bring anything new for the ramoops. It's an
+example for reserved-memory to show usage with alloc-ranges. There is
+nothing useful here in terms of ramoops, so I think it should be dropped.
+
+Best regards,
+Krzysztof
+
