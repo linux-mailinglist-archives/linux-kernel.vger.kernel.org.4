@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAC867EEAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E94A67EEAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbjA0Tp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 14:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
+        id S232216AbjA0Tpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:45:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjA0ToC (ORCPT
+        with ESMTP id S232372AbjA0ToU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 14:44:02 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CDB1E1FF
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:43:06 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4b34cf67fb6so65252337b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:43:06 -0800 (PST)
+        Fri, 27 Jan 2023 14:44:20 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5BF53B0C
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:43:13 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id d21-20020a25add5000000b007ff8112e8b8so6430225ybe.17
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:43:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5PvsAEkfbXSvdKN+lTJ9M9+vqfLQVBlihpxSKUw/t/s=;
-        b=kp92vFUO2N4rCYUenom2PgB/dU7qqaylHAcH6HVVMYT5QMpL/oqQ/DdOm4bVNlYLNw
-         9rNSkse+dfgOJKwj09yKdpzV2qc7upA8mjHmEpxt3RKsaa3pDRks1QGh3Nb2hG4bp/jU
-         3eSArvNsdqtxNb6zpVi6gl2vf0iZr8y+PtaslVXMeV9Pu9xS/EmrXvCiajKJa9iCZe4S
-         LpK/JO6vbmew4JxbSzbZQyffZL4sOt9sBlPWbT9WmPY7+pp+Ff0i+9BT7l4WdUaIrrgA
-         btwhF2XkX8IUP7VpoyJ9OAYm06ddrZftAFhV0gBzofVRmYYEJ8dT0O9gMwk7XMh0b2Ct
-         qw3A==
+        bh=gSaEMik01Wf1+Bdt2RmdUMjgYY7lDp9hLxJUYqXXyyM=;
+        b=rcBVm8w95my/f0ebkBHOBSdk/g3dXIBnrvyKhE+0lfp8SBBL9UDohndGfm9prz69Nb
+         1VsGdk5hVjbZdd99cfs1kRzqndkhM72YtTrleRtcoKwDWYV7T956W4hi9P14DNVnfcTE
+         4dzd8voX/MwzX+niWcYh6zC2gtPII1RsQu2W+o1SzbH/VUzyZkZ+K0mbi6bCuvIO2r/9
+         q8JUw2FMeYJjbLjibdrizaV+CI77RGRlLfF03fxNpzuIRE1ymkIpYCAH7a7Vh5p4LTWM
+         djOGRW9GCrBrxw2Z+lpBSKPiwjL/b62fESDSi0yRTpPNMfCaBkk0gvqmlpNjM1674+ZN
+         MkCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5PvsAEkfbXSvdKN+lTJ9M9+vqfLQVBlihpxSKUw/t/s=;
-        b=XqblgBp0ZkG/sgPug/J34bMEfsbtHxL6yOVv+f7o/BSbKodPd6q7cCfA8u461LY5Pv
-         dlK2okGts7uCHAyqMC96o+jPafmSkVuCMIsP65hwWTj08ZfNYWALbmOqYiy1bBRMkQFk
-         W1WRaPTar3im9hcu5qFc4bRz9/S+068dUnpH18sk5TuaRQdc9aWhZwADGBSbGcbUj5ii
-         UV4NGTciJVwmi9KsnDHDS8AxetTQ1AsJhntQfOcQpG12y1r+3am15vYq9gaPJzVouu9O
-         ijiY8n7styqBu+E/wXo8t9aD6owrLAttN8XZ6sQ3xeSZD/vWfnOr0ogsBJ2nkhve/QG+
-         D2Uw==
-X-Gm-Message-State: AO0yUKWye3Is3CNTLv9r7Ip5yfYI4YB4Ybd6JRFHC6sCBuZVWc10Su/T
-        JS1vnUejk8RzDriL5IK+Q+EjBwebZN4=
-X-Google-Smtp-Source: AK7set8zsvT5wkP/7moSYA7dIHSCpHQad2RzXlV5c0Wh0zEZrq5yaOQZsQ7iykW9DnqHdXZz8PLHMfkZLc8=
+        bh=gSaEMik01Wf1+Bdt2RmdUMjgYY7lDp9hLxJUYqXXyyM=;
+        b=r15GmN1poUZ4dQgu9keNOfHmA9pK8DE5sJA1vaiMC5qTL247YoHvDo7oijSFx/35bd
+         JZp4584jIVWImblKL97t9Yurl7aJFXrxohImUMRERGgABrzmPeGakcBKkd3BfR8AoF/Q
+         1WTcHq7Kv9pRfr1hAErsHoMhrGQrTQHoT75UaPzIjwrCEwcjTM+5K8uNVyeD1iI/6wIc
+         w7yPO1JSxH7hXSiEwz4pSRzTpNLH0Vmr8kohycaCya4GS7jTDWoURVmIy842vrj7AIG0
+         GRv4sO29D9bM2ThxDQf9xC+DH4EtAqFtXoonRV3XHrEQ7pKOwheMbmCwr7kSUVXoz1Pn
+         ydmg==
+X-Gm-Message-State: AO0yUKX0Pkwt6LNpxFwq8GsuuFWMUovf3ja40//j+NJeT2eRrZTWL95I
+        4KXGpjQvMO3HClo9LM4f0VhRaI/EMY0=
+X-Google-Smtp-Source: AK7set9ZuZbDGpVLmgenU71+ffHh46VvnF49YmmPOU0QZTkBBursiC5h0isQQWJJC0fjjZLxRphOeOdStg0=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:4e19:be9:c5d0:8483])
- (user=surenb job=sendgmr) by 2002:a81:6d2:0:b0:50e:e91d:f47 with SMTP id
- 201-20020a8106d2000000b0050ee91d0f47mr27189ywg.61.1674848529047; Fri, 27 Jan
- 2023 11:42:09 -0800 (PST)
-Date:   Fri, 27 Jan 2023 11:41:00 -0800
+ (user=surenb job=sendgmr) by 2002:a0d:d8d5:0:b0:508:1348:3e54 with SMTP id
+ a204-20020a0dd8d5000000b0050813483e54mr1003857ywe.440.1674848531551; Fri, 27
+ Jan 2023 11:42:11 -0800 (PST)
+Date:   Fri, 27 Jan 2023 11:41:01 -0800
 In-Reply-To: <20230127194110.533103-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230127194110.533103-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230127194110.533103-24-surenb@google.com>
-Subject: [PATCH v2 23/33] mm: introduce lock_vma_under_rcu to be used from
- arch-specific code
+Message-ID: <20230127194110.533103-25-surenb@google.com>
+Subject: [PATCH v2 24/33] mm: fall back to mmap_lock if vma->anon_vma is not
+ yet set
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -85,97 +85,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce lock_vma_under_rcu function to lookup and lock a VMA during
-page fault handling. When VMA is not found, can't be locked or changes
-after being locked, the function returns NULL. The lookup is performed
-under RCU protection to prevent the found VMA from being destroyed before
-the VMA lock is acquired. VMA lock statistics are updated according to
-the results.
-For now only anonymous VMAs can be searched this way. In other cases the
-function returns NULL.
+When vma->anon_vma is not set, page fault handler will set it by either
+reusing anon_vma of an adjacent VMA if VMAs are compatible or by
+allocating a new one. find_mergeable_anon_vma() walks VMA tree to find
+a compatible adjacent VMA and that requires not only the faulting VMA
+to be stable but also the tree structure and other VMAs inside that tree.
+Therefore locking just the faulting VMA is not enough for this search.
+Fall back to taking mmap_lock when vma->anon_vma is not set. This
+situation happens only on the first page fault and should not affect
+overall performance.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/mm.h |  3 +++
- mm/memory.c        | 51 ++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 54 insertions(+)
+ mm/memory.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 66dca140695e..fa2b9d6e665e 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -687,6 +687,9 @@ static inline void vma_assert_write_locked(struct vm_area_struct *vma)
- 	VM_BUG_ON_VMA(vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq), vma);
- }
- 
-+struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
-+					  unsigned long address);
-+
- #else /* CONFIG_PER_VMA_LOCK */
- 
- static inline void vma_init_lock(struct vm_area_struct *vma) {}
 diff --git a/mm/memory.c b/mm/memory.c
-index d48c76e9fa57..5568fcb0a46b 100644
+index 5568fcb0a46b..593548f24007 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
-@@ -5222,6 +5222,57 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- }
- EXPORT_SYMBOL_GPL(handle_mm_fault);
+@@ -5244,6 +5244,10 @@ struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
+ 	if (!vma_is_anonymous(vma))
+ 		goto inval;
  
-+#ifdef CONFIG_PER_VMA_LOCK
-+/*
-+ * Lookup and lock a VMA under RCU protection. Returned VMA is guaranteed to be
-+ * stable and not isolated. If the VMA is not found or is being modified the
-+ * function returns NULL.
-+ */
-+struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
-+					  unsigned long address)
-+{
-+	MA_STATE(mas, &mm->mm_mt, address, address);
-+	struct vm_area_struct *vma, *validate;
-+
-+	rcu_read_lock();
-+	vma = mas_walk(&mas);
-+retry:
-+	if (!vma)
++	/* find_mergeable_anon_vma uses adjacent vmas which are not locked */
++	if (!vma->anon_vma)
 +		goto inval;
 +
-+	/* Only anonymous vmas are supported for now */
-+	if (!vma_is_anonymous(vma))
-+		goto inval;
-+
-+	if (!vma_start_read(vma))
-+		goto inval;
-+
-+	/* Check since vm_start/vm_end might change before we lock the VMA */
-+	if (unlikely(address < vma->vm_start || address >= vma->vm_end)) {
-+		vma_end_read(vma);
-+		goto inval;
-+	}
-+
-+	/* Check if the VMA got isolated after we found it */
-+	mas.index = address;
-+	validate = mas_walk(&mas);
-+	if (validate != vma) {
-+		vma_end_read(vma);
-+		count_vm_vma_lock_event(VMA_LOCK_MISS);
-+		/* The area was replaced with another one. */
-+		vma = validate;
-+		goto retry;
-+	}
-+
-+	rcu_read_unlock();
-+	return vma;
-+inval:
-+	rcu_read_unlock();
-+	count_vm_vma_lock_event(VMA_LOCK_ABORT);
-+	return NULL;
-+}
-+#endif /* CONFIG_PER_VMA_LOCK */
-+
- #ifndef __PAGETABLE_P4D_FOLDED
- /*
-  * Allocate p4d page table.
+ 	if (!vma_start_read(vma))
+ 		goto inval;
+ 
 -- 
 2.39.1
 
