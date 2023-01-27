@@ -2,104 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8367767E00F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E0767E01B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjA0J0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:26:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S232931AbjA0J15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:27:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbjA0J0V (ORCPT
+        with ESMTP id S232735AbjA0J1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:26:21 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF7C2943C
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:26:19 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so4979466wmb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:26:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v5COxBprWoYF2NZbM6nFunPs6wim8IJQ/3Q4uq8c1i0=;
-        b=SFcbJxSySu8U3h4WZZ3E1nR8C4sPPzTPRNZ7K98L/Bkepe+HG40+6AyUL/HBBpKbU5
-         pqeHmB72hGSpVncRcEOzTTEQb8L6tl0mCpZeiPJD42qyCZ6akNXLiAFvbUmY3qoQhrrL
-         dqb0IHjkfJgBlBqSFjOAmkplxZwICCv+KwB15UW3+s1P1814IS7nE70RMwL5fH/3XDu0
-         aUHFnuuN9o3WQz9ircYFPlFKXJCir+cw9k+4Tuwg4iS3rbAYutGe/5YsTm6VsilmVkeq
-         2zKvRiN98+NlSb0hHazPLDLZr/4Ud3K/lXPxFj7yK9/hc7cZ9BEX/PweZGe40VueR6Z1
-         O8cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v5COxBprWoYF2NZbM6nFunPs6wim8IJQ/3Q4uq8c1i0=;
-        b=e3p1fGwRdr+dpuBgYcjT1U2fjROLOSihsXS6jVZiDBjO7dZDrzIDgafRv5HOXMW3O+
-         7UGaXe0mLNYn19AMyZqYYUYUcSbzKnZtkmex+074Y6CQ6YhLhHtbYW9IB29TDoHBl/Ni
-         Zorz/V4zKIht9GdLV5zF9UJqJuq/kttp/CzNXuAC04PBVoHPGFtIfjZBvRSrbt3mr+wF
-         i6lIKqPJyEeMCUj0d7TXUkbx4JSJ0UjDMvrVqaow+UogqMyP7M3VGpJVA5E+DYOpxGHq
-         d3aItSvPqipgxZgyPO8mnkQg9z+dSGgOWuZeIoSLrqjakc7TPLmhO6dts7I6hqkhD0y6
-         VjmA==
-X-Gm-Message-State: AFqh2kpaFpQRWI2ewTOgAwSWvbJ+jkNX/Gsuu+V2mfPZTsItxpQse2vd
-        mNyXm/+kfkb3/80RM0PkSRv6hg==
-X-Google-Smtp-Source: AMrXdXv7un7XD0R7Z9M5OlGnu3Y1MewDZOALuQiC/9rrvr9/f9d/RnC3xQ2hnrUq4eaGGkWTcZHlig==
-X-Received: by 2002:a05:600c:3d9b:b0:3db:1afd:ac36 with SMTP id bi27-20020a05600c3d9b00b003db1afdac36mr33060394wmb.32.1674811577886;
-        Fri, 27 Jan 2023 01:26:17 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:624:f1a4:edb9:78d5])
-        by smtp.gmail.com with ESMTPSA id l4-20020a05600c1d0400b003db2e3f2c7csm15613178wms.0.2023.01.27.01.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 01:26:17 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
+        Fri, 27 Jan 2023 04:27:54 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA055BA9;
+        Fri, 27 Jan 2023 01:27:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674811672; x=1706347672;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=irOFwGOpCdgiAWhOEXeba39LtNKCJ17Fddk8cCsao5I=;
+  b=EQ/tr08Otk1Dg0J1e5sOT5KRZv58/hHcvAdP09KJ8VUI0ecXQX5TdB2f
+   qL/Vyuvf7gDXjtqg9Qw4V03i2+k3R/4pH8UsTr64XF/ndNQdaOibnZm5F
+   ViTVEg7qn5fi7GCgShmH2T7ihnzznMp+QI0QDKH+EdhNq7lrmwN6TucgE
+   C0vIxknLYew1D0v9UdW/iJCt9m2AqKnYol0rEEYob0faFfps6M/lqJLPp
+   FwgOJaSwQBfV3NVTbLrwSsxuBuIhCHBpblitBLW0DcI6MLpsyYat+WhUO
+   e0QVDxnjuccNclxpE3GWTOZu1HKFAgaGNBc+JkhNxdrELsbOKq1fsK49e
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="325723982"
+X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
+   d="scan'208";a="325723982"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 01:27:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="787159567"
+X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
+   d="scan'208";a="787159567"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 27 Jan 2023 01:27:10 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pLL0k-00FtTe-1I;
+        Fri, 27 Jan 2023 11:27:06 +0200
+Date:   Fri, 27 Jan 2023 11:27:06 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Eric Chanudet <echanude@redhat.com>
-Subject: [PATCH] dt-bindings: interconnect: qcom,sa8775p-rpmh: fix a typo
-Date:   Fri, 27 Jan 2023 10:26:15 +0100
-Message-Id: <20230127092615.39690-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maxim Kiselev <bigunclemax@gmail.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 04/11] gpiolib: Clear the gpio_device's fwnode
+ initialized flag before adding
+Message-ID: <Y9OY6pMwYtab1Avd@smile.fi.intel.com>
+References: <20230127001141.407071-1-saravanak@google.com>
+ <20230127001141.407071-5-saravanak@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127001141.407071-5-saravanak@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Thu, Jan 26, 2023 at 04:11:31PM -0800, Saravana Kannan wrote:
+> Registering an irqdomain sets the flag for the fwnode. But having the
+> flag set when a device is added is interpreted by fw_devlink to mean the
+> device has already been initialized and will never probe. This prevents
+> fw_devlink from creating device links with the gpio_device as a
+> supplier. So, clear the flag before adding the device.
 
-The name of the chip is sa8775p, not sa8875p.
+...
 
-Reported-by: Eric Chanudet <echanude@redhat.com>
-Link: https://lore.kernel.org/lkml/20230126203618.nbqwppaddncq7on7@echanude/
-Fixes: 2579af94c813 ("dt-bindings: interconnect: qcom: document the interconnects for sa8775p")
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- .../devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml     | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +	/*
+> +	 * If fwnode doesn't belong to another device, it's safe to clear its
+> +	 * initialized flag.
+> +	 */
+> +	if (!gdev->dev.fwnode->dev)
+> +		fwnode_dev_initialized(gdev->dev.fwnode, false);
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml
-index 672c7aaa8ed7..2e0c0bc7a376 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/interconnect/qcom,sa8775p-rpmh.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Qualcomm RPMh Network-On-Chip Interconnect on SA8875P
-+title: Qualcomm RPMh Network-On-Chip Interconnect on SA8775P
- 
- maintainers:
-   - Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Do not dereference fwnode in struct device. Use dev_fwnode() for that.
+
+	struct fwnode_handle *fwnode = dev_fwnode(&gdev->dev);
+
+	if (!fwnode->dev)
+		fwnode_dev_initialized(fwnode, false);
+
++ Blank line.
+
+>  	ret = gcdev_register(gdev, gpio_devt);
+>  	if (ret)
+>  		return ret;
+
 -- 
-2.37.2
+With Best Regards,
+Andy Shevchenko
+
 
