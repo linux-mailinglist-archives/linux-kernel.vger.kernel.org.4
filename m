@@ -2,90 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF56167DF81
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD65467DF86
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbjA0IvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 03:51:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        id S231912AbjA0IwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 03:52:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbjA0IvC (ORCPT
+        with ESMTP id S231709AbjA0IwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 03:51:02 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58F619F25
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:51:00 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-50660e2d2ffso58581247b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:51:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ust5T1dOQ0zL+HLLGTDn3zdUYMh/5770ZElRgQ3sPDg=;
-        b=obzjvlT1y9jt6kSminE3izVC8zsG+ufoMFpKAz7oy4XW4QKmvCOTcTHXpYMVmCmgdx
-         fWsV39ysAELR3n/hY0ldJBfN5QUGlIpo1YvPn0O3IUMBLAQ8gycCUwKtgOJYneCL2kpB
-         n6kkcVRyGl3ystC0vK5VQb9YZpsfYah8wElQpMH5ZoQw9lMipH4AWZ+yuEC2LEcnq+U6
-         sH1blQqVQU790uWxsio6IAePBfsKDhlgmQtTGXjBwQjTwkwvoSifmup3B+6NntVoovoH
-         K6PtteRwWGzWKmqKkMSV7uFK+0ubQthmhBIwC3dkdhda/yxh9gcWLRo+yAQuEr86HRiZ
-         bXfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ust5T1dOQ0zL+HLLGTDn3zdUYMh/5770ZElRgQ3sPDg=;
-        b=q3OlIG53YAH+iGDVfFRe6aXb3hV/yvD0khtUKphfuG9+81RK1xuWGuQ59Lj+WCna5o
-         d5v5EoxpUWkm/osMjqm28P4Cc0AtIwPftotE1tsF5lZvGxRJe7+YG9PJk7BYcsXrEaOR
-         xaesU2r2ePJPGqKARulRk6x+a7OuKHyxKEjy30bgTVI+22m0SVP6BrW6kNsa/USUxJF6
-         4d2ADBJo253nFT9UwqRKmzcCRcuB4ZaQ/ooYjYz8FbgReU9KX6Ef6D7t3ja6NUIeiA1m
-         glMSZ60R3gdYvB+q+Km7daiKZ8lStEI5Eskc/Oqv9AljYUojQlM8JhnqvAgBJ+S0KJt/
-         OedA==
-X-Gm-Message-State: AFqh2kpzK7QUngxAUovZLS7XfjxeTU9v7TLayNmDI6oCdGQ8GnTI6qgg
-        8jFAcTBHJTyZZTjDoW2HGpUZKkdesdN2v89vUJM+Ww==
-X-Google-Smtp-Source: AMrXdXsm/Hv7McSrHeZXMfE8TeNjNxQAnkGxQwfCfkr1WBI7rjZDVKp4ILbZt75wR8jNHQ/kqB6Fpz/eHIeitvmf610=
-X-Received: by 2002:a81:6842:0:b0:4ff:e4bc:b56f with SMTP id
- d63-20020a816842000000b004ffe4bcb56fmr3524838ywc.488.1674809460124; Fri, 27
- Jan 2023 00:51:00 -0800 (PST)
+        Fri, 27 Jan 2023 03:52:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F45A19F25;
+        Fri, 27 Jan 2023 00:52:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 295EF61A1D;
+        Fri, 27 Jan 2023 08:52:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF104C433EF;
+        Fri, 27 Jan 2023 08:52:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674809526;
+        bh=+t5XYbDnpxAsQKYfEVg9ILhlr/G87XMZOJrJ3hqtOJ8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aVpirXyNBq8heMv9meBF89mJ0dtN/TECXW48SLyT6javKFeR/L1rU6dC7wQwU6S1U
+         /NtdfR9HrmI50ww6QfKXWqcc5RzIPjTcJ//pKjjfr5znIUGC642l8XycO8RN2Y+NsW
+         GZkbm/GEG8FDwxEMppfzpeLjrEPHbJ+MZKQjCuKyQqtVNR1Yc6IXbqFBidkWVU0MDr
+         OD3ppYRdFxcpFkcdHkt8NrLaoLY6GhQ3WSSz/L8dgNiZ4e8jGdGj28hLc0HCFrAyo4
+         z/KXWE9ZLlUyD9VYuiYdXWSTMBqXrIbt7iUBfc29meeF3RO5hcBUR/RCXpdvEQXH0F
+         l488j59dfnaDQ==
+Message-ID: <9c9e7846-0521-32eb-153c-0686af5e58ba@kernel.org>
+Date:   Fri, 27 Jan 2023 09:52:02 +0100
 MIME-Version: 1.0
-References: <20230124141541.8290-1-quic_devipriy@quicinc.com> <20230124141541.8290-7-quic_devipriy@quicinc.com>
-In-Reply-To: <20230124141541.8290-7-quic_devipriy@quicinc.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 27 Jan 2023 09:50:49 +0100
-Message-ID: <CACRpkdZTMdK06jfuydwSpwMXLAeoL45EL4z2Msn-po+MjUZxNA@mail.gmail.com>
-Subject: Re: [PATCH V1 6/8] dt-bindings: mmc: sdhci-msm: Document the IPQ9574 compatible
-To:     devi priya <quic_devipriy@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, tdas@codeaurora.org, bhupesh.sharma@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, quic_srichara@quicinc.com,
-        quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 30/35] Documentation: tools/rtla: correct spelling
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        linux-trace-devel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+References: <20230127064005.1558-1-rdunlap@infradead.org>
+ <20230127064005.1558-31-rdunlap@infradead.org>
+Content-Language: en-US
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20230127064005.1558-31-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 3:17 PM devi priya <quic_devipriy@quicinc.com> wrote:
+On 1/27/23 07:40, Randy Dunlap wrote:
+> Correct spelling problems for Documentation/tools/rtla/ as reported
+> by codespell.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: linux-trace-devel@vger.kernel.org
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
 
-> Document the compatible for SDHCI on IPQ9574.
->
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+Thanks
+-- Daniel
