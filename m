@@ -2,206 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E73767DE56
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC73E67DE55
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbjA0HPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 02:15:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S230515AbjA0HO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 02:14:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbjA0HPN (ORCPT
+        with ESMTP id S232365AbjA0HOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 02:15:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF523A862
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:14:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674803666;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R3zXC7BLShJSQz17R47PyiKfOUcoTGd7uBIuLuInT94=;
-        b=R5rGUWA8GLW9UwBR99Cko3TGHZy+YRUn7fXMZsrOl6TNHDHzTGIgGWyQXrHv/FyHDX47gv
-        J1Lyykx6vBNze4ESjrVLfmRtFXiDJOQ3zr8ih5lDNWfJ1n55P3tLvlNxX/dSDGNWQXhIxN
-        PI9cFUi+6D8SAGf0FaK3J25LaL8rJFo=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-537-yDXVnFeMPDeQ5Y7840c27A-1; Fri, 27 Jan 2023 02:14:25 -0500
-X-MC-Unique: yDXVnFeMPDeQ5Y7840c27A-1
-Received: by mail-oi1-f197.google.com with SMTP id l1-20020aca1901000000b0036cd9d01876so1623580oii.19
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:14:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R3zXC7BLShJSQz17R47PyiKfOUcoTGd7uBIuLuInT94=;
-        b=xcEv1ttCpf7E2OlyhgB+5oPWZtieqlUk/VLkYsLcoRMf9khueUm+MN0pAT9Q3UrBJc
-         qe/SfZvliBpPD/accXbHThV1BH4Qx79+7WuwG9JYR3ZY6QcB0iL6ZSNoliFZcxFkwJ9n
-         EZT4tznxwQB6Wiy8hrJAfM060G2qVkxshAWL653KuiUZqSE2NoejtIbKqOb76BkiXoIs
-         sNAFK333wdmxgFLrmkt+WEJPfTCnZVi1dMMMiq3rRdAsgGUNUHavc0bKtQBK/ng8ofWS
-         TSnsU0tUuA3AP6GkKQDzcys7CkE2u1IWTY20mwlYNyIa9ckgRn5Jf4k+N2JM1cFmQQsQ
-         /Lng==
-X-Gm-Message-State: AO0yUKWGUVB4k6cHV4aEO6mc+SRT1ddWocs9cyoJXBQgV2B8825OyaZU
-        lUp1k9ZNHEPGnPSTueI/GisVpZdyL7/iDASweH57YI0FNR9e5+WgvcURGG7ZwtekBdTclG6EYxF
-        2mNI2/39kXR+B7H5jnumNXtWi
-X-Received: by 2002:a05:6808:1441:b0:36e:3082:aafc with SMTP id x1-20020a056808144100b0036e3082aafcmr2821022oiv.22.1674803664332;
-        Thu, 26 Jan 2023 23:14:24 -0800 (PST)
-X-Google-Smtp-Source: AK7set8hH/PpOhYyPAlSefknqZ+k4fTdURkpfjMtwxczwFjxH1dSexKDNpHTFpfR3/ewOGvdvqq3Dg==
-X-Received: by 2002:a05:6808:1441:b0:36e:3082:aafc with SMTP id x1-20020a056808144100b0036e3082aafcmr2821017oiv.22.1674803664080;
-        Thu, 26 Jan 2023 23:14:24 -0800 (PST)
-Received: from ?IPv6:2804:1b3:a800:6912:c477:c73a:cf7c:3a27? ([2804:1b3:a800:6912:c477:c73a:cf7c:3a27])
-        by smtp.gmail.com with ESMTPSA id q125-20020aca5c83000000b0036f02656fa5sm1295386oib.34.2023.01.26.23.14.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 23:14:23 -0800 (PST)
-Message-ID: <55ac6e3cbb97c7d13c49c3125c1455d8a2c785c3.camel@redhat.com>
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@suse.com>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 27 Jan 2023 04:14:19 -0300
-In-Reply-To: <Y9MI42NSLooyVZNu@P9FQF9L96D.corp.robot.car>
-References: <20230125073502.743446-1-leobras@redhat.com>
-         <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
-         <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
-         <Y9FzSBw10MGXm2TK@tpad> <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
-         <Y9Iurktut9B9T+Tl@dhcp22.suse.cz>
-         <Y9MI42NSLooyVZNu@P9FQF9L96D.corp.robot.car>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 
+        Fri, 27 Jan 2023 02:14:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F3430B17;
+        Thu, 26 Jan 2023 23:14:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 890E961989;
+        Fri, 27 Jan 2023 07:14:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65B0FC433EF;
+        Fri, 27 Jan 2023 07:14:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674803693;
+        bh=x1JdooluUWCGUd/cgPpH9376iPbKL4rLMM3SWvULdkw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=alVnaxqmsTkMn4vrUIwoH539/du6MCVRTulUgf4bAHidBbrFckuxGBDFnEEylSY1R
+         EnnTgXvEfzUK497x5CNoNxc3KsAc8ls1P4fTgI6yuQ9YUk217w0l+fV9NQqNNQ2HEx
+         pT/OO8+l4oYD+16/mPGPTzA3U+8Huqr2ch6xqzPgF/SfqNKjsgPbjUs9GWnYjhudUD
+         Gq+9VHi0tDoNymTJHRH1DqGq3vXj7Wb9geSg+AwnycXknIblvUhWe2PTAhg7PLbzZ5
+         k7eJyrmwgUQO4HY3IN9MpXkZTUJBHSk38q98Oic9XVxh7O3pNQ2CRLYv51Rc8BkkEw
+         4P95UPS2GMjRQ==
+Date:   Fri, 27 Jan 2023 08:14:46 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 11/35] Documentation: i2c: correct spelling
+Message-ID: <Y9N55pFZc6TRD9S2@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+References: <20230127064005.1558-1-rdunlap@infradead.org>
+ <20230127064005.1558-12-rdunlap@infradead.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Kx4chLeJ7UNCk7qz"
+Content-Disposition: inline
+In-Reply-To: <20230127064005.1558-12-rdunlap@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-01-26 at 15:12 -0800, Roman Gushchin wrote:
-> On Thu, Jan 26, 2023 at 08:41:34AM +0100, Michal Hocko wrote:
-> > On Wed 25-01-23 15:14:48, Roman Gushchin wrote:
-> > > On Wed, Jan 25, 2023 at 03:22:00PM -0300, Marcelo Tosatti wrote:
-> > > > On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Br=C3=A1s wrote:
-> > > > > On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
-> > > > > > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
-> > > > > > > Disclaimer:
-> > > > > > > a - The cover letter got bigger than expected, so I had to sp=
-lit it in
-> > > > > > >     sections to better organize myself. I am not very confort=
-able with it.
-> > > > > > > b - Performance numbers below did not include patch 5/5 (Remo=
-ve flags
-> > > > > > >     from memcg_stock_pcp), which could further improve perfor=
-mance for
-> > > > > > >     drain_all_stock(), but I could only notice the optimizati=
-on at the
-> > > > > > >     last minute.
-> > > > > > >=20
-> > > > > > >=20
-> > > > > > > 0 - Motivation:
-> > > > > > > On current codebase, when drain_all_stock() is ran, it will s=
-chedule a
-> > > > > > > drain_local_stock() for each cpu that has a percpu stock asso=
-ciated with a
-> > > > > > > descendant of a given root_memcg.
-> > >=20
-> > > Do you know what caused those drain_all_stock() calls? I wonder if we=
- should look
-> > > into why we have many of them and whether we really need them?
-> > >=20
-> > > It's either some user's actions (e.g. reducing memory.max), either so=
-me memcg
-> > > is entering pre-oom conditions. In the latter case a lot of drain cal=
-ls can be
-> > > scheduled without a good reason (assuming the cgroup contain multiple=
- tasks running
-> > > on multiple cpus).
-> >=20
-> > I believe I've never got a specific answer to that. We
-> > have discussed that in the previous version submission
-> > (20221102020243.522358-1-leobras@redhat.com and specifically
-> > Y2TQLavnLVd4qHMT@dhcp22.suse.cz). Leonardo has mentioned a mix of RT an=
-d
-> > isolcpus. I was wondering about using memcgs in RT workloads because
-> > that just sounds weird but let's say this is the case indeed. Then an R=
-T
-> > task or whatever task that is running on an isolated cpu can have pcp
-> > charges.
-> >=20
-> > > Essentially each cpu will try to grab the remains of the memory quota
-> > > and move it locally. I wonder in such circumstances if we need to dis=
-able the pcp-caching
-> > > on per-cgroup basis.
-> >=20
-> > I think it would be more than sufficient to disable pcp charging on an
-> > isolated cpu.
->=20
-> It might have significant performance consequences.
->=20
-> I'd rather opt out of stock draining for isolated cpus: it might slightly=
- reduce
-> the accuracy of memory limits and slightly increase the memory footprint =
-(all
-> those dying memcgs...), but the impact will be limited. Actually it is li=
-mited
-> by the number of cpus.
 
-I was discussing this same idea with Marcelo yesterday morning.
+--Kx4chLeJ7UNCk7qz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The questions had in the topic were:
-a - About how many pages the pcp cache will hold before draining them itsel=
-f?=C2=A0
-b - Would it cache any kind of bigger page, or huge page in this same aspec=
-t?
 
-Please let me know if I got anything wrong, but IIUC from a previous debug =
-(a)'s
-answer is 4 pages. Meaning even on bigger-page archs such as powerpc, with =
-64k
-pages, the max pcp cache 'wasted' on each processor would be 256k (very sma=
-ll on
-today's standard).
+> -  client->irq assigned to a Host Notify IRQ if noone else specified an other.
+> +  client->irq assigned to a Host Notify IRQ if no one else specified an other.
 
-Please let me know if you have any info on (b), or any correcting on (a).
+I am not a native speaker, but shouldn't the last word be "another"?
 
-The thing is: having this drain_local_stock() waiver only for isolated cpus
-would not bring the same benefits for non-isolated cpus in high memory pres=
-sure
-as I understand this patchset is bringing. =C2=A0
 
-OTOH not running drain_local_stock() at all for every cpu may introduce
-performance gains (no remote CPU access) but can be a problem if I got the
-'wasted pages' could on (a) wrong. I mean, drain_local_stock() was introduc=
-ed
-for a reason.
+--Kx4chLeJ7UNCk7qz
+Content-Type: application/pgp-signature; name="signature.asc"
 
->=20
-> > This is not a per memcg property.
->=20
-> Sure, my point was that in pre-oom condition several cpus might try to co=
-nsolidate
-> the remains of the memory quota, actually working against each other. Sep=
-arate issue,
-> which might be a reason why there are many flush attempts in the case we =
-discuss.
->=20
-> Thanks!
->=20
+-----BEGIN PGP SIGNATURE-----
 
-Thank you for reviewing!
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPTeeIACgkQFA3kzBSg
+KbbfPQ/+JqbYfo5oC0hH8L4kQfxU84K8CYhwHmda2e694LyreyIgSxRq5vwaP4MA
+5tNnlPcu/1B9j19U8BLotJFGEXmMvQTfOQnWClSSRQ0bvHsX44XwpnPzwGchstGX
+uI58n6byEoE5OtEVl0/9x0oO7hpGsDhlWlYKTolgEXf7O0Gt1gFGf2dWdddr9mPe
+xQD0UvP8MNfRNUNyYCKxRe5FnIYyvXfIVqEwiLY8pUzhPEK4nRkvkISHEjt5/y0/
++Rlyue//arueGgOQ/cmBum4kVgr8brJwx5DcGt7oGdxJEG44SVWsyfr4+8b1t6bH
+Y34HWyS4lOlUG/1CyS58ay0/CA5BNl52iKKiWCX7z26TboNNIKj3nocaAOFuX9OB
+eNyLMbQcioovQ4L3o+j8cuow9Q0+0wjuogZ9JJ3jZkqQkE/XLyCU/+Li66aixmXE
+H8vGsZA4sjhDCBHSmrqhRmpiWmqp5+AarGVpl0JM+V+P6U+CG6r4GDufb6Gse2Gm
+7Bm3K/gKG3zmW4KNyfkyd2vFTS1qGVWg2nk1YEyIvK8Rkw9jwXApv7OQbKD5lgRA
+1/kCRGBcw5hwcq1FfwJkGgR9BviAXYxH5bQY9zYPtAdzwWzDoG7EywaxcvkBFvr2
+0WSXfC+qEauHnXE+IAPltHgC5XVopHTFQ2rdI5mqfveuSw0tS8Q=
+=noBS
+-----END PGP SIGNATURE-----
 
-Leo
-
+--Kx4chLeJ7UNCk7qz--
