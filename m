@@ -2,117 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5405E67E83E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0A567E847
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232859AbjA0O1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
+        id S232974AbjA0Oaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbjA0O1K (ORCPT
+        with ESMTP id S232257AbjA0Oah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:27:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9827F1A973
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:26:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674829580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VnkJIxm2QI3DDMT3TxMvWq8lIB2hYw6fZNHH6Pyl3DA=;
-        b=eaoWHnlkGXTIjeHUHt2jSkAgeETMOJuLsXji/poyRdD3brhgJ6PaxS0JClabxpqNsdXgjU
-        fN9okKUGZKaGzjq9GDb3XXcnI9lIwvHtu0FyzvxxeD4oK3f2xUqsy00xPfHdL+GIBPJZbS
-        jB7cDZZt/W+2+JKpucziYWmM3WKFDig=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-110-YDKvetHhPHWP8li8TN9dVw-1; Fri, 27 Jan 2023 09:26:17 -0500
-X-MC-Unique: YDKvetHhPHWP8li8TN9dVw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9F1EF3C1014F;
-        Fri, 27 Jan 2023 14:26:16 +0000 (UTC)
-Received: from [10.22.8.206] (unknown [10.22.8.206])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 33E9B492C14;
-        Fri, 27 Jan 2023 14:26:16 +0000 (UTC)
-Message-ID: <b112394d-7efa-c6f9-bbef-a73c501ff02c@redhat.com>
-Date:   Fri, 27 Jan 2023 09:26:16 -0500
+        Fri, 27 Jan 2023 09:30:37 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24548FF0E
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:30:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1674829835;
+  x=1706365835;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=RL1TVR8JpwDGXzhk2Xp/sjq8b+rwzvFYVEYMjlPcCWk=;
+  b=MvvpGXs7wDRDCxf5t1CPJbD0jSxY3jdzdAZO9frq+TXILOn6yR1Mb3Dr
+   ChsM+EMLPuB3a7HrDbmp/p+DOE6zwy7+ppOtpXyevgIuy3X817LjfHJvH
+   b/Oc/zd/t/p8X60cZqGerf1SGVZBy/5IBVNO1y6nuNceRtcI4BX+9AUhc
+   auSTsp8lwZ07yhJITRuPVM+ylFt1TH9QTv9AlHvW0HaIknwVZGGtD1rms
+   AFQt7VqxlYdQ5zQrJ//C6PQSjr6ZgRKM9H2XoCOJ2y+WVVTIGlSfSsVIL
+   9WgSuHc8xi88TfqmtLB8XRwHlUMyhyGk1Q2t0BfbjzB2xVA6m5vPC39yx
+   A==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+Date:   Fri, 27 Jan 2023 15:30:27 +0100
+Subject: [PATCH] virt-pci: add platform bus support
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
-Content-Language: en-US
-To:     Boqun Feng <boqun.feng@gmail.com>,
-        Chris Murphy <lists@colorremedies.com>
-Cc:     =?UTF-8?B?0JzQuNGF0LDQuNC7INCT0LDQstGA0LjQu9C+0LI=?= 
-        <mikhail.v.gavrilov@gmail.com>, David Sterba <dsterba@suse.cz>,
-        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-References: <CABXGCsN+BcaGO0+0bJszDPvA=5JF_bOPfXC=OLzMzsXY2M8hyQ@mail.gmail.com>
- <20220726164250.GE13489@twin.jikos.cz>
- <CABXGCsN1rzCoYiB-vN5grzsMdvgm1qv2jnWn0enXq5R-wke8Eg@mail.gmail.com>
- <20230125171517.GV11562@twin.jikos.cz>
- <CABXGCsOD7jVGYkFFG-nM9BgNq_7c16yU08EBfaUc6+iNsX338g@mail.gmail.com>
- <Y9K6m5USnON/19GT@boqun-archlinux>
- <CABXGCsMD6nAPpF34c6oMK47kHUQqADQPUCWrxyY7WFiKi1qPNg@mail.gmail.com>
- <a8992f62-06e6-b183-3ab5-8118343efb3f@redhat.com>
- <7e48c1ec-c653-484e-88fb-69f3deb40b1d@app.fastmail.com>
- <Y9NN9CFWc40oxmzP@boqun-archlinux>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y9NN9CFWc40oxmzP@boqun-archlinux>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <20230127-uml-pci-platform-v1-1-ec6b45d2829f@axis.com>
+X-B4-Tracking: v=1; b=H4sIAALg02MC/x2NQQqDMBAAvyJ77kKSIkq/UnrYxE1dMDFsbCmIf
+ zf2OAPD7FBZhSs8uh2Uv1JlzQ3srYMwU34zytQYnHF3Y92An7RgCYJloS2umpDj2FtPQx9HAy3
+ zVBm9Ug7zFW6pXLYoR/n9R8/XcZyN11SoeAAAAA==
+To:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+CC:     <robh@kernel.org>, <devicetree@lists.infradead.org>,
+        <linux-um@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@axis.com>, Vincent Whitchurch <vincent.whitchurch@axis.com>
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/23 23:07, Boqun Feng wrote:
-> On Thu, Jan 26, 2023 at 10:37:56PM -0500, Chris Murphy wrote:
->>
->> On Thu, Jan 26, 2023, at 7:20 PM, Waiman Long wrote:
->>> On 1/26/23 17:42, Mikhail Gavrilov wrote:
->>>>> I'm not sure whether these options are better than just increasing the
->>>>> number, maybe to unblock your ASAP, you can try make it 30 and make sure
->>>>> you have large enough memory to test.
->>>> About just to increase the LOCKDEP_CHAINS_BITS by 1. Where should this
->>>> be done? In vanilla kernel on kernel.org? In a specific distribution?
->>>> or the user must rebuild the kernel himself? Maybe increase
->>>> LOCKDEP_CHAINS_BITS by 1 is most reliable solution, but it difficult
->>>> to distribute to end users because the meaning of using packaged
->>>> distributions is lost (user should change LOCKDEP_CHAINS_BITS in
->>>> config and rebuild the kernel by yourself).
->>> Note that lockdep is typically only enabled in a debug kernel shipped by
->>> a distro because of the high performance overhead. The non-debug kernel
->>> doesn't have lockdep enabled. When LOCKDEP_CHAINS_BITS isn't big enough
->>> when testing on the debug kernel, you can file a ticket to the distro
->>> asking for an increase in CONFIG_LOCKDEP_CHAIN_BITS. Or you can build
->>> your own debug kernel with a bigger CONFIG_LOCKDEP_CHAIN_BITS.
->> Fedora bumped CONFIG_LOCKDEP_CHAINS_BITS=17 to 18 just 6 months ago for debug kernels.
->> https://gitlab.com/cki-project/kernel-ark/-/merge_requests/1921
->>
->> If 19 the recommended value I don't mind sending an MR for it. But if
->> the idea is we're going to be back here talking about bumping it to 20
->> in six months, I'd like to avoid that.
->>
-> How about a boot parameter then?
+This driver registers PCI busses, but the underlying virtio protocol
+could just as easily be used to provide a platform bus instead.  If the
+virtio device node in the devicetree indicates that it's compatible with
+simple-bus, register platform devices instead of handling it as a PCI
+bus.
 
-A boot parameter doesn't work for a statically allocated array which is 
-determined at compile time. Dynamic memory allocation isn't enabled yet 
-at early boot when lockdep will be used.
+Only one platform bus is allowed and the logic MMIO region for the
+platform bus is placed at an arbitrarily-chosen address away from the
+PCI region.
 
-Cheers,
-Longman
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+My first approach to getting platform drivers working on UML was by
+adding a minimal PCI-to-platform bridge driver, which worked without
+modifications to virt-pci, but that got shot down:
+
+ https://lore.kernel.org/lkml/20230120-simple-mfd-pci-v1-1-c46b3d6601ef@axis.com/
+---
+ arch/um/drivers/virt-pci.c | 91 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
+
+diff --git a/arch/um/drivers/virt-pci.c b/arch/um/drivers/virt-pci.c
+index 3ac220dafec4..0ff69d6ad253 100644
+--- a/arch/um/drivers/virt-pci.c
++++ b/arch/um/drivers/virt-pci.c
+@@ -8,6 +8,7 @@
+ #include <linux/virtio.h>
+ #include <linux/virtio_config.h>
+ #include <linux/logic_iomem.h>
++#include <linux/of_platform.h>
+ #include <linux/irqdomain.h>
+ #include <linux/virtio_pcidev.h>
+ #include <linux/virtio-uml.h>
+@@ -39,6 +40,8 @@ struct um_pci_device {
+ 	unsigned long status;
+ 
+ 	int irq;
++
++	bool platform;
+ };
+ 
+ struct um_pci_device_reg {
+@@ -48,6 +51,7 @@ struct um_pci_device_reg {
+ 
+ static struct pci_host_bridge *bridge;
+ static DEFINE_MUTEX(um_pci_mtx);
++static struct um_pci_device *um_pci_platform_device;
+ static struct um_pci_device_reg um_pci_devices[MAX_DEVICES];
+ static struct fwnode_handle *um_pci_fwnode;
+ static struct irq_domain *um_pci_inner_domain;
+@@ -480,6 +484,9 @@ static void um_pci_handle_irq_message(struct virtqueue *vq,
+ 	struct virtio_device *vdev = vq->vdev;
+ 	struct um_pci_device *dev = vdev->priv;
+ 
++	if (!dev->irq)
++		return;
++
+ 	/* we should properly chain interrupts, but on ARCH=um we don't care */
+ 
+ 	switch (msg->op) {
+@@ -561,6 +568,55 @@ static int um_pci_init_vqs(struct um_pci_device *dev)
+ 	return 0;
+ }
+ 
++static void __um_pci_virtio_platform_remove(struct virtio_device *vdev,
++					    struct um_pci_device *dev)
++{
++	virtio_reset_device(vdev);
++	vdev->config->del_vqs(vdev);
++
++	mutex_lock(&um_pci_mtx);
++	um_pci_platform_device = NULL;
++	mutex_unlock(&um_pci_mtx);
++
++	kfree(dev);
++}
++
++static int um_pci_virtio_platform_probe(struct virtio_device *vdev,
++					struct um_pci_device *dev)
++{
++	int ret;
++
++	dev->platform = true;
++
++	mutex_lock(&um_pci_mtx);
++
++	if (um_pci_platform_device) {
++		mutex_unlock(&um_pci_mtx);
++		ret = -EBUSY;
++		goto out_free;
++	}
++
++	ret = um_pci_init_vqs(dev);
++	if (ret) {
++		mutex_unlock(&um_pci_mtx);
++		goto out_free;
++	}
++
++	um_pci_platform_device = dev;
++
++	mutex_unlock(&um_pci_mtx);
++
++	ret = of_platform_default_populate(vdev->dev.of_node, NULL, &vdev->dev);
++	if (ret)
++		__um_pci_virtio_platform_remove(vdev, dev);
++
++	return ret;
++
++out_free:
++	kfree(dev);
++	return ret;
++}
++
+ static int um_pci_virtio_probe(struct virtio_device *vdev)
+ {
+ 	struct um_pci_device *dev;
+@@ -574,6 +630,9 @@ static int um_pci_virtio_probe(struct virtio_device *vdev)
+ 	dev->vdev = vdev;
+ 	vdev->priv = dev;
+ 
++	if (of_device_is_compatible(vdev->dev.of_node, "simple-bus"))
++		return um_pci_virtio_platform_probe(vdev, dev);
++
+ 	mutex_lock(&um_pci_mtx);
+ 	for (i = 0; i < MAX_DEVICES; i++) {
+ 		if (um_pci_devices[i].dev)
+@@ -623,6 +682,12 @@ static void um_pci_virtio_remove(struct virtio_device *vdev)
+ 	struct um_pci_device *dev = vdev->priv;
+ 	int i;
+ 
++	if (dev->platform) {
++		of_platform_depopulate(&vdev->dev);
++		__um_pci_virtio_platform_remove(vdev, dev);
++		return;
++	}
++
+         /* Stop all virtqueues */
+         virtio_reset_device(vdev);
+         vdev->config->del_vqs(vdev);
+@@ -860,6 +925,30 @@ void *pci_root_bus_fwnode(struct pci_bus *bus)
+ 	return um_pci_fwnode;
+ }
+ 
++static long um_pci_map_platform(unsigned long offset, size_t size,
++				const struct logic_iomem_ops **ops,
++				void **priv)
++{
++	if (!um_pci_platform_device)
++		return -ENOENT;
++
++	*ops = &um_pci_device_bar_ops;
++	*priv = &um_pci_platform_device->resptr[0];
++
++	return 0;
++}
++
++static const struct logic_iomem_region_ops um_pci_platform_ops = {
++	.map = um_pci_map_platform,
++};
++
++static struct resource virt_platform_resource = {
++	.name = "platform",
++	.start = 0x10000000,
++	.end = 0x1fffffff,
++	.flags = IORESOURCE_MEM,
++};
++
+ static int __init um_pci_init(void)
+ {
+ 	int err, i;
+@@ -868,6 +957,8 @@ static int __init um_pci_init(void)
+ 				       &um_pci_cfgspace_ops));
+ 	WARN_ON(logic_iomem_add_region(&virt_iomem_resource,
+ 				       &um_pci_iomem_ops));
++	WARN_ON(logic_iomem_add_region(&virt_platform_resource,
++				       &um_pci_platform_ops));
+ 
+ 	if (WARN(CONFIG_UML_PCI_OVER_VIRTIO_DEVICE_ID < 0,
+ 		 "No virtio device ID configured for PCI - no PCI support\n"))
+
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230127-uml-pci-platform-ef851ba75f80
+
+Best regards,
+-- 
+Vincent Whitchurch <vincent.whitchurch@axis.com>
 
