@@ -2,152 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E25767E71D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC5167E71F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233144AbjA0NxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S233202AbjA0Nxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233086AbjA0NxE (ORCPT
+        with ESMTP id S229847AbjA0Nx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:53:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C06757B4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:52:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674827538;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R7PwQQfaQAAI4cWcMcSVvB/9kkzepsIAiNqYaNg7Vqg=;
-        b=Bicu/tFl0PtlK5OTJuX7LIHSyGAAcNJXDlLyGYYGHpN1rKaTfR12/9o0HNmKV4giPqrVpC
-        fHHSL5ytvK33RDdsCHy1Vk9qBh1dFqLgn3gh4cZmswA5Ju/frkowqorDWA7TpQAmzsiYgt
-        2UBx3emKB6O+O1sIRy6xmccN8pZhbNg=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-640-CiZ0Q0-HMPOxhds0MMtB1A-1; Fri, 27 Jan 2023 08:52:17 -0500
-X-MC-Unique: CiZ0Q0-HMPOxhds0MMtB1A-1
-Received: by mail-ej1-f69.google.com with SMTP id qf20-20020a1709077f1400b0086ec9755517so3434800ejc.15
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:52:16 -0800 (PST)
+        Fri, 27 Jan 2023 08:53:28 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E447C703
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:53:26 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id h19so3567932vsv.13
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:53:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RzUBqryTptYUzEfhbyg+Lbcb+hwacEV+TO0IK7LNXU8=;
+        b=Nj0//xHZCol4X/4LoPRHBLp04mZ6EyoR6ifMGAJyZKXqDQ2DDO+UCVf7oXmiq8NKlv
+         uZhMC6w+AZvGFtaDvUzwidx8Sj6lRH4ps0RND4mC75QLASrACcarZbZAwCO+OrbBgA2a
+         g6FO/H9UpLopISqqI4EpbAT5FHiezaN0Fh8eq1vv3wpFDi1xJ1DxrF1FbWDGq1iQM8db
+         jhsXmwcthCd/L7yBe0BjwKvAfI5jGJEJ22/YXzrIkm6RnhG1QA/BRHhzDOqjpj8yDCHA
+         D4eYt52pTgdUF+rDhhr2qje3A/dPZp0eHCoQb4UOKqcPObAZwnduqaFfm0Ypw1PKn7gw
+         EiTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R7PwQQfaQAAI4cWcMcSVvB/9kkzepsIAiNqYaNg7Vqg=;
-        b=FGk3NoJIVKfMLbeMHaevEJGaeDKTLGTCRXaKGFrf9KaLptON9TLw4b549FtcVRuVFa
-         NTf4TWpLMMpT11LAjRF1/zggOP0bt4tQnZqT7fSh+MsF8r7XH/axA4nW1MPm6SBYWdpM
-         f+gHzOmTVyu6UP3X7K9c0VA6iAarm29rj/FnfuNX4UGV3wT2GRHfMA2t9NKTMVApy8Ed
-         2DLGRefIBs6VuaKL9wJ/CcP3OE89iiOvM2m656NpFpCgRc5cdXEQzCDfSgBNGGZtW5at
-         bNfS5RJ4waUlpa5LWE1jzNccqTPo8PCKheDo67i8rFFQGUnHPU/+YgA69miaQxjD6vEu
-         PlPg==
-X-Gm-Message-State: AFqh2koSkOTudE/o2TDfyaxo6De7hTwS3CRv/iB8crDDquHafmY4Bv7c
-        vzd1O8SuCYXhq7vRh08IeTQMC62FhygBzH/pGWt+UNNe71Af0SUyI9gqX6NmclRL96fdZKTpaXC
-        7z2Y1hPmVi8Am/CuHBa9T0TP3
-X-Received: by 2002:a17:906:9f1c:b0:870:3c70:8c8d with SMTP id fy28-20020a1709069f1c00b008703c708c8dmr35780276ejc.17.1674827535253;
-        Fri, 27 Jan 2023 05:52:15 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv6Rvl5hVCAcmib+Ajlnf9hxYLH9FQSlnb3lj94uj3kByJbvLhBcQF3Wx5PXW8TJDK2Yh5ogw==
-X-Received: by 2002:a17:906:9f1c:b0:870:3c70:8c8d with SMTP id fy28-20020a1709069f1c00b008703c708c8dmr35780264ejc.17.1674827535048;
-        Fri, 27 Jan 2023 05:52:15 -0800 (PST)
-Received: from redhat.com ([2.52.137.69])
-        by smtp.gmail.com with ESMTPSA id sb25-20020a1709076d9900b0086faa5b06d4sm2262152ejc.181.2023.01.27.05.52.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 05:52:14 -0800 (PST)
-Date:   Fri, 27 Jan 2023 08:52:09 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
-        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
-        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v1 2/6] virtio console: Harden port adding
-Message-ID: <20230127085006-mutt-send-email-mst@kernel.org>
-References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
- <20230119135721.83345-3-alexander.shishkin@linux.intel.com>
- <Y8lfz8C5uvx2w4fC@kroah.com>
- <87ilh2quto.fsf@ubik.fi.intel.com>
- <Y8mSs68JfW6t4mjl@kroah.com>
- <87a62eqo4h.fsf@ubik.fi.intel.com>
- <20230127055944-mutt-send-email-mst@kernel.org>
- <87k018p4xs.fsf@ubik.fi.intel.com>
- <20230127071152-mutt-send-email-mst@kernel.org>
- <87edrgp2is.fsf@ubik.fi.intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RzUBqryTptYUzEfhbyg+Lbcb+hwacEV+TO0IK7LNXU8=;
+        b=Z83tuQBBfmH+BR+HJIOdmefHlxh8MIiNdI+q6HjRlt/5eWW5NxeiUwK0G2Qw871GXt
+         +Ud1LZZo0YKc8jF5FN+0em4vSBcfcbJNydkV33u4/tWyjd7qI6SSRv62v9gqd1qGPBKb
+         4DUvzDJwYApJLZKE8eKeJbjKgf9NLoLuxZ5nOmtCr/YtwsOSCB5YC2MynkcNz3fx5yiH
+         es8NdhRJcJQJBWMQYxdK3B9jAT5zxbitxEFACUvtXk0LoM4Iy+m+RBOnNL6AY7ExVg+4
+         +vPpPpjy7BOoY+peUe6BUDIIY3otVTTxIgNIscI00/ewocPIxNxW/eNwp4Hsz1EvkzNG
+         tnRQ==
+X-Gm-Message-State: AO0yUKUr9ySKYE64lXGfdXyyiXHizvWPNP8Mk7/uwQEjYTne/4Lczq3E
+        MhFeuY9/XaDCLo8rXw1SLFnZXQBXyD8gOrR+ZfPiDA==
+X-Google-Smtp-Source: AK7set+G91Acv+61aPdZ7vz54qMR8TqpiXkerxphHeLdypTJtL9kTh+QKLLarGjOUcQbXe2xYcQWJXCbqIL8IuEg6ZM=
+X-Received: by 2002:a05:6102:3098:b0:3ec:1029:9eae with SMTP id
+ l24-20020a056102309800b003ec10299eaemr661243vsb.10.1674827605343; Fri, 27 Jan
+ 2023 05:53:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87edrgp2is.fsf@ubik.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230112140304.1830648-1-apatel@ventanamicro.com>
+ <20230112140304.1830648-4-apatel@ventanamicro.com> <20230126161147.6rewhfvlouqn4ual@orel>
+In-Reply-To: <20230126161147.6rewhfvlouqn4ual@orel>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Fri, 27 Jan 2023 19:23:13 +0530
+Message-ID: <CAK9=C2XzTdqXr+vWZ4Ua=HET1gvskAY+y9yFtGbmR2LGg87asQ@mail.gmail.com>
+Subject: Re: [PATCH 3/7] RISC-V: KVM: Drop the _MASK suffix from hgatp.VMID
+ mask defines
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 02:47:55PM +0200, Alexander Shishkin wrote:
-> "Michael S. Tsirkin" <mst@redhat.com> writes:
-> 
-> > On Fri, Jan 27, 2023 at 01:55:43PM +0200, Alexander Shishkin wrote:
-> >> "Michael S. Tsirkin" <mst@redhat.com> writes:
-> >> 
-> >> > On Thu, Jan 19, 2023 at 10:13:18PM +0200, Alexander Shishkin wrote:
-> >> >> When handling control messages, instead of peeking at the device memory
-> >> >> to obtain bits of the control structure,
-> >> >
-> >> > Except the message makes it seem that we are getting data from
-> >> > device memory, when we do nothing of the kind.
-> >> 
-> >> We can be, see below.
-> >> 
-> >> >> take a snapshot of it once and
-> >> >> use it instead, to prevent it from changing under us. This avoids races
-> >> >> between port id validation and control event decoding, which can lead
-> >> >> to, for example, a NULL dereference in port removal of a nonexistent
-> >> >> port.
-> >> >> 
-> >> >> The control structure is small enough (8 bytes) that it can be cached
-> >> >> directly on the stack.
-> >> >
-> >> > I still have no real idea why we want a copy here.
-> >> > If device can poke anywhere at memory then it can crash kernel anyway.
-> >> > If there's a bounce buffer or an iommu or some other protection
-> >> > in place, then this memory can no longer change by the time
-> >> > we look at it.
-> >> 
-> >> We can have shared pages between the host and guest without bounce
-> >> buffers in between, so they can be both looking directly at the same
-> >> page.
-> >> 
-> >> Regards,
+On Thu, Jan 26, 2023 at 9:41 PM Andrew Jones <ajones@ventanamicro.com> wrote:
+>
+> On Thu, Jan 12, 2023 at 07:33:00PM +0530, Anup Patel wrote:
+> > The hgatp.VMID mask defines are used before shifting when extracting
+> > VMID value from hgatp CSR value so based on the convention followed
+> > in the other parts of asm/csr.h, the hgatp.VMID mask defines should
+> > not have a _MASK suffix.
 > >
-> > How does this configuration work? What else is in this page?
-> 
-> So, for example in TDX, you have certain pages as "shared", as in
-> between guest and hypervisor. You can have virtio ring(s) in such
-> pages.
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/csr.h | 8 ++++----
+> >  arch/riscv/kvm/mmu.c         | 3 +--
+> >  arch/riscv/kvm/vmid.c        | 4 ++--
+> >  3 files changed, 7 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> > index d608dac4b19f..36d580528f90 100644
+> > --- a/arch/riscv/include/asm/csr.h
+> > +++ b/arch/riscv/include/asm/csr.h
+> > @@ -131,12 +131,12 @@
+> >
+> >  #define HGATP32_MODE_SHIFT   31
+> >  #define HGATP32_VMID_SHIFT   22
+> > -#define HGATP32_VMID_MASK    _AC(0x1FC00000, UL)
+> > +#define HGATP32_VMID         _AC(0x1FC00000, UL)
+> >  #define HGATP32_PPN          _AC(0x003FFFFF, UL)
+> >
+> >  #define HGATP64_MODE_SHIFT   60
+> >  #define HGATP64_VMID_SHIFT   44
+> > -#define HGATP64_VMID_MASK    _AC(0x03FFF00000000000, UL)
+> > +#define HGATP64_VMID         _AC(0x03FFF00000000000, UL)
+> >  #define HGATP64_PPN          _AC(0x00000FFFFFFFFFFF, UL)
+> >
+> >  #define HGATP_PAGE_SHIFT     12
+> > @@ -144,12 +144,12 @@
+> >  #ifdef CONFIG_64BIT
+> >  #define HGATP_PPN            HGATP64_PPN
+> >  #define HGATP_VMID_SHIFT     HGATP64_VMID_SHIFT
+> > -#define HGATP_VMID_MASK              HGATP64_VMID_MASK
+> > +#define HGATP_VMID           HGATP64_VMID
+> >  #define HGATP_MODE_SHIFT     HGATP64_MODE_SHIFT
+> >  #else
+> >  #define HGATP_PPN            HGATP32_PPN
+> >  #define HGATP_VMID_SHIFT     HGATP32_VMID_SHIFT
+> > -#define HGATP_VMID_MASK              HGATP32_VMID_MASK
+> > +#define HGATP_VMID           HGATP32_VMID
+> >  #define HGATP_MODE_SHIFT     HGATP32_MODE_SHIFT
+> >  #endif
+> >
+> > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> > index 34b57e0be2ef..034746638fa6 100644
+> > --- a/arch/riscv/kvm/mmu.c
+> > +++ b/arch/riscv/kvm/mmu.c
+> > @@ -748,8 +748,7 @@ void kvm_riscv_gstage_update_hgatp(struct kvm_vcpu *vcpu)
+> >       unsigned long hgatp = gstage_mode;
+> >       struct kvm_arch *k = &vcpu->kvm->arch;
+> >
+> > -     hgatp |= (READ_ONCE(k->vmid.vmid) << HGATP_VMID_SHIFT) &
+> > -              HGATP_VMID_MASK;
+> > +     hgatp |= (READ_ONCE(k->vmid.vmid) << HGATP_VMID_SHIFT) & HGATP_VMID;
+> >       hgatp |= (k->pgd_phys >> PAGE_SHIFT) & HGATP_PPN;
+> >
+> >       csr_write(CSR_HGATP, hgatp);
+> > diff --git a/arch/riscv/kvm/vmid.c b/arch/riscv/kvm/vmid.c
+> > index 6cd93995fb65..6f4d4979a759 100644
+> > --- a/arch/riscv/kvm/vmid.c
+> > +++ b/arch/riscv/kvm/vmid.c
+> > @@ -26,9 +26,9 @@ void kvm_riscv_gstage_vmid_detect(void)
+> >
+> >       /* Figure-out number of VMID bits in HW */
+> >       old = csr_read(CSR_HGATP);
+> > -     csr_write(CSR_HGATP, old | HGATP_VMID_MASK);
+> > +     csr_write(CSR_HGATP, old | HGATP_VMID);
+> >       vmid_bits = csr_read(CSR_HGATP);
+> > -     vmid_bits = (vmid_bits & HGATP_VMID_MASK) >> HGATP_VMID_SHIFT;
+> > +     vmid_bits = (vmid_bits & HGATP_VMID) >> HGATP_VMID_SHIFT;
+> >       vmid_bits = fls_long(vmid_bits);
+> >       csr_write(CSR_HGATP, old);
+> >
+> > --
+> > 2.34.1
+> >
+>
+> Could switch to GENMASK too at the same time :-)
 
-That one's marked as dma coherent.
+Okay, I will update.
 
-> It's likely that there'd be a swiotlb buffer there instead, but
-> sharing pages between host virtio and guest virtio drivers is possible.
+>
+> Anyway,
+>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+>
 
-It's not something console does though, does it?
-
-> Apologies if the language is confusing, I hope I'm answering the
-> question.
-> 
-> Regards,
-> --
-> Alex
-
-I'd like an answer to when does the console driver share the buffer
-in question, not when generally some pages shared.
-
--- 
-MST
-
+Thanks,
+Anup
