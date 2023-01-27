@@ -2,90 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9CA67E91C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E7767E924
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234375AbjA0PLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
+        id S234340AbjA0PMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234276AbjA0PLr (ORCPT
+        with ESMTP id S233302AbjA0PMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:11:47 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FD47FA01
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:11:30 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so5619508wmq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:11:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pFGFyIlaUgi5dEdEAInZAffkhm1C7oufG5PHtVZv8k4=;
-        b=n+Z7FILuTAIuI8fdgCmqUjlUb9JshrYX66HmRWLHbRPJzI91jR0lFU9qYjA8pVnHMJ
-         Vq9r+s++nCsd5q34Qv8B7ScoMEUzjXVteDLzJJ1Df23lJEDXlftru/r7vV22B9WABGhv
-         txUox2wazSwJbjubtxB4RD4fjmoZzOiD7Wn0t1mJFk8IQKVG7QDMo0EM5loeJGdX+d/X
-         SyUOoOrhMxCPVMbPcZ26NIpIAiHIukooSbmmwzmwRb5icSGU3OCNnL1BaY2bWsz7YpXR
-         74El27246kheJaaVmiTYe1b2eboYcww+/jfTtJsjWuLeJWU+ZBWmHJWYDTIN6UUF5NG7
-         NpNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pFGFyIlaUgi5dEdEAInZAffkhm1C7oufG5PHtVZv8k4=;
-        b=sUzLPHTbAw2OcGAxs20FGCH342qkGFru6xUVKdlxX0dVc7NCGlRAz9DkmY7kxpFR6c
-         RusNaPLeuV5ahtEgIn2sNi84YMiRyfResJJVAVFF/WsBcSyrf1eG70pY93yTiR0XsQtH
-         baMppNGob7rh/1rTnj2HvjEN0irvVPlu+HCpw3OwrjlVsW0gX3VcWwDi2kyN9IKBEK8Z
-         oEMMRE6LbNYxWCAHDua7e/iTQjNbT7Lc11iU/soO4vXpT9+KfwWhe5WbzGsPgjt5klRm
-         FQvch0Si01bzUfH/F2tpKi59XzPhTEa+GHekL9pMU8YWEpGEtH4AzA3daSEcS/yZetI3
-         kJ8w==
-X-Gm-Message-State: AFqh2krDcx+Nh5KuSgIipSGHhU7po7IVFu2JRCuafP15lDnd/k26Vtzf
-        1e6BK+0t73MSfhtCFH3VwO0TSg==
-X-Google-Smtp-Source: AMrXdXskBTvhigu7JjoC9WzKkVc8AO+kZF5hVkJFTRwD5SOusc042fCbF4GvHhgYSIed5eluNp1kKg==
-X-Received: by 2002:a05:600c:c0a:b0:3db:2858:db84 with SMTP id fm10-20020a05600c0c0a00b003db2858db84mr30564681wmb.34.1674832288879;
-        Fri, 27 Jan 2023 07:11:28 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id 18-20020a05600c26d200b003da28dfdedcsm5390776wmv.5.2023.01.27.07.11.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 07:11:28 -0800 (PST)
-Message-ID: <1eff0411-430d-25d2-f1c6-41b22ff3938f@linaro.org>
-Date:   Fri, 27 Jan 2023 16:11:26 +0100
+        Fri, 27 Jan 2023 10:12:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB6884FBF
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:12:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 53417CE28C1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 15:12:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEBBC433A4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 15:12:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674832338;
+        bh=XEGrj08mrGc6T/CEgbRHQGd2YGIb4XomZMq/krxPioc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NE7iOLypBK0VcyoXe938Wrub/Dw5KzL7dSr6El5xLMjFDdDwRIPzcnb+RnFl1DtR4
+         zGKUbwkZUSDBwoNhnLnciBA2uFF3bwTK1gnIasFfpIKr/mtB4yhOjWYYnOTsRZT5Jp
+         1o+734IVEyh++hTgc3TLwfQv34XrT54Ip0EG8+3tetxKa4A359ip3Ehvu7DMyVqjWh
+         4r7bfZr3KRlXZHsFJm47FxEOMa0EkDWPOBS/DB8Tig1jfugQ814tNJDL2x7s3zbC+K
+         lLG0wk7i3F7AJlWLNjiOJV3nzAa+Wqrcg2t110cjECkctz+1+EyjVYeM/ggu2PUuCN
+         hjnKH0Nwe32EQ==
+Received: by mail-lf1-f41.google.com with SMTP id bp15so8571490lfb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:12:18 -0800 (PST)
+X-Gm-Message-State: AFqh2koCYOpxsxyCMTCgiVDqdNO5hShD2HFRHcONJDy8EDdgkXkC377p
+        6y3BMNZpY3JOt49pVPug+ivy0ZJ4Z25cTg5qxA==
+X-Google-Smtp-Source: AMrXdXsMmkgRBQo0TFynmEJqLTZw81aRoOnst7MOnAoZNQlO8IkeJrvkMJCE/StM8437PfU6MBsslI61mZGCWtvv18g=
+X-Received: by 2002:a05:6512:1043:b0:4ca:f9e4:c410 with SMTP id
+ c3-20020a056512104300b004caf9e4c410mr2228287lfb.97.1674832336570; Fri, 27 Jan
+ 2023 07:12:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 07/15] dt-bindings: clock: Add Ambarella clock bindings
-Content-Language: en-US
-To:     Li Chen <me@linux.beauty>
-Cc:     li chen <lchen@ambarella.com>,
-        michael turquette <mturquette@baylibre.com>,
-        stephen boyd <sboyd@kernel.org>,
-        rob herring <robh+dt@kernel.org>,
-        krzysztof kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:arm/ambarella soc support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:common clk framework" <linux-clk@vger.kernel.org>,
-        "open list:open firmware and flattened device tree bindings" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        arnd bergmann <arnd@arndb.de>
-References: <20230123073305.149940-1-lchen@ambarella.com>
- <20230123073305.149940-8-lchen@ambarella.com>
- <0c19efb4-3bca-f500-ca24-14b9d24369ef@linaro.org>
- <87y1prgdyu.wl-me@linux.beauty>
- <b26a52ff-6b8a-8a64-7189-346cd2b0d705@linaro.org>
- <87tu0ehl88.wl-me@linux.beauty>
- <ec9fc589-2612-3315-3550-83b68bead926@linaro.org>
- <87sffyhgvw.wl-me@linux.beauty>
- <f70def8e-b148-616f-a93e-c2a8fb85be03@linaro.org>
- <185f3b3a330.11c135c37327076.6300919877819761183@linux.beauty>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <185f3b3a330.11c135c37327076.6300919877819761183@linux.beauty>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20221122143949.3493104-1-nfraprado@collabora.com>
+In-Reply-To: <20221122143949.3493104-1-nfraprado@collabora.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Fri, 27 Jan 2023 23:12:04 +0800
+X-Gmail-Original-Message-ID: <CAAOTY__oFQ8DyAbdCyQEGAw7tFi+6AONiOHZxu_qJhT9MHNpoQ@mail.gmail.com>
+Message-ID: <CAAOTY__oFQ8DyAbdCyQEGAw7tFi+6AONiOHZxu_qJhT9MHNpoQ@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/mediatek: Clean dangling pointer on bind error path
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>, kernel@collabora.com,
+        "Nancy . Lin" <nancy.lin@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        CK Hu <ck.hu@mediatek.com>,
+        Daniel Kurtz <djkurtz@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Mao Huang <littlecvr@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        YT Shen <yt.shen@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,16 +76,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 15:48, Li Chen wrote:
->  > This is independent topic. SoC-specific compatibles are a requirement
->  > but it does not affect your device hierarchy.
->  
-> Thanks, "requirement" makes things much more clear. So I will always use SoC-specific compatibles even
-> if different Amarella SoCs may share the same reg offset and setting.
+Hi, Nicolas:
 
-Just please read before sending any new versions:
-https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst
+N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com> =E6=96=BC 2022=E5=B9=
+=B411=E6=9C=8822=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8810:39=E5=AF=
+=AB=E9=81=93=EF=BC=9A
+>
+> mtk_drm_bind() can fail, in which case drm_dev_put() is called,
+> destroying the drm_device object. However a pointer to it was still
+> being held in the private object, and that pointer would be passed along
+> to DRM in mtk_drm_sys_prepare() if a suspend were triggered at that
+> point, resulting in a panic. Clean the pointer when destroying the
+> object in the error path to prevent this from happening.
 
-Best regards,
-Krzysztof
+Applied to mediatek-drm-next [1], thanks.
 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-next
+
+Regards,
+Chun-Kuang.
+
+>
+> Fixes: 119f5173628a ("drm/mediatek: Add DRM Driver for Mediatek SoC MT817=
+3.")
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+>
+> ---
+>
+> Changes in v2:
+> - Added Fixes tag
+>
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/med=
+iatek/mtk_drm_drv.c
+> index 39a42dc8fb85..a21ff1b3258c 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> @@ -514,6 +514,7 @@ static int mtk_drm_bind(struct device *dev)
+>  err_deinit:
+>         mtk_drm_kms_deinit(drm);
+>  err_free:
+> +       private->drm =3D NULL;
+>         drm_dev_put(drm);
+>         return ret;
+>  }
+> --
+> 2.38.1
+>
