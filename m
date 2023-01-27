@@ -2,561 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE7867E88C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 820A267E88F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:46:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbjA0OpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S233811AbjA0Oqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:46:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233784AbjA0OpE (ORCPT
+        with ESMTP id S230423AbjA0Oq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:45:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795367D9BE
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:44:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674830654;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LgyUzbW5VO7wi4+o+0G4wAzbN510PHzCyFsvHroOWX8=;
-        b=CsAONW1dcZF0u6kHs5cckYCn/hKxtnS5H0qbAUe44V2HszYimG0Zmoot405M4Zqsnp+gEQ
-        avTURBeL/TG6g/19aGhlr1zLWeiyWaz36rtaf9c+K1SsIy3EJ+x2MOQqNyfCFf1B0K2aVU
-        mfxLuTelp7kAHSn4Uzuq5vPtxjMVGQI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-643-vcoMWsZlPNeupsw554Cmmw-1; Fri, 27 Jan 2023 09:44:13 -0500
-X-MC-Unique: vcoMWsZlPNeupsw554Cmmw-1
-Received: by mail-ed1-f70.google.com with SMTP id h18-20020a05640250d200b0049e0e9382c2so3730730edb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:44:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LgyUzbW5VO7wi4+o+0G4wAzbN510PHzCyFsvHroOWX8=;
-        b=DQ4KxIBSGSZY8A70ZqsoG8lkRIkhV2SRcSLpffD/CtAdEyxqvNltBEIqgg9729Yl/K
-         uyc8i16bi3gwr50ypf5dPHusxbWUrXW5bqHLLIN8fRXAAFx7E56+z5KJGhK4K5YJxzYb
-         FvQNzu6CHBE/FAjXWkhEA//6BCOQJW9GOrbsthi8kQmLNmGDDAD5a2oheEUftpljl94p
-         F80dqxfOfG81ibnnWLjosdL0p6cpZPlMwa29or2ukdGxlN3EpbmO0q1htqRVyD2d/OwL
-         EXmjcIoyzUpGoSZCTzjbuJk278arMqndAwjdBZkKgY5cMinSU8LdwvD3GNTuuWXSaQnu
-         4tdA==
-X-Gm-Message-State: AO0yUKVZ6lo3AvWsALPcCjILSvNQDIYj6FO5A+ls00ZaeGSJ1AcPU8Hv
-        i7NLZnFE7amrOPvlvW0fypa9wKxBmhf/YMXSf7DJ0JmIVA6r7ybCQkGLobzcojgDcDdCTexErU5
-        SHL26R25qMD7tJjXgMVTb+ag3
-X-Received: by 2002:a17:907:6d9b:b0:87c:db2:f658 with SMTP id sb27-20020a1709076d9b00b0087c0db2f658mr1437589ejc.40.1674830651942;
-        Fri, 27 Jan 2023 06:44:11 -0800 (PST)
-X-Google-Smtp-Source: AK7set9mD8aQL+X9TxOVUe05KrGTCI+fOlCBF0hrKGtRVaQ8Wj6ppDv8pQJab0SPWdZgiGJE+txSQA==
-X-Received: by 2002:a17:907:6d9b:b0:87c:db2:f658 with SMTP id sb27-20020a1709076d9b00b0087c0db2f658mr1437552ejc.40.1674830651616;
-        Fri, 27 Jan 2023 06:44:11 -0800 (PST)
-Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id n18-20020a1709067b5200b00878530f5324sm2375166ejo.90.2023.01.27.06.44.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 06:44:11 -0800 (PST)
-Message-ID: <3a76bfa9-8ee5-a7d9-b9fb-a98181baec0b@redhat.com>
-Date:   Fri, 27 Jan 2023 15:44:09 +0100
+        Fri, 27 Jan 2023 09:46:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01E97D9B0;
+        Fri, 27 Jan 2023 06:46:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A0F961C39;
+        Fri, 27 Jan 2023 14:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FDC5C433EF;
+        Fri, 27 Jan 2023 14:46:25 +0000 (UTC)
+Message-ID: <59b1c8f5-24da-4a6b-d555-84a83d3c19ba@xs4all.nl>
+Date:   Fri, 27 Jan 2023 15:46:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH drm-next 05/14] drm/nouveau: new VM_BIND uapi interfaces
+Subject: Re: [PATCH 05/10] media: Add B312 video format
 Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Matthew Brost <matthew.brost@intel.com>
-Cc:     daniel@ffwll.ch, airlied@redhat.com, bskeggs@redhat.com,
-        jason@jlekstrand.net, tzimmermann@suse.de, mripard@kernel.org,
-        corbet@lwn.net, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org
-References: <20230118061256.2689-1-dakr@redhat.com>
- <20230118061256.2689-6-dakr@redhat.com>
- <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com>
- <7c046ff9-728d-7634-9d77-8536308c7481@redhat.com>
- <c2256c7d-e768-ae3f-d465-b9f8080d111b@amd.com>
- <2427a918-5348-d1ef-ccae-a29c1ff33c83@redhat.com>
- <a214b28b-043c-a8bb-69da-b4d8216fce56@amd.com>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <a214b28b-043c-a8bb-69da-b4d8216fce56@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
+        mirela.rabulea@oss.nxp.com
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <cover.1671071730.git.ming.qian@nxp.com>
+ <a3ae7c29f0c2c8e86f2c35d50a4b9cbc432c6cf0.1671071730.git.ming.qian@nxp.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <a3ae7c29f0c2c8e86f2c35d50a4b9cbc432c6cf0.1671071730.git.ming.qian@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/23 14:23, Christian König wrote:
+On 20/12/2022 04:11, Ming Qian wrote:
+> B312 is a reversed RGB format with 12 bits per component like BGR24,
+> expanded to 16bits.
+> Data in the 12 high bits, zeros in the 4 low bits,
+> arranged in little endian order.
 > 
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> ---
+>  .../userspace-api/media/v4l/pixfmt-rgb.rst    | 35 +++++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-common.c         |  1 +
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+>  include/uapi/linux/videodev2.h                |  3 ++
+>  4 files changed, 40 insertions(+)
 > 
-> Am 27.01.23 um 14:12 schrieb Danilo Krummrich:
->> On 1/27/23 08:55, Christian König wrote:
->>> Am 27.01.23 um 02:26 schrieb Danilo Krummrich:
->>>> On 1/27/23 02:05, Matthew Brost wrote:
->>>>> On Wed, Jan 18, 2023 at 07:12:47AM +0100, Danilo Krummrich wrote:
->>>>>> This commit provides the interfaces for the new UAPI motivated by the
->>>>>> Vulkan API. It allows user mode drivers (UMDs) to:
->>>>>>
->>>>>> 1) Initialize a GPU virtual address (VA) space via the new
->>>>>>     DRM_IOCTL_NOUVEAU_VM_INIT ioctl. UMDs can provide a kernel 
->>>>>> reserved
->>>>>>     VA area.
->>>>>>
->>>>>> 2) Bind and unbind GPU VA space mappings via the new
->>>>>>     DRM_IOCTL_NOUVEAU_VM_BIND ioctl.
->>>>>>
->>>>>> 3) Execute push buffers with the new DRM_IOCTL_NOUVEAU_EXEC ioctl.
->>>>>>
->>>>>> Both, DRM_IOCTL_NOUVEAU_VM_BIND and DRM_IOCTL_NOUVEAU_EXEC support
->>>>>> asynchronous processing with DRM syncobjs as synchronization 
->>>>>> mechanism.
->>>>>>
->>>>>> The default DRM_IOCTL_NOUVEAU_VM_BIND is synchronous processing,
->>>>>> DRM_IOCTL_NOUVEAU_EXEC supports asynchronous processing only.
->>>>>>
->>>>>> Co-authored-by: Dave Airlie <airlied@redhat.com>
->>>>>> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
->>>>>> ---
->>>>>>   Documentation/gpu/driver-uapi.rst |   8 ++
->>>>>>   include/uapi/drm/nouveau_drm.h    | 216 
->>>>>> ++++++++++++++++++++++++++++++
->>>>>>   2 files changed, 224 insertions(+)
->>>>>>
->>>>>> diff --git a/Documentation/gpu/driver-uapi.rst 
->>>>>> b/Documentation/gpu/driver-uapi.rst
->>>>>> index 4411e6919a3d..9c7ca6e33a68 100644
->>>>>> --- a/Documentation/gpu/driver-uapi.rst
->>>>>> +++ b/Documentation/gpu/driver-uapi.rst
->>>>>> @@ -6,3 +6,11 @@ drm/i915 uAPI
->>>>>>   =============
->>>>>>     .. kernel-doc:: include/uapi/drm/i915_drm.h
->>>>>> +
->>>>>> +drm/nouveau uAPI
->>>>>> +================
->>>>>> +
->>>>>> +VM_BIND / EXEC uAPI
->>>>>> +-------------------
->>>>>> +
->>>>>> +.. kernel-doc:: include/uapi/drm/nouveau_drm.h
->>>>>> diff --git a/include/uapi/drm/nouveau_drm.h 
->>>>>> b/include/uapi/drm/nouveau_drm.h
->>>>>> index 853a327433d3..f6e7d40201d4 100644
->>>>>> --- a/include/uapi/drm/nouveau_drm.h
->>>>>> +++ b/include/uapi/drm/nouveau_drm.h
->>>>>> @@ -126,6 +126,216 @@ struct drm_nouveau_gem_cpu_fini {
->>>>>>       __u32 handle;
->>>>>>   };
->>>>>>   +/**
->>>>>> + * struct drm_nouveau_sync - sync object
->>>>>> + *
->>>>>> + * This structure serves as synchronization mechanism for 
->>>>>> (potentially)
->>>>>> + * asynchronous operations such as EXEC or VM_BIND.
->>>>>> + */
->>>>>> +struct drm_nouveau_sync {
->>>>>> +    /**
->>>>>> +     * @flags: the flags for a sync object
->>>>>> +     *
->>>>>> +     * The first 8 bits are used to determine the type of the 
->>>>>> sync object.
->>>>>> +     */
->>>>>> +    __u32 flags;
->>>>>> +#define DRM_NOUVEAU_SYNC_SYNCOBJ 0x0
->>>>>> +#define DRM_NOUVEAU_SYNC_TIMELINE_SYNCOBJ 0x1
->>>>>> +#define DRM_NOUVEAU_SYNC_TYPE_MASK 0xf
->>>>>> +    /**
->>>>>> +     * @handle: the handle of the sync object
->>>>>> +     */
->>>>>> +    __u32 handle;
->>>>>> +    /**
->>>>>> +     * @timeline_value:
->>>>>> +     *
->>>>>> +     * The timeline point of the sync object in case the syncobj 
->>>>>> is of
->>>>>> +     * type DRM_NOUVEAU_SYNC_TIMELINE_SYNCOBJ.
->>>>>> +     */
->>>>>> +    __u64 timeline_value;
->>>>>> +};
->>>>>> +
->>>>>> +/**
->>>>>> + * struct drm_nouveau_vm_init - GPU VA space init structure
->>>>>> + *
->>>>>> + * Used to initialize the GPU's VA space for a user client, 
->>>>>> telling the kernel
->>>>>> + * which portion of the VA space is managed by the UMD and kernel 
->>>>>> respectively.
->>>>>> + */
->>>>>> +struct drm_nouveau_vm_init {
->>>>>> +    /**
->>>>>> +     * @unmanaged_addr: start address of the kernel managed VA 
->>>>>> space region
->>>>>> +     */
->>>>>> +    __u64 unmanaged_addr;
->>>>>> +    /**
->>>>>> +     * @unmanaged_size: size of the kernel managed VA space 
->>>>>> region in bytes
->>>>>> +     */
->>>>>> +    __u64 unmanaged_size;
->>>>>> +};
->>>>>> +
->>>>>> +/**
->>>>>> + * struct drm_nouveau_vm_bind_op - VM_BIND operation
->>>>>> + *
->>>>>> + * This structure represents a single VM_BIND operation. UMDs 
->>>>>> should pass
->>>>>> + * an array of this structure via struct drm_nouveau_vm_bind's 
->>>>>> &op_ptr field.
->>>>>> + */
->>>>>> +struct drm_nouveau_vm_bind_op {
->>>>>> +    /**
->>>>>> +     * @op: the operation type
->>>>>> +     */
->>>>>> +    __u32 op;
->>>>>> +/**
->>>>>> + * @DRM_NOUVEAU_VM_BIND_OP_ALLOC:
->>>>>> + *
->>>>>> + * The alloc operation is used to reserve a VA space region 
->>>>>> within the GPU's VA
->>>>>> + * space. Optionally, the &DRM_NOUVEAU_VM_BIND_SPARSE flag can be 
->>>>>> passed to
->>>>>> + * instruct the kernel to create sparse mappings for the given 
->>>>>> region.
->>>>>> + */
->>>>>> +#define DRM_NOUVEAU_VM_BIND_OP_ALLOC 0x0
->>>>>
->>>>> Do you really need this operation? We have no concept of this in Xe,
->>>>> e.g. we can create a VM and the entire address space is managed 
->>>>> exactly
->>>>> the same.
->>>>
->>>> The idea for alloc/free is to let UMDs allocate a portion of the VA 
->>>> space (which I call a region), basically the same thing Vulkan 
->>>> represents with a VKBuffer.
->>>
->>> If that's mangled into the same component/interface then I can say 
->>> from experience that this is a pretty bad idea. We have tried 
->>> something similar with radeon and it turned out horrible.
->>
->> What was the exact constellation in radeon and which problems did 
->> arise from it?
->>
->>>
->>> What you want is one component for tracking the VA allocations 
->>> (drm_mm based) and a different component/interface for tracking the 
->>> VA mappings (probably rb tree based).
->>
->> That's what the GPUVA manager is doing. There are gpuva_regions which 
->> correspond to VA allocations and gpuvas which represent the mappings. 
->> Both are tracked separately (currently both with a separate drm_mm, 
->> though). However, the GPUVA manager needs to take regions into account 
->> when dealing with mappings to make sure the GPUVA manager doesn't 
->> propose drivers to merge over region boundaries. Speaking from 
->> userspace PoV, the kernel wouldn't merge mappings from different 
->> VKBuffer objects even if they're virtually and physically contiguous.
-> 
-> That are two completely different things and shouldn't be handled in a 
-> single component.
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
+> index 30f51cd33f99..f7785c93292a 100644
+> --- a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
+> @@ -763,6 +763,41 @@ nomenclature that instead use the order of components as seen in a 24- or
+>      \normalsize
+>  
+>  
+> +More Than 8 Bits Per Component
+> +==============================
+> +
+> +These formats store an RGB triplet in six or eighth bytes, with more than 8 bits per component.
+> +expand the bits per component to 16 bits, data in the high bits, zeros in the low bits,
+> +arranged in little endian order.
+> +
+> +.. raw:: latex
+> +
+> +    \small
+> +
+> +.. flat-table:: RGB Formats With More Than 8 Bits Per Component
+> +    :header-rows:  1
+> +    :stub-columns: 0
+> +
+> +    * - Identifier
+> +      - Code
+> +      - Byte 1-0
+> +      - Byte 3-2
+> +      - Byte 5-4
+> +      - Byte 7-6
+> +    * .. _V4L2-PIX-FMT-B312:
+> +
+> +      - ``V4L2_PIX_FMT_B312``
+> +      - 'B312'
+> +
+> +      - B\ :sub:`15-4`
+> +      - G\ :sub:`15-4`
+> +      - R\ :sub:`15-4`
+> +      -
+> +
+> +.. raw:: latex
+> +
+> +    \normalsize
+> +
+>  Deprecated RGB Formats
+>  ======================
+>  
+> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+> index 332d4b11bc1b..0cc58abae562 100644
+> --- a/drivers/media/v4l2-core/v4l2-common.c
+> +++ b/drivers/media/v4l2-core/v4l2-common.c
+> @@ -252,6 +252,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+>  		{ .format = V4L2_PIX_FMT_RGB565,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>  		{ .format = V4L2_PIX_FMT_RGB555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>  		{ .format = V4L2_PIX_FMT_BGR666,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> +		{ .format = V4L2_PIX_FMT_B312,    .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 6, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>  
+>  		/* YUV packed formats */
+>  		{ .format = V4L2_PIX_FMT_YUYV,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index 5b97d7e5dbbf..8c3d40d3acf5 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -1298,6 +1298,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>  	case V4L2_PIX_FMT_BGRX32:	descr = "32-bit XBGR 8-8-8-8"; break;
+>  	case V4L2_PIX_FMT_RGBA32:	descr = "32-bit RGBA 8-8-8-8"; break;
+>  	case V4L2_PIX_FMT_RGBX32:	descr = "32-bit RGBX 8-8-8-8"; break;
+> +	case V4L2_PIX_FMT_B312:		descr = "12-bit Depth BGR"; break;
+>  	case V4L2_PIX_FMT_GREY:		descr = "8-bit Greyscale"; break;
+>  	case V4L2_PIX_FMT_Y4:		descr = "4-bit Greyscale"; break;
+>  	case V4L2_PIX_FMT_Y6:		descr = "6-bit Greyscale"; break;
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 3475331737af..c67f895210de 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -577,6 +577,9 @@ struct v4l2_pix_format {
+>  #define V4L2_PIX_FMT_ARGB32  v4l2_fourcc('B', 'A', '2', '4') /* 32  ARGB-8-8-8-8  */
+>  #define V4L2_PIX_FMT_XRGB32  v4l2_fourcc('B', 'X', '2', '4') /* 32  XRGB-8-8-8-8  */
+>  
+> +/* RGB formats (6 or 8 bytes per pixel) */
+> +#define V4L2_PIX_FMT_B312    v4l2_fourcc('B', '3', '1', '2') /* 48  BGR 12-bit per component */
 
-They are different things, but they're related in a way that for 
-handling the mappings (in particular merging and sparse) the GPUVA 
-manager needs to know the VA allocation (or region) boundaries.
+BGR24_12
 
-I have the feeling there might be a misunderstanding. Userspace is in 
-charge to actually allocate a portion of VA space and manage it. The 
-GPUVA manager just needs to know about those VA space allocations and 
-hence keeps track of them.
+Regards,
 
-The GPUVA manager is not meant to be an allocator in the sense of 
-finding and providing a hole for a given request.
+	Hans
 
-Maybe the non-ideal choice of using drm_mm was implying something else.
-
-> 
-> We should probably talk about the design of the GPUVA manager once more 
-> when this should be applicable to all GPU drivers.
-
-That's what I try to figure out with this RFC, how to make it appicable 
-for all GPU drivers, so I'm happy to discuss this. :-)
-
-> 
->>
->> For sparse residency the kernel also needs to know the region 
->> boundaries to make sure that it keeps sparse mappings around.
-> 
-> What?
-
-When userspace creates a new VKBuffer with the 
-VK_BUFFER_CREATE_SPARSE_BINDING_BIT the kernel may need to create sparse 
-mappings in order to ensure that using this buffer without any memory 
-backed mappings doesn't fault the GPU.
-
-Currently, the implementation does this the following way:
-
-1. Userspace creates a new VKBuffer and hence allocates a portion of the 
-VA space for it. It calls into the kernel indicating the new VA space 
-region and the fact that the region is sparse.
-
-2. The kernel picks up the region and stores it in the GPUVA manager, 
-the driver creates the corresponding sparse mappings / page table entries.
-
-3. Userspace might ask the driver to create a couple of memory backed 
-mappings for this particular VA region. The GPUVA manager stores the 
-mapping parameters, the driver creates the corresponding page table entries.
-
-4. Userspace might ask to unmap all the memory backed mappings from this 
-particular VA region. The GPUVA manager removes the mapping parameters, 
-the driver cleans up the corresponding page table entries. However, the 
-driver also needs to re-create the sparse mappings, since it's a sparse 
-buffer, hence it needs to know the boundaries of the region it needs to 
-create the sparse mappings in.
-
-> 
-> Regards,
-> Christian.
-> 
->>
->>>
->>> amdgpu has even gotten so far that the VA allocations are tracked in 
->>> libdrm in userspace
->>>
->>> Regards,
->>> Christian.
->>>
->>>>
->>>> It serves two purposes:
->>>>
->>>> 1. It gives the kernel (in particular the GPUVA manager) the bounds 
->>>> in which it is allowed to merge mappings. E.g. when a user request 
->>>> asks for a new mapping and we detect we could merge this mapping 
->>>> with an existing one (used in another VKBuffer than the mapping 
->>>> request came for) the driver is not allowed to change the page table 
->>>> for the existing mapping we want to merge with (assuming that some 
->>>> drivers would need to do this in order to merge), because the 
->>>> existing mapping could already be in use and by re-mapping it we'd 
->>>> potentially cause a fault on the GPU.
->>>>
->>>> 2. It is used for sparse residency in a way that such an allocated 
->>>> VA space region can be flagged as sparse, such that the kernel 
->>>> always keeps sparse mappings around for the parts of the region that 
->>>> do not contain actual memory backed mappings.
->>>>
->>>> If for your driver merging is always OK, creating a single huge 
->>>> region would do the trick I guess. Otherwise, we could also add an 
->>>> option to the GPUVA manager (or a specific region, which could also 
->>>> be a single huge one) within which it never merges.
->>>>
->>>>>
->>>>> If this can be removed then the entire concept of regions in the GPUVA
->>>>> can be removed too (drop struct drm_gpuva_region). I say this because
->>>>> in Xe as I'm porting over to GPUVA the first thing I'm doing after
->>>>> drm_gpuva_manager_init is calling drm_gpuva_region_insert on the 
->>>>> entire
->>>>> address space. To me this seems kinda useless but maybe I'm missing 
->>>>> why
->>>>> you need this for Nouveau.
->>>>>
->>>>> Matt
->>>>>
->>>>>> +/**
->>>>>> + * @DRM_NOUVEAU_VM_BIND_OP_FREE: Free a reserved VA space region.
->>>>>> + */
->>>>>> +#define DRM_NOUVEAU_VM_BIND_OP_FREE 0x1
->>>>>> +/**
->>>>>> + * @DRM_NOUVEAU_VM_BIND_OP_MAP:
->>>>>> + *
->>>>>> + * Map a GEM object to the GPU's VA space. The mapping must be 
->>>>>> fully enclosed by
->>>>>> + * a previously allocated VA space region. If the region is 
->>>>>> sparse, existing
->>>>>> + * sparse mappings are overwritten.
->>>>>> + */
->>>>>> +#define DRM_NOUVEAU_VM_BIND_OP_MAP 0x2
->>>>>> +/**
->>>>>> + * @DRM_NOUVEAU_VM_BIND_OP_UNMAP:
->>>>>> + *
->>>>>> + * Unmap an existing mapping in the GPU's VA space. If the region 
->>>>>> the mapping
->>>>>> + * is located in is a sparse region, new sparse mappings are 
->>>>>> created where the
->>>>>> + * unmapped (memory backed) mapping was mapped previously.
->>>>>> + */
->>>>>> +#define DRM_NOUVEAU_VM_BIND_OP_UNMAP 0x3
->>>>>> +    /**
->>>>>> +     * @flags: the flags for a &drm_nouveau_vm_bind_op
->>>>>> +     */
->>>>>> +    __u32 flags;
->>>>>> +/**
->>>>>> + * @DRM_NOUVEAU_VM_BIND_SPARSE:
->>>>>> + *
->>>>>> + * Indicates that an allocated VA space region should be sparse.
->>>>>> + */
->>>>>> +#define DRM_NOUVEAU_VM_BIND_SPARSE (1 << 8)
->>>>>> +    /**
->>>>>> +     * @handle: the handle of the DRM GEM object to map
->>>>>> +     */
->>>>>> +    __u32 handle;
->>>>>> +    /**
->>>>>> +     * @addr:
->>>>>> +     *
->>>>>> +     * the address the VA space region or (memory backed) mapping 
->>>>>> should be mapped to
->>>>>> +     */
->>>>>> +    __u64 addr;
->>>>>> +    /**
->>>>>> +     * @bo_offset: the offset within the BO backing the mapping
->>>>>> +     */
->>>>>> +    __u64 bo_offset;
->>>>>> +    /**
->>>>>> +     * @range: the size of the requested mapping in bytes
->>>>>> +     */
->>>>>> +    __u64 range;
->>>>>> +};
->>>>>> +
->>>>>> +/**
->>>>>> + * struct drm_nouveau_vm_bind - structure for 
->>>>>> DRM_IOCTL_NOUVEAU_VM_BIND
->>>>>> + */
->>>>>> +struct drm_nouveau_vm_bind {
->>>>>> +    /**
->>>>>> +     * @op_count: the number of &drm_nouveau_vm_bind_op
->>>>>> +     */
->>>>>> +    __u32 op_count;
->>>>>> +    /**
->>>>>> +     * @flags: the flags for a &drm_nouveau_vm_bind ioctl
->>>>>> +     */
->>>>>> +    __u32 flags;
->>>>>> +/**
->>>>>> + * @DRM_NOUVEAU_VM_BIND_RUN_ASYNC:
->>>>>> + *
->>>>>> + * Indicates that the given VM_BIND operation should be executed 
->>>>>> asynchronously
->>>>>> + * by the kernel.
->>>>>> + *
->>>>>> + * If this flag is not supplied the kernel executes the 
->>>>>> associated operations
->>>>>> + * synchronously and doesn't accept any &drm_nouveau_sync objects.
->>>>>> + */
->>>>>> +#define DRM_NOUVEAU_VM_BIND_RUN_ASYNC 0x1
->>>>>> +    /**
->>>>>> +     * @wait_count: the number of wait &drm_nouveau_syncs
->>>>>> +     */
->>>>>> +    __u32 wait_count;
->>>>>> +    /**
->>>>>> +     * @sig_count: the number of &drm_nouveau_syncs to signal 
->>>>>> when finished
->>>>>> +     */
->>>>>> +    __u32 sig_count;
->>>>>> +    /**
->>>>>> +     * @wait_ptr: pointer to &drm_nouveau_syncs to wait for
->>>>>> +     */
->>>>>> +    __u64 wait_ptr;
->>>>>> +    /**
->>>>>> +     * @sig_ptr: pointer to &drm_nouveau_syncs to signal when 
->>>>>> finished
->>>>>> +     */
->>>>>> +    __u64 sig_ptr;
->>>>>> +    /**
->>>>>> +     * @op_ptr: pointer to the &drm_nouveau_vm_bind_ops to execute
->>>>>> +     */
->>>>>> +    __u64 op_ptr;
->>>>>> +};
->>>>>> +
->>>>>> +/**
->>>>>> + * struct drm_nouveau_exec_push - EXEC push operation
->>>>>> + *
->>>>>> + * This structure represents a single EXEC push operation. UMDs 
->>>>>> should pass an
->>>>>> + * array of this structure via struct drm_nouveau_exec's 
->>>>>> &push_ptr field.
->>>>>> + */
->>>>>> +struct drm_nouveau_exec_push {
->>>>>> +    /**
->>>>>> +     * @va: the virtual address of the push buffer mapping
->>>>>> +     */
->>>>>> +    __u64 va;
->>>>>> +    /**
->>>>>> +     * @va_len: the length of the push buffer mapping
->>>>>> +     */
->>>>>> +    __u64 va_len;
->>>>>> +};
->>>>>> +
->>>>>> +/**
->>>>>> + * struct drm_nouveau_exec - structure for DRM_IOCTL_NOUVEAU_EXEC
->>>>>> + */
->>>>>> +struct drm_nouveau_exec {
->>>>>> +    /**
->>>>>> +     * @channel: the channel to execute the push buffer in
->>>>>> +     */
->>>>>> +    __u32 channel;
->>>>>> +    /**
->>>>>> +     * @push_count: the number of &drm_nouveau_exec_push ops
->>>>>> +     */
->>>>>> +    __u32 push_count;
->>>>>> +    /**
->>>>>> +     * @wait_count: the number of wait &drm_nouveau_syncs
->>>>>> +     */
->>>>>> +    __u32 wait_count;
->>>>>> +    /**
->>>>>> +     * @sig_count: the number of &drm_nouveau_syncs to signal 
->>>>>> when finished
->>>>>> +     */
->>>>>> +    __u32 sig_count;
->>>>>> +    /**
->>>>>> +     * @wait_ptr: pointer to &drm_nouveau_syncs to wait for
->>>>>> +     */
->>>>>> +    __u64 wait_ptr;
->>>>>> +    /**
->>>>>> +     * @sig_ptr: pointer to &drm_nouveau_syncs to signal when 
->>>>>> finished
->>>>>> +     */
->>>>>> +    __u64 sig_ptr;
->>>>>> +    /**
->>>>>> +     * @push_ptr: pointer to &drm_nouveau_exec_push ops
->>>>>> +     */
->>>>>> +    __u64 push_ptr;
->>>>>> +};
->>>>>> +
->>>>>>   #define DRM_NOUVEAU_GETPARAM           0x00 /* deprecated */
->>>>>>   #define DRM_NOUVEAU_SETPARAM           0x01 /* deprecated */
->>>>>>   #define DRM_NOUVEAU_CHANNEL_ALLOC      0x02 /* deprecated */
->>>>>> @@ -136,6 +346,9 @@ struct drm_nouveau_gem_cpu_fini {
->>>>>>   #define DRM_NOUVEAU_NVIF               0x07
->>>>>>   #define DRM_NOUVEAU_SVM_INIT           0x08
->>>>>>   #define DRM_NOUVEAU_SVM_BIND           0x09
->>>>>> +#define DRM_NOUVEAU_VM_INIT            0x10
->>>>>> +#define DRM_NOUVEAU_VM_BIND            0x11
->>>>>> +#define DRM_NOUVEAU_EXEC               0x12
->>>>>>   #define DRM_NOUVEAU_GEM_NEW            0x40
->>>>>>   #define DRM_NOUVEAU_GEM_PUSHBUF        0x41
->>>>>>   #define DRM_NOUVEAU_GEM_CPU_PREP       0x42
->>>>>> @@ -197,6 +410,9 @@ struct drm_nouveau_svm_bind {
->>>>>>   #define DRM_IOCTL_NOUVEAU_GEM_CPU_FINI       DRM_IOW 
->>>>>> (DRM_COMMAND_BASE + DRM_NOUVEAU_GEM_CPU_FINI, struct 
->>>>>> drm_nouveau_gem_cpu_fini)
->>>>>>   #define DRM_IOCTL_NOUVEAU_GEM_INFO DRM_IOWR(DRM_COMMAND_BASE + 
->>>>>> DRM_NOUVEAU_GEM_INFO, struct drm_nouveau_gem_info)
->>>>>>   +#define DRM_IOCTL_NOUVEAU_VM_INIT DRM_IOWR(DRM_COMMAND_BASE + 
->>>>>> DRM_NOUVEAU_VM_INIT, struct drm_nouveau_vm_init)
->>>>>> +#define DRM_IOCTL_NOUVEAU_VM_BIND DRM_IOWR(DRM_COMMAND_BASE + 
->>>>>> DRM_NOUVEAU_VM_BIND, struct drm_nouveau_vm_bind)
->>>>>> +#define DRM_IOCTL_NOUVEAU_EXEC DRM_IOWR(DRM_COMMAND_BASE + 
->>>>>> DRM_NOUVEAU_EXEC, struct drm_nouveau_exec)
->>>>>>   #if defined(__cplusplus)
->>>>>>   }
->>>>>>   #endif
->>>>>> -- 
->>>>>> 2.39.0
->>>>>>
->>>>>
->>>>
->>>
->>
-> 
+> +
+>  /* Grey formats */
+>  #define V4L2_PIX_FMT_GREY    v4l2_fourcc('G', 'R', 'E', 'Y') /*  8  Greyscale     */
+>  #define V4L2_PIX_FMT_Y4      v4l2_fourcc('Y', '0', '4', ' ') /*  4  Greyscale     */
 
