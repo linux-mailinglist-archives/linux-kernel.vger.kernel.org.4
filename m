@@ -2,108 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EF367ECCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F08167ECDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235261AbjA0Rym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
+        id S234618AbjA0R6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235237AbjA0Ryg (ORCPT
+        with ESMTP id S233761AbjA0R6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:54:36 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F5E7FA26
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:54:32 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id y1so5692829wru.2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:54:32 -0800 (PST)
+        Fri, 27 Jan 2023 12:58:44 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86287D2AA;
+        Fri, 27 Jan 2023 09:58:42 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id rl14so15887111ejb.2;
+        Fri, 27 Jan 2023 09:58:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NO2TJchJQkSUciVJ048CE5JVvfXlkyX1sBqCZRqoaSk=;
-        b=d3BWJCYH0b5IKv1JZZCJT1WrBic1Hn/DUD8yAaADqDVK4xe7jE1+Qs6hsXNtktNmfM
-         o3OpnqRqMjbOLCAktPlKFjv1IE7fFQa8OORaUEPJCo2m5CiMnEhlrbGbf0BldZ1/K8wN
-         704jeS51gnUFju6MvSL6UX1BVitO3Clp277zaMJOqr3u/xsRbkqSLUSDQeZjsn4rHFHg
-         YLo8jg3He2haNBImc93dd4zV7r5G5hj/RBduy7v7w24gOZbugnmMPyMEuOh/dvtr7Pg0
-         JmdtAYc4i86a//O3JRKbB1yyM2+Xw41vQMR8lVvFgsBbvvOHwmd0m3w1K7Agw2Yj+8o0
-         qEJg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AkTXtXZvSlyW7dhrOhtl54a2x6aLLDzgCZF3MBO2yT4=;
+        b=D45urjwlLOqJ5oEWUBgdQkmsYbSjvXmkD1jToywten5PtNhUD9c8awHO3NHAzmQl46
+         2Ay7kmFQRTQ8cZlB/KTtUw4eoj7fQiY6CGXuax+YXRwNWSVSiw4757N6Bzx17MKeSu01
+         k0IehkZHiqWzWobRDv3JZXtZ9P1YJv/2yildPxCacxYjqdIGstP2wDmIpbjXyE9fpa5s
+         nWgSHzL5YwOsqCngAEOjpzySj8hclwm0nOaStOt0f2qt9S/Lo7ONKJyFSQxx8nap4w29
+         /WrsHxbyuxSN7wYTpEZKcbmqp9cceq8uzA+byVq4aZffRa2Q/oB/VixxOTb4yuoN/UrI
+         kkAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NO2TJchJQkSUciVJ048CE5JVvfXlkyX1sBqCZRqoaSk=;
-        b=3fpQ2G3IAEV44c1m1hMPUa0JxopjD0Z7mcb/X2SFs6EWsU+IhnbLw9VhdERd8V+G8j
-         7UulAxKJ9kYbmlkg1l/Rm65BRdgNfE4N7H9G4abY6WSxAs1dlZUINEnB/3goY7XZSxzO
-         Q4JGB7b76Gzs4bwE6SJvRwbfc9nEtiq5Cx0PFNPXd4NuJN5FX4N6kRH6AADip/tEZyak
-         WAgJEkpiFDkx8USj/iMXqXjiCcfir5KvDvWTNR7Ua8xsa3r/w2o+BoWZy2WhN+pC0JW2
-         TbUW0m4Y7xSPkiV9A2FFMG9GKXCp0TuqqBbLyCSePL9ED+wLapDEAy1kwWSWAsyXCTJV
-         3xPw==
-X-Gm-Message-State: AFqh2kocm+8t85M3fsqUa1qOpu3B94ycJ1uYoKxjd9cOQD7i78vdcK6I
-        jyVpN7jUM6rYfh/n2mdpKxSyVg==
-X-Google-Smtp-Source: AMrXdXuMIheyW2A0xsXwX4QkA5JjZP96JxaosIP01ENH8v917KfNPZCCiX4azuz3fG61XaD7SQP7sQ==
-X-Received: by 2002:a05:6000:1b8c:b0:2be:c5d:adc4 with SMTP id r12-20020a0560001b8c00b002be0c5dadc4mr36149238wru.13.1674842070705;
-        Fri, 27 Jan 2023 09:54:30 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j5-20020adff005000000b002bddd75a83fsm4555217wro.8.2023.01.27.09.54.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 09:54:30 -0800 (PST)
-Message-ID: <739543e2-bf2d-b76a-172f-a8fbe5f26495@linaro.org>
-Date:   Fri, 27 Jan 2023 18:54:28 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AkTXtXZvSlyW7dhrOhtl54a2x6aLLDzgCZF3MBO2yT4=;
+        b=K7VNo1mVGyH45N9lN53piPIuUb23vIxZUk+dHEj1NjnX3myRN/O08sPRN3e86wOkzE
+         dAtGqvxtpvX4/16q5sBgZXA6KIVBHMYB9MJONXMgEX63LrtP3SrG+7KwvIyegWL/h3D6
+         jFh8qIBFhmaPbZ2jGIpx9eI5FhGUlx4tYeoijNPI3PAq06k0Ebm2r3QV6LTaLOxFnEs1
+         NTJNcrtZ4+WfgIB5xYh3PL6G7IJ8cmGS42iejWuMbi9TMSCxWhHjiGGpsMFmOPg5VuKc
+         F/0/weI3UauwulyIngj9C9QpIW+Znbl1+U48MCTuVB+z50AkyOZe6s7HFeDuHdDs0fPo
+         /UnA==
+X-Gm-Message-State: AO0yUKUGFmt+YG/lqiR022OZ/MuHJijtKNr8qdJT/2uAf+kcHvoJSR65
+        imVQLgm28tJQ4YeByMSE4yE=
+X-Google-Smtp-Source: AK7set9YFRj0WFfdzKw45ndnfLNVXHirfZXQPMiwuSaPd2a9SuM0Yn0MHy2+hb2rKxYyINLcUmX2FA==
+X-Received: by 2002:a17:907:c26:b0:878:53a5:70a1 with SMTP id ga38-20020a1709070c2600b0087853a570a1mr10777796ejc.50.1674842321108;
+        Fri, 27 Jan 2023 09:58:41 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id z22-20020a1709067e5600b0087276f66c6asm2600508ejr.115.2023.01.27.09.58.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 09:58:40 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH 1/2] dt-bindings: nvmem: io: new binding for IO accessible NVMEM devices
+Date:   Fri, 27 Jan 2023 18:58:30 +0100
+Message-Id: <20230127175831.26753-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] arm64: dts: renesas: r9a07g043u: Add Cortex-A55 PMU node
-Content-Language: en-US
-To:     Prabhakar <prabhakar.csengg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20230127174040.251642-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230127174040.251642-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 18:40, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> 
-> Enable the performance monitor unit for the Cortex-A55 core on the
-> RZ/G2UL (r9a07g043u) SoC.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  arch/arm64/boot/dts/renesas/r9a07g043u.dtsi | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi b/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
-> index 9d854706ada5..33e562390646 100644
-> --- a/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
-> @@ -35,6 +35,11 @@ L3_CA55: cache-controller-0 {
->  		};
->  	};
->  
-> +	pmu_a55 {
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Same comments.
+With the NVMEM layouts binding in place we should now use:
+1. NVMEM device access bindings
+2. NVMEM content description bindings
 
-Best regards,
-Krzysztof
+This binding allows describing NVMEM devices that can be accessed using
+IO mappings.
+
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ .../devicetree/bindings/nvmem/io.yaml         | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/io.yaml
+
+diff --git a/Documentation/devicetree/bindings/nvmem/io.yaml b/Documentation/devicetree/bindings/nvmem/io.yaml
+new file mode 100644
+index 000000000000..67e0aae9cd94
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/io.yaml
+@@ -0,0 +1,37 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/io.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: IO access based NVMEM
++
++description: |
++  This binding describes simple NVMEM devices that can be accessed by simply
++  mapping a predefined IO address.
++
++  It's a generic solution for providing NVMEM content access. The way of
++  handling actual content may be device specific and can be described using a
++  proper layout.
++
++maintainers:
++  - Rafał Miłecki <rafal@milecki.pl>
++
++allOf:
++  - $ref: nvmem.yaml#
++
++properties:
++  compatible:
++    const: io-nvmem
++
++  reg:
++    maxItems: 1
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    nvmem@10000 {
++        compatible = "io-nvmem";
++        reg = <0x10000000 0x10000>;
++    };
+-- 
+2.34.1
 
