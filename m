@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7E967DA5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70DC67DA67
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232736AbjA0AMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 19:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S233189AbjA0AMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 19:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbjA0AMB (ORCPT
+        with ESMTP id S232545AbjA0AMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 19:12:01 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A7D721F0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:11:50 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5065604854eso38266627b3.16
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:11:50 -0800 (PST)
+        Thu, 26 Jan 2023 19:12:05 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7B4721E6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:11:53 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id b201-20020a2534d2000000b0080b87d910a2so3680350yba.21
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:11:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oSp69aiP/ondfVBxLJgKdKcBnN2p1Qu9kMhAEVz7jQo=;
-        b=WN5DOQpYzA92uZTk5nB7Gm+JHPUhYwyKPFfQgnsGcIXK24VeOqAuCHMqj0K9QIHsK4
-         VDJINGbm+PZQ3D46gH9OOk1BZIZYxmKsfVmUhh5yU1FVIGGNA8uHoGLKqrlP5q/XWMIC
-         ASunugeOvewn6WROaXEMgKC5JzdCO+ZRpSFJcmK7Ru/kahTql81VAj0bRBch6D1sH5E2
-         R+TLl4pbdpM/C+LxjBtFvrZF+cEvz3GgORkPhsdcgSXXbMs0WwBxILTvUbbxTpb5gNop
-         80tc/HoW58bY7nNrnAEcmXR8sWMLTD10O/iaU0O8n4d/GXA/XwchgaZYTtWd+lYxHcnL
-         oecg==
+        bh=+qrGwsyJhvuk8/KLfQTHsy0tky5Hgdg5GqDKep+1DD4=;
+        b=ImHEFeirQ0+RNKXqTaRuRYAbdlWC5P5L5GKOen6KHlSMssg4oHFiz8wutXFV5a4tIe
+         S7kQQuXLu7CpQ+gcDOKQIgq7ikdWUn+rZ1UtcQPNh0gxcZQw1wsRj6iqGY3gnJnXhy1G
+         NkOjRS354EK8XltpUyGCaPrUCbw/DnHLbLReN+Ew9y/NfKLLZcgs7hauSWp5PvS5MbaA
+         FqgwSH8VK+sdmrpkFSE4HZxG2acds1LrKo7sRSFq7ryxJ4Wxoqki0uG9IRIlPHito8iZ
+         zImbuVkz+4PK9IaO7IHdiDnHqOYuRc6/qWn3UZ4pCiAfGD+B5KwFGQl+8L+UgsEnm9Z+
+         3qSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oSp69aiP/ondfVBxLJgKdKcBnN2p1Qu9kMhAEVz7jQo=;
-        b=31CIqHXz/ZTNgdedok8E0QyUTFyQladPTACA4El65FJ2HsoDI7D9SF/euwIgWJeO7c
-         B0FAhi6U2QpbjwCBnEzgASPp+5CsN/d29ZWiMuwiil3Q0QA1riUcB40/p8gX/Fqx2uus
-         VHLq51zAUyxjx0LDUDUmTQSz1R53Gj6dzczZ6p+vdC5pe4VR0Urgk7tXf2LoUdnME8MO
-         dtNwdzzJ68ar+KFW2NhicUUdO4NsWmBA0LZzz2LBGW6eJLlVtSD40SO0ojHhQdL8BipL
-         eR/QubWOagvAc+EsYplUADah7qfB6lYbLrFTpj5ESzCIHJ8a81H6pLNawVX0QZgoA6Hs
-         FBUA==
-X-Gm-Message-State: AO0yUKUE4xVu5ckJEGq46WXLth15Y9vIFL0o+90jXhHfxO9mwgR78CSk
-        OhOHPQ/pGXF8VWkh8cqja2ZJJxwwv1coQjk=
-X-Google-Smtp-Source: AK7set96Y+e9U1r05pqMQpL0k9Ij3R0FH79/ElueXQokOeBTjKJdHwZIAnvnycP8rHNiKQopHaYQfRQ9y4PwQpk=
+        bh=+qrGwsyJhvuk8/KLfQTHsy0tky5Hgdg5GqDKep+1DD4=;
+        b=OHrh2U7Mr0hrv0qUajqDZPOFVJZfbK4hVWdDk4vsfQYBZJdP0aAjorNazSt6GzAKG1
+         7BAhK8CE9Ra9MlmtmOz8Q+ObOHluVcseYAleIo8k+vY7cZ6u9EN7ebsX0gsD3CT/I28N
+         CKF5KT4HGS/bcGs+Uq8zy0TWhUKYFZH7Wa2jOhSs52kLeOPOvFaG3losGe3W/AMhcqv9
+         zDy4ChnmfKORSew6UogoV9RcTj98PYohNykP0rq4ei0dcf87d1uHH2j3lxcRM9GorFBt
+         yty6I6xyNIvGszBp7ZHvLJnnT1tbLISGg8xd+YWgyQJjWDEHdJFJvbbzfIby0F5pzdJA
+         MbRQ==
+X-Gm-Message-State: AO0yUKVnCypSCJqMCHhJdCGWz1xLVfgTrZY0EMbI3u/lv3Ghm6zghiiJ
+        piWQvPvPgdrHLvZQDRMHBfpud8fpd7RH+io=
+X-Google-Smtp-Source: AK7set94B+Uk166woh0daWeHRoT+YOBMrypJ1SORaMn8sBX2Wuwc6YxVyj9CsmbZUek2b/SIx0NT19DAyygxzRQ=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:c3b4:8b1c:e3ee:3708])
- (user=saravanak job=sendgmr) by 2002:a25:69d0:0:b0:80b:7021:b88d with SMTP id
- e199-20020a2569d0000000b0080b7021b88dmr1335558ybc.93.1674778309799; Thu, 26
- Jan 2023 16:11:49 -0800 (PST)
-Date:   Thu, 26 Jan 2023 16:11:29 -0800
+ (user=saravanak job=sendgmr) by 2002:a25:260c:0:b0:80b:663d:6a98 with SMTP id
+ m12-20020a25260c000000b0080b663d6a98mr1309860ybm.598.1674778312253; Thu, 26
+ Jan 2023 16:11:52 -0800 (PST)
+Date:   Thu, 26 Jan 2023 16:11:30 -0800
 In-Reply-To: <20230127001141.407071-1-saravanak@google.com>
-Message-Id: <20230127001141.407071-3-saravanak@google.com>
+Message-Id: <20230127001141.407071-4-saravanak@google.com>
 Mime-Version: 1.0
 References: <20230127001141.407071-1-saravanak@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Subject: [PATCH v2 02/11] driver core: fw_devlink: Improve check for fwnode
- with no device/driver
+Subject: [PATCH v2 03/11] soc: renesas: Move away from using OF_POPULATED for fw_devlink
 From:   Saravana Kannan <saravanak@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -101,7 +100,7 @@ Cc:     Tony Lindgren <tony@atomide.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,76 +108,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fw_devlink shouldn't defer the probe of a device to wait on a supplier
-that'll never have a struct device or will never be probed by a driver.
-We currently check if a supplier falls into this category, but don't
-check its ancestors. We need to check the ancestors too because if the
-ancestor will never probe, then the supplier will never probe either.
+The OF_POPULATED flag was set to let fw_devlink know that the device
+tree node will not have a struct device created for it. This information
+is used by fw_devlink to avoid deferring the probe of consumers of this
+device tree node.
+
+Let's use fwnode_dev_initialized() instead because it achieves the same
+effect without using OF specific flags. This allows more generic code to
+be written in driver core.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/base/core.c | 40 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 38 insertions(+), 2 deletions(-)
+ drivers/soc/renesas/rcar-sysc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index b6d98cc82f26..919728e784e8 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -1867,6 +1867,35 @@ static int fw_devlink_relax_cycle(struct device *con, void *sup)
- 	return ret;
- }
+diff --git a/drivers/soc/renesas/rcar-sysc.c b/drivers/soc/renesas/rcar-sysc.c
+index b0a80de34c98..03246ed4a79e 100644
+--- a/drivers/soc/renesas/rcar-sysc.c
++++ b/drivers/soc/renesas/rcar-sysc.c
+@@ -437,7 +437,7 @@ static int __init rcar_sysc_pd_init(void)
  
-+static bool fwnode_init_without_drv(struct fwnode_handle *fwnode)
-+{
-+	struct device *dev;
-+	bool ret;
-+
-+	if (!(fwnode->flags & FWNODE_FLAG_INITIALIZED))
-+		return false;
-+
-+	dev = get_dev_from_fwnode(fwnode);
-+	ret = !dev || dev->links.status == DL_DEV_NO_DRIVER;
-+	put_device(dev);
-+
-+	return ret;
-+}
-+
-+static bool fwnode_ancestor_init_without_drv(struct fwnode_handle *fwnode)
-+{
-+	struct fwnode_handle *parent;
-+
-+	fwnode_for_each_parent_node(fwnode, parent) {
-+		if (fwnode_init_without_drv(parent)) {
-+			fwnode_handle_put(parent);
-+			return true;
-+		}
-+	}
-+
-+	return false;
-+}
-+
- /**
-  * fw_devlink_create_devlink - Create a device link from a consumer to fwnode
-  * @con: consumer device for the device link
-@@ -1948,9 +1977,16 @@ static int fw_devlink_create_devlink(struct device *con,
- 		goto out;
- 	}
+ 	error = of_genpd_add_provider_onecell(np, &domains->onecell_data);
+ 	if (!error)
+-		of_node_set_flag(np, OF_POPULATED);
++		fwnode_dev_initialized(&np->fwnode, true);
  
--	/* Supplier that's already initialized without a struct device. */
--	if (sup_handle->flags & FWNODE_FLAG_INITIALIZED)
-+	/*
-+	 * Supplier or supplier's ancestor already initialized without a struct
-+	 * device or being probed by a driver.
-+	 */
-+	if (fwnode_init_without_drv(sup_handle) ||
-+	    fwnode_ancestor_init_without_drv(sup_handle)) {
-+		dev_dbg(con, "Not linking %pfwP - Might never probe\n",
-+			sup_handle);
- 		return -EINVAL;
-+	}
- 
- 	/*
- 	 * DL_FLAG_SYNC_STATE_ONLY doesn't block probing and supports
+ out_put:
+ 	of_node_put(np);
 -- 
 2.39.1.456.gfc5497dd1b-goog
 
