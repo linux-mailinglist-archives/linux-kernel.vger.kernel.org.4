@@ -2,126 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341D067E548
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 193E667E54A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbjA0Mdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
+        id S233204AbjA0MeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjA0Mdl (ORCPT
+        with ESMTP id S233075AbjA0MeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:33:41 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F153D1284D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:33:38 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 27 Jan 2023 07:34:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E6F43467;
+        Fri, 27 Jan 2023 04:34:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9D88321F05;
-        Fri, 27 Jan 2023 12:33:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674822817; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MwVWF0Ry0ov8OgZpSO78XYhT3LnmS6xjwoTJM/YHanE=;
-        b=mZBL1tfC342Fb2x7n49SKap6LN+3fdMIxeMXr/1CJivK0PqVzskxEI46ywEseLyK8yAvbr
-        AIYgz20vdrkdRZlwd85e94dlt2HiPW5NNuCOltSQynm3M+qBo/dDK+8ncB4xryzaC2jbYs
-        DPO4eoPXjTks+pOtcyNLOQ6rmKltPmE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 615911336F;
-        Fri, 27 Jan 2023 12:33:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZDK8F6HE02NvBAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 27 Jan 2023 12:33:37 +0000
-Date:   Fri, 27 Jan 2023 13:33:36 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Ingo Molnar <mingo@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH mm-unstable] lib/Kconfig.debug: do not enable
- DEBUG_PREEMPT by default
-Message-ID: <Y9PEoOAxE1hlnH5o@dhcp22.suse.cz>
-References: <20230121033942.350387-1-42.hyeyoo@gmail.com>
- <86e68d3b-b029-5e82-5bbc-e0ccc2ae1d36@suse.cz>
- <Y8vSZ+gOFXWDKC8Z@hyeyoo>
- <Y85MNmZDc5czMRUJ@dhcp22.suse.cz>
- <Y9FNm50H+w1B26yR@hyeyoo>
- <Y9D7iXUuLsOURfFv@dhcp22.suse.cz>
- <Y9O42N9J9gAsbJ6T@hyeyoo>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0646B81F99;
+        Fri, 27 Jan 2023 12:34:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA3CDC433D2;
+        Fri, 27 Jan 2023 12:33:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674822839;
+        bh=TS2+CpKa2cp61H4L2xyxqqO1Xa+9EPd/tgoYGYbo2PU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AOIO/dmBppqhBtGmbssqspC6gF08zWXRP3blx3PpWb0QrYlXVWOIZA8xnJc3C+eWu
+         5kyaDq09s3nJoxaQTN1VT1ciyn4JxcwsT9/Jl/kmN/S2+jN0xhoMHwTeCOCpIUG7wd
+         bvY4O/P0xk2eSogKpMu0lC1ZQFj2jr5pjAoJdOX4=
+Date:   Fri, 27 Jan 2023 13:33:56 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Liang He <windhl@126.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Zou Wei <zou_wei@huawei.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 01/16] of: device: make of_device_uevent_modalias()
+ take a const device *
+Message-ID: <Y9PEtP7oLjRJTxFM@kroah.com>
+References: <20230111113018.459199-1-gregkh@linuxfoundation.org>
+ <20230111113018.459199-2-gregkh@linuxfoundation.org>
+ <CAL_JsqJ4QsLym-bQGGjUpzT14MYuTE1n8BQkGn6Ey9NiFF7u7w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9O42N9J9gAsbJ6T@hyeyoo>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAL_JsqJ4QsLym-bQGGjUpzT14MYuTE1n8BQkGn6Ey9NiFF7u7w@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 27-01-23 20:43:20, Hyeonggon Yoo wrote:
-> On Wed, Jan 25, 2023 at 10:51:05AM +0100, Michal Hocko wrote:
-> > On Thu 26-01-23 00:41:15, Hyeonggon Yoo wrote:
-> > [...]
-> > > > Do you happen to have any perf data collected during those runs? I
-> > > > would be interested in the memcg side of things. Maybe we can do
-> > > > something better there.
-> > > 
-> > > Yes, below is performance data I've collected.
-> > > 
-> > > 6.1.8-debug-preempt-dirty
-> > > =========================
-> > >   Overhead  Command       Shared Object     Symbol
-> > > +    9.14%  hackbench        [kernel.vmlinux]  [k] check_preemption_disabled
-> > 
-> > Thanks! Could you just add callers that are showing in the profile for
-> > this call please?
+On Wed, Jan 11, 2023 at 08:54:04AM -0600, Rob Herring wrote:
+> On Wed, Jan 11, 2023 at 5:30 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > of_device_uevent_modalias() does not modify the device pointer passed to
+> > it, so mark it constant.  In order to properly do this, a number of
+> > busses need to have a modalias function added as they were attempting to
+> > just point to of_device_uevent_modalias instead of their bus-specific
+> > modalias function.  This is fine except if the prototype for a bus and
+> > device type modalias function diverges and then problems could happen.  To
+> > prevent all of that, just wrap the call to of_device_uevent_modalias()
+> > directly for each bus and device type individually.
 > 
-> -   14.56%     9.14%  hackbench        [kernel.vmlinux]  [k] check_preemption_disabled                          
->    - 6.37% check_preemption_disabled                                                                            
->       + 3.48% mod_objcg_state                                                                                   
->       + 1.10% obj_cgroup_charge                                                                                 
->         1.02% refill_obj_stock                                                                                  
->      0.67% memcg_slab_post_alloc_hook                                                                           
->      0.58% mod_objcg_state      
-> 
-> According to perf, many memcg functions call this function
-> and that's because __this_cpu_xxxx checks if preemption is disabled.
+> Why not just put the wrapper function in the DT code instead of making
+> 4 copies of it?
 
-OK, I see. Thanks! I was thinking whether we can optimize for that bu
-IIUC __this_cpu* is already an optimized form. mod_objcg_state is
-already called with local_lock so raw_cpu* could be used in that path
-but I guess this is not really worth just to optimize for a debug
-compile option to benefit.
--- 
-Michal Hocko
-SUSE Labs
+Ok, I looked at doing this today, but in the end, making "4" copies of
+this is simpler overall.  To do it your way would require a "const"
+version of the function be added to the core, and then convert these 4
+busses to use that, and then when the real function is converted to be
+const, move all of these functions back over to use that again.
+
+Lots of churn, and then in the end, we still have the mismatch of a
+the same function callback being used in two different types of
+callbacks (one a bus, one a class).  This way we separate them to make
+things much more obvious and self-contained.
+
+So I'll keep this as-is for now, thanks.
+
+greg k-h
