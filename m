@@ -2,133 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F1667E215
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33EBB67E216
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbjA0Koh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:44:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S232398AbjA0Kol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjA0KoX (ORCPT
+        with ESMTP id S232269AbjA0Kob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:44:23 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDB079210
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:44:08 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so5105305wml.3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:44:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AkW+isBb5a4L8sXPP80M2oupV7/HDncbrHTy0pBpxso=;
-        b=dDfJbi1aBUhuqqT8X2mY+HRAQt75ovhKiMAWZ0nAXCMfU7MrI9D8WJIU6Cv55OmNYZ
-         r7um7oaOYrKiW/zUKXhoc2COViRPF8Ra8Vtt1uC7r8Xj2azwzLX6l5riLJ/GAcfjMfjR
-         SGdpd9vUmyI8l5UGkCN76t4ly4fFIDN2aU0uPRUMJA6MsHRANg5ggKywiHn0YatDwPpp
-         pSkpLtxehLFIu/afyDWocpkiLZMY56EA2aHEYK3GRAO2WfzzhctjiICPuDsFp2Ymyv9+
-         fvmnSSi1BvrkJkNFpn5Vj3KZ8WzGiJS8ZwF0ahSyPjwTGqPROSSpsgQ0FD/OR/5yNn1M
-         2pZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AkW+isBb5a4L8sXPP80M2oupV7/HDncbrHTy0pBpxso=;
-        b=VgI6NuUvWEFNRtjS5bwPmhCFf+LlwBCvZGi0YcxGaNd0JJPtLdyO0iaZWec25pRJpp
-         OuDpaPi5pl4xjqCNJ4LTS6VjsHYvriPb5PvIW2Yo++LAcz4MzIIuN+LmsTi+8Unpx+8s
-         RRPuzPCaBIGcL1/6nOd0QRdHWI+3E74WCJhqbTiXETB5e/Juxon6pk3uiaclHXdRcTmL
-         XMX3+QvF6V57+4YeI/kTa+rmBrqXS/DXdvfuxNywK+oRJImeygqVqDPm0FfJiLEQ7BcS
-         YgjLrAwVFsCCUrlXGVNFiUk+P14hy2g4BImcNVnxplAncBfo9ePu+9kF2kD+fxtCygFl
-         /tIA==
-X-Gm-Message-State: AFqh2koNco9DvtPRHWrMQLX7/h1UfX6Cod0IgWJQhUiDxYdDYPSnlkfX
-        WWGHJmOadLQ1rVrPIhi49+AqHA==
-X-Google-Smtp-Source: AMrXdXt0Mvi4+KEHGy6hm4OEafsyenG7wbOGszWwYqJji+sJPQeK/taITq8Wn0jA9ObTlqT/gSx9cw==
-X-Received: by 2002:a05:600c:2e51:b0:3da:632:a8d with SMTP id q17-20020a05600c2e5100b003da06320a8dmr38440855wmf.10.1674816247195;
-        Fri, 27 Jan 2023 02:44:07 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id j38-20020a05600c1c2600b003daff80f16esm10418913wms.27.2023.01.27.02.44.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 02:44:06 -0800 (PST)
-Date:   Fri, 27 Jan 2023 12:44:05 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC] PM: domains: Skip disabling unused domains if provider has
- sync_state
-Message-ID: <Y9Oq9Z4s8oqrIG6m@linaro.org>
-References: <20230126234013.3638425-1-abel.vesa@linaro.org>
+        Fri, 27 Jan 2023 05:44:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6502134C1D;
+        Fri, 27 Jan 2023 02:44:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00F9C61AD5;
+        Fri, 27 Jan 2023 10:44:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8FDC433A0;
+        Fri, 27 Jan 2023 10:44:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674816252;
+        bh=ynTmj3b4CBObQ1WhT58swNRUJrBAzRCbyyjV8tvQOeg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nIq3g8Iyvv7jAql5cP8aaXB44NLxyFsez6brpzTyYorxVdi7gxQPlKVLbv0z69xVG
+         Uny8JS4MO2Nwldfx9ViaHF8paXDefC4sTmEdygYdoazDdrdkNsuM9M71fDVYkoO6g8
+         uMydwXAbVqCrg/JCH0L1dq6fR4y0bnnkywagSC/05lHz662Rno4j54NNrMmuusVxbW
+         UP62Lka3R3+jyrCj+XT1+a7PjlDhE2DPl7KT0zhINQwnKioxhq4eMA8khAr7tGTFZu
+         bmsrwA/JeS4iYRIhCQYeF20UIGAlLvYz7ceMz5m2wIeEEz8q3M8OcaMAQ0xZVhcoRM
+         uBX2lj/cecGuw==
+Date:   Fri, 27 Jan 2023 10:44:06 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 09/11] fpga: m10bmc-sec: Make rsu status type specific
+Message-ID: <Y9Oq9hlhoTlzndNZ@google.com>
+References: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
+ <20230116100845.6153-10-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230126234013.3638425-1-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230116100845.6153-10-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-27 01:40:13, Abel Vesa wrote:
-> Currently, there are cases when a domain needs to remain enabled until
-> the consumer driver probes. Sometimes such consumer drivers may be built
-> as modules. Since the genpd_power_off_unused is called too early for
-> such consumer driver modules to get a chance to probe, the domain, since
-> it is unused, will get disabled. On the other hand, the best time for
-> an unused domain to be disabled is on the provider's sync_state
-> callback. So, if the provider has registered a sync_state callback,
-> assume the unused domains for that provider will be disabled on its
-> sync_state callback.
+Mon, 16 Jan 2023, Ilpo Järvinen wrote:
+
+> The rsu status field moves from the doorbell register to the auth
+> result register in the PMCI implementation of the MAX10 BMC. In order
+> to prepare for that, refactor the sec update driver code to have a type
+> specific ops that provides ->rsu_status().
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-
-Please ignore this version as it is only part of the solution.
-
-Have a look at v2 here:
-https://lore.kernel.org/lkml/20230127104054.895129-1-abel.vesa@linaro.org/
-
+> Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
-> 
-> This approach has been applied for unused clocks as well.
-> With this patch merged in, all the providers that have sync_state
-> callback registered will leave the domains enabled unless the provider's
-> sync_state callback explicitly disables them. So those providers will
-> need to add the disabling part to their sync_state callback. On the
-> other hand, the platforms that have cases where domains need to remain
-> enabled (even if unused) until the consumer driver probes, will be able,
-> with this patch in, to run without the pd_ignore_unused kernel argument,
-> which seems to be the case for most Qualcomm platforms, at this moment.
-> 
->  drivers/base/power/domain.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 84662d338188..8e72e8e38c77 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -1099,7 +1099,8 @@ static int __init genpd_power_off_unused(void)
->  	mutex_lock(&gpd_list_lock);
->  
->  	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-> -		genpd_queue_power_off_work(genpd);
-> +		if (!dev_has_sync_state(genpd->provider->dev))
-> +			genpd_queue_power_off_work(genpd);
->  
->  	mutex_unlock(&gpd_list_lock);
->  
-> -- 
-> 2.34.1
-> 
+>  drivers/fpga/intel-m10-bmc-sec-update.c | 109 +++++++++++++++++-------
+>  include/linux/mfd/intel-m10-bmc.h       |   1 -
+>  2 files changed, 78 insertions(+), 32 deletions(-)
+
+Applied, thanks
+
+-- 
+Lee Jones [李琼斯]
