@@ -2,109 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4031F67E49C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EC667E4A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjA0MF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
+        id S233048AbjA0MG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbjA0MFT (ORCPT
+        with ESMTP id S233011AbjA0MFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:05:19 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63C780152
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:59:45 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id b10so4413237pjo.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:59:45 -0800 (PST)
+        Fri, 27 Jan 2023 07:05:43 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9980164
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:00:02 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id k6so5080100vsk.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:00:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SJQyMP8KtEdsdoG1W/rDTY2sHvstU2onoiuLNZSdqRA=;
-        b=PwU/MxFfxjI7rblgdodb3z+Ia427ZsfwVdOF5RDiO/To4doDp3lZnreegyJfPEUcfL
-         eMYGGqaiTVYl2nj9mjtC2cRdIuJMHr9zsy/cqlzL1LLDupBEagQYpzOg9MF5k7wwDVO6
-         +uRNVvqRI45PPuMAJE27a2lKwMNPX+QPvK6S0mW4poSVFW30+k1M2I5JQSCLTotDkXos
-         PfyeHOKKSe8VN/rVEQwedqsC8mvy9wQLEtnBo1BQBkQlNifURH7ZR3Pd5O+NvakkPWiT
-         CstnuWhVJKO5XDJcqPRnF2KyAZiN9LqFVF9UT53wpNdYXX8UIHuY+fpn/+Zvw9ptPolF
-         Z4IQ==
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jgmw1h6HumCKIAmiKefvna0Hf/3PseJorCSc8z7I4JU=;
+        b=NvTggrZpuQLvzRUb8nXqJDTuvOgJLRHwMC1+NXoMEkGXRbfvcsIgEbqXp2mFf0YAOj
+         PVWU/CBCcuXZw/b9tsRyY9o8lgmQ7zWFhSk+LnsRKeDIwp9tnjODUL2lSP+Kn7M48vVv
+         QFJZ4gvERv1GXu6PA8kNFNBKvMKkvyJ2S9V0k49/V5qPxQRYYu6/aIU5/c2g8oZKq7J1
+         1+Vm6akp9D5LzZzju4RMrCUy07vanmzESnaMVnrk3ne7NtI5pLFmzL6eaFCbzLeU/V/M
+         ZC9aUa2L281d4WdmNGSSG6xfT1N2zn3SQF81gHycm/XWgzLvChNS5TUIIC3P7/74co/p
+         ioig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SJQyMP8KtEdsdoG1W/rDTY2sHvstU2onoiuLNZSdqRA=;
-        b=m4HMmo2+vDR/esydID9uFXajR7JDB3cokuBtKmv8fwKCRxmKalQHqYzqm7ASreHU8/
-         s6sZYp/bABurcVN0gfl0LiyeGmJeyMSH+GtJzmkvnJSCTQHLOZ2aARwyoF98XfXFI/bS
-         8SaWfALGdnE74WUnbgdnoTa66zJ6ejbvjuzG87t4Re1lLr1d1K8KwJDGvLQfaLj/lHoi
-         h79oZ5+P0sFDifq25aMG705Hp0tPKySCl27Z7h5i+jEBDE+ZoNS5xSk74jmysuifGv2O
-         cNPLvX1Nj6LbCYwCbk84TEVznCNhFndTfT29GpQoe0LLyy8NCg9xodJm6Ui2lH7YO1Ji
-         qvKA==
-X-Gm-Message-State: AFqh2kpulDryqa5QpwpFcOdHpSy6J6B88VUQDj4HDXJOBbdLU+efwkEj
-        5C8yhNxWhkYJWQKLU2tPGbI=
-X-Google-Smtp-Source: AMrXdXs5qdqdD1dcu7VPXFaAEJULrNvcKAOlo7ycLqi1WJSgPC7qNCKHNlSBkhnd9pymGsdCaOPEjQ==
-X-Received: by 2002:a05:6a21:3a82:b0:b8:7d48:2860 with SMTP id zv2-20020a056a213a8200b000b87d482860mr44988169pzb.4.1674820729118;
-        Fri, 27 Jan 2023 03:58:49 -0800 (PST)
-Received: from min-iamroot ([210.91.70.133])
-        by smtp.gmail.com with ESMTPSA id y191-20020a638ac8000000b004d182686e08sm2324994pgd.39.2023.01.27.03.58.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 03:58:48 -0800 (PST)
-Date:   Fri, 27 Jan 2023 20:58:44 +0900
-From:   Hyunmin Lee <hn.min.lee@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] replace BUG_ON to WARN_ON
-Message-ID: <20230127115844.GA1124261@min-iamroot>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jgmw1h6HumCKIAmiKefvna0Hf/3PseJorCSc8z7I4JU=;
+        b=AHiMdO5KyAaB4IAQG4r/T5o42kFfMEJ2CfO7yYNyTrHr+mOZMUprX6aNK11pd7oLhB
+         mtfrduQAJAh1kh/LW8Vs6XH2T3COQN1XD3oMxHg8MginkPpJ/vYxgyumwZHH9QQlxDHO
+         sFM9cx9gakYXw1wi4CIdB7unl+i8BNB7pZ+oqpoYS+yOvbETMdbq5OTka5bMVhJzj1AF
+         pd176KdUfmqIRF4oq5b07RLLgj+HAwAFODscu9qXMO+vX9QLdRC+h98wZEZWKrmkQd+r
+         N+Kr0+zu9l2KDJVvcJsrBwjrL2yRbYtYJrPz5dEC4RNuhGiisJJLUqyxrRAe/w3PwE5+
+         f1lg==
+X-Gm-Message-State: AFqh2krTH4RNHtFCmbHydZX03Dc7IUGJNtrrIIyCEaeTsNubTcEL5Rwv
+        q26AIwYZp+qOhcKbPhJjyEUjC45uaLhaMbQdpH0cAg==
+X-Google-Smtp-Source: AMrXdXubHdqlaizKNTj9G102JeOsBYvmfoEFUWQ0mrfMUZ0Li5vk5eK42eJIcEWgqN/BB7YpwIsfbm0SDqDPvJhJlGE=
+X-Received: by 2002:a05:6102:3134:b0:3d3:d816:c798 with SMTP id
+ f20-20020a056102313400b003d3d816c798mr4957237vsh.59.1674820749156; Fri, 27
+ Jan 2023 03:59:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230103141409.772298-1-apatel@ventanamicro.com>
+ <20230103141409.772298-2-apatel@ventanamicro.com> <Y7YGp/7ufyRPhkwg@spud>
+ <CAAhSdy2YKJfuxhBmsx9v-OMyxKQjys+J-z_ZqoPJF7q=YrE4Zw@mail.gmail.com> <Y8cIG6gKSlkTh5AF@spud>
+In-Reply-To: <Y8cIG6gKSlkTh5AF@spud>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Fri, 27 Jan 2023 17:28:57 +0530
+Message-ID: <CAK9=C2VzJvpQLPedc+ruUnw8xDDDaC6_Vmj6qg1nXv+iqU-AfQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] RISC-V: Add AIA related CSR defines
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace unnacessary BUG_ON to WARN_ON. These BUG_ONs verify aruguments of a function. Thus, the WARN_ONs return an EINVAL error when their condition is true.
+On Wed, Jan 18, 2023 at 2:12 AM Conor Dooley <conor@kernel.org> wrote:
+>
+> Hey Anup,
+>
+> I thought I had already replied here but clearly not, sorry!
+>
+> On Mon, Jan 09, 2023 at 10:39:08AM +0530, Anup Patel wrote:
+> > On Thu, Jan 5, 2023 at 4:37 AM Conor Dooley <conor@kernel.org> wrote:
+> > > On Tue, Jan 03, 2023 at 07:44:01PM +0530, Anup Patel wrote:
+>
+> > > > +/* AIA CSR bits */
+> > > > +#define TOPI_IID_SHIFT               16
+> > > > +#define TOPI_IID_MASK                0xfff
+>
+> While I think of it, it'd be worth noting that these are generic across
+> all of topi, mtopi etc. Initially I thought that this mask was wrong as
+> the topi section says:
+>         bits 25:16 Interrupt identity (source number)
+>         bits 7:0 Interrupt priority
 
-Co-Developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Co-Developed-by: Jeungwoo Yoo <casionwoo@gmail.com>
-Co-Developed-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
-Signed-off-by: Hyunmin Lee <hn.min.lee@gmail.com>
-Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Signed-off-by: Jeungwoo Yoo <casionwoo@gmail.com>
-Signed-off-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
----
- mm/vmalloc.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+These defines are for the AIA CSRs and not AIA APLIC IDC registers.
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 74afa2208558..9f9dba3132c5 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -1587,9 +1587,14 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
- 	int purged = 0;
- 	int ret;
- 
--	BUG_ON(!size);
--	BUG_ON(offset_in_page(size));
--	BUG_ON(!is_power_of_2(align));
-+	if (WARN_ON(!size))
-+		return ERR_PTR(-EINVAL);
-+
-+	if (WARN_ON(offset_in_page(size)))
-+		return ERR_PTR(-EINVAL);
-+
-+	if (WARN_ON(!is_power_of_2(align)))
-+		return ERR_PTR(-EINVAL);
- 
- 	if (unlikely(!vmap_initialized))
- 		return ERR_PTR(-EBUSY);
--- 
-2.25.1
+As per the latest frozen spec, the mtopi/stopi/vstopi has following bits:
+    bits: 27:16 IID
+    bits: 7:0 IPRIO
 
+>
+> > > > +#define TOPI_IPRIO_MASK              0xff
+> > > > +#define TOPI_IPRIO_BITS              8
+> > > > +
+> > > > +#define TOPEI_ID_SHIFT               16
+> > > > +#define TOPEI_ID_MASK                0x7ff
+> > > > +#define TOPEI_PRIO_MASK              0x7ff
+> > > > +
+> > > > +#define ISELECT_IPRIO0               0x30
+> > > > +#define ISELECT_IPRIO15              0x3f
+> > > > +#define ISELECT_MASK         0x1ff
+> > > > +
+> > > > +#define HVICTL_VTI           0x40000000
+> > > > +#define HVICTL_IID           0x0fff0000
+> > > > +#define HVICTL_IID_SHIFT     16
+> > > > +#define HVICTL_IPRIOM                0x00000100
+> > > > +#define HVICTL_IPRIO         0x000000ff
+> > >
+> > > Why not name these as masks, like you did for the other masks?
+> > > Also, the mask/shift defines appear inconsistent. TOPI_IID_MASK is
+> > > intended to be used post-shift AFAICT, but HVICTL_IID_SHIFT is intended
+> > > to be used *pre*-shift.
+> > > Some consistency in naming and function would be great.
+> >
+> > The following convention is being followed in asm/csr.h for defining
+> > MASK of any XYZ field in ABC CSR:
+> > 1. ABC_XYZ : This name is used for MASK which is intended
+> >    to be used before SHIFT
+> > 2. ABC_XYZ_MASK: This name is used for MASK which is
+> >    intended to be used after SHIFT
+>
+> Which makes sense in theory.
+>
+> > The existing defines for [M|S]STATUS, HSTATUS, SATP, and xENVCFG
+> > follows the above convention. The only outlier is HGATPx_VMID_MASK
+> > define which I will fix in my next KVM RISC-V series.
+>
+> Yup, it is liable to end up like that.
+>
+> > I don't see how any of the AIA CSR defines are violating the above
+> > convention.
+>
+> What I was advocating for was picking one style and sticking to it.
+> These copy-paste from docs things are tedious and error prone to review,
+> and I don't think having multiple styles is helpful.
+
+On the other hand, I think we should let developers choose a style
+which is better suited for a particular register field instead enforcing
+it here. The best we can do is follow a naming convention for defines.
+
+>
+> Tedious as it was, I did check all the numbers though, so in that
+> respect:
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+BTW, this patch is shared with KVM AIA CSR series so most likely
+I will take this patch through that series.
+
+Regards,
+Anup
