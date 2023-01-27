@@ -2,103 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EA767E96B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4250167E970
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbjA0P0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
+        id S234352AbjA0P2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbjA0P0g (ORCPT
+        with ESMTP id S232281AbjA0P2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:26:36 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22D37BBD3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:26:34 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id m14so4827503wrg.13
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:26:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1tjEUzLFjJmxfniuCdsNKzTQp/eXm9sRTYtnzkPTRGE=;
-        b=KUexmgRu5iOOfgI9R349Jd8L2TyoFbY1EsZAokQ3a/7AM3waZn4yATTO1YrXdP8Kkx
-         z/0f4L+QJcoDx5Jc2YiSJDMPuTJ8B0SXLJYGhAos7+7yimV3ZtsDMFRmIYhi7FSEGK0Y
-         0B+2LfXh35sh1pdV9VUXz7s1hPuuZWjSLwlxaL61ndTEOwewE8naS+Pd3OlyBQ1zracL
-         G67VJ+/oXtHG3eqDbpQiGSLl0vkaz+vnpH11xG7Wniomm6Pe5ayefFZsoihv6HZzdawf
-         LIxM+KFl8helJIKHG11992tvJf6aFjAuN8VirRkVvAePOWtSP4Qj3mwuE446HVJWsbHR
-         GCOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1tjEUzLFjJmxfniuCdsNKzTQp/eXm9sRTYtnzkPTRGE=;
-        b=ZelI9nUO7Q7qO7Xw3BZ4TDyYQ+P8S2BG1S7F6hnENOzh+Q2/dlYhzmhVntNvO5e1Le
-         n0aAkU6EJr2jjKtYDxT9qnJbBCu7ImKToZdl2shV0kllNLCIXOUV8OBGJCseRDrPT6j0
-         cPd1YqssMiKD/S08UmPOMed5RnB4hZEgtnwXO5Ul1cGFL16MxrmCYPERQCzzGIsi4l2P
-         cLvIRKaQGMg/8gBwVGGl5n+07OqqZ/ikBRqbCEYE+TCruYQNz3v5p7Bm7IzUNiJcfngl
-         GA0fAuNXJrA7O9QqCzjIsPcBY/lIF4R4jRPYja2pd7A0ios/I5lrp47xrgF6g2HVoZgQ
-         wrgg==
-X-Gm-Message-State: AFqh2krmj5uYt50dbnl8Ydh9FkSBWm3Gky/fhTseuQBwSPYCRupFwSn7
-        5BF7kpHc4fUt7nxkW1yDlkQu2PPbx8DkCd6I3iuCQg==
-X-Google-Smtp-Source: AMrXdXva7H5XWHDFiLRxpONdNSBqnohgqBGHD8HwUdzNKwIZrLMJ1OzcPdG5hlDJpM6rYIT+Ntu+kQ==
-X-Received: by 2002:a5d:5083:0:b0:2be:546c:4663 with SMTP id a3-20020a5d5083000000b002be546c4663mr23900328wrt.45.1674833192983;
-        Fri, 27 Jan 2023 07:26:32 -0800 (PST)
-Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
-        by smtp.gmail.com with ESMTPSA id e7-20020adfe387000000b002be15ee1377sm4265350wrm.22.2023.01.27.07.26.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 07:26:32 -0800 (PST)
-Date:   Fri, 27 Jan 2023 15:26:32 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Fuad Tabba <tabba@google.com>,
-        James Morse <james.morse@arm.com>,
-        Joey Gouly <Joey.Gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Price <steven.price@arm.com>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.cs.columbia.edu
-Subject: Re: [RFC] Support for Arm CCA VMs on Linux
-Message-ID: <Y9PtKJ3Wicc19JF1@myrica>
-References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+        Fri, 27 Jan 2023 10:28:15 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380CE21959;
+        Fri, 27 Jan 2023 07:28:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1674833293; x=1706369293;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CtNAdAonBFHUKepZl7RaqISOJYoGgnfbvYJNH8B3Y0k=;
+  b=odupeIn+e+jVCDRbjIG71Vsh4sZnD9NQT+yErQd0TVfdVxxdpJfM/HOO
+   2YRvWr9arDPL83SMcdSrvyaQ3XGe+/X1e2YuCWIHSbUexWgV6HdaPSjuz
+   qlBDmP3OvUU7yfjD3yXvP69ngfPeWq8QzbUYcwug/AfQKGo0eyN0P9KCQ
+   YYLMdhP2gyxVKFfVxpCsZ07rh/66L6gvAAUGvkM1OdGswXsHNIe5MkM2F
+   En4iPKaWKv2c3HmwiA69Z00FHtkXHx7/hRhOh0j3NiSlVaDSlD96bw7nI
+   0clQev8JkhNTVoBN/d+qJe9My8450sHWgp1ZfwKFaf07mxTRWPY665gNv
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,251,1669100400"; 
+   d="asc'?scan'208";a="197710525"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jan 2023 08:28:11 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 27 Jan 2023 08:28:06 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Fri, 27 Jan 2023 08:28:04 -0700
+Date:   Fri, 27 Jan 2023 15:27:40 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <kasan-dev@googlegroups.com>, <linux-efi@vger.kernel.org>
+Subject: Re: [PATCH v3 3/6] riscv: Move DTB_EARLY_BASE_VA to the kernel
+ address space
+Message-ID: <Y9PtbMSe9DUk3bCn@wendy>
+References: <20230125082333.1577572-1-alexghiti@rivosinc.com>
+ <20230125082333.1577572-4-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Z01ixQvrSdrQQAm3"
 Content-Disposition: inline
-In-Reply-To: <20230127112248.136810-1-suzuki.poulose@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230125082333.1577572-4-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:22:48AM +0000, Suzuki K Poulose wrote:
-> We are happy to announce the early RFC version of the Arm
-> Confidential Compute Architecture (CCA) support for the Linux
-> stack. The intention is to seek early feedback in the following areas:
->  * KVM integration of the Arm CCA
->  * KVM UABI for managing the Realms, seeking to generalise the operations
->    wherever possible with other Confidential Compute solutions.
+--Z01ixQvrSdrQQAm3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-A prototype for launching Realm VMs with QEMU is available at:
-https://lore.kernel.org/qemu-devel/20230127150727.612594-1-jean-philippe@linaro.org/
+Hey Alex,
+
+On Wed, Jan 25, 2023 at 09:23:30AM +0100, Alexandre Ghiti wrote:
+> The early virtual address should lie in the kernel address space for
+> inline kasan instrumentation to succeed, otherwise kasan tries to
+> dereference an address that does not exist in the address space (since
+> kasan only maps *kernel* address space, not the userspace).
+>=20
+> Simply use the very first address of the kernel address space for the
+> early fdt mapping.
+>=20
+> It allowed an Ubuntu kernel to boot successfully with inline
+> instrumentation.
+>=20
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+
+Been poking around in this area the last few days trying to hunt down
+some bugs... Things look functionally the same w/ this patch and we do
+get rid of the odd looking pointer which is nice.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Probably would've made the cause of 50e63dd8ed92 ("riscv: fix reserved
+memory setup") more difficult to find so glad I got that out of the way
+well before this patch!
 
 Thanks,
-Jean
+Conor.
 
+> ---
+>  arch/riscv/mm/init.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 478d6763a01a..87f6a5d475a6 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -57,7 +57,7 @@ unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsign=
+ed long)]
+>  EXPORT_SYMBOL(empty_zero_page);
+> =20
+>  extern char _start[];
+> -#define DTB_EARLY_BASE_VA      PGDIR_SIZE
+> +#define DTB_EARLY_BASE_VA      (ADDRESS_SPACE_END - (PTRS_PER_PGD / 2 * =
+PGDIR_SIZE) + 1)
+>  void *_dtb_early_va __initdata;
+>  uintptr_t _dtb_early_pa __initdata;
+> =20
+> --=20
+> 2.37.2
+>=20
+>=20
+
+--Z01ixQvrSdrQQAm3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHQEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9PtbAAKCRB4tDGHoIJi
+0u7KAPY1hCi3Va5fAfv37uYg8QCBL7X4ZCQl3ls8gDg6rGp9AQDsdy5FKbSVrpX1
+z1qeXbmq0/jC3ZakOc10BTCtvty7Dw==
+=w080
+-----END PGP SIGNATURE-----
+
+--Z01ixQvrSdrQQAm3--
