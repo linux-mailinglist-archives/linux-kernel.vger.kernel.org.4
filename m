@@ -2,92 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650F467E730
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFB567E74F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbjA0N52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
+        id S233563AbjA0N6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233522AbjA0N5V (ORCPT
+        with ESMTP id S233518AbjA0N6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:57:21 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D177D280
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:57:14 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id v127so5321065vsb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:57:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PBVrZ7Q7DuNnewLFiNGoE0LN1qG/UCTMSF+G5Ptq+ww=;
-        b=yo2NyAzopyQOqEyD3V618wzEbXXfwsqh1KP612mKC0X9ymcSpySO9oMm4SxzXIM5jn
-         izCH0yMcnEbHjwe3WRNF8WZhXPLFy7AVNFTWe5yQ6LQBJ1IIGxidXUH0geRZOW6JQ5AL
-         hI97H6gJ3891HIq41W6KTxBl63E5Nzb99Hg3IyBTxK3b1A+kHSC4pnC6CuN2O1nwtLTX
-         RNL8cq6ZTV8NHjJ7Bkh1kG+yQ929FoK3oH/h9UzkQsldc9cQ+UUTBgD035UPIwdiOtJD
-         oL8ThH/MWRnPjkC+so1efkV7/UiL6kh5wwqObBumC23p6DrkhBo3U/Ry1G/BX1C6P336
-         GICw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PBVrZ7Q7DuNnewLFiNGoE0LN1qG/UCTMSF+G5Ptq+ww=;
-        b=YhrV9X4eUjHLlNT19jJqewSpai92HWoCGp0++zgexxjEirHQ+fR8+O8RFp9LKyIrLg
-         pj1kM+QPrY8OoqiCrEY0ftHk2S+7l87i2vD1qbUUPoKdvB4HjklGoLSTDgW+0geMAr2r
-         mwx6oQAmM2B+ADxq6LkTXeTCWm32NnG47SRfCDFz02sCsbSdtT9z3tItyXguIWBjBHMS
-         ikIuC4I5vRgS7h+8GekXYAwLcyxyFD1iUvfKX8kgNHPMzr5rX8njUZVPuaH6IAhBmF9x
-         tBQeHlSVzx8jlkp4ShloXt1M/MxsfyZV9rPcScYrQGCY4sx8BHJ5GA7l+7P5pM+TMPxM
-         m+HA==
-X-Gm-Message-State: AO0yUKUHqP/DiUeYJq5uwAhrwDqGAn7a7GZfUJYO21VwU6zH22W/Gj8G
-        etYigGsZugk5pYPsCrLIMJVoU4KGBeSBIWnLmHDkhg==
-X-Google-Smtp-Source: AK7set9mj1CJJHr+TTwT8hSRz9OOunsPEMFmRYh2hPArPnZjpXqYuN0JoPloLw5xuqk8PKO0C2hnel7PBRWLT/5ektg=
-X-Received: by 2002:a67:5e43:0:b0:3f0:5f85:e86f with SMTP id
- s64-20020a675e43000000b003f05f85e86fmr83634vsb.17.1674827833818; Fri, 27 Jan
- 2023 05:57:13 -0800 (PST)
+        Fri, 27 Jan 2023 08:58:07 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1034C12;
+        Fri, 27 Jan 2023 05:58:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1674827881;
+        bh=cU2pVEC6fRSE0DXnUl0FoTHYRuUPSBqRDsCp95cUq7I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hxaLSz8y5jCtXHf66be7gJUXruzbPzRAYfq/OEOrQoACy+u+5/94WavdC/XRYhBgx
+         iMU5Oxg4m+7r59bQbHrTEPo7UkOMMRGLutCu8pR8nKV0WqPkcBw/s92wo0Qrfqt5mA
+         tQx5Z92wHI9Ur/c+OngxLqbCzuiViuEdkoFos5qQ2ZZY7cmlp9CccE7D9zTTPephxG
+         I3XLvMMivUhCmddQc/5+sYIJNAXxzk9sIidNce6m73zJ5yapCCUREvZ3PG/dQjYN1C
+         oYru3Yurd3QPfkZ9V1DCHMU8X6wlS4tDe+gl5zUOFkFvEmuZox3bAAK5mXcXpkXSFT
+         1BBSywbz+QJ4g==
+Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0T0zGVzhT5;
+        Fri, 27 Jan 2023 08:58:01 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH 00/34] selftests: Fix incorrect kernel headers search path
+Date:   Fri, 27 Jan 2023 08:57:21 -0500
+Message-Id: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230127101149.3475929-1-arnd@kernel.org> <Y9O1oA2KKUUvOcnP@smile.fi.intel.com>
-In-Reply-To: <Y9O1oA2KKUUvOcnP@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 27 Jan 2023 14:57:02 +0100
-Message-ID: <CAMRc=Mc+kqfqOWdNnAV4u=MotoSan0obxakhua78CW=TL=9i8g@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] gpiolib cleanups
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 12:29 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Jan 27, 2023 at 11:11:42AM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > These are some older patches I did last year, rebased to linux-next-20230127.
-> >
-> > The main goal is to remove some of the legacy bits of the gpiolib
-> > interfaces, where the corner cases are easily avoided or replaced
-> > with gpio descriptor based interfaces.
->
-> Thank you!
->
-> I guess we may go with this via GPIO tree.
->
+Hi,
 
-Arnd: are you fine with that? There are lots of changes from many
-different architectures after all.
+This series fixes incorrect kernel header search path in kernel
+selftests.
 
-Bart
+Near the end of the series, a few changes are not tagged as "Fixes"
+because the current behavior is to rely on the kernel sources uapi files
+rather than on the installed kernel header files. Nevertheless, those
+are updated for consistency.
+
+There are situations where "../../../../include/" was added to -I search
+path, which is bogus for userspace tests and caused issues with types.h.
+Those are removed. 
+
+Thanks,
+
+Mathieu
+
+Mathieu Desnoyers (34):
+  selftests: arm64: Fix incorrect kernel headers search path
+  selftests: bpf: Fix incorrect kernel headers search path
+  selftests: clone3: Fix incorrect kernel headers search path
+  selftests: core: Fix incorrect kernel headers search path
+  selftests: dma: Fix incorrect kernel headers search path
+  selftests: dmabuf-heaps: Fix incorrect kernel headers search path
+  selftests: drivers: Fix incorrect kernel headers search path
+  selftests: filesystems: Fix incorrect kernel headers search path
+  selftests: futex: Fix incorrect kernel headers search path
+  selftests: gpio: Fix incorrect kernel headers search path
+  selftests: ipc: Fix incorrect kernel headers search path
+  selftests: kcmp: Fix incorrect kernel headers search path
+  selftests: media_tests: Fix incorrect kernel headers search path
+  selftests: membarrier: Fix incorrect kernel headers search path
+  selftests: mount_setattr: Fix incorrect kernel headers search path
+  selftests: move_mount_set_group: Fix incorrect kernel headers search
+    path
+  selftests: net: Fix incorrect kernel headers search path
+  selftests: perf_events: Fix incorrect kernel headers search path
+  selftests: pid_namespace: Fix incorrect kernel headers search path
+  selftests: pidfd: Fix incorrect kernel headers search path
+  selftests: powerpc: Fix incorrect kernel headers search path
+  selftests: ptp: Fix incorrect kernel headers search path
+  selftests: rseq: Fix incorrect kernel headers search path
+  selftests: sched: Fix incorrect kernel headers search path
+  selftests: seccomp: Fix incorrect kernel headers search path
+  selftests: sync: Fix incorrect kernel headers search path
+  selftests: user_events: Fix incorrect kernel headers search path
+  selftests: vm: Fix incorrect kernel headers search path
+  selftests: x86: Fix incorrect kernel headers search path
+  selftests: bpf docs: Use installed kernel headers search path
+  selftests: iommu: Use installed kernel headers search path
+  selftests: memfd: Use installed kernel headers search path
+  selftests: ptrace: Use installed kernel headers search path
+  selftests: tdx: Use installed kernel headers search path
+
+ tools/testing/selftests/arm64/fp/Makefile               | 2 +-
+ tools/testing/selftests/arm64/tags/Makefile             | 2 +-
+ tools/testing/selftests/bpf/Makefile                    | 2 +-
+ tools/testing/selftests/bpf/Makefile.docs               | 2 +-
+ tools/testing/selftests/clone3/Makefile                 | 2 +-
+ tools/testing/selftests/core/Makefile                   | 2 +-
+ tools/testing/selftests/dma/Makefile                    | 2 +-
+ tools/testing/selftests/dmabuf-heaps/Makefile           | 2 +-
+ tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c      | 3 +--
+ tools/testing/selftests/drivers/dma-buf/Makefile        | 2 +-
+ tools/testing/selftests/drivers/s390x/uvdevice/Makefile | 3 +--
+ tools/testing/selftests/filesystems/Makefile            | 2 +-
+ tools/testing/selftests/filesystems/binderfs/Makefile   | 2 +-
+ tools/testing/selftests/filesystems/epoll/Makefile      | 2 +-
+ tools/testing/selftests/futex/functional/Makefile       | 2 +-
+ tools/testing/selftests/gpio/Makefile                   | 2 +-
+ tools/testing/selftests/iommu/Makefile                  | 3 +--
+ tools/testing/selftests/ipc/Makefile                    | 2 +-
+ tools/testing/selftests/kcmp/Makefile                   | 2 +-
+ tools/testing/selftests/media_tests/Makefile            | 2 +-
+ tools/testing/selftests/membarrier/Makefile             | 2 +-
+ tools/testing/selftests/memfd/Makefile                  | 4 +---
+ tools/testing/selftests/mount_setattr/Makefile          | 2 +-
+ tools/testing/selftests/move_mount_set_group/Makefile   | 2 +-
+ tools/testing/selftests/net/Makefile                    | 2 +-
+ tools/testing/selftests/net/bpf/Makefile                | 2 +-
+ tools/testing/selftests/net/mptcp/Makefile              | 2 +-
+ tools/testing/selftests/net/openvswitch/Makefile        | 2 +-
+ tools/testing/selftests/perf_events/Makefile            | 2 +-
+ tools/testing/selftests/pid_namespace/Makefile          | 2 +-
+ tools/testing/selftests/pidfd/Makefile                  | 2 +-
+ tools/testing/selftests/powerpc/ptrace/Makefile         | 2 +-
+ tools/testing/selftests/powerpc/security/Makefile       | 2 +-
+ tools/testing/selftests/powerpc/syscalls/Makefile       | 2 +-
+ tools/testing/selftests/powerpc/tm/Makefile             | 2 +-
+ tools/testing/selftests/ptp/Makefile                    | 2 +-
+ tools/testing/selftests/ptrace/Makefile                 | 2 +-
+ tools/testing/selftests/rseq/Makefile                   | 2 +-
+ tools/testing/selftests/sched/Makefile                  | 2 +-
+ tools/testing/selftests/seccomp/Makefile                | 2 +-
+ tools/testing/selftests/sync/Makefile                   | 2 +-
+ tools/testing/selftests/tdx/Makefile                    | 2 +-
+ tools/testing/selftests/tdx/tdx_guest_test.c            | 2 +-
+ tools/testing/selftests/user_events/Makefile            | 2 +-
+ tools/testing/selftests/vm/Makefile                     | 2 +-
+ tools/testing/selftests/x86/Makefile                    | 2 +-
+ 46 files changed, 46 insertions(+), 51 deletions(-)
+
+-- 
+2.25.1
+
