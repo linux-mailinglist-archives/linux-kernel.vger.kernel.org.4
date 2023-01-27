@@ -2,163 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC1267E599
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DC967E59D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234285AbjA0MkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
+        id S234382AbjA0Mkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234427AbjA0Mju (ORCPT
+        with ESMTP id S234393AbjA0Mje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:39:50 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3012007A
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:38:32 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id j7so5107427vsl.11
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:38:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=76/Qo0p/UxKI75yKdBSKj64ShK7ggokQHoWD6X+9VHg=;
-        b=Hszngf222LTCIZHcJU1fcQ3FtMpp0R2eOQm3OvoYjsDNqUd9DWcmWOy+/4fg78+HsO
-         8XFpqun0Ueoj6fmd17AWt7K/6W2VW1sD/tmGPEQcv4nIf9Gt3HuB0Vnhk/IwXI1pSYGJ
-         BPZXC2Km1XXz633t+U9T88H2NhD1Xhj19dWgOmKi0Ec6TgvVDAHSMWw0oEdfg5mMiwUp
-         QFM3/gIYS3j1sl3Pz9WOlt/pZg66CUZmDctaZTQiyqh4feNu+YQconFv4gttY67JPn67
-         yOiZvxB6QYbnHv4Q60G40Qo4FX7HK0lwkbFRczhuBipr3M3bs+35aM8GDrCkk65hkX7y
-         amzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=76/Qo0p/UxKI75yKdBSKj64ShK7ggokQHoWD6X+9VHg=;
-        b=RinvG35yI0VbQBwnCcR81lYz3j7RlYLvn5ja4eTFhNqpPznuuYF1ZCwoaS/pMGYEzf
-         o3PlP5V/aMGAJMQpjxoXsxe7PM7MoKbNKdiznNPYuzKEBRPHmFdyAOnpSNxhZx9ZOPhG
-         LCyyTToIZjxjLkQuMnGqbUbmLkuRtwQFcNNrripvtm/sx1hWR8wAgc1eutXOxvHiRHhh
-         FdG2yAj68VUHopF2scvyHyaBX7k1GRsSI8yOsz1SpzPH9yI6AniPvl6cpT/gc2R2uXxO
-         2LSAKPRLGBKf7sYIpYZFGXUXfrvnyuLZiqFU6Ed2vmIbKGgLlkx/Rklbk/uypdWUfwWH
-         eSqQ==
-X-Gm-Message-State: AFqh2kqt1Z8XYoUV1xgs/l5H/8lGkiCpr7Wg8RPqc75QPRUPM/Svenl+
-        j5INJ4fqShX7Hv2jgEDCjUpSUuW0X/KU9L6sT+cfzg==
-X-Google-Smtp-Source: AMrXdXvc0q+iLQCnU6T6GYjXCaxLciz1aBj2XVRZ5Wl7IH4DhMufJ5y3L690UwNsvqdwM9Ay5ls2J7TzC6BW9BtSReM=
-X-Received: by 2002:a05:6102:3134:b0:3d3:d816:c798 with SMTP id
- f20-20020a056102313400b003d3d816c798mr4972887vsh.59.1674823110815; Fri, 27
- Jan 2023 04:38:30 -0800 (PST)
+        Fri, 27 Jan 2023 07:39:34 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996167E047;
+        Fri, 27 Jan 2023 04:38:24 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 210851FF3C;
+        Fri, 27 Jan 2023 12:38:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1674823103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dg/eZw9C2WEGUOLobcqz+Lpe/vuPYoV3mKnbpIUu6/Q=;
+        b=Ad+cNpj/TSE9SFlIsoDZIWx9lsf197KgIpbXzFMdtjAAP08CL8GRm27Ukusg26Xi292FZv
+        iIFNZhud0zPzcoH16g8IctWfqoRlN7oVJc0tjjspHjqf02EWyVJ4iXL1og3pnxg/leM7r3
+        gjjcdpg+qHxCkJyJkXC5SGsoAI+2Iug=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1674823103;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dg/eZw9C2WEGUOLobcqz+Lpe/vuPYoV3mKnbpIUu6/Q=;
+        b=Odo7hPqrvOEgs4vQJva60XbLzuMONIFl3t72oFZ5rbE7h5n2Jo0e8vciALpbb3apamadxv
+        2cWpHvzUzp+7F6DQ==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 87D2C2C141;
+        Fri, 27 Jan 2023 12:38:21 +0000 (UTC)
+Date:   Fri, 27 Jan 2023 13:38:26 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        live-patching@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Subject: Re: [PATCH 1/2] powerpc/module_64: Improve restore_r2() return
+ semantics
+In-Reply-To: <15baf76c271a0ae09f7b8556e50f2b4251e7049d.1674617130.git.jpoimboe@kernel.org>
+Message-ID: <alpine.LSU.2.21.2301271338001.7389@pobox.suse.cz>
+References: <cover.1674617130.git.jpoimboe@kernel.org> <15baf76c271a0ae09f7b8556e50f2b4251e7049d.1674617130.git.jpoimboe@kernel.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <20230112140304.1830648-1-apatel@ventanamicro.com>
- <20230112140304.1830648-3-apatel@ventanamicro.com> <20230126160234.pkx4socjv3fcxpmn@orel>
-In-Reply-To: <20230126160234.pkx4socjv3fcxpmn@orel>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Fri, 27 Jan 2023 18:08:19 +0530
-Message-ID: <CAK9=C2X3=GZ1KDhHOAY2Mk+=uYAqSMVSYEQkWizm2=VgF_ynXw@mail.gmail.com>
-Subject: Re: [PATCH 2/7] RISC-V: Detect AIA CSRs from ISA string
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 9:32 PM Andrew Jones <ajones@ventanamicro.com> wrote:
->
-> On Thu, Jan 12, 2023 at 07:32:59PM +0530, Anup Patel wrote:
-> > We have two extension names for AIA ISA support: Smaia (M-mode AIA CSRs)
-> > and Ssaia (S-mode AIA CSRs).
-> >
-> > We extend the ISA string parsing to detect Smaia and Ssaia extensions.
-> >
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > ---
-> >  arch/riscv/include/asm/hwcap.h | 8 ++++++++
-> >  arch/riscv/kernel/cpu.c        | 2 ++
-> >  arch/riscv/kernel/cpufeature.c | 2 ++
-> >  3 files changed, 12 insertions(+)
-> >
-> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> > index 86328e3acb02..c649e85ed7bb 100644
-> > --- a/arch/riscv/include/asm/hwcap.h
-> > +++ b/arch/riscv/include/asm/hwcap.h
-> > @@ -59,10 +59,18 @@ enum riscv_isa_ext_id {
-> >       RISCV_ISA_EXT_ZIHINTPAUSE,
-> >       RISCV_ISA_EXT_SSTC,
-> >       RISCV_ISA_EXT_SVINVAL,
-> > +     RISCV_ISA_EXT_SSAIA,
-> > +     RISCV_ISA_EXT_SMAIA,
->
-> These will change a couple different ways due other other patches in
-> flight, but let's put the pair in alphabetical order now so they get
-> moved together that way.
+On Tue, 24 Jan 2023, Josh Poimboeuf wrote:
 
-Okay, I will update.
+> restore_r2() returns 1 on success, which is surprising for a non-boolean
+> function.  Change it to return 0 on success and -errno on error to match
+> kernel coding convention.
+> 
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
->
-> >       RISCV_ISA_EXT_ID_MAX
-> >  };
-> >  static_assert(RISCV_ISA_EXT_ID_MAX <= RISCV_ISA_EXT_MAX);
-> >
-> > +#ifdef CONFIG_RISCV_M_MODE
-> > +#define RISCV_ISA_EXT_SxAIA          RISCV_ISA_EXT_SMAIA
-> > +#else
-> > +#define RISCV_ISA_EXT_SxAIA          RISCV_ISA_EXT_SSAIA
-> > +#endif
->
-> This isn't used in this patch, so should probably be introduced in a later
-> patch when it is.
+Reviewed-by: Miroslav Benes <mbenes@suse.cz>
 
-Okay, I will move this to the patch where it is used.
-
->
-> > +
-> >  /*
-> >   * This enum represents the logical ID for each RISC-V ISA extension static
-> >   * keys. We can use static key to optimize code path if some ISA extensions
-> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > index 1b9a5a66e55a..a215ec929160 100644
-> > --- a/arch/riscv/kernel/cpu.c
-> > +++ b/arch/riscv/kernel/cpu.c
-> > @@ -162,6 +162,8 @@ arch_initcall(riscv_cpuinfo_init);
-> >   *    extensions by an underscore.
-> >   */
-> >  static struct riscv_isa_ext_data isa_ext_arr[] = {
-> > +     __RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
-> > +     __RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
-> >       __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
-> >       __RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
-> >       __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > index 93e45560af30..3c5b51f519d5 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -228,6 +228,8 @@ void __init riscv_fill_hwcap(void)
-> >                               SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
-> >                               SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
-> >                               SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
-> > +                             SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SMAIA);
-> > +                             SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SSAIA);
-> >                       }
-> >  #undef SET_ISA_EXT_MAP
-> >               }
-> > --
-> > 2.34.1
-> >
->
-> Otherwise,
->
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
->
-
-Thanks,
-Anup
+M
