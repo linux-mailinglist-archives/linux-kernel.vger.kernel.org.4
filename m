@@ -2,105 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4E567F13B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AE467F13C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbjA0WiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
+        id S231849AbjA0Wi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:38:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjA0WiU (ORCPT
+        with ESMTP id S230149AbjA0WiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:38:20 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02162ED7E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:38:17 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso9261849pju.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:38:17 -0800 (PST)
+        Fri, 27 Jan 2023 17:38:21 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28C8199C1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:38:19 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id b24-20020a17090a551800b0022beefa7a23so10010992pji.5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:38:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wT576QX9xHllxN0lRYKR47JyczROgIwu1/PNvL2Rutc=;
-        b=N8uiweR9oBNu+LgBzfjcYD4LfOcGUNYX6AHlx0v6YVDeAc66gmMpNn3oZIayWzKsDn
-         926K9JP3uxel/Ho9K5Ois/lhxo8W+Ox4nSXlrgjlf6aSxotydEAMHwubMa2/94+Fjb9U
-         snv15PToWK5Rm3Nvw2dlDhXwHgCOEL5lpuczC71l0Pw5TLfQ70xqL8QLG/nHA0lhS1xF
-         p1RGKHlbaLtfoPufbjbyeSMNGYrUpaUHK62ieAKW9wB2SgvaUtWrnT9p6EiHTEgB9K2c
-         Zw2+2NsaN5M5EbpyDQQjjGaPDJghbSPIb6yujk23VLQ7JvnOCyKlYGH0+DnJ2J96bHSF
-         S7VA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=v8KUQGK7MJtzuKGRGDT0BQ6/1Z8fLbRNluB/Og9OPvw=;
+        b=WsypvYtPfkPUjon6FlpkUez3/t7ERj4dR0qDWPjh+OxIGuPsOyODltDLvl0hNi7yh1
+         tHX6ZBa0vmEm4pZWaWnzIZjhhg6LXLlxX50zsD6n+XwFWKUcfNswh/fCwQb1uHo5ciew
+         X8yz53VEK25sNyYArevRoax9uOlgS2FUp6sok=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wT576QX9xHllxN0lRYKR47JyczROgIwu1/PNvL2Rutc=;
-        b=bhbX116P2MtoQbrx8OgyP8xL0pJtcchj+meHk5vSsvJerMTLrHOm8xznr9gnuvWpU0
-         AGor4sDU3gpyeavkypuS+r1a/oXqjkNAuM+j9YN2wkoTs4xew4cvZ1gtYgf68UPrYw7t
-         42tgKvVrNmMJ2/MS6u8UN312Ftk0NlhtYAtvoUsfsvBjq5EuPt1XgdTodykwLPqQ2jJv
-         ywbCZ/4Yc/OqOfO4bSgya1AazHLTImVc7j6Q/MLJzMgS2T8oh0SNQ4GYTaj+fO2fEEt4
-         4mk/SeMH97ZUSDdGWP7AL0v9E8orLjD/bIN+ah48CSmaBfPmjVMH7nEgJLdkOHa58QTG
-         pnUQ==
-X-Gm-Message-State: AFqh2kqacnINOIWPqyoHl18trNYG+qXrVVht2zPzePrXfXAltrbsbzEh
-        sXG22IznAAo7Ym0YRXg1pG2EEo1YrlPlsdGPypdS
-X-Google-Smtp-Source: AMrXdXunM/785t5txnw7UTNhE9KblolcGjVvpPCwHuVLwD9hj4/sdRedAvzglIcjinAMhc5wbooE+A37rMqn4q3jEpU=
-X-Received: by 2002:a17:90b:3903:b0:225:de08:b714 with SMTP id
- ob3-20020a17090b390300b00225de08b714mr5008556pjb.193.1674859097412; Fri, 27
- Jan 2023 14:38:17 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v8KUQGK7MJtzuKGRGDT0BQ6/1Z8fLbRNluB/Og9OPvw=;
+        b=a80448iapOBbAjS6szBVibRHYdTeNW5l5wLSzKn+LnNbD6Zb0j1rU4R4AANeNda/xI
+         TZLVt0D1vDNT89dgmLPZsdkMSQO4cOEgRdabsTzIk14MvcbSzGy2JKkhK6/4iqBeC09E
+         Y5X3/s/vc4mB9xs1FqGDVei2k2VJxZYzohYCjfvdPMp8kBGUiiPP2pJskjQiY7LnsLzq
+         cnUBAeeZPP3NpEVsAQ/cWGlZgN8NoJt0yxXFpnvwcW//DXSyhg16ZjgSVmllG+FPrzK3
+         dJjmTjmh0QPUZWZmkvzDS0t3jANrd0a4mGf1oHlKTrAp+V1xvTtiKfMOWv9EMo5Zpgw0
+         Fkqw==
+X-Gm-Message-State: AO0yUKVqdxOQKCvfyFOMgxkZwoJ2YKzX2XajbNDMFe369f9OTFW7ifkB
+        GSUxIW+jwGO8tB7UD0D8/R4Nbg==
+X-Google-Smtp-Source: AK7set8ZJl02n6oFmIl8pxXtG1MZuC84fRHK08N8jgqRjWLycq2flaq6sz5rhHHqCU8FgQIcPFB0Rw==
+X-Received: by 2002:a17:90b:4d04:b0:22c:f74:9417 with SMTP id mw4-20020a17090b4d0400b0022c0f749417mr10949646pjb.32.1674859099176;
+        Fri, 27 Jan 2023 14:38:19 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n19-20020a637213000000b0044ed37dbca8sm2869837pgc.2.2023.01.27.14.38.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 14:38:18 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] iommufd: Add top-level bounds check on kernel buffer size
+Date:   Fri, 27 Jan 2023 14:38:17 -0800
+Message-Id: <20230127223816.never.413-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <cover.1674682056.git.rgb@redhat.com> <da695bf4-bd9b-a03d-3fbc-686724a7b602@kernel.dk>
- <CAHC9VhSRbay5bEUMJngpj+6Ss=WLeRoyJaNNMip+TyTkTJ6=Lg@mail.gmail.com> <24fbe6cb-ee80-f726-b260-09f394ead764@kernel.dk>
-In-Reply-To: <24fbe6cb-ee80-f726-b260-09f394ead764@kernel.dk>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 27 Jan 2023 17:38:06 -0500
-Message-ID: <CAHC9VhRuvV9vjhmTM4eGJkWmpZmSkgVaoQ=L6g3cahej-F52tQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] two suggested iouring op audit updates
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Richard Guy Briggs <rgb@redhat.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2558; h=from:subject:message-id; bh=DvvDSCPrtiZf/vMBP8xmsL1zlu6L3aeqhNadd+7X3/I=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj1FJYszVzg798jHCOXWzXgYux6qhv5/f16dGlhaEB rqrNfm+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY9RSWAAKCRCJcvTf3G3AJrDmEA CbYqX7OsaxA+dCd3NJ1XX0DkPmMT3rasLziMOqYGfiyPrkphRzxwJpqE4RmVRUGLh/l/rq0IDEqN9q CU/+3WbpR1gnnAkU9S999jWfdgFMwDeU9faCxzWGfOURx4qmzdeChhirJ4tCIOjWaBWkaplF0dBFHn XNei+7Dm2NhtUTEPrCGw8ksJ4LV5vw11l5N5GQ+7nCTPz3bKjFxDUsujvoSTezYtRJ0d5EEP1qEirN kPvVp/L5Gj9nWjiXu1IuK8ccZZsL6sVIqPJHGleRSazpuHs2A1oNOAybyglMN0c3szknlqtSsiTrmK Tn3h+0a/eXCyAZMmnUD9si1ShI4cDVscNZJPARDGWPPVFpltHPr2ujsLrdttQM8TuXYiuQGXP1HhIB LB+eJU7qzVovH7LmgDgRT+pCLKL7CTh1DdyKqZWIFMZ5OdU7o+5EDsKNuWiTvFfdHvo5vbEzS8TCvc ud8D62925NjOCzjA/HwBKDgSTR8EZQGgcFH7BhUIPeBoc0LfgzFzNKdhK6e/KeHwM/UAOd3L0aYwCt A1f/DHjI6mRQu7J8WuOEUYwU2ByNFDvzKsVOrUYwoYM9HLozJt5774fE2XaNcoVbnOB+F6CERVXHby UhmpHr10nXfMTJo+08gdjgW0TUTMQ4bh3JBFaDYxLb4DdWtEBD9ii+7MxrGA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 2:43 PM Jens Axboe <axboe@kernel.dk> wrote:
-> On 1/27/23 12:42=E2=80=AFPM, Paul Moore wrote:
-> > On Fri, Jan 27, 2023 at 12:40 PM Jens Axboe <axboe@kernel.dk> wrote:
-> >> On 1/27/23 10:23=E2=80=AFAM, Richard Guy Briggs wrote:
-> >>> A couple of updates to the iouring ops audit bypass selections sugges=
-ted in
-> >>> consultation with Steve Grubb.
-> >>>
-> >>> Richard Guy Briggs (2):
-> >>>   io_uring,audit: audit IORING_OP_FADVISE but not IORING_OP_MADVISE
-> >>>   io_uring,audit: do not log IORING_OP_*GETXATTR
-> >>>
-> >>>  io_uring/opdef.c | 4 +++-
-> >>>  1 file changed, 3 insertions(+), 1 deletion(-)
-> >>
-> >> Look fine to me - we should probably add stable to both of them, just
-> >> to keep things consistent across releases. I can queue them up for 6.3=
-.
-> >
-> > Please hold off until I've had a chance to look them over ...
->
-> I haven't taken anything yet, for things like this I always let it
-> simmer until people have had a chance to do so.
+While the op->size assignments are already bounds-checked at static
+initializer time, these limits aren't aggregated and tracked when doing
+later variable range checking under -Warray-bounds. Help the compiler
+see that we know what we're talking about, and we'll never ask to
+write more that sizeof(ucmd.cmd) bytes during the memset() inside
+copy_struct_from_user(). Seen under GCC 13:
 
-Thanks.  FWIW, that sounds very reasonable to me, but I've seen lots
-of different behaviors across subsystems and wanted to make sure we
-were on the same page.
+In function 'copy_struct_from_user',
+    inlined from 'iommufd_fops_ioctl' at ../drivers/iommu/iommufd/main.c:333:8:
+../include/linux/fortify-string.h:59:33: warning: '__builtin_memset' offset [57, 4294967294] is out of the bounds [0, 56] of object 'buf' with type 'union ucmd_buffer' [-Warray-bounds=]
+   59 | #define __underlying_memset     __builtin_memset
+      |                                 ^
+../include/linux/fortify-string.h:453:9: note: in expansion of macro '__underlying_memset'
+  453 |         __underlying_memset(p, c, __fortify_size); \
+      |         ^~~~~~~~~~~~~~~~~~~
+../include/linux/fortify-string.h:461:25: note: in expansion of macro '__fortify_memset_chk'
+  461 | #define memset(p, c, s) __fortify_memset_chk(p, c, s, \
+      |                         ^~~~~~~~~~~~~~~~~~~~
+../include/linux/uaccess.h:334:17: note: in expansion of macro 'memset'
+  334 |                 memset(dst + size, 0, rest);
+      |                 ^~~~~~
+../drivers/iommu/iommufd/main.c: In function 'iommufd_fops_ioctl':
+../drivers/iommu/iommufd/main.c:311:27: note: 'buf' declared here
+  311 |         union ucmd_buffer buf;
+      |                           ^~~
 
---=20
-paul-moore.com
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Kevin Tian <kevin.tian@intel.com>
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: iommu@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/iommu/iommufd/main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
+index 3fbe636c3d8a..34a1785da33a 100644
+--- a/drivers/iommu/iommufd/main.c
++++ b/drivers/iommu/iommufd/main.c
+@@ -330,8 +330,9 @@ static long iommufd_fops_ioctl(struct file *filp, unsigned int cmd,
+ 		return -EINVAL;
+ 
+ 	ucmd.cmd = &buf;
+-	ret = copy_struct_from_user(ucmd.cmd, op->size, ucmd.ubuffer,
+-				    ucmd.user_size);
++	ret = copy_struct_from_user(ucmd.cmd,
++				    min_t(size_t, op->size, sizeof(ucmd.cmd)),
++				    ucmd.ubuffer, ucmd.user_size);
+ 	if (ret)
+ 		return ret;
+ 	ret = op->execute(&ucmd);
+-- 
+2.34.1
+
