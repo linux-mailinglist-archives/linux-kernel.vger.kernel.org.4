@@ -2,146 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287E967DD0D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 06:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C06B367DD11
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 06:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbjA0FVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 00:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
+        id S231476AbjA0FXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 00:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjA0FVu (ORCPT
+        with ESMTP id S231490AbjA0FWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 00:21:50 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03E12A98F;
-        Thu, 26 Jan 2023 21:21:48 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P35Xm6LDNz4xGM;
-        Fri, 27 Jan 2023 16:21:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674796907;
-        bh=ElbxIHGG350REXTmSYM+T8ONWCYZkA51/Jho7+0kBBk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iqCR6CmOIFbHobhWLLARl1Wnb+EuE8/TTejkxK0NWXl+gwrKlR329LqXyWVaR939W
-         q78+vATfjvjDZqXVboEV0NWHkiTwwfK1WDaUMZaob7jCy4aITRcv5CVEesudjewzYE
-         4leIH79mQfSZa3kcaRvkLpepwlDE/TFj4y+PjWlfIzTJw/YQgQzN5uKJMWjo3c1+HX
-         klCgb2KjfVG+W98JMTYsNm/TskfEWd7op8+cq3L94ddSLM/fDeG7J9k1t76VwYjTI/
-         IDV1TWKFD+jiZ1rej8z5Ykq6tmTQMvC0RVbYYZ6PYV71zi2CVvdKrxhXdEvwRjlZOs
-         zkypjwl2XDSJA==
-Date:   Fri, 27 Jan 2023 16:21:43 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@mellanox.com>
-Cc:     Dean Luick <dean.luick@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: linux-next: manual merge of the mm tree with the rdma tree
-Message-ID: <20230127162143.1a3bc64b@canb.auug.org.au>
+        Fri, 27 Jan 2023 00:22:53 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61BB61AC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:22:49 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id qx13so10656671ejb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:22:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=AIRfVPUF3auiDttQnKRgcplVNHSb6nAi9W3+CUN3MHM=;
+        b=j00WlRSQife8DuJtHE5q7HP4Y//JBBd+69mmoVMrl1AhvaVKjU4i6FpEgtdo/YBoEK
+         gel/toq2+8aa7f8V8Gdw9HMIdAz2Ncwp7r70pQEzZFNehSxgpKO04TBOuScKqFNT8BK5
+         v6pMLBbB4b3RXnn5ZgznRRHRsGvHZJWV6IgKlzh7e6HJVypO6RpiqcR9WLqgY0qLZXhN
+         yjVXcoox8S15sp+s469vaAW0JcEql3jDpAWOmwDEQhSGE60CV6P4Wimbn+gEzNrfGOM2
+         COCRQaAdqfDDxdyj2AtLBxKnoc1jIzNImW/vFEvplqsG49iaavg0Rs8UHqqjAn+MrDHv
+         Dn/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AIRfVPUF3auiDttQnKRgcplVNHSb6nAi9W3+CUN3MHM=;
+        b=YBqCzyaKlvldm+o0/oaBXH2uKx7CCgTtE4zE/d3XGZJU5cjCM/XAYlLpAJcjrsmgXE
+         cOWZE2f9U31CGx7m4IC4ewyrTKIlMLmEbCJKY06Nk6uZ0Og3RCwbc4zR3QxuJ5AIt/fq
+         J+aKFnwv2+fe4UU7QmY2WkESlV/4eVdNmRrGEK44yZz4L5J3v55e1g2mQSQY2q1ReDVE
+         7mdGu7sQwUoGmAoonTmp5q6Bmjiq4GHrQfbNqpZ285CE3sVj5XDF3oDKDRT+q3Il5agN
+         AyNdYeDIQxCdUkZlA6q3/H3GL7gV7PqeFULNTCMQ43oll2cvubfIxEjyosmxmoZv7jPq
+         Cy9A==
+X-Gm-Message-State: AFqh2krIDkYz2r9+hpACtvY/YCBDcqL7hB6TYz7mnXT+UtNuC5mn7RIU
+        1xOJVXy8Ls3M1z8OjBdNH7T2kg/96MxNGAT/aoc=
+X-Google-Smtp-Source: AMrXdXvAowwBSdQmgQ0A5NBuv6/VJba6ElPGTtVatEOCnu9EPlZpvjksEqc5I0q3AwNkyPpr9tb9IYmBOVC8DnbNb94=
+X-Received: by 2002:a17:906:13d4:b0:85f:68bf:265a with SMTP id
+ g20-20020a17090613d400b0085f68bf265amr4246195ejc.278.1674796968294; Thu, 26
+ Jan 2023 21:22:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Kp/.8g48qMu3jNvrNEERdcF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 27 Jan 2023 15:22:36 +1000
+Message-ID: <CAPM=9tzuu4xnx6T5v7sKsK+A5HEaPOc1ieMyzNSYQZGztJ=6Qw@mail.gmail.com>
+Subject: [git pull] drm fixes for 6.2-rc6
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Kp/.8g48qMu3jNvrNEERdcF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Linus,
 
-Hi all,
+Fairly small this week as well, i915 has a memory leak fix and some
+minor changes, and amdgpu has some MST fixes, and some other minor
+ones.
 
-Today's linux-next merge of the mm tree got a conflict in:
+Dave.
 
-  drivers/infiniband/hw/hfi1/file_ops.c
+drm-fixes-2023-01-27:
+drm fixes for 6.2-rc6
 
-between commit:
+drm:
+- DP MST kref fix
+- fb_helper: check return value
 
-  1ec82317a1da ("IB/hfi1: Use dma_mmap_coherent for matching buffers")
+i915:
+- Fix BSC default context for Meteor Lake
+- Fix selftest-scheduler's modify_type
+- memory leak fix
 
-from the rdma tree and commit:
+amdgpu:
+- GC11.x fixes
+- SMU13.0.0 fix
+- Freesync video fix
+- DP MST fixes
+- build fix
+The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
 
-  6fe0afd07701 ("mm: replace vma->vm_flags direct modifications with modifi=
-er calls")
+  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
 
-from the mm tree.
+are available in the Git repository at:
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-01-27
 
---=20
-Cheers,
-Stephen Rothwell
+for you to fetch changes up to d23db89883962d9b4cb3ad03dfd02e525ed2cc03:
 
-diff --cc drivers/infiniband/hw/hfi1/file_ops.c
-index e03b0207856e,c6e59bc480f9..000000000000
---- a/drivers/infiniband/hw/hfi1/file_ops.c
-+++ b/drivers/infiniband/hw/hfi1/file_ops.c
-@@@ -424,17 -403,8 +424,17 @@@ static int hfi1_file_mmap(struct file *
-  			ret =3D -EPERM;
-  			goto done;
-  		}
-- 		vma->vm_flags &=3D ~VM_MAYWRITE;
-+ 		vm_flags_clear(vma, VM_MAYWRITE);
- -		addr =3D vma->vm_start;
- +		/*
- +		 * Mmap multiple separate allocations into a single vma.  From
- +		 * here, dma_mmap_coherent() calls dma_direct_mmap(), which
- +		 * requires the mmap to exactly fill the vma starting at
- +		 * vma_start.  Adjust the vma start and end for each eager
- +		 * buffer segment mapped.  Restore the originals when done.
- +		 */
- +		vm_start_save =3D vma->vm_start;
- +		vm_end_save =3D vma->vm_end;
- +		vma->vm_end =3D vma->vm_start;
-  		for (i =3D 0 ; i < uctxt->egrbufs.numbufs; i++) {
-  			memlen =3D uctxt->egrbufs.buffers[i].len;
-  			memvirt =3D uctxt->egrbufs.buffers[i].addr;
-@@@ -560,9 -528,11 +560,9 @@@
-  		goto done;
-  	}
- =20
-- 	vma->vm_flags =3D flags;
-+ 	vm_flags_reset(vma, flags);
- -	hfi1_cdbg(PROC,
- -		  "%u:%u type:%u io/vf:%d/%d, addr:0x%llx, len:%lu(%lu), flags:0x%lx\n",
- -		    ctxt, subctxt, type, mapio, vmf, memaddr, memlen,
- -		    vma->vm_end - vma->vm_start, vma->vm_flags);
- +	mmap_cdbg(ctxt, subctxt, type, mapio, vmf, memaddr, memvirt, memdma,=20
- +		  memlen, vma);
-  	if (vmf) {
-  		vma->vm_pgoff =3D PFN_DOWN(memaddr);
-  		vma->vm_ops =3D &vm_ops;
+  Merge tag 'drm-misc-fixes-2023-01-26' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2023-01-27
+12:31:09 +1000)
 
---Sig_/Kp/.8g48qMu3jNvrNEERdcF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+----------------------------------------------------------------
+drm fixes for 6.2-rc6
 
------BEGIN PGP SIGNATURE-----
+drm:
+- DP MST kref fix
+- fb_helper: check return value
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTX2gACgkQAVBC80lX
-0GwAOQf/XhxyOShr+CmxFTTBGVL/Ksnht2CcC0VK57U2EQL8PATzCLKkALHbc9GH
-r4SlKamxq7V2gRcrusTAkodYsVcdzcq+Q1u8d2oShAJWL7IpyQBGllmcA2c+8o5q
-yH2sOHwMmYrdi3oT4BXeLAxAgVptCJHH3pMaaIzm+ahJ7W2ZgWgrfcBJh9M+N69i
-GWT9VM0D5mDJTs+nOBFo7/2hEpyVI3ClfZqImi2Stsaji++b9pXSY6uk0raZrJO1
-3DglC5tX1CqGdZHhM04PtKIgetJ+tYRu114IotKrHJZcXMfOV8Vp2t2K7VQA4RSi
-1XS8NcR6sTn/RDidrTtdTleprUL85w==
-=yZpw
------END PGP SIGNATURE-----
+i915:
+- Fix BSC default context for Meteor Lake
+- Fix selftest-scheduler's modify_type
+- memory leak fix
 
---Sig_/Kp/.8g48qMu3jNvrNEERdcF--
+amdgpu:
+- GC11.x fixes
+- SMU13.0.0 fix
+- Freesync video fix
+- DP MST fixes
+- build fix
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      drm/i915/selftest: fix intel_selftest_modify_policy argument types
+
+Aurabindo Pillai (1):
+      drm/amd/display: Fix timing not changning when freesync video is enabled
+
+Dave Airlie (4):
+      Merge tag 'drm-intel-fixes-2023-01-26' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+      Merge tag 'amd-drm-fixes-6.2-2023-01-25' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      amdgpu: fix build on non-DCN platforms.
+      Merge tag 'drm-misc-fixes-2023-01-26' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+
+Evan Quan (1):
+      drm/amd/pm: add missing AllowIHInterrupt message mapping for SMU13.0.0
+
+Javier Martinez Canillas (2):
+      drm/fb-helper: Check fb_deferred_io_init() return value
+      drm/fb-helper: Use a per-driver FB deferred I/O handler
+
+Jonathan Kim (1):
+      drm/amdgpu: remove unconditional trap enable on add gfx11 queues
+
+Li Ma (2):
+      drm/amdgpu: enable imu firmware for GC 11.0.4
+      drm/amdgpu: declare firmware for new MES 11.0.4
+
+Lucas De Marchi (1):
+      drm/i915/mtl: Fix bcs default context
+
+Lyude Paul (1):
+      drm/amdgpu/display/mst: Fix mst_state->pbn_div and slot count assignments
+
+Nirmoy Das (2):
+      drm/drm_vma_manager: Add drm_vma_node_allow_once()
+      drm/i915: Fix a memory leak with reused mmap_offset
+
+Wayne Lin (3):
+      drm/amdgpu/display/mst: limit payload to be updated one by one
+      drm/amdgpu/display/mst: update mst_mgr relevant variable when long HPD
+      drm/display/dp_mst: Correct the kref of port.
+
+ drivers/gpu/drm/amd/amdgpu/imu_v11_0.c             |  1 +
+ drivers/gpu/drm/amd/amdgpu/mes_v11_0.c             |  3 +-
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  | 31 +++++++++
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c  | 51 +++++++++++----
+ .../amd/display/amdgpu_dm/amdgpu_dm_mst_types.c    |  5 --
+ drivers/gpu/drm/amd/display/dc/core/dc_link.c      | 14 +++-
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   |  1 +
+ drivers/gpu/drm/display/drm_dp_mst_topology.c      |  4 +-
+ drivers/gpu/drm/drm_fbdev_generic.c                | 15 +++--
+ drivers/gpu/drm/drm_vma_manager.c                  | 76 +++++++++++++++-------
+ drivers/gpu/drm/i915/gem/i915_gem_mman.c           |  2 +-
+ drivers/gpu/drm/i915/gt/intel_lrc.c                | 37 +----------
+ .../drm/i915/selftests/intel_scheduler_helpers.c   |  3 +-
+ include/drm/drm_fb_helper.h                        | 12 ++++
+ include/drm/drm_vma_manager.h                      |  1 +
+ 15 files changed, 167 insertions(+), 89 deletions(-)
