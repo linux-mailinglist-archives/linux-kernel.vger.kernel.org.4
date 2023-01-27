@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9803067EEB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8423D67EEBB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbjA0Tpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 14:45:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51650 "EHLO
+        id S232695AbjA0TrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbjA0ToI (ORCPT
+        with ESMTP id S232683AbjA0Tq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 14:44:08 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C2859769
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:43:10 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4c11ae6ab25so65258697b3.8
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:43:10 -0800 (PST)
+        Fri, 27 Jan 2023 14:46:29 -0500
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25A08D0BD
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:44:10 -0800 (PST)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-482d3bf0266so65384517b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:44:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zr26Tmb2M01sb1afZfnklHdnYeWn0/HWZzrpjXJYooI=;
-        b=I2P3olZBrDoCFDP1jHcaHXqtsXyUzxQr/ws4wX6bBu3CUipyuxA31yRpWa3MnFa/SU
-         pcf5+CCx+WnMbozlzDdIg2ALFwq/OFj8s/q24FIJwL7Tizh8I6eeGtbBFib4zJzLB5md
-         /zjFFlwtWXGghsSwviKTLUSRcwBRmcJaXn6b7nEXFweXpvU3ZyCKtcIxikLC8+UQ9pUQ
-         JujyWegWeeB7qz6qsENh+jKg1foSfeMqF01FuGu+Yb/GyFYoIS6vq3ynrguPkj0pOoLx
-         BYJ8cK1I9Z+jOMo/TqTeh+dlSH9FVfZfZ84FkijhY572Ij8GlcP0ii8VORVWe0sgl8Ck
-         Cp6w==
+        bh=MNwo0rhG4y8C+tQG7LPM4nLJWTbIHprc8uVQsZA2GSc=;
+        b=JxxlO5586M0z4sVDSxHugqEEADB1cAjEHo2xluVRFI46WqHTOUsszCaJjysGoPqCq8
+         ztKkJGmntymAGuEGxdM2A7EX8Sykw/reCFrQFVsgm7kaRoHFsG9BNF/PmmjyzPElNA3A
+         u2zVx465PKwxuuDkWTqvf70dFDsT4sE76+Q1i+nyNMyErq//frz9WqLOph65UMZVM1Q3
+         1JnBBBOhnZpIDf2DrbbDSdhADbiUH2oov3flacw7sejkvu/YDNPNLxViqgxSV8aAiDpN
+         WEe8RN23e0S32q4tATcZ7ZhVfhZ7+NOeU1bzW/fjTQ6HzW6TJlQUp4mHpwvwuOr4rhfO
+         QkKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zr26Tmb2M01sb1afZfnklHdnYeWn0/HWZzrpjXJYooI=;
-        b=Wt59uesTdyZ7RecOO9SwzT8Xwl6yO2QvhuTj8m7BoEQaWSRQOjKdcI3IjZ/g+rUr3j
-         bNenf9ptvCrnBNMwf74exRSsJ5Q3T5uGAYdAO6b4YEMlLY1WX1d81wh/f2x6I5U6GAIF
-         Hjk4PGttpM7orqJ4mnvziEG6ckWhVNvq5KQgrRXtYE7GJbSF2l+2Hm9TudC6/udIAAjw
-         MLK85E7LMHI/cXdlBMI+e6A+HZSuSDzenLCmj9RlUhIyXdaoZ1z6hOC+qGGuSVzQx2Vo
-         3GDtR25Z++F+NE7B0Ga/hKu/1WPlPUtK+gTlzHuuQHbfk0cvpR4TifYVSfLglVU67BpZ
-         Khkw==
-X-Gm-Message-State: AO0yUKWipz/yH/5hlrIGEDO6lM+lbHKeq0yj//Qi6W4YsOW0mLAWaveZ
-        rNPT32humK10JIhg5Kgj02jYslr4d7E=
-X-Google-Smtp-Source: AK7set8yRf6g7ktuBKP0CQzBeFyUCv/mUJgTqrv00u2WfcKZqCCOgg0GVy3Vw6WGmXU8JBT03ehy/weY7OA=
+        bh=MNwo0rhG4y8C+tQG7LPM4nLJWTbIHprc8uVQsZA2GSc=;
+        b=4FF1nk0tYt6b6Z3EunkU6EU6kG6eBxGs3ME3FwLhXpLxF38mP7rovlU2by3mKOGy6q
+         Pd6kgN1MTV666QKgtZC1AjGMzWq16tFNdkQPh7HA08EfNbj8a+olr6EkkGBzvh6H6d6d
+         FbyfXvqsFapeMOWOMmnxgxEt6GFsd9YfYJhEh8EuoQLvWSfzFbB4ju7zkXgMKu7BqXdt
+         pDRGrPN7Mo6q1DGjH3roDtkRJKRTFhLVdeX9EX4JnzrXj2tHztIISYOz2fAL4NOTj8sW
+         EdqZWU25C/LfRDN1fYPWZGvWUB8MD5GkaryBxI/Ke0Bkzs8H+gCn0zvglAVA250/yfO0
+         0bCg==
+X-Gm-Message-State: AFqh2kpB9jhSGcccYp0gXXc8NN57H5pBxnTR9OBDe2wFuS6D1MPKBouZ
+        FduU3do8ldCdXsDfGJ+nsPevuudIYm0=
+X-Google-Smtp-Source: AMrXdXv6cPUTMY06wj7LHpX7SofIKh9xmcnJ1P5+6wR9m3ToK9ikAh4HiQMQbcnL8It7MYI0W5hAcMnIURQ=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:4e19:be9:c5d0:8483])
- (user=surenb job=sendgmr) by 2002:a0d:eb09:0:b0:506:391c:6d37 with SMTP id
- u9-20020a0deb09000000b00506391c6d37mr2021270ywe.88.1674848542935; Fri, 27 Jan
- 2023 11:42:22 -0800 (PST)
-Date:   Fri, 27 Jan 2023 11:41:06 -0800
+ (user=surenb job=sendgmr) by 2002:a81:5b88:0:b0:462:e278:1a08 with SMTP id
+ p130-20020a815b88000000b00462e2781a08mr5361156ywb.243.1674848545116; Fri, 27
+ Jan 2023 11:42:25 -0800 (PST)
+Date:   Fri, 27 Jan 2023 11:41:07 -0800
 In-Reply-To: <20230127194110.533103-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230127194110.533103-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230127194110.533103-30-surenb@google.com>
-Subject: [PATCH v2 29/33] x86/mm: try VMA lock-based page fault handling first
+Message-ID: <20230127194110.533103-31-surenb@google.com>
+Subject: [PATCH v2 30/33] arm64/mm: try VMA lock-based page fault handling first
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -76,8 +76,8 @@ Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,51 +89,54 @@ existing mmap_lock-based handling if that fails.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- arch/x86/Kconfig    |  1 +
- arch/x86/mm/fault.c | 36 ++++++++++++++++++++++++++++++++++++
+ arch/arm64/Kconfig    |  1 +
+ arch/arm64/mm/fault.c | 36 ++++++++++++++++++++++++++++++++++++
  2 files changed, 37 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 3604074a878b..3647f7bdb110 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -27,6 +27,7 @@ config X86_64
- 	# Options that are inherently 64-bit kernel only:
- 	select ARCH_HAS_GIGANTIC_PAGE
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index c5ccca26a408..9f2c0e352da3 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -95,6 +95,7 @@ config ARM64
  	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+ 	select ARCH_SUPPORTS_NUMA_BALANCING
+ 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
 +	select ARCH_SUPPORTS_PER_VMA_LOCK
- 	select ARCH_USE_CMPXCHG_LOCKREF
- 	select HAVE_ARCH_SOFT_DIRTY
- 	select MODULES_USE_ELF_RELA
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index a498ae1fbe66..122c8fe4af12 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -19,6 +19,7 @@
- #include <linux/uaccess.h>		/* faulthandler_disabled()	*/
- #include <linux/efi.h>			/* efi_crash_gracefully_on_page_fault()*/
- #include <linux/mm_types.h>
-+#include <linux/mm.h>			/* find_and_lock_vma() */
+ 	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
+ 	select ARCH_WANT_DEFAULT_BPF_JIT
+ 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+index f4cb0f85ccf4..16588dda9258 100644
+--- a/arch/arm64/mm/fault.c
++++ b/arch/arm64/mm/fault.c
+@@ -535,6 +535,9 @@ static int __kprobes do_page_fault(unsigned long far, unsigned long esr,
+ 	unsigned long vm_flags;
+ 	unsigned int mm_flags = FAULT_FLAG_DEFAULT;
+ 	unsigned long addr = untagged_addr(far);
++#ifdef CONFIG_PER_VMA_LOCK
++	struct vm_area_struct *vma;
++#endif
  
- #include <asm/cpufeature.h>		/* boot_cpu_has, ...		*/
- #include <asm/traps.h>			/* dotraplinkage, ...		*/
-@@ -1333,6 +1334,38 @@ void do_user_addr_fault(struct pt_regs *regs,
- 	}
- #endif
+ 	if (kprobe_page_fault(regs, esr))
+ 		return 0;
+@@ -585,6 +588,36 @@ static int __kprobes do_page_fault(unsigned long far, unsigned long esr,
+ 
+ 	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, addr);
  
 +#ifdef CONFIG_PER_VMA_LOCK
-+	if (!(flags & FAULT_FLAG_USER) || atomic_read(&mm->mm_users) == 1)
++	if (!(mm_flags & FAULT_FLAG_USER) || atomic_read(&mm->mm_users) == 1)
 +		goto lock_mmap;
 +
-+	vma = lock_vma_under_rcu(mm, address);
++	vma = lock_vma_under_rcu(mm, addr);
 +	if (!vma)
 +		goto lock_mmap;
 +
-+	if (unlikely(access_error(error_code, vma))) {
++	if (!(vma->vm_flags & vm_flags)) {
 +		vma_end_read(vma);
 +		goto lock_mmap;
 +	}
-+	fault = handle_mm_fault(vma, address, flags | FAULT_FLAG_VMA_LOCK, regs);
++	fault = handle_mm_fault(vma, addr & PAGE_MASK,
++				mm_flags | FAULT_FLAG_VMA_LOCK, regs);
 +	vma_end_read(vma);
 +
 +	if (!(fault & VM_FAULT_RETRY)) {
@@ -145,27 +148,24 @@ index a498ae1fbe66..122c8fe4af12 100644
 +	/* Quick path to respond to signals */
 +	if (fault_signal_pending(fault, regs)) {
 +		if (!user_mode(regs))
-+			kernelmode_fixup_or_oops(regs, error_code, address,
-+						 SIGBUS, BUS_ADRERR,
-+						 ARCH_DEFAULT_PKEY);
-+		return;
++			goto no_context;
++		return 0;
 +	}
 +lock_mmap:
 +#endif /* CONFIG_PER_VMA_LOCK */
-+
  	/*
- 	 * Kernel-mode access to the user address space should only occur
- 	 * on well-defined single instructions listed in the exception
-@@ -1433,6 +1466,9 @@ void do_user_addr_fault(struct pt_regs *regs,
+ 	 * As per x86, we may deadlock here. However, since the kernel only
+ 	 * validly references user space from well defined areas of the code,
+@@ -628,6 +661,9 @@ static int __kprobes do_page_fault(unsigned long far, unsigned long esr,
  	}
- 
  	mmap_read_unlock(mm);
+ 
 +#ifdef CONFIG_PER_VMA_LOCK
 +done:
 +#endif
- 	if (likely(!(fault & VM_FAULT_ERROR)))
- 		return;
- 
+ 	/*
+ 	 * Handle the "normal" (no error) case first.
+ 	 */
 -- 
 2.39.1
 
