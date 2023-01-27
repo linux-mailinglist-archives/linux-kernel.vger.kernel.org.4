@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E11C67E34E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA0E67E34F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233429AbjA0LaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S233443AbjA0Lac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233416AbjA0L3r (ORCPT
+        with ESMTP id S233421AbjA0L3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:29:47 -0500
+        Fri, 27 Jan 2023 06:29:48 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 749FF74C3E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 657BC72679
         for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:29:01 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D99D51650;
-        Fri, 27 Jan 2023 03:29:11 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 555F5165C;
+        Fri, 27 Jan 2023 03:29:14 -0800 (PST)
 Received: from e122027.cambridge.arm.com (e122027.cambridge.arm.com [10.1.35.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B39DE3F64C;
-        Fri, 27 Jan 2023 03:28:27 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 34CC63F64C;
+        Fri, 27 Jan 2023 03:28:30 -0800 (PST)
 From:   Steven Price <steven.price@arm.com>
 To:     kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org
 Cc:     Steven Price <steven.price@arm.com>,
@@ -35,9 +35,9 @@ Cc:     Steven Price <steven.price@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Christoffer Dall <christoffer.dall@arm.com>,
         Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
-Subject: [RFC PATCH 07/14] arm64: Override set_fixmap_io
-Date:   Fri, 27 Jan 2023 11:27:51 +0000
-Message-Id: <20230127112758.37891-8-steven.price@arm.com>
+Subject: [RFC PATCH 08/14] arm64: Make the PHYS_MASK_SHIFT dynamic
+Date:   Fri, 27 Jan 2023 11:27:52 +0000
+Message-Id: <20230127112758.37891-9-steven.price@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230127112758.37891-1-steven.price@arm.com>
 References: <20230127112248.136810-1-suzuki.poulose@arm.com>
@@ -52,57 +52,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suzuki K Poulose <suzuki.poulose@arm.com>
+Make the PHYS_MASK_SHIFT dynamic for Realms. This is only is required
+for masking the PFN from a pte entry. Elsewhere, we could still use the
+PA bits configured by the kernel. So, this patch:
 
-Override the set_fixmap_io to set shared permission for the host
-in case of a CC guest. For now we mark it shared unconditionally.
-Future changes could filter the physical address and make the
-decision accordingly.
+ -> renames PHYS_MASK_SHIFT -> MAX_PHYS_SHIFT as supported by the kernel
+ -> Makes PHYS_MASK_SHIFT -> Dynamic value of the (I)PA bit width
+ -> For a realm: reduces phys_mask_shift if the RMM reports a smaller
+    configured size for the guest.
 
+Co-developed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 Signed-off-by: Steven Price <steven.price@arm.com>
 ---
- arch/arm64/include/asm/fixmap.h |  2 ++
- arch/arm64/mm/mmu.c             | 13 +++++++++++++
- 2 files changed, 15 insertions(+)
+ arch/arm64/include/asm/kvm_arm.h       | 2 +-
+ arch/arm64/include/asm/pgtable-hwdef.h | 4 ++--
+ arch/arm64/include/asm/pgtable.h       | 5 +++++
+ arch/arm64/kernel/head.S               | 2 +-
+ arch/arm64/kernel/rsi.c                | 5 +++++
+ 5 files changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/include/asm/fixmap.h b/arch/arm64/include/asm/fixmap.h
-index 09ba9fe3b02c..1acafc1c7fae 100644
---- a/arch/arm64/include/asm/fixmap.h
-+++ b/arch/arm64/include/asm/fixmap.h
-@@ -107,6 +107,8 @@ void __init early_fixmap_init(void);
- #define __late_set_fixmap __set_fixmap
- #define __late_clear_fixmap(idx) __set_fixmap((idx), 0, FIXMAP_PAGE_CLEAR)
+diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
+index 0df3fc3a0173..924f84024009 100644
+--- a/arch/arm64/include/asm/kvm_arm.h
++++ b/arch/arm64/include/asm/kvm_arm.h
+@@ -346,7 +346,7 @@
+  * bits in PAR are res0.
+  */
+ #define PAR_TO_HPFAR(par)		\
+-	(((par) & GENMASK_ULL(52 - 1, 12)) >> 8)
++	(((par) & GENMASK_ULL(MAX_PHYS_MASK_SHIFT - 1, 12)) >> 8)
  
-+#define set_fixmap_io set_fixmap_io
-+void set_fixmap_io(enum fixed_addresses idx, phys_addr_t phys);
- void __set_fixmap(enum fixed_addresses idx, phys_addr_t phys, pgprot_t prot);
+ #define ECN(x) { ESR_ELx_EC_##x, #x }
  
- #include <asm-generic/fixmap.h>
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 14c87e8d69d8..33fda73c669b 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -1279,6 +1279,19 @@ void __set_fixmap(enum fixed_addresses idx,
- 	}
+diff --git a/arch/arm64/include/asm/pgtable-hwdef.h b/arch/arm64/include/asm/pgtable-hwdef.h
+index f658aafc47df..677bf7a91616 100644
+--- a/arch/arm64/include/asm/pgtable-hwdef.h
++++ b/arch/arm64/include/asm/pgtable-hwdef.h
+@@ -178,8 +178,8 @@
+ /*
+  * Highest possible physical address supported.
+  */
+-#define PHYS_MASK_SHIFT		(CONFIG_ARM64_PA_BITS)
+-#define PHYS_MASK		((UL(1) << PHYS_MASK_SHIFT) - 1)
++#define MAX_PHYS_MASK_SHIFT	(CONFIG_ARM64_PA_BITS)
++#define MAX_PHYS_MASK		((UL(1) << PHYS_MASK_SHIFT) - 1)
+ 
+ #define TTBR_CNP_BIT		(UL(1) << 0)
+ 
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index b4bbeed80fb6..a1319a743b38 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -35,6 +35,11 @@
+ #include <linux/sched.h>
+ #include <linux/page_table_check.h>
+ 
++extern unsigned int phys_mask_shift;
++
++#define PHYS_MASK_SHIFT		(phys_mask_shift)
++#define PHYS_MASK		((1UL << PHYS_MASK_SHIFT) - 1)
++
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ #define __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
+ 
+diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
+index 952e17bd1c0b..a05504667b69 100644
+--- a/arch/arm64/kernel/head.S
++++ b/arch/arm64/kernel/head.S
+@@ -321,7 +321,7 @@ SYM_FUNC_START_LOCAL(create_idmap)
+ #error "Mismatch between VA_BITS and page size/number of translation levels"
+ #endif
+ #else
+-#define IDMAP_PGD_ORDER	(PHYS_MASK_SHIFT - PGDIR_SHIFT)
++#define IDMAP_PGD_ORDER	(MAX_PHYS_MASK_SHIFT - PGDIR_SHIFT)
+ #define EXTRA_SHIFT
+ 	/*
+ 	 * If VA_BITS == 48, we don't have to configure an additional
+diff --git a/arch/arm64/kernel/rsi.c b/arch/arm64/kernel/rsi.c
+index 9c63ee1c6979..49d36dfe0064 100644
+--- a/arch/arm64/kernel/rsi.c
++++ b/arch/arm64/kernel/rsi.c
+@@ -12,6 +12,8 @@ struct realm_config __attribute((aligned(PAGE_SIZE))) config;
+ unsigned long prot_ns_shared;
+ EXPORT_SYMBOL(prot_ns_shared);
+ 
++unsigned int phys_mask_shift = CONFIG_ARM64_PA_BITS;
++
+ DEFINE_STATIC_KEY_FALSE_RO(rsi_present);
+ 
+ static bool rsi_version_matches(void)
+@@ -54,5 +56,8 @@ void __init arm64_rsi_init(void)
+ 		return;
+ 	prot_ns_shared = BIT(config.ipa_bits - 1);
+ 
++	if (config.ipa_bits - 1 < phys_mask_shift)
++		phys_mask_shift = config.ipa_bits - 1;
++
+ 	static_branch_enable(&rsi_present);
  }
- 
-+void set_fixmap_io(enum fixed_addresses idx, phys_addr_t phys)
-+{
-+	pgprot_t prot = FIXMAP_PAGE_IO;
-+
-+	/*
-+	 * For now we consider all I/O as non-secure. For future
-+	 * filter the I/O base for setting appropriate permissions.
-+	 */
-+	prot = __pgprot(pgprot_val(prot) | PROT_NS_SHARED);
-+
-+	return __set_fixmap(idx, phys, prot);
-+}
-+
- void *__init fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot)
- {
- 	const u64 dt_virt_base = __fix_to_virt(FIX_FDT);
 -- 
 2.34.1
 
