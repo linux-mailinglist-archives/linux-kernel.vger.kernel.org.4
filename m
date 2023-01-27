@@ -2,101 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6755867EBC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B183767EBCC
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbjA0Q7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:59:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
+        id S234500AbjA0RBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjA0Q7p (ORCPT
+        with ESMTP id S231342AbjA0RA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:59:45 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30470213D;
-        Fri, 27 Jan 2023 08:59:44 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id r132so4673598oif.10;
-        Fri, 27 Jan 2023 08:59:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xuc3tclMngpgJkRdKqMDtEnHq9IobDeEAM5VzXHLDtI=;
-        b=j4/PFguW9sg7XvpdGJgv3o0vcxMXINgw9XTS0bPmPDuyJUKeWTb5TvMtzHm86uUPOp
-         Iho4vvr9aUVqwxy/fn7CetIMBh596Hkl2w3nPuFNn8UrUhkDAZi6gFOfQ+9LpqVXeNKU
-         p2pZ2o3cAVgFbnOMbEHVQzJosvQkr6r5AxgrQbYCOm9m6p3KdH/DluTYA6/6Cw3RUAWQ
-         YYy9E0+dgB3tX9r/6/YHycka4jDKb1D85IsA/ZaSdrGj8ivgcRvN7fmu8zy3Ms1Xploj
-         9PNBtlLo47xLok7C3Xkp17bg+r1y6v6fqkqSEZGuAu7XGb4i+T2NQxJrdDZkragU4HYs
-         cOiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xuc3tclMngpgJkRdKqMDtEnHq9IobDeEAM5VzXHLDtI=;
-        b=kB36w71Y9EgQdwwqyQd/E+q0NBIoeK/Eixg5KbYZ51QS6rKPWC6GoMNxyjMC7r6+8o
-         Msoluma4OGjrP/SdyhAYh8EyFBaEm/RE22eqmwK/dNPiJ+IIyd+Qco4OYnp+Kbu9zfCL
-         bmy5WE1WQUUGbEO33BAf8KHPzXWSRhpkZe0bOLCuyMFk8Vu9rloHThArV+wJhcOd7ZNf
-         dZoHCXelOtPQeMpwOWedtZx5iFnenQ14NX6vAbb5on36LRd5b7bhwQpD9Kcso3tL5nyz
-         Ip2pvt6OMhOSpKgkZKc+ddM6D3cBXI6vRUaviiohlvoDdAYhvFf1hmuTeg+BsN+aFmfU
-         r3Qg==
-X-Gm-Message-State: AO0yUKWM+Q7j7rjzyR+0dKRyMootZPlRc2Ns1oOu02GLDnXr+RVp80My
-        lDoQkavviYLTkVKM3qGMMjNi3cO5n5c=
-X-Google-Smtp-Source: AK7set+FMo4TV/ejRDS/j54EnWPu1nFjcteSA16DMM+w8OhhaEd5qpIljIkvwOpJ8+M/K9iNfSIc6A==
-X-Received: by 2002:a05:6808:1819:b0:364:a651:38eb with SMTP id bh25-20020a056808181900b00364a65138ebmr3801504oib.17.1674838783491;
-        Fri, 27 Jan 2023 08:59:43 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b67-20020aca3446000000b00364e8f85c08sm1749676oia.21.2023.01.27.08.59.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 08:59:42 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 27 Jan 2023 08:59:41 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Song Liu <song@kernel.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] module: replace module_layout with module_memory
-Message-ID: <20230127165941.GB3962737@roeck-us.net>
-References: <20230125185004.254742-1-song@kernel.org>
- <Y9IYTI3pWuKbJ3bC@bombadil.infradead.org>
- <CAPhsuW7ipGS=RhowYSp06DBYOY31sYoup7-Je+CEuKCxJsHavQ@mail.gmail.com>
- <Y9Lp+5mqxP0bgvrM@bombadil.infradead.org>
- <20230127131351.GB3911997@roeck-us.net>
- <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 27 Jan 2023 12:00:57 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322BA525F
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:00:56 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1D60D5C008C;
+        Fri, 27 Jan 2023 12:00:53 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 27 Jan 2023 12:00:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674838853; x=1674925253; bh=DVwmy5VImV
+        KBY8sEuXHoreEiwmisEqPomZU5ORDBusk=; b=KSphgDNIMYvYcra2/U1iv977+N
+        JI4oJujUpDpps/euD9kEVeFzBNWhLkUMsz3sbAaRi8JQv5ALdKYLP+x6/XhsSaY5
+        BBLTITSyrCn4vwZiSYJZe3iZwKASQOOnGwozfc3wfAMoVS9VzqQ3XbqkuKzGOvcc
+        lFhIobMKmTib570MRZ9XHID3AnEAYnxf9fQ+3ZPkEzQzVvbnwr272OP3LwRh3bgq
+        OnwsmKRwhkIw7ECYhjMjBQUwLfhDsuya6pezBTM6s9R+pG91lr3W1+FhFzxfriZN
+        u/SBnJJQpgKFRaZ16hy7lv/d+NEtoPC358uicQZLH012/s0kRcMI5wVsuTrg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674838853; x=1674925253; bh=DVwmy5VImVKBY8sEuXHoreEiwmis
+        EqPomZU5ORDBusk=; b=fDT/mZdNMDZp8PLQIWzzEYEs3yVs/CjdHoqULHDMqWc3
+        LAZznjJL2wSpr4pMMEqMBsqJs8yLUNxl4JMNlEELyE3qu5ctxIUmAdPofPcK79vy
+        48GyVo+IBZPj6hm37EDrOj4UjJPSdFcVKXsadK9eNncCpOCFno3ZWtfOousJLSTC
+        MCayBEodGqnb5x5ydHr7KF4RpHYEyTYAC00m9ONlwRomn2w5PX+fMq+o0LSHSFdp
+        j49TjfQQIIcYNl76G45SU2WChQvAgeiSrKB/8BwJOukztEwiu2pmAXRUejrMKvHs
+        jVA1qXkYbgxaz7ZJX98AknLYyfvlyY29eGvIfzG70Q==
+X-ME-Sender: <xms:RAPUY7z_OqyiDx6dzhOgQFwHQ-DW3KEjDNMNDQ5h1OlOkLsE-BjoJg>
+    <xme:RAPUYzTnJ2jFENQZlIQoGONK5363GWEdAs8oIU0DUszTPCrNM3m07WH3vxcKZRvdt
+    C5lklPs6Z7K30ZX19o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddviedgleegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:RAPUY1WBBmYx_ZGMR4mSF9TGjD1v5yP7ak95vnamUQoD-y3YgshL2A>
+    <xmx:RAPUY1jbNn6Unv-ERcfzUGNGQYSSPTPMAYPGof8Yxbuy30wAF1aTaw>
+    <xmx:RAPUY9A40MdeN7CR18Chd0ajtl7e_H3H0IFX8h4w5iB9DXD_1hrzlw>
+    <xmx:RQPUYxuCmfqn2IkOJazGty3pVh5RLdCJ40dA7BFw0GyYEnQp25BTiQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id ACA3CB60086; Fri, 27 Jan 2023 12:00:52 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <f87c8f49-227e-40fb-b13b-00d869d81fe8@app.fastmail.com>
+In-Reply-To: <e6c3fa24-963b-57c0-1a9a-fd056a9ac591@arm.com>
+References: <20230126163530.3495413-1-arnd@kernel.org>
+ <7ec6bd88-7f18-7eca-fa92-cfea9a25a395@arm.com>
+ <cd4f23d7-cdd7-49e1-8eff-9ec04dcb36c8@app.fastmail.com>
+ <e6c3fa24-963b-57c0-1a9a-fd056a9ac591@arm.com>
+Date:   Fri, 27 Jan 2023 18:00:34 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+        "Tao Zhang" <quic_taozha@quicinc.com>,
+        "Mao Jinlong" <quic_jinlmao@quicinc.com>,
+        "Will Deacon" <will@kernel.org>
+Cc:     "Mike Leach" <mike.leach@linaro.org>,
+        "Leo Yan" <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Coresight: tpda/tpdm: remove incorrect __exit annotation
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 08:42:57AM -0800, Song Liu wrote:
-> Hi Guenter,
-> 
-> On Fri, Jan 27, 2023 at 5:13 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Thu, Jan 26, 2023 at 01:00:43PM -0800, Luis Chamberlain wrote:
-> > > Guenter Roeck,
-> > >
-> > > Any chance you can give this branch a good spin on your multi-arch setup
-> > > to see what may below up?
-> > >
-> > I assume I shoud test v3 ?
-> 
-> Yes, please. The one in the modules-testing [1] branch is already v3.
-> 
+On Fri, Jan 27, 2023, at 17:46, Suzuki K Poulose wrote:
+> On 26/01/2023 20:37, Arnd Bergmann wrote:
+>> On Thu, Jan 26, 2023, at 19:02, Suzuki K Poulose wrote:
+>>> On 26/01/2023 16:35, Arnd Bergmann wrote:
+>>>> From: Arnd Bergmann <arnd@arndb.de>
+>>> Thanks for the fix, I will queue this. Btw, I did try to
+>>> reproduce it locally, but couldn't trigger the warnings,
+>>> even with
+>>>
+>>> CONFIG_WERROR=y
+>>>
+>>> and all CORESIGHT configs builtin. I see other drivers doing the
+>>> same outside coresight too. Just curious to know why is this
+>>> any different. Is it specific to "bus" driver (e.g. AMBA) ?
+>> 
+>> The warning comes from postprocessing the object file, it's got
+>> nothing to do with the bus type, only with a symbol in .data
+>> referencing a symbol in .init.text. Maybe there are some
+>> config options that keep the section from getting discarded?
+>> Or possibly you only built the files in this directory, but did
+>> not get to the final link?
+>
+> I did a full kernel build. Also, I see a similar issue with the 
+> coresight-etm4x (by code inspection) driver. Did you not hit that ?
+>
+> May be there is a config option that is masking it on my end. But
+> the case of etm4x driver is puzzling.
+>
+> $ git grep etm4_remove_amba 
+> drivers/hwtracing/coresight/coresight-etm4x-core.c
+> drivers/hwtracing/coresight/coresight-etm4x-core.c:static void __exit 
+> etm4_remove_amba(struct amba_device *adev)
+> drivers/hwtracing/coresight/coresight-etm4x-core.c:     .remove 
+> = etm4_remove_amba,
 
-I started a test on v6.2-rc5-52-gc96fb00e9ddf.
+Indeed, that one clearly has the same but, but I have never
+observed a warning for it.
 
-Guenter
+I checked one more thing and found that I only get the warning
+for 32-bit Arm builds, but not arm64. Since the etm4x driver
+'depends on ARM64' for its use of asm/sysreg.h,
+I never test-built it on 32-bit arm.
+
+From the git history of arch/arm64/kernel/vmlinux.lds.S,
+I can see that arm64 never discards the .exit section, see
+commit 07c802bd7c39 ("arm64: vmlinux.lds.S: don't discard
+.exit.* sections at link-time").
+
+     Arnd
