@@ -2,125 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3C867E06F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DF067E079
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233129AbjA0Jid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:38:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
+        id S233181AbjA0JkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:40:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233118AbjA0Jib (ORCPT
+        with ESMTP id S233084AbjA0JkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:38:31 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7742CC67
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:37:56 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id y1so4425406wru.2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:37:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yksAV7yHL3wN3w9c8k40mCMMPiyV1hd99TyFgaBpDUE=;
-        b=Q1IgsFXQgA4vRbKnGHEV09YcIKYNHOU6wbfDCYOa/8oRhBoDcw6DOo3ZtKEAlh/hVz
-         DJXrF3MPff5EwbaLVr5ax7Z1ASkgVRgaqhrum6TGTC4BF4AzSIDJb3HMsnFv3BL0KI6/
-         hDyRGvdPoXOnHloSa515sLqxxEYhkDAy5I3adl8lqK6S6sLoLLXSpvC4rxcCWqU2ePVU
-         g4M/iYrz5B1PflrG4UZ8+Cg4sFR761tiBYlxlG4aqy9XJdeCYl+0isoKHa/U8upK4wMy
-         xZmtzVlG9Z1mYf0Zgf3inLuQupaVfE7vsRrndR0C/EA1zbyvM6leuc7wKxEh9L+cR0JY
-         QEjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yksAV7yHL3wN3w9c8k40mCMMPiyV1hd99TyFgaBpDUE=;
-        b=xrfbF8EVbOKyrynrlYetv5yyJr4GbtzftrUdrWwUZKvsI4tFr6WLk/YOScQyNFiMrd
-         /bWFi7siSQGoy4ORhJhH6X4I/Xt7CCv8YsuvIAnZ39+t2Ms8dGXWFfaVxtje9mwXkUbl
-         4gGM6LEWnWOO6WS5HLXOB8VYQbDn3wZZAG1ngivv3RSCPVQ/eR3PoZtvQR4lXftj8cUc
-         enPlf+YhQTy1rNlGkrmPh18tko+riOMXZrdTWbkcGQjlMxCReb3ni4r35ZnpSGW29FpT
-         LOpcZPA7PVwroxpsaSJfkz3F3mhi+lc3OvBXwI/shvFA6cvwuINCmJeVd3LfDQe1koLF
-         fcCw==
-X-Gm-Message-State: AO0yUKX6E3zVIraLjvgy7RZ9xWjPZYhfOJZGUbXG3IGRj0uovwO32IjX
-        G1kWw/ClfJHLXJjubKnQKdZihw==
-X-Google-Smtp-Source: AK7set88fvpm7mZ/TBDrWIqtjTBm/K9NABW+jcJf7uWpwGFZ9Oh/xUoCN/DyAVGGqWyO2zpOiFJfPA==
-X-Received: by 2002:a5d:65cd:0:b0:2bf:bd43:aacc with SMTP id e13-20020a5d65cd000000b002bfbd43aaccmr7088381wrw.55.1674812274879;
-        Fri, 27 Jan 2023 01:37:54 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003d237d60318sm3842947wmi.2.2023.01.27.01.37.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 01:37:54 -0800 (PST)
-Message-ID: <7e941a2d-25d9-44e0-7438-13225c87d8ac@linaro.org>
-Date:   Fri, 27 Jan 2023 10:37:49 +0100
+        Fri, 27 Jan 2023 04:40:02 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A8E1B9;
+        Fri, 27 Jan 2023 01:40:01 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30R9d96D010411;
+        Fri, 27 Jan 2023 09:39:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=cF9X9aJaof3C7DGX2sN20O3SfOpV4IsVdaLAM8Ot6ME=;
+ b=aQWi2f1kPBe5Y7XRcPQd9jP5fy3MzFbytqMKsI38nwwquFGJkwzGtYrvq94hNm8/NDSu
+ PNd5XZjQ2sx/zxvqVkFgQB5GwC4iTrCqvYyW6nze+eWOvj8ojW8f0Ofbxg+cc+1vpFd5
+ zCvadahCOdEcE6OYMxMELXZkLXgSAvj4+bQtbldysPvHx+VZevSeNn/5l6rbT4iFhxS8
+ 0J7CEv3KLGevhPbz6/xYxl5lntl++EvxD+J2VFeLVRX8jjpFwFS8NQWn0sZO6tr5+AnK
+ RAkjx2fWGZF717/Qiir55JLYnHLhh7zu1WxxFlHxAEmzSQ7Ue4GSCGhPsnDibwGGItSW Hg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nc956r8q3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 09:39:09 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30R9d8Rf002113
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 09:39:08 GMT
+Received: from [10.50.41.100] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 27 Jan
+ 2023 01:38:57 -0800
+Message-ID: <d39a5965-3320-c7f7-d936-93467b141e10@quicinc.com>
+Date:   Fri, 27 Jan 2023 15:08:54 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 0/9] media: dt-bindings: common CEC properties
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        devicetree@vger.kernel.org, Joe Tessler <jrt@google.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-tegra@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-media@vger.kernel.org, Jeff Chase <jnchase@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20221208103115.25512-1-krzysztof.kozlowski@linaro.org>
- <cd803c70-faf0-963e-fca3-0edd13fa8a29@linaro.org>
- <c092c11f-870f-6520-ad89-001468ed59dc@xs4all.nl>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V1 7/8] arm64: dts: qcom: Add ipq9574 SoC and AL02 board
+ support
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c092c11f-870f-6520-ad89-001468ed59dc@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
+        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>, <shawnguo@kernel.org>,
+        <arnd@arndb.de>, <marcel.ziswiler@toradex.com>,
+        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
+        <broonie@kernel.org>, <tdas@codeaurora.org>,
+        <bhupesh.sharma@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <20230124141541.8290-1-quic_devipriy@quicinc.com>
+ <20230124141541.8290-8-quic_devipriy@quicinc.com>
+ <adb66162-6ff3-184e-fe92-109bdef8ed1c@linaro.org>
+ <9cce23e9-bb1e-b49e-b771-f61ac6d12933@quicinc.com>
+ <41efc16a-8b6d-e6c1-efe1-4e0b4ce43533@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <41efc16a-8b6d-e6c1-efe1-4e0b4ce43533@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jw2_O0OrDSvr_c2M2GM6qfsn17Y93L0T
+X-Proofpoint-ORIG-GUID: jw2_O0OrDSvr_c2M2GM6qfsn17Y93L0T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_05,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 phishscore=0 impostorscore=0 priorityscore=1501
+ bulkscore=0 suspectscore=0 malwarescore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=894 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301270091
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2023 10:04, Hans Verkuil wrote:
-> Hi Krzysztof,
+
+
+On 1/26/2023 5:10 AM, Konrad Dybcio wrote:
 > 
-> On 13/01/2023 09:59, Krzysztof Kozlowski wrote:
->> On 08/12/2022 11:31, Krzysztof Kozlowski wrote:
->>> Hi,
->>>
->>> Changes since v3
->>> ================
->>> 1. cec-gpio: Add missing SPDX.
->>> 2. nvidia,tegra114-cec: Correct path in maintainers.
->>>
+> 
+> On 25.01.2023 12:12, Devi Priya wrote:
 >>
 >>
->> Mauro (and maybe Hans?), any comments here. Can you apply the patchset?
+>> On 1/24/2023 8:44 PM, Krzysztof Kozlowski wrote:
+>>> On 24/01/2023 15:15, devi priya wrote:
+>>>> From: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+>>>>
+>>>> Add initial device tree support for Qualcomm IPQ9574 SoC
+>>>> and AL02 board
+>>>>
+>>>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>>>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>>>> Co-developed-by: devi priya <quic_devipriy@quicinc.com>
+>>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>>>> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+>>>> ---
+>>>>    arch/arm64/boot/dts/qcom/Makefile            |   1 +
+>>>>    arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts |  78 +++++
+>>>>    arch/arm64/boot/dts/qcom/ipq9574.dtsi        | 285 +++++++++++++++++++
+>>>>    3 files changed, 364 insertions(+)
+>>>>    create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+>>>>    create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>>>> index 3e79496292e7..872c62028a0b 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>>>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>>>> @@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_QCOM)    += ipq6018-cp01-c1.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)    += ipq8074-hk01.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)    += ipq8074-hk10-c1.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)    += ipq8074-hk10-c2.dtb
+>>>> +dtb-$(CONFIG_ARCH_QCOM)    += ipq9574-al02-c7.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)    += msm8916-alcatel-idol347.dtb
+>>>
+>>> This does not match current tree, so I could not apply it for tests. I
+>>> think you based it on a bit older version.
+>>>
+>> The patch series is based on Linux 6.2-rc1 and not the qcom/for-next branch.
+> Linux 6.2-rc1 is very old already and Bjorn has already picked
+> tens of patches atop it, so yours will not apply unless you
+> base it on qcom/for-next (or just linux-next for that matter).
 > 
-> No comments yet. I plan to review and likely merge this next week.
-
-Hi Hans,
-
-I hope they didn't get forgotten and you still have a plan to look at
-these. Patchwork shows they are waiting for review:
-https://patchwork.kernel.org/project/linux-media/patch/20221208103115.25512-2-krzysztof.kozlowski@linaro.org/
-
-Best regards,
-Krzysztof
-
+Sure got it. Will post V3 based on linux-next
+> Konrad
+>>> Best regards,
+>>> Krzysztof
+>>>
+>> Best Regards,
+>> Devi Priya
