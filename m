@@ -2,119 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E4267EC6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D544A67EC7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbjA0Ram (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:30:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
+        id S235218AbjA0Rcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:32:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233140AbjA0Rak (ORCPT
+        with ESMTP id S232433AbjA0Rce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:30:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3BE4224;
-        Fri, 27 Jan 2023 09:30:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16F41B821A5;
-        Fri, 27 Jan 2023 17:30:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B906C433EF;
-        Fri, 27 Jan 2023 17:30:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674840636;
-        bh=yNZFiu9qy7zJ/EWkc4F3j8vLQAcYNj9Evf58Zwkbeqk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=hELv7tqy2E2JcNBXCVZVUgeW8Vbk8OKW5dB4gWmFyjf4+zZHRL+qK/GypbQPELczq
-         anwBM9lrjhtm5uCVGLvcxaVUjMRMpIxU6IeqANqTmQTCNZKyL31ZxkhuSHN0yHOPBr
-         nwsAOmzd1RwFZ+0L/ePrQqmvbySpWVQrdS3ML5ysK6y+yjlJ0CfLU74glIgClebaDA
-         PtYjFFnq3APo7Zyut44Cfr/3OjUbLe4X/fIreJ/eceSr2zAzaH2HAydg38k2/82JWe
-         TB2j62wtqEWAn6suHGZhaQYwSsAlAgQYyJBkeA+Aj0aGaVletrQmv24df8F6rdgNcn
-         pE5SpoFj+zNDg==
-Date:   Fri, 27 Jan 2023 11:30:35 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Matt Fagnani <matt.fagnani@bell.net>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] PCI: Add translated request only flag for
- pci_enable_pasid()
-Message-ID: <20230127173035.GA994835@bhelgaas>
+        Fri, 27 Jan 2023 12:32:34 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419F07B429;
+        Fri, 27 Jan 2023 09:32:33 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id o13so5243179pjg.2;
+        Fri, 27 Jan 2023 09:32:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Cyayte7rNg2NCJ6jPKmWFL1WfNKxwC/JMC/OKuubiGU=;
+        b=WaPr0KeYTiDLX8X2RriP4gLi9IPbq/+D88103NJbzxQtCIomVyr8nKGlKe6VzdOg3Y
+         9G0SfGMWLwVgj3rZJ6XHH9+x/20aRzkUqpJAMXpNhUox2/2ytqqgDIVCuRjGspxFbLY9
+         JMLBl0C2+PkIKGZiRG2haBcLDg4TMcNdoZ2jYUvejO//io+QtnW211g7EoXJOla74WUu
+         42f8qFGBA3lRzNmtUfdkE/QveOsc7BmLMqi8QR89FD1VxhUQcjG6snYjMIA9VHbZegmj
+         jJ8v11WSar3PWWz+L9Sh7O3h2NLnA+PDOdqZiR6x3er0mIoqa6LkzGcQ5f/oYtOD7k53
+         8Scw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cyayte7rNg2NCJ6jPKmWFL1WfNKxwC/JMC/OKuubiGU=;
+        b=0B0wZnxEGdfsSe0i0bw1yGCG5YU/JkINOcq9o+Y9Mjx+AaW06SdyrErBuMaW3wYz1u
+         Syhgze3XS8OIHyKX1R6Ps3NPxkkxDu855fzZGzR+X1ZN28VRNK84ZpESgMLeAX39/9Li
+         SPdFoXeOmAEASiN99dnkn+APmfnxVuA/PqqaYGLX9d5K82QCIdjWwFFdJE3IwJRUDi6T
+         uiFExvA+tIgABOqjAeAXk9gEw6wQiNK85Q2uT1M0MGgI14127+YkGt8yUzDQh5JpYTIK
+         ul8tE4jtDEZLRuY1MYX8eZrfYxRqd2DFAjW2mhXjjvy4GcorvTv4LapK7nZC2RpHCuPs
+         YizA==
+X-Gm-Message-State: AFqh2krFKHlQJUI9wq0u0yYuNxf/CZa88MSEWmXxqO64JQWedUHrWdTQ
+        0/ub6qvS40/zxAwygpgWFEw=
+X-Google-Smtp-Source: AMrXdXtnk+xIcjnPAxmSRN+4u8WzyrGUdpyQfv2f7eXuPRTl1cJpWvD8/J17MOOq8o2D24kuuKphaA==
+X-Received: by 2002:a05:6a20:8e03:b0:b8:a19f:4f6c with SMTP id y3-20020a056a208e0300b000b8a19f4f6cmr57481427pzj.62.1674840752687;
+        Fri, 27 Jan 2023 09:32:32 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id u144-20020a627996000000b0055f209690c0sm2903262pfc.50.2023.01.27.09.32.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 09:32:32 -0800 (PST)
+Message-ID: <2d2e6c03-7351-1c8e-4fa7-51794a9164bd@gmail.com>
+Date:   Fri, 27 Jan 2023 09:32:30 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230114073420.759989-1-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v1 net] net: phy: fix null dereference in
+ phy_attach_direct
+Content-Language: en-US
+To:     Colin Foster <colin.foster@in-advantage.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Xiaolei Wang <xiaolei.wang@windriver.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+References: <20230127171427.265023-1-colin.foster@in-advantage.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230127171427.265023-1-colin.foster@in-advantage.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 03:34:20PM +0800, Lu Baolu wrote:
-> The PCIe fabric routes Memory Requests based on the TLP address, ignoring
-> the PASID. In order to ensure system integrity, commit 201007ef707a ("PCI:
-> Enable PASID only when ACS RR & UF enabled on upstream path") requires
-> some ACS features being supported on device's upstream path when enabling
-> PCI/PASID.
+
+
+On 1/27/2023 9:14 AM, Colin Foster wrote:
+> Commit bc66fa87d4fd ("net: phy: Add link between phy dev and mac dev")
+> introduced a link between net devices and phy devices. It fails to check
+> whether dev is NULL, leading to a NULL dereference error.
 > 
-> One alternative is ATS/PRI which lets the device resolve the PASID + addr
-> pair before a memory request is made into a routeable TLB address through
-> the translation agent.
+> Fixes: bc66fa87d4fd ("net: phy: Add link between phy dev and mac dev")
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
 
-This sounds like "ATS/PRI" is a solution to a problem, but we haven't
-stated the problem yet.
-
-> Those resolved addresses are then cached on the
-> device instead of in the IOMMU TLB and the device always sets translated
-> bit for PASID. One example of those devices are AMD graphic devices that
-> always have ACS or ATS/PRI enabled together with PASID.
-> 
-> This adds a flag parameter in the pci_enable_pasid() helper, with which
-> the device driver could opt-in the fact that device always sets the
-> translated bit for PASID.
-
-Nit: "Add a flag ..." and "Apply this opt-in ..." (below).
-
-> It also applies this opt-in for AMD graphic devices. Without this change,
-> kernel boots to black screen on a system with below AMD graphic device:
-> 
-> 00:01.0 VGA compatible controller: Advanced Micro Devices, Inc.
->         [AMD/ATI] Wani [Radeon R5/R6/R7 Graphics] (rev ca)
->         (prog-if 00 [VGA controller])
-> 	DeviceName: ATI EG BROADWAY
-> 	Subsystem: Hewlett-Packard Company Device 8332
-
-What is the underlying failure here?  "Black screen" is useful but we
-should say *why* that happens, e.g., transactions went the wrong place
-or whatever.
-
-> At present, it is a common practice to enable/disable PCI PASID in the
-> iommu drivers. Considering that the device driver knows more about the
-> specific device, we will follow up by moving pci_enable_pasid() into
-> the specific device drivers.
-
-> @@ -353,12 +353,15 @@ void pci_pasid_init(struct pci_dev *pdev)
->   * pci_enable_pasid - Enable the PASID capability
->   * @pdev: PCI device structure
->   * @features: Features to enable
-> + * @flags: device-specific flags
-> + *   - PCI_PASID_XLATED_REQ_ONLY: The PCI device always use translated type
-> + *                                for all PASID memory requests.
-
-s/use/uses/
-
-I guess PCI_PASID_XLATED_REQ_ONLY is something only the driver knows,
-right?  We can't deduce from architected config space that the device
-will produce PASID prefixes for every Memory Request, can we?
-
-Bjorn
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
