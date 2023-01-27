@@ -2,93 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3338D67EBC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2839A67EBC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234252AbjA0Q6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
+        id S234392AbjA0Q6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjA0Q6g (ORCPT
+        with ESMTP id S234309AbjA0Q6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:58:36 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEC1213D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:58:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=LmAjr1m6mk9w4CR9BTxCtj0rtt8UM2HbzWPMIlH+lLM=; b=uPRHoMTVafrgBjE17tVUp0eFqw
-        ZzAAUlVzuRkForbcfDYgbB85IPnDFa9RlWRIYMN9fvBLPFa3ymfkI/ycIc6VEjeG2+jIas8KT5Dw1
-        cywnCKnIHiIcxI9CjWBwqlToZHTQdI46PZ2fQCc3HdFzaxoHXUx4jTsafO2eJ0k4TGagSxL4V5g1p
-        IjubC5aeSr6idZ1VagIktx01JOYNhNtlMOWd0DiKmyHwDQjXU2fBClpO4KLUDxyu3poyD9a8hyqB/
-        ln+2UuVII+G8e/y9fzKVyDNSeaYTu7oaPbCz9sn49uZDbgFbzWPsrg74sig9NSzfjdXDyuc1wQOn3
-        cjW8loPQ==;
-Received: from p200300ccff0829001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff08:2900:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pLS3b-0004ov-Bc; Fri, 27 Jan 2023 17:58:31 +0100
-Received: from andi by aktux with local (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pLS3a-00Df5f-N5; Fri, 27 Jan 2023 17:58:30 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     j.neuschaefer@gmx.net, lee@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v2] mfd: ntxec: Add version number for EC in Tolino Vision
-Date:   Fri, 27 Jan 2023 17:58:28 +0100
-Message-Id: <20230127165828.3256170-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
+        Fri, 27 Jan 2023 11:58:46 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAE159C5;
+        Fri, 27 Jan 2023 08:58:45 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 707D91F8A4;
+        Fri, 27 Jan 2023 16:58:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674838724; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ALfBJc/TQnM76erXqx3WFS5RKW2U4RiO2owBZHKVCn8=;
+        b=eKjVXY6L2bTaysy2dxZYGumxEmgbJgFFV9dWbg2XycKTSNuEReJucdlSDTY4AMPBhorrlL
+        ym3HZYuEHB8Np2ZCFuyBNkUOQ0ktCSNEwFFQhsuygKWszcutdYTfvyXwROWRawcYnBzjEY
+        ExQGRPzh4knFK7qzICuuvSWW3mFTehs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674838724;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ALfBJc/TQnM76erXqx3WFS5RKW2U4RiO2owBZHKVCn8=;
+        b=e0DErOEVvhfTZTI2/NwXWSWXpgYrK2/+9f6tnnXm8Yx6D8A5qtYNTf9vFajXiffEiZNcV3
+        nE8f0OOcl67HZYDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 466AD1336F;
+        Fri, 27 Jan 2023 16:58:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GyqPEMQC1GO1FwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 27 Jan 2023 16:58:44 +0000
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Helge Deller <deller@gmx.de>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Patrik Jakobsson <pjakobsson@suse.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH] fbdev: Fix invalid page access after closing deferred I/O devices
+Date:   Fri, 27 Jan 2023 17:58:34 +0100
+Message-Id: <20230127165834.11387-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The EC firmware has a different version number than anything
-defined until now.
+When a fbdev with deferred I/O is once opened and closed, the dirty
+pages still remain queued in the pageref list, and eventually later
+those may be processed in the delayed work.  This may lead to a
+corruption of pages, hitting an Oops.
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+This patch makes sure to cancel the delayed work and clean up the
+pageref list at closing the device for addressing the bug.  A part of
+the cleanup code is factored out as a new helper function that is
+called from the common fb_release().
+
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
-Changes in V2:
- use the same formatting as the other version numbers
+ drivers/video/fbdev/core/fb_defio.c | 10 +++++++++-
+ drivers/video/fbdev/core/fbmem.c    |  2 ++
+ include/linux/fb.h                  |  1 +
+ 3 files changed, 12 insertions(+), 1 deletion(-)
 
- drivers/mfd/ntxec.c       | 1 +
- include/linux/mfd/ntxec.h | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/mfd/ntxec.c b/drivers/mfd/ntxec.c
-index e16a7a82a929..b02785b10d48 100644
---- a/drivers/mfd/ntxec.c
-+++ b/drivers/mfd/ntxec.c
-@@ -175,6 +175,7 @@ static int ntxec_probe(struct i2c_client *client)
- 	/* Bail out if we encounter an unknown firmware version */
- 	switch (version) {
- 	case NTXEC_VERSION_KOBO_AURA:
-+	case NTXEC_VERSION_TOLINO_VISION:
- 		subdevs = ntxec_subdev;
- 		n_subdevs = ARRAY_SIZE(ntxec_subdev);
- 		break;
-diff --git a/include/linux/mfd/ntxec.h b/include/linux/mfd/ntxec.h
-index cc6f07bfa2b3..e5880c346da9 100644
---- a/include/linux/mfd/ntxec.h
-+++ b/include/linux/mfd/ntxec.h
-@@ -34,5 +34,5 @@ static inline u16 ntxec_reg8(u8 value)
- /* Known firmware versions */
- #define NTXEC_VERSION_KOBO_AURA	0xd726	/* found in Kobo Aura */
- #define NTXEC_VERSION_TOLINO_SHINE2 0xf110 /* found in Tolino Shine 2 HD */
--
-+#define NTXEC_VERSION_TOLINO_VISION 0xe135 /* found in Tolino Vision, contains RTC, ADC, PWM, home pad */
- #endif
+diff --git a/drivers/video/fbdev/core/fb_defio.c b/drivers/video/fbdev/core/fb_defio.c
+index c730253ab85c..583cbcf09446 100644
+--- a/drivers/video/fbdev/core/fb_defio.c
++++ b/drivers/video/fbdev/core/fb_defio.c
+@@ -313,7 +313,7 @@ void fb_deferred_io_open(struct fb_info *info,
+ }
+ EXPORT_SYMBOL_GPL(fb_deferred_io_open);
+ 
+-void fb_deferred_io_cleanup(struct fb_info *info)
++void fb_deferred_io_release(struct fb_info *info)
+ {
+ 	struct fb_deferred_io *fbdefio = info->fbdefio;
+ 	struct page *page;
+@@ -327,6 +327,14 @@ void fb_deferred_io_cleanup(struct fb_info *info)
+ 		page = fb_deferred_io_page(info, i);
+ 		page->mapping = NULL;
+ 	}
++}
++EXPORT_SYMBOL_GPL(fb_deferred_io_release);
++
++void fb_deferred_io_cleanup(struct fb_info *info)
++{
++	struct fb_deferred_io *fbdefio = info->fbdefio;
++
++	fb_deferred_io_release(info);
+ 
+ 	kvfree(info->pagerefs);
+ 	mutex_destroy(&fbdefio->lock);
+diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+index 3a6c8458eb8d..78c4cb5ee7c9 100644
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -1454,6 +1454,8 @@ __releases(&info->lock)
+ 	struct fb_info * const info = file->private_data;
+ 
+ 	lock_fb_info(info);
++	if (info->fbdefio)
++		fb_deferred_io_release(info);
+ 	if (info->fbops->fb_release)
+ 		info->fbops->fb_release(info,1);
+ 	module_put(info->fbops->owner);
+diff --git a/include/linux/fb.h b/include/linux/fb.h
+index 96b96323e9cb..73eb1f85ea8e 100644
+--- a/include/linux/fb.h
++++ b/include/linux/fb.h
+@@ -662,6 +662,7 @@ extern int  fb_deferred_io_init(struct fb_info *info);
+ extern void fb_deferred_io_open(struct fb_info *info,
+ 				struct inode *inode,
+ 				struct file *file);
++extern void fb_deferred_io_release(struct fb_info *info);
+ extern void fb_deferred_io_cleanup(struct fb_info *info);
+ extern int fb_deferred_io_fsync(struct file *file, loff_t start,
+ 				loff_t end, int datasync);
 -- 
-2.30.2
+2.35.3
 
