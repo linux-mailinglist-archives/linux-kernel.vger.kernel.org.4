@@ -2,125 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4BD67F1F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 00:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6BE67F1FD
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 00:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjA0XET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 18:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
+        id S232653AbjA0XFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 18:05:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbjA0XES (ORCPT
+        with ESMTP id S232583AbjA0XFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 18:04:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0AE8BB80;
-        Fri, 27 Jan 2023 15:04:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35CF861DC4;
-        Fri, 27 Jan 2023 23:04:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E7AC433D2;
-        Fri, 27 Jan 2023 23:04:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1674860652;
-        bh=vXb6OGR3jjuhguEAysSQHpLS55ZCH4lzC8q7qrmExC4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GeXLPEFPnmXnybEa25WwdFpTpr2nhYU8dLL7E2sH4CFNOzfVOkdnfEsFzv+w1P77i
-         ZFHD1cIyfbt01v+7INXSaQrNBZu9xQCzZVaHHdD09PqZPS918tHEKQ7Y1NXN0O362B
-         SeJxlYCZqBX14TKSM/4XPHIjm5y0xIrxE6v2kSgs=
-Date:   Fri, 27 Jan 2023 15:04:11 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Peter Xu <peterx@redhat.com>, Michal Hocko <mhocko@suse.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Muchun Song <songmuchun@bytedance.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm: hugetlb: proc: check for hugetlb shared PMD in
- /proc/PID/smaps
-Message-Id: <20230127150411.7c3b7b99fa4884a6af0b9351@linux-foundation.org>
-In-Reply-To: <4ad5163f-5368-0bd8-de9b-1400a7a653ed@redhat.com>
-References: <20230126222721.222195-1-mike.kravetz@oracle.com>
-        <20230126222721.222195-2-mike.kravetz@oracle.com>
-        <4ad5163f-5368-0bd8-de9b-1400a7a653ed@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 27 Jan 2023 18:05:33 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBD01A95C
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 15:05:32 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d9so6434656pll.9
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 15:05:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1if3nqY3ebhaiRdRKG+YvG1GCcwT1XGQ5ycqjx8peko=;
+        b=vSe7FfCCbaXgIKee2fJGuBa/QQtO750Y5RWFfwooLvsW/TIQMHubSSDl/MpiQq/Dgg
+         48wQXYBRZrnCkvCirfc4/tiH8r0bEfF0TDTvZuIdGd0/AJ54cTfUpS/FebzLWBSvA70U
+         pSelnlf2ysvGnc30HFu6S5ZBdRtQfMymkm8mgQLjtfi6HYhy7NC8l+nCG5C+QgExsVoz
+         OoJk9GhgQkjXUQdmKLihir5GghQQKI5KVGMXAAsHoItqIHXaRp5bGg+i0D4sErAuamtL
+         7OOmgZILljUYfH1DFR2TO4Xa+1OuYib6jv3sKSsQ4W5OE8pPWP1SdiiyKlQrsNMzvWp9
+         EtNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1if3nqY3ebhaiRdRKG+YvG1GCcwT1XGQ5ycqjx8peko=;
+        b=aCZb23pSRC5FTAwZjhtSc8uKaIIbNOMVx3cnNXMgmfWsSx7ri6SPlR/tFMwfEeETL2
+         SwN9rPN8BxyiYXE2/SViccxDizHseZuKRwWm2g0G10XgYX0Loxy2Es7XusxeCEtuKBLI
+         c1ZG7T/oC1QtyNgh4zpmrza+wPLPP7z1m7K6oRTQR06I2UER8tA14/dBUNF0TpHRn8JK
+         HZbUiLGiCpXlngDLl+U5pt9dpI4z5oJ/2JdJ3o/tQMrNRki7smlvn5zyUoqGMKL5Yc+j
+         Bxf32T3cCwLHrHu6uU+7j4APzIXHLj65Ga4ngTSbX7YEVdvMmXZzTnss7yoRzSvb2QOJ
+         obRQ==
+X-Gm-Message-State: AFqh2kqFPJ8PlfrLxczbOg1UgAmGlHHP2lF9JYtlXmK9Xn9fjeEBNhxI
+        +JZBVFjtwfuT5xUDHMVTrLPCeQ==
+X-Google-Smtp-Source: AMrXdXvMBrteWfxyFIiiCzWxki5bIZfpsTdo2LgDYcI1fhYZ9PoPBVh+itd57y3ta5hGLDjuOdr1LA==
+X-Received: by 2002:a05:6a20:429e:b0:b5:f664:b4bc with SMTP id o30-20020a056a20429e00b000b5f664b4bcmr13388200pzj.2.1674860731663;
+        Fri, 27 Jan 2023 15:05:31 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id t16-20020a639550000000b0046fefb18a09sm2742146pgn.91.2023.01.27.15.05.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 15:05:31 -0800 (PST)
+Message-ID: <5270af37-5544-42de-4e3f-c437889944dd@kernel.dk>
+Date:   Fri, 27 Jan 2023 16:05:29 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 2/2] io_uring,audit: do not log IORING_OP_*GETXATTR
+Content-Language: en-US
+To:     Richard Guy Briggs <rgb@redhat.com>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>
+References: <cover.1674682056.git.rgb@redhat.com>
+ <f602429ce0f419c2abc3ae5a0e705e1368ac5650.1674682056.git.rgb@redhat.com>
+ <CAHC9VhQiy9vP7BdQk+SXG7gQKAqOAqbYtU+c9R0_ym0h4bgG7g@mail.gmail.com>
+ <Y9RX0QhHKfWv3TGL@madcap2.tricolour.ca>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Y9RX0QhHKfWv3TGL@madcap2.tricolour.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 17:23:39 +0100 David Hildenbrand <david@redhat.com> wrote:
-
-> On 26.01.23 23:27, Mike Kravetz wrote:
-> > A hugetlb page will have a mapcount of 1 if mapped by multiple processes
-> > via a shared PMD.  This is because only the first process increases the
-> > map count, and subsequent processes just add the shared PMD page to
-> > their page table.
-> > 
-> > page_mapcount is being used to decide if a hugetlb page is shared or
-> > private in /proc/PID/smaps.  Pages referenced via a shared PMD were
-> > incorrectly being counted as private.
-> > 
-> > To fix, check for a shared PMD if mapcount is 1.  If a shared PMD is
-> > found count the hugetlb page as shared.  A new helper to check for a
-> > shared PMD is added.
-> > 
-> ...
->
-> > --- a/fs/proc/task_mmu.c
-> > +++ b/fs/proc/task_mmu.c
-> > @@ -749,8 +749,14 @@ static int smaps_hugetlb_range(pte_t *pte, unsigned long hmask,
-> >   
-> >   		if (mapcount >= 2)
-> >   			mss->shared_hugetlb += huge_page_size(hstate_vma(vma));
-> > -		else
-> > -			mss->private_hugetlb += huge_page_size(hstate_vma(vma));
-> > +		else {
+On 1/27/23 4:01 PM, Richard Guy Briggs wrote:
+> On 2023-01-27 17:43, Paul Moore wrote:
+>> On Fri, Jan 27, 2023 at 12:24 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+>>> Getting XATTRs is not particularly interesting security-wise.
+>>>
+>>> Suggested-by: Steve Grubb <sgrubb@redhat.com>
+>>> Fixes: a56834e0fafe ("io_uring: add fgetxattr and getxattr support")
+>>> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+>>> ---
+>>>  io_uring/opdef.c | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>
+>> Depending on your security policy, fetching file data, including
+>> xattrs, can be interesting from a security perspective.  As an
+>> example, look at the SELinux file/getattr permission.
+>>
+>> https://github.com/SELinuxProject/selinux-notebook/blob/main/src/object_classes_permissions.md#common-file-permissions
 > 
-> Better:
+> The intent here is to lessen the impact of audit operations.  Read and
+> Write were explicitly removed from io_uring auditing due to performance
+> concerns coupled with the denial of service implications from sheer
+> volume of records making other messages harder to locate.  Those
+> operations are still possible for syscall auditing but they are strongly
+> discouraged for normal use.
 > 
-> if (mapcount >= 2 || hugetlb_pmd_shared(pte))
-> 	mss->shared_hugetlb += huge_page_size(hstate_vma(vma));
-> else
-> 	mss->private_hugetlb += huge_page_size(hstate_vma(vma));
+> If the frequency of getxattr io_uring ops is so infrequent as to be no
+> distraction, then this patch may be more of a liability than a benefit.
 
-Yup.  And that local doesn't add any value?
+(audit list removed)
 
---- a/fs/proc/task_mmu.c~mm-hugetlb-proc-check-for-hugetlb-shared-pmd-in-proc-pid-smaps-fix
-+++ a/fs/proc/task_mmu.c
-@@ -745,18 +745,10 @@ static int smaps_hugetlb_range(pte_t *pt
- 			page = pfn_swap_entry_to_page(swpent);
- 	}
- 	if (page) {
--		int mapcount = page_mapcount(page);
--
--		if (mapcount >= 2)
-+		if (page_mapcount(page) >= 2 || hugetlb_pmd_shared(pte))
- 			mss->shared_hugetlb += huge_page_size(hstate_vma(vma));
--		else {
--			if (hugetlb_pmd_shared(pte))
--				mss->shared_hugetlb +=
--						huge_page_size(hstate_vma(vma));
--			else
--				mss->private_hugetlb +=
--						huge_page_size(hstate_vma(vma));
--		}
-+		else
-+			mss->private_hugetlb += huge_page_size(hstate_vma(vma));
- 	}
- 	return 0;
- }
-_
+Right now the xattr related functions are io-wq driven, and hence not
+super performance sensitive. But I'd greatly prefer to clean these up
+regardless, because once opcodes get upgraded from needing io-wq, then
+we don't have to go through the audit discussion at that point. Better
+to do it upfront, like now, regardless of expectation of frequency of
+calls.
+
+-- 
+Jens Axboe
+
 
