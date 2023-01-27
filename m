@@ -2,59 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB03F67EF05
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7323267EEC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbjA0UAp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 27 Jan 2023 15:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S232923AbjA0TtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:49:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjA0UAS (ORCPT
+        with ESMTP id S232699AbjA0Tsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:00:18 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3CA22786;
-        Fri, 27 Jan 2023 11:58:37 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id v6so16578147ejg.6;
-        Fri, 27 Jan 2023 11:58:37 -0800 (PST)
+        Fri, 27 Jan 2023 14:48:33 -0500
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77A58D41C
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:45:59 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id m7-20020a17090a71c700b0022c0c070f2eso8942977pjs.4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:45:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4FpsNM4Bdeby2MkenGuWGLbgk6pVqfQ79XLW3mUcsw8=;
+        b=F2vvZ4cY3XujJxcvSFPPFbA0T4QFWceX/SZWDjzEBQBsDpjiwkvUCKcwp/10z9aejk
+         1W3DC675aeH2QMNG4B6W+Ub7kYV/QhY72iMcK3/Lxu/VhH2YP3UvGbqkf4MqZh23IT0L
+         dvjoOW5AA+2ue6XtiKzFEjeejdjicP8045Bab1vFTCB1zUGCD6ynMyjklQzhxyvlUlsz
+         cpZDKjezmKc1h5jiNlaWflutTuEikyY8MKuKbiN81Haplm1kSBz0SjvaJLoOYwttQWZL
+         wslXyaI3KJ+FVgMR+y1Ix6z7zlYgL0I9fU6526Y6hvZ+FcaeLl/tFjJuMJBXPQIvCPcB
+         PCKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lcJtKSdMHqKdE8xqcb2pgFpWxs4VqUhIIxfqfsB0zUM=;
-        b=F1bQVxBWUNIjEI0dJrKTYHQ9g2n+obfBFifI6FlNZFgZnBPlM/X0vYxkT4YpstW/hH
-         tloabLQVynLe127ufYInwicxmRPLzzi6RMoGD1n/a3r+MfhqyqNcfSI9Usin+ElREzvB
-         Xs80uGYXQrS17EPm/5P7Zmi7oStLBux0vZtQZJGulfeaEVvW6noK6tD69YWyBm0aupau
-         7RUuCIatet0tqESHArrsXJpPEiQtRjeCLX8HRI0ipOQXJEt+K2yyvlilyrsXtxrfT+MQ
-         +VwIBL1qggh2nQJ1aWZHq91+A2NSQWN9fgGopjXkZoo8gxdVOeMJ4dgpiv5hA9VTZBiE
-         gn1g==
-X-Gm-Message-State: AFqh2koJcHajiMLmEK2hgQXs4uxOxCHr6ERx4yu7Qd72cBO7xN2i4WUK
-        /kwiY8W01/GlrBSFThF+xQbSu09UKlFpCoCvwKkpsbxuHew=
-X-Google-Smtp-Source: AMrXdXuf4OnaEqJZeR4LpMLoedXEpZt4yq8U0HTUgh2Pm7TIwN3glp3b9onlDGb8CPzpm16l7usvTqPiSNpQjRdMNJo=
-X-Received: by 2002:a17:907:d10f:b0:872:be4b:1b65 with SMTP id
- uy15-20020a170907d10f00b00872be4b1b65mr6650176ejc.125.1674848601884; Fri, 27
- Jan 2023 11:43:21 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4FpsNM4Bdeby2MkenGuWGLbgk6pVqfQ79XLW3mUcsw8=;
+        b=gP+lQia0auPIBFb74pnXKBcunoJUTz9L7wz8dVG6+MCLafCyybARbyJoUbAkNKi4Kc
+         Vs3WGjNk/g6O6IaMITSWrMDR4BM2RpWWIr6Rmg76ERnpzLCiKe1km53hLw8mbp5VNnBo
+         AXVwZXi6CRbRXkkzZJVULhHcKDfgESsdlswYA7TFsBeWmfSFhOk0aVc5SEsWdqnCc8PS
+         565shxuZXVHwPjjubly42D2MKVXf/4waES5xGLOCdR2p2iEoNGVNtuXXOAOeFAoaDLH6
+         fyF/ogVb/oZ3RttT5030lessdL4VEXo6emrYcBZW7XVjUOjOROK8U9tV+4txi8KZHTT9
+         8iow==
+X-Gm-Message-State: AO0yUKW6VxxF6Fdt2AGOSNh4HLkEAG6QfxY/w1zy2Q6r9cyKiwMJv2WX
+        5bwMV2S7qAqfWZHn1hmvJSZkPw==
+X-Google-Smtp-Source: AK7set/JiYkD1dPFXX0spEZ4uMEWwjgdpN2oFU19P2Z0/IgGbk/hInjo9DftHh34XEOc/4I/lRZl0g==
+X-Received: by 2002:a17:902:d4d1:b0:196:1f80:105a with SMTP id o17-20020a170902d4d100b001961f80105amr3004568plg.5.1674848620397;
+        Fri, 27 Jan 2023 11:43:40 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b001894198d0ebsm3254490plg.24.2023.01.27.11.43.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 11:43:39 -0800 (PST)
+Message-ID: <24fbe6cb-ee80-f726-b260-09f394ead764@kernel.dk>
+Date:   Fri, 27 Jan 2023 12:43:38 -0700
 MIME-Version: 1.0
-References: <20230127191621.gonna.262-kees@kernel.org>
-In-Reply-To: <20230127191621.gonna.262-kees@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 27 Jan 2023 20:43:05 +0100
-Message-ID: <CAJZ5v0iV5wK4gsoadmWOyof_vzaAOx8oX0DJu+1-bCQNdNJtBQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPICA: Replace fake flexible arrays with flexible
- array members
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 0/2] two suggested iouring op audit updates
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Richard Guy Briggs <rgb@redhat.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>
+References: <cover.1674682056.git.rgb@redhat.com>
+ <da695bf4-bd9b-a03d-3fbc-686724a7b602@kernel.dk>
+ <CAHC9VhSRbay5bEUMJngpj+6Ss=WLeRoyJaNNMip+TyTkTJ6=Lg@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHC9VhSRbay5bEUMJngpj+6Ss=WLeRoyJaNNMip+TyTkTJ6=Lg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,85 +82,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 8:16 PM Kees Cook <keescook@chromium.org> wrote:
->
-> One-element arrays (and multi-element arrays being treated as
-> dynamically sized) are deprecated[1] and are being replaced with
-> flexible array members in support of the ongoing efforts to tighten the
-> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
-> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
->
-> Replace one-element array with flexible-array member in struct
-> acpi_resource_extended_irq. Replace 4-byte fixed-size array with 4-byte
-> padding in a union with a flexible-array member in struct
-> acpi_pci_routing_table.
->
-> This results in no differences in binary output.
->
-> Link: https://github.com/acpica/acpica/pull/813
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> v2: include stddef.h and switch to __DECLARE_FLEX_ARRAY()
-> v1: https://lore.kernel.org/lkml/20221118181538.never.225-kees@kernel.org/
-> ---
->  include/acpi/acrestyp.h | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/include/acpi/acrestyp.h b/include/acpi/acrestyp.h
-> index a7fb8ddb3dc6..250046a7c870 100644
-> --- a/include/acpi/acrestyp.h
-> +++ b/include/acpi/acrestyp.h
-> @@ -10,6 +10,8 @@
->  #ifndef __ACRESTYP_H__
->  #define __ACRESTYP_H__
->
-> +#include <linux/stddef.h>
-> +
->  /*
->   * Definitions for Resource Attributes
->   */
-> @@ -332,7 +334,7 @@ struct acpi_resource_extended_irq {
->         u8 wake_capable;
->         u8 interrupt_count;
->         struct acpi_resource_source resource_source;
-> -       u32 interrupts[1];
-> +       u32 interrupts[];
->  };
->
->  struct acpi_resource_generic_register {
-> @@ -679,7 +681,10 @@ struct acpi_pci_routing_table {
->         u32 pin;
->         u64 address;            /* here for 64-bit alignment */
->         u32 source_index;
-> -       char source[4];         /* pad to 64 bits so sizeof() works in all cases */
-> +       union {
-> +               char pad[4];    /* pad to 64 bits so sizeof() works in all cases */
-> +               __DECLARE_FLEX_ARRAY(char, source);
-> +       };
->  };
->
->  #endif                         /* __ACRESTYP_H__ */
-> --
+On 1/27/23 12:42 PM, Paul Moore wrote:
+> On Fri, Jan 27, 2023 at 12:40 PM Jens Axboe <axboe@kernel.dk> wrote:
+>> On 1/27/23 10:23 AM, Richard Guy Briggs wrote:
+>>> A couple of updates to the iouring ops audit bypass selections suggested in
+>>> consultation with Steve Grubb.
+>>>
+>>> Richard Guy Briggs (2):
+>>>   io_uring,audit: audit IORING_OP_FADVISE but not IORING_OP_MADVISE
+>>>   io_uring,audit: do not log IORING_OP_*GETXATTR
+>>>
+>>>  io_uring/opdef.c | 4 +++-
+>>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> Look fine to me - we should probably add stable to both of them, just
+>> to keep things consistent across releases. I can queue them up for 6.3.
+> 
+> Please hold off until I've had a chance to look them over ...
 
-With this applied I get:
+I haven't taken anything yet, for things like this I always let it
+simmer until people have had a chance to do so.
 
-rafael@gratch:~/work/linux-pm/tools/power/acpi> make
- DESCEND tools/acpidbg
- MKDIR    include
- CP       include
- CC       tools/acpidbg/acpidbg.o
-In file included from
-/scratch/rafael/work/linux-pm/tools/power/acpi/include/acpi/acpi.h:27:0,
-                from acpidbg.c:9:
-/scratch/rafael/work/linux-pm/tools/power/acpi/include/acpi/acrestyp.h:686:3:
-error: expected specif
-ier-qualifier-list before ‘__DECLARE_FLEX_ARRAY’
-  __DECLARE_FLEX_ARRAY(char, source);
-  ^~~~~~~~~~~~~~~~~~~~
-make[1]: *** [../../Makefile.rules:25:
-/scratch/rafael/work/linux-pm/tools/power/acpi/tools/acpidbg/
-acpidbg.o] Error 1
-make: *** [Makefile:18: acpidbg] Error 2
+-- 
+Jens Axboe
 
-The tools build successfully without it.
+
