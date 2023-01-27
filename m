@@ -2,448 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FC167DAE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E1B67DAEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232695AbjA0AtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 19:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
+        id S232740AbjA0Atl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 19:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjA0AtM (ORCPT
+        with ESMTP id S232743AbjA0Ati (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 19:49:12 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A184B8AE
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:49:09 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id s26so1278788ioa.11
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:49:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JPAR9qbPBT98lToPY9XdhPXClo5wa/Nb1sY8DyZ/V/o=;
-        b=fj7ywk5pgP6dncAx/4AOpiiw3UZZRoVqUO0TMnvU2HPTs5D5hCBt6YGsimt/V+tezo
-         r6vOdxTGYmYVtfMpO9XGMbpLJ2NWxc24laJRNz/hrF5DrsYazFV3hM8RiTIBERlqvqjI
-         5HxMMkwxh4pQ8Hn4whwqZKzqosOqGjWYtnOAtR6CQzjLpVRg5cupK70FPGpWHUVHDzvn
-         2kpBstutVKvfYskdt6VfoP7AUWuTF1iTfn4JJTaLEAu1henGHWKm5/gPPOiqldPI2Bqw
-         jjKil74fu69T627ZAT5iKUgPIM9J8RWNGXsrgnf73Yd08GdU8ezNNFaXk7O5dghofmmv
-         1wAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JPAR9qbPBT98lToPY9XdhPXClo5wa/Nb1sY8DyZ/V/o=;
-        b=af7w7BuGthVsafCktBJKQj0zrscbuVIWOeOBRn2+YkLg3/PUeN6AVci4HHE5YQQtd7
-         1NtE/hBBlv2mtt2gTJ8r7qKf8MVBDPGWEVnDqDsivfDtqdM1cO1P8sI5Ta0H3uGfHTz3
-         sJhS/NLKRZx1aCemhEOXWnFALVwRExED/6Phu8yRod3Sd63CVDFRmHslSxMCTmVoLa6W
-         V0SuNXJ0f8E8a8fHisIuSCB3N8y1YVLN2e94NeE2cw0r6tHvv84Fo7BFxiEUfYPwN21G
-         BLX5IS4AB06UEuwoZloZqaG7VrGD3tsUwn0xiMv0hpQRjqnu5Qux+XZa/SB0wISwFbxz
-         MoEg==
-X-Gm-Message-State: AFqh2kq/9Df3WtdhTAfprjhiAb2vTSBJqAZfXSvRp0AkywvvJpbStv+d
-        dnsHfjmoQIOdTwoSkDDN99zFo+GCn0k++5CdAZZA/g==
-X-Google-Smtp-Source: AMrXdXue2+v+Ipdq1UTxYRWri9/cvLqRzIMRwNlNiFqI7sRhVuhk75VgM8v/MeghKnAtlL03Vcmzuncw5QTySg2cQs0=
-X-Received: by 2002:a05:6602:2741:b0:704:dab9:edea with SMTP id
- b1-20020a056602274100b00704dab9edeamr3119333ioe.125.1674780548924; Thu, 26
- Jan 2023 16:49:08 -0800 (PST)
+        Thu, 26 Jan 2023 19:49:38 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42593568B8;
+        Thu, 26 Jan 2023 16:49:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674780568; x=1706316568;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=q6pKt0HJPDiKwxJ+60jGw0rnjGvIPDHStuCmsKYbyWw=;
+  b=iqLOeZPRebvTPldNXoVF6+dVfNhjvjoRvaUxoPCxxq8UeYq3j2+S5xhv
+   MRor1Jj0T+bZUPQPcZbjYkyQ7J7ABK/PJ6gj+P1nHkxf3h1xCy8phsUjo
+   5QkBNhgiVrcmJUbEM6Ggk0gC02ALRL8fADtqvbEZS313ShUNQWX7bTvvS
+   0kriYzxzwJsyTh9PQWroKipDJlVU/lkZM471HMhvx7bMW3YWAqftKkE4Y
+   LCkXSF/5sn/TagWYHMGtyAjNNpgDrNmrJi1f7Wj2jyHMkSetWn/QySkEz
+   9FjlzYF+P0+rm5rQw+Mz3dnUTMiq9H0A02a3rDXYtghlTROlwhHLdVTAM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="329124762"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="329124762"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 16:49:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="751820794"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="751820794"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Jan 2023 16:49:27 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 26 Jan 2023 16:49:27 -0800
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 26 Jan 2023 16:49:26 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 26 Jan 2023 16:49:26 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 26 Jan 2023 16:49:26 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ln+HdPbV2m8b0xlas5g7s3gnHUo4YMXOvExM4YhMy2BKXxuvM8TZKNg7gdCPAChqsCIvwb6bznqyDOr+5LAN+q06Pq9CWXvBnRNMtaybL9jTSf8ymBgO+Q0pglApnQ0JVp5+efwoxADX5okUSlf2fRICerlXP5TjPy58vQfyJX4tl2FugSXoXsfmb84lmd2DKFhMm8paCqG7aI6TwcvAPk5Yj8F4fi0qny3IBaU8wif44PflCWdHnXTNIVPfS3FlrLLtHn1WLA4GnPI4buFtdkH36ze1+GyrFXuunyhAIIrkU+zIMCDwJIh0jhxs642Qf4KDuPLFXVuYj3DPtM20Bw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Vf3DlWzXMHZ+IWXIoEbp13tQlCunAtj9hanHL4h6gBU=;
+ b=e+jwTNJgWvqrizQdlgS4qTsJBCCVg+KP8I+GT9r4EXEsWmK2/V4kc3uSXEuJD5ZK5Ti/0973NoCpyrVJb+U/bWWeIMOh2bQ6ndUUi932VBgjwEaE8OCTW3ZjMoMkvd8nFz8NopkHhT6/1bkKAypOFoVnpWHIfBJpuNbs3gkcDWP0eCd9ucY5AIzdPgWQJJcFdczgUeSGH3PsnIVQAVK66nViUucAgkhDFMYMSj1ZEudPBGe37+ZI6gMYi9w0umMUSFTqzAsxNiYG7sCutWMIaUL2xX5VxHEU47vGesEHtoJw+CS09ooTUvuCZE1PQXP6OhO2BJtyZuMbM9PimHf2oQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by CO1PR11MB4801.namprd11.prod.outlook.com (2603:10b6:303:9c::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Fri, 27 Jan
+ 2023 00:49:23 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc%5]) with mapi id 15.20.6043.022; Fri, 27 Jan 2023
+ 00:49:22 +0000
+Date:   Thu, 26 Jan 2023 16:49:19 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+CC:     Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ira Weiny" <ira.weiny@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: RE: [PATCH v7 1/8] cxl/mem: Read, trace, and clear events on driver
+ load
+Message-ID: <63d31f8fbb678_ea222294a3@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20221216-cxl-ev-log-v7-0-2316a5c8f7d8@intel.com>
+ <20221216-cxl-ev-log-v7-1-2316a5c8f7d8@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221216-cxl-ev-log-v7-1-2316a5c8f7d8@intel.com>
+X-ClientProxiedBy: BYAPR07CA0092.namprd07.prod.outlook.com
+ (2603:10b6:a03:12b::33) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-References: <20230124080350.2275652-1-davidgow@google.com>
-In-Reply-To: <20230124080350.2275652-1-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 26 Jan 2023 19:48:57 -0500
-Message-ID: <CAFd5g47_fXBfmmiE93OGj65Lw6NNt5HPYq1Pz7x6f6nSzXsZfA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] kunit: Add "hooks" to call into KUnit when it's
- built as a module
-To:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|CO1PR11MB4801:EE_
+X-MS-Office365-Filtering-Correlation-Id: fc813a4a-4c72-445c-52fd-08db000054ad
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hk+ZCkHdqT5TWdKbFwchP5vyYj1uTBxhIhitLcmrrksmyjQyMDTiNEs3CqnpCaGgfAUcIZ0DwZxuD4UDijeAMTjpT1lhmHyEEn3pGAnJ5qSRC+1YmeXLWWP/lbfuJkTDOGhz6iFick18iwdCt9h6bntbM5po5fYN7ODZBROA1vDz4YN6pkF2dkBN4ATnEnNJtgrotTwykVAjAib+OU7uBPZ5gtzklRru8wGUT/Uu5o90pR62VvUEEazrkijv4v/AHCaJvgnph6JFhWvHZzkqwNRO/1TkWSaSGXGU7Z7671zd7DY0tE58XjLpWw4q3zBgXq1xFEbDhU7XwQ5eID2RtJX1NUaN5q8KlAjzcAMsz5fv/4HiCUoJJummyCr7ak6cSmqS+vaz1oJ0ksRYZI6YbDbtr3gMqZGd3ILsls0L95g6zaxp8sJLv8DHbPjRj+03HAsINIgCLRbfVJELxBj17V88pkvYW4CwBTXenRIG7QsAOPVu2iVufLUJxRRl5QKm8HipayoC8PAz/pd8sPUE1+wkmPObn9QEnb+3i4xWN5O+QhSITqI6iqE+/byCql+ZR/7CtL4KvASq/NSuVQ8SDFV0RZceP/TpkBHjJriAIebdhMS5T+IH+q7ErEbfpWCdiyLUzhILrlUPRY8NmMRVSg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(136003)(396003)(376002)(346002)(39860400002)(451199018)(8676002)(54906003)(38100700002)(110136005)(83380400001)(86362001)(26005)(6512007)(9686003)(186003)(5660300002)(66946007)(6666004)(316002)(6506007)(82960400001)(6486002)(478600001)(66476007)(41300700001)(8936002)(66556008)(2906002)(4326008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4DXnQnvWINoNP15tRGJ236oFRJizi/bQtSHyT+NruMjVdM0LGw0uP/4+yQGJ?=
+ =?us-ascii?Q?ZQWBf+98MmfI3D4vuQ4cDCmuDCCzsMqmX7YrGaAPPBOwCtiowq4nTZTddeSd?=
+ =?us-ascii?Q?piIyRRZ65z0apSA8pxBLVSpcbE1utxKK2bpG1MTP4Qznbyvt/a12xxsZXnFr?=
+ =?us-ascii?Q?F+HGS2sLz097juMTCRZvHn6gUHBnBdvVqcbz/JbHlmFo1Hogqn6gPYZiMLvn?=
+ =?us-ascii?Q?xNqHsYB2noA+shP/klQEUv/OPmr5/OW2+cecl9QnO1GMjMMyDUDEraST+ZCQ?=
+ =?us-ascii?Q?pKMTh0bCLqTWWdnqicpHfCuLFSl5a6crNjLB/xPJgRDgpGOzfwirJG9mobjx?=
+ =?us-ascii?Q?QdMs6P/lTmKyVUnFlRebslUV9DfS1Tlgh4ResnNX1KI896MbDT8NXl7M96xu?=
+ =?us-ascii?Q?UD+YYgXP2K5VpNpxw0DhSZYWuCUv1L8TKmw2Jr/GuPEMtYzp+NT7SRT90q7E?=
+ =?us-ascii?Q?EvPHSOA+lcuq1oChgZt7HGPCJBQdTOvmox+5UXl03pLxsjndnQGZMjhWipCa?=
+ =?us-ascii?Q?bT/gBZxBNOxWnufxJR+9rrGrJ8Vehg+mDTFQYnyb4xVqoP2R9HytfTWccIx+?=
+ =?us-ascii?Q?ggNiK+W6Bwd1uk4a+Yo3j4llC1vSRh3bCKrw6CF1S/mwKxDToNPAdhjLyXrK?=
+ =?us-ascii?Q?JcO5088R9ZCpArRbvLCnHPvQFJ0XKzqK4Tm8+MpQvnPQRsMwyy0pzm7aOdcy?=
+ =?us-ascii?Q?afoPbe39B2dCBmLyhmkMqyieZGj+x38kS+TUeErh4v069I5IZAkhfZHKEvdU?=
+ =?us-ascii?Q?fLpx8hO6qNgDXmoHocvxgyDl3wvaj4eQ5N3NoRcswbnFFo7DB6uW3yi3OUQF?=
+ =?us-ascii?Q?YYVj4LFo0PdOmO6ph/xFM//zZKkMvnXf8SNTqytrrt1WoyQ9RjSpcXR4EYhP?=
+ =?us-ascii?Q?I3I3ssss67bWS5hF7uAa9hzW6UGrIR8Gm8+a/mxqE3j1QBzVuUIBwcMqB3nX?=
+ =?us-ascii?Q?BL2eKR3XBksRMOoYfyKVSEc+wbNbbGyuHLRjD0arMhYuDVrB7q168dACoYdE?=
+ =?us-ascii?Q?Wl86Ogwbf3Eu+PduGlLqbDzt/YMoDhEJS01loqSVftTVycRs7yGuw1IbUMzO?=
+ =?us-ascii?Q?nHp+pBGYTES4hgh8QA4I0/4JlSSwCtIw7G9ljaVs72rYZC65E6EuPjRjNNZ5?=
+ =?us-ascii?Q?E3u9khLR9C25v+rNYqu2K72bY5DtpsjE5iZHsO7jsUIKttJ8UVv2T9Y/q4bK?=
+ =?us-ascii?Q?Q/arWcFMTBWy12p05zKa9fMIy14B38igwDb5PmzqOh3gX8xN0SRxije2MhxY?=
+ =?us-ascii?Q?UALg5XeDzgMOlhxewSyD+xsVC8jFVVNph0X00Zb9r6Y5+YK2+KDyg9HL0qT4?=
+ =?us-ascii?Q?ZNJSxAVjRetaa08SQl2lZn9S/Ab/e2d2FMyqkcTtX/u5RwFajvEZPp20CDYy?=
+ =?us-ascii?Q?wlmRQtm3aNSxvHUEbV02OFQiDok0nQ/cNpOeMgiL5HvfPJOLfeRVoErfviMv?=
+ =?us-ascii?Q?R9ppJeC4B/JpCkQ39FySsEHSI9b1jmAETA3/AZH4FILFXSXB/ZCI5zemBkSr?=
+ =?us-ascii?Q?GyXVSWtDV67vimJrAW/K0XDz8XTGZev0uPUudzkHdtEv1fxNz+dYn69JnwzQ?=
+ =?us-ascii?Q?9SOF+6E0GNiIq4mrFUS2E6dmhunZTkwfIqSm+VOjwPbCjnVxngw6c6OmZL0+?=
+ =?us-ascii?Q?Dw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc813a4a-4c72-445c-52fd-08db000054ad
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 00:49:22.5265
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oRdTuyWepp4zc4GTQhCNoEIHgURHFMwbhkGZpYynsUywCrKwOz1F+MCsUHW598EZ+lKDtSlICY/MUTDQh47kD9gBrkmkqgKsl6rYmQIxU6w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4801
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 3:04 AM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> KUnit has several macros and functions intended for use from non-test
-> code. These hooks, currently the kunit_get_current_test() and
-> kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=m.
->
-> In order to support this case, the required functions and static data
-> need to be available unconditionally, even when KUnit itself is not
-> built-in. The new 'hooks.c' file is therefore always included, and has
-> both the static key required for kunit_get_current_test(), and a
-> function pointer to the real implementation of
-> __kunit_fail_current_test(), which is populated when the KUnit module is
-> loaded.
->
-> A new header, kunit/hooks-table.h, contains a table of all hooks, and is
-> repeatedly included with different definitions of the KUNIT_HOOK() in
-> order to automatically generate the needed function pointer tables. When
-> KUnit is disabled, or the module is not loaded, these function pointers
-> are all NULL. This shouldn't be a problem, as they're all used behind
-> wrappers which check kunit_running and/or that the pointer is non-NULL.
->
-> This can then be extended for future features which require similar
-> "hook" behaviour, such as static stubs:
-> https://lore.kernel.org/all/20221208061841.2186447-1-davidgow@google.com/
+Ira Weiny wrote:
+> CXL devices have multiple event logs which can be queried for CXL event
+> records.  Devices are required to support the storage of at least one
+> event record in each event log type.
+> 
+> Devices track event log overflow by incrementing a counter and tracking
+> the time of the first and last overflow event seen.
+> 
+> Software queries events via the Get Event Record mailbox command; CXL
+> rev 3.0 section 8.2.9.2.2 and clears events via CXL rev 3.0 section
+> 8.2.9.2.3 Clear Event Records mailbox command.
+> 
+> If the result of negotiating CXL Error Reporting Control is OS control,
+> read and clear all event logs on driver load.
+> 
+> Ensure a clean slate of events by reading and clearing the events on
+> driver load.
+> 
+> The status register is not used because a device may continue to trigger
+> events and the only requirement is to empty the log at least once.  This
+> allows for the required transition from empty to non-empty for interrupt
+> generation.  Handling of interrupts is in a follow on patch.
+> 
+> The device can return up to 1MB worth of event records per query.
+> Allocate a shared large buffer to handle the max number of records based
+> on the mailbox payload size.
+> 
+> This patch traces a raw event record and leaves specific event record
+> type tracing to subsequent patches.  Macros are created to aid in
+> tracing the common CXL Event header fields.
+> 
+> Each record is cleared explicitly.  A clear all bit is specified but is
+> only valid when the log overflows.
+> 
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+[..]
+> diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
+> index 20ca2fe2ca8e..6898212fcb47 100644
+> --- a/drivers/cxl/core/trace.h
+> +++ b/drivers/cxl/core/trace.h
+> @@ -6,7 +6,9 @@
+>  #if !defined(_CXL_EVENTS_H) || defined(TRACE_HEADER_MULTI_READ)
+>  #define _CXL_EVENTS_H
+>  
+> +#include <asm-generic/unaligned.h>
+>  #include <cxl.h>
+> +#include <cxlmem.h>
+>  #include <linux/tracepoint.h>
+>  
+>  #define CXL_RAS_UC_CACHE_DATA_PARITY	BIT(0)
+> @@ -103,6 +105,124 @@ TRACE_EVENT(cxl_aer_correctable_error,
+>  	)
+>  );
+>  
+> +#include <linux/tracepoint.h>
 
-Devilishly clever. Maybe too clever, but I don't have any better ideas, so:
-
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-
-Nevertheless, see my comments below:
-
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> This is basically a prerequisite for the stub features working when
-> KUnit is built as a module, and should nicely make a few other tests
-> work then, too.
->
-> v2 adds a slightly-excessive macro-based system for defining hooks. This
-> made adding the static stub hooks absolutely trivial, and the complexity
-> is totally hidden from the user (being an internal KUnit implementation
-> detail), so I'm more comfortable with this than some other macro magic.
->
-> It does however result in a huge number of checkpatch.pl errors, as
-> we're using macros in unconventional ways, and checkpatch just can't
-> work out the syntax. These are mostly "Macros with complex values should
-> be enclosed in parentheses", "Macros with multiple statements should be
-> enclosed in a do - while loop", and similar, which don't apply due to
-> the macros not being expressions: they are mostly declarations or
-> assignment statements. There are a few others where checkpatch thinks
-> that the return value is the function name and similar, so complains
-> about the style.
-
-Shuah, what are your thoughts here? I think it's OK, but I don't want
-to go any further down this path unless you are OK with it too.
-
-> Open questions:
-> - Is this macro-based system worth it, or was v1 better?
-
-I think this is definitely better if we had more than one function to
-hook. With just one function - I am less confident, but I like having
-a set way to do it.
-
-> - Should we rename test-bug.h to hooks.h or similar.
->   (I think so, but would rather do it in a separate patch, to make it
->   easier to review. There are a few includes of it scattered about.)
-
-Agreed, that confused me at first.
-
-> - Is making these NULL when KUnit isn't around sensible, or should we
->   auto-generate a "default" implementation. This is a pretty easy
->   extension to the macros here.
->   (I think NULL is good for now, as we have wrappers for these anyway.
->   If we want to change our minds later as we add more hooks, it's easy.)
-
-Yeah, I'm fine with either.
-
-> - Any other thoughts?
-
-My primary concern was with the naming of test-bug.h, but you said
-you'd handle that in another patch, which makes sense to me.
-
-I also want to make sure Shuah is OK with the checkpatch warnings.
-
-I did find two nits below:
-
-> Cheers,
-> -- David
->
-> Changes since RFC v1:
-> https://lore.kernel.org/all/20230117142737.246446-1-davidgow@google.com/
-> - Major refit to auto-generate the hook code using macros.
-> - (Note that previous Reviewed-by tags have not been added, as this is a
->   big enough change it probably needs a re-reviews. Thanks Rae for
->   reviewing RFC v1 previously, though!)
-> ---
->  Documentation/dev-tools/kunit/usage.rst | 14 +++++-----
->  include/kunit/hooks-table.h             | 34 +++++++++++++++++++++++++
->  include/kunit/test-bug.h                | 24 +++++++++--------
->  lib/Makefile                            |  4 +++
->  lib/kunit/Makefile                      |  3 +++
->  lib/kunit/hooks.c                       | 27 ++++++++++++++++++++
->  lib/kunit/test.c                        | 22 +++++++++++-----
->  7 files changed, 103 insertions(+), 25 deletions(-)
->  create mode 100644 include/kunit/hooks-table.h
->  create mode 100644 lib/kunit/hooks.c
->
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index 48f8196d5aad..6424493b93cb 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -648,10 +648,9 @@ We can do this via the ``kunit_test`` field in ``task_struct``, which we can
->  access using the ``kunit_get_current_test()`` function in ``kunit/test-bug.h``.
->
->  ``kunit_get_current_test()`` is safe to call even if KUnit is not enabled. If
-> -KUnit is not enabled, was built as a module (``CONFIG_KUNIT=m``), or no test is
-> -running in the current task, it will return ``NULL``. This compiles down to
-> -either a no-op or a static key check, so will have a negligible performance
-> -impact when no test is running.
-> +KUnit is not enabled, or if no test is running in the current task, it will
-> +return ``NULL``. This compiles down to either a no-op or a static key check,
-> +so will have a negligible performance impact when no test is running.
->
->  The example below uses this to implement a "mock" implementation of a function, ``foo``:
->
-> @@ -726,8 +725,7 @@ structures as shown below:
->         #endif
->
->  ``kunit_fail_current_test()`` is safe to call even if KUnit is not enabled. If
-> -KUnit is not enabled, was built as a module (``CONFIG_KUNIT=m``), or no test is
-> -running in the current task, it will do nothing. This compiles down to either a
-> -no-op or a static key check, so will have a negligible performance impact when
-> -no test is running.
-> +KUnit is not enabled, or if no test is running in the current task, it will do
-> +nothing. This compiles down to either a no-op or a static key check, so will
-> +have a negligible performance impact when no test is running.
->
-> diff --git a/include/kunit/hooks-table.h b/include/kunit/hooks-table.h
-> new file mode 100644
-> index 000000000000..0b5eafd199ed
-> --- /dev/null
-> +++ b/include/kunit/hooks-table.h
-> @@ -0,0 +1,34 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * KUnit 'Hooks' function pointer table
-> + *
-> + * This file is included multiple times, each time with a different definition
-> + * of KUNIT_HOOK. This provides one place where all of the hooks can be listed
-> + * which can then be converted into function / implementation declarations, or
-> + * code to set function pointers.
-> + *
-> + * Copyright (C) 2023, Google LLC.
-> + * Author: David Gow <davidgow@google.com>
-> + */
-> +
-> +/*
-> + * To declare a hook, use:
-> + * KUNIT_HOOK(name, retval, args), where:
-> + * - name: the function name of the exported hook
-> + * - retval: the type of the return value of the hook
-> + * - args: the arguments to the hook, of the form (int a, int b)
-> + *
-> + * Note that the argument list should be contained within the brackets (),
-> + * and that the implementation of the hook should be in a <name>_impl
-> + * function, which should not be declared static, but need not be exported.
-> + */
-> +
-> +#ifndef KUNIT_HOOK
-> +#error KUNIT_HOOK must be defined before including the hooks table
-> +#endif
-> +
-> +KUNIT_HOOK(__kunit_fail_current_test, __printf(3, 4) void,
-> +          (const char *file, int line, const char *fmt, ...));
-> +
-> +/* Undefine KUNIT_HOOK at the end, ready for the next use. */
-> +#undef KUNIT_HOOK
-> diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
-> index c1b2e14eab64..3203ffc0a08b 100644
-> --- a/include/kunit/test-bug.h
-> +++ b/include/kunit/test-bug.h
-> @@ -1,6 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  /*
-> - * KUnit API allowing dynamic analysis tools to interact with KUnit tests
-> + * KUnit API providing hooks for non-test code to interact with tests.
->   *
->   * Copyright (C) 2020, Google LLC.
->   * Author: Uriel Guajardo <urielguajardo@google.com>
-> @@ -9,7 +9,7 @@
->  #ifndef _KUNIT_TEST_BUG_H
->  #define _KUNIT_TEST_BUG_H
->
-> -#if IS_BUILTIN(CONFIG_KUNIT)
-> +#if IS_ENABLED(CONFIG_KUNIT)
->
->  #include <linux/jump_label.h> /* For static branch */
->  #include <linux/sched.h>
-> @@ -43,20 +43,21 @@ static inline struct kunit *kunit_get_current_test(void)
->   * kunit_fail_current_test() - If a KUnit test is running, fail it.
->   *
->   * If a KUnit test is running in the current task, mark that test as failed.
-> - *
-> - * This macro will only work if KUnit is built-in (though the tests
-> - * themselves can be modules). Otherwise, it compiles down to nothing.
->   */
->  #define kunit_fail_current_test(fmt, ...) do {                                 \
->                 if (static_branch_unlikely(&kunit_running)) {                   \
-> +                       /* Guaranteed to be non-NULL when kunit_running true*/  \
->                         __kunit_fail_current_test(__FILE__, __LINE__,           \
->                                                   fmt, ##__VA_ARGS__);          \
->                 }                                                               \
->         } while (0)
->
->
-> -extern __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
-> -                                                   const char *fmt, ...);
-> +/* Declare all of the available hooks. */
-> +#define KUNIT_HOOK(name, retval, args) \
-> +       extern retval (*name)args
-> +
-> +#include "kunit/hooks-table.h"
->
->  #else
->
-> @@ -66,10 +67,11 @@ static inline struct kunit *kunit_get_current_test(void) { return NULL; }
->  #define kunit_fail_current_test(fmt, ...) \
->                 __kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
->
-> -static inline __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
-> -                                                           const char *fmt, ...)
-> -{
-> -}
-> +/* No-op stubs if KUnit is not enabled. */
-> +#define KUNIT_HOOK(name, retval, args) \
-> +       static retval (*name)args = NULL
-> +
-> +#include "kunit/hooks-table.h"
->
->  #endif
->
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 4d9461bfea42..9031de6ca73c 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -126,6 +126,10 @@ CFLAGS_test_fpu.o += $(FPU_CFLAGS)
->  obj-$(CONFIG_TEST_LIVEPATCH) += livepatch/
->
->  obj-$(CONFIG_KUNIT) += kunit/
-> +# Include the KUnit hooks unconditionally. They'll compile to nothing if
-> +# CONFIG_KUNIT=n, otherwise will be a small table of static data (static key,
-> +# function pointers) which need to be built-in even when KUnit is a module.
-> +obj-y += kunit/hooks.o
->
->  ifeq ($(CONFIG_DEBUG_KOBJECT),y)
->  CFLAGS_kobject.o += -DDEBUG
-> diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-> index 29aff6562b42..deeb46cc879b 100644
-> --- a/lib/kunit/Makefile
-> +++ b/lib/kunit/Makefile
-> @@ -11,6 +11,9 @@ ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
->  kunit-objs +=                          debugfs.o
->  endif
->
-> +# KUnit 'hooks' are built-in even when KUnit is built as a module.
-> +lib-y +=                               hooks.o
-> +
->  obj-$(CONFIG_KUNIT_TEST) +=            kunit-test.o
->
->  # string-stream-test compiles built-in only.
-> diff --git a/lib/kunit/hooks.c b/lib/kunit/hooks.c
-> new file mode 100644
-> index 000000000000..29e81614f486
-> --- /dev/null
-> +++ b/lib/kunit/hooks.c
-> @@ -0,0 +1,27 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit 'Hooks' implementation.
-> + *
-> + * This file contains code / structures which should be built-in even when
-> + * KUnit itself is built as a module.
-> + *
-> + * Copyright (C) 2022, Google LLC.
-> + * Author: David Gow <davidgow@google.com>
-> + */
-> +
-> +/* This file is always built-in, so make sure it's empty if CONFIG_KUNIT=n */
-> +#if IS_ENABLED(CONFIG_KUNIT)
-> +
-> +#include <kunit/test-bug.h>
-> +
-> +DEFINE_STATIC_KEY_FALSE(kunit_running);
-> +EXPORT_SYMBOL(kunit_running);
-> +
-> +/* Function pointers for hooks. */
-> +#define KUNIT_HOOK(name, retval, args) \
-> +       retval (*name)args; \
-> +       EXPORT_SYMBOL(name)
-> +
-> +#include "kunit/hooks-table.h"
-> +
-> +#endif
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index c9ebf975e56b..b6c88f722b68 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -20,13 +20,10 @@
->  #include "string-stream.h"
->  #include "try-catch-impl.h"
->
-> -DEFINE_STATIC_KEY_FALSE(kunit_running);
-> -
-> -#if IS_BUILTIN(CONFIG_KUNIT)
->  /*
->   * Fail the current test and print an error message to the log.
->   */
-> -void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
-
-nit: I think it would be good to add a comment here about this being a
-hooked function or something.
-
-> +void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...)
->  {
->         va_list args;
->         int len;
-> @@ -53,8 +50,6 @@ void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
->         kunit_err(current->kunit_test, "%s:%d: %s", file, line, buffer);
->         kunit_kfree(current->kunit_test, buffer);
->  }
-> -EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
-> -#endif
->
->  /*
->   * Enable KUnit tests to run.
-> @@ -775,8 +770,18 @@ void kunit_cleanup(struct kunit *test)
->  }
->  EXPORT_SYMBOL_GPL(kunit_cleanup);
->
-> +/* Declarations for the hook implemetnations */
-
-nit: spelling
-
-> +#define KUNIT_HOOK(name, retval, args) \
-> +       extern retval name##_impl args
-> +#include "kunit/hooks-table.h"
-> +
->  static int __init kunit_init(void)
->  {
-> +       /* Install the KUnit hook functions. */
-> +#define KUNIT_HOOK(name, retval, args) \
-> +       name = name##_impl
-> +#include "kunit/hooks-table.h"
-> +
->         kunit_debugfs_init();
->  #ifdef CONFIG_MODULES
->         return register_module_notifier(&kunit_mod_nb);
-> @@ -788,6 +793,11 @@ late_initcall(kunit_init);
->
->  static void __exit kunit_exit(void)
->  {
-> +       /* Remove the KUnit hook functions. */
-> +#define KUNIT_HOOK(name, retval, args) \
-> +       name = NULL
-> +#include "kunit/hooks-table.h"
-> +
->  #ifdef CONFIG_MODULES
->         unregister_module_notifier(&kunit_mod_nb);
->  #endif
-> --
-> 2.39.0.246.g2a6d74b583-goog
+missed this earlier, no need to include this again. Will drop it in my
+local tree.
