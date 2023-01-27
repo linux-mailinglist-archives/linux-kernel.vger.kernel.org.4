@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D6D67E2F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3616067E2F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233034AbjA0LSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:18:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
+        id S232070AbjA0LSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232489AbjA0LSP (ORCPT
+        with ESMTP id S231902AbjA0LSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:18:15 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF3D4ED6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:17:56 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id r2so4650109wrv.7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:17:56 -0800 (PST)
+        Fri, 27 Jan 2023 06:18:14 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8154C26A7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:17:55 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id m7so4653020wru.8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:17:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dUNPIWp5WTSOCDKia5k+jXCL26J1A9hep40mE5FWQns=;
-        b=mrM86jQgcEMJkJmxip2tIHld39RoiLb0WGp8HkmoxEG07MUByTNx9/o0BPk7WddBOC
-         L0cJC/vQL9ZTkROoFVxEPG48hzz9sLP8MEUN6bJZuXsTrEMf/pTbOMfNiydtIg7mZiei
-         SS84fkDHVvVBzeMsna9qvfteFFnm3iYGCRO30hOhiNPcwXUk5dvAf8z47WqQQTOzIwX2
-         IyiDuir9eYr6T77+rOp/hdc2y7I7cNnN1VPpriJqkZUfUtd54vHu6jIHXD3fGO3/bTSH
-         nb/55PCHGTniN6Q/4euLXjsbqlvzSTEjzgWO4sQkgHNcNdNRCaGy7I2Sb97SP/TD8rqE
-         v99A==
+        bh=Yih36DUTKHT+LMXkgGyjPXAz+nin4ZdW7iSqMcxFtIs=;
+        b=upDdyxb4DH4gqlG6+VPCvhbg99cUFdjm0GnXZOFDAsU55BLLhSYaU7xREglvFV2tcK
+         Jo/P26FJ2Y5sR7HvkXR++BofjroQdOUBhQe1YuK7Hb1NvEf02HY9z/+wBZEvaN2gPQHe
+         15TrFUjX+iUaV7D8D2gt+99pDT6TZaxUdUvisMrwOcdl36PGf1jGw2lHapfNn+iumu/x
+         mK4ume5XpvjnNX8e3ho7wQvluNOeyIRvsJZaUOJPq40LSVf6tasyqfaqbtlQfiaHKIQl
+         3PRTYJVreWR+Jh241CPYkBXNFR96wsujXy+zivtgzt12jI38++LwWxBMUwHlaPX205dH
+         B6yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dUNPIWp5WTSOCDKia5k+jXCL26J1A9hep40mE5FWQns=;
-        b=CPBaWSDVsZyktlyaZ2fjhncoKcMLcfmxwuICp2Z+YzMLw9Jz6oGcNcJ6TegmdauBAa
-         /jlzikyrEFpHgl7vDQLHzBMMFk2maSMSBChQZ+79GRBV7hSs8rk9NFC0Qh8NZCBv94RP
-         wC8cgiGB2k7YzW1J4pMAwpkHkNuc7nm9gNMly09cNNb0eLtbV3AvngZkIO5P01c2IDNf
-         qTx9fnUzFqmqHTody+b/vxlsvOVTQagtnSeE4Gwz1bAO0h70TEnbR9Jz6xThpt/7JmdB
-         BXbWJAGrOXrLbJDrIsQb56Nu8b/ncYJkdAp7a+HVIJv1enJcIHRtmlOKOLydK+D5RTDW
-         YC4w==
-X-Gm-Message-State: AO0yUKUr9Vnl4Askmx3GFTG3Gw/q2C/HePPP1YMzR9O0+32XlmIUW+aZ
-        xPKIst9L4kijrMjdKR033BfcmQ==
-X-Google-Smtp-Source: AK7set96IIR9C/rDOlE7hI2CkBFLlmCpCdvmKuDNmhBXzWj35w5oHUUOxzupcUqUs3WyX4yEheS7Lg==
-X-Received: by 2002:adf:ea08:0:b0:2bf:bab5:1284 with SMTP id q8-20020adfea08000000b002bfbab51284mr8649539wrm.63.1674818273939;
-        Fri, 27 Jan 2023 03:17:53 -0800 (PST)
+        bh=Yih36DUTKHT+LMXkgGyjPXAz+nin4ZdW7iSqMcxFtIs=;
+        b=icg/zKnRgiTLvdc0b2qUkhyqu/huQiHp24T5M5faiOnKrV41Xcv2COXw6L+wpJ2jZM
+         2Kgfz08Z7a3NKusAuo3n6XwwPGWwi19W6B8QCcSAY/mqcf5Tu+joZqdJEx8l1JY4gWx6
+         GV04GK4fhjIGb1HxN7OFIPGnir57T+Ub3/xCJs/UJ0b/d9/bLCzIM6N29XotRJK+2HcZ
+         l+c4s5KB9WgI6mHIqm2WEUdkAnB431KOteSPuWG9iiIj2yWS87kYHR5yqwBOeUJ+aDSc
+         LBAWknb+DGVAxu+ldOkMh4TDgtbVABSnHPf8qOUJrR2sZCKEBwzoKwU8A6UPAJZar58h
+         FfvQ==
+X-Gm-Message-State: AO0yUKUVmZTKENJA6wrXIlSpYbppgb+sli0dJ/DtxVScTQEOIm5A1jl6
+        T+eysQxXzPh8n22BSHMuiuKPKw==
+X-Google-Smtp-Source: AK7set/I6mFacH2U0lbwM1vADNwo0nUON6ImGQaiRjmvCphneev4pRCV8iDLOEccREHmdg3pFTco7w==
+X-Received: by 2002:adf:ea08:0:b0:2bf:c403:c485 with SMTP id q8-20020adfea08000000b002bfc403c485mr5603510wrm.22.1674818275496;
+        Fri, 27 Jan 2023 03:17:55 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id c13-20020adffb0d000000b002bfd190fd60sm1843314wrr.108.2023.01.27.03.17.52
+        by smtp.gmail.com with ESMTPSA id c13-20020adffb0d000000b002bfd190fd60sm1843314wrr.108.2023.01.27.03.17.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 03:17:53 -0800 (PST)
+        Fri, 27 Jan 2023 03:17:54 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Rob Herring <robh@kernel.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 10/37] of: property: make #.*-cells optional for simple props
-Date:   Fri, 27 Jan 2023 11:15:38 +0000
-Message-Id: <20230127111605.25958-11-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 11/37] of: property: add #nvmem-cell-cells property
+Date:   Fri, 27 Jan 2023 11:15:39 +0000
+Message-Id: <20230127111605.25958-12-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127111605.25958-1-srinivas.kandagatla@linaro.org>
 References: <20230127111605.25958-1-srinivas.kandagatla@linaro.org>
@@ -75,35 +75,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Walle <michael@walle.cc>
 
-Sometimes, future bindings for phandles will get additional arguments.
-Thus the target node of the phandle will need a new #.*-cells property.
-To be backwards compatible, this needs to be optional.
-
-Prepare the DEFINE_SIMPLE_PROPS() to handle the cells name as optional.
+Bindings describe the new '#nvmem-cell-cells' property. Now that the
+arguments count property is optional, we just add this property to the
+nvmem-cells.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/of/property.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/of/property.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/of/property.c b/drivers/of/property.c
-index 134cfc980b70..3043ca7735db 100644
+index 3043ca7735db..8d9ba20a8f90 100644
 --- a/drivers/of/property.c
 +++ b/drivers/of/property.c
-@@ -1256,8 +1256,8 @@ static struct device_node *parse_suffix_prop_cells(struct device_node *np,
- 	if (strcmp_suffix(prop_name, suffix))
- 		return NULL;
- 
--	if (of_parse_phandle_with_args(np, prop_name, cells_name, index,
--				       &sup_args))
-+	if (__of_parse_phandle_with_args(np, prop_name, cells_name, 0, index,
-+					 &sup_args))
- 		return NULL;
- 
- 	return sup_args.np;
+@@ -1307,7 +1307,7 @@ DEFINE_SIMPLE_PROP(dmas, "dmas", "#dma-cells")
+ DEFINE_SIMPLE_PROP(power_domains, "power-domains", "#power-domain-cells")
+ DEFINE_SIMPLE_PROP(hwlocks, "hwlocks", "#hwlock-cells")
+ DEFINE_SIMPLE_PROP(extcon, "extcon", NULL)
+-DEFINE_SIMPLE_PROP(nvmem_cells, "nvmem-cells", NULL)
++DEFINE_SIMPLE_PROP(nvmem_cells, "nvmem-cells", "#nvmem-cell-cells")
+ DEFINE_SIMPLE_PROP(phys, "phys", "#phy-cells")
+ DEFINE_SIMPLE_PROP(wakeup_parent, "wakeup-parent", NULL)
+ DEFINE_SIMPLE_PROP(pinctrl0, "pinctrl-0", NULL)
 -- 
 2.25.1
 
