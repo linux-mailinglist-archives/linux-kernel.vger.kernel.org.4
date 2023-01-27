@@ -2,117 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A9667EC32
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C8F67EC36
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235091AbjA0RNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
+        id S235009AbjA0RN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:13:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235025AbjA0RN0 (ORCPT
+        with ESMTP id S234381AbjA0RNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:13:26 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B7D1E07E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:13:05 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D8DA2B;
-        Fri, 27 Jan 2023 09:13:40 -0800 (PST)
-Received: from [10.57.75.194] (unknown [10.57.75.194])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ABA833F71E;
-        Fri, 27 Jan 2023 09:12:56 -0800 (PST)
-Message-ID: <c5d7833d-6372-7eb7-67fe-3cda0bdd4715@arm.com>
-Date:   Fri, 27 Jan 2023 17:12:55 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] Coresight: tpda/tpdm: remove incorrect __exit annotation
-To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Mao Jinlong <quic_jinlmao@quicinc.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        Fri, 27 Jan 2023 12:13:52 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B40A26A9;
+        Fri, 27 Jan 2023 09:13:46 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 5E8412D3;
+        Fri, 27 Jan 2023 17:13:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5E8412D3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1674839625; bh=S3dil/jJhCjqHHB5iBm3wiRiGo1U/GbKwYcoUCM075w=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=DYlgWhGQLcMyDRc/eD0FUj3janxYh2qU1eQJ/+K22NrHu4AHeYxVaXHM3Zatp3AbL
+         FYTg6MZrc9pOmqv05fiDVAIxMSkhuWCJfDM2gmi3HP2wVWGTbr+WJh8OWA0wtHurvh
+         JbhGE/o8jdkBEddlFO/j50vFhC3CYMdnMhXN3orF/4k/QL589embhsUuwhDIp6BZRu
+         m674jlcQAdAQq67gCfQmz4kZWNHJo+Xj8QMQ4Zl9Zga0MVMXI1CfPLgPKzFi3vPA2s
+         2epGlsDxdgIwiT9VbvmBQ9X+fbKQkPU1sWI4/JQZbTMZFPFtUQt6t4BX5N7XHKFJP9
+         rn2FBJdfm49ow==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, sshefali021@gmail.com,
+        kstewart@linuxfoundation.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230126163530.3495413-1-arnd@kernel.org>
- <7ec6bd88-7f18-7eca-fa92-cfea9a25a395@arm.com>
- <cd4f23d7-cdd7-49e1-8eff-9ec04dcb36c8@app.fastmail.com>
- <e6c3fa24-963b-57c0-1a9a-fd056a9ac591@arm.com>
- <f87c8f49-227e-40fb-b13b-00d869d81fe8@app.fastmail.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <f87c8f49-227e-40fb-b13b-00d869d81fe8@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] docs: add workload-tracing document to admin-guide
+In-Reply-To: <20230127165440.19158-1-skhan@linuxfoundation.org>
+References: <20230127165440.19158-1-skhan@linuxfoundation.org>
+Date:   Fri, 27 Jan 2023 10:13:44 -0700
+Message-ID: <87bkmj99yv.fsf@meer.lwn.net>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 17:00, Arnd Bergmann wrote:
-> On Fri, Jan 27, 2023, at 17:46, Suzuki K Poulose wrote:
->> On 26/01/2023 20:37, Arnd Bergmann wrote:
->>> On Thu, Jan 26, 2023, at 19:02, Suzuki K Poulose wrote:
->>>> On 26/01/2023 16:35, Arnd Bergmann wrote:
->>>>> From: Arnd Bergmann <arnd@arndb.de>
->>>> Thanks for the fix, I will queue this. Btw, I did try to
->>>> reproduce it locally, but couldn't trigger the warnings,
->>>> even with
->>>>
->>>> CONFIG_WERROR=y
->>>>
->>>> and all CORESIGHT configs builtin. I see other drivers doing the
->>>> same outside coresight too. Just curious to know why is this
->>>> any different. Is it specific to "bus" driver (e.g. AMBA) ?
->>>
->>> The warning comes from postprocessing the object file, it's got
->>> nothing to do with the bus type, only with a symbol in .data
->>> referencing a symbol in .init.text. Maybe there are some
->>> config options that keep the section from getting discarded?
->>> Or possibly you only built the files in this directory, but did
->>> not get to the final link?
->>
->> I did a full kernel build. Also, I see a similar issue with the
->> coresight-etm4x (by code inspection) driver. Did you not hit that ?
->>
->> May be there is a config option that is masking it on my end. But
->> the case of etm4x driver is puzzling.
->>
->> $ git grep etm4_remove_amba
->> drivers/hwtracing/coresight/coresight-etm4x-core.c
->> drivers/hwtracing/coresight/coresight-etm4x-core.c:static void __exit
->> etm4_remove_amba(struct amba_device *adev)
->> drivers/hwtracing/coresight/coresight-etm4x-core.c:     .remove
->> = etm4_remove_amba,
-> 
-> Indeed, that one clearly has the same but, but I have never
-> observed a warning for it.
-> 
-> I checked one more thing and found that I only get the warning
-> for 32-bit Arm builds, but not arm64. Since the etm4x driver
-> 'depends on ARM64' for its use of asm/sysreg.h,
-> I never test-built it on 32-bit arm.
-> 
->  From the git history of arch/arm64/kernel/vmlinux.lds.S,
-> I can see that arm64 never discards the .exit section, see
-> commit 07c802bd7c39 ("arm64: vmlinux.lds.S: don't discard
-> .exit.* sections at link-time").
+Shuah Khan <skhan@linuxfoundation.org> writes:
 
-That makes sense, thanks for getting to the bottom of this. I
-have pushed it to coresight next.
+> Add a new section to the admin-guide with information of interest to
+> application developers and system integrators doing analysis of the
+> Linux kernel for safety critical applications.
+>
+> This section will contain documents supporting analysis of kernel
+> interactions with applications, and key kernel subsystems expectations.
+>
+> Add a new workload-tracing document to this new section.
+>
+> Signed-off-by: Shefali Sharma <sshefali021@gmail.com>
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+>  Documentation/admin-guide/index.rst           |  11 +
+>  .../admin-guide/workload-tracing.rst          | 486 ++++++++++++++++++
+>  2 files changed, 497 insertions(+)
+>  create mode 100644 Documentation/admin-guide/workload-tracing.rst
 
-https://git.kernel.org/coresight/c/0c1ccc158bbc
+This seems like generally good stuff, thanks.  I have a few nits...
 
-Kind regards
-Suzuki
+> +Key Points
+> +==========
+> +
+> + * Understanding system resources necessary to build and run a workload
+> +   is important.
+> + * Linux tracing and strace can be used to discover the system resources
+> +   in use by a workload. The completeness of the system usage information
+> +   depends on the completeness of coverage of a workload.
+> + * Performance and security of the operating system can be analyzed with
+> +   the help of tools such as `perf <https://man7.org/linux/man-pages/man1/perf.1.html>`_, `stress-ng <https://www.mankier.com/1/stress-ng>`_, `paxtest <https://github.com/opntr/paxtest-freebsd/blob/hardenedbsd/0.9.14-hbsd/README>`_.
+> + * Once we discover and understand the workload needs, we can focus on them
+> +   to avoid regressions and use it to evaluate safety considerations.
+> +
+> +Methodology
+> +===========
+> +
+> +`strace <https://man7.org/linux/man-pages/man1/strace.1.html>`_ is a diagnostic, instructional, and debugging tool and can be used to discover the system resources in use by a workload. Once we discover and understand the workload needs, we can focus on them to avoid regressions and use it to evaluate safety considerations. We chose strace tool to trace workloads.
 
+I know that the 80-column limit is controversial to some; I happen to
+believe that text should certainly adhere to it for basic readability
+reasons.  But can we all agree that nearly 400 columns is too many? :)
+Please line-break the whole document properly.
 
+> +Install tools to build Linux kernel and tools in kernel repository. scripts/ver_linux is a good way to check if your system already has the necessary tools.
+> +::
+> +
+> +  sudo apt-get build-essentials flex bison yacc
+> +  sudo apt install libelf-dev systemtap-sdt-dev libaudit-dev libslang2-dev libperl-dev libdw-dev
+> +
+> +Browsing kernel sources
+> +::
+> +
+> +  sudo apt-get install cscope
+> +
+> +Install stress-ng and paxtest
+> +::
+> +
+> +  apt-get install stress-ng
+> +  apt-get install paxtest
 
-> 
->       Arnd
+For literal blocks, the "::" can go at the end of the previous line,
+which makes the document a bit more readable.
 
+[...]
+
+> +SPDX-License-Identifier: CC-BY-4.0
+> +==================================
+> +This document is released under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode. Pursuant to Section 5 of the license, please note that the following disclaimers apply (capitalized terms have the meanings set forth in the license). To the extent possible, the Licensor offers the Licensed Material as-is and as-available, and makes no representations or warranties of any kind concerning the Licensed Material, whether express, implied, statutory, or other. This includes, without limitation, warranties of title, merchantability, fitness for a particular purpose, non-infringement, absence of latent or other defects, accuracy, or the presence or absence of errors, whether or not known or discoverable. Where disclaimers of warranties are not allowed in full or in part, this disclaimer may not apply to You.
+> +
+> +To the extent possible, in no event will the Licensor be liable to You on any legal theory (including, without limitation, negligence) or otherwise for any direct, special, indirect, incidental, consequential, punitive, exemplary, or other losses, costs, expenses, or damages arising out of this Public License or use of the Licensed Material, even if the Licensor has been advised of the possibility of such losses, costs, expenses, or damages. Where a limitation of liability is not allowed in full or in part, this limitation may not apply to You.
+> +
+> +The disclaimer of warranties and limitation of liability provided above shall be interpreted in a manner that, to the extent possible, most closely approximates an absolute disclaimer and waiver of all liability.
+> +
+> +Note: Only the content of this RST file as found in the Linux kernel sources
+> +is available under CC-BY-4.0, as versions of this text that were processed
+> +(for example by the kernel's build system) might contain content taken from
+> +files which use a more restrictive license.
+
+This is just the kind of license boilerplate that we have been trying
+hard to get rid of.  *Dual*-licensing with CC4 is OK, and the SPDX line
+at the top properly reflects that; this additional text shouldn't be here.
+
+> +..
+> +   end-of-content
+
+...and that seems a bit redundant somehow...:)
+
+Thanks,
+
+jon
