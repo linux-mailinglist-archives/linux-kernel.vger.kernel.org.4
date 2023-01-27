@@ -2,108 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32E867EAC9
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4040367EAD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234842AbjA0QX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S234896AbjA0QZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234821AbjA0QXy (ORCPT
+        with ESMTP id S234936AbjA0QYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:23:54 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A1080F8F
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:23:53 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id q8so3826943wmo.5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:23:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=65MO12imV1nqCcpTeXSLh3c/aVlDLZs9NEXVWBJqWRk=;
-        b=wVDHfwnW/Z2+BDsP/bNqlYsc+0Obb42FoQhtkUt3II9REyXmgmnN9Mnv9bbVeXBfRy
-         +56GhmfJLXI/J64TBWemi9pxLT0PrwyXIgdO5HGtoOFKAUlfjcWkiaCTmtJThB8VmwUh
-         LcByHD0PCiN3MabUOD0/xVnZiHPcYIezFr+QVPtC5yK2K18vrqjnmpOBWMgpMcyQMYnN
-         fv58JdLgiEN/PI8SITq8NU06Rv+mq/02zbEac+Gnvo4i2izPeLKdKhjHe4+f7PLMZJBa
-         rUuR1rMx2E1XsLDuYDlpA0w3wNC1urnmV/n1KPAqCwPrjuq2HpZIIYF+l8UTVUHBqByb
-         sinQ==
+        Fri, 27 Jan 2023 11:24:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A36D84948
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:24:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674836644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rBcfIHEg4jZbTQIImkzkLN9g2iVk6db6jthiIxejuwA=;
+        b=JGnV88AJ0whKKFYNNvpsJ9PAgdk6VpN7eKOyf1GcO9tXJZNR7y7DDX8RbUejinfOixckKW
+        9/viXG1ILs0BVy1VhYqbLWv23owcEu+pZEaEvzJTGcDWrlmL8m67cnmCvBgl0DtvL2R/wr
+        FrXDCjdLGrvpg3RTbGuwssMmceNLI8k=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-615-6pwFjO_qNDmkk_B_0Z0_6g-1; Fri, 27 Jan 2023 11:24:02 -0500
+X-MC-Unique: 6pwFjO_qNDmkk_B_0Z0_6g-1
+Received: by mail-wm1-f72.google.com with SMTP id bg24-20020a05600c3c9800b003db0ddddb6fso3062150wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:24:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=65MO12imV1nqCcpTeXSLh3c/aVlDLZs9NEXVWBJqWRk=;
-        b=EsA7J0jVU9RgGxj+Yi/yUS8uhuvbQCikukE2uooREI4sA9YNlXBjLEjUoXQj1UdIOX
-         4oPT4JgNRcNxBfTwQpJFZ5YOpgOKorbZa7lWllPQCMaff7a5sNDvVxHt/T/UMohDUKYj
-         CZFBxEV2CJy5uZ3n9hHM129gDZwTEQICaOuVgqfbw6uq8CxQHmguJ26skX0sQTdvCNVq
-         NCnFzk4cOVaQ9h8oofYrSUUcbjjsVnjblIP/iQCQnuF+ZNLjoHs4Ymb8FMA2LD17jaO8
-         qDf0K4AzBxqhyZTFnvahgrS1jcBuZ6BhtwxMUJmDFqWKDF61HGYIFSJP2i+F1JpmXXGf
-         Zwkg==
-X-Gm-Message-State: AFqh2kq4qMqLG5fiBvkiDRQknXFwym9sgRHF3K2++J3e4pzICZi4I8iZ
-        qCaft9n55l66yBZ76QgX949xtw==
-X-Google-Smtp-Source: AMrXdXuidEmKRArhNg4hR1+6a9tqUH+Fvwc/xoaTWpcivHWXGGhJYiSN6tDkGVlXLzZqW9icUMm8dg==
-X-Received: by 2002:a05:600c:1d22:b0:3d9:6bc3:b8b9 with SMTP id l34-20020a05600c1d2200b003d96bc3b8b9mr40855982wms.9.1674836631849;
-        Fri, 27 Jan 2023 08:23:51 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:d4ec:15ea:873c:61e6? ([2a01:e0a:982:cbb0:d4ec:15ea:873c:61e6])
-        by smtp.gmail.com with ESMTPSA id v6-20020a05600c444600b003db09692364sm9191058wmn.11.2023.01.27.08.23.50
+        bh=rBcfIHEg4jZbTQIImkzkLN9g2iVk6db6jthiIxejuwA=;
+        b=IZ2wpz++cO7CaHNlPv0a160feaZm8rrLhhjdF+Jc+eGQ5LB5fsW+vMmIrEawc9IQHa
+         djz565qEA7/Tv9n+QVUEUbhXZ+GHvHWgAAuTxTBOa5l3wewNCSvtJ1ZkKwFCkIrvQqCs
+         SI0BqFttIlL/7aY528LXTE5Ui9dzJKe7JB7xbcDcEnNRe1/TCkPJ++bxJ7ox8lPN+m31
+         1o3Q3Ob0eooziY83K9dPGzHaN3B5UGcYBiGcx2DsWFHIgX8Hbb85Pjo7oEnML15rQoQi
+         +dveEPfmfJaMY+9m9qrzB6W6ycVMHvAEChTfRMiYcZ4xdCCCZMvhMFiD5XMAjPMboMTC
+         CAWw==
+X-Gm-Message-State: AO0yUKXtCe1BuERTzOlKaTIX8x8f1JcTNPqiUwa+1o/SgLJYk/sjMXmB
+        gQiAGbV6IdMLEEn0x1YZPv6b3NUd1grQNxXgXUCOJkCCjJei3qOiGkXd8S4dHDlyTLhfCyA1wn4
+        /zoEvEx49vCiYJ+/BfGFZ+5F8
+X-Received: by 2002:a5d:5588:0:b0:2bf:cfb4:2e2 with SMTP id i8-20020a5d5588000000b002bfcfb402e2mr3530685wrv.17.1674836641196;
+        Fri, 27 Jan 2023 08:24:01 -0800 (PST)
+X-Google-Smtp-Source: AK7set/Y+LNaZDyABiiOmf5N54VfZvfoeUt9bSW+AQh4dtqSkfuGAZY0DclafN1Se1z2VO+XUxpTjQ==
+X-Received: by 2002:a5d:5588:0:b0:2bf:cfb4:2e2 with SMTP id i8-20020a5d5588000000b002bfcfb402e2mr3530671wrv.17.1674836640968;
+        Fri, 27 Jan 2023 08:24:00 -0800 (PST)
+Received: from ?IPV6:2003:d8:2f16:1800:a9b4:1776:c5d9:1d9a? (p200300d82f161800a9b41776c5d91d9a.dip0.t-ipconnect.de. [2003:d8:2f16:1800:a9b4:1776:c5d9:1d9a])
+        by smtp.gmail.com with ESMTPSA id z14-20020a5d640e000000b002bfb5bda59asm4467446wru.25.2023.01.27.08.23.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 08:23:51 -0800 (PST)
-Message-ID: <7e52a67a-ac64-2340-3b52-83e334440d7c@linaro.org>
-Date:   Fri, 27 Jan 2023 17:23:50 +0100
+        Fri, 27 Jan 2023 08:24:00 -0800 (PST)
+Message-ID: <f9f13d4d-5882-2647-0032-e4f0e9296c69@redhat.com>
+Date:   Fri, 27 Jan 2023 17:23:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 2/5] arm64: dts: meson: bananapi-m5: remove redundant
- status from sound node
+Subject: Re: [PATCH 2/2] migrate: hugetlb: Check for hugetlb shared PMD in
+ node migration
 Content-Language: en-US
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230127142221.3718184-1-christianshewitt@gmail.com>
- <20230127142221.3718184-3-christianshewitt@gmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230127142221.3718184-3-christianshewitt@gmail.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Peter Xu <peterx@redhat.com>, Michal Hocko <mhocko@suse.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org
+References: <20230126222721.222195-1-mike.kravetz@oracle.com>
+ <20230126222721.222195-3-mike.kravetz@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230126222721.222195-3-mike.kravetz@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 15:22, Christian Hewitt wrote:
-> The sound device is enabled by default so remove the redundant status.
+On 26.01.23 23:27, Mike Kravetz wrote:
+> migrate_pages/mempolicy semantics state that CAP_SYS_NICE is required
+> to move pages shared with another process to a different node.
+> page_mapcount > 1 is being used to determine if a hugetlb page is shared.
+> However, a hugetlb page will have a mapcount of 1 if mapped by multiple
+> processes via a shared PMD.  As a result, hugetlb pages shared by multiple
+> processes and mapped with a shared PMD can be moved by a process without
+> CAP_SYS_NICE.
 > 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+> To fix, check for a shared PMD if mapcount is 1.  If a shared PMD is
+> found consider the page shared.
+> 
+> Fixes: e2d8cf405525 ("migrate: add hugepage migration code to migrate_pages()")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 > ---
->   arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 1 -
->   1 file changed, 1 deletion(-)
+>   mm/mempolicy.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> index 3c1267a7ffef..86f0afe6491e 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> @@ -233,7 +233,6 @@ sound {
->   		assigned-clock-rates = <294912000>,
->   				       <270950400>,
->   				       <393216000>;
-> -		status = "okay";
+> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> index 85a34f1f3ab8..72142fbe7652 100644
+> --- a/mm/mempolicy.c
+> +++ b/mm/mempolicy.c
+> @@ -600,7 +600,8 @@ static int queue_pages_hugetlb(pte_t *pte, unsigned long hmask,
 >   
->   		dai-link-0 {
->   			sound-dai = <&frddr_a>;
+>   	/* With MPOL_MF_MOVE, we migrate only unshared hugepage. */
+>   	if (flags & (MPOL_MF_MOVE_ALL) ||
+> -	    (flags & MPOL_MF_MOVE && page_mapcount(page) == 1)) {
+> +	    (flags & MPOL_MF_MOVE && page_mapcount(page) == 1 &&
+> +	     !hugetlb_pmd_shared(pte))) {
+>   		if (isolate_hugetlb(page, qp->pagelist) &&
+>   			(flags & MPOL_MF_STRICT))
+>   			/*
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+
