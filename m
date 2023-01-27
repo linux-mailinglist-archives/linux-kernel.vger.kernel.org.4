@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3214067E464
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1C467E403
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbjA0L7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:59:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
+        id S233860AbjA0Lrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233838AbjA0L7A (ORCPT
+        with ESMTP id S234021AbjA0LrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:59:00 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA597B795
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:55:16 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id h17so5285859ljq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:55:16 -0800 (PST)
+        Fri, 27 Jan 2023 06:47:04 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716EE83241
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:45:17 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id z5so4721683wrt.6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:45:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+geWY6qVjZfig772ABS5/qXq/ZgJ7dn7lm+IKTyyWoI=;
-        b=OMyHpbZ6HsEXqsz63vAd4jHNfBYMOzUxEox4x4gurP8O0BJ3WNDi7Qfju7Qdwg47NQ
-         ivENSeZCff6XNNlGgqgzrI4vkWNPIKDBSYo2RZOvtV6lmQigxDq+18EpGXfFCa1MoJPH
-         waeigfCMTbN/MfGO1t44svziHIuudDf/rGmDk8h1N527WpTQn+tSiYN5YDHCWF0SAF27
-         erqCVpFHDT/g6g8Jpjrni73vdnlsX/zmdSPuByJP/U1wHSigNN8Uj2JNwrR7zyOb3CLR
-         8ebi7HH8CzMuaLjenHYUtqpIqUHqnmY0g1br1ykcepRU37Ut1+8vOP5kEW/J9ghEDBDo
-         Ds/Q==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oeX5sh0pB1nWQRCFP8JlWLr9E5y8r+895bK99p9ZBeQ=;
+        b=hBc1g0y38tVDw1ZyxddtgM2GHACdd7x2KcdVVDPMCXcB524JDcmsU5a8nhID6V/KQn
+         qYqV6l1XEy1UwFFnGfiCJdOuCZneUzqliOAsvByag1sxm88aKNKdqNtYJ/GwL//nw9J/
+         0B3ePqdthyxH8c++CGKgJ1U936gAfQkGOncOERpCJS2ci1Z92nHvdiTnzlKa9I86YQ9L
+         ieVO01JJb9hulQpqLrldGTp5y2/JoYwSKY8FyzwI+2ZAmX/+/fubrmdDlZjhdhpY19Kk
+         lP1+8Jw4VeVvXmgWBM268XUo5DprZ1wfICK2H/Z3Onj5toZwavvVAeZ5ZtE1ks+4PdFf
+         aYLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+geWY6qVjZfig772ABS5/qXq/ZgJ7dn7lm+IKTyyWoI=;
-        b=cPwJvWyKA1A/89NHCEYESEZMAL7phuittSNnMfyD4b1UR46fcvwCtFlVQQ5iibK72Z
-         m/lROh9NXCjORAQJF9Ee7BY/mlmhM/x2aKQsdlftnGbsegxAwvH/wIAU1dGBkkhc6/RD
-         YJjSUsMGAqaahCcJ3ot3Z3yKm6HSFEcQZ2b9tH8gCr2Go7uP4ODWuk7PIpeyTKHaVjd3
-         uhFtKTLn4n7PCr9LCbM4EL/S9lRj9n9wFPSmM7DTlF3em5E7QP+IcnCkBrX4fHOqMVfe
-         ecxw4+dblDon6Jn8qmv/97UkzBO17rgctboHtJmcSA/5y63JoY8V5PJ1uUTgt46dQJRB
-         0sWg==
-X-Gm-Message-State: AO0yUKWgMAOVXQBWucRNSyHjfzsLAz2StakIps+4y0YWjOYFUsnZ32oz
-        EhTBzjefefcobQEyUlDkCbAdtRm8/AFwTwQY
-X-Google-Smtp-Source: AK7set+DdbYHUvl6CYuPKq1XuN538q52AQpEocIbtSSMPdQoBsz7gj5GUL/KzPkcIOEzfFJF3/xWpA==
-X-Received: by 2002:a5d:4911:0:b0:2bf:b217:e365 with SMTP id x17-20020a5d4911000000b002bfb217e365mr11110995wrq.11.1674819851073;
-        Fri, 27 Jan 2023 03:44:11 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oeX5sh0pB1nWQRCFP8JlWLr9E5y8r+895bK99p9ZBeQ=;
+        b=GIAtZpsWIs9/sjVxMyaQ2dWxXqEky6Hqp2FYHeYE6ftdrkDrWHsBPsT/6ZUKe3jQmh
+         FB8j3QtHCeMTcUjOkDt6omR878KLnNXTBx6631BQL/emFoP5TGgkTZ0SFsrSehFX2uso
+         YCLTZgJnyoB+JySdl2LkMkdWmHr3VSmc0r4T1JtYcYbWgycN16i2kYAl2zNQ3bVSwSu8
+         ZXxDyTiWKzykb+Ra6CyATcifvrDpW8lHCLoVL5enIDoB2meM9XiYpVns/kq87lBZTQZM
+         qlI3wLxNeWdKi+2/ObwIpfeoSFYDVx5Ql+KtnkKvUqg1AwgaBH0xxDmFR2EPRnLS6Pcs
+         iKsQ==
+X-Gm-Message-State: AFqh2kpgz4QZj428hJUaicZaPT4cKUZZzBESOu96VM9ZNd2sMF9Fjkq0
+        DTtNmNSTaG6tQToNaReVQPUctQ==
+X-Google-Smtp-Source: AMrXdXt6CXcCZeXYmt/Q6tlUG01BEN2phXAn8KELn5WFgFd8UWWw2zHvB2nfWetl2B/5p9dCcy3lng==
+X-Received: by 2002:adf:dd41:0:b0:2be:d9e7:f39a with SMTP id u1-20020adfdd41000000b002bed9e7f39amr20718354wrm.43.1674819852872;
+        Fri, 27 Jan 2023 03:44:12 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id z14-20020a5d4c8e000000b002bfc2d0eff0sm3807760wrs.47.2023.01.27.03.44.09
+        by smtp.gmail.com with ESMTPSA id z14-20020a5d4c8e000000b002bfc2d0eff0sm3807760wrs.47.2023.01.27.03.44.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 03:44:10 -0800 (PST)
+        Fri, 27 Jan 2023 03:44:12 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -58,10 +59,12 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 01/11] ARM: dts: qcom-sdx55: align RPMh regulator nodes with bindings
-Date:   Fri, 27 Jan 2023 12:43:37 +0100
-Message-Id: <20230127114347.235963-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 02/11] ARM: dts: qcom-sdx65: align RPMh regulator nodes with bindings
+Date:   Fri, 27 Jan 2023 12:43:38 +0100
+Message-Id: <20230127114347.235963-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230127114347.235963-1-krzysztof.kozlowski@linaro.org>
+References: <20230127114347.235963-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,55 +81,22 @@ Device node names should be generic and bindings expect certain pattern
 for RPMh regulator nodes.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
 ---
+ arch/arm/boot/dts/qcom-sdx65-mtp.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-See:
-https://lore.kernel.org/all/20230112203653.23139-1-quic_molvera@quicinc.com/
----
- arch/arm/boot/dts/qcom-sdx55-mtp.dts             | 2 +-
- arch/arm/boot/dts/qcom-sdx55-t55.dts             | 2 +-
- arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm/boot/dts/qcom-sdx55-mtp.dts b/arch/arm/boot/dts/qcom-sdx55-mtp.dts
-index 6f8909731faf..7e97ad5803d8 100644
---- a/arch/arm/boot/dts/qcom-sdx55-mtp.dts
-+++ b/arch/arm/boot/dts/qcom-sdx55-mtp.dts
-@@ -75,7 +75,7 @@ vreg_s7e_mx_0p752: pmx55-s7e {
+diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+index 85ea02d8362d..ed98c83c141f 100644
+--- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
++++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+@@ -65,7 +65,7 @@ vreg_bob_3p3: pmx65_bob {
  };
  
  &apps_rsc {
--	pmx55-rpmh-regulators {
+-	pmx65-rpmh-regulators {
 +	regulators-0 {
- 		compatible = "qcom,pmx55-rpmh-regulators";
- 		qcom,pmic-id = "e";
- 
-diff --git a/arch/arm/boot/dts/qcom-sdx55-t55.dts b/arch/arm/boot/dts/qcom-sdx55-t55.dts
-index ccf2b8b42b16..d5343bb0daee 100644
---- a/arch/arm/boot/dts/qcom-sdx55-t55.dts
-+++ b/arch/arm/boot/dts/qcom-sdx55-t55.dts
-@@ -98,7 +98,7 @@ vreg_vddpx_2: vddpx-2 {
- };
- 
- &apps_rsc {
--	pmx55-rpmh-regulators {
-+	regulators-0 {
- 		compatible = "qcom,pmx55-rpmh-regulators";
- 		qcom,pmic-id = "e";
- 
-diff --git a/arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts b/arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts
-index db7b3d5b0bd0..ad74ecc2a196 100644
---- a/arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts
-+++ b/arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts
-@@ -98,7 +98,7 @@ vreg_vddpx_2: vddpx-2 {
- };
- 
- &apps_rsc {
--	pmx55-rpmh-regulators {
-+	regulators-0 {
- 		compatible = "qcom,pmx55-rpmh-regulators";
- 		qcom,pmic-id = "e";
+ 		compatible = "qcom,pmx65-rpmh-regulators";
+ 		qcom,pmic-id = "b";
  
 -- 
 2.34.1
