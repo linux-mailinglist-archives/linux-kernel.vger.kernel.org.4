@@ -2,121 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2476267EC4D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3647867EC29
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235138AbjA0RUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S229518AbjA0RLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234968AbjA0RUF (ORCPT
+        with ESMTP id S234883AbjA0RLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:20:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76D737F0F
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:19:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674839955;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PmxGa44W6isfjTBSzVfP/UwTsDElhnXKEsXbjHCdyrI=;
-        b=f1lM0cibFvxPY1WIaJ6Xu4Gwya7xRlem0Emj4MA9Y/f1GiswNa2kFuMGe5O6fffJy78lcf
-        1lK2hZ0l3IjJwmLe2RN1eW8mb0VKsh6MNyvXtBSrPx4jyCpFk+mRLdUXIudMXwgIWeD3Td
-        vDC/iYg7blNCSGdDqSBiaum7u29n0M4=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-570-cKByCxfcM6qrhVEvjKlT6A-1; Fri, 27 Jan 2023 12:06:00 -0500
-X-MC-Unique: cKByCxfcM6qrhVEvjKlT6A-1
-Received: by mail-qk1-f200.google.com with SMTP id bp33-20020a05620a45a100b007090e2e1b0cso3344523qkb.16
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:06:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PmxGa44W6isfjTBSzVfP/UwTsDElhnXKEsXbjHCdyrI=;
-        b=2fC8Z1EjP9gTSZQtvD6uQ9a1iAKWfC/1jszHjJltN4pIdLITFtD8X4V+CaSEEwhnaw
-         QmPrpyU1GB1D/RuhPnqeg9yUSDklubZUU8v0Io86b8AxkE1x2Q/65oje2lu0iOL9uLIz
-         +F0o3TstIYnHHkXCj+SzjfyItxRW5VKhpoFzEI0Jp+oKP2FNJX9wDk4OLfHgAJmdy9LU
-         wE/O1jTZadcYKSwShAxNhhGOoNR6v+o1SAS7iUMgObayhKsbOzsRA/OvFzchqTWMwXsf
-         fJpjrIo2Bw0z8dA5w7en6HJiWEM1WD6zvogDJMZAAAnplhhWe0mKlrqXdW/sTG9qCgOv
-         Xw9Q==
-X-Gm-Message-State: AFqh2koj108XvchSIer8izFDwA44GRcNo7gGNGFIU+iFG7B2cBAh7WKK
-        LB3c0zsTEWoS151xDEfO/q2dieFMRpPOf+5gGLBHigRXVPDYmLPqjed6ggB9URSUJ4CmhJQkxVA
-        qZeAX2c7Y8TgD/Jlyg1ZurnqH
-X-Received: by 2002:a05:622a:598b:b0:3a9:8f6c:2d7c with SMTP id gb11-20020a05622a598b00b003a98f6c2d7cmr63120112qtb.52.1674839160386;
-        Fri, 27 Jan 2023 09:06:00 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsBuMR76qCD9iNhA3MG7zbleHxGuuO1yl2hlMrlf18HF044I6aiUQq824mIaMRnIi9g+mEKbA==
-X-Received: by 2002:a05:622a:598b:b0:3a9:8f6c:2d7c with SMTP id gb11-20020a05622a598b00b003a98f6c2d7cmr63120073qtb.52.1674839160145;
-        Fri, 27 Jan 2023 09:06:00 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id x20-20020ac84a14000000b00399fe4aac3esm2949817qtq.50.2023.01.27.09.05.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 09:05:59 -0800 (PST)
-Date:   Fri, 27 Jan 2023 12:05:57 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v8 2/4] userfaultfd: split mwriteprotect_range()
-Message-ID: <Y9QEdbkZxOJ10oEJ@x1n>
-References: <20230124084323.1363825-1-usama.anjum@collabora.com>
- <20230124084323.1363825-3-usama.anjum@collabora.com>
+        Fri, 27 Jan 2023 12:11:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2554C18;
+        Fri, 27 Jan 2023 09:10:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0490961D04;
+        Fri, 27 Jan 2023 17:09:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8AE9C433EF;
+        Fri, 27 Jan 2023 17:09:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674839388;
+        bh=gWUbK0c4RR1yn+JaQjbB3L0M42JkQ49jpNPbeYG/EdM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CGkMbCd86HIzYSIxgC+1VgVYp54QrgxBmiEjocBcjp0sg+YSRkNmyKk13FqRwexef
+         SJtzeQyp/QhZ0KuciAFJl/uap4GKzAqnZid+yxpHF+vY7zdmFABQRp8axWxLOjhQlf
+         fKdZa3Phz5tkAbXH3fw7TPdM+tAZiT7C1YlSKVndjGHS7YKzDPFLNeau7OpcdCIjXY
+         0AQtAHtaIwGy8fwTvA7C9nMxVar+8QbL1hXaWcIgs/ZBijm0kHH8cv8+JZO0DrBar5
+         gF8CfW2EJLX3/P/R41YmQmWVuW02IbXVYEHFW1GGvqCUrxQUZLAuivKb4FZXbAzf2s
+         GHoylZp3RdSdQ==
+Date:   Fri, 27 Jan 2023 09:09:46 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        Jiri Kosina <jikos@kernel.org>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        "Seth Forshee (DigitalOcean)" <sforshee@digitalocean.com>,
+        live-patching@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH 0/2] vhost: improve livepatch switching for heavily
+ loaded vhost worker kthreads
+Message-ID: <20230127170946.zey6xbr4sm4kvh3x@treble>
+References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
+ <Y9KyVKQk3eH+RRse@alley>
+ <Y9LswwnPAf+nOVFG@do-x1extreme>
+ <20230127044355.frggdswx424kd5dq@treble>
+ <Y9OpTtqWjAkC2pal@hirez.programming.kicks-ass.net>
+ <20230127165236.rjcp6jm6csdta6z3@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230124084323.1363825-3-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230127165236.rjcp6jm6csdta6z3@treble>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 01:43:21PM +0500, Muhammad Usama Anjum wrote:
-> Split mwriteprotect_range() to create a unlocked version. This
-> will be used in the next patch to write protect a memory area.
-> Add a helper function, wp_range_async() as well.
+On Fri, Jan 27, 2023 at 08:52:38AM -0800, Josh Poimboeuf wrote:
+> On Fri, Jan 27, 2023 at 11:37:02AM +0100, Peter Zijlstra wrote:
+> > On Thu, Jan 26, 2023 at 08:43:55PM -0800, Josh Poimboeuf wrote:
+> > > Here's another idea, have we considered this?  Have livepatch set
+> > > TIF_NEED_RESCHED on all kthreads to force them into schedule(), and then
+> > > have the scheduler call klp_try_switch_task() if TIF_PATCH_PENDING is
+> > > set.
+> > > 
+> > > Not sure how scheduler folks would feel about that ;-)
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Hmmmm, with preemption I guess the above doesn't work for kthreads
+> calling cond_resched() instead of what vhost_worker() does (explicit
+> need_resched/schedule).
 
-IIUC this patch is not needed.  You have a stable vma, so I think you can
-directly use uffd_wp_range(), while most of the mwriteprotect_range() is
-not needed.
-
-There's one trivial detail of ignoring userfaultfd_ctx->mmap_changing when
-it's set to true, but I don't think it applies here either because it was
-used to resolve a problem in uffd non-cooperative mode on the predictable
-behavior of events, here I don't think it matters a lot either.
+Though I guess we could hook into cond_resched() too if we make it a
+non-NOP for PREEMPT+LIVEPATCH?
 
 -- 
-Peter Xu
-
+Josh
