@@ -2,1020 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B5667EACB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC0E67EAD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234868AbjA0QYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        id S234919AbjA0QZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234837AbjA0QYV (ORCPT
+        with ESMTP id S234914AbjA0QYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:24:21 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8711C84F95
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:24:11 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso5758197wmn.5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:24:11 -0800 (PST)
+        Fri, 27 Jan 2023 11:24:39 -0500
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABBC84183
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:24:32 -0800 (PST)
+Received: by mail-ej1-x64a.google.com with SMTP id kt9-20020a1709079d0900b00877f4df5aceso3729773ejc.21
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:24:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=oKeJ1FvGSJT89NE6fJN7GAPqpXh7XWv5p1PqLeIlzhE=;
-        b=ykj5Dy9VrFmtfYieIonAJ257bQY9ec7ZRiujwbPlZlnMVHO2QkCC6ShcYEvgQOq1TY
-         ykk6Jibn0jdCS2+Fc8lR5Nz0W/T70z8XXfN9t3Ge2EusuIEmMfvhlYmhnkRIihIqzlKU
-         /FFoJsqjY1PWDt9/A8m8XpTWDeu7WtEq5zY5rnC37+JiFqpHqRCgmPkNgHCZ5zr4/410
-         k3kfrT+yvlZrjXNuXBde0a6LRFu1N6F2b311q/x1QP4mPUUciK8znwzXWNk3JTyIUDRg
-         ehV+0m88s/wKjb1IBwxTCETOMZYj3cebb/c4rg4p2ZsyPWdsgQm6C8/UgvhUNrUzSUFv
-         S/hg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+ZA1LVGRnTSLVUFMxUOcf61woTjOoeoiKjydCG1Ukv0=;
+        b=fYvcrw82fbpBOjdM7Tufn3QIumdGltcGOVcJOL3P91Mb+xN6AWlMaU0wegl4Bp5KLz
+         oNHmAmw9YROlzBPiV0oWvxpRdsFJcDiqZ7aSNfalpbRwE0u7DdLVObfFpbFnn2ofMWSZ
+         dn48cTiy+XGJ1NtCdRitiY7fn40MvVkGGeg+HdRJvaxsy1nKpxfFjKR+73oBXa+uENDb
+         ninwsim5zsfTBvw+FSH4bUOiwB32kJknPOY3XrWX6tGbwgDQlPNsCfNi8C5fU4tsQn0A
+         lu9VjPCECckHi2eIpzFGrrg+7W32eKTyjhD0TsX0d5tXIrnuh2a9yftLUCIgSPMKhYqV
+         mYGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oKeJ1FvGSJT89NE6fJN7GAPqpXh7XWv5p1PqLeIlzhE=;
-        b=YhRGxFgJzhPhWHbqr70b4xhDhiwwyRATXjbycmvNSAn37NaUkDC7BcQh0toI54/tLo
-         J7IK8ym8A9UdzWvFBwqXCpbb/FR7sBQfbfLYLu1Slyjvcnt+lIEJkMRESayVQP2HZq4T
-         jb1lZjWObMVRkIbYP4CTQktstTCtKPFuE8kpiAUD++7RHkW63UVs0s+mDqiLvfMeONYE
-         e3W0q22rSZ+/XUebfo0wykQctaVAiVrYPX1XMA7Dm7EuTcOCXfI0DE9YmW1Kw7VZffb/
-         8dJds5abw29NRJzCabEPfStbKTBEuwUKzhyUIp7IfVs0ah/N6lTBf06o/WNp/F2PnLgc
-         e5Jg==
-X-Gm-Message-State: AFqh2kq7+yZZUiV1nXgKGs7kVeSkuR+akIFFvuVbW/MVoFF9B4IO7//j
-        3ieXJE0CYD+JXt97JBJ8XIa57jmnT5f2deoeGB8=
-X-Google-Smtp-Source: AMrXdXuMjcYUiWiJeJmQ3hPixNeDJSJGY9/iSfXYlRC3EWoqmg6icA+ToR6I0lew4puZIX4xVn/mvw==
-X-Received: by 2002:a05:600c:1d8e:b0:3d1:fcb4:4074 with SMTP id p14-20020a05600c1d8e00b003d1fcb44074mr41696991wms.22.1674836650022;
-        Fri, 27 Jan 2023 08:24:10 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:d4ec:15ea:873c:61e6? ([2a01:e0a:982:cbb0:d4ec:15ea:873c:61e6])
-        by smtp.gmail.com with ESMTPSA id hg6-20020a05600c538600b003dafbd859a6sm8196166wmb.43.2023.01.27.08.24.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 08:24:09 -0800 (PST)
-Message-ID: <0a059778-2fe2-0f0c-4886-f5dd19d5e43c@linaro.org>
-Date:   Fri, 27 Jan 2023 17:24:08 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 3/5] arm64: dts: meson: bananapi-m5: convert dts to
- dtsi
-Content-Language: en-US
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230127142221.3718184-1-christianshewitt@gmail.com>
- <20230127142221.3718184-4-christianshewitt@gmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230127142221.3718184-4-christianshewitt@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+ZA1LVGRnTSLVUFMxUOcf61woTjOoeoiKjydCG1Ukv0=;
+        b=qKcy2+4BnmPwEelzH5Kd4sZQANmYkfzyuQc0IIf0N4zeQBJw6yq+3f0pcszoUwtIF4
+         zRBo4hLTMOuh0j2DgWikE65Ertzu26kLwvWSWfr2GUDh19NFzoDP4NiZe6iO7NXAlvIl
+         CDGKNz4IMNPtbHvrggzQtVTBmadvjmKtgxaJHYhUz1PO1WO9Ir+qC687Ehq7B9qLiEvD
+         mcjVs7e/FON2rjpK9+fGoqwACyQtGET7BLbRZBTppDIiIojXDk0tMlkDwEiWXzKRN8Ce
+         lLxC30j4O4a1xjcqf+zuBTKr2XwzZJcRfQgdGDh9MwTHP/IGQLW5GBB3TiOmxFJ/bqgO
+         ZXkA==
+X-Gm-Message-State: AO0yUKXgrYYYd2E7ZkUglHfujArT5PjY/Hiz8Fx8BUhcxXiJpA+YWhDt
+        hCTNdS+BBw550zHsTKYTLOYbElET+g==
+X-Google-Smtp-Source: AK7set8YHy438BZhhkjF7XYU2ntCzTZyFaOVgFf6XEuswyclRtH3xR47q+7qczMrGZHXmH37zPgtdrEU5g==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:19a:e00e:4f5d:59d8])
+ (user=elver job=sendgmr) by 2002:a05:6402:b63:b0:4a0:e4bd:6ea4 with SMTP id
+ cb3-20020a0564020b6300b004a0e4bd6ea4mr1477810edb.35.1674836671255; Fri, 27
+ Jan 2023 08:24:31 -0800 (PST)
+Date:   Fri, 27 Jan 2023 17:24:09 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230127162409.2505312-1-elver@google.com>
+Subject: [PATCH v2] perf: Allow restricted kernel breakpoints on user addresses
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
+        Jann Horn <jannh@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrey Konovalov <andreyknvl@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 15:22, Christian Hewitt wrote:
-> Convert the BPI-M5 dts into meson-sm1-bananapi.dtsi to support the
-> addition of new boards based on the same design.
-> 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
->   .../dts/amlogic/meson-sm1-bananapi-m5.dts     | 427 +----------------
->   .../boot/dts/amlogic/meson-sm1-bananapi.dtsi  | 435 ++++++++++++++++++
->   2 files changed, 436 insertions(+), 426 deletions(-)
->   create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> index 86f0afe6491e..f045bf851638 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> @@ -6,10 +6,7 @@
->   
->   /dts-v1/;
->   
-> -#include "meson-sm1.dtsi"
-> -#include <dt-bindings/leds/common.h>
-> -#include <dt-bindings/input/linux-event-codes.h>
-> -#include <dt-bindings/gpio/meson-g12a-gpio.h>
-> +#include "meson-sm1-bananapi.dtsi"
->   #include <dt-bindings/sound/meson-g12a-toacodec.h>
->   #include <dt-bindings/sound/meson-g12a-tohdmitx.h>
->   
-> @@ -17,28 +14,6 @@ / {
->   	compatible = "bananapi,bpi-m5", "amlogic,sm1";
->   	model = "Banana Pi BPI-M5";
->   
-> -	adc_keys {
-> -		compatible = "adc-keys";
-> -		io-channels = <&saradc 2>;
-> -		io-channel-names = "buttons";
-> -		keyup-threshold-microvolt = <1800000>;
-> -
-> -		key {
-> -			label = "SW3";
-> -			linux,code = <BTN_3>;
-> -			press-threshold-microvolt = <1700000>;
-> -		};
-> -	};
-> -
-> -	aliases {
-> -		serial0 = &uart_AO;
-> -		ethernet0 = &ethmac;
-> -	};
-> -
-> -	chosen {
-> -		stdout-path = "serial0:115200n8";
-> -	};
-> -
->   	/* TOFIX: handle CVBS_DET on SARADC channel 0 */
->   	cvbs-connector {
->   		compatible = "composite-video-connector";
-> @@ -50,150 +25,6 @@ cvbs_connector_in: endpoint {
->   		};
->   	};
->   
-> -	emmc_pwrseq: emmc-pwrseq {
-> -		compatible = "mmc-pwrseq-emmc";
-> -		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
-> -	};
-> -
-> -	gpio-keys {
-> -		compatible = "gpio-keys";
-> -
-> -		key {
-> -			label = "SW1";
-> -			linux,code = <BTN_1>;
-> -			gpios = <&gpio_ao GPIOAO_3 GPIO_ACTIVE_LOW>;
-> -			interrupt-parent = <&gpio_intc>;
-> -			interrupts = <3 IRQ_TYPE_EDGE_BOTH>;
-> -		};
-> -	};
-> -
-> -	hdmi-connector {
-> -		compatible = "hdmi-connector";
-> -		type = "a";
-> -
-> -		port {
-> -			hdmi_connector_in: endpoint {
-> -				remote-endpoint = <&hdmi_tx_tmds_out>;
-> -			};
-> -		};
-> -	};
-> -
-> -	leds {
-> -		compatible = "gpio-leds";
-> -
-> -		led-green {
-> -			color = <LED_COLOR_ID_GREEN>;
-> -			function = LED_FUNCTION_STATUS;
-> -			gpios = <&gpio_ao GPIOAO_2 GPIO_ACTIVE_LOW>;
-> -		};
-> -
-> -		led-blue {
-> -			color = <LED_COLOR_ID_BLUE>;
-> -			function = LED_FUNCTION_STATUS;
-> -			gpios = <&gpio_ao GPIOAO_11 GPIO_ACTIVE_LOW>;
-> -			linux,default-trigger = "heartbeat";
-> -		};
-> -	};
-> -
-> -	memory@0 {
-> -		device_type = "memory";
-> -		reg = <0x0 0x0 0x0 0x40000000>;
-> -	};
-> -
-> -	emmc_1v8: regulator-emmc_1v8 {
-> -		compatible = "regulator-fixed";
-> -		regulator-name = "EMMC_1V8";
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -		vin-supply = <&vddao_3v3>;
-> -		regulator-always-on;
-> -	};
-> -
-> -	dc_in: regulator-dc_in {
-> -		compatible = "regulator-fixed";
-> -		regulator-name = "DC_IN";
-> -		regulator-min-microvolt = <5000000>;
-> -		regulator-max-microvolt = <5000000>;
-> -		regulator-always-on;
-> -	};
-> -
-> -	vddio_c: regulator-vddio_c {
-> -		compatible = "regulator-gpio";
-> -		regulator-name = "VDDIO_C";
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <3300000>;
-> -
-> -		enable-gpio = <&gpio_ao GPIOE_2 GPIO_OPEN_DRAIN>;
-> -		enable-active-high;
-> -		regulator-always-on;
-> -
-> -		gpios = <&gpio_ao GPIOAO_6 GPIO_OPEN_DRAIN>;
-> -		gpios-states = <1>;
-> -
-> -		states = <1800000 0>,
-> -			 <3300000 1>;
-> -	};
-> -
-> -	tflash_vdd: regulator-tflash_vdd {
-> -		compatible = "regulator-fixed";
-> -		regulator-name = "TFLASH_VDD";
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -		vin-supply = <&dc_in>;
-> -		gpio = <&gpio GPIOH_8 GPIO_OPEN_DRAIN>;
-> -		enable-active-high;
-> -		regulator-always-on;
-> -	};
-> -
-> -	vddao_1v8: regulator-vddao_1v8 {
-> -		compatible = "regulator-fixed";
-> -		regulator-name = "VDDAO_1V8";
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <1800000>;
-> -		vin-supply = <&vddao_3v3>;
-> -		regulator-always-on;
-> -	};
-> -
-> -	vddao_3v3: regulator-vddao_3v3 {
-> -		compatible = "regulator-fixed";
-> -		regulator-name = "VDDAO_3V3";
-> -		regulator-min-microvolt = <3300000>;
-> -		regulator-max-microvolt = <3300000>;
-> -		vin-supply = <&dc_in>;
-> -		regulator-always-on;
-> -	};
-> -
-> -	vddcpu: regulator-vddcpu {
-> -		/*
-> -		 * SY8120B1ABC DC/DC Regulator.
-> -		 */
-> -		compatible = "pwm-regulator";
-> -
-> -		regulator-name = "VDDCPU";
-> -		regulator-min-microvolt = <690000>;
-> -		regulator-max-microvolt = <1050000>;
-> -
-> -		pwm-supply = <&dc_in>;
-> -
-> -		pwms = <&pwm_AO_cd 1 1250 0>;
-> -		pwm-dutycycle-range = <100 0>;
-> -
-> -		regulator-boot-on;
-> -		regulator-always-on;
-> -	};
-> -
-> -	/* USB Hub Power Enable */
-> -	vl_pwr_en: regulator-vl_pwr_en {
-> -		compatible = "regulator-fixed";
-> -		regulator-name = "VL_PWR_EN";
-> -		regulator-min-microvolt = <5000000>;
-> -		regulator-max-microvolt = <5000000>;
-> -		vin-supply = <&dc_in>;
-> -
-> -		gpio = <&gpio GPIOH_6 GPIO_ACTIVE_HIGH>;
-> -		enable-active-high;
-> -	};
-> -
->   	sound {
->   		compatible = "amlogic,axg-sound-card";
->   		model = "BPI-M5";
-> @@ -318,68 +149,17 @@ &acodec {
->   	status = "okay";
->   };
->   
-> -&arb {
-> -	status = "okay";
-> -};
->   
->   &clkc_audio {
->   	status = "okay";
->   };
->   
-> -&cpu0 {
-> -	cpu-supply = <&vddcpu>;
-> -	operating-points-v2 = <&cpu_opp_table>;
-> -	clocks = <&clkc CLKID_CPU_CLK>;
-> -	clock-latency = <50000>;
-> -};
-> -
-> -&cpu1 {
-> -	cpu-supply = <&vddcpu>;
-> -	operating-points-v2 = <&cpu_opp_table>;
-> -	clocks = <&clkc CLKID_CPU1_CLK>;
-> -	clock-latency = <50000>;
-> -};
-> -
-> -&cpu2 {
-> -	cpu-supply = <&vddcpu>;
-> -	operating-points-v2 = <&cpu_opp_table>;
-> -	clocks = <&clkc CLKID_CPU2_CLK>;
-> -	clock-latency = <50000>;
-> -};
-> -
-> -&cpu3 {
-> -	cpu-supply = <&vddcpu>;
-> -	operating-points-v2 = <&cpu_opp_table>;
-> -	clocks = <&clkc CLKID_CPU3_CLK>;
-> -	clock-latency = <50000>;
-> -};
-> -
->   &cvbs_vdac_port {
->   	cvbs_vdac_out: endpoint {
->   		remote-endpoint = <&cvbs_connector_in>;
->   	};
->   };
->   
-> -&ext_mdio {
-> -	external_phy: ethernet-phy@0 {
-> -		/* Realtek RTL8211F (0x001cc916) */
-> -		reg = <0>;
-> -		max-speed = <1000>;
-> -
-> -		interrupt-parent = <&gpio_intc>;
-> -		/* MAC_INTR on GPIOZ_14 */
-> -		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
-> -	};
-> -};
-> -
-> -&ethmac {
-> -	pinctrl-0 = <&eth_pins>, <&eth_rgmii_pins>;
-> -	pinctrl-names = "default";
-> -	status = "okay";
-> -	phy-mode = "rgmii-txid";
-> -	phy-handle = <&external_phy>;
-> -};
-> -
->   &frddr_a {
->   	status = "okay";
->   };
-> @@ -392,192 +172,6 @@ &frddr_c {
->   	status = "okay";
->   };
->   
-> -&gpio {
-> -	gpio-line-names =
-> -		/* GPIOZ */
-> -		"ETH_MDIO", /* GPIOZ_0 */
-> -		"ETH_MDC", /* GPIOZ_1 */
-> -		"ETH_RXCLK", /* GPIOZ_2 */
-> -		"ETH_RX_DV", /* GPIOZ_3 */
-> -		"ETH_RXD0", /* GPIOZ_4 */
-> -		"ETH_RXD1", /* GPIOZ_5 */
-> -		"ETH_RXD2", /* GPIOZ_6 */
-> -		"ETH_RXD3", /* GPIOZ_7 */
-> -		"ETH_TXCLK", /* GPIOZ_8 */
-> -		"ETH_TXEN", /* GPIOZ_9 */
-> -		"ETH_TXD0", /* GPIOZ_10 */
-> -		"ETH_TXD1", /* GPIOZ_11 */
-> -		"ETH_TXD2", /* GPIOZ_12 */
-> -		"ETH_TXD3", /* GPIOZ_13 */
-> -		"ETH_INTR", /* GPIOZ_14 */
-> -		"ETH_NRST", /* GPIOZ_15 */
-> -		/* GPIOH */
-> -		"HDMI_SDA", /* GPIOH_0 */
-> -		"HDMI_SCL", /* GPIOH_1 */
-> -		"HDMI_HPD", /* GPIOH_2 */
-> -		"HDMI_CEC", /* GPIOH_3 */
-> -		"VL-RST_N", /* GPIOH_4 */
-> -		"CON1-P36", /* GPIOH_5 */
-> -		"VL-PWREN", /* GPIOH_6 */
-> -		"WiFi_3V3_1V8", /* GPIOH_7 */
-> -		"TFLASH_VDD_EN", /* GPIOH_8 */
-> -		/* BOOT */
-> -		"eMMC_D0", /* BOOT_0 */
-> -		"eMMC_D1", /* BOOT_1 */
-> -		"eMMC_D2", /* BOOT_2 */
-> -		"eMMC_D3", /* BOOT_3 */
-> -		"eMMC_D4", /* BOOT_4 */
-> -		"eMMC_D5", /* BOOT_5 */
-> -		"eMMC_D6", /* BOOT_6 */
-> -		"eMMC_D7", /* BOOT_7 */
-> -		"eMMC_CLK", /* BOOT_8 */
-> -		"",
-> -		"eMMC_CMD", /* BOOT_10 */
-> -		"",
-> -		"eMMC_RST#", /* BOOT_12 */
-> -		"eMMC_DS", /* BOOT_13 */
-> -		"", "",
-> -		/* GPIOC */
-> -		"SD_D0_B", /* GPIOC_0 */
-> -		"SD_D1_B", /* GPIOC_1 */
-> -		"SD_D2_B", /* GPIOC_2 */
-> -		"SD_D3_B", /* GPIOC_3 */
-> -		"SD_CLK_B", /* GPIOC_4 */
-> -		"SD_CMD_B", /* GPIOC_5 */
-> -		"CARD_EN_DET", /* GPIOC_6 */
-> -		"",
-> -		/* GPIOA */
-> -		"", "", "", "", "", "", "", "",
-> -		"", "", "", "", "", "",
-> -		"CON1-P27", /* GPIOA_14 */
-> -		"CON1-P28", /* GPIOA_15 */
-> -		/* GPIOX */
-> -		"CON1-P16", /* GPIOX_0 */
-> -		"CON1-P18", /* GPIOX_1 */
-> -		"CON1-P22", /* GPIOX_2 */
-> -		"CON1-P11", /* GPIOX_3 */
-> -		"CON1-P13", /* GPIOX_4 */
-> -		"CON1-P07", /* GPIOX_5 */
-> -		"CON1-P33", /* GPIOX_6 */
-> -		"CON1-P15", /* GPIOX_7 */
-> -		"CON1-P19", /* GPIOX_8 */
-> -		"CON1-P21", /* GPIOX_9 */
-> -		"CON1-P24", /* GPIOX_10 */
-> -		"CON1-P23", /* GPIOX_11 */
-> -		"CON1-P08", /* GPIOX_12 */
-> -		"CON1-P10", /* GPIOX_13 */
-> -		"CON1-P29", /* GPIOX_14 */
-> -		"CON1-P31", /* GPIOX_15 */
-> -		"CON1-P26", /* GPIOX_16 */
-> -		"CON1-P03", /* GPIOX_17 */
-> -		"CON1-P05", /* GPIOX_18 */
-> -		"CON1-P32"; /* GPIOX_19 */
-> -
-> -	/*
-> -	 * WARNING: The USB Hub on the BPI-M5 needs a reset signal
-> -	 * to be turned high in order to be detected by the USB Controller
-> -	 * This signal should be handled by a USB specific power sequence
-> -	 * in order to reset the Hub when USB bus is powered down.
-> -	 */
-> -	usb-hub {
-> -		gpio-hog;
-> -		gpios = <GPIOH_4 GPIO_ACTIVE_HIGH>;
-> -		output-high;
-> -		line-name = "usb-hub-reset";
-> -	};
-> -};
-> -
-> -&gpio_ao {
-> -	gpio-line-names =
-> -		/* GPIOAO */
-> -		"DEBUG TX", /* GPIOAO_0 */
-> -		"DEBUG RX", /* GPIOAO_1 */
-> -		"SYS_LED2", /* GPIOAO_2 */
-> -		"UPDATE_KEY", /* GPIOAO_3 */
-> -		"CON1-P40", /* GPIOAO_4 */
-> -		"IR_IN", /* GPIOAO_5 */
-> -		"TF_3V3N_1V8_EN", /* GPIOAO_6 */
-> -		"CON1-P35", /* GPIOAO_7 */
-> -		"CON1-P12", /* GPIOAO_8 */
-> -		"CON1-P37", /* GPIOAO_9 */
-> -		"CON1-P38", /* GPIOAO_10 */
-> -		"SYS_LED", /* GPIOAO_11 */
-> -		/* GPIOE */
-> -		"VDDEE_PWM", /* GPIOE_0 */
-> -		"VDDCPU_PWM", /* GPIOE_1 */
-> -		"TF_PWR_EN"; /* GPIOE_2 */
-> -};
-> -
-> -&hdmi_tx {
-> -	status = "okay";
-> -	pinctrl-0 = <&hdmitx_hpd_pins>, <&hdmitx_ddc_pins>;
-> -	pinctrl-names = "default";
-> -	hdmi-supply = <&dc_in>;
-> -};
-> -
-> -&hdmi_tx_tmds_port {
-> -	hdmi_tx_tmds_out: endpoint {
-> -		remote-endpoint = <&hdmi_connector_in>;
-> -	};
-> -};
-> -
-> -&ir {
-> -	status = "okay";
-> -	pinctrl-0 = <&remote_input_ao_pins>;
-> -	pinctrl-names = "default";
-> -};
-> -
-> -&pwm_AO_cd {
-> -	pinctrl-0 = <&pwm_ao_d_e_pins>;
-> -	pinctrl-names = "default";
-> -	clocks = <&xtal>;
-> -	clock-names = "clkin1";
-> -	status = "okay";
-> -};
-> -
-> -&saradc {
-> -	status = "okay";
-> -	vref-supply = <&vddao_1v8>;
-> -};
-> -
-> -/* SD card */
-> -&sd_emmc_b {
-> -	status = "okay";
-> -	pinctrl-0 = <&sdcard_c_pins>;
-> -	pinctrl-1 = <&sdcard_clk_gate_c_pins>;
-> -	pinctrl-names = "default", "clk-gate";
-> -
-> -	bus-width = <4>;
-> -	cap-sd-highspeed;
-> -	max-frequency = <50000000>;
-> -	disable-wp;
-> -
-> -	/* TOFIX: SD card is barely usable in SDR modes */
-> -
-> -	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
-> -	vmmc-supply = <&tflash_vdd>;
-> -	vqmmc-supply = <&vddio_c>;
-> -};
-> -
-> -/* eMMC */
-> -&sd_emmc_c {
-> -	status = "okay";
-> -	pinctrl-0 = <&emmc_ctrl_pins>, <&emmc_data_8b_pins>, <&emmc_ds_pins>;
-> -	pinctrl-1 = <&emmc_clk_gate_pins>;
-> -	pinctrl-names = "default", "clk-gate";
-> -
-> -	bus-width = <8>;
-> -	cap-mmc-highspeed;
-> -	mmc-ddr-1_8v;
-> -	mmc-hs200-1_8v;
-> -	max-frequency = <200000000>;
-> -	disable-wp;
-> -
-> -	mmc-pwrseq = <&emmc_pwrseq>;
-> -	vmmc-supply = <&vddao_3v3>;
-> -	vqmmc-supply = <&emmc_1v8>;
-> -};
-> -
->   &tdmif_b {
->   	status = "okay";
->   };
-> @@ -625,22 +219,3 @@ &toddr_b {
->   &toddr_c {
->   	status = "okay";
->   };
-> -
-> -&uart_AO {
-> -	status = "okay";
-> -	pinctrl-0 = <&uart_ao_a_pins>;
-> -	pinctrl-names = "default";
-> -};
-> -
-> -&usb {
-> -	status = "okay";
-> -};
-> -
-> -&usb2_phy0 {
-> -	phy-supply = <&dc_in>;
-> -};
-> -
-> -&usb2_phy1 {
-> -	/* Enable the hub which is connected to this port */
-> -	phy-supply = <&vl_pwr_en>;
-> -};
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi
-> new file mode 100644
-> index 000000000000..c914f1148185
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi
-> @@ -0,0 +1,435 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2021 BayLibre SAS
-> + * Author: Neil Armstrong <narmstrong@baylibre.com>
-> + */
-> +
-> +#include "meson-sm1.dtsi"
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/input/linux-event-codes.h>
-> +#include <dt-bindings/gpio/meson-g12a-gpio.h>
-> +
-> +/ {
-> +	adc_keys {
-> +		compatible = "adc-keys";
-> +		io-channels = <&saradc 2>;
-> +		io-channel-names = "buttons";
-> +		keyup-threshold-microvolt = <1800000>;
-> +
-> +		key {
-> +			label = "SW3";
-> +			linux,code = <BTN_3>;
-> +			press-threshold-microvolt = <1700000>;
-> +		};
-> +	};
-> +
-> +	aliases {
-> +		serial0 = &uart_AO;
-> +		ethernet0 = &ethmac;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	emmc_pwrseq: emmc-pwrseq {
-> +		compatible = "mmc-pwrseq-emmc";
-> +		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		key {
-> +			label = "SW1";
-> +			linux,code = <BTN_1>;
-> +			gpios = <&gpio_ao GPIOAO_3 GPIO_ACTIVE_LOW>;
-> +			interrupt-parent = <&gpio_intc>;
-> +			interrupts = <3 IRQ_TYPE_EDGE_BOTH>;
-> +		};
-> +	};
-> +
-> +	hdmi-connector {
-> +		compatible = "hdmi-connector";
-> +		type = "a";
-> +
-> +		port {
-> +			hdmi_connector_in: endpoint {
-> +				remote-endpoint = <&hdmi_tx_tmds_out>;
-> +			};
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led-green {
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			function = LED_FUNCTION_STATUS;
-> +			gpios = <&gpio_ao GPIOAO_2 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		led-blue {
-> +			color = <LED_COLOR_ID_BLUE>;
-> +			function = LED_FUNCTION_STATUS;
-> +			gpios = <&gpio_ao GPIOAO_11 GPIO_ACTIVE_LOW>;
-> +			linux,default-trigger = "heartbeat";
-> +		};
-> +	};
-> +
-> +	memory@0 {
-> +		device_type = "memory";
-> +		reg = <0x0 0x0 0x0 0x40000000>;
-> +	};
-> +
-> +	emmc_1v8: regulator-emmc_1v8 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "EMMC_1V8";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		vin-supply = <&vddao_3v3>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	dc_in: regulator-dc_in {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "DC_IN";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddio_c: regulator-vddio_c {
-> +		compatible = "regulator-gpio";
-> +		regulator-name = "VDDIO_C";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <3300000>;
-> +
-> +		enable-gpio = <&gpio_ao GPIOE_2 GPIO_OPEN_DRAIN>;
-> +		enable-active-high;
-> +		regulator-always-on;
-> +
-> +		gpios = <&gpio_ao GPIOAO_6 GPIO_OPEN_DRAIN>;
-> +		gpios-states = <1>;
-> +
-> +		states = <1800000 0>,
-> +			 <3300000 1>;
-> +	};
-> +
-> +	tflash_vdd: regulator-tflash_vdd {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "TFLASH_VDD";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&dc_in>;
-> +		gpio = <&gpio GPIOH_8 GPIO_OPEN_DRAIN>;
-> +		enable-active-high;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddao_1v8: regulator-vddao_1v8 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VDDAO_1V8";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		vin-supply = <&vddao_3v3>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddao_3v3: regulator-vddao_3v3 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VDDAO_3V3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&dc_in>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddcpu: regulator-vddcpu {
-> +		/*
-> +		 * SY8120B1ABC DC/DC Regulator.
-> +		 */
-> +		compatible = "pwm-regulator";
-> +
-> +		regulator-name = "VDDCPU";
-> +		regulator-min-microvolt = <690000>;
-> +		regulator-max-microvolt = <1050000>;
-> +
-> +		pwm-supply = <&dc_in>;
-> +
-> +		pwms = <&pwm_AO_cd 1 1250 0>;
-> +		pwm-dutycycle-range = <100 0>;
-> +
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +	};
-> +
-> +	/* USB Hub Power Enable */
-> +	vl_pwr_en: regulator-vl_pwr_en {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VL_PWR_EN";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&dc_in>;
-> +
-> +		gpio = <&gpio GPIOH_6 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +	};
-> +};
-> +
-> +&arb {
-> +	status = "okay";
-> +};
-> +
-> +&cpu0 {
-> +	cpu-supply = <&vddcpu>;
-> +	operating-points-v2 = <&cpu_opp_table>;
-> +	clocks = <&clkc CLKID_CPU_CLK>;
-> +	clock-latency = <50000>;
-> +};
-> +
-> +&cpu1 {
-> +	cpu-supply = <&vddcpu>;
-> +	operating-points-v2 = <&cpu_opp_table>;
-> +	clocks = <&clkc CLKID_CPU1_CLK>;
-> +	clock-latency = <50000>;
-> +};
-> +
-> +&cpu2 {
-> +	cpu-supply = <&vddcpu>;
-> +	operating-points-v2 = <&cpu_opp_table>;
-> +	clocks = <&clkc CLKID_CPU2_CLK>;
-> +	clock-latency = <50000>;
-> +};
-> +
-> +&cpu3 {
-> +	cpu-supply = <&vddcpu>;
-> +	operating-points-v2 = <&cpu_opp_table>;
-> +	clocks = <&clkc CLKID_CPU3_CLK>;
-> +	clock-latency = <50000>;
-> +};
-> +
-> +&ext_mdio {
-> +	external_phy: ethernet-phy@0 {
-> +		/* Realtek RTL8211F (0x001cc916) */
-> +		reg = <0>;
-> +		max-speed = <1000>;
-> +
-> +		interrupt-parent = <&gpio_intc>;
-> +		/* MAC_INTR on GPIOZ_14 */
-> +		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-> +};
-> +
-> +&ethmac {
-> +	pinctrl-0 = <&eth_pins>, <&eth_rgmii_pins>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +	phy-mode = "rgmii-txid";
-> +	phy-handle = <&external_phy>;
-> +};
-> +
-> +&gpio {
-> +	gpio-line-names =
-> +		/* GPIOZ */
-> +		"ETH_MDIO", /* GPIOZ_0 */
-> +		"ETH_MDC", /* GPIOZ_1 */
-> +		"ETH_RXCLK", /* GPIOZ_2 */
-> +		"ETH_RX_DV", /* GPIOZ_3 */
-> +		"ETH_RXD0", /* GPIOZ_4 */
-> +		"ETH_RXD1", /* GPIOZ_5 */
-> +		"ETH_RXD2", /* GPIOZ_6 */
-> +		"ETH_RXD3", /* GPIOZ_7 */
-> +		"ETH_TXCLK", /* GPIOZ_8 */
-> +		"ETH_TXEN", /* GPIOZ_9 */
-> +		"ETH_TXD0", /* GPIOZ_10 */
-> +		"ETH_TXD1", /* GPIOZ_11 */
-> +		"ETH_TXD2", /* GPIOZ_12 */
-> +		"ETH_TXD3", /* GPIOZ_13 */
-> +		"ETH_INTR", /* GPIOZ_14 */
-> +		"ETH_NRST", /* GPIOZ_15 */
-> +		/* GPIOH */
-> +		"HDMI_SDA", /* GPIOH_0 */
-> +		"HDMI_SCL", /* GPIOH_1 */
-> +		"HDMI_HPD", /* GPIOH_2 */
-> +		"HDMI_CEC", /* GPIOH_3 */
-> +		"VL-RST_N", /* GPIOH_4 */
-> +		"CON1-P36", /* GPIOH_5 */
-> +		"VL-PWREN", /* GPIOH_6 */
-> +		"WiFi_3V3_1V8", /* GPIOH_7 */
-> +		"TFLASH_VDD_EN", /* GPIOH_8 */
-> +		/* BOOT */
-> +		"eMMC_D0", /* BOOT_0 */
-> +		"eMMC_D1", /* BOOT_1 */
-> +		"eMMC_D2", /* BOOT_2 */
-> +		"eMMC_D3", /* BOOT_3 */
-> +		"eMMC_D4", /* BOOT_4 */
-> +		"eMMC_D5", /* BOOT_5 */
-> +		"eMMC_D6", /* BOOT_6 */
-> +		"eMMC_D7", /* BOOT_7 */
-> +		"eMMC_CLK", /* BOOT_8 */
-> +		"",
-> +		"eMMC_CMD", /* BOOT_10 */
-> +		"",
-> +		"eMMC_RST#", /* BOOT_12 */
-> +		"eMMC_DS", /* BOOT_13 */
-> +		"", "",
-> +		/* GPIOC */
-> +		"SD_D0_B", /* GPIOC_0 */
-> +		"SD_D1_B", /* GPIOC_1 */
-> +		"SD_D2_B", /* GPIOC_2 */
-> +		"SD_D3_B", /* GPIOC_3 */
-> +		"SD_CLK_B", /* GPIOC_4 */
-> +		"SD_CMD_B", /* GPIOC_5 */
-> +		"CARD_EN_DET", /* GPIOC_6 */
-> +		"",
-> +		/* GPIOA */
-> +		"", "", "", "", "", "", "", "",
-> +		"", "", "", "", "", "",
-> +		"CON1-P27", /* GPIOA_14 */
-> +		"CON1-P28", /* GPIOA_15 */
-> +		/* GPIOX */
-> +		"CON1-P16", /* GPIOX_0 */
-> +		"CON1-P18", /* GPIOX_1 */
-> +		"CON1-P22", /* GPIOX_2 */
-> +		"CON1-P11", /* GPIOX_3 */
-> +		"CON1-P13", /* GPIOX_4 */
-> +		"CON1-P07", /* GPIOX_5 */
-> +		"CON1-P33", /* GPIOX_6 */
-> +		"CON1-P15", /* GPIOX_7 */
-> +		"CON1-P19", /* GPIOX_8 */
-> +		"CON1-P21", /* GPIOX_9 */
-> +		"CON1-P24", /* GPIOX_10 */
-> +		"CON1-P23", /* GPIOX_11 */
-> +		"CON1-P08", /* GPIOX_12 */
-> +		"CON1-P10", /* GPIOX_13 */
-> +		"CON1-P29", /* GPIOX_14 */
-> +		"CON1-P31", /* GPIOX_15 */
-> +		"CON1-P26", /* GPIOX_16 */
-> +		"CON1-P03", /* GPIOX_17 */
-> +		"CON1-P05", /* GPIOX_18 */
-> +		"CON1-P32"; /* GPIOX_19 */
-> +
-> +	/*
-> +	 * WARNING: The USB Hub needs a reset signal to be turned high in
-> +	 * order to be detected by the USB Controller. This signal should
-> +	 * be handled by a USB specific power sequence to reset the Hub
-> +	 * when the USB bus is powered down.
-> +	 */
-> +	usb-hub {
-> +		gpio-hog;
-> +		gpios = <GPIOH_4 GPIO_ACTIVE_HIGH>;
-> +		output-high;
-> +		line-name = "usb-hub-reset";
-> +	};
-> +};
-> +
-> +&gpio_ao {
-> +	gpio-line-names =
-> +		/* GPIOAO */
-> +		"DEBUG TX", /* GPIOAO_0 */
-> +		"DEBUG RX", /* GPIOAO_1 */
-> +		"SYS_LED2", /* GPIOAO_2 */
-> +		"UPDATE_KEY", /* GPIOAO_3 */
-> +		"CON1-P40", /* GPIOAO_4 */
-> +		"IR_IN", /* GPIOAO_5 */
-> +		"TF_3V3N_1V8_EN", /* GPIOAO_6 */
-> +		"CON1-P35", /* GPIOAO_7 */
-> +		"CON1-P12", /* GPIOAO_8 */
-> +		"CON1-P37", /* GPIOAO_9 */
-> +		"CON1-P38", /* GPIOAO_10 */
-> +		"SYS_LED", /* GPIOAO_11 */
-> +		/* GPIOE */
-> +		"VDDEE_PWM", /* GPIOE_0 */
-> +		"VDDCPU_PWM", /* GPIOE_1 */
-> +		"TF_PWR_EN"; /* GPIOE_2 */
-> +};
-> +
-> +&hdmi_tx {
-> +	status = "okay";
-> +	pinctrl-0 = <&hdmitx_hpd_pins>, <&hdmitx_ddc_pins>;
-> +	pinctrl-names = "default";
-> +	hdmi-supply = <&dc_in>;
-> +};
-> +
-> +&hdmi_tx_tmds_port {
-> +	hdmi_tx_tmds_out: endpoint {
-> +		remote-endpoint = <&hdmi_connector_in>;
-> +	};
-> +};
-> +
-> +&ir {
-> +	status = "okay";
-> +	pinctrl-0 = <&remote_input_ao_pins>;
-> +	pinctrl-names = "default";
-> +};
-> +
-> +&pwm_AO_cd {
-> +	pinctrl-0 = <&pwm_ao_d_e_pins>;
-> +	pinctrl-names = "default";
-> +	clocks = <&xtal>;
-> +	clock-names = "clkin1";
-> +	status = "okay";
-> +};
-> +
-> +&saradc {
-> +	status = "okay";
-> +	vref-supply = <&vddao_1v8>;
-> +};
-> +
-> +/* SD card */
-> +&sd_emmc_b {
-> +	status = "okay";
-> +	pinctrl-0 = <&sdcard_c_pins>;
-> +	pinctrl-1 = <&sdcard_clk_gate_c_pins>;
-> +	pinctrl-names = "default", "clk-gate";
-> +
-> +	bus-width = <4>;
-> +	cap-sd-highspeed;
-> +	max-frequency = <50000000>;
-> +	disable-wp;
-> +
-> +	/* TOFIX: SD card is barely usable in SDR modes */
-> +
-> +	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
-> +	vmmc-supply = <&tflash_vdd>;
-> +	vqmmc-supply = <&vddio_c>;
-> +};
-> +
-> +/* eMMC */
-> +&sd_emmc_c {
-> +	status = "okay";
-> +	pinctrl-0 = <&emmc_ctrl_pins>, <&emmc_data_8b_pins>, <&emmc_ds_pins>;
-> +	pinctrl-1 = <&emmc_clk_gate_pins>;
-> +	pinctrl-names = "default", "clk-gate";
-> +
-> +	bus-width = <8>;
-> +	cap-mmc-highspeed;
-> +	mmc-ddr-1_8v;
-> +	mmc-hs200-1_8v;
-> +	max-frequency = <200000000>;
-> +	disable-wp;
-> +
-> +	mmc-pwrseq = <&emmc_pwrseq>;
-> +	vmmc-supply = <&vddao_3v3>;
-> +	vqmmc-supply = <&emmc_1v8>;
-> +};
-> +
-> +&uart_AO {
-> +	status = "okay";
-> +	pinctrl-0 = <&uart_ao_a_pins>;
-> +	pinctrl-names = "default";
-> +};
-> +
-> +&usb {
-> +	status = "okay";
-> +};
-> +
-> +&usb2_phy0 {
-> +	phy-supply = <&dc_in>;
-> +};
-> +
-> +&usb2_phy1 {
-> +	/* Enable the hub which is connected to this port */
-> +	phy-supply = <&vl_pwr_en>;
-> +};
+Allow the creation of restricted breakpoint perf events that also fire
+in the kernel (perf_event_attr::exclude_kernel=0), if:
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+  1. No sample information is requested; samples may contain IPs,
+     registers, or other information that may disclose kernel addresses.
+
+  2. The breakpoint (viz. data watchpoint) is on a user address.
+
+The rules constrain the allowable perf events such that no sensitive
+kernel information can be disclosed.
+
+Despite no explicit kernel information disclosure, the following
+questions may need answers:
+
+ 1. Q: Is obtaining information that the kernel accessed a particular
+    user's known memory location revealing new information?
+
+    A: Given the kernel's user space ABI, there should be no "surprise
+    accesses" to user space memory in the first place.
+
+ 2. Q: Does causing breakpoints on user memory accesses by the kernel
+    potentially impact timing in a sensitive way?
+
+    A: Since hardware breakpoints trigger regardless of the state of
+    perf_event_attr::exclude_kernel, but are filtered in the perf
+    subsystem, this possibility already exists independent of the
+    proposed change.
+
+Motivation:  Data breakpoints on user addresses that also fire in the
+kernel provide complete coverage to track and debug accesses, not just
+in user space but also through the kernel. For example, tracking where
+user space invokes syscalls with pointers to specific memory.
+
+Breakpoints can be used for more complex dynamic analysis, such as race
+detection, memory-safety error detection, or data-flow analysis. Larger
+deployment by linking such dynamic analysis into binaries in production
+only becomes possible when no additional capabilities are required by
+unprivileged users. To improve coverage, it should then also be possible
+to enable breakpoints on user addresses that fire in the kernel with no
+additional capabilities.
+
+Acked-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Marco Elver <elver@google.com>
+---
+
+Changelog
+~~~~~~~~~
+
+v2:
+* Commit message (motivation, more explanation).
+* Apply ack.
+
+v1: https://lkml.kernel.org/r/20220902100057.404817-1-elver@google.com
+* Rebase.
+
+RFC: https://lkml.kernel.org/r/20220601093502.364142-1-elver@google.com
+---
+ include/linux/perf_event.h |  8 +-------
+ kernel/events/core.c       | 38 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index c6a3bac76966..a95a6b889b00 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1463,13 +1463,7 @@ static inline int perf_is_paranoid(void)
+ 	return sysctl_perf_event_paranoid > -1;
+ }
+ 
+-static inline int perf_allow_kernel(struct perf_event_attr *attr)
+-{
+-	if (sysctl_perf_event_paranoid > 1 && !perfmon_capable())
+-		return -EACCES;
+-
+-	return security_perf_event_open(attr, PERF_SECURITY_KERNEL);
+-}
++extern int perf_allow_kernel(struct perf_event_attr *attr);
+ 
+ static inline int perf_allow_cpu(struct perf_event_attr *attr)
+ {
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index d56328e5080e..0f1fc9aef294 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -3174,6 +3174,12 @@ static int perf_event_modify_attr(struct perf_event *event,
+ 		return -EOPNOTSUPP;
+ 	}
+ 
++	if (!event->attr.exclude_kernel) {
++		err = perf_allow_kernel(attr);
++		if (err)
++			return err;
++	}
++
+ 	WARN_ON_ONCE(event->ctx->parent_ctx);
+ 
+ 	mutex_lock(&event->child_mutex);
+@@ -12289,6 +12295,38 @@ perf_check_permission(struct perf_event_attr *attr, struct task_struct *task)
+ 	return is_capable || ptrace_may_access(task, ptrace_mode);
+ }
+ 
++/*
++ * Check if unprivileged users are allowed to set up breakpoints on user
++ * addresses that also count when the kernel accesses them.
++ */
++static bool perf_allow_kernel_breakpoint(struct perf_event_attr *attr)
++{
++	if (attr->type != PERF_TYPE_BREAKPOINT)
++		return false;
++
++	/*
++	 * The sample may contain IPs, registers, or other information that may
++	 * disclose kernel addresses or timing information. Disallow any kind of
++	 * additional sample information.
++	 */
++	if (attr->sample_type)
++		return false;
++
++	/*
++	 * Only allow kernel breakpoints on user addresses.
++	 */
++	return access_ok((void __user *)(unsigned long)attr->bp_addr, attr->bp_len);
++}
++
++int perf_allow_kernel(struct perf_event_attr *attr)
++{
++	if (sysctl_perf_event_paranoid > 1 && !perfmon_capable() &&
++	    !perf_allow_kernel_breakpoint(attr))
++		return -EACCES;
++
++	return security_perf_event_open(attr, PERF_SECURITY_KERNEL);
++}
++
+ /**
+  * sys_perf_event_open - open a performance event, associate it to a task/cpu
+  *
+-- 
+2.39.1.456.gfc5497dd1b-goog
+
