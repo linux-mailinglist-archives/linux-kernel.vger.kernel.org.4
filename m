@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B294D67EFEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75A367EFF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbjA0UqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 15:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S230398AbjA0UrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 15:47:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjA0UqS (ORCPT
+        with ESMTP id S230414AbjA0UrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:46:18 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7A37E6EF;
-        Fri, 27 Jan 2023 12:45:18 -0800 (PST)
-Received: from lenovo-t14s.redhat.com ([82.142.8.70]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MWSJJ-1pBMAk2xND-00XusM; Fri, 27 Jan 2023 21:45:05 +0100
-From:   Laurent Vivier <lvivier@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        virtualization@lists.linux-foundation.org,
-        Cindy Lu <lulu@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, Eli Cohen <elic@nvidia.com>,
-        Gautam Dawar <gautam.dawar@xilinx.com>,
-        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, netdev@vger.kernel.org,
-        Parav Pandit <parav@nvidia.com>
-Subject: [PATCH v3 2/2] virtio_net: notify MAC address change on device initialization
-Date:   Fri, 27 Jan 2023 21:45:00 +0100
-Message-Id: <20230127204500.51930-3-lvivier@redhat.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230127204500.51930-1-lvivier@redhat.com>
-References: <20230127204500.51930-1-lvivier@redhat.com>
+        Fri, 27 Jan 2023 15:47:15 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F422C7DB1;
+        Fri, 27 Jan 2023 12:47:02 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-50aa54cc7c0so55279317b3.8;
+        Fri, 27 Jan 2023 12:47:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kouO7u+bs7T+iMfnYDkSLAukyRnuu6BxC2pSxSTT8zg=;
+        b=DlvsIkX0qN3inFNrOB4prIdQvqtqmM16FWIvEo371ExtB8L0aAXJqh2LkG6stQ+Tte
+         YvUeABbNooq+g0nhZz5ql5sDcq+wn1akooKJ5P9MAER5ilcm/ZogorOdGYf3bWMuFT+2
+         7hR8BT8gqKHN7zyoI+M4nQptlOgsTvKtO4cuxwrqs/vFacQHKJpszHZCD2Kb4MZ6Hi9k
+         LCN54Wbx0e3y6MdJuBfEZu1Eij077oGmGz6DNzo68fyi4DY8X7ekRiuIRg4pokEEsshB
+         MJOTbceR+55QYCGodv7VZFAAIKJnwqBKrSrKZoPr6r3B/occc6uyfaThO/oXzW773Fg9
+         T7TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kouO7u+bs7T+iMfnYDkSLAukyRnuu6BxC2pSxSTT8zg=;
+        b=PEdX9sP4fuP3vUvPlz4jDpex/z+65nxaqRf86he7w4RGqu/F2TKitO7XDhxzLc0aEJ
+         XN+kKNGj4fKGhK7BT066IlGZGAGohM24+Ps/64SHPHMTc2EC3EztAt/Z4d9bnDAOzEvv
+         ZVPe9i1018gadEa/dQJ7iyVkAnmoeCZiBKjSVcC9yWwRG+wfrslKXFOChE0M0aiXNsuW
+         T/C62tP26I1kiiYYyPobJsGd9Q52PgFvBxiooFcqgEQUGeN3/Hg1asVxr51699+W+lmf
+         gkgrOodWH+Aa0jr8rG6CjXxMVxraWTlLFu85KomekA8/bvvtFxv4Qg5zuNHs7Jyca1Mf
+         R9ig==
+X-Gm-Message-State: AO0yUKVY5ugXnQB79pq6qTIufQEarpuGGikIDOcnBOyk6Otxa2OPGRxt
+        xZdqctiPONUfTVZ2MpJ5TuC5vqiqjrQ5lD0M5e8VBdBzPmo=
+X-Google-Smtp-Source: AK7set9HVG30cY8SO6wA6h66En9OSKjkd+dbQHrXILG1Tsakenlpav9gzJn47RMq8PaYRXejvbM0XW1rdaPOXXaVAvk=
+X-Received: by 2002:a81:4656:0:b0:4fd:9685:d982 with SMTP id
+ t83-20020a814656000000b004fd9685d982mr19640ywa.304.1674852422199; Fri, 27 Jan
+ 2023 12:47:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:vDP/sU3WbWB3aipv6spulG2sZ/1/Qx0NRvtEbQ/95jvDYBrgqmv
- ZN3NrtTNEg7/lbeTe7M8RMTYDDBTb50tIFBE5sKC1+dGcykmefRnplHi5Jj2SuoDef9L+k8
- JsT+qgN5H7TdT7yYUGdVrw20FOcRMzLIMrLttqxHXylaSE9B0r6WpmSiZaB3QykOyrbZxc9
- 8csVaeU/XH5gJCpVVFPig==
-UI-OutboundReport: notjunk:1;M01:P0:YlxfpHwCfKI=;F2Z0qtzUOVtZt2dyT7TyrApqXPl
- /OeE0Hrod1cbH/ILzhse+N7lHTWXmIgWXuf+n0WQUqw1sXa9Jz6i2+MFzbTmxKYl1S2i003tC
- YGBElKmIKyDskmmbVIS60/ls4uaMq2tvd/qDkPPlxj2SpTgEuz1WnUDbjXnuIXMVy71DBuPCW
- 5b3zZxB8QgRHmcpbaxiHw3mtN1IYyQP8iiOiS7yM5oMu1hcQomQCjaGVYEst8rTpTRNPDCAOr
- uA+bYmu8jX0fWae/F9nClQ/NuCO/ssabz0eH17fhN1/3ldHjX8rFB0saoDU38165VHKapeV56
- DJ7xFCGdbiMP0JdJLZVQiOQ1/agp6bjCkJg7Gwf2A+NJifDJKbeICCpFU127adGM6ryff4aHU
- W8r8NvqB+LwFaLKu61vl8Ou2sjxsIk2IM8b1FnJoVJDHioGCuEf3A3X9ld3FTHw6p0ZV2dv1e
- CnO7jf0pMeuAuje7hEFFT9cfnlDwiob8JwRvgCRDQhHp4f7vz7lkNS+l2UEOXf9FVVWFIQjXl
- c+lhxAi4lc+CGVdL09P+VjeMFpLzfbZFSoh1cnggzCybxcJVKZ6OMaMp0iaqkFy1hcL7qX0jS
- t+hBDNoqIHPyBatsD/L2fpOgGL0pNwqy4jzmSTK+3B8bMydMflilJl/5FVKKCYB6r0Q2ZwkoN
- gW8zeTeUzg/PVIi1dnTOD94brO2eEEoPwf4dvNZtXw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230127174014.251539-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <6faa66a5-8f86-1a22-df51-2c8fa62054a2@linaro.org>
+In-Reply-To: <6faa66a5-8f86-1a22-df51-2c8fa62054a2@linaro.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 27 Jan 2023 20:46:36 +0000
+Message-ID: <CA+V-a8uDfpfZJGK8jZB=8_VApAN+GCu_SC7RDoYvzL+s8M261A@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: r9a07g044: Add Cortex-A55 PMU node
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,62 +73,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In virtnet_probe(), if the device doesn't provide a MAC address the
-driver assigns a random one.
-As we modify the MAC address we need to notify the device to allow it
-to update all the related information.
+Hi Krzysztof,
 
-The problem can be seen with vDPA and mlx5_vdpa driver as it doesn't
-assign a MAC address by default. The virtio_net device uses a random
-MAC address (we can see it with "ip link"), but we can't ping a net
-namespace from another one using the virtio-vdpa device because the
-new MAC address has not been provided to the hardware:
-RX packets are dropped since they don't go through the receive filters,
-TX packets go through unaffected.
+Thank you for the review.
 
-Signed-off-by: Laurent Vivier <lvivier@redhat.com>
----
- drivers/net/virtio_net.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+On Fri, Jan 27, 2023 at 5:54 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 27/01/2023 18:40, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Enable the performance monitor unit for the Cortex-A55 cores on the
+> > RZ/G2L (r9a07g044) SoC.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+> > index 80b2332798d9..ff9bdc03a3ed 100644
+> > --- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+> > +++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+> > @@ -161,6 +161,11 @@ opp-50000000 {
+> >               };
+> >       };
+> >
+> > +     pmu_a55 {
+>
+> No underscores in node names. This is usually called just 'pmu'.
+>
+Ok, I will update it in the next version.
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 7d700f8e545a..704a05f1c279 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -3806,6 +3806,8 @@ static int virtnet_probe(struct virtio_device *vdev)
- 		eth_hw_addr_set(dev, addr);
- 	} else {
- 		eth_hw_addr_random(dev);
-+		dev_info(&vdev->dev, "Assigned random MAC address %pM\n",
-+			 dev->dev_addr);
- 	}
- 
- 	/* Set up our device-specific information */
-@@ -3933,6 +3935,24 @@ static int virtnet_probe(struct virtio_device *vdev)
- 
- 	virtio_device_ready(vdev);
- 
-+	/* a random MAC address has been assigned, notify the device.
-+	 * We don't fail probe if VIRTIO_NET_F_CTRL_MAC_ADDR is not there
-+	 * because many devices work fine without getting MAC explicitly
-+	 */
-+	if (!virtio_has_feature(vdev, VIRTIO_NET_F_MAC) &&
-+	    virtio_has_feature(vi->vdev, VIRTIO_NET_F_CTRL_MAC_ADDR)) {
-+		struct scatterlist sg;
-+
-+		sg_init_one(&sg, dev->dev_addr, dev->addr_len);
-+		if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MAC,
-+					  VIRTIO_NET_CTRL_MAC_ADDR_SET, &sg)) {
-+			pr_debug("virtio_net: setting MAC address failed\n");
-+			rtnl_unlock();
-+			err = -EINVAL;
-+			goto free_unregister_netdev;
-+		}
-+	}
-+
- 	rtnl_unlock();
- 
- 	err = virtnet_cpu_notif_add(vi);
--- 
-2.39.1
-
+Cheers,
+Prabhakar
