@@ -2,117 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A2B67E6C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D2067E6C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbjA0Nbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        id S234390AbjA0NcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbjA0Nbm (ORCPT
+        with ESMTP id S233836AbjA0NcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:31:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA10E757A9
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:31:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E90461C43
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:31:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36368C433D2;
-        Fri, 27 Jan 2023 13:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674826300;
-        bh=IunA0Pc8LL+zSuJ7WZCxCQOUJgXGl22zLfNJLSaAsn8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZapjK9qAo4jtAF/ANodw/fxTC0/TbcBp0lzlRR08wC8qrMW0PRXVxuWXelZ5KOdf3
-         npaNshhnj64hW1sMT40oieEvwtU0PcThEWgBZKPMR2nPmB72TrS1Xd5Kq4MbyIEz2m
-         Sj0Df1cvD9xZGWxDu3O+uiPbC1LItfgRFAvO86Mc=
-Date:   Fri, 27 Jan 2023 14:31:37 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>, jasowang@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
-        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
-        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v1 2/6] virtio console: Harden port adding
-Message-ID: <Y9PSObAeUyHK2cc3@kroah.com>
-References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
- <20230119135721.83345-3-alexander.shishkin@linux.intel.com>
- <Y8lfz8C5uvx2w4fC@kroah.com>
- <87ilh2quto.fsf@ubik.fi.intel.com>
- <Y8mSs68JfW6t4mjl@kroah.com>
- <87a62eqo4h.fsf@ubik.fi.intel.com>
- <20230127055944-mutt-send-email-mst@kernel.org>
- <87k018p4xs.fsf@ubik.fi.intel.com>
- <20230127071152-mutt-send-email-mst@kernel.org>
- <87edrgp2is.fsf@ubik.fi.intel.com>
+        Fri, 27 Jan 2023 08:32:03 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EF77448F;
+        Fri, 27 Jan 2023 05:32:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674826320; x=1706362320;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7mC15fOVSE6NegzxHk/BX7UWkKB1AkE7p5o74pyZvt0=;
+  b=FQuWs8hjrBVGcHF4IWhbLkPxigoAJ+8TMm+tL72Kw5mBIlLc8FtqUxj4
+   y0H9jw3H9709it7RHmVedqxV9OYZ791r5l1PEVPP9AZmygWJH0xpyhkDM
+   uyv8UvptWrsYwsR05TGEbQAith9JmLUHHovB5ZESjuBIravMUaH57sbIv
+   8kM1tTcNFZSwoRNsPsOofO8pRwPnjlNK3KpcWILu2Rci+cTUDCeyFK37y
+   UO/xJ8cUjyIx+ApHq8D6CJZJrEVXl/xcXELFppdczC5OyKxIhVOYQgyt8
+   azQl7EcmGoNi0Kz5wLJ4U/8CHcJHsJkegGkc1FWoHvZjcDHvT9fJ9rHMK
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="325757614"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="325757614"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 05:32:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="731836563"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="731836563"
+Received: from jgeary-mobl1.ger.corp.intel.com (HELO [10.213.233.162]) ([10.213.233.162])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 05:31:56 -0800
+Message-ID: <a96e6b5c-b538-f7e7-d603-cabb29137de7@linux.intel.com>
+Date:   Fri, 27 Jan 2023 13:31:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87edrgp2is.fsf@ubik.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC 10/12] cgroup/drm: Introduce weight based drm cgroup control
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        =?UTF-8?Q?St=c3=a9phane_Marchesin?= <marcheu@chromium.org>,
+        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Brian Welty <brian.welty@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+References: <20230112165609.1083270-1-tvrtko.ursulin@linux.intel.com>
+ <20230112165609.1083270-11-tvrtko.ursulin@linux.intel.com>
+ <20230127130134.GA15846@blackbody.suse.cz>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <20230127130134.GA15846@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 02:47:55PM +0200, Alexander Shishkin wrote:
-> "Michael S. Tsirkin" <mst@redhat.com> writes:
+
+On 27/01/2023 13:01, Michal Koutný wrote:
+> On Thu, Jan 12, 2023 at 04:56:07PM +0000, Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+>> +static int drmcs_can_attach(struct cgroup_taskset *tset)
+>> +{
+>> +	int ret;
+>> +
+>> +	/*
+>> +	 * As processes are getting moved between groups we need to ensure
+>> +	 * both that the old group does not see a sudden downward jump in the
+>> +	 * GPU utilisation, and that the new group does not see a sudden jump
+>> +	 * up with all the GPU time clients belonging to the migrated process
+>> +	 * have accumulated.
+>> +	 *
+>> +	 * To achieve that we suspend the scanner until the migration is
+>> +	 * completed where the resume at the end ensures both groups start
+>> +	 * observing GPU utilisation from a reset state.
+>> +	 */
+>> +
+>> +	ret = mutex_lock_interruptible(&drmcg_mutex);
+>> +	if (ret)
+>> +		return ret;
+>> +	start_suspend_scanning();
+>> +	mutex_unlock(&drmcg_mutex);
+>> +
+>> +	finish_suspend_scanning();
 > 
-> > On Fri, Jan 27, 2023 at 01:55:43PM +0200, Alexander Shishkin wrote:
-> >> "Michael S. Tsirkin" <mst@redhat.com> writes:
-> >> 
-> >> > On Thu, Jan 19, 2023 at 10:13:18PM +0200, Alexander Shishkin wrote:
-> >> >> When handling control messages, instead of peeking at the device memory
-> >> >> to obtain bits of the control structure,
-> >> >
-> >> > Except the message makes it seem that we are getting data from
-> >> > device memory, when we do nothing of the kind.
-> >> 
-> >> We can be, see below.
-> >> 
-> >> >> take a snapshot of it once and
-> >> >> use it instead, to prevent it from changing under us. This avoids races
-> >> >> between port id validation and control event decoding, which can lead
-> >> >> to, for example, a NULL dereference in port removal of a nonexistent
-> >> >> port.
-> >> >> 
-> >> >> The control structure is small enough (8 bytes) that it can be cached
-> >> >> directly on the stack.
-> >> >
-> >> > I still have no real idea why we want a copy here.
-> >> > If device can poke anywhere at memory then it can crash kernel anyway.
-> >> > If there's a bounce buffer or an iommu or some other protection
-> >> > in place, then this memory can no longer change by the time
-> >> > we look at it.
-> >> 
-> >> We can have shared pages between the host and guest without bounce
-> >> buffers in between, so they can be both looking directly at the same
-> >> page.
-> >> 
-> >> Regards,
-> >
-> > How does this configuration work? What else is in this page?
+> Here's scanning suspension, communicated via
 > 
-> So, for example in TDX, you have certain pages as "shared", as in
-> between guest and hypervisor. You can have virtio ring(s) in such
-> pages. It's likely that there'd be a swiotlb buffer there instead, but
-> sharing pages between host virtio and guest virtio drivers is possible.
+> 	root_drmcs.scanning_suspended = true;
+> 	root_drmcs.suspended_period_us = root_drmcs.period_us;
+> 	root_drmcs.period_us = 0;
+> 
+> but I don't see those used in scan_worker() and the scanning traversal
+> can apparently run concurrently with a task migration.
 
-If it is shared, then what does this mean?  Do we then need to copy
-everything out of that buffer first before doing anything with it
-because the data could change later on?  Or do we not trust anything in
-it at all and we throw it away?  Or something else (trust for a short
-while and then we don't?)
+I think you missed the finish_suspend_scanning() part:
 
-Please be specific as to what you want to see happen here, and why.
+	if (root_drmcs.suspended_period_us)
+		cancel_delayed_work_sync(&root_drmcs.scan_work);
 
-thanks,
+So if scanning was in progress migration will wait until it finishes. 
+And re-start only when migration is done (drmcs_attach), or it failed 
+(drmcs_cancel_attach).
 
-greg k-h
+Not claiming I did not miss something because I was totally new with 
+cgroup internals when I started working on this. So it is definitely 
+useful to have more eyes looking.
+
+>> [...]
+>> +static bool
+>> +__start_scanning(struct drm_cgroup_state *root, unsigned int period_us)
+>> [...]
+>> +	css_for_each_descendant_post(node, &root->css) {
+>> [...]
+>> +		active = drmcs_get_active_time_us(drmcs);
+>> +		if (period_us && active > drmcs->prev_active_us)
+>> +			drmcs->active_us += active - drmcs->prev_active_us;
+>> +		drmcs->prev_active_us = active;
+> 
+> drmcs_get_active_time_us() could count a task's contribution here,
+> the task would migrate to a different drmcs,
+> and it'd be counted 2nd time.
+
+Lets see.. __start_scanning() can be called from the worker, so max one 
+instance at a time, no issue.
+
+Then from resume scanning, so it is guaranteed worker is not running and 
+can't restart since mutex guards the re-start.
+
+Finally from drmcs_write_period_us() - yes there __start_scanning() can 
+race with it being invoked by the worker - oops! However.. this is just 
+a debugging aid as the cover letter explains. This file is not intended 
+to be present in the final version, rather as per earlier discussion 
+with Tejun the idea is to only have boot time option to control the 
+functionality (enable/disable or period).
+
+I will nevertheless try to fix this race up for the next posting to 
+avoid further confusion!
+
+Regards,
+
+Tvrtko
