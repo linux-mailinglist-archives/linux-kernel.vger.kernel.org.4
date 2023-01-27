@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7611C67F0FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A42067F0FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232572AbjA0WNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S232670AbjA0WO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:14:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbjA0WNd (ORCPT
+        with ESMTP id S231439AbjA0WOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:13:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4770684FBF;
-        Fri, 27 Jan 2023 14:13:32 -0800 (PST)
+        Fri, 27 Jan 2023 17:14:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CA384942;
+        Fri, 27 Jan 2023 14:14:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF7EEB821FE;
-        Fri, 27 Jan 2023 22:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C53BC433D2;
-        Fri, 27 Jan 2023 22:13:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 933BF61DA1;
+        Fri, 27 Jan 2023 22:14:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024A6C433D2;
+        Fri, 27 Jan 2023 22:14:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674857609;
-        bh=erjVZPguZWWRU7zYaS/0T0cYT+4Oqh4S2R3jRj0Wtes=;
+        s=k20201202; t=1674857663;
+        bh=o/wZZ1uzmJ7qFEw1pt+mcU/ptJZ13hgGGF/CULyoMJ4=;
         h=From:To:Cc:Subject:Date:From;
-        b=GsvgBSO99BxV+RsUDHX+W1o5oWOHGb2vzyYK1Fbip5D3/HVfrxz3qT32sIeZLbK2w
-         Iy+e5TegkffYOpK/DLerZCL4WYDdX3stH4dD8eDtRD/3mwvZ5J4tFKu8YfPbyitAMy
-         zPThVY6Zl4xrN5Y+t5nFKbza5dU0fnFSKH8qarz+lfbxjKkdll6FZolZyTD9pyPLia
-         /P98DZuhvVapAhPiGQGPgBFXwtqDNO6uFf8D+lD2yRfmddzBNjhzlVxGD/MT0lOMUp
-         c35C+e9jiflhVPOGVN/JeOYQ7jF7vg1QHRgtkkdoqw0w3Rd7iN64/LwN6zY80k/MqP
-         PgOw00JwRymRQ==
+        b=mLoGepRJuyf4fEgFO26waiEfOSuAf6TdWVpNp3P2k9Gc2tm2E3uR46Xo/hjAvRSet
+         3/zhelAgl+1nCivDb+TKA7OZqmbagmtWbCHwESGfWG3n6+6mPt3Y41FkJzxMH/y4i6
+         7R5cvH3+cCuaZFsIzs9zYOaayHTfpDbb3GGIAmlyJNQ4Nu3GmPEnSL1vSMF3yZt5Ca
+         PFtEYg4t2SqqTqfrm/8ZNtyys6xN4qqm3mQZN6v75bG26CdYnVl2TeLfkTZjvXrvJc
+         giocRsVf3XzUHNtQbHmKuK8DvM1Ek1/x5K0wyYtasolTEg7/2qB6aGjQp00vFKNL5Y
+         zt+Sp8L7RVdGg==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: dsa: microchip: ptp: add one more PTP dependency
-Date:   Fri, 27 Jan 2023 23:13:03 +0100
-Message-Id: <20230127221323.2522421-1-arnd@kernel.org>
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Robin Murphy <robin.murphy@arm.com>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] gpu: host1x: fix uninitialized variable use
+Date:   Fri, 27 Jan 2023 23:14:00 +0100
+Message-Id: <20230127221418.2522612-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -63,35 +62,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-When only NET_DSA_MICROCHIP_KSZ8863_SMI is built-in but
-PTP is a loadable module, the ksz_ptp support still causes
-a link failure:
+The error handling for platform_get_irq() failing no longer
+works after a recent change, clang now points this out with
+a warning:
 
-ld.lld-16: error: undefined symbol: ptp_clock_index
->>> referenced by ksz_ptp.c
->>>               drivers/net/dsa/microchip/ksz_ptp.o:(ksz_get_ts_info) in archive vmlinux.a
+drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
+        if (syncpt_irq < 0)
+            ^~~~~~~~~~
 
-Add the same dependency here that exists with the KSZ9477_I2C
-and KSZ_SPI drivers.
+Fix this by removing the variable and checking the correct
+error status.
 
-Fixes: eac1ea20261e ("net: dsa: microchip: ptp: add the posix clock support")
+Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/net/dsa/microchip/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/host1x/dev.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/dsa/microchip/Kconfig b/drivers/net/dsa/microchip/Kconfig
-index 0546c573668a..11920939b6d8 100644
---- a/drivers/net/dsa/microchip/Kconfig
-+++ b/drivers/net/dsa/microchip/Kconfig
-@@ -36,6 +36,7 @@ config NET_DSA_MICROCHIP_KSZ_PTP
- config NET_DSA_MICROCHIP_KSZ8863_SMI
- 	tristate "KSZ series SMI connected switch driver"
- 	depends on NET_DSA_MICROCHIP_KSZ_COMMON
-+	depends on PTP_1588_CLOCK_OPTIONAL
- 	select MDIO_BITBANG
- 	help
- 	  Select to enable support for registering switches configured through
+diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
+index 4872d183d860..aae2efeef503 100644
+--- a/drivers/gpu/host1x/dev.c
++++ b/drivers/gpu/host1x/dev.c
+@@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
+ static int host1x_probe(struct platform_device *pdev)
+ {
+ 	struct host1x *host;
+-	int syncpt_irq;
+ 	int err;
+ 
+ 	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
+@@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	host->syncpt_irq = platform_get_irq(pdev, 0);
+-	if (syncpt_irq < 0)
+-		return syncpt_irq;
++	if (host->syncpt_irq < 0)
++		return host->syncpt_irq;
+ 
+ 	mutex_init(&host->devices_lock);
+ 	INIT_LIST_HEAD(&host->devices);
 -- 
 2.39.0
 
