@@ -2,97 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34FA67E9C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DDB67E9DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234559AbjA0Pnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:43:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
+        id S233248AbjA0PpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:45:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233878AbjA0Pnt (ORCPT
+        with ESMTP id S234618AbjA0Pot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:43:49 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AA083270;
-        Fri, 27 Jan 2023 07:43:48 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E17E01F461;
-        Fri, 27 Jan 2023 15:43:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674834226; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qnn4QIM3Ma+1QyLluFkYDiWSQQLF3wzqKMv+UV/tw4Y=;
-        b=AL6P1L4X/hr3QN4qYo3KJ1aZ5eL0z9NoMqZFIcHoghOMkpsXMHVf5uq3C+SE6oxwPYeBQM
-        ooUXejB8nbo9uHaE5u4ir2DHuWUAJNeFn9tfthIQaKzUAY7BUm/BSuFMdK5zrICRuE8JqH
-        PCuRlILj5JnXVUe2b9yDKXFkpL7jBiI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674834226;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qnn4QIM3Ma+1QyLluFkYDiWSQQLF3wzqKMv+UV/tw4Y=;
-        b=rxtTFpfjFz7hbEHWxJupQCv8JG5OUooFFXT0Y/dtKT0VRrpeR8eZPlfxRKl6gphdMnFUvV
-        GfeaNkzkzdzXyRAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CEEB7138E3;
-        Fri, 27 Jan 2023 15:43:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id LNaLMTLx02P3bgAAMHmgww
-        (envelope-from <hare@suse.de>); Fri, 27 Jan 2023 15:43:46 +0000
-Message-ID: <f8a4b796-4b60-d2b9-6e61-7249d2fe63a9@suse.de>
-Date:   Fri, 27 Jan 2023 16:43:46 +0100
+        Fri, 27 Jan 2023 10:44:49 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC3183958
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:44:30 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-142b72a728fso6900207fac.9
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:44:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=L5WWz9fhXxpXg6EmN48bNkcnM7o/dG+N+CVzIWey7Ow=;
+        b=kB3eWzbBuevretKVLNQIc6LnDaUJHg5dX47XzvPpviB+kLJMTkhi9hl2bFF0hxzGc3
+         1bmSwTNoKR8A+Z6O5ncrKR7CxOx7fXA75d3uTgdaCsreaoy//RN8rK0DyYDVGqmY6LLt
+         2y/4h4bK8kJRWJYGcCig26s7uh0mZE/pdqy0ewstsusrnvnbrfiBYZr8IMxGJEMdYHzc
+         M8lj0oIw3aH87LgaDDhE600YKPSJuZ3DWbAOKOMnNgnxlvpgh3tA7/4TZlDV8iWk7HAB
+         +x6U3xQnbA/mApF+QruzLba0Dk/H/cWlrGCJ3tWceCwlFNM/X6mKz9KmRccQb5RxqJQo
+         i47w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L5WWz9fhXxpXg6EmN48bNkcnM7o/dG+N+CVzIWey7Ow=;
+        b=EWr8Mm7aA6sIcMEv5UYNOSfA5QGus4FQSasVOA+FDr8PZrlJUFbx3+UR4PZb6TNSg8
+         4r+Cb9Jp7gVPC27VNaoLDpibt+RpEfbj22mkPI9DNK1KIn1LTFdjJyQ5JDBwRfQRwcAF
+         qEK8moRpsxJyL648aM+b4NztSEBXwlfS55Xse2Z982sgX+KgIVMSmYml4XIdNePEcHHR
+         L7pIhTQ+7NYgIe8J8NUNF6Ws/0ga/eVnz6PzQB89YtFPGECAFGeJg0F5OEAunfBA54+j
+         WTluZzJBse21l5jxn5/6idrZ/BCeGguST3UgzcAFGWOz8V2s6BFxcXPPcfYVCwsuBfvU
+         ACYg==
+X-Gm-Message-State: AFqh2kqvfByhqwygLMW7SdXjCOf+YFP0ddm519jSvfaHpOmIy8EyzvwS
+        kc1FFjU3TeZjRFsCaEPrbRX7eQaV76o0lgeBL10=
+X-Google-Smtp-Source: AMrXdXup/oiP7Q12YFafrFfdB69dMqfoWyegvyVl2UR664bFNRQnR7IiR+R5erW+114UUEr4FAe2K42dz+pOGsd06QE=
+X-Received: by 2002:a05:6870:44d0:b0:15b:96b8:e2be with SMTP id
+ t16-20020a05687044d000b0015b96b8e2bemr2505559oai.38.1674834269272; Fri, 27
+ Jan 2023 07:44:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 18/18] Documentation: sysfs-block-device: document
- command duration limits
-Content-Language: en-US
-To:     Niklas Cassel <niklas.cassel@wdc.com>, linux-kernel@vger.kernel.org
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-block@vger.kernel.org
-References: <20230124190308.127318-1-niklas.cassel@wdc.com>
- <20230124190308.127318-19-niklas.cassel@wdc.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20230124190308.127318-19-niklas.cassel@wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230126225815.1518839-1-ryanneph@chromium.org>
+In-Reply-To: <20230126225815.1518839-1-ryanneph@chromium.org>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Fri, 27 Jan 2023 07:44:17 -0800
+Message-ID: <CAF6AEGtQ1nsHZtigJs4ABe=3ibqbWJgWXzfPjypBcQZ8vgZekg@mail.gmail.com>
+Subject: Re: [PATCH] drm/virtio: exbuf->fence_fd unmodified on interrupted wait
+To:     Ryan Neph <ryanneph@chromium.org>
+Cc:     David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Robert Foss <robert.foss@collabora.com>,
+        Yiwei Zhang <zzyiwei@chromium.org>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Emil Velikov <emil.velikov@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 20:03, Niklas Cassel wrote:
-> From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> 
-> Document ABI/testing/sysfs-block-device the sysfs attributes present
-> under /sys/block/*/device/duration_limits for ATA and SCSI devices
-> supporting the command duration limits feature.
-> 
-> Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+On Fri, Jan 27, 2023 at 12:31 AM Ryan Neph <ryanneph@chromium.org> wrote:
+>
+> An interrupted dma_fence_wait() becomes an -ERESTARTSYS returned
+> to userspace ioctl(DRM_IOCTL_VIRTGPU_EXECBUFFER) calls, prompting to
+> retry the ioctl(), but the passed exbuf->fence_fd has been reset to -1,
+> making the retry attempt fail at sync_file_get_fence().
+>
+> The uapi for DRM_IOCTL_VIRTGPU_EXECBUFFER is changed to retain the
+> passed value for exbuf->fence_fd when returning ERESTARTSYS or EINTR.
+>
+> Fixes: 2cd7b6f08bc4 ("drm/virtio: add in/out fence support for explicit synchronization")
+> Signed-off-by: Ryan Neph <ryanneph@chromium.org>
+
+Reviewed-by: Rob Clark <robdclark@gmail.com>
+
 > ---
->   Documentation/ABI/testing/sysfs-block-device | 150 +++++++++++++++++++
->   1 file changed, 150 insertions(+)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-
-Cheers,
-
-Hannes
-
+>
+>  drivers/gpu/drm/virtio/virtgpu_ioctl.c | 9 ++++++---
+>  include/uapi/drm/virtgpu_drm.h         | 3 +++
+>  2 files changed, 9 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> index 9f4a90493aea..ffce4e2a409a 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> +++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> @@ -132,6 +132,8 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
+>         uint64_t fence_ctx;
+>         uint32_t ring_idx;
+>
+> +       exbuf->fence_fd = -1;
+> +
+>         fence_ctx = vgdev->fence_drv.context;
+>         ring_idx = 0;
+>
+> @@ -152,8 +154,6 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
+>                 ring_idx = exbuf->ring_idx;
+>         }
+>
+> -       exbuf->fence_fd = -1;
+> -
+>         virtio_gpu_create_context(dev, file);
+>         if (exbuf->flags & VIRTGPU_EXECBUF_FENCE_FD_IN) {
+>                 struct dma_fence *in_fence;
+> @@ -173,7 +173,7 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
+>
+>                 dma_fence_put(in_fence);
+>                 if (ret)
+> -                       return ret;
+> +                       goto out_err;
+>         }
+>
+>         if (exbuf->flags & VIRTGPU_EXECBUF_FENCE_FD_OUT) {
+> @@ -259,6 +259,9 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
+>
+>         if (out_fence_fd >= 0)
+>                 put_unused_fd(out_fence_fd);
+> +out_err:
+> +       if (ret == -EINTR || ret == -ERESTARTSYS)
+> +               exbuf->fence_fd = in_fence_fd;
+>
+>         return ret;
+>  }
+> diff --git a/include/uapi/drm/virtgpu_drm.h b/include/uapi/drm/virtgpu_drm.h
+> index 0512fde5e697..ac8d1eed12ab 100644
+> --- a/include/uapi/drm/virtgpu_drm.h
+> +++ b/include/uapi/drm/virtgpu_drm.h
+> @@ -64,6 +64,9 @@ struct drm_virtgpu_map {
+>         __u32 pad;
+>  };
+>
+> +/* For ioctl() returning ERESTARTSYS or EINTR, fence_fd is unmodified.
+> + * For all other errors it is set to -1.
+> + */
+>  struct drm_virtgpu_execbuffer {
+>         __u32 flags;
+>         __u32 size;
+> --
+> 2.39.1.456.gfc5497dd1b-goog
+>
