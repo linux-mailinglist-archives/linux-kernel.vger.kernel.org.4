@@ -2,236 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DD667E52D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8104167E537
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbjA0M3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:29:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S233634AbjA0MaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:30:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232286AbjA0M31 (ORCPT
+        with ESMTP id S232525AbjA0MaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:29:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC1C35241
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:28:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674822487;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5xclzS60WKfmjFavTzqp+B0Uxio42pgew/o/vyaA76o=;
-        b=UsBqfypVxhc86l6OFkekPNDdCj6TlC+eDoP70YuPYNrRmG0wiSRmsCJTbxQwtYuV1zOUFz
-        ytFO7WPHDGPTh7kf5Df3SMJJe3Gj9npbPmNTjSvxbXAFb5NWsJPpAZA+J2D9VpPSTfFqjZ
-        p2hKOCFHYbVsOG3w63SvG0i088ZO2sg=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-673-XOsYTRwHOZ6V-vU5nIsunw-1; Fri, 27 Jan 2023 07:28:06 -0500
-X-MC-Unique: XOsYTRwHOZ6V-vU5nIsunw-1
-Received: by mail-qk1-f197.google.com with SMTP id x12-20020a05620a258c00b007051ae500a2so2901480qko.15
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:28:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5xclzS60WKfmjFavTzqp+B0Uxio42pgew/o/vyaA76o=;
-        b=DSsQfeQOhhln1MX8b6a1sntdcDC/CNVpBOeTAT1sn9wnju849wgxzh2VXN617fP5N+
-         AfU/GqVGGujX5uwCebNIausF7pOimCa0D6oDe320YILd6JbxUVY+/7ZXCpBYY6Tz9dQS
-         0tLMIi9RPpRl7s3z+DktA120gA3oVX3fCK3DMDazwV+LQxxcCnRU3I7snGbqp3zI8w4E
-         2i5C+lrbiqaSjL1KXslotCTTEVpPkmhBnRT1guutmNyyirmwRHF3Y8xMFBEs0ArX+81I
-         JQMYvh9/6D/FweAXBFLYJkr0/jH0SjtthBUk/xhUoR5hz8ZmbjPqB67QP4UMz2q5H54M
-         EyWQ==
-X-Gm-Message-State: AO0yUKWYWtNQK9pUeVYzb4j85aCu4k7wxmibQYz+KtZG7pwoQ7GUTMOf
-        jtP9XZ4uDos+PZHNRsHmKoBrgv7jYlAi+gUZ07haB/PpM/5wwNrRlaV8OmuQvtszImmqsADpHHG
-        AAX5rXSH+YfkUg2xZJ5CornkI
-X-Received: by 2002:a05:622a:1016:b0:3b8:248b:a035 with SMTP id d22-20020a05622a101600b003b8248ba035mr2601185qte.19.1674822485731;
-        Fri, 27 Jan 2023 04:28:05 -0800 (PST)
-X-Google-Smtp-Source: AK7set8IDSemL3lqiCbkX9GCb5pAEaPeJPkc2xzrAclCoOfx1/pjTc6meh6Iz3ye7+UdTcLWZOvLSQ==
-X-Received: by 2002:a05:622a:1016:b0:3b8:248b:a035 with SMTP id d22-20020a05622a101600b003b8248ba035mr2601133qte.19.1674822485329;
-        Fri, 27 Jan 2023 04:28:05 -0800 (PST)
-Received: from [192.168.100.30] ([82.142.8.70])
-        by smtp.gmail.com with ESMTPSA id d15-20020a05620a136f00b006fb112f512csm2751566qkl.74.2023.01.27.04.28.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 04:28:04 -0800 (PST)
-Message-ID: <5d82047d-411b-a98d-ce0e-1195838db42c@redhat.com>
-Date:   Fri, 27 Jan 2023 13:28:01 +0100
+        Fri, 27 Jan 2023 07:30:13 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F7E30E4;
+        Fri, 27 Jan 2023 04:30:10 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RBv4YZ024366;
+        Fri, 27 Jan 2023 12:29:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=6601227chkLYrNzE4yqvw/mKCTmKQwmwYAxGEzjr2CQ=;
+ b=Y9niUPaE3hZuVQWSxiobmtfNmBRfp+eLGAbpXsS15i4iTXY48dxoIQQLnDZnEVVilQcB
+ JNAajD6af9LzP6ZzlIucfcXZ1PTanPCE0++n+oJ1a/OX2E+UhUBQQy3X96U9WiRWEe4z
+ IE/ci/0l+V8LznIj6BrmAeCpqUWCfFy+eEVilUim73cPensHbkJlnzyhjt8ByUeKYsmo
+ DtUlMXB56m2XiknA4zlgCq4AEHLfuAsX6oZakH2KZ5Td5rUIEDlvs9XlEln/Ipd8PHar
+ 9LjoSsVVR0+QrXPRAykgvQ8XgSTLiMft2YtqQjK+9JsscWpAomq3TzQprR6WjzGh1rOf +g== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nbd7au6vb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 12:29:56 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30RCTu79024155
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 12:29:56 GMT
+Received: from [10.216.47.84] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 27 Jan
+ 2023 04:29:52 -0800
+Message-ID: <9610a38e-9f39-c514-f535-73434ae8f51a@quicinc.com>
+Date:   Fri, 27 Jan 2023 17:59:49 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 1/1] virtio_net: notify MAC address change on device
- initialization
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Gautam Dawar <gautam.dawar@xilinx.com>,
-        =?UTF-8?Q?Eugenio_P=c3=a9rez?= <eperezma@redhat.com>,
-        netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        Eli Cohen <elic@nvidia.com>, Cindy Lu <lulu@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Parav Pandit <parav@nvidia.com>
-References: <20230123120022.2364889-1-lvivier@redhat.com>
- <20230123120022.2364889-2-lvivier@redhat.com>
- <20230124024711-mutt-send-email-mst@kernel.org>
- <971beeaf-5e68-eb4a-1ceb-63a5ffa74aff@redhat.com>
- <20230127060453-mutt-send-email-mst@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v2 1/3] dt-bindings: reserved-memory: ramoops: Update the
+ binding
 Content-Language: en-US
-From:   Laurent Vivier <lvivier@redhat.com>
-In-Reply-To: <20230127060453-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <keescook@chromium.org>, <gpiccoli@igalia.com>, <corbet@lwn.net>,
+        <tony.luck@intel.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-hardening@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <1673611126-13803-1-git-send-email-quic_mojha@quicinc.com>
+ <7cb96551-094c-1a68-cc3f-31e4e2e94518@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <7cb96551-094c-1a68-cc3f-31e4e2e94518@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: tPkkxhmOhWHw67xDJR3jJqJHnWT6pnn7
+X-Proofpoint-GUID: tPkkxhmOhWHw67xDJR3jJqJHnWT6pnn7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_08,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 impostorscore=0 adultscore=0
+ clxscore=1015 priorityscore=1501 phishscore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301270117
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/23 12:08, Michael S. Tsirkin wrote:
-> On Tue, Jan 24, 2023 at 12:04:24PM +0100, Laurent Vivier wrote:
->> On 1/24/23 11:15, Michael S. Tsirkin wrote:
->>> On Mon, Jan 23, 2023 at 01:00:22PM +0100, Laurent Vivier wrote:
->>>> In virtnet_probe(), if the device doesn't provide a MAC address the
->>>> driver assigns a random one.
->>>> As we modify the MAC address we need to notify the device to allow it
->>>> to update all the related information.
->>>>
->>>> The problem can be seen with vDPA and mlx5_vdpa driver as it doesn't
->>>> assign a MAC address by default. The virtio_net device uses a random
->>>> MAC address (we can see it with "ip link"), but we can't ping a net
->>>> namespace from another one using the virtio-vdpa device because the
->>>> new MAC address has not been provided to the hardware.
->>>
->>> And then what exactly happens? Does hardware drop the outgoing
->>> or the incoming packets? Pls include in the commit log.
->>
->> I don't know. There is nothing in the kernel logs.
->>
->> The ping error is: "Destination Host Unreachable"
->>
->> I found the problem with the mlx5 driver as in "it doesn't work when MAC
->> address is not set"...
->>
->> Perhaps Eli can explain what happens when the MAC address is not set?
->>
->>>
->>>> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
->>>> ---
->>>>    drivers/net/virtio_net.c | 14 ++++++++++++++
->>>>    1 file changed, 14 insertions(+)
->>>>
->>>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
->>>> index 7723b2a49d8e..4bdc8286678b 100644
->>>> --- a/drivers/net/virtio_net.c
->>>> +++ b/drivers/net/virtio_net.c
->>>> @@ -3800,6 +3800,8 @@ static int virtnet_probe(struct virtio_device *vdev)
->>>>    		eth_hw_addr_set(dev, addr);
->>>>    	} else {
->>>>    		eth_hw_addr_random(dev);
->>>> +		dev_info(&vdev->dev, "Assigned random MAC address %pM\n",
->>>> +			 dev->dev_addr);
->>>>    	}
->>>>    	/* Set up our device-specific information */
->>>> @@ -3956,6 +3958,18 @@ static int virtnet_probe(struct virtio_device *vdev)
->>>>    	pr_debug("virtnet: registered device %s with %d RX and TX vq's\n",
->>>>    		 dev->name, max_queue_pairs);
->>>> +	/* a random MAC address has been assigned, notify the device */
->>>> +	if (!virtio_has_feature(vdev, VIRTIO_NET_F_MAC) &&
->>>> +	    virtio_has_feature(vi->vdev, VIRTIO_NET_F_CTRL_MAC_ADDR)) {
->>>
->>> Maybe add a comment explaining that we don't fail probe if
->>> VIRTIO_NET_F_CTRL_MAC_ADDR is not there because
->>> many devices work fine without getting MAC explicitly.
->>
->> OK
->>
->>>
->>>> +		struct scatterlist sg;
->>>> +
->>>> +		sg_init_one(&sg, dev->dev_addr, dev->addr_len);
->>>> +		if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MAC,
->>>> +					  VIRTIO_NET_CTRL_MAC_ADDR_SET, &sg)) {
->>>> +			dev_warn(&vdev->dev, "Failed to update MAC address.\n");
->>>
->>> Here, I'm not sure we want to proceed. Is it useful sometimes?
->>
->> I think reporting an error is always useful, but I can remove that if you prefer.
+Hi,
+
+On 1/13/2023 5:34 PM, Krzysztof Kozlowski wrote:
+> Subject: drop second/last, redundant "binding". The "dt-bindings" prefix
+> is already stating that these are bindings.
 > 
-> No the question was whether we should fail probe not
-> whether we print the warning.
-
-Good question.
-
-After all, as VIRTIO_NET_F_CTRL_MAC_ADDR is set, if VIRTIO_NET_CTRL_MAC_ADDR_SET fails it 
-means there is a real problem, so yes, we should fail.
-
+> Your subject says nothing. Everything is "update".
 > 
+> On 13/01/2023 12:58, Mukesh Ojha wrote:
+>> Update the ramoops region binding document with details
+>> like region can also be reserved dynamically apart from
+>> reserving it statically.
 > 
->>> I note that we deny with virtnet_set_mac_address.
->>>
->>>> +		}
->>>> +	}
->>>> +
->>>>    	return 0;
->>>
->>>
->>>
->>> Also, some code duplication with virtnet_set_mac_address here.
->>>
->>> Also:
->>> 	When using the legacy interface, \field{mac} is driver-writable
->>> 	which provided a way for drivers to update the MAC without
->>> 	negotiating VIRTIO_NET_F_CTRL_MAC_ADDR.
->>>
->>> How about factoring out code in virtnet_set_mac_address
->>> and reusing that?
->>>
+> So what exactly can be here reserved dynamically? And what does it mean
+> 'dynamically'? By whom? How is this property of hardware (not OS)?
+> 
 >>
->> In fact, we can write in the field only if we have VIRTIO_NET_F_MAC
->> (according to virtnet_set_mac_address(), and this code is executed only if
->> we do not have VIRTIO_NET_F_MAC. So I think it's better not factoring the
->> code as we have only the control queue case to manage.
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>> ---
+>> Change in v2:
+>>    - Added this patch as per changes going to be done in patch 3/3
 >>
->>> This will also handle corner cases such as VIRTIO_NET_F_STANDBY
->>> which are not currently addressed.
+>>   .../bindings/reserved-memory/ramoops.yaml          | 34 ++++++++++++++++++++--
+>>   1 file changed, 32 insertions(+), 2 deletions(-)
 >>
->> F_STANDBY is only enabled when virtio-net device MAC address is equal to the
->> VFIO device MAC address, I don't think it can be enabled when the MAC
->> address is randomly assigned (in this case it has already failed in
->> net_failover_create(), as it has been called using the random mac address),
->> it's why I didn't check for it.
+>> diff --git a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+>> index 0391871..54e46e8 100644
+>> --- a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+>> +++ b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+>> @@ -10,7 +10,8 @@ description: |
+>>     ramoops provides persistent RAM storage for oops and panics, so they can be
+>>     recovered after a reboot. This is a child-node of "/reserved-memory", and
+>>     is named "ramoops" after the backend, rather than "pstore" which is the
+>> -  subsystem.
+>> +  subsystem. This region can be reserved both statically or dynamically by
+>> +  using appropriate property in device tree.
+>>   
+>>     Parts of this storage may be set aside for other persistent log buffers, such
+>>     as kernel log messages, or for optional ECC error-correction data.  The total
+>> @@ -112,7 +113,13 @@ unevaluatedProperties: false
+>>   
+>>   required:
+>>     - compatible
+>> -  - reg
+>> +
+>> +oneOf:
+>> +  - required:
+>> +      - reg
+>> +
+>> +  - required:
+>> +      - size
 > 
-> But the spec did not say there's a dependency :(.
-> My point is what should we do if there's F_STANDBY but no MAC?
-> Maybe add a separate patch clearing F_STANDBY in this case?
+> There is no such property. You cannot require it.
 
-The simplest would be to add at the beginning of the probe function:
+I was thinking, since this size is part reserved-memory.yaml and
+we have
 
-if (!virtio_has_feature(vdev, VIRTIO_NET_F_MAC) &&
-     virtio_has_feature(vdev, VIRTIO_NET_F_STANDBY)) {
-	pr_err("virtio-net: a standby device cannot be used without a MAC address");
-	return -EOPNOTSUPP;
-}
+allOf:
+   - $ref: "reserved-memory.yaml"
 
-And I think it would help a lot to debug misconfiguration of the interface.
+Is your comment still applies?
 
-Thanks,
-Laurent
-
+-Mukesh
 > 
->>>
->>>
->>>>    free_unregister_netdev:
->>>> -- 
->>>> 2.39.0
->>>
->>
->> Thanks,
->> Laurent
+>>   
+>>   anyOf:
+>>     - required: [record-size]
+>> @@ -142,3 +149,26 @@ examples:
+>>               };
+>>           };
+>>       };
+>> +
+>> +  - |
+>> +    / {
+>> +        compatible = "foo";
+>> +        model = "foo";
+>> +        #address-cells = <2>;
+>> +        #size-cells = <2>;
+>> +
+>> +        reserved-memory {
+>> +            #address-cells = <2>;
+>> +            #size-cells = <2>;
+>> +            ranges;
+>> +
+>> +            ramoops: ramoops_region {
 > 
-
+> Node names should be generic, no underscores in node names.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> 
+> Any reason in naming it differently then existing one? You have there
+> example.
+> 
+>> +                compatible = "ramoops";
+>> +                alloc-ranges = <0x0 0x00000000 0xffffffff 0xffffffff>;
+>> +                size = <0x0 0x10000>;       /* 64kB */
+>> +                console-size = <0x8000>;    /* 32kB */
+>> +                record-size = <0x400>;      /*  1kB */
+>> +                ecc-size = <16>;
+>> +            };
+>> +        };
+>> +    };
+> 
+> Best regards,
+> Krzysztof
+> 
