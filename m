@@ -2,90 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A5A67DEE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5CCA67DEE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbjA0INP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 03:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
+        id S231856AbjA0IOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 03:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjA0INO (ORCPT
+        with ESMTP id S229874AbjA0IO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 03:13:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A741776425
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:12:22 -0800 (PST)
+        Fri, 27 Jan 2023 03:14:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6FA38013
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:13:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674807141;
+        s=mimecast20190719; t=1674807227;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tfn6EbWtPNJebb879MWv3dOIAf3Kgq4dei2DnXcoD6U=;
-        b=DXVnTFLZJfNCLJ4JUjjqt3odxigb9eCzLJVfkvtpcCLjtI5Sfttrz75yUEFmE15Vq8pxrc
-        xuEvF0zayt2PwhZbBCRCVtc+YPBKKmidOJXmxeHG3hU7TzLgQ6moCszcDBkgZS90Z5PIh3
-        As/8xPyJO12XIAICElM7vaVtRgrh26g=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-571-NDZRqwSCOmaPxyHLmu4kLA-1; Fri, 27 Jan 2023 03:12:20 -0500
-X-MC-Unique: NDZRqwSCOmaPxyHLmu4kLA-1
-Received: by mail-ot1-f70.google.com with SMTP id h19-20020a9d3e53000000b0068b94d630b3so352424otg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:12:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tfn6EbWtPNJebb879MWv3dOIAf3Kgq4dei2DnXcoD6U=;
-        b=wwmoCZYZooXzvlRJiYUOLPYN8XEZrBF7TrgnbDsJJWGsEYhulqo61pW+kQ4JWx1O9c
-         zaMyqBadNCs25t+FxP6JCgIm/T8nh8haadM6yO/LAvJKqZykBXQRuVoyqPSCAR8pfBv4
-         +OSUtxu98wdSlwK4Nm1MQcYUOIAqQSJf08xFRfI3i39mOcncX+i/2eoFPWZaBkuz7X9c
-         3BA8/HtU2OqAJbD+MDaf4AOA/hOxMu9YfZbj8Dzrg/dr6kyw5F91QYZzFyZp9brUHz1w
-         MoUsSidihm6krHR+x5t7mDE9uYlxFKXFox7Q4Nxb4LFDuBzOYIJ2F467nOOk3CR1f4KG
-         ew1Q==
-X-Gm-Message-State: AO0yUKXFoOsjD4MYU41LjsEQjW7kUH3Xv8TvzWEcAvjw3J88vDdoknHn
-        FohWwW5HPia6BLvrmgxr4SW6Cqtl2s/GDbl9y/YW83roJwHV6G9fG2cavg9xUZqKMtrHNtlivTX
-        4g+Gcyg78tqmwAe7DBftYHbOs
-X-Received: by 2002:a05:6808:10:b0:375:12e1:28c5 with SMTP id u16-20020a056808001000b0037512e128c5mr1907273oic.55.1674807139559;
-        Fri, 27 Jan 2023 00:12:19 -0800 (PST)
-X-Google-Smtp-Source: AK7set/Up483fYHxeZaymHaWpfU51pJD+d71I5SgB3hjGZAWv7PXqj9pJM37Mfqh56wsfN+i4lQDMg==
-X-Received: by 2002:a05:6808:10:b0:375:12e1:28c5 with SMTP id u16-20020a056808001000b0037512e128c5mr1907268oic.55.1674807139388;
-        Fri, 27 Jan 2023 00:12:19 -0800 (PST)
-Received: from ?IPv6:2804:1b3:a800:6912:c477:c73a:cf7c:3a27? ([2804:1b3:a800:6912:c477:c73a:cf7c:3a27])
-        by smtp.gmail.com with ESMTPSA id g20-20020a9d6b14000000b0068848d6b231sm1480090otp.30.2023.01.27.00.12.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 00:12:18 -0800 (PST)
-Message-ID: <601fc35a8cc2167e53e45c636fccb2d899fd7c50.camel@redhat.com>
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-To:     Michal Hocko <mhocko@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <fweisbecker@suse.de>
-Date:   Fri, 27 Jan 2023 05:12:13 -0300
-In-Reply-To: <52a0f1e593b1ec0ca7e417ba37680d65df22de82.camel@redhat.com>
-References: <20230125073502.743446-1-leobras@redhat.com>
-         <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
-         <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
-         <Y9FzSBw10MGXm2TK@tpad> <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
-         <Y9Iurktut9B9T+Tl@dhcp22.suse.cz>
-         <Y9MI42NSLooyVZNu@P9FQF9L96D.corp.robot.car>
-         <Y9N5CI8PpsfiaY9c@dhcp22.suse.cz>
-         <52a0f1e593b1ec0ca7e417ba37680d65df22de82.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 
+        bh=wQyPt/6bZriSvjC5ZXh5l3TKz/N7A4kc1yntO2MilN0=;
+        b=a3EcuUiJbgankfsGqdQjUxuYeqpXjm+33ZRDUapjw6HIc8qUwm6zNtTrnTmOfKn2Ot0B7p
+        h2ar9hwYb0FBKyPLvBCDgOPMpYytJzvrWb+/0AgE4lV8CgYpq+pRaHPWOO3+YpVtb/lqU3
+        T84tU4WJzJR5h1iZz600A3anLoUvjxo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-252-Z6Nj1TXBPmq0ujnQ2BEItg-1; Fri, 27 Jan 2023 03:13:42 -0500
+X-MC-Unique: Z6Nj1TXBPmq0ujnQ2BEItg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 39FAA3C0D845;
+        Fri, 27 Jan 2023 08:13:41 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EE9E5400DE84;
+        Fri, 27 Jan 2023 08:13:40 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id B10301800606; Fri, 27 Jan 2023 09:13:39 +0100 (CET)
+Date:   Fri, 27 Jan 2023 09:13:39 +0100
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        David Airlie <airlied@gmail.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: Re: [PATCH v10 00/11] Add generic memory shrinker to VirtIO-GPU and
+ Panfrost DRM drivers
+Message-ID: <20230127081339.yovxofpboc4gfdgo@sirius.home.kraxel.org>
+References: <20230108210445.3948344-1-dmitry.osipenko@collabora.com>
+ <e5e9e8dd-a5b6-cfd2-44d6-4d5aa768e56c@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e5e9e8dd-a5b6-cfd2-44d6-4d5aa768e56c@collabora.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,83 +83,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-01-27 at 04:22 -0300, Leonardo Br=C3=A1s wrote:
-> On Fri, 2023-01-27 at 08:11 +0100, Michal Hocko wrote:
-> > [Cc Frederic]
-> >=20
-> > On Thu 26-01-23 15:12:35, Roman Gushchin wrote:
-> > > On Thu, Jan 26, 2023 at 08:41:34AM +0100, Michal Hocko wrote:
-> > [...]
-> > > > > Essentially each cpu will try to grab the remains of the memory q=
-uota
-> > > > > and move it locally. I wonder in such circumstances if we need to=
- disable the pcp-caching
-> > > > > on per-cgroup basis.
-> > > >=20
-> > > > I think it would be more than sufficient to disable pcp charging on=
- an
-> > > > isolated cpu.
-> > >=20
-> > > It might have significant performance consequences.
-> >=20
-> > Is it really significant?
-> >=20
-> > > I'd rather opt out of stock draining for isolated cpus: it might slig=
-htly reduce
-> > > the accuracy of memory limits and slightly increase the memory footpr=
-int (all
-> > > those dying memcgs...), but the impact will be limited. Actually it i=
-s limited
-> > > by the number of cpus.
-> >=20
-> > Hmm, OK, I have misunderstood your proposal. Yes, the overal pcp charge=
-s
-> > potentially left behind should be small and that shouldn't really be a
-> > concern for memcg oom situations (unless the limit is very small and
-> > workloads on isolated cpus using small hard limits is way beyond my
-> > imagination).
-> >=20
-> > My first thought was that those charges could be left behind without an=
-y
-> > upper bound but in reality sooner or later something should be running
-> > on those cpus and if the memcg is gone the pcp cache would get refilled
-> > and old charges gone.
-> >=20
-> > So yes, this is actually a better and even simpler solution. All we nee=
-d
-> > is something like this
-> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > index ab457f0394ab..13b84bbd70ba 100644
-> > --- a/mm/memcontrol.c
-> > +++ b/mm/memcontrol.c
-> > @@ -2344,6 +2344,9 @@ static void drain_all_stock(struct mem_cgroup *ro=
-ot_memcg)
-> >  		struct mem_cgroup *memcg;
-> >  		bool flush =3D false;
-> > =20
-> > +		if (cpu_is_isolated(cpu))
-> > +			continue;
-> > +
-> >  		rcu_read_lock();
-> >  		memcg =3D stock->cached;
-> >  		if (memcg && stock->nr_pages &&
-> >=20
-> > There is no such cpu_is_isolated() AFAICS so we would need a help from
-> > NOHZ and cpuisol people to create one for us. Frederic, would such an
-> > abstraction make any sense from your POV?
->=20
->=20
-> IIUC, 'if (cpu_is_isolated())' would be instead:
->=20
-> if (!housekeeping_cpu(smp_processor_id(), HK_TYPE_DOMAIN) ||
-> !housekeeping_cpu(smp_processor_id(), HK_TYPE_WQ)
+On Thu, Jan 26, 2023 at 01:55:09AM +0300, Dmitry Osipenko wrote:
+> Hello Thomas and Gerd,
+> 
+> On 1/9/23 00:04, Dmitry Osipenko wrote:
+> > This series:
+> > 
+> >   1. Makes minor fixes for drm_gem_lru and Panfrost
+> >   2. Brings refactoring for older code
+> >   3. Adds common drm-shmem memory shrinker
+> >   4. Enables shrinker for VirtIO-GPU driver
+> >   5. Switches Panfrost driver to the common shrinker
+> > 
+> > Changelog:
+> > 
+> > v10:- Rebased on a recent linux-next.
+> > 
+> >     - Added Rob's ack to MSM "Prevent blocking within shrinker loop" patch.
+> > 
+> >     - Added Steven's ack/r-b/t-b for the Panfrost patches.
+> > 
+> >     - Fixed missing export of the new drm_gem_object_evict() function.
+> > 
+> >     - Added fixes tags to the first two patches that are making minor fixes,
+> >       for consistency.
+> 
+> Do you have comments on this version? Otherwise ack will be appreciated.
+> Thanks in advance!
 
-oh, sorry 's/smp_processor_id()/cpu/' here:
+Don't feel like signing off on the locking changes, I'm not that
+familiar with the drm locking rules.  So someone else looking at them
+would be good.  Otherwise the series and specifically the virtio changes
+look good to me.
 
-if(!housekeeping_cpu(cpu, HK_TYPE_DOMAIN) || !housekeeping_cpu(cpu, HK_TYPE=
-_WQ))
+Acked-by: Gerd Hoffmann <kraxel@redhat.com>
 
-
-Not sure why I added smp_processor_id() instead of cpu. I think I need some
-sleep. :)
+take care,
+  Gerd
 
