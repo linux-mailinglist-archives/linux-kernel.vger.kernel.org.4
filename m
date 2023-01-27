@@ -2,157 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7C567EF6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E244B67EF73
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbjA0USh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 15:18:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
+        id S229757AbjA0UUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 15:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjA0USf (ORCPT
+        with ESMTP id S232688AbjA0UUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:18:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F5E40E8
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:17:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674850667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oLsww4nMT853aLsRUstJw7Wj+WfXpD2FfDEM08ruJd4=;
-        b=Y+s37APEHbhPgIbwv8WYCesKp4vP6DJTwKpeG3osZP5BpifD8pDwDuvL8MoNiWA8Q5ZGkQ
-        X3J4eDyOqOzT1wUmphAyKebYyuskGnwyhAT2MBkYMTo4Hkw6AgAnRI1fW101oQ1Ar7Sse/
-        Ov6eokWpwgkgwymcszdLEKzxuwGOarI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-231-WmTIcNZyMNiL4Bo4k-7h-g-1; Fri, 27 Jan 2023 15:17:43 -0500
-X-MC-Unique: WmTIcNZyMNiL4Bo4k-7h-g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 852063806703;
-        Fri, 27 Jan 2023 20:17:42 +0000 (UTC)
-Received: from x2.localnet (unknown [10.22.33.250])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 172D214171BE;
-        Fri, 27 Jan 2023 20:17:42 +0000 (UTC)
-From:   Steve Grubb <sgrubb@redhat.com>
-To:     Richard Guy Briggs <rgb@redhat.com>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v6 3/3] fanotify,audit: Allow audit to use the full permission
- event response
-Date:   Fri, 27 Jan 2023 15:17:41 -0500
-Message-ID: <12154220.O9o76ZdvQC@x2>
-Organization: Red Hat
-In-Reply-To: <CAHC9VhRWDD6Tk6AEmgoobBkcVKRYbVOte7-F0TGJD2dRk7NKxw@mail.gmail.com>
-References: <cover.1673989212.git.rgb@redhat.com> <Y9Gn4YmKFBot/R4l@madcap2.tricolour.ca>
- <CAHC9VhRWDD6Tk6AEmgoobBkcVKRYbVOte7-F0TGJD2dRk7NKxw@mail.gmail.com>
+        Fri, 27 Jan 2023 15:20:46 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A374A238
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:20:44 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id l41-20020a05600c1d2900b003daf986faaeso4268567wms.3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:20:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MQJZG/xKcCJsVsFDHrDpLNHly5wPWcC1lO6W1/tImAQ=;
+        b=XLswvSn0iWJEiVX86b3AojUKI6gFD+xJfDL0WBc+eU64CJKFU/9zPdXobp2My2DRdM
+         qY792thqiotAKFM+YmxxS1AievxqjzritonPJ9vyD5RVNPW8QsNK9/bnYCMPFgYGQIPZ
+         SgOLFmJr1a+jhEFFCISU1l/G5+HrMaL+nf2FoQSyUlicGwJmjOFy/3qFDXCXJJcZ+yw0
+         IOf1Sf76AUWDCEu0hyxRIfL2Iv3E1jn5Zf/q1ALJYV/gamGrUad5eK6eeEyDE+qIGscb
+         tA0Z3USSOxPo8ThdS8K4e+CaEZizIxxSwiyYQvd26m9e6VliSuaHPjKitpiLhGHMc8vZ
+         IUVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MQJZG/xKcCJsVsFDHrDpLNHly5wPWcC1lO6W1/tImAQ=;
+        b=TNKZT0hI1l42dZP0ETfX6BB+Sj7+dzGQB87f9X+Zfi+oxN4GoHZFX8N9wSBJb3oDj3
+         IIeU7lchifcTKR2V8ri9WMRhgYZg00tjrdQFqcWL5eCNiINVc49zEzg5qgCKgeMNMGkc
+         EGIWwH0tsG3zgNHcLAW3pR4d8OeIQ2rMAT/3Ptlf+KQG1iO6Ukjfkkk0L9838ec2QmZd
+         DP/Nq/JZ6zYDu4zlg7E62HMr9vUlR7PC0zZNi3AO49rl0JxEu1m3qGg7iggxh7PTCh5s
+         Tpa9uvMlwFjichyUXfG+rdO/4IRx6sNGlyjuP1g5ITcg24TNyABbmmpuAszRTOhbIovI
+         S23Q==
+X-Gm-Message-State: AFqh2kold6IzV11qsvhYTO+4ek0w5CvvRHNN0ElERklW8NXRr6rm5riM
+        HI/kP6qILGE8s1d2X0A4/IfTPA==
+X-Google-Smtp-Source: AMrXdXuNRILKOhT1cKmkeLlOlAI5U7DaEFjqsMn3TViTMRmv1RGPuc0oBtcBH0u3ppdFai6vxu/YCA==
+X-Received: by 2002:a05:600c:540d:b0:3d9:fb59:c16b with SMTP id he13-20020a05600c540d00b003d9fb59c16bmr37938172wmb.36.1674850843204;
+        Fri, 27 Jan 2023 12:20:43 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t1-20020adfe441000000b002bfd524255esm2116881wrm.43.2023.01.27.12.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 12:20:42 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: input: touchscreen: st,stmfts: convert to dtschema
+Date:   Fri, 27 Jan 2023 21:20:40 +0100
+Message-Id: <20230127202040.196411-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday, January 27, 2023 3:00:37 PM EST Paul Moore wrote:
-> On Wed, Jan 25, 2023 at 5:06 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> > On 2023-01-20 13:52, Paul Moore wrote:
-> > > On Wed, Jan 18, 2023 at 1:34 PM Steve Grubb <sgrubb@redhat.com> wrote:
-> > > > Hello Richard,
-> > > > 
-> > > > I built a new kernel and tested this with old and new user space. It
-> > > > is
-> > > > working as advertised. The only thing I'm wondering about is why we
-> > > > have 3F as the default value when no additional info was sent? Would
-> > > > it be better to just make it 0?
-> > > 
-> > > ...
-> > > 
-> > > > On Tuesday, January 17, 2023 4:14:07 PM EST Richard Guy Briggs wrote:
-> > > > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > > > > index d1fb821de104..3133c4175c15 100644
-> > > > > --- a/kernel/auditsc.c
-> > > > > +++ b/kernel/auditsc.c
-> > > > > @@ -2877,10 +2878,19 @@ void __audit_log_kern_module(char *name)
-> > > > > 
-> > > > >       context->type = AUDIT_KERN_MODULE;
-> > > > >  
-> > > > >  }
-> > > > > 
-> > > > > -void __audit_fanotify(u32 response)
-> > > > > +void __audit_fanotify(u32 response, struct
-> > > > > fanotify_response_info_audit_rule *friar) {
-> > > > > -     audit_log(audit_context(), GFP_KERNEL,
-> > > > > -             AUDIT_FANOTIFY, "resp=%u", response);
-> > > > > +     /* {subj,obj}_trust values are {0,1,2}: no,yes,unknown */
-> > > > > +     if (friar->hdr.type == FAN_RESPONSE_INFO_NONE) {
-> > > > > +             audit_log(audit_context(), GFP_KERNEL,
-> > > > > AUDIT_FANOTIFY,
-> > > > > +                       "resp=%u fan_type=%u fan_info=3F
-> > > > > subj_trust=2
-> > > > 
-> > > > obj_trust=2",
-> > > > 
-> > > > > +                       response, FAN_RESPONSE_INFO_NONE);
-> > > > > +             return;
-> > > > > +     }
-> > > 
-> > > (I'm working under the assumption that the "fan_info=3F" in the record
-> > > above is what Steve was referring to in his comment.)
-> > > 
-> > > I vaguely recall Richard commenting on this in the past, although
-> > > maybe not ... my thought is that the "3F" is simply the hex encoded
-> > > "?" character in ASCII ('man 7 ascii' is your friend).  I suppose the
-> > > question is what to do in the FAN_RESPONSE_INFO_NONE case.
-> > > 
-> > > Historically when we had a missing field we would follow the "field=?"
-> > > pattern, but I don't recall doing that for a field which was
-> > > potentially hex encoded, is there an existing case where we use "?"
-> > > for a field that is hex encoded?  If so, we can swap out the "3F" for
-> > > a more obvious "?".
-> > 
-> > I was presuming encoding the zero: "30"
-> 
-> I'm sorry, but you've lost me here.
-> 
-> > > However, another option might be to simply output the current
-> > > AUDIT_FANOTIFY record format in the FAN_RESPONSE_INFO_NONE case, e.g.
-> > > only "resp=%u".  This is a little against the usual guidance of
-> > > "fields should not disappear from a record", but considering that
-> > > userspace will always need to support the original resp-only format
-> > > for compatibility reasons this may be an option.
-> > 
-> > I don't have a strong opinion.
-> 
-> I'm not sure I care too much either.  I will admit that the "3F" seems
-> to be bordering on the "bit too clever" side of things, but it's easy
-> to argue it is in keeping with the general idea of using "?" to denote
-> absent/unknown fields.
+Convert the ST-Microelectronics FingerTip touchscreen controller
+bindings to DT schema.
 
-The translation will be from %X to %u. In that case, someone might think 63 
-has some meaning. It would be better to leave it as 0 so there's less to 
-explain.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/input/touchscreen/st,stmfts.txt  | 41 -----------
+ .../bindings/input/touchscreen/st,stmfts.yaml | 72 +++++++++++++++++++
+ 2 files changed, 72 insertions(+), 41 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/touchscreen/st,stmfts.txt
+ create mode 100644 Documentation/devicetree/bindings/input/touchscreen/st,stmfts.yaml
 
--Steve
-
-> As Steve was the one who raised the question in this latest round, and
-> he knows his userspace tools the best, it seems wise to get his input
-> on this.
-
-
-
+diff --git a/Documentation/devicetree/bindings/input/touchscreen/st,stmfts.txt b/Documentation/devicetree/bindings/input/touchscreen/st,stmfts.txt
+deleted file mode 100644
+index 0a5d0cb4a280..000000000000
+--- a/Documentation/devicetree/bindings/input/touchscreen/st,stmfts.txt
++++ /dev/null
+@@ -1,41 +0,0 @@
+-* ST-Microelectronics FingerTip touchscreen controller
+-
+-The ST-Microelectronics FingerTip device provides a basic touchscreen
+-functionality. Along with it the user can enable the touchkey which can work as
+-a basic HOME and BACK key for phones.
+-
+-The driver supports also hovering as an absolute single touch event with x, y, z
+-coordinates.
+-
+-Required properties:
+-- compatible		: must be "st,stmfts"
+-- reg			: I2C slave address, (e.g. 0x49)
+-- interrupts		: interrupt specification
+-- avdd-supply		: analogic power supply
+-- vdd-supply		: power supply
+-- touchscreen-size-x	: see touchscreen.txt
+-- touchscreen-size-y	: see touchscreen.txt
+-
+-Optional properties:
+-- touch-key-connected	: specifies whether the touchkey feature is connected
+-- ledvdd-supply		: power supply to the touch key leds
+-
+-Example:
+-
+-i2c@00000000 {
+-
+-	/* ... */
+-
+-	touchscreen@49 {
+-		compatible = "st,stmfts";
+-		reg = <0x49>;
+-		interrupt-parent = <&gpa1>;
+-		interrupts = <1 IRQ_TYPE_NONE>;
+-		touchscreen-size-x = <1599>;
+-		touchscreen-size-y = <2559>;
+-		touch-key-connected;
+-		avdd-supply = <&ldo30_reg>;
+-		vdd-supply = <&ldo31_reg>;
+-		ledvdd-supply = <&ldo33_reg>;
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/input/touchscreen/st,stmfts.yaml b/Documentation/devicetree/bindings/input/touchscreen/st,stmfts.yaml
+new file mode 100644
+index 000000000000..c593ae63d0ec
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/touchscreen/st,stmfts.yaml
+@@ -0,0 +1,72 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/touchscreen/st,stmfts.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ST-Microelectronics FingerTip touchscreen controller
++
++maintainers:
++  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++
++description:
++  The ST-Microelectronics FingerTip device provides a basic touchscreen
++  functionality. Along with it the user can enable the touchkey which can work
++  as a basic HOME and BACK key for phones.
++
++allOf:
++  - $ref: touchscreen.yaml#
++
++properties:
++  compatible:
++    const: st,stmfts
++
++  reg:
++    maxItems: 1
++
++  avdd-supply:
++    description: Analogic power supply
++
++  interrupts:
++    maxItems: 1
++
++  ledvdd-supply:
++    description: Power supply to the touch key leds
++
++  touch-key-connected:
++    type: boolean
++    description: The touchkey feature is connected
++
++  vdd-supply:
++    description: Power supply
++
++required:
++  - compatible
++  - reg
++  - avdd-supply
++  - interrupts
++  - vdd-supply
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        touchscreen@49 {
++            compatible = "st,stmfts";
++            reg = <0x49>;
++            interrupt-parent = <&gpa1>;
++            interrupts = <1 IRQ_TYPE_LEVEL_LOW>;
++            touchscreen-size-x = <1599>;
++            touchscreen-size-y = <2559>;
++            touch-key-connected;
++            avdd-supply = <&ldo30_reg>;
++            vdd-supply = <&ldo31_reg>;
++            ledvdd-supply = <&ldo33_reg>;
++        };
++    };
+-- 
+2.34.1
 
