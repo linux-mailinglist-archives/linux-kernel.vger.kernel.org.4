@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DED867DFA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD0E67DFAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbjA0JH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        id S232782AbjA0JID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:08:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbjA0JH2 (ORCPT
+        with ESMTP id S231486AbjA0JIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:07:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5431CF51
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:07:27 -0800 (PST)
+        Fri, 27 Jan 2023 04:08:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636928A50;
+        Fri, 27 Jan 2023 01:07:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66F1161A3F
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:07:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49479C433D2;
-        Fri, 27 Jan 2023 09:07:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87705B81F94;
+        Fri, 27 Jan 2023 09:07:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B68DCC433D2;
+        Fri, 27 Jan 2023 09:07:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674810446;
-        bh=ggZ34Exn3VzcyVQyTe1ONqfzfK2fcKFLcF2csgbgeNs=;
+        s=korg; t=1674810473;
+        bh=8pPQixkLyVGwTAlHM8wO/5r5wtzLG9ukHcqgxxVOpFM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BrAMO5Q5DWo43+o5RiLqEsZ2HITbLmXNC2YfI6MCiVz19EXOO6mLZo/BuKAqMdax4
-         UvsOQL+ulP98hGLzWi3K3+ag6roaJVlecad/eOQ9joXAWeZqV+xiNsmAc++trJUajI
-         rSY+vJyMPqRGvi8wkoTkZPF3kI8ru7nL7vvk7bco=
-Date:   Fri, 27 Jan 2023 10:07:23 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Winkler, Tomas" <tomas.winkler@intel.com>
-Cc:     "Usyskin, Alexander" <alexander.usyskin@intel.com>,
-        "Lubart, Vitaly" <vitaly.lubart@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [char-misc-next] mei: gsc_proxy: add gsc proxy driver
-Message-ID: <Y9OUS7Y57t0y0gx4@kroah.com>
-References: <20221222220214.3688774-1-tomas.winkler@intel.com>
- <Y6VV5d/V4MKDz2Te@kroah.com>
- <CY5PR11MB6366515D2A965EEDEC77AF63EDF29@CY5PR11MB6366.namprd11.prod.outlook.com>
- <Y8lt1gmo9smOMXD7@kroah.com>
- <MN2PR11MB409305204A36872FEDAD2B82E5C99@MN2PR11MB4093.namprd11.prod.outlook.com>
+        b=pbi8wdVFnXz/2gUXoFaRAe3lXZB9bUZhCWjJ763aAIuCHI4fsC6nzPKDfiMbMGFq6
+         zc8hYALTk/ZLCNQg3KaRVR4xKjEdP+QN8FslIb0uUypGo/+vfPCe2u4Y1EL6Pr7Etk
+         03RmTQQRxsjj5UddxpTngpa7gkJF2582oF9pMy68=
+Date:   Fri, 27 Jan 2023 10:07:50 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     ysato@users.sourceforge.jp, dalias@libc.org,
+        bgolaszewski@baylibre.com, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sh: fix spdx format
+Message-ID: <Y9OUZuTbvVpNRrv2@kroah.com>
+References: <20230124133941.632974-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MN2PR11MB409305204A36872FEDAD2B82E5C99@MN2PR11MB4093.namprd11.prod.outlook.com>
+In-Reply-To: <20230124133941.632974-1-trix@redhat.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,45 +51,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 09:05:19PM +0000, Winkler, Tomas wrote:
+On Tue, Jan 24, 2023 at 05:39:41AM -0800, Tom Rix wrote:
+> checkpatch reports
+> WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
+> FILE: arch/sh/include/asm/platform_early.h:1:
+> +/* SPDX--License-Identifier: GPL-2.0 */
 > 
+> Remove extra -
 > 
-> > -----Original Message-----
-> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Sent: Thursday, January 19, 2023 18:21
-> > To: Usyskin, Alexander <alexander.usyskin@intel.com>
-> > Cc: Winkler, Tomas <tomas.winkler@intel.com>; Lubart, Vitaly
-> > <vitaly.lubart@intel.com>; linux-kernel@vger.kernel.org
-> > Subject: Re: [char-misc-next] mei: gsc_proxy: add gsc proxy driver
-> > 
-> > On Wed, Dec 28, 2022 at 11:46:36AM +0000, Usyskin, Alexander wrote:
-> > > >
-> > > > Why a whole new subdirectory for a tiny 200 line file?
-> > > >
-> > > All drivers for devices on mei bus have private subdirectory.
-> > > This one just modelled on the existing examples.
-> > > If you say that this is not a good thing - can put it in the main mei directory.
-> > 
-> > Put it in the main mei directory, no need to split things up for no good
-> > reason.
-> > 
+> Fixes: 507fd01d5333 ("drivers: move the early platform device support to arch/sh")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  arch/sh/drivers/platform_early.c     | 2 +-
+>  arch/sh/include/asm/platform_early.h | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> All mei sub drivers are in sperate directories, this driver is indeed tiny, but I do prefer consistency,
-> In my view it is easier to maintain that way. 
-
-Ok.
-
-> I believe all the bellow stuff you've already discussed in ths thread,.
-> https://lore.kernel.org/lkml/YkXdgQH1GWCitf0A@kroah.com/T/
-> I guess all that was explained there, so no need to repeat.
+> diff --git a/arch/sh/drivers/platform_early.c b/arch/sh/drivers/platform_early.c
+> index 143747c45206..1c2a571a8ab8 100644
+> --- a/arch/sh/drivers/platform_early.c
+> +++ b/arch/sh/drivers/platform_early.c
+> @@ -1,4 +1,4 @@
+> -// SPDX--License-Identifier: GPL-2.0
+> +// SPDX-License-Identifier: GPL-2.0
+>  
+>  #include <asm/platform_early.h>
+>  #include <linux/mod_devicetable.h>
+> diff --git a/arch/sh/include/asm/platform_early.h b/arch/sh/include/asm/platform_early.h
+> index fc802137c37d..00b6e6dc4ac4 100644
+> --- a/arch/sh/include/asm/platform_early.h
+> +++ b/arch/sh/include/asm/platform_early.h
+> @@ -1,4 +1,4 @@
+> -/* SPDX--License-Identifier: GPL-2.0 */
+> +/* SPDX-License-Identifier: GPL-2.0 */
+>  
+>  #ifndef __PLATFORM_EARLY__
+>  #define __PLATFORM_EARLY__
+> -- 
+> 2.26.3
 > 
-> We'll try to see what can be done to make it more robust and your comments are more than valid,
-> but as the thread concludes probably the component framework needs to be addressed. 
 
-Agreed, something needs to be done, you can't make these random
-assumptions about the exact driver and device topology as that is not
-how the driver model works at all (nor do you want it to work that way.)
-
-thanks,
-
-greg k-h
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
