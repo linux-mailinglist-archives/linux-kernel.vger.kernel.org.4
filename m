@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0601067E2B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B7E67E2BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232879AbjA0LI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:08:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S232936AbjA0LJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:09:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjA0LIz (ORCPT
+        with ESMTP id S232929AbjA0LJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:08:55 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9150196A8;
-        Fri, 27 Jan 2023 03:08:54 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Fri, 27 Jan 2023 06:09:07 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950A980F9B;
+        Fri, 27 Jan 2023 03:09:03 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7B4301F37F;
-        Fri, 27 Jan 2023 11:08:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674817733; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Mep4Rr8Z+5U+3JRsFi1JIw1zbHgf4EPZQO7IpTGgxY=;
-        b=PHUw/J6AuTSxGf5Fs2Who4NcFT968FFEhDBlDQNZxJFxMlXLJ2auTdqVjijlPiUZtRp2XI
-        bVTJW+eZqfkcRu5zizv156NMk1Ve7HuLW5E5AualvtFVxNzymsV4ZrBnHbJnpUil/Kvt6G
-        cIYRfuPu3xS/vPv4jc9rKPO3JAJNR6I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674817733;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Mep4Rr8Z+5U+3JRsFi1JIw1zbHgf4EPZQO7IpTGgxY=;
-        b=8DMR8dUEnWWbgh22/A8phPvacxOJg1GM69DSZdc3MxNqp0Eh92cGcg3rpREZztbsYNg1Z7
-        vhe+AZeQ/nR0GXBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A533B1336F;
-        Fri, 27 Jan 2023 11:08:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id rdPJGsOw02OGUgAAMHmgww
-        (envelope-from <mpdesouza@suse.de>); Fri, 27 Jan 2023 11:08:51 +0000
-Date:   Fri, 27 Jan 2023 08:08:48 -0300
-From:   Marcos Paulo de Souza <mpdesouza@suse.de>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        jpoimboe@redhat.com
-Subject: Re: [PATCH v2 0/4] livepatch: Add garbage collection for shadow
- variables
-Message-ID: <20230127110848.rgjvzh3cqc5fepyj@daedalus>
-References: <20221026194122.11761-1-mpdesouza@suse.com>
- <Y2D4ZgWqB0E9viPy@alley>
- <20230123173331.2rvelrrbkaitw56r@daedalus>
- <Y8/+bGqjHsi8LEfI@alley>
- <Y9Kr3vb2s3m0MbEQ@alley>
- <3e3f4bee-4fba-7ab7-b104-7c13d89db102@redhat.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P3FFR5p05z4xHV;
+        Fri, 27 Jan 2023 22:08:59 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1674817740;
+        bh=Y9utl1kOHVvMVILv+GUuqyaSSu0UglfF0XYXjmDGNlo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Lss0HKdluvv5JI2rpIb69PH0xbX1GwXooNuCM9bRM7tTwmfiwMopaz3cHjNvc53Yc
+         6PKoVjuxokRqj/c0yq2Nf2PxqkZi+vEvchyBacGOZJMdsQwnTEOTEEnl+bdHtHVaLY
+         spGCu4jYruPxPt5SFluIcaUw5KigftfZ1t9ynldKha4s6rFp3QHirPk3pRVZYZcwDi
+         b1fbYVZNEpbA76c//EU4p0d5wElXGMHu5zKwz8zP1jAmNr6T/6dbAINrpssgby+vnz
+         x1Irji28fWg2yKJ+uvIHHtCEMr/L8+FSR2OIk9Mr5yj34gRv3LCcT4CqggX7UpyKQS
+         jXyI/sdcB8eSw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        'Segher Boessenkool' <segher@kernel.crashing.org>
+Cc:     "gjoyce@linux.ibm.com" <gjoyce@linux.ibm.com>,
+        "erichte@linux.ibm.com" <erichte@linux.ibm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "sudhakar@linux.ibm.com" <sudhakar@linux.ibm.com>,
+        "ruscur@russell.cc" <ruscur@russell.cc>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "bgray@linux.ibm.com" <bgray@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "gcwilson@linux.ibm.com" <gcwilson@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
+ structures and buffers
+In-Reply-To: <2de207dadb936f25db123ae2d02aea91a9841656.camel@linux.ibm.com>
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+ <20230120074306.1326298-3-ajd@linux.ibm.com>
+ <87pmb2pxpa.fsf@mpe.ellerman.id.au>
+ <20230126171925.GN25951@gate.crashing.org>
+ <5118edd7f1f445afa1812d2b9b62dd4f@AcuMS.aculab.com>
+ <2de207dadb936f25db123ae2d02aea91a9841656.camel@linux.ibm.com>
+Date:   Fri, 27 Jan 2023 22:08:59 +1100
+Message-ID: <87y1pos08k.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e3f4bee-4fba-7ab7-b104-7c13d89db102@redhat.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,35 +70,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 12:05:02PM -0500, Joe Lawrence wrote:
-> On 1/26/23 11:35, Petr Mladek wrote:
-> > 
-> > Josh accepted the idea in the end so we could actually push the entire
-> > patchset. I am not sure if anyone else would like to review it
-> > so I going to wait a bit longer.
-> > 
-> > Resume:
-> > 
-> > I am going to push the entire patchset the following week (Wednesday?)
-> > unless anyone asks for more time or finds a problem.
-> > 
-> 
-> Hi Petr,
-> 
-> Re docs: patches (3) and (4) change the klp_shadow_* API.  There should
-> be updates (and possibly examples) to
-> Documentation/livepatch/shadow-vars.rst.
+Andrew Donnellan <ajd@linux.ibm.com> writes:
+> On Thu, 2023-01-26 at 17:31 +0000, David Laight wrote:
+>> Changing the size to kzalloc() doesn't help.
+>> The alignment depends on the allocator and is only required to have
+>> a relatively small alignment (ARCH_MINALIGN?) regardless of the size.
+>> 
+>> IIRC one of the allocators adds a small header to every item.
+>> It won't return 16 byte aligned items at all.
+>
+> I'm relying on the behaviour described in Documentation/core-
+> api/memory-allocation.rst:
+>
+>     The address of a chunk allocated with kmalloc is aligned to at
+>     least ARCH_KMALLOC_MINALIGN bytes. For sizes which are a power of
+>     two, the alignment is also guaranteed to be at least the respective
+>     size.
+>
+> Is this wrong?
 
-I forgot about shadow-vars.rst! This will be added on v3.
+I believe it's correct.
 
-> 
-> Having this for v1/v2 would have made review a lot easier, though I
-> understand not wanting to waste cycles on documenting dead ends.
+For SLAB and SLUB it boils down to:
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/slab_common.c?commit=830b3c68c1fb1e9176028d02ef86f3cf76aa2476#n640
 
-That's true. Next time I'll take care of the docs when the API changes. Thanks
-for the reviews so far!
+That's where the kmalloc slabs are created (see create_kmalloc_cache())
+just below.
 
-> 
-> -- 
-> Joe
-> 
+If you create your own slab (with kmem_cache_create()) then the
+alignment is up to you, so that's why there's no power-of-2 logic in
+calculate_alignment().
+
+And SLOB (which we don't use) does something similar:
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/slob.c?commit=830b3c68c1fb1e9176028d02ef86f3cf76aa2476#n493
+
+cheers
