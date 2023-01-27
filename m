@@ -2,115 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E374167EB84
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB8867EB8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjA0Qtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
+        id S233476AbjA0QvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:51:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234326AbjA0QtZ (ORCPT
+        with ESMTP id S229456AbjA0QvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:49:25 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3872F7BE76
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:49:18 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so5746032wmq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:49:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MwxIin163802ACvSCq0jg4HlDZfjOU+b7ag/1i6mXEE=;
-        b=p0bN2yAu28MNGvTlRbQWr0+f8dRrN7+Tn627u0K/x42EmNDLphayIf9NlMev0wqj8h
-         /EmzHfmLQqKOVu8ZgIciDK/fUJr6PvWPKCTqRsZtsPxIDrQvOH3aJeQUvnun7rNkTSUQ
-         6/KZMhpjpBCdTsrlPk0Pq1AqbefuhemfseqENDs+CCppSNm6HT2vKHwFAalheOqTayxm
-         dtjoNuM92e8Dp5V+KrvfMQYfpqoVE/fUi7G9DPER5YIOirUmedqSV5KeWbBKvr23C7Je
-         C0hL4yNzr1apQ8T4Xaqa5bA4xfUJep3aF5qWXf5H1dWiQl4NI8yI1oLJqFFQ+XguiBLe
-         Z84Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MwxIin163802ACvSCq0jg4HlDZfjOU+b7ag/1i6mXEE=;
-        b=uc+oyyZiGW26zXS//MlwcaCdU6EvES5DH0fyec7ipeJLqXs/1Jg/Vw/4YRsilCLpFC
-         i0fJm38BF0Zfota4Yr74NhQa8msxK7e1937xM5fEXdBLZMpBTbf/jkN7oeShHfd7mmis
-         T+2H19SWNTZ1hvSQepUS6MnUS0DNaPoyg2DPhy5VB5OCjXIRl3IF9IoIrIJWMhw0QSsR
-         imlo556NEwJCpncYAkjDbey6ElGWLWBwZRAU4zhsv93xaYtten3lsB83j+jeha4Tjdq6
-         zWEJDXBR1gsoY5iElzaLttmz16yHh45N6eDVeodDJ3AOoCGi0ldDxGqZHBJXjTUxPBpp
-         TuYg==
-X-Gm-Message-State: AO0yUKWghygw65kcaZEyR16PGohGunctBQtBzxzJUSVbaej3wq7VzC/v
-        /Dsjs9tuBV9ei8fjY5gwv1AAXg==
-X-Google-Smtp-Source: AK7set91BwRn6DZssbXKyvbz30nnUQMYADbkS+Drm/RA9jZHFwp9Oe0M3rmb1c4Tgb8gUCp8+I209g==
-X-Received: by 2002:a05:600c:3151:b0:3dc:443e:420e with SMTP id h17-20020a05600c315100b003dc443e420emr40585wmo.2.1674838156833;
-        Fri, 27 Jan 2023 08:49:16 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p24-20020a05600c1d9800b003dafadd2f77sm8990779wms.1.2023.01.27.08.49.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 08:49:16 -0800 (PST)
-Message-ID: <1e498b93-d3bd-bd12-e991-e3f4bedf632d@linaro.org>
-Date:   Fri, 27 Jan 2023 17:49:13 +0100
+        Fri, 27 Jan 2023 11:51:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E07B7BE76
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:51:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F07E61D19
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:51:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFA81C4339B;
+        Fri, 27 Jan 2023 16:50:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674838260;
+        bh=y9nk2iJEkaZrKqmP6NCJwp21crY3EzZu1exBJV93rAU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=KmAUW7IEFCSj1FcHMNu7MiacPkQTEbw9G9N6CjYcFrLJrFAPy1Dt1WIT46He/pzKj
+         gAt3did9hVTQGYay8XHx0pMT3Z2Q3duSPqfCmstOcI9mouu2Sg/T65sH+WeGd/q0eb
+         gO0ombliRk9ljqIRcZrt6JQjPDoN/bVZKQGi+k6wOReUcmfQJQno1mGbAXNleSvl5G
+         VhFF+XWxVZ4BeTpiQ0VdF2imceRhonDOzyZ+JC7hvMYtNR1vofpAz0Gx5Mqd+WMQPU
+         T7wM65CHbccSaYuM0Q7uG0xhFGxjoFZakQQDA0/Nq/xb2Wgp9y9VlalJ4Kabd7WGwr
+         I23bOVryxnt2Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8686A5C0510; Fri, 27 Jan 2023 08:50:59 -0800 (PST)
+Date:   Fri, 27 Jan 2023 08:50:59 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230127165059.GV2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Y9F+SyLpxHwdK0rE@rowland.harvard.edu>
+ <20230125194651.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9GVFkVRRRs5/rBd@rowland.harvard.edu>
+ <20230125213832.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230125233308.GA1552266@paulmck-ThinkPad-P17-Gen-1>
+ <Y9HbSBLrNJ9O2ad6@rowland.harvard.edu>
+ <20230126015330.GX2948950@paulmck-ThinkPad-P17-Gen-1>
+ <0ef2e974-5c3a-6195-62d5-a4c436bd7d82@huaweicloud.com>
+ <20230126184802.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+ <c94ad1d4-c7ac-4570-6f33-85656b041090@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 1/6] dt-bindings: Document common device controller
- bindings
-Content-Language: en-US
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>,
-        Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
-        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
-        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
-        ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
- <20230127164040.1047583-2-gatien.chevallier@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230127164040.1047583-2-gatien.chevallier@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c94ad1d4-c7ac-4570-6f33-85656b041090@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 17:40, Gatien Chevallier wrote:
-> From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+On Fri, Jan 27, 2023 at 04:03:16PM +0100, Jonas Oberhauser wrote:
 > 
-> Introducing of the common device controller bindings for the controller
-> provider and consumer devices. Those bindings are intended to allow
-> divided system on chip into muliple domains, that can be used to
-> configure hardware permissions.
 > 
-> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
-> ---
+> On 1/26/2023 7:48 PM, Paul E. McKenney wrote:
+> > On Thu, Jan 26, 2023 at 01:17:49PM +0100, Jonas Oberhauser wrote:
+> > > [...]
+> > > Note that this interpretation is analogous to the promise of smp_mb__after_unlock_lock(), which says that an
+> > > UNLOCK+LOCK pair act as a full fence: here the read-side unlock+gp act as a
+> > > full memory barrier.
+> > Good point that the existing smp_mb__after_unlock_lock() can be used for
+> > any use cases relying on the more literal interpretation of this promise.
+> > We already have the work-around!  ;-)
 > 
-> No change since V1. I'm letting this patch for dependency with bindings to
-> avoid noise with dt/bindings checks. Therefore, it should be reviewed on the
-> appropriate thread.
+> Can it? I meant that the less-literal form is similar to the one given by
+> smp_mb__after_unlock_lock().
+> 
+> > > [...] I suppose you might be able to write
+> > > some absurd client that inspects every store of the reader thread and sees
+> > > that there is no line in the reader side code that acts like a full fence.
+> > > But it would take a lot of effort to discern this.
+> > The usual litmus test is shown at the end of this email [...]
+> > > [...] I hope few people would have this unhealthy idea. But you
+> > > never know.
+> > Given that the more literal interpretation is not unreasonable, we should
+> > assume that someone somewhere might have interpreted it that way.
+> > 
+> > But I agree that the odds of someone actually relying on this are low,
+> > and any such use case can be fixed with smp_mb__before_srcu_read_unlock(),
+> > similar to smp_mb__after_srcu_read_unlock() that you note is already in use.
+> > 
+> > It would still be good to scan SRCU use for this sort of pattern, maybe
+> > manually, maybe via something like coccinelle.  Alternatively, I could
+> > post on my blog (with right of first refusal to LWN and you guys as
+> > co-authors) telling the community of our intent to change this and see
+> > what people say.  Probably both rather than either/or.
+> > 
+> > Thoughts?
+> 
+> My first thought is "there is a 'usual' litmus test for this?" :D
+> But yes, the test you have given has at least the same structure as what I
+> would expect.
 
-There was a v6 already, this is v3 and I don't understand this comment.
-What do you let? Whom? If it is not for review and not for merging,
-please annotate it in the title ([IGNORE PATCH] or something).
+Exactly!  ;-)
 
-Best regards,
-Krzysztof
+> Communicating this with the community sounds very reasonable.
+> 
+> For some automated combing, I'm really not sure what pattern to look for.
+> I'm afraid someone with a lot of time might have to look (semi-)manually.
 
+Please continue giving it some thought.  The number of srcu_read_unlock()
+calls in v6.1 is about 250, which is within the realm of manual
+inspection, but it is all too easy to miss something.
+
+							Thanx, Paul
+
+> Best wishes, jonas
+> 
+> 
+> > 
+> > 							Thanx, Paul
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > C C-srcu-observed-6
+> > 
+> > (*
+> >   * Result: Sometimes
+> >   *
+> >   * The result is Never if any of the smp_mb() calls is uncommented.
+> >   *)
+> > 
+> > {}
+> > 
+> > P0(int *a, int *b, int *c, int *d, struct srcu_struct *s)
+> > {
+> > 	int r1;
+> > 	int r2;
+> > 	int r3;
+> > 	int r4;
+> > 
+> > 	r1 = srcu_read_lock(s);
+> > 	WRITE_ONCE(*b, 2);
+> > 	r2 = READ_ONCE(*a);
+> > 	// smp_mb();
+> > 	srcu_read_unlock(s, r1);
+> > 	// smp_mb();
+> > 	r3 = READ_ONCE(*c);
+> > 	// smp_mb();
+> > 	r4 = READ_ONCE(*d);
+> > }
+> > 
+> > P1(int *a, int *b, int *c, int *d, struct srcu_struct *s)
+> > {
+> > 	WRITE_ONCE(*b, 1);
+> > 	synchronize_srcu(s);
+> > 	WRITE_ONCE(*c, 1);
+> > }
+> > 
+> > P2(int *a, int *b, int *c, int *d, struct srcu_struct *s)
+> > {
+> > 	WRITE_ONCE(*d, 1);
+> > 	smp_mb();
+> > 	WRITE_ONCE(*a, 1);
+> > }
+> > 
+> > exists (0:r2=1 /\ 0:r3=1 /\ 0:r4=0 /\ b=1)
+> 
