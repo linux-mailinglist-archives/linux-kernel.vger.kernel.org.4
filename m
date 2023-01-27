@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D2367EB93
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C09F67EB8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234469AbjA0Qvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
+        id S234152AbjA0Qvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:51:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjA0Qvl (ORCPT
+        with ESMTP id S232670AbjA0Qvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:51:41 -0500
+        Fri, 27 Jan 2023 11:51:40 -0500
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07077DBF6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:51:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086887DBD6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:51:38 -0800 (PST)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30R9k8LT030633;
-        Fri, 27 Jan 2023 10:51:32 -0600
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30R9k8LP030633;
+        Fri, 27 Jan 2023 10:51:31 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=TTC47bgNB45idzSbfNOI1xh6OyXSxo6PonYazO3r2IQ=;
- b=W+U8v1iAzlM2Qo3qLFTrqO78YQEbqmtzJjVSU3y26v08lbhWVjctvJvyC2aGbhRISA//
- qLSCeIdyn192e3vX5vNQeSSV9TxsXl4Ppc18JvUrbh0szkYmPdM9anYv/OcuITEy3MgF
- U4XfVhLlQAW1RdM8MA5i2Jmt5TxCafEz2AU/isebaCbZApVKDew6J/2A0hyDxvuU9PPC
- i/kicHTuoIUomp2ctYCkmNV/9SUaSxBiXdyv0NLoszSQT4SlzjK+kL14h2w3CFZRvtI4
- MLdN+RNgBEXDvkNjiJVOwFkdS9KuqQfbUZPWb3/KAaZtN9TNP0CcylYnuN9SmTAH6D1S mQ== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3n8dbsvrd1-5
+ bh=gzww93MA3M79V6JYJ0KSkJ/wBLiBFaVv6r0gK+hWsXw=;
+ b=EIRhEgaJzWmHA5zR66SR2EivoiTvbu5HCfUR7KZUZF7clFQBcv7jJGGSS9Fk/GfqAtD/
+ OcZmegfmh5bC8RKPueKjJFAURrEd7+3nj0r5p1DiegppKnqj50MPdktLOZMYxV0qgQ6+
+ +sATVnPN+4tEk6g0GyRsxaIWh7uDQMS9v0d03JyDslDHpf38awUHnISDLYeTTrDF9Zsh
+ z50lTH2EjbaWaA/KOGgRWdHZH/7Kn9+eU1YFxiHrtPXQTlZYivXW3RvarMRDLmRB/+UJ
+ cI8KYh2oyLU5fEMbetsvI/3aVclUvjKrU1ZxQItoj1c9hZCcyxeHFyScIIFYH2UTWNdQ Tw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3n8dbsvrd3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 10:51:32 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 27 Jan 2023 10:51:30 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Fri, 27 Jan
- 2023 10:51:28 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.7 via Frontend Transport; Fri, 27 Jan 2023 10:51:28 -0600
+ 2023 10:51:29 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.21 via Frontend
+ Transport; Fri, 27 Jan 2023 10:51:29 -0600
 Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.202.160])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D2DD7475;
-        Fri, 27 Jan 2023 16:51:28 +0000 (UTC)
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 05A7311D6;
+        Fri, 27 Jan 2023 16:51:29 +0000 (UTC)
 From:   Stefan Binding <sbinding@opensource.cirrus.com>
 To:     Vinod Koul <vkoul@kernel.org>,
         Bard Liao <yung-chuan.liao@linux.intel.com>,
@@ -50,17 +50,17 @@ CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <patches@opensource.cirrus.com>,
         Richard Fitzgerald <rf@opensource.cirrus.com>,
         Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v3 4/8] ASoC: cs42l42: Separate ASP config from PLL config
-Date:   Fri, 27 Jan 2023 16:51:07 +0000
-Message-ID: <20230127165111.3010960-5-sbinding@opensource.cirrus.com>
+Subject: [PATCH v3 5/8] ASoC: cs42l42: Export some functions for SoundWire
+Date:   Fri, 27 Jan 2023 16:51:08 +0000
+Message-ID: <20230127165111.3010960-6-sbinding@opensource.cirrus.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230127165111.3010960-1-sbinding@opensource.cirrus.com>
 References: <20230127165111.3010960-1-sbinding@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: TeXrXISvG1BSgFQ0Xsy-DAS6qgxsMEjZ
-X-Proofpoint-GUID: TeXrXISvG1BSgFQ0Xsy-DAS6qgxsMEjZ
+X-Proofpoint-ORIG-GUID: MWrLG6xNTkMsmJ1yAyy9tnEMFXowVR19
+X-Proofpoint-GUID: MWrLG6xNTkMsmJ1yAyy9tnEMFXowVR19
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
@@ -73,151 +73,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Richard Fitzgerald <rf@opensource.cirrus.com>
 
-Setup of the ASP (audio serial port) was being done as a side-effect of
-cs42l42_pll_config() and forces a restriction on the ratio of sample_rate
-to bit_clock that is invalid for Soundwire.
-
-Move the ASP setup into a dedicated function.
+Export functions that will be needed by a SoundWire module.
 
 Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 ---
- sound/soc/codecs/cs42l42.c | 81 +++++++++++++++++++++-----------------
- sound/soc/codecs/cs42l42.h |  1 -
- 2 files changed, 44 insertions(+), 38 deletions(-)
+ sound/soc/codecs/cs42l42.c | 14 +++++++++-----
+ sound/soc/codecs/cs42l42.h |  5 +++++
+ 2 files changed, 14 insertions(+), 5 deletions(-)
 
 diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
-index 939f8bcc222c0..d81c6eb1c1e59 100644
+index d81c6eb1c1e59..cefefd7061689 100644
 --- a/sound/soc/codecs/cs42l42.c
 +++ b/sound/soc/codecs/cs42l42.c
-@@ -658,7 +658,6 @@ static int cs42l42_pll_config(struct snd_soc_component *component, unsigned int
+@@ -653,8 +653,8 @@ static const struct cs42l42_pll_params pll_ratio_table[] = {
+ 	{ 24576000, 1, 0x03, 0x40, 0x000000, 0x03, 0x10, 12288000, 128, 1}
+ };
+ 
+-static int cs42l42_pll_config(struct snd_soc_component *component, unsigned int clk,
+-			      unsigned int sample_rate)
++int cs42l42_pll_config(struct snd_soc_component *component, unsigned int clk,
++		       unsigned int sample_rate)
  {
  	struct cs42l42_private *cs42l42 = snd_soc_component_get_drvdata(component);
  	int i;
--	u32 fsync;
+@@ -740,8 +740,9 @@ static int cs42l42_pll_config(struct snd_soc_component *component, unsigned int
  
- 	/* Don't reconfigure if there is an audio stream running */
- 	if (cs42l42->stream_use) {
-@@ -684,40 +683,6 @@ static int cs42l42_pll_config(struct snd_soc_component *component, unsigned int
- 					(pll_ratio_table[i].mclk_int !=
- 					24000000)) <<
- 					CS42L42_INTERNAL_FS_SHIFT);
--
--			/* Set up the LRCLK */
--			fsync = clk / cs42l42->srate;
--			if (((fsync * cs42l42->srate) != clk)
--				|| ((fsync % 2) != 0)) {
--				dev_err(component->dev,
--					"Unsupported sclk %d/sample rate %d\n",
--					clk,
--					cs42l42->srate);
--				return -EINVAL;
--			}
--			/* Set the LRCLK period */
--			snd_soc_component_update_bits(component,
--					CS42L42_FSYNC_P_LOWER,
--					CS42L42_FSYNC_PERIOD_MASK,
--					CS42L42_FRAC0_VAL(fsync - 1) <<
--					CS42L42_FSYNC_PERIOD_SHIFT);
--			snd_soc_component_update_bits(component,
--					CS42L42_FSYNC_P_UPPER,
--					CS42L42_FSYNC_PERIOD_MASK,
--					CS42L42_FRAC1_VAL(fsync - 1) <<
--					CS42L42_FSYNC_PERIOD_SHIFT);
--			/* Set the LRCLK to 50% duty cycle */
--			fsync = fsync / 2;
--			snd_soc_component_update_bits(component,
--					CS42L42_FSYNC_PW_LOWER,
--					CS42L42_FSYNC_PULSE_WIDTH_MASK,
--					CS42L42_FRAC0_VAL(fsync - 1) <<
--					CS42L42_FSYNC_PULSE_WIDTH_SHIFT);
--			snd_soc_component_update_bits(component,
--					CS42L42_FSYNC_PW_UPPER,
--					CS42L42_FSYNC_PULSE_WIDTH_MASK,
--					CS42L42_FRAC1_VAL(fsync - 1) <<
--					CS42L42_FSYNC_PULSE_WIDTH_SHIFT);
- 			if (pll_ratio_table[i].mclk_src_sel == 0) {
- 				/* Pass the clock straight through */
- 				snd_soc_component_update_bits(component,
-@@ -809,6 +774,46 @@ static void cs42l42_src_config(struct snd_soc_component *component, unsigned int
+ 	return -EINVAL;
+ }
++EXPORT_SYMBOL_NS_GPL(cs42l42_pll_config, SND_SOC_CS42L42_CORE);
+ 
+-static void cs42l42_src_config(struct snd_soc_component *component, unsigned int sample_rate)
++void cs42l42_src_config(struct snd_soc_component *component, unsigned int sample_rate)
+ {
+ 	struct cs42l42_private *cs42l42 = snd_soc_component_get_drvdata(component);
+ 	unsigned int fs;
+@@ -773,6 +774,7 @@ static void cs42l42_src_config(struct snd_soc_component *component, unsigned int
+ 				      CS42L42_CLK_OASRC_SEL_MASK,
  				      fs << CS42L42_CLK_OASRC_SEL_SHIFT);
  }
++EXPORT_SYMBOL_NS_GPL(cs42l42_src_config, SND_SOC_CS42L42_CORE);
  
-+static int cs42l42_asp_config(struct snd_soc_component *component,
-+			      unsigned int sclk, unsigned int sample_rate)
-+{
-+	u32 fsync = sclk / sample_rate;
-+
-+	/* Set up the LRCLK */
-+	if (((fsync * sample_rate) != sclk) || ((fsync % 2) != 0)) {
-+		dev_err(component->dev,
-+			"Unsupported sclk %d/sample rate %d\n",
-+			sclk,
-+			sample_rate);
-+		return -EINVAL;
-+	}
-+	/* Set the LRCLK period */
-+	snd_soc_component_update_bits(component,
-+				      CS42L42_FSYNC_P_LOWER,
-+				      CS42L42_FSYNC_PERIOD_MASK,
-+				      CS42L42_FRAC0_VAL(fsync - 1) <<
-+				      CS42L42_FSYNC_PERIOD_SHIFT);
-+	snd_soc_component_update_bits(component,
-+				      CS42L42_FSYNC_P_UPPER,
-+				      CS42L42_FSYNC_PERIOD_MASK,
-+				      CS42L42_FRAC1_VAL(fsync - 1) <<
-+				      CS42L42_FSYNC_PERIOD_SHIFT);
-+	/* Set the LRCLK to 50% duty cycle */
-+	fsync = fsync / 2;
-+	snd_soc_component_update_bits(component,
-+				      CS42L42_FSYNC_PW_LOWER,
-+				      CS42L42_FSYNC_PULSE_WIDTH_MASK,
-+				      CS42L42_FRAC0_VAL(fsync - 1) <<
-+				      CS42L42_FSYNC_PULSE_WIDTH_SHIFT);
-+	snd_soc_component_update_bits(component,
-+				      CS42L42_FSYNC_PW_UPPER,
-+				      CS42L42_FSYNC_PULSE_WIDTH_MASK,
-+				      CS42L42_FRAC1_VAL(fsync - 1) <<
-+				      CS42L42_FSYNC_PULSE_WIDTH_SHIFT);
-+
-+	return 0;
-+}
-+
- static int cs42l42_set_dai_fmt(struct snd_soc_dai *codec_dai, unsigned int fmt)
+ static int cs42l42_asp_config(struct snd_soc_component *component,
+ 			      unsigned int sclk, unsigned int sample_rate)
+@@ -1013,7 +1015,7 @@ static int cs42l42_set_bclk_ratio(struct snd_soc_dai *dai,
+ 	return 0;
+ }
+ 
+-static int cs42l42_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
++int cs42l42_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
  {
- 	struct snd_soc_component *component = codec_dai->component;
-@@ -904,8 +909,6 @@ static int cs42l42_pcm_hw_params(struct snd_pcm_substream *substream,
- 	unsigned int bclk;
- 	int ret;
- 
--	cs42l42->srate = params_rate(params);
--
- 	if (cs42l42->bclk_ratio) {
- 		/* machine driver has set the BCLK/samp-rate ratio */
- 		bclk = cs42l42->bclk_ratio * params_rate(params);
-@@ -966,6 +969,10 @@ static int cs42l42_pcm_hw_params(struct snd_pcm_substream *substream,
- 	if (ret)
- 		return ret;
- 
-+	ret = cs42l42_asp_config(component, bclk, sample_rate);
-+	if (ret)
-+		return ret;
-+
- 	cs42l42_src_config(component, sample_rate);
+ 	struct snd_soc_component *component = dai->component;
+ 	struct cs42l42_private *cs42l42 = snd_soc_component_get_drvdata(component);
+@@ -1106,6 +1108,7 @@ static int cs42l42_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
  
  	return 0;
+ }
++EXPORT_SYMBOL_NS_GPL(cs42l42_mute_stream, SND_SOC_CS42L42_CORE);
+ 
+ #define CS42L42_FORMATS (SNDRV_PCM_FMTBIT_S16_LE |\
+ 			 SNDRV_PCM_FMTBIT_S24_LE |\
+@@ -1648,7 +1651,7 @@ static const struct cs42l42_irq_params irq_params_table[] = {
+ 		CS42L42_TSRS_PLUG_VAL_MASK}
+ };
+ 
+-static irqreturn_t cs42l42_irq_thread(int irq, void *data)
++irqreturn_t cs42l42_irq_thread(int irq, void *data)
+ {
+ 	struct cs42l42_private *cs42l42 = (struct cs42l42_private *)data;
+ 	unsigned int stickies[12];
+@@ -1765,6 +1768,7 @@ static irqreturn_t cs42l42_irq_thread(int irq, void *data)
+ 
+ 	return IRQ_HANDLED;
+ }
++EXPORT_SYMBOL_NS_GPL(cs42l42_irq_thread, SND_SOC_CS42L42_CORE);
+ 
+ static void cs42l42_set_interrupt_masks(struct cs42l42_private *cs42l42)
+ {
 diff --git a/sound/soc/codecs/cs42l42.h b/sound/soc/codecs/cs42l42.h
-index a721366641127..17aab06adc8e6 100644
+index 17aab06adc8e6..ef8219f489100 100644
 --- a/sound/soc/codecs/cs42l42.h
 +++ b/sound/soc/codecs/cs42l42.h
-@@ -36,7 +36,6 @@ struct  cs42l42_private {
- 	int pll_config;
- 	u32 sclk;
- 	u32 bclk_ratio;
--	u32 srate;
- 	u8 plug_state;
- 	u8 hs_type;
- 	u8 ts_inv;
+@@ -61,6 +61,11 @@ extern struct snd_soc_dai_driver cs42l42_dai;
+ bool cs42l42_readable_register(struct device *dev, unsigned int reg);
+ bool cs42l42_volatile_register(struct device *dev, unsigned int reg);
+ 
++int cs42l42_pll_config(struct snd_soc_component *component,
++		       unsigned int clk, unsigned int sample_rate);
++void cs42l42_src_config(struct snd_soc_component *component, unsigned int sample_rate);
++int cs42l42_mute_stream(struct snd_soc_dai *dai, int mute, int stream);
++irqreturn_t cs42l42_irq_thread(int irq, void *data);
+ int cs42l42_suspend(struct device *dev);
+ int cs42l42_resume(struct device *dev);
+ void cs42l42_resume_restore(struct device *dev);
 -- 
 2.34.1
 
