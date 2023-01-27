@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F3667F21F
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 00:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0904967F221
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 00:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbjA0XRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 18:17:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S232861AbjA0XRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 18:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjA0XQ5 (ORCPT
+        with ESMTP id S229681AbjA0XRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 18:16:57 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3DF82402
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 15:16:55 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Fri, 27 Jan 2023 18:17:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40D18B7BF;
+        Fri, 27 Jan 2023 15:17:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 496F71EC0681;
-        Sat, 28 Jan 2023 00:16:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1674861413;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:references;
-        bh=PWpeLnGzL8kAYkey8Z0rbkSYotP9qzH3xxUU/PpcXw0=;
-        b=eomULAP184pftBXhkQNhubL3C+3DQrX7Hu0DD17JZsv+Jd9xc88DZOLeqemqWi3rk2HWvT
-        11mZnLDNC/fccNF+J0nyUz0KMcyQAfW01SkM+cKv4qPWXT5taKzmAHv5JWIBs7otJ8Ckw+
-        R2mwW1MZpWfQv3AUDy4mbrjvkhJN7SE=
-Date:   Sat, 28 Jan 2023 00:16:47 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alexander Potapenko <glider@google.com>,
-        ZhaoyangHuang <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        linux-mm <linux-mm@kvack.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "ke.wang" <ke.wang@unisoc.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>
-Subject: Re: Failure during Stack Depot allocating hash table of 1048576
- entries with kvcalloc
-Message-ID: <Y9RbX9k/zC6+Eg+u@zn.tnic>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B9AB61DDA;
+        Fri, 27 Jan 2023 23:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89CC0C4339B;
+        Fri, 27 Jan 2023 23:17:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674861433;
+        bh=yAH3FEaklexlVeMM/F+Mq5G7RmdCgW4ngE83Zd5lWmo=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=nN9FbRLtgFL6cOBuWQftB7zqy0UzNOFywDIxyJqttRn6JaQB9JHDONJ0OCXtk2zq0
+         Dofi6oiyheH6xDyyr/WppyRsIW/v2i2JqLsPWiGrxe/FiQUWFUPsD9ujfLW58k5odw
+         RtFttHz2vAnLgCX1E/OUfoLhDJ91xgOJMYwh8cNg4RU3GcL2h2qOTL5lW5KPI3j90v
+         IjTCAFy0jE6lqKO0lHx8JaXScjnQe91DeeO6C1DuHLGUXTqPGJyaBMsbHQLIficHde
+         sAnZ2UlyaQQ21YaTaoKsGE7Hy5FyLCWk9gZGcnmsio1UH1T5j2dqTHe6zxglhPil5N
+         l5hyBXbH2Vm2w==
+Message-ID: <47323f5043bc32140cbdbf6d08b8a0fd.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y8GCa2CG2Z7hl/5d@zn.tnic>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <8136eb5b2049177bc2f6d3e0f2aefecc342d626f.1674703830.git.daniel@makrotopia.org>
+References: <cover.1674703830.git.daniel@makrotopia.org> <8136eb5b2049177bc2f6d3e0f2aefecc342d626f.1674703830.git.daniel@makrotopia.org>
+Subject: Re: [PATCH v5 3/3] clk: mediatek: add MT7981 clock support
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Miles Chen <miles.chen@mediatek.com>
+To:     Daniel Golle <daniel@makrotopia.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Date:   Fri, 27 Jan 2023 15:17:11 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ok,
+Quoting Daniel Golle (2023-01-25 19:34:24)
+> Add MT7981 clock support, include topckgen, apmixedsys, infracfg and
+> ethernet subsystem clocks.
+>=20
+> The drivers are based on clk-mt7981.c which can be found in MediaTek's
+> SDK sources. To be fit for upstream inclusion the driver has been split
+> into clock domains and the infracfg part has been significantly
+> de-bloated by removing all the 1:1 factors (aliases).
+>=20
+> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
 
-was finally able to bisect it. Lemme add everybody to Cc.
-
-This one reverted ontop of latest Linus master fixes the vmalloc error here:
-
-https://lore.kernel.org/r/Y8Fq5m0CLfcFLCOY@zn.tnic
-
-commit 56a61617dd2276cbc56a6c868599716386d70041 (HEAD, refs/bisect/bad)
-Author: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-Date:   Thu Oct 27 17:50:24 2022 +0800
-
-    mm: use stack_depot for recording kmemleak's backtrace
-    
-    Using stack_depot to record kmemleak's backtrace which has been
-    implemented on slub for reducing redundant information.
-    
-    [akpm@linux-foundation.org: fix build - remove now-unused __save_stack_trace()]
-    [zhaoyang.huang@unisoc.com: v3]
-      Link: https://lkml.kernel.org/r/1667101354-4669-1-git-send-email-zhaoyang.huang@unisoc.com
-    [akpm@linux-foundation.org: fix v3 layout oddities]
-    [akpm@linux-foundation.org: coding-style cleanups]
-    Link: https://lkml.kernel.org/r/1666864224-27541-1-git-send-email-zhaoyang.huang@unisoc.com
-    Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-    Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-    Cc: ke.wang <ke.wang@unisoc.com>
-    Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-    Cc: Vlastimil Babka <vbabka@suse.cz>
-    Cc: Zhaoyang Huang <huangzhaoyang@gmail.com>
-    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Applied to clk-next
