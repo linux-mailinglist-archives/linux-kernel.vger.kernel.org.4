@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4317F67ED86
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC4567ED87
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235428AbjA0S2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 13:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
+        id S235435AbjA0S2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 13:28:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234999AbjA0S2V (ORCPT
+        with ESMTP id S235210AbjA0S2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 13:28:21 -0500
+        Fri, 27 Jan 2023 13:28:22 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8428307E;
-        Fri, 27 Jan 2023 10:27:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2453D83240;
+        Fri, 27 Jan 2023 10:27:34 -0800 (PST)
 Date:   Fri, 27 Jan 2023 18:26:56 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674844016;
+        s=2020; t=1674844017;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=vZz46/zKEqjuMdOjPGVkBu/Ab+eqSCP/7KJ1e+eGqYY=;
-        b=J5WZFRntb/WmCv+UvlchWVmzi9i+Cx591gLmBXtvF07i/QhtLsSlVVVvgmglM9KoBbqryr
-        DfuaVxrm3118Qm/8D7yP8zir/hQqK64kNePNyL8f0PkDZwraUsJlW3j3BQnemd54RM+vos
-        auZIVSMuqdnNUWyzFyH+le5S6b1f9wLmfqRJTeN5vfGw6v5jTPYBPKeIrfQpkqhZ0voyyJ
-        Fmov2xGs3V35S1XBjcF4qf66UgdnohZeq0XDJNQOVaGxR3xQMDrYGRTYqWBAI3zgU17jbS
-        OmQt9wX0Q5G1zrro1eTLLUgebQIbp9/aU/7EYnjRRFdnPHRhru7v7Y34WGVSIw==
+        bh=LHjZkcJoCoNf2FZj9Z1UyWb4+dkvZrYpqan3ctWzrCY=;
+        b=viFJ8oV+gFGDxFxNT+dXGlVJ2rlV3BZlC0syXqx8gPz9ByZwY0u0yYZzEPGbYhqqT9/sfC
+        pGnVU7qc5rBicjiF6LWUGb/QoztgDy+IJNh/AESxv6Sh1sU7HsOgGawx+7lsh7YJWEQn7S
+        col0ZZ7JR2bB2Cb5DourhuiyzPYuQjdd3zw6N675Q/7KAaVcQrlCh4Pobiyo+6QgqRkO60
+        CFShsSa+Q4apCzaAzUy8Xzk1/wmQKhjcDhB5oD5HGY7mln8EySM3QlC6q6D/dTs0w/N9Dt
+        U1oPkLl9au+fwuDEuy8csp8mLQKyot99CAXTZciIyYbeyzEj1gNF+WazmRKCvw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674844016;
+        s=2020e; t=1674844017;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=vZz46/zKEqjuMdOjPGVkBu/Ab+eqSCP/7KJ1e+eGqYY=;
-        b=RGZYMDtgd/UiBCD4abmvfKIDjsmM8s2d2hPoIuOn1SojMIrlEjZ3sYWPjbyvwjISWH9l6B
-        AURveOSkwl88axBg==
+        bh=LHjZkcJoCoNf2FZj9Z1UyWb4+dkvZrYpqan3ctWzrCY=;
+        b=TBulKF8z7CXpNBN893syMl7K8IR/WXb0TDZ99Uvu9Htoo94ZsV6YeK0T95xmxiv+ijS+Ty
+        G783R11raGi0nLCg==
 From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/tdx] x86/tdx: Expand __tdx_hypercall() to handle more arguments
+Subject: [tip: x86/tdx] x86/tdx: Refactor __tdx_hypercall() to allow pass down
+ more arguments
 Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <167484401655.4906.15408746079052714467.tip-bot2@tip-bot2>
+Message-ID: <167484401684.4906.6620390919066115550.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,125 +61,122 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/tdx branch of tip:
 
-Commit-ID:     752d13305c78b2f0f0d783132f94acc9ce93d38e
-Gitweb:        https://git.kernel.org/tip/752d13305c78b2f0f0d783132f94acc9ce93d38e
+Commit-ID:     c30c4b2555ba93b845559a036293fcaf7ffd2b82
+Gitweb:        https://git.kernel.org/tip/c30c4b2555ba93b845559a036293fcaf7ffd2b82
 Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-AuthorDate:    Fri, 27 Jan 2023 01:11:56 +03:00
+AuthorDate:    Fri, 27 Jan 2023 01:11:55 +03:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Fri, 27 Jan 2023 09:42:09 -08:00
 
-x86/tdx: Expand __tdx_hypercall() to handle more arguments
+x86/tdx: Refactor __tdx_hypercall() to allow pass down more arguments
 
-So far __tdx_hypercall() only handles six arguments for VMCALL.
-Expanding it to six more register would allow to cover more use-cases
-like ReportFatalError() and Hyper-V hypercalls.
+RDI is the first argument to __tdx_hypercall() that used to pass pointer
+to struct tdx_hypercall_args. RSI is the second argument that contains
+flags, such as TDX_HCALL_HAS_OUTPUT and TDX_HCALL_ISSUE_STI.
 
-With all preparations in place, the expansion is pretty straight
-forward.
+RDI and RSI can also be used as arguments to TDVMCALL leafs. Move RDI to
+RAX and RSI to RBP to free up them for the hypercall arguments.
+
+RAX saved on stack during TDCALL as it returns status code in the
+register.
+
+RBP value has to be restored before returning from __tdx_hypercall() as
+it is callee-saved register.
+
+This is preparatory patch. No functional change.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lore.kernel.org/all/20230126221159.8635-5-kirill.shutemov%40linux.intel.com
+Link: https://lore.kernel.org/all/20230126221159.8635-4-kirill.shutemov%40linux.intel.com
 ---
- arch/x86/coco/tdx/tdcall.S | 35 ++++++++++++++++++++++++++++++-----
- 1 file changed, 30 insertions(+), 5 deletions(-)
+ arch/x86/coco/tdx/tdcall.S | 46 ++++++++++++++++++++++---------------
+ 1 file changed, 28 insertions(+), 18 deletions(-)
 
 diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
-index a9bb4cb..5da06d1 100644
+index 74b108e..a9bb4cb 100644
 --- a/arch/x86/coco/tdx/tdcall.S
 +++ b/arch/x86/coco/tdx/tdcall.S
-@@ -13,6 +13,12 @@
- /*
-  * Bitmasks of exposed registers (with VMM).
-  */
-+#define TDX_RDX		BIT(2)
-+#define TDX_RBX		BIT(3)
-+#define TDX_RSI		BIT(6)
-+#define TDX_RDI		BIT(7)
-+#define TDX_R8		BIT(8)
-+#define TDX_R9		BIT(9)
- #define TDX_R10		BIT(10)
- #define TDX_R11		BIT(11)
- #define TDX_R12		BIT(12)
-@@ -27,9 +33,9 @@
-  * details can be found in TDX GHCI specification, section
-  * titled "TDCALL [TDG.VP.VMCALL] leaf".
-  */
--#define TDVMCALL_EXPOSE_REGS_MASK	( TDX_R10 | TDX_R11 | \
--					  TDX_R12 | TDX_R13 | \
--					  TDX_R14 | TDX_R15 )
-+#define TDVMCALL_EXPOSE_REGS_MASK	\
-+	( TDX_RDX | TDX_RBX | TDX_RSI | TDX_RDI | TDX_R8  | TDX_R9  | \
-+	  TDX_R10 | TDX_R11 | TDX_R12 | TDX_R13 | TDX_R14 | TDX_R15 )
- 
- /*
-  * __tdx_module_call()  - Used by TDX guests to request services from
-@@ -124,6 +130,7 @@ SYM_FUNC_START(__tdx_hypercall)
+@@ -124,19 +124,26 @@ SYM_FUNC_START(__tdx_hypercall)
  	push %r14
  	push %r13
  	push %r12
-+	push %rbx
- 	push %rbp
++	push %rbp
++
++	/* Free RDI and RSI to be used as TDVMCALL arguments */
++	movq %rdi, %rax
++	movq %rsi, %rbp
++
++	/* Copy hypercall registers from arg struct: */
++	movq TDX_HYPERCALL_r10(%rax), %r10
++	movq TDX_HYPERCALL_r11(%rax), %r11
++	movq TDX_HYPERCALL_r12(%rax), %r12
++	movq TDX_HYPERCALL_r13(%rax), %r13
++	movq TDX_HYPERCALL_r14(%rax), %r14
++	movq TDX_HYPERCALL_r15(%rax), %r15
++
++	push %rax
  
- 	/* Free RDI and RSI to be used as TDVMCALL arguments */
-@@ -131,12 +138,18 @@ SYM_FUNC_START(__tdx_hypercall)
- 	movq %rsi, %rbp
+ 	/* Mangle function call ABI into TDCALL ABI: */
+ 	/* Set TDCALL leaf ID (TDVMCALL (0)) in RAX */
+ 	xor %eax, %eax
  
- 	/* Copy hypercall registers from arg struct: */
-+	movq TDX_HYPERCALL_r8(%rax),  %r8
-+	movq TDX_HYPERCALL_r9(%rax),  %r9
- 	movq TDX_HYPERCALL_r10(%rax), %r10
- 	movq TDX_HYPERCALL_r11(%rax), %r11
- 	movq TDX_HYPERCALL_r12(%rax), %r12
- 	movq TDX_HYPERCALL_r13(%rax), %r13
- 	movq TDX_HYPERCALL_r14(%rax), %r14
- 	movq TDX_HYPERCALL_r15(%rax), %r15
-+	movq TDX_HYPERCALL_rdi(%rax), %rdi
-+	movq TDX_HYPERCALL_rsi(%rax), %rsi
-+	movq TDX_HYPERCALL_rbx(%rax), %rbx
-+	movq TDX_HYPERCALL_rdx(%rax), %rdx
+-	/* Copy hypercall registers from arg struct: */
+-	movq TDX_HYPERCALL_r10(%rdi), %r10
+-	movq TDX_HYPERCALL_r11(%rdi), %r11
+-	movq TDX_HYPERCALL_r12(%rdi), %r12
+-	movq TDX_HYPERCALL_r13(%rdi), %r13
+-	movq TDX_HYPERCALL_r14(%rdi), %r14
+-	movq TDX_HYPERCALL_r15(%rdi), %r15
+-
+ 	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
  
- 	push %rax
+ 	/*
+@@ -148,7 +155,7 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	 * HLT operation indefinitely. Since this is the not the desired
+ 	 * result, conditionally call STI before TDCALL.
+ 	 */
+-	testq $TDX_HCALL_ISSUE_STI, %rsi
++	testq $TDX_HCALL_ISSUE_STI, %rbp
+ 	jz .Lskip_sti
+ 	sti
+ .Lskip_sti:
+@@ -165,20 +172,22 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	testq %rax, %rax
+ 	jne .Lpanic
  
-@@ -178,12 +191,18 @@ SYM_FUNC_START(__tdx_hypercall)
- 	testq $TDX_HCALL_HAS_OUTPUT, %rbp
+-	/* TDVMCALL leaf return code is in R10 */
+-	movq %r10, %rax
++	pop %rax
+ 
+ 	/* Copy hypercall result registers to arg struct if needed */
+-	testq $TDX_HCALL_HAS_OUTPUT, %rsi
++	testq $TDX_HCALL_HAS_OUTPUT, %rbp
  	jz .Lout
  
-+	movq %r8,  TDX_HYPERCALL_r8(%rax)
-+	movq %r9,  TDX_HYPERCALL_r9(%rax)
- 	movq %r10, TDX_HYPERCALL_r10(%rax)
- 	movq %r11, TDX_HYPERCALL_r11(%rax)
- 	movq %r12, TDX_HYPERCALL_r12(%rax)
- 	movq %r13, TDX_HYPERCALL_r13(%rax)
- 	movq %r14, TDX_HYPERCALL_r14(%rax)
- 	movq %r15, TDX_HYPERCALL_r15(%rax)
-+	movq %rdi, TDX_HYPERCALL_rdi(%rax)
-+	movq %rsi, TDX_HYPERCALL_rsi(%rax)
-+	movq %rbx, TDX_HYPERCALL_rbx(%rax)
-+	movq %rdx, TDX_HYPERCALL_rdx(%rax)
+-	movq %r10, TDX_HYPERCALL_r10(%rdi)
+-	movq %r11, TDX_HYPERCALL_r11(%rdi)
+-	movq %r12, TDX_HYPERCALL_r12(%rdi)
+-	movq %r13, TDX_HYPERCALL_r13(%rdi)
+-	movq %r14, TDX_HYPERCALL_r14(%rdi)
+-	movq %r15, TDX_HYPERCALL_r15(%rdi)
++	movq %r10, TDX_HYPERCALL_r10(%rax)
++	movq %r11, TDX_HYPERCALL_r11(%rax)
++	movq %r12, TDX_HYPERCALL_r12(%rax)
++	movq %r13, TDX_HYPERCALL_r13(%rax)
++	movq %r14, TDX_HYPERCALL_r14(%rax)
++	movq %r15, TDX_HYPERCALL_r15(%rax)
  .Lout:
- 	/* TDVMCALL leaf return code is in R10 */
- 	movq %r10, %rax
-@@ -191,14 +210,20 @@ SYM_FUNC_START(__tdx_hypercall)
++	/* TDVMCALL leaf return code is in R10 */
++	movq %r10, %rax
++
  	/*
  	 * Zero out registers exposed to the VMM to avoid speculative execution
  	 * with VMM-controlled values. This needs to include all registers
--	 * present in TDVMCALL_EXPOSE_REGS_MASK (except R12-R15). R12-R15
--	 * context will be restored.
-+	 * present in TDVMCALL_EXPOSE_REGS_MASK, except RBX, and R12-R15 which
-+	 * will be restored.
- 	 */
-+	xor %r8d,  %r8d
-+	xor %r9d,  %r9d
- 	xor %r10d, %r10d
+@@ -189,6 +198,7 @@ SYM_FUNC_START(__tdx_hypercall)
  	xor %r11d, %r11d
-+	xor %rdi,  %rdi
-+	xor %rsi,  %rsi
-+	xor %rdx,  %rdx
  
  	/* Restore callee-saved GPRs as mandated by the x86_64 ABI */
- 	pop %rbp
-+	pop %rbx
++	pop %rbp
  	pop %r12
  	pop %r13
  	pop %r14
