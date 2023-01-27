@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E36467E12C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60EC667E12F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233088AbjA0KM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S233464AbjA0KMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233424AbjA0KMU (ORCPT
+        with ESMTP id S233460AbjA0KM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:12:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150054B75C;
-        Fri, 27 Jan 2023 02:12:18 -0800 (PST)
+        Fri, 27 Jan 2023 05:12:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313F677DC0;
+        Fri, 27 Jan 2023 02:12:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 568CDB81FC7;
-        Fri, 27 Jan 2023 10:12:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C583C433EF;
-        Fri, 27 Jan 2023 10:12:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABCE7B8200B;
+        Fri, 27 Jan 2023 10:12:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80B6FC4339B;
+        Fri, 27 Jan 2023 10:12:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674814335;
-        bh=0YBdE3btLJ2tSRcQLbs5o3QlmOGeboxgMUsAgzinaCQ=;
+        s=k20201202; t=1674814337;
+        bh=6X11Bz5b7lMqNuxX3JeGI1QvkklF41RteWtCBQ9Y6ZE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Del35osK027VH9O0jWiWluhlUkbUEFsYzC7bxkigUMrFMA8Jjmrb06N7cICgNLvvg
-         6Z4gaWXk3Lw6E7FsZ6gam5111+hdWGgve77714yHCecBkmNlvEeUxSjMzrJKAY+Cya
-         lX6Wj1HfmB6iVrcPlewAcVCn27qPEUAs2421hrjzIn5zQJoEQudTPB1ti3MU++pEOH
-         FK1dkqcZyB89O6Bpaod/96iF/rfesXzx8zIJZQfBy/zMLwWQALoK+H09ZMMaz0II7a
-         ec35f2n5BF8Jodj90qt0iV+Xp6GLvvxsVBQzccLUpzNxpp9MvSpel1VIgflCYI3YKD
-         ejWo5bWD56tuA==
+        b=OZJhYa2fP6kxnOJmThRuT6aKaRPVTYHFq6S/utZHYIdb8myC2EE/rx/5B0gkIflfx
+         nsoNM6JbvWWsA9k5rSSudC1YUfZQQnFm37r8RrNR2TvjRaHFtfIxOlCpwyJy3KcYEZ
+         Ncaim1+F2kYHPJkyV8+scFbBvPzHHlqRUqRhoNglozFZk25dyADlo6CDTaWQI1JkK0
+         4gnt/d+dCtmKd8K0FHeC5PwFEN58pWjtqpAoaDAff2picVZqLJy3BI7qx8qpshvLCV
+         WhCPo4JLLK415WfI/aopLDNKlnb2Rz3jNqEB0AXfWDnUw29UkfI3CIaw8UIWAx0Z+m
+         UAjPu6fODXZ0Q==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-gpio@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -41,13 +41,14 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/7] gpiolib: remove asm-generic/gpio.h
-Date:   Fri, 27 Jan 2023 11:11:45 +0100
-Message-Id: <20230127101149.3475929-4-arnd@kernel.org>
+Subject: [PATCH v2 4/7] gpiolib: remove gpio_set_debounce
+Date:   Fri, 27 Jan 2023 11:11:46 +0100
+Message-Id: <20230127101149.3475929-5-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230127101149.3475929-1-arnd@kernel.org>
 References: <20230127101149.3475929-1-arnd@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,339 +61,157 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The asm-generic/gpio.h file is now always included when
-using gpiolib, so just move its contents into linux/gpio.h
-with a few minor simplifications.
+gpio_set_debounce() only has a single user, which is trivially
+converted to gpiod_set_debounce().
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- MAINTAINERS                     |   1 -
- arch/m68k/include/asm/mcfgpio.h |   2 +-
- drivers/gpio/gpio-davinci.c     |   2 -
- drivers/pinctrl/core.c          |   1 -
- include/asm-generic/gpio.h      | 147 --------------------------------
- include/linux/gpio.h            |  93 ++++++++++++++++++--
- 6 files changed, 85 insertions(+), 161 deletions(-)
- delete mode 100644 include/asm-generic/gpio.h
+ Documentation/driver-api/gpio/legacy.rst      |  2 --
+ .../zh_CN/driver-api/gpio/legacy.rst          |  1 -
+ Documentation/translations/zh_TW/gpio.txt     |  1 -
+ drivers/input/touchscreen/ads7846.c           | 25 ++++++++++---------
+ include/linux/gpio.h                          | 10 --------
+ 5 files changed, 13 insertions(+), 26 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f64c8f15df4b..25f16f825427 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8731,7 +8731,6 @@ F:	Documentation/admin-guide/gpio/
- F:	Documentation/devicetree/bindings/gpio/
- F:	Documentation/driver-api/gpio/
- F:	drivers/gpio/
--F:	include/asm-generic/gpio.h
- F:	include/dt-bindings/gpio/
- F:	include/linux/gpio.h
- F:	include/linux/gpio/
-diff --git a/arch/m68k/include/asm/mcfgpio.h b/arch/m68k/include/asm/mcfgpio.h
-index 27f32cc81da6..2cefe8445980 100644
---- a/arch/m68k/include/asm/mcfgpio.h
-+++ b/arch/m68k/include/asm/mcfgpio.h
-@@ -9,7 +9,7 @@
- #define mcfgpio_h
+diff --git a/Documentation/driver-api/gpio/legacy.rst b/Documentation/driver-api/gpio/legacy.rst
+index a0559d93efd1..e0306e78e34b 100644
+--- a/Documentation/driver-api/gpio/legacy.rst
++++ b/Documentation/driver-api/gpio/legacy.rst
+@@ -238,8 +238,6 @@ setup or driver probe/teardown code, so this is an easy constraint.)::
+         ## 	gpio_free_array()
  
- #ifdef CONFIG_GPIOLIB
--#include <asm-generic/gpio.h>
-+#include <linux/gpio.h>
- #else
+                 gpio_free()
+-                gpio_set_debounce()
+-
  
- int __mcfgpio_get_value(unsigned gpio);
-diff --git a/drivers/gpio/gpio-davinci.c b/drivers/gpio/gpio-davinci.c
-index 26b1f7465e09..7fc83057990a 100644
---- a/drivers/gpio/gpio-davinci.c
-+++ b/drivers/gpio/gpio-davinci.c
-@@ -24,8 +24,6 @@
- #include <linux/spinlock.h>
- #include <linux/pm_runtime.h>
  
--#include <asm-generic/gpio.h>
--
- #define MAX_REGS_BANKS 5
- #define MAX_INT_PER_BANK 32
+ Claiming and Releasing GPIOs
+diff --git a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
+index 74fa473bb504..dee2a0517c1c 100644
+--- a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
++++ b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
+@@ -219,7 +219,6 @@ GPIO 值的命令需要等待其信息排到队首才发送命令，再获得其
+         ## 	gpio_free_array()
  
-diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
-index d6e6c751255f..401886c81344 100644
---- a/drivers/pinctrl/core.c
-+++ b/drivers/pinctrl/core.c
-@@ -30,7 +30,6 @@
+                 gpio_free()
+-                gpio_set_debounce()
  
- #ifdef CONFIG_GPIOLIB
- #include "../gpio/gpiolib.h"
--#include <asm-generic/gpio.h>
- #endif
  
- #include "core.h"
-diff --git a/include/asm-generic/gpio.h b/include/asm-generic/gpio.h
-deleted file mode 100644
-index 22cb8c9efc1d..000000000000
---- a/include/asm-generic/gpio.h
-+++ /dev/null
-@@ -1,147 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _ASM_GENERIC_GPIO_H
--#define _ASM_GENERIC_GPIO_H
+ 
+diff --git a/Documentation/translations/zh_TW/gpio.txt b/Documentation/translations/zh_TW/gpio.txt
+index 1b986bbb0909..dc608358d90a 100644
+--- a/Documentation/translations/zh_TW/gpio.txt
++++ b/Documentation/translations/zh_TW/gpio.txt
+@@ -226,7 +226,6 @@ GPIO 值的命令需要等待其信息排到隊首才發送命令，再獲得其
+ ## 	gpio_free_array()
+ 
+ 	gpio_free()
+-	gpio_set_debounce()
+ 
+ 
+ 
+diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+index 4c3dd01902d0..da3c55d9cb98 100644
+--- a/drivers/input/touchscreen/ads7846.c
++++ b/drivers/input/touchscreen/ads7846.c
+@@ -25,8 +25,8 @@
+ #include <linux/slab.h>
+ #include <linux/pm.h>
+ #include <linux/of.h>
+-#include <linux/of_gpio.h>
+ #include <linux/of_device.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/gpio.h>
+ #include <linux/spi/spi.h>
+ #include <linux/spi/ads7846.h>
+@@ -139,7 +139,7 @@ struct ads7846 {
+ 	int			(*filter)(void *data, int data_idx, int *val);
+ 	void			*filter_data;
+ 	int			(*get_pendown_state)(void);
+-	int			gpio_pendown;
++	struct gpio_desc	*gpio_pendown;
+ 
+ 	void			(*wait_for_sync)(void);
+ };
+@@ -222,7 +222,7 @@ static int get_pendown_state(struct ads7846 *ts)
+ 	if (ts->get_pendown_state)
+ 		return ts->get_pendown_state();
+ 
+-	return !gpio_get_value(ts->gpio_pendown);
++	return !gpiod_get_value(ts->gpio_pendown);
+ }
+ 
+ static void ads7846_report_pen_up(struct ads7846 *ts)
+@@ -1005,7 +1005,6 @@ static int ads7846_setup_pendown(struct spi_device *spi,
+ 	if (pdata->get_pendown_state) {
+ 		ts->get_pendown_state = pdata->get_pendown_state;
+ 	} else if (gpio_is_valid(pdata->gpio_pendown)) {
 -
--#include <linux/types.h>
--#include <linux/errno.h>
+ 		err = devm_gpio_request_one(&spi->dev, pdata->gpio_pendown,
+ 					    GPIOF_IN, "ads7846_pendown");
+ 		if (err) {
+@@ -1015,15 +1014,17 @@ static int ads7846_setup_pendown(struct spi_device *spi,
+ 			return err;
+ 		}
+ 
+-		ts->gpio_pendown = pdata->gpio_pendown;
 -
--#ifdef CONFIG_GPIOLIB
--
--#include <linux/compiler.h>
--#include <linux/gpio/driver.h>
--#include <linux/gpio/consumer.h>
--
--/*
-- * Platforms may implement their GPIO interface with library code,
-- * at a small performance cost for non-inlined operations and some
-- * extra memory (for code and for per-GPIO table entries).
-- */
--
--/*
-- * At the end we want all GPIOs to be dynamically allocated from 0.
-- * However, some legacy drivers still perform fixed allocation.
-- * Until they are all fixed, leave 0-512 space for them.
-- */
--#define GPIO_DYNAMIC_BASE	512
--
--struct device;
--struct gpio;
--struct seq_file;
--struct module;
--struct device_node;
--struct gpio_desc;
--
--/* Always use the library code for GPIO management calls,
-- * or when sleeping may be involved.
-- */
--extern int gpio_request(unsigned gpio, const char *label);
--extern void gpio_free(unsigned gpio);
--
--static inline int gpio_direction_input(unsigned gpio)
--{
--	return gpiod_direction_input(gpio_to_desc(gpio));
--}
--static inline int gpio_direction_output(unsigned gpio, int value)
--{
--	return gpiod_direction_output_raw(gpio_to_desc(gpio), value);
--}
--
+-		if (pdata->gpio_pendown_debounce)
+-			gpio_set_debounce(pdata->gpio_pendown,
+-					  pdata->gpio_pendown_debounce);
++		ts->gpio_pendown = gpio_to_desc(pdata->gpio_pendown);
+ 	} else {
+-		dev_err(&spi->dev, "no get_pendown_state nor gpio_pendown?\n");
+-		return -EINVAL;
++		ts->gpio_pendown = gpiod_get(&spi->dev, "pendown-gpio", GPIOD_IN);
++		if (IS_ERR(ts->gpio_pendown)) {
++			dev_err(&spi->dev, "no get_pendown_state nor gpio_pendown?\n");
++			return PTR_ERR(ts->gpio_pendown);
++		}
+ 	}
++	if (pdata->gpio_pendown_debounce)
++		gpiod_set_debounce(ts->gpio_pendown,
++				   pdata->gpio_pendown_debounce);
+ 
+ 	return 0;
+ }
+@@ -1192,7 +1193,7 @@ static const struct ads7846_platform_data *ads7846_probe_dt(struct device *dev)
+ 	pdata->wakeup = of_property_read_bool(node, "wakeup-source") ||
+ 			of_property_read_bool(node, "linux,wakeup");
+ 
+-	pdata->gpio_pendown = of_get_named_gpio(dev->of_node, "pendown-gpio", 0);
++	pdata->gpio_pendown = -1;
+ 
+ 	return pdata;
+ }
+diff --git a/include/linux/gpio.h b/include/linux/gpio.h
+index 6719a82eeec5..220e8656f2ab 100644
+--- a/include/linux/gpio.h
++++ b/include/linux/gpio.h
+@@ -100,11 +100,6 @@ static inline int gpio_direction_output(unsigned gpio, int value)
+ 	return gpiod_direction_output_raw(gpio_to_desc(gpio), value);
+ }
+ 
 -static inline int gpio_set_debounce(unsigned gpio, unsigned debounce)
 -{
 -	return gpiod_set_debounce(gpio_to_desc(gpio), debounce);
 -}
 -
--static inline int gpio_get_value_cansleep(unsigned gpio)
--{
--	return gpiod_get_raw_value_cansleep(gpio_to_desc(gpio));
--}
--static inline void gpio_set_value_cansleep(unsigned gpio, int value)
--{
--	return gpiod_set_raw_value_cansleep(gpio_to_desc(gpio), value);
--}
--
--
--/* A platform's <asm/gpio.h> code may want to inline the I/O calls when
-- * the GPIO is constant and refers to some always-present controller,
-- * giving direct access to chip registers and tight bitbanging loops.
-- */
--static inline int __gpio_get_value(unsigned gpio)
--{
--	return gpiod_get_raw_value(gpio_to_desc(gpio));
--}
--static inline void __gpio_set_value(unsigned gpio, int value)
--{
--	return gpiod_set_raw_value(gpio_to_desc(gpio), value);
--}
--
--static inline int __gpio_cansleep(unsigned gpio)
--{
--	return gpiod_cansleep(gpio_to_desc(gpio));
--}
--
--static inline int __gpio_to_irq(unsigned gpio)
--{
--	return gpiod_to_irq(gpio_to_desc(gpio));
--}
--
--extern int gpio_request_one(unsigned gpio, unsigned long flags, const char *label);
--extern int gpio_request_array(const struct gpio *array, size_t num);
--extern void gpio_free_array(const struct gpio *array, size_t num);
--
--/*
-- * A sysfs interface can be exported by individual drivers if they want,
-- * but more typically is configured entirely from userspace.
-- */
--static inline int gpio_export(unsigned gpio, bool direction_may_change)
--{
--	return gpiod_export(gpio_to_desc(gpio), direction_may_change);
--}
--
--static inline void gpio_unexport(unsigned gpio)
--{
--	gpiod_unexport(gpio_to_desc(gpio));
--}
--
--#else	/* !CONFIG_GPIOLIB */
--
--#include <linux/kernel.h>
--
--/* platforms that don't directly support access to GPIOs through I2C, SPI,
-- * or other blocking infrastructure can use these wrappers.
-- */
--
--static inline int gpio_cansleep(unsigned gpio)
--{
--	return 0;
--}
--
--static inline int gpio_get_value_cansleep(unsigned gpio)
--{
--	might_sleep();
--	return __gpio_get_value(gpio);
--}
--
--static inline void gpio_set_value_cansleep(unsigned gpio, int value)
--{
--	might_sleep();
--	__gpio_set_value(gpio, value);
--}
--
--#endif /* !CONFIG_GPIOLIB */
--
--/*
-- * "valid" GPIO numbers are nonnegative and may be passed to
-- * setup routines like gpio_request().  only some valid numbers
-- * can successfully be requested and used.
-- *
-- * Invalid GPIO numbers are useful for indicating no-such-GPIO in
-- * platform data and other tables.
-- */
--
--static inline bool gpio_is_valid(int number)
--{
--	/* only non-negative numbers are valid */
--	return number >= 0;
--}
--
--#endif /* _ASM_GENERIC_GPIO_H */
-diff --git a/include/linux/gpio.h b/include/linux/gpio.h
-index 2b75017b3aad..6719a82eeec5 100644
---- a/include/linux/gpio.h
-+++ b/include/linux/gpio.h
-@@ -54,26 +54,101 @@ struct gpio {
- };
- 
- #ifdef CONFIG_GPIOLIB
--#include <asm-generic/gpio.h>
-+#include <linux/compiler.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/gpio/driver.h>
- 
--static inline int gpio_get_value(unsigned int gpio)
-+/*
-+ * "valid" GPIO numbers are nonnegative and may be passed to
-+ * setup routines like gpio_request().  Only some valid numbers
-+ * can successfully be requested and used.
-+ *
-+ * Invalid GPIO numbers are useful for indicating no-such-GPIO in
-+ * platform data and other tables.
-+ */
-+static inline bool gpio_is_valid(int number)
-+{
-+	/* only non-negative numbers are valid */
-+	return number >= 0;
-+}
-+
-+/*
-+ * Platforms may implement their GPIO interface with library code,
-+ * at a small performance cost for non-inlined operations and some
-+ * extra memory (for code and for per-GPIO table entries).
-+ */
-+
-+/*
-+ * At the end we want all GPIOs to be dynamically allocated from 0.
-+ * However, some legacy drivers still perform fixed allocation.
-+ * Until they are all fixed, leave 0-512 space for them.
-+ */
-+#define GPIO_DYNAMIC_BASE	512
-+
-+/* Always use the library code for GPIO management calls,
-+ * or when sleeping may be involved.
-+ */
-+int gpio_request(unsigned gpio, const char *label);
-+void gpio_free(unsigned gpio);
-+
-+static inline int gpio_direction_input(unsigned gpio)
-+{
-+	return gpiod_direction_input(gpio_to_desc(gpio));
-+}
-+static inline int gpio_direction_output(unsigned gpio, int value)
+ static inline int gpio_get_value_cansleep(unsigned gpio)
  {
--	return __gpio_get_value(gpio);
-+	return gpiod_direction_output_raw(gpio_to_desc(gpio), value);
+ 	return gpiod_get_raw_value_cansleep(gpio_to_desc(gpio));
+@@ -215,11 +210,6 @@ static inline int gpio_direction_output(unsigned gpio, int value)
+ 	return -ENOSYS;
  }
  
--static inline void gpio_set_value(unsigned int gpio, int value)
-+static inline int gpio_set_debounce(unsigned gpio, unsigned debounce)
+-static inline int gpio_set_debounce(unsigned gpio, unsigned debounce)
+-{
+-	return -ENOSYS;
+-}
+-
+ static inline int gpio_get_value(unsigned gpio)
  {
--	__gpio_set_value(gpio, value);
-+	return gpiod_set_debounce(gpio_to_desc(gpio), debounce);
- }
- 
--static inline int gpio_cansleep(unsigned int gpio)
-+static inline int gpio_get_value_cansleep(unsigned gpio)
-+{
-+	return gpiod_get_raw_value_cansleep(gpio_to_desc(gpio));
-+}
-+static inline void gpio_set_value_cansleep(unsigned gpio, int value)
- {
--	return __gpio_cansleep(gpio);
-+	return gpiod_set_raw_value_cansleep(gpio_to_desc(gpio), value);
- }
- 
--static inline int gpio_to_irq(unsigned int gpio)
-+static inline int gpio_get_value(unsigned gpio)
-+{
-+	return gpiod_get_raw_value(gpio_to_desc(gpio));
-+}
-+static inline void gpio_set_value(unsigned gpio, int value)
-+{
-+	return gpiod_set_raw_value(gpio_to_desc(gpio), value);
-+}
-+
-+static inline int gpio_cansleep(unsigned gpio)
-+{
-+	return gpiod_cansleep(gpio_to_desc(gpio));
-+}
-+
-+static inline int gpio_to_irq(unsigned gpio)
-+{
-+	return gpiod_to_irq(gpio_to_desc(gpio));
-+}
-+
-+int gpio_request_one(unsigned gpio, unsigned long flags, const char *label);
-+int gpio_request_array(const struct gpio *array, size_t num);
-+void gpio_free_array(const struct gpio *array, size_t num);
-+
-+/*
-+ * A sysfs interface can be exported by individual drivers if they want,
-+ * but more typically is configured entirely from userspace.
-+ */
-+static inline int gpio_export(unsigned gpio, bool direction_may_change)
-+{
-+	return gpiod_export(gpio_to_desc(gpio), direction_may_change);
-+}
-+
-+static inline void gpio_unexport(unsigned gpio)
- {
--	return __gpio_to_irq(gpio);
-+	gpiod_unexport(gpio_to_desc(gpio));
- }
- 
- /* CONFIG_GPIOLIB: bindings for managed devices that want to request gpios */
+ 	/* GPIO can never have been requested or set as {in,out}put */
 -- 
 2.39.0
 
