@@ -2,118 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA92167F245
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 00:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA9467F248
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 00:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbjA0XeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 18:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
+        id S231701AbjA0Xgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 18:36:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjA0XeM (ORCPT
+        with ESMTP id S229696AbjA0Xgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 18:34:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AA1757AD
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 15:33:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674862405;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M6k4SK0tssJUsReKgWrMbkASPa1DRov0Livqs+ZaJ88=;
-        b=fTn5uxdEYz2qx6YAWWwbpvqcKHr+5fwNXF6EXCaYX2UEDtb5vS3wzsqg0OTum74DWmf9mo
-        aruJKRrn/S7QGf+/PkYmDz+2l4t+3iegOurJszMMPnrHCvncvK+wU9xRUHB/VT8CW1B8KY
-        h/+5VZ3Ru0yeg9fpS5SfNyLVGR168sw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-Ybk-MWwANHCBmQf3YXeg-w-1; Fri, 27 Jan 2023 18:33:21 -0500
-X-MC-Unique: Ybk-MWwANHCBmQf3YXeg-w-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 27 Jan 2023 18:36:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B76D757AD
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 15:36:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 651E829AA3B9;
-        Fri, 27 Jan 2023 23:33:20 +0000 (UTC)
-Received: from [10.64.54.64] (vpn2-54-64.bne.redhat.com [10.64.54.64])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 497E52166B26;
-        Fri, 27 Jan 2023 23:33:11 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v3 2/4] KVM: arm64: Add helper vgic_write_guest_lock()
-To:     Zenghui Yu <zenghui.yu@linux.dev>, kvmarm@lists.linux.dev
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, pbonzini@redhat.com,
-        corbet@lwn.net, maz@kernel.org, james.morse@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-        yuzhe@nfschina.com, isaku.yamahata@intel.com, seanjc@google.com,
-        ricarkol@google.com, eric.auger@redhat.com, renzhengeek@gmail.com,
-        reijiw@google.com, shan.gavin@gmail.com
-References: <20230126235451.469087-1-gshan@redhat.com>
- <20230126235451.469087-3-gshan@redhat.com>
- <a4b3ee35-a0d7-80f6-c64f-f9056c5b6110@linux.dev>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <9a8260b1-15f9-f8c9-34a7-0cce8e62a386@redhat.com>
-Date:   Sat, 28 Jan 2023 10:33:09 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03599B82208
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:36:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2D09C433EF;
+        Fri, 27 Jan 2023 23:36:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674862603;
+        bh=VWlzWalnkhO1dohr/NVJ6IZeHtHEw2u6z553J4C7hrs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YNksFuc7dfDCFXFmM+MOZMTmiGs5w0d9rSTZdOucxVGg+rPtU0FZyHxukJrwGMnyE
+         P53Yl7QKjzeg/+lgWEZcuieSfeNvsctPmI+6dqUTI7yqWEEOUebzOVlv8WAvpXZxYP
+         6dYY7SE98rIkmefqh11iFJ/OGy+iCTUK/3uygjMPd4JlhKxFkwI7v5UzE82n8gBRzN
+         whv545rDPf/4WQZUfowe7OBB3T0xJccYN1Wpu+s2u1QC1d41kZRZ2GXK/Wdw3SZlkK
+         cpazTg+eXGRgIl2tPacpLk8lVTs04FAfAc34xQJoE+SZXBXZ+cHesENMj4iLBP8JDe
+         mknmGSb55FBGA==
+Date:   Fri, 27 Jan 2023 23:36:38 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, conor.dooley@microchip.com,
+        apatel@ventanamicro.com, atishp@atishpatra.org,
+        mark.rutland@arm.com, bjorn@kernel.org, tongtiangen@huawei.com,
+        ajones@ventanamicro.com, andrew@sifive.com,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V2] riscv: Fixup race condition on PG_dcache_clean in
+ flush_icache_pte
+Message-ID: <Y9RgBh9X6KM1/uvp@spud>
+References: <20230127035306.1819561-1-guoren@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <a4b3ee35-a0d7-80f6-c64f-f9056c5b6110@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="GuNVYafotbXvgZR0"
+Content-Disposition: inline
+In-Reply-To: <20230127035306.1819561-1-guoren@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zenghui,
 
-On 1/28/23 2:57 AM, Zenghui Yu wrote:
-> [ just coming back from holiday, sorry for the late reply ]
-> 
+--GuNVYafotbXvgZR0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hope you have a nice refresh. Thanks for your review.
+Hey Guo Ren,
 
-> On 2023/1/27 07:54, Gavin Shan wrote:
->> Currently, the unknown no-running-vcpu sites are reported when a
->> dirty page is tracked by mark_page_dirty_in_slot(). Until now, the
->> only known no-running-vcpu site is saving vgic/its tables through
->> KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_SAVE_TABLES} command on KVM device
->> "kvm-arm-vgic-its". Unfortunately, there are more unknown sites to
->> be handled and no-running-vcpu context will be allowed in these
->> sites: (1) KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_RESTORE_TABLES} command
->> on KVM device "kvm-arm-vgic-its" to restore vgic/its tables. The
->> vgic3 LPI pending status could be restored. (2) Save vgic3 pending
-> 
-> We typically write it as "VGICv3".
-> 
+On Thu, Jan 26, 2023 at 10:53:06PM -0500, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>=20
+> In commit 588a513d3425 ("arm64: Fix race condition on PG_dcache_clean
+> in __sync_icache_dcache()"), we found RISC-V has the same issue as the
+> previous arm64. The previous implementation didn't guarantee the correct
+> sequence of operations, which means flush_icache_all() hasn't been
+> called when the PG_dcache_clean was set. That would cause a risk of page
+> synchronization.
+>=20
+> Fixes: 08f051eda33b ("RISC-V: Flush I$ when making a dirty page executabl=
+e")
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+> Changelog:
+> V2:
+>  - Optimize commit log
 
-Ok. I will fix by replacing 'vgic3' with 'VGICv3' in v4. However, the
-term 'vgic/its' will be kept.
-
->> table through KVM_DEV_ARM_{VGIC_GRP_CTRL, VGIC_SAVE_PENDING_TABLES}
->> command on KVM device "kvm-arm-vgic-v3".
->>
->> In order to handle those unknown cases, we need a unified helper
->> vgic_write_guest_lock(). struct vgic_dist::save_its_tables_in_progress
->> is also renamed to struct vgic_dist::save_tables_in_progress.
-> 
-> How about renaming it to 'write_tables_in_progress' which would look a
-> bit more generic? The rest looks good to me.
-> 
-
-'write_tables_in_progress' works for me. I will have it in v4, which
-will be posted shortly.
+Probably would have benefited from providing the analysis that the arm64
+commit did, for riscv, rather than referring to theirs.
+But that's not really important and the diff itself seems sound, so:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
 Thanks,
-Gavin
+Conor.
 
+>  - Rebase on riscv for-next (20230127)
+>=20
+> V1:
+> https://lore.kernel.org/linux-riscv/20221023133205.3493564-2-guoren@kerne=
+l.org/
+> ---
+>  arch/riscv/mm/cacheflush.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
+> index 3cc07ed45aeb..fcd6145fbead 100644
+> --- a/arch/riscv/mm/cacheflush.c
+> +++ b/arch/riscv/mm/cacheflush.c
+> @@ -90,8 +90,10 @@ void flush_icache_pte(pte_t pte)
+>  	if (PageHuge(page))
+>  		page =3D compound_head(page);
+> =20
+> -	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
+> +	if (!test_bit(PG_dcache_clean, &page->flags)) {
+>  		flush_icache_all();
+> +		set_bit(PG_dcache_clean, &page->flags);
+> +	}
+>  }
+>  #endif /* CONFIG_MMU */
+> =20
+> --=20
+> 2.36.1
+>=20
+
+--GuNVYafotbXvgZR0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9RgBgAKCRB4tDGHoIJi
+0m+jAQCoWHcrkvq5cRc39KGXssFRtqfRT9ZMxIkLfGtPSIG16QD/fWAAQ8JWzxde
+siNntjh6A6FImIAQ0pLweSyiW0bfEAk=
+=qMS9
+-----END PGP SIGNATURE-----
+
+--GuNVYafotbXvgZR0--
