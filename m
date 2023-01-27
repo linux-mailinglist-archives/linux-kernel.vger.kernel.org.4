@@ -2,131 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5C467DB69
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 02:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DE967DC00
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 02:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbjA0Brm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 20:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
+        id S233745AbjA0B6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 20:58:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjA0Brk (ORCPT
+        with ESMTP id S233372AbjA0B60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 20:47:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B3A40BCC
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:46:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674784011;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RCGLuOvzRoUJJHbOD/FbK9RJ/iyqcYrpGwcs0dzbqAg=;
-        b=TQN1o3UEMje0Aiw0uIfjPLBEwsR9srOLb3exT7E8KCuOU+DwYLdgzLKXQWCIdmro4szIDw
-        eioEX75HxA6Ngc3Jp43DopCB2gn1eJh9PpuaXPazHqQNY8VzqdA7ZS3a3ZG3wEHQhXrKze
-        8Q8bxf9ruiWdaR3c42LdiqLgnaE8ELQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-_ldfS5dMO7yh5-fhU-3OpA-1; Thu, 26 Jan 2023 20:46:48 -0500
-X-MC-Unique: _ldfS5dMO7yh5-fhU-3OpA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC1682801E54;
-        Fri, 27 Jan 2023 01:46:47 +0000 (UTC)
-Received: from [10.22.33.13] (unknown [10.22.33.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D361B2166B26;
-        Fri, 27 Jan 2023 01:46:45 +0000 (UTC)
-Message-ID: <4122ef0d-1508-8ce2-df80-874565a612ce@redhat.com>
-Date:   Thu, 26 Jan 2023 20:46:45 -0500
+        Thu, 26 Jan 2023 20:58:26 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F79757A8;
+        Thu, 26 Jan 2023 17:52:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674784364; x=1706320364;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qyfxmzLE5JfhsIee4y1DuROPldIjNhc8I6zB/cwwAS0=;
+  b=PkiE5rPB055siIJxO4WCWzQWhUPl5n3+fqk8YeWbHpDaaUk8LBgHrNRn
+   Wi+4ghOE1mGDg4Ok/4RxXC+lf341GZF2EpIQZKH+I+djSQo0L6piv33qh
+   Gfksc2lhviT5kbe4ZZzx8Vb3ZoubItN3eu1m8+3s/d2q/75dpNuMIzE8l
+   c3aY3VLxPAb/wd23DT2W2rGSoeGTF9uNglevglEJ0dEhp4AAdEOxnPr3d
+   G7EpJNhwJ32pZcuCm6nfqblBFrbKylCmyqnAUe3OwhP9diHnRJsp5ozpK
+   17Yflfhnw2nvjnR606gd8JxRWwze/pVmRlk6XiCW6ILdRZkNAQY8kSfNJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="391553841"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="391553841"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 17:50:40 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="908503263"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="908503263"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 17:50:39 -0800
+From:   Tony Luck <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Naoya Horiguchi <naoya.horiguchi@nec.com>, x86@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Zhiquan Li <zhiquan1.li@intel.com>,
+        Youquan Song <youquan.song@intel.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: [PATCH] x86/mce: Set PG_hwpoison page flag to avoid the capture kernel panic
+Date:   Thu, 26 Jan 2023 17:50:30 -0800
+Message-Id: <20230127015030.30074-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] Fix data race in mark_rt_mutex_waiters
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Hernan Ponce de Leon' <hernan.poncedeleon@huaweicloud.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "akpm@osdl.org" <akpm@osdl.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "diogo.behrens@huawei.com" <diogo.behrens@huawei.com>,
-        "jonas.oberhauser@huawei.com" <jonas.oberhauser@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hernan Ponce de Leon <hernanl.leon@huawei.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-References: <20230120135525.25561-1-hernan.poncedeleon@huaweicloud.com>
- <562c883b-b2c3-3a27-f045-97e7e3281e0b@linux.intel.com>
- <20230120155439.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <9a1c7959-4b8c-94df-a3e2-e69be72bfd7d@huaweicloud.com>
- <20230123164014.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <f17dcce0-d510-a112-3127-984e8e73f480@huaweicloud.com>
- <d1e28124-b7a7-ae19-87ec-b1dcd3701b61@redhat.com>
- <Y8/+2YBRD4rFySjh@hirez.programming.kicks-ass.net>
- <ae90e931-df19-9d60-610c-57dc34494d8e@redhat.com>
- <c300747a-cf81-0e2d-77ec-f861421291f9@huaweicloud.com>
- <Y9Jv9yL8x7/TAq/X@hirez.programming.kicks-ass.net>
- <9da70674-42e0-9aaa-edab-c606ca8dd2e8@huaweicloud.com>
- <004045af7a2b4abaa5f4d9840371da60@AcuMS.aculab.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <004045af7a2b4abaa5f4d9840371da60@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Zhiquan Li <zhiquan1.li@intel.com>
 
-On 1/26/23 17:10, David Laight wrote:
-> From: Hernan Ponce de Leon
->> Sent: 26 January 2023 21:07
-> ...
->>    static __always_inline void rt_mutex_clear_owner(struct rt_mutex_base
->> *lock)
->> @@ -232,12 +232,7 @@ static __always_inline bool
->> rt_mutex_cmpxchg_release(struct rt_mutex_base *lock,
->>     */
->>    static __always_inline void mark_rt_mutex_waiters(struct rt_mutex_base
->> *lock)
->>    {
->> -	unsigned long owner, *p = (unsigned long *) &lock->owner;
->> -
->> -	do {
->> -		owner = *p;
->> -	} while (cmpxchg_relaxed(p, owner,
->> -				 owner | RT_MUTEX_HAS_WAITERS) != owner);
->> +	atomic_long_or(RT_MUTEX_HAS_WAITERS, (atomic_long_t *)&lock->owner);
-> These *(int_type *)&foo accesses (quite often just plain wrong)
-> made me look up the definitions.
->
-> All one big accident waiting to happen...
-> RT_MUTEX_HAS_WAITERS is defined in a different header to the structure.
-> The explanatory comment is in a 3rd file.
->
-> It would all be safer if lock->owner were atomic_long_t with a comment
-> that it was the waiting task_struct | RT_MUTEX_HAS_WAITERS.
->
-> Given the actual definition is rt_mutex_base_is_locked() even correct?
+Kdump can exclude the HWPosion page to avoid touch the error page
+again, the prerequisite is the PG_hwpoison page flag is set.
+However, for some MCE fatal error cases, there are no opportunity
+to queue a task for calling memory_failure(), as a result,
+the capture kernel touches the error page again and panics.
 
-It is arguable if it should be considered locked if a waiter is waiting 
-but the lock is at an unlock state at the moment. Mutex has a narrower 
-definition of locked while others have a broader one.
+Add function mce_set_page_hwpoison_now() which mark a page as
+HWPoison before kernel panic() for MCE error, so that the dump
+program can check and skip the error page and prevent the capture
+kernel panic.
 
-Cheers,
-Longman
+[Tony: Changed TestSetPageHWPoison() to SetPageHWPoison()]
+
+Co-developedd-by: Youquan Song <youquan.song@intel.com>
+Signed-off-by: Youquan Song <youquan.song@intel.com>
+Signed-off-by: Zhiquan Li <zhiquan1.li@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+---
+ arch/x86/kernel/cpu/mce/core.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 2c8ec5c71712..0630999c6311 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -162,6 +162,24 @@ void mce_unregister_decode_chain(struct notifier_block *nb)
+ }
+ EXPORT_SYMBOL_GPL(mce_unregister_decode_chain);
+ 
++/*
++ * Kdump can exclude the HWPosion page to avoid touch the error page again,
++ * the prerequisite is the PG_hwpoison page flag is set. However, for some
++ * MCE fatal error cases, there are no opportunity to queue a task
++ * for calling memory_failure(), as a result, the capture kernel panic.
++ * This function mark the page as HWPoison before kernel panic() for MCE.
++ */
++static void mce_set_page_hwpoison_now(unsigned long pfn)
++{
++	struct page *p;
++
++	/* TODO: need to handle other sort of page, like SGX, PMEM and
++	 * HugeTLB pages*/
++	p = pfn_to_online_page(pfn);
++	if (p)
++		SetPageHWPoison(p);
++}
++
+ static void __print_mce(struct mce *m)
+ {
+ 	pr_emerg(HW_ERR "CPU %d: Machine Check%s: %Lx Bank %d: %016Lx\n",
+@@ -292,6 +310,8 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
+ 	if (!fake_panic) {
+ 		if (panic_timeout == 0)
+ 			panic_timeout = mca_cfg.panic_timeout;
++		if (final && (final->status & MCI_STATUS_ADDRV))
++			 mce_set_page_hwpoison_now(final->addr >> PAGE_SHIFT);
+ 		panic(msg);
+ 	} else
+ 		pr_emerg(HW_ERR "Fake kernel panic: %s\n", msg);
+-- 
+2.39.1
 
