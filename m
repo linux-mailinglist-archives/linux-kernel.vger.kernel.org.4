@@ -2,110 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657F767E8CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE6567E8D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbjA0PAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
+        id S233569AbjA0PBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232568AbjA0PAg (ORCPT
+        with ESMTP id S233427AbjA0PBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:00:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E037ECA;
-        Fri, 27 Jan 2023 07:00:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46590B82145;
-        Fri, 27 Jan 2023 15:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFBE5C433D2;
-        Fri, 27 Jan 2023 15:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674831632;
-        bh=LuPZgCoAPIb5MoP6IydX1n+c3wdC9+kFudaV4FLY4Q8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rIljV39IwaOy163hrOxM2/lDZxWxPu6857Lg25JQtPwRDq37wVKee2Gj7Fl+jPI/Z
-         kjTy8vU1kUvwUlP+3cY5KExqR9ucP2zIcLplMY55fkgauLYFhg9zWtRCeZSQRkky8S
-         gzocg5JGV7Ea3SYRtzfewzNXQfE4rtOb88RKfWPznwjXt5nFFmosDa3nLyQT5/nYRU
-         wXfv2/D0vOnl3iTy7JRt5DvskF94ghdvlchpOk9mWLnBTHkzYIu06U1vaXMVuH+9/d
-         denpoO5zfv0bRVVxk41lv+Pl7I1Fc60jSy/taeDv6ONBZKySdZZXp2SNi+WSLIEAVX
-         cMEPG0qfmE5hw==
-Date:   Fri, 27 Jan 2023 15:00:26 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 00/11] intel-m10-bmc: Split BMC to core and SPI parts
- & add PMCI+N6000 support
-Message-ID: <Y9PnChtJnIGhu4wt@google.com>
-References: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
+        Fri, 27 Jan 2023 10:01:09 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BA77ECA;
+        Fri, 27 Jan 2023 07:01:08 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30REi24Q031361;
+        Fri, 27 Jan 2023 15:00:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=VXS2X5drfdkQujhXGlbWe/JnBB0qmbiddFlUZ+R2+KU=;
+ b=DAQUjsihEAH3oYvxEXAK+kG3KIunWFSl0GCAHJZ09jeHkMY4N0wviKMTCjKpT5rJgdW3
+ xWeiSMeoeQ1U/h85Tf+AMtUCGEcp1PwBzyTNd4gchwlKmkzBzTjWq4+Lav9TtyozZPU4
+ wk6SAaWrM5MnS640uzX7cf6pKQi3RSClXTyk/QgCXUHygareEqn+Isc88j7ykf0sy1xF
+ a0uVPARYKTmrnpjuHMZjIcAwEX2prheMGhE1iJctXdqR39K3M6rppij9ZXsd8YTbTcAL
+ oqvrdnUeuRJy3WkHjYCIm/dYPBzr7oXzRq/xzD7XtOtNfRn3pDPJFb2vnrUf3KSEHTF2 4g== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nbp1varhj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 15:00:49 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30RF0mIu015203
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 15:00:48 GMT
+Received: from [10.216.31.125] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 27 Jan
+ 2023 07:00:40 -0800
+Message-ID: <659c81b0-b75e-9a6f-bd26-878bb9868397@quicinc.com>
+Date:   Fri, 27 Jan 2023 20:30:36 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 3/5] firmware: scm: Modify only the DLOAD bit in TCSR
+ register for download mode
+Content-Language: en-US
+To:     Guru Das Srinagesh <quic_gurus@quicinc.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <lee@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_devipriy@quicinc.com>
+References: <20230113160012.14893-1-quic_poovendh@quicinc.com>
+ <20230113160012.14893-4-quic_poovendh@quicinc.com>
+ <20230114011606.GA24659@quicinc.com>
+From:   POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
+In-Reply-To: <20230114011606.GA24659@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: t3eg6psULoo0zN33VBxDls_iuoXEBlzU
+X-Proofpoint-GUID: t3eg6psULoo0zN33VBxDls_iuoXEBlzU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_09,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 clxscore=1015 spamscore=0 phishscore=0 bulkscore=0
+ suspectscore=0 adultscore=0 mlxlogscore=776 mlxscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301270142
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enjoy!
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-fpga-hwmon-6.3
-
-for you to fetch changes up to 869b9eddf0b38a22c27a400e2fa849d2ff2aa7e1:
-
-  mfd: intel-m10-bmc: Add PMCI driver (2023-01-27 10:47:11 +0000)
-
-----------------------------------------------------------------
-Ilpo Järvinen (10):
-      mfd: intel-m10-bmc: Add missing includes to header
-      mfd: intel-m10-bmc: Create m10bmc_platform_info for type specific info
-      mfd: intel-m10-bmc: Rename the local variables
-      mfd: intel-m10-bmc: Split into core and spi specific parts
-      mfd: intel-m10-bmc: Support multiple CSR register layouts
-      fpga: intel-m10-bmc: Rework flash read/write
-      mfd: intel-m10-bmc: Prefix register defines with M10BMC_N3000
-      fpga: m10bmc-sec: Create helpers for rsu status/progress checks
-      fpga: m10bmc-sec: Make rsu status type specific
-      mfd: intel-m10-bmc: Add PMCI driver
-
- .../ABI/testing/sysfs-driver-intel-m10-bmc         |   8 +-
- MAINTAINERS                                        |   2 +-
- drivers/fpga/Kconfig                               |   2 +-
- drivers/fpga/intel-m10-bmc-sec-update.c            | 364 +++++++++++++--------
- drivers/hwmon/Kconfig                              |   2 +-
- drivers/mfd/Kconfig                                |  32 +-
- drivers/mfd/Makefile                               |   5 +-
- drivers/mfd/intel-m10-bmc-core.c                   | 122 +++++++
- drivers/mfd/intel-m10-bmc-pmci.c                   | 219 +++++++++++++
- drivers/mfd/intel-m10-bmc-spi.c                    | 168 ++++++++++
- drivers/mfd/intel-m10-bmc.c                        | 238 --------------
- include/linux/mfd/intel-m10-bmc.h                  | 154 ++++++---
- 12 files changed, 888 insertions(+), 428 deletions(-)
- create mode 100644 drivers/mfd/intel-m10-bmc-core.c
- create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
- create mode 100644 drivers/mfd/intel-m10-bmc-spi.c
- delete mode 100644 drivers/mfd/intel-m10-bmc.c
-
--- 
-Lee Jones [李琼斯]
+On 1/14/2023 6:46 AM, Guru Das Srinagesh wrote:
+> On Jan 13 2023 21:30, Poovendhan Selvaraj wrote:
+>> Add support to read-modify-write TCSR register to modify only DLOAD bit.
+> Could you please add more details on what problem this patch is fixing, and why
+> this patch is needed?
+>
+> CrashDump collection is based on the DLOAD bit of TCSR register. To retain other bits, we read the register and modify only the DLOAD bit as the other bits have their own significance.
+>
+> Thank you.
+>
+> Guru Das.
+>
+> Regards,
+> Poovendhan S
