@@ -2,122 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A95467EDFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3137667EDFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbjA0TKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 14:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        id S231975AbjA0TQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbjA0TKJ (ORCPT
+        with ESMTP id S230414AbjA0TQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 14:10:09 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21687BE4E;
-        Fri, 27 Jan 2023 11:10:07 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id q10so4526548qvt.10;
-        Fri, 27 Jan 2023 11:10:07 -0800 (PST)
+        Fri, 27 Jan 2023 14:16:31 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E317BBD8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:16:30 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id x5so2535966plr.2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:16:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=GSPIv+YqWdBZ4Ekp+ls2qyg5+evBT3aLSAigsT+W2bo=;
-        b=q2e55E8gLMbbkccPn6JzZN4GEJyjdCHjScWW4jlkhEzZFF2WaghJGaHQeo7D+b1zvb
-         28HB1B/zHGh0VsYRGx8jdo5moKtdAIBSHxTKLGooGdV3xcR1tUmzSlpUP0ey1gUqjN3A
-         MbM4IfgDsJgbzFUvsvCxfFrJqyMajMTaAta3oFTky0Y/zdMSjpmZJz7LZmixS6Vn5zTz
-         b3JdzD3UE7YjB99So/GfTckevQ6WbDPLh05ssc5QNRHS2lRNv9sww6TN+EU+ePJ7t6Zo
-         hiwT3hSsY1cMy7oWxgF0/yp76J/jhIoWuF7FbQ2dworHxWMUg/iPaRAzIvp8BA/u60zD
-         g9zA==
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pSndjEFPQ8hAZKvh/r+nd2nnOGer9rU0gXriWQsIEEQ=;
+        b=LUcZtXDPuEtFizj4Bs7VHv9wEcnEa5uELvDLcfiOt+HJ0z3U654Zhq92ouD/AvxRyJ
+         c4WnLYzr+R+XOlzI0VTTLfmOBHry4yWAT6owaEPUbPYj6oRurSbYPeR2wm02MmeLSkZT
+         +xbZgirrx0mRSif3xvfWmnr8a0lC4nShZYmko=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GSPIv+YqWdBZ4Ekp+ls2qyg5+evBT3aLSAigsT+W2bo=;
-        b=K2LjNJbudqDpqPwX5DjL3hTIfvKq+GYATLqr7LOJUtfMVCogP+HhYyzSJ73IGCg5wL
-         4Kx7s1kfkxjbrn/Qetkj0WDiBlq6XHKgqBDihuvPDH3VMyH3PtQsCAtS5qSnDPyn2cZN
-         LMrL9UZXkFQ1krWkWBTuo4DRkDrzuZ3vQHdrrsAXhX6ddqQ9lYi7HRLZQoTKFi1/ZIwL
-         lAXGjhALZHmMG7dmzzf/vU8dNPMwa/J2y9W5UyGjpcsOyJBPyGn9glu9TTMWUINmhBKw
-         u/4FsnYaIe++UavWHoWnY6gXmm1HZLndsf3Zu1HADHkXhxEIZKNiZF8w8evMXtQBKw1g
-         V2yA==
-X-Gm-Message-State: AO0yUKUT1GhS0ocMie2KT8oX5s1YNoaKC8z0r95FKNg94NZuXADwydCS
-        ujLwzcvXxQVEqJl4AgrVCzc=
-X-Google-Smtp-Source: AK7set8nPB+Gn1du31KZgmxgwcBAH6FrxEuFT79qYMyqShGE2pPhvigqvUHCzA6bHwyJvUvIYzgs1w==
-X-Received: by 2002:ad4:5b87:0:b0:537:64fc:eb43 with SMTP id 7-20020ad45b87000000b0053764fceb43mr28166288qvp.7.1674846606828;
-        Fri, 27 Jan 2023 11:10:06 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id b23-20020a05620a127700b00704c6263924sm3362881qkl.13.2023.01.27.11.10.06
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pSndjEFPQ8hAZKvh/r+nd2nnOGer9rU0gXriWQsIEEQ=;
+        b=poYyIN3bW37NUGGzbpCUru8nt4OhfTG5mfszLLqyJUhMO4R26cJq0McEYUpperLOc8
+         g8K2NtUHHALxsAHdoRNh0bu23+XQ+nua0KMm9LMEx2fk0P3YPx//PIcnAW/M4TY2gw49
+         iU9vxNJK6CoRU7xgopjpqkwJAfQaJqmd2aE9R54CaKcC7u79uDVp4hnL/RoBkmtYndjV
+         l2Yy5v4gjrmNgjvBYg3grQ88tMamm9sFYAR9dXOEMJbOipU8dlb7qWGSiRaVMBRum8iy
+         8EHhc8mc1wFRAs6uYdnTLEbq401ApiLhLteLrkej80c5+j+a+F5Qd9wSQDjixvHagupJ
+         yDTw==
+X-Gm-Message-State: AFqh2kqwjvk/LK8gxZmctoCC6DvobDEGrWqXuD0/KQzntigvkMPr/bnM
+        ZJmPl1KjlBQVhQAlkQ2WF69DWw==
+X-Google-Smtp-Source: AMrXdXtH1CXKWg2AUOpH/3d9Xy8zYKSQ91rpvEKF2qqiouG2N3QZ/D+6ldssuipVfdd4VOiwXncPnw==
+X-Received: by 2002:a17:902:d650:b0:193:13fc:8840 with SMTP id y16-20020a170902d65000b0019313fc8840mr38951507plh.21.1674846989961;
+        Fri, 27 Jan 2023 11:16:29 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m9-20020a170902bb8900b0019488090884sm3179644pls.273.2023.01.27.11.16.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 11:10:06 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id EB62227C0054;
-        Fri, 27 Jan 2023 14:10:05 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 27 Jan 2023 14:10:05 -0500
-X-ME-Sender: <xms:jSHUY0E3i0J3OUbieJRT_exCwA7DmmPNTZEY9b8dZonb52KtcXxTOw>
-    <xme:jSHUY9UIzf74y4vbKvtZW7fCYdqSXrjvjssBwuX7mnlIVJ73ixPBz8EUTMX9sZA9l
-    llnjoLxQ3zNfbN3UA>
-X-ME-Received: <xmr:jSHUY-J4-ITIAYCRbHESGMkDgEeeaGVnCN2pn27wi81wh4qblm2wzXgddh4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddviedguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeelfeegvddutdetudeivdetfeegtdegffdvlefhueelhfehveetjeefteeu
-    gfefgeenucffohhmrghinhepiihulhhiphgthhgrthdrtghomhdpghhithhhuhgsrdgtoh
-    hmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsgho
-    qhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqd
-    dujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihm
-    vgdrnhgrmhgv
-X-ME-Proxy: <xmx:jSHUY2HwoYuB28qZfcUesrhh9HqexonIKxrOzEDup58jSWyhhqqTmA>
-    <xmx:jSHUY6VDmuUQoQHA0vCvSnZ1TxWuFpozXaDAMFY9tjtEPkizXUEeyA>
-    <xmx:jSHUY5Ond06l5ItzknTyWvpBGGDesUJv2cwsurLNYgCCYIC7DjJCwQ>
-    <xmx:jSHUY8LuqBAKMZZ7zdoHsDKvvmFVTbvDzhVspklQwFg1tZ3GaMrcvA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 27 Jan 2023 14:10:05 -0500 (EST)
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     rust-for-linux@vger.kernel.org
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] rust: MAINTAINERS: Add the zulip link
-Date:   Fri, 27 Jan 2023 11:09:13 -0800
-Message-Id: <20230127190917.3369037-1-boqun.feng@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 27 Jan 2023 11:16:29 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] ACPICA: Replace fake flexible arrays with flexible array members
+Date:   Fri, 27 Jan 2023 11:16:25 -0800
+Message-Id: <20230127191621.gonna.262-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1970; h=from:subject:message-id; bh=GuYHj8k1bgoDrYd8xgMK12HekFco3rn1yc6XfKftvic=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj1CMJvYoAMRsu0wMAJoD56KtcmU8zpzJsIG2mPkda Kr5gyviJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY9QjCQAKCRCJcvTf3G3AJo1jEA CJ3BAb/MM8rhQFPA22R+3S7Y5SiuCw4thqyflZIJip4u3apW9Q3pq2TusNrysgAnfATXJdKwowgwt5 QaCYwkfsRjglE68wgcjA3vmcjNIEaFNEo5u49ulY0UTUC83oDdU0Yy9OGiRAIGpDd+cZpHbGreuguw qzNwxCoIRS9WATvILCYcdoj6c5qN5AOg1ZVtOiIeimIW9P03r//Vj+U5pB+XxjutDXMg8/t9KqzVlS 3VilEtucB2flo/RNPuTf3j89WIEj83C5ozYB+9UyNxbMqGn9v2IXrTY36+zPBa9r7K+8lvXm54KBc/ iA9OgrnbsuTqBS1NcxqPfqbSN2SDPiqFrniYX2oJCoHH9r+MhTh5mhkDX3UQbQsDlwpV4PoWw/whNu lCdUufowLczpB08TzO1KjGuNnZVGoTS3GZ9cgMHLUgamLS0SCBFrXRLp4IO6iiuNL7PBrh8Jqx5tEc nisX+chLSWPnPc37aYdKDJEqLPg19Cul7c5tF70ytEKprjVpGDXmTTVQFHH+YHOr4QVEC8+udGZrMQ hb0cPsdaGxGZIOB8ODlSQNcZRYMavA9nhW66okMVO1akfp6oMrXsxbefLIP3RlINcOPSQdE0nKHMam 1eLWpq52IFchwf9YjZS6vxsT+kVoacT99yKwLqcHeQx0KUtaAxcxJYBsLEzQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+One-element arrays (and multi-element arrays being treated as
+dynamically sized) are deprecated[1] and are being replaced with
+flexible array members in support of the ongoing efforts to tighten the
+FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
+with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 42fc47c6edfd..30161207f365 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18219,6 +18219,7 @@ R:	Boqun Feng <boqun.feng@gmail.com>
- R:	Gary Guo <gary@garyguo.net>
- R:	Björn Roy Baron <bjorn3_gh@protonmail.com>
- L:	rust-for-linux@vger.kernel.org
-+C:	zulip://rust-for-linux.zulipchat.com
- S:	Supported
- W:	https://github.com/Rust-for-Linux/linux
- B:	https://github.com/Rust-for-Linux/linux/issues
+Replace one-element array with flexible-array member in struct
+acpi_resource_extended_irq. Replace 4-byte fixed-size array with 4-byte
+padding in a union with a flexible-array member in struct
+acpi_pci_routing_table.
+
+This results in no differences in binary output.
+
+Link: https://github.com/acpica/acpica/pull/813
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+v2: include stddef.h and switch to __DECLARE_FLEX_ARRAY()
+v1: https://lore.kernel.org/lkml/20221118181538.never.225-kees@kernel.org/
+---
+ include/acpi/acrestyp.h | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/include/acpi/acrestyp.h b/include/acpi/acrestyp.h
+index a7fb8ddb3dc6..250046a7c870 100644
+--- a/include/acpi/acrestyp.h
++++ b/include/acpi/acrestyp.h
+@@ -10,6 +10,8 @@
+ #ifndef __ACRESTYP_H__
+ #define __ACRESTYP_H__
+ 
++#include <linux/stddef.h>
++
+ /*
+  * Definitions for Resource Attributes
+  */
+@@ -332,7 +334,7 @@ struct acpi_resource_extended_irq {
+ 	u8 wake_capable;
+ 	u8 interrupt_count;
+ 	struct acpi_resource_source resource_source;
+-	u32 interrupts[1];
++	u32 interrupts[];
+ };
+ 
+ struct acpi_resource_generic_register {
+@@ -679,7 +681,10 @@ struct acpi_pci_routing_table {
+ 	u32 pin;
+ 	u64 address;		/* here for 64-bit alignment */
+ 	u32 source_index;
+-	char source[4];		/* pad to 64 bits so sizeof() works in all cases */
++	union {
++		char pad[4];	/* pad to 64 bits so sizeof() works in all cases */
++		__DECLARE_FLEX_ARRAY(char, source);
++	};
+ };
+ 
+ #endif				/* __ACRESTYP_H__ */
 -- 
-2.38.1
+2.34.1
 
