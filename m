@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EC667E12F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19AC767E130
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjA0KMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S233444AbjA0KMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:12:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233460AbjA0KM0 (ORCPT
+        with ESMTP id S233465AbjA0KM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:12:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313F677DC0;
+        Fri, 27 Jan 2023 05:12:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68E884B79;
         Fri, 27 Jan 2023 02:12:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABCE7B8200B;
-        Fri, 27 Jan 2023 10:12:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80B6FC4339B;
-        Fri, 27 Jan 2023 10:12:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AD3361AAF;
+        Fri, 27 Jan 2023 10:12:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C911BC433D2;
+        Fri, 27 Jan 2023 10:12:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674814337;
-        bh=6X11Bz5b7lMqNuxX3JeGI1QvkklF41RteWtCBQ9Y6ZE=;
+        s=k20201202; t=1674814339;
+        bh=QeFp2NRj/Jr86u5lj0vaSnMtviZbvXfKG9iNV2OAJ5Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OZJhYa2fP6kxnOJmThRuT6aKaRPVTYHFq6S/utZHYIdb8myC2EE/rx/5B0gkIflfx
-         nsoNM6JbvWWsA9k5rSSudC1YUfZQQnFm37r8RrNR2TvjRaHFtfIxOlCpwyJy3KcYEZ
-         Ncaim1+F2kYHPJkyV8+scFbBvPzHHlqRUqRhoNglozFZk25dyADlo6CDTaWQI1JkK0
-         4gnt/d+dCtmKd8K0FHeC5PwFEN58pWjtqpAoaDAff2picVZqLJy3BI7qx8qpshvLCV
-         WhCPo4JLLK415WfI/aopLDNKlnb2Rz3jNqEB0AXfWDnUw29UkfI3CIaw8UIWAx0Z+m
-         UAjPu6fODXZ0Q==
+        b=oYxUd3H6oe1OrQM66RTLPYQcLEvDt09Al4xunT00MVBbSV54Zqn/eM/cakkWEO2jF
+         hcmDwi9tS/zwP/5KgmN193pyIQaKb/MywZ+T+m6k+fm9sXzYubsX/pB8wLJY1kVT7j
+         sPWpLOL1r83is6172Gg1/rZ3xAmH55UwsvVrFyK7g+d3VttLtcP4CvIMlKNY7spnqk
+         6zVoZbV5MyYjaga/OQtLQdeM2modd4x4QSwO7zahjlCH9KZ+e1EX4UHBgI70gZJpsN
+         81OgpvbHW+nq1xO5Miy4sPA46z6lX3yd65TcWKOqZCb9fztNkIowQYZ8x/4vxVV+X4
+         grLSloFeDYy5A==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-gpio@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -41,9 +41,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/7] gpiolib: remove gpio_set_debounce
-Date:   Fri, 27 Jan 2023 11:11:46 +0100
-Message-Id: <20230127101149.3475929-5-arnd@kernel.org>
+Subject: [PATCH v2 5/7] gpiolib: remove legacy gpio_export
+Date:   Fri, 27 Jan 2023 11:11:47 +0100
+Message-Id: <20230127101149.3475929-6-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230127101149.3475929-1-arnd@kernel.org>
 References: <20230127101149.3475929-1-arnd@kernel.org>
@@ -61,157 +61,340 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-gpio_set_debounce() only has a single user, which is trivially
-converted to gpiod_set_debounce().
+There are only a handful of users of gpio_export() and
+related functions.
 
+As these are just wrappers around the modern gpiod_export()
+helper, remove the wrappers and open-code the gpio_to_desc
+in all callers to shrink the legacy API.
+
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- Documentation/driver-api/gpio/legacy.rst      |  2 --
- .../zh_CN/driver-api/gpio/legacy.rst          |  1 -
- Documentation/translations/zh_TW/gpio.txt     |  1 -
- drivers/input/touchscreen/ads7846.c           | 25 ++++++++++---------
- include/linux/gpio.h                          | 10 --------
- 5 files changed, 13 insertions(+), 26 deletions(-)
+ Documentation/admin-guide/gpio/sysfs.rst      |  2 +-
+ Documentation/driver-api/gpio/legacy.rst      | 21 ---------------
+ .../zh_CN/driver-api/gpio/legacy.rst          | 19 -------------
+ Documentation/translations/zh_TW/gpio.txt     | 18 -------------
+ arch/arm/mach-omap2/pdata-quirks.c            |  9 ++++---
+ arch/sh/boards/mach-ap325rxa/setup.c          |  7 ++---
+ drivers/gpio/gpiolib-sysfs.c                  |  4 +--
+ drivers/media/pci/sta2x11/sta2x11_vip.c       | 10 ++++---
+ drivers/net/ieee802154/ca8210.c               |  3 ++-
+ include/linux/gpio.h                          | 27 -------------------
+ 10 files changed, 21 insertions(+), 99 deletions(-)
 
+diff --git a/Documentation/admin-guide/gpio/sysfs.rst b/Documentation/admin-guide/gpio/sysfs.rst
+index ec09ffd983e7..35171d15f78d 100644
+--- a/Documentation/admin-guide/gpio/sysfs.rst
++++ b/Documentation/admin-guide/gpio/sysfs.rst
+@@ -145,7 +145,7 @@ requested using gpio_request()::
+ 	/* export the GPIO to userspace */
+ 	int gpiod_export(struct gpio_desc *desc, bool direction_may_change);
+ 
+-	/* reverse gpio_export() */
++	/* reverse gpiod_export() */
+ 	void gpiod_unexport(struct gpio_desc *desc);
+ 
+ 	/* create a sysfs link to an exported GPIO node */
 diff --git a/Documentation/driver-api/gpio/legacy.rst b/Documentation/driver-api/gpio/legacy.rst
-index a0559d93efd1..e0306e78e34b 100644
+index e0306e78e34b..78372853c6d4 100644
 --- a/Documentation/driver-api/gpio/legacy.rst
 +++ b/Documentation/driver-api/gpio/legacy.rst
-@@ -238,8 +238,6 @@ setup or driver probe/teardown code, so this is an easy constraint.)::
-         ## 	gpio_free_array()
+@@ -714,27 +714,6 @@ gpiochip nodes (possibly in conjunction with schematics) to determine
+ the correct GPIO number to use for a given signal.
  
-                 gpio_free()
--                gpio_set_debounce()
+ 
+-Exporting from Kernel code
+---------------------------
+-Kernel code can explicitly manage exports of GPIOs which have already been
+-requested using gpio_request()::
 -
+-	/* export the GPIO to userspace */
+-	int gpio_export(unsigned gpio, bool direction_may_change);
+-
+-	/* reverse gpio_export() */
+-	void gpio_unexport();
+-
+-After a kernel driver requests a GPIO, it may only be made available in
+-the sysfs interface by gpio_export().  The driver can control whether the
+-signal direction may change.  This helps drivers prevent userspace code
+-from accidentally clobbering important system state.
+-
+-This explicit exporting can help with debugging (by making some kinds
+-of experiments easier), or can provide an always-there interface that's
+-suitable for documenting as part of a board support package.
+-
+-
+ API Reference
+ =============
  
- 
- Claiming and Releasing GPIOs
 diff --git a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
-index 74fa473bb504..dee2a0517c1c 100644
+index dee2a0517c1c..84ce2322fdba 100644
 --- a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
 +++ b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
-@@ -219,7 +219,6 @@ GPIO 值的命令需要等待其信息排到队首才发送命令，再获得其
-         ## 	gpio_free_array()
- 
-                 gpio_free()
--                gpio_set_debounce()
+@@ -653,25 +653,6 @@ GPIO 控制器的路径类似 /sys/class/gpio/gpiochip42/ (对于从#42 GPIO
+ 确定给定信号所用的 GPIO 编号。
  
  
+-从内核代码中导出
+-----------------
+-
+-内核代码可以明确地管理那些已通过 gpio_request()申请的 GPIO 的导出::
+-
+-	/* 导出 GPIO 到用户空间 */
+-	int gpio_export(unsigned gpio, bool direction_may_change);
+-
+-	/* gpio_export()的逆操作 */
+-	void gpio_unexport();
+-
+-在一个内核驱动申请一个 GPIO 之后，它可以通过 gpio_export()使其在 sysfs
+-接口中可见。该驱动可以控制信号方向是否可修改。这有助于防止用户空间代码无意间
+-破坏重要的系统状态。
+-
+-这个明确的导出有助于(通过使某些实验更容易来)调试，也可以提供一个始终存在的接口，
+-与文档配合作为板级支持包的一部分。
+-
+-
+ API参考
+ =======
  
 diff --git a/Documentation/translations/zh_TW/gpio.txt b/Documentation/translations/zh_TW/gpio.txt
-index 1b986bbb0909..dc608358d90a 100644
+index dc608358d90a..62e560ffe628 100644
 --- a/Documentation/translations/zh_TW/gpio.txt
 +++ b/Documentation/translations/zh_TW/gpio.txt
-@@ -226,7 +226,6 @@ GPIO 值的命令需要等待其信息排到隊首才發送命令，再獲得其
- ## 	gpio_free_array()
- 
- 	gpio_free()
--	gpio_set_debounce()
- 
- 
- 
-diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
-index 4c3dd01902d0..da3c55d9cb98 100644
---- a/drivers/input/touchscreen/ads7846.c
-+++ b/drivers/input/touchscreen/ads7846.c
-@@ -25,8 +25,8 @@
- #include <linux/slab.h>
- #include <linux/pm.h>
- #include <linux/of.h>
--#include <linux/of_gpio.h>
- #include <linux/of_device.h>
+@@ -614,21 +614,3 @@ GPIO 控制器的路徑類似 /sys/class/gpio/gpiochip42/ (對於從#42 GPIO
+ 固定的,例如在擴展卡上的 GPIO會根據所使用的主板或所在堆疊架構中其他的板子而
+ 有所不同。在這種情況下,你可能需要使用 gpiochip 節點(儘可能地結合電路圖)來
+ 確定給定信號所用的 GPIO 編號。
+-
+-
+-從內核代碼中導出
+--------------
+-內核代碼可以明確地管理那些已通過 gpio_request()申請的 GPIO 的導出:
+-
+-	/* 導出 GPIO 到用戶空間 */
+-	int gpio_export(unsigned gpio, bool direction_may_change);
+-
+-	/* gpio_export()的逆操作 */
+-	void gpio_unexport();
+-
+-在一個內核驅動申請一個 GPIO 之後，它可以通過 gpio_export()使其在 sysfs
+-接口中可見。該驅動可以控制信號方向是否可修改。這有助於防止用戶空間代碼無意間
+-破壞重要的系統狀態。
+-
+-這個明確的導出有助於(通過使某些實驗更容易來)調試，也可以提供一個始終存在的接口，
+-與文檔配合作爲板級支持包的一部分。
+diff --git a/arch/arm/mach-omap2/pdata-quirks.c b/arch/arm/mach-omap2/pdata-quirks.c
+index 248478af5bfa..ee90fb42c955 100644
+--- a/arch/arm/mach-omap2/pdata-quirks.c
++++ b/arch/arm/mach-omap2/pdata-quirks.c
+@@ -6,6 +6,7 @@
+  */
+ #include <linux/clk.h>
+ #include <linux/davinci_emac.h>
 +#include <linux/gpio/consumer.h>
  #include <linux/gpio.h>
- #include <linux/spi/spi.h>
- #include <linux/spi/ads7846.h>
-@@ -139,7 +139,7 @@ struct ads7846 {
- 	int			(*filter)(void *data, int data_idx, int *val);
- 	void			*filter_data;
- 	int			(*get_pendown_state)(void);
--	int			gpio_pendown;
-+	struct gpio_desc	*gpio_pendown;
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+@@ -108,7 +109,7 @@ static int omap3_sbc_t3730_twl_callback(struct device *dev,
+ 	if (res)
+ 		return res;
  
- 	void			(*wait_for_sync)(void);
- };
-@@ -222,7 +222,7 @@ static int get_pendown_state(struct ads7846 *ts)
- 	if (ts->get_pendown_state)
- 		return ts->get_pendown_state();
- 
--	return !gpio_get_value(ts->gpio_pendown);
-+	return !gpiod_get_value(ts->gpio_pendown);
- }
- 
- static void ads7846_report_pen_up(struct ads7846 *ts)
-@@ -1005,7 +1005,6 @@ static int ads7846_setup_pendown(struct spi_device *spi,
- 	if (pdata->get_pendown_state) {
- 		ts->get_pendown_state = pdata->get_pendown_state;
- 	} else if (gpio_is_valid(pdata->gpio_pendown)) {
--
- 		err = devm_gpio_request_one(&spi->dev, pdata->gpio_pendown,
- 					    GPIOF_IN, "ads7846_pendown");
- 		if (err) {
-@@ -1015,15 +1014,17 @@ static int ads7846_setup_pendown(struct spi_device *spi,
- 			return err;
- 		}
- 
--		ts->gpio_pendown = pdata->gpio_pendown;
--
--		if (pdata->gpio_pendown_debounce)
--			gpio_set_debounce(pdata->gpio_pendown,
--					  pdata->gpio_pendown_debounce);
-+		ts->gpio_pendown = gpio_to_desc(pdata->gpio_pendown);
- 	} else {
--		dev_err(&spi->dev, "no get_pendown_state nor gpio_pendown?\n");
--		return -EINVAL;
-+		ts->gpio_pendown = gpiod_get(&spi->dev, "pendown-gpio", GPIOD_IN);
-+		if (IS_ERR(ts->gpio_pendown)) {
-+			dev_err(&spi->dev, "no get_pendown_state nor gpio_pendown?\n");
-+			return PTR_ERR(ts->gpio_pendown);
-+		}
- 	}
-+	if (pdata->gpio_pendown_debounce)
-+		gpiod_set_debounce(ts->gpio_pendown,
-+				   pdata->gpio_pendown_debounce);
+-	gpio_export(gpio, 0);
++	gpiod_export(gpio_to_desc(gpio), 0);
  
  	return 0;
  }
-@@ -1192,7 +1193,7 @@ static const struct ads7846_platform_data *ads7846_probe_dt(struct device *dev)
- 	pdata->wakeup = of_property_read_bool(node, "wakeup-source") ||
- 			of_property_read_bool(node, "linux,wakeup");
+@@ -123,7 +124,7 @@ static void __init omap3_sbc_t3x_usb_hub_init(int gpio, char *hub_name)
+ 		return;
+ 	}
  
--	pdata->gpio_pendown = of_get_named_gpio(dev->of_node, "pendown-gpio", 0);
-+	pdata->gpio_pendown = -1;
+-	gpio_export(gpio, 0);
++	gpiod_export(gpio_to_desc(gpio), 0);
  
- 	return pdata;
+ 	udelay(10);
+ 	gpio_set_value(gpio, 1);
+@@ -200,8 +201,8 @@ static void __init omap3_sbc_t3517_wifi_init(void)
+ 		return;
+ 	}
+ 
+-	gpio_export(cm_t3517_wlan_gpios[0].gpio, 0);
+-	gpio_export(cm_t3517_wlan_gpios[1].gpio, 0);
++	gpiod_export(gpio_to_desc(cm_t3517_wlan_gpios[0].gpio), 0);
++	gpiod_export(gpio_to_desc(cm_t3517_wlan_gpios[1].gpio), 0);
+ 
+ 	msleep(100);
+ 	gpio_set_value(cm_t3517_wlan_gpios[1].gpio, 0);
+diff --git a/arch/sh/boards/mach-ap325rxa/setup.c b/arch/sh/boards/mach-ap325rxa/setup.c
+index 6e66ac194f7d..48055991152c 100644
+--- a/arch/sh/boards/mach-ap325rxa/setup.c
++++ b/arch/sh/boards/mach-ap325rxa/setup.c
+@@ -18,6 +18,7 @@
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/gpio/machine.h>
+ #include <linux/i2c.h>
+ #include <linux/init.h>
+@@ -411,16 +412,16 @@ static int __init ap325rxa_devices_setup(void)
+ 	/* LD3 and LD4 LEDs */
+ 	gpio_request(GPIO_PTX5, NULL); /* RUN */
+ 	gpio_direction_output(GPIO_PTX5, 1);
+-	gpio_export(GPIO_PTX5, 0);
++	gpiod_export(gpio_to_desc(GPIO_PTX5), 0);
+ 
+ 	gpio_request(GPIO_PTX4, NULL); /* INDICATOR */
+ 	gpio_direction_output(GPIO_PTX4, 0);
+-	gpio_export(GPIO_PTX4, 0);
++	gpiod_export(gpio_to_desc(GPIO_PTX4), 0);
+ 
+ 	/* SW1 input */
+ 	gpio_request(GPIO_PTF7, NULL); /* MODE */
+ 	gpio_direction_input(GPIO_PTF7);
+-	gpio_export(GPIO_PTF7, 0);
++	gpiod_export(gpio_to_desc(GPIO_PTF7), 0);
+ 
+ 	/* LCDC */
+ 	gpio_request(GPIO_FN_LCDD15, NULL);
+diff --git a/drivers/gpio/gpiolib-sysfs.c b/drivers/gpio/gpiolib-sysfs.c
+index cd27bf173dec..6e4267944f80 100644
+--- a/drivers/gpio/gpiolib-sysfs.c
++++ b/drivers/gpio/gpiolib-sysfs.c
+@@ -491,7 +491,7 @@ static ssize_t unexport_store(struct class *class,
+ 		goto done;
+ 
+ 	desc = gpio_to_desc(gpio);
+-	/* reject bogus commands (gpio_unexport ignores them) */
++	/* reject bogus commands (gpiod_unexport() ignores them) */
+ 	if (!desc) {
+ 		pr_warn("%s: invalid GPIO %ld\n", __func__, gpio);
+ 		return -EINVAL;
+@@ -790,7 +790,7 @@ static int __init gpiolib_sysfs_init(void)
+ 	 * early (e.g. before the class_register above was called).
+ 	 *
+ 	 * We run before arch_initcall() so chip->dev nodes can have
+-	 * registered, and so arch_initcall() can always gpio_export().
++	 * registered, and so arch_initcall() can always gpiod_export().
+ 	 */
+ 	spin_lock_irqsave(&gpio_lock, flags);
+ 	list_for_each_entry(gdev, &gpio_devices, list) {
+diff --git a/drivers/media/pci/sta2x11/sta2x11_vip.c b/drivers/media/pci/sta2x11/sta2x11_vip.c
+index 8535e49a4c4f..e4cf9d63e926 100644
+--- a/drivers/media/pci/sta2x11/sta2x11_vip.c
++++ b/drivers/media/pci/sta2x11/sta2x11_vip.c
+@@ -18,6 +18,7 @@
+ #include <linux/pci.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/gpio.h>
+ #include <linux/i2c.h>
+ #include <linux/delay.h>
+@@ -889,6 +890,7 @@ static int sta2x11_vip_init_controls(struct sta2x11_vip *vip)
+ static int vip_gpio_reserve(struct device *dev, int pin, int dir,
+ 			    const char *name)
+ {
++	struct gpio_desc *desc = gpio_to_desc(pin);
+ 	int ret = -ENODEV;
+ 
+ 	if (!gpio_is_valid(pin))
+@@ -900,7 +902,7 @@ static int vip_gpio_reserve(struct device *dev, int pin, int dir,
+ 		return ret;
+ 	}
+ 
+-	ret = gpio_direction_output(pin, dir);
++	ret = gpiod_direction_output(desc, dir);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to set direction for pin %d (%s)\n",
+ 			pin, name);
+@@ -908,7 +910,7 @@ static int vip_gpio_reserve(struct device *dev, int pin, int dir,
+ 		return ret;
+ 	}
+ 
+-	ret = gpio_export(pin, false);
++	ret = gpiod_export(desc, false);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to export pin %d (%s)\n", pin, name);
+ 		gpio_free(pin);
+@@ -928,8 +930,10 @@ static int vip_gpio_reserve(struct device *dev, int pin, int dir,
+ static void vip_gpio_release(struct device *dev, int pin, const char *name)
+ {
+ 	if (gpio_is_valid(pin)) {
++		struct gpio_desc *desc = gpio_to_desc(pin);
++
+ 		dev_dbg(dev, "releasing pin %d (%s)\n",	pin, name);
+-		gpio_unexport(pin);
++		gpiod_unexport(desc);
+ 		gpio_free(pin);
+ 	}
  }
+diff --git a/drivers/net/ieee802154/ca8210.c b/drivers/net/ieee802154/ca8210.c
+index e1a569b99e4a..5c0be6a3ec5e 100644
+--- a/drivers/net/ieee802154/ca8210.c
++++ b/drivers/net/ieee802154/ca8210.c
+@@ -51,6 +51,7 @@
+ #include <linux/clk-provider.h>
+ #include <linux/debugfs.h>
+ #include <linux/delay.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/gpio.h>
+ #include <linux/ieee802154.h>
+ #include <linux/io.h>
+@@ -2853,7 +2854,7 @@ static int ca8210_interrupt_init(struct spi_device *spi)
+ 	);
+ 	if (ret) {
+ 		dev_crit(&spi->dev, "request_irq %d failed\n", pdata->irq_id);
+-		gpio_unexport(pdata->gpio_irq);
++		gpiod_unexport(gpio_to_desc(pdata->gpio_irq));
+ 		gpio_free(pdata->gpio_irq);
+ 	}
+ 
 diff --git a/include/linux/gpio.h b/include/linux/gpio.h
-index 6719a82eeec5..220e8656f2ab 100644
+index 220e8656f2ab..a1271526e489 100644
 --- a/include/linux/gpio.h
 +++ b/include/linux/gpio.h
-@@ -100,11 +100,6 @@ static inline int gpio_direction_output(unsigned gpio, int value)
- 	return gpiod_direction_output_raw(gpio_to_desc(gpio), value);
- }
+@@ -132,20 +132,6 @@ int gpio_request_one(unsigned gpio, unsigned long flags, const char *label);
+ int gpio_request_array(const struct gpio *array, size_t num);
+ void gpio_free_array(const struct gpio *array, size_t num);
  
--static inline int gpio_set_debounce(unsigned gpio, unsigned debounce)
+-/*
+- * A sysfs interface can be exported by individual drivers if they want,
+- * but more typically is configured entirely from userspace.
+- */
+-static inline int gpio_export(unsigned gpio, bool direction_may_change)
 -{
--	return gpiod_set_debounce(gpio_to_desc(gpio), debounce);
+-	return gpiod_export(gpio_to_desc(gpio), direction_may_change);
 -}
 -
- static inline int gpio_get_value_cansleep(unsigned gpio)
- {
- 	return gpiod_get_raw_value_cansleep(gpio_to_desc(gpio));
-@@ -215,11 +210,6 @@ static inline int gpio_direction_output(unsigned gpio, int value)
- 	return -ENOSYS;
- }
- 
--static inline int gpio_set_debounce(unsigned gpio, unsigned debounce)
+-static inline void gpio_unexport(unsigned gpio)
 -{
--	return -ENOSYS;
+-	gpiod_unexport(gpio_to_desc(gpio));
 -}
 -
- static inline int gpio_get_value(unsigned gpio)
+ /* CONFIG_GPIOLIB: bindings for managed devices that want to request gpios */
+ 
+ struct device;
+@@ -243,19 +229,6 @@ static inline void gpio_set_value_cansleep(unsigned gpio, int value)
+ 	WARN_ON(1);
+ }
+ 
+-static inline int gpio_export(unsigned gpio, bool direction_may_change)
+-{
+-	/* GPIO can never have been requested or set as {in,out}put */
+-	WARN_ON(1);
+-	return -EINVAL;
+-}
+-
+-static inline void gpio_unexport(unsigned gpio)
+-{
+-	/* GPIO can never have been exported */
+-	WARN_ON(1);
+-}
+-
+ static inline int gpio_to_irq(unsigned gpio)
  {
- 	/* GPIO can never have been requested or set as {in,out}put */
+ 	/* GPIO can never have been requested or set as input */
 -- 
 2.39.0
 
