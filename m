@@ -2,185 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB8867EB8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8042A67EB8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbjA0QvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:51:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
+        id S233764AbjA0Qvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:51:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjA0QvC (ORCPT
+        with ESMTP id S231582AbjA0Qvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:51:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E07B7BE76
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:51:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F07E61D19
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:51:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFA81C4339B;
-        Fri, 27 Jan 2023 16:50:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674838260;
-        bh=y9nk2iJEkaZrKqmP6NCJwp21crY3EzZu1exBJV93rAU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=KmAUW7IEFCSj1FcHMNu7MiacPkQTEbw9G9N6CjYcFrLJrFAPy1Dt1WIT46He/pzKj
-         gAt3did9hVTQGYay8XHx0pMT3Z2Q3duSPqfCmstOcI9mouu2Sg/T65sH+WeGd/q0eb
-         gO0ombliRk9ljqIRcZrt6JQjPDoN/bVZKQGi+k6wOReUcmfQJQno1mGbAXNleSvl5G
-         VhFF+XWxVZ4BeTpiQ0VdF2imceRhonDOzyZ+JC7hvMYtNR1vofpAz0Gx5Mqd+WMQPU
-         T7wM65CHbccSaYuM0Q7uG0xhFGxjoFZakQQDA0/Nq/xb2Wgp9y9VlalJ4Kabd7WGwr
-         I23bOVryxnt2Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8686A5C0510; Fri, 27 Jan 2023 08:50:59 -0800 (PST)
-Date:   Fri, 27 Jan 2023 08:50:59 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <20230127165059.GV2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Y9F+SyLpxHwdK0rE@rowland.harvard.edu>
- <20230125194651.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9GVFkVRRRs5/rBd@rowland.harvard.edu>
- <20230125213832.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230125233308.GA1552266@paulmck-ThinkPad-P17-Gen-1>
- <Y9HbSBLrNJ9O2ad6@rowland.harvard.edu>
- <20230126015330.GX2948950@paulmck-ThinkPad-P17-Gen-1>
- <0ef2e974-5c3a-6195-62d5-a4c436bd7d82@huaweicloud.com>
- <20230126184802.GF2948950@paulmck-ThinkPad-P17-Gen-1>
- <c94ad1d4-c7ac-4570-6f33-85656b041090@huaweicloud.com>
+        Fri, 27 Jan 2023 11:51:40 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0716F7DBD1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:51:38 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30R9k8LN030633;
+        Fri, 27 Jan 2023 10:51:30 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=lY5UIsZ69hx/4gHdwcW0N1VKa4Qb9oFZA+396K23HMk=;
+ b=nmP4VnrKi5tWiANdAKVn1dx+iUsTW94X+9EQP7+jCs0ZnPc5pbfgDj4KBx+HSgiG6OTu
+ j7gN1EUfjSUYOVNMneCE5FtUWiKL+HHxGdEzED8akj50hwNHCy2h9euxBrXskiItQyIH
+ PqdKasikiZp76e6CkR+O84zZw+vKPS7sRFAuC414Si5LIHW3nXzVet3OdtgAgbe+333G
+ 2+v0Gu6zOHNu9ekEwqipaOgZjYsk2f8rV6sKq7vek08ORq58gYHqIs4Qjz7Tg73Ktd3O
+ tOyLwS8JTkUIsL8n6yL6+WGQOrdtNbk5wy0tTm3NiAQN5OXU7RjO5wuiMAhd92cCfGRn 5A== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3n8dbsvrd1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 10:51:29 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Fri, 27 Jan
+ 2023 10:51:28 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.7 via Frontend Transport; Fri, 27 Jan 2023 10:51:28 -0600
+Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.202.160])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 34237475;
+        Fri, 27 Jan 2023 16:51:28 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v3 0/8] ASoC: cs42l42: Add SoundWire support
+Date:   Fri, 27 Jan 2023 16:51:03 +0000
+Message-ID: <20230127165111.3010960-1-sbinding@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c94ad1d4-c7ac-4570-6f33-85656b041090@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: ld2F_qA2ieOHzm2HVUV8Vbzu6z-BGsLr
+X-Proofpoint-GUID: ld2F_qA2ieOHzm2HVUV8Vbzu6z-BGsLr
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 04:03:16PM +0100, Jonas Oberhauser wrote:
-> 
-> 
-> On 1/26/2023 7:48 PM, Paul E. McKenney wrote:
-> > On Thu, Jan 26, 2023 at 01:17:49PM +0100, Jonas Oberhauser wrote:
-> > > [...]
-> > > Note that this interpretation is analogous to the promise of smp_mb__after_unlock_lock(), which says that an
-> > > UNLOCK+LOCK pair act as a full fence: here the read-side unlock+gp act as a
-> > > full memory barrier.
-> > Good point that the existing smp_mb__after_unlock_lock() can be used for
-> > any use cases relying on the more literal interpretation of this promise.
-> > We already have the work-around!  ;-)
-> 
-> Can it? I meant that the less-literal form is similar to the one given by
-> smp_mb__after_unlock_lock().
-> 
-> > > [...] I suppose you might be able to write
-> > > some absurd client that inspects every store of the reader thread and sees
-> > > that there is no line in the reader side code that acts like a full fence.
-> > > But it would take a lot of effort to discern this.
-> > The usual litmus test is shown at the end of this email [...]
-> > > [...] I hope few people would have this unhealthy idea. But you
-> > > never know.
-> > Given that the more literal interpretation is not unreasonable, we should
-> > assume that someone somewhere might have interpreted it that way.
-> > 
-> > But I agree that the odds of someone actually relying on this are low,
-> > and any such use case can be fixed with smp_mb__before_srcu_read_unlock(),
-> > similar to smp_mb__after_srcu_read_unlock() that you note is already in use.
-> > 
-> > It would still be good to scan SRCU use for this sort of pattern, maybe
-> > manually, maybe via something like coccinelle.  Alternatively, I could
-> > post on my blog (with right of first refusal to LWN and you guys as
-> > co-authors) telling the community of our intent to change this and see
-> > what people say.  Probably both rather than either/or.
-> > 
-> > Thoughts?
-> 
-> My first thought is "there is a 'usual' litmus test for this?" :D
-> But yes, the test you have given has at least the same structure as what I
-> would expect.
+The CS42L42 has a SoundWire interface for control and audio. This
+chain of patches adds support for this.
 
-Exactly!  ;-)
+Patches #1 .. #5 split out various changes to the existing code that
+are needed for adding Soundwire. These are mostly around clocking and
+supporting the separate probe and enumeration stages in SoundWire.
 
-> Communicating this with the community sounds very reasonable.
-> 
-> For some automated combing, I'm really not sure what pattern to look for.
-> I'm afraid someone with a lot of time might have to look (semi-)manually.
+Patches #6 .. #8 actually adds the SoundWire handling.
 
-Please continue giving it some thought.  The number of srcu_read_unlock()
-calls in v6.1 is about 250, which is within the realm of manual
-inspection, but it is all too easy to miss something.
+Changes since v1:
+- fixes for various review comments from v1
+- add support for wakeup from clock stop using hardware interrupts
+- use port_prep callback to prepare/deprepare codec
 
-							Thanx, Paul
+Changes since v2:
+- fix various comments
+- enable pm_runtime during probe
 
-> Best wishes, jonas
-> 
-> 
-> > 
-> > 							Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > C C-srcu-observed-6
-> > 
-> > (*
-> >   * Result: Sometimes
-> >   *
-> >   * The result is Never if any of the smp_mb() calls is uncommented.
-> >   *)
-> > 
-> > {}
-> > 
-> > P0(int *a, int *b, int *c, int *d, struct srcu_struct *s)
-> > {
-> > 	int r1;
-> > 	int r2;
-> > 	int r3;
-> > 	int r4;
-> > 
-> > 	r1 = srcu_read_lock(s);
-> > 	WRITE_ONCE(*b, 2);
-> > 	r2 = READ_ONCE(*a);
-> > 	// smp_mb();
-> > 	srcu_read_unlock(s, r1);
-> > 	// smp_mb();
-> > 	r3 = READ_ONCE(*c);
-> > 	// smp_mb();
-> > 	r4 = READ_ONCE(*d);
-> > }
-> > 
-> > P1(int *a, int *b, int *c, int *d, struct srcu_struct *s)
-> > {
-> > 	WRITE_ONCE(*b, 1);
-> > 	synchronize_srcu(s);
-> > 	WRITE_ONCE(*c, 1);
-> > }
-> > 
-> > P2(int *a, int *b, int *c, int *d, struct srcu_struct *s)
-> > {
-> > 	WRITE_ONCE(*d, 1);
-> > 	smp_mb();
-> > 	WRITE_ONCE(*a, 1);
-> > }
-> > 
-> > exists (0:r2=1 /\ 0:r3=1 /\ 0:r4=0 /\ b=1)
-> 
+Richard Fitzgerald (6):
+  ASoC: cs42l42: Add SOFT_RESET_REBOOT register
+  ASoC: cs42l42: Ensure MCLKint is a multiple of the sample rate
+  ASoC: cs42l42: Separate ASP config from PLL config
+  ASoC: cs42l42: Export some functions for SoundWire
+  ASoC: cs42l42: Add SoundWire support
+  ASoC: cs42l42: Don't set idle_bias_on
+
+Stefan Binding (2):
+  soundwire: stream: Add specific prep/deprep commands to port_prep
+    callback
+  ASoC: cs42l42: Wait for debounce interval after resume
+
+ drivers/soundwire/stream.c     |   4 +-
+ include/linux/soundwire/sdw.h  |   8 +-
+ include/sound/cs42l42.h        |   5 +
+ sound/soc/codecs/Kconfig       |   8 +
+ sound/soc/codecs/Makefile      |   2 +
+ sound/soc/codecs/cs42l42-sdw.c | 610 +++++++++++++++++++++++++++++++++
+ sound/soc/codecs/cs42l42.c     | 133 ++++---
+ sound/soc/codecs/cs42l42.h     |   9 +-
+ 8 files changed, 729 insertions(+), 50 deletions(-)
+ create mode 100644 sound/soc/codecs/cs42l42-sdw.c
+
+-- 
+2.34.1
+
