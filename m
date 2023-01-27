@@ -2,135 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD1B67DF00
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A54F967DF05
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbjA0IXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 03:23:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S232100AbjA0IYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 03:24:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjA0IXN (ORCPT
+        with ESMTP id S229606AbjA0IYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 03:23:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C06D38026
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:22:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674807745;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aDjl4klenBNtl/PLFSbWMzoXaIOyzFKf0hXB3Iobp5g=;
-        b=ObUwNRFPJwOJlY3fwEUj3vc/vMfwPgasxdY1yzXNDHmwXTjNrWDBUtV1unXLmgm+p+ynp8
-        O5Wji+x7XzmXqHxloihi9k0/W3s1gVHDYaAAlf+hdSD3HcdhoZZ03dO58Pi+RDQiwS8bU8
-        Hf63/YED1SsKupdkQ/PrSW/miMEa0GU=
-Received: from mail-ua1-f71.google.com (mail-ua1-f71.google.com
- [209.85.222.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-547-kVvYXSfoPbWcdf_IKURBcA-1; Fri, 27 Jan 2023 03:22:23 -0500
-X-MC-Unique: kVvYXSfoPbWcdf_IKURBcA-1
-Received: by mail-ua1-f71.google.com with SMTP id z22-20020ab05656000000b00652f9577464so1575400uaa.15
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:22:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aDjl4klenBNtl/PLFSbWMzoXaIOyzFKf0hXB3Iobp5g=;
-        b=gM9G+woj3UngNlNoa1DblrjzZVZlEzelAQnfV4rC7UagBE+PnxRNdgm50C+XndK4Jf
-         AHU36LhvPU264ro7slGtVqvHNRitF/82q5KhQJCTcHiGPMDcV/zmW6ihtuMfcUH9OwAo
-         SSbQYd33vZvFQQ5awpP8LV8eM8OXE7P56vOp0Tdem0TLHmcsEtciKq491M6mcbzvRshg
-         vlxEo/tiM3ymSb1+ToWNdMzwPnBHGOjWZvlqbjDQcAPLPrhYwTe38MsS8FGuFreZMO8D
-         Ev6Epn4TNWLzmCeMT6aNbblYX2DwJDbzB2BsMo9dL3g96ENilQhMo6hFvkFvq6aE++dG
-         Qq5A==
-X-Gm-Message-State: AO0yUKXGwQmFYA1z37kPX4fQWWI1It6iVqtFpTZPgbbLKkauP9YP7OgG
-        vyP5XQTZhKyvj9dO7tGsZ/4S8eSZ3wQG2WnCxd6ExuA82ocy8zkS6G88/DuE/t15Y2anlPFWl6T
-        Xlpr6TuSKTJuJ/Rg6NDSdIRow
-X-Received: by 2002:a1f:a846:0:b0:3e6:2734:7602 with SMTP id r67-20020a1fa846000000b003e627347602mr5111681vke.1.1674807743440;
-        Fri, 27 Jan 2023 00:22:23 -0800 (PST)
-X-Google-Smtp-Source: AK7set9iRj9arz3CD4aqIKW6gnt+cnTuOdlvDcBZLcVWFqllfMd02qFwImS0F1+FxuC3fl0sIaIUCA==
-X-Received: by 2002:a1f:a846:0:b0:3e6:2734:7602 with SMTP id r67-20020a1fa846000000b003e627347602mr5111676vke.1.1674807743221;
-        Fri, 27 Jan 2023 00:22:23 -0800 (PST)
-Received: from redhat.com ([37.19.199.113])
-        by smtp.gmail.com with ESMTPSA id s8-20020a05612204c800b003e25aef33f5sm254005vkn.9.2023.01.27.00.22.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 00:22:22 -0800 (PST)
-Date:   Fri, 27 Jan 2023 03:22:16 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Yongji Xie <xieyongji@bytedance.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jason Wang <jasowang@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 01/11] genirq/affinity:: Export
- irq_create_affinity_masks()
-Message-ID: <20230127032039-mutt-send-email-mst@kernel.org>
-References: <20221205084127.535-1-xieyongji@bytedance.com>
- <20221205084127.535-2-xieyongji@bytedance.com>
- <20221219023253-mutt-send-email-mst@kernel.org>
- <CACycT3utDJFZtWzqCUXJaqRjkCXPMTAi+VJd3g6dw25vWqaduw@mail.gmail.com>
+        Fri, 27 Jan 2023 03:24:13 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0817C4FC31;
+        Fri, 27 Jan 2023 00:24:11 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 677642B3;
+        Fri, 27 Jan 2023 09:24:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674807849;
+        bh=niDyqFDWqiArhyvutjU5y1QCfPrstLEbn01CZDRz5yE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=utkgh9xOt6RyqBx6BRc/W34PP9y14HzAXTXaBKoL3rvxkL6KE9OECUZ1heRpNHJeX
+         0Dsr4fWmfVtEo7R8n7LYjtRfsypG6KJbXRpzPVPYBy8wPmiH63QRRpEZAEIhmXC5TS
+         WUClIj0vn6sCqbXsRJOuhx+TypGzwsYmbM9gnN54=
+Message-ID: <0c13eac3-cadb-b923-d475-7851dbef0c4e@ideasonboard.com>
+Date:   Fri, 27 Jan 2023 10:24:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACycT3utDJFZtWzqCUXJaqRjkCXPMTAi+VJd3g6dw25vWqaduw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+References: <aba49d82-c76f-7ff2-751c-d1be7b8f3bca@ideasonboard.com>
+ <Y8rFh6zO7Hp9mLxE@smile.fi.intel.com>
+ <4286abe2-f23f-d4c9-ef18-f351af7a3a8b@ideasonboard.com>
+ <Y9EcRlooHwIjOqiZ@smile.fi.intel.com>
+ <cad92dbb-43ef-fa8c-1962-13c4a8578899@ideasonboard.com>
+ <Y9FBlMl4b3l1zVck@smile.fi.intel.com>
+ <5d208710-f284-e6e9-18dc-f5ef63a9ea44@ideasonboard.com>
+ <Y9FKcoVlgUWR4rhn@smile.fi.intel.com>
+ <04a82b08-524f-8d03-ac47-73d826907fc3@ideasonboard.com>
+ <Y9JUEv66Gze8FjMZ@smile.fi.intel.com>
+ <Y9JbMjPM3Ea3RVzH@pendragon.ideasonboard.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y9JbMjPM3Ea3RVzH@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 05:36:02PM +0800, Yongji Xie wrote:
-> On Mon, Dec 19, 2022 at 3:33 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Mon, Dec 05, 2022 at 04:41:17PM +0800, Xie Yongji wrote:
-> > > Export irq_create_affinity_masks() so that some modules
-> > > can make use of it to implement interrupt affinity
-> > > spreading mechanism.
-> > >
-> > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-> >
-> > So this got nacked, what's the plan now?
-> >
+On 26/01/2023 12:51, Laurent Pinchart wrote:
+> On Thu, Jan 26, 2023 at 12:21:06PM +0200, Andy Shevchenko wrote:
+>> On Thu, Jan 26, 2023 at 10:41:47AM +0200, Tomi Valkeinen wrote:
+>>> On 25/01/2023 17:27, Andy Shevchenko wrote:
+>>
+>> ...
+>>
+>>>> But I probably don't understand the ATR structure and what exactly we need to
+>>>> pass to it, perhaps it also can be replaced with properties (note, that we have
+>>>> some interesting ones that called references, which is an alternative to DT
+>>>> phandle).
+>>>
+>>> Well, maybe this needs a Linux bus implementation. I'm not that familiar
+>>> with implementing a bus, but I think that would make it easier to share data
+>>> between the deserializer and the serializer. A bus sounds a bit like an
+>>> overkill for a 1-to-1 connection, used by a few drivers, but maybe it
+>>> wouldn't be too much code.
+>>
+>> Have you looked at auxiliary bus (appeared a few releases ago in kernel)?
 > 
-> I‘d like to check with Christoph again first.
-> 
-> Hi Christoph,
-> 
-> Jason will post some patches to get rid of the DMA API for vDPA
-> simulators. And the irq affinity algorithm is independent of the IRQ
-> subsystem IIUC. So could you allow this patch so that we can reuse the
-> algorithm to select the best CPU (per-cpu affinity if possible, or at
-> least per-node) to run the virtqueue's irq callback.
-> 
-> Thanks,
-> Yongji
+> As far as I understand, the auxiliary bus infrastructure is meant for
+> use cases where a single hardware device needs to be split into multiple
+> logical devices (as in struct device). Platform devices were
+> historically (ab)used for this, and the auxiliary bus is meant as a
+> cleaner solution. I'm not sure if it would be a good match here, or if
+> it would be considered an abuse of the auxiliary bus API.
 
-I think you need to explain why you are building low level
-affinity masks.  what's the plan now?
+The aux bus docs say "A key requirement for utilizing the auxiliary bus 
+is that there is no dependency on a physical bus, device, register 
+accesses or regmap support. These individual devices split from the core 
+cannot live on the platform bus as they are not physical devices that 
+are controlled by DT/ACPI.", which doesn't sound like a good fit.
 
-> > > ---
-> > >  kernel/irq/affinity.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/kernel/irq/affinity.c b/kernel/irq/affinity.c
-> > > index d9a5c1d65a79..f074a7707c6d 100644
-> > > --- a/kernel/irq/affinity.c
-> > > +++ b/kernel/irq/affinity.c
-> > > @@ -487,6 +487,7 @@ irq_create_affinity_masks(unsigned int nvecs, struct irq_affinity *affd)
-> > >
-> > >       return masks;
-> > >  }
-> > > +EXPORT_SYMBOL_GPL(irq_create_affinity_masks);
-> > >
-> > >  /**
-> > >   * irq_calc_affinity_vectors - Calculate the optimal number of vectors
-> > > --
-> > > 2.20.1
-> >
+The deserializer and serializers are currently independent devices and 
+drivers (the pdata is the only shared thing), but I think we may need 
+something better here. The devices are more tightly tied together than 
+"normal" video devices, in my opinion, as the serializer is fully 
+controlled by the deserializer (including power).
+
+And if we ever want to implement something like power management, we 
+probably need something more than what we have now. Although I don't 
+know how that would be done, as all the peripherals behind the 
+serializer would also lose power...
+
+  Tomi
 
