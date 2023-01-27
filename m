@@ -2,131 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCAF67DE78
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC8D67DE7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbjA0HYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 02:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S232675AbjA0HZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 02:25:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjA0HY1 (ORCPT
+        with ESMTP id S229886AbjA0HZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 02:24:27 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9564FADA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:24:26 -0800 (PST)
-Received: from [192.168.0.105] (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 7CE2E44C100F;
-        Fri, 27 Jan 2023 07:24:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 7CE2E44C100F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1674804262;
-        bh=Ov8b+N0rxFBQ1mJI28Uiq6+JbKshYC6f8YcFIGSyt4w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ob0Q92OhLBuQF1U7Yj54lbEVLdP2iDNTCLFYlv1eUzprXhDFI2HtTR904qSTi/r2A
-         KdpRzexkWLsA+aBfkxKCLic1JBfzGhe8/1vv7LtBlE93O7R0UjhJmwAdOWaRtG4sIg
-         P8H+z79G9CpUIqDRrlOniNpFuXjeFW1RxUk2VkbQ=
-Message-ID: <7603920e-e5ac-b88f-667b-efd8f928ba97@ispras.ru>
-Date:   Fri, 27 Jan 2023 10:24:22 +0300
+        Fri, 27 Jan 2023 02:25:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D56A518E8;
+        Thu, 26 Jan 2023 23:25:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1E43B81F83;
+        Fri, 27 Jan 2023 07:25:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13A47C433D2;
+        Fri, 27 Jan 2023 07:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674804319;
+        bh=uiDH1wTvjIHk7fS7H/gr3ugWkoj8lJ2x2AXClUIXcVc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CFSAlYy9Dm+0rzvxNPbzD6Hoget8LchXtUZIKj1/mPZ++3Z9tihvpDIyl37ehs2FF
+         my4KMLyXyzqUhN1d/9MBncXqDzA/zsX6yup9N3f1nihtrvHkHeSXaq5jj3ZZGBqW1H
+         wifmRiZnQc7yJN1EedhndkIv4M8pRLDRELw5Hsmw=
+Date:   Fri, 27 Jan 2023 08:25:16 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Adrian Zaharia <adrian.zaharia@windriver.com>
+Cc:     stable@vger.kernel.org, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.10 1/1] xhci: Set HCD flag to defer primary roothub
+ registration
+Message-ID: <Y9N8XEh6rL/MWP77@kroah.com>
+References: <20230125133359.3538078-1-adrian.zaharia@windriver.com>
+ <20230125133359.3538078-2-adrian.zaharia@windriver.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 1/1] squashfs: harden sanity check in
- squashfs_read_xattr_id_table
-To:     Phillip Lougher <phillip@squashfs.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org,
-        syzbot+082fa4af80a5bb1a9843@syzkaller.appspotmail.com
-References: <20230117105226.329303-1-pchelkin@ispras.ru>
- <20230117105226.329303-2-pchelkin@ispras.ru>
- <68f15d67-8945-2728-1f17-5b53a80ec52d@squashfs.org.uk>
-Content-Language: en-US
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-In-Reply-To: <68f15d67-8945-2728-1f17-5b53a80ec52d@squashfs.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125133359.3538078-2-adrian.zaharia@windriver.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the reply. Actually, I made a proposal about '*xattr_ds' type
-being unsigned in 0/1 patch of the series, but in the end tried to fix
-the issue in-place, and that was definitely a wrong decision. I'm sorry
-for the misleading patch.
+On Wed, Jan 25, 2023 at 03:33:59PM +0200, Adrian Zaharia wrote:
+> From: Kishon Vijay Abraham I <kishon@ti.com>
+> 
+> [ Upstream commit b7a4f9b5d0e4b6dd937678c546c0b322dd1a4054 ]
+> 
+> Set "HCD_FLAG_DEFER_RH_REGISTER" to hcd->flags in xhci_run() to defer
+> registering primary roothub in usb_add_hcd() if xhci has two roothubs.
+> This will make sure both primary roothub and secondary roothub will be
+> registered along with the second HCD.
+> This is required for cold plugged USB devices to be detected in certain
+> PCIe USB cards (like Inateck USB card connected to AM64 EVM or J7200 EVM).
+> 
+> This patch has been added and reverted earier as it triggered a race
+> in usb device enumeration.
+> That race is now fixed in 5.16-rc3, and in stable back to 5.4
+> commit 6cca13de26ee ("usb: hub: Fix locking issues with address0_mutex")
+> commit 6ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0
+> race")
+> 
+> [minor rebase change, and commit message update -Mathias]
+> 
+> CC: stable@vger.kernel.org # 5.4+
+> Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Tested-by: Chris Chiu <chris.chiu@canonical.com>
+> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+> Link: https://lore.kernel.org/r/20220510091630.16564-3-kishon@ti.com
+> Signed-off-by: Adrian Zaharia <Adrian.Zaharia@windriver.com>
+> ---
+>  drivers/usb/host/xhci.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-On 27.01.2023 09:20, Phillip Lougher wrote:
-> On 17/01/2023 10:52, Fedor Pchelkin wrote:
->  > While mounting a corrupted filesystem, a signed integer '*xattr_ids' can
->  > become less than zero. This leads to the incorrect computation of 'len'
->  > and 'indexes' values which can cause null-ptr-deref in 
-> copy_bio_to_actor()
->  > or out-of-bounds accesses in the next sanity checks inside
->  > squashfs_read_xattr_id_table().
->  >
-> 
-> NACK
-> 
-> Thanks for sending the patch, but, you have unfortunately identified and
-> fixed the wrong sanity check.  In effect you're fixing the symptom and
-> not the cause.
-> 
-> The Sysbot corrupted filesystem has an xattr_ids value of 4294967071,
-> which as you point out is treated as negative due to xattr_ids being a
-> signed int.
-> 
-> But 4294967071 even though it is a large number could be a perfectly
-> legitimate number because in theory the filesystem layout supports up
-> to 2^32 xattr_ids.
-> 
-> By extending the wrong sanity check from
-> 
->  >    if (*xattr_ids == 0)
-> 
-> to
-> 
->  >    if (*xattr_ids <= 0)
-> 
-> You are using the fact that the number has gone negative to reject the
-> filesystem.  But you are not fixing the real issues.
-> 
-> You have not discovered if or why the negative number is the
-> cause of the failure, or whether there are extra flaws.
-> 
-> With syzkiller fuzzer generated exploits, it is essential to analyze the
-> issue throughly, because these exploits often rely on over-looked
-> dependencies/assumptions, and it can be difficult to produce a patch
-> that fixes all the issues and without introducing regressions.
-> 
-> Phillip
-> 
->  >
->  > Fixes: 506220d2ba21 ("squashfs: add more sanity checks in xattr id 
-> lookup")
->  > Reported-by: syzbot+082fa4af80a5bb1a9843@syzkaller.appspotmail.com
->  > Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
->  > Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
->  > ---
->  >   fs/squashfs/xattr_id.c | 2 +-
->  >   1 file changed, 1 insertion(+), 1 deletion(-)
->  >
->  > diff --git a/fs/squashfs/xattr_id.c b/fs/squashfs/xattr_id.c
->  > index 087cab8c78f4..f6d78cbc3e74 100644
->  > --- a/fs/squashfs/xattr_id.c
->  > +++ b/fs/squashfs/xattr_id.c
->  > @@ -76,7 +76,7 @@ __le64 *squashfs_read_xattr_id_table(struct 
-> super_block *sb, u64 table_start,
->  >       /* Sanity check values */
->  >
->  >       /* there is always at least one xattr id */
->  > -    if (*xattr_ids == 0)
->  > +    if (*xattr_ids <= 0)
->  >           return ERR_PTR(-EINVAL);
->  >
->  >       len = SQUASHFS_XATTR_BLOCK_BYTES(*xattr_ids);
+You dropped my original signed-off-by?  Odd...
+
+Anyway, now queued up.
+
+greg k-h
