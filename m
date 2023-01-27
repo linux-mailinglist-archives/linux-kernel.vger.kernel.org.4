@@ -2,75 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0CE67EA96
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3BB67EAA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234738AbjA0QQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
+        id S232940AbjA0QSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234755AbjA0QPz (ORCPT
+        with ESMTP id S229819AbjA0QSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:15:55 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D036E7BBC9
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:15:47 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id rl14so15125176ejb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:15:47 -0800 (PST)
+        Fri, 27 Jan 2023 11:18:53 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0547C658
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:18:51 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id w15so4163205qvs.11
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:18:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=grsecurity.net; s=grsec;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=omzXg8OT+1HtcPdH7sWBJQq9q/lSuoFptSXDIoH2qBE=;
-        b=sxKgYruEvXs1bRh0GU0N/RYWpDzF6pgHMmVWgNmjZt5hYKnL6ZEVWQcWoiSFdliogy
-         3CtadtBFdk0dE/jtfe50t15kUoTiWKlS/Nxcs4CJ3b0fHqxS03l4D05XavC8Yf6LqI2h
-         8Pru7lfSL8ljpelPMdQv1DRqgqIepzTbRUsR2Y8w0eew8k0RrMwtZdALHfFameMy2UsK
-         X4JgCRIsgXCrPeVFB8DCgoaEjSCuBa2R/p4SLv0aI/IENp7Mo/+jq+jUPFVkj48rL+fw
-         kda+VuwHedyNcigzjOrDLmT+vQL+XICY2lANA+9Dly068XIxKF7IU2Xc2lI+xqqP9d7C
-         g0zg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DpbM6dulHZ17ZJk7sIXX1zvUQ+2CFayGo452JEZsUgA=;
+        b=sei4Ur3/qhUD7eRtizMwsp9T6XeunKIuHWi7/1xW5YiSHAAZjfGiFrjmNroi5Enj8P
+         0NXdDYvUlkxkZFSZ8QC7MWX3UVc/1D/PRzdEIy1zPa+ac+P8OcshmPccSYKmoPj+8upz
+         bF1cYyx+wYqWTI3M2ZRA5rjQB3IvJhBtMjBcFST1UKVHNS5ge2jDw381/jn/TPNUG8Ig
+         Utt08poel4blMMcW/0fHg3xTtshN+h7KVP6YlUQEUfgC7IHcdXOtmL/qzdXFI1Oxa/+4
+         qPu9X7fftgdEcwoRI/zPhtWiwy4+hJQS7bTws88fySVHeWezQCCBy0QU30+wduA64yFS
+         uaIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=omzXg8OT+1HtcPdH7sWBJQq9q/lSuoFptSXDIoH2qBE=;
-        b=MoLF/CulmBQ7CNTCP35RzBCDLOLM6bPFij1/awZlXpa/mlkJrTKU3dC1dDCQEbUSDH
-         F8l+e6wnWBFgX2d3PeUje9eMcGgzOrPFQFYxBqkNH0VtBOG+gN/zePPB/4kf7Q1NXTVP
-         nSmoWW5Pfn8I9MMTdWyH2LYiS/SjazkONxuHZ4U5GyroGqZa2HhdXSs/2Ic0fwa4VJLO
-         pAowYAyZBoNd/RiCMD8WUT7OsYikc2yf5beiwegzdxUEJiaCOLk9DYZCMoWLxgqbZfLN
-         8fz4o7eiM4h5M7yUeaB90koYm99J52/yue0HqzvYGaPfHZjkD4p/UmhJjYxsPAt4/xhT
-         fNFA==
-X-Gm-Message-State: AFqh2kpFYYhKOgR04H4nULGR0/ifRlTzwDslr3j8eKQU/pY7d3vbyWxv
-        KJQEr4OtQx6lZHnR7Taw0JWtqCG8KtDNwQGVqnI=
-X-Google-Smtp-Source: AMrXdXunZWLZUXYRKw2maJa5BYMxljiU1YRa2lQcshHGtRF9mVQZf9Gmwt2+FRd9a8Cq0+x2+OWB3A==
-X-Received: by 2002:a17:907:9623:b0:869:236c:ac40 with SMTP id gb35-20020a170907962300b00869236cac40mr55061282ejc.31.1674836146460;
-        Fri, 27 Jan 2023 08:15:46 -0800 (PST)
-Received: from ?IPV6:2003:f6:af06:9e00:9ba6:6299:7a26:8e00? (p200300f6af069e009ba662997a268e00.dip0.t-ipconnect.de. [2003:f6:af06:9e00:9ba6:6299:7a26:8e00])
-        by smtp.gmail.com with ESMTPSA id fu17-20020a170907b01100b008536ff0bb44sm2456373ejc.109.2023.01.27.08.15.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 08:15:45 -0800 (PST)
-Message-ID: <ccad240e-d604-60e2-b12d-c7c3ca530887@grsecurity.net>
-Date:   Fri, 27 Jan 2023 17:15:44 +0100
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DpbM6dulHZ17ZJk7sIXX1zvUQ+2CFayGo452JEZsUgA=;
+        b=BMyiIdDvfIU9FIdOwjKvOQ0A1hXZCNBtkfevLNgAMksrtGATTreuJBUOYVCi8dRXB7
+         IOnVGs01N7zvBLRz7crSCa3w6hWTmg2CRc6kAkf8qaSXtbZIAvdEYFe1+eTJHBOhxid0
+         urkcKZCECRtnUJwguViTKGr8C6qSoSpWwpDebcZIKvHJPev77oghhdKENJm0dog2gfIg
+         o4yAng9S2YGcpx2Mi7jMLz4eJ11N5m3LlUJtUE97r8ICkfLn5CNCiPTXLePc6cjRf/81
+         RA3/M1RQikYlpK4r6/ZyRPQxri1pODPKE6C3uf8GObche58eBOMAxJsqx0blQWaNTf7E
+         vTxw==
+X-Gm-Message-State: AFqh2kod0y9Fl8QR/bzajAVIF4fIRqs+6zmo/mRPi43eiOTZGKVB3nKD
+        lYHVu43g3C2HcFxHx4vb03T5TcSqHvhGTYl0k3wNDQ==
+X-Google-Smtp-Source: AMrXdXvLZ3tb9o4k4+Rdt+X24aNNL4DoFTd5UeyiqztwmluRV4eW2iDC4NLWecpVdMZnnv+GzK2PKeAqcPJnnUgMp0M=
+X-Received: by 2002:a05:6214:5c42:b0:534:1fd4:72ec with SMTP id
+ lz2-20020a0562145c4200b005341fd472ecmr2080182qvb.65.1674836331103; Fri, 27
+ Jan 2023 08:18:51 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 27 Jan 2023 11:18:50 -0500
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220919-v5-0-cfb0e5ad29b2@baylibre.com>
+In-Reply-To: <20220919-v5-0-cfb0e5ad29b2@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 3/3] KVM: x86: do not unload MMU roots when only toggling
- CR0.WP
-Content-Language: en-US, de-DE
-From:   Mathias Krause <minipli@grsecurity.net>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20230117204556.16217-1-minipli@grsecurity.net>
- <20230117204556.16217-4-minipli@grsecurity.net> <Y8cTMnyBzNdO5dY3@google.com>
- <1b4d4488-9afc-91e9-790d-5b669d00217b@grsecurity.net>
-In-Reply-To: <1b4d4488-9afc-91e9-790d-5b669d00217b@grsecurity.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Date:   Fri, 27 Jan 2023 11:18:50 -0500
+Message-ID: <CABnWg9u02duwaM3zWAdM9ZLw03Z53j0aCSWYXWpz=WM8zm-Ynw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] Add MT8195 HDMI phy support
+To:     CK Hu <ck.hu@mediatek.com>, Vinod Koul <vkoul@kernel.org>,
+        Jitao shi <jitao.shi@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mac.shen@mediatek.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-phy@lists.infradead.org,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        devicetree@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, stuart.lee@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,50 +86,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.01.23 11:17, Mathias Krause wrote:
-> On 17.01.23 22:29, Sean Christopherson wrote:
->> On Tue, Jan 17, 2023, Mathias Krause wrote:
->>> [...] 
->>> Change kvm_mmu_reset_context() to get passed the need for unloading MMU
->>> roots and explicitly avoid it if only CR0.WP was toggled on a CR0 write
->>> caused VMEXIT.
->>
->> One thing we should explore on top of this is not intercepting CR0.WP (on Intel)
->> when TDP is enabled.  It could even trigger after toggling CR0.WP N times, e.g.
->> to optimize the grsecurity use case without negatively impacting workloads with
->> a static CR0.WP, as walking guest memory would require an "extra" VMREAD to get
->> CR0.WP in that case.
-> 
-> That would be even better, agreed. I'll look into it and will try to
-> come up with something.
+On Fri, 27 Jan 2023 16:55, Guillaume Ranquet <granquet@baylibre.com> wrote:
+>Add support for HDMI phy on MT8195.
+>
 
-I looked into it and we can gain quite a few more cycles from this, e.g.
-the runtime for the 'ssdd 10 50000' test running with TDP MMU takes
-another bump from 7.31s down to 4.89s. That's overall 2.8 times faster
-than the 13.91s we started with. :)
+Please disregard this, as I meant to send v6 and not a new v5...
+link to the actual v6 is here:
+https://lore.kernel.org/linux-mediatek/20220919-v6-0-2f641c422cb6@baylibre.com/
 
-I'll cook up a patch next week and send a v3 series with some more
-cleanups I collected in the meantime.
+Sorry for spamming your inboxes,
+Guillaume.
 
->> Unfortunately, AMD doesn't provide per-bit controls.
-
-Meanwhile I got my hands on an AMD system and it gains from this series
-as well, not as much as my Intel system, though. We go down from 5.8s to
-4.12s for the 'ssdd 10 50000' test with TDP MMU enabled -- a nearly 30%
-runtime reduction.
-
->>> This change brings a huge performance gain as the following micro-
->>> benchmark running 'ssdd 10 50000' from rt-tests[1] on a grsecurity L1 VM
->>> shows (runtime in seconds, lower is better):
->>>
->>>                       legacy MMU   TDP MMU
->>> kvm.git/queue             11.55s    13.91s
->>> kvm.git/queue+patch        7.44s     7.94s
->>>
->>> For legacy MMU this is ~35% faster, for TTP MMU ~43% faster.
->>>
->>> [1] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
->>>
->>> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
->>> ---
->>
+>This is split from the previous v3 to contain only the phy related
+>changes to the HDMI support for mt8195 as suggested by Vinod.
+>
+>This is based on top of next-20221121
+>
+>To: Chunfeng Yun <chunfeng.yun@mediatek.com>
+>To: Kishon Vijay Abraham I <kishon@ti.com>
+>To: Vinod Koul <vkoul@kernel.org>
+>To: Rob Herring <robh+dt@kernel.org>
+>To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+>To: Matthias Brugger <matthias.bgg@gmail.com>
+>To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+>To: Philipp Zabel <p.zabel@pengutronix.de>
+>To: David Airlie <airlied@gmail.com>
+>To: Daniel Vetter <daniel@ffwll.ch>
+>To: CK Hu <ck.hu@mediatek.com>
+>To: Jitao shi <jitao.shi@mediatek.com>
+>Cc: linux-arm-kernel@lists.infradead.org
+>Cc: linux-mediatek@lists.infradead.org
+>Cc: linux-phy@lists.infradead.org
+>Cc: devicetree@vger.kernel.org
+>Cc: linux-kernel@vger.kernel.org
+>Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>Cc: mac.shen@mediatek.com
+>CC: stuart.lee@mediatek.com
+>Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>---
+>Changes in v5:
+>- Adapt clock bit ratio when TMDS is over 340M
+>- Used sized integers for register read/writes
+>- Removed useless comments
+>- Shortened function names
+>- Link to v4: https://lore.kernel.org/r/20220919-v4-0-bdc21e1307e9@baylibre.com
+>
+>Changes in v4:
+>- Dedicated series for HDMI phy support (without the drm/ related
+>  changes)
+>- Removed useless variable initializations in phy driver
+>- Link to v3: https://lore.kernel.org/r/20220919-v3-0-a803f2660127@baylibre.com
+>
+>Changes in v3:
+>- phy: Grouped register and bit definition together to add clarity
+>- dt-bindings: Addressed comments
+>- Link to v2: https://lore.kernel.org/r/20220919-v2-0-8419dcf4f09d@baylibre.com
+>
+>Changes in v2:
+>- Removed syscon requirement from the hdmi node
+>- Use as much as possible bit FIELD_PREP/FIELD_GET macros across all the
+>  patches
+>- Make cec optional dynamically instead of hardcoded with a flag
+>- Renamed hdmi variants to v1 (legacy) and v2 (mt8195) while waiting for
+>  a better name
+>- Rework hdmi v2 code to use a connector (same as v1)
+>- Remove "magic" 0x43 addr special handling in hdmi ddc code
+>- Link to v1: https://lore.kernel.org/r/20220919-v1-0-4844816c9808@baylibre.com
+>
+>---
+>Guillaume Ranquet (3):
+>      dt-bindings: phy: mediatek: hdmi-phy: Add mt8195 compatible
+>      phy: phy-mtk-hdmi: Add generic phy configure callback
+>      phy: mediatek: add support for phy-mtk-hdmi-mt8195
+>
+> .../devicetree/bindings/phy/mediatek,hdmi-phy.yaml |   1 +
+> drivers/phy/mediatek/Makefile                      |   1 +
+> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c         | 523 +++++++++++++++++++++
+> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.h         | 111 +++++
+> drivers/phy/mediatek/phy-mtk-hdmi.c                |  15 +
+> drivers/phy/mediatek/phy-mtk-hdmi.h                |   3 +
+> 6 files changed, 654 insertions(+)
+>---
+>base-commit: e2f86c02fdc96ca29ced53221a3cbf50aa6f8b49
+>change-id: 20220919-hdmi_mtk
+>
+>Best regards,
+>--
+>Guillaume Ranquet <granquet@baylibre.com>
