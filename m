@@ -2,100 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D88567E243
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD4F67E245
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbjA0Kwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
+        id S231874AbjA0KxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbjA0Kws (ORCPT
+        with ESMTP id S232585AbjA0Kw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:52:48 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB165173B;
-        Fri, 27 Jan 2023 02:52:46 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 27 Jan 2023 05:52:57 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EBB1DBA0;
+        Fri, 27 Jan 2023 02:52:56 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1FB4D1F37F;
+        Fri, 27 Jan 2023 10:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674816775; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4AXCCYnmxwOyOER7P1F8fCZpYH5el3jxHyuaQXX3BiM=;
+        b=E1vUaDmnnquL6tixLsA8iXaSUI2yeCRlIgu94pxA9KQ+7a2hwklVFxoYC7kLs9BcLl0tml
+        E1xrtcRYprgOKxiZ3mahCI0hbmRoze8mrhIhOyyeGH3wlQEAC6M2ZWfCJjrk69ZXgw7SwN
+        Ad/oAlHRYiid1atoVtnt/l9CgJIO0kY=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P3Dtd620gz4xGq;
-        Fri, 27 Jan 2023 21:52:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1674816762;
-        bh=QDCzctob2hZHnjNozBUiQhZ3c3ZIA5hUvy/sWV7Il00=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=gNVZkfafjj2MpgzETy//HzY37m8ZEoLJYzM81q+qE82zMDjKzSTib1kQlCEWeD74x
-         TbA1AJAUzh3UF1b5tIvdicaCY2B8X01OR7xZ+m53Vy0nOtJ3LUefqcxOGiX0TbLzXA
-         FpQsTEBfIY6ln8br4aEbGhYCfvHI2Wk46905hzvGFT43HVNg3I805NGwAjRxWwHRl9
-         ciLHepcbgn/Ugqz751JfDEzRYwbKTR7RwnvTILKfsIiP/YeV8O7KVE1eCo7xwgRE4m
-         oSO3tekfSTlDRy5WvqPzKwaZSDNgEJN4FzrYuWbIZD/efUVviZaorDQh40DV8VzXAt
-         Uy3JBixutSBJQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org,
-        sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, nayna@linux.ibm.com,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        gjoyce@linux.ibm.com, joel@jms.id.au, ruscur@russell.cc,
-        gcwilson@linux.ibm.com
-Subject: Re: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
- structures and buffers
-In-Reply-To: <20230126171925.GN25951@gate.crashing.org>
-References: <20230120074306.1326298-1-ajd@linux.ibm.com>
- <20230120074306.1326298-3-ajd@linux.ibm.com>
- <87pmb2pxpa.fsf@mpe.ellerman.id.au>
- <20230126171925.GN25951@gate.crashing.org>
-Date:   Fri, 27 Jan 2023 21:52:31 +1100
-Message-ID: <871qngtfkg.fsf@mpe.ellerman.id.au>
+        by relay2.suse.de (Postfix) with ESMTPS id EFBBF2C141;
+        Fri, 27 Jan 2023 10:52:54 +0000 (UTC)
+Date:   Fri, 27 Jan 2023 11:52:54 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>, live-patching@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 16/35] Documentation: livepatch: correct spelling
+Message-ID: <Y9OtBm7qKccs3tbY@alley>
+References: <20230127064005.1558-1-rdunlap@infradead.org>
+ <20230127064005.1558-17-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127064005.1558-17-rdunlap@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Segher Boessenkool <segher@kernel.crashing.org> writes:
-> On Thu, Jan 26, 2023 at 12:09:53AM +1100, Michael Ellerman wrote:
->> Andrew Donnellan <ajd@linux.ibm.com> writes:
->> > A number of structures and buffers passed to PKS hcalls have alignment
->> > requirements, which could on occasion cause problems:
->> >
->> > - Authorisation structures must be 16-byte aligned and must not cross a
->> >   page boundary
->> >
->> > - Label structures must not cross page boundaries
->> >
->> > - Password output buffers must not cross page boundaries
->> >
->> > Round up the allocations of these structures/buffers to the next power of
->> > 2 to make sure this happens.
->> 
->> It's not the *next* power of 2, it's the *nearest* power of 2, including
->> the initial value if it's already a power of 2.
->
-> It's not the nearest either, the nearest power of two to 65 is 64.  You
-> could say "but, round up" to which I would say "round?"  :-P
+On Thu 2023-01-26 22:39:46, Randy Dunlap wrote:
+> Correct spelling problems for Documentation/livepatch/ as reported
+> by codespell.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 
-OK you got me there :)
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-The function name makes it pretty clear that it will round *up* to the
-nearest power of 2 but you're right the comment should also make that
-clear.
-
-> "Adjust the allocation size to be the smallest power of two greater than
-> or equal to the given size."
->
-> "Pad to a power of two" in shorthand.  "Padded to a power of two if
-> necessary" if you want to emphasise it can be a no-op.
-
-The initial wording implied that it would always over-allocate so yes I
-think it's important to make it clear that it doesn't round up if it
-doesn't need to.
-
-cheers
+Best Regards,
+Petr
