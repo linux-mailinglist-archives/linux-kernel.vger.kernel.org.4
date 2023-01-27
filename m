@@ -2,68 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D880E67F12E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B57967F131
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjA0WeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:34:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
+        id S231339AbjA0WgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjA0WeX (ORCPT
+        with ESMTP id S229531AbjA0WgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:34:23 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F019668AD7;
-        Fri, 27 Jan 2023 14:34:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=dZ0yoI1EYq5VvW98U5aa31PACmLs8B3+1hTJZcF0jRM=; b=i7weQH0caDwnGvyTl9WiMTLxTe
-        8dcUW9q8dUU29PgVe81Ovd1dIHJ1kb/vy8FCuMlHj0cqW6IUpct+oRHu5McksCmiwTVH/Vj5IsHgn
-        goZZ7CYDcQ8zdNH+wIrlEe43/igko0xm6x4d0yIskCIx8p1C0OKviYJDnKSVyLbKMWNp/3jQFH2xz
-        xUQiUrjW2KKm0B/L4yId9myJiE2YRTyyyf829OSgsez+QqmG8ubuGJd4Cz1WbmU941qXnaO931FTe
-        SOA4gK5UCpXPekPQdcenMlFsll7/VHIqe33zi6vetMwCZ5A6tW0UrpZq2fFBXGNrxyvlQ1yQQtfic
-        D0QK7L4A==;
-Received: from [2601:1c2:d00:6a60::9526]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pLXIW-00GihT-Ou; Fri, 27 Jan 2023 22:34:16 +0000
-Message-ID: <ce18988a-775d-cb74-0ee3-acc24ee45c70@infradead.org>
-Date:   Fri, 27 Jan 2023 14:34:15 -0800
+        Fri, 27 Jan 2023 17:36:09 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A647962C
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:36:04 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id p24so6376850plw.11
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:36:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hg9InPQN4tioHiMOdnKqvlrPm/hTugTIRh5hdEkItHk=;
+        b=IkBYUtYDZafcPWMLulxZiUJSeNAA86Kv8Xpi33/kVI4jpXr82P4LQyDIDQABFSUhas
+         17MmT36jpLUUQAtas8M7WDGmlJi9YAfYXks0Zx9284ToWbnGxty13qfnO0lfwxAWw5G+
+         XmsoPUQ++jfe8+g/sdKeTkDE3eiJNE4Yfb0OHE9yJ5Bv6krz6EFTKnbjpLvTzK7ZFLyu
+         H2cIrJ1hsKIq2/P/mfcfHdyWqV1v73KsC2h/vEJvs6GeCNhTmykcht2XBSa19lfgH8ax
+         MZ7PXY2xBsRaxyDJ+e3G/9/39QKW/VOdGZI5Igvu/s3houV1VAvscksWTGUw2lUpA9ci
+         yEfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hg9InPQN4tioHiMOdnKqvlrPm/hTugTIRh5hdEkItHk=;
+        b=KL9q8ZcoU5v8M6e0aR9J/WcY+GQrod+z1VWy6/RQdbEie4bIN2G4mKYQf9hMmyWmtY
+         liOyOB4tjlYAJoAO9kPFdut+elEwZqMXqw36mOtO+4cldY1hIvq3XyOXkaUcTejhJllf
+         ywys0vazazZ81foYQ09UIv9mrR4CHEDNckZUcQ09FC9EtPBzsyh9SQkCZKlnwyg81zKm
+         dwlWxdOJYsW6HlIsX/FNg7OemIbYhl0rTZXiYzHp2Rf1F2B3uLbeXSbOJDkkAhnPTOA/
+         3zBPmimUS9sUBkiZSljgTQaf1x20GAJZ8eO44G51D7WGQJWgAo+6FTzRitqponbm8XE9
+         lorw==
+X-Gm-Message-State: AFqh2kqoJrSRtv7y7RhIkKlymWu+jZi0mmeBXgpConUbXAh2AtFIOujj
+        /kk6yvNFkneb9wotUhBZo2OVwCM2STYiBqqNrZlN0eRF12rk
+X-Google-Smtp-Source: AMrXdXvzWbZmDFbaDAfHsJMk2b5d62SU6fcAEF0ZvE0if6bNDtDttm18NnlrjsNl8TDbMsKuTJp/ByVLd+bOX8i8ai4=
+X-Received: by 2002:a17:90a:5b0c:b0:223:fa07:7bfb with SMTP id
+ o12-20020a17090a5b0c00b00223fa077bfbmr5371755pji.38.1674858963877; Fri, 27
+ Jan 2023 14:36:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 11/35] Documentation: i2c: correct spelling
-To:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-References: <20230127064005.1558-1-rdunlap@infradead.org>
- <20230127064005.1558-12-rdunlap@infradead.org> <Y9N55pFZc6TRD9S2@shikoro>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Y9N55pFZc6TRD9S2@shikoro>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1674682056.git.rgb@redhat.com> <68eb0c2dd50bca1af91203669f7f1f8312331f38.1674682056.git.rgb@redhat.com>
+In-Reply-To: <68eb0c2dd50bca1af91203669f7f1f8312331f38.1674682056.git.rgb@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 27 Jan 2023 17:35:52 -0500
+Message-ID: <CAHC9VhSZNGs+SQU7WCD+ObMcwv-=1ZkBts8oHn40qWsQ=n0pXA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] io_uring,audit: audit IORING_OP_FADVISE but not IORING_OP_MADVISE
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 27, 2023 at 12:24 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+>
+> Since FADVISE can truncate files and MADVISE operates on memory, reverse
+> the audit_skip tags.
+>
+> Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> ---
+>  io_uring/opdef.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/io_uring/opdef.c b/io_uring/opdef.c
+> index 3aa0d65c50e3..a2bf53b4a38a 100644
+> --- a/io_uring/opdef.c
+> +++ b/io_uring/opdef.c
+> @@ -306,12 +306,12 @@ const struct io_op_def io_op_defs[] = {
+>         },
+>         [IORING_OP_FADVISE] = {
+>                 .needs_file             = 1,
+> -               .audit_skip             = 1,
+>                 .name                   = "FADVISE",
+>                 .prep                   = io_fadvise_prep,
+>                 .issue                  = io_fadvise,
+>         },
 
+I've never used posix_fadvise() or the associated fadvise64*()
+syscalls, but from quickly reading the manpages and the
+generic_fadvise() function in the kernel I'm missing where the fadvise
+family of functions could be used to truncate a file, can you show me
+where this happens?  The closest I can see is the manipulation of the
+page cache, but that shouldn't actually modify the file ... right?
 
-On 1/26/23 23:14, Wolfram Sang wrote:
-> 
->> -  client->irq assigned to a Host Notify IRQ if noone else specified an other.
->> +  client->irq assigned to a Host Notify IRQ if no one else specified an other.
-> 
-> I am not a native speaker, but shouldn't the last word be "another"?
-> 
+>         [IORING_OP_MADVISE] = {
+> +               .audit_skip             = 1,
+>                 .name                   = "MADVISE",
+>                 .prep                   = io_madvise_prep,
+>                 .issue                  = io_madvise,
 
-Yes, I'll correct that. Thanks.
+I *think* this should be okay, what testing/verification have you done
+on this?  One of the things I like to check is to see if any LSMs
+might perform an access check and/or generate an audit record on an
+operation, if there is a case where that could happen we should setup
+audit properly.  I did a very quick check of do_madvise() and nothing
+jumped out at me, but I would be interested in knowing what testing or
+verification you did here.
 
 -- 
-~Randy
+paul-moore.com
