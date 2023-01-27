@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F4867EDAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2832667EDAD
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234919AbjA0Sil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 13:38:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
+        id S234973AbjA0SjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 13:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234103AbjA0Sij (ORCPT
+        with ESMTP id S233386AbjA0SjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 13:38:39 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144046E96
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:38:21 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id u5so3568060pfm.10
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:38:21 -0800 (PST)
+        Fri, 27 Jan 2023 13:39:20 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12D613511
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:39:09 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so5529922pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:39:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rHuDJ9RucUYhCg8ApwjHdMewmia/AXOlZBZXO55pQg4=;
-        b=RmE65qt1a1ZbGCMjQzVMq0GhHKeBfxlz+MBM6Eq9URWpP3LIKMz2EazDPJtt1bblme
-         LOR/+/i+fVokKlYHfgyshAE+35fwF2mGlbWHaA/xtwjOH123ijopEjAce5uujFmEQ/qT
-         1ksiRo6KrNJ4TcjDr7Y7urWHe7xb3ZHghvPoQ=
+        bh=nrjxXNdK4I+dKRJl+RazyEkZMnW15ppGiBRRJzwAjlI=;
+        b=M2CZG0TsCW2EfMEir+0n0tq6W7MFgvZGhrib8KUa1MaqPIq3z5mkkKpsq27u8R1/s+
+         BsJ8LiG+W15gvEMmtXGpUQOGoeAK7kFrWCS+n5BvpTOAKLo9RybRhBnel3EXxzvU9ED4
+         gpkSFU1Q62myy3SfHnvEpx08R6r1lxOZHNMjo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rHuDJ9RucUYhCg8ApwjHdMewmia/AXOlZBZXO55pQg4=;
-        b=c3XiSvEN0M8qUbZGJs0idYjSIIn2ioVGbj9HqaTehLoTU63+TIC724hR5fLS3cWqLL
-         JiBC3FtPjixk140KLMSzJehPeO3cb7sQodzpSU2/f/+p2y3Hh5XmyFYUHRfp2QGrgQA2
-         e5X7Mps+nZSksbxiACQVbD50vTlwdwwlnn6VYqWI3ctxy718Z77EXhO1Jl3zu6x6zDBA
-         5XfwxI/rV6tWrMgYLqa9vtcqv38I9BWLFKlbVhebqtLfGsEeAIHT3f2LxivjIJS5PPXp
-         DPvE7PGq1ayH5C8CHHVQQqJHvv/osGge4xZTUGKRSY8gSdiY24iGNi8nTn+kstTA75XX
-         dVtg==
-X-Gm-Message-State: AO0yUKU8xsH5raxYE4PrVUTr0gUtfmna6F/pJTKKgufVB/wPvsho94gs
-        TkJgzFLrW486XEuHIW8f8P8B7A==
-X-Google-Smtp-Source: AK7set9l3nqdTnXHNILcrLjSSOwU/xz5W5jOEeN3EGtBcJyIYZZUIrUSGbVwsjhJIzj6ZGKzOdxo1g==
-X-Received: by 2002:a62:1b14:0:b0:58b:c1a1:4006 with SMTP id b20-20020a621b14000000b0058bc1a14006mr7347583pfb.18.1674844700509;
-        Fri, 27 Jan 2023 10:38:20 -0800 (PST)
+        bh=nrjxXNdK4I+dKRJl+RazyEkZMnW15ppGiBRRJzwAjlI=;
+        b=x/15CIitMimlTHC6Iyo3kv6FI166MZQpHFT1l4WwlXUzNvsLuthl/ghVMUu3k7RKvk
+         z6gqopRImX9bi4AS+IcytcvXdtGViWTMs+MfLeCcGWCFfCDk3TYsM+6jE9MHNPOZgAwy
+         yJAn9Z3YuH3zrhMQawL8/PZ5VK41HFRvwWQHt2/IqwpkPQFH1wZjNDrilsC+xzOXUn/P
+         BR/qnJnaYneK+E3Zi5ir+yblMGBoDCOQn4UAJNiWl6BNzWOE5Uo2NA3xlgt5Pv0PM6Rh
+         SXIUq+fnMNMW/XV3DdEquTJRpvXrDlRoQHno4EZxyQesyxOIMRvvY13AI8qrE0P8w/Jq
+         V6IQ==
+X-Gm-Message-State: AFqh2kpP8ayfcaS0FuFqtQOjfTITFzNY5SJmFDnk1DbQuPcoH9yvpOBB
+        CrcIuzIH3QMLZ8IuDdShDUbPDA==
+X-Google-Smtp-Source: AMrXdXtPXtXIzrdadZKq6vmQXDs0rCcf4OFWXSTd+Fo+rccWx2CbqlOGRPnsBOn3l8Fz8X1aaaB7Ow==
+X-Received: by 2002:a17:902:6a89:b0:194:88a3:6e28 with SMTP id n9-20020a1709026a8900b0019488a36e28mr38669680plk.51.1674844748988;
+        Fri, 27 Jan 2023 10:39:08 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o23-20020aa79797000000b00580978caca7sm2976364pfp.45.2023.01.27.10.38.19
+        by smtp.gmail.com with ESMTPSA id f8-20020a170902ce8800b0018725c2fc46sm3146551plg.303.2023.01.27.10.39.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 10:38:20 -0800 (PST)
-Date:   Fri, 27 Jan 2023 10:38:19 -0800
+        Fri, 27 Jan 2023 10:39:08 -0800 (PST)
+Date:   Fri, 27 Jan 2023 10:39:07 -0800
 From:   Kees Cook <keescook@chromium.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Jann Horn <jannh@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH] fs: Use CHECK_DATA_CORRUPTION() when kernel bugs are
- detected
-Message-ID: <202301271038.1E64668B@keescook>
-References: <20230116191425.458864-1-jannh@google.com>
- <202301260835.61F1C2CA4D@keescook>
- <20230127105815.adgqe2opfzruxk7e@wittgenstein>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the kspp tree with the tty tree
+Message-ID: <202301271038.8790DBA2AE@keescook>
+References: <20230127155753.1f9b9517@canb.auug.org.au>
+ <Y9N3GNBKzOKuSOMJ@kroah.com>
+ <82cfbb3e-cb2c-199c-8833-35498ce894e2@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230127105815.adgqe2opfzruxk7e@wittgenstein>
+In-Reply-To: <82cfbb3e-cb2c-199c-8833-35498ce894e2@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:58:15AM +0100, Christian Brauner wrote:
-> On Thu, Jan 26, 2023 at 08:35:49AM -0800, Kees Cook wrote:
-> > On Mon, Jan 16, 2023 at 08:14:25PM +0100, Jann Horn wrote:
-> > > Currently, filp_close() and generic_shutdown_super() use printk() to log
-> > > messages when bugs are detected. This is problematic because infrastructure
-> > > like syzkaller has no idea that this message indicates a bug.
-> > > In addition, some people explicitly want their kernels to BUG() when kernel
-> > > data corruption has been detected (CONFIG_BUG_ON_DATA_CORRUPTION).
-> > > And finally, when generic_shutdown_super() detects remaining inodes on a
-> > > system without CONFIG_BUG_ON_DATA_CORRUPTION, it would be nice if later
-> > > accesses to a busy inode would at least crash somewhat cleanly rather than
-> > > walking through freed memory.
+On Fri, Jan 27, 2023 at 08:12:46AM +0100, Jiri Slaby wrote:
+> On 27. 01. 23, 8:02, Greg KH wrote:
+> > On Fri, Jan 27, 2023 at 03:57:53PM +1100, Stephen Rothwell wrote:
+> > > Hi all,
 > > > 
-> > > To address all three, use CHECK_DATA_CORRUPTION() when kernel bugs are
-> > > detected.
+> > > Today's linux-next merge of the kspp tree got a conflict in:
+> > > 
+> > >    drivers/tty/vt/vt.c
+> > > 
+> > > between commit:
+> > > 
+> > >    feb36abbedea ("tty: vt: remove struct uni_screen")
+> > > 
+> > > from the tty tree and commit:
+> > > 
+> > >    19c30ead3938 ("vt: Replace 0-length array with flexible array")
+> > > 
+> > > from the kspp tree.
 > > 
-> > Seems reasonable to me. I'll carry this unless someone else speaks up.
+> > Kees, I was waiting for a new version of your 0-length patch before
+> > applying it as I thought there were review comments on it.  So you
+> > should probably drop it from your tree or resend it so I can merge it
+> > into the tty tree if it's acceptable.
 > 
-> I've already picked this into a branch with other fs changes for coming cycle.
+> feb36abbedea removes the array completely, so obsoletes 19c30ead3938.
 
-Okay, great! I'll drop it from my tree.
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Yup, looks great. I've dropped the patch now.
 
 -- 
 Kees Cook
