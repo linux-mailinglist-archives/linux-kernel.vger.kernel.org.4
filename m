@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E741B67E2FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:19:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C61A67E301
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233086AbjA0LTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
+        id S232265AbjA0LTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbjA0LSe (ORCPT
+        with ESMTP id S232597AbjA0LSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 Jan 2023 06:18:34 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7437A490
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:18:09 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id l41-20020a05600c1d2900b003daf986faaeso3191271wms.3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:18:09 -0800 (PST)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2A13C2A1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:18:10 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id b7so4677927wrt.3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:18:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2qJxrwfcLTXBaQBmmE6as0L4veHi/uh8tjNkkwxbsmQ=;
-        b=Q+yGL6NNnK5ULiY1gOtIA9YoTYj2eYM7WABKdQ6QlDnB0YNUfVvOEItzU616iRORdS
-         eyV7u0hxCafKwXzYKI7B+ndFg8N14s/Ru7/1Df9ex32Ozts+pK3eglrkT+c8K+8nxnm6
-         UhhUsyTBYl7pv4g071VYZiDLI+oUYH0IydUWG7Y78uf/EEsd1Onjnddt3F6X8WwYPkUK
-         7E3lUUHV3oWoQRv66i6YzstNANN7aMudRSKuLdVQ92mm8sQUOL6hmEjEjhfE1lS6VjGG
-         raTYwwm5k9eFJJT1M5zoA22u4EHi9oSAcdNJDdke1nQ+mEnXr4KX9Cw/acbfZiZ/a4g2
-         ovaA==
+        bh=DR9w7wcr4DxJXxKbzQwRT2qyu3/q2O3thBJlj1O/L4c=;
+        b=sF8aqy+tRNV9j/qZ2iQCf4dYQSyI8A00EeoANp5zCeaMAEHK/jehE1rsQKSe9UyQXK
+         PNE48qlU5OOB3QIFN9khvGoaPAL6KEy+dvzsbX3I5Rc0GumTrVh2uEN1yT4tGq4SPGUE
+         6hpqZSQ3dzIODaLuwisXipuPDDpvwYryPUFtcYv+56nDrqby4MycjPRNsfkVJdQr4FeR
+         qSXoE/tKK40FsKJwFlO05GZpPgmfXubXdcJBLEzjQlLVTTilMshCWddiWYHB8rFjGYfp
+         /MmUiG27yb0+WxGEfALrpduHW/Luw+6YvEIRL78W7w1LZi1snPLxNTVU7rlasb/e0f5p
+         mKGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2qJxrwfcLTXBaQBmmE6as0L4veHi/uh8tjNkkwxbsmQ=;
-        b=zGQRefIK+P6cq97LsXJtCnuY7ec7UGrMVMGSncqMWU4qnXAPX2wUiHmHPtNPQrhSqV
-         Iw6zWRDmEMG2U/6dOIitoFCJT9xjZtkrFER8htrD8et2+cSV7mnNTVcF1/SzX4ZeDV9s
-         LgPzxA5HWmAEy9OMZIwf9BIWEGCrX7FfcLWj7hpwCSk80RIRSujkrqFUm4K2vduLvO3l
-         kIBPey2S0OiWZjUd45kzzaxQTJrYKemw9Q8D9Gd0sonMlYAK1M8hZx7Kw0PTeFdYcNaw
-         +KY2wdw/H/Njb9szYTzNg0krgMHo4MMsOdKb2oJAQmT6NzHlR/Q9pu5LBKafesuHW+D6
-         FRiA==
-X-Gm-Message-State: AFqh2kpJmE1dzkxZS35PStEkFVYiXrzFJWD+l67mtfXo/fV2K9pjCRWb
-        D4n4UyRYv/zlbI6CgEAzUQEYWA==
-X-Google-Smtp-Source: AMrXdXvwVkC92YnC3DyPPSpEJzf1FVRZ9RyPCo0MGRHmPBu2zJdkdKC/jyU0AXMzQ3dQlGDaBkRiLQ==
-X-Received: by 2002:a05:600c:3b84:b0:3da:fd7c:98b3 with SMTP id n4-20020a05600c3b8400b003dafd7c98b3mr39161014wms.25.1674818287177;
-        Fri, 27 Jan 2023 03:18:07 -0800 (PST)
+        bh=DR9w7wcr4DxJXxKbzQwRT2qyu3/q2O3thBJlj1O/L4c=;
+        b=Om7NFbLDS+xixDxU59BtSEaLsMrQ7uj/bXRKbVOcqj1fRdFuoL+mXDgkYgSKuAcO3b
+         3aZF4gGiVEWyxoOwssU+WN7SjrdW1rcy8RsFL6yi9P7XFwXq1XwJIHyF7QF/4w1MUcD7
+         gwBYglaDWALEvP5xpA9fQBa/qD/nCaM9+SMfw1hqcwkG3HAlwmOyWmrUgusqycDdB5yO
+         dA8ILVzo5n+xLXp8Wk9uDR7c0HF52dyL43JZJ34G9mbdxt+GEpRxIRD417tJ64UALhN8
+         hpaUBDLJwvSBy30ccpvpUGS7pn98i65G8/UcuFeGYoDba8iR0w1FELy6dnMXjqgJrx2J
+         JMqQ==
+X-Gm-Message-State: AO0yUKVgL/zC1vriomrwzxxiWiN6PCqFixyRje5OfNEv69TKmj7SG0zI
+        Z1FWT9nFExyi0XuFKielt2OGpA==
+X-Google-Smtp-Source: AK7set9PbRgOIlOhvRLpQVV+268XAlgy0lnLfdMO90rJeLQxzu6KuA0U+nSAAZ6TvinKO98kLVdltQ==
+X-Received: by 2002:a5d:62d1:0:b0:2bf:d680:e37a with SMTP id o17-20020a5d62d1000000b002bfd680e37amr850728wrv.67.1674818288648;
+        Fri, 27 Jan 2023 03:18:08 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id c13-20020adffb0d000000b002bfd190fd60sm1843314wrr.108.2023.01.27.03.18.06
+        by smtp.gmail.com with ESMTPSA id c13-20020adffb0d000000b002bfd190fd60sm1843314wrr.108.2023.01.27.03.18.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 03:18:06 -0800 (PST)
+        Fri, 27 Jan 2023 03:18:07 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 20/37] nvmem: imx-ocotp: replace global post processing with layouts
-Date:   Fri, 27 Jan 2023 11:15:48 +0000
-Message-Id: <20230127111605.25958-21-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 21/37] nvmem: cell: drop global cell_post_process
+Date:   Fri, 27 Jan 2023 11:15:49 +0000
+Message-Id: <20230127111605.25958-22-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127111605.25958-1-srinivas.kandagatla@linaro.org>
 References: <20230127111605.25958-1-srinivas.kandagatla@linaro.org>
@@ -73,81 +73,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Walle <michael@walle.cc>
 
-In preparation of retiring the global post processing hook change this
-driver to use layouts. The layout will be supplied during registration
-and will be used to add the post processing hook to all added cells.
+There are no users anymore for the global cell_post_process callback
+anymore. New users should use proper nvmem layouts.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Tested-by: Michael Walle <michael@walle.cc> # on kontron-pitx-imx8m
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/imx-ocotp.c | 30 +++++++++++++++++++-----------
- 1 file changed, 19 insertions(+), 11 deletions(-)
+ drivers/nvmem/core.c           | 9 ---------
+ include/linux/nvmem-provider.h | 2 --
+ 2 files changed, 11 deletions(-)
 
-diff --git a/drivers/nvmem/imx-ocotp.c b/drivers/nvmem/imx-ocotp.c
-index e9b52ecb3f72..ac0edb6398f1 100644
---- a/drivers/nvmem/imx-ocotp.c
-+++ b/drivers/nvmem/imx-ocotp.c
-@@ -225,18 +225,13 @@ static int imx_ocotp_read(void *context, unsigned int offset,
- static int imx_ocotp_cell_pp(void *context, const char *id, int index,
- 			     unsigned int offset, void *data, size_t bytes)
- {
--	struct ocotp_priv *priv = context;
-+	u8 *buf = data;
-+	int i;
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 216a8eb01d00..ae59d9cb901c 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -38,7 +38,6 @@ struct nvmem_device {
+ 	unsigned int		nkeepout;
+ 	nvmem_reg_read_t	reg_read;
+ 	nvmem_reg_write_t	reg_write;
+-	nvmem_cell_post_process_t cell_post_process;
+ 	struct gpio_desc	*wp_gpio;
+ 	struct nvmem_layout	*layout;
+ 	void *priv;
+@@ -893,7 +892,6 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 	nvmem->type = config->type;
+ 	nvmem->reg_read = config->reg_read;
+ 	nvmem->reg_write = config->reg_write;
+-	nvmem->cell_post_process = config->cell_post_process;
+ 	nvmem->keepout = config->keepout;
+ 	nvmem->nkeepout = config->nkeepout;
+ 	if (config->of_node)
+@@ -1558,13 +1556,6 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
+ 			return rc;
+ 	}
  
- 	/* Deal with some post processing of nvmem cell data */
--	if (id && !strcmp(id, "mac-address")) {
--		if (priv->params->reverse_mac_address) {
--			u8 *buf = data;
--			int i;
--
--			for (i = 0; i < bytes/2; i++)
--				swap(buf[i], buf[bytes - i - 1]);
--		}
+-	if (nvmem->cell_post_process) {
+-		rc = nvmem->cell_post_process(nvmem->priv, id, index,
+-					      cell->offset, buf, cell->bytes);
+-		if (rc)
+-			return rc;
 -	}
-+	if (id && !strcmp(id, "mac-address"))
-+		for (i = 0; i < bytes / 2; i++)
-+			swap(buf[i], buf[bytes - i - 1]);
+-
+ 	if (len)
+ 		*len = cell->bytes;
  
- 	return 0;
- }
-@@ -488,7 +483,6 @@ static struct nvmem_config imx_ocotp_nvmem_config = {
- 	.stride = 1,
- 	.reg_read = imx_ocotp_read,
- 	.reg_write = imx_ocotp_write,
--	.cell_post_process = imx_ocotp_cell_pp,
- };
- 
- static const struct ocotp_params imx6q_params = {
-@@ -595,6 +589,17 @@ static const struct of_device_id imx_ocotp_dt_ids[] = {
- };
- MODULE_DEVICE_TABLE(of, imx_ocotp_dt_ids);
- 
-+static void imx_ocotp_fixup_cell_info(struct nvmem_device *nvmem,
-+				      struct nvmem_layout *layout,
-+				      struct nvmem_cell_info *cell)
-+{
-+	cell->read_post_process = imx_ocotp_cell_pp;
-+}
-+
-+struct nvmem_layout imx_ocotp_layout = {
-+	.fixup_cell_info = imx_ocotp_fixup_cell_info,
-+};
-+
- static int imx_ocotp_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -619,6 +624,9 @@ static int imx_ocotp_probe(struct platform_device *pdev)
- 	imx_ocotp_nvmem_config.size = 4 * priv->params->nregs;
- 	imx_ocotp_nvmem_config.dev = dev;
- 	imx_ocotp_nvmem_config.priv = priv;
-+	if (priv->params->reverse_mac_address)
-+		imx_ocotp_nvmem_config.layout = &imx_ocotp_layout;
-+
- 	priv->config = &imx_ocotp_nvmem_config;
- 
- 	clk_prepare_enable(priv->clk);
+diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
+index be81cc88eabc..d3d7af86a283 100644
+--- a/include/linux/nvmem-provider.h
++++ b/include/linux/nvmem-provider.h
+@@ -85,7 +85,6 @@ struct nvmem_cell_info {
+  * @no_of_node:	Device should not use the parent's of_node even if it's !NULL.
+  * @reg_read:	Callback to read data.
+  * @reg_write:	Callback to write data.
+- * @cell_post_process:	Callback for vendor specific post processing of cell data
+  * @size:	Device size.
+  * @word_size:	Minimum read/write access granularity.
+  * @stride:	Minimum read/write access stride.
+@@ -118,7 +117,6 @@ struct nvmem_config {
+ 	bool			no_of_node;
+ 	nvmem_reg_read_t	reg_read;
+ 	nvmem_reg_write_t	reg_write;
+-	nvmem_cell_post_process_t cell_post_process;
+ 	int	size;
+ 	int	word_size;
+ 	int	stride;
 -- 
 2.25.1
 
