@@ -2,207 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3220167DD2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 06:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D16767DD33
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 06:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjA0FlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 00:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S229933AbjA0FnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 00:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjA0FlT (ORCPT
+        with ESMTP id S229536AbjA0FnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 00:41:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A966F225
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:40:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674798037;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1/nlRzFE8uEH2KN6NvFa3jRsSiNKHTj9vX5XMb/Z35s=;
-        b=ILXIu9UM7b2eDQzZS7j2WgAidEvgP1FAecA2fF7pSG/gA4M3lesvYdgeaUt+6qmbJPB98H
-        m9zgrpr4cqg/OkN/3tGKVO6jtQ6PLnmENCP7laJMUyRcTkAvVzxwpGKDYLxoN3PG4Bfx+w
-        AdUU8CtQ2y53+I/1jX/VW2G6Ld/+J+A=
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
- [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-345-4xFvWpxRMEmzeH-lwsrPbw-1; Fri, 27 Jan 2023 00:40:36 -0500
-X-MC-Unique: 4xFvWpxRMEmzeH-lwsrPbw-1
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1635c250efeso992735fac.19
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:40:36 -0800 (PST)
+        Fri, 27 Jan 2023 00:43:08 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D5E18B31
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:43:07 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-50660e2d2ffso53885727b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:43:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fqJbS1bFJa5utvCnTv+wYBXRWVr+UnUdQNczPlCi+3U=;
+        b=TLdkMwBmkOpoMtKqXKSYzWj+S6KAXh59dODKmFzdRWBsvbUGbq5nfaABjBysst3wgK
+         ObuQsZl4vSPe+p/0xNzLiHEuvZNWp3Le22Q9XWQAobiyTLi4GIu8D+4Xb1/hb8Szd+AV
+         KlVROzaQ4/YeKAVaJLVqzlvIoqTLPzOgZZvKmvYCSkW9TJfMz9tTdSYvy/Npb9X932iQ
+         R2xE6eeZHxB1uTC786OSNmmrm7gwbbHo3FZbHVy+MAVAjRXMHkapH/aX0umXMlewggcr
+         gR/UobIuX7wiilvG5/WR6P3ztVaWWmVGku7Ev5ICsMMgw6aiocrJGVPRJcVjctT8V6WI
+         WwyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1/nlRzFE8uEH2KN6NvFa3jRsSiNKHTj9vX5XMb/Z35s=;
-        b=KqzGpRIb/taYsjAR0eC2YetUFIgGGpeW99wL+GE9hO/CFaWoCf3Thh+YmILLnCfLiL
-         dsWXswnzcBL+Fw3P0vav+d7+m8zwdhoun0NUQ+fRuZHJSMPx5vCrJQkqJxBNTL13gvIv
-         Z/I9X1tu2hG0Rg/7Rz92fIVnVEbC0SzShs2376n5gC5gNtoSJBbC7bRhUmX+jEcvE1Hs
-         Jj1sdoKMMJm8dXlLza+MhTJDOfp3iCYFjmjkgpdsSnHhGdT5zFVzoXjq/ADdJCSyYtWi
-         8rM9D4ifjJiesADBaIQXYq4F5R6463AcM3CS6mz5OXnTHkGNtUBaw4Ho0BW9suzyxk4H
-         KttA==
-X-Gm-Message-State: AO0yUKVb2y+GjvS2eDxG3g96t1gvaUEV6c1cJkv+U8d5rSZsHHZcFCZN
-        8avfOAVcyYErjfsoe0LKEhG0STMVbjYCzGCV4kq2wnKGkNC1v7TQJWA1IlULnMP2JPkgMpRFpjB
-        PvZEprfwV4DBkI8gcQTqJF9ZT
-X-Received: by 2002:a05:6871:824:b0:163:6dfc:755b with SMTP id q36-20020a056871082400b001636dfc755bmr747749oap.24.1674798035414;
-        Thu, 26 Jan 2023 21:40:35 -0800 (PST)
-X-Google-Smtp-Source: AK7set+gOU/E4LLHCIEREuBaAclxcItR+R67IH4Yta6AaWQrnjayQqogFXCB61xcxPBZzjam4UVDAw==
-X-Received: by 2002:a05:6871:824:b0:163:6dfc:755b with SMTP id q36-20020a056871082400b001636dfc755bmr747738oap.24.1674798035177;
-        Thu, 26 Jan 2023 21:40:35 -0800 (PST)
-Received: from ?IPv6:2804:1b3:a800:6912:c477:c73a:cf7c:3a27? ([2804:1b3:a800:6912:c477:c73a:cf7c:3a27])
-        by smtp.gmail.com with ESMTPSA id lg6-20020a0568700b8600b00150835847c2sm1403175oab.16.2023.01.26.21.40.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 21:40:34 -0800 (PST)
-Message-ID: <9ec001ba093e21a5ac2cafa1c61810b035daf13d.camel@redhat.com>
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 27 Jan 2023 02:40:28 -0300
-In-Reply-To: <Y9LEQfX5dkEyBOkT@tpad>
-References: <20230125073502.743446-1-leobras@redhat.com>
-         <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
-         <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
-         <Y9FzSBw10MGXm2TK@tpad> <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
-         <Y9LEQfX5dkEyBOkT@tpad>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fqJbS1bFJa5utvCnTv+wYBXRWVr+UnUdQNczPlCi+3U=;
+        b=ZsPYcKQaj1/3hy88akWkb7RnkE8MPQfIl7SNhZbR/sASOjtp+sTfazrk/EZoDGQF0M
+         Cl5PdKpPy1n13j+qIu33i1AFMujWt33mn2GmHZXOix1oxBOwZr5q3x1E3L8/zXGSHTBg
+         jw1FRhzTrOQqntYwOgSLlV2fCjjocJ2h4hzLe/5PCuFj7+GNbY2PHK+kcmhO/zvQIE4G
+         Cq8IBaAiO0aGh8R5lXatJ6rFW4aC8KtwRjVTv3+SYkq3ZuP8K6eOmi63W4k+RSldQqwd
+         N8ptMwuCsSa/Ayrl3VckTCc1phgkg3mzeMuOHRaLZHyyUbMYbBqftZUCQDPKpWXbNl7q
+         51vg==
+X-Gm-Message-State: AFqh2kpD3vYTrE1vEe29ZOczQA4u+UUR3YiRbSNM6cP7ZsjsCLPyzpmd
+        mBHkYAlPWJ6qGrESnA2ACiI/uT7LhwitSsxxhzLATRRduhhFITcCYAg=
+X-Google-Smtp-Source: AMrXdXv8jXCaIMBzTzmvSJhUZCAILeJ1JQhpL6j3RKiZ3tge8MD4DQJuzQfpd1Jnud+SHRAU0UymE07hNfn68KwB2iM=
+X-Received: by 2002:a81:3e0d:0:b0:4fe:1d13:5980 with SMTP id
+ l13-20020a813e0d000000b004fe1d135980mr4580021ywa.378.1674798186717; Thu, 26
+ Jan 2023 21:43:06 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230127041200.29094-1-quic_namajain@quicinc.com>
+In-Reply-To: <20230127041200.29094-1-quic_namajain@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 27 Jan 2023 07:42:55 +0200
+Message-ID: <CAA8EJpr96GppHmG86b2i3HhBV_OykpgV3h2MA=5ODYBwHVuDQw@mail.gmail.com>
+Subject: Re: [PATCH v2] soc: qcom: socinfo: Add support for new field in
+ revision 17
+To:     Naman Jain <quic_namajain@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_pkondeti@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-01-26 at 15:19 -0300, Marcelo Tosatti wrote:
-> On Wed, Jan 25, 2023 at 03:14:48PM -0800, Roman Gushchin wrote:
-> > On Wed, Jan 25, 2023 at 03:22:00PM -0300, Marcelo Tosatti wrote:
-> > > On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Br=C3=A1s wrote:
-> > > > On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
-> > > > > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
-> > > > > > Disclaimer:
-> > > > > > a - The cover letter got bigger than expected, so I had to spli=
-t it in
-> > > > > >     sections to better organize myself. I am not very confortab=
-le with it.
-> > > > > > b - Performance numbers below did not include patch 5/5 (Remove=
- flags
-> > > > > >     from memcg_stock_pcp), which could further improve performa=
-nce for
-> > > > > >     drain_all_stock(), but I could only notice the optimization=
- at the
-> > > > > >     last minute.
-> > > > > >=20
-> > > > > >=20
-> > > > > > 0 - Motivation:
-> > > > > > On current codebase, when drain_all_stock() is ran, it will sch=
-edule a
-> > > > > > drain_local_stock() for each cpu that has a percpu stock associ=
-ated with a
-> > > > > > descendant of a given root_memcg.
-> >=20
-> > Do you know what caused those drain_all_stock() calls? I wonder if we s=
-hould look
-> > into why we have many of them and whether we really need them?
-> >=20
-> > It's either some user's actions (e.g. reducing memory.max), either some=
- memcg
-> > is entering pre-oom conditions. In the latter case a lot of drain calls=
- can be
-> > scheduled without a good reason (assuming the cgroup contain multiple t=
-asks running
-> > on multiple cpus). Essentially each cpu will try to grab the remains of=
- the memory quota
-> > and move it locally. I wonder in such circumstances if we need to disab=
-le the pcp-caching
-> > on per-cgroup basis.
-> >=20
-> > Generally speaking, draining of pcpu stocks is useful only if an idle c=
-pu is holding some
-> > charges/memcg references (it might be not completely idle, but running =
-some very special
-> > workload which is not doing any kernel allocations or a process belongi=
-ng to the root memcg).
-> > In all other cases pcpu stock will be either drained naturally by an al=
-location from another
-> > memcg or an allocation from the same memcg will "restore" it, making dr=
-aining useless.
-> >=20
-> > We also can into drain_all_pages() opportunistically, without waiting f=
-or the result.
-> > On a busy system it's most likely useless, we might oom before schedule=
-d works will be executed.
-> >=20
-> > I admit I planned to do some work around and even started, but then nev=
-er had enough time to
-> > finish it.
-> >=20
-> > Overall I'm somewhat resistant to an idea of making generic allocation =
-& free paths slower
-> > for an improvement of stock draining. It's not a strong objection, but =
-IMO we should avoid
-> > doing this without a really strong reason.
->=20
-> The expectation would be that cache locking should not cause slowdown of
-> the allocation and free paths:
->=20
-> https://manualsbrain.com/en/manuals/1246877/?page=3D313
->=20
-> For the P6 and more recent processor families, if the area of memory bein=
-g locked=20
-> during a LOCK operation is cached in the processor that is performing the=
- LOCK oper-
-> ation as write-back memory and is completely contained in a cache line, t=
-he=20
-> processor may not assert the LOCK# signal on the bus. Instead, it will mo=
-dify the=20
-> memory location internally and allow it=E2=80=99s cache coherency mechani=
-sm to insure that=20
-> the operation is carried out atomically. This operation is called =E2=80=
-=9Ccache locking.=E2=80=9D The=20
-> cache coherency mechanism automatically prevents two or more processors t=
-hat ...
->=20
->=20
+On Fri, 27 Jan 2023 at 06:12, Naman Jain <quic_namajain@quicinc.com> wrote:
+>
+> Add support for new field coming with socinfo structure under v17 to get
+> hardware platform's oem variant id. This is to enable OEMs to have minor
+> changes in the board, but to use the same platform subtype as the one
+> supported by Qualcomm. The new field is to be used in platform overlay
+> file. Default value is 0, reserved for Qualcomm platforms. Also, add
+> debugfs support to read this field for a device.
+>
+> Signed-off-by: Naman Jain <quic_namajain@quicinc.com>
 
-Just to keep the info easily available: the protected structure (struct
-memcg_stock_pcp) fits in 48 Bytes, which is less than the usual 64B cacheli=
-ne.=20
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-struct memcg_stock_pcp {
-	spinlock_t                 stock_lock;           /*     0     4 */
-	unsigned int               nr_pages;             /*     4     4 */
-	struct mem_cgroup *        cached;               /*     8     8 */
-	struct obj_cgroup *        cached_objcg;         /*    16     8 */
-	struct pglist_data *       cached_pgdat;         /*    24     8 */
-	unsigned int               nr_bytes;             /*    32     4 */
-	int                        nr_slab_reclaimable_b; /*    36     4 */
-	int                        nr_slab_unreclaimable_b; /*    40     4 */
+> ---
+> v1 -> v2: Removed change-id, included SOB line
+>
+>  drivers/soc/qcom/socinfo.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+> index 10efdbcfdf05..10cdd32ce74d 100644
+> --- a/drivers/soc/qcom/socinfo.c
+> +++ b/drivers/soc/qcom/socinfo.c
+> @@ -174,6 +174,8 @@ struct socinfo {
+>         __le32  pcode;
+>         __le32  npartnamemap_offset;
+>         __le32  nnum_partname_mapping;
+> +       /* Version 17 */
+> +       __le32 oem_variant;
+>  };
+>
+>  #ifdef CONFIG_DEBUG_FS
+> @@ -196,6 +198,7 @@ struct socinfo_params {
+>         u32 nmodem_supported;
+>         u32 feature_code;
+>         u32 pcode;
+> +       u32 oem_variant;
+>  };
+>
+>  struct smem_image_version {
+> @@ -519,6 +522,11 @@ static void socinfo_debugfs_init(struct qcom_socinfo *qcom_socinfo,
+>                            &qcom_socinfo->info.fmt);
+>
+>         switch (qcom_socinfo->info.fmt) {
+> +       case SOCINFO_VERSION(0, 17):
+> +               qcom_socinfo->info.oem_variant = __le32_to_cpu(info->oem_variant);
+> +               debugfs_create_u32("oem_variant", 0444, qcom_socinfo->dbg_root,
+> +                                  &qcom_socinfo->info.oem_variant);
+> +               fallthrough;
+>         case SOCINFO_VERSION(0, 16):
+>                 qcom_socinfo->info.feature_code = __le32_to_cpu(info->feature_code);
+>                 qcom_socinfo->info.pcode = __le32_to_cpu(info->pcode);
+> --
+> 2.17.1
+>
 
-	/* size: 48, cachelines: 1, members: 8 */
-	/* padding: 4 */
-	/* last cacheline: 48 bytes */
-};
 
-(It got smaller after patches 3/5, 4/5 and 5/5, which remove holes, work_st=
-ruct
-and flags respectively.)
-
-On top of that, patch 1/5 makes sure the percpu allocation is aligned to
-cacheline size.
-
+-- 
+With best wishes
+Dmitry
