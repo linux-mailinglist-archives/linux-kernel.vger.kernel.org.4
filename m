@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C27467DFE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C25F867DFF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbjA0JVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
+        id S232985AbjA0JVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231527AbjA0JVe (ORCPT
+        with ESMTP id S232740AbjA0JVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:21:34 -0500
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2080.outbound.protection.outlook.com [40.107.105.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207DE5BB0;
-        Fri, 27 Jan 2023 01:21:33 -0800 (PST)
+        Fri, 27 Jan 2023 04:21:38 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2070.outbound.protection.outlook.com [40.107.21.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB2A5BB0;
+        Fri, 27 Jan 2023 01:21:37 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g7wv8QyQIFqM+RB055QLtywDgx9rMfwor4xTQB+6jO+Gucd479IxKirXZl0CF5rTzKHLz+7o+Rir8Pj/DWj5JgKYQNBRB3guwfiL3NAZOU4xfJ0ZTy2q/nFO5J5xFgBS87Tityr2k3wjXT+PAhNSLMHTt7ky48qmNKRCF9AzUOSMsRIj8Z2WxM2zda+TCgOzbu9eVxm0KYv4eeb/puNfE/YY/GGIRhq9tfh5G6jTQuyz6Q0/pHC2dROkLD/+Ky4iQW+OvtOZ+pmojZM8n5jaANHXBATV6FH87Jcw50DlYAVl5USFINQ0aH1h+WTMNyZsn53JEmMkjtelNqLsmtnZFg==
+ b=Ub0UPzuf7pLAaCWtB+8kBvG5GBf20GYH+ll7x/vGcfW2bbCozwT59QX0yfo9Gp8df8q+N8TMWSd44mOiyrmnoH2m9cQYGEUmkNhpkwACUjLscLucWD3k+KURWbPdWehVLKTmBAM1kKxzNWrI/Ur+zeCxWndNxcVt/36m8yFBGnlkenRD9Qc93I2/CSRAqbUe+ixtMYguF3e5HUPq/Sb18PNvRVMVGCQnLpo+i9psISkHN6cCQ8Mwpd4jPm6FGRmGgwcdv2uP/z/W2VOj8ocZLxDWRWA3r+DL9MPnn4CQvXCNi13MYZf6govxZpNeqew8woXsNArbRQ443PzQAtDHLg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ukuik0eSXzAL8MMKPEtlsRuIFnRGwhLBcfERop83VNk=;
- b=BB7dC/kNWvvaefoMsxXp6JSGvz07D/5JeTgyf14WlwHeDi+7g/x8hac6G5bpMiNkyF4oNWKGBJuHw/ZedvdemZZji/m38lldo4uobg6GhVX7t5uybZrarc/zPF5pahLJNc9ENfxjEOFlHtzUqdAMpLUE62ShWeR7ZVBI7c+tj3qaaVDaA3Zjkn3wYFtBrZ4i16AIP5BxWhRtOy7m8UXrux769WhD05sZYahlENqjnL1FePpCDhBxFAqXoaKZ2Z7So7QZbubVGyPo4QsS2/cCXa9RPK8+Evfr3lwbczLMDFpAAkWXhvrPJ8L6e1oN6Q4P28xFFABM9ijINe8lj2BkIg==
+ bh=5JkRLjElN/hvoRUa9Qe1a4NLYuIcWhbRbz0xVhmDAl0=;
+ b=drQgMQidUBpz7gkOL6w7PR9rbZwrvQPmviT03jTPMTsbMY72MKeT0iLGhlTKUOUbSZ7kyfGOAUWM8+LZhzAQc7YP2vjksgK2zp2umko8cIn9bcJ/qf/MN0teLH5TZeUgDYsMy0shLXszXFzhCrCVUx8+NApj5jWD2ftoDvLeTauMgo0NUxLItEruuWF9p52Q8/Ku2aDxhtYjikJFnRx257L3vU/zwBH02Ozftb6UNfo7+/ash4ofnMIBTvHW4sn+VIS7J7A10XsGqTeLnALUTl6M0xl8HBNniyKJvYN7dNvPSDMQrPTAXcodoHRyDt47RKL4pN3hswcMIN+HeAc50w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ukuik0eSXzAL8MMKPEtlsRuIFnRGwhLBcfERop83VNk=;
- b=RN9d1AsKLfq4oW+7egPiBfSc3DhcW1GtUjiDJgum/SS4ClV0YhhwYV+q/icB7BgPQ3RjVB5DPpmjO+NBglC3zW1h6jCGo3mF+bVXGOVcUbcfmCOWG71MtLYENMxSZcq22NhgBuldGbYz22NXYIikprLt4sWexbxSQ1+vBPjVdC8=
+ bh=5JkRLjElN/hvoRUa9Qe1a4NLYuIcWhbRbz0xVhmDAl0=;
+ b=j8UrOmKXEgqJ32m2QoHDra7T4790ViOE+flJuEn2iFxnzEtULFiFIDH6NF5r82azpn6qM8JWr/qiR55nLj7s4BQlVp570orZTp/V872WMX03b8w6lECcp7wygpvmBA0nsqwnpNAi+dgCyACB4VRN0M8UeZLn1gMKEXVe3Xz4Bx0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by PAXPR04MB8926.eurprd04.prod.outlook.com (2603:10a6:102:20d::7) with
+ by DBBPR04MB7530.eurprd04.prod.outlook.com (2603:10a6:10:1f5::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Fri, 27 Jan
- 2023 09:21:29 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Fri, 27 Jan
+ 2023 09:21:33 +0000
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::e203:47be:36e4:c0c3]) by DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::e203:47be:36e4:c0c3%9]) with mapi id 15.20.6002.033; Fri, 27 Jan 2023
- 09:21:29 +0000
+ 09:21:33 +0000
 From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 To:     andersson@kernel.org, mathieu.poirier@linaro.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de,
@@ -49,10 +49,12 @@ Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
         linux-remoteproc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V2 0/6] remoteproc: imx_rproc: support firmware in DDR
-Date:   Fri, 27 Jan 2023 17:22:40 +0800
-Message-Id: <20230127092246.1470865-1-peng.fan@oss.nxp.com>
+Subject: [PATCH V2 1/6] remoteproc: elf_loader: introduce rproc_elf_find_shdr
+Date:   Fri, 27 Jan 2023 17:22:41 +0800
+Message-Id: <20230127092246.1470865-2-peng.fan@oss.nxp.com>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230127092246.1470865-1-peng.fan@oss.nxp.com>
+References: <20230127092246.1470865-1-peng.fan@oss.nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SI2PR02CA0019.apcprd02.prod.outlook.com
@@ -61,53 +63,53 @@ X-ClientProxiedBy: SI2PR02CA0019.apcprd02.prod.outlook.com
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|PAXPR04MB8926:EE_
-X-MS-Office365-Filtering-Correlation-Id: bcd58447-b28c-4bd2-4ca9-08db0047deea
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|DBBPR04MB7530:EE_
+X-MS-Office365-Filtering-Correlation-Id: e47d44ee-53a7-49c7-5fa4-08db0047e1bf
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JiPqjXB9Z4T7PxTeS7yDZJMx6nUxBVO5iQF8JhWgnCDADGN8CYTvD+pYs8f/ze6ynJkAk8fZNu1f0/Sl9ZgxODaZ4A4fTIHPwMK2ydNfaHbUS9AMY60rbfmdVspH5KJ5+cmAlbV5BxBLup/hN7AbIZKhDRxGIL+UbhfS2dCcR8gfpbM7tfkPJxOTZTLMD4/k1O4kSphjMdfXLRAztycgs6FBAVA97iVcZmheQcRzyvsRn+hzCf9qjPqslnFmn5xsww/eyGCHQRUINy6XEfl0XevPeO/UqDmbEmdVjuCc6Vy3J1JJdVpHAG82d55p9UPiU2Gx6xgM9Xmyfvqz4IhkFTIqFw0wtRKhGl6a3ZJ+E9JfS59VSmPyyrswKwvJlPmcdQX6HZV6tePB4gJkBxLHxe2Nkxln49jhrEOdDUFU89IvD6RsAvShbnRjNe6C6kj9T8IleEtsKRv5YqHxVBBGcS4rSaNEJWsCYZSy3oLmoqarBkF4BQW0IFIXfsN9ZrLRwurO38ljI/WsoENhXi74vFCn3T82Ec1I5sijJpZXkKkSfHjemrYrOMZyR9AWPYjk44GyEMUzkVpiHI+k+UqPBajXC6Vwtv+AnnC7HC4C5TjgLX165pSePKkmvXKd8dkDtkWaVHH65CeIU0vdflGBRwQaIu6ZoT/kJn0hWf1p4e1PR/6ho0OtZcjK36PTC7ttd+AKTHydqRBbBewjhRhoCg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(366004)(346002)(396003)(376002)(136003)(451199018)(86362001)(66556008)(2906002)(66476007)(1076003)(2616005)(4326008)(8676002)(26005)(6512007)(66946007)(6506007)(186003)(316002)(6486002)(52116002)(38350700002)(6666004)(38100700002)(8936002)(5660300002)(7416002)(41300700001)(478600001)(83380400001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: a3gAd6HJMZW6rqMuBO7pHsX7Yt9cfcTNaFi3/dNlJXxY5Ga5/Jue7nIY+J8e8IHgtF7AmWNGefxnSGUSq3jufnhyz6Z0/x8V9u5F3RwLohJOI+amXkc8J23W1ZI2Tgd0Yn0YABozAA451YTvgMdhmsYLuQvEiaKHmnRlLThE9LUQEx26lUMiIJFVT5P3Ok/dRp3LoLVa1iQk/ndIG1GNzD3p5Lexy71ZtM0WYc4RAALFw5AGcDzfkhRLIIBtg48CQv5nUkaUKwKEsuQyr/UAZSrhwuXdq+05xS8pJv5aOCOq1DTzNvK13W+Bxi3Hvdgksg9HsXBF2MrE4yzdXXimX+5Goo7ZxiUVZiTdi7d5+ynEA8Kp2n0zo/VK2KDssVw13wRBf3tpwxdj+G9ZzyqqLfGo5QdEhzKdeaHpnJWFpzVfVPIxeeAtzGNu56hjsqJZwtRHdEmdaWgCleqY+OLBSjqUKiobp6ifMhZwQiQ78mhxgbH9XO6KmF56sHCWWfN5x3/hy9HWuPqsuEUnoJzNQDQHUqQlDMJvlG8QY54F78d+f1xTAzibG9+tlj6cAvRYb4jBJ2A7fF3dxFdSljoz+qFK8tibhzriNUbgZknf4OvgVviRm2Scx6pnzmtJ3+ZTC/PI3/B806WMm5G0nq8GZYacEeuHXykka8ELbme+bqIF88fi9LNJI1wTKzZjVWIjwVAsTxyNeFs1l+S9kcue+Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(396003)(39860400002)(366004)(346002)(451199018)(38100700002)(1076003)(2616005)(8936002)(38350700002)(2906002)(316002)(52116002)(41300700001)(6486002)(478600001)(86362001)(83380400001)(6512007)(186003)(26005)(6666004)(6506007)(7416002)(8676002)(66946007)(5660300002)(66476007)(4326008)(66556008);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j2cQCli2EdYcj4qSMzwMjYUbBdpGCld/1Ge/LmretqAkK/qCzIGgD5Ze3fRK?=
- =?us-ascii?Q?aNre4jHHlTeIdQ5MbT92yYfZG8Mok/lF6+ylgLiaykjhyYDcE5SbXw9sD2qi?=
- =?us-ascii?Q?HnIpyykbguZwiawpeVvE8ffF4rlKuGdDSmwMNFF22/rXboq0rWE5KE/tRLrt?=
- =?us-ascii?Q?gGppfbxwWlXf+bYC2GC989RQCcweCCIcS16P32kGfFLxyYB25+0QVdm3eFxS?=
- =?us-ascii?Q?sjl06HvAfANQv+1FWETsGq7WnnSu4XbcEnSt1Gq4QpDt+NpjS4B3l8p7YtdC?=
- =?us-ascii?Q?VYCN15UJjhO54znrkmzKdE7dRH1kJdPL9aMEoRj2e+1GSZc8dJBVDtGf5CjY?=
- =?us-ascii?Q?tLwpKGF5V7uorep1SxYKmGW5hpkGZt2egSZXC4Q1URnfNSqwqRZk3eul7J4c?=
- =?us-ascii?Q?dxU9Pj9PByHREEDJPP8vUZUaEVAoIpTSm7E2kTmsh18G6yJnukFPQ0HcDd6f?=
- =?us-ascii?Q?Z5ECOa8tU2eNDZe8L12ICfpF8tI8yc6SP/XFGnmrG1hiktKt3/SIVF9hDhcp?=
- =?us-ascii?Q?ztekYNNp8wwRNNWP1eohGEoK02xmfLZ3Waggth0R+iJw1Ly5bEs4L8D6mFth?=
- =?us-ascii?Q?x+jz5y2qffQ9DSQwLRGS4PMst4I/od1foUcVM8wWFlFnz/2tJJqwFiJk0JCN?=
- =?us-ascii?Q?V+L7eG5NZ3KRSVRoDwV02K+mfssfx1YRPjA23vlE5YqscnHmL6Cp/sBF94ZK?=
- =?us-ascii?Q?rqti0qV1ORBGX2It5JgGAlILz5GbSEyztFWgzSTqWuB9AvkxYKwB9RUFqYgF?=
- =?us-ascii?Q?gbDgq05M18G4gyZByWKC2LMTACL1abt5kgd7bSaMtpTGdyn4Nftggmjzh9t0?=
- =?us-ascii?Q?HJTGBGKfLirs2s2z6Pg3ISqUG+moYdnk36ONy1Ln46p/EvriwukeZk/JTdtu?=
- =?us-ascii?Q?AHwsTl+1wAmWq4e4DrSRXtDdm41jNIlYPTXXZ9BsITaVgURwLVZ8deELI9bu?=
- =?us-ascii?Q?7xWscbRN1nT9/uMTQDg50orh7ZO+TipMnhSyzCRNRniwC7icte0hURMD4aGP?=
- =?us-ascii?Q?LTpSmG8Wl9BXBp5Vk1DZ847EN1mcD2q7WrQj9bEvoAVG4tS4kcMv/f9BNy7q?=
- =?us-ascii?Q?Gcf/udepqm9wCo5TlzodAYDWxZBMUVmPC2J6LLLwpblxCS1QEMK75nVyVxIJ?=
- =?us-ascii?Q?SHHGazBYhymLHpshxQ74Pl0Fcgx3fbAmiryN0fV2jt2m0uB4AiwEBmg35Jfg?=
- =?us-ascii?Q?wWerN4hTjcRznvQ5wsow8wT1YiDPH7CMZtg3GYVpxSbpZdGkksdTRnEZhwuO?=
- =?us-ascii?Q?Hy1LdKyy7b6s5Px3PK8rJZq2umJt0hGoa9ER8eaeE3O2lVvJz8IFRrAoRTiL?=
- =?us-ascii?Q?d/zjUmnTgyGtSsJz0qG18rDYVdXXUzevMxlT3881zO7OpdxrZHbQ5T8TpsmR?=
- =?us-ascii?Q?5DhudmOLWsiZvWrtXladfUdIA+63+gotCUqmP6t0rqxzhpyj/TiEvEpKPbah?=
- =?us-ascii?Q?LZVxYEaR3LxFmQJSyBpp+ik5SAzcHr5ERDb4XFzz6vKKvgWhrfg2366HQqOL?=
- =?us-ascii?Q?sTXRUE1IWjqSyQUCQxFWvT1qa5mTxuOcJr0HsAZRy4lFObRXahnq/Rf3vz37?=
- =?us-ascii?Q?vOzU2Z8mHFycwO/8btC+wiSNH4mBm6QU8mRogX4K?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CxrwyFVdB5CDv+2v8uZ64gmMd0Bnv+T3FHje5Y8gHVBPzqNcUEhJqmmTusv5?=
+ =?us-ascii?Q?4vlwanUVEvy3/sM3niLOL2yOFHtvY1fUzDyAGqd227PmS9QkYL1jXA/tFZ23?=
+ =?us-ascii?Q?znLTbITSC0u56BuxBOHZVbbBESHnITyhEJhY1vNRHWCeJrsHj7ceCfbuSUKb?=
+ =?us-ascii?Q?lgiCUvhCyinn5Kg6OSVFAJMMfSIR4ZmhNN1+b8jHWcX90N7YLVxhitYsDtH9?=
+ =?us-ascii?Q?ckXvwCnAi0uB5BMLn8Ql7cVlFtXtXtV+1gsD3U2teCSeHlV1e8WmoZ1md+O0?=
+ =?us-ascii?Q?tYfp/AIiULySnl7XX1GQ20Z54k9re0mjn3utgIe6hGrlcJH0Y7dSA3d+di/k?=
+ =?us-ascii?Q?HHVmeHZgZt/4u8euXMZfLXI1uPl57HLolix1VOy/7hj4OQDx1jxeu/PAHvHz?=
+ =?us-ascii?Q?aQLbd2JIhkF8IPM5RNA3IoSwb/zyIj8ErVoCNmI8VkgExImKk11RZjSh6n0W?=
+ =?us-ascii?Q?hPnJt4gnzQ0yhT8cXYXcPTIcPgvpgXhIgL8bq4ygKToLuNg2Bb6IeJ4+QA2d?=
+ =?us-ascii?Q?PRudXgiCyGm4P+9u9HjnSUPpZQ6Me8RpYjHiWbm86KELNE86N/Rv3i63vl7/?=
+ =?us-ascii?Q?QpXiG9kKPw+WgrxSLQVN1M4QAVUfXbcEjvJMMT9qfMY4ut2TOyHBSA7sEpKM?=
+ =?us-ascii?Q?N8NUZGgk2hNoj+sQZJrR7llJpfKRtYpOOprMvQEidisMQXjMR0wRPoFOOtuX?=
+ =?us-ascii?Q?y+4YFIPQ6n54WwyK74V+dOTOxMhro0m2cSWmyiRMAXFX8lE76E/rs2jjWDFm?=
+ =?us-ascii?Q?bbH/J6RDCt7nb0WNGoZwRgHH/X0I34E8en66ODVfqGUUAAz+VK+NDQzhoJxQ?=
+ =?us-ascii?Q?nGiHnNPUKVlzUofUbYKsxk/GvhCnW4BjM/EQByVZBoX2xS66uj/DScFqDPm6?=
+ =?us-ascii?Q?jgjlRCsdqbhlJLP62X+y386r2Xlj7V5aVylA1J45JjdnfCciNXStDrUD/0gA?=
+ =?us-ascii?Q?ArdSEw/1gbIhXqjqIRriNKjbJmxpA89eM9c44DwcvPjafIUIJ7n1sf1tjvkn?=
+ =?us-ascii?Q?wxeHTh5CwoKFz8mwnbZ3AGkrnq/lzSR6eA16+tviKny80Or8IAxtj6j8sRlq?=
+ =?us-ascii?Q?BYR3vGiM4f773LjKj1fY326uP1aEZs5TOJPt4r8hmph8iaTziJrZ1kMDBISc?=
+ =?us-ascii?Q?6nAYBPhBjShk4owmHFDk7dn38DtZr5Pl60U/hgSNpto300AwGeAClA2ZTKY1?=
+ =?us-ascii?Q?Fi18yOe3eAJjP2Cy4Pr3Qnh2RYUyy1lBoI53vv4HrrL3Tiq+lZSlFOiOtaWL?=
+ =?us-ascii?Q?vfrIsA14PHjvNExkTBpLR1CCYueW8y/5oxnwcckZOGSzWihnwLk8Jr4kYMIT?=
+ =?us-ascii?Q?CX795jMIIzvArH85VHwzAjj6czDbK5YkcVPKstIbzXtiUFvXJx17MMmfRkty?=
+ =?us-ascii?Q?XjTgj03N8MSOtWWRDQyowgvCHKWUPqcE55RVv2EMJnFCgFOK5oBs1kXu+JGb?=
+ =?us-ascii?Q?NsD7LEmiNz5vPEoXL7WdHGP3zNZ8pNONTxgXca6PG1pWP90bVWovfsRYs6hY?=
+ =?us-ascii?Q?ckHQOwK4gd7ftYJKOegI99XTho/gHsnd0jKs/oOy7Qt8g7mSucuWSpl1EbbX?=
+ =?us-ascii?Q?T6tFTTk00VjTx9fz5dImkrFRRUkp22bvA8dwPlPd?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bcd58447-b28c-4bd2-4ca9-08db0047deea
+X-MS-Exchange-CrossTenant-Network-Message-Id: e47d44ee-53a7-49c7-5fa4-08db0047e1bf
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 09:21:29.0318
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 09:21:33.5790
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BjtYHkgnqOLoIq7NBA2rJhIVwxpU0QXTaj5j3vBuk35OqI340N7eciYW4LJNTztG3jZ3rZsj6E9NWsRt5CeifQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8926
+X-MS-Exchange-CrossTenant-UserPrincipalName: e67/u8c47Mb88fAzSPFPLU6huKZYklw70Ecuu0PaCiHJK8ftwA3mMeRbXhwm2XCdyt7YpbkasWwcQFhbkDxL7g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7530
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -119,49 +121,183 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peng Fan <peng.fan@nxp.com>
 
-V2:
- patch 4 is introduced for sparse check warning fix
- 
-This pachset is to support i.MX8M and i.MX93 Cortex-M core firmware could
-be in DDR, not just the default TCM.
+Introduce API rproc_elf_find_shdr to get the shdr pointer. This API
+could be used to find the ".resource_table" section, and could also
+be used by i.MX driver to find the ".interrupts" section.
 
-i.MX8M needs stack/pc value be stored in TCML entry address[0,4], the
-initial value could be got from firmware first section ".interrupts".
-i.MX93 is a bit different, it just needs the address of .interrupts
-section. NXP SDK always has .interrupts section.
-
-So first we need find the .interrupts section from firmware, so patch 1
-is to reuse the code of find_table to introduce a new API
-rproc_elf_find_shdr to find shdr, the it could reused by i.MX driver.
-
-Patch 2 is introduce devtype for i.MX8M/93
-
-Although patch 3 is correct the mapping, but this area was never used
-by NXP SW team, we directly use the DDR region, not the alias region.
-Since this patchset is first to support firmware in DDR, mark this patch
-as a fix does not make much sense.
-
-patch 4 and 5 is support i.MX8M/93 firmware in DDR with parsing .interrupts
-section. Detailed information in each patch commit message.
-
-Patches were tested on i.MX8MQ-EVK i.MX8MP-EVK i.MX93-11x11-EVK
-
-
-
-Peng Fan (6):
-  remoteproc: elf_loader: introduce rproc_elf_find_shdr
-  remoteproc: imx_rproc: add devtype
-  remoteproc: imx_rproc: correct i.MX8MQ DDR Code alias mapping
-  remoteproc: imx_rproc: force pointer type
-  remoteproc: imx_rproc: set Cortex-M stack/pc to TCML
-  remoteproc: imx_rproc: set address of .interrupts section as bootaddr
-
- drivers/remoteproc/imx_rproc.c             | 58 ++++++++++++--
- drivers/remoteproc/imx_rproc.h             |  6 ++
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
  drivers/remoteproc/remoteproc_elf_loader.c | 93 +++++++++++++---------
  drivers/remoteproc/remoteproc_internal.h   |  2 +
- 4 files changed, 114 insertions(+), 45 deletions(-)
+ 2 files changed, 56 insertions(+), 39 deletions(-)
 
+diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
+index 5a412d7b6e0b..c09fd5733aee 100644
+--- a/drivers/remoteproc/remoteproc_elf_loader.c
++++ b/drivers/remoteproc/remoteproc_elf_loader.c
+@@ -244,22 +244,19 @@ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
+ }
+ EXPORT_SYMBOL(rproc_elf_load_segments);
+ 
+-static const void *
+-find_table(struct device *dev, const struct firmware *fw)
++const void *
++rproc_elf_find_shdr(struct rproc *rproc, const struct firmware *fw, const char *sh_name)
+ {
+ 	const void *shdr, *name_table_shdr;
+ 	int i;
+ 	const char *name_table;
+-	struct resource_table *table = NULL;
+ 	const u8 *elf_data = (void *)fw->data;
+ 	u8 class = fw_elf_get_class(fw);
+-	size_t fw_size = fw->size;
+ 	const void *ehdr = elf_data;
+ 	u16 shnum = elf_hdr_get_e_shnum(class, ehdr);
+ 	u32 elf_shdr_get_size = elf_size_of_shdr(class);
+ 	u16 shstrndx = elf_hdr_get_e_shstrndx(class, ehdr);
+ 
+-	/* look for the resource table and handle it */
+ 	/* First, get the section header according to the elf class */
+ 	shdr = elf_data + elf_hdr_get_e_shoff(class, ehdr);
+ 	/* Compute name table section header entry in shdr array */
+@@ -268,49 +265,68 @@ find_table(struct device *dev, const struct firmware *fw)
+ 	name_table = elf_data + elf_shdr_get_sh_offset(class, name_table_shdr);
+ 
+ 	for (i = 0; i < shnum; i++, shdr += elf_shdr_get_size) {
+-		u64 size = elf_shdr_get_sh_size(class, shdr);
+-		u64 offset = elf_shdr_get_sh_offset(class, shdr);
+ 		u32 name = elf_shdr_get_sh_name(class, shdr);
+ 
+-		if (strcmp(name_table + name, ".resource_table"))
++		if (strcmp(name_table + name, sh_name))
+ 			continue;
+ 
+-		table = (struct resource_table *)(elf_data + offset);
++		return shdr;
++	}
+ 
+-		/* make sure we have the entire table */
+-		if (offset + size > fw_size || offset + size < size) {
+-			dev_err(dev, "resource table truncated\n");
+-			return NULL;
+-		}
++	return NULL;
++}
++EXPORT_SYMBOL(rproc_elf_find_shdr);
+ 
+-		/* make sure table has at least the header */
+-		if (sizeof(struct resource_table) > size) {
+-			dev_err(dev, "header-less resource table\n");
+-			return NULL;
+-		}
++static const void *
++find_table(struct rproc *rproc, const struct firmware *fw)
++{
++	const u8 *elf_data = (void *)fw->data;
++	u8 class = fw_elf_get_class(fw);
++	size_t fw_size = fw->size;
++	struct resource_table *table = NULL;
++	struct device *dev = &rproc->dev;
++	const void *shdr;
++	u64 size, offset;
+ 
+-		/* we don't support any version beyond the first */
+-		if (table->ver != 1) {
+-			dev_err(dev, "unsupported fw ver: %d\n", table->ver);
+-			return NULL;
+-		}
++	shdr = rproc_elf_find_shdr(rproc, fw, ".resource_table");
++	if (!shdr)
++		return NULL;
+ 
+-		/* make sure reserved bytes are zeroes */
+-		if (table->reserved[0] || table->reserved[1]) {
+-			dev_err(dev, "non zero reserved bytes\n");
+-			return NULL;
+-		}
++	size = elf_shdr_get_sh_size(class, shdr);
++	offset = elf_shdr_get_sh_offset(class, shdr);
++	table = (struct resource_table *)(elf_data + offset);
+ 
+-		/* make sure the offsets array isn't truncated */
+-		if (struct_size(table, offset, table->num) > size) {
+-			dev_err(dev, "resource table incomplete\n");
+-			return NULL;
+-		}
++	/* make sure we have the entire table */
++	if (offset + size > fw_size || offset + size < size) {
++		dev_err(dev, "resource table truncated\n");
++		return NULL;
++	}
+ 
+-		return shdr;
++	/* make sure table has at least the header */
++	if (sizeof(struct resource_table) > size) {
++		dev_err(dev, "header-less resource table\n");
++		return NULL;
+ 	}
+ 
+-	return NULL;
++	/* we don't support any version beyond the first */
++	if (table->ver != 1) {
++		dev_err(dev, "unsupported fw ver: %d\n", table->ver);
++		return NULL;
++	}
++
++	/* make sure reserved bytes are zeroes */
++	if (table->reserved[0] || table->reserved[1]) {
++		dev_err(dev, "non zero reserved bytes\n");
++		return NULL;
++	}
++
++	/* make sure the offsets array isn't truncated */
++	if (struct_size(table, offset, table->num) > size) {
++		dev_err(dev, "resource table incomplete\n");
++		return NULL;
++	}
++
++	return shdr;
+ }
+ 
+ /**
+@@ -326,14 +342,13 @@ find_table(struct device *dev, const struct firmware *fw)
+ int rproc_elf_load_rsc_table(struct rproc *rproc, const struct firmware *fw)
+ {
+ 	const void *shdr;
+-	struct device *dev = &rproc->dev;
+ 	struct resource_table *table = NULL;
+ 	const u8 *elf_data = fw->data;
+ 	size_t tablesz;
+ 	u8 class = fw_elf_get_class(fw);
+ 	u64 sh_offset;
+ 
+-	shdr = find_table(dev, fw);
++	shdr = find_table(rproc, fw);
+ 	if (!shdr)
+ 		return -EINVAL;
+ 
+@@ -377,7 +392,7 @@ struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
+ 	u8 class = fw_elf_get_class(fw);
+ 	struct device *dev = &rproc->dev;
+ 
+-	shdr = find_table(&rproc->dev, fw);
++	shdr = find_table(rproc, fw);
+ 	if (!shdr)
+ 		return NULL;
+ 
+diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+index d4dbb8d1d80c..2a4f75a401d3 100644
+--- a/drivers/remoteproc/remoteproc_internal.h
++++ b/drivers/remoteproc/remoteproc_internal.h
+@@ -117,6 +117,8 @@ int rproc_trigger_recovery(struct rproc *rproc);
+ 
+ int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw);
+ u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw);
++const void *rproc_elf_find_shdr(struct rproc *rproc, const struct firmware *fw,
++				const char *sh_name);
+ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw);
+ int rproc_elf_load_rsc_table(struct rproc *rproc, const struct firmware *fw);
+ struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
 -- 
 2.37.1
 
