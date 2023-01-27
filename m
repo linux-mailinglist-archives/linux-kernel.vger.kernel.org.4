@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D3967DD25
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 06:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8B867DD27
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 06:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjA0Fir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 00:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
+        id S231649AbjA0Fjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 00:39:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjA0Fim (ORCPT
+        with ESMTP id S229481AbjA0Fjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 00:38:42 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44F6721E4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:38:41 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id e8-20020a17090a9a8800b0022c387f0f93so2517605pjp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:38:41 -0800 (PST)
+        Fri, 27 Jan 2023 00:39:44 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5B224498
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:39:43 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-50112511ba7so53530777b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 21:39:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1AXkXWQAWqOhK5zPC17QLJZMm/iek5TrrZTt5bXHKZE=;
-        b=hD/fSRxX4tsflwyoHmuD3m8kyxd10JvQ/nQGztp6CPBkoLuWQUV2aohmT+oTUIp2Xr
-         8zt52OjV1mgr0JHdk/YbK85SPQcn0VQ4+2/FMCuW8+y4sSGfccivBzzPHxAIqqC7osfM
-         32Sw9xwF7If5LRyfSWV2A4y7zTizubIh3U643KFfTNBTKdnJDQZfuxZwhWMvFpI/dS46
-         Qu44z39MIuJ99wvDsC5oIAPNEYeIwSTt7xidHEMke5kmhyuAEVZPmsLwbk/zcdPiBvHE
-         LImoSAqehO6eduCPB+JAThUBOKaImnKs+c+w8qbAyX6WLT7oOcCq0wLcGj6JqDf1y9Ur
-         lQGw==
+        bh=7GiQ7w1X2hhFSR7NAHawrhOM+1bixV1+YFnoXy42vGU=;
+        b=QVl2mReNZWpLX20IPMiqSZF9jDaiI62lV6nbC4xS2ZQ0+ObGDve/qVNNBlnqQ5Tvls
+         d1gDBrRB17QYETlrVwh4qMiMYLiz1+2bw06RLaZtuxtdZ2DnTyouIcUQXyI9ydyxaP8l
+         Pd8a35a9B86U2rajp2eNZCL0lNhf0VeFYF/ddJAFoe2K1/RprOOBjM/Dax11DDxZ/w4l
+         HdVi1U8z6ziXzGQYMrbI5TLDeVTN1nFzMylQ5XdQhUe05W3N0Zv35LvNKs3G92ZLUACA
+         f6kDF2jZIZ2BPLhjMs3TURmadw8LHz5FZF6vd5XJ+pGRNDXaKswxXsUrkT+K3k1DqxOm
+         iauw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1AXkXWQAWqOhK5zPC17QLJZMm/iek5TrrZTt5bXHKZE=;
-        b=vZaHbEfK6XwNskLsj6KGcLTbyZBJp6BD2OHAIPsPNZsqhM1aK3xbDR0MO7v/jloVeW
-         oChKrXPSKSIdXim/5+1Gkksk/YhziVa4Pe7xPwLde0rJJYJL9V9ebPKnrpRXTEzo5o1K
-         ipwOArusxFgxP74enr7UosXvPvINXBlworE94HKHkd8WaAbrQaLqtggi3mhBOoWeQn7Z
-         JD0b35myQ+xidmpsaRmANJpUtCnfPgbpsuhILoLaP/xgvbZoMrn5CizCGS08NZdztnnj
-         Hb14EkVSZSVOHWgM5kG3T7SbSTejYZhcd8O8TZd8Cjj7ZonmuQP8idUogBmYou0OkyHd
-         7EWg==
-X-Gm-Message-State: AO0yUKV8JMhkpbqp2VbFaViHhA5ZFcLJzpORYghFi/XWzwtXzBGP/s+Y
-        pYjC5hHobnGlGS3q1zF+boW16uqmERQKdRKAjgBGRRz6csuM3WX+YgZI2Q==
-X-Google-Smtp-Source: AK7set9+WPEw09PZ0/16bM6oTLo37eglDexdHgi+WW6q0+Qx2bteLPbTVta2v1sjjOKMDbxqQx1ESiJoXBqfbqVxP/M=
-X-Received: by 2002:a17:90a:43c6:b0:22c:4fad:d26b with SMTP id
- r64-20020a17090a43c600b0022c4fadd26bmr70412pjg.162.1674797920949; Thu, 26 Jan
- 2023 21:38:40 -0800 (PST)
+        bh=7GiQ7w1X2hhFSR7NAHawrhOM+1bixV1+YFnoXy42vGU=;
+        b=Aqotb3S78598kx6WjwdNXXvn8XbTsrVKKZjzAoIeo8GYGRP3oBKkdB73wm5PCFQ6gS
+         EAGAL8TvKyGcFLf7FXaFcEPcik38B9+WPehrVpAHTClybT5tO69N8v5G3rXiNOYBB/Fv
+         jxtYS9PV5EEC8eg3fEMiTzt6RAIfmKEh08iAKcci0h+HjM1fm6uQxiHSJ8CbIoCZ+Ncn
+         9nqwTWIbvW+/W8tx2/az9SH52fb1KMqIg71WIqntMdNHcZP1byr4Gz0eIxiStdXVyD99
+         NENvDNrBWW8b4evSvvN0aJcZ9LI198RowuxzLY1aFx8He5ZjOFnBvETprA3kCmpAm5Fk
+         Ia4Q==
+X-Gm-Message-State: AO0yUKW0NOuf1kXDYqykhrvDSGVLevy2sDfmApUbd8iL0E+Fd+z3ECmc
+        erXHErh4HSOJc75RtE9AYyEns7ZI4OxTg4Rs8CKGjA==
+X-Google-Smtp-Source: AK7set91Hj+5JRIUMgFdCdTiKxYQbRYY0lmNdodkcHw8zPBgiHAgAOtNrL4ORfklzYuu+CmGMvnIJgOvZY5W8zbJr9s=
+X-Received: by 2002:a0d:cb41:0:b0:507:e228:fd85 with SMTP id
+ n62-20020a0dcb41000000b00507e228fd85mr956460ywd.132.1674797982893; Thu, 26
+ Jan 2023 21:39:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20230124080350.2275652-1-davidgow@google.com>
-In-Reply-To: <20230124080350.2275652-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 26 Jan 2023 21:38:29 -0800
-Message-ID: <CAGS_qxq4vWvRJ89477S+rxHYLvnc2xN435GQ4+BvpLgqon8miw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] kunit: Add "hooks" to call into KUnit when it's
- built as a module
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Rae Moar <rmoar@google.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230127162143.1a3bc64b@canb.auug.org.au>
+In-Reply-To: <20230127162143.1a3bc64b@canb.auug.org.au>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 26 Jan 2023 21:39:31 -0800
+Message-ID: <CAJuCfpGSQk45mvCxCUhWTD1GjKs=XYmjOeZTEUerpo-ZKnTByA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the mm tree with the rdma tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dean Luick <dean.luick@cornelisnetworks.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -74,69 +74,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 12:04 AM David Gow <davidgow@google.com> wrote:
+On Thu, Jan 26, 2023 at 9:21 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> KUnit has several macros and functions intended for use from non-test
-> code. These hooks, currently the kunit_get_current_test() and
-> kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=m.
+> Hi all,
 >
-> In order to support this case, the required functions and static data
-> need to be available unconditionally, even when KUnit itself is not
-> built-in. The new 'hooks.c' file is therefore always included, and has
-> both the static key required for kunit_get_current_test(), and a
-> function pointer to the real implementation of
-> __kunit_fail_current_test(), which is populated when the KUnit module is
-> loaded.
+> Today's linux-next merge of the mm tree got a conflict in:
 >
-> A new header, kunit/hooks-table.h, contains a table of all hooks, and is
-> repeatedly included with different definitions of the KUNIT_HOOK() in
-> order to automatically generate the needed function pointer tables. When
-
-Perhaps I'm overlooking something and this is a dumb question.
-
-Is there a reason we can't go with a less-clever approach?
-Like have a global struct?
-We could memset it to 0 to clear it instead of defining a macro to set
-individual variables to NULL?
-
-i.e.
-
-// hooks.h
-extern struct kunit_hook_table {
-        __printf(3, 4) void (*fail_current_test)(const char*, int,
-const char*, ...);
-} kunit_hooks;
-
-//hooks.c
-struct kunit_hook_table kunit_hooks;
-
-// in test.c
-// here all the functions should be in scope for us to use
-static void kunit_set_hooks(void)
-{
-  kunit_hooks.fail_current_test = __kunit_fail_current_test;
-  ...
-}
-
- static int __init kunit_init(void)
- {
-  ...
-  kunit_set_hooks();
-  ...
-}
-
-static void __exit kunit_exit(void)
-{
-  ...
-  memset(&kunit_hooks, 0, sizeof(kunit_hooks));
-}
-
-> KUnit is disabled, or the module is not loaded, these function pointers
-> are all NULL. This shouldn't be a problem, as they're all used behind
-> wrappers which check kunit_running and/or that the pointer is non-NULL.
+>   drivers/infiniband/hw/hfi1/file_ops.c
 >
-> This can then be extended for future features which require similar
-> "hook" behaviour, such as static stubs:
-> https://lore.kernel.org/all/20221208061841.2186447-1-davidgow@google.com/
+> between commit:
 >
-> Signed-off-by: David Gow <davidgow@google.com>
+>   1ec82317a1da ("IB/hfi1: Use dma_mmap_coherent for matching buffers")
+>
+> from the rdma tree and commit:
+>
+>   6fe0afd07701 ("mm: replace vma->vm_flags direct modifications with modifier calls")
+>
+> from the mm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+
+Hi Stephen,
+Conflict resolution for 6fe0afd07701 looks good to me.
+Thanks,
+Suren.
+
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc drivers/infiniband/hw/hfi1/file_ops.c
+> index e03b0207856e,c6e59bc480f9..000000000000
+> --- a/drivers/infiniband/hw/hfi1/file_ops.c
+> +++ b/drivers/infiniband/hw/hfi1/file_ops.c
+> @@@ -424,17 -403,8 +424,17 @@@ static int hfi1_file_mmap(struct file *
+>                         ret = -EPERM;
+>                         goto done;
+>                 }
+> -               vma->vm_flags &= ~VM_MAYWRITE;
+> +               vm_flags_clear(vma, VM_MAYWRITE);
+>  -              addr = vma->vm_start;
+>  +              /*
+>  +               * Mmap multiple separate allocations into a single vma.  From
+>  +               * here, dma_mmap_coherent() calls dma_direct_mmap(), which
+>  +               * requires the mmap to exactly fill the vma starting at
+>  +               * vma_start.  Adjust the vma start and end for each eager
+>  +               * buffer segment mapped.  Restore the originals when done.
+>  +               */
+>  +              vm_start_save = vma->vm_start;
+>  +              vm_end_save = vma->vm_end;
+>  +              vma->vm_end = vma->vm_start;
+>                 for (i = 0 ; i < uctxt->egrbufs.numbufs; i++) {
+>                         memlen = uctxt->egrbufs.buffers[i].len;
+>                         memvirt = uctxt->egrbufs.buffers[i].addr;
+> @@@ -560,9 -528,11 +560,9 @@@
+>                 goto done;
+>         }
+>
+> -       vma->vm_flags = flags;
+> +       vm_flags_reset(vma, flags);
+>  -      hfi1_cdbg(PROC,
+>  -                "%u:%u type:%u io/vf:%d/%d, addr:0x%llx, len:%lu(%lu), flags:0x%lx\n",
+>  -                  ctxt, subctxt, type, mapio, vmf, memaddr, memlen,
+>  -                  vma->vm_end - vma->vm_start, vma->vm_flags);
+>  +      mmap_cdbg(ctxt, subctxt, type, mapio, vmf, memaddr, memvirt, memdma,
+>  +                memlen, vma);
+>         if (vmf) {
+>                 vma->vm_pgoff = PFN_DOWN(memaddr);
+>                 vma->vm_ops = &vm_ops;
