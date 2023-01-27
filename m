@@ -2,129 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2098667DE49
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B76567DE50
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbjA0HLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 02:11:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S232307AbjA0HMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 02:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjA0HLH (ORCPT
+        with ESMTP id S230404AbjA0HMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 02:11:07 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345603928B;
-        Thu, 26 Jan 2023 23:11:06 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E330D21D76;
-        Fri, 27 Jan 2023 07:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674803464; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6JbbjV8XPl8L1h6/eaMpCzQteeSN53ss/rnYjmgTrXA=;
-        b=nFLaAeUQ5whgylpP8TWBYrurt2mzJIePEHISY2sElbE/wV9zCG0kZLTksxYkCGkDMJ7/e/
-        3puaE1H2LxgFT2FnCyyJCM4ifWQt1a4LNfl8BvN/MsCuVlN/GJYyr42sQpyKXrL+diYIO4
-        uUAvQrDLDXGn7N/8wzS93CpH+RrBNFs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B78091336F;
-        Fri, 27 Jan 2023 07:11:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +x5rKgh502M7VgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 27 Jan 2023 07:11:04 +0000
-Date:   Fri, 27 Jan 2023 08:11:04 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <fweisbecker@suse.de>
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-Message-ID: <Y9N5CI8PpsfiaY9c@dhcp22.suse.cz>
-References: <20230125073502.743446-1-leobras@redhat.com>
- <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
- <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
- <Y9FzSBw10MGXm2TK@tpad>
- <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
- <Y9Iurktut9B9T+Tl@dhcp22.suse.cz>
- <Y9MI42NSLooyVZNu@P9FQF9L96D.corp.robot.car>
+        Fri, 27 Jan 2023 02:12:50 -0500
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10ED01027B;
+        Thu, 26 Jan 2023 23:12:49 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id v6so11227267ejg.6;
+        Thu, 26 Jan 2023 23:12:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uVj6tESp4nEWyweFFwTiuF+hajljU5N9ZtVJsgI50Ms=;
+        b=spwoF+puhEjVBhNP5gOoMlFKbk/MH1yknmcI4QedkyCZoDTamlQtoVzSTfCRgRPdEy
+         4WBB9GDugTjm7Qd1e5n8kArL6pRXRHhaY3gm/oJVSzK2o4fH32BTjIzhwFtmk90w33Ky
+         5JQ9gpsam3uX7S/366uvjpyGKVWBpaeOo6UfI7hc6LkD4gNrZTNu68OHVENb840ZsBfD
+         TAxL5JbSihHEDRUUUd//UFsz0Vny3lrtgbcnPO/GOt6pPMJ3CQyaTItLEu+IoEDxEwhe
+         laZAbw2fB4udN44l5u7xRHJ/h2osYCQ0vfVlUDvtwmLIrR3QYCn5NtW/+USn+keJQk0H
+         oDCQ==
+X-Gm-Message-State: AFqh2kqfFwFV4KIas871tm1VjsNtLY2A+NMHyf7cthSqsJSfRko8oIZq
+        mHjyIS0SAwgsFpb1ZTZF/oz0sqweh1g=
+X-Google-Smtp-Source: AMrXdXsKlioCnHG+HsP3xNl4il4T9jfpnY+iMovgYnpTy0k+dfBCai7gzJh58/B1/NfR8+zY9FvuHg==
+X-Received: by 2002:a17:906:5786:b0:84d:4e79:e7a with SMTP id k6-20020a170906578600b0084d4e790e7amr41671668ejq.74.1674803567502;
+        Thu, 26 Jan 2023 23:12:47 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id z16-20020a170906945000b0084d46461852sm1715868ejx.126.2023.01.26.23.12.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 23:12:47 -0800 (PST)
+Message-ID: <82cfbb3e-cb2c-199c-8833-35498ce894e2@kernel.org>
+Date:   Fri, 27 Jan 2023 08:12:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9MI42NSLooyVZNu@P9FQF9L96D.corp.robot.car>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: linux-next: manual merge of the kspp tree with the tty tree
+Content-Language: en-US
+To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230127155753.1f9b9517@canb.auug.org.au>
+ <Y9N3GNBKzOKuSOMJ@kroah.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <Y9N3GNBKzOKuSOMJ@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc Frederic]
-
-On Thu 26-01-23 15:12:35, Roman Gushchin wrote:
-> On Thu, Jan 26, 2023 at 08:41:34AM +0100, Michal Hocko wrote:
-[...]
-> > > Essentially each cpu will try to grab the remains of the memory quota
-> > > and move it locally. I wonder in such circumstances if we need to disable the pcp-caching
-> > > on per-cgroup basis.
-> > 
-> > I think it would be more than sufficient to disable pcp charging on an
-> > isolated cpu.
+On 27. 01. 23, 8:02, Greg KH wrote:
+> On Fri, Jan 27, 2023 at 03:57:53PM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Today's linux-next merge of the kspp tree got a conflict in:
+>>
+>>    drivers/tty/vt/vt.c
+>>
+>> between commit:
+>>
+>>    feb36abbedea ("tty: vt: remove struct uni_screen")
+>>
+>> from the tty tree and commit:
+>>
+>>    19c30ead3938 ("vt: Replace 0-length array with flexible array")
+>>
+>> from the kspp tree.
 > 
-> It might have significant performance consequences.
+> Kees, I was waiting for a new version of your 0-length patch before
+> applying it as I thought there were review comments on it.  So you
+> should probably drop it from your tree or resend it so I can merge it
+> into the tty tree if it's acceptable.
 
-Is it really significant?
+feb36abbedea removes the array completely, so obsoletes 19c30ead3938.
 
-> I'd rather opt out of stock draining for isolated cpus: it might slightly reduce
-> the accuracy of memory limits and slightly increase the memory footprint (all
-> those dying memcgs...), but the impact will be limited. Actually it is limited
-> by the number of cpus.
-
-Hmm, OK, I have misunderstood your proposal. Yes, the overal pcp charges
-potentially left behind should be small and that shouldn't really be a
-concern for memcg oom situations (unless the limit is very small and
-workloads on isolated cpus using small hard limits is way beyond my
-imagination).
-
-My first thought was that those charges could be left behind without any
-upper bound but in reality sooner or later something should be running
-on those cpus and if the memcg is gone the pcp cache would get refilled
-and old charges gone.
-
-So yes, this is actually a better and even simpler solution. All we need
-is something like this
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index ab457f0394ab..13b84bbd70ba 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -2344,6 +2344,9 @@ static void drain_all_stock(struct mem_cgroup *root_memcg)
- 		struct mem_cgroup *memcg;
- 		bool flush = false;
- 
-+		if (cpu_is_isolated(cpu))
-+			continue;
-+
- 		rcu_read_lock();
- 		memcg = stock->cached;
- 		if (memcg && stock->nr_pages &&
-
-There is no such cpu_is_isolated() AFAICS so we would need a help from
-NOHZ and cpuisol people to create one for us. Frederic, would such an
-abstraction make any sense from your POV?
+thanks,
 -- 
-Michal Hocko
-SUSE Labs
+js
+suse labs
+
