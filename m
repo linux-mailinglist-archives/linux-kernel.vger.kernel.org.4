@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5723A67DDEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2082B67DDEB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbjA0GmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 01:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
+        id S232653AbjA0GmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 01:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjA0Gk1 (ORCPT
+        with ESMTP id S232046AbjA0Gk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 01:40:27 -0500
+        Fri, 27 Jan 2023 01:40:29 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D45C69B0A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63E174C32;
         Thu, 26 Jan 2023 22:40:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=Ebx92A7qVhpZxNIMmgKYGxRiJizszD7/X6SujBriCAU=; b=PTSryrA8qs+rwTNkcS558WRCfl
-        bAUiZRGyGEcEyYMl1VFMVt861OTJEwd4G02yvu6XFlMCOcBnQ3lFiaWOnAX1R8ProOvhx9GKsquvo
-        EbNPuVk9Jfbm5yZrAe3TCVxxbjt9iNMdyIGYFctKbnEiE8sP3BcFT2HjDe6Zfkwilasgd32ORcoM8
-        h/8Xwt/MTTQZfXNh99tb5dbJvu8R2NoJ4C3MfTbnSOh0s9bID6OaxO99oJ9nWFd1ugO4qgikF47pB
-        ilnG50reVZ2dXgyVY9/eZsTyP39LYO2czHVmCHjjw5sngcujLwBQfJ/RVoXRkxwtc+/BOQvQ5ow1T
-        eG/NwvMw==;
+        bh=0tBu6Erz+dlIKmi6Fcf2PLuhswsM+Mn8+mdPYDo4x14=; b=2SuElG0dZjMUm+IcyMMWh43ge6
+        7wfgozINmdWGJA/BmCuooKFLOzUf6abx+CRWJVB/nrCj8dIalHAgBTH9e88wpmFrnK65/M+YHUlC6
+        EqexX3bTfz+aJ2udkWFgNeS+OPJVIxQk1sj6KgQbWaIkX186kM6vw9a5+h8R6+L4GqZ/zRD8TnIlt
+        y9kF7cTpjm0PK1p+aXmmj4OyRcYdWfUAyRI8/k58ShYkspQ3EKyhe8cNJCLKX7RsR8jDE3kuxN/qi
+        KrhD26P2QeKQ92+WKZtDsxWtLQiRamsfZGcBU5cbArNGcWcFuvoeRCB+odep4AIi++lSm8H7ITNly
+        Qx2DryIw==;
 Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pLIPQ-00DM0u-Kd; Fri, 27 Jan 2023 06:40:24 +0000
+        id 1pLIPR-00DM0u-1E; Fri, 27 Jan 2023 06:40:25 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 31/35] Documentation: trace: correct spelling
-Date:   Thu, 26 Jan 2023 22:40:01 -0800
-Message-Id: <20230127064005.1558-32-rdunlap@infradead.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 32/35] Documentation: usb: correct spelling
+Date:   Thu, 26 Jan 2023 22:40:02 -0800
+Message-Id: <20230127064005.1558-33-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230127064005.1558-1-rdunlap@infradead.org>
 References: <20230127064005.1558-1-rdunlap@infradead.org>
@@ -56,129 +51,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling problems for Documentation/trace/ as reported
+Correct spelling problems for Documentation/usb/ as reported
 by codespell.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: linux-trace-kernel@vger.kernel.org
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc: coresight@lists.linaro.org
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
 ---
- Documentation/trace/coresight/coresight-etm4x-reference.rst |    2 +-
- Documentation/trace/events.rst                              |    6 +++---
- Documentation/trace/fprobe.rst                              |    2 +-
- Documentation/trace/ftrace-uses.rst                         |    2 +-
- Documentation/trace/hwlat_detector.rst                      |    2 +-
- Documentation/trace/rv/runtime-verification.rst             |    2 +-
- Documentation/trace/uprobetracer.rst                        |    2 +-
- 7 files changed, 9 insertions(+), 9 deletions(-)
+ Documentation/usb/chipidea.rst       |   19 ++++++++++---------
+ Documentation/usb/gadget-testing.rst |    2 +-
+ Documentation/usb/mass-storage.rst   |    2 +-
+ 3 files changed, 12 insertions(+), 11 deletions(-)
 
-diff -- a/Documentation/trace/coresight/coresight-etm4x-reference.rst b/Documentation/trace/coresight/coresight-etm4x-reference.rst
---- a/Documentation/trace/coresight/coresight-etm4x-reference.rst
-+++ b/Documentation/trace/coresight/coresight-etm4x-reference.rst
-@@ -675,7 +675,7 @@ Bit assignments shown below:-
-     reconstructed using only conditional branches.
+diff -- a/Documentation/usb/chipidea.rst b/Documentation/usb/chipidea.rst
+--- a/Documentation/usb/chipidea.rst
++++ b/Documentation/usb/chipidea.rst
+@@ -35,10 +35,10 @@ which can show otg fsm variables and som
+ 1) Power up 2 Freescale i.MX6Q sabre SD boards with gadget class driver loaded
+    (e.g. g_mass_storage).
  
-     There is currently no support in Perf for supplying modified binaries to the decoder, so this
--    feature is only inteded to be used for debugging purposes or with a 3rd party tool.
-+    feature is only intended to be used for debugging purposes or with a 3rd party tool.
+-2) Connect 2 boards with usb cable with one end is micro A plug, the other end
++2) Connect 2 boards with usb cable: one end is micro A plug, the other end
+    is micro B plug.
  
-     Choosing this option will result in a significant increase in the amount of trace generated -
-     possible danger of overflows, or fewer instructions covered. Note, that this option also
-diff -- a/Documentation/trace/events.rst b/Documentation/trace/events.rst
---- a/Documentation/trace/events.rst
-+++ b/Documentation/trace/events.rst
-@@ -903,7 +903,7 @@ functions can be used.
+-   The A-device(with micro A plug inserted) should enumerate B-device.
++   The A-device (with micro A plug inserted) should enumerate B-device.
  
- To create a kprobe event, an empty or partially empty kprobe event
- should first be created using kprobe_event_gen_cmd_start().  The name
--of the event and the probe location should be specfied along with one
-+of the event and the probe location should be specified along with one
- or args each representing a probe field should be supplied to this
- function.  Before calling kprobe_event_gen_cmd_start(), the user
- should create and initialize a dynevent_cmd object using
-@@ -983,7 +983,7 @@ The basic idea is simple and amounts to
- layer that can be used to generate trace event commands.  The
- generated command strings can then be passed to the command-parsing
- and event creation code that already exists in the trace event
--subystem for creating the corresponding trace events.
-+subsystem for creating the corresponding trace events.
+ 3) Role switch
  
- In a nutshell, the way it works is that the higher-level interface
- code creates a struct dynevent_cmd object, then uses a couple
-@@ -1056,7 +1056,7 @@ to add an operator between the pair (her
- appended onto the end of the arg pair (here ';').
+@@ -54,18 +54,19 @@ which can show otg fsm variables and som
  
- There's also a dynevent_str_add() function that can be used to simply
--add a string as-is, with no spaces, delimeters, or arg check.
-+add a string as-is, with no spaces, delimiters, or arg check.
+ 	echo 0 > /sys/bus/platform/devices/ci_hdrc.0/inputs/b_bus_req
  
- Any number of dynevent_*_add() calls can be made to build up the string
- (until its length surpasses cmd->maxlen).  When all the arguments have
-diff -- a/Documentation/trace/fprobe.rst b/Documentation/trace/fprobe.rst
---- a/Documentation/trace/fprobe.rst
-+++ b/Documentation/trace/fprobe.rst
-@@ -111,7 +111,7 @@ saved at function entry and passed to ex
-         the instruction pointer of @regs may be different from the @entry_ip
-         in the entry_handler. If you need traced instruction pointer, you need
-         to use @entry_ip. On the other hand, in the exit_handler, the instruction
--        pointer of @regs is set to the currect return address.
-+        pointer of @regs is set to the correct return address.
+-   or, by introducing HNP polling, B-Host can know when A-peripheral wish
+-   to be host role, so this role switch also can be trigged in A-peripheral
+-   side by answering the polling from B-Host, this can be done on A-device::
++   or, by introducing HNP polling, B-Host can know when A-peripheral wishes to
++   be in the host role, so this role switch also can be triggered in
++   A-peripheral side by answering the polling from B-Host. This can be done on
++   A-device::
  
- Share the callbacks with kprobes
- ================================
-diff -- a/Documentation/trace/ftrace-uses.rst b/Documentation/trace/ftrace-uses.rst
---- a/Documentation/trace/ftrace-uses.rst
-+++ b/Documentation/trace/ftrace-uses.rst
-@@ -193,7 +193,7 @@ FTRACE_OPS_FL_RECURSION
- 	Not, if this flag is set, then the callback will always be called
- 	with preemption disabled. If it is not set, then it is possible
- 	(but not guaranteed) that the callback will be called in
--	preemptable context.
-+	preemptible context.
+ 	echo 1 > /sys/bus/platform/devices/ci_hdrc.0/inputs/a_bus_req
  
- FTRACE_OPS_FL_IPMODIFY
- 	Requires FTRACE_OPS_FL_SAVE_REGS set. If the callback is to "hijack"
-diff -- a/Documentation/trace/hwlat_detector.rst b/Documentation/trace/hwlat_detector.rst
---- a/Documentation/trace/hwlat_detector.rst
-+++ b/Documentation/trace/hwlat_detector.rst
-@@ -14,7 +14,7 @@ originally written for use by the "RT" p
- kernel is highly latency sensitive.
+    A-device should switch back to host and enumerate B-device.
  
- SMIs are not serviced by the Linux kernel, which means that it does not
--even know that they are occuring. SMIs are instead set up by BIOS code
-+even know that they are occurring. SMIs are instead set up by BIOS code
- and are serviced by BIOS code, usually for "critical" events such as
- management of thermal sensors and fans. Sometimes though, SMIs are used for
- other tasks and those tasks can spend an inordinate amount of time in the
-diff -- a/Documentation/trace/rv/runtime-verification.rst b/Documentation/trace/rv/runtime-verification.rst
---- a/Documentation/trace/rv/runtime-verification.rst
-+++ b/Documentation/trace/rv/runtime-verification.rst
-@@ -31,7 +31,7 @@ In Linux terms, the runtime verification
- *RV monitor* abstraction. A *RV monitor* includes a reference model of the
- system, a set of instances of the monitor (per-cpu monitor, per-task monitor,
- and so on), and the helper functions that glue the monitor to the system via
--trace, as depicted bellow::
-+trace, as depicted below::
+-5) Remove B-device(unplug micro B plug) and insert again in 10 seconds,
++5) Remove B-device (unplug micro B plug) and insert again in 10 seconds;
+    A-device should enumerate B-device again.
  
-  Linux   +---- RV Monitor ----------------------------------+ Formal
-   Realm  |                                                  |  Realm
-diff -- a/Documentation/trace/uprobetracer.rst b/Documentation/trace/uprobetracer.rst
---- a/Documentation/trace/uprobetracer.rst
-+++ b/Documentation/trace/uprobetracer.rst
-@@ -55,7 +55,7 @@ Synopsis of uprobe_tracer
+-6) Remove B-device(unplug micro B plug) and insert again after 10 seconds,
++6) Remove B-device (unplug micro B plug) and insert again after 10 seconds;
+    A-device should NOT enumerate B-device.
  
-   (\*1) only for return probe.
-   (\*2) this is useful for fetching a field of data structures.
--  (\*3) Unlike kprobe event, "u" prefix will just be ignored, becuse uprobe
-+  (\*3) Unlike kprobe event, "u" prefix will just be ignored, because uprobe
-         events can access only user-space memory.
+    if A-device wants to use bus:
+@@ -105,7 +106,7 @@ July 27, 2012 Revision 2.0 version 1.1a"
+ 2. How to enable USB as system wakeup source
+ --------------------------------------------
+ Below is the example for how to enable USB as system wakeup source
+-at imx6 platform.
++on an imx6 platform.
  
- Types
+ 2.1 Enable core's wakeup::
+ 
+@@ -128,6 +129,6 @@ at imx6 platform.
+ 	echo enabled > /sys/bus/usb/devices/1-1/power/wakeup
+ 
+ If the system has only one usb port, and you want usb wakeup at this port, you
+-can use below script to enable usb wakeup::
++can use the below script to enable usb wakeup::
+ 
+ 	for i in $(find /sys -name wakeup | grep usb);do echo enabled > $i;done;
+diff -- a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -813,7 +813,7 @@ the user must provide the following:
+ 	================== ====================================================
+ 
+ Each frame description contains frame interval specification, and each
+-such specification consists of a number of lines with an inverval value
++such specification consists of a number of lines with an interval value
+ in each line. The rules stated above are best illustrated with an example::
+ 
+   # mkdir functions/uvc.usb0/control/header/h
+diff -- a/Documentation/usb/mass-storage.rst b/Documentation/usb/mass-storage.rst
+--- a/Documentation/usb/mass-storage.rst
++++ b/Documentation/usb/mass-storage.rst
+@@ -150,7 +150,7 @@ Module parameters
+   - bcdDevice     -- USB Device version (BCD) (16 bit integer)
+   - iManufacturer -- USB Manufacturer string (string)
+   - iProduct      -- USB Product string (string)
+-  - iSerialNumber -- SerialNumber string (sting)
++  - iSerialNumber -- SerialNumber string (string)
+ 
+ sysfs entries
+ =============
