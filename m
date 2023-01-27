@@ -2,82 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7248167DAF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BEC67DAFB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232862AbjA0Aw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 19:52:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S231837AbjA0AyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 19:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbjA0Awy (ORCPT
+        with ESMTP id S232292AbjA0Ax7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 19:52:54 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E35234F3;
-        Thu, 26 Jan 2023 16:52:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Hm0uBZa9+i23jOL/6obx9nGe1Bq/+5PzZ2Lpi5YV8JU=; b=TToFPZwE24QuzHo7nhz5kCSns1
-        /V3jpJs8G5wwSIpaaX369oTF1vfx7neyQqGgOOnOJaK46vGNTihUSpAowTSnkNQDVfSj+cr5cM+X9
-        xWP3vQRRQdie3mkQsXyyoQb0p1zbiqnIlabAqAJy3hQGfvKfFcDiH7i5UcBY74P7Ri5upXIAQWEXl
-        9YjJi66P1ufguiDuRH/pDNU1GP63Yr7CXRwZ4lSxnZnF1Wv/QomcA+diwfZHOT77JS81AwxrKnFgg
-        MYmicL+thuIZVio1T0gSVNK3B5kq64bl1sv87DkZXWFhGh9B/bdk8LJXXJuckeo3DxDoNiYwnX2yH
-        6wWGGEpQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pLCys-004Liy-3A;
-        Fri, 27 Jan 2023 00:52:39 +0000
-Date:   Fri, 27 Jan 2023 00:52:38 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v11 2/8] iov_iter: Add a function to extract a page list
- from an iterator
-Message-ID: <Y9MgVsrMdgGsxNHC@ZenIV>
-References: <ba3adce1-ddea-98e0-fc3a-1cb660edae4c@redhat.com>
- <20230126141626.2809643-1-dhowells@redhat.com>
- <20230126141626.2809643-3-dhowells@redhat.com>
- <Y9L3yA+B1rrnrGK8@ZenIV>
- <Y9MAbYt6DIRFm954@ZenIV>
- <2907150.1674777410@warthog.procyon.org.uk>
+        Thu, 26 Jan 2023 19:53:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D192530FD
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:53:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE860619CB
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:53:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41F21C433EF;
+        Fri, 27 Jan 2023 00:53:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674780835;
+        bh=PJHJ9/eLbz4lLsG9p3KtlaXfM4oLzuXTDQ8E2Hls+w8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ku1yF1KipVryMWdDMfHUHZ6XmekunQOyz5KbpG5RmZCAoqO+fgJooEI6S1mjDNODB
+         Avzrmp9OCZcOb0VzmrJxj+JFqorGt9x6S43a2PrQ1igAxWvWat5ynK+sArUlQcsiYV
+         IjsEVPjMzaJYBXSREcHWduxNM76MUpTpaP50ejmOTLRzkyZqGDozzOdf42lGaS4tzv
+         CP15YMF1bfotCjvwTV1ofCKt0iLpKS96kcUBTcwvOnI16nezwJt7CjWlVNfpGS76yo
+         xRW0jsemaUmnaRPM/CkGElZsA9pg317RQYbXN72RH+Eya8XUjbhjooB0jFpTeILGwP
+         SaGOc/5LkvL1g==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Cristian Marussi <cristian.marussi@arm.com>
+Cc:     sudeep.holla@arm.com, Jim Quinlan <james.quinlan@broadcom.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20230126180511.766373-1-cristian.marussi@arm.com>
+References: <20230126180511.766373-1-cristian.marussi@arm.com>
+Subject: Re: [PATCH] regulator: scmi: Allow for zero voltage domains
+Message-Id: <167478083297.1118403.15307034817786674476.b4-ty@kernel.org>
+Date:   Fri, 27 Jan 2023 00:53:52 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2907150.1674777410@warthog.procyon.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:56:50PM +0000, David Howells wrote:
-> Al says that pinning a page (ie. FOLL_PIN) could cause a deadlock if a page is
-> vmspliced into a pipe with the pipe holding a pin on it because pinned pages
-> are removed from all page tables.  Is this actually the case?  I can't see
-> offhand where in mm/gup.c it does this.
+On Thu, 26 Jan 2023 18:05:11 +0000, Cristian Marussi wrote:
+> SCMI Voltage protocol allows the platform to report no voltage domains
+> on discovery, while warning the user about such an odd configuration.
+> As a consequence this condition should not be treated as error by the SCMI
+> regulator driver either.
+> 
+> Allow SCMI regulator driver to probe successfully even when no voltage
+> domains are discovered.
+> 
+> [...]
 
-It doesn't; sorry, really confused memories of what's going on, took a while
-to sort them out (FWIW, writeback is where we unmap and check if page is
-pinned, while pin_user_pages running into an unmapped page will end up
-with handle_mm_fault() (->fault(), actually) try to get the sucker locked
-and block on that until the writeback is over).
+Applied to
 
-Said that, I still think that pinned pages (arbitrary pagecache ones,
-at that) ending up in a pipe is a seriously bad idea.  It's trivial to
-arrange for them to stay that way indefinitely - no priveleges needed,
-very few limits, etc.
+   broonie/regulator.git for-next
+
+Thanks!
+
+[1/1] regulator: scmi: Allow for zero voltage domains
+      commit: 668f777d02f61faa834f1e24f3b99576dbe5ff6b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
