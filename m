@@ -2,183 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F41FD67E8E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9A167E8E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbjA0PD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
+        id S233998AbjA0PDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjA0PD4 (ORCPT
+        with ESMTP id S233276AbjA0PDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:03:56 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6947BE69
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:03:55 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P3LHD0ggKz9v7Qq
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 22:55:52 +0800 (CST)
-Received: from [10.81.218.251] (unknown [10.81.218.251])
-        by APP1 (Coremail) with SMTP id LxC2BwBn6QS459NjJkPQAA--.2692S2;
-        Fri, 27 Jan 2023 16:03:31 +0100 (CET)
-Message-ID: <c94ad1d4-c7ac-4570-6f33-85656b041090@huaweicloud.com>
-Date:   Fri, 27 Jan 2023 16:03:16 +0100
+        Fri, 27 Jan 2023 10:03:31 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011217BE6E
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:03:28 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id b10so4876295pjo.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:03:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n31FklM0OYREnHA1tP1e3LSdaHgDa9JeETQaAtpDNx0=;
+        b=M6SSWaRKvHYyXnHeqRhKyDiua1oMz8Hd3PukoMuD6rBmopInZtl50XdRMj6ER5UXOv
+         RLP15t2X51gbC98s/9gPou7TistUJOmaDVU6OqMgrl2l7qxgftafZmdGPY9Yz34GIPxP
+         YK2CuOV46j3Vrbn9ayuLfteOAltptj+Xdk15vmSkmo902j9QETHVjAAF3k2EhL9N42kl
+         qpUh3S4rTSAVhq3SbRFcf8jdAy9W+Cv9c8cITddHJQ9guoLJFU+82ncQiOYpnznCreHg
+         4mfZmNYqI0wROQWoQy7otgEd9hr8NXVVRPBGip6GQMsadaSA5DfZrXOPILlXqAmCbiuV
+         coPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n31FklM0OYREnHA1tP1e3LSdaHgDa9JeETQaAtpDNx0=;
+        b=cTs80LtbdGR9wJIJfSiY/P606JaDBSwP4NQomBMBIZggg3vxfoSZOQrUucVeBZXVuT
+         ypgoBrqJyf+gLGwZU/yr8t/uIMXU88QQB+Ul3ikk+q4Ftkj13zyOITvsLwujWRuq/sQ8
+         KqxHtGQ5xOTpmbVZfOvDWZZwCKngSiixMLiBKWXgM6D0f5OxuiiTTOTApyO5NOrseP0Q
+         uzmOFbbk0Z2nHocbvDH2ddsRLEznTnJEgc6GB9C9dRQkLER0jmLpM3M2tLAl8q1gcOdf
+         PWi2MQIUuPxlgK8nT2TSLoFf6AFNG+wNIvav6cyYkpHQSbtiU3O6Z8fFpP27GuwGeBCA
+         0wtw==
+X-Gm-Message-State: AFqh2kogTQTM0n8uqr/hKDqdtts3yfyRZR65wSlIFqrrO3qOBNsjHthz
+        OFUKUeZEYdn+qPx4WTL0u5U=
+X-Google-Smtp-Source: AMrXdXu8fOFjL0+xdFqgqCe+WGF6zeplIVby1Vxp1yf0RzVYaCVenBITz8K3fDdfqv0cIcld35fvHw==
+X-Received: by 2002:a17:903:124c:b0:194:d664:be3a with SMTP id u12-20020a170903124c00b00194d664be3amr36226903plh.16.1674831808380;
+        Fri, 27 Jan 2023 07:03:28 -0800 (PST)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id t18-20020a1709028c9200b0017a032d7ae4sm2983879plo.104.2023.01.27.07.03.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 07:03:27 -0800 (PST)
+Date:   Sat, 28 Jan 2023 00:03:19 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Hyunmin Lee <hn.min.lee@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] replace BUG_ON to WARN_ON
+Message-ID: <Y9PntwfqtarxWFUq@hyeyoo>
+References: <20230127115844.GA1124261@min-iamroot>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     paulmck@kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <Y9FMEATzv3gcTUe2@rowland.harvard.edu>
- <20230125171832.GH2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9F+SyLpxHwdK0rE@rowland.harvard.edu>
- <20230125194651.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9GVFkVRRRs5/rBd@rowland.harvard.edu>
- <20230125213832.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230125233308.GA1552266@paulmck-ThinkPad-P17-Gen-1>
- <Y9HbSBLrNJ9O2ad6@rowland.harvard.edu>
- <20230126015330.GX2948950@paulmck-ThinkPad-P17-Gen-1>
- <0ef2e974-5c3a-6195-62d5-a4c436bd7d82@huaweicloud.com>
- <20230126184802.GF2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230126184802.GF2948950@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwBn6QS459NjJkPQAA--.2692S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF1kXw1fCFW8JF4DWr47XFb_yoW5AF1rpF
-        WSgrsrGrn8Jrs7uw17Aw4UCr9Yy3yrGFy5CF93Wr1vya43Zr13JF40gry8uryDWFZrur4U
-        tw4UK3Z5AFy5u3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUFDGOUUUUU
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127115844.GA1124261@min-iamroot>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Hyunmin.
 
+the subject line could be "mm/vmalloc: replace BUG_ON() with WARN_ON()".
 
-On 1/26/2023 7:48 PM, Paul E. McKenney wrote:
-> On Thu, Jan 26, 2023 at 01:17:49PM +0100, Jonas Oberhauser wrote:
->> [...]
->> Note that this interpretation is analogous to the promise of smp_mb__after_unlock_lock(), which says that an
->> UNLOCK+LOCK pair act as a full fence: here the read-side unlock+gp act as a
->> full memory barrier.
-> Good point that the existing smp_mb__after_unlock_lock() can be used for
-> any use cases relying on the more literal interpretation of this promise.
-> We already have the work-around!  ;-)
+On Fri, Jan 27, 2023 at 08:58:44PM +0900, Hyunmin Lee wrote:
+> Replace unnacessary BUG_ON to WARN_ON. These BUG_ONs verify aruguments of a function. Thus, the WARN_ONs return an EINVAL error when their condition is true.
+> 
+> Co-Developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> Co-Developed-by: Jeungwoo Yoo <casionwoo@gmail.com>
+> Co-Developed-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
+> Signed-off-by: Hyunmin Lee <hn.min.lee@gmail.com>
+> Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> Signed-off-by: Jeungwoo Yoo <casionwoo@gmail.com>
+> Signed-off-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
+> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Can it? I meant that the less-literal form is similar to the one given 
-by smp_mb__after_unlock_lock().
+could be rephrased a little, like:
 
->> [...] I suppose you might be able to write
->> some absurd client that inspects every store of the reader thread and sees
->> that there is no line in the reader side code that acts like a full fence.
->> But it would take a lot of effort to discern this.
-> The usual litmus test is shown at the end of this email [...]
->> [...] I hope few people would have this unhealthy idea. But you
->> never know.
-> Given that the more literal interpretation is not unreasonable, we should
-> assume that someone somewhere might have interpreted it that way.
->
-> But I agree that the odds of someone actually relying on this are low,
-> and any such use case can be fixed with smp_mb__before_srcu_read_unlock(),
-> similar to smp_mb__after_srcu_read_unlock() that you note is already in use.
->
-> It would still be good to scan SRCU use for this sort of pattern, maybe
-> manually, maybe via something like coccinelle.  Alternatively, I could
-> post on my blog (with right of first refusal to LWN and you guys as
-> co-authors) telling the community of our intent to change this and see
-> what people say.  Probably both rather than either/or.
->
-> Thoughts?
+"As per the coding standards, in the event of an abnormal condition that
+should not occur under normal circumstances, the kernel should attempt
+recovery and proceed with execution, rather than halting the machine.
 
-My first thought is "there is a 'usual' litmus test for this?" :D
-But yes, the test you have given has at least the same structure as what 
-I would expect.
+Specifically, in the alloc_vmap_area() function, use WARN_ON()
+and fail the request instead of using BUG_ON() to halt the machine."
 
-Communicating this with the community sounds very reasonable.
+> ---
+>  mm/vmalloc.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 74afa2208558..9f9dba3132c5 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -1587,9 +1587,14 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
+>  	int purged = 0;
+>  	int ret;
+>  
+> -	BUG_ON(!size);
+> -	BUG_ON(offset_in_page(size));
+> -	BUG_ON(!is_power_of_2(align));
+> +	if (WARN_ON(!size))
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	if (WARN_ON(offset_in_page(size)))
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	if (WARN_ON(!is_power_of_2(align)))
+> +		return ERR_PTR(-EINVAL);
+>  
+>  	if (unlikely(!vmap_initialized))
+>  		return ERR_PTR(-EBUSY);
+> -- 
+> 2.25.1
 
-For some automated combing, I'm really not sure what pattern to look for.
-I'm afraid someone with a lot of time might have to look (semi-)manually.
+The code change itself looks fine to me.
 
-Best wishes, jonas
+Even if BUG*() -> WARN*() conversion may not be a high priority task,
+I see no reason to reject such changes.
 
-
->
-> 							Thanx, Paul
->
-> ------------------------------------------------------------------------
->
-> C C-srcu-observed-6
->
-> (*
->   * Result: Sometimes
->   *
->   * The result is Never if any of the smp_mb() calls is uncommented.
->   *)
->
-> {}
->
-> P0(int *a, int *b, int *c, int *d, struct srcu_struct *s)
-> {
-> 	int r1;
-> 	int r2;
-> 	int r3;
-> 	int r4;
->
-> 	r1 = srcu_read_lock(s);
-> 	WRITE_ONCE(*b, 2);
-> 	r2 = READ_ONCE(*a);
-> 	// smp_mb();
-> 	srcu_read_unlock(s, r1);
-> 	// smp_mb();
-> 	r3 = READ_ONCE(*c);
-> 	// smp_mb();
-> 	r4 = READ_ONCE(*d);
-> }
->
-> P1(int *a, int *b, int *c, int *d, struct srcu_struct *s)
-> {
-> 	WRITE_ONCE(*b, 1);
-> 	synchronize_srcu(s);
-> 	WRITE_ONCE(*c, 1);
-> }
->
-> P2(int *a, int *b, int *c, int *d, struct srcu_struct *s)
-> {
-> 	WRITE_ONCE(*d, 1);
-> 	smp_mb();
-> 	WRITE_ONCE(*a, 1);
-> }
->
-> exists (0:r2=1 /\ 0:r3=1 /\ 0:r4=0 /\ b=1)
-
+--
+Thanks,
+Hyeonggon
