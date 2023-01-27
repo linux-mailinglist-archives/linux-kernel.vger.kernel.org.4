@@ -2,122 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3389167ECAF
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4667667ED11
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235091AbjA0Rlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
+        id S232597AbjA0SMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 13:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234967AbjA0Rlq (ORCPT
+        with ESMTP id S229889AbjA0SMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:41:46 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA477D6D1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:41:43 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id g5-20020a92d7c5000000b00310afb74005so3484985ilq.11
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:41:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=miKO8nRIAl/PPu614CPsgHa5rh/GvcHtJLm9Wlk+k9s=;
-        b=jtLChuo7x0p8rJqLHaMQBJ5nW7sWzq6yq9dE4b9ILadEc1WlOlrQb5/sg+ecTp3qDo
-         AX8kNdGPDXkS1YnCKC21OAFPBWFoLekz7qTepTzu4CpRHIlOa/2u9/y6c7aebfkQZBKW
-         Sc5c7mi37Un7Kq7d9YTO7ZosoE9oxHOWoN6mIhOMoojDSOi4sNT995rnoXNhK191cIY8
-         nr2LK36DOdZHhQNsjexFsnHkRJOsdyfc9VFrp9RirHF33DSqpdQiHtdfy93vhsCpg+1V
-         vSMETq8LunbMVzGcCOw3yVp6UwhHgpyTbRoFbXePGurEDGQyGlRTqcv2hzks2moOdMg7
-         Q73A==
-X-Gm-Message-State: AFqh2ko1zRyj8/yrv+6Nzr2LrMgG+8lzL/vk47+je7PcOVCEIRtmA3Kf
-        KQF3gutT1tKMd+zqxjeJJQF93tx4YFWXCRI6mBB+Zci0v5vp
-X-Google-Smtp-Source: AMrXdXu7OX/QUqJfC/WAyUx+HnKc2Nt4wn5iS3QQof5w6mH0iHQtjF68B/52N/IQgbdE3jJhxl1RM4pd5Da+WTx74lXf6KKxzUXr
+        Fri, 27 Jan 2023 13:12:30 -0500
+Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CE91ADDE
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:12:29 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 51AA7140B4F;
+        Fri, 27 Jan 2023 18:12:29 +0000 (UTC)
+Received: from pdx1-sub0-mail-a215.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id DAFD81418BF;
+        Fri, 27 Jan 2023 18:12:27 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1674843148; a=rsa-sha256;
+        cv=none;
+        b=8gZAzNhiY910f4xRltxYtaoXOXMwHRoC42Z3yBFi9La4R5jiiKxSZByeaz7GX6QT4UZyZ9
+        hTBmJzgoxHTam2zim9I5IckCVSleJJcwssq7PPYGjI22xI6tNj8klWI0e/JZgNmH0IMYg3
+        +qHViyzJJfnkKL2YvOOuNKp6l1BWgPN6jAPXQg/1/jaFFoprwSECxxsVEjrllSEn+Nu69h
+        aBd+3TiFCO4thbgTo7nhH++DpnjRElj21RbuglqT/KX6HkGs8deHCykbaXGD1l7MO2TiPY
+        hzDUxHP8K7wtZ7Rs04lqsQxpFEg876u2TSEGJNMQ2sVn2nD9jEefxRxQfsWSPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1674843148;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=AFPAQrpTa6JQv90tZx2cVE3JvvG6vY0G/Jb1Gz+6tWw=;
+        b=O02PU6dv984pHWXFsjmM+jzulO8KVIeZqcPBsmbpNzbp58bz5sTH4TLgJ395b4db1K4glH
+        PNzxBM/4bDYTLaHUA+bT/m5lUHemJxoUJc+dSBdw/t9R+t33SbS3vzOC8OBlhwLEZ1IkCV
+        XaAX9hmkTRrEhivqwt203HCJs/eLqwaGIpJIXb0kVvnY+OPlNdY3KfM9JPDK9qSvH3GWov
+        iL+Ew5cQznNQx8yGqiruPl76Or9XsLWMbcXU4ArpKFSDf+S55e9oeLT69a7xmpkNIkM9WJ
+        v2JZ+oerCm9Wfbc4tn9p/crPH16WMSdM/19woLyjLplNZSNQMZGKNHLhfK+Y6w==
+ARC-Authentication-Results: i=1;
+        rspamd-544f66f495-wxdrn;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Relation-Daffy: 020a35f967655b8b_1674843148840_886956793
+X-MC-Loop-Signature: 1674843148840:7612868
+X-MC-Ingress-Time: 1674843148840
+Received: from pdx1-sub0-mail-a215.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.103.24.83 (trex/6.7.1);
+        Fri, 27 Jan 2023 18:12:28 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a215.dreamhost.com (Postfix) with ESMTPSA id 4P3Qf00Vj7z95;
+        Fri, 27 Jan 2023 10:12:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1674843147;
+        bh=AFPAQrpTa6JQv90tZx2cVE3JvvG6vY0G/Jb1Gz+6tWw=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=JIDFKbwUDw0JZ3SbrpB/Bj4GbFEpmvP6tr1C3RSKUPhp73vxhg4Grmp8npGv1MdUu
+         fKSGECsi57IjiXo5Wkl6SDhd2OGhJgE1CXQbNjgo/YsxzFZ6KkZS6khj0tqTtaCWxX
+         RBmLEBlN7Jm3H6SCAQb+5sh1Hd1UlaapKft3DzcVH+SuqpZGU71b6NEt/RVlzCXXIp
+         29+9+f5sWbofBI0N/otn9+yak3RFmUhOpOTT2tLo9PdLOhZ9xqCEJn5MJuRcmM20vL
+         KT/9Nes1IeXPlQeTSSJyvq/gCCjkUw9T7OpCcLsxOS2OVRLzesjsxKz66+aKM8NNAv
+         /pHd0aOp7eX5w==
+Date:   Fri, 27 Jan 2023 09:45:30 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v4 3/7] mm: replace VM_LOCKED_CLEAR_MASK with
+ VM_LOCKED_MASK
+Message-ID: <20230127174530.sws4xg3qjsx3agh4@offworld>
+Mail-Followup-To: Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+References: <20230126193752.297968-1-surenb@google.com>
+ <20230126193752.297968-4-surenb@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:216b:b0:30c:5f8d:886f with SMTP id
- s11-20020a056e02216b00b0030c5f8d886fmr4750534ilv.7.1674841303048; Fri, 27 Jan
- 2023 09:41:43 -0800 (PST)
-Date:   Fri, 27 Jan 2023 09:41:43 -0800
-In-Reply-To: <0000000000003d19f805f25b3c71@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ec6bdf05f3426051@google.com>
-Subject: Re: [syzbot] [f2fs?] kernel BUG in __destroy_extent_tree
-From:   syzbot <syzbot+15d87e3695975269de2c@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230126193752.297968-4-surenb@google.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Thu, 26 Jan 2023, Suren Baghdasaryan wrote:
 
-HEAD commit:    1dc22be1f91f Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=121135cd480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e8cf742d9a45bfb6
-dashboard link: https://syzkaller.appspot.com/bug?extid=15d87e3695975269de2c
-compiler:       Debian clang version 13.0.1-6~deb11u1, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1322f625480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=154ae485480000
+>To simplify the usage of VM_LOCKED_CLEAR_MASK in vm_flags_clear(),
+>replace it with VM_LOCKED_MASK bitmask and convert all users.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ae0fce51809c/disk-1dc22be1.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2e13fba82ffb/vmlinux-1dc22be1.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8d97a32221e2/Image-1dc22be1.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/6bb4c8db9bf2/mount_0.gz
+Might be good to mention explicitly no change in semantics, but
+otherwise lgtm
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+15d87e3695975269de2c@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at fs/f2fs/extent_cache.c:1191!
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 4444 Comm: syz-executor879 Not tainted 6.2.0-rc5-syzkaller-17295-g1dc22be1f91f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __destroy_extent_tree+0x2dc/0x324 fs/f2fs/extent_cache.c:1191
-lr : __destroy_extent_tree+0x2dc/0x324 fs/f2fs/extent_cache.c:1191
-sp : ffff80000ff0ba90
-x29: ffff80000ff0bac0 x28: ffff0000caf45200 x27: 0000000000000000
-x26: ffff0000ca1c2000 x25: ffff0000caf77000 x24: 0000000000000001
-x23: ffff0000ca1c2bf0 x22: 0000000000000001 x21: ffff0000caf75120
-x20: ffff0000caf44bf0 x19: 0000000000000000 x18: 0000000000000109
-x17: 0000000000000000 x16: ffff80000dd97118 x15: ffff0000c9558000
-x14: 00000000000000c0 x13: 00000000ffffffff x12: ffff0000c9558000
-x11: ff8080000937af04 x10: 0000000000000000 x9 : ffff80000937af04
-x8 : ffff0000c9558000 x7 : ffff80000937ae40 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff0000c9558000 x1 : 0000000000000001 x0 : 0000000000000000
-Call trace:
- __destroy_extent_tree+0x2dc/0x324 fs/f2fs/extent_cache.c:1191
- f2fs_destroy_extent_tree+0x24/0x40 fs/f2fs/extent_cache.c:1204
- f2fs_evict_inode+0x180/0x97c fs/f2fs/inode.c:789
- evict+0xec/0x334 fs/inode.c:664
- iput_final fs/inode.c:1747 [inline]
- iput+0x2c4/0x324 fs/inode.c:1773
- f2fs_abort_atomic_write+0x60/0x2c0 fs/f2fs/segment.c:196
- f2fs_ioc_abort_atomic_write fs/f2fs/file.c:2182 [inline]
- __f2fs_ioctl+0x1338/0x3320 fs/f2fs/file.c:4156
- f2fs_ioctl+0x74/0xbc fs/f2fs/file.c:4242
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x104 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: 17ffffed 97bce56a d4210000 97bce568 (d4210000) 
----[ end trace 0000000000000000 ]---
-
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
