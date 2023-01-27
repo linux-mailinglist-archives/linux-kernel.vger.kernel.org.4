@@ -2,92 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D9867EB0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C8067EB0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234979AbjA0Qk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
+        id S234871AbjA0QmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:42:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234054AbjA0Qkz (ORCPT
+        with ESMTP id S233775AbjA0Ql6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:40:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528317CC98;
-        Fri, 27 Jan 2023 08:40:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 27 Jan 2023 11:41:58 -0500
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E697CC89
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:41:56 -0800 (PST)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 664B911E4;
+        Fri, 27 Jan 2023 17:41:54 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 664B911E4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1674837714; bh=72VCcJJxXXJ2bRu6xheDpCpxeIDPr4x7r7Bh9fqdkxo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=qsE7WeDhAIYITdqIx4QhUbq4ukEd81gGTxkWg1gHEcz+MM2p8mXAQfT8rrss4d7h9
+         il6oXy/w1cphUQ2yixydix3aek4tCPlzUOzZcVYBqmDVH1MupuJH8ydK42YwtKOcmH
+         VHRs/5VZvRdjtNQ0qJtzKkbmKhBKAP/TLElU0uOw=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A96CB82013;
-        Fri, 27 Jan 2023 16:40:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C12C433EF;
-        Fri, 27 Jan 2023 16:40:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674837648;
-        bh=gL29Zrz0/D+2aRM80IoOkzpVQZltIiXkr3UTM6jkxQI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FEAY7lRPlS71P4vd1mnOb99+zfCXZaNiJYGX4C2auV8u6+E/Fr/+xnTia4it9Lg/A
-         TKsdC0BkfD8EveWUIgnGydssTz39HY/6ecVefBUWWopPuSN1IYZ9Zt/GNhb+RCInDF
-         J1nViTa+lFvrk29dS6qrYa9O6m+V9Bmtgrk7u34UfAWvNMizFXZkZyXOCHrkzlMou2
-         +7QkQ9lUnQkg4aQKEAEpzlOUHOPjexk/clFb6WhiwIFtfQ5dX+on8ey9bg4rjE/G6w
-         bq5Qrj4hsjAPdMn4lsiac0f94e1c62dTuL0XUjSLFW1Yw7ptqEtyKwpDu46SFACjvf
-         ig2SpHcdkRvMg==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH] setlocalversion: remove unneeded check and set -e
-Date:   Sat, 28 Jan 2023 01:40:41 +0900
-Message-Id: <20230127164041.548225-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Fri, 27 Jan 2023 17:41:44 +0100 (CET)
+Message-ID: <e9733e9a-ac70-846f-c3a2-f96a6787b9bc@perex.cz>
+Date:   Fri, 27 Jan 2023 17:41:44 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/6] ASoC: amd: yc: Add a module parameter to influence
+ pdm_gain
+Content-Language: en-US
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Mukunda, Vijendar" <Vijendar.Mukunda@amd.com>,
+        "Saba Kareem, Syed" <Syed.SabaKareem@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Pananchikkal, Renjith" <Renjith.Pananchikkal@amd.com>,
+        Mark Pearson <mpearson@lenovo.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+References: <20230127160134.2658-1-mario.limonciello@amd.com>
+ <20230127160134.2658-3-mario.limonciello@amd.com>
+ <2e9f4301-0211-04f5-5b38-caf2be9f4fd1@perex.cz>
+ <MN0PR12MB61014C004C798F7DE8682AAFE2CC9@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Jaroslav Kysela <perex@perex.cz>
+In-Reply-To: <MN0PR12MB61014C004C798F7DE8682AAFE2CC9@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kbuild creates include/config/auto.conf before running this script,
-so include/config/auto.conf always exists unless the user directly
-runs this script.
+On 27. 01. 23 17:25, Limonciello, Mario wrote:
+> [AMD Official Use Only - General]
+> 
+> 
+> 
+>> -----Original Message-----
+>> From: Jaroslav Kysela <perex@perex.cz>
+>> Sent: Friday, January 27, 2023 10:23
+>> To: Limonciello, Mario <Mario.Limonciello@amd.com>; Mukunda, Vijendar
+>> <Vijendar.Mukunda@amd.com>; Saba Kareem, Syed
+>> <Syed.SabaKareem@amd.com>; linux-kernel@vger.kernel.org
+>> Cc: Pananchikkal, Renjith <Renjith.Pananchikkal@amd.com>; Mark Pearson
+>> <mpearson@lenovo.com>; Liam Girdwood <lgirdwood@gmail.com>; Mark
+>> Brown <broonie@kernel.org>; Takashi Iwai <tiwai@suse.com>; alsa-
+>> devel@alsa-project.org
+>> Subject: Re: [PATCH 2/6] ASoC: amd: yc: Add a module parameter to
+>> influence pdm_gain
+>>
+>> On 27. 01. 23 17:01, Mario Limonciello wrote:
+>>> In case of regressions for any users that the new pdm_gain value is
+>>> too high and for additional debugging, introduce a module parameter
+>>> that would let them configure it.
+>>>
+>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>> ---
+>>>    sound/soc/amd/yc/acp6x-pdm-dma.c | 7 ++++++-
+>>>    sound/soc/amd/yc/acp6x.h         | 2 +-
+>>>    2 files changed, 7 insertions(+), 2 deletions(-)
+>>
+>> ...
+>>
+>>>    	pdm_ctrl = acp6x_readl(acp_base + ACP_WOV_MISC_CTRL);
+>>> -	pdm_ctrl |= ACP_WOV_MISC_CTRL_MASK;
+>>> +	pdm_ctrl |= FIELD_PREP(ACP_WOV_GAIN_CONTROL, pdm_gain);
+>>
+>> The bits should be zeroed (AND - &) before OR to make sure that the correct
+>> value is written to the register. More related patches are affected.
+> 
+> I had consider this, but the hardware default at reset is 0x0.  Do you think it's
+> still necessary for posterity?
 
-Remove the redundant check. Instead, set -e.
+You're using 0644 permissions for the module parameter, so the value can be 
+changed by root using sysfs anytime (between SNDRV_PCM_TRIGGER calls).
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+						Jaroslav
 
- scripts/setlocalversion | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/scripts/setlocalversion b/scripts/setlocalversion
-index 7c7cbefa5aa4..3df25b045e81 100755
---- a/scripts/setlocalversion
-+++ b/scripts/setlocalversion
-@@ -10,6 +10,8 @@
- #
- #
- 
-+set -e
-+
- usage() {
- 	echo "Usage: $0 [srctree]" >&2
- 	exit 1
-@@ -103,11 +105,6 @@ collect_files()
- 	echo "$res"
- }
- 
--if ! test -e include/config/auto.conf; then
--	echo "Error: kernelrelease not valid - run 'make prepare' to update it" >&2
--	exit 1
--fi
--
- if [ -z "${KERNELVERSION}" ]; then
- 	echo "KERNELVERSION is not set" >&2
- 	exit 1
 -- 
-2.34.1
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
 
