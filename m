@@ -2,126 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4014C67EA78
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB78A67EA7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbjA0QKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:10:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        id S234578AbjA0QLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234628AbjA0QKX (ORCPT
+        with ESMTP id S234500AbjA0QLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:10:23 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D4E5CD37
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:10:18 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id bk16so5386112wrb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:10:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c5c1eedNjG2GtgvM7btwPNhYOwNRimSFdJYoD2846dk=;
-        b=vnyG2N7BkeFCq1NOoffzeAQTOuKZslMEMR5Q3TJ9vmmrorqaKr7pwMRiUSw2e4iCCC
-         j9AMFbrYb54DJJUr8V6aT9WZ8gHVrc3IznywBBaoQ0+HHE7+H+g5+MF4O5mjotIa5zdi
-         fet/sywe0/BhWHPnE4jh1D0NtNSEqCzyxrNz6PZwbnrEu3dVC6qq5CAr6eWCyryV5EX/
-         letUfNSsTcZDMyjaFulOLpGHebkKkpIQqZedsOcle+nJAz7QYaR2bASHFsXttnu/9K4T
-         axFTwSV8QblZvUgU/a/Zg0ulDkbWpEkASBtQrmKYPYIM1TAJXIPmQJoH7ne6ZdRoD/K8
-         22kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c5c1eedNjG2GtgvM7btwPNhYOwNRimSFdJYoD2846dk=;
-        b=pDPhvFWrdlU0Lw3BHjeeq2gabs8WFS1gFCBZVLFB2QUHznWg0ClDlDzzzMn8362ZzV
-         YwxRn6SHusPT1inr69Yjv4GCqMdO6HZEGxHQ5EJVj4K2Z8cxoDiGfi7k+ZYTSY5UUU0L
-         CUtMa3jy59+3EnQCvHSC+Y7S24Tvwvjg/GPBSR4vT4ipcl1pi+iwutjHDIQsc68/xT+t
-         CFUb5hdsepyar/39lkmZAF34BCmYXWP26E06xMcu4ZI/qtessEeYRe3RhXurvezsOZZ7
-         7TLn/PPwinbp4Atn9K1IuTQ2AaaprDWu9nZ6yOzZCmmRh0rW+C3/sG5mkS/vz7ueiS2I
-         dcJQ==
-X-Gm-Message-State: AO0yUKVkOyQKlWRiFyz+VJ1ov30YCVBCCrWA2z2dFMOmPsDO/0rqF+lb
-        5legmuxi5/g5z7CrxlErsdsnRQ==
-X-Google-Smtp-Source: AK7set9fC9KDLzGG5uo35qWPcOMhPWvuhV8kzWwn2bTk49e9kuY/12RAcoiVciK7zU73a00qjeojCg==
-X-Received: by 2002:a5d:5541:0:b0:2bf:c0e4:1bc5 with SMTP id g1-20020a5d5541000000b002bfc0e41bc5mr6984696wrw.56.1674835817538;
-        Fri, 27 Jan 2023 08:10:17 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n9-20020a5d67c9000000b00294176c2c01sm4307168wrw.86.2023.01.27.08.10.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 08:10:17 -0800 (PST)
-Message-ID: <6b5e20a3-69ba-aceb-5402-853729e73266@linaro.org>
-Date:   Fri, 27 Jan 2023 17:10:14 +0100
+        Fri, 27 Jan 2023 11:11:14 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB545CD2A;
+        Fri, 27 Jan 2023 08:11:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674835871; x=1706371871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QOzaDuDJVI2iCLV4Lb3ob1aL5f7nt+w5a8r1p9mfh9w=;
+  b=YnLyyLOGBE7d5dw2L5yyHO3Ag9/UJct9XzbzvQjTZifJZaPy0YpnzBPr
+   4NXbosPw1sPBh8SvGDl2GJW1ogmlUnb02PK9cgRRsuIHBJfrrUjdbkiz1
+   i2T93KJbpISQztC7gGmQa3XYz6ZnG1gGJ7VbKizEH456gypRYTZr+kaXu
+   jsW/Gz2bCVhWU7+5gjcNGjKdMYHVk8uDX77HSSFh9J0qAeH0A0yf9/rgg
+   wigQyfgE1GFKbNg1NsDRmuYJ35FRbowkvfXZgj71B3/m5aVkWhO7g+P3f
+   1N5MCd6xMQC65KskqIkjL47c7JhmYuUosuVpDe/qQBC2tCsIlMP9UMECW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="328407645"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="328407645"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 08:11:03 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="640745108"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="640745108"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.161.50])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 08:10:51 -0800
+Date:   Fri, 27 Jan 2023 08:10:50 -0800
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:
+Message-ID: <Y9P3ipL28W7N1bLm@aschofie-mobl2>
+References: <cover.1674070170.git.alison.schofield@intel.com>
+ <63d32fe783ee2_ea2222949f@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: describe sa8775p-tlmm
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230127154426.173863-1-brgl@bgdev.pl>
- <20230127154426.173863-2-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230127154426.173863-2-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63d32fe783ee2_ea2222949f@dwillia2-xfh.jf.intel.com.notmuch>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 16:44, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Thu, Jan 26, 2023 at 05:59:03PM -0800, Dan Williams wrote:
+> alison.schofield@ wrote:
+> > From: Alison Schofield <alison.schofield@intel.com>
+> > 
+> > Subject: [PATCH v5 0/5] CXL Poison List Retrieval & Tracing
+> > 
+> > Changes in v5:
+> > - Rebase on cxl/next 
+> > - Use struct_size() to calc mbox cmd payload .min_out
+> > - s/INTERNAL/INJECTED mocked poison record source
+> > - Added Jonathan Reviewed-by tag on Patch 3
+> > 
+> > Link to v4:
+> > https://lore.kernel.org/linux-cxl/cover.1671135967.git.alison.schofield@intel.com/
+> > 
+> > Add support for retrieving device poison lists and store the returned
+> > error records as kernel trace events.
+> > 
+> > The handling of the poison list is guided by the CXL 3.0 Specification
+> > Section 8.2.9.8.4.1. [1] 
+> > 
+> > Example, triggered by memdev:
+> > $ echo 1 > /sys/bus/cxl/devices/mem3/trigger_poison_list
+> > cxl_poison: memdev=mem3 pcidev=cxl_mem.3 region= region_uuid=00000000-0000-0000-0000-000000000000 dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
 > 
-> Add DT bindings for the TLMM controller on sa8775p platforms.
+> I think the pcidev= field wants to be called something like "host" or
+> "parent", because there is no strict requirement that a 'struct
+> cxl_memdev' is related to a 'struct pci_dev'. In fact in that example
+> "cxl_mem.3" is a 'struct platform_device'. Now that I think about it, I
+> think all CXL device events should be emitting the PCIe serial number
+> for the memdev.
+]
+
+Will do, 'host' and add PCIe serial no.
+
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> I will look in the implementation, but do region= and region_uuid= get
+> populated when mem3 is a member of the region?
 
-Thank you for your patch. There is something to discuss/improve.
+Not always.
+In the case above, where the trigger was by memdev, no.
+Region= and region_uuid= (and in the follow-on patch, hpa=) only get
+populated if the poison was triggered by region, like the case below.
 
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts: true
-> +  interrupt-controller: true
-> +  "#interrupt-cells": true
-> +  gpio-controller: true
-> +  "#gpio-cells": true
-> +  gpio-ranges: true
+It could be looked up for the by memdev cases. Is that wanted?
 
-Blank line here.
-
-> +  gpio-reserved-ranges:
-> +    minItems: 1
-> +    maxItems: 74
-
-Blank line.
-
-> +  gpio-line-names:
-> +    maxItems: 148
-
-Your GPIO pattern suggests you have 149 GPIOs. Something has to be
-fixed. If this is 149, then reserved ranges is up to 75.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-
-
-Best regards,
-Krzysztof
-
+Thanks for the reviews Dan!
+> 
+> > 
+> > Example, triggered by region:
+> > $ echo 1 > /sys/bus/cxl/devices/region5/trigger_poison_list
+> > cxl_poison: memdev=mem0 pcidev=cxl_mem.0 region=region5 region_uuid=bfcb7a29-890e-4a41-8236-fe22221fc75c dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
+> > cxl_poison: memdev=mem1 pcidev=cxl_mem.1 region=region5 region_uuid=bfcb7a29-890e-4a41-8236-fe22221fc75c dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
+> > 
+> > [1]: https://www.computeexpresslink.org/download-the-specification
+> > 
+> > Alison Schofield (5):
+> >   cxl/mbox: Add GET_POISON_LIST mailbox command
+> >   cxl/trace: Add TRACE support for CXL media-error records
+> >   cxl/memdev: Add trigger_poison_list sysfs attribute
+> >   cxl/region: Add trigger_poison_list sysfs attribute
+> >   tools/testing/cxl: Mock support for Get Poison List
+> > 
+> >  Documentation/ABI/testing/sysfs-bus-cxl | 28 +++++++++
+> >  drivers/cxl/core/mbox.c                 | 78 +++++++++++++++++++++++
+> >  drivers/cxl/core/memdev.c               | 45 ++++++++++++++
+> >  drivers/cxl/core/region.c               | 33 ++++++++++
+> >  drivers/cxl/core/trace.h                | 83 +++++++++++++++++++++++++
+> >  drivers/cxl/cxlmem.h                    | 69 +++++++++++++++++++-
+> >  drivers/cxl/pci.c                       |  4 ++
+> >  tools/testing/cxl/test/mem.c            | 42 +++++++++++++
+> >  8 files changed, 381 insertions(+), 1 deletion(-)
+> > 
+> > 
+> > base-commit: 589c3357370a596ef7c99c00baca8ac799fce531
+> > -- 
+> > 2.37.3
+> > 
+> 
+> 
