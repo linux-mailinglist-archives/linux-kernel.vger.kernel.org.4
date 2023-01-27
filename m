@@ -2,143 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B183767EBCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D59F67EBD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234500AbjA0RBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
+        id S234569AbjA0RCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:02:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjA0RA5 (ORCPT
+        with ESMTP id S231342AbjA0RCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:00:57 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322BA525F
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:00:56 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1D60D5C008C;
-        Fri, 27 Jan 2023 12:00:53 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 27 Jan 2023 12:00:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674838853; x=1674925253; bh=DVwmy5VImV
-        KBY8sEuXHoreEiwmisEqPomZU5ORDBusk=; b=KSphgDNIMYvYcra2/U1iv977+N
-        JI4oJujUpDpps/euD9kEVeFzBNWhLkUMsz3sbAaRi8JQv5ALdKYLP+x6/XhsSaY5
-        BBLTITSyrCn4vwZiSYJZe3iZwKASQOOnGwozfc3wfAMoVS9VzqQ3XbqkuKzGOvcc
-        lFhIobMKmTib570MRZ9XHID3AnEAYnxf9fQ+3ZPkEzQzVvbnwr272OP3LwRh3bgq
-        OnwsmKRwhkIw7ECYhjMjBQUwLfhDsuya6pezBTM6s9R+pG91lr3W1+FhFzxfriZN
-        u/SBnJJQpgKFRaZ16hy7lv/d+NEtoPC358uicQZLH012/s0kRcMI5wVsuTrg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674838853; x=1674925253; bh=DVwmy5VImVKBY8sEuXHoreEiwmis
-        EqPomZU5ORDBusk=; b=fDT/mZdNMDZp8PLQIWzzEYEs3yVs/CjdHoqULHDMqWc3
-        LAZznjJL2wSpr4pMMEqMBsqJs8yLUNxl4JMNlEELyE3qu5ctxIUmAdPofPcK79vy
-        48GyVo+IBZPj6hm37EDrOj4UjJPSdFcVKXsadK9eNncCpOCFno3ZWtfOousJLSTC
-        MCayBEodGqnb5x5ydHr7KF4RpHYEyTYAC00m9ONlwRomn2w5PX+fMq+o0LSHSFdp
-        j49TjfQQIIcYNl76G45SU2WChQvAgeiSrKB/8BwJOukztEwiu2pmAXRUejrMKvHs
-        jVA1qXkYbgxaz7ZJX98AknLYyfvlyY29eGvIfzG70Q==
-X-ME-Sender: <xms:RAPUY7z_OqyiDx6dzhOgQFwHQ-DW3KEjDNMNDQ5h1OlOkLsE-BjoJg>
-    <xme:RAPUYzTnJ2jFENQZlIQoGONK5363GWEdAs8oIU0DUszTPCrNM3m07WH3vxcKZRvdt
-    C5lklPs6Z7K30ZX19o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddviedgleegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:RAPUY1WBBmYx_ZGMR4mSF9TGjD1v5yP7ak95vnamUQoD-y3YgshL2A>
-    <xmx:RAPUY1jbNn6Unv-ERcfzUGNGQYSSPTPMAYPGof8Yxbuy30wAF1aTaw>
-    <xmx:RAPUY9A40MdeN7CR18Chd0ajtl7e_H3H0IFX8h4w5iB9DXD_1hrzlw>
-    <xmx:RQPUYxuCmfqn2IkOJazGty3pVh5RLdCJ40dA7BFw0GyYEnQp25BTiQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id ACA3CB60086; Fri, 27 Jan 2023 12:00:52 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <f87c8f49-227e-40fb-b13b-00d869d81fe8@app.fastmail.com>
-In-Reply-To: <e6c3fa24-963b-57c0-1a9a-fd056a9ac591@arm.com>
-References: <20230126163530.3495413-1-arnd@kernel.org>
- <7ec6bd88-7f18-7eca-fa92-cfea9a25a395@arm.com>
- <cd4f23d7-cdd7-49e1-8eff-9ec04dcb36c8@app.fastmail.com>
- <e6c3fa24-963b-57c0-1a9a-fd056a9ac591@arm.com>
-Date:   Fri, 27 Jan 2023 18:00:34 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Suzuki K Poulose" <suzuki.poulose@arm.com>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        "Tao Zhang" <quic_taozha@quicinc.com>,
-        "Mao Jinlong" <quic_jinlmao@quicinc.com>,
-        "Will Deacon" <will@kernel.org>
-Cc:     "Mike Leach" <mike.leach@linaro.org>,
-        "Leo Yan" <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Coresight: tpda/tpdm: remove incorrect __exit annotation
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 27 Jan 2023 12:02:08 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5E1525F;
+        Fri, 27 Jan 2023 09:02:07 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30REGmZ8019692;
+        Fri, 27 Jan 2023 18:01:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=QNH1ux7cYrF5KW+Ey5DCbKnkWudemJAed1CdOisOzwU=;
+ b=aWrFglN6WN9lJ9UfkuNRCOf+eZLqOK/K/MwebDvkvlJ9BbraR7IaDQjfWJsuxG3qEl+w
+ /zcbla1ATkb34/cgfv+jY98hV15W4tnl5ImuyPNlwMV+YJAdJjbH1aopG15aLRkh8wmM
+ l4dhdDRjV+hC6xAWQteP9ugkWvZRUn+2SbiSOelz6JrhmEzzjMybo5hBxA3Bcimg9qnY
+ zdsENVEPxj6CymobQqyNOE70uQpKyrM9lu7NqbOzhejcg3jASSLXeSHG2+UOFLtTC114
+ gDpaZ6/KFUEeQG46+8MaDOHr4QDhzeheFE/3snJXRXDYFzO0erPQuMETrlvse78cpBw2 ww== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3n89chde7x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 18:01:06 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8FD5D100039;
+        Fri, 27 Jan 2023 18:00:43 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6F28D21F0C6;
+        Fri, 27 Jan 2023 18:00:43 +0100 (CET)
+Received: from [10.201.21.177] (10.201.21.177) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Fri, 27 Jan
+ 2023 18:00:40 +0100
+Message-ID: <179fe90c-0ac9-bb43-6e49-8b1d7ec520df@foss.st.com>
+Date:   Fri, 27 Jan 2023 18:00:39 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 1/6] dt-bindings: Document common device controller
+ bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
+        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
+        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
+        <fabrice.gasnier@foss.st.com>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+ <20230127164040.1047583-2-gatien.chevallier@foss.st.com>
+ <1e498b93-d3bd-bd12-e991-e3f4bedf632d@linaro.org>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <1e498b93-d3bd-bd12-e991-e3f4bedf632d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.177]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_10,2023-01-27_01,2022-06-22_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023, at 17:46, Suzuki K Poulose wrote:
-> On 26/01/2023 20:37, Arnd Bergmann wrote:
->> On Thu, Jan 26, 2023, at 19:02, Suzuki K Poulose wrote:
->>> On 26/01/2023 16:35, Arnd Bergmann wrote:
->>>> From: Arnd Bergmann <arnd@arndb.de>
->>> Thanks for the fix, I will queue this. Btw, I did try to
->>> reproduce it locally, but couldn't trigger the warnings,
->>> even with
->>>
->>> CONFIG_WERROR=y
->>>
->>> and all CORESIGHT configs builtin. I see other drivers doing the
->>> same outside coresight too. Just curious to know why is this
->>> any different. Is it specific to "bus" driver (e.g. AMBA) ?
->> 
->> The warning comes from postprocessing the object file, it's got
->> nothing to do with the bus type, only with a symbol in .data
->> referencing a symbol in .init.text. Maybe there are some
->> config options that keep the section from getting discarded?
->> Or possibly you only built the files in this directory, but did
->> not get to the final link?
->
-> I did a full kernel build. Also, I see a similar issue with the 
-> coresight-etm4x (by code inspection) driver. Did you not hit that ?
->
-> May be there is a config option that is masking it on my end. But
-> the case of etm4x driver is puzzling.
->
-> $ git grep etm4_remove_amba 
-> drivers/hwtracing/coresight/coresight-etm4x-core.c
-> drivers/hwtracing/coresight/coresight-etm4x-core.c:static void __exit 
-> etm4_remove_amba(struct amba_device *adev)
-> drivers/hwtracing/coresight/coresight-etm4x-core.c:     .remove 
-> = etm4_remove_amba,
+Hello Krzysztof,
 
-Indeed, that one clearly has the same but, but I have never
-observed a warning for it.
+On 1/27/23 17:49, Krzysztof Kozlowski wrote:
+> On 27/01/2023 17:40, Gatien Chevallier wrote:
+>> From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+>>
+>> Introducing of the common device controller bindings for the controller
+>> provider and consumer devices. Those bindings are intended to allow
+>> divided system on chip into muliple domains, that can be used to
+>> configure hardware permissions.
+>>
+>> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+>> ---
+>>
+>> No change since V1. I'm letting this patch for dependency with bindings to
+>> avoid noise with dt/bindings checks. Therefore, it should be reviewed on the
+>> appropriate thread.
+> 
+> There was a v6 already, this is v3 and I don't understand this comment.
+> What do you let? Whom? If it is not for review and not for merging,
+> please annotate it in the title ([IGNORE PATCH] or something).
+> 
 
-I checked one more thing and found that I only get the warning
-for 32-bit Arm builds, but not arm64. Since the etm4x driver
-'depends on ARM64' for its use of asm/sysreg.h,
-I never test-built it on 32-bit arm.
+Sorry for not being clear in the previous comment.
 
-From the git history of arch/arm64/kernel/vmlinux.lds.S,
-I can see that arm64 never discards the .exit section, see
-commit 07c802bd7c39 ("arm64: vmlinux.lds.S: don't discard
-.exit.* sections at link-time").
+I meant I'm letting this patch in this patch set so the dependencies on 
+the feature-domain-controller.yaml file are satisfied.
 
-     Arnd
+I will annotate it with [IGNORE PATCH], as you suggest.
+
+> Best regards,
+> Krzysztof
+> 
+
+Best regards,
+Gatien
