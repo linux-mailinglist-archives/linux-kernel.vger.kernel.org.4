@@ -2,122 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B6A67DC8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 04:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090FB67DC94
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 04:21:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbjA0DS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 22:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44536 "EHLO
+        id S232797AbjA0DVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 22:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjA0DS4 (ORCPT
+        with ESMTP id S229531AbjA0DVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 22:18:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE26036FC0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 19:18:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 26 Jan 2023 22:21:07 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF90936FC0;
+        Thu, 26 Jan 2023 19:21:02 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30R0daMf019307;
+        Fri, 27 Jan 2023 03:20:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=hRtKMDNOJZCWPaOA+pcd2NPeR9mTV+fIY08wzjAhk/o=;
+ b=V5qOGEb0MhzCj8lDwaK3fv2nHKRHykFr5f33kdIw2S8Lz9CzYnCyjcrTn6clBpT9Z8Ln
+ NqyEJPvOmBC6FiMzKNn3YcfaBRaAfCuNDr0SxJn0LVWNkBRS2QZYiSHiyAgKKOYw/kAZ
+ Cn3qWjT+rFzVpgRlynWKVNdpengF6ffOTz5jFnzCMRZqKcl92t7gBCOjyNTAV5Zh9PIB
+ aTfW3oejCilhxF1PP73kRGi1kRqarsM9BfYHSl6TERtyoOEhki9QTIUgCnNClENPv/Ek
+ vkPYUAbSJ6zByr031Vp3pkpwnYap6nUsqnHS4sJOmizlJEj3zqfXl0IJW7X2VpX007Ba MA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nc372bn2p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 03:20:46 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QBMXvm010330;
+        Fri, 27 Jan 2023 03:20:44 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6q17t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 03:20:44 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30R3KfkI43385334
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 Jan 2023 03:20:42 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D39FB20043;
+        Fri, 27 Jan 2023 03:20:41 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5608720040;
+        Fri, 27 Jan 2023 03:20:41 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 27 Jan 2023 03:20:41 +0000 (GMT)
+Received: from [9.192.255.228] (unknown [9.192.255.228])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D69619E8
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:18:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91B73C433A1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:18:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674789530;
-        bh=yMqlqxCiTXbV0sP0tQtRNJGlz4yIWf+ozTmq0CkGlQQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=P6jgqiXM8BVBHL56uLfm1UkhlNvMqPIi/hT1o64MO9DXD1PjyMy8pGKoP0EDvnWrF
-         1VLtOfjs68otRVoa8oq6ur8Ff3exwsg24OWOwiCEPfXYKBFtua/i+VrH+xWmOiB9aF
-         4NGLqOzt6Alr2+NLlq7/sqSeltc8dPCcNYe77tp92UHdm6PN1EGePXpuG3+crZFGgY
-         fC5+CuskVGFNu3UeErdf6CoNy47PZnl3gclDBaEclmEVJGEMbrl78lWRZ6oAqHhgIU
-         d+gGOheYNK6AQWq8DT2ykPw+xxOzDk+eyRczvDwshqvZNXLWNslZno5FkWDJ9UzAt2
-         TFWAaYxHgUcPw==
-Received: by mail-lj1-f177.google.com with SMTP id e16so4180754ljn.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 19:18:50 -0800 (PST)
-X-Gm-Message-State: AFqh2krNk2Z7ggjjMk2zES3W/+t5cMUfDLGbF8rDniOmqjtlQwda1Bng
-        hrU2Z3nsYrnQ6gyZ/YSm3vppuRlvALZ5YH4NRA==
-X-Google-Smtp-Source: AMrXdXuKl/XfTZtyJDk7sSww33tWah9JPd78aB+WMh0SYqRDti1pFGSaFGG6NZv1jxA2fNc7q0W0F+cePoApqEB7OBM=
-X-Received: by 2002:a2e:82cf:0:b0:28b:bde3:7871 with SMTP id
- n15-20020a2e82cf000000b0028bbde37871mr1699213ljh.269.1674789528603; Thu, 26
- Jan 2023 19:18:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20230119231255.2883365-1-robdclark@gmail.com>
-In-Reply-To: <20230119231255.2883365-1-robdclark@gmail.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Fri, 27 Jan 2023 11:18:35 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_81bQaU0CqavppEuXk9ZCr_V136KU_NURTGfmszz38FwQ@mail.gmail.com>
-Message-ID: <CAAOTY_81bQaU0CqavppEuXk9ZCr_V136KU_NURTGfmszz38FwQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/mediatek: Drop unbalanced obj unref
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        CK Hu <ck.hu@mediatek.com>, Mao Huang <littlecvr@chromium.org>,
-        Daniel Kurtz <djkurtz@chromium.org>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        YT Shen <yt.shen@mediatek.com>,
-        "moderated list:DRM DRIVERS FOR MEDIATEK" 
-        <linux-mediatek@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 7437360425;
+        Fri, 27 Jan 2023 14:20:37 +1100 (AEDT)
+Message-ID: <2de207dadb936f25db123ae2d02aea91a9841656.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
+ structures and buffers
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "'Segher Boessenkool'" <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     "gjoyce@linux.ibm.com" <gjoyce@linux.ibm.com>,
+        "erichte@linux.ibm.com" <erichte@linux.ibm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "sudhakar@linux.ibm.com" <sudhakar@linux.ibm.com>,
+        "ruscur@russell.cc" <ruscur@russell.cc>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "bgray@linux.ibm.com" <bgray@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "gcwilson@linux.ibm.com" <gcwilson@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Date:   Fri, 27 Jan 2023 14:20:37 +1100
+In-Reply-To: <5118edd7f1f445afa1812d2b9b62dd4f@AcuMS.aculab.com>
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+         <20230120074306.1326298-3-ajd@linux.ibm.com>
+         <87pmb2pxpa.fsf@mpe.ellerman.id.au>
+         <20230126171925.GN25951@gate.crashing.org>
+         <5118edd7f1f445afa1812d2b9b62dd4f@AcuMS.aculab.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: RH7n1wJMGdJfXyigP1OFY3W1fdGCKevp
+X-Proofpoint-GUID: RH7n1wJMGdJfXyigP1OFY3W1fdGCKevp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-26_09,2023-01-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ mlxlogscore=871 adultscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301270026
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rob:
+On Thu, 2023-01-26 at 17:31 +0000, David Laight wrote:
+> Changing the size to kzalloc() doesn't help.
+> The alignment depends on the allocator and is only required to have
+> a relatively small alignment (ARCH_MINALIGN?) regardless of the size.
+>=20
+> IIRC one of the allocators adds a small header to every item.
+> It won't return 16 byte aligned items at all.
 
-Rob Clark <robdclark@gmail.com> =E6=96=BC 2023=E5=B9=B41=E6=9C=8820=E6=97=
-=A5 =E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=887:12=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> From: Rob Clark <robdclark@chromium.org>
->
-> In the error path, mtk_drm_gem_object_mmap() is dropping an obj
-> reference that it doesn't own.
+I'm relying on the behaviour described in Documentation/core-
+api/memory-allocation.rst:
 
-Applied to mediatek-drm-next [1], thanks.
+    The address of a chunk allocated with kmalloc is aligned to at
+    least ARCH_KMALLOC_MINALIGN bytes. For sizes which are a power of
+    two, the alignment is also guaranteed to be at least the respective
+    size.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
-log/?h=3Dmediatek-drm-next
+Is this wrong?
 
-Regards,
-Chun-Kuang.
 
->
-> Fixes: 119f5173628a ("drm/mediatek: Add DRM Driver for Mediatek SoC MT817=
-3.")
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/mediatek/mtk_drm_gem.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_gem.c b/drivers/gpu/drm/med=
-iatek/mtk_drm_gem.c
-> index 9b3d15d3a983..f961c7c7456b 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_gem.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
-> @@ -169,8 +169,6 @@ static int mtk_drm_gem_object_mmap(struct drm_gem_obj=
-ect *obj,
->
->         ret =3D dma_mmap_attrs(priv->dma_dev, vma, mtk_gem->cookie,
->                              mtk_gem->dma_addr, obj->size, mtk_gem->dma_a=
-ttrs);
-> -       if (ret)
-> -               drm_gem_vm_close(vma);
->
->         return ret;
->  }
-> --
-> 2.38.1
->
+Andrew
+
+--=20
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
