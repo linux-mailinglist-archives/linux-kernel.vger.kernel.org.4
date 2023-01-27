@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC4567ED87
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 953E567ED84
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235435AbjA0S2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 13:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        id S235414AbjA0S2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 13:28:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbjA0S2W (ORCPT
+        with ESMTP id S235342AbjA0S2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 13:28:22 -0500
+        Fri, 27 Jan 2023 13:28:19 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2453D83240;
-        Fri, 27 Jan 2023 10:27:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEE084FA5;
+        Fri, 27 Jan 2023 10:27:28 -0800 (PST)
 Date:   Fri, 27 Jan 2023 18:26:56 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1674844017;
+        s=2020; t=1674844016;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=LHjZkcJoCoNf2FZj9Z1UyWb4+dkvZrYpqan3ctWzrCY=;
-        b=viFJ8oV+gFGDxFxNT+dXGlVJ2rlV3BZlC0syXqx8gPz9ByZwY0u0yYZzEPGbYhqqT9/sfC
-        pGnVU7qc5rBicjiF6LWUGb/QoztgDy+IJNh/AESxv6Sh1sU7HsOgGawx+7lsh7YJWEQn7S
-        col0ZZ7JR2bB2Cb5DourhuiyzPYuQjdd3zw6N675Q/7KAaVcQrlCh4Pobiyo+6QgqRkO60
-        CFShsSa+Q4apCzaAzUy8Xzk1/wmQKhjcDhB5oD5HGY7mln8EySM3QlC6q6D/dTs0w/N9Dt
-        U1oPkLl9au+fwuDEuy8csp8mLQKyot99CAXTZciIyYbeyzEj1gNF+WazmRKCvw==
+        bh=QU3D1MVl4nF12dfqXKBPUAzNEWPP6wcbOhCTHK/byU8=;
+        b=BR2yPxn5qEXFU3+oe32J7VXsBmiWCfl8fN0gB5HX2tQIZmxAwIVEbjq/88AmEm3XA8Us2m
+        a+WUlhreRnAIkvEB0jMpTvOETBlJvOcGdHugvHtkukIHPqQLpTl4dK41QJ2d5zv8Dtt0c/
+        iReCVYsUNw/U1gJxlhFKYbSD7Y1CC0MG5z32ybixvOeaDsXfgTTA0iMKV2Jm7LvWm8qOgW
+        rnktT/c4tSL9a4TPqAMa4cBpeb2XjkeozfGp9DfF7wHYSqrnpQpOqKOcNCEh0Cx850+0EK
+        lgDrXku48e+Oc5f1q2+/GxNUvNp3vCR3ayCgYo/AsrwU2sfaccf9MaTAhMThJQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1674844017;
+        s=2020e; t=1674844016;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=LHjZkcJoCoNf2FZj9Z1UyWb4+dkvZrYpqan3ctWzrCY=;
-        b=TBulKF8z7CXpNBN893syMl7K8IR/WXb0TDZ99Uvu9Htoo94ZsV6YeK0T95xmxiv+ijS+Ty
-        G783R11raGi0nLCg==
+        bh=QU3D1MVl4nF12dfqXKBPUAzNEWPP6wcbOhCTHK/byU8=;
+        b=IC/19wwIS/2KBYmfmmyc0PGI1+9wb+6uiRyMwAVhaqoPYSnVM5pmzDAaGJcUhero2qidIj
+        t1oBPU1CATpC7ZAQ==
 From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/tdx] x86/tdx: Refactor __tdx_hypercall() to allow pass down
- more arguments
+Subject: [tip: x86/tdx] x86/tdx: Use ReportFatalError to report missing
+ SEPT_VE_DISABLE
 Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <167484401684.4906.6620390919066115550.tip-bot2@tip-bot2>
+Message-ID: <167484401624.4906.9634557672121237563.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,122 +61,103 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/tdx branch of tip:
 
-Commit-ID:     c30c4b2555ba93b845559a036293fcaf7ffd2b82
-Gitweb:        https://git.kernel.org/tip/c30c4b2555ba93b845559a036293fcaf7ffd2b82
+Commit-ID:     71acdcd7cd0abee7698c2d5e5a8a66602a00b12c
+Gitweb:        https://git.kernel.org/tip/71acdcd7cd0abee7698c2d5e5a8a66602a00b12c
 Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-AuthorDate:    Fri, 27 Jan 2023 01:11:55 +03:00
+AuthorDate:    Fri, 27 Jan 2023 01:11:57 +03:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Fri, 27 Jan 2023 09:42:09 -08:00
+CommitterDate: Fri, 27 Jan 2023 09:45:55 -08:00
 
-x86/tdx: Refactor __tdx_hypercall() to allow pass down more arguments
+x86/tdx: Use ReportFatalError to report missing SEPT_VE_DISABLE
 
-RDI is the first argument to __tdx_hypercall() that used to pass pointer
-to struct tdx_hypercall_args. RSI is the second argument that contains
-flags, such as TDX_HCALL_HAS_OUTPUT and TDX_HCALL_ISSUE_STI.
+Linux TDX guests require that the SEPT_VE_DISABLE "attribute" be set.
+If it is not set, the kernel is theoretically required to handle
+exceptions anywhere that kernel memory is accessed, including places
+like NMI handlers and in the syscall entry gap.
 
-RDI and RSI can also be used as arguments to TDVMCALL leafs. Move RDI to
-RAX and RSI to RBP to free up them for the hypercall arguments.
+Rather than even try to handle these exceptions, the kernel refuses to
+run if SEPT_VE_DISABLE is unset.
 
-RAX saved on stack during TDCALL as it returns status code in the
-register.
+However, the SEPT_VE_DISABLE detection and refusal code happens very
+early in boot, even before earlyprintk runs.  Calling panic() will
+effectively just hang the system.
 
-RBP value has to be restored before returning from __tdx_hypercall() as
-it is callee-saved register.
+Instead, call a TDX-specific panic() function.  This makes a very simple
+TDVMCALL which gets a short error string out to the hypervisor without
+any console infrastructure.
 
-This is preparatory patch. No functional change.
+Use TDG.VP.VMCALL<ReportFatalError> to report the error. The hypercall
+can encode message up to 64 bytes in eight registers.
+
+[ dhansen: tweak comment and remove while loop brackets. ]
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lore.kernel.org/all/20230126221159.8635-4-kirill.shutemov%40linux.intel.com
+Link: https://lore.kernel.org/all/20230126221159.8635-6-kirill.shutemov%40linux.intel.com
 ---
- arch/x86/coco/tdx/tdcall.S | 46 ++++++++++++++++++++++---------------
- 1 file changed, 28 insertions(+), 18 deletions(-)
+ arch/x86/coco/tdx/tdx.c | 38 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
-index 74b108e..a9bb4cb 100644
---- a/arch/x86/coco/tdx/tdcall.S
-+++ b/arch/x86/coco/tdx/tdcall.S
-@@ -124,19 +124,26 @@ SYM_FUNC_START(__tdx_hypercall)
- 	push %r14
- 	push %r13
- 	push %r12
-+	push %rbp
-+
-+	/* Free RDI and RSI to be used as TDVMCALL arguments */
-+	movq %rdi, %rax
-+	movq %rsi, %rbp
-+
-+	/* Copy hypercall registers from arg struct: */
-+	movq TDX_HYPERCALL_r10(%rax), %r10
-+	movq TDX_HYPERCALL_r11(%rax), %r11
-+	movq TDX_HYPERCALL_r12(%rax), %r12
-+	movq TDX_HYPERCALL_r13(%rax), %r13
-+	movq TDX_HYPERCALL_r14(%rax), %r14
-+	movq TDX_HYPERCALL_r15(%rax), %r15
-+
-+	push %rax
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index 669d9e4..fbb9913 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -22,6 +22,7 @@
  
- 	/* Mangle function call ABI into TDCALL ABI: */
- 	/* Set TDCALL leaf ID (TDVMCALL (0)) in RAX */
- 	xor %eax, %eax
+ /* TDX hypercall Leaf IDs */
+ #define TDVMCALL_MAP_GPA		0x10001
++#define TDVMCALL_REPORT_FATAL_ERROR	0x10003
  
--	/* Copy hypercall registers from arg struct: */
--	movq TDX_HYPERCALL_r10(%rdi), %r10
--	movq TDX_HYPERCALL_r11(%rdi), %r11
--	movq TDX_HYPERCALL_r12(%rdi), %r12
--	movq TDX_HYPERCALL_r13(%rdi), %r13
--	movq TDX_HYPERCALL_r14(%rdi), %r14
--	movq TDX_HYPERCALL_r15(%rdi), %r15
--
- 	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
+ /* MMIO direction */
+ #define EPT_READ	0
+@@ -140,6 +141,41 @@ int tdx_mcall_get_report0(u8 *reportdata, u8 *tdreport)
+ }
+ EXPORT_SYMBOL_GPL(tdx_mcall_get_report0);
  
- 	/*
-@@ -148,7 +155,7 @@ SYM_FUNC_START(__tdx_hypercall)
- 	 * HLT operation indefinitely. Since this is the not the desired
- 	 * result, conditionally call STI before TDCALL.
++static void __noreturn tdx_panic(const char *msg)
++{
++	struct tdx_hypercall_args args = {
++		.r10 = TDX_HYPERCALL_STANDARD,
++		.r11 = TDVMCALL_REPORT_FATAL_ERROR,
++		.r12 = 0, /* Error code: 0 is Panic */
++	};
++	union {
++		/* Define register order according to the GHCI */
++		struct { u64 r14, r15, rbx, rdi, rsi, r8, r9, rdx; };
++
++		char str[64];
++	} message;
++
++	/* VMM assumes '\0' in byte 65, if the message took all 64 bytes */
++	strncpy(message.str, msg, 64);
++
++	args.r8  = message.r8;
++	args.r9  = message.r9;
++	args.r14 = message.r14;
++	args.r15 = message.r15;
++	args.rdi = message.rdi;
++	args.rsi = message.rsi;
++	args.rbx = message.rbx;
++	args.rdx = message.rdx;
++
++	/*
++	 * This hypercall should never return and it is not safe
++	 * to keep the guest running. Call it forever if it
++	 * happens to return.
++	 */
++	while (1)
++		__tdx_hypercall(&args, 0);
++}
++
+ static void tdx_parse_tdinfo(u64 *cc_mask)
+ {
+ 	struct tdx_module_output out;
+@@ -172,7 +208,7 @@ static void tdx_parse_tdinfo(u64 *cc_mask)
  	 */
--	testq $TDX_HCALL_ISSUE_STI, %rsi
-+	testq $TDX_HCALL_ISSUE_STI, %rbp
- 	jz .Lskip_sti
- 	sti
- .Lskip_sti:
-@@ -165,20 +172,22 @@ SYM_FUNC_START(__tdx_hypercall)
- 	testq %rax, %rax
- 	jne .Lpanic
+ 	td_attr = out.rdx;
+ 	if (!(td_attr & ATTR_SEPT_VE_DISABLE))
+-		panic("TD misconfiguration: SEPT_VE_DISABLE attibute must be set.\n");
++		tdx_panic("TD misconfiguration: SEPT_VE_DISABLE attribute must be set.");
+ }
  
--	/* TDVMCALL leaf return code is in R10 */
--	movq %r10, %rax
-+	pop %rax
- 
- 	/* Copy hypercall result registers to arg struct if needed */
--	testq $TDX_HCALL_HAS_OUTPUT, %rsi
-+	testq $TDX_HCALL_HAS_OUTPUT, %rbp
- 	jz .Lout
- 
--	movq %r10, TDX_HYPERCALL_r10(%rdi)
--	movq %r11, TDX_HYPERCALL_r11(%rdi)
--	movq %r12, TDX_HYPERCALL_r12(%rdi)
--	movq %r13, TDX_HYPERCALL_r13(%rdi)
--	movq %r14, TDX_HYPERCALL_r14(%rdi)
--	movq %r15, TDX_HYPERCALL_r15(%rdi)
-+	movq %r10, TDX_HYPERCALL_r10(%rax)
-+	movq %r11, TDX_HYPERCALL_r11(%rax)
-+	movq %r12, TDX_HYPERCALL_r12(%rax)
-+	movq %r13, TDX_HYPERCALL_r13(%rax)
-+	movq %r14, TDX_HYPERCALL_r14(%rax)
-+	movq %r15, TDX_HYPERCALL_r15(%rax)
- .Lout:
-+	/* TDVMCALL leaf return code is in R10 */
-+	movq %r10, %rax
-+
- 	/*
- 	 * Zero out registers exposed to the VMM to avoid speculative execution
- 	 * with VMM-controlled values. This needs to include all registers
-@@ -189,6 +198,7 @@ SYM_FUNC_START(__tdx_hypercall)
- 	xor %r11d, %r11d
- 
- 	/* Restore callee-saved GPRs as mandated by the x86_64 ABI */
-+	pop %rbp
- 	pop %r12
- 	pop %r13
- 	pop %r14
+ /*
