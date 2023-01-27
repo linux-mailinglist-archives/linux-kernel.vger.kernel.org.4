@@ -2,115 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEF367DFA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C241367DFA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjA0JC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:02:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
+        id S232740AbjA0JFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjA0JCy (ORCPT
+        with ESMTP id S231649AbjA0JFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:02:54 -0500
-Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1DE46E92
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:02:46 -0800 (PST)
-Received: from 8bytes.org (p5b006afb.dip0.t-ipconnect.de [91.0.106.251])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id 244E326300F;
-        Fri, 27 Jan 2023 10:02:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1674810165;
-        bh=1kNu2BN86NFgfS60v9TeXvBOhW4cm7kxxYsbD7dJlLs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K470ePYqrjCiwz0ijJJNlQ++TeRAjBf0aK2xRN9eM27gInrpuui2C7xyigp1xeBW8
-         XcK+o2wHHs0S3Z0QUnq89CvF+fZhyEKlZP3TY1Y0/6RjhzKPO1vw9D/iYJ7Ivtmkth
-         RD2ffRXX4ysZJq0YHrzFSWpGeXqQymfg0qTccJ2z4d8vE1i9U3FRzGr0xaDhQ4zfsx
-         RCoa31o3hyO5jXXhHxbHNYWw6anQ4fadnFhH3eNSP+t2KaLzXdh/Pz6jOWItm3GB7b
-         k4kuOLctTRcMEFwO74VAfqZbA3V6JTK3jp9Z74bR7cZ1ziPZjWCJU56k3GupAbOMOR
-         8H6e4uEv0HROA==
-Date:   Fri, 27 Jan 2023 10:02:43 +0100
-From:   =?iso-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>
-To:     Richard Weinberger <richard.weinberger@gmail.com>
-Cc:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <Y9OTM/itvVnn45p3@8bytes.org>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y9EkCvAfNXnJ+ATo@kroah.com>
- <Y9Ex3ZUIFxwOBg1n@work-vm>
- <Y9E5Cg7mreDx737N@redhat.com>
- <CAFLxGvwHRK3vyXiCv5ELvrDSEkcDgV5c6pNnWgWhcATfp1dedA@mail.gmail.com>
- <Y9KVHnHnig4jwNPx@work-vm>
- <CAFLxGvyMncqjkEXiOqenQu+rZW46RP7UorXs36+awmgnBxTGhA@mail.gmail.com>
+        Fri, 27 Jan 2023 04:05:42 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FA43A589
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:05:40 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-207-p-8H2nnBPfSw_AWgsS6nQg-1; Fri, 27 Jan 2023 09:05:38 +0000
+X-MC-Unique: p-8H2nnBPfSw_AWgsS6nQg-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Fri, 27 Jan
+ 2023 09:05:37 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Fri, 27 Jan 2023 09:05:37 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andrew Donnellan' <ajd@linux.ibm.com>,
+        'Segher Boessenkool' <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     "gjoyce@linux.ibm.com" <gjoyce@linux.ibm.com>,
+        "erichte@linux.ibm.com" <erichte@linux.ibm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "sudhakar@linux.ibm.com" <sudhakar@linux.ibm.com>,
+        "ruscur@russell.cc" <ruscur@russell.cc>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "bgray@linux.ibm.com" <bgray@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "gcwilson@linux.ibm.com" <gcwilson@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: RE: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
+ structures and buffers
+Thread-Topic: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
+ structures and buffers
+Thread-Index: AQHZMarbHHGSrma/kEeRKp/dNdgk5K6w84EwgAClz4CAAF8Y4A==
+Date:   Fri, 27 Jan 2023 09:05:37 +0000
+Message-ID: <b016aefff9514ed1ad40620cea6d3b9f@AcuMS.aculab.com>
+References: <20230120074306.1326298-1-ajd@linux.ibm.com>
+         <20230120074306.1326298-3-ajd@linux.ibm.com>
+         <87pmb2pxpa.fsf@mpe.ellerman.id.au>
+         <20230126171925.GN25951@gate.crashing.org>
+         <5118edd7f1f445afa1812d2b9b62dd4f@AcuMS.aculab.com>
+ <2de207dadb936f25db123ae2d02aea91a9841656.camel@linux.ibm.com>
+In-Reply-To: <2de207dadb936f25db123ae2d02aea91a9841656.camel@linux.ibm.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFLxGvyMncqjkEXiOqenQu+rZW46RP7UorXs36+awmgnBxTGhA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 04:13:11PM +0100, Richard Weinberger wrote:
-> On Thu, Jan 26, 2023 at 3:58 PM Dr. David Alan Gilbert
-> <dgilbert@redhat.com> wrote:
-> >
-> > * Richard Weinberger (richard.weinberger@gmail.com) wrote:
-> > > On Wed, Jan 25, 2023 at 3:22 PM Daniel P. Berrangé <berrange@redhat.com> wrote:
-> > Are you aware of anything that you'd use instead?
-> 
-> Well, I'd think towards iSCSI over TLS to protect the IO transport.
+RnJvbTogQW5kcmV3IERvbm5lbGxhbg0KPiBTZW50OiAyNyBKYW51YXJ5IDIwMjMgMDM6MjENCj4g
+DQo+IE9uIFRodSwgMjAyMy0wMS0yNiBhdCAxNzozMSArMDAwMCwgRGF2aWQgTGFpZ2h0IHdyb3Rl
+Og0KPiA+IENoYW5naW5nIHRoZSBzaXplIHRvIGt6YWxsb2MoKSBkb2Vzbid0IGhlbHAuDQo+ID4g
+VGhlIGFsaWdubWVudCBkZXBlbmRzIG9uIHRoZSBhbGxvY2F0b3IgYW5kIGlzIG9ubHkgcmVxdWly
+ZWQgdG8gaGF2ZQ0KPiA+IGEgcmVsYXRpdmVseSBzbWFsbCBhbGlnbm1lbnQgKEFSQ0hfTUlOQUxJ
+R04/KSByZWdhcmRsZXNzIG9mIHRoZSBzaXplLg0KPiA+DQo+ID4gSUlSQyBvbmUgb2YgdGhlIGFs
+bG9jYXRvcnMgYWRkcyBhIHNtYWxsIGhlYWRlciB0byBldmVyeSBpdGVtLg0KPiA+IEl0IHdvbid0
+IHJldHVybiAxNiBieXRlIGFsaWduZWQgaXRlbXMgYXQgYWxsLg0KPiANCj4gSSdtIHJlbHlpbmcg
+b24gdGhlIGJlaGF2aW91ciBkZXNjcmliZWQgaW4gRG9jdW1lbnRhdGlvbi9jb3JlLQ0KPiBhcGkv
+bWVtb3J5LWFsbG9jYXRpb24ucnN0Og0KPiANCj4gICAgIFRoZSBhZGRyZXNzIG9mIGEgY2h1bmsg
+YWxsb2NhdGVkIHdpdGgga21hbGxvYyBpcyBhbGlnbmVkIHRvIGF0DQo+ICAgICBsZWFzdCBBUkNI
+X0tNQUxMT0NfTUlOQUxJR04gYnl0ZXMuIEZvciBzaXplcyB3aGljaCBhcmUgYSBwb3dlciBvZg0K
+PiAgICAgdHdvLCB0aGUgYWxpZ25tZW50IGlzIGFsc28gZ3VhcmFudGVlZCB0byBiZSBhdCBsZWFz
+dCB0aGUgcmVzcGVjdGl2ZQ0KPiAgICAgc2l6ZS4NCj4gDQo+IElzIHRoaXMgd3Jvbmc/DQoNClRo
+ZSBhbGlnbm1lbnQgZm9yIHBvd2VyIG9mIHR3byBkb2Vzbid0IG1hdGNoIHdoYXQgSSd2ZSBpbmZl
+cnJlZA0KZnJvbSByZWFkaW5nIGNvbW1lbnRzIG9uIG90aGVyIHBhdGNoZXMuDQoNCkl0IGlzIHRy
+dWUgZm9yIGRtYV9tYWxsb2NfY29oZXJlbnQoKSAtIHRoYXQgZG9lcyBndWFyYW50ZWUgdGhhdCBh
+DQoxNmsgYWxsb2NhdGUgd2lsbCBiZSBhbGlnbmVkIG9uIGEgMTZrIHBoeXNpY2FsIGFkZHJlc3Mg
+Ym91bmRhcnkuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJy
+YW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lz
+dHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-In the context of confidential computing this makes only sense if the
-scsi target is part of the trusted base, which means it needs to be
-attested and protected against outside attacks. Currently all CoCo
-implementations I know of treat disk storage as untrusted.
-
-Besides that the same problems exist with a VMs encrypted memory. The
-hardware does not guarantee that the HV can not fiddle with your private
-memory, it only guarantees that you can detect such fiddling and that
-the private data is encrypted. The HV can also still trace memory access
-patterns of confidential guests by setting the right permissions in the
-nested page table.
-
-So storage and memory of a CoCo VM have in common that the transport is
-not secure, but there are measures to detect if someone fiddles with
-your data on the transport or at rest, for memory implemented in
-hardware, and for storage in software by using dm-crypt together with
-dm-verity or dm-integrity.
-
-Regards,
-
-	Joerg
