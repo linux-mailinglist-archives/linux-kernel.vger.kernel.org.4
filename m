@@ -2,189 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2338467EAB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8BA967EAB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234814AbjA0QVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S234817AbjA0QU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234827AbjA0QUv (ORCPT
+        with ESMTP id S234589AbjA0QUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:20:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1496845228
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:20:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674836404;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QQC+GA2acrVBeLgoGs0vfKE8KELNAReQCZ4cMvGb/2s=;
-        b=IRwgJWrKT5g5mjfzEQ98ui2rsIlaOcMjHZphHuNcabUBC3MFUgBQ+oM/1f8d8sA5j9WcxX
-        XTo/K5ea0hlh9MSgWMH1w+bkZJJBnGeyKxocXkhp9NuhwOC7Z/1lDPotpCu4ZaUwttR1ot
-        o5UoNMI6VSAq9Lx6zBLIUwk9Cw2jqps=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-42-o6LpzG0TNXWf-7hCqS4b2Q-1; Fri, 27 Jan 2023 11:20:03 -0500
-X-MC-Unique: o6LpzG0TNXWf-7hCqS4b2Q-1
-Received: by mail-wm1-f72.google.com with SMTP id m10-20020a05600c3b0a00b003dafe7451deso3029217wms.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:20:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QQC+GA2acrVBeLgoGs0vfKE8KELNAReQCZ4cMvGb/2s=;
-        b=LwrNS8MCyikuLn8iiaDbUrnjHKSKw84Je5liGyDl7wzp+e1h6LqRecWmtY/XQDYg7S
-         aa9A9Gx438zaiCErXgJZTNxx7NXiCGQs8J1DnMFSeWoAAxNzHRxj9HyGDpmaxEC9C8IB
-         5egsBl3yL0jIqj/ZV5iVy4QrfxQyx7K92xQWWIrZY8Rj01qm6Wel812KroZVDiEaC4Uu
-         PTy37KjmGuRvKfFQQQQd7k5bPqnd+F6IqLOAPCM+jNZDJ1g2Vj5FdAfhTWcoEKuj4Efu
-         D5blijJ3bijbFAKzgXktNXl6Smz+Wxz3izojukaUfKgP0x900oxPcZyL4PQBKyMVHwoa
-         +Bbg==
-X-Gm-Message-State: AFqh2ko4OYmSb4EJTeCetcYkzczK+r0N5dBwdmCDZT58Z/a3JeWLTLJw
-        zbUMibo3DQ4funfPItC3vvb5gwpkLLyW7V8lzhqnZABkDocBF2buDQ5c2kNAD5LihRV3NGbkNJs
-        TsQ7FGa++6snz3Drh29CQX/8v
-X-Received: by 2002:a05:600c:54d0:b0:3da:f9c9:cec9 with SMTP id iw16-20020a05600c54d000b003daf9c9cec9mr40473691wmb.1.1674836401768;
-        Fri, 27 Jan 2023 08:20:01 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvvcS/R7Lu9IpyYbItqDsPLR6yhYqQH7DSpvxyzPtIpO1WxqsHHYvBoFeUij0ZOWcXGc/xzYA==
-X-Received: by 2002:a05:600c:54d0:b0:3da:f9c9:cec9 with SMTP id iw16-20020a05600c54d000b003daf9c9cec9mr40473649wmb.1.1674836401472;
-        Fri, 27 Jan 2023 08:20:01 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f16:1800:a9b4:1776:c5d9:1d9a? (p200300d82f161800a9b41776c5d91d9a.dip0.t-ipconnect.de. [2003:d8:2f16:1800:a9b4:1776:c5d9:1d9a])
-        by smtp.gmail.com with ESMTPSA id k18-20020a05600c081200b003dc3a6f9447sm2446245wmp.32.2023.01.27.08.19.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 08:20:00 -0800 (PST)
-Message-ID: <349bbece-485c-4898-4583-b8f588f8322f@redhat.com>
-Date:   Fri, 27 Jan 2023 17:19:59 +0100
+        Fri, 27 Jan 2023 11:20:20 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15849841B5;
+        Fri, 27 Jan 2023 08:20:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674836415; x=1706372415;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=U270CQoWlTfib2ccUnX91Q4dGBBbjD5E5gXGCup4EEQ=;
+  b=Qn+RvgIesu0Cu+aqdHXGe3w+vWWMV5Wuloeit5gwz6E5U4yYilFGBnWp
+   9VRK90jzgk7BwNyeLJ5jSmEoRIxxite/KdE2kWy5a0PyLKaGKljtX5gOj
+   2TF0hL2GObgsNW+gn4FVE/DP4nAgG8Z2uv+pWJ93ZcdevHh1NV8Uaaa0c
+   8M5nTkihPneLZRJlDHXGLu+7X+C1HgCduc0AuJhBrxv1noUxaTe8y6XnC
+   oafPUKh96SmWaIhJw8IrJnr1gTtqrlY7xNFgwpDGIcuostyeP1Yo/PN8w
+   qkKykKFhyFmjfp/kgWZsr8mvaOitT5eWkaou8coqplL1dREF/gVnMpFSi
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="306770287"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="306770287"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 08:20:14 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="771630254"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="771630254"
+Received: from dpbogia-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.18.51])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 08:20:14 -0800
+Message-ID: <bcc22f45efbde7b7b075fe84a495a52b81e02b18.camel@linux.intel.com>
+Subject: Re: [PATCH 10/35] Documentation: hid: correct spelling
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+Date:   Fri, 27 Jan 2023 08:20:13 -0800
+In-Reply-To: <20230127064005.1558-11-rdunlap@infradead.org>
+References: <20230127064005.1558-1-rdunlap@infradead.org>
+         <20230127064005.1558-11-rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-19-rick.p.edgecombe@intel.com>
- <7f63d13d-7940-afb6-8b25-26fdf3804e00@redhat.com>
- <50cf64932507ba60639eca28692e7df285bcc0a7.camel@intel.com>
- <1327c608-1473-af4f-d962-c24f04f3952c@redhat.com>
- <8c3820ae1448de4baffe7c476b4b5d9ba0a309ff.camel@intel.com>
- <4d224020-f26f-60a4-c7ab-721a024c7a6d@redhat.com>
- <dd06b54291ad5721da392a42f2d8e5636301ffef.camel@intel.com>
- <79e0a85e-1ec4-e359-649d-618ca79c36f7@redhat.com>
- <4ebbdd643853ff02c930baee817ba6f515595224.camel@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v5 18/39] mm: Handle faultless write upgrades for shstk
-In-Reply-To: <4ebbdd643853ff02c930baee817ba6f515595224.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2023-01-26 at 22:39 -0800, Randy Dunlap wrote:
+> Correct spelling problems for Documentation/hid/ as reported
+> by codespell.
 > 
-> Now shadow stack memory creation is tightly controlled. Either created
-> via special syscall or automatically with a new thread.
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: linux-input@vger.kernel.org
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
 
-Good, it would be valuable to document that somewhere ("Neve rapplies to 
-VM_SHARED|VM_MAYSHARE VMAs").
+For Documentation/hid/intel-ish-hid.rst
 
-[...]
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
->>
->> The other thing I had in mind was that we have to make sure that
->> we're
->> not accidentally setting "Write=0,Dirty=1" in mk_pte() /
->> pte_modify().
->>
->> Assume we had a "Write=1,Dirty=1" PTE, and we effectively wrprotect
->> using pte_modify(), we have to make sure to move the dirty bit to
->> the
->> saved_dirty bit.
+
+> ---
+>  Documentation/hid/hid-alps.rst      |    2 +-
+>  Documentation/hid/hid-bpf.rst       |    2 +-
+>  Documentation/hid/hiddev.rst        |    2 +-
+>  Documentation/hid/hidraw.rst        |    2 +-
+>  Documentation/hid/intel-ish-hid.rst |    2 +-
+>  5 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> For the mk_pte() case, I don't think a Write=0,Dirty=1 prot could come
-> from anywhere. I guess the MAP_SHARED case is a little less bounded. We
-> could maybe add a warning for this case.
-
-Right, Write=0,Dirty=1  shouldn't apply at that point if shstk are 
-always wrprotected as default.
-
-> 
-> For the pte_modify() case, this does happen. There are two scenarios
-> considered:
-> 1. A Write=0,Dirty=0 PTE is made dirty. This can't happen today as
-> Dirty is filtered via _PAGE_CHG_MASK. Basically pte_modify() doesn't
-> support it.
-
-It should simply set the saved_dirty bit I guess. But I don't think 
-pte_modify() is actually supposed to set PTEs dirty (primary goal is to 
-change protection IIRC).
-
-> 2. A Write=1,Dirty=1 PTE gets write protected. This does happen because
-> the Write=0 prot comes from protection_map, and pte_modify() would
-> leave the Dirty=1 bit alone. The main case I know of is mprotect(). It
-> is handled by changes to pte_modify() by doing the Dirty->SoftDirty
-> fixup if needed.
-
-Right, we'd have to move the dirty bit to the saved_dirty bit. (we have 
-to handle soft-dirty, too, whenever setting the PTE dirty -- either via 
-the dirty bit or via the saved_dirty bit)
-
-> 
-> So pte_modify()s job should not be too tricky. What you can't do with
-> it though, is create shadow stack PTEs. But it is ok for our uses
-> because of the explicit mkwrite().
-
-I think you are correct.
-
--- 
-Thanks,
-
-David / dhildenb
+> diff -- a/Documentation/hid/hid-alps.rst b/Documentation/hid/hid-
+> alps.rst
+> --- a/Documentation/hid/hid-alps.rst
+> +++ b/Documentation/hid/hid-alps.rst
+> @@ -9,7 +9,7 @@ Currently ALPS HID driver supports U1 To
+>  U1 device basic information.
+>  
+>  ==========     ======
+> -Vender ID      0x044E
+> +Vendor ID      0x044E
+>  Product ID     0x120B
+>  Version ID     0x0121
+>  ==========     ======
+> diff -- a/Documentation/hid/hid-bpf.rst b/Documentation/hid/hid-
+> bpf.rst
+> --- a/Documentation/hid/hid-bpf.rst
+> +++ b/Documentation/hid/hid-bpf.rst
+> @@ -307,7 +307,7 @@ sysfs path: ``/sys/bus/hid/devices/xxxx:
+>  
+>  We can not rely on hidraw to bind a BPF program to a HID device.
+> hidraw is an
+>  artefact of the processing of the HID device, and is not stable.
+> Some drivers
+> -even disable it, so that removes the tracing capabilies on those
+> devices
+> +even disable it, so that removes the tracing capabilities on those
+> devices
+>  (where it is interesting to get the non-hidraw traces).
+>  
+>  On the other hand, the ``hid_id`` is stable for the entire life of
+> the HID device,
+> diff -- a/Documentation/hid/hiddev.rst b/Documentation/hid/hiddev.rst
+> --- a/Documentation/hid/hiddev.rst
+> +++ b/Documentation/hid/hiddev.rst
+> @@ -8,7 +8,7 @@ Introduction
+>  In addition to the normal input type HID devices, USB also uses the
+>  human interface device protocols for things that are not really
+> human
+>  interfaces, but have similar sorts of communication needs. The two
+> big
+> -examples for this are power devices (especially uninterruptable
+> power
+> +examples for this are power devices (especially uninterruptible
+> power
+>  supplies) and monitor control on higher end monitors.
+>  
+>  To support these disparate requirements, the Linux USB system
+> provides
+> diff -- a/Documentation/hid/hidraw.rst b/Documentation/hid/hidraw.rst
+> --- a/Documentation/hid/hidraw.rst
+> +++ b/Documentation/hid/hidraw.rst
+> @@ -163,7 +163,7 @@ HIDIOCGOUTPUT(len):
+>         Get an Output Report
+>  
+>  This ioctl will request an output report from the device using the
+> control
+> -endpoint.  Typically, this is used to retrive the initial state of
+> +endpoint.  Typically, this is used to retrieve the initial state of
+>  an output report of a device, before an application updates it as
+> necessary either
+>  via a HIDIOCSOUTPUT request, or the regular device write()
+> interface.  The format
+>  of the buffer issued with this report is identical to that of
+> HIDIOCGFEATURE.
+> diff -- a/Documentation/hid/intel-ish-hid.rst
+> b/Documentation/hid/intel-ish-hid.rst
+> --- a/Documentation/hid/intel-ish-hid.rst
+> +++ b/Documentation/hid/intel-ish-hid.rst
+> @@ -199,7 +199,7 @@ the sender that the memory region for th
+>  DMA initialization is started with host sending DMA_ALLOC_NOTIFY bus
+> message
+>  (that includes RX buffer) and FW responds with DMA_ALLOC_NOTIFY_ACK.
+>  Additionally to DMA address communication, this sequence checks
+> capabilities:
+> -if thw host doesn't support DMA, then it won't send DMA allocation,
+> so FW can't
+> +if the host doesn't support DMA, then it won't send DMA allocation,
+> so FW can't
+>  send DMA; if FW doesn't support DMA then it won't respond with
+>  DMA_ALLOC_NOTIFY_ACK, in which case host will not use DMA transfers.
+>  Here ISH acts as busmaster DMA controller. Hence when host sends
+> DMA_XFER,
 
