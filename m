@@ -2,314 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB0367E8FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8151D67E915
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234159AbjA0PKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
+        id S234293AbjA0PLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:11:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234130AbjA0PKA (ORCPT
+        with ESMTP id S234253AbjA0PLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:10:00 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4BB80F85;
-        Fri, 27 Jan 2023 07:09:57 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 431181BF20F;
-        Fri, 27 Jan 2023 15:09:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674832196;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fvf8wuWvKt1lKaISiLsHIlmZzW1JuoS4Fofh2rHqKJ0=;
-        b=ZXaZ53lAeIa389azTklh0u4Ti0eLyChXWOSc4i32n7GaO4OtoU9LEEyZT9GZT8mEajkP58
-        jSW2/c2XJcBXzkqb68coSVEuSM2Tde14sVlFBn73y10RrjAIkXoyL/BmopT4/J5Mb7i4d0
-        8WR1A5R+Z3T4fAt0SqVDr+WDjllet1WJQin+ft+JhBZS176dSVVA19w/9FUwNinNLYzGeh
-        fZoW+U70uX8mrLvDvZ8Mwgn9WclfZD/QXqEHmGm0+fXKQnawUXyb8vQhuVIFQ/eOm6qqsj
-        1hdHZDH0Pb4HKCeTsLoG5FsPLuJmHH0rx8gOiUIxfRwSacHhVoVnyorTtXkYqg==
-Date:   Fri, 27 Jan 2023 16:09:54 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        Fri, 27 Jan 2023 10:11:34 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3929080179;
+        Fri, 27 Jan 2023 07:11:23 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RDlNHZ021451;
+        Fri, 27 Jan 2023 15:11:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=91idBUbdIfOr0IZ3DR2hHSVL5JCnzTMJNpoHN5YShWg=;
+ b=hS2IeEjNEoZ5VmW+mtHdbH/aEeFblPqGHt95S/rSTSeZTNhk4eFE+EI2NQcReFbm31SC
+ J2du9HnKeWtqszCFQbx3aY4znIP1OYYWpK/0WIcLN1dOAo0v6WyQWO6UrZqGQ/5cMnXe
+ i+Op+q6xnskzJgdwEaSFV/14mzaGxsr2b/4RU4EE6o2pHhSOBYntF5W56gO7pMcevUPq
+ VEOTuz4kWXpJZ4SeMECoO6pKDFfR/OU8NgB1jVS/zLBvevYBXNgZt0N3L1bZUqTWWx1x
+ q07bk0O1PYpGvhv1KcjWokwJUeysLrrGfttBdaKgICRQIFd+uF7Q4MJeabE5dAxcBlnP fQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nbyma1m4p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 15:11:09 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30RFB8Ch024156
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 15:11:08 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 27 Jan 2023 07:11:05 -0800
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <linux-hardening@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     Mukesh Ojha <quic_mojha@quicinc.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/24] rtc: pm8xxx: add support for nvmem offset
-Message-ID: <Y9PpQkW3Rtm+bi2V@mail.local>
-References: <20230126142057.25715-1-johan+linaro@kernel.org>
- <20230126142057.25715-17-johan+linaro@kernel.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: [PATCH v3 1/2] dt-bindings: ramoops: Inherit reserve memory property
+Date:   Fri, 27 Jan 2023 20:40:35 +0530
+Message-ID: <1674832236-6754-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126142057.25715-17-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: mBHyGmpBQl6jFonsw6XyjZMtziCOeB7h
+X-Proofpoint-GUID: mBHyGmpBQl6jFonsw6XyjZMtziCOeB7h
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_09,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 mlxscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301270143
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 15:20:49+0100, Johan Hovold wrote:
-> On many Qualcomm platforms the PMIC RTC control and time registers are
-> read-only so that the RTC time can not be updated. Instead an offset
-> needs be stored in some machine-specific non-volatile memory, which the
-> driver can take into account.
-> 
-> Add support for storing a 32-bit offset from the Epoch in an nvmem cell
-> so that the RTC time can be set on such platforms.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/rtc/rtc-pm8xxx.c | 134 +++++++++++++++++++++++++++++++++++----
->  1 file changed, 123 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-> index 922aef0f0241..09816b9f6282 100644
-> --- a/drivers/rtc/rtc-pm8xxx.c
-> +++ b/drivers/rtc/rtc-pm8xxx.c
-> @@ -3,6 +3,7 @@
->   */
->  #include <linux/of.h>
->  #include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
->  #include <linux/init.h>
->  #include <linux/rtc.h>
->  #include <linux/platform_device.h>
-> @@ -49,6 +50,8 @@ struct pm8xxx_rtc_regs {
->   * @alarm_irq:		alarm irq number
->   * @regs:		register description
->   * @dev:		device structure
-> + * @nvmem_cell:		nvmem cell for offset
-> + * @offset:		offset from epoch in seconds
->   */
->  struct pm8xxx_rtc {
->  	struct rtc_device *rtc;
-> @@ -57,8 +60,60 @@ struct pm8xxx_rtc {
->  	int alarm_irq;
->  	const struct pm8xxx_rtc_regs *regs;
->  	struct device *dev;
-> +	struct nvmem_cell *nvmem_cell;
-> +	u32 offset;
->  };
->  
-> +static int pm8xxx_rtc_read_nvmem_offset(struct pm8xxx_rtc *rtc_dd)
-> +{
-> +	size_t len;
-> +	void *buf;
-> +	int rc;
-> +
-> +	buf = nvmem_cell_read(rtc_dd->nvmem_cell, &len);
-> +	if (IS_ERR(buf)) {
-> +		rc = PTR_ERR(buf);
-> +		dev_err(rtc_dd->dev, "failed to read nvmem offset: %d\n", rc);
+The reserved memory region for ramoops is assumed to be at a
+fixed and known location when read from the devicetree. This
+is not desirable in an environment where it is preferred the
+region to be dynamically allocated at runtime, as opposed to
+being fixed at compile time.
 
-You removed many dev_err strings in your previous patch and now this is
-verbose. Honestly, there is not much to do apart from reying the
-operation so I don't think the strings are worth it.
+So, update the ramoops binding by inheriting some reserve memory
+property to allocate the ramoops region dynamically.
 
-> +		return rc;
-> +	}
-> +
-> +	if (len != sizeof(u32)) {
-> +		dev_err(rtc_dd->dev, "unexpected nvmem cell size %zu\n", len);
-> +		kfree(buf);
-> +		return -EINVAL;
-> +	}
-> +
-> +	rtc_dd->offset = get_unaligned_le32(buf);
-> +
-> +	kfree(buf);
-> +
-> +	return 0;
-> +}
-> +
-> +static int pm8xxx_rtc_write_nvmem_offset(struct pm8xxx_rtc *rtc_dd, u32 offset)
-> +{
-> +	u8 buf[sizeof(u32)];
-> +	int rc;
-> +
-> +	put_unaligned_le32(offset, buf);
-> +
-> +	rc = nvmem_cell_write(rtc_dd->nvmem_cell, buf, sizeof(buf));
-> +	if (rc < 0) {
-> +		dev_err(rtc_dd->dev, "failed to write nvmem offset: %d\n", rc);
-> +		return rc;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int pm8xxx_rtc_read_offset(struct pm8xxx_rtc *rtc_dd)
-> +{
-> +	if (!rtc_dd->nvmem_cell)
-> +		return 0;
-> +
-> +	return pm8xxx_rtc_read_nvmem_offset(rtc_dd);
-> +}
-> +
->  static int pm8xxx_rtc_read_raw(struct pm8xxx_rtc *rtc_dd, u32 *secs)
->  {
->  	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-> @@ -90,6 +145,33 @@ static int pm8xxx_rtc_read_raw(struct pm8xxx_rtc *rtc_dd, u32 *secs)
->  	return 0;
->  }
->  
-> +static int pm8xxx_rtc_update_offset(struct pm8xxx_rtc *rtc_dd, u32 secs)
-> +{
-> +	u32 raw_secs;
-> +	u32 offset;
-> +	int rc;
-> +
-> +	if (!rtc_dd->nvmem_cell)
-> +		return -ENODEV;
-> +
-> +	rc = pm8xxx_rtc_read_raw(rtc_dd, &raw_secs);
-> +	if (rc)
-> +		return rc;
-> +
-> +	offset = secs - raw_secs;
-> +
-> +	if (offset == rtc_dd->offset)
-> +		return 0;
-> +
-> +	rc = pm8xxx_rtc_write_nvmem_offset(rtc_dd, offset);
-> +	if (rc)
-> +		return rc;
-> +
-> +	rtc_dd->offset = offset;
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * Steps to write the RTC registers.
->   * 1. Disable alarm if enabled.
-> @@ -99,23 +181,15 @@ static int pm8xxx_rtc_read_raw(struct pm8xxx_rtc *rtc_dd, u32 *secs)
->   * 5. Enable rtc if disabled in step 2.
->   * 6. Enable alarm if disabled in step 1.
->   */
-> -static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +static int __pm8xxx_rtc_set_time(struct pm8xxx_rtc *rtc_dd, u32 secs)
->  {
-> -	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
->  	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
->  	u8 value[NUM_8_BIT_RTC_REGS];
->  	bool alarm_enabled;
-> -	u32 secs;
->  	int rc;
->  
-> -	if (!rtc_dd->allow_set_time)
-> -		return -ENODEV;
-> -
-> -	secs = rtc_tm_to_time64(tm);
->  	put_unaligned_le32(secs, value);
->  
-> -	dev_dbg(dev, "set time: %ptRd %ptRt (%u)\n", tm, tm, secs);
-> -
->  	rc = regmap_update_bits_check(rtc_dd->regmap, regs->alarm_ctrl,
->  				      regs->alarm_en, 0, &alarm_enabled);
->  	if (rc)
-> @@ -158,6 +232,27 @@ static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
->  	return 0;
->  }
->  
-> +static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
-> +	u32 secs;
-> +	int rc;
-> +
-> +	secs = rtc_tm_to_time64(tm);
-> +
-> +	if (rtc_dd->allow_set_time)
-> +		rc = __pm8xxx_rtc_set_time(rtc_dd, secs);
-> +	else
-> +		rc = pm8xxx_rtc_update_offset(rtc_dd, secs);
-> +
-> +	if (rc)
-> +		return rc;
-> +
-> +	dev_dbg(dev, "set time: %ptRd %ptRt (%u + %u)\n", tm, tm,
-> +			secs - rtc_dd->offset, rtc_dd->offset);
-> +	return 0;
-> +}
-> +
->  static int pm8xxx_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  {
->  	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
-> @@ -168,10 +263,11 @@ static int pm8xxx_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  	if (rc)
->  		return rc;
->  
-> +	secs += rtc_dd->offset;
->  	rtc_time64_to_tm(secs, tm);
->  
-> -	dev_dbg(dev, "read time: %ptRd %ptRt (%u)\n", tm, tm, secs);
-> -
-> +	dev_dbg(dev, "read time: %ptRd %ptRt (%u + %u)\n", tm, tm,
-> +			secs - rtc_dd->offset, rtc_dd->offset);
->  	return 0;
->  }
->  
-> @@ -184,6 +280,7 @@ static int pm8xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
->  	int rc;
->  
->  	secs = rtc_tm_to_time64(&alarm->time);
-> +	secs -= rtc_dd->offset;
->  	put_unaligned_le32(secs, value);
->  
->  	rc = regmap_update_bits(rtc_dd->regmap, regs->alarm_ctrl,
-> @@ -223,6 +320,7 @@ static int pm8xxx_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
->  		return rc;
->  
->  	secs = get_unaligned_le32(value);
-> +	secs += rtc_dd->offset;
->  	rtc_time64_to_tm(secs, &alarm->time);
->  
->  	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
-> @@ -380,9 +478,23 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
->  	rtc_dd->allow_set_time = of_property_read_bool(pdev->dev.of_node,
->  						      "allow-set-time");
->  
-> +	rtc_dd->nvmem_cell = devm_nvmem_cell_get(&pdev->dev, "offset");
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+---
+Changes in v3:
+ - Fixed yaml error and updated commit text as per comment.
 
-Maybe we should get something more specific than just "offset" so this
-could be parsed in the RTC core at some point (this is the second RTC to
-behave like this)
+Change in v2:
+  - Added this patch as per changes going to be done in patch 3/3
 
-> +	if (IS_ERR(rtc_dd->nvmem_cell)) {
-> +		rc = PTR_ERR(rtc_dd->nvmem_cell);
-> +		if (rc != -ENOENT)
-> +			return rc;
-> +		rtc_dd->nvmem_cell = NULL;
-> +	}
-> +
->  	rtc_dd->regs = match->data;
->  	rtc_dd->dev = &pdev->dev;
->  
-> +	if (!rtc_dd->allow_set_time) {
-> +		rc = pm8xxx_rtc_read_offset(rtc_dd);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
->  	rc = pm8xxx_rtc_enable(rtc_dd);
->  	if (rc)
->  		return rc;
-> -- 
-> 2.39.1
-> 
+ .../bindings/reserved-memory/ramoops.yaml          | 34 ++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+index 0391871..8741626 100644
+--- a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
++++ b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+@@ -10,7 +10,8 @@ description: |
+   ramoops provides persistent RAM storage for oops and panics, so they can be
+   recovered after a reboot. This is a child-node of "/reserved-memory", and
+   is named "ramoops" after the backend, rather than "pstore" which is the
+-  subsystem.
++  subsystem. This region can be reserved both statically or dynamically by
++  using appropriate property in device tree.
+ 
+   Parts of this storage may be set aside for other persistent log buffers, such
+   as kernel log messages, or for optional ECC error-correction data.  The total
+@@ -112,7 +113,13 @@ unevaluatedProperties: false
+ 
+ required:
+   - compatible
+-  - reg
++
++oneOf:
++  - required:
++      - reg
++
++  - required:
++      - size
+ 
+ anyOf:
+   - required: [record-size]
+@@ -142,3 +149,26 @@ examples:
+             };
+         };
+     };
++
++  - |
++    / {
++        compatible = "foo";
++        model = "foo";
++        #address-cells = <1>;
++        #size-cells = <1>;
++
++        reserved-memory {
++            #address-cells = <1>;
++            #size-cells = <1>;
++            ranges;
++
++            ramoops: ramoops_region {
++                compatible = "ramoops";
++                alloc-ranges = <0x00000000 0xffffffff>;
++                size = <0x0 0x10000>;       /* 64kB */
++                console-size = <0x8000>;    /* 32kB */
++                record-size = <0x400>;      /*  1kB */
++                ecc-size = <16>;
++            };
++        };
++    };
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
+
