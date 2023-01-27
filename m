@@ -2,103 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB4467E002
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C27467DFE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjA0JYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
+        id S232087AbjA0JVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:21:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbjA0JYc (ORCPT
+        with ESMTP id S231527AbjA0JVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:24:32 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFCE2E0EC;
-        Fri, 27 Jan 2023 01:23:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674811438; x=1706347438;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7L/axu+05lgRV1B7k83rTdiEnNvSos+SJ26ckkwltXU=;
-  b=GmfhhfLsn52t3fzd66Kx+fbR5qn4OcKoZmIKoGK1X9HCl5AVxYyKb96x
-   sb5ItVXdkYGeX5hcOBU3U3dD26AKwDkXcg3XrovuyNqbnkuj6FV2ZwZ0i
-   kzATY1QT75rxlqPSTnZYPrRxlhF/Dgm50sRP4dU53JrMIDMUh2gPy0KAP
-   HF7DJn0/w7Gt/qTsbO7hhSXbvbdH2VHzprugUEAoe+JScsgloc6F/is14
-   6NwVbA4Zh83D7CNQ87tFD4K+CWMpEzwO+Hc6LBWSOBW71EYhxDux7CRlp
-   ymVq7+3YePYLf3HZIxv26MxxQvgHyEc4zhRyA4fE9OGOwznQUB4eYdCgO
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="310672030"
-X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
-   d="scan'208";a="310672030"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 01:22:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="656541888"
-X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
-   d="scan'208";a="656541888"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 27 Jan 2023 01:22:00 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pLKvk-00FtO1-00;
-        Fri, 27 Jan 2023 11:21:56 +0200
-Date:   Fri, 27 Jan 2023 11:21:55 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 01/11] driver core: fw_devlink: Don't purge child
- fwnode's consumer links
-Message-ID: <Y9OXs9+uYi31dYJD@smile.fi.intel.com>
-References: <20230127001141.407071-1-saravanak@google.com>
- <20230127001141.407071-2-saravanak@google.com>
+        Fri, 27 Jan 2023 04:21:34 -0500
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2080.outbound.protection.outlook.com [40.107.105.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207DE5BB0;
+        Fri, 27 Jan 2023 01:21:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g7wv8QyQIFqM+RB055QLtywDgx9rMfwor4xTQB+6jO+Gucd479IxKirXZl0CF5rTzKHLz+7o+Rir8Pj/DWj5JgKYQNBRB3guwfiL3NAZOU4xfJ0ZTy2q/nFO5J5xFgBS87Tityr2k3wjXT+PAhNSLMHTt7ky48qmNKRCF9AzUOSMsRIj8Z2WxM2zda+TCgOzbu9eVxm0KYv4eeb/puNfE/YY/GGIRhq9tfh5G6jTQuyz6Q0/pHC2dROkLD/+Ky4iQW+OvtOZ+pmojZM8n5jaANHXBATV6FH87Jcw50DlYAVl5USFINQ0aH1h+WTMNyZsn53JEmMkjtelNqLsmtnZFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ukuik0eSXzAL8MMKPEtlsRuIFnRGwhLBcfERop83VNk=;
+ b=BB7dC/kNWvvaefoMsxXp6JSGvz07D/5JeTgyf14WlwHeDi+7g/x8hac6G5bpMiNkyF4oNWKGBJuHw/ZedvdemZZji/m38lldo4uobg6GhVX7t5uybZrarc/zPF5pahLJNc9ENfxjEOFlHtzUqdAMpLUE62ShWeR7ZVBI7c+tj3qaaVDaA3Zjkn3wYFtBrZ4i16AIP5BxWhRtOy7m8UXrux769WhD05sZYahlENqjnL1FePpCDhBxFAqXoaKZ2Z7So7QZbubVGyPo4QsS2/cCXa9RPK8+Evfr3lwbczLMDFpAAkWXhvrPJ8L6e1oN6Q4P28xFFABM9ijINe8lj2BkIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ukuik0eSXzAL8MMKPEtlsRuIFnRGwhLBcfERop83VNk=;
+ b=RN9d1AsKLfq4oW+7egPiBfSc3DhcW1GtUjiDJgum/SS4ClV0YhhwYV+q/icB7BgPQ3RjVB5DPpmjO+NBglC3zW1h6jCGo3mF+bVXGOVcUbcfmCOWG71MtLYENMxSZcq22NhgBuldGbYz22NXYIikprLt4sWexbxSQ1+vBPjVdC8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by PAXPR04MB8926.eurprd04.prod.outlook.com (2603:10a6:102:20d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Fri, 27 Jan
+ 2023 09:21:29 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::e203:47be:36e4:c0c3]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::e203:47be:36e4:c0c3%9]) with mapi id 15.20.6002.033; Fri, 27 Jan 2023
+ 09:21:29 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     andersson@kernel.org, mathieu.poirier@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        arnaud.pouliquen@foss.st.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V2 0/6] remoteproc: imx_rproc: support firmware in DDR
+Date:   Fri, 27 Jan 2023 17:22:40 +0800
+Message-Id: <20230127092246.1470865-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0019.apcprd02.prod.outlook.com
+ (2603:1096:4:195::13) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127001141.407071-2-saravanak@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|PAXPR04MB8926:EE_
+X-MS-Office365-Filtering-Correlation-Id: bcd58447-b28c-4bd2-4ca9-08db0047deea
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JiPqjXB9Z4T7PxTeS7yDZJMx6nUxBVO5iQF8JhWgnCDADGN8CYTvD+pYs8f/ze6ynJkAk8fZNu1f0/Sl9ZgxODaZ4A4fTIHPwMK2ydNfaHbUS9AMY60rbfmdVspH5KJ5+cmAlbV5BxBLup/hN7AbIZKhDRxGIL+UbhfS2dCcR8gfpbM7tfkPJxOTZTLMD4/k1O4kSphjMdfXLRAztycgs6FBAVA97iVcZmheQcRzyvsRn+hzCf9qjPqslnFmn5xsww/eyGCHQRUINy6XEfl0XevPeO/UqDmbEmdVjuCc6Vy3J1JJdVpHAG82d55p9UPiU2Gx6xgM9Xmyfvqz4IhkFTIqFw0wtRKhGl6a3ZJ+E9JfS59VSmPyyrswKwvJlPmcdQX6HZV6tePB4gJkBxLHxe2Nkxln49jhrEOdDUFU89IvD6RsAvShbnRjNe6C6kj9T8IleEtsKRv5YqHxVBBGcS4rSaNEJWsCYZSy3oLmoqarBkF4BQW0IFIXfsN9ZrLRwurO38ljI/WsoENhXi74vFCn3T82Ec1I5sijJpZXkKkSfHjemrYrOMZyR9AWPYjk44GyEMUzkVpiHI+k+UqPBajXC6Vwtv+AnnC7HC4C5TjgLX165pSePKkmvXKd8dkDtkWaVHH65CeIU0vdflGBRwQaIu6ZoT/kJn0hWf1p4e1PR/6ho0OtZcjK36PTC7ttd+AKTHydqRBbBewjhRhoCg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(366004)(346002)(396003)(376002)(136003)(451199018)(86362001)(66556008)(2906002)(66476007)(1076003)(2616005)(4326008)(8676002)(26005)(6512007)(66946007)(6506007)(186003)(316002)(6486002)(52116002)(38350700002)(6666004)(38100700002)(8936002)(5660300002)(7416002)(41300700001)(478600001)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j2cQCli2EdYcj4qSMzwMjYUbBdpGCld/1Ge/LmretqAkK/qCzIGgD5Ze3fRK?=
+ =?us-ascii?Q?aNre4jHHlTeIdQ5MbT92yYfZG8Mok/lF6+ylgLiaykjhyYDcE5SbXw9sD2qi?=
+ =?us-ascii?Q?HnIpyykbguZwiawpeVvE8ffF4rlKuGdDSmwMNFF22/rXboq0rWE5KE/tRLrt?=
+ =?us-ascii?Q?gGppfbxwWlXf+bYC2GC989RQCcweCCIcS16P32kGfFLxyYB25+0QVdm3eFxS?=
+ =?us-ascii?Q?sjl06HvAfANQv+1FWETsGq7WnnSu4XbcEnSt1Gq4QpDt+NpjS4B3l8p7YtdC?=
+ =?us-ascii?Q?VYCN15UJjhO54znrkmzKdE7dRH1kJdPL9aMEoRj2e+1GSZc8dJBVDtGf5CjY?=
+ =?us-ascii?Q?tLwpKGF5V7uorep1SxYKmGW5hpkGZt2egSZXC4Q1URnfNSqwqRZk3eul7J4c?=
+ =?us-ascii?Q?dxU9Pj9PByHREEDJPP8vUZUaEVAoIpTSm7E2kTmsh18G6yJnukFPQ0HcDd6f?=
+ =?us-ascii?Q?Z5ECOa8tU2eNDZe8L12ICfpF8tI8yc6SP/XFGnmrG1hiktKt3/SIVF9hDhcp?=
+ =?us-ascii?Q?ztekYNNp8wwRNNWP1eohGEoK02xmfLZ3Waggth0R+iJw1Ly5bEs4L8D6mFth?=
+ =?us-ascii?Q?x+jz5y2qffQ9DSQwLRGS4PMst4I/od1foUcVM8wWFlFnz/2tJJqwFiJk0JCN?=
+ =?us-ascii?Q?V+L7eG5NZ3KRSVRoDwV02K+mfssfx1YRPjA23vlE5YqscnHmL6Cp/sBF94ZK?=
+ =?us-ascii?Q?rqti0qV1ORBGX2It5JgGAlILz5GbSEyztFWgzSTqWuB9AvkxYKwB9RUFqYgF?=
+ =?us-ascii?Q?gbDgq05M18G4gyZByWKC2LMTACL1abt5kgd7bSaMtpTGdyn4Nftggmjzh9t0?=
+ =?us-ascii?Q?HJTGBGKfLirs2s2z6Pg3ISqUG+moYdnk36ONy1Ln46p/EvriwukeZk/JTdtu?=
+ =?us-ascii?Q?AHwsTl+1wAmWq4e4DrSRXtDdm41jNIlYPTXXZ9BsITaVgURwLVZ8deELI9bu?=
+ =?us-ascii?Q?7xWscbRN1nT9/uMTQDg50orh7ZO+TipMnhSyzCRNRniwC7icte0hURMD4aGP?=
+ =?us-ascii?Q?LTpSmG8Wl9BXBp5Vk1DZ847EN1mcD2q7WrQj9bEvoAVG4tS4kcMv/f9BNy7q?=
+ =?us-ascii?Q?Gcf/udepqm9wCo5TlzodAYDWxZBMUVmPC2J6LLLwpblxCS1QEMK75nVyVxIJ?=
+ =?us-ascii?Q?SHHGazBYhymLHpshxQ74Pl0Fcgx3fbAmiryN0fV2jt2m0uB4AiwEBmg35Jfg?=
+ =?us-ascii?Q?wWerN4hTjcRznvQ5wsow8wT1YiDPH7CMZtg3GYVpxSbpZdGkksdTRnEZhwuO?=
+ =?us-ascii?Q?Hy1LdKyy7b6s5Px3PK8rJZq2umJt0hGoa9ER8eaeE3O2lVvJz8IFRrAoRTiL?=
+ =?us-ascii?Q?d/zjUmnTgyGtSsJz0qG18rDYVdXXUzevMxlT3881zO7OpdxrZHbQ5T8TpsmR?=
+ =?us-ascii?Q?5DhudmOLWsiZvWrtXladfUdIA+63+gotCUqmP6t0rqxzhpyj/TiEvEpKPbah?=
+ =?us-ascii?Q?LZVxYEaR3LxFmQJSyBpp+ik5SAzcHr5ERDb4XFzz6vKKvgWhrfg2366HQqOL?=
+ =?us-ascii?Q?sTXRUE1IWjqSyQUCQxFWvT1qa5mTxuOcJr0HsAZRy4lFObRXahnq/Rf3vz37?=
+ =?us-ascii?Q?vOzU2Z8mHFycwO/8btC+wiSNH4mBm6QU8mRogX4K?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bcd58447-b28c-4bd2-4ca9-08db0047deea
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 09:21:29.0318
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BjtYHkgnqOLoIq7NBA2rJhIVwxpU0QXTaj5j3vBuk35OqI340N7eciYW4LJNTztG3jZ3rZsj6E9NWsRt5CeifQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8926
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,84 +117,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 04:11:28PM -0800, Saravana Kannan wrote:
-> When a device X is bound successfully to a driver, if it has a child
-> firmware node Y that doesn't have a struct device created by then, we
-> delete fwnode links where the child firmware node Y is the supplier. We
-> did this to avoid blocking the consumers of the child firmware node Y
-> from deferring probe indefinitely.
-> 
-> While that a step in the right direction, it's better to make the
-> consumers of the child firmware node Y to be consumers of the device X
-> because device X is probably implementing whatever functionality is
-> represented by child firmware node Y. By doing this, we capture the
-> device dependencies more accurately and ensure better
-> probe/suspend/resume ordering.
+From: Peng Fan <peng.fan@nxp.com>
 
-...
+V2:
+ patch 4 is introduced for sparse check warning fix
+ 
+This pachset is to support i.MX8M and i.MX93 Cortex-M core firmware could
+be in DDR, not just the default TCM.
 
->  static unsigned int defer_sync_state_count = 1;
->  static DEFINE_MUTEX(fwnode_link_lock);
->  static bool fw_devlink_is_permissive(void);
-> +static void __fw_devlink_link_to_consumers(struct device *dev);
->  static bool fw_devlink_drv_reg_done;
->  static bool fw_devlink_best_effort;
+i.MX8M needs stack/pc value be stored in TCML entry address[0,4], the
+initial value could be got from firmware first section ".interrupts".
+i.MX93 is a bit different, it just needs the address of .interrupts
+section. NXP SDK always has .interrupts section.
 
-I'm wondering if may avoid adding more forward declarations...
+So first we need find the .interrupts section from firmware, so patch 1
+is to reuse the code of find_table to introduce a new API
+rproc_elf_find_shdr to find shdr, the it could reused by i.MX driver.
 
-Perhaps it's a sign that devlink code should be split to its own
-module?
+Patch 2 is introduce devtype for i.MX8M/93
 
-...
+Although patch 3 is correct the mapping, but this area was never used
+by NXP SW team, we directly use the DDR region, not the alias region.
+Since this patchset is first to support firmware in DDR, mark this patch
+as a fix does not make much sense.
 
-> -int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup)
-> +static int __fwnode_link_add(struct fwnode_handle *con,
-> +			     struct fwnode_handle *sup)
+patch 4 and 5 is support i.MX8M/93 firmware in DDR with parsing .interrupts
+section. Detailed information in each patch commit message.
 
-I believe we tolerate a bit longer lines, so you may still have it on a single
-line.
-
-...
-
-> +int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup)
-> +{
-
-> +	int ret = 0;
-
-Redundant assignment.
-
-> +	mutex_lock(&fwnode_link_lock);
-> +	ret = __fwnode_link_add(con, sup);
-> +	mutex_unlock(&fwnode_link_lock);
->  	return ret;
->  }
-
-...
-
->  	if (dev->fwnode && dev->fwnode->dev == dev) {
-
-You may have above something like
+Patches were tested on i.MX8MQ-EVK i.MX8MP-EVK i.MX93-11x11-EVK
 
 
-	fwnode = dev_fwnode(dev);
-	if (fwnode && fwnode->dev == dev) {
 
->  		struct fwnode_handle *child;
->  		fwnode_links_purge_suppliers(dev->fwnode);
-> +		mutex_lock(&fwnode_link_lock);
->  		fwnode_for_each_available_child_node(dev->fwnode, child)
-> -			fw_devlink_purge_absent_suppliers(child);
-> +			__fw_devlink_pickup_dangling_consumers(child,
-> +							       dev->fwnode);
+Peng Fan (6):
+  remoteproc: elf_loader: introduce rproc_elf_find_shdr
+  remoteproc: imx_rproc: add devtype
+  remoteproc: imx_rproc: correct i.MX8MQ DDR Code alias mapping
+  remoteproc: imx_rproc: force pointer type
+  remoteproc: imx_rproc: set Cortex-M stack/pc to TCML
+  remoteproc: imx_rproc: set address of .interrupts section as bootaddr
 
-			__fw_devlink_pickup_dangling_consumers(child, fwnode);
-
-> +		__fw_devlink_link_to_consumers(dev);
-> +		mutex_unlock(&fwnode_link_lock);
->  	}
+ drivers/remoteproc/imx_rproc.c             | 58 ++++++++++++--
+ drivers/remoteproc/imx_rproc.h             |  6 ++
+ drivers/remoteproc/remoteproc_elf_loader.c | 93 +++++++++++++---------
+ drivers/remoteproc/remoteproc_internal.h   |  2 +
+ 4 files changed, 114 insertions(+), 45 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.1
 
