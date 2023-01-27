@@ -2,61 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BAC67DF62
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB1E67DF64
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbjA0IiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 03:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S231972AbjA0Ilo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 03:41:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbjA0IiU (ORCPT
+        with ESMTP id S230510AbjA0Ilm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 03:38:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BCE27484;
-        Fri, 27 Jan 2023 00:38:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 282ACB81FB5;
-        Fri, 27 Jan 2023 08:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E81C4339E;
-        Fri, 27 Jan 2023 08:38:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674808696;
-        bh=6vCyZSA7Qvqq9e4x31KbE2hnDSnSWO3YH3sRuWYvyQE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=C2ibkqBg3iIUaX3i1FnLdNzR8KHlH5f0cvvoc/JDmINObA2yx6dd8lY7xGynbHkyR
-         6gpTeAWepDcXSTeY86R0rBBQevJcnxRAXXSZo+MgYfGo8ry8hrZGDuiZONN6d6MQIh
-         g0+y8iKjdRXcCO8rtPyPUpNDjuhG0XYVnltYTA1mJhf/BHVgtrPXhGnV8DpUhg8qYZ
-         JzZxCIPwpOf4Yppcmsko4xNkcRfc+D/3XLSa9LF1+iDOojkYW6l2y+89EwErBN7Eio
-         adWBqlTXtvG+jqTC9mLp2suCSnbRxuvFI81KTEBzEIipEdIxWYR2qXdyW8Hv+7axP2
-         uMVgqKilebC+w==
-Received: by mail-lf1-f52.google.com with SMTP id h24so7046994lfv.6;
-        Fri, 27 Jan 2023 00:38:16 -0800 (PST)
-X-Gm-Message-State: AFqh2kpJfqRSAdPR0XLtP0wju4QF0aigipTkev6Cv3hccmbDRL4PWEX/
-        4AepzVUmONxmW+ec6hGwivhGTNQds/DXekJfMp4=
-X-Google-Smtp-Source: AMrXdXvb/7wiJ76VBxdr5Y4yHrzXKHsg78AOjqGskO2tP2ce7Pg73DzmSHaQ9u9SCByMva1jHNhfQaEo6RR82qNbvF0=
-X-Received: by 2002:a19:6511:0:b0:4cb:bea6:dac6 with SMTP id
- z17-20020a196511000000b004cbbea6dac6mr2559234lfb.344.1674808694733; Fri, 27
- Jan 2023 00:38:14 -0800 (PST)
+        Fri, 27 Jan 2023 03:41:42 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35102CC76
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:41:41 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id k16so2906428wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:41:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UxnWhrFnVg9VP58IS7ZKzQX3VM2IYjNuKWEuyc1Z10U=;
+        b=NQCHspnEctpCE8vljAUa6h3ikw9CPSk1fOcWf9iseJERN2npBiZFIcBJiwlDVQhshA
+         s3nOMsVhQJvYM6NgHdqjwftcEEUFrjLMXCRSsSWNxPKV41UH3WYxJQM+3ikN1HQuCcEH
+         s9vyRfIQjEL/21h/cAsthPAHg0YWwvtoKN6JQ5B5xKnvVl1mrcuvs33yWEZOcW0F/tUz
+         Xj0AQtW6tdq7c/+DE0acUuCH3Oc70HlTPAl4NM1PQu+tEmznQBz4NziJnHAye9iScLq9
+         uk4krR9dj6hACvGmgFLDnErk4C8yHOBKV5ZmdKG+te9ZjurwjPVODYLRs0R5OsQD9Doe
+         +0rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UxnWhrFnVg9VP58IS7ZKzQX3VM2IYjNuKWEuyc1Z10U=;
+        b=2nlZraoNuVCMmF7vaMqUC4CuwNiTkbObT79PMsiIY5FYqt+WByi8JLVKuTco5EbAEK
+         NBMti8K9qJgVhgJttCkGLnaOE7F3zgcuB/uDjIRnm/vuTAnpTn1/SoYw9QnwniBIjCP5
+         CW/eBJm0vTfYZWW8xnm5apPFmD8mZmeGdzEhii/Zfde+X7cfyNd7OD4RGkM6MpKYRrfY
+         jtpS9V86JL9gsyarfEih5X6uKXGUk2GfcDBcunAwRfQMyns92gp3eD65mJEYC1X/llAz
+         rKeexGZkUg1tvaVYi1FlIwuwCGobyFUw7aj5ETRjOOBrfggwJDwjEtifoOFHVlwc4Bjm
+         h1xw==
+X-Gm-Message-State: AFqh2ko8EnTvvH9mwTRQH5AutwVNl1SF1gBGpFqNzvNjCIRlZ+1Ru6wY
+        lHvZmfXwtXBpcCoRurphHCwPhA==
+X-Google-Smtp-Source: AMrXdXvTpwGNtr6wPm4vSPwSZLub/71exUFMnbCUGJxPEgkSu5kw1bcyisR+Dnx1LOm6LZ1OCZeeAQ==
+X-Received: by 2002:a05:600c:b90:b0:3d8:e0d3:ee24 with SMTP id fl16-20020a05600c0b9000b003d8e0d3ee24mr39376985wmb.37.1674808900181;
+        Fri, 27 Jan 2023 00:41:40 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l4-20020a7bc444000000b003db03725e86sm3662743wmi.8.2023.01.27.00.41.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 00:41:39 -0800 (PST)
+Message-ID: <492fd43c-ca32-17f0-dcdd-48eee0e7e035@linaro.org>
+Date:   Fri, 27 Jan 2023 09:41:37 +0100
 MIME-Version: 1.0
-References: <20230126112129.4602-1-johan+linaro@kernel.org>
- <CAMj1kXEUKChvqA8D_T3Bt-pQhvjBmsGxyy69uqDqyn0EBmQ1pw@mail.gmail.com> <Y9OLG5/yeuG6KT0f@hovoldconsulting.com>
-In-Reply-To: <Y9OLG5/yeuG6KT0f@hovoldconsulting.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 27 Jan 2023 09:38:03 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHiWBA99KG_OXD12rGH3zk84dii3LWZ6OybahudXp3vwA@mail.gmail.com>
-Message-ID: <CAMj1kXHiWBA99KG_OXD12rGH3zk84dii3LWZ6OybahudXp3vwA@mail.gmail.com>
-Subject: Re: [PATCH] efivarfs: fix NULL-deref on mount when no efivars
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Jeremy Kerr <jk@ozlabs.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steev Klimaszewski <steev@kali.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/4] dt-bindings: display: bridge: tfp410: Add tfp410
+ i2c example
+Content-Language: en-US
+To:     Jonathan Cormier <jcormier@criticallink.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Michael Williamson <michael.williamson@criticallink.com>,
+        Bob Duke <bduke@criticallink.com>
+References: <20230125-tfp410_i2c-v2-0-bf22f4dcbcea@criticallink.com>
+ <20230125-tfp410_i2c-v2-1-bf22f4dcbcea@criticallink.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230125-tfp410_i2c-v2-1-bf22f4dcbcea@criticallink.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,24 +87,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 at 09:28, Johan Hovold <johan@kernel.org> wrote:
->
-> On Thu, Jan 26, 2023 at 09:32:27PM +0100, Ard Biesheuvel wrote:
-> > On Thu, 26 Jan 2023 at 12:23, Johan Hovold <johan+linaro@kernel.org> wrote:
-> > >
-> > > The VFS calls kill_sb() also in case mount fails in get_tree().
-> > >
-> > > Add the missing check to make sure that efivars has been registered also
-> > > to kill_sb() to avoid dereferencing a NULL pointer when trying to remove
-> > > efivar entries.
-> > >
-> > > Fixes: c3fd71b428b8 ("efivarfs: always register filesystem")
-> > > Reported-by: Steev Klimaszewski <steev@kali.org>
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> >
-> > Thanks - I have squashed this with the original patch.
->
-> Thanks, Ard. And sorry about not catching this before posting.
->
+On 26/01/2023 23:40, Jonathan Cormier wrote:
+> Add a i2c example with HDMI connector
+> 
+> Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
+> ---
+>  .../bindings/display/bridge/ti,tfp410.yaml         | 30 ++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/ti,tfp410.yaml b/Documentation/devicetree/bindings/display/bridge/ti,tfp410.yaml
+> index 4c5dd8ec2951..1f3d29259f22 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/ti,tfp410.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/ti,tfp410.yaml
+> @@ -116,4 +116,34 @@ examples:
+>          };
+>      };
+>  
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        tfp410_i2c: encoder@38 {
+> +            compatible = "ti,tfp410";
+> +            reg = <0x38>;
 
-No worries.
+This differs only by two properties, I don't think it's beneficial to
+add it.
+
+Best regards,
+Krzysztof
+
