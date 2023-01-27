@@ -2,200 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2821967EE2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC0767EE37
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234578AbjA0Taq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 14:30:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
+        id S229670AbjA0Tg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:36:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjA0Tao (ORCPT
+        with ESMTP id S229502AbjA0TgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 14:30:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A8380FB4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:29:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674847783;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SUv5DFOx1orc2Szz1mjtgk5jcU9W4yiwziY2UuvBPys=;
-        b=EJRjtkSs4wO8UEiFb4+XLL3tCn01j3aXo7v/Bnge5HtUNGXBCtdXR59hvdx85raCIpijbE
-        LZq0oS+XKbNL9kHShnazwL14/kz0sLCmL8g4YcpQ5TBMqqD9//QruMJlMvC+SiUhguIJ5U
-        zZ40iGB8Sck6WgIe4cJO2EkxQfJE1UA=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-662-y1MmfSTiMIe-LygZHv0TnA-1; Fri, 27 Jan 2023 14:29:42 -0500
-X-MC-Unique: y1MmfSTiMIe-LygZHv0TnA-1
-Received: by mail-ot1-f72.google.com with SMTP id w15-20020a056830144f00b00687ec8c75cdso2677772otp.2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:29:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SUv5DFOx1orc2Szz1mjtgk5jcU9W4yiwziY2UuvBPys=;
-        b=ROKMSJvflt3XyHH8QRiY+anq6BDo8D+9Q4C1W2rAD7ZAZEHm+e3d0soTDb4mXdXQsa
-         57u0hqVPCmj5kKSxPE4iec1YDdumYkqjl0xZdgkiidBvo92Ej2uS8rQGX9hI+YF0SO9y
-         pSYcN3pjRdeizDLKIDicvmRtqbgL0mN6Lx5zYbj+wiYNFQFq3+waR8q1dJ2/JD4P20bP
-         WftP0tIVzC76vFHWPkGune02j/D41q7W/mBONb8yZyTaSquBVRDK7PfDVqvuSOveylkv
-         1qztJ+ppuaea32YRB5N3QuqVTmAJdwupcCoUFZTvzt6qUlvHOyWhlDAGIrlhQ6/d1qRG
-         0SGA==
-X-Gm-Message-State: AO0yUKUzJGVMOTNz2DvgCf5nyNz9A54kp24p8qPp2rbXrkI0D9FPcQZ+
-        oGn2Nuwx9/zu6QIrC0Q0mHQZMyGSuwMRdVhEMok8CkLOv6Tb/jcZxSMHpQnCXIZGFdwwTQqhsRd
-        +MGSk48OiMkWNhMf46c7KH7EC
-X-Received: by 2002:a9d:3f1:0:b0:68b:ba7e:1800 with SMTP id f104-20020a9d03f1000000b0068bba7e1800mr38637otf.34.1674847781948;
-        Fri, 27 Jan 2023 11:29:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set+Ph9lhLfqTNVR5otrvd7xQnQfYQPxx7b1GPoc50tFYq9YnPESypV2bWjtmZa5dzVRAfQJQCQ==
-X-Received: by 2002:a9d:3f1:0:b0:68b:ba7e:1800 with SMTP id f104-20020a9d03f1000000b0068bba7e1800mr38629otf.34.1674847781695;
-        Fri, 27 Jan 2023 11:29:41 -0800 (PST)
-Received: from ?IPv6:2804:1b3:a800:6912:c477:c73a:cf7c:3a27? ([2804:1b3:a800:6912:c477:c73a:cf7c:3a27])
-        by smtp.gmail.com with ESMTPSA id cp11-20020a056830660b00b0066ca61230casm2160524otb.8.2023.01.27.11.29.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 11:29:41 -0800 (PST)
-Message-ID: <029147be35b5173d5eb10c182e124ac9d2f1f0ba.camel@redhat.com>
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 27 Jan 2023 16:29:37 -0300
-In-Reply-To: <Y9OZezjUPITtEvTx@dhcp22.suse.cz>
-References: <20230125073502.743446-1-leobras@redhat.com>
-         <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
-         <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
-         <Y9FzSBw10MGXm2TK@tpad> <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
-         <Y9Iurktut9B9T+Tl@dhcp22.suse.cz>
-         <Y9MI42NSLooyVZNu@P9FQF9L96D.corp.robot.car>
-         <55ac6e3cbb97c7d13c49c3125c1455d8a2c785c3.camel@redhat.com>
-         <Y9N7UMrLTyZT71uA@dhcp22.suse.cz>
-         <15c605f27f87d732e80e294f13fd9513697b65e3.camel@redhat.com>
-         <Y9OZezjUPITtEvTx@dhcp22.suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 
+        Fri, 27 Jan 2023 14:36:19 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2106.outbound.protection.outlook.com [40.107.93.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60510783EF;
+        Fri, 27 Jan 2023 11:36:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ft8dGppzjKI1kkp9cZTpPXMgYaasD0fNVs6ZCwswXEWCTcKeBCGm0O79HWKy4H//XfGLrcgHxtprB6s9NS9D5UML1gRAv9xjnCq2qpt4fbiqxjdON0ewv05DeJGWvaqNNo4f+uqnre4DOZ7aMS+dFsZt7/6FrAarHmYyanMiIDjVwD8N9GUQ7Bwg960DcnmVm/BTRzOM8Ihh3RCVQpt6BnV+9jZn5/vickG0MCAeAb/2XqMDaYbxvDx7X0ss/0gEL5dq9N0mRk3sqZ+W5ehMRy7uMnO65D8RNF1v9dDfyOpc0YjRWYthH8apnIX7FHsNyfztwxsfdZUupEiB1eKxQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eO7dIcVQPFkc6w1KvJhnXuOt0hlynzrLIS5vT1u+ncw=;
+ b=gSDVs3fQ7XI7yb+OYUDaWFL+a0rMv34tT2n8R8cBX+nSJq4l1+NPgfrhMrFSyfmCRUUKxLpwzB0G4tg/DD/Z5q35SlLKleaHltAouR32mP/nh+EL6zZ4myWSuc/0xO8+wh+u8fkIpAYJNHgfmaz9evTF463J3VfeBo3HYgjO1njv+QwEhCfdxKA+sddQ+ZVtDqUWNnl+x8Lg2fO7xkAKFpFM8qTeKymmV/1ZzHrCtvwAd0B2ueMUaaKW4LiLuHGeekL3aGIyXXVtfEMtvDsu6METYCsFDSkBL+bW9E3F0K16i3f1+fWsQj4aa5FtM15B+hAQtQL8bb+Y1lHn6TQfBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eO7dIcVQPFkc6w1KvJhnXuOt0hlynzrLIS5vT1u+ncw=;
+ b=dDc7UIsE7MI+lDXZ1Q6uMDLMhOprY+7xSWKDaF5JGnkctG7v5/8/X3ocN0WZFJDIDK+yBGHKzsqw2Kyg5SFNUP6su3C0lNToOoP8fr+nKBuBnXyTbZWYFrOOr/4sm6HoA52vaLPktzyeelijCYT9ltaSswKOpsFniyTQLUt45ck=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from DM5PR1001MB2345.namprd10.prod.outlook.com (2603:10b6:4:2d::31)
+ by SA2PR10MB4636.namprd10.prod.outlook.com (2603:10b6:806:11e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.13; Fri, 27 Jan
+ 2023 19:36:12 +0000
+Received: from DM5PR1001MB2345.namprd10.prod.outlook.com
+ ([fe80::221:4186:6ea3:9097]) by DM5PR1001MB2345.namprd10.prod.outlook.com
+ ([fe80::221:4186:6ea3:9097%7]) with mapi id 15.20.6064.010; Fri, 27 Jan 2023
+ 19:36:11 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>
+Subject: [PATCH v5 net-next 00/13] add support for the the vsc7512 internal copper phys
+Date:   Fri, 27 Jan 2023 11:35:46 -0800
+Message-Id: <20230127193559.1001051-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR02CA0011.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::24) To DM5PR1001MB2345.namprd10.prod.outlook.com
+ (2603:10b6:4:2d::31)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR1001MB2345:EE_|SA2PR10MB4636:EE_
+X-MS-Office365-Filtering-Correlation-Id: b537fcda-e6f4-49a9-eac6-08db009dbe77
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KwMnrrJH9/3K9JAZNRkAlifcMneXa9/dKDYZ9ov4htlbT+3YiUMMbqCcnckuPtrm3eJm706lX1W8B40kFPGhEVGmq7a+lIXnBGZwMXq1nq2cu4TqI7F20nFyDDw0aUudrIZVfYWojCPidjXFcRYHRJIXrUs3+wft3tNzynzwOQbnbKPxdysUujeSi20IlErTFhkkutMrK1ODVF+06C+O4UhkNTL6iLj7D1M556QzRgS6UuJrqB5u9y1N4IVrv6lrZKIll4mTpCD9ti1dqPHX013vcJLleZQ9dIs/4Ewqk8R+9hQ5SzSRAuvblWdZolBrQf2TSj4mmBKL+Rc0tIGhtwu4TTOIhEdD8THTDtJS62ToVkWeVjjrPTZ9sK0L8giJJNe2pnn4+ZFx7lkkPr2RToqXpw7bvTJqo7Jo8bT/fwSNn6l+tHLSmz8bq5fLrC4/uh9puRSZADF0/ssVv5oX+j8zXTyNhfRdBKvz29e9fkEmk3iDo5tNuWVMw+52iiElxF3UvZ+S317OqegSTGD3FWcz+v4oBX9Ug3HZ0pivjxOa3PVuOK2uVOjXo/OlxWI5MZ0q5DzzFh0dQPywcS56VEmcsNPNfRZt4rXXxlPFGaakyXCnCIN/onIPBzYari+Bn1ysjTcFLq3/GJxIhd8Z8Y9TEy4VDOjoF1FnVUc9V5UkExJd1k0dB58ctpwUrIf4jjcbIK7WL3+7WhljXULuA/y9cS86Dx2UF6L5uFF7jko=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1001MB2345.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(39830400003)(136003)(396003)(346002)(366004)(451199018)(36756003)(86362001)(2906002)(2616005)(6512007)(26005)(186003)(66946007)(66556008)(8676002)(4326008)(66476007)(52116002)(316002)(54906003)(6666004)(1076003)(6506007)(966005)(6486002)(478600001)(38350700002)(38100700002)(5660300002)(44832011)(41300700001)(7416002)(8936002)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rMRe78/jBFnInNRhavMd33iiD4HdYe+S155L6QmJXrzFb7bL3XQIax3wwRTK?=
+ =?us-ascii?Q?N8D7qgKmoSOuaA8Ig4JdctsiMYldr/l6Qh0KEUH6g27NupHHiHmZzG5SC0w7?=
+ =?us-ascii?Q?E4yDBptIzM0G+8mjN75Iv0XM71aFwSLwGhQnyxty0o3WHG+XkWNUAmQPPN0s?=
+ =?us-ascii?Q?sV4/1GmRFoVo/k/WblVTRKO7bmTzPRs7KQn1+x/MF8mm6XsUQhk5G9678Zqm?=
+ =?us-ascii?Q?67IbSYxNhucHgDmuVnm3yUlgl/2BQu/bJMuvMi4Ukf8gxf7gVrdOnX3DO05B?=
+ =?us-ascii?Q?A0Zjh3j3adpsF0f7EwoHFPrdVC2n7cJQXB4WpSwONLtI7GKnVp9kjPa+nb/p?=
+ =?us-ascii?Q?6sRFd2X4ZFXhhqgQB8G1HLVl6C2CMy2DX1zwfcjRPn8H6PgqHt0znNFBIPJN?=
+ =?us-ascii?Q?hpH+u4Vy0olPuwxRC7P+KvIpTCEzMLaHgUrt3/y8iK9rrNAKHXrvJGsNzxtk?=
+ =?us-ascii?Q?3RRRtBi41Idbj9LUHBAWPGtPCFA7YqSdQvo5Ys8WY7E6RMhY1UlwwmHtt5sG?=
+ =?us-ascii?Q?KFZDzqB+26+c5n+F4m9VFaU2ef0YzY3sbMq3BBThxk559VLKrkCP99kRU6pO?=
+ =?us-ascii?Q?amwvnCOwGTcC7LQ3KJAi5O7oMyUdfor/ny/VuT7xIjDoDCpUVRM7tHD1f50/?=
+ =?us-ascii?Q?LmlMPNz+udnTwtHQ9b1TNXheM7bpUBgyaYAIQhL/jbMpbwna59BpGdxw7FN2?=
+ =?us-ascii?Q?V19Cd66dVQvRKIN3mjzz5q62Wb7Tf7CNrJE3wy+kOVpdqS0UG3L9qnc4FpfB?=
+ =?us-ascii?Q?pNfZZpCaP/sdhJqBAJgGcXtGQjM2w1be6Bv+3P+Szs01OjTthup1sgCuyFdd?=
+ =?us-ascii?Q?jFAYfL09IQP9qvBNb+3rZU/zYKJZbdUh0KkS5QppF1mIfx5M/jhJfmFZtn15?=
+ =?us-ascii?Q?nt0r2m22UPshdR3flYPscZ/Ay7AO+wG8XjVh/1osCbszRJx3FAsD6CldlOk9?=
+ =?us-ascii?Q?PAHh+595TDjWHglBqVuKmOQBAutYO6Io+pjNaYvBopYW8B7O/fLDT2AwMKOA?=
+ =?us-ascii?Q?IUY4jgpWSXnCfTL2de0BflxGgvXvt44Tm7UcNRqAvMdemj+lLpnxoYGddXjU?=
+ =?us-ascii?Q?Qki1UJVGQ5Bie8vrrEw25z03O/P/4BBOvQwbsKEDxNwRRofv3GYnESIqwgJ2?=
+ =?us-ascii?Q?GCWFD/baolNb/j0pwmiCX0JZ+B523/+TIqEAOSSCjRzcF820gi7eOmaq8DHZ?=
+ =?us-ascii?Q?QAkN4RXNPknprcP27Ks/y4hMT9rslZyE8CMYKFfhV5tJuHlVUeD73EA3FtUy?=
+ =?us-ascii?Q?+pP5F6+YYJ9siPPM51pe/hLl0NPBxOQnBY/xfK3dqLR4NUC1KXYHJRJ8AAlA?=
+ =?us-ascii?Q?b+Pc63/vehu5WydADgPXbv3Ks8Jfs45FWwOYXnooS6Z4DHVSScvMfcc+FVdX?=
+ =?us-ascii?Q?nkgzJdqamr26EQ7uTV7Gh0gMgxL4n7qxyE8zucdoqDgjZCC7IwLiKm2mbr3l?=
+ =?us-ascii?Q?zBSb1wfh2IKXEZoOH1d6vYtMnV0x2AsffpKi8FbJHHOkgOlrLfHiFv+PcYsA?=
+ =?us-ascii?Q?uYYn6FE3ElFczg7ko/nalnQl/OtbNF2PDVBR5YM11clbk+h5+JJ77+GM6sSA?=
+ =?us-ascii?Q?Sar1Ro/KjRY7621YajayGfLpJn4EJHm8enK168nduDYQ+6xqkM8eXFx4hiJ8?=
+ =?us-ascii?Q?TLWUq1/AnP8jmlQwBG+NfyE=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b537fcda-e6f4-49a9-eac6-08db009dbe77
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR1001MB2345.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 19:36:11.0327
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HbX4CpXjMSnobYIP7+xZ5M9BiJjC9yBmsXSKW/61b+n20hc5Pr1kpoEYEWL3q31bZOgosfEniIxSTfQk3JU1WhwFoWkqFb6d2CWu9mm9UVM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4636
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-01-27 at 10:29 +0100, Michal Hocko wrote:
-> On Fri 27-01-23 04:35:22, Leonardo Br=C3=A1s wrote:
-> > On Fri, 2023-01-27 at 08:20 +0100, Michal Hocko wrote:
-> > > On Fri 27-01-23 04:14:19, Leonardo Br=C3=A1s wrote:
-> > > > On Thu, 2023-01-26 at 15:12 -0800, Roman Gushchin wrote:
-> > > [...]
-> > > > > I'd rather opt out of stock draining for isolated cpus: it might =
-slightly reduce
-> > > > > the accuracy of memory limits and slightly increase the memory fo=
-otprint (all
-> > > > > those dying memcgs...), but the impact will be limited. Actually =
-it is limited
-> > > > > by the number of cpus.
-> > > >=20
-> > > > I was discussing this same idea with Marcelo yesterday morning.
-> > > >=20
-> > > > The questions had in the topic were:
-> > > > a - About how many pages the pcp cache will hold before draining th=
-em itself?=C2=A0
-> > >=20
-> > > MEMCG_CHARGE_BATCH (64 currently). And one more clarification. The ca=
-che
-> > > doesn't really hold any pages. It is a mere counter of how many charg=
-es
-> > > have been accounted for the memcg page counter. So it is not really
-> > > consuming proportional amount of resources. It just pins the
-> > > corresponding memcg. Have a look at consume_stock and refill_stock
-> >=20
-> > I see. Thanks for pointing that out!
-> >=20
-> > So in worst case scenario the memcg would have reserved 64 pages * (num=
-cpus - 1)
->=20
-> s@numcpus@num_isolated_cpus@
+This patch series is a continuation to add support for the VSC7512:
+https://patchwork.kernel.org/project/netdevbpf/list/?series=674168&state=*
 
-I was thinking worst case scenario being (ncpus - 1) being isolated.
+That series added the framework and initial functionality for the
+VSC7512 chip. Several of these patches grew during the initial
+development of the framework, which is why v1 will include changelogs.
+It was during v9 of that original MFD patch set that these were dropped.
 
->=20
-> > that are not getting used, and may cause an 'earlier' OOM if this amoun=
-t is
-> > needed but can't be freed.
->=20
-> s@OOM@memcg OOM@
-=20
-> > In the wave of worst case, supposing a big powerpc machine, 256 CPUs, e=
-ach
-> > holding 64k * 64 pages =3D> 1GB memory - 4MB (one cpu using resources).
-> > It's starting to get too big, but still ok for a machine this size.
->=20
-> It is more about the memcg limit rather than the size of the machine.
-> Again, let's focus on actual usacase. What is the usual memcg setup with
-> those isolcpus
+With that out of the way, the VSC7512 is mainly a subset of the VSC7514
+chip. The 7512 lacks an internal MIPS processor, but otherwise many of
+the register definitions are identical. That is why several of these
+patches are simply to expose common resources from
+drivers/net/ethernet/mscc/*.
 
-I understand it's about the limit, not actually allocated memory. When I po=
-int
-the machine size, I mean what is expected to be acceptable from a user in t=
-hat
-machine.
-
->=20
-> > The thing is that it can present an odd behavior:=20
-> > You have a cgroup created before, now empty, and try to run given appli=
-cation,
-> > and hits OOM.
->=20
-> The application would either consume those cached charges or flush them
-> if it is running in a different memcg. Or what do you have in mind?
-
-1 - Create a memcg with a VM inside, multiple vcpus pinned to isolated cpus=
-.=20
-2 - Run multi-cpu task inside the VM, it allocates memory for every CPU and=
- keep
-    the pcp cache
-3 - Try to run a single-cpu task (pinned?) inside the VM, which uses almost=
- all
-    the available memory.
-4 - memcg OOM.
-
-Does it make sense?
+This patch only adds support for the first four ports (swp0-swp3). The
+remaining ports require more significant changes to the felix driver,
+and will be handled in the future.
 
 
->=20
-> > You then restart the cgroup, run the same application without an issue.
-> >=20
-> > Even though it looks a good possibility, this can be perceived by user =
-as
-> > instability.
-> >=20
-> > >=20
-> > > > b - Would it cache any kind of bigger page, or huge page in this sa=
-me aspect?
-> > >=20
-> > > The above should answer this as well as those following up I hope. If
-> > > not let me know.
-> >=20
-> > IIUC we are talking normal pages, is that it?
->=20
-> We are talking about memcg charges and those have page granularity.
->=20
+***
+Note on V5: This driver triggers a bug in phy_device.c. A fix has been
+sent to 'net': https://lkml.org/lkml/2023/1/27/1105
+***
 
-Thanks for the info!
+v5
+    * Documentation overhauled to use
+      /schemas/net/mscc,vsc7514-switch.yaml instead of
+      /schemas/net/dsa/mscc,ocelot.yaml
+    * Two patches were applied elsewhere, so have been dropped:
+      "net: dsa: felix: populate mac_capabilities for all ports" and
+      "dt-bindings: mfd: ocelot: remove spi-max-frequency from required
+       properties"
+    * stats_layout changes are no longer necessary, so the patch
+      "net: mscc: ocelot: expose stats layout definition to be used by
+       other drivers" has been dropped
+    * Common naming macros has been dropped:
+      "mfd: ocelot: add shared resource names for switch functionality".
+      This changed patches 12-13 slightly.
+    * Patch 12 had some small changes due to the rebase - more info there
 
-Also, thanks for the feedback!
-Leo
+v4
+    * Update documentation to include all ports / modes (patch 15)
+    * Fix dt_bindings_check warnings (patch 13, 14, 15)
+    * Utilize new "resource_names" reference (patch 9, 12, 16)
+    * Drop unnecessary #undef REG patch in pinctl: ocelot
+    * Utilize standard MFD resource addition (patch 17)
+    * Utilize shared vsc7514_regmap (new patch 6)
+    * Allow forward-compatibility on fully-defined device trees
+      (patch 10,14)
+
+v3
+    * Fix allmodconfig build (patch 8)
+    * Change documentation wording (patch 12)
+    * Import module namespace (patch 13)
+    * Fix array initializer (patch 13)
+
+v2
+    * Utilize common ocelot_reset routine (new patch 5, modified patch 13)
+    * Change init_regmap() routine to be string-based (new patch 8)
+    * Split patches where necessary (patches 9 and 14)
+    * Add documentation (patch 12) and MAINTAINERS (patch 13)
+    * Upgrade to PATCH status
+
+v1 (from RFC v8 suggested above):
+    * Utilize the MFD framework for creating regmaps, as well as
+      dev_get_regmap() (patches 7 and 8 of this series)
+
+
+Colin Foster (13):
+  net: mscc: ocelot: expose ocelot wm functions
+  net: mscc: ocelot: expose regfield definition to be used by other
+    drivers
+  net: mscc: ocelot: expose vcap_props structure
+  net: mscc: ocelot: expose ocelot_reset routine
+  net: mscc: ocelot: expose vsc7514_regmap definition
+  net: dsa: felix: add configurable device quirks
+  net: dsa: felix: add support for MFD configurations
+  net: dsa: felix: add functionality when not all ports are supported
+  mfd: ocelot: prepend resource size macros to be 32-bit
+  dt-bindings: net: mscc,vsc7514-switch: add dsa binding for the vsc7512
+  dt-bindings: mfd: ocelot: add ethernet-switch hardware support
+  net: dsa: ocelot: add external ocelot switch control
+  mfd: ocelot: add external ocelot switch control
+
+ .../devicetree/bindings/mfd/mscc,ocelot.yaml  |   9 +
+ .../bindings/net/mscc,vsc7514-switch.yaml     | 113 ++++++++---
+ MAINTAINERS                                   |   1 +
+ drivers/mfd/ocelot-core.c                     |  68 ++++++-
+ drivers/net/dsa/ocelot/Kconfig                |  20 ++
+ drivers/net/dsa/ocelot/Makefile               |   2 +
+ drivers/net/dsa/ocelot/felix.c                |  25 ++-
+ drivers/net/dsa/ocelot/felix.h                |   2 +
+ drivers/net/dsa/ocelot/felix_vsc9959.c        |   1 +
+ drivers/net/dsa/ocelot/ocelot_ext.c           | 163 +++++++++++++++
+ drivers/net/dsa/ocelot/seville_vsc9953.c      |   1 +
+ drivers/net/ethernet/mscc/ocelot.c            |  48 ++++-
+ drivers/net/ethernet/mscc/ocelot_devlink.c    |  31 +++
+ drivers/net/ethernet/mscc/ocelot_vsc7514.c    | 190 +-----------------
+ drivers/net/ethernet/mscc/vsc7514_regs.c      | 117 +++++++++++
+ include/soc/mscc/ocelot.h                     |   6 +
+ include/soc/mscc/vsc7514_regs.h               |   6 +
+ 17 files changed, 582 insertions(+), 221 deletions(-)
+ create mode 100644 drivers/net/dsa/ocelot/ocelot_ext.c
+
+-- 
+2.25.1
 
