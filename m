@@ -2,84 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A643A67EEEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED49567EEFB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232598AbjA0T5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 14:57:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        id S233272AbjA0T6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:58:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232343AbjA0T5L (ORCPT
+        with ESMTP id S233212AbjA0T6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 14:57:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0FD8CC77;
-        Fri, 27 Jan 2023 11:55:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F117B821D1;
-        Fri, 27 Jan 2023 19:54:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C4CAC433EF;
-        Fri, 27 Jan 2023 19:54:20 +0000 (UTC)
-Date:   Fri, 27 Jan 2023 14:54:17 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 31/35] Documentation: trace: correct spelling
-Message-ID: <20230127145417.28046fbc@gandalf.local.home>
-In-Reply-To: <20230127064005.1558-32-rdunlap@infradead.org>
-References: <20230127064005.1558-1-rdunlap@infradead.org>
-        <20230127064005.1558-32-rdunlap@infradead.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 27 Jan 2023 14:58:30 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E5C241F3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:56:35 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso6090681wmn.5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:56:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HdcHf4vxQ/rMjsTEFJ0DgEuQ3SMQ+z07fek3463si+E=;
+        b=pz8/k9kdx4HJG9otnXwQxkiFWs3s7B3HHZZ1ebgK20eD9KotQE02nESF3bq8LurB0e
+         2WTQ6R6L60fXxMRyNdvYsKwpe/sBF13EOehF5+aoqui1JwEsYNWov+V1g/g+lSWSAQD0
+         o6/AZ9Ez+JUqSvAtF4+jyaqncWPBuR4fR/myP+9WGSQDM4qgZMfGsmlTmlyPozoFpedj
+         lDf972svIqKfS0ce+T916GjkrMolGv7Ot25KqnJrvdQazHotyqZ1SfgsVCxh67u5PnSc
+         h95uAVkJilEDZmBV3/3enw5S7+1YjnQSONTrDiOCs6FM0IBB79T8kvItKOREM6e6Go4K
+         90Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HdcHf4vxQ/rMjsTEFJ0DgEuQ3SMQ+z07fek3463si+E=;
+        b=0qsyahIp23OcePFQqn0ka+oe4ZVjotFXcPEWdMsPfGMAvqOB6ySXiO2YHjL4ZjIXdN
+         V/pbQwlyuzTYBOtXVOLBwQgA+0dd4U90x/3uDir3L5ehuAsj9jAwDGpMEbDoRuAREjfB
+         dW+YiS26jErwxaWUlLvYVcrfYxCLHc9R+GqioK8Gc8kv1cTsCpFcRNt4oiTRlCkZNDl1
+         jkQhTNE3qskAIKUo+5Er5p+V/+tm8+FuQu413AfNhLef98Y0u6hHIcGkKT5QAzeo0t/E
+         2OVrJ8ZHNIzliDkYhYkvRM/IfJeYyjB8SHAXEqlOKLjgaXVIs8MwalURcbigi1HzDiRT
+         NpQg==
+X-Gm-Message-State: AFqh2koThtnhrAoXvdNztriZ1ifljYNl2X7wFqHXGw2y/kBYVEom4zfE
+        24Sme0rPASCQbWMdQYyVDK5glw==
+X-Google-Smtp-Source: AMrXdXuUI4WWaf2bPFMUfTdSPFeCesGihwg4tC5rD9BWoMfsGxLqO5WdVlEEA1rJgIlK6lXDOSgUjA==
+X-Received: by 2002:a05:600c:4f82:b0:3db:25a0:ca5b with SMTP id n2-20020a05600c4f8200b003db25a0ca5bmr32834843wmq.37.1674849390878;
+        Fri, 27 Jan 2023 11:56:30 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o3-20020a05600c4fc300b003db1d9553e7sm10081542wmq.32.2023.01.27.11.56.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 11:56:30 -0800 (PST)
+Message-ID: <52508584-47c5-2497-68c8-2c0044911aca@linaro.org>
+Date:   Fri, 27 Jan 2023 20:56:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] dt-bindings: firmware: qcom,scm: add qcom,scm-sa8775p
+ compatible
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230127192139.299228-1-brgl@bgdev.pl>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230127192139.299228-1-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 Jan 2023 22:40:01 -0800
-Randy Dunlap <rdunlap@infradead.org> wrote:
-
-> Correct spelling problems for Documentation/trace/ as reported
-> by codespell.
+On 27/01/2023 20:21, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-> Cc: linux-trace-kernel@vger.kernel.org
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: coresight@lists.linaro.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
+> Add a compatible for the sa8775p platform's Secure Channel Manager
+> firmware interface.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > ---
+>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+If you send bindings separately from DTS (which is fine), please provide
+the link to the user - either DTS or driver for this compatible. Driver
+does not use it, thus to the DTS.
 
--- Steve
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->  Documentation/trace/coresight/coresight-etm4x-reference.rst |    2 +-
->  Documentation/trace/events.rst                              |    6 +++---
->  Documentation/trace/fprobe.rst                              |    2 +-
->  Documentation/trace/ftrace-uses.rst                         |    2 +-
->  Documentation/trace/hwlat_detector.rst                      |    2 +-
->  Documentation/trace/rv/runtime-verification.rst             |    2 +-
->  Documentation/trace/uprobetracer.rst                        |    2 +-
->  7 files changed, 9 insertions(+), 9 deletions(-)
-> 
+Best regards,
+Krzysztof
+
