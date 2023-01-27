@@ -2,65 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B2967E851
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F6F67E84D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbjA0OcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
+        id S229889AbjA0Obr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:31:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233144AbjA0OcN (ORCPT
+        with ESMTP id S232442AbjA0Obo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:32:13 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8612283278
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:32:03 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P3KZP1f1tz9v7JD
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 22:23:57 +0800 (CST)
-Received: from [10.81.218.251] (unknown [10.81.218.251])
-        by APP1 (Coremail) with SMTP id LxC2BwD3dwNA4NNjNCvQAA--.2670S2;
-        Fri, 27 Jan 2023 15:31:38 +0100 (CET)
-Message-ID: <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
-Date:   Fri, 27 Jan 2023 15:31:25 +0100
+        Fri, 27 Jan 2023 09:31:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E403DFF0E;
+        Fri, 27 Jan 2023 06:31:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 878D561CBB;
+        Fri, 27 Jan 2023 14:31:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5282C433EF;
+        Fri, 27 Jan 2023 14:31:32 +0000 (UTC)
+Message-ID: <05bfc909-1ebb-b74f-dcdd-adc70dd97f3e@xs4all.nl>
+Date:   Fri, 27 Jan 2023 15:31:30 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
- <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
- <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwD3dwNA4NNjNCvQAA--.2670S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFWDArykZry3Zr45XFWfuFg_yoWrtrWkpr
-        WfKws3Kayvyrn5uw1UJw1DXFyrCw4rAw1rJF18ua4F93y5Wa929F40gr4j9Fy7GrZ7Jayj
-        qr4Yy34kZr4kZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU13rcDUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 01/10] media: Add P012 and P012M video format
+Content-Language: en-US
+To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
+        mirela.rabulea@oss.nxp.com
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <cover.1671071730.git.ming.qian@nxp.com>
+ <dfaef3c8eb29108b1837a1959d598c8b0db63422.1671071730.git.ming.qian@nxp.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <dfaef3c8eb29108b1837a1959d598c8b0db63422.1671071730.git.ming.qian@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,141 +50,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 20/12/2022 04:11, Ming Qian wrote:
+> P012 is a YUV format with 12-bits per component with interleaved UV,
+> like NV12, expanded to 16 bits.
+> Data in the 12 high bits, zeros in the 4 low bits,
+> arranged in little endian order.
+> And P012M has two non contiguous planes.
+> 
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> ---
+>  .../media/v4l/pixfmt-yuv-planar.rst           | 94 +++++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-common.c         |  2 +
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |  2 +
+>  include/uapi/linux/videodev2.h                |  2 +
+>  4 files changed, 100 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> index f1d5bb7b806d..aa37c3de8808 100644
+> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> @@ -123,6 +123,20 @@ All components are stored with the same number of bits per component.
+>        - Cb, Cr
+>        - Yes
+>        - 4x4 tiles
+> +    * - V4L2_PIX_FMT_P012
+> +      - 'P012'
+> +      - 12
+> +      - 4:2:0
+> +      - Cb, Cr
+> +      - Yes
+> +      - Linear
+> +    * - V4L2_PIX_FMT_P012M
+> +      - 'PM12'
+> +      - 12
+> +      - 4:2:0
+> +      - Cb, Cr
+> +      - Yes
+> +      - Linear
+>      * - V4L2_PIX_FMT_NV16
+>        - 'NV16'
+>        - 8
+> @@ -586,6 +600,86 @@ Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian ord
+>        - Cb\ :sub:`11`
+>        - Cr\ :sub:`11`
+>  
+> +.. _V4L2-PIX-FMT-P012:
+> +.. _V4L2-PIX-FMT-P012M:
+> +
+> +P012 and P012M
+> +--------------
+> +
+> +P012 is like NV12 with 12 bits per component, expanded to 16 bits.
+> +Data in the 12 high bits, zeros in the 4 low bits, arranged in little endian order.
+> +
+> +.. flat-table:: Sample 4x4 P012 Image
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +
+> +    * - start + 0:
+> +      - Y'\ :sub:`00`
+> +      - Y'\ :sub:`01`
+> +      - Y'\ :sub:`02`
+> +      - Y'\ :sub:`03`
+> +    * - start + 8:
+> +      - Y'\ :sub:`10`
+> +      - Y'\ :sub:`11`
+> +      - Y'\ :sub:`12`
+> +      - Y'\ :sub:`13`
+> +    * - start + 16:
+> +      - Y'\ :sub:`20`
+> +      - Y'\ :sub:`21`
+> +      - Y'\ :sub:`22`
+> +      - Y'\ :sub:`23`
+> +    * - start + 24:
+> +      - Y'\ :sub:`30`
+> +      - Y'\ :sub:`31`
+> +      - Y'\ :sub:`32`
+> +      - Y'\ :sub:`33`
+> +    * - start + 32:
+> +      - Cb\ :sub:`00`
+> +      - Cr\ :sub:`00`
+> +      - Cb\ :sub:`01`
+> +      - Cr\ :sub:`01`
+> +    * - start + 40:
+> +      - Cb\ :sub:`10`
+> +      - Cr\ :sub:`10`
+> +      - Cb\ :sub:`11`
+> +      - Cr\ :sub:`11`
+> +
+> +.. flat-table:: Sample 4x4 P012M Image
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +
+> +    * - start0 + 0:
+> +      - Y'\ :sub:`00`
+> +      - Y'\ :sub:`01`
+> +      - Y'\ :sub:`02`
+> +      - Y'\ :sub:`03`
+> +    * - start0 + 8:
+> +      - Y'\ :sub:`10`
+> +      - Y'\ :sub:`11`
+> +      - Y'\ :sub:`12`
+> +      - Y'\ :sub:`13`
+> +    * - start0 + 16:
+> +      - Y'\ :sub:`20`
+> +      - Y'\ :sub:`21`
+> +      - Y'\ :sub:`22`
+> +      - Y'\ :sub:`23`
+> +    * - start0 + 24:
+> +      - Y'\ :sub:`30`
+> +      - Y'\ :sub:`31`
+> +      - Y'\ :sub:`32`
+> +      - Y'\ :sub:`33`
+> +    * -
+> +    * - start1 + 0:
+> +      - Cb\ :sub:`00`
+> +      - Cr\ :sub:`00`
+> +      - Cb\ :sub:`01`
+> +      - Cr\ :sub:`01`
+> +    * - start1 + 8:
+> +      - Cb\ :sub:`10`
+> +      - Cr\ :sub:`10`
+> +      - Cb\ :sub:`11`
+> +      - Cr\ :sub:`11`
+> +
+>  
+>  Fully Planar YUV Formats
+>  ========================
+> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+> index 40f56e044640..a5e8ba370d33 100644
+> --- a/drivers/media/v4l2-core/v4l2-common.c
+> +++ b/drivers/media/v4l2-core/v4l2-common.c
+> @@ -267,6 +267,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+>  		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>  		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>  		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> +		{ .format = V4L2_PIX_FMT_P012,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+>  
+>  		{ .format = V4L2_PIX_FMT_YUV410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+>  		{ .format = V4L2_PIX_FMT_YVU410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+> @@ -292,6 +293,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+>  		{ .format = V4L2_PIX_FMT_NV21M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+>  		{ .format = V4L2_PIX_FMT_NV16M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+>  		{ .format = V4L2_PIX_FMT_NV61M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> +		{ .format = V4L2_PIX_FMT_P012M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+>  
+>  		/* Bayer RGB formats */
+>  		{ .format = V4L2_PIX_FMT_SBGGR8,	.pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index 8e0a0ff62a70..067dbdd0a9ef 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -1348,6 +1348,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>  	case V4L2_PIX_FMT_NV24:		descr = "Y/UV 4:4:4"; break;
+>  	case V4L2_PIX_FMT_NV42:		descr = "Y/VU 4:4:4"; break;
+>  	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/UV 4:2:0"; break;
+> +	case V4L2_PIX_FMT_P012:		descr = "12-bit Y/UV 4:2:0"; break;
+>  	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/UV 4:2:0 (4x4 Linear)"; break;
+>  	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/UV 4:2:0 (16x16 Linear)"; break;
+>  	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/UV 4:2:0 (32x32 Linear)"; break;
+> @@ -1358,6 +1359,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>  	case V4L2_PIX_FMT_NV61M:	descr = "Y/VU 4:2:2 (N-C)"; break;
+>  	case V4L2_PIX_FMT_NV12MT:	descr = "Y/UV 4:2:0 (64x32 MB, N-C)"; break;
+>  	case V4L2_PIX_FMT_NV12MT_16X16:	descr = "Y/UV 4:2:0 (16x16 MB, N-C)"; break;
+> +	case V4L2_PIX_FMT_P012M:	descr = "12-bit Y/UV 4:2:0 (N-C)"; break;
+>  	case V4L2_PIX_FMT_YUV420M:	descr = "Planar YUV 4:2:0 (N-C)"; break;
+>  	case V4L2_PIX_FMT_YVU420M:	descr = "Planar YVU 4:2:0 (N-C)"; break;
+>  	case V4L2_PIX_FMT_YUV422M:	descr = "Planar YUV 4:2:2 (N-C)"; break;
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 1befd181a4cc..5448aa3b7858 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -626,12 +626,14 @@ struct v4l2_pix_format {
+>  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
+>  #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
+>  #define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 24  Y/CbCr 4:2:0 10-bit per component */
+> +#define V4L2_PIX_FMT_P012    v4l2_fourcc('P', '0', '1', '2') /* 24  Y/CbCr 4:2:0 12-bit per component */
+>  
+>  /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
+>  #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
+>  #define V4L2_PIX_FMT_NV21M   v4l2_fourcc('N', 'M', '2', '1') /* 21  Y/CrCb 4:2:0  */
+>  #define V4L2_PIX_FMT_NV16M   v4l2_fourcc('N', 'M', '1', '6') /* 16  Y/CbCr 4:2:2  */
+>  #define V4L2_PIX_FMT_NV61M   v4l2_fourcc('N', 'M', '6', '1') /* 16  Y/CrCb 4:2:2  */
+> +#define V4L2_PIX_FMT_P012M   v4l2_fourcc('P', 'M', '1', '2') /* 24  Y/CbCr 4:2:0 12-bit per component */
 
+The name of the V4L2_PIX_FMT_ defines in this series are hard to decode.
 
-On 1/26/2023 5:36 PM, Alan Stern wrote:
-> On Thu, Jan 26, 2023 at 02:46:04PM +0100, Jonas Oberhauser wrote:
->> As stated in the documentation and implied by its name, the ppo
->> (preserved program order) relation is intended to link po-earlier
->> to po-later instructions under certain conditions.  However, a
->> corner case currently allows instructions to be linked by ppo that
->> are not executed by the same thread, i.e., instructions are being
->> linked that have no po relation.
->>
->> This happens due to the mb/strong-fence relations, which (as one
->> case) provide order when locks are passed between threads followed
->> by an smp_mb__after_unlock_lock() fence.  This is illustrated in
->> the following litmus test (as can be seen when using herd7 with
->> `doshow ppo`):
->>
->> P0(int *x, int *y)
->> {
->>      spin_lock(x);
->>      spin_unlock(x);
->> }
->>
->> P1(int *x, int *y)
->> {
->>      spin_lock(x);
->>      smp_mb__after_unlock_lock();
->>      *y = 1;
->> }
->>
->> The ppo relation will link P0's spin_lock(x) and P1's *y=1, because
->> P0 passes a lock to P1 which then uses this fence.
->>
->> The patch makes ppo a subrelation of po by eliminating this possibility
->> from mb (but not strong-fence) and relying explicitly on mb|gp instead
->> of strong-fence when defining ppo.
->>
->> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
->> ---
-> This changes the meaning of the fence relation, which is used in
-> w-pre-bounded, w-post-bounded, ww-vis, wr-vis, and rw-xbstar.  Have you
-> checked that they won't be affected by the change?
+In this case is it derived from V4L2_PIX_FMT_P010, which really should have been
+named differently, but it's too late now :-(
 
-Good point, in fact it changes the nonrw-fence as well which is used in 
-the r-* relations.
-I had missed this completely. That's what I get for not looking at the 
-data race relations!
+So I guess we'll stick with this naming, but it's not obvious what 'P012' means
+without referring to documentation.
 
+Oh well.
 
-Let's go through the individual cases.
-If we had e.g. *-post-bounded because of the 
-po-unlock-lock-po;[After-unlock-lock];po edge, this may be either due to 
-the fence rule or due to (...fence ; vis ; *-pre-bounded).
-In the first case we have po-rel ; rfe ; acq-po and get 
-fence;rfe;(xbstar&int);fence which gives us *-post-bounded.
-In the second case we now have strong-fence, with vis <= xbstar we see 
-that **-vis is preserved here by switching from the fence rule to the 
-strong-fence;xbstar;... case.
+Regards,
 
-For *-pre-bounded, the situtation is tricky because of the xbstar&int 
-that can be at the end of vis, when *-pre-bounded is used to define 
-w*-vis through (w-post-bounded;vis;*-pre-bounded). In this case, the 
-xbstar&int can point in the opposite direction of po, which means that 
-the unlock that creates the strong fence might not be po-after the 
-instruction that starts the link.
+	Hans
 
-Here's a litmus test illustrating the difference, where P1 has a 
-backwards-pointing xbstar&int. Currently there's no data race, but with 
-the proposed patch there is.
-
-P0(int *x, int *y)
-{
-     *x = 1;
-     smp_store_release(y, 1);
-}
-
-P1(int *x, int *y, int *dx, int *dy, spinlock_t *l)
-{
-     spin_lock(l);
-     int r1 = READ_ONCE(*dy);
-     if (r1==1)
-         spin_unlock(l);
-
-     int r0 = smp_load_acquire(y);
-     if (r0 == 1) {
-         WRITE_ONCE(*dx,1);
-     }
-}
-
-P2(int *dx, int *dy)
-{
-     WRITE_ONCE(*dy,READ_ONCE(*dx));
-}
-
-
-P3(int *x, spinlock_t *l)
-{
-     spin_lock(l);
-     smp_mb__after_unlock_lock();
-     *x = 2;
-}
-
-
-This actually makes me wonder. I thought the reason for the xbstar & int 
-is that it ensures that the overall relation, after shuffling around a 
-little bit, becomes prop&int ; hb*.
-
-Like in case the *x=2 is co-before the *x=1, we get
-   Wx2 ->overwrite Wx1 ->cumul-fence*;rfe  (some event on the same CPU 
-as Wx2)  ->fence Wx2
-which is
-   Wx2 -> prop&int some other event ->hb Wx2
-which must be irreflexive.
-
-However, that's not the case at all, because the fence relation 
-currently doesn't actually have to relate events of the same CPU.
-So we get
-   Wx2 ->overwrite Wx1 ->cumul-fence*;rfe  (some event on some other CPU 
-than Wx2's) ->(hb*&int);fence Wx2
-i.e.,
-   Wx2 ->prop&ext;hb*;strong-fence Wx2
-
-which shouldn't provide any ordering in general.
-
-In fact, replacing the *x=1 and *x=2 with WRITE_ONCEs, (pilot errors 
-notwithstanding) both Wx1 ->co Wx2 and Wx2 ->co Wx1 become allowed in 
-the current LKMM (in graphs where all other edges are equal).
-
-Shouldn't this actually *be* a data race? And potentially the same with 
-rcu-fence?
-
-The other cases of *-pre-bounded seem to work out: they all link stuff 
-via xbstar to the instruction that is linked via po-unlock-lock-po ; 
-[After-unlock-lock] ; po to the potentially racy access, and 
-po-unlock-lock-po;po   is xbstar ; acq-po, which allows closing the gap.
-
-Best wishes, jonas
+>  
+>  /* three planes - Y Cb, Cr */
+>  #define V4L2_PIX_FMT_YUV410  v4l2_fourcc('Y', 'U', 'V', '9') /*  9  YUV 4:1:0     */
 
