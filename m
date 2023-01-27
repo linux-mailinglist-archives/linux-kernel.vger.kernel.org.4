@@ -2,124 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38E567E50C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43CFC67E420
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233492AbjA0MXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:23:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S231646AbjA0LvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234190AbjA0MWg (ORCPT
+        with ESMTP id S234258AbjA0Ltx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:22:36 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DCB7EFD2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:19:58 -0800 (PST)
-Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pLMvy-0001YU-VO; Fri, 27 Jan 2023 12:30:19 +0100
-Message-ID: <493cf6bd-6c68-2415-2b24-76ec634df240@leemhuis.info>
-Date:   Fri, 27 Jan 2023 12:30:18 +0100
+        Fri, 27 Jan 2023 06:49:53 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800468627C
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:47:31 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id u21so4504394edv.3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:47:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DaRRAfvxfJqSrDYc/T6dUW2JpmapMuQVxuuxsRDHL3g=;
+        b=t69jrkz9SgxCei4WfeByohBBrLzhGEsyIDxNeyJRqUDr59WimVQW45Xku7GldIWpjF
+         2r6yHBqJRHKcwTgnh+svOX8NZEgCEr+7WyojabZPrmPuoqah5uSNPkyO9Kz/y2TIAsW4
+         jfQFpX5A3uDGlpqoxC9haB1mKzEXsHkaajpQuTmXAUT7DkbzQnZwJZh8Cx+jVlakAvlT
+         HS6UrBUKPNC81A2DttawPWdhY9fpNlsmZ9ieIyGCJjBgCdzhHsqpmLKgkNHYTZeo03cT
+         3GcZx5Uf42NUnGhJ1G6/3c9tgg9vVnlU+u96TgxfwxR+4MNv0lV/rLkvnch5Xdxn2FVP
+         M+8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DaRRAfvxfJqSrDYc/T6dUW2JpmapMuQVxuuxsRDHL3g=;
+        b=szgmer8hQgFQxyDaqDmcdp3hruJIOXcU4lr5SLlnC3CBiIhcRaDx08kz/veBiqgD30
+         OWP9ePxwmfIxfdKRxfqr+OT9m/jJUBIJkOZWkSRRbdGhWo8xVacfXAKSicI2S/bQcmcG
+         ZbKq3g0lrdgvXLOIhxj7HOYHjgwJQawAwOSqCVFwYffTVPwNjCQ3eDKRdBwuOUaK4bp/
+         0cKmHPrnVJj/IATSCpqYdzYIWibsPny3Ncu6vCy09vHEl1ayWc2CBWeScT+7tuDIlbqJ
+         t1dyupKFoayCQ3SG4+JdtByrrjtDrsdhuhcmef9kUlBcZVbTGuvFpYOeqMf3ksYDYuSY
+         in9Q==
+X-Gm-Message-State: AFqh2kpCoZJ1ftAskmcCRb8yPzkQsdX9/O5R7SBTAg1FXfJ/v2kMZhNJ
+        dRoNfXAt7MYNVc0z7R45uG/AU4XmtD+jRWLP
+X-Google-Smtp-Source: AK7set8keQvmYQzUlhP93L9+PZRj97OmGgCO3J08fX/ISka8dWTIQI/JG6G4yp7JUSNyrWui2A0GmQ==
+X-Received: by 2002:a05:600c:4f4b:b0:3dc:2af8:83c0 with SMTP id m11-20020a05600c4f4b00b003dc2af883c0mr4924359wmq.31.1674819245543;
+        Fri, 27 Jan 2023 03:34:05 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id l21-20020a05600c4f1500b003dc4050c97bsm676573wmq.3.2023.01.27.03.34.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 03:34:04 -0800 (PST)
+Date:   Fri, 27 Jan 2023 13:34:03 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sm8550-mtp: drop incorrect
+ vdd-l6-l16-supply
+Message-ID: <Y9O2q6Om+MK9k3UL@linaro.org>
+References: <20230127111913.117036-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 1/1] PCI: Add translated request only flag for
- pci_enable_pasid()
-Content-Language: en-US, de-DE
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Matt Fagnani <matt.fagnani@bell.net>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <20230114073420.759989-1-baolu.lu@linux.intel.com>
- <Y8Vwc/bMwvtICv4T@nvidia.com>
-From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <Y8Vwc/bMwvtICv4T@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674821998;426d5f6a;
-X-HE-SMSGID: 1pLMvy-0001YU-VO
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127111913.117036-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker. Top-posting for once,
-to make this easily accessible to everyone.
-
-What happened to below patch? It looks like there was no progress since
-ten days now. Or did I miss something?
-
-Reminder, the patch is fixing a regression, hence it would be good if
-this could be fixed rather sooner than later.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-On 16.01.23 16:42, Jason Gunthorpe wrote:
-> On Sat, Jan 14, 2023 at 03:34:20PM +0800, Lu Baolu wrote:
->> The PCIe fabric routes Memory Requests based on the TLP address, ignoring
->> the PASID. In order to ensure system integrity, commit 201007ef707a ("PCI:
->> Enable PASID only when ACS RR & UF enabled on upstream path") requires
->> some ACS features being supported on device's upstream path when enabling
->> PCI/PASID.
->>
->> One alternative is ATS/PRI which lets the device resolve the PASID + addr
->> pair before a memory request is made into a routeable TLB address through
->> the translation agent. Those resolved addresses are then cached on the
->> device instead of in the IOMMU TLB and the device always sets translated
->> bit for PASID. One example of those devices are AMD graphic devices that
->> always have ACS or ATS/PRI enabled together with PASID.
->>
->> This adds a flag parameter in the pci_enable_pasid() helper, with which
->> the device driver could opt-in the fact that device always sets the
->> translated bit for PASID.
->>
->> It also applies this opt-in for AMD graphic devices. Without this change,
->> kernel boots to black screen on a system with below AMD graphic device:
->>
->> 00:01.0 VGA compatible controller: Advanced Micro Devices, Inc.
->>         [AMD/ATI] Wani [Radeon R5/R6/R7 Graphics] (rev ca)
->>         (prog-if 00 [VGA controller])
->> 	DeviceName: ATI EG BROADWAY
->> 	Subsystem: Hewlett-Packard Company Device 8332
->>
->> At present, it is a common practice to enable/disable PCI PASID in the
->> iommu drivers. Considering that the device driver knows more about the
->> specific device, we will follow up by moving pci_enable_pasid() into
->> the specific device drivers.
->>
->> Fixes: 201007ef707a ("PCI: Enable PASID only when ACS RR & UF enabled on upstream path")
->> Reported-and-tested-by: Matt Fagnani <matt.fagnani@bell.net>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216865
->> Link: https://lore.kernel.org/r/15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info/
->> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
->> Suggested-by: Christian König <christian.koenig@amd.com>
->> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->> ---
->>  include/linux/pci-ats.h                     | 6 ++++--
->>  drivers/iommu/amd/iommu.c                   | 2 +-
->>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 +-
->>  drivers/iommu/intel/iommu.c                 | 3 ++-
->>  drivers/pci/ats.c                           | 8 ++++++--
->>  5 files changed, 14 insertions(+), 7 deletions(-)
+On 23-01-27 12:19:13, Krzysztof Kozlowski wrote:
+> There is no vdd-l6-l16 supply in qcom,pm8550-rpmh-regulators.
 > 
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Fixes: 71342fb91eae ("arm64: dts: qcom: Add base SM8550 MTP dts")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> Jason
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+> index 725d3bc3ee72..d6ae80414654 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+> @@ -47,7 +47,6 @@ regulators-0 {
+>  		vdd-bob2-supply = <&vph_pwr>;
+>  		vdd-l2-l13-l14-supply = <&vreg_bob1>;
+>  		vdd-l3-supply = <&vreg_s4g_1p3>;
+> -		vdd-l6-l16-supply = <&vreg_bob1>;
+
+NACK.
+
+There is actually an L6 but is not added yet.
+
+But the correct one here is actually: vdd-l5-l16-supply
+
+At least according to the power grid documentation.
+
+>  		vdd-l6-l7-supply = <&vreg_bob1>;
+>  		vdd-l8-l9-supply = <&vreg_bob1>;
+>  		vdd-l11-supply = <&vreg_s4g_1p3>;
+> -- 
+> 2.34.1
+> 
