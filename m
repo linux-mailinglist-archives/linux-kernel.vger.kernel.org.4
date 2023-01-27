@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C2C67DC19
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 775FD67DC1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbjA0CF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 21:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        id S233339AbjA0CGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 21:06:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjA0CFk (ORCPT
+        with ESMTP id S233190AbjA0CFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 21:05:40 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461D5AD3D;
-        Thu, 26 Jan 2023 18:02:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PK9c5BIZ/2zl/kbi/P3CFpqoz5RNvD3sK2pvPPas0Ak=; b=RylZnR9uWIvzX4rWuBzjZyKE88
-        p7IhXapBv2ZuJ8A5mNdHQ/M4MSSpH2DhYndse8MHfUKjUVpOimHisD8sYwAXacgUuraHI26wQLGfA
-        ZTOuH9+ysl18EC/pf4TBjGlgbm/+l4BAfxy/B3Dqxb1oCo3ERvTttDRm4VN8M+WXYsbtFZD0QYRXK
-        EZ54JgXXmPhXCsE3YKPxtOFagSMtMtW57bXiCDmHrYqa6qm4cGZXRgfODjLrfV/nI2Omrl3u8hbAc
-        7Uu9Szo5UwLkvwyZhqqXASLKT5SrFZM9KyoOlQ52YNg9Yg48+zdsWK21Jwik8hMSF/bAvz1SCSDR3
-        eesAwG3w==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pLE4V-004MLo-24;
-        Fri, 27 Jan 2023 02:02:31 +0000
-Date:   Fri, 27 Jan 2023 02:02:31 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v11 2/8] iov_iter: Add a function to extract a page list
- from an iterator
-Message-ID: <Y9Mwt1EMm8InCHvA@ZenIV>
-References: <20230126141626.2809643-1-dhowells@redhat.com>
- <20230126141626.2809643-3-dhowells@redhat.com>
- <Y9L3yA+B1rrnrGK8@ZenIV>
- <Y9MAbYt6DIRFm954@ZenIV>
- <ba3adce1-ddea-98e0-fc3a-1cb660edae4c@redhat.com>
+        Thu, 26 Jan 2023 21:05:43 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3574E4996F
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:03:15 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id o13so3259844pjg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:03:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QlnC2FACLz4TVazdbeeDFs7ZKh+4cFrx8LwVyzMk1F8=;
+        b=loBlZtwcLsVlfXwQIERwIJ+CvIOKfjyag+u+fc7ru6Zxx3Fdk5sbWOUYc98VITpEgU
+         dfk+Z+14ls4uR+LOpmvabY0SZH22k3D/rg95JtaWxgMKNFOodruDeiw+25R4/6tMVPb2
+         gAyCAFCAmwQDN0X0tXZyaHBJnmehybBqSZgdYXH3QHlQ9gfCd+kXH0hNzkGkb8hl6Y1c
+         Si2uIeSghkSBj6GSlBIHCwtA0ewSS2odWWIi0evy6WsoHJYjiFRV+bDZu2Hv/P7fsI6X
+         xT1nm7jnQ9il8SLu9MU4qeRUAO85eAnTvJmiCpR1DATPSUgw5oLJjE6VWv8eG2U3Md7L
+         6IiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QlnC2FACLz4TVazdbeeDFs7ZKh+4cFrx8LwVyzMk1F8=;
+        b=k/WGHa8JFkbCuG4oxT5CZur46jqfdHH0JCmq0cxOMzBnZ4DfbvQ8rVoyiTez7SqgsM
+         5nk0Z60/zarjsjBZfom07jK6K/vLkDcFihwc6wgTE35+EYjYsMGh6XYOtl1tMYShVO51
+         PN9nZdBtIEe3Ug4+HHvJP2KomVx4lr9OYY3F4kzpTz3cJO9hiNpMA2MZbpBSi+Yb+XWn
+         qLLdmb9feWz19rjPXEXWPGHzjFoEzXqZ5CgDss4vq4VZf+eeIN8qoMLpJUxoAtaHoATI
+         C+KMZulid01/lTZCfXZ0hGZDrWMsbAy4/JamsTSwjP7iLNrAP/xS3KbEgsatPx1sC27K
+         mvpg==
+X-Gm-Message-State: AO0yUKVCrKI4vejjDIDfJIBhyAekRtPAl+Ud+S+e3FnKoC6xS3+ExzNJ
+        6RbyVsIMnnBoBZoTIQ77CC9rFA==
+X-Google-Smtp-Source: AK7set/q3kh0Y5amuDKghvzE2jA+7uNs0NPpCTSEeqflEwH2JIUjGWc2BNZcQcGyU16D8fjoov2vnQ==
+X-Received: by 2002:a17:902:c9d2:b0:189:6624:58c0 with SMTP id q18-20020a170902c9d200b00189662458c0mr1152283pld.3.1674784994516;
+        Thu, 26 Jan 2023 18:03:14 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u5-20020a170902e80500b00194974a2b3asm1619966plg.151.2023.01.26.18.03.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 18:03:14 -0800 (PST)
+Date:   Fri, 27 Jan 2023 02:03:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v3 1/8] KVM: x86/pmu: Rename pmc_is_enabled() to
+ pmc_is_globally_enabled()
+Message-ID: <Y9Mw3pcW/SL/Mna8@google.com>
+References: <20221111102645.82001-1-likexu@tencent.com>
+ <20221111102645.82001-2-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ba3adce1-ddea-98e0-fc3a-1cb660edae4c@redhat.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20221111102645.82001-2-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,43 +74,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 12:44:08AM +0100, David Hildenbrand wrote:
-> On 26.01.23 23:36, Al Viro wrote:
-> > On Thu, Jan 26, 2023 at 09:59:36PM +0000, Al Viro wrote:
-> > > On Thu, Jan 26, 2023 at 02:16:20PM +0000, David Howells wrote:
-> > > 
-> > > > +/**
-> > > > + * iov_iter_extract_will_pin - Indicate how pages from the iterator will be retained
-> > > > + * @iter: The iterator
-> > > > + *
-> > > > + * Examine the iterator and indicate by returning true or false as to how, if
-> > > > + * at all, pages extracted from the iterator will be retained by the extraction
-> > > > + * function.
-> > > > + *
-> > > > + * %true indicates that the pages will have a pin placed in them that the
-> > > > + * caller must unpin.  This is must be done for DMA/async DIO to force fork()
-> > > > + * to forcibly copy a page for the child (the parent must retain the original
-> > > > + * page).
-> > > > + *
-> > > > + * %false indicates that no measures are taken and that it's up to the caller
-> > > > + * to retain the pages.
-> > > > + */
-> > > > +static inline bool iov_iter_extract_will_pin(const struct iov_iter *iter)
-> > > > +{
-> > > > +	return user_backed_iter(iter);
-> > > > +}
-> > > > +
-> > > 
-> > > Wait a sec; why would we want a pin for pages we won't be modifying?
-> > > A reference - sure, but...
-> > 
-> > After having looked through the earlier iterations of the patchset -
-> > sorry, but that won't fly for (at least) vmsplice().  There we can't
-> > pin those suckers;
+On Fri, Nov 11, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> We'll need a way to pass FOLL_LONGTERM to pin_user_pages_fast() to handle
-> such long-term pinning as vmsplice() needs. But the release path (unpin)
-> will be the same.
+> The name of function pmc_is_enabled() is a bit misleading. A PMC can
+> be disabled either by PERF_CLOBAL_CTRL or by its corresponding EVTSEL.
+> Add the global semantic to its name.
+> 
+> Suggested-by: Jim Mattson <jmattson@google.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
 
-Umm...  Are you saying that if the source area contains DAX mmaps, vmsplice()
-from it will fail?
+...
+
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index 684393c22105..e57f707fb940 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -83,7 +83,7 @@ void kvm_pmu_ops_update(const struct kvm_pmu_ops *pmu_ops)
+>  #undef __KVM_X86_PMU_OP
+>  }
+>  
+> -static inline bool pmc_is_enabled(struct kvm_pmc *pmc)
+> +static inline bool pmc_is_globally_enabled(struct kvm_pmc *pmc)
+>  {
+>  	return static_call(kvm_x86_pmu_pmc_is_enabled)(pmc);
+
+This doesn't compile.  v3, and I'm getting pings, and the very first patch doesn't
+compile.
