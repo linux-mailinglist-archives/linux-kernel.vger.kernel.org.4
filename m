@@ -2,169 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDF067DBFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 02:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D1567DC0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233631AbjA0B5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 20:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
+        id S233714AbjA0CDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 21:03:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbjA0B46 (ORCPT
+        with ESMTP id S233629AbjA0CCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 20:56:58 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05E27A4B4;
-        Thu, 26 Jan 2023 17:51:01 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 26 Jan 2023 21:02:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907977963A
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:57:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674784543;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kBqIVY5zx2E18osvf7PrltTD0lMoq5S2M4uAQB23y6I=;
+        b=CuXD7eJn/ibRttXMwlBoi6oqthQahgesqB6yChGOaVb8pBw0YTmHS6trmka4tyBLv7+OXh
+        bUi1/FzlDKBYcqtygb3OzneptZQ8gVOBoYnG2f+yGxEPYZ1eJG8b15KM7d65vG6sQBpxyh
+        ULV59bcHHFWCZJWQt3nILwTjT9vYFv4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-172-t5CkqvuZNRuKvUtSMwdH_A-1; Thu, 26 Jan 2023 20:55:37 -0500
+X-MC-Unique: t5CkqvuZNRuKvUtSMwdH_A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P30sT4Kr2z4xyB;
-        Fri, 27 Jan 2023 12:50:53 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1674784255;
-        bh=VNMdS/CiloN9PaF8wxKbbGy+XMCZPUIYeLlMZIhbur4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=HA2iypQAyHfpo1GP/aSTqG9JGfMwOWPqiY4Fj2kWrHEC/KuBvgi2XZv9mVkmWDAlb
-         CUcrZ2NG+F/vV9ccVH6KbOkyiZq6oTlj2Z2b0B2kJGOTppuzTLL7U3E4OR9UXuM9jx
-         LQZC2yXd48NIR9GuXTnd8qafZyIYYj306pQXzsNbUPPnUeR4W8MqRtD3ju7XOC0kiY
-         LfKMk37a3jXi7gqJAPDvC2NxyCVrHZDNX6JnqZ4DKRj+An0rxSFLmyg8kOOOcfLpHE
-         8FPF24V2UFQlT2tiFG1FN+P4yLcZs50+1VSzYXETxu37fYrTgcXKjeP/uEpoYExckC
-         jF2PlO+2B3/gQ==
-Date:   Fri, 27 Jan 2023 12:50:52 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Florian Westphal <fw@strlen.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sriram Yagnaraman <sriram.yagnaraman@est.tech>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20230127125052.674281f9@canb.auug.org.au>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 175EC101A52E;
+        Fri, 27 Jan 2023 01:55:37 +0000 (UTC)
+Received: from llong.com (unknown [10.22.33.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 406322166B29;
+        Fri, 27 Jan 2023 01:55:36 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Phil Auld <pauld@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
+Subject: [PATCH v3] sched: Store restrict_cpus_allowed_ptr() call state
+Date:   Thu, 26 Jan 2023 20:55:27 -0500
+Message-Id: <20230127015527.466367-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bDcnixPAPnVH4NOMG2umlS3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/bDcnixPAPnVH4NOMG2umlS3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The user_cpus_ptr field was originally added by commit b90ca8badbd1
+("sched: Introduce task_struct::user_cpus_ptr to track requested
+affinity"). It was used only by arm64 arch due to possible asymmetric
+CPU setup.
 
-Hi all,
+Since commit 8f9ea86fdf99 ("sched: Always preserve the user requested
+cpumask"), task_struct::user_cpus_ptr is repurposed to store user
+requested cpu affinity specified in the sched_setaffinity().
 
-Today's linux-next merge of the net-next tree got a conflict in:
+This results in a slight performance regression on an arm64
+system when booted with "allow_mismatched_32bit_el0"
+on the command-line.  The arch code will (amongst
+other things) calls force_compatible_cpus_allowed_ptr() and
+relax_compatible_cpus_allowed_ptr() when exec()'ing a 32-bit or a 64-bit
+task respectively. Now a call to relax_compatible_cpus_allowed_ptr()
+will always result in a __sched_setaffinity() call whether there is a
+previous force_compatible_cpus_allowed_ptr() call or not.
 
-  net/netfilter/nf_conntrack_proto_sctp.c
+In order to fix this regression, a new scheduler flag
+task_struct::cpus_allowed_restricted is now added to track if
+force_compatible_cpus_allowed_ptr() has been called before or not. This
+patch also updates the comments in force_compatible_cpus_allowed_ptr()
+and relax_compatible_cpus_allowed_ptr() and handles their interaction
+with sched_setaffinity().
 
-between commits:
+This patch also removes the task_user_cpus() helper. In the case of
+relax_compatible_cpus_allowed_ptr(), cpu_possible_mask as user_cpu_ptr
+masking will be performed within __sched_setaffinity() anyway.
 
-  13bd9b31a969 ("Revert "netfilter: conntrack: add sctp DATA_SENT state"")
-  a44b7651489f ("netfilter: conntrack: unify established states for SCTP pa=
-ths")
+Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
+Reported-by: Will Deacon <will@kernel.org>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ include/linux/sched.h |  3 +++
+ kernel/sched/core.c   | 25 +++++++++++++++++--------
+ kernel/sched/sched.h  |  8 +-------
+ 3 files changed, 21 insertions(+), 15 deletions(-)
 
-from the net tree and commit:
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 853d08f7562b..f93f62a1f858 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -886,6 +886,9 @@ struct task_struct {
+ 	unsigned			sched_contributes_to_load:1;
+ 	unsigned			sched_migrated:1;
+ 
++	/* restrict_cpus_allowed_ptr() bit, serialized by scheduler locks */
++	unsigned			cpus_allowed_restricted:1;
++
+ 	/* Force alignment to the next boundary: */
+ 	unsigned			:0;
+ 
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index bb1ee6d7bdde..d7bc809c109e 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2999,6 +2999,10 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
+ 	struct rq *rq;
+ 
+ 	rq = task_rq_lock(p, &rf);
++
++	if (ctx->flags & SCA_CLR_RESTRICT)
++		p->cpus_allowed_restricted = 0;
++
+ 	/*
+ 	 * Masking should be skipped if SCA_USER or any of the SCA_MIGRATE_*
+ 	 * flags are set.
+@@ -3025,8 +3029,8 @@ EXPORT_SYMBOL_GPL(set_cpus_allowed_ptr);
+ /*
+  * Change a given task's CPU affinity to the intersection of its current
+  * affinity mask and @subset_mask, writing the resulting mask to @new_mask.
+- * If user_cpus_ptr is defined, use it as the basis for restricting CPU
+- * affinity or use cpu_online_mask instead.
++ * The cpus_allowed_restricted bit is set to indicate to a later
++ * relax_compatible_cpus_allowed_ptr() call to relax the cpumask.
+  *
+  * If the resulting mask is empty, leave the affinity unchanged and return
+  * -EINVAL.
+@@ -3044,6 +3048,7 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
+ 	int err;
+ 
+ 	rq = task_rq_lock(p, &rf);
++	p->cpus_allowed_restricted = 1;
+ 
+ 	/*
+ 	 * Forcefully restricting the affinity of a deadline task is
+@@ -3055,7 +3060,8 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
+ 		goto err_unlock;
+ 	}
+ 
+-	if (!cpumask_and(new_mask, task_user_cpus(p), subset_mask)) {
++	if (p->user_cpu_ptr &&
++	    !cpumask_and(new_mask, p->user_cpu_ptr, subset_mask)) {
+ 		err = -EINVAL;
+ 		goto err_unlock;
+ 	}
+@@ -3069,9 +3075,8 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
+ 
+ /*
+  * Restrict the CPU affinity of task @p so that it is a subset of
+- * task_cpu_possible_mask() and point @p->user_cpus_ptr to a copy of the
+- * old affinity mask. If the resulting mask is empty, we warn and walk
+- * up the cpuset hierarchy until we find a suitable mask.
++ * task_cpu_possible_mask(). If the resulting mask is empty, we warn
++ * and walk up the cpuset hierarchy until we find a suitable mask.
+  */
+ void force_compatible_cpus_allowed_ptr(struct task_struct *p)
+ {
+@@ -3125,11 +3130,15 @@ __sched_setaffinity(struct task_struct *p, struct affinity_context *ctx);
+ void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
+ {
+ 	struct affinity_context ac = {
+-		.new_mask  = task_user_cpus(p),
+-		.flags     = 0,
++		.new_mask  = cpu_possible_mask;
++		.flags     = SCA_CLR_RESTRICT,
+ 	};
+ 	int ret;
+ 
++	/* Return if no previous force_compatible_cpus_allowed_ptr() call */
++	if (!data_race(p->cpus_allowed_restricted))
++		return;
++
+ 	/*
+ 	 * Try to restore the old affinity mask with __sched_setaffinity().
+ 	 * Cpuset masking will be done there too.
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 771f8ddb7053..e32ba5d9bb54 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1881,13 +1881,6 @@ static inline void dirty_sched_domain_sysctl(int cpu)
+ #endif
+ 
+ extern int sched_update_scaling(void);
+-
+-static inline const struct cpumask *task_user_cpus(struct task_struct *p)
+-{
+-	if (!p->user_cpus_ptr)
+-		return cpu_possible_mask; /* &init_task.cpus_mask */
+-	return p->user_cpus_ptr;
+-}
+ #endif /* CONFIG_SMP */
+ 
+ #include "stats.h"
+@@ -2293,6 +2286,7 @@ extern struct task_struct *pick_next_task_idle(struct rq *rq);
+ #define SCA_MIGRATE_DISABLE	0x02
+ #define SCA_MIGRATE_ENABLE	0x04
+ #define SCA_USER		0x08
++#define SCA_CLR_RESTRICT	0x10
+ 
+ #ifdef CONFIG_SMP
+ 
+-- 
+2.31.1
 
-  f71cb8f45d09 ("netfilter: conntrack: sctp: use nf log infrastructure for =
-invalid packets")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc net/netfilter/nf_conntrack_proto_sctp.c
-index 945dd40e7077,dbdfcc6cd2aa..000000000000
---- a/net/netfilter/nf_conntrack_proto_sctp.c
-+++ b/net/netfilter/nf_conntrack_proto_sctp.c
-@@@ -238,14 -243,16 +227,12 @@@ static int sctp_new_state(enum ip_connt
-  		i =3D 9;
-  		break;
-  	case SCTP_CID_HEARTBEAT_ACK:
-- 		pr_debug("SCTP_CID_HEARTBEAT_ACK");
-  		i =3D 10;
-  		break;
- -	case SCTP_CID_DATA:
- -	case SCTP_CID_SACK:
- -		i =3D 11;
- -		break;
-  	default:
-  		/* Other chunks like DATA or SACK do not change the state */
-- 		pr_debug("Unknown chunk type, Will stay in %s\n",
-- 			 sctp_conntrack_names[cur_state]);
-+ 		pr_debug("Unknown chunk type %d, Will stay in %s\n",
-+ 			 chunk_type, sctp_conntrack_names[cur_state]);
-  		return cur_state;
-  	}
- =20
-@@@ -381,19 -386,21 +364,21 @@@ int nf_conntrack_sctp_packet(struct nf_
- =20
-  		if (!sctp_new(ct, skb, sh, dataoff))
-  			return -NF_ACCEPT;
- -	} else {
- -		/* Check the verification tag (Sec 8.5) */
- -		if (!test_bit(SCTP_CID_INIT, map) &&
- -		    !test_bit(SCTP_CID_SHUTDOWN_COMPLETE, map) &&
- -		    !test_bit(SCTP_CID_COOKIE_ECHO, map) &&
- -		    !test_bit(SCTP_CID_ABORT, map) &&
- -		    !test_bit(SCTP_CID_SHUTDOWN_ACK, map) &&
- -		    !test_bit(SCTP_CID_HEARTBEAT, map) &&
- -		    !test_bit(SCTP_CID_HEARTBEAT_ACK, map) &&
- -		    sh->vtag !=3D ct->proto.sctp.vtag[dir]) {
- -			nf_ct_l4proto_log_invalid(skb, ct, state,
- -						  "verification tag check failed %x vs %x for dir %d",
- -						  sh->vtag, ct->proto.sctp.vtag[dir], dir);
- -			goto out;
- -		}
- +	}
- +
- +	/* Check the verification tag (Sec 8.5) */
- +	if (!test_bit(SCTP_CID_INIT, map) &&
- +	    !test_bit(SCTP_CID_SHUTDOWN_COMPLETE, map) &&
- +	    !test_bit(SCTP_CID_COOKIE_ECHO, map) &&
- +	    !test_bit(SCTP_CID_ABORT, map) &&
- +	    !test_bit(SCTP_CID_SHUTDOWN_ACK, map) &&
- +	    !test_bit(SCTP_CID_HEARTBEAT, map) &&
- +	    !test_bit(SCTP_CID_HEARTBEAT_ACK, map) &&
- +	    sh->vtag !=3D ct->proto.sctp.vtag[dir]) {
-- 		pr_debug("Verification tag check failed\n");
-++		nf_ct_l4proto_log_invalid(skb, ct, state,
-++					  "verification tag check failed %x vs %x for dir %d",
-++					  sh->vtag, ct->proto.sctp.vtag[dir], dir);
- +		goto out;
-  	}
- =20
-  	old_state =3D new_state =3D SCTP_CONNTRACK_NONE;
-
---Sig_/bDcnixPAPnVH4NOMG2umlS3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTLfwACgkQAVBC80lX
-0GxWyAf+OsNvsid/vbh+k5dWbGkivstckGHkL9tLnN7xLRGpesvdmuPp97pLoD5H
-jNoa0MNqWSayhwKutKPaKRnLkhjvPqJs50cyq4V36g/qE3uvJ66Vb1pkQ6+R4HXd
-fTlGzVG9wLokyLM351gQD7XAylY0VSmxw6awKat/ldgTA30wsuO4OvAfyIQg+jBX
-oz7YbrZO8Hnoml5reitAaX3vJQT2k9qOnGX5z08zJrxjjvX92e+2yzzGVfRCvMhB
-NVp3aYKO8t2o4tlNqqAm/CSitt6/JG3SmstVOC4Kmk2/VqJHK5FhxTkFnR3txru+
-lrgdSPS3PSk6SMT/R6WFtVGRQFb9PQ==
-=xjAJ
------END PGP SIGNATURE-----
-
---Sig_/bDcnixPAPnVH4NOMG2umlS3--
