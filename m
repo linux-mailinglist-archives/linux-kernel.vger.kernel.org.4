@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EB067EE8B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418C167EE87
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbjA0TnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 14:43:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
+        id S232123AbjA0TnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:43:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbjA0Tm5 (ORCPT
+        with ESMTP id S231783AbjA0Tm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 14:42:57 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497B68242F
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:42:30 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id cr14-20020a056a000f0e00b0058da951c487so2786838pfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:42:30 -0800 (PST)
+        Fri, 27 Jan 2023 14:42:59 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3E584B67
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:42:35 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-507aac99fdfso65529237b3.11
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:42:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fluAUEldqgo6Mr/4Su/gpwJVTd/f+QKHo7F0iCGeqOg=;
-        b=B0QFA0zTTAgJFhNgrdDgKRfLtInL5VmAHE1KFwNYXYIlcWvaJJq1PKzYA8ckdy7Kyn
-         xAwTf5YPOblK6+TJj1tGvdojweaIBaHFiTxRDHhkDnK6qDnyvgtYbq5iiXWxBxOCwUuh
-         WaET5h8CLSuaMj6adU6fJWH6EpE5SqyIKnzFJ/pir1JZwDIco5M5jQ2a/9VWhgwD3iWL
-         QgWDwglZ0wa8AC1rJh0bk86XOm5Sb2wt2duuTU/yqZcdsgUl6ZFLCYWIeCgAmHx4ObRd
-         hHIbD6pxz2ke/VukXpDhoYuOo0GEGrcZQn8DqZwlpC0FiE7wMl7MPAjekSdb7LenTMW0
-         255w==
+        bh=A97N+ZL4sr7Moa7VA3MaIfeszXjKUidgl5sbUl4VE3M=;
+        b=h4z95aWqlTijLuw2+pa/O521iwctvYJ/JE9Gk94Om8JNdm1J4qRBJ1EfNZDOaurfUb
+         h0xAr5ZA79m4jhsd5KmptV8L5YTVXkJEqIIo06fTcAgDWyf2Iw1unXEy8R6f3F+h7n0/
+         eKAno27phPvhqEsCndY+cAQm1TD4BuL7gONpQNAXYFn8Kf2q+ZhvCxmCxJsT4hK4blKF
+         lDmG8J5RutFJ9mwfq4DqWgfTIN8+TeptwgRlAF+qB5k0K+pf2NR8dkIUNhEjxCEKvwc/
+         GAm3buayP+cfA/HX9e16HQfg7j+WzzAIFSLNgZD3Zm/44+VjSwN/Bplr8AdUjUNKklkq
+         c5Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fluAUEldqgo6Mr/4Su/gpwJVTd/f+QKHo7F0iCGeqOg=;
-        b=zS84MyA4LiNIUaKu8tV8iiqiew1AwtBjNR252+XwRk/medbzfToEY5qFEQ+zBpSsJj
-         VAi2TtzuhCBPjIui0ouzulTOHIDGtJeeX3ah+kpczFIBLuYLvbq+bcajcBiKW8+Qn4fw
-         Bdl8dok5pWKoRaJICgbTF8uwKj3wELoV0gnx7zoM3K7B9lzTqsK2mTlUumSL31iMxYWj
-         ckOtsW2wpqzHU6ee0rEGprHhJpjc3suqfz22jNb+7F14s7jBeLJ1sW4zxIMFotfHluPR
-         KZhibpltSKLFSBynLXMYlQ7Jsun9rQfZwEuDrP1NIFUc+/SH7hxcuhEOBSHmQrAv8U5v
-         l5aw==
-X-Gm-Message-State: AO0yUKXtDRsuF/qLUIR2cHZLt3zCNlQALXhEus6lHnEsvexDxod/az77
-        CYR2Pkg1ef53Db3jlwySejXsmbQ3S9Q=
-X-Google-Smtp-Source: AK7set+gvzIFHouo+ELhD7kNJY3eRZqYYIzPpjJr9+paWQDRkxxsh7BJRXlaLIfiaGLvKexw3FDEYkSiOQU=
+        bh=A97N+ZL4sr7Moa7VA3MaIfeszXjKUidgl5sbUl4VE3M=;
+        b=nMiyFHMJqR8b2ffuEaRwQtF07DKs2Hwn3ZXPEfWZicJGrNC4annzsol19JRM0dBeVW
+         PWAaYNKJCBshwA/YVevYrhwU1mTZBK+Wa/L8ULBJL/I7rXR/XsAWhJdoMi1GdmaBlhsp
+         KutnA6+FtBtxLIXzYs74wUUud94H7A732GOsYTWWRa8Dg/8/IWP2JUxhHqw9SHVfB+gE
+         hVOX0K0aKdNA3lPmgZVqjMSBeQnADpk3FN+rRtMNhfN600qGD/Uwf9TEKMwve909GBW5
+         C8Qs1mDRRNfTydx5BMh/6Vsu31TooEGJa4+oDunenpSclGnFDl47NUfCd3THcv0icJ9I
+         1oUw==
+X-Gm-Message-State: AO0yUKWbdOKiCcfIAT5+/rB0xRlsSBQAXJ83uy5xYMz8sRjqSRkrOxpy
+        +qXaoeCVmYvz57CnHzquaIIfijgV3uQ=
+X-Google-Smtp-Source: AK7set8r1BYS7Wv/oAXgdJ6+dIiQhgZ/QiambSorQvdFTePlCpS2jC0PmTUUP3dVFKS1ORR7IfLO9gpuOYg=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:4e19:be9:c5d0:8483])
- (user=surenb job=sendgmr) by 2002:a17:90b:a16:b0:225:eaa2:3f5d with SMTP id
- gg22-20020a17090b0a1600b00225eaa23f5dmr12984pjb.2.1674848485998; Fri, 27 Jan
- 2023 11:41:25 -0800 (PST)
-Date:   Fri, 27 Jan 2023 11:40:42 -0800
+ (user=surenb job=sendgmr) by 2002:a81:9bd6:0:b0:509:5557:c194 with SMTP id
+ s205-20020a819bd6000000b005095557c194mr892323ywg.449.1674848488954; Fri, 27
+ Jan 2023 11:41:28 -0800 (PST)
+Date:   Fri, 27 Jan 2023 11:40:43 -0800
 In-Reply-To: <20230127194110.533103-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230127194110.533103-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230127194110.533103-6-surenb@google.com>
-Subject: [PATCH v2 05/33] maple_tree: Fix write memory barrier of nodes once
- dead for RCU mode
+Message-ID: <20230127194110.533103-7-surenb@google.com>
+Subject: [PATCH v2 06/33] maple_tree: Add smp_rmb() to dead node detection
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -87,185 +86,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
 
-During the development of the maple tree, the strategy of freeing
-multiple nodes changed and, in the process, the pivots were reused to
-store pointers to dead nodes.  To ensure the readers see accurate
-pivots, the writers need to mark the nodes as dead and call smp_wmb() to
-ensure any readers can identify the node as dead before using the pivot
-values.
+Add an smp_rmb() before reading the parent pointer to ensure that
+anything read from the node prior to the parent pointer hasn't been
+reordered ahead of this check.
 
-There were two places where the old method of marking the node as dead
-without smp_wmb() were being used, which resulted in RCU readers seeing
-the wrong pivot value before seeing the node was dead.  Fix this race
-condition by using mte_set_node_dead() which has the smp_wmb() call to
-ensure the race is closed.
-
-Add a WARN_ON() to the ma_free_rcu() call to ensure all nodes being
-freed are marked as dead to ensure there are no other call paths besides
-the two updated paths.
-
-This is necessary for the RCU mode of the maple tree.
+The is necessary for RCU mode.
 
 Fixes: 54a611b60590 ("Maple Tree: add new data structure")
 Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- lib/maple_tree.c                 |  7 +++++--
- tools/testing/radix-tree/maple.c | 16 ++++++++++++++++
- 2 files changed, 21 insertions(+), 2 deletions(-)
+ lib/maple_tree.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 75cce2d4d5da..49e399e8afaa 100644
+index 49e399e8afaa..859303d2da90 100644
 --- a/lib/maple_tree.c
 +++ b/lib/maple_tree.c
-@@ -178,7 +178,7 @@ static void mt_free_rcu(struct rcu_head *head)
+@@ -532,9 +532,11 @@ static inline struct maple_node *mte_parent(const struct maple_enode *enode)
   */
- static void ma_free_rcu(struct maple_node *node)
+ static inline bool ma_dead_node(const struct maple_node *node)
  {
--	node->parent = ma_parent_ptr(node);
-+	WARN_ON(node->parent != ma_parent_ptr(node));
- 	call_rcu(&node->rcu, mt_free_rcu);
+-	struct maple_node *parent = (void *)((unsigned long)
+-					     node->parent & ~MAPLE_NODE_MASK);
++	struct maple_node *parent;
+ 
++	/* Do not reorder reads from the node prior to the parent check */
++	smp_rmb();
++	parent = (void *)((unsigned long) node->parent & ~MAPLE_NODE_MASK);
+ 	return (parent == node);
  }
  
-@@ -1771,8 +1771,10 @@ static inline void mas_replace(struct ma_state *mas, bool advanced)
- 		rcu_assign_pointer(slots[offset], mas->node);
- 	}
+@@ -549,6 +551,8 @@ static inline bool mte_dead_node(const struct maple_enode *enode)
+ 	struct maple_node *parent, *node;
  
--	if (!advanced)
-+	if (!advanced) {
-+		mte_set_node_dead(old_enode);
- 		mas_free(mas, old_enode);
-+	}
+ 	node = mte_to_node(enode);
++	/* Do not reorder reads from the node prior to the parent check */
++	smp_rmb();
+ 	parent = mte_parent(enode);
+ 	return (parent == node);
  }
- 
- /*
-@@ -4211,6 +4213,7 @@ static inline bool mas_wr_node_store(struct ma_wr_state *wr_mas)
- done:
- 	mas_leaf_set_meta(mas, newnode, dst_pivots, maple_leaf_64, new_end);
- 	if (in_rcu) {
-+		mte_set_node_dead(mas->node);
- 		mas->node = mt_mk_node(newnode, wr_mas->type);
- 		mas_replace(mas, false);
- 	} else {
-diff --git a/tools/testing/radix-tree/maple.c b/tools/testing/radix-tree/maple.c
-index 958ee9bdb316..4c89ff333f6f 100644
---- a/tools/testing/radix-tree/maple.c
-+++ b/tools/testing/radix-tree/maple.c
-@@ -108,6 +108,7 @@ static noinline void check_new_node(struct maple_tree *mt)
- 	MT_BUG_ON(mt, mn->slot[1] != NULL);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != 0);
- 
-+	mn->parent = ma_parent_ptr(mn);
- 	ma_free_rcu(mn);
- 	mas.node = MAS_START;
- 	mas_nomem(&mas, GFP_KERNEL);
-@@ -160,6 +161,7 @@ static noinline void check_new_node(struct maple_tree *mt)
- 		MT_BUG_ON(mt, mas_allocated(&mas) != i);
- 		MT_BUG_ON(mt, !mn);
- 		MT_BUG_ON(mt, not_empty(mn));
-+		mn->parent = ma_parent_ptr(mn);
- 		ma_free_rcu(mn);
- 	}
- 
-@@ -192,6 +194,7 @@ static noinline void check_new_node(struct maple_tree *mt)
- 		MT_BUG_ON(mt, not_empty(mn));
- 		MT_BUG_ON(mt, mas_allocated(&mas) != i - 1);
- 		MT_BUG_ON(mt, !mn);
-+		mn->parent = ma_parent_ptr(mn);
- 		ma_free_rcu(mn);
- 	}
- 
-@@ -210,6 +213,7 @@ static noinline void check_new_node(struct maple_tree *mt)
- 			mn = mas_pop_node(&mas);
- 			MT_BUG_ON(mt, not_empty(mn));
- 			MT_BUG_ON(mt, mas_allocated(&mas) != j - 1);
-+			mn->parent = ma_parent_ptr(mn);
- 			ma_free_rcu(mn);
- 		}
- 		MT_BUG_ON(mt, mas_allocated(&mas) != 0);
-@@ -233,6 +237,7 @@ static noinline void check_new_node(struct maple_tree *mt)
- 			MT_BUG_ON(mt, mas_allocated(&mas) != i - j);
- 			mn = mas_pop_node(&mas);
- 			MT_BUG_ON(mt, not_empty(mn));
-+			mn->parent = ma_parent_ptr(mn);
- 			ma_free_rcu(mn);
- 			MT_BUG_ON(mt, mas_allocated(&mas) != i - j - 1);
- 		}
-@@ -269,6 +274,7 @@ static noinline void check_new_node(struct maple_tree *mt)
- 			mn = mas_pop_node(&mas); /* get the next node. */
- 			MT_BUG_ON(mt, mn == NULL);
- 			MT_BUG_ON(mt, not_empty(mn));
-+			mn->parent = ma_parent_ptr(mn);
- 			ma_free_rcu(mn);
- 		}
- 		MT_BUG_ON(mt, mas_allocated(&mas) != 0);
-@@ -294,6 +300,7 @@ static noinline void check_new_node(struct maple_tree *mt)
- 			mn = mas_pop_node(&mas2); /* get the next node. */
- 			MT_BUG_ON(mt, mn == NULL);
- 			MT_BUG_ON(mt, not_empty(mn));
-+			mn->parent = ma_parent_ptr(mn);
- 			ma_free_rcu(mn);
- 		}
- 		MT_BUG_ON(mt, mas_allocated(&mas2) != 0);
-@@ -334,10 +341,12 @@ static noinline void check_new_node(struct maple_tree *mt)
- 	MT_BUG_ON(mt, mas_allocated(&mas) != MAPLE_ALLOC_SLOTS + 2);
- 	mn = mas_pop_node(&mas);
- 	MT_BUG_ON(mt, not_empty(mn));
-+	mn->parent = ma_parent_ptr(mn);
- 	ma_free_rcu(mn);
- 	for (i = 1; i <= MAPLE_ALLOC_SLOTS + 1; i++) {
- 		mn = mas_pop_node(&mas);
- 		MT_BUG_ON(mt, not_empty(mn));
-+		mn->parent = ma_parent_ptr(mn);
- 		ma_free_rcu(mn);
- 	}
- 	MT_BUG_ON(mt, mas_allocated(&mas) != 0);
-@@ -375,6 +384,7 @@ static noinline void check_new_node(struct maple_tree *mt)
- 		mas_node_count(&mas, i); /* Request */
- 		mas_nomem(&mas, GFP_KERNEL); /* Fill request */
- 		mn = mas_pop_node(&mas); /* get the next node. */
-+		mn->parent = ma_parent_ptr(mn);
- 		ma_free_rcu(mn);
- 		mas_destroy(&mas);
- 
-@@ -382,10 +392,13 @@ static noinline void check_new_node(struct maple_tree *mt)
- 		mas_node_count(&mas, i); /* Request */
- 		mas_nomem(&mas, GFP_KERNEL); /* Fill request */
- 		mn = mas_pop_node(&mas); /* get the next node. */
-+		mn->parent = ma_parent_ptr(mn);
- 		ma_free_rcu(mn);
- 		mn = mas_pop_node(&mas); /* get the next node. */
-+		mn->parent = ma_parent_ptr(mn);
- 		ma_free_rcu(mn);
- 		mn = mas_pop_node(&mas); /* get the next node. */
-+		mn->parent = ma_parent_ptr(mn);
- 		ma_free_rcu(mn);
- 		mas_destroy(&mas);
- 	}
-@@ -35369,6 +35382,7 @@ static noinline void check_prealloc(struct maple_tree *mt)
- 	MT_BUG_ON(mt, allocated != 1 + height * 3);
- 	mn = mas_pop_node(&mas);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != allocated - 1);
-+	mn->parent = ma_parent_ptr(mn);
- 	ma_free_rcu(mn);
- 	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
- 	mas_destroy(&mas);
-@@ -35386,6 +35400,7 @@ static noinline void check_prealloc(struct maple_tree *mt)
- 	mas_destroy(&mas);
- 	allocated = mas_allocated(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
-+	mn->parent = ma_parent_ptr(mn);
- 	ma_free_rcu(mn);
- 
- 	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-@@ -35756,6 +35771,7 @@ void farmer_tests(void)
- 	tree.ma_root = mt_mk_node(node, maple_leaf_64);
- 	mt_dump(&tree);
- 
-+	node->parent = ma_parent_ptr(node);
- 	ma_free_rcu(node);
- 
- 	/* Check things that will make lockdep angry */
 -- 
 2.39.1
 
