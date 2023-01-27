@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20A567E8C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 657F767E8CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbjA0PAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35842 "EHLO
+        id S233171AbjA0PAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjA0O76 (ORCPT
+        with ESMTP id S232568AbjA0PAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:59:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BF46184;
-        Fri, 27 Jan 2023 06:59:58 -0800 (PST)
+        Fri, 27 Jan 2023 10:00:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E037ECA;
+        Fri, 27 Jan 2023 07:00:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5E2661CC5;
-        Fri, 27 Jan 2023 14:59:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C7FDC4339B;
-        Fri, 27 Jan 2023 14:59:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46590B82145;
+        Fri, 27 Jan 2023 15:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFBE5C433D2;
+        Fri, 27 Jan 2023 15:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674831597;
-        bh=6A3bg177CZCGpr4mKIGL57gyFua0Tc3JibyHOd77gOk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=YUGFTY+79tYm0nI1wWJvWX5NArv7J756eUPQwJIiCFEMmfEM0LIHeIDeO27RnvYrx
-         rkFbnHwt7aLgMZzeFLniDr09wPSixi+N9Plw+VK36aCysIhwZ2CVlGafOKINJnF4vk
-         eJQ9k60tEYT98ks+7DbsfcJSXPBlkjSB1IW0DYILhu+Pb2/AJVw2dhVPdPDzCGeTpF
-         CSeNdxd1ZEUs7uoy7lTddtHZ61uWJY+/wZmVOjsgdbsMjuyg5toS61xAe+MjU5g2oZ
-         uuy6k8GdcBKOXMu3+a8ScSdKSM+00ijPWpCRiPYwTTCh9ezlVbGjYvdqzWPvilArv4
-         O4e84N14Lv4fw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B09A55C010C; Fri, 27 Jan 2023 06:59:56 -0800 (PST)
-Date:   Fri, 27 Jan 2023 06:59:56 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        linux-arch@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH 15/35] Documentation: litmus-tests: correct spelling
-Message-ID: <20230127145956.GS2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230127064005.1558-16-rdunlap@infradead.org>
- <20230127064005.1558-1-rdunlap@infradead.org>
- <2919161.1674802748@warthog.procyon.org.uk>
+        s=k20201202; t=1674831632;
+        bh=LuPZgCoAPIb5MoP6IydX1n+c3wdC9+kFudaV4FLY4Q8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rIljV39IwaOy163hrOxM2/lDZxWxPu6857Lg25JQtPwRDq37wVKee2Gj7Fl+jPI/Z
+         kjTy8vU1kUvwUlP+3cY5KExqR9ucP2zIcLplMY55fkgauLYFhg9zWtRCeZSQRkky8S
+         gzocg5JGV7Ea3SYRtzfewzNXQfE4rtOb88RKfWPznwjXt5nFFmosDa3nLyQT5/nYRU
+         wXfv2/D0vOnl3iTy7JRt5DvskF94ghdvlchpOk9mWLnBTHkzYIu06U1vaXMVuH+9/d
+         denpoO5zfv0bRVVxk41lv+Pl7I1Fc60jSy/taeDv6ONBZKySdZZXp2SNi+WSLIEAVX
+         cMEPG0qfmE5hw==
+Date:   Fri, 27 Jan 2023 15:00:26 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 00/11] intel-m10-bmc: Split BMC to core and SPI parts
+ & add PMCI+N6000 support
+Message-ID: <Y9PnChtJnIGhu4wt@google.com>
+References: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2919161.1674802748@warthog.procyon.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,29 +62,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 06:59:08AM +0000, David Howells wrote:
-> Randy Dunlap <rdunlap@infradead.org> wrote:
-> 
-> > Correct spelling problems for Documentation/litmus-tests/ as reported
-> > by codespell.
-> > 
-> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > Cc: Alan Stern <stern@rowland.harvard.edu>
-> > Cc: Andrea Parri <parri.andrea@gmail.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Boqun Feng <boqun.feng@gmail.com>
-> > Cc: Nicholas Piggin <npiggin@gmail.com>
-> > Cc: David Howells <dhowells@redhat.com>
-> > Cc: Jade Alglave <j.alglave@ucl.ac.uk>
-> > Cc: Luc Maranget <luc.maranget@inria.fr>
-> > Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> > Cc: linux-arch@vger.kernel.org
-> > Cc: Jonathan Corbet <corbet@lwn.net>
-> > Cc: linux-doc@vger.kernel.org
-> 
-> Reviewed-by: David Howells <dhowells@redhat.com>
+Enjoy!
 
-Queued for v6.4, thank you both!
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-							Thanx, Paul
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-fpga-hwmon-6.3
+
+for you to fetch changes up to 869b9eddf0b38a22c27a400e2fa849d2ff2aa7e1:
+
+  mfd: intel-m10-bmc: Add PMCI driver (2023-01-27 10:47:11 +0000)
+
+----------------------------------------------------------------
+Ilpo Järvinen (10):
+      mfd: intel-m10-bmc: Add missing includes to header
+      mfd: intel-m10-bmc: Create m10bmc_platform_info for type specific info
+      mfd: intel-m10-bmc: Rename the local variables
+      mfd: intel-m10-bmc: Split into core and spi specific parts
+      mfd: intel-m10-bmc: Support multiple CSR register layouts
+      fpga: intel-m10-bmc: Rework flash read/write
+      mfd: intel-m10-bmc: Prefix register defines with M10BMC_N3000
+      fpga: m10bmc-sec: Create helpers for rsu status/progress checks
+      fpga: m10bmc-sec: Make rsu status type specific
+      mfd: intel-m10-bmc: Add PMCI driver
+
+ .../ABI/testing/sysfs-driver-intel-m10-bmc         |   8 +-
+ MAINTAINERS                                        |   2 +-
+ drivers/fpga/Kconfig                               |   2 +-
+ drivers/fpga/intel-m10-bmc-sec-update.c            | 364 +++++++++++++--------
+ drivers/hwmon/Kconfig                              |   2 +-
+ drivers/mfd/Kconfig                                |  32 +-
+ drivers/mfd/Makefile                               |   5 +-
+ drivers/mfd/intel-m10-bmc-core.c                   | 122 +++++++
+ drivers/mfd/intel-m10-bmc-pmci.c                   | 219 +++++++++++++
+ drivers/mfd/intel-m10-bmc-spi.c                    | 168 ++++++++++
+ drivers/mfd/intel-m10-bmc.c                        | 238 --------------
+ include/linux/mfd/intel-m10-bmc.h                  | 154 ++++++---
+ 12 files changed, 888 insertions(+), 428 deletions(-)
+ create mode 100644 drivers/mfd/intel-m10-bmc-core.c
+ create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
+ create mode 100644 drivers/mfd/intel-m10-bmc-spi.c
+ delete mode 100644 drivers/mfd/intel-m10-bmc.c
+
+-- 
+Lee Jones [李琼斯]
