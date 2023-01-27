@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312B367DC61
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 859B767DC64
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233698AbjA0CxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 21:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
+        id S233774AbjA0CxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 21:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbjA0Cwy (ORCPT
+        with ESMTP id S233169AbjA0Cwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 21:52:54 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDDC19F1E
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:52:50 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id vw16so10105191ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:52:50 -0800 (PST)
+        Thu, 26 Jan 2023 21:52:55 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F296E24113
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:52:51 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id y11so3612256edd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 18:52:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=profian-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ndi8r0k5qmI5H0mD72hydSKAWjCqri28uGHpAKNsfwI=;
-        b=J+MEjZcEMAozPoJMzOMGFuLh/rXFwKnSkJCp7M6wYzV1qCJ411aGKRONcTDWmZnpQt
-         60GCM69y32AM+8403zNk7TEwhFLcnZy+uTOYTZ1csLL8Fazp3sJQ5I7pPU6hL+Ma0CoL
-         XooGUzX2iRIgrCoeTjE/d35TENVosv26T/K+nOae75Yw6bkPgRzg2pEemK9qr7oQ8DTK
-         pWncSuCGRMmjNPAdPHAo+UypK/FBOhv2CuKtDMpKEIi9jjJqnfewmFdXlqd0s/H2lIGT
-         4dzc6RYV6rxqX7ECkEfB/AjYfGeLoIQrLco7rH3EKPXErc10gO2zX0k4r4GFrQwq698Q
-         ZSdw==
+        bh=ytT3Q0695m5Y9Xvmkrg+w4EmcEmCVa0jLjn4WfE//S8=;
+        b=KJ38u2Xmat3lo0fPE4H3YTxidKGLp15TIOWnYppX3OUcz/f7hOQYnF8lPZWfoGQLDt
+         KoPrbu4E1t2dc/rpiABw6JqFH9d5DSX3OtvP+z1nPVa/6MG1pzxfxGGM2yAEae3XAnbJ
+         oK8RexGFhpDzXdvPxwPnRiz8BBZUXtC/luz+uiW2DOq9oLRg5yWw0xGWWjhMRnl1vV65
+         WqjLRXn8bNUcPjioT4VcoVBhLED24zwc/Njr8K+/i4UkIcYsY1c4hCud+a3BAb5gT8Cc
+         a82U8FqFvx/WMGw10WGey9tl98iidA/qis1WbV2Z/d3Xy273+jvhYjmaLuwYW2qxoikR
+         gRtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ndi8r0k5qmI5H0mD72hydSKAWjCqri28uGHpAKNsfwI=;
-        b=sdRhWO/ZC7muirQy7A30sZFcHqav4rV0SwJwGierv6Gi1K4bfAGVDVRCqFtUx/idQO
-         G1Dp3U5xGhWA1ZEHWXZc0XWKOelhg3bSqD4pwQkYtWc49+uVw+3yS2CgGu2qsWwwZ1Xh
-         /dZ8lbb7pgVvzAjIxW0PiUDMhKeX5WB/zFskaQDZSH5e2zXVOyAYTny+riYLKyP8Yp/v
-         uyWcGgFooXqIhUdzva85XvK2wq7viCCcYNjHn9GmkGH2HTQlZOfHtIy4qdNOVWTFJ7Lq
-         ZWFv1KeQTv/F7Wo2Pi99crS3PwNCG3IKtitFpyM/rcOpPlRhCLUy9WbtaMa4AKT6WnOt
-         sqGA==
-X-Gm-Message-State: AFqh2krrJWdGpSCphW6Yn2GYkBV7V89mfrSkyF8Eu+3Kj59q8JEIocMz
-        D0vdO3iMUDpG8qcoCxWrnR1ixw==
-X-Google-Smtp-Source: AMrXdXu57VRGjXM7FMcpSFGz84LKNvBjg3pMXc2fVdX3CF8xPg1MMVN07PY+9CCaJ4FuB43Vd0BIVA==
-X-Received: by 2002:a17:907:8c14:b0:84c:e9c4:5751 with SMTP id ta20-20020a1709078c1400b0084ce9c45751mr41792387ejc.74.1674787968997;
-        Thu, 26 Jan 2023 18:52:48 -0800 (PST)
+        bh=ytT3Q0695m5Y9Xvmkrg+w4EmcEmCVa0jLjn4WfE//S8=;
+        b=YyRJZupY2+VLZjoa7TLBRQ2qcq/AOunSBGjm0NeFz5/CcsYXscOdm+H6fZIEBxYD9I
+         fx510Cxv4CzYQ49qPViBubZVgbNcwok+iwC2TaBFRctSNmfrkdfrdaCS6zPz5ewLDXFV
+         FMlAHKwQOKDoVIHsw3PHoTwrqItly2njnSpMYvesUG7Bj8fwsrx1Zkrxxfeejequ0uak
+         6oSbSCpikXfy0JIoZcW+8g5xilqjRYcgI23U2Kjn5DsDNCj0/GnQUv5ZRfkqg56U+OzF
+         bbPvlge+KqLL+G/BESGfMeQllKWXOJvPZebnEwFgSnY0ujAe1B7xKAj2w42T9WAuCHTM
+         +9tA==
+X-Gm-Message-State: AO0yUKXxVhOsgDOc32DRebXgHbKfnCZt9BlqCIw98c4eupem3KRwazSG
+        6ij/mRfLBJ3TxnH3Z6IpoQolWA==
+X-Google-Smtp-Source: AK7set+nkhdtXFrQNgkvDYB8ZERdEObgycOgQtX+MVNSxiQIRYslKQ+vrTeV6GnYBIvkirdHfAsx7g==
+X-Received: by 2002:a50:9eef:0:b0:4a0:8fc4:6be8 with SMTP id a102-20020a509eef000000b004a08fc46be8mr11338521edf.26.1674787970574;
+        Thu, 26 Jan 2023 18:52:50 -0800 (PST)
 Received: from localhost (88-113-101-73.elisa-laajakaista.fi. [88.113.101.73])
-        by smtp.gmail.com with ESMTPSA id z16-20020a170906945000b0084d46461852sm1432144ejx.126.2023.01.26.18.52.48
+        by smtp.gmail.com with ESMTPSA id s13-20020a05640217cd00b0049c2b02bad4sm1059790edy.88.2023.01.26.18.52.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 18:52:48 -0800 (PST)
+        Thu, 26 Jan 2023 18:52:50 -0800 (PST)
 From:   Jarkko Sakkinen <jarkko@profian.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -65,17 +65,17 @@ Cc:     Harald Hoyer <harald@profian.com>, Tom Dohrmann <erbse.13@gmx.de>,
         kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)),
         linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
         64-BIT))
-Subject: [PATCH RFC 2/8] KVM: SVM: fix: initialize `npinned`
-Date:   Fri, 27 Jan 2023 02:52:31 +0000
-Message-Id: <20230127025237.269680-3-jarkko@profian.com>
+Subject: [PATCH RFC 3/8] KVM: SVM: write back corrected CPUID page
+Date:   Fri, 27 Jan 2023 02:52:32 +0000
+Message-Id: <20230127025237.269680-4-jarkko@profian.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230127025237.269680-1-jarkko@profian.com>
 References: <20230127025237.269680-1-jarkko@profian.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,29 +84,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tom Dohrmann <erbse.13@gmx.de>
 
-If UPM is enabled and getting the PFN fails, `npinned` is never set, but is
-read for the call to `unpin_user_pages`.
+When doing a launch update for a CPUID page the firmware checks that the values
+conform to the policy laid out in the processor programming manual. If the
+values don't conform, the firmware will return SEV_RET_INVALID_PARAM.
+In addition to returning an error the firmware will choose some acceptable
+values and write them back to the page that was used for the launch update, so
+that the VMM can inspect the changes and try again with the corrected values.
+This is specified in section 8.17.2.6 in the SEV-SNP Firmware ABI spec.
+Because launch updates are always done on the private UPM mappings, the pages
+are first copied from the shared mappings to the private mappings. When the
+firmware corrects the values, the corrected values are in the private mappings,
+inaccessible to userspace. In order to make the corrected values accessible to
+userspace, the page containing them must be copied from the private mappings
+back to the shared mappings.
 
-Link: https://lore.kernel.org/lkml/Y6Sgwp%2FBofzCUrQe@notebook/
+[jarkko@profian.com: fixed checkpatch.pl errors]
+Link: https://lore.kernel.org/lkml/Y76%2FI6Nrh7xEAAwv@notebook/
 Signed-off-by: Tom Dohrmann <erbse.13@gmx.de>
 Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
 ---
- arch/x86/kvm/svm/sev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kvm/svm/sev.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index d3468d1533bd..6d3162853c33 100644
+index 6d3162853c33..4a8e552d8cfe 100644
 --- a/arch/x86/kvm/svm/sev.c
 +++ b/arch/x86/kvm/svm/sev.c
-@@ -510,7 +510,7 @@ static struct page **sev_pin_memory(struct kvm *kvm, unsigned long uaddr,
- {
- 	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
- 	unsigned long npages, size;
--	int npinned;
-+	int npinned = 0;
- 	unsigned long locked, lock_limit;
- 	struct page **pages;
- 	unsigned long first, last;
+@@ -2230,6 +2230,23 @@ static int snp_launch_update_gfn_handler(struct kvm *kvm,
+ 			pr_err("SEV-SNP launch update failed, ret: 0x%x, fw_error: 0x%x\n",
+ 			       ret, *error);
+ 			snp_page_reclaim(pfns[i]);
++
++			/*
++			 * When invalid CPUID function entries are detected, the firmware
++			 * corrects these entries.  In that case write the page back to
++			 * userspace.
++			 */
++			if (params.page_type == SNP_PAGE_TYPE_CPUID &&
++			    *error == SEV_RET_INVALID_PARAM) {
++				int ret;
++
++				host_rmp_make_shared(pfns[i], PG_LEVEL_4K, true);
++
++				ret = kvm_write_guest_page(kvm, gfn, kvaddr, 0, PAGE_SIZE);
++				if (ret)
++					pr_err("Guest write failed, ret: 0x%x\n", ret);
++			}
++
+ 			goto e_release;
+ 		}
+ 	}
 -- 
 2.38.1
 
