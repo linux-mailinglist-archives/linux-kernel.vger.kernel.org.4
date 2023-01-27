@@ -2,84 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1835267EB4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A3D67EB6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbjA0QoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        id S233902AbjA0QrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:47:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjA0Qn5 (ORCPT
+        with ESMTP id S232597AbjA0QrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:43:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEB38D093;
-        Fri, 27 Jan 2023 08:43:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9514B8211E;
-        Fri, 27 Jan 2023 16:43:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6301DC433EF;
-        Fri, 27 Jan 2023 16:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674837791;
-        bh=TfWsIjnpXj9UAEiaerVWeiYol3ufC+0UIEjPrYdaesw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=go9Fo8j18qfSnkxp59u+WDQI5I10RGKfJGEyGGYdnTy1jR5/ovkRthMBZ8VOtNvjh
-         h/s9kRDAgw5opS82jQ0bGP3DdqXvq7KT14SVsfFNstdrjmSwMVj/7JECDo3bJ5ZHdt
-         LcjMddly8bRsg1iT82vcbRA+mSpghIrCEGDF++2/ziK/Tw/44cr4830knQHbO5o43u
-         Ie0QQ1WeH9xBqd7QVtvMa4USWgsyXS4rOr7yqaCLu09rhf9sn7yWNBWrabDuV9X+nX
-         8eI6vsDY1m01D61OsfiMgpcS/lhdg61nw83PpoVeelVl8orXFF3MS+VUAYcjM/okuC
-         3kq5yVvMvb/Eg==
-Received: by mail-lj1-f180.google.com with SMTP id k38so6136389lje.5;
-        Fri, 27 Jan 2023 08:43:11 -0800 (PST)
-X-Gm-Message-State: AFqh2koptC5c54D7GxiqRD2fybIXtE4FZSj6cIvj6bBXflgh9nhtVefA
-        6yzRERl5BgegdV+sYQ0kqg27CvCA9Fa/2VSs2Vg=
-X-Google-Smtp-Source: AMrXdXvrkDQ3Xeyopqiy3GVRgj/q/1qJFaiCTsHSRNxdefODJEls8a0/hNtLqPNTmQL3P05Dk3ZTaIMuNnTzalNKH+o=
-X-Received: by 2002:a2e:bc25:0:b0:28b:663a:168d with SMTP id
- b37-20020a2ebc25000000b0028b663a168dmr2153457ljf.53.1674837789401; Fri, 27
- Jan 2023 08:43:09 -0800 (PST)
+        Fri, 27 Jan 2023 11:47:22 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B65E483F2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:46:27 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CBF12B;
+        Fri, 27 Jan 2023 08:47:06 -0800 (PST)
+Received: from [10.57.75.194] (unknown [10.57.75.194])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1620F3F64C;
+        Fri, 27 Jan 2023 08:46:22 -0800 (PST)
+Message-ID: <e6c3fa24-963b-57c0-1a9a-fd056a9ac591@arm.com>
+Date:   Fri, 27 Jan 2023 16:46:21 +0000
 MIME-Version: 1.0
-References: <20230125185004.254742-1-song@kernel.org> <Y9IYTI3pWuKbJ3bC@bombadil.infradead.org>
- <CAPhsuW7ipGS=RhowYSp06DBYOY31sYoup7-Je+CEuKCxJsHavQ@mail.gmail.com>
- <Y9Lp+5mqxP0bgvrM@bombadil.infradead.org> <20230127131351.GB3911997@roeck-us.net>
-In-Reply-To: <20230127131351.GB3911997@roeck-us.net>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 27 Jan 2023 08:42:57 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
-Message-ID: <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
-Subject: Re: [PATCH v2] module: replace module_layout with module_memory
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] Coresight: tpda/tpdm: remove incorrect __exit annotation
+To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Mao Jinlong <quic_jinlmao@quicinc.com>
+Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230126163530.3495413-1-arnd@kernel.org>
+ <7ec6bd88-7f18-7eca-fa92-cfea9a25a395@arm.com>
+ <cd4f23d7-cdd7-49e1-8eff-9ec04dcb36c8@app.fastmail.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <cd4f23d7-cdd7-49e1-8eff-9ec04dcb36c8@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+On 26/01/2023 20:37, Arnd Bergmann wrote:
+> On Thu, Jan 26, 2023, at 19:02, Suzuki K Poulose wrote:
+>> On 26/01/2023 16:35, Arnd Bergmann wrote:
+>>> From: Arnd Bergmann <arnd@arndb.de>
+>> Thanks for the fix, I will queue this. Btw, I did try to
+>> reproduce it locally, but couldn't trigger the warnings,
+>> even with
+>>
+>> CONFIG_WERROR=y
+>>
+>> and all CORESIGHT configs builtin. I see other drivers doing the
+>> same outside coresight too. Just curious to know why is this
+>> any different. Is it specific to "bus" driver (e.g. AMBA) ?
+> 
+> The warning comes from postprocessing the object file, it's got
+> nothing to do with the bus type, only with a symbol in .data
+> referencing a symbol in .init.text. Maybe there are some
+> config options that keep the section from getting discarded?
+> Or possibly you only built the files in this directory, but did
+> not get to the final link?
 
-On Fri, Jan 27, 2023 at 5:13 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, Jan 26, 2023 at 01:00:43PM -0800, Luis Chamberlain wrote:
-> > Guenter Roeck,
-> >
-> > Any chance you can give this branch a good spin on your multi-arch setup
-> > to see what may below up?
-> >
-> I assume I shoud test v3 ?
+I did a full kernel build. Also, I see a similar issue with the 
+coresight-etm4x (by code inspection) driver. Did you not hit that ?
 
-Yes, please. The one in the modules-testing [1] branch is already v3.
+May be there is a config option that is masking it on my end. But
+the case of etm4x driver is puzzling.
 
-Thanks,
-Song
+$ git grep etm4_remove_amba 
+drivers/hwtracing/coresight/coresight-etm4x-core.c
+drivers/hwtracing/coresight/coresight-etm4x-core.c:static void __exit 
+etm4_remove_amba(struct amba_device *adev)
+drivers/hwtracing/coresight/coresight-etm4x-core.c:     .remove 
+= etm4_remove_amba,
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-testing
+Suzuki
+
+
+> 
+
+
+>        Arnd
+
