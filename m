@@ -2,98 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C5267DE60
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C81667DE64
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232445AbjA0HR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 02:17:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
+        id S232461AbjA0HS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 02:18:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbjA0HRz (ORCPT
+        with ESMTP id S231824AbjA0HS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 02:17:55 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A762DBDE
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:17:53 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id b7so4116855wrt.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:17:53 -0800 (PST)
+        Fri, 27 Jan 2023 02:18:27 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78584E533
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:18:25 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id j15so3653613ljg.8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:18:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zu8F0YryLt/OgLyDbyT+COsXBWZJ+zCIx+ZWtC5IKkg=;
-        b=WGY7E/PSjYEz982lSPv35cpucEGupEadtERlumDXtX8XKQL1ufwwK8jq1WeP0lRpj7
-         yvTrhd3+v8b/ZVucRajffMcKWHm1L1k7Dats/WD17n4S1Dxx6Bb8JLxFajnEfHcRHaU7
-         UPo/mJTsx7izz4mLpE95UWikJKc0ZFJijx1tfWVRJ/NrlFgoUEs2+qvEjq8HzgRc7tBA
-         Tcq9KWlx08MRHTkwySZvNQ5X37m497rbR/NuBNYm6xZOo3JQdwdouGLRKA4dCcVP/qgG
-         gBzOjNqThoUBnFSw0xHp0ddueyP9+5QEkONaBmxtJerDTpPI61wQnSLkXk7mZeE15jIW
-         SG+A==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=In8HPEUR3rkYjVSEV5mTYuM2J5NBJVyHjEY+q+ssdRA=;
+        b=h32SnYbNcTEpgRSCSyKQV5un3A7fbAiEIMethaUYZhiQLkicD1nC7IKRHW0j5nKVB5
+         UTjUUXTLSjLSe1kMYUp4buHmXwEPGUpnoZeVvG2UuyE7EeVmaoPObB/yoQnVNtX5j69z
+         gADS0W4RHmukEZnGfb3f89uz84xzCNfYqkShDbgosl/Xp6tExwHk65jszsQSD3Xuikck
+         4ELXdr+20JfJONU1cjEk6dPRN3S5VQmsYKjCibu37mGdAgJuLrbq3VT3AEejm3fvEfFu
+         vPi8wr+zns07BW4PCfdG1JKjtD8Vc03V8LT0DlgjDkEWISZqRY6tdHYPBDOl3VPPA8fH
+         l3gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zu8F0YryLt/OgLyDbyT+COsXBWZJ+zCIx+ZWtC5IKkg=;
-        b=tUaISHgZABwbG5zJVUpmDtTeWViYY9muXbM59PEzaY3Z5qJT6iwKAjvyeJldGybqw9
-         th++pq9lN9THe8f0T6zRtCAiatiyvRRzwWDX1dzzty7ZG14bAlb3Z2CT5Mz6RcRLKssU
-         9ml85Gw/c3mzwpWdcK0MeCdaVO+LPYhOyTxSd4ErqJmj6eLb0AmGBdZuvf5yFxivPlsI
-         uHX+oyk/NR7/3ig+quJ073zFl5KJK4igmfu1/5GSkqp3qiWJAjgjyrTtHCY4JNAVBVDC
-         vMd0KIg7lshvYFfkcmwxPZICjigeXmF7qhhKf2AMC1xVt5Ay4CI6LuclYP2nZqZSZ3BA
-         zCng==
-X-Gm-Message-State: AO0yUKWlUbFirqE+lkpUbpAzzspw7Lmfxr9m+OJ/nL8aFYJjLgHfglWb
-        1JZ6888Ll6fUZjO/WiAnVjevuQ==
-X-Google-Smtp-Source: AK7set+B3n3giZrrrzvhrZe5kohk1pMxsQkkUJJDZp8hEVRVSrL+hCD+foHS8sR4KeguBUH965OCDw==
-X-Received: by 2002:adf:f7cd:0:b0:2bf:d511:18a9 with SMTP id a13-20020adff7cd000000b002bfd51118a9mr858226wrq.29.1674803871740;
-        Thu, 26 Jan 2023 23:17:51 -0800 (PST)
-Received: from vermeer ([2a01:cb1d:81a9:dd00:b570:b34c:ffd4:c805])
-        by smtp.gmail.com with ESMTPSA id v13-20020a5d43cd000000b0027cb20605e3sm3272136wrr.105.2023.01.26.23.17.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 23:17:51 -0800 (PST)
-Date:   Fri, 27 Jan 2023 08:17:48 +0100
-From:   Samuel Ortiz <sameo@rivosinc.com>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-pci@vger.kernel.org
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <Y9N6nP+Z67TnEaMa@vermeer>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y9EkCvAfNXnJ+ATo@kroah.com>
- <Y9Ex3ZUIFxwOBg1n@work-vm>
- <Y9E7PNmSTP5w2zuw@kroah.com>
- <Y9FDZPV7qENtNNyk@work-vm>
- <20230125215333.GA18160@wunner.de>
- <CAGXJix9-cXNW7EwJf0PVzj_Qmt5fmQvBX1KvXfRX5NAeEpnMvw@mail.gmail.com>
- <20230126154449.GB4188@wunner.de>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=In8HPEUR3rkYjVSEV5mTYuM2J5NBJVyHjEY+q+ssdRA=;
+        b=0ow74kPw9lo8BtOtUBcrknG4WG9rNKtRMNNtv3RjJnAavwmBRcR1//e1mwEpDPAE+w
+         wTheJVsIq4tyVdjQhKA1oJpjVr4j5JVQmf+tFcGxtzXx9DtIxnZD+W6vkPATSNQiPKYW
+         UkiGmA6qa4uwOWQG0AYJErX7bPhdA+B4vObxFosCLon5ti/Kvsi7MX4TwYqJ/GGqZJMV
+         2d+OKcLsZtrPJmNxfOzEfyKXbcz3J+ssYncbPDndF8XJHnXesE7tc7SKmLIIIoqIuKlO
+         NRfzhKri/v4o4wL2P37sYAhaXQU6T279VLKYDrFanTHjNNhHQtJmABwevMhSUQ/spl4/
+         0eFA==
+X-Gm-Message-State: AFqh2koflN+DxNDMUtWeabIIhOrRTiPaHi8P/6qfMbtTbKIN4zG0B82u
+        BWw2P/QSgV3G8Jco7SJA3jZJTgbF0zdvwHHmPtVyYg==
+X-Google-Smtp-Source: AMrXdXsgud8St7chf4CgtrHnAbG2rHMOvqCxZALyqh9CWxJg5beNqMf1+amMaZCQOYpN5GG7vG8ln46w1uLjCmauTdY=
+X-Received: by 2002:a2e:3611:0:b0:287:e806:82d4 with SMTP id
+ d17-20020a2e3611000000b00287e80682d4mr3874550lja.1.1674803903934; Thu, 26 Jan
+ 2023 23:18:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126154449.GB4188@wunner.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230123082114.4291-1-hdanton@sina.com> <0000000000006b647005f2ece55e@google.com>
+In-Reply-To: <0000000000006b647005f2ece55e@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 27 Jan 2023 08:18:11 +0100
+Message-ID: <CACT4Y+bAbSBBYVnBGqZechS_aV=zX6J-B2wdUC_acYYkQur1kw@mail.gmail.com>
+Subject: Re: [syzbot] [xfs?] KASAN: stack-out-of-bounds Read in xfs_buf_lock
+To:     syzbot <syzbot+0bc698a422b5e4ac988c@syzkaller.appspotmail.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Aleksandr Nogikh <nogikh@google.com>
+Cc:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,90 +72,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 04:44:49PM +0100, Lukas Wunner wrote:
-> On Thu, Jan 26, 2023 at 10:24:32AM +0100, Samuel Ortiz wrote:
-> > On Wed, Jan 25, 2023 at 11:03 PM Lukas Wunner <lukas@wunner.de> wrote:
-> > > CMA/SPDM (PCIe r6.0 sec 6.31) is in active development on this branch:
-> > >
-> > > https://github.com/l1k/linux/commits/doe
-> > > 
-> > > The device authentication service afforded here is generic.
-> > > It is up to users and vendors to decide how to employ it,
-> > > be it for "confidential computing" or something else.
-> > >
-> > > Trusted root certificates to validate device certificates can be
-> > > installed into a kernel keyring using the familiar keyctl(1) utility,
-> > > but platform-specific roots of trust (such as a HSM) could be
-> > > supported as well.
-> > 
-> > This may have been discussed at LPC, but are there any plans to also
-> > support confidential computing flows where the host kernel is not part
-> > of the TCB and would not be trusted for validating the device cert chain
-> > nor for running the SPDM challenge?
-> 
-> As long as a device is passed through to a guest, the guest owns
-> that device.  
+On Mon, 23 Jan 2023 at 12:42, syzbot
+<syzbot+0bc698a422b5e4ac988c@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot tried to test the proposed patch but the build/boot failed:
+>
+> failed to delete instance: googleapi: Error 400: Invalid value for field =
+'instance': 'ci-upstream-kasan-gce-root-test-job-parallel-test-job-parallel=
+-1'. Must be a match of regex '[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?|[1-9][0-9]=
+{0,19}', invalid
 
-I agree. On a SRIOV setup, the host typically owns the PF and assigns
-VFs to the guests. Devices must be enlightened to guarantee that once
-one of their VFs/interfaces is passed to a trusted VM, it can no longer
-be modified by anything untrusted (e.g. the hypervisor).
++Aleksandr, was this fixed already?
 
-> It is the guest's prerogative and duty to perform
-> CMA/SPDM authentication on its own behalf.  If the guest uses
-> memory encryption via TDX or SEV, key material established through
-> a Diffie-Hellman exchange between guest and device is invisible
-> to the host.  Consequently using that key material for IDE encryption
-> protects device accesses from the guest against snooping by the host.
-
-On confidential computing platforms where a security manager (e.g.
-Intel TDX module) manages the confidential guests, the IDE key
-management and stream settings would be handled by this manager. In
-other words, the SPDM requester would not be a Linux kernel.
-FWIW, Intel recently published an interesting description of TEE-IO
-enabling with TDX [1].
-
-> SPDM authentication consists of a sequence of exchanges, the first
-> being GET_VERSION.  When a responder (=device) receives a GET_VERSION
-> request, it resets the connection and all internal state related to
-> that connection.  (SPDM 1.2.1 margin no 185: "a Requester can issue
-> a GET_VERSION to a Responder to reset a connection at any time";
-> see also SPDM 1.1.0 margin no 161 for details.)
-> 
-> Thus, even though the host may have authenticated the device,
-> once it's passed through to a guest and the guest performs
-> authentication again, SPDM state on the device is reset.
-> 
-> I'll amend the patches so that the host refrains from performing
-> reauthentication as long as a device is passed through.  The host
-> has no business mutating SPDM state on the device once ownership
-> has passed to the guest.
-> 
-> The first few SPDM exchanges are transmitted in the clear,
-> so the host can eavesdrop on the negotiated algorithms,
-> exchanged certificates and nonces.  However the host cannot
-> successfully modify the exchanged data due to the man in the middle
-> protection afforded by SPDM:  The challenge/response hash is
-> computed over the concatenation of the exchanged messages,
-> so modification of the messages by a man in the middle leads
-> to authentication failure.
-
-Right, I was not concerned by the challenge messages integrity but by
-trusting the host with verifying the response and validating the device
-cert chains.
-
-> Obviously the host can DoS guest access to the device by modifying
-> exchanged messages, but there are much simpler ways for it to
-> do that, say, by clearing Bus Master Enable or Memory Space Enable
-> bits in the Command Register.  DoS attacks from the host against
-> the guest cannot be part of the threat model at this point.
-
-Yes, the host can DoS the guest at anytime it wants and in multiple
-ways. It's definitely out of the confidential computing thread model at
-least.
-
-Cheers,
-Samuel.
-
-[1] https://cdrdv2-public.intel.com/742542/software-enabling-for-tdx-tee-io-fixed.pdf
-
+> syzkaller build log:
+> go env (err=3D<nil>)
+> GO111MODULE=3D"auto"
+> GOARCH=3D"amd64"
+> GOBIN=3D""
+> GOCACHE=3D"/syzkaller/.cache/go-build"
+> GOENV=3D"/syzkaller/.config/go/env"
+> GOEXE=3D""
+> GOEXPERIMENT=3D""
+> GOFLAGS=3D""
+> GOHOSTARCH=3D"amd64"
+> GOHOSTOS=3D"linux"
+> GOINSECURE=3D""
+> GOMODCACHE=3D"/syzkaller/jobs-2/linux/gopath/pkg/mod"
+> GONOPROXY=3D""
+> GONOSUMDB=3D""
+> GOOS=3D"linux"
+> GOPATH=3D"/syzkaller/jobs-2/linux/gopath"
+> GOPRIVATE=3D""
+> GOPROXY=3D"https://proxy.golang.org,direct"
+> GOROOT=3D"/usr/local/go"
+> GOSUMDB=3D"sum.golang.org"
+> GOTMPDIR=3D""
+> GOTOOLDIR=3D"/usr/local/go/pkg/tool/linux_amd64"
+> GOVCS=3D""
+> GOVERSION=3D"go1.17"
+> GCCGO=3D"gccgo"
+> AR=3D"ar"
+> CC=3D"gcc"
+> CXX=3D"g++"
+> CGO_ENABLED=3D"1"
+> GOMOD=3D"/syzkaller/jobs-2/linux/gopath/src/github.com/google/syzkaller/g=
+o.mod"
+> CGO_CFLAGS=3D"-g -O2"
+> CGO_CPPFLAGS=3D""
+> CGO_CXXFLAGS=3D"-g -O2"
+> CGO_FFLAGS=3D"-g -O2"
+> CGO_LDFLAGS=3D"-g -O2"
+> PKG_CONFIG=3D"pkg-config"
+> GOGCCFLAGS=3D"-fPIC -m64 -pthread -fmessage-length=3D0 -fdebug-prefix-map=
+=3D/tmp/go-build480514578=3D/tmp/go-build -gno-record-gcc-switches"
+>
+> git status (err=3D<nil>)
+> HEAD detached at 1dac8c7a0
+> nothing to commit, working tree clean
+>
+>
+> tput: No value for $TERM and no -T specified
+> tput: No value for $TERM and no -T specified
+> Makefile:32: run command via tools/syz-env for best compatibility, see:
+> Makefile:33: https://github.com/google/syzkaller/blob/master/docs/contrib=
+uting.md#using-syz-env
+> go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./=
+sys/syz-sysgen
+> make .descriptions
+> tput: No value for $TERM and no -T specified
+> tput: No value for $TERM and no -T specified
+> bin/syz-sysgen
+> touch .descriptions
+> GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/goog=
+le/syzkaller/prog.GitRevision=3D1dac8c7a01e2bdd35cb04eb4901ddb157291ac2d -X=
+ 'github.com/google/syzkaller/prog.gitRevisionDate=3D20230103-123455'" "-ta=
+gs=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzz=
+er github.com/google/syzkaller/syz-fuzzer
+> GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/goog=
+le/syzkaller/prog.GitRevision=3D1dac8c7a01e2bdd35cb04eb4901ddb157291ac2d -X=
+ 'github.com/google/syzkaller/prog.gitRevisionDate=3D20230103-123455'" "-ta=
+gs=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-exec=
+prog github.com/google/syzkaller/tools/syz-execprog
+> GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/goog=
+le/syzkaller/prog.GitRevision=3D1dac8c7a01e2bdd35cb04eb4901ddb157291ac2d -X=
+ 'github.com/google/syzkaller/prog.gitRevisionDate=3D20230103-123455'" "-ta=
+gs=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stre=
+ss github.com/google/syzkaller/tools/syz-stress
+> mkdir -p ./bin/linux_amd64
+> gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
+>         -m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-vari=
+able -Wframe-larger-than=3D16384 -Wno-stringop-overflow -Wno-array-bounds -=
+Wno-format-overflow -static-pie -fpermissive -w -DGOOS_linux=3D1 -DGOARCH_a=
+md64=3D1 \
+>         -DHOSTGOOS_linux=3D1 -DGIT_REVISION=3D\"1dac8c7a01e2bdd35cb04eb49=
+01ddb157291ac2d\"
+>
+>
+>
+> Tested on:
+>
+> commit:         7dd4b804 Merge tag 'nfsd-6.2-3' of git://git.kernel.or..
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/=
+linux.git
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D2b6ecad960fc7=
+03e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D0bc698a422b5e4a=
+c988c
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
+ls for Debian) 2.35.2
+> patch:          https://syzkaller.appspot.com/x/patch.diff?x=3D145887ee48=
+0000
