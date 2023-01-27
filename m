@@ -2,128 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B5367EF0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BC367EECA
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjA0UBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 15:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
+        id S229756AbjA0TwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:52:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbjA0UA3 (ORCPT
+        with ESMTP id S229828AbjA0TvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:00:29 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDE875795
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:58:49 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1442977d77dso7918268fac.6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:58:49 -0800 (PST)
+        Fri, 27 Jan 2023 14:51:22 -0500
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09566908E2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:48:58 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so6107318wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:48:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hGtGk71zGBq3lMRp+2nfXAsNyIB3Tg451dHzgKe0ygE=;
-        b=rTRZgCEMqxDZZQtwYBIxe7lMvanr0HPHINPBJy8mn24Gt2Vwi0hKR19YjCcCwHKhR+
-         qCU75K0sN7Pselifv3VWsdAinNXtC4RuieESziPMvtfOd3G4GXSuJ9TNTi3oIYgbQwK6
-         SuzG/Nm5344HbwGnc+IIA3hiVC8MQwY3Ciuf+iHOmtvUljDIkFqEkGEA1B51Pj6emsFO
-         KtEFE6ivAI2UBCdkmhyJB40bYnk7DmY//9OnAIdRK9xE8nN4X05AZcf/o4JqclOoqbVz
-         zda8KmpKo7+GOhd2S21wHZcyAZUo/Pak9x1LPxRsl6D1ZVO+W3+LtQTYKtYWa8bXDI5x
-         Ib2w==
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZzZrYwfIlsg/hf+UKa25iBP/Yd649/iUcqSOcRI8zd0=;
+        b=moD7pz8Se0LDrliwZSOCOVz8TOFfh4e0O7LJI7iUl3rQjUn9v4sT++TSKODZNQWdVo
+         T/M/mBvwYQd8NRHZnOFMsVp9KyjOvVU5fD6venKfI/SAXHyDuy7IYOkE5JgBeVgAM2Gt
+         3oSjh8kJ8tV4KjAmOvDB7PaUfq8LnKzq8tK8c/IksBeIovCr17xxYpUYYZfA+ZB/QOBQ
+         JrbF0v1Ye2w+jH6JLhRZimAVqS7YTC7XK35v/hM8Bf3X/NHfQ6o5DYSdgpbw4bRcv0ZI
+         b/44bQBDPTHxMqPZKMAmWv74KIl78PqpX/Z65wk9UnH6ySIWu5dXfwfv5YLtmCJvirlE
+         KNhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hGtGk71zGBq3lMRp+2nfXAsNyIB3Tg451dHzgKe0ygE=;
-        b=X7NhZ5mbZwhOUPqt0pdv+vaoXFIgDS4XYVYxcNA9AhEx/eYpDWawLfPFQhJDaDuTdM
-         Mo5VHwTDuQoW69W9zcwD+Z4hOszl0GbvIotmwEuePWGSlkr6UZPPtKlGYXqkzrMP0rrr
-         Y7Gn5f6mTRulFKM8grApQzSGm76Fsyclzc+AcxeqLQ4+XR2lo4RO37GDX/35k+uYabsJ
-         705LZ9LuzJxY7BzV8V5Z3i6xmaLLV2BEQ3fQheiDwStSE9NVEHrMq2aSIR2A9/UiuwRn
-         6S0ttzAEO15vO6d7/BCxPyuvU0FdS/yQOoLcstMh5KGcPvTVYn0cArTFvtuliQWNwH/X
-         GI0A==
-X-Gm-Message-State: AFqh2kp6/rL2mT+enwtKGMJbinPUryzC/rCFJ1/7XPw2l7Bqyb4YlwPA
-        qLLoCEOjBaY7Uvz1pU3nTTvEhzG3ApAMQBst
-X-Google-Smtp-Source: AK7set9mH6lkfiOCeI5h7s8FdfEmtzefaanv+gMBh4QOE+JctEJatgpymLRSdS/YrdbWNxuNwgwWqg==
-X-Received: by 2002:a05:622a:1181:b0:3b8:2e36:9d24 with SMTP id m1-20020a05622a118100b003b82e369d24mr2655604qtk.50.1674848789969;
-        Fri, 27 Jan 2023 11:46:29 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:c833])
-        by smtp.gmail.com with ESMTPSA id y8-20020ac87048000000b003b5bc7a4512sm3290836qtm.26.2023.01.27.11.46.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 11:46:29 -0800 (PST)
-Date:   Fri, 27 Jan 2023 14:46:28 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Nhat Pham <nphamcs@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-api@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v8 2/3] cachestat: implement cachestat syscall
-Message-ID: <Y9QqFJUFo1RAbIqP@cmpxchg.org>
-References: <20230126175356.1582123-1-nphamcs@gmail.com>
- <20230126175356.1582123-3-nphamcs@gmail.com>
- <54c8ecbd-1d6e-40f1-af30-7efd04c63a7e@app.fastmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZzZrYwfIlsg/hf+UKa25iBP/Yd649/iUcqSOcRI8zd0=;
+        b=GzitZp/7OD13n6HSg4c3WwP++TduXggdHlrQkdTC6q9ORPfyJIjpxboSrc1aS35SyT
+         FYtqz6KsQorO/3tNWXFhAzTvIDed29y8IygfAOhNLn+pd668tn+dO2a+5DKgHcKVnAUr
+         6sQgUJYyUC9OUSPpsv+DBRdiNjn2WQWRLdfWVjW5HIInwPAOeEvQlssiP55B5XoMHR+4
+         kBj0irDsorPQOtCMADMdt6qXDROZDgAl6cbHZTsTOzKml6StWzKm+JfuIo4vwPraCbPm
+         iEx0iAwpvQxaVPKRKrdOXkwRZd3kOSqi+ceP5CuFdkljmzjCtl3E/0fcP1hQ1fbueUyp
+         Msww==
+X-Gm-Message-State: AO0yUKWYgVwiKZ/ib4q4QwUyKqmMvmLTDF227ZhC7NIbOaeSFQXs3GUi
+        csE4U/IXskQ9WjuvobeDglo=
+X-Google-Smtp-Source: AK7set/F3D5hmuWY6i4mvWWxz8kB8LJ8aiAEziUlyT0SDsrz1+0Q5Yevv2ZMl6Ud+pw70D01kVH00Q==
+X-Received: by 2002:a05:600c:1ca0:b0:3dc:433a:e952 with SMTP id k32-20020a05600c1ca000b003dc433ae952mr1216612wms.33.1674848800805;
+        Fri, 27 Jan 2023 11:46:40 -0800 (PST)
+Received: from [192.168.1.10] (97e09f27.skybroadband.com. [151.224.159.39])
+        by smtp.googlemail.com with ESMTPSA id bd16-20020a05600c1f1000b003d1f3e9df3csm8975103wmb.7.2023.01.27.11.46.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 11:46:40 -0800 (PST)
+Message-ID: <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com>
+Date:   Fri, 27 Jan 2023 19:46:37 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54c8ecbd-1d6e-40f1-af30-7efd04c63a7e@app.fastmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+Content-Language: en-GB
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        bskeggs@redhat.com, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        ML nouveau <nouveau@lists.freedesktop.org>
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info>
+ <b21fa1f6-a71d-5657-8596-ee0be73185ea@leemhuis.info>
+From:   Chris Clayton <chris2553@googlemail.com>
+In-Reply-To: <b21fa1f6-a71d-5657-8596-ee0be73185ea@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 04:46:38PM +0100, Arnd Bergmann wrote:
-> On Thu, Jan 26, 2023, at 18:53, Nhat Pham wrote:
-> >
-> > SYNOPSIS
-> >     #include <sys/mman.h>
-> >
-> >     struct cachestat {
-> >         __u64 nr_cache;
-> >         __u64 nr_dirty;
-> >         __u64 nr_writeback;
-> >         __u64 nr_evicted;
-> >         __u64 nr_recently_evicted;
-> >     };
-> >
-> >     int cachestat(unsigned int fd, off_t off, size_t len,
-> >           unsigned int cstat_version, struct cachestat *cstat,
-> >           unsigned int flags);
+[Resend because the mail client on my phone decided to turn HTML on behind my back, so my reply got bounced.]
+
+Thanks Thorsten.
+
+I did try to revert but it didnt revert cleanly and I don't have the knowledge to fix it up.
+
+The patch was part of a merge that included a number of related patches. Tomorrow, I'll try to revert the lot and report
+back.
+
+Chris
+
+
+
+On 27/01/2023 11:20, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
+> Hi, this is your Linux kernel regression tracker. Top-posting for once,
+> to make this easily accessible to everyone.
 > 
-> Is this "off_t off" argument intentionally limited to the old
-> 32-bit type on 32-bit architectures? Unfortunately I fear 
-> there are no good options to pass an offset here:
+> @nouveau-maintainers, did anyone take a look at this? The report is
+> already 8 days old and I don't see a single reply. Sure, we'll likely
+> get a -rc8, but still it would be good to not fix this on the finish line.
 > 
-> - if you make it a 32-bit type, this breaks calling it from
->   normal userspace that defines off_t as a 64-bit type
+> Chris, btw, did you try if you can revert the commit on top of latest
+> mainline? And if so, does it fix the problem?
 > 
-> - if you change it to a 64-bit loff_t, there are three
->   separate calling conventions for 64-bit, 32-bit with
->   aligned register pairs and other 32-bit, plus you
->   exceed the usual limit of six system call arguments
-
-That's a good point, thanks for raising it, Arnd.
-
-> A separate problem may be the cstat_version argument, usually
-> we don't use interface versions but instead use a new
-> system call number if something changes in an incompatible
-> way.
-
-I suppose from a userspace POV, a version argument vs calling a
-separate syscall doesn't make much of a difference. So going with
-loff_t and dropping cstat_version seems like a sensible way forward.
-
-As an added bonus, versioning the syscall itself means the signature
-can change in v2. This allows dropping the unused flags arg for now.
-
-That would leave it at:
-
-  int cachestat(unsigned int, loff_t, size_t len, struct cachestat *cstat);
-
-and should we ever require extensions - new fields, flags - they would
-come through a new cachestat2().
-
-Would anybody have objections to that?
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+> 
+> #regzbot poke
+> 
+> On 19.01.23 15:33, Linux kernel regression tracking (Thorsten Leemhuis)
+> wrote:
+>> [adding various lists and the two other nouveau maintainers to the list
+>> of recipients]
+> 
+>> On 18.01.23 21:59, Chris Clayton wrote:
+>>> Hi.
+>>>
+>>> I build and installed the lastest development kernel earlier this week. I've found that when I try the laptop down (or
+>>> reboot it), it hangs right at the end of closing the current session. The last line I see on  the screen when rebooting is:
+>>>
+>>> 	sd 4:0:0:0: [sda] Synchronising SCSI cache
+>>>
+>>> when closing down I see one additional line:
+>>>
+>>> 	sd 4:0:0:0 [sda]Stopping disk
+>>>
+>>> In both cases the machine then hangs and I have to hold down the power button fot a few seconds to switch it off.
+>>>
+>>> Linux 6.1 is OK but 6.2-rc1 hangs, so I bisected between this two and landed on:
+>>>
+>>> 	# first bad commit: [0e44c21708761977dcbea9b846b51a6fb684907a] drm/nouveau/flcn: new code to load+boot simple HS FWs
+>>> (VPR scrubber)
+>>>
+>>> I built and installed a kernel with f15cde64b66161bfa74fb58f4e5697d8265b802e (the parent of the bad commit) checked out
+>>> and that shuts down and reboots fine. It the did the same with the bad commit checked out and that does indeed hang, so
+>>> I'm confident the bisect outcome is OK.
+>>>
+>>> Kernels 6.1.6 and 5.15.88 are also OK.
+>>>
+>>> My system had dual GPUs - one intel and one NVidia. Related extracts from 'lscpi -v' is:
+>>>
+>>> 00:02.0 VGA compatible controller: Intel Corporation CometLake-H GT2 [UHD Graphics] (rev 05) (prog-if 00 [VGA controller])
+>>>         Subsystem: CLEVO/KAPOK Computer CometLake-H GT2 [UHD Graphics]
+>>>
+>>>         Flags: bus master, fast devsel, latency 0, IRQ 142
+>>>
+>>>         Memory at c2000000 (64-bit, non-prefetchable) [size=16M]
+>>>
+>>>         Memory at a0000000 (64-bit, prefetchable) [size=256M]
+>>>
+>>>         I/O ports at 5000 [size=64]
+>>>
+>>>         Expansion ROM at 000c0000 [virtual] [disabled] [size=128K]
+>>>
+>>>         Capabilities: [40] Vendor Specific Information: Len=0c <?>
+>>>
+>>>         Capabilities: [70] Express Root Complex Integrated Endpoint, MSI 00
+>>>
+>>>         Capabilities: [ac] MSI: Enable+ Count=1/1 Maskable- 64bit-
+>>>
+>>>         Capabilities: [d0] Power Management version 2
+>>>
+>>>         Kernel driver in use: i915
+>>>
+>>>         Kernel modules: i915
+>>>
+>>>
+>>> 01:00.0 VGA compatible controller: NVIDIA Corporation TU117M [GeForce GTX 1650 Ti Mobile] (rev a1) (prog-if 00 [VGA
+>>> controller])
+>>>         Subsystem: CLEVO/KAPOK Computer TU117M [GeForce GTX 1650 Ti Mobile]
+>>>         Flags: bus master, fast devsel, latency 0, IRQ 141
+>>>         Memory at c4000000 (32-bit, non-prefetchable) [size=16M]
+>>>         Memory at b0000000 (64-bit, prefetchable) [size=256M]
+>>>         Memory at c0000000 (64-bit, prefetchable) [size=32M]
+>>>         I/O ports at 4000 [size=128]
+>>>         Expansion ROM at c3000000 [disabled] [size=512K]
+>>>         Capabilities: [60] Power Management version 3
+>>>         Capabilities: [68] MSI: Enable+ Count=1/1 Maskable- 64bit+
+>>>         Capabilities: [78] Express Legacy Endpoint, MSI 00
+>>>         Kernel driver in use: nouveau
+>>>         Kernel modules: nouveau
+>>>
+>>> DRI_PRIME=1 is exported in one of my init scripts (yes, I am still using sysvinit).
+>>>
+>>> I've attached the bisect.log, but please let me know if I can provide any other diagnostics. Please cc me as I'm not
+>>> subscribed.
+>>
+>> Thanks for the report. To be sure the issue doesn't fall through the
+>> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+>> tracking bot:
+>>
+>> #regzbot ^introduced e44c2170876197
+>> #regzbot title drm: nouveau: hangs on poweroff/reboot
+>> #regzbot ignore-activity
+>>
+>> This isn't a regression? This issue or a fix for it are already
+>> discussed somewhere else? It was fixed already? You want to clarify when
+>> the regression started to happen? Or point out I got the title or
+>> something else totally wrong? Then just reply and tell me -- ideally
+>> while also telling regzbot about it, as explained by the page listed in
+>> the footer of this mail.
+>>
+>> Developers: When fixing the issue, remember to add 'Link:' tags pointing
+>> to the report (the parent of this mail). See page linked in footer for
+>> details.
+>>
+>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>> --
+>> Everything you wanna know about Linux kernel regression tracking:
+>> https://linux-regtracking.leemhuis.info/about/#tldr
+>> That page also explains what to do if mails like this annoy you.
