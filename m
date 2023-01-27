@@ -2,81 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E4C67E4B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:10:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D637967E474
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbjA0MKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S233173AbjA0MDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:03:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbjA0MJv (ORCPT
+        with ESMTP id S232590AbjA0MCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:09:51 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6D186250
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:03:32 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id ud5so13127717ejc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:03:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IXd1Cay0PuoVNLquWy4+5A9Hje1OZ6HIZgO3KYLNKCU=;
-        b=EM+BulHUseAsmgsDpFK679ddP8Z3AeuM8tLmktr0DE2abRVZJ5wKMKNsz/nK3VPE30
-         OHzifBu8lcuElJLZ/r83ZfXSGbz/jju0ZVtRUuyOodRDgKYRUJVg3dmfiVfNWyqrSvpB
-         Vhyu2yeRGICk4vclE5hwkNNByXgNlwuDEHwlaD+n5oYnkWqIBkDPYKPqmnW8l4vBli1y
-         jRkIWbUUIFh5eIHXaIBIBByJk7zDU7ESsYtndEVGMKz8BBWorqXSuhHZq4Kysc314DI7
-         wWUFay+YPLrKHhMn3KMex813AlP9Q25mxEHDb3rI11K6+kC6SuquhPHXrjKZVaHQHIfJ
-         sChQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IXd1Cay0PuoVNLquWy4+5A9Hje1OZ6HIZgO3KYLNKCU=;
-        b=LGeVxh4ki3y+fANSGFxFsOxFsMrqDXwr2s3eFFhg7D2irKYZ+D1iE0utKP5vRCQa86
-         LTWy0FeN+ViloeyGUxNcgs6ex/qJtR03dygzO+dGnV+08GjSergUam10mHkKy/NMGMLY
-         SbOYiHydcOOGZ08LFDlEcwZjSY4E+j0AYqk0vzHioTk7urp124/ogubySATfp1B3qpUU
-         V7n3R6/moO7ySLZzthCkA1L8MiXdVeOVwnV6Dppl5pru/DqBuYAmDWwNnrrLzjhCXoTl
-         Qs/8ka7l2TjjIS1w20CmYZnpG0yoZMhDSpKC4qdlXaVhYSLSRzFsm3QBjasMjbMx5Yd9
-         t0rQ==
-X-Gm-Message-State: AFqh2ko/kWq+CNAnVd3sVTdGI2DcEsNlv5VE7HKQl50e/22WB2x8ZviJ
-        j6s+3QSPoRT9baZf6PCvmuZpij8KFSGsQbF8
-X-Google-Smtp-Source: AMrXdXs1krk+6o/FfFny7AmBPlSTXvn2eo0l3icgMKTakzX2LZT41di38a+DLnWs8FhhuiSaNmhY8g==
-X-Received: by 2002:a05:600c:4e16:b0:3db:15b1:fafd with SMTP id b22-20020a05600c4e1600b003db15b1fafdmr32933179wmq.24.1674820175891;
-        Fri, 27 Jan 2023 03:49:35 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p20-20020a05600c2e9400b003d9862ec435sm4075479wmn.20.2023.01.27.03.49.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 03:49:35 -0800 (PST)
-Message-ID: <9f4666db-9b0b-77d4-e02b-708c2a1ebb4e@linaro.org>
-Date:   Fri, 27 Jan 2023 12:49:33 +0100
+        Fri, 27 Jan 2023 07:02:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAC92A9B5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:58:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC89B61B48
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:50:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82CC0C433EF;
+        Fri, 27 Jan 2023 11:50:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674820245;
+        bh=yg7LVjF/Sxi7pRws/+ezLgbUiexQuVEylBV9Ln2+OZk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fIsy9043QSVE0+qZwwPJD86MLjYhe5Vl7AcvAzBQ7tCcVq3TxiJo2HUMywupE3z59
+         H1iTpcLQIDEDFGmXNkmfMrnlbCzmiNQLLmYeZvtHBkxpxLeBy88FzMv57J8P7Od0wt
+         XovcKlayuFatPnOVBVgcWSZHD6DxFcpwLupGojlCdx2qg5lsvYt6wh/08nYYTMZpLO
+         Cl9P0pAr8x+JOdHdu0cxbbU8VOXTInmxp7N9fkXoWHh6Yr4N3/V+OCA/E4pKk3Qy9Z
+         QKsa9pTT0pJbOIrtpPi24mk3HW3Rc5KHK4sLcoZ0A4sLzaBBk0rcmQTQ5QolgtdeN4
+         nQp+VmQkV8r5w==
+Date:   Fri, 27 Jan 2023 11:50:39 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     catalin.marinas@arm.com, mark.rutland@arm.com,
+        daniel.thompson@linaro.org, dianders@chromium.org,
+        liwei391@huawei.com, mhiramat@kernel.org, maz@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] arm64: kgdb: Set PSTATE.SS to 1 to re-enable
+ single-step
+Message-ID: <20230127115039.GA30505@willie-the-truck>
+References: <20221219102452.2860088-1-sumit.garg@linaro.org>
+ <20221219102452.2860088-3-sumit.garg@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 7/8] arm64: dts: qcom: sm8550: Add USB PHYs and
- controller nodes
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-phy@lists.infradead.org
-References: <20230126131415.1453741-1-abel.vesa@linaro.org>
- <20230126131415.1453741-8-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230126131415.1453741-8-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219102452.2860088-3-sumit.garg@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,56 +58,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 14:14, Abel Vesa wrote:
-> Add USB host controller and PHY nodes.
+On Mon, Dec 19, 2022 at 03:54:52PM +0530, Sumit Garg wrote:
+> Currently only the first attempt to single-step has any effect. After
+> that all further stepping remains "stuck" at the same program counter
+> value.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Refer to the ARM Architecture Reference Manual (ARM DDI 0487E.a) D2.12,
+> PSTATE.SS=1 should be set at each step before transferring the PE to the
+> 'Active-not-pending' state. The problem here is PSTATE.SS=1 is not set
+> since the second single-step.
+> 
+> After the first single-step, the PE transferes to the 'Inactive' state,
+> with PSTATE.SS=0 and MDSCR.SS=1, thus PSTATE.SS won't be set to 1 due to
+> kernel_active_single_step()=true. Then the PE transferes to the
+> 'Active-pending' state when ERET and returns to the debugger by step
+> exception.
+> 
+> Before this patch:
+> ==================
+> Entering kdb (current=0xffff3376039f0000, pid 1) on processor 0 due to Keyboard Entry
+> [0]kdb>
+> 
+> [0]kdb>
+> [0]kdb> bp write_sysrq_trigger
+> Instruction(i) BP #0 at 0xffffa45c13d09290 (write_sysrq_trigger)
+>     is enabled   addr at ffffa45c13d09290, hardtype=0 installed=0
+> 
+> [0]kdb> go
+> $ echo h > /proc/sysrq-trigger
+> 
+> Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to Breakpoint @ 0xffffad651a309290
+> [1]kdb> ss
+> 
+> Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to SS trap @ 0xffffad651a309294
+> [1]kdb> ss
+> 
+> Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to SS trap @ 0xffffad651a309294
+> [1]kdb>
+> 
+> After this patch:
+> =================
+> Entering kdb (current=0xffff6851c39f0000, pid 1) on processor 0 due to Keyboard Entry
+> [0]kdb> bp write_sysrq_trigger
+> Instruction(i) BP #0 at 0xffffc02d2dd09290 (write_sysrq_trigger)
+>     is enabled   addr at ffffc02d2dd09290, hardtype=0 installed=0
+> 
+> [0]kdb> go
+> $ echo h > /proc/sysrq-trigger
+> 
+> Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to Breakpoint @ 0xffffc02d2dd09290
+> [1]kdb> ss
+> 
+> Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd09294
+> [1]kdb> ss
+> 
+> Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd09298
+> [1]kdb> ss
+> 
+> Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd0929c
+> [1]kdb>
+> 
+> Fixes: 44679a4f142b ("arm64: KGDB: Add step debugging support")
+> Co-developed-by: Wei Li <liwei391@huawei.com>
+> Signed-off-by: Wei Li <liwei391@huawei.com>
+> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> Tested-by: Douglas Anderson <dianders@chromium.org>
 > ---
+>  arch/arm64/include/asm/debug-monitors.h | 1 +
+>  arch/arm64/kernel/debug-monitors.c      | 5 +++++
+>  arch/arm64/kernel/kgdb.c                | 2 ++
+>  3 files changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/debug-monitors.h b/arch/arm64/include/asm/debug-monitors.h
+> index 7b7e05c02691..ce3875ad5cd3 100644
+> --- a/arch/arm64/include/asm/debug-monitors.h
+> +++ b/arch/arm64/include/asm/debug-monitors.h
+> @@ -104,6 +104,7 @@ void user_regs_reset_single_step(struct user_pt_regs *regs,
+>  void kernel_enable_single_step(struct pt_regs *regs);
+>  void kernel_disable_single_step(void);
+>  int kernel_active_single_step(void);
+> +void kernel_regs_reset_single_step(struct pt_regs *regs);
+>  
+>  #ifdef CONFIG_HAVE_HW_BREAKPOINT
+>  int reinstall_suspended_bps(struct pt_regs *regs);
+> diff --git a/arch/arm64/kernel/debug-monitors.c b/arch/arm64/kernel/debug-monitors.c
+> index 3da09778267e..9af898b22ed4 100644
+> --- a/arch/arm64/kernel/debug-monitors.c
+> +++ b/arch/arm64/kernel/debug-monitors.c
+> @@ -438,6 +438,11 @@ int kernel_active_single_step(void)
+>  }
+>  NOKPROBE_SYMBOL(kernel_active_single_step);
+>  
+> +void kernel_regs_reset_single_step(struct pt_regs *regs)
+> +{
+> +	set_regs_spsr_ss(regs);
+> +}
 
+Just a nit on the naming here, but please can this be
+kernel_rewind_single_step() instead? I think it's closer to the rewind
+function we have for user tasks than the reset function.
 
-(...)
+Cheers,
 
-> +		usb_1: usb@a6f8800 {
-> +			compatible = "qcom,sm8550-dwc3", "qcom,dwc3";
-> +			reg = <0x0 0x0a6f8800 0x0 0x400>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +				 <&rpmhcc TCSR_USB3_CLKREF_EN>;
-> +			clock-names = "cfg_noc",
-> +				      "core",
-> +				      "iface",
-> +				      "sleep",
-> +				      "mock_utmi",
-> +				      "xo";
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&pdc 15 IRQ_TYPE_EDGE_RISING>,
-> +					      <&pdc 14 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "hs_phy_irq",
-> +					  "ss_phy_irq",
-> +					  "dm_hs_phy_irq",
-> +					  "dp_hs_phy_irq";
-> +
-> +			power-domains = <&gcc USB30_PRIM_GDSC>;
-> +			required-opps = <&rpmhpd_opp_nom>;
-
-This is not accepted, so far. Can we drop it?
-
-Or revive:
-https://lore.kernel.org/all/YXcBK7zqny0s4gd4@ripper/
-
-Best regards,
-Krzysztof
-
+Will
