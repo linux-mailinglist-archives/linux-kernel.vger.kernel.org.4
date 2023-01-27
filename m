@@ -2,160 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B203867E183
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDB067E185
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjA0KW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S229873AbjA0KXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjA0KWz (ORCPT
+        with ESMTP id S229596AbjA0KXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:22:55 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9701E9C3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:22:52 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id q10so4527156wrm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:22:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/CEHKrMArowrp45y0BJCJO3EwlygbfM1dWauMJbvYl4=;
-        b=otigbkRW6OwuOG2Op9YG90y/V+Tu/nCl0D7Wg/TvdYnKbPVzQNxJRx0zM4SOoTK7MD
-         2Txd9qlyPedexlCQiNusoXu+emdX0JHchh7Xrml0Yt+XvNYRlLGQ/O1a4HrO3cczbXh1
-         1VYNF+dGw9FSP4ZV0V4sXVy7tMrKOJ7h3bthsWGCTJugtBJCd9klwMCAoSEkGaiR3OkA
-         RTchiXQPqraytJyp/9A/rWew1+S0BFJE8mCj5HVU8ade5WMSXgZXQ2PRANbqlfxh3nJj
-         tUyX6DwdNVX9iV3JJj8ajSqvyBto8Vse5s0uvaU5AVWACM51yo70S3BCC733S7Qm9YTH
-         QlCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/CEHKrMArowrp45y0BJCJO3EwlygbfM1dWauMJbvYl4=;
-        b=PUw9lmz8qDwSIO2LS+InnDDvH66AhUzuHT92PHfirgRocugz4vfKmhH3uEX08VYpjy
-         lQUBo+hisPZpsFGwaWBzHIx1Ll8nOvDK0hqnKHut6t6GiU7Qbe0VBpvNNQCTN+bldoBv
-         D+/sF2IX1DDlMO+QR6jDCUBbcJiYUlKbtWZK4zHbCzG22t3XKSHEqV64GW4CQulzhuj4
-         QpfvuCpdh0b2+ZQumZzgpyxi5PBmdR+iL8srenxaXlbEPMIgor/M0I9nryBqQN8IwnS7
-         uWTKMFSPBEAOmWZME3zxHAzM6Ua8frdWE+joAF6lxjcKS/Ce/pJnfIrfDV/Fqs90+fn+
-         Lt/w==
-X-Gm-Message-State: AFqh2kq5Ke1ey52oW+kNTNv7y6iWAwh5l3c6szQrNCM7x6dT6msVa4Nx
-        0Ha3ugJLC7M0e3ESaHIbZfXP7csKoNu61/OA
-X-Google-Smtp-Source: AMrXdXuOhdgMh17Z4KujKWs02hUZNK/b3pZwJtW3Bkyst7YC0mAzk4Kn36PGmaGsYP8VOwfbJUywYw==
-X-Received: by 2002:a05:6000:81b:b0:2be:5c3d:99e3 with SMTP id bt27-20020a056000081b00b002be5c3d99e3mr27717572wrb.10.1674814971469;
-        Fri, 27 Jan 2023 02:22:51 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id x12-20020adfec0c000000b002b065272da2sm3706693wrn.13.2023.01.27.02.22.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 02:22:50 -0800 (PST)
-Message-ID: <b8ce28b5-0e53-aca4-a2e4-f6333b5ac80b@linaro.org>
-Date:   Fri, 27 Jan 2023 11:22:49 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 5/6] dt-bindings: clock: Add Qcom SM6115 GPUCC
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230126181335.12970-1-konrad.dybcio@linaro.org>
- <20230126181335.12970-6-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230126181335.12970-6-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 27 Jan 2023 05:23:20 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3AC28D3F
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:23:18 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 072E05C012A;
+        Fri, 27 Jan 2023 05:23:18 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 27 Jan 2023 05:23:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674814998; x=1674901398; bh=ESYKgkcp1o
+        AJy2GgJO4g+7f5T9dErjzdnGeeRmEuZUM=; b=mwpIAxCPl5jp4IDgAX1HMAQz7t
+        P6ShCHDnrH1GflyH8Oiq97HR30qjYMurrKI5ZWK4WBfLqGl6GTVLQfo0zxMI/HXA
+        WD7qE9YBYFRb2gZiUxprPPapNm150XlAfUtYl2KLUV1lXaJAzzaZloghCypTNaKk
+        Cd5WtrSP1gAWBR4ZpBjWZ4k8DYAcQy0jAHoliigtYpgr68jhxMYShdMLDJLjLi+h
+        djHzMh1DlaTWcDUDL3WHuO2yn/gyYVVvrTPYm3sFdYAdIxjRT0S9iNgytORZa+Ha
+        2rxr0UelHsfRMOzX+9rkIjebvGrjxksDvXCh8tEt/o53tbTNtG9c7r6M0VPQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674814998; x=1674901398; bh=ESYKgkcp1oAJy2GgJO4g+7f5T9dE
+        rjzdnGeeRmEuZUM=; b=YN9ZL+JlxxeownlNFQTeDHYHhwd5UXjirRQtL+7B70V4
+        +ROfEfH3ZiCrerrK87KwHP3AqEAlY5Ou+nRPUVtmLl6fm4D/dMw7balbW2yEOaTR
+        SMR/SeA3S1C6L5ikV/vecKnI83KHatJIaJS03KSnymWDl0dJHVwdci0X9qCgYd0u
+        AeNwU0fTCBK0pwYbEGbU6fvApuJbZO9xmXQbkPYcMtmyXw7FnrKrvzo+L5ZQSM7i
+        3++v/NmvwtE9TWiYxD+ZYalGPg4lKQI99k1n+K5vYEnoLYfpZWNgRedvtchA90xY
+        aM/8mytclhX5U3TFghO1jiqLRJdeWAavCJplDU7kPQ==
+X-ME-Sender: <xms:FabTY4NPaP6S9U7Tw220ZiSKtKYuiBV8AbD3bcP4LzBqzXMwDNikKQ>
+    <xme:FabTY--okzgeumhHDCA2FlpBr-w3aMCeQtpRw4YVDS-ioUZEr7_kpaNf1rGU8a8mE
+    mpS0J8FqY5xN5wuNrE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddviedgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:FabTY_T_WbYWqxzhYGF9tPykug2LJLgvC3wRcd85FQ34OgCfi_1q7g>
+    <xmx:FabTYwufGlIDPRdfYjyI8fAk1yI2t2LKwYWW52wRZRCnmTSFJicddw>
+    <xmx:FabTYwdeoUSGLUoNSf4oX5mQ3xHJDuLwmSkEjJI3KhyjRSIoGqevLQ>
+    <xmx:FqbTY3zNGLNsGCKO92JnQmCisItEc4nU1Tm44SlMaSNLYGxMuHQnIQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 88516B60086; Fri, 27 Jan 2023 05:23:17 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <4db4ab2d-968f-4403-b85e-1465b3c1017e@app.fastmail.com>
+In-Reply-To: <20230127101701.GA1416485@linux.intel.com>
+References: <20230127093631.2132187-1-arnd@kernel.org>
+ <20230127101701.GA1416485@linux.intel.com>
+Date:   Fri, 27 Jan 2023 11:22:57 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stanislaw Gruszka" <stanislaw.gruszka@linux.intel.com>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Oded Gabbay" <ogabbay@kernel.org>,
+        "Jeffrey Hugo" <quic_jhugo@quicinc.com>,
+        "Jacek Lawrynowicz" <jacek.lawrynowicz@linux.intel.com>,
+        "Dave Airlie" <airlied@redhat.com>,
+        "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Melissa Wen" <mwen@igalia.com>,
+        "Daniel Vetter" <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] accel: work around DRM_ACCEL dependencies
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 19:13, Konrad Dybcio wrote:
-> Add device tree bindings for graphics clock controller for Qualcomm
-> Technology Inc's SM6115 SoCs.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> v1 -> v2:
-> 
-> No changes
-> 
->  .../bindings/clock/qcom,sm6115-gpucc.yaml     | 71 +++++++++++++++++++
->  include/dt-bindings/clock/qcom,sm6115-gpucc.h | 36 ++++++++++
->  2 files changed, 107 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6115-gpucc.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,sm6115-gpucc.h
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm6115-gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm6115-gpucc.yaml
-> new file mode 100644
-> index 000000000000..abf4e87359a3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,sm6115-gpucc.yaml
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,sm6115-gpucc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Graphics Clock & Reset Controller on SM6115
-> +
-> +maintainers:
-> +  - Konrad Dybcio <konrad.dybcio@linaro.org>
-> +
-> +description: |
-> +  Qualcomm graphics clock control module provides clocks and power domains on
-> +  Qualcomm SoCs.
-> +
-> +  See also:: include/dt-bindings/clock/qcom,sm6115-gpucc.h
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sm6115-gpucc
-> +
-> +  clocks:
-> +    items:
-> +      - description: Board XO source
-> +      - description: GPLL0 main branch source
-> +      - description: GPLL0 main div source
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  '#power-domain-cells':
-> +    const: 1
-> +
-> +  '#reset-cells':
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - '#clock-cells'
-> +  - '#reset-cells'
-> +  - '#power-domain-cells'
+On Fri, Jan 27, 2023, at 11:17, Stanislaw Gruszka wrote:
+> On Fri, Jan 27, 2023 at 10:36:20AM +0100, Arnd Bergmann wrote:
 
-Why this one is not referencing gcc.yaml? Looks the same as your
-previous sm6375.
+>> I think it will be necessary to establish a link hierarchy between drm.ko
+>> and drm_accel.ko to avoid circular dependencies like this, but until then
+>> the only way that both can be used is to have both subsystems built into
+>> the kernel. Enforce this using a Kconfig dependency.
+>
+> Hmm, it was discussed a bit before and conclusion was that accel will be
+> compiled in drm.ko to avoid circular dependencies. There should be
+> no drm_accel.ko module.
 
-Best regards,
-Krzysztof
+Ok, got it. This does not sounds like a great solution as it ties
+the two modules closer together than most users want, but it should
+work as long as we control the dependencies for the individual drivers.
 
+>> diff --git a/drivers/accel/Kconfig b/drivers/accel/Kconfig
+>> index 834863902e16..dd18d3b2028c 100644
+>> --- a/drivers/accel/Kconfig
+>> +++ b/drivers/accel/Kconfig
+>> @@ -8,7 +8,7 @@
+>>  #
+>>  menuconfig DRM_ACCEL
+>>  	bool "Compute Acceleration Framework"
+>> -	depends on DRM
+>> +	depends on DRM=y
+>
+> Would making ivpu Kconfig:
+>
+> depends on DRM
+> select DRM_ACCEL
+>
+> solve the problem and still allow to drm to be build as module ? 
+
+Right, that should work, I'll send a v2 patch to add an "if DRM"
+around the entire drivers/accel/Kconfig file, which should have the
+effect.
+
+     Arnd
