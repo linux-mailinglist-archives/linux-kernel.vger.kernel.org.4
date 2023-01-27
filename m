@@ -2,80 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8104167E537
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A20A267E533
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbjA0MaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S232450AbjA0MaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232525AbjA0MaN (ORCPT
+        with ESMTP id S231910AbjA0MaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:30:13 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F7E30E4;
-        Fri, 27 Jan 2023 04:30:10 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RBv4YZ024366;
-        Fri, 27 Jan 2023 12:29:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6601227chkLYrNzE4yqvw/mKCTmKQwmwYAxGEzjr2CQ=;
- b=Y9niUPaE3hZuVQWSxiobmtfNmBRfp+eLGAbpXsS15i4iTXY48dxoIQQLnDZnEVVilQcB
- JNAajD6af9LzP6ZzlIucfcXZ1PTanPCE0++n+oJ1a/OX2E+UhUBQQy3X96U9WiRWEe4z
- IE/ci/0l+V8LznIj6BrmAeCpqUWCfFy+eEVilUim73cPensHbkJlnzyhjt8ByUeKYsmo
- DtUlMXB56m2XiknA4zlgCq4AEHLfuAsX6oZakH2KZ5Td5rUIEDlvs9XlEln/Ipd8PHar
- 9LjoSsVVR0+QrXPRAykgvQ8XgSTLiMft2YtqQjK+9JsscWpAomq3TzQprR6WjzGh1rOf +g== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nbd7au6vb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 12:29:56 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30RCTu79024155
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 12:29:56 GMT
-Received: from [10.216.47.84] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 27 Jan
- 2023 04:29:52 -0800
-Message-ID: <9610a38e-9f39-c514-f535-73434ae8f51a@quicinc.com>
-Date:   Fri, 27 Jan 2023 17:59:49 +0530
+        Fri, 27 Jan 2023 07:30:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CC2EF;
+        Fri, 27 Jan 2023 04:30:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B88CB82050;
+        Fri, 27 Jan 2023 12:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2078C433D2;
+        Fri, 27 Jan 2023 12:30:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674822604;
+        bh=vH2S3QTL88n8UkKlzXAG+HLWuxF+TDSqv4WGt7x7NKY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PdeoVrfTGv8Z2UEsUYqY5j2xlNjlukeIpc6w73uHkA8HWvJsbSV9jozKLUZdzR+b+
+         oxm0ZkMa1phas/Z4CAG1ez4LyXrRvzZHoCimyWp+PbsBFjL6GOE7GEk3I538ahyKuI
+         SrJ5stOb7faFgEJ6XhK/H1FQJRPUr5y61due82yOV1htLYsh07UYlj3mFkaIt8VLfe
+         NKhHK3c/bs38YIIAObak4fxQohu3oWpG3IUT04gAVHzbojZM4CV8Z/FsntTGgCEEzo
+         b/V090NvLJkj2JaUevNWVXl5/8NrZq+7Ohonq86K4LjfTyVjlstEWLMiK/dn81OHqN
+         CF5MtkWZ9a4FQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1A409405BE; Fri, 27 Jan 2023 09:30:01 -0300 (-03)
+Date:   Fri, 27 Jan 2023 09:30:01 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Michael Petlan <mpetlan@redhat.com>
+Cc:     linux-perf-users@vger.kernel.org, acme@redhat.com,
+        qzhao@redhat.com, cjense@google.com,
+        Ian Rogers <irogers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH 2/2] perf test: Fix JSON format linter test checks
+Message-ID: <Y9PDycrODMfeUSA2@kernel.org>
+References: <20230120134039.17788-1-mpetlan@redhat.com>
+ <20230120134039.17788-3-mpetlan@redhat.com>
+ <Y9PC2+Yqh3W8wyNU@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 1/3] dt-bindings: reserved-memory: ramoops: Update the
- binding
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <keescook@chromium.org>, <gpiccoli@igalia.com>, <corbet@lwn.net>,
-        <tony.luck@intel.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-hardening@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <1673611126-13803-1-git-send-email-quic_mojha@quicinc.com>
- <7cb96551-094c-1a68-cc3f-31e4e2e94518@linaro.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <7cb96551-094c-1a68-cc3f-31e4e2e94518@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: tPkkxhmOhWHw67xDJR3jJqJHnWT6pnn7
-X-Proofpoint-GUID: tPkkxhmOhWHw67xDJR3jJqJHnWT6pnn7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-27_08,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 spamscore=0 mlxlogscore=999 impostorscore=0 adultscore=0
- clxscore=1015 priorityscore=1501 phishscore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301270117
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9PC2+Yqh3W8wyNU@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,108 +63,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Em Fri, Jan 27, 2023 at 09:26:03AM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Fri, Jan 20, 2023 at 02:40:39PM +0100, Michael Petlan escreveu:
+> > The test fails on CPUs with topdown metrics, where it is common to print
+> > two metrics per line. Since these are included in default event set for
+> > `perf stat -- something`, it causes the "no args" subtest to fail due to
+> > unexpected member count. We need to accept 7 or 9 members in that case.
+> > 
+> > Coming to that, counting commas in the JSON line and consider it a number
+> > of elements is incorrect and misleading. There should be +1 element than
+> > the count of commas, while also, commas can potentially appear in the
+> > event names. Count " : " substrings rather, since these better fit to
+> > what should be actually counted.
+> 
+> Before I apply this first patch I can run, as root, the 'perf test' JSON
+> lint 100 times without problems:
+> 
+> [root@quaco ~]# for a in $(seq 100) ; do echo -n $a ; perf test 98 ; done
+> 1 98: perf stat JSON output linter                                    : Ok
+> 2 98: perf stat JSON output linter                                    : Ok
+> 3 98: perf stat JSON output linter                                    : Ok
+> 4 98: perf stat JSON output linter                                    : Ok
+> <SNIP>
+> 96 98: perf stat JSON output linter                                    : Ok
+> 97 98: perf stat JSON output linter                                    : Ok
+> 98 98: perf stat JSON output linter                                    : Ok
+> 99 98: perf stat JSON output linter                                    : Ok
+> 100 98: perf stat JSON output linter                                    : Ok
+> [root@quaco ~]#
+> 
+> After applying it it fails seemingly randomly, I'll remove both patches
+> from my tmp.perf/core branch and investigate.
+> 
+> [acme@quaco perf]$ git log --oneline -1
+> fdafd42aac3629db (HEAD) perf stat: Fix JSON metric printout for multiple metrics per line
+> [acme@quaco perf]$ perf -v
+> perf version 6.2.rc5.gfdafd42aac36
+> [acme@quaco perf]$
+> [root@quaco ~]# perf -v
+> perf version 6.2.rc5.gfdafd42aac36
+> [root@quaco ~]# for a in $(seq 100) ; do echo -n $a ; perf test 98 ; done
+> [root@quaco ~]# perf -v
+> perf version 6.2.rc5.gfdafd42aac36
+> [root@quaco ~]# for a in $(seq 100) ; do echo -n $a ; perf test 98 ; done
+> 1 98: perf stat JSON output linter                                    : Ok
+> 2 98: perf stat JSON output linter                                    : Ok
+> 3 98: perf stat JSON output linter                                    : FAILED!
+> 4 98: perf stat JSON output linter                                    : Ok
 
-On 1/13/2023 5:34 PM, Krzysztof Kozlowski wrote:
-> Subject: drop second/last, redundant "binding". The "dt-bindings" prefix
-> is already stating that these are bindings.
-> 
-> Your subject says nothing. Everything is "update".
-> 
-> On 13/01/2023 12:58, Mukesh Ojha wrote:
->> Update the ramoops region binding document with details
->> like region can also be reserved dynamically apart from
->> reserving it statically.
-> 
-> So what exactly can be here reserved dynamically? And what does it mean
-> 'dynamically'? By whom? How is this property of hardware (not OS)?
-> 
->>
->> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->> ---
->> Change in v2:
->>    - Added this patch as per changes going to be done in patch 3/3
->>
->>   .../bindings/reserved-memory/ramoops.yaml          | 34 ++++++++++++++++++++--
->>   1 file changed, 32 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
->> index 0391871..54e46e8 100644
->> --- a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
->> +++ b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
->> @@ -10,7 +10,8 @@ description: |
->>     ramoops provides persistent RAM storage for oops and panics, so they can be
->>     recovered after a reboot. This is a child-node of "/reserved-memory", and
->>     is named "ramoops" after the backend, rather than "pstore" which is the
->> -  subsystem.
->> +  subsystem. This region can be reserved both statically or dynamically by
->> +  using appropriate property in device tree.
->>   
->>     Parts of this storage may be set aside for other persistent log buffers, such
->>     as kernel log messages, or for optional ECC error-correction data.  The total
->> @@ -112,7 +113,13 @@ unevaluatedProperties: false
->>   
->>   required:
->>     - compatible
->> -  - reg
->> +
->> +oneOf:
->> +  - required:
->> +      - reg
->> +
->> +  - required:
->> +      - size
-> 
-> There is no such property. You cannot require it.
+BTW, after applying the second patch, the one for 'perf test', the
+problem persists:
 
-I was thinking, since this size is part reserved-memory.yaml and
-we have
+[acme@quaco perf]$ git log --oneline -1
+320cd37176508ec2 (HEAD, acme/tmp.perf/core, acme.korg/tmp.perf/core) perf test: Fix JSON format linter test checks
+[acme@quaco perf]$ perf -v
+perf version 6.2.rc5.g320cd3717650
+[acme@quaco perf]$
+[root@quaco ~]# perf -v
+perf version 6.2.rc5.g320cd3717650
+[root@quaco ~]# for a in $(seq 100) ; do echo -n $a ; perf test 98 ; done
+1 98: perf stat JSON output linter                                    : Ok
+2 98: perf stat JSON output linter                                    : FAILED!
+3 98: perf stat JSON output linter                                    : Ok
+4 98: perf stat JSON output linter                                    : Ok
+5 98: perf stat JSON output linter                                    : FAILED!
+6 98: perf stat JSON output linter                                    : Ok
+7 98: perf stat JSON output linter                                    : FAILED!
+8 98: perf stat JSON output linter                                    : Ok
+9 98: perf stat JSON output linter                                    : Ok
+10 98: perf stat JSON output linter                                    : FAILED!
+11 98: perf stat JSON output linter                                    : FAILED!
+12 98: perf stat JSON output linter                                    : FAILED!
+13 98: perf stat JSON output linter                                    : Ok
+14 98: perf stat JSON output linter                                    : Ok
+15 98: perf stat JSON output linter                                    : FAILED!
+16 98: perf stat JSON output linter                                    : FAILED!
+17 98: perf stat JSON output linter                                    : FAILED!
+18 98: perf stat JSON output linter                                    :^C
+[root@quaco ~]#
 
-allOf:
-   - $ref: "reserved-memory.yaml"
+When it works:
 
-Is your comment still applies?
+[root@quaco ~]# perf test -v 98
+ 98: perf stat JSON output linter                                    :
+--- start ---
+test child forked, pid 62202
+Checking json output: no args [Success]
+Checking json output: system wide [Success]
+Checking json output: interval [Success]
+Checking json output: event [Success]
+Checking json output: per thread [Success]
+Checking json output: per node [Success]
+Checking json output: system wide Checking json output: system wide no aggregation [Success]
+Checking json output: per core [Success]
+Checking json output: per die [Success]
+Checking json output: per socket [Success]
+test child finished with 0
+---- end ----
+perf stat JSON output linter: Ok
+[root@quaco ~]#
 
--Mukesh
-> 
->>   
->>   anyOf:
->>     - required: [record-size]
->> @@ -142,3 +149,26 @@ examples:
->>               };
->>           };
->>       };
->> +
->> +  - |
->> +    / {
->> +        compatible = "foo";
->> +        model = "foo";
->> +        #address-cells = <2>;
->> +        #size-cells = <2>;
->> +
->> +        reserved-memory {
->> +            #address-cells = <2>;
->> +            #size-cells = <2>;
->> +            ranges;
->> +
->> +            ramoops: ramoops_region {
-> 
-> Node names should be generic, no underscores in node names.
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-> 
-> Any reason in naming it differently then existing one? You have there
-> example.
-> 
->> +                compatible = "ramoops";
->> +                alloc-ranges = <0x0 0x00000000 0xffffffff 0xffffffff>;
->> +                size = <0x0 0x10000>;       /* 64kB */
->> +                console-size = <0x8000>;    /* 32kB */
->> +                record-size = <0x400>;      /*  1kB */
->> +                ecc-size = <16>;
->> +            };
->> +        };
->> +    };
-> 
-> Best regards,
-> Krzysztof
-> 
+When it fails:
+
+[root@quaco ~]# perf test -v 98
+ 98: perf stat JSON output linter                                    :
+--- start ---
+test child forked, pid 62270
+Checking json output: no args [Success]
+Checking json output: system wide [Success]
+Checking json output: interval [Success]
+Checking json output: event [Success]
+Checking json output: per thread Test failed for input:
+{"thread" : "rcu_preempt-16", "counter-value" : "0.018340", "unit" : "msec", "event" : "cpu-clock", "event-runtime" : 19071, "pcnt-running" : 100.00, "metric-value" : 0.001758, "metric-unit" : "CPUs utilized"}
+
+{"thread" : "gnome-terminal--2977", "counter-value" : "0.061868", "unit" : "msec", "event" : "cpu-clock", "event-runtime" : 62075, "pcnt-running" : 100.00, "metric-value" : 0.005930, "metric-unit" : "CPUs utilized"}
+
+{"thread" : "perf-62294", "counter-value" : "9.398635", "unit" : "msec", "event" : "cpu-clock", "event-runtime" : 9398904, "pcnt-running" : 100.00, "metric-value" : 0.900916, "metric-unit" : "CPUs utilized"}
+
+{"thread" : "rcu_preempt-16", "counter-value" : "4.000000", "unit" : "", "event" : "context-switches", "event-runtime" : 15203, "pcnt-running" : 100.00, "metric-value" : 218.102508, "metric-unit" : "K/sec"}
+
+{"thread" : "gnome-terminal--2977", "counter-value" : "1.000000", "unit" : "", "event" : "context-switches", "event-runtime" : 62075, "pcnt-running" : 100.00, "metric-value" : 16.163445, "metric-unit" : "K/sec"}
+
+{"thread" : "perf-62294", "counter-value" : "1.000000", "unit" : "", "event" : "context-switches", "event-runtime" : 9388658, "pcnt-running" : 100.00, "metric-value" : 106.398429, "metric-unit" : "/sec"}
+
+{"thread" : "rcu_preempt-16", "counter-value" : "1.000000", "unit" : "", "event" : "cpu-migrations", "event-runtime" : 12511, "pcnt-running" : 100.00, "metric-value" : 54.525627, "metric-unit" : "K/sec"}
+
+{"thread" : "perf-62294", "counter-value" : "2.000000", "unit" : "", "event" : "page-faults", "event-runtime" : 9427495, "pcnt-running" : 100.00, "metric-value" : 212.796858, "metric-unit" : "/sec"}
+
+{"thread" : "rcu_preempt-16", "counter-value" : "41498.000000", "unit" : "", "event" : "cycles", "event-runtime" : 20944, "pcnt-running" : 100.00, "metric-value" : 2.262704, "metric-unit" : "GHz"}
+
+{"thread" : "ksoftirqd/1-22", "counter-value" : "23883.000000", "unit" : "", "event" : "cycles", "event-runtime" : 9949, "pcnt-running" : 100.00}
+
+{"thread" : "perf-62294", "counter-value" : "36686750.000000", "unit" : "", "event" : "cycles", "event-runtime" : 9439269, "pcnt-running" : 100.00, "metric-value" : 3.903413, "metric-unit" : "GHz"}
+
+{"thread" : "rcu_preempt-16", "counter-value" : "25086.000000", "unit" : "", "event" : "instructions", "event-runtime" : 20944, "pcnt-running" : 100.00, "metric-value" : 0.604511, "metric-unit" : "insn per cycle"}
+
+{"thread" : "ksoftirqd/1-22", "counter-value" : "13360.000000", "unit" : "", "event" : "instructions", "event-runtime" : 9949, "pcnt-running" : 100.00, "metric-value" : 0.559394, "metric-unit" : "insn per cycle"}
+
+{"thread" : "perf-62294", "counter-value" : "7905940.000000", "unit" : "", "event" : "instructions", "event-runtime" : 9438686, "pcnt-running" : 100.00, "metric-value" : 0.215499, "metric-unit" : "insn per cycle"}
+
+{"thread" : "rcu_preempt-16", "counter-value" : "3951.000000", "unit" : "", "event" : "branches", "event-runtime" : 16533, "pcnt-running" : 100.00, "metric-value" : 215.430752, "metric-unit" : "M/sec"}
+
+{"thread" : "ksoftirqd/1-22", "counter-value" : "2822.000000", "unit" : "", "event" : "branches", "event-runtime" : 9949, "pcnt-running" : 100.00, "metric-value" : 0.000000, "metric-unit" : "/sec"}
+
+{"thread" : "perf-62294", "counter-value" : "1691804.000000", "unit" : "", "event" : "branches", "event-runtime" : 9474118, "pcnt-running" : 100.00, "metric-value" : 180.005288, "metric-unit" : "M/sec"}
+
+{"thread" : "rcu_preempt-16", "counter-value" : "279.000000", "unit" : "", "event" : "branch-misses", "event-runtime" : 16533, "pcnt-running" : 100.00, "metric-value" : 7.061503, "metric-unit" : "of all branches"}
+
+{"thread" : "ksoftirqd/1-22", "counter-value" : "153.000000", "unit" : "", "event" : "branch-misses", "event-runtime" : 9949, "pcnt-running" : 100.00, "metric-value" : 5.421687, "metric-unit" : "of all branches"}
+
+{"thread" : "kworker/1:2-events-752", "counter-value" : "121.000000", "unit" : "", "event" : "branch-misses", "event-runtime" : 9850, "pcnt-running" : 100.00, "metric-value" : 0.000000, "metric-unit" : "of all branches"}
+
+{"thread" : "perf-62294", "counter-value" : "52693.000000", "unit" : "", "event" : "branch-misses", "event-runtime" : 9451948, "pcnt-running" : 100.00, "metric-value" : 3.114604, "metric-unit" : "of all branches"}
+
+Traceback (most recent call last):
+  File "/home/acme/libexec/perf-core/tests/shell/lib/perf_json_output_lint.py", line 93, in <module>
+    check_json_output(expected_items)
+  File "/home/acme/libexec/perf-core/tests/shell/lib/perf_json_output_lint.py", line 54, in check_json_output
+    raise RuntimeError(f'wrong number of fields. counted {count} expected {expected_items}'
+RuntimeError: wrong number of fields. counted 6 expected [8, 10] in '{"thread" : "ksoftirqd/1-22", "counter-value" : "23883.000000", "unit" : "", "event" : "cycles", "event-runtime" : 9949, "pcnt-running" : 100.00}
+'
+test child finished with -1
+---- end ----
+perf stat JSON output linter: FAILED!
+[root@quaco ~]#
