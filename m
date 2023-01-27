@@ -2,113 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899AA67EB95
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8998767EB9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234543AbjA0QwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S232940AbjA0Qxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233569AbjA0Qvl (ORCPT
+        with ESMTP id S231382AbjA0Qxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:51:41 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE7C7E04E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:51:40 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30R9k8LV030633;
-        Fri, 27 Jan 2023 10:51:33 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=U/maz5mq7SDVzaMNMiD4HWoXA0LOACVlnq93oey3UBM=;
- b=jFZbsW3fNWzSXVtTVtqLfUylJ9G7+7ANLZnP8Fy7QfjqoytQ3y4dVLbB2b66TPRQkPCW
- f1vjkw8ho825Slg7jsN0yqcyBu6Pr2Hbe93V+aIFFD+u2xfYgvx9+tKKD7kf4k+n7etV
- k795p3z8r7Ihi2lbJArz/vrKvgaVdp6Kpfi9lE2fexx4+dueuFknxR5rMWPOARPflOdR
- clMQMg9eezpXoYafE+9Q+afJ7KuQP586gVnFgaBkKBxp0JTpvCMhxfszGNNGs7+3zC3G
- VK9WNWEUkAeIJNcAXzyoF2zDwxgyQyummbKogQMUKq9sGp8QvZ3SU8W2uDAUN2o5ZLGr oA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3n8dbsvrd1-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 10:51:33 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Fri, 27 Jan
- 2023 10:51:29 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.7 via Frontend Transport; Fri, 27 Jan 2023 10:51:29 -0600
-Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.202.160])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7E92511DC;
-        Fri, 27 Jan 2023 16:51:29 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v3 8/8] ASoC: cs42l42: Wait for debounce interval after resume
-Date:   Fri, 27 Jan 2023 16:51:11 +0000
-Message-ID: <20230127165111.3010960-9-sbinding@opensource.cirrus.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230127165111.3010960-1-sbinding@opensource.cirrus.com>
-References: <20230127165111.3010960-1-sbinding@opensource.cirrus.com>
+        Fri, 27 Jan 2023 11:53:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1589C761C6;
+        Fri, 27 Jan 2023 08:53:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 81771CE0A36;
+        Fri, 27 Jan 2023 16:52:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21A53C433D2;
+        Fri, 27 Jan 2023 16:52:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674838358;
+        bh=4PEOSgaSNZcRyv2+4Vf4N0LKGu/uE0t/eNTGrTjQCE8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tDh7dRFiEDjTkn4QUY9DLfEhv4hvKDWOhuQFr/co53t+6RPG8/mbbd5IK3vfgBt4u
+         M15ZbDdGsTTvA/8kqxutPALB+tbijKfZqnH4ZLBndUu/BFDLGqFuw28pcR52cr1hyG
+         MbjAq0l6vdbGGWV2GbQzFQRwGqw6NXabRaExO2g01wSKMkkrL4muK4RfzJI6rCAjG3
+         3Z8kQ4YNkKGSOx6j7VjdfP682dkniDgwBbYkhjFA1OhOGJ0qRssXq8m4B0h/uFgKa9
+         EPR2bCInKU59FsqGVXDYnl3T98HdVXsie8++FxlNWSZvS1Z0QiHmX5CMik5q8CPozA
+         5Q07DNmxQ4H8Q==
+Date:   Fri, 27 Jan 2023 08:52:36 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        Jiri Kosina <jikos@kernel.org>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        "Seth Forshee (DigitalOcean)" <sforshee@digitalocean.com>,
+        live-patching@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH 0/2] vhost: improve livepatch switching for heavily
+ loaded vhost worker kthreads
+Message-ID: <20230127165236.rjcp6jm6csdta6z3@treble>
+References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
+ <Y9KyVKQk3eH+RRse@alley>
+ <Y9LswwnPAf+nOVFG@do-x1extreme>
+ <20230127044355.frggdswx424kd5dq@treble>
+ <Y9OpTtqWjAkC2pal@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: aAvAmRBgvSBVNp_iapDEzhgWA-nkGonO
-X-Proofpoint-GUID: aAvAmRBgvSBVNp_iapDEzhgWA-nkGonO
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y9OpTtqWjAkC2pal@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since clock stop causes bus reset on Intel controllers, we need
-to wait for the debounce interval on resume, to ensure all the
-interrupt status registers are set correctly.
+On Fri, Jan 27, 2023 at 11:37:02AM +0100, Peter Zijlstra wrote:
+> On Thu, Jan 26, 2023 at 08:43:55PM -0800, Josh Poimboeuf wrote:
+> > Here's another idea, have we considered this?  Have livepatch set
+> > TIF_NEED_RESCHED on all kthreads to force them into schedule(), and then
+> > have the scheduler call klp_try_switch_task() if TIF_PATCH_PENDING is
+> > set.
+> > 
+> > Not sure how scheduler folks would feel about that ;-)
 
-Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
----
- sound/soc/codecs/cs42l42-sdw.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Hmmmm, with preemption I guess the above doesn't work for kthreads
+calling cond_resched() instead of what vhost_worker() does (explicit
+need_resched/schedule).
 
-diff --git a/sound/soc/codecs/cs42l42-sdw.c b/sound/soc/codecs/cs42l42-sdw.c
-index 0de370b40eaf0..79023268d4c1b 100644
---- a/sound/soc/codecs/cs42l42-sdw.c
-+++ b/sound/soc/codecs/cs42l42-sdw.c
-@@ -447,7 +447,9 @@ static int __maybe_unused cs42l42_sdw_handle_unattach(struct cs42l42_private *cs
- 
- static int __maybe_unused cs42l42_sdw_runtime_resume(struct device *dev)
- {
-+	static const unsigned int ts_dbnce_ms[] = { 0, 125, 250, 500, 750, 1000, 1250, 1500};
- 	struct cs42l42_private *cs42l42 = dev_get_drvdata(dev);
-+	unsigned int dbnce;
- 	int ret;
- 
- 	dev_dbg(dev, "Runtime resume\n");
-@@ -456,8 +458,14 @@ static int __maybe_unused cs42l42_sdw_runtime_resume(struct device *dev)
- 		return 0;
- 
- 	ret = cs42l42_sdw_handle_unattach(cs42l42);
--	if (ret < 0)
-+	if (ret < 0) {
- 		return ret;
-+	} else if (ret > 0) {
-+		dbnce = max(cs42l42->ts_dbnc_rise, cs42l42->ts_dbnc_fall);
-+
-+		if (dbnce > 0)
-+			msleep(ts_dbnce_ms[dbnce]);
-+	}
- 
- 	regcache_cache_only(cs42l42->regmap, false);
- 
+> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+> index f1b25ec581e0..06746095a724 100644
+> --- a/kernel/livepatch/transition.c
+> +++ b/kernel/livepatch/transition.c
+> @@ -9,6 +9,7 @@
+>  
+>  #include <linux/cpu.h>
+>  #include <linux/stacktrace.h>
+> +#include <linux/stop_machine.h>
+>  #include "core.h"
+>  #include "patch.h"
+>  #include "transition.h"
+> @@ -334,6 +335,16 @@ static bool klp_try_switch_task(struct task_struct *task)
+>  	return !ret;
+>  }
+>  
+> +static int __stop_try_switch(void *arg)
+> +{
+> +	return klp_try_switch_task(arg) ? 0 : -EBUSY;
+> +}
+> +
+> +static bool klp_try_switch_task_harder(struct task_struct *task)
+> +{
+> +	return !stop_one_cpu(task_cpu(task), __stop_try_switch, task);
+> +}
+> +
+>  /*
+>   * Sends a fake signal to all non-kthread tasks with TIF_PATCH_PENDING set.
+>   * Kthreads with TIF_PATCH_PENDING set are woken up.
+
+Doesn't work for PREEMPT+!ORC.  Non-ORC reliable unwinders will detect
+preemption on the stack and automatically report unreliable.
+
 -- 
-2.34.1
-
+Josh
