@@ -2,124 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A603A67DFB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 003DC67DFC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbjA0JJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:09:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
+        id S232808AbjA0JKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:10:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjA0JJw (ORCPT
+        with ESMTP id S232542AbjA0JKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:09:52 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BD14C10;
-        Fri, 27 Jan 2023 01:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674810591; x=1706346591;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eQ/IZzkS2NRxWmaI8adOA3mfHkoHdtOg1+kSMHdnbcg=;
-  b=c9LRvu5u5uyKb3kvO5pfm+BZt2RSUTbZJDAWH9ITH4x2lik+ZSYrhQ8R
-   Cbw3RNNPIEOGS0ZbzDBZoBpkaqAMEJQJbblKLpoTBRoq35XahQrjxk+Rc
-   6RaXWzUy6l2ek4OF3jjw7xVNawYM2950YR+1FdQ2m74LTJUlZ/mez0/8X
-   2K0td5atJeRCZRmRtA+jMeTojhLb7HigYMQ6FgAWfA+5fU0jOFXXvx8X4
-   gnwAOcl6OggJo5kWV7nbUlN+vEg+C/I+NK6CKgdPNt6IENTMD/JwO77SB
-   fuBBuEL22YdB7ABBcTygijeECNUoWQuoFWpUP+Py57S4ig68QBu/o3IQv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="325721265"
-X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
-   d="scan'208";a="325721265"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 01:09:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="787156569"
-X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
-   d="scan'208";a="787156569"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 27 Jan 2023 01:09:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pLKjx-00Ft8c-1f;
-        Fri, 27 Jan 2023 11:09:45 +0200
-Date:   Fri, 27 Jan 2023 11:09:45 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] iio: light: Add support for AMS TCS3490 light sensor
-Message-ID: <Y9OU2e6YMIUTtto0@smile.fi.intel.com>
-References: <20230123231028.26073-1-markuss.broks@gmail.com>
- <20230123231028.26073-3-markuss.broks@gmail.com>
- <Y8+xamtH/U4vK75e@smile.fi.intel.com>
- <a782a0d9-c47e-4328-774f-6bef78161d81@gmail.com>
+        Fri, 27 Jan 2023 04:10:33 -0500
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB1E761E6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:10:23 -0800 (PST)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-50660e2d2ffso59178727b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:10:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NF9F6nmk4D5HCn1Ztkvb0MHra+in9ohTgBv6TaRKTNw=;
+        b=B1gJTrcbOmj1zu+xW7j9aX1NO8wmmyRtqKIQj3kmtlGb03ApTl2+h8EuFhImEiSQdA
+         IFN9F8+3AMWkbfTErjnwKdlxxByjLidWPxIccWsRvfeMNSFGcufmUFesY33d9bPH/urm
+         BrNXs+eo/VwOjx2S73J4eD95r/FNOC3ceCunHuWrJrDjn0X+NZgdVWSI7UGlVPqy6ybB
+         exuDCiaOT0KGpPBkVpUidCQvpCR6JG0oTZWtK6D8NhrojIM5Zz10gjq61GLFLYQZBVzE
+         P1EYNoRiEU3f+YgxAB57zJ68MjiAMFYOCgNIoS0r1paS0TB1nGl+DNcx6fhQEyYeXsr9
+         pq5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NF9F6nmk4D5HCn1Ztkvb0MHra+in9ohTgBv6TaRKTNw=;
+        b=VyHhb2zpGuJVNBbdfIj3+1faUedh3Ic2tSZVbkrOg/5Y3FvNPBhKc9N/EyexTT7pO5
+         9oClKglEVY2zCGorwBeFIktK/d2yXb4bsnCPJRUlTMIRz+AK5E4Q2SiRca2ytf2luMFK
+         4DBZVfCzLYmGxxNJhJaXhhYDJNJq+kgc/H9/wYCWLGU9l3LMqeERvayT9+vO6GDRG3S6
+         +xDohyKUbvAWMWxbHgoZ+T6tZXaM98T0Fzq2OE+kepisv/zvwre7vR4pRGqug5vouR59
+         IuEpTfLTLdjJDBcjKngoME1TRmbTVdg2Mq1q8zcsXRKJchiqInTQXxaKenHAx4CvhoFj
+         kg+g==
+X-Gm-Message-State: AO0yUKUeBsbsTeETenAdn6R7Qdw332/WrgjvaGbhw259l+Fx8In0Jtto
+        AMz2yRUhV+/aznlhqJDAYUZ+22EJMjFHnpfsBrDIfw==
+X-Google-Smtp-Source: AK7set8vlrhF2s8FUf1Ky0wGBPEHYDQbUcc2hnY7bUD6R9OD7/fVkXFTeobJsbxKHTflhAyZVDM7Yg8LQ/7zYxpQSvA=
+X-Received: by 2002:a05:690c:706:b0:506:6952:b9c9 with SMTP id
+ bs6-20020a05690c070600b005066952b9c9mr1187071ywb.477.1674810622569; Fri, 27
+ Jan 2023 01:10:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a782a0d9-c47e-4328-774f-6bef78161d81@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230120154437.22025-1-andriy.shevchenko@linux.intel.com>
+ <20230120154437.22025-5-andriy.shevchenko@linux.intel.com>
+ <CACRpkdaeAkPuAQu0BW45Bn94Q_eO-Ven0-TSd38upe9XpXMzwA@mail.gmail.com> <Y9ORbi8hz7o5ek7W@smile.fi.intel.com>
+In-Reply-To: <Y9ORbi8hz7o5ek7W@smile.fi.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Jan 2023 10:10:11 +0100
+Message-ID: <CACRpkdaFZxbZ4Sw0-PKyP5s7nPDYiSjNuJC_EdPiEiORZrQnEw@mail.gmail.com>
+Subject: Re: [PATCH v1 5/5] usb: fotg210: use devm_platform_get_and_ioremap_resource()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 05:54:56PM +0200, Markuss Broks wrote:
-> On 1/24/23 12:22, Andy Shevchenko wrote:
-> > On Tue, Jan 24, 2023 at 01:10:25AM +0200, Markuss Broks wrote:
+On Fri, Jan 27, 2023 at 9:55 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-First of all, I assume you agree on the comments you left unanswered,
-so we will expect them all being addressed in the next version. Is it
-correct perception?
+> On Thu, Jan 26, 2023 at 09:02:30PM +0100, Linus Walleij wrote:
+> > On Fri, Jan 20, 2023 at 4:44 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+>
+> ...
+>
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>
+> Thanks for all your reviews!
+>
+> But I think you are a bit late with them as Greg applied the series like
+> a couple of days ago.
 
-...
+Yeah he's so quick and I'm so slow...
+But these days we record the mail thread link to lore in the
+commit so I can still share the blame ;)
 
-> > > +static const struct regmap_config tcs3490_regmap_config = {
-> > > +	.reg_bits	= 8,
-> > > +	.val_bits	= 8,
-> > Seems you are using regmap internal serialization, but does it guarantee the
-> > serialization on the transaction level? Or why is it not a problem?
-> Well, other drivers seem to have it this way too.
-
-They all may be buggy, unclear, or hardware there doesn't require transaction
-level locks. It means we have to avoid cargo cult.
-
-> I don't really understand
-> why it should be a problem, could you please clarify?
-
-Because one should distinguish IO with register vs. IO transaction.
-Imaging two threads which do an IO:
-
-	CPU0					CPU1
-						read REG2
-						update value
-	read REG1
-						write REG2
-	update value
-	write REG1
-
-If in our hypothetical example the writing to REG2 has a side effect on
-the values in REG1, we are doomed.
-
-You have to check all possible scenarios and tell if it's a problem or not with
-the certain hardware. According to the result, add a corresponding comment to
-the code and, if required, change the locking scheme.
-
-> > > +};
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Yours,
+Linus Walleij
