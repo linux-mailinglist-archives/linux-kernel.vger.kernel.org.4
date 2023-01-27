@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A87D67DDB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A793567DD8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbjA0Gkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 01:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
+        id S231902AbjA0GkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 01:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbjA0GkR (ORCPT
+        with ESMTP id S230044AbjA0GkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 Jan 2023 01:40:17 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDBA69509;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF69E6951F;
         Thu, 26 Jan 2023 22:40:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=qEGKEwz0HpIWHLFDYjhBQ2KIz4hwlHvvYjMTHF+VdSA=; b=PvxFRIAbkLpgBu3cGSm83XF3D8
-        4o+PnEGPm1hEYOJR5cIq3IOED7mr0KzbiH5JVLpwVbrbkT8y4em1foIcAXxvJntPy5n7mOYiugpkh
-        wL9G8FsIWUFxBLliFm8hdNqacdvgDFUhQo86HwSD0n4YSDQk0AdmT4eRsmUHc5F7+RdGDSjdmD21g
-        3xnXUxHUjlD983bY/hff87ZCSIfyVqG8qSwkLQVhlKxpHcxhXg4L23r/PvoBgeIhD6GWK1rT/RkhT
-        LHrcxQ19eLYn3G0WI6sEN5b2Lx2tW+0nyxguYUuug+BKMifWsEkmVpW1v9VubHT+r4fVebOW/re5N
-        GVrYJElA==;
+        bh=W1j9Oe9+oMEpmfdxgJPUfEHqO35bMtxJ9yuaDvSPmv4=; b=PQtKxFsWfeWb/aiHnLcOaNSeIl
+        YLzg9HAjgeoI4DIkXhZkTyvey3/FvJEZF+5UCigN/QalKfhz+Vo6zHLtZwoeLOuotMQmwCr2GbGNT
+        miP0msrKxyt9BLufz7ipgpDac1KaJVBRZgXBIqKCimXXRwc4JCiRjVbNyHPWkXa/1wTsT221D17Cq
+        UbMzEoNUpGI4NUAQuyAEMTQcMbJJYjcM1yyl85ycf2H+1JKjXUtnqPM1FeJ/vUHR/ge/9Liy+Tic1
+        YNocxjeSDbK0R9dFQapnQn1Vwjo7C2fU4Ton3K718swszF0v5ahvhkW7RxCIk6svmts+4nIjnKyB+
+        bjNumneQ==;
 Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pLIPC-00DM0u-6P; Fri, 27 Jan 2023 06:40:10 +0000
+        id 1pLIPC-00DM0u-Jb; Fri, 27 Jan 2023 06:40:10 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 02/35] Documentation: arm: correct spelling
-Date:   Thu, 26 Jan 2023 22:39:31 -0800
-Message-Id: <20230127064005.1558-2-rdunlap@infradead.org>
+Subject: [PATCH 01/35] Documentation: arm64: correct spelling
+Date:   Thu, 26 Jan 2023 22:39:32 -0800
+Message-Id: <20230127064005.1558-3-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230127064005.1558-1-rdunlap@infradead.org>
 References: <20230127064005.1558-1-rdunlap@infradead.org>
@@ -51,137 +52,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling problems for Documentation/arm/ as reported
+Correct spelling problems for Documentation/arm64/ as reported
 by codespell.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Russell King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
 ---
- Documentation/arm/arm.rst                           |    2 +-
- Documentation/arm/ixp4xx.rst                        |    4 ++--
- Documentation/arm/keystone/knav-qmss.rst            |    2 +-
- Documentation/arm/stm32/stm32-dma-mdma-chaining.rst |    6 +++---
- Documentation/arm/sunxi/clocks.rst                  |    2 +-
- Documentation/arm/swp_emulation.rst                 |    2 +-
- Documentation/arm/tcm.rst                           |    2 +-
- Documentation/arm/vlocks.rst                        |    2 +-
- 8 files changed, 11 insertions(+), 11 deletions(-)
+ Documentation/arm64/booting.rst    |    2 +-
+ Documentation/arm64/elf_hwcaps.rst |    2 +-
+ Documentation/arm64/sve.rst        |    4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff -- a/Documentation/arm/ixp4xx.rst b/Documentation/arm/ixp4xx.rst
---- a/Documentation/arm/ixp4xx.rst
-+++ b/Documentation/arm/ixp4xx.rst
-@@ -78,9 +78,9 @@ IXP4xx provides two methods of accessing
- 1) A direct mapped window from 0x48000000 to 0x4bffffff (64MB).
-    To access PCI via this space, we simply ioremap() the BAR
-    into the kernel and we can use the standard read[bwl]/write[bwl]
--   macros. This is the preffered method due to speed but it
-+   macros. This is the preferred method due to speed but it
-    limits the system to just 64MB of PCI memory. This can be
--   problamatic if using video cards and other memory-heavy devices.
-+   problematic if using video cards and other memory-heavy devices.
+diff -- a/Documentation/arm64/booting.rst b/Documentation/arm64/booting.rst
+--- a/Documentation/arm64/booting.rst
++++ b/Documentation/arm64/booting.rst
+@@ -223,7 +223,7 @@ Before jumping into the kernel, the foll
+   For systems with a GICv3 interrupt controller to be used in v3 mode:
+   - If EL3 is present:
  
- 2) If > 64MB of memory space is required, the IXP4xx can be
-    configured to use indirect registers to access PCI This allows
-diff -- a/Documentation/arm/swp_emulation.rst b/Documentation/arm/swp_emulation.rst
---- a/Documentation/arm/swp_emulation.rst
-+++ b/Documentation/arm/swp_emulation.rst
-@@ -1,7 +1,7 @@
- Software emulation of deprecated SWP instruction (CONFIG_SWP_EMULATE)
- ---------------------------------------------------------------------
+-      - ICC_SRE_EL3.Enable (bit 3) must be initialiased to 0b1.
++      - ICC_SRE_EL3.Enable (bit 3) must be initialised to 0b1.
+       - ICC_SRE_EL3.SRE (bit 0) must be initialised to 0b1.
+       - ICC_CTLR_EL3.PMHE (bit 6) must be set to the same value across
+         all CPUs the kernel is executing on, and must stay constant
+diff -- a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
+--- a/Documentation/arm64/elf_hwcaps.rst
++++ b/Documentation/arm64/elf_hwcaps.rst
+@@ -14,7 +14,7 @@ Some hardware or software features are o
+ implementations, and/or with certain kernel configurations, but have no
+ architected discovery mechanism available to userspace code at EL0. The
+ kernel exposes the presence of these features to userspace through a set
+-of flags called hwcaps, exposed in the auxilliary vector.
++of flags called hwcaps, exposed in the auxiliary vector.
  
--ARMv6 architecture deprecates use of the SWP/SWPB instructions, and recommeds
-+ARMv6 architecture deprecates use of the SWP/SWPB instructions, and recommends
- moving to the load-locked/store-conditional instructions LDREX and STREX.
+ Userspace software can test for features by acquiring the AT_HWCAP or
+ AT_HWCAP2 entry of the auxiliary vector, and testing whether the relevant
+diff -- a/Documentation/arm64/sve.rst b/Documentation/arm64/sve.rst
+--- a/Documentation/arm64/sve.rst
++++ b/Documentation/arm64/sve.rst
+@@ -175,7 +175,7 @@ the SVE instruction set architecture.
+ When returning from a signal handler:
  
- ARMv7 multiprocessing extensions introduce the ability to disable these
-diff -- a/Documentation/arm/tcm.rst b/Documentation/arm/tcm.rst
---- a/Documentation/arm/tcm.rst
-+++ b/Documentation/arm/tcm.rst
-@@ -71,7 +71,7 @@ in <asm/tcm.h>. Using this interface it
+ * If there is no sve_context record in the signal frame, or if the record is
+-  present but contains no register data as desribed in the previous section,
++  present but contains no register data as described in the previous section,
+   then the SVE registers/bits become non-live and take unspecified values.
  
- - Have the remaining TCM RAM added to a special
-   allocation pool with gen_pool_create() and gen_pool_add()
--  and provice tcm_alloc() and tcm_free() for this
-+  and provide tcm_alloc() and tcm_free() for this
-   memory. Such a heap is great for things like saving
-   device state when shutting off device power domains.
+ * If sve_context is present in the signal frame and contains full register
+@@ -223,7 +223,7 @@ prctl(PR_SVE_SET_VL, unsigned long arg)
+ 	    Defer the requested vector length change until the next execve()
+ 	    performed by this thread.
  
-diff -- a/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
---- a/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
-+++ b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
-@@ -359,7 +359,7 @@ Driver updates for STM32 DMA-MDMA chaini
-     descriptor you want a callback to be called at the end of the transfer
-     (dmaengine_prep_slave_sg()) or the period (dmaengine_prep_dma_cyclic()).
-     Depending on the direction, set the callback on the descriptor that finishes
--    the overal transfer:
-+    the overall transfer:
+-	    The effect is equivalent to implicit exceution of the following
++	    The effect is equivalent to implicit execution of the following
+ 	    call immediately after the next execve() (if any) by the thread:
  
-     * DMA_DEV_TO_MEM: set the callback on the "MDMA" descriptor
-     * DMA_MEM_TO_DEV: set the callback on the "DMA" descriptor
-@@ -371,7 +371,7 @@ Driver updates for STM32 DMA-MDMA chaini
-   As STM32 MDMA channel transfer is triggered by STM32 DMA, you must issue
-   STM32 MDMA channel before STM32 DMA channel.
- 
--  If any, your callback will be called to warn you about the end of the overal
-+  If any, your callback will be called to warn you about the end of the overall
-   transfer or the period completion.
- 
-   Don't forget to terminate both channels. STM32 DMA channel is configured in
-@@ -412,4 +412,4 @@ Resources
- 
- :Authors:
- 
--- Amelie Delaunay <amelie.delaunay@foss.st.com>
-\ No newline at end of file
-+- Amelie Delaunay <amelie.delaunay@foss.st.com>
-diff -- a/Documentation/arm/arm.rst b/Documentation/arm/arm.rst
---- a/Documentation/arm/arm.rst
-+++ b/Documentation/arm/arm.rst
-@@ -141,7 +141,7 @@ ST506 hard drives
-   `*configure` harddrive set to 2). I've got an internal 20MB and a great
-   big external 5.25" FH 64MB drive (who could ever want more :-) ).
- 
--  I've just got 240K/s off it (a dd with bs=128k); thats about half of what
-+  I've just got 240K/s off it (a dd with bs=128k); that's about half of what
-   RiscOS gets; but it's a heck of a lot better than the 50K/s I was getting
-   last week :-)
- 
-diff -- a/Documentation/arm/keystone/knav-qmss.rst b/Documentation/arm/keystone/knav-qmss.rst
---- a/Documentation/arm/keystone/knav-qmss.rst
-+++ b/Documentation/arm/keystone/knav-qmss.rst
-@@ -39,7 +39,7 @@ CPPI/QMSS Low Level Driver document (doc
- 
- 	git://git.ti.com/keystone-rtos/qmss-lld.git
- 
--k2_qmss_pdsp_acc48_k2_le_1_0_0_9.bin firmware supports upto 48 accumulator
-+k2_qmss_pdsp_acc48_k2_le_1_0_0_9.bin firmware supports up to 48 accumulator
- channels. This firmware is available under ti-keystone folder of
- firmware.git at
- 
-diff -- a/Documentation/arm/sunxi/clocks.rst b/Documentation/arm/sunxi/clocks.rst
---- a/Documentation/arm/sunxi/clocks.rst
-+++ b/Documentation/arm/sunxi/clocks.rst
-@@ -5,7 +5,7 @@ Frequently asked questions about the sun
- This document contains useful bits of information that people tend to ask
- about the sunxi clock system, as well as accompanying ASCII art when adequate.
- 
--Q: Why is the main 24MHz oscillator gatable? Wouldn't that break the
-+Q: Why is the main 24MHz oscillator gateable? Wouldn't that break the
-    system?
- 
- A: The 24MHz oscillator allows gating to save power. Indeed, if gated
-diff -- a/Documentation/arm/vlocks.rst b/Documentation/arm/vlocks.rst
---- a/Documentation/arm/vlocks.rst
-+++ b/Documentation/arm/vlocks.rst
-@@ -155,7 +155,7 @@ the basic algorithm:
-    optimisation.
- 
-    If there are too many CPUs to read the currently_voting array in
--   one transaction then multiple transations are still required.  The
-+   one transaction then multiple transactions are still required.  The
-    implementation uses a simple loop of word-sized loads for this
-    case.  The number of transactions is still fewer than would be
-    required if bytes were loaded individually.
+ 		prctl(PR_SVE_SET_VL, arg & ~PR_SVE_SET_VL_ONEXEC)
