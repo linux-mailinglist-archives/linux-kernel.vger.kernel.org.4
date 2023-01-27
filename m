@@ -2,133 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D22267ECB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF25767ECB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235106AbjA0Rqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
+        id S234967AbjA0RqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234025AbjA0Rqt (ORCPT
+        with ESMTP id S234436AbjA0RqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:46:49 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C287D2AB;
-        Fri, 27 Jan 2023 09:46:47 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RGrbqa021060;
-        Fri, 27 Jan 2023 17:46:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=VxG+aiZhuhssr8QPHzlAfPnXU7va5TskD2lv8gKu11w=;
- b=HIdofbICN06aRj/VbWJAqoAUUBNxmLgXL6LVdSs4HbMLnODBcdDf/IoL5NOARRaZMVp2
- PnCzsBP/x/cKi8fMbjDGwEbSs52oJSFm2PZVEY3X8T2qgh8FikkzP1YFVyYcCnO5ffD5
- MZxCE8cIRHiWB15wGZ6B4lbWfUe7l51kHwXQDuzTPJFTtIw4j6Nwri9N7WcNxGZMc575
- CT5fbyNAVX1zzaF8YJUylmBD4PlVxzn+a11P5EQH/cmOA7S5Fit2x3gK3xzp/6tVcHgn
- yR7uVlovXO3BGNW8Dt4Icam0G5fFazYhoBxlGKoozQHln3pOmYg7grxf41+HXOpER+/a yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ncjhk9d56-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 17:46:43 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30RHcIjI005768;
-        Fri, 27 Jan 2023 17:46:43 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ncjhk9d4m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 17:46:42 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30R5kv7S010790;
-        Fri, 27 Jan 2023 17:46:41 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n87p6qv52-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 17:46:41 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30RHkbeg48169350
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 27 Jan 2023 17:46:37 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7C2CA2004B;
-        Fri, 27 Jan 2023 17:46:37 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3923120043;
-        Fri, 27 Jan 2023 17:46:37 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 27 Jan 2023 17:46:37 +0000 (GMT)
-From:   Nina Schoetterl-Glausch <nsg@linux.ibm.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Nina Schoetterl-Glausch <nsg@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Huth <thuth@redhat.com>
-Subject: [RFC PATCH v1] KVM: selftests: Compile s390 tests with -march=z10
-Date:   Fri, 27 Jan 2023 18:45:52 +0100
-Message-Id: <20230127174552.3370169-1-nsg@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 27 Jan 2023 12:46:15 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FDF7D99F;
+        Fri, 27 Jan 2023 09:46:11 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-50e7a0f0cc8so14727657b3.2;
+        Fri, 27 Jan 2023 09:46:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uUu2KO9bEKoTKPVOPQNCA+OUNOYtt2vrrIeIXcxAbgQ=;
+        b=gI8l6+ZUQrnG03kH+WEMNzXsrKTH/1v2bBhRIsTUGk7Pr5tACVsMOOvS6IzYFspMgU
+         LjFyX6++l3ptne8adH/plO/4tks1jBSlOu601JqQzLnmr6r7/XYRCkfsmmQCcYfd+d5C
+         ezcMwTTx8jpDdreJPWvwBmRPgE3qEERkoYLauYVTK5NDAfiY2QBMjQfeLJqGbdU6/0fk
+         c69xE9+JHpCMmJPkgQck0/UfmwRv0Etdw5oL7+138cBgVYwxmAuMnfO6ZpGZp8tjHTpK
+         aESscc04YKKSTAVbGDC7/ADid/SIy7i7+MEYDObgMmPLDshGNJGS8VXv3jv+rZMyv3Em
+         LvmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uUu2KO9bEKoTKPVOPQNCA+OUNOYtt2vrrIeIXcxAbgQ=;
+        b=KYjZGki10tZ0KBfCdJd71ePo0na3LV40gb/RwEhsVKjqUd3pQrZBNO33kTla/UrAXK
+         zEDxqte9FG52sCWajOy+7kEAo3QOr9YqQoQKIX8b6XO3n/jkhzDUPwll1JEgnoeMLPLw
+         pTECjmjdmDYcLefnLQaT+VS4r0ugoAdtEnXjsCyMJvWvQDKM11y2tZ5mGcvHfPCcNTlg
+         rlVKOOCNEh/PWZlEx7EoP3KMCt/ufQZEn4ZnOPmGVsqPVOda9dVuzhaYB6MXKOmyvfHC
+         4LgKnEvc+Tvdo6G1V08oz2KB9Jcq8Gu/eqP81dO9bWgRH9FwDsF0GDv9IUHYrn95EO/D
+         Ub1g==
+X-Gm-Message-State: AFqh2kpQaEbDBcr/8JzpoCZ8bQ2iaI/h3f1BFQy/6dbnVKG2czHTBNDp
+        Dr4ysZRlxNyWCkNYt2zXzVt6K3l4o792gghRqPk=
+X-Google-Smtp-Source: AMrXdXsU7ChWpHDOvJIzoG4Oou90rg/wfs/TrCukzz6kM7fEPhmVAa/3AftlVd3IETy2sYZSboRCMqku2bP0EYiCewU=
+X-Received: by 2002:a0d:d086:0:b0:4fa:78d8:efbf with SMTP id
+ s128-20020a0dd086000000b004fa78d8efbfmr4314739ywd.247.1674841571239; Fri, 27
+ Jan 2023 09:46:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3n17b4DYyHozSj_3UXQ1i8oMNO3MKu5a
-X-Proofpoint-ORIG-GUID: 3hjY8SkT8txt3NFncvzqm9PmjfM6ikfN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-27_10,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- priorityscore=1501 spamscore=0 clxscore=1011 suspectscore=0
- mlxlogscore=999 adultscore=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301270164
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127064005.1558-1-rdunlap@infradead.org> <20230127064005.1558-36-rdunlap@infradead.org>
+In-Reply-To: <20230127064005.1558-36-rdunlap@infradead.org>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Fri, 27 Jan 2023 09:45:59 -0800
+Message-ID: <CAMo8BfJCe_tj9PVotJYL7G6vLX9a0h0BcpLTNRO6qRFj8mu1sw@mail.gmail.com>
+Subject: Re: [PATCH 35/35] Documentation: xtensa: correct spelling
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        linux-xtensa@linux-xtensa.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The guest used in s390 kvm selftests is not be set up to handle all
-instructions the compiler might emit, i.e. vector instructions, leading
-to crashes.
-Limit what the compiler emits to the oldest machine model currently
-supported by Linux.
+On Thu, Jan 26, 2023 at 10:40 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Correct spelling problems for Documentation/xtensa/ as reported
+> by codespell.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Chris Zankel <chris@zankel.net>
+> Cc: Max Filippov <jcmvbkbc@gmail.com>
+> Cc: linux-xtensa@linux-xtensa.org
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> ---
+>  Documentation/xtensa/atomctl.rst |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
----
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 
-
-Should we also set -mtune?
-Since it are vector instructions that caused the problem here, there
-are some alternatives:
- * use -mno-vx
- * set the required guest control bit to enable vector instructions on
-   models supporting them
-
--march=z10 might prevent similar issues with other instructions, but I
-don't know if there actually exist other relevant instructions, so it
-could be needlessly restricting.
-
-
- tools/testing/selftests/kvm/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 1750f91dd936..df0989949eb5 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -200,6 +200,9 @@ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
- 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
- 	-I$(<D) -Iinclude/$(ARCH_DIR) -I ../rseq -I.. $(EXTRA_CFLAGS) \
- 	$(KHDR_INCLUDES)
-+ifeq ($(ARCH),s390)
-+	CFLAGS += -march=z10
-+endif
- 
- no-pie-option := $(call try-run, echo 'int main(void) { return 0; }' | \
-         $(CC) -Werror $(CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
 -- 
-2.34.1
-
+Thanks.
+-- Max
