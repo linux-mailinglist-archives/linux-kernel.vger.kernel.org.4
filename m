@@ -2,201 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B546367E850
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F9967E854
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbjA0OcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:32:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S233350AbjA0OdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233350AbjA0Ob7 (ORCPT
+        with ESMTP id S233321AbjA0OdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:31:59 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 083D5820FF;
-        Fri, 27 Jan 2023 06:31:56 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5B8E2F;
-        Fri, 27 Jan 2023 06:32:37 -0800 (PST)
-Received: from e126815.warwick.arm.com (e126815.arm.com [10.32.32.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 148DA3F5A1;
-        Fri, 27 Jan 2023 06:31:53 -0800 (PST)
-From:   James Clark <james.clark@arm.com>
-To:     linux-perf-users@vger.kernel.org, peterz@infradead.org,
-        ravi.bangoria@amd.com
-Cc:     James Clark <james.clark@arm.com>,
-        syzbot+697196bc0265049822bd@syzkaller.appspotmail.com,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] perf: Fix warning from concurrent read/write of perf_event_pmu_context
-Date:   Fri, 27 Jan 2023 14:31:41 +0000
-Message-Id: <20230127143141.1782804-2-james.clark@arm.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230127143141.1782804-1-james.clark@arm.com>
-References: <20230127143141.1782804-1-james.clark@arm.com>
+        Fri, 27 Jan 2023 09:33:01 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085A1F768
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:32:57 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id b4so340314ioj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:32:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4VJl1LFj78awaMi5u1yCyS89RCOFZobWhyD03Egy1dY=;
+        b=e2S+T+hw8P+2HOsuX++A4wB4qB0exNACPcbnqddJ1iayW63HOp3y7k999fxSY+GNQm
+         WKLwzxo9LrgQ4PKeLugPBdT2kFegxKKjrL89ZJRlHWpJz5DpUOJMwKwnwU76zfPBL+dk
+         6WwLjwPZZbN5HMkYP/crQbMNgnA2BVT4itYy3x2uRkx9Pk4Gq0BH85yZ2mj2BcPj1jEO
+         aJJmcVBgCyIXqiuCL8lYUX0UMRltMyYishf11RCDCu3PRHGmXkAHE7pc0DYCKJJUhXlj
+         K0s+xY04Wsu7L05JBk9Ic/1trtNjjF9ZB9iwVjsJsCqZ3WX1aNftxv5F80uLd4AWvgb7
+         Dvjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4VJl1LFj78awaMi5u1yCyS89RCOFZobWhyD03Egy1dY=;
+        b=6lYeQfyO/oNa9DxrHXebl+RvHbnh1o3lW5/FsK2353FMi+xP92qkTMZhH4UfwbnlEC
+         vULJc80QULwbXTKO77FVg+E/6UW6GVJVUwReXOxI8cRzUlT1IwTmWR7GAbF71hfO5Zjb
+         d8U1n1lbKpzHUw/0mG0X3SbtFdAYz6Az+lSNA1S7cR8+ZDHkwr2VZkgjD7UGqm1NcF4w
+         FAPAc7MglBe+gwnQLwwEIqcm5CbVQNbzM4JjLaYWM2oSo6vns4WrONyrjnJYOsJ+WSbf
+         UiB2GsBsu5uDB2LEEMM5/NFJxDkHFIXP/hYYddSVybK/Dn4r1YzzJZ3vH7tWgmOP4DWO
+         nFTg==
+X-Gm-Message-State: AO0yUKUZTn4TmKs7gmlg7UYyVjm83bdTrEv+mUTCGTHiTuCG2gKaHAqm
+        sT1vDO37a5k1P6yjS2AyHePCa1MO9w/Frtj0Ct6rTA==
+X-Google-Smtp-Source: AK7set+3mZJkF8fkciCG6VzvikUhcMDERUzDhLStD/6poffAcfmiE2I8eb4RebH3huth4FaWurCefne/onY5y8p1T2A=
+X-Received: by 2002:a02:ad06:0:b0:3a9:5776:864 with SMTP id
+ s6-20020a02ad06000000b003a957760864mr1383179jan.67.1674829976842; Fri, 27 Jan
+ 2023 06:32:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127140944.265135-1-andrei.gherzan@canonical.com> <20230127140944.265135-3-andrei.gherzan@canonical.com>
+In-Reply-To: <20230127140944.265135-3-andrei.gherzan@canonical.com>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Fri, 27 Jan 2023 06:32:44 -0800
+Message-ID: <CANP3RGchqLRLRAxgWU69DzWfa9R2d0AhgeBdpJhmaE+c-Sszjw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] selftests: net: Fix udpgro_frglist.sh shellcheck
+ warnings and errors
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Lina Wang <lina.wang@mediatek.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When running two Perf sessions, the following warning can appear:
+On Fri, Jan 27, 2023 at 6:09 AM Andrei Gherzan
+<andrei.gherzan@canonical.com> wrote:
+>
+> This change fixes the following shellcheck warnings and errors:
+>
+> * SC2155 (warning): Declare and assign separately to avoid masking return
+>   values.
+> * SC2124 (warning): Assigning an array to a string! Assign as array, or use
+>   instead of @ to concatenate.
+> * SC2034 (warning): ipv4_args appears unused. Verify use (or export if used
+>   externally).
+> * SC2242 (error): Can only exit with status 0-255. Other data should be
+>   written to stdout/stderr.
+> * SC2068 (error): Double quote array expansions to avoid re-splitting
+>   elements.
+>
+> Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
+> Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> ---
+>  tools/testing/selftests/net/udpgro_frglist.sh | 20 +++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/testing/selftests/net/udpgro_frglist.sh b/tools/testing/selftests/net/udpgro_frglist.sh
+> index e1ca49de2491..97bf20e9afd8 100755
+> --- a/tools/testing/selftests/net/udpgro_frglist.sh
+> +++ b/tools/testing/selftests/net/udpgro_frglist.sh
+> @@ -3,7 +3,8 @@
+>  #
+>  # Run a series of udpgro benchmarks
+>
+> -readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+> +PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+> +readonly PEER_NS
+>
+>  BPF_FILE="../bpf/xdp_dummy.bpf.o"
+>  BPF_NAT6TO4_FILE="nat6to4.o"
+> @@ -19,7 +20,7 @@ trap cleanup EXIT
+>
+>  run_one() {
+>         # use 'rx' as separator between sender args and receiver args
+> -       local -r all="$@"
+> +       local -r all="$*"
 
-  WARNING: CPU: 1 PID: 2245 at kernel/events/core.c:4925 put_pmu_ctx+0x1f0/0x278
-  Modules linked in: xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT nf_reject_ipv4 xt_tcpudp ip6table_mangle ip6table_nat iptable_mangle iptable_nat nf_nat nf_conntrack libcrc32c nf_defrag_ipv6 nf_defrag_ipv4 ip6table_filter ip6_tables iptable_filter bridge stp llc coresight_stm stm_core coresight_etm4x coresight_tmc coresight_replicator coresight_funnel coresight_tpiu coresight arm_spe_pmu ip_tables x_tables ipv6 xhci_pci xhci_pci_renesas r8169
-  CPU: 1 PID: 2245 Comm: perf Not tainted 6.2.0-rc4+ #1
-  pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-  pc : put_pmu_ctx+0x1f0/0x278
-  lr : put_pmu_ctx+0x1b4/0x278
-  sp : ffff80000dfcbc20
-  x29: ffff80000dfcbca0 x28: ffff008004f00000 x27: ffff00800763a928
-  x26: ffff00800763a928 x25: 00000000000000c0 x24: 0000000000000000
-  x23: 00000000000a0003 x22: ffff00837df74088 x21: ffff80000dfcbd18
-  x20: 0000000000000000 x19: ffff00800763a6c0 x18: 0000000000000000
-  x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-  x14: 0000000000000000 x13: ffff80000dfc8000 x12: ffff80000dfcc000
-  x11: be58ab6d2939e700 x10: be58ab6d2939e700 x9 : 0000000000000000
-  x8 : 0000000000000001 x7 : 0000000000000000 x6 : 0000000000000000
-  x5 : ffff00800093c9c0 x4 : 0000000000000000 x3 : ffff80000dfcbca0
-  x2 : ffff008004f00000 x1 : ffff8000082403c4 x0 : 0000000000000000
-  Call trace:
-   put_pmu_ctx+0x1f0/0x278
-   _free_event+0x2bc/0x3d0
-   perf_event_release_kernel+0x444/0x4bc
-   perf_release+0x20/0x30
-   __fput+0xe4/0x25c
-   ____fput+0x1c/0x28
-   task_work_run+0xc4/0xe8
-   do_notify_resume+0x10c/0x164
-   el0_svc+0xb4/0xdc
-   el0t_64_sync_handler+0x84/0xf0
-   el0t_64_sync+0x190/0x194
+this should technically use arrays, something like
 
-This is because there is no locking around the access of "if
-(!epc->ctx)" in find_get_pmu_context() and when it is set to NULL in
-put_pmu_ctx().
+local -a -r args=("$@")
 
-The decrement of the reference count in put_pmu_ctx() also happens
-outside of the spinlock, leading to the possibility of this order of
-events, and the context being cleared in put_pmu_ctx(), after its
-refcount is non zero:
+but perhaps just get rid of args and just use "$@" directly below
 
- CPU0                                   CPU1
- find_get_pmu_context()
-   if (!epc->ctx) == false
-                                        put_pmu_ctx()
-                                        atomic_dec_and_test(&epc->refcount) == true
-                                        epc->refcount == 0
-     atomic_inc(&epc->refcount);
-     epc->refcount == 1
-                                        list_del_init(&epc->pmu_ctx_entry);
-	                                      epc->ctx = NULL;
+>         local -r tx_args=${all%rx*}
+>         local rx_args=${all#*rx}
+>
+> @@ -56,13 +57,13 @@ run_one() {
+>  }
+>
+>  run_in_netns() {
+> -       local -r args=$@
+> +       local -r args="$*"
+>    echo ${args}
+>         ./in_netns.sh $0 __subprocess ${args}
 
-Another issue is that WARN_ON for no active PMU events in put_pmu_ctx()
-is outside of the lock. If the perf_event_pmu_context is an embedded
-one, even after clearing it, it won't be deleted and can be re-used. So
-the warning can trigger. For this reason it also needs to be moved
-inside the lock.
+ie. here could just use "$@" directly twice instead of defining args.
+$0 should be doublequoted - though I guess it'll never be empty, and
+is unlikely to include spaces.
+>  }
+>
+>  run_udp() {
+> -       local -r args=$@
+> +       local -r args="$*"
+>
+>         echo "udp gso - over veth touching data"
+>         run_in_netns ${args} -u -S 0 rx -4 -v
+> @@ -72,7 +73,7 @@ run_udp() {
+>  }
+>
+>  run_tcp() {
+> -       local -r args=$@
+> +       local -r args="$*"
+>
+>         echo "tcp - over veth touching data"
+>         run_in_netns ${args} -t rx -4 -t
+> @@ -80,7 +81,6 @@ run_tcp() {
+>
+>  run_all() {
+>         local -r core_args="-l 4"
 
-The above warning is very quick to trigger on Arm by running these two
-commands at the same time:
+is this still useful? embed directly in ipv6_args
 
-  while true; do perf record -- ls; done
-  while true; do perf record -- ls; done
+> -       local -r ipv4_args="${core_args} -4  -D 192.168.1.1"
 
-Reported-by: syzbot+697196bc0265049822bd@syzkaller.appspotmail.com
-Fixes: bd2756811766 ("perf: Rewrite core context handling")
-Signed-off-by: James Clark <james.clark@arm.com>
----
- kernel/events/core.c | 42 ++++++++++++++++++++----------------------
- 1 file changed, 20 insertions(+), 22 deletions(-)
+perhaps this should stay as a comment??
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 380476a934e8..b11edb86d518 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -4813,19 +4813,17 @@ find_get_pmu_context(struct pmu *pmu, struct perf_event_context *ctx,
- 
- 		cpc = per_cpu_ptr(pmu->cpu_pmu_context, event->cpu);
- 		epc = &cpc->epc;
--
-+		raw_spin_lock_irq(&ctx->lock);
- 		if (!epc->ctx) {
- 			atomic_set(&epc->refcount, 1);
- 			epc->embedded = 1;
--			raw_spin_lock_irq(&ctx->lock);
- 			list_add(&epc->pmu_ctx_entry, &ctx->pmu_ctx_list);
- 			epc->ctx = ctx;
--			raw_spin_unlock_irq(&ctx->lock);
- 		} else {
- 			WARN_ON_ONCE(epc->ctx != ctx);
- 			atomic_inc(&epc->refcount);
- 		}
--
-+		raw_spin_unlock_irq(&ctx->lock);
- 		return epc;
- 	}
- 
-@@ -4897,32 +4895,32 @@ static void free_epc_rcu(struct rcu_head *head)
- static void put_pmu_ctx(struct perf_event_pmu_context *epc)
- {
- 	unsigned long flags;
-+	struct perf_event_context *ctx = epc->ctx;
- 
--	if (!atomic_dec_and_test(&epc->refcount))
-+	/*
-+	 * XXX
-+	 *
-+	 * lockdep_assert_held(&ctx->mutex);
-+	 *
-+	 * can't because of the call-site in _free_event()/put_event()
-+	 * which isn't always called under ctx->mutex.
-+	 */
-+	raw_spin_lock_irqsave(&ctx->lock, flags);
-+	if (!atomic_dec_and_test(&epc->refcount)) {
-+		raw_spin_unlock_irqrestore(&ctx->lock, flags);
- 		return;
-+	}
- 
--	if (epc->ctx) {
--		struct perf_event_context *ctx = epc->ctx;
--
--		/*
--		 * XXX
--		 *
--		 * lockdep_assert_held(&ctx->mutex);
--		 *
--		 * can't because of the call-site in _free_event()/put_event()
--		 * which isn't always called under ctx->mutex.
--		 */
-+	WARN_ON_ONCE(list_empty(&epc->pmu_ctx_entry));
- 
--		WARN_ON_ONCE(list_empty(&epc->pmu_ctx_entry));
--		raw_spin_lock_irqsave(&ctx->lock, flags);
--		list_del_init(&epc->pmu_ctx_entry);
--		epc->ctx = NULL;
--		raw_spin_unlock_irqrestore(&ctx->lock, flags);
--	}
-+	list_del_init(&epc->pmu_ctx_entry);
-+	epc->ctx = NULL;
- 
- 	WARN_ON_ONCE(!list_empty(&epc->pinned_active));
- 	WARN_ON_ONCE(!list_empty(&epc->flexible_active));
- 
-+	raw_spin_unlock_irqrestore(&ctx->lock, flags);
-+
- 	if (epc->embedded)
- 		return;
- 
--- 
-2.39.1
+>         local -r ipv6_args="${core_args} -6  -D 2001:db8::1"
+>
+>         echo "ipv6"
+> @@ -90,19 +90,19 @@ run_all() {
+>
+>  if [ ! -f ${BPF_FILE} ]; then
 
+double quote
+"${BPF_FILE}"
+in case space in file name
+
+>         echo "Missing ${BPF_FILE}. Build bpf selftest first"
+> -       exit -1
+> +       exit 1
+>  fi
+>
+>  if [ ! -f "$BPF_NAT6TO4_FILE" ]; then
+
+there seems to be inconsistency around [ vs [[, use [[ if relying on bash anyway
+
+>         echo "Missing nat6to4 helper. Build bpf nat6to4.o selftest first"
+> -       exit -1
+> +       exit 1
+>  fi
+>
+>  if [[ $# -eq 0 ]]; then
+>         run_all
+>  elif [[ $1 == "__subprocess" ]]; then
+
+while this does indeed work, imho $1 should be "$1" to be less confusing
+
+>         shift
+> -       run_one $@
+> +       run_one "$@"
+>  else
+> -       run_in_netns $@
+> +       run_in_netns "$@"
+>  fi
+> --
+> 2.34.1
