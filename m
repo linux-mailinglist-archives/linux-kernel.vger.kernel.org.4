@@ -2,242 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED86C67E73D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B2567E7A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbjA0N6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
+        id S234832AbjA0N7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbjA0N6F (ORCPT
+        with ESMTP id S233925AbjA0N62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:58:05 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70A21BDE
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:58:01 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 0EC573200BAB;
-        Fri, 27 Jan 2023 08:57:58 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 27 Jan 2023 08:58:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1674827878; x=1674914278; bh=gxPcqW+EzW
-        chthucdr8f28ODmGsdkj3oek3horojRTI=; b=GFLqUSEUdi+gejTToJ488Uxx8z
-        3fzeQD5UpJ49me1gkfkmxTokxM2b3LNckbhDVIofWKij0WFMSYfxCybp9sqG+Pj4
-        cjkIPZrIuvwvQpfbAzuUcvA9m/dfiEFqyRei1rnnrZu65elcNF0M7Baezcde3rGW
-        lsDArFctDlZASncbg08w5+2yh4Xp1acwwqx9JzRUMOjR6vUs14KRqVuRH0tatv5O
-        wL2qbn8D8tm2zD8S4ZvsusVD6bxWgf5DdNbwrfI9uYJ24X3QS5VrJKAQ/tD4V163
-        1G5TVTIzNPyKKHmevzXmYgJX9E2TWn3WuoKGx/2yV36uAj/nbV14GRAKu0bA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674827878; x=1674914278; bh=gxPcqW+EzWchthucdr8f28ODmGsd
-        kj3oek3horojRTI=; b=IEHQ030lh040w9N3lm8lqNedAOi46E9Z2xxpbFgT/YoQ
-        iRRM5oxP4Myvi27TlC9v01uw7VZNELW1bPgPqg6meEZH8rZpk3dYmohir65da+N8
-        W9/iKmo6Z9Lnxeku6KjrDn1ax2IZMpn/SDCP48KlmVz9slIWWlPsStXNMG01AcFT
-        FuDRrjR7WFFmFS/4oYEB/XiJLKjwmW/EnS46IGSeMcLU/c8/BLubGPj8IvebrAAC
-        1B1NLNxUmZ1UXsbb9Exd/Ommk6k/QT3Ibk1AzT5lOddSf8qtzgYmSRERlHwUh5N+
-        wk3+M0t/g5PmSNWLSRs5uoN0YDK5jGL1mfLKytquhw==
-X-ME-Sender: <xms:ZNjTY9OTCubv3Ns2fOHEb-bNUY3CVBUf_FqqhrdFd9-C2pAPG_8bdg>
-    <xme:ZNjTY_-eyvtiRyFXcwgG9IDyKDASuVCKj2tNq2DbyOzkIfWQmTdGWgAyxYlwN4Smu
-    dpp34OEbauaQhAKLYQ>
-X-ME-Received: <xmr:ZNjTY8Qkk-yenrnXUBGU6Z2-15bAAaKDt6dnoR--U9a7bL4fDrM3Ca0iH-muGsHfPnFsNVfG-Bk47g3oimI8shyFpcKfnfjmMmbyOpl82QuydA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddviedgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeevgfevjeetkeejteeftdfhudelgfehfeekveeghedvkeduhfeutdfhleev
-    ieffudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhm
-    vgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:ZNjTY5srQg--BnD2b-vT0XhlEzwrVKBkQtng8yaZ8IlJUUZE2fBpYg>
-    <xmx:ZNjTY1eXgcvLtQyWTsjYK9KoKxcyvRiG8H180jb35mpV3PGHGiQJzg>
-    <xmx:ZNjTY102QIsqVNMo1Z_Msxegf0pVONHjFKtJUfDNNbLdpAnfStaqOw>
-    <xmx:ZtjTY4xyGv_780rDYLM3uTmjwjlDfr71dOBQNfa3Cr217ysMMiSLmQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 27 Jan 2023 08:57:56 -0500 (EST)
-Date:   Fri, 27 Jan 2023 14:57:54 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Dom Cobley <dom@raspberrypi.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        michael@rodin.online, erosca@de.adit-jv.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH] drm: override detected status for connectors which are
- forced on
-Message-ID: <20230127135754.sirydb5vtr5taksr@houat>
-References: <20221107123657.24vbgep3jqeklb2s@houat>
- <20221215170359.92422-1-mrodin@de.adit-jv.com>
- <20221222174054.tsj4rfzejrl3cc7g@penduick>
- <20230120090348.GA860002@vmlxhi-182>
+        Fri, 27 Jan 2023 08:58:28 -0500
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AEA2312C;
+        Fri, 27 Jan 2023 05:58:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1674827888;
+        bh=7jIfTNCu7zpPLHJpUW3uli6pP+V4do4UcRBq1ufAji0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mvURC9U1jZI6BZB0ToC7FIqkTyLlEnklVvuXSavwfDi5OJBDX8BbJXZTVE79Ro1y6
+         qjBz5USNdaQ2LoEooh45BZZu4u+Rq89a3B6BiCzSpKF/+cY2d24icng8W/rckilmVS
+         dEWIWRrHyG5u6e2QrwlYdQtH2dKLtY23jQ94Xl6RE5ByZ5jHlQFz4bvt3eduq19B1v
+         lHNALEEByemodJogrT+eLdLnV+a2Bt8Rd8QOcsEZuJvb8wBRZOB/5FMC3ms4pqhG8D
+         mLCtXVrL50YGcn2QL1btABgcOT7KTgpThZzkjbE9X5bsIV5Y6AMNERja4NMFJAr74T
+         WL6yOCtK/O26A==
+Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0c1jKPzhd4;
+        Fri, 27 Jan 2023 08:58:08 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH 34/34] selftests: tdx: Use installed kernel headers search path
+Date:   Fri, 27 Jan 2023 08:57:55 -0500
+Message-Id: <20230127135755.79929-35-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
+References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2rlhppz4ufp7gd3u"
-Content-Disposition: inline
-In-Reply-To: <20230120090348.GA860002@vmlxhi-182>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use $(KHDR_INCLUDES) as lookup path for installed kernel headers rather
+than using kernel headers in include/uapi from the source kernel tree
+kernel headers.
 
---2rlhppz4ufp7gd3u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: Ingo Molnar <mingo@redhat.com>
+---
+ tools/testing/selftests/tdx/Makefile         | 2 +-
+ tools/testing/selftests/tdx/tdx_guest_test.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hi Michael, all,
+diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftests/tdx/Makefile
+index 8dd43517cd55..306e9c4d5ef7 100644
+--- a/tools/testing/selftests/tdx/Makefile
++++ b/tools/testing/selftests/tdx/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-CFLAGS += -O3 -Wl,-no-as-needed -Wall -static
++CFLAGS += -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES) -static
+ 
+ TEST_GEN_PROGS := tdx_guest_test
+ 
+diff --git a/tools/testing/selftests/tdx/tdx_guest_test.c b/tools/testing/selftests/tdx/tdx_guest_test.c
+index 2a2afd856798..81d8cb88ea1a 100644
+--- a/tools/testing/selftests/tdx/tdx_guest_test.c
++++ b/tools/testing/selftests/tdx/tdx_guest_test.c
+@@ -12,8 +12,8 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ 
++#include <linux/tdx-guest.h>
+ #include "../kselftest_harness.h"
+-#include "../../../../include/uapi/linux/tdx-guest.h"
+ 
+ #define TDX_GUEST_DEVNAME "/dev/tdx_guest"
+ #define HEX_DUMP_SIZE 8
+-- 
+2.25.1
 
-On Fri, Jan 20, 2023 at 10:03:48AM +0100, Michael Rodin wrote:
-> Hi Maxime,
->=20
-> thank you for your feedback!
-> On Thu, Dec 22, 2022 at 06:40:54PM +0100, Maxime Ripard wrote:
-> > Hi,
-> >=20
-> > On Thu, Dec 15, 2022 at 06:03:59PM +0100, Michael Rodin wrote:
-> > > The detected status of a connector should be ignored when a connector=
- is
-> > > forced as hinted in the commit d50ba256b5f1 ("drm/kms: start
-> > > adding command line interface using fb."). One negative side effect of
-> > > not ignoring this is observed on the RCar3 SoCs which use the dw-hdmi
-> > > driver. It continues executing drm_helper_hpd_irq_event even if its
-> > > connector is forced to ON. As consequence drm_helper_hpd_irq_event ca=
-lls
-> > > "detect" so the connector status is updated to "disconnected":
-> > >=20
-> > > [  420.201527] [drm:drm_helper_hpd_irq_event] [CONNECTOR:76:HDMI-A-1]=
- status updated from connected to disconnected
-> > >=20
-> > > This status is corrected by drm_helper_probe_single_connector_modes s=
-hortly
-> > > after this because this function checks if a connector is forced:
-> > >=20
-> > > [  420.218703] [drm:drm_helper_probe_single_connector_modes] [CONNECT=
-OR:76:HDMI-A-1] status updated from disconnected to connected
-> > >=20
-> > > To avoid similar issues this commit adapts functions which call "dete=
-ct"
-> > > so they check additionally if a connector is forced and override the =
-status
-> > > returned by "detect".
-> > >=20
-> > > Fixes: 816da85a0990 ("drm: handle HPD and polled connectors separatel=
-y")
-> > > Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
-> >=20
-> > As reported here, this breaks vc4, and probably i915:
-> > https://lore.kernel.org/dri-devel/20221107123657.24vbgep3jqeklb2s@houat/
-> >=20
-> > Maxime
->=20
-> My understanding from [1,2] was that the way to avoid such regressions is
-> to make sure that the "detect" callbacks of connector drivers are always
-> called even if a connector is forced. This is what I have implemented in =
-my
-> second patch where "detect" is called first and then the return value is
-> adjusted based on the "force" status. If my understanding was wrong, I
-> would very much appreciate if you could give me some hints for the
-> implementation of an acceptable solution.
-
-Ah, sorry, you're right.
-
-I was confused since you didn't mention it was a new version, and didn't
-provide a changelog, I just assumed you resent the same patch.
-
-In the time between, we also got a report for the RaspberryPi that the
-behaviour is also broken on CEC:
-
-https://github.com/raspberrypi/linux/pull/5052
-
-If we get back to the problem we're trying to solve, it means that if
-nothing is provided on the command line, we should rely on the polling
-or IRQ based detection that will call detect on a regular basis. The
-current detect side effects (for HDMI) are that:
-
-  * the CEC address will be invalidated if it's disconnected, and
-    set if it's connected.
-
-  * if the scrambler was active, we re-enable the HDMI scrambler
-
-If we want to force the connector to be disconnected, everything is
-fine. If we want to force the connector on, then we should ignore the
-CEC invalidation, but should keep enabling the scrambler.
-
-And you want to avoid state transitions when the connector is forced,
-which also makes sense.
-
-I think we can get it to work by:
-
-  - Merging your patch to call detect, but no matter the returned
-    status, if it's forced to a state by the command line or some other
-    mechanism, we return what was forced.
-
-  - in the detect hook:
-
-      * if connector->force is set to off, we just return
-      	connector_status_disconnected.
-
-      * if connector->force is set to on, and if:
-
-      	+ the actual status is that the display is disconnected, we
-          return but don't invalidate the CEC address.
-
-      	+ the actual status is that the display is connected, we setup
-          the scrambler again if needed, and set the CEC address.
-
-So in addition to your patch, a skeleton detect hook would be something lik=
-e:
-
-static int detect(struct drm_connector *connector, bool force)
-{
-	if (connector->force =3D=3D DRM_FORCE_OFF)
-		return connector_status_disconnected;
-
-	status =3D /* whatever is needed to fetch the status from the hardware */;
-
-	if (status =3D=3D connector_status_disconnected) {
-		if (connector->force =3D=3D DRM_FORCE_ON)
-			return connector_status_connected;
-
-		cec_phys_addr_invalidate(vc4_hdmi->cec_adap);
-	}
-
-	edid =3D drm_get_edid(...);
-	cec_s_phys_addr_from_edid(..., edid);
-	reset_scrambler();
-
-	return status;
-}
-
-Does that make sense?
-Maxime
-
---2rlhppz4ufp7gd3u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY9PYYgAKCRDj7w1vZxhR
-xQnoAQC0sayvsPAfsDphABbx6OE2Cb4ruRzEy3nlzUu9PbJAiQEAwOKeeiNs+wQH
-jtVm3dZG1ddVKo59YE8/Pbxsw0kR+g8=
-=IHup
------END PGP SIGNATURE-----
-
---2rlhppz4ufp7gd3u--
