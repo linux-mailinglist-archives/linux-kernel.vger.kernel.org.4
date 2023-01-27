@@ -2,210 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1C167E8B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3D767E8B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbjA0OzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
+        id S233427AbjA0Ozo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233140AbjA0OzP (ORCPT
+        with ESMTP id S229542AbjA0Ozm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:55:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABC974C11
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:54:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674831269;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ysIL8RukAYmBUB71mQtyT0OJ0/jFEvPNazkDdH1z3cQ=;
-        b=f9rFpNdWGx7MJmxf22FRMKFjAvwxzkiQe0VkiaIb6Ar90xv5f+PLeyqiuY7SsHG3N+3FvK
-        o24AvL4rDBKjPWF0WEIGACedeeDlwGmXbMKP3W4w0rR4pypCaKRkuCLwiNKQSrSmnTU7+z
-        EwPDrdcffg65YF4t5JzzGT8jwZ9s0bA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-399-s6hjROmeP6OX23gbZ5ufjA-1; Fri, 27 Jan 2023 09:54:28 -0500
-X-MC-Unique: s6hjROmeP6OX23gbZ5ufjA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 27 Jan 2023 09:55:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9C63BD95
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:55:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 859DE29DD993;
-        Fri, 27 Jan 2023 14:54:27 +0000 (UTC)
-Received: from [10.22.10.246] (unknown [10.22.10.246])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F3272166B26;
-        Fri, 27 Jan 2023 14:54:26 +0000 (UTC)
-Message-ID: <43da8f9d-f0fd-d67b-7384-fc03ad159f29@redhat.com>
-Date:   Fri, 27 Jan 2023 09:54:26 -0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BCD261CC6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:55:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F4ADC4339B
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:55:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674831340;
+        bh=HvNrME+MM8yn4e0AkTN+4TlH0dGTPBFUw82z5J9q42o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BdOJeA81z8ETj4H1loxExyGMkjmJU71jtbn48u+zJKPN3npJkLLrD1DTEzUDyITfh
+         HDqTrjXvFpiXuIEuPBw7xP+bQB9UR3OKcBZE0Wj/jO/o2DOm/GpsZdFzd+ezW+6aVY
+         f7vkv2VfyHsdtcELdVnqBZgKL0QiRw8bCP2POSD0+CpoJrqlBwp8PfKmahn0PF+jjF
+         HYYg55akVUd+tMg51h5/kAo8OV5jd8bVZJki/YUmBOxUtU7/k6Lgfiay4apwLTfT9S
+         0QvmA/4vc5njTRfs5fd7yf1UrbXlYNPr4ZVd1HvysynF6AuxpKgStRD4NXfSxBX4CW
+         6qEPoZsjkkPcg==
+Received: by mail-lf1-f54.google.com with SMTP id d30so8510643lfv.8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:55:40 -0800 (PST)
+X-Gm-Message-State: AFqh2koyxEkIzimx10vLgg7g2CsXDeaL8lK+zOak3gI+eNky8r0YwWIS
+        7ggFm23OT8o7HeTNH4zjg8bjntkwhYS1P4ftYQ==
+X-Google-Smtp-Source: AMrXdXt+OmlRKcer++n7fCu4l2zdWFvwQbkW53r+2SZjCqH0XMEpiXMeFESigK5NF723T8csDUcyNE8hgDt/kcl9nxk=
+X-Received: by 2002:a05:6512:1105:b0:4cb:f29:e2b0 with SMTP id
+ l5-20020a056512110500b004cb0f29e2b0mr3003381lfg.404.1674831338572; Fri, 27
+ Jan 2023 06:55:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3] sched: Store restrict_cpus_allowed_ptr() call state
-To:     Will Deacon <will@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-References: <20230127015527.466367-1-longman@redhat.com>
- <20230127125946.GA30605@willie-the-truck>
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230127125946.GA30605@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205095115.2905090-1-ruanjinjie@huawei.com> <378232f4-5c2e-ad56-c4ec-4d9f72f08755@collabora.com>
+In-Reply-To: <378232f4-5c2e-ad56-c4ec-4d9f72f08755@collabora.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Fri, 27 Jan 2023 22:55:26 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_9aQnkWvLjaoxRsHStpfeK5v72XkNd7aCw-MbCLVQewUA@mail.gmail.com>
+Message-ID: <CAAOTY_9aQnkWvLjaoxRsHStpfeK5v72XkNd7aCw-MbCLVQewUA@mail.gmail.com>
+Subject: Re: [PATCH] drm/mediatek: mtk_drm_crtc: Add checks for devm_kcalloc
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     ruanjinjie <ruanjinjie@huawei.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, seanpaul@chromium.org, ck.hu@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/23 07:59, Will Deacon wrote:
-> Hi Waiman,
->
-> On Thu, Jan 26, 2023 at 08:55:27PM -0500, Waiman Long wrote:
->> The user_cpus_ptr field was originally added by commit b90ca8badbd1
->> ("sched: Introduce task_struct::user_cpus_ptr to track requested
->> affinity"). It was used only by arm64 arch due to possible asymmetric
->> CPU setup.
->>
->> Since commit 8f9ea86fdf99 ("sched: Always preserve the user requested
->> cpumask"), task_struct::user_cpus_ptr is repurposed to store user
->> requested cpu affinity specified in the sched_setaffinity().
->>
->> This results in a slight performance regression on an arm64
->> system when booted with "allow_mismatched_32bit_el0"
->> on the command-line.  The arch code will (amongst
->> other things) calls force_compatible_cpus_allowed_ptr() and
->> relax_compatible_cpus_allowed_ptr() when exec()'ing a 32-bit or a 64-bit
->> task respectively. Now a call to relax_compatible_cpus_allowed_ptr()
->> will always result in a __sched_setaffinity() call whether there is a
->> previous force_compatible_cpus_allowed_ptr() call or not.
->>
->> In order to fix this regression, a new scheduler flag
->> task_struct::cpus_allowed_restricted is now added to track if
->> force_compatible_cpus_allowed_ptr() has been called before or not. This
->> patch also updates the comments in force_compatible_cpus_allowed_ptr()
->> and relax_compatible_cpus_allowed_ptr() and handles their interaction
->> with sched_setaffinity().
->>
->> This patch also removes the task_user_cpus() helper. In the case of
->> relax_compatible_cpus_allowed_ptr(), cpu_possible_mask as user_cpu_ptr
->> masking will be performed within __sched_setaffinity() anyway.
->>
->> Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
->> Reported-by: Will Deacon <will@kernel.org>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   include/linux/sched.h |  3 +++
->>   kernel/sched/core.c   | 25 +++++++++++++++++--------
->>   kernel/sched/sched.h  |  8 +-------
->>   3 files changed, 21 insertions(+), 15 deletions(-)
-> So this doesn't even build...
->
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index bb1ee6d7bdde..d7bc809c109e 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -2999,6 +2999,10 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
->>   	struct rq *rq;
->>   
->>   	rq = task_rq_lock(p, &rf);
->> +
->> +	if (ctx->flags & SCA_CLR_RESTRICT)
->> +		p->cpus_allowed_restricted = 0;
->> +
->>   	/*
->>   	 * Masking should be skipped if SCA_USER or any of the SCA_MIGRATE_*
->>   	 * flags are set.
->> @@ -3025,8 +3029,8 @@ EXPORT_SYMBOL_GPL(set_cpus_allowed_ptr);
->>   /*
->>    * Change a given task's CPU affinity to the intersection of its current
->>    * affinity mask and @subset_mask, writing the resulting mask to @new_mask.
->> - * If user_cpus_ptr is defined, use it as the basis for restricting CPU
->> - * affinity or use cpu_online_mask instead.
->> + * The cpus_allowed_restricted bit is set to indicate to a later
->> + * relax_compatible_cpus_allowed_ptr() call to relax the cpumask.
->>    *
->>    * If the resulting mask is empty, leave the affinity unchanged and return
->>    * -EINVAL.
->> @@ -3044,6 +3048,7 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
->>   	int err;
->>   
->>   	rq = task_rq_lock(p, &rf);
->> +	p->cpus_allowed_restricted = 1;
->>   
->>   	/*
->>   	 * Forcefully restricting the affinity of a deadline task is
->> @@ -3055,7 +3060,8 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
->>   		goto err_unlock;
->>   	}
->>   
->> -	if (!cpumask_and(new_mask, task_user_cpus(p), subset_mask)) {
->> +	if (p->user_cpu_ptr &&
->> +	    !cpumask_and(new_mask, p->user_cpu_ptr, subset_mask)) {
-> s/user_cpu_ptr/user_cpus_ptr/
->
->>   		err = -EINVAL;
->>   		goto err_unlock;
->>   	}
->> @@ -3069,9 +3075,8 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
->>   
->>   /*
->>    * Restrict the CPU affinity of task @p so that it is a subset of
->> - * task_cpu_possible_mask() and point @p->user_cpus_ptr to a copy of the
->> - * old affinity mask. If the resulting mask is empty, we warn and walk
->> - * up the cpuset hierarchy until we find a suitable mask.
->> + * task_cpu_possible_mask(). If the resulting mask is empty, we warn
->> + * and walk up the cpuset hierarchy until we find a suitable mask.
->>    */
->>   void force_compatible_cpus_allowed_ptr(struct task_struct *p)
->>   {
->> @@ -3125,11 +3130,15 @@ __sched_setaffinity(struct task_struct *p, struct affinity_context *ctx);
->>   void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
->>   {
->>   	struct affinity_context ac = {
->> -		.new_mask  = task_user_cpus(p),
->> -		.flags     = 0,
->> +		.new_mask  = cpu_possible_mask;
-> s/;/,/
->
-> But even with those two things fixed, I'm seeing new failures in my
-> testing which I think are because restrict_cpus_allowed_ptr() is failing
-> unexpectedly when called by force_compatible_cpus_allowed_ptr().
->
-> For example, just running a 32-bit task on an asymmetric system results
-> in:
->
-> $ ./hello32
-> [ 1690.855341] Overriding affinity for process 580 (hello32) to CPUs 2-3
->
-> That then has knock-on effects such as losing track of the initial affinity
-> mask and not being able to restore it if the forcefully-affined 32-bit task
-> exec()s a 64-bit program.
+Hi, Ruanjinjie:
 
-I thought I have fixed the build failure. Apparently it is still there. 
-I will fix it.
+Applied to mediatek-drm-next [1], thanks.
 
-BTW, which arm64 cpus support "allow_mismatched_32bit_el0"? I am trying 
-to see if I can reproduce the issue, but I am not sure if I have any 
-access to the cpus that have this capability.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-next
 
-Cheers,
-Longman
+Regards,
+Chun-Kuang.
 
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =E6=96=
+=BC
+2022=E5=B9=B412=E6=9C=885=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=887:5=
+3=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Il 05/12/22 10:51, ruanjinjie ha scritto:
+> > As the devm_kcalloc may return NULL, the return value needs to be check=
+ed
+> > to avoid NULL poineter dereference.
+> >
+> > Fixes: 31c5558dae05 ("drm/mediatek: Refactor plane init")
+> > Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+>
