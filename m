@@ -2,226 +2,561 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC8267E885
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE7867E88C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233764AbjA0OnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:43:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
+        id S233793AbjA0OpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:45:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjA0OnR (ORCPT
+        with ESMTP id S233784AbjA0OpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:43:17 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201E37C70E;
-        Fri, 27 Jan 2023 06:43:15 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B8EB9220FF;
-        Fri, 27 Jan 2023 14:43:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1674830592; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 27 Jan 2023 09:45:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795367D9BE
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:44:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674830654;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uD2PukWeCMHDxfU6cX50tev8CxQr4kL+7D4hPGIy2vA=;
-        b=HGJlKyV3xz+rd4ETKRmwRMYY+TYuH8u+kQBcHneBXghAZ5GcOhqlUC8E15okptjA7a3phD
-        zoOSnAaGP9H+YCrOEx2unK1PILTvXcnzTFU4h+KooFl2JI0UYcrJ6nXThOKx/FX1M4tY3t
-        /KaG70suYts6hMyLAs+TPN0FCAdLfvA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1674830592;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uD2PukWeCMHDxfU6cX50tev8CxQr4kL+7D4hPGIy2vA=;
-        b=ONfkIeP2vq6AyOt2TUSlAX+MsAbO4Udlny1q5w5QKGKDl7YkrSmxR+4EPpROFYa5gH4fsB
-        YDPZ6Zg0fU1CQJCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9F6931336F;
-        Fri, 27 Jan 2023 14:43:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id M+XeJgDj02NNTAAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 27 Jan 2023 14:43:12 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 32FD6A06B4; Fri, 27 Jan 2023 15:43:12 +0100 (CET)
-Date:   Fri, 27 Jan 2023 15:43:12 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rookxu <brookxu.cn@gmail.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [PATCH v3 7/8] ext4: Use rbtrees to manage PAs instead of inode
- i_prealloc_list
-Message-ID: <20230127144312.3m3hmcufcvxxp6f4@quack3>
-References: <20230116080216.249195-1-ojaswin@linux.ibm.com>
- <20230116080216.249195-8-ojaswin@linux.ibm.com>
- <20230116122334.k2hlom22o2hlek3m@quack3>
- <Y8Z413XTPMr//bln@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230117110335.7dtlq4catefgjrm3@quack3>
- <Y8jizbGg6l2WxJPF@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+        bh=LgyUzbW5VO7wi4+o+0G4wAzbN510PHzCyFsvHroOWX8=;
+        b=CsAONW1dcZF0u6kHs5cckYCn/hKxtnS5H0qbAUe44V2HszYimG0Zmoot405M4Zqsnp+gEQ
+        avTURBeL/TG6g/19aGhlr1zLWeiyWaz36rtaf9c+K1SsIy3EJ+x2MOQqNyfCFf1B0K2aVU
+        mfxLuTelp7kAHSn4Uzuq5vPtxjMVGQI=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-643-vcoMWsZlPNeupsw554Cmmw-1; Fri, 27 Jan 2023 09:44:13 -0500
+X-MC-Unique: vcoMWsZlPNeupsw554Cmmw-1
+Received: by mail-ed1-f70.google.com with SMTP id h18-20020a05640250d200b0049e0e9382c2so3730730edb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:44:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LgyUzbW5VO7wi4+o+0G4wAzbN510PHzCyFsvHroOWX8=;
+        b=DQ4KxIBSGSZY8A70ZqsoG8lkRIkhV2SRcSLpffD/CtAdEyxqvNltBEIqgg9729Yl/K
+         uyc8i16bi3gwr50ypf5dPHusxbWUrXW5bqHLLIN8fRXAAFx7E56+z5KJGhK4K5YJxzYb
+         FvQNzu6CHBE/FAjXWkhEA//6BCOQJW9GOrbsthi8kQmLNmGDDAD5a2oheEUftpljl94p
+         F80dqxfOfG81ibnnWLjosdL0p6cpZPlMwa29or2ukdGxlN3EpbmO0q1htqRVyD2d/OwL
+         EXmjcIoyzUpGoSZCTzjbuJk278arMqndAwjdBZkKgY5cMinSU8LdwvD3GNTuuWXSaQnu
+         4tdA==
+X-Gm-Message-State: AO0yUKVZ6lo3AvWsALPcCjILSvNQDIYj6FO5A+ls00ZaeGSJ1AcPU8Hv
+        i7NLZnFE7amrOPvlvW0fypa9wKxBmhf/YMXSf7DJ0JmIVA6r7ybCQkGLobzcojgDcDdCTexErU5
+        SHL26R25qMD7tJjXgMVTb+ag3
+X-Received: by 2002:a17:907:6d9b:b0:87c:db2:f658 with SMTP id sb27-20020a1709076d9b00b0087c0db2f658mr1437589ejc.40.1674830651942;
+        Fri, 27 Jan 2023 06:44:11 -0800 (PST)
+X-Google-Smtp-Source: AK7set9mD8aQL+X9TxOVUe05KrGTCI+fOlCBF0hrKGtRVaQ8Wj6ppDv8pQJab0SPWdZgiGJE+txSQA==
+X-Received: by 2002:a17:907:6d9b:b0:87c:db2:f658 with SMTP id sb27-20020a1709076d9b00b0087c0db2f658mr1437552ejc.40.1674830651616;
+        Fri, 27 Jan 2023 06:44:11 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id n18-20020a1709067b5200b00878530f5324sm2375166ejo.90.2023.01.27.06.44.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 06:44:11 -0800 (PST)
+Message-ID: <3a76bfa9-8ee5-a7d9-b9fb-a98181baec0b@redhat.com>
+Date:   Fri, 27 Jan 2023 15:44:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8jizbGg6l2WxJPF@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH drm-next 05/14] drm/nouveau: new VM_BIND uapi interfaces
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Matthew Brost <matthew.brost@intel.com>
+Cc:     daniel@ffwll.ch, airlied@redhat.com, bskeggs@redhat.com,
+        jason@jlekstrand.net, tzimmermann@suse.de, mripard@kernel.org,
+        corbet@lwn.net, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org
+References: <20230118061256.2689-1-dakr@redhat.com>
+ <20230118061256.2689-6-dakr@redhat.com>
+ <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com>
+ <7c046ff9-728d-7634-9d77-8536308c7481@redhat.com>
+ <c2256c7d-e768-ae3f-d465-b9f8080d111b@amd.com>
+ <2427a918-5348-d1ef-ccae-a29c1ff33c83@redhat.com>
+ <a214b28b-043c-a8bb-69da-b4d8216fce56@amd.com>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <a214b28b-043c-a8bb-69da-b4d8216fce56@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ojaswin!
+On 1/27/23 14:23, Christian König wrote:
+> 
+> 
+> Am 27.01.23 um 14:12 schrieb Danilo Krummrich:
+>> On 1/27/23 08:55, Christian König wrote:
+>>> Am 27.01.23 um 02:26 schrieb Danilo Krummrich:
+>>>> On 1/27/23 02:05, Matthew Brost wrote:
+>>>>> On Wed, Jan 18, 2023 at 07:12:47AM +0100, Danilo Krummrich wrote:
+>>>>>> This commit provides the interfaces for the new UAPI motivated by the
+>>>>>> Vulkan API. It allows user mode drivers (UMDs) to:
+>>>>>>
+>>>>>> 1) Initialize a GPU virtual address (VA) space via the new
+>>>>>>     DRM_IOCTL_NOUVEAU_VM_INIT ioctl. UMDs can provide a kernel 
+>>>>>> reserved
+>>>>>>     VA area.
+>>>>>>
+>>>>>> 2) Bind and unbind GPU VA space mappings via the new
+>>>>>>     DRM_IOCTL_NOUVEAU_VM_BIND ioctl.
+>>>>>>
+>>>>>> 3) Execute push buffers with the new DRM_IOCTL_NOUVEAU_EXEC ioctl.
+>>>>>>
+>>>>>> Both, DRM_IOCTL_NOUVEAU_VM_BIND and DRM_IOCTL_NOUVEAU_EXEC support
+>>>>>> asynchronous processing with DRM syncobjs as synchronization 
+>>>>>> mechanism.
+>>>>>>
+>>>>>> The default DRM_IOCTL_NOUVEAU_VM_BIND is synchronous processing,
+>>>>>> DRM_IOCTL_NOUVEAU_EXEC supports asynchronous processing only.
+>>>>>>
+>>>>>> Co-authored-by: Dave Airlie <airlied@redhat.com>
+>>>>>> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+>>>>>> ---
+>>>>>>   Documentation/gpu/driver-uapi.rst |   8 ++
+>>>>>>   include/uapi/drm/nouveau_drm.h    | 216 
+>>>>>> ++++++++++++++++++++++++++++++
+>>>>>>   2 files changed, 224 insertions(+)
+>>>>>>
+>>>>>> diff --git a/Documentation/gpu/driver-uapi.rst 
+>>>>>> b/Documentation/gpu/driver-uapi.rst
+>>>>>> index 4411e6919a3d..9c7ca6e33a68 100644
+>>>>>> --- a/Documentation/gpu/driver-uapi.rst
+>>>>>> +++ b/Documentation/gpu/driver-uapi.rst
+>>>>>> @@ -6,3 +6,11 @@ drm/i915 uAPI
+>>>>>>   =============
+>>>>>>     .. kernel-doc:: include/uapi/drm/i915_drm.h
+>>>>>> +
+>>>>>> +drm/nouveau uAPI
+>>>>>> +================
+>>>>>> +
+>>>>>> +VM_BIND / EXEC uAPI
+>>>>>> +-------------------
+>>>>>> +
+>>>>>> +.. kernel-doc:: include/uapi/drm/nouveau_drm.h
+>>>>>> diff --git a/include/uapi/drm/nouveau_drm.h 
+>>>>>> b/include/uapi/drm/nouveau_drm.h
+>>>>>> index 853a327433d3..f6e7d40201d4 100644
+>>>>>> --- a/include/uapi/drm/nouveau_drm.h
+>>>>>> +++ b/include/uapi/drm/nouveau_drm.h
+>>>>>> @@ -126,6 +126,216 @@ struct drm_nouveau_gem_cpu_fini {
+>>>>>>       __u32 handle;
+>>>>>>   };
+>>>>>>   +/**
+>>>>>> + * struct drm_nouveau_sync - sync object
+>>>>>> + *
+>>>>>> + * This structure serves as synchronization mechanism for 
+>>>>>> (potentially)
+>>>>>> + * asynchronous operations such as EXEC or VM_BIND.
+>>>>>> + */
+>>>>>> +struct drm_nouveau_sync {
+>>>>>> +    /**
+>>>>>> +     * @flags: the flags for a sync object
+>>>>>> +     *
+>>>>>> +     * The first 8 bits are used to determine the type of the 
+>>>>>> sync object.
+>>>>>> +     */
+>>>>>> +    __u32 flags;
+>>>>>> +#define DRM_NOUVEAU_SYNC_SYNCOBJ 0x0
+>>>>>> +#define DRM_NOUVEAU_SYNC_TIMELINE_SYNCOBJ 0x1
+>>>>>> +#define DRM_NOUVEAU_SYNC_TYPE_MASK 0xf
+>>>>>> +    /**
+>>>>>> +     * @handle: the handle of the sync object
+>>>>>> +     */
+>>>>>> +    __u32 handle;
+>>>>>> +    /**
+>>>>>> +     * @timeline_value:
+>>>>>> +     *
+>>>>>> +     * The timeline point of the sync object in case the syncobj 
+>>>>>> is of
+>>>>>> +     * type DRM_NOUVEAU_SYNC_TIMELINE_SYNCOBJ.
+>>>>>> +     */
+>>>>>> +    __u64 timeline_value;
+>>>>>> +};
+>>>>>> +
+>>>>>> +/**
+>>>>>> + * struct drm_nouveau_vm_init - GPU VA space init structure
+>>>>>> + *
+>>>>>> + * Used to initialize the GPU's VA space for a user client, 
+>>>>>> telling the kernel
+>>>>>> + * which portion of the VA space is managed by the UMD and kernel 
+>>>>>> respectively.
+>>>>>> + */
+>>>>>> +struct drm_nouveau_vm_init {
+>>>>>> +    /**
+>>>>>> +     * @unmanaged_addr: start address of the kernel managed VA 
+>>>>>> space region
+>>>>>> +     */
+>>>>>> +    __u64 unmanaged_addr;
+>>>>>> +    /**
+>>>>>> +     * @unmanaged_size: size of the kernel managed VA space 
+>>>>>> region in bytes
+>>>>>> +     */
+>>>>>> +    __u64 unmanaged_size;
+>>>>>> +};
+>>>>>> +
+>>>>>> +/**
+>>>>>> + * struct drm_nouveau_vm_bind_op - VM_BIND operation
+>>>>>> + *
+>>>>>> + * This structure represents a single VM_BIND operation. UMDs 
+>>>>>> should pass
+>>>>>> + * an array of this structure via struct drm_nouveau_vm_bind's 
+>>>>>> &op_ptr field.
+>>>>>> + */
+>>>>>> +struct drm_nouveau_vm_bind_op {
+>>>>>> +    /**
+>>>>>> +     * @op: the operation type
+>>>>>> +     */
+>>>>>> +    __u32 op;
+>>>>>> +/**
+>>>>>> + * @DRM_NOUVEAU_VM_BIND_OP_ALLOC:
+>>>>>> + *
+>>>>>> + * The alloc operation is used to reserve a VA space region 
+>>>>>> within the GPU's VA
+>>>>>> + * space. Optionally, the &DRM_NOUVEAU_VM_BIND_SPARSE flag can be 
+>>>>>> passed to
+>>>>>> + * instruct the kernel to create sparse mappings for the given 
+>>>>>> region.
+>>>>>> + */
+>>>>>> +#define DRM_NOUVEAU_VM_BIND_OP_ALLOC 0x0
+>>>>>
+>>>>> Do you really need this operation? We have no concept of this in Xe,
+>>>>> e.g. we can create a VM and the entire address space is managed 
+>>>>> exactly
+>>>>> the same.
+>>>>
+>>>> The idea for alloc/free is to let UMDs allocate a portion of the VA 
+>>>> space (which I call a region), basically the same thing Vulkan 
+>>>> represents with a VKBuffer.
+>>>
+>>> If that's mangled into the same component/interface then I can say 
+>>> from experience that this is a pretty bad idea. We have tried 
+>>> something similar with radeon and it turned out horrible.
+>>
+>> What was the exact constellation in radeon and which problems did 
+>> arise from it?
+>>
+>>>
+>>> What you want is one component for tracking the VA allocations 
+>>> (drm_mm based) and a different component/interface for tracking the 
+>>> VA mappings (probably rb tree based).
+>>
+>> That's what the GPUVA manager is doing. There are gpuva_regions which 
+>> correspond to VA allocations and gpuvas which represent the mappings. 
+>> Both are tracked separately (currently both with a separate drm_mm, 
+>> though). However, the GPUVA manager needs to take regions into account 
+>> when dealing with mappings to make sure the GPUVA manager doesn't 
+>> propose drivers to merge over region boundaries. Speaking from 
+>> userspace PoV, the kernel wouldn't merge mappings from different 
+>> VKBuffer objects even if they're virtually and physically contiguous.
+> 
+> That are two completely different things and shouldn't be handled in a 
+> single component.
 
-I'm sorry for a bit delayed reply...
+They are different things, but they're related in a way that for 
+handling the mappings (in particular merging and sparse) the GPUVA 
+manager needs to know the VA allocation (or region) boundaries.
 
-On Thu 19-01-23 11:57:25, Ojaswin Mujoo wrote:
-> On Tue, Jan 17, 2023 at 12:03:35PM +0100, Jan Kara wrote:
-> > On Tue 17-01-23 16:00:47, Ojaswin Mujoo wrote:
-> > > On Mon, Jan 16, 2023 at 01:23:34PM +0100, Jan Kara wrote:
-> > > > > Since this covers the special case we discussed above, we will always
-> > > > > un-delete the PA when we encounter the special case and we can then
-> > > > > adjust for overlap and traverse the PA rbtree without any issues.
-> > > > > 
-> > > > > Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> > > > > Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-> > > 
-> > > Hi Jan,
-> > > Thanks for the review, sharing some of my thoughts below.
-> > > 
-> > > > 
-> > > > So I find this putting back of already deleted inode PA very fragile. For
-> > > > example in current code I suspect you've missed a case in ext4_mb_put_pa()
-> > > > which can mark inode PA (so it can then be spotted by
-> > > > ext4_mb_pa_adjust_overlap() and marked as in use again) but
-> > > > ext4_mb_put_pa() still goes on and destroys the PA.
-> > > 
-> > > The 2 code paths that clash here are:
-> > > 
-> > > ext4_mb_new_blocks() -> ext4_mb_release_context() -> ext4_mb_put_pa()
-> > > ext4_mb_new_blocks() -> ext4_mb_normalize_request() -> ext4_mb_pa_adjust_overlap()
-> > > 
-> > > Since these are the only code paths from which these 2 functions are
-> > > called, for a given inode, access will always be serialized by the upper
-> > > level ei->i_data_sem, which is always taken when writing data blocks
-> > > using ext4_mb_new_block(). 
-> > 
-> > Indeed, inode->i_data_sem prevents the race I was afraid of.
-> >  
-> > > From my understanding of the code, I feel only
-> > > ext4_mb_discard_group_preallocations() can race against other functions
-> > > that are modifying the PA rbtree since it does not take any inode locks.
-> > > 
-> > > That being said, I do understand your concerns regarding the solution,
-> > > however I'm willing to work with the community to ensure our
-> > > implementation of this undelete feature is as robust as possible. Along
-> > > with fixing the bug reported here [1], I believe that it is also a good
-> > > optimization to have especially when the disk is near full and we are
-> > > seeing a lot of group discards going on. 
-> > > 
-> > > Also, in case the deleted PA completely lies inside our new range, it is
-> > > much better to just undelete and use it rather than deleting the
-> > > existing PA and reallocating the range again. I think the advantage
-> > > would be even bigger in ext4_mb_use_preallocated() function where we can
-> > > just undelete and use the PA and skip the entire allocation, incase original
-> > > range lies in a deleted PA.
-> > 
-> > Thanks for explantion. However I think you're optimizing the wrong thing.
-> > We are running out of space (to run ext4_mb_discard_group_preallocations()
-> > at all) and we allocate from an area covered by PA that we've just decided
-> > to discard - if anything relies on performance of the filesystem in ENOSPC
-> > conditions it has serious problems no matter what. Sure, we should deliver
-> > the result (either ENOSPC or some block allocation) in a reasonable time
-> > but the performance does not really matter much because all the scanning
-> > and flushing is going to slow down everything a lot anyway. One additional
-> > scan of the rbtree is really negligible in this case. So what we should
-> > rather optimize for in this case is the code simplicity and maintainability
-> > of this rare corner-case that will also likely get only a small amount of
-> > testing. And in terms of code simplicity the delete & restart solution
-> > seems to be much better (at least as far as I'm imagining it - maybe the
-> > code will prove me wrong ;)).
-> Hi Jan,
-> 
-> So I did try out the 'rb_erase from ext4_mb_adjust_overlap() and retry' method,
-> with ane extra pa_removed flag, but the locking is getting pretty messy. I'm
-> not sure if such a design is possible is the lock we currently have. 
-> 
-> Basically, the issue I'm facing is that we are having to drop the
-> locks read locks and accquire the write locks in
-> ext4_mb_adjust_overlap(), which looks something like this:
-> 
-> 				spin_unlock(&tmp_pa->pa_lock);
-> 				read_unlock(&ei->i_prealloc_lock);
-> 
-> 				write_lock(&ei->i_prealloc_lock);
-> 				spin_lock(&tmp_pa->pa_lock);
-> 
-> We have to preserve the order and drop both tree and PA locks to avoid
-> deadlocks.  With this approach, the issue is that in between dropping and
-> accquiring this lock, the group discard path can actually go ahead and free the
-> PA memory after calling rb erase on it, which can result in use after free in
-> the adjust overlap path.  This is because the PA is freed without any locks in
-> discard path, as it assumes no other thread will have a reference to it. This
-> assumption was true earlier since our allocation path never gave up the rbtree
-> lock however it is not possible with this approach now.  Essentially, the
-> concept of having two different areas where a PA can be deleted is bringing in
-> additional challenges and complexity, which might make things worse from a
-> maintainers/reviewers point of view.
+I have the feeling there might be a misunderstanding. Userspace is in 
+charge to actually allocate a portion of VA space and manage it. The 
+GPUVA manager just needs to know about those VA space allocations and 
+hence keeps track of them.
 
-Right, I didn't realize that. That is nasty.
+The GPUVA manager is not meant to be an allocator in the sense of 
+finding and providing a hole for a given request.
 
-> After brainstorming a bit, I think there might be a few alternatives here:
-> 
-> 1. Instead of deleting PA in the adjust overlap thread, make it sleep till group
-> discard path goes ahead and deletes/frees it. At this point we can wake it up and retry
-> allocation. 
-> 
-> * Pros: We can be sure that PA would have been removed at the time of retry so
-> we don't waste extra retries. C
-> * Cons: Extra complexity in code. 
-> 
-> 2. Just go for a retry in adjust overlap without doing anything. In ideal case,
-> by the time we start retrying the PA might be already removed. Worse case: We
-> keep looping again and again since discard path has not deleted it yet.
-> 
-> * Pros: Simplest approach, code remains straightforward.
-> * Cons: We can end up uselessly retrying if the discard path doesn't delete the PA fast enough.
+Maybe the non-ideal choice of using drm_mm was implying something else.
 
-Well, I think cond_resched() + goto retry would be OK here. We could also
-cycle the corresponding group lock which would wait for
-ext4_mb_discard_group_preallocations() to finish but that is going to burn
-the CPU even more than the cond_resched() + retry as we'll be just spinning
-on the spinlock. Sleeping is IMHO not warranted as the whole
-ext4_mb_discard_group_preallocations() is running under a spinlock anyway
-so it should better be a very short sleep.
-
-Or actually I have one more possible solution: What the adjusting function
-is doing that it looks up PA before and after ac->ac_o_ex.fe_logical and
-trims start & end to not overlap these PAs. So we could just lookup these
-two PAs (ignoring the deleted state) and then just iterate from these with
-rb_prev() & rb_next() until we find not-deleted ones. What do you think? 
- 
-> 3. The approach of undeleting the PA (proposed in this patchset) that
-> we've already discussed.
 > 
-> Now, to be honest, I still prefer the undelete PA approach as it makes more
-> sense to me and I think the code is simple enough as there are not many paths
-> that might race. Mostly just adjust_overlap and group discard or
-> use_preallocated and group discard.
+> We should probably talk about the design of the GPUVA manager once more 
+> when this should be applicable to all GPU drivers.
 
-Yeah, I'm still not too keen on this but I'm willing to reconsider if 
-above approach proves to be too expensive under ENOSPC conditions...
+That's what I try to figure out with this RFC, how to make it appicable 
+for all GPU drivers, so I'm happy to discuss this. :-)
 
-									Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> 
+>>
+>> For sparse residency the kernel also needs to know the region 
+>> boundaries to make sure that it keeps sparse mappings around.
+> 
+> What?
+
+When userspace creates a new VKBuffer with the 
+VK_BUFFER_CREATE_SPARSE_BINDING_BIT the kernel may need to create sparse 
+mappings in order to ensure that using this buffer without any memory 
+backed mappings doesn't fault the GPU.
+
+Currently, the implementation does this the following way:
+
+1. Userspace creates a new VKBuffer and hence allocates a portion of the 
+VA space for it. It calls into the kernel indicating the new VA space 
+region and the fact that the region is sparse.
+
+2. The kernel picks up the region and stores it in the GPUVA manager, 
+the driver creates the corresponding sparse mappings / page table entries.
+
+3. Userspace might ask the driver to create a couple of memory backed 
+mappings for this particular VA region. The GPUVA manager stores the 
+mapping parameters, the driver creates the corresponding page table entries.
+
+4. Userspace might ask to unmap all the memory backed mappings from this 
+particular VA region. The GPUVA manager removes the mapping parameters, 
+the driver cleans up the corresponding page table entries. However, the 
+driver also needs to re-create the sparse mappings, since it's a sparse 
+buffer, hence it needs to know the boundaries of the region it needs to 
+create the sparse mappings in.
+
+> 
+> Regards,
+> Christian.
+> 
+>>
+>>>
+>>> amdgpu has even gotten so far that the VA allocations are tracked in 
+>>> libdrm in userspace
+>>>
+>>> Regards,
+>>> Christian.
+>>>
+>>>>
+>>>> It serves two purposes:
+>>>>
+>>>> 1. It gives the kernel (in particular the GPUVA manager) the bounds 
+>>>> in which it is allowed to merge mappings. E.g. when a user request 
+>>>> asks for a new mapping and we detect we could merge this mapping 
+>>>> with an existing one (used in another VKBuffer than the mapping 
+>>>> request came for) the driver is not allowed to change the page table 
+>>>> for the existing mapping we want to merge with (assuming that some 
+>>>> drivers would need to do this in order to merge), because the 
+>>>> existing mapping could already be in use and by re-mapping it we'd 
+>>>> potentially cause a fault on the GPU.
+>>>>
+>>>> 2. It is used for sparse residency in a way that such an allocated 
+>>>> VA space region can be flagged as sparse, such that the kernel 
+>>>> always keeps sparse mappings around for the parts of the region that 
+>>>> do not contain actual memory backed mappings.
+>>>>
+>>>> If for your driver merging is always OK, creating a single huge 
+>>>> region would do the trick I guess. Otherwise, we could also add an 
+>>>> option to the GPUVA manager (or a specific region, which could also 
+>>>> be a single huge one) within which it never merges.
+>>>>
+>>>>>
+>>>>> If this can be removed then the entire concept of regions in the GPUVA
+>>>>> can be removed too (drop struct drm_gpuva_region). I say this because
+>>>>> in Xe as I'm porting over to GPUVA the first thing I'm doing after
+>>>>> drm_gpuva_manager_init is calling drm_gpuva_region_insert on the 
+>>>>> entire
+>>>>> address space. To me this seems kinda useless but maybe I'm missing 
+>>>>> why
+>>>>> you need this for Nouveau.
+>>>>>
+>>>>> Matt
+>>>>>
+>>>>>> +/**
+>>>>>> + * @DRM_NOUVEAU_VM_BIND_OP_FREE: Free a reserved VA space region.
+>>>>>> + */
+>>>>>> +#define DRM_NOUVEAU_VM_BIND_OP_FREE 0x1
+>>>>>> +/**
+>>>>>> + * @DRM_NOUVEAU_VM_BIND_OP_MAP:
+>>>>>> + *
+>>>>>> + * Map a GEM object to the GPU's VA space. The mapping must be 
+>>>>>> fully enclosed by
+>>>>>> + * a previously allocated VA space region. If the region is 
+>>>>>> sparse, existing
+>>>>>> + * sparse mappings are overwritten.
+>>>>>> + */
+>>>>>> +#define DRM_NOUVEAU_VM_BIND_OP_MAP 0x2
+>>>>>> +/**
+>>>>>> + * @DRM_NOUVEAU_VM_BIND_OP_UNMAP:
+>>>>>> + *
+>>>>>> + * Unmap an existing mapping in the GPU's VA space. If the region 
+>>>>>> the mapping
+>>>>>> + * is located in is a sparse region, new sparse mappings are 
+>>>>>> created where the
+>>>>>> + * unmapped (memory backed) mapping was mapped previously.
+>>>>>> + */
+>>>>>> +#define DRM_NOUVEAU_VM_BIND_OP_UNMAP 0x3
+>>>>>> +    /**
+>>>>>> +     * @flags: the flags for a &drm_nouveau_vm_bind_op
+>>>>>> +     */
+>>>>>> +    __u32 flags;
+>>>>>> +/**
+>>>>>> + * @DRM_NOUVEAU_VM_BIND_SPARSE:
+>>>>>> + *
+>>>>>> + * Indicates that an allocated VA space region should be sparse.
+>>>>>> + */
+>>>>>> +#define DRM_NOUVEAU_VM_BIND_SPARSE (1 << 8)
+>>>>>> +    /**
+>>>>>> +     * @handle: the handle of the DRM GEM object to map
+>>>>>> +     */
+>>>>>> +    __u32 handle;
+>>>>>> +    /**
+>>>>>> +     * @addr:
+>>>>>> +     *
+>>>>>> +     * the address the VA space region or (memory backed) mapping 
+>>>>>> should be mapped to
+>>>>>> +     */
+>>>>>> +    __u64 addr;
+>>>>>> +    /**
+>>>>>> +     * @bo_offset: the offset within the BO backing the mapping
+>>>>>> +     */
+>>>>>> +    __u64 bo_offset;
+>>>>>> +    /**
+>>>>>> +     * @range: the size of the requested mapping in bytes
+>>>>>> +     */
+>>>>>> +    __u64 range;
+>>>>>> +};
+>>>>>> +
+>>>>>> +/**
+>>>>>> + * struct drm_nouveau_vm_bind - structure for 
+>>>>>> DRM_IOCTL_NOUVEAU_VM_BIND
+>>>>>> + */
+>>>>>> +struct drm_nouveau_vm_bind {
+>>>>>> +    /**
+>>>>>> +     * @op_count: the number of &drm_nouveau_vm_bind_op
+>>>>>> +     */
+>>>>>> +    __u32 op_count;
+>>>>>> +    /**
+>>>>>> +     * @flags: the flags for a &drm_nouveau_vm_bind ioctl
+>>>>>> +     */
+>>>>>> +    __u32 flags;
+>>>>>> +/**
+>>>>>> + * @DRM_NOUVEAU_VM_BIND_RUN_ASYNC:
+>>>>>> + *
+>>>>>> + * Indicates that the given VM_BIND operation should be executed 
+>>>>>> asynchronously
+>>>>>> + * by the kernel.
+>>>>>> + *
+>>>>>> + * If this flag is not supplied the kernel executes the 
+>>>>>> associated operations
+>>>>>> + * synchronously and doesn't accept any &drm_nouveau_sync objects.
+>>>>>> + */
+>>>>>> +#define DRM_NOUVEAU_VM_BIND_RUN_ASYNC 0x1
+>>>>>> +    /**
+>>>>>> +     * @wait_count: the number of wait &drm_nouveau_syncs
+>>>>>> +     */
+>>>>>> +    __u32 wait_count;
+>>>>>> +    /**
+>>>>>> +     * @sig_count: the number of &drm_nouveau_syncs to signal 
+>>>>>> when finished
+>>>>>> +     */
+>>>>>> +    __u32 sig_count;
+>>>>>> +    /**
+>>>>>> +     * @wait_ptr: pointer to &drm_nouveau_syncs to wait for
+>>>>>> +     */
+>>>>>> +    __u64 wait_ptr;
+>>>>>> +    /**
+>>>>>> +     * @sig_ptr: pointer to &drm_nouveau_syncs to signal when 
+>>>>>> finished
+>>>>>> +     */
+>>>>>> +    __u64 sig_ptr;
+>>>>>> +    /**
+>>>>>> +     * @op_ptr: pointer to the &drm_nouveau_vm_bind_ops to execute
+>>>>>> +     */
+>>>>>> +    __u64 op_ptr;
+>>>>>> +};
+>>>>>> +
+>>>>>> +/**
+>>>>>> + * struct drm_nouveau_exec_push - EXEC push operation
+>>>>>> + *
+>>>>>> + * This structure represents a single EXEC push operation. UMDs 
+>>>>>> should pass an
+>>>>>> + * array of this structure via struct drm_nouveau_exec's 
+>>>>>> &push_ptr field.
+>>>>>> + */
+>>>>>> +struct drm_nouveau_exec_push {
+>>>>>> +    /**
+>>>>>> +     * @va: the virtual address of the push buffer mapping
+>>>>>> +     */
+>>>>>> +    __u64 va;
+>>>>>> +    /**
+>>>>>> +     * @va_len: the length of the push buffer mapping
+>>>>>> +     */
+>>>>>> +    __u64 va_len;
+>>>>>> +};
+>>>>>> +
+>>>>>> +/**
+>>>>>> + * struct drm_nouveau_exec - structure for DRM_IOCTL_NOUVEAU_EXEC
+>>>>>> + */
+>>>>>> +struct drm_nouveau_exec {
+>>>>>> +    /**
+>>>>>> +     * @channel: the channel to execute the push buffer in
+>>>>>> +     */
+>>>>>> +    __u32 channel;
+>>>>>> +    /**
+>>>>>> +     * @push_count: the number of &drm_nouveau_exec_push ops
+>>>>>> +     */
+>>>>>> +    __u32 push_count;
+>>>>>> +    /**
+>>>>>> +     * @wait_count: the number of wait &drm_nouveau_syncs
+>>>>>> +     */
+>>>>>> +    __u32 wait_count;
+>>>>>> +    /**
+>>>>>> +     * @sig_count: the number of &drm_nouveau_syncs to signal 
+>>>>>> when finished
+>>>>>> +     */
+>>>>>> +    __u32 sig_count;
+>>>>>> +    /**
+>>>>>> +     * @wait_ptr: pointer to &drm_nouveau_syncs to wait for
+>>>>>> +     */
+>>>>>> +    __u64 wait_ptr;
+>>>>>> +    /**
+>>>>>> +     * @sig_ptr: pointer to &drm_nouveau_syncs to signal when 
+>>>>>> finished
+>>>>>> +     */
+>>>>>> +    __u64 sig_ptr;
+>>>>>> +    /**
+>>>>>> +     * @push_ptr: pointer to &drm_nouveau_exec_push ops
+>>>>>> +     */
+>>>>>> +    __u64 push_ptr;
+>>>>>> +};
+>>>>>> +
+>>>>>>   #define DRM_NOUVEAU_GETPARAM           0x00 /* deprecated */
+>>>>>>   #define DRM_NOUVEAU_SETPARAM           0x01 /* deprecated */
+>>>>>>   #define DRM_NOUVEAU_CHANNEL_ALLOC      0x02 /* deprecated */
+>>>>>> @@ -136,6 +346,9 @@ struct drm_nouveau_gem_cpu_fini {
+>>>>>>   #define DRM_NOUVEAU_NVIF               0x07
+>>>>>>   #define DRM_NOUVEAU_SVM_INIT           0x08
+>>>>>>   #define DRM_NOUVEAU_SVM_BIND           0x09
+>>>>>> +#define DRM_NOUVEAU_VM_INIT            0x10
+>>>>>> +#define DRM_NOUVEAU_VM_BIND            0x11
+>>>>>> +#define DRM_NOUVEAU_EXEC               0x12
+>>>>>>   #define DRM_NOUVEAU_GEM_NEW            0x40
+>>>>>>   #define DRM_NOUVEAU_GEM_PUSHBUF        0x41
+>>>>>>   #define DRM_NOUVEAU_GEM_CPU_PREP       0x42
+>>>>>> @@ -197,6 +410,9 @@ struct drm_nouveau_svm_bind {
+>>>>>>   #define DRM_IOCTL_NOUVEAU_GEM_CPU_FINI       DRM_IOW 
+>>>>>> (DRM_COMMAND_BASE + DRM_NOUVEAU_GEM_CPU_FINI, struct 
+>>>>>> drm_nouveau_gem_cpu_fini)
+>>>>>>   #define DRM_IOCTL_NOUVEAU_GEM_INFO DRM_IOWR(DRM_COMMAND_BASE + 
+>>>>>> DRM_NOUVEAU_GEM_INFO, struct drm_nouveau_gem_info)
+>>>>>>   +#define DRM_IOCTL_NOUVEAU_VM_INIT DRM_IOWR(DRM_COMMAND_BASE + 
+>>>>>> DRM_NOUVEAU_VM_INIT, struct drm_nouveau_vm_init)
+>>>>>> +#define DRM_IOCTL_NOUVEAU_VM_BIND DRM_IOWR(DRM_COMMAND_BASE + 
+>>>>>> DRM_NOUVEAU_VM_BIND, struct drm_nouveau_vm_bind)
+>>>>>> +#define DRM_IOCTL_NOUVEAU_EXEC DRM_IOWR(DRM_COMMAND_BASE + 
+>>>>>> DRM_NOUVEAU_EXEC, struct drm_nouveau_exec)
+>>>>>>   #if defined(__cplusplus)
+>>>>>>   }
+>>>>>>   #endif
+>>>>>> -- 
+>>>>>> 2.39.0
+>>>>>>
+>>>>>
+>>>>
+>>>
+>>
+> 
+
