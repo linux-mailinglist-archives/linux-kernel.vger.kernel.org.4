@@ -2,111 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDA367F0E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E4867F0E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbjA0WGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:06:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
+        id S229607AbjA0WHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjA0WGu (ORCPT
+        with ESMTP id S230058AbjA0WHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:06:50 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAED468F;
-        Fri, 27 Jan 2023 14:06:48 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id s66so5289533oib.7;
-        Fri, 27 Jan 2023 14:06:48 -0800 (PST)
+        Fri, 27 Jan 2023 17:07:41 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414A72E83D
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:07:40 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id jm10so6314522plb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:07:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:from:subject:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TDolccbyviYWRHRADLhQqX8cIwCJYGkq4bB0PFopkh8=;
-        b=kbPiAPK/vpfOO8jg3cwnQZ50wKsPjaNC5CxiUcrrizvGSAV3vmz566lZK+txWlA2E9
-         DeEWVzWjSfhGZ3ztpYJGpQGLHgwGKPQPGDcjs2F8deSDvLtzZRbiM3tdUu8NzthHmv28
-         ZoLdnjCzk+uFqGhKJS6MSO5lbN5TRqRSGEjTqbGAHW4X4098WVGPm0stbkDzrw0k6GYq
-         u8uC863a4v3BJAvpaR1IRfFHJPmSqlCDdqiT4vFuPodla/EElomnJXPjJo31McpCJgxb
-         9k1pyzC6wiCfJyJlkQHPLmNvg6br4EsWmJcMhTTtfkw91/aNVRsdHG7JaxNBSBZQqWKV
-         Of8g==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TzQRCX+PVF8ExmxCtRtKuVa5dWjWhK6hNfkOiY6LP94=;
+        b=ZsPnds5uiSJSgPfWj6uB2v0X1isPsbwhmou0thao6id+wBNbhjMx/UHvwcwitzVaOA
+         PeLZsoJ0L9poYmgvFmGUPJczYzBpdRjkJy+P0epzVvHLgWe20ShNEKJOb5m/8nJUG2Pp
+         i7ZTvjQ13rFzzFFPudN2X18EiXXGYauaXHn1ttb6aUu2pQ4DUKk5hIARccXn9GorkooZ
+         fnEaFJnokdrnW4DrWCOwSHnh43YqcUvrdsyiaHXBjwv4/UWbZV+T17YgcTTMN8ArFL2Z
+         9ZxoerQ5bcuJo01VJeqtKGrotS+duuw58/9B0jqZGawnI57GgTaeo5uIS6SEmtOHwEAH
+         tEMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TDolccbyviYWRHRADLhQqX8cIwCJYGkq4bB0PFopkh8=;
-        b=CzWTpjeWyAclfGLnG0PBKbPayGErv8/uWF/SddzT/mD783QGdfJI3GOK4bF2LXrbUy
-         OQh8CBdT0ixb3jwffwXUHV6laKjcsa/MXTkPDuDBlDYYi6WAuZfTpleYOz+NmxTq+sqC
-         oziDIYGGTizjQBX9GgsmCiZLdbdIIIMwwTA8+JpjExMHi3kLZQ7mnVZcS6bNo5FgjKJN
-         7/trUKGBloSjw6krgSsB13mPogpkVVYMwsN2ODnzyAEEqxLWh7mjq/aoxcGTOC1mXugP
-         uQ1/P1zYO8ESOXWnSLfaa+NC5rR5wuyQ3oGMJUU5Y2ueX+eoqQAxstMCz5cKEYBFz6B2
-         M7iQ==
-X-Gm-Message-State: AO0yUKWDt7S0hg55kngrk0wXggLdtrDjf7r62T653pcXog2Y1E+VdsqX
-        211GxXOcYjjEVT8oexmwrw4yiaWvfzTh/WyO
-X-Google-Smtp-Source: AK7set9RqN688S7fkIeiywT2MHiCrEz0VRsUvqqo1k7CbcpgaSMqdyKbE1eHCHdSyKc8CHdwNY/yFQ==
-X-Received: by 2002:a54:440b:0:b0:364:7618:8d1e with SMTP id k11-20020a54440b000000b0036476188d1emr3117165oiw.34.1674857207258;
-        Fri, 27 Jan 2023 14:06:47 -0800 (PST)
-Received: from [192.168.50.134] (99-176-3-182.lightspeed.brhmal.sbcglobal.net. [99.176.3.182])
-        by smtp.gmail.com with ESMTPSA id v66-20020acade45000000b00369ec58932csm2059424oig.45.2023.01.27.14.06.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 14:06:46 -0800 (PST)
-Message-ID: <4fc782ec-e1f7-3b89-5be9-d5b7bab5c4d3@gmail.com>
-Date:   Fri, 27 Jan 2023 16:06:45 -0600
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TzQRCX+PVF8ExmxCtRtKuVa5dWjWhK6hNfkOiY6LP94=;
+        b=1USjv1wuTglDpHi1hhP7tf+XZEWxFFkW+XRsFIf/sPP6sr/E6ZGDjnR1V2xiFLjx5y
+         jqYWULLlA6G3VNzijGtSSnfZDy29mnlGf9VqRby0118xoq3nPXYycOvUDongWAuOOAMb
+         NmRIXlvarv5rdOInji7XjLhXdNqqTYRIFLIG4bT4lsbGmDiYy3SIoWa9eY2XwYFCjMxM
+         U/XA7ikxU8SNPNabXbBT9Esut2/SVPlknztqH8VmGOiLDMYq6dRfSad4jOKfF1HSEP+q
+         GTMrCzE6k2t1mPIwmNz48Ur4HTThij2vHWJlLOUeadZjqMZfj7+f5AS2z9GEIfBSeYpc
+         8XDw==
+X-Gm-Message-State: AO0yUKV1lUGyNU9Z/UUASQKbiyJpp6DWGEtoaAMzRSfPvKoio49Ji8NU
+        7V2rtCyrpvjcQh4atuOJbKAw4w==
+X-Google-Smtp-Source: AK7set+ScQzB4bLs6IE/mjC9PlfkgmNmLrgleBrv8cUovW567UA/kkrOuHvfzZ97U0K2vEprIByYFw==
+X-Received: by 2002:a17:90a:6949:b0:219:f970:5119 with SMTP id j9-20020a17090a694900b00219f9705119mr153479pjm.1.1674857259613;
+        Fri, 27 Jan 2023 14:07:39 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id em6-20020a17090b014600b00217090ece49sm3168655pjb.31.2023.01.27.14.07.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 14:07:38 -0800 (PST)
+Date:   Fri, 27 Jan 2023 22:07:34 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, like.xu.linux@gmail.com,
+        kan.liang@linux.intel.com, wei.w.wang@intel.com,
+        Like Xu <like.xu@linux.intel.com>
+Subject: Re: [PATCH v2 11/15] KVM: x86: Add XSAVE Support for Architectural
+ LBR
+Message-ID: <Y9RLJsEGjXQ0IAlX@google.com>
+References: <20221125040604.5051-1-weijiang.yang@intel.com>
+ <20221125040604.5051-12-weijiang.yang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] HID: quirks: Add quirk for Logitech G923 Xbox steering
- wheel
-From:   Walt Holman <waltholman09@gmail.com>
-To:     linux-input <linux-input@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>
-References: <823df262-aa1d-4340-666f-07b991fce64b@gmail.com>
-Content-Language: en-US
-In-Reply-To: <823df262-aa1d-4340-666f-07b991fce64b@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221125040604.5051-12-weijiang.yang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/23 16:03, Walt Holman wrote:
-> Hello,
+On Thu, Nov 24, 2022, Yang Weijiang wrote:
+> From: Like Xu <like.xu@linux.intel.com>
 > 
-> This patch adds support for the Logitech G923 Xbox edition steering
-> wheel.
+> On processors supporting XSAVES and XRSTORS, Architectural LBR XSAVE
+> support is enumerated from CPUID.(EAX=0DH, ECX=1):ECX[bit 15].
+> The detailed sub-leaf for Arch LBR is enumerated in CPUID.(0DH, 0FH).
 > 
-> -Walt
+> XSAVES provides a faster means than RDMSR for guest to read all LBRs.
+> When guest IA32_XSS[bit 15] is set, the Arch LBR state can be saved using
+> XSAVES and restored by XRSTORS with the appropriate RFBM.
 > 
-> diff -uprN linux-master-source/drivers/hid/hid-ids.h linux-master-target/drivers/hid/hid-ids.h
-> --- linux-master-source/drivers/hid/hid-ids.h    2023-01-27 15:18:14.000000000 -0600
-> +++ linux-master-target/drivers/hid/hid-ids.h    2023-01-27 15:50:24.077639994 -0600
-> @@ -819,6 +819,7 @@
->   #define USB_DEVICE_ID_LOGITECH_G510_USB_AUDIO    0xc22e
->   #define USB_DEVICE_ID_LOGITECH_G29_WHEEL    0xc24f
->   #define USB_DEVICE_ID_LOGITECH_G920_WHEEL    0xc262
-> +#define USB_DEVICE_ID_LOGITECH_G923_XBOX_WHEEL    0xc26e
->   #define USB_DEVICE_ID_LOGITECH_WINGMAN_F3D    0xc283
->   #define USB_DEVICE_ID_LOGITECH_FORCE3D_PRO    0xc286
->   #define USB_DEVICE_ID_LOGITECH_FLIGHT_SYSTEM_G940    0xc287
-> diff -uprN linux-master-source/drivers/hid/hid-logitech-hidpp.c linux-master-target/drivers/hid/hid-logitech-hidpp.c
-> --- linux-master-source/drivers/hid/hid-logitech-hidpp.c    2023-01-27 15:18:14.000000000 -0600
-> +++ linux-master-target/drivers/hid/hid-logitech-hidpp.c    2023-01-27 15:50:24.077639994 -0600
-> @@ -4347,6 +4347,9 @@ static const struct hid_device_id hidpp_
->       { /* Logitech G920 Wheel over USB */
->         HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G920_WHEEL),
->           .driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS},
-> +    { /* Logitech G923 Wheel (Xbox version) over USB */
-> +      HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G923_XBOX_WHEEL),
-> +        .driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS },
->       { /* Logitech G Pro Gaming Mouse over USB */
->         HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC088) },
+> Signed-off-by: Like Xu <like.xu@linux.intel.com>
+> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 4 ++++
+>  arch/x86/kvm/x86.c     | 2 +-
+>  2 files changed, 5 insertions(+), 1 deletion(-)
 > 
-Signed off by: Walt Holman (waltholman09@gmail.com)
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 359da38a19a1..3bc892e8cf7a 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7733,6 +7733,10 @@ static __init void vmx_set_cpu_caps(void)
+>  		kvm_cpu_cap_check_and_set(X86_FEATURE_DS);
+>  		kvm_cpu_cap_check_and_set(X86_FEATURE_DTES64);
+>  	}
+> +	if (!cpu_has_vmx_arch_lbr()) {
+> +		kvm_cpu_cap_clear(X86_FEATURE_ARCH_LBR);
 
+No, this needs to be opt-in, not opt-out.  I.e. omit the flag from common CPUID
+code and set it if and only if it's fully supported.  It's not out of the realm
+of possibilities that AMD might want to support arch LBRs, at which point those
+CPUs would explode.
+
+> +		kvm_caps.supported_xss &= ~XFEATURE_MASK_LBR;
+> +	}
+>  
+>  	if (!enable_pmu)
+>  		kvm_cpu_cap_clear(X86_FEATURE_PDCM);
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 889be0c9176d..38df08d9d0cb 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -217,7 +217,7 @@ static struct kvm_user_return_msrs __percpu *user_return_msrs;
+>  				| XFEATURE_MASK_BNDCSR | XFEATURE_MASK_AVX512 \
+>  				| XFEATURE_MASK_PKRU | XFEATURE_MASK_XTILE)
+>  
+> -#define KVM_SUPPORTED_XSS     0
+> +#define KVM_SUPPORTED_XSS     XFEATURE_MASK_LBR
+>  
+>  u64 __read_mostly host_efer;
+>  EXPORT_SYMBOL_GPL(host_efer);
+> -- 
+> 2.27.0
+> 
