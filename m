@@ -2,127 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE4567F078
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B6D67F079
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjA0Vfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:35:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
+        id S229946AbjA0VgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjA0Vfj (ORCPT
+        with ESMTP id S229769AbjA0VgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:35:39 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094815AA47
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:35:38 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id z31so4170123pfw.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:35:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ct9ck9vkM14O2ZHT6Pqc9iBFx3XHxaDWOS1C2RoVEAU=;
-        b=YcZG93rCx580JM+/kJQjqJNGa6Jgb6/qZiN5/YfvP4kIVBbWkUzJ8hwxXNlx8Ewpwo
-         LqnLq1rlR7zfYs9S4f0XcmnwRYZDOvhEUroawwmqv2wyiiIIaIK8TvTrrGC/9Q5a4i7o
-         /H9LS2x4jHEq2tldPYhckGPvwPm/D6ztPdWkLVVNLbhVASfIVLJ7VdQvtLLDOtAbpZDl
-         mOQv0isg2ZCsQdiIbaXX0WC3KR9suV8MFrv41WyqGXwMi55LYe1tgFvcvKD6WR3wetWZ
-         itqs0kGWR9UYPR5om9kTa4s6pQeQceN/FpGWkJJLYK96iPp3ebtI0ncdPp7Y4tYKAGB9
-         WMvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ct9ck9vkM14O2ZHT6Pqc9iBFx3XHxaDWOS1C2RoVEAU=;
-        b=A+Th/Xf3EgbaHR+FIyAUcvhahbM4pqsn9VafhWTQ/CXXztRHNr72CBDIrnhyb+ds2H
-         rxJeaJQRWZ19KC40dI/PW4zGfpr7GMRr8v7Z04v1CeXWrf194w/TgVDQtcGpPR1GogGS
-         qMgW0a1RmgObRudmQx9spoJlytFma8xDpIn0k7LTPetD25N9oIzsGeRZud5h+tyXXowT
-         pSYGvVKyngAq5swAx/dxG9v/Tac2BhH36Vh3CmrXhThwMNoDjC9vIFnU+r4ePX/0vUu4
-         3FdWqvesp/jN0H0vP2svP1055V9M1gx5+q7XR0kLY/GLzC3Yjq/gKaCNQvgPlkAha+g8
-         d92A==
-X-Gm-Message-State: AO0yUKVQ752HmdhuKiP9Mw1kz5DGCUmsys0IA3T20jzF3nrV7KUAPnus
-        lZy35E8ASsIDAmRvhmtyI+653QHzmF7OxCTv1wtHIQ==
-X-Google-Smtp-Source: AK7set8A87a1b6gwb4OnNq2XRUc7qhsa9qKHiaWo49QwN+9e+0qsFtowQYDUOK06dTepf46OknaZKx06adJ0S04TZoY=
-X-Received: by 2002:aa7:91d3:0:b0:592:61cc:5aeb with SMTP id
- z19-20020aa791d3000000b0059261cc5aebmr608421pfa.59.1674855336983; Fri, 27 Jan
- 2023 13:35:36 -0800 (PST)
+        Fri, 27 Jan 2023 16:36:12 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C085A351;
+        Fri, 27 Jan 2023 13:36:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674855368; x=1706391368;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Gkg6K5SC88XcNSOy70yqKkpx83kTBtchNgAEpKJ1XIQ=;
+  b=OzsWmyPGnck7vgKfWw0WiwReI0/yTAR+rm/f7mn4pLpLpedFkHp4F50o
+   AYWaZruD9cSjTeTlDHXPi2+7cqgXyVCF8JzJszzI57ErNUK+OBkmncMyE
+   L8z3pXdnebN99N6kK8da4OQPGaUelAWMydKsRfuKIBloxyqW9/+e7lVB8
+   wvWezqKe5rHtGQvitaBBeXpCq1mnp1bTcpW7vbJLXZQ07IzI8/OdddBQr
+   F1fbVxr3NxJnro2jLTTYcIp7VYxAWFYjcrhER55Qv+Jtz0Id6Xn6HnOQL
+   RdFFk3MPTzn+xXIYZ3opFTJizrOShFXAeS92h6qWxgRfqDqU9XJc+IIpW
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="389577234"
+X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
+   d="scan'208";a="389577234"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 13:36:07 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="805957947"
+X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
+   d="scan'208";a="805957947"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.161.50])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 13:36:07 -0800
+Date:   Fri, 27 Jan 2023 13:36:05 -0800
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:
+Message-ID: <Y9RDxWwKX+OPl7V1@aschofie-mobl2>
+References: <cover.1674070170.git.alison.schofield@intel.com>
+ <63d32fe783ee2_ea2222949f@dwillia2-xfh.jf.intel.com.notmuch>
+ <Y9P3ipL28W7N1bLm@aschofie-mobl2>
+ <63d423218e854_3a36e5294fd@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-References: <20230127001141.407071-1-saravanak@google.com> <Y9Q0culPHGNZkQz9@euler>
-In-Reply-To: <Y9Q0culPHGNZkQz9@euler>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 27 Jan 2023 13:35:00 -0800
-Message-ID: <CAGETcx9oohQ0SeHGQNsbVpitG-freYhbTUm34TbzMQAeLGjSfw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/11] fw_devlink improvements
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63d423218e854_3a36e5294fd@dwillia2-xfh.jf.intel.com.notmuch>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 12:30 PM Colin Foster
-<colin.foster@in-advantage.com> wrote:
->
-> On Thu, Jan 26, 2023 at 04:11:27PM -0800, Saravana Kannan wrote:
-> > Dmitry, Maxim(s), Miquel, Luca, Doug, Colin, Martin, Jean-Philippe,
-> >
-> > I've Cc-ed you because I had pointed you to v1 of this series + the
-> > patches in that thread at one point or another as a fix to some issue
-> > you were facing. It'd appreciate it if you can test this series and
-> > report any issues, or things it fixed and give Tested-bys.
->
-> I applied this on my working net-next/main development branch and can
-> confirm I am able to successfully boot the Beaglebone Black.
->
-> Tested-by: Colin Foster <colin.foster@in-advantage.com>
+On Fri, Jan 27, 2023 at 11:16:49AM -0800, Dan Williams wrote:
+> Alison Schofield wrote:
+> > On Thu, Jan 26, 2023 at 05:59:03PM -0800, Dan Williams wrote:
+> > > alison.schofield@ wrote:
+> > > > From: Alison Schofield <alison.schofield@intel.com>
+> > > > 
+> > > > Subject: [PATCH v5 0/5] CXL Poison List Retrieval & Tracing
+> > > > 
+> > > > Changes in v5:
+> > > > - Rebase on cxl/next 
+> > > > - Use struct_size() to calc mbox cmd payload .min_out
+> > > > - s/INTERNAL/INJECTED mocked poison record source
+> > > > - Added Jonathan Reviewed-by tag on Patch 3
+> > > > 
+> > > > Link to v4:
+> > > > https://lore.kernel.org/linux-cxl/cover.1671135967.git.alison.schofield@intel.com/
+> > > > 
+> > > > Add support for retrieving device poison lists and store the returned
+> > > > error records as kernel trace events.
+> > > > 
+> > > > The handling of the poison list is guided by the CXL 3.0 Specification
+> > > > Section 8.2.9.8.4.1. [1] 
+> > > > 
+> > > > Example, triggered by memdev:
+> > > > $ echo 1 > /sys/bus/cxl/devices/mem3/trigger_poison_list
+> > > > cxl_poison: memdev=mem3 pcidev=cxl_mem.3 region= region_uuid=00000000-0000-0000-0000-000000000000 dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
+> > > 
+> > > I think the pcidev= field wants to be called something like "host" or
+> > > "parent", because there is no strict requirement that a 'struct
+> > > cxl_memdev' is related to a 'struct pci_dev'. In fact in that example
+> > > "cxl_mem.3" is a 'struct platform_device'. Now that I think about it, I
+> > > think all CXL device events should be emitting the PCIe serial number
+> > > for the memdev.
+> > ]
+> > 
+> > Will do, 'host' and add PCIe serial no.
+> > 
+> > > 
+> > > I will look in the implementation, but do region= and region_uuid= get
+> > > populated when mem3 is a member of the region?
+> > 
+> > Not always.
+> > In the case above, where the trigger was by memdev, no.
+> > Region= and region_uuid= (and in the follow-on patch, hpa=) only get
+> > populated if the poison was triggered by region, like the case below.
+> > 
+> > It could be looked up for the by memdev cases. Is that wanted?
+> 
+> Just trying to understand the semantics. However, I do think it makes sense
+> for a memdev trigger to lookup information on all impacted regions
+> across all of the device's DPA and the region trigger makes sense to
+> lookup all memdevs, but bounded by the DPA that contributes to that
+> region. I just want to avoid someone having to trigger the region to get
+> extra information that was readily available from a memdev listing.
+> 
 
-Thanks!
+Dan - 
 
--Saravana
+Confirming my take-away from this email, and our chat:
+
+Remove the by-region trigger_poison_list option entirely. User space
+needs to trigger by-memdev the memdevs participating in the region and
+filter those events by region.
+
+Add the region info (region name, uuid) to the TRACE_EVENTs when the
+poisoned DPA is part of any region.
+
+Alison
+
+> > 
+> > Thanks for the reviews Dan!
+> > > 
+> > > > 
+> > > > Example, triggered by region:
+> > > > $ echo 1 > /sys/bus/cxl/devices/region5/trigger_poison_list
+> > > > cxl_poison: memdev=mem0 pcidev=cxl_mem.0 region=region5 region_uuid=bfcb7a29-890e-4a41-8236-fe22221fc75c dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
+> > > > cxl_poison: memdev=mem1 pcidev=cxl_mem.1 region=region5 region_uuid=bfcb7a29-890e-4a41-8236-fe22221fc75c dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
+> > > > 
+> > > > [1]: https://www.computeexpresslink.org/download-the-specification
+> > > > 
+> > > > Alison Schofield (5):
+> > > >   cxl/mbox: Add GET_POISON_LIST mailbox command
+> > > >   cxl/trace: Add TRACE support for CXL media-error records
+> > > >   cxl/memdev: Add trigger_poison_list sysfs attribute
+> > > >   cxl/region: Add trigger_poison_list sysfs attribute
+> > > >   tools/testing/cxl: Mock support for Get Poison List
+> > > > 
+> > > >  Documentation/ABI/testing/sysfs-bus-cxl | 28 +++++++++
+> > > >  drivers/cxl/core/mbox.c                 | 78 +++++++++++++++++++++++
+> > > >  drivers/cxl/core/memdev.c               | 45 ++++++++++++++
+> > > >  drivers/cxl/core/region.c               | 33 ++++++++++
+> > > >  drivers/cxl/core/trace.h                | 83 +++++++++++++++++++++++++
+> > > >  drivers/cxl/cxlmem.h                    | 69 +++++++++++++++++++-
+> > > >  drivers/cxl/pci.c                       |  4 ++
+> > > >  tools/testing/cxl/test/mem.c            | 42 +++++++++++++
+> > > >  8 files changed, 381 insertions(+), 1 deletion(-)
+> > > > 
+> > > > 
+> > > > base-commit: 589c3357370a596ef7c99c00baca8ac799fce531
+> > > > -- 
+> > > > 2.37.3
+> > > > 
+> > > 
+> > > 
+> 
+> 
