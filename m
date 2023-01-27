@@ -2,132 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98C867DF94
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEF367DFA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjA0I6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 03:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
+        id S232116AbjA0JC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:02:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjA0I6H (ORCPT
+        with ESMTP id S229560AbjA0JCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 03:58:07 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCDD298C0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:58:05 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso2904011wmq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:58:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PYMteubS+4lwOGc2I7JiDeXqE7nT4Xb62g6ujdBjlpE=;
-        b=gly/Ah19V9gpzED0uxuLEtUd8b2f3KZf9Z3F5llZ7GPh2M2DQsUzBwNWErueqqKwOK
-         2IAcgKEbiNGtg++g45thG+xXmIA4Tto8tPfjISHiN5h/kUVp0xZnk9tn7XQwdrlWnZkY
-         tn1OOjDuwMXRVnLhLwkJ20zWcnheaHrd95IgmLye+uFgvmHWG9apsp9IubCtRHBI2MzC
-         oIJfLmqRPKMAtFdTD6OUc0pl8hwNl0ALmQnKK8GS6pYz6+ErcmE2MDOlXhSl3sntDOO6
-         Wo4TU7LR0Ttl99QFAGCq/czH+h4HdB9ejMDMIXBY9mzkXgHaEm4g6jh3Y9R9dVpkCj+9
-         07Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PYMteubS+4lwOGc2I7JiDeXqE7nT4Xb62g6ujdBjlpE=;
-        b=chzaNHsfLY8RrQfrCDrn+IrsMphMPnLEZkmxJiSWXltCuWQNMJJTyeHMPckl32/P0v
-         ehIqn7kqRSj4QAwsXJL4EoT1dcaKMg19i9441Ir3UyVXrmdy/+IuUAgfncmurr6qIMem
-         Uz5MsUkh5mj3nJmdUWWSpdjO3WWLPKrgF8jl7qZphj3vfePmDfiv95rXT36wdt4YhEIa
-         tgrUv7KCfbDWjHtI6lKSsNDxVXaC6VZaGDDqjknpFZHEQrhROOiqbJN97grUxcOGDD8u
-         TvtZiO2atFEGkMGz9BpoJX3ZHbjDlhEo8Yyw9ez50gAH/wxdfP6QURyAiNNnYPZ8GO3M
-         pseA==
-X-Gm-Message-State: AFqh2kol9xPYohG399kUToCR/hwTvsKdc2/bGOBsUxiN4GZ6nZaoj9ST
-        crOBNOXUIUONW+6Hb2O5+WEVSQ==
-X-Google-Smtp-Source: AMrXdXtav/oM3qM10MujDBkbMkvfbbVRSYWQH3g8HyfDNMvHTIctgxxkkiyCrXTT8buQVGYHDEyK7Q==
-X-Received: by 2002:a1c:f317:0:b0:3d0:480b:ac53 with SMTP id q23-20020a1cf317000000b003d0480bac53mr38981050wmq.12.1674809884477;
-        Fri, 27 Jan 2023 00:58:04 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id a19-20020a05600c349300b003cfa622a18asm7342751wmq.3.2023.01.27.00.58.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 00:58:04 -0800 (PST)
-Date:   Fri, 27 Jan 2023 09:58:03 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Message-ID: <20230127085803.ruj624323wxeyllx@orel>
-References: <20230123112803.817534-1-alexghiti@rivosinc.com>
- <20230123142554.f22ajf6upfk2ybxk@orel>
- <20230125104102.2thvourt3lx2p36a@orel>
- <CAHVXubjUCmk6xGTCPzMujYqKUwE0bhQBqd8A+=yq7ijQZtBObg@mail.gmail.com>
- <20230125151041.ijhjqswqiwmrzljd@orel>
- <CAHVXubjR8AsZhMz59goxfmf8LmA4bjePKUx=AkvmbqoF42tzmA@mail.gmail.com>
+        Fri, 27 Jan 2023 04:02:54 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1DE46E92
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:02:46 -0800 (PST)
+Received: from 8bytes.org (p5b006afb.dip0.t-ipconnect.de [91.0.106.251])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id 244E326300F;
+        Fri, 27 Jan 2023 10:02:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1674810165;
+        bh=1kNu2BN86NFgfS60v9TeXvBOhW4cm7kxxYsbD7dJlLs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K470ePYqrjCiwz0ijJJNlQ++TeRAjBf0aK2xRN9eM27gInrpuui2C7xyigp1xeBW8
+         XcK+o2wHHs0S3Z0QUnq89CvF+fZhyEKlZP3TY1Y0/6RjhzKPO1vw9D/iYJ7Ivtmkth
+         RD2ffRXX4ysZJq0YHrzFSWpGeXqQymfg0qTccJ2z4d8vE1i9U3FRzGr0xaDhQ4zfsx
+         RCoa31o3hyO5jXXhHxbHNYWw6anQ4fadnFhH3eNSP+t2KaLzXdh/Pz6jOWItm3GB7b
+         k4kuOLctTRcMEFwO74VAfqZbA3V6JTK3jp9Z74bR7cZ1ziPZjWCJU56k3GupAbOMOR
+         8H6e4uEv0HROA==
+Date:   Fri, 27 Jan 2023 10:02:43 +0100
+From:   =?iso-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>
+To:     Richard Weinberger <richard.weinberger@gmail.com>
+Cc:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y9OTM/itvVnn45p3@8bytes.org>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <Y9Ex3ZUIFxwOBg1n@work-vm>
+ <Y9E5Cg7mreDx737N@redhat.com>
+ <CAFLxGvwHRK3vyXiCv5ELvrDSEkcDgV5c6pNnWgWhcATfp1dedA@mail.gmail.com>
+ <Y9KVHnHnig4jwNPx@work-vm>
+ <CAFLxGvyMncqjkEXiOqenQu+rZW46RP7UorXs36+awmgnBxTGhA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAHVXubjR8AsZhMz59goxfmf8LmA4bjePKUx=AkvmbqoF42tzmA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFLxGvyMncqjkEXiOqenQu+rZW46RP7UorXs36+awmgnBxTGhA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 09:45:21AM +0100, Alexandre Ghiti wrote:
-...
-> > > > > > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> > > > > > index f08b25195ae7..58107bd56f8f 100644
-> > > > > > --- a/drivers/of/fdt.c
-> > > > > > +++ b/drivers/of/fdt.c
-> > > > > > @@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
-> > > > > >  static void __early_init_dt_declare_initrd(unsigned long start,
-> > > > > >                                        unsigned long end)
-> > > > > >  {
-> > > > > > -   /* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
-> > > > > > -    * enabled since __va() is called too early. ARM64 does make use
-> > > > > > -    * of phys_initrd_start/phys_initrd_size so we can skip this
-> > > > > > -    * conversion.
-> > > > > > +   /*
-> > > > > > +    * __va() is not yet available this early on some platforms. In that
-> > > > > > +    * case, the platform uses phys_initrd_start/phys_initrd_size instead
-> > > > > > +    * and does the VA conversion itself.
-> > > > > >      */
-> > > > > > -   if (!IS_ENABLED(CONFIG_ARM64)) {
-> > > > > > +   if (!IS_ENABLED(CONFIG_ARM64) &&
-> > > > > > +       !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
-> > > > >
-> > > > > There are now two architectures, so maybe it's time for a new config
-> > > > > symbol which would be selected by arm64 and riscv64 and then used here,
-> > > > > e.g.
-> > > > >
-> > > > >   if (!IS_ENABLED(CONFIG_NO_EARLY_LINEAR_MAP)) {
-> > > >
-> > > > I see v5 left this as it was. Any comment on this suggestion?
-> > >
-> > > Introducing a config for this only use case sounds excessive to me,
-> > > but I'll let Rob decide what he wants to see here.
+On Thu, Jan 26, 2023 at 04:13:11PM +0100, Richard Weinberger wrote:
+> On Thu, Jan 26, 2023 at 3:58 PM Dr. David Alan Gilbert
+> <dgilbert@redhat.com> wrote:
 > >
-> > To me, the suggestion is less about trying to tidy up DT code and more
-> > about bringing this comment about arm64 and riscv64 not being able to
-> > use the linear map as early as other architectures up out of the
-> > depths of DT code. Seeing an architecture select something like
-> > NO_EARLY_LINEAR_MAP, which has a paragraph explaining what that
-> > means, may help avoid other early uses of __va() which may or may
-> > not fail quickly and cleanly with a BUG.
-> >
+> > * Richard Weinberger (richard.weinberger@gmail.com) wrote:
+> > > On Wed, Jan 25, 2023 at 3:22 PM Daniel P. Berrangé <berrange@redhat.com> wrote:
+> > Are you aware of anything that you'd use instead?
 > 
-> You're right, do you have some bandwidth for doing that?
->
+> Well, I'd think towards iSCSI over TLS to protect the IO transport.
 
-Sure, I'll post something today.
+In the context of confidential computing this makes only sense if the
+scsi target is part of the trusted base, which means it needs to be
+attested and protected against outside attacks. Currently all CoCo
+implementations I know of treat disk storage as untrusted.
 
-Thanks,
-drew
+Besides that the same problems exist with a VMs encrypted memory. The
+hardware does not guarantee that the HV can not fiddle with your private
+memory, it only guarantees that you can detect such fiddling and that
+the private data is encrypted. The HV can also still trace memory access
+patterns of confidential guests by setting the right permissions in the
+nested page table.
+
+So storage and memory of a CoCo VM have in common that the transport is
+not secure, but there are measures to detect if someone fiddles with
+your data on the transport or at rest, for memory implemented in
+hardware, and for storage in software by using dm-crypt together with
+dm-verity or dm-integrity.
+
+Regards,
+
+	Joerg
