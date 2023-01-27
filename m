@@ -2,87 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD47567E4F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030FA67E4F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233656AbjA0MSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
+        id S233834AbjA0MS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233981AbjA0MSi (ORCPT
+        with ESMTP id S233754AbjA0MSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:18:38 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9004419F30
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:15:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=C7nFkPl7lubRhxaJVnuEdeLBgE/QirVa7r2a+1q8ftY=; b=C5tF6DY71tsSBvUzBNyQW97/NX
-        lFfu9QYIc5s2xLfT6Km//lYmdxTvjyagG5R6HWG8h1bq4yn1IzC3jU1mABI/z5ogOhz49XdsGarpk
-        mcNxGdmzZ+ddgrlZc+9N7yb63ATX25oh/ziRkyr4jRlQQ0xjoPr4loecK5cCTgh/ePCHwBGlITjur
-        eCSfUE/9RoLknLbhG1fhvxaM9hKq69RqAYYvuSFVwUykJS9uJbx7FV0mgblwnyJBZs++Q3m6pGzFZ
-        1RQ0OXVI+k9RMwUpWTgf3mxhvGi0iZOB3lgE4xtE2MVA9BOKHWPouPuEJweDguF0Bjfu8AclBmClW
-        E8BFBfwg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pLNcX-002mCX-08;
-        Fri, 27 Jan 2023 12:14:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C2DBE300446;
-        Fri, 27 Jan 2023 13:14:47 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1DB41209E6751; Fri, 27 Jan 2023 13:14:47 +0100 (CET)
-Date:   Fri, 27 Jan 2023 13:14:47 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, sfr@canb.auug.org.au
-Subject: Re: objtool warning from next-20230125
-Message-ID: <Y9PAN12SPHuGL99G@hirez.programming.kicks-ass.net>
-References: <20230126182302.GA687063@paulmck-ThinkPad-P17-Gen-1>
- <20230126205954.zk3t4fpmxqowfu2d@treble>
+        Fri, 27 Jan 2023 07:18:41 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552EF410BB
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:15:14 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id i185so5085409vsc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:15:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=voPlRXxpBMdM10/rkXj6aBG2pUgoFvgwiJZKHRVQeYQ=;
+        b=Sff+hvOU2iCljIh8CEpYcZUcRd0FRki4/VqfCxncuM4Uf00IxJXzS+8RF5NorDYDrw
+         +DuYI5nqbF7lPekG29BAMsQY6xP/EZ7qMK/dvSsoY9vANM5W00IkRBVsCet7tZLJRopH
+         X/PdE4aqSJoE1Wkbp8Xi4NK8DkerjDWMYCnz6pooap+TrpVTnBPjLGVVEmfrrbCW8SFs
+         B/TNOUX7JTd20zRHEWCxogSPcOhbBqFCC6b2Nd8OIUqTrgFYZ3gZMMjEJ0BkN4W2SAJb
+         qVSL90VSO1/zClkUvjrvtGkDigSpFsQ6P/UcW/fv4k5K54g1OdGS9tPAv82Eqjqf1Vx3
+         9gnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=voPlRXxpBMdM10/rkXj6aBG2pUgoFvgwiJZKHRVQeYQ=;
+        b=Wvd6di2BrhkNvDe6aldZzsYwP6HVzL4UBXFr50OpROZxZNZam/qK6h9kEZkWpi/h4R
+         T0JbFj9QE5X3MMo+cEspsU7miiKCTwtvYQLgh57sRkmWEW6RyN5yBw8MwpVHyQ/6CC6F
+         rOWayf4sbEJh3Vn1DweyGdPm5WJEBU4Zak1/1bTeoej+UCI1icgugG+4JUgKIrSNa+46
+         9kwDM9FScU1B8XlajZgrwarZk+VejzFHzQB2+eOIi+vxF9+YWmt2QdkiN+fm2FcJZV8X
+         sUx2Si7S2Y9T3c2d/hjDBTb9FlLdBhaQjIveG+G/fKBdumjHCOQbxarijFksnsKbzCB4
+         zCBA==
+X-Gm-Message-State: AFqh2kpvte4bNViA9KSvTs2W7cHVwGrJ+XPLfmxuSTx+Ay2F9Jvtzzmg
+        AM9uejOodIzPqBTRTFayMhYJVYU30STz2yRpz0EI4g==
+X-Google-Smtp-Source: AMrXdXtq0XX0/BXZTy4vtKTn/J0d3fbU8rAMqVfyLhoN29ydFe2ekri5sPJZKqdpzOA8471Maw+InB+gRIX3839s1Vg=
+X-Received: by 2002:a05:6102:c16:b0:3d3:e027:877a with SMTP id
+ x22-20020a0561020c1600b003d3e027877amr5440401vss.0.1674821706879; Fri, 27 Jan
+ 2023 04:15:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126205954.zk3t4fpmxqowfu2d@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230112140304.1830648-1-apatel@ventanamicro.com>
+ <20230112140304.1830648-2-apatel@ventanamicro.com> <20230126154753.txhgaqgudnksymrm@orel>
+In-Reply-To: <20230126154753.txhgaqgudnksymrm@orel>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Fri, 27 Jan 2023 17:44:54 +0530
+Message-ID: <CAK9=C2UEF=ta08wwm=nnHgL9yqFCa_03L6UX-SuNLffHhXc45Q@mail.gmail.com>
+Subject: Re: [PATCH 1/7] RISC-V: Add AIA related CSR defines
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 12:59:54PM -0800, Josh Poimboeuf wrote:
-> On Thu, Jan 26, 2023 at 10:23:02AM -0800, Paul E. McKenney wrote:
-> > Hello!
-> > 
-> > I have started seeing these objtool warnings from a wide variety of
-> > KASAN-enabled rcutorture-related test scenarios in next-20230125.  It has
-> > been awhile since I tested -next, so I am not yet sure where this started.
-> > 
-> > vmlinux.o: warning: objtool: __asan_memset+0x34: call to __memset() with UACCESS enabled
-> > vmlinux.o: warning: objtool: __asan_memmove+0x4d: call to __memmove() with UACCESS enabled
-> > vmlinux.o: warning: objtool: __asan_memcpy+0x4d: call to __memcpy() with UACCESS enabled
-> > 
-> > As usual, should I be worried?
-> 
-> This apparently came from Peter's
-> 
->   69d4c0d32186 ("entry, kasan, x86: Disallow overriding mem*() functions")
-> 
-> but I have no idea how this is supposed to work.  Peter?
+On Thu, Jan 26, 2023 at 9:17 PM Andrew Jones <ajones@ventanamicro.com> wrote:
+>
+> On Thu, Jan 12, 2023 at 07:32:58PM +0530, Anup Patel wrote:
+> > The RISC-V AIA specification improves handling per-HART local interrupts
+> > in a backward compatible manner. This patch adds defines for new RISC-V
+> > AIA CSRs.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/csr.h | 93 ++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 93 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> > index 0e571f6483d9..d608dac4b19f 100644
+> > --- a/arch/riscv/include/asm/csr.h
+> > +++ b/arch/riscv/include/asm/csr.h
+> > @@ -73,7 +73,10 @@
+> >  #define IRQ_S_EXT            9
+> >  #define IRQ_VS_EXT           10
+> >  #define IRQ_M_EXT            11
+> > +#define IRQ_S_GEXT           12
+> >  #define IRQ_PMU_OVF          13
+> > +#define IRQ_LOCAL_MAX                (IRQ_PMU_OVF + 1)
+> > +#define IRQ_LOCAL_MASK               ((_AC(1, UL) << IRQ_LOCAL_MAX) - 1)
+>
+> How about instead of the above two defines we do
+>
+>   #define IRQ_LOCAL_MASK GENMASK(13, 0)
+>
+> And in general it might be nice to put GENMASK to work for all the
+> new masks below.
+>
+> >
+> >  /* Exception causes */
+> >  #define EXC_INST_MISALIGNED  0
+> > @@ -156,6 +159,27 @@
+> >                                (_AC(1, UL) << IRQ_S_TIMER) | \
+> >                                (_AC(1, UL) << IRQ_S_EXT))
+> >
+> > +/* AIA CSR bits */
+> > +#define TOPI_IID_SHIFT               16
+> > +#define TOPI_IID_MASK                _AC(0xfff, UL)
+> > +#define TOPI_IPRIO_MASK              _AC(0xff, UL)
+> > +#define TOPI_IPRIO_BITS              8
+> > +
+> > +#define TOPEI_ID_SHIFT               16
+> > +#define TOPEI_ID_MASK                _AC(0x7ff, UL)
+> > +#define TOPEI_PRIO_MASK              _AC(0x7ff, UL)
+> > +
+> > +#define ISELECT_IPRIO0               0x30
+> > +#define ISELECT_IPRIO15              0x3f
+> > +#define ISELECT_MASK         _AC(0x1ff, UL)
+> > +
+> > +#define HVICTL_VTI           _AC(0x40000000, UL)
+>
+> I'd rather read this as '1 << 30' to match the spec and other
+> bit masks in this file. Actually, it'd be nice if BIT() was
+> used throughout this file, e.g. #define HVICTL_VTI BIT(30)
+>
+> > +#define HVICTL_IID           _AC(0x0fff0000, UL)
+> > +#define HVICTL_IID_SHIFT     16
+> > +#define HVICTL_DPR           _AC(0x00000200, UL)
+> > +#define HVICTL_IPRIOM                _AC(0x00000100, UL)
+> > +#define HVICTL_IPRIO         _AC(0x000000ff, UL)
+> > +
+> >  /* xENVCFG flags */
+> >  #define ENVCFG_STCE                  (_AC(1, ULL) << 63)
+> >  #define ENVCFG_PBMTE                 (_AC(1, ULL) << 62)
+> > @@ -250,6 +274,18 @@
+> >  #define CSR_STIMECMP         0x14D
+> >  #define CSR_STIMECMPH                0x15D
+> >
+> > +/* Supervisor-Level Window to Indirectly Accessed Registers (AIA) */
+> > +#define CSR_SISELECT         0x150
+> > +#define CSR_SIREG            0x151
+> > +
+> > +/* Supervisor-Level Interrupts (AIA) */
+> > +#define CSR_STOPEI           0x15c
+> > +#define CSR_STOPI            0xdb0
+> > +
+> > +/* Supervisor-Level High-Half CSRs (AIA) */
+> > +#define CSR_SIEH             0x114
+> > +#define CSR_SIPH             0x154
+> > +
+> >  #define CSR_VSSTATUS         0x200
+> >  #define CSR_VSIE             0x204
+> >  #define CSR_VSTVEC           0x205
+> > @@ -279,8 +315,32 @@
+> >  #define CSR_HGATP            0x680
+> >  #define CSR_HGEIP            0xe12
+> >
+> > +/* Virtual Interrupts and Interrupt Priorities (H-extension with AIA) */
+> > +#define CSR_HVIEN            0x608
+> > +#define CSR_HVICTL           0x609
+> > +#define CSR_HVIPRIO1         0x646
+> > +#define CSR_HVIPRIO2         0x647
+> > +
+> > +/* VS-Level Window to Indirectly Accessed Registers (H-extension with AIA) */
+> > +#define CSR_VSISELECT                0x250
+> > +#define CSR_VSIREG           0x251
+> > +
+> > +/* VS-Level Interrupts (H-extension with AIA) */
+> > +#define CSR_VSTOPEI          0x25c
+> > +#define CSR_VSTOPI           0xeb0
+> > +
+> > +/* Hypervisor and VS-Level High-Half CSRs (H-extension with AIA) */
+> > +#define CSR_HIDELEGH         0x613
+> > +#define CSR_HVIENH           0x618
+> > +#define CSR_HVIPH            0x655
+> > +#define CSR_HVIPRIO1H                0x656
+> > +#define CSR_HVIPRIO2H                0x657
+> > +#define CSR_VSIEH            0x214
+> > +#define CSR_VSIPH            0x254
+> > +
+> >  #define CSR_MSTATUS          0x300
+> >  #define CSR_MISA             0x301
+> > +#define CSR_MIDELEG          0x303
+> >  #define CSR_MIE                      0x304
+> >  #define CSR_MTVEC            0x305
+> >  #define CSR_MENVCFG          0x30a
+> > @@ -297,6 +357,25 @@
+> >  #define CSR_MIMPID           0xf13
+> >  #define CSR_MHARTID          0xf14
+> >
+> > +/* Machine-Level Window to Indirectly Accessed Registers (AIA) */
+> > +#define CSR_MISELECT         0x350
+> > +#define CSR_MIREG            0x351
+> > +
+> > +/* Machine-Level Interrupts (AIA) */
+> > +#define CSR_MTOPEI           0x35c
+> > +#define CSR_MTOPI            0xfb0
+> > +
+> > +/* Virtual Interrupts for Supervisor Level (AIA) */
+> > +#define CSR_MVIEN            0x308
+> > +#define CSR_MVIP             0x309
+> > +
+> > +/* Machine-Level High-Half CSRs (AIA) */
+> > +#define CSR_MIDELEGH         0x313
+> > +#define CSR_MIEH             0x314
+> > +#define CSR_MVIENH           0x318
+> > +#define CSR_MVIPH            0x319
+> > +#define CSR_MIPH             0x354
+> > +
+> >  #ifdef CONFIG_RISCV_M_MODE
+> >  # define CSR_STATUS  CSR_MSTATUS
+> >  # define CSR_IE              CSR_MIE
+> > @@ -307,6 +386,13 @@
+> >  # define CSR_TVAL    CSR_MTVAL
+> >  # define CSR_IP              CSR_MIP
+> >
+> > +# define CSR_IEH             CSR_MIEH
+> > +# define CSR_ISELECT CSR_MISELECT
+> > +# define CSR_IREG    CSR_MIREG
+> > +# define CSR_IPH             CSR_MIPH
+> > +# define CSR_TOPEI   CSR_MTOPEI
+> > +# define CSR_TOPI    CSR_MTOPI
+> > +
+> >  # define SR_IE               SR_MIE
+> >  # define SR_PIE              SR_MPIE
+> >  # define SR_PP               SR_MPP
+> > @@ -324,6 +410,13 @@
+> >  # define CSR_TVAL    CSR_STVAL
+> >  # define CSR_IP              CSR_SIP
+> >
+> > +# define CSR_IEH             CSR_SIEH
+> > +# define CSR_ISELECT CSR_SISELECT
+> > +# define CSR_IREG    CSR_SIREG
+> > +# define CSR_IPH             CSR_SIPH
+> > +# define CSR_TOPEI   CSR_STOPEI
+> > +# define CSR_TOPI    CSR_STOPI
+> > +
+> >  # define SR_IE               SR_SIE
+> >  # define SR_PIE              SR_SPIE
+> >  # define SR_PP               SR_SPP
+> > --
+> > 2.34.1
+> >
+>
+> Besides my preference for GENMASK and BIT, this looks good to me.
+>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
-Durr.. I'm not sure why I put them in the uaccess_safe_builtin[] array.
+Thanks, I will address all your comments in v2.
 
-So yeah, this reproduces using defconfig+KASAN, removing the functions
-from the array shuts it up and doesn't generate new ones -- for that
-config.
-
-Let me try and build a few more .configs...
+Regards,
+Anup
