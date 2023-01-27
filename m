@@ -2,41 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91B067E292
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F53067E2A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbjA0LEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:04:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
+        id S232851AbjA0LH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:07:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbjA0LD6 (ORCPT
+        with ESMTP id S232808AbjA0LHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:03:58 -0500
+        Fri, 27 Jan 2023 06:07:25 -0500
 Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8074FC33;
-        Fri, 27 Jan 2023 03:03:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD774F37E;
+        Fri, 27 Jan 2023 03:07:24 -0800 (PST)
 Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
         by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pLMVt-004hKi-RU; Fri, 27 Jan 2023 19:03:22 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 27 Jan 2023 19:03:21 +0800
-Date:   Fri, 27 Jan 2023 19:03:21 +0800
+        id 1pLMZh-004hQP-Rm; Fri, 27 Jan 2023 19:07:18 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 27 Jan 2023 19:07:17 +0800
+Date:   Fri, 27 Jan 2023 19:07:17 +0800
 From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Jia Jie Ho <jiajie.ho@starfivetech.com>
-Cc:     Olivia Mackall <olivia@selenic.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH] hwrng: starfive - Enable compile testing
-Message-ID: <Y9OveVKTkX8cRhyP@gondor.apana.org.au>
-References: <20230117015445.32500-1-jiajie.ho@starfivetech.com>
- <20230117015445.32500-3-jiajie.ho@starfivetech.com>
+To:     Vladis Dronov <vdronov@redhat.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Stephan Mueller <smueller@chronox.de>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] crypto: testmgr - disallow certain DRBG hash functions
+ in FIPS mode
+Message-ID: <Y9OwZUbZpHQ3gMl4@gondor.apana.org.au>
+References: <20230117172006.8912-1-vdronov@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230117015445.32500-3-jiajie.ho@starfivetech.com>
+In-Reply-To: <20230117172006.8912-1-vdronov@redhat.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,25 +41,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable compile testing for jh7110.  Also remove the dependency on
-HW_RANDOM.
+On Tue, Jan 17, 2023 at 06:20:06PM +0100, Vladis Dronov wrote:
+> According to FIPS 140-3 IG, section D.R "Hash Functions Acceptable for
+> Use in the SP 800-90A DRBGs", modules certified after May 16th, 2023
+> must not support the use of: SHA-224, SHA-384, SHA512-224, SHA512-256,
+> SHA3-224, SHA3-384. Disallow HMAC and HASH DRBGs using SHA-384 in FIPS
+> mode.
+> 
+> Signed-off-by: Vladis Dronov <vdronov@redhat.com>
+> ---
+> Some details:
+> 
+> The following DRBG algos are defined in testmgr.c as of now:
+> 
+> drbg_{no,}pr_ctr_aes128
+> drbg_{no,}pr_ctr_aes192
+> drbg_{no,}pr_ctr_aes256
+> 
+> drbg_{no,}pr_hmac_sha1
+> drbg_{no,}pr_hmac_sha256
+> drbg_{no,}pr_hmac_sha384 (disallow)
+> drbg_{no,}pr_hmac_sha512
+> 
+> drbg_{no,}pr_sha1
+> drbg_{no,}pr_sha256
+> drbg_{no,}pr_sha384 (disallow)
+> drbg_{no,}pr_sha512
+> 
+> Marked DRBGs should be disallowed in FIPS mode according to
+> the requirements above.
+> ---
+>  crypto/testmgr.c | 4 ----
+>  1 file changed, 4 deletions(-)
 
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-diff --git a/drivers/char/hw_random/Kconfig b/drivers/char/hw_random/Kconfig
-index 9924e2f35b69..ae508e96cfc2 100644
---- a/drivers/char/hw_random/Kconfig
-+++ b/drivers/char/hw_random/Kconfig
-@@ -551,8 +551,7 @@ config HW_RANDOM_CN10K
- 
- config HW_RANDOM_JH7110
- 	tristate "StarFive JH7110 Random Number Generator support"
--	depends on SOC_STARFIVE
--	depends on HW_RANDOM
-+	depends on SOC_STARFIVE || COMPILE_TEST
- 	help
- 	  This driver provides support for the True Random Number
- 	  Generator in StarFive JH7110 SoCs.
+Patch applied.  Thanks.
 -- 
 Email: Herbert Xu <herbert@gondor.apana.org.au>
 Home Page: http://gondor.apana.org.au/~herbert/
