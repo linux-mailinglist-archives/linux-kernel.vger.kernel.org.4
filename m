@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A553567DA35
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:08:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091B967DA36
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbjA0AId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 19:08:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
+        id S231918AbjA0AIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 19:08:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjA0AIb (ORCPT
+        with ESMTP id S231784AbjA0AIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 19:08:31 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696DE4B19D;
-        Thu, 26 Jan 2023 16:08:30 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id d3so3376337plr.10;
-        Thu, 26 Jan 2023 16:08:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uc6aKUtXlv3GS/KMoafn+YIiq695lQmLJQ+YunBm9p4=;
-        b=JDKYdDzxrtnrxAGN1MD+/x4vWdJRLzzQ/V5iVcAobx7hLlYxZaIXMuskl6Ged+I6X+
-         Q/XhS/d86vbp0FujZn8o8I8hkwPOxwePvk5odPVHN/pE/Ap0i+eR9n24+gKwYRcXQeVV
-         Y2bAgKyA588/meqfzUsTe6cIr7eZUpOJIIsAjh1LxfxpcrWt5BiSJGod+JSoZvHgG9YL
-         mk9EO1unzhonUglH+OgNodkTyYQUSagiUuPjKejdh3d4ackOoa3IJh3XKYw7Hf39ivsM
-         ALCEuKUSdVLZR9KD+Xfps6cW3qTziL9KOhtK0r5+UlEpAx0sO9KX7RY2NlPUc3ec2phU
-         ihdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Uc6aKUtXlv3GS/KMoafn+YIiq695lQmLJQ+YunBm9p4=;
-        b=eTVwBbKu5QEfylogPRW6EkAw40F7EySK0HBixW7cEU7oJdFkLmsuIpajW1r/aedWbg
-         ssFQ/KAgIsU8PjPv6J0bRy3FbB/gCq/tvXQ5zrEWdI/MBM5bIXqlf6h5jhNsSDZx2EdQ
-         PuSkL3iWULwFqnhxSOEFWCpXj58szvHcLQ8cfpd2blRgEzI926HWdKLjsy5L+HBEeYv4
-         wfK5Ce18dKJeBy0pxDe7ANlh6tZQgt9PoS8Gs+QZXqiE/0NDYOEXZ04ed5Sit4IcaLqx
-         7XAUoHrT8PefUCoNDftWiyS3Ti7r1nPtT4nGxgiXmyiUmBdkCjoHLM8LC91ADDVnanpL
-         sIGA==
-X-Gm-Message-State: AFqh2kqjUPbti6Jj9C+Z0/OGclykkJIlaxsyR2QfuF+uz+KRVYnS4oT1
-        kCHHntWt410U1HJxzsVsGDnrirdJTFasxQ==
-X-Google-Smtp-Source: AMrXdXupOG8HzamFqnl0Y8CVEzJszgrRBhPIqJ9dut8zR9/qsdpg1/7ZWRu5Xfk0sDdECkDzHmP5Dw==
-X-Received: by 2002:a17:902:8b81:b0:194:87e1:41a with SMTP id ay1-20020a1709028b8100b0019487e1041amr38637373plb.42.1674778109410;
-        Thu, 26 Jan 2023 16:08:29 -0800 (PST)
-Received: from 7YHHR73.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id l10-20020a170902eb0a00b00196503444b0sm324959plb.43.2023.01.26.16.08.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Jan 2023 16:08:28 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     maxime@cerno.tech, Florian Fainelli <f.fainelli@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net-next] net: bcmgenet: Add a check for oversized packets
-Date:   Thu, 26 Jan 2023 16:08:19 -0800
-Message-Id: <20230127000819.3934-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 26 Jan 2023 19:08:41 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E76C4F872;
+        Thu, 26 Jan 2023 16:08:36 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P2ybQ5kWcz4xN1;
+        Fri, 27 Jan 2023 11:08:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674778115;
+        bh=/bX5AMfUVWqKnUOm2OnZehqp+a/+dvIdoG2O2L8XH9Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=PvOvkGhYNSOqaK6QqlqDZzq3Q7KInXq8oxUGF/QKQ4gdewUPEdimX+i1IsvAIvnjc
+         8F7od8ka0hSteVZh6oPidQ+b78S/v8JkU5nlpxNjPRo2ygeqQwh++A+okpUJKU4l5e
+         a8vRpyhQPWO+sO2pb/nAchMLgI5LC7jz5P8gdPuwE/lL+L8+uK6BSBGxhy3FCs3fiy
+         jo30QWUcCokRpIr5fUl7ih1gs/geBqYHgEyBXWCR5KVQ+UIhKw8SMdh8NnV+ClUuNp
+         xKu/8jwjREVeyUw6Bq4dZqEAWXvyEls5sPeMXiP33vu5yygEqSlzBYPiJ8BdORIj61
+         uckADHUDYR/1g==
+Date:   Fri, 27 Jan 2023 11:08:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shawn Guo <shawnguo@kernel.org>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the imx-mxs tree
+Message-ID: <20230127110833.6cb7f4c8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/WAlN3HLhJ.BygoVK1mxeb+5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Occasionnaly we may get oversized packets from the hardware which
-exceed the nomimal 2KiB buffer size we allocate SKBs with. Add an early
-check which drops the packet to avoid invoking skb_over_panic() and move
-on to processing the next packet.
+--Sig_/WAlN3HLhJ.BygoVK1mxeb+5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/net/ethernet/broadcom/genet/bcmgenet.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Hi all,
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index 21973046b12b..d937daa8ee88 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -2316,6 +2316,14 @@ static unsigned int bcmgenet_desc_rx(struct bcmgenet_rx_ring *ring,
- 			  __func__, p_index, ring->c_index,
- 			  ring->read_ptr, dma_length_status);
- 
-+		if (unlikely(len > RX_BUF_LENGTH)) {
-+			netif_err(priv, rx_status, dev, "oversized packet\n");
-+			dev->stats.rx_length_errors++;
-+			dev->stats.rx_errors++;
-+			dev_kfree_skb_any(skb);
-+			goto next;
-+		}
-+
- 		if (unlikely(!(dma_flag & DMA_EOP) || !(dma_flag & DMA_SOP))) {
- 			netif_err(priv, rx_status, dev,
- 				  "dropping fragmented packet!\n");
--- 
-2.25.1
+The following commit is also in arm-soc tree as a different commit
+(but the same patch):
 
+  b82765d04e37 ("ARM: multi_v7_defconfig: Enable wm896x audio CODECs")
+
+This is commit
+
+  74ab23d5a7fc ("ARM: multi_v7_defconfig: Enable wm896x audio CODECs")
+
+in the arm-soc tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/WAlN3HLhJ.BygoVK1mxeb+5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTFgIACgkQAVBC80lX
+0Gwmiwf9GFedHPu7BgyAL+v0iTJOwTWdhdXUPshpCY23Imm0a8lyDRRf4YZc16L+
+Rny/nblZ3rE+cYXrmS5QE4kkPByBcqs0Fm1xwGMzlitHxO3dHM1t8V4GCur+8rXk
+bAvcDc//U0tdd0pYUiJsqltmTe4pS2YB1OtG4kJh8A6QTzZcIPl2XCAJQrnbOJDc
+ZrFQVfPoV1YEwrVYnWvDOvq4hOoT+5GrGpcWbkWIqz63+aSy5qIWK+1b7++OE4V7
+0chdKIhkq9dVqoEKhrEIWLBNpat0oHtqM8ST3wE+wAboJDwfU7TFgJR6rU0dESqq
+izvzAvoP2BEG2YP5Jz/T0bUXjC7JeQ==
+=SI1Z
+-----END PGP SIGNATURE-----
+
+--Sig_/WAlN3HLhJ.BygoVK1mxeb+5--
