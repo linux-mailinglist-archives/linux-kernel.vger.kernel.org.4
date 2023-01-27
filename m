@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7857767DA7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0374C67DA7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbjA0ANL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 19:13:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S232587AbjA0ANV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 19:13:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjA0AMW (ORCPT
+        with ESMTP id S233201AbjA0AMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 19:12:22 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BB474A57
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:12:10 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id n203-20020a2572d4000000b0078f09db9888so3646584ybc.18
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:12:10 -0800 (PST)
+        Thu, 26 Jan 2023 19:12:33 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE75473768
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:12:12 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5073cf66299so38515137b3.17
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:12:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nNud8Lepb4eeXuGOsqZyJ2CqEHzF4/YGHX/WXomA3GE=;
-        b=dg98ZZl1AyihbP1LtRx2ePJtNIBANvg6l6Gdfmwrlmg+xT29TDIlqdpN4YyRCNlsxH
-         2d+0NDQIyNI3+imcQ7NQDTRWU1cDISH1SIRjs9KZ9MtQYKwyRV2E4kxG41RUu30tztbk
-         1mwsm7nys4j63yTbqvFZ+dsEGsC+i/ndeRX8r4+da18Js4TD+T2SAi+UhZwx6pYIX2zk
-         S33rrWohkq2TTRvsyKP/W20Tvxz9wzR67Dg4HTFjJ3AJA4tGIDsFSQ5Evi/mLTjK/dZc
-         mdnVVzCHcFRVh1ANjNSv5R8RCXk+iP/LFXcXuHnbESiTmXqgog9RUHjvs7XuDBqjK0Te
-         pPWQ==
+        bh=tTvFN9zt+7lH55sPjPnCWAMH3CSMYqAujbIJhWhGHpQ=;
+        b=fJbwfbPyLajM8BS9brnvnJPHttuFd4SHDHCbOBlCg/VxAuOvTepr0GZHQM6b84YyRA
+         PGZc1my4gZVIxdJD6+WG1ofD+96uUSWoV1kz9Ju1zqCgLOrV3aoO1spiemr3VfD0NSR+
+         5gWV+AkxCQfqzAMSlm62EBUFx3WVlWwQ/lyg8G5AKjz7E9l+lPVW+VwiXKzhgoOqLEVg
+         e7WijyIAqHKwyCsh9qbehpat436RYGDweSUlBivA6fvPKaCeTPPpCq4q/C+Xd7LjgUB4
+         ZPS7LazL527TUMqI1r0GnvyfXb6faxBKg97hTdSLi3rwGCXSYvoE48EislHpAiUHoVSt
+         zkUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nNud8Lepb4eeXuGOsqZyJ2CqEHzF4/YGHX/WXomA3GE=;
-        b=UcgOalvt6O9kcyKC8R6UnrfYphXGHNAD3FVgfHF2v+IC6X2D/zehJ8oyfS58ZAdL6K
-         2Ev/Bd5FM9x9WGfIpwZNm4SLZ+YVOKDnv4PSLDsj6Nj03jiXYf72wiAMXu1Mj3J1g307
-         QKnpwA8FoZ0XQkkKfTpHnDkU4sQzeIqpTZvCj08QoUpvEB/jlIHlKpyqzDcEEbd7PBwH
-         6bpU8dElEust9eJDm0KA6rdJxPwiXlcEkgBD/QMP73Ho34HDBHymq62/Ce/3zCh3ALdb
-         wVuga25QzLR0uBbmy8EeIb846Pp9KloYql60oC7fl6kCXeE1f+hsfJOf3XMlQK0D1iQV
-         WXrw==
-X-Gm-Message-State: AFqh2koo9J/SEe6/hv5nvg8cpMJHd77ERnVjKNLWewwrBw18/xcgyY1J
-        6Vx034YtZeDHb1kBlz4fJPzYSAti/tK55dI=
-X-Google-Smtp-Source: AMrXdXsSdZknjAr0wKn0gY/MpnIZeRHel3NzwGKSoO8sLRLrs7LZP2oF+s13fwjubTyvaUKdTsWZdOHXxvgHyc8=
+        bh=tTvFN9zt+7lH55sPjPnCWAMH3CSMYqAujbIJhWhGHpQ=;
+        b=iXmfqLmr3Q+rIjsAbjKN4c9zERet0LCpRgCN2bQGURSsQTHJn5Zoq9csUO5VO2Dtsr
+         Fl4R/tPW5UQrQYPpp1mBVIWDowK5OxeFgo3oyxfL2KGJMzbQB+2QZygvibbf+ilBGW08
+         eY6TWDewKRi1ocjK7eAFgADRRRgnJbzHB/8GEJablYyEqWrIN36Jzuxt28XB0WfzJEdS
+         qokfEaisbyHBuAGMLvusrpq6wy2v5xI7mqZ2D3afMLiZYS333BAUqUWxXsEeLgNLztgw
+         aAMll+IE+D9uJclzW0ke+RVb2GJbLNPL6IAIv+y+iw/Djqb48ibB+8VYgKFbzLq+459z
+         zCpw==
+X-Gm-Message-State: AFqh2koDuPwF4LOYpZXxNm3IzT2855U59QvBeWmJCpo1Q+eS78O/anMv
+        zCdW/xg2XpFCExkAL/wVWd2x3uW6qTPBhF8=
+X-Google-Smtp-Source: AMrXdXtG7vV8hAqaNOO3XIpSGa1FPirJBe63/y15kC2w6rHGEFHML2nGTZnit7DdBS69wDhESwRkBEUxeDUA7p0=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:c3b4:8b1c:e3ee:3708])
- (user=saravanak job=sendgmr) by 2002:a81:6284:0:b0:373:8313:2991 with SMTP id
- w126-20020a816284000000b0037383132991mr3462545ywb.261.1674778329995; Thu, 26
- Jan 2023 16:12:09 -0800 (PST)
-Date:   Thu, 26 Jan 2023 16:11:37 -0800
+ (user=saravanak job=sendgmr) by 2002:a81:bf41:0:b0:36c:dd56:ce59 with SMTP id
+ s1-20020a81bf41000000b0036cdd56ce59mr4682807ywk.321.1674778332239; Thu, 26
+ Jan 2023 16:12:12 -0800 (PST)
+Date:   Thu, 26 Jan 2023 16:11:38 -0800
 In-Reply-To: <20230127001141.407071-1-saravanak@google.com>
-Message-Id: <20230127001141.407071-11-saravanak@google.com>
+Message-Id: <20230127001141.407071-12-saravanak@google.com>
 Mime-Version: 1.0
 References: <20230127001141.407071-1-saravanak@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Subject: [PATCH v2 10/11] irqchip/irq-imx-gpcv2: Mark fwnode device as not initialized
+Subject: [PATCH v2 11/11] firmware: arm_scmi: Set fwnode for the scmi_device
 From:   Saravana Kannan <saravanak@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -100,7 +100,7 @@ Cc:     Tony Lindgren <tony@atomide.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,44 +108,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since this device is only partially initialized by the irqchip driver,
-we need to mark the fwnode device as not initialized. This is to let
-fw_devlink know that the device will be completely initialized at a
-later point. That way, fw_devlink will continue to defer the probe of
-the power domain consumers till the power domain driver successfully
-binds to the struct device and completes the initialization of the
-device.
+This allows fw_devlink to track and enforce supplier-consumer
+dependencies for scmi_device.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/irqchip/irq-imx-gpcv2.c | 1 +
- drivers/soc/imx/gpcv2.c         | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/firmware/arm_scmi/bus.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/irqchip/irq-imx-gpcv2.c b/drivers/irqchip/irq-imx-gpcv2.c
-index b9c22f764b4d..8a0e82067924 100644
---- a/drivers/irqchip/irq-imx-gpcv2.c
-+++ b/drivers/irqchip/irq-imx-gpcv2.c
-@@ -283,6 +283,7 @@ static int __init imx_gpcv2_irqchip_init(struct device_node *node,
- 	 * later the GPC power domain driver will not be skipped.
- 	 */
- 	of_node_clear_flag(node, OF_POPULATED);
-+	fwnode_dev_initialized(domain->fwnode, false);
- 	return 0;
- }
+diff --git a/drivers/firmware/arm_scmi/bus.c b/drivers/firmware/arm_scmi/bus.c
+index 35bb70724d44..1d8a6a8d9906 100644
+--- a/drivers/firmware/arm_scmi/bus.c
++++ b/drivers/firmware/arm_scmi/bus.c
+@@ -12,6 +12,7 @@
+ #include <linux/kernel.h>
+ #include <linux/slab.h>
+ #include <linux/device.h>
++#include <linux/of.h>
  
-diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-index 7a47d14fde44..b24f9ab634dc 100644
---- a/drivers/soc/imx/gpcv2.c
-+++ b/drivers/soc/imx/gpcv2.c
-@@ -1519,6 +1519,7 @@ static int imx_gpcv2_probe(struct platform_device *pdev)
+ #include "common.h"
  
- 		pd_pdev->dev.parent = dev;
- 		pd_pdev->dev.of_node = np;
-+		pd_pdev->dev.fwnode = of_fwnode_handle(np);
- 
- 		ret = platform_device_add(pd_pdev);
- 		if (ret) {
+@@ -192,6 +193,7 @@ scmi_device_create(struct device_node *np, struct device *parent, int protocol,
+ 	scmi_dev->protocol_id = protocol;
+ 	scmi_dev->dev.parent = parent;
+ 	scmi_dev->dev.of_node = np;
++	scmi_dev->dev.fwnode = of_fwnode_handle(np);
+ 	scmi_dev->dev.bus = &scmi_bus_type;
+ 	scmi_dev->dev.release = scmi_device_release;
+ 	dev_set_name(&scmi_dev->dev, "scmi_dev.%d", id);
 -- 
 2.39.1.456.gfc5497dd1b-goog
 
