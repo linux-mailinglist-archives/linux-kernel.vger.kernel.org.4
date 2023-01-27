@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661F267EAEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1080367EAF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbjA0Q27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        id S234921AbjA0Qad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234068AbjA0Q24 (ORCPT
+        with ESMTP id S234149AbjA0Qa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:28:56 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9876B21A11;
-        Fri, 27 Jan 2023 08:28:54 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pLRav-0002kp-03; Fri, 27 Jan 2023 17:28:53 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 3A4C6C2638; Fri, 27 Jan 2023 17:28:30 +0100 (CET)
-Date:   Fri, 27 Jan 2023 17:28:30 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] MIPS: remove CONFIG_MIPS_LD_CAN_LINK_VDSO
-Message-ID: <20230127162830.GD6090@alpha.franken.de>
-References: <20230120063351.433502-1-masahiroy@kernel.org>
+        Fri, 27 Jan 2023 11:30:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D277D84F9F
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:29:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674836961;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ofwRew2DOV3Mw1UeLOQ6Q9TuhNax0SYEuuABf3JrtUw=;
+        b=B9/a7tmdMOlPpP+i1ln4n1YKrNLCDr/r4zEImlFn6wNg3A2Uz+JeMO+CSzj40oC8DRElRa
+        R33C/cRFL6q5eDkj9Bj5rFgo692KASfVksTo5QGkcIiCjmUNj+S6ruJ/q5MKo2c1TT3lFF
+        5eGN6ZsnQYKLpVtRM3Y6S5TcWhnutMI=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-507-AZTPiJl-M7GZ1A5VCtbEBg-1; Fri, 27 Jan 2023 11:29:19 -0500
+X-MC-Unique: AZTPiJl-M7GZ1A5VCtbEBg-1
+Received: by mail-qt1-f198.google.com with SMTP id br26-20020a05622a1e1a00b003b62dc86831so2325678qtb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:29:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ofwRew2DOV3Mw1UeLOQ6Q9TuhNax0SYEuuABf3JrtUw=;
+        b=t8DmMyioiRcf/fhCbQ51NHhITsVD++Mp8t8EPUfl0af7vhSqq5wbNhmIaDS/VEj/b8
+         6/10pz8SRtago8qLnbUxNn8+mnq7ZyyUIQNuyXazrFu/AJjkLaEYWs5OZsgUlxdXUl8Z
+         sV3xmaD3J2Wpvhbp5mQoiWr/FdcAglxR2C/hrRhWcuEWmNj5l68376UJZAUEn9mnZU/L
+         9G6i0+xqDMLwQr4G3pgY53GBLFgCqKwxErPtgenMZCCSsjjZ9VLVhtUcIZ1W4NJkEzqP
+         Kfg+CUP0mssbeqINIVXRo3tAMu5Bkzht89KvfZM5/DlB6Tf+h+Ol+MlsLqAzHhUKswaC
+         Ttwg==
+X-Gm-Message-State: AFqh2kry3hFYnlVrjE26hx0FFt4SUdeS7eFhYfuiqhYYudPk2vVplY4F
+        w+vAKwm2WHcs6+Cun5EZcbhHKa7i20aTdgi7iG7sudNzaMs1Ng4YkvJm50rGxuoaJuICWmFMMqz
+        KOd8wgMxKMsN6AgIYs6OjwI6r
+X-Received: by 2002:a05:622a:1dc4:b0:3b6:3b60:e0 with SMTP id bn4-20020a05622a1dc400b003b63b6000e0mr53812676qtb.31.1674836959130;
+        Fri, 27 Jan 2023 08:29:19 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtSLiyiygJZmi9ZkzaLEmBS5d2N0ilOPyqt8mtEc3xpMVZWdQMbtMS/3H1lhJAlOqqr0nPJ2g==
+X-Received: by 2002:a05:622a:1dc4:b0:3b6:3b60:e0 with SMTP id bn4-20020a05622a1dc400b003b63b6000e0mr53812657qtb.31.1674836958905;
+        Fri, 27 Jan 2023 08:29:18 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id y4-20020ac85244000000b003b6302f2580sm2917033qtn.22.2023.01.27.08.29.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 08:29:18 -0800 (PST)
+From:   Tom Rix <trix@redhat.com>
+To:     jack@suse.com, nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] udf: remove reporting loc in debug output
+Date:   Fri, 27 Jan 2023 08:29:06 -0800
+Message-Id: <20230127162906.872395-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120063351.433502-1-masahiroy@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 03:33:51PM +0900, Masahiro Yamada wrote:
-> Given commit e4412739472b ("Documentation: raise minimum supported
-> version of binutils to 2.25"), CONFIG_MIPS_LD_CAN_LINK_VDSO is always
-> 'y'.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  arch/mips/vdso/Kconfig  | 14 +-------------
->  arch/mips/vdso/Makefile |  3 ---
->  2 files changed, 1 insertion(+), 16 deletions(-)
-> 
-> diff --git a/arch/mips/vdso/Kconfig b/arch/mips/vdso/Kconfig
-> index a665f6108cb5..70140248da72 100644
-> --- a/arch/mips/vdso/Kconfig
-> +++ b/arch/mips/vdso/Kconfig
-> @@ -1,18 +1,6 @@
-> -# For the pre-R6 code in arch/mips/vdso/vdso.h for locating
-> -# the base address of VDSO, the linker will emit a R_MIPS_PC32
-> -# relocation in binutils > 2.25 but it will fail with older versions
-> -# because that relocation is not supported for that symbol. As a result
-> -# of which we are forced to disable the VDSO symbols when building
-> -# with < 2.25 binutils on pre-R6 kernels. For more references on why we
-> -# can't use other methods to get the base address of VDSO please refer to
-> -# the comments on that file.
-> -#
->  # GCC (at least up to version 9.2) appears to emit function calls that make use
->  # of the GOT when targeting microMIPS, which we can't use in the VDSO due to
->  # the lack of relocations. As such, we disable the VDSO for microMIPS builds.
->  
-> -config MIPS_LD_CAN_LINK_VDSO
-> -	def_bool LD_VERSION >= 22500 || LD_IS_LLD
-> -
->  config MIPS_DISABLE_VDSO
-> -	def_bool CPU_MICROMIPS || (!CPU_MIPSR6 && !MIPS_LD_CAN_LINK_VDSO)
-> +	def_bool CPU_MICROMIPS
-> diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-> index 1f7d5c6c10b0..18af9474ed0e 100644
-> --- a/arch/mips/vdso/Makefile
-> +++ b/arch/mips/vdso/Makefile
-> @@ -52,9 +52,6 @@ endif
->  CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE)
->  
->  ifdef CONFIG_MIPS_DISABLE_VDSO
-> -  ifndef CONFIG_MIPS_LD_CAN_LINK_VDSO
-> -    $(warning MIPS VDSO requires binutils >= 2.25)
-> -  endif
->    obj-vdso-y := $(filter-out vgettimeofday.o, $(obj-vdso-y))
->  endif
->  
-> -- 
-> 2.34.1
+clang build fails with
+fs/udf/partition.c:86:28: error: variable 'loc' is uninitialized when used here [-Werror,-Wuninitialized]
+                          sb, block, partition, loc, index);
+                                                ^~~
 
-applied to mips-next.
+loc is now only know when bh is valid.  So remove reporting loc in debug output.
 
-Thomas.
+Fixes: 4215db46d538 ("udf: Use udf_bread() in udf_get_pblock_virt15()")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ fs/udf/partition.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/fs/udf/partition.c b/fs/udf/partition.c
+index 92765d2f6958..5bcfe78d5cab 100644
+--- a/fs/udf/partition.c
++++ b/fs/udf/partition.c
+@@ -82,8 +82,8 @@ uint32_t udf_get_pblock_virt15(struct super_block *sb, uint32_t block,
+ 
+ 	bh = udf_bread(sbi->s_vat_inode, newblock, 0, &err);
+ 	if (!bh) {
+-		udf_debug("get_pblock(UDF_VIRTUAL_MAP:%p,%u,%u) VAT: %u[%u]\n",
+-			  sb, block, partition, loc, index);
++		udf_debug("get_pblock(UDF_VIRTUAL_MAP:%p,%u,%u)\n",
++			  sb, block, partition);
+ 		return 0xFFFFFFFF;
+ 	}
+ 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.26.3
+
