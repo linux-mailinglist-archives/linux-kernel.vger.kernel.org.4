@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7346367EF56
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3964B67EF5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:12:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbjA0UL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 15:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
+        id S229731AbjA0UMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 15:12:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233253AbjA0ULC (ORCPT
+        with ESMTP id S229611AbjA0UMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:11:02 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2304EC1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:10:49 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id k18so6112485pll.5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:10:49 -0800 (PST)
+        Fri, 27 Jan 2023 15:12:43 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEC810D2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:12:42 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5065604854eso66550347b3.16
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:12:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uVeXA+MV2KiRuoJWt2euHuiO6q0ls69NMV+B5RGOE1g=;
-        b=UnHTto9iYs+wX9znqS/a19vQIBuu685jiveSd5U6TsEy2kUm4egnKX+d2Q8+uqgKpX
-         nAP4VyHRJkb+du25uLUwTbWRHG4imvVZ6B9sDjbqJ0BQrKilkVK+cTjFTYgF1tAPQ1SP
-         Yvh7hqPkSJSfLPuoYRBqJUd2uPPalH+W+6XO2HmidqekVUYHrA4vKHj+t3QvzigPj8lh
-         lJ9R6xniqfNYGpvlBxzT6GW9JV+sx7LhhQWlcrX7xqxm14myaujtxCqTDMYPI2oUIv4s
-         36L2Eapu+AKpE4LlxAN7Z/Fep1f+WWnY7bzspA9kqsC11kBBQqTcF/ExTH+hUyOvv7u+
-         yiow==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=U5PweF5Md6NbIdnNvsH2BayzCnZUUA5GzHDCZFW7bFw=;
+        b=ONWctdoEud7qQ4B99HG3h//Nh6GFQlodrwLFPGz7gXjP/o0pmC2lz/qXuJQsiAbwzm
+         SxXvQaEy5uFk4g8C8Ye8SoZfrkZniuArrj65jPMjByR+bJNLMuQLqllZTO/xvgSAMAUc
+         bhHbrtseaiyH7TspyFJj83HWGtNFn0r1BrpHVv71Nalq3rIuVU9t+fYuruji6+laUcs6
+         UnCng6BcdB7yF8DLHN6LpqQDsWsAoS5KbB84BbmoO/35D3s/6TkTqmydFW7atw+np343
+         IftJe77NrK2rUbZ5jJ7tB2zyseRG/CNlTr3gk/ZLWRvIYyJ6cU5w/3IWldHh45/MzENF
+         Skdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uVeXA+MV2KiRuoJWt2euHuiO6q0ls69NMV+B5RGOE1g=;
-        b=ae1mdkunmypFC+GQXAMnYmyCaykwtWLX8rxUW+k4N6b7oVuSV7yRrVWjpAqvwB/O7e
-         4E4Y0q0jD1fD4lbp2kcPEupeyvu9ToVPI7RSdmCIiwWAPUCoptsBxosEJuhQrKAn3tUT
-         p8OXSuZZ5p5vaYZYC+YZ6YBgxPhuHoVF82hM8mH4kkufMmtd6RTlLxV5imcQhAjQ5uUf
-         JcBG+oeJcY5IuOFGK40NXmaFT8rxDSGmIzNfhiIPBvPv8Az9lnF3ZRutuimu4AWmkgPG
-         FmAtfHHMNl7Nbtritw925cetWpR8qpl99glxkYxJO7Ux+uOB5i9k96JvzJXQMs2BZxxy
-         97Ew==
-X-Gm-Message-State: AO0yUKWlFfQ+5maH6UjmgRq59XHpKmcAQijJX70554OBlw7L3YSlgXw/
-        VeR7vRECPwL5MjUICg+zqi8y5w==
-X-Google-Smtp-Source: AK7set+XmtiAzHziowdJYv4UlUisVIIgCtjFaVGFSMV2uzaTLcaE71V5YEPSlKrBprYinorG3plboQ==
-X-Received: by 2002:a05:6a20:3d16:b0:bc:3523:13c5 with SMTP id y22-20020a056a203d1600b000bc352313c5mr107342pzi.3.1674850248437;
-        Fri, 27 Jan 2023 12:10:48 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id v6-20020aa78506000000b00591b0c847b5sm1717135pfn.218.2023.01.27.12.10.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 12:10:47 -0800 (PST)
-Date:   Fri, 27 Jan 2023 20:10:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yang Weijiang <weijiang.yang@intel.com>
-Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, like.xu.linux@gmail.com,
-        kan.liang@linux.intel.com, wei.w.wang@intel.com
-Subject: Re: [PATCH v2 04/15] KVM: PMU: disable LBR handling if architectural
- LBR is available
-Message-ID: <Y9QvxJbITGaY6Yki@google.com>
-References: <20221125040604.5051-1-weijiang.yang@intel.com>
- <20221125040604.5051-5-weijiang.yang@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221125040604.5051-5-weijiang.yang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U5PweF5Md6NbIdnNvsH2BayzCnZUUA5GzHDCZFW7bFw=;
+        b=obpc31t0+JT069SEGxrV+hW4Hyc54gsAUaDBeWXgtND4239awBiiNWJlGzUFb4VCuS
+         eWceJHY8Nt8a5hGqnLyYm2AXlfeEqUbHEqMmXpzDSSGGJpBMLfABNuWdXW4SNA/XfuUW
+         UpoafYQzYIB8MnraYAM3kAHITfB5e64so60gspuDzIlJIK7R6eTUx62oYcGhJFMF1TRu
+         6kuy55fzLtZzns8Ku2VPMfgU/y+SrHljgmLL6WDPDI1SXSgjnekzOu74cSIJpeh7lf/i
+         uEaLR2+ryTO1DLMV9LCmpJgmZ0RaEhwOwJ4nxi9PnBRihDsZn/PQ0ENKSltcbQO8B127
+         yi7w==
+X-Gm-Message-State: AO0yUKVAE/dess6aUKF+IgbAU07TzoCjVn2qSXhOa1dgrtMGT2T8Ac/C
+        i5FN0V2LRo2gWhbzCjvh9E91P5j6xA==
+X-Google-Smtp-Source: AK7set8VJGEtbKBZlU6hCuahzp1rc7G7d7am0mQLFXrImBHYa3g9f/I+bQ2PeH4yNwPIDrBhDJ5z+OkK4A==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a81:61c6:0:b0:50e:8ebe:45be with SMTP id
+ v189-20020a8161c6000000b0050e8ebe45bemr193751ywb.214.1674850361795; Fri, 27
+ Jan 2023 12:12:41 -0800 (PST)
+Date:   Fri, 27 Jan 2023 20:12:19 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230127201219.775410-1-rmoar@google.com>
+Subject: [PATCH v1] apparmor: fix use of strcpy in policy_unpack_test
+From:   Rae Moar <rmoar@google.com>
+To:     john.johansen@canonical.com, brendanhiggins@google.com,
+        davidgow@google.com, dlatypov@google.com
+Cc:     apparmor@lists.ubuntu.com, skhan@linuxfoundation.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Rae Moar <rmoar@google.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,111 +69,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022, Yang Weijiang wrote:
-> From: Paolo Bonzini <pbonzini@redhat.com>
-> 
-> Traditional LBR is absent on CPU models that have architectural LBR, so
-> disable all processing of traditional LBR MSRs if they are not there.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
-> ---
->  arch/x86/kvm/vmx/pmu_intel.c | 32 ++++++++++++++++++++++----------
->  1 file changed, 22 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> index e5cec07ca8d9..905673228932 100644
-> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> @@ -170,19 +170,23 @@ static inline struct kvm_pmc *get_fw_gp_pmc(struct kvm_pmu *pmu, u32 msr)
->  static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
->  {
->  	struct x86_pmu_lbr *records = vcpu_to_lbr_records(vcpu);
-> -	bool ret = false;
->  
->  	if (!intel_pmu_lbr_is_enabled(vcpu))
-> -		return ret;
-> +		return false;
->  
-> -	ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS) ||
-> -		(index >= records->from && index < records->from + records->nr) ||
-> -		(index >= records->to && index < records->to + records->nr);
-> +	if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
+Replace the use of strcpy() in build_aa_ext_struct() in
+policy_unpack_test.c with strscpy().
 
-IIUC, the MSRs flat out don't exist _and_ KVM expects to passthrough MSRs to the
-guest, i.e. KVM should check host support, not guest support.  Probably a moot
-point from a functionality perspective since KVM shouldn't allow LBRs to shouldn't
-be enabled for the guest, but from a performance perspective, checking guest CPUID
-is slooow.
+strscpy() is the safer method to use to ensure the buffer does not
+overflow. This was found by kernel test robot:
+https://lore.kernel.org/all/202301040348.NbfVsXO0-lkp@intel.com/.
 
-That brings me to point #2, which is that KVM needs to disallow enabling legacy
-LBRs on CPUs that support arch LBRs.  Again, IIUC, because KVM doesn't have the
-option to fallback to legacy LBRs, that restriction needs to be treated as a bug
-fix.  I'll post a separate patch unless my understanding is wrong.
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +	    (index == MSR_LBR_SELECT || index == MSR_LBR_TOS))
-> +		return true;
->  
-> -	if (!ret && records->info)
-> -		ret = (index >= records->info && index < records->info + records->nr);
-> +	if ((index >= records->from && index < records->from + records->nr) ||
-> +	    (index >= records->to && index < records->to + records->nr))
-> +		return true;
->  
-> -	return ret;
-> +	if (records->info && index >= records->info &&
-> +	    index < records->info + records->nr)
-> +		return true;
-> +
-> +	return false;
->  }
->  
->  static bool intel_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
-> @@ -702,6 +706,9 @@ static void vmx_update_intercept_for_lbr_msrs(struct kvm_vcpu *vcpu, bool set)
->  			vmx_set_intercept_for_msr(vcpu, lbr->info + i, MSR_TYPE_RW, set);
->  	}
->  
-> +	if (guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
 
-Similar to above, I really don't want to query guest CPUID in the VM-Enter path.
-If we establish the rule that LBRs can be enabled if and only if the correct type
-is enabled (traditional/legacy vs. arch), then this can simply check host support.
+Note: This patch is based on the apparmor-next branch. However, the
+patch should also apply cleanly to the kselftest/kunit branch.
 
-> +		return;
-> +
->  	vmx_set_intercept_for_msr(vcpu, MSR_LBR_SELECT, MSR_TYPE_RW, set);
->  	vmx_set_intercept_for_msr(vcpu, MSR_LBR_TOS, MSR_TYPE_RW, set);
->  }
-> @@ -742,10 +749,12 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
->  	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
-> +	bool lbr_enable = !guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
-> +		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
+ security/apparmor/policy_unpack_test.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-Unnecessary guest CPUID lookup and VMCS read, i.e. this can be deferred to the
-!lbr_desc->event path.
+diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
+index e1bfdab524b7..5c9bde25e56d 100644
+--- a/security/apparmor/policy_unpack_test.c
++++ b/security/apparmor/policy_unpack_test.c
+@@ -69,31 +69,30 @@ static struct aa_ext *build_aa_ext_struct(struct policy_unpack_fixture *puf,
+ 
+ 	*buf = AA_NAME;
+ 	*(buf + 1) = strlen(TEST_STRING_NAME) + 1;
+-	strcpy(buf + 3, TEST_STRING_NAME);
++	strscpy(buf + 3, TEST_STRING_NAME, e->end - (void *)(buf + 3));
+ 
+ 	buf = e->start + TEST_STRING_BUF_OFFSET;
+ 	*buf = AA_STRING;
+ 	*(buf + 1) = strlen(TEST_STRING_DATA) + 1;
+-	strcpy(buf + 3, TEST_STRING_DATA);
+-
++	strscpy(buf + 3, TEST_STRING_DATA, e->end - (void *)(buf + 3));
+ 	buf = e->start + TEST_NAMED_U32_BUF_OFFSET;
+ 	*buf = AA_NAME;
+ 	*(buf + 1) = strlen(TEST_U32_NAME) + 1;
+-	strcpy(buf + 3, TEST_U32_NAME);
++	strscpy(buf + 3, TEST_U32_NAME, e->end - (void *)(buf + 3));
+ 	*(buf + 3 + strlen(TEST_U32_NAME) + 1) = AA_U32;
+ 	*((u32 *)(buf + 3 + strlen(TEST_U32_NAME) + 2)) = TEST_U32_DATA;
+ 
+ 	buf = e->start + TEST_NAMED_U64_BUF_OFFSET;
+ 	*buf = AA_NAME;
+ 	*(buf + 1) = strlen(TEST_U64_NAME) + 1;
+-	strcpy(buf + 3, TEST_U64_NAME);
++	strscpy(buf + 3, TEST_U64_NAME, e->end - (void *)(buf + 3));
+ 	*(buf + 3 + strlen(TEST_U64_NAME) + 1) = AA_U64;
+ 	*((u64 *)(buf + 3 + strlen(TEST_U64_NAME) + 2)) = TEST_U64_DATA;
+ 
+ 	buf = e->start + TEST_NAMED_BLOB_BUF_OFFSET;
+ 	*buf = AA_NAME;
+ 	*(buf + 1) = strlen(TEST_BLOB_NAME) + 1;
+-	strcpy(buf + 3, TEST_BLOB_NAME);
++	strscpy(buf + 3, TEST_BLOB_NAME, e->end - (void *)(buf + 3));
+ 	*(buf + 3 + strlen(TEST_BLOB_NAME) + 1) = AA_BLOB;
+ 	*(buf + 3 + strlen(TEST_BLOB_NAME) + 2) = TEST_BLOB_DATA_SIZE;
+ 	memcpy(buf + 3 + strlen(TEST_BLOB_NAME) + 6,
+@@ -102,7 +101,7 @@ static struct aa_ext *build_aa_ext_struct(struct policy_unpack_fixture *puf,
+ 	buf = e->start + TEST_NAMED_ARRAY_BUF_OFFSET;
+ 	*buf = AA_NAME;
+ 	*(buf + 1) = strlen(TEST_ARRAY_NAME) + 1;
+-	strcpy(buf + 3, TEST_ARRAY_NAME);
++	strscpy(buf + 3, TEST_ARRAY_NAME, e->end - (void *)(buf + 3));
+ 	*(buf + 3 + strlen(TEST_ARRAY_NAME) + 1) = AA_ARRAY;
+ 	*((u16 *)(buf + 3 + strlen(TEST_ARRAY_NAME) + 2)) = TEST_ARRAY_SIZE;
+ 
 
->  
->  	if (!lbr_desc->event) {
->  		vmx_disable_lbr_msrs_passthrough(vcpu);
-> -		if (vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR)
-> +		if (lbr_enable)
->  			goto warn;
->  		if (test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use))
->  			goto warn;
-> @@ -768,7 +777,10 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
->  
->  static void intel_pmu_cleanup(struct kvm_vcpu *vcpu)
->  {
-> -	if (!(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR))
-> +	bool lbr_enable = !guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
-> +		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
-> +
-> +	if (!lbr_enable)
->  		intel_pmu_release_guest_lbr_event(vcpu);
->  }
->  
-> -- 
-> 2.27.0
-> 
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+-- 
+2.39.1.456.gfc5497dd1b-goog
+
