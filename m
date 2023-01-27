@@ -2,154 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5B367E8B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1C167E8B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234029AbjA0Oy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
+        id S234054AbjA0OzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:55:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234052AbjA0Oyv (ORCPT
+        with ESMTP id S233140AbjA0OzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:54:51 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703C373773;
-        Fri, 27 Jan 2023 06:54:49 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id me3so14381972ejb.7;
-        Fri, 27 Jan 2023 06:54:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+gn+XHL+I5DO4+DWbAun4810C7fhfSL0Li+nXaVTEvs=;
-        b=mCiDhwHhXiHMHtKBUL42B/Fdk/e9V9X42CMjAoBcq7XHtgd+zt5Vh+zrvJiuHWBMa5
-         GZ19+XJtlWwKy/WTyjmGAiAgyHsDiwuyFcpH7thw7A/FzWAIKm0cklxSxJ8mJFvW5/L9
-         Kw8xUd6rxriX5m8ZDYciLfvU2Cmh4vn0Z/rk8qF0OPo7/8Phs50RJdhJQSl2NngdEOkf
-         zMnXCz/IP+8Eh4mwOKA/M3vF4Eq65ZOzXIN4RcAF2WoRM7c4JH/hY00JUcNyE5TN6mU1
-         tNLotSPxdKTJ4IWnCfxuXuBjLz5JQSnZbYfdkHn4bJXVdZLGz7hHymfvp2YqI9CBrHNe
-         1t+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+gn+XHL+I5DO4+DWbAun4810C7fhfSL0Li+nXaVTEvs=;
-        b=YhxAUIsqftTW0XA6hgIWnfO7iKa+xqsEPDG8T2CDpjBLGh4qdDYbXV1cPHYlzI7WVM
-         1MrMbjOGSw3DnhgPxaXiVFKniIMJmcslCiu6594b3/KXl6cQDsUfXT1rmbu9Qx5mNiyY
-         4vQbxHeS7RqFNrjM5lYD9Pewm21O9gMH2un8z7jKExqknOhmJfhPjZCmmTWY0kkq314v
-         2QgGRyUEhzxf5S9ner9cXWvC+pPuspDug/2JSJMCufORPTObUKbKp0M9hGzaihzU3gbO
-         Tw8gQJMh92KGh10YxTxdsaP3dX3XcurL/WiJgdb3mUdqPCPgutMHb7D8CndE/57sGVxr
-         6xzw==
-X-Gm-Message-State: AO0yUKW0Gpf8zx4Rth1dLLrVqtYbZddEcDpFsH3UF0oFYBupf6PVMyA+
-        KiiBHI/+1ukKKWw8WxZrMj00K4Acx5UJAfGfeUs=
-X-Google-Smtp-Source: AK7set/kHYkx9F2iYVASYAX2AnRyTPsgkk0idgKriSw0PFsOBfGsDbSrzRkb79ZMtFjfHCKu/D4DWvreR7aTmwoQyY4=
-X-Received: by 2002:a17:906:53d3:b0:878:4c93:5b70 with SMTP id
- p19-20020a17090653d300b008784c935b70mr1813929ejo.16.1674831287856; Fri, 27
- Jan 2023 06:54:47 -0800 (PST)
+        Fri, 27 Jan 2023 09:55:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABC974C11
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:54:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674831269;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ysIL8RukAYmBUB71mQtyT0OJ0/jFEvPNazkDdH1z3cQ=;
+        b=f9rFpNdWGx7MJmxf22FRMKFjAvwxzkiQe0VkiaIb6Ar90xv5f+PLeyqiuY7SsHG3N+3FvK
+        o24AvL4rDBKjPWF0WEIGACedeeDlwGmXbMKP3W4w0rR4pypCaKRkuCLwiNKQSrSmnTU7+z
+        EwPDrdcffg65YF4t5JzzGT8jwZ9s0bA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-399-s6hjROmeP6OX23gbZ5ufjA-1; Fri, 27 Jan 2023 09:54:28 -0500
+X-MC-Unique: s6hjROmeP6OX23gbZ5ufjA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 859DE29DD993;
+        Fri, 27 Jan 2023 14:54:27 +0000 (UTC)
+Received: from [10.22.10.246] (unknown [10.22.10.246])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F3272166B26;
+        Fri, 27 Jan 2023 14:54:26 +0000 (UTC)
+Message-ID: <43da8f9d-f0fd-d67b-7384-fc03ad159f29@redhat.com>
+Date:   Fri, 27 Jan 2023 09:54:26 -0500
 MIME-Version: 1.0
-References: <20230127122018.2839-1-kerneljasonxing@gmail.com>
-In-Reply-To: <20230127122018.2839-1-kerneljasonxing@gmail.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Fri, 27 Jan 2023 22:54:11 +0800
-Message-ID: <CAL+tcoAci+fwk6-JsTL7+yOiom08XSpc9Y5xbTZZ=WWRjYvnuw@mail.gmail.com>
-Subject: Re: [PATCH v2 net] ixgbe: allow to increase MTU to some extent with
- XDP enabled
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        alexandr.lobakin@intel.com
-Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3] sched: Store restrict_cpus_allowed_ptr() call state
+To:     Will Deacon <will@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20230127015527.466367-1-longman@redhat.com>
+ <20230127125946.GA30605@willie-the-truck>
+Content-Language: en-US
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230127125946.GA30605@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My bad. It's not that right. Please ignore the v2 patch. I need some
-time to do more studies and tests on this part.
+On 1/27/23 07:59, Will Deacon wrote:
+> Hi Waiman,
+>
+> On Thu, Jan 26, 2023 at 08:55:27PM -0500, Waiman Long wrote:
+>> The user_cpus_ptr field was originally added by commit b90ca8badbd1
+>> ("sched: Introduce task_struct::user_cpus_ptr to track requested
+>> affinity"). It was used only by arm64 arch due to possible asymmetric
+>> CPU setup.
+>>
+>> Since commit 8f9ea86fdf99 ("sched: Always preserve the user requested
+>> cpumask"), task_struct::user_cpus_ptr is repurposed to store user
+>> requested cpu affinity specified in the sched_setaffinity().
+>>
+>> This results in a slight performance regression on an arm64
+>> system when booted with "allow_mismatched_32bit_el0"
+>> on the command-line.  The arch code will (amongst
+>> other things) calls force_compatible_cpus_allowed_ptr() and
+>> relax_compatible_cpus_allowed_ptr() when exec()'ing a 32-bit or a 64-bit
+>> task respectively. Now a call to relax_compatible_cpus_allowed_ptr()
+>> will always result in a __sched_setaffinity() call whether there is a
+>> previous force_compatible_cpus_allowed_ptr() call or not.
+>>
+>> In order to fix this regression, a new scheduler flag
+>> task_struct::cpus_allowed_restricted is now added to track if
+>> force_compatible_cpus_allowed_ptr() has been called before or not. This
+>> patch also updates the comments in force_compatible_cpus_allowed_ptr()
+>> and relax_compatible_cpus_allowed_ptr() and handles their interaction
+>> with sched_setaffinity().
+>>
+>> This patch also removes the task_user_cpus() helper. In the case of
+>> relax_compatible_cpus_allowed_ptr(), cpu_possible_mask as user_cpu_ptr
+>> masking will be performed within __sched_setaffinity() anyway.
+>>
+>> Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
+>> Reported-by: Will Deacon <will@kernel.org>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   include/linux/sched.h |  3 +++
+>>   kernel/sched/core.c   | 25 +++++++++++++++++--------
+>>   kernel/sched/sched.h  |  8 +-------
+>>   3 files changed, 21 insertions(+), 15 deletions(-)
+> So this doesn't even build...
+>
+>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>> index bb1ee6d7bdde..d7bc809c109e 100644
+>> --- a/kernel/sched/core.c
+>> +++ b/kernel/sched/core.c
+>> @@ -2999,6 +2999,10 @@ static int __set_cpus_allowed_ptr(struct task_struct *p,
+>>   	struct rq *rq;
+>>   
+>>   	rq = task_rq_lock(p, &rf);
+>> +
+>> +	if (ctx->flags & SCA_CLR_RESTRICT)
+>> +		p->cpus_allowed_restricted = 0;
+>> +
+>>   	/*
+>>   	 * Masking should be skipped if SCA_USER or any of the SCA_MIGRATE_*
+>>   	 * flags are set.
+>> @@ -3025,8 +3029,8 @@ EXPORT_SYMBOL_GPL(set_cpus_allowed_ptr);
+>>   /*
+>>    * Change a given task's CPU affinity to the intersection of its current
+>>    * affinity mask and @subset_mask, writing the resulting mask to @new_mask.
+>> - * If user_cpus_ptr is defined, use it as the basis for restricting CPU
+>> - * affinity or use cpu_online_mask instead.
+>> + * The cpus_allowed_restricted bit is set to indicate to a later
+>> + * relax_compatible_cpus_allowed_ptr() call to relax the cpumask.
+>>    *
+>>    * If the resulting mask is empty, leave the affinity unchanged and return
+>>    * -EINVAL.
+>> @@ -3044,6 +3048,7 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
+>>   	int err;
+>>   
+>>   	rq = task_rq_lock(p, &rf);
+>> +	p->cpus_allowed_restricted = 1;
+>>   
+>>   	/*
+>>   	 * Forcefully restricting the affinity of a deadline task is
+>> @@ -3055,7 +3060,8 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
+>>   		goto err_unlock;
+>>   	}
+>>   
+>> -	if (!cpumask_and(new_mask, task_user_cpus(p), subset_mask)) {
+>> +	if (p->user_cpu_ptr &&
+>> +	    !cpumask_and(new_mask, p->user_cpu_ptr, subset_mask)) {
+> s/user_cpu_ptr/user_cpus_ptr/
+>
+>>   		err = -EINVAL;
+>>   		goto err_unlock;
+>>   	}
+>> @@ -3069,9 +3075,8 @@ static int restrict_cpus_allowed_ptr(struct task_struct *p,
+>>   
+>>   /*
+>>    * Restrict the CPU affinity of task @p so that it is a subset of
+>> - * task_cpu_possible_mask() and point @p->user_cpus_ptr to a copy of the
+>> - * old affinity mask. If the resulting mask is empty, we warn and walk
+>> - * up the cpuset hierarchy until we find a suitable mask.
+>> + * task_cpu_possible_mask(). If the resulting mask is empty, we warn
+>> + * and walk up the cpuset hierarchy until we find a suitable mask.
+>>    */
+>>   void force_compatible_cpus_allowed_ptr(struct task_struct *p)
+>>   {
+>> @@ -3125,11 +3130,15 @@ __sched_setaffinity(struct task_struct *p, struct affinity_context *ctx);
+>>   void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
+>>   {
+>>   	struct affinity_context ac = {
+>> -		.new_mask  = task_user_cpus(p),
+>> -		.flags     = 0,
+>> +		.new_mask  = cpu_possible_mask;
+> s/;/,/
+>
+> But even with those two things fixed, I'm seeing new failures in my
+> testing which I think are because restrict_cpus_allowed_ptr() is failing
+> unexpectedly when called by force_compatible_cpus_allowed_ptr().
+>
+> For example, just running a 32-bit task on an asymmetric system results
+> in:
+>
+> $ ./hello32
+> [ 1690.855341] Overriding affinity for process 580 (hello32) to CPUs 2-3
+>
+> That then has knock-on effects such as losing track of the initial affinity
+> mask and not being able to restore it if the forcefully-affined 32-bit task
+> exec()s a 64-bit program.
 
-Thanks,
-Jason
+I thought I have fixed the build failure. Apparently it is still there. 
+I will fix it.
 
-On Fri, Jan 27, 2023 at 8:20 PM Jason Xing <kerneljasonxing@gmail.com> wrote:
->
-> From: Jason Xing <kernelxing@tencent.com>
->
-> I encountered one case where I cannot increase the MTU size directly
-> from 1500 to 2000 with XDP enabled if the server is equipped with
-> IXGBE card, which happened on thousands of servers in production
-> environment.
->
-> This patch follows the behavior of changing MTU as i40e/ice does.
->
-> Referrences:
-> commit 23b44513c3e6f ("ice: allow 3k MTU for XDP")
-> commit 0c8493d90b6bb ("i40e: add XDP support for pass and drop actions")
->
-> Link: https://lore.kernel.org/lkml/20230121085521.9566-1-kerneljasonxing@gmail.com/
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> ---
-> v2:
-> 1) change the commit message.
-> 2) modify the logic when changing MTU size suggested by Maciej and Alexander.
-> ---
->  drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 25 ++++++++++++-------
->  1 file changed, 16 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> index ab8370c413f3..2c1b6eb60436 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> @@ -6777,6 +6777,18 @@ static void ixgbe_free_all_rx_resources(struct ixgbe_adapter *adapter)
->                         ixgbe_free_rx_resources(adapter->rx_ring[i]);
->  }
->
-> +/**
-> + * ixgbe_max_xdp_frame_size - returns the maximum allowed frame size for XDP
-> + * @adapter - device handle, pointer to adapter
-> + */
-> +static int ixgbe_max_xdp_frame_size(struct ixgbe_adapter *adapter)
-> +{
-> +       if (PAGE_SIZE >= 8192 || adapter->flags2 & IXGBE_FLAG2_RX_LEGACY)
-> +               return IXGBE_RXBUFFER_2K;
-> +       else
-> +               return IXGBE_RXBUFFER_3K;
-> +}
-> +
->  /**
->   * ixgbe_change_mtu - Change the Maximum Transfer Unit
->   * @netdev: network interface device structure
-> @@ -6788,18 +6800,13 @@ static int ixgbe_change_mtu(struct net_device *netdev, int new_mtu)
->  {
->         struct ixgbe_adapter *adapter = netdev_priv(netdev);
->
-> -       if (adapter->xdp_prog) {
-> +       if (ixgbe_enabled_xdp_adapter(adapter)) {
->                 int new_frame_size = new_mtu + ETH_HLEN + ETH_FCS_LEN +
->                                      VLAN_HLEN;
-> -               int i;
-> -
-> -               for (i = 0; i < adapter->num_rx_queues; i++) {
-> -                       struct ixgbe_ring *ring = adapter->rx_ring[i];
->
-> -                       if (new_frame_size > ixgbe_rx_bufsz(ring)) {
-> -                               e_warn(probe, "Requested MTU size is not supported with XDP\n");
-> -                               return -EINVAL;
-> -                       }
-> +               if (new_frame_size > ixgbe_max_xdp_frame_size(adapter)) {
-> +                       e_warn(probe, "Requested MTU size is not supported with XDP\n");
-> +                       return -EINVAL;
->                 }
->         }
->
-> --
-> 2.37.3
->
+BTW, which arm64 cpus support "allow_mismatched_32bit_el0"? I am trying 
+to see if I can reproduce the issue, but I am not sure if I have any 
+access to the cpus that have this capability.
+
+Cheers,
+Longman
+
