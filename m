@@ -2,92 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003DC67DFC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CAA067DFC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbjA0JKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:10:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
+        id S232824AbjA0JLS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 27 Jan 2023 04:11:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbjA0JKd (ORCPT
+        with ESMTP id S232728AbjA0JLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:10:33 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB1E761E6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:10:23 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-50660e2d2ffso59178727b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:10:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NF9F6nmk4D5HCn1Ztkvb0MHra+in9ohTgBv6TaRKTNw=;
-        b=B1gJTrcbOmj1zu+xW7j9aX1NO8wmmyRtqKIQj3kmtlGb03ApTl2+h8EuFhImEiSQdA
-         IFN9F8+3AMWkbfTErjnwKdlxxByjLidWPxIccWsRvfeMNSFGcufmUFesY33d9bPH/urm
-         BrNXs+eo/VwOjx2S73J4eD95r/FNOC3ceCunHuWrJrDjn0X+NZgdVWSI7UGlVPqy6ybB
-         exuDCiaOT0KGpPBkVpUidCQvpCR6JG0oTZWtK6D8NhrojIM5Zz10gjq61GLFLYQZBVzE
-         P1EYNoRiEU3f+YgxAB57zJ68MjiAMFYOCgNIoS0r1paS0TB1nGl+DNcx6fhQEyYeXsr9
-         pq5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NF9F6nmk4D5HCn1Ztkvb0MHra+in9ohTgBv6TaRKTNw=;
-        b=VyHhb2zpGuJVNBbdfIj3+1faUedh3Ic2tSZVbkrOg/5Y3FvNPBhKc9N/EyexTT7pO5
-         9oClKglEVY2zCGorwBeFIktK/d2yXb4bsnCPJRUlTMIRz+AK5E4Q2SiRca2ytf2luMFK
-         4DBZVfCzLYmGxxNJhJaXhhYDJNJq+kgc/H9/wYCWLGU9l3LMqeERvayT9+vO6GDRG3S6
-         +xDohyKUbvAWMWxbHgoZ+T6tZXaM98T0Fzq2OE+kepisv/zvwre7vR4pRGqug5vouR59
-         IuEpTfLTLdjJDBcjKngoME1TRmbTVdg2Mq1q8zcsXRKJchiqInTQXxaKenHAx4CvhoFj
-         kg+g==
-X-Gm-Message-State: AO0yUKUeBsbsTeETenAdn6R7Qdw332/WrgjvaGbhw259l+Fx8In0Jtto
-        AMz2yRUhV+/aznlhqJDAYUZ+22EJMjFHnpfsBrDIfw==
-X-Google-Smtp-Source: AK7set8vlrhF2s8FUf1Ky0wGBPEHYDQbUcc2hnY7bUD6R9OD7/fVkXFTeobJsbxKHTflhAyZVDM7Yg8LQ/7zYxpQSvA=
-X-Received: by 2002:a05:690c:706:b0:506:6952:b9c9 with SMTP id
- bs6-20020a05690c070600b005066952b9c9mr1187071ywb.477.1674810622569; Fri, 27
- Jan 2023 01:10:22 -0800 (PST)
+        Fri, 27 Jan 2023 04:11:17 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95882761D0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:11:05 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 79B1424DDB2;
+        Fri, 27 Jan 2023 17:11:02 +0800 (CST)
+Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 27 Jan
+ 2023 17:11:02 +0800
+Received: from jsia-virtual-machine.localdomain (60.50.196.81) by
+ EXMBX066.cuchost.com (172.16.6.66) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Fri, 27 Jan 2023 17:10:58 +0800
+From:   Sia Jee Heng <jeeheng.sia@starfivetech.com>
+To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <jeeheng.sia@starfivetech.com>, <leyfoon.tan@starfivetech.com>,
+        <mason.huo@starfivetech.com>
+Subject: [PATCH v3 0/4] RISC-V Hibernation Support
+Date:   Fri, 27 Jan 2023 17:10:47 +0800
+Message-ID: <20230127091051.1465278-1-jeeheng.sia@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230120154437.22025-1-andriy.shevchenko@linux.intel.com>
- <20230120154437.22025-5-andriy.shevchenko@linux.intel.com>
- <CACRpkdaeAkPuAQu0BW45Bn94Q_eO-Ven0-TSd38upe9XpXMzwA@mail.gmail.com> <Y9ORbi8hz7o5ek7W@smile.fi.intel.com>
-In-Reply-To: <Y9ORbi8hz7o5ek7W@smile.fi.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 27 Jan 2023 10:10:11 +0100
-Message-ID: <CACRpkdaFZxbZ4Sw0-PKyP5s7nPDYiSjNuJC_EdPiEiORZrQnEw@mail.gmail.com>
-Subject: Re: [PATCH v1 5/5] usb: fotg210: use devm_platform_get_and_ioremap_resource()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [60.50.196.81]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX066.cuchost.com
+ (172.16.6.66)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 9:55 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+This series adds RISC-V Hibernation/suspend to disk support.
+Low level Arch functions were created to support hibernation.
+swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
+cpu state onto the stack, then calling swsusp_save() to save the memory
+image.
 
-> On Thu, Jan 26, 2023 at 09:02:30PM +0100, Linus Walleij wrote:
-> > On Fri, Jan 20, 2023 at 4:44 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
->
-> ...
->
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->
-> Thanks for all your reviews!
->
-> But I think you are a bit late with them as Greg applied the series like
-> a couple of days ago.
+Arch specific hibernation header is implemented and is utilized by the
+arch_hibernation_header_restore() and arch_hibernation_header_save()
+functions. The arch specific hibernation header consists of satp, hartid,
+and the cpu_resume address. The kernel built version is also need to be
+saved into the hibernation image header to making sure only the same
+kernel is restore when resume.
 
-Yeah he's so quick and I'm so slow...
-But these days we record the mail thread link to lore in the
-commit so I can still share the blame ;)
+swsusp_arch_resume() creates a temporary page table that covering only
+the linear map. It copies the restore code to a 'safe' page, then start to
+restore the memory image. Once completed, it restores the original
+kernel's page table. It then calls into __hibernate_cpu_resume()
+to restore the CPU context. Finally, it follows the normal hibernation
+path back to the hibernation core.
 
-Yours,
-Linus Walleij
+To enable hibernation/suspend to disk into RISCV, the below config
+need to be enabled:
+- CONFIG_ARCH_HIBERNATION_HEADER
+- CONFIG_ARCH_HIBERNATION_POSSIBLE
+
+At high-level, this series includes the following changes:
+1) Change suspend_save_csrs() and suspend_restore_csrs()
+   to public function as these functions are common to
+   suspend/hibernation. (patch 1)
+2) Refactor the common code in the __cpu_resume_enter() function and
+   __hibernate_cpu_resume() function. The common code are used by
+   hibernation and suspend. (patch 2)
+3) Enhance kernel_page_present() function to support huge page. (patch 3)
+4) Add arch/riscv low level functions to support
+   hibernation/suspend to disk. (patch 4)
+
+The above patches are based on kernel v6.2-rc5 and are tested on
+StarFive VF2 SBC board and Qemu. 
+ACPI platform mode is not supported in this series.
+
+Changes since v2:
+- Rebased to kernel v6.2-rc5
+- Refactor the common code used by hibernation and suspend
+- Create copy_page macro
+- Solved other comments from Andrew and Conor
+
+Changes since v1:
+- Rebased to kernel v6.2-rc3
+- Fixed bot's compilation error
+
+Sia Jee Heng (4):
+  RISC-V: Change suspend_save_csrs and suspend_restore_csrs to public
+    function
+  RISC-V: Factor out common code of __cpu_resume_enter()
+  RISC-V: mm: Enable huge page support to kernel_page_present() function
+  RISC-V: Add arch functions to support hibernation/suspend-to-disk
+
+ arch/riscv/Kconfig                 |   7 +
+ arch/riscv/include/asm/assembler.h |  82 +++++++
+ arch/riscv/include/asm/suspend.h   |  24 ++
+ arch/riscv/kernel/Makefile         |   1 +
+ arch/riscv/kernel/asm-offsets.c    |   5 +
+ arch/riscv/kernel/hibernate-asm.S  |  89 +++++++
+ arch/riscv/kernel/hibernate.c      | 360 +++++++++++++++++++++++++++++
+ arch/riscv/kernel/suspend.c        |   4 +-
+ arch/riscv/kernel/suspend_entry.S  |  34 +--
+ arch/riscv/mm/pageattr.c           |   6 +
+ 10 files changed, 579 insertions(+), 33 deletions(-)
+ create mode 100644 arch/riscv/include/asm/assembler.h
+ create mode 100644 arch/riscv/kernel/hibernate-asm.S
+ create mode 100644 arch/riscv/kernel/hibernate.c
+
+
+base-commit: 7c46948a6e9cf47ed03b0d489fde894ad46f1437
+-- 
+2.34.1
+
