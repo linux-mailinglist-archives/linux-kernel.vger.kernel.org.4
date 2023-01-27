@@ -2,134 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9728F67F20E
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 00:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA3267F209
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 00:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjA0XJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 18:09:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
+        id S232710AbjA0XI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 18:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbjA0XJC (ORCPT
+        with ESMTP id S232699AbjA0XIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 18:09:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270A47D9B8
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 15:08:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674860889;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iP5M+Rvk3GF5mM9HY3iEHMgp/cYCRLdT0QBjJv/tYEY=;
-        b=GlHYzp0sDHjoq7L84aSfr9K1QwsOcxqNtzxaYxIum/gm5AVFQu3s7BtWeLKBzoVnaeR0/1
-        x1oZSM8yf8Z2kV8lDs5eJfMHyfIwmWcKLVeqUg3sZFPRr+eg4TgW85YaqhQ907cPmUGRIu
-        XlYonjvDCqjGGD66Dvy9j/1VfozPexA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-664-dlooKtsfMfankTnBLYHdbQ-1; Fri, 27 Jan 2023 18:08:08 -0500
-X-MC-Unique: dlooKtsfMfankTnBLYHdbQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 644D51C05AD5;
-        Fri, 27 Jan 2023 23:08:07 +0000 (UTC)
-Received: from madcap2.tricolour.ca (ovpn-0-3.rdu2.redhat.com [10.22.0.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D3902400F8F1;
-        Fri, 27 Jan 2023 23:08:05 +0000 (UTC)
-Date:   Fri, 27 Jan 2023 18:08:03 -0500
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: Re: [PATCH v1 1/2] io_uring,audit: audit IORING_OP_FADVISE but not
- IORING_OP_MADVISE
-Message-ID: <Y9RZU4InKURO/yGP@madcap2.tricolour.ca>
-References: <cover.1674682056.git.rgb@redhat.com>
- <68eb0c2dd50bca1af91203669f7f1f8312331f38.1674682056.git.rgb@redhat.com>
- <CAHC9VhSZNGs+SQU7WCD+ObMcwv-=1ZkBts8oHn40qWsQ=n0pXA@mail.gmail.com>
- <6d3f76ae-9f86-a96e-d540-cfd45475e288@kernel.dk>
- <Y9RYFHucRL5TrsDh@madcap2.tricolour.ca>
- <68b599bb-2329-3125-1859-cf529fbeea00@kernel.dk>
+        Fri, 27 Jan 2023 18:08:55 -0500
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FA71E5DF;
+        Fri, 27 Jan 2023 15:08:49 -0800 (PST)
+Received: by mail-io1-f41.google.com with SMTP id h184so2491922iof.9;
+        Fri, 27 Jan 2023 15:08:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=msAyX3ByOsUek5ziG1EnXhB9F97GMAyCutt3DTEavEI=;
+        b=lz5zaOsAqO23QNq8IYi4OVFsifK10KDDcXRe6P3EGDPUjTDX/EhTqsO+jllX+2891f
+         QC7RfGiAtOdyQxZL+GWTVEVqFXGLAkmpF6V5hb8TOTNwajHwvDW7+X1wuLOU/A3J5vY4
+         aXxRgPBWtbkiHKj2ryg0trjxjzAGcWvxry0yQSmh+rLEFcYIPwk/ZPmAcbd/ToZt3+bu
+         YVB1JKWbIV91k/PLxOMQxUhRMWQ9Ns4d0De5R6X6vdRdJ9GWnAP4Ky8kX/WHacGEIX3Z
+         xLB4XQ/NJ8GOiu0ccqRJAsHi2WyOrhDmW+OwG6PZmcWCMr/hQbUw5Xb+TSRr3pW5wL1d
+         E0uQ==
+X-Gm-Message-State: AFqh2krrxBICRNQ8r4kNaZGk+nxCQ6MMToA2lnQhTIdxkKOAhkC3gUp3
+        vLo157MiYLwAlsRxdu2Xc2me5TNyMyEdD77XwEM=
+X-Google-Smtp-Source: AMrXdXuMNiQzt+xeryqjTx8FNgLd+ZcquxV496yLzsQm6UltcFeIU+br+BbXlRQfDqV5YMRC7In5Dc/vsBmsrjaQV34=
+X-Received: by 2002:a05:6638:36c6:b0:39e:8c9c:7e37 with SMTP id
+ t6-20020a05663836c600b0039e8c9c7e37mr4970613jau.77.1674860929026; Fri, 27 Jan
+ 2023 15:08:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <68b599bb-2329-3125-1859-cf529fbeea00@kernel.dk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230127001951.3432374-1-namhyung@kernel.org> <bda606c2-2b1b-de9f-1386-8ee2bf925b4b@intel.com>
+ <317a91ff-70c5-57a5-8447-7543057e4055@arm.com>
+In-Reply-To: <317a91ff-70c5-57a5-8447-7543057e4055@arm.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 27 Jan 2023 15:08:37 -0800
+Message-ID: <CAM9d7chU6kTdG0y65_UaD_hW75GezzNJF1ZwjNWq8BUpACAGTA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] perf intel-pt: Fix the pipe mode (v1)
+To:     James Clark <james.clark@arm.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-27 16:03, Jens Axboe wrote:
-> On 1/27/23 4:02 PM, Richard Guy Briggs wrote:
-> > On 2023-01-27 15:45, Jens Axboe wrote:
-> >> On 1/27/23 3:35?PM, Paul Moore wrote:
-> >>> On Fri, Jan 27, 2023 at 12:24 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> >>>>
-> >>>> Since FADVISE can truncate files and MADVISE operates on memory, reverse
-> >>>> the audit_skip tags.
-> >>>>
-> >>>> Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
-> >>>> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> >>>> ---
-> >>>>  io_uring/opdef.c | 2 +-
-> >>>>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-> >>>> index 3aa0d65c50e3..a2bf53b4a38a 100644
-> >>>> --- a/io_uring/opdef.c
-> >>>> +++ b/io_uring/opdef.c
-> >>>> @@ -306,12 +306,12 @@ const struct io_op_def io_op_defs[] = {
-> >>>>         },
-> >>>>         [IORING_OP_FADVISE] = {
-> >>>>                 .needs_file             = 1,
-> >>>> -               .audit_skip             = 1,
-> >>>>                 .name                   = "FADVISE",
-> >>>>                 .prep                   = io_fadvise_prep,
-> >>>>                 .issue                  = io_fadvise,
-> >>>>         },
-> >>>
-> >>> I've never used posix_fadvise() or the associated fadvise64*()
-> >>> syscalls, but from quickly reading the manpages and the
-> >>> generic_fadvise() function in the kernel I'm missing where the fadvise
-> >>> family of functions could be used to truncate a file, can you show me
-> >>> where this happens?  The closest I can see is the manipulation of the
-> >>> page cache, but that shouldn't actually modify the file ... right?
+Hi James,
+
+On Fri, Jan 27, 2023 at 6:42 AM James Clark <james.clark@arm.com> wrote:
+>
+>
+>
+> On 27/01/2023 07:22, Adrian Hunter wrote:
+> > On 27/01/23 02:19, Namhyung Kim wrote:
+> >> Hello,
 > >>
-> >> Yeah, honestly not sure where that came from. Maybe it's being mixed up
-> >> with fallocate? All fadvise (or madvise, for that matter) does is
-> >> provide hints on the caching or access pattern. On second thought, both
-> >> of these should be able to set audit_skip as far as I can tell.
-> > 
-> > That was one suspicion I had.  If this is the case, I'd agree both could
-> > be skipped.
-> 
-> I'd be surprised if Steve didn't mix them up. Once he responds, can you
-> send a v2 with the correction?
+> >> I found some problems in Intel-PT and auxtrace in general with pipe.
+> >> In the past it used to work with pipe, but recent code fails.
+> >
+> > Pipe mode is a problem for Intel PT and possibly other auxtrace users.
+>
+> Just some info from my side: For Arm Coresight we ended up deprecating
+> pipe mode, then not supporting it altogether. First was when we added an
+> optional step to peek through all of the data to help with an edge case.
+> Then we added a requirement to receive a HW_ID packet before decoding
+> which necessitated the peek. You can't peek in pipe mode because you
+> need to be able to seek, so it's not supported at all anymore.
+>
+> For Arm SPE I never tested it with piped data. I suppose I could add a
+> test at some point, but I don't really see the usecase.
 
-Gladly.
+Yeah, it'd be great if we can have a test for Arm SPE.
 
-> Jens Axboe
+Anyway, my work env (Google) requires the pipe mode due to the
+restriction in disk usage.  Without the pipe support, it's not possible
+to run `perf record` in production.
 
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
-
+Thanks,
+Namhyung
