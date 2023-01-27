@@ -2,93 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9828067E09E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A63767E0A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233266AbjA0JrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:47:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        id S233109AbjA0Jrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:47:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233237AbjA0JrJ (ORCPT
+        with ESMTP id S233306AbjA0Jro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:47:09 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EEB80F80
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:47:07 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id fl24so3035474wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:47:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HBIolSlZ00EwbeKxt9JEN283WvP67aZfjKFSntuEpWw=;
-        b=xMM3VO5T4P9E5qmtfMQrKqowljMqE0Jig9p/WmIy4oAW57OtbhDCzr8n609LTLRNy0
-         cOshi6gndyzzlBXqNxcQfSDUFY+FUZSwA8OcjF75kXZhNkebj5sKgtpFB67J93/PREOs
-         sy1bj5rnxVDft0eBeGjUKnZw80BbzhZbayy42A9oVtZZLbT4uF7GlM+nG+YbZaaLgR+b
-         PJsjHvZnPzQY1nFg/4P/FtBGPo1AocKQebCaZ489TXYAFoCcQLE0bQLu9NoCSda+JH7d
-         IYByK4kK/7Vl1P/ClvNfGS8uoKay3tcWtCioD4gKX6cOWlHJlpb2P02X++OTefMDCO8X
-         OYyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HBIolSlZ00EwbeKxt9JEN283WvP67aZfjKFSntuEpWw=;
-        b=wUUiwWKczBrCj4ieVjH+99HfCsrzcYLkrKeaLGHL8tPnxYWgpqH1v7pTV44v7GFNfn
-         ntvE7hU8WO7dao2RM0MgXOrf68Gx0JdORKB+LocntrKBcF8sEqWL1q4eINBFBrSmRwq0
-         dp4EG++MPO67GpjmK8M+V8rmEeUKo/4G0Uu5KtGUrKr7+vpHAZoiuwfKymJJfVSXLe46
-         gzuQ82/qaHDZ8i6ML7VrKB8dnPDEr8qmwPL6AOzVw3qMn2d5Hyz7Bi4FoOh9DJoAgLVe
-         4laaE1BVGeZsIz4cSCqoXnyVtUONOiL7hUfKEGWhI9aDEHxp15ve+eXjjabjUs6oY1yJ
-         TQDw==
-X-Gm-Message-State: AFqh2kod0uUJiOx/9LX27jarYUPqr0IPHK7YKh+7kTJW6uSbdZ9sNXfP
-        tuqiODOBKVXjMDoA/DCwLVmpiUKmRMVFvvGx
-X-Google-Smtp-Source: AMrXdXvcM3Kdm6orrizc223QRtb+ndLyWOi5p5goOkVMJ8rcN3PCm+DMGrz4qGmvIoz+j+5byc8Aag==
-X-Received: by 2002:a05:600c:a4d:b0:3db:1d6:16f7 with SMTP id c13-20020a05600c0a4d00b003db01d616f7mr36374561wmq.23.1674812825815;
-        Fri, 27 Jan 2023 01:47:05 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h20-20020a05600c351400b003dc1300eab0sm8042087wmq.33.2023.01.27.01.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 01:47:05 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] ARM: dts: berlin: align UART node name with bindings
-Date:   Fri, 27 Jan 2023 10:46:58 +0100
-Message-Id: <167481277325.62929.11022928494197799320.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230123151539.369654-1-krzysztof.kozlowski@linaro.org>
-References: <20230123151539.369654-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 27 Jan 2023 04:47:44 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D0B77529;
+        Fri, 27 Jan 2023 01:47:22 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 27CB55C01E1;
+        Fri, 27 Jan 2023 04:47:19 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 27 Jan 2023 04:47:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674812839; x=1674899239; bh=tj4fUV0mbS
+        BB8dPKYcWhph5CmlArCZpuWD2qlpLjjUM=; b=NqcZIWOMP02pFJUkQSy+jZGFSa
+        AsLCaB7pvjhiMSRhEQqGuggVpaDVvwRJ9i3rqfGoFpkcyJbqxVo9DPQ10GCqLAEL
+        UeWfkBwHanctycdsMJqxdTT9a5Zv9SOBPA8j5TwtYXlr3Ey+gteDoniAmytk6lDC
+        Sgrw3e+AxKHqbPjC83DPKaRYILqPlDtEHCPZKvpSjLzLWF0Yl2aE1odmqthXZRFi
+        KaCZPNhzNLzxaCvvI4W6A3LGM3zlX6q+7uFUzkwTyG1wOoHIdtJrWTZ0xgKiwo5m
+        CwwwoniL/JaXW67QcOdM61eYGPXEiBi4pkeBIqu2ODg44g4tj3pYz45kxvHg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674812839; x=1674899239; bh=tj4fUV0mbSBB8dPKYcWhph5CmlAr
+        CZpuWD2qlpLjjUM=; b=RIy2/PFL9y+yYZljyekisVGaGB+Wgp131zaDczCJ2uSE
+        lVtMovYYIc6Y/kUhdHiPfoOE+LhIzBkHIM/xDiE+Xb1BT2TxSaYqs6v2KTbRg15M
+        ORCq6NBmulv1ldDOEUgogzFEJPH6iiN8nl3tvEPI1wFAGj4IpdQE73Wp/7L7XlDy
+        Bakdd15ygYkUR8tdzQN5ISRkSzbEHKSAS69cI+r/jyr4bjrsLPkQEXdPTHSFMVvE
+        fZoW14ZvfZ2Vo29oZz4mFRjiQxvHFk95gFCtfRrsjroMGMM309f3JjDMhfBS+l7h
+        JTZnR+OSSEGW40V0WjTVm6rk3tGAld7Llfw8yQYGzg==
+X-ME-Sender: <xms:pp3TY2nS_PQrvG9xrEoOGaSBSGxc3HFolVrxFgyWgofwCkJpezOIHA>
+    <xme:pp3TY90IcsPoLVI8XW61gv2utoWYi-XezC3eTJHdm2-79E0qRp4ybFS9myTe6vq9o
+    WdvDYA5dXNH83XSKow>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddviedgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:p53TY0qsoHTJWGphgcEsWzpLMYGkXgrLA0e-k_6LepTt6CwfUgwkWg>
+    <xmx:p53TY6lDT0hMf5Dg1bEqbiqE_HmP0m1qfQP-CLMaIsdYdRbRgFimYw>
+    <xmx:p53TY01pmSrgZTWyn3St-jeLHFPH_DM55OHj-n0M1_87woexQh-oXA>
+    <xmx:p53TY-qj15BRA_R24yUUZz8OPq7C2jkrRiDAbrrr1Z1w24Lk52JLvA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E0922B60086; Fri, 27 Jan 2023 04:47:18 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <31ed5c19-af81-4665-b8e9-79112a4f88df@app.fastmail.com>
+In-Reply-To: <CAMRc=McAAwdtCo9VCFtSuQm9hDRVWHZUQe+tMC9Fec=1YhJ+Ng@mail.gmail.com>
+References: <20230126132801.2042371-1-arnd@kernel.org>
+ <20230126132801.2042371-9-arnd@kernel.org>
+ <Y9KJpU4rynmTdQMj@smile.fi.intel.com>
+ <21657e6c-1101-4c56-91e3-6b2f6f9e10c9@app.fastmail.com>
+ <Y9OQ9/3IuVIU8VK7@smile.fi.intel.com>
+ <CAMRc=McAAwdtCo9VCFtSuQm9hDRVWHZUQe+tMC9Fec=1YhJ+Ng@mail.gmail.com>
+Date:   Fri, 27 Jan 2023 10:46:59 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Cc:     "Arnd Bergmann" <arnd@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 8/8] gpiolib: move of_gpio_flags into gpiolib-of.c
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 16:15:39 +0100, Krzysztof Kozlowski wrote:
-> Bindings expect UART/serial node names to be "serial".
-> 
-> 
+On Fri, Jan 27, 2023, at 10:43, Bartosz Golaszewski wrote:
+> On Fri, Jan 27, 2023 at 9:53 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+>>
+>> On Thu, Jan 26, 2023 at 03:47:42PM +0100, Arnd Bergmann wrote:
+>> > On Thu, Jan 26, 2023, at 15:09, Andy Shevchenko wrote:
+>> > > On Thu, Jan 26, 2023 at 02:28:01PM +0100, Arnd Bergmann wrote:
+>> > >> From: Arnd Bergmann <arnd@arndb.de>
+>> > >>
+>> > >> There is no need for this in the header any more, it's just
+>> > >> an implementation detail now.
+>> > >
+>> > > I have published
+>> > > https://lore.kernel.org/r/20230112145140.67573-1-andriy.shevchenko@linux.intel.com
+>> > > Can it be used?
+>> >
+>> > Sure, I added a Reviewed-by: on that now. Your patch will conflict
+>> > with my patch 7/8, but we can work that out.
+>>
+>> Either Bart takes it independently or you may attach it into your series.
+>> Bart?
+>>
+>
+> I applied it to my for-next branch, is that fine?
 
-Applied, thanks!
+That's fine, I'll make sure to rebase patch 7 on top of that before
+I resend it. The two are functionally independent but touch adjacent
+lines.
 
-Let me know if anyone preferred to take it via sub-arch/SoC maintainer tree.
-I'll drop it then.
-
-[1/1] ARM: dts: berlin: align UART node name with bindings
-      https://git.kernel.org/krzk/linux-dt/c/2ba4ff82f9dd312fb9f77168f159698c93f4841b
-
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+     Arnd
