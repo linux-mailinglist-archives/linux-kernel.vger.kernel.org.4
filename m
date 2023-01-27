@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C725E67EA30
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD40A67EA32
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234360AbjA0QAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:00:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        id S234452AbjA0QAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:00:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234095AbjA0QAG (ORCPT
+        with ESMTP id S234068AbjA0QAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:00:06 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5C284FB4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:00:02 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id h16so5342202wrz.12
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:00:02 -0800 (PST)
+        Fri, 27 Jan 2023 11:00:07 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F1F82429
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:00:03 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id z5so5378737wrt.6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:00:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Y/FOgQ0NZG0jwRqHnOj//3vzxfhNSgcxkGZMIRLxc18=;
-        b=Z581dVEflQIlkmAKVpzH1Hx78FcKmqgluOxsgZVKB34gp/ileDSKefoZZa6XtitIdh
-         VeyfnjDVQp2URi7NSUQ6bfXScFnBxGluMOrrpalAE1hlJYoypTK5wriQD7F6LWFf5hSS
-         cqAbhI+M1KnpkLcR1KxQKLrj1pvLyK6A18TsnpbNXC6/AiRIFHvd5LmfZ6DAE+N4NsPN
-         jbWWNZNKISVB16cKK348o+yXYUhLdlwEZC8Iq5M8hxtXRVb6TNeLqE/FxYA64xUYbnC0
-         2AfgGKURgK4IW/6uTHPr+SobQH2IGMduVh3aCIULGx8M1W4QTqmGfUwX7vhmtNcGF1aT
-         GCsQ==
+        bh=bzJbuEpSorl6eoXYVPl93ynMwjEC1wNPzgQRRlVLFcc=;
+        b=UM1CmdhDrD5/cs9Kn1JfLX/109YUd3P0NDK0KFLaXqbEeeV6VRoSh3GXf9NXpUqGS1
+         Fm1q9JcCWzFmyGKu2HUHQTLhdHrnl9JwtjToxAh1AZD23rO3CgOCMYEo96B45HdHudgD
+         pCngAPF0X8mcULZCPC4sAfkdwpcjkZQ8V8CFQDlFOioSOWjTJB/Ve1dtpCXOdwq1XCvA
+         dNTSr+/EyhpCj+0yQhKJiGVHS5jtlmJZShT/Q9TkE9BGTGZWjnNM+8HSXl+IYnIRehDf
+         n89xd7OLLGGKJxSaDbCwwmfLgzRyv8EnZF/BusgcHoqSANXJSu6nXz2T7T/osDdX9ezr
+         2pEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y/FOgQ0NZG0jwRqHnOj//3vzxfhNSgcxkGZMIRLxc18=;
-        b=uDlKaBTCtPTqMyQ6yvK2G/TT0kSTaok3EGXDhQYwNIZUcMBfotvFS8sXOKrrU0MQzt
-         BlnpqR5K9jc3U1Q1FBXOTwYDsSb1nljb3J1Er2HhmKgNm1oyWuHbmdIR2e3A+5XeTSgU
-         z4guExM/n5RD7iK7P7xulsN8DZbUbCBk20VBBFv3OHe317Jdgytp6kFmDqQbYRSITgcX
-         w54KdeV60gU8Y7qy1SWuHOzkiNXmXFvZFX+wVkKhbPL+cHnci3ZFHiHMmivd0hnbLwtN
-         E9cEBhPp4+xhyuPpltSHMySgq4KVRp7JsLjTRUF4IswCQwc/5vIvB4dcXEP1D62LQa3B
-         Sy9g==
-X-Gm-Message-State: AFqh2kqEHLOOSw+NPHNbDI3vEaECW1rTOl6E5CcZDhlfTjJ9i5yz/1US
-        GpaAp9uFYiTxap0/CQxvTjq7hQ==
-X-Google-Smtp-Source: AMrXdXsfxZfsB12h/I+4kDdqKwJTa4EmVK4edFjSQJRMCkCqjHfeJdCXRiwlufDWBONCnyUY10a/Qg==
-X-Received: by 2002:a05:6000:8d:b0:2be:3a6a:f565 with SMTP id m13-20020a056000008d00b002be3a6af565mr26758952wrx.38.1674835200796;
-        Fri, 27 Jan 2023 08:00:00 -0800 (PST)
+        bh=bzJbuEpSorl6eoXYVPl93ynMwjEC1wNPzgQRRlVLFcc=;
+        b=jCXWexTZ4+yY4plB9ShY7gfXrzpm+Z3tF1yEKKn2b2DMEPS4wAQMXuWuWwu1QtegBb
+         PWO2DcD7bUdpkSUJFn6YBC8pVv/cNjNV6lxIe8wPJwZWh0EkeTFE3aJMOQFX5oZlE7e2
+         VqOpQKTMjqC4IY2E6owptCn/iQ2Vy2Jf35h0jNf+mfgyT4B+Mc3fNgw13GPvPnA2BN5j
+         T/FmZFeWmz5k3ZPSKJOL4JDlyd8TKhCO3Xfh1kVnchVAGnWsShf/Y3mtbD0TZR9/lsBY
+         nCO86oIfYcwOwieQ60+BdZR9cjdYOFo9CfgHS5xOkFIhlqFhDQDMGwKPNtHKcQIBlFoj
+         0ejQ==
+X-Gm-Message-State: AO0yUKV0jV4uyKh8TGD9Y627fPcqy3426E97wI2CiuzBKlkVgSjjEBoj
+        eoHTKGwYWML6Hqe/VUR+FyeZTA==
+X-Google-Smtp-Source: AK7set8GqJEyHXCYvmzLPwbIFxr282s+0gOPSbsGs1wFB2Rc04VMUynXQuFy9kq6+Qi867lK7eO+Xg==
+X-Received: by 2002:adf:cf08:0:b0:2bf:bbd1:1db3 with SMTP id o8-20020adfcf08000000b002bfbbd11db3mr9145215wrj.44.1674835202019;
+        Fri, 27 Jan 2023 08:00:02 -0800 (PST)
 Received: from [127.0.0.1] ([2a01:cb19:85c2:1100:7fe1:513:212f:568e])
-        by smtp.gmail.com with ESMTPSA id b11-20020adfe30b000000b002bfcc940014sm3171942wrj.82.2023.01.27.07.59.59
+        by smtp.gmail.com with ESMTPSA id b11-20020adfe30b000000b002bfcc940014sm3171942wrj.82.2023.01.27.08.00.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 08:00:00 -0800 (PST)
+        Fri, 27 Jan 2023 08:00:01 -0800 (PST)
 From:   Guillaume Ranquet <granquet@baylibre.com>
-Date:   Fri, 27 Jan 2023 16:55:08 +0100
-Subject: [PATCH v5 1/3] dt-bindings: phy: mediatek: hdmi-phy: Add mt8195 compatible
+Date:   Fri, 27 Jan 2023 16:55:09 +0100
+Subject: [PATCH v5 2/3] phy: phy-mtk-hdmi: Add generic phy configure callback
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220919-v5-1-cfb0e5ad29b2@baylibre.com>
+Message-Id: <20220919-v5-2-cfb0e5ad29b2@baylibre.com>
 References: <20220919-v5-0-cfb0e5ad29b2@baylibre.com>
 In-Reply-To: <20220919-v5-0-cfb0e5ad29b2@baylibre.com>
 To:     Vinod Koul <vkoul@kernel.org>, Jitao shi <jitao.shi@mediatek.com>,
@@ -88,27 +88,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a compatible for the HDMI PHY on MT8195
+Some phys, such as mt8195, needs to have a configure callback defined.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
 ---
- Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/phy/mediatek/phy-mtk-hdmi.c | 12 ++++++++++++
+ drivers/phy/mediatek/phy-mtk-hdmi.h |  1 +
+ 2 files changed, 13 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml
-index 6cfdaadec085..f3a8b0b745d1 100644
---- a/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml
-@@ -28,6 +28,7 @@ properties:
-           - const: mediatek,mt2701-hdmi-phy
-       - const: mediatek,mt2701-hdmi-phy
-       - const: mediatek,mt8173-hdmi-phy
-+      - const: mediatek,mt8195-hdmi-phy
+diff --git a/drivers/phy/mediatek/phy-mtk-hdmi.c b/drivers/phy/mediatek/phy-mtk-hdmi.c
+index b16d437d6721..32f713301768 100644
+--- a/drivers/phy/mediatek/phy-mtk-hdmi.c
++++ b/drivers/phy/mediatek/phy-mtk-hdmi.c
+@@ -8,10 +8,12 @@
  
-   reg:
-     maxItems: 1
+ static int mtk_hdmi_phy_power_on(struct phy *phy);
+ static int mtk_hdmi_phy_power_off(struct phy *phy);
++static int mtk_hdmi_phy_configure(struct phy *phy, union phy_configure_opts *opts);
+ 
+ static const struct phy_ops mtk_hdmi_phy_dev_ops = {
+ 	.power_on = mtk_hdmi_phy_power_on,
+ 	.power_off = mtk_hdmi_phy_power_off,
++	.configure = mtk_hdmi_phy_configure,
+ 	.owner = THIS_MODULE,
+ };
+ 
+@@ -43,6 +45,16 @@ static int mtk_hdmi_phy_power_off(struct phy *phy)
+ 	return 0;
+ }
+ 
++static int mtk_hdmi_phy_configure(struct phy *phy, union phy_configure_opts *opts)
++{
++	struct mtk_hdmi_phy *hdmi_phy = phy_get_drvdata(phy);
++
++	if (hdmi_phy->conf->hdmi_phy_configure)
++		return hdmi_phy->conf->hdmi_phy_configure(phy, opts);
++
++	return 0;
++}
++
+ static const struct phy_ops *
+ mtk_hdmi_phy_dev_get_ops(const struct mtk_hdmi_phy *hdmi_phy)
+ {
+diff --git a/drivers/phy/mediatek/phy-mtk-hdmi.h b/drivers/phy/mediatek/phy-mtk-hdmi.h
+index c7fa65cff989..f5aac9d352d8 100644
+--- a/drivers/phy/mediatek/phy-mtk-hdmi.h
++++ b/drivers/phy/mediatek/phy-mtk-hdmi.h
+@@ -24,6 +24,7 @@ struct mtk_hdmi_phy_conf {
+ 	const struct clk_ops *hdmi_phy_clk_ops;
+ 	void (*hdmi_phy_enable_tmds)(struct mtk_hdmi_phy *hdmi_phy);
+ 	void (*hdmi_phy_disable_tmds)(struct mtk_hdmi_phy *hdmi_phy);
++	int (*hdmi_phy_configure)(struct phy *phy, union phy_configure_opts *opts);
+ };
+ 
+ struct mtk_hdmi_phy {
 
 -- 
 2.39.0
