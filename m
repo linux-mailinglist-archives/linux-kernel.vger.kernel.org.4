@@ -2,120 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2CC67EBE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3328E67EC12
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234702AbjA0RCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:02:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
+        id S235037AbjA0RGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbjA0RCv (ORCPT
+        with ESMTP id S235033AbjA0RGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:02:51 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5177C726
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:02:32 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id fl24so3919993wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:02:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WbU1jG3eBIib3Y4T/FJmhjrIYuLNHNTwPimhNEaBXnw=;
-        b=ZYqzKu5blklwUObA1H3gAkwCboO6R1adMPHjlKADOpoynUElxQHWl2yhz5fmMJ6/OC
-         2nzf1af85r9C5QwP4LdAALucQ0GJBKLp9Fc7M0AxBfPmo4zHYq1dLUyHbWOh2U+NM1uk
-         pDccnDz9SDYqiePHluMiOQypB7bl+tRkOzl31LQiaCkIJWj3RHd4BP0dS4he+VRiqu0W
-         b6vyXb9jET2cF6MJXg4WQkSifFOwnXSbZ9p/ogX/DXyGRLg5epYZ/2i4hjnIK/d+ES7a
-         9u9eLkpvlzjN9eiRcqUcmx74E1ZgC5+yt4Dz+/J3EFtI5q/P0UiM4sAHAQaa8mDJU5vL
-         TsGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WbU1jG3eBIib3Y4T/FJmhjrIYuLNHNTwPimhNEaBXnw=;
-        b=pNrOVvxrtuCc5kZXgiZkmW4mMp7IuOSXpnEzJt6z118cPM+T2AwGhqCT8dHQ3JT1vL
-         wA6K4LlM98kys7WglA+iAJXxCh4TJ1uRnvvl2po9fbVwlzEWoMlfWAfUg0QODs9wXhap
-         s8UW79dl16nRUR/OGFKHMY/IwLG22DdPlgdrrXfwVIhNdhyohsxUfuTTFTJ2BWgSuWZM
-         jz4nNA2od3e4kVYsJO4WKLADPSL2LmNIUY7dCNqxfHCC/Kxark3EDAwl6RU13W1D4ZVK
-         GeNxiBojuupv6z/oG/oLQhcDHbU0XbtyOV9/9vE3YcBeiftVje9gXvJw8y3fZ13drYid
-         //5A==
-X-Gm-Message-State: AO0yUKWeLgp1A5vkFPzcm7jJ0flMSneWNpkWbtsl8h0BdL2h/776elZg
-        oVQD69E0ZANpH1k7NfrWRV8V+Q==
-X-Google-Smtp-Source: AK7set8nKe1EwJJz5qSh/iMOOjsbaKe0SVJ6gB0BYq3Td23vOrRiaDhe0P7jCeUxIxn6ZPoBJ0Fjww==
-X-Received: by 2002:a05:600c:2189:b0:3dc:4334:22e3 with SMTP id e9-20020a05600c218900b003dc433422e3mr790979wme.17.1674838951034;
-        Fri, 27 Jan 2023 09:02:31 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c12ca00b003d9df9e59c4sm7925935wmd.37.2023.01.27.09.02.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 09:02:30 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Christian Hewitt <christianshewitt@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230127150536.3719090-1-christianshewitt@gmail.com>
-References: <20230127150536.3719090-1-christianshewitt@gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: arm: amlogic: add support for
- Radxa Zero2
-Message-Id: <167483894978.2238401.2111173691502093407.b4-ty@linaro.org>
-Date:   Fri, 27 Jan 2023 18:02:29 +0100
+        Fri, 27 Jan 2023 12:06:05 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2088.outbound.protection.outlook.com [40.107.95.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8E58497A;
+        Fri, 27 Jan 2023 09:05:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EjTg0COUU8qBOPM8eyhirvv5oZ1xgEFlp9GIxdsG+1NnoyRyjebt+yVw2YfslCtRQIpVOpL/KjRLNr2KWw+REpssd74lBiCrG24PdS2yiItZ1iN8MJupcig1Uo+rEXN50j4WPZfZNLDJDjnhEztEeTStvlPoFawpimBZw/vRh5oOy4lexaD147Q+v69tzQMHyA6N0NIDtuqv5zb8h0TJAlsWcjxJYEOTBt+BoNEY2VfLo++8ZtWYZSwB7lMA7/LcNweZd3/0ksxq8gFj2qk8hVZclk7s4+uTWfpmIPz9ZOsF2dK89M7Qr6NN/dOPsTxQAMRNLm8+KgoqArwry79lDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U5YcovxXShS8uVNJ+vMeslU0ZSLeD0SZJKDMa+4ArS4=;
+ b=OJuzdBu43+tfgHdrk9j8Oo5W6BR7q7+YBfjlrH23rj3KnjF2JRfJYj8MwOhn9DqZZkUDICTcTg1g5hB07z6czluHeiIpcJ7vO+FwBeZPGqQQRlOi/I/iW4mCQWL9Q7L7oSMMMaHydBTvbz2y/5dH6FgZ5CuhdlAXnRFTpe3u9YoNCtl1KqQ45J8fRklYRSBsis+RjQx8gYaHewFbgf3Kr5aaM/lS+DXIgnB5IIO8cPpVScDyGvxanrGrQCmJ3UsFMavckbw/r2bYnXvFYhyYVRUlWmdWFfTEv4migT54b1vAbsMTjXoz13mY3yI+dT0MZptYbk8QCU+MGsS8kkNWpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U5YcovxXShS8uVNJ+vMeslU0ZSLeD0SZJKDMa+4ArS4=;
+ b=FDybrfu8Wrrn/dXy4G3SwCIAnDCMgY0zU1JIjGlwXCRauQop/649b3RrazCnIBiL9mdUm5vjpSYWn2CFlOXRd+y+9jf4j94aR0apf6f0xfH7Y5M9+DW2FVcv3GFtShmDFa2eygpl0k8eaL+jDCO/XneSXgIJeHrgUXO5w6F7SOE=
+Received: from BN8PR04CA0047.namprd04.prod.outlook.com (2603:10b6:408:d4::21)
+ by IA1PR12MB6650.namprd12.prod.outlook.com (2603:10b6:208:3a1::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Fri, 27 Jan
+ 2023 17:04:31 +0000
+Received: from BN8NAM11FT089.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:d4:cafe::46) by BN8PR04CA0047.outlook.office365.com
+ (2603:10b6:408:d4::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22 via Frontend
+ Transport; Fri, 27 Jan 2023 17:04:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT089.mail.protection.outlook.com (10.13.176.105) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6023.16 via Frontend Transport; Fri, 27 Jan 2023 17:04:31 +0000
+Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 27 Jan
+ 2023 11:04:30 -0600
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     <bp@alien8.de>, <linux-edac@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <muralidhara.mk@amd.com>,
+        <naveenkrishna.chatradhi@amd.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH v2 00/22] AMD64 EDAC Cleanup and Refactor
+Date:   Fri, 27 Jan 2023 17:03:57 +0000
+Message-ID: <20230127170419.1824692-1-yazen.ghannam@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT089:EE_|IA1PR12MB6650:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2d6e3eca-bc14-40d2-bf3b-08db00888e9c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qm2DGUnm4RtSgRI+Ycg/nX6HyaOhDfvNq2n/o8nbDSlXD6pwAsbGF1BAWXjai5MeK9OWwvoqfmYGa8e2wEvkO6FkSP/5T0MGDnqqtvnEAfk2qUlJeLgZseIPJ8a3L38gQXPdgF1GnG/iBclhttrj4o0gKi78bzPZBAVCA0x74NoVAHWUAl/DQXc6YHIK4PjxjedEIZHxjMNRyGK5mUpMkn1tPPVqYmrYzIJSWdiR2M3QbLoj3g3MJmM7O9cXJNxaMlY15gFdjwEwe9e3VEW6eOSS96fSh5t63UW3OPE222Sj03KgxmWwMKdZ4b11sN8M8d5V1TxUSj6J9nG1olUNpWP0kcwV/PsqOXJ4966w4dJcLfpcqrqKwQ0nhm0vQ7Wd8dEQ9PUXSUR9FppSDDtYTbVrQWbKDYjauNDcKxMZKj0fZ6Fjsnq/6egX1pIPkXjvYZ9qhAS+f+q+jPfh+joUP1gcF4mvS/naQQPH6XwoaZLCgJE7nAGdimaDQ4qy2vCj/G2pYXITbgH/nctkqtOLgsyQm/BNbpeMwwiysCramrei18XIGDDUuG69cwcmGM4extITVyL2/EinfuAyXlAq/T/XmJmlv+ms8RlKwfOwPSJk2DryxTNPPrtQ/E8QU6YVFcBGdH/af4kTQAkeVYYUYoaBMim3i+ZLk8giXg7hLU1p/MpC2J+x/1cAoLFZkU+GAmVQsyZm+pMrfgdfwAcH9wSehHrHBeVqm4zxHx4ERwJDruC+uLARMItVkl219dAkha0x0WMef7fNX2M9yuVSpQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199018)(40470700004)(36840700001)(46966006)(7696005)(16526019)(186003)(26005)(478600001)(966005)(47076005)(2616005)(336012)(82310400005)(426003)(83380400001)(6666004)(316002)(54906003)(41300700001)(8676002)(81166007)(356005)(1076003)(70206006)(82740400003)(110136005)(8936002)(44832011)(40460700003)(86362001)(4326008)(5660300002)(70586007)(36756003)(40480700001)(36860700001)(2906002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 17:04:31.0777
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d6e3eca-bc14-40d2-bf3b-08db00888e9c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT089.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6650
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Boris,
 
-On Fri, 27 Jan 2023 15:05:35 +0000, Christian Hewitt wrote:
-> The Radxa Zero2 is a small form-factor SBC using the Amlogic
-> A311D chip.
-> 
-> 
+This set removes a good amount of code that is no longer useful. Also,
+this set splits the module initialization more clearly between legacy
+and modern systems. The original intention was to prep for adding GPU
+support, but I think the split is worthwhile on its own.
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.3/arm64-dt)
+Patches 1-4 remove useless code for Family 17h and later systems.
 
-[1/2] dt-bindings: arm: amlogic: add support for Radxa Zero2
-      https://git.kernel.org/amlogic/c/229cfc6b16ccedfcae1ee10dc1aed04e7a85ed32
-[2/2] arm64: dts: meson: add support for Radxa Zero2
-      https://git.kernel.org/amlogic/c/d747e7f76a5fa6e3deb4c419df768f9ee49c2161
+Patch 5 removes code that is no longer needed for all systems.
 
-These changes has been applied on the intermediate git tree [1].
+Patches 6-22 merge, split, and rename various functions and structures
+to have clear legacy and modern initialization paths. A future patch
+set will add a third "GPU" path.
 
-The v6.3/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
+The basis of the first revision of this set was to make a function
+pointer for each legacy/modern split in the code path. This resulted in
+16 function pointers. And, in my mind, it was still hard to follow.
 
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
+The basis of this revision is to diverge early during initialization,
+and then follow separate paths. This results in 7 functions pointers
+including 2 used only for legacy systems and 1 used only for modern
+systems. I think this is much easier to follow as each path has a clear
+set of helper functions.
 
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
+Also, I dropped a lot of the boiler plate commit messages. Most are now
+fairly terse though I did try to add extra details in some cases.
 
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
+Thanks!
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+-Yazen
+
+Link:
+https://lore.kernel.org/r/20220509145534.44912-1-yazen.ghannam@amd.com
+
+Muralidhara M K (11):
+  EDAC/amd64: Merge struct amd64_family_type into struct amd64_pvt
+  EDAC/amd64: Split prep_chip_selects() into dct/umc functions
+  EDAC/amd64: Split read_base_mask() into dct/umc functions
+  EDAC/amd64: Split determine_memory_type() into dct/umc functions
+  EDAC/amd64: Split read_mc_regs() into dct/umc functions
+  EDAC/amd64: Split ecc_enabled() into dct/umc functions
+  EDAC/amd64: Split setup_mci_misc_attrs() into dct/umc functions
+  EDAC/amd64: Split determine_edac_cap() into dct/umc functions
+  EDAC/amd64: Split init_csrows() into dct/umc functions
+  EDAC/amd64: Split dump_misc_regs() into dct/umc functions
+  EDAC/amd64: Add get_err_info() to pvt->ops
+
+Yazen Ghannam (11):
+  EDAC/amd64: Don't set up EDAC PCI control on Family 17h+
+  EDAC/amd64: Remove scrub rate control for Family 17h and later
+  EDAC/amd64: Remove PCI Function 6
+  EDAC/amd64: Remove PCI Function 0
+  EDAC/amd64: Remove early_channel_count()
+  EDAC/amd64: Rename debug_display_dimm_sizes()
+  EDAC/amd64: Split get_csrow_nr_pages() into dct/umc functions
+  EDAC/amd64: Drop dbam_to_cs() for Family 17h and later
+  EDAC/amd64: Don't find ECC symbol size for Family 17h and later
+  EDAC/amd64: Rework hw_info_{get,put}
+  EDAC/amd64: Rename f17h_determine_edac_ctl_cap()
+
+ drivers/edac/amd64_edac.c | 1221 ++++++++++++++-----------------------
+ drivers/edac/amd64_edac.h |   89 +--
+ 2 files changed, 483 insertions(+), 827 deletions(-)
 
 -- 
-Neil
+2.25.1
 
