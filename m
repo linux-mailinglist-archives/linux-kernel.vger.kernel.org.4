@@ -2,119 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE6867EA1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC08167EA21
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233997AbjA0P6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        id S233907AbjA0P67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbjA0P6h (ORCPT
+        with ESMTP id S233956AbjA0P6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:58:37 -0500
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDC180173;
-        Fri, 27 Jan 2023 07:58:33 -0800 (PST)
-Message-ID: <713a3e22-6327-875e-072d-e916f75d5239@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1674835111;
+        Fri, 27 Jan 2023 10:58:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FB8241D3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:58:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674835085;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LilgKmKEflCZfQlcQYFPLEHnFe8sGUdWiFuvFJpiBQE=;
-        b=W1h1/95tW4oi19mOTrCL4z3lTFY8WnS1D5JQdlCzgj3W/8QulHUVnFCJLQrkC+WNPqCc47
-        rjsHDgp33JKmjFdkuV7f2w+Tvq9wVSksD8V1gMzpBeUH3UoXQOMnhfMW/yBZFXt6NGDQ2G
-        6akvkrV+vSX/NkAKfmFonoHFUCrl15c=
-Date:   Fri, 27 Jan 2023 23:57:57 +0800
+        bh=LGMjaKXOqe+JLwIJovTd/9nYCPNTj82aDGnhgP3mX/4=;
+        b=YcItZ/HjTMqdzwjDLlrx8EbLN/WXOffEhq4bwiXq0tPA0NE/0Wn/5NAiMaqfIHpdiaPunx
+        eQWznQyBHItw1XNVL0WXfykLIrnslHiEMRJ7oyf1XVgaSbqm1nSRVSzgyT1cZhG4s3dPPY
+        p+HeJG85NL2EnpjxGKF2XCV+ardrTUE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-279-Gs8p_XAMOpuFQqWlvU8ztQ-1; Fri, 27 Jan 2023 10:58:02 -0500
+X-MC-Unique: Gs8p_XAMOpuFQqWlvU8ztQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1B78857F82;
+        Fri, 27 Jan 2023 15:58:01 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.22.32.146])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9382C14171BE;
+        Fri, 27 Jan 2023 15:58:01 +0000 (UTC)
+Received: by fedora.redhat.com (Postfix, from userid 1000)
+        id E09ACF10F2; Fri, 27 Jan 2023 10:57:58 -0500 (EST)
+Date:   Fri, 27 Jan 2023 10:57:58 -0500
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Giuseppe Scrivano <gscrivan@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brauner@kernel.org, viro@zeniv.linux.org.uk,
+        Miklos Szeredi <miklos@szeredi.hu>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+Message-ID: <Y9P0hhHSFq/OBZjt@redhat.com>
+References: <20230125041835.GD937597@dread.disaster.area>
+ <CAOQ4uxhqdjRbNFs_LohwXdTpE=MaFv-e8J3D2R57FyJxp_f3nA@mail.gmail.com>
+ <87wn5ac2z6.fsf@redhat.com>
+ <CAOQ4uxiPLHHnr2=XH4gN4bAjizH-=4mbZMe_sx99FKuPo-fDMQ@mail.gmail.com>
+ <87o7qmbxv4.fsf@redhat.com>
+ <CAOQ4uximBLqXDtq9vDhqR__1ctiiOMhMd03HCFUR_Bh_JFE-UQ@mail.gmail.com>
+ <87fsbybvzq.fsf@redhat.com>
+ <CAOQ4uxgos8m72icX+u2_6Gh7eMmctTTt6XZ=BRt3VzeOZH+UuQ@mail.gmail.com>
+ <87wn5a9z4m.fsf@redhat.com>
+ <CAOQ4uxi7GHVkaqxsQV6ninD9fhvMAPk1xFRM2aMRFXQZUV-s3Q@mail.gmail.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 4/4] KVM: arm64: Allow no running vcpu on saving vgic3
- pending table
-Content-Language: en-US
-To:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.linux.dev
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, pbonzini@redhat.com,
-        corbet@lwn.net, maz@kernel.org, james.morse@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-        yuzhe@nfschina.com, isaku.yamahata@intel.com, seanjc@google.com,
-        ricarkol@google.com, eric.auger@redhat.com, renzhengeek@gmail.com,
-        reijiw@google.com, shan.gavin@gmail.com
-References: <20230126235451.469087-1-gshan@redhat.com>
- <20230126235451.469087-5-gshan@redhat.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Zenghui Yu <zenghui.yu@linux.dev>
-In-Reply-To: <20230126235451.469087-5-gshan@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxi7GHVkaqxsQV6ninD9fhvMAPk1xFRM2aMRFXQZUV-s3Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/27 07:54, Gavin Shan wrote:
-> We don't have a running VCPU context to save vgic3 pending table due
-> to KVM_DEV_ARM_VGIC_{GRP_CTRL, SAVE_PENDING_TABLES} command on KVM
-> device "kvm-arm-vgic-v3". The unknown case is caught by kvm-unit-tests.
+On Wed, Jan 25, 2023 at 10:23:08PM +0200, Amir Goldstein wrote:
+> On Wed, Jan 25, 2023 at 9:45 PM Giuseppe Scrivano <gscrivan@redhat.com> wrote:
+> >
+> > Amir Goldstein <amir73il@gmail.com> writes:
+> >
+> > >> >> I previously mentioned my wish of using it from a user namespace, the
+> > >> >> goal seems more challenging with EROFS or any other block devices.  I
+> > >> >> don't know about the difficulty of getting overlay metacopy working in a
+> > >> >> user namespace, even though it would be helpful for other use cases as
+> > >> >> well.
+> > >> >>
+> > >> >
+> > >> > There is no restriction of metacopy in user namespace.
+> > >> > overlayfs needs to be mounted with -o userxattr and the overlay
+> > >> > xattrs needs to use user.overlay. prefix.
+> > >>
+> > >> if I specify both userxattr and metacopy=on then the mount ends up in
+> > >> the following check:
+> > >>
+> > >> if (config->userxattr) {
+> > >>         [...]
+> > >>         if (config->metacopy && metacopy_opt) {
+> > >>                 pr_err("conflicting options: userxattr,metacopy=on\n");
+> > >>                 return -EINVAL;
+> > >>         }
+> > >> }
+> > >>
+> > >
+> > > Right, my bad.
+> > >
+> > >> to me it looks like it was done on purpose to prevent metacopy from a
+> > >> user namespace, but I don't know the reason for sure.
+> > >>
+> > >
+> > > With hand crafted metacopy, an unpriv user can chmod
+> > > any files to anything by layering another file with different
+> > > mode on top of it....
+> >
+> > I might be missing something obvious about metacopy, so please correct
+> > me if I am wrong, but I don't see how it is any different than just
+> > copying the file and chowning it.  Of course, as long as overlay uses
+> > the same security model so that a file that wasn't originally possible
+> > to access must be still blocked, even if referenced through metacopy.
+> >
 > 
->    # ./kvm-unit-tests/tests/its-pending-migration
->    WARNING: CPU: 120 PID: 7973 at arch/arm64/kvm/../../../virt/kvm/kvm_main.c:3325 \
->    mark_page_dirty_in_slot+0x60/0xe0
->     :
->    mark_page_dirty_in_slot+0x60/0xe0
->    __kvm_write_guest_page+0xcc/0x100
->    kvm_write_guest+0x7c/0xb0
->    vgic_v3_save_pending_tables+0x148/0x2a0
->    vgic_set_common_attr+0x158/0x240
->    vgic_v3_set_attr+0x4c/0x5c
->    kvm_device_ioctl+0x100/0x160
->    __arm64_sys_ioctl+0xa8/0xf0
->    invoke_syscall.constprop.0+0x7c/0xd0
->    el0_svc_common.constprop.0+0x144/0x160
->    do_el0_svc+0x34/0x60
->    el0_svc+0x3c/0x1a0
->    el0t_64_sync_handler+0xb4/0x130
->    el0t_64_sync+0x178/0x17c
+> You're right.
+> The reason for mutual exclusion maybe related to the
+> comment in ovl_check_metacopy_xattr() about EACCES.
+> Need to check with Vivek or Miklos.
 > 
-> Use vgic_write_guest_lock() to save vgic3 pending table.
-> 
-> Reported-by: Zenghui Yu <yuzenghui@huawei.com>
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
-> ---
->  Documentation/virt/kvm/api.rst | 4 +++-
->  arch/arm64/kvm/vgic/vgic-v3.c  | 2 +-
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 40ada313faa3..07f07668995e 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -8074,7 +8074,9 @@ NOTE: Multiple examples of using the backup bitmap: (1) save vgic/its
->  tables through command KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_SAVE_TABLES} on
->  KVM device "kvm-arm-vgic-its". (2) restore vgic/its tables through
->  command KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_RESTORE_TABLES} on KVM device
-> -"kvm-arm-vgic-its". vgic3 LPI pending status is restored.
-> +"kvm-arm-vgic-its". vgic3 LPI pending status is restored. (3) save
-> +vgic3 pending table through KVM_DEV_ARM_VGIC_{GRP_CTRL, SAVE_PENDING_TABLES}
-> +command on KVM device "kvm-arm-vgic-v3".
+> But get this - you do not need metacopy=on to follow lower inode.
+> It should work without metacopy=on.
+> metacopy=on only instructs overlayfs whether to copy up data
+> or only metadata when changing metadata of lower object, so it is
+> not relevant for readonly mount.
 
-Can we summarize these 3 examples with something like: "when the guest
-memory (pending tables, ITS tables, etc) is dirtied by the virtual GIC
-or ITS, which is typically triggered by a userspace request (e.g.,
-KVM_DEV_ARM_ITS_SAVE_TABLES) and doesn't require a running VCPU
-context"? In case there will be more no-running-vcpu
-kvm_write_guest_lock() cases in the VGIC emulation code in future and we
-have to extend the documentation..
+I think you might need metacopy=on even to just follow lower inode. I
+see following in ovl_lookup().
 
-But I don't have objection to your writing and the whole series looks
-good.
+                if ((uppermetacopy || d.metacopy) && !ofs->config.metacopy) {
+                        dput(this);
+                        err = -EPERM;
+                        pr_warn_ratelimited("refusing to follow metacopy origin for (%pd2)\n", dentry); 
+                        goto out_put;
+                }
 
-Thanks,
-Zenghui
+W.r.t allowing metacopy=on from inside userns, I never paid much attention
+to this as I never needed it. But this might be interesting to look into
+it now if it is needed.
+
+Thanks
+Vivek
+
