@@ -2,161 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B0F67F05B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DEF67F05F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjA0VYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S231461AbjA0VYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:24:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbjA0VYK (ORCPT
+        with ESMTP id S231902AbjA0VYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:24:10 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358471D919
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:24:08 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso6203940wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:24:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qTUfdhlTEOfdl/ldpk9Lhv3WxL8z/CXYcPInfVrR2L0=;
-        b=IHiHTzDa+xmRWBUTN2BMRv0XZWZWJtfmRS4o26q9bqJqnSjhzy9i4JvPn4kE4BXlW7
-         ZVABm8HHiM4cNmbqlSor7NAfaV5T+wKS4Nyfig6E4OxAqqTf6I2JC3hlpvqU1PZchW8x
-         OFYWSdzly27cRGfoAqeCfYWOAgUOOi17U/7FQSbDhVrMe+1BX6c/HoiRSIDSPX0Odnfd
-         h1vJ3G7EbpfWoG/07b0CZWNVxrSApfyGcoSrOt9EG8IQ1rk62q6lqiW+3HO8RiSB/ppI
-         vi+yqsvKG0lGtXB0Z6u0h7ClZoCiaZBX69OSnCkdeVTztSWf6xj6iPapGTXlq+0jw9m4
-         Dm+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qTUfdhlTEOfdl/ldpk9Lhv3WxL8z/CXYcPInfVrR2L0=;
-        b=4q1SWlj0Ii+uSu3yL1M7MWf3+hr0YOUlcD2M5WMdaenHoiHcSkliwTnvkYY+MElass
-         D63iLYv6AXwV+Uq6YoFGSAYMzAQl92VkD2Xfq87oISyOtZVGR7Xn93x2Alt2DW3Wu4E5
-         3JULYg3kkT1gbOBaojMr6sDkR5b6mI60WlIK2iDAlL1PwdbvjKRKViED2FzlgupQvqYT
-         hicNYGIc39+lRJyME5mLjn47cijbZGFCnHf1KGFj2hB3FDprGkIrI+/xGWGdStdJjBZi
-         eEYkpIBJOLsXXQqX59HHUaKZfRD2/6O+8vd/DTQVvmd6UmpKExY3lZfG+pu7+DuLV1Oe
-         Zo3Q==
-X-Gm-Message-State: AFqh2kpDli+uf7UJZEELypXLGvE688UMOv0b545es0+AweN2Y78GcHzp
-        SawZY10Jvx6WX/sxK34QIa7woQ==
-X-Google-Smtp-Source: AMrXdXtDQFhR45y0gs25bLmrKHWNmHZcMv+Yywf3fqjOffbVdnEGyyV1AKrBw66mrfv9Tb+W/qcBBA==
-X-Received: by 2002:a05:600c:1609:b0:3db:12a:5e65 with SMTP id m9-20020a05600c160900b003db012a5e65mr40296129wmn.4.1674854646796;
-        Fri, 27 Jan 2023 13:24:06 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o18-20020a05600c339200b003dc42d48defsm1369678wmp.6.2023.01.27.13.24.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 13:24:06 -0800 (PST)
-Message-ID: <3fc8863b-a378-1ccd-982d-6e44013d97c8@linaro.org>
-Date:   Fri, 27 Jan 2023 22:24:04 +0100
+        Fri, 27 Jan 2023 16:24:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A744F5254;
+        Fri, 27 Jan 2023 13:24:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 586ADB821E7;
+        Fri, 27 Jan 2023 21:24:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E296BC433D2;
+        Fri, 27 Jan 2023 21:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674854674;
+        bh=X77o2EN7hu23p9QesyJvTlz4zrfiHmazTL3NOd2r6wc=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=XYDjhkCvEFwo2gbUTAUv8mpgCTLgHgubvIVMl3pIylJTF22WS4Bw4wU/Qa3Unrno1
+         kp/Qj8On1hPhQw2TaXJThKLilmLJXzJXHmx93JmmowCfh1OuJ0tit/vi9sogWv3iT8
+         OBELeFFu7BB5yYsfhrMwKRX12wCVajOmjlhM7cV3OkQ8HVVcn4iRjd7B8/WodfxUG3
+         2o7JTCqicknaCsFfV7+/pHmq7OXhCC8qnVUVCWQAhlrJYVCnr+aalpSpLvBSWtuH10
+         RnkdVlOZFc60UVt+aFG5zeLtXJzYx5/ySWmf7VBhg4coSfCuHMyulAZBX+9IFVB7QL
+         tsBZD3Udy97Eg==
+Message-ID: <73c3a79bb8b429d8f2ef23c5d2666a8a.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFT PATCH v2 3/4] arm64: dts: exynos: add unit address to DWC3
- node wrapper in Exynos5433
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <7d0582ac-e5c1-7dbf-8063-f6ea8cb59862@linaro.org>
+References: <20230118132254.2356209-1-dmitry.baryshkov@linaro.org> <20230118132254.2356209-8-dmitry.baryshkov@linaro.org> <7055af43f4a8894ac34e53c5847fb3de.sboyd@kernel.org> <7d0582ac-e5c1-7dbf-8063-f6ea8cb59862@linaro.org>
+Subject: Re: [PATCH v4 7/7] clk: qcom: add the driver for the MSM8996 APCS clocks
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     replicant@osuosl.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>,
-        Henrik Grimler <henrik@grimler.se>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-References: <20230127211527.260060-1-krzysztof.kozlowski@linaro.org>
- <20230127211527.260060-3-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230127211527.260060-3-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Date:   Fri, 27 Jan 2023 13:24:31 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 22:15, Krzysztof Kozlowski wrote:
-> Neither simple-bus bindings nor dtc W=1 accept device nodes in soc@ node
-> which do not have unit address.  Therefore usethe address space
-> of child device (actual DWC3 Controller) as the wrapper's address to
-> fix:
-> 
->   exynos5433-tm2e.dtb: soc@0: usbdrd: {'compatible': ['samsung,exynos5433-dwusb3'], ...
->     should not be valid under {'type': 'object'}
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. New patch
-> ---
->  arch/arm64/boot/dts/exynos/exynos5433.dtsi | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/exynos/exynos5433.dtsi b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
-> index 9da24fe958a3..0fca783979f6 100644
-> --- a/arch/arm64/boot/dts/exynos/exynos5433.dtsi
-> +++ b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
-> @@ -1742,7 +1742,7 @@ hsi2c_11: i2c@14df0000 {
->  			status = "disabled";
->  		};
->  
-> -		usbdrd30: usbdrd {
-> +		usbdrd30: usb@15400000 {
->  			compatible = "samsung,exynos5433-dwusb3";
->  			clocks = <&cmu_fsys CLK_ACLK_USBDRD30>,
->  				<&cmu_fsys CLK_SCLK_USBDRD30>,
-> @@ -1751,16 +1751,16 @@ usbdrd30: usbdrd {
->  			clock-names = "aclk", "susp_clk", "phyclk", "pipe_pclk";
->  			#address-cells = <1>;
->  			#size-cells = <1>;
-> -			ranges;
-> +			ranges = <0x0 0x15400000 0x10000>;
->  			status = "disabled";
->  
-> -			usbdrd_dwc3: usb@15400000 {
-> +			usbdrd_dwc3: usb@0 {
->  				compatible = "snps,dwc3";
->  				clocks = <&cmu_fsys CLK_SCLK_USBDRD30>,
->  					<&cmu_fsys CLK_ACLK_USBDRD30>,
->  					<&cmu_fsys CLK_SCLK_USBDRD30>;
->  				clock-names = "ref", "bus_early", "suspend";
-> -				reg = <0x15400000 0x10000>;
-> +				reg = <0x0 0x10000>;
->  				interrupts = <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>;
->  				phys = <&usbdrd30_phy 0>, <&usbdrd30_phy 1>;
->  				phy-names = "usb2-phy", "usb3-phy";
-> @@ -1795,7 +1795,7 @@ usbhost30_phy: phy@15580000 {
->  			status = "disabled";
->  		};
->  
-> -		usbhost30: usbhost {
-> +		usbhost30: usb@15a00000 {
->  			compatible = "samsung,exynos5433-dwusb3";
->  			clocks = <&cmu_fsys CLK_ACLK_USBHOST30>,
->  				<&cmu_fsys CLK_SCLK_USBHOST30>,
-> @@ -1804,16 +1804,16 @@ usbhost30: usbhost {
->  			clock-names = "aclk", "susp_clk", "phyclk", "pipe_pclk";
->  			#address-cells = <1>;
->  			#size-cells = <1>;
-> -			ranges;
-> +			ranges <0x0 0x15a00000 0x10000>;
+Quoting Dmitry Baryshkov (2023-01-26 14:51:51)
+> On 25/01/2023 23:38, Stephen Boyd wrote:
+> > Quoting Dmitry Baryshkov (2023-01-18 05:22:54)
+> >> diff --git a/drivers/clk/qcom/apcs-msm8996.c b/drivers/clk/qcom/apcs-m=
+sm8996.c
+> >> new file mode 100644
+> >> index 000000000000..7e46ea8ed444
+> >> --- /dev/null
+> >> +++ b/drivers/clk/qcom/apcs-msm8996.c
+> >> @@ -0,0 +1,76 @@
+> >> +
+> >> +       /*
+> >> +        * Register the clock as fixed rate instead of being a child o=
+f gpll0
+> >> +        * to let the driver register probe as early as possible.
+> >=20
+> > The function doesn't block or return EPROBE_DEFER if the clk is orphaned
+> > when registered. Why is this necessary? Are you getting defered by the
+> > fw_devlink logic thinking it needs to defer probe of this driver until
+> > gpll0 provider probes? We should fix fw_devlink to not do that. Maybe if
+> > the node is a clk provider (#clock-cells exists) then we don't wait for
+> > clocks property to be provided, because the clk core already handles
+> > that itself.
+>=20
+> Letting clock-controllers probe was my idea for the patch, but it was=20
+> delayed again by Saravana, see [1], [2]
 
-This does not even build...
-
-Best regards,
-Krzysztof
-
+Ah, I didn't see it because linux-clk wasn't Cced and I look at that
+mail pile less regularly.
