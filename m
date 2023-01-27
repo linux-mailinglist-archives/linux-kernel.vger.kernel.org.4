@@ -2,94 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2643B67F089
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE8167F08E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbjA0VkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S229447AbjA0Vmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:42:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjA0VkR (ORCPT
+        with ESMTP id S229469AbjA0Vmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:40:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF791C5AB;
-        Fri, 27 Jan 2023 13:40:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8BB661DBB;
-        Fri, 27 Jan 2023 21:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4182BC433A4;
-        Fri, 27 Jan 2023 21:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674855616;
-        bh=b9uDjU7LT+I/mG+9iGB49kgfPiodbLBnJTjLq2lnm9w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=N3qRZC8vEwy5COnn34s8YMMpSApDx6S6U9Hg+fU42RD4JGew2wmhznAk/VjOdZkam
-         9NBxaiAj5+cadTfif/p7cWIYOhLXXMaTIZQZRTu+uFhVLbAznHoNYkWkAciTgCFyZy
-         sqTYII8kp4HDvDDv7k+qe13bqVo0GfIrSbgrj6UDmN71bNqkeecGbTz4v+rpKo68ql
-         aNrcFQ0S5pc6cX35LcQ+p1568wjF4D1lMAIg5dTaQQMtlP4frLcUM30CFpHN5JNotn
-         r/g30uCOFwFNRO6AWkfRTY/pJyl/4oOI78VkaMnSXEeV0ddnmKqSSVhUw/7tZ0oVY7
-         FBp+cCG3Ml9Qw==
-Received: by mail-vk1-f171.google.com with SMTP id t190so3055594vkb.13;
-        Fri, 27 Jan 2023 13:40:16 -0800 (PST)
-X-Gm-Message-State: AFqh2ko3Y+TjUyjEYJZCiKiE+WcQBAfcnV0shUoLbr8fC9MyaNKMvjeI
-        Lqh3+0sLLeRYNk9FvADX5CXBfnrQ9Oa2jzmhYA==
-X-Google-Smtp-Source: AMrXdXulnAkMWnXjcpXL/m412Iyt/Rx5osfcz9TGvRj6nAOp0u1AZt82H8i3SoeHOSB0ncQUU08SxYlZ7jc24m80yTs=
-X-Received: by 2002:a1f:ad56:0:b0:3bc:8497:27fd with SMTP id
- w83-20020a1fad56000000b003bc849727fdmr5298244vke.15.1674855615161; Fri, 27
- Jan 2023 13:40:15 -0800 (PST)
+        Fri, 27 Jan 2023 16:42:43 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025BB2007C
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:42:42 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id z31so4179614pfw.4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:42:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0d6n6AuTepafE8zRxy7R/0YUNfUjkxK2wRxr8ePG2TQ=;
+        b=Xd70rP95v9OOS8VZ/k+iLrWA61DJSoLEWwTfHLmKtArj4JixnNl/00BMvWM37/4e+q
+         zGYB8Qmj7+tqiBw/oie2xjCoKmJOV4JLfcRpzTN1rJwKPa420g1lyElw9YfS0VV3bh5n
+         YxeNAf6j2ugwdK5SUsUm16EANlytaNu7GucQ2LEe5EozOKNuxeSmK2/3Bcf9W61yKC5r
+         X9uHCqNIqzxTedojEN8KcjAi8z6eDqGBz/yOpoehWCRX0wNawVwTSkFa8zbKArGD7Wy4
+         K4H3c9nhbChl8jEbqQdVpQ4v1gsTkCEQBne//T6X46bRuNh3i8YFC+xoOXD9pmM8/NFq
+         GLFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0d6n6AuTepafE8zRxy7R/0YUNfUjkxK2wRxr8ePG2TQ=;
+        b=Pj8RaKjeqsybEXa8cROSMvsE/ZLgW3dviBskvXrghVIulMDWHbeyVLZvI1+/aQ3rJE
+         DgTvDhXkltRErXX9tUDocNjGrul0+sZEmuYC6BX4J81+EckpUgkyXs/TVA3hULh5/rEg
+         IKa7vy6toEh86jZ7q/3iqlzgIs+bUXvL8ohO/LAvCxXxGjtDSqjpd5ot0jRD3PzIaPSw
+         F/Tc4+gzupBLJDkzU112GaAD5C9wLS+4/+Opg+7Q/yzZnl+/nFxuGZt4etcJACfsJzu+
+         AN/2z09lkEU9+sC0avc1QRkxu4puW1RG13F3zYoUqVNl5u/ZztI3tOUApWNOXJ7VMnrw
+         gdWQ==
+X-Gm-Message-State: AO0yUKUJ5iLjyOTOaada26JPJKpBHnKf3FPLNTC0T3dXhnWD4RUNAWMO
+        4PNtHKd5/0aYhIOmdLjbGwROnA==
+X-Google-Smtp-Source: AK7set8ixdj3l9QJrIJEUtMxmDMBJN5pHM3X69PpntwQqq16lvP6YGflFCI+1AxN2EQZal+YPsNxaw==
+X-Received: by 2002:a05:6a00:1884:b0:581:bfac:7a52 with SMTP id x4-20020a056a00188400b00581bfac7a52mr131735pfh.1.1674855761263;
+        Fri, 27 Jan 2023 13:42:41 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id f186-20020a62dbc3000000b0058a72925687sm3040476pfg.212.2023.01.27.13.42.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 13:42:40 -0800 (PST)
+Date:   Fri, 27 Jan 2023 21:42:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, like.xu.linux@gmail.com,
+        kan.liang@linux.intel.com, wei.w.wang@intel.com,
+        Like Xu <like.xu@linux.intel.com>
+Subject: Re: [PATCH v2 06/15] KVM: vmx/pmu: Emulate MSR_ARCH_LBR_CTL for
+ guest Arch LBR
+Message-ID: <Y9RFTUqdS05WBCaW@google.com>
+References: <20221125040604.5051-1-weijiang.yang@intel.com>
+ <20221125040604.5051-7-weijiang.yang@intel.com>
 MIME-Version: 1.0
-References: <20230124230254.295589-1-isaacmanjarres@google.com> <167485548359.726924.14589412750691974893.robh@kernel.org>
-In-Reply-To: <167485548359.726924.14589412750691974893.robh@kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 27 Jan 2023 15:40:03 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKdHiZ0q8TkfjW6SUYg-_p4PxcGfA6SV0Q3Dif_dSY75Q@mail.gmail.com>
-Message-ID: <CAL_JsqKdHiZ0q8TkfjW6SUYg-_p4PxcGfA6SV0Q3Dif_dSY75Q@mail.gmail.com>
-Subject: Re: [PATCH v1] Revert "mm: kmemleak: alloc gray object for reserved
- region with direct map"
-To:     "Isaac J. Manjarres" <isaacmanjarres@google.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>, stable@vger.kernel.org,
-        Saravana Kannan <saravanak@google.com>,
-        devicetree@vger.kernel.org,
-        Calvin Zhang <calvinzhang.cool@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221125040604.5051-7-weijiang.yang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 3:38 PM Rob Herring <robh@kernel.org> wrote:
->
->
-> On Tue, 24 Jan 2023 15:02:54 -0800, Isaac J. Manjarres wrote:
-> > This reverts commit 972fa3a7c17c9d60212e32ecc0205dc585b1e769.
-> >
-> > Kmemleak operates by periodically scanning memory regions for pointers
-> > to allocated memory blocks to determine if they are leaked or not.
-> > However, reserved memory regions can be used for DMA transactions
-> > between a device and a CPU, and thus, wouldn't contain pointers to
-> > allocated memory blocks, making them inappropriate for kmemleak to
-> > scan. Thus, revert this commit.
-> >
-> > Cc: stable@vger.kernel.org # 5.17+
-> > Cc: Calvin Zhang <calvinzhang.cool@gmail.com>
-> > Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-> > ---
-> >  drivers/of/fdt.c | 6 +-----
-> >  1 file changed, 1 insertion(+), 5 deletions(-)
-> >
->
-> Applied, thanks!
+On Thu, Nov 24, 2022, Yang Weijiang wrote:
+> @@ -345,6 +346,30 @@ static bool intel_pmu_handle_lbr_msrs_access(struct kvm_vcpu *vcpu,
+>  	return true;
+>  }
+>  
+> +static bool arch_lbr_ctl_is_valid(struct kvm_vcpu *vcpu, u64 ctl)
+> +{
+> +	struct kvm_cpuid_entry2 *entry;
+> +	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> +
+> +	if (!pmu->kvm_arch_lbr_depth)
+> +		return false;
+> +
+> +	if (ctl & ~KVM_ARCH_LBR_CTL_MASK)
+> +		return false;
+> +
+> +	entry = kvm_find_cpuid_entry(vcpu, 0x1c);
 
-Or not. Andrew already applied it.
+Why!?!?!  Why does this series reinvent the wheel so many times.  We already have
+a huge pile of reserved bits masks that are computed in intel_pmu_refresh(), just
+do the easy thing and follow the established pattern.
 
-Rob
+> +	if (!entry)
+> +		return false;
+> +
+> +	if (!(entry->ebx & BIT(0)) && (ctl & ARCH_LBR_CTL_CPL))
+> +		return false;
+> +	if (!(entry->ebx & BIT(2)) && (ctl & ARCH_LBR_CTL_STACK))
+> +		return false;
+> +	if (!(entry->ebx & BIT(1)) && (ctl & ARCH_LBR_CTL_FILTER))
+> +		return false;
+> +	return true;
+> +}
+> +
+>  static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  {
+>  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> @@ -377,6 +402,14 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  	case MSR_ARCH_LBR_DEPTH:
+>  		msr_info->data = lbr_desc->records.nr;
+>  		return 0;
+> +	case MSR_ARCH_LBR_CTL:
+> +		if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR)) {
+
+So I assume the point of this code is to allow reading MSR_ARCH_LBR_CTL from
+userspace before doing KVM_SET_CPUID2, but I would much rather do that in a
+generic way, i.e. build this series on 
+https://lore.kernel.org/all/20230124234905.3774678-7-seanjc@google.com
+
+> +			WARN_ON_ONCE(!msr_info->host_initiated);
+> +			msr_info->data = 0;
+> +		} else {
+> +			msr_info->data = vmcs_read64(GUEST_IA32_LBR_CTL);
+> +		}
+> +		return 0;
+>  	default:
+>  		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
+>  		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
+> @@ -483,6 +516,18 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  		if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
+>  			wrmsrl(MSR_ARCH_LBR_DEPTH, lbr_desc->records.nr);
+>  		return 0;
+> +	case MSR_ARCH_LBR_CTL:
+> +		if (msr_info->host_initiated && !pmu->kvm_arch_lbr_depth)
+> +			return data != 0;
+> +
+> +		if (!arch_lbr_ctl_is_valid(vcpu, data))
+> +			break;
+> +
+> +		vmcs_write64(GUEST_IA32_LBR_CTL, data);
+> +		if (intel_pmu_lbr_is_enabled(vcpu) && !lbr_desc->event &&
+> +		    (data & ARCH_LBR_CTL_LBREN))
+> +			intel_pmu_create_guest_lbr_event(vcpu);
+> +		return 0;
+>  	default:
+>  		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
+>  		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
+> @@ -727,12 +772,16 @@ static void intel_pmu_reset(struct kvm_vcpu *vcpu)
+>   */
+>  static void intel_pmu_legacy_freezing_lbrs_on_pmi(struct kvm_vcpu *vcpu)
+>  {
+> -	u64 data = vmcs_read64(GUEST_IA32_DEBUGCTL);
+> +	u32 lbr_ctl_field = GUEST_IA32_DEBUGCTL;
+>  
+> -	if (data & DEBUGCTLMSR_FREEZE_LBRS_ON_PMI) {
+> -		data &= ~DEBUGCTLMSR_LBR;
+> -		vmcs_write64(GUEST_IA32_DEBUGCTL, data);
+> -	}
+> +	if (!(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_FREEZE_LBRS_ON_PMI))
+> +		return;
+> +
+> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
+> +	    guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
+> +		lbr_ctl_field = GUEST_IA32_LBR_CTL;
+
+Similar to other comments, just rely on KVM not allowing LBRs to be enabled unless
+the guest is configured with the correct flavor.
+
+> +
+> +	vmcs_write64(lbr_ctl_field, vmcs_read64(lbr_ctl_field) & ~0x1ULL);
+
+Open coding a bit just because it happens to be in the same position in both fields
+is ridiculous.
+
+	u64 debugctl = vmcs_read64(GUEST_IA32_DEBUGCTL);
+
+	if (!debugctl & DEBUGCTLMSR_FREEZE_LBRS_ON_PMI))
+		return;
+
+	if (cpu_feature_enabled(X86_FEATURE_ARCH_LBR))
+		vmcs_clear_bits64(GUEST_IA32_LBR_CTL, ARCH_LBR_CTL_LBREN);
+	else
+		vmcs_write64(GUEST_IA32_DEBUGCTL, debugctl & ~DEBUGCTLMSR_LBR);
+
+>  }
+>  
+>  static void intel_pmu_deliver_pmi(struct kvm_vcpu *vcpu)
+> @@ -801,7 +850,8 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>  	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
+> -	bool lbr_enable = !guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
+> +	bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
+> +		(vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
+>  		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
+>  
+>  	if (!lbr_desc->event) {
+> @@ -829,7 +879,8 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
+>  
+>  static void intel_pmu_cleanup(struct kvm_vcpu *vcpu)
+>  {
+> -	bool lbr_enable = !guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
+> +	bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
+> +		(vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
+>  		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
+
+Instead of open coding the same ugly ternary operator in multiple locations, add
+a helper.
+
+>  
+>  	if (!lbr_enable)
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index cea8c07f5229..1ae2efc29546 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2120,6 +2120,13 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  						VM_EXIT_SAVE_DEBUG_CONTROLS)
+>  			get_vmcs12(vcpu)->guest_ia32_debugctl = data;
+>  
+> +		/*
+> +		 * For Arch LBR, IA32_DEBUGCTL[bit 0] has no meaning.
+> +		 * It can be written to 0 or 1, but reads will always return 0.
+> +		 */
+> +		if (guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
+
+This can be dependent solely on the host CPU.  If LBRs are unsupported, the bit
+will be marked invalid and cleared above.  And as mentioned multiple times, KVM
+needs to allow enabling LBRs iff the guest and host flavors match.
+
+> +			data &= ~DEBUGCTLMSR_LBR;
+
+This needs to be done before shoving the value into vmcs12.
+
+> +
+>  		vmcs_write64(GUEST_IA32_DEBUGCTL, data);
+>  		if (intel_pmu_lbr_is_enabled(vcpu) && !to_vmx(vcpu)->lbr_desc.event &&
+>  		    (data & DEBUGCTLMSR_LBR))
+> -- 
+> 2.27.0
+> 
