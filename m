@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45EB67E2C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7B767E2C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbjA0LKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
+        id S232714AbjA0LLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:11:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbjA0LJ4 (ORCPT
+        with ESMTP id S229679AbjA0LLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:09:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40C6126FD;
-        Fri, 27 Jan 2023 03:09:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F40061B03;
-        Fri, 27 Jan 2023 11:09:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6515C433EF;
-        Fri, 27 Jan 2023 11:09:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674817794;
-        bh=Rvc7pjf+AN6/eCdtwoY/n3UBsgh8HAsQA3tHglV1ekI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cFh4QDBIcXCeNBMEtG5/Yha1H7jwRuc8oVG77lBtYjCVXsGu9HTAC12kWSteg9mHJ
-         yZQj2/XzkTtyZWNezDvPAcv1O2ph0juzWs12NEnC+rgOi9E8NrlSaaRPLHQ9MhQ+Iv
-         TsyqxmiOayXl8rv+SyXpyRoAybUvYhPGUel2zL4ybhLriUpqP9TEcpLnB1DdwCelor
-         m9bid/udwZKi7pU/Z0r/IvPxoVSNPO/NV4O4NOkk2aV/ndw5ti9c95ObFFNumQbY/R
-         LMNbwF8E0u6KCix2nkuTJxT6kisK7/nTxVBM1Z4w2D1yE8llZtVCIxuXgaagPZo2cn
-         EWzyFNlfPmYvw==
-Received: by mail-lf1-f45.google.com with SMTP id x40so7559181lfu.12;
-        Fri, 27 Jan 2023 03:09:54 -0800 (PST)
-X-Gm-Message-State: AFqh2koxZFEOqT6DbDTJ4i33nEwWePKCYIDG/BgAxKEwV1TEc4cX9s1I
-        N/r+BhzjmzC3lM1V7VZ3RkniD663O0eU6+Myf74=
-X-Google-Smtp-Source: AMrXdXsze0x4tj3RhFk2kYwD2OXo5wp6M26DhtTwjztVd6iuZ0v3TKG4yj9EDtSjFuROVRAwiLS3m9OM4YPN0OoAga8=
-X-Received: by 2002:a19:8c19:0:b0:4ca:f3c2:2670 with SMTP id
- o25-20020a198c19000000b004caf3c22670mr3651560lfd.166.1674817792807; Fri, 27
- Jan 2023 03:09:52 -0800 (PST)
+        Fri, 27 Jan 2023 06:11:31 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9E19757
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:11:30 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pLMdf-0005UE-0Q; Fri, 27 Jan 2023 12:11:23 +0100
+Message-ID: <ea5f2437-e7ce-faea-ed8d-30322160c22a@leemhuis.info>
+Date:   Fri, 27 Jan 2023 12:11:22 +0100
 MIME-Version: 1.0
-References: <CAMj1kXE3v1_pUVT4HSCoVZO512cGMxjBNcDEhLpf22v9iFmoSA@mail.gmail.com>
- <Y9OtDvgp3SsxuVf4@gondor.apana.org.au>
-In-Reply-To: <Y9OtDvgp3SsxuVf4@gondor.apana.org.au>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 27 Jan 2023 12:09:41 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGQGEwe7Ea3mu7VKCNd22hzE4cnHPXP4WzxYKcqwYzLzA@mail.gmail.com>
-Message-ID: <CAMj1kXGQGEwe7Ea3mu7VKCNd22hzE4cnHPXP4WzxYKcqwYzLzA@mail.gmail.com>
-Subject: Re: [PATCH] crypto: x86 - exit fpu context earlier in ECB/CBC macros
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     conor.dooley@microchip.com, peter@n8pjl.ca,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: regression on aarch64? panic on boot
+Content-Language: en-US, de-DE
+From:   "Linux kernel regression tracking (#update)" 
+        <regressions@leemhuis.info>
+To:     Klaus Jensen <its@irrelevant.dk>, Christoph Hellwig <hch@lst.de>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <Y8XINx8fpGPKudW6@cormorant.local>
+ <849c43bc-7488-72a6-f6fc-8700639b0c79@leemhuis.info>
+In-Reply-To: <849c43bc-7488-72a6-f6fc-8700639b0c79@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674817890;b31b26e5;
+X-HE-SMSGID: 1pLMdf-0005UE-0Q
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 at 11:53, Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > I am still receiving encrypted messages, and given that I am a direct
-> > recipient, the mailing list server does not cc me then unencrypted
-> > copies.
-> >
-> > I am not going to reply to the patch until it lands in my inbox in
-> > plaintext, sorry ...
->
-> As Ard needs to review this patch, until this is resolved I won't
-> be applying this.
->
+[TLDR: there afaics is a fix for the regression discussed in this
+thread, but its author did not use a Link: tag to point to the report,
+as wanted by Linus and explained in the documentation; this forces me to
+write this mail, which sole purpose it to update the state of this
+tracked Linux kernel regression.]
 
-I've received the plaintext version in the mean time, it's on another thread.
+On 19.01.23 14:10, Linux kernel regression tracking (#adding) wrote:
+> On 16.01.23 22:57, Klaus Jensen wrote:
+>>
+>> I'm getting panics when booting from a QEMU hw/nvme device on an aarch64
+>> guest in roughly 20% of boots on v6.2-rc4. Example panic below.
+>>
+>> I've bisected it to commit eac3ef262941 ("nvme-pci: split the initial
+>> probe from the rest path").
+>>
+>> I'm not seeing this on any other emulated platforms that I'm currently
+>> testing (x86_64, riscv32/64, mips32/64 and sparc64).
+>> [...]
+> 
+> Thanks for the report. To be sure the issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+> tracking bot:
+> 
+> #regzbot ^introduced eac3ef262941
+> #regzbot title nvme: occasional boot problems due to the newly supported
+> async driver probe
+> #regzbot ignore-activity
 
-So we can close this one.
+#regzbot monitor:
+https://lore.kernel.org/all/20230124171738.2311160-1-kbusch@meta.com/
+#regzbot fix: nvme-pci: flush initial scan_work for async probe
+#regzbot ignore-activity
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
