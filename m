@@ -2,418 +2,581 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB5567DB3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 02:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2FA67DB47
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 02:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233103AbjA0B1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 20:27:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S232082AbjA0BcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 20:32:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjA0B1P (ORCPT
+        with ESMTP id S229446AbjA0BcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 20:27:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576E9728C1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:26:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674782790;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hbvey5wHHvjs/oXB5rGmtyX2nEk7d2EsdqbZiV/BBWQ=;
-        b=Tm8aQrofQY+hN1ujG6HAptOoTxUwnobxz99+isUELGJCaxIwtjNAOYqu0Nu63mUbSit8A8
-        HHL99m7DOyWY4YXAnV1RUzC4PMMc5lg32d1QSjFN92k07sfNWE97GbzXOekW/bKZiS8cc5
-        PN3Jr5OrpNQccIB+14qX8Kt+du9M8Fc=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-265-xW-AEiVIOIunJl2AYFsUNw-1; Thu, 26 Jan 2023 20:26:28 -0500
-X-MC-Unique: xW-AEiVIOIunJl2AYFsUNw-1
-Received: by mail-ed1-f72.google.com with SMTP id b15-20020a056402350f00b0049e42713e2bso2561519edd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:26:28 -0800 (PST)
+        Thu, 26 Jan 2023 20:32:00 -0500
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C49162265
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:31:58 -0800 (PST)
+Received: by mail-ua1-x936.google.com with SMTP id r10so759579ual.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 17:31:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=icmB0SIvPT/FIaWV3eix+NUljCw3t9FrTEOMgqNQISo=;
+        b=rBVvCcgka07GpPpCgNIb4zSGku4aWDgZgp1o8mz3rRChH2zNIvyN6ny1HpHnDVAVV6
+         SHvDVx0ympdX8/wzb73nx4zymB3M55ltjUgJNHLG+Q2H6v3gzPeS0xjYGqDRxDiHHhsD
+         FL/jFh01zKJEjEHNl3RqAeFFH3HGrKFbcDlvEEI/1Ohflez3V7HZi8ef7rTUzkIVIR57
+         dqyUCAIwCpf+oMvG7Wk57cnkkJGyLRichJzsRp88FyEoRrP2NCdYRMlL9xb561qHvDCs
+         +YhIWLCvP2+W2G/JDTd6QHphXBmmbVByct1KWp3qyz/yxloRfqtj933BWQZ+GuXBXW7o
+         587Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hbvey5wHHvjs/oXB5rGmtyX2nEk7d2EsdqbZiV/BBWQ=;
-        b=Q2Qglo/TcL4qRPOIFIdMxKhAAJZYe8sQcu9GOd7Y4hI39Wx/cHfqzkPnzQLOogZvxF
-         H7ES5Ghdy9oR65oLtHDYLPUkGiMazXilQuhtlHPWbBP5R/IJJK8Qp0ioXT9z8vqMg0T2
-         +G2Xr1bWFPL6AiQdTjtLZBvsJYwo+HBh/c0tu8p54j+PBgw3/vvq7MrDNCFXePYT+u4G
-         oQW36yWXiKM2top3kUXH2g8fxmxNfFBPHEpOJ9HLc/Q1hOFoaFSEHPnYFjLAs3Y9Bk8B
-         0VZbWeglatSmawnXHccql8pXq2vfaNdQ+J7ronLfr5YannMyKGS69YsuikxEyI7s3XYM
-         sSNg==
-X-Gm-Message-State: AFqh2kpLL/JOrM13OHKXbTRtK/hFml6txXcozuMpoL/ZF6yP3zemv6vE
-        U3HG4zHZ8Q3c0nqyiOiTaNepVR2h6P/+mIPPxYu8hcmjzI5ONj3gyU9Q6CNxkJfhbVrfOCqPEUg
-        yXl4dnDSY8o1HF6Ne13ZzJtFw
-X-Received: by 2002:aa7:c845:0:b0:497:b6bc:b811 with SMTP id g5-20020aa7c845000000b00497b6bcb811mr37913421edt.33.1674782787022;
-        Thu, 26 Jan 2023 17:26:27 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu6lha1mIb8CVkXNvveMAnSWzbNPvcCRf2xMZqXV2fpjBOJrCyBsekrS27Y2oQ8i/77wGdXrA==
-X-Received: by 2002:aa7:c845:0:b0:497:b6bc:b811 with SMTP id g5-20020aa7c845000000b00497b6bcb811mr37913404edt.33.1674782786693;
-        Thu, 26 Jan 2023 17:26:26 -0800 (PST)
-Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id j23-20020aa7c0d7000000b0046892e493dcsm1530377edp.26.2023.01.26.17.26.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 17:26:26 -0800 (PST)
-Message-ID: <7c046ff9-728d-7634-9d77-8536308c7481@redhat.com>
-Date:   Fri, 27 Jan 2023 02:26:24 +0100
+        bh=icmB0SIvPT/FIaWV3eix+NUljCw3t9FrTEOMgqNQISo=;
+        b=zxJdKpKJ83r1LL4tKuWkIFYeU6qbZv0+IyOYDvTwmYvXFTNgR/kOes9eB2H3dFCzN9
+         +TfAiLhrDfCZx/PwSnUW/b7av7THI/WrA+gsVEr9eWE2m9OtgehVNXD0+hCfAj2u6h1X
+         nKCnr1gJ/XAx6DbiD5ON3APAUqSRiK9dLhc9SHbcpFBevhBWvQy6UJDAsimFoM/uNlHT
+         26NMHHlvhFtmgpyHH+fMa6G69lcBBocWZAfp8sfiyF6qERVPz2pBw3rvwSQt9DFPoOew
+         5emwFHU/U0q8rx2ElzzSuXJ+uAaDdIn/vmaQ8NVwxLqFIhWQzyk7PbeSUoWXAOVJE1hY
+         AGiQ==
+X-Gm-Message-State: AO0yUKXqUkB9e9r+vCLTRhTKGWeDhlc4mzzOztwilzC5LpkaUId66qo7
+        jzQQVILP7SOeDK2ydDg8c2DAHxg5ZxfVPK4yHlHcOw==
+X-Google-Smtp-Source: AK7set8SggUDTNw8Y5M28QdQBkJqYma/YJRaEyhbVlmGMK6fZ6dzeguMSBvmDwjZDBoLUDB6HQ7tb5Io9kBpKAZeKT4=
+X-Received: by 2002:ab0:71ca:0:b0:655:c9e7:b4d2 with SMTP id
+ n10-20020ab071ca000000b00655c9e7b4d2mr1362145uao.78.1674783116152; Thu, 26
+ Jan 2023 17:31:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH drm-next 05/14] drm/nouveau: new VM_BIND uapi interfaces
-Content-Language: en-US
-To:     Matthew Brost <matthew.brost@intel.com>
-Cc:     daniel@ffwll.ch, airlied@redhat.com, christian.koenig@amd.com,
-        bskeggs@redhat.com, jason@jlekstrand.net, tzimmermann@suse.de,
-        mripard@kernel.org, corbet@lwn.net, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org
-References: <20230118061256.2689-1-dakr@redhat.com>
- <20230118061256.2689-6-dakr@redhat.com>
- <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230124080350.2275652-1-davidgow@google.com> <CAFd5g47_fXBfmmiE93OGj65Lw6NNt5HPYq1Pz7x6f6nSzXsZfA@mail.gmail.com>
+In-Reply-To: <CAFd5g47_fXBfmmiE93OGj65Lw6NNt5HPYq1Pz7x6f6nSzXsZfA@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 27 Jan 2023 09:31:44 +0800
+Message-ID: <CABVgOS=Jm6BWE28ebVHL8ibYUCFvAMey0tuzTJ3bwTemva+wVQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2] kunit: Add "hooks" to call into KUnit when it's
+ built as a module
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/23 02:05, Matthew Brost wrote:
-> On Wed, Jan 18, 2023 at 07:12:47AM +0100, Danilo Krummrich wrote:
->> This commit provides the interfaces for the new UAPI motivated by the
->> Vulkan API. It allows user mode drivers (UMDs) to:
->>
->> 1) Initialize a GPU virtual address (VA) space via the new
->>     DRM_IOCTL_NOUVEAU_VM_INIT ioctl. UMDs can provide a kernel reserved
->>     VA area.
->>
->> 2) Bind and unbind GPU VA space mappings via the new
->>     DRM_IOCTL_NOUVEAU_VM_BIND ioctl.
->>
->> 3) Execute push buffers with the new DRM_IOCTL_NOUVEAU_EXEC ioctl.
->>
->> Both, DRM_IOCTL_NOUVEAU_VM_BIND and DRM_IOCTL_NOUVEAU_EXEC support
->> asynchronous processing with DRM syncobjs as synchronization mechanism.
->>
->> The default DRM_IOCTL_NOUVEAU_VM_BIND is synchronous processing,
->> DRM_IOCTL_NOUVEAU_EXEC supports asynchronous processing only.
->>
->> Co-authored-by: Dave Airlie <airlied@redhat.com>
->> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
->> ---
->>   Documentation/gpu/driver-uapi.rst |   8 ++
->>   include/uapi/drm/nouveau_drm.h    | 216 ++++++++++++++++++++++++++++++
->>   2 files changed, 224 insertions(+)
->>
->> diff --git a/Documentation/gpu/driver-uapi.rst b/Documentation/gpu/driver-uapi.rst
->> index 4411e6919a3d..9c7ca6e33a68 100644
->> --- a/Documentation/gpu/driver-uapi.rst
->> +++ b/Documentation/gpu/driver-uapi.rst
->> @@ -6,3 +6,11 @@ drm/i915 uAPI
->>   =============
->>   
->>   .. kernel-doc:: include/uapi/drm/i915_drm.h
->> +
->> +drm/nouveau uAPI
->> +================
->> +
->> +VM_BIND / EXEC uAPI
->> +-------------------
->> +
->> +.. kernel-doc:: include/uapi/drm/nouveau_drm.h
->> diff --git a/include/uapi/drm/nouveau_drm.h b/include/uapi/drm/nouveau_drm.h
->> index 853a327433d3..f6e7d40201d4 100644
->> --- a/include/uapi/drm/nouveau_drm.h
->> +++ b/include/uapi/drm/nouveau_drm.h
->> @@ -126,6 +126,216 @@ struct drm_nouveau_gem_cpu_fini {
->>   	__u32 handle;
->>   };
->>   
->> +/**
->> + * struct drm_nouveau_sync - sync object
->> + *
->> + * This structure serves as synchronization mechanism for (potentially)
->> + * asynchronous operations such as EXEC or VM_BIND.
->> + */
->> +struct drm_nouveau_sync {
->> +	/**
->> +	 * @flags: the flags for a sync object
->> +	 *
->> +	 * The first 8 bits are used to determine the type of the sync object.
->> +	 */
->> +	__u32 flags;
->> +#define DRM_NOUVEAU_SYNC_SYNCOBJ 0x0
->> +#define DRM_NOUVEAU_SYNC_TIMELINE_SYNCOBJ 0x1
->> +#define DRM_NOUVEAU_SYNC_TYPE_MASK 0xf
->> +	/**
->> +	 * @handle: the handle of the sync object
->> +	 */
->> +	__u32 handle;
->> +	/**
->> +	 * @timeline_value:
->> +	 *
->> +	 * The timeline point of the sync object in case the syncobj is of
->> +	 * type DRM_NOUVEAU_SYNC_TIMELINE_SYNCOBJ.
->> +	 */
->> +	__u64 timeline_value;
->> +};
->> +
->> +/**
->> + * struct drm_nouveau_vm_init - GPU VA space init structure
->> + *
->> + * Used to initialize the GPU's VA space for a user client, telling the kernel
->> + * which portion of the VA space is managed by the UMD and kernel respectively.
->> + */
->> +struct drm_nouveau_vm_init {
->> +	/**
->> +	 * @unmanaged_addr: start address of the kernel managed VA space region
->> +	 */
->> +	__u64 unmanaged_addr;
->> +	/**
->> +	 * @unmanaged_size: size of the kernel managed VA space region in bytes
->> +	 */
->> +	__u64 unmanaged_size;
->> +};
->> +
->> +/**
->> + * struct drm_nouveau_vm_bind_op - VM_BIND operation
->> + *
->> + * This structure represents a single VM_BIND operation. UMDs should pass
->> + * an array of this structure via struct drm_nouveau_vm_bind's &op_ptr field.
->> + */
->> +struct drm_nouveau_vm_bind_op {
->> +	/**
->> +	 * @op: the operation type
->> +	 */
->> +	__u32 op;
->> +/**
->> + * @DRM_NOUVEAU_VM_BIND_OP_ALLOC:
->> + *
->> + * The alloc operation is used to reserve a VA space region within the GPU's VA
->> + * space. Optionally, the &DRM_NOUVEAU_VM_BIND_SPARSE flag can be passed to
->> + * instruct the kernel to create sparse mappings for the given region.
->> + */
->> +#define DRM_NOUVEAU_VM_BIND_OP_ALLOC 0x0
-> 
-> Do you really need this operation? We have no concept of this in Xe,
-> e.g. we can create a VM and the entire address space is managed exactly
-> the same.
+On Fri, 27 Jan 2023 at 08:49, Brendan Higgins <brendanhiggins@google.com> wrote:
+>
+> On Tue, Jan 24, 2023 at 3:04 AM 'David Gow' via KUnit Development
+> <kunit-dev@googlegroups.com> wrote:
+> >
+> > KUnit has several macros and functions intended for use from non-test
+> > code. These hooks, currently the kunit_get_current_test() and
+> > kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=m.
+> >
+> > In order to support this case, the required functions and static data
+> > need to be available unconditionally, even when KUnit itself is not
+> > built-in. The new 'hooks.c' file is therefore always included, and has
+> > both the static key required for kunit_get_current_test(), and a
+> > function pointer to the real implementation of
+> > __kunit_fail_current_test(), which is populated when the KUnit module is
+> > loaded.
+> >
+> > A new header, kunit/hooks-table.h, contains a table of all hooks, and is
+> > repeatedly included with different definitions of the KUNIT_HOOK() in
+> > order to automatically generate the needed function pointer tables. When
+> > KUnit is disabled, or the module is not loaded, these function pointers
+> > are all NULL. This shouldn't be a problem, as they're all used behind
+> > wrappers which check kunit_running and/or that the pointer is non-NULL.
+> >
+> > This can then be extended for future features which require similar
+> > "hook" behaviour, such as static stubs:
+> > https://lore.kernel.org/all/20221208061841.2186447-1-davidgow@google.com/
+>
+> Devilishly clever. Maybe too clever, but I don't have any better ideas, so:
+>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+>
+> Nevertheless, see my comments below:
+>
 
-The idea for alloc/free is to let UMDs allocate a portion of the VA 
-space (which I call a region), basically the same thing Vulkan 
-represents with a VKBuffer.
+Thanks for checking this out! I definitely agree that this is verging
+on over-complicated, but I do think it'll be worth it.
 
-It serves two purposes:
+I'll send out a proper v1 in a day or two with your comments below
+addressed (and a few other minor issues).
+One option is to just include this in the same series as the static
+stub feature (the next version of which will use it), but that may
+just make things more confusing.
 
-1. It gives the kernel (in particular the GPUVA manager) the bounds in 
-which it is allowed to merge mappings. E.g. when a user request asks for 
-a new mapping and we detect we could merge this mapping with an existing 
-one (used in another VKBuffer than the mapping request came for) the 
-driver is not allowed to change the page table for the existing mapping 
-we want to merge with (assuming that some drivers would need to do this 
-in order to merge), because the existing mapping could already be in use 
-and by re-mapping it we'd potentially cause a fault on the GPU.
+> > Signed-off-by: David Gow <davidgow@google.com>
+> > ---
+> >
+> > This is basically a prerequisite for the stub features working when
+> > KUnit is built as a module, and should nicely make a few other tests
+> > work then, too.
+> >
+> > v2 adds a slightly-excessive macro-based system for defining hooks. This
+> > made adding the static stub hooks absolutely trivial, and the complexity
+> > is totally hidden from the user (being an internal KUnit implementation
+> > detail), so I'm more comfortable with this than some other macro magic.
+> >
+> > It does however result in a huge number of checkpatch.pl errors, as
+> > we're using macros in unconventional ways, and checkpatch just can't
+> > work out the syntax. These are mostly "Macros with complex values should
+> > be enclosed in parentheses", "Macros with multiple statements should be
+> > enclosed in a do - while loop", and similar, which don't apply due to
+> > the macros not being expressions: they are mostly declarations or
+> > assignment statements. There are a few others where checkpatch thinks
+> > that the return value is the function name and similar, so complains
+> > about the style.
+>
+> Shuah, what are your thoughts here? I think it's OK, but I don't want
+> to go any further down this path unless you are OK with it too.
+>
+> > Open questions:
+> > - Is this macro-based system worth it, or was v1 better?
+>
+> I think this is definitely better if we had more than one function to
+> hook. With just one function - I am less confident, but I like having
+> a set way to do it.
 
-2. It is used for sparse residency in a way that such an allocated VA 
-space region can be flagged as sparse, such that the kernel always keeps 
-sparse mappings around for the parts of the region that do not contain 
-actual memory backed mappings.
+Yeah, I agree that it's not worth it for just one function (hence the
+first RFC just hardcoding these), but I think it pays of surprisingly
+quickly as we add more.
 
-If for your driver merging is always OK, creating a single huge region 
-would do the trick I guess. Otherwise, we could also add an option to 
-the GPUVA manager (or a specific region, which could also be a single 
-huge one) within which it never merges.
+In particular, the static stub code lives in a different file, so
+would've needed an extra header for the "_impl" version anyway, as
+it'd need to be accessible from the test.c init code which sets up the
+function pointers. Once we're adding several headers, each with very
+closely related definitions, this way already looks like a bit of a
+win.
 
-> 
-> If this can be removed then the entire concept of regions in the GPUVA
-> can be removed too (drop struct drm_gpuva_region). I say this because
-> in Xe as I'm porting over to GPUVA the first thing I'm doing after
-> drm_gpuva_manager_init is calling drm_gpuva_region_insert on the entire
-> address space. To me this seems kinda useless but maybe I'm missing why
-> you need this for Nouveau.
-> 
-> Matt
-> 
->> +/**
->> + * @DRM_NOUVEAU_VM_BIND_OP_FREE: Free a reserved VA space region.
->> + */
->> +#define DRM_NOUVEAU_VM_BIND_OP_FREE 0x1
->> +/**
->> + * @DRM_NOUVEAU_VM_BIND_OP_MAP:
->> + *
->> + * Map a GEM object to the GPU's VA space. The mapping must be fully enclosed by
->> + * a previously allocated VA space region. If the region is sparse, existing
->> + * sparse mappings are overwritten.
->> + */
->> +#define DRM_NOUVEAU_VM_BIND_OP_MAP 0x2
->> +/**
->> + * @DRM_NOUVEAU_VM_BIND_OP_UNMAP:
->> + *
->> + * Unmap an existing mapping in the GPU's VA space. If the region the mapping
->> + * is located in is a sparse region, new sparse mappings are created where the
->> + * unmapped (memory backed) mapping was mapped previously.
->> + */
->> +#define DRM_NOUVEAU_VM_BIND_OP_UNMAP 0x3
->> +	/**
->> +	 * @flags: the flags for a &drm_nouveau_vm_bind_op
->> +	 */
->> +	__u32 flags;
->> +/**
->> + * @DRM_NOUVEAU_VM_BIND_SPARSE:
->> + *
->> + * Indicates that an allocated VA space region should be sparse.
->> + */
->> +#define DRM_NOUVEAU_VM_BIND_SPARSE (1 << 8)
->> +	/**
->> +	 * @handle: the handle of the DRM GEM object to map
->> +	 */
->> +	__u32 handle;
->> +	/**
->> +	 * @addr:
->> +	 *
->> +	 * the address the VA space region or (memory backed) mapping should be mapped to
->> +	 */
->> +	__u64 addr;
->> +	/**
->> +	 * @bo_offset: the offset within the BO backing the mapping
->> +	 */
->> +	__u64 bo_offset;
->> +	/**
->> +	 * @range: the size of the requested mapping in bytes
->> +	 */
->> +	__u64 range;
->> +};
->> +
->> +/**
->> + * struct drm_nouveau_vm_bind - structure for DRM_IOCTL_NOUVEAU_VM_BIND
->> + */
->> +struct drm_nouveau_vm_bind {
->> +	/**
->> +	 * @op_count: the number of &drm_nouveau_vm_bind_op
->> +	 */
->> +	__u32 op_count;
->> +	/**
->> +	 * @flags: the flags for a &drm_nouveau_vm_bind ioctl
->> +	 */
->> +	__u32 flags;
->> +/**
->> + * @DRM_NOUVEAU_VM_BIND_RUN_ASYNC:
->> + *
->> + * Indicates that the given VM_BIND operation should be executed asynchronously
->> + * by the kernel.
->> + *
->> + * If this flag is not supplied the kernel executes the associated operations
->> + * synchronously and doesn't accept any &drm_nouveau_sync objects.
->> + */
->> +#define DRM_NOUVEAU_VM_BIND_RUN_ASYNC 0x1
->> +	/**
->> +	 * @wait_count: the number of wait &drm_nouveau_syncs
->> +	 */
->> +	__u32 wait_count;
->> +	/**
->> +	 * @sig_count: the number of &drm_nouveau_syncs to signal when finished
->> +	 */
->> +	__u32 sig_count;
->> +	/**
->> +	 * @wait_ptr: pointer to &drm_nouveau_syncs to wait for
->> +	 */
->> +	__u64 wait_ptr;
->> +	/**
->> +	 * @sig_ptr: pointer to &drm_nouveau_syncs to signal when finished
->> +	 */
->> +	__u64 sig_ptr;
->> +	/**
->> +	 * @op_ptr: pointer to the &drm_nouveau_vm_bind_ops to execute
->> +	 */
->> +	__u64 op_ptr;
->> +};
->> +
->> +/**
->> + * struct drm_nouveau_exec_push - EXEC push operation
->> + *
->> + * This structure represents a single EXEC push operation. UMDs should pass an
->> + * array of this structure via struct drm_nouveau_exec's &push_ptr field.
->> + */
->> +struct drm_nouveau_exec_push {
->> +	/**
->> +	 * @va: the virtual address of the push buffer mapping
->> +	 */
->> +	__u64 va;
->> +	/**
->> +	 * @va_len: the length of the push buffer mapping
->> +	 */
->> +	__u64 va_len;
->> +};
->> +
->> +/**
->> + * struct drm_nouveau_exec - structure for DRM_IOCTL_NOUVEAU_EXEC
->> + */
->> +struct drm_nouveau_exec {
->> +	/**
->> +	 * @channel: the channel to execute the push buffer in
->> +	 */
->> +	__u32 channel;
->> +	/**
->> +	 * @push_count: the number of &drm_nouveau_exec_push ops
->> +	 */
->> +	__u32 push_count;
->> +	/**
->> +	 * @wait_count: the number of wait &drm_nouveau_syncs
->> +	 */
->> +	__u32 wait_count;
->> +	/**
->> +	 * @sig_count: the number of &drm_nouveau_syncs to signal when finished
->> +	 */
->> +	__u32 sig_count;
->> +	/**
->> +	 * @wait_ptr: pointer to &drm_nouveau_syncs to wait for
->> +	 */
->> +	__u64 wait_ptr;
->> +	/**
->> +	 * @sig_ptr: pointer to &drm_nouveau_syncs to signal when finished
->> +	 */
->> +	__u64 sig_ptr;
->> +	/**
->> +	 * @push_ptr: pointer to &drm_nouveau_exec_push ops
->> +	 */
->> +	__u64 push_ptr;
->> +};
->> +
->>   #define DRM_NOUVEAU_GETPARAM           0x00 /* deprecated */
->>   #define DRM_NOUVEAU_SETPARAM           0x01 /* deprecated */
->>   #define DRM_NOUVEAU_CHANNEL_ALLOC      0x02 /* deprecated */
->> @@ -136,6 +346,9 @@ struct drm_nouveau_gem_cpu_fini {
->>   #define DRM_NOUVEAU_NVIF               0x07
->>   #define DRM_NOUVEAU_SVM_INIT           0x08
->>   #define DRM_NOUVEAU_SVM_BIND           0x09
->> +#define DRM_NOUVEAU_VM_INIT            0x10
->> +#define DRM_NOUVEAU_VM_BIND            0x11
->> +#define DRM_NOUVEAU_EXEC               0x12
->>   #define DRM_NOUVEAU_GEM_NEW            0x40
->>   #define DRM_NOUVEAU_GEM_PUSHBUF        0x41
->>   #define DRM_NOUVEAU_GEM_CPU_PREP       0x42
->> @@ -197,6 +410,9 @@ struct drm_nouveau_svm_bind {
->>   #define DRM_IOCTL_NOUVEAU_GEM_CPU_FINI       DRM_IOW (DRM_COMMAND_BASE + DRM_NOUVEAU_GEM_CPU_FINI, struct drm_nouveau_gem_cpu_fini)
->>   #define DRM_IOCTL_NOUVEAU_GEM_INFO           DRM_IOWR(DRM_COMMAND_BASE + DRM_NOUVEAU_GEM_INFO, struct drm_nouveau_gem_info)
->>   
->> +#define DRM_IOCTL_NOUVEAU_VM_INIT            DRM_IOWR(DRM_COMMAND_BASE + DRM_NOUVEAU_VM_INIT, struct drm_nouveau_vm_init)
->> +#define DRM_IOCTL_NOUVEAU_VM_BIND            DRM_IOWR(DRM_COMMAND_BASE + DRM_NOUVEAU_VM_BIND, struct drm_nouveau_vm_bind)
->> +#define DRM_IOCTL_NOUVEAU_EXEC               DRM_IOWR(DRM_COMMAND_BASE + DRM_NOUVEAU_EXEC, struct drm_nouveau_exec)
->>   #if defined(__cplusplus)
->>   }
->>   #endif
->> -- 
->> 2.39.0
->>
-> 
+(And I have plans to add some more hooks going forward, particularly
+for "data stubbing", as well as to expose some way of looking up
+resources.)
 
+>
+> > - Should we rename test-bug.h to hooks.h or similar.
+> >   (I think so, but would rather do it in a separate patch, to make it
+> >   easier to review. There are a few includes of it scattered about.)
+>
+> Agreed, that confused me at first.
+
+The other option we could do is to add "hooks.h" now, and temporarily
+make "test-bug.h" just transitively include that until we clean up any
+existing users.
+
+>
+> > - Is making these NULL when KUnit isn't around sensible, or should we
+> >   auto-generate a "default" implementation. This is a pretty easy
+> >   extension to the macros here.
+> >   (I think NULL is good for now, as we have wrappers for these anyway.
+> >   If we want to change our minds later as we add more hooks, it's easy.)
+>
+> Yeah, I'm fine with either.
+>
+
+I think we'll leave it as-is until we have enough hooks that it
+justifies even more complexity.
+
+> > - Any other thoughts?
+>
+> My primary concern was with the naming of test-bug.h, but you said
+> you'd handle that in another patch, which makes sense to me.
+>
+> I also want to make sure Shuah is OK with the checkpatch warnings.
+>
+
+Yeah, the checkpatch warnings are the biggest worry I have. There are
+good reasons to consider them false positives, but it still leaves a
+bit of a bad taste in my mouth.
+
+Here's the full list, with some notes:
+WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+#116:
+new file mode 100644
+
+(The new files are in KUnit directories, so are already covered by MAINTAINERS)
+
+ERROR: Macros with complex values should be enclosed in parentheses
+#196: FILE: include/kunit/test-bug.h:57:
++#define KUNIT_HOOK(name, retval, args) \
++       extern retval (*name)args
+
+(This is a global variable declaration, so can't be enclosed with
+parentheses or do {} while (0))
+
+WARNING: space prohibited between function name and open parenthesis '('
+#197: FILE: include/kunit/test-bug.h:58:
++       extern retval (*name)args
+
+(retval is not the function name, it's the return value. name is the
+name, the parentheses are for the function pointer syntax.)
+
+ERROR: Macros with complex values should be enclosed in parentheses
+#212: FILE: include/kunit/test-bug.h:71:
++#define KUNIT_HOOK(name, retval, args) \
++       static retval (*name)args = NULL
+
+(This is a global variable declaration, so can't be enclosed with
+parentheses or do {} while (0))
+
+WARNING: space prohibited between function name and open parenthesis '('
+#213: FILE: include/kunit/test-bug.h:72:
++       static retval (*name)args = NULL
+
+(retval is not the function name, it's the return value. name is the
+name, the parentheses are for the function pointer syntax.)
+
+WARNING: EXPORT_SYMBOL(foo); should immediately follow its function/variable
+#271: FILE: lib/kunit/hooks.c:18:
++EXPORT_SYMBOL(kunit_running);
+
+(This does immediately follow the DEFINE_STATIC_KEY macro)
+
+ERROR: Macros with multiple statements should be enclosed in a do - while loop
+#274: FILE: lib/kunit/hooks.c:21:
++#define KUNIT_HOOK(name, retval, args) \
++       retval (*name)args; \
++       EXPORT_SYMBOL(name)
+
+(These are global declarations, so can't live in a do {} while (0) loop)
+
+WARNING: space prohibited between function name and open parenthesis '('
+#275: FILE: lib/kunit/hooks.c:22:
++       retval (*name)args; \
+
+(retval is not the function name, it's the return value. name is the
+name, the parentheses are for the function pointer syntax.)
+
+ERROR: Macros with complex values should be enclosed in parentheses
+#314: FILE: lib/kunit/test.c:774:
++#define KUNIT_HOOK(name, retval, args) \
++       extern retval name##_impl args
+
+(This is a global variable declaration, so can't be enclosed with
+parentheses or do {} while (0))
+
+ERROR: Macros with complex values should be enclosed in parentheses
+#321: FILE: lib/kunit/test.c:781:
++#define KUNIT_HOOK(name, retval, args) \
++       name = name##_impl
+
+(I _guess_ this one and the following could be put in a do {} while
+(0) loop, but parentheses wouldn't work, as this is an assignment.)
+
+ERROR: Macros with complex values should be enclosed in parentheses
+#333: FILE: lib/kunit/test.c:797:
++#define KUNIT_HOOK(name, retval, args) \
++       name = NULL
+
+(I _guess_ this one and the previous could be put in a do {} while (0)
+loop, but parentheses wouldn't work, as this is an assignment.)
+
+total: 6 errors, 5 warnings, 211 lines checked
+
+
+> I did find two nits below:
+>
+> > Cheers,
+> > -- David
+> >
+> > Changes since RFC v1:
+> > https://lore.kernel.org/all/20230117142737.246446-1-davidgow@google.com/
+> > - Major refit to auto-generate the hook code using macros.
+> > - (Note that previous Reviewed-by tags have not been added, as this is a
+> >   big enough change it probably needs a re-reviews. Thanks Rae for
+> >   reviewing RFC v1 previously, though!)
+> > ---
+> >  Documentation/dev-tools/kunit/usage.rst | 14 +++++-----
+> >  include/kunit/hooks-table.h             | 34 +++++++++++++++++++++++++
+> >  include/kunit/test-bug.h                | 24 +++++++++--------
+> >  lib/Makefile                            |  4 +++
+> >  lib/kunit/Makefile                      |  3 +++
+> >  lib/kunit/hooks.c                       | 27 ++++++++++++++++++++
+> >  lib/kunit/test.c                        | 22 +++++++++++-----
+> >  7 files changed, 103 insertions(+), 25 deletions(-)
+> >  create mode 100644 include/kunit/hooks-table.h
+> >  create mode 100644 lib/kunit/hooks.c
+> >
+> > diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+> > index 48f8196d5aad..6424493b93cb 100644
+> > --- a/Documentation/dev-tools/kunit/usage.rst
+> > +++ b/Documentation/dev-tools/kunit/usage.rst
+> > @@ -648,10 +648,9 @@ We can do this via the ``kunit_test`` field in ``task_struct``, which we can
+> >  access using the ``kunit_get_current_test()`` function in ``kunit/test-bug.h``.
+> >
+> >  ``kunit_get_current_test()`` is safe to call even if KUnit is not enabled. If
+> > -KUnit is not enabled, was built as a module (``CONFIG_KUNIT=m``), or no test is
+> > -running in the current task, it will return ``NULL``. This compiles down to
+> > -either a no-op or a static key check, so will have a negligible performance
+> > -impact when no test is running.
+> > +KUnit is not enabled, or if no test is running in the current task, it will
+> > +return ``NULL``. This compiles down to either a no-op or a static key check,
+> > +so will have a negligible performance impact when no test is running.
+> >
+> >  The example below uses this to implement a "mock" implementation of a function, ``foo``:
+> >
+> > @@ -726,8 +725,7 @@ structures as shown below:
+> >         #endif
+> >
+> >  ``kunit_fail_current_test()`` is safe to call even if KUnit is not enabled. If
+> > -KUnit is not enabled, was built as a module (``CONFIG_KUNIT=m``), or no test is
+> > -running in the current task, it will do nothing. This compiles down to either a
+> > -no-op or a static key check, so will have a negligible performance impact when
+> > -no test is running.
+> > +KUnit is not enabled, or if no test is running in the current task, it will do
+> > +nothing. This compiles down to either a no-op or a static key check, so will
+> > +have a negligible performance impact when no test is running.
+> >
+> > diff --git a/include/kunit/hooks-table.h b/include/kunit/hooks-table.h
+> > new file mode 100644
+> > index 000000000000..0b5eafd199ed
+> > --- /dev/null
+> > +++ b/include/kunit/hooks-table.h
+> > @@ -0,0 +1,34 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * KUnit 'Hooks' function pointer table
+> > + *
+> > + * This file is included multiple times, each time with a different definition
+> > + * of KUNIT_HOOK. This provides one place where all of the hooks can be listed
+> > + * which can then be converted into function / implementation declarations, or
+> > + * code to set function pointers.
+> > + *
+> > + * Copyright (C) 2023, Google LLC.
+> > + * Author: David Gow <davidgow@google.com>
+> > + */
+> > +
+> > +/*
+> > + * To declare a hook, use:
+> > + * KUNIT_HOOK(name, retval, args), where:
+> > + * - name: the function name of the exported hook
+> > + * - retval: the type of the return value of the hook
+> > + * - args: the arguments to the hook, of the form (int a, int b)
+> > + *
+> > + * Note that the argument list should be contained within the brackets (),
+> > + * and that the implementation of the hook should be in a <name>_impl
+> > + * function, which should not be declared static, but need not be exported.
+> > + */
+> > +
+> > +#ifndef KUNIT_HOOK
+> > +#error KUNIT_HOOK must be defined before including the hooks table
+> > +#endif
+> > +
+> > +KUNIT_HOOK(__kunit_fail_current_test, __printf(3, 4) void,
+> > +          (const char *file, int line, const char *fmt, ...));
+> > +
+> > +/* Undefine KUNIT_HOOK at the end, ready for the next use. */
+> > +#undef KUNIT_HOOK
+> > diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
+> > index c1b2e14eab64..3203ffc0a08b 100644
+> > --- a/include/kunit/test-bug.h
+> > +++ b/include/kunit/test-bug.h
+> > @@ -1,6 +1,6 @@
+> >  /* SPDX-License-Identifier: GPL-2.0 */
+> >  /*
+> > - * KUnit API allowing dynamic analysis tools to interact with KUnit tests
+> > + * KUnit API providing hooks for non-test code to interact with tests.
+> >   *
+> >   * Copyright (C) 2020, Google LLC.
+> >   * Author: Uriel Guajardo <urielguajardo@google.com>
+> > @@ -9,7 +9,7 @@
+> >  #ifndef _KUNIT_TEST_BUG_H
+> >  #define _KUNIT_TEST_BUG_H
+> >
+> > -#if IS_BUILTIN(CONFIG_KUNIT)
+> > +#if IS_ENABLED(CONFIG_KUNIT)
+> >
+> >  #include <linux/jump_label.h> /* For static branch */
+> >  #include <linux/sched.h>
+> > @@ -43,20 +43,21 @@ static inline struct kunit *kunit_get_current_test(void)
+> >   * kunit_fail_current_test() - If a KUnit test is running, fail it.
+> >   *
+> >   * If a KUnit test is running in the current task, mark that test as failed.
+> > - *
+> > - * This macro will only work if KUnit is built-in (though the tests
+> > - * themselves can be modules). Otherwise, it compiles down to nothing.
+> >   */
+> >  #define kunit_fail_current_test(fmt, ...) do {                                 \
+> >                 if (static_branch_unlikely(&kunit_running)) {                   \
+> > +                       /* Guaranteed to be non-NULL when kunit_running true*/  \
+> >                         __kunit_fail_current_test(__FILE__, __LINE__,           \
+> >                                                   fmt, ##__VA_ARGS__);          \
+> >                 }                                                               \
+> >         } while (0)
+> >
+> >
+> > -extern __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
+> > -                                                   const char *fmt, ...);
+> > +/* Declare all of the available hooks. */
+> > +#define KUNIT_HOOK(name, retval, args) \
+> > +       extern retval (*name)args
+> > +
+> > +#include "kunit/hooks-table.h"
+> >
+> >  #else
+> >
+> > @@ -66,10 +67,11 @@ static inline struct kunit *kunit_get_current_test(void) { return NULL; }
+> >  #define kunit_fail_current_test(fmt, ...) \
+> >                 __kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+> >
+> > -static inline __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
+> > -                                                           const char *fmt, ...)
+> > -{
+> > -}
+> > +/* No-op stubs if KUnit is not enabled. */
+> > +#define KUNIT_HOOK(name, retval, args) \
+> > +       static retval (*name)args = NULL
+> > +
+> > +#include "kunit/hooks-table.h"
+> >
+> >  #endif
+> >
+> > diff --git a/lib/Makefile b/lib/Makefile
+> > index 4d9461bfea42..9031de6ca73c 100644
+> > --- a/lib/Makefile
+> > +++ b/lib/Makefile
+> > @@ -126,6 +126,10 @@ CFLAGS_test_fpu.o += $(FPU_CFLAGS)
+> >  obj-$(CONFIG_TEST_LIVEPATCH) += livepatch/
+> >
+> >  obj-$(CONFIG_KUNIT) += kunit/
+> > +# Include the KUnit hooks unconditionally. They'll compile to nothing if
+> > +# CONFIG_KUNIT=n, otherwise will be a small table of static data (static key,
+> > +# function pointers) which need to be built-in even when KUnit is a module.
+> > +obj-y += kunit/hooks.o
+> >
+> >  ifeq ($(CONFIG_DEBUG_KOBJECT),y)
+> >  CFLAGS_kobject.o += -DDEBUG
+> > diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+> > index 29aff6562b42..deeb46cc879b 100644
+> > --- a/lib/kunit/Makefile
+> > +++ b/lib/kunit/Makefile
+> > @@ -11,6 +11,9 @@ ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
+> >  kunit-objs +=                          debugfs.o
+> >  endif
+> >
+> > +# KUnit 'hooks' are built-in even when KUnit is built as a module.
+> > +lib-y +=                               hooks.o
+> > +
+> >  obj-$(CONFIG_KUNIT_TEST) +=            kunit-test.o
+> >
+> >  # string-stream-test compiles built-in only.
+> > diff --git a/lib/kunit/hooks.c b/lib/kunit/hooks.c
+> > new file mode 100644
+> > index 000000000000..29e81614f486
+> > --- /dev/null
+> > +++ b/lib/kunit/hooks.c
+> > @@ -0,0 +1,27 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * KUnit 'Hooks' implementation.
+> > + *
+> > + * This file contains code / structures which should be built-in even when
+> > + * KUnit itself is built as a module.
+> > + *
+> > + * Copyright (C) 2022, Google LLC.
+> > + * Author: David Gow <davidgow@google.com>
+> > + */
+> > +
+> > +/* This file is always built-in, so make sure it's empty if CONFIG_KUNIT=n */
+> > +#if IS_ENABLED(CONFIG_KUNIT)
+> > +
+> > +#include <kunit/test-bug.h>
+> > +
+> > +DEFINE_STATIC_KEY_FALSE(kunit_running);
+> > +EXPORT_SYMBOL(kunit_running);
+> > +
+> > +/* Function pointers for hooks. */
+> > +#define KUNIT_HOOK(name, retval, args) \
+> > +       retval (*name)args; \
+> > +       EXPORT_SYMBOL(name)
+> > +
+> > +#include "kunit/hooks-table.h"
+> > +
+> > +#endif
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index c9ebf975e56b..b6c88f722b68 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -20,13 +20,10 @@
+> >  #include "string-stream.h"
+> >  #include "try-catch-impl.h"
+> >
+> > -DEFINE_STATIC_KEY_FALSE(kunit_running);
+> > -
+> > -#if IS_BUILTIN(CONFIG_KUNIT)
+> >  /*
+> >   * Fail the current test and print an error message to the log.
+> >   */
+> > -void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
+>
+> nit: I think it would be good to add a comment here about this being a
+> hooked function or something.
+
+Makes sense, will do.
+
+>
+> > +void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...)
+> >  {
+> >         va_list args;
+> >         int len;
+> > @@ -53,8 +50,6 @@ void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
+> >         kunit_err(current->kunit_test, "%s:%d: %s", file, line, buffer);
+> >         kunit_kfree(current->kunit_test, buffer);
+> >  }
+> > -EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
+> > -#endif
+> >
+> >  /*
+> >   * Enable KUnit tests to run.
+> > @@ -775,8 +770,18 @@ void kunit_cleanup(struct kunit *test)
+> >  }
+> >  EXPORT_SYMBOL_GPL(kunit_cleanup);
+> >
+> > +/* Declarations for the hook implemetnations */
+>
+> nit: spelling
+>
+
+Nice catch, thanks!
+
+> > +#define KUNIT_HOOK(name, retval, args) \
+> > +       extern retval name##_impl args
+> > +#include "kunit/hooks-table.h"
+> > +
+> >  static int __init kunit_init(void)
+> >  {
+> > +       /* Install the KUnit hook functions. */
+> > +#define KUNIT_HOOK(name, retval, args) \
+> > +       name = name##_impl
+> > +#include "kunit/hooks-table.h"
+> > +
+> >         kunit_debugfs_init();
+> >  #ifdef CONFIG_MODULES
+> >         return register_module_notifier(&kunit_mod_nb);
+> > @@ -788,6 +793,11 @@ late_initcall(kunit_init);
+> >
+> >  static void __exit kunit_exit(void)
+> >  {
+> > +       /* Remove the KUnit hook functions. */
+> > +#define KUNIT_HOOK(name, retval, args) \
+> > +       name = NULL
+> > +#include "kunit/hooks-table.h"
+> > +
+> >  #ifdef CONFIG_MODULES
+> >         unregister_module_notifier(&kunit_mod_nb);
+> >  #endif
+> > --
+> > 2.39.0.246.g2a6d74b583-goog
