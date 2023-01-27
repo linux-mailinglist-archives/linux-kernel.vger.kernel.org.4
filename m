@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 030FA67E4F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 925EF67E502
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233834AbjA0MS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
+        id S232321AbjA0MVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233754AbjA0MSl (ORCPT
+        with ESMTP id S234328AbjA0MU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:18:41 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552EF410BB
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:15:14 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id i185so5085409vsc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:15:14 -0800 (PST)
+        Fri, 27 Jan 2023 07:20:27 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAA38627C
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:17:18 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so3333555wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:17:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=voPlRXxpBMdM10/rkXj6aBG2pUgoFvgwiJZKHRVQeYQ=;
-        b=Sff+hvOU2iCljIh8CEpYcZUcRd0FRki4/VqfCxncuM4Uf00IxJXzS+8RF5NorDYDrw
-         +DuYI5nqbF7lPekG29BAMsQY6xP/EZ7qMK/dvSsoY9vANM5W00IkRBVsCet7tZLJRopH
-         X/PdE4aqSJoE1Wkbp8Xi4NK8DkerjDWMYCnz6pooap+TrpVTnBPjLGVVEmfrrbCW8SFs
-         B/TNOUX7JTd20zRHEWCxogSPcOhbBqFCC6b2Nd8OIUqTrgFYZ3gZMMjEJ0BkN4W2SAJb
-         qVSL90VSO1/zClkUvjrvtGkDigSpFsQ6P/UcW/fv4k5K54g1OdGS9tPAv82Eqjqf1Vx3
-         9gnQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/0vwBT3Hzhed1v3dNdYhtokzYsN4bpkEgFzT9qlnuRc=;
+        b=HLjt2DzHon24NhQ3fetg2NMMwzdnsc4nHHCuPyKZ5mf3si6U5Pysg5i94+q7FZpGx/
+         VMj+4tqKozptI6e0vP+3ZHCH4ZaW7r4EIXkNTkyL5yBYTIvbYXNN7Su0jcrNngR8wMh0
+         r4Ubqt+jHpOONzRVbANdVQ2l5WnvKM2D7csiNTgsB2tfhNfhlJd9EEvqz+3al8Yz6fyt
+         ueZBGnS3RvYL3+BlXVtfs9fDiivtDfMunuj0fHhN7yoBcp/NV849Bzqn53ArRdMA79ea
+         HsVF/7DxsVZ4kdbNAW8GQzWqAPk7wNR2XhEZdqo2UHUkU6VcfLhZG47wBoCWZ34xepqr
+         0kQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=voPlRXxpBMdM10/rkXj6aBG2pUgoFvgwiJZKHRVQeYQ=;
-        b=Wvd6di2BrhkNvDe6aldZzsYwP6HVzL4UBXFr50OpROZxZNZam/qK6h9kEZkWpi/h4R
-         T0JbFj9QE5X3MMo+cEspsU7miiKCTwtvYQLgh57sRkmWEW6RyN5yBw8MwpVHyQ/6CC6F
-         rOWayf4sbEJh3Vn1DweyGdPm5WJEBU4Zak1/1bTeoej+UCI1icgugG+4JUgKIrSNa+46
-         9kwDM9FScU1B8XlajZgrwarZk+VejzFHzQB2+eOIi+vxF9+YWmt2QdkiN+fm2FcJZV8X
-         sUx2Si7S2Y9T3c2d/hjDBTb9FlLdBhaQjIveG+G/fKBdumjHCOQbxarijFksnsKbzCB4
-         zCBA==
-X-Gm-Message-State: AFqh2kpvte4bNViA9KSvTs2W7cHVwGrJ+XPLfmxuSTx+Ay2F9Jvtzzmg
-        AM9uejOodIzPqBTRTFayMhYJVYU30STz2yRpz0EI4g==
-X-Google-Smtp-Source: AMrXdXtq0XX0/BXZTy4vtKTn/J0d3fbU8rAMqVfyLhoN29ydFe2ekri5sPJZKqdpzOA8471Maw+InB+gRIX3839s1Vg=
-X-Received: by 2002:a05:6102:c16:b0:3d3:e027:877a with SMTP id
- x22-20020a0561020c1600b003d3e027877amr5440401vss.0.1674821706879; Fri, 27 Jan
- 2023 04:15:06 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/0vwBT3Hzhed1v3dNdYhtokzYsN4bpkEgFzT9qlnuRc=;
+        b=q+T+KWGbE9XMJBtUJUevh9gBHpbUz8K1Q6OFh2z8sSwpo85UxZFQ2K4eOhMWiQoIcu
+         wrCpjq9VJTyA2Gychd7zW+GkdM9e8Nzz/LzaxXoaLTPJA5sm8wFGUtw2ngofm2aXY3UO
+         HGzk8ewd03uxTpSiAv8LHnf0VJnE3EogGMIZHxRfIU0d44U933+zrFJoPjud58kSMV+S
+         GrCTLGA596kmn0eUht54/c0cpQnN4aHCKczHgxuNKWPwum4PFihe8pNeMrzsOMa8buoA
+         Yg0aIntX+AF10TKytboWv07QTdMJnU3gnu9K2ZHVGn/pk2VBnj14IgVt8tsin1gn+7ja
+         hDsQ==
+X-Gm-Message-State: AFqh2kpm7XUJAu39DflpG19/PzrVyfZHxAPfJAQtWLmrpZGXAZUHuh0n
+        3+9IVSDJ+2jrzuLduCo1mlo5SQ==
+X-Google-Smtp-Source: AMrXdXsLXdBNGvdVWGmQ2Lvar0s7cj7UQSPy019n4SS2PpTdL2HpR7UDzYVLGjCJc2qvCJ76k00XFw==
+X-Received: by 2002:a1c:7514:0:b0:3d9:f559:1f7e with SMTP id o20-20020a1c7514000000b003d9f5591f7emr47106324wmc.20.1674821837274;
+        Fri, 27 Jan 2023 04:17:17 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id b32-20020a05600c4aa000b003db0cab0844sm4062495wmp.40.2023.01.27.04.17.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 04:17:16 -0800 (PST)
+Message-ID: <93852386-f25a-0748-78bb-499edef4d292@linaro.org>
+Date:   Fri, 27 Jan 2023 13:17:14 +0100
 MIME-Version: 1.0
-References: <20230112140304.1830648-1-apatel@ventanamicro.com>
- <20230112140304.1830648-2-apatel@ventanamicro.com> <20230126154753.txhgaqgudnksymrm@orel>
-In-Reply-To: <20230126154753.txhgaqgudnksymrm@orel>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Fri, 27 Jan 2023 17:44:54 +0530
-Message-ID: <CAK9=C2UEF=ta08wwm=nnHgL9yqFCa_03L6UX-SuNLffHhXc45Q@mail.gmail.com>
-Subject: Re: [PATCH 1/7] RISC-V: Add AIA related CSR defines
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] arm64: dts: qcom: sm8550-mtp: drop incorrect
+ vdd-l6-l16-supply
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20230127111913.117036-1-krzysztof.kozlowski@linaro.org>
+ <Y9O2q6Om+MK9k3UL@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y9O2q6Om+MK9k3UL@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,189 +83,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 9:17 PM Andrew Jones <ajones@ventanamicro.com> wrote:
->
-> On Thu, Jan 12, 2023 at 07:32:58PM +0530, Anup Patel wrote:
-> > The RISC-V AIA specification improves handling per-HART local interrupts
-> > in a backward compatible manner. This patch adds defines for new RISC-V
-> > AIA CSRs.
-> >
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > ---
-> >  arch/riscv/include/asm/csr.h | 93 ++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 93 insertions(+)
-> >
-> > diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> > index 0e571f6483d9..d608dac4b19f 100644
-> > --- a/arch/riscv/include/asm/csr.h
-> > +++ b/arch/riscv/include/asm/csr.h
-> > @@ -73,7 +73,10 @@
-> >  #define IRQ_S_EXT            9
-> >  #define IRQ_VS_EXT           10
-> >  #define IRQ_M_EXT            11
-> > +#define IRQ_S_GEXT           12
-> >  #define IRQ_PMU_OVF          13
-> > +#define IRQ_LOCAL_MAX                (IRQ_PMU_OVF + 1)
-> > +#define IRQ_LOCAL_MASK               ((_AC(1, UL) << IRQ_LOCAL_MAX) - 1)
->
-> How about instead of the above two defines we do
->
->   #define IRQ_LOCAL_MASK GENMASK(13, 0)
->
-> And in general it might be nice to put GENMASK to work for all the
-> new masks below.
->
-> >
-> >  /* Exception causes */
-> >  #define EXC_INST_MISALIGNED  0
-> > @@ -156,6 +159,27 @@
-> >                                (_AC(1, UL) << IRQ_S_TIMER) | \
-> >                                (_AC(1, UL) << IRQ_S_EXT))
-> >
-> > +/* AIA CSR bits */
-> > +#define TOPI_IID_SHIFT               16
-> > +#define TOPI_IID_MASK                _AC(0xfff, UL)
-> > +#define TOPI_IPRIO_MASK              _AC(0xff, UL)
-> > +#define TOPI_IPRIO_BITS              8
-> > +
-> > +#define TOPEI_ID_SHIFT               16
-> > +#define TOPEI_ID_MASK                _AC(0x7ff, UL)
-> > +#define TOPEI_PRIO_MASK              _AC(0x7ff, UL)
-> > +
-> > +#define ISELECT_IPRIO0               0x30
-> > +#define ISELECT_IPRIO15              0x3f
-> > +#define ISELECT_MASK         _AC(0x1ff, UL)
-> > +
-> > +#define HVICTL_VTI           _AC(0x40000000, UL)
->
-> I'd rather read this as '1 << 30' to match the spec and other
-> bit masks in this file. Actually, it'd be nice if BIT() was
-> used throughout this file, e.g. #define HVICTL_VTI BIT(30)
->
-> > +#define HVICTL_IID           _AC(0x0fff0000, UL)
-> > +#define HVICTL_IID_SHIFT     16
-> > +#define HVICTL_DPR           _AC(0x00000200, UL)
-> > +#define HVICTL_IPRIOM                _AC(0x00000100, UL)
-> > +#define HVICTL_IPRIO         _AC(0x000000ff, UL)
-> > +
-> >  /* xENVCFG flags */
-> >  #define ENVCFG_STCE                  (_AC(1, ULL) << 63)
-> >  #define ENVCFG_PBMTE                 (_AC(1, ULL) << 62)
-> > @@ -250,6 +274,18 @@
-> >  #define CSR_STIMECMP         0x14D
-> >  #define CSR_STIMECMPH                0x15D
-> >
-> > +/* Supervisor-Level Window to Indirectly Accessed Registers (AIA) */
-> > +#define CSR_SISELECT         0x150
-> > +#define CSR_SIREG            0x151
-> > +
-> > +/* Supervisor-Level Interrupts (AIA) */
-> > +#define CSR_STOPEI           0x15c
-> > +#define CSR_STOPI            0xdb0
-> > +
-> > +/* Supervisor-Level High-Half CSRs (AIA) */
-> > +#define CSR_SIEH             0x114
-> > +#define CSR_SIPH             0x154
-> > +
-> >  #define CSR_VSSTATUS         0x200
-> >  #define CSR_VSIE             0x204
-> >  #define CSR_VSTVEC           0x205
-> > @@ -279,8 +315,32 @@
-> >  #define CSR_HGATP            0x680
-> >  #define CSR_HGEIP            0xe12
-> >
-> > +/* Virtual Interrupts and Interrupt Priorities (H-extension with AIA) */
-> > +#define CSR_HVIEN            0x608
-> > +#define CSR_HVICTL           0x609
-> > +#define CSR_HVIPRIO1         0x646
-> > +#define CSR_HVIPRIO2         0x647
-> > +
-> > +/* VS-Level Window to Indirectly Accessed Registers (H-extension with AIA) */
-> > +#define CSR_VSISELECT                0x250
-> > +#define CSR_VSIREG           0x251
-> > +
-> > +/* VS-Level Interrupts (H-extension with AIA) */
-> > +#define CSR_VSTOPEI          0x25c
-> > +#define CSR_VSTOPI           0xeb0
-> > +
-> > +/* Hypervisor and VS-Level High-Half CSRs (H-extension with AIA) */
-> > +#define CSR_HIDELEGH         0x613
-> > +#define CSR_HVIENH           0x618
-> > +#define CSR_HVIPH            0x655
-> > +#define CSR_HVIPRIO1H                0x656
-> > +#define CSR_HVIPRIO2H                0x657
-> > +#define CSR_VSIEH            0x214
-> > +#define CSR_VSIPH            0x254
-> > +
-> >  #define CSR_MSTATUS          0x300
-> >  #define CSR_MISA             0x301
-> > +#define CSR_MIDELEG          0x303
-> >  #define CSR_MIE                      0x304
-> >  #define CSR_MTVEC            0x305
-> >  #define CSR_MENVCFG          0x30a
-> > @@ -297,6 +357,25 @@
-> >  #define CSR_MIMPID           0xf13
-> >  #define CSR_MHARTID          0xf14
-> >
-> > +/* Machine-Level Window to Indirectly Accessed Registers (AIA) */
-> > +#define CSR_MISELECT         0x350
-> > +#define CSR_MIREG            0x351
-> > +
-> > +/* Machine-Level Interrupts (AIA) */
-> > +#define CSR_MTOPEI           0x35c
-> > +#define CSR_MTOPI            0xfb0
-> > +
-> > +/* Virtual Interrupts for Supervisor Level (AIA) */
-> > +#define CSR_MVIEN            0x308
-> > +#define CSR_MVIP             0x309
-> > +
-> > +/* Machine-Level High-Half CSRs (AIA) */
-> > +#define CSR_MIDELEGH         0x313
-> > +#define CSR_MIEH             0x314
-> > +#define CSR_MVIENH           0x318
-> > +#define CSR_MVIPH            0x319
-> > +#define CSR_MIPH             0x354
-> > +
-> >  #ifdef CONFIG_RISCV_M_MODE
-> >  # define CSR_STATUS  CSR_MSTATUS
-> >  # define CSR_IE              CSR_MIE
-> > @@ -307,6 +386,13 @@
-> >  # define CSR_TVAL    CSR_MTVAL
-> >  # define CSR_IP              CSR_MIP
-> >
-> > +# define CSR_IEH             CSR_MIEH
-> > +# define CSR_ISELECT CSR_MISELECT
-> > +# define CSR_IREG    CSR_MIREG
-> > +# define CSR_IPH             CSR_MIPH
-> > +# define CSR_TOPEI   CSR_MTOPEI
-> > +# define CSR_TOPI    CSR_MTOPI
-> > +
-> >  # define SR_IE               SR_MIE
-> >  # define SR_PIE              SR_MPIE
-> >  # define SR_PP               SR_MPP
-> > @@ -324,6 +410,13 @@
-> >  # define CSR_TVAL    CSR_STVAL
-> >  # define CSR_IP              CSR_SIP
-> >
-> > +# define CSR_IEH             CSR_SIEH
-> > +# define CSR_ISELECT CSR_SISELECT
-> > +# define CSR_IREG    CSR_SIREG
-> > +# define CSR_IPH             CSR_SIPH
-> > +# define CSR_TOPEI   CSR_STOPEI
-> > +# define CSR_TOPI    CSR_STOPI
-> > +
-> >  # define SR_IE               SR_SIE
-> >  # define SR_PIE              SR_SPIE
-> >  # define SR_PP               SR_SPP
-> > --
-> > 2.34.1
-> >
->
-> Besides my preference for GENMASK and BIT, this looks good to me.
->
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+On 27/01/2023 12:34, Abel Vesa wrote:
+> On 23-01-27 12:19:13, Krzysztof Kozlowski wrote:
+>> There is no vdd-l6-l16 supply in qcom,pm8550-rpmh-regulators.
+>>
+>> Fixes: 71342fb91eae ("arm64: dts: qcom: Add base SM8550 MTP dts")
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 1 -
+>>  1 file changed, 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+>> index 725d3bc3ee72..d6ae80414654 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+>> @@ -47,7 +47,6 @@ regulators-0 {
+>>  		vdd-bob2-supply = <&vph_pwr>;
+>>  		vdd-l2-l13-l14-supply = <&vreg_bob1>;
+>>  		vdd-l3-supply = <&vreg_s4g_1p3>;
+>> -		vdd-l6-l16-supply = <&vreg_bob1>;
+> 
+> NACK.
+> 
+> There is actually an L6 but is not added yet.
+> 
+> But the correct one here is actually: vdd-l5-l16-supply
 
-Thanks, I will address all your comments in v2.
+Konrad also suggested this. I'll correct to l5-l16.
 
-Regards,
-Anup
+Best regards,
+Krzysztof
+
