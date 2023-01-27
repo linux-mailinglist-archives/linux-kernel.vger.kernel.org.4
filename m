@@ -2,76 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD36767E03B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF5467E03C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjA0JcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        id S232787AbjA0JcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbjA0JcO (ORCPT
+        with ESMTP id S232251AbjA0JcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:32:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518C42E0D0;
-        Fri, 27 Jan 2023 01:32:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 27 Jan 2023 04:32:15 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EDE329438
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:32:09 -0800 (PST)
+Received: from 8bytes.org (p5b006afb.dip0.t-ipconnect.de [91.0.106.251])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D227261A3F;
-        Fri, 27 Jan 2023 09:32:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD3B1C433EF;
-        Fri, 27 Jan 2023 09:32:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674811928;
-        bh=ry/oIi0OHXzdRTXNsss+PckkCY4X4TbKoAbI71uIw24=;
+        by mail.8bytes.org (Postfix) with ESMTPSA id 2857126300B;
+        Fri, 27 Jan 2023 10:32:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1674811928;
+        bh=67bxT685tOMCKAuJAdCEHl033uhA9K3HKNmu6VQru0o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tKQhgIhLpVwrGYHjlhbIHiUxqNUHnKe/n2gIKDebQMMIqYU7KT9kR+QN7EfAKWwzd
-         GlN6pK7YuLZh/2VqJie7wd0ylB2NtYsmETspW7Xz0T6MfwnWXtqDZaZoGzeLLCBRoO
-         BYUWUDFHr0lBwVid73N0OX2DM4OQ1frlYm5+89Nddv22BjHEpmKpMLhu8rl7mES5uV
-         eHJFRgV+1uZbefi2wJAtG354UIgfBzF90wMX3i8C850di3V6s+mHV/5KzRQZQBbCtz
-         hAt/4W5luPgEuGXObP+Mz84eBTRLNMSMI7owsvLt9B+qDY2prLVnDHCIYjsb1rIKoJ
-         OJIPpIGk1qgPA==
-Date:   Fri, 27 Jan 2023 09:32:03 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        b=Xy2SiDytMo1wuCsna2qB+MFrsDdSUGfO4h3fBDUHGer8n9OqFrq+zLxIRp+wKeAYo
+         WCVqiNKU6o1RRx1foLikfKWDJwZt7NwWDdp61ni8YITCQDLrxwK/xKJY/7Kh6jld2J
+         6gI6pHCgNx0DKaD83QIW6gJiQ2Y4LoPLOeMlEm7ubDS/7+HWcWp54nRFCZIFGQDAv/
+         ORUp7me4GZTaXozH+WunuCriokj9YOcsnT7+ArGFYptfdBY0d8JECpKDgq7crBUyRr
+         Ik/dGWmFIoQkkpqiK+D4tjKbjmmfELjWZ/PRIXbcu+2Vpg45hCdyLBDTz0L/+3ucai
+         46QWyEJ19LB8A==
+Date:   Fri, 27 Jan 2023 10:32:07 +0100
+From:   =?iso-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     "Reshetova, Elena" <elena.reshetova@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the backlight tree
-Message-ID: <Y9OaE6M9CaGYvVZD@google.com>
-References: <20230127161233.5c21c04f@canb.auug.org.au>
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y9OaF/p6PszOCydn@8bytes.org>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9Jh2x9XJE1KEUg6@unreal>
+ <DM8PR11MB5750414F6638169C7097E365E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9JyW5bUqV7gWmU8@unreal>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230127161233.5c21c04f@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9JyW5bUqV7gWmU8@unreal>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023, Stephen Rothwell wrote:
+On Thu, Jan 26, 2023 at 02:30:19PM +0200, Leon Romanovsky wrote:
+> This is exactly what I said. You presented me the cases which exist in
+> your invented world. Mentioned unhandled page fault doesn't exist in real
+> world. If PCI device doesn't work, it needs to be replaced/blocked and not
+> left to be operable and accessible from the kernel/user.
 
-> Hi all,
-> 
-> The following commit is also in the arm-soc tree as a different commit
-> (but the same patch):
-> 
->   6e9b5cad13f0 ("backlight: Remove pxa tosa support")
-> 
-> This ia commit
-> 
->   9041bd1aff23 ("backlight: remove pxa tosa support")
-> 
-> in the arm-soc tree.
+Believe it or not, this "invented" world is already part of the real
+world, and will become even more in the future.
 
-This should be removed from the arm-soc tree.
+So this has been stated elsewhere in the thread already, but I also like
+to stress that hiding misbehavior of devices (real or emulated) is not
+the goal of this work.
 
+In fact, the best action for a CoCo guest in case it detects a
+(possible) attack is to stop whatever it is doing and crash. And a
+misbehaving device in a CoCo guest is a possible attack.
 
--- 
-Lee Jones [李琼斯]
+But what needs to be prevented at all costs is undefined behavior in the
+CoCo guest that is triggerable by the HV, e.g. by letting an emulated
+device misbehave. That undefined behavior can lead to information leak,
+which is a way bigger problem for a guest owner than a crashed VM.
+
+Regards,
+
+	Joerg
