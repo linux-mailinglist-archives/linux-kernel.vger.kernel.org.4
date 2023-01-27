@@ -2,85 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8427667E5D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C0467E5D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbjA0My4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
+        id S229711AbjA0M5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbjA0Myy (ORCPT
+        with ESMTP id S232727AbjA0M5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:54:54 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8DE69B26
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:54:46 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id u72so5838098ybi.7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:54:46 -0800 (PST)
+        Fri, 27 Jan 2023 07:57:20 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0380720068;
+        Fri, 27 Jan 2023 04:57:19 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id x10so4631865edd.10;
+        Fri, 27 Jan 2023 04:57:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e4Duo7yTzdZxkEabRt0qmMTKlLlA46+PK96iVypqY7A=;
-        b=cnuDPpD11hReq0XyNmFeCIx0b71bNk3NBx2rc8MD/xYMkHo4pLNNQmxH9++VBVD7oj
-         bsJIrj4d5urCgLj/cdTXIjda5ILxvQ2Ype/F9M6IeSUwFb/aZO4WXd3tipytf3cTJpWr
-         0m79NhsHNN7gkVrnPwXCbq/hVPXCUuqG0T84peeM9Zx/AL/Z1lZHj89HEWoannelPCYb
-         t5dxyR+4SJQQ9Y8gXbvuJfedQB0ETTi0eKx8h91inE5OEN928rvX2a7FFQFaYf9PLHNq
-         5R998c/SyZpeaoKrPE6g8MPzUGZ45NK1OyqDY5vRL8j4xxXjqGryYGFHVlWpfj7Xwgj5
-         q0ZQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WSGMh7tRNAaLj5yI1m4PdJqLgl2acNMOyBtFtlK7OZk=;
+        b=QwChc0PKt4BnWFjr/KdVghPRZqy3T2yTdWM7BYwvCzsYOHWWkhWqkuBK/CKWB+hiuR
+         74a55Kfc/aa1z76rQBd6a9a0PK2/7SXelwmC88ai1mm/2KEqZNxjUIftDMrUj15rWPo+
+         J5EohSEHtCCOJfLHHgQszp62I/bCTWMR5llQP9DpchNEnIClDFjE1uJWxxVRi7MgBJCm
+         Q01Subftos9N9h14/ntJjV9G97HO/g0kS3Mx3jWzMRjtIacVz4V43rfM96IPR+d/KrNO
+         Gnc7HsmPRFgujE0Tt/hUyGW/XQepQHsoQZEs1sooSM59OtGkpcXc46d42bUi7YzLvfnk
+         NbwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=e4Duo7yTzdZxkEabRt0qmMTKlLlA46+PK96iVypqY7A=;
-        b=ubANYg+bJG5Yl5kf0NtC6T5CdT892GWQIqyMbQ1Z2ebJv662gLd4QHRGuPzKGAjy5q
-         n734yDBLmeBf2fHBsVkpGabejCbMsbUkW7WNk+R/nsFkIpR/lowEgu0KAid2eOIa48IV
-         agkBntvdj2751fAxP7B61BC2AE15SSpdJZSWAbYEa9uAzwhH0G8w2Go9QC627uPJDs1Y
-         HV4jx4Et5HDZOASHpLo6Z6AYCF5aLyOS8rI1VeVa0kkBnmMsdDcy39uXujN59nOAGGYD
-         TMLnqa3Ir6emvMmLqOpBDgOwwPk6GMYxkHB4JJbKQsheyGKq7OzTLzDuRVUUC/jtB6f4
-         atZA==
-X-Gm-Message-State: AO0yUKX6qXSie7TOGEKPG1FBNNxLwW0hpqt5VETtn/PQnBklt7NeXfNS
-        rZsQ8AHj+ZKkwQKoZoyJ24Najb0IHgmkZuOYM+Fxgw==
-X-Google-Smtp-Source: AK7set9NQq5JuQtFwNkB5SlRJX2gRGCTkuUQknVc+coffsEH8XXGbiklpR+j7zD4R+i12cXNb5MrWCvbOp0J8iuKdxc=
-X-Received: by 2002:a25:d884:0:b0:80b:66c5:9fc5 with SMTP id
- p126-20020a25d884000000b0080b66c59fc5mr1743762ybg.210.1674824085818; Fri, 27
- Jan 2023 04:54:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20230126-gpio-mmio-fix-v1-0-8a20ce0e8275@ncr.com> <20230126-gpio-mmio-fix-v1-2-8a20ce0e8275@ncr.com>
-In-Reply-To: <20230126-gpio-mmio-fix-v1-2-8a20ce0e8275@ncr.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 27 Jan 2023 13:54:34 +0100
-Message-ID: <CACRpkda57wNMO20ZGtjm7zOKMk=1D2g6ZBq5aRKnPp=1z5Pr+Q@mail.gmail.com>
-Subject: Re: [PATCH 2/3] gpio: Add new flag BGPIOF_NO_INPUT
-To:     nl250060@ncr.com
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        bh=WSGMh7tRNAaLj5yI1m4PdJqLgl2acNMOyBtFtlK7OZk=;
+        b=6gWJPI8bczBC91uGsX6+7ilJu9qzC9FlifdTsCFUihAUt5qbqDxSVnO8UjjXt4d+Z7
+         BRe5qQpLSP3IxioMVUse4CBbUl/u+hGqBmG17pu13d2CZlS5+IqW7Qr1N/Q1IEl5tQhm
+         O20Apxbz+kXsL6yH+uC9pmepUK3C8X6UldAdE2u4BhBGD4+BWRUO8lvtEPuD7SDiXROG
+         OZt447eQ7mehw9H9zaFriJlDxn7GJTDORxKdICqs97CUDgtgDr82+i5RGLbm5T8HUJEQ
+         8XMsBtUhGTxchuERLa86jgGQ7jmTghcjJzReqMk8SEXSIgh1rLISoQxa78EYb+/JUkbn
+         p2sg==
+X-Gm-Message-State: AO0yUKXCbIYundQAxL8po3sxdxwtkkwoI+JyC5aOs6fQj8VwGvH8PjXn
+        sriVME0A3xyK5LrbetORi1X/BwsVcQc=
+X-Google-Smtp-Source: AK7set9fiieDJvoI0cIIXqfh2KwwgHZ/FqCug9cxZlmhbl+skSmKi2RvQL5akuVkh2MI4nIWsO2p5w==
+X-Received: by 2002:a05:6402:298c:b0:49f:a3d7:b84d with SMTP id eq12-20020a056402298c00b0049fa3d7b84dmr16189411edb.34.1674824237029;
+        Fri, 27 Jan 2023 04:57:17 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id y5-20020a056402358500b00482e0c55e2bsm2248136edc.93.2023.01.27.04.57.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 04:57:16 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        u-boot@lists.denx.de,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V3 1/6] nvmem: core: add nvmem_dev_size() helper
+Date:   Fri, 27 Jan 2023 13:57:04 +0100
+Message-Id: <20230127125709.32191-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:18 AM Niall Leonard via B4 Submission
-Endpoint <devnull+nl250060.ncr.com@kernel.org> wrote:
+From: Rafał Miłecki <rafal@milecki.pl>
 
-> From: Niall Leonard <nl250060@ncr.com>
->
-> Signed-off-by: Niall Leonard <nl250060@ncr.com>
+This is required by layouts that need to read whole NVMEM space. It
+applies to NVMEM devices without hardcoded layout (like U-Boot
+environment data block).
 
-I would squash this with the other patch adding it to the MMIO driver
-per the principle one patch = one technical step.
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+V2: Drop "const" from "const size_t"
+---
+ drivers/nvmem/core.c           | 13 +++++++++++++
+ include/linux/nvmem-consumer.h |  1 +
+ 2 files changed, 14 insertions(+)
 
-Anyway:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 38a5728bc65c..9e77af0164aa 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -2063,6 +2063,19 @@ void nvmem_del_cell_lookups(struct nvmem_cell_lookup *entries, size_t nentries)
+ }
+ EXPORT_SYMBOL_GPL(nvmem_del_cell_lookups);
+ 
++/**
++ * nvmem_dev_size() - Get the size of a given nvmem device.
++ *
++ * @nvmem: nvmem device.
++ *
++ * Return: size of the nvmem device.
++ */
++size_t nvmem_dev_size(struct nvmem_device *nvmem)
++{
++	return nvmem->size;
++}
++EXPORT_SYMBOL_GPL(nvmem_dev_size);
++
+ /**
+  * nvmem_dev_name() - Get the name of a given nvmem device.
+  *
+diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
+index fa030d93b768..c3005ab6cc4f 100644
+--- a/include/linux/nvmem-consumer.h
++++ b/include/linux/nvmem-consumer.h
+@@ -78,6 +78,7 @@ ssize_t nvmem_device_cell_read(struct nvmem_device *nvmem,
+ int nvmem_device_cell_write(struct nvmem_device *nvmem,
+ 			    struct nvmem_cell_info *info, void *buf);
+ 
++size_t nvmem_dev_size(struct nvmem_device *nvmem);
+ const char *nvmem_dev_name(struct nvmem_device *nvmem);
+ 
+ void nvmem_add_cell_lookups(struct nvmem_cell_lookup *entries,
+-- 
+2.34.1
 
-Yours,
-Linus Walleij
