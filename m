@@ -2,143 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B7A67DCCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 05:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C0167DCD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 05:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbjA0EQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 23:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        id S232171AbjA0EQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 23:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjA0EQP (ORCPT
+        with ESMTP id S229536AbjA0EQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 23:16:15 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE2716336;
-        Thu, 26 Jan 2023 20:16:14 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30R47J4X020421;
-        Fri, 27 Jan 2023 04:16:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=KZUcTgUaTGqseYdC0Kjz9D5vCmq+JhIEgHzdinumt9g=;
- b=KKb4lCNK7zw6IjwbU6bGYMm325Ew+WZuwWxdXgHxuwLg9eeQQDqfre+0qzVTCFdFF0Sz
- vFgu5RFgHXE8uxCu5+DaBXwsVjxxM9NSt1V9E37BavKzHBVcwwpIOyV8dnNmcWGbGumL
- lYEIaEljVlom8s7rgiitA5Bi2pORCBk7YlLynJ827dE5JMp8zzZSavj+Rq4XKcDcyfrz
- wzb6mSTgEes3TqZEdZZOdm6eVMtQTEPXN2MBlcOu/R6r/0HBU9k5PT6n5olF7c6KOAyj
- bLhe/bJNHY+s+us1h3fC+2rFLcOLcORvGqIPyrdXhB3G2XRVD2sfMZvIZ5XHMS2hwwRd LA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nb0qrv3xg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 04:16:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30R4G2XQ004538
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 04:16:02 GMT
-Received: from [10.214.82.226] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 26 Jan
- 2023 20:15:59 -0800
-Message-ID: <8c64d4a5-b101-ad3d-0e5e-590f060d0104@quicinc.com>
-Date:   Fri, 27 Jan 2023 09:45:56 +0530
+        Thu, 26 Jan 2023 23:16:45 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1077B16336;
+        Thu, 26 Jan 2023 20:16:44 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id k4so5016780eje.1;
+        Thu, 26 Jan 2023 20:16:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pCPg4p/kNjS/XcZm5od+BEqI0eRA9tT6yJAnZLVLufo=;
+        b=XXpkOMwOgo0LHzHR/loDFVHUu5rPtT+qqbPGwCH73uVWNDGczt3AMcYqY2IRWlXPnI
+         dg5++kJa018KtzQdnQCDIEIqJwilrAFYDoev57v/iwQxqtGhE5AwQE4V5nzmikM/aEOU
+         upnNhEuBKgvqzYUFVcDkkxUlf6DfH/3F/CFY5A17at704BCfGkVLR9vnH6jg7fNj7ZW1
+         rMirPTM01DJ7cEkflA1z9BZ3fa3SejeFjhVmkrE3OH21lUS6aHcPz3ilT1czvh1f/x6H
+         4faGHdWRljQfJi45c3ZMh964EC7IaFLfaXdVuvOIYFd0Du/LJtaeAtI/FBGimONmURs3
+         sFyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pCPg4p/kNjS/XcZm5od+BEqI0eRA9tT6yJAnZLVLufo=;
+        b=Pql/AOd6Lh0o0ethfEHxSbiKIiTybDaDj54wWw59VY/TjN+DyBFiwso7gnPNOG/VC4
+         b9VYJJlBYl1Sg/SVBzxqfh22eLjk8+hQtpghzK/MJFQ+5NOAFCpljYOKpKoMDYrkx9xk
+         shh0nDx+i85lmCDRkjZalPgcKZddgDWRhmmTAvbX5r7ygDuduyz2PCzs6oNMYdiO/zZ4
+         dVBznoTfIguC5J2ffQAIqg3eblqfcu3r61MfqSmIo/LaJsBhETsXZAm1YfWHBFaGiWdl
+         tvoY5mljouLbB6Bd0paEYAKAOhC8ZhiE5zXmiwHVK68FyO7bZEaDYfJRRBl4qwhqbWAZ
+         MkLA==
+X-Gm-Message-State: AFqh2kq3QOTo/GIDHWoimoQRcG1KQ2U09QMvVk2GX/5uafwGtpfBlKvs
+        D7AJDdKYf6Yosq/HP8ARpYct7Of9r6tVnw8byEqeb52B1lo=
+X-Google-Smtp-Source: AMrXdXtS93XYT2PTeYAhswaSqtGBBNjGjzbSX2zXwaBaiv1xo/CoL2aXV/Thiix7NKQbiSLkQPk4A5chCCSzRBz7TP8=
+X-Received: by 2002:a17:906:7d14:b0:86f:9fb1:30a8 with SMTP id
+ u20-20020a1709067d1400b0086f9fb130a8mr5599478ejo.181.1674793002473; Thu, 26
+ Jan 2023 20:16:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] soc: qcom: socinfo: Add support for new field in revision
- 17
-Content-Language: en-US
-To:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>
-References: <20230125081407.31833-1-quic_namajain@quicinc.com>
- <59bf1f6e-60df-160a-a343-11a482eec586@quicinc.com>
-From:   Naman Jain <quic_namajain@quicinc.com>
-In-Reply-To: <59bf1f6e-60df-160a-a343-11a482eec586@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: g8ErzgeeEvm3nw1D-sj0rFrrNTBFyAjk
-X-Proofpoint-ORIG-GUID: g8ErzgeeEvm3nw1D-sj0rFrrNTBFyAjk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_09,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
- priorityscore=1501 spamscore=0 suspectscore=0 clxscore=1015 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301270038
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230121085521.9566-1-kerneljasonxing@gmail.com>
+ <Y9JvUKBgBifiosOa@boxer> <48639eb0-27d9-5754-0687-286e909ceff0@intel.com>
+In-Reply-To: <48639eb0-27d9-5754-0687-286e909ceff0@intel.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Fri, 27 Jan 2023 12:16:06 +0800
+Message-ID: <CAL+tcoD2wNOS-Tg+A94naTP2QtVmcoDLZTpapRiD4PVkW3H5eQ@mail.gmail.com>
+Subject: Re: [PATCH net] ixgbe: allow to increase MTU to some extent with XDP enalbed
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, richardcochran@gmail.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.co,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Jason Xing <kernelxing@tencent.com>, magnus.karlsson@intel.com,
+        tirthendu.sarkar@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/25/2023 11:58 PM, Trilok Soni wrote:
-> On 1/25/2023 12:14 AM, Naman Jain wrote:
->> Add support for new field coming with socinfo structure under v17 to get
->> hardware platform's oem variant id. This is to enable OEMs to have minor
->> changes in the board, but to use the same platform subtype as the one
->> supported by Qualcomm. The new field is to be used in platform overlay
->> file. Default value is 0, reserved for Qualcomm platforms. Also, add
->> debugfs support to read this field for a device.
->>
->> Change-Id: I18f80084bc75466f3fcccd55fd21b37d69245aa6
+On Thu, Jan 26, 2023 at 11:56 PM Alexander Lobakin
+<alexandr.lobakin@intel.com> wrote:
 >
-> I don't see SOB line. Please remove Change-ID. Run checkpatch?
+> From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> Date: Thu, 26 Jan 2023 13:17:20 +0100
+>
+> > On Sat, Jan 21, 2023 at 04:55:21PM +0800, Jason Xing wrote:
+> >> From: Jason Xing <kernelxing@tencent.com>
+> >>
+> >> I encountered one case where I cannot increase the MTU size with XDP
+> >> enabled if the server is equipped with IXGBE card, which happened on
+> >> thousands of servers. I noticed it was prohibited from 2017[1] and
+> >> added size checks[2] if allowed soon after the previous patch.
+> >>
+> >> Interesting part goes like this:
+> >> 1) Changing MTU directly from 1500 (default value) to 2000 doesn't
+> >> work because the driver finds out that 'new_frame_size >
+> >> ixgbe_rx_bufsz(ring)' in ixgbe_change_mtu() function.
+> >> 2) However, if we change MTU to 1501 then change from 1501 to 2000, it
+> >> does work, because the driver sets __IXGBE_RX_3K_BUFFER when MTU size
+> >> is converted to 1501, which later size check policy allows.
+> >>
+> >> The default MTU value for most servers is 1500 which cannot be adjusted
+> >> directly to the value larger than IXGBE_MAX_2K_FRAME_BUILD_SKB (1534 or
+> >> 1536) if it loads XDP.
+> >>
+> >> After I do a quick study on the manner of i40E driver allowing two kinds
+> >> of buffer size (one is 2048 while another is 3072) to support XDP mode in
+> >> i40e_max_xdp_frame_size(), I believe the default MTU size is possibly not
+> >> satisfied in XDP mode when IXGBE driver is in use, we sometimes need to
+> >> insert a new header, say, vxlan header. So setting the 3K-buffer flag
+> >> could solve the issue.
+> >>
+> >> [1] commit 38b7e7f8ae82 ("ixgbe: Do not allow LRO or MTU change with XDP")
+> >> [2] commit fabf1bce103a ("ixgbe: Prevent unsupported configurations with
+> >> XDP")
+> >>
+> >> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> >> ---
+> >>  drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 +++
+> >>  1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> >> index ab8370c413f3..dc016582f91e 100644
+> >> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> >> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> >> @@ -4313,6 +4313,9 @@ static void ixgbe_set_rx_buffer_len(struct ixgbe_adapter *adapter)
+> >>              if (IXGBE_2K_TOO_SMALL_WITH_PADDING ||
+> >>                  (max_frame > (ETH_FRAME_LEN + ETH_FCS_LEN)))
+> >>                      set_bit(__IXGBE_RX_3K_BUFFER, &rx_ring->state);
+> >> +
+> >> +            if (ixgbe_enabled_xdp_adapter(adapter))
+> >> +                    set_bit(__IXGBE_RX_3K_BUFFER, &rx_ring->state);
+> >
+> > This will result with unnecessary overhead for 1500 MTU because you will
+> > be working on order-1 pages. Instead I would focus on fixing
+> > ixgbe_change_mtu() and stop relying on ixgbe_rx_bufsz() in there. You can
+> > check what we do on ice/i40e sides.
 
+Well, now I see the commit 23b44513c3e6f in 2019. Thanks, Maciej.
 
-SOB line must have been deleted, in place of Change-id, by mistake. I 
-run checkscript everytime, but somehow it got missed the last time, and 
-I did not catch this. Sorry for the trouble and thanks for reviewing, 
-addressed in v2.
+> >
+> > I'm not looking actively into ixgbe internals but I don't think that there
+> > is anything that stops us from using 3k buffers with XDP.
+>
+> I think it uses the same logics as the rest of drivers: splits a 4k page
+> into two 2k buffers when MTU is <= 1536, otherwise uses order-1 pages
+> and uses 3k buffers.
+>
+> OTOH ixgbe is not fully correct in terms how it calculates Rx headroom,
+> but the main problem is how it calculates the maximum MTU available when
+> XDP is on. Our usual MTU supported when XDP is on is 3046 bytes.
+> For MTU <= 1536, 2k buffers are used even for XDP, so the fix is not
+> correct. Maciej is right that i40e and ice do that way better and don't
+> have such issue.
 
+Thank you for the detailed explanation. And yes, I checked this part
+in the ice/i40e driver which introduces ice/i40e_max_xdp_frame_size()
+to test if we can change MTU size when the driver is loading the XDP
+program.
+I will rewrite the patch as the i40e/ice does in the next submission.
+
+Thanks,
+Jason
 
 >
->> ---
->>   drivers/soc/qcom/socinfo.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
->> index 10efdbcfdf05..10cdd32ce74d 100644
->> --- a/drivers/soc/qcom/socinfo.c
->> +++ b/drivers/soc/qcom/socinfo.c
->> @@ -174,6 +174,8 @@ struct socinfo {
->>       __le32  pcode;
->>       __le32  npartnamemap_offset;
->>       __le32  nnum_partname_mapping;
->> +    /* Version 17 */
->> +    __le32 oem_variant;
->>   };
->>     #ifdef CONFIG_DEBUG_FS
->> @@ -196,6 +198,7 @@ struct socinfo_params {
->>       u32 nmodem_supported;
->>       u32 feature_code;
->>       u32 pcode;
->> +    u32 oem_variant;
->>   };
->>     struct smem_image_version {
->> @@ -519,6 +522,11 @@ static void socinfo_debugfs_init(struct 
->> qcom_socinfo *qcom_socinfo,
->>                  &qcom_socinfo->info.fmt);
->>         switch (qcom_socinfo->info.fmt) {
->> +    case SOCINFO_VERSION(0, 17):
->> +        qcom_socinfo->info.oem_variant = 
->> __le32_to_cpu(info->oem_variant);
->> +        debugfs_create_u32("oem_variant", 0444, qcom_socinfo->dbg_root,
->> +                   &qcom_socinfo->info.oem_variant);
->> +        fallthrough;
->>       case SOCINFO_VERSION(0, 16):
->>           qcom_socinfo->info.feature_code = 
->> __le32_to_cpu(info->feature_code);
->>           qcom_socinfo->info.pcode = __le32_to_cpu(info->pcode);
+> >
+> >>  #endif
+> >>      }
+> >>  }
+> >> --
+> >> 2.37.3
+> >>
+>
+> Thanks,
+> Olek
