@@ -2,110 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6F767F0E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C69967F0EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232521AbjA0WIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:08:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        id S229804AbjA0WJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbjA0WIh (ORCPT
+        with ESMTP id S229681AbjA0WJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:08:37 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3BC5CD38
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:08:36 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id e204so2461990iof.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:08:36 -0800 (PST)
+        Fri, 27 Jan 2023 17:09:45 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E5C1555A
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:09:44 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id d3so6322510plr.10
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:09:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=al9oy3E79ODPhEjXEHhJKk/A8XmQzAwjko7z1WJnZkc=;
-        b=NPwfv5aXAsscvOxtwXtO9484xYSoDmyOBMRHaq6lKLS61CV1IWSbgh14Mvd5VHqR4X
-         bwh/qNckPyHJ3rRfcMqtRB0SQKEsB2IPGnJT/H4kwO7OemTtVM4iRqS2UZSsGlDbjn/Y
-         nkENSjnV/+noRbM4zBn6bygihOczkHMzXE/os=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YE+20ePuR5Q/rSYA8Kgx1qIQvuBjNbnsIq3ynDe/WNA=;
+        b=lrPE+NQJISKzbSzuSk7SXCzc7j/+D9EpaJD9K7rzwRWNg1kSVQNYFtP1rQ0l84SpST
+         rRyMv3exis4Bu4Mpm1x2KAq90VRt3XpaBN+ZNdbAjDbtqUwBa8wvYFUNUuDklKESaE7r
+         I8G7soOT/vdp4aGepBWXgqIvgelXysNDiHs6Sx6SzPOSC2P6xo8isrjFK99t4iF0pRgn
+         qIg69R5L2CZ5mSGbigoxw2wC+Ryl15wK/J5+DDaSAcyG167+uPY4z7BZWCG5LujUY3I0
+         pFtbL+TdJDVbVFk68Wd5jUHG2+6VAtXhfeyeDmiUTxjA+SOVGHAEKefreamLZtNve1Kt
+         8MLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=al9oy3E79ODPhEjXEHhJKk/A8XmQzAwjko7z1WJnZkc=;
-        b=DCXkqX1kkYbYF2oSbCPZzxhQm5+LSZOiOwyn6eMA0jORdl5eUsuRIUSewUgmI0LXfH
-         BM2i109a/z4zAUBflIlo7Tc6SXYXIIg15j5AdB9s7fFNk98cck4TWLf1VljoCWsXVF3D
-         qnEpR5ZVn+4NCm6Sya/lcy18UEHG2S3aHRk0j2q5TEtzbTcGKPs0yYatSv+630ILpUkd
-         oO9DD4XVZO7D1aEGibfd+fZ1/kkavsOlhoaoPaNqXKev4UWn061RhWGpgK9swKhflobP
-         WzyRaWRseXQmkBcvkeVQ8vYZtdGuFQJfglujLRyUpfRydyYWNwtUUb0MKTbIfyDGAxkq
-         vKbg==
-X-Gm-Message-State: AO0yUKXB+V4jbXZscvc0DKO+tMHQyVd/RWkeuliXAUQpSzSSXIGf8acw
-        1f6ieji5p1zS9+6yfcezhQqhG27gEVEt/L2UjcWX8g==
-X-Google-Smtp-Source: AK7set/q2kaa+ypIxOjsL1soOvTsxLlm1mLlh4dFrILigvfOQioehJJTu0K8nJ8YHs49B/9ZVlPODT+AvZNEaOu5JHQ=
-X-Received: by 2002:a05:6638:10d4:b0:3a9:6f3a:4b55 with SMTP id
- q20-20020a05663810d400b003a96f3a4b55mr805907jad.6.1674857315411; Fri, 27 Jan
- 2023 14:08:35 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YE+20ePuR5Q/rSYA8Kgx1qIQvuBjNbnsIq3ynDe/WNA=;
+        b=czDmmPR7BHZU53Ormr754rNq3ZPZn+cy7U0Tqm02QI6mb5r9Xvy3pqt57yox/84F1x
+         3ow+O+ym6m39ppizGfYJ1CruMA8ZuJi99Le1LRMYji1mwARQt0yzvbz3gx+3uAp6sviB
+         Buj+HIJ0K75TTPx6LNShUR6nvy05/tuUlMTRg8LjxCc5iYD/gCJ+nenYciY6bdtdhF0A
+         afwRzuw9Cy02WLXI5P58rnMhtvH/Oj3Ti5x/VpMEyfLodlLPcU3SJ4qAJ7N6q0gRc+k5
+         cCd/+8X7Q1RMeF43OATedCliZivQyvQtInhm4yxrq2urVpcvLiOJAaU5THUi7dlpKdAo
+         LTiQ==
+X-Gm-Message-State: AO0yUKVZ0ZE2nOQZsWdnogiMaE1m1n57evH5v/JEHglfP5S9qKyT6Y9R
+        NJzkZ9KKsUGVEo1jzWTrixIDRg==
+X-Google-Smtp-Source: AK7set8qBf7H7/N8KBYOlsoFn/st9/Zevw7PG0vkJYPKrtvPFqWTu5e70qoyxrKgou2jY23lLsL7mQ==
+X-Received: by 2002:a05:6a20:3ca8:b0:b8:c859:7fc4 with SMTP id b40-20020a056a203ca800b000b8c8597fc4mr162205pzj.1.1674857383797;
+        Fri, 27 Jan 2023 14:09:43 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y12-20020a17090a2b4c00b002293b1aa2b6sm5441275pjc.30.2023.01.27.14.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 14:09:42 -0800 (PST)
+Date:   Fri, 27 Jan 2023 22:09:39 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, like.xu.linux@gmail.com,
+        kan.liang@linux.intel.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v2 12/15] KVM: x86/vmx: Disable Arch LBREn bit in #DB and
+ warm reset
+Message-ID: <Y9RLowPBbQFCqLRf@google.com>
+References: <20221125040604.5051-1-weijiang.yang@intel.com>
+ <20221125040604.5051-13-weijiang.yang@intel.com>
 MIME-Version: 1.0
-References: <20221220075215.1.Ic12e347e0d61a618124b742614e82bbd5d770173@changeid>
- <56d4941a-ad35-37ca-48ca-5f1bf7a86d25@quicinc.com> <CACTWRwt7oQrCyHf=ZF6dW8TtRhOfa14XMZW39cYZWi4hhszcqg@mail.gmail.com>
- <87tu0wcb3l.fsf@kernel.org>
-In-Reply-To: <87tu0wcb3l.fsf@kernel.org>
-From:   Abhishek Kumar <kuabhs@chromium.org>
-Date:   Fri, 27 Jan 2023 14:08:23 -0800
-Message-ID: <CACTWRwvhRUFvdv06YkQEgnz1Zyig_FqCeJU06VypT0Lvzv5OXw@mail.gmail.com>
-Subject: Re: [PATCH] ath10k: snoc: enable threaded napi on WCN3990
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221125040604.5051-13-weijiang.yang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for all the comments. I will call dev_set_threaded() directly
-without HW params and rollout a v2 soon.
+On Thu, Nov 24, 2022, Yang Weijiang wrote:
+> Per SDM 3B, Chapter 18:
+> “On a debug breakpoint event (#DB), IA32_LBR_CTL.LBREn is cleared.”
+> and "On a warm reset, all LBR MSRs, including IA32_LBR_DEPTH, have their
+> values preserved. However, IA32_LBR_CTL.LBREn is cleared to 0, disabling
+> LBRs.", clear the bit manually before inject #DB or when vCPU is in warm
+> reset.
+> 
+> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 3bc892e8cf7a..6ad765ea4059 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -1695,6 +1695,20 @@ static void vmx_clear_hlt(struct kvm_vcpu *vcpu)
+>  		vmcs_write32(GUEST_ACTIVITY_STATE, GUEST_ACTIVITY_ACTIVE);
+>  }
+>  
+> +static void disable_arch_lbr_ctl(struct kvm_vcpu *vcpu)
+> +{
+> +	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
+> +	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> +
+> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
+> +	    test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use) &&
+> +	    lbr_desc->event) {
 
-On Thu, Jan 12, 2023 at 2:15 AM Kalle Valo <kvalo@kernel.org> wrote:
->
-> Abhishek Kumar <kuabhs@chromium.org> writes:
->
-> >> > --- a/drivers/net/wireless/ath/ath10k/snoc.c
-> >> > +++ b/drivers/net/wireless/ath/ath10k/snoc.c
-> >> > @@ -927,6 +927,9 @@ static int ath10k_snoc_hif_start(struct ath10k *ar)
-> >> >
-> >> >       bitmap_clear(ar_snoc->pending_ce_irqs, 0, CE_COUNT_MAX);
-> >> >
-> >> > +     if (ar->hw_params.enable_threaded_napi)
-> >> > +             dev_set_threaded(&ar->napi_dev, true);
-> >> > +
-> >>
-> >> Since this is done in the API specific to WCN3990, we do not need
-> >> hw_param for this.
-> >
-> > Just so that I am clear, are you suggesting to enable this by default
-> > in snoc.c, similar to what you did in
-> >
-> > https://lore.kernel.org/all/20220905071805.31625-2-quic_mpubbise@quicinc.com/
-> >
-> > If my understanding is correct and there is no objection, I can remove
-> > hw_param and enable it by default on snoc.c . I used hw_param because,
-> > as I see it, threaded NAPI can have some adverse effect on the cache
-> > utilization and power.
->
-> WCN3990 is the only device using SNOC bus so the hw_param is not needed.
-> It's safe to call dev_set_threaded() in ath10k_snoc_hif_start()
-> unconditionally as it only affects WCN3990.
->
-> --
-> https://patchwork.kernel.org/project/linux-wireless/list/
->
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+I don't see any reason to check that an event is actually assigned.  The behavior
+is architectural, whether or not KVM is actively exposing LBRs to the guest is
+irrelevant.
+
+> +		u64 ctl = vmcs_read64(GUEST_IA32_LBR_CTL);
+> +
+> +		vmcs_write64(GUEST_IA32_LBR_CTL, ctl & ~ARCH_LBR_CTL_LBREN);
+> +	}
+> +}
+> +
+>  static void vmx_inject_exception(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_queued_exception *ex = &vcpu->arch.exception;
+> @@ -1738,6 +1752,9 @@ static void vmx_inject_exception(struct kvm_vcpu *vcpu)
+>  	vmcs_write32(VM_ENTRY_INTR_INFO_FIELD, intr_info);
+>  
+>  	vmx_clear_hlt(vcpu);
+> +
+> +	if (ex->vector == DB_VECTOR)
+> +		disable_arch_lbr_ctl(vcpu);
+>  }
+>  
+>  static void vmx_setup_uret_msr(struct vcpu_vmx *vmx, unsigned int msr,
+> @@ -4796,7 +4813,9 @@ static void vmx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>  
+>  	vmx_update_fb_clear_dis(vcpu, vmx);
+>  
+> -	if (!init_event && cpu_has_vmx_arch_lbr())
+> +	if (init_event)
+
+INIT and warm RESET are not the same thing, i.e. this is flat out wrong.
+
+> +		disable_arch_lbr_ctl(vcpu);
+> +	else if (cpu_has_vmx_arch_lbr())
+>  		vmcs_write64(GUEST_IA32_LBR_CTL, 0);
+>  }
+>  
+> @@ -4873,6 +4892,9 @@ static void vmx_inject_nmi(struct kvm_vcpu *vcpu)
+>  			INTR_TYPE_NMI_INTR | INTR_INFO_VALID_MASK | NMI_VECTOR);
+>  
+>  	vmx_clear_hlt(vcpu);
+> +
+> +	if (vcpu->arch.exception.vector == DB_VECTOR)
+
+Huh?  This is _very_ obviously injecting NMIs, not #DBs.
+
+> +		disable_arch_lbr_ctl(vcpu);
+>  }
+>  
+>  bool vmx_get_nmi_mask(struct kvm_vcpu *vcpu)
+> -- 
+> 2.27.0
+> 
