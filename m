@@ -2,120 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8441267ECFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B00A67ED04
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234747AbjA0SCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 13:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43136 "EHLO
+        id S234935AbjA0SE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 13:04:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233171AbjA0SCg (ORCPT
+        with ESMTP id S232618AbjA0SEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 13:02:36 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529717CCB9
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:02:35 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id hw16so15771290ejc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:02:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y2Q86j92pQ9q2wsMYUDefPiRAUR/rCfcZ3Y/y0U02v8=;
-        b=CdDAORiYi7i8Rh5tx0vLXUjR6M49l7zi6wYWbctYHIiW9d5EDVrOzpXzWHxCvweTiM
-         VsRE9D8RDYs6Gc07Ig3Gv2Goti67GkR3oaCqb91zHJ/hTw59daVB1+K0ukgP5parwwp9
-         GZPYuqHvTRS3J1F85pOsxMJNi9unlWXkqxle8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y2Q86j92pQ9q2wsMYUDefPiRAUR/rCfcZ3Y/y0U02v8=;
-        b=v/GGe3Y9bhPM6S56G+rt95NpwAc8UA6Z9ujkeqETPIqgp7HOYwEK5ZwHRd0DXOP4Zj
-         Pzy2Yforx0DbwAjBIpMvd2DF+H8TwX6+WpNC9lCjY0bpofkoD6XbymMrQSW27VlG7Me4
-         WaMbe4zouV7EgHhhlgpYzYF3bHbtqDcGhLcIbcBahN0Fb3/e8+m5mZ7jGCTvcaMiHWXS
-         ktJ/G1WtHwzFhE6CmXGFv+ogHnVDaaL7gquC3dvsleRzoxaSTq/pqRCWjZ/VVhU8r5Fr
-         FmGEg4XDhFYeCmZkU6Q65oLRiMJoLDfkDrf+FVemtnAPknw5DIszm/2/jjeAQCa2m6Pj
-         mYJg==
-X-Gm-Message-State: AFqh2kpirUiexNfonR2xlIRbLT5XMrotNWj5qYrmkGybe9qvojoiw2Ye
-        UOWdPDH7ODDEReq0BB2U84zHjJO1XtCD2Qu4WRc=
-X-Google-Smtp-Source: AMrXdXtZJ7QuLiKv83mvgteNPI3W35XJBzP5NrdOjmgRSJdycTAKC21kVV208ESF9/crd+Jax+7nhg==
-X-Received: by 2002:a17:906:c008:b0:859:1d78:765 with SMTP id e8-20020a170906c00800b008591d780765mr38784271ejz.11.1674842553765;
-        Fri, 27 Jan 2023 10:02:33 -0800 (PST)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id s19-20020a1709060c1300b008699bacc03csm2647656ejf.14.2023.01.27.10.02.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 10:02:31 -0800 (PST)
-Received: by mail-wr1-f46.google.com with SMTP id h12so5679625wrv.10
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:02:31 -0800 (PST)
-X-Received: by 2002:a5d:6b51:0:b0:2bf:c5cc:e1d6 with SMTP id
- x17-20020a5d6b51000000b002bfc5cce1d6mr164739wrw.659.1674842551177; Fri, 27
- Jan 2023 10:02:31 -0800 (PST)
+        Fri, 27 Jan 2023 13:04:25 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEE97579A
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:04:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=i0d/AHnGAZVOoNC1mrYJHLs0fJVxQCxbSeSlNV+00YU=; b=FW/URsj5aCPLSd0Fca58A0zfgv
+        2u80XboKatxu/hsKTqxNhuBQsXerU36oaLy32OLWbwnueAI6u8XIMshWxZIhG119o+jE/0q2t8X/B
+        Jvj3v/eAzGgr+5WWjfjqlgSR3NWAMBa6cpHs+9NPwDZcbGXvpSgC+e2wBYmj/UMhZyR6p6VwNftYB
+        HanRO+LSvbL3BTE4T3S86cDjiB6yobAASOVTDDgVA9lhHqJIEVzFY3DbM/lsy6a2U+7wNoQFcjaVW
+        IojaQ+N3awDu7PgOy5zJB/VPZVx4rFD2mXf637HJj7sj3FvRWeK9TDnLw2Mw+w5QbGhZasCPd97KH
+        mf9y8VOg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pLT4r-007vKQ-Uv; Fri, 27 Jan 2023 18:03:53 +0000
+Date:   Fri, 27 Jan 2023 18:03:53 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Sterba <dsterba@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Al Viro <viro@zeniv.linux.org.uk>, Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH] mm/highmem: Align-down to page the address for
+ kunmap_flush_on_unmap()
+Message-ID: <Y9QSCWrijb0R1lnu@casper.infradead.org>
+References: <20230126143346.12086-1-fmdefrancesco@gmail.com>
+ <Y9LdmUw8TkoJOWvM@casper.infradead.org>
+ <1920277.PYKUYFuaPT@suse>
 MIME-Version: 1.0
-References: <20230127165409.3512501-1-robdclark@gmail.com>
-In-Reply-To: <20230127165409.3512501-1-robdclark@gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 27 Jan 2023 10:02:19 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XL_KKB1vbU=gZVXYJzs4pLEnACysp0Q9DxhkHGTR9AgA@mail.gmail.com>
-Message-ID: <CAD=FV=XL_KKB1vbU=gZVXYJzs4pLEnACysp0Q9DxhkHGTR9AgA@mail.gmail.com>
-Subject: Re: [PATCH] drm/mediatek: Remove unused GEM DMA header include
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:DRM DRIVERS FOR MEDIATEK" 
-        <linux-mediatek@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1920277.PYKUYFuaPT@suse>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jan 27, 2023 at 06:58:55PM +0100, Fabio M. De Francesco wrote:
+> On giovedì 26 gennaio 2023 21:07:53 CET Matthew Wilcox wrote:
+> > On Thu, Jan 26, 2023 at 03:33:46PM +0100, Fabio M. De Francesco wrote:
+> > > If ARCH_HAS_FLUSH_ON_KUNMAP is defined (PA-RISC case), __kunmap_local()
+> > > calls kunmap_flush_on_unmap(). The latter currently flushes the wrong
+> > > address (as confirmed by Matthew Wilcox and Helge Deller). Al Viro
+> > > proposed to call kunmap_flush_on_unmap() on an aligned-down to page
+> > > address in order to fix this issue. Consensus has been reached on this
+> > > solution.
+> > > 
+> > > Therefore, if ARCH_HAS_FLUSH_ON_KUNMAP is defined, call
+> > > kunmap_flush_on_unmap() on an aligned-down to page address computed with
+> > > the PTR_ALIGN_DOWN() macro.
+> > 
+> > You missed a spot.  Sent the version I've had in my tree for a few days.
+> 
+> I'm sorry for missing the other call site.
+> Furthermore, your patch has a better commit message. 
+> 
+> However, I'm also sorry because I would have expected a different kind of 
+> support from you. My patch could have been improved with v2.
+> 
+> Anyway, I assume that you missed that I had asked you and Al if anybody were 
+> interested in doing these changes and probably you missed also that Ira 
+> encouraged me to send a patch, whereas you did not show any interest...
+> https://lore.kernel.org/lkml/3146373.5fSG56mABF@suse/
 
-On Fri, Jan 27, 2023 at 8:54 AM Rob Clark <robdclark@gmail.com> wrote:
->
-> From: Rob Clark <robdclark@chromium.org>
->
-> No longer needed since the removal of dependency on DMA helper.
->
-> Fixes: 2ea8aec56bf1 ("drm/mediatek: Remove dependency on GEM DMA helper")
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-
-Reported-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-
-> ---
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> index cd5b18ef7951..7e2fad8e8444 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> @@ -20,8 +20,8 @@
->  #include <drm/drm_fbdev_generic.h>
->  #include <drm/drm_fourcc.h>
->  #include <drm/drm_gem.h>
-> -#include <drm/drm_gem_dma_helper.h>
->  #include <drm/drm_gem_framebuffer_helper.h>
-> +#include <drm/drm_ioctl.h>
-
-It took me a little while to realize why you needed this extra
-include. I guess DEFINE_DRM_GEM_FOPS implicitly refers to drm_ioctl().
-Seems like really drm_gem.h ought to be the one including drm_ioctl.h,
-but maybe there's a good reason why we don't do that?
-
--Doug
+Sorry; I get too much email and I missed the last six emails in that
+thread (just went back and read them).  According to git, I committed
+this patch to my tree on Jan 20th, so if I'd read your email, I would
+have told you to not bother.
