@@ -2,102 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4963A67F09A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B2967F09D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbjA0Vo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
+        id S231848AbjA0Vp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:45:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbjA0Vox (ORCPT
+        with ESMTP id S231886AbjA0Vp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:44:53 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B3B80014;
-        Fri, 27 Jan 2023 13:44:34 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id k13so6360821plg.0;
-        Fri, 27 Jan 2023 13:44:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IGyEe5r+NojLRSHukODHgweo3795xTuuhhKFb1p2rKo=;
-        b=VVClLmEPsUs9mjKaayyyC5mh2eOFGjtp5LxcHfc7P9UlzPULKquyQZuXhdzBYjWskB
-         cY+T8fXqgz2lgHkfuFYTZGXNLG8iTep3xXcGfGIQWrWDHFeT1iGMNzYJ79a7sLcFfgBj
-         PHB9PbYr2Yi05ss+681fc7wf/O4e6J3vd4JedzmNXg00rXoD7/BGx25KLKKfzZb+35lR
-         naDMMn14bOioHB5fz0Oic1JdIiO8eo99pOipmiC3OwSEhuAl8GzaAUemQpMQovnJ7YQ8
-         S9hYzb1loWgT/dkcLt79/yjOfmkoPN42XN21dnWzctMUvZbbN9jpn95JVynnO1jQmvM6
-         pT8g==
+        Fri, 27 Jan 2023 16:45:26 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFAC7A4BD
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:45:23 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id c11-20020a056e020bcb00b0030be9d07d63so3843946ilu.0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:45:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IGyEe5r+NojLRSHukODHgweo3795xTuuhhKFb1p2rKo=;
-        b=3fFNpONNJBeaHYGntdJexoyYhv/1t7q3d/CTMWNqjfEWAs1BJONwwa1Rwt3+KmETdP
-         gVQwsVikO54fB9JwieLvKzHlmqxqQLptaHZUr7OeMxaD4ma9++dj+mKKNfQFJt1wQml4
-         13NQziYOakGZ4MNnD5pSRJSRsK9i8EFIAulP1DObL9em1W6YgiM+mImp9csDlPJ5nXlk
-         +IO+tNi0wfSFMQ2J0dqH3KeDRIiHAqxS17U1tJG/dxSEhvpf3Dqfce8SOO2tIkMvYYRT
-         TVtcaz3uAGzTTLSSve0RAQwQNEAEVearYLaIIHcq1dCzwLabSwRIeYI/oyDcSovO8kDT
-         RxRg==
-X-Gm-Message-State: AFqh2kr8B1/Z8vRbFWHrXXb38SnnsBOPCdi0Q0qNtjEfxafYO0C4Xhbx
-        T2mt8etwQmacN1ipWo4nFGQ=
-X-Google-Smtp-Source: AMrXdXvg9xeWLi95LLoBVMsG4rR/NetrqF9W6r+y4Yq1/r2ua4S9qisTOZupoPVmcgv2pKv8gBCSnA==
-X-Received: by 2002:a17:902:bd07:b0:192:8d17:78e0 with SMTP id p7-20020a170902bd0700b001928d1778e0mr39591462pls.42.1674855861379;
-        Fri, 27 Jan 2023 13:44:21 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902c74500b00183c67844aesm3334819plq.22.2023.01.27.13.44.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 13:44:20 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 27 Jan 2023 11:44:19 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
-        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
-        mkoutny@suse.com, daniel@ffwll.ch,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH 14/19] mm: Introduce a cgroup for pinned memory
-Message-ID: <Y9RFs+90TyzVMs83@slm.duckdns.org>
-References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
- <183372b80aac73e640d9f5ac3c742d505fc6c1f2.1674538665.git-series.apopple@nvidia.com>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JjOKySvD02qbiNRroHzsUl+VbL3SPqNF9aYSI9Pxhmo=;
+        b=Mbtd/+KzgJMVjINjlnjzFLfsMEjwljc/B/jjTRWyitr7qr8+iB36ZCZdD0ISDQSLWh
+         dT48q64p1Yeu+Egmhn7Scif+OMK621mv+RtK2O63SiXjIAlPh/jmc9IUxZCJvr4g0aBz
+         YayT6pYLUs2E7NOa82kCHwtkRJum21qWOjSI3aY5WVq5Bh8tIsDLKbBwkSrDXaeBbnu0
+         NRpbd89XDzFXbdAbCFmjuyBjO0iKaMvwvBUIKb6zibHQWPhrsM435PPIgmeKDw9mzR5R
+         ygg4+YX6wWbTzW+kdlnyYV9zjK6CtawPCRz73hHiACN6DB6U8mPlmsmvCPA0x4kQM60a
+         cNcg==
+X-Gm-Message-State: AFqh2kpGz4hg0KgH4PschWB0DQNuUf3qSvPmAMffX5oQAKM4vwoPr0c/
+        vZyRb1KXYvsdcWvV9Bq7aJM/v1gwrUmJrnu1pe07raOoWtQF
+X-Google-Smtp-Source: AMrXdXuprXVu0QioCRd44GzfJqotzVn6zqBkzVKpPJRXPLHeFlyIEnCB3+uHEbUdAHJaNm/89d13N+ypErN5CmqPD1Ev3+Hn97le
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <183372b80aac73e640d9f5ac3c742d505fc6c1f2.1674538665.git-series.apopple@nvidia.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:8a7:b0:30d:8748:c541 with SMTP id
+ a7-20020a056e0208a700b0030d8748c541mr5208214ilt.64.1674855923113; Fri, 27 Jan
+ 2023 13:45:23 -0800 (PST)
+Date:   Fri, 27 Jan 2023 13:45:23 -0800
+In-Reply-To: <00000000000065419205cb454ac4@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000058e86005f345c88f@google.com>
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Write in
+ tpg_fill_plane_buffer (2)
+From:   syzbot <syzbot+272ce7abd8e49c0ddf42@syzkaller.appspotmail.com>
+To:     hverkuil-cisco@xs4all.nl, hverkuil@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        liushixin2@huawei.com, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 04:42:43PM +1100, Alistair Popple wrote:
-> If too much memory in a system is pinned or locked it can lead to
-> problems such as performance degredation or in the worst case
-> out-of-memory errors as such memory cannot be moved or paged out.
-> 
-> In order to prevent users without CAP_IPC_LOCK from causing these
-> issues the amount of memory that can be pinned is typically limited by
-> RLIMIT_MEMLOCK. However this is inflexible as limits can't be shared
-> between tasks and the enforcement of these limits is inconsistent
-> between in-kernel users of pinned memory such as mlock() and device
-> drivers which may also pin pages with pin_user_pages().
-> 
-> To allow for a single limit to be set introduce a cgroup controller
-> which can be used to limit the number of pages being pinned by all
-> tasks in the cgroup.
+syzbot suspects this issue was fixed by commit:
 
-The use case makes some sense to me but I wonder whether this'd fit a lot
-better in memcg rather than being its own controller.
+commit 94a7ad9283464b75b12516c5512541d467cefcf8
+Author: Liu Shixin <liushixin2@huawei.com>
+Date:   Thu Oct 27 12:38:55 2022 +0000
 
-Thanks.
+    media: vivid: fix compose size exceed boundary
 
--- 
-tejun
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10a3509e480000
+start commit:   f1583cb1be35 Merge tag 'linux-kselftest-next-5.15-rc1' of ..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9c582b69de20dde2
+dashboard link: https://syzkaller.appspot.com/bug?extid=272ce7abd8e49c0ddf42
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14f79ecd300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1489a4c9300000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: media: vivid: fix compose size exceed boundary
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
