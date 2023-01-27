@@ -2,197 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB1467DEDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A5A67DEE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbjA0ILq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 03:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
+        id S232196AbjA0INP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 03:13:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjA0ILp (ORCPT
+        with ESMTP id S229874AbjA0INO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 03:11:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7030279B6;
-        Fri, 27 Jan 2023 00:11:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E66A61A30;
-        Fri, 27 Jan 2023 08:11:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8717BC433D2;
-        Fri, 27 Jan 2023 08:11:39 +0000 (UTC)
-Message-ID: <197c3574-2ffa-7c8a-2372-a373123087a3@xs4all.nl>
-Date:   Fri, 27 Jan 2023 09:11:38 +0100
+        Fri, 27 Jan 2023 03:13:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A741776425
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:12:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674807141;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tfn6EbWtPNJebb879MWv3dOIAf3Kgq4dei2DnXcoD6U=;
+        b=DXVnTFLZJfNCLJ4JUjjqt3odxigb9eCzLJVfkvtpcCLjtI5Sfttrz75yUEFmE15Vq8pxrc
+        xuEvF0zayt2PwhZbBCRCVtc+YPBKKmidOJXmxeHG3hU7TzLgQ6moCszcDBkgZS90Z5PIh3
+        As/8xPyJO12XIAICElM7vaVtRgrh26g=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-571-NDZRqwSCOmaPxyHLmu4kLA-1; Fri, 27 Jan 2023 03:12:20 -0500
+X-MC-Unique: NDZRqwSCOmaPxyHLmu4kLA-1
+Received: by mail-ot1-f70.google.com with SMTP id h19-20020a9d3e53000000b0068b94d630b3so352424otg.12
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 00:12:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tfn6EbWtPNJebb879MWv3dOIAf3Kgq4dei2DnXcoD6U=;
+        b=wwmoCZYZooXzvlRJiYUOLPYN8XEZrBF7TrgnbDsJJWGsEYhulqo61pW+kQ4JWx1O9c
+         zaMyqBadNCs25t+FxP6JCgIm/T8nh8haadM6yO/LAvJKqZykBXQRuVoyqPSCAR8pfBv4
+         +OSUtxu98wdSlwK4Nm1MQcYUOIAqQSJf08xFRfI3i39mOcncX+i/2eoFPWZaBkuz7X9c
+         3BA8/HtU2OqAJbD+MDaf4AOA/hOxMu9YfZbj8Dzrg/dr6kyw5F91QYZzFyZp9brUHz1w
+         MoUsSidihm6krHR+x5t7mDE9uYlxFKXFox7Q4Nxb4LFDuBzOYIJ2F467nOOk3CR1f4KG
+         ew1Q==
+X-Gm-Message-State: AO0yUKXFoOsjD4MYU41LjsEQjW7kUH3Xv8TvzWEcAvjw3J88vDdoknHn
+        FohWwW5HPia6BLvrmgxr4SW6Cqtl2s/GDbl9y/YW83roJwHV6G9fG2cavg9xUZqKMtrHNtlivTX
+        4g+Gcyg78tqmwAe7DBftYHbOs
+X-Received: by 2002:a05:6808:10:b0:375:12e1:28c5 with SMTP id u16-20020a056808001000b0037512e128c5mr1907273oic.55.1674807139559;
+        Fri, 27 Jan 2023 00:12:19 -0800 (PST)
+X-Google-Smtp-Source: AK7set/Up483fYHxeZaymHaWpfU51pJD+d71I5SgB3hjGZAWv7PXqj9pJM37Mfqh56wsfN+i4lQDMg==
+X-Received: by 2002:a05:6808:10:b0:375:12e1:28c5 with SMTP id u16-20020a056808001000b0037512e128c5mr1907268oic.55.1674807139388;
+        Fri, 27 Jan 2023 00:12:19 -0800 (PST)
+Received: from ?IPv6:2804:1b3:a800:6912:c477:c73a:cf7c:3a27? ([2804:1b3:a800:6912:c477:c73a:cf7c:3a27])
+        by smtp.gmail.com with ESMTPSA id g20-20020a9d6b14000000b0068848d6b231sm1480090otp.30.2023.01.27.00.12.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 00:12:18 -0800 (PST)
+Message-ID: <601fc35a8cc2167e53e45c636fccb2d899fd7c50.camel@redhat.com>
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     Michal Hocko <mhocko@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <fweisbecker@suse.de>
+Date:   Fri, 27 Jan 2023 05:12:13 -0300
+In-Reply-To: <52a0f1e593b1ec0ca7e417ba37680d65df22de82.camel@redhat.com>
+References: <20230125073502.743446-1-leobras@redhat.com>
+         <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+         <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+         <Y9FzSBw10MGXm2TK@tpad> <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
+         <Y9Iurktut9B9T+Tl@dhcp22.suse.cz>
+         <Y9MI42NSLooyVZNu@P9FQF9L96D.corp.robot.car>
+         <Y9N5CI8PpsfiaY9c@dhcp22.suse.cz>
+         <52a0f1e593b1ec0ca7e417ba37680d65df22de82.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH v6 03/11] media: v4l2: Add extended buffer (de)queue
- operations for video types
-Content-Language: en-US
-To:     ayaka <ayaka@soulik.info>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     randy.li@synaptics.com, Brian.Starkey@arm.com,
-        frkoenig@chromium.org, hans.verkuil@cisco.com,
-        helen.koike@collabora.com, hiroh@chromium.org,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, mchehab@kernel.org,
-        narmstrong@baylibre.com, nicolas@ndufresne.ca, sakari.ailus@iki.fi,
-        stanimir.varbanov@linaro.org, tfiga@chromium.org
-References: <20210114180738.1758707-1-helen.koike@collabora.com>
- <20210114180738.1758707-4-helen.koike@collabora.com>
- <20230125200026.16643-1-ayaka@soulik.info>
- <7609d523-667a-49a8-45f5-8186de20c24b@xs4all.nl>
- <Y9Jd12nYGk2xTYzx@pendragon.ideasonboard.com>
- <02142e8c-7479-1066-b5af-dad954136adc@soulik.info>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <02142e8c-7479-1066-b5af-dad954136adc@soulik.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 19:36, ayaka wrote:
-> 
-> On 1/26/23 19:02, Laurent Pinchart wrote:
->> On Thu, Jan 26, 2023 at 09:57:51AM +0100, Hans Verkuil wrote:
->>> On 25/01/2023 21:00, ayaka wrote:
->>>> I am currently refresh this patchset, but I didn't see the need beyond v4l2_ext_pix_fmt, which I had done.
->>>> On 2/23/21 20:58, Hans Verkuil wrote:
->>>>> On 14/01/2021 19:07, Helen Koike wrote:
->>>>>> Those extended buffer ops have several purpose:
->>>>>> 1/ Fix y2038 issues by converting the timestamp into an u64 counting
->>>>>>      the number of ns elapsed since 1970
->>>> I think application just use the timestamp field for tracking the
->>>> buffer. It would be just a sequence buffer.
->>>> At least for the most widely cases, the video encoder and decoder
->>>> and ISP, this field is not a wall time.
->>> For video capture and video output this is typically the monotonic
->>> clock value.
->>>
->>> For memory-to-memory devices it is something that is just copied from
->>> output to capture.
->>>
->>> So ISPs definitely use this as a proper timestamp.
->> There are both inline (live-to-memory) and offline (memory-to-memory)
->> ISPs. The former certainly need a proper timestamp.
->>
-> I really have not seen a device that has timer starting with the epoch.
-> 
-> I rarely know the ISP has a wall clock timer.
-> 
-> Timestamp is not my first concern here. Offset is.
+On Fri, 2023-01-27 at 04:22 -0300, Leonardo Br=C3=A1s wrote:
+> On Fri, 2023-01-27 at 08:11 +0100, Michal Hocko wrote:
+> > [Cc Frederic]
+> >=20
+> > On Thu 26-01-23 15:12:35, Roman Gushchin wrote:
+> > > On Thu, Jan 26, 2023 at 08:41:34AM +0100, Michal Hocko wrote:
+> > [...]
+> > > > > Essentially each cpu will try to grab the remains of the memory q=
+uota
+> > > > > and move it locally. I wonder in such circumstances if we need to=
+ disable the pcp-caching
+> > > > > on per-cgroup basis.
+> > > >=20
+> > > > I think it would be more than sufficient to disable pcp charging on=
+ an
+> > > > isolated cpu.
+> > >=20
+> > > It might have significant performance consequences.
+> >=20
+> > Is it really significant?
+> >=20
+> > > I'd rather opt out of stock draining for isolated cpus: it might slig=
+htly reduce
+> > > the accuracy of memory limits and slightly increase the memory footpr=
+int (all
+> > > those dying memcgs...), but the impact will be limited. Actually it i=
+s limited
+> > > by the number of cpus.
+> >=20
+> > Hmm, OK, I have misunderstood your proposal. Yes, the overal pcp charge=
+s
+> > potentially left behind should be small and that shouldn't really be a
+> > concern for memcg oom situations (unless the limit is very small and
+> > workloads on isolated cpus using small hard limits is way beyond my
+> > imagination).
+> >=20
+> > My first thought was that those charges could be left behind without an=
+y
+> > upper bound but in reality sooner or later something should be running
+> > on those cpus and if the memcg is gone the pcp cache would get refilled
+> > and old charges gone.
+> >=20
+> > So yes, this is actually a better and even simpler solution. All we nee=
+d
+> > is something like this
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index ab457f0394ab..13b84bbd70ba 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -2344,6 +2344,9 @@ static void drain_all_stock(struct mem_cgroup *ro=
+ot_memcg)
+> >  		struct mem_cgroup *memcg;
+> >  		bool flush =3D false;
+> > =20
+> > +		if (cpu_is_isolated(cpu))
+> > +			continue;
+> > +
+> >  		rcu_read_lock();
+> >  		memcg =3D stock->cached;
+> >  		if (memcg && stock->nr_pages &&
+> >=20
+> > There is no such cpu_is_isolated() AFAICS so we would need a help from
+> > NOHZ and cpuisol people to create one for us. Frederic, would such an
+> > abstraction make any sense from your POV?
+>=20
+>=20
+> IIUC, 'if (cpu_is_isolated())' would be instead:
+>=20
+> if (!housekeeping_cpu(smp_processor_id(), HK_TYPE_DOMAIN) ||
+> !housekeeping_cpu(smp_processor_id(), HK_TYPE_WQ)
 
-You are working in the V4L2 core framework here, something that is used
-by all V4L2 drivers. So everything is important. You can't just focus on
-your own use-case.
+oh, sorry 's/smp_processor_id()/cpu/' here:
 
-> 
->>>>>> 2/ Unify single/multiplanar handling
->>>>>> 3/ Add a new start offset field to each v4l2 plane buffer info struct
->>>>>>      to support the case where a single buffer object is storing all
->>>>>>      planes data, each one being placed at a different offset
->>>> I really care about this. But I think the data_offset field in
->>>> struct v4l2_plane is enough. The rest is the problem of the kernel
->>>> internal API and allocator.
->>> data_offset has proven to be very confusing and is rarely used because
->>> of that.
-> Yes, I didn't know any stateful codec driver support this.
->>> We do need some sort of an offset field as proposed here, but it
->>> shouldn't be named data_offset.
-> Maybe we could just rename it or make a union in the existing struct.
->> The existing data_offset field was indeed added for other purposes, to
->> let drivers report where the actual image data starts for devices that
->> prepend some sort of header.
-> 
-> For the compressed image, it makes sense. But the most of usage I knew is the upstream would just allocate a large buffer for compression video bitstream,
-> 
-> Then it could tell where the decoder should start.
+if(!housekeeping_cpu(cpu, HK_TYPE_DOMAIN) || !housekeeping_cpu(cpu, HK_TYPE=
+_WQ))
 
-It's not codec specific, it's meant to be used with raw video frames.
 
-The key problem in today's API is that if the buffer for the video frame
-contains multiple planes, typically Y and UV (2 planes) or Y, U and V (3 planes).
+Not sure why I added smp_processor_id() instead of cpu. I think I need some
+sleep. :)
 
-The offset at which each plane begins is currently a property of the
-pixelformat. That doesn't scale since there are often HW requirements
-that influence this.
-
-One of the main confusing issues is that data_offset is included in
-the bytesused value, which was a design mistake in hindsight.
-
-For the new APIs just ignore the existing data_offset and design
-this from scratch.
-
-> 
->>   That's indeed not what we want here, we
->> instead need something similar to the offsets field of struct
->> drm_mode_fb_cmd2.
-> 
-> That leads to another question. Should the offset be fixed from the first enqueued?
-
-It's always been fixed in the hardware I have seen, but I'm sure someone will
-make it dynamic at some point in the future :-(
-
-So I would say that the public API has to support this as a future enhancement,
-but it is OK to write the initial code with the assumption that it will remain
-fixed.
-
-> 
-> For the dmabuf, the v4l2 core framework would detatch then attach the buffer when it found the private of a plane is not same. Although it sounds unnecessary, some devices would a different cache line
-> for the chroma channel, it should be updated.
-> 
-> For the drm_mode_fb_cmd2, unless you remove that fb_id, there is no way to modify the offset. But this would break the existing usage I mentioned before.
-> 
-> We need to consider whether we need to keep the previous offset and a hook for update it.
-> 
->>>> I am thinking just add a field recording the offset input from the user.
->>>> When we return the buffer back to the user, the value of the offset
->>>> should be same as the it is queued.
->>>>
->>>> Meanwhile, the API compatible that I want to keep is user using the
->>>> ext_pix API could access those drivers support old API.
->>>> But I don't want the user would expect they could get correct pixel
->>>> format using the old ioctl(). It could create many duplicated pixel
->>>> formats. If we want to keep the compatible here, that is the job of
->>>> libv4l.
->>>>
->>>> Besides, I think make the driver using the new API be compatible
->>>> with the old ioctl() would lead a huge problem. User won't like to
->>>> update its code if it could work even in a less performance mode
->>>> because this code are for all the other hardware vendors/models.
->>>> Unless we make this a feature, they could make a new branch in their
->>>> code(don't count them would upate the kernel of the other products).
->>> New drivers that require the additional information that these new ioctls give can
->>> decide to just support these new ioctls only. But for existing drivers you want
->>> to automatically support the new ioctls.
-> 
-> What I said didn't break that. Application would use the new ioctl() to contact with the existing driver.
-> 
-> What I want to remove is that Application use the old ioctl() to contact with the driver support new ioctl().
-
-No, you can't do that. Not unless the driver uses features that only work with the new API.
-
-I.e. if I make a new driver whose properties are completely compatible with the existing
-APIs (so no weird offsets etc.), then I want to write the driver using the new ioctls,
-and leave it to the V4L2 framework to provide support for the old ioctls.
-
-There is absolutely no reason to block old ioctls in that case. Applications will not
-just be able to support a new API overnight, that takes years.
-
-> 
-> I would omit this related patches in the refresh set. We could always add it back. But what I want is a way  to enqueue and dequeue different formats(or usage) of buffers in both OUTPUT and CAPTURE. I
-> may add a more complex API later.
-
-For discussion it is OK to drop the old ioctl support, but once you go beyond the RFC stage
-it has to be put back.
-
-Regards,
-
-	Hans
