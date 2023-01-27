@@ -2,52 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A42067F0FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC2A67F100
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbjA0WO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
+        id S232710AbjA0WPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbjA0WOY (ORCPT
+        with ESMTP id S229495AbjA0WPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:14:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CA384942;
-        Fri, 27 Jan 2023 14:14:24 -0800 (PST)
+        Fri, 27 Jan 2023 17:15:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191ED84FBC
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:15:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 933BF61DA1;
-        Fri, 27 Jan 2023 22:14:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024A6C433D2;
-        Fri, 27 Jan 2023 22:14:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9F0CB8214D
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 22:15:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 065FBC433D2;
+        Fri, 27 Jan 2023 22:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674857663;
-        bh=o/wZZ1uzmJ7qFEw1pt+mcU/ptJZ13hgGGF/CULyoMJ4=;
+        s=k20201202; t=1674857708;
+        bh=tYeVWVDqmrYCQ68BomdAu9i6GwFXBSSVooD9s632kl0=;
         h=From:To:Cc:Subject:Date:From;
-        b=mLoGepRJuyf4fEgFO26waiEfOSuAf6TdWVpNp3P2k9Gc2tm2E3uR46Xo/hjAvRSet
-         3/zhelAgl+1nCivDb+TKA7OZqmbagmtWbCHwESGfWG3n6+6mPt3Y41FkJzxMH/y4i6
-         7R5cvH3+cCuaZFsIzs9zYOaayHTfpDbb3GGIAmlyJNQ4Nu3GmPEnSL1vSMF3yZt5Ca
-         PFtEYg4t2SqqTqfrm/8ZNtyys6xN4qqm3mQZN6v75bG26CdYnVl2TeLfkTZjvXrvJc
-         giocRsVf3XzUHNtQbHmKuK8DvM1Ek1/x5K0wyYtasolTEg7/2qB6aGjQp00vFKNL5Y
-         zt+Sp8L7RVdGg==
+        b=FcoP7OuX+aYmdJQtza1BnQZJTENkfGj2s/ORLK/+cRjT/Psyfu1W8AV4ydF3eNhC4
+         XXCAoj8GK47nhBs3IU+aL/uffgBty8u8nFWRAk4NG0CJ056LuvVKgN8ZBR+DwVcWMc
+         8F+CCJhb/Xt5iPcAdxyiydjRrWCjaAdwfMN/jUNq8C1ssKDlUQCcxeYdZCrmWk0xlf
+         zQj+nwBibCyeGIE3dc8O80I5MHFObt+w58qik5L5HMH0sajKK3BcP3YJYioNhqMi2E
+         cgGK+g2XhMMQPQ38zdz5a4NPM1OrVk5kQqCHUUJ+vQlBJf2xZkMWoAns3sWxacbMqu
+         9s56ZSw5PuR5w==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
+To:     Oded Gabbay <ogabbay@kernel.org>, Dave Airlie <airlied@redhat.com>,
+        Melissa Wen <mwen@igalia.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Robin Murphy <robin.murphy@arm.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] gpu: host1x: fix uninitialized variable use
-Date:   Fri, 27 Jan 2023 23:14:00 +0100
-Message-Id: <20230127221418.2522612-1-arnd@kernel.org>
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] [v2] accel: fix CONFIG_DRM dependencies
+Date:   Fri, 27 Jan 2023 23:14:55 +0100
+Message-Id: <20230127221504.2522909-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,46 +59,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The error handling for platform_get_irq() failing no longer
-works after a recent change, clang now points this out with
-a warning:
+At the moment, accel drivers can be built-in even with CONFIG_DRM=m,
+but this causes a link failure:
 
-drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
-        if (syncpt_irq < 0)
-            ^~~~~~~~~~
+x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_dev_init':
+ivpu_drv.c:(.text+0x1535): undefined reference to `drmm_kmalloc'
+x86_64-linux-ld: ivpu_drv.c:(.text+0x1562): undefined reference to `drmm_kmalloc'
+x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_remove':
+ivpu_drv.c:(.text+0x1faa): undefined reference to `drm_dev_unregister'
+x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_probe':
+ivpu_drv.c:(.text+0x1fef): undefined reference to `__devm_drm_dev_alloc'
 
-Fix this by removing the variable and checking the correct
-error status.
+The problem is that DRM_ACCEL is a 'bool' symbol symbol, so driver that
+only depend on DRM_ACCEL but not also on DRM do not see the restriction
+to =m configs.
 
-Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
+To ensure that each accel driver has an implied dependency on CONFIG_DRM,
+enclose the entire Kconfig file in an if/endif check.
+
+Fixes: 8bf4889762a8 ("drivers/accel: define kconfig and register a new major")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/gpu/host1x/dev.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+v2: rearrage the DRM dependency rather than requiring DRM to be built-in
+---
+ drivers/accel/Kconfig | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
-index 4872d183d860..aae2efeef503 100644
---- a/drivers/gpu/host1x/dev.c
-+++ b/drivers/gpu/host1x/dev.c
-@@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
- static int host1x_probe(struct platform_device *pdev)
- {
- 	struct host1x *host;
--	int syncpt_irq;
- 	int err;
+diff --git a/drivers/accel/Kconfig b/drivers/accel/Kconfig
+index 834863902e16..c437206aa3f1 100644
+--- a/drivers/accel/Kconfig
++++ b/drivers/accel/Kconfig
+@@ -6,9 +6,10 @@
+ # as, but not limited to, Machine-Learning and Deep-Learning acceleration
+ # devices
+ #
++if DRM
++
+ menuconfig DRM_ACCEL
+ 	bool "Compute Acceleration Framework"
+-	depends on DRM
+ 	help
+ 	  Framework for device drivers of compute acceleration devices, such
+ 	  as, but not limited to, Machine-Learning and Deep-Learning
+@@ -25,3 +26,5 @@ menuconfig DRM_ACCEL
  
- 	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
-@@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
- 	}
- 
- 	host->syncpt_irq = platform_get_irq(pdev, 0);
--	if (syncpt_irq < 0)
--		return syncpt_irq;
-+	if (host->syncpt_irq < 0)
-+		return host->syncpt_irq;
- 
- 	mutex_init(&host->devices_lock);
- 	INIT_LIST_HEAD(&host->devices);
+ source "drivers/accel/habanalabs/Kconfig"
+ source "drivers/accel/ivpu/Kconfig"
++
++endif
 -- 
 2.39.0
 
