@@ -2,92 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3ED967ED13
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C1867ED27
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234456AbjA0SMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 13:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
+        id S234909AbjA0SNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 13:13:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233428AbjA0SMe (ORCPT
+        with ESMTP id S234556AbjA0SNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 13:12:34 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE707E6CC
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:12:32 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id br9so9434547lfb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 10:12:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8KKYur1D6vGHF9gs814CKbLsD8Ur+nkTM9SmNPJrR/g=;
-        b=suTe1IFat9G7xPogzM5K+2rXvHh21IiPvcS3F5KcxUKM7YqDxvkZdad5J1uSl8Wquo
-         TL31iF/tM6S3Nduqu7hZGeQuqUTkQwqiDf14pl0jsVwTxKfImB9fZpQVPyHfj65htIfm
-         Egt+n1ESiUF8/JMnog0cQP1zdS5oGPWmMO8p+4jhj0AneAmyXyopwUL4+StFTRL0UUib
-         2fD/fLo6tUPG/keiW6CmwevnpNvl+PqmyH4uXTnStjTbIJE5gquULxmYBy+7hvMxZBQL
-         rP1J16ahTUEvu+oyfnrnCZeWtFLIBjWWtFXV9zeO1t+q0sJRajwh8HOiGs8GUckcuPsd
-         /Ypg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8KKYur1D6vGHF9gs814CKbLsD8Ur+nkTM9SmNPJrR/g=;
-        b=D2Cmih3DIDu398/Ebg8UaxCJo5D38/L1KNETmVtMT+RdzbtfTib1LPt4mm0fvQ620Q
-         Q+N98ATkdh5n9Dthj/AkzaHe05FbpEwgTQZD81q/OR+6Q9cyrPEmypGQVXnzkGGP3eWk
-         5sdMZxmiyHIC9fJKVjZZ8EQcyIdj5piaYE5IuAZULg+Yv9n5neHvMVCVSq40Y5o01RPZ
-         jUmXSOLvuKpzwiNfRqtk3WVMB0e0rsVeJ4gnPHu/SGDgvq07EiDObHZMFMKIOOYJcebW
-         c8/p2g8YLKdYNmHugxyb8U727ECH5pi4LYZHP5lgMkpN3diG7HPEZoXKoiMMUjMGG108
-         T4Cw==
-X-Gm-Message-State: AFqh2kogNXAaDP6Cr/1yUwntb5C9fMs1xzY6YuVcSd0lJV8pygkFTQya
-        Kk8ctUcnXVs1r1ehdq3iswpq/uucEF3hb3l4rRUQog==
-X-Google-Smtp-Source: AMrXdXsFsbQF7dn1lPmxAQ3UIH7dlHwM40RfW0Pju0Ppy38dFJDTJHq7QJsm2acc7HxdmVtJOopEoQ==
-X-Received: by 2002:a05:6512:32d4:b0:4b5:7925:8707 with SMTP id f20-20020a05651232d400b004b579258707mr11111863lfg.26.1674843151257;
-        Fri, 27 Jan 2023 10:12:31 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id g11-20020a0565123b8b00b00498fc3d4cfdsm317192lfv.189.2023.01.27.10.12.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 10:12:30 -0800 (PST)
-Message-ID: <cf1b0a29-a145-6f47-dd8e-6cb619f54bad@linaro.org>
-Date:   Fri, 27 Jan 2023 20:12:29 +0200
+        Fri, 27 Jan 2023 13:13:39 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B067E6C2;
+        Fri, 27 Jan 2023 10:13:21 -0800 (PST)
+Received: from jupiter.universe (dyndsl-095-033-159-051.ewe-ip-backbone.de [95.33.159.51])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 556646602E9B;
+        Fri, 27 Jan 2023 18:13:20 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674843200;
+        bh=Q2QQX23fhMzsayXzvNy33mUcpbMe6H9t7Oc8vL44vWc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bdprN64Xr/GgBxUWiXrITDMsuXyNJ4IWiZp0pcNFm0W26/GcMgTiQjDL1WbuVzll3
+         X79hnuBjkfTEthHwXyRwD4UFLHeBv7UWWz8YZ2TEhnYHmNGNs1mRLhiZV9QjuXiqLS
+         Xp2DzLWI33n2dRdEI2tEOc5UoJJrnETcfnWM1SyH4tp3niDvOS2Ov3mz+ScJhtGKDm
+         9cUitYY2FA0s8w59gnUnTgGc288VWhE8Kafn+AaRUQysBZI5ASoG667BaZKx8RmDBx
+         fVqz4zLN06Xg9TbAOVQ3/s+hGcGQcjNpoP3B+XpKecbVy10CEDmvYYkrP1NUiv4YrJ
+         /HXJc7IhwGvtw==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 2CD7D48010E; Fri, 27 Jan 2023 19:13:17 +0100 (CET)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCHv6 00/11] Introduce RK806 Support
+Date:   Fri, 27 Jan 2023 19:12:33 +0100
+Message-Id: <20230127181244.160887-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] arm64: defconfig: enable SM8450 DISPCC clock driver
-Content-Language: en-GB
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230127-topic-sm8450-upstream-defconfig-v1-1-93cf603db08b@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230127-topic-sm8450-upstream-defconfig-v1-1-93cf603db08b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 18:34, Neil Armstrong wrote:
-> Build the Qualcomm SM8450 Display Clock Controller driver as a module
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->   arch/arm64/configs/defconfig | 1 +
->   1 file changed, 1 insertion(+)
->
+Hi,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+The Rockchip RK3588 Evaluation Boards as well as the Rock 5
+boards and probably most other RK3588 boards use SPI connected
+RK806 PMICs. Downstream this is handled by a new driver, but
+apart from being SPI connected this chip is quite similar to
+the other Rockchip PMICs (and RK806 is promoted to also support
+I2C). Thus this series instead updates the RK808 driver(s).
+
+Changelog since PATCHv5:
+ * https://lore.kernel.org/all/20230109172723.60304-1-sebastian.reichel@collabora.com/
+ * add Reviewed-by from Rob Herring to the rk806 DT binding patch
+ * drop useless wrapper functions for rk8xx_i2c_suspend and rk8xx_i2c_resume
+ * put .num_resources after .resources for rk806_pwrkey_resources
+ * simplify dual_support logic by storing IRQF_SHARED or 0 instead of bool
+ * add missing spaces around + and - in rk806
+ * add new patch using device_get_match_data() in rk8xx-i2c and removing
+   the pointless dev_info printing the chip version
+ * call devm_mfd_add_devices() with id=0 and rely on mfd_cell to have the .id
+   field configured to either PLATFORM_DEVID_AUTO or PLATFORM_DEVID_NONE
+ * add check if more than 128 bytes are tried to be received/sent, which would
+   overflow the command register
+ * add RK806_CMD_WITH_SIZE() define
+
+Changelog since PATCHv4:
+ * https://lore.kernel.org/all/20221020204251.108565-1-sebastian.reichel@collabora.com/
+ * rebase to v6.2-rc1
+   - dropped 'regulator: rk808: reduce 'struct rk808' usage' (queued to 6.2-rc1)
+   - dropped 'regulator: rk808: Use dev_err_probe' (queued to 6.2-rc1)
+   - dropped 'rtc: rk808: reduce 'struct rk808' usage' (queued to 6.2-rc1)
+ * use 'MFD_RK8XX' for the MFD driver supporting all the MFD8XX chips
+ * added author tags to drivers/mfd/rk8xx-core.c. They were missing because
+   I moved the original header over to the i2c specific file and wrote the
+   new header from scratch. I suppose it's better to have the author tags
+   in both files.
+ * fix Rob's comments for the rk806 YAML binding
+ * add defines for rk806 command indexes
+ * modify rk806 code, so that it is capable of mult-write
+
+Changelog since PATCHv3:
+ * https://lore.kernel.org/all/20220909175522.179175-1-sebastian.reichel@collabora.com/
+ * Dropped removing REGMAP_I2C dependency from RK817 ASoC driver (applied)
+ * Rename MFD_RK808 to MFD_RK8XX to be consistent. It makes sense to do this now,
+   since the patchset touches all the child drivers anyways.
+ * rebase to v6.1-rc1
+ * collected a couple of Acks
+ * update rk806 DT binding according to DT maintainer feedback
+ * add missing pinmux config to the rk806 DT binding
+ * update rk806_spi_bus_write and rk806_spi_bus_read
+ * replaced some constants with sizeof or defines
+ * used capitalized comments
+ * rename regmap_find_closest_bigger to regulator_find_closest_bigger, not sure
+   why I prefixed it with regmap_ in the first place
+ * use rk8xx_is_enabled_wmsk_regmap instead of regulator_is_enabled_regmap for
+   the switching regulators to correctly report the state
+ * reordered the first few patches grouping the MFD patches together
+
+Changelog since PATCHv2:
+ * https://lore.kernel.org/all/20220908003107.220143-1-sebastian.reichel@collabora.com/
+ * Change DT binding to not allow nldo-reg6
+ * Fix DT binding to check for [np]ldo-reg instead of [np]ldo_reg
+ * remove rk806_get_voltage_sel_regmap in favour of regulator_get_voltage_sel_regmap
+ * drop rk806_set_voltage in favour of regulator_set_voltage_sel_regmap
+ * use regulator_set_ramp_delay_regmap
+ * drop possibly incorrect printing of chip id register address in case of errors
+
+Changelog since PATCHv1:
+ * https://lore.kernel.org/all/20220831215437.117880-1-sebastian.reichel@collabora.com/
+ * Collect Acked-by
+ * Avoid if/else checks for regulator id in rk806 regulator driver
+ * Fix indentation in DTS example section of the rk806 binding
+ * Use absolute path for regulator.yaml referencing in the rk806 binding
+ * Reduce pattern for DCDC regulators to only allow 1-10
+ * replace uppercase name with lowercase ones in regulator names
+ * replace _ with - in regulator names
+
+-- Sebastian
+
+Sebastian Reichel (11):
+  clk: RK808: reduce 'struct rk808' usage
+  mfd: rk808: convert to device managed resources
+  mfd: rk808: use dev_err_probe
+  mfd: rk808: replace 'struct i2c_client' with 'struct device'
+  mfd: rk808: split into core and i2c
+  mfd: rk8xx-i2c: use device_get_match_data
+  dt-bindings: mfd: add rk806 binding
+  mfd: rk8xx: add rk806 support
+  pinctrl: rk805: add rk806 pinctrl support
+  regulator: expose regulator_find_closest_bigger
+  regulator: rk808: add rk806 support
+
+ .../bindings/mfd/rockchip,rk806.yaml          | 406 +++++++++++++++++
+ drivers/clk/Kconfig                           |   2 +-
+ drivers/clk/clk-rk808.c                       |  34 +-
+ drivers/input/misc/Kconfig                    |   2 +-
+ drivers/mfd/Kconfig                           |  21 +-
+ drivers/mfd/Makefile                          |   4 +-
+ drivers/mfd/{rk808.c => rk8xx-core.c}         | 352 +++++----------
+ drivers/mfd/rk8xx-i2c.c                       | 185 ++++++++
+ drivers/mfd/rk8xx-spi.c                       | 129 ++++++
+ drivers/pinctrl/Kconfig                       |   2 +-
+ drivers/pinctrl/pinctrl-rk805.c               | 189 +++++++-
+ drivers/power/supply/Kconfig                  |   2 +-
+ drivers/regulator/Kconfig                     |   2 +-
+ drivers/regulator/helpers.c                   |  22 +-
+ drivers/regulator/rk808-regulator.c           | 383 ++++++++++++++++
+ drivers/rtc/Kconfig                           |   2 +-
+ include/linux/mfd/rk808.h                     | 417 +++++++++++++++++-
+ include/linux/regulator/driver.h              |   2 +
+ sound/soc/codecs/Kconfig                      |   2 +-
+ 19 files changed, 1872 insertions(+), 286 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rockchip,rk806.yaml
+ rename drivers/mfd/{rk808.c => rk8xx-core.c} (71%)
+ create mode 100644 drivers/mfd/rk8xx-i2c.c
+ create mode 100644 drivers/mfd/rk8xx-spi.c
 
 -- 
-With best wishes
-Dmitry
+2.39.0
 
