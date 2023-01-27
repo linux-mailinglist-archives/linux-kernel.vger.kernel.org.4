@@ -2,111 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127C167E5BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2748267E5BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234392AbjA0MtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S234393AbjA0Mtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232045AbjA0MtM (ORCPT
+        with ESMTP id S233705AbjA0Mti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:49:12 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF451EBEE
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:49:10 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id m15so3363499wms.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:49:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d9Bsr7DFt9k0hs2DJVlMaFwbMOMWvruv/P9/ucfP1ow=;
-        b=agScGHnFDnvBP+FJsZIRahMZD5/Zus9ycraLbcQm/YSoi6nJrRys5z8XIOVzFlKbEc
-         mWV1Kvy+EPULBpQ7o9/SkCXe2xQ6dH9FE2aZr1lzIiN1iB/ftEzv9mOqk1YyqcSy1Cso
-         FGpbAEKkhpsrwh7TjKN5QVMBDH85oh8CeI0HKJSA7KkjzwK+Ow+MPH+ZHlbTOrUn4Vij
-         1i8A5SyCQBvGE8C02RXGa/AxVO1871iOw/5K7AAYz9ZCIWMcW/QmSByV/xKy58RD2rKx
-         3oQ8E5TOm6kApyW42RuLvObwBfqwXKeah0fgjsTkJQF5+ItSzC0S8i2R9lv4b8fRKrkN
-         JzDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d9Bsr7DFt9k0hs2DJVlMaFwbMOMWvruv/P9/ucfP1ow=;
-        b=0LaJSKNgeoZTEKFG0hBPNrFybbvhzwtD24WOpvAljrrkgmySoj6z/pGcocdzek1iNn
-         K+0LEc1Fb95TAzE7mtBF+AuRWCbarltXkHsktUGlsdODRoRjF+FA+wLr8VeLhKGpvbvU
-         Hg3Ue6f/lyIJD0MgAzCJJCVdlXrm0Lc8E9bjR16zEVyxud9JyaIkCFjtYAbTjearcIi2
-         ySOr19v7t7f8bkv94AusnSw+V3PT7CGwFtNFl2EaY+cK8yxMktdBlZo2gzUCL3qFxi7E
-         e1AOAzHlVRpoFuZDrSRGpqymaza2EPATYowXnQnLrN5rwat8fxDrkg4yj85DIaqWkgzo
-         Ti7Q==
-X-Gm-Message-State: AFqh2koCnb4xDmSDCHbc/Gxse0EjerYiXdi/RDzEAf6Lm9Je2i21aTOt
-        lu1dLuvVLtMBZfP/7SL+d4S0pg==
-X-Google-Smtp-Source: AMrXdXsd4ggG4Zq42GESy8acOm7B6Ldu7hFTX6C4RTjcwOhKUpawaEzvKZtvaJbMXC56bgs2+VL38Q==
-X-Received: by 2002:a05:600c:4e94:b0:3db:bc5:b2ae with SMTP id f20-20020a05600c4e9400b003db0bc5b2aemr36433923wmq.41.1674823749453;
-        Fri, 27 Jan 2023 04:49:09 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id f24-20020a05600c491800b003dc0cb5e3f1sm4048133wmp.46.2023.01.27.04.49.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 04:49:08 -0800 (PST)
-Message-ID: <2989138a-8f4b-50a0-3e90-98b6785f2690@linaro.org>
-Date:   Fri, 27 Jan 2023 12:49:07 +0000
+        Fri, 27 Jan 2023 07:49:38 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE28817CF1;
+        Fri, 27 Jan 2023 04:49:37 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pLOAi-0001Fi-8p; Fri, 27 Jan 2023 13:49:36 +0100
+Message-ID: <93d1e57f-a7c5-4d3c-3b3d-d1f573894a78@leemhuis.info>
+Date:   Fri, 27 Jan 2023 13:49:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sm6350: Add camera clock
- controller
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221213-sm6350-cci-v2-0-15c2c14c34bb@fairphone.com>
- <20221213-sm6350-cci-v2-2-15c2c14c34bb@fairphone.com>
- <e5ff49d4-45c7-8c4a-d624-d8f7cc9ce2cb@linaro.org>
- <CQ0I4ONEI6J4.3KWS1KBE7RTKD@otso>
- <3ae863df-3260-4863-d88f-da4d3f442174@linaro.org>
- <CQ2ZDQKO11XZ.HA5CXLK5MTFB@otso>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <CQ2ZDQKO11XZ.HA5CXLK5MTFB@otso>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ Thunderbird/102.6.0
+Subject: Re: [git pull] Input updates for v6.1-rc5
+Content-Language: en-US, de-DE
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <Y3gwySzRvhCwdSgW@google.com>
+ <824effa5-8b9a-c28a-82bb-9b0ab24623e1@kernel.org>
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <824effa5-8b9a-c28a-82bb-9b0ab24623e1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674823777;fe669485;
+X-HE-SMSGID: 1pLOAi-0001Fi-8p
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 12:45, Luca Weiss wrote:
-> Can I reference <&camcc TITAN_TOP_GDSC> from itself? I know that having
-> it on is required to turn on at least some clocks (maybe all clocks).
-> But from what I understand how power domains are normally handled, the
-> driver core enables them before the driver is probed, so self
-> referencing wouldn't work.
+On 13.12.22 12:41, Jiri Slaby wrote:
+> On 19. 11. 22, 2:26, Dmitry Torokhov wrote:
+>> to receive updates for the input subsystem. You will get:
+>>
+>> - a fix for 8042 to stop leaking platform device on unload
+>> - a fix for Goodix touchscreens on devices like Nanote UMPC-01 where we
+>>    need to reset controller to load config from firmware
+>> - a workaround for Acer Switch to avoid interrupt storm from home and
+>>    power buttons
+>> - a workaround for more ASUS ZenBook models to detect keyboard cnotroller
+>> - a fix for iforce driver to properly handle communication errors
+>> - touchpad on HP Laptop 15-da3001TU switched to RMI mode
+>>
+>> Changelog:
+>> ---------
+>>
+>> Aman Dhoot (1):
+>>        Input: synaptics - switch touchpad on HP Laptop 15-da3001TU to
+>> RMI mode
 > 
-> And at least no other SoC upstream references TITAN_TOP_GDSC in camcc.
+> This appears to break keyboard on HP's 15-da1xxx which appears to have
+> the same ID: SYN3286. This happens on 6.0.12.
+
+Dmitry, Jiri's report afaics made you quickly apply a revert that since
+round about mid December is in -next:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=3c44e2b6cde674797b76e76d3a903a63ce8a18bb
+
+But it looks like it never made it to mainline (or am I missing
+something here? it feels like I do... anyway, moving on.). Was that
+intentional or did that simply fall through the cracks due to the
+festive season?
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
+
+> synaptics excerpt from dmesg:
+> psmouse serio1: synaptics: Trying to set up SMBus access
+> psmouse serio1: synaptics: SMbus companion is not ready yet
+> ...
+> psmouse serio1: synaptics: queried max coordinates: x [..5648], y [..4826]
+> psmouse serio1: synaptics: queried min coordinates: x [1292..], y [1026..]
+> psmouse serio1: synaptics: Trying to set up SMBus access
+> rmi4_smbus 6-002c: registering SMbus-connected sensor
+> rmi4_f01 rmi4-00.fn01: found RMI device, manufacturer: Synaptics,
+> product: TM3320-003, fw id: 2659795
+> input: Synaptics TM3320-003 as
+> /devices/pci0000:00/0000:00:1f.4/i2c-6/6-002c/rmi4-00/input/input21
 > 
-> Regards
-> Luca
-
-Doh I meant to say a power-domain to an mmcx a la
-
-power-domains = <&rpmhpd SM8250_MMCX>;
-required-opps = <&rpmhpd_opp_low_svs>;
-
-TITAN_TOP should be in your cci and camss dt nodes.
-
----
-bod
+> 
+> 
+> 
+> This was reported downstream as a regression between 6.0.10 and 6.0.12:
+> https://bugzilla.suse.com/show_bug.cgi?id=1206358
+> 
+> Full dmesgs available there too.
+> 
+> 
+> 6.0.10 has this instead of the above:
+> psmouse serio1: synaptics: queried max coordinates: x [..5648], y [..4826]
+> psmouse serio1: synaptics: queried min coordinates: x [1292..], y [1026..]
+> psmouse serio1: synaptics: Your touchpad (PNP: SYN3286 PNP0f13) says it
+> can support a different bus. If i2c-hid and hid-rmi are not used, you
+> might want to try setting psmouse.synaptics_intertouch to 1 and report
+> this to linux-input@vger.kernel.org.
+> psmouse serio1: synaptics: Touchpad model: 1, fw: 8.16, id: 0x1e2b1,
+> caps: 0xf00323/0x840300/0x2e800/0x400000, board id: 3320, fw id: 2659795
+> 
+> 
+> 
+> thanks,
