@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D1D67E2F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D6D67E2F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232364AbjA0LSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:18:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
+        id S233034AbjA0LSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:18:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231683AbjA0LSA (ORCPT
+        with ESMTP id S232489AbjA0LSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:18:00 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0FA1287F
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:17:52 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id n7so4667577wrx.5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:17:52 -0800 (PST)
+        Fri, 27 Jan 2023 06:18:15 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF3D4ED6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:17:56 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id r2so4650109wrv.7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:17:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bZk++rAGilP0se2vyyYc9G9oc9KF7qnie14AIpwjJ4k=;
-        b=mH55wi35SGoIcZosh++cTF0urwF1ISiGMPK+u5pVhn0ZP+8/mXMQ4553H5Xq+rDlnD
-         Q0Q9/4IgRPYC4GEYvRk5127ZvR7qVaYONYG7qCpiq13Silz5Rx/fgSNPGzLq2QECnpZ2
-         +3VBnVquC5hIX5otJ31sYDAz8Dh6QQc16zAS88ut9nr7lMdz1TMFruQCpMAyaYme1Hhj
-         2yklV773O7HtDjyNCubCQ2X891uP1r/eTu1NdMbjdLXFZF+beGrIRejXNMcPA2M0NVN8
-         07awVLrveihnfUwpzYMX7eFoYmPt2Y3sSlw/liYBFuvUP20/2d71c2wlKMY2caBWJteH
-         uFcg==
+        bh=dUNPIWp5WTSOCDKia5k+jXCL26J1A9hep40mE5FWQns=;
+        b=mrM86jQgcEMJkJmxip2tIHld39RoiLb0WGp8HkmoxEG07MUByTNx9/o0BPk7WddBOC
+         L0cJC/vQL9ZTkROoFVxEPG48hzz9sLP8MEUN6bJZuXsTrEMf/pTbOMfNiydtIg7mZiei
+         SS84fkDHVvVBzeMsna9qvfteFFnm3iYGCRO30hOhiNPcwXUk5dvAf8z47WqQQTOzIwX2
+         IyiDuir9eYr6T77+rOp/hdc2y7I7cNnN1VPpriJqkZUfUtd54vHu6jIHXD3fGO3/bTSH
+         nb/55PCHGTniN6Q/4euLXjsbqlvzSTEjzgWO4sQkgHNcNdNRCaGy7I2Sb97SP/TD8rqE
+         v99A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bZk++rAGilP0se2vyyYc9G9oc9KF7qnie14AIpwjJ4k=;
-        b=X8CNyUf0erOgtLXkZ3tSqccsfFOs6I3tgSiNkzjNKRyjrePhjoZqMFM+oH+0Bis+zW
-         wPjb54v6j2Fev9tKwdvZLbBHUk8zg4xIFcwYosqCern0vvsE4DceTNhRtLiAlBc6Ybp7
-         I5HYAEM2Z9BZKAvUxJTEBaC6/yYLwhARDh00BNH22/Gm27GtCZYw9wrlq4PfpYLzttub
-         zGNHf420c0OOEBueUOJgC8d8V/hy/QtjKOupd9kuyHFwcm+2RWI/vcN7EcirMBui9YQO
-         BDopca4SGVZ6DG3Q+KU9A+iA7ykGnnq+hEoWqZCFAkS7aSCRll8TF55dVUFlfsLnNYld
-         PDkA==
-X-Gm-Message-State: AO0yUKUXBNDvebpfHhmi2HS1giO857Z6E24QEMDQtTAIUYMwxcfrLSZ/
-        NmK7WKvbyI+I56OFX78Xa6rx6Q==
-X-Google-Smtp-Source: AK7set8MUufCIV5SK0DowvJgLbvrhsIt9z7sgQlLhwXuv4Uua+lEErojzprxg23G+a8T16pW1NCy6Q==
-X-Received: by 2002:adf:8b48:0:b0:2bf:d6f9:23d6 with SMTP id v8-20020adf8b48000000b002bfd6f923d6mr653061wra.45.1674818272559;
-        Fri, 27 Jan 2023 03:17:52 -0800 (PST)
+        bh=dUNPIWp5WTSOCDKia5k+jXCL26J1A9hep40mE5FWQns=;
+        b=CPBaWSDVsZyktlyaZ2fjhncoKcMLcfmxwuICp2Z+YzMLw9Jz6oGcNcJ6TegmdauBAa
+         /jlzikyrEFpHgl7vDQLHzBMMFk2maSMSBChQZ+79GRBV7hSs8rk9NFC0Qh8NZCBv94RP
+         wC8cgiGB2k7YzW1J4pMAwpkHkNuc7nm9gNMly09cNNb0eLtbV3AvngZkIO5P01c2IDNf
+         qTx9fnUzFqmqHTody+b/vxlsvOVTQagtnSeE4Gwz1bAO0h70TEnbR9Jz6xThpt/7JmdB
+         BXbWJAGrOXrLbJDrIsQb56Nu8b/ncYJkdAp7a+HVIJv1enJcIHRtmlOKOLydK+D5RTDW
+         YC4w==
+X-Gm-Message-State: AO0yUKUr9Vnl4Askmx3GFTG3Gw/q2C/HePPP1YMzR9O0+32XlmIUW+aZ
+        xPKIst9L4kijrMjdKR033BfcmQ==
+X-Google-Smtp-Source: AK7set96IIR9C/rDOlE7hI2CkBFLlmCpCdvmKuDNmhBXzWj35w5oHUUOxzupcUqUs3WyX4yEheS7Lg==
+X-Received: by 2002:adf:ea08:0:b0:2bf:bab5:1284 with SMTP id q8-20020adfea08000000b002bfbab51284mr8649539wrm.63.1674818273939;
+        Fri, 27 Jan 2023 03:17:53 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id c13-20020adffb0d000000b002bfd190fd60sm1843314wrr.108.2023.01.27.03.17.51
+        by smtp.gmail.com with ESMTPSA id c13-20020adffb0d000000b002bfd190fd60sm1843314wrr.108.2023.01.27.03.17.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 03:17:52 -0800 (PST)
+        Fri, 27 Jan 2023 03:17:53 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Rob Herring <robh@kernel.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 09/37] of: base: add of_parse_phandle_with_optional_args()
-Date:   Fri, 27 Jan 2023 11:15:37 +0000
-Message-Id: <20230127111605.25958-10-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 10/37] of: property: make #.*-cells optional for simple props
+Date:   Fri, 27 Jan 2023 11:15:38 +0000
+Message-Id: <20230127111605.25958-11-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127111605.25958-1-srinivas.kandagatla@linaro.org>
 References: <20230127111605.25958-1-srinivas.kandagatla@linaro.org>
@@ -74,59 +75,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Walle <michael@walle.cc>
 
-Add a new variant of the of_parse_phandle_with_args() which treats the
-cells name as optional. If it's missing, it is assumed that the phandle
-has no arguments.
+Sometimes, future bindings for phandles will get additional arguments.
+Thus the target node of the phandle will need a new #.*-cells property.
+To be backwards compatible, this needs to be optional.
 
-Up until now, a nvmem node didn't have any arguments, so all the device
-trees haven't any '#*-cells' property. But there is a need for an
-additional argument for the phandle, for which we need a '#*-cells'
-property. Therefore, we need to support nvmem nodes with and without
-this property.
+Prepare the DEFINE_SIMPLE_PROPS() to handle the cells name as optional.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
+Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- include/linux/of.h | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ drivers/of/property.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/of.h b/include/linux/of.h
-index 8b9f94386dc3..98c252d2d851 100644
---- a/include/linux/of.h
-+++ b/include/linux/of.h
-@@ -1008,6 +1008,31 @@ static inline int of_parse_phandle_with_fixed_args(const struct device_node *np,
- 					    index, out_args);
- }
+diff --git a/drivers/of/property.c b/drivers/of/property.c
+index 134cfc980b70..3043ca7735db 100644
+--- a/drivers/of/property.c
++++ b/drivers/of/property.c
+@@ -1256,8 +1256,8 @@ static struct device_node *parse_suffix_prop_cells(struct device_node *np,
+ 	if (strcmp_suffix(prop_name, suffix))
+ 		return NULL;
  
-+/**
-+ * of_parse_phandle_with_optional_args() - Find a node pointed by phandle in a list
-+ * @np:		pointer to a device tree node containing a list
-+ * @list_name:	property name that contains a list
-+ * @cells_name:	property name that specifies phandles' arguments count
-+ * @index:	index of a phandle to parse out
-+ * @out_args:	optional pointer to output arguments structure (will be filled)
-+ *
-+ * Same as of_parse_phandle_with_args() except that if the cells_name property
-+ * is not found, cell_count of 0 is assumed.
-+ *
-+ * This is used to useful, if you have a phandle which didn't have arguments
-+ * before and thus doesn't have a '#*-cells' property but is now migrated to
-+ * having arguments while retaining backwards compatibility.
-+ */
-+static inline int of_parse_phandle_with_optional_args(const struct device_node *np,
-+						      const char *list_name,
-+						      const char *cells_name,
-+						      int index,
-+						      struct of_phandle_args *out_args)
-+{
-+	return __of_parse_phandle_with_args(np, list_name, cells_name,
-+					    0, index, out_args);
-+}
-+
- /**
-  * of_property_count_u8_elems - Count the number of u8 elements in a property
-  *
+-	if (of_parse_phandle_with_args(np, prop_name, cells_name, index,
+-				       &sup_args))
++	if (__of_parse_phandle_with_args(np, prop_name, cells_name, 0, index,
++					 &sup_args))
+ 		return NULL;
+ 
+ 	return sup_args.np;
 -- 
 2.25.1
 
