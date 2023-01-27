@@ -2,144 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7548967EF46
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1B067EF48
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233561AbjA0UHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 15:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
+        id S233624AbjA0UHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 15:07:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbjA0UHF (ORCPT
+        with ESMTP id S232882AbjA0UHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:07:05 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F257280
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:05:50 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id j5so5591623pjn.5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:05:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lmNlTw6/hGVpApNMZq1gzzgAdrxXUdhCjEWwQxehEq8=;
-        b=Q+nhlvBpWrP0fqHx3sgjPqQLGxq0tosbU3mQwlm/TZsauYDDCx8XNZyf53kYrQ3zMx
-         BWPHLU1vWzPvaaXK5AJ3yTa14ZwMQmKlInPT8Ol8hXyVhNZrnZ7hNU2OkyH3gr915LxC
-         SSVDPg0f+VBlpjs8ywlpRNXKXa4W3rDBx/KYQf01Fg/Q4r6FHOcuQd1oKYRYjBvroK9z
-         bDAhQb+n6zbPGdWTiXTkS5qQ9tORBmn7dfmnBqkA5B46S31udvwKbbHQ2n16O52effaJ
-         IBLjsScvH4CC6r/8FACqAESUM+EW27qmsYqbqE7HUscYT3r2JTjGx/XRbIuVxPNJAA/V
-         R0AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lmNlTw6/hGVpApNMZq1gzzgAdrxXUdhCjEWwQxehEq8=;
-        b=4JuiqiEtZ4AAz+Ps/e6utehYk7XjZUGrTar0GUhlIHbWfVgo9TRAsu4NyslSvi/4AF
-         oYJdN6NwKMhtbxz0KX4uLViE1ZkixptUYZNmekhmBr/FucLNW0BE0biZKM6DamYa6EId
-         d16HNlWuaQp+jMOmxV0nJWOHC1ICwKG5sYn1FTXLjtZZWuNi+A+hSzzad18p3WLZ/MpW
-         C091ecvEvY+iV648koGptdY+uzeSMb6/bv2jZFW7zcUidl/2/N6+PRYzUWL7Qockctph
-         8JrLGMdZJCx6fwLZgryU/AoMcu3MxMZTT7eZVkYzquFnxqExgun+cbMcq+pvTEg814dX
-         O7Yg==
-X-Gm-Message-State: AFqh2kpTIoi+Va3x2Nbvww+MCztOOn9avdJbOweGDP+D/QBItQsmte1W
-        0CW2QpxTlVWI2KlWOPlgy/4=
-X-Google-Smtp-Source: AMrXdXuhrtE5oPMK7SmyRQ5hCrj8OtvVjREYjt+cwrgbWas3tcp5lOPInofTWTWUh/nkRXnRVQPqGA==
-X-Received: by 2002:a17:902:a40f:b0:194:5ff8:a3b0 with SMTP id p15-20020a170902a40f00b001945ff8a3b0mr37288703plq.7.1674849950312;
-        Fri, 27 Jan 2023 12:05:50 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id y2-20020a170902d64200b001961608d74bsm3223200plh.299.2023.01.27.12.05.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 12:05:49 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        pengfuyuan <pengfuyuan@kylinos.cn>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/i915: Fix potential bit_17 double-free
-Date:   Fri, 27 Jan 2023 12:05:31 -0800
-Message-Id: <20230127200550.3531984-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 27 Jan 2023 15:07:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2AA88CCF;
+        Fri, 27 Jan 2023 12:05:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6FB361D9D;
+        Fri, 27 Jan 2023 20:05:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 410AAC433A4;
+        Fri, 27 Jan 2023 20:05:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674849957;
+        bh=v29blagsokF4DUYAWbvcpTiop0WyodX0gl/oyRzswqA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=P3wMkOsmn/C6ifTpe0WSVeEB0ovdAXKs6HeHt68o0xMi0ysOsRvQKvkm4Aic9WQVV
+         QuQ58v1cCfguXjQcLRiS9rqBxqjocjfkAjWiDAnLdAlyIFWcDV0/NqvCsvBhjCtUkY
+         ajr7C/+lVYhOyi62hyy1gR61+yUyf2HBqFM45QczIo8fFapswJBDfH3D3FoKFP3mry
+         YWfVKzVK/aqiC/LfKjprLrvjoOiZMVgSgk2inE2+rOIjfRhwbkvD4cspG+Q0p7qhBK
+         P/wUIWrDXaR057BpjV1YmbPxjHS7rJ0Yk46AkycLntAg2vLNQuZSbMdIrew6dhE6FX
+         KWXjC/cr59s9Q==
+Received: by mail-vs1-f48.google.com with SMTP id h19so4685794vsv.13;
+        Fri, 27 Jan 2023 12:05:57 -0800 (PST)
+X-Gm-Message-State: AFqh2krchwUg//fwMF4FSzV5XvDNk/bRgVXl8y0gTtOveCLPwIOvYPtp
+        PhPiBA6h6KrwIsxk4UWsUCq2gk9++38C5I6lNA==
+X-Google-Smtp-Source: AMrXdXu9qsE8D6rWHgYZwwCPcVxgXD2SdLnghYhLaXPA9fqnGjkWOWvQtB2DHP+Tq8yStJ4VrPxvSNnkBQbACCj47Z0=
+X-Received: by 2002:a67:ef8a:0:b0:3d0:b955:e0af with SMTP id
+ r10-20020a67ef8a000000b003d0b955e0afmr6106856vsp.26.1674849956011; Fri, 27
+ Jan 2023 12:05:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1674835252-31954-1-git-send-email-quic_mojha@quicinc.com>
+In-Reply-To: <1674835252-31954-1-git-send-email-quic_mojha@quicinc.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 27 Jan 2023 14:05:44 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqK_wuOwJS=dSkSdYs10kE1S3gmtHVU31wkxkP5wT39qqg@mail.gmail.com>
+Message-ID: <CAL_JsqK_wuOwJS=dSkSdYs10kE1S3gmtHVU31wkxkP5wT39qqg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: ramoops: Inherit reserve memory property
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Fri, Jan 27, 2023 at 10:01 AM Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+>
+> The reserved memory region for ramoops is assumed to be at a
+> fixed and known location when read from the devicetree. This
+> is not desirable in an environment where it is preferred the
+> region to be dynamically allocated at runtime, as opposed to
+> being fixed at compile time.
 
-A userspace with multiple threads racing I915_GEM_SET_TILING to set the
-tiling to I915_TILING_NONE could trigger a double free of the bit_17
-bitmask.  (Or conversely leak memory on the transition to tiled.)  Move
-allocation/free'ing of the bitmask within the section protected by the
-obj lock.
+I don't see how this can work. How do you find the region after
+rebooting? Or this is only used for the current boot? If so, provide a
+userspace interface to configure it (or the existing module params).
 
-Fixes: e9b73c67390a ("drm/i915: Reduce memory pressure during shrinker by preallocating swizzle pages")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/i915/gem/i915_gem_tiling.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+The addition of 'size' type regions was primarily for large carveouts
+that needed to be allocated before anything else. ramoops is not that.
+It's 10s or 100s of KB at most.
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_tiling.c b/drivers/gpu/drm/i915/gem/i915_gem_tiling.c
-index fd42b89b7162..bc21b1c2350a 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_tiling.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_tiling.c
-@@ -298,36 +298,37 @@ i915_gem_object_set_tiling(struct drm_i915_gem_object *obj,
- 		vma->fence_alignment =
- 			i915_gem_fence_alignment(i915,
- 						 vma->size, tiling, stride);
- 
- 		if (vma->fence)
- 			vma->fence->dirty = true;
- 	}
- 	spin_unlock(&obj->vma.lock);
- 
- 	obj->tiling_and_stride = tiling | stride;
--	i915_gem_object_unlock(obj);
--
--	/* Force the fence to be reacquired for GTT access */
--	i915_gem_object_release_mmap_gtt(obj);
- 
- 	/* Try to preallocate memory required to save swizzling on put-pages */
- 	if (i915_gem_object_needs_bit17_swizzle(obj)) {
- 		if (!obj->bit_17) {
- 			obj->bit_17 = bitmap_zalloc(obj->base.size >> PAGE_SHIFT,
- 						    GFP_KERNEL);
- 		}
- 	} else {
- 		bitmap_free(obj->bit_17);
- 		obj->bit_17 = NULL;
- 	}
- 
-+	i915_gem_object_unlock(obj);
-+
-+	/* Force the fence to be reacquired for GTT access */
-+	i915_gem_object_release_mmap_gtt(obj);
-+
- 	return 0;
- }
- 
- /**
-  * i915_gem_set_tiling_ioctl - IOCTL handler to set tiling mode
-  * @dev: DRM device
-  * @data: data pointer for the ioctl
-  * @file: DRM file for the ioctl call
-  *
-  * Sets the tiling mode of an object, returning the required swizzling of
--- 
-2.38.1
 
+> So, update the ramoops binding by inheriting some reserve memory
+> property to allocate the ramoops region dynamically.
+>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+> Changes in v4:
+>  - Addressed comment made by Krzysztof on ramoops node name.
+>
+> Changes in v3:
+>  - Fixed yaml error and updated commit text as per comment.
+>
+> Change in v2:
+>   - Added this patch as per changes going to be done in patch 3/3
+>
+>  .../bindings/reserved-memory/ramoops.yaml          | 34 ++++++++++++++++++++--
+>  1 file changed, 32 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+> index 0391871..8741626 100644
+> --- a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+> +++ b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+> @@ -10,7 +10,8 @@ description: |
+>    ramoops provides persistent RAM storage for oops and panics, so they can be
+>    recovered after a reboot. This is a child-node of "/reserved-memory", and
+>    is named "ramoops" after the backend, rather than "pstore" which is the
+> -  subsystem.
+> +  subsystem. This region can be reserved both statically or dynamically by
+> +  using appropriate property in device tree.
+>
+>    Parts of this storage may be set aside for other persistent log buffers, such
+>    as kernel log messages, or for optional ECC error-correction data.  The total
+> @@ -112,7 +113,13 @@ unevaluatedProperties: false
+>
+>  required:
+>    - compatible
+> -  - reg
+> +
+> +oneOf:
+> +  - required:
+> +      - reg
+> +
+> +  - required:
+> +      - size
+>
+>  anyOf:
+>    - required: [record-size]
+> @@ -142,3 +149,26 @@ examples:
+>              };
+>          };
+>      };
+> +
+> +  - |
+> +    / {
+
+You can't have multiple root node examples. Check the example dts, the
+examples will be merged together.
+
+> +        compatible = "foo";
+> +        model = "foo";
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        reserved-memory {
+> +            #address-cells = <1>;
+> +            #size-cells = <1>;
+> +            ranges;
+> +
+> +            ramoops_region: ramoops {
+> +                compatible = "ramoops";
+> +                alloc-ranges = <0x00000000 0xffffffff>;
+> +                size = <0x0 0x10000>;       /* 64kB */
+> +                console-size = <0x8000>;    /* 32kB */
+> +                record-size = <0x400>;      /*  1kB */
+> +                ecc-size = <16>;
+> +            };
+> +        };
+> +    };
+> --
+> 2.7.4
+>
