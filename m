@@ -2,185 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B164467E7B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B76267E7BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234083AbjA0OFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
+        id S229447AbjA0OH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235137AbjA0OFT (ORCPT
+        with ESMTP id S229714AbjA0OHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:05:19 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2092.outbound.protection.outlook.com [40.107.8.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6491140ED;
-        Fri, 27 Jan 2023 06:04:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ed1sW2pA+FdujaC13dng+/aGvDEe47PtQ2lEdOHraqd4Aqq7htOLZ8v77CmQy5CTrXZLRsg+SMnJ/kf4hmz02S1grB98bksTcJuS/2oy+n56WNHIyxqgQI49OsxqCS/N2a1wEPXL8J2szJXpL+4rVPhUR7Jae3m+n56kzxm1qKUnPwHLnknHAqgFrkvb4Xqhpd8WVcvJrKmsyz0b5aVKe2dtSPrEwL6tT3iCUAalpBYvWAhYKm91zR2boTqMcLXWpO6c7uUgflmfntXjGdgwCrlcukrpnRE1Gw85HRVpAc9RPKL0ElKMTQgGvji+BHAlrowXTh03j1DaWCSUDU+12A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7MTGvKyNY5dt6bK2QjGiEIzO5SFNzH8deTCu7XeE8Ek=;
- b=eiSBCr48/TElRfKuFerF8+9Ig5iMWovJGv78w4/p6UzD5ZqbYiYcgapNSy5pjVqTKhgMtyoQSnvnw+eNil7ekeGIlUgu1YMVGd5DVh++DN/gOeuQGWdwyFk3yWoHEBfqaV2mzUa+5MIpZBWXe+PuR9VBsJ4V501cRFIdbOp96dtXkTGwL5mK3N0B3KuDDVr+gAgsATTo+/vFmPHACEZqXipI3s65GAqY0vbf2AnuTcFemWLQZR/dEYeGMBGM+2Y8eYaF7LLRPi/Ptp4+imsOKzthUF/0lzzLT+LoYc5IHQvkIIriWLuQnESgyym6p00CF3YkP5HXdM4WnSBtdPjW6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7MTGvKyNY5dt6bK2QjGiEIzO5SFNzH8deTCu7XeE8Ek=;
- b=DHIbvoTYUmeqJKk5QDiiw4T96xI5ABAWELc+7wgGjivqKxh3//WB3AwjUnxF87pTF9tVObYNVCxUdPjc47PbocZDvHt+vzwhJLhnYlQoinJIHCjmpfuchCi3Hzn9NCADlQABN2u/hqLD8X85UjdATWCvdCIr7EPPc7jgZoTVVfg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CWLP265MB6754.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1e8::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Fri, 27 Jan
- 2023 14:04:18 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::b96e:93ad:4043:6145]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::b96e:93ad:4043:6145%9]) with mapi id 15.20.6043.023; Fri, 27 Jan 2023
- 14:04:18 +0000
-Date:   Fri, 27 Jan 2023 14:04:16 +0000
-From:   Gary Guo <gary@garyguo.net>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Fri, 27 Jan 2023 09:07:25 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06E330CD;
+        Fri, 27 Jan 2023 06:07:24 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2FFB55C03FA;
+        Fri, 27 Jan 2023 09:07:24 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 27 Jan 2023 09:07:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674828444; x=1674914844; bh=tmFRvlKVvX
+        DK9iy2Pc8KgmZTSRXrarsd78EnwvIZO4Y=; b=NOtYL68bWQPKMRjr4X7bpnbbxz
+        7eSWvJQzxTv8J8AdzG9IcB7B+Jw7UQ+xdJ0Mobfll4DzZj3owFqI/VhbP7PofLQ5
+        36GLBxIXeCkDeiwo8qd8W+fjWd3amKerM1ZmlE4z9qw3s+2E6y+hmEfgWQhfKEO0
+        3VciIznrSHHSNuH6bNCdHRKrO67DnzxX6+i/Y7P2Fx4F/3sWRTA7nfizaeWkyW7J
+        jVg0wkUh2ZNZhlD1ZQuGHGpW7FzhPqyDXNYnunLoF1i4DWtMlXxxlKPab2XiBDEw
+        QUOJwQd/JtcbR5P69IZoq3c8I9ekLmbta6s/INr+BcNJikUkkYCeWmLT0kng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674828444; x=1674914844; bh=tmFRvlKVvXDK9iy2Pc8KgmZTSRXr
+        arsd78EnwvIZO4Y=; b=FN3ast6dbSwkvPmNhF3nBjkyVcryjx2FY4iIo20ELF0J
+        EfvZqE8TP7/siXO2K7jBbHYA2ki2UUhCuORZq9KiVIiBKJkF8arsuTWbSdDn7LEn
+        MsR7Yp3nL7gIwYsdpKmo5ejLqWdlqqqq81ddjaFgHQ1BbVdpkRFa9yaxIDbsCdaN
+        3KNZxrN/fsrtJqRNB+GAbAHmx5stST1UB1G2C5q+L6seQYvqf6Us0hG6hpHRb0fV
+        Fbz0jFs+8PvOTf+e0AM6G5+yBv0XSSdpFMc5g2FJkV9P0GrsZHcA/I+k1XjbHsNQ
+        HzEQ86aD95W0CQT6rMOqNkE7PBYqVWxLcjhGCvxy2g==
+X-ME-Sender: <xms:m9rTY8FKaB4Xpf4We-V4MeXKRupaSyB7FHHOFxU8H9qf3IJyjNFMyw>
+    <xme:m9rTY1VWczUnMFWi7NFzuGJHZJZQhVsoxbsxQKLoZjreM_jypfI6DjJl7CjXbLLb9
+    J0Ai_sZZAsKh8MT788>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddviedgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:m9rTY2J4aKVshpDMSvJHowbnPtJuXJJHIoklfy2zUI80FnWDDCBEzA>
+    <xmx:m9rTY-G53oR5P5JpEDgd538rIQRYQmw0UJ_GY4amcvxPXN87piliDg>
+    <xmx:m9rTYyUPhWNsOGOtpRVSQH5vGUA0G2yBQZOMM-vN5yF1s8ZucNCsPg>
+    <xmx:nNrTY0fVd0D0JNmtfcg_uXjKp-Jgbr-wcu5yN-rlJtIcbyapir72Jg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B634DB60086; Fri, 27 Jan 2023 09:07:23 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <44479469-3079-4654-a08b-aeb0e45cb1b4@app.fastmail.com>
+In-Reply-To: <CACRpkdZDm2enFM=0AoDre=GmF+NHv+ZX9=9LdZ_KAcUJ5ta64A@mail.gmail.com>
+References: <20230127101149.3475929-1-arnd@kernel.org>
+ <20230127101149.3475929-7-arnd@kernel.org>
+ <CACRpkdZDm2enFM=0AoDre=GmF+NHv+ZX9=9LdZ_KAcUJ5ta64A@mail.gmail.com>
+Date:   Fri, 27 Jan 2023 15:07:04 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Walleij" <linus.walleij@linaro.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] rust: types: implement `ForeignOwnable` for
- `Arc<T>`
-Message-ID: <20230127140416.2542ce0a.gary@garyguo.net>
-In-Reply-To: <20230119174036.64046-5-wedsonaf@gmail.com>
-References: <20230119174036.64046-1-wedsonaf@gmail.com>
-        <20230119174036.64046-5-wedsonaf@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0395.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18f::22) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWLP265MB6754:EE_
-X-MS-Office365-Filtering-Correlation-Id: e363702d-f751-42a7-d59b-08db006f6188
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ygZ31K1U0nLjIBJz9pC1vo9SAHznduoMzC4ikUokwO83C9Od2ABeUIyrcIaFaMOFvwuQ6d9jtEZM0HcmORn5dQa8p7oHlBX4eCw9MbcgRLViIIFz0JehKFJ/skEjT5I+Cl7W7F6shJbAz1mnrDNr9CRM8Ex3uu+KUzUwp4racYQgqKq6CyGy/26MSJeCj2WjomzkRUJNPLMmpTxdRumydm4Gg/ucSYGhEvdjbHVNuBVc+3klJWY+alJN32v/KRwEq5XVl/sHO9rJRX8EPwL8hdZQXIBhIL/p0+EGGBIA+hU7f6FRPS6R/oDO/VEdzNUtDzx2n+frBA7xEp8KtB+p53ta5GP/gpFGPxWeGL3uwtg8+jxDbTI3DYkiGwZBcv87/+mtNaepo93gq3Et6hcMTkY5QmWhrnMibkxRyu5qIZvm28Ah9/8VXLQ8DTXEud85dzjpXXZUszdAfTcC2OoYNAEdA14HgO50pDYLS4kEMWK5NftrsIW1LYoLzP8xgB6TTlWx+WiBVcfWcxq+ShrCSBx98AqbucJYISiVeLJBfxwOfYcWTfCwQHo8pb1pJGLsd4VNy685Rng7Agb42QJxRCiUiabyXFV5Ldb8UQr+j2leN2H8Yqcmj3d2/2WSK+umHfMnhgw5aO+MAfsTfduUO2w9muMJyq1OHCJQzYswvoRUxVN0e9EDlwkb7aueyVAiEH1VVBtHtPRQ55a+8Jv8rWg705lr4z5EGNk38/0Vm6U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(39830400003)(376002)(346002)(396003)(136003)(366004)(451199018)(1076003)(316002)(54906003)(38100700002)(41300700001)(8676002)(66476007)(36756003)(6916009)(8936002)(5660300002)(66946007)(66556008)(86362001)(4326008)(2906002)(6506007)(26005)(478600001)(6512007)(186003)(966005)(6486002)(83380400001)(2616005)(81973001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1S2aujHL6KjOq2ZWV91RuHg42TIlnElnhvzLAMf3xu0Q6fCJf5UgTff5DtQn?=
- =?us-ascii?Q?z5DvZDp73O6ayMZ2GrJv1XyVYhqnq1cKUMk/CwYtZM2s43j8OIUoz4Gy6YXQ?=
- =?us-ascii?Q?fwEIGEknYTPnBw9g7r/rTLko8o+3/iHWsTpAHM2h8m1vaUqx5+m83CKZJAzU?=
- =?us-ascii?Q?PwIQ/SnvZd0anyvg7U2DV4NB9t2ukuLd+S9/owF4S5eQ/2uAVqDDI6eySYTM?=
- =?us-ascii?Q?dNxC1Bafely6CG3nxDHlHWhfgUuukmtTR/SCcc6QcE0bXljuSXRxR1FakDDk?=
- =?us-ascii?Q?hH2brCCgC1Ht7Xg0jkee8XVywKlgmpz/sbHeaKFliRcglcUgu2s3JT5C+ILU?=
- =?us-ascii?Q?MfUXGIaQlk53/EJa3jjZLGLwKl63COSDsRT+GKm6YHBw6zz9vW9xpD6GSYBk?=
- =?us-ascii?Q?8wAyEunnD30HUozOqb99YnB7z8xCDTzkjW+yOin2gwn6e0JJXwX232VpLRpz?=
- =?us-ascii?Q?1bdsc6W6ZUPZiXIpGFsSX7QP7tCXfgbyKGNDNeqYAhHyiq/q3Ojito8bbT7t?=
- =?us-ascii?Q?6++hBuAMjKSE2AxboqLPUKnGX01zkb8+lXs/EGYFwirAGMj6vcKJN6u9a8gs?=
- =?us-ascii?Q?GOQVfR0Oouv3MLV/9WT3d5vOkKm27/YLreeU/kcg6kp2/5cwlHBmxJSM072P?=
- =?us-ascii?Q?OvRpLpwDLNTrLZ+g4/k4KKIUk0iyc7R9FD8jL0JJiQe9N4D5JCSl4bScFosy?=
- =?us-ascii?Q?YUkpfmVqHQ2C4ZjEeu3Veglefb8a2cwqiAMJNNtHn4ZEcj0fzRWHz/1fm9DD?=
- =?us-ascii?Q?W++nYQ5cD7FwQB3mKkGXjzvY44PkIUZ8I7AdyfYkf/LvsAoxZ2j3fINuhnhv?=
- =?us-ascii?Q?QYdO2taFo02hckLZkIzqvPuWiZG4WBWj4FFwK5h2kIy02YPcMT7mZ0a8/Gaj?=
- =?us-ascii?Q?ztheT3W0lLdF9czFFD2Rzi6thC/AFO8n8CrxGWkYSvJWh3Qe5iPAcA0ZwuxF?=
- =?us-ascii?Q?yITCYTd0TuBzOtgWnyWSV8N5q3E4G1V//yTPFGhrMGFOM5IzyBWfmIaEqV/o?=
- =?us-ascii?Q?IFZl59t4wcXGtUXHTZSuvbK+x6eIawwYYXKc7pcoYmK7PKEhPZh6JNAP0ZTU?=
- =?us-ascii?Q?FPwx9EITeqJ9xP/IAoW198eTXxiWHunMzst2iYX9CBoXfxGyvDi8rcGukMKv?=
- =?us-ascii?Q?T4UTGvdqR3PbSU2u/AYaQVCP1I2n6eL67eHoXiWRb7q6dNw/5Q8FP4sgcxNx?=
- =?us-ascii?Q?7yfppckEnLK6I4N+JeWe5274nnRapsulG4iWY9Er5jfRDOORBPvzwwryTkzS?=
- =?us-ascii?Q?uQVw856Njn9HbtUA10xY+knaOk4lGakp8CR+I5AzSoN8O4d90RRKaozVAEZ+?=
- =?us-ascii?Q?R4YkaGJlJzA/HeyQk6rr2Uw3TjNbOBRC/Wg3erGJkCThrz4MV16I2Ji3vBE7?=
- =?us-ascii?Q?Ape4anrcuojNypBjKNzRXUIn5mFUVtROt0kP7zg3HAG4dLCX+8DWIrwl32GS?=
- =?us-ascii?Q?xza1oNLMMedqq9lfS+fxKv+h+jGd22ePXmscZBtG7NqKx/nwxzIwkX5KXcsx?=
- =?us-ascii?Q?7gBHBW8BaEebX9NCf95pwSJ+bMzQJF74jN/BscpfeD4tGoi+ztbAv13GXD6q?=
- =?us-ascii?Q?n9SyL9fIt+wo05bKuInwZfZ8HG3HaDpZzFQQG45S?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: e363702d-f751-42a7-d59b-08db006f6188
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 14:04:18.1890
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KpDrssPu0AjcTuvPWGvRwpGWYhEbq69nli6FnjlX6MG2bk/BbJMaBdecDrgkgHhIw/ardg3Gw1VUwLP3MZhH1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB6754
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 6/7] gpiolib: split linux/gpio/driver.h out of linux/gpio.h
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 Jan 2023 14:40:36 -0300
-Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
+On Fri, Jan 27, 2023, at 14:39, Linus Walleij wrote:
+> On Fri, Jan 27, 2023 at 11:12 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> Almost all gpio drivers include linux/gpio/driver.h, and other
+>> files should not rely on includes from this header.
+>>
+>> Remove the indirect include from here and include the correct
+>> headers directly from where they are used.
+>>
+>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> As mentioned on v1 you will need two additional patches to
+> avoid build errors from the bots, perhaps Bartosz can cherry-pick
+> them?
 
-> This allows us to hand ownership of Rust ref-counted objects to
-> the C side of the kernel.
-> 
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+Yes, that would be ideal.
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
+> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git/commit/?h=gpiochip-no-driver-h&id=73ca8058a7b2075c993040bdc92b6a82f57d4316
+> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git/commit/?h=gpiochip-no-driver-h&id=89f4f9cc70c686303679e57bdc3ac86507979fe3
+>
+> (Maybe the Viper cf adapter is deleted in the PXA boardfile removal so
+> it's not an issue. The HTE file needs patching through.)
+>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> ---
->  rust/kernel/sync/arc.rs | 32 +++++++++++++++++++++++++++++++-
->  1 file changed, 31 insertions(+), 1 deletion(-)
-> 
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index ff73f9240ca1..519a6ec43644 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -15,7 +15,11 @@
->  //!
->  //! [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
->  
-> -use crate::{bindings, error::Result, types::Opaque};
-> +use crate::{
-> +    bindings,
-> +    error::Result,
-> +    types::{ForeignOwnable, Opaque},
-> +};
->  use alloc::boxed::Box;
->  use core::{
->      marker::{PhantomData, Unsize},
-> @@ -189,6 +193,32 @@ impl<T: ?Sized> Arc<T> {
->      }
->  }
->  
-> +impl<T: 'static> ForeignOwnable for Arc<T> {
-> +    type Borrowed<'a> = ArcBorrow<'a, T>;
-> +
-> +    fn into_foreign(self) -> *const core::ffi::c_void {
-> +        ManuallyDrop::new(self).ptr.as_ptr() as _
-> +    }
-> +
-> +    unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> ArcBorrow<'a, T> {
-> +        // SAFETY: By the safety requirement of this function, we know that `ptr` came from
-> +        // a previous call to `Arc::into_foreign`.
-> +        let inner = NonNull::new(ptr as *mut ArcInner<T>).unwrap();
-> +
-> +        // SAFETY: The safety requirements of `from_foreign` ensure that the object remains alive
-> +        // for the lifetime of the returned value. Additionally, the safety requirements of
-> +        // `ForeignOwnable::borrow_mut` ensure that no new mutable references are created.
-> +        unsafe { ArcBorrow::new(inner) }
-> +    }
-> +
-> +    unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self {
-> +        // SAFETY: By the safety requirement of this function, we know that `ptr` came from
-> +        // a previous call to `Arc::into_foreign`, which owned guarantees that `ptr` is valid and
-> +        // owns a reference.
-> +        unsafe { Self::from_inner(NonNull::new(ptr as _).unwrap()) }
-> +    }
-> +}
-> +
->  impl<T: ?Sized> Deref for Arc<T> {
->      type Target = T;
->  
+Thanks!
 
+Indeed, the viper support is gone in linux-next, which is why that
+change was gone from my series after rebasing. I have the same
+HTE file change in my tree that you have, but misclassified it
+as an existing bug rather than one caused by my patch. The maintainer
+said they would apply my patch directly, but it has not shown
+up in linux-next yet.
+
+I agree that for both patches the best way is if Bartosz
+applies your version before my series.
+
+    Arnd
+
+[1] https://lore.kernel.org/all/38f2d681-80a8-dc97-e5ed-4886e5e3bf7c@nvidia.com/
