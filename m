@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DEF67F0DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:04:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A526667F0D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbjA0WEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:04:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41208 "EHLO
+        id S232282AbjA0WDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:03:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbjA0WET (ORCPT
+        with ESMTP id S229498AbjA0WDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:04:19 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905F662D20
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:04:16 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 129so7720175ybb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:04:16 -0800 (PST)
+        Fri, 27 Jan 2023 17:03:47 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5C1468F;
+        Fri, 27 Jan 2023 14:03:46 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id r132so5279335oif.10;
+        Fri, 27 Jan 2023 14:03:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ohR+0rZmCaLAS7ieSQMPFcMY0YXXufvyIxmbzUJjpY=;
-        b=QsatLhaFnWSXhPmdRslUYg6oNm7HsNFs6MeWjyLitafGucJCB84BxrprRLjnBSgA08
-         9Vx/7QVTiCgz05zEtILq63eX5YLEhToFKOwhCj9fUqZ20YeK1sUe/tUZ/DIkMFmgbIj+
-         mEaXlsCv5ZsMtg7XwB7Ri7a3n5ODRM/+bjA4Sr9BwI1IpDzkM2eeCxIXjipG41EmDC57
-         +qDvnMtE3WCC5hiFdyuSucCOtSy2veG4b3ZWcTYJ+zATEhGtANBzW15Q3Crajm534M36
-         OqIjXAEojFjJvUDEx9e31HsTOaiiMjbD3VB1lsQHFLPkrYf4XqhZlYHOio4e3IDU5jEa
-         Z85Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/teSsHNsavWnDNNgrX8hnWHGmHQHrqvMQrKQ04UHE64=;
+        b=mMcFkhfo8wlJqADF5B4YKovplIFCJPWL2GQKW8L37yMHxyX4YnaCSwc7m5IeU7eJgS
+         sr8oTnT8DM+SiXiVnk0E+B/1HB/kldyB/Fln95gLRh2HBKzHyJ5ji5K9FFWefgRahy84
+         qA6OpQCcEp2HNe+RMVYc77bsUFipcUng92FhvrtPoYDhx+JLO9zSSxy16yPpAhkrqSl9
+         H2qrP/5awD9KFuo/B13innvcnq1qUuLM+gebqXYwo4zAHDxIdSSu5fF3nO83fwqlFAlW
+         M8A7/w8VZMmdZBllOJHIqsmZU8dCtKMI8kSEmsQ50aq2vN9Eu3HA/eXSwFaSpeAfy2CQ
+         02vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5ohR+0rZmCaLAS7ieSQMPFcMY0YXXufvyIxmbzUJjpY=;
-        b=AFDiVX+teiLXrfy71QmJrmf25cQDikyAMU2y5dis9mKZyIEWheR/x5CCPqQ05lKSf8
-         HjI0s4tZ9WGto1cIiBeDRQC1xq7I//jA72AEuJVR7uldvPdCLYNK+qhTpDvXTuCR8xA8
-         vDRy47F4NGMa1OpHTNpbzrsD3A3qYX1kwi3qpe1oWTIUfGC/Y1FlgKqph9krPq9fBeqn
-         YgjN3v6Aa0eq8tP09aGY7PNkoENsnxOoJMKIitumC/PyaV1ps39uoYXyM07NwToXQHwA
-         cUMlLwy35K4n/1eTN4mghduIQ2UfXS+zOED8Qw82dMi3mB6cLIyNReBYu1TI4ztTwiIe
-         pJ2g==
-X-Gm-Message-State: AFqh2kr/9w9E9Utgw0ueJ1Hq5jPJ/yS4k/kL90lqNpSHyN6K16n/bM5V
-        dWdJFk/oKMR9ztM2LeMeg/o7RLi8jZOwVJe5LEQR9g==
-X-Google-Smtp-Source: AMrXdXvOK9+ujMEgBOAsX5NGN3GRpCK9UUEcoO25Huvd8luJUDO/qifWrBXYWnRUCH8A9y4wQ+xTMmoZNBOmn+KobLM=
-X-Received: by 2002:a25:750b:0:b0:7d0:f8e3:6d80 with SMTP id
- q11-20020a25750b000000b007d0f8e36d80mr3376773ybc.363.1674857055672; Fri, 27
- Jan 2023 14:04:15 -0800 (PST)
+        h=content-transfer-encoding:content-language:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/teSsHNsavWnDNNgrX8hnWHGmHQHrqvMQrKQ04UHE64=;
+        b=WSvD/SmUUhXE5ZkiaiVYClYVy2t31XQIc59DVtdgqVIPCAs2EoK24xJOTU69gv1lp2
+         6ReKkkS05dA5Uxhm97HOQxDcJdzqLAvNLiBcwjYquGDh3FyaAUvJugYmV/aXb6E7659L
+         OF2L31BQkqZz+X3si/K3fUAGHj2UNSiZvv4JPbFrpeyOzW14tT6M9M1Vj6rUVi/jDl6H
+         vnh/h5Q4TAfOOypKoM/+9j6EypBEtVmB4+NXw+079HC/kt9zTbT6yFoV6aJ60uhrwnmY
+         F95s9ruWKPaxam7UgAi5lr460+HtMuEVm2QaSbvA5UFfqnGSN9NKiFoTTbBW7FHtzldK
+         avmw==
+X-Gm-Message-State: AFqh2krFFl1ogC5qQJgzyyeDXfLKA4NnfId4z7NxN4MwqVqTfzKQMOK7
+        o4iI01LDYRfWt/z/OhEkkFdZ3NB+lRAKrQ==
+X-Google-Smtp-Source: AMrXdXtatznKE2NBRCLTJIYPSg8EopSKD6q+WFE/TgXqjhFMAAurBezK5jYrg7ph23cz7kL2XgQDLA==
+X-Received: by 2002:aca:d80a:0:b0:368:8773:5fd3 with SMTP id p10-20020acad80a000000b0036887735fd3mr20242191oig.16.1674857024748;
+        Fri, 27 Jan 2023 14:03:44 -0800 (PST)
+Received: from [192.168.50.134] (99-176-3-182.lightspeed.brhmal.sbcglobal.net. [99.176.3.182])
+        by smtp.gmail.com with ESMTPSA id r131-20020acada89000000b0035aa617156bsm2058229oig.17.2023.01.27.14.03.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 14:03:44 -0800 (PST)
+Message-ID: <823df262-aa1d-4340-666f-07b991fce64b@gmail.com>
+Date:   Fri, 27 Jan 2023 16:03:43 -0600
 MIME-Version: 1.0
-References: <20230127181625.286546-1-andrei.gherzan@canonical.com>
-In-Reply-To: <20230127181625.286546-1-andrei.gherzan@canonical.com>
-From:   Willem de Bruijn <willemb@google.com>
-Date:   Fri, 27 Jan 2023 17:03:39 -0500
-Message-ID: <CA+FuTSewU6bjYLsyLzZ1Yne=6YBPDJZ=U1mZc+6cJVdr06BhiQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
- back-off retries
-To:     Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Walt Holman <waltholman09@gmail.com>
+Subject: [PATCH] HID: quirks: Add quirk for Logitech G923 Xbox steering wheel
+To:     linux-input <linux-input@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,163 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
-<andrei.gherzan@canonical.com> wrote:
->
-> The tx and rx test programs are used in a couple of test scripts including
-> "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
-> are invoked subsequently, there is a chance that the rx one is not ready to
-> accept socket connections. This racing bug could fail the test with at
-> least one of the following:
->
-> ./udpgso_bench_tx: connect: Connection refused
-> ./udpgso_bench_tx: sendmsg: Connection refused
-> ./udpgso_bench_tx: write: Connection refused
->
-> This change addresses this by adding routines that retry the socket
-> operations with an exponential back off algorithm from 100ms to 2s.
->
-> Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-> Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+Hello,
 
-Synchronizing the two processes is indeed tricky.
+This patch adds support for the Logitech G923 Xbox edition steering
+wheel.
 
-Perhaps more robust is opening an initial TCP connection, with
-SO_RCVTIMEO to bound the waiting time. That covers all tests in one
-go.
+-Walt
 
-> ---
->  tools/testing/selftests/net/udpgso_bench_tx.c | 57 +++++++++++++------
->  1 file changed, 41 insertions(+), 16 deletions(-)
->
-> diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-> index f1fdaa270291..4dea9ee7eb46 100644
-> --- a/tools/testing/selftests/net/udpgso_bench_tx.c
-> +++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-> @@ -53,6 +53,9 @@
->
->  #define NUM_PKT                100
->
-> +#define MAX_DELAY      2000000
-> +#define INIT_DELAY     100000
-> +
->  static bool    cfg_cache_trash;
->  static int     cfg_cpu         = -1;
->  static int     cfg_connected   = true;
-> @@ -257,13 +260,18 @@ static void flush_errqueue(int fd, const bool do_poll)
->  static int send_tcp(int fd, char *data)
->  {
->         int ret, done = 0, count = 0;
-> +       useconds_t delay = INIT_DELAY;
->
->         while (done < cfg_payload_len) {
-> -               ret = send(fd, data + done, cfg_payload_len - done,
-> -                          cfg_zerocopy ? MSG_ZEROCOPY : 0);
-> -               if (ret == -1)
-> -                       error(1, errno, "write");
-> -
-> +               delay = INIT_DELAY;
-> +               while ((ret = send(fd, data + done, cfg_payload_len - done,
-> +                               cfg_zerocopy ? MSG_ZEROCOPY : 0)) == -1) {
-> +                       usleep(delay);
-> +                       if (delay < MAX_DELAY)
-> +                               delay *= 2;
-> +                       else
-> +                               error(1, errno, "write");
-> +               }
->                 done += ret;
->                 count++;
->         }
-
-send_tcp should not be affected, as connect will by then already have
-succeeded. Also, as a reliable protocol it will internally retry,
-after returning with success.
-
-> @@ -274,17 +282,23 @@ static int send_tcp(int fd, char *data)
->  static int send_udp(int fd, char *data)
->  {
->         int ret, total_len, len, count = 0;
-> +       useconds_t delay = INIT_DELAY;
->
->         total_len = cfg_payload_len;
->
->         while (total_len) {
->                 len = total_len < cfg_mss ? total_len : cfg_mss;
->
-> -               ret = sendto(fd, data, len, cfg_zerocopy ? MSG_ZEROCOPY : 0,
-> -                            cfg_connected ? NULL : (void *)&cfg_dst_addr,
-> -                            cfg_connected ? 0 : cfg_alen);
-> -               if (ret == -1)
-> -                       error(1, errno, "write");
-> +               delay = INIT_DELAY;
-> +               while ((ret = sendto(fd, data, len, cfg_zerocopy ? MSG_ZEROCOPY : 0,
-> +                               cfg_connected ? NULL : (void *)&cfg_dst_addr,
-> +                               cfg_connected ? 0 : cfg_alen)) == -1) {
-
-should ideally only retry on the expected errno. Unreliable datagram
-sendto will succeed and initially. It will fail with error later,
-after reception of an ICMP dst unreachable response.
-
-> +                       usleep(delay);
-> +                       if (delay < MAX_DELAY)
-> +                               delay *= 2;
-> +                       else
-> +                               error(1, errno, "write");
-> +               }
->                 if (ret != len)
->                         error(1, errno, "write: %uB != %uB\n", ret, len);
->
-> @@ -378,6 +392,7 @@ static int send_udp_segment(int fd, char *data)
->         struct iovec iov = {0};
->         size_t msg_controllen;
->         struct cmsghdr *cmsg;
-> +       useconds_t delay = INIT_DELAY;
->         int ret;
->
->         iov.iov_base = data;
-> @@ -401,9 +416,13 @@ static int send_udp_segment(int fd, char *data)
->         msg.msg_name = (void *)&cfg_dst_addr;
->         msg.msg_namelen = cfg_alen;
->
-> -       ret = sendmsg(fd, &msg, cfg_zerocopy ? MSG_ZEROCOPY : 0);
-> -       if (ret == -1)
-> -               error(1, errno, "sendmsg");
-> +       while ((ret = sendmsg(fd, &msg, cfg_zerocopy ? MSG_ZEROCOPY : 0)) == -1) {
-> +               usleep(delay);
-> +               if (delay < MAX_DELAY)
-> +                       delay *= 2;
-> +               else
-> +                       error(1, errno, "sendmsg");
-> +       }
->         if (ret != iov.iov_len)
->                 error(1, 0, "sendmsg: %u != %llu\n", ret,
->                         (unsigned long long)iov.iov_len);
-> @@ -616,6 +635,7 @@ int main(int argc, char **argv)
->  {
->         unsigned long num_msgs, num_sends;
->         unsigned long tnow, treport, tstop;
-> +       useconds_t delay = INIT_DELAY;
->         int fd, i, val, ret;
->
->         parse_opts(argc, argv);
-> @@ -648,9 +668,14 @@ int main(int argc, char **argv)
->                 }
->         }
->
-> -       if (cfg_connected &&
-> -           connect(fd, (void *)&cfg_dst_addr, cfg_alen))
-> -               error(1, errno, "connect");
-> +       if (cfg_connected)
-> +               while (connect(fd, (void *)&cfg_dst_addr, cfg_alen)) {
-> +                       usleep(delay);
-> +                       if (delay < MAX_DELAY)
-> +                               delay *= 2;
-> +                       else
-> +                               error(1, errno, "connect");
-> +               }
->
->         if (cfg_segment)
->                 set_pmtu_discover(fd, cfg_family == PF_INET);
-> --
-> 2.34.1
->
+diff -uprN linux-master-source/drivers/hid/hid-ids.h linux-master-target/drivers/hid/hid-ids.h
+--- linux-master-source/drivers/hid/hid-ids.h	2023-01-27 15:18:14.000000000 -0600
++++ linux-master-target/drivers/hid/hid-ids.h	2023-01-27 15:50:24.077639994 -0600
+@@ -819,6 +819,7 @@
+  #define USB_DEVICE_ID_LOGITECH_G510_USB_AUDIO	0xc22e
+  #define USB_DEVICE_ID_LOGITECH_G29_WHEEL	0xc24f
+  #define USB_DEVICE_ID_LOGITECH_G920_WHEEL	0xc262
++#define USB_DEVICE_ID_LOGITECH_G923_XBOX_WHEEL	0xc26e
+  #define USB_DEVICE_ID_LOGITECH_WINGMAN_F3D	0xc283
+  #define USB_DEVICE_ID_LOGITECH_FORCE3D_PRO	0xc286
+  #define USB_DEVICE_ID_LOGITECH_FLIGHT_SYSTEM_G940	0xc287
+diff -uprN linux-master-source/drivers/hid/hid-logitech-hidpp.c linux-master-target/drivers/hid/hid-logitech-hidpp.c
+--- linux-master-source/drivers/hid/hid-logitech-hidpp.c	2023-01-27 15:18:14.000000000 -0600
++++ linux-master-target/drivers/hid/hid-logitech-hidpp.c	2023-01-27 15:50:24.077639994 -0600
+@@ -4347,6 +4347,9 @@ static const struct hid_device_id hidpp_
+  	{ /* Logitech G920 Wheel over USB */
+  	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G920_WHEEL),
+  		.driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS},
++	{ /* Logitech G923 Wheel (Xbox version) over USB */
++	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G923_XBOX_WHEEL),
++		.driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS },
+  	{ /* Logitech G Pro Gaming Mouse over USB */
+  	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC088) },
+  
