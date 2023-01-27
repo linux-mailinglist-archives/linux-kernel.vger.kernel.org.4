@@ -2,80 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A39867E5E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5427D67E8DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234517AbjA0M5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
+        id S233900AbjA0PCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:02:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234512AbjA0M5n (ORCPT
+        with ESMTP id S233716AbjA0PB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:57:43 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34EB7D28E;
-        Fri, 27 Jan 2023 04:57:31 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id m12so4658716edq.5;
-        Fri, 27 Jan 2023 04:57:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9ZG5/dJfEvlfksUEy4dZqlxkQUvfDpGnkVNpt/A8DFM=;
-        b=EX3d7D9gnItYT1rU6c/kJyqXPYfLJK0VS58ySEa8KxtMm+SfJqn3lQxVk09N6+0cCT
-         kl8DduwQd8D+ta6lsxIUn3FaKKsR28tvCVCEu4JyFLzf8ukjn5p7JwgZLFzTLpIkcomx
-         3hfIzFHnvUquZFohcnL7uBSbixlVbDLaTK0t2Q71quau437fCyVkKwgx0o8TtvwfgG1J
-         rfxZsv5iSj9m9br8IPfIi4MVeiwAwFTg6CIYcp/sksPUHqu49wiFIWu9urk0YoHrriqm
-         sXnvzEKRBBSRtlp3I6E2j4S8O2l91TxyyS7G+rPgV84RWPNAnwFNimu4IOaXMgPS+0jt
-         Wecg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9ZG5/dJfEvlfksUEy4dZqlxkQUvfDpGnkVNpt/A8DFM=;
-        b=6uK4ehbU2/VMrQMQRFoqsigZMq0MXghwLi1+uLOKjKh2JzqvCQT4FvT3M7NLoJJdT8
-         +4N/N5AUq6S8DGo3cZ+X3fac4ygPVlBX+hl8+pNGRd4LrHx4/vK4O32vw/wr/5R+m5CD
-         6c+5ILeeJ3/D6oFZS4HqIXdWWj0I13W2C7yl8SJdwI4b0KEaM4f3jxv8oOTSMaLCz9gb
-         oDQCVxf57Spmh3ZVK7NzCK7vfpZ32e8lb5EAf7NPT5Ps0nAkp2x13pQ5viBqHH18ZtsK
-         LRm/Q4HuER8MbUuf4uVO9V9SKC3XVVCnuERHTXOOEfPkf7lmXrk9YsZ7BvWii1cPaoaR
-         Adng==
-X-Gm-Message-State: AFqh2kqU/T5Quh3cTk02ENLIw1fhS7BQAPUwBOox5c3w8j7XYB2yGASB
-        AaB5iLriftZ/w11mxAkcM4U=
-X-Google-Smtp-Source: AMrXdXs9hkTQoMtsQj/q7bK+0hqEGX45N2hOmMzacl7O03MEP6FYZIiUlc8wIjtyjmskicMgm3eMPg==
-X-Received: by 2002:a50:ff12:0:b0:492:8c77:7da9 with SMTP id a18-20020a50ff12000000b004928c777da9mr37459278edu.9.1674824250105;
-        Fri, 27 Jan 2023 04:57:30 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id y5-20020a056402358500b00482e0c55e2bsm2248136edc.93.2023.01.27.04.57.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 04:57:29 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        u-boot@lists.denx.de,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V3 6/6] nvmem: u-boot-env: post process "ethaddr" env variable
-Date:   Fri, 27 Jan 2023 13:57:09 +0100
-Message-Id: <20230127125709.32191-6-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230127125709.32191-1-zajec5@gmail.com>
-References: <20230127125709.32191-1-zajec5@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 27 Jan 2023 10:01:58 -0500
+X-Greylist: delayed 967 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 Jan 2023 07:01:57 PST
+Received: from mx0a-00176a03.pphosted.com (mx0b-00176a03.pphosted.com [67.231.157.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13E8757B7;
+        Fri, 27 Jan 2023 07:01:57 -0800 (PST)
+Received: from pps.filterd (m0048299.ppops.net [127.0.0.1])
+        by m0048299.ppops.net-00176a03. (8.17.1.19/8.17.1.19) with ESMTP id 30R6j4FF008620;
+        Fri, 27 Jan 2023 07:57:19 -0500
+From:   Ian Ray <ian.ray@ge.com>
+To:     lars@metafoo.de, Michael.Hennerich@analog.com
+Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        ian.ray@ge.com
+Subject: [PATCH] drivers: iio: adc: ltc2497: fix LSB shift
+Date:   Fri, 27 Jan 2023 14:57:14 +0200
+Message-Id: <20230127125714.44608-1-ian.ray@ge.com>
+X-Mailer: git-send-email 2.10.1
+X-Proofpoint-ORIG-GUID: ZhqMomqWbtzWC2O6rSYnrsrZc8VQYowq
+X-Proofpoint-GUID: ZhqMomqWbtzWC2O6rSYnrsrZc8VQYowq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_08,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 lowpriorityscore=0
+ bulkscore=0 impostorscore=0 mlxscore=0 phishscore=0 priorityscore=1501
+ clxscore=1011 suspectscore=0 malwarescore=0 spamscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301270122
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,81 +46,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+Correct the "sub_lsb" shift for both ltc2497 and ltc2499.
 
-U-Boot environment variables are stored in ASCII format so "ethaddr"
-requires parsing into binary to make it work with Ethernet interfaces.
+An earlier version of the code shifted by 14 but this was a consequence
+of reading three bytes into a __be32 buffer and using be32_to_cpu(), so
+eight extra bits needed to be skipped.  Now we use get_unaligned_be24()
+and thus the additional skip is wrong.
 
-This includes support for indexes to support #nvmem-cell-cells = <1>.
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Fixes 2187cfe ("drivers: iio: adc: ltc2497: LTC2499 support")
+Signed-off-by: Ian Ray <ian.ray@ge.com>
 ---
- drivers/nvmem/layouts/Kconfig      |  1 +
- drivers/nvmem/layouts/u-boot-env.c | 25 +++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ drivers/iio/adc/ltc2497.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/nvmem/layouts/Kconfig b/drivers/nvmem/layouts/Kconfig
-index 8a38c514943a..566b4f25630d 100644
---- a/drivers/nvmem/layouts/Kconfig
-+++ b/drivers/nvmem/layouts/Kconfig
-@@ -23,6 +23,7 @@ config NVMEM_LAYOUT_ONIE_TLV
- config NVMEM_LAYOUT_U_BOOT_ENV
- 	bool "U-Boot environment variables support"
- 	select CRC32
-+	select GENERIC_NET_UTILS
- 	help
- 	  U-Boot stores its setup as environment variables. This driver adds
- 	  support for verifying & exporting such data. It also exposes variables
-diff --git a/drivers/nvmem/layouts/u-boot-env.c b/drivers/nvmem/layouts/u-boot-env.c
-index 95c314553952..e99b853a44c4 100644
---- a/drivers/nvmem/layouts/u-boot-env.c
-+++ b/drivers/nvmem/layouts/u-boot-env.c
-@@ -4,6 +4,8 @@
-  */
+diff --git a/drivers/iio/adc/ltc2497.c b/drivers/iio/adc/ltc2497.c
+index 17370c5..ec198c6 100644
+--- a/drivers/iio/adc/ltc2497.c
++++ b/drivers/iio/adc/ltc2497.c
+@@ -28,7 +28,6 @@ struct ltc2497_driverdata {
+ 	struct ltc2497core_driverdata common_ddata;
+ 	struct i2c_client *client;
+ 	u32 recv_size;
+-	u32 sub_lsb;
+ 	/*
+ 	 * DMA (thus cache coherency maintenance) may require the
+ 	 * transfer buffers to live in their own cache lines.
+@@ -65,10 +64,10 @@ static int ltc2497_result_and_measure(struct ltc2497core_driverdata *ddata,
+ 		 * equivalent to a sign extension.
+ 		 */
+ 		if (st->recv_size == 3) {
+-			*val = (get_unaligned_be24(st->data.d8) >> st->sub_lsb)
++			*val = (get_unaligned_be24(st->data.d8) >> 6)
+ 				- BIT(ddata->chip_info->resolution + 1);
+ 		} else {
+-			*val = (be32_to_cpu(st->data.d32) >> st->sub_lsb)
++			*val = (be32_to_cpu(st->data.d32) >> 6)
+ 				- BIT(ddata->chip_info->resolution + 1);
+ 		}
  
- #include <linux/crc32.h>
-+#include <linux/etherdevice.h>
-+#include <linux/if_ether.h>
- #include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/nvmem-consumer.h>
-@@ -36,6 +38,27 @@ struct u_boot_env_image_broadcom {
- 	uint8_t data[];
- } __packed;
+@@ -122,7 +121,6 @@ static int ltc2497_probe(struct i2c_client *client)
+ 	st->common_ddata.chip_info = chip_info;
  
-+static int u_boot_env_read_post_process_ethaddr(void *context, const char *id, int index,
-+						unsigned int offset, void **data, size_t *bytes)
-+{
-+	u8 mac[ETH_ALEN];
-+
-+	if (*bytes != 3 * ETH_ALEN - 1)
-+		return -EINVAL;
-+
-+	if (!mac_pton(*data, mac))
-+		return -EINVAL;
-+
-+	if (index)
-+		eth_addr_add(mac, index);
-+
-+	/* We need *smaller* buffer so don't bother to krealloc() */
-+	ether_addr_copy(*data, mac);
-+	*bytes = ETH_ALEN;
-+
-+	return 0;
-+}
-+
- static int u_boot_env_parse_data(struct device *dev, struct nvmem_device *nvmem, uint8_t *buf,
- 				 size_t data_offset, size_t data_len)
- {
-@@ -67,6 +90,8 @@ static int u_boot_env_parse_data(struct device *dev, struct nvmem_device *nvmem,
- 		info.offset = data_offset + value - data;
- 		info.bytes = strlen(value);
- 		info.np = of_get_child_by_name(np, info.name);
-+		if (!strcmp(var, "ethaddr"))
-+			info.read_post_process = u_boot_env_read_post_process_ethaddr;
+ 	resolution = chip_info->resolution;
+-	st->sub_lsb = 31 - (resolution + 1);
+ 	st->recv_size = BITS_TO_BYTES(resolution) + 1;
  
- 		err = nvmem_add_one_cell(nvmem, &info);
- 		if (err) {
+ 	return ltc2497core_probe(dev, indio_dev);
 -- 
-2.34.1
+2.10.1
 
