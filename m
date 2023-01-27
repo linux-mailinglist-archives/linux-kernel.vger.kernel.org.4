@@ -2,113 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B8A67EC2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A9667EC32
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235095AbjA0RMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
+        id S235091AbjA0RNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235044AbjA0RLv (ORCPT
+        with ESMTP id S235025AbjA0RN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:11:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4D421290;
-        Fri, 27 Jan 2023 09:11:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9976AB8217C;
-        Fri, 27 Jan 2023 17:10:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC4EC433EF;
-        Fri, 27 Jan 2023 17:10:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674839446;
-        bh=ykcLMPFQCjaN70UNUV3JpUemp46SnywgTPYQJ8CMLGU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LYIuIQrHH9sq+i8HbnRYhX/+FJWRrderGr2PLmKSGsWvme7KjyS5s6/YJtZ8CHGYw
-         POCMo1a+BsX66+iFKbFz7SjAxCXt7VoU7F+lUTCNC2bGxz/j350OBoX6IN2TzABSUK
-         nlzCloeixbk6Wb14AJa5//dZ3w4pIDx3uVyysq4YYWT9VcYnLZAE1CZn05LNUz2SV1
-         +jbNRoLXnfQ+Lo+uNZNYZZpYA2CUa9FZcsoo/80zaMwf3bYuAgDGpGOZUjFUR/XnfP
-         NzfedL76uw83Bx6sL+w2ZcXtMWdfYhe6jaMQgJYTXegM9CkwKGpZG3XPkW32lpNnn4
-         c3O6t6KOqfX3w==
-Date:   Fri, 27 Jan 2023 17:10:40 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Immutable branch between MFD, FPGA and HWMON due for the
- v6.3 merge window
-Message-ID: <Y9QFkFF2aZ/GibZt@google.com>
-References: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
+        Fri, 27 Jan 2023 12:13:26 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B7D1E07E
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:13:05 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D8DA2B;
+        Fri, 27 Jan 2023 09:13:40 -0800 (PST)
+Received: from [10.57.75.194] (unknown [10.57.75.194])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ABA833F71E;
+        Fri, 27 Jan 2023 09:12:56 -0800 (PST)
+Message-ID: <c5d7833d-6372-7eb7-67fe-3cda0bdd4715@arm.com>
+Date:   Fri, 27 Jan 2023 17:12:55 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] Coresight: tpda/tpdm: remove incorrect __exit annotation
+To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230126163530.3495413-1-arnd@kernel.org>
+ <7ec6bd88-7f18-7eca-fa92-cfea9a25a395@arm.com>
+ <cd4f23d7-cdd7-49e1-8eff-9ec04dcb36c8@app.fastmail.com>
+ <e6c3fa24-963b-57c0-1a9a-fd056a9ac591@arm.com>
+ <f87c8f49-227e-40fb-b13b-00d869d81fe8@app.fastmail.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <f87c8f49-227e-40fb-b13b-00d869d81fe8@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enjoy!
+On 27/01/2023 17:00, Arnd Bergmann wrote:
+> On Fri, Jan 27, 2023, at 17:46, Suzuki K Poulose wrote:
+>> On 26/01/2023 20:37, Arnd Bergmann wrote:
+>>> On Thu, Jan 26, 2023, at 19:02, Suzuki K Poulose wrote:
+>>>> On 26/01/2023 16:35, Arnd Bergmann wrote:
+>>>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>> Thanks for the fix, I will queue this. Btw, I did try to
+>>>> reproduce it locally, but couldn't trigger the warnings,
+>>>> even with
+>>>>
+>>>> CONFIG_WERROR=y
+>>>>
+>>>> and all CORESIGHT configs builtin. I see other drivers doing the
+>>>> same outside coresight too. Just curious to know why is this
+>>>> any different. Is it specific to "bus" driver (e.g. AMBA) ?
+>>>
+>>> The warning comes from postprocessing the object file, it's got
+>>> nothing to do with the bus type, only with a symbol in .data
+>>> referencing a symbol in .init.text. Maybe there are some
+>>> config options that keep the section from getting discarded?
+>>> Or possibly you only built the files in this directory, but did
+>>> not get to the final link?
+>>
+>> I did a full kernel build. Also, I see a similar issue with the
+>> coresight-etm4x (by code inspection) driver. Did you not hit that ?
+>>
+>> May be there is a config option that is masking it on my end. But
+>> the case of etm4x driver is puzzling.
+>>
+>> $ git grep etm4_remove_amba
+>> drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> drivers/hwtracing/coresight/coresight-etm4x-core.c:static void __exit
+>> etm4_remove_amba(struct amba_device *adev)
+>> drivers/hwtracing/coresight/coresight-etm4x-core.c:     .remove
+>> = etm4_remove_amba,
+> 
+> Indeed, that one clearly has the same but, but I have never
+> observed a warning for it.
+> 
+> I checked one more thing and found that I only get the warning
+> for 32-bit Arm builds, but not arm64. Since the etm4x driver
+> 'depends on ARM64' for its use of asm/sysreg.h,
+> I never test-built it on 32-bit arm.
+> 
+>  From the git history of arch/arm64/kernel/vmlinux.lds.S,
+> I can see that arm64 never discards the .exit section, see
+> commit 07c802bd7c39 ("arm64: vmlinux.lds.S: don't discard
+> .exit.* sections at link-time").
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+That makes sense, thanks for getting to the bottom of this. I
+have pushed it to coresight next.
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+https://git.kernel.org/coresight/c/0c1ccc158bbc
 
-are available in the Git repository at:
+Kind regards
+Suzuki
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-mfd-fpga-hwmon-v6.3
 
-for you to fetch changes up to 869b9eddf0b38a22c27a400e2fa849d2ff2aa7e1:
 
-  mfd: intel-m10-bmc: Add PMCI driver (2023-01-27 10:47:11 +0000)
+> 
+>       Arnd
 
-----------------------------------------------------------------
-Immutable branch between MFD, FPGA and HWMON due for the v6.3 merge window
-
-----------------------------------------------------------------
-Ilpo Järvinen (10):
-      mfd: intel-m10-bmc: Add missing includes to header
-      mfd: intel-m10-bmc: Create m10bmc_platform_info for type specific info
-      mfd: intel-m10-bmc: Rename the local variables
-      mfd: intel-m10-bmc: Split into core and spi specific parts
-      mfd: intel-m10-bmc: Support multiple CSR register layouts
-      fpga: intel-m10-bmc: Rework flash read/write
-      mfd: intel-m10-bmc: Prefix register defines with M10BMC_N3000
-      fpga: m10bmc-sec: Create helpers for rsu status/progress checks
-      fpga: m10bmc-sec: Make rsu status type specific
-      mfd: intel-m10-bmc: Add PMCI driver
-
- .../ABI/testing/sysfs-driver-intel-m10-bmc         |   8 +-
- MAINTAINERS                                        |   2 +-
- drivers/fpga/Kconfig                               |   2 +-
- drivers/fpga/intel-m10-bmc-sec-update.c            | 364 +++++++++++++--------
- drivers/hwmon/Kconfig                              |   2 +-
- drivers/mfd/Kconfig                                |  32 +-
- drivers/mfd/Makefile                               |   5 +-
- drivers/mfd/intel-m10-bmc-core.c                   | 122 +++++++
- drivers/mfd/intel-m10-bmc-pmci.c                   | 219 +++++++++++++
- drivers/mfd/intel-m10-bmc-spi.c                    | 168 ++++++++++
- drivers/mfd/intel-m10-bmc.c                        | 238 --------------
- include/linux/mfd/intel-m10-bmc.h                  | 154 ++++++---
- 12 files changed, 888 insertions(+), 428 deletions(-)
- create mode 100644 drivers/mfd/intel-m10-bmc-core.c
- create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
- create mode 100644 drivers/mfd/intel-m10-bmc-spi.c
- delete mode 100644 drivers/mfd/intel-m10-bmc.c
-
--- 
-Lee Jones [李琼斯]
