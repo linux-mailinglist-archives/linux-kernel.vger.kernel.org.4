@@ -2,101 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7AB67E0EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E06AF67E0F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbjA0KAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:00:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S233192AbjA0KCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:02:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbjA0KAe (ORCPT
+        with ESMTP id S232726AbjA0KCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:00:34 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04olkn2032.outbound.protection.outlook.com [40.92.46.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5983727995
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:00:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QDF9Jbq1pww27ukiNG/89OPrHFFe61GjOJd1KlQCVtuQfffemTiL+G98Dj/pYHox4RZ4UeH3z7w8XimJQwo84GljRgWW67h1L3+fihjyX6F+gCitGQEWFshzfRYk0FFPofWq+1JVP4ZGcj3He1elmGhC4PL8TsEhrWxUT9xxmSRJgvpRVsA7y1t/1Ko3eWLnQCiGOdsmFpmiRUKd054HanqfbFB2CnfuIqJRW9LCbPDQOhaYg3Mj9hYOkB2KDnsca70xi050vwfRNN27uCmG1qz735p7cscg8iDCbKVsO64Tccb3z+UDThqK19pRtDcOyXgMTKmVx5oUkJfGLQUvvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5qSKADg/N6lQQmSP7XatOKm5WIVmTuqqPcedbGEm35w=;
- b=aTH8vn0FcWSb2QXhMgYBIwk2cID6VS/Xr85xMr796JcJ6f6nlPB7BsWc+Ka72g5/2GHSreztwWGbC1u5tAaERlSfTGwSgDWDgLQD18/WQOmQF+7PvBIEj4RIEJTt/FmLrrGoJx61sg8EmVi+6Kj8TsMIhzF8ihfC3K3rDfRBTwIoXVVgadts9YTff7zycfvnNaSru5c/BOGBXHJoED3D/VpdNEFP6qGqjAMGULs60fJYsIrCHJ70VcjkMlmQKxaneHhlS9yIrM4yi2OimSnK7awUDhybfeuuCRRFsinYv3r4YGhBQvWCfTcUrxAQGf/7BoW1vOBOX4Dmz+EQJa/Z7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5qSKADg/N6lQQmSP7XatOKm5WIVmTuqqPcedbGEm35w=;
- b=JqjOJnThc6R6IMzbv2Wkp458MJ2v/h78mzVhjP0H4kskqv2n/BV20d5m/Jv8O4K/yNODLRv9vUGn/dEGELhjcZB2e3emdzVlatmQTvJrAz3V/t1pXolf54rEqGqo+74ERel8YsVw34B/4K/KYUTPcnuMiszlVltxLv3DSr0xlS2HXLszPr3wcvPCy5B+yhVGO4iTJZcAzlsl+J0QBZ/hLrUNK+nk/b9yPDQ6vqJ6kdWnDkURGrjCyBCUnAjvEKG80caFe4M7Bx6cb9VxbbW9QMW80/NVsnfCL/JwVugK9sZM5i2atPu1dBR8cHr8PvqxKhdsHJm7RZLAmZHEwZXkRA==
-Received: from BY5PR19MB3333.namprd19.prod.outlook.com (2603:10b6:a03:188::23)
- by DS7PR19MB4535.namprd19.prod.outlook.com (2603:10b6:5:2c3::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.23; Fri, 27 Jan
- 2023 10:00:29 +0000
-Received: from BY5PR19MB3333.namprd19.prod.outlook.com
- ([fe80::2f9f:773e:b1da:5087]) by BY5PR19MB3333.namprd19.prod.outlook.com
- ([fe80::2f9f:773e:b1da:5087%4]) with mapi id 15.20.6043.023; Fri, 27 Jan 2023
- 10:00:29 +0000
-From:   "katiyar26@outlook.com" <katiyar26@outlook.com>
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Mellanox interrupts are not load balanced
-Thread-Topic: Mellanox interrupts are not load balanced
-Thread-Index: AQHZMjMkUEeiz2tn4ECAxfc0bz4HOg==
-Date:   Fri, 27 Jan 2023 10:00:28 +0000
-Message-ID: <BY5PR19MB3333BC15B1D33E89A679D7A7A5CC9@BY5PR19MB3333.namprd19.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-tmn:  [dXSsiUagHQYxpdP9ovgqYCP2JRGr1X9S]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY5PR19MB3333:EE_|DS7PR19MB4535:EE_
-x-ms-office365-filtering-correlation-id: 1894a412-6d95-48eb-3ac5-08db004d51eb
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: f3y6FXp/uS3cFVuaA+ciDoOGcQqsTh/ewK40lpz8lWv94Noe5ON+cBxv3rEWFL0na1T9WTXs2SRo6l/E13VbxaGeX1V5NKTzovbeV7GVjU0hbFOiSSyyMQcdPWO0CAX2mP32UIACYTE9C9hJcXW29rpydgiRTVcLkSr3LctiIpLXuQYqPRivLq389qMc5TSkL7pYcmhdvB32lKClSPTWxPwR/ei1ReR+B0bQAogDpMTwkzmFtdPBKMwGWtJeGLpZWwEf3hi3Fahl5L7Hzmu32cYqk/+lIGNhzq9Tj4StAQx0gGY0rFk2E/fgQXCgEfYEzl+Gm1zcR4FaCcQxQWHxuYb5ZJ65sOx66rbZ9ubDdFLcV+dxjXfpJ8FuvCpf9eo+bScYqWb3tizrnopTiXJ9ylO1L4WZsMcL6fNDEEHIX4M09AXq09eyUwvbHpur5+lj47es8U+h9hwpBjBsU5h/k0N3YLhaBNyXmnhh/SUcysHe5XAIx4NupXUS+YKV9h0DiIOmbHbnyVaKIJJm/FZmxEtnTP4bW8ZrLFmrsLxIDTANB91ECvVN2cSu75PEPPYpnlcAtKSrhe/4VI2tjpVmlVexCZRujQmxsvFXhtyfixE=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?d8RPUOG1yz3gSHtEF/4DBKSYscqYNFc91LdT9pgpr8jYMgqe2BklrQKKXa?=
- =?iso-8859-1?Q?h2THKnlIFz4LxdMQp/pZIc3vVRxCFfs/S9fCNXbvgXp+moBDUmHWUu/H7U?=
- =?iso-8859-1?Q?nse5EIFpY/rMLOp3On29W9wdzjbTcBFhlXJsm2rMaN3YPdYxllZzcUTVse?=
- =?iso-8859-1?Q?IVH594lsog7b+U1jGHTad97CrtetfvQk+1vnKgAW9qgLn+CncWY96erRTb?=
- =?iso-8859-1?Q?M25x8iGLfmyK96w57OO+k5bR964ILPXQ9CWaW7cYHWDIJGYRuh3PJkaVWS?=
- =?iso-8859-1?Q?LHbaj92fJEtzODZfURRL34PvLzl3cOfFSZ7BEPlKv3LYBILIALa5Kge17y?=
- =?iso-8859-1?Q?xAcXNRvc5jT17P/2fjUKE/ChjlPZRRVSFS3pcqvr4tEN2o+1uQq4VVkPjC?=
- =?iso-8859-1?Q?I64Z9PoY2OACTt/9e9miGcu5hiEa7uzQr/+II86thu2sD25mf3eANie6KJ?=
- =?iso-8859-1?Q?Ft5KG1FV35lPGCWAUV+Fq102zng5uEz7jBdg8m2mF+aLhKCbeQUF6mnGMY?=
- =?iso-8859-1?Q?gyhuPtfGRRTGdWEz8KRwy3HNO/E8WXCDkkhgzaynU7zVMruO1zwVDN3LA6?=
- =?iso-8859-1?Q?qq1Sb5xbxXeqoV6cxg78Dt0KtseQlNkitH2EI11kFLGmWTOxcXF7OZ1ibw?=
- =?iso-8859-1?Q?TT48Ma5d+jLbvA3/onS6aI8WPL04n6SgRCkdkrCmVRFvWYIxFNwU4awVHw?=
- =?iso-8859-1?Q?QCdPhvU+EZeLvISs0OFpxCjsVz6PSjUhE6jDq0d3mmqSyFxCNjFRSDLoTZ?=
- =?iso-8859-1?Q?bBDlHXW1/my7H3hYspAaKbb1x/1UEoF80UK+gSgFRAoSGIVKLmwpgl6ybx?=
- =?iso-8859-1?Q?DLTH9mCY8ECaV0cdPwEapxeqcvPd0JY8cMaiOtP8EErRl//sfqzIrxYoMy?=
- =?iso-8859-1?Q?abeI6nAMQAcaoNL8X3DOmo1bxx2UeJq5dHo0Diu53okd7pI12wRTg3z+zY?=
- =?iso-8859-1?Q?jHtatiiNKDSqoDydns8HrSKJJkogEqvMnePyFi3aDY2r4nyM94FgEf+Eum?=
- =?iso-8859-1?Q?vm1rV+LfqyHDz+csufcdTxiuOValqdMYXjfl4IUBSyBZTxuqVSLoeCMren?=
- =?iso-8859-1?Q?aJQjeRe9bQaj00pt6r2JMWXAmQKrpCmTf7mBaBSUSRbW13bej3F1o8DXAS?=
- =?iso-8859-1?Q?5J67QBZdNkWkoAdmrG+3iTrolA9OhAYt0zeebpWZFwFbduzbbN7JSjPkcE?=
- =?iso-8859-1?Q?O9C7HOMR9J7pPAV/To5BOWXSrA4GxhbuqIoEZgELSG2uQ32qIJs+S6BwBZ?=
- =?iso-8859-1?Q?0PxI1t88LESi/goXC2Kg8zivGkzhI6ThXQspOsf0nnnI9gn1RT9TL5BPPv?=
- =?iso-8859-1?Q?WxKg?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 27 Jan 2023 05:02:43 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E69F27995;
+        Fri, 27 Jan 2023 02:02:42 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so5054263wmb.0;
+        Fri, 27 Jan 2023 02:02:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=O89v8PjiSY2Ob+iAxk3/FFiEUgZPIgQc0tCql9t2tfI=;
+        b=UyXrR+bg1ydL2ojBSqXNvun6Bz+gvr4PWK5WMoIRph5L8gHMc+orGDxqwW47IoOuGc
+         ixUV0AOv6PWCjwb5nh4xdfsIgdRyQ/OzndemjD1Vc+kLRK8hMYb+GNjX7v6SmVAhfNiU
+         FcnMbja2IboZGMAs2HUiWHM0HYxn7LGHyy4NnUEKpoqsIPVxWDm19FvPonZ2/Ebzl2Mu
+         tdCSoc6ZKcAme74+oDq/CiprG9KVW2e4vOe3ZfsmFqsD3WZam1KWzvlSaaFDWyNMdMIB
+         e3gYCeNsn0VwqgXqh+3V+qX4TQqe2Rs0DVav52PpFPLtfFZX/2awn1RDh8ciP9NamkW7
+         yE3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O89v8PjiSY2Ob+iAxk3/FFiEUgZPIgQc0tCql9t2tfI=;
+        b=1hzM5dVy8KDpC3e9qJmC30NoHurmMkfRWH0TC3eTIaTL5TUuINa0Qs0tizghOdAgeU
+         0W4l3Fm8utr3E3FVfH5j3t/INxz+nqS6+KOLKKb7Kn6ir+dM/Pl2SdDK+6HtfmAZJ795
+         mv/RU0MGaa/jGbudf56K1XRkCER356Y8rYCc42osejpDZrVyfk+jkolbUTAbdYsUTggj
+         jzdbtZr/xGCPZMjcm75y6fBii97C426hH30vXlT32EInBxxbLXt2wUz6aCXtUb9myW2P
+         awbQl8vxY/kSaU5PS+VhHbxoT2Z5RomyWuYPmG8N8/I2NKJH07q5auTdliUo2ZhiSlmu
+         SFAA==
+X-Gm-Message-State: AFqh2ko0iPJQXVAoXYvBqS6hHgSfFbzwDDZpGMInjs8eJcSHf8xHc1pF
+        HCJ54h9boQufvAlPt/Gp48EhNmMJ926fkg==
+X-Google-Smtp-Source: AMrXdXtkWYRA8cMy4G2V+sVUZLnfg2D23SMqOBSXdHG8ruxBWXGvFGzVXu2CIHdbSOkOgSzUvke+yQ==
+X-Received: by 2002:a05:600c:4fd3:b0:3cf:7197:e68a with SMTP id o19-20020a05600c4fd300b003cf7197e68amr36864687wmq.18.1674813760868;
+        Fri, 27 Jan 2023 02:02:40 -0800 (PST)
+Received: from toolbox.. ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id l7-20020adffe87000000b002bfbe30e8f8sm3493858wrr.98.2023.01.27.02.02.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 02:02:40 -0800 (PST)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>
+Subject: [PATCH 0/4] arm64: dts: meson: fix BPI-M5 and add BPI-M2-PRO
+Date:   Fri, 27 Jan 2023 10:02:32 +0000
+Message-Id: <20230127100236.3385154-1-christianshewitt@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR19MB3333.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1894a412-6d95-48eb-3ac5-08db004d51eb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jan 2023 10:00:28.9284
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR19MB4535
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,114 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,=0A=
-I am running centos 7.7 VM in azure with Mellanox (mlx5_core) driver for NI=
-C. It is running customized 3.10.0-1062.18.1.el7 kernel image with some min=
-or changes in net directory. =0A=
-=0A=
-It has created as many queues and irqs as the number of CPUs in VM but all =
-the interrupts are being processed by CPU0 only. Irqbalance service is also=
- running and smp_affinity is set differently for different irqs. I tried se=
-tting it manually after stopping the irqbalance service but still all the i=
-nterrupts were targeted to CPU0 as can be seen from below output.=0A=
-=0A=
-> cat /proc/interrupts =0A=
-           CPU0       CPU1       CPU2       CPU3       CPU4       CPU5     =
-  CPU6       CPU7       =0A=
-  0:       9881          0          0          0          0          0     =
-     0          0   IO-APIC-edge      timer=0A=
-  1:          0          0          0          0          0          0     =
-     0          9   IO-APIC-edge      i8042=0A=
-  3:         21         25         13         19          2          2     =
-     3        856   IO-APIC-edge    =0A=
-  4:         68          6         25         22         21         10     =
-    19        360   IO-APIC-edge      serial=0A=
-  8:          0          0          0          0          0          0     =
-     0          0   IO-APIC-edge      rtc0=0A=
-  9:          0          0          0          0          0          0     =
-     0          0   IO-APIC-fasteoi   acpi=0A=
-12:          0          0          0          0          0          0      =
-    0          5   IO-APIC-edge      i8042=0A=
-14:        602        318        226        232        278        205      =
-   69       8917   IO-APIC-edge      ata_piix=0A=
-15:          0          0          0          0          0          0      =
-    0          0   IO-APIC-edge      ata_piix=0A=
-24:          0          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_pages_eq@pci:8b76:00:02.0=0A=
-25:      19694          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_cmd_eq@pci:8b76:00:02.0=0A=
-26:          0          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_async_eq@pci:8b76:00:02.0=0A=
-28:     123648          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp0@pci:8b76:00:02.0=0A=
-29:     152455          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp1@pci:8b76:00:02.0=0A=
-30:     102308          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp2@pci:8b76:00:02.0=0A=
-31:      89403          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp3@pci:8b76:00:02.0=0A=
-32:      86793          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp4@pci:8b76:00:02.0=0A=
-33:     107817          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp5@pci:8b76:00:02.0=0A=
-34:     117091          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp6@pci:8b76:00:02.0=0A=
-35:      59714          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp7@pci:8b76:00:02.0=0A=
-36:          0          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_pages_eq@pci:83a4:00:02.0=0A=
-37:      12427          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_cmd_eq@pci:83a4:00:02.0=0A=
-38:          0          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_async_eq@pci:83a4:00:02.0=0A=
-40:      35520          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp0@pci:83a4:00:02.0=0A=
-41:        576          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp1@pci:83a4:00:02.0=0A=
-42:      34139          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp2@pci:83a4:00:02.0=0A=
-43:      19951          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp3@pci:83a4:00:02.0=0A=
-44:      41038          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp4@pci:83a4:00:02.0=0A=
-45:      36569          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp5@pci:83a4:00:02.0=0A=
-46:      42023          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp6@pci:83a4:00:02.0=0A=
-47:      12610          0          0          0          0          0      =
-    0          0   PCI-MSI-edge      mlx5_comp7@pci:83a4:00:02.0=0A=
-NMI:          0          0          0          0          0          0     =
-     0          0   Non-maskable interrupts=0A=
-LOC:       1536       1224       1240       1107       1299       1379     =
-  1171       2152   Local timer interrupts=0A=
-SPU:          0          0          0          0          0          0     =
-     0          0   Spurious interrupts=0A=
-PMI:          0          0          0          0          0          0     =
-     0          0   Performance monitoring interrupts=0A=
-IWI:        726        143        776        309        780        370     =
-   748       1047   IRQ work interrupts=0A=
-RTR:          0          0          0          0          0          0     =
-     0          0   APIC ICR read retries=0A=
-RES:      59746      34162     150579      45146     149421      87954     =
-149095      47137   Rescheduling interrupts=0A=
-CAL:       2562       2717       2601       2590       2577       2649     =
-  2572       2557   Function call interrupts=0A=
-=0A=
-Mellanox driver version is :=0A=
-version:        5.0-0=0A=
-license:        Dual BSD/GPL=0A=
-description:    Mellanox 5th generation network adapters (ConnectX series) =
-core driver=0A=
-author:         Eli Cohen <eli@mellanox.com>=0A=
-rhelversion:    7.7=0A=
-srcversion:     7D9FFD656B0EB1000804CB2=0A=
-=0A=
-Same kernel with different NIC driver (in AWS) and igb driver in physical s=
-erver works fine.=0A=
-I tried centos7.9 (3.10.0-1160.76.1.el7) available in Azure market place an=
-d there I don't see the issue.=0A=
-=0A=
-Please help in debugging/resolving this issue.=0A=
-=0A=
-regards,=0A=
-Nitin=
+The first patch in this series fixes an SD card (re)boot issue on the
+BPI-M5. Susequent patches convert the (fixed) dts into a common dtsi
+to support the addition of BPI-M2-PRO which is based upon the BPI-M5
+board design.
+
+Christian Hewitt (4):
+  arm64: dts: meson: bananapi-m5: switch VDDIO_C pin to OPEN_DRAIN
+  arm64: dts: meson: meson-sm1-bananapi-m5: convert to dtsi
+  dt-bindings: arm: amlogic: add support for BananaPi M2-Pro
+  arm64: dts: meson: add support for BananaPi M2-Pro
+
+ .../devicetree/bindings/arm/amlogic.yaml      |   1 +
+ arch/arm64/boot/dts/amlogic/Makefile          |   1 +
+ .../dts/amlogic/meson-sm1-bananapi-m2-pro.dts |  98 ++++
+ .../dts/amlogic/meson-sm1-bananapi-m5.dts     | 427 +----------------
+ .../boot/dts/amlogic/meson-sm1-bananapi.dtsi  | 435 ++++++++++++++++++
+ 5 files changed, 536 insertions(+), 426 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m2-pro.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi
+
+-- 
+2.34.1
+
