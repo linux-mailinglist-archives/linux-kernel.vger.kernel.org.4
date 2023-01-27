@@ -2,74 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CACFC67E879
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA6D67E87C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233689AbjA0OlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
+        id S233707AbjA0Ols (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:41:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjA0OlM (ORCPT
+        with ESMTP id S233734AbjA0Oln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:41:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D1179217
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:41:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39A5EB820ED
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:41:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7709BC433D2;
-        Fri, 27 Jan 2023 14:41:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674830466;
-        bh=0pDWFm7JWeQuGLfQOAkcZioh02NWwT5ih8ETkFGkHeY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mMYoVhYHU6HXPbvnyDwznPH+Db3qHNZbDa7SOIbcXGsgkyJY/OhVLHYe+w07DXkO2
-         ckSOIWLn36zY+3i+8A1ORgsBuBfCbPRkYwZy7CF5372f6Lg5ftjhNB4HLGkKE+APry
-         tl+CyKl1EokRP0X12AvsUb7CfFd+KBZSmHB/Jk2qdMukQOoYljotQFoeyUXY5vUOvo
-         rktO+rOG4hlCfZ56mg84lssvTKu/IawYxjlOxrMDuUALqK3yJfiB4qk5gWaF8zURiT
-         +pDkT5LQ1eQ6EnVUgB7GUiMgHk+f73JgFq5NH+1iNNQMEUASJPrWTDei5cYZJdyTYq
-         AX+9b9cJtPmyw==
-Date:   Fri, 27 Jan 2023 14:41:02 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mfd: Remove .enable() and .disable() callbacks
-Message-ID: <Y9PiflfjkinCXfHn@google.com>
-References: <20230126152429.580539-1-u.kleine-koenig@pengutronix.de>
+        Fri, 27 Jan 2023 09:41:43 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481C183045;
+        Fri, 27 Jan 2023 06:41:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674830502; x=1706366502;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZRGIvL3M9OUyZouslOGgrzIuwLCzxUKq9L9bwPEwfGs=;
+  b=ZVXdRpYjsGn2FmVzv6L+YZ4MLcWtUBeMhR2vKWxttdgjnVzph51PPBHr
+   8GR6/gdadzqdvL4S637EtVL/2nHkarVDJCSJ39Q1AakzffT7HU9gNvNFq
+   6CWBOzWhYIN+/InST2X5rcr62fLmX5aRrbidy7goPL3cCUfmFt4yFAiUD
+   WK2Fs19ditd2qZkIOhaspBp/WnlzSE9LKEm3wm5IatxcseQR36Q3I1itz
+   1MmGavN19ntmfw3J041my/Ek7kYRj8cRpwU8wJyRP3F6jV9XID025eXTy
+   c6rDd/5nUTNA7+vuIQJtcA4KDyM1Bd4/KqdMwA9KOkFmINl2jsv5rItiN
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="328383803"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="328383803"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 06:41:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="837134238"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="837134238"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 27 Jan 2023 06:41:39 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pLPv7-00G0PD-24;
+        Fri, 27 Jan 2023 16:41:37 +0200
+Date:   Fri, 27 Jan 2023 16:41:37 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v3 2/2] kbuild: make W=1 warn files that are tracked but
+ ignored by git
+Message-ID: <Y9PioQHu2ShZ2veo@smile.fi.intel.com>
+References: <20221229074310.906556-1-masahiroy@kernel.org>
+ <20221229074310.906556-2-masahiroy@kernel.org>
+ <Y9PQxCTJGTRU1cuE@smile.fi.intel.com>
+ <CAK7LNASJ6j7XEZ-poS+Qq+8nZ5iztLTuTSgkr+fMka7HYH8ekQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230126152429.580539-1-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAK7LNASJ6j7XEZ-poS+Qq+8nZ5iztLTuTSgkr+fMka7HYH8ekQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 Jan 2023, Uwe Kleine-König wrote:
-
-> With commit dd77f5fa97d3 ("mfd: Remove toshiba tmio drivers") the last
-> mfd driver that makes use of these callbacks is gone. The corresponding
-> functions mfd_cell_enable() and mfd_cell_disable() are also unused
-> (apart from the leds-asic3 driver that cannot be enabled any more after
-> the above mentioned remove and will/should be deleted, too).
+On Fri, Jan 27, 2023 at 11:31:07PM +0900, Masahiro Yamada wrote:
+> On Fri, Jan 27, 2023 at 10:25 PM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+> >
+> > On Thu, Dec 29, 2022 at 04:43:10PM +0900, Masahiro Yamada wrote:
+> > > The top .gitignore comments about how to detect files breaking
+> > > .gitignore rules, but people rarely care about it.
+> > >
+> > > Add a new W=1 warning to detect files that are tracked but ignored by
+> > > git. If git is not installed or the source tree is not tracked by git
+> > > at all, this script does not print anything.
+> > >
+> > > Running it on v6.2-rc1 detected the following:
+> >
+> > Since patch was published there is no sign it was ever meet Linux Next.
+> > What's the plan?
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/mfd/mfd-core.c   | 26 --------------------------
->  include/linux/mfd/core.h | 12 ------------
->  2 files changed, 38 deletions(-)
+> Oh?
 
-Applied, thanks
+Sorry, my mistake. I need to understand why these patches do not fix
+the issue I have.
+
+> I can see this patch in linux-next.
+> 
+> $ git log next-20230127 -- scripts/misc-check
 
 -- 
-Lee Jones [李琼斯]
+With Best Regards,
+Andy Shevchenko
+
+
