@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDECD67EE8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3DB167EE89
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbjA0Tn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 14:43:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
+        id S231873AbjA0Tnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbjA0TnA (ORCPT
+        with ESMTP id S231931AbjA0TnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 14:43:00 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C453F82432
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:42:36 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4ff7c6679f2so65753727b3.12
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:42:36 -0800 (PST)
+        Fri, 27 Jan 2023 14:43:05 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD478A547
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:42:40 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id b201-20020a2534d2000000b0080b87d910a2so6435179yba.21
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:42:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nu9/mdu38G6WtBjXb6Do7xpUyt6CdrDbmAUDhoyp47k=;
-        b=oFyOjlhEa6jPD1d+pKzu8xqMu9sShcBJM0zkcdXAO9bWZHfs5hDegJ8sEKWFr4AQNl
-         iGPCIH7iC8aR5RiIjRoH9W2KUncZPWl0b5vsJXQEB2UE60mYiP5ldYuNlEW3dM96CgJp
-         +2KdvoCyVN7G6APzAMKWAfXHTUhAA+JaJZhJgfnGwlr68Zr0GLZrYj2YnOQkKo96sWGj
-         Ng0DOWnRANnP+XQns5edhVeWyYl+9EdfDgkHbYKOkVF++Ku/0IaWanDTI7HqCQuL/w5R
-         edw8ZGqmSQJCCmVgs5lV30HhGrOZqx2K3qMJgNbHCqjkT1CdH2dJNnKk0QEKLZZ9jCPS
-         y7/w==
+        bh=OfsRQat1IE0fDeYSs5Psw7qjLLZE8mkiXmSdSDqQs6E=;
+        b=Q7jceUjhtfhNXIUFz0/MzwmS5ZgtWEAK+cBK0blt69F8+KIFs/AwOKnAqPB+IEDKT/
+         FyLbx1gLVqD34Rlv7gRilV5FNygR87+qF/41EC627UqwDLTg6NJEFnAj/1s6LMME1gBy
+         h9D9urWoN0e32uyucIiiCDtt59fZ91UJGpShxrAxprHccHpeDkPGS432b78Iuw1rAi+Y
+         PGxS0P/Csnmusy4TpNpOjbr38NhV2uRvkkx/I7vAEJVPhb/fpP3E3BB7l9N5Jq8Ddy4K
+         G0deOaLN7bYZJlZOXJL3xM94KhFiD/71EdmjsD4THVYmj7eB4g9ZYLPfdvfcp6yLyVR8
+         Oqkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nu9/mdu38G6WtBjXb6Do7xpUyt6CdrDbmAUDhoyp47k=;
-        b=h3TEow3zRjG0lfCe5mvSQw5za2RRH4bDNJ2uFc8FE1Vk4O+/vca4y+1MhzhifpHZjF
-         E8iCbuMu3k8njZgssRUSPH0Nd28ho8ZoHuDe/DrMao42v5gYamGAagDmFjMhhxzkzSY/
-         UGAvLWHmSvZ2kK07e9pNJDPSV5292hZDRv7kt29SfJpizclfJMrE8MiPfp73a38gqvcr
-         080uEza2rx7zqJmrUmIfF78T30hK+psCMEuX2cREmAgIXE1DQKox+FzA2kkBRXYBECRL
-         BwOusTDNLykSbKbiuSxxKy9DNyBUFR0jTkCS2UlXO7udGjoxuP6PcHGuE+YDWaAhj8Q2
-         ZRHw==
-X-Gm-Message-State: AFqh2krEdkqLw+u/U5/61Hh8v+Wvx4W99aaUMVbiwxIw9pXjUSRW9QFK
-        ek0PN/SUSzJ9s7kXfSjfZQEDIW8k5cQ=
-X-Google-Smtp-Source: AMrXdXtMMT5r56SGjlxKGvDbQirEmfUIu1ilIQcv1/3wi/4TSk/ascWeVtYTcuwkoFwuriGWfFUnQoKWHlg=
+        bh=OfsRQat1IE0fDeYSs5Psw7qjLLZE8mkiXmSdSDqQs6E=;
+        b=Bfr+txlCYis8bHpMFGgq5vlFNPvsd8cpOWeZybDcNlMvo1og1+9BceuR3DW5a4SDL1
+         0q8r3eG3It+MGgyhtmEa/knqmILVulY/92sQsuoPIz4sSWu73bR5rKjl35AiuhhF8v06
+         sFfMp8PSLI3ldBvOHQBdT1BTUBpWnRRzhqE4PDxbTq36/SnmYRZ2X+vCIbc3H8urgoex
+         k2lv2x9aeWH1rnqWQaIm1DH0biu6uVW0xT3KozbF1cUmdaFqWjw/JJEg+9ABpCLPmb7N
+         McZlNrNT2YSfIrrtVnaGIZjNhBTkxBBJ36tf5Xic2kW1jn6Hlpu2dnyOCyGbCS+kveLv
+         Du0g==
+X-Gm-Message-State: AO0yUKU2P/uugDWxMvSyycdgLaCCnWctXTC2zmyAq4ra6epEZTegdGw2
+        erOvZQYa/DOKK4sFywa94qR21YjlVqA=
+X-Google-Smtp-Source: AK7set9LIYXWd5UhR4gu2cf1OYz0XpBzDlrTVxbQWEhDgYvTk1OPOqMByF3iTmnXKTsrl+3RDXXXUtjCRT8=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:4e19:be9:c5d0:8483])
- (user=surenb job=sendgmr) by 2002:a0d:cdc7:0:b0:4df:f712:5d57 with SMTP id
- p190-20020a0dcdc7000000b004dff7125d57mr3818080ywd.303.1674848495850; Fri, 27
- Jan 2023 11:41:35 -0800 (PST)
-Date:   Fri, 27 Jan 2023 11:40:46 -0800
+ (user=surenb job=sendgmr) by 2002:a0d:f2c3:0:b0:50a:468d:48d8 with SMTP id
+ b186-20020a0df2c3000000b0050a468d48d8mr731943ywf.104.1674848498315; Fri, 27
+ Jan 2023 11:41:38 -0800 (PST)
+Date:   Fri, 27 Jan 2023 11:40:47 -0800
 In-Reply-To: <20230127194110.533103-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230127194110.533103-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230127194110.533103-10-surenb@google.com>
-Subject: [PATCH v2 09/33] mm: rcu safe VMA freeing
+Message-ID: <20230127194110.533103-11-surenb@google.com>
+Subject: [PATCH v2 10/33] mm: move mmap_lock assert function definitions
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -84,78 +84,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michel Lespinasse <michel@lespinasse.org>
+Move mmap_lock assert function definitions up so that they can be used
+by other mmap_lock routines.
 
-This prepares for page faults handling under VMA lock, looking up VMAs
-under protection of an rcu read lock, instead of the usual mmap read lock.
-
-Signed-off-by: Michel Lespinasse <michel@lespinasse.org>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/mm_types.h | 13 ++++++++++---
- kernel/fork.c            | 20 +++++++++++++++++++-
- 2 files changed, 29 insertions(+), 4 deletions(-)
+ include/linux/mmap_lock.h | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 8410c3052148..62e413f84011 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -480,9 +480,16 @@ struct anon_vma_name {
- struct vm_area_struct {
- 	/* The first cache line has the info for VMA tree walking. */
+diff --git a/include/linux/mmap_lock.h b/include/linux/mmap_lock.h
+index 96e113e23d04..e49ba91bb1f0 100644
+--- a/include/linux/mmap_lock.h
++++ b/include/linux/mmap_lock.h
+@@ -60,6 +60,18 @@ static inline void __mmap_lock_trace_released(struct mm_struct *mm, bool write)
  
--	unsigned long vm_start;		/* Our start address within vm_mm. */
--	unsigned long vm_end;		/* The first byte after our end address
--					   within vm_mm. */
-+	union {
-+		struct {
-+			/* VMA covers [vm_start; vm_end) addresses within mm */
-+			unsigned long vm_start;
-+			unsigned long vm_end;
-+		};
-+#ifdef CONFIG_PER_VMA_LOCK
-+		struct rcu_head vm_rcu;	/* Used for deferred freeing. */
-+#endif
-+	};
+ #endif /* CONFIG_TRACING */
  
- 	struct mm_struct *vm_mm;	/* The address space we belong to. */
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 5f23d5e03362..314d51eb91da 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -479,12 +479,30 @@ struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
- 	return new;
- }
- 
--void vm_area_free(struct vm_area_struct *vma)
-+static void __vm_area_free(struct vm_area_struct *vma)
- {
- 	free_anon_vma_name(vma);
- 	kmem_cache_free(vm_area_cachep, vma);
- }
- 
-+#ifdef CONFIG_PER_VMA_LOCK
-+static void vm_area_free_rcu_cb(struct rcu_head *head)
++static inline void mmap_assert_locked(struct mm_struct *mm)
 +{
-+	struct vm_area_struct *vma = container_of(head, struct vm_area_struct,
-+						  vm_rcu);
-+	__vm_area_free(vma);
-+}
-+#endif
-+
-+void vm_area_free(struct vm_area_struct *vma)
-+{
-+#ifdef CONFIG_PER_VMA_LOCK
-+	call_rcu(&vma->vm_rcu, vm_area_free_rcu_cb);
-+#else
-+	__vm_area_free(vma);
-+#endif
++	lockdep_assert_held(&mm->mmap_lock);
++	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
 +}
 +
- static void account_kernel_stack(struct task_struct *tsk, int account)
++static inline void mmap_assert_write_locked(struct mm_struct *mm)
++{
++	lockdep_assert_held_write(&mm->mmap_lock);
++	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
++}
++
+ static inline void mmap_init_lock(struct mm_struct *mm)
  {
- 	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
+ 	init_rwsem(&mm->mmap_lock);
+@@ -150,18 +162,6 @@ static inline void mmap_read_unlock_non_owner(struct mm_struct *mm)
+ 	up_read_non_owner(&mm->mmap_lock);
+ }
+ 
+-static inline void mmap_assert_locked(struct mm_struct *mm)
+-{
+-	lockdep_assert_held(&mm->mmap_lock);
+-	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
+-}
+-
+-static inline void mmap_assert_write_locked(struct mm_struct *mm)
+-{
+-	lockdep_assert_held_write(&mm->mmap_lock);
+-	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
+-}
+-
+ static inline int mmap_lock_is_contended(struct mm_struct *mm)
+ {
+ 	return rwsem_is_contended(&mm->mmap_lock);
 -- 
 2.39.1
 
