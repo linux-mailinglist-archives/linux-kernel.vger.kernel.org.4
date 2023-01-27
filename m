@@ -2,121 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9381567E89E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A5767E8A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233863AbjA0OuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:50:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
+        id S233925AbjA0Oup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjA0OuE (ORCPT
+        with ESMTP id S231710AbjA0Ouk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:50:04 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDAB2449D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:50:03 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id x10so4916759edd.10
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:50:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0ZPG9Z5Pk+99+CAtPa4G8jXmIilkOFP59E89fWS9Tno=;
-        b=tgjPvxh/pJfAXMdziXyEeEF9U6sLvikVD18AyVQeSqbni1jNMdiVXGmXJwb8BYq7o/
-         iS6c2stGPYd5uv00n+c1TtHLW0RvvXj3AHE5B7g0YCL+yF4uaDjorHDH4jc0Q2KLXbXP
-         IYpJcBIsM5Y1kW3/j4eagcFg7s9OOAT4FhUtd3+vUJYK7JyBCrSKCkUozzQjwtQqRJXK
-         cSwNX5brhxox/d1ORN4PhGD2yfdMlhKpNScw4qabnrJmzaHEKX528G8o4PkVMlr98fXx
-         6/u8aaXQ0E0gTiTr3bCFKS9GXf5nt78rJiEz8sgT5haYhBNOK6s7LNH8Jwp/xoI8uInW
-         2fUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ZPG9Z5Pk+99+CAtPa4G8jXmIilkOFP59E89fWS9Tno=;
-        b=HJDq3mIEZVExUvcZagw4/YwtH8Rl5A9/2skL3eB4lfbgo5wdaRO3GLJtnhRyGSsZM2
-         0Y0EF9zgpqIy9cI8PFaE11JYCJGfmWIIQLkjl3zT06Oho6g8f4PnYG4bv31B4Gt741DY
-         99XpTgWuXLPLeA0FAopuB/htLpSm0YxnwsHmR4eGsNft2CZWU41dc7ZFh8TXIDAd+34v
-         VjNATU7VmIAa7/yOiERH9vAohinW/1SIJdztA72STl3FDX4FYFdkvT7jvPLDgNaiTAEE
-         RdQYfcboRQ8lbKYfNIBUg6zH4A7NRg/enVuIKpqG0z1kHm4g8l6P183NAaKJt8YxiFSN
-         IIcw==
-X-Gm-Message-State: AFqh2konQ4sKq6fPVifm9SHxIQpQ1mgnDjxKodTqVDtz4UUCN2x5aI4w
-        x9go8/2QwD4yRPF3DqDpSlb+Bw==
-X-Google-Smtp-Source: AMrXdXvraQZzNrnRPnzCeg3q9+hqR7m0LyKh+Wfqcowzj33Bm+AtmyN6Ks68Us/hw/fqTlwk090EDQ==
-X-Received: by 2002:a05:6402:159:b0:49d:a87f:ba7b with SMTP id s25-20020a056402015900b0049da87fba7bmr40539457edu.39.1674831002335;
-        Fri, 27 Jan 2023 06:50:02 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id y8-20020a056402134800b004610899742asm2410252edw.13.2023.01.27.06.49.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 06:50:01 -0800 (PST)
-Message-ID: <27878e7c-b345-06e9-6e69-e9ac397a9ec1@linaro.org>
-Date:   Fri, 27 Jan 2023 15:49:58 +0100
+        Fri, 27 Jan 2023 09:50:40 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDBC449D;
+        Fri, 27 Jan 2023 06:50:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674831039; x=1706367039;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JuwPbT8+dmegb/xN4G0cZQNbiBljZvTVwrqhKevCoq8=;
+  b=BzKks688lGIepGc3EaBaKRbDVjVu7pHCSWbp1R9+3wF9sKHIwq1U4FV8
+   euLoFg8Bjx373q1RjFjMwwwpHzocbeIQ4AD7qdNDcLqIvlDr7E9vgYNTw
+   JeWYKvgk2TaIOSTLsti8zdd7s39FqHlj6jsOdhR2JAbtyL6jrgaTujdTB
+   4bWv29n4MqjokDeeP7Xw2Dct96rrNA9ctsu5fL3WYmf0DVC8F78XJxLBW
+   f41o25Bt09m9dDTKF983oJLQxaI3kJVfZqucY/UVx3ZnRjL7ajJ9btWRR
+   R5oy7tFKuX4ZQZuYCTThS39mzkU0Y7cfit0cw2S+xwldE9ve5lGhkqoDP
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="315052611"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="315052611"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 06:50:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="693740944"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="693740944"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 27 Jan 2023 06:50:36 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pLQ3m-00G0Zg-36;
+        Fri, 27 Jan 2023 16:50:34 +0200
+Date:   Fri, 27 Jan 2023 16:50:34 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v3 2/2] kbuild: make W=1 warn files that are tracked but
+ ignored by git
+Message-ID: <Y9PkupqarlpLbdm+@smile.fi.intel.com>
+References: <20221229074310.906556-1-masahiroy@kernel.org>
+ <20221229074310.906556-2-masahiroy@kernel.org>
+ <Y9PQxCTJGTRU1cuE@smile.fi.intel.com>
+ <CAK7LNASJ6j7XEZ-poS+Qq+8nZ5iztLTuTSgkr+fMka7HYH8ekQ@mail.gmail.com>
+ <Y9PioQHu2ShZ2veo@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2] soc: qcom: llcc: Fix slice configuration values for
- SC8280XP
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Johan Hovold <johan@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20230127144724.1292580-1-abel.vesa@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230127144724.1292580-1-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9PioQHu2ShZ2veo@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 27, 2023 at 04:41:37PM +0200, Andy Shevchenko wrote:
+> On Fri, Jan 27, 2023 at 11:31:07PM +0900, Masahiro Yamada wrote:
+> > On Fri, Jan 27, 2023 at 10:25 PM Andy Shevchenko
+> > <andriy.shevchenko@intel.com> wrote:
+> > >
+> > > On Thu, Dec 29, 2022 at 04:43:10PM +0900, Masahiro Yamada wrote:
+> > > > The top .gitignore comments about how to detect files breaking
+> > > > .gitignore rules, but people rarely care about it.
+> > > >
+> > > > Add a new W=1 warning to detect files that are tracked but ignored by
+> > > > git. If git is not installed or the source tree is not tracked by git
+> > > > at all, this script does not print anything.
+> > > >
+> > > > Running it on v6.2-rc1 detected the following:
+> > >
+> > > Since patch was published there is no sign it was ever meet Linux Next.
+> > > What's the plan?
+> > 
+> > Oh?
+> 
+> Sorry, my mistake. I need to understand why these patches do not fix
+> the issue I have.
+
+OK, after carefully reading the commit message it's actually the culprit of
+the warnings I have.
+
+So, it seems we need to wait maintainers / developers of the respective code
+to go and fix this. Is it your intention?
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-On 27.01.2023 15:47, Abel Vesa wrote:
-> These new values are now based on the latest LLCC SC table.
-> 
-> Fixes: ec69dfbdc426 ("soc: qcom: llcc: Add sc8180x and sc8280xp configurations")
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-I can't verify this, but it looks sound so:
-
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> 
-> The v1 is here:
-> https://lore.kernel.org/all/20230126171636.2319496-1-abel.vesa@linaro.org/
-> 
-> Changes since v1:
->  * dropped the LLCC_GPU and LLCC_WRCACHE max_cap changes
->  * took the new values from documentatio this time rather than
->    downstream kernel
-> 
->  drivers/soc/qcom/llcc-qcom.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-> index 23ce2f78c4ed..26efe12012a0 100644
-> --- a/drivers/soc/qcom/llcc-qcom.c
-> +++ b/drivers/soc/qcom/llcc-qcom.c
-> @@ -191,9 +191,9 @@ static const struct llcc_slice_config sc8280xp_data[] = {
->  	{ LLCC_CVP,      28, 512,  3, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
->  	{ LLCC_APTCM,    30, 1024, 3, 1, 0x0,   0x1, 1, 0, 0, 1, 0, 0 },
->  	{ LLCC_WRCACHE,  31, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> -	{ LLCC_CVPFW,    32, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> -	{ LLCC_CPUSS1,   33, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> -	{ LLCC_CPUHWT,   36, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> +	{ LLCC_CVPFW,    17, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> +	{ LLCC_CPUSS1,   3, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> +	{ LLCC_CPUHWT,   5, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
->  };
->  
->  static const struct llcc_slice_config sdm845_data[] =  {
