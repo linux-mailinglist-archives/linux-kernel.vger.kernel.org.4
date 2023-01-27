@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EF367EEA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FC567EEAD
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbjA0Tpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 14:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S232043AbjA0Tph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbjA0ToH (ORCPT
+        with ESMTP id S231892AbjA0ToH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 Jan 2023 14:44:07 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A505CD1A
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:43:09 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id x8-20020a25e008000000b007cb4f1e3e57so1753366ybg.8
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4103E2E811
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:43:10 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-50660dd3263so65585197b3.19
         for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:43:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtbb/rgJDVPG5hb8ydKzjEL35WMZYcFrpyL4j03oF8s=;
-        b=GSbfUJd90yi2xMLpxJwkNIQoO7AYaRuo1p0W3egBrsgFnTlql/QObCOWtQyWcyCJri
-         L9IkPEewPotUja2mT2dWXCpgA9vVmlCVPbr2KFEVViPcTyej+SHFX8+fhAEaOP6xtrM/
-         x5eCKOKsLW06Glc5jxntDrg/hIgANLyaiKO4UzofC0FOHh/fDzJT0Gg9GuJf/nEgmEZV
-         hix6GjSSYXSWndo4QypjFazRowiaazjUscTvm2uHMbtPJDABgUnEX51b4PI7vURt3LgP
-         X4xLvpH0mH+5Sv/7D+0hQE/rAXv1nGKdGusu8zdXbWRFOMqJp4iPgA6p21w37iQT/eTP
-         bctw==
+        bh=QTC+ocJD/ZK0d8AWah1kQLEh3QM8J68abwl+vLpX/MY=;
+        b=mU8gu/pWf6zIsQFo9qZJmzO+C9Rz2zywIzJAt0hiLsBb0sfMScn0ga1WT0lJP4+cuU
+         jnlE49/hYrnAMYh/RLEYzocL5Jy7mfCziMb33lJyjegHt186LkbV/WCwUSBxzV0FGK1I
+         xrqhc33jx9MJLtdss02+APSdeRf2XUnFG09IUKfXCIr+hkTGBQo7qLvcD8/EZZarD0c6
+         9RiTDx0vtERha59paJtaKyAUCno0Vzl4l7lvqpJzE2nTjhpBkjOXcTvShnV68JU8Wm5n
+         IoRxYa+gg9A7UVOaBxUJpIYlD0HzhsBk7iegMRGVNF5IQVYNK1FSZGz91UjWgsue8k5N
+         kYLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtbb/rgJDVPG5hb8ydKzjEL35WMZYcFrpyL4j03oF8s=;
-        b=qOUIpBPL+rpft3hZySD7KKTVnepWMqlG6hLPEcKmV4cggdRv1DCq+7V1plUbCs951X
-         lxMH/szkt80Br8JxeG/hL0bKBtnz+4Box8316nGao3F1fjd8lEUK6ofTduGEO1YctdHS
-         ejvqbRHp/TIV1v5Q+Y2zmBbFzAG4QwyhrGqUObzpVIDH8EeMjkhYzAA6rZGeS/yA+JBc
-         ggcv7ztumPD6pY+APTxeGzXS2QpTmAJjOqmhtZuLAZnWLN7He9ZsbLfSZO0lfcYZeC1a
-         NKMWQh7o2pLJ9oL98hwmBqsiH5GimfUl5sNpxN1iOqz//I99LkjJt4JRNxQV2DecaMl4
-         oMSw==
-X-Gm-Message-State: AFqh2kqfZfJYOvJouHXBZLzvGYCzq190xmj8L7HZdkMWzzivaLCejg0S
-        KEZOYTGRFj2I+TAVWWInPflYWhwxsJM=
-X-Google-Smtp-Source: AMrXdXszwUWrk3+ezT3vpCagEl0mvWZa9sEHax26SYGf7QapJl4fBzpxwL0/6TcVCB7ktvgIaczCkSx6r1s=
+        bh=QTC+ocJD/ZK0d8AWah1kQLEh3QM8J68abwl+vLpX/MY=;
+        b=n9nUVyn4N6fMDpHmkxC+XdURepWGHSxPuHIFb3iKjAdaDV6xGuNdCfPfgGkiTDt66J
+         wZJqzfJZU6i4HdFuWDrywN9Zj5miz93KzTq6Tqt9As08EMSG5T5WyWf0c0vj52fqVrGp
+         kOhOLZjJ1KwV3+NhZIcTHtHfumls35Wizc3IGJBg79AgWTFugIo9rzq+QY+Cc85/9GF6
+         dOKEB7Pf7bmz+q1Ounfx5XkCmKIkksfhTtKEWzUUYdV/PAS0qbpTfPPJXZztpBZ+FIB2
+         W4HH0glsLr5jySTjGCggSCeDtl+9LfA+6Qqs0YPZ/eb4oaOTVFvOokhfClkPlEmBla2U
+         Y4nA==
+X-Gm-Message-State: AO0yUKVa6UcDtteJJQ+yq6F6KSQhUaXi8ZiuIUcwnAZK1WR2DKjLHKol
+        tXa82CvKE247czvBGnQ+3zTQ9QZpE7w=
+X-Google-Smtp-Source: AK7set93uG4w1kFwIB1zyvlDAWxZcHXpTslQnEHpzoDHLwlIEt0PkMVZGLSp9rtobNPjvtDDJk1UuyFV7ts=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:4e19:be9:c5d0:8483])
- (user=surenb job=sendgmr) by 2002:a0d:fc86:0:b0:4db:3ac0:78a3 with SMTP id
- m128-20020a0dfc86000000b004db3ac078a3mr5702708ywf.266.1674848538548; Fri, 27
- Jan 2023 11:42:18 -0800 (PST)
-Date:   Fri, 27 Jan 2023 11:41:04 -0800
+ (user=surenb job=sendgmr) by 2002:a25:e705:0:b0:80b:bdc5:5060 with SMTP id
+ e5-20020a25e705000000b0080bbdc55060mr930533ybh.27.1674848540634; Fri, 27 Jan
+ 2023 11:42:20 -0800 (PST)
+Date:   Fri, 27 Jan 2023 11:41:05 -0800
 In-Reply-To: <20230127194110.533103-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230127194110.533103-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230127194110.533103-28-surenb@google.com>
-Subject: [PATCH v2 27/33] mm: prevent userfaults to be handled under per-vma lock
+Message-ID: <20230127194110.533103-29-surenb@google.com>
+Subject: [PATCH v2 28/33] mm: introduce per-VMA lock statistics
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -84,36 +84,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to the possibility of handle_userfault dropping mmap_lock, avoid fault
-handling under VMA lock and retry holding mmap_lock. This can be handled
-more gracefully in the future.
+Add a new CONFIG_PER_VMA_LOCK_STATS config option to dump extra
+statistics about handling page fault under VMA lock.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Suggested-by: Peter Xu <peterx@redhat.com>
 ---
- mm/memory.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ include/linux/vm_event_item.h | 6 ++++++
+ include/linux/vmstat.h        | 6 ++++++
+ mm/Kconfig.debug              | 7 +++++++
+ mm/vmstat.c                   | 6 ++++++
+ 4 files changed, 25 insertions(+)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 33ecc850d3cb..55582c6fa2fd 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5256,6 +5256,15 @@ struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
- 	if (!vma_start_read(vma))
- 		goto inval;
+diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
+index 7f5d1caf5890..8abfa1240040 100644
+--- a/include/linux/vm_event_item.h
++++ b/include/linux/vm_event_item.h
+@@ -149,6 +149,12 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
+ #ifdef CONFIG_X86
+ 		DIRECT_MAP_LEVEL2_SPLIT,
+ 		DIRECT_MAP_LEVEL3_SPLIT,
++#endif
++#ifdef CONFIG_PER_VMA_LOCK_STATS
++		VMA_LOCK_SUCCESS,
++		VMA_LOCK_ABORT,
++		VMA_LOCK_RETRY,
++		VMA_LOCK_MISS,
+ #endif
+ 		NR_VM_EVENT_ITEMS
+ };
+diff --git a/include/linux/vmstat.h b/include/linux/vmstat.h
+index 19cf5b6892ce..fed855bae6d8 100644
+--- a/include/linux/vmstat.h
++++ b/include/linux/vmstat.h
+@@ -125,6 +125,12 @@ static inline void vm_events_fold_cpu(int cpu)
+ #define count_vm_tlb_events(x, y) do { (void)(y); } while (0)
+ #endif
  
-+	/*
-+	 * Due to the possibility of userfault handler dropping mmap_lock, avoid
-+	 * it for now and fall back to page fault handling under mmap_lock.
-+	 */
-+	if (userfaultfd_armed(vma)) {
-+		vma_end_read(vma);
-+		goto inval;
-+	}
++#ifdef CONFIG_PER_VMA_LOCK_STATS
++#define count_vm_vma_lock_event(x) count_vm_event(x)
++#else
++#define count_vm_vma_lock_event(x) do {} while (0)
++#endif
 +
- 	/* Check since vm_start/vm_end might change before we lock the VMA */
- 	if (unlikely(address < vma->vm_start || address >= vma->vm_end)) {
- 		vma_end_read(vma);
+ #define __count_zid_vm_events(item, zid, delta) \
+ 	__count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+ 
+diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
+index 9191897e76af..4965a7333a3f 100644
+--- a/mm/Kconfig.debug
++++ b/mm/Kconfig.debug
+@@ -278,3 +278,10 @@ config DEBUG_KMEMLEAK_AUTO_SCAN
+ 	  memory leaks.
+ 
+ 	  If unsure, say Y.
++
++config PER_VMA_LOCK_STATS
++	bool "Statistics for per-vma locks"
++	depends on PER_VMA_LOCK
++	default y
++	help
++	  Statistics for per-vma locks.
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index 1ea6a5ce1c41..4f1089a1860e 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -1399,6 +1399,12 @@ const char * const vmstat_text[] = {
+ 	"direct_map_level2_splits",
+ 	"direct_map_level3_splits",
+ #endif
++#ifdef CONFIG_PER_VMA_LOCK_STATS
++	"vma_lock_success",
++	"vma_lock_abort",
++	"vma_lock_retry",
++	"vma_lock_miss",
++#endif
+ #endif /* CONFIG_VM_EVENT_COUNTERS || CONFIG_MEMCG */
+ };
+ #endif /* CONFIG_PROC_FS || CONFIG_SYSFS || CONFIG_NUMA || CONFIG_MEMCG */
 -- 
 2.39.1
 
