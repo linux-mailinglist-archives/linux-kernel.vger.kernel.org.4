@@ -2,189 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71D067F0A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5332967F0AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbjA0Vs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S229496AbjA0Vw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:52:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbjA0VsZ (ORCPT
+        with ESMTP id S231611AbjA0Vw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:48:25 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EA179097
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:48:20 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id k16so4371538wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:48:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=03i7qT/bOEhlhB476GbreCqcdErHUJCrrgWy4C2d7cc=;
-        b=qwtgCYUpV5Fv3GJ7CPN54R+GV1pSzXNmg118RZuZ5+V3wmeMdFLMx9orn748vKn4CU
-         KqcNpqTsyr2vf+FumPwdV3wdGqnGrov6/G7bLj401OU4xYhVF8K5Zn5yTqBd5qI/mVOW
-         9K+FGBQqgqMVIU8I71TOqSii8D1tfUvp+aN+N/bYncKoZrDGJWM61KDzTx43Fj3NKKsu
-         fQZyvteJuyS1QMjO+/5TYhjrvcYhW9fM6tkWGtj1dgSPqPjtmsVzBvTPAHrYbLpGqqbT
-         3IDa5O4Dw7objupsG0ztBjjhH2l55NM68MtRqpRxCuHTzuUNBS2YWs5XS/S16Ae/TEaI
-         1y6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=03i7qT/bOEhlhB476GbreCqcdErHUJCrrgWy4C2d7cc=;
-        b=1kI4Y3XNiU2qhBHc1rjpwxS8tE8pzqmb+gxQz4hTc+0nLZ/bPvZXc9v9mKrWIlk8JH
-         VcrTmMWvUYEJFg4y69f0mrEE8rvqfGCa8adrfktkTMppgfz1Bnf6FBv5NRCKliT0l/Xz
-         joCdLbgWdwYzaSgBdVmXB+EN09kWFRKBScqcqDAFUHHjfu03wVDUjvIztsChVkKF6wDe
-         OMXhTPRbZK/PLSaIYWDdaK4hJfCKMlnyeVsNtEUDRxM5aWftCj8x0baCI0RlRd0POc3j
-         65svmysfhDu+5F83BAR5Un3wMWNO+z+D/kWm+8aU1Ejn2ud8s39LeuIxb8JfU1evqQGe
-         5WzQ==
-X-Gm-Message-State: AFqh2kpKBJkRVWw6z0zkZSXUaz9LSo78fHqHDf2ATJTMZmq9iEgjPxPe
-        voKWqo+u1aR6ssacHYwwpK/K0w==
-X-Google-Smtp-Source: AMrXdXttD4LDn8SoPtg9fpxJbj18KNz1xRiz0VNsCXe6vbbssiJrZtQlVrv7yNq86Xr/VbufC7OnxQ==
-X-Received: by 2002:a05:600c:1d05:b0:3d2:3be4:2d9a with SMTP id l5-20020a05600c1d0500b003d23be42d9amr39759623wms.20.1674856099257;
-        Fri, 27 Jan 2023 13:48:19 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id e19-20020a05600c439300b003cfd4e6400csm5403705wmn.19.2023.01.27.13.48.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 13:48:18 -0800 (PST)
-Message-ID: <eb3b9439-172b-daea-8f0f-53c8fe7648f9@linaro.org>
-Date:   Fri, 27 Jan 2023 22:48:17 +0100
+        Fri, 27 Jan 2023 16:52:57 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FB4126E3;
+        Fri, 27 Jan 2023 13:52:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674856371; x=1706392371;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9Ii69Mw+ITtCryrVzceNJaInNNbxTdiKPALVlpnKbxQ=;
+  b=XFPKmMzzNIuVcBOniXO0gyo+vU5RrngZfQNvUmlLJo/aEN87SMMYJHKI
+   f9eHP0yGjBDaCi5bwvIxG1PCyh/LD8saF/HdsAEfZQC+Sdefb+vpiGVRB
+   +gPQOzcj58xrAzjcmtwo3W3XMZRS0Lsza4X8dcqZbKpeWXFCqL1czVyjU
+   zmAwlN/xh4cNz09W2fzbtVheAz8FqHLZ2Np+UR4P6qr6ts4u6h1pbQrC/
+   yjjR3k9YhVZNIDkLr/YWY9Uo+HmhW9sCTNBOqPmR6P+c/7ZDDPtvzEh7F
+   Ppz1MjMuESFO3gE8JYrook+T1x3JOC7BXldlbkAVi6DpVy61ENi2F+PfO
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="389581092"
+X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
+   d="scan'208";a="389581092"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 13:52:49 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="693858269"
+X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
+   d="scan'208";a="693858269"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.161.50])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 13:52:49 -0800
+Date:   Fri, 27 Jan 2023 13:52:47 -0800
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v5 3/5] cxl/memdev: Add trigger_poison_list sysfs
+ attribute
+Message-ID: <Y9RHr0kQqfLiT3Cq@aschofie-mobl2>
+References: <cover.1674070170.git.alison.schofield@intel.com>
+ <fc1a2f51834888c2ea585efb0b4fa41cd251e52d.1674070170.git.alison.schofield@intel.com>
+ <63d429435984f_3a36e5294b2@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v9 2/5] thermal: mediatek: control buffer enablement
- tweaks
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Michael Kao <michael.kao@mediatek.com>
-References: <20221018-up-i350-thermal-bringup-v9-0-55a1ae14af74@baylibre.com>
- <20221018-up-i350-thermal-bringup-v9-2-55a1ae14af74@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221018-up-i350-thermal-bringup-v9-2-55a1ae14af74@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63d429435984f_3a36e5294b2@dwillia2-xfh.jf.intel.com.notmuch>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 16:44, Amjad Ouled-Ameur wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Fri, Jan 27, 2023 at 11:42:59AM -0800, Dan Williams wrote:
+> alison.schofield@ wrote:
+> > From: Alison Schofield <alison.schofield@intel.com>
+> > 
+> > When a boolean 'true' is written to this attribute the memdev driver
+> > retrieves the poison list from the device. The list consists of
+> > addresses that are poisoned, or would result in poison if accessed,
+> > and the source of the poison. This attribute is only visible for
+> > devices supporting the capability. The retrieved errors are logged
+> > as kernel trace events with the label 'cxl_poison'.
+> > 
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> > ---
+> >  Documentation/ABI/testing/sysfs-bus-cxl | 14 ++++++++
+> >  drivers/cxl/core/memdev.c               | 45 +++++++++++++++++++++++++
+> >  drivers/cxl/cxlmem.h                    |  2 +-
+> >  3 files changed, 60 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
+> > index 8494ef27e8d2..df40ed09ea67 100644
+> > --- a/Documentation/ABI/testing/sysfs-bus-cxl
+> > +++ b/Documentation/ABI/testing/sysfs-bus-cxl
+> > @@ -388,3 +388,17 @@ Description:
+> >  		1), and checks that the hardware accepts the commit request.
+> >  		Reading this value indicates whether the region is committed or
+> >  		not.
+> > +
+> > +
+> > +What:		/sys/bus/cxl/devices/memX/trigger_poison_list
+> > +Date:		November, 2022
+> > +KernelVersion:	v6.2
+> > +Contact:	linux-cxl@vger.kernel.org
+> > +Description:
+> > +		(WO) When a boolean 'true' is written to this attribute the
+> > +		memdev driver retrieves the poison list from the device. The
+> > +		list consists of addresses that are poisoned, or would result
+> > +		in poison if accessed, and the source of the poison. This
+> > +		attribute is only visible for devices supporting the
+> > +		capability. The retrieved errors are logged as kernel
+> > +		trace events with the label 'cxl_poison'.
+> > diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+> > index a74a93310d26..e0af7e9c9989 100644
+> > --- a/drivers/cxl/core/memdev.c
+> > +++ b/drivers/cxl/core/memdev.c
+> > @@ -106,12 +106,49 @@ static ssize_t numa_node_show(struct device *dev, struct device_attribute *attr,
+> >  }
+> >  static DEVICE_ATTR_RO(numa_node);
+> >  
+> > +static ssize_t trigger_poison_list_store(struct device *dev,
+> > +					 struct device_attribute *attr,
+> > +					 const char *buf, size_t len)
+> > +{
+> > +	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
+> > +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+> > +	u64 offset, length;
+> > +	bool tmp;
+> > +	int rc;
+> > +
+> > +	if (kstrtobool(buf, &tmp))
+> > +		return -EINVAL;
 > 
-> Add logic in order to be able to turn on the control buffer on MT8365.
-> This change now allows to have control buffer support for MTK_THERMAL_V1,
-> and it allows to define the register offset, and mask used to enable it.
+> Wait, where's the check for "if (tmp)"? Otherwise I can do "echo N >
+> trigger_poison_list" and it will still run. Should probably
+> s/tmp/trigger/.
+
+Got it.
+(I guess I was too loose w the trigger, thinking you write anything to
+it, I'm triggering.)
 > 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->   drivers/thermal/mtk_thermal.c | 25 ++++++++++++++++++-------
->   1 file changed, 18 insertions(+), 7 deletions(-)
+> > +
+> > +	/* CXL 3.0 Spec 8.2.9.8.4.1 Separate pmem and ram poison requests */
+> > +	if (resource_size(&cxlds->pmem_res)) {
+> > +		offset = cxlds->pmem_res.start;
+> > +		length = resource_size(&cxlds->pmem_res);
+> > +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
 > 
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-> index 8440692e3890..d8ddceb75372 100644
-> --- a/drivers/thermal/mtk_thermal.c
-> +++ b/drivers/thermal/mtk_thermal.c
-> @@ -271,6 +271,9 @@ struct mtk_thermal_data {
->   	bool need_switch_bank;
->   	struct thermal_bank_cfg bank_data[MAX_NUM_ZONES];
->   	enum mtk_thermal_version version;
-> +	u32 apmixed_buffer_ctl_reg;
-> +	u32 apmixed_buffer_ctl_mask;
-> +	u32 apmixed_buffer_ctl_set;
->   };
->   
->   struct mtk_thermal {
-> @@ -514,6 +517,9 @@ static const struct mtk_thermal_data mt7622_thermal_data = {
->   	.adcpnp = mt7622_adcpnp,
->   	.sensor_mux_values = mt7622_mux_values,
->   	.version = MTK_THERMAL_V2,
-> +	.apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON1,
-> +	.apmixed_buffer_ctl_mask = GENMASK(31, 6) | BIT(3),
-> +	.apmixed_buffer_ctl_set = BIT(0),
->   };
->   
->   /*
-> @@ -963,14 +969,18 @@ static const struct of_device_id mtk_thermal_of_match[] = {
->   };
->   MODULE_DEVICE_TABLE(of, mtk_thermal_of_match);
->   
-> -static void mtk_thermal_turn_on_buffer(void __iomem *apmixed_base)
-> +static void mtk_thermal_turn_on_buffer(struct mtk_thermal *mt,
-> +				       void __iomem *apmixed_base)
->   {
-> -	int tmp;
-> +	u32 tmp;
-> +
-> +	if (!mt->conf->apmixed_buffer_ctl_reg)
-> +		return;
->   
-> -	tmp = readl(apmixed_base + APMIXED_SYS_TS_CON1);
-> -	tmp &= ~(0x37);
-> -	tmp |= 0x1;
-> -	writel(tmp, apmixed_base + APMIXED_SYS_TS_CON1);
-> +	tmp = readl(apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
-> +	tmp &= mt->conf->apmixed_buffer_ctl_mask;
-> +	tmp |= mt->conf->apmixed_buffer_ctl_set;
-> +	writel(tmp, apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
->   	udelay(200);
->   }
->   
-> @@ -1070,8 +1080,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   		goto err_disable_clk_auxadc;
->   	}
->   
-> +	mtk_thermal_turn_on_buffer(mt, apmixed_base);
-> +
->   	if (mt->conf->version == MTK_THERMAL_V2) {
-> -		mtk_thermal_turn_on_buffer(apmixed_base);
->   		mtk_thermal_release_periodic_ts(mt, auxadc_base);
->   	}
+> Ah now I see why the region information is not provided in the memdev
+> triggers. I think while the scan needs to be done on partition boundary
+> basis, like you have here, I think the region lookup needs to happen on
+> a per-record basis.
+> 
+> However, that's a significant architectural change, so I am going to
+> think out loud about the implications.
 
-This change conflicts with commit 4f2ee0aa2e706
+I'm thinking that adding region info to the trace event isn't starting
+here. That will be looked up when we log the event. Basically assuming
+assuming find regions memdev participates in, and look for which one
+maps this DPA.
 
-I fixed it with:
+> 
+> A site operator wants to know "is FRU (field-replaceable-unit) X bad,
+> and if so what's the damage?". In that report I expect they want to know
+> if poison impacts media that is allocated to a region (an imminent
+> danger) or is in free space (a problem for a later date). If the memdev
+> trigger does all the region lookup per record it provides that
+> information. Further if the memdev trigger reliably provides region
+> information it allows the region trigger ABI to be deleted. The region
+> trigger can be replaced in userspace with logic that does:
+> 
+>    set tracepoint filter to look for region_id == $region
+>    for endpoint decoder in $region
+>        trigger associated memdev
+> 
+> ...so I do think the arch change is worth it, but I am willing to hear
+> counter arguments.
 
--       if (mt->conf->version != MTK_THERMAL_V1) {
--               mtk_thermal_turn_on_buffer(apmixed_base);
-+       mtk_thermal_turn_on_buffer(apmixed_base);
-+
-+       if (mt->conf->version != MTK_THERMAL_V1)
-                 mtk_thermal_release_periodic_ts(mt, auxadc_base);
--       }
+My only counter argument was that we could let them have it both ways,
+but, simplifying and reducing code in kernel is good!
 
-Let me know if there is something wrong.
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
