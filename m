@@ -2,116 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A8967E67D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65C667E684
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234776AbjA0NVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S231512AbjA0NXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:23:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234827AbjA0NVJ (ORCPT
+        with ESMTP id S234149AbjA0NXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:21:09 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDD683958
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:20:56 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so5413379wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:20:56 -0800 (PST)
+        Fri, 27 Jan 2023 08:23:22 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D017D80148;
+        Fri, 27 Jan 2023 05:23:20 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id x5so1444694plr.2;
+        Fri, 27 Jan 2023 05:23:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Iw0lautMML9+B9oBLxXJ8thF9HPKzqCb+aG8qr+zu50=;
-        b=uXKcQwboXefuGg34DkvLPbnO42hDpxiN0i9AeKvmVXXjwlAnXHR4GiFOkhE5R6uyLk
-         lLGVldCh5cYb+LXp8lCEsaTAzPQdTZkCWraK5jm/CoCvG4G6ahz2+BOK49cjKOK5VrHz
-         s1dimII/1cH7RJQ6G/7DUJqlOKsm6LlrrrjbIPQQjnIBc4EnDeU/6TfofV8amZIorAlc
-         9qJ5a8SMefycA/vLSCcDLvZo3IAIhC8nuhLVG0pQc+SrjeUuyd6rQ+Z6bpBj5jfTnmLB
-         ySF38h8CY5sgcyW90AyzdHOz+576x7Sz648KFvpmx4zXuDF38UFwxImHehhLtRNj8bZg
-         oJGA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5j29kml6zIepJZzNZLhnsejuRvqVcZnRr54YcbRqQ4s=;
+        b=NAD/8CLetbneQ3aGVzaDGDWFro/8aJ2Y/tSZS1ISbz5SE2Vikv/Ho49ojlXLmKtdt4
+         yBBvYT2ZX5Pd8ja+Rct0Bifa6avxL3n8l4/5QvNAMOf+xX97YR0r41ZkDNiNRkNzUyfH
+         FhXGHiQtte0nX6akxLxU6+B5YPEn8RKHEGNEy5AEgoRBCcssc2g/MD5MRpy+KmHWX4Yq
+         BvxYgn6w3GisTfZnmzPjJ22aLGJ4ra8gB4uHNGxsuPhxSQArlQTNt/4JGJdR8+EiMbST
+         8S+LSK+RUpgHtN2rDI9Wdew1YbpTyTO/MmA6hAqIfT/lQUchyv/vO42sj0RSx7WWIkVq
+         BWmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Iw0lautMML9+B9oBLxXJ8thF9HPKzqCb+aG8qr+zu50=;
-        b=K1Y1fLsF2vut/h+fvOzJizYbVsh3PSgOP2QXn6bvbGyGMVrHw3+ig0QhFCfDAl98bO
-         r93fuGKT/lxiFtuoMJqrlhT6bOyVfKuZa8AM6lYsGapv7o+w4fCeCvFoKp2Z9gnMLyVg
-         tIL6d2zyNWsAd7ff3NbJvIE0+HPuyMTEMulWrcGBmtfLoGkJDlQoazrO976w14Y1yffZ
-         XhOu36BJDyv+0Jncq/U5gCh2mLiwuvRHZLfu26piUedZnbghX1GTvLSRx3lGhRaerzGN
-         oj+dH4qkrUEBzlhCtPcgxTnU1Vx90/WsYkUMSxjSBONg6vvOzWDAVYnhVSNpktwtIiA/
-         mj0g==
-X-Gm-Message-State: AFqh2kpsmmkBgm0MDnFQdkCEq7AFkfIQ6g1d96B38RaRZNxX+8s7Q5i7
-        NNAWYRy1ZaIW29Nkom57kBBhhA==
-X-Google-Smtp-Source: AMrXdXvdCH47nU7ML39r6l1guaL9tDkEaE32Ak6WDXsKPnrT6ag+MUHNn49hIMPBp5XqjlWMArP2iw==
-X-Received: by 2002:a05:600c:ad4:b0:3db:11d0:21e2 with SMTP id c20-20020a05600c0ad400b003db11d021e2mr36391836wmr.29.1674825655058;
-        Fri, 27 Jan 2023 05:20:55 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id bg6-20020a05600c3c8600b003db06493ee7sm8906473wmb.47.2023.01.27.05.20.54
+        bh=5j29kml6zIepJZzNZLhnsejuRvqVcZnRr54YcbRqQ4s=;
+        b=lYQkXEm+jPVs2aedQ7VZh9BCsRuK0p/jCejZJXXUfgh4LaEsI3vWVnyptgBWtP43MK
+         rMGNZTL91uPqrHmo6MN/gmNHZ2aGC51KMv2JTHr2ZSNhHT8smv2qrxLIFIuQ+trVI1cI
+         Ayr/FO7ElbGyzioSnMJGag40LrXQtbDOgVT06569bNGu+z0+e52ac6xAzL3ExsBxeiNn
+         ZcedVBc/d6vpXS2JAOEyzKsYr7B9bZY5jvwT2o8Un7qH6IehLS2kjrdLnFFy1UC7UcnV
+         9tcULD2GYngdgPvbYy2CpGShfZOe8uLopsjZEdSzHwI3qLpU3r2njO/M8L+8cJB0FyIm
+         cqQA==
+X-Gm-Message-State: AFqh2komGW7YL1M/rMDWDCaqGURoicjRovqXFpC4vhLgl7VGGLfnnH7p
+        xY4LANFAQBsoKy6MxKzYp90=
+X-Google-Smtp-Source: AMrXdXuwtBcwHIiFOeCERQG29bFr3M05M6JE3cAavhFEjLgrLSiHkxus/YImOBt8A4NHElncU9aujw==
+X-Received: by 2002:a17:902:7089:b0:194:6414:12db with SMTP id z9-20020a170902708900b00194641412dbmr37789473plk.56.1674825799976;
+        Fri, 27 Jan 2023 05:23:19 -0800 (PST)
+Received: from carrot.. (i223-217-149-217.s42.a014.ap.plala.or.jp. [223.217.149.217])
+        by smtp.gmail.com with ESMTPSA id jo8-20020a170903054800b001946a3f4d9csm2870264plb.38.2023.01.27.05.23.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 05:20:54 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Christian Hewitt <christianshewitt@gmail.com>
-In-Reply-To: <20230127103913.3386435-1-christianshewitt@gmail.com>
-References: <20230127103913.3386435-1-christianshewitt@gmail.com>
-Subject: Re: [PATCH] arm64: dts: meson: radxa-zero: allow usb otg mode
-Message-Id: <167482565422.1669662.8122640004261744864.b4-ty@linaro.org>
-Date:   Fri, 27 Jan 2023 14:20:54 +0100
+        Fri, 27 Jan 2023 05:23:19 -0800 (PST)
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-nilfs <linux-nilfs@vger.kernel.org>,
+        syzbot <syzbot+cbff7a52b6f99059e67f@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] nilfs2: prevent WARNING in nilfs_dat_commit_end()
+Date:   Fri, 27 Jan 2023 22:22:02 +0900
+Message-Id: <20230127132202.6083-1-konishi.ryusuke@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <000000000000154d2c05e9ec7df6@google.com>
+References: <000000000000154d2c05e9ec7df6@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+If nilfs2 reads a corrupted disk image and its DAT metadata file contains
+invalid lifetime data for a virtual block number, a kernel warning can be
+generated by the WARN_ON check in nilfs_dat_commit_end() and can panic
+if the kernel is booted with panic_on_warn.
 
-On Fri, 27 Jan 2023 10:39:13 +0000, Christian Hewitt wrote:
-> Setting dr_mode to "host" prevents otg which can be useful on a board
-> with limited connectivity options. So don't force host mode.
-> 
-> 
+This patch avoids the issue with a sanity check that treats it as an
+error.
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.3/arm64-dt)
+Since error return is not allowed in the execution phase of
+nilfs_dat_commit_end(), this inserts that sanity check in
+nilfs_dat_prepare_end(), which prepares for nilfs_dat_commit_end().
 
-[1/1] arm64: dts: meson: radxa-zero: allow usb otg mode
-      https://git.kernel.org/amlogic/c/ce43ea00b927805c1fd0450ccc9b4b6069e292c5
+As the error code, -EINVAL is returned to notify bmap layer of the
+metadata corruption.  When the bmap layer sees this code, it handles the
+abnormal situation and replaces the return code with -EIO as it should.
 
-These changes has been applied on the intermediate git tree [1].
+Link: https://lkml.kernel.org/r/000000000000154d2c05e9ec7df6@google.com
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Reported-by: syzbot+cbff7a52b6f99059e67f@syzkaller.appspotmail.com
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+---
+Andrew, please add this patch to the queue.  This fixes another
+WARN_ON hit in fs/nilfs2/dat.c for a corrupted disk image pattern.
 
-The v6.3/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
+Thanks,
+Ryusuke Konishi
 
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
+fs/nilfs2/dat.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
-
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
+diff --git a/fs/nilfs2/dat.c b/fs/nilfs2/dat.c
+index 1e7f653c1df7..9cf6ba58f585 100644
+--- a/fs/nilfs2/dat.c
++++ b/fs/nilfs2/dat.c
+@@ -158,6 +158,7 @@ void nilfs_dat_commit_start(struct inode *dat, struct nilfs_palloc_req *req,
+ int nilfs_dat_prepare_end(struct inode *dat, struct nilfs_palloc_req *req)
+ {
+ 	struct nilfs_dat_entry *entry;
++	__u64 start;
+ 	sector_t blocknr;
+ 	void *kaddr;
+ 	int ret;
+@@ -169,6 +170,7 @@ int nilfs_dat_prepare_end(struct inode *dat, struct nilfs_palloc_req *req)
+ 	kaddr = kmap_atomic(req->pr_entry_bh->b_page);
+ 	entry = nilfs_palloc_block_get_entry(dat, req->pr_entry_nr,
+ 					     req->pr_entry_bh, kaddr);
++	start = le64_to_cpu(entry->de_start);
+ 	blocknr = le64_to_cpu(entry->de_blocknr);
+ 	kunmap_atomic(kaddr);
+ 
+@@ -179,6 +181,15 @@ int nilfs_dat_prepare_end(struct inode *dat, struct nilfs_palloc_req *req)
+ 			return ret;
+ 		}
+ 	}
++	if (unlikely(start > nilfs_mdt_cno(dat))) {
++		nilfs_err(dat->i_sb,
++			  "vblocknr = %llu has abnormal lifetime: start cno (= %llu) > current cno (= %llu)",
++			  (unsigned long long)req->pr_entry_nr,
++			  (unsigned long long)start,
++			  (unsigned long long)nilfs_mdt_cno(dat));
++		nilfs_dat_abort_entry(dat, req);
++		return -EINVAL;
++	}
+ 
+ 	return 0;
+ }
 -- 
-Neil
+2.34.1
 
