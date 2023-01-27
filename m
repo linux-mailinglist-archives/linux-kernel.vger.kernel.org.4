@@ -2,111 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC2A67F100
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6532D67F102
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbjA0WPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:15:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
+        id S232741AbjA0WP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjA0WPM (ORCPT
+        with ESMTP id S232714AbjA0WPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:15:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191ED84FBC
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:15:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9F0CB8214D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 22:15:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 065FBC433D2;
-        Fri, 27 Jan 2023 22:15:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674857708;
-        bh=tYeVWVDqmrYCQ68BomdAu9i6GwFXBSSVooD9s632kl0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FcoP7OuX+aYmdJQtza1BnQZJTENkfGj2s/ORLK/+cRjT/Psyfu1W8AV4ydF3eNhC4
-         XXCAoj8GK47nhBs3IU+aL/uffgBty8u8nFWRAk4NG0CJ056LuvVKgN8ZBR+DwVcWMc
-         8F+CCJhb/Xt5iPcAdxyiydjRrWCjaAdwfMN/jUNq8C1ssKDlUQCcxeYdZCrmWk0xlf
-         zQj+nwBibCyeGIE3dc8O80I5MHFObt+w58qik5L5HMH0sajKK3BcP3YJYioNhqMi2E
-         cgGK+g2XhMMQPQ38zdz5a4NPM1OrVk5kQqCHUUJ+vQlBJf2xZkMWoAns3sWxacbMqu
-         9s56ZSw5PuR5w==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Oded Gabbay <ogabbay@kernel.org>, Dave Airlie <airlied@redhat.com>,
-        Melissa Wen <mwen@igalia.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] [v2] accel: fix CONFIG_DRM dependencies
-Date:   Fri, 27 Jan 2023 23:14:55 +0100
-Message-Id: <20230127221504.2522909-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Fri, 27 Jan 2023 17:15:23 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5669986E8D
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:15:21 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id b24-20020a17090a551800b0022beefa7a23so9964426pji.5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:15:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p1OM1KDXb9Qfz9gyDWmx+cdbCnJyOugwK6Di6FN+pM4=;
+        b=tknPbBbY/BuP9xKGpbiwIDE12BkTb/uGULXxa41kQhP3ug6i4muvEqVRAp+soJ++27
+         bpa1DX2Zl/s0Oe5ebh99rFixL1SBn0Z6EJJFzgUR5u99qsCW0kZTFGC0kAq5lQk5qQYx
+         /JVe/h9NM6W1IQuM9L5NCkNkKP3sVzVdgXTr5OgZGsM4+4VrGJYymmmY9Tcfk9TDjzac
+         ci3OT1TjgtdAa/bZjYi+YppIbRXdzroqth1BqZatRUJiuDEJD673/QGGy0IUtc/gyM/t
+         1jTqohB24syztLvDiH93nscjloxyZ68o4S3GbQov9gg/pQzm/H3B052ScnygVxpn5oSm
+         GK8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p1OM1KDXb9Qfz9gyDWmx+cdbCnJyOugwK6Di6FN+pM4=;
+        b=3cU9OfS48uukQnh2W9O7oPtfiL54M67FW6JYdtOcjACNDYE89G/muJLR0nXOTL/gLN
+         q9wqWq7RkI83BJeq0Ek4DYXRAPYIOlSzRzY6pPHqmhxM4v6nCThKvaX/EZa1kZJFgu2/
+         ptZj6PBQ4a5H3wttnIe+esAyxBb8cH/LnRUe3LYGrqAsQx2GXVLWi/q5/WppQHaT3TzE
+         7BNeljZxs8iLnQnau/UFmssPIaslnLshQc4k9Z3/iwseE9ABhBAqIJSwcTwUWMeyIu/l
+         tYmmpG9Q0oiHYvchJgx6i3Yw1z9M/TkIXCd6agxRoOE566D+ah7MN+66jg79PLUJBGkp
+         Ojuw==
+X-Gm-Message-State: AO0yUKWj9x4S2cmgo37vq1f/yQ60sIebD7D1CTISgx1jaRDlCZ3RwwYY
+        9eTjEGzX39+xGXdw1aQA+9TdAg==
+X-Google-Smtp-Source: AK7set/dfl3SMw9T0vaX3jTrYx4cah3xDIfPXHg+NIow16SNVI2DXH1eHSxqEkudoR+OqX6mAaqR8w==
+X-Received: by 2002:a05:6a20:c18c:b0:b8:e33c:f160 with SMTP id bg12-20020a056a20c18c00b000b8e33cf160mr171347pzb.0.1674857720691;
+        Fri, 27 Jan 2023 14:15:20 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c64-20020a624e43000000b00586fbbdf6e4sm3126948pfb.34.2023.01.27.14.15.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 14:15:19 -0800 (PST)
+Date:   Fri, 27 Jan 2023 22:15:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, like.xu.linux@gmail.com,
+        kan.liang@linux.intel.com, wei.w.wang@intel.com,
+        Like Xu <like.xu@linux.intel.com>
+Subject: Re: [PATCH v2 15/15] KVM: x86/cpuid: Advertise Arch LBR feature in
+ CPUID
+Message-ID: <Y9RM8ytJYLDIVMpq@google.com>
+References: <20221125040604.5051-1-weijiang.yang@intel.com>
+ <20221125040604.5051-16-weijiang.yang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221125040604.5051-16-weijiang.yang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Nov 24, 2022, Yang Weijiang wrote:
+> Add Arch LBR feature bit in CPU cap-mask to expose the feature.
+> Only max LBR depth is supported for guest, and it's consistent
+> with host Arch LBR settings.
+> 
+> Co-developed-by: Like Xu <like.xu@linux.intel.com>
+> Signed-off-by: Like Xu <like.xu@linux.intel.com>
+> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> ---
+>  arch/x86/kvm/cpuid.c | 36 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 35 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 85e3df6217af..60b3c591d462 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -134,6 +134,19 @@ static int kvm_check_cpuid(struct kvm_vcpu *vcpu,
+>  		if (vaddr_bits != 48 && vaddr_bits != 57 && vaddr_bits != 0)
+>  			return -EINVAL;
+>  	}
+> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR)) {
+> +		best = cpuid_entry2_find(entries, nent, 0x1c, 0);
+> +		if (best) {
+> +			unsigned int eax, ebx, ecx, edx;
+> +
+> +			/* Reject user-space CPUID if depth is different from host's.*/
+> +			cpuid_count(0x1c, 0, &eax, &ebx, &ecx, &edx);
+> +
+> +			if ((eax & 0xff) &&
+> +			    (best->eax & 0xff) != BIT(fls(eax & 0xff) - 1))
+> +				return -EINVAL;
+> +		}
+> +	}
 
-At the moment, accel drivers can be built-in even with CONFIG_DRM=m,
-but this causes a link failure:
+Drop this.  While I think everyone agrees that KVM's CPUID uAPI sucks, the status
+quo is to let userspace shoot itself in the foot.  I.e. disallow enabling LBRs
+with a "bad" config, but don't reject the ioctl().
 
-x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_dev_init':
-ivpu_drv.c:(.text+0x1535): undefined reference to `drmm_kmalloc'
-x86_64-linux-ld: ivpu_drv.c:(.text+0x1562): undefined reference to `drmm_kmalloc'
-x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_remove':
-ivpu_drv.c:(.text+0x1faa): undefined reference to `drm_dev_unregister'
-x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_probe':
-ivpu_drv.c:(.text+0x1fef): undefined reference to `__devm_drm_dev_alloc'
+>  
+>  	/*
+>  	 * Exposing dynamic xfeatures to the guest requires additional
+> @@ -652,7 +665,7 @@ void kvm_set_cpu_caps(void)
+>  		F(SPEC_CTRL_SSBD) | F(ARCH_CAPABILITIES) | F(INTEL_STIBP) |
+>  		F(MD_CLEAR) | F(AVX512_VP2INTERSECT) | F(FSRM) |
+>  		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16) |
+> -		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16)
+> +		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16) | F(ARCH_LBR)
 
-The problem is that DRM_ACCEL is a 'bool' symbol symbol, so driver that
-only depend on DRM_ACCEL but not also on DRM do not see the restriction
-to =m configs.
+As mentioned earlier, omit this and make it opt-in.
 
-To ensure that each accel driver has an implied dependency on CONFIG_DRM,
-enclose the entire Kconfig file in an if/endif check.
+>  	);
+>  
+>  	/* TSC_ADJUST and ARCH_CAPABILITIES are emulated in software. */
+> @@ -1074,6 +1087,27 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>  				goto out;
+>  		}
+>  		break;
+> +	/* Architectural LBR */
+> +	case 0x1c: {
+> +		u32 lbr_depth_mask = entry->eax & 0xff;
+> +
+> +		if (!lbr_depth_mask ||
+> +		    !kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR)) {
+> +			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+> +			break;
+> +		}
+> +		/*
+> +		 * KVM only exposes the maximum supported depth, which is the
+> +		 * fixed value used on the host side.
+> +		 * KVM doesn't allow VMM userspace to adjust LBR depth because
+> +		 * guest LBR emulation depends on the configuration of host LBR
+> +		 * driver.
+> +		 */
+> +		lbr_depth_mask = BIT((fls(lbr_depth_mask) - 1));
 
-Fixes: 8bf4889762a8 ("drivers/accel: define kconfig and register a new major")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: rearrage the DRM dependency rather than requiring DRM to be built-in
----
- drivers/accel/Kconfig | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+C'mon.  More unnecessary dependencies on perf using the max depth.
 
-diff --git a/drivers/accel/Kconfig b/drivers/accel/Kconfig
-index 834863902e16..c437206aa3f1 100644
---- a/drivers/accel/Kconfig
-+++ b/drivers/accel/Kconfig
-@@ -6,9 +6,10 @@
- # as, but not limited to, Machine-Learning and Deep-Learning acceleration
- # devices
- #
-+if DRM
-+
- menuconfig DRM_ACCEL
- 	bool "Compute Acceleration Framework"
--	depends on DRM
- 	help
- 	  Framework for device drivers of compute acceleration devices, such
- 	  as, but not limited to, Machine-Learning and Deep-Learning
-@@ -25,3 +26,5 @@ menuconfig DRM_ACCEL
- 
- source "drivers/accel/habanalabs/Kconfig"
- source "drivers/accel/ivpu/Kconfig"
-+
-+endif
--- 
-2.39.0
-
+> +		entry->eax &= ~0xff;
+> +		entry->eax |= lbr_depth_mask;
+> +		break;
+> +	}
+>  	/* Intel AMX TILE */
+>  	case 0x1d:
+>  		if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE)) {
+> -- 
+> 2.27.0
+> 
