@@ -2,51 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC65467E0BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15AD167E0C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbjA0Jvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S232960AbjA0Jwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:52:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjA0Jvq (ORCPT
+        with ESMTP id S229792AbjA0Jw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:51:46 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA87D2713;
-        Fri, 27 Jan 2023 01:51:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674813105; x=1706349105;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZWP6U/h1buqDvrZDQgJO3Y6rjFGk3hK7uUv26Hnc6SY=;
-  b=iG/mm3HDa6YzH977juVQVf4trYcEdd8jVS0WF3burG1WprMo9WQCWdPt
-   zagbVhQUsR9mR7/ell8Y3vYl+oQ41n8hsj7i9awshob4mvyyGMLp8crmj
-   oJ3S0DRuThF5x8uz8Kxz2qozBw0il417AGHIoYwkfHeZD8dtb+UTsmd9d
-   RcEZ38fnHMQpkveLcxhe5CgEgorJZNJeb/tHK6VeEbzASN2PotlTycrlK
-   aCAT3J/b5QPWeJt+VWUo5vBXwsMLi1OiH2zwhs79XD1r96LTEWXXVb5rt
-   7KzMZ0IqB3adllrPiYYyHwkSucUds7KX7yg8/3Ft4eZEPlu1nWjgnXmuV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="389428691"
-X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
-   d="scan'208";a="389428691"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 01:51:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="771520372"
-X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
-   d="scan'208";a="771520372"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 27 Jan 2023 01:51:26 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pLLOE-00Fu2l-0h;
-        Fri, 27 Jan 2023 11:51:22 +0200
-Date:   Fri, 27 Jan 2023 11:51:21 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fri, 27 Jan 2023 04:52:27 -0500
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3691C2713;
+        Fri, 27 Jan 2023 01:52:26 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id o5so3536748qtr.11;
+        Fri, 27 Jan 2023 01:52:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rcPSHtw8IRmQiplO2eV40srjU+RjNYjtCSWfS2dk4XE=;
+        b=R1GbwsKi2K+QrxKcvFvoI833NE3S8Dry7taEg3FMbkdMM7KD/9V1PMrLd4og23g6e0
+         3WgjPissVb+yrtHwN+Izq4ecmy+eh5wlENDUmaf1Z9yPOR7sHilz6QVXTNCz7DOwex69
+         dAHnkdYcnBdMwomyZTOmJxZumtuuhoVhz0V7XTDDVE9mFHFXXME8pKdVvPhzCfuUr0iC
+         cnfjxGtW+mmoI9ffJ5O59XmxLsV+bKIsu2Hguoq5slT4bdMm6H1yuTkVuJRVVlUSXxlQ
+         lzTeGHbaSyAwkrwIW23F5TDLwKhXIUhMXrhAzoTVNx03tFfPz+t0rLJOnE2LfvW5K8tq
+         boJw==
+X-Gm-Message-State: AFqh2komLGbl2mX85GalmcrXbMSs/LV5uATKYd8QAlyPrvXIAFkop9fh
+        YLXajhiM/79vCZP+gosr/QUHC76TZScBaA==
+X-Google-Smtp-Source: AMrXdXvlWxGCchkRGWxaENR5ex8IEBgdDcFt/5ILK6KbQUGjfXFd02fgVpDg8k7JEYtQ2HaAcZJMag==
+X-Received: by 2002:a05:622a:4015:b0:3b0:7755:ab80 with SMTP id cf21-20020a05622a401500b003b07755ab80mr62763671qtb.67.1674813145118;
+        Fri, 27 Jan 2023 01:52:25 -0800 (PST)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id d12-20020ac85acc000000b003b68d445654sm981543qtd.91.2023.01.27.01.52.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 01:52:24 -0800 (PST)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-4ff07dae50dso60282707b3.2;
+        Fri, 27 Jan 2023 01:52:24 -0800 (PST)
+X-Received: by 2002:a25:d505:0:b0:7bf:d201:60cb with SMTP id
+ r5-20020a25d505000000b007bfd20160cbmr3209718ybe.365.1674813133808; Fri, 27
+ Jan 2023 01:52:13 -0800 (PST)
+MIME-Version: 1.0
+References: <20230127001141.407071-1-saravanak@google.com> <20230127001141.407071-9-saravanak@google.com>
+ <Y9OcqGTocu8ZlFqy@smile.fi.intel.com>
+In-Reply-To: <Y9OcqGTocu8ZlFqy@smile.fi.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 27 Jan 2023 10:52:02 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXRbiNW9nd_N_=+OTo-uCmy2ePfOmREEHcqLyEn1H=Rhg@mail.gmail.com>
+Message-ID: <CAMuHMdXRbiNW9nd_N_=+OTo-uCmy2ePfOmREEHcqLyEn1H=Rhg@mail.gmail.com>
+Subject: Re: [PATCH v2 08/11] driver core: fw_devlink: Make cycle detection
+ more robust
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Sudeep Holla <sudeep.holla@arm.com>,
         Cristian Marussi <cristian.marussi@arm.com>,
@@ -71,7 +80,6 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Naresh Kamboju <naresh.kamboju@linaro.org>,
         Abel Vesa <abel.vesa@linaro.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
         John Stultz <jstultz@google.com>,
         Doug Anderson <dianders@chromium.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -87,45 +95,38 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 10/11] irqchip/irq-imx-gpcv2: Mark fwnode device as
- not initialized
-Message-ID: <Y9OemQgO9qoSdT1r@smile.fi.intel.com>
-References: <20230127001141.407071-1-saravanak@google.com>
- <20230127001141.407071-11-saravanak@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127001141.407071-11-saravanak@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 04:11:37PM -0800, Saravana Kannan wrote:
-> Since this device is only partially initialized by the irqchip driver,
-> we need to mark the fwnode device as not initialized. This is to let
-> fw_devlink know that the device will be completely initialized at a
-> later point. That way, fw_devlink will continue to defer the probe of
-> the power domain consumers till the power domain driver successfully
-> binds to the struct device and completes the initialization of the
-> device.
+Hi Andy,
 
-...
+On Fri, Jan 27, 2023 at 10:43 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Thu, Jan 26, 2023 at 04:11:35PM -0800, Saravana Kannan wrote:
+> > + * Check if @sup_handle or any of its ancestors or suppliers direct/indirectly
+> > + * depend on @con.  This function can detect multiple cyles between @sup_handle
+>
+> A single space is enough.
 
->  		pd_pdev->dev.of_node = np;
-> +		pd_pdev->dev.fwnode = of_fwnode_handle(np);
+It's very common to write two spaces after a full stop.
+When joining two sentences on separate lines in vim using SHIFT-J,
+vim will make sure there are two spaces.
 
-Instead,
+Gr{oetje,eeting}s,
 
-		device_set_node(&pd_dev->dev, of_fwnode_handle(np));
+                        Geert
 
--- 
-With Best Regards,
-Andy Shevchenko
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
