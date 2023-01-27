@@ -2,107 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB45467E05F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3C867E06F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbjA0Jgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:36:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
+        id S233129AbjA0Jid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:38:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjA0Jgk (ORCPT
+        with ESMTP id S233118AbjA0Jib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:36:40 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89772C9
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:36:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CC618CE26E2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:36:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3989C433EF;
-        Fri, 27 Jan 2023 09:36:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674812196;
-        bh=wlz6HIVQ/GgIj0YbTS0RXKypfcVwy2vvEGBqBClsFuo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Tir3d55g29BmdExqeS9YYdmYN3bB9BIsEcfWaB4gHjRQgIO8DPGdyUbu8a/h5jel7
-         wqVAdY0QxPgzZ8nAJrUxKX2rkHn0ipkyfFP73Eg4NTygD1wosC1bd5jRxEdSmWMzNq
-         PUGnUrXSQ2AMGsUKfkRZsrWwOUOt7C89Ou7P4a6320syjhHDnqOH1KHDRKYDFMAwMP
-         dEMELwYPsl0pM0VEfTXtHIT3HgN1pF4TDrlJ57QDkqodr9+Gp+bXLa2RRI6EfUyQ/J
-         mT8tXwQvo5u9E+ImLVjmuudBFc69W/JU8nIwqBH79cGtmkHp37C8hqFqG040dnIh9E
-         G+fwgYcmFJh3g==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Oded Gabbay <ogabbay@kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Melissa Wen <mwen@igalia.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] accel: work around DRM_ACCEL dependencies
-Date:   Fri, 27 Jan 2023 10:36:20 +0100
-Message-Id: <20230127093631.2132187-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Fri, 27 Jan 2023 04:38:31 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7742CC67
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:37:56 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id y1so4425406wru.2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:37:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yksAV7yHL3wN3w9c8k40mCMMPiyV1hd99TyFgaBpDUE=;
+        b=Q1IgsFXQgA4vRbKnGHEV09YcIKYNHOU6wbfDCYOa/8oRhBoDcw6DOo3ZtKEAlh/hVz
+         DJXrF3MPff5EwbaLVr5ax7Z1ASkgVRgaqhrum6TGTC4BF4AzSIDJb3HMsnFv3BL0KI6/
+         hDyRGvdPoXOnHloSa515sLqxxEYhkDAy5I3adl8lqK6S6sLoLLXSpvC4rxcCWqU2ePVU
+         g4M/iYrz5B1PflrG4UZ8+Cg4sFR761tiBYlxlG4aqy9XJdeCYl+0isoKHa/U8upK4wMy
+         xZmtzVlG9Z1mYf0Zgf3inLuQupaVfE7vsRrndR0C/EA1zbyvM6leuc7wKxEh9L+cR0JY
+         QEjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yksAV7yHL3wN3w9c8k40mCMMPiyV1hd99TyFgaBpDUE=;
+        b=xrfbF8EVbOKyrynrlYetv5yyJr4GbtzftrUdrWwUZKvsI4tFr6WLk/YOScQyNFiMrd
+         /bWFi7siSQGoy4ORhJhH6X4I/Xt7CCv8YsuvIAnZ39+t2Ms8dGXWFfaVxtje9mwXkUbl
+         4gGM6LEWnWOO6WS5HLXOB8VYQbDn3wZZAG1ngivv3RSCPVQ/eR3PoZtvQR4lXftj8cUc
+         enPlf+YhQTy1rNlGkrmPh18tko+riOMXZrdTWbkcGQjlMxCReb3ni4r35ZnpSGW29FpT
+         LOpcZPA7PVwroxpsaSJfkz3F3mhi+lc3OvBXwI/shvFA6cvwuINCmJeVd3LfDQe1koLF
+         fcCw==
+X-Gm-Message-State: AO0yUKX6E3zVIraLjvgy7RZ9xWjPZYhfOJZGUbXG3IGRj0uovwO32IjX
+        G1kWw/ClfJHLXJjubKnQKdZihw==
+X-Google-Smtp-Source: AK7set88fvpm7mZ/TBDrWIqtjTBm/K9NABW+jcJf7uWpwGFZ9Oh/xUoCN/DyAVGGqWyO2zpOiFJfPA==
+X-Received: by 2002:a5d:65cd:0:b0:2bf:bd43:aacc with SMTP id e13-20020a5d65cd000000b002bfbd43aaccmr7088381wrw.55.1674812274879;
+        Fri, 27 Jan 2023 01:37:54 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003d237d60318sm3842947wmi.2.2023.01.27.01.37.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 01:37:54 -0800 (PST)
+Message-ID: <7e941a2d-25d9-44e0-7438-13225c87d8ac@linaro.org>
+Date:   Fri, 27 Jan 2023 10:37:49 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 0/9] media: dt-bindings: common CEC properties
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree@vger.kernel.org, Joe Tessler <jrt@google.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-tegra@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-media@vger.kernel.org, Jeff Chase <jnchase@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20221208103115.25512-1-krzysztof.kozlowski@linaro.org>
+ <cd803c70-faf0-963e-fca3-0edd13fa8a29@linaro.org>
+ <c092c11f-870f-6520-ad89-001468ed59dc@xs4all.nl>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c092c11f-870f-6520-ad89-001468ed59dc@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 13/01/2023 10:04, Hans Verkuil wrote:
+> Hi Krzysztof,
+> 
+> On 13/01/2023 09:59, Krzysztof Kozlowski wrote:
+>> On 08/12/2022 11:31, Krzysztof Kozlowski wrote:
+>>> Hi,
+>>>
+>>> Changes since v3
+>>> ================
+>>> 1. cec-gpio: Add missing SPDX.
+>>> 2. nvidia,tegra114-cec: Correct path in maintainers.
+>>>
+>>
+>>
+>> Mauro (and maybe Hans?), any comments here. Can you apply the patchset?
+> 
+> No comments yet. I plan to review and likely merge this next week.
 
-At the moment, accel drivers can be built-in even with CONFIG_DRM=m,
-but this causes a link failure:
+Hi Hans,
 
-x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_dev_init':
-ivpu_drv.c:(.text+0x1535): undefined reference to `drmm_kmalloc'
-x86_64-linux-ld: ivpu_drv.c:(.text+0x1562): undefined reference to `drmm_kmalloc'
-x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_remove':
-ivpu_drv.c:(.text+0x1faa): undefined reference to `drm_dev_unregister'
-x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_probe':
-ivpu_drv.c:(.text+0x1fef): undefined reference to `__devm_drm_dev_alloc'
+I hope they didn't get forgotten and you still have a plan to look at
+these. Patchwork shows they are waiting for review:
+https://patchwork.kernel.org/project/linux-media/patch/20221208103115.25512-2-krzysztof.kozlowski@linaro.org/
 
-This could be avoided by making DRM_ACCEL a tristate symbol, which
-would mean that every ACCEL driver is guarantee to be able to link
-against DRM as well. However, having both as =m causes another link
-failure because the DRM core code also links against the accel driver:
-
-x86_64-linux-ld: drivers/gpu/drm/drm_drv.o: in function `drm_minor_register':
-drm_drv.c:(.text+0x259): undefined reference to `accel_debugfs_init'
-x86_64-linux-ld: drm_drv.c:(.text+0x298): undefined reference to `accel_minor_replace'
-
-I think it will be necessary to establish a link hierarchy between drm.ko
-and drm_accel.ko to avoid circular dependencies like this, but until then
-the only way that both can be used is to have both subsystems built into
-the kernel. Enforce this using a Kconfig dependency.
-
-Fixes: 8bf4889762a8 ("drivers/accel: define kconfig and register a new major")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/accel/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/accel/Kconfig b/drivers/accel/Kconfig
-index 834863902e16..dd18d3b2028c 100644
---- a/drivers/accel/Kconfig
-+++ b/drivers/accel/Kconfig
-@@ -8,7 +8,7 @@
- #
- menuconfig DRM_ACCEL
- 	bool "Compute Acceleration Framework"
--	depends on DRM
-+	depends on DRM=y
- 	help
- 	  Framework for device drivers of compute acceleration devices, such
- 	  as, but not limited to, Machine-Learning and Deep-Learning
--- 
-2.39.0
+Best regards,
+Krzysztof
 
