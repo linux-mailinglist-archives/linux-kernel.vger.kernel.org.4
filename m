@@ -2,193 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509D567EA92
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0CE67EA96
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234702AbjA0QPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
+        id S234738AbjA0QQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:16:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234068AbjA0QPg (ORCPT
+        with ESMTP id S234755AbjA0QPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:15:36 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699DD7D2A6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:15:25 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso1023290wms.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:15:25 -0800 (PST)
+        Fri, 27 Jan 2023 11:15:55 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D036E7BBC9
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:15:47 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id rl14so15125176ejb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:15:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DPjHEyov1hE02QP/IWcle2+g2W2JIKUquq/K/wU0SWA=;
-        b=qOoFMXb1cKR3k/N+SPlBH1PaUaJT3I7mQzzcvKr1UZShX0hiUB/1qY2MoSNmuhZ7Y+
-         w+7bRv+zFfehEe9NnClsvIwCykjjnpf5l6wqCrzN4eAf1qi895ASC6Ex0E+obvHagJMi
-         Bamm+EH3nlxOSI19g/x1qgCvsEJHpcfQYi3X82XT237VSqzmGAn28zFkFDVAGnC/trcb
-         jEOv2+/Yzhi852IB/S2Y4ahULhYBwzUTtTGemHM8qW21JkASI2CjRGbuTs+zkOT2B7A0
-         THUm5in/tt1em2JMi+KPkF2C0ObzJt36DkkeKhEwNdtz6baP5S9/NhVNohBeJx1ZSjsy
-         dM5Q==
+        d=grsecurity.net; s=grsec;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=omzXg8OT+1HtcPdH7sWBJQq9q/lSuoFptSXDIoH2qBE=;
+        b=sxKgYruEvXs1bRh0GU0N/RYWpDzF6pgHMmVWgNmjZt5hYKnL6ZEVWQcWoiSFdliogy
+         3CtadtBFdk0dE/jtfe50t15kUoTiWKlS/Nxcs4CJ3b0fHqxS03l4D05XavC8Yf6LqI2h
+         8Pru7lfSL8ljpelPMdQv1DRqgqIepzTbRUsR2Y8w0eew8k0RrMwtZdALHfFameMy2UsK
+         X4JgCRIsgXCrPeVFB8DCgoaEjSCuBa2R/p4SLv0aI/IENp7Mo/+jq+jUPFVkj48rL+fw
+         kda+VuwHedyNcigzjOrDLmT+vQL+XICY2lANA+9Dly068XIxKF7IU2Xc2lI+xqqP9d7C
+         g0zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DPjHEyov1hE02QP/IWcle2+g2W2JIKUquq/K/wU0SWA=;
-        b=ui3SI2okFi2132W9kC9IrnBjC0p+lirxKcl5IfPJxhDOImECNDYMBE2x8TwbJidMQE
-         tnQleTmEUyGn6m46yeTIX4/+uyk3j0eP3WG/fv3V0qcA8A6+e4iEDc4dc//Y3bfKpis1
-         Kmh7BPp2uoeJku0+BfcLQouXn54HOhyU6mWyqefd8G6wMJdMFIyayANzQCqLXYUd+37D
-         IRSczSFwloxT8FijNni5o5Q4ZR6XB9wZBxNMCCCDButYun9uDg7dC97bxN9966/uvc4D
-         sfHqijSKe6EzUAFMKWuvAzMHPmEbWHpkmRenLT1zF0vu+7X3xk+gLEEnv9R53C1UqIhl
-         Em4A==
-X-Gm-Message-State: AFqh2kpH8lhWInDqE7OL0K6dNw3SgDgqVp8KhkI+9xFdodbTB6wM8ZhW
-        5J7fH52fnKDEJQthZDSUfiaZ7g==
-X-Google-Smtp-Source: AMrXdXsHZMrsOuFl/Ku+TEw4XWa+mKf4Dw63rhhK2821jnvwFWV6eidUT6wJEEuGAnWn8Qk2hM4PGw==
-X-Received: by 2002:a05:600c:3296:b0:3cf:82b9:2fe6 with SMTP id t22-20020a05600c329600b003cf82b92fe6mr42347426wmp.8.1674836123961;
-        Fri, 27 Jan 2023 08:15:23 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c12ca00b003d9df9e59c4sm7826593wmd.37.2023.01.27.08.15.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 08:15:23 -0800 (PST)
-Date:   Fri, 27 Jan 2023 18:15:22 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: qcom: gdsc: Disable HW control until supported
-Message-ID: <Y9P4mhSIK1BvZ38k@linaro.org>
-References: <20230112135224.3837820-1-quic_bjorande@quicinc.com>
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=omzXg8OT+1HtcPdH7sWBJQq9q/lSuoFptSXDIoH2qBE=;
+        b=MoLF/CulmBQ7CNTCP35RzBCDLOLM6bPFij1/awZlXpa/mlkJrTKU3dC1dDCQEbUSDH
+         F8l+e6wnWBFgX2d3PeUje9eMcGgzOrPFQFYxBqkNH0VtBOG+gN/zePPB/4kf7Q1NXTVP
+         nSmoWW5Pfn8I9MMTdWyH2LYiS/SjazkONxuHZ4U5GyroGqZa2HhdXSs/2Ic0fwa4VJLO
+         pAowYAyZBoNd/RiCMD8WUT7OsYikc2yf5beiwegzdxUEJiaCOLk9DYZCMoWLxgqbZfLN
+         8fz4o7eiM4h5M7yUeaB90koYm99J52/yue0HqzvYGaPfHZjkD4p/UmhJjYxsPAt4/xhT
+         fNFA==
+X-Gm-Message-State: AFqh2kpFYYhKOgR04H4nULGR0/ifRlTzwDslr3j8eKQU/pY7d3vbyWxv
+        KJQEr4OtQx6lZHnR7Taw0JWtqCG8KtDNwQGVqnI=
+X-Google-Smtp-Source: AMrXdXunZWLZUXYRKw2maJa5BYMxljiU1YRa2lQcshHGtRF9mVQZf9Gmwt2+FRd9a8Cq0+x2+OWB3A==
+X-Received: by 2002:a17:907:9623:b0:869:236c:ac40 with SMTP id gb35-20020a170907962300b00869236cac40mr55061282ejc.31.1674836146460;
+        Fri, 27 Jan 2023 08:15:46 -0800 (PST)
+Received: from ?IPV6:2003:f6:af06:9e00:9ba6:6299:7a26:8e00? (p200300f6af069e009ba662997a268e00.dip0.t-ipconnect.de. [2003:f6:af06:9e00:9ba6:6299:7a26:8e00])
+        by smtp.gmail.com with ESMTPSA id fu17-20020a170907b01100b008536ff0bb44sm2456373ejc.109.2023.01.27.08.15.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 08:15:45 -0800 (PST)
+Message-ID: <ccad240e-d604-60e2-b12d-c7c3ca530887@grsecurity.net>
+Date:   Fri, 27 Jan 2023 17:15:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112135224.3837820-1-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 3/3] KVM: x86: do not unload MMU roots when only toggling
+ CR0.WP
+Content-Language: en-US, de-DE
+From:   Mathias Krause <minipli@grsecurity.net>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20230117204556.16217-1-minipli@grsecurity.net>
+ <20230117204556.16217-4-minipli@grsecurity.net> <Y8cTMnyBzNdO5dY3@google.com>
+ <1b4d4488-9afc-91e9-790d-5b669d00217b@grsecurity.net>
+In-Reply-To: <1b4d4488-9afc-91e9-790d-5b669d00217b@grsecurity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-12 05:52:24, Bjorn Andersson wrote:
-> Software normally uses the SW_COLLAPSE bit to collapse a GDSC, but in
-> some scenarios it's beneficial to let the hardware perform this without
-> software intervention.
+On 18.01.23 11:17, Mathias Krause wrote:
+> On 17.01.23 22:29, Sean Christopherson wrote:
+>> On Tue, Jan 17, 2023, Mathias Krause wrote:
+>>> [...] 
+>>> Change kvm_mmu_reset_context() to get passed the need for unloading MMU
+>>> roots and explicitly avoid it if only CR0.WP was toggled on a CR0 write
+>>> caused VMEXIT.
+>>
+>> One thing we should explore on top of this is not intercepting CR0.WP (on Intel)
+>> when TDP is enabled.  It could even trigger after toggling CR0.WP N times, e.g.
+>> to optimize the grsecurity use case without negatively impacting workloads with
+>> a static CR0.WP, as walking guest memory would require an "extra" VMREAD to get
+>> CR0.WP in that case.
 > 
-> This is done by configuring the GDSC in "hardware control" state, in
-> which case the SW_COLLAPSE bit is ignored and some hardware signal is
-> relies upon instead.
-> 
-> The GDSCs are modelled as power-domains in Linux and as such it's
-> reasonable to assume that the device drivers intend for the hardware
-> block to be accessible when their power domain is active.
-> 
-> But in the current implementation, any GDSC that is marked to support
-> hardware control, gets hardware control unconditionally while the
-> client driver requests it to be active. It's therefor conceivable that
-> the hardware collapses a GDSC while Linux is accessing resources
-> depending on it.
-> 
-> There are ongoing discussions about how to properly expose this control
-> to the client drivers, but until conclusion in that discussion is
-> reached, the safer option would be to keep the GDSC in software control
-> mode.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> That would be even better, agreed. I'll look into it and will try to
+> come up with something.
 
-Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+I looked into it and we can gain quite a few more cycles from this, e.g.
+the runtime for the 'ssdd 10 50000' test running with TDP MMU takes
+another bump from 7.31s down to 4.89s. That's overall 2.8 times faster
+than the 13.91s we started with. :)
 
-> ---
->  drivers/clk/qcom/gdsc.c | 48 ++++++-----------------------------------
->  1 file changed, 7 insertions(+), 41 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index 9e4d6ce891aa..6d3b36a52a48 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -291,22 +291,6 @@ static int gdsc_enable(struct generic_pm_domain *domain)
->  	 */
->  	udelay(1);
->  
-> -	/* Turn on HW trigger mode if supported */
-> -	if (sc->flags & HW_CTRL) {
-> -		ret = gdsc_hwctrl(sc, true);
-> -		if (ret)
-> -			return ret;
-> -		/*
-> -		 * Wait for the GDSC to go through a power down and
-> -		 * up cycle.  In case a firmware ends up polling status
-> -		 * bits for the gdsc, it might read an 'on' status before
-> -		 * the GDSC can finish the power cycle.
-> -		 * We wait 1us before returning to ensure the firmware
-> -		 * can't immediately poll the status bits.
-> -		 */
-> -		udelay(1);
-> -	}
-> -
->  	if (sc->flags & RETAIN_FF_ENABLE)
->  		gdsc_retain_ff_on(sc);
->  
-> @@ -321,24 +305,6 @@ static int gdsc_disable(struct generic_pm_domain *domain)
->  	if (sc->pwrsts == PWRSTS_ON)
->  		return gdsc_assert_reset(sc);
->  
-> -	/* Turn off HW trigger mode if supported */
-> -	if (sc->flags & HW_CTRL) {
-> -		ret = gdsc_hwctrl(sc, false);
-> -		if (ret < 0)
-> -			return ret;
-> -		/*
-> -		 * Wait for the GDSC to go through a power down and
-> -		 * up cycle.  In case we end up polling status
-> -		 * bits for the gdsc before the power cycle is completed
-> -		 * it might read an 'on' status wrongly.
-> -		 */
-> -		udelay(1);
-> -
-> -		ret = gdsc_poll_status(sc, GDSC_ON);
-> -		if (ret)
-> -			return ret;
-> -	}
-> -
->  	if (sc->pwrsts & PWRSTS_OFF)
->  		gdsc_clear_mem_on(sc);
->  
-> @@ -419,13 +385,6 @@ static int gdsc_init(struct gdsc *sc)
->  				goto err_disable_supply;
->  		}
->  
-> -		/* Turn on HW trigger mode if supported */
-> -		if (sc->flags & HW_CTRL) {
-> -			ret = gdsc_hwctrl(sc, true);
-> -			if (ret < 0)
-> -				goto err_disable_supply;
-> -		}
-> -
->  		/*
->  		 * Make sure the retain bit is set if the GDSC is already on,
->  		 * otherwise we end up turning off the GDSC and destroying all
-> @@ -439,6 +398,13 @@ static int gdsc_init(struct gdsc *sc)
->  		on = true;
->  	}
->  
-> +	/* Disable HW trigger mode until propertly supported */
-> +	if (sc->flags & HW_CTRL) {
-> +		ret = gdsc_hwctrl(sc, false);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
->  	if (on || (sc->pwrsts & PWRSTS_RET))
->  		gdsc_force_mem_on(sc);
->  	else
-> -- 
-> 2.37.3
-> 
+I'll cook up a patch next week and send a v3 series with some more
+cleanups I collected in the meantime.
+
+>> Unfortunately, AMD doesn't provide per-bit controls.
+
+Meanwhile I got my hands on an AMD system and it gains from this series
+as well, not as much as my Intel system, though. We go down from 5.8s to
+4.12s for the 'ssdd 10 50000' test with TDP MMU enabled -- a nearly 30%
+runtime reduction.
+
+>>> This change brings a huge performance gain as the following micro-
+>>> benchmark running 'ssdd 10 50000' from rt-tests[1] on a grsecurity L1 VM
+>>> shows (runtime in seconds, lower is better):
+>>>
+>>>                       legacy MMU   TDP MMU
+>>> kvm.git/queue             11.55s    13.91s
+>>> kvm.git/queue+patch        7.44s     7.94s
+>>>
+>>> For legacy MMU this is ~35% faster, for TTP MMU ~43% faster.
+>>>
+>>> [1] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+>>>
+>>> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+>>> ---
+>>
