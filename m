@@ -2,162 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4D867E0FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CD967E104
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 11:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbjA0KEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 05:04:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
+        id S233311AbjA0KF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 05:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjA0KEc (ORCPT
+        with ESMTP id S230092AbjA0KFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:04:32 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7851E5F7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:03:46 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id gs13so1564444ejc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:03:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=OqcOIHJ8AdmjqV9pu1TUZaFga/jZxoTHW8uGlyxqnn0=;
-        b=jtYILTuidtzcVDMu6N4Iz8i/X9vcd0ViaWG8pc4cA8zUATmQsQmPAs8TLM1hiHPXu3
-         kvDYgvO4IZtFOYlSes8zvjDnPxGKt1xGxSZpv+wuX2W+YdZ4sKFsc9NerFlx1/MiPPe1
-         TOw7K36DDjggL047rptRUAhsw7X9XFqwk96bah8rWAqyFeNw1YdRmfqsaLirbDGTb9Nw
-         U1sguT5GwyQWvBkmfB3w5aG8eKySuhxSpTmI25/S8dofcvm9x0yUthHRF7s+lXpYYR30
-         TvVlk+vifv4j51J6ohZYLr7jyXOl/JdGkdAS/Zc3MOlL7TC60pC5FF2AvYzdaXAOnDYT
-         nclA==
+        Fri, 27 Jan 2023 05:05:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7254FEF9E
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:04:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674813860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C7k+0JyRd7Jj4+JGuTlvRsODVs1VUz6inKc9+6lWrs4=;
+        b=S02KutXOhJyybZ/MQoKOtcQ3L1VZPYAwCi/qtORzyb0ZxWRRaMTIT794M634VKr3Lbmlsy
+        mPJnDJeZmny0qoQJkxw3o1EXDsZIIWHqUyCL2MWk4uhAvxwcywBsHFuVGlmCLdYCZ1mQ8b
+        3Jka5EV1P1tAadWqS9cf256g9jmZb5w=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-654-Y7-cBElBNG6dnVxx0kk99g-1; Fri, 27 Jan 2023 05:04:19 -0500
+X-MC-Unique: Y7-cBElBNG6dnVxx0kk99g-1
+Received: by mail-wm1-f69.google.com with SMTP id h2-20020a1ccc02000000b003db1ded176dso1209629wmb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 02:04:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OqcOIHJ8AdmjqV9pu1TUZaFga/jZxoTHW8uGlyxqnn0=;
-        b=SgiZhP0BVK2O92qm5rB5XhLWBgcpXUW8XG1Po3rXzMZD6e6cyZUiSZxHziKdeltTd5
-         fCllU9MYPvRBVUNi+i0n+URpU8hHrPWL/eB2n976FoSldJPu2mlxJfZTic0s636+VSgm
-         KmCFBjUcoe9yYJagp0oExKYmwBpwd/RE0ePkaUacI5ZGqoGGcHjqW9BjoYlD6Zsp5tlr
-         5OTROS3YjZ+9TSSDkovsLxfsokTa+lY7HqeIixWUQqzp+2h0/aSrOmCBUZ4JW7YUgpzY
-         sA5H6wvvONykjV4LIi9qA2ySuLeVeEK41Hw+FZE0j0c0G/CJGlQnqu64ZdDlW5oeJYY/
-         Bdsg==
-X-Gm-Message-State: AFqh2krJi4iPStXasikYdXyHEejONkFjhowbg7TmsSGoA4YvxP14Yay+
-        oyD34lcR0Y1rVG8uzkrWrTMg9A==
-X-Google-Smtp-Source: AMrXdXsA5HAt49wMzF8Xw4aZITkpZA52qt+jVIL4FDekX//BTbCTAPcFimR0oQKQce9slcF2MOSKFw==
-X-Received: by 2002:a17:906:1f57:b0:872:2cc4:6886 with SMTP id d23-20020a1709061f5700b008722cc46886mr34797636ejk.30.1674813824644;
-        Fri, 27 Jan 2023 02:03:44 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id gx27-20020a1709068a5b00b0086b0d53cde2sm1947693ejc.201.2023.01.27.02.03.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 02:03:44 -0800 (PST)
-Message-ID: <a3bb7ecd-d97b-9465-60aa-bbf7d145a705@linaro.org>
-Date:   Fri, 27 Jan 2023 11:03:42 +0100
+        bh=C7k+0JyRd7Jj4+JGuTlvRsODVs1VUz6inKc9+6lWrs4=;
+        b=o0F6DkKDWHxwMKz+76pgppnvWEE7p67NwPfp65ByV++9AlMeP3VG/xSf/Ousp17qbB
+         mdCQBgxAi+NEPVW/+i47JcE2GCFm12+eWP9nWVBqbxT8UlWp71eoJlCxe1pZffnpiCoE
+         dB31RF7muDQh/H+9ehGrjB+S9zkbqz1ypu0smqK123Bn2aONfGJzCjFCtNApwYXar5ud
+         4NggoW9ZBg1BinS3TmiT2K7ylHtaYBzDu9PlLZRrai1snM9OZGrxrG8tzIgNG4E49mNN
+         wEVxdV0eVbPQ6VMUke0l3YfknyGnzD4y00eDJffGtYMic6tBplPbYa2bw8z/4fWVxSV5
+         bVeA==
+X-Gm-Message-State: AFqh2kpI0JoT1vSjLGqQuz/uQRqxfvSnT/No312FBdJ8j1RV5B5ztWAx
+        1CzJYDmpexjQkIh8vR2IPThpqlfFyEBf977+hojYalJfQzxAn2kWPSm66lEJ6AaImkIAS4ouGb+
+        IVxdBPN8mMU/Fe1m+iPuZ/e/m
+X-Received: by 2002:a05:600c:a52:b0:3db:122c:1638 with SMTP id c18-20020a05600c0a5200b003db122c1638mr34649460wmq.27.1674813858158;
+        Fri, 27 Jan 2023 02:04:18 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvJqy11IfUQQTbG2B8vHqiaJJ8gQRORP7iVkIPKkozNg7BhdJTGN3sIDmVxrNgk1mSSJzu9FA==
+X-Received: by 2002:a05:600c:a52:b0:3db:122c:1638 with SMTP id c18-20020a05600c0a5200b003db122c1638mr34649436wmq.27.1674813857820;
+        Fri, 27 Jan 2023 02:04:17 -0800 (PST)
+Received: from redhat.com ([2.52.137.69])
+        by smtp.gmail.com with ESMTPSA id n24-20020a7bcbd8000000b003daf7721bb3sm6790156wmi.12.2023.01.27.02.04.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 02:04:17 -0800 (PST)
+Date:   Fri, 27 Jan 2023 05:04:12 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <20230127044508-mutt-send-email-mst@kernel.org>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <20230126105618-mutt-send-email-mst@kernel.org>
+ <DM8PR11MB5750678B5F639F6C2848FC3CE7CC9@DM8PR11MB5750.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] ARM: dts: qcom: use "okay" for status
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230127095319.64560-1-krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230127095319.64560-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DM8PR11MB5750678B5F639F6C2848FC3CE7CC9@DM8PR11MB5750.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 27, 2023 at 08:52:22AM +0000, Reshetova, Elena wrote:
+> > On Wed, Jan 25, 2023 at 03:29:07PM +0000, Reshetova, Elena wrote:
+> > > And this is a very special aspect of 'hardening' since it is about hardening a
+> > kernel
+> > > under different threat model/assumptions.
+> > 
+> > I am not sure it's that special in that hardening IMHO is not a specific
+> > threat model or a set of assumptions. IIUC it's just something that
+> > helps reduce severity of vulnerabilities.  Similarly, one can use the CC
+> > hardware in a variety of ways I guess. And one way is just that -
+> > hardening linux such that ability to corrupt guest memory does not
+> > automatically escalate into guest code execution.
+> 
+> I am not sure if I fully follow you on this. I do agree that it is in principle
+> the same 'hardening' that we have been doing in Linux for decades just
+> applied to a new attack surface, host <-> guest, vs userspace <->kernel.
+
+Sorry about being unclear this is not the type of hardening I meant
+really.  The "hardening" you meant is preventing kernel vulnerabilities,
+right? This is what we've been doing for decades.
+But I meant slightly newer things like e.g. KASLR or indeed ASLR generally -
+we are trying to reduce a chance a vulnerability causes random
+code execution as opposed to a DOS. To think in these terms you do not
+need to think about attack surfaces - in the system including
+a hypervisor, guest supervisor and guest userspace hiding
+one component from others is helpful even if they share
+a privelege level.
 
 
-On 27.01.2023 10:53, Krzysztof Kozlowski wrote:
-> "okay" over "ok" is preferred:
-> 
->   serial@f991f000: status:0: 'ok' is not one of ['okay', 'disabled', 'reserved']
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Konrad
->  arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dts | 2 +-
->  arch/arm/boot/dts/qcom-sdx55-t55.dts              | 6 +++---
->  arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts  | 6 +++---
->  3 files changed, 7 insertions(+), 7 deletions(-)
+> Interfaces have changed, but the types of vulnerabilities, etc are the same.
+> The attacker model is somewhat different because we have 
+> different expectations on what host/hypervisor should be able to do
+> to the guest (following business reasons and use-cases), versus what we
+> expect normal userspace being able to "do" towards kernel. The host and
+> hypervisor still has a lot of control over the guest (ability to start/stop it, 
+> manage its resources, etc). But the reasons behind this doesn’t come
+> from the fact that security CoCo HW not being able to support this stricter
+> security model (it cannot now indeed, but this is a design decision), but
+> from the fact that it is important for Cloud service providers to retain that
+> level of control over their infrastructure. 
+
+Surely they need ability to control resource usage, not ability to execute DOS
+attacks. Current hardware just does not have ability to allow the former
+without the later.
+
+> > 
+> > If you put it this way, you get to participate in a well understood
+> > problem space instead of constantly saying "yes but CC is special".  And
+> > further, you will now talk about features as opposed to fixing bugs.
+> > Which will stop annoying people who currently seem annoyed by the
+> > implication that their code is buggy simply because it does not cache in
+> > memory all data read from hardware. Finally, you then don't really need
+> > to explain why e.g. DoS is not a problem but info leak is a problem - when
+> > for many users it's actually the reverse - the reason is not that it's
+> > not part of a threat model - which then makes you work hard to define
+> > the threat model - but simply that CC hardware does not support this
+> > kind of hardening.
 > 
-> diff --git a/arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dts b/arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dts
-> index 6a082ad4418a..288cacd5d1fa 100644
-> --- a/arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dts
-> +++ b/arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dts
-> @@ -20,5 +20,5 @@ chosen {
->  };
->  
->  &blsp1_uart3 {
-> -	status = "ok";
-> +	status = "okay";
->  };
-> diff --git a/arch/arm/boot/dts/qcom-sdx55-t55.dts b/arch/arm/boot/dts/qcom-sdx55-t55.dts
-> index 61ac5f54cd57..ccf2b8b42b16 100644
-> --- a/arch/arm/boot/dts/qcom-sdx55-t55.dts
-> +++ b/arch/arm/boot/dts/qcom-sdx55-t55.dts
-> @@ -233,7 +233,7 @@ ldo16 {
->  };
->  
->  &blsp1_uart3 {
-> -	status = "ok";
-> +	status = "okay";
->  };
->  
->  &ipa {
-> @@ -243,11 +243,11 @@ &ipa {
->  };
->  
->  &qpic_bam {
-> -	status = "ok";
-> +	status = "okay";
->  };
->  
->  &qpic_nand {
-> -	status = "ok";
-> +	status = "okay";
->  
->  	nand@0 {
->  		reg = <0>;
-> diff --git a/arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts b/arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts
-> index c9c1f7da1261..db7b3d5b0bd0 100644
-> --- a/arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts
-> +++ b/arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts
-> @@ -233,7 +233,7 @@ ldo16 {
->  };
->  
->  &blsp1_uart3 {
-> -	status = "ok";
-> +	status = "okay";
->  };
->  
->  &ipa {
-> @@ -258,11 +258,11 @@ &pcie_ep {
->  };
->  
->  &qpic_bam {
-> -	status = "ok";
-> +	status = "okay";
->  };
->  
->  &qpic_nand {
-> -	status = "ok";
-> +	status = "okay";
->  
->  	nand@0 {
->  		reg = <0>;
+> But this won't be correct statement, because it is not limitation of HW, but the
+> threat and business model that Confidential Computing exists in. I am not 
+> aware of a single cloud provider who would be willing to use the HW that
+> takes the full control of their infrastructure and running confidential guests,
+> leaving them with no mechanisms to control the load balancing, enforce
+> resource usage, etc. So, given that nobody needs/willing to use such HW, 
+> such HW simply doesn’t exist. 
+> 
+> So, I would still say that the model we operate in CoCo usecases is somewhat
+> special, but I do agree that given that we list a couple of these special assumptions
+> (over which ones we have no control or ability to influence, none of us are business
+> people), then the rest becomes just careful enumeration of attack surface interfaces
+> and break up of potential mitigations. 
+> 
+> Best Regards,
+> Elena.
+> 
+
+I'd say each business has a slightly different business model, no?
+Finding common ground is what helps us share code ...
+
+-- 
+MST
+
