@@ -2,133 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2750067DD68
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9C167DD64
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjA0GXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 01:23:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
+        id S231572AbjA0GWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 01:22:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbjA0GXG (ORCPT
+        with ESMTP id S231532AbjA0GV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 01:23:06 -0500
-X-Greylist: delayed 165 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Jan 2023 22:23:05 PST
-Received: from p3plwbeout17-06.prod.phx3.secureserver.net (p3plsmtp17-06-2.prod.phx3.secureserver.net [173.201.193.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0B72D5A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 22:23:05 -0800 (PST)
-Received: from mailex.mailcore.me ([94.136.40.143])
-        by :WBEOUT: with ESMTP
-        id LI5zpgcQCMKZLLI60pZ9Ps; Thu, 26 Jan 2023 23:20:20 -0700
-X-CMAE-Analysis: v=2.4 cv=VesygHl9 c=1 sm=1 tr=0 ts=63d36d24
- a=EhJYbXVJKsomWlz4CTV+qA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=RvmDmJFTN0MA:10 a=hSkVLCK3AAAA:8
- a=xjQjg--fAAAA:8 a=VJ6naE4wvLo_NqA_W6QA:9 a=QEXdDO2ut3YA:10
- a=cQPPKAXgyycSBL8etih5:22 a=L4vkcYpMSA5nFlNZ2tk3:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  LI5zpgcQCMKZL
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
-        by smtp02.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1pLI5z-0003kq-7E; Fri, 27 Jan 2023 06:20:19 +0000
-Message-ID: <68f15d67-8945-2728-1f17-5b53a80ec52d@squashfs.org.uk>
-Date:   Fri, 27 Jan 2023 06:20:18 +0000
+        Fri, 27 Jan 2023 01:21:29 -0500
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FF659B78
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 22:21:28 -0800 (PST)
+Received: by mail-vk1-xa35.google.com with SMTP id v81so2006637vkv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 22:21:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tt+YDrfHwbP/tcqrYWX78c8eWt6PlwIsaHwmczL9W/8=;
+        b=Lc0HoLn4SumSw3g/7Q0fmfwQdUGLwQtH9azFyLymVbaroIbQr9j361vb7I7LVPwNoZ
+         khlpsS+0BcPw9FSegocOalyL0J8VRO05esrxqf6ptVdK6HOjA3L519+IYIorqNuxDpGs
+         ECTacR/nUdVmKWrXTWtaL/BxFTkJi++aZP3A/zsLrZU0jbRZpV9sl1/A9CcOca00uWQO
+         vVeSAyUzrTD1IV0jFO+gYDudj6sxQQTFLXyPNKrbgpeyuh84/tk3XPkjymUWub/5bz34
+         RStm890CYMcZUuKTZQnDXYB1WSwfd0q9BNOzgz9sjkvh24e5nE/s5WMaySsz5RXHA/53
+         VliA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Tt+YDrfHwbP/tcqrYWX78c8eWt6PlwIsaHwmczL9W/8=;
+        b=UxMYmdNofPoftoc3yPy7iIcUY6z7RdaVW7ejWPqqXLym5Wzfd1qezd+6+OXiMLRSpI
+         U0x1OWpoju8rl2MfsXeL+rlM2gsjuf9Wjx6gTisAy3M4e9JdNxbtLs+vaa3Y1rfXANIo
+         Y4GE+Jt2FzdpfhhqkjEf2838A0pAT7QBHt0yuHR+yFcdSBT7EW1/rDF+pmbZW7rZWTPC
+         AUhOILec2GBu8k2+Pydy+WKr9E2F3A2PwVUShG7KsXG38Mmdyfas9w4XydqO0/NU7uGY
+         sUjKlRIifaMI6yKRR6XT7o5a92DjTwTmvlPfyNE33KHCXz/tm6FTwAVDSTEsO2lzz3lg
+         rKJg==
+X-Gm-Message-State: AO0yUKVv+TVr6I794Vy9YcF89+eLnXBpyJyxWg/zUmXqmCmgSmlPfRQA
+        mETrvNnt4WwQBZWrYblGHPd2q8V0h0CqrEhEPn/cRw==
+X-Google-Smtp-Source: AK7set8AcJdo7lxMknpIr8EMrr/k6YI700Ac3qvKocMqzX82hKGCVFSAaduSx6qZuz8Jvaoa45m6sSpYNNwMQI5oicM=
+X-Received: by 2002:ac5:c193:0:b0:3e8:35d9:7a6f with SMTP id
+ z19-20020ac5c193000000b003e835d97a6fmr569665vkb.34.1674800487107; Thu, 26 Jan
+ 2023 22:21:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/1] squashfs: harden sanity check in
- squashfs_read_xattr_id_table
-To:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org,
-        syzbot+082fa4af80a5bb1a9843@syzkaller.appspotmail.com
-References: <20230117105226.329303-1-pchelkin@ispras.ru>
- <20230117105226.329303-2-pchelkin@ispras.ru>
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <20230117105226.329303-2-pchelkin@ispras.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfAUXse3AXkEd3n4ZBv5VH4cTjsvqLRExI/WBks5YvLOwfNP6DBYRLlUU7TF4UYUDi3NTEA7ZKtb9jEyZwaotpY3SqMiNGuuAKhk8sF5js8zbtgXW16wo
- TnIqHuRMAu74kLhYXY3IFzmcnK/SmaPoabsiwU1SHr+021rampAJOaLjZSN3mKXMLbFuRzcIPkjaaOnikRCzecSagIBwQHyedsY=
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230124080350.2275652-1-davidgow@google.com> <CAGS_qxq4vWvRJ89477S+rxHYLvnc2xN435GQ4+BvpLgqon8miw@mail.gmail.com>
+In-Reply-To: <CAGS_qxq4vWvRJ89477S+rxHYLvnc2xN435GQ4+BvpLgqon8miw@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 27 Jan 2023 14:21:15 +0800
+Message-ID: <CABVgOSn+F3WOA5hR+H5x_fW=jRTGATmO+nycZ7R7mXN8X7qNvw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2] kunit: Add "hooks" to call into KUnit when it's
+ built as a module
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Rae Moar <rmoar@google.com>,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2023 10:52, Fedor Pchelkin wrote:
- > While mounting a corrupted filesystem, a signed integer '*xattr_ids' can
- > become less than zero. This leads to the incorrect computation of 'len'
- > and 'indexes' values which can cause null-ptr-deref in 
-copy_bio_to_actor()
- > or out-of-bounds accesses in the next sanity checks inside
- > squashfs_read_xattr_id_table().
- >
+On Fri, 27 Jan 2023 at 13:38, 'Daniel Latypov' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> On Tue, Jan 24, 2023 at 12:04 AM David Gow <davidgow@google.com> wrote:
+> >
+> > KUnit has several macros and functions intended for use from non-test
+> > code. These hooks, currently the kunit_get_current_test() and
+> > kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=m.
+> >
+> > In order to support this case, the required functions and static data
+> > need to be available unconditionally, even when KUnit itself is not
+> > built-in. The new 'hooks.c' file is therefore always included, and has
+> > both the static key required for kunit_get_current_test(), and a
+> > function pointer to the real implementation of
+> > __kunit_fail_current_test(), which is populated when the KUnit module is
+> > loaded.
+> >
+> > A new header, kunit/hooks-table.h, contains a table of all hooks, and is
+> > repeatedly included with different definitions of the KUNIT_HOOK() in
+> > order to automatically generate the needed function pointer tables. When
+>
+> Perhaps I'm overlooking something and this is a dumb question.
+>
+> Is there a reason we can't go with a less-clever approach?
+> Like have a global struct?
+> We could memset it to 0 to clear it instead of defining a macro to set
+> individual variables to NULL?
+>
 
-NACK
+I didn't think of that: it'd definitely fix the need to have a macro
+for resetting the pointers to NULL, as well as the definitions.
 
-Thanks for sending the patch, but, you have unfortunately identified and
-fixed the wrong sanity check.  In effect you're fixing the symptom and
-not the cause.
+We'd still have the repetition of the function names in the
+kunit_set_hooks function and the table definition. (As well as needing
+all of the implementation functions around.)
 
-The Sysbot corrupted filesystem has an xattr_ids value of 4294967071,
-which as you point out is treated as negative due to xattr_ids being a
-signed int.
+Still, I think there's value in putting this in a struct, even if we
+also use the macro magic for other things. If we, for instance,
+instead of setting individual members of struct kunit_hook_table, we
+re-initialised it in one go, that might give the compiler enough
+context to warn about uninitialised values if we missed one.
 
-But 4294967071 even though it is a large number could be a perfectly
-legitimate number because in theory the filesystem layout supports up
-to 2^32 xattr_ids.
+The only downside of the struct is that it's slightly uglier if people
+want to call the hook function pointer directly. This is not as likely
+at the moment, as it could be NULL, but it'd be possible to extend the
+macro to generate a stub implementation which just returned nothing.
+(Still, it'd be equally possible to autogenerate a wrapper function
+which checks kunit_running, so this isn't a dealbreaker.)
 
-By extending the wrong sanity check from
+> i.e.
+>
+> // hooks.h
+> extern struct kunit_hook_table {
+>         __printf(3, 4) void (*fail_current_test)(const char*, int,
+> const char*, ...);
+> } kunit_hooks;
+>
+> //hooks.c
+> struct kunit_hook_table kunit_hooks;
+>
+> // in test.c
+> // here all the functions should be in scope for us to use
 
- >	if (*xattr_ids == 0)
+This is actually the bit which pushed me over the line and made me
+write the macro-based version: if the hook implementations are not all
+in test.c (and the static stub ones are in static_stub.c), we'd have
+to declare the hook implementation function somewhere, either
+introducing a new hooks-impl.h or having a bunch of function
+declarations in test.c.
 
-to
+My thought was, if we were going to need an extra header with more
+definitions, we might as well just have one, which would also stop us
+from worrying about missing an assignment in one place or the other.
 
- >	if (*xattr_ids <= 0)
+> static void kunit_set_hooks(void)
+> {
+>   kunit_hooks.fail_current_test = __kunit_fail_current_test;
+>   ...
+> }
+>
+>  static int __init kunit_init(void)
+>  {
+>   ...
+>   kunit_set_hooks();
+>   ...
+> }
+>
+> static void __exit kunit_exit(void)
+> {
+>   ...
+>   memset(&kunit_hooks, 0, sizeof(kunit_hooks));
+> }
+>
 
-You are using the fact that the number has gone negative to reject the
-filesystem.  But you are not fixing the real issues.
+I'll give moving this to a struct a go, it should be an improvement
+even if I still use the macros to generate the struct.
 
-You have not discovered if or why the negative number is the
-cause of the failure, or whether there are extra flaws.
+The real advantage of the macro is only having to add the new hook in
+two or three places:
+- The hooks-table.h entry
+- The _impl function (which can be in any file)
+- (Optionally) a wrapper so that people don't need to check for NULL /
+kunit_running themselves.
 
-With syzkiller fuzzer generated exploits, it is essential to analyze the
-issue throughly, because these exploits often rely on over-looked
-dependencies/assumptions, and it can be difficult to produce a patch
-that fixes all the issues and without introducing regressions.
+Without it, they'll have to:
+- Add an entry to the struct kunit_hooks_table
+- Write the implementation function.
+- Add a declaration for the _impl function in test.c, if the function
+isn't defined there.
+- Add an entry to kunit_set_hooks()
+- (Optionally) a wrapper, etc.
 
-Phillip
+That's potentially twice as many things to get right. Still, it's a
+lot better with the struct than doing each function individually, so
+it's a closer tradeoff.
+Personally, I still feel the macro-based version will eventually be
+useful, but it's probably 50/50 whether it's worth it for just two or
+three hooks.
 
- >
- > Fixes: 506220d2ba21 ("squashfs: add more sanity checks in xattr id 
-lookup")
- > Reported-by: syzbot+082fa4af80a5bb1a9843@syzkaller.appspotmail.com
- > Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
- > Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
- > ---
- >   fs/squashfs/xattr_id.c | 2 +-
- >   1 file changed, 1 insertion(+), 1 deletion(-)
- >
- > diff --git a/fs/squashfs/xattr_id.c b/fs/squashfs/xattr_id.c
- > index 087cab8c78f4..f6d78cbc3e74 100644
- > --- a/fs/squashfs/xattr_id.c
- > +++ b/fs/squashfs/xattr_id.c
- > @@ -76,7 +76,7 @@ __le64 *squashfs_read_xattr_id_table(struct 
-super_block *sb, u64 table_start,
- >   	/* Sanity check values */
- >
- >   	/* there is always at least one xattr id */
- > -	if (*xattr_ids == 0)
- > +	if (*xattr_ids <= 0)
- >   		return ERR_PTR(-EINVAL);
- >
- >   	len = SQUASHFS_XATTR_BLOCK_BYTES(*xattr_ids);
+Worst-case, we can do just the manual struct-based version, and
+replace it with the macro one later.
+
+Thanks,
+-- David
+
+> > KUnit is disabled, or the module is not loaded, these function pointers
+> > are all NULL. This shouldn't be a problem, as they're all used behind
+> > wrappers which check kunit_running and/or that the pointer is non-NULL.
+> >
+> > This can then be extended for future features which require similar
+> > "hook" behaviour, such as static stubs:
+> > https://lore.kernel.org/all/20221208061841.2186447-1-davidgow@google.com/
+> >
+> > Signed-off-by: David Gow <davidgow@google.com>
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/CAGS_qxq4vWvRJ89477S%2BrxHYLvnc2xN435GQ4%2BBvpLgqon8miw%40mail.gmail.com.
