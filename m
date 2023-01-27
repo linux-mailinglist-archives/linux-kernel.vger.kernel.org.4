@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DBD67E2EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2953567E2EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbjA0LSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:18:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55112 "EHLO
+        id S231675AbjA0LSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:18:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbjA0LRy (ORCPT
+        with ESMTP id S231636AbjA0LRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:17:54 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308F826AD
+        Fri, 27 Jan 2023 06:17:55 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D3A59CA
         for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:17:49 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so5167873wml.3
+Received: by mail-wr1-x432.google.com with SMTP id m7so4652756wru.8
         for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:17:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mJ+Rhyub7QdZQCx+PBV6POAj+tkBwCFqMXV8WoFTj5c=;
-        b=Xo1CBygkgpHH/tFpj6j9kDXLuhq5A62Kw4X382lY5a0voNm7I70yrWARWKgfTYaSen
-         /u8E+UxVTnjROQ2Xt+vzmmDv+q2RfSn5vjTcb0zYYad6E3NHPuPLYxmxc+5HB89uY4n5
-         dv2tGgTHCpLOHms1png8qrbAhuDBSlTIxAHus4LPbYw7qYHPQK05L6g8FaU/3gkKUiRK
-         kUtGMcFgnNurNB3zhupRa4gK+zgQHzHSfXQzEwOrELIQ9FtnIm7/WrcA7f4DTIQsG4ee
-         4yjvBX7l9MfPAjnMDiWA/xbIrHoDbcLnWQ0A8I8tj1uy11fnb2cerK8pdoGJZGgeRNCZ
-         KcZQ==
+        bh=bcQCOTgzaeE74ZCuxo4/3CNeOTAuJvVOxPA2T7IDx74=;
+        b=SKvsZzmdaghpxygEouhG8N98RssGxSsu0eDO3I/lv3ON+Of+PsyJ1BHGuF4Y+kk4xk
+         qStGLzevngbOatsm2tEzAOyb8FZdB9adz3YZhi6TfVBCDEy1xxL0yVq6gCJBrTKQnN/z
+         3+6iYGwNqWd1ttmxLKk/VffzfR7Xtqx5Lj2EEuEkLedlv30P52cVC2QZFG4IBSo6MNd0
+         OMZQDouWIuJXcnuus+vElDXWjGD9e0mrF5dso0wYSBNsfC+YVmsC+v6/tChHQ4lYiEcO
+         VowcGBwOPkOAM0U/pFt1mzb0lziEDAUK1YORA5/K8Jgv8RH+fmIHkeWrK64yDkcwcE7F
+         WKVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mJ+Rhyub7QdZQCx+PBV6POAj+tkBwCFqMXV8WoFTj5c=;
-        b=J9G7fQLPiw1ToIolQKii7c+JxNnHNm0XIK29bT5lMF+qXcZoWsQo3W+9dtok5Z0SCX
-         1newqvoV7Otnyq+/OGABbymEYQa4KH4rC43DhTRHSO4mLBg+I/idvdCccwSRCyfHqViI
-         sBiSqsqvBnls5XTajSvff1/qfybjEBBYOMyxDID3QJjvtNmzU4ndMoTadmnDN1poMuaa
-         V/IEypyCQYddtaYj98VpJQg11849PhM9nJjP6DpeRDSNMEA79OHFmz2YkTugLrbLGtDY
-         CvICJo6pSK00/zdk/BTiaQrJ4Z9TnatPYi6YN9ZrE+jjJ5qmhR38NpNkN74ke1JtkeM8
-         IHlQ==
-X-Gm-Message-State: AFqh2krZZjS5mMEwV0Yln+PH169hPJ4KIy964lG5UWK8lvcqYMA2Bl7u
-        fJH2R0GyvRPNfjumUfD0ka/E9Q==
-X-Google-Smtp-Source: AMrXdXs5hoz3LN8AV2WP8uQa1Q0FSeoiyd6UjOw0yoktx94Xvj1VmKahJrQehGLQr3aJvhvo4r7ukg==
-X-Received: by 2002:a05:600c:1713:b0:3da:fd90:19dd with SMTP id c19-20020a05600c171300b003dafd9019ddmr38975229wmn.26.1674818267879;
-        Fri, 27 Jan 2023 03:17:47 -0800 (PST)
+        bh=bcQCOTgzaeE74ZCuxo4/3CNeOTAuJvVOxPA2T7IDx74=;
+        b=PsKjzgkbmSqS84M0JjempID8lyeF/v/qJNaQX7aZh1Y3gEo0MAVc220ZEjbSlhfiTJ
+         kBiWjuYvmhGCi/ibo5yxcGUhDUPXhoSHuumWlAQQ6/sfPEZYF5RCcWQhvUE3O+lX2tM/
+         TfG/Ged9j/z6+sipQWmFxCFG1P3KzKCSSTUJLOc8NKlrfDrXlbKEHcOdLLPbYeW8aW2V
+         v4VnFeEV43nOgX5NnjVG/tj3Zd0R50Xpd7VdyFfeo9o01iMYpS5QQRkpIQI8DCM4etTI
+         xIcw3PMMkptvCDkKH3MER0Pb+cWbiFhOjntZY6PBtl8xhNELC5U9nwhZjLMasZTxdB1i
+         15XQ==
+X-Gm-Message-State: AO0yUKWNkCenpd/S8h2q85Z+hYV6arDayK7IvcOFVi492qcBUi8+BOvy
+        3wdur/M4peP70BIf6uJsSaYARA==
+X-Google-Smtp-Source: AK7set+pNN5wERN2lyAO5mm97bqpAECDVNdPpQzfrZCusqSgPfTCVBSarSB7hfcaVpMw9kQ/oUC8xQ==
+X-Received: by 2002:adf:a1dc:0:b0:2bf:b4ca:6bac with SMTP id v28-20020adfa1dc000000b002bfb4ca6bacmr9235874wrv.59.1674818269102;
+        Fri, 27 Jan 2023 03:17:49 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id c13-20020adffb0d000000b002bfd190fd60sm1843314wrr.108.2023.01.27.03.17.46
+        by smtp.gmail.com with ESMTPSA id c13-20020adffb0d000000b002bfd190fd60sm1843314wrr.108.2023.01.27.03.17.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 03:17:47 -0800 (PST)
+        Fri, 27 Jan 2023 03:17:48 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 05/37] dt-bindings: nvmem: Add compatible for SM8150
-Date:   Fri, 27 Jan 2023 11:15:33 +0000
-Message-Id: <20230127111605.25958-6-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 06/37] dt-bindings: nvmem: Add compatible for SM8250
+Date:   Fri, 27 Jan 2023 11:15:34 +0000
+Message-Id: <20230127111605.25958-7-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127111605.25958-1-srinivas.kandagatla@linaro.org>
 References: <20230127111605.25958-1-srinivas.kandagatla@linaro.org>
@@ -75,7 +75,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Docuemnt the QFPROM on SM8150.
+Docuemnt the QFPROM on SM8250.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
@@ -85,14 +85,14 @@ Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-index b7811bbb0e71..a248033026b1 100644
+index a248033026b1..9ddf3cef9e84 100644
 --- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
 +++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-@@ -31,6 +31,7 @@ properties:
-           - qcom,sdm670-qfprom
+@@ -32,6 +32,7 @@ properties:
            - qcom,sdm845-qfprom
            - qcom,sm6115-qfprom
-+          - qcom,sm8150-qfprom
+           - qcom,sm8150-qfprom
++          - qcom,sm8250-qfprom
        - const: qcom,qfprom
  
    reg:
