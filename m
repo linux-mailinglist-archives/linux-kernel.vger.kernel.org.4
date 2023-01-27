@@ -2,102 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557B567EBED
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 261C267EBEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234862AbjA0RD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:03:58 -0500
+        id S234589AbjA0REJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:04:09 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234831AbjA0RDq (ORCPT
+        with ESMTP id S234825AbjA0RD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:03:46 -0500
+        Fri, 27 Jan 2023 12:03:56 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DFE80147;
-        Fri, 27 Jan 2023 09:03:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93FB8497A;
+        Fri, 27 Jan 2023 09:03:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674838996; x=1706374996;
+  t=1674839006; x=1706375006;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=R3NgJAtWb7jXyeV9uKKrkT8nXL2hEwhW5ncNONVpuSY=;
-  b=TjVij/8tVuf78Wh+Uv0AyGR61gQAn4d/KoE/tMfhKKi4KoXNrnrNudw6
-   pzSWM4RgoITNn7SJpoBKc2OQK9gjKtP2D7T3zCNA05vu8Z8WFx2SyXr5H
-   pCczra5eDlPpI/jcEz5rxRoO6JfOC9nyACrUEC0kbg5oNjQimMhrwzQx9
-   S4upOh/INk5sg2q6pV5+Gc9TIdOvpX1MrABFZwS9V2wak7usREp4HzgSw
-   FcI8mfPRljA7k5iC5QqvW7oxOylKD1T59oo6fdvb9V4FZA9e/ZZxMyqIV
-   marhCTG55ILwNOCAv8WW8x4nhRCZ8PUuG2OuLyzsKLISOm7CorsxbO0+d
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="310754196"
+  bh=gSCQ96tg4l0FNHIgMJQtf3tGIwORYZgZx/efj/0fnbo=;
+  b=ktZmv99/pwUgwWnQp/a6k+efdlRyhpS+qjN6A1U5VDZxBnSBAFnOdz1i
+   hd6gY84Eh5DwdEe976S3r2iGsa/0ban2I1mVhYLAjBdhQzimQ0iu9jPtf
+   +vTwOMYjad32NI7RKDqSRxl8MNLQrA/GEKVROrQOKUqg2EhOwYwQpnVNj
+   /cJmNYSRkiKSIM88D/dERWfG9FgzDvr90ZDidYKpKwZiA2zvYnea7eQdc
+   AtbMi4XwQ4Cm50HsRC3eK4UZZOD7w11Ohz88NpmMNQa8OhLvxEoCQLlTP
+   TWkRI88uMO6vcGbJs1RszuIDcvWp2/vTK6uROithisCBiygS1wmW/7+Th
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="310754210"
 X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="310754196"
+   d="scan'208";a="310754210"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 09:02:49 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="726739253"
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 09:02:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="726739263"
 X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="726739253"
+   d="scan'208";a="726739263"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.57.171])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 09:02:47 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 09:02:50 -0800
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
         Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH 7/9] perf symbols: Allow for static executables with .plt
-Date:   Fri, 27 Jan 2023 19:02:20 +0200
-Message-Id: <20230127170222.9895-8-adrian.hunter@intel.com>
+Subject: [PATCH 8/9] perf symbols: Start adding support for .plt.got for x86
+Date:   Fri, 27 Jan 2023 19:02:21 +0200
+Message-Id: <20230127170222.9895-9-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230127170222.9895-1-adrian.hunter@intel.com>
 References: <20230127170222.9895-1-adrian.hunter@intel.com>
 MIME-Version: 1.0
 Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE,URI_NOVOWEL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A statically linked executable can have a .plt due to IFUNCs, in which
-case .symtab is used not .dynsym. Check the section header link to see
-if that is the case, and then use symtab instead.
+For x86, .plt.got is used, for example, when the address is taken of a
+dynamically linked function. Start adding support by synthesizing a
+symbol for each entry. A subsequent patch will attempt to get a better
+name for the symbol.
 
 Example:
 
   Before:
 
-    $ cat tstifunc.c
-    #include <stdio.h>
+    $ cat tstpltlib.c
+    void fn1(void) {}
+    void fn2(void) {}
+    void fn3(void) {}
+    void fn4(void) {}
+    $ cat tstpltgot.c
+    void fn1(void);
+    void fn2(void);
+    void fn3(void);
+    void fn4(void);
 
-    void thing1(void)
+    void callfn(void (*fn)(void))
     {
-            printf("thing1\n");
+            fn();
     }
-
-    void thing2(void)
-    {
-            printf("thing2\n");
-    }
-
-    typedef void (*thing_fn_t)(void);
-
-    thing_fn_t thing_ifunc(void)
-    {
-            int x;
-
-            if (x & 1)
-                    return thing2;
-            return thing1;
-    }
-
-    void thing(void) __attribute__ ((ifunc ("thing_ifunc")));
 
     int main()
     {
-            thing();
+            fn4();
+            fn1();
+            callfn(fn3);
+            fn2();
+            fn3();
             return 0;
     }
     $ gcc --version
@@ -105,112 +100,107 @@ Example:
     Copyright (C) 2021 Free Software Foundation, Inc.
     This is free software; see the source for copying conditions.  There is NO
     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-    $ gcc -static -Wall -Wextra -Wno-uninitialized -o tstifuncstatic tstifunc.c
-    $ readelf -SW tstifuncstatic | grep 'Name\|plt\|dyn'
+    $ gcc -Wall -Wextra -shared -o libtstpltlib.so tstpltlib.c
+    $ gcc -Wall -Wextra -o tstpltgot tstpltgot.c -L . -ltstpltlib -Wl,-rpath="$(pwd)"
+    $ readelf -SW tstpltgot | grep 'Name\|plt\|dyn'
       [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
-      [ 4] .rela.plt         RELA            00000000004002e8 0002e8 000258 18  AI 29  20  8
-      [ 6] .plt              PROGBITS        0000000000401020 001020 000190 00  AX  0   0 16
-      [20] .got.plt          PROGBITS        00000000004c5000 0c4000 0000e0 08  WA  0   0  8
-    $ perf record -e intel_pt//u --filter 'filter main @ ./tstifuncstatic' ./tstifuncstatic
-    thing1
+      [ 6] .dynsym           DYNSYM          00000000000003d8 0003d8 0000f0 18   A  7   1  8
+      [ 7] .dynstr           STRTAB          00000000000004c8 0004c8 0000c6 00   A  0   0  1
+      [10] .rela.dyn         RELA            00000000000005d8 0005d8 0000d8 18   A  6   0  8
+      [11] .rela.plt         RELA            00000000000006b0 0006b0 000048 18  AI  6  24  8
+      [13] .plt              PROGBITS        0000000000001020 001020 000040 10  AX  0   0 16
+      [14] .plt.got          PROGBITS        0000000000001060 001060 000020 10  AX  0   0 16
+      [15] .plt.sec          PROGBITS        0000000000001080 001080 000030 10  AX  0   0 16
+      [23] .dynamic          DYNAMIC         0000000000003d90 002d90 000210 10  WA  7   0  8
+    $ perf record -e intel_pt//u --filter 'filter main @ ./tstpltgot , filter callfn @ ./tstpltgot' ./tstpltgot
     [ perf record: Woken up 1 times to write data ]
-    [ perf record: Captured and wrote 0.008 MB perf.data ]
+    [ perf record: Captured and wrote 0.011 MB perf.data ]
     $ perf script --itrace=be --ns -F+flags,-event,+addr,-period,-comm,-tid,-cpu,-dso
-    15786.690189535:   tr strt                               0 [unknown] =>           4017cd main+0x0
-    15786.690189535:   tr end  call                     4017d5 main+0x8 =>           401170 [unknown]
-    15786.690197660:   tr strt                               0 [unknown] =>           4017da main+0xd
-    15786.690197660:   tr end  return                   4017e0 main+0x13 =>           401c1a __libc_start_call_main+0x6a
+    28393.810326915:   tr strt                               0 [unknown] =>     562350baa1b2 main+0x0
+    28393.810326915:   tr end  call               562350baa1ba main+0x8 =>     562350baa090 fn4@plt+0x0
+    28393.810326917:   tr strt                               0 [unknown] =>     562350baa1bf main+0xd
+    28393.810326917:   tr end  call               562350baa1bf main+0xd =>     562350baa080 fn1@plt+0x0
+    28393.810326917:   tr strt                               0 [unknown] =>     562350baa1c4 main+0x12
+    28393.810326917:   call                       562350baa1ce main+0x1c =>     562350baa199 callfn+0x0
+    28393.810326917:   tr end  call               562350baa1ad callfn+0x14 =>     7f607d36110f fn3+0x0
+    28393.810326922:   tr strt                               0 [unknown] =>     562350baa1af callfn+0x16
+    28393.810326922:   return                     562350baa1b1 callfn+0x18 =>     562350baa1d3 main+0x21
+    28393.810326922:   tr end  call               562350baa1d3 main+0x21 =>     562350baa0a0 fn2@plt+0x0
+    28393.810326924:   tr strt                               0 [unknown] =>     562350baa1d8 main+0x26
+    28393.810326924:   tr end  call               562350baa1d8 main+0x26 =>     562350baa060 [unknown]  <- call to fn3 via .plt.got
+    28393.810326925:   tr strt                               0 [unknown] =>     562350baa1dd main+0x2b
+    28393.810326925:   tr end  return             562350baa1e3 main+0x31 =>     7f607d029d90 __libc_start_call_main+0x80
 
   After:
 
     $ perf script --itrace=be --ns -F+flags,-event,+addr,-period,-comm,-tid,-cpu,-dso
-    15786.690189535:   tr strt                               0 [unknown] =>           4017cd main+0x0
-    15786.690189535:   tr end  call                     4017d5 main+0x8 =>           401170 thing_ifunc@plt+0x0
-    15786.690197660:   tr strt                               0 [unknown] =>           4017da main+0xd
-    15786.690197660:   tr end  return                   4017e0 main+0x13 =>           401c1a __libc_start_call_main+0x6a
+    28393.810326915:   tr strt                               0 [unknown] =>     562350baa1b2 main+0x0
+    28393.810326915:   tr end  call               562350baa1ba main+0x8 =>     562350baa090 fn4@plt+0x0
+    28393.810326917:   tr strt                               0 [unknown] =>     562350baa1bf main+0xd
+    28393.810326917:   tr end  call               562350baa1bf main+0xd =>     562350baa080 fn1@plt+0x0
+    28393.810326917:   tr strt                               0 [unknown] =>     562350baa1c4 main+0x12
+    28393.810326917:   call                       562350baa1ce main+0x1c =>     562350baa199 callfn+0x0
+    28393.810326917:   tr end  call               562350baa1ad callfn+0x14 =>     7f607d36110f fn3+0x0
+    28393.810326922:   tr strt                               0 [unknown] =>     562350baa1af callfn+0x16
+    28393.810326922:   return                     562350baa1b1 callfn+0x18 =>     562350baa1d3 main+0x21
+    28393.810326922:   tr end  call               562350baa1d3 main+0x21 =>     562350baa0a0 fn2@plt+0x0
+    28393.810326924:   tr strt                               0 [unknown] =>     562350baa1d8 main+0x26
+    28393.810326924:   tr end  call               562350baa1d8 main+0x26 =>     562350baa060 offset_0x1060@plt+0x0
+    28393.810326925:   tr strt                               0 [unknown] =>     562350baa1dd main+0x2b
+    28393.810326925:   tr end  return             562350baa1e3 main+0x31 =>     7f607d029d90 __libc_start_call_main+0x80
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
- tools/perf/util/symbol-elf.c | 30 ++++++++++++++++++++----------
- tools/perf/util/symsrc.h     |  1 +
- 2 files changed, 21 insertions(+), 10 deletions(-)
+ tools/perf/util/symbol-elf.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
 diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index 8f7802097c72..9e265a726418 100644
+index 9e265a726418..254116d40e59 100644
 --- a/tools/perf/util/symbol-elf.c
 +++ b/tools/perf/util/symbol-elf.c
-@@ -483,7 +483,6 @@ int dso__synthesize_plt_symbols(struct dso *dso, struct symsrc *ss)
- 	GElf_Shdr shdr_rel_plt, shdr_dynsym;
- 	Elf_Data *syms, *symstrs;
- 	Elf_Scn *scn_plt_rel, *scn_symstrs, *scn_dynsym;
--	size_t dynsym_idx;
- 	GElf_Ehdr ehdr;
- 	char sympltname[1024];
- 	Elf *elf;
-@@ -530,13 +529,6 @@ int dso__synthesize_plt_symbols(struct dso *dso, struct symsrc *ss)
- 		lazy_plt = true;
- 	}
+@@ -466,6 +466,30 @@ static bool machine_is_x86(GElf_Half e_machine)
+ 	return e_machine == EM_386 || e_machine == EM_X86_64;
+ }
  
--	scn_dynsym = ss->dynsym;
--	shdr_dynsym = ss->dynshdr;
--	dynsym_idx = ss->dynsym_idx;
--
--	if (scn_dynsym == NULL)
--		return 0;
--
- 	scn_plt_rel = elf_section_by_name(elf, &ehdr, &shdr_rel_plt,
- 					  ".rela.plt", NULL);
- 	if (scn_plt_rel == NULL) {
-@@ -550,8 +542,25 @@ int dso__synthesize_plt_symbols(struct dso *dso, struct symsrc *ss)
- 	    shdr_rel_plt.sh_type != SHT_REL)
- 		return 0;
- 
--	if (shdr_rel_plt.sh_link != dynsym_idx)
-+	if (!shdr_rel_plt.sh_link)
++static int dso__synthesize_plt_got_symbols(struct dso *dso, Elf *elf,
++					   GElf_Ehdr *ehdr,
++					   char *buf, size_t buf_sz)
++{
++	struct symbol *sym;
++	GElf_Shdr shdr;
++	Elf_Scn *scn;
++	size_t i;
++
++	scn = elf_section_by_name(elf, ehdr, &shdr, ".plt.got", NULL);
++	if (!scn || !shdr.sh_entsize)
 +		return 0;
 +
-+	if (shdr_rel_plt.sh_link == ss->dynsym_idx) {
-+		scn_dynsym = ss->dynsym;
-+		shdr_dynsym = ss->dynshdr;
-+	} else if (shdr_rel_plt.sh_link == ss->symtab_idx) {
-+		/*
-+		 * A static executable can have a .plt due to IFUNCs, in which
-+		 * case .symtab is used not .dynsym.
-+		 */
-+		scn_dynsym = ss->symtab;
-+		shdr_dynsym = ss->symshdr;
-+	} else {
- 		goto out_elf_end;
++	for (i = 0; i < shdr.sh_size; i += shdr.sh_entsize) {
++		snprintf(buf, buf_sz, "offset_%#zx@plt", shdr.sh_offset + i);
++		sym = symbol__new(shdr.sh_offset + i, shdr.sh_entsize, STB_GLOBAL, STT_FUNC, buf);
++		if (!sym)
++			return -1;
++		symbols__insert(&dso->symbols, sym);
 +	}
 +
-+	if (!scn_dynsym)
-+		return 0;
++	return 0;
++}
++
+ /*
+  * We need to check if we have a .dynsym, so that we can handle the
+  * .plt, synthesizing its symbols, that aren't on the symtabs (be it
+@@ -514,6 +538,11 @@ int dso__synthesize_plt_symbols(struct dso *dso, struct symsrc *ss)
+ 		goto out_elf_end;
+ 	symbols__insert(&dso->symbols, plt_sym);
  
- 	/*
- 	 * Fetch the relocation section to find the idxes to the GOT
-@@ -1077,8 +1086,9 @@ int symsrc__init(struct symsrc *ss, struct dso *dso, const char *name,
- 
- 	ss->is_64_bit = (gelf_getclass(elf) == ELFCLASS64);
- 
-+	ss->symtab_idx = 0;
- 	ss->symtab = elf_section_by_name(elf, &ehdr, &ss->symshdr, ".symtab",
--			NULL);
-+			&ss->symtab_idx);
- 	if (ss->symshdr.sh_type != SHT_SYMTAB)
- 		ss->symtab = NULL;
- 
-diff --git a/tools/perf/util/symsrc.h b/tools/perf/util/symsrc.h
-index 2665b4bde751..edf82028c9e6 100644
---- a/tools/perf/util/symsrc.h
-+++ b/tools/perf/util/symsrc.h
-@@ -26,6 +26,7 @@ struct symsrc {
- 	GElf_Shdr	     opdshdr;
- 
- 	Elf_Scn		     *symtab;
-+	size_t		     symtab_idx;
- 	GElf_Shdr	     symshdr;
- 
- 	Elf_Scn		     *dynsym;
++	/* Only x86 has .plt.got */
++	if (machine_is_x86(ehdr.e_machine) &&
++	    dso__synthesize_plt_got_symbols(dso, elf, &ehdr, sympltname, sizeof(sympltname)))
++		goto out_elf_end;
++
+ 	/* Only x86 has .plt.sec */
+ 	if (machine_is_x86(ehdr.e_machine) &&
+ 	    elf_section_by_name(elf, &ehdr, &plt_sec_shdr, ".plt.sec", NULL)) {
 -- 
 2.34.1
 
