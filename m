@@ -2,175 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3BB67EAA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08BC67EAA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232940AbjA0QSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S234193AbjA0QTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjA0QSx (ORCPT
+        with ESMTP id S234303AbjA0QTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:18:53 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0547C658
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:18:51 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id w15so4163205qvs.11
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:18:51 -0800 (PST)
+        Fri, 27 Jan 2023 11:19:16 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A1D7D6CF
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:19:11 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id j21so1161355uap.5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:19:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
-         :user-agent:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DpbM6dulHZ17ZJk7sIXX1zvUQ+2CFayGo452JEZsUgA=;
-        b=sei4Ur3/qhUD7eRtizMwsp9T6XeunKIuHWi7/1xW5YiSHAAZjfGiFrjmNroi5Enj8P
-         0NXdDYvUlkxkZFSZ8QC7MWX3UVc/1D/PRzdEIy1zPa+ac+P8OcshmPccSYKmoPj+8upz
-         bF1cYyx+wYqWTI3M2ZRA5rjQB3IvJhBtMjBcFST1UKVHNS5ge2jDw381/jn/TPNUG8Ig
-         Utt08poel4blMMcW/0fHg3xTtshN+h7KVP6YlUQEUfgC7IHcdXOtmL/qzdXFI1Oxa/+4
-         qPu9X7fftgdEcwoRI/zPhtWiwy4+hJQS7bTws88fySVHeWezQCCBy0QU30+wduA64yFS
-         uaIQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=btzXDkgY9zIV0E9s3BhkQX/D33sJFMFogaPzfTY6Ij8=;
+        b=Uj35fujsymUNT+Dpx+NM/bZ/3HuCuDVI+F5ZEhFp8eN1O5gfh14fq5ulYBUs3aZ75R
+         2VhyGEg77uD8gVsD3xTvTWEw4G6XbUGY91q7ADSjgxzjmvQDx+apZwE5JA+VF2d7SMu2
+         r8Omlw3XgbhxWD8b93tvEo5JeMLDN9FxGbQD0M+/cSaMTYwRSxsLbn/yoUVLmyIv9Rml
+         1f8vmWDqLLTqaFrag8e9xbKQALtsognLThGzMmefhfSHPygfhwhYw3XE1IIy2RYsotsX
+         NgsUf5zcSvJzv0oPWWlG/5UvppfDi1jSCe+RfQlOKebHgFaazvo+sc3iva7viwWwmC3k
+         7ctw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
-         :user-agent:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DpbM6dulHZ17ZJk7sIXX1zvUQ+2CFayGo452JEZsUgA=;
-        b=BMyiIdDvfIU9FIdOwjKvOQ0A1hXZCNBtkfevLNgAMksrtGATTreuJBUOYVCi8dRXB7
-         IOnVGs01N7zvBLRz7crSCa3w6hWTmg2CRc6kAkf8qaSXtbZIAvdEYFe1+eTJHBOhxid0
-         urkcKZCECRtnUJwguViTKGr8C6qSoSpWwpDebcZIKvHJPev77oghhdKENJm0dog2gfIg
-         o4yAng9S2YGcpx2Mi7jMLz4eJ11N5m3LlUJtUE97r8ICkfLn5CNCiPTXLePc6cjRf/81
-         RA3/M1RQikYlpK4r6/ZyRPQxri1pODPKE6C3uf8GObche58eBOMAxJsqx0blQWaNTf7E
-         vTxw==
-X-Gm-Message-State: AFqh2kod0y9Fl8QR/bzajAVIF4fIRqs+6zmo/mRPi43eiOTZGKVB3nKD
-        lYHVu43g3C2HcFxHx4vb03T5TcSqHvhGTYl0k3wNDQ==
-X-Google-Smtp-Source: AMrXdXvLZ3tb9o4k4+Rdt+X24aNNL4DoFTd5UeyiqztwmluRV4eW2iDC4NLWecpVdMZnnv+GzK2PKeAqcPJnnUgMp0M=
-X-Received: by 2002:a05:6214:5c42:b0:534:1fd4:72ec with SMTP id
- lz2-20020a0562145c4200b005341fd472ecmr2080182qvb.65.1674836331103; Fri, 27
- Jan 2023 08:18:51 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 27 Jan 2023 11:18:50 -0500
-From:   Guillaume Ranquet <granquet@baylibre.com>
-User-Agent: meli 0.7.2
-References: <20220919-v5-0-cfb0e5ad29b2@baylibre.com>
-In-Reply-To: <20220919-v5-0-cfb0e5ad29b2@baylibre.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=btzXDkgY9zIV0E9s3BhkQX/D33sJFMFogaPzfTY6Ij8=;
+        b=PFz632+soRV3j8cUtnc6ol5EOEJFilD/J4Xo9JlVuy8VaiGcYUplSI8t0lRGrlVuh/
+         7rXOO8f9hrmqkXoV+HKv862YozU13bN1WrFLJ+P5OTdxpx8sE7xL1owGVaCL2kR0s/OC
+         dP7JVlpgrEkCKiyD6Il8ywe2SeTWdfqRIo1FRexzIlmSf7oFU9P3fcpUS6RPK5Xw/4ga
+         wb/Wan1GkVVkm4CAjVBo6YiTZLost57aGg8M53qjCd8tjOfILUB0k1NfCXP/FkYS54r3
+         h2Nm9xrh6545qsmrb8MfwNC0Ush6B8QTNCUx9E7GL2rg3FgpSxdjnhBdqcUepRTDZJ3V
+         5oTQ==
+X-Gm-Message-State: AFqh2krRegp4I6fw+OJgE/BOpi6x7lr5BF1CbazVs3FtXPkNGsCcPTTQ
+        uVMLib60rteY8cT8r+sWXm23Z+hGbftT7mZMgCj4eQ==
+X-Google-Smtp-Source: AMrXdXtCXWoKvPOmh0hZEHZ3kKv8FTv1+y1qQCUCWWQ4uQ7FFsgLx7/6erIhMq355JCc2VYbRnNDs8/smpnNPXgV61o=
+X-Received: by 2002:ab0:5550:0:b0:631:641a:ed3b with SMTP id
+ u16-20020ab05550000000b00631641aed3bmr3572249uaa.13.1674836350255; Fri, 27
+ Jan 2023 08:19:10 -0800 (PST)
 MIME-Version: 1.0
-Date:   Fri, 27 Jan 2023 11:18:50 -0500
-Message-ID: <CABnWg9u02duwaM3zWAdM9ZLw03Z53j0aCSWYXWpz=WM8zm-Ynw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/3] Add MT8195 HDMI phy support
-To:     CK Hu <ck.hu@mediatek.com>, Vinod Koul <vkoul@kernel.org>,
-        Jitao shi <jitao.shi@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mac.shen@mediatek.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-phy@lists.infradead.org,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, stuart.lee@mediatek.com
+References: <73e639d5-702b-0d03-16d9-a965b1963ef6@huawei.com>
+ <Y6RRfF5yRew7rdCp@hirez.programming.kicks-ass.net> <Y9GG3N5ivVvyETa2@u40bc5e070a0153.ant.amazon.com>
+ <Y9J25xMrItpeHIxD@hirez.programming.kicks-ass.net> <Y9LG5vkf/4ufJb35@u40bc5e070a0153.ant.amazon.com>
+ <Y9O5Fwfib2CVAMwl@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y9O5Fwfib2CVAMwl@hirez.programming.kicks-ass.net>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 27 Jan 2023 17:18:56 +0100
+Message-ID: <CAKfTPtBMSg2SDXq=sVt99TyM+tEXRFL74EQ57-t5uKYAXUUyLg@mail.gmail.com>
+Subject: Re: [bug-report] possible s64 overflow in max_vruntime()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Roman Kagan <rkagan@amazon.de>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 16:55, Guillaume Ranquet <granquet@baylibre.com> wrote:
->Add support for HDMI phy on MT8195.
+On Fri, 27 Jan 2023 at 12:44, Peter Zijlstra <peterz@infradead.org> wrote:
 >
+> On Thu, Jan 26, 2023 at 07:31:02PM +0100, Roman Kagan wrote:
+>
+> > > All that only matters for small sleeps anyway.
+> > >
+> > > Something like:
+> > >
+> > >         sleep_time = U64_MAX;
+> > >         if (se->avg.last_update_time)
+> > >           sleep_time = cfs_rq_clock_pelt(cfs_rq) - se->avg.last_update_time;
+> >
+> > Interesting, why not rq_clock_task(rq_of(cfs_rq)) - se->exec_start, as
+> > others were suggesting?  It appears to better match the notion of sleep
+> > wall-time, no?
+>
+> Should also work I suppose. cfs_rq_clock takes throttling into account,
+> but that should hopefully also not be *that* long, so either should
+> work.
 
-Please disregard this, as I meant to send v6 and not a new v5...
-link to the actual v6 is here:
-https://lore.kernel.org/linux-mediatek/20220919-v6-0-2f641c422cb6@baylibre.com/
+yes rq_clock_task(rq_of(cfs_rq)) should be fine too
 
-Sorry for spamming your inboxes,
-Guillaume.
+Another thing to take into account is the sleeper credit that the
+waking task deserves so the detection should be done once it has been
+subtracted from vruntime.
 
->This is split from the previous v3 to contain only the phy related
->changes to the HDMI support for mt8195 as suggested by Vinod.
->
->This is based on top of next-20221121
->
->To: Chunfeng Yun <chunfeng.yun@mediatek.com>
->To: Kishon Vijay Abraham I <kishon@ti.com>
->To: Vinod Koul <vkoul@kernel.org>
->To: Rob Herring <robh+dt@kernel.org>
->To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
->To: Matthias Brugger <matthias.bgg@gmail.com>
->To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
->To: Philipp Zabel <p.zabel@pengutronix.de>
->To: David Airlie <airlied@gmail.com>
->To: Daniel Vetter <daniel@ffwll.ch>
->To: CK Hu <ck.hu@mediatek.com>
->To: Jitao shi <jitao.shi@mediatek.com>
->Cc: linux-arm-kernel@lists.infradead.org
->Cc: linux-mediatek@lists.infradead.org
->Cc: linux-phy@lists.infradead.org
->Cc: devicetree@vger.kernel.org
->Cc: linux-kernel@vger.kernel.org
->Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->Cc: mac.shen@mediatek.com
->CC: stuart.lee@mediatek.com
->Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
->---
->Changes in v5:
->- Adapt clock bit ratio when TMDS is over 340M
->- Used sized integers for register read/writes
->- Removed useless comments
->- Shortened function names
->- Link to v4: https://lore.kernel.org/r/20220919-v4-0-bdc21e1307e9@baylibre.com
->
->Changes in v4:
->- Dedicated series for HDMI phy support (without the drm/ related
->  changes)
->- Removed useless variable initializations in phy driver
->- Link to v3: https://lore.kernel.org/r/20220919-v3-0-a803f2660127@baylibre.com
->
->Changes in v3:
->- phy: Grouped register and bit definition together to add clarity
->- dt-bindings: Addressed comments
->- Link to v2: https://lore.kernel.org/r/20220919-v2-0-8419dcf4f09d@baylibre.com
->
->Changes in v2:
->- Removed syscon requirement from the hdmi node
->- Use as much as possible bit FIELD_PREP/FIELD_GET macros across all the
->  patches
->- Make cec optional dynamically instead of hardcoded with a flag
->- Renamed hdmi variants to v1 (legacy) and v2 (mt8195) while waiting for
->  a better name
->- Rework hdmi v2 code to use a connector (same as v1)
->- Remove "magic" 0x43 addr special handling in hdmi ddc code
->- Link to v1: https://lore.kernel.org/r/20220919-v1-0-4844816c9808@baylibre.com
->
->---
->Guillaume Ranquet (3):
->      dt-bindings: phy: mediatek: hdmi-phy: Add mt8195 compatible
->      phy: phy-mtk-hdmi: Add generic phy configure callback
->      phy: mediatek: add support for phy-mtk-hdmi-mt8195
->
-> .../devicetree/bindings/phy/mediatek,hdmi-phy.yaml |   1 +
-> drivers/phy/mediatek/Makefile                      |   1 +
-> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c         | 523 +++++++++++++++++++++
-> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.h         | 111 +++++
-> drivers/phy/mediatek/phy-mtk-hdmi.c                |  15 +
-> drivers/phy/mediatek/phy-mtk-hdmi.h                |   3 +
-> 6 files changed, 654 insertions(+)
->---
->base-commit: e2f86c02fdc96ca29ced53221a3cbf50aa6f8b49
->change-id: 20220919-hdmi_mtk
->
->Best regards,
->--
->Guillaume Ranquet <granquet@baylibre.com>
+Last point, when a nice -20 task runs on a rq, it will take a bit more
+than 2 seconds for the vruntime to be increased by more than 24ms (the
+maximum credit that a waking task can get) so threshold must be
+significantly higher than 2 sec. On the opposite side, the lowest
+possible weight of a cfs rq is 2 which means that the problem appears
+for a sleep longer or equal to 2^54 = 2^63*2/1024. We should use this
+value instead of an arbitrary 200 days
