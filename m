@@ -2,173 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B6D67F079
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C34A67F07B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjA0VgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        id S230110AbjA0VhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:37:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjA0VgM (ORCPT
+        with ESMTP id S229593AbjA0Vg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:36:12 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C085A351;
-        Fri, 27 Jan 2023 13:36:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674855368; x=1706391368;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Gkg6K5SC88XcNSOy70yqKkpx83kTBtchNgAEpKJ1XIQ=;
-  b=OzsWmyPGnck7vgKfWw0WiwReI0/yTAR+rm/f7mn4pLpLpedFkHp4F50o
-   AYWaZruD9cSjTeTlDHXPi2+7cqgXyVCF8JzJszzI57ErNUK+OBkmncMyE
-   L8z3pXdnebN99N6kK8da4OQPGaUelAWMydKsRfuKIBloxyqW9/+e7lVB8
-   wvWezqKe5rHtGQvitaBBeXpCq1mnp1bTcpW7vbJLXZQ07IzI8/OdddBQr
-   F1fbVxr3NxJnro2jLTTYcIp7VYxAWFYjcrhER55Qv+Jtz0Id6Xn6HnOQL
-   RdFFk3MPTzn+xXIYZ3opFTJizrOShFXAeS92h6qWxgRfqDqU9XJc+IIpW
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="389577234"
-X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
-   d="scan'208";a="389577234"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 13:36:07 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="805957947"
-X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
-   d="scan'208";a="805957947"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.161.50])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 13:36:07 -0800
-Date:   Fri, 27 Jan 2023 13:36:05 -0800
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:
-Message-ID: <Y9RDxWwKX+OPl7V1@aschofie-mobl2>
-References: <cover.1674070170.git.alison.schofield@intel.com>
- <63d32fe783ee2_ea2222949f@dwillia2-xfh.jf.intel.com.notmuch>
- <Y9P3ipL28W7N1bLm@aschofie-mobl2>
- <63d423218e854_3a36e5294fd@dwillia2-xfh.jf.intel.com.notmuch>
+        Fri, 27 Jan 2023 16:36:58 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651402A175;
+        Fri, 27 Jan 2023 13:36:57 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id l35-20020a05600c1d2300b003dc4634a466so244789wms.4;
+        Fri, 27 Jan 2023 13:36:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wjzq5k6eWg1I0/GMAp2LeFAGPD0xEfbPD6kNUwzQn8A=;
+        b=mqqjWersLhfnnFg/Gkqe7Zf3VibhxN0tDukAlSoRZ1/AEXL8BL+LplnUwCVPmWvMMS
+         OX9+qM9EkFPZtMpiAKG6VdZ0W68bwn3lMYc+oFu8ZDiOGYOZ/f0y+Lta5WBpPlDPDQJJ
+         6qlUeCfcP7oUgOkNsYUuw0dAG9Gkjy7FojaKnNIXueNkiIco+Kv5qskhYKJuwvD1ArmQ
+         /IoRmLePJOyWeuTGXU9/NOafvbpbtps62bM2VWLxX04jkRELtw31FWOgC8XHGP739I5n
+         gjEVQiywRy5jDySwPLutvKNUQPrlfv5uHtzoiu4MtQV8KuBgmyZ6uqQx9ERRR+ZzDfBx
+         1icg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wjzq5k6eWg1I0/GMAp2LeFAGPD0xEfbPD6kNUwzQn8A=;
+        b=0YiuWaHt0hwAen26m+EeTI9EhGu8jMEIF/sk/T6pWolpKkYFLkW71P+ET6gsFxDkgD
+         p1VhCb6VPkID5Y7WoAI4MEjz0Om66Dhfw3VfLigOgMF9DSDKu6y/bjFezTywPMxG13Tu
+         v43H9rqzZIOpWaH9g4r20Du20AlBLhYXCSm+ZPYCALHxuKCxa30XTzMJFY62o6nEQ5Fb
+         KgzAHsOep1FJcTPPaN3qIzNXZ3fdwoCtFL/VWWRI7mgW7X/Mfhcuvs7ojcB2QCBliDGU
+         UfCffvvo6nffqvPkplLx+PguSsmpKUMoKWz69uHl2qFzdtZTaWnyaTv7rEBBYPFDfkNE
+         iTNw==
+X-Gm-Message-State: AO0yUKXQb1TPGajldNRhkONhJdOjNKqurQbToaNd3Bg6VxxLZPLf/Nzr
+        NAODuPX6twEOWwFyiiQ7GBY=
+X-Google-Smtp-Source: AK7set8Pp4tv0182n/GQp7PzspRCykcbjXnPJBNjmaMDjFFHpobvlRLVqA0F6RTTSKBcgI2XIhPeqQ==
+X-Received: by 2002:a05:600c:1c02:b0:3dc:3b1a:5d2d with SMTP id j2-20020a05600c1c0200b003dc3b1a5d2dmr910363wms.0.1674855415880;
+        Fri, 27 Jan 2023 13:36:55 -0800 (PST)
+Received: from localhost (95-172-185-203.cpe.netmadeira.com. [95.172.185.203])
+        by smtp.gmail.com with ESMTPSA id t1-20020a05600c41c100b003dc47d458cdsm81138wmh.15.2023.01.27.13.36.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 13:36:55 -0800 (PST)
+Date:   Fri, 27 Jan 2023 23:36:52 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        kai.huang@intel.com
+Subject: Re: [PATCH v11 030/113] KVM: x86/mmu: Replace hardcoded value 0 for
+ the initial value for SPTE
+Message-ID: <20230127233513.0000367c@gmail.com>
+In-Reply-To: <Y9Fj/vgPEzfU1eof@google.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+        <dee30f0562d8be0102547d8eb9fc77736eae679d.1673539699.git.isaku.yamahata@intel.com>
+        <20230125112434.0000512a@gmail.com>
+        <Y9Fj/vgPEzfU1eof@google.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63d423218e854_3a36e5294fd@dwillia2-xfh.jf.intel.com.notmuch>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:16:49AM -0800, Dan Williams wrote:
-> Alison Schofield wrote:
-> > On Thu, Jan 26, 2023 at 05:59:03PM -0800, Dan Williams wrote:
-> > > alison.schofield@ wrote:
-> > > > From: Alison Schofield <alison.schofield@intel.com>
-> > > > 
-> > > > Subject: [PATCH v5 0/5] CXL Poison List Retrieval & Tracing
-> > > > 
-> > > > Changes in v5:
-> > > > - Rebase on cxl/next 
-> > > > - Use struct_size() to calc mbox cmd payload .min_out
-> > > > - s/INTERNAL/INJECTED mocked poison record source
-> > > > - Added Jonathan Reviewed-by tag on Patch 3
-> > > > 
-> > > > Link to v4:
-> > > > https://lore.kernel.org/linux-cxl/cover.1671135967.git.alison.schofield@intel.com/
-> > > > 
-> > > > Add support for retrieving device poison lists and store the returned
-> > > > error records as kernel trace events.
-> > > > 
-> > > > The handling of the poison list is guided by the CXL 3.0 Specification
-> > > > Section 8.2.9.8.4.1. [1] 
-> > > > 
-> > > > Example, triggered by memdev:
-> > > > $ echo 1 > /sys/bus/cxl/devices/mem3/trigger_poison_list
-> > > > cxl_poison: memdev=mem3 pcidev=cxl_mem.3 region= region_uuid=00000000-0000-0000-0000-000000000000 dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
-> > > 
-> > > I think the pcidev= field wants to be called something like "host" or
-> > > "parent", because there is no strict requirement that a 'struct
-> > > cxl_memdev' is related to a 'struct pci_dev'. In fact in that example
-> > > "cxl_mem.3" is a 'struct platform_device'. Now that I think about it, I
-> > > think all CXL device events should be emitting the PCIe serial number
-> > > for the memdev.
-> > ]
+On Wed, 25 Jan 2023 17:22:08 +0000
+Sean Christopherson <seanjc@google.com> wrote:
+
+> On Wed, Jan 25, 2023, Zhi Wang wrote:
+> > On Thu, 12 Jan 2023 08:31:38 -0800
+> > isaku.yamahata@intel.com wrote:
 > > 
-> > Will do, 'host' and add PCIe serial no.
+> > This refactor patch is quite hacky.
 > > 
-> > > 
-> > > I will look in the implementation, but do region= and region_uuid= get
-> > > populated when mem3 is a member of the region?
+> > Why not change the purpose of vcpu->arch.mmu_shadow_page.gfp_zero and let the
+> > callers respect that the initial value of spte can be configurable? It will be
+> > generic and not TDX-specific, then kvm_init_shadow_page() is not required,
+> > mmu_topup_shadow_page_cache() can be left un-touched as the refactor can cover
+> > other architectures.
 > > 
-> > Not always.
-> > In the case above, where the trigger was by memdev, no.
-> > Region= and region_uuid= (and in the follow-on patch, hpa=) only get
-> > populated if the poison was triggered by region, like the case below.
-> > 
-> > It could be looked up for the by memdev cases. Is that wanted?
-> 
-> Just trying to understand the semantics. However, I do think it makes sense
-> for a memdev trigger to lookup information on all impacted regions
-> across all of the device's DPA and the region trigger makes sense to
-> lookup all memdevs, but bounded by the DPA that contributes to that
-> region. I just want to avoid someone having to trigger the region to get
-> extra information that was readily available from a memdev listing.
-> 
-
-Dan - 
-
-Confirming my take-away from this email, and our chat:
-
-Remove the by-region trigger_poison_list option entirely. User space
-needs to trigger by-memdev the memdevs participating in the region and
-filter those events by region.
-
-Add the region info (region name, uuid) to the TRACE_EVENTs when the
-poisoned DPA is part of any region.
-
-Alison
-
-> > 
-> > Thanks for the reviews Dan!
-> > > 
-> > > > 
-> > > > Example, triggered by region:
-> > > > $ echo 1 > /sys/bus/cxl/devices/region5/trigger_poison_list
-> > > > cxl_poison: memdev=mem0 pcidev=cxl_mem.0 region=region5 region_uuid=bfcb7a29-890e-4a41-8236-fe22221fc75c dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
-> > > > cxl_poison: memdev=mem1 pcidev=cxl_mem.1 region=region5 region_uuid=bfcb7a29-890e-4a41-8236-fe22221fc75c dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
-> > > > 
-> > > > [1]: https://www.computeexpresslink.org/download-the-specification
-> > > > 
-> > > > Alison Schofield (5):
-> > > >   cxl/mbox: Add GET_POISON_LIST mailbox command
-> > > >   cxl/trace: Add TRACE support for CXL media-error records
-> > > >   cxl/memdev: Add trigger_poison_list sysfs attribute
-> > > >   cxl/region: Add trigger_poison_list sysfs attribute
-> > > >   tools/testing/cxl: Mock support for Get Poison List
-> > > > 
-> > > >  Documentation/ABI/testing/sysfs-bus-cxl | 28 +++++++++
-> > > >  drivers/cxl/core/mbox.c                 | 78 +++++++++++++++++++++++
-> > > >  drivers/cxl/core/memdev.c               | 45 ++++++++++++++
-> > > >  drivers/cxl/core/region.c               | 33 ++++++++++
-> > > >  drivers/cxl/core/trace.h                | 83 +++++++++++++++++++++++++
-> > > >  drivers/cxl/cxlmem.h                    | 69 +++++++++++++++++++-
-> > > >  drivers/cxl/pci.c                       |  4 ++
-> > > >  tools/testing/cxl/test/mem.c            | 42 +++++++++++++
-> > > >  8 files changed, 381 insertions(+), 1 deletion(-)
-> > > > 
-> > > > 
-> > > > base-commit: 589c3357370a596ef7c99c00baca8ac799fce531
-> > > > -- 
-> > > > 2.37.3
-> > > > 
-> > > 
-> > > 
+> > 1) Let it store the expected nonpresent value and rename it to nonpresent_spte.
 > 
 > 
+> I agree that handling this in the common code would be cleaner, but repurposing
+> gfp_zero gets kludgy because it would require a magic value to say "don't initialize
+> the data", e.g. x86's mmu_shadowed_info_cache isn't pre-filled.
+> 
+> And supporting a custom 64-bit init value for kmem_cache-backed caches would require
+> restricting such caches to be a multiple of 8 bytes in size.
+> 
+> How about this?  Lightly tested.
+> 
+> From: Sean Christopherson <seanjc@google.com>
+> Date: Wed, 25 Jan 2023 16:55:01 +0000
+> Subject: [PATCH] KVM: Allow page-sized MMU caches to be initialized with
+>  custom 64-bit values
+>
+
+It looks good enough so far although it only supports 64bit init value. But
+it can be extended in the future. 
+
+Just want to make sure people are thinking the same:
+
+1) Keep the changes of SHADOW_NONPRESENT_VALUE and REMOVED_SPTE in TDX patch.
+init_value stays as a generic feature in the kvm mmu cache layer. It is *not*
+going to replace SHADOW_NONPRESENT_VALUE.
+
+2) TDX kvm_x86_vcpu_create sets the SHADOW_NONPRESENT value into init_value.
+
+3) mmu cache topping up function initializes the page according to init_value
+with Sean's patch. 
+
+> Add support to MMU caches for initializing a page with a custom 64-bit
+> value, e.g. to pre-fill an entire page table with non-zero PTE values.
+> The functionality will be used by x86 to support Intel's TDX, which needs
+> to set bit 63 in all non-present PTEs in order to prevent !PRESENT page
+> faults from getting reflected into the guest (Intel's EPT Violation #VE
+> architecture made the less than brilliant decision of having the per-PTE
+> behavior be opt-out instead of opt-in).
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  include/linux/kvm_types.h |  1 +
+>  virt/kvm/kvm_main.c       | 16 ++++++++++++++--
+>  2 files changed, 15 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+> index 76de36e56cdf..67972db17b55 100644
+> --- a/include/linux/kvm_types.h
+> +++ b/include/linux/kvm_types.h
+> @@ -94,6 +94,7 @@ struct kvm_mmu_memory_cache {
+>  	int nobjs;
+>  	gfp_t gfp_zero;
+>  	gfp_t gfp_custom;
+> +	u64 init_value;
+>  	struct kmem_cache *kmem_cache;
+>  	int capacity;
+>  	void **objects;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index d255964ec331..78f1e49179a7 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -380,12 +380,17 @@ static void kvm_flush_shadow_all(struct kvm *kvm)
+>  static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+>  					       gfp_t gfp_flags)
+>  {
+> +	void *page;
+> +
+>  	gfp_flags |= mc->gfp_zero;
+>  
+>  	if (mc->kmem_cache)
+>  		return kmem_cache_alloc(mc->kmem_cache, gfp_flags);
+> -	else
+> -		return (void *)__get_free_page(gfp_flags);
+> +
+> +	page = (void *)__get_free_page(gfp_flags);
+> +	if (page && mc->init_value)
+> +		memset64(page, mc->init_value, PAGE_SIZE / sizeof(mc->init_value));
+> +	return page;
+>  }
+>  
+>  int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
+> @@ -400,6 +405,13 @@ int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity,
+>  		if (WARN_ON_ONCE(!capacity))
+>  			return -EIO;
+>  
+> +		/*
+> +		 * Custom init values can be used only for page allocations,
+> +		 * and obviously conflict with __GFP_ZERO.
+> +		 */
+> +		if (WARN_ON_ONCE(mc->init_value && (mc->kmem_cache || mc->gfp_zero)))
+> +			return -EIO;
+> +
+>  		mc->objects = kvmalloc_array(sizeof(void *), capacity, gfp);
+>  		if (!mc->objects)
+>  			return -ENOMEM;
+> 
+> base-commit: 503f0315c97739d3f8e645c500d81757dfbf76be
+
