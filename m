@@ -2,143 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8211B67F071
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C21767F072
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjA0VcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:32:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S229702AbjA0VdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:33:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjA0VcJ (ORCPT
+        with ESMTP id S229468AbjA0VdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:32:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D7C199E6;
-        Fri, 27 Jan 2023 13:32:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 27 Jan 2023 16:33:24 -0500
+Received: from smtp-out-04.comm2000.it (smtp-out-04.comm2000.it [212.97.32.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2612A175
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:33:20 -0800 (PST)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55BE6B821EC;
-        Fri, 27 Jan 2023 21:32:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB15C433A1;
-        Fri, 27 Jan 2023 21:32:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674855126;
-        bh=4+1HdPalIF26/Jx7D5F4nVUT+Y0EyvNy1tTfIlvU7WI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=m1SOff2Jld5NMu7jjStPh4+P2RheTRS4zLJSV2QdBmOXdqLFiSqiYKMuoLRw4CNVM
-         otK+U5HkxtCCgBV4Px7f9tP6mEF2QIOELSAcApQs9xfjPuVmttGb4knZRIqCx8l/rH
-         eyoki57K97sKbH3PHEF9EYot3tO3Kji8PxiF4Pl4EZdx9ukwPmlxLQhmR5v8hVvO8p
-         ZqCVqFXYqblsPVLuRRyNCtuNWUq6I9yFmBKfjO12rXFMK6XNvuX4lZmKgy8vousbJZ
-         u6KRqlpjzaudgIfTsig8xw2BFR19MyQnINcTaGL1S8lIrYYgQaNG7mvaYbtfIBoPr6
-         QN/4yRJu3W4GA==
-Received: by mail-lf1-f41.google.com with SMTP id bp15so10120841lfb.13;
-        Fri, 27 Jan 2023 13:32:05 -0800 (PST)
-X-Gm-Message-State: AFqh2kqqHAUEWwqjbtkiBFcpEeCC6Nho8zNqanoN9qkgzS5s173YWpdM
-        U6KTiWGpNJmhtG5Jc4IAdX2G8HXe+N7Vcapb3HQ=
-X-Google-Smtp-Source: AMrXdXuj5cT0wzZDzeJakyQRQUvbsFPBHaSSnesNBuYwQ4XuAL6rMs3Ujs8Pg2QG1n3yD3stssJSBJDLD49RFbbmsYo=
-X-Received: by 2002:a05:6512:3450:b0:4b5:7dcb:161b with SMTP id
- j16-20020a056512345000b004b57dcb161bmr3562201lfr.74.1674855123888; Fri, 27
- Jan 2023 13:32:03 -0800 (PST)
+        (Authenticated sender: francesco@dolcini.it)
+        by smtp-out-04.comm2000.it (Postfix) with ESMTPSA id 2FDD2BC7089;
+        Fri, 27 Jan 2023 22:33:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
+        s=mailsrv; t=1674855199;
+        bh=kdoAqMrExVGaNoV54ZBc8DPfktno9RS2Tt30mZjgcoE=;
+        h=Date:From:To:Subject;
+        b=ztTJ8luJUVeI2F+/Vxj92d7hzdAEZsQNU7BTVbHlqhE7S7ve59G8Quv73XIEd0jOJ
+         kl+NNjqdhXHKx2A3i4gTAwHBrEezGPmDnsWX+mspTRtePRtSqs8BS6huIKl5LGDzfb
+         9PJiYMtkWyHCFrv+5jwL9m00eqBQkI8+UDlAmrBf4zGxcLXk1EJ63u1qbJv6hS1jUn
+         Zg5JglkCbPZ8vQdoRpeJKnm9WSgCicfDTzVbKUCub3uQ5ID5dLTe/vUTG1NpLgD8yp
+         OS+nHX1EFZO2CjbMFhHaTi77fbqgYzz5/bJ1dajKJxvHXrIRth3p+Ohm3hFW7f5BDG
+         s66k7fSW8W5KQ==
+Date:   Fri, 27 Jan 2023 22:33:14 +0100
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: fixed-regulator with enable from another regulator
+Message-ID: <Y9RDGnZLg6wGJWwn@francesco-nb.int.toradex.com>
 MIME-Version: 1.0
-References: <20230126233606.1317794-1-song@kernel.org> <20230127204011.GA45594@roeck-us.net>
-In-Reply-To: <20230127204011.GA45594@roeck-us.net>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 27 Jan 2023 13:31:51 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4nPo_OFwspn18N-pKpPjc6vOYBJp8hE7O5mYEweKUySg@mail.gmail.com>
-Message-ID: <CAPhsuW4nPo_OFwspn18N-pKpPjc6vOYBJp8hE7O5mYEweKUySg@mail.gmail.com>
-Subject: Re: [PATCH v3] module: replace module_layout with module_memory
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+Hello all,
+I am trying to figure out if it is possible with the current
+regulator-fixed or with any other solution already implemented in Linux
+to have a regulator enabled from another one.
 
-Thanks for running the test!
+I am not talking about the regulator vin-supply, I am really talking
+about the enable input signal of a LDO connected to the output of another
+regulator, a sort of "chained" regulator.
 
-On Fri, Jan 27, 2023 at 12:40 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, Jan 26, 2023 at 03:36:06PM -0800, Song Liu wrote:
-> > module_layout manages different types of memory (text, data, rodata, etc.)
-> > in one allocation, which is problematic for some reasons:
-> >
-> > 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
-> > 2. It is hard to use huge pages in modules (and not break strict rwx).
-> > 3. Many archs uses module_layout for arch-specific data, but it is not
-> >    obvious how these data are used (are they RO, RX, or RW?)
-> >
-> > Improve the scenario by replacing 2 (or 3) module_layout per module with
-> > up to 7 module_memory per module:
-> >
-> >         MOD_MEM_TYPE_TEXT,
-> >         MOD_MEM_TYPE_DATA,
-> >         MOD_MEM_TYPE_RODATA,
-> >         MOD_MEM_TYPE_RO_AFTER_INIT,
-> >         MOD_MEM_TYPE_INIT_TEXT,
-> >         MOD_MEM_TYPE_INIT_DATA,
-> >         MOD_MEM_TYPE_INIT_RODATA,
-> >
-> > and allocating them separately. This adds slightly more entries to
-> > mod_tree (from up to 3 entries per module, to up to 7 entries per
-> > module). However, this at most adds a small constant overhead to
-> > __module_address(), which is expected to be fast.
-> >
-> > Various archs use module_layout for different data. These data are put
-> > into different module_memory based on their location in module_layout.
-> > IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
-> > data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
-> >
-> > module_memory simplifies quite some of the module code. For example,
-> > ARCH_WANTS_MODULES_DATA_IN_VMALLOC is a lot cleaner, as it just uses a
-> > different allocator for the data. kernel/module/strict_rwx.c is also
-> > much cleaner with module_memory.
-> >
-> > Signed-off-by: Song Liu <song@kernel.org>
-> > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> >
-> > ---
->
-> Build reference: v6.2-rc5-52-gc96fb00
-> Compiler version: powerpc64-linux-gcc (GCC) 11.3.0
-> Assembler version: GNU assembler (GNU Binutils) 2.39
->
-> Building powerpc:defconfig ... passed
-> Building powerpc:allmodconfig ... passed
-> Building powerpc:ppc32_allmodconfig ... failed
-> --------------
-> Error log:
-> kernel/module/main.c: In function 'show_coresize':
-> kernel/module/main.c:938:22: error: unused variable 'size' [-Werror=unused-variable]
->   938 |         unsigned int size = 0;
+As an example something like this
 
-Fixed this in my local branch:
+<reg_1v8>[out] ---> [vin-supply]<reg_1v0>[out] --->
+<reg_3v3>[out] ---> [enable]
 
-diff --git c/kernel/module/main.c w/kernel/module/main.c
-index 32f63c6eaa61..da2bca75e4a8 100644
---- c/kernel/module/main.c
-+++ w/kernel/module/main.c
-@@ -935,8 +935,6 @@ struct module_attribute module_uevent =
- static ssize_t show_coresize(struct module_attribute *mattr,
-                             struct module_kobject *mk, char *buffer)
- {
--       unsigned int size = 0;
--
-        return sprintf(buffer, "%u\n",
-                       mk->mod->mod_mem[MOD_MEM_TYPE_TEXT].size);
- }
+<reg_1v8>[out] ---> [vin-supply]<reg_1v2>[out] --->
+<reg_3v3>[out] ---> [enable]
 
-Song
+<gpio1> ---> [enable]<reg_3v3>[out]--->
+
+in which toggling <gpio1> control 3 different outputs.
+
+I am still not 100% sure if describing this specific hardware connection
+would be required on my system, maybe I can just ignore all of that.
+
+Any thought?
+
+Francesco
+
