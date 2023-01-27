@@ -2,172 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C0167DCD0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 05:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C5867DCD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 05:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbjA0EQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 23:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
+        id S232457AbjA0ERT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 23:17:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjA0EQp (ORCPT
+        with ESMTP id S229536AbjA0ERP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 23:16:45 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1077B16336;
-        Thu, 26 Jan 2023 20:16:44 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id k4so5016780eje.1;
-        Thu, 26 Jan 2023 20:16:43 -0800 (PST)
+        Thu, 26 Jan 2023 23:17:15 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D590728DE
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 20:17:06 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso3740291pjp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 20:17:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pCPg4p/kNjS/XcZm5od+BEqI0eRA9tT6yJAnZLVLufo=;
-        b=XXpkOMwOgo0LHzHR/loDFVHUu5rPtT+qqbPGwCH73uVWNDGczt3AMcYqY2IRWlXPnI
-         dg5++kJa018KtzQdnQCDIEIqJwilrAFYDoev57v/iwQxqtGhE5AwQE4V5nzmikM/aEOU
-         upnNhEuBKgvqzYUFVcDkkxUlf6DfH/3F/CFY5A17at704BCfGkVLR9vnH6jg7fNj7ZW1
-         rMirPTM01DJ7cEkflA1z9BZ3fa3SejeFjhVmkrE3OH21lUS6aHcPz3ilT1czvh1f/x6H
-         4faGHdWRljQfJi45c3ZMh964EC7IaFLfaXdVuvOIYFd0Du/LJtaeAtI/FBGimONmURs3
-         sFyg==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=P7ZY02wnB++PrtjjVebywq2P+KdwsUUnvCgPrCN1viE=;
+        b=O1dz04cJ9kZB389iORyVGSppE1KZyeImi1gkXdGZe+K6gTCkXMDsrzWFY/B1rG4uZY
+         WsPe9B61kEKUrWaOtn/KkG6VGyorkeI4CgGpvzq6csEgwlPPcRRrjzHlnFBjGsjXGswi
+         oT6I1R0Xe+hMpv8JH4B+88d1P/RDoM0LUxCyqEqup+80+okrXb4RLJEhfuYDlZOVDdk8
+         F1yifj+oHz0wluaxO0aItc5lHE2nkkpE4zSGTePtL3m2rC97jKI7OdX6HI5d1++8Bo4R
+         yFi8Lt5dD/yR+jk2yiQnLMmMnhDFfRBuyQ5mwGOyZNHEfWzjpnQukJwrjtnx+5aFNESG
+         qMGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pCPg4p/kNjS/XcZm5od+BEqI0eRA9tT6yJAnZLVLufo=;
-        b=Pql/AOd6Lh0o0ethfEHxSbiKIiTybDaDj54wWw59VY/TjN+DyBFiwso7gnPNOG/VC4
-         b9VYJJlBYl1Sg/SVBzxqfh22eLjk8+hQtpghzK/MJFQ+5NOAFCpljYOKpKoMDYrkx9xk
-         shh0nDx+i85lmCDRkjZalPgcKZddgDWRhmmTAvbX5r7ygDuduyz2PCzs6oNMYdiO/zZ4
-         dVBznoTfIguC5J2ffQAIqg3eblqfcu3r61MfqSmIo/LaJsBhETsXZAm1YfWHBFaGiWdl
-         tvoY5mljouLbB6Bd0paEYAKAOhC8ZhiE5zXmiwHVK68FyO7bZEaDYfJRRBl4qwhqbWAZ
-         MkLA==
-X-Gm-Message-State: AFqh2kq3QOTo/GIDHWoimoQRcG1KQ2U09QMvVk2GX/5uafwGtpfBlKvs
-        D7AJDdKYf6Yosq/HP8ARpYct7Of9r6tVnw8byEqeb52B1lo=
-X-Google-Smtp-Source: AMrXdXtS93XYT2PTeYAhswaSqtGBBNjGjzbSX2zXwaBaiv1xo/CoL2aXV/Thiix7NKQbiSLkQPk4A5chCCSzRBz7TP8=
-X-Received: by 2002:a17:906:7d14:b0:86f:9fb1:30a8 with SMTP id
- u20-20020a1709067d1400b0086f9fb130a8mr5599478ejo.181.1674793002473; Thu, 26
- Jan 2023 20:16:42 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P7ZY02wnB++PrtjjVebywq2P+KdwsUUnvCgPrCN1viE=;
+        b=nlepJGM+seOuUImKZ29Ia8O6DQ6cyjPTZt73HB1Y2tBc2MHppwp24SVw69oVByQaHA
+         npyGTaKWNSoH/VZ+hbEFu4cUDpx40bxuEFOtfGCjyXLlRcnSD6edCAc9XOEwLFrSbqCg
+         XYxGs8UehCYmCOFQYI9GUanNtf8+YmUDUeyDmWV6UTuKRwIOUDSIy5QcoZTNG9r60QO7
+         OIXOT3bn7zkxGE+FnJCp05A4ag1P9dityJhV2glZqDOsTux3+ojCI4wKvKXU0NZ624n7
+         ymms/g23b9bhYyxQrFAPgjA8O2qOmedTkan/PPzLnXpo4ijsPJAyTfDxebAKyvlWpi19
+         117Q==
+X-Gm-Message-State: AFqh2kq/rBqFctEQPvLl9+5wIB2kI7R5wbdu18elaVsxe0OremhYl2Xb
+        GbIcVVJi5FxfAV5sGw0T7rSoLw==
+X-Google-Smtp-Source: AMrXdXviEje4NBqjKMkEyy4TLr/lPqx6nBeGPG8VZTMVcSSpAEjb5nSV2Wrb7k5N2Pep7SUuznqsXg==
+X-Received: by 2002:a17:902:6bc6:b0:194:9c69:290c with SMTP id m6-20020a1709026bc600b001949c69290cmr34716033plt.67.1674793026085;
+        Thu, 26 Jan 2023 20:17:06 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id x7-20020a1709029a4700b001949b915188sm1786613plv.12.2023.01.26.20.17.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 20:17:05 -0800 (PST)
+Date:   Fri, 27 Jan 2023 09:47:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: mediatek-hw: Register to module device table
+Message-ID: <20230127041703.325luwaf47topv4b@vireshk-i7>
+References: <20230126154856.1322193-1-nfraprado@collabora.com>
 MIME-Version: 1.0
-References: <20230121085521.9566-1-kerneljasonxing@gmail.com>
- <Y9JvUKBgBifiosOa@boxer> <48639eb0-27d9-5754-0687-286e909ceff0@intel.com>
-In-Reply-To: <48639eb0-27d9-5754-0687-286e909ceff0@intel.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Fri, 27 Jan 2023 12:16:06 +0800
-Message-ID: <CAL+tcoD2wNOS-Tg+A94naTP2QtVmcoDLZTpapRiD4PVkW3H5eQ@mail.gmail.com>
-Subject: Re: [PATCH net] ixgbe: allow to increase MTU to some extent with XDP enalbed
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.co,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>, magnus.karlsson@intel.com,
-        tirthendu.sarkar@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230126154856.1322193-1-nfraprado@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:56 PM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> Date: Thu, 26 Jan 2023 13:17:20 +0100
->
-> > On Sat, Jan 21, 2023 at 04:55:21PM +0800, Jason Xing wrote:
-> >> From: Jason Xing <kernelxing@tencent.com>
-> >>
-> >> I encountered one case where I cannot increase the MTU size with XDP
-> >> enabled if the server is equipped with IXGBE card, which happened on
-> >> thousands of servers. I noticed it was prohibited from 2017[1] and
-> >> added size checks[2] if allowed soon after the previous patch.
-> >>
-> >> Interesting part goes like this:
-> >> 1) Changing MTU directly from 1500 (default value) to 2000 doesn't
-> >> work because the driver finds out that 'new_frame_size >
-> >> ixgbe_rx_bufsz(ring)' in ixgbe_change_mtu() function.
-> >> 2) However, if we change MTU to 1501 then change from 1501 to 2000, it
-> >> does work, because the driver sets __IXGBE_RX_3K_BUFFER when MTU size
-> >> is converted to 1501, which later size check policy allows.
-> >>
-> >> The default MTU value for most servers is 1500 which cannot be adjusted
-> >> directly to the value larger than IXGBE_MAX_2K_FRAME_BUILD_SKB (1534 or
-> >> 1536) if it loads XDP.
-> >>
-> >> After I do a quick study on the manner of i40E driver allowing two kinds
-> >> of buffer size (one is 2048 while another is 3072) to support XDP mode in
-> >> i40e_max_xdp_frame_size(), I believe the default MTU size is possibly not
-> >> satisfied in XDP mode when IXGBE driver is in use, we sometimes need to
-> >> insert a new header, say, vxlan header. So setting the 3K-buffer flag
-> >> could solve the issue.
-> >>
-> >> [1] commit 38b7e7f8ae82 ("ixgbe: Do not allow LRO or MTU change with XDP")
-> >> [2] commit fabf1bce103a ("ixgbe: Prevent unsupported configurations with
-> >> XDP")
-> >>
-> >> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> >> ---
-> >>  drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 +++
-> >>  1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> >> index ab8370c413f3..dc016582f91e 100644
-> >> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> >> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> >> @@ -4313,6 +4313,9 @@ static void ixgbe_set_rx_buffer_len(struct ixgbe_adapter *adapter)
-> >>              if (IXGBE_2K_TOO_SMALL_WITH_PADDING ||
-> >>                  (max_frame > (ETH_FRAME_LEN + ETH_FCS_LEN)))
-> >>                      set_bit(__IXGBE_RX_3K_BUFFER, &rx_ring->state);
-> >> +
-> >> +            if (ixgbe_enabled_xdp_adapter(adapter))
-> >> +                    set_bit(__IXGBE_RX_3K_BUFFER, &rx_ring->state);
-> >
-> > This will result with unnecessary overhead for 1500 MTU because you will
-> > be working on order-1 pages. Instead I would focus on fixing
-> > ixgbe_change_mtu() and stop relying on ixgbe_rx_bufsz() in there. You can
-> > check what we do on ice/i40e sides.
+On 26-01-23, 10:48, Nícolas F. R. A. Prado wrote:
+> Register the compatibles for this module on the module device table so
+> it can be automatically loaded when a matching device is found on the
+> system.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> ---
+> 
+>  drivers/cpufreq/mediatek-cpufreq-hw.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
+> index f80339779084..115b0eda38c1 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq-hw.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
+> @@ -324,6 +324,7 @@ static const struct of_device_id mtk_cpufreq_hw_match[] = {
+>  	{ .compatible = "mediatek,cpufreq-hw", .data = &cpufreq_mtk_offsets },
+>  	{}
+>  };
+> +MODULE_DEVICE_TABLE(of, mtk_cpufreq_hw_match);
+>  
+>  static struct platform_driver mtk_cpufreq_hw_driver = {
+>  	.probe = mtk_cpufreq_hw_driver_probe,
 
-Well, now I see the commit 23b44513c3e6f in 2019. Thanks, Maciej.
+Applied. Thanks.
 
-> >
-> > I'm not looking actively into ixgbe internals but I don't think that there
-> > is anything that stops us from using 3k buffers with XDP.
->
-> I think it uses the same logics as the rest of drivers: splits a 4k page
-> into two 2k buffers when MTU is <= 1536, otherwise uses order-1 pages
-> and uses 3k buffers.
->
-> OTOH ixgbe is not fully correct in terms how it calculates Rx headroom,
-> but the main problem is how it calculates the maximum MTU available when
-> XDP is on. Our usual MTU supported when XDP is on is 3046 bytes.
-> For MTU <= 1536, 2k buffers are used even for XDP, so the fix is not
-> correct. Maciej is right that i40e and ice do that way better and don't
-> have such issue.
-
-Thank you for the detailed explanation. And yes, I checked this part
-in the ice/i40e driver which introduces ice/i40e_max_xdp_frame_size()
-to test if we can change MTU size when the driver is loading the XDP
-program.
-I will rewrite the patch as the i40e/ice does in the next submission.
-
-Thanks,
-Jason
-
->
-> >
-> >>  #endif
-> >>      }
-> >>  }
-> >> --
-> >> 2.37.3
-> >>
->
-> Thanks,
-> Olek
+-- 
+viresh
