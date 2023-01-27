@@ -2,72 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C241367DFA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DED867DFA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjA0JFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
+        id S232760AbjA0JH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjA0JFm (ORCPT
+        with ESMTP id S231486AbjA0JH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:05:42 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FA43A589
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:05:40 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-207-p-8H2nnBPfSw_AWgsS6nQg-1; Fri, 27 Jan 2023 09:05:38 +0000
-X-MC-Unique: p-8H2nnBPfSw_AWgsS6nQg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Fri, 27 Jan
- 2023 09:05:37 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Fri, 27 Jan 2023 09:05:37 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andrew Donnellan' <ajd@linux.ibm.com>,
-        'Segher Boessenkool' <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-CC:     "gjoyce@linux.ibm.com" <gjoyce@linux.ibm.com>,
-        "erichte@linux.ibm.com" <erichte@linux.ibm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "sudhakar@linux.ibm.com" <sudhakar@linux.ibm.com>,
-        "ruscur@russell.cc" <ruscur@russell.cc>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "bgray@linux.ibm.com" <bgray@linux.ibm.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "gcwilson@linux.ibm.com" <gcwilson@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: RE: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
- structures and buffers
-Thread-Topic: [PATCH v4 02/24] powerpc/pseries: Fix alignment of PLPKS
- structures and buffers
-Thread-Index: AQHZMarbHHGSrma/kEeRKp/dNdgk5K6w84EwgAClz4CAAF8Y4A==
-Date:   Fri, 27 Jan 2023 09:05:37 +0000
-Message-ID: <b016aefff9514ed1ad40620cea6d3b9f@AcuMS.aculab.com>
-References: <20230120074306.1326298-1-ajd@linux.ibm.com>
-         <20230120074306.1326298-3-ajd@linux.ibm.com>
-         <87pmb2pxpa.fsf@mpe.ellerman.id.au>
-         <20230126171925.GN25951@gate.crashing.org>
-         <5118edd7f1f445afa1812d2b9b62dd4f@AcuMS.aculab.com>
- <2de207dadb936f25db123ae2d02aea91a9841656.camel@linux.ibm.com>
-In-Reply-To: <2de207dadb936f25db123ae2d02aea91a9841656.camel@linux.ibm.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 27 Jan 2023 04:07:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5431CF51
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:07:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66F1161A3F
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:07:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49479C433D2;
+        Fri, 27 Jan 2023 09:07:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674810446;
+        bh=ggZ34Exn3VzcyVQyTe1ONqfzfK2fcKFLcF2csgbgeNs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BrAMO5Q5DWo43+o5RiLqEsZ2HITbLmXNC2YfI6MCiVz19EXOO6mLZo/BuKAqMdax4
+         UvsOQL+ulP98hGLzWi3K3+ag6roaJVlecad/eOQ9joXAWeZqV+xiNsmAc++trJUajI
+         rSY+vJyMPqRGvi8wkoTkZPF3kI8ru7nL7vvk7bco=
+Date:   Fri, 27 Jan 2023 10:07:23 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Winkler, Tomas" <tomas.winkler@intel.com>
+Cc:     "Usyskin, Alexander" <alexander.usyskin@intel.com>,
+        "Lubart, Vitaly" <vitaly.lubart@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [char-misc-next] mei: gsc_proxy: add gsc proxy driver
+Message-ID: <Y9OUS7Y57t0y0gx4@kroah.com>
+References: <20221222220214.3688774-1-tomas.winkler@intel.com>
+ <Y6VV5d/V4MKDz2Te@kroah.com>
+ <CY5PR11MB6366515D2A965EEDEC77AF63EDF29@CY5PR11MB6366.namprd11.prod.outlook.com>
+ <Y8lt1gmo9smOMXD7@kroah.com>
+ <MN2PR11MB409305204A36872FEDAD2B82E5C99@MN2PR11MB4093.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MN2PR11MB409305204A36872FEDAD2B82E5C99@MN2PR11MB4093.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,25 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQW5kcmV3IERvbm5lbGxhbg0KPiBTZW50OiAyNyBKYW51YXJ5IDIwMjMgMDM6MjENCj4g
-DQo+IE9uIFRodSwgMjAyMy0wMS0yNiBhdCAxNzozMSArMDAwMCwgRGF2aWQgTGFpZ2h0IHdyb3Rl
-Og0KPiA+IENoYW5naW5nIHRoZSBzaXplIHRvIGt6YWxsb2MoKSBkb2Vzbid0IGhlbHAuDQo+ID4g
-VGhlIGFsaWdubWVudCBkZXBlbmRzIG9uIHRoZSBhbGxvY2F0b3IgYW5kIGlzIG9ubHkgcmVxdWly
-ZWQgdG8gaGF2ZQ0KPiA+IGEgcmVsYXRpdmVseSBzbWFsbCBhbGlnbm1lbnQgKEFSQ0hfTUlOQUxJ
-R04/KSByZWdhcmRsZXNzIG9mIHRoZSBzaXplLg0KPiA+DQo+ID4gSUlSQyBvbmUgb2YgdGhlIGFs
-bG9jYXRvcnMgYWRkcyBhIHNtYWxsIGhlYWRlciB0byBldmVyeSBpdGVtLg0KPiA+IEl0IHdvbid0
-IHJldHVybiAxNiBieXRlIGFsaWduZWQgaXRlbXMgYXQgYWxsLg0KPiANCj4gSSdtIHJlbHlpbmcg
-b24gdGhlIGJlaGF2aW91ciBkZXNjcmliZWQgaW4gRG9jdW1lbnRhdGlvbi9jb3JlLQ0KPiBhcGkv
-bWVtb3J5LWFsbG9jYXRpb24ucnN0Og0KPiANCj4gICAgIFRoZSBhZGRyZXNzIG9mIGEgY2h1bmsg
-YWxsb2NhdGVkIHdpdGgga21hbGxvYyBpcyBhbGlnbmVkIHRvIGF0DQo+ICAgICBsZWFzdCBBUkNI
-X0tNQUxMT0NfTUlOQUxJR04gYnl0ZXMuIEZvciBzaXplcyB3aGljaCBhcmUgYSBwb3dlciBvZg0K
-PiAgICAgdHdvLCB0aGUgYWxpZ25tZW50IGlzIGFsc28gZ3VhcmFudGVlZCB0byBiZSBhdCBsZWFz
-dCB0aGUgcmVzcGVjdGl2ZQ0KPiAgICAgc2l6ZS4NCj4gDQo+IElzIHRoaXMgd3Jvbmc/DQoNClRo
-ZSBhbGlnbm1lbnQgZm9yIHBvd2VyIG9mIHR3byBkb2Vzbid0IG1hdGNoIHdoYXQgSSd2ZSBpbmZl
-cnJlZA0KZnJvbSByZWFkaW5nIGNvbW1lbnRzIG9uIG90aGVyIHBhdGNoZXMuDQoNCkl0IGlzIHRy
-dWUgZm9yIGRtYV9tYWxsb2NfY29oZXJlbnQoKSAtIHRoYXQgZG9lcyBndWFyYW50ZWUgdGhhdCBh
-DQoxNmsgYWxsb2NhdGUgd2lsbCBiZSBhbGlnbmVkIG9uIGEgMTZrIHBoeXNpY2FsIGFkZHJlc3Mg
-Ym91bmRhcnkuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJy
-YW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lz
-dHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Tue, Jan 24, 2023 at 09:05:19PM +0000, Winkler, Tomas wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Sent: Thursday, January 19, 2023 18:21
+> > To: Usyskin, Alexander <alexander.usyskin@intel.com>
+> > Cc: Winkler, Tomas <tomas.winkler@intel.com>; Lubart, Vitaly
+> > <vitaly.lubart@intel.com>; linux-kernel@vger.kernel.org
+> > Subject: Re: [char-misc-next] mei: gsc_proxy: add gsc proxy driver
+> > 
+> > On Wed, Dec 28, 2022 at 11:46:36AM +0000, Usyskin, Alexander wrote:
+> > > >
+> > > > Why a whole new subdirectory for a tiny 200 line file?
+> > > >
+> > > All drivers for devices on mei bus have private subdirectory.
+> > > This one just modelled on the existing examples.
+> > > If you say that this is not a good thing - can put it in the main mei directory.
+> > 
+> > Put it in the main mei directory, no need to split things up for no good
+> > reason.
+> > 
+> 
+> All mei sub drivers are in sperate directories, this driver is indeed tiny, but I do prefer consistency,
+> In my view it is easier to maintain that way. 
 
+Ok.
+
+> I believe all the bellow stuff you've already discussed in ths thread,.
+> https://lore.kernel.org/lkml/YkXdgQH1GWCitf0A@kroah.com/T/
+> I guess all that was explained there, so no need to repeat.
+> 
+> We'll try to see what can be done to make it more robust and your comments are more than valid,
+> but as the thread concludes probably the component framework needs to be addressed. 
+
+Agreed, something needs to be done, you can't make these random
+assumptions about the exact driver and device topology as that is not
+how the driver model works at all (nor do you want it to work that way.)
+
+thanks,
+
+greg k-h
