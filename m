@@ -2,133 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1F367E343
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5861D67E35B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233363AbjA0L3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:29:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S233462AbjA0Lbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233326AbjA0L3O (ORCPT
+        with ESMTP id S233424AbjA0LbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:29:14 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FC17E681;
-        Fri, 27 Jan 2023 03:28:19 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 33D662003F;
-        Fri, 27 Jan 2023 11:28:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674818898; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=tDOqTbs0S3Y0iW7HxTYwoZGCDL2WVLefPe2n98YmMuk=;
-        b=eQmkJHzYyShNotnOsAuCffwXvYJOAC9lLBUOLg8k2yXbrXdAnumj7p3nB7tMaQVYRx0bbO
-        ao5iAwLyJWtgyXlirw1GU52L4FMTDIa5D0gDdF+8ZYdP+mZOb+kJqEv0dFqPa04C4hvVue
-        uOxm4NxBBtNSP3kLD1lob03F7hMgmY8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674818898;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=tDOqTbs0S3Y0iW7HxTYwoZGCDL2WVLefPe2n98YmMuk=;
-        b=IxFGJ3LqrCl5bt0C2vF/VtW/yDY8ITWzELW/Jno4GLwuLiOsGtudj5NB4fSCH3svcgDptu
-        qeLQESI2b5vA/gBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DEB911336F;
-        Fri, 27 Jan 2023 11:28:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id b+feNFG102PBXQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Fri, 27 Jan 2023 11:28:17 +0000
-Date:   Fri, 27 Jan 2023 12:28:16 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Cc:     Daniel Hung-yu Wu <hywu@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH RESEND] Input: atmel_captouch - drop obsolete dependency on
- COMPILE_TEST
-Message-ID: <20230127122816.02b6ea26@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        Fri, 27 Jan 2023 06:31:10 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CD702278F;
+        Fri, 27 Jan 2023 03:29:44 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E5AB92F;
+        Fri, 27 Jan 2023 03:30:23 -0800 (PST)
+Received: from e122027.cambridge.arm.com (e122027.cambridge.arm.com [10.1.35.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C33CD3F64C;
+        Fri, 27 Jan 2023 03:29:38 -0800 (PST)
+From:   Steven Price <steven.price@arm.com>
+To:     kvm@vger.kernel.org, kvmarm@lists.linux.dev
+Cc:     Steven Price <steven.price@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
+Subject: [RFC PATCH 00/28] arm64: Support for Arm CCA in KVM
+Date:   Fri, 27 Jan 2023 11:29:04 +0000
+Message-Id: <20230127112932.38045-1-steven.price@arm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230127112248.136810-1-suzuki.poulose@arm.com>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+This series is an RFC adding support for running protected VMs using KVM
+under the new Arm Confidential Compute Architecture (CCA). The purpose
+of this series is to gather feedback on the proposed changes to the
+architecture code for CCA.
 
-As a nice side effect, dropping the alternative dependency on
-COMPILE_TEST allows removing preprocessor directives, which will
-speed up the build.
+The user ABI is not in it's final form, we plan to make use of the
+memfd_restricted() allocator[1] and associated infrastructure which will
+avoid problems in the current user ABI where a malicious VMM may be able
+to cause a Granule Protection Fault in the kernel (which is fatal).
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Daniel Hung-yu Wu <hywu@google.com>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- drivers/input/misc/Kconfig          |    2 +-
- drivers/input/misc/atmel_captouch.c |    4 +---
- 2 files changed, 2 insertions(+), 4 deletions(-)
+The ABI to the RMM (the RMI) is based on the Beta 0 specification[2] and
+will be updated in the future when a final version of the specification
+is published.
 
---- linux-6.1.orig/drivers/input/misc/Kconfig
-+++ linux-6.1/drivers/input/misc/Kconfig
-@@ -107,7 +107,7 @@ config INPUT_ATC260X_ONKEY
- 
- config INPUT_ATMEL_CAPTOUCH
- 	tristate "Atmel Capacitive Touch Button Driver"
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	depends on I2C
- 	help
- 	  Say Y here if an Atmel Capacitive Touch Button device which
---- linux-6.1.orig/drivers/input/misc/atmel_captouch.c
-+++ linux-6.1/drivers/input/misc/atmel_captouch.c
-@@ -249,7 +249,6 @@ static int atmel_captouch_probe(struct i
- 	return 0;
- }
- 
--#ifdef CONFIG_OF
- static const struct of_device_id atmel_captouch_of_id[] = {
- 	{
- 		.compatible = "atmel,captouch",
-@@ -257,7 +256,6 @@ static const struct of_device_id atmel_c
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, atmel_captouch_of_id);
--#endif
- 
- static const struct i2c_device_id atmel_captouch_id[] = {
- 	{ "atmel_captouch", 0 },
-@@ -270,7 +268,7 @@ static struct i2c_driver atmel_captouch_
- 	.id_table	= atmel_captouch_id,
- 	.driver		= {
- 		.name	= "atmel_captouch",
--		.of_match_table = of_match_ptr(atmel_captouch_of_id),
-+		.of_match_table = atmel_captouch_of_id,
- 	},
- };
- module_i2c_driver(atmel_captouch_driver);
+This series is based on v6.2-rc1. It is also available as a git
+repository:
 
+https://gitlab.arm.com/linux-arm/linux-cca cca-host/rfc-v1
+
+Introduction
+============
+A more general introduction to Arm CCA is available on the Arm
+website[3], and links to the other components involved are available in
+the overall cover letter[4].
+
+Arm Confidential Compute Architecture adds two new 'worlds' to the
+architecture: Root and Realm. A new software component known as the RMM
+(Realm Management Monitor) runs in Realm EL2 and is trusted by both the
+Normal World and VMs running within Realms. This enables mutual
+distrust between the Realm VMs and the Normal World.
+
+Virtual machines running within a Realm can decide on a (4k)
+page-by-page granularity whether to share a page with the (Normal World)
+host or to keep it private (protected). This protection is provided by
+the hardware and attempts to access a page which isn't shared by the
+Normal World will trigger a Granule Protection Fault. The series starts
+by adding handling for these; faults within user space can be handled by
+killing the process, faults within kernel space are considered fatal.
+
+The Normal World host can communicate with the RMM via an SMC interface
+known as RMI (Realm Management Interface), and Realm VMs can communicate
+with the RMM via another SMC interface known as RSI (Realm Services
+Interface). This series adds wrappers for the full set of RMI commands
+and uses them to manage the realm guests.
+
+The Normal World can use RMI commands to delegate pages to the Realm
+world and to create, manage and run Realm VMs. Once delegated the pages
+are inaccessible to the Normal World (unless explicitly shared by the
+guest). However the Normal World may destroy the Realm VM at any time to
+be able to reclaim (undelegate) the pages.
+
+Entry/exit of a Realm VM attempts to reuse the KVM infrastructure, but
+ultimately the final mechanism is different. So this series has a bunch
+of commits handling the differences. As much as possible is placed in a
+two new files: rme.c and rme-exit.c.
+
+The RMM specification provides a new mechanism for a guest to
+communicate with host which goes by the name "Host Call". For now this
+is simply hooked up to the existing support for HVC calls from a normal
+guest.
+
+[1] https://lore.kernel.org/r/20221202061347.1070246-1-chao.p.peng%40linux.intel.com
+[2] https://developer.arm.com/documentation/den0137/1-0bet0/
+[3] https://www.arm.com/architecture/security-features/arm-confidential-compute-architecture
+[4] .. cover letter ..
+
+Joey Gouly (2):
+  arm64: rme: allow userspace to inject aborts
+  arm64: rme: support RSI_HOST_CALL
+
+Steven Price (25):
+  arm64: RME: Handle Granule Protection Faults (GPFs)
+  arm64: RME: Add SMC definitions for calling the RMM
+  arm64: RME: Add wrappers for RMI calls
+  arm64: RME: Check for RME support at KVM init
+  arm64: RME: Define the user ABI
+  arm64: RME: ioctls to create and configure realms
+  arm64: kvm: Allow passing machine type in KVM creation
+  arm64: RME: Keep a spare page delegated to the RMM
+  arm64: RME: RTT handling
+  arm64: RME: Allocate/free RECs to match vCPUs
+  arm64: RME: Support for the VGIC in realms
+  KVM: arm64: Support timers in realm RECs
+  arm64: RME: Allow VMM to set RIPAS
+  arm64: RME: Handle realm enter/exit
+  KVM: arm64: Handle realm MMIO emulation
+  arm64: RME: Allow populating initial contents
+  arm64: RME: Runtime faulting of memory
+  KVM: arm64: Handle realm VCPU load
+  KVM: arm64: Validate register access for a Realm VM
+  KVM: arm64: Handle Realm PSCI requests
+  KVM: arm64: WARN on injected undef exceptions
+  arm64: Don't expose stolen time for realm guests
+  KVM: arm64: Allow activating realms
+  arm64: RME: Always use 4k pages for realms
+  HACK: Accept prototype RMI versions
+
+Suzuki K Poulose (1):
+  arm64: rme: Allow checking SVE on VM instance
+
+ Documentation/virt/kvm/api.rst       |    3 +
+ arch/arm64/include/asm/kvm_emulate.h |   29 +
+ arch/arm64/include/asm/kvm_host.h    |    7 +
+ arch/arm64/include/asm/kvm_rme.h     |   98 ++
+ arch/arm64/include/asm/rmi_cmds.h    |  259 +++++
+ arch/arm64/include/asm/rmi_smc.h     |  242 +++++
+ arch/arm64/include/asm/virt.h        |    1 +
+ arch/arm64/include/uapi/asm/kvm.h    |   63 ++
+ arch/arm64/kvm/Kconfig               |    8 +
+ arch/arm64/kvm/Makefile              |    3 +-
+ arch/arm64/kvm/arch_timer.c          |   53 +-
+ arch/arm64/kvm/arm.c                 |  105 +-
+ arch/arm64/kvm/guest.c               |   50 +
+ arch/arm64/kvm/inject_fault.c        |    2 +
+ arch/arm64/kvm/mmio.c                |    7 +
+ arch/arm64/kvm/mmu.c                 |   80 +-
+ arch/arm64/kvm/psci.c                |   23 +
+ arch/arm64/kvm/reset.c               |   41 +
+ arch/arm64/kvm/rme-exit.c            |  194 ++++
+ arch/arm64/kvm/rme.c                 | 1453 ++++++++++++++++++++++++++
+ arch/arm64/kvm/vgic/vgic-v3.c        |    9 +-
+ arch/arm64/kvm/vgic/vgic.c           |   37 +-
+ arch/arm64/mm/fault.c                |   29 +-
+ include/kvm/arm_arch_timer.h         |    2 +
+ include/uapi/linux/kvm.h             |   21 +-
+ 25 files changed, 2772 insertions(+), 47 deletions(-)
+ create mode 100644 arch/arm64/include/asm/kvm_rme.h
+ create mode 100644 arch/arm64/include/asm/rmi_cmds.h
+ create mode 100644 arch/arm64/include/asm/rmi_smc.h
+ create mode 100644 arch/arm64/kvm/rme-exit.c
+ create mode 100644 arch/arm64/kvm/rme.c
 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.34.1
+
