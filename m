@@ -2,142 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A13167E80F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CC967E80E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbjA0OVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:21:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
+        id S230004AbjA0OVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbjA0OU5 (ORCPT
+        with ESMTP id S231305AbjA0OU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:20:57 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1287C739;
-        Fri, 27 Jan 2023 06:20:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1674829256; x=1706365256;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qRi/ydqT7NbsVpsX89s+hti2aWqBktbxWkTgajSS8xY=;
-  b=FeG/zE7WJyVbwuB4ducl9U96sROcEXTKEhn2gCzc1GRuQWXrpnFmC1Wk
-   wlYIkMZjVhdsVbpmjpwF8ATL1EpmahQitQVWL4+GqMkB1B102YoIy/L1M
-   ar0VgwA+2Cky/HROxQFGQh0awojlJSWD5E2QX15rqjf/hMiJAPkb6I4K9
-   ENgLX6/celO/c4wiWOCyyhSIfrFgRWjUj3KkqkmBbqpa4o82f3rS449vY
-   rw2YPLTGdQ4bBcAQ0HXfn/hvhZHJ3N54LYoA5Q1op6rP3v1MK0ZVtTo6U
-   vmsn4VgiCPWyixjCcozXxnbOJaw2NA0GN7LgTEC/R3ieB1BkXnpo4MzlV
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,251,1669100400"; 
-   d="asc'?scan'208";a="198299614"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jan 2023 07:20:55 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 27 Jan 2023 07:20:54 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Fri, 27 Jan 2023 07:20:52 -0700
-Date:   Fri, 27 Jan 2023 14:20:28 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-CC:     Conor Dooley <conor@kernel.org>, Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 1/9] RISC-V: Add AIA related CSR defines
-Message-ID: <Y9PdrOvb8bYXpgVw@wendy>
-References: <20230103141409.772298-1-apatel@ventanamicro.com>
- <20230103141409.772298-2-apatel@ventanamicro.com>
- <Y7YGp/7ufyRPhkwg@spud>
- <CAAhSdy2YKJfuxhBmsx9v-OMyxKQjys+J-z_ZqoPJF7q=YrE4Zw@mail.gmail.com>
- <Y8cIG6gKSlkTh5AF@spud>
- <CAK9=C2VzJvpQLPedc+ruUnw8xDDDaC6_Vmj6qg1nXv+iqU-AfQ@mail.gmail.com>
+        Fri, 27 Jan 2023 09:20:56 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D5E1EBF9
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:20:55 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id v10so4850623edi.8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:20:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s1mMOgOAUczPiRdH6XCgg9V9JLsmma56WmhiUpM4dfA=;
+        b=hYBaOruFI14ltOb8P+C731dFIXvnBH5xYO2UGG5apyjFRSh2LbfUvZjFkrzgRpFnnk
+         lUkYdct5EGEoiBHg79czlY72qVp3ZD10mY6Xi3gkgdNW7W9WlSdzcK93yVotezI4Y83A
+         kiIOMkbKII7r+/xv4WMneecGHC+ggQU/WTed+9ksZpRiA/9aShl29mBEU8OeavwRa7Ve
+         qLBi7PJ/fa402uq8Jxi1i47giTqUeXVfzLjVqbE2v4lstuIA/QALp8ptDLZC/Oo9gmjN
+         asNAzcHHBmg41+SfmXzh4yrRVvAfUuLpVoOf5ln047Z6C7nka0Yit37cY/pYsOci3PGi
+         0l4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s1mMOgOAUczPiRdH6XCgg9V9JLsmma56WmhiUpM4dfA=;
+        b=C3gOBrQomjPtCvuUp7Jdtcs0hJibLRU26YNDNy4q4s0xld7PrANBBJYv+IILuNgIVq
+         6nEvoH7h4rqXKWEw1ifbkN9HF+x9QjWYkyeCy7l8JlBhuM7wyI0u+mX6SJYycUjH7YDJ
+         lRhBI40aYI3pef8Q7eTkpurz+8QKJoOnyCW50j8gPyG+GRRkiYH2xFZWVPypem0hlb3q
+         HA92vJKAPTDPC82Fm/txMwEbKKragpxEV7AwWvib/7HMI+46s9IVjaS3zYLzBWr281jb
+         q/TZtKBmdoSv/iVH/HVir/6zywzzdbFLEPqvD8X2KCO98ltfz5oCj41d+I2Gqx99T3sZ
+         PS1Q==
+X-Gm-Message-State: AFqh2kqE36yDwit27PjEm6lGQAhfRlLUx8uzi02/a66aKesdRdJuZQWE
+        27rdiwStfZWQmShxQ6sqdp4DYw==
+X-Google-Smtp-Source: AMrXdXvN9nzYJ7tRCLEzVs0mhMBMiEU22SiCe0tmNjgYzRK1+B0pxIrdNhOhuHXmjcmFvbxLVWHW1A==
+X-Received: by 2002:a05:6402:4d6:b0:46c:6ed1:83ac with SMTP id n22-20020a05640204d600b0046c6ed183acmr41820400edw.9.1674829253644;
+        Fri, 27 Jan 2023 06:20:53 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id l19-20020a056402255300b00488abbbadb3sm2362546edb.63.2023.01.27.06.20.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 06:20:53 -0800 (PST)
+Message-ID: <18aad46a-b3d5-dadd-0e22-7b2f5938b761@linaro.org>
+Date:   Fri, 27 Jan 2023 15:20:50 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Q5G9sbwHy4TPVN/e"
-Content-Disposition: inline
-In-Reply-To: <CAK9=C2VzJvpQLPedc+ruUnw8xDDDaC6_Vmj6qg1nXv+iqU-AfQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 13/14] drm/msm/a6xx: Add A619_holi speedbin support
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230126151618.225127-1-konrad.dybcio@linaro.org>
+ <20230126151618.225127-14-konrad.dybcio@linaro.org>
+ <c8d9d5f0-dab8-4dca-5a32-1f4e11ecc964@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <c8d9d5f0-dab8-4dca-5a32-1f4e11ecc964@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Q5G9sbwHy4TPVN/e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Jan 27, 2023 at 05:28:57PM +0530, Anup Patel wrote:
-> On Wed, Jan 18, 2023 at 2:12 AM Conor Dooley <conor@kernel.org> wrote:
-
-> > > > > +/* AIA CSR bits */
-> > > > > +#define TOPI_IID_SHIFT               16
-> > > > > +#define TOPI_IID_MASK                0xfff
-> >
-> > While I think of it, it'd be worth noting that these are generic across
-> > all of topi, mtopi etc. Initially I thought that this mask was wrong as
-> > the topi section says:
-> >         bits 25:16 Interrupt identity (source number)
-> >         bits 7:0 Interrupt priority
->=20
-> These defines are for the AIA CSRs and not AIA APLIC IDC registers.
->=20
-> As per the latest frozen spec, the mtopi/stopi/vstopi has following bits:
->     bits: 27:16 IID
->     bits: 7:0 IPRIO
-
-I know, that those ones use those bits, hence leaving an R-b for the
-patch - but your define says TOPI, which it is *not* accurate for.
-That is confusing and should be noted.
-
-> > What I was advocating for was picking one style and sticking to it.
-> > These copy-paste from docs things are tedious and error prone to review,
-> > and I don't think having multiple styles is helpful.
->=20
-> On the other hand, I think we should let developers choose a style
-> which is better suited for a particular register field instead enforcing
-> it here. The best we can do is follow a naming convention for defines.
-
-Well shall have to agree to disagree I suppose!
-
-> > Tedious as it was, I did check all the numbers though, so in that
-> > respect:
-> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->=20
-> BTW, this patch is shared with KVM AIA CSR series so most likely
-> I will take this patch through that series.
-
-Since the path which it gets applied is between you and Palmer to
-decide, feel free to add the R-b whichever way the patch ends up going!
-
-Thanks,
-Conor.
 
 
---Q5G9sbwHy4TPVN/e
-Content-Type: application/pgp-signature; name="signature.asc"
+On 27.01.2023 15:19, Dmitry Baryshkov wrote:
+> On 26/01/2023 17:16, Konrad Dybcio wrote:
+>> A619_holi is implemented on at least two SoCs: SM4350 (holi) and SM6375
+>> (blair). This is what seems to be a first occurrence of this happening,
+>> but it's easy to overcome by guarding the SoC-specific fuse values with
+>> of_machine_is_compatible(). Do just that to enable frequency limiting
+>> on these SoCs.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 31 +++++++++++++++++++++++++++
+>>   1 file changed, 31 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> index 452ba32699b2..89990bec897f 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> @@ -2091,6 +2091,34 @@ static u32 a618_get_speed_bin(u32 fuse)
+>>       return UINT_MAX;
+>>   }
+>>   +static u32 a619_holi_get_speed_bin(u32 fuse)
+>> +{
+>> +    /*
+>> +     * There are (at least) two SoCs implementing A619_holi: SM4350 (holi)
+>> +     * and SM6375 (blair). Limit the fuse matching to the corresponding
+>> +     * SoC to prevent bogus frequency setting (as improbable as it may be,
+>> +     * given unexpected fuse values are.. unexpected! But still possible.)
+>> +     */
+>> +
+>> +    if (fuse == 0)
+>> +        return 0;
+>> +
+>> +    if (of_machine_is_compatible("qcom,sm4350")) {
+>> +        if (fuse == 138)
+>> +            return 1;
+>> +        else if (fuse == 92)
+>> +            return 2;
+>> +    } else if (of_machine_is_compatible("qcom,sm6375")) {
+>> +        if (fuse == 190)
+>> +            return 1;
+>> +        else if (fuse == 177)
+>> +            return 2;
+>> +    } else
+>> +        pr_warn("Unknown SoC implementing A619_holi!\n");
+> 
+> I think, we might be better to introduce "qcom,SoC-adreno" compat string instead, ignore it in the bindings and only care about it here. This might seem an overkill thinking from the single Adreno version. However this issue also affects other revisions.
+> 
+> For example, for the A618 there are at least three platforms which use the same Adreno version: SC7180, SM7125 and SM7150. Only first one is supported (thus the speed_bin function is simple). However according to the vendor dts files all three platforms use different fuse values to specify the speed bin.
+> 
+>> +
+>> +    return UINT_MAX;
+>> +}
+>> +
+>>   static u32 a619_get_speed_bin(u32 fuse)
+>>   {
+>>       if (fuse == 0)
+>> @@ -2150,6 +2178,9 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
+>>       if (adreno_cmp_rev(ADRENO_REV(6, 1, 8, ANY_ID), rev))
+>>           val = a618_get_speed_bin(fuse);
+>>   +    else if (adreno_cmp_rev(ADRENO_REV(6, 1, 9, 1), rev))
+>> +        val = a619_holi_get_speed_bin(fuse);
+>> +
+> 
+> Are we sure that SM6350, the unholi A619 user, doesn't use patchid .1? (note I do not know a thing about Adreno patch ids and its usage between different platforms).
+Yes
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9PdrAAKCRB4tDGHoIJi
-0hKXAQCV41cEz/0+TALwgNAhpxgpr/x9in2qmKvIyEVcmTybHgEA/fTEeQ8D3ipy
-4nLYxkY/iE4Orn6/f5tKcQ1ydfXq3QE=
-=1kNL
------END PGP SIGNATURE-----
-
---Q5G9sbwHy4TPVN/e--
+Konrad
+> 
+>>       else if (adreno_cmp_rev(ADRENO_REV(6, 1, 9, ANY_ID), rev))
+>>           val = a619_get_speed_bin(fuse);
+>>   
+> 
