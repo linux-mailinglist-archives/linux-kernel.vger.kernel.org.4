@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948CD67E4DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7186167E4E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233900AbjA0MOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S233888AbjA0MPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232859AbjA0MOZ (ORCPT
+        with ESMTP id S232565AbjA0MP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:14:25 -0500
+        Fri, 27 Jan 2023 07:15:26 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689C6206A7;
-        Fri, 27 Jan 2023 04:09:28 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 621CF218BB;
-        Fri, 27 Jan 2023 12:09:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674821343; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D570A84F8E
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:10:51 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E08FA21EB7;
+        Fri, 27 Jan 2023 12:10:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674821446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=a9faRZ/SxtgILFonZsHOQNT86YKAAhJwA/HSfiWSP6Y=;
-        b=sMvrKAeF1FXre3nEN+/+ZQQUn2ojiJ+7aDv42b1jHg+dbyaQVeZI/KWwHjy4mn/l0JBxj1
-        TWkdJ4D44Wv8rj+4VbfdLqDSTf/FSTUUZo0J01gqgOs5vQM+tfDOOpi5dgSjp/SsqZc754
-        mjK6oH+DAvMdmUOUe3KdLkt0Rzik/wc=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        bh=07dh0oC/UdpdjtV1PDerdEYISe/VcXNWak+RtCBFcVk=;
+        b=YWtoY4r82xjQIkDkuu9HeSHMRO1mJUpU4eBER3Z7+yOTbnyz0sjSO9p+H3rVc2b526Yj91
+        4Hy2oDt+77lGsoyim/NQYL7t7r3IeLpU+cBj0TS0ktKCrGJ+Xl77AXlNtSsR7HP/5wpZJL
+        h/W4qbfdmaX7YgSQlCBMPUbVIzYijSI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674821446;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=07dh0oC/UdpdjtV1PDerdEYISe/VcXNWak+RtCBFcVk=;
+        b=tAYdBaRX0I8uD9dmnyzrWvLDhS0nU+RVc/ldfTsdKG5hUNygGH9/JlUjiMMQuXCissE7fA
+        82ix3mnEyIug8yAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3C7932C141;
-        Fri, 27 Jan 2023 12:09:03 +0000 (UTC)
-Date:   Fri, 27 Jan 2023 13:09:02 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Seth Forshee (DigitalOcean)" <sforshee@digitalocean.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] vhost: improve livepatch switching for heavily
- loaded vhost worker kthreads
-Message-ID: <Y9O+3jzH0PiG1qlJ@alley>
-References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
- <Y9KyVKQk3eH+RRse@alley>
- <Y9LswwnPAf+nOVFG@do-x1extreme>
- <20230127044355.frggdswx424kd5dq@treble>
- <Y9OpTtqWjAkC2pal@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9OpTtqWjAkC2pal@hirez.programming.kicks-ass.net>
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B257D138E3;
+        Fri, 27 Jan 2023 12:10:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yru+Kka/02MCdwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 27 Jan 2023 12:10:46 +0000
+Date:   Fri, 27 Jan 2023 13:10:46 +0100
+Message-ID: <87mt64qit5.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     bskeggs@redhat.com
+Cc:     Zheng Wang <zyytlz.wz@163.com>, alex000young@gmail.com,
+        security@kernel.org, kherbst@redhat.com,
+        nouveau@lists.freedesktop.org, hackerzheng666@gmail.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/nouveau/mmu: fix Use after Free bug in nvkm_vmm_node_split
+In-Reply-To: <87mt6zr9s4.wl-tiwai@suse.de>
+References: <20221230072758.443644-1-zyytlz.wz@163.com>
+        <87mt6zr9s4.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,106 +71,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2023-01-27 11:37:02, Peter Zijlstra wrote:
-> On Thu, Jan 26, 2023 at 08:43:55PM -0800, Josh Poimboeuf wrote:
-> > On Thu, Jan 26, 2023 at 03:12:35PM -0600, Seth Forshee (DigitalOcean) wrote:
-> > > On Thu, Jan 26, 2023 at 06:03:16PM +0100, Petr Mladek wrote:
-> > > > On Fri 2023-01-20 16:12:20, Seth Forshee (DigitalOcean) wrote:
-> > > > > We've fairly regularaly seen liveptches which cannot transition within kpatch's
-> > > > > timeout period due to busy vhost worker kthreads.
-> > > > 
-> > > > I have missed this detail. Miroslav told me that we have solved
-> > > > something similar some time ago, see
-> > > > https://lore.kernel.org/all/20220507174628.2086373-1-song@kernel.org/
-> > > 
-> > > Interesting thread. I had thought about something along the lines of the
-> > > original patch, but there are some ideas in there that I hadn't
-> > > considered.
+On Tue, 03 Jan 2023 15:07:55 +0100,
+Takashi Iwai wrote:
+> 
+> On Fri, 30 Dec 2022 08:27:58 +0100,
+> Zheng Wang wrote:
 > > 
-> > Here's another idea, have we considered this?  Have livepatch set
-> > TIF_NEED_RESCHED on all kthreads to force them into schedule(), and then
-> > have the scheduler call klp_try_switch_task() if TIF_PATCH_PENDING is
-> > set.
+> > Here is a function call chain.
+> > nvkm_vmm_pfn_map->nvkm_vmm_pfn_split_merge->nvkm_vmm_node_split
+> > If nvkm_vma_tail return NULL in nvkm_vmm_node_split, it will
+> > finally invoke nvkm_vmm_node_merge->nvkm_vmm_node_delete, which
+> > will free the vma. However, nvkm_vmm_pfn_map didn't notice that.
+> > It goes into next label and UAF happens.
 > > 
-> > Not sure how scheduler folks would feel about that ;-)
+> > Fix it by returning the return-value of nvkm_vmm_node_merge
+> > instead of NULL.
+> > 
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 > 
-> So, let me try and page all that back in.... :-)
+> FWIW, CVE-2023-0030 has been assigned to this bug.
+> It's a question whether it really deserves as a security issue, but a
+> bug is a bug...
 > 
-> KLP needs to unwind the stack to see if any of the patched functions are
-> active, if not, flip task to new set.
+> Ben, could you review this please?
+
+A gentle ping as reminder.  The bug is still present.
+
+
+thanks,
+
+Takashi
+
 > 
-> Unwinding the stack of a task can be done when:
 > 
->  - task is inactive (stable reg and stack) -- provided it stays inactive
->    while unwinding etc..
+> thanks,
 > 
->  - task is current (guarantees stack doesn't dip below where we started
->    due to being busy on top etc..)
+> Takashi
 > 
-> Can NOT be done from interrupt context, because can hit in the middle of
-> setting up stack frames etc..
-
-All the above seems correct.
-
-> The issue at hand is that some tasks run for a long time without passing
-> through an explicit check.
-
-There might actually be two possibilities why the transition fails
-too often:
-
-1. The task might be in the running state most of the time. Therefore
-   the backtrace is not reliable most of the time.
-
-   In this case, some cooperation with the scheduler would really
-   help. We would need to stop the task and check the stack
-   when it is stopped. Something like the patch you proposed.
-
-
-2. The task might be sleeping but almost always in a livepatched
-   function. Therefore it could not be transitioned.
-
-   It might be the case with vhost_worker(). The main loop is "tiny".
-   The kthread probaly spends most of the time with processing
-   a vhost_work. And if the "works" are livepatched...
-
-   In this case, it would help to call klp_try_switch_task(current)
-   in the main loop in vhost_worker(). It would always succeed
-   when vhost_worker() is not livepatched on its own.
-
-   Note that even this would not help with kPatch when a single
-   vhost_work might need more than the 1 minute timout to get proceed.
-
-> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-> index f1b25ec581e0..06746095a724 100644
-> --- a/kernel/livepatch/transition.c
-> +++ b/kernel/livepatch/transition.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/cpu.h>
->  #include <linux/stacktrace.h>
-> +#include <linux/stop_machine.h>
->  #include "core.h"
->  #include "patch.h"
->  #include "transition.h"
-> @@ -334,6 +335,16 @@ static bool klp_try_switch_task(struct task_struct *task)
->  	return !ret;
->  }
->  
-> +static int __stop_try_switch(void *arg)
-> +{
-> +	return klp_try_switch_task(arg) ? 0 : -EBUSY;
-> +}
-> +
-> +static bool klp_try_switch_task_harder(struct task_struct *task)
-> +{
-> +	return !stop_one_cpu(task_cpu(task), __stop_try_switch, task);
-> +}
-> +
->  /*
->   * Sends a fake signal to all non-kthread tasks with TIF_PATCH_PENDING set.
->   * Kthreads with TIF_PATCH_PENDING set are woken up.
-
-Nice. I am surprised that it can be implemented so easily.
-
-Best Regards,
-Petr
+> > ---
+> >  drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> > index ae793f400ba1..84d6fc87b2e8 100644
+> > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> > @@ -937,8 +937,8 @@ nvkm_vmm_node_split(struct nvkm_vmm *vmm,
+> >  	if (vma->size != size) {
+> >  		struct nvkm_vma *tmp;
+> >  		if (!(tmp = nvkm_vma_tail(vma, vma->size - size))) {
+> > -			nvkm_vmm_node_merge(vmm, prev, vma, NULL, vma->size);
+> > -			return NULL;
+> > +			tmp = nvkm_vmm_node_merge(vmm, prev, vma, NULL, vma->size);
+> > +			return tmp;
+> >  		}
+> >  		tmp->part = true;
+> >  		nvkm_vmm_node_insert(vmm, tmp);
+> > -- 
+> > 2.25.1
+> > 
