@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A2367E84E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B2967E851
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbjA0Obv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
+        id S233202AbjA0OcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:32:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbjA0Obq (ORCPT
+        with ESMTP id S233144AbjA0OcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:31:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EB7FF0E;
-        Fri, 27 Jan 2023 06:31:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 486CC61C1D;
-        Fri, 27 Jan 2023 14:31:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB7F1C433EF;
-        Fri, 27 Jan 2023 14:31:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674829904;
-        bh=+LRus+iJtP9b1Gg0DrsmsnfQzYQTRnZkqWmF3BfFAXQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MFK1mvjC5yPz3eWStoEjKSNIdRl9NLTnpjP+4rt5p/i39k5ccB+Zzbjs8lGWC9Pz2
-         GGXRr/K19MvC7Po85hdEmSDH3sVfn5t0UAxcAraCRFRRuViNy8l60E4VE3piF+Q3fY
-         yungBmAGhKIoGcWxY6IzfqQfo1+FKPxIe5HAAgh61IrD+U2DKdBNzJEom3+Gm6PVDI
-         q3pD+MRHAHWW1pSEUA0XnbJWjTR84SxdaJNpB9dFvvp0Jx6MeU6U2IUZ61hEkTiTsN
-         UJU0EKL1JVNIFZSH4QcOq/3yhQ/R4S5bH2fnHbBM2eBmOVw5J8cvCm3zfsOiurtVHK
-         SBD7AVJUY0bcg==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1442977d77dso6633995fac.6;
-        Fri, 27 Jan 2023 06:31:44 -0800 (PST)
-X-Gm-Message-State: AFqh2kpdvzZIACdc8evmj+508MybTv2OvVh+bBfLUL9OFBG5YMEZzf0w
-        KUGAQNFq+ztCq+lu3pRVbRNE1m0fHQMxhuLNO1Q=
-X-Google-Smtp-Source: AK7set8amIa6z7tRWTk83cYkNweETJWmJHZG3C/kcz+y/nQcQwLnkdNJhWuo0dk3GoudjYP/ZwZeol8XNBhMIuw8sCw=
-X-Received: by 2002:a05:6870:110f:b0:160:3296:a9b9 with SMTP id
- 15-20020a056870110f00b001603296a9b9mr1392365oaf.287.1674829903989; Fri, 27
- Jan 2023 06:31:43 -0800 (PST)
+        Fri, 27 Jan 2023 09:32:13 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8612283278
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:32:03 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P3KZP1f1tz9v7JD
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 22:23:57 +0800 (CST)
+Received: from [10.81.218.251] (unknown [10.81.218.251])
+        by APP1 (Coremail) with SMTP id LxC2BwD3dwNA4NNjNCvQAA--.2670S2;
+        Fri, 27 Jan 2023 15:31:38 +0100 (CET)
+Message-ID: <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
+Date:   Fri, 27 Jan 2023 15:31:25 +0100
 MIME-Version: 1.0
-References: <20221229074310.906556-1-masahiroy@kernel.org> <20221229074310.906556-2-masahiroy@kernel.org>
- <Y9PQxCTJGTRU1cuE@smile.fi.intel.com>
-In-Reply-To: <Y9PQxCTJGTRU1cuE@smile.fi.intel.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 27 Jan 2023 23:31:07 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASJ6j7XEZ-poS+Qq+8nZ5iztLTuTSgkr+fMka7HYH8ekQ@mail.gmail.com>
-Message-ID: <CAK7LNASJ6j7XEZ-poS+Qq+8nZ5iztLTuTSgkr+fMka7HYH8ekQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] kbuild: make W=1 warn files that are tracked but
- ignored by git
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
+ <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
+ <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwD3dwNA4NNjNCvQAA--.2670S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAFWDArykZry3Zr45XFWfuFg_yoWrtrWkpr
+        WfKws3Kayvyrn5uw1UJw1DXFyrCw4rAw1rJF18ua4F93y5Wa929F40gr4j9Fy7GrZ7Jayj
+        qr4Yy34kZr4kZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,30 +68,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 10:25 PM Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
->
-> On Thu, Dec 29, 2022 at 04:43:10PM +0900, Masahiro Yamada wrote:
-> > The top .gitignore comments about how to detect files breaking
-> > .gitignore rules, but people rarely care about it.
-> >
-> > Add a new W=1 warning to detect files that are tracked but ignored by
-> > git. If git is not installed or the source tree is not tracked by git
-> > at all, this script does not print anything.
-> >
-> > Running it on v6.2-rc1 detected the following:
->
-> Since patch was published there is no sign it was ever meet Linux Next.
-> What's the plan?
 
 
-Oh?
-I can see this patch in linux-next.
+On 1/26/2023 5:36 PM, Alan Stern wrote:
+> On Thu, Jan 26, 2023 at 02:46:04PM +0100, Jonas Oberhauser wrote:
+>> As stated in the documentation and implied by its name, the ppo
+>> (preserved program order) relation is intended to link po-earlier
+>> to po-later instructions under certain conditions.  However, a
+>> corner case currently allows instructions to be linked by ppo that
+>> are not executed by the same thread, i.e., instructions are being
+>> linked that have no po relation.
+>>
+>> This happens due to the mb/strong-fence relations, which (as one
+>> case) provide order when locks are passed between threads followed
+>> by an smp_mb__after_unlock_lock() fence.  This is illustrated in
+>> the following litmus test (as can be seen when using herd7 with
+>> `doshow ppo`):
+>>
+>> P0(int *x, int *y)
+>> {
+>>      spin_lock(x);
+>>      spin_unlock(x);
+>> }
+>>
+>> P1(int *x, int *y)
+>> {
+>>      spin_lock(x);
+>>      smp_mb__after_unlock_lock();
+>>      *y = 1;
+>> }
+>>
+>> The ppo relation will link P0's spin_lock(x) and P1's *y=1, because
+>> P0 passes a lock to P1 which then uses this fence.
+>>
+>> The patch makes ppo a subrelation of po by eliminating this possibility
+>> from mb (but not strong-fence) and relying explicitly on mb|gp instead
+>> of strong-fence when defining ppo.
+>>
+>> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+>> ---
+> This changes the meaning of the fence relation, which is used in
+> w-pre-bounded, w-post-bounded, ww-vis, wr-vis, and rw-xbstar.  Have you
+> checked that they won't be affected by the change?
+
+Good point, in fact it changes the nonrw-fence as well which is used in 
+the r-* relations.
+I had missed this completely. That's what I get for not looking at the 
+data race relations!
 
 
-$ git log next-20230127 -- scripts/misc-check
+Let's go through the individual cases.
+If we had e.g. *-post-bounded because of the 
+po-unlock-lock-po;[After-unlock-lock];po edge, this may be either due to 
+the fence rule or due to (...fence ; vis ; *-pre-bounded).
+In the first case we have po-rel ; rfe ; acq-po and get 
+fence;rfe;(xbstar&int);fence which gives us *-post-bounded.
+In the second case we now have strong-fence, with vis <= xbstar we see 
+that **-vis is preserved here by switching from the fence rule to the 
+strong-fence;xbstar;... case.
+
+For *-pre-bounded, the situtation is tricky because of the xbstar&int 
+that can be at the end of vis, when *-pre-bounded is used to define 
+w*-vis through (w-post-bounded;vis;*-pre-bounded). In this case, the 
+xbstar&int can point in the opposite direction of po, which means that 
+the unlock that creates the strong fence might not be po-after the 
+instruction that starts the link.
+
+Here's a litmus test illustrating the difference, where P1 has a 
+backwards-pointing xbstar&int. Currently there's no data race, but with 
+the proposed patch there is.
+
+P0(int *x, int *y)
+{
+     *x = 1;
+     smp_store_release(y, 1);
+}
+
+P1(int *x, int *y, int *dx, int *dy, spinlock_t *l)
+{
+     spin_lock(l);
+     int r1 = READ_ONCE(*dy);
+     if (r1==1)
+         spin_unlock(l);
+
+     int r0 = smp_load_acquire(y);
+     if (r0 == 1) {
+         WRITE_ONCE(*dx,1);
+     }
+}
+
+P2(int *dx, int *dy)
+{
+     WRITE_ONCE(*dy,READ_ONCE(*dx));
+}
 
 
--- 
-Best Regards
-Masahiro Yamada
+P3(int *x, spinlock_t *l)
+{
+     spin_lock(l);
+     smp_mb__after_unlock_lock();
+     *x = 2;
+}
+
+
+This actually makes me wonder. I thought the reason for the xbstar & int 
+is that it ensures that the overall relation, after shuffling around a 
+little bit, becomes prop&int ; hb*.
+
+Like in case the *x=2 is co-before the *x=1, we get
+   Wx2 ->overwrite Wx1 ->cumul-fence*;rfe  (some event on the same CPU 
+as Wx2)  ->fence Wx2
+which is
+   Wx2 -> prop&int some other event ->hb Wx2
+which must be irreflexive.
+
+However, that's not the case at all, because the fence relation 
+currently doesn't actually have to relate events of the same CPU.
+So we get
+   Wx2 ->overwrite Wx1 ->cumul-fence*;rfe  (some event on some other CPU 
+than Wx2's) ->(hb*&int);fence Wx2
+i.e.,
+   Wx2 ->prop&ext;hb*;strong-fence Wx2
+
+which shouldn't provide any ordering in general.
+
+In fact, replacing the *x=1 and *x=2 with WRITE_ONCEs, (pilot errors 
+notwithstanding) both Wx1 ->co Wx2 and Wx2 ->co Wx1 become allowed in 
+the current LKMM (in graphs where all other edges are equal).
+
+Shouldn't this actually *be* a data race? And potentially the same with 
+rcu-fence?
+
+The other cases of *-pre-bounded seem to work out: they all link stuff 
+via xbstar to the instruction that is linked via po-unlock-lock-po ; 
+[After-unlock-lock] ; po to the potentially racy access, and 
+po-unlock-lock-po;po   is xbstar ; acq-po, which allows closing the gap.
+
+Best wishes, jonas
+
