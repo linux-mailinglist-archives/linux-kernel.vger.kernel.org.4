@@ -2,40 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE64067DDD3
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9955167DDE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbjA0Gku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 01:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
+        id S232512AbjA0GlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 01:41:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbjA0GkU (ORCPT
+        with ESMTP id S231855AbjA0GkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 01:40:20 -0500
+        Fri, 27 Jan 2023 01:40:21 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E781169505;
-        Thu, 26 Jan 2023 22:40:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA216B98D;
+        Thu, 26 Jan 2023 22:40:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=jkGU4nbyYTo0PHUSwa4F1L9prs0zbYb2bk1PtblxpjA=; b=ebXTMeKRptI2/jgaxUPED6UveF
-        di7olaXSKh9w+LsfprF/LkUB6nL4jY7FPtvS2Otq6JJk4UvfeQTaDhBriswXtitt32o2VDY9AIuAD
-        97tweo5hiB1ctKjt5xiYplW4niUE/OGq7mog/7AnA1cTo+V+IJVVx2i25x9lqU+wyWegoMMb5B+Gk
-        qrn/yVQas5kMlm0TiXogiO9YzB2j/MWuAgUZohq7FEiw1oyilgeetQXHRTeZPvQJ7LtmdBObeUKrc
-        YZ/Q3O/i9HJAy70uKzTibmcirWLlMnUcDLVqebN/t9y18Gl0WR0yPdyL1V2/FfzbP/IGK1A5kuL0j
-        TQ1CwF6g==;
+        bh=SUwH1LDQIw4JkT2EOAlWQFQIElPYczSWfrxh+QtUfJM=; b=n2NwzsXUlSrzYDF2M7V7nL9e7o
+        mGfvprTGQXuHivvlde99vYK2OXmJG9VJf8wbuqk5NSLKnGP+nQlO9ZkvEhsFwq8uIN9yf27O6mrjA
+        ZVxZ90FwkJfELZRnAmAkFdAWt402Ji55upCJNEBGb+aLl75gz/1eHLFposdfg3Nf9AtOEpjwxMjMr
+        r5J63NDiePPLTrU7Nz5uCoUbb9nC49nY5HkgEpuiI0d+na6NY4IrR45QtiQolGXhIWZ0K8p6PHdb+
+        uAP11QNzIhFkdwV5s78mCMJZDqeoPvTl9fSJpw/KxXJjiwlFqA3SutkcW+/9PLO+AR2sMSdvT+KGO
+        RPUjL57Q==;
 Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pLIPI-00DM0u-Cw; Fri, 27 Jan 2023 06:40:16 +0000
+        id 1pLIPJ-00DM0u-1J; Fri, 27 Jan 2023 06:40:17 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 14/35] Documentation: leds: correct spelling
-Date:   Thu, 26 Jan 2023 22:39:44 -0800
-Message-Id: <20230127064005.1558-15-rdunlap@infradead.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-arch@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 15/35] Documentation: litmus-tests: correct spelling
+Date:   Thu, 26 Jan 2023 22:39:45 -0800
+Message-Id: <20230127064005.1558-16-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230127064005.1558-1-rdunlap@infradead.org>
 References: <20230127064005.1558-1-rdunlap@infradead.org>
@@ -50,37 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling problems for Documentation/leds/ as reported
+Correct spelling problems for Documentation/litmus-tests/ as reported
 by codespell.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Lee Jones <lee@kernel.org>
-Cc: linux-leds@vger.kernel.org
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Andrea Parri <parri.andrea@gmail.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jade Alglave <j.alglave@ucl.ac.uk>
+Cc: Luc Maranget <luc.maranget@inria.fr>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: linux-arch@vger.kernel.org
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
 ---
- Documentation/leds/leds-qcom-lpg.rst |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/litmus-tests/README |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff -- a/Documentation/leds/leds-qcom-lpg.rst b/Documentation/leds/leds-qcom-lpg.rst
---- a/Documentation/leds/leds-qcom-lpg.rst
-+++ b/Documentation/leds/leds-qcom-lpg.rst
-@@ -34,7 +34,7 @@ Specify a hardware pattern for a Qualcom
+diff -- a/Documentation/litmus-tests/README b/Documentation/litmus-tests/README
+--- a/Documentation/litmus-tests/README
++++ b/Documentation/litmus-tests/README
+@@ -9,7 +9,7 @@ a kernel test module based on a litmus t
+ tools/memory-model/README.
  
- The pattern is a series of brightness and hold-time pairs, with the hold-time
- expressed in milliseconds. The hold time is a property of the pattern and must
--therefor be identical for each element in the pattern (except for the pauses
-+therefore be identical for each element in the pattern (except for the pauses
- described below). As the LPG hardware is not able to perform the linear
- transitions expected by the leds-trigger-pattern format, each entry in the
- pattern must be followed a zero-length entry of the same brightness.
-@@ -66,7 +66,7 @@ Low-pause pattern::
-         +----------------------------->
-         0    5   10   15  20   25   time (100ms)
  
--Similarily, the last entry can be stretched by using a higher hold-time on the
-+Similarly, the last entry can be stretched by using a higher hold-time on the
- last entry.
+-atomic (/atomic derectory)
++atomic (/atomic directory)
+ --------------------------
  
- In order to save space in the shared lookup table the LPG supports "ping-pong"
+ Atomic-RMW+mb__after_atomic-is-stronger-than-acquire.litmus
