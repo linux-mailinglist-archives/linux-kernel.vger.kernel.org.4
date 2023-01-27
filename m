@@ -2,162 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D637967E474
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E02F67E446
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbjA0MDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:03:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S233373AbjA0L4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:56:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbjA0MCq (ORCPT
+        with ESMTP id S232974AbjA0LzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:02:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAC92A9B5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:58:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC89B61B48
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:50:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82CC0C433EF;
-        Fri, 27 Jan 2023 11:50:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674820245;
-        bh=yg7LVjF/Sxi7pRws/+ezLgbUiexQuVEylBV9Ln2+OZk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fIsy9043QSVE0+qZwwPJD86MLjYhe5Vl7AcvAzBQ7tCcVq3TxiJo2HUMywupE3z59
-         H1iTpcLQIDEDFGmXNkmfMrnlbCzmiNQLLmYeZvtHBkxpxLeBy88FzMv57J8P7Od0wt
-         XovcKlayuFatPnOVBVgcWSZHD6DxFcpwLupGojlCdx2qg5lsvYt6wh/08nYYTMZpLO
-         Cl9P0pAr8x+JOdHdu0cxbbU8VOXTInmxp7N9fkXoWHh6Yr4N3/V+OCA/E4pKk3Qy9Z
-         QKsa9pTT0pJbOIrtpPi24mk3HW3Rc5KHK4sLcoZ0A4sLzaBBk0rcmQTQ5QolgtdeN4
-         nQp+VmQkV8r5w==
-Date:   Fri, 27 Jan 2023 11:50:39 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     catalin.marinas@arm.com, mark.rutland@arm.com,
-        daniel.thompson@linaro.org, dianders@chromium.org,
-        liwei391@huawei.com, mhiramat@kernel.org, maz@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] arm64: kgdb: Set PSTATE.SS to 1 to re-enable
- single-step
-Message-ID: <20230127115039.GA30505@willie-the-truck>
-References: <20221219102452.2860088-1-sumit.garg@linaro.org>
- <20221219102452.2860088-3-sumit.garg@linaro.org>
+        Fri, 27 Jan 2023 06:55:23 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3E33AB2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:52:45 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id y1so4757187wru.2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:52:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VUxkjbPI2hGs2bTAnhOWhZx0Y3u570fRt/MEL0+XvDc=;
+        b=nPrIxS6CM21G3+sUYx9go7df0QKfN3/Dtsq+WpA/kOh5cKqckydPi/hrYpQrqkUKAZ
+         QIgTraYG/K8jnwZsSQq8ymhiarXYxgGcNmaXEJBiuZUy1gEgkcb0aRm8TbSfLwCGOz8Z
+         IyoTBq5NwNaOPQdwoVrKMQAOHmUdK/7LjNJmKRHYMLnTlqvY+slLeTtIXtOu/GWf766p
+         Taxs8meQgkIFyjj22jSYK0We4LS0nKuMo01qrQ2CR2DCa6d7qGQ2OmG4ax8pb+3vpTRK
+         mfQe5Tewu6PrfbGmvyFSLdx480x+SOLB8FTvch5JebZVHMbGryve27Q325tOj62McMmS
+         3QpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VUxkjbPI2hGs2bTAnhOWhZx0Y3u570fRt/MEL0+XvDc=;
+        b=sbBHjMZ66SI8xG+sgVwbpHUQbIeSCAgGrVNOrRX22JIBxhZDcNR0SlKA4PrPyiqvKZ
+         x6nG2hdpTRshFgiWQQFMdCOGbwtEDOkTKu6Dds9GGHZIfouheFY8E3XQT1DxSR2IHqOk
+         E5nqwlqELCXRFd/eJd4wihlz9SJWuofZDfOWZ5z3/5RuGsRxp8mdwlzoqdPIpRi3BqOz
+         Hd2hm5j7SKA1MbTd1a0huVlPJtk63DTatnhgCJMXnsnTQS+2NJdFZzxNhlTjvOETk5nI
+         xH5GtEF94NRHibbeRdn0BSs68gHvPHYL2Ww4aXiYDvaYY58oqOZ/UqL4hUwTZ0XoXLsO
+         Pq9g==
+X-Gm-Message-State: AFqh2kpTbJUEXBZ+JeWwrzyk60Ot5Ru+rQy+Xra867tTNHztNvRVMBgs
+        q6fGuWC/wLf8rYTthEF+adJG1Q==
+X-Google-Smtp-Source: AMrXdXu/ppR95kNTQmFZaEgCcnWnz2FywoDoW01+9eBW7RnHLZ/01Gr9HpcBmhdtrkOjZiIM+x1cyw==
+X-Received: by 2002:adf:e18c:0:b0:2be:493f:3b34 with SMTP id az12-20020adfe18c000000b002be493f3b34mr33144295wrb.26.1674820267487;
+        Fri, 27 Jan 2023 03:51:07 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id p2-20020a5d4582000000b002b6bcc0b64dsm3804434wrq.4.2023.01.27.03.51.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 03:51:07 -0800 (PST)
+Message-ID: <2d368c6f-5240-8aec-ef27-a86b2a361856@linaro.org>
+Date:   Fri, 27 Jan 2023 12:51:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219102452.2860088-3-sumit.garg@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 7/8] arm64: dts: qcom: sm8550: Add USB PHYs and
+ controller nodes
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-phy@lists.infradead.org
+References: <20230126124651.1362533-1-abel.vesa@linaro.org>
+ <20230126124651.1362533-8-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230126124651.1362533-8-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 03:54:52PM +0530, Sumit Garg wrote:
-> Currently only the first attempt to single-step has any effect. After
-> that all further stepping remains "stuck" at the same program counter
-> value.
+On 26/01/2023 13:46, Abel Vesa wrote:
+> Add USB host controller and PHY nodes.
 > 
-> Refer to the ARM Architecture Reference Manual (ARM DDI 0487E.a) D2.12,
-> PSTATE.SS=1 should be set at each step before transferring the PE to the
-> 'Active-not-pending' state. The problem here is PSTATE.SS=1 is not set
-> since the second single-step.
-> 
-> After the first single-step, the PE transferes to the 'Inactive' state,
-> with PSTATE.SS=0 and MDSCR.SS=1, thus PSTATE.SS won't be set to 1 due to
-> kernel_active_single_step()=true. Then the PE transferes to the
-> 'Active-pending' state when ERET and returns to the debugger by step
-> exception.
-> 
-> Before this patch:
-> ==================
-> Entering kdb (current=0xffff3376039f0000, pid 1) on processor 0 due to Keyboard Entry
-> [0]kdb>
-> 
-> [0]kdb>
-> [0]kdb> bp write_sysrq_trigger
-> Instruction(i) BP #0 at 0xffffa45c13d09290 (write_sysrq_trigger)
->     is enabled   addr at ffffa45c13d09290, hardtype=0 installed=0
-> 
-> [0]kdb> go
-> $ echo h > /proc/sysrq-trigger
-> 
-> Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to Breakpoint @ 0xffffad651a309290
-> [1]kdb> ss
-> 
-> Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to SS trap @ 0xffffad651a309294
-> [1]kdb> ss
-> 
-> Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to SS trap @ 0xffffad651a309294
-> [1]kdb>
-> 
-> After this patch:
-> =================
-> Entering kdb (current=0xffff6851c39f0000, pid 1) on processor 0 due to Keyboard Entry
-> [0]kdb> bp write_sysrq_trigger
-> Instruction(i) BP #0 at 0xffffc02d2dd09290 (write_sysrq_trigger)
->     is enabled   addr at ffffc02d2dd09290, hardtype=0 installed=0
-> 
-> [0]kdb> go
-> $ echo h > /proc/sysrq-trigger
-> 
-> Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to Breakpoint @ 0xffffc02d2dd09290
-> [1]kdb> ss
-> 
-> Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd09294
-> [1]kdb> ss
-> 
-> Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd09298
-> [1]kdb> ss
-> 
-> Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd0929c
-> [1]kdb>
-> 
-> Fixes: 44679a4f142b ("arm64: KGDB: Add step debugging support")
-> Co-developed-by: Wei Li <liwei391@huawei.com>
-> Signed-off-by: Wei Li <liwei391@huawei.com>
-> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-> Tested-by: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->  arch/arm64/include/asm/debug-monitors.h | 1 +
->  arch/arm64/kernel/debug-monitors.c      | 5 +++++
->  arch/arm64/kernel/kgdb.c                | 2 ++
->  3 files changed, 8 insertions(+)
 > 
-> diff --git a/arch/arm64/include/asm/debug-monitors.h b/arch/arm64/include/asm/debug-monitors.h
-> index 7b7e05c02691..ce3875ad5cd3 100644
-> --- a/arch/arm64/include/asm/debug-monitors.h
-> +++ b/arch/arm64/include/asm/debug-monitors.h
-> @@ -104,6 +104,7 @@ void user_regs_reset_single_step(struct user_pt_regs *regs,
->  void kernel_enable_single_step(struct pt_regs *regs);
->  void kernel_disable_single_step(void);
->  int kernel_active_single_step(void);
-> +void kernel_regs_reset_single_step(struct pt_regs *regs);
+> NOTE: This patch has been already merged. It is here only to provide
+> context for the rest of the patchset. There is a change with respect to the
+> clocks, but that will be sent as a separate/individual fix patch.
+> 
+>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 92 +++++++++++++++++++++++++++-
+>  1 file changed, 91 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index 4daf1f03d79f..6801454bbe10 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -13,6 +13,7 @@
+>  #include <dt-bindings/mailbox/qcom-ipcc.h>
+>  #include <dt-bindings/power/qcom-rpmpd.h>
+>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> +#include <dt-bindings/phy/phy-qcom-qmp.h>
+>  #include <dt-bindings/thermal/thermal.h>
 >  
->  #ifdef CONFIG_HAVE_HW_BREAKPOINT
->  int reinstall_suspended_bps(struct pt_regs *regs);
-> diff --git a/arch/arm64/kernel/debug-monitors.c b/arch/arm64/kernel/debug-monitors.c
-> index 3da09778267e..9af898b22ed4 100644
-> --- a/arch/arm64/kernel/debug-monitors.c
-> +++ b/arch/arm64/kernel/debug-monitors.c
-> @@ -438,6 +438,11 @@ int kernel_active_single_step(void)
->  }
->  NOKPROBE_SYMBOL(kernel_active_single_step);
+>  / {
+> @@ -652,7 +653,7 @@ gcc: clock-controller@100000 {
+>  				 <&ufs_mem_phy 0>,
+>  				 <&ufs_mem_phy 1>,
+>  				 <&ufs_mem_phy 2>,
+> -				 <0>;
+> +				 <&usb_dp_qmpphy QMP_USB43DP_USB3_PIPE_CLK>;
+>  		};
 >  
-> +void kernel_regs_reset_single_step(struct pt_regs *regs)
-> +{
-> +	set_regs_spsr_ss(regs);
-> +}
+>  		ipcc: mailbox@408000 {
+> @@ -1924,6 +1925,95 @@ opp-202000000 {
+>  			};
+>  		};
+>  
+> +		usb_1_hsphy: phy@88e3000 {
+> +			compatible = "qcom,sm8550-snps-eusb2-phy";
+> +			reg = <0x0 0x088e3000 0x0 0x154>;
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&tcsr TCSR_USB2_CLKREF_EN>;
+> +			clock-names = "ref";
+> +
+> +			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		usb_dp_qmpphy: phy@88e8000 {
+> +			compatible = "qcom,sm8550-qmp-usb3-dp-phy";
+> +			reg = <0x0 0x088e8000 0x0 0x3000>;
+> +
+> +			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
+> +				 <&rpmhcc RPMH_CXO_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+> +			clock-names = "aux", "ref", "com_aux", "usb3_pipe";
+> +
+> +			power-domains = <&gcc USB3_PHY_GDSC>;
+> +
+> +			resets = <&gcc GCC_USB3_DP_PHY_PRIM_BCR>,
+> +				 <&gcc GCC_USB3_PHY_PRIM_BCR>;
+> +			reset-names = "phy", "common";
+> +
+> +			#clock-cells = <1>;
+> +			#phy-cells = <1>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		usb_1: usb@a6f8800 {
+> +			compatible = "qcom,sm8550-dwc3", "qcom,dwc3";
+> +			reg = <0x0 0x0a6f8800 0x0 0x400>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
+> +				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
+> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
+> +				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>,
+> +				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+> +				 <&rpmhcc TCSR_USB3_CLKREF_EN>;
+> +			clock-names = "cfg_noc",
+> +				      "core",
+> +				      "iface",
+> +				      "sleep",
+> +				      "mock_utmi",
+> +				      "xo";
+> +
+> +			assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+> +					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
+> +			assigned-clock-rates = <19200000>, <200000000>;
+> +
+> +			interrupts-extended = <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&pdc 15 IRQ_TYPE_EDGE_RISING>,
+> +					      <&pdc 14 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "hs_phy_irq",
+> +					  "ss_phy_irq",
+> +					  "dm_hs_phy_irq",
+> +					  "dp_hs_phy_irq";
+> +
+> +			power-domains = <&gcc USB30_PRIM_GDSC>;
+> +			required-opps = <&rpmhpd_opp_nom>;
 
-Just a nit on the naming here, but please can this be
-kernel_rewind_single_step() instead? I think it's closer to the rewind
-function we have for user tasks than the reset function.
+This part was merged but it is not correct without [1]. Are we going to
+revive [1] or should we drop it?
 
-Cheers,
+[1] https://lore.kernel.org/all/YXcBK7zqny0s4gd4@ripper/
 
-Will
+Best regards,
+Krzysztof
+
