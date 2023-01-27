@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3B867DDE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DEF67DDDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjA0GlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 01:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
+        id S232449AbjA0GlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 01:41:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbjA0GkV (ORCPT
+        with ESMTP id S231859AbjA0GkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 Jan 2023 01:40:21 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ED469533;
-        Thu, 26 Jan 2023 22:40:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06116951F;
+        Thu, 26 Jan 2023 22:40:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=6J6Vi0RCPyxDfoC5MKQ9vw5ZM3fRcONntqTYKAAIxtY=; b=lpKOPLkD7r+0WJeIfwAu6uYgaf
-        glKSGhhtDkjjDnoz8W1d8hpTwG6ul+6ExLxYfPP4dBciTCgAFsK4GHjo+HEeCf0w5Afw6HEKu0aMS
-        6pTubItwg7yslvYxQErJqnWr0Eau7TBYZKtkOktkh2HkUEl40tuP2EJEw3YMPZ1fI5V1Ok2NjKXth
-        i/BMADkxf/DpFt/Yn1OdZFQslssDMx708qn+pQeJoYrgadFENLqQiZWTGT8SBnb/2NBJ1un4MPaMq
-        vI14843/aGp4g6vXFqXf7EN5KjdmOsE9OmTHun134uz+Rs9vj+o++j4B7Jj/gFBGg4L5PpslvRLeH
-        Vf8KYwQQ==;
+        Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
+        To:From:Sender:Reply-To:Content-ID:Content-Description;
+        bh=to66d23I47sb8h2oeV/vfz/qgeMBrJ25h7jvcPNuY+0=; b=wRYMb+i6bqH9dHXXk5GVuorcu2
+        iGJdYPHmscCf4HNEd2kBEjJZDs6Uvm8dd8bVHw4DxpEMwlRDT9r6+xXerlpfGFC8D6fGsX/a/WbHv
+        BngXyqAuHfWKWcFUxDYtMakog51ufr09VBi0AihWKO3HUfvUOX3eVbpR9TpXb/OZUw3xTYZx1MsDP
+        4wBaktEdTa2qyGcMDaSipil2uTvAEDGVFnG6x2J/y4Ogb/Dqt3pFubGjVWiLm/o3qr94Yj1dZYhId
+        3han/gTtoyPJc7wjG6W4BN6r8+4M9PoFXDjDugC2aCBvr5HtuUCo5tO7MJ0KajD2fONLbFzzjY5LK
+        Bm49/xHw==;
 Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pLIPL-00DM0u-2s; Fri, 27 Jan 2023 06:40:19 +0000
+        id 1pLIPL-00DM0u-HM; Fri, 27 Jan 2023 06:40:19 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        openrisc@lists.librecores.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 19/35] Documentation: openrisc: correct spelling
-Date:   Thu, 26 Jan 2023 22:39:49 -0800
-Message-Id: <20230127064005.1558-20-rdunlap@infradead.org>
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-pci@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [PATCH 20/35] Documentation: PCI: correct spelling
+Date:   Thu, 26 Jan 2023 22:39:50 -0800
+Message-Id: <20230127064005.1558-21-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230127064005.1558-1-rdunlap@infradead.org>
 References: <20230127064005.1558-1-rdunlap@infradead.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -53,38 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling problems for Documentation/openrisc/ as reported
+Correct spelling problems for Documentation/PCI/ as reported
 by codespell.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jonas Bonn <jonas@southpole.se>
-Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-Cc: Stafford Horne <shorne@gmail.com>
-Cc: openrisc@lists.librecores.org
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: linux-pci@vger.kernel.org
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
 ---
- Documentation/openrisc/openrisc_port.rst |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/PCI/endpoint/pci-vntb-howto.rst |    2 +-
+ Documentation/PCI/msi-howto.rst               |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff -- a/Documentation/openrisc/openrisc_port.rst b/Documentation/openrisc/openrisc_port.rst
---- a/Documentation/openrisc/openrisc_port.rst
-+++ b/Documentation/openrisc/openrisc_port.rst
-@@ -106,7 +106,7 @@ History
- 	a much improved version with changes all around.
+diff -- a/Documentation/PCI/endpoint/pci-vntb-howto.rst b/Documentation/PCI/endpoint/pci-vntb-howto.rst
+--- a/Documentation/PCI/endpoint/pci-vntb-howto.rst
++++ b/Documentation/PCI/endpoint/pci-vntb-howto.rst
+@@ -103,7 +103,7 @@ A sample configuration for NTB function
+ 	# echo 1 > functions/pci_epf_vntb/func1/pci_epf_vntb.0/num_mws
+ 	# echo 0x100000 > functions/pci_epf_vntb/func1/pci_epf_vntb.0/mw1
  
- 10-04-2004	Matjaz Breskvar (phoenix@bsemi.com)
--	alot of bugfixes all over.
-+	a lot of bugfixes all over.
- 	ethernet support, functional http and telnet servers.
- 	running many standard linux apps.
+-A sample configuration for virtual NTB driver for virutal PCI bus::
++A sample configuration for virtual NTB driver for virtual PCI bus::
  
-@@ -114,7 +114,7 @@ History
- 	port to 2.6.x
+ 	# echo 0x1957 > functions/pci_epf_vntb/func1/pci_epf_vntb.0/vntb_vid
+ 	# echo 0x080A > functions/pci_epf_vntb/func1/pci_epf_vntb.0/vntb_pid
+diff -- a/Documentation/PCI/msi-howto.rst b/Documentation/PCI/msi-howto.rst
+--- a/Documentation/PCI/msi-howto.rst
++++ b/Documentation/PCI/msi-howto.rst
+@@ -290,7 +290,7 @@ PCI_IRQ_MSI or PCI_IRQ_MSIX flags.
+ List of device drivers MSI(-X) APIs
+ ===================================
  
- 30-11-2004	Matjaz Breskvar (phoenix@bsemi.com)
--	lots of bugfixes and enhancments.
-+	lots of bugfixes and enhancements.
- 	added opencores framebuffer driver.
+-The PCI/MSI subystem has a dedicated C file for its exported device driver
++The PCI/MSI subsystem has a dedicated C file for its exported device driver
+ APIs — `drivers/pci/msi/api.c`. The following functions are exported:
  
- 09-10-2010    Jonas Bonn (jonas@southpole.se)
+ .. kernel-doc:: drivers/pci/msi/api.c
