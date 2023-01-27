@@ -2,97 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D31467DFD9
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD1A67DFD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 10:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbjA0JQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 04:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33032 "EHLO
+        id S232901AbjA0JQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 04:16:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbjA0JQh (ORCPT
+        with ESMTP id S232891AbjA0JQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 04:16:37 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4BA783CE
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:16:32 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id u199so1639592vkb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 01:16:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aaD6dIV1gsVv+4gc6ahYMn8/UYyHqgHNmcCgd6nynwI=;
-        b=Ci7RLYkb/VW6daieLc6bXUHa0FKFL5uTPQgc0OCRCSQWChPSS2hCE/+JohARsY6lQM
-         b2axTrsCd9tj2rq5tEBa3PmPYVKkrxgPiMN6N/UY+/M0hYffKDnA/2C2000pySvPMki0
-         SXx7Oju2lfywBSapFMocZZcv3naTAe/CcuYr/qrLxNHGkblQkp29EfUSl5AuXJiKI1Sh
-         wJS5bav7RFII2jNxFbplVQxK4seXuhm7wgg6EoJZwGBGjAY3qAC0wNQF2zBqnnEj//DR
-         IGKZx1Atk+T3qnxvnRTUTa+7m/p7u+onGBL5WK/hyyHnbnPiR9+zozw9sMqEv1XSi6n1
-         pCig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aaD6dIV1gsVv+4gc6ahYMn8/UYyHqgHNmcCgd6nynwI=;
-        b=0V1WbnHx5EiIdR9VN3Bn5LXP0uhDH/6+MRbbjZSgkKepOScHpgcBSVO60Bd3skzh86
-         JxdWmZiNX/gk2+JXG8S89eBUel1qmhzkxVInLmZj7q9eT5Rb3cg1P1DaulGLfb/2G1Jg
-         1UdnNhzCvEdcQ9wM/TNmCpCZQNLDSpEIlo2CkVulAcCZmaTijoGDaCRcu6iNVKeus+XS
-         LAMs+lMKhZYFo/aiNFC8K8eHc27SjupOChTZLiu1/WpJjGJBJ5P267YxNWq8Oe1zz3p6
-         9jVNIJG17ghX9jo1ILgH32GGvuFQfJUjrunWfQTvcVo3RgmmPB8S1PyIcfe+mPwPbxjw
-         76bg==
-X-Gm-Message-State: AFqh2kqtzG6+byDZGZqbzcY5DVpAEJ1w/Y2UADiNIOC5V9ROWh7+/o4b
-        40Tlym9Bbj65Mj5KqUwi9PoitzrHQuk4JqUOFKGaGA==
-X-Google-Smtp-Source: AMrXdXt+pm6BC48848ASCGbtuGQ/JZZ7o2YMf3wuxOcXaeJZ59tdocyfrew1oO5ABdFz1Jv5paOkDu/WRD3kr/8Yea0=
-X-Received: by 2002:a1f:9b53:0:b0:3e1:db78:6cd9 with SMTP id
- d80-20020a1f9b53000000b003e1db786cd9mr3921810vke.25.1674810990878; Fri, 27
- Jan 2023 01:16:30 -0800 (PST)
+        Fri, 27 Jan 2023 04:16:28 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776017753A;
+        Fri, 27 Jan 2023 01:16:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674810987; x=1706346987;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8+w715QhoBpJxNDnwlDPLsCRu1Y2v1Jp8jiuFOjJJtQ=;
+  b=CRS0ZEKkrpK4nivN4NY4Tk5Elxyamv0QRNy6aOdtSMmScX7042/OEA3T
+   BmE5g1zCJhEoLAaPdTl6WhcM+a3j3/OfacNMMbcjOBqZ+PieQRpipn5EY
+   HyLVAALAy9Xft854X0EYuM7pnxl1EgRKHpMs5dgObCx3b+mYot2wfmK4v
+   +ohcTv0v3EXgi57LUlYfkyXPgBsn5dBFDNZuWQJaaPTWTRPLkeZPjk0H/
+   hdN9mLsxeo9RBVl5J3Tr0xuKrVmSyrDcNSB2YLUH01zN82Dhs79fsXu2d
+   EMiFmyG+l0KE7On054nHoeqjgqrEtu14Rz1FDQMAD5kAZZJf/yWAia/GR
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="413272280"
+X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
+   d="scan'208";a="413272280"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 01:16:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="665193275"
+X-IronPort-AV: E=Sophos;i="5.97,250,1669104000"; 
+   d="scan'208";a="665193275"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Jan 2023 01:16:25 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pLKqO-00FtGi-21;
+        Fri, 27 Jan 2023 11:16:24 +0200
+Date:   Fri, 27 Jan 2023 11:16:24 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 5/5] usb: fotg210: use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <Y9OWaPGpyGvVgIRw@smile.fi.intel.com>
+References: <20230120154437.22025-1-andriy.shevchenko@linux.intel.com>
+ <20230120154437.22025-5-andriy.shevchenko@linux.intel.com>
+ <CACRpkdaeAkPuAQu0BW45Bn94Q_eO-Ven0-TSd38upe9XpXMzwA@mail.gmail.com>
+ <Y9ORbi8hz7o5ek7W@smile.fi.intel.com>
+ <CACRpkdaFZxbZ4Sw0-PKyP5s7nPDYiSjNuJC_EdPiEiORZrQnEw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230112145140.67573-1-andriy.shevchenko@linux.intel.com>
- <0805b351-1661-4c90-89e1-2fea2fc98867@app.fastmail.com> <Y9OQEzbMMMUSVblf@smile.fi.intel.com>
-In-Reply-To: <Y9OQEzbMMMUSVblf@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 27 Jan 2023 10:16:19 +0100
-Message-ID: <CAMRc=Mc-RLHjA=JKVzEgJAzSfs5=wath5nLZ-MgDPLE0N-CYuw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpiolib: of: Move enum of_gpio_flags to its only user
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdaFZxbZ4Sw0-PKyP5s7nPDYiSjNuJC_EdPiEiORZrQnEw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 9:49 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Jan 26, 2023 at 03:46:32PM +0100, Arnd Bergmann wrote:
-> > On Thu, Jan 12, 2023, at 15:51, Andy Shevchenko wrote:
-> > > GPIO library for OF is the only user for enum of_gpio_flags.
-> > > Move it there.
-> > >
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> >
-> > I made the same patch independently, but you sent it first, so
-> >
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
->
-> Thank you!
->
-> Bart, I guess we have a consensus to proceed with this, the worries I have
-> can be addressed later on, i.e. as a followup patch.
->
+On Fri, Jan 27, 2023 at 10:10:11AM +0100, Linus Walleij wrote:
+> On Fri, Jan 27, 2023 at 9:55 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> 
+> > On Thu, Jan 26, 2023 at 09:02:30PM +0100, Linus Walleij wrote:
+> > > On Fri, Jan 20, 2023 at 4:44 PM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
 
-Sounds good, applied!
+...
 
-Bart
+> > > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> >
+> > Thanks for all your reviews!
+> >
+> > But I think you are a bit late with them as Greg applied the series like
+> > a couple of days ago.
+> 
+> Yeah he's so quick and I'm so slow...
+> But these days we record the mail thread link to lore in the
+> commit so I can still share the blame ;)
+
+Right, what I meant is not diminish your efforts, but to say that
+they won't make Git history.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
