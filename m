@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A796667E53F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E112167E542
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbjA0Mbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:31:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
+        id S232238AbjA0McR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:32:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbjA0Mbo (ORCPT
+        with ESMTP id S232579AbjA0McN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:31:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DE61CAF4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:31:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F947B820FD
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:31:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B66C433EF;
-        Fri, 27 Jan 2023 12:31:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674822684;
-        bh=aNk+4mGXrZr3Rq7i4ehTc92cGdF5tRn6YDVJ193U5v8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BGSm22Fis5soyioFNYUep5FfddGVQ9DVVmaoq96qXy4lmRWXRhDdOEpIazlRiwCGO
-         p7JHrC3vaSLTwR/Ccel224wy3fYkaojmog8jztCKkNSTUm0Hh+K9XlkttMCbYeWTKj
-         UvgTN9sIhZlF29jlrOQbhY1VKj1T2kIjs8E1jFYFvttyI94f8Ozdwgg/4NgVBzfP3w
-         6c9ptDQ11nldtdZqJOMnB/pk6OIQ59yUapXa8BpnkkeP5v5Lvt0uei2tejwOgBmpW+
-         ZNg1qFBGZpeKnQVWxrU3fhhOR4fd4FOzTKsowdjx5o9Ojj3FXZh1GBF1ouzFfDBfUe
-         OfJWopp1t7N7Q==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Giuseppe Scrivano <gscrivan@redhat.com>
-Cc:     Christian Brauner <brauner@kernel.org>, keescook@chromium.org,
-        bristot@redhat.com, ebiederm@xmission.com, cyphar@cyphar.com,
-        viro@zeniv.linux.org.uk, alexl@redhat.com, peterz@infradead.org,
-        bmasney@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] exec: add PR_HIDE_SELF_EXE prctl
-Date:   Fri, 27 Jan 2023 13:31:13 +0100
-Message-Id: <167482213665.546991.3626486119597692007.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230120102512.3195094-1-gscrivan@redhat.com>
-References: <20230120102512.3195094-1-gscrivan@redhat.com>
+        Fri, 27 Jan 2023 07:32:13 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B957D88
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:32:10 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-50660e2d2ffso65259297b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:32:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=v0if3bG0az4VVrqjrBAgqmkkRSjBuWgCJhmn0kYqVUo=;
+        b=FgWZXTUPi5P9XiCuBQQ7Mban5muT1PCuAYN+0cWoieKvqtgyl0BETa13RIeZruTQcI
+         RMlnL/epMaeKzOQBweNCUpVbgYQafunJr0MAQW3/TvrzRwOexZQDDdWIlMiYv3B3TxCw
+         JAaM3ihmcnwnT6voKtG6v0nmzCa5/Vs1uAlqRdqztT9iXBELBGQOHR+CyaOD+rjUb+pS
+         r6JdwodKRM5lkPtF//UxlDd0AKiRSqjF37It476HLdauFoJe3GYrjo7GgUvsup2sPglI
+         VwPK9Df8V36vQ6HzWHzRR1pRwIpcHi394E26eYHS02OgJpMJMT+PAQhk4Dh9ODBTHfHg
+         y5Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v0if3bG0az4VVrqjrBAgqmkkRSjBuWgCJhmn0kYqVUo=;
+        b=BPCjGim8BFZePNLr73X7rUwqwuhFKB1DLse05HaE0ioombutoYmGu1AjmMN4hqYXVc
+         m3A1yGBazaAbD3/sn0k7lICuW9uW8BZotdC3q6evfHQOhLB2CQ3QgUXckyKvVzjYEooI
+         lu6MFwGUEwr7O0Zo+Mwbxd1gooCzMxlzHUa+V1ylU+LCAPsIQyA3a/vyBO+0BgI/SdFc
+         VJpLcsT7/p9UiE7MzcCgDomr10EWnlovToLGbKU5QzTtCF6Z1DkX6BosCI9VRtcD3cF0
+         yFdH5Nv38PTJszL5PjFkE+wfY+mUGsMm6r67T4LQc7Xkc48L9+8dEJrFPvOd58Eu2469
+         Yxvg==
+X-Gm-Message-State: AFqh2kpJ2qGBvmKxmvLUj1bMnxAK6XVmLlNpcQaXSYEUEP9E1CaB0Bqn
+        i+CYymDeduO8M0fWy1IhyHNEF+5scV7qAZSaS8CzhQ==
+X-Google-Smtp-Source: AMrXdXuW9ov/7XYT2FJRuxqTfJG/eiPAHPczrgtkY00TYBLkmPlms6WH7OhqK/K+U7X67YZnbPfgRMOD/fB39Awpptc=
+X-Received: by 2002:a05:690c:39b:b0:4f3:8d0e:edce with SMTP id
+ bh27-20020a05690c039b00b004f38d0eedcemr3524525ywb.185.1674822729729; Fri, 27
+ Jan 2023 04:32:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=962; i=brauner@kernel.org; h=from:subject:message-id; bh=/YnbsRyF/VAOdBsPrzLZepBNYunlAAmRfPLNuhM2ebk=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSRfPrz4B/vLk70/XO5efFul+yi0omTizUuMAcl+Aq3fv/Ze un9gYkcpC4MYF4OsmCKLQ7tJuNxynorNRpkaMHNYmUCGMHBxCsBEnigw/HeU6Agqef5I/Hx0spCs4p NDAT9OrlZOvBjy+VrbTa/gJ4oM/4viTv01P77G1Gpr27JNjYGNJk/FbybY6NhOtlLNshZexgEA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230120020536.3229300-1-robh@kernel.org>
+In-Reply-To: <20230120020536.3229300-1-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Jan 2023 13:31:58 +0100
+Message-ID: <CACRpkdYRmTiwdtghDjLpCwuQFzDEYhJiWStkwuphUUsAiOEwcw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: pinctrl: mediatek: Fix child node name patterns
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sean Wang <sean.wang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,27 +70,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Brauner (Microsoft) <brauner@kernel.org>
+On Fri, Jan 20, 2023 at 3:05 AM Rob Herring <robh@kernel.org> wrote:
 
+> The child node name patterns in Mediatek pinctrl bindings don't match
+> reality. I don't know where '-[0-9]+$' came from, but I don't see any nodes
+> with a matching pattern. Also, patterns such as 'pins' or 'mux' are
+> ambiguous because any prefix or suffix is allowed. If that's desired, it
+> should be explicit.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-On Fri, 20 Jan 2023 11:25:11 +0100, Giuseppe Scrivano wrote:
-> This patch adds a new prctl called PR_HIDE_SELF_EXE which allows
-> processes to hide their own /proc/*/exe file. When this prctl is
-> used, every access to /proc/*/exe for the calling process will
-> fail with ENOENT.
-> 
-> This is useful for preventing issues like CVE-2019-5736, where an
-> attacker can gain host root access by overwriting the binary
-> in OCI runtimes through file-descriptor mishandling in containers.
-> 
-> [...]
+Patch applied!
 
-Only needed for privileged sandboxes. The userspace mitigations Aleksa
-and I did for the CVE in all affected runtimes back then are nifty but
-complicated. The patch is a decent compromise.
-Picking up this prctl() for now,
-
-[1/2] exec: add PR_HIDE_SELF_EXE prctl
-      commit: 673301182d473ef61a98c292cf64650c73117172
-[2/2] selftests: add tests for prctl(SET_HIDE_SELF_EXE)
-      commit: bafa339eda3f79d567386e1fae59bb0537156c96
+Yours,
+Linus Walleij
