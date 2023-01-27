@@ -2,287 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F2A67EC8B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB49F67EC8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 18:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbjA0ReO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 12:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S235228AbjA0RfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 12:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235196AbjA0ReM (ORCPT
+        with ESMTP id S231342AbjA0RfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 12:34:12 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC977C33E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:34:09 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id h24so9263832lfv.6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 09:34:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0OhyX9oLZW5/zYk0jNLeuEhyuYMFe887hKU9REklXWk=;
-        b=xQoDRotJWTfm0FYDlP09QYgGT0DlEthrjbwvbLnqQosgbMa4Mc0hvjdFpRXyVlxfgX
-         NF8a/HOPPKWvFCYYSrO35oWpGIL44haX3vGkwe+8ljkTb28MIqEPSLa1CQwqd38McY7b
-         fxCn181ng0qmtiNO++Tkyuqguo/7VYbU+grW0206Fk5zWarVLjz+I6s06kIc4oLfUP6O
-         C6eQq9jChx4i3xQ7fnmAM1uBDgJ9iV34z+bjw0gCWdFpDK3uEGPHxjEZSzwk4pctAdJ3
-         MIzZx1GGGW5j/Yr75//RwOj5RR825AU2vSMvXu5xTyOzVM56Zijq0VEoC75eEpKUAGmB
-         mr6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0OhyX9oLZW5/zYk0jNLeuEhyuYMFe887hKU9REklXWk=;
-        b=bEEjiCoiuJEz7bMeKOpY+BUiA1XPwHO5gSksVkHN/oMz3/Z7gUHSYdp8p9gHU8fu9T
-         RAvtZhvuaG490IcffLIDPOOSNS4hmO9ch+0bKQKp64ezAt0pTPbmFgk6eFdWViR/l1cf
-         aJAAgNQX+OiBsOXIJs2XhFKy+LB3HnC/UFaRML2wkWUbYGIUl/m1mDOVBt72gyHF11HV
-         y66felUJwDasCFQHYNXPrQNXBqOTo8U8qO3KV5NeJC/CxiaYX3OQhp2IFQ8/dVfbizOY
-         3L4Dc+I87Sf/o8RwvMvSL5QEhuhaU9y40o4LZfwuF3K+wWaLKlAA16UnSY0WKhJsUgJN
-         l2bw==
-X-Gm-Message-State: AFqh2krB+Iw1lkSY1g5oneHAxPSIn7XDZzVMdThZm+Z4NQ6oTSyal6YP
-        kkxysV1T4j1PE1V1iNSQYxYGKw==
-X-Google-Smtp-Source: AMrXdXsGzvZuPLTgjrbSx+zXKFB8cmU1+jIBTyqMu1EkczTQ9+l24aEfT0yZ5h+ZVr+qQbaScMQXug==
-X-Received: by 2002:a05:6512:128a:b0:4d5:acb3:fd30 with SMTP id u10-20020a056512128a00b004d5acb3fd30mr8017681lfs.21.1674840848050;
-        Fri, 27 Jan 2023 09:34:08 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id 13-20020ac2482d000000b004cafe65883dsm315781lft.122.2023.01.27.09.34.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 09:34:07 -0800 (PST)
-Message-ID: <aebba18e-8da7-fba0-a012-5e69bca424f4@linaro.org>
-Date:   Fri, 27 Jan 2023 19:34:06 +0200
+        Fri, 27 Jan 2023 12:35:02 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD03C1114B;
+        Fri, 27 Jan 2023 09:34:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674840899; x=1706376899;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=6CZvLjtA6nkJFaj5XpJOO6EgdpKBDhRI/YtMBEJuKLw=;
+  b=gO2GXDr/Q4bxrsSa6V39uv6G1Rn2+WCUHquyiYjrKBPgezW6kpq2cI6E
+   SWKQALzdt0GwUXEDj/ydKNuuCZk6fcwIz1wIbAeRxZ6sLEzVka74AT9E5
+   NsJEMJU3h6/rF3vDVdWXLVkjIvcuRFKqDvw6H6Z0dfkxYH0D5Wd3wmUco
+   mrogz+SNjsbOubMNNnOBzn9WDfhAwTztfsf2aShsk7hbYBWcKHaLB3/up
+   vVhwVnypU0wg6OKsAm7aHEHANtcDeQAIBWaQ5+q7IcJbMP1Ow3H4UdrYH
+   N5HF9ZgSMZqeSDN0KAvttfBKpljgaE4weuJOf9vHGFEMbMc8IVuwz+EMz
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="327161555"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="327161555"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 09:34:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="731930153"
+X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
+   d="scan'208";a="731930153"
+Received: from maseidel-mobl1.ger.corp.intel.com (HELO varistar-mobl2.ger.corp.intel.com) ([10.252.57.131])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 09:34:56 -0800
+Date:   Fri, 27 Jan 2023 19:34:54 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Lee Jones <lee@kernel.org>
+cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 00/11] intel-m10-bmc: Split BMC to core and SPI parts
+ & add PMCI+N6000 support
+In-Reply-To: <Y9PnChtJnIGhu4wt@google.com>
+Message-ID: <916b3bb1-2f99-aa39-9159-c4c2b92855c3@linux.intel.com>
+References: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com> <Y9PnChtJnIGhu4wt@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFT PATCH 2/2] drm/msm/dsi: Stop unconditionally powering up DSI
- hosts at modeset
-Content-Language: en-GB
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     dri-devel@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
-References: <20230113155547.RFT.1.I723a3761d57ea60c5dd754c144aed6c3b2ea6f5a@changeid>
- <20230113155547.RFT.2.I4cfeab9d0e07e98ead23dd0736ab4461e6c69002@changeid>
- <CAA8EJprBPNfjhx1Op4rnHTx9DXDGkgc0q3cZzBHtahi6EaKS_w@mail.gmail.com>
- <CAD=FV=Xt2XbAX6DxCFUz0F1O0NV2dbc7cy5ZNQ5-nFwMu6j4YA@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAD=FV=Xt2XbAX6DxCFUz0F1O0NV2dbc7cy5ZNQ5-nFwMu6j4YA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-674294556-1674840401=:1778"
+Content-ID: <48e2dbe-1a39-9f86-7451-b5dfbee9e54@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 18:32, Doug Anderson wrote:
-> Hi,
-> 
-> On Thu, Jan 26, 2023 at 9:49 PM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
->>
->> Hi,
->>
->> On Sat, 14 Jan 2023 at 01:56, Douglas Anderson <dianders@chromium.org> wrote:
->>>
->>> In commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset
->>> time"), we moved powering up DSI hosts to modeset time. This wasn't
->>> because it was an elegant design, but there were no better options.
->>>
->>> That commit actually ended up breaking ps8640, and thus was born
->>> commit ec7981e6c614 ("drm/msm/dsi: don't powerup at modeset time for
->>> parade-ps8640") as a temporary hack to un-break ps8640 by moving it to
->>> the old way of doing things. It turns out that ps8640 _really_ doesn't
->>> like its pre_enable() function to be called after
->>> dsi_mgr_bridge_power_on(). Specifically (from experimentation, not
->>> because I have any inside knowledge), it looks like the assertion of
->>> "RST#" in the ps8640 runtime resume handler seems like it's not
->>> allowed to happen after dsi_mgr_bridge_power_on()
->>>
->>> Recently, Dave Stevenson's series landed allowing bridges some control
->>> over pre_enable ordering. The meaty commit for our purposes is commit
->>> 4fb912e5e190 ("drm/bridge: Introduce pre_enable_prev_first to alter
->>> bridge init order"). As documented by that series, if a bridge doesn't
->>> set "pre_enable_prev_first" then we should use the old ordering.
->>>
->>> Now that we have the commit ("drm/bridge: tc358762: Set
->>> pre_enable_prev_first") we can go back to the old ordering, which also
->>> allows us to remove the ps8640 special case.
->>>
->>> One last note is that even without reverting commit 7d8e9a90509f
->>> ("drm/msm/dsi: move DSI host powerup to modeset time"), if you _just_
->>> revert the ps8640 special case and try it out then it doesn't seem to
->>> fail anymore. I spent time bisecting / debugging this and it turns out
->>> to be mostly luck, so we still want this patch to make sure it's
->>> solid. Specifically the reason it sorta works these days is because
->>> we implemented wait_hpd_asserted() in ps8640 now, plus the magic of
->>> "pm_runtime" autosuspend. The fact that we have wait_hpd_asserted()
->>> implemented means that we actually power the bridge chip up just a wee
->>> bit earlier and then the bridge happens to stay on because of
->>> autosuspend and thus ends up powered before dsi_mgr_bridge_power_on().
->>
->> I had a small comment on your patch, but then I was distracted and
->> forgot to send it. See below.
->>
->>>
->>> Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
->>> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>> Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
->>> ---
->>>
->>>   drivers/gpu/drm/msm/dsi/dsi_manager.c | 68 +++++----------------------
->>>   1 file changed, 11 insertions(+), 57 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
->>> index 3a1417397283..5e6b8d423b96 100644
->>> --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
->>> +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
->>> @@ -34,32 +34,6 @@ static struct msm_dsi_manager msm_dsim_glb;
->>>   #define IS_SYNC_NEEDED()       (msm_dsim_glb.is_sync_needed)
->>>   #define IS_MASTER_DSI_LINK(id) (msm_dsim_glb.master_dsi_link_id == id)
->>>
->>> -#ifdef CONFIG_OF
->>> -static bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
->>> -{
->>> -       struct drm_bridge *next_bridge = drm_bridge_get_next_bridge(bridge);
->>> -
->>> -       /*
->>> -        * If the next bridge in the chain is the Parade ps8640 bridge chip
->>> -        * then don't power on early since it seems to violate the expectations
->>> -        * of the firmware that the bridge chip is running.
->>> -        *
->>> -        * NOTE: this is expected to be a temporary special case. It's expected
->>> -        * that we'll eventually have a framework that allows the next level
->>> -        * bridge to indicate whether it needs us to power on before it or
->>> -        * after it. When that framework is in place then we'll use it and
->>> -        * remove this special case.
->>> -        */
->>> -       return !(next_bridge && next_bridge->of_node &&
->>> -                of_device_is_compatible(next_bridge->of_node, "parade,ps8640"));
->>> -}
->>> -#else
->>> -static inline bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
->>> -{
->>> -       return true;
->>> -}
->>> -#endif
->>> -
->>>   static inline struct msm_dsi *dsi_mgr_get_dsi(int id)
->>>   {
->>>          return msm_dsim_glb.dsi[id];
->>> @@ -254,7 +228,7 @@ static void msm_dsi_manager_set_split_display(u8 id)
->>>          }
->>>   }
->>>
->>> -static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
->>> +static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
->>
->> Can you please keep the dsi_mgr_bridge_power_on() as is and just
->> remove the now-legacy dsi_mgr_power_on_early().
-> 
-> By this, I assume you mean keep the function separate but still remove
-> the call to it from "modeset" and unconditionally call it from
-> dsi_mgr_bridge_pre_enable(), right?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Yes, of course.
+--8323329-674294556-1674840401=:1778
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <b260eda-b5d1-8f39-a4ab-fad1f915ba41@linux.intel.com>
 
+On Fri, 27 Jan 2023, Lee Jones wrote:
+
+> Enjoy!
 > 
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 > 
->>>   {
->>>          int id = dsi_mgr_bridge_get_id(bridge);
->>>          struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
->>> @@ -300,36 +274,10 @@ static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
->>>          if (is_bonded_dsi && msm_dsi1)
->>>                  msm_dsi_host_enable_irq(msm_dsi1->host);
->>>
->>> -       return;
->>> -
->>> -host1_on_fail:
->>> -       msm_dsi_host_power_off(host);
->>> -host_on_fail:
->>> -       dsi_mgr_phy_disable(id);
->>> -phy_en_fail:
->>> -       return;
->>> -}
->>> -
->>> -static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
->>> -{
->>> -       int id = dsi_mgr_bridge_get_id(bridge);
->>> -       struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
->>> -       struct msm_dsi *msm_dsi1 = dsi_mgr_get_dsi(DSI_1);
->>> -       struct mipi_dsi_host *host = msm_dsi->host;
->>> -       bool is_bonded_dsi = IS_BONDED_DSI();
->>> -       int ret;
->>> -
->>> -       DBG("id=%d", id);
->>> -       if (!msm_dsi_device_connected(msm_dsi))
->>> -               return;
->>> -
->>>          /* Do nothing with the host if it is slave-DSI in case of bonded DSI */
->>>          if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id))
->>>                  return;
->>>
->>> -       if (!dsi_mgr_power_on_early(bridge))
->>> -               dsi_mgr_bridge_power_on(bridge);
->>> -
->>>          ret = msm_dsi_host_enable(host);
->>>          if (ret) {
->>>                  pr_err("%s: enable host %d failed, %d\n", __func__, id, ret);
->>> @@ -349,7 +297,16 @@ static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
->>>   host1_en_fail:
->>>          msm_dsi_host_disable(host);
->>>   host_en_fail:
->>> -
->>> +       msm_dsi_host_disable_irq(host);
->>> +       if (is_bonded_dsi && msm_dsi1) {
->>> +               msm_dsi_host_disable_irq(msm_dsi1->host);
->>> +               msm_dsi_host_power_off(msm_dsi1->host);
->>> +       }
->>> +host1_on_fail:
->>> +       msm_dsi_host_power_off(host);
->>> +host_on_fail:
->>> +       dsi_mgr_phy_disable(id);
->>> +phy_en_fail:
->>>          return;
->>>   }
->>>
->>> @@ -438,9 +395,6 @@ static void dsi_mgr_bridge_mode_set(struct drm_bridge *bridge,
->>>          msm_dsi_host_set_display_mode(host, adjusted_mode);
->>>          if (is_bonded_dsi && other_dsi)
->>>                  msm_dsi_host_set_display_mode(other_dsi->host, adjusted_mode);
->>> -
->>> -       if (dsi_mgr_power_on_early(bridge))
->>> -               dsi_mgr_bridge_power_on(bridge);
->>>   }
->>>
->>>   static enum drm_mode_status dsi_mgr_bridge_mode_valid(struct drm_bridge *bridge,
->>> --
->>> 2.39.0.314.g84b9a713c41-goog
->>>
->>
->>
->> --
->> With best wishes
->> Dmitry
+>   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-fpga-hwmon-6.3
+> 
+> for you to fetch changes up to 869b9eddf0b38a22c27a400e2fa849d2ff2aa7e1:
+> 
+>   mfd: intel-m10-bmc: Add PMCI driver (2023-01-27 10:47:11 +0000)
+> 
+> ----------------------------------------------------------------
+> Ilpo Järvinen (10):
+>       mfd: intel-m10-bmc: Add missing includes to header
+>       mfd: intel-m10-bmc: Create m10bmc_platform_info for type specific info
+>       mfd: intel-m10-bmc: Rename the local variables
+>       mfd: intel-m10-bmc: Split into core and spi specific parts
+>       mfd: intel-m10-bmc: Support multiple CSR register layouts
+>       fpga: intel-m10-bmc: Rework flash read/write
+>       mfd: intel-m10-bmc: Prefix register defines with M10BMC_N3000
+>       fpga: m10bmc-sec: Create helpers for rsu status/progress checks
+>       fpga: m10bmc-sec: Make rsu status type specific
+>       mfd: intel-m10-bmc: Add PMCI driver
+
+Hi Lee,
+
+Thanks. I was left to wonder is there some particular reason for why 11/11 
+was not taken among the others? Did I perhaps end up giving a wrong 
+impression in the cover letter that it wouldn't have been complete yet?
 
 -- 
-With best wishes
-Dmitry
-
+ i.
+--8323329-674294556-1674840401=:1778--
