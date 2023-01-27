@@ -2,151 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E1B67DEE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB1467DEDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 09:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbjA0IME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 03:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
+        id S232027AbjA0ILq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 03:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232109AbjA0IMC (ORCPT
+        with ESMTP id S229508AbjA0ILp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 03:12:02 -0500
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D186761FB;
-        Fri, 27 Jan 2023 00:11:58 -0800 (PST)
-Received: by mail-qv1-f42.google.com with SMTP id ll10so2245757qvb.6;
-        Fri, 27 Jan 2023 00:11:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dBAPOHYTkWiPLnj81NzCswXH0Y6077YYaFE4ZOx/zRY=;
-        b=cSJYl8O2nDpMg/CA3iceMsy1oxQllQ9Gjg9Nmq6jJ+kPrr71GxU5PxeL5DfGt3zDfa
-         gPWuMZ3zzRic0MJOJj0flpXENXbJ/OobiqOD0JvpCHn8ift85z/WN5i/QgzRiPA5hLPM
-         T2HEq8Kwkk2eZ3iP3pFF8GllTOLzR0s0cvAPUBAsVGuEdCWMWMeIkplPIRK8pHdQYe6l
-         PiKsuN/lDJ203Wb1mNcQ4y/1RubjH2mQ8pAf0YL2H7BfEHz8otvTonhIBEEVjQBLIQlQ
-         hb/D8yWbwg5rx0mxa1jhaJaCT7iugdUs2vsOlbMTNeFjQkNFXE82Ncf7I2C8yF8XxQIh
-         bveA==
-X-Gm-Message-State: AO0yUKVFCiFEgINkl1Y5vLuqV6A25a2jfGBmvxfvgrjaROJJ7JKy1bO3
-        PKze7f9gQjFmi6bkda7L0W1+DoAsUoqj6AZW
-X-Google-Smtp-Source: AK7set9Bz62Q67ABrWdM7KPzU8QFgHRgxZTAr85sdaX8Gw1YpZ3MjQxtUT3lWXRtAgamQxPpSzFeGA==
-X-Received: by 2002:ad4:48d1:0:b0:537:727f:ac2b with SMTP id v17-20020ad448d1000000b00537727fac2bmr13020372qvx.41.1674807117361;
-        Fri, 27 Jan 2023 00:11:57 -0800 (PST)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id p25-20020a05620a22b900b00706c1f7a608sm190589qkh.89.2023.01.27.00.11.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 00:11:57 -0800 (PST)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-4fda31c3351so56901947b3.11;
-        Fri, 27 Jan 2023 00:11:57 -0800 (PST)
-X-Received: by 2002:a25:37d4:0:b0:80b:8602:f3fe with SMTP id
- e203-20020a2537d4000000b0080b8602f3femr1568499yba.36.1674807106088; Fri, 27
- Jan 2023 00:11:46 -0800 (PST)
+        Fri, 27 Jan 2023 03:11:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7030279B6;
+        Fri, 27 Jan 2023 00:11:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E66A61A30;
+        Fri, 27 Jan 2023 08:11:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8717BC433D2;
+        Fri, 27 Jan 2023 08:11:39 +0000 (UTC)
+Message-ID: <197c3574-2ffa-7c8a-2372-a373123087a3@xs4all.nl>
+Date:   Fri, 27 Jan 2023 09:11:38 +0100
 MIME-Version: 1.0
-References: <20230127001141.407071-1-saravanak@google.com> <20230127001141.407071-4-saravanak@google.com>
-In-Reply-To: <20230127001141.407071-4-saravanak@google.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 27 Jan 2023 09:11:34 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV4B49OM7S-UAxJtfAR8OvG_-S526fGnTA+t+-orytrTw@mail.gmail.com>
-Message-ID: <CAMuHMdV4B49OM7S-UAxJtfAR8OvG_-S526fGnTA+t+-orytrTw@mail.gmail.com>
-Subject: Re: [PATCH v2 03/11] soc: renesas: Move away from using OF_POPULATED
- for fw_devlink
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH v6 03/11] media: v4l2: Add extended buffer (de)queue
+ operations for video types
+Content-Language: en-US
+To:     ayaka <ayaka@soulik.info>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     randy.li@synaptics.com, Brian.Starkey@arm.com,
+        frkoenig@chromium.org, hans.verkuil@cisco.com,
+        helen.koike@collabora.com, hiroh@chromium.org,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, mchehab@kernel.org,
+        narmstrong@baylibre.com, nicolas@ndufresne.ca, sakari.ailus@iki.fi,
+        stanimir.varbanov@linaro.org, tfiga@chromium.org
+References: <20210114180738.1758707-1-helen.koike@collabora.com>
+ <20210114180738.1758707-4-helen.koike@collabora.com>
+ <20230125200026.16643-1-ayaka@soulik.info>
+ <7609d523-667a-49a8-45f5-8186de20c24b@xs4all.nl>
+ <Y9Jd12nYGk2xTYzx@pendragon.ideasonboard.com>
+ <02142e8c-7479-1066-b5af-dad954136adc@soulik.info>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <02142e8c-7479-1066-b5af-dad954136adc@soulik.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
+On 26/01/2023 19:36, ayaka wrote:
+> 
+> On 1/26/23 19:02, Laurent Pinchart wrote:
+>> On Thu, Jan 26, 2023 at 09:57:51AM +0100, Hans Verkuil wrote:
+>>> On 25/01/2023 21:00, ayaka wrote:
+>>>> I am currently refresh this patchset, but I didn't see the need beyond v4l2_ext_pix_fmt, which I had done.
+>>>> On 2/23/21 20:58, Hans Verkuil wrote:
+>>>>> On 14/01/2021 19:07, Helen Koike wrote:
+>>>>>> Those extended buffer ops have several purpose:
+>>>>>> 1/ Fix y2038 issues by converting the timestamp into an u64 counting
+>>>>>>      the number of ns elapsed since 1970
+>>>> I think application just use the timestamp field for tracking the
+>>>> buffer. It would be just a sequence buffer.
+>>>> At least for the most widely cases, the video encoder and decoder
+>>>> and ISP, this field is not a wall time.
+>>> For video capture and video output this is typically the monotonic
+>>> clock value.
+>>>
+>>> For memory-to-memory devices it is something that is just copied from
+>>> output to capture.
+>>>
+>>> So ISPs definitely use this as a proper timestamp.
+>> There are both inline (live-to-memory) and offline (memory-to-memory)
+>> ISPs. The former certainly need a proper timestamp.
+>>
+> I really have not seen a device that has timer starting with the epoch.
+> 
+> I rarely know the ISP has a wall clock timer.
+> 
+> Timestamp is not my first concern here. Offset is.
 
-On Fri, Jan 27, 2023 at 1:11 AM Saravana Kannan <saravanak@google.com> wrote:
-> The OF_POPULATED flag was set to let fw_devlink know that the device
-> tree node will not have a struct device created for it. This information
-> is used by fw_devlink to avoid deferring the probe of consumers of this
-> device tree node.
->
-> Let's use fwnode_dev_initialized() instead because it achieves the same
-> effect without using OF specific flags. This allows more generic code to
-> be written in driver core.
->
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+You are working in the V4L2 core framework here, something that is used
+by all V4L2 drivers. So everything is important. You can't just focus on
+your own use-case.
 
-Thanks for your patch!
+> 
+>>>>>> 2/ Unify single/multiplanar handling
+>>>>>> 3/ Add a new start offset field to each v4l2 plane buffer info struct
+>>>>>>      to support the case where a single buffer object is storing all
+>>>>>>      planes data, each one being placed at a different offset
+>>>> I really care about this. But I think the data_offset field in
+>>>> struct v4l2_plane is enough. The rest is the problem of the kernel
+>>>> internal API and allocator.
+>>> data_offset has proven to be very confusing and is rarely used because
+>>> of that.
+> Yes, I didn't know any stateful codec driver support this.
+>>> We do need some sort of an offset field as proposed here, but it
+>>> shouldn't be named data_offset.
+> Maybe we could just rename it or make a union in the existing struct.
+>> The existing data_offset field was indeed added for other purposes, to
+>> let drivers report where the actual image data starts for devices that
+>> prepend some sort of header.
+> 
+> For the compressed image, it makes sense. But the most of usage I knew is the upstream would just allocate a large buffer for compression video bitstream,
+> 
+> Then it could tell where the decoder should start.
 
-> --- a/drivers/soc/renesas/rcar-sysc.c
-> +++ b/drivers/soc/renesas/rcar-sysc.c
-> @@ -437,7 +437,7 @@ static int __init rcar_sysc_pd_init(void)
->
->         error = of_genpd_add_provider_onecell(np, &domains->onecell_data);
->         if (!error)
-> -               of_node_set_flag(np, OF_POPULATED);
-> +               fwnode_dev_initialized(&np->fwnode, true);
+It's not codec specific, it's meant to be used with raw video frames.
 
-As drivers/soc/renesas/rmobile-sysc.c is already using this method,
-it should work fine.
+The key problem in today's API is that if the buffer for the video frame
+contains multiple planes, typically Y and UV (2 planes) or Y, U and V (3 planes).
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.4.
+The offset at which each plane begins is currently a property of the
+pixelformat. That doesn't scale since there are often HW requirements
+that influence this.
 
->
->  out_put:
->         of_node_put(np);
+One of the main confusing issues is that data_offset is included in
+the bytesused value, which was a design mistake in hindsight.
 
-Gr{oetje,eeting}s,
+For the new APIs just ignore the existing data_offset and design
+this from scratch.
 
-                        Geert
+> 
+>>   That's indeed not what we want here, we
+>> instead need something similar to the offsets field of struct
+>> drm_mode_fb_cmd2.
+> 
+> That leads to another question. Should the offset be fixed from the first enqueued?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+It's always been fixed in the hardware I have seen, but I'm sure someone will
+make it dynamic at some point in the future :-(
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+So I would say that the public API has to support this as a future enhancement,
+but it is OK to write the initial code with the assumption that it will remain
+fixed.
+
+> 
+> For the dmabuf, the v4l2 core framework would detatch then attach the buffer when it found the private of a plane is not same. Although it sounds unnecessary, some devices would a different cache line
+> for the chroma channel, it should be updated.
+> 
+> For the drm_mode_fb_cmd2, unless you remove that fb_id, there is no way to modify the offset. But this would break the existing usage I mentioned before.
+> 
+> We need to consider whether we need to keep the previous offset and a hook for update it.
+> 
+>>>> I am thinking just add a field recording the offset input from the user.
+>>>> When we return the buffer back to the user, the value of the offset
+>>>> should be same as the it is queued.
+>>>>
+>>>> Meanwhile, the API compatible that I want to keep is user using the
+>>>> ext_pix API could access those drivers support old API.
+>>>> But I don't want the user would expect they could get correct pixel
+>>>> format using the old ioctl(). It could create many duplicated pixel
+>>>> formats. If we want to keep the compatible here, that is the job of
+>>>> libv4l.
+>>>>
+>>>> Besides, I think make the driver using the new API be compatible
+>>>> with the old ioctl() would lead a huge problem. User won't like to
+>>>> update its code if it could work even in a less performance mode
+>>>> because this code are for all the other hardware vendors/models.
+>>>> Unless we make this a feature, they could make a new branch in their
+>>>> code(don't count them would upate the kernel of the other products).
+>>> New drivers that require the additional information that these new ioctls give can
+>>> decide to just support these new ioctls only. But for existing drivers you want
+>>> to automatically support the new ioctls.
+> 
+> What I said didn't break that. Application would use the new ioctl() to contact with the existing driver.
+> 
+> What I want to remove is that Application use the old ioctl() to contact with the driver support new ioctl().
+
+No, you can't do that. Not unless the driver uses features that only work with the new API.
+
+I.e. if I make a new driver whose properties are completely compatible with the existing
+APIs (so no weird offsets etc.), then I want to write the driver using the new ioctls,
+and leave it to the V4L2 framework to provide support for the old ioctls.
+
+There is absolutely no reason to block old ioctls in that case. Applications will not
+just be able to support a new API overnight, that takes years.
+
+> 
+> I would omit this related patches in the refresh set. We could always add it back. But what I want is a way  to enqueue and dequeue different formats(or usage) of buffers in both OUTPUT and CAPTURE. I
+> may add a more complex API later.
+
+For discussion it is OK to drop the old ioctl support, but once you go beyond the RFC stage
+it has to be put back.
+
+Regards,
+
+	Hans
