@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4E667E6D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DC967E6D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234793AbjA0Nfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:35:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
+        id S234804AbjA0NgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbjA0Nfa (ORCPT
+        with ESMTP id S233559AbjA0NgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:35:30 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AFA1D92A
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:35:29 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id u72so5973659ybi.7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:35:29 -0800 (PST)
+        Fri, 27 Jan 2023 08:36:01 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DDC7922D
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:35:59 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id e15so5959290ybn.10
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:35:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+JlBczZ+fG7R6JQ9nktDvVYnDGRE115Thkzmewvp3F4=;
-        b=NygA6arAMbHn7P/PnR1WwheGhSmyw6qLAHJj9IB6jRprxCmnETGw/fdT67AlI5AAHt
-         x740bkfwo2MpNcdepS2pC8rcuQW2UHjWNBxbFA45yX4KtGPE1CKfD/kLtlAb+TdQlvHB
-         mkUfOGjqpBDoJh01JY8NINzIMZxMKaIG+bU47OJqg+O2ZrRcHblrGPJoOURpscYBE7jn
-         lVjyWyGHbYxcDeOjnMiLWJNFlANwAeNONVgXUHIDEMcKVbfb1g94Lyd8+HTbz66AGRUY
-         ++JtEpygBZb6JmYQjvBWxYVBDXIDVp15rUE0vymW8kpsGHNn+FH3g6vrkygXqA6plcau
-         uI3g==
+        bh=e4oFi6GR9CTLUrV5CHMl42z5mIKCPPEmeaNVyp/QHM4=;
+        b=i0RpOSyZA4exS95MmcKnDP8qEMRgJtuUYNcrJOvPuNrLDr1GKJNlGyEa+NZWr9vlsi
+         oF0NO/BlO+PP5NH0wpzo0pSIxpZT/VIQ06KljihxbzkDevIUW49A4kkIG8t5yx0yJvYk
+         x2nRbGtgvjZqcgbEQULfk4yuXO0r4k5BIhs/hkY560Gb1CzqkxvrM2pcRrTcONpLBzLj
+         4hChtgy9J3nuVoxazAhrONVtToxS9EMH/QKJltwOZAyXMV6q/g24663pe9+y58G8KM5+
+         eAPIptqqrSBMktlabXAKqpm+xjahQvFHSfYL33ZMblslaCDjlqBjA8jHuCC5diZ0A/7o
+         VxNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+JlBczZ+fG7R6JQ9nktDvVYnDGRE115Thkzmewvp3F4=;
-        b=Se9qZ///9mI1cxd5lnqI8USG7kkyC88FU06jm6/TLMdxTxA+1XXCbG+PIPtOPR5Gm3
-         8Mnb8A7Wgw8FcFEdxi7luMoegBmlaHMCyJmLQCVHlTQFKbVG4U7486wLdPcT7w8V0NFP
-         obrNDFJZGqk5fDNxVSmdKxaLVt/ilNsGgMas2iFI2nEpgg8151N/Iec09B3CUqQBpdQE
-         3pBDt/FHkrQnnDRwq3cGeAOqFAx7mLdSx/G8S2WbHgLNWy+hrWVIfUZkLMluHk/bbBB9
-         X/T4ZaX25I6FUiF9a7wdERNH0MpjjACVep7GXKAFdZ/nWsqO/m2+DKVK6kGI89DP8ndJ
-         +cMw==
-X-Gm-Message-State: AFqh2kr5ag97orR0JoHb5SH5qOFsAkekAZcgZyxQaJotl6xrV5Y9VJtH
-        4YyAZ7jHg5U5DUdy/sPQcLywfm+ceT858SLqMuyiivDToy32TYJP
-X-Google-Smtp-Source: AMrXdXs8LpY8+SIRcxq+5MJlyno9csqwNoT4DlT60NMH3d/zyJdHGHyD/Z7d9QKSpoZurSghjMmivfFw6s2gFzi3OJQ=
-X-Received: by 2002:a5b:38b:0:b0:7ca:9b40:72a7 with SMTP id
- k11-20020a5b038b000000b007ca9b4072a7mr4948223ybp.130.1674826528746; Fri, 27
- Jan 2023 05:35:28 -0800 (PST)
+        bh=e4oFi6GR9CTLUrV5CHMl42z5mIKCPPEmeaNVyp/QHM4=;
+        b=THfdFGDd8hbhXbVbIdsBvceN2q22QvOyrxhI4qIgUYAwhkLiJsO7dc4yYEWtVSLLoV
+         krqY5HiLgfPiMbGD0ugmexr7hkhYQRuAE1yr4H5hWKD+JLx93ufefIwGENKgHguDWiit
+         UsocUnMnNz6BY+T2QbLle8jhw5EPF5wjoPUXY6ZTWJHiMhfVI1qXbMUaN56HJWNzJ2rs
+         c3bXsjwcG3lsneGwM7bNsq/nL9ruIaWOqrcWHV/YfeEmnh36ikOTHrAH+rcaWpi4AiAq
+         FlOW05JZ+ZyFCw/m1rNqYjcW2950VionU0+2HQF7+HTjfVl6qABG4pxirw+wT6Mz/HFY
+         LBOg==
+X-Gm-Message-State: AO0yUKWfdTnUE9Lo7mZPdCN1mlgKOeYpFLaQQZMdThKKSNnCgRQJLYN7
+        lM5sonHUym8bbjL+YbXHWwMMKYgMgdTdI4hSXSMF2A==
+X-Google-Smtp-Source: AK7set9zuzETPV93oELM5VqaLRMLHJEm1IVTmICv9xmhfyROT8hY4qwFZc/DvYLQwkyO6Ag1OaPISVbLjwEzJ/IjnRk=
+X-Received: by 2002:a25:d1d1:0:b0:80b:4d84:b25 with SMTP id
+ i200-20020a25d1d1000000b0080b4d840b25mr1327925ybg.584.1674826558839; Fri, 27
+ Jan 2023 05:35:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20230127101149.3475929-1-arnd@kernel.org> <20230127101149.3475929-4-arnd@kernel.org>
-In-Reply-To: <20230127101149.3475929-4-arnd@kernel.org>
+References: <20230127101149.3475929-1-arnd@kernel.org> <20230127101149.3475929-5-arnd@kernel.org>
+In-Reply-To: <20230127101149.3475929-5-arnd@kernel.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 27 Jan 2023 14:35:17 +0100
-Message-ID: <CACRpkdaaAbqL4CWwDK8z=DqJ3V-HQrwzZCXro+hbfw2pqaqAQw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] gpiolib: remove asm-generic/gpio.h
+Date:   Fri, 27 Jan 2023 14:35:47 +0100
+Message-ID: <CACRpkda4aF8_veseycZFm+QRgzzz2ybRBudB2za=wjGBn6vYAw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] gpiolib: remove gpio_set_debounce
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -63,8 +63,7 @@ Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,9 +74,8 @@ On Fri, Jan 27, 2023 at 11:12 AM Arnd Bergmann <arnd@kernel.org> wrote:
 
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> The asm-generic/gpio.h file is now always included when
-> using gpiolib, so just move its contents into linux/gpio.h
-> with a few minor simplifications.
+> gpio_set_debounce() only has a single user, which is trivially
+> converted to gpiod_set_debounce().
 >
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
