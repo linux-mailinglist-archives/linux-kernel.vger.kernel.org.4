@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F124067EF86
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E857267EF81
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbjA0U0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 15:26:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
+        id S231656AbjA0UZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 15:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjA0U0G (ORCPT
+        with ESMTP id S229495AbjA0UZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:26:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FC92DE7F
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:25:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674851121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IPFaivJKn71UfPFDN84nxVwrXtkpEKt3PCNX8OYRPaI=;
-        b=dK+x//Au8PmxTWbdWyZGBptQ90UKZV0Il4wVDsB+lyZ5E8AOoE3CRnYKzgcE4beLaTysyh
-        AClNAKvrATIO4iLBAgeJBigYat93LirnEAZdNeeUYky3JGgOANTLX1Xi5xpUlqogml/UpO
-        84cCz96L4DlJ+jlf2pMLpC3R/AmZfvY=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-384-k8oe9VzEMWiBgN2-9Lhscg-1; Fri, 27 Jan 2023 15:25:19 -0500
-X-MC-Unique: k8oe9VzEMWiBgN2-9Lhscg-1
-Received: by mail-qk1-f199.google.com with SMTP id s7-20020a05620a0bc700b006e08208eb31so3652220qki.3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:25:19 -0800 (PST)
+        Fri, 27 Jan 2023 15:25:22 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2188FDBE8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:25:21 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id 88so5643828pjo.3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:25:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uJe6a029aMe3U1mBIX27gKXNT1Xkqqrq1mwntN0JHEQ=;
+        b=FSRvGIOiUPcH8GZ8AoNaJbLkHoUBzCl0ahYHcKjsAVRU7MPFqYJwC/6XzATvQuOHNz
+         zH30Ezaj0UgPGL3V6QwiGVa46uxisyXDMTTIDzVplpCWko+J1wZPzzID6pLQ4G8pftrm
+         NigmlH8gKuvZksUjgwyk8bt1EUH2qJHm5pUBxeCosYtf01Sp8s/Z3snUZxx7rHiyv67a
+         USvYchAvTmHqRaIhoQhxPaq/OPckSp1Sl0fYI1OeLauRhql/tLZMP5uMmPFoX5+MbeTp
+         tGfTZv27FcyETKdN/ym1d+OErsh8+hY92C5jF1vcLSa3nVfYx4MxIU9W488g4l5zsW6L
+         hJkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IPFaivJKn71UfPFDN84nxVwrXtkpEKt3PCNX8OYRPaI=;
-        b=S8qrql/U2mdGhv/DXlBsrvVBB0Aq1EP/HwEyFVLUdHbuRx4uxRbXPEp1z3uNXzudKA
-         IYWkH9J+dRxu6A4a9ytIkvythXp0qxpX0zQzPgheA0o0wrjIx/uRO51B20AGbr9V3vnj
-         Wi4nq5aShh7MqnhPI/v4FqBJmR+6uNrDDN+DwSPSKscH7nS3bY73yNA7pLYiYSMWVMo5
-         /s/h2nPSYRQsV7uDgEvYEgp7xtJOWfLAGtau/8WhnPMmZUglX38xHWhCK3D2T8MnnvOt
-         DQWoANmOcD4T7fcyn3SXZEOHxnRmmooBDNbedWSlkVvytZpAzO5TbOQfdC2HJpw+vgPN
-         2P6A==
-X-Gm-Message-State: AO0yUKUOhQQ/gi83BkfIqf08rTDHaCCLjXyzSJlnjaxAaYOQqAHlcdIJ
-        TKYcAtUaefKvMNlQqiVyYfi4aLDYN2AcY5yFCZcYXcTruNYciOWXtO/opfiYK9AlhNgYV8g/eZx
-        nTeDZKB1BQzHnbjXfhlebcPTDOMpMqLJe8pTJvg0W
-X-Received: by 2002:ae9:e314:0:b0:719:484e:f986 with SMTP id v20-20020ae9e314000000b00719484ef986mr166688qkf.209.1674851118758;
-        Fri, 27 Jan 2023 12:25:18 -0800 (PST)
-X-Google-Smtp-Source: AK7set+reW9epoUgsTvkoCuS4BWyTRI928d66PYTf9uNh1S8zfiJVxGLovoAqoY3RSrdRLwfrJTOHStCXA8a5N+ZuEY=
-X-Received: by 2002:ae9:e314:0:b0:719:484e:f986 with SMTP id
- v20-20020ae9e314000000b00719484ef986mr166680qkf.209.1674851118416; Fri, 27
- Jan 2023 12:25:18 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uJe6a029aMe3U1mBIX27gKXNT1Xkqqrq1mwntN0JHEQ=;
+        b=C5OQvxDEdvXG4b3AV2htffb4C2SjWI33Sz+012jpzcO2kUHaGToV3FCFZCwba0qstb
+         rZakoZULew2yadIMUWYBVJlgpgSP9AozQK93eHdlhj/MKIBgHauf/BvrjjQBIBUkRY/4
+         tZFK6O950CL7GRcUnSLOrmjneLqHqDu2lGiIhDSI0KrbupV/t9tEdvn2WeBvvVNnCBcr
+         wQxbnIm5Ti+yi9x7m2XrN9GrLdJZJYdlo547GrkXrLcKdxvt8q+XUY5MqxepKz4Axn36
+         PIuF+F3Rb4Z8uwFWCUWD+BPBk+USCdLvdmdAoKuXBMq7YRjAN9GPFhidXFwcpDKpJ6hY
+         M4YA==
+X-Gm-Message-State: AO0yUKXeB4yHpDpR5GaLjcd8fB0F4E0Aqp052e+NRkxcBt7a5qh46n6p
+        bcEqCjSOzXMrKElucaeE3Eae6Q==
+X-Google-Smtp-Source: AK7set/9uEcs/0K2Hl2UXRg4jVt4RuoaOYuxJnSLwEZ29/MCL9mAE/uUO2MJAyh8qA6S5ZijUrc4mA==
+X-Received: by 2002:a17:90a:6949:b0:219:f970:5119 with SMTP id j9-20020a17090a694900b00219f9705119mr115299pjm.1.1674851120337;
+        Fri, 27 Jan 2023 12:25:20 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c22-20020a637256000000b0048988ed9e4bsm2701875pgn.19.2023.01.27.12.25.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 12:25:19 -0800 (PST)
+Date:   Fri, 27 Jan 2023 20:25:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, like.xu.linux@gmail.com,
+        kan.liang@linux.intel.com, wei.w.wang@intel.com,
+        Like Xu <like.xu@linux.intel.com>
+Subject: Re: [PATCH v2 05/15] KVM: vmx/pmu: Emulate MSR_ARCH_LBR_DEPTH for
+ guest Arch LBR
+Message-ID: <Y9QzLHNxS4K81SfU@google.com>
+References: <20221125040604.5051-1-weijiang.yang@intel.com>
+ <20221125040604.5051-6-weijiang.yang@intel.com>
 MIME-Version: 1.0
-References: <20230118061256.2689-1-dakr@redhat.com> <20230118061256.2689-6-dakr@redhat.com>
- <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com> <7c046ff9-728d-7634-9d77-8536308c7481@redhat.com>
- <c2256c7d-e768-ae3f-d465-b9f8080d111b@amd.com> <2427a918-5348-d1ef-ccae-a29c1ff33c83@redhat.com>
- <a214b28b-043c-a8bb-69da-b4d8216fce56@amd.com> <3a76bfa9-8ee5-a7d9-b9fb-a98181baec0b@redhat.com>
- <49ac3f95-6eda-9009-4b28-0167213301b2@amd.com>
-In-Reply-To: <49ac3f95-6eda-9009-4b28-0167213301b2@amd.com>
-From:   David Airlie <airlied@redhat.com>
-Date:   Sat, 28 Jan 2023 06:25:06 +1000
-Message-ID: <CAMwc25oGap_hEg5AquM_L2eH42PcG=pM3KPS6HNTNj-SzeHu+g@mail.gmail.com>
-Subject: Re: [PATCH drm-next 05/14] drm/nouveau: new VM_BIND uapi interfaces
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Danilo Krummrich <dakr@redhat.com>,
-        Matthew Brost <matthew.brost@intel.com>, daniel@ffwll.ch,
-        bskeggs@redhat.com, jason@jlekstrand.net, tzimmermann@suse.de,
-        mripard@kernel.org, corbet@lwn.net, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221125040604.5051-6-weijiang.yang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,172 +76,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 1:17 AM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 27.01.23 um 15:44 schrieb Danilo Krummrich:
-> > [SNIP]
-> >>>>
-> >>>> What you want is one component for tracking the VA allocations
-> >>>> (drm_mm based) and a different component/interface for tracking the
-> >>>> VA mappings (probably rb tree based).
-> >>>
-> >>> That's what the GPUVA manager is doing. There are gpuva_regions
-> >>> which correspond to VA allocations and gpuvas which represent the
-> >>> mappings. Both are tracked separately (currently both with a
-> >>> separate drm_mm, though). However, the GPUVA manager needs to take
-> >>> regions into account when dealing with mappings to make sure the
-> >>> GPUVA manager doesn't propose drivers to merge over region
-> >>> boundaries. Speaking from userspace PoV, the kernel wouldn't merge
-> >>> mappings from different VKBuffer objects even if they're virtually
-> >>> and physically contiguous.
-> >>
-> >> That are two completely different things and shouldn't be handled in
-> >> a single component.
-> >
-> > They are different things, but they're related in a way that for
-> > handling the mappings (in particular merging and sparse) the GPUVA
-> > manager needs to know the VA allocation (or region) boundaries.
-> >
-> > I have the feeling there might be a misunderstanding. Userspace is in
-> > charge to actually allocate a portion of VA space and manage it. The
-> > GPUVA manager just needs to know about those VA space allocations and
-> > hence keeps track of them.
-> >
-> > The GPUVA manager is not meant to be an allocator in the sense of
-> > finding and providing a hole for a given request.
-> >
-> > Maybe the non-ideal choice of using drm_mm was implying something else.
->
-> Uff, well long story short that doesn't even remotely match the
-> requirements. This way the GPUVA manager won't be usable for a whole
-> bunch of use cases.
->
-> What we have are mappings which say X needs to point to Y with this and
-> hw dependent flags.
->
-> The whole idea of having ranges is not going to fly. Neither with AMD
-> GPUs and I strongly think not with Intels XA either.
->
-> >> We should probably talk about the design of the GPUVA manager once
-> >> more when this should be applicable to all GPU drivers.
-> >
-> > That's what I try to figure out with this RFC, how to make it
-> > appicable for all GPU drivers, so I'm happy to discuss this. :-)
->
-> Yeah, that was really good idea :) That proposal here is really far away
-> from the actual requirements.
->
-> >>> For sparse residency the kernel also needs to know the region
-> >>> boundaries to make sure that it keeps sparse mappings around.
-> >>
-> >> What?
-> >
-> > When userspace creates a new VKBuffer with the
-> > VK_BUFFER_CREATE_SPARSE_BINDING_BIT the kernel may need to create
-> > sparse mappings in order to ensure that using this buffer without any
-> > memory backed mappings doesn't fault the GPU.
-> >
-> > Currently, the implementation does this the following way:
-> >
-> > 1. Userspace creates a new VKBuffer and hence allocates a portion of
-> > the VA space for it. It calls into the kernel indicating the new VA
-> > space region and the fact that the region is sparse.
-> >
-> > 2. The kernel picks up the region and stores it in the GPUVA manager,
-> > the driver creates the corresponding sparse mappings / page table
-> > entries.
-> >
-> > 3. Userspace might ask the driver to create a couple of memory backed
-> > mappings for this particular VA region. The GPUVA manager stores the
-> > mapping parameters, the driver creates the corresponding page table
-> > entries.
-> >
-> > 4. Userspace might ask to unmap all the memory backed mappings from
-> > this particular VA region. The GPUVA manager removes the mapping
-> > parameters, the driver cleans up the corresponding page table entries.
-> > However, the driver also needs to re-create the sparse mappings, since
-> > it's a sparse buffer, hence it needs to know the boundaries of the
-> > region it needs to create the sparse mappings in.
->
-> Again, this is not how things are working. First of all the kernel
-> absolutely should *NOT* know about those regions.
->
-> What we have inside the kernel is the information what happens if an
-> address X is accessed. On AMD HW this can be:
->
-> 1. Route to the PCIe bus because the mapped BO is stored in system memory=
-.
-> 2. Route to the internal MC because the mapped BO is stored in local memo=
-ry.
-> 3. Route to other GPUs in the same hive.
-> 4. Route to some doorbell to kick of other work.
-> ...
-> x. Ignore write, return 0 on reads (this is what is used for sparse
-> mappings).
-> x+1. Trigger a recoverable page fault. This is used for things like SVA.
-> x+2. Trigger a non-recoverable page fault. This is used for things like
-> unmapped regions where access is illegal.
->
-> All this is plus some hw specific caching flags.
->
-> When Vulkan allocates a sparse VKBuffer what should happen is the followi=
-ng:
->
-> 1. The Vulkan driver somehow figures out a VA region A..B for the
-> buffer. This can be in userspace (libdrm_amdgpu) or kernel (drm_mm), but
-> essentially is currently driver specific.
+On Thu, Nov 24, 2022, Yang Weijiang wrote:
+> Write to MSR_ARCH_LBR_DEPTH has side-effect, all LBR entries are reset
+> to 0. Kernel PMU driver can leverage this effect to do fask reset to
+> LBR record MSRs. KVM allows guest to achieve it when Arch LBR records
+> MSRs are passed through to the guest.
+> 
+> Signed-off-by: Like Xu <like.xu@linux.intel.com>
+> Co-developed-by: Yang Weijiang <weijiang.yang@intel.com>
+> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  3 ++
+>  arch/x86/kvm/vmx/pmu_intel.c    | 58 +++++++++++++++++++++++++++++++--
+>  2 files changed, 58 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 70af7240a1d5..2dba2fdd9cdc 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -571,6 +571,9 @@ struct kvm_pmu {
+>  	 * redundant check before cleanup if guest don't use vPMU at all.
+>  	 */
+>  	u8 event_count;
+> +
+> +	/* Guest arch lbr depth supported by KVM. */
+> +	u64 kvm_arch_lbr_depth;
 
-There are NO plans to have drm_mm do VA region management, VA region
-management will be in userspace in Mesa. Can we just not bring that up agai=
-n?
-This is for GPU VA tracking not management if that makes it easier we
-could rename it.
+There is zero reason to store this separately.  KVM already records the allowed
+depth in kvm_vcpu.lbr_desc.records.nr.
 
->
-> 2. The kernel gets a request to map the VA range A..B as sparse, meaning
-> that it updates the page tables from A..B with the sparse setting.
->
-> 3. User space asks kernel to map a couple of memory backings at location
-> A+1, A+10, A+15 etc....
+>  };
+>  
+>  struct kvm_pmu_ops;
+> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> index 905673228932..0c78cb4b72be 100644
+> --- a/arch/x86/kvm/vmx/pmu_intel.c
+> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> @@ -178,6 +178,10 @@ static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
+>  	    (index == MSR_LBR_SELECT || index == MSR_LBR_TOS))
+>  		return true;
+>  
+> +	if (index == MSR_ARCH_LBR_DEPTH)
+> +		return kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
 
-3.5?
+Like the previous patch, since intel_pmu_lbr_is_enabled() effectively serves as
+a generic kvm_cpu_cap_has(LBRS) check, this can be distilled to:
 
-Userspace asks the kernel to unmap A+1 so it can later map something
-else in there?
+	if (cpu_feature_enabled(X86_FEATURE_ARCH_LBR)) {
+		if (index == MSR_ARCH_LBR_DEPTH || index == MSR_ARCH_LBR_CTL)
+			return true;
+	} else {
+		if (index == MSR_LBR_SELECT || index == MSR_LBR_TOS))
+			return true;
+	}
 
-What happens in that case, with a set of queued binds, do you just do
-a new sparse mapping for A+1, does userspace decide that?
+> +		       guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
+> +
+>  	if ((index >= records->from && index < records->from + records->nr) ||
+>  	    (index >= records->to && index < records->to + records->nr))
+>  		return true;
+> @@ -345,6 +349,7 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  {
+>  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>  	struct kvm_pmc *pmc;
+> +	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
+>  	u32 msr = msr_info->index;
+>  
+>  	switch (msr) {
+> @@ -369,6 +374,9 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  	case MSR_PEBS_DATA_CFG:
+>  		msr_info->data = pmu->pebs_data_cfg;
+>  		return 0;
+> +	case MSR_ARCH_LBR_DEPTH:
+> +		msr_info->data = lbr_desc->records.nr;
+> +		return 0;
+>  	default:
+>  		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
+>  		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
+> @@ -395,6 +403,7 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  {
+>  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>  	struct kvm_pmc *pmc;
+> +	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
+>  	u32 msr = msr_info->index;
+>  	u64 data = msr_info->data;
+>  	u64 reserved_bits, diff;
+> @@ -456,6 +465,24 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  			return 0;
+>  		}
+>  		break;
+> +	case MSR_ARCH_LBR_DEPTH:
+> +		if (!pmu->kvm_arch_lbr_depth && !msr_info->host_initiated)
 
-Dave.
+Don't invent a new check, just prevent KVM from reaching this path via the
+existing intel_pmu_lbr_is_enabled().
 
->
-> 4. The VKBuffer is de-allocated, userspace asks kernel to update region
-> A..B to not map anything (usually triggers a non-recoverable fault).
->
-> When you want to unify this between hw drivers I strongly suggest to
-> completely start from scratch once more.
->
-> First of all don't think about those mappings as VMAs, that won't work
-> because VMAs are usually something large. Think of this as individual
-> PTEs controlled by the application. similar how COW mappings and struct
-> pages are handled inside the kernel.
->
-> Then I would start with the VA allocation manager. You could probably
-> base that on drm_mm. We handle it differently in amdgpu currently, but I
-> think this is something we could change.
->
-> Then come up with something close to the amdgpu VM system. I'm pretty
-> sure that should work for Nouveau and Intel XA as well. In other words
-> you just have a bunch of very very small structures which represents
-> mappings and a larger structure which combine all mappings of a specific
-> type, e.g. all mappings of a BO or all sparse mappings etc...
->
-> Merging of regions is actually not mandatory. We don't do it in amdgpu
-> and can live with the additional mappings pretty well. But I think this
-> can differ between drivers.
->
-> Regards,
-> Christian.
->
+> +			return 1;
+> +		/*
+> +		 * When guest/host depth are different, the handling would be tricky,
+> +		 * so only max depth is supported for both host and guest.
+> +		 */
 
+This semi-arbitrary restriction is fine because Intel's architecture allows KVM
+to enumerate support for a single depth, but somewhere in the changelog and/or
+code that actually needs to be state.  This blurb
+
+  In the first generation of Arch LBR, max entry size is 32,
+  host configures the max size and guest always honors the setting.
+
+makes it sound like KVM is relying on the guest to do the right thing, and this
+code looks like KVM is making up it's own behavior.
+
+> +		if (data != pmu->kvm_arch_lbr_depth)
+> +			return 1;
+> +
+> +		lbr_desc->records.nr = data;
+> +		/*
+> +		 * Writing depth MSR from guest could either setting the
+> +		 * MSR or resetting the LBR records with the side-effect.
+> +		 */
+> +		if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
+
+Another check, really?  KVM shouldn't reach this point if KVM doesn't support
+Arch LBRs.  And if that isn't guarantee (honestly forgot what this series actually
+proposed at this point), then that's a bug, full stop.
+
+> +			wrmsrl(MSR_ARCH_LBR_DEPTH, lbr_desc->records.nr);
+
+IIUC, this is subtly broken.  Piecing together all of the undocumented bits, my
+understanding is that arch LBRs piggyback KVM's existing LBR support, i.e. use a
+"virtual" perf event.  And like traditional LBR support, the host can steal control
+of the LBRs in IRQ context by disabling the perf event via IPI.  And since writes
+to MSR_ARCH_LBR_DEPTH purge LBR records, this needs to be treated as if it were a
+write to an LBR record, i.e. belongs in the IRQs disabled section of
+intel_pmu_handle_lbr_msrs_access().
+
+If for some magical reason it's safe to access arch LBR MSRs without disabling IRQs
+and confirming perf event ownership, I want to see a very detailed changelog
+explaining exactly how that magic works.
+
+> +		return 0;
+>  	default:
+>  		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
+>  		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
+> @@ -506,6 +533,32 @@ static void setup_fixed_pmc_eventsel(struct kvm_pmu *pmu)
+>  	}
+>  }
+>  
+> +static bool cpuid_enable_lbr(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> +	struct kvm_cpuid_entry2 *entry;
+> +	int depth_bit;
+> +
+> +	if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
+> +		return !static_cpu_has(X86_FEATURE_ARCH_LBR) &&
+> +			cpuid_model_is_consistent(vcpu);
+> +
+> +	pmu->kvm_arch_lbr_depth = 0;
+> +	if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
+> +		return false;
+> +
+> +	entry = kvm_find_cpuid_entry(vcpu, 0x1C);
+> +	if (!entry)
+> +		return false;
+> +
+> +	depth_bit = fls(cpuid_eax(0x1C) & 0xff);
+
+This is unnecessarily fragile.  Get the LBR depth from perf, don't read CPUID and
+assume perf will always configured the max depth.,
+
+This enabling also belongs at the tail end of the series, i.e. KVM shouldn't let
+userspace enable LBRs until all the support pieces are in place.
+
+> +	if ((entry->eax & 0xff) != (1 << (depth_bit - 1)))
+> +		return false;
+> +
+> +	pmu->kvm_arch_lbr_depth = depth_bit * 8;
+> +	return true;
+> +}
+> +
+>  static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> @@ -589,9 +642,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+>  	bitmap_set(pmu->all_valid_pmc_idx,
+>  		INTEL_PMC_MAX_GENERIC, pmu->nr_arch_fixed_counters);
+>  
+> -	perf_capabilities = vcpu_get_perf_capabilities(vcpu);
+> -	if (cpuid_model_is_consistent(vcpu) &&
+> -	    (perf_capabilities & PMU_CAP_LBR_FMT))
+> +	if (cpuid_enable_lbr(vcpu))
+>  		x86_perf_get_lbr(&lbr_desc->records);
+>  	else
+>  		lbr_desc->records.nr = 0;
+> @@ -599,6 +650,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+>  	if (lbr_desc->records.nr)
+>  		bitmap_set(pmu->all_valid_pmc_idx, INTEL_PMC_IDX_FIXED_VLBR, 1);
+>  
+> +	perf_capabilities = vcpu_get_perf_capabilities(vcpu);
+>  	if (perf_capabilities & PERF_CAP_PEBS_FORMAT) {
+>  		if (perf_capabilities & PERF_CAP_PEBS_BASELINE) {
+>  			pmu->pebs_enable_mask = counter_mask;
+> -- 
+> 2.27.0
+> 
