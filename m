@@ -2,130 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BE467DA29
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0588D67DA2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 01:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbjA0ADz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 19:03:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
+        id S231774AbjA0AEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 19:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjA0ADx (ORCPT
+        with ESMTP id S230269AbjA0AEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 19:03:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99362B093
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 16:03:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674777787;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MhI12ICe242ci+pWMRLlhSgKz/EtJeRMJyar7EF8onw=;
-        b=deLkXVmwLTh56UwPVnCUkjY3FwYCOFiQQDFU/wuHJtjNxXHCQpcrIPC0VJiHxrR68e7Tmh
-        r1MZ2uwdZwPk+3YAen5QY30Ip9maDjFhIqb0dmIJ/IYugam/V0T2XR/796n8XcimZsIzRT
-        d1Igc8oigCtqnP/DUv8fWks05y1sI80=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-153-bRSEd4VSPWK3FSgK10-1kg-1; Thu, 26 Jan 2023 19:03:03 -0500
-X-MC-Unique: bRSEd4VSPWK3FSgK10-1kg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 26 Jan 2023 19:04:38 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E00BCA11;
+        Thu, 26 Jan 2023 16:04:37 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AF4743810B26;
-        Fri, 27 Jan 2023 00:03:02 +0000 (UTC)
-Received: from [10.64.54.98] (vpn2-54-98.bne.redhat.com [10.64.54.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3C654492B02;
-        Fri, 27 Jan 2023 00:02:55 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v2 1/3] KVM: arm64: Add helper vgic_write_guest_lock()
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net,
-        maz@kernel.org, will@kernel.org, ricarkol@google.com,
-        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
-        reijiw@google.com, ardb@kernel.org, Julia.Lawall@inria.fr,
-        yuzenghui@huawei.com, seanjc@google.com, shan.gavin@gmail.com
-References: <20230119234405.349644-1-gshan@redhat.com>
- <20230119234405.349644-2-gshan@redhat.com> <Y9LgplvWZtdjXCEE@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <847162da-f3fd-9bcd-f784-e1b152ad6336@redhat.com>
-Date:   Fri, 27 Jan 2023 11:02:53 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P2yVj6B2jz4x1N;
+        Fri, 27 Jan 2023 11:04:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1674777871;
+        bh=oA/QyuVeN3Q6DEQTHlGETtxjfLNOOf29n+5xQlBorAo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TOIV5bzGszk5WpT6Up4FojaOgOW60VDGdBDkw1SFawUVJKlSLPjZUgDeqaqXVfVvW
+         895BlRHj0ygf8BUtDHhWDqCge72Xtcxj3KOoQDhSjMiSCpv3IsX9Tble1+SVgGhCx3
+         ce9gdVsCz/gsDZqDExwHUS6ekR9sOxvxVdRobm158saWpMyTEC8sAKAZHOvZJoDBMM
+         5n35D4kDzFgoCHkKTSX8WPVQupHpZVm3Ztj3A+q7MbpjDWtzv8FwMDu3cukPOtHAQq
+         5YgwqRSJHYGlfn8kLW0qPbpNPvcExDk2knim3wzNawxcxQJzyr6BHeoJ+XguEUIybi
+         5EHhKHnuQHstg==
+Date:   Fri, 27 Jan 2023 11:04:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joel Stanley <joel@jms.id.au>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Eddie James <eajames@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the aspeed tree
+Message-ID: <20230127110428.34c159b4@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <Y9LgplvWZtdjXCEE@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/DqIBJzxdsoEaplcGkJI5HS/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+--Sig_/DqIBJzxdsoEaplcGkJI5HS/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 1/27/23 7:20 AM, Oliver Upton wrote:
-> On Fri, Jan 20, 2023 at 07:44:03AM +0800, Gavin Shan wrote:
->> Currently, the unknown no-running-vcpu sites are reported when a
->> dirty page is tracked by mark_page_dirty_in_slot(). Until now, the
->> only known no-running-vcpu site is saving vgic/its tables through
->> KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_SAVE_TABLES} command on KVM device
->> "kvm-arm-vgic-its". Unfortunately, there are more unknown sites to
->> be handled and no-running-vcpu context will be allowed in these
->> sites: (1) KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_RESTORE_TABLES} command
->> on KVM device "kvm-arm-vgic-its" to restore vgic/its tables. The
->> vgic3 LPI pending status could be restored. (2) Save vgic3 pending
->> table through KVM_DEV_ARM_{VGIC_GRP_CTRL, VGIC_SAVE_PENDING_TABLES}
->> command on KVM device "kvm-arm-vgic-v3".
->>
->> In order to handle those unknown cases, we need a unified helper
->> vgic_write_guest_lock(). struct vgic_dist::save_its_tables_in_progress
->> is also renamed to struct vgic_dist::save_tables_in_progress. Besides,
->> "asm/kvm_mmu.h" needs to be included for "vgic.h" for the definition
->> of kvm_write_guest_lock().
->>
->> No functional change intended.
->>
->> Suggested-by: Oliver Upton <oliver.upton@linux.dev>
->> Signed-off-by: Gavin Shan <gshan@redhat.com>
->> ---
->>   arch/arm64/kvm/vgic-sys-reg-v3.c   |  1 +
->>   arch/arm64/kvm/vgic/vgic-irqfd.c   |  1 +
->>   arch/arm64/kvm/vgic/vgic-its.c     | 13 +++++--------
->>   arch/arm64/kvm/vgic/vgic-mmio-v2.c |  1 +
->>   arch/arm64/kvm/vgic/vgic-mmio.c    |  1 +
->>   arch/arm64/kvm/vgic/vgic-v4.c      |  1 +
->>   arch/arm64/kvm/vgic/vgic.c         |  1 +
->>   arch/arm64/kvm/vgic/vgic.h         | 13 +++++++++++++
->>   include/kvm/arm_vgic.h             |  2 +-
->>   9 files changed, 25 insertions(+), 9 deletions(-)
-> 
-> You wouldn't have to add the include all around the shop if you instead
-> just stuck it in vgic.h...
-> 
-> Having said that, we really ought to get a fix in for this sooner rather
-> than later. I just hit it myself testing kvmarm/next.
-> 
-> Marc, could you take care of the include fix when applying?
-> 
+Hi all,
 
-I've posted v3 to have a separate PATCH[1/4] where the header file inclusions
-are handled, to save Marc's valuable time. After 'kvm_mmu.h' is included to
-'vgic.h', the duplicate inclusions of 'kvm_mmu.h' needs to be removed. A separate
-patch would make the follow-up patches clean.
+The following commit is also in the arm-soc-fixes tree as a different
+commit (but the same patch):
 
-https://lore.kernel.org/kvmarm/20230126235451.469087-1-gshan@redhat.com/T/#t
+  fc8529f0609d ("ARM: dts: aspeed: Fix pca9849 compatible")
 
-Thanks,
-Gavin
+This is commit
 
+  d9b6c322fd33 ("ARM: dts: aspeed: Fix pca9849 compatible")
+
+in the arm-soc-fixes tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/DqIBJzxdsoEaplcGkJI5HS/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPTFQwACgkQAVBC80lX
+0GzPEgf/dMWQTioS6mGH6qxE/GAFdoXux5XoToiELTWb44A/kdIfnQdWmPtMZpq3
+0BUaGR8t9DpfEx1B0u/REd4CN1j/i78ay4kSHBv5h1/qU1Dty+Z/SBd/+sc8Qb4O
+0/6l9LMItfHIt7ZjCq8nNVUZa29Wkk3o+wK+ZE2Rz/yfwrMP4ynq31Rv8xGqX1+/
+Rj32q+xpvJK/b8L+L1pY9SkOVzHLPGB0eYDbUIFzLm9NaYEHgo1YuNX3872kOxSz
+5RBI1QWmEKP4fqCy36X2CEg7FVV7DiiByGNAP5S49LNoiFWr39n98Lfrjy5ucR1s
+teJHKpYj5Gv2GRnQbwpxBjaHdUUP9w==
+=OROh
+-----END PGP SIGNATURE-----
+
+--Sig_/DqIBJzxdsoEaplcGkJI5HS/--
