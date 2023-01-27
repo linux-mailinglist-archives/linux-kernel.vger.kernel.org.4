@@ -2,622 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAB767E2C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45EB67E2C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbjA0LKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
+        id S233010AbjA0LKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:10:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbjA0LJu (ORCPT
+        with ESMTP id S233059AbjA0LJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:09:50 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7310719F1E;
-        Fri, 27 Jan 2023 03:09:37 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id y1so4659127wru.2;
-        Fri, 27 Jan 2023 03:09:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xgV+DPLcWzcFRUy6RJyrz9OEQK56lHYoVaCzgIn3dPQ=;
-        b=Po5XNURZwHw3UKV8QcoUmK1VxPfJRnRIuia4ttrbzwOmlOR/9lKkhflkkrXQ00yEqD
-         xs6OdR9wdHnyUottCgcZgpzAvgt1ezlVmP/GaCQAzVFH/Pd0jkF6ET3DumbJR9+4P5pG
-         CAPo4zjn4EZtzrKEKUpaJiNBzCiP8yBqM0qdfWuz9d6M9Qxb+crlw1GV4XMYbGPv8Xy1
-         UTf9euoWSp3It1e5QthupV+DFYFqzWkQ5xiRTAzu/pjVfaKWGlx2jIlvcZXZ3HEPsPKu
-         1LsiOeu4V+ox0H4qgqI23JYvhJHAJJU7V/cAD9tmSyGwk/2iUrVupFYPhMrb8xcxo0j8
-         aFIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xgV+DPLcWzcFRUy6RJyrz9OEQK56lHYoVaCzgIn3dPQ=;
-        b=YxK1GG+V53zJKwpnk60dd3qiyb/mX+sllqX9x0vSWw4FBJ1Pfcd4bue4HBilDcasbC
-         Iii/9/558y29DwPIJhNQW4PKpHINDOwshIvGW7LxR4DhmgC8/+kDLqvUt3OasZkpJKgg
-         VP5RpTfLzxDit3AgxtUfmMeT1Nym667izCcKKtxyeftLDcCvlTJkf/HO0yriJtfUSLEv
-         W/lYPJ6hSeuYgMNFnZIi+V1PUG18LYbrv9slWunlOG5Lb9boVK/fVGq0vo9+RdZ9l8pU
-         CBfqVTiMB2w7sQu4U5umkHdVpFL6yEyIXNQGeT3pmyQzFt78D1RFsRdStgTduLUDClw/
-         y1hA==
-X-Gm-Message-State: AFqh2krhlIhL0G1ZKbIl9+q89rdVAfA0UhE6osCGR8BaZ+QYc7e/UYi3
-        vSocQzXyI/WwQZPKs/k88sM=
-X-Google-Smtp-Source: AMrXdXuukJ/3ILkf7rOk36PXdcYZkhNgJ5qm9069VY1yU8S9RuynBUB1+ZSxmWFgZZ9MqhxgQhBoDg==
-X-Received: by 2002:adf:d1c7:0:b0:2be:544c:fe2c with SMTP id b7-20020adfd1c7000000b002be544cfe2cmr29602197wrd.25.1674817775990;
-        Fri, 27 Jan 2023 03:09:35 -0800 (PST)
-Received: from toolbox.. ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id d7-20020a056000114700b00241fab5a296sm3662106wrx.40.2023.01.27.03.09.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 03:09:35 -0800 (PST)
-From:   Christian Hewitt <christianshewitt@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Christian Hewitt <christianshewitt@gmail.com>,
-        Yuntian Zhang <yt@radxa.com>
-Subject: [PATCH 2/2] arm64: dts: meson: add support for Radxa Zero2
-Date:   Fri, 27 Jan 2023 11:09:28 +0000
-Message-Id: <20230127110928.3387654-2-christianshewitt@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230127110928.3387654-1-christianshewitt@gmail.com>
-References: <20230127110928.3387654-1-christianshewitt@gmail.com>
+        Fri, 27 Jan 2023 06:09:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40C6126FD;
+        Fri, 27 Jan 2023 03:09:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F40061B03;
+        Fri, 27 Jan 2023 11:09:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6515C433EF;
+        Fri, 27 Jan 2023 11:09:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674817794;
+        bh=Rvc7pjf+AN6/eCdtwoY/n3UBsgh8HAsQA3tHglV1ekI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cFh4QDBIcXCeNBMEtG5/Yha1H7jwRuc8oVG77lBtYjCVXsGu9HTAC12kWSteg9mHJ
+         yZQj2/XzkTtyZWNezDvPAcv1O2ph0juzWs12NEnC+rgOi9E8NrlSaaRPLHQ9MhQ+Iv
+         TsyqxmiOayXl8rv+SyXpyRoAybUvYhPGUel2zL4ybhLriUpqP9TEcpLnB1DdwCelor
+         m9bid/udwZKi7pU/Z0r/IvPxoVSNPO/NV4O4NOkk2aV/ndw5ti9c95ObFFNumQbY/R
+         LMNbwF8E0u6KCix2nkuTJxT6kisK7/nTxVBM1Z4w2D1yE8llZtVCIxuXgaagPZo2cn
+         EWzyFNlfPmYvw==
+Received: by mail-lf1-f45.google.com with SMTP id x40so7559181lfu.12;
+        Fri, 27 Jan 2023 03:09:54 -0800 (PST)
+X-Gm-Message-State: AFqh2koxZFEOqT6DbDTJ4i33nEwWePKCYIDG/BgAxKEwV1TEc4cX9s1I
+        N/r+BhzjmzC3lM1V7VZ3RkniD663O0eU6+Myf74=
+X-Google-Smtp-Source: AMrXdXsze0x4tj3RhFk2kYwD2OXo5wp6M26DhtTwjztVd6iuZ0v3TKG4yj9EDtSjFuROVRAwiLS3m9OM4YPN0OoAga8=
+X-Received: by 2002:a19:8c19:0:b0:4ca:f3c2:2670 with SMTP id
+ o25-20020a198c19000000b004caf3c22670mr3651560lfd.166.1674817792807; Fri, 27
+ Jan 2023 03:09:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAMj1kXE3v1_pUVT4HSCoVZO512cGMxjBNcDEhLpf22v9iFmoSA@mail.gmail.com>
+ <Y9OtDvgp3SsxuVf4@gondor.apana.org.au>
+In-Reply-To: <Y9OtDvgp3SsxuVf4@gondor.apana.org.au>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 27 Jan 2023 12:09:41 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGQGEwe7Ea3mu7VKCNd22hzE4cnHPXP4WzxYKcqwYzLzA@mail.gmail.com>
+Message-ID: <CAMj1kXGQGEwe7Ea3mu7VKCNd22hzE4cnHPXP4WzxYKcqwYzLzA@mail.gmail.com>
+Subject: Re: [PATCH] crypto: x86 - exit fpu context earlier in ECB/CBC macros
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     conor.dooley@microchip.com, peter@n8pjl.ca,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yuntian Zhang <yt@radxa.com>
+On Fri, 27 Jan 2023 at 11:53, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > I am still receiving encrypted messages, and given that I am a direct
+> > recipient, the mailing list server does not cc me then unencrypted
+> > copies.
+> >
+> > I am not going to reply to the patch until it lands in my inbox in
+> > plaintext, sorry ...
+>
+> As Ard needs to review this patch, until this is resolved I won't
+> be applying this.
+>
 
-Radxa Zero2 is a small form factor SBC based on the Amlogic A311D
-chipset that ships in a number of eMMC configurations:
+I've received the plaintext version in the mean time, it's on another thread.
 
-- Amlogic A311D (Quad A73 + Dual A53) CPU
-- 4GB LPDDR4 RAM
-- 32/64/128GB eMMC
-- Mali G52-MP4 GPU
-- HDMI 2.1 output (micro)
-- BCM4345 WiFi (2.4/5GHz a/b/g/n/ac) and BT 5.0
-- 1x USB 2.0 port - Type C (OTG)
-- 1x USB 3.0 port - Type C (Host)
-- 1x micro SD Card slot
-- 40 Pin GPIO header
-
-Signed-off-by: Yuntian Zhang <yt@radxa.com>
-Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
----
-The original dts from Yuntian contains some additional content for
-the USB-C device, but this is not working for me so I have ommited
-it and kept things simple. I've also left out some pwm-fan/thermal
-content; while the board does not ship with a fan the A311D chip
-should be used with one and I believe the board has a connector to
-add a fan, but until this is confirmed (and production boards are
-available) it's best left out.
-
- arch/arm64/boot/dts/amlogic/Makefile          |   1 +
- .../dts/amlogic/meson-g12b-radxa-zero2.dts    | 489 ++++++++++++++++++
- 2 files changed, 490 insertions(+)
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts
-
-diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-index 04114e8c9992..bb1af1d80c21 100644
---- a/arch/arm64/boot/dts/amlogic/Makefile
-+++ b/arch/arm64/boot/dts/amlogic/Makefile
-@@ -16,6 +16,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-go-ultra.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2-plus.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2l.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-radxa-zero2.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-khadas-vim3.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-ugoos-am6.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-kii-pro.dtb
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts
-new file mode 100644
-index 000000000000..319b2239afc0
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts
-@@ -0,0 +1,489 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2019 BayLibre, SAS
-+ * Author: Neil Armstrong <narmstrong@baylibre.com>
-+ * Copyright (c) 2019 Christian Hewitt <christianshewitt@gmail.com>
-+ * Copyright (c) 2022 Radxa Limited
-+ * Author: Yuntian Zhang <yt@radxa.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "meson-g12b-a311d.dtsi"
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/gpio/meson-g12a-gpio.h>
-+#include <dt-bindings/sound/meson-g12a-tohdmitx.h>
-+
-+/ {
-+	compatible = "radxa,zero2", "amlogic,a311d", "amlogic,g12b";
-+	model = "Radxa Zero2";
-+
-+	aliases {
-+		serial0 = &uart_AO;
-+		serial2 = &uart_A;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x0 0x0 0x80000000>;
-+	};
-+
-+	gpio-keys-polled {
-+		compatible = "gpio-keys-polled";
-+		poll-interval = <100>;
-+		power-button {
-+			label = "power";
-+			linux,code = <KEY_POWER>;
-+			gpios = <&gpio_ao GPIOAO_3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-green {
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_STATUS;
-+			gpios = <&gpio GPIOA_12 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+
-+	hdmi-connector {
-+		compatible = "hdmi-connector";
-+		type = "a";
-+
-+		port {
-+			hdmi_connector_in: endpoint {
-+				remote-endpoint = <&hdmi_tx_tmds_out>;
-+			};
-+		};
-+	};
-+
-+	emmc_pwrseq: emmc-pwrseq {
-+		compatible = "mmc-pwrseq-emmc";
-+		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
-+	};
-+
-+	sdio_pwrseq: sdio-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		reset-gpios = <&gpio GPIOX_6 GPIO_ACTIVE_LOW>;
-+		clocks = <&wifi32k>;
-+		clock-names = "ext_clock";
-+	};
-+
-+	ao_5v: regulator-ao_5v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "AO_5V";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+	};
-+
-+	vcc_1v8: regulator-vcc_1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VCC_1V8";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vcc_3v3>;
-+		regulator-always-on;
-+	};
-+
-+	vcc_3v3: regulator-vcc_3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VCC_3V3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vddao_3v3>;
-+		regulator-always-on;
-+		/* FIXME: actually controlled by VDDCPU_B_EN */
-+	};
-+
-+	vddao_1v8: regulator-vddao_1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDDIO_AO1V8";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vddao_3v3>;
-+		regulator-always-on;
-+	};
-+
-+	vddao_3v3: regulator-vddao_3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDDAO_3V3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&ao_5v>;
-+		regulator-always-on;
-+	};
-+
-+	vddcpu_a: regulator-vddcpu-a {
-+		/*
-+		 * MP8756GD Regulator.
-+		 */
-+		compatible = "pwm-regulator";
-+
-+		regulator-name = "VDDCPU_A";
-+		regulator-min-microvolt = <730000>;
-+		regulator-max-microvolt = <1022000>;
-+
-+		pwm-supply = <&ao_5v>;
-+
-+		pwms = <&pwm_ab 0 1250 0>;
-+		pwm-dutycycle-range = <100 0>;
-+
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
-+	vddcpu_b: regulator-vddcpu-b {
-+		/*
-+		 * Silergy SY8120B1ABC Regulator.
-+		 */
-+		compatible = "pwm-regulator";
-+
-+		regulator-name = "VDDCPU_B";
-+		regulator-min-microvolt = <730000>;
-+		regulator-max-microvolt = <1022000>;
-+
-+		pwm-supply = <&ao_5v>;
-+
-+		pwms = <&pwm_AO_cd 1 1250 0>;
-+		pwm-dutycycle-range = <100 0>;
-+
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
-+	sound {
-+		compatible = "amlogic,axg-sound-card";
-+		model = "RADXA-ZERO2";
-+		audio-aux-devs = <&tdmout_b>;
-+		audio-routing = "TDMOUT_B IN 0", "FRDDR_A OUT 1",
-+				"TDMOUT_B IN 1", "FRDDR_B OUT 1",
-+				"TDMOUT_B IN 2", "FRDDR_C OUT 1",
-+				"TDM_B Playback", "TDMOUT_B OUT";
-+
-+		assigned-clocks = <&clkc CLKID_MPLL2>,
-+				  <&clkc CLKID_MPLL0>,
-+				  <&clkc CLKID_MPLL1>;
-+		assigned-clock-parents = <0>, <0>, <0>;
-+		assigned-clock-rates = <294912000>,
-+				       <270950400>,
-+				       <393216000>;
-+
-+		dai-link-0 {
-+			sound-dai = <&frddr_a>;
-+		};
-+
-+		dai-link-1 {
-+			sound-dai = <&frddr_b>;
-+		};
-+
-+		dai-link-2 {
-+			sound-dai = <&frddr_c>;
-+		};
-+
-+		/* 8ch hdmi interface */
-+		dai-link-3 {
-+			sound-dai = <&tdmif_b>;
-+			dai-format = "i2s";
-+			dai-tdm-slot-tx-mask-0 = <1 1>;
-+			dai-tdm-slot-tx-mask-1 = <1 1>;
-+			dai-tdm-slot-tx-mask-2 = <1 1>;
-+			dai-tdm-slot-tx-mask-3 = <1 1>;
-+			mclk-fs = <256>;
-+
-+			codec {
-+				sound-dai = <&tohdmitx TOHDMITX_I2S_IN_B>;
-+			};
-+		};
-+
-+		/* hdmi glue */
-+		dai-link-4 {
-+			sound-dai = <&tohdmitx TOHDMITX_I2S_OUT>;
-+
-+			codec {
-+				sound-dai = <&hdmi_tx>;
-+			};
-+		};
-+	};
-+
-+	wifi32k: wifi32k {
-+		compatible = "pwm-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <32768>;
-+		pwms = <&pwm_ef 0 30518 0>; /* PWM_E at 32.768KHz */
-+	};
-+};
-+
-+&arb {
-+	status = "okay";
-+};
-+
-+&cec_AO {
-+	pinctrl-0 = <&cec_ao_a_h_pins>;
-+	pinctrl-names = "default";
-+	status = "disabled";
-+	hdmi-phandle = <&hdmi_tx>;
-+};
-+
-+&cecb_AO {
-+	pinctrl-0 = <&cec_ao_b_h_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+	hdmi-phandle = <&hdmi_tx>;
-+};
-+
-+&clkc_audio {
-+	status = "okay";
-+};
-+
-+&cpu0 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu1 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu100 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu101 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu102 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu103 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&frddr_a {
-+	status = "okay";
-+};
-+
-+&frddr_b {
-+	status = "okay";
-+};
-+
-+&frddr_c {
-+	status = "okay";
-+};
-+
-+&gpio {
-+	gpio-line-names =
-+		/* GPIOZ */
-+		"PIN_27", "PIN_28", "PIN_7", "PIN_11", "PIN_13", "PIN_15", "PIN_18", "PIN_40",
-+		"", "", "", "", "", "", "", "",
-+		/* GPIOH */
-+		"", "", "", "", "PIN_19", "PIN_21", "PIN_24", "PIN_23",
-+		"",
-+		/* BOOT */
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "EMMC_PWRSEQ", "", "", "",
-+		/* GPIOC */
-+		"", "", "", "", "", "", "SD_CD", "PIN_36",
-+		/* GPIOA */
-+		"PIN_32", "PIN_12", "PIN_35", "", "", "PIN_38", "", "",
-+		"", "", "", "", "LED_GREEN", "PIN_31", "PIN_3", "PIN_5",
-+		/* GPIOX */
-+		"", "", "", "", "", "", "SDIO_PWRSEQ", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "BT_SHUTDOWN", "", "";
-+};
-+
-+&gpio_ao {
-+	gpio-line-names =
-+		/* GPIOAO */
-+		"PIN_8", "PIN_10", "", "BTN_POWER", "", "", "", "PIN_29",
-+		"PIN_33", "PIN_37", "FAN", "",
-+		/* GPIOE */
-+		"", "", "";
-+};
-+
-+&hdmi_tx {
-+	status = "okay";
-+	pinctrl-0 = <&hdmitx_hpd_pins>, <&hdmitx_ddc_pins>;
-+	pinctrl-names = "default";
-+	hdmi-supply = <&ao_5v>;
-+};
-+
-+&hdmi_tx_tmds_port {
-+	hdmi_tx_tmds_out: endpoint {
-+		remote-endpoint = <&hdmi_connector_in>;
-+	};
-+};
-+
-+&ir {
-+	status = "disabled";
-+	pinctrl-0 = <&remote_input_ao_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+&pwm_ab {
-+	pinctrl-0 = <&pwm_a_e_pins>;
-+	pinctrl-names = "default";
-+	clocks = <&xtal>;
-+	clock-names = "clkin0";
-+	status = "okay";
-+};
-+
-+&pwm_ef {
-+	pinctrl-0 = <&pwm_e_pins>;
-+	pinctrl-names = "default";
-+	clocks = <&xtal>;
-+	clock-names = "clkin2";
-+	status = "okay";
-+};
-+
-+&pwm_AO_ab {
-+	pinctrl-0 = <&pwm_ao_a_pins>;
-+	pinctrl-names = "default";
-+	clocks = <&xtal>;
-+	clock-names = "clkin3";
-+	status = "okay";
-+};
-+
-+&pwm_AO_cd {
-+	pinctrl-0 = <&pwm_ao_d_e_pins>;
-+	pinctrl-names = "default";
-+	clocks = <&xtal>;
-+	clock-names = "clkin4";
-+	status = "okay";
-+};
-+
-+&saradc {
-+	status = "okay";
-+	vref-supply = <&vddao_1v8>;
-+};
-+
-+/* SDIO */
-+&sd_emmc_a {
-+	status = "okay";
-+	pinctrl-0 = <&sdio_pins>;
-+	pinctrl-1 = <&sdio_clk_gate_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	bus-width = <4>;
-+	cap-sd-highspeed;
-+	max-frequency = <100000000>;
-+
-+	non-removable;
-+	disable-wp;
-+
-+	/* WiFi firmware requires power to be kept while in suspend */
-+	keep-power-in-suspend;
-+
-+	mmc-pwrseq = <&sdio_pwrseq>;
-+
-+	vmmc-supply = <&vddao_3v3>;
-+	vqmmc-supply = <&vddao_1v8>;
-+
-+	brcmf: wifi@1 {
-+		reg = <1>;
-+		compatible = "brcm,bcm4329-fmac";
-+	};
-+};
-+
-+/* SD card */
-+&sd_emmc_b {
-+	status = "okay";
-+	pinctrl-0 = <&sdcard_c_pins>;
-+	pinctrl-1 = <&sdcard_clk_gate_c_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <4>;
-+	cap-sd-highspeed;
-+	max-frequency = <50000000>;
-+	disable-wp;
-+
-+	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&vddao_3v3>;
-+	vqmmc-supply = <&vddao_3v3>;
-+};
-+
-+/* eMMC */
-+&sd_emmc_c {
-+	status = "okay";
-+	pinctrl-0 = <&emmc_ctrl_pins>, <&emmc_data_8b_pins>, <&emmc_ds_pins>;
-+	pinctrl-1 = <&emmc_clk_gate_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <8>;
-+	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
-+	mmc-hs200-1_8v;
-+	max-frequency = <200000000>;
-+	disable-wp;
-+
-+	mmc-pwrseq = <&emmc_pwrseq>;
-+	vmmc-supply = <&vcc_3v3>;
-+	vqmmc-supply = <&vcc_1v8>;
-+};
-+
-+&tdmif_b {
-+	status = "okay";
-+};
-+
-+&tdmout_b {
-+	status = "okay";
-+};
-+
-+&tohdmitx {
-+	status = "okay";
-+};
-+
-+&uart_A {
-+	status = "okay";
-+	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
-+	pinctrl-names = "default";
-+	uart-has-rtscts;
-+
-+	bluetooth {
-+		compatible = "brcm,bcm43438-bt";
-+		shutdown-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
-+		max-speed = <2000000>;
-+		clocks = <&wifi32k>;
-+		clock-names = "lpo";
-+	};
-+};
-+
-+&uart_AO {
-+	status = "okay";
-+	pinctrl-0 = <&uart_ao_a_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+&usb {
-+	status = "okay";
-+};
--- 
-2.34.1
-
+So we can close this one.
