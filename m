@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB3867DDC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F02BB67DD85
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 07:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbjA0Gk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 01:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S231856AbjA0GkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 01:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbjA0GkR (ORCPT
+        with ESMTP id S229871AbjA0GkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 01:40:17 -0500
+        Fri, 27 Jan 2023 01:40:16 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9C169B0A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF82F69B07;
         Thu, 26 Jan 2023 22:40:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=WOlMkCDCy8lExYDWc6Zx7In/UvKr77iVceai4v2zQUc=; b=yREXSIUIV0KMN9H5ZkaIyKd563
-        3lB4/W0R3xNn2UEXA2m04oQGR77gKuYmlVUjC6DDi4OefqeMCQf9fP12CuwM9YROmrb2umhlh80b8
-        bLbRy4wsd8Rfz/Id5LeluVJPBXytotX27WLLh7FoaAI/ToKMfn6540Hm/Gv+TsLeF1ExHzJeCsB4H
-        WO914oX+2i5tV24+vSNsbfb4QplCzHi4Cznr6hydoK5gyqZM8KjeMf6x4Xuc7MGAEGzec/8ZkirY2
-        emlXXA4m2qIspfBbvlUX9I10zsA4tONNuBiJ1RKzN1DczSmHo2wKjpqEeIXW6Qe9OsiVbCdIGfYE1
-        bYOrSuCg==;
+        bh=qAnULDD1Vs1l03vDvUPK8RqKC6ytHJz1xxwBhM6tUO4=; b=0ZUQU5LIvCy39LLL5XeAlXIm0F
+        Dvbaq23/vB+7gEYFQevqFXt33fqiTWGIQ/AKWV88URjF9ar6z7F/OoxMv0Pw3cdwvcrhdKr+tIemn
+        DT2uW3jnvw1wrtyBBwI5aeCOUCcyMieT/9ge/uh7d6gh5vyr6DbihhCZirRa5RtV3RU2thefc8Dzy
+        s5f4E3/GGb+mnCjaCxMVrSSbRIqnYFAit+z1PyhnHBjWZ7tbnjVshLVA9LWf9eiMlKw2mLNye2AHU
+        5Isj8DVvjzE2KmhhcpRVMS8bkitntxJzbfGwxYFSmTRMulbOb3Q6k4ZCSw80tINkH4GTk8wtkJD9G
+        nORumjLA==;
 Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pLIPC-00DM0u-VC; Fri, 27 Jan 2023 06:40:11 +0000
+        id 1pLIPD-00DM0u-Ea; Fri, 27 Jan 2023 06:40:11 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 03/35] Documentation: block: correct spelling
-Date:   Thu, 26 Jan 2023 22:39:33 -0800
-Message-Id: <20230127064005.1558-4-rdunlap@infradead.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [PATCH 04/35] Documentation: bpf: correct spelling
+Date:   Thu, 26 Jan 2023 22:39:34 -0800
+Message-Id: <20230127064005.1558-5-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230127064005.1558-1-rdunlap@infradead.org>
 References: <20230127064005.1558-1-rdunlap@infradead.org>
@@ -50,27 +52,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling problems for Documentation/block/ as reported
+Correct spelling problems for Documentation/bpf/ as reported
 by codespell.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: linux-block@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
 ---
- Documentation/block/data-integrity.rst |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/bpf/libbpf/libbpf_naming_convention.rst |    6 +++---
+ Documentation/bpf/map_xskmap.rst                      |    2 +-
+ Documentation/bpf/ringbuf.rst                         |    4 ++--
+ Documentation/bpf/verifier.rst                        |    2 +-
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-diff -- a/Documentation/block/data-integrity.rst b/Documentation/block/data-integrity.rst
---- a/Documentation/block/data-integrity.rst
-+++ b/Documentation/block/data-integrity.rst
-@@ -209,7 +209,7 @@ will require extra work due to the appli
-       sector must be set, and the bio should have all data pages
-       added.  It is up to the caller to ensure that the bio does not
-       change while I/O is in progress.
--      Complete bio with error if prepare failed for some reson.
-+      Complete bio with error if prepare failed for some reason.
+diff -- a/Documentation/bpf/libbpf/libbpf_naming_convention.rst b/Documentation/bpf/libbpf/libbpf_naming_convention.rst
+--- a/Documentation/bpf/libbpf/libbpf_naming_convention.rst
++++ b/Documentation/bpf/libbpf/libbpf_naming_convention.rst
+@@ -83,8 +83,8 @@ This prevents from accidentally exportin
+ to be a part of ABI what, in turn, improves both libbpf developer- and
+ user-experiences.
  
+-ABI versionning
+----------------
++ABI versioning
++--------------
  
- 5.3 Passing Existing Integrity Metadata
+ To make future ABI extensions possible libbpf ABI is versioned.
+ Versioning is implemented by ``libbpf.map`` version script that is
+@@ -148,7 +148,7 @@ API documentation convention
+ The libbpf API is documented via comments above definitions in
+ header files. These comments can be rendered by doxygen and sphinx
+ for well organized html output. This section describes the
+-convention in which these comments should be formated.
++convention in which these comments should be formatted.
+ 
+ Here is an example from btf.h:
+ 
+diff -- a/Documentation/bpf/map_xskmap.rst b/Documentation/bpf/map_xskmap.rst
+--- a/Documentation/bpf/map_xskmap.rst
++++ b/Documentation/bpf/map_xskmap.rst
+@@ -178,7 +178,7 @@ The following code snippet shows how to
+ 
+ For an example on how create AF_XDP sockets, please see the AF_XDP-example and
+ AF_XDP-forwarding programs in the `bpf-examples`_ directory in the `libxdp`_ repository.
+-For a detailed explaination of the AF_XDP interface please see:
++For a detailed explanation of the AF_XDP interface please see:
+ 
+ - `libxdp-readme`_.
+ - `AF_XDP`_ kernel documentation.
+diff -- a/Documentation/bpf/ringbuf.rst b/Documentation/bpf/ringbuf.rst
+--- a/Documentation/bpf/ringbuf.rst
++++ b/Documentation/bpf/ringbuf.rst
+@@ -124,7 +124,7 @@ buffer.  Currently 4 are supported:
+ 
+ - ``BPF_RB_AVAIL_DATA`` returns amount of unconsumed data in ring buffer;
+ - ``BPF_RB_RING_SIZE`` returns the size of ring buffer;
+-- ``BPF_RB_CONS_POS``/``BPF_RB_PROD_POS`` returns current logical possition
++- ``BPF_RB_CONS_POS``/``BPF_RB_PROD_POS`` returns current logical position
+   of consumer/producer, respectively.
+ 
+ Returned values are momentarily snapshots of ring buffer state and could be
+@@ -146,7 +146,7 @@ Design and Implementation
+ This reserve/commit schema allows a natural way for multiple producers, either
+ on different CPUs or even on the same CPU/in the same BPF program, to reserve
+ independent records and work with them without blocking other producers. This
+-means that if BPF program was interruped by another BPF program sharing the
++means that if BPF program was interrupted by another BPF program sharing the
+ same ring buffer, they will both get a record reserved (provided there is
+ enough space left) and can work with it and submit it independently. This
+ applies to NMI context as well, except that due to using a spinlock during
+diff -- a/Documentation/bpf/verifier.rst b/Documentation/bpf/verifier.rst
+--- a/Documentation/bpf/verifier.rst
++++ b/Documentation/bpf/verifier.rst
+@@ -192,7 +192,7 @@ checked and found to be non-NULL, all co
+ As well as range-checking, the tracked information is also used for enforcing
+ alignment of pointer accesses.  For instance, on most systems the packet pointer
+ is 2 bytes after a 4-byte alignment.  If a program adds 14 bytes to that to jump
+-over the Ethernet header, then reads IHL and addes (IHL * 4), the resulting
++over the Ethernet header, then reads IHL and adds (IHL * 4), the resulting
+ pointer will have a variable offset known to be 4n+2 for some n, so adding the 2
+ bytes (NET_IP_ALIGN) gives a 4-byte alignment and so word-sized accesses through
+ that pointer are safe.
