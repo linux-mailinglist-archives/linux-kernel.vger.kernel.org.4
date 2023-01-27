@@ -2,124 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B19B67F157
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF25367F159
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjA0WpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S232365AbjA0Wq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:46:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbjA0WpR (ORCPT
+        with ESMTP id S231890AbjA0WqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:45:17 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFCA4A1F2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:45:17 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id w6-20020a17090ac98600b0022c58cc7a18so1602015pjt.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:45:17 -0800 (PST)
+        Fri, 27 Jan 2023 17:46:25 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181514A1F2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:46:24 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id jl3so6410317plb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:46:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5wXhf32dQp7HTWwdehDrHWyNx8yhhU2eOdzrxP6+BGI=;
-        b=GimRNURUFjc43aW2O7LkCumVac07xtD0EtgWJv8AuKxOL8gq0F5cbuLQbbMRCtZu6/
-         AVaHCmcguM92uDorzrTs7NL11hT3i1Ji5n6GjG3vc92S5mQBYyuz7Q1st9F4zYPOQznJ
-         jxM/DI9Bxfy6v07B3eexP9ojKJq/5Ih1BB9K8uj3HwQwV4LYHejyqelk7ltFd58Cj7p0
-         brOaVDfVzYA4FLqVYrcHDfUL7FKZLLUwgJmfkG/qEkiS14ov2jfPpUNiYOcxA4yaR/H5
-         4WD3mW/elbmkzKdU8lEbKEba5KQLsn2J3lQjDDcw9E3smdMcfdwlmB/i0guNnY9OFDBZ
-         /uSA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZEYnhr/B5b9mHUoTu3/hsSx7bXw1ljXohhUlX7HpfeQ=;
+        b=VX7UwjHqDndiT8deGr2yNk6PuKZhLEkrMsCxTDrbAD+YJvACNeKBitXSo7rWBR8s3A
+         hex+j/TahRdLE2+iXhdd/UZb1N5ZP4YjQpuOtlHkxjhl0l+XHWZNkWbRhb2cynLezN9V
+         1hWvNC6omWu32vQ0CgIM9Qu5o3NtRQfbjLQhTrtDyqqd/LoN6zYDH+S8qtTm+VsIyLvJ
+         66/r+PgaIWU5CQzt4XpAaNeEvNOtYUug32Sw7NpOk6GGqz/CB5yY9JiBRQB/YyScad1V
+         EmguIJVtWtaW2iLlKox6drY7m71gggdbgQHupqAv7gTX8JPpUS6O06qWYIU6BrEeKrB3
+         4Dew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5wXhf32dQp7HTWwdehDrHWyNx8yhhU2eOdzrxP6+BGI=;
-        b=JfUr+dlmZZUpsh76MAvbPxJv51v6hnVFdfgtv35IyCNPUIAZ8FWAosyIXltaDuWMkx
-         GTPaWf5Fig0JH9JoBc+x/kdJHvJHRDSQqdlzpvkdLf5nF71So1R4PJmlW/E41u1Ev9D/
-         MikqS4Nj+h5H362UgJ/kfPH53Pp+fzXfX7QyvWSn/ecyQJG6GoQvzOn3ioBhLqtKixBo
-         CcWLVyIM9eotcDuP6UhpHUklyUcDcYl9j/6SdlX/gnyzMQZSzLhvCSu+9Sm7TH4ES39h
-         3+LZ5AbkIZEY7cmdzE5E6d1tx9X0SGpdgMbLNZu800S5teUDULSFlarGv7v6ebhj7CE4
-         FHmQ==
-X-Gm-Message-State: AO0yUKUrEYl1+5MqnfWZNcqB5BH3D8f4Ime9lsK43KaYm1+9X8F6aKNQ
-        i/VIcvc2p7AqYJHlQNkWVjm8ug==
-X-Google-Smtp-Source: AK7set/urEU+vaRFtR4rBlynkEVi5f4STjzUbdQyrZbnvT7Ewn/tNuPq9vLB2Vx7dTjOwerq1lgG1A==
-X-Received: by 2002:a17:902:d4d1:b0:196:1f80:105a with SMTP id o17-20020a170902d4d100b001961f80105amr3123040plg.5.1674859516359;
-        Fri, 27 Jan 2023 14:45:16 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id a9-20020a170902ecc900b001949ae8c275sm3347677plh.141.2023.01.27.14.45.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 14:45:15 -0800 (PST)
-Message-ID: <6d3f76ae-9f86-a96e-d540-cfd45475e288@kernel.dk>
-Date:   Fri, 27 Jan 2023 15:45:14 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZEYnhr/B5b9mHUoTu3/hsSx7bXw1ljXohhUlX7HpfeQ=;
+        b=VPlqhn05AHPVxhZYstIO3G0TjMZTCFsJTy3UYE2KwCeLNZiBuTDyjfjMq+3WiZYEFV
+         5Ok4HD06R87OxZo2EyeglwogH4uBDbTNzhRPewnZmvW0FFdWIZjFInSQ2JkwQ5iprLvj
+         HoRJDW+9Pdw4B9RAxxbhv7zY5pyvYwUNi3Q7tlsXGesg61FMDZ+lWVEAyNEFK87lKmje
+         Zhr3SqqVGkUs1aScXHvzaPpvLU8T5n7Mlc4KdvS5uXEr7wzfP6RSPm6EUkqI7VZ2JDD/
+         2zTToU5foKpO02haea1qmPHw7/1fSgXZrjYAIQaz0vJaR5o7cFBXmwVzPvhMBKGtLnwU
+         Jt3w==
+X-Gm-Message-State: AO0yUKXONgK//hWbc6B61kKL/0EJgNJvZul5Oo/9Dczaaf8dnoybR/No
+        W5ZH9GEpzods4AcVGgDQjsjeZQ==
+X-Google-Smtp-Source: AK7set8OSkfemmivnzt+FaTqk7pVCDdsxRS5FakopzxPZyWWlPwJdqWTOnIrlHupwNkFnDayOuy2BQ==
+X-Received: by 2002:a17:90a:6949:b0:219:f970:5119 with SMTP id j9-20020a17090a694900b00219f9705119mr170655pjm.1.1674859583405;
+        Fri, 27 Jan 2023 14:46:23 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c71-20020a63354a000000b004cffa8c0227sm2802295pga.23.2023.01.27.14.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 14:46:22 -0800 (PST)
+Date:   Fri, 27 Jan 2023 22:46:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, like.xu.linux@gmail.com,
+        kan.liang@linux.intel.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v2 00/15] Introduce Architectural LBR for vPMU
+Message-ID: <Y9RUOvJ5dkCU9J8C@google.com>
+References: <20221125040604.5051-1-weijiang.yang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 1/2] io_uring,audit: audit IORING_OP_FADVISE but not
- IORING_OP_MADVISE
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>,
-        Richard Guy Briggs <rgb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-References: <cover.1674682056.git.rgb@redhat.com>
- <68eb0c2dd50bca1af91203669f7f1f8312331f38.1674682056.git.rgb@redhat.com>
- <CAHC9VhSZNGs+SQU7WCD+ObMcwv-=1ZkBts8oHn40qWsQ=n0pXA@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHC9VhSZNGs+SQU7WCD+ObMcwv-=1ZkBts8oHn40qWsQ=n0pXA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221125040604.5051-1-weijiang.yang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/23 3:35?PM, Paul Moore wrote:
-> On Fri, Jan 27, 2023 at 12:24 PM Richard Guy Briggs <rgb@redhat.com> wrote:
->>
->> Since FADVISE can truncate files and MADVISE operates on memory, reverse
->> the audit_skip tags.
->>
->> Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
->> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
->> ---
->>  io_uring/opdef.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/io_uring/opdef.c b/io_uring/opdef.c
->> index 3aa0d65c50e3..a2bf53b4a38a 100644
->> --- a/io_uring/opdef.c
->> +++ b/io_uring/opdef.c
->> @@ -306,12 +306,12 @@ const struct io_op_def io_op_defs[] = {
->>         },
->>         [IORING_OP_FADVISE] = {
->>                 .needs_file             = 1,
->> -               .audit_skip             = 1,
->>                 .name                   = "FADVISE",
->>                 .prep                   = io_fadvise_prep,
->>                 .issue                  = io_fadvise,
->>         },
+On Thu, Nov 24, 2022, Yang Weijiang wrote:
+> Intel CPU model-specific LBR(Legacy LBR) has evolved to Architectural
+> LBR(Arch LBR [0]), it's the replacement of legacy LBR on new platforms.
+> The native support patches were merged into 5.9 kernel tree, and this
+> patch series is to enable Arch LBR in vPMU so that guest can benefit
+> from the feature.
 > 
-> I've never used posix_fadvise() or the associated fadvise64*()
-> syscalls, but from quickly reading the manpages and the
-> generic_fadvise() function in the kernel I'm missing where the fadvise
-> family of functions could be used to truncate a file, can you show me
-> where this happens?  The closest I can see is the manipulation of the
-> page cache, but that shouldn't actually modify the file ... right?
+> The main advantages of Arch LBR are [1]:
+> - Faster context switching due to XSAVES support and faster reset of
+>   LBR MSRs via the new DEPTH MSR
+> - Faster LBR read for a non-PEBS event due to XSAVES support, which
+>   lowers the overhead of the NMI handler.
+> - Linux kernel can support the LBR features without knowing the model
+>   number of the current CPU.
+> 
+> From end user's point of view, the usage of Arch LBR is the same as
+> the Legacy LBR that has been merged in the mainline.
+> 
+> Note, in this series, there's one restriction for guest Arch LBR, i.e.,
+> guest can only set its LBR record depth the same as host's. This is due
+> to the special behavior of MSR_ARCH_LBR_DEPTH: 
+> 1) On write to the MSR, it'll reset all Arch LBR recording MSRs to 0s.
+> 2) XRSTORS resets all record MSRs to 0s if the saved depth mismatches
+> MSR_ARCH_LBR_DEPTH.
+> Enforcing the restriction keeps KVM Arch LBR vPMU working flow simple
+> and straightforward.
+> 
+> Paolo refactored the old series and the resulting patches became the
+> base of this new series, therefore he's the author of some patches.
 
-Yeah, honestly not sure where that came from. Maybe it's being mixed up
-with fallocate? All fadvise (or madvise, for that matter) does is
-provide hints on the caching or access pattern. On second thought, both
-of these should be able to set audit_skip as far as I can tell.
+To be very blunt, this series is a mess.  I don't want to point fingers as there
+is plenty of blame to go around.  The existing LBR support is a confusing mess,
+vPMU as a whole has been neglected for too long, review feedback has been relatively
+non-existent, and I'm sure some of the mess is due to Paolo trying to hastily fix
+things up back when this was temporarily queued.
 
--- 
-Jens Axboe
+However, for arch LBR support to be merged, things need to change.
 
+First and foremost, the existing LBR support needs to be documented.  Someone,
+I don't care who, needs to provide a detailed writeup of the contract between KVM
+and perf.  Specifically, I want to know:
+
+  1. When exactly is perf allowed to take control of LBR MRS.  Task switch?  IRQ?
+     NMI?
+
+  2. What is the expected behavior when perf is using LBRs?  Is the guest supposed
+     to be traced?
+
+  3. Why does KVM snapshot DEBUGCTL with IRQs enabled, but disables IRQs when
+     accessing LBR MSRs?
+
+It doesn't have to be polished, e.g. I'll happily wordsmith things into proper
+documentation, but I want to have a very clear understanding of how LBR support
+is _intended_ to function and how it all _actually_ functions without having to
+make guesses.
+
+And depending on the answers, I want to revisit KVM's LBR implementation before
+tackling arch LBRs.  Letting perf usurp LBRs while KVM has the vCPU loaded is
+frankly ridiculous.  Just have perf set a flag telling KVM that it needs to take
+control of LBRs and have KVM service the flag as a request or something.  Stealing
+the LBRs back in IRQ context adds a stupid amount of complexity without much value,
+e.g. waiting a few branches for KVM to get to a safe place isn't going to meaningfully
+change the traces.  If that can't actually happen, then why on earth does KVM need
+to disable IRQs to read MSRs?
+
+And AFAICT, since KVM unconditionally loads the guest's DEBUGCTL, whether or not
+guest branches show up in the LBRs when the host is tracing is completely up to
+the whims of the guest.  If that's correct, then again, what's the point of the
+dance between KVM and perf?
+
+Beyond the "how does this work" issues, there needs to be tests.  At the absolute
+minimum, there needs to be selftests showing that this stuff actually works, that
+save/restore (migration) works, that the MSRs can/can't be accessed when guest
+CPUID is (in)correctly configured, etc. And I would really, really like to have
+tests that force contention between host and guests, e.g. to make sure that KVM
+isn't leaking host state or outright exploding, but I can understand that those
+types of tests would be very difficult to write.
+
+I've pushed a heavily reworked, but definitely broken, version to
+
+  git@github.com:sean-jc/linux.git x86/arch_lbrs
+
+It compiles, but it's otherwise untested and there are known gaps.  E.g. I omitted
+toggling load+clear of ARCH_LBR_CTL because I couldn't figure out the intended
+behavior.
