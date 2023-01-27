@@ -2,96 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5427D67E8DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9464067E5E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233900AbjA0PCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:02:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
+        id S233202AbjA0M6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:58:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233716AbjA0PB6 (ORCPT
+        with ESMTP id S231281AbjA0M6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:01:58 -0500
-X-Greylist: delayed 967 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 Jan 2023 07:01:57 PST
-Received: from mx0a-00176a03.pphosted.com (mx0b-00176a03.pphosted.com [67.231.157.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13E8757B7;
-        Fri, 27 Jan 2023 07:01:57 -0800 (PST)
-Received: from pps.filterd (m0048299.ppops.net [127.0.0.1])
-        by m0048299.ppops.net-00176a03. (8.17.1.19/8.17.1.19) with ESMTP id 30R6j4FF008620;
-        Fri, 27 Jan 2023 07:57:19 -0500
-From:   Ian Ray <ian.ray@ge.com>
-To:     lars@metafoo.de, Michael.Hennerich@analog.com
-Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        ian.ray@ge.com
-Subject: [PATCH] drivers: iio: adc: ltc2497: fix LSB shift
-Date:   Fri, 27 Jan 2023 14:57:14 +0200
-Message-Id: <20230127125714.44608-1-ian.ray@ge.com>
-X-Mailer: git-send-email 2.10.1
-X-Proofpoint-ORIG-GUID: ZhqMomqWbtzWC2O6rSYnrsrZc8VQYowq
-X-Proofpoint-GUID: ZhqMomqWbtzWC2O6rSYnrsrZc8VQYowq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-27_08,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 lowpriorityscore=0
- bulkscore=0 impostorscore=0 mlxscore=0 phishscore=0 priorityscore=1501
- clxscore=1011 suspectscore=0 malwarescore=0 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301270122
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 27 Jan 2023 07:58:42 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EF968109
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:58:14 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-4c24993965eso65271077b3.12
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vh+bKXtdb/z1QCPxI2/PQtGdcBrzsfUgycixwIlm1Is=;
+        b=Rr8xhv/OSS7204WgMEKkwF53NcpYDuZMgCQvnk07CQgUmvxNYUMA1RASA9ajGe2IUm
+         PGUHbdjtv2Rxm0kppk9PehUhB8HOQE84PDOOidRDcJnHYDTgyjf+cpH98vOqAok2zNb1
+         D+nluFpWnwX6ZTnIy75oPmz0VgkhtWTs/aTq+WlyFKMvwLErBewvb8O2QqnwUH8prP10
+         7JQKsz37fibUYPXt59nDJnw8tr4saHruJxiDb3vmnk+5PSX5EXsUDydoexGlmMJNNvAY
+         XNZeBoaxWxT+BKQK5fxGD+oeCTp8bNrHV5fqp3nlV4iAU7IzNrh/McMlxTE4p28Ja3Os
+         /SHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vh+bKXtdb/z1QCPxI2/PQtGdcBrzsfUgycixwIlm1Is=;
+        b=Fc0G2PE6nAzCAzzziqtvOwa44UK4fDX9KlocaMRWJSucfM8lphKrwoeYt0HMvLeDZa
+         WfrYv02kKV76ds9MIL3Ou7BaZM3En1YwwqdwGGsDXN/TcfHlQ+DIVERlZc9DeI4FbOui
+         Z6/Efp4QLL8bX8bjNnnTYLm4kaIPsFVOd0YQ9ShQetMlGVAkgqSisyuSk+So25hYyTfB
+         RFwvX27U3/W/11d2iPhyeRmFLX17Peqh/rCw3XcBrJ5U3aJi88tl95HAvsPnCSnys5ch
+         nUC6OXcF3CvTg9HhdltbP/sOxGKXiEI0ah8VYbScrQQZxnAfpwCHYdv/Az9mR+X+3F6j
+         1hbA==
+X-Gm-Message-State: AO0yUKX7eDF4/yaDlTLjsNBjZuEdy40FbR4w7kQ/3v5uCb74MN8HSvEV
+        fLbX3QL7XpbMd+GUYvmD1kik7UpcIw3lmQtvP7gbbQ==
+X-Google-Smtp-Source: AK7set/pmEFwy14DSxUIoFhgRvUHxwHId97MCz3n4bGfCrxDLXaTZoxTOHGysbJaigoBiETZhxOz45r0mMfJ1dv4PhI=
+X-Received: by 2002:a05:690c:706:b0:506:6952:b9c9 with SMTP id
+ bs6-20020a05690c070600b005066952b9c9mr1266249ywb.477.1674824288171; Fri, 27
+ Jan 2023 04:58:08 -0800 (PST)
+MIME-Version: 1.0
+References: <20230126-gpio-mmio-fix-v1-0-8a20ce0e8275@ncr.com> <20230126-gpio-mmio-fix-v1-1-8a20ce0e8275@ncr.com>
+In-Reply-To: <20230126-gpio-mmio-fix-v1-1-8a20ce0e8275@ncr.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Jan 2023 13:57:57 +0100
+Message-ID: <CACRpkdYyRXx-Q4NYEUzpvmBEvyW5b9TVw7DngphhV56VJJCESw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] gpio: dt-bindings: add new property to wd,mbl-gpio bindings
+To:     nl250060@ncr.com
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct the "sub_lsb" shift for both ltc2497 and ltc2499.
+Hi Niall,
 
-An earlier version of the code shifted by 14 but this was a consequence
-of reading three bytes into a __be32 buffer and using be32_to_cpu(), so
-eight extra bits needed to be skipped.  Now we use get_unaligned_be24()
-and thus the additional skip is wrong.
+thanks for your patch!
 
-Fixes 2187cfe ("drivers: iio: adc: ltc2497: LTC2499 support")
-Signed-off-by: Ian Ray <ian.ray@ge.com>
----
- drivers/iio/adc/ltc2497.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+On Thu, Jan 26, 2023 at 11:18 AM Niall Leonard via B4 Submission
+Endpoint <devnull+nl250060.ncr.com@kernel.org> wrote:
 
-diff --git a/drivers/iio/adc/ltc2497.c b/drivers/iio/adc/ltc2497.c
-index 17370c5..ec198c6 100644
---- a/drivers/iio/adc/ltc2497.c
-+++ b/drivers/iio/adc/ltc2497.c
-@@ -28,7 +28,6 @@ struct ltc2497_driverdata {
- 	struct ltc2497core_driverdata common_ddata;
- 	struct i2c_client *client;
- 	u32 recv_size;
--	u32 sub_lsb;
- 	/*
- 	 * DMA (thus cache coherency maintenance) may require the
- 	 * transfer buffers to live in their own cache lines.
-@@ -65,10 +64,10 @@ static int ltc2497_result_and_measure(struct ltc2497core_driverdata *ddata,
- 		 * equivalent to a sign extension.
- 		 */
- 		if (st->recv_size == 3) {
--			*val = (get_unaligned_be24(st->data.d8) >> st->sub_lsb)
-+			*val = (get_unaligned_be24(st->data.d8) >> 6)
- 				- BIT(ddata->chip_info->resolution + 1);
- 		} else {
--			*val = (be32_to_cpu(st->data.d32) >> st->sub_lsb)
-+			*val = (be32_to_cpu(st->data.d32) >> 6)
- 				- BIT(ddata->chip_info->resolution + 1);
- 		}
- 
-@@ -122,7 +121,6 @@ static int ltc2497_probe(struct i2c_client *client)
- 	st->common_ddata.chip_info = chip_info;
- 
- 	resolution = chip_info->resolution;
--	st->sub_lsb = 31 - (resolution + 1);
- 	st->recv_size = BITS_TO_BYTES(resolution) + 1;
- 
- 	return ltc2497core_probe(dev, indio_dev);
--- 
-2.10.1
+>  Optional properties:
+>         - no-output: GPIOs are read-only.
+> +       - no-input: GPIOs are write-only. Read is via a shadow register.
 
+"Shadow register" is unclear technical lingo.
+
+Just write "GPIO output registers are write-only"
+
+DT bindings are OS neutral, the fact that Linux and other OS:es need to
+cache ("shadow") this value is an implementation detail.
+
+Yours,
+Linus Walleij
