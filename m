@@ -2,74 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E44367F0BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F1167F0C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbjA0V6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
+        id S229517AbjA0V7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:59:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbjA0V6f (ORCPT
+        with ESMTP id S229713AbjA0V7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:58:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E75A7E69D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:58:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E748C61DAD
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 21:58:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 51360C4339C;
-        Fri, 27 Jan 2023 21:58:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674856713;
-        bh=I8FrMcL01dMLStUIHTVhShExZfdUUxmy7m22x/AEZJs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=EdvyK6Sb/FGPpLMHG0nhazOGU2ZOWjaqg/yMPUJrZmhWy7+Io51afKZ/f1+hMvVfq
-         Sr3JVLCJf3GDoGgdyvQo6HTwxU8BMaYqG5FX0vbg33I0hivLAoMz+M17tOiDRkFbA2
-         DsGD6MVbTImxc7mWMV/M3QNbCMJ7vcEaUGtvervIF5uIxA01JvMLzI2atxQfevTwos
-         fLvpoPBJ7B6scXoQr62TjSceY+VbChNrnPmVTn40R4RmZVR+CjlOdAkhzXCiM5IApt
-         QAq6LOZp/U5t1BbYzk2Ys4KzMTSLCC5babJvVh/RtPGxpC/3rhmenpclFc0G93La7i
-         tmZYRpAlqB1tQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3A062F83ECD;
-        Fri, 27 Jan 2023 21:58:33 +0000 (UTC)
-Subject: Re: [GIT PULL] regulator fixes for v6.2-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230127190024.4066EC433D2@smtp.kernel.org>
-References: <20230127190024.4066EC433D2@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230127190024.4066EC433D2@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v6.2-rc5
-X-PR-Tracked-Commit-Id: 4bb3d82a1820c1b609ede8eb2332f3cb038c5840
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4d1483a99e9cdf2775ae93c49982042a0a103c29
-Message-Id: <167485671323.1722.6168514253955420388.pr-tracker-bot@kernel.org>
-Date:   Fri, 27 Jan 2023 21:58:33 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 27 Jan 2023 16:59:30 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BF9A7E078;
+        Fri, 27 Jan 2023 13:58:58 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B7CD31FB;
+        Fri, 27 Jan 2023 13:59:35 -0800 (PST)
+Received: from [10.57.88.221] (unknown [10.57.88.221])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC4143F5A1;
+        Fri, 27 Jan 2023 13:58:50 -0800 (PST)
+Message-ID: <dfad6d75-6f4d-99ef-1c6a-4bf397dcaa13@arm.com>
+Date:   Fri, 27 Jan 2023 21:58:46 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/4] iommu: Add a broken_unmanaged_domain flag in
+ iommu_ops
+Content-Language: en-GB
+To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
+        kevin.tian@intel.com, joro@8bytes.org, will@kernel.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        yong.wu@mediatek.com, matthias.bgg@gmail.com,
+        thierry.reding@gmail.com, alex.williamson@redhat.com,
+        cohuck@redhat.com
+Cc:     vdumpa@nvidia.com, jonathanh@nvidia.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <cover.1674849118.git.nicolinc@nvidia.com>
+ <0875479d24a53670e17db8a11945664a6bb4a25b.1674849118.git.nicolinc@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <0875479d24a53670e17db8a11945664a6bb4a25b.1674849118.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 27 Jan 2023 19:00:11 +0000:
+On 2023-01-27 20:04, Nicolin Chen wrote:
+> Both IOMMU_DOMAIN_UNMANAGED and IOMMU_DOMAIN_DMA require the support
+> of __IOMMU_DOMAIN_PAGING capability, i.e. iommu_map/unmap. However,
+> some older iommu drivers do not fully support that, and these drivers
+> also do not advertise support for dma-iommu.c via IOMMU_DOMAIN_DMA,
+> or use arm_iommu_create_mapping(), so largely their implementations
+> of IOMMU_DOMAIN_UNMANAGED are untested. This means that a user like
+> vfio/iommufd does not likely work with them.
+> 
+> Several of them have obvious problems:
+>    * fsl_pamu_domain.c
+>      Without map/unmap ops in the default_domain_ops, it isn't an
+>      unmanaged domain at all.
+>    * mtk_iommu_v1.c
+>      With a fixed 4M "pagetable", it can only map exactly 4G of
+>      memory, but doesn't set the aperture.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v6.2-rc5
+The aperture is easily fixed (one could argue that what's broken there 
+are the ARM DMA ops for assuming every IOMMU has a 32-bit IOVA space and 
+not checking).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4d1483a99e9cdf2775ae93c49982042a0a103c29
+>    * tegra-gart.c
+>      Its notion of attach/detach and groups has to be a complete lie to
+>      get around all the other API expectations.
 
-Thank you!
+That's true, and the domain is tiny and not isolated from the rest of 
+the address space outside the aperture, but the one thing it does do is 
+support iommu_map/unmap just fine, which is what this flag is documented 
+as saying it doesn't.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> Some others might work but have never been tested with vfio/iommufd:
+>    * msm_iommu.c
+>    * omap-iommu.c
+>    * tegra-smmu.c
+
+And yet they all have other in-tree users (GPUs on MSM and Tegra, 
+remoteproc on OMAP) that allocate unmanaged domains and use 
+iommu_map/unmap just fine, so they're clearly not broken either.
+
+On the flipside, you're also missing cases like apple-dart, which can 
+have broken unmanaged domains by any definition, but only under certain 
+conditions (at least it "fails safe" and they will refuse attempts to 
+attach anything). I'd also question sprd-iommu, which hardly has a 
+generally-useful domain size, and has only just recently gained the 
+ability to unmap anything successfully. TBH none of the SoC IOMMUs are 
+likely to ever be of interest to VFIO or IOMMUFD, since the only things 
+they could assign to userspace are the individual devices - usually 
+graphics and media engines - that they're coupled to, whose useful 
+functionality tends to depend on clocks, phys, and random other 
+low-level stuff that would be somewhere between impractical and 
+downright unsafe to attempt to somehow expose as well.
+
+> Thus, mark all these drivers as having "broken" UNAMANGED domains and
+> add a new device_iommu_unmanaged_supported() API for vfio/iommufd and
+> dma-iommu to refuse to work with these drivers.
+> 
+> Co-developed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+
+[...]
+
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 46e1347bfa22..919a5dbad75b 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -245,6 +245,10 @@ struct iommu_iotlb_gather {
+>    *                    pasid, so that any DMA transactions with this pasid
+>    *                    will be blocked by the hardware.
+>    * @pgsize_bitmap: bitmap of all possible supported page sizes
+> + * @broken_unmanaged_domain: IOMMU_DOMAIN_UNMANAGED is not fully functional; the
+> + *                           driver does not really support iommu_map/unmap, but
+> + *                           uses UNMANAGED domains for the IOMMU API, called by
+> + *                           other SOC drivers.
+
+"uses UNMANAGED domains for the IOMMU API" is literally the definition 
+of unmanaged domains :/
+
+Some "other SOC drivers" use more of the IOMMU API than VFIO does :/
+
+Please just add IOMMU_CAP_IOMMUFD to represent whatever the nebulous 
+requirements of IOMMUFD actually are (frankly it's no less informative 
+than calling domains "broken"), handle that in the drivers you care 
+about and have tested, and use device_iommu_capable(). What you're 
+describing in this series is a capability, and we have a perfectly good 
+API for drivers to express those already. Plus, as demonstrated above, a 
+positive capability based on empirical testing will be infinitely more 
+robust than a negative one based on guessing.
+
+Thanks,
+Robin.
