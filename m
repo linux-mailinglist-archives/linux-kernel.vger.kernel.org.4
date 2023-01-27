@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D7867E81D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC82867E81F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbjA0OWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:22:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S231980AbjA0OWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:22:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjA0OWb (ORCPT
+        with ESMTP id S232664AbjA0OWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:22:31 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B05F7F31A;
-        Fri, 27 Jan 2023 06:22:30 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id t18so5140648wro.1;
-        Fri, 27 Jan 2023 06:22:30 -0800 (PST)
+        Fri, 27 Jan 2023 09:22:34 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404248419A;
+        Fri, 27 Jan 2023 06:22:33 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id h12so5100776wrv.10;
+        Fri, 27 Jan 2023 06:22:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bDAPnltMdRm1ugUQxshJ1/bx7aojXccJ0679qqZoo0Q=;
-        b=kAeJjQWJNHE8CQ+467n+ObDLeH4XMup0tRUWzagdgBA/kl4NBhb8rC8PA/xHCUQlMx
-         VpKIlKn6ZJpAeVDDSdCq+1opeE2lagO1r0FrrS4n2JvsLRBPSgk+HcnCsNZ4Xvqy6BMt
-         Ns+FWpszlBigRvayDY/W4ZdHNGimw9x9VL2s2uJysB659gpPvaCfu9RSuipnOYmlb42s
-         gErKWigh8MzVh/4ynTUMRKjhpEn7JhoZXCH4AZm0UETYnpfVE6wERUnsDydgHYmjYfd6
-         7giwlAJThu3O00H3BdSUEDhMNkDBtScm8BmXk9arnw+PI2ZC/aPjd5b0EXDM3xVPsAEM
-         DnkA==
+        bh=vP+rhIH9mNOkOjcXJ9CVHf6dwRVakHxg9jm1BkBlrsk=;
+        b=Ax+WWrbJ9jIuxe1ElYzKFHmskU0zGhoJboqcMGFcRAgF7IuHudLGDukdYgE3cW8PVm
+         1+D5guEUUA6sqWmlJ8UDSwDLbo1ViQQ91OttDP7nhOedE5aH9YHYfOGFro9GILKerVqU
+         g3ox0nL8gMz9t6PqzYW95i0ZyioLFZe/AZndRUuZJP8qfvXLE34DcWrioc+31MutOWLQ
+         KNk4uroTiOovFuLTYvGKCnVsDIYDavd+LhJFvOob/DphJRIO0Ly4l3gh8dhEpWthuFYD
+         cEoXCTmPtsn4WG1Lv7FcJXKgATEnmJetMikiHKUNw7h/oQjahKJTS5KLWKukqKNpyfV7
+         unTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bDAPnltMdRm1ugUQxshJ1/bx7aojXccJ0679qqZoo0Q=;
-        b=6JZKpOk1IoVJvbmJMvOTAiqoJRxVn0t9sq1gaViQuSed8X/rl05ZQGwiqZGJ6xUWmz
-         l+/tJwerzZtEoL/Rl9zdikrbdv/uSpa25zBJda31zC8IxVS0pr82FIgHEv5vYuM8tQrc
-         3q/oO0thGicXVXAO+Ms5oBIElUILuWGxJlN0Wtc4LakZteywHRy7aTt9KkcBE72VbI5C
-         2YB33SHkazEv0HfbikwKuUrg57N+UPTKLdd48eS4zUnoUS19fo9wcqmxagIW+z8NVh7I
-         TVDSfd0FwpGwGVuNJzNvl/yrHp+IdEazqiFmPYWXsPWBNaUCmeL9I91o++HEZdLm+dHe
-         5dwQ==
-X-Gm-Message-State: AFqh2kpYuG63NhanowcWlHZr3wqPLxANKRtpyI787GMiPoQQvcRQqvzF
-        Ho2NYT8ceGm1SaDip3MgQf8=
-X-Google-Smtp-Source: AMrXdXuPgItqz2YFvhsDQUBsxBJbBa6hpjC4Ng9uwYW9LPS5ffYmGUsO6XjxmQBMsTS0MoiexZGNqQ==
-X-Received: by 2002:a05:6000:1c0e:b0:2be:5403:45ef with SMTP id ba14-20020a0560001c0e00b002be540345efmr27000772wrb.6.1674829349079;
-        Fri, 27 Jan 2023 06:22:29 -0800 (PST)
+        bh=vP+rhIH9mNOkOjcXJ9CVHf6dwRVakHxg9jm1BkBlrsk=;
+        b=YM7uYbgwG0bTkwhSvXF/IZNI3Xt+5B62QIMZq+MZ4LiDp/uzdBDlySV1+mH6yMdQ8n
+         T6mf0ERhXHwxYMmvk/eROtI9Q91Si8wf5KWWJbFwFjixXug0sjdx7mtV048mDtArp8XB
+         hEHA9hT/mZ3sfTZgxrk9ux1vcokxBOaPMAgjO9DyrCdmuC7apuatBe81nvN1ifMRTG3a
+         6yyEPr1KI7/2JlaNnk41/rkqzjTtjnRYxKiY4vKdZjt0D73GQ9yxjrqo7pDCfYzrNEpk
+         N2qgX6Rg8rezEYxBpcw+IuyWHVfjXmjdqvI7WIel4TKPZLv4AUxxIQtXEHn+W8YWnMBf
+         QYsA==
+X-Gm-Message-State: AFqh2kqjCzfIrAKGScCPao3Ns7E/qWlnbXmDNiHeNBLjbmCISVwfLaQ8
+        3iW+HQu3t/KX8yV/aWYFRJE=
+X-Google-Smtp-Source: AMrXdXsef18V9RoF1zoMane1QGci9nSqkakcINjFi5UsiBoFE4hvVo3/UpKvBXXVkitmcqc90kUlrA==
+X-Received: by 2002:a05:6000:1e04:b0:2bd:e8c2:c9bc with SMTP id bj4-20020a0560001e0400b002bde8c2c9bcmr34979943wrb.42.1674829351706;
+        Fri, 27 Jan 2023 06:22:31 -0800 (PST)
 Received: from toolbox.. ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id c11-20020adfa30b000000b002bfb5ebf8cfsm4301039wrb.21.2023.01.27.06.22.26
+        by smtp.gmail.com with ESMTPSA id c11-20020adfa30b000000b002bfb5ebf8cfsm4301039wrb.21.2023.01.27.06.22.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 06:22:28 -0800 (PST)
+        Fri, 27 Jan 2023 06:22:31 -0800 (PST)
 From:   Christian Hewitt <christianshewitt@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -60,9 +60,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Christian Hewitt <christianshewitt@gmail.com>
-Subject: [PATCH v2 1/5] arm64: dts: meson: bananapi-m5: switch VDDIO_C pin to OPEN_DRAIN
-Date:   Fri, 27 Jan 2023 14:22:17 +0000
-Message-Id: <20230127142221.3718184-2-christianshewitt@gmail.com>
+Subject: [PATCH v2 2/5] arm64: dts: meson: bananapi-m5: remove redundant status from sound node
+Date:   Fri, 27 Jan 2023 14:22:18 +0000
+Message-Id: <20230127142221.3718184-3-christianshewitt@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230127142221.3718184-1-christianshewitt@gmail.com>
 References: <20230127142221.3718184-1-christianshewitt@gmail.com>
@@ -78,35 +78,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For proper warm (re)boot from SD card the BPI-M5 board requires TFLASH_VDD_EN
-and VDDIO_C pins to be switched to high impedance mode. This can be achieved
-using OPEN_DRAIN instead of ACTIVE_HIGH to leave the GPIO pins in input mode
-and retain high state (pin has the pull-up).
+The sound device is enabled by default so remove the redundant status.
 
-This change is inspired by meson-sm1-odroid.dtsi where OPEN_DRAIN has been
-used to resolve similar problems with the Odroid C4 board (TF_IO in the C4
-dts is the equivalent regulator).
-
-Fixes: 976e920183e4 ("arm64: dts: meson-sm1: add Banana PI BPI-M5 board dts")
-Suggested-by: Neil Armstrong <neil.armstrong@linaro.org>
 Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
 ---
- arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-index 028220ed45ad..3c1267a7ffef 100644
+index 3c1267a7ffef..86f0afe6491e 100644
 --- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
 +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-@@ -123,7 +123,7 @@ vddio_c: regulator-vddio_c {
- 		regulator-min-microvolt = <1800000>;
- 		regulator-max-microvolt = <3300000>;
+@@ -233,7 +233,6 @@ sound {
+ 		assigned-clock-rates = <294912000>,
+ 				       <270950400>,
+ 				       <393216000>;
+-		status = "okay";
  
--		enable-gpio = <&gpio_ao GPIOE_2 GPIO_ACTIVE_HIGH>;
-+		enable-gpio = <&gpio_ao GPIOE_2 GPIO_OPEN_DRAIN>;
- 		enable-active-high;
- 		regulator-always-on;
- 
+ 		dai-link-0 {
+ 			sound-dai = <&frddr_a>;
 -- 
 2.34.1
 
