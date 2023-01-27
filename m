@@ -2,111 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C84767E556
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8F667E55F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 13:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbjA0MfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 07:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
+        id S233934AbjA0Mf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 07:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233691AbjA0Meu (ORCPT
+        with ESMTP id S233931AbjA0Mft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 07:34:50 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9622B783F7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:34:33 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id j17so3371891wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:34:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nFBq+LWNx9OQ5NIBolt0/CB9kGTsCrF8UXkK5/8aTUk=;
-        b=E1Qar4eVRNKn7I+1ANxO82Oz7QAtYGqHewiZptFAGgK8eaCfBsh4aj3/MwXf+ErAa8
-         11AlArtPGDoIURssZaiBuGstWaGoSu3dcJljdqXluwBaApVtTYx4Eo9jRpLXUxnBTx9b
-         T6xjz9xIpjFpe94kv3uFTYnpGv40ChMpcQ3snQpcV8urwPeQWchYb3rR9SQ1dqc/cK8Q
-         QEZE8noKB6O/GYbBKhTqekArLFTn8WSsxl/PqAheTaY3piCCk7WCyKhTONO8gs1g6y56
-         A324UQlxJMmsLZ2ta0Q09opa59hoNB3Hf9meWroatX4DYOrG6MSqRuxqsVCJddJjQeB/
-         PXIw==
+        Fri, 27 Jan 2023 07:35:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A8A4ABF3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:34:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674822894;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AvUZq9zhTSOpariEqdt1IfiEXwlz3ceeVpAzNf6gzS4=;
+        b=XSDDoUkEeAr4ljmfRC3SW9+o9yYVHGpATMyeql/aSmTNE8QpZt99E3aRy6PpFom6dYCt0f
+        +hebG8IAfz9wWkTD4ubmSccmFip4atotTS6H65C7zmjKT8vMkzVZgrqim7feZH3/2iTflO
+        AonQOWZTcfQ1LsymzhlLGbAX8muPWJA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-586-LzON_jDzPkS0uVylfr037A-1; Fri, 27 Jan 2023 07:34:53 -0500
+X-MC-Unique: LzON_jDzPkS0uVylfr037A-1
+Received: by mail-wm1-f70.google.com with SMTP id l19-20020a05600c1d1300b003dc13fc9e42so2722569wms.3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 04:34:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nFBq+LWNx9OQ5NIBolt0/CB9kGTsCrF8UXkK5/8aTUk=;
-        b=RrzpnVJZtkssNH1KjHQkYAdoFyHJvvRNdIRJwHqj10wpDwBxk1s38LlhMmFAkEuxGE
-         R0Zb5CUmKXYdXlAtU8mY65b1JYlSfQ4+lf/IDcayL6Hr2gmFG7uZtpA8i42iE60cnsIy
-         MwaltL5/5TjteXmtSIOLW68KB9ZA0KmBIpIMUpKNZMyUT3C9BUbt3Bi18vluyza4k/Lx
-         5kv2XHucbAg44m9nbHTrGp5UiFD9Nm8FPT6B1/gs1c6k6r1XSSG+WJCC3O9jPVoTUxL0
-         TohOu9yjeD/XBQhmObMOVd9MqCgh6jBCWMd41Lay8/vhD0uqFz8b+8s675sKLemZdsCo
-         zfcA==
-X-Gm-Message-State: AO0yUKUQ4T4J/AYiLvGknXmwPpaUc3BBlYFp2/KNm1m+STmvrVlVLKUy
-        fGlKa9e9bMCfCAQvUinJYDbsfA==
-X-Google-Smtp-Source: AK7set+oJEfGmo1/jdHpJGcP3MHNQJUAXDul5H1sxGP4LQF77hoAznOLVtjO67vr1M0M1dG6MuYKuA==
-X-Received: by 2002:a05:600c:3511:b0:3dc:3da0:171f with SMTP id h17-20020a05600c351100b003dc3da0171fmr1279712wmq.41.1674822872068;
-        Fri, 27 Jan 2023 04:34:32 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id a19-20020a05600c349300b003cfa622a18asm7918199wmq.3.2023.01.27.04.34.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 04:34:31 -0800 (PST)
-Date:   Fri, 27 Jan 2023 14:34:30 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: dts: qcom: sm8550-mtp: correct
- vdd-l5-l16-supply
-Message-ID: <Y9PE1tdk/LucFXfn@linaro.org>
-References: <20230127121843.349738-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AvUZq9zhTSOpariEqdt1IfiEXwlz3ceeVpAzNf6gzS4=;
+        b=SFoJ1SLUXA7QhfFS1Q71D4kijJZa7XOiDX0LBIF6YF4+mqopnN7ajeRJOjA5vjczu/
+         DYnpeNkGegfA6WEBcQcBnnCVLQkvnmFXW2PalpsMODwHGAY/N4bDOtYSof9HUY+q3Axb
+         IpjPLwRDe11JnHsJehYLHiBYMruCcJ0mkQhM9jNV1V8GN9iU5/oXxm5qJROdTuj3jjxb
+         YAgQL7t63Pfn+O42y07pVLZrOn9otZQiQFs9YOYEm1Ua5DbFtp/rnMQQOTSsp8ml0NCm
+         Yq7PzBdBEv5wfMFmAuoM3bU3VMAwsml9wrj4iNYfI8yPVc7UwfHM4vkNcGuxpi5GaKJX
+         u2hg==
+X-Gm-Message-State: AO0yUKW2LZ36YIzUUbTjEtCV+lfpKnL9l/cdFuU6Yxhy1+i0FrrYibHn
+        ObJRxoKE/Zrld2O5kJy9AIDEJuM1Afa4i2LtlayTbgx6Utg3lvzHfKvzvbIw6zYZZa3GysuPsxS
+        f8TitLqMWGaP7dTmkW0A2mxrl
+X-Received: by 2002:adf:c7c2:0:b0:2bf:d617:6aa0 with SMTP id y2-20020adfc7c2000000b002bfd6176aa0mr1251838wrg.66.1674822892430;
+        Fri, 27 Jan 2023 04:34:52 -0800 (PST)
+X-Google-Smtp-Source: AK7set8KHfQ+JrxXe4wE8YfNkipOTaYkjMGsfUoE0u82WBLyCb+27hsIT6Rl48f0jOZhn5HYYgkV8g==
+X-Received: by 2002:adf:c7c2:0:b0:2bf:d617:6aa0 with SMTP id y2-20020adfc7c2000000b002bfd6176aa0mr1251801wrg.66.1674822892038;
+        Fri, 27 Jan 2023 04:34:52 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:2600:5c01:dcac:6d6:415? (p200300cbc70526005c01dcac06d60415.dip0.t-ipconnect.de. [2003:cb:c705:2600:5c01:dcac:6d6:415])
+        by smtp.gmail.com with ESMTPSA id a17-20020a5d53d1000000b0024cb961b6aesm3841439wrw.104.2023.01.27.04.34.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 04:34:51 -0800 (PST)
+Message-ID: <cbca813e-cdaf-6938-570e-17dd26e3cd87@redhat.com>
+Date:   Fri, 27 Jan 2023 13:34:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127121843.349738-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v11 2/8] iov_iter: Add a function to extract a page list
+ from an iterator
+Content-Language: en-US
+To:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>
+Cc:     David Howells <dhowells@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20230126141626.2809643-1-dhowells@redhat.com>
+ <20230126141626.2809643-3-dhowells@redhat.com> <Y9L3yA+B1rrnrGK8@ZenIV>
+ <Y9MAbYt6DIRFm954@ZenIV> <ba3adce1-ddea-98e0-fc3a-1cb660edae4c@redhat.com>
+ <Y9Mwt1EMm8InCHvA@ZenIV> <20230127123030.qfmgkthuzlxadpkk@quack3>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230127123030.qfmgkthuzlxadpkk@quack3>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-27 13:18:43, Krzysztof Kozlowski wrote:
-> Fix typo in vdd-l5-l16 supply of qcom,pm8550-rpmh-regulators.
+On 27.01.23 13:30, Jan Kara wrote:
+> On Fri 27-01-23 02:02:31, Al Viro wrote:
+>> On Fri, Jan 27, 2023 at 12:44:08AM +0100, David Hildenbrand wrote:
+>>> On 26.01.23 23:36, Al Viro wrote:
+>>>> On Thu, Jan 26, 2023 at 09:59:36PM +0000, Al Viro wrote:
+>>>>> On Thu, Jan 26, 2023 at 02:16:20PM +0000, David Howells wrote:
+>>>>>
+>>>>>> +/**
+>>>>>> + * iov_iter_extract_will_pin - Indicate how pages from the iterator will be retained
+>>>>>> + * @iter: The iterator
+>>>>>> + *
+>>>>>> + * Examine the iterator and indicate by returning true or false as to how, if
+>>>>>> + * at all, pages extracted from the iterator will be retained by the extraction
+>>>>>> + * function.
+>>>>>> + *
+>>>>>> + * %true indicates that the pages will have a pin placed in them that the
+>>>>>> + * caller must unpin.  This is must be done for DMA/async DIO to force fork()
+>>>>>> + * to forcibly copy a page for the child (the parent must retain the original
+>>>>>> + * page).
+>>>>>> + *
+>>>>>> + * %false indicates that no measures are taken and that it's up to the caller
+>>>>>> + * to retain the pages.
+>>>>>> + */
+>>>>>> +static inline bool iov_iter_extract_will_pin(const struct iov_iter *iter)
+>>>>>> +{
+>>>>>> +	return user_backed_iter(iter);
+>>>>>> +}
+>>>>>> +
+>>>>>
+>>>>> Wait a sec; why would we want a pin for pages we won't be modifying?
+>>>>> A reference - sure, but...
+>>>>
+>>>> After having looked through the earlier iterations of the patchset -
+>>>> sorry, but that won't fly for (at least) vmsplice().  There we can't
+>>>> pin those suckers;
+>>>
+>>> We'll need a way to pass FOLL_LONGTERM to pin_user_pages_fast() to handle
+>>> such long-term pinning as vmsplice() needs. But the release path (unpin)
+>>> will be the same.
+>>
+>> Umm...  Are you saying that if the source area contains DAX mmaps, vmsplice()
+>> from it will fail?
 > 
-> Fixes: 71342fb91eae ("arm64: dts: qcom: Add base SM8550 MTP dts")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Yes, that's the plan. Because as you wrote elsewhere, it is otherwise too easy
+> to lock up operations such as truncate(2) on DAX filesystems.
 
-Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+Right, it's then the same behavior as we already have for other 
+FOLL_LONGTERM users, such as RDMA or io_uring.
 
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Correct, not drop (Abel, Konrad).
-> ---
->  arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> index 725d3bc3ee72..5db6e789e6b8 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> @@ -47,7 +47,7 @@ regulators-0 {
->  		vdd-bob2-supply = <&vph_pwr>;
->  		vdd-l2-l13-l14-supply = <&vreg_bob1>;
->  		vdd-l3-supply = <&vreg_s4g_1p3>;
-> -		vdd-l6-l16-supply = <&vreg_bob1>;
-> +		vdd-l5-l16-supply = <&vreg_bob1>;
->  		vdd-l6-l7-supply = <&vreg_bob1>;
->  		vdd-l8-l9-supply = <&vreg_bob1>;
->  		vdd-l11-supply = <&vreg_s4g_1p3>;
-> -- 
-> 2.34.1
-> 
+... if we're afraid of breaking existing setups we could add some kind 
+of fallback to copy to a buffer like ordinary pipe writes.
+
+-- 
+Thanks,
+
+David / dhildenb
+
