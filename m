@@ -2,136 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBCA367F115
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0FA67F11A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 23:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbjA0WXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 17:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
+        id S232898AbjA0W3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 17:29:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232861AbjA0WXJ (ORCPT
+        with ESMTP id S231743AbjA0W3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 17:23:09 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E7A875AD
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:23:07 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so6347873wml.3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:23:07 -0800 (PST)
+        Fri, 27 Jan 2023 17:29:30 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C716086EBF
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:29:28 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id m7-20020a17090a71c700b0022c0c070f2eso9322195pjs.4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:29:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hw5WZV22kIf8LV4BYYD5zMZGL9QT6puKpKuaXbM0YSg=;
-        b=07HB0DkOvEmzPwgdHTYPWBEwazvDvzxyXCvfZeEWHr7ZQVYrN23FroZHnqI9o3YYHb
-         nOWJYm863srNOIMCCwZ2mMY/KM8WhFtuv6NHRyWz2MbzQsVDPELd6js2CKsC4nrYRvI4
-         g8Y6/f2s6qoCR3kIyWQ3MO01DIQ7riQpvmCfRabBEjF2zCvpJv7i7FCTrehYbECTWJO3
-         qUHmBwjPcl7oPemz/n+ztbqiG6jcanAHYa5sIB4chD0sQ95oaUIX9Hx0AVlal7PEvguQ
-         VRlBBwN62OsA0Smn4ziJiYerSpQy3W3RdvWKeyMAlihnyK8qfl5qMQ3Kq+LPoM9VtcQt
-         Klow==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tBDTJUFvOvLe8zxVo3fN71Ve2f8EQzmQK5VcIUe+DW4=;
+        b=dI8Uc8ZeGmmKvwcvrW1r6U90XYaOeH7k9bGWvMC2B3U6aBWv24EHMIJDabHFN68Jdc
+         0GeAN31Kgtad8Jt1lYjcniqmjOvFvUsoSJB5I34SrTK3+GLzjx5E8beTmrXL+FH6tgph
+         ndKgXV1r6VanZBmYReyzDWmutPJR+inORkj39EU+ip4DPxsQFCQlP/ptlDiOnnVzYCF9
+         zAgyUlbbBrHvlIGncOXJJ3rxO9p6OCTEmkyriUF8+bPxl52Lq9RvMIsoXj3RIXtjrvMU
+         4TkSbXaTE8ElgJ0DmyztEFREtxgZAzIGntPJ5XKuAPsjGOoV0CqmJdlzAHg5HN+3yqt8
+         EzSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hw5WZV22kIf8LV4BYYD5zMZGL9QT6puKpKuaXbM0YSg=;
-        b=NEguBDKCR6Kw5Ekgm/jdhWr4R15ba6xhXeB/KmI9q4y7BC/ZMRsnJbceaS3pyut6df
-         K+FHdCDbm8dRbCPQQodoq87Zs6XsrqRUmZ6Ct3f4/gq3XsTsyiDIKFhWFvW4CtaQ6iYT
-         HVVji4IzqHfCfzOulf4X6C+PfgPepI2sA5BMuoJvqY0PYGcSoNskew8sM5SMFdZD3aG2
-         d4mctR2d+UkM9j34uU2gshkL2GwvlrN+02Hs9aQVULTI3cwUdIyC7jSlWTT6PvdOJMuZ
-         1w8ZmczTkm+95QbS4hRXXfglVorxB3/2SQSYz6aWZp5VX/zrvUz8fATETRhRBzFUmmvv
-         C2Ug==
-X-Gm-Message-State: AFqh2kq0oh2+CvcrZjZlwOmJdv+l4rhNgBIWuAcSp8eyj2sA2lVtsnWS
-        ufeW+5U5pBvBfJd7f6fVwzbfcA==
-X-Google-Smtp-Source: AMrXdXsAOA3YpQ4mwC7XEGlfoY6kbh9XeRRAB2vBaRPH37DPkopUrTvg7H0JBMp+rt9MvYA3N+zi/g==
-X-Received: by 2002:a05:600c:4d93:b0:3d9:efd1:214d with SMTP id v19-20020a05600c4d9300b003d9efd1214dmr41147873wmp.25.1674858186392;
-        Fri, 27 Jan 2023 14:23:06 -0800 (PST)
-Received: from [192.168.0.20] (62.213.132.195.rev.sfr.net. [195.132.213.62])
-        by smtp.gmail.com with ESMTPSA id j38-20020a05600c1c2600b003daff80f16esm12461874wms.27.2023.01.27.14.23.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 14:23:05 -0800 (PST)
-Message-ID: <81989ddf-4439-c176-e003-891f80a4e291@baylibre.com>
-Date:   Fri, 27 Jan 2023 23:23:04 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tBDTJUFvOvLe8zxVo3fN71Ve2f8EQzmQK5VcIUe+DW4=;
+        b=sgvFlNgu0XGlxz1pyIxlOQ1dMFs2vc3S60X9oPX5WbpTc/XVT4ZxzDUbH0v9d9LbPP
+         i//2WqRtx6ar4TmKc6LJJs9KDqYvyVEk4noXLzxQsfCAM+ApupFEknbadLMzucWLBgIs
+         NUs8laMOo+YSt2uKR4v1cOYpHSPCtdWv8XYC8INwXoJRuOjo0yv+sAUX2N0DKDNNnDYj
+         jB2korCyLDDCmhRZFSQNasOr6PS3TmBjRFLoHTrcLt8gsCJjT383nD6FW1ELKaKBtY97
+         tq7WDWShizZL0w1hWahiAGMYUGzQp44SrXEWOyEezkG7eAsAlWzub4B2cThuohVg+osV
+         5i6A==
+X-Gm-Message-State: AO0yUKUCpbK4P6iTdlB0AEB9CzsGm4YPmBNCbZV7dGGrP9/OsiK5mPZT
+        Ad2ophhJqRtJtMPym4jggyrxEw3RDCxQ1ZSQZjrPJw==
+X-Google-Smtp-Source: AK7set8T/qv93wAgM/ZyOlrx9hNItAMM2Ck32gQb/PF6EHV1/En8vzDVl18DrAyo/AHdjjBAp+7QEUl3clPEwlai/HE=
+X-Received: by 2002:a17:90a:c204:b0:22c:1613:164f with SMTP id
+ e4-20020a17090ac20400b0022c1613164fmr1364669pjt.103.1674858568225; Fri, 27
+ Jan 2023 14:29:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v9 0/5] thermal: mediatek: Add support for MT8365 SoC
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Michael Kao <michael.kao@mediatek.com>
-References: <20221018-up-i350-thermal-bringup-v9-0-55a1ae14af74@baylibre.com>
- <afa4aacd-bacf-a545-3973-474286fd4b9c@linaro.org>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <afa4aacd-bacf-a545-3973-474286fd4b9c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <73e639d5-702b-0d03-16d9-a965b1963ef6@huawei.com>
+ <Y6RRfF5yRew7rdCp@hirez.programming.kicks-ass.net> <Y9GG3N5ivVvyETa2@u40bc5e070a0153.ant.amazon.com>
+ <Y9J25xMrItpeHIxD@hirez.programming.kicks-ass.net> <Y9LG5vkf/4ufJb35@u40bc5e070a0153.ant.amazon.com>
+ <Y9O5Fwfib2CVAMwl@hirez.programming.kicks-ass.net> <CAKfTPtBMSg2SDXq=sVt99TyM+tEXRFL74EQ57-t5uKYAXUUyLg@mail.gmail.com>
+ <xm26v8kr7ho0.fsf@google.com>
+In-Reply-To: <xm26v8kr7ho0.fsf@google.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 27 Jan 2023 23:29:16 +0100
+Message-ID: <CAKfTPtBaL06+EFUscYqgA=psTV4r-MxVwxyKHXDXppWPD2ku0w@mail.gmail.com>
+Subject: Re: [bug-report] possible s64 overflow in max_vruntime()
+To:     Benjamin Segall <bsegall@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Roman Kagan <rkagan@amazon.de>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/27/23 22:59, Daniel Lezcano wrote:
-> On 27/01/2023 16:44, Amjad Ouled-Ameur wrote:
->> This patchset adds thermal support for MT8365 SoC.
->>
->> MT8365 has 4 thermal sensors, one for CPUs and the rest for debug/dev
->> purposes. The CPU thermal zone uses passive cooling device with
->> CPU{0..3}.
->>
->> Changes in v9:
->> - Use delay between bank init and the thermal zone device register.
->> - Link to v8: https://lore.kernel.org/r/20221018-up-i350-thermal-bringup-v8-0-23e8fbb08837@baylibre.com
->>
->> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> ---
->> Amjad Ouled-Ameur (2):
->>        thermal: mediatek: add callback for raw to mcelsius conversion
->>        thermal: mediatek: add delay after thermal banks initialization
->>
->> Fabien Parent (2):
->>        dt-bindings: thermal: mediatek: add binding documentation for MT8365 SoC
->>        thermal: mediatek: add support for MT8365 SoC
->>
->> Markus Schneider-Pargmann (1):
->>        thermal: mediatek: control buffer enablement tweaks
->>
->>   .../bindings/thermal/mediatek-thermal.txt          |   1 +
->>   drivers/thermal/mtk_thermal.c                      | 117 +++++++++++++++++----
->>   2 files changed, 96 insertions(+), 22 deletions(-)
->> ---
+On Fri, 27 Jan 2023 at 23:10, Benjamin Segall <bsegall@google.com> wrote:
 >
-> Applied, with some changes and the subject fixed:
+> Vincent Guittot <vincent.guittot@linaro.org> writes:
 >
-> Subject format for thermal is: thermal/drivers/<thedriver>: [A-Z]*.
+> > On Fri, 27 Jan 2023 at 12:44, Peter Zijlstra <peterz@infradead.org> wrote:
+> >>
+> >> On Thu, Jan 26, 2023 at 07:31:02PM +0100, Roman Kagan wrote:
+> >>
+> >> > > All that only matters for small sleeps anyway.
+> >> > >
+> >> > > Something like:
+> >> > >
+> >> > >         sleep_time = U64_MAX;
+> >> > >         if (se->avg.last_update_time)
+> >> > >           sleep_time = cfs_rq_clock_pelt(cfs_rq) - se->avg.last_update_time;
+> >> >
+> >> > Interesting, why not rq_clock_task(rq_of(cfs_rq)) - se->exec_start, as
+> >> > others were suggesting?  It appears to better match the notion of sleep
+> >> > wall-time, no?
+> >>
+> >> Should also work I suppose. cfs_rq_clock takes throttling into account,
+> >> but that should hopefully also not be *that* long, so either should
+> >> work.
+> >
+> > yes rq_clock_task(rq_of(cfs_rq)) should be fine too
 >
-> Thanks
+> No, last_update_time is based on cfs_rq_clock_pelt(cfs_rq), and it will
+> get more and more out of sync as time goes on, every time the cfs_rq
+> throttles. It won't reset when the throttle is done.
 
-Thank you Daniel for applying the patchset.
-
-Kindly,
-
-Amjad
+I was referring to the rq_clock_task(rq_of(cfs_rq)) - se->exec_start
+that Roman was asking for
 
 >
->   -- Daniel
->
+> >
+> > Another thing to take into account is the sleeper credit that the
+> > waking task deserves so the detection should be done once it has been
+> > subtracted from vruntime.
+> >
+> > Last point, when a nice -20 task runs on a rq, it will take a bit more
+> > than 2 seconds for the vruntime to be increased by more than 24ms (the
+> > maximum credit that a waking task can get) so threshold must be
+> > significantly higher than 2 sec. On the opposite side, the lowest
+> > possible weight of a cfs rq is 2 which means that the problem appears
+> > for a sleep longer or equal to 2^54 = 2^63*2/1024. We should use this
+> > value instead of an arbitrary 200 days
