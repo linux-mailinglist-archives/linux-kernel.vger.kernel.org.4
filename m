@@ -2,93 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7843167EAC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A3867EAD3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 17:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234815AbjA0QXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 11:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51108 "EHLO
+        id S234881AbjA0QYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 11:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbjA0QX3 (ORCPT
+        with ESMTP id S234860AbjA0QYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:23:29 -0500
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E74972643
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:23:27 -0800 (PST)
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 6988C11E3;
-        Fri, 27 Jan 2023 17:23:23 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 6988C11E3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-        t=1674836603; bh=HFtCjUzVv6apt9RAMKC5bQL3yGHddvmCJcNQXNjbmQU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IpC8aex1xztHx+vCdN0KLrBAcTaNmNf9+t55wIPsjBft/8Dj2aTSmRnjbIZv8mSWn
-         MgEgtwAolFaCoOlGbC+Oc2896R9XuSL+GB6UPqx++Q/RzfvhK5yQ9LtcSujkgEavdI
-         bZJUUE/f7hyBi2ldl2GT2iFOewfmI0iaqOTwFiFY=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: perex)
-        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-        Fri, 27 Jan 2023 17:23:13 +0100 (CET)
-Message-ID: <2e9f4301-0211-04f5-5b38-caf2be9f4fd1@perex.cz>
-Date:   Fri, 27 Jan 2023 17:23:12 +0100
+        Fri, 27 Jan 2023 11:24:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE3724C94
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:23:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674836624;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ay4J8NiVmukoYZxh47vc7cE5H4Ol6HWWCqzI6lRkn7Y=;
+        b=Rs0GPDnoCswTwWrVBO0j5MNvN7IO8sRNlAfxBJkNDzvqpC2asVNdrhK2WUhNXk+j2bIC57
+        l7oHAP4XYn9HSlLR8ZZBJsLqrn97uJuQn30cFQQ4+TH3sEjz1g6yxtxZ4zDUv7M1ZIe9gs
+        F3xdtjs1sijcCCxGKv5s4MYt9bZQ7pM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-609-CyzsZ-kiMEa2VjA4g8ZEAQ-1; Fri, 27 Jan 2023 11:23:42 -0500
+X-MC-Unique: CyzsZ-kiMEa2VjA4g8ZEAQ-1
+Received: by mail-wm1-f70.google.com with SMTP id u12-20020a05600c210c00b003da1c092b83so1640906wml.7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 08:23:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ay4J8NiVmukoYZxh47vc7cE5H4Ol6HWWCqzI6lRkn7Y=;
+        b=prZFviVsniuiEDm3PhnYpUeQ3DQmgqT+8mW384MFFEMF/SWru9wozLzmJxxp1Idyuu
+         t/k/a/e8ibv+fSHISrV2VDzxW/GK31bVa05IC7Wax9hnVnxsGJkrLeIDnCGqISQ8hBe5
+         SokaTOKwAp+G4j672bWvRlQKODs0sOMOn4YijvLoGz7nyDJqj94nI0YMj3/dK8265Ca+
+         Kz5y7WSyyn6UdiNXmGwDKHk5oFh+6DCy/gh8J9vLCWw7Z1KaptpcQnur5/xDIV7s+2QU
+         4DlxkffvVT/zPwXr25n3o7MxWMJoi+cKq2o08zDgfH86SGTWX1jhiZGwAzYOHKr0KBbB
+         QhWw==
+X-Gm-Message-State: AFqh2krFC9Uwf6aUkz1AdO7wsUvU/J/ArDLSzMsjs4wMOzQhDv9Zlqln
+        dlUYJXxsE32LmyJu38kHWOsK7mEA6ADT/gP0G8CObSt655rdshySj7oVo3HeRHoGK9VLOplbqT5
+        Jr/swg9V+bp4MlFCTOPBHUYU+
+X-Received: by 2002:adf:a318:0:b0:2bd:dc0c:ffd1 with SMTP id c24-20020adfa318000000b002bddc0cffd1mr36614104wrb.13.1674836621246;
+        Fri, 27 Jan 2023 08:23:41 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuB2dMIFD7bUBu52H/xM+AQhiucG06bJTl/Uapk0YVnQa+vB4PB/FAEEMFu1JwsZHx3L7robg==
+X-Received: by 2002:adf:a318:0:b0:2bd:dc0c:ffd1 with SMTP id c24-20020adfa318000000b002bddc0cffd1mr36614088wrb.13.1674836620959;
+        Fri, 27 Jan 2023 08:23:40 -0800 (PST)
+Received: from ?IPV6:2003:d8:2f16:1800:a9b4:1776:c5d9:1d9a? (p200300d82f161800a9b41776c5d91d9a.dip0.t-ipconnect.de. [2003:d8:2f16:1800:a9b4:1776:c5d9:1d9a])
+        by smtp.gmail.com with ESMTPSA id r8-20020adfda48000000b002be25db0b7bsm4403700wrl.10.2023.01.27.08.23.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 08:23:40 -0800 (PST)
+Message-ID: <4ad5163f-5368-0bd8-de9b-1400a7a653ed@redhat.com>
+Date:   Fri, 27 Jan 2023 17:23:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH 2/6] ASoC: amd: yc: Add a module parameter to influence
- pdm_gain
+Subject: Re: [PATCH 1/2] mm: hugetlb: proc: check for hugetlb shared PMD in
+ /proc/PID/smaps
 Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mukunda Vijendar <Vijendar.Mukunda@amd.com>,
-        Saba Kareem Syed <Syed.SabaKareem@amd.com>,
+To:     Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Cc:     Pananchikkal Renjith <Renjith.Pananchikkal@amd.com>,
-        Mark Pearson <mpearson@lenovo.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org
-References: <20230127160134.2658-1-mario.limonciello@amd.com>
- <20230127160134.2658-3-mario.limonciello@amd.com>
-From:   Jaroslav Kysela <perex@perex.cz>
-In-Reply-To: <20230127160134.2658-3-mario.limonciello@amd.com>
+Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Peter Xu <peterx@redhat.com>, Michal Hocko <mhocko@suse.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org
+References: <20230126222721.222195-1-mike.kravetz@oracle.com>
+ <20230126222721.222195-2-mike.kravetz@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230126222721.222195-2-mike.kravetz@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27. 01. 23 17:01, Mario Limonciello wrote:
-> In case of regressions for any users that the new pdm_gain value is
-> too high and for additional debugging, introduce a module parameter
-> that would let them configure it.
+On 26.01.23 23:27, Mike Kravetz wrote:
+> A hugetlb page will have a mapcount of 1 if mapped by multiple processes
+> via a shared PMD.  This is because only the first process increases the
+> map count, and subsequent processes just add the shared PMD page to
+> their page table.
 > 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> page_mapcount is being used to decide if a hugetlb page is shared or
+> private in /proc/PID/smaps.  Pages referenced via a shared PMD were
+> incorrectly being counted as private.
+> 
+> To fix, check for a shared PMD if mapcount is 1.  If a shared PMD is
+> found count the hugetlb page as shared.  A new helper to check for a
+> shared PMD is added.
+> 
+> Fixes: 25ee01a2fca0 ("mm: hugetlb: proc: add hugetlb-related fields to /proc/PID/smaps")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 > ---
->   sound/soc/amd/yc/acp6x-pdm-dma.c | 7 ++++++-
->   sound/soc/amd/yc/acp6x.h         | 2 +-
->   2 files changed, 7 insertions(+), 2 deletions(-)
+>   fs/proc/task_mmu.c      | 10 ++++++++--
+>   include/linux/hugetlb.h | 12 ++++++++++++
+>   2 files changed, 20 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index e35a0398db63..cb9539879402 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -749,8 +749,14 @@ static int smaps_hugetlb_range(pte_t *pte, unsigned long hmask,
+>   
+>   		if (mapcount >= 2)
+>   			mss->shared_hugetlb += huge_page_size(hstate_vma(vma));
+> -		else
+> -			mss->private_hugetlb += huge_page_size(hstate_vma(vma));
+> +		else {
 
-...
+Better:
 
->   	pdm_ctrl = acp6x_readl(acp_base + ACP_WOV_MISC_CTRL);
-> -	pdm_ctrl |= ACP_WOV_MISC_CTRL_MASK;
-> +	pdm_ctrl |= FIELD_PREP(ACP_WOV_GAIN_CONTROL, pdm_gain);
+if (mapcount >= 2 || hugetlb_pmd_shared(pte))
+	mss->shared_hugetlb += huge_page_size(hstate_vma(vma));
+else
+	mss->private_hugetlb += huge_page_size(hstate_vma(vma));
 
-The bits should be zeroed (AND - &) before OR to make sure that the correct 
-value is written to the register. More related patches are affected.
 
->   	acp6x_writel(pdm_ctrl, acp_base + ACP_WOV_MISC_CTRL);
-
-					Jaroslav
 
 -- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+Thanks,
+
+David / dhildenb
 
