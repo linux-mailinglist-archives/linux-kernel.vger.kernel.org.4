@@ -2,136 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0D767E41F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA0867E425
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233989AbjA0Ltg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40688 "EHLO
+        id S234043AbjA0LvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:51:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234091AbjA0LtS (ORCPT
+        with ESMTP id S234653AbjA0Lub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:49:18 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6742D7BBCC
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:46:48 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id v23so4700089plo.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:46:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jnrc8gEkUSVHuwwvdrRQLi4j91HYcX9bQ8UOEavZrS4=;
-        b=ANQYTRMLAXmY6HvrFxYXtV/9gV9ir4BWVlikE8Unn2l5RyfiF8h8DV/w4lOHoBc3B/
-         Ia4WhlfQovB3RW0v4y8irRTKzNEQms/XVuxn64bpOkoaY+wMnh9Ng4HIkEltdazEEfIp
-         vrQ7nLWWWYnq4HkrpBNQUy0KTuiQhtdwQtLyQqo1odpHyTRN3kh2ejMtRLqzuUjpNVEZ
-         KzgAwqPTQC8iiEu8kIJN51M86kE8LqiZV625PMs6ByS/QFDIUuWPc2pWn6C7Kzc4IFr8
-         gzXEUqpzTOBLIRJnuX4ks6bLTXRqnCJjGnVZFFsfP7bY4nuR/VRNsXA2iHune3UHilV/
-         VP1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jnrc8gEkUSVHuwwvdrRQLi4j91HYcX9bQ8UOEavZrS4=;
-        b=EPDwYpQ3yZ4z+it11GbV2zq4xqpi5ptZW69i2l3shUfN7N8DciZ1M/9aoeV2BtI9pS
-         9H+TDbZBERUnnaIYTZWlBAacajoWbgsY7q1DinJZnt6p4IvjAythtnFHoFIXereRQF2o
-         V1nacGHGSkzndFXpxYP4v7dOrTGaHZFg5sxV7GYBOxyyD4tvKltASIZxH90r+r8ccd5b
-         o5AYpcW3cjxyo1LDlQL/1kysT7xHAuFh6L2cdq01qUleBmiO2NKec6sz5brDFUe6NuWH
-         l2focJe3SfU345LdcFd+d2QAPncLqTfzf5DMYo3gu3CITgXwK967wKmJ1CY2QFO4Ze5l
-         GvmA==
-X-Gm-Message-State: AFqh2kq9zRCcZKK2EgT4g6980OORC/D9aaU8+6Jg5A3nfQzTC1T+d7vd
-        QxMGIzfBVcHGBGoULBqiRH0=
-X-Google-Smtp-Source: AMrXdXv0QRXVx18e7HvcncCVkQXcZP+GAYOT+45/eUMSBnBUJEPZQnfucAn8oSJ5FK1cKOhCTUy0sQ==
-X-Received: by 2002:a17:90a:f604:b0:229:9627:80b2 with SMTP id bw4-20020a17090af60400b00229962780b2mr40398122pjb.46.1674819935801;
-        Fri, 27 Jan 2023 03:45:35 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id o7-20020a17090ad24700b00229b17bb1e8sm2644812pjw.34.2023.01.27.03.45.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 03:45:34 -0800 (PST)
-Date:   Fri, 27 Jan 2023 20:45:28 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Ingo Molnar <mingo@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH mm-unstable] lib/Kconfig.debug: do not enable
- DEBUG_PREEMPT by default
-Message-ID: <Y9O5WAtEeVDyHwQX@hyeyoo>
-References: <20230121033942.350387-1-42.hyeyoo@gmail.com>
- <Y9HfHKXRPLrfG6g1@P9FQF9L96D.corp.robot.car>
+        Fri, 27 Jan 2023 06:50:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EED7DBF1;
+        Fri, 27 Jan 2023 03:48:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0610E61B48;
+        Fri, 27 Jan 2023 11:45:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA25EC433EF;
+        Fri, 27 Jan 2023 11:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674819955;
+        bh=+HZedC1yYWn9RpT0uEg90it6dWEPBAOVrFjpfrJEmQA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gXiPe9Dgc9ISKhiSOrlvRd3vLkCrFPKbID9Sdqb8YTmyUV5MkO+qxCXN0rHEb/eSp
+         q6Nu+oZWk7Z+bnW8piP441ATYZ0bgF8mB1wY/+gqEh/LoquSECvV9RNKpLJFsaaPPS
+         aSDMWgOBNEd5cIzWxcjZXzjRMhgQ+tTvJrgG5zyQ=
+Date:   Fri, 27 Jan 2023 12:45:52 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 571/606] serial: sc16is7xx: Convert to i2c's .probe_new()
+Message-ID: <Y9O5cMnC+uKrPToz@kroah.com>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-572-uwe@kleine-koenig.org>
+ <536ac08e-bdbd-b4d6-8309-8f6763f8db12@kernel.org>
+ <20221121070757.cqiybt5uk4qiczmr@pengutronix.de>
+ <0bfea903-5efd-a76d-5944-16a2c9362adb@kernel.org>
+ <20221123080912.lbmfgnco67psdu27@pengutronix.de>
+ <20230127101025.evefhpwpfikahd3k@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y9HfHKXRPLrfG6g1@P9FQF9L96D.corp.robot.car>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230127101025.evefhpwpfikahd3k@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 06:02:04PM -0800, Roman Gushchin wrote:
-> On Sat, Jan 21, 2023 at 12:39:42PM +0900, Hyeonggon Yoo wrote:
-> > In workloads where this_cpu operations are frequently performed,
-> > enabling DEBUG_PREEMPT may result in significant increase in
-> > runtime overhead due to frequent invocation of
-> > __this_cpu_preempt_check() function.
+On Fri, Jan 27, 2023 at 11:10:25AM +0100, Uwe Kleine-König wrote:
+> Hello,
+> 
+> On Wed, Nov 23, 2022 at 09:09:12AM +0100, Uwe Kleine-König wrote:
+> > On Wed, Nov 23, 2022 at 07:36:52AM +0100, Jiri Slaby wrote:
+> > > On 21. 11. 22, 8:07, Uwe Kleine-König wrote:
+> > > > On Mon, Nov 21, 2022 at 07:03:41AM +0100, Jiri Slaby wrote:
+> > > > > On 18. 11. 22, 23:45, Uwe Kleine-König wrote:
+> > > > > > From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> > > > > > 
+> > > > > > .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> > > > > > that explicitly in the probe function.
+> > > > > 
+> > > > > I wonder why -- is this a new approach to probe functions? Or is only i2c
+> > > > > affected? And why? Could you point to the commit introducing and describing
+> > > > > the change in the i2c core?
+> > > > 
+> > > > I didn't sent the cover letter to all recipents of the individual
+> > > > patches, so flow of information is a bit rough. Sorry about that.
+> > > > 
+> > > > You can find it at
+> > > > https://lore.kernel.org/lkml/20221118224540.619276-1-uwe@kleine-koenig.org/,
+> > > > it should answer your question.
+> > > 
+> > > Yes, I looked up that beforehand, but was no more clever after reading it.
+> > > 
+> > > > The short version is: The i2c framework does a more or less expensive
+> > > > lookup for each call to .probe() to provide the id parameter. A relevant
+> > > > part of the drivers however doesn't use this parameter, so the idea is
+> > > > to let the drivers who actually need it, determine it themselves.
+> > > > 
+> > > > Statistics for the current state of this series in my tree:
+> > > > Among the 602 converted drivers, 404 don't make use of the parameter.
+> > > 
+> > > So doesn't it make sense to provide both probe with no id and "probe_id"
+> > > then? 200 is quite a few (a third to be precise).
 > > 
-> > This can be demonstrated through benchmarks such as hackbench where this
-> > configuration results in a 10% reduction in performance, primarily due to
-> > the added overhead within memcg charging path.
+> > Having the probe callback with the id parameter is only temporary. As
+> > soon as all drivers are converted, the variant with the id parameter
+> > will go away.
 > > 
-> > Therefore, do not to enable DEBUG_PREEMPT by default and make users aware
-> > of its potential impact on performance in some workloads.
+> > > BTW is this a performance issue? I.e. does it slow down the boot?
 > > 
-> > hackbench-process-sockets
-> > 		      debug_preempt	 no_debug_preempt
-> > Amean     1       0.4743 (   0.00%)      0.4295 *   9.45%*
-> > Amean     4       1.4191 (   0.00%)      1.2650 *  10.86%*
-> > Amean     7       2.2677 (   0.00%)      2.0094 *  11.39%*
-> > Amean     12      3.6821 (   0.00%)      3.2115 *  12.78%*
-> > Amean     21      6.6752 (   0.00%)      5.7956 *  13.18%*
-> > Amean     30      9.6646 (   0.00%)      8.5197 *  11.85%*
-> > Amean     48     15.3363 (   0.00%)     13.5559 *  11.61%*
-> > Amean     79     24.8603 (   0.00%)     22.0597 *  11.27%*
-> > Amean     96     30.1240 (   0.00%)     26.8073 *  11.01%*
+> > I don't know the start motivation for Lee (who triggered the conversion
+> > in b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back
+> > type")).
+> > Looking at the git history, he created 1e98dcd77970 ("mfd: 88pm860x:
+> > Move over to new I2C device .probe() call") converting a driver that
+> > doesn't benefit immensely. The lookup is more expensive for drivers with
+> > big .id_table, the converted driver has only one entry.
 > > 
-> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> > I think in the end is a mixture between:
+> > 
+> >  - A big part of the drivers doesn't benefit from the lookup.
+> >  - For most other busses the probe function only gets a device parameter
+> >    and no id (spi, platform, i3c). There are counter examples though:
+> >    amba, usb. Didn't check further.
 > 
-> Nice!
+> The discussion somehow ended here without a real result.
 > 
-> I checkout my very simple kmem performance test (1M allocations 8-bytes allocations)
-> and it shows ~30% difference: 112319 us with vs 80836 us without.
-
-Hello Roman,
-
-Oh, it has higher impact on micro benchmark.
-
+> As of today's next master there are only 9 drivers left using .probe().
+> So I'd like to stop this discussion and ask to apply the conversion for
+> the sc16is7xx driver to be able to complete the conversion.
 > 
-> Probably not that big for real workloads, but still nice to have.
-> 
-> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> My plan is to drop the .probe callback as it is today after the next
+> merge window. So I ask the serial maintainers to either take the patch
+> under discussion for the next merge window or accept that the conversion
+> is done together with the patch that drops .probe() that probably will
+> go in via the i2c tree.
 
-Thank you for kindly measuring impact of this patch
-and giving ack!
+I don't see the patch anymore, so I have no objection for it going
+through the i2c tree.
 
-> Thank you!
-> 
+thanks,
 
---
-Thanks,
-Hyeonggon
+greg k-h
