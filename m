@@ -2,144 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C2267E934
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FC667E93A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 16:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234307AbjA0PQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 10:16:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49590 "EHLO
+        id S234331AbjA0PRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 10:17:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbjA0PQ1 (ORCPT
+        with ESMTP id S234364AbjA0PRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:16:27 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0793040E1;
-        Fri, 27 Jan 2023 07:16:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1674832586; x=1706368586;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=J85XzxxjAKCt6wUsJoyOWvpKjjyw1igxFqPQ00CyA24=;
-  b=o8NVY8FAE8oBz4G/C/L6u5uBpBoY+E1cfyYD5xtHEJhnW6+qUT/Lt5c3
-   HVmrwlZ83YWqlq54L9H1fLvDy/ol4ZnICLpPgvaA3T5jKt2Qvv9FNgOgv
-   Ezic3X47Ufn7mtlZAvUORCnfQl3WX3gnI4mP3k0nRBMy4ZBKP5Q+09euG
-   M=;
-X-IronPort-AV: E=Sophos;i="5.97,251,1669075200"; 
-   d="scan'208";a="292851507"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 15:16:23 +0000
-Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com (Postfix) with ESMTPS id A7AA943230;
-        Fri, 27 Jan 2023 15:16:21 +0000 (UTC)
-Received: from EX19D009UWB003.ant.amazon.com (10.13.138.95) by
- EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Fri, 27 Jan 2023 15:16:21 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX19D009UWB003.ant.amazon.com (10.13.138.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.24; Fri, 27 Jan 2023 15:16:21 +0000
-Received: from dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (10.15.11.255)
- by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP Server id
- 15.0.1497.45 via Frontend Transport; Fri, 27 Jan 2023 15:16:20 +0000
-Received: by dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (Postfix, from userid 23027615)
-        id 6FD3220D34; Fri, 27 Jan 2023 16:16:19 +0100 (CET)
-From:   Pratyush Yadav <ptyadav@amazon.de>
-To:     Dhruva Gole <d-gole@ti.com>
-CC:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vaishnav Achath <vaishnav.a@ti.com>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Takahiro.Kuwano@infineon.com>
-Subject: Re: [PATCH v2 1/4] spi: cadence-quadspi: Reset CMD_CTRL Reg on cmd
- r/w completion
-References: <20230125081023.1573712-1-d-gole@ti.com>
-        <20230125081023.1573712-2-d-gole@ti.com>
-Date:   Fri, 27 Jan 2023 16:16:19 +0100
-In-Reply-To: <20230125081023.1573712-2-d-gole@ti.com> (Dhruva Gole's message
-        of "Wed, 25 Jan 2023 13:40:20 +0530")
-Message-ID: <mafs07cx8f1oc.fsf_-_@amazon.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Fri, 27 Jan 2023 10:17:07 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DD77C177
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 07:16:56 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 319972B;
+        Fri, 27 Jan 2023 07:17:38 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.48.236])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D79113F64C;
+        Fri, 27 Jan 2023 07:16:54 -0800 (PST)
+Date:   Fri, 27 Jan 2023 15:16:52 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        robin.murphy@arm.com
+Subject: Re: [PATCH V2] arm64/mm: Intercept pfn changes in set_pte_at()
+Message-ID: <Y9Pq5JAhfsdIwRsr@FVFF77S0Q05N>
+References: <20230109052816.405335-1-anshuman.khandual@arm.com>
+ <e924c1aa-5f04-fd7f-52d4-7cf22c476016@arm.com>
+ <20230126133321.GB29148@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126133321.GB29148@willie-the-truck>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 26, 2023 at 01:33:22PM +0000, Will Deacon wrote:
+> On Tue, Jan 24, 2023 at 11:11:49AM +0530, Anshuman Khandual wrote:
+> > On 1/9/23 10:58, Anshuman Khandual wrote:
+> > > Changing pfn on a user page table mapped entry, without first going through
+> > > break-before-make (BBM) procedure is unsafe. This just updates set_pte_at()
+> > > to intercept such changes, via an updated pgattr_change_is_safe(). This new
+> > > check happens via __check_racy_pte_update(), which has now been renamed as
+> > > __check_safe_pte_update().
+> > > 
+> > > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > > Cc: Will Deacon <will@kernel.org>
+> > > Cc: Mark Rutland <mark.rutland@arm.com>
+> > > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > > Cc: linux-arm-kernel@lists.infradead.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> > > ---
+> > > This applies on v6.2-rc3. This patch had some test time on an internal CI
+> > > system without any issues being reported.
+> > 
+> > Gentle ping, any updates on this patch ? Still any concerns ?
+> 
+> I don't think we really got to the bottom of Mark's concerns with
+> unreachable ptes on the stack, did we? I also have vague recollections
+> of somebody (Robin?) running into issues with the vmap code not honouring
+> BBM.
+> 
+> So I think we should confirm/fix the vmap issue before we enable this check
+> and also try to get some testing coverage to address Mark's worries. I think
+> he has a syzkaller instance set up, so that sound like a good place to
+> start.
 
-Hi,
+I've thrown my Syzkaller instance at this patch; if it doesn't find anything by
+Monday I reckon we should pick this up.
 
-On Wed, Jan 25 2023, Dhruva Gole wrote:
+That said, I had some minor nits on the patch; I'm not sure if you'd be happy
+to apply the suggested changes when applying or if you'd prefer that Anshuman
+applies those locally and sense a v3.
 
-> If one leaves the CQSPI_REG_CMDCTRL in an unclean state this may cause
-> issues in future command reads. This issue came to light when some flash
-> reads in STIG mode were coming back dirty.
-
-Can you explain in more detail what you mean by "reads coming back
-dirty"? Because I don't see any clear reason why not resetting the
-register would break anything. We re-create the register value from the
-scratch on the next read anyway, and as soon as you writel() that, the
-old fields get thrown away anyway.
-
->
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> ---
->  drivers/spi/spi-cadence-quadspi.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-> index 676313e1bdad..6030da942c6e 100644
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
-> @@ -549,6 +549,9 @@ static int cqspi_command_read(struct cqspi_flash_pdata *f_pdata,
->                 memcpy(rxbuf, &reg, read_len);
->         }
->
-> +       /* Reset CMD_CTRL Reg once command read completes */
-> +       writel(0, reg_base + CQSPI_REG_CMDCTRL);
-> +
->         return 0;
->  }
->
-> @@ -613,7 +616,12 @@ static int cqspi_command_write(struct cqspi_flash_pdata *f_pdata,
->                 }
->         }
->
-> -       return cqspi_exec_flash_cmd(cqspi, reg);
-> +       ret = cqspi_exec_flash_cmd(cqspi, reg);
-> +
-> +       /* Reset CMD_CTRL Reg once command write completes */
-> +       writel(0, reg_base + CQSPI_REG_CMDCTRL);
-> +
-> +       return ret;
->  }
->
->  static int cqspi_read_setup(struct cqspi_flash_pdata *f_pdata,
-> --
-> 2.25.1
->
-
--- 
-Regards,
-Pratyush Yadav
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
-
+Thanks,
+Mark.
