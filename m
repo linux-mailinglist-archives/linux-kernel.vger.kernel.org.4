@@ -2,127 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031C067E31B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E3C67E31F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 12:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbjA0LUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 06:20:45 -0500
+        id S233294AbjA0LVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 06:21:07 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbjA0LU2 (ORCPT
+        with ESMTP id S233160AbjA0LUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 06:20:28 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3C714222;
-        Fri, 27 Jan 2023 03:19:13 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2A3AD21889;
-        Fri, 27 Jan 2023 11:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674818344; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jg6tAtljWkLOtzvKkDNIoiHHgxanNXV1iXTx9cL+UQU=;
-        b=utmF3gy7DItB+OI2ZalxyBwjhN8ryT8raie78QEcmelb6Gaa27V6jEgklx42rzficIjadI
-        nu+HqyEOKtdYizLCOtQkNWx4S2VvGWugKipxH2r9HOc4bA9hB+YRcYXTY/zW8bW0QlDX7r
-        g41e96/5ttY1iEwr1MNKmU14WzKGC0w=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A46122C141;
-        Fri, 27 Jan 2023 11:19:03 +0000 (UTC)
-Date:   Fri, 27 Jan 2023 12:19:03 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Seth Forshee (DigitalOcean)" <sforshee@digitalocean.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, live-patching@vger.kernel.org,
+        Fri, 27 Jan 2023 06:20:44 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4641A7AE6E
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:19:32 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id bk16so4643959wrb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 03:19:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UHPOSXcl0PvUmCRJGe++fk0HPlizptRgv2FYZzA8BdM=;
+        b=SZSZC43JlERBqyAp9tfew+eUJBbA43EsO5khxkd+BuRYoVSrnKE3/RcuNe6kLPBHPW
+         JiL4/FbmThbpEkU7p+o4+sJXFdZwyV2rq1mEjLx6YIcjHwzGId7+sAnJRtxc/+KwaG4w
+         udafqMLhPKNMTraaDLqdHzPx11rCc3EzB8i5SlzygWrkJSWHJKXMP3BYpP/Us6R73Hu/
+         gSsMmlxah56UeIZu0J+lPscAiQsEza3DryaUHfJuBcd4SPOaZwzdAhcQ6z7Z9BiSfzFS
+         sd8Qe78eddnxcNU9kqHlcvNwleB8CBDD+3xHxP4yho+WYTEy8Q5b0J0ZxRh6g2SOKS8h
+         tD8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UHPOSXcl0PvUmCRJGe++fk0HPlizptRgv2FYZzA8BdM=;
+        b=EBjD5udDACHvxX5hQCqGun7TslgMBdOUfSuUnJxtJ6Aul1tAd+tx5vAcQUF1BLmSLv
+         UIXUWlr/tOZG+DonsolsYKnxkv+dZd91Lh6Q+Xd01Wi6nLng+14/49FbufvouE9PtuX4
+         RQTFEVShwA/F3Px6z9DiiysXY38oTNFA2dol1tdxqnFv56iUxMO76SNGIY7gmMb5Foxx
+         IrBj2IMshJkRnqAwYs5NIovQJ7zOzJCGLIUrYZh+/z46/0qQioCwOg7G5OCqEy68ZFa8
+         KndaGWcUruu5xHnMfiVOSL3BqO41NYTetFma67Q+iPD3+igI89wl193mKsJ5hDfoUp4L
+         RinA==
+X-Gm-Message-State: AFqh2kpBZX22qKZ0SXW+qluHgCNz3M5y+c9CeEFoqw4pLCMM2o1NH32/
+        moooZGwQCk3yCcDQ+Vk6RaL3PQ==
+X-Google-Smtp-Source: AMrXdXtZvYUmimVob4GRlbfZ1q03+OU88lXorrqvQgya3LHTNzI8WFF5gCfot/o1U0GDuqK6Wh3U8w==
+X-Received: by 2002:adf:e310:0:b0:2bd:d8f1:2edf with SMTP id b16-20020adfe310000000b002bdd8f12edfmr35173274wrj.49.1674818357628;
+        Fri, 27 Jan 2023 03:19:17 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l15-20020a5d6d8f000000b002bfb37497a8sm4157584wrs.31.2023.01.27.03.19.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 03:19:17 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] vhost: improve livepatch switching for heavily
- loaded vhost worker kthreads
-Message-ID: <Y9OzJzHIASUeIrzO@alley>
-References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
- <Y9KyVKQk3eH+RRse@alley>
- <Y9LswwnPAf+nOVFG@do-x1extreme>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: qcom: sm8550-mtp: drop incorrect vdd-l6-l16-supply
+Date:   Fri, 27 Jan 2023 12:19:13 +0100
+Message-Id: <20230127111913.117036-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9LswwnPAf+nOVFG@do-x1extreme>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2023-01-26 15:12:35, Seth Forshee (DigitalOcean) wrote:
-> On Thu, Jan 26, 2023 at 06:03:16PM +0100, Petr Mladek wrote:
-> > On Fri 2023-01-20 16:12:20, Seth Forshee (DigitalOcean) wrote:
-> > > We've fairly regularaly seen liveptches which cannot transition within kpatch's
-> > > timeout period due to busy vhost worker kthreads.
-> > 
-> > I have missed this detail. Miroslav told me that we have solved
-> > something similar some time ago, see
-> > https://lore.kernel.org/all/20220507174628.2086373-1-song@kernel.org/
-> 
-> Interesting thread. I had thought about something along the lines of the
-> original patch, but there are some ideas in there that I hadn't
-> considered.
+There is no vdd-l6-l16 supply in qcom,pm8550-rpmh-regulators.
 
-Could you please provide some more details about the test system?
-Is there anything important to make it reproducible?
+Fixes: 71342fb91eae ("arm64: dts: qcom: Add base SM8550 MTP dts")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-The following aspects come to my mind. It might require:
+diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+index 725d3bc3ee72..d6ae80414654 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
++++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+@@ -47,7 +47,6 @@ regulators-0 {
+ 		vdd-bob2-supply = <&vph_pwr>;
+ 		vdd-l2-l13-l14-supply = <&vreg_bob1>;
+ 		vdd-l3-supply = <&vreg_s4g_1p3>;
+-		vdd-l6-l16-supply = <&vreg_bob1>;
+ 		vdd-l6-l7-supply = <&vreg_bob1>;
+ 		vdd-l8-l9-supply = <&vreg_bob1>;
+ 		vdd-l11-supply = <&vreg_s4g_1p3>;
+-- 
+2.34.1
 
-   + more workers running on the same system
-   + have a dedicated CPU for the worker
-   + livepatching the function called by work->fn()
-   + running the same work again and again
-   + huge and overloaded system
-
-
-> > Honestly, kpatch's timeout 1 minute looks incredible low to me. Note
-> > that the transition is tried only once per minute. It means that there
-> > are "only" 60 attempts.
-> > 
-> > Just by chance, does it help you to increase the timeout, please?
-> 
-> To be honest my test setup reproduces the problem well enough to make
-> KLP wait significant time due to vhost threads, but it seldom causes it
-> to hit kpatch's timeout.
-> 
-> Our system management software will try to load a patch tens of times in
-> a day, and we've seen real-world cases where patches couldn't load
-> within kpatch's timeout for multiple days. But I don't have such an
-> environment readily accessible for my own testing. I can try to refine
-> my test case and see if I can get it to that point.
-
-My understanding is that you try to load the patch repeatedly but
-it always fails after the 1 minute timeout. It means that it always
-starts from the beginning (no livepatched process).
-
-Is there any chance to try it with a longer timeout, for example, one
-hour? It should increase the chance if there are more problematic kthreads.
-
-> > This low timeout might be useful for testing. But in practice, it does
-> > not matter when the transition is lasting one hour or even longer.
-> > It takes much longer time to prepare the livepatch.
-> 
-> Agreed. And to be clear, we cope with the fact that patches may take
-> hours or even days to get applied in some cases. The patches I sent are
-> just about improving the only case I've identified which has lead to
-> kpatch failing to load a patch for a day or longer.
-
-If it is acceptable to wait hours or even days then the 1 minute
-timeout is quite contra-productive. We actually do not use any timeout
-at all in livepatches provided by SUSE.
-
-Best Regards,
-Petr
