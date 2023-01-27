@@ -2,156 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC2F67E894
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0335967E893
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjA0Orm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
+        id S233825AbjA0Org (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233836AbjA0Ori (ORCPT
+        with ESMTP id S230423AbjA0Ore (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:47:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9448327E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:46:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674830813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HpgxDVEC7+0c0qata4U+nz7dWR4hklZ05tT76C3hVlU=;
-        b=UpvEWpCNLPK5MkSxe/oy8OS3epbJyvsq8IXGk02gOKZtoqm8UrJ50t52UGb369n/puGQCo
-        WsL5d9R3eTq/JP/WvibR/dN+x4lWOXiXGzyusUDH1M3LKcXHxjXe9d44h+9S9SztWPdcON
-        4NHl8SEfuxjhDMDoPqQAW7XWbcGMRuA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-88-2YaA9jaFPeS9mWXW7FcvMw-1; Fri, 27 Jan 2023 09:46:51 -0500
-X-MC-Unique: 2YaA9jaFPeS9mWXW7FcvMw-1
-Received: by mail-ed1-f70.google.com with SMTP id s14-20020a056402520e00b0049e0bea1c3fso3693059edd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:46:51 -0800 (PST)
+        Fri, 27 Jan 2023 09:47:34 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9427DBE7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:47:33 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so5574264wmb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:47:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1KKJUq5WKhzjaSp+Mwo81aQ4gVmuVUpw2n+7Kp/Unuo=;
+        b=jdR+Ko3ozAmvYFX9JLmNVn5iV4Csy6QSZG1a/YPXUY/+s0qx9oppoMcDIzS/yMXo11
+         cJqFXITk2Gb7eu2JCNtJIgmYbAZaNi1hXFy8qX8ipThmzZ4aLU+nCNHvz+SMb98Y3h5V
+         GusdNp0oXBaNNfiv/fnxupM07T1MnwVeiV/XDX/FdOR5PVuJTv4f6gp+IHkcnMShxBnv
+         aNaDCAgF1tSJJSTPwjfTS72J+dqao8PO2hKQZabvSveQ3tKnZTs0Z9ZZUKRwiuKQ1qFu
+         YDdgCCBYsdsgWYWidcp9F6wfCwFFpOgOXVUMVzW4SalPbcKBqI9BbhgbVOe0OqEPwH1E
+         QLkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HpgxDVEC7+0c0qata4U+nz7dWR4hklZ05tT76C3hVlU=;
-        b=Lcqv7IlyDeBE3mvqJz4iSJzVPyr9LmIBPJLhO0hppdW3rYfbuOjETEkBgtW/d5I5b9
-         viWsBcz205sjXXbgL16vTk9vj6N2oDuYb+hGv28FIM0JjM+3viwcyiM2mtd8Garzaofl
-         E90ansIZ++m/5ZSOeO/fC4DsGtnILFj5TLWSQp8tzlABt+MbsfvZy3hD2TaLVvo+rcQa
-         iPAok8r9y0g0Dgn690UlSh4a3IT91a5FI7SI4uP7f/KrOljFpNv+93Yb91FG9l7lgWmF
-         Hsn99HXn5GJIkA9jisdk1Zm38RUr96NqkPCzs99YxIak7L27/zcFa+CQuoPmFNGceO9H
-         agpw==
-X-Gm-Message-State: AO0yUKUYyoJbzPhlUGR02MItn6gI6egJjzkOkhv07piLA/jNJBtkpzhb
-        7QyjRJYsR504IfKwlmN+zRNYjHH0UaFyELAYE8VHIV3LycecMBz+rPP4uhyfDQOtdTmL5e3yP01
-        xGlv7e3pLUu1za+NgiKaU+eQ8
-X-Received: by 2002:a17:907:ea3:b0:87c:6aa5:ce24 with SMTP id ho35-20020a1709070ea300b0087c6aa5ce24mr1556477ejc.71.1674830810144;
-        Fri, 27 Jan 2023 06:46:50 -0800 (PST)
-X-Google-Smtp-Source: AK7set+G9T3BxQ2uASepzL4Az/FbSILbMgk/fWjAvHrhUKtSSSXMQoFwgu2i+XKQHEZyOl3z79y1qg==
-X-Received: by 2002:a17:907:ea3:b0:87c:6aa5:ce24 with SMTP id ho35-20020a1709070ea300b0087c6aa5ce24mr1556459ejc.71.1674830809916;
-        Fri, 27 Jan 2023 06:46:49 -0800 (PST)
-Received: from redhat.com ([2.52.137.69])
-        by smtp.gmail.com with ESMTPSA id w9-20020a170906184900b007c0f217aadbsm2320342eje.24.2023.01.27.06.46.47
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1KKJUq5WKhzjaSp+Mwo81aQ4gVmuVUpw2n+7Kp/Unuo=;
+        b=OQdB9kVlsbzICE8cF+hiXaMyLiJRII5KunoNjy+X5fff6SmqcGVDSCjI/dLR7eyCOm
+         iAJuyosphir/ZwcL8PA9wCQ7idG8wFvsnyjeUH63cXE3PiDKBwvzDE4kyAjVTDbwKCGJ
+         pPzwkIvsjwkYyZWmT51V2K7luYGlmSfqAB3sMzkCeUwnfxQqU1ncEuCMFjuKL6JFwVKR
+         BwmB/Y16DkWreiRCyC5J0QTdjFc8mIYiOLrjGO+cDZFTHFsf8P+X/6Py05qufaQjQ37c
+         ylfegLwZLOCFIf/d32M4gjvvymU5uewp3lUiuYp1zhtcC167Xh30lKA2rjNq2p57ot0t
+         JkVw==
+X-Gm-Message-State: AFqh2kpLa4bxdqbDJ19HNCSIr4B9796rJ0S41sXzWypWBww6Hup4ujBL
+        gt0j7nZFTcDo4mW3LnqbE3V76A==
+X-Google-Smtp-Source: AMrXdXv4N0OXmz+FUj99xgWrogLlCVx4448xlj97WtMIyfMl+0CKekDVru6FDwQXvG7KAqgZYZasIQ==
+X-Received: by 2002:a05:600c:3c92:b0:3d3:4007:9c88 with SMTP id bg18-20020a05600c3c9200b003d340079c88mr41317427wmb.18.1674830851600;
+        Fri, 27 Jan 2023 06:47:31 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id q9-20020a05600c330900b003dc1763da37sm4656118wmp.17.2023.01.27.06.47.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 06:46:49 -0800 (PST)
-Date:   Fri, 27 Jan 2023 09:46:45 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
-        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
-        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v1 2/6] virtio console: Harden port adding
-Message-ID: <20230127094425-mutt-send-email-mst@kernel.org>
-References: <Y8lfz8C5uvx2w4fC@kroah.com>
- <87ilh2quto.fsf@ubik.fi.intel.com>
- <Y8mSs68JfW6t4mjl@kroah.com>
- <87a62eqo4h.fsf@ubik.fi.intel.com>
- <20230127055944-mutt-send-email-mst@kernel.org>
- <87k018p4xs.fsf@ubik.fi.intel.com>
- <20230127071152-mutt-send-email-mst@kernel.org>
- <87edrgp2is.fsf@ubik.fi.intel.com>
- <Y9PSObAeUyHK2cc3@kroah.com>
- <87bkmkoyd1.fsf@ubik.fi.intel.com>
+        Fri, 27 Jan 2023 06:47:30 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Johan Hovold <johan@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] soc: qcom: llcc: Fix slice configuration values for SC8280XP
+Date:   Fri, 27 Jan 2023 16:47:24 +0200
+Message-Id: <20230127144724.1292580-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bkmkoyd1.fsf@ubik.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 04:17:46PM +0200, Alexander Shishkin wrote:
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-> 
-> > On Fri, Jan 27, 2023 at 02:47:55PM +0200, Alexander Shishkin wrote:
-> >> "Michael S. Tsirkin" <mst@redhat.com> writes:
-> >> 
-> >> > On Fri, Jan 27, 2023 at 01:55:43PM +0200, Alexander Shishkin wrote:
-> >> >> We can have shared pages between the host and guest without bounce
-> >> >> buffers in between, so they can be both looking directly at the same
-> >> >> page.
-> >> >> 
-> >> >> Regards,
-> >> >
-> >> > How does this configuration work? What else is in this page?
-> >> 
-> >> So, for example in TDX, you have certain pages as "shared", as in
-> >> between guest and hypervisor. You can have virtio ring(s) in such
-> >> pages. It's likely that there'd be a swiotlb buffer there instead, but
-> >> sharing pages between host virtio and guest virtio drivers is possible.
-> >
-> > If it is shared, then what does this mean?  Do we then need to copy
-> > everything out of that buffer first before doing anything with it
-> > because the data could change later on?  Or do we not trust anything in
-> > it at all and we throw it away?  Or something else (trust for a short
-> > while and then we don't?)
-> 
-> The first one, we need a consistent view of the metadata (the ckpt in
-> this case), so we take a snapshot of it. Then, we validate it (because
-> we don't trust it) to be correct. If it is not, we discard it, otherwise
-> we act on it. Since this is a ring, we just move on to the next record
-> if there is one.
-> 
-> Meanwhile, in the shared page, it can change from correct to incorrect,
-> but it won't affect us because we have this consistent view at the
-> moment the snapshot was taken.
-> 
-> > Please be specific as to what you want to see happen here, and why.
-> 
-> For example, if we get a control message to add a port and
-> cpkt->event==PORT_ADD, we skip validation of cpkt->id (port id), because
-> we're intending to add a new one. At this point, the device can change
-> cpkt->event to PORT_REMOVE, which does require a valid cpkt->id and the
-> subsequent code runs into a NULL dereference on the port value, which
-> should have been looked up from cpkt->id.
-> 
-> Now, if we take a snapshot of cpkt, we naturally don't have this
-> problem, because we're looking at a consistent state of cpkt: it's
-> either PORT_ADD or PORT_REMOVE all the way. Which is what this patch
-> does.
-> 
-> Does this answer your question?
-> 
-> Thanks,
-> --
-> Alex
+These new values are now based on the latest LLCC SC table.
 
+Fixes: ec69dfbdc426 ("soc: qcom: llcc: Add sc8180x and sc8280xp configurations")
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
 
-Not sure about Greg but it doesn't answer my question because either the
-bad device has access to all memory at which point it's not clear why
-is it changing cpkt->event and not e.g. stack. Or it's restricted to
-only access memory when mapped through the DMA API. Which is not the
-case here.
+The v1 is here:
+https://lore.kernel.org/all/20230126171636.2319496-1-abel.vesa@linaro.org/
 
+Changes since v1:
+ * dropped the LLCC_GPU and LLCC_WRCACHE max_cap changes
+ * took the new values from documentatio this time rather than
+   downstream kernel
+
+ drivers/soc/qcom/llcc-qcom.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+index 23ce2f78c4ed..26efe12012a0 100644
+--- a/drivers/soc/qcom/llcc-qcom.c
++++ b/drivers/soc/qcom/llcc-qcom.c
+@@ -191,9 +191,9 @@ static const struct llcc_slice_config sc8280xp_data[] = {
+ 	{ LLCC_CVP,      28, 512,  3, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
+ 	{ LLCC_APTCM,    30, 1024, 3, 1, 0x0,   0x1, 1, 0, 0, 1, 0, 0 },
+ 	{ LLCC_WRCACHE,  31, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
+-	{ LLCC_CVPFW,    32, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
+-	{ LLCC_CPUSS1,   33, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
+-	{ LLCC_CPUHWT,   36, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
++	{ LLCC_CVPFW,    17, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
++	{ LLCC_CPUSS1,   3, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
++	{ LLCC_CPUHWT,   5, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
+ };
+ 
+ static const struct llcc_slice_config sdm845_data[] =  {
 -- 
-MST
+2.34.1
 
