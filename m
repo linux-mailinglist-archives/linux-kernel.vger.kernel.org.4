@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3024367EEBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EF367EEA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbjA0Tq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 14:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
+        id S232018AbjA0Tpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:45:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbjA0TqY (ORCPT
+        with ESMTP id S232062AbjA0ToH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 14:46:24 -0500
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8841A91FA5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:44:06 -0800 (PST)
-Received: by mail-yb1-f202.google.com with SMTP id g138-20020a25db90000000b0080c27bde887so2635506ybf.18
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:44:06 -0800 (PST)
+        Fri, 27 Jan 2023 14:44:07 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A505CD1A
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:43:09 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id x8-20020a25e008000000b007cb4f1e3e57so1753366ybg.8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:43:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sBLmwmiYmTj+OGGVUcLxhx0PU/jBUoUEJpANG8soAfU=;
-        b=KWtfJ/7xIlPNyMbJgMly5Sn2+77Pi3kT3bIKcXhSEYdAbccLPUNTncstNEX89dvAhW
-         NM9ImIflxrHOdJ1Mj5fWozRK69MXYGw+crQDfh9Oftap/iRU1kAVPiBZhr/+UuvLj4+U
-         4LLcR3mdcWgS75oxY+Q2vGwsrXQ6jEpwNWpRZ0m4MKHrCT8iGAtEZyFhrSxdE7CjPr88
-         djL5aWWS3cMBdV/JlcmaRg0LM4Y33l8LwLfoSQoWCllE6I7RGCcpBFSNwKknGwVlLQii
-         i5R/yajGZAULuwac7zP2AeGWc0Ux4Tm1rMqU81PAQU3nWhlQVK4py4JD6fzjGBwa6RFE
-         gFWQ==
+        bh=dtbb/rgJDVPG5hb8ydKzjEL35WMZYcFrpyL4j03oF8s=;
+        b=GSbfUJd90yi2xMLpxJwkNIQoO7AYaRuo1p0W3egBrsgFnTlql/QObCOWtQyWcyCJri
+         L9IkPEewPotUja2mT2dWXCpgA9vVmlCVPbr2KFEVViPcTyej+SHFX8+fhAEaOP6xtrM/
+         x5eCKOKsLW06Glc5jxntDrg/hIgANLyaiKO4UzofC0FOHh/fDzJT0Gg9GuJf/nEgmEZV
+         hix6GjSSYXSWndo4QypjFazRowiaazjUscTvm2uHMbtPJDABgUnEX51b4PI7vURt3LgP
+         X4xLvpH0mH+5Sv/7D+0hQE/rAXv1nGKdGusu8zdXbWRFOMqJp4iPgA6p21w37iQT/eTP
+         bctw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sBLmwmiYmTj+OGGVUcLxhx0PU/jBUoUEJpANG8soAfU=;
-        b=EScMkfmTrvjSIQhckS3et5hFdVMdAQ7t4NJZWmp79+IeUbRbSrqb2B0WABMWgBOpdG
-         J2E0Wa+I4RowSzWJnaJ7rQHtpz8WzjPBdjAHHM4YdJ59cu1e3m3qFO4i/MKt4QNkXivd
-         ZXWAYvICxo8UububZK1L9JiHP4r+5TFbesLHIamHVSzqdf3ULzXGdQUqdFa6PsEjEwZP
-         2TDd8gZq+nLNft2mMMeCsQzwBED3wQhhZFDLbhws9wAWP+UBFmCBe5su9Vi2mVi8vBcm
-         G1Roq8+MxAuKZ9aLnpUtbk1cstW3YlsFStCeusgKsDqef4uYOIH657uh54SUEin1xs8j
-         H8fw==
-X-Gm-Message-State: AFqh2krZtpaFVvgH8g42FNH/X+FR9Z6+3Eks08phyrv5mHqSg77s5lbJ
-        rXT7yfH8enFdw3wPudX4v2Y5Kdz34p8=
-X-Google-Smtp-Source: AMrXdXtj44VmRN6kQLB49pXglCfjpmg9iXCqYgU9gl6+Dl4v+hAma4/0PMDtIg4t8IMM3q4b9OalQWjETEg=
+        bh=dtbb/rgJDVPG5hb8ydKzjEL35WMZYcFrpyL4j03oF8s=;
+        b=qOUIpBPL+rpft3hZySD7KKTVnepWMqlG6hLPEcKmV4cggdRv1DCq+7V1plUbCs951X
+         lxMH/szkt80Br8JxeG/hL0bKBtnz+4Box8316nGao3F1fjd8lEUK6ofTduGEO1YctdHS
+         ejvqbRHp/TIV1v5Q+Y2zmBbFzAG4QwyhrGqUObzpVIDH8EeMjkhYzAA6rZGeS/yA+JBc
+         ggcv7ztumPD6pY+APTxeGzXS2QpTmAJjOqmhtZuLAZnWLN7He9ZsbLfSZO0lfcYZeC1a
+         NKMWQh7o2pLJ9oL98hwmBqsiH5GimfUl5sNpxN1iOqz//I99LkjJt4JRNxQV2DecaMl4
+         oMSw==
+X-Gm-Message-State: AFqh2kqfZfJYOvJouHXBZLzvGYCzq190xmj8L7HZdkMWzzivaLCejg0S
+        KEZOYTGRFj2I+TAVWWInPflYWhwxsJM=
+X-Google-Smtp-Source: AMrXdXszwUWrk3+ezT3vpCagEl0mvWZa9sEHax26SYGf7QapJl4fBzpxwL0/6TcVCB7ktvgIaczCkSx6r1s=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:4e19:be9:c5d0:8483])
- (user=surenb job=sendgmr) by 2002:a81:cd7:0:b0:4dd:9ed1:fba0 with SMTP id
- 206-20020a810cd7000000b004dd9ed1fba0mr5011323ywm.265.1674848536283; Fri, 27
- Jan 2023 11:42:16 -0800 (PST)
-Date:   Fri, 27 Jan 2023 11:41:03 -0800
+ (user=surenb job=sendgmr) by 2002:a0d:fc86:0:b0:4db:3ac0:78a3 with SMTP id
+ m128-20020a0dfc86000000b004db3ac078a3mr5702708ywf.266.1674848538548; Fri, 27
+ Jan 2023 11:42:18 -0800 (PST)
+Date:   Fri, 27 Jan 2023 11:41:04 -0800
 In-Reply-To: <20230127194110.533103-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230127194110.533103-1-surenb@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230127194110.533103-27-surenb@google.com>
-Subject: [PATCH v2 26/33] mm: prevent do_swap_page from handling page faults
- under VMA lock
+Message-ID: <20230127194110.533103-28-surenb@google.com>
+Subject: [PATCH v2 27/33] mm: prevent userfaults to be handled under per-vma lock
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -73,44 +72,48 @@ Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
         linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
         linux-kernel@vger.kernel.org, kernel-team@android.com,
-        surenb@google.com, Laurent Dufour <laurent.dufour@fr.ibm.com>
+        surenb@google.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to the possibility of do_swap_page dropping mmap_lock, abort fault
+Due to the possibility of handle_userfault dropping mmap_lock, avoid fault
 handling under VMA lock and retry holding mmap_lock. This can be handled
 more gracefully in the future.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Reviewed-by: Laurent Dufour <laurent.dufour@fr.ibm.com>
+Suggested-by: Peter Xu <peterx@redhat.com>
 ---
- mm/memory.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ mm/memory.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/mm/memory.c b/mm/memory.c
-index 593548f24007..33ecc850d3cb 100644
+index 33ecc850d3cb..55582c6fa2fd 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
-@@ -3690,6 +3690,11 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 	if (!pte_unmap_same(vmf))
- 		goto out;
+@@ -5256,6 +5256,15 @@ struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
+ 	if (!vma_start_read(vma))
+ 		goto inval;
  
-+	if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-+		ret = VM_FAULT_RETRY;
-+		goto out;
++	/*
++	 * Due to the possibility of userfault handler dropping mmap_lock, avoid
++	 * it for now and fall back to page fault handling under mmap_lock.
++	 */
++	if (userfaultfd_armed(vma)) {
++		vma_end_read(vma);
++		goto inval;
 +	}
 +
- 	entry = pte_to_swp_entry(vmf->orig_pte);
- 	if (unlikely(non_swap_entry(entry))) {
- 		if (is_migration_entry(entry)) {
+ 	/* Check since vm_start/vm_end might change before we lock the VMA */
+ 	if (unlikely(address < vma->vm_start || address >= vma->vm_end)) {
+ 		vma_end_read(vma);
 -- 
 2.39.1
 
