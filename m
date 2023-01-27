@@ -2,125 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97CF67E7FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C76B67E807
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjA0ORy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S232678AbjA0OTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:19:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjA0ORv (ORCPT
+        with ESMTP id S232878AbjA0OTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:17:51 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814164EE1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674829070; x=1706365070;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=YSLo2Eg7xACX5j9lFrWlTXd/5fp84SzG0tsDWpLVJ/Y=;
-  b=e7PTPfq5VhR2+oFc3XQ+88ZFGKiCRhklIjYf3lfWpLnslVNnGUFeS+Ce
-   o51rrvqcyYPFEGG8npUW/l1bhtnLIaMsshTdSpfHni/HwAKwgOZF66laR
-   qMsugTPiSyjM/7jaLSI0aITZG2WiKU57809ub8lTvG+mNy5rSF2gVjWeg
-   Kwz+lGGkXo9VNye+65c4PWgb264ve87xg7zyDgVMIZoloCTZbTjRHAAEs
-   Vo7Y8b045Y6VobNGg/IOs2IrICvO/Daal570kcdA3NYgM6MInYmCDYUVP
-   ZlkHVZSryfnT7234IRP6eu88MBlGcJjCFF824T2apYtgKcsqzAlIDK5e0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="307437888"
-X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="307437888"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 06:17:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="665270926"
-X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="665270926"
-Received: from ubik.fi.intel.com (HELO localhost) ([10.237.72.184])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Jan 2023 06:17:46 -0800
-From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>, jasowang@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, elena.reshetova@intel.com,
-        kirill.shutemov@linux.intel.com, Andi Kleen <ak@linux.intel.com>,
-        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        alexander.shishkin@linux.intel.com
-Subject: Re: [PATCH v1 2/6] virtio console: Harden port adding
-In-Reply-To: <Y9PSObAeUyHK2cc3@kroah.com>
-References: <20230119135721.83345-1-alexander.shishkin@linux.intel.com>
- <20230119135721.83345-3-alexander.shishkin@linux.intel.com>
- <Y8lfz8C5uvx2w4fC@kroah.com> <87ilh2quto.fsf@ubik.fi.intel.com>
- <Y8mSs68JfW6t4mjl@kroah.com> <87a62eqo4h.fsf@ubik.fi.intel.com>
- <20230127055944-mutt-send-email-mst@kernel.org>
- <87k018p4xs.fsf@ubik.fi.intel.com>
- <20230127071152-mutt-send-email-mst@kernel.org>
- <87edrgp2is.fsf@ubik.fi.intel.com> <Y9PSObAeUyHK2cc3@kroah.com>
-Date:   Fri, 27 Jan 2023 16:17:46 +0200
-Message-ID: <87bkmkoyd1.fsf@ubik.fi.intel.com>
+        Fri, 27 Jan 2023 09:19:46 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C297E6A0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:19:45 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id a11so8462682lfg.0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:19:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yHpKCLd1feAFHzqVAkS1vVRJl7DA2D26atGO1hDsoMU=;
+        b=uJMfkMrjEAbLTER4mfP9PuiszncnQvqaRMAAqRosN1Xz61KPw8Hf0ARqC8V4atUinN
+         9ZdRFzGTnD8o5xyYxPUdAPL+YzD9HBdTjk+1BdXCSh1w/w4g6yWSczwADg/BuM8QoRcF
+         VDt57VQ5CAUepFDV3Vxs9xiuC95aOJGdeHgHtdEpbMcXMLYuHtpjefd6Z7iix+M55WAu
+         lweP2upZXm+uBnpqw1JKvZEHHPmu4tvv+mgg32Qli+RPxw1vU4Ng3dpUb6JFXqotRBFa
+         xZvkRbOzHzYb0YYmJ1+RPHmD9HwpnjBCxfCVnqhUPWRGHJMrkVfQQCLJAmQL6NExwc6r
+         F5Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yHpKCLd1feAFHzqVAkS1vVRJl7DA2D26atGO1hDsoMU=;
+        b=QXgNgFmtyQ2/sRnlclCZ9rgWhZj51AoxHpM6jewlwgCPKWKgUm9nJXTRBHTiL4K4Mu
+         nlCLCnl8pHZU5JFeVfib696xxVJuUh2NtkX2B8X1BUr8l0jVQRYyyQpsNUFv1j8KtxYn
+         YbzEAKfmBKexHqO5KSb9583D+zSwS3IwkBExmJkdoOdMBMuZ7sztnItm1Jiy0K+JADlh
+         QwS7LUS9ce8lAlh/Egen7e/fk8J+V3jISRp7inT3wraUShX0hYCONUN2mZTjK1mkCF1j
+         Fau/UR7JGqGwpakwoQgi2d5jHkLX4cj6WkPIXYrr243+AGCyNDtgV6ymrkWAyTjridce
+         qT+Q==
+X-Gm-Message-State: AFqh2kqhdyVwGD9h8UQhXtCOtW5uANNQf63ZD2THWzL8sLwuNiLq6nf2
+        Nfxvj77ry+ZGGKXLUs1HgKQQFQ==
+X-Google-Smtp-Source: AMrXdXv+fg8npKTMHLNTGLHU3PfRZ616QaZ5JiAO5ASXHDUq00NZrclsBNuAfXPddsQ0VsFM0gTj2A==
+X-Received: by 2002:a05:6512:1108:b0:4b5:b87a:3262 with SMTP id l8-20020a056512110800b004b5b87a3262mr12248951lfg.28.1674829183700;
+        Fri, 27 Jan 2023 06:19:43 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id d14-20020ac2544e000000b004b56bebdc4esm272241lfn.14.2023.01.27.06.19.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 06:19:43 -0800 (PST)
+Message-ID: <c8d9d5f0-dab8-4dca-5a32-1f4e11ecc964@linaro.org>
+Date:   Fri, 27 Jan 2023 16:19:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 13/14] drm/msm/a6xx: Add A619_holi speedbin support
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230126151618.225127-1-konrad.dybcio@linaro.org>
+ <20230126151618.225127-14-konrad.dybcio@linaro.org>
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230126151618.225127-14-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+On 26/01/2023 17:16, Konrad Dybcio wrote:
+> A619_holi is implemented on at least two SoCs: SM4350 (holi) and SM6375
+> (blair). This is what seems to be a first occurrence of this happening,
+> but it's easy to overcome by guarding the SoC-specific fuse values with
+> of_machine_is_compatible(). Do just that to enable frequency limiting
+> on these SoCs.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 31 +++++++++++++++++++++++++++
+>   1 file changed, 31 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> index 452ba32699b2..89990bec897f 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> @@ -2091,6 +2091,34 @@ static u32 a618_get_speed_bin(u32 fuse)
+>   	return UINT_MAX;
+>   }
+>   
+> +static u32 a619_holi_get_speed_bin(u32 fuse)
+> +{
+> +	/*
+> +	 * There are (at least) two SoCs implementing A619_holi: SM4350 (holi)
+> +	 * and SM6375 (blair). Limit the fuse matching to the corresponding
+> +	 * SoC to prevent bogus frequency setting (as improbable as it may be,
+> +	 * given unexpected fuse values are.. unexpected! But still possible.)
+> +	 */
+> +
+> +	if (fuse == 0)
+> +		return 0;
+> +
+> +	if (of_machine_is_compatible("qcom,sm4350")) {
+> +		if (fuse == 138)
+> +			return 1;
+> +		else if (fuse == 92)
+> +			return 2;
+> +	} else if (of_machine_is_compatible("qcom,sm6375")) {
+> +		if (fuse == 190)
+> +			return 1;
+> +		else if (fuse == 177)
+> +			return 2;
+> +	} else
+> +		pr_warn("Unknown SoC implementing A619_holi!\n");
 
-> On Fri, Jan 27, 2023 at 02:47:55PM +0200, Alexander Shishkin wrote:
->> "Michael S. Tsirkin" <mst@redhat.com> writes:
->> 
->> > On Fri, Jan 27, 2023 at 01:55:43PM +0200, Alexander Shishkin wrote:
->> >> We can have shared pages between the host and guest without bounce
->> >> buffers in between, so they can be both looking directly at the same
->> >> page.
->> >> 
->> >> Regards,
->> >
->> > How does this configuration work? What else is in this page?
->> 
->> So, for example in TDX, you have certain pages as "shared", as in
->> between guest and hypervisor. You can have virtio ring(s) in such
->> pages. It's likely that there'd be a swiotlb buffer there instead, but
->> sharing pages between host virtio and guest virtio drivers is possible.
->
-> If it is shared, then what does this mean?  Do we then need to copy
-> everything out of that buffer first before doing anything with it
-> because the data could change later on?  Or do we not trust anything in
-> it at all and we throw it away?  Or something else (trust for a short
-> while and then we don't?)
+I think, we might be better to introduce "qcom,SoC-adreno" compat string 
+instead, ignore it in the bindings and only care about it here. This 
+might seem an overkill thinking from the single Adreno version. However 
+this issue also affects other revisions.
 
-The first one, we need a consistent view of the metadata (the ckpt in
-this case), so we take a snapshot of it. Then, we validate it (because
-we don't trust it) to be correct. If it is not, we discard it, otherwise
-we act on it. Since this is a ring, we just move on to the next record
-if there is one.
+For example, for the A618 there are at least three platforms which use 
+the same Adreno version: SC7180, SM7125 and SM7150. Only first one is 
+supported (thus the speed_bin function is simple). However according to 
+the vendor dts files all three platforms use different fuse values to 
+specify the speed bin.
 
-Meanwhile, in the shared page, it can change from correct to incorrect,
-but it won't affect us because we have this consistent view at the
-moment the snapshot was taken.
+> +
+> +	return UINT_MAX;
+> +}
+> +
+>   static u32 a619_get_speed_bin(u32 fuse)
+>   {
+>   	if (fuse == 0)
+> @@ -2150,6 +2178,9 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
+>   	if (adreno_cmp_rev(ADRENO_REV(6, 1, 8, ANY_ID), rev))
+>   		val = a618_get_speed_bin(fuse);
+>   
+> +	else if (adreno_cmp_rev(ADRENO_REV(6, 1, 9, 1), rev))
+> +		val = a619_holi_get_speed_bin(fuse);
+> +
 
-> Please be specific as to what you want to see happen here, and why.
+Are we sure that SM6350, the unholi A619 user, doesn't use patchid .1? 
+(note I do not know a thing about Adreno patch ids and its usage between 
+different platforms).
 
-For example, if we get a control message to add a port and
-cpkt->event==PORT_ADD, we skip validation of cpkt->id (port id), because
-we're intending to add a new one. At this point, the device can change
-cpkt->event to PORT_REMOVE, which does require a valid cpkt->id and the
-subsequent code runs into a NULL dereference on the port value, which
-should have been looked up from cpkt->id.
+>   	else if (adreno_cmp_rev(ADRENO_REV(6, 1, 9, ANY_ID), rev))
+>   		val = a619_get_speed_bin(fuse);
+>   
 
-Now, if we take a snapshot of cpkt, we naturally don't have this
-problem, because we're looking at a consistent state of cpkt: it's
-either PORT_ADD or PORT_REMOVE all the way. Which is what this patch
-does.
+-- 
+With best wishes
+Dmitry
 
-Does this answer your question?
-
-Thanks,
---
-Alex
