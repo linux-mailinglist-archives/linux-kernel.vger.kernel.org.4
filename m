@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C81667DE64
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84C867DE65
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232461AbjA0HS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 02:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
+        id S231743AbjA0HTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 02:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbjA0HS1 (ORCPT
+        with ESMTP id S231691AbjA0HS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 02:18:27 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78584E533
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:18:25 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id j15so3653613ljg.8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:18:25 -0800 (PST)
+        Fri, 27 Jan 2023 02:18:57 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC14113F8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:18:55 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id o12so4564371ljp.11
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:18:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=In8HPEUR3rkYjVSEV5mTYuM2J5NBJVyHjEY+q+ssdRA=;
-        b=h32SnYbNcTEpgRSCSyKQV5un3A7fbAiEIMethaUYZhiQLkicD1nC7IKRHW0j5nKVB5
-         UTjUUXTLSjLSe1kMYUp4buHmXwEPGUpnoZeVvG2UuyE7EeVmaoPObB/yoQnVNtX5j69z
-         gADS0W4RHmukEZnGfb3f89uz84xzCNfYqkShDbgosl/Xp6tExwHk65jszsQSD3Xuikck
-         4ELXdr+20JfJONU1cjEk6dPRN3S5VQmsYKjCibu37mGdAgJuLrbq3VT3AEejm3fvEfFu
-         vPi8wr+zns07BW4PCfdG1JKjtD8Vc03V8LT0DlgjDkEWISZqRY6tdHYPBDOl3VPPA8fH
-         l3gw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gckA+z8bi0knDr7CiudDJxl25fqVm0Q7pXZDmnoc9BE=;
+        b=r4C4D/Vi3TeQ9Yz8Rk7XAQJdh/ve3+6lpszoreHOJuC+AcbBAPvaXQ3F+xqJHq0YBL
+         jQwuIwFJFttmEvbu/RcaZEITUVYtzOGzurzeopbCPTDky0fdsoCyO7/OeIP378f6FQFD
+         fn0UNCIWrhY+tokqpEIxMTnCmjxr68kf9ET0s9gDWHHsr7pD0CY48n/x9UYeSbqH/mVX
+         wF67yTRKx4/sqckRKMmIVTI8SyEHNRwrg/UV7XlfXS4FfkpvaovR5q7xsh31r8L8GSe6
+         SQVx0pF05KVju8rBeMwEiCMmnHP2a3KhrCPJtjuyypPz3HoDX3NdSuPk6aFtdaqBrdK0
+         3ozQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=In8HPEUR3rkYjVSEV5mTYuM2J5NBJVyHjEY+q+ssdRA=;
-        b=0ow74kPw9lo8BtOtUBcrknG4WG9rNKtRMNNtv3RjJnAavwmBRcR1//e1mwEpDPAE+w
-         wTheJVsIq4tyVdjQhKA1oJpjVr4j5JVQmf+tFcGxtzXx9DtIxnZD+W6vkPATSNQiPKYW
-         UkiGmA6qa4uwOWQG0AYJErX7bPhdA+B4vObxFosCLon5ti/Kvsi7MX4TwYqJ/GGqZJMV
-         2d+OKcLsZtrPJmNxfOzEfyKXbcz3J+ssYncbPDndF8XJHnXesE7tc7SKmLIIIoqIuKlO
-         NRfzhKri/v4o4wL2P37sYAhaXQU6T279VLKYDrFanTHjNNhHQtJmABwevMhSUQ/spl4/
-         0eFA==
-X-Gm-Message-State: AFqh2koflN+DxNDMUtWeabIIhOrRTiPaHi8P/6qfMbtTbKIN4zG0B82u
-        BWw2P/QSgV3G8Jco7SJA3jZJTgbF0zdvwHHmPtVyYg==
-X-Google-Smtp-Source: AMrXdXsgud8St7chf4CgtrHnAbG2rHMOvqCxZALyqh9CWxJg5beNqMf1+amMaZCQOYpN5GG7vG8ln46w1uLjCmauTdY=
-X-Received: by 2002:a2e:3611:0:b0:287:e806:82d4 with SMTP id
- d17-20020a2e3611000000b00287e80682d4mr3874550lja.1.1674803903934; Thu, 26 Jan
- 2023 23:18:23 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gckA+z8bi0knDr7CiudDJxl25fqVm0Q7pXZDmnoc9BE=;
+        b=qmyLEUmwFPZAkHgKNqlp+CWRMvJ8qaYEvqs6ONCxDWXBCYSWX5Q2vp2UKZYPEEAWsT
+         AVFlZzWhiTZ8fs6Eb2eyEvBmB2tuLTgJPvtLpNeawNwSfInzxHT66Ye0xIcWfeUX7mXf
+         UmTCs+go5OKixTRhDfDXIv6v22jotCgtQP34egmxvVM3nuiu0M0mkDC/aakK7CmzMpjt
+         IDRn4KFOBRVrmWjgP+14KgL+BZiBj0u/u2ArIQjlZ9x8T0QFSdEwIUiyU5hLC1pllYr5
+         7g2/3q+U6IuOSvSChH9TyebCcnePK6YTDGMNgQKk0N5NX5WDxZCLDJXE/kxrMoeUGPRq
+         pPmw==
+X-Gm-Message-State: AFqh2koxbx+tBohIo3H8F7cWNU6JfXhcqm+3QnXLxC5ea944w6C2iCxy
+        k/3vTNhy4fjQUR5xvOK5Ts51HFG7kdcxLpePpuCcjA==
+X-Google-Smtp-Source: AMrXdXvn/qgdr6jgDpr6LENXIlhjrHMR+ZrYlvt8sYn9NJsEEwX9ZlmPUBtW9TiVDYyOJeurpBbVS1LsR7oNwajtq84=
+X-Received: by 2002:a2e:9c93:0:b0:283:e61a:487c with SMTP id
+ x19-20020a2e9c93000000b00283e61a487cmr2082796lji.109.1674803933651; Thu, 26
+ Jan 2023 23:18:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20230123082114.4291-1-hdanton@sina.com> <0000000000006b647005f2ece55e@google.com>
-In-Reply-To: <0000000000006b647005f2ece55e@google.com>
+References: <0000000000002f9ede05eb40cfbd@google.com> <000000000000690e9405f338aa34@google.com>
+In-Reply-To: <000000000000690e9405f338aa34@google.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 27 Jan 2023 08:18:11 +0100
-Message-ID: <CACT4Y+bAbSBBYVnBGqZechS_aV=zX6J-B2wdUC_acYYkQur1kw@mail.gmail.com>
-Subject: Re: [syzbot] [xfs?] KASAN: stack-out-of-bounds Read in xfs_buf_lock
-To:     syzbot <syzbot+0bc698a422b5e4ac988c@syzkaller.appspotmail.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Aleksandr Nogikh <nogikh@google.com>
-Cc:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Date:   Fri, 27 Jan 2023 08:18:41 +0100
+Message-ID: <CACT4Y+ab0VvBWA-pvmSbu9gpxWG0JOvv-dbp3_2ej5+qg32L7Q@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in end_page_writeback
+To:     syzbot <syzbot+c9db9ae0bd780a3094e1@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, chenzhongjin@huawei.com,
+        konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,115 +69,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 at 12:42, syzbot
-<syzbot+0bc698a422b5e4ac988c@syzkaller.appspotmail.com> wrote:
+On Fri, 27 Jan 2023 at 07:06, syzbot
+<syzbot+c9db9ae0bd780a3094e1@syzkaller.appspotmail.com> wrote:
 >
-> Hello,
+> syzbot suspects this issue was fixed by commit:
 >
-> syzbot tried to test the proposed patch but the build/boot failed:
+> commit 512c5ca01a3610ab14ff6309db363de51f1c13a6
+> Author: Chen Zhongjin <chenzhongjin@huawei.com>
+> Date:   Fri Nov 18 06:33:04 2022 +0000
 >
-> failed to delete instance: googleapi: Error 400: Invalid value for field =
-'instance': 'ci-upstream-kasan-gce-root-test-job-parallel-test-job-parallel=
--1'. Must be a match of regex '[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?|[1-9][0-9]=
-{0,19}', invalid
+>     nilfs2: fix nilfs_sufile_mark_dirty() not set segment usage as dirty
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=138e4485480000
+> start commit:   55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=c9db9ae0bd780a3094e1
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ad8cc2880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=106b5906880000
+>
+> If the result looks correct, please mark the issue as fixed by replying with:
+>
+> #syz fix: nilfs2: fix nilfs_sufile_mark_dirty() not set segment usage as dirty
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-+Aleksandr, was this fixed already?
+Looks reasonable. Let's close the bug report:
 
-> syzkaller build log:
-> go env (err=3D<nil>)
-> GO111MODULE=3D"auto"
-> GOARCH=3D"amd64"
-> GOBIN=3D""
-> GOCACHE=3D"/syzkaller/.cache/go-build"
-> GOENV=3D"/syzkaller/.config/go/env"
-> GOEXE=3D""
-> GOEXPERIMENT=3D""
-> GOFLAGS=3D""
-> GOHOSTARCH=3D"amd64"
-> GOHOSTOS=3D"linux"
-> GOINSECURE=3D""
-> GOMODCACHE=3D"/syzkaller/jobs-2/linux/gopath/pkg/mod"
-> GONOPROXY=3D""
-> GONOSUMDB=3D""
-> GOOS=3D"linux"
-> GOPATH=3D"/syzkaller/jobs-2/linux/gopath"
-> GOPRIVATE=3D""
-> GOPROXY=3D"https://proxy.golang.org,direct"
-> GOROOT=3D"/usr/local/go"
-> GOSUMDB=3D"sum.golang.org"
-> GOTMPDIR=3D""
-> GOTOOLDIR=3D"/usr/local/go/pkg/tool/linux_amd64"
-> GOVCS=3D""
-> GOVERSION=3D"go1.17"
-> GCCGO=3D"gccgo"
-> AR=3D"ar"
-> CC=3D"gcc"
-> CXX=3D"g++"
-> CGO_ENABLED=3D"1"
-> GOMOD=3D"/syzkaller/jobs-2/linux/gopath/src/github.com/google/syzkaller/g=
-o.mod"
-> CGO_CFLAGS=3D"-g -O2"
-> CGO_CPPFLAGS=3D""
-> CGO_CXXFLAGS=3D"-g -O2"
-> CGO_FFLAGS=3D"-g -O2"
-> CGO_LDFLAGS=3D"-g -O2"
-> PKG_CONFIG=3D"pkg-config"
-> GOGCCFLAGS=3D"-fPIC -m64 -pthread -fmessage-length=3D0 -fdebug-prefix-map=
-=3D/tmp/go-build480514578=3D/tmp/go-build -gno-record-gcc-switches"
->
-> git status (err=3D<nil>)
-> HEAD detached at 1dac8c7a0
-> nothing to commit, working tree clean
->
->
-> tput: No value for $TERM and no -T specified
-> tput: No value for $TERM and no -T specified
-> Makefile:32: run command via tools/syz-env for best compatibility, see:
-> Makefile:33: https://github.com/google/syzkaller/blob/master/docs/contrib=
-uting.md#using-syz-env
-> go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./=
-sys/syz-sysgen
-> make .descriptions
-> tput: No value for $TERM and no -T specified
-> tput: No value for $TERM and no -T specified
-> bin/syz-sysgen
-> touch .descriptions
-> GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/goog=
-le/syzkaller/prog.GitRevision=3D1dac8c7a01e2bdd35cb04eb4901ddb157291ac2d -X=
- 'github.com/google/syzkaller/prog.gitRevisionDate=3D20230103-123455'" "-ta=
-gs=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzz=
-er github.com/google/syzkaller/syz-fuzzer
-> GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/goog=
-le/syzkaller/prog.GitRevision=3D1dac8c7a01e2bdd35cb04eb4901ddb157291ac2d -X=
- 'github.com/google/syzkaller/prog.gitRevisionDate=3D20230103-123455'" "-ta=
-gs=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-exec=
-prog github.com/google/syzkaller/tools/syz-execprog
-> GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/goog=
-le/syzkaller/prog.GitRevision=3D1dac8c7a01e2bdd35cb04eb4901ddb157291ac2d -X=
- 'github.com/google/syzkaller/prog.gitRevisionDate=3D20230103-123455'" "-ta=
-gs=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stre=
-ss github.com/google/syzkaller/tools/syz-stress
-> mkdir -p ./bin/linux_amd64
-> gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
->         -m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-vari=
-able -Wframe-larger-than=3D16384 -Wno-stringop-overflow -Wno-array-bounds -=
-Wno-format-overflow -static-pie -fpermissive -w -DGOOS_linux=3D1 -DGOARCH_a=
-md64=3D1 \
->         -DHOSTGOOS_linux=3D1 -DGIT_REVISION=3D\"1dac8c7a01e2bdd35cb04eb49=
-01ddb157291ac2d\"
->
->
->
-> Tested on:
->
-> commit:         7dd4b804 Merge tag 'nfsd-6.2-3' of git://git.kernel.or..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/=
-linux.git
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D2b6ecad960fc7=
-03e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D0bc698a422b5e4a=
-c988c
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
-ls for Debian) 2.35.2
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=3D145887ee48=
-0000
+#syz fix: nilfs2: fix nilfs_sufile_mark_dirty() not set segment usage as dirty
