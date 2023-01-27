@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D2F67E677
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCE467E67B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 14:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234800AbjA0NUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 08:20:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S234734AbjA0NUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 08:20:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234786AbjA0NUQ (ORCPT
+        with ESMTP id S234704AbjA0NUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:20:16 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34A484197
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:19:31 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P3HyV2H1vz9v7H9
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 21:11:14 +0800 (CST)
-Received: from [10.81.218.251] (unknown [10.81.218.251])
-        by APP2 (Coremail) with SMTP id GxC2BwAX510zz9NjSPnNAA--.19909S2;
-        Fri, 27 Jan 2023 14:18:54 +0100 (CET)
-Message-ID: <c9c511d1-318b-8551-e5d7-be9fa5e09008@huaweicloud.com>
-Date:   Fri, 27 Jan 2023 14:18:41 +0100
+        Fri, 27 Jan 2023 08:20:25 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CB919F18
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:19:46 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v10so4695732edi.8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 05:19:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OcgPAMgrAZ/C7xPMvBkfJEfxIjKIhIiRt6e2oEpw2P8=;
+        b=QeQDzrGiKaOpTK0L4ffCwsCnXl55BXQ2SKM3wzAUrretYfLqPKBeAxLZgnLV17ELto
+         c8S4Mw75ZK4P9OGJOLmntTJDb+I72QcNAUcgM3vGgBhd1Yrk/XR98o0geLrPp2T+jFyl
+         8vSz/GoPJ+tnsQtMwegXUK6pm4AfUZ98q2+920rv0OoBYgddgk04LoHnAMesbT5Hohww
+         hBsKQD1Fi2zgZHuMjF0ul0aF2q5nfUKtgvi2y3X2U/jGs3G5psoS0xUhmjKtU8Lnogjr
+         ewLR3QTEE0lXaZJM6ufM1F6Sf26iYV5ooSNdJSW9HG3qqXiDEdcQnVIIMuP+aH1kV5KX
+         0ozg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OcgPAMgrAZ/C7xPMvBkfJEfxIjKIhIiRt6e2oEpw2P8=;
+        b=Y/lEpCVSvxZfNWXjfCY3QvOd1ckYe/RyZNS/WGMa3QM+0dwJpCEB+yHXYgD1Zn1K27
+         I1EV5WGQvddeTfjce1dOLLBv3Y1q/9YciOoR+lckPyetI/mQKv55A/Lazd7W6mu2K7oi
+         YHJk5Zak9zWhbrTGi4x6Sg/J/8YfSYtQWJGADlOeUIrczjA8rRNWapGgh/OFaoXtEsds
+         hfZOmPGehzwbFrzO0yvsBzxOrdLvlHiV6Q5PmTguimEXY0/pPBbSYO0RMlikjZ3IBMZk
+         kNPGl8BvQKEvkGPm+c2RtYbMBbPvQrdgqsGLri19gjzQYELUI9FUPIBtGn4G7ZHmrdjS
+         +JzQ==
+X-Gm-Message-State: AFqh2kpvmvlf02ezsoqOdau2RmP42wRNJ+hD6gjGuM9ppNF1SwRIl908
+        E6Y+HLKWEQ6oJ77Bus5/ypHaXQ==
+X-Google-Smtp-Source: AMrXdXuQF/+vduGhh7O4LY2Mxe6x5n/9zOd0Pawa+WdOyFosu/ndcYTzHQOWa4l/PZN3CukIRJxNig==
+X-Received: by 2002:a05:6402:4d6:b0:46c:6ed1:83ac with SMTP id n22-20020a05640204d600b0046c6ed183acmr41608812edw.9.1674825584239;
+        Fri, 27 Jan 2023 05:19:44 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id e9-20020a50fb89000000b0048ecd372fc9sm2335204edq.2.2023.01.27.05.19.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 05:19:43 -0800 (PST)
+Message-ID: <7da76295-7d0f-f401-1501-7932f31ecbee@linaro.org>
+Date:   Fri, 27 Jan 2023 14:19:42 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/2] tools/memory-model: Unify UNLOCK+LOCK pairings to
- po-unlock-lock-po
-To:     paulmck@kernel.org, Alan Stern <stern@rowland.harvard.edu>
-Cc:     parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
-        quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
- <20230126134604.2160-2-jonas.oberhauser@huaweicloud.com>
- <Y9KsI/PsW4DK083z@rowland.harvard.edu>
- <20230126200828.GK2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230126232148.GA855268@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230126232148.GA855268@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH] arm64: dts: qcom: sm8550: Fix the aoss_qmp node name
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+References: <20230127131441.1157679-1-abel.vesa@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230127131441.1157679-1-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAX510zz9NjSPnNAA--.19909S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw17Zw43CrWrtFykZry7Wrg_yoWrZw43pr
-        WDKa1UKw4DJrykWw1qgwn0qrWIyw43Gr15Xr1DX3Z5Cas0q3WfCF1UtrWj9FykWrn3WFWD
-        tFyjvasxur15AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU13rcDUUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,116 +83,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/27/2023 12:21 AM, Paul E. McKenney wrote:
-> On Thu, Jan 26, 2023 at 12:08:28PM -0800, Paul E. McKenney wrote:
->> On Thu, Jan 26, 2023 at 11:36:51AM -0500, Alan Stern wrote:
->>> On Thu, Jan 26, 2023 at 02:46:03PM +0100, Jonas Oberhauser wrote:
->>>> LKMM uses two relations for talking about UNLOCK+LOCK pairings:
->>>>
->>>> 	1) po-unlock-lock-po, which handles UNLOCK+LOCK pairings
->>>> 	   on the same CPU or immediate lock handovers on the same
->>>> 	   lock variable
->>>>
->>>> 	2) po;[UL];(co|po);[LKW];po, which handles UNLOCK+LOCK pairs
->>>> 	   literally as described in rcupdate.h#L1002, i.e., even
->>>> 	   after a sequence of handovers on the same lock variable.
->>>>
->>>> The latter relation is used only once, to provide the guarantee
->>>> defined in rcupdate.h#L1002 by smp_mb__after_unlock_lock(), which
->>>> makes any UNLOCK+LOCK pair followed by the fence behave like a full
->>>> barrier.
->>>>
->>>> This patch drops this use in favor of using po-unlock-lock-po
->>>> everywhere, which unifies the way the model talks about UNLOCK+LOCK
->>>> pairings.  At first glance this seems to weaken the guarantee given
->>>> by LKMM: When considering a long sequence of lock handovers
->>>> such as below, where P0 hands the lock to P1, which hands it to P2,
->>>> which finally executes such an after_unlock_lock fence, the mb
->>>> relation currently links any stores in the critical section of P0
->>>> to instructions P2 executes after its fence, but not so after the
->>>> patch.
->>>>
->>>> P0(int *x, int *y, spinlock_t *mylock)
->>>> {
->>>>          spin_lock(mylock);
->>>>          WRITE_ONCE(*x, 2);
->>>>          spin_unlock(mylock);
->>>>          WRITE_ONCE(*y, 1);
->>>> }
->>>>
->>>> P1(int *y, int *z, spinlock_t *mylock)
->>>> {
->>>>          int r0 = READ_ONCE(*y); // reads 1
->>>>          spin_lock(mylock);
->>>>          spin_unlock(mylock);
->>>>          WRITE_ONCE(*z,1);
->>>> }
->>>>
->>>> P2(int *z, int *d, spinlock_t *mylock)
->>>> {
->>>>          int r1 = READ_ONCE(*z); // reads 1
->>>>          spin_lock(mylock);
->>>>          spin_unlock(mylock);
->>>>          smp_mb__after_unlock_lock();
->>>>          WRITE_ONCE(*d,1);
->>>> }
->>>>
->>>> P3(int *x, int *d)
->>>> {
->>>>          WRITE_ONCE(*d,2);
->>>>          smp_mb();
->>>>          WRITE_ONCE(*x,1);
->>>> }
->>>>
->>>> exists (1:r0=1 /\ 2:r1=1 /\ x=2 /\ d=2)
->>>>
->>>> Nevertheless, the ordering guarantee given in rcupdate.h is actually
->>>> not weakened.  This is because the unlock operations along the
->>>> sequence of handovers are A-cumulative fences.  They ensure that any
->>>> stores that propagate to the CPU performing the first unlock
->>>> operation in the sequence must also propagate to every CPU that
->>>> performs a subsequent lock operation in the sequence.  Therefore any
->>>> such stores will also be ordered correctly by the fence even if only
->>>> the final handover is considered a full barrier.
->>>>
->>>> Indeed this patch does not affect the behaviors allowed by LKMM at
->>>> all.  The mb relation is used to define ordering through:
->>>> 1) mb/.../ppo/hb, where the ordering is subsumed by hb+ where the
->>>>     lock-release, rfe, and unlock-acquire orderings each provide hb
->>>> 2) mb/strong-fence/cumul-fence/prop, where the rfe and A-cumulative
->>>>     lock-release orderings simply add more fine-grained cumul-fence
->>>>     edges to substitute a single strong-fence edge provided by a long
->>>>     lock handover sequence
->>>> 3) mb/strong-fence/pb and various similar uses in the definition of
->>>>     data races, where as discussed above any long handover sequence
->>>>     can be turned into a sequence of cumul-fence edges that provide
->>>>     the same ordering.
->>>>
->>>> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
->>>> ---
->>> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
->> A quick spot check showed no change in performance, so thank you both!
->>
->> Queued for review and further testing.
-> And testing on https://github.com/paulmckrcu/litmus for litmus tests up
-> to ten processes and allowing 10 minutes per litmus test got this:
->
-> Exact output matches: 5208
-> !!! Timed out: 38
-> !!! Unknown primitive: 7
->
-> This test compared output with and without your patch.
->
-> For the tests with a Results clause, these failed:
+On 27.01.2023 14:14, Abel Vesa wrote:
+> The proper name for it is power-management. Currently, with the node
+> name being power-controller, the bindings check fails due to the
+> property #power-domain-cells missing.
+> 
+> Fixes: ffc50b2d3828 ("arm64: dts: qcom: Add base SM8550 dtsi")
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Gave me a heart attack there for a second!
+Konrad
 
-> Also, I am going to be pushing the scripts I use to mainline.  They might
-> not be perfect, but they will be quite useful for this sort of change
-> to the memory model.
-
-I could also provide Coq proofs, although those are ignoring the 
-srcu/data race parts at the moment.
-
-Have fun, jonas
-
+>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index 6ff135191ee0..57878ea64ee0 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -2503,7 +2503,7 @@ tsens2: thermal-sensor@c273000 {
+>  			#thermal-sensor-cells = <1>;
+>  		};
+>  
+> -		aoss_qmp: power-controller@c300000 {
+> +		aoss_qmp: power-management@c300000 {
+>  			compatible = "qcom,sm8550-aoss-qmp", "qcom,aoss-qmp";
+>  			reg = <0 0x0c300000 0 0x400>;
+>  			interrupt-parent = <&ipcc>;
