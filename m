@@ -2,111 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B1967EF53
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7346367EF56
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 21:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbjA0ULC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 15:11:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
+        id S233337AbjA0UL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 15:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjA0UKq (ORCPT
+        with ESMTP id S233253AbjA0ULC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 15:10:46 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B9B298DB
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:10:11 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso5754135pjp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:10:11 -0800 (PST)
+        Fri, 27 Jan 2023 15:11:02 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2304EC1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:10:49 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id k18so6112485pll.5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 12:10:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mCpGCS/OXeh7kYIrLqMAqyzZU6U0iWsXPrIDck1yl4Q=;
-        b=COEuRwnZJeTT8Co7vP68ncETJxbQLPH3GL04G1l4xtc63Ci7eG+N0f+/2YFHeMBD7x
-         4eGGkPJ+XjN1GOtuK0cGDhBn+/PVNG9Y+tEuOjZSrgJNnMnpcfp5RoNSJAJkiBl28aaF
-         lFFPh7iOrLVR+Fhpn0Maam7MFveM7j4k2BPH+QfcrWLWhtnL002SwNczYu26N4pNjBx9
-         K30t9T2hSJ2k/sSlHZgz4qmJfX4W36AdPYARXp6KRm4JryEMJXwx1BlrF2f6kMNs+841
-         sRs16HWRnMCHKY7XAUWOib0j+nlA+ujPX6XdCsgqNqo5rDXhQOKWoGrBrliXuHOvhLEg
-         tkbA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uVeXA+MV2KiRuoJWt2euHuiO6q0ls69NMV+B5RGOE1g=;
+        b=UnHTto9iYs+wX9znqS/a19vQIBuu685jiveSd5U6TsEy2kUm4egnKX+d2Q8+uqgKpX
+         nAP4VyHRJkb+du25uLUwTbWRHG4imvVZ6B9sDjbqJ0BQrKilkVK+cTjFTYgF1tAPQ1SP
+         Yvh7hqPkSJSfLPuoYRBqJUd2uPPalH+W+6XO2HmidqekVUYHrA4vKHj+t3QvzigPj8lh
+         lJ9R6xniqfNYGpvlBxzT6GW9JV+sx7LhhQWlcrX7xqxm14myaujtxCqTDMYPI2oUIv4s
+         36L2Eapu+AKpE4LlxAN7Z/Fep1f+WWnY7bzspA9kqsC11kBBQqTcF/ExTH+hUyOvv7u+
+         yiow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mCpGCS/OXeh7kYIrLqMAqyzZU6U0iWsXPrIDck1yl4Q=;
-        b=660Y1XV5w0R2lgXSQkEBDc3aCK5BOvsd+197gIwjLmKnBshStQTogxux+wmc+45Bhs
-         JrveB0glpLAhykCpJa7TCbfJUSfZlvJY+XGYNUl+rpdiWP8YUzTIAra3GLOejTLQCaN7
-         F6LmyNMQ/a9hFxH8FYiHLXKXVUDWyK979qAym5S5ZvkppRqs3Jy+rZJaK6YUSddZHjhz
-         9JBJxdUfkuU2pguKKX3y0HLy0VpTBQKVFXJ8UyaLGZ79ekIy0bUadaoBjuYPml+Q0NgR
-         XUXlON3u7j8M+DZ7xdkZRxtc5vglU8iq3qI/aHJuRjP9PThMXDTiSoW/ztvd8vGUXmn0
-         l0kg==
-X-Gm-Message-State: AFqh2kp1+4YTb13wfVg4ZxNdoEL4Gjq1clgTi4Gdtyz+FsMckklu8F30
-        AKbH6JKj5jhOPbiYlZdHt2ndCA==
-X-Google-Smtp-Source: AMrXdXue43UUcDKwZjZdhWr+oBt+sdwXQSo5OBklKDMWMoPNfYRjlup1uXivGzXJ5OIlbz0SonbxTQ==
-X-Received: by 2002:a17:902:7611:b0:192:5a90:b047 with SMTP id k17-20020a170902761100b001925a90b047mr10038582pll.3.1674850210540;
-        Fri, 27 Jan 2023 12:10:10 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id s10-20020a17090a760a00b0022bbbba9801sm5295775pjk.37.2023.01.27.12.10.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 12:10:09 -0800 (PST)
-Message-ID: <3ba1adc6-4fb4-036c-8eca-91f549471c49@kernel.dk>
-Date:   Fri, 27 Jan 2023 13:10:08 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uVeXA+MV2KiRuoJWt2euHuiO6q0ls69NMV+B5RGOE1g=;
+        b=ae1mdkunmypFC+GQXAMnYmyCaykwtWLX8rxUW+k4N6b7oVuSV7yRrVWjpAqvwB/O7e
+         4E4Y0q0jD1fD4lbp2kcPEupeyvu9ToVPI7RSdmCIiwWAPUCoptsBxosEJuhQrKAn3tUT
+         p8OXSuZZ5p5vaYZYC+YZ6YBgxPhuHoVF82hM8mH4kkufMmtd6RTlLxV5imcQhAjQ5uUf
+         JcBG+oeJcY5IuOFGK40NXmaFT8rxDSGmIzNfhiIPBvPv8Az9lnF3ZRutuimu4AWmkgPG
+         FmAtfHHMNl7Nbtritw925cetWpR8qpl99glxkYxJO7Ux+uOB5i9k96JvzJXQMs2BZxxy
+         97Ew==
+X-Gm-Message-State: AO0yUKWlFfQ+5maH6UjmgRq59XHpKmcAQijJX70554OBlw7L3YSlgXw/
+        VeR7vRECPwL5MjUICg+zqi8y5w==
+X-Google-Smtp-Source: AK7set+XmtiAzHziowdJYv4UlUisVIIgCtjFaVGFSMV2uzaTLcaE71V5YEPSlKrBprYinorG3plboQ==
+X-Received: by 2002:a05:6a20:3d16:b0:bc:3523:13c5 with SMTP id y22-20020a056a203d1600b000bc352313c5mr107342pzi.3.1674850248437;
+        Fri, 27 Jan 2023 12:10:48 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id v6-20020aa78506000000b00591b0c847b5sm1717135pfn.218.2023.01.27.12.10.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 12:10:47 -0800 (PST)
+Date:   Fri, 27 Jan 2023 20:10:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, like.xu.linux@gmail.com,
+        kan.liang@linux.intel.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v2 04/15] KVM: PMU: disable LBR handling if architectural
+ LBR is available
+Message-ID: <Y9QvxJbITGaY6Yki@google.com>
+References: <20221125040604.5051-1-weijiang.yang@intel.com>
+ <20221125040604.5051-5-weijiang.yang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] block: Default to build the BFQ I/O scheduler
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-block@vger.kernel.org,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20230127154339.157460-1-ulf.hansson@linaro.org>
- <5743fb1b-eb4b-d169-a467-ee618bcd75f5@kernel.dk>
- <CAPDyKFqFrB4h21F0901nBp-mpiP70nObOrCpRA0ZRfOD_kD5ug@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAPDyKFqFrB4h21F0901nBp-mpiP70nObOrCpRA0ZRfOD_kD5ug@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221125040604.5051-5-weijiang.yang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/23 8:58 AM, Ulf Hansson wrote:
-> On Fri, 27 Jan 2023 at 16:48, Jens Axboe <axboe@kernel.dk> wrote:
->>
->> On 1/27/23 8:43 AM, Ulf Hansson wrote:
->>> Today BFQ is widely used and it's also the default choice for some of the
->>> single-queue-based storage devices. Therefore, let's make it more
->>> convenient to build it as default, along with the other I/O schedulers.
->>>
->>> Let's also build the cgroup support for BFQ as default, as it's likely that
->>> it's wanted too, assuming CONFIG_BLK_CGROUP is also set, of course.
->>
->> This won't make much of a difference, when the symbols are already in
->> the .config. So let's please not. It may be a 'y' for you by default,
->> but for lots of others it is not. Don't impose it on folks.
+On Thu, Nov 24, 2022, Yang Weijiang wrote:
+> From: Paolo Bonzini <pbonzini@redhat.com>
 > 
-> This isn't about folkz, but HW. :-)
+> Traditional LBR is absent on CPU models that have architectural LBR, so
+> disable all processing of traditional LBR MSRs if they are not there.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+> ---
+>  arch/x86/kvm/vmx/pmu_intel.c | 32 ++++++++++++++++++++++----------
+>  1 file changed, 22 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> index e5cec07ca8d9..905673228932 100644
+> --- a/arch/x86/kvm/vmx/pmu_intel.c
+> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> @@ -170,19 +170,23 @@ static inline struct kvm_pmc *get_fw_gp_pmc(struct kvm_pmu *pmu, u32 msr)
+>  static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
+>  {
+>  	struct x86_pmu_lbr *records = vcpu_to_lbr_records(vcpu);
+> -	bool ret = false;
+>  
+>  	if (!intel_pmu_lbr_is_enabled(vcpu))
+> -		return ret;
+> +		return false;
+>  
+> -	ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS) ||
+> -		(index >= records->from && index < records->from + records->nr) ||
+> -		(index >= records->to && index < records->to + records->nr);
+> +	if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
 
-Is it everybody? No, it's a subset. Everybody adding a new driver wants
-to default to y/m, and it's almost always wrong.
+IIUC, the MSRs flat out don't exist _and_ KVM expects to passthrough MSRs to the
+guest, i.e. KVM should check host support, not guest support.  Probably a moot
+point from a functionality perspective since KVM shouldn't allow LBRs to shouldn't
+be enabled for the guest, but from a performance perspective, checking guest CPUID
+is slooow.
 
-> I was thinking that it makes sense for the similar reason to why kyber
-> and deadline are being built as default. Or are there any particular
-> other reasons to why we build those in as default, but not BFQ?
+That brings me to point #2, which is that KVM needs to disallow enabling legacy
+LBRs on CPUs that support arch LBRs.  Again, IIUC, because KVM doesn't have the
+option to fallback to legacy LBRs, that restriction needs to be treated as a bug
+fix.  I'll post a separate patch unless my understanding is wrong.
 
-deadline arguably makes sense as it's simple, and we should have one
-default scheduler. kyber probably does not need to be default y. But
-at least that one doesn't pull in other dependencies.
+> +	    (index == MSR_LBR_SELECT || index == MSR_LBR_TOS))
+> +		return true;
+>  
+> -	if (!ret && records->info)
+> -		ret = (index >= records->info && index < records->info + records->nr);
+> +	if ((index >= records->from && index < records->from + records->nr) ||
+> +	    (index >= records->to && index < records->to + records->nr))
+> +		return true;
+>  
+> -	return ret;
+> +	if (records->info && index >= records->info &&
+> +	    index < records->info + records->nr)
+> +		return true;
+> +
+> +	return false;
+>  }
+>  
+>  static bool intel_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
+> @@ -702,6 +706,9 @@ static void vmx_update_intercept_for_lbr_msrs(struct kvm_vcpu *vcpu, bool set)
+>  			vmx_set_intercept_for_msr(vcpu, lbr->info + i, MSR_TYPE_RW, set);
+>  	}
+>  
+> +	if (guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
 
--- 
-Jens Axboe
+Similar to above, I really don't want to query guest CPUID in the VM-Enter path.
+If we establish the rule that LBRs can be enabled if and only if the correct type
+is enabled (traditional/legacy vs. arch), then this can simply check host support.
 
+> +		return;
+> +
+>  	vmx_set_intercept_for_msr(vcpu, MSR_LBR_SELECT, MSR_TYPE_RW, set);
+>  	vmx_set_intercept_for_msr(vcpu, MSR_LBR_TOS, MSR_TYPE_RW, set);
+>  }
+> @@ -742,10 +749,12 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>  	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
+> +	bool lbr_enable = !guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
+> +		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
 
+Unnecessary guest CPUID lookup and VMCS read, i.e. this can be deferred to the
+!lbr_desc->event path.
+
+>  
+>  	if (!lbr_desc->event) {
+>  		vmx_disable_lbr_msrs_passthrough(vcpu);
+> -		if (vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR)
+> +		if (lbr_enable)
+>  			goto warn;
+>  		if (test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use))
+>  			goto warn;
+> @@ -768,7 +777,10 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
+>  
+>  static void intel_pmu_cleanup(struct kvm_vcpu *vcpu)
+>  {
+> -	if (!(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR))
+> +	bool lbr_enable = !guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
+> +		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
+> +
+> +	if (!lbr_enable)
+>  		intel_pmu_release_guest_lbr_event(vcpu);
+>  }
+>  
+> -- 
+> 2.27.0
+> 
