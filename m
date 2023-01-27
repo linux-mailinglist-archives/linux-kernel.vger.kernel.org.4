@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A63367EE5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D69367EE60
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 20:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjA0TjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 14:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
+        id S231826AbjA0Tje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 14:39:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbjA0Tiv (ORCPT
+        with ESMTP id S231404AbjA0TjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 14:38:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969B91ABEA
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 11:38:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B29CB821C1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 19:37:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 280DAC433D2;
-        Fri, 27 Jan 2023 19:37:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674848266;
-        bh=nwoh6givfuSBmXb3GCR7oK6jqFpnszFTLiwUZsLjbzQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=MbiirT+5CVovD3F0K+FJCEJeiQWkLenJgi2xiqJ7sIojQ+BJCYPneuWsFdSiExlWF
-         Fmu6PEIZ3uXV1wp1VHMbOgK/olcRlwf4fqdVRfPmpU30hUav8UsAxvaYBvvVMQ3tvT
-         OF63tTLARfAvlole4uwUS5vFeme/6qg0Kuv5virwY18+RD+xo8APKqyxKgXWWkf217
-         NpmQGr2SExy7e4VXOS+fA1AfaNSgLzSCgu8bHGLBK8bGsUs2s/lVwYVuR5WrzcFGVF
-         /S0ZRmdbWdFh/yzGRhYXPWawE63h0VRlIQAhEyvAXoDMZXgZpEEs68cbfqCDAShJqb
-         Si6TVieWiEVFQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C6FB75C0510; Fri, 27 Jan 2023 11:37:45 -0800 (PST)
-Date:   Fri, 27 Jan 2023 11:37:45 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
-        sfr@canb.auug.org.au
-Subject: Re: objtool warning from next-20230125
-Message-ID: <20230127193745.GX2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230126182302.GA687063@paulmck-ThinkPad-P17-Gen-1>
- <20230126205954.zk3t4fpmxqowfu2d@treble>
- <Y9PAN12SPHuGL99G@hirez.programming.kicks-ass.net>
+        Fri, 27 Jan 2023 14:39:02 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A522BF06;
+        Fri, 27 Jan 2023 11:38:11 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id q15so4998407qtn.0;
+        Fri, 27 Jan 2023 11:38:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w1aEl95AJYjffXRdxsqmJWBXw55TlbGY6xDVHq3famI=;
+        b=Ul2BzwmSPjznejO2ag3lQdUvwfAOcbW5G2w8KilBPxPif6AB1QoFBUhnHngQrQQgtS
+         aRpF4VQ+QZnsBcNyBTCCX/gOihGMNAzourTg0ae3vuzCEtOFeVx00my5rp0x6STvQoRA
+         2s8LPH4X/bFAYgduOnz6MBvODTvetCKDIVh3KQ8M0EVB70AmOBJh9hDBFvd3ILOv+E4L
+         kMPBKUvyXL3TfKEG8o1HLs4mW+e5DwN98phaKzzG6QFVjc+2mRwbWOmswIf1COW7+mFF
+         CothVt6ofu67NsR4KmRJBQaORcdbUKbEl5kw/J4ZrkIm8FKGOW9orTprHGRHc+zZI3xo
+         XWDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w1aEl95AJYjffXRdxsqmJWBXw55TlbGY6xDVHq3famI=;
+        b=lVT2FYCvY2XK1DwoC5LgdcLUXGoySDOyNwNZHDcfxaaSvHS0RJFBiwOYkn+9rJLWwA
+         MATOw68+FnGobdvkzJwT598bVtPy13ymm73sF86b0xsA4fpFoLzyXwKom+fjOZMIvCty
+         COl/jVLwKTvVfbMClqKgC3oye58yvV2RJL0PL4obE4wXwuAeII3i+k8JYfy9qcjyY/Rn
+         wHTe01g8AiWrXo/jUQFgH78aG0AcvawWHELfd3LS2g8jUBPCTByrwQbYCLRexcrGH9hn
+         +K6x14pOy3tBymTt5TFWjhl7ElC4+5CLJ1ehUfo48wGj+uQnW59/fwGhXL99DV4ra6ZG
+         MhLQ==
+X-Gm-Message-State: AO0yUKVQU697NeJSa0D3jevSxlKqP+CfsUzqsmcXizWTS+qkLnVXSxzu
+        ZevbWdRbgkz+wtKORqAdL9smdi04YQQKAg==
+X-Google-Smtp-Source: AK7set9E4TD4QHRWMfOWVqB/822pNG/iU0dnoy2007Qoy+t4dqCrr7WizLhdpvEG+Amu+0WgvzfpQg==
+X-Received: by 2002:ac8:5d94:0:b0:3b8:2dc2:9fad with SMTP id d20-20020ac85d94000000b003b82dc29fadmr2982170qtx.49.1674848278911;
+        Fri, 27 Jan 2023 11:37:58 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id l190-20020a3789c7000000b006cfc9846594sm3430274qkd.93.2023.01.27.11.37.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 11:37:58 -0800 (PST)
+Message-ID: <c3974009-f585-0f51-e747-123392080a93@gmail.com>
+Date:   Fri, 27 Jan 2023 11:37:55 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9PAN12SPHuGL99G@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v5 net-next 01/13] net: mscc: ocelot: expose ocelot wm
+ functions
+Content-Language: en-US
+To:     Colin Foster <colin.foster@in-advantage.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>
+References: <20230127193559.1001051-1-colin.foster@in-advantage.com>
+ <20230127193559.1001051-2-colin.foster@in-advantage.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230127193559.1001051-2-colin.foster@in-advantage.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 01:14:47PM +0100, Peter Zijlstra wrote:
-> On Thu, Jan 26, 2023 at 12:59:54PM -0800, Josh Poimboeuf wrote:
-> > On Thu, Jan 26, 2023 at 10:23:02AM -0800, Paul E. McKenney wrote:
-> > > Hello!
-> > > 
-> > > I have started seeing these objtool warnings from a wide variety of
-> > > KASAN-enabled rcutorture-related test scenarios in next-20230125.  It has
-> > > been awhile since I tested -next, so I am not yet sure where this started.
-> > > 
-> > > vmlinux.o: warning: objtool: __asan_memset+0x34: call to __memset() with UACCESS enabled
-> > > vmlinux.o: warning: objtool: __asan_memmove+0x4d: call to __memmove() with UACCESS enabled
-> > > vmlinux.o: warning: objtool: __asan_memcpy+0x4d: call to __memcpy() with UACCESS enabled
-> > > 
-> > > As usual, should I be worried?
-> > 
-> > This apparently came from Peter's
-> > 
-> >   69d4c0d32186 ("entry, kasan, x86: Disallow overriding mem*() functions")
-> > 
-> > but I have no idea how this is supposed to work.  Peter?
-> 
-> Durr.. I'm not sure why I put them in the uaccess_safe_builtin[] array.
-> 
-> So yeah, this reproduces using defconfig+KASAN, removing the functions
-> from the array shuts it up and doesn't generate new ones -- for that
-> config.
-> 
-> Let me try and build a few more .configs...
 
-Again, I am glad that it is not just me...
 
-And thank you for digging into this!
+On 1/27/2023 11:35 AM, Colin Foster wrote:
+> Expose ocelot_wm functions so they can be shared with other drivers.
+> 
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-							Thanx, Paul
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
