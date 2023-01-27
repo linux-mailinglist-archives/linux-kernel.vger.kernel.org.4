@@ -2,234 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC0F67ED5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 330E967ED99
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 19:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235116AbjA0SZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 13:25:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
+        id S234360AbjA0Se0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 13:34:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235096AbjA0SZs (ORCPT
+        with ESMTP id S235063AbjA0SeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 13:25:48 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 725ED37B54;
-        Fri, 27 Jan 2023 10:25:46 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 962632F;
-        Fri, 27 Jan 2023 10:15:26 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.11.183])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C2E63FA58;
-        Fri, 27 Jan 2023 10:14:42 -0800 (PST)
-Date:   Fri, 27 Jan 2023 18:14:35 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        Jann Horn <jannh@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrey Konovalov <andreyknvl@gmail.com>
-Subject: Re: [PATCH v2] perf: Allow restricted kernel breakpoints on user
- addresses
-Message-ID: <Y9QUi7oU3nbdIV1J@FVFF77S0Q05N>
-References: <20230127162409.2505312-1-elver@google.com>
+        Fri, 27 Jan 2023 13:34:23 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0996F21C;
+        Fri, 27 Jan 2023 10:34:22 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RHhJr5003759;
+        Fri, 27 Jan 2023 18:15:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=z4AA2ZK0KoCUrgCsScIkdFlax+AQ1xvYsqquTrj3a5k=;
+ b=G9pUnuBbqRSCRdf+GsYx9Y7GLDNQsNXSdMqDVm4TYpQzKToLMJbNSrqH2mRHgGP35JBq
+ tTLFq1hDM3Rp+BT67b9LYISni+BkgJpgI6ECun+omCs8zIiHLKx3bbocbZaxJHjjQYER
+ 3wYnjcyuFKX5Jp6EZx/YbOi4EpvFnVnWlzp+/szXrMECf+4L/6HqdIScFvWZGfkApzIE
+ 5wmmtPJ/U/lPZ3CJyl0jLKVRBb2OhH8l08ddTeixAjFZa4y7lyMgHdSf2lOWqgHgprcv
+ XYdaMP0CrkjP6zdPIcgYEsulABQV2K+UL3iFPzwjqiplH+NdVrXM3kwansig+s1x0Yq5 CA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nck8s0rsd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 18:15:28 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30RHujp9007987;
+        Fri, 27 Jan 2023 18:15:28 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nck8s0rrm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 18:15:28 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30R6E8Fo014903;
+        Fri, 27 Jan 2023 18:15:26 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3n87affwh6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 18:15:26 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30RIFMIn47579566
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 Jan 2023 18:15:22 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9857720049;
+        Fri, 27 Jan 2023 18:15:22 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3DDE920040;
+        Fri, 27 Jan 2023 18:15:22 +0000 (GMT)
+Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.154.20])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 27 Jan 2023 18:15:22 +0000 (GMT)
+Message-ID: <f0f6c83f7d38a24234203849e116516ab7ac32f7.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 12/14] KVM: s390: Extend MEM_OP ioctl by storage key
+ checked cmpxchg
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Janosch Frank <frankja@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Date:   Fri, 27 Jan 2023 19:15:22 +0100
+In-Reply-To: <aa942cf0-6f50-05f5-75a9-278129f00bf6@linux.ibm.com>
+References: <20230125212608.1860251-1-scgl@linux.ibm.com>
+         <20230125212608.1860251-13-scgl@linux.ibm.com>
+         <aa942cf0-6f50-05f5-75a9-278129f00bf6@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127162409.2505312-1-elver@google.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: X4TYTTeX60ySKf2aPVbcn3mRdDhAB91y
+X-Proofpoint-ORIG-GUID: fWJGBKK6oPYom01hnFAZGuDL5eIDQoTZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_10,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ mlxscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1015
+ priorityscore=1501 impostorscore=0 spamscore=0 phishscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301270167
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
+On Thu, 2023-01-26 at 17:10 +0100, Janosch Frank wrote:
+> On 1/25/23 22:26, Janis Schoetterl-Glausch wrote:
+> > User space can use the MEM_OP ioctl to make storage key checked reads
+> > and writes to the guest, however, it has no way of performing atomic,
+> > key checked, accesses to the guest.
+> > Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
+> > op. For now, support this op for absolute accesses only.
+> >=20
+> > This op can be use, for example, to set the device-state-change
+>=20
+> s/use/used/
+>=20
+> > indicator and the adapter-local-summary indicator atomically.
+> >=20
+> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> > ---
+> [...]
+> > +/**
+> > + * cmpxchg_guest_abs_with_key() - Perform cmpxchg on guest absolute ad=
+dress.
+> > + * @kvm: Virtual machine instance.
+> > + * @gpa: Absolute guest address of the location to be changed.
+> > + * @len: Operand length of the cmpxchg, required: 1 <=3D len <=3D 16. =
+Providing a
+> > + *       non power of two will result in failure.
+> > + * @old_addr: Pointer to old value. If the location at @gpa contains t=
+his value,
+> > + *            the exchange will succeed. After calling cmpxchg_guest_a=
+bs_with_key()
+> > + *            *@old_addr contains the value at @gpa before the attempt=
+ to
+> > + *            exchange the value.
+> > + * @new: The value to place at @gpa.
+> > + * @access_key: The access key to use for the guest access.
+> > + * @success: output value indicating if an exchange occurred.
+> > + *
+> > + * Atomically exchange the value at @gpa by @new, if it contains *@old=
+.
+> > + * Honors storage keys.
+> > + *
+> > + * Return: * 0: successful exchange
+> > + *         * a program interruption code indicating the reason cmpxchg=
+ could
+> > + *           not be attempted
+>=20
+> Nit:
+>  >0: a program interruption code...
+>=20
+>=20
+> > + *         * -EINVAL: address misaligned or len not power of two
+> > + *         * -EAGAIN: transient failure (len 1 or 2)
+> > + *         * -EOPNOTSUPP: read-only memslot (should never occur)
+> > + */
+> > +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
+> > +			       __uint128_t *old_addr, __uint128_t new,
+> > +			       u8 access_key, bool *success)
+> > +{
+> > +	gfn_t gfn =3D gpa >> PAGE_SHIFT;
+>=20
+>   gpa_to_gfn()?
 
-Apologies for having not replies on v1...
+Yes.
+>=20
+> > +	struct kvm_memory_slot *slot =3D gfn_to_memslot(kvm, gfn);
+> > +	bool writable;
+> > +	hva_t hva;
+> > +	int ret;
+> > +
+> > +	if (!IS_ALIGNED(gpa, len))
+> > +		return -EINVAL;
+> > +
+> > +	hva =3D gfn_to_hva_memslot_prot(slot, gfn, &writable);
+> > +	if (kvm_is_error_hva(hva))
+> > +		return PGM_ADDRESSING;
+> > +	/*
+> > +	 * Check if it's a read-only memslot, even though that cannot occur
+> > +	 * since those are unsupported.
+> > +	 * Don't try to actually handle that case.
+> > +	 */
+> > +	if (!writable)
+> > +		return -EOPNOTSUPP;
+> > +
+> > +	hva +=3D offset_in_page(gpa);
+>=20
+> Hmm if we don't use a macro to generate these then I'd add an explanation=
+:
+>=20
+> cmpxchg_user_key() is a macro that is dependent on the type of "old" so=
+=20
+> there's no deduplication possible without further macros.
 
-On Fri, Jan 27, 2023 at 05:24:09PM +0100, Marco Elver wrote:
-> Allow the creation of restricted breakpoint perf events that also fire
-> in the kernel (perf_event_attr::exclude_kernel=0), if:
-> 
->   1. No sample information is requested; samples may contain IPs,
->      registers, or other information that may disclose kernel addresses.
-> 
->   2. The breakpoint (viz. data watchpoint) is on a user address.
+Can do.
+Btw. I could move the other two statements out of the switch by using a uni=
+on of old values,
+memcmp and memcpy, but I think that would be less readable.
 
-I think there's a potential problem here w.r.t. what constitutes a "user
-address". Below, the patch assumes that any address which access_ok() is happy
-with is a user address, but that's not always the case, and it's not
-necessarily always safe to allow watchpoints on such addresses.
+>=20
+> > +	switch (len) {
+> > +	case 1: {
+> > +		u8 old;
+> > +
+> > +		ret =3D cmpxchg_user_key((u8 *)hva, &old, *old_addr, new, access_key=
+);
+> > +		*success =3D !ret && old =3D=3D *old_addr;
+> > +		*old_addr =3D old;
+> > +		break;
+> > +	}
+> > +	case 2: {
+> > +		u16 old;
+> > +
+> > +		ret =3D cmpxchg_user_key((u16 *)hva, &old, *old_addr, new, access_ke=
+y);
+> > +		*success =3D !ret && old =3D=3D *old_addr;
+> > +		*old_addr =3D old;
+> > +		break;
+> > +	}
+> > +	case 4: {
+> > +		u32 old;
+> > +
+> > +		ret =3D cmpxchg_user_key((u32 *)hva, &old, *old_addr, new, access_ke=
+y);
+> > +		*success =3D !ret && old =3D=3D *old_addr;
+> > +		*old_addr =3D old;
+> > +		break;
+> > +	}
+> > +	case 8: {
+> > +		u64 old;
+> > +
+> > +		ret =3D cmpxchg_user_key((u64 *)hva, &old, *old_addr, new, access_ke=
+y);
+> > +		*success =3D !ret && old =3D=3D *old_addr;
+> > +		*old_addr =3D old;
+> > +		break;
+> > +	}
+> > +	case 16: {
+> > +		__uint128_t old;
+> > +
+> > +		ret =3D cmpxchg_user_key((__uint128_t *)hva, &old, *old_addr, new, a=
+ccess_key);
+> > +		*success =3D !ret && old =3D=3D *old_addr;
+> > +		*old_addr =3D old;
+> > +		break;
+> > +	}
+> > +	default:
+> > +		return -EINVAL;
+> > +	}
+> > +	mark_page_dirty_in_slot(kvm, slot, gfn);
+>=20
+> Is that needed if we failed the store?
 
-For example, UEFI runtime services may live in low adddresses below
-TASK_SIZE_MAX, and there are times when we run code in an idmap (or other
-low-half mapping) when we cannot safely take an exception for things like idle,
-suspend, kexec, pagetable rewriting on arm64, etc.
+Indeed it isn't.
 
-So I think this may introduce functional issues (e.g. a mechanism to crash the
-kernel) in addition to any potential information disclosure, and I would not
-want this to be generally available to unprivileged users.
+[...]
 
-Most of those happen in kernel threads, but they can also happen in the context
-of user threads (e.g. if triggering suspend/idle via sysfs), so special care
-will be needed, as above.
-
-> The rules constrain the allowable perf events such that no sensitive
-> kernel information can be disclosed.
-> 
-> Despite no explicit kernel information disclosure, the following
-> questions may need answers:
-> 
->  1. Q: Is obtaining information that the kernel accessed a particular
->     user's known memory location revealing new information?
-> 
->     A: Given the kernel's user space ABI, there should be no "surprise
->     accesses" to user space memory in the first place.
-
-I think that may be true for userspace, but not true for other transient
-mappings in the low half of the address space. Ignoring the functional concern
-above, for idmap'd code this would at least provide a mechanism to probe for
-the phyiscal address of that code (and by extension, reveal the phyiscal
-location of the entire kernel).
-
->  2. Q: Does causing breakpoints on user memory accesses by the kernel
->     potentially impact timing in a sensitive way?
-> 
->     A: Since hardware breakpoints trigger regardless of the state of
->     perf_event_attr::exclude_kernel, but are filtered in the perf
->     subsystem, this possibility already exists independent of the
->     proposed change.
-
-Hmm... arm64's HW breakpoints and watchpoints have HW privilege filters, so I'm
-not sure the above statement is generally/necessarily true.
-
-> Motivation:  Data breakpoints on user addresses that also fire in the
-> kernel provide complete coverage to track and debug accesses, not just
-> in user space but also through the kernel. For example, tracking where
-> user space invokes syscalls with pointers to specific memory.
-> 
-> Breakpoints can be used for more complex dynamic analysis, such as race
-> detection, memory-safety error detection, or data-flow analysis. Larger
-> deployment by linking such dynamic analysis into binaries in production
-> only becomes possible when no additional capabilities are required by
-> unprivileged users. To improve coverage, it should then also be possible
-> to enable breakpoints on user addresses that fire in the kernel with no
-> additional capabilities.
-
-I can understand the argument for watchpoints (modulo my concerns above), but
-there's no need to support instruction breakpoints, right? i.e. there's no
-legitimate reason for a user to want to monitor a given user address
-system-wide, regardless of what's running?
-
-IIUC this only makes sense for watchpoints, and only in the context of a given
-task.
-
-Thanks,
-Mark.
-
-> Acked-by: Dmitry Vyukov <dvyukov@google.com>
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
-> 
-> Changelog
-> ~~~~~~~~~
-> 
-> v2:
-> * Commit message (motivation, more explanation).
-> * Apply ack.
-> 
-> v1: https://lkml.kernel.org/r/20220902100057.404817-1-elver@google.com
-> * Rebase.
-> 
-> RFC: https://lkml.kernel.org/r/20220601093502.364142-1-elver@google.com
-> ---
->  include/linux/perf_event.h |  8 +-------
->  kernel/events/core.c       | 38 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 39 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index c6a3bac76966..a95a6b889b00 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -1463,13 +1463,7 @@ static inline int perf_is_paranoid(void)
->  	return sysctl_perf_event_paranoid > -1;
->  }
->  
-> -static inline int perf_allow_kernel(struct perf_event_attr *attr)
-> -{
-> -	if (sysctl_perf_event_paranoid > 1 && !perfmon_capable())
-> -		return -EACCES;
-> -
-> -	return security_perf_event_open(attr, PERF_SECURITY_KERNEL);
-> -}
-> +extern int perf_allow_kernel(struct perf_event_attr *attr);
->  
->  static inline int perf_allow_cpu(struct perf_event_attr *attr)
->  {
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index d56328e5080e..0f1fc9aef294 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -3174,6 +3174,12 @@ static int perf_event_modify_attr(struct perf_event *event,
->  		return -EOPNOTSUPP;
->  	}
->  
-> +	if (!event->attr.exclude_kernel) {
-> +		err = perf_allow_kernel(attr);
-> +		if (err)
-> +			return err;
-> +	}
-> +
->  	WARN_ON_ONCE(event->ctx->parent_ctx);
->  
->  	mutex_lock(&event->child_mutex);
-> @@ -12289,6 +12295,38 @@ perf_check_permission(struct perf_event_attr *attr, struct task_struct *task)
->  	return is_capable || ptrace_may_access(task, ptrace_mode);
->  }
->  
-> +/*
-> + * Check if unprivileged users are allowed to set up breakpoints on user
-> + * addresses that also count when the kernel accesses them.
-> + */
-> +static bool perf_allow_kernel_breakpoint(struct perf_event_attr *attr)
-> +{
-> +	if (attr->type != PERF_TYPE_BREAKPOINT)
-> +		return false;
-> +
-> +	/*
-> +	 * The sample may contain IPs, registers, or other information that may
-> +	 * disclose kernel addresses or timing information. Disallow any kind of
-> +	 * additional sample information.
-> +	 */
-> +	if (attr->sample_type)
-> +		return false;
-> +
-> +	/*
-> +	 * Only allow kernel breakpoints on user addresses.
-> +	 */
-> +	return access_ok((void __user *)(unsigned long)attr->bp_addr, attr->bp_len);
-> +}
-> +
-> +int perf_allow_kernel(struct perf_event_attr *attr)
-> +{
-> +	if (sysctl_perf_event_paranoid > 1 && !perfmon_capable() &&
-> +	    !perf_allow_kernel_breakpoint(attr))
-> +		return -EACCES;
-> +
-> +	return security_perf_event_open(attr, PERF_SECURITY_KERNEL);
-> +}
-> +
->  /**
->   * sys_perf_event_open - open a performance event, associate it to a task/cpu
->   *
-> -- 
-> 2.39.1.456.gfc5497dd1b-goog
-> 
