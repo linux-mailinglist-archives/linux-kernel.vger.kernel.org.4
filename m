@@ -2,90 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFC867F07F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2941C67F084
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbjA0ViM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
+        id S231420AbjA0Viz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjA0ViH (ORCPT
+        with ESMTP id S229782AbjA0Viw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:38:07 -0500
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5873C1C5AB;
-        Fri, 27 Jan 2023 13:38:07 -0800 (PST)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1636eae256cso3956315fac.0;
-        Fri, 27 Jan 2023 13:38:07 -0800 (PST)
+        Fri, 27 Jan 2023 16:38:52 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0052B21298
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:38:50 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id l1so2938106qkg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:38:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EkjlJx23CrkCdR6Z9AlaV1vvEzLjMrV/VSTIV1fEBgE=;
+        b=mdSFmRNUmWQq+PcXXLwJph7CYzqDTSPiartUvARRGxoGc1aVC4POxGBX2FggO/3pu3
+         tQFZhD+2V6mS+vdDTGCdjH8/FrQxi8HRqTTNNPcMu5W5wnxcbINbEwC2uNxi16VqiCrO
+         spk3LNSUUGWq9NS1/ROkCfB5Ox947kYiSkJhopYy57uEk7X1FazkJABT0QaaWtsjwE7r
+         wO/3wn0B/X9ffj10o5BpGlMf6j3OkxuiwccZ79tRyIm09vaB2+BsgheNIk/XNgIon8r0
+         AAe5cGFFuaXLmz3cJvk7X0bAKvEdrCkDma6CLHS4KCzXss+wZOUs7zLIkLGlwB9b1ui4
+         u6Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4DjLB1n7BfkYGT4DAfuO2w1qwaXNy9ZaZZ251T77AFo=;
-        b=KYcvAv5aQIuHHpJjKnabOdL2uHAphAsRlpbK/kXTOzPPqPTYWg0aLrnxr3mblXdsjK
-         6qd7BLJ/4RxI6N5neCAEuvtV3LDphTmOcvg4rlho0ege5sONSEticY4jwxIFfwYYGG+R
-         Ej8NwPP346J6E7CAfvBGn8ov/Bn08ZlRLIoFvwEreG0TdEsv74VRbdJU/qIIU6osjRgf
-         NwcP8X5n8ZUmMOpC3kjim9QwS4opEC5ys3OHZYXgx9afSQq13nahT5UQvv+Hp8IvCcHO
-         mVp76gJ8hFXsd5W1/iRkCeYQ6FALaCfaZX7nv+cbNtm0OCuduKVnUqDMhGUocEh5HHmT
-         7d9w==
-X-Gm-Message-State: AO0yUKWQou4vVh1rUxh+upGnhrsTV9NkQG8zmQ66/sMXhEY4s8PcfJ7q
-        Um+YhRu5nnLXhyfnEf3mHw==
-X-Google-Smtp-Source: AK7set8Ql8o8EiWbybmvdsqxzp7LPFPJQ09kTHa1AGoCvt1jMJz/kWH1nsV19uepUDh5cb28oze3dQ==
-X-Received: by 2002:a05:6870:f10c:b0:163:50ff:ba11 with SMTP id k12-20020a056870f10c00b0016350ffba11mr4283145oac.21.1674855486495;
-        Fri, 27 Jan 2023 13:38:06 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b36-20020a056870472400b001600797d1b5sm2406214oaq.41.2023.01.27.13.38.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 13:38:06 -0800 (PST)
-Received: (nullmailer pid 727006 invoked by uid 1000);
-        Fri, 27 Jan 2023 21:38:05 -0000
-Date:   Fri, 27 Jan 2023 15:38:05 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Isaac J. Manjarres" <isaacmanjarres@google.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>, stable@vger.kernel.org,
-        Saravana Kannan <saravanak@google.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Calvin Zhang <calvinzhang.cool@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] Revert "mm: kmemleak: alloc gray object for reserved
- region with direct map"
-Message-ID: <167485548359.726924.14589412750691974893.robh@kernel.org>
-References: <20230124230254.295589-1-isaacmanjarres@google.com>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EkjlJx23CrkCdR6Z9AlaV1vvEzLjMrV/VSTIV1fEBgE=;
+        b=JSBNro2da99QxYEhnEQ20CM6aO05ehwqPU37L4JSAGWYCESRvv0/QqnjJynCJrwaTw
+         2VjBnBn6GncDuMzP2xWsXL+L0hk+8vqyMJ/Ylcvpt/SYyIAQkBLBiHBaVozx7ym+MMJd
+         wwr+39saXBErRT0wG3uo1d8wX0dmWYdzAo39mLuHFDQV+KJbC4eeQnNJjdU+pIY3rt4r
+         P3HEecYkBBnfuey55avhpgml06p75DnncBlPjq7gUMi0t56xRTsXX4wl7RZoDQsdI/ai
+         E+bORtsQKsheEbZNhA6RZkFkllCg9tk9F0PFPUR5Gwv8hreI/Zq/Y7C0dFv0TsTWoQ31
+         6JgQ==
+X-Gm-Message-State: AFqh2kqnnOK2dv1Y6fULF83ZEfn7s7y4YHAJ9iI9vH7QRX9HYL4+KuJt
+        cXu0tj1fbetLQqCjaWKOwWJY68S9yFgdLgfbVEk=
+X-Google-Smtp-Source: AMrXdXsk2W296jrqnhgL8kKhRiSFwc9CWIOCXF0g3sGOXBKyQYL5TqE8x1jplv4n4pOuAMZpZqMCweE4nKqi6Xud/Ak=
+X-Received: by 2002:ae9:e214:0:b0:708:ee3b:e153 with SMTP id
+ c20-20020ae9e214000000b00708ee3be153mr1126380qkc.352.1674855529998; Fri, 27
+ Jan 2023 13:38:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124230254.295589-1-isaacmanjarres@google.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Received: by 2002:a05:622a:2c6:b0:3b6:4a9d:4c83 with HTTP; Fri, 27 Jan 2023
+ 13:38:49 -0800 (PST)
+Reply-To: mrsmargaret1960r@gmail.com
+From:   "Mrs. Margaret Christopher" <alkasimabubakar644@gmail.com>
+Date:   Fri, 27 Jan 2023 22:38:49 +0100
+Message-ID: <CAC84WCrZJNgrSfmMM24wp7WU8T7ZCPvgPUyXRBgHx++ro78g4w@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:72b listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7056]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [alkasimabubakar644[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [alkasimabubakar644[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+-- 
+Hello Dear
 
-On Tue, 24 Jan 2023 15:02:54 -0800, Isaac J. Manjarres wrote:
-> This reverts commit 972fa3a7c17c9d60212e32ecc0205dc585b1e769.
-> 
-> Kmemleak operates by periodically scanning memory regions for pointers
-> to allocated memory blocks to determine if they are leaked or not.
-> However, reserved memory regions can be used for DMA transactions
-> between a device and a CPU, and thus, wouldn't contain pointers to
-> allocated memory blocks, making them inappropriate for kmemleak to
-> scan. Thus, revert this commit.
-> 
-> Cc: stable@vger.kernel.org # 5.17+
-> Cc: Calvin Zhang <calvinzhang.cool@gmail.com>
-> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-> ---
->  drivers/of/fdt.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
+  Am a dying woman here in the hospital, i was diagnose as a
+Coronavirus patient over  a month ago. I am A business woman who is
+dealing with Gold Exportation, I Am from USA California i have a
+charitable and unfulfilling project that am about to handover to you,
+if you are interested to know more about this project please reply me.
+ Hope to hear from you
 
-Applied, thanks!
+Best Regard
+Mrs Margaret
