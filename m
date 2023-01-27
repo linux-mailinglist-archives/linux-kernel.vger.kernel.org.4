@@ -2,479 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33B067DC13
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDEDA67DC16
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 03:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjA0CD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 Jan 2023 21:03:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S232994AbjA0CEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 Jan 2023 21:04:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233454AbjA0CC7 (ORCPT
+        with ESMTP id S233321AbjA0CEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 Jan 2023 21:02:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FF87A490;
-        Thu, 26 Jan 2023 17:58:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90B4EB81F86;
-        Fri, 27 Jan 2023 01:58:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E1FFC433A8;
-        Fri, 27 Jan 2023 01:58:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674784709;
-        bh=pzNOG0Djf7V1R33wl68ow+px2X7SH6XndlxEJRqf8KA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DLTnS85jmYw3B9GcEjVOD6YJTNMQz8vVDc0NzVyrsHkgBmzqzXyTwHe5HyqYwHTue
-         6DEkRNTwrg6oH+QSwHhbE7T2JQZKioBkNeLiqCnSoH8Y3m6J/ZWVlaC5iyuLeDFJpW
-         jWwwVpUNLPGcBEWIyyAlHEb/CyRZXr9G/zGeGRFtWGi2OXzMZe190yNvw7YZj5OTwL
-         z3bNr0cmkz3rKMERSPdiz5rKRagX4ehp4qPhNPMz2tPNcZ9OD8LOk3mo+RNfACr5oh
-         17xX6Z8jrfFMHqsAOJUSzV6bpKYzQ7MidcOqAKhRjyKHSIpHEH2g32jJiTf0ntZlC9
-         R2dyvHPwGx9tA==
-Received: by mail-ej1-f52.google.com with SMTP id v6so10001934ejg.6;
-        Thu, 26 Jan 2023 17:58:29 -0800 (PST)
-X-Gm-Message-State: AFqh2krDt7xzCs2N5XtwNH0d+xuuN+vMcD+DrFbM0HmyDIBjEE8D/TgM
-        b9UJoRBLjqo9xL7HgAv0u1rHKoPT/YzQAPrrXKg=
-X-Google-Smtp-Source: AMrXdXt008fMl0aqmAEgNQX/zkl+hROHQsMbEajSnj9VGCgxHd9lGbxsSIeB2dhxneD5xCgD0lX2gGyuG+mIBYuC/Ak=
-X-Received: by 2002:a17:906:d7a8:b0:84d:3b9a:2e4a with SMTP id
- pk8-20020a170906d7a800b0084d3b9a2e4amr4004490ejb.235.1674784707205; Thu, 26
- Jan 2023 17:58:27 -0800 (PST)
+        Thu, 26 Jan 2023 21:04:06 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EF6761FC;
+        Thu, 26 Jan 2023 17:59:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674784768; x=1706320768;
+  h=date:from:to:cc:message-id:references:in-reply-to:
+   mime-version;
+  bh=XVoBrL1u+ovY+dPD6G1D/dONTla12lyDTSb13RbsByQ=;
+  b=CaE4HG4y/TDqsbPUv76aCr41JZvjd6wsMazJqS9gPQMNocZB7fDxm5g2
+   fOWUAJuk5kx7rEwkVUTW43Ndrg4jSKSuz5eX/rI+ZFlFvZ/jP5EWyK3OB
+   7olr5WoUZ/P4m9Hw8TSKl244I3em4XOhriLygYloV3lEU4OREvwO/ZXbg
+   GCu443lxf6lw7TpldTMSnJ5zvrNwjJPJAy49nmTj6id3M0C39VHguT1wa
+   JRSXXmhz24jkxa358b+i4aXut0Jpka1aWf2O9nP+i/IuMMrqw2BgY+ORx
+   DG/lXVfQPBpnRDg80+W2PN5ef6IYORHdGJmnwegrWYsoXMAtB2hEYrlU3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="306657447"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="306657447"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2023 17:59:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10602"; a="663122200"
+X-IronPort-AV: E=Sophos;i="5.97,249,1669104000"; 
+   d="scan'208";a="663122200"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga002.jf.intel.com with ESMTP; 26 Jan 2023 17:59:10 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 26 Jan 2023 17:59:09 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 26 Jan 2023 17:59:09 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 26 Jan 2023 17:59:09 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LI959XeUBnMJbk3/kccp+tW1VUSXIBpoCBZcVBZfiMOoQStMM8ZrJM4QRnD74nWQK/hFKSeRkaovAa0TavWtWAYM43z7qk6IsNPQomp4Cfihc0MppXMJrbsIJs36LGrXDVMe9GhGUP1NiMSXIOX1Gq30pdJ7IoaTRAUd8u6YAkGz1Mz94LPiiQmu/yaam8g/6b37jsy3Yu+3Y5Hfbi22ewBXZIuTEx3fqJoLFJMAJPio1u8mimh2zm4/gmcS8nwjZlIPjYpzEoXAK5kIc2Xcjdcfs6yDmH9f1BBaNNEUFgJqJTcdJg3XmIBaB9/RLDPEzQ277crxVDidqN5eqGgIDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GUtfowpkaYO4FO2jM2lQu7HdTrUjsl91zmPdkT8JXao=;
+ b=Npg40CZGWva5jiiyfrxxxpwMNDf3lbDcbAzWjD5ZnLXC6qp3fyVM1MI5HhmzZaHwcSKAGFWy5l/qOdad9DTTpadJ5pSdkXAdiGbtxfjGu1Oby05jRAGCAvJzKTT4cJJK7bZizuKth17/D6AO4PDY3DDP4rYiQBGieWg+ydbre3OD521/Lh0xtDBJsXeDwwVggoiM6LbEjF3iHZSg3O9H1t9c+czcTFFD/xRTqKGzswKUomVPSffndxJOp3ADN/nTDM7Aa8c+d4psAtLYlJX2wrmoVa5whmYotv5nKSIRcMEKe9RxEkIDM8ZzuFv5OSarZpviznaEPcvcqWzs7TfdGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by CO1PR11MB4962.namprd11.prod.outlook.com (2603:10b6:303:99::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.23; Fri, 27 Jan
+ 2023 01:59:06 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc%5]) with mapi id 15.20.6043.022; Fri, 27 Jan 2023
+ 01:59:06 +0000
+Date:   Thu, 26 Jan 2023 17:59:03 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     <alison.schofield@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Ira Weiny" <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>
+CC:     Alison Schofield <alison.schofield@intel.com>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Message-ID: <63d32fe783ee2_ea2222949f@dwillia2-xfh.jf.intel.com.notmuch>
+References: <cover.1674070170.git.alison.schofield@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cover.1674070170.git.alison.schofield@intel.com>
+X-ClientProxiedBy: BYAPR06CA0063.namprd06.prod.outlook.com
+ (2603:10b6:a03:14b::40) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-References: <20230125190757.22555-1-rppt@kernel.org> <20230125190757.22555-4-rppt@kernel.org>
-In-Reply-To: <20230125190757.22555-4-rppt@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 27 Jan 2023 09:58:15 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQw7vaj8uu2CYuKHwKQM4=v7dxmtNaMMoFXjwhtvog7nw@mail.gmail.com>
-Message-ID: <CAJF2gTQw7vaj8uu2CYuKHwKQM4=v7dxmtNaMMoFXjwhtvog7nw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] mm, arch: add generic implementation of pfn_valid()
- for FLATMEM
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux--csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|CO1PR11MB4962:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6842b977-2767-4764-8caa-08db000a1224
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6Ng9YdU7wNmp9PldFIsl56dWoiyUKTVLyK7DsyV63yiPH2oHKeFXN8LlZUpq7wQ7NixZSEMnXplfh8jlfgWGBxNKZWD+T3U/KCRtgDUkZyLA93jg/F7T+273VKUvV5ElAiFmQpfa464tqYGUkX8WFPmCz6/RZYPe66jtl97yj6g/zIaOz/b1DNhNxWCbqxAD93Kvmrs3S7qQ/GuCmfmIq7d7j+xtsdclg4rhe3VO0qtJ3LmZwawjK0YjEI3/Vb8fYqLm+QOUYvK9iQFBKhjlHyl8oHIO5iYrmRGrlpXoiZYS8gYNy7D3PF2f7/gstmqMcp5crwJRLDIMdF6o5Qi9xPTeQ57PXIsaJ7LTpgc2lGv5uqcWpGNrmn2vYp2GuVV2oM3PV+U2xOtJjfG0vTcvd7fqUPb+q6c8oMcnzYyetJNtvH0e5OLrSYEV9mIZM4Rbj2Fn4CgsEYeDwd615KAuNN8iE1mPHs+DSVXAnAUOup3MdzCobYinyRohgAO7yQGuvXyn4aOQikU0Ou9FG4mQmJpVY/Q6rxyBM6jx7nc/YvOPxQ/fvbF+zVtNb2uuDveXQidfKHQJ1v4G2PU8HNOiVIfQC2Ers4henVjV4g26/yhVB9lGPjzWtL0+IfzqrsHDmQGaoFEKjZEsZcOnxjt37laTisCFqrFP5JXJ3omHWrETK0O4f/AiPhfCzuZNso8n/lrh0f8g3Kq7HqkYWdgefN2rZBwibEp5x7WganknflqV8jqESFkXf+g8Gl8BT5iqKf0xVqFMA9ulqBK1bTP40w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(136003)(346002)(376002)(39860400002)(396003)(451199018)(2906002)(8936002)(41300700001)(5660300002)(83380400001)(966005)(478600001)(6486002)(186003)(9686003)(26005)(6506007)(6512007)(6666004)(4326008)(86362001)(82960400001)(38100700002)(66556008)(66476007)(66946007)(110136005)(316002)(25626002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?M2cwbQ37Z7CUJ3kb2feL3rDKJ6h3+ansikyF+UBtow/6VpgLy6je96gRuuRv?=
+ =?us-ascii?Q?qd4LvNB0lfopfZPt1fNjIxpIoqbSLk1LuoLSI9WDoXfFpmSFMO48PxKVLArc?=
+ =?us-ascii?Q?DpQ2TXJHDSx5ME0Jq2cmsFlvYW52+zq/BVOl9U5dOBghMabeVYWQ0KZwCRMl?=
+ =?us-ascii?Q?Vb27s2m0/v9jfCLrcvLXDxr+fo3chWSPiMNEhoBNjAQ/4u2XDyRAMm4nKxPn?=
+ =?us-ascii?Q?vHE7re7LR9CisSDhlU21KLKquciPSXdYkDMLH7NiFlsUEisGkJ9Cj67GwL9T?=
+ =?us-ascii?Q?lWcbaKCN+O4+WWvRbv1VFGmT4WiJsCZT6kNOci3C9koVVUlL0bsfM/EqyBQ2?=
+ =?us-ascii?Q?qzTamnsn//MABl9X0aqMoai+47WZSOkCzpsIjpWqwXKECZQ4DF8Qq7KZzhb2?=
+ =?us-ascii?Q?f3HJScNdnVaCaSED7EewJc7kPbPEv3QAt6X/NGY9yR0tWlF9ZV6O783QxXeR?=
+ =?us-ascii?Q?sXoCj1P8Pjn7GtAM/AQnePTAy3RaoBNZx0cfzHvn97ly/w93QoBRYQ81W5sJ?=
+ =?us-ascii?Q?V+OHKWgVdxuDjLy7vkfd7BiLeJ93W7K2JlgQdAWwE+oPC/SOQf43yt7SDfCL?=
+ =?us-ascii?Q?9Kp/cTsr1gUevhcA8M1gK4A3t7H7qG7ScwsE4qNkgI5ISSFKaQDlqxkQuc/p?=
+ =?us-ascii?Q?2asREhuzfg0ZdT5tIYDzY3WYHBqJzuBe9uaoxiy8u2dhHfJQ9ZlmVb6Rqro3?=
+ =?us-ascii?Q?g9uJR5Aa4jbAULTTpc9BOwioNrP85h06afQHiT3yCBYmdAFsCaxD21OFOa7C?=
+ =?us-ascii?Q?77y18gxzuuySkdXkt7CsaCcECQVDClUUD6EU/JzzqU9KgxoYvQ1V2DJLcxHU?=
+ =?us-ascii?Q?rcMf28K0UD01b07/zVt1IsfU74pGetuKqMl8cxu870KersbUUNoPgKi9pNNc?=
+ =?us-ascii?Q?Njgetomu4p7dp5NZY414SdTl3YupfMwdvGqOsg8YTglgeaHxMqitYJigbPL4?=
+ =?us-ascii?Q?b3gdP0Xg+7wzR1lk7EaRactrSoHchQZhJ//7r/b0Rp401eh2+kP+b7saLccw?=
+ =?us-ascii?Q?pGkJhtpCFSNfq8jx7BENtrSLAZLBuvkZ3y/vSn5MMXDYw/ntnS5Onl7kyhPT?=
+ =?us-ascii?Q?3zD3iJZdn8Ohyfx/Z06trz9OjdIsh+sJujCA2k8UMiPQr/+/9kwceEJjR9dN?=
+ =?us-ascii?Q?WRFNOeVbTKr89ZDkB3IWgv2DyB3Tsu0VdI8anOKGtt6ubNKxRaQkiG9wEpyB?=
+ =?us-ascii?Q?0P881nYJXu/h+woqaQ0Vv6GmrPsHdPQLS0Q2OEcNoiB+/WThUK2xp54bie6c?=
+ =?us-ascii?Q?BjUtu6lr9p1eWk9caK7y+meSP4oFy8jlwqmN/vU3EY4y7FS0MFJ5R5z9pAra?=
+ =?us-ascii?Q?Ls1PVgBZ9yaaFPBmgEH8cldM8OL5sV7W+W5SeW/USU81lWOesTTB7v/9GLAE?=
+ =?us-ascii?Q?VNNbt0FoyFV/ZTwtHIE4D9muIaPpfahbQ7DyJTA4H+466HLaCWUNAyhxN/Yy?=
+ =?us-ascii?Q?Dvr0pUxKHJe3Eo01P1tSwWHC2pVhI/3B3YrjhRh4Q3mg7W8s4PYjyEU96inu?=
+ =?us-ascii?Q?mGbkMPqE7bOtq+CDWJj9+djFz7Kh8C9xLY7cg9yHLNFRZJM7kmWSAUZ23Pxj?=
+ =?us-ascii?Q?RSy2kRVmgBF5M/GyTTzt86UlCdFNjx8aVKQU16dvIoxKRLjmCZYaziDEHH7D?=
+ =?us-ascii?Q?Nw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6842b977-2767-4764-8caa-08db000a1224
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 01:59:05.9615
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0AcB9tckRe5PYppX41Dy8cuw1UvsGwCUJKojzIU8OpwuPiZgVxYN6BkRZWWwQW5GOtBETgoCUfLMPYwR4uoDxUSNhRjWh0Y1SqiLZzRwiBM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4962
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_SUBJECT,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 3:08 AM Mike Rapoport <rppt@kernel.org> wrote:
->
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> Every architecture that supports FLATMEM memory model defines its own
-> version of pfn_valid() that essentially compares a pfn to max_mapnr.
->
-> Use mips/powerpc version implemented as static inline as a generic
-> implementation of pfn_valid() and drop its per-architecture definitions
->
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->  arch/alpha/include/asm/page.h      |  4 ----
->  arch/arc/include/asm/page.h        |  1 -
->  arch/csky/include/asm/page.h       |  1 -
->  arch/hexagon/include/asm/page.h    |  1 -
->  arch/ia64/include/asm/page.h       |  4 ----
->  arch/loongarch/include/asm/page.h  | 13 -------------
->  arch/m68k/include/asm/page_no.h    |  2 --
->  arch/microblaze/include/asm/page.h |  1 -
->  arch/mips/include/asm/page.h       | 13 -------------
->  arch/nios2/include/asm/page.h      |  9 ---------
->  arch/openrisc/include/asm/page.h   |  2 --
->  arch/parisc/include/asm/page.h     |  4 ----
->  arch/powerpc/include/asm/page.h    |  9 ---------
->  arch/riscv/include/asm/page.h      |  5 -----
->  arch/sh/include/asm/page.h         |  3 ---
->  arch/sparc/include/asm/page_32.h   |  1 -
->  arch/um/include/asm/page.h         |  1 -
->  arch/x86/include/asm/page_32.h     |  4 ----
->  arch/x86/include/asm/page_64.h     |  4 ----
->  arch/xtensa/include/asm/page.h     |  2 --
->  include/asm-generic/memory_model.h | 12 ++++++++++++
->  include/asm-generic/page.h         |  2 --
->  22 files changed, 12 insertions(+), 86 deletions(-)
->
-> diff --git a/arch/alpha/include/asm/page.h b/arch/alpha/include/asm/page.h
-> index 8f3f5eecba28..227d32b6b75f 100644
-> --- a/arch/alpha/include/asm/page.h
-> +++ b/arch/alpha/include/asm/page.h
-> @@ -87,10 +87,6 @@ typedef struct page *pgtable_t;
->  #define virt_to_page(kaddr)    pfn_to_page(__pa(kaddr) >> PAGE_SHIFT)
->  #define virt_addr_valid(kaddr) pfn_valid((__pa(kaddr) >> PAGE_SHIFT))
->
-> -#ifdef CONFIG_FLATMEM
-> -#define pfn_valid(pfn)         ((pfn) < max_mapnr)
-> -#endif /* CONFIG_FLATMEM */
-> -
->  #include <asm-generic/memory_model.h>
->  #include <asm-generic/getorder.h>
->
-> diff --git a/arch/arc/include/asm/page.h b/arch/arc/include/asm/page.h
-> index 9a62e1d87967..e43fe27ec54d 100644
-> --- a/arch/arc/include/asm/page.h
-> +++ b/arch/arc/include/asm/page.h
-> @@ -109,7 +109,6 @@ extern int pfn_valid(unsigned long pfn);
->  #else /* CONFIG_HIGHMEM */
->
->  #define ARCH_PFN_OFFSET                virt_to_pfn(CONFIG_LINUX_RAM_BASE)
-> -#define pfn_valid(pfn)         (((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
->
->  #endif /* CONFIG_HIGHMEM */
->
-> diff --git a/arch/csky/include/asm/page.h b/arch/csky/include/asm/page.h
-> index ed7451478b1b..b23e3006a9e0 100644
-> --- a/arch/csky/include/asm/page.h
-> +++ b/arch/csky/include/asm/page.h
-> @@ -39,7 +39,6 @@
->
->  #define virt_addr_valid(kaddr)  ((void *)(kaddr) >= (void *)PAGE_OFFSET && \
->                         (void *)(kaddr) < high_memory)
-> -#define pfn_valid(pfn)         ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
-For csky part:
-Acked-by: Guo Ren <guoren@kernel.org>
+alison.schofield@ wrote:
+> From: Alison Schofield <alison.schofield@intel.com>
+> 
+> Subject: [PATCH v5 0/5] CXL Poison List Retrieval & Tracing
+> 
+> Changes in v5:
+> - Rebase on cxl/next 
+> - Use struct_size() to calc mbox cmd payload .min_out
+> - s/INTERNAL/INJECTED mocked poison record source
+> - Added Jonathan Reviewed-by tag on Patch 3
+> 
+> Link to v4:
+> https://lore.kernel.org/linux-cxl/cover.1671135967.git.alison.schofield@intel.com/
+> 
+> Add support for retrieving device poison lists and store the returned
+> error records as kernel trace events.
+> 
+> The handling of the poison list is guided by the CXL 3.0 Specification
+> Section 8.2.9.8.4.1. [1] 
+> 
+> Example, triggered by memdev:
+> $ echo 1 > /sys/bus/cxl/devices/mem3/trigger_poison_list
+> cxl_poison: memdev=mem3 pcidev=cxl_mem.3 region= region_uuid=00000000-0000-0000-0000-000000000000 dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
 
->
->  extern void *memset(void *dest, int c, size_t l);
->  extern void *memcpy(void *to, const void *from, size_t l);
-> diff --git a/arch/hexagon/include/asm/page.h b/arch/hexagon/include/asm/page.h
-> index d7d4f9fca327..9c03b9965f07 100644
-> --- a/arch/hexagon/include/asm/page.h
-> +++ b/arch/hexagon/include/asm/page.h
-> @@ -95,7 +95,6 @@ struct page;
->  /* Default vm area behavior is non-executable.  */
->  #define VM_DATA_DEFAULT_FLAGS  VM_DATA_FLAGS_NON_EXEC
->
-> -#define pfn_valid(pfn) ((pfn) < max_mapnr)
->  #define virt_addr_valid(kaddr) pfn_valid(__pa(kaddr) >> PAGE_SHIFT)
->
->  /*  Need to not use a define for linesize; may move this to another file.  */
-> diff --git a/arch/ia64/include/asm/page.h b/arch/ia64/include/asm/page.h
-> index 1b990466d540..783eceab5df3 100644
-> --- a/arch/ia64/include/asm/page.h
-> +++ b/arch/ia64/include/asm/page.h
-> @@ -97,10 +97,6 @@ do {                                         \
->
->  #include <asm-generic/memory_model.h>
->
-> -#ifdef CONFIG_FLATMEM
-> -# define pfn_valid(pfn)                ((pfn) < max_mapnr)
-> -#endif
-> -
->  #define page_to_phys(page)     (page_to_pfn(page) << PAGE_SHIFT)
->  #define virt_to_page(kaddr)    pfn_to_page(__pa(kaddr) >> PAGE_SHIFT)
->  #define pfn_to_kaddr(pfn)      __va((pfn) << PAGE_SHIFT)
-> diff --git a/arch/loongarch/include/asm/page.h b/arch/loongarch/include/asm/page.h
-> index 53f284a96182..fb5338b352e6 100644
-> --- a/arch/loongarch/include/asm/page.h
-> +++ b/arch/loongarch/include/asm/page.h
-> @@ -82,19 +82,6 @@ typedef struct { unsigned long pgprot; } pgprot_t;
->
->  #define pfn_to_kaddr(pfn)      __va((pfn) << PAGE_SHIFT)
->
-> -#ifdef CONFIG_FLATMEM
-> -
-> -static inline int pfn_valid(unsigned long pfn)
-> -{
-> -       /* avoid <linux/mm.h> include hell */
-> -       extern unsigned long max_mapnr;
-> -       unsigned long pfn_offset = ARCH_PFN_OFFSET;
-> -
-> -       return pfn >= pfn_offset && pfn < max_mapnr;
-> -}
-> -
-> -#endif
-> -
->  #define virt_to_pfn(kaddr)     PFN_DOWN(PHYSADDR(kaddr))
->  #define virt_to_page(kaddr)    pfn_to_page(virt_to_pfn(kaddr))
->
-> diff --git a/arch/m68k/include/asm/page_no.h b/arch/m68k/include/asm/page_no.h
-> index 0a8ccef777fd..2555ec57149d 100644
-> --- a/arch/m68k/include/asm/page_no.h
-> +++ b/arch/m68k/include/asm/page_no.h
-> @@ -26,8 +26,6 @@ extern unsigned long memory_end;
->  #define virt_to_page(addr)     (mem_map + (((unsigned long)(addr)-PAGE_OFFSET) >> PAGE_SHIFT))
->  #define page_to_virt(page)     __va(((((page) - mem_map) << PAGE_SHIFT) + PAGE_OFFSET))
->
-> -#define pfn_valid(pfn)         ((pfn) < max_mapnr)
-> -
->  #define        virt_addr_valid(kaddr)  (((unsigned long)(kaddr) >= PAGE_OFFSET) && \
->                                 ((unsigned long)(kaddr) < memory_end))
->
-> diff --git a/arch/microblaze/include/asm/page.h b/arch/microblaze/include/asm/page.h
-> index 4b8b2fa78fc5..7b9861bcd458 100644
-> --- a/arch/microblaze/include/asm/page.h
-> +++ b/arch/microblaze/include/asm/page.h
-> @@ -112,7 +112,6 @@ extern int page_is_ram(unsigned long pfn);
->  #  define page_to_phys(page)     (page_to_pfn(page) << PAGE_SHIFT)
->
->  #  define ARCH_PFN_OFFSET      (memory_start >> PAGE_SHIFT)
-> -#  define pfn_valid(pfn)       ((pfn) >= ARCH_PFN_OFFSET && (pfn) < (max_mapnr + ARCH_PFN_OFFSET))
->  # endif /* __ASSEMBLY__ */
->
->  #define        virt_addr_valid(vaddr)  (pfn_valid(virt_to_pfn(vaddr)))
-> diff --git a/arch/mips/include/asm/page.h b/arch/mips/include/asm/page.h
-> index 9286f11ff6ad..5978a8dfb917 100644
-> --- a/arch/mips/include/asm/page.h
-> +++ b/arch/mips/include/asm/page.h
-> @@ -224,19 +224,6 @@ extern phys_addr_t __phys_addr_symbol(unsigned long x);
->
->  #define pfn_to_kaddr(pfn)      __va((pfn) << PAGE_SHIFT)
->
-> -#ifdef CONFIG_FLATMEM
-> -
-> -static inline int pfn_valid(unsigned long pfn)
-> -{
-> -       /* avoid <linux/mm.h> include hell */
-> -       extern unsigned long max_mapnr;
-> -       unsigned long pfn_offset = ARCH_PFN_OFFSET;
-> -
-> -       return pfn >= pfn_offset && pfn < max_mapnr;
-> -}
-> -
-> -#endif
-> -
->  #define virt_to_pfn(kaddr)     PFN_DOWN(virt_to_phys((void *)(kaddr)))
->  #define virt_to_page(kaddr)    pfn_to_page(virt_to_pfn(kaddr))
->
-> diff --git a/arch/nios2/include/asm/page.h b/arch/nios2/include/asm/page.h
-> index 6a989819a7c1..0ae7d9ce369b 100644
-> --- a/arch/nios2/include/asm/page.h
-> +++ b/arch/nios2/include/asm/page.h
-> @@ -86,15 +86,6 @@ extern struct page *mem_map;
->
->  # define pfn_to_kaddr(pfn)     __va((pfn) << PAGE_SHIFT)
->
-> -static inline bool pfn_valid(unsigned long pfn)
-> -{
-> -       /* avoid <linux/mm.h> include hell */
-> -       extern unsigned long max_mapnr;
-> -       unsigned long pfn_offset = ARCH_PFN_OFFSET;
-> -
-> -       return pfn >= pfn_offset && pfn < max_mapnr;
-> -}
-> -
->  # define virt_to_page(vaddr)   pfn_to_page(PFN_DOWN(virt_to_phys(vaddr)))
->  # define virt_addr_valid(vaddr)        pfn_valid(PFN_DOWN(virt_to_phys(vaddr)))
->
-> diff --git a/arch/openrisc/include/asm/page.h b/arch/openrisc/include/asm/page.h
-> index aab6e64d6db4..52b0d7e76446 100644
-> --- a/arch/openrisc/include/asm/page.h
-> +++ b/arch/openrisc/include/asm/page.h
-> @@ -80,8 +80,6 @@ typedef struct page *pgtable_t;
->
->  #define page_to_phys(page)      ((dma_addr_t)page_to_pfn(page) << PAGE_SHIFT)
->
-> -#define pfn_valid(pfn)          ((pfn) < max_mapnr)
-> -
->  #define virt_addr_valid(kaddr) (pfn_valid(virt_to_pfn(kaddr)))
->
->  #endif /* __ASSEMBLY__ */
-> diff --git a/arch/parisc/include/asm/page.h b/arch/parisc/include/asm/page.h
-> index 6faaaa3ebe9b..667e703c0e8f 100644
-> --- a/arch/parisc/include/asm/page.h
-> +++ b/arch/parisc/include/asm/page.h
-> @@ -155,10 +155,6 @@ extern int npmem_ranges;
->  #define __pa(x)                        ((unsigned long)(x)-PAGE_OFFSET)
->  #define __va(x)                        ((void *)((unsigned long)(x)+PAGE_OFFSET))
->
-> -#ifndef CONFIG_SPARSEMEM
-> -#define pfn_valid(pfn)         ((pfn) < max_mapnr)
-> -#endif
-> -
->  #ifdef CONFIG_HUGETLB_PAGE
->  #define HPAGE_SHIFT            PMD_SHIFT /* fixed for transparent huge pages */
->  #define HPAGE_SIZE             ((1UL) << HPAGE_SHIFT)
-> diff --git a/arch/powerpc/include/asm/page.h b/arch/powerpc/include/asm/page.h
-> index edf1dd1b0ca9..f2b6bf5687d0 100644
-> --- a/arch/powerpc/include/asm/page.h
-> +++ b/arch/powerpc/include/asm/page.h
-> @@ -117,15 +117,6 @@ extern long long virt_phys_offset;
->
->  #ifdef CONFIG_FLATMEM
->  #define ARCH_PFN_OFFSET                ((unsigned long)(MEMORY_START >> PAGE_SHIFT))
-> -#ifndef __ASSEMBLY__
-> -extern unsigned long max_mapnr;
-> -static inline bool pfn_valid(unsigned long pfn)
-> -{
-> -       unsigned long min_pfn = ARCH_PFN_OFFSET;
-> -
-> -       return pfn >= min_pfn && pfn < max_mapnr;
-> -}
-> -#endif
->  #endif
->
->  #define virt_to_pfn(kaddr)     (__pa(kaddr) >> PAGE_SHIFT)
-> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-> index 9f432c1b5289..7fed7c431928 100644
-> --- a/arch/riscv/include/asm/page.h
-> +++ b/arch/riscv/include/asm/page.h
-> @@ -171,11 +171,6 @@ extern phys_addr_t __phys_addr_symbol(unsigned long x);
->
->  #define sym_to_pfn(x)           __phys_to_pfn(__pa_symbol(x))
->
-> -#ifdef CONFIG_FLATMEM
-> -#define pfn_valid(pfn) \
-> -       (((pfn) >= ARCH_PFN_OFFSET) && (((pfn) - ARCH_PFN_OFFSET) < max_mapnr))
-> -#endif
-> -
->  #endif /* __ASSEMBLY__ */
->
->  #define virt_addr_valid(vaddr) ({                                              \
-> diff --git a/arch/sh/include/asm/page.h b/arch/sh/include/asm/page.h
-> index eca5daa43b93..09ac6c7faee0 100644
-> --- a/arch/sh/include/asm/page.h
-> +++ b/arch/sh/include/asm/page.h
-> @@ -169,9 +169,6 @@ typedef struct page *pgtable_t;
->  #define PFN_START              (__MEMORY_START >> PAGE_SHIFT)
->  #define ARCH_PFN_OFFSET                (PFN_START)
->  #define virt_to_page(kaddr)    pfn_to_page(__pa(kaddr) >> PAGE_SHIFT)
-> -#ifdef CONFIG_FLATMEM
-> -#define pfn_valid(pfn)         ((pfn) >= min_low_pfn && (pfn) < max_low_pfn)
-> -#endif
->  #define virt_addr_valid(kaddr) pfn_valid(__pa(kaddr) >> PAGE_SHIFT)
->
->  #include <asm-generic/memory_model.h>
-> diff --git a/arch/sparc/include/asm/page_32.h b/arch/sparc/include/asm/page_32.h
-> index fff8861df107..6be6f683f98f 100644
-> --- a/arch/sparc/include/asm/page_32.h
-> +++ b/arch/sparc/include/asm/page_32.h
-> @@ -130,7 +130,6 @@ extern unsigned long pfn_base;
->  #define ARCH_PFN_OFFSET                (pfn_base)
->  #define virt_to_page(kaddr)    pfn_to_page(__pa(kaddr) >> PAGE_SHIFT)
->
-> -#define pfn_valid(pfn)         (((pfn) >= (pfn_base)) && (((pfn)-(pfn_base)) < max_mapnr))
->  #define virt_addr_valid(kaddr) ((((unsigned long)(kaddr)-PAGE_OFFSET)>>PAGE_SHIFT) < max_mapnr)
->
->  #include <asm-generic/memory_model.h>
-> diff --git a/arch/um/include/asm/page.h b/arch/um/include/asm/page.h
-> index cdbd9653aa14..84866127d074 100644
-> --- a/arch/um/include/asm/page.h
-> +++ b/arch/um/include/asm/page.h
-> @@ -108,7 +108,6 @@ extern unsigned long uml_physmem;
->  #define phys_to_pfn(p) ((p) >> PAGE_SHIFT)
->  #define pfn_to_phys(pfn) PFN_PHYS(pfn)
->
-> -#define pfn_valid(pfn) ((pfn) < max_mapnr)
->  #define virt_addr_valid(v) pfn_valid(phys_to_pfn(__pa(v)))
->
->  #include <asm-generic/memory_model.h>
-> diff --git a/arch/x86/include/asm/page_32.h b/arch/x86/include/asm/page_32.h
-> index df42f8aa99e4..580d71aca65a 100644
-> --- a/arch/x86/include/asm/page_32.h
-> +++ b/arch/x86/include/asm/page_32.h
-> @@ -15,10 +15,6 @@ extern unsigned long __phys_addr(unsigned long);
->  #define __phys_addr_symbol(x)  __phys_addr(x)
->  #define __phys_reloc_hide(x)   RELOC_HIDE((x), 0)
->
-> -#ifdef CONFIG_FLATMEM
-> -#define pfn_valid(pfn)         ((pfn) < max_mapnr)
-> -#endif /* CONFIG_FLATMEM */
-> -
->  #include <linux/string.h>
->
->  static inline void clear_page(void *page)
-> diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
-> index 198e03e59ca1..cc6b8e087192 100644
-> --- a/arch/x86/include/asm/page_64.h
-> +++ b/arch/x86/include/asm/page_64.h
-> @@ -39,10 +39,6 @@ extern unsigned long __phys_addr_symbol(unsigned long);
->
->  #define __phys_reloc_hide(x)   (x)
->
-> -#ifdef CONFIG_FLATMEM
-> -#define pfn_valid(pfn)          ((pfn) < max_pfn)
-> -#endif
-> -
->  void clear_page_orig(void *page);
->  void clear_page_rep(void *page);
->  void clear_page_erms(void *page);
-> diff --git a/arch/xtensa/include/asm/page.h b/arch/xtensa/include/asm/page.h
-> index 493eb7083b1a..3267c672cd11 100644
-> --- a/arch/xtensa/include/asm/page.h
-> +++ b/arch/xtensa/include/asm/page.h
-> @@ -189,8 +189,6 @@ static inline unsigned long ___pa(unsigned long va)
->  #endif
->  #define __va(x)        \
->         ((void *)((unsigned long) (x) - PHYS_OFFSET + PAGE_OFFSET))
-> -#define pfn_valid(pfn) \
-> -       ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
->
->  #define virt_to_page(kaddr)    pfn_to_page(__pa(kaddr) >> PAGE_SHIFT)
->  #define page_to_virt(page)     __va(page_to_pfn(page) << PAGE_SHIFT)
-> diff --git a/include/asm-generic/memory_model.h b/include/asm-generic/memory_model.h
-> index a2c8ed60233a..13d2a844d928 100644
-> --- a/include/asm-generic/memory_model.h
-> +++ b/include/asm-generic/memory_model.h
-> @@ -19,6 +19,18 @@
->  #define __page_to_pfn(page)    ((unsigned long)((page) - mem_map) + \
->                                  ARCH_PFN_OFFSET)
->
-> +#ifndef pfn_valid
-> +static inline int pfn_valid(unsigned long pfn)
-> +{
-> +       /* avoid <linux/mm.h> include hell */
-> +       extern unsigned long max_mapnr;
-> +       unsigned long pfn_offset = ARCH_PFN_OFFSET;
-> +
-> +       return pfn >= pfn_offset && pfn < max_mapnr;
-> +}
-> +#define pfn_valid pfn_valid
-> +#endif
-> +
->  #elif defined(CONFIG_SPARSEMEM_VMEMMAP)
->
->  /* memmap is virtually contiguous.  */
-> diff --git a/include/asm-generic/page.h b/include/asm-generic/page.h
-> index 6fc47561814c..c0be2edeb484 100644
-> --- a/include/asm-generic/page.h
-> +++ b/include/asm-generic/page.h
-> @@ -84,8 +84,6 @@ extern unsigned long memory_end;
->  #define page_to_phys(page)      ((dma_addr_t)page_to_pfn(page) << PAGE_SHIFT)
->  #endif
->
-> -#define pfn_valid(pfn)         ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
-> -
->  #define        virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
->                                 ((void *)(kaddr) < (void *)memory_end))
->
-> --
-> 2.35.1
->
+I think the pcidev= field wants to be called something like "host" or
+"parent", because there is no strict requirement that a 'struct
+cxl_memdev' is related to a 'struct pci_dev'. In fact in that example
+"cxl_mem.3" is a 'struct platform_device'. Now that I think about it, I
+think all CXL device events should be emitting the PCIe serial number
+for the memdev.
+
+I will look in the implementation, but do region= and region_uuid= get
+populated when mem3 is a member of the region?
+
+> 
+> Example, triggered by region:
+> $ echo 1 > /sys/bus/cxl/devices/region5/trigger_poison_list
+> cxl_poison: memdev=mem0 pcidev=cxl_mem.0 region=region5 region_uuid=bfcb7a29-890e-4a41-8236-fe22221fc75c dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
+> cxl_poison: memdev=mem1 pcidev=cxl_mem.1 region=region5 region_uuid=bfcb7a29-890e-4a41-8236-fe22221fc75c dpa=0x0 length=0x40 source=Internal flags= overflow_time=0
+> 
+> [1]: https://www.computeexpresslink.org/download-the-specification
+> 
+> Alison Schofield (5):
+>   cxl/mbox: Add GET_POISON_LIST mailbox command
+>   cxl/trace: Add TRACE support for CXL media-error records
+>   cxl/memdev: Add trigger_poison_list sysfs attribute
+>   cxl/region: Add trigger_poison_list sysfs attribute
+>   tools/testing/cxl: Mock support for Get Poison List
+> 
+>  Documentation/ABI/testing/sysfs-bus-cxl | 28 +++++++++
+>  drivers/cxl/core/mbox.c                 | 78 +++++++++++++++++++++++
+>  drivers/cxl/core/memdev.c               | 45 ++++++++++++++
+>  drivers/cxl/core/region.c               | 33 ++++++++++
+>  drivers/cxl/core/trace.h                | 83 +++++++++++++++++++++++++
+>  drivers/cxl/cxlmem.h                    | 69 +++++++++++++++++++-
+>  drivers/cxl/pci.c                       |  4 ++
+>  tools/testing/cxl/test/mem.c            | 42 +++++++++++++
+>  8 files changed, 381 insertions(+), 1 deletion(-)
+> 
+> 
+> base-commit: 589c3357370a596ef7c99c00baca8ac799fce531
+> -- 
+> 2.37.3
+> 
 
 
--- 
-Best Regards
- Guo Ren
