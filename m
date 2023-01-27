@@ -2,216 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C65D67F0AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4E767F0B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 22:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbjA0VzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 16:55:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S231887AbjA0V4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 16:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjA0VzA (ORCPT
+        with ESMTP id S230440AbjA0V4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:55:00 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B92716AF5;
-        Fri, 27 Jan 2023 13:54:59 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so6318360wmb.0;
-        Fri, 27 Jan 2023 13:54:59 -0800 (PST)
+        Fri, 27 Jan 2023 16:56:10 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463A9303CD
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:56:08 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id j36-20020a05600c1c2400b003dc39cb9c33so2067813wms.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 13:56:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3sUXq/W8BEZIBDYYVZQ1mnxogvWQtdcjY0PJMAjAJSM=;
-        b=UwI8uf9zgKWWBCv5264lTfvKd7BbaCbH15YY4LLLbTx2uLxQPSjpuuXSwtkFO8BjeH
-         62Ag4W1HOQ3hsdfQxVDehNVVb5PJod899hLGE0H94l7b7k6v7Ai8mIO1gBJrNuU2vJ1c
-         1DUEYx/PPTGEzn7SmOh/nxPks43Z3gCOfd26P7LJCJ/jUSPnmHFJz5WrYjDsXFhd2gTW
-         dezaQE6/SidtcpiYSQH6Fqpm1uHJ8qiwmkNKYSCLiMO24G2mWxl52bO2IHhOrO1S48+W
-         UxJ82P7mZ+K9WIyWD3qPZQuKqE0B0Ao5kgOH98WLfteeW9MJU0uFNQjb7WByaKwhuOqK
-         sTLA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uqerTmqCpFsIa1KRiULFzNXiXHPUW2LZKvRlLneTfEQ=;
+        b=H1Rk8VryoASg11PvNTDuM3J56d0mozernw4AtwgbYoJ7ZwsIPeyuMitK8grqsr67EX
+         DfmazJbfDGjXUIjHoKI3avvpMUSqMdh1yi3dxMCDmbD19dCUMuv4bcrIVgRJjLI/8H9t
+         XkVtziVt0NNICp6viBAM8mihP36nl5z4I7kW2l2Omf/SJ+LOQKMnGIEjQsbn9Bhb9V0E
+         g9RoPw4fP29OPkGQ6NmP3hsBggLipBn3+ek2f7LEOrJn0swNTcHjwiuOpLMKOOXZK+Hc
+         BTRhUfQVfCu+Dfjv0KjKrcMVoaygciwf63+E9Xr0YaGJsLxq/9JiLp4h7agpZV6bvui0
+         W7/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3sUXq/W8BEZIBDYYVZQ1mnxogvWQtdcjY0PJMAjAJSM=;
-        b=nxqAGYR5ws+skvjFabK0T4LhQou49hKWU0bBudgbg1mLtUmFIg/Oa4saefOnJ1t2zU
-         pCN8CauhvmMHWriv1SLNWG1oQMYu3zBAFwaUAzxB96uVtSz6XvkIYyNxEsNBTDiDEh26
-         mh4Zkar13OqqWj454EkDatdL9LXMwZNiiYX3GO0rW54xBMcJKRCTsiIjlHPkuwVNrN28
-         ZH9EKHMwcIaA822aR3Qx4pwX0A9OPbFU2jhnWA4AZlp4J+IufKUUL9EKvbvrW+1mUz6p
-         X8BYVHFZt05wR3PSk4xHnHQaHwMEEkDXvr4LSbiw8w64LuD6SLDKX70ncY8HDieR3NFj
-         NmGg==
-X-Gm-Message-State: AFqh2kqqSbuF9WCj65E1Fs/luo4poEW2Co3v+fTnXu5PgWgiegO8+JtH
-        6676nVorMvl0nSc3EVbUWzc=
-X-Google-Smtp-Source: AMrXdXu8k0vp+ioGOVn9ul8IRoSc2tgoAWt1mbIs2ouKiCtWeiO/aYu0n8tOumMgfrc8tghf4YgVbg==
-X-Received: by 2002:a05:600c:510b:b0:3db:d3f:a919 with SMTP id o11-20020a05600c510b00b003db0d3fa919mr39209411wms.1.1674856497629;
-        Fri, 27 Jan 2023 13:54:57 -0800 (PST)
-Received: from localhost.localdomain (host-82-60-215-65.retail.telecomitalia.it. [82.60.215.65])
-        by smtp.gmail.com with ESMTPSA id n20-20020a05600c465400b003dc43a10fa5sm859717wmo.13.2023.01.27.13.54.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 13:54:56 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Olga Kornievskaia <olga.kornievskaia@gmail.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] fs/nfs: Replace kmap_atomic() with kmap_local_page() in dir.c
-Date:   Fri, 27 Jan 2023 22:54:52 +0100
-Message-Id: <20230127215452.6399-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uqerTmqCpFsIa1KRiULFzNXiXHPUW2LZKvRlLneTfEQ=;
+        b=U9mu8NhA7JT5KI9lRq77Elylg6ql5E04oBHrD5YCO5W8v8gGO3sDjuh12ThXn4Z9zB
+         cQROK2yX3tfuHT35dDdMqy/P44gj9J6GcDV06yOzxaXSk4jH2SDt+7yo/AzA4s+lApxk
+         Ym1aruJAcb2Fjq+kNd7IVgA0lqM1UQc8bLJnHThY0QQBxMS70RafA31JyemgrK8vDoja
+         JYNwqsyzozK6Qdrg5bAZjg428uWBF9Cm8P8wfvIJ8YGdmJCMPW1RUgKCyDNxv7wa8P/o
+         QHYcGAPT5VXIWsIIJmNGQvKYOfAjCyX5doMV8m2NlXXdifwk/87Qd9FRgr8TufL0u3zk
+         ObcQ==
+X-Gm-Message-State: AO0yUKXKLlkhXl4cXQ0sKRLvgSJOHTdOs6t0AF24H9tuPxeJLnLR+Qdv
+        3Yt9eHVOSbHaRaBblPuM9hXkHQ==
+X-Google-Smtp-Source: AK7set8lhMsGxWKiTW9iwcGiaAKYO/4Li3ypSywT8chYJiXQdCLq5KfVH9nlyUMEAsyGxHXV+f9MaA==
+X-Received: by 2002:a05:600c:3b02:b0:3dc:4296:6d56 with SMTP id m2-20020a05600c3b0200b003dc42966d56mr2330462wms.30.1674856566752;
+        Fri, 27 Jan 2023 13:56:06 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id h18-20020a05600c30d200b003c21ba7d7d6sm5298133wmn.44.2023.01.27.13.56.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 13:56:06 -0800 (PST)
+Message-ID: <0cf41810-744c-9bbc-9a4d-abd686e14b9c@linaro.org>
+Date:   Fri, 27 Jan 2023 22:56:04 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 4/5] thermal: mediatek: add callback for raw to
+ mcelsius conversion
+Content-Language: en-US
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh@kernel.org>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Michael Kao <michael.kao@mediatek.com>
+References: <20221018-up-i350-thermal-bringup-v9-0-55a1ae14af74@baylibre.com>
+ <20221018-up-i350-thermal-bringup-v9-4-55a1ae14af74@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221018-up-i350-thermal-bringup-v9-4-55a1ae14af74@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap_atomic() is deprecated in favor of kmap_local_page().
+On 27/01/2023 16:44, Amjad Ouled-Ameur wrote:
+> Set a callback at probe time instead of checking the version at
+> each get_sensor_temp().
+> 
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page-faults, and can be called from any context (including interrupts).
-Furthermore, the tasks can be preempted and, when they are scheduled to
-run again, the kernel virtual addresses are restored and still valid.
+This patch has been dropped because it is duplicate of patch:
 
-kmap_atomic() is implemented like a kmap_local_page() which also disables
-page-faults and preemption (the latter only for !PREEMPT_RT kernels,
-otherwise it only disables migration).
+https://lore.kernel.org/r/69c17529e8418da3eec703dde31e1b01e5b0f7e8.1674055882.git.daniel@makrotopia.org
 
-The code within the mappings/un-mappings in the functions of dir.c don't
-depend on the above-mentioned side effects of kmap_atomic(), so that mere
-replacements of the old API with the new one is all that is required
-(i.e., there is no need to explicitly add calls to pagefault_disable()
-and/or preempt_disable()).
 
-Therefore, replace kmap_atomic() with kmap_local_page() in fs/nfs/dir.c.
 
-Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
-HIGHMEM64GB enabled.
+>   drivers/thermal/mtk_thermal.c | 13 ++++++-------
+>   1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> index 3a5df1440822..b8e06f6c7c42 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -307,6 +307,8 @@ struct mtk_thermal {
+>   
+>   	const struct mtk_thermal_data *conf;
+>   	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
+> +
+> +	int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
+>   };
+>   
+>   /* MT8183 thermal sensor data */
+> @@ -726,13 +728,7 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>   	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+>   		raw = readl(mt->thermal_base + conf->msr[i]);
+>   
+> -		if (mt->conf->version == MTK_THERMAL_V1) {
+> -			temp = raw_to_mcelsius_v1(
+> -				mt, conf->bank_data[bank->id].sensors[i], raw);
+> -		} else {
+> -			temp = raw_to_mcelsius_v2(
+> -				mt, conf->bank_data[bank->id].sensors[i], raw);
+> -		}
+> +		temp = mt->raw_to_mcelsius(mt, i, raw);
+>   
+>   		/*
+>   		 * The first read of a sensor often contains very high bogus
+> @@ -1150,6 +1146,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   
+>   	mtk_thermal_turn_on_buffer(mt, apmixed_base);
+>   
+> +	mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
+> +				raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
+> +
+>   	if (mt->conf->version == MTK_THERMAL_V2) {
+>   		mtk_thermal_release_periodic_ts(mt, auxadc_base);
+>   	}
+> 
 
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- fs/nfs/dir.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-index f7e4a88d5d92..dec18c9f7650 100644
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -203,14 +203,14 @@ static void nfs_readdir_page_init_array(struct page *page, u64 last_cookie,
- {
- 	struct nfs_cache_array *array;
- 
--	array = kmap_atomic(page);
-+	array = kmap_local_page(page);
- 	array->change_attr = change_attr;
- 	array->last_cookie = last_cookie;
- 	array->size = 0;
- 	array->page_full = 0;
- 	array->page_is_eof = 0;
- 	array->cookies_are_ordered = 1;
--	kunmap_atomic(array);
-+	kunmap_local(array);
- }
- 
- /*
-@@ -221,11 +221,11 @@ static void nfs_readdir_clear_array(struct page *page)
- 	struct nfs_cache_array *array;
- 	unsigned int i;
- 
--	array = kmap_atomic(page);
-+	array = kmap_local_page(page);
- 	for (i = 0; i < array->size; i++)
- 		kfree(array->array[i].name);
- 	array->size = 0;
--	kunmap_atomic(array);
-+	kunmap_local(array);
- }
- 
- static void nfs_readdir_free_folio(struct folio *folio)
-@@ -371,14 +371,14 @@ static pgoff_t nfs_readdir_page_cookie_hash(u64 cookie)
- static bool nfs_readdir_page_validate(struct page *page, u64 last_cookie,
- 				      u64 change_attr)
- {
--	struct nfs_cache_array *array = kmap_atomic(page);
-+	struct nfs_cache_array *array = kmap_local_page(page);
- 	int ret = true;
- 
- 	if (array->change_attr != change_attr)
- 		ret = false;
- 	if (nfs_readdir_array_index_cookie(array) != last_cookie)
- 		ret = false;
--	kunmap_atomic(array);
-+	kunmap_local(array);
- 	return ret;
- }
- 
-@@ -418,9 +418,9 @@ static u64 nfs_readdir_page_last_cookie(struct page *page)
- 	struct nfs_cache_array *array;
- 	u64 ret;
- 
--	array = kmap_atomic(page);
-+	array = kmap_local_page(page);
- 	ret = array->last_cookie;
--	kunmap_atomic(array);
-+	kunmap_local(array);
- 	return ret;
- }
- 
-@@ -429,9 +429,9 @@ static bool nfs_readdir_page_needs_filling(struct page *page)
- 	struct nfs_cache_array *array;
- 	bool ret;
- 
--	array = kmap_atomic(page);
-+	array = kmap_local_page(page);
- 	ret = !nfs_readdir_array_is_full(array);
--	kunmap_atomic(array);
-+	kunmap_local(array);
- 	return ret;
- }
- 
-@@ -439,9 +439,9 @@ static void nfs_readdir_page_set_eof(struct page *page)
- {
- 	struct nfs_cache_array *array;
- 
--	array = kmap_atomic(page);
-+	array = kmap_local_page(page);
- 	nfs_readdir_array_set_eof(array);
--	kunmap_atomic(array);
-+	kunmap_local(array);
- }
- 
- static struct page *nfs_readdir_page_get_next(struct address_space *mapping,
-@@ -568,14 +568,14 @@ static int nfs_readdir_search_array(struct nfs_readdir_descriptor *desc)
- 	struct nfs_cache_array *array;
- 	int status;
- 
--	array = kmap_atomic(desc->page);
-+	array = kmap_local_page(desc->page);
- 
- 	if (desc->dir_cookie == 0)
- 		status = nfs_readdir_search_for_pos(array, desc);
- 	else
- 		status = nfs_readdir_search_for_cookie(array, desc);
- 
--	kunmap_atomic(array);
-+	kunmap_local(array);
- 	return status;
- }
- 
 -- 
-2.39.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
