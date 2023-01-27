@@ -2,99 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8764767E857
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A447567E85A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 15:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbjA0OeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 09:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
+        id S233174AbjA0Oew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 09:34:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbjA0OeQ (ORCPT
+        with ESMTP id S233443AbjA0Oeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:34:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6257810AAF
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 06:34:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4274B82114
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 14:34:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56F77C433D2;
-        Fri, 27 Jan 2023 14:34:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674830052;
-        bh=DK0+ODwfApxIzpdQu/leU0y/FH2vCVxk5kJJdJLCFLA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dfu80J9gS53/y8huiFUCM+iPDL2hgliQj0prxTfug1DjqsWASlaiq2IGPDuGmwhFp
-         nYhPDzC0ABKsZ6iKS2b07vFBGlEKkgMZDUUaoab2pUWJv7TVdvpvLOnJsOiRIbmCK+
-         itRqRclxfVlGwtBuMlZ2h9wPQuKS03n9wROm1NtNZSXZSEqDbyjJbDihMSIKUegqkq
-         G0bN7+YmwD/SDYH0+Yph5kfT9qSiHHz9iJMR7gi7da4p2SchJnbeTJMEBprDp/Wzv5
-         vcErXvyGV5epZs7xHvyh6QiItoki9rZHEOyxTccHrP02IwqFpbm2Jnc0CwipPWeXWD
-         AsoZqmIZC7q2Q==
-Date:   Fri, 27 Jan 2023 14:34:07 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     j.neuschaefer@gmx.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mfd: ntxec: Add version number for EC in Tolino Vision
-Message-ID: <Y9Pg35aH5WL7burc@google.com>
-References: <20230123230114.3134400-1-andreas@kemnade.info>
+        Fri, 27 Jan 2023 09:34:50 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DCF10AAB;
+        Fri, 27 Jan 2023 06:34:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jLg0NgtndXwOK1xM/a9LLndkpSy2IRQYcolcesnToSM=; b=ZFKG54wRPyqDX3DCGqtaENHPh4
+        nNgrk8iAQL2ZlkGDS+qKr73pk4309yNZ0YT4/jNw5F5Ef+QyX2n1mXToZfq0cnb/ACOequ4aHD6og
+        YzdkXqxrK2Lu8TJ/fWPHvWhg6cpMdVR4400Z5ShH/oGkgPDWfNtI0DKot/BcroDaSbQrggL+xSfGW
+        lSmYdpdSnUGpWV3BSn76jxS6h3h6t6yScwNZXrZhJoCfwFQY5qtmkjaatY+xeXq1HNMbvKYmbrk4s
+        RtyPwkntEbvBAjvrkI16gTWyNKfQPvpiBAfjVXPCzwLjGVKL/1LP7tHN+LN3nVBQF+s8VFnyyKRVL
+        UEtWHs5Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pLPnn-002sdj-2O;
+        Fri, 27 Jan 2023 14:34:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 26F8D300137;
+        Fri, 27 Jan 2023 15:34:34 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0FBBF20A79E8B; Fri, 27 Jan 2023 15:34:34 +0100 (CET)
+Date:   Fri, 27 Jan 2023 15:34:33 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jules Maselbas <jmaselbas@kalray.eu>
+Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in
+ generic atomic ops
+Message-ID: <Y9Pg+aNM9f48SY5Z@hirez.programming.kicks-ass.net>
+References: <20230126173354.13250-1-jmaselbas@kalray.eu>
+ <Y9Oy9ZAj/DQ7O+6e@hirez.programming.kicks-ass.net>
+ <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230123230114.3134400-1-andreas@kemnade.info>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023, Andreas Kemnade wrote:
-
-> The EC firmware has a different version number than anything
-> defined until now.
+On Fri, Jan 27, 2023 at 02:49:46PM +0100, Jules Maselbas wrote:
+> Hi Peter,
 > 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
->  drivers/mfd/ntxec.c       | 1 +
->  include/linux/mfd/ntxec.h | 4 ++++
->  2 files changed, 5 insertions(+)
+> On Fri, Jan 27, 2023 at 12:18:13PM +0100, Peter Zijlstra wrote:
+> > On Thu, Jan 26, 2023 at 06:33:54PM +0100, Jules Maselbas wrote:
+> > 
+> > > @@ -58,9 +61,11 @@ static inline int generic_atomic_fetch_##op(int i, atomic_t *v)		\
+> > >  static inline void generic_atomic_##op(int i, atomic_t *v)		\
+> > >  {									\
+> > >  	unsigned long flags;						\
+> > > +	int c;								\
+> > >  									\
+> > >  	raw_local_irq_save(flags);					\
+> > > -	v->counter = v->counter c_op i;					\
+> > > +	c = arch_atomic_read(v);					\
+> > > +	arch_atomic_set(v, c c_op i);					\
+> > >  	raw_local_irq_restore(flags);					\
+> > >  }
+> > 
+> > This and the others like it are a bit sad, it explicitly dis-allows the
+> > compiler from using memops and forces a load-store.
+> Good point, I don't know much about atomic memops but this is indeed a
+> bit sad to prevent such instructions to be used.
+
+Depends on the platform, x86,s390 etc. have then, RISC like things
+typically don't.
+
+> > The alternative is writing it like:
+> > 
+> > 	*(volatile int *)&v->counter c_op i;
+> I wonder if it could be possible to write something like:
 > 
-> diff --git a/drivers/mfd/ntxec.c b/drivers/mfd/ntxec.c
-> index e16a7a82a929..b02785b10d48 100644
-> --- a/drivers/mfd/ntxec.c
-> +++ b/drivers/mfd/ntxec.c
-> @@ -175,6 +175,7 @@ static int ntxec_probe(struct i2c_client *client)
->  	/* Bail out if we encounter an unknown firmware version */
->  	switch (version) {
->  	case NTXEC_VERSION_KOBO_AURA:
-> +	case NTXEC_VERSION_TOLINO_VISION:
->  		subdevs = ntxec_subdev;
->  		n_subdevs = ARRAY_SIZE(ntxec_subdev);
->  		break;
-> diff --git a/include/linux/mfd/ntxec.h b/include/linux/mfd/ntxec.h
-> index cc6f07bfa2b3..562895eb9a31 100644
-> --- a/include/linux/mfd/ntxec.h
-> +++ b/include/linux/mfd/ntxec.h
-> @@ -35,4 +35,8 @@ static inline u16 ntxec_reg8(u8 value)
->  #define NTXEC_VERSION_KOBO_AURA	0xd726	/* found in Kobo Aura */
->  #define NTXEC_VERSION_TOLINO_SHINE2 0xf110 /* found in Tolino Shine 2 HD */
->  
-> +/*
-> + * found in Tolino Vision, contains RTC, ADC, PWM, home pad
-> + */
+>         *(volatile int *)&v->counter += i;
 
-Could you please use the same formatting as the others.
+Should work, but give it a try, see what it does :-)
 
-> +#define NTXEC_VERSION_TOLINO_VISION 0xe135
->  #endif
-> -- 
-> 2.30.2
-> 
+> I also noticed that GCC has some builtin/extension to do such things,
+> __atomic_OP_fetch and __atomic_fetch_OP, but I do not know if this
+> can be used in the kernel.
 
--- 
-Lee Jones [李琼斯]
+On a per-architecture basis only, the C/C++ memory model does not match
+the Linux Kernel memory model so using the compiler to generate the
+atomic ops is somewhat tricky and needs architecture audits.
