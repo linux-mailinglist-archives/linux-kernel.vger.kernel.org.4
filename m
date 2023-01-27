@@ -2,67 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3243467DE61
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C5267DE60
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 Jan 2023 08:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbjA0HR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 02:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
+        id S232445AbjA0HR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 02:17:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbjA0HR0 (ORCPT
+        with ESMTP id S231849AbjA0HRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 02:17:26 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F9F4522A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:17:25 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id j17so6821707lfr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:17:25 -0800 (PST)
+        Fri, 27 Jan 2023 02:17:55 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A762DBDE
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:17:53 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id b7so4116855wrt.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 Jan 2023 23:17:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t6JX9N8YU0ZRqNe6wufmk02qXuxOtdyVljTACCKEcGg=;
-        b=nCK59OAyOOqOuLFK6Msjex5na6gejqRtW7VDdGlgPWnyiNabSGmrz7xdV4mqU3MqyM
-         v6DJjMDP33gKhfCVwArnR6xC3FzIlt/bymM3F0CX/1HfuciggqhLllB12otkqPBTn8kY
-         4jb075vjMBa+69RYRSSHiElBLHGhX+kLWqEW4oVSyjjCT3zrCGCQV7MRWFLKrcEtVJeM
-         /twxQvRNx4ANELvYUaL18ZlQO+f9MoICnKhERkjgLbk3KGcsbBZ19tI31HJ3/soqvueX
-         U0WegXVbXbx3VP7jTRF2SvYcI1gGZF/DoYzE043MQ7F2xwgcfonn99UaD3YdpD+nOlbF
-         tjFw==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zu8F0YryLt/OgLyDbyT+COsXBWZJ+zCIx+ZWtC5IKkg=;
+        b=WGY7E/PSjYEz982lSPv35cpucEGupEadtERlumDXtX8XKQL1ufwwK8jq1WeP0lRpj7
+         yvTrhd3+v8b/ZVucRajffMcKWHm1L1k7Dats/WD17n4S1Dxx6Bb8JLxFajnEfHcRHaU7
+         UPo/mJTsx7izz4mLpE95UWikJKc0ZFJijx1tfWVRJ/NrlFgoUEs2+qvEjq8HzgRc7tBA
+         Tcq9KWlx08MRHTkwySZvNQ5X37m497rbR/NuBNYm6xZOo3JQdwdouGLRKA4dCcVP/qgG
+         gBzOjNqThoUBnFSw0xHp0ddueyP9+5QEkONaBmxtJerDTpPI61wQnSLkXk7mZeE15jIW
+         SG+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t6JX9N8YU0ZRqNe6wufmk02qXuxOtdyVljTACCKEcGg=;
-        b=IBKs9T6084mhvETdj6ozczCB2XWDyW8Ux/ePmPMnbq06lPpQT4d+n2SmkFs1bIDyk+
-         nWvjuKLlNb93mZPDTL0CKLqgX33IXLVX20dnELcyjO/bOs6FW6L1pD77FuIeBPbxIj5C
-         w5G6SC6Bwd2PYrxMjF/zgr2/fgA/roKU08MV0leS7we53vp1Ssuhsky5hPtJ2or/XlI2
-         SzBm9FGq2MJnO8vR3ccSRMsi5X+KUo9LZDKzEwOylfQjhzi/FQzyeoSRvmhxGlxDtY9f
-         4ELMBQKHhOjAUhcxmSAwkzJ8SUuRQNYU3o6fgUTqwQc5WApzwRVwp0ueCpS22yRYWGs6
-         kxuw==
-X-Gm-Message-State: AFqh2ko1lC4SBW/FlffMc8m2UgWaaVdcGnT15UXcvmVlOZg23rBmeb/6
-        Z17MiOALr9y3Z9doLO7yVg+glq/xB3Z/2hEZER3aVw==
-X-Google-Smtp-Source: AMrXdXs0v6Ue3yA4k8NUfTIYEvwqIAxkwxmjFuIPuay9e+m8eQqDdhAU2niVaLWNAdVcke53Mmk9l92bsjfzZz2pOUI=
-X-Received: by 2002:ac2:508f:0:b0:4cb:7c2:87ee with SMTP id
- f15-20020ac2508f000000b004cb07c287eemr3927074lfm.165.1674803843191; Thu, 26
- Jan 2023 23:17:23 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zu8F0YryLt/OgLyDbyT+COsXBWZJ+zCIx+ZWtC5IKkg=;
+        b=tUaISHgZABwbG5zJVUpmDtTeWViYY9muXbM59PEzaY3Z5qJT6iwKAjvyeJldGybqw9
+         th++pq9lN9THe8f0T6zRtCAiatiyvRRzwWDX1dzzty7ZG14bAlb3Z2CT5Mz6RcRLKssU
+         9ml85Gw/c3mzwpWdcK0MeCdaVO+LPYhOyTxSd4ErqJmj6eLb0AmGBdZuvf5yFxivPlsI
+         uHX+oyk/NR7/3ig+quJ073zFl5KJK4igmfu1/5GSkqp3qiWJAjgjyrTtHCY4JNAVBVDC
+         vMd0KIg7lshvYFfkcmwxPZICjigeXmF7qhhKf2AMC1xVt5Ay4CI6LuclYP2nZqZSZ3BA
+         zCng==
+X-Gm-Message-State: AO0yUKWlUbFirqE+lkpUbpAzzspw7Lmfxr9m+OJ/nL8aFYJjLgHfglWb
+        1JZ6888Ll6fUZjO/WiAnVjevuQ==
+X-Google-Smtp-Source: AK7set+B3n3giZrrrzvhrZe5kohk1pMxsQkkUJJDZp8hEVRVSrL+hCD+foHS8sR4KeguBUH965OCDw==
+X-Received: by 2002:adf:f7cd:0:b0:2bf:d511:18a9 with SMTP id a13-20020adff7cd000000b002bfd51118a9mr858226wrq.29.1674803871740;
+        Thu, 26 Jan 2023 23:17:51 -0800 (PST)
+Received: from vermeer ([2a01:cb1d:81a9:dd00:b570:b34c:ffd4:c805])
+        by smtp.gmail.com with ESMTPSA id v13-20020a5d43cd000000b0027cb20605e3sm3272136wrr.105.2023.01.26.23.17.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 23:17:51 -0800 (PST)
+Date:   Fri, 27 Jan 2023 08:17:48 +0100
+From:   Samuel Ortiz <sameo@rivosinc.com>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-pci@vger.kernel.org
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y9N6nP+Z67TnEaMa@vermeer>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com>
+ <Y9Ex3ZUIFxwOBg1n@work-vm>
+ <Y9E7PNmSTP5w2zuw@kroah.com>
+ <Y9FDZPV7qENtNNyk@work-vm>
+ <20230125215333.GA18160@wunner.de>
+ <CAGXJix9-cXNW7EwJf0PVzj_Qmt5fmQvBX1KvXfRX5NAeEpnMvw@mail.gmail.com>
+ <20230126154449.GB4188@wunner.de>
 MIME-Version: 1.0
-References: <000000000000e4630c05e974c1eb@google.com> <000000000000defd4b05f2feb35c@google.com>
-In-Reply-To: <000000000000defd4b05f2feb35c@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 27 Jan 2023 08:17:11 +0100
-Message-ID: <CACT4Y+Y7CDqyXq87bh=eXfpQz2Xdu=8HV5pojnNd2Xv6x-4G9Q@mail.gmail.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in evict
-To:     syzbot <syzbot+6b74cf8fcd7378d8be7c@syzkaller.appspotmail.com>
-Cc:     feldsherov@google.com, hirofumi@mail.parknet.co.jp, jack@suse.cz,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126154449.GB4188@wunner.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,31 +101,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 Jan 2023 at 09:57, syzbot
-<syzbot+6b74cf8fcd7378d8be7c@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 4e3c51f4e805291b057d12f5dda5aeb50a538dc4
-> Author: Svyatoslav Feldsherov <feldsherov@google.com>
-> Date:   Tue Nov 15 20:20:01 2022 +0000
->
->     fs: do not update freeing inode i_io_list
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=111208cd480000
-> start commit:   b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=6b74cf8fcd7378d8be7c
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1353a3e2880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16163dce880000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: fs: do not update freeing inode i_io_list
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+On Thu, Jan 26, 2023 at 04:44:49PM +0100, Lukas Wunner wrote:
+> On Thu, Jan 26, 2023 at 10:24:32AM +0100, Samuel Ortiz wrote:
+> > On Wed, Jan 25, 2023 at 11:03 PM Lukas Wunner <lukas@wunner.de> wrote:
+> > > CMA/SPDM (PCIe r6.0 sec 6.31) is in active development on this branch:
+> > >
+> > > https://github.com/l1k/linux/commits/doe
+> > > 
+> > > The device authentication service afforded here is generic.
+> > > It is up to users and vendors to decide how to employ it,
+> > > be it for "confidential computing" or something else.
+> > >
+> > > Trusted root certificates to validate device certificates can be
+> > > installed into a kernel keyring using the familiar keyctl(1) utility,
+> > > but platform-specific roots of trust (such as a HSM) could be
+> > > supported as well.
+> > 
+> > This may have been discussed at LPC, but are there any plans to also
+> > support confidential computing flows where the host kernel is not part
+> > of the TCB and would not be trusted for validating the device cert chain
+> > nor for running the SPDM challenge?
+> 
+> As long as a device is passed through to a guest, the guest owns
+> that device.  
 
-Looks reasonable. Let's close the bug report:
+I agree. On a SRIOV setup, the host typically owns the PF and assigns
+VFs to the guests. Devices must be enlightened to guarantee that once
+one of their VFs/interfaces is passed to a trusted VM, it can no longer
+be modified by anything untrusted (e.g. the hypervisor).
 
-#syz fix: fs: do not update freeing inode i_io_list
+> It is the guest's prerogative and duty to perform
+> CMA/SPDM authentication on its own behalf.  If the guest uses
+> memory encryption via TDX or SEV, key material established through
+> a Diffie-Hellman exchange between guest and device is invisible
+> to the host.  Consequently using that key material for IDE encryption
+> protects device accesses from the guest against snooping by the host.
+
+On confidential computing platforms where a security manager (e.g.
+Intel TDX module) manages the confidential guests, the IDE key
+management and stream settings would be handled by this manager. In
+other words, the SPDM requester would not be a Linux kernel.
+FWIW, Intel recently published an interesting description of TEE-IO
+enabling with TDX [1].
+
+> SPDM authentication consists of a sequence of exchanges, the first
+> being GET_VERSION.  When a responder (=device) receives a GET_VERSION
+> request, it resets the connection and all internal state related to
+> that connection.  (SPDM 1.2.1 margin no 185: "a Requester can issue
+> a GET_VERSION to a Responder to reset a connection at any time";
+> see also SPDM 1.1.0 margin no 161 for details.)
+> 
+> Thus, even though the host may have authenticated the device,
+> once it's passed through to a guest and the guest performs
+> authentication again, SPDM state on the device is reset.
+> 
+> I'll amend the patches so that the host refrains from performing
+> reauthentication as long as a device is passed through.  The host
+> has no business mutating SPDM state on the device once ownership
+> has passed to the guest.
+> 
+> The first few SPDM exchanges are transmitted in the clear,
+> so the host can eavesdrop on the negotiated algorithms,
+> exchanged certificates and nonces.  However the host cannot
+> successfully modify the exchanged data due to the man in the middle
+> protection afforded by SPDM:  The challenge/response hash is
+> computed over the concatenation of the exchanged messages,
+> so modification of the messages by a man in the middle leads
+> to authentication failure.
+
+Right, I was not concerned by the challenge messages integrity but by
+trusting the host with verifying the response and validating the device
+cert chains.
+
+> Obviously the host can DoS guest access to the device by modifying
+> exchanged messages, but there are much simpler ways for it to
+> do that, say, by clearing Bus Master Enable or Memory Space Enable
+> bits in the Command Register.  DoS attacks from the host against
+> the guest cannot be part of the threat model at this point.
+
+Yes, the host can DoS the guest at anytime it wants and in multiple
+ways. It's definitely out of the confidential computing thread model at
+least.
+
+Cheers,
+Samuel.
+
+[1] https://cdrdv2-public.intel.com/742542/software-enabling-for-tdx-tee-io-fixed.pdf
+
