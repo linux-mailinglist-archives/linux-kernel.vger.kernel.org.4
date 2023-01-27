@@ -2,135 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FE167F1F2
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 00:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4BD67F1F5
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 00:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbjA0XDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 18:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
+        id S232480AbjA0XET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 18:04:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231527AbjA0XDt (ORCPT
+        with ESMTP id S232440AbjA0XES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 18:03:49 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BFB17CC5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 15:03:47 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id q9so4161382pgq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 15:03:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m2SRkdfehVqUlVEbPV1ol/qzmcbiChj1eXWjlHXA1fM=;
-        b=RCilDMKNLv1stf+fIIjMCzYLcvf/WlFkjQXUgux+S6hzeIOXM13Krg3W0kAA0FPb0F
-         qRecEq29yCB4KLtXpOfWEeZ1opG1+j+QZ4ADT+5yQRN4qEe/Ff3qm2Ei0ZNFrXCpT/xq
-         T/31Uxye9+1PIs4/tfy7NQheNbPVohCb5umlPm8bZ09HvIBt/89llZ9r7iYm/qLJNP5s
-         BFFvKB1ZRgo+PsmBsRbrkrrZMs+zJFt9HpGMnrtFIAo8vZKNQlmeulpSirtS8ecjHKGF
-         YIrxlVFeKyrWos5yjRaYP26xPvpqRJTqYL2sL1rFPQhKbVUt0mNgtbZxZSoUURJNC0Jp
-         yvsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m2SRkdfehVqUlVEbPV1ol/qzmcbiChj1eXWjlHXA1fM=;
-        b=4mB5N0aP6YH6iRC8iQyCdvB+tklVXfxz3Ag97QAXRuqG/VglDoLG7Xonyf6gA6QzqD
-         etKa/SlNWk9Mbdc6Do/W7wRFylNPHgYq9TKZtFCiz4Clq7Crfri3mPKsycvT7PmpAuvY
-         0n8NNo4sK1LWH56uefwRN+wJ7rr3TChYhcBGF2u1EqSy0C28ho2DvFqHvAlCD/0ZP50i
-         R4iFV2oCUE6/97hxswQ1Gr8jB39+Q7q8yHVuT3uIZmJ/aRm/5mzoyRk2Kr+4tdrh7BTy
-         NN3X0ap0ZDxp6OTAj3xO/M99WdXL2hBcnmWLKujR0ZZ100fdUySwQRlApXPz/6OeD5dg
-         cpsw==
-X-Gm-Message-State: AFqh2kodxHVYDpuOZbuMBvx/F5PLFxp+b411RgR7morl+/TWJkNLbiwB
-        5uRgHgRGvq02K7/9vJhmPoRbmw==
-X-Google-Smtp-Source: AMrXdXvyKThCnqjfhJIN0WxduTFibCfFlLqpnch3TBi9KvIRWTrTmraSgNE+8+meE778qDikDdlC2w==
-X-Received: by 2002:a05:6a00:189a:b0:58d:e33b:d588 with SMTP id x26-20020a056a00189a00b0058de33bd588mr8670778pfh.2.1674860627043;
-        Fri, 27 Jan 2023 15:03:47 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id j11-20020aa7928b000000b0058bb8943c9asm3085751pfa.161.2023.01.27.15.03.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 15:03:46 -0800 (PST)
-Message-ID: <68b599bb-2329-3125-1859-cf529fbeea00@kernel.dk>
-Date:   Fri, 27 Jan 2023 16:03:45 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 1/2] io_uring,audit: audit IORING_OP_FADVISE but not
- IORING_OP_MADVISE
-Content-Language: en-US
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-References: <cover.1674682056.git.rgb@redhat.com>
- <68eb0c2dd50bca1af91203669f7f1f8312331f38.1674682056.git.rgb@redhat.com>
- <CAHC9VhSZNGs+SQU7WCD+ObMcwv-=1ZkBts8oHn40qWsQ=n0pXA@mail.gmail.com>
- <6d3f76ae-9f86-a96e-d540-cfd45475e288@kernel.dk>
- <Y9RYFHucRL5TrsDh@madcap2.tricolour.ca>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y9RYFHucRL5TrsDh@madcap2.tricolour.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fri, 27 Jan 2023 18:04:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0AE8BB80;
+        Fri, 27 Jan 2023 15:04:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35CF861DC4;
+        Fri, 27 Jan 2023 23:04:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E7AC433D2;
+        Fri, 27 Jan 2023 23:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1674860652;
+        bh=vXb6OGR3jjuhguEAysSQHpLS55ZCH4lzC8q7qrmExC4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GeXLPEFPnmXnybEa25WwdFpTpr2nhYU8dLL7E2sH4CFNOzfVOkdnfEsFzv+w1P77i
+         ZFHD1cIyfbt01v+7INXSaQrNBZu9xQCzZVaHHdD09PqZPS918tHEKQ7Y1NXN0O362B
+         SeJxlYCZqBX14TKSM/4XPHIjm5y0xIrxE6v2kSgs=
+Date:   Fri, 27 Jan 2023 15:04:11 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Peter Xu <peterx@redhat.com>, Michal Hocko <mhocko@suse.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] mm: hugetlb: proc: check for hugetlb shared PMD in
+ /proc/PID/smaps
+Message-Id: <20230127150411.7c3b7b99fa4884a6af0b9351@linux-foundation.org>
+In-Reply-To: <4ad5163f-5368-0bd8-de9b-1400a7a653ed@redhat.com>
+References: <20230126222721.222195-1-mike.kravetz@oracle.com>
+        <20230126222721.222195-2-mike.kravetz@oracle.com>
+        <4ad5163f-5368-0bd8-de9b-1400a7a653ed@redhat.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/23 4:02 PM, Richard Guy Briggs wrote:
-> On 2023-01-27 15:45, Jens Axboe wrote:
->> On 1/27/23 3:35?PM, Paul Moore wrote:
->>> On Fri, Jan 27, 2023 at 12:24 PM Richard Guy Briggs <rgb@redhat.com> wrote:
->>>>
->>>> Since FADVISE can truncate files and MADVISE operates on memory, reverse
->>>> the audit_skip tags.
->>>>
->>>> Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
->>>> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
->>>> ---
->>>>  io_uring/opdef.c | 2 +-
->>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/io_uring/opdef.c b/io_uring/opdef.c
->>>> index 3aa0d65c50e3..a2bf53b4a38a 100644
->>>> --- a/io_uring/opdef.c
->>>> +++ b/io_uring/opdef.c
->>>> @@ -306,12 +306,12 @@ const struct io_op_def io_op_defs[] = {
->>>>         },
->>>>         [IORING_OP_FADVISE] = {
->>>>                 .needs_file             = 1,
->>>> -               .audit_skip             = 1,
->>>>                 .name                   = "FADVISE",
->>>>                 .prep                   = io_fadvise_prep,
->>>>                 .issue                  = io_fadvise,
->>>>         },
->>>
->>> I've never used posix_fadvise() or the associated fadvise64*()
->>> syscalls, but from quickly reading the manpages and the
->>> generic_fadvise() function in the kernel I'm missing where the fadvise
->>> family of functions could be used to truncate a file, can you show me
->>> where this happens?  The closest I can see is the manipulation of the
->>> page cache, but that shouldn't actually modify the file ... right?
->>
->> Yeah, honestly not sure where that came from. Maybe it's being mixed up
->> with fallocate? All fadvise (or madvise, for that matter) does is
->> provide hints on the caching or access pattern. On second thought, both
->> of these should be able to set audit_skip as far as I can tell.
+On Fri, 27 Jan 2023 17:23:39 +0100 David Hildenbrand <david@redhat.com> wrote:
+
+> On 26.01.23 23:27, Mike Kravetz wrote:
+> > A hugetlb page will have a mapcount of 1 if mapped by multiple processes
+> > via a shared PMD.  This is because only the first process increases the
+> > map count, and subsequent processes just add the shared PMD page to
+> > their page table.
+> > 
+> > page_mapcount is being used to decide if a hugetlb page is shared or
+> > private in /proc/PID/smaps.  Pages referenced via a shared PMD were
+> > incorrectly being counted as private.
+> > 
+> > To fix, check for a shared PMD if mapcount is 1.  If a shared PMD is
+> > found count the hugetlb page as shared.  A new helper to check for a
+> > shared PMD is added.
+> > 
+> ...
+>
+> > --- a/fs/proc/task_mmu.c
+> > +++ b/fs/proc/task_mmu.c
+> > @@ -749,8 +749,14 @@ static int smaps_hugetlb_range(pte_t *pte, unsigned long hmask,
+> >   
+> >   		if (mapcount >= 2)
+> >   			mss->shared_hugetlb += huge_page_size(hstate_vma(vma));
+> > -		else
+> > -			mss->private_hugetlb += huge_page_size(hstate_vma(vma));
+> > +		else {
 > 
-> That was one suspicion I had.  If this is the case, I'd agree both could
-> be skipped.
+> Better:
+> 
+> if (mapcount >= 2 || hugetlb_pmd_shared(pte))
+> 	mss->shared_hugetlb += huge_page_size(hstate_vma(vma));
+> else
+> 	mss->private_hugetlb += huge_page_size(hstate_vma(vma));
 
-I'd be surprised if Steve didn't mix them up. Once he responds, can you
-send a v2 with the correction?
+Yup.  And that local doesn't add any value?
 
--- 
-Jens Axboe
-
+--- a/fs/proc/task_mmu.c~mm-hugetlb-proc-check-for-hugetlb-shared-pmd-in-proc-pid-smaps-fix
++++ a/fs/proc/task_mmu.c
+@@ -745,18 +745,10 @@ static int smaps_hugetlb_range(pte_t *pt
+ 			page = pfn_swap_entry_to_page(swpent);
+ 	}
+ 	if (page) {
+-		int mapcount = page_mapcount(page);
+-
+-		if (mapcount >= 2)
++		if (page_mapcount(page) >= 2 || hugetlb_pmd_shared(pte))
+ 			mss->shared_hugetlb += huge_page_size(hstate_vma(vma));
+-		else {
+-			if (hugetlb_pmd_shared(pte))
+-				mss->shared_hugetlb +=
+-						huge_page_size(hstate_vma(vma));
+-			else
+-				mss->private_hugetlb +=
+-						huge_page_size(hstate_vma(vma));
+-		}
++		else
++			mss->private_hugetlb += huge_page_size(hstate_vma(vma));
+ 	}
+ 	return 0;
+ }
+_
 
