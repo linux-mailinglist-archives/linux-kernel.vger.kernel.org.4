@@ -2,144 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1B567F9ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 18:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FA867F9D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 18:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234790AbjA1RjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 12:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S231548AbjA1RYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 12:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234726AbjA1RjC (ORCPT
+        with ESMTP id S229707AbjA1RYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 12:39:02 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3B12A175;
-        Sat, 28 Jan 2023 09:39:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1674927502; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=XGngZ+CfeF5ETeoZj5mEJCZXNloNBXlYT5+bh/sQwlCnYUEX6rtdAK0ic0s9rBBckX2MqOaFZhulKNV9xvf6xP/8S3AG2mRN80orreVy5aRQCG0lhu5apvcYWiZ8gnE5hNueAiThV1/1MimRfDNUisE+qzCNlOiFz3JdRyvo88U=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1674927502; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=XZyRjGD6IJEi2ji1I50O5QBvIy0FeOzgKH5lESzzl1M=; 
-        b=GDI36+F02nx/AZvz7aFYjb2VfMzR4i4QmmsQsjTfniv/euYDJ0PU7oa8jNZcNTylRc51MxC6dBvjgavpkL/D4kc91caOmj8jQY9JLMwXlLJewEgCyLlitRV/Ov+2oVekpdvDZ6tThChp3WFC3UlIW7rHPwTIy70XI4+7hBBUXLo=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674927502;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=XZyRjGD6IJEi2ji1I50O5QBvIy0FeOzgKH5lESzzl1M=;
-        b=a10mS5qX5UtpKUNIjBZYBA9Yd4XsZOBwUsHQUk+VEcbHLkc2Gv9vhvQjGOIimyPp
-        06w0ZrDaxHhoU9VTkIzbhet2PChtW10T9SCzv1DIWn7/URdn+vMSxEJz3hnEkqhZgKJ
-        nKZCFFQsG5uF53gnsAi0akpzT7rvWxAD9YuSia3c=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1674927499694831.882213376883; Sat, 28 Jan 2023 09:38:19 -0800 (PST)
-Message-ID: <79506b27-d71a-c341-48fd-0e6d3a973f2e@arinc9.com>
-Date:   Sat, 28 Jan 2023 20:38:11 +0300
+        Sat, 28 Jan 2023 12:24:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82617144A0;
+        Sat, 28 Jan 2023 09:24:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D2BC60BAD;
+        Sat, 28 Jan 2023 17:24:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E038BC433D2;
+        Sat, 28 Jan 2023 17:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674926683;
+        bh=gyX0IhGsDxt9M//MLMJmErh/JVISs1iqdqbw8LxGycU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SKGTVEYTgizaeg2sRYtfkRDnXvvZ9mKhegZnWtJAbXBJGCUZVItAEKRgX0Rdljwfm
+         kxCB+c7PqdVMwlESPArC07pvMYCTUvirD7eaPaf+zdhlSXfJV9BQUCpxZGbRqjFE7C
+         PHYKk63vw3lJ5ZWjrxUHCt9U9wQ2S87YVmYde9kLuQxtvXGrEkGeRZcERCyKYGBYll
+         sEumsTczWItcuSqCre49ipo+aH/eWpg6DuLvoCjCdqH1TmhI7Y/ZjRA2+FifFHXul0
+         alU86L7ge03On5AQHiQnpRYju+IPRBg2yVPtNbgcMM2LXHqo3KiioLXc3mLEnm7aRA
+         +SVlkGNhxrYAQ==
+Date:   Sat, 28 Jan 2023 17:38:36 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     error27@gmail.com, Lars-Peter Clausen <lars@metafoo.de>,
+        Irina Tirdea <irina.tirdea@intel.com>,
+        Vlad Dogaru <ddvlad@gmail.com>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: accel: mma9551_core: Prevent uninitialized
+ variable in mma9551_read_status_word()
+Message-ID: <20230128173836.10a58a7e@jic23-huawei>
+In-Reply-To: <20230126152147.3585874-1-harshit.m.mogalapalli@oracle.com>
+References: <20230126152147.3585874-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net v3 4/5] net: ethernet: mtk_eth_soc: drop generic vlan
- rx offload, only use DSA untagging
-To:     Felix Fietkau <nbd@nbd.name>, netdev@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        erkin.bozoglu@xeront.com
-References: <20221230073145.53386-1-nbd@nbd.name>
- <20221230073145.53386-4-nbd@nbd.name>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20221230073145.53386-4-nbd@nbd.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.12.2022 10:31, Felix Fietkau wrote:
-> Through testing I found out that hardware vlan rx offload support seems to
-> have some hardware issues. At least when using multiple MACs and when receiving
-> tagged packets on the secondary MAC, the hardware can sometimes start to emit
-> wrong tags on the first MAC as well.
+On Thu, 26 Jan 2023 07:21:46 -0800
+Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com> wrote:
+
+> Smatch Warns: drivers/iio/accel/mma9551_core.c:357
+> 	mma9551_read_status_word() error: uninitialized symbol 'v'.
 > 
-> In order to avoid such issues, drop the feature configuration and use the
-> offload feature only for DSA hardware untagging on MT7621/MT7622 devices which
-> only use one MAC.
+> When (offset >= 1 << 12) is true mma9551_transfer() will return -EINVAL
+> without 'v' being initialized, so check for the error and return.
 > 
-> Tested-By: Frank Wunderlich <frank-w@public-files.de>
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> Fixes: d5b97f5c7dfc ("iio: accel: mma9551: split driver to expose mma955x api")
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 
-You can add this to all patches on the series.
+Whilst inelegant, there isn't actually a bug here as such because the function
+callers don't use the value.  Given the function is exported, it's not going to
+be easy for static analysis to see that however and your patch is definitely an
+improvement.
 
-Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Hence applied, but with fixes tag dropped and a note added for information
+of anyone considering backporting this.
 
-Tested on Unielec U7621-06 (MT7621AT) and Bananapi BPI-R2 (MT7623NI) on 
-latest netnext with buildroot as initramfs. These are tested with my fix 
-[0] applied on top.
+Jonathan
 
-VLAN on DSA master gmac0.
-   Works on MT7621 SoC with multi-chip module MT7530 switch and MT7623
-   SoC with standalone MT7530 switch.
+> ---
+> This is detected using static analysis with smatch, and could probably
+> be detected by syzkaller fuzzing in future.
+> ---
+>  drivers/iio/accel/mma9551_core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/accel/mma9551_core.c b/drivers/iio/accel/mma9551_core.c
+> index 75eee7f7303a..b898f865fb87 100644
+> --- a/drivers/iio/accel/mma9551_core.c
+> +++ b/drivers/iio/accel/mma9551_core.c
+> @@ -357,9 +357,12 @@ int mma9551_read_status_word(struct i2c_client *client, u8 app_id,
+>  
+>  	ret = mma9551_transfer(client, app_id, MMA9551_CMD_READ_STATUS,
+>  			       reg, NULL, 0, (u8 *)&v, 2);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	*val = be16_to_cpu(v);
+>  
+> -	return ret;
+> +	return 0;
+>  }
+>  EXPORT_SYMBOL_NS(mma9551_read_status_word, IIO_MMA9551);
+>  
 
-VLAN on DSA master gmac0 and non-DSA gmac1.
-   Works on MT7621 SoC with multi-chip module MT7530 switch and MT7623
-   SoC with standalone MT7530 switch.
-
-VLAN on DSA master gmac1.
-   Can’t test on MT7621 as an unrelated issue prevents from testing.
-     Define port@6 and gmac0, otherwise gmac1 DSA master receives
-     malformed frames from port@5. This issue appears only on MT7621 SoC
-     with multi-chip module MT7530 switch.
-   Works on MT7623 SoC with standalone MT7530 switch.
-
-VLAN on DSA master gmac0 and DSA master gmac1.
-   Works on MT7621 SoC with multi-chip module MT7530 and MT7623 SoC with
-   standalone MT7530 switch switch after compensating an unrelated issue.
-     When both MACs are DSA masters, ping from gmac1 DSA master first,
-     otherwise frames received from user ports won’t reach to gmac1 DSA
-     master. This issue appears on MT7621 SoC with multi-chip module
-     MT7530 switch and MT7623 SoC with standalone MT7530 switch.
-
-It'd be great if you could take a look at these issues.
-
-Network configuration:
-
-For DSA master gmac0/gmac1
-ip l add link lan3 name lan3.50 type vlan id 50
-ip a add 192.168.3.1/24 dev lan3.50
-ip l set up lan3 && ip l set up lan3.50
-
-For non-DSA gmac1
-ip l del lan3.50
-ip l add link eth1 name eth1.50 type vlan id 50
-ip a add 192.168.3.1/24 dev eth1.50
-ip l set up eth1 && ip l set up eth1.50
-
-Other side
-ip l add link enp9s0 name enp9s0.50 type vlan id 50
-ip a add 192.168.3.2/24 dev enp9s0.50
-ip l set up enp9s0 && ip l set up enp9s0.50
-
-[0] 
-https://lore.kernel.org/netdev/20230128094232.2451947-1-arinc.unal@arinc9.com/
-
-Arınç
