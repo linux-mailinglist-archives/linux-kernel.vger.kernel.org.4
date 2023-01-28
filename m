@@ -2,319 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F1D67F5C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743A667F5C6
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbjA1Hti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 02:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S232688AbjA1HuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 02:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232438AbjA1Hte (ORCPT
+        with ESMTP id S229579AbjA1HuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 02:49:34 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACBB783CE
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:49:30 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5063c0b909eso78481717b3.7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:49:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=771NPyRF1PEt8cs2hCV18puTF3LGONEcEJnkC6VrUwM=;
-        b=Xe48EWeSfcJugp9Fqys1a4HBtDNLooqtWsIE1RteRtRyRQICJL3sy+3N7Zd4gnyZs1
-         e/EUgOTUYLEp5BkjcI6i9SUMhSMXOhT8oLZgu+sqtx0UIByQw8jS3a122xO78VhL3N/e
-         EChvjI0sUTHFErwRPLCUjeHBs7JQjdZCe9aVq/3fNeIjhCXqvmh74lSeFZnSMSZBNB7V
-         fgHzKjRCLZWuMPoIgWErpolwxxvTD88wGxF2SPq7bhhtDSUEf6MlOnNzDMcBKXGCOwNB
-         oDWZ1t3n20GM/SHg9RgTa9rb6ssbWS/XZGpsaVVxQwGp9WCPcIRfktO5olwH3gviBknV
-         M8YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=771NPyRF1PEt8cs2hCV18puTF3LGONEcEJnkC6VrUwM=;
-        b=PDfOHQnmBODRTV6X+baY0f3d2ReRrNfLOdck+QE2sgKbyY91MKOHrsn3oNNHFLlJrn
-         2IOY7EvysLJJmxRFE6rzI7ONG0xNRFpLFho1YzvpX/CUSzdme3zoo4ia1aHRymUUOX+F
-         JEvT9LmUlitfL68TdT+fIKa9zR/lUuJKgHczpmKXs5KcdIW4f5AMzNqg50BQU19AH5G5
-         E0X0mPWoDdPtgI1CurNSBQZfRBZJAfVrnZbAQKHMtZGcyE5v+DAcE5kc4c3P6UfzS4ce
-         V5CxoZZTtorNH5KzvI/oudis6wFakj14bGhFm9QmokeAQ7uFNCok2C5nHZz/rfJq9j+4
-         2AQg==
-X-Gm-Message-State: AFqh2krh8o1oDSfKQrLOOpznUaxH2O81mmdlNhbdXDuexkjTMkMgmNkd
-        e3q4YoN4FCmkXPaDTGyVDFhGT2ybJVzQUg==
-X-Google-Smtp-Source: AMrXdXuMV3wsThXD7wbG0TCsvlinfj8R6omUbC0OplNqe0/ZHUXG3RUNA/0fvUzpGeyBv6A3b5h5vFP1jYFGpg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a81:79d0:0:b0:4fe:276a:baf4 with SMTP id
- u199-20020a8179d0000000b004fe276abaf4mr4068084ywc.401.1674892170006; Fri, 27
- Jan 2023 23:49:30 -0800 (PST)
-Date:   Sat, 28 Jan 2023 15:49:18 +0800
-In-Reply-To: <20230128074918.1180523-1-davidgow@google.com>
-Mime-Version: 1.0
-References: <20230128074918.1180523-1-davidgow@google.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230128074918.1180523-2-davidgow@google.com>
-Subject: [PATCH v2 2/2] Documentation: Add Function Redirection API docs
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joe Fradley <joefradley@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Sat, 28 Jan 2023 02:50:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371FE3669F;
+        Fri, 27 Jan 2023 23:50:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 888CE60A48;
+        Sat, 28 Jan 2023 07:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DC3F6C4339C;
+        Sat, 28 Jan 2023 07:50:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674892218;
+        bh=LgfNZKO5nHqGL1jvIEf4eVDX4YJ6I9yFP0Y2P1Y5iYs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ImXvrtl7wUQZIAklo5zFr/BpN26y6rc/NinXaX4Gs8TCyZOkhQ81OU6Ohs3Du8WKT
+         cQL2RZOKlsKG4fRk3514Xa1Qi9ThzVMwxZ9mLKIAS3sl1Xe2v7CY3Z4mMQYpxV4vtF
+         +zx2eaXn8gOHuNg4ZwOH1gR2Ya2G85MA8Qa8xZWe7nDeIeAEzsrqpCIOq2+25rIYea
+         zmZwjvhp0K8wXdaMYLNDbmNDWLEONNqpb9JtUdg5GoEXOzbrPssPel8HEE9+WcZ3ij
+         V0YQbZ3PxDzHXR6qARWMDXyMOMQ38kGf2pdLLIFnjbGuK35K1mGD7TwZ4u7H8WyqlW
+         w8LBbCocablRQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BD6D2F83ED2;
+        Sat, 28 Jan 2023 07:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net PATCH] skb: Do mix page pool and page referenced frags in GRO
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167489221877.30137.12578753687356815512.git-patchwork-notify@kernel.org>
+Date:   Sat, 28 Jan 2023 07:50:18 +0000
+References: <167475990764.1934330.11960904198087757911.stgit@localhost.localdomain>
+In-Reply-To: <167475990764.1934330.11960904198087757911.stgit@localhost.localdomain>
+To:     Alexander Duyck <alexander.duyck@gmail.com>
+Cc:     nbd@nbd.name, davem@davemloft.net, edumazet@google.com,
+        hawk@kernel.org, ilias.apalodimas@linaro.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linyunsheng@huawei.com,
+        lorenzo@kernel.org, netdev@vger.kernel.org, pabeni@redhat.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sadiya Kazi <sadiyakazi@google.com>
+Hello:
 
-Added a new page (functionredirection.rst) that describes the Function
-Redirection (static stubbing) API. This page will be expanded if we add,
-for example, ftrace-based stubbing.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-In addition,
-1. Updated the api/index.rst page to create an entry for function
-   redirection api
-2. Updated the toctree to be hidden, reducing redundancy on the
-   generated page.
+On Thu, 26 Jan 2023 11:06:59 -0800 you wrote:
+> From: Alexander Duyck <alexanderduyck@fb.com>
+> 
+> GSO should not merge page pool recycled frames with standard reference
+> counted frames. Traditionally this didn't occur, at least not often.
+> However as we start looking at adding support for wireless adapters there
+> becomes the potential to mix the two due to A-MSDU repartitioning frames in
+> the receive path. There are possibly other places where this may have
+> occurred however I suspect they must be few and far between as we have not
+> seen this issue until now.
+> 
+> [...]
 
-Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
-Co-developed-by: Daniel Latypov <dlatypov@google.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Co-developed-by: David Gow <davidgow@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
+Here is the summary with links:
+  - [net] skb: Do mix page pool and page referenced frags in GRO
+    https://git.kernel.org/netdev/net/c/7d2c89b32587
 
-Note that this document reworks some elements of the KUnit website's "mocking"
-page at http://kunit.dev/mocking.html written by Daniel Latypov, and used with
-his permission.
-
-Changes since v1:
-https://lore.kernel.org/all/20221208061841.2186447-3-davidgow@google.com/
-- Fix a bunch of typos (Thanks, Daniel)
-- Remove a redundant comment (Thanks, Daniel)
-- Reword a few things to be clearer, especially about global state.
-
----
- .../kunit/api/functionredirection.rst         | 162 ++++++++++++++++++
- Documentation/dev-tools/kunit/api/index.rst   |  13 +-
- 2 files changed, 172 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/dev-tools/kunit/api/functionredirection.rst
-
-diff --git a/Documentation/dev-tools/kunit/api/functionredirection.rst b/Documentation/dev-tools/kunit/api/functionredirection.rst
-new file mode 100644
-index 000000000000..3791efc2fcca
---- /dev/null
-+++ b/Documentation/dev-tools/kunit/api/functionredirection.rst
-@@ -0,0 +1,162 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+========================
-+Function Redirection API
-+========================
-+
-+Overview
-+========
-+
-+When writing unit tests, it's important to be able to isolate the code being
-+tested from other parts of the kernel. This ensures the reliability of the test
-+(it won't be affected by external factors), reduces dependencies on specific
-+hardware or config options (making the test easier to run), and protects the
-+stability of the rest of the system (making it less likely for test-specific
-+state to interfere with the rest of the system).
-+
-+While for some code (typically generic data structures, helpers, and other
-+"pure functions") this is trivial, for others (like device drivers,
-+filesystems, core subsystems) the code is heavily coupled with other parts of
-+the kernel.
-+
-+This coupling is often due to global state in some way: be it a global list of
-+devices, the filesystem, or some hardware state. Tests need to either carefully
-+manage, isolate, and restore state, or they can avoid it altogether by
-+replacing access to and mutation of this state with a "fake" or "mock" variant.
-+
-+By refactoring access to such state, such as by introducing a layer of
-+indirection which can use or emulate a separate set of test state. However,
-+such refactoring comes with its own costs (and undertaking significant
-+refactoring before being able to write tests is suboptimal).
-+
-+A simpler way to intercept and replace some of the function calls is to use
-+function redirection via static stubs.
-+
-+
-+Static Stubs
-+============
-+
-+Static stubs are a way of redirecting calls to one function (the "real"
-+function) to another function (the "replacement" function).
-+
-+It works by adding a macro to the "real" function which checks to see if a test
-+is running, and if a replacement function is available. If so, that function is
-+called in place of the original.
-+
-+Using static stubs is pretty straightforward:
-+
-+1. Add the KUNIT_STATIC_STUB_REDIRECT() macro to the start of the "real"
-+   function.
-+
-+   This should be the first statement in the function, after any variable
-+   declarations. KUNIT_STATIC_STUB_REDIRECT() takes the name of the
-+   function, followed by all of the arguments passed to the real function.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	void send_data_to_hardware(const char *str)
-+	{
-+		KUNIT_STATIC_STUB_REDIRECT(send_data_to_hardware, str);
-+		/* real implementation */
-+	}
-+
-+2. Write one or more replacement functions.
-+
-+   These functions should have the same function signature as the real function.
-+   In the event they need to access or modify test-specific state, they can use
-+   kunit_get_current_test() to get a struct kunit pointer. This can then
-+   be passed to the expectation/assertion macros, or used to look up KUnit
-+   resources.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	void fake_send_data_to_hardware(const char *str)
-+	{
-+		struct kunit *test = kunit_get_current_test();
-+		KUNIT_EXPECT_STREQ(test, str, "Hello World!");
-+	}
-+
-+3. Activate the static stub from your test.
-+
-+   From within a test, the redirection can be enabled with
-+   kunit_activate_static_stub(), which accepts a struct kunit pointer,
-+   the real function, and the replacement function. You can call this several
-+   times with different replacement functions to swap out implementations of the
-+   function.
-+
-+   In our example, this would be
-+
-+   .. code-block:: c
-+
-+	kunit_activate_static_stub(test,
-+				   send_data_to_hardware,
-+				   fake_send_data_to_hardware);
-+
-+4. Call (perhaps indirectly) the real function.
-+
-+   Once the redirection is activated, any call to the real function will call
-+   the replacement function instead. Such calls may be buried deep in the
-+   implementation of another function, but must occur from the test's kthread.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	send_data_to_hardware("Hello World!"); /* Succeeds */
-+	send_data_to_hardware("Something else"); /* Fails the test. */
-+
-+5. (Optionally) disable the stub.
-+
-+   When you no longer need it, disable the redirection (and hence resume the
-+   original behaviour of the 'real' function) using
-+   kunit_deactivate_static_stub(). Otherwise, it will be automatically disabled
-+   when the test exits.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	kunit_deactivate_static_stub(test, send_data_to_hardware);
-+
-+
-+It's also possible to use these replacement functions to test to see if a
-+function is called at all, for example:
-+
-+.. code-block:: c
-+
-+	void send_data_to_hardware(const char *str)
-+	{
-+		KUNIT_STATIC_STUB_REDIRECT(send_data_to_hardware, str);
-+		/* real implementation */
-+	}
-+
-+	/* In test file */
-+	int times_called = 0;
-+	void fake_send_data_to_hardware(const char *str)
-+	{
-+		times_called++;
-+	}
-+	...
-+	/* In the test case, redirect calls for the duration of the test */
-+	kunit_activate_static_stub(test, send_data_to_hardware, fake_send_data_to_hardware);
-+
-+	send_data_to_hardware("hello");
-+	KUNIT_EXPECT_EQ(test, times_called, 1);
-+
-+	/* Can also deactivate the stub early, if wanted */
-+	kunit_deactivate_static_stub(test, send_data_to_hardware);
-+
-+	send_data_to_hardware("hello again");
-+	KUNIT_EXPECT_EQ(test, times_called, 1);
-+
-+
-+
-+API Reference
-+=============
-+
-+.. kernel-doc:: include/kunit/static_stub.h
-+   :internal:
-diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
-index 45ce04823f9f..2d8f756aab56 100644
---- a/Documentation/dev-tools/kunit/api/index.rst
-+++ b/Documentation/dev-tools/kunit/api/index.rst
-@@ -4,17 +4,24 @@
- API Reference
- =============
- .. toctree::
-+	:hidden:
- 
- 	test
- 	resource
-+	functionredirection
- 
--This section documents the KUnit kernel testing API. It is divided into the
-+
-+This page documents the KUnit kernel testing API. It is divided into the
- following sections:
- 
- Documentation/dev-tools/kunit/api/test.rst
- 
-- - documents all of the standard testing API
-+ - Documents all of the standard testing API
- 
- Documentation/dev-tools/kunit/api/resource.rst
- 
-- - documents the KUnit resource API
-+ - Documents the KUnit resource API
-+
-+Documentation/dev-tools/kunit/api/functionredirection.rst
-+
-+ - Documents the KUnit Function Redirection API
+You are awesome, thank you!
 -- 
-2.39.1.456.gfc5497dd1b-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
