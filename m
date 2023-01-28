@@ -2,157 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3F867FA8E
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5961867FA91
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234382AbjA1Tt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 14:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        id S234460AbjA1Tuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 14:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjA1Tty (ORCPT
+        with ESMTP id S229966AbjA1Tuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 14:49:54 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9339320D03;
-        Sat, 28 Jan 2023 11:49:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674935393; x=1706471393;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ks8NPG/0wNzB8QAK/WMNQrtn0BmzV/O50xmmaQ8aYiE=;
-  b=oJj3J4GEEjlLkHQpDq/SRuSeGUMOGl0aQjLVfrnWOD7P0d9iEV51km0n
-   PkCGGPtm5uWwZeEUqyYwdHcz889u+eQVsopmlmVSmh8trHj9oXQl/mxRB
-   ShLw1pwIJu3kXgTzd1vMo36Pxdlfx4rzVXEYC40o8V8aMPcdGPcRTBHHt
-   acAf5f5UlVXTZMwrlj94cseypJGa83BKY4iNEdHFeAogLP9TqJV5LZQpA
-   TYKpX6Em9ksHoYVXcK28ehZlUnA/B/rVTOQGgrikwYpTubVahOl88ZcPN
-   dySD2HybNgujxxM6Pj1+Dlsc+HrJyQdXAm1oO+vD7NdyZn4Pt6Zkhu3EW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="413548360"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="413548360"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 11:49:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="732231775"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="732231775"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jan 2023 11:49:50 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pLrCv-000135-17;
-        Sat, 28 Jan 2023 19:49:49 +0000
-Date:   Sun, 29 Jan 2023 03:49:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gregory Price <gourry.memverge@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
-        oleg@redhat.com, avagin@gmail.com, peterz@infradead.org,
-        luto@kernel.org, krisman@collabora.com, tglx@linutronix.de,
-        corbet@lwn.net, shuah@kernel.org,
-        Gregory Price <gregory.price@memverge.com>
-Subject: Re: [PATCH v7 1/1] ptrace,syscall_user_dispatch: checkpoint/restore
- support for SUD
-Message-ID: <202301290302.CSHz4zLe-lkp@intel.com>
-References: <20230126190645.18341-2-gregory.price@memverge.com>
+        Sat, 28 Jan 2023 14:50:50 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B535A20069;
+        Sat, 28 Jan 2023 11:50:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=qEnfDf+BQe2kIPxLJiV7OZn4deC6AGOYYXUZSW1pSOU=; b=WNESInrEGQ4hgPJTNesLKzpYcK
+        Pd0RAQ4pe+sxVn9f2bquTCMoTbiw+Wq0Xrj4FcUvppge8BH+8/Zch2EsODoEsQ0WiwY4+HzMIu0kb
+        1XkGijy+NtOvuCqxLsp1drtvlw7rlyptGzKEajl8Pui9Z3uihAu7Qo5rF985WgoH/XXUwEAhHdexx
+        weyQmk5nVQ768Ep/mnmNUg0mYhGENa/HnJW8QdAfc4ciur8Nq6hw9BugJM4SsW8nwOG2l0g5FGcKv
+        lvP1KEgS6qHBogL3tRbM2Jo2raFwzBtDx9R7UNayG8jmAIn+tLVLQnomOA8QP4ihLg+MiA7qM5PLe
+        fcAWDVwQ==;
+Received: from [2601:1c2:d00:6a60::9526] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pLrDq-000cy2-RU; Sat, 28 Jan 2023 19:50:46 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH bpf-next v2] Documentation: bpf: correct spelling
+Date:   Sat, 28 Jan 2023 11:50:46 -0800
+Message-Id: <20230128195046.13327-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126190645.18341-2-gregory.price@memverge.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gregory,
+Correct spelling problems for Documentation/bpf/ as reported
+by codespell.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+v2: independent patch targeting bpf-next
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on tip/core/entry v6.2-rc5 next-20230127]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ Documentation/bpf/libbpf/libbpf_naming_convention.rst |    6 +++---
+ Documentation/bpf/map_xskmap.rst                      |    2 +-
+ Documentation/bpf/ringbuf.rst                         |    4 ++--
+ Documentation/bpf/verifier.rst                        |    2 +-
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/ptrace-syscall_user_dispatch-checkpoint-restore-support-for-SUD/20230128-145101
-patch link:    https://lore.kernel.org/r/20230126190645.18341-2-gregory.price%40memverge.com
-patch subject: [PATCH v7 1/1] ptrace,syscall_user_dispatch: checkpoint/restore support for SUD
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20230129/202301290302.CSHz4zLe-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/bc68df21f98617e74a8c5368a901041f89bdb17f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Gregory-Price/ptrace-syscall_user_dispatch-checkpoint-restore-support-for-SUD/20230128-145101
-        git checkout bc68df21f98617e74a8c5368a901041f89bdb17f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   kernel/entry/syscall_user_dispatch.c: In function 'syscall_user_dispatch_get_config':
->> kernel/entry/syscall_user_dispatch.c:114:45: error: storage size of 'config' isn't known
-     114 |         struct syscall_user_dispatch_config config;
-         |                                             ^~~~~~
->> kernel/entry/syscall_user_dispatch.c:116:28: error: invalid application of 'sizeof' to incomplete type 'struct syscall_user_dispatch_config'
-     116 |         if (size != sizeof(struct syscall_user_dispatch_config))
-         |                            ^~~~~~
-   kernel/entry/syscall_user_dispatch.c:114:45: warning: unused variable 'config' [-Wunused-variable]
-     114 |         struct syscall_user_dispatch_config config;
-         |                                             ^~~~~~
-   kernel/entry/syscall_user_dispatch.c: In function 'syscall_user_dispatch_set_config':
-   kernel/entry/syscall_user_dispatch.c:137:45: error: storage size of 'config' isn't known
-     137 |         struct syscall_user_dispatch_config config;
-         |                                             ^~~~~~
-   kernel/entry/syscall_user_dispatch.c:139:28: error: invalid application of 'sizeof' to incomplete type 'struct syscall_user_dispatch_config'
-     139 |         if (size != sizeof(struct syscall_user_dispatch_config))
-         |                            ^~~~~~
-   kernel/entry/syscall_user_dispatch.c:137:45: warning: unused variable 'config' [-Wunused-variable]
-     137 |         struct syscall_user_dispatch_config config;
-         |                                             ^~~~~~
-   kernel/entry/syscall_user_dispatch.c:147:1: error: control reaches end of non-void function [-Werror=return-type]
-     147 | }
-         | ^
-   cc1: some warnings being treated as errors
-
-
-vim +114 kernel/entry/syscall_user_dispatch.c
-
-   109	
-   110	int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-   111			void __user *data)
-   112	{
-   113		struct syscall_user_dispatch *sd = &task->syscall_dispatch;
- > 114		struct syscall_user_dispatch_config config;
-   115	
- > 116		if (size != sizeof(struct syscall_user_dispatch_config))
-   117			return -EINVAL;
-   118	
-   119		if (test_syscall_work(SYSCALL_USER_DISPATCH))
-   120			config.mode = PR_SYS_DISPATCH_ON;
-   121		else
-   122			config.mode = PR_SYS_DISPATCH_OFF;
-   123	
-   124		config.offset = sd->offset;
-   125		config.len = sd->len;
-   126		config.selector = sd->selector;
-   127	
-   128		if (copy_to_user(data, &config, sizeof(config)))
-   129			return -EFAULT;
-   130	
-   131		return 0;
-   132	}
-   133	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+diff -- a/Documentation/bpf/libbpf/libbpf_naming_convention.rst b/Documentation/bpf/libbpf/libbpf_naming_convention.rst
+--- a/Documentation/bpf/libbpf/libbpf_naming_convention.rst
++++ b/Documentation/bpf/libbpf/libbpf_naming_convention.rst
+@@ -83,8 +83,8 @@ This prevents from accidentally exportin
+ to be a part of ABI what, in turn, improves both libbpf developer- and
+ user-experiences.
+ 
+-ABI versionning
+----------------
++ABI versioning
++--------------
+ 
+ To make future ABI extensions possible libbpf ABI is versioned.
+ Versioning is implemented by ``libbpf.map`` version script that is
+@@ -148,7 +148,7 @@ API documentation convention
+ The libbpf API is documented via comments above definitions in
+ header files. These comments can be rendered by doxygen and sphinx
+ for well organized html output. This section describes the
+-convention in which these comments should be formated.
++convention in which these comments should be formatted.
+ 
+ Here is an example from btf.h:
+ 
+diff -- a/Documentation/bpf/map_xskmap.rst b/Documentation/bpf/map_xskmap.rst
+--- a/Documentation/bpf/map_xskmap.rst
++++ b/Documentation/bpf/map_xskmap.rst
+@@ -178,7 +178,7 @@ The following code snippet shows how to
+ 
+ For an example on how create AF_XDP sockets, please see the AF_XDP-example and
+ AF_XDP-forwarding programs in the `bpf-examples`_ directory in the `libxdp`_ repository.
+-For a detailed explaination of the AF_XDP interface please see:
++For a detailed explanation of the AF_XDP interface please see:
+ 
+ - `libxdp-readme`_.
+ - `AF_XDP`_ kernel documentation.
+diff -- a/Documentation/bpf/ringbuf.rst b/Documentation/bpf/ringbuf.rst
+--- a/Documentation/bpf/ringbuf.rst
++++ b/Documentation/bpf/ringbuf.rst
+@@ -124,7 +124,7 @@ buffer.  Currently 4 are supported:
+ 
+ - ``BPF_RB_AVAIL_DATA`` returns amount of unconsumed data in ring buffer;
+ - ``BPF_RB_RING_SIZE`` returns the size of ring buffer;
+-- ``BPF_RB_CONS_POS``/``BPF_RB_PROD_POS`` returns current logical possition
++- ``BPF_RB_CONS_POS``/``BPF_RB_PROD_POS`` returns current logical position
+   of consumer/producer, respectively.
+ 
+ Returned values are momentarily snapshots of ring buffer state and could be
+@@ -146,7 +146,7 @@ Design and Implementation
+ This reserve/commit schema allows a natural way for multiple producers, either
+ on different CPUs or even on the same CPU/in the same BPF program, to reserve
+ independent records and work with them without blocking other producers. This
+-means that if BPF program was interruped by another BPF program sharing the
++means that if BPF program was interrupted by another BPF program sharing the
+ same ring buffer, they will both get a record reserved (provided there is
+ enough space left) and can work with it and submit it independently. This
+ applies to NMI context as well, except that due to using a spinlock during
+diff -- a/Documentation/bpf/verifier.rst b/Documentation/bpf/verifier.rst
+--- a/Documentation/bpf/verifier.rst
++++ b/Documentation/bpf/verifier.rst
+@@ -192,7 +192,7 @@ checked and found to be non-NULL, all co
+ As well as range-checking, the tracked information is also used for enforcing
+ alignment of pointer accesses.  For instance, on most systems the packet pointer
+ is 2 bytes after a 4-byte alignment.  If a program adds 14 bytes to that to jump
+-over the Ethernet header, then reads IHL and addes (IHL * 4), the resulting
++over the Ethernet header, then reads IHL and adds (IHL * 4), the resulting
+ pointer will have a variable offset known to be 4n+2 for some n, so adding the 2
+ bytes (NET_IP_ALIGN) gives a 4-byte alignment and so word-sized accesses through
+ that pointer are safe.
