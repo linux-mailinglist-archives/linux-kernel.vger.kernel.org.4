@@ -2,91 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3E067F2A9
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B00367F2B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbjA1AH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 19:07:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
+        id S230398AbjA1AHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 19:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbjA1AHZ (ORCPT
+        with ESMTP id S232288AbjA1AHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:07:25 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C645286609
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:07:22 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id d10-20020a631d4a000000b00491da16dc44so2805339pgm.16
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:07:22 -0800 (PST)
+        Fri, 27 Jan 2023 19:07:39 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763DB8663B
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:07:29 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id e10so4221468pgc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:07:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uHsr2oJUItSi3vqA6tkcnF07ysr7z0zXfg4n2h1yTQE=;
-        b=J1SQgyRtJK/Zu2QQvkc7mBgYGUZiPn1Bz8v0O2XcSB0lKHhi3LH3gZPTwN9nKQ/EWc
-         cLS2uKCN+6G4VUH3++bNzvCPwhsLkIVT940ggF2W/alKMiAu+HK9S9DY637ZAbUPGhLS
-         eyfyJ6ZtR1hbIJo4E+NwzZpsx4zz8FIoDofnMZSk0Kmb6/v902SXxTAYs+U0cvS4Fx4r
-         YYDcTfbAsz2i51AWU4rgE2hs8KvEZs7a915gH7DybFRmprvfbeydswuWjiMKijDXS/fq
-         hl/rZxwjQTUFyfPwrOlim7VK94WV/F2XxbjEaHy2ekTG9oV3gSypm9HLCZrEHYJezsfN
-         RBaw==
+        d=paul-moore.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2A/Zg0V6mGpRrWbIuZ1WrswW+49OQc7hs6M62c327v4=;
+        b=bKX0PfG9IW1cUXUKM7Mxe7p2uhDtsdSaiECHRswG7K80hHqwsUZHSCcOONA7KTGoKn
+         WoLwxBWXZQPke5jVRofxheCvsoJpsyd7/hbQ3EbHG5KQo6PZ+3q+Nb0+blE4gPy/yaRj
+         jkBHtcyxxOOnSeI+H+tEw77v8oLsIxqT0kAlZyVT+2HVAYGgSaYR12HRgJSfY6blCmHZ
+         cJbV4KPl31+QqiXVZgKIQe3fGnwxEI8E2IJU2CdAu6ucriD5Ab5lcfe7xUVEeAdmLa/Z
+         5jA6iNfsqB5XHL5cxxAMvd53HjQbttZ5rDlp6NoOeh9TT8hLxq0XLi5xe3RxyebD6xTg
+         CrEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uHsr2oJUItSi3vqA6tkcnF07ysr7z0zXfg4n2h1yTQE=;
-        b=EyHJqY1ezdufiGB8bzlW/i4kQQdSUgPmBGo8v/8R283/+XX/UHRWvDfnBiX9FG8CLS
-         fnEFYogFJAuKxzD3zQOv821leryYW46gE+ScZw3YLduGISCFxwRBRTX3pKlfEA0WNodF
-         pP3HZe9zaZ5MPVS9KCKPRhp7QBP0oL1feVpu+GOT1fz6/urvaaXmbZzf2gx4Ely/cHnk
-         DPX0oI+LYVlfvcP9eTCvpi56SKYa02mENbjLl/vHFls0WSSl0mKy4PsMLNxS84OTYj1f
-         UQV+cOTK7m0q1mW3/XL4dtADb9AII1Q1xymFamZSYf0PvyHwfjOBMS1tXEbJ8A4/iS3r
-         sWYg==
-X-Gm-Message-State: AFqh2krVGCXbQqiI5Pqj9jEGSeo7YKAIjClz6eAqAjHQNNNQpul/UNj+
-        Fe3GL2jhjdu5EuEW4SmuDHq4449oiFw=
-X-Google-Smtp-Source: AMrXdXuvu1sGU1vYAwHwXwDXKHxOUXsgegJAQwa8tvXvso1A8LdaRdJsA6zWArCPjuoYm/jCvqWVi0rND9Y=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:b217:b0:194:7c22:1885 with SMTP id
- t23-20020a170902b21700b001947c221885mr4493000plr.26.1674864442136; Fri, 27
- Jan 2023 16:07:22 -0800 (PST)
-Date:   Sat, 28 Jan 2023 00:07:16 +0000
-In-Reply-To: <20221205122048.16023-1-likexu@tencent.com>
-Mime-Version: 1.0
-References: <20221205122048.16023-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <167477056207.187359.3952314052374339122.b4-ty@google.com>
-Subject: Re: [PATCH] KVM: x86/pmu: Drop event_type and rename "struct kvm_event_hw_type_mapping"
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2A/Zg0V6mGpRrWbIuZ1WrswW+49OQc7hs6M62c327v4=;
+        b=V7nGluFne5B6+gfgWr0dbUXQ4NTpXNLQtjwcG3rci3pnxbFzQMl9BrGyZCZvuxLSWi
+         OZspoZxeeuhA6vz5wwiG0MuQanMwpLoiNdqTtppkd3wvBqmp43zwy6Ya5c3HCA5oOzMx
+         WsdvJ3vVelOSNumNpN6Q/Y0/nHDIqaGjW551hI88AEmKRNdswHmfLgxnP42JdPA3hWZY
+         WQV3gCeFnfNV8VKcPrZzfw1ukarQsWeNJSCqQQ5bK0Cm+WzAuCsjnTUrfUz9tJgN87ZH
+         xSDq71K06/pnitrGHKkPRV54tfRTGhexUCI/xjHUuoV78k7YkcJSGnxoyeH2Uin//cM7
+         FWmA==
+X-Gm-Message-State: AFqh2krSf9ZP4/klRv8fQAoshlfBVqbtOikGIqJAWCRSymoa9OvZL7WQ
+        b9YSMip2LxyORW/LbNINhEnhymaQzZnnTPi05CuaHm/HP8+w
+X-Google-Smtp-Source: AMrXdXu4JO49N65C/MOynyZpgVpmlsh4riJCNBfaQ5OEUTtGhSYC7W10mjEhYOOv27I64fmXzLHkjjfsYpdMGPAGwO4=
+X-Received: by 2002:a65:58c1:0:b0:4d0:1233:d369 with SMTP id
+ e1-20020a6558c1000000b004d01233d369mr4575134pgu.88.1674864448918; Fri, 27 Jan
+ 2023 16:07:28 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1674682056.git.rgb@redhat.com> <f602429ce0f419c2abc3ae5a0e705e1368ac5650.1674682056.git.rgb@redhat.com>
+ <CAHC9VhQiy9vP7BdQk+SXG7gQKAqOAqbYtU+c9R0_ym0h4bgG7g@mail.gmail.com>
+ <Y9RX0QhHKfWv3TGL@madcap2.tricolour.ca> <5270af37-5544-42de-4e3f-c437889944dd@kernel.dk>
+In-Reply-To: <5270af37-5544-42de-4e3f-c437889944dd@kernel.dk>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 27 Jan 2023 19:07:17 -0500
+Message-ID: <CAHC9VhRCN9HHDkcp1xPJ7QwGq=_UG95ZCot9HRY7w5FCM2XtFg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] io_uring,audit: do not log IORING_OP_*GETXATTR
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Richard Guy Briggs <rgb@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Dec 2022 20:20:48 +0800, Like Xu wrote:
-> After commit ("02791a5c362b KVM: x86/pmu: Use PERF_TYPE_RAW
-> to merge reprogram_{gp,fixed}counter()"), vPMU starts to directly
-> use the hardware event eventsel and unit_mask to reprogram perf_event,
-> and the event_type field in the "struct kvm_event_hw_type_mapping"
-> is simply no longer being used.
-> 
-> After discarding this field, the name of the structure also lost
-> its mapping semantics, renaming it "struct kvm_pmu_hw_event" and
-> reorganizing the comments to continue to help newcomers.
-> 
-> [...]
+On Fri, Jan 27, 2023 at 6:05 PM Jens Axboe <axboe@kernel.dk> wrote:
+> On 1/27/23 4:01=E2=80=AFPM, Richard Guy Briggs wrote:
+> > On 2023-01-27 17:43, Paul Moore wrote:
+> >> On Fri, Jan 27, 2023 at 12:24 PM Richard Guy Briggs <rgb@redhat.com> w=
+rote:
+> >>> Getting XATTRs is not particularly interesting security-wise.
+> >>>
+> >>> Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> >>> Fixes: a56834e0fafe ("io_uring: add fgetxattr and getxattr support")
+> >>> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> >>> ---
+> >>>  io_uring/opdef.c | 2 ++
+> >>>  1 file changed, 2 insertions(+)
+> >>
+> >> Depending on your security policy, fetching file data, including
+> >> xattrs, can be interesting from a security perspective.  As an
+> >> example, look at the SELinux file/getattr permission.
+> >>
+> >> https://github.com/SELinuxProject/selinux-notebook/blob/main/src/objec=
+t_classes_permissions.md#common-file-permissions
+> >
+> > The intent here is to lessen the impact of audit operations.  Read and
+> > Write were explicitly removed from io_uring auditing due to performance
+> > concerns coupled with the denial of service implications from sheer
+> > volume of records making other messages harder to locate.  Those
+> > operations are still possible for syscall auditing but they are strongl=
+y
+> > discouraged for normal use.
+> >
+> > If the frequency of getxattr io_uring ops is so infrequent as to be no
+> > distraction, then this patch may be more of a liability than a benefit.
+>
+> (audit list removed)
+>
+> Right now the xattr related functions are io-wq driven, and hence not
+> super performance sensitive. But I'd greatly prefer to clean these up
+> regardless, because once opcodes get upgraded from needing io-wq, then
+> we don't have to go through the audit discussion at that point. Better
+> to do it upfront, like now, regardless of expectation of frequency of
+> calls.
 
-Applied to kvm-x86 pmu, thanks!
+See my reply to Richard, but unfortunately we need to continue to
+audit the getxattr ops.
 
-[1/1] KVM: x86/pmu: Drop event_type and rename "struct kvm_event_hw_type_mapping"
-      https://github.com/kvm-x86/linux/commit/4996f87f9385
-
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
+--=20
+paul-moore.com
