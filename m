@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3597067F7A2
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9272467F7A4
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbjA1Lps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 06:45:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
+        id S233931AbjA1Lqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 06:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjA1Lpp (ORCPT
+        with ESMTP id S230074AbjA1Lqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 06:45:45 -0500
+        Sat, 28 Jan 2023 06:46:47 -0500
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8821720;
-        Sat, 28 Jan 2023 03:45:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763FB234DA;
+        Sat, 28 Jan 2023 03:46:46 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 7C716424D0;
-        Sat, 28 Jan 2023 11:45:39 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 15783424D0;
+        Sat, 28 Jan 2023 11:46:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1674906342; bh=izttfsBM8FR0txRob5fPFR1ElRpJR+EMtvZG2dF3LfQ=;
+        t=1674906405; bh=XF6Idsk35kfCAPNyhQs/PAXkcVnV95QoxC92DpEL/c4=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Bapk+bDshERBmlwTnHFQeQJ0Dx1YtANznhHJijZm0H0Q47HMZDnOaIfi+hFHPEjmi
-         Qdi+xL4ZMDV4KAGLhJ8+0yzk9/Qjv3bBS3VbVaAG53aS7EEzCHn5g0R+/JLQM062xH
-         hk6jf9rjUEjC2b5jytAAgkczIplMi7spn5MxvL+LqU9GoiZBjIVM1Xx6uLnL7cdpy9
-         iEkvNU0Or6xVFTjhMukMHPElqh5UEGFwLxRYYOeecR35HJVsTVCJncCV3e2GZF0h6p
-         Ez2DbHmw8C67tshDZskxcKxGv2bCmX+OK1yi9/wmztt5LVD0iLkEFr47Vw9A81HBpE
-         k736D4Vf46IwQ==
-Message-ID: <defcbb1a-599f-c905-1f4c-5c512d0a67c1@marcan.st>
-Date:   Sat, 28 Jan 2023 20:45:37 +0900
+        b=V15IkajZn+WdS3awUit4i1s1e3s8SG6WSJhHCNzwEvZ+LMmI8i5FtRGBxGcg4gXKv
+         nHjjWFSmwbhZWFr1QCxhPFg1VY0jdaFcR+3ut3wjICWQWTqEAqiEq42o/45Wabbn2X
+         12v/BFUOjBa+/a7+kH4kEuMEXnAKXsF5Kettw0MBR1KrsaRzzMDLS+xfZ9w4os4R+v
+         uOrdlUVPPN/NCagInIoX/gVqVi8/oVfslaG/XCNPdNS1qAKSikXjPpkNT5/304XLNb
+         amvj17OQeghu5PZgZ0iA8AOEZ+UIfmLv+ySQ/v9NOd8d9Z6WO7fOqGTeKSCgkvqNgo
+         rQGn08gnUW4tQ==
+Message-ID: <3b796124-5edf-aff1-15e9-4ee94da5177b@marcan.st>
+Date:   Sat, 28 Jan 2023 20:46:40 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 3/4] iommu: dart: Write to all DART_T8020_STREAM_SELECT
+Subject: Re: [PATCH 4/4] iommu: dart: Add support for M1 USB4 PCIe DART
 Content-Language: en-US
 To:     Sven Peter <sven@svenpeter.dev>, Joerg Roedel <joro@8bytes.org>,
         Will Deacon <will@kernel.org>,
@@ -48,9 +48,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         iommu@lists.linux.dev, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230128111114.4049-1-sven@svenpeter.dev>
- <20230128111114.4049-4-sven@svenpeter.dev>
+ <20230128111114.4049-5-sven@svenpeter.dev>
 From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <20230128111114.4049-4-sven@svenpeter.dev>
+In-Reply-To: <20230128111114.4049-5-sven@svenpeter.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -63,36 +63,75 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 28/01/2023 20.11, Sven Peter wrote:
-> We're about to add support for a DART variant that use more than 16
-> streams and requires writing to two separate stream select registers
-> when issuing TLB flushes.
+> This variant of the regular t8103 DART is used for the two
+> USB4/Thunderbolt PCIe controllers. It supports 64 instead of 16 streams
+> which requires a slightly different MMIO layout. We also disallow bypass
+> support since these DARTs will only ever be used for externally facing
+> devices on the USB4 ports.
 > 
 > Signed-off-by: Sven Peter <sven@svenpeter.dev>
 > ---
->  drivers/iommu/apple-dart.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  drivers/iommu/apple-dart.c | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
 > 
 > diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-> index 7d8b2b90cdb6..7579c97a9062 100644
+> index 7579c97a9062..a1304ba3639b 100644
 > --- a/drivers/iommu/apple-dart.c
 > +++ b/drivers/iommu/apple-dart.c
-> @@ -372,12 +372,14 @@ apple_dart_t8020_hw_stream_command(struct apple_dart_stream_map *stream_map,
->  			     u32 command)
->  {
->  	unsigned long flags;
-> -	int ret;
-> +	int ret, i;
->  	u32 command_reg;
+> @@ -81,6 +81,7 @@
+>  #define DART_T8020_TCR_BYPASS_DAPF      BIT(12)
 >  
->  	spin_lock_irqsave(&stream_map->dart->lock, flags);
+>  #define DART_T8020_TTBR       0x200
+> +#define DART_T8020_USB4_TTBR  0x400
+>  #define DART_T8020_TTBR_VALID BIT(31)
+>  #define DART_T8020_TTBR_ADDR_FIELD_SHIFT 0
+>  #define DART_T8020_TTBR_SHIFT 12
+> @@ -1184,6 +1185,35 @@ static const struct apple_dart_hw apple_dart_hw_t8103 = {
+>  	.ttbr_shift = DART_T8020_TTBR_SHIFT,
+>  	.ttbr_count = 4,
+>  };
+> +
+> +static const struct apple_dart_hw apple_dart_hw_t8103_usb4 = {
+> +	.type = DART_T8020,
+> +	.irq_handler = apple_dart_t8020_irq,
+> +	.invalidate_tlb = apple_dart_t8020_hw_invalidate_tlb,
+> +	.oas = 36,
+> +	.fmt = APPLE_DART,
+> +	.max_sid_count = 64,
+> +
+> +	.enable_streams = DART_T8020_STREAMS_ENABLE,
+> +	.lock = DART_T8020_CONFIG,
+> +	.lock_bit = DART_T8020_CONFIG_LOCK,
+> +
+> +	.error = DART_T8020_ERROR,
+> +
+> +	.tcr = DART_T8020_TCR,
+> +	.tcr_enabled = DART_T8020_TCR_TRANSLATE_ENABLE,
+> +	.tcr_disabled = 0,
+> +	.tcr_bypass = 0,
+> +
+> +	.ttbr = DART_T8020_USB4_TTBR,
+> +	.ttbr_valid = DART_T8020_TTBR_VALID,
+> +	.ttbr_addr_field_shift = DART_T8020_TTBR_ADDR_FIELD_SHIFT,
+> +	.ttbr_shift = DART_T8020_TTBR_SHIFT,
+> +	.ttbr_count = 4,
+> +
+> +	.disable_bypass = true,
+> +};
+> +
+>  static const struct apple_dart_hw apple_dart_hw_t6000 = {
+>  	.type = DART_T6000,
+>  	.irq_handler = apple_dart_t8020_irq,
+> @@ -1276,6 +1306,7 @@ DEFINE_SIMPLE_DEV_PM_OPS(apple_dart_pm_ops, apple_dart_suspend, apple_dart_resum
 >  
-> -	writel(stream_map->sidmap[0], stream_map->dart->regs + DART_T8020_STREAM_SELECT);
-> +	for (i = 0; i < BITS_TO_U32(stream_map->dart->num_streams); i++)
-> +		writel(stream_map->sidmap[i],
-> +		       stream_map->dart->regs + DART_T8020_STREAM_SELECT + 4 * i);
->  	writel(command, stream_map->dart->regs + DART_T8020_STREAM_COMMAND);
->  
->  	ret = readl_poll_timeout_atomic(
+>  static const struct of_device_id apple_dart_of_match[] = {
+>  	{ .compatible = "apple,t8103-dart", .data = &apple_dart_hw_t8103 },
+> +	{ .compatible = "apple,t8103-dart-usb4", .data = &apple_dart_hw_t8103_usb4 },
+>  	{ .compatible = "apple,t8110-dart", .data = &apple_dart_hw_t8110 },
+>  	{ .compatible = "apple,t6000-dart", .data = &apple_dart_hw_t6000 },
+>  	{},
+
+Other than the compatible as per patch #1,
 
 Acked-by: Hector Martin <marcan@marcan.st>
 
