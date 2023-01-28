@@ -2,120 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB5C67FB36
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 22:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A644867FB3F
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 22:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234706AbjA1Vor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 16:44:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
+        id S234715AbjA1VyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 16:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjA1Vop (ORCPT
+        with ESMTP id S229999AbjA1Vx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 16:44:45 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2539E24C8F;
-        Sat, 28 Jan 2023 13:44:44 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7E3B85C00E8;
-        Sat, 28 Jan 2023 16:44:41 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 28 Jan 2023 16:44:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674942281; x=1675028681; bh=8dkb3lTxU3
-        ta1NqXzjpNbwolyQy6Iz0HDR4a6737HS4=; b=lJ0Hu1nEFE9mwm+8/ZyIc3GcFg
-        ZgQe/p2W2cYz3c+bVLxWTSVdgQnXj5EeFjvcSSx40FcLlX0mtRxxCoGRJLzah73f
-        o2mU4uiLRIrp4SOuta1N3a2uES0Tk8YG4oAljPqq1PweoIB8q/VR4vdjzXM/YeGf
-        ldAnQ4k3bIkLLBrfDsHAhIPtIx80PEnT3BL5uFcZUnZjktKRQy52juOTaJUXQ9ah
-        5ggmwBWi2gc0MHcSX+ayeImqBcXXyzto6nK+K2jFgsyfcglK3ncdxIIyaCVSGYB9
-        i+Ux0EnhRDfKS9XQr6x9iQD1uQQepH+RJuCOVRkC18+BuZ/KLfGfmz/W4EXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674942281; x=1675028681; bh=8dkb3lTxU3ta1NqXzjpNbwolyQy6
-        Iz0HDR4a6737HS4=; b=dfYKhdKyeLvAEk6FmbRvzrUj5LetxQk81rLeqJOkigF5
-        lIs3BKoOii4e2W/C3xB5ytXo7bp4ifLaoSANrbhEtRei3SOG2c+3eEtzQbph7ThY
-        HCbLI4/Y/i/9vWhC0ZhNIeKURExvllm2x4uC5w2C+B2PbPCJ6P26mf2mqu3St/OJ
-        Lycyj8r3WQuKoLO7iv5ImU/YU9kSEHJw9C33jlgIsDWAr0CVwG0UM7uo3jmGJ+q1
-        UymFwCVfhWGgcGWx6LNgMYdL8VOIqdm7oUo9Vy+J5RE9znNrjcxADw4BNCLIVOHV
-        f9qAPr2d1KCjPpTCCn2anU9BR6sYO5Je8KdJ5oSxVQ==
-X-ME-Sender: <xms:SJfVY6PV8saFGHE6xLlYV6V9ok0Io6B89BNNBpvVVVXvW7ppW--xGA>
-    <xme:SJfVY4-Ej3UhJbSQuMereYQJttTVSuFi4qayX_ArTcqd1z1JrK0NVX0B8nelpZRId
-    nw2DMha-nhfjqO8XaM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvkedgudehfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:SJfVYxRDaCxvPZxN09k4n597SoOsQ77xr5YJj2HnzlEVmvWKOVkJtg>
-    <xmx:SJfVY6vz-wdJVnFSdL7nMZNMI15Wd3s8aLY-pHiBeshfI-4ZiuIF-w>
-    <xmx:SJfVYycmGusYE16DqvsXykbXoHb44Llgd1jBmOtugYQl19V6dnSftg>
-    <xmx:SZfVY43yVc2fcaTOy5iuHJuydP1hS47el-8cekjVCgcS7w_2RNX4Ig>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D3A00B60086; Sat, 28 Jan 2023 16:44:40 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <2d90460c-9d30-46cb-871e-e2500243ffd3@app.fastmail.com>
-In-Reply-To: <Y9RlHIqbVNG7SoDw@hoboy.vegasvil.org>
-References: <20230127221323.2522421-1-arnd@kernel.org>
- <Y9RlHIqbVNG7SoDw@hoboy.vegasvil.org>
-Date:   Sat, 28 Jan 2023 22:44:22 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Richard Cochran" <richardcochran@gmail.com>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Woojung Huh" <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, "Andrew Lunn" <andrew@lunn.ch>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Vladimir Oltean" <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Arun Ramadoss" <arun.ramadoss@microchip.com>,
-        "Jacob Keller" <jacob.e.keller@intel.com>,
-        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: microchip: ptp: add one more PTP dependency
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 28 Jan 2023 16:53:58 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFCBB766;
+        Sat, 28 Jan 2023 13:53:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674942837; x=1706478837;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=7JjnrQQWp+kN26DZzJ0mVdFYAjkwO83r09SH1uaPITg=;
+  b=G6Gea9v7HSeofpXTuZVp7DPnuafq1KMTvt0Ahj3nqssxwA1T2ZTF+RLB
+   o+jriTo6647km6K2scFfiyXdGOnKJLnywi0iKZ5diy0pB7L1KEuM5W784
+   TJoaY/nwLlyJlZAIT27F1/kucKVSHPJyYGk6C1PHUU7z7xPKZ/Ae4af+/
+   Iw0fxystFqRoExS5qrONoM5jc/zpME5ZtLm8AVv3tteFvTyC4Y4SgXxCz
+   s37S6wJ5a4r4pAd+uZaJYLiwoJOnUJ8i+FNY7HCGPtUNpCgYxaE0uFNmc
+   7JT9T0H3ui2Q865lrFvD8kEKkUuxm2/WZ6TR8jwyOIUQvdIO0ogMqGIBj
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="329467408"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="329467408"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 13:53:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="752368320"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="752368320"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2023 13:53:54 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pLt90-00018w-0E;
+        Sat, 28 Jan 2023 21:53:54 +0000
+Date:   Sun, 29 Jan 2023 05:53:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>, corbet@lwn.net
+Cc:     oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bilbao@vt.edu,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: Re: [PATCH] docs/sp_SP: Add process magic-number translation
+Message-ID: <202301290537.kO9rsBjm-lkp@intel.com>
+References: <20230125181840.3007341-1-carlos.bilbao@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230125181840.3007341-1-carlos.bilbao@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023, at 00:58, Richard Cochran wrote:
-> On Fri, Jan 27, 2023 at 11:13:03PM +0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> When only NET_DSA_MICROCHIP_KSZ8863_SMI is built-in but
->> PTP is a loadable module, the ksz_ptp support still causes
->> a link failure:
->> 
->> ld.lld-16: error: undefined symbol: ptp_clock_index
->> >>> referenced by ksz_ptp.c
->> >>>               drivers/net/dsa/microchip/ksz_ptp.o:(ksz_get_ts_info) in archive vmlinux.a
->> 
->> Add the same dependency here that exists with the KSZ9477_I2C
->> and KSZ_SPI drivers.
->> 
->> Fixes: eac1ea20261e ("net: dsa: microchip: ptp: add the posix clock support")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Acked-by: Richard Cochran <richardcochran@gmail.com>
+Hi Carlos,
 
-The randconfig builder just found another regression in the same
-driver, I'll have to send a new version, so please disregard this one
-for now.
+I love your patch! Perhaps something to improve:
 
-      Arnd
+[auto build test WARNING on lwn/docs-next]
+[also build test WARNING on next-20230127]
+[cannot apply to linus/master v6.2-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Carlos-Bilbao/docs-sp_SP-Add-process-magic-number-translation/20230128-103013
+base:   git://git.lwn.net/linux.git docs-next
+patch link:    https://lore.kernel.org/r/20230125181840.3007341-1-carlos.bilbao%40amd.com
+patch subject: [PATCH] docs/sp_SP: Add process magic-number translation
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/386e4549b53d3e7f381ad80c954a1e783aedf1c6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Carlos-Bilbao/docs-sp_SP-Add-process-magic-number-translation/20230128-103013
+        git checkout 386e4549b53d3e7f381ad80c954a1e783aedf1c6
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/translations/sp_SP/process/magic-number.rst:16: WARNING: Inline emphasis start-string without end-string.
+
+vim +16 Documentation/translations/sp_SP/process/magic-number.rst
+
+    15	
+  > 16	Es una muy buena idea proteger las estructuras de datos del kernel con
+    17	números mágicos. Esto le permite verificar en tiempo de ejecución si (a)
+    18	una estructura ha sido manipulada, o (b) ha pasado la estructura incorrecta
+    19	a una rutina. Esto último es especialmente útil --- particularmente cuando
+    20	pasa punteros a estructuras a través de un puntero void *. El código tty,
+    21	por ejemplo, hace esto con frecuencia para pasar información específica del
+    22	driver y líneas de estructuras específicas de protocolo de un lado al
+    23	otro.
+    24	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
