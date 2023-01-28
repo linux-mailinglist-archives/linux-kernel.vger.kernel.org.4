@@ -2,131 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56A067FAC1
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 21:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0237167FAC2
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 21:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234755AbjA1URP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 15:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
+        id S234124AbjA1UU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 15:20:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjA1URN (ORCPT
+        with ESMTP id S229637AbjA1UUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 15:17:13 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C55FF03
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 12:17:11 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id i185so8696409vsc.6
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 12:17:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ujPYE2Tccn6z3KxKUSVhZWB/6ljcy0NrewFRgFoChRo=;
-        b=OprqN0tx8wVI0V3qkOPsfCk+TgRj4XRwP377LsUdYaPie+9r1YUA3OhqdBzWpcCIQ0
-         ihvniywd5JiP/94exqCcTJ4tUyMWklmAIdoyTxCUWDZgiixTeSDeUhGmDUfdjSL3eep6
-         w+DUa304GLUWsW+mBD4zB1mIQS0DQQYR8lplj2dyNdmEkgkVK2yM6085cjU9FfSFtiUX
-         H42LLNRCnpfZcISX0QCQCmul4i2cTHC3nZ3yeYHROB0xx6cZveCPEnr58bkvq8HbspYm
-         h8WWdOQ/2iZCP6Qf9z/j5KGFJD/YNKHkXQ/SVo3ptHP6+dKatbl5SQuM8DZvKf+aSxVi
-         Nmng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ujPYE2Tccn6z3KxKUSVhZWB/6ljcy0NrewFRgFoChRo=;
-        b=5m4yI5EBx6Yp5Nq6JzU11y5is7Qt4xAVTR/MK1wjcPLjQtfCHViioO7idir8XBunnO
-         PX6vfu41pNByfxfqVk3u9WslTbT9R5d8jZKfJTr7Y8jOXQ8JOMyPChbLIeXn9Cg9TSjP
-         ZJ99WTrAjAZLvsmd9q5A+pIrwWomMXVat9lidCMLSbAC/+JHj99/4gHgDkI39wh0a0t8
-         z9JaOHxJwRUTMf5Um84d/8W+KrgONh+x9ot6Nsl02pY25HVipu6fYIlM1z4ctXiPbtFp
-         +j15tMSjrTr2iYD8zEFSQ1r1fKnYVnngEyXoL5fWxYSsSuVvbWTYY/DRlxg7wtz0FHTj
-         FteA==
-X-Gm-Message-State: AFqh2kpF7f11OL2evv5T9sImFh9cc7ALTY7tP+tZbvi0iv6pVZQrTomb
-        6LqZWb5xAo79NAaGMZRJruqqzKWzavWzyPXwBC+I5g==
-X-Google-Smtp-Source: AMrXdXtfMFBNvTu/RyaSLqA4XiaTJ9U0TVR2L3t9kB5IuOmJdCycFBX0CXDRuI8QLigLuXoDnERskNv4dB/TLI5FNh8=
-X-Received: by 2002:a05:6102:3e08:b0:3c5:1ac1:bf38 with SMTP id
- j8-20020a0561023e0800b003c51ac1bf38mr6700388vsv.78.1674937030730; Sat, 28 Jan
- 2023 12:17:10 -0800 (PST)
+        Sat, 28 Jan 2023 15:20:55 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9CF241D9
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 12:20:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674937254; x=1706473254;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dFBhob8MHmzXu757sCnUaQFuD2W3tXJKuMR8SGgfwVc=;
+  b=k1cZ9hnfzJ7q7z2tkQQTeCCRFFrnMfGEPkWVqscKqeJjUyF0MCmEN9ba
+   zihI6mFxkYTSzNbVLHwKCbupcNLTO3ftow+DvPa2p2HtMpGNWPJh886sW
+   dR/U41YfI70i8EG+59bI7MSFCiPGz7b4qHkitDru5296WaqIOiuHvSksH
+   N1qxjOPkCTaikHXxaP6tTu4qOuqRhCe2KqO8O0MZbqXuggBM817qPbNxi
+   jhi8hMVCrVewsi+Tz1bwSMMtsPoBA/BPt3Ir74D3tzlq1iI7cVJuScuIb
+   lYW+aoNnrerxWOfpAp2T/qOSu9MdcSO+yfZbIJPDm2Sk3kpFRfdsdf0+y
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="307672347"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="307672347"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 12:20:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="727051089"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="727051089"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jan 2023 12:20:51 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pLrgw-00014a-1L;
+        Sat, 28 Jan 2023 20:20:50 +0000
+Date:   Sun, 29 Jan 2023 04:19:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "GuoRui.Yu" <GuoRui.Yu@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        konrad.wilk@oracle.com, linux-coco@lists.linux.dev
+Cc:     oe-kbuild-all@lists.linux.dev, GuoRui.Yu@linux.alibaba.com,
+        robin.murphy@arm.com
+Subject: Re: [PATCH 4/4] cc-swiotlb: Allow set swiotlb watermark from cmdline
+Message-ID: <202301290417.n1KMDPQt-lkp@intel.com>
+References: <20230128083254.86012-5-GuoRui.Yu@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20230118134940.240102-1-brgl@bgdev.pl> <Y9DpbChLZfDONHPz@ninjato>
- <Y9GpL9RBNM8H2ZSL@shikoro> <CAMRc=McHowkYJBckM1eikcrBUoXXZN+OkozA-dNXZc1Zgd+Kfw@mail.gmail.com>
- <Y9VxQCu95HfGnWNe@ninjato>
-In-Reply-To: <Y9VxQCu95HfGnWNe@ninjato>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Sat, 28 Jan 2023 21:16:59 +0100
-Message-ID: <CAMRc=MdyLfai3svyfQ2=0M4HqhWQHa1tr-xCWBrk5rECQNizwg@mail.gmail.com>
-Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the kernel
-To:     Wolfram Sang <wsa@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URI_DOTEDU
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230128083254.86012-5-GuoRui.Yu@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 8:02 PM Wolfram Sang <wsa@kernel.org> wrote:
->
-> Hi Bartosz,
->
-> > > https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
-> > >
-> > > There are still drivers using i2c_del_adapter()+kfree(), so removing the
-> > > completion could cause use-after-free there, or?
-> > >
-> >
-> > Ugh, what a mess... I was mostly focused on the character device side
-> > of it but now I realized the true extent of the problem.
->
-> Still, thanks for trying. Really!
->
-> > It's all because the adapter struct really should be allocated by
-> > i2c_add_adapter() and bus drivers should only really provide some
-> > structure containing the adapter description for the subsystem the
-> > lifetime of which would not affect the adapter itself. This way the
-> > adapter (embedding struct device) would be freed by device type's
-> > .release() like we do over in the GPIO subsystem. Instead the adapter
-> > struct is allocated by drivers at .probe() meaning it will get dropped
-> > at .remove().
->
-> Or, like SPI does, use controller_alloc() which initializes the parts
-> needed by the core, returns to the driver which needs to setup the
-> private data, and finally calls controller_register().
->
+Hi GuoRui.Yu",
 
-If we could add a helper like struct *i2c_adapter_get_device(struct
-i2c_adapter *adap) and convert all users who access adap.dev directly
-to using it instead in a sweeping change across the subsystem - that
-would already be a huge improvement as this would allow us to later
-move struct device memory into the subsystem and free it in .release()
-and not allow provider drivers to free it at .remove(). Something to
-consider. Let me know if that's an interesting option.
+Thank you for the patch! Perhaps something to improve:
 
-> > I don't have a good solution. I've been thinking about it for an hour
-> > and every solution requires sweeping changes across the entire
-> > subsystem. Or else we'd introduce a parallel solution that would do
-> > the right thing and wait in perpetuity until all drivers convert -
-> > like with i2e probe_new() which is after all much simpler.
->
-> Thank you for spending time on another solution. "Perpetuity" is a good
-> word to put it :/
->
-> > Anyway, that's all I've got. We probably need to drop this change and
-> > live with what we have now.
->
-> I am curious to see if this finding will make it into your FOSDEM talk.
-> Looking already forward to it!
->
+[auto build test WARNING on tip/x86/core]
+[also build test WARNING on joro-iommu/next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.2-rc5 next-20230127]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Ha! Yeah, definitely. I went down that rabbit hole a while ago and am
-bothered by the amount of latent bugs I'm finding. I sent some patches
-for GPIO and SPI (and this one for I2C). See you there, I guess?
+url:    https://github.com/intel-lab-lkp/linux/commits/GuoRui-Yu/swiotlb-Add-a-new-cc-swiotlb-implementation-for-Confidential-VMs/20230128-181154
+patch link:    https://lore.kernel.org/r/20230128083254.86012-5-GuoRui.Yu%40linux.alibaba.com
+patch subject: [PATCH 4/4] cc-swiotlb: Allow set swiotlb watermark from cmdline
+config: nios2-buildonly-randconfig-r002-20230129 (https://download.01.org/0day-ci/archive/20230129/202301290417.n1KMDPQt-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/fcbd538c875f5f1086682829671935d7155e4029
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review GuoRui-Yu/swiotlb-Add-a-new-cc-swiotlb-implementation-for-Confidential-VMs/20230128-181154
+        git checkout fcbd538c875f5f1086682829671935d7155e4029
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash kernel/dma/
 
-> Happy hacking,
->
->    Wolfram
->
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Bart
+All warnings (new ones prefixed by >>):
+
+   kernel/dma/cc-swiotlb.c: In function 'swiotlb_bounce':
+   kernel/dma/cc-swiotlb.c:200:32: warning: variable 'tlb_end' set but not used [-Wunused-but-set-variable]
+     200 |         phys_addr_t orig_addr, tlb_end, slot_start, slot_end = tlb_addr ;
+         |                                ^~~~~~~
+   In file included from kernel/dma/cc-swiotlb.c:13:
+   kernel/dma/cc-swiotlb.c: In function 'cc_populate_pages':
+>> include/linux/kern_levels.h:5:25: warning: format '%lu' expects argument of type 'long unsigned int', but argument 2 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:429:25: note: in definition of macro 'printk_index_wrap'
+     429 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:530:9: note: in expansion of macro 'printk'
+     530 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   include/linux/kern_levels.h:14:25: note: in expansion of macro 'KERN_SOH'
+      14 | #define KERN_INFO       KERN_SOH "6"    /* informational */
+         |                         ^~~~~~~~
+   include/linux/printk.h:530:16: note: in expansion of macro 'KERN_INFO'
+     530 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |                ^~~~~~~~~
+   kernel/dma/cc-swiotlb.c:411:9: note: in expansion of macro 'pr_info'
+     411 |         pr_info("bounce buffer size adjusted to %luMB", size >> 20);
+         |         ^~~~~~~
+   kernel/dma/cc-swiotlb.c: At top level:
+   kernel/dma/cc-swiotlb.c:524:13: warning: no previous prototype for 'swiotlb_hint_cpus' [-Wmissing-prototypes]
+     524 | void __init swiotlb_hint_cpus(int cpus) {}
+         |             ^~~~~~~~~~~~~~~~~
+
+
+vim +5 include/linux/kern_levels.h
+
+314ba3520e513a Joe Perches 2012-07-30  4  
+04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
+04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
+04d2c8c83d0e3a Joe Perches 2012-07-30  7  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
