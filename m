@@ -2,81 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF9E67F79B
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A99967F79E
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbjA1LiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 06:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
+        id S233670AbjA1Lo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 06:44:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233670AbjA1LiX (ORCPT
+        with ESMTP id S233753AbjA1Lov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 06:38:23 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860FF29E34
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:38:22 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 91CBE32005C1;
-        Sat, 28 Jan 2023 06:38:21 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute5.internal (MEProxy); Sat, 28 Jan 2023 06:38:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1674905901; x=1674992301; bh=tb
-        Usm6pfIt/kPBot6dt1/vQv/ShnjRggzhxmWsZoqLM=; b=fckz/PQFvjLW+JNNFh
-        FnQ/pRJIb/iv9fd9FaxntxmDyHu5SD7GAn2aNMFHYdc/S2fmnPI4mVlGWoGfRYd3
-        HANSsL99UeqB3oJ9Gi4UzCMFRf/EWE/hqu+M1z71Z8AqA8vv51oe2wqeo74UkbNm
-        Hmm/E4SQagy38rRX2bMDYY2VbRusdvG0NKUDd9X+xUfOXeGlzxh7U7yD1AJWwqKY
-        VyCn0Az+h0huFTKKADV255zAFXogpezmX9CQKrSHTArciwECXgwDs4FrPK58ynlB
-        R6zViigBJT1bs2xx/H7wfaxce7WqJpXCLuUhhXAFvmG+R+zmNyz3WL/QbI72knpG
-        IZHw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674905901; x=1674992301; bh=tbUsm6pfIt/kPBot6dt1/vQv/Shn
-        jRggzhxmWsZoqLM=; b=MX/AAKfWQPI8yVHD8sYXhmEy/4Nrts6V3GsGD4HMlXu8
-        Uu+S+Usy+CiiA9nckzP+A5UV0RFE9oFCz5Gv1T5+vyxdBVI9nGhchyMZvfaKJwpg
-        dBISpCPZLGjhxSdTRJkNdrjcio0G6boXJ2Bm4X77iFDPpigeLqm8ixN1SgK0pPBG
-        YYQELfQw3q7inLvdbU2JUAI69sq7seFCafbnDjFuUfdZbX37P1rZvIy13GyZETsT
-        BmV74yfJygMDDFVlRyKAsc5/pN1Gt/0ahhl9/7Q4AHIgUO5atLARFbOt2cuU3z8n
-        vAmplDKHy/V0+T8YuvizktNNOYbgQ1AS1HqtO9iEig==
-X-ME-Sender: <xms:LAnVY42KTh75hpmSMYuBDhokPEPYnhZszpCJsu2C9Wg-u3AUvEceIQ>
-    <xme:LAnVYzHI3b_6YuOgLXKt7qRamGnRbk23Y-A7JEdBikEHJB9VI1SEHFokzG4yBLuB7
-    3OWSIt7lM22pMO5cZg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvkedgvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
-    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
-    grthhtvghrnhepleevgfegffehvedtieevhfekheeftedtjeetudevieehveevieelgffh
-    ieevieeunecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
-    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:LQnVYw6b1vWCqzJ9ntWqMtNLtAp9eLGhrsSUQJNellJ47thyeMSuvA>
-    <xmx:LQnVYx0FetV2J92QkxKqsihz6-GwV9xNSAAi2kcaL_eYpYJBkg6ZmQ>
-    <xmx:LQnVY7H_i569Q0oo_Uj_6ZNw5I-stNVaLvoPHGaml7n_29BM_PlDsg>
-    <xmx:LQnVYzCtN2V3mjxhSfBroufbHDQLcTlG2PIv5h04pBaG50wEXwsSkw>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E9F27A6007C; Sat, 28 Jan 2023 06:38:20 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <ef1a2650-806d-425f-af90-7004f99d11fe@app.fastmail.com>
-In-Reply-To: <20230123065125.26350-1-marcan@marcan.st>
-References: <20230123065125.26350-1-marcan@marcan.st>
-Date:   Sat, 28 Jan 2023 12:38:00 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Hector Martin" <marcan@marcan.st>
-Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        "Janne Grunau" <j@jannau.net>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc: apple: apple-pmgr-pwrstate: Switch to IRQ-safe mode
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        Sat, 28 Jan 2023 06:44:51 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21D62107;
+        Sat, 28 Jan 2023 03:44:48 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 820BB424D0;
+        Sat, 28 Jan 2023 11:44:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1674906285; bh=S5r0W0iw7BaFxUb16luLBBapLUJiOIdlxxM/yB90IPg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=uR8vs9F/g00tVM7iyiTjm8fYPy3+XyQGiV8UDAKDav9WMglXxeoMHPCLYC3NmDuvz
+         E36qupznzR7DP1lJq+73YD6EKtblden0Boa84/GTn1ochzWfS/BlnkZm8RW9flj17n
+         KsQ+UwW5CPK/Y/MMf9xv6JP8kyln2iZzrWuojLV6N7MnDk/mXmQUKTIMCNdeilD+il
+         SySdkGz0+8c+GcjpJSE5+nh2Wxae7fJmP5xLn02ACb0Vb4FERagvk4NOerOxRrWqfT
+         QmdJXSd91T1jUqqoB1B5U6xEkObJ9UrpzwCm38BvCq2mrmBgBnKPROhrLlvRFW8pm4
+         AZtzzvf0muGfQ==
+Message-ID: <f2cfca4c-1728-f9eb-6e1e-56d7f4a1f637@marcan.st>
+Date:   Sat, 28 Jan 2023 20:44:39 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/4] dt-bindings: iommu: dart: Add t8103-usb4-dart
+ compatible
+Content-Language: en-US
+To:     Sven Peter <sven@svenpeter.dev>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
+        iommu@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230128111114.4049-1-sven@svenpeter.dev>
+ <20230128111114.4049-2-sven@svenpeter.dev>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <20230128111114.4049-2-sven@svenpeter.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,15 +62,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023, at 07:51, Hector Martin wrote:
-> This requires changing the reset path locking primitives to the spinlock
-> path in genpd, instead of the mutex path.
->
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+On 28/01/2023 20.11, Sven Peter wrote:
+> This DART variant is found in the t8103 (M1) SoCs and used for the
+> USB4/Thunderbolt PCIe ports. Unlike the regular t8103 DART these support
+> up to 64 SIDs and require a slightly different MMIO layout. This variant
+> is only found on the M1 SoCs.
+> 
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 > ---
+>  Documentation/devicetree/bindings/iommu/apple,dart.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/iommu/apple,dart.yaml b/Documentation/devicetree/bindings/iommu/apple,dart.yaml
+> index 903edf85d72e..f9c1843c074d 100644
+> --- a/Documentation/devicetree/bindings/iommu/apple,dart.yaml
+> +++ b/Documentation/devicetree/bindings/iommu/apple,dart.yaml
+> @@ -24,6 +24,7 @@ properties:
+>    compatible:
+>      enum:
+>        - apple,t8103-dart
+> +      - apple,t8103-dart-usb4
+>        - apple,t8110-dart
+>        - apple,t6000-dart
+>  
 
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
+You probably wanted t8103-usb4-dart (as mentioned in the commit message).
 
+Other than that,
 
-Sven
+Acked-by: Hector Martin <marcan@marcan.st>
 
+- Hector
