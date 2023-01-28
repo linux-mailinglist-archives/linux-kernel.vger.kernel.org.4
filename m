@@ -2,107 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B1867F9B5
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 17:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E408C67F9B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 18:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbjA1Q5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 11:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S232579AbjA1RBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 12:01:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjA1Q5U (ORCPT
+        with ESMTP id S230110AbjA1RBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 11:57:20 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856182A178
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 08:57:18 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id s3so7349182edd.4
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 08:57:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=diag.uniroma1.it; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tt8Ha/RSXw0RfPBUqnD7ihG/77QJ3kclrfnxQeGKaOg=;
-        b=vdySnnQpnG7PamHqJRpJHTk2/+pkWDwtlaaTwo/4ftut1SPbh2wsoeOBfyqSe97XJr
-         mBy/7KQLHn305eIbrv15wtIC3jt677R6UlSH0zZLLGg/AOXKk5sofUt21qCLjX8Xqvpz
-         ZRdX45XYwjwfNRYgk0ChwEm0M4J3VJXcUuOjg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tt8Ha/RSXw0RfPBUqnD7ihG/77QJ3kclrfnxQeGKaOg=;
-        b=SIa0pLMV1h/Zh0kXGZRwv7So8OOkh3BXJPXJK78PjHjlh4tV5mWXih9vqzCg5CODn3
-         47RoOuxW6O7yLCT+uhYMDkbpUG+lXqII08zb82uF1L17mACz/xHruRrpy8uw8JT0kSMS
-         pWfWYROrIJTEn2nCutPqDpw0gEKth9ij1QLeqAWzlEph/Hp3qpoKBNLNB3fyRMHZVaoR
-         wCEPZLsNpAqsNAsOzuiGwUbHkym7/Ebx5VdNuEB3yohm1sxe7QMDpPgg7q/qLEI3k5Il
-         a/FZD+999G6N6j2hkuI3yoEauPSxwzQtI1L6sBnMb9kMqc8B+TlBY/WUMPdX4bAitICC
-         C8qw==
-X-Gm-Message-State: AO0yUKXJx7a9asaYmWuEQ7KwPj891WcMWbCTMYHWW2PLn2RuZ23of/wh
-        +0bNivR/zR01g243mQCzw2BATMaE8zUgRAAy4mpgCQ==
-X-Google-Smtp-Source: AK7set8gwJjmXGZ7qEK5w/UZ8ko/Bw99HYHzRiyxR2URnKVNJoJLwhG2Y0TJ+hLyQwxjUH1ZmX3ZHnlhwaLOabgBZQ8=
-X-Received: by 2002:a05:6402:552:b0:4a0:8fde:99b4 with SMTP id
- i18-20020a056402055200b004a08fde99b4mr3865536edx.32.1674925037155; Sat, 28
- Jan 2023 08:57:17 -0800 (PST)
+        Sat, 28 Jan 2023 12:01:47 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85485244A7
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 09:01:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674925306; x=1706461306;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cBryCMl0D/vcLVS1oNnYPyI0WoTwMVGPRg54WmJkkOQ=;
+  b=ME+r+2YFMWH9JnonEbVlxFPJKv2TuhYIzem6AhxsBQG6XYbKxKHzZTI6
+   vCbkXHbIeuJJ3pMM5hUjPs6Kk3FiLlEJ6qH7eDQPqFbvrxebxu45s8x86
+   db0y42oGoG7Mzo91xlef2T8Kxgjhej7pfvw70mjCtF/tE6TwO2A8TZsfJ
+   t6aUxIBywRd60LNppGfhjFprayS5FF9y78y9U0LZ8i3zftTXpqvTjNL5/
+   rS2nVx0vQO6roMwTgRFVE5vXbZdmU5YYqlOuqU7jP6AP1stov2QsXl1Kr
+   q4STxgL9EExscZZT6PdAi0GbIG5YsvjqNbr/5e43MJ6AXZfy567Lu7jkl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="307652117"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="307652117"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 09:01:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="663626810"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="663626810"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2023 09:01:44 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pLoaF-0000vj-1t;
+        Sat, 28 Jan 2023 17:01:43 +0000
+Date:   Sun, 29 Jan 2023 01:01:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/core] BUILD SUCCESS
+ 890a0794b34f89fcd90e94ec970ad2bc18b70e73
+Message-ID: <63d554f3.MkI167Suk+f95ui3%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20230128-list-entry-null-check-tls-v1-1-525bbfe6f0d0@diag.uniroma1.it>
- <Y9VP6Hw7jH0VelUX@corigine.com>
-In-Reply-To: <Y9VP6Hw7jH0VelUX@corigine.com>
-From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Date:   Sat, 28 Jan 2023 17:57:06 +0100
-Message-ID: <CAEih1qX-XG=-OxMcNyWm9NuYG+_=oFHkTPD3s-Q7EPKPAS3+zw@mail.gmail.com>
-Subject: Re: [PATCH net-next] net/tls: tls_is_tx_ready() checked list_entry
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vakul Garg <vakul.garg@nxp.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 28 Jan 2023 at 17:40, Simon Horman <simon.horman@corigine.com> wrote:
->
-> Hi Pietro,
->
-> I agree this is correct.
->
-> However, given that the code has been around for a while,
-> I feel it's relevant to ask if tx_list can ever be NULL.
-> If not, perhaps it's better to remove the error path entirely.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+branch HEAD: 890a0794b34f89fcd90e94ec970ad2bc18b70e73  x86/ACPI/boot: Use try_cmpxchg() in __acpi_{acquire,release}_global_lock()
 
-Hi Simon,
-Thank you for your fast reply.
-The point is exactly that tx_list will never be NULL, as the list head will
-always be present.
-So the error, as is, will never be detected, resulting in type confusion.
-We found this with static analysis, so we have no way to say for sure that
-the list can never be empty on edge cases.
-As this is a type confusion, the errors are often sneaky and go undetected.
+elapsed time: 896m
 
-As an example, the following bug we previously reported resulted in a type
-confusion on net code that went undetected for more than 20 years.
-Link: https://lore.kernel.org/all/9fcd182f1099f86c6661f3717f63712ddd1c676c.1674496737.git.marcelo.leitner@gmail.com/
-In that case, we were able to create a PoC to demonstrate the issue where we
-leveraged the type confusion to bypass KASLR.
+configs tested: 63
+configs skipped: 2
 
-In the end, this is the maintainer's call, but I would keep the check and
-correctly issue a list_first_entry_or_null() so that the check will work
-as intended as the added overhead is just a pointer comparison which
-would likely justify the cost of a more solid code.
-Otherwise, I can also submit a patch that entirely removes the check.
-Let me know what you prefer.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Best regards,
-Pietro
+gcc tested configs:
+x86_64                            allnoconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64               randconfig-a002-20230123
+x86_64               randconfig-a005-20230123
+x86_64               randconfig-a001-20230123
+x86_64               randconfig-a006-20230123
+x86_64               randconfig-a003-20230123
+x86_64               randconfig-a004-20230123
+i386                 randconfig-a004-20230123
+i386                 randconfig-a006-20230123
+i386                 randconfig-a005-20230123
+i386                 randconfig-a002-20230123
+i386                 randconfig-a003-20230123
+i386                 randconfig-a001-20230123
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+arc                                 defconfig
+alpha                               defconfig
+s390                             allmodconfig
+s390                                defconfig
+s390                             allyesconfig
+ia64                             allmodconfig
+
+clang tested configs:
+x86_64               randconfig-a013-20230123
+x86_64               randconfig-a011-20230123
+x86_64               randconfig-a016-20230123
+x86_64               randconfig-a012-20230123
+x86_64               randconfig-a015-20230123
+x86_64               randconfig-a014-20230123
+riscv                randconfig-r042-20230123
+hexagon              randconfig-r041-20230123
+hexagon              randconfig-r045-20230123
+s390                 randconfig-r044-20230123
+i386                 randconfig-a013-20230123
+i386                 randconfig-a016-20230123
+i386                 randconfig-a012-20230123
+i386                 randconfig-a015-20230123
+i386                 randconfig-a011-20230123
+i386                 randconfig-a014-20230123
+x86_64                          rhel-8.3-rust
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
