@@ -2,202 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA1167F5CB
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FDA67F5CD
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbjA1HwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 02:52:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S233620AbjA1HwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 02:52:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbjA1HwH (ORCPT
+        with ESMTP id S233446AbjA1HwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 02:52:07 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E33577DE3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:52:04 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id j17so4938492wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:52:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AwT09QFvbeIdYBJsfcmVCJn9nySi46ioy4UiTZXOQBU=;
-        b=O9xMHDeSECxW7o24q/6NUFHzLv5SOU7LuUFzeYGUCKEUfx5ZJ3tE4pipR2JhWAP+jg
-         hPoesVW7rhnn9xzLRSskElx6CmZTetOAxdvriYZEZTJ3pb68iL6YW2YkYWFg4wHIA6W9
-         5xBJLfpPHq4CK6+Z536WA3f+hDRxMti0zb848BvE1aXs/kGND7eqyknPpj4d9vnu3vLK
-         OL3D+AkI/gJ0VG58PsxRDY1/OamUADlhthBOy+c2/99cAyHEiW1M+ZlMgAs4eYJusHOG
-         qhdU+mBXeUO9K12bPXjy8LTm0Wk86BNUNKc3vG8qiBAy+AmBL0E3kLLkVznbDvrsY/sc
-         OV2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AwT09QFvbeIdYBJsfcmVCJn9nySi46ioy4UiTZXOQBU=;
-        b=N2CQut8jlEqtRmU2BzAKuzRwSsBuYRFaqOmwmGhK/7SED79WIt4b8KtWR54y0iy26n
-         16T8UALo1T3GnzgYqdx52ca6rJldp8OU+uXqbiNMypdk/txFPQ1QpuSQ6nektcuWJtsH
-         8QZHDL9ReXlUrl/8GY1E1djPZrb9kYc3WA1DtafxN7XiYffAyHF3h7PLqcRuE18C0S1z
-         ZHol+Qjr85LxZ7GHh7kDLJYdtTw6QnL4YRuIitq/OLOz5QEI5OLjPw6Is5T/XTPorN6U
-         lo+x8iuikY685SXJVqylKP0ZUZ1nSLG61Ypdbao5zLa81Lk697Lu3zvWbP2qSNHxWBL3
-         HUtQ==
-X-Gm-Message-State: AFqh2koAJ/EU0Rj/h0AnzS5TrEfigntT3JyyAnCICNF0mJ5A6O9dtvIX
-        rYxhFMa6tUerh6aqwkotbR4dNw==
-X-Google-Smtp-Source: AMrXdXvSNekIIQS28DBo7WV5qCK0p341YhGJ92/g23fsqCqTUyMImv07j8DGXqwVqRJdkFHAGIuVOA==
-X-Received: by 2002:a05:600c:3ba9:b0:3da:b40f:7a55 with SMTP id n41-20020a05600c3ba900b003dab40f7a55mr48469547wms.6.1674892323044;
-        Fri, 27 Jan 2023 23:52:03 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id v1-20020a5d6781000000b002b9b9445149sm6701742wru.54.2023.01.27.23.52.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jan 2023 23:52:02 -0800 (PST)
-Message-ID: <64b7e7f1-44ff-09fe-c292-40eaa30a76a1@linaro.org>
-Date:   Sat, 28 Jan 2023 08:52:00 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v9 2/5] thermal: mediatek: control buffer enablement
- tweaks
+        Sat, 28 Jan 2023 02:52:21 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6630577DF0;
+        Fri, 27 Jan 2023 23:52:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674892337; x=1706428337;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=WfJ0oWnmvMY+kxu4W+LLPeaptays4P2uuR1uEATi7Lw=;
+  b=XUPZ6mabyD7chwCIskqBEcwJqpLJQ3AGOoVdn0ZVtFvi/EgdMhZqCIhX
+   2lGu4QN3un4wcZugutSUT/5fNWKWMIknXxmdyFgkfi/8YncJyRQTH7pdR
+   h9q+/iB/T2ifQJ1a/+YmKLCIkA/yNlCnzynJdu5GxuqKjrXUuvhyNPvqa
+   J8WLiNoRzIqZIT61wEJpQrbu4taaQmpu34F70Ia8A+3I937XAbrh+kQF3
+   PGbjRPZYJAwfyVLi2kuBjiD1CNe/MCPkrGg6ofvIu2ni5im9XC3JaEd1i
+   eMFuuDPIE3U92mnJprKNDch7D7ZtLhD3jPX9w9KUhylkf88l52ohs/9e/
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="310895217"
+X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
+   d="scan'208";a="310895217"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 23:52:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="732126330"
+X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
+   d="scan'208";a="732126330"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Jan 2023 23:52:16 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 27 Jan 2023 23:52:16 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 27 Jan 2023 23:52:15 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 27 Jan 2023 23:52:15 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 27 Jan 2023 23:52:15 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ty5pZzDfiN1oZ6ipBFVbWRoIHZr3phq4jyWMp7eZxZHJPmjnn48ozlxO+pmhb2S79G/JKaRQmmLP/5zZa9/hLjjv3qFuZcBflt1YtBjOUB7FH7PhpmlO2HW0SG98HrjbZZfUITeMdfD+RV4zHVdeI1EYOO/MdRKFqiN6ukfC0uI+7a/v6JAr8ofTH2nS/B3WC+BS2Rgv5NggjUlx76PtkxYsD1lEvg19VtxRAA4RPtqxMu4LNMGhdy4W9gK9qIvCjHR4M1ymwBjqnxHXfMbv4f66YeQ6RhsG/Ay6AYTvr+t4E0Iq9QmuNnl7bshX/XQOpxXbpFtqE/CycwHk+aQEIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LIYwjPDKyISsgBQzmAheeNaTwDlOMufJ+3p1VmhRvU0=;
+ b=Xf4lWa4KSV4lib8gFsni1K5nIEKmHKZlghKJBBQIVFhzGCeVn4vuncg8+RqbV3eV+AuN+beAg2xv6OgCagwwjC4Eq0Voz6Tm8c8CU/MrUcjNajKpkCinRJWCQw6jV4dYXNXhNmTXL5H7ZInVhWzg7zYBtZQuWsmZnV1Kpd87+U61c1q3ppNoXVFbj2FnfVaLb2Za5RajAJaYdI22hVR+tgX7fkMixWwsP85lWOhbxG+Jtb4jtCiJ+S6F6oG9i3v6icq7twdwt4bijt+b1nt8oZ/foHS7xWCyf1yj7G2sY8I9MQGBItunNc0C7/bdYTeepwHwNJTnuaEnsoHi/nPaDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by SJ0PR11MB5677.namprd11.prod.outlook.com (2603:10b6:a03:37e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.25; Sat, 28 Jan
+ 2023 07:52:08 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6043.030; Sat, 28 Jan 2023
+ 07:52:07 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>
+CC:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rodel, Jorg" <jroedel@suse.de>,
+        "Matt Fagnani" <matt.fagnani@bell.net>,
+        =?iso-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Vasant Hegde <vasant.hegde@amd.com>,
+        "Zhu, Tony" <tony.zhu@intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3 1/1] PCI: Add translated request only flag for
+ pci_enable_pasid()
+Thread-Topic: [PATCH v3 1/1] PCI: Add translated request only flag for
+ pci_enable_pasid()
+Thread-Index: AQHZJ+u/izID69X8S0CIgNghGwY+ma6ymkmAgADulxA=
+Date:   Sat, 28 Jan 2023 07:52:07 +0000
+Message-ID: <BN9PR11MB5276B53481C374BDE839824E8CCD9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230114073420.759989-1-baolu.lu@linux.intel.com>
+ <20230127173035.GA994835@bhelgaas>
+In-Reply-To: <20230127173035.GA994835@bhelgaas>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Michael Kao <michael.kao@mediatek.com>
-References: <20221018-up-i350-thermal-bringup-v9-0-55a1ae14af74@baylibre.com>
- <20221018-up-i350-thermal-bringup-v9-2-55a1ae14af74@baylibre.com>
- <eb3b9439-172b-daea-8f0f-53c8fe7648f9@linaro.org>
- <df39cc8c-29db-f401-e1a2-1a3b7e962a7e@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <df39cc8c-29db-f401-e1a2-1a3b7e962a7e@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SJ0PR11MB5677:EE_
+x-ms-office365-filtering-correlation-id: a9fcaac2-0565-4eee-2c8f-08db01048e11
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7sDa4TqDm7YdqXDXThxD5zZ9mx4wmqoOmeTfXhojIw5hYy+voLJoZaNMzSaDRZ6qpHcu0vDBUFVyetZjBencimLwy9xxIaty+ykmH8bWZBg6HtlYI7Wx5slm4COc/uws2Zk1i1Q9sv8RknHcvTigVGntV/7X9wZOrZlc53ZS0Znj4z93gqJIcMYw1w1hJJM+Kg9U1bk/elh2QnYYNGYCu7rbgOhHjKWz1xLyj+ovPgNTcK+JMoZmFrjtvV3/EM3GEqxU3diMdn2lzkEJ5oinVxlNIpmt8RNdjPkbXFE7RVHLuf0iwicRxBZ0ZPzm4xGhv4/yFrRdMBxjPswS0wls940UZBfKCHtPUa8Imf3KQg+7EwkdkcCq5SJnIdoHjOSH/xKI4H/0lrvmewvaEfJ3yXyf1BfLvISFu2HUnKCd3QMeYJ4ntIcO/hPrH1AFmgCvzSTjd/c1COLsUcQoX8Qsm99rnwNQhz9D+JpnywUZPsSUrUvOMrJIJAjk+g5ySK4ZKcrd7IwNDtJkfNuYMdWD9+ja7eLqQqrqCxCgXmzzjPNMuDioQasbL3/0kJT056MJ7TH9u/WKIc1KlLalHozutH+VgtmtEJR8EyE7KqiesSVpOa2vbBwSU2pVEwaSSixvSedhxFbLlh0D3O4QxdzVScpJ8rgnYZDvJAzzBMFSLguvsBJVAK/vXCnhnuL+visBEA3981SgHfccAooX3LxkuA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(366004)(346002)(396003)(39860400002)(136003)(451199018)(38100700002)(83380400001)(186003)(122000001)(6506007)(82960400001)(9686003)(26005)(2906002)(55016003)(110136005)(8676002)(54906003)(478600001)(52536014)(4326008)(5660300002)(316002)(71200400001)(64756008)(7416002)(66476007)(76116006)(66556008)(41300700001)(8936002)(66946007)(7696005)(66446008)(38070700005)(86362001)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?xpCu0NOC+RTgZewy1ob8wSx0wvTkV1zdFMmqPmOmlqKQ2/y5zZfijDbI3W?=
+ =?iso-8859-1?Q?u41ACEPrVqDssXPPtP5qS/cHvSXQXAqRjqRA+mPOkha9eCZf46bFMl5nkc?=
+ =?iso-8859-1?Q?xdWWOCenFzjoVLvIQmyTj3ZHgYnnypT+T/tkAJnOD/sgm4xaeFW3Cu9LoV?=
+ =?iso-8859-1?Q?NPFb8bdl/ecW8GIh6uGi7EmY9b4RPeHXPnSJ3hX8K9UpQGp9mxKEDEgMcX?=
+ =?iso-8859-1?Q?LIHIx7MSc2t+b8w2ITpkT/gEOkuRwbRUmFd2ALs7TqxmQ2/ACbGMkAJLvr?=
+ =?iso-8859-1?Q?bE+CO2EAqS5dXOmnCTblfyzy8p9pw71/Zrmgvy0WqH2AG59uQad2ZJWBy0?=
+ =?iso-8859-1?Q?BWUbt+6VDR3+FFgPzy7bmW395T/6igLVaqebOitHlhplhA6ZQUSSahmSBL?=
+ =?iso-8859-1?Q?KnjX++4HLOT8kTIzuV/8+fH4WVXAzrX1EkKLpbc2/Fr2ivKg1H7T29ilpb?=
+ =?iso-8859-1?Q?2/asNjX8S9DLZjiZuBNkODuvsvEIbdb1zVizZvCrbH/mJisZ1u8wGhg4ZE?=
+ =?iso-8859-1?Q?ZOcjj0D7eXxJN7LOsM0AM+eAJW2SM+1iXiL+D4YkNT4QLEMk+ENFsak+XS?=
+ =?iso-8859-1?Q?Ru0wzJodczKC6XN5p4tTfXS2mHBXA+VpGwaHbAX2C/Gn/32606Km00iJcO?=
+ =?iso-8859-1?Q?N5gPmJHMM4MhaUlROk6RJd6WbIs+p92VcYNu2anICza+apJQ/sBs0ucurf?=
+ =?iso-8859-1?Q?Jew3yKCNhHRj4XOL5i/azfCY529PwqV1ZGCfYAEV7ldrvPnmP4o/qw27nk?=
+ =?iso-8859-1?Q?x+S1giU2sn55oZgOEfkdk7woHu7Bi5qmfNaKr6c0gOPZXwvOUdLmToNRM9?=
+ =?iso-8859-1?Q?vekaBX19IW4nbD/QcMSh7g0+MKcRG6x8QxmoNOL9pZZrfUqYZI7Xuy8dei?=
+ =?iso-8859-1?Q?yA2S0DDDvLpE4W2NUBREtopPtMCNf3GDq4En4cIfTBOavZZ7kWZbhSDcHJ?=
+ =?iso-8859-1?Q?mSLMmqnHdfkiIRunmqm+Er2dKbyWGicCuJE8IXq7NFsUCfR2U8KtT15PmH?=
+ =?iso-8859-1?Q?OVJwtQIofd+3ptqDgVBGpHuBJgX+wpnoxevSm6fEyYhD8bzKZ3LKdOIRq5?=
+ =?iso-8859-1?Q?PoUnv88OVSzxffUC4G1yynTxzluBhrLe/+MB7MPekGldZlS6XeLnQlsx30?=
+ =?iso-8859-1?Q?l/dYddQnd4zz320InH8gTARt7eE5KaCgugLMtnjvp/KswIep7A8D0kkYL7?=
+ =?iso-8859-1?Q?h3J44KbxsxQn0riFdGl5UY8kzJeleiyB+KYYiQiFiz4mc2kEOcIw7SNs1q?=
+ =?iso-8859-1?Q?qNkDxn4sPY0yG2VPztMSmCZLVPBy6UtNcyt23VyptFoVFl+c10sfOC0Gab?=
+ =?iso-8859-1?Q?kKXj06x10jRpZCGQNbRwfKK56thwAnQL0u62MxvMtT3V/9M2stnd7W9e7Q?=
+ =?iso-8859-1?Q?+DDSW5n97LXBs7UknT0mB6vMm40VOELIr42uvi7i/nVGqOaZMQFNo0/HkJ?=
+ =?iso-8859-1?Q?l7j6Kg8vmW1KkMzv7X7lq8YHkConVPXPgE8Dkz7O5YS+c9Lgypmb2k5q7n?=
+ =?iso-8859-1?Q?7ewrUVpCER5HxEAhVdB6gZ6FEr5cFUlgsaBIVS8uQ6Z3AiAz5caj+LPu/K?=
+ =?iso-8859-1?Q?q1F+M5+6d9IgnimWfJUxqx85rkAehTuPkp0aidb2HL0O/z3fKSn3vOkInQ?=
+ =?iso-8859-1?Q?R16cFPh5nNlhTyS2xNOVJc+eCB+84AR4fV?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9fcaac2-0565-4eee-2c8f-08db01048e11
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jan 2023 07:52:07.7731
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jUEp+BLlAqUhMJYPDANXHvsej+B0ROFmJ3ay7Bcg80TtUjM0/M2OZO21KjU2GXmn2j1Pnjpd+TCy/Y3LbK9TAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5677
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 23:21, Amjad Ouled-Ameur wrote:
-> 
-> On 1/27/23 22:48, Daniel Lezcano wrote:
->> On 27/01/2023 16:44, Amjad Ouled-Ameur wrote:
->>> From: Markus Schneider-Pargmann <msp@baylibre.com>
->>>
->>> Add logic in order to be able to turn on the control buffer on MT8365.
->>> This change now allows to have control buffer support for 
->>> MTK_THERMAL_V1,
->>> and it allows to define the register offset, and mask used to enable it.
->>>
->>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
->>> Signed-off-by: Fabien Parent <fparent@baylibre.com>
->>> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->>> Reviewed-by: AngeloGioacchino Del Regno 
->>> <angelogioacchino.delregno@collabora.com>
->>> ---
->>>   drivers/thermal/mtk_thermal.c | 25 ++++++++++++++++++-------
->>>   1 file changed, 18 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/drivers/thermal/mtk_thermal.c 
->>> b/drivers/thermal/mtk_thermal.c
->>> index 8440692e3890..d8ddceb75372 100644
->>> --- a/drivers/thermal/mtk_thermal.c
->>> +++ b/drivers/thermal/mtk_thermal.c
->>> @@ -271,6 +271,9 @@ struct mtk_thermal_data {
->>>       bool need_switch_bank;
->>>       struct thermal_bank_cfg bank_data[MAX_NUM_ZONES];
->>>       enum mtk_thermal_version version;
->>> +    u32 apmixed_buffer_ctl_reg;
->>> +    u32 apmixed_buffer_ctl_mask;
->>> +    u32 apmixed_buffer_ctl_set;
->>>   };
->>>     struct mtk_thermal {
->>> @@ -514,6 +517,9 @@ static const struct mtk_thermal_data 
->>> mt7622_thermal_data = {
->>>       .adcpnp = mt7622_adcpnp,
->>>       .sensor_mux_values = mt7622_mux_values,
->>>       .version = MTK_THERMAL_V2,
->>> +    .apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON1,
->>> +    .apmixed_buffer_ctl_mask = GENMASK(31, 6) | BIT(3),
->>> +    .apmixed_buffer_ctl_set = BIT(0),
->>>   };
->>>     /*
->>> @@ -963,14 +969,18 @@ static const struct of_device_id 
->>> mtk_thermal_of_match[] = {
->>>   };
->>>   MODULE_DEVICE_TABLE(of, mtk_thermal_of_match);
->>>   -static void mtk_thermal_turn_on_buffer(void __iomem *apmixed_base)
->>> +static void mtk_thermal_turn_on_buffer(struct mtk_thermal *mt,
->>> +                       void __iomem *apmixed_base)
->>>   {
->>> -    int tmp;
->>> +    u32 tmp;
->>> +
->>> +    if (!mt->conf->apmixed_buffer_ctl_reg)
->>> +        return;
->>>   -    tmp = readl(apmixed_base + APMIXED_SYS_TS_CON1);
->>> -    tmp &= ~(0x37);
->>> -    tmp |= 0x1;
->>> -    writel(tmp, apmixed_base + APMIXED_SYS_TS_CON1);
->>> +    tmp = readl(apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
->>> +    tmp &= mt->conf->apmixed_buffer_ctl_mask;
->>> +    tmp |= mt->conf->apmixed_buffer_ctl_set;
->>> +    writel(tmp, apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
->>>       udelay(200);
->>>   }
->>>   @@ -1070,8 +1080,9 @@ static int mtk_thermal_probe(struct 
->>> platform_device *pdev)
->>>           goto err_disable_clk_auxadc;
->>>       }
->>>   +    mtk_thermal_turn_on_buffer(mt, apmixed_base);
->>> +
->>>       if (mt->conf->version == MTK_THERMAL_V2) {
->>> -        mtk_thermal_turn_on_buffer(apmixed_base);
->>>           mtk_thermal_release_periodic_ts(mt, auxadc_base);
->>>       }
->>
->> This change conflicts with commit 4f2ee0aa2e706
->>
->> I fixed it with:
->>
->> -       if (mt->conf->version != MTK_THERMAL_V1) {
->> -               mtk_thermal_turn_on_buffer(apmixed_base);
->> +       mtk_thermal_turn_on_buffer(apmixed_base);
->> +
->> +       if (mt->conf->version != MTK_THERMAL_V1)
->>                 mtk_thermal_release_periodic_ts(mt, auxadc_base);
->> -       }
->>
-> I think it's rather MTK_THERMAL_V2 and not MTK_THERMAL_V1. Other than 
-> that, it looks
+> From: Bjorn Helgaas <helgaas@kernel.org>
+> Sent: Saturday, January 28, 2023 1:31 AM
+>=20
+> On Sat, Jan 14, 2023 at 03:34:20PM +0800, Lu Baolu wrote:
+>=20
+> > @@ -353,12 +353,15 @@ void pci_pasid_init(struct pci_dev *pdev)
+> >   * pci_enable_pasid - Enable the PASID capability
+> >   * @pdev: PCI device structure
+> >   * @features: Features to enable
+> > + * @flags: device-specific flags
+> > + *   - PCI_PASID_XLATED_REQ_ONLY: The PCI device always use translated
+> type
+> > + *                                for all PASID memory requests.
+>=20
+> s/use/uses/
+>=20
+> I guess PCI_PASID_XLATED_REQ_ONLY is something only the driver knows,
+> right?  We can't deduce from architected config space that the device
 
-It was before if (version == MTK_THERMAL_V2). Now there is a V3, so it 
-is replaced by if (version != MTK_THERMAL_V1) in order to include the V3
+Yes
 
+> will produce PASID prefixes for every Memory Request, can we?
+>=20
 
->> Let me know if there is something wrong.
->>
->>
+No, we can't. PASID cap only indicates that the device is capable of
+using PASID prefix, not a mandatory requirement on every memory
+request.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Similar case is PRI. Having PRI enabled only means the device is
+capable of handling I/O page faults, not the indicator that it can
+100% tolerate fault in every memory access. That is the main reason
+why vfio/iommufd can't simply skip pinning guest memory when
+seeing PRI enabled (well, though PRI is not supported yet). It has to
+be opted-in via a driver specific way e.g. a vfio variant driver.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Thanks
+Kevin
