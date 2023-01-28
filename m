@@ -2,86 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7545067F732
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 11:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC7167F733
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 11:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234210AbjA1KkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 05:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
+        id S234179AbjA1Klj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 05:41:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbjA1KkS (ORCPT
+        with ESMTP id S231185AbjA1Klh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 05:40:18 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF49F7643D;
-        Sat, 28 Jan 2023 02:40:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1674902395; bh=Y+8/fOapSSmWLEqg7lJpPnADv5hXIKr7UJtI9ZjvAFw=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=XIkh+hL8vbalP7MRdL/ZgaZpjd2pQ/iG9Qd+TQ/VsdiMWHQPbmKvPzgf0CgNYQdSt
-         wNBH8aPDPOBddzN1/7mOHvJ50H1TUmt4nj4cFVkgGgSaQBHcFGVm3kMzpVIp7VzJFo
-         27l2eqCU/RGvmkPrRveaD5hi+s8nUX5gnt5uAX+o=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sat, 28 Jan 2023 11:39:55 +0100 (CET)
-X-EA-Auth: 52l/H8g2NG2HneUKl+/V3mX4LOB9amfBJ2uIMcfD2pL8zpPZriS/JRNd3NsdHCPbnQElAYsYvzFR+pHxWdPk8KRkJkpOlbWm
-Date:   Sat, 28 Jan 2023 16:09:51 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH 2/2] scsi: megaraid_sas: Use max helper for comparison and
- assignment
-Message-ID: <bf5884a7bd7c1c92497664eb793c99051b81d67a.1674900575.git.drv@mailo.com>
-References: <cover.1674900575.git.drv@mailo.com>
+        Sat, 28 Jan 2023 05:41:37 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A884D7579A
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 02:41:35 -0800 (PST)
+Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P3rXt4dYHzRrGL;
+        Sat, 28 Jan 2023 18:39:26 +0800 (CST)
+Received: from [10.67.111.186] (10.67.111.186) by
+ dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sat, 28 Jan 2023 18:41:33 +0800
+Message-ID: <51b603d3-72bf-91c2-1559-b3f85b4865ba@huawei.com>
+Date:   Sat, 28 Jan 2023 18:41:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1674900575.git.drv@mailo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [PATCH] sched/fair: sanitize vruntime of entity being placed
+To:     Roman Kagan <rkagan@amazon.de>, <linux-kernel@vger.kernel.org>
+CC:     Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Juri Lelli <juri.lelli@redhat.com>
+References: <20230127163230.3339408-1-rkagan@amazon.de>
+From:   Zhang Qiao <zhangqiao22@huawei.com>
+In-Reply-To: <20230127163230.3339408-1-rkagan@amazon.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.186]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500018.china.huawei.com (7.185.36.186)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify code using max() helper macro for logical evaluation and value
-assignment.
-Proposed change is identified using minmax.cocci semantic patch script.
-
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/scsi/megaraid/megaraid_sas_base.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 7fa472ab0b94..4ca9b04e1962 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -5993,10 +5993,7 @@ megasas_alloc_irq_vectors(struct megasas_instance *instance)
- 			instance->msix_vectors - instance->iopoll_q_count,
- 			i, instance->iopoll_q_count);
- 
--	if (i > 0)
--		instance->msix_vectors = i;
--	else
--		instance->msix_vectors = 0;
-+	instance->msix_vectors = max(i, 0);
- 
- 	if (instance->smp_affinity_enable)
- 		megasas_set_high_iops_queue_affinity_and_hint(instance);
--- 
-2.34.1
 
 
+在 2023/1/28 0:32, Roman Kagan 写道:
+> From: Zhang Qiao <zhangqiao22@huawei.com>
+> 
+> When a scheduling entity is placed onto cfs_rq, its vruntime is pulled
+> to the base level (around cfs_rq->min_vruntime), so that the entity
+> doesn't gain extra boost when placed backwards.
+> 
+> However, if the entity being placed wasn't executed for a long time, its
+> vruntime may get too far behind (e.g. while cfs_rq was executing a
+> low-weight hog), which can inverse the vruntime comparison due to s64
+> overflow.  This results in the entity being placed with its original
+> vruntime way forwards, so that it will effectively never get to the cpu.
+> 
+> To prevent that, ignore the vruntime of the entity being placed if it
+> didn't execute for much longer than the characteristic sheduler time
+> scale.
+> 
 
+
+Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+
+
+> [rkagan: formatted, adjusted commit log, comments, cutoff value]
+> Co-developed-by: Roman Kagan <rkagan@amazon.de>
+> Signed-off-by: Roman Kagan <rkagan@amazon.de>
+> ---
+> @zhangqiao22, I took the liberty to put you as the author of the patch,
+> as this is essentially what you posted for discussion, with minor
+> tweaks.  Please stamp with your s-o-b if you're ok with it.
+> 
+>  kernel/sched/fair.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 0f8736991427..d6cf131ebb0b 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4656,6 +4656,7 @@ static void
+>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>  {
+>  	u64 vruntime = cfs_rq->min_vruntime;
+> +	u64 sleep_time;
+>  
+>  	/*
+>  	 * The 'current' period is already promised to the current tasks,
+> @@ -4685,8 +4686,18 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>  		vruntime -= thresh;
+>  	}
+>  
+> -	/* ensure we never gain time by being placed backwards. */
+> -	se->vruntime = max_vruntime(se->vruntime, vruntime);
+> +	/*
+> +	 * Pull vruntime of the entity being placed to the base level of
+> +	 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
+> +	 * slept for a long time, don't even try to compare its vruntime with
+> +	 * the base as it may be too far off and the comparison may get
+> +	 * inversed due to s64 overflow.
+> +	 */
+> +	sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+> +	if ((s64)sleep_time > 60 * NSEC_PER_SEC)
+
+In order to avoid overflowing, it'd better be "60LL * NSEC_PER_SEC"
+
+Thanks,
+Qiao.
+
+
+> +		se->vruntime = vruntime;
+> +	else
+> +		se->vruntime = max_vruntime(se->vruntime, vruntime);
+>  }
+>  
+>  static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
+> 
