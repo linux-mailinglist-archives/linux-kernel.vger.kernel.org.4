@@ -2,100 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6191067F31F
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F4167F339
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232445AbjA1A0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 19:26:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
+        id S229862AbjA1Ahd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 19:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjA1A0b (ORCPT
+        with ESMTP id S229478AbjA1Ah3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:26:31 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8368CE06
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:25:57 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id nn18-20020a17090b38d200b0022bfb584987so6247650pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:25:57 -0800 (PST)
+        Fri, 27 Jan 2023 19:37:29 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47D71BAF4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:37:28 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so6232256pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:37:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SeH8pABTUU3a0xVRTCMZvbgUglNp9bFLSOXGO6BnE7g=;
-        b=BECD3XNIWMyGoO2pR3j/pX0MZD4uav4Bzx9OtUdfE75udvtV/lOWKkjTFbRM2sloLc
-         ejhPX+xaRVLru/x35gtmNrlbT2PxkyPt59fIfVceGze3V2TV45OtLHqKvysIzYQJXtBR
-         4NfM+qgitcY4aK6I2UI65eE6pFQ4iEHj/fbIE=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=X9rFteB/OvrIgZT76ETC3cs4lJmFmkP7IRP2qqR/ZH4=;
+        b=Inae36NNwscklWednII+BkctwitcyZOXU5Lpll1cnbzVMokTHfm+d3ek79KM8u38lQ
+         Oodg15MUbiv3U9oEaBtA7JRgfu2Qeg3hpLhvAvTtNG0jWstuNAcWU6RtBMFK+BdWyWPF
+         dpCOZqOP0Bf8OS49i4/E0dFh4uNfOK4oAhYdMnuuQztzTQGnwaRVp79rNoJwRkmqtEdZ
+         CDKj6B+83j88LF4HYi7rzDUszQo3oWuP6NKZa2xhIa6w1lLCtWT2L+GeTYnXt3hXe9r3
+         Khh27YfgrFX4h4GVtKReYZWqXtd8zVZX++6aUYRY7tQmbQIYPR4X9w5OUr9w9vO2DrFK
+         eU8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SeH8pABTUU3a0xVRTCMZvbgUglNp9bFLSOXGO6BnE7g=;
-        b=rMV8+6x3IAjzL68H/SFIqR4p1uQLS9lyu8jnX7Jw5Voltdzly6VNM1HyRhDRZRRlcl
-         omEAzOgi+7y08lTbRoBqHpCrnsxzZ7XOUzAivRfqQLOIY9E6gOXaVUga7HpxFsXJReTY
-         jtoyeu+n5J+UEaBy/sza0wAuO1VVoCGEJN1iDm6xD+zswkaWMGVWJ/cdK//E322f+m7d
-         ve/krduD5zRABqBJDE4F5JmQVmPQyC5jLgnibLOAXD6KQxAYcgGWwShc3OVMSZvmFIj0
-         aVjUqHzomLwEgzyKAYNoxoXrqBWRnfOgHy0yozsOafB0hqqPuYNhm5l0lNlVo51zoWmr
-         FvaA==
-X-Gm-Message-State: AFqh2kq14lxhPib99ERHJpRWseOobW1bujrvZG/1BuGu/oPUBvE80kDf
-        XGnqMm3Q2g31ca+FNibWGwD0BQ==
-X-Google-Smtp-Source: AMrXdXsExg1wzuhHvjjRvAqAzd/gB3gJtdoQdxyb9q20M/sCxt1Uqj01DxRY4/bB23t24AwIZoSeug==
-X-Received: by 2002:a17:902:e891:b0:194:de51:9ad with SMTP id w17-20020a170902e89100b00194de5109admr37556027plg.22.1674865459091;
-        Fri, 27 Jan 2023 16:24:19 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y10-20020a17090322ca00b001947c22185bsm3393193plg.184.2023.01.27.16.24.18
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X9rFteB/OvrIgZT76ETC3cs4lJmFmkP7IRP2qqR/ZH4=;
+        b=K0TH4AOT25MVkrO9w49HCaR+/k1WOza7ht0gcgzpx09mECgVyr6a/TtLmoGRjGQ2y7
+         sduQ5WkxoD/HbWZU1BVUKPpYR5Qy32L5VUhpcZ2GvQDzV/ZOB4eAgo6ct/o3G/LOC/Xd
+         6hJs6M61ZYMiXhqtFVlEDYVbtF2navaUor/Rf67dFV5Qv3ewjH84MXDoKwnLiag4IPJD
+         btRxIap5eFqcqll2NFLLqqzO2HsiapH/vvDFQAg0G7lahJ/jGE9AnBd2kYv5HoYRdwaP
+         Uzplxk6AzscBG4HDuwepkksqls5NBGAm7McHaCJ7D3qR781wQ/AQ8WMgRBPTbTK0pPKW
+         kaOQ==
+X-Gm-Message-State: AO0yUKWyO6L/INAAR83c7oH3r8WQRPfGfFbfauKoNnAxLbitq+KSGpA+
+        rSTTt1y3mmLTE7slpy9rxocWFg==
+X-Google-Smtp-Source: AK7set/nRB49McILBM66+YZXvGUfNKEMOv5Ivj8SB4uU2ic1MTlNVvfCij9/1gg+SJw/R7olGOkRdg==
+X-Received: by 2002:a17:90a:6949:b0:219:f970:5119 with SMTP id j9-20020a17090a694900b00219f9705119mr207876pjm.1.1674866248063;
+        Fri, 27 Jan 2023 16:37:28 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y7-20020a17090a474700b0022bae41c820sm3230160pjg.56.2023.01.27.16.37.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 16:24:18 -0800 (PST)
-Date:   Fri, 27 Jan 2023 16:24:17 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] scripts/dtc: Replace 0-length arrays with flexible arrays
-Message-ID: <202301271624.01B4A55D3C@keescook>
-References: <20230127224101.never.746-kees@kernel.org>
- <CAL_JsqKVp57NtR11JV-eXktMU9_dQ+8sF8YSPe7KyazrvJB-eQ@mail.gmail.com>
- <202301271609.15F0E5EB15@keescook>
+        Fri, 27 Jan 2023 16:37:27 -0800 (PST)
+Date:   Sat, 28 Jan 2023 00:37:23 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2 02/11] KVM: nSVM: clean up the copying of V_INTR bits
+ from vmcb02 to vmcb12
+Message-ID: <Y9RuQz8dAT7DZGYk@google.com>
+References: <20221129193717.513824-1-mlevitsk@redhat.com>
+ <20221129193717.513824-3-mlevitsk@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202301271609.15F0E5EB15@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221129193717.513824-3-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 04:12:21PM -0800, Kees Cook wrote:
-> On Fri, Jan 27, 2023 at 05:44:13PM -0600, Rob Herring wrote:
-> > On Fri, Jan 27, 2023 at 4:41 PM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > Replace the 0-length array with a C99 flexible array. Seen with GCC 13
-> > > under -fstrict-flex-arrays:
-> > >
-> > > In file included from ../lib/fdt_ro.c:2:
-> > > ../lib/../scripts/dtc/libfdt/fdt_ro.c: In function 'fdt_get_name':
-> > > ../lib/../scripts/dtc/libfdt/fdt_ro.c:319:24: warning: 'strrchr' reading 1 or more bytes from a region of size 0 [-Wstringop-overread]
-> > >   319 |                 leaf = strrchr(nameptr, '/');
-> > >       |                        ^~~~~~~~~~~~~~~~~~~~~
-> > >
-> > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > Cc: Frank Rowand <frowand.list@gmail.com>
-> > > Cc: devicetree@vger.kernel.org
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >  scripts/dtc/libfdt/fdt.h | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > Changes to dtc/libfdt go to upstream dtc first and then we sync them back.
+On Tue, Nov 29, 2022, Maxim Levitsky wrote:
+> the V_IRQ and v_TPR bits don't exist when virtual interrupt
+> masking is not enabled, therefore the KVM should not copy these
+> bits regardless of V_IRQ intercept.
+
+Hmm, the APM disagrees:
+
+ The APIC's TPR always controls the task priority for physical interrupts, and the
+ V_TPR always controls virtual interrupts.
+
+   While running a guest with V_INTR_MASKING cleared to 0:
+     • Writes to CR8 affect both the APIC's TPR and the V_TPR register.
+
+
+ ...
+
+ The three VMCB fields V_IRQ, V_INTR_PRIO, and V_INTR_VECTOR indicate whether there
+ is a virtual interrupt pending, and, if so, what its vector number and priority are.
+
+IIUC, V_INTR_MASKING_MASK is mostly about EFLAGS.IF, with a small side effect on
+TPR.  E.g. a VMM could pend a V_IRQ but clear V_INTR_MASKING and expect the guest
+to take the V_IRQ.  At least, that's my reading of things.
+
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  arch/x86/kvm/svm/nested.c | 23 ++++++++---------------
+>  1 file changed, 8 insertions(+), 15 deletions(-)
 > 
-> Ah-ha, I've found it: https://github.com/dgibson/dtc
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index 37af0338da7c32..aad3145b2f62fe 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -412,24 +412,17 @@ void nested_copy_vmcb_save_to_cache(struct vcpu_svm *svm,
+>   */
+>  void nested_sync_control_from_vmcb02(struct vcpu_svm *svm)
+>  {
+> -	u32 mask;
+> +	u32 mask = 0;
+>  	svm->nested.ctl.event_inj      = svm->vmcb->control.event_inj;
+>  	svm->nested.ctl.event_inj_err  = svm->vmcb->control.event_inj_err;
+>  
+> -	/* Only a few fields of int_ctl are written by the processor.  */
+> -	mask = V_IRQ_MASK | V_TPR_MASK;
+> -	if (!(svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK) &&
+> -	    svm_is_intercept(svm, INTERCEPT_VINTR)) {
+> -		/*
+> -		 * In order to request an interrupt window, L0 is usurping
+> -		 * svm->vmcb->control.int_ctl and possibly setting V_IRQ
+> -		 * even if it was clear in L1's VMCB.  Restoring it would be
+> -		 * wrong.  However, in this case V_IRQ will remain true until
+> -		 * interrupt_window_interception calls svm_clear_vintr and
+> -		 * restores int_ctl.  We can just leave it aside.
+> -		 */
+> -		mask &= ~V_IRQ_MASK;
+> -	}
+> +	/*
+> +	 * Only a few fields of int_ctl are written by the processor.
+> +	 * Copy back only the bits that are passed through to the L2.
 
-Sent upstream: https://github.com/dgibson/dtc/pull/76
+Just "L2", not "the L2".
 
--- 
-Kees Cook
+> +	 */
+> +
+
+Unnecessary newline.
+
+> +	if (svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK)
+> +		mask = V_IRQ_MASK | V_TPR_MASK;
+>  
+>  	if (nested_vgif_enabled(svm))
+>  		mask |= V_GIF_MASK;
+> -- 
+> 2.26.3
+> 
