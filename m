@@ -2,80 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A9867F850
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 14:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C06167F854
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 15:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbjA1N4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 08:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S234213AbjA1OAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 09:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbjA1N4G (ORCPT
+        with ESMTP id S230394AbjA1OAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 08:56:06 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C4A4C0A
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 05:56:02 -0800 (PST)
-Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pLlgV-0002Kg-12; Sat, 28 Jan 2023 14:55:59 +0100
-Message-ID: <d4871e70-c7c9-e638-d7c0-304ec8aea77b@leemhuis.info>
-Date:   Sat, 28 Jan 2023 14:55:58 +0100
+        Sat, 28 Jan 2023 09:00:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFBCD51F;
+        Sat, 28 Jan 2023 06:00:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B823B80AF6;
+        Sat, 28 Jan 2023 14:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B1A85C4339B;
+        Sat, 28 Jan 2023 14:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674914417;
+        bh=ZUt19BoZpX0xTtTw6MsV9dAVljunOHRmwbXmaJ7Ugtw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=SPEgENsBuxvXLexOa5jYVcHsV/yYaYXZ9IB8B1ww+hk/oFgI9DVslRkuvOi+SWARL
+         TdF4KjkbIlk2BUzRDy7O4G+B7AGW+BwJRJwD5jW6SYIezjE4xlIQrVk2WoRkuBhi28
+         CHLqnvAQw5PhXWD9jX9MV/pNEWGdgodmu1mlWs8c+OO3pXXirY9A92bOXUPGPlfaBa
+         sDkqyYE1NRUqTu/OfuCj9pVUICLq9LhPvsaAylK+7X2DRo5RzAYTNhA0qpjbSFWOec
+         tF68OQpgazvkEMmlos8UsqYXps3rshP3+uRydpmwEKpTAZsBoec2ErpKJ/mwrn4P5d
+         KPvdGlb2xT2zA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99BDEF83ECF;
+        Sat, 28 Jan 2023 14:00:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: Failure during Stack Depot allocating hash table of 1048576
- entries with kvcalloc
-Content-Language: en-US, de-DE
-To:     Borislav Petkov <bp@alien8.de>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        linux-mm <linux-mm@kvack.org>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <Y8Fq5m0CLfcFLCOY@zn.tnic>
- <07e42002-e78d-7947-19a7-0dd035466f50@alu.unizg.hr>
- <Y9UBFNwBeuePPsk3@zn.tnic>
-From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <Y9UBFNwBeuePPsk3@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1674914162;a5c37dae;
-X-HE-SMSGID: 1pLlgV-0002Kg-12
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftest: net: Improve IPV6_TCLASS/IPV6_HOPLIMIT tests
+ apparmor compatibility
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167491441762.1771.2123081381985522010.git-patchwork-notify@kernel.org>
+Date:   Sat, 28 Jan 2023 14:00:17 +0000
+References: <20230126165548.230453-1-andrei.gherzan@canonical.com>
+In-Reply-To: <20230126165548.230453-1-andrei.gherzan@canonical.com>
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.01.23 12:03, Borislav Petkov wrote:
-> On Sat, Jan 28, 2023 at 03:41:50AM +0100, Mirsad Goran Todorovac wrote:
->> This appears to be a duplicate of the report:
->> https://lore.kernel.org/linux-mm/2c677d85-820c-d41a-fc98-7d3974b49e42@alu.unizg.hr/raw
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 26 Jan 2023 16:55:48 +0000 you wrote:
+> "tcpdump" is used to capture traffic in these tests while using a random,
+> temporary and not suffixed file for it. This can interfere with apparmor
+> configuration where the tool is only allowed to read from files with
+> 'known' extensions.
 > 
-> Yah, looks like
+> The MINE type application/vnd.tcpdump.pcap was registered with IANA for
+> pcap files and .pcap is the extension that is both most common but also
+> aligned with standard apparmor configurations. See TCPDUMP(8) for more
+> details.
 > 
-> 56a61617dd22 ("mm: use stack_depot for recording kmemleak's backtrace")
-> 
-> needs to be reverted.
+> [...]
 
-Unless I'm missing something (which might easily be the case) there is a
-patch for that issue in -mm already:
+Here is the summary with links:
+  - selftest: net: Improve IPV6_TCLASS/IPV6_HOPLIMIT tests apparmor compatibility
+    https://git.kernel.org/netdev/net/c/a6efc42a86c0
 
-https://lore.kernel.org/all/20230119224022.80752C433F0@smtp.kernel.org/
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Or where two different issues discussed in the thread Mirsad mentioned
-above?
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
