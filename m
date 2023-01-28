@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5961867FA91
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB6367FA95
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234460AbjA1Tuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 14:50:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
+        id S234529AbjA1Tz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 14:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjA1Tuu (ORCPT
+        with ESMTP id S234507AbjA1TzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 14:50:50 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B535A20069;
-        Sat, 28 Jan 2023 11:50:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=qEnfDf+BQe2kIPxLJiV7OZn4deC6AGOYYXUZSW1pSOU=; b=WNESInrEGQ4hgPJTNesLKzpYcK
-        Pd0RAQ4pe+sxVn9f2bquTCMoTbiw+Wq0Xrj4FcUvppge8BH+8/Zch2EsODoEsQ0WiwY4+HzMIu0kb
-        1XkGijy+NtOvuCqxLsp1drtvlw7rlyptGzKEajl8Pui9Z3uihAu7Qo5rF985WgoH/XXUwEAhHdexx
-        weyQmk5nVQ768Ep/mnmNUg0mYhGENa/HnJW8QdAfc4ciur8Nq6hw9BugJM4SsW8nwOG2l0g5FGcKv
-        lvP1KEgS6qHBogL3tRbM2Jo2raFwzBtDx9R7UNayG8jmAIn+tLVLQnomOA8QP4ihLg+MiA7qM5PLe
-        fcAWDVwQ==;
-Received: from [2601:1c2:d00:6a60::9526] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pLrDq-000cy2-RU; Sat, 28 Jan 2023 19:50:46 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH bpf-next v2] Documentation: bpf: correct spelling
-Date:   Sat, 28 Jan 2023 11:50:46 -0800
-Message-Id: <20230128195046.13327-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.1
+        Sat, 28 Jan 2023 14:55:24 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D47234D6
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 11:55:22 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id l1so3753321qkg.11
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 11:55:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qbp9QaNDZWJkPD4EX8FVMT1Tf9hwMQACYdEjENlwtsU=;
+        b=aClggjBpSo0dFaEaJIufElfuIIXiVg48b4HEDmAU9Il3GXJe+8V6hwT1wUFfqXfdi+
+         QJghwDrMoX3LSPAixk1mbpVtS1vBSfdUDMwOU0T+WbZwOyiUjg4d7VI38XTuPhEzouhS
+         GuTXr/D3Yp57OOflAFovkJwzpHbWPs5lId27yXFOl+PRX5IrlxURaHI8w3JYfBEUdC7F
+         gRCdW2D4XrTfvLFJi+nowL6UO8ALsK8FRylc13hULqLYwEeggUJTYWDZo+6W/3qunTv1
+         oy83Jwo/QRnEOAfDKzFdKabhSVlk/tusu0JNQMYpLmMrk71juj0ZX0gFOP3vhrTCwzUe
+         zP3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qbp9QaNDZWJkPD4EX8FVMT1Tf9hwMQACYdEjENlwtsU=;
+        b=aa2mqGhszkYk8yybB8T7qwfGXiz6eGIrwvK0XCHVC4af8IPr6g6YqzVxX/SfMycAG3
+         xvlv/ZLP08quXJ8DoOPRZ6lE7uhTAqyp/H/dfWHFTHdQt8nuEPiGcIE0degh1SxGe+Br
+         DeugnQ3CRVmymQaG73OVw+R7c5YMzk4qZA2hrFajq8v0ZGW8Xl0Ku+YvDPl4KC9WQg8v
+         nJu47StyNhK6kszKA59OSIAgJ9YYy/cJlflgwaZ7rHC5EMTCnmAsGQjhsvhdKGOZvBLa
+         JcrbIszXU3Al3xRQSaqqLkOKNGULCuc+WMzEf4nqt/Kl5Ba5XjmaMb61Fuu+K4gwhxii
+         C8qQ==
+X-Gm-Message-State: AFqh2kqPCVxyKVaj/ZrRzh0h85KNWIFdI+W07bQKv61VsI5Gqa4HXhe8
+        9c/k5SkNpl7WkGDexizBrnarLoLrB+rh/5kagyY=
+X-Google-Smtp-Source: AMrXdXvJYwjhNwl80QknzB3ZE1bCEaEDhrhA/Qx3wY0ugJWoV/QT87p/6OXwoI6XIXEVhqsU5luZvzFSw2T9CRYwt8Q=
+X-Received: by 2002:a05:620a:1214:b0:706:9677:5fdd with SMTP id
+ u20-20020a05620a121400b0070696775fddmr3008606qkj.283.1674935721101; Sat, 28
+ Jan 2023 11:55:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127155135.27153-1-andriy.shevchenko@linux.intel.com> <a903947619f94dfa88d3dd147b7a5e95@AcuMS.aculab.com>
+In-Reply-To: <a903947619f94dfa88d3dd147b7a5e95@AcuMS.aculab.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 28 Jan 2023 21:54:44 +0200
+Message-ID: <CAHp75VcZgkuOA3pSrg7cN36EAB4Y0jV2xFNfj-sGp_C17J2yAQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] lib/string: Use strchr() in strpbrk()
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling problems for Documentation/bpf/ as reported
-by codespell.
+On Sat, Jan 28, 2023 at 4:51 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Andy Shevchenko
+> > Sent: 27 January 2023 15:52
+> >
+> > Use strchr() instead of open coding it as it's done elsewhere in
+> > the same file. Either we will have similar to what it was or possibly
+> > better performance in case architecture implements its own strchr().
+>
+> Except that you get a whole load of calls to strchr() for (typically)
+> very few characters.
+> So the cost of the calls dominates, anything that tries to speed up
+> strchr() for long strings will also slow things down.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
-v2: independent patch targeting bpf-next
+Hmm... I haven't seen the calls, I assume gcc simply inlined a copy of that.
 
- Documentation/bpf/libbpf/libbpf_naming_convention.rst |    6 +++---
- Documentation/bpf/map_xskmap.rst                      |    2 +-
- Documentation/bpf/ringbuf.rst                         |    4 ++--
- Documentation/bpf/verifier.rst                        |    2 +-
- 4 files changed, 7 insertions(+), 7 deletions(-)
+...
 
-diff -- a/Documentation/bpf/libbpf/libbpf_naming_convention.rst b/Documentation/bpf/libbpf/libbpf_naming_convention.rst
---- a/Documentation/bpf/libbpf/libbpf_naming_convention.rst
-+++ b/Documentation/bpf/libbpf/libbpf_naming_convention.rst
-@@ -83,8 +83,8 @@ This prevents from accidentally exportin
- to be a part of ABI what, in turn, improves both libbpf developer- and
- user-experiences.
- 
--ABI versionning
-----------------
-+ABI versioning
-+--------------
- 
- To make future ABI extensions possible libbpf ABI is versioned.
- Versioning is implemented by ``libbpf.map`` version script that is
-@@ -148,7 +148,7 @@ API documentation convention
- The libbpf API is documented via comments above definitions in
- header files. These comments can be rendered by doxygen and sphinx
- for well organized html output. This section describes the
--convention in which these comments should be formated.
-+convention in which these comments should be formatted.
- 
- Here is an example from btf.h:
- 
-diff -- a/Documentation/bpf/map_xskmap.rst b/Documentation/bpf/map_xskmap.rst
---- a/Documentation/bpf/map_xskmap.rst
-+++ b/Documentation/bpf/map_xskmap.rst
-@@ -178,7 +178,7 @@ The following code snippet shows how to
- 
- For an example on how create AF_XDP sockets, please see the AF_XDP-example and
- AF_XDP-forwarding programs in the `bpf-examples`_ directory in the `libxdp`_ repository.
--For a detailed explaination of the AF_XDP interface please see:
-+For a detailed explanation of the AF_XDP interface please see:
- 
- - `libxdp-readme`_.
- - `AF_XDP`_ kernel documentation.
-diff -- a/Documentation/bpf/ringbuf.rst b/Documentation/bpf/ringbuf.rst
---- a/Documentation/bpf/ringbuf.rst
-+++ b/Documentation/bpf/ringbuf.rst
-@@ -124,7 +124,7 @@ buffer.  Currently 4 are supported:
- 
- - ``BPF_RB_AVAIL_DATA`` returns amount of unconsumed data in ring buffer;
- - ``BPF_RB_RING_SIZE`` returns the size of ring buffer;
--- ``BPF_RB_CONS_POS``/``BPF_RB_PROD_POS`` returns current logical possition
-+- ``BPF_RB_CONS_POS``/``BPF_RB_PROD_POS`` returns current logical position
-   of consumer/producer, respectively.
- 
- Returned values are momentarily snapshots of ring buffer state and could be
-@@ -146,7 +146,7 @@ Design and Implementation
- This reserve/commit schema allows a natural way for multiple producers, either
- on different CPUs or even on the same CPU/in the same BPF program, to reserve
- independent records and work with them without blocking other producers. This
--means that if BPF program was interruped by another BPF program sharing the
-+means that if BPF program was interrupted by another BPF program sharing the
- same ring buffer, they will both get a record reserved (provided there is
- enough space left) and can work with it and submit it independently. This
- applies to NMI context as well, except that due to using a spinlock during
-diff -- a/Documentation/bpf/verifier.rst b/Documentation/bpf/verifier.rst
---- a/Documentation/bpf/verifier.rst
-+++ b/Documentation/bpf/verifier.rst
-@@ -192,7 +192,7 @@ checked and found to be non-NULL, all co
- As well as range-checking, the tracked information is also used for enforcing
- alignment of pointer accesses.  For instance, on most systems the packet pointer
- is 2 bytes after a 4-byte alignment.  If a program adds 14 bytes to that to jump
--over the Ethernet header, then reads IHL and addes (IHL * 4), the resulting
-+over the Ethernet header, then reads IHL and adds (IHL * 4), the resulting
- pointer will have a variable offset known to be 4n+2 for some n, so adding the 2
- bytes (NET_IP_ALIGN) gives a 4-byte alignment and so word-sized accesses through
- that pointer are safe.
+> Although I very much doubt strpbrk() is used anywhere where
+> performance matters.
+
+strsep()/strspn() are the users.
+
+-- 
+With Best Regards,
+Andy Shevchenko
