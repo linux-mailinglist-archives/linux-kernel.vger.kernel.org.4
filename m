@@ -2,91 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E597867F5F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 09:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 988FA67F5FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 09:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbjA1INO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 03:13:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S233741AbjA1IN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 03:13:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbjA1INK (ORCPT
+        with ESMTP id S229619AbjA1INy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 03:13:10 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F0B12F0B;
-        Sat, 28 Jan 2023 00:13:09 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 28 Jan 2023 03:13:54 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC5AF771
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 00:13:53 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4P3nJ41fhzz6FK2S;
-        Sat, 28 Jan 2023 16:13:08 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.97.17])
-        by mse-fl1.zte.com.cn with SMTP id 30S8D0DP013896;
-        Sat, 28 Jan 2023 16:13:00 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Sat, 28 Jan 2023 16:13:03 +0800 (CST)
-Date:   Sat, 28 Jan 2023 16:13:03 +0800 (CST)
-X-Zmail-TransId: 2af963d4d90f732b41b0
-X-Mailer: Zmail v1.0
-Message-ID: <202301281613032191431@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <dmitry.torokhov@gmail.com>
-Cc:     <ldewangan@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <linux-input@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBJbnB1dDogdGVncmEta2JjIC0gVXNlwqBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 30S8D0DP013896
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63D4D914.000 by FangMail milter!
-X-FangMail-Envelope: 1674893588/4P3nJ41fhzz6FK2S/63D4D914.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63D4D914.000/4P3nJ41fhzz6FK2S
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EAAC61FEE7;
+        Sat, 28 Jan 2023 08:13:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1674893631; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=j0bC1IACweb+rUsjNdy5DfWP6SMIJaSitYsbfNy3ayo=;
+        b=H+XfM6HeZ7ed6n2dCv9vhwHSrLviSOceivlN2XwiPXdbH9tVstdaRrMib2wgJSwRACfHVi
+        rLcAvMHhKrBFw+E+3vUbhzvpP0cVZYeq8wrd2vKlG5lv12HM7sOqqFV8VEY2g2nq1VFTBO
+        2AXwMUXSfy/RReaxmTF3zbx0T6LQJ6U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1674893631;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=j0bC1IACweb+rUsjNdy5DfWP6SMIJaSitYsbfNy3ayo=;
+        b=qn8WrN1MEpeU6RXsR+1Jq6cyY337ttMKo5ZCHuhhu19Mdwgge0mMGmef/vMSjIha+19KRb
+        NTcHYZ3JPSdo5qAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A8EE313918;
+        Sat, 28 Jan 2023 08:13:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vHPCJz/Z1GMFGAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sat, 28 Jan 2023 08:13:51 +0000
+Date:   Sat, 28 Jan 2023 09:13:51 +0100
+Message-ID: <87bkmjqdog.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     Takashi Iwai <tiwai@suse.de>, bskeggs@redhat.com,
+        alex000young@gmail.com, security@kernel.org, kherbst@redhat.com,
+        nouveau@lists.freedesktop.org, hackerzheng666@gmail.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: Re: [PATCH] drm/nouveau/mmu: fix Use after Free bug in nvkm_vmm_node_split
+In-Reply-To: <63d485b2.170a0220.4af4c.d54f@mx.google.com>
+References: <20221230072758.443644-1-zyytlz.wz@163.com>
+        <87mt6zr9s4.wl-tiwai@suse.de>
+        <87mt64qit5.wl-tiwai@suse.de>
+        <63d485b2.170a0220.4af4c.d54f@mx.google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On Sat, 28 Jan 2023 03:17:15 +0100,
+Danilo Krummrich wrote:
+> 
+> On Fri, Jan 27, 2023 at 01:10:46PM +0100, Takashi Iwai wrote:
+> > On Tue, 03 Jan 2023 15:07:55 +0100,
+> > Takashi Iwai wrote:
+> > > 
+> > > On Fri, 30 Dec 2022 08:27:58 +0100,
+> > > Zheng Wang wrote:
+> > > > 
+> > > > Here is a function call chain.
+> > > > nvkm_vmm_pfn_map->nvkm_vmm_pfn_split_merge->nvkm_vmm_node_split
+> > > > If nvkm_vma_tail return NULL in nvkm_vmm_node_split, it will
+> > > > finally invoke nvkm_vmm_node_merge->nvkm_vmm_node_delete, which
+> > > > will free the vma. However, nvkm_vmm_pfn_map didn't notice that.
+> > > > It goes into next label and UAF happens.
+> > > > 
+> > > > Fix it by returning the return-value of nvkm_vmm_node_merge
+> > > > instead of NULL.
+> > > > 
+> > > > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > > 
+> > > FWIW, CVE-2023-0030 has been assigned to this bug.
+> > > It's a question whether it really deserves as a security issue, but a
+> > > bug is a bug...
+> > > 
+> > > Ben, could you review this please?
+> > 
+> > A gentle ping as reminder.  The bug is still present.
+> 
+> This was also reported in [1]. I had a closer look and FWICT this code is fine
+> and there isn't a bug.
+> 
+> Zheng Wang, the reporter of the BZ, also confirmed this to be a false positive
+> from CodeQL.
+> 
+> Anyway, here's the explaination I also posted in the BZ:
+> 
+> "In nvkm_vmm_node_merge() nvkm_vmm_node_delete() is only called when prev is
+> set. However, prev is NULL unless we enter the "if (vma->addr != addr)" path in
+> nvkm_vmm_node_split(). In such a case the vma pointer, which is also passed to
+> nvkm_vmm_node_merge(), is set to a freshly allocated struct nvkm_vma with
+> nvkm_vma_tail() right before prev is set to the old vma pointer.
+> 
+> Hence, the only thing happening there when nvkm_vma_tail() fails in the
+> "if (vma->size != size)" path is that either nvkm_vmm_node_merge() does nothing
+> in case prev wasn't set or it merges and frees the new vma created in the
+> "if (vma->addr != addr)" path. Or in other words the proper cleanup for the
+> error condition is done.
+> 
+> I can't see any case where the original vma pointer given by nvkm_vmm_pfn_map()
+> is actually freed."
+> 
+> [1] https://bugzilla.redhat.com/show_bug.cgi?id=2157041
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+Thanks for the information!  Then we should try to dispute the CVE.
+I'll ask our security team.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/input/keyboard/tegra-kbc.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/input/keyboard/tegra-kbc.c b/drivers/input/keyboard/tegra-kbc.c
-index 1eba06bcf27a..da4019cf0c83 100644
---- a/drivers/input/keyboard/tegra-kbc.c
-+++ b/drivers/input/keyboard/tegra-kbc.c
-@@ -598,7 +598,6 @@ MODULE_DEVICE_TABLE(of, tegra_kbc_of_match);
- static int tegra_kbc_probe(struct platform_device *pdev)
- {
- 	struct tegra_kbc *kbc;
--	struct resource *res;
- 	int err;
- 	int num_rows = 0;
- 	unsigned int debounce_cnt;
-@@ -642,8 +641,7 @@ static int tegra_kbc_probe(struct platform_device *pdev)
+Takashi
 
- 	timer_setup(&kbc->timer, tegra_kbc_keypress_timer, 0);
-
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	kbc->mmio = devm_ioremap_resource(&pdev->dev, res);
-+	kbc->mmio = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(kbc->mmio))
- 		return PTR_ERR(kbc->mmio);
-
--- 
-2.25.1
+> 
+> - Danilo
+> 
+> > 
+> > 
+> > thanks,
+> > 
+> > Takashi
+> > 
+> > > 
+> > > 
+> > > thanks,
+> > > 
+> > > Takashi
+> > > 
+> > > > ---
+> > > >  drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> > > > index ae793f400ba1..84d6fc87b2e8 100644
+> > > > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> > > > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> > > > @@ -937,8 +937,8 @@ nvkm_vmm_node_split(struct nvkm_vmm *vmm,
+> > > >  	if (vma->size != size) {
+> > > >  		struct nvkm_vma *tmp;
+> > > >  		if (!(tmp = nvkm_vma_tail(vma, vma->size - size))) {
+> > > > -			nvkm_vmm_node_merge(vmm, prev, vma, NULL, vma->size);
+> > > > -			return NULL;
+> > > > +			tmp = nvkm_vmm_node_merge(vmm, prev, vma, NULL, vma->size);
+> > > > +			return tmp;
+> > > >  		}
+> > > >  		tmp->part = true;
+> > > >  		nvkm_vmm_node_insert(vmm, tmp);
+> > > > -- 
+> > > > 2.25.1
+> > > > 
+> > 
+> 
