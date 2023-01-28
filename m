@@ -2,94 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE4067F9BD
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 18:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C6F67F9C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 18:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbjA1RGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 12:06:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S234133AbjA1RJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 12:09:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjA1RGc (ORCPT
+        with ESMTP id S234014AbjA1RI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 12:06:32 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76B3EFA4;
-        Sat, 28 Jan 2023 09:06:31 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id w11so960574qtc.3;
-        Sat, 28 Jan 2023 09:06:31 -0800 (PST)
+        Sat, 28 Jan 2023 12:08:58 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DE124CA6;
+        Sat, 28 Jan 2023 09:08:56 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id z1so2211190pfg.12;
+        Sat, 28 Jan 2023 09:08:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6LkjGYc1DQBixcrRx3f5l/Lm3c/gvRvkhxMH5vPTMoQ=;
-        b=Ynd+q6s5C8ZoTVXBeMX+2eJg9EHqbUKkwUzy8i1K+9WX5fQW5wKKxv7EvNrtoFnM6E
-         Mm912V/a5Xj05LOcBw6/+Q0hExtjZy1YFMaOxqsvWNU7Hsjnd+TTHlUEEyPPEKV1XbEp
-         hh1iVFfK1W5h27/bICIXSV5eV8zOzQmDQXBJhH5r3UvMfexgbwm6TmuBHFbeaYx9SOWi
-         UJ1T81ygypDa4VKFtOn3L3Bj5h6A7JV/JgE3P9u0rBYio2MWXgxeriX1ZyqsfUaacp7L
-         mUCNqlYLltuJL8YzEA58CRCE5dfZw1zPuQMToY16LAEaVltL2T1m/3af37XlNwHe2nCD
-         gm8Q==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bi2c0AiB4/LoswvJkjpv5gSlOvZirZv7Jl7L6GFn7Vg=;
+        b=PwVIGVIB+CvI+Z0JJaJ5ZeywBMhuIrPTpLWZmAVS6rn5TFgVBBqsJvD8hCakBOQOuu
+         MYtLH1w8NRHEOTVJM7kOd5fHWsMxOtPavGa4hUk79sOpRgGWjhEP2ixgton6x8S/zErF
+         KprYIuirhzPaKgxGmRzLa9Gc2GXn2c2aSFkkQJqNfbX8i20306S789eZAHBLF/m1gDYq
+         BlXjsSD2HyL9dwH5mdqqSTeHzMrL8PAQujeco2624/AvTDNa+EEncYIKuGimVQSgn63y
+         OczuZS2QLGyh8S3a/ctV5uURgfT9C73QFGt+qPWxaQpBT1u3I73nVkqx3qRADRgsfhTi
+         rpiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6LkjGYc1DQBixcrRx3f5l/Lm3c/gvRvkhxMH5vPTMoQ=;
-        b=sJL1Y+VCZRgkqf1Uf8tHcpZAm/geDoRzXoSXgZSR3I+hpVTXhtaLRLVRxnM7SbXBHu
-         LYO/9uF8L9iR7g60MmZiFHzD3j5TdzH4a0/EaBzedh7sk1bx7JNETcg1pigMGlQ0jtQX
-         x9PURILOX4cBVo4OPURPBuM6ij5/P4EX4OZmte2+8ZzzpI6zsYtt8TqoxVc0ViQuQ/0x
-         Jqd/1V8UHhLU2qpPY1dQWgXAn6USW2GAYXyYavNxcgec2ubmR3FBIk0gm12rgF8bIjGy
-         cmtnrRGfNULKTmdpb6R4zp9RqMPJLGZXsmKfdbY1r1HJG3LwhJwm7U1D7/LkNr9gKV0+
-         UWIQ==
-X-Gm-Message-State: AFqh2krcr5VxdI68IYrOqZMZMdb2Y4qP9BqKY+HdnX8+eKuaSu284gI8
-        CTbo/bSIgsnil+5yhX1/oPU=
-X-Google-Smtp-Source: AMrXdXtGA6gGcQ9ASmGp1QprWmmPiPydXpMJnuJYMeBL5xcz3tgX0HjxMVUshxo9UT88MuPhgA2TEw==
-X-Received: by 2002:ac8:6e83:0:b0:3b6:3406:81cb with SMTP id c3-20020ac86e83000000b003b6340681cbmr66219576qtv.14.1674925590957;
-        Sat, 28 Jan 2023 09:06:30 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id f8-20020ac840c8000000b003b84b92052asm755797qtm.57.2023.01.28.09.06.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 09:06:30 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 0B71927C0054;
-        Sat, 28 Jan 2023 12:06:29 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 28 Jan 2023 12:06:30 -0500
-X-ME-Sender: <xms:FVbVY9oLvpMu7xecBGhaA8qhLZqgV9sQoJWNQyg0QM4mVruWNRcGqg>
-    <xme:FVbVY_oDf-dun-mq5bzqjrAxvs5NDmKU_FI3X7G77BM4eq5QkXqiy40d6zhB6T8CW
-    MJrAODSCnKavbrCKQ>
-X-ME-Received: <xmr:FVbVY6Olfxxj_PBRvSENRL5AUJoAR1LB5FcZwD1sToBpHCp3ymf6_uFt5k8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvkedgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
-    ertddttddvnecuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghes
-    ghhmrghilhdrtghomheqnecuggftrfgrthhtvghrnhephedugfduffffteeutddvheeuve
-    elvdfhleelieevtdeguefhgeeuveeiudffiedvnecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrh
-    hsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgv
-    nhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:FVbVY45kUSK75QVkYr9lGN6KOIzGEBt-G3gl7Jk_qWbAaycyxTQr1A>
-    <xmx:FVbVY84oK9AeTeWVfmJAYsZ42SqPyljc3lwy5TUTLg2-ItnPt9oqEQ>
-    <xmx:FVbVYwgQ2CvAL5oz5Zjur01grUo9ZO6LPvTT_FjpZXVZkspl3CxZHA>
-    <xmx:FVbVY7aA-UR5lv7YeyouY7p-JiuagWk42utTO6FpRvFDTEbmJFboEA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 28 Jan 2023 12:06:29 -0500 (EST)
-Date:   Sat, 28 Jan 2023 09:05:39 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc:     wedsonaf@gmail.com, alex.gaynor@gmail.com,
-        bjorn3_gh@protonmail.com, gary@garyguo.net,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH 2/5] rust: types: introduce `ForeignOwnable`
-Message-ID: <Y9VV4+KCkShRex9m@boqun-archlinux>
-References: <20230119174036.64046-2-wedsonaf@gmail.com>
- <20230128145345.1770912-1-yakoyoku@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bi2c0AiB4/LoswvJkjpv5gSlOvZirZv7Jl7L6GFn7Vg=;
+        b=11fyl/dlx440vRM+a3SwQyk4rJlRwDf6gIhyo+HuXzK4nUJ12SgyJ3/er6FswXxN8l
+         AhRSbLdvJuEIPIntgGuKh7+054G0+sRSxLf8m05cRITwlo9SYnz2EucI0EwIt+UY3Chi
+         2WoGTpDbhS5/fB1D85h2I1mLgtbquROiDBiREjzF46FH/U5d+pIYnWCmCp4G69rsQ3I4
+         xixsN/4LqmPHSJzDKlWAfSgY8Mr04Rtkep0I6BZTsCkYL5/jzesanTvUCjh054mngl2x
+         PwJ0iSRO1XxHKPkylYHr4GdjdAXx8yCm6GJ4KdhV+b2GS1TC28M4KgYLyojFUVVDnPEv
+         YlIQ==
+X-Gm-Message-State: AFqh2kpcgfarA6Q2qnxJajl6mMUhuR423oQiuFn/j/90afBMn2WLhYJ7
+        C7gc8rmn/Xe+yWPF0vXaVh7JaUrkldRFWPME6N+gZu84
+X-Google-Smtp-Source: AMrXdXspGTX67unMJYWstzl+rZ6PJ0WnkXGoeLIG43ZfDiHo9vj7qGT2h4kf5EIyjYoS6ogLjp7QsC6nfx51hba/Cuo=
+X-Received: by 2002:a65:4d09:0:b0:4a0:8210:f47a with SMTP id
+ i9-20020a654d09000000b004a08210f47amr4119853pgt.14.1674925736168; Sat, 28 Jan
+ 2023 09:08:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230128145345.1770912-1-yakoyoku@gmail.com>
+References: <04e27096-9ace-07eb-aa51-1663714a586d@nbd.name>
+ <167475990764.1934330.11960904198087757911.stgit@localhost.localdomain>
+ <cde24ed8-1852-ce93-69f3-ff378731f52c@huawei.com> <20230127212646.4cfeb475@kernel.org>
+ <CANn89iL1x=Wis4xDRF=SJ-8_7FebY9y7hvG71gsvUPGXf6xwHA@mail.gmail.com>
+In-Reply-To: <CANn89iL1x=Wis4xDRF=SJ-8_7FebY9y7hvG71gsvUPGXf6xwHA@mail.gmail.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Sat, 28 Jan 2023 09:08:44 -0800
+Message-ID: <CAKgT0UfWMNwzLmmAoR2oHW9DHmGRQSCLuscjH+4tXW+rdETMJg@mail.gmail.com>
+Subject: Re: [net PATCH] skb: Do mix page pool and page referenced frags in GRO
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Yunsheng Lin <linyunsheng@huawei.com>, nbd@nbd.name,
+        davem@davemloft.net, hawk@kernel.org, ilias.apalodimas@linaro.org,
+        linux-kernel@vger.kernel.org, lorenzo@kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -100,81 +73,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 11:53:45AM -0300, Martin Rodriguez Reboredo wrote:
-[...]
-> > +    /// Borrows a foreign-owned object.
-> > +    ///
-> > +    /// # Safety
-> > +    ///
-> > +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
-> > +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
-> > +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow_mut`]
-> > +    /// for this object must have been dropped.
-> > +    unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> Self::Borrowed<'a>;
-> > +
-> > +    /// Mutably borrows a foreign-owned object.
-> > +    ///
-> > +    /// # Safety
-> > +    ///
-> > +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
-> > +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
-> > +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
-> > +    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
-> > +    unsafe fn borrow_mut<T: ForeignOwnable>(ptr: *const core::ffi::c_void) -> ScopeGuard<T, fn(T)> {
-> > +        // SAFETY: The safety requirements ensure that `ptr` came from a previous call to
-> > +        // `into_foreign`.
-> > +        ScopeGuard::new_with_data(unsafe { T::from_foreign(ptr) }, |d| {
-> > +            d.into_foreign();
-> > +        })
-> > +    }
-> 
-> Could these three methods have a borrowing equivalent? When I was
-> working on some features for the USB module I've stumbled upon the case
-> of having to encode a pointer (with a pivot) and I cannot do it without
-> taking ownership of the pointer.
-> 
+On Fri, Jan 27, 2023 at 11:16 PM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Sat, Jan 28, 2023 at 6:26 AM Jakub Kicinski <kuba@kernel.org> wrote:
+> >
+> > On Sat, 28 Jan 2023 10:37:47 +0800 Yunsheng Lin wrote:
+> > > If we are not allowing gro for the above case, setting NAPI_GRO_CB(p)->flush
+> > > to 1 in gro_list_prepare() seems to be making more sense so that the above
+> > > case has the same handling as skb_has_frag_list() handling?
+> > > https://elixir.bootlin.com/linux/v6.2-rc4/source/net/core/gro.c#L503
+> > >
+> > > As it seems to avoid some unnecessary operation according to comment
+> > > in tcp4_gro_receive():
+> > > https://elixir.bootlin.com/linux/v6.2-rc4/source/net/ipv4/tcp_offload.c#L322
+> >
+> > The frag_list case can be determined with just the input skb.
+> > For pp_recycle we need to compare input skb's pp_recycle with
+> > the pp_recycle of the skb already held by GRO.
+> >
+> > I'll hold off with applying a bit longer tho, in case Eric
+> > wants to chime in with an ack or opinion.
+>
+> Doing the test only if the final step (once all headers have been
+> verified) seems less costly
+> for the vast majority of the cases the driver cooks skbs with a
+> consistent pp_recycle bit ?
+>
+> So Alex patch seems less expensive to me than adding the check very early.
 
-*const T is Copy, so you can still use it after pass it to a function or
-a new binding, e.g.
-
-	pub fn use_ptr(ptr: *const i32) { .. }
-
-	let p: *const i32 = some_func();
-
-	let q = p;
-
-	// q is just a copy of p
-	use_ptr(p);
-	// passing to a function parameter is just copying
-	use_ptr(p);
-
-maybe I'm missing something subtle, but if you have an example I can
-help take a look.
-
-Regards,
-Boqun
-
-> > +
-> > +    /// Converts a foreign-owned object back to a Rust-owned one.
-> > +    ///
-> > +    /// # Safety
-> > +    ///
-> > +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
-> > +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
-> > +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
-> > +    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
-> > +    unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self;
-> > +}
-> > +
-> >  /// Runs a cleanup function/closure when dropped.
-> >  ///
-> >  /// The [`ScopeGuard::dismiss`] function prevents the cleanup function from running.
-> > -- 
-> > 2.34.1
-> 
-> Aside from these comments I observe that there's a possibility to make
-> ForeignOwnable a const trait and have non const implementors. Otherwise
-> if these things are out of scope, no problem whatsoever and this has my
-> OK.
-> 
-> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+That was the general idea. Basically there is no need to look into
+this until we are looking at merging the skb and it is very unlikely
+that we will see a mix of page pool and non-page pool skbs. I
+considered this check to be something equivalent to discovering there
+is no space in the skb to store the frags so that is one of the
+reasons why I had picked the spot that I did.
