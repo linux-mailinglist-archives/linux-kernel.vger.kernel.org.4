@@ -2,145 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E408C67F9B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 18:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646BC67F9B9
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 18:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbjA1RBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 12:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
+        id S233348AbjA1RDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 12:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjA1RBr (ORCPT
+        with ESMTP id S229645AbjA1RDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 12:01:47 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85485244A7
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 09:01:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674925306; x=1706461306;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cBryCMl0D/vcLVS1oNnYPyI0WoTwMVGPRg54WmJkkOQ=;
-  b=ME+r+2YFMWH9JnonEbVlxFPJKv2TuhYIzem6AhxsBQG6XYbKxKHzZTI6
-   vCbkXHbIeuJJ3pMM5hUjPs6Kk3FiLlEJ6qH7eDQPqFbvrxebxu45s8x86
-   db0y42oGoG7Mzo91xlef2T8Kxgjhej7pfvw70mjCtF/tE6TwO2A8TZsfJ
-   t6aUxIBywRd60LNppGfhjFprayS5FF9y78y9U0LZ8i3zftTXpqvTjNL5/
-   rS2nVx0vQO6roMwTgRFVE5vXbZdmU5YYqlOuqU7jP6AP1stov2QsXl1Kr
-   q4STxgL9EExscZZT6PdAi0GbIG5YsvjqNbr/5e43MJ6AXZfy567Lu7jkl
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="307652117"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="307652117"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 09:01:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="663626810"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="663626810"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2023 09:01:44 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pLoaF-0000vj-1t;
-        Sat, 28 Jan 2023 17:01:43 +0000
-Date:   Sun, 29 Jan 2023 01:01:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:locking/core] BUILD SUCCESS
- 890a0794b34f89fcd90e94ec970ad2bc18b70e73
-Message-ID: <63d554f3.MkI167Suk+f95ui3%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 28 Jan 2023 12:03:00 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E659620059;
+        Sat, 28 Jan 2023 09:02:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1674925368; bh=+8TKLKDrMXk1aX3sjR/kJoEvZAQFsAvwmSjZFAccLgg=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=Ui0AegwQcfT2+K0Cac1J2ZgbYyt5qkOTti+bkZ27XAokWCFdtDKV2rR0qAYxJSFIC
+         +FZU+uhv6OtyOKpVLcXokGF/xFp9dVsHA5+cNGX/d1/QUOrvmNXroP8Gv0NAduZxqE
+         u+5nlocKw7Y6csYdUSzNmk+JZ/X/ky0uwDHtiFIM=
+Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sat, 28 Jan 2023 18:02:48 +0100 (CET)
+X-EA-Auth: h5MYg+Yeo7m+WjFzLuSX2OLGCOmYFsxT1QAjTicMi8hGeJhhYIs9w1BsP5iTpo4oQkyrL8I3lMmx3VJBPCwN73XoBV07RqTv
+Date:   Sat, 28 Jan 2023 22:32:42 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] scsi: bfa: Use min helpers for comparison and assignment
+Message-ID: <Y9VVMh8epgxQYyji@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-branch HEAD: 890a0794b34f89fcd90e94ec970ad2bc18b70e73  x86/ACPI/boot: Use try_cmpxchg() in __acpi_{acquire,release}_global_lock()
+Simplify code by using min helper macros for logical evaluation
+and value assignment. Use the _t variant when the variable types
+are not same. The change also facilitates code realignment for improved
+readability.
+Proposed change is identified using minmax.cocci Coccinelle script.
 
-elapsed time: 896m
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ drivers/scsi/bfa/bfa_fcbuild.c   | 3 +--
+ drivers/scsi/bfa/bfa_fcs_rport.c | 5 +----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-configs tested: 63
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                            allnoconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64               randconfig-a002-20230123
-x86_64               randconfig-a005-20230123
-x86_64               randconfig-a001-20230123
-x86_64               randconfig-a006-20230123
-x86_64               randconfig-a003-20230123
-x86_64               randconfig-a004-20230123
-i386                 randconfig-a004-20230123
-i386                 randconfig-a006-20230123
-i386                 randconfig-a005-20230123
-i386                 randconfig-a002-20230123
-i386                 randconfig-a003-20230123
-i386                 randconfig-a001-20230123
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-arc                                 defconfig
-alpha                               defconfig
-s390                             allmodconfig
-s390                                defconfig
-s390                             allyesconfig
-ia64                             allmodconfig
-
-clang tested configs:
-x86_64               randconfig-a013-20230123
-x86_64               randconfig-a011-20230123
-x86_64               randconfig-a016-20230123
-x86_64               randconfig-a012-20230123
-x86_64               randconfig-a015-20230123
-x86_64               randconfig-a014-20230123
-riscv                randconfig-r042-20230123
-hexagon              randconfig-r041-20230123
-hexagon              randconfig-r045-20230123
-s390                 randconfig-r044-20230123
-i386                 randconfig-a013-20230123
-i386                 randconfig-a016-20230123
-i386                 randconfig-a012-20230123
-i386                 randconfig-a015-20230123
-i386                 randconfig-a011-20230123
-i386                 randconfig-a014-20230123
-x86_64                          rhel-8.3-rust
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-
+diff --git a/drivers/scsi/bfa/bfa_fcbuild.c b/drivers/scsi/bfa/bfa_fcbuild.c
+index df18d9d2af53..a58a73e596c0 100644
+--- a/drivers/scsi/bfa/bfa_fcbuild.c
++++ b/drivers/scsi/bfa/bfa_fcbuild.c
+@@ -1092,8 +1092,7 @@ fc_rftid_build_sol(struct fchs_s *fchs, void *pyld, u32 s_id, u16 ox_id,
+ 	memset(rftid, 0, sizeof(struct fcgs_rftid_req_s));
+ 
+ 	rftid->dap = s_id;
+-	memcpy((void *)rftid->fc4_type, (void *)fc4_bitmap,
+-		(bitmap_size < 32 ? bitmap_size : 32));
++	memcpy((void *)rftid->fc4_type, (void *)fc4_bitmap, min_t(u32, bitmap_size, 32));
+ 
+ 	return sizeof(struct fcgs_rftid_req_s) + sizeof(struct ct_hdr_s);
+ }
+diff --git a/drivers/scsi/bfa/bfa_fcs_rport.c b/drivers/scsi/bfa/bfa_fcs_rport.c
+index c21aa37b8adb..d501314be8d8 100644
+--- a/drivers/scsi/bfa/bfa_fcs_rport.c
++++ b/drivers/scsi/bfa/bfa_fcs_rport.c
+@@ -2539,10 +2539,7 @@ bfa_fcs_rport_update(struct bfa_fcs_rport_s *rport, struct fc_logi_s *plogi)
+ 	 * - MAX receive frame size
+ 	 */
+ 	rport->cisc = plogi->csp.cisc;
+-	if (be16_to_cpu(plogi->class3.rxsz) < be16_to_cpu(plogi->csp.rxsz))
+-		rport->maxfrsize = be16_to_cpu(plogi->class3.rxsz);
+-	else
+-		rport->maxfrsize = be16_to_cpu(plogi->csp.rxsz);
++	rport->maxfrsize = min(be16_to_cpu(plogi->class3.rxsz), be16_to_cpu(plogi->csp.rxsz));
+ 
+ 	bfa_trc(port->fcs, be16_to_cpu(plogi->csp.bbcred));
+ 	bfa_trc(port->fcs, port->fabric->bb_credit);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+
+
+
