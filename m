@@ -2,96 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1690267F4E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 06:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF7A67F4EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 06:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjA1FXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 00:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
+        id S231267AbjA1F0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 00:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjA1FXb (ORCPT
+        with ESMTP id S229464AbjA1F0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 00:23:31 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA81559D;
-        Fri, 27 Jan 2023 21:23:28 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30S5NCKB080773;
-        Fri, 27 Jan 2023 23:23:12 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1674883392;
-        bh=DcBYdWmgILJX8YWf+duJ8R+qAHHjNmga6Oww9qtoh30=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=tQoKytS2JnuzoFVY3CEIWNaRvhxe1lFqqIkoGfcCk6P5QJA7IYINvTih2QxLl39i5
-         REfY95zRr4unplqMgU3kL+PKUvbVXfRfQEyu9Ld7S2jf4Q1GNdBZXyd4E3AdQkRe8u
-         GiCA0qYv0lgZC7qMOjk5sU39i8SNtgdG0c2/H8o0=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30S5NCI7009282
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 27 Jan 2023 23:23:12 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 27
- Jan 2023 23:23:12 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 27 Jan 2023 23:23:12 -0600
-Received: from [10.250.233.254] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30S5N9ee075765;
-        Fri, 27 Jan 2023 23:23:09 -0600
-Message-ID: <0172f045-4bd0-ec5e-35a0-efc80da5ace0@ti.com>
-Date:   Sat, 28 Jan 2023 10:53:08 +0530
+        Sat, 28 Jan 2023 00:26:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7F47BE4D;
+        Fri, 27 Jan 2023 21:26:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76736B82200;
+        Sat, 28 Jan 2023 05:26:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85A9FC433EF;
+        Sat, 28 Jan 2023 05:26:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674883608;
+        bh=Zv9RYztzmfeeUXtmsnWulZnltlTkGNR6OGOCm8FP0jg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n+M/AtV17Yiuy8gEBnc+AbZE4OI6aigKaysU85tGqrvwFObicWiE/jusChPOJHB36
+         jmWtdvagYJKUgMYmbxsTmzB50YvCHy9vsRQgACVUHzBi+7H0EG5yiTymtWHsqEfryd
+         pApEc5ncBKs2mz85wBCqlBFYk8rpXipN5ZfCo8Lll/3TXpZg64lBC7iG3xE4vhojVN
+         cQtV1ppNv0CKiFgrv2j25pN6te4x9WHheI6UVMn/zoON8gA2ETwYX5x632B1xoBG2p
+         tm+fv8RqhhQ7+ECY1npFh5kHEUYr0bbqwXOpGvq5nMuIap6etPlDte3VtYnN5YVuVJ
+         phX2/m+HwdPWg==
+Date:   Fri, 27 Jan 2023 21:26:46 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     Alexander Duyck <alexander.duyck@gmail.com>, <nbd@nbd.name>,
+        <davem@davemloft.net>, <edumazet@google.com>, <hawk@kernel.org>,
+        <ilias.apalodimas@linaro.org>, <linux-kernel@vger.kernel.org>,
+        <lorenzo@kernel.org>, <netdev@vger.kernel.org>, <pabeni@redhat.com>
+Subject: Re: [net PATCH] skb: Do mix page pool and page referenced frags in
+ GRO
+Message-ID: <20230127212646.4cfeb475@kernel.org>
+In-Reply-To: <cde24ed8-1852-ce93-69f3-ff378731f52c@huawei.com>
+References: <04e27096-9ace-07eb-aa51-1663714a586d@nbd.name>
+        <167475990764.1934330.11960904198087757911.stgit@localhost.localdomain>
+        <cde24ed8-1852-ce93-69f3-ff378731f52c@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 2/6] arm64: dts: ti: k3-am62-wakeup: add VTM node
-Content-Language: en-US
-To:     Bryan Brattlof <bb@ti.com>, Nishanth Menon <nm@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     ARM Linux Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Keerthy <j-keerthy@ti.com>
-References: <20230120003051.9100-1-bb@ti.com>
- <20230120003051.9100-3-bb@ti.com>
-From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
-In-Reply-To: <20230120003051.9100-3-bb@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bryan,
+On Sat, 28 Jan 2023 10:37:47 +0800 Yunsheng Lin wrote:
+> If we are not allowing gro for the above case, setting NAPI_GRO_CB(p)->flush
+> to 1 in gro_list_prepare() seems to be making more sense so that the above
+> case has the same handling as skb_has_frag_list() handling?
+> https://elixir.bootlin.com/linux/v6.2-rc4/source/net/core/gro.c#L503
+> 
+> As it seems to avoid some unnecessary operation according to comment
+> in tcp4_gro_receive():
+> https://elixir.bootlin.com/linux/v6.2-rc4/source/net/ipv4/tcp_offload.c#L322
 
-On 1/20/2023 6:00 AM, Bryan Brattlof wrote:
-> @@ -94,10 +95,13 @@ cbass_wakeup: bus@2b000000 {
->  			compatible = "simple-bus";
->  			#address-cells = <2>;
->  			#size-cells = <2>;
-> -			ranges = <0x00 0x2b000000 0x00 0x2b000000 0x00 0x00300400>, /* Peripheral Window */
-> +			ranges = <0x00 0x00b00000 0x00 0x00b00000 0x00 0x00002400>, /* VTM */
+The frag_list case can be determined with just the input skb.
+For pp_recycle we need to compare input skb's pp_recycle with
+the pp_recycle of the skb already held by GRO.
 
-You would need to update unit address in node name as well:
-			cbass_wakeup: bus@b00000 {
-
-> +				 <0x00 0x2b000000 0x00 0x2b000000 0x00 0x00300400>, /* Peripheral Window */
->  				 <0x00 0x43000000 0x00 0x43000000 0x00 0x00020000>;
->  		};
->  	};
-> +
-> +	#include "k3-am62-thermal.dtsi"
->  };
-
-Regards
-Vignesh
+I'll hold off with applying a bit longer tho, in case Eric
+wants to chime in with an ack or opinion.
