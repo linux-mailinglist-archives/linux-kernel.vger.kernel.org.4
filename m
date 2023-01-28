@@ -2,107 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBEC67F32A
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FB367F31B
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232782AbjA1Abb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 19:31:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S232371AbjA1AWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 19:22:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233192AbjA1AbZ (ORCPT
+        with ESMTP id S230028AbjA1AWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:31:25 -0500
+        Fri, 27 Jan 2023 19:22:35 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0911E2A2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:30:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989888E16E
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:21:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674865749;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        s=mimecast20190719; t=1674865176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=UFSxdYO5nDtftBiB4L6W7S5MGdfu2Qx9OX4YoB+ycGk=;
-        b=ZBJOz0LTHjtW4ZZ2aJp0u1NcdyftDiPLyi6KT0hbyW1/Jf+/INwkdsoRJdMX8QQabU3bXB
-        Jh4IlOnD5mEdPc+6+LlTQd/+hgIbX1TwHoVd1IRBxrumLSpmNGqgPIDxb3JIQflW4xxoDh
-        0iAe3aEFRPwdbKbjIPN7hG3uR8Kxu8o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=i7aOq9W3XOqSSPllVutX9bvOB7c6GyK6o1GuE+eflv8=;
+        b=B9xUO5Y8PR/RSvzW2wrskYqoUlfJKsQ+l3sEBWQH86fAAuWYhUvc2JGdSzQxUhlRs/NgiY
+        cdxv7ThgusqP3ua7WQNKaEKaa/vfWJosLUo/P8dN1ZeCGgE/fwormzQ3vIgJaGNP6XF4EQ
+        F3FKmKEdN5RGYuTfJlcpfgeea8QRSdo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-435-vEU1w1AuP9u29RJkzCLK-A-1; Fri, 27 Jan 2023 19:18:16 -0500
-X-MC-Unique: vEU1w1AuP9u29RJkzCLK-A-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-227-UufeiL1FOwGQEKbF0x3Nag-1; Fri, 27 Jan 2023 19:19:35 -0500
+X-MC-Unique: UufeiL1FOwGQEKbF0x3Nag-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A839858F0E;
-        Sat, 28 Jan 2023 00:18:15 +0000 (UTC)
-Received: from [10.64.54.64] (vpn2-54-64.bne.redhat.com [10.64.54.64])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E0A67492C18;
-        Sat, 28 Jan 2023 00:18:07 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v4 1/4] KVM: arm64: Include kvm_mmu.h from vgic.h
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
-        pbonzini@redhat.com, corbet@lwn.net, maz@kernel.org,
-        james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, yuzhe@nfschina.com,
-        seanjc@google.com, isaku.yamahata@intel.com, ricarkol@google.com,
-        eric.auger@redhat.com, renzhengeek@gmail.com, reijiw@google.com,
-        shan.gavin@gmail.com
-References: <20230127235150.17025-1-gshan@redhat.com>
- <20230127235150.17025-2-gshan@redhat.com> <Y9Ro6IEjPVeQfmUQ@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <be359c63-fbbb-0ced-d023-0df9dc6b3527@redhat.com>
-Date:   Sat, 28 Jan 2023 11:18:05 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD4491C05EBC;
+        Sat, 28 Jan 2023 00:19:34 +0000 (UTC)
+Received: from madcap2.tricolour.ca (ovpn-0-3.rdu2.redhat.com [10.22.0.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2430D7AD4;
+        Sat, 28 Jan 2023 00:19:33 +0000 (UTC)
+Date:   Fri, 27 Jan 2023 19:19:31 -0500
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: Re: [PATCH v1 2/2] io_uring,audit: do not log IORING_OP_*GETXATTR
+Message-ID: <Y9RqEz/qQYmp5jD+@madcap2.tricolour.ca>
+References: <cover.1674682056.git.rgb@redhat.com>
+ <f602429ce0f419c2abc3ae5a0e705e1368ac5650.1674682056.git.rgb@redhat.com>
+ <CAHC9VhQiy9vP7BdQk+SXG7gQKAqOAqbYtU+c9R0_ym0h4bgG7g@mail.gmail.com>
+ <Y9RX0QhHKfWv3TGL@madcap2.tricolour.ca>
+ <CAHC9VhSN+XSYGh0TBsCPftNvVNBN1JHugrrsp3gbF-in5S1PoA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Y9Ro6IEjPVeQfmUQ@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhSN+XSYGh0TBsCPftNvVNBN1JHugrrsp3gbF-in5S1PoA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
-
-On 1/28/23 11:14 AM, Oliver Upton wrote:
-> On Sat, Jan 28, 2023 at 07:51:47AM +0800, Gavin Shan wrote:
->> We need a unified helper in 'kvm/vgic/vgic.h' to write guest memory. In
->> the helper, the check of no-running-vcpu context for dirty ring will be
->> applied. kvm_write_guest_lock(), defined in 'include/asm/kvm_mmu.h', is
->> going to be dereferenced by the unified helper.
->>
->> Include 'include/asm/kvm_mmu.h' to 'kvm/vgic/vgic.h' to avoid including
->> the former header file when the later one is needed. With the change,
->> the duplicate inclusions of 'include/asm/kvm_mmu.h' are removed.
->>
->> No functional change intended.
->>
->> Suggested-by: Oliver Upton <oliver.upton@linux.dev>
+On 2023-01-27 19:06, Paul Moore wrote:
+> On Fri, Jan 27, 2023 at 6:01 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> > On 2023-01-27 17:43, Paul Moore wrote:
+> > > On Fri, Jan 27, 2023 at 12:24 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> > > > Getting XATTRs is not particularly interesting security-wise.
+> > > >
+> > > > Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> > > > Fixes: a56834e0fafe ("io_uring: add fgetxattr and getxattr support")
+> > > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > > > ---
+> > > >  io_uring/opdef.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > >
+> > > Depending on your security policy, fetching file data, including
+> > > xattrs, can be interesting from a security perspective.  As an
+> > > example, look at the SELinux file/getattr permission.
+> > >
+> > > https://github.com/SELinuxProject/selinux-notebook/blob/main/src/object_classes_permissions.md#common-file-permissions
+> >
+> > The intent here is to lessen the impact of audit operations.  Read and
+> > Write were explicitly removed from io_uring auditing due to performance
+> > concerns coupled with the denial of service implications from sheer
+> > volume of records making other messages harder to locate.  Those
+> > operations are still possible for syscall auditing but they are strongly
+> > discouraged for normal use.
 > 
-> No, I did not suggest for you to do this. I had suggested you just
-> include asm/kvm_mmu.h from the vgic header, not to go and remove it from
-> all the files that include vgic.h.
+> We need to balance security needs and performance needs.  You are
+> correct that general read() and write() operations are not audited,
+> and generally not checked from a LSM perspective as the auditing and
+> access control happens at open() time instead (access to fds is
+> revalidated when they are passed).  However, in the case of getxattr
+> and fgetxattr, these are not normal file read operations, and do not
+> go through the same code path in the kernel; there is a reason why we
+> have xattr_permission() and security_inode_getxattr().
 > 
-> Who cares if kvm_mmu.h gets included twice? Include guards exist for this
-> exact reason.
-> 
+> We need to continue to audit IORING_OP_FGETXATTR and IORING_OP_GETXATTR.
 
-Ok, I misundertood your suggestion. Could you drop PATCH[v4 1/4] and include
-'kvm_mmu.h' to 'vgic.h'? Otherwise, I need to respin for v5. Please let me
-know your preference.
+Fair enough.  This would be similar reasoning to send/recv vs
+sendmsg/recvmsg.  I'll drop this patch.  Thanks for the reasoning and
+feedback.
 
-Thanks,
-Gavin
+> paul-moore.com
+
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+IRC: rgb, SunRaycer
+Voice: +1.647.777.2635, Internal: (81) 32635
 
