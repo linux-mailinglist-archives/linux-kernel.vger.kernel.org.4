@@ -2,67 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE3467FA99
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C9267FA98
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234601AbjA1T5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 14:57:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S234569AbjA1T5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 14:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbjA1T5h (ORCPT
+        with ESMTP id S232455AbjA1T5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 14:57:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A06233EE
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 11:56:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674935815;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fNU2u372/7Sb65mBBFHPvq/vNgVTuST0kJLjueX9SFk=;
-        b=dLtxH+p9abA8bVzEScWz7SBoOc/SlqwzVFWHADRBi/3iLQdK1QHpT5H2uva92XeG4sWjfo
-        5dPy924EEdtADAlHqFtJZ4L5cH6YSNSgJmNj5GoW46t/FHOjEy2MsYFZEbYXovIUaMN/4b
-        FJL48ZuvGhOLpJ8GeuEiZvtzBl2B7yM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-fpCfCplIM7irVfEIzo9Tqg-1; Sat, 28 Jan 2023 14:56:48 -0500
-X-MC-Unique: fpCfCplIM7irVfEIzo9Tqg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 69FED101A521;
-        Sat, 28 Jan 2023 19:56:47 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (ovpn-192-101.brq.redhat.com [10.40.192.101])
-        by smtp.corp.redhat.com (Postfix) with SMTP id C490C1400B19;
-        Sat, 28 Jan 2023 19:56:45 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Sat, 28 Jan 2023 20:56:44 +0100 (CET)
-Date:   Sat, 28 Jan 2023 20:56:42 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH v4] posix-timers: Prefer delivery of signals to the
- current thread
-Message-ID: <20230128195641.GA14906@redhat.com>
-References: <20230126105128.2249938-1-dvyukov@google.com>
- <20230126154118.2393850-1-dvyukov@google.com>
- <CANpmjNM=PVigDZKu-H_-cLECUJKSx7TH+kxSjfF=4UHdrGBj+g@mail.gmail.com>
- <87o7qlgjce.ffs@tglx>
- <CACT4Y+aMLeCo9+nwXrFWo8FLG8rKHDe8v2ppkZ+mOaKAF6qtgw@mail.gmail.com>
+        Sat, 28 Jan 2023 14:57:02 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B506922DC9
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 11:57:00 -0800 (PST)
+Received: (qmail 348420 invoked by uid 1000); 28 Jan 2023 14:56:59 -0500
+Date:   Sat, 28 Jan 2023 14:56:59 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     paulmck@kernel.org, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y9V+CyKIjg8sgVAC@rowland.harvard.edu>
+References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
+ <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
+ <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
+ <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+aMLeCo9+nwXrFWo8FLG8rKHDe8v2ppkZ+mOaKAF6qtgw@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,29 +45,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dmitry,
+On Fri, Jan 27, 2023 at 03:31:25PM +0100, Jonas Oberhauser wrote:
+> Here's a litmus test illustrating the difference, where P1 has a
+> backwards-pointing xbstar&int. Currently there's no data race, but with the
+> proposed patch there is.
+> 
+> P0(int *x, int *y)
+> {
+>     *x = 1;
+>     smp_store_release(y, 1);
+> }
+> 
+> P1(int *x, int *y, int *dx, int *dy, spinlock_t *l)
+> {
+>     spin_lock(l);
+>     int r1 = READ_ONCE(*dy);
+>     if (r1==1)
+>         spin_unlock(l);
+> 
+>     int r0 = smp_load_acquire(y);
+>     if (r0 == 1) {
+>         WRITE_ONCE(*dx,1);
+>     }
+> }
+> 
+> P2(int *dx, int *dy)
+> {
+>     WRITE_ONCE(*dy,READ_ONCE(*dx));
+> }
+> 
+> 
+> P3(int *x, spinlock_t *l)
+> {
+>     spin_lock(l);
+>     smp_mb__after_unlock_lock();
+>     *x = 2;
+> }
 
-I agree with what you said, just one note...
+I don't understand why the current LKMM doesn't say there is a data 
+race.  In fact, I don't understand what herd7 is doing with this litmus 
+test at all.  Evidently the plain-coherence check rules out x=1 at the 
+end, because when I relax that check, x=1 becomes a possible result.  
+Furthermore, the graphical output confirms that this execution has a 
+ww-incoh edge from Wx=2 to Wx=1.  But there is no ww-vis edge from Wx=1 
+to Wx=2!  How can this be possible?  It seems like a bug in herd7.
 
-On 01/27, Dmitry Vyukov wrote:
->
-> After this change the test passes quickly (within a second for me).
+Furthermore, the execution with x=2 at the end doesn't have either a 
+ww-vis or a ww-nonrace edge betwen Wx=1 and Wx=2.  So why isn't there a 
+ww-race edge?
 
-yet perhaps it makes sense to slightly change it? It does
+> This actually makes me wonder. I thought the reason for the xbstar & int is
+> that it ensures that the overall relation, after shuffling around a little
+> bit, becomes prop&int ; hb*.
 
-	+static void *distribution_thr(void *arg) {
-	+	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
-	+	return NULL;
-	+}
+No, that is not the reason for it.  See below.
 
-so distribution_thr() eats CPU even after this thread gets a signal and thus
-(in theory) it can "steal" cpu_timer_fire() from other threads unpredictably
-long ? How about
+> Like in case the *x=2 is co-before the *x=1, we get
+>   Wx2 ->overwrite Wx1 ->cumul-fence*;rfe  (some event on the same CPU as
+> Wx2)  ->fence Wx2
+> which is
+>   Wx2 -> prop&int some other event ->hb Wx2
+> which must be irreflexive.
+> 
+> However, that's not the case at all, because the fence relation currently
+> doesn't actually have to relate events of the same CPU.
+> So we get
+>   Wx2 ->overwrite Wx1 ->cumul-fence*;rfe  (some event on some other CPU than
+> Wx2's) ->(hb*&int);fence Wx2
+> i.e.,
+>   Wx2 ->prop&ext;hb*;strong-fence Wx2
+> 
+> which shouldn't provide any ordering in general.
+> 
+> In fact, replacing the *x=1 and *x=2 with WRITE_ONCEs, (pilot errors
+> notwithstanding) both Wx1 ->co Wx2 and Wx2 ->co Wx1 become allowed in the
+> current LKMM (in graphs where all other edges are equal).
+> 
+> Shouldn't this actually *be* a data race? And potentially the same with
+> rcu-fence?
 
-	-	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
-	+	while (__atomic_load_n(&got_signal, __ATOMIC_RELAXED));
+I think that herd7 _should_ say there is a data race.
 
-?
+On the other hand, I also think that the operational model says there 
+isn't.  This is a case where the formal model fails to match the 
+operational model.
 
-Oleg.
+The operational model says that if W is a release-store on CPU C and W' 
+is another store which propagates to C before W executes, then W' 
+propagates to every CPU before W does.  (In other words, releases are 
+A-cumulative).  But the formal model enforces this rule only in cases 
+the event reading W' on C is po-before W.
 
+In your litmus test, the event reading y=1 on P1 is po-after the 
+spin_unlock (which is a release).  Nevertheless, any feasible execution 
+requires that P1 must execute Ry=1 before the unlock.  So the 
+operational model says that y=1 must propagate to P3 before the unlock 
+does, i.e., before P3 executes the spin_lock().  But the formal model 
+doesn't require this.
+
+Ideally we would fix this by changing the definition of po-rel to:
+
+	[M] ; (xbstar & int) ; [Release]
+
+(This is closely related to the use of (xbstar & int) in the definition 
+of vis that you asked about.)  Unfortunately we can't do this, because 
+po-rel has to be defined long before xbstar.
+
+> The other cases of *-pre-bounded seem to work out: they all link stuff via
+> xbstar to the instruction that is linked via po-unlock-lock-po ;
+> [After-unlock-lock] ; po to the potentially racy access, and
+> po-unlock-lock-po;po   is xbstar ; acq-po, which allows closing the gap.
+
+I could not follow your arguments at all; the writing was too confusing.
+
+Alan
