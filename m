@@ -2,151 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDAB567F9BB
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 18:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE4067F9BD
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 18:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233999AbjA1RDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 12:03:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        id S233348AbjA1RGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 12:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjA1RDx (ORCPT
+        with ESMTP id S229963AbjA1RGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 12:03:53 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100DD2005E
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 09:03:52 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so7484847pjb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 09:03:52 -0800 (PST)
+        Sat, 28 Jan 2023 12:06:32 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76B3EFA4;
+        Sat, 28 Jan 2023 09:06:31 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id w11so960574qtc.3;
+        Sat, 28 Jan 2023 09:06:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FZB8lg0YeivU1JmY6qzB+xB0HCsqlxdwoCMFwmTxhGc=;
-        b=YuWBbzUv750b3lluA0Xc6lKsr9XDMwG9ONJRXLFKTbkZw5XSnXEy80i6xh+hAwKICO
-         09F9AfIAay1C21P2ZRssDSjfvhjxbcYu3VeUvBg9AqqSSmQuGXimp+OpQzy/VRa3Dq4e
-         UMK+mkQ4eAdn4/zqmLakHLyO06OJ1Of4mojiF9+jQbBwmDFmClpTAt776z2kAPVMY0eW
-         Ef8QZLIE/cdUpvAPr9Bls6jXYp1JPKDMyo//TNpJOb5xZp8Hcf8LQYHqvXify6hVcUyu
-         JH+60kQqWeh5blSKY2lWPJUf6LNlWDqmFF2LJ6evItT/6tn6UhVgGx3tfoFHjOLc6N1H
-         0DHA==
+        bh=6LkjGYc1DQBixcrRx3f5l/Lm3c/gvRvkhxMH5vPTMoQ=;
+        b=Ynd+q6s5C8ZoTVXBeMX+2eJg9EHqbUKkwUzy8i1K+9WX5fQW5wKKxv7EvNrtoFnM6E
+         Mm912V/a5Xj05LOcBw6/+Q0hExtjZy1YFMaOxqsvWNU7Hsjnd+TTHlUEEyPPEKV1XbEp
+         hh1iVFfK1W5h27/bICIXSV5eV8zOzQmDQXBJhH5r3UvMfexgbwm6TmuBHFbeaYx9SOWi
+         UJ1T81ygypDa4VKFtOn3L3Bj5h6A7JV/JgE3P9u0rBYio2MWXgxeriX1ZyqsfUaacp7L
+         mUCNqlYLltuJL8YzEA58CRCE5dfZw1zPuQMToY16LAEaVltL2T1m/3af37XlNwHe2nCD
+         gm8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FZB8lg0YeivU1JmY6qzB+xB0HCsqlxdwoCMFwmTxhGc=;
-        b=mbIXX3+RY6hCDWaGxN7cjUWNfrvO/+83t41xs+ZRyljEJkxAyTFF0ugzL8+tw66FTv
-         FvonqKwF383x7k/a10Y/DR35Tl/y3tfTjaV/K0Q1aq4kpAOojSF3f7RJetMnUfZEzUoe
-         StQQSXQZ4dyJaJFl7e+3S9xdFRzNZ8iLVS14/880Op/18c1Sdj8JgniCwVA+VQ+xy+e7
-         3yni3LIUb+sJgxa0vudKLc/7nxI0eMtLliYP9ErfzAz80MERFfbmojjcUBw2rn1pV1Lh
-         fCeDV8/aK25imngNMrBfqsCAesqflDaOOQQAy/Pj57ItlsKJVNu28DEJ9Df9d2+QF7Cy
-         R6Cw==
-X-Gm-Message-State: AFqh2krwssIG/OnhN/7tn0BzmyuV7O3qo25+O+FiCQzjOH2ZYwM82zAg
-        OQaGqrJLFcYQuNCENBr3zi64C4mqmJ7w+dJE1rV3
-X-Google-Smtp-Source: AMrXdXts3HgaSZ1OMsaBQlmOSyte1KDM2wha7k7fk7BHABCeqM3pzpwKqS0gOaF7QboopE3ejUebzS9ZE6jmFHPI+3w=
-X-Received: by 2002:a17:902:c404:b0:194:954c:fb8 with SMTP id
- k4-20020a170902c40400b00194954c0fb8mr5105429plk.20.1674925431278; Sat, 28 Jan
- 2023 09:03:51 -0800 (PST)
+        bh=6LkjGYc1DQBixcrRx3f5l/Lm3c/gvRvkhxMH5vPTMoQ=;
+        b=sJL1Y+VCZRgkqf1Uf8tHcpZAm/geDoRzXoSXgZSR3I+hpVTXhtaLRLVRxnM7SbXBHu
+         LYO/9uF8L9iR7g60MmZiFHzD3j5TdzH4a0/EaBzedh7sk1bx7JNETcg1pigMGlQ0jtQX
+         x9PURILOX4cBVo4OPURPBuM6ij5/P4EX4OZmte2+8ZzzpI6zsYtt8TqoxVc0ViQuQ/0x
+         Jqd/1V8UHhLU2qpPY1dQWgXAn6USW2GAYXyYavNxcgec2ubmR3FBIk0gm12rgF8bIjGy
+         cmtnrRGfNULKTmdpb6R4zp9RqMPJLGZXsmKfdbY1r1HJG3LwhJwm7U1D7/LkNr9gKV0+
+         UWIQ==
+X-Gm-Message-State: AFqh2krcr5VxdI68IYrOqZMZMdb2Y4qP9BqKY+HdnX8+eKuaSu284gI8
+        CTbo/bSIgsnil+5yhX1/oPU=
+X-Google-Smtp-Source: AMrXdXtGA6gGcQ9ASmGp1QprWmmPiPydXpMJnuJYMeBL5xcz3tgX0HjxMVUshxo9UT88MuPhgA2TEw==
+X-Received: by 2002:ac8:6e83:0:b0:3b6:3406:81cb with SMTP id c3-20020ac86e83000000b003b6340681cbmr66219576qtv.14.1674925590957;
+        Sat, 28 Jan 2023 09:06:30 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id f8-20020ac840c8000000b003b84b92052asm755797qtm.57.2023.01.28.09.06.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Jan 2023 09:06:30 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0B71927C0054;
+        Sat, 28 Jan 2023 12:06:29 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 28 Jan 2023 12:06:30 -0500
+X-ME-Sender: <xms:FVbVY9oLvpMu7xecBGhaA8qhLZqgV9sQoJWNQyg0QM4mVruWNRcGqg>
+    <xme:FVbVY_oDf-dun-mq5bzqjrAxvs5NDmKU_FI3X7G77BM4eq5QkXqiy40d6zhB6T8CW
+    MJrAODSCnKavbrCKQ>
+X-ME-Received: <xmr:FVbVY6Olfxxj_PBRvSENRL5AUJoAR1LB5FcZwD1sToBpHCp3ymf6_uFt5k8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvkedgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
+    ertddttddvnecuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghes
+    ghhmrghilhdrtghomheqnecuggftrfgrthhtvghrnhephedugfduffffteeutddvheeuve
+    elvdfhleelieevtdeguefhgeeuveeiudffiedvnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrh
+    hsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgv
+    nhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:FVbVY45kUSK75QVkYr9lGN6KOIzGEBt-G3gl7Jk_qWbAaycyxTQr1A>
+    <xmx:FVbVY84oK9AeTeWVfmJAYsZ42SqPyljc3lwy5TUTLg2-ItnPt9oqEQ>
+    <xmx:FVbVYwgQ2CvAL5oz5Zjur01grUo9ZO6LPvTT_FjpZXVZkspl3CxZHA>
+    <xmx:FVbVY7aA-UR5lv7YeyouY7p-JiuagWk42utTO6FpRvFDTEbmJFboEA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 28 Jan 2023 12:06:29 -0500 (EST)
+Date:   Sat, 28 Jan 2023 09:05:39 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc:     wedsonaf@gmail.com, alex.gaynor@gmail.com,
+        bjorn3_gh@protonmail.com, gary@garyguo.net,
+        linux-kernel@vger.kernel.org, ojeda@kernel.org,
+        rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH 2/5] rust: types: introduce `ForeignOwnable`
+Message-ID: <Y9VV4+KCkShRex9m@boqun-archlinux>
+References: <20230119174036.64046-2-wedsonaf@gmail.com>
+ <20230128145345.1770912-1-yakoyoku@gmail.com>
 MIME-Version: 1.0
-References: <cover.1674682056.git.rgb@redhat.com> <d9da8035-ed81-fb28-bf3a-f98c8a1e044a@kernel.dk>
- <CAHC9VhRpu7WZDqWKcLDj18A0Z5FJdUU=eUL3wbJH1CnEBWB4GA@mail.gmail.com> <12151218.O9o76ZdvQC@x2>
-In-Reply-To: <12151218.O9o76ZdvQC@x2>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sat, 28 Jan 2023 12:03:40 -0500
-Message-ID: <CAHC9VhRoJRRcsXWOMkBQWKOUkCdJEL5mkb+w196rZPJn0KuFtw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] two suggested iouring op audit updates
-To:     Steve Grubb <sgrubb@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Richard Guy Briggs <rgb@redhat.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>, Stefan Roesch <shr@fb.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230128145345.1770912-1-yakoyoku@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 11:48 AM Steve Grubb <sgrubb@redhat.com> wrote:
-> On Friday, January 27, 2023 5:53:24 PM EST Paul Moore wrote:
-> > On Fri, Jan 27, 2023 at 5:46 PM Jens Axboe <axboe@kernel.dk> wrote:
-> > > On 1/27/23 3:38=E2=80=AFPM, Paul Moore wrote:
-> > > > On Fri, Jan 27, 2023 at 2:43 PM Jens Axboe <axboe@kernel.dk> wrote:
-> > > >> On 1/27/23 12:42=E2=80=AFPM, Paul Moore wrote:
-> > > >>> On Fri, Jan 27, 2023 at 12:40 PM Jens Axboe <axboe@kernel.dk> wro=
-te:
-> > > >>>> On 1/27/23 10:23=E2=80=AFAM, Richard Guy Briggs wrote:
-> > > >>>>> A couple of updates to the iouring ops audit bypass selections
-> > > >>>>> suggested in consultation with Steve Grubb.
-> > > >>>>>
-> > > >>>>> Richard Guy Briggs (2):
-> > > >>>>>   io_uring,audit: audit IORING_OP_FADVISE but not IORING_OP_MAD=
-VISE
-> > > >>>>>   io_uring,audit: do not log IORING_OP_*GETXATTR
-> > > >>>>>
-> > > >>>>>  io_uring/opdef.c | 4 +++-
-> > > >>>>>  1 file changed, 3 insertions(+), 1 deletion(-)
-> > > >>>>
-> > > >>>> Look fine to me - we should probably add stable to both of them,
-> > > >>>> just to keep things consistent across releases. I can queue them=
- up
-> > > >>>> for 6.3.
-> > > >>>
-> > > >>> Please hold off until I've had a chance to look them over ...
-> > > >>
-> > > >> I haven't taken anything yet, for things like this I always let it
-> > > >> simmer until people have had a chance to do so.
-> > > >
-> > > > Thanks.  FWIW, that sounds very reasonable to me, but I've seen lot=
-s
-> > > > of different behaviors across subsystems and wanted to make sure we
-> > > > were on the same page.
-> > >
-> > > Sounds fair. BTW, can we stop CC'ing closed lists on patch
-> > > submissions? Getting these:
-> > >
-> > > Your message to Linux-audit awaits moderator approval
-> > >
-> > > on every reply is really annoying.
-> >
-> > We kinda need audit related stuff on the linux-audit list, that's our
-> > mailing list for audit stuff.
-> >
-> > However, I agree that it is crap that the linux-audit list is
-> > moderated, but unfortunately that isn't something I control (I haven't
-> > worked for RH in years, and even then the list owner was really weird
-> > about managing the list).  Occasionally I grumble about moving the
-> > kernel audit development to a linux-audit list on vger but haven't
-> > bothered yet, perhaps this is as good a reason as any.
-> >
-> > Richard, Steve - any chance of opening the linux-audit list?
->
-> Unfortunately, it really has to be this way. I deleted 10 spam emails
-> yesterday. It seems like some people subscribed to this list are compromi=
-sed.
-> Because everytime there is a legit email, it's followed in a few seconds =
-by a
-> spam email.
->
-> Anyways, all legit email will be approved without needing to be subscribe=
-d.
+On Sat, Jan 28, 2023 at 11:53:45AM -0300, Martin Rodriguez Reboredo wrote:
+[...]
+> > +    /// Borrows a foreign-owned object.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
+> > +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
+> > +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow_mut`]
+> > +    /// for this object must have been dropped.
+> > +    unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> Self::Borrowed<'a>;
+> > +
+> > +    /// Mutably borrows a foreign-owned object.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
+> > +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
+> > +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
+> > +    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
+> > +    unsafe fn borrow_mut<T: ForeignOwnable>(ptr: *const core::ffi::c_void) -> ScopeGuard<T, fn(T)> {
+> > +        // SAFETY: The safety requirements ensure that `ptr` came from a previous call to
+> > +        // `into_foreign`.
+> > +        ScopeGuard::new_with_data(unsafe { T::from_foreign(ptr) }, |d| {
+> > +            d.into_foreign();
+> > +        })
+> > +    }
+> 
+> Could these three methods have a borrowing equivalent? When I was
+> working on some features for the USB module I've stumbled upon the case
+> of having to encode a pointer (with a pivot) and I cannot do it without
+> taking ownership of the pointer.
+> 
 
-The problem is that other subsystem developers who aren't subscribed
-to the linux-audit list end up getting held mail notices (see the
-comments from Jens).  The moderation of linux-audit, as permissive as
-it may be for proper emails, is a problem for upstream linux audit
-development, I would say much more so than 10/day mails.
+*const T is Copy, so you can still use it after pass it to a function or
+a new binding, e.g.
 
-If you are unable/unwilling to switch linux-audit over to an open
-mailing list we should revisit moving over to a vger list; at least
-for upstream kernel development, you are welcome to stick with the
-existing redhat.com list for discussion of your userspace tools.
+	pub fn use_ptr(ptr: *const i32) { .. }
 
---=20
-paul-moore.com
+	let p: *const i32 = some_func();
+
+	let q = p;
+
+	// q is just a copy of p
+	use_ptr(p);
+	// passing to a function parameter is just copying
+	use_ptr(p);
+
+maybe I'm missing something subtle, but if you have an example I can
+help take a look.
+
+Regards,
+Boqun
+
+> > +
+> > +    /// Converts a foreign-owned object back to a Rust-owned one.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// `ptr` must have been returned by a previous call to [`ForeignOwnable::into_foreign`] for
+> > +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn't been called yet.
+> > +    /// Additionally, all instances (if any) of values returned by [`ForeignOwnable::borrow`] and
+> > +    /// [`ForeignOwnable::borrow_mut`] for this object must have been dropped.
+> > +    unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self;
+> > +}
+> > +
+> >  /// Runs a cleanup function/closure when dropped.
+> >  ///
+> >  /// The [`ScopeGuard::dismiss`] function prevents the cleanup function from running.
+> > -- 
+> > 2.34.1
+> 
+> Aside from these comments I observe that there's a possibility to make
+> ForeignOwnable a const trait and have non const implementors. Otherwise
+> if these things are out of scope, no problem whatsoever and this has my
+> OK.
+> 
+> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
