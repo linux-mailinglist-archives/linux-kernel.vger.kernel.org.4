@@ -2,136 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF6867F298
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AABD567F29B
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbjA1AEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 19:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        id S231267AbjA1AGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 19:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjA1AER (ORCPT
+        with ESMTP id S229575AbjA1AGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:04:17 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32CC834B2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:04:16 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 141so4257705pgc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:04:16 -0800 (PST)
+        Fri, 27 Jan 2023 19:06:12 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F11126FE
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:06:11 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id c5-20020aa78805000000b0058d983c708aso3071854pfo.22
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:06:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FDc1f6H36kSbMyhmdOu12h8TguEbHWVRiGzB2+CN2EQ=;
-        b=jqN19sWZ3nZ1ylcOToqEKpzql3r9UmN8+byIOuXDFEh2VxNe/47KCoXcmXX2cCO8t0
-         artbB2vnijdLeMOclOlwjOQ4oil+/MxPYfFhyebOQLChNRaruqY1qpqQ2eFTJSg5TdAu
-         i1uFKylpcNV6TRc0ZpzXNmOK0MT8gRs3RUt/A=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z6eQXh7MQlL9INvJ7bQlQBjXn8/parUiPWkEDqdSfug=;
+        b=Cpnt+BwP145ujea1Utkqc9U5vBz5vDaoV5ftSZ6EUhOGk1n2rQ9xAqT8+gOgds0UAj
+         kc6uHfPq5pU62bhF44GTuzSATyNPjb+R0vqU7oYTz+LagAIe6g6ReLRSw5Zk2r1u/heb
+         AYPBsrl8i/FXWK3xk1WqPY6aqNiC38gM3Y3eTut4OhcP650YnUlx8EnBcgtgAKihb7My
+         62QS8JDiAgJcN2g2hS18GQs7eRgMTKk1hBtOQIb9G2JjCHp7q02ncJR0JFIL4a93WHWG
+         it0DLHmh9pe+cPmW0Oj/2vtRsKZZ09VlntB9+NsHOG3eZlORLh6iqyksSyX0ReVH0J/6
+         sgNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FDc1f6H36kSbMyhmdOu12h8TguEbHWVRiGzB2+CN2EQ=;
-        b=dDeQ08uryTUMtqqh+PMSKYq9q8/TZqsyWFkFpFkzKzfeXZJD+94IffyESFkbeeqcpN
-         jovAwx7+q9PeHR0qRQHALyxMKU87DRp+38YzAnMBPLt0brbrBruuv4kEsVYFQG19rhP7
-         NPjPgBXv1rh89diJ4CiC7pzkIWDML6QR66Igqvk05bmch9FDa8M1lyNGtzI7MEdpy9cm
-         qxfonIlKbAHSavmzWj7eKz8v9QLo4m01RXgVaK0EYC9hh1dKArSEOpSrO4JninwmEB56
-         bSWzQRBQg3p0+bqi0EgGuDVbMVYBkBz0d5ZG+8fwKnU2sug03mISX2JqdfxmZYjKSb/e
-         PQhw==
-X-Gm-Message-State: AO0yUKUNBPYqRoD2qMRlO21jgSrp4gU3miLDswZN0GSYpaEIs4kvHEHN
-        a1Z4h/qrhZaRA8JqyWsLq95LFQ==
-X-Google-Smtp-Source: AK7set8nSePnnSfEVdKbfxF6scz0/Uj2c71pQ6W+5fNQ70sm53fXibm/RGvGyWY1TXB5PRKOwLAytQ==
-X-Received: by 2002:a62:b505:0:b0:593:9109:4627 with SMTP id y5-20020a62b505000000b0059391094627mr714429pfe.0.1674864256051;
-        Fri, 27 Jan 2023 16:04:16 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x28-20020aa7957c000000b0056bc5ad4862sm2527886pfq.28.2023.01.27.16.04.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 16:04:15 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Kees Cook <keescook@chromium.org>, Hannes Reinecke <hare@suse.de>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] scsi: aacraid: Allocate cmd_priv with scsicmd
-Date:   Fri, 27 Jan 2023 16:04:13 -0800
-Message-Id: <20230128000409.never.976-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2826; h=from:subject:message-id; bh=8KFZgqjwwJO+qq8QfdeM9HK9KDv6PDJJEB0n/EnuyKA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj1GZ9mcYxxmBFWjb9WJlVcSCr1yuma3vzlXTE6ry5 XFz/f5+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY9RmfQAKCRCJcvTf3G3AJnDqD/ 47sfkHG+/a3xdJClnia5fi++tP4YYoZynZ5fqtTBOFFNLI319Zlz2wlqHjfcc1sz2eweq62ksWB2TB YW6aC0dSd+5FoXkT4uVVml2nZDZxy0E9cMn2qJ5pFbZrfCZpmSrashWSunKUeB6Eb4TfkgLG61WIFP SNYnzVIz4DVO/INJgJobsjQyp4axpBZCRpmBiw14V4sIv3fDg+OWXVTqUNHFMm1DULBEPAVxaBx+FQ Vti5fflR3WJMRI7HCoNdsO+iRnZ+FyCybX4oNoYu2SVas+pzDJfwP+NUWc/j5M0ALVZTshiuQBol6U c+3T6d0A/LN3kWyICneQSULVNfMLPw8hcgAZHl9v3tWN5l2O40zGRqliaTZDJ31k+Tfc3vtTzp1aVy N1rAU9Q6dCDJgAPqm8cu6SCUFyQawV5xfY9S0qh4M0kGY0kPaAreBvLizpLSd6rWgB/5eIY+1Lluu2 tEKhMvRr0BQTUtBNKtPxtZYjJtBFAjetGQ8g3ez42Ty0CZ0nONtVCkcAi1PsysjehWBTlTrau8Zr2i /tSBvd730+TfBbfhB3sZcDKpuWL6mL59ZKPRX+8as6QZklDgblu72PXEY+nA4K6uArXk0P9m50S1wY 3qo8bUnPG18px6gVheiFE0q7XMDZ9RHj+yhfnrvE8zSygQh2akGwWKFqbieQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z6eQXh7MQlL9INvJ7bQlQBjXn8/parUiPWkEDqdSfug=;
+        b=S3d1BP82iWPcXv6mQe4PLQfk4ixoAPGGZF6/R5aQUvJVaOEInuvZXnZoSQlgX+CIPi
+         zDhHZAXX91LI7zzA3noqAHu5ZDbt83DfupxFCF8+k0u9CWBb/KlpwRvtHGLDZyQ97Vkp
+         8cJtU3pNdEtSPljDaaKQG5BZeGo1DytB6XKgApCV+4b7rQgvM7iw2W5gSUfmYEQOJz+o
+         6zu6J551yHvbVhIOTmGz3vbOxHULdNmnRDcspkxxd/Hrw9TkRulQU6tBtVwJKoVeMTqA
+         stAUaYgWuPQl2TyBaxvjx34lErpf6gbTkDSmfCPDSr5aAxiMqxPJ2LO6+lu/TR3d2pSa
+         QaWQ==
+X-Gm-Message-State: AFqh2kptbarakw/mti+jaQjO/joewZNV2gDMmGF+T9DGNvMjBufJOkpe
+        8XQL6LOcXAAHJzjNZgUVC0PeIktG26I=
+X-Google-Smtp-Source: AMrXdXtkvr9gTeBVrIKLfrp6ZIEjmtnJZOwG43G5gd/gZZeB148K3WUvBOu4cR1gxNLInDbtwrSqcEC5o8M=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:778c:b0:192:ba7a:2be4 with SMTP id
+ o12-20020a170902778c00b00192ba7a2be4mr4774876pll.27.1674864371054; Fri, 27
+ Jan 2023 16:06:11 -0800 (PST)
+Date:   Sat, 28 Jan 2023 00:05:50 +0000
+In-Reply-To: <20221130233650.1404148-1-seanjc@google.com>
+Mime-Version: 1.0
+References: <20221130233650.1404148-1-seanjc@google.com>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <167424175801.2640527.5679926568908656054.b4-ty@google.com>
+Subject: Re: [PATCH v4 0/4] x86/crash: Fix double NMI shootdown bug
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, stable@vger.kernel
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The aac_priv() helper assumes that the private cmd area immediately
-follows struct scsi_cmnd. Allocate this space as part of scsicmd,
-else there is a risk of heap overflow. Seen with GCC 13:
+On Wed, 30 Nov 2022 23:36:46 +0000, Sean Christopherson wrote:
+> Fix a double NMI shootdown bug found and debugged by Guilherme, who did all
+> the hard work.  NMI shootdown is a one-time thing; the handler leaves NMIs
+> blocked and enters halt.  At best, a second (or third...) shootdown is an
+> expensive nop, at worst it can hang the kernel and prevent kexec'ing into
+> a new kernel, e.g. prior to the hardening of register_nmi_handler(), a
+> double shootdown resulted in a double list_add(), which is fatal when running
+> with CONFIG_BUG_ON_DATA_CORRUPTION=y.
+> 
+> [...]
 
-../drivers/scsi/aacraid/aachba.c: In function 'aac_probe_container':
-../drivers/scsi/aacraid/aachba.c:841:26: warning: array subscript 16 is outside array bounds of 'void[392]' [-Warray-bounds=]
-  841 |         status = cmd_priv->status;
-      |                          ^~
-In file included from ../include/linux/resource_ext.h:11,
-                 from ../include/linux/pci.h:40,
-                 from ../drivers/scsi/aacraid/aachba.c:22:
-In function 'kmalloc',
-    inlined from 'kzalloc' at ../include/linux/slab.h:720:9,
-    inlined from 'aac_probe_container' at ../drivers/scsi/aacraid/aachba.c:821:30:
-../include/linux/slab.h:580:24: note: at offset 392 into object of size 392 allocated by 'kmalloc_trace'
-  580 |                 return kmalloc_trace(
-      |                        ^~~~~~~~~~~~~~
-  581 |                                 kmalloc_caches[kmalloc_type(flags)][index],
-      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  582 |                                 flags, size);
-      |                                 ~~~~~~~~~~~~
+Applied to kvm-x86 misc, thanks!
 
-Fixes: 76a3451b64c6 ("scsi: aacraid: Move the SCSI pointer to private command data")
-Cc: Bart Van Assche <bvanassche@acm.org>
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: Himanshu Madhani <himanshu.madhani@oracle.com>
-Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/scsi/aacraid/aachba.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+[1/4] x86/crash: Disable virt in core NMI crash handler to avoid double shootdown
+      https://github.com/kvm-x86/linux/commit/26044aff37a5
+[2/4] x86/virt: Force GIF=1 prior to disabling SVM (for reboot flows)
+      https://github.com/kvm-x86/linux/commit/6a3236580b0b
+[3/4] x86/reboot: Disable virtualization in an emergency if SVM is supported
+      https://github.com/kvm-x86/linux/commit/d81f952aa657
+[4/4] x86/reboot: Disable SVM, not just VMX, when stopping CPUs
+      https://github.com/kvm-x86/linux/commit/a2b07fa7b933
 
-diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
-index 4d4cb47b3846..24c049eff157 100644
---- a/drivers/scsi/aacraid/aachba.c
-+++ b/drivers/scsi/aacraid/aachba.c
-@@ -818,8 +818,8 @@ static void aac_probe_container_scsi_done(struct scsi_cmnd *scsi_cmnd)
- 
- int aac_probe_container(struct aac_dev *dev, int cid)
- {
--	struct scsi_cmnd *scsicmd = kzalloc(sizeof(*scsicmd), GFP_KERNEL);
--	struct aac_cmd_priv *cmd_priv = aac_priv(scsicmd);
-+	struct aac_cmd_priv *cmd_priv;
-+	struct scsi_cmnd *scsicmd = kzalloc(sizeof(*scsicmd) + sizeof(*cmd_priv), GFP_KERNEL);
- 	struct scsi_device *scsidev = kzalloc(sizeof(*scsidev), GFP_KERNEL);
- 	int status;
- 
-@@ -838,6 +838,7 @@ int aac_probe_container(struct aac_dev *dev, int cid)
- 		while (scsicmd->device == scsidev)
- 			schedule();
- 	kfree(scsidev);
-+	cmd_priv = aac_priv(scsicmd);
- 	status = cmd_priv->status;
- 	kfree(scsicmd);
- 	return status;
--- 
-2.34.1
-
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
