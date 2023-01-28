@@ -2,144 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5DE67F7E4
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 13:59:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C73967F7E7
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 14:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbjA1M7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 07:59:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        id S233744AbjA1NIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 08:08:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbjA1M7C (ORCPT
+        with ESMTP id S230502AbjA1NIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 07:59:02 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2115356C
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 04:58:59 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id k4so14880888eje.1
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 04:58:59 -0800 (PST)
+        Sat, 28 Jan 2023 08:08:40 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5D4C641
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 05:08:38 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id p26so9177609ejx.13
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 05:08:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TGiVQCAPVenbpU4R0UlRE+cCXkPIO6idXxOzj44qmV0=;
-        b=NOXp64PlL5aJZuCGG3Li4mElZSQPvkCcefvyvXKv9nPVd6S3pcAfkwiyzC+wIXY3uH
-         jkjpScv813kZjRxrzQKJgJnRVuCFI9SeHPF0JSR6LbDmD7fyzD5jKtoZ+kMsGophMV2N
-         dUKG2OsauDDEoZn2ACy4S+i+Hfd1A0U64rCjA=
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3noSpr0qsbBjaPiHek7vXj61bnZWH4YDsV9fDm3w6bg=;
+        b=GqoA0BWlnkv1+k7b2w6EFw+iRqLjZcbPObOdfLA1dW+gUzDn4hFyaV44TZTRFH/2TI
+         ZzyZ3g/aod4fp4lN+/kWOa/68ecDddZXUuzTTvgOYSVQxXM9jMQ+EvRgPnZgqD+BqHPu
+         fo8SftFGTNn4oTAmMO4Ayga2VN8WLakrSnTVYaEw/aB9Gtp5pEPEBFnx3ZxRLi87/Tbx
+         metjDOan2qaYk2jOfOoYI90co/8m7UPb+xRW+fjo3VYRYnudZp9W7QdP5ks3+pFlCMl/
+         UQDVWUGoj+Rl98SZJ5V325dEgLGPhHD+uMpJnup5o7/nZGVpEDuOUaR2GD4wWnSJwCfK
+         V8Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TGiVQCAPVenbpU4R0UlRE+cCXkPIO6idXxOzj44qmV0=;
-        b=Ddxm/Lehz72W2jJosivwrVmp9PwiS1Ogax75LefKOMdySzhNdyMvauPlgZhqxKBteo
-         urWfl3k+tm2Y58PWPHC0Lv5bbRArN3KM+LMyrUP/328h4mluPmJcsD6BxFDjH7n8RlOb
-         zA6Ti0qHvdRCLiBmkA/BNwBGZux/QHoHzyZb2wPqRT39SuoTVeDKFE6nDtsOBZCMWio0
-         Zz+algO1x6pwDYPgTd47Y4rz/mbHm2tNGX4tHF5ZVbahKR39teXh1ZiXpYEXjWEBOdth
-         S487KF3OFkwCmc82tLRZ8TDbx7ZKpZgfbirq6dvz17Yz/SI+9vJ3ZwN8wGxp9oMZgQfP
-         ORKw==
-X-Gm-Message-State: AFqh2krwzLF0P9EmQMIFinf/ajgzF4lcwDui30WYGuStmTMi5IXJLEG5
-        1UrQ+dtT0hodidvpL8kYoNqH4w==
-X-Google-Smtp-Source: AMrXdXvBj1/K6U8JZ4UStLdlVY8y8dYanmULvL+9Aqp+CzeTrzxkQ7Po5IEBuebAxjGp2azfs+2T1Q==
-X-Received: by 2002:a17:906:3f87:b0:809:c1f4:ea09 with SMTP id b7-20020a1709063f8700b00809c1f4ea09mr41433760ejj.69.1674910738479;
-        Sat, 28 Jan 2023 04:58:58 -0800 (PST)
-Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id f25-20020a170906139900b0087b3d555d2esm2730051ejc.33.2023.01.28.04.58.57
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3noSpr0qsbBjaPiHek7vXj61bnZWH4YDsV9fDm3w6bg=;
+        b=LrjPuKo7te2dBiPWQZxnnb3+Hxtjum0cgCuomdLRP9Ik9DJSwPUvvP0YUO/GJWHTob
+         /rDpWEkON3XPBCb8itmr/2/Ob8QYSX5I+pA55+JuDnxuFH/kg6ygCx2ShSqgKyNL7z3g
+         OruGJ2C6/88RKbIaIarebrWKLGGUjYIcHVD+N8TCehJyeDE8Z+nTtRTOUc46wWbOmixm
+         Qx5mEVn1AJr/lRCSLDx5X/2L6sotRwbE+oyZyD3deknra8joEJ0omAkSS04g4lCZDGOi
+         EiTiKnDPsylHyKozJZgswME/MV1tcs1+GFkiC0s2aAGG67DB4irZnvCeOMYxkhFiQ9Ml
+         SLag==
+X-Gm-Message-State: AO0yUKWeA3CA0FJo3NJOiUPjDyjMNf/7eEiSFU+fNwIJ7QxhqfttZftR
+        vBp0ulgS7FjUdjjGZUxsqqR18A==
+X-Google-Smtp-Source: AK7set9s1XJCixtX4cwHO6p5/3Vah0LIW8ZFX9u6X+W6Gu/3sSdtWRe1LeWRRkOlfiv8fDUoCSjdCw==
+X-Received: by 2002:a17:906:a457:b0:878:66bc:2280 with SMTP id cb23-20020a170906a45700b0087866bc2280mr9834745ejb.12.1674911317574;
+        Sat, 28 Jan 2023 05:08:37 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id n5-20020a1709061d0500b0084d420503a3sm3910116ejh.178.2023.01.28.05.08.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 04:58:58 -0800 (PST)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Sat, 28 Jan 2023 05:08:37 -0800 (PST)
+Date:   Sat, 28 Jan 2023 14:08:36 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 next 2/2] wifi: nl80211: add MLO_LINK_ID to CMD_STOP_AP event
-Date:   Sat, 28 Jan 2023 13:58:44 +0100
-Message-Id: <20230128125844.2407135-2-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230128125844.2407135-1-alvin@pqrs.dk>
-References: <20230128125844.2407135-1-alvin@pqrs.dk>
+Subject: Re: [PATCH v3 1/2] RISC-V: KVM: Fix privilege mode setting in
+ kvm_riscv_vcpu_trap_redirect()
+Message-ID: <20230128130836.4ujqmzfqlfpcekni@orel>
+References: <20230128082847.3055316-1-apatel@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230128082847.3055316-1-apatel@ventanamicro.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On Sat, Jan 28, 2023 at 01:58:46PM +0530, Anup Patel wrote:
+> The kvm_riscv_vcpu_trap_redirect() should set guest privilege mode
+> to supervisor mode because guest traps/interrupts are always handled
+> in virtual supervisor mode.
+> 
+> Fixes: 9f7013265112 ("RISC-V: KVM: Handle MMIO exits for VCPU")
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  arch/riscv/kvm/vcpu_exit.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/riscv/kvm/vcpu_exit.c b/arch/riscv/kvm/vcpu_exit.c
+> index c9f741ab26f5..af7c4bc07929 100644
+> --- a/arch/riscv/kvm/vcpu_exit.c
+> +++ b/arch/riscv/kvm/vcpu_exit.c
+> @@ -160,6 +160,9 @@ void kvm_riscv_vcpu_trap_redirect(struct kvm_vcpu *vcpu,
+>  
+>  	/* Set Guest PC to Guest exception vector */
+>  	vcpu->arch.guest_context.sepc = csr_read(CSR_VSTVEC);
+> +
+> +	/* Set Guest privilege mode to supervisor */
+> +	vcpu->arch.guest_context.sstatus |= SR_SPP;
+>  }
+>  
+>  /*
+> -- 
+> 2.34.1
+>
 
-nl80211_send_ap_stopped() can be called multiple times on the same
-netdev for each link when using Multi-Link Operation. Add the
-MLO_LINK_ID attribute to the event to allow userspace to distinguish
-which link the event is for.
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
-v1 -> v2: new patch
----
- net/wireless/ap.c      | 2 +-
- net/wireless/nl80211.c | 6 ++++--
- net/wireless/nl80211.h | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/net/wireless/ap.c b/net/wireless/ap.c
-index e68923200018..0962770303b2 100644
---- a/net/wireless/ap.c
-+++ b/net/wireless/ap.c
-@@ -39,7 +39,7 @@ static int ___cfg80211_stop_ap(struct cfg80211_registered_device *rdev,
- 		wdev->u.ap.ssid_len = 0;
- 		rdev_set_qos_map(rdev, dev, NULL);
- 		if (notify)
--			nl80211_send_ap_stopped(wdev);
-+			nl80211_send_ap_stopped(wdev, link_id);
- 
- 		/* Should we apply the grace period during beaconing interface
- 		 * shutdown also?
-diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-index 7370ddf84fd3..fd231e37ea9d 100644
---- a/net/wireless/nl80211.c
-+++ b/net/wireless/nl80211.c
-@@ -19701,7 +19701,7 @@ void cfg80211_crit_proto_stopped(struct wireless_dev *wdev, gfp_t gfp)
- }
- EXPORT_SYMBOL(cfg80211_crit_proto_stopped);
- 
--void nl80211_send_ap_stopped(struct wireless_dev *wdev)
-+void nl80211_send_ap_stopped(struct wireless_dev *wdev, unsigned int link_id)
- {
- 	struct wiphy *wiphy = wdev->wiphy;
- 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wiphy);
-@@ -19719,7 +19719,9 @@ void nl80211_send_ap_stopped(struct wireless_dev *wdev)
- 	if (nla_put_u32(msg, NL80211_ATTR_WIPHY, rdev->wiphy_idx) ||
- 	    nla_put_u32(msg, NL80211_ATTR_IFINDEX, wdev->netdev->ifindex) ||
- 	    nla_put_u64_64bit(msg, NL80211_ATTR_WDEV, wdev_id(wdev),
--			      NL80211_ATTR_PAD))
-+			      NL80211_ATTR_PAD) ||
-+	    (wdev->valid_links &&
-+	     nla_put_u8(msg, NL80211_ATTR_MLO_LINK_ID, link_id)))
- 		goto out;
- 
- 	genlmsg_end(msg, hdr);
-diff --git a/net/wireless/nl80211.h b/net/wireless/nl80211.h
-index ba9457e94c43..0278d817bb02 100644
---- a/net/wireless/nl80211.h
-+++ b/net/wireless/nl80211.h
-@@ -114,7 +114,7 @@ nl80211_radar_notify(struct cfg80211_registered_device *rdev,
- 		     enum nl80211_radar_event event,
- 		     struct net_device *netdev, gfp_t gfp);
- 
--void nl80211_send_ap_stopped(struct wireless_dev *wdev);
-+void nl80211_send_ap_stopped(struct wireless_dev *wdev, unsigned int link_id);
- 
- void cfg80211_rdev_free_coalesce(struct cfg80211_registered_device *rdev);
- 
--- 
-2.39.0
-
+Thanks,
+drew
