@@ -2,168 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E6667F564
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D3467F567
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233489AbjA1HKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 02:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51170 "EHLO
+        id S231809AbjA1HNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 02:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233440AbjA1HKR (ORCPT
+        with ESMTP id S229562AbjA1HN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 02:10:17 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF99283954
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:10:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674889816; x=1706425816;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Pgk2+RRbQUnCdx9LsYP+8gwo7QXNoVTuyyGXhYEw6uc=;
-  b=a3JCHj+lbjH3ngCvp232AG0GktDYJn7qLohwtVWQ6GOsADLWP/J7aS8g
-   Q7FdPiwuZBUCAdP+U3ah63xda0BMB+MlFH2mFcG2nRC0+jWW+gCT/v9g6
-   kmNWFXVL8rBOx1FceM6ek+VYYeO843DtJE15uhax9Pk8amNKYzLGYSliC
-   21e3m681k6PQ3fXU5qgKFHfNr1rW1xADK4XSs/Ov6pmFsviYAmmkJUGPz
-   WzCScZ1mZH89MpgWsBGPCLeHCRs88dLvx9CUoe1NPCgVsaMMweFlTYKEy
-   3ubQZUhlv4u2/AhQNTWbhyZIc3xvkRjV5ZyErIW5WY56u5dJjnx6OGsXt
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="324964355"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="324964355"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 23:10:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="806077918"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="806077918"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.186.212]) ([10.252.186.212])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 23:10:12 -0800
-Message-ID: <723f8070-1f03-dcab-4592-bceaf9cbdf07@linux.intel.com>
-Date:   Sat, 28 Jan 2023 15:10:09 +0800
+        Sat, 28 Jan 2023 02:13:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5104B2ED4F;
+        Fri, 27 Jan 2023 23:13:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FD5BB81219;
+        Sat, 28 Jan 2023 07:13:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C660FC433D2;
+        Sat, 28 Jan 2023 07:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674890004;
+        bh=q0lYhtfJI2Xy2767Vzy1SEGyYt0U3k0GB0QJkNmaVJY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nWC2UPLY8wGEXTHo4SvSVCzGEvNVtu3ejt/pihbdy7C+8AOg6cwB2XvvV3A7q638D
+         vizRwHQZeOf7xdgujjZAGW41AMhkfZLmG4ECJ34c+TYlTLpJm21c/hn5SmS0ayIP9M
+         7BmiM5itdzQZyLjPtpPV7JO64NBDNcdc1mm/CPIZBy6cUc2nJLr+3XLikEOvIqs09z
+         78QkU3n3hoY1LfoiY9stN26Un4Gbe8WP6peWVhvW5wJ1uOkoU1YAv/x3M2SQVQeSYT
+         qBHWq2qzOSLFf13ab9s0Q6bsZxXqTMEtWOpR5GX92wcfaF+Nrx5jNA7Ojc6Tc09Vh+
+         QcSKH/4Hbbn+g==
+Date:   Fri, 27 Jan 2023 23:13:22 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jonas Suhr Christensen <jsc@umbraculum.org>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, michal.simek@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        esben@geanix.com
+Subject: Re: [PATCH 2/2] net: ll_temac: improve reset of buffer on dma
+ mapping
+Message-ID: <20230127231322.08b75b36@kernel.org>
+In-Reply-To: <20230126101607.88407-2-jsc@umbraculum.org>
+References: <20230126101607.88407-1-jsc@umbraculum.org>
+        <20230126101607.88407-2-jsc@umbraculum.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com, yu-cheng.yu@intel.com
-Subject: Re: [PATCH V3 0/7] iommu/vt-d: Support performance monitoring for
- IOMMU
-Content-Language: en-US
-To:     kan.liang@linux.intel.com, joro@8bytes.org, will@kernel.org,
-        dwmw2@infradead.org, robin.murphy@arm.com, robert.moore@intel.com,
-        rafael.j.wysocki@intel.com, lenb@kernel.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230120165408.500511-1-kan.liang@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230120165408.500511-1-kan.liang@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/21 0:54, kan.liang@linux.intel.com wrote:
-> From: Kan Liang <kan.liang@linux.intel.com>
-> 
-> Changes since V2:
-> - Move ecmd_submit_sync() to iommu.c to avoid #ifdef CONFIG_INTEL_IOMMU
-> 
-> Changes since V1:
-> - The cap and ecap registers are always in the first page. It's not
->    necessary to use the reg size in dmar_validate_one_drhd(). (Patch 1)
-> - Move reg_size up and pair it with reg_base_addr in struct
->    dmar_drhd_unit (Patch 1)
-> - Update the year of Copyright (Patch 2)
-> - Return 0 if PMS is not supported (Patch 2)
-> - Refine the comments and add a pr_warn for per-counter capabilities
->    check (Patch 2)
-> - Remove unnecessary iommu_pmu->num_cntr = i (Patch 2)
-> - Remove has_ob of ecmd_submit_sync() (Patch 3)
-> - Remove the helpers from non-INTEL_IOMMU. (Patch 3)
-> - Still keep #ifdef CONFIG_INTEL_IOMMU for ecmd_submit_sync() to
->    avoid compile warning with non-INTEL_IOMMU config.
-> - Use pr_warn_once() to replace WARN_ONCE() (Patch 4 & 6)
-> - Free iommu PMU if it fails to be registered. (Patch 4)
-> - Remove unnecessary 'handled' variable. (Patch 6)
-> 
-> A performance monitoring infrastructure, perfmon, is introduced with
-> the VT-d Spec 4.0. The purpose of perfmon is to support collection of
-> information about key events occurring during operation of the remapping
-> hardware, to aid performance tuning and debug. The patch series is to
-> support the perfmon for IOMMU.
-> 
-> To facilitate the perfmon support, the patch series also supports two
-> new generic features of VT-d Spec 4.0.
-> - Support the 'size' field to retrieve the accurate size of the register
->    set for each dmar device from DRHD. (Patch 1)
-> - Support the new Enhanced Command Interface. (Patch 3)
-> 
-> With the patch series, users can collect the performance data of IOMMU
-> via Linux perf tool. For example,
-> 
->   $ perf stat -e dmar0/iommu_requests,filter_ats=0/ -a sleep 1
-> 
->   Performance counter stats for 'system wide':
-> 
->                2135      dmar0/iommu_requests,filter_ats=0/
-> 
->         1.001087695 seconds time elapsed
-> 
-> The IOMMU PMUs can be found under /sys/bus/event_source/devices/dmar*
-> 
-> The available filters and event format can be found at the format folder
->   $ ls /sys/bus/event_source/devices/dmar0/format/
-> event  event_group  filter_ats  filter_page_table
-> 
-> The supported events can be found at the events folder
-> 
->   $ ls /sys/bus/event_source/devices/dmar0/events/
-> ats_blocked        int_cache_hit_nonposted  iommu_mrds
-> pasid_cache_lookup
-> ctxt_cache_hit     int_cache_hit_posted     iommu_requests
-> pg_req_posted
-> ctxt_cache_lookup  int_cache_lookup         iotlb_hit
-> pw_occupancy
-> fs_nonleaf_hit     iommu_clocks             iotlb_lookup
-> ss_nonleaf_hit
-> fs_nonleaf_lookup  iommu_mem_blocked        pasid_cache_hit
-> ss_nonleaf_lookup
-> 
-> Kan Liang (7):
->    iommu/vt-d: Support size of the register set in DRHD
->    iommu/vt-d: Retrieve IOMMU perfmon capability information
->    iommu/vt-d: Support Enhanced Command Interface
->    iommu/vt-d: Add IOMMU perfmon support
->    iommu/vt-d: Support cpumask for IOMMU perfmon
->    iommu/vt-d: Add IOMMU perfmon overflow handler support
->    iommu/vt-d: Enable IOMMU perfmon support
-> 
->   .../sysfs-bus-event_source-devices-iommu      |  32 +
->   drivers/iommu/intel/Kconfig                   |   9 +
->   drivers/iommu/intel/Makefile                  |   1 +
->   drivers/iommu/intel/dmar.c                    |  33 +-
->   drivers/iommu/intel/iommu.c                   |  59 ++
->   drivers/iommu/intel/iommu.h                   | 101 +-
->   drivers/iommu/intel/perfmon.c                 | 860 ++++++++++++++++++
->   drivers/iommu/intel/perfmon.h                 |  65 ++
->   drivers/iommu/intel/svm.c                     |   2 +-
->   include/acpi/actbl1.h                         |   2 +-
->   include/linux/cpuhotplug.h                    |   1 +
->   include/linux/dmar.h                          |   1 +
->   12 files changed, 1159 insertions(+), 7 deletions(-)
->   create mode 100644 Documentation/ABI/testing/sysfs-bus-event_source-devices-iommu
->   create mode 100644 drivers/iommu/intel/perfmon.c
->   create mode 100644 drivers/iommu/intel/perfmon.h
+On Thu, 26 Jan 2023 11:16:07 +0100 Jonas Suhr Christensen wrote:
+> Free buffer and set pointer to null on dma mapping error.
 
-Thanks for the work. The overall looks good to me now. But I am still
-seeing some code style issues after running "./scripts/checkpatch.pl
---strict" scripts.
-
-Can you please fix those issues and post a v4?
-
-Best regards,
-baolu
-
+Why? I don't see a leak. You should provide motivation in the commit
+message.
