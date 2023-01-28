@@ -2,183 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B699567F7CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 13:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6C967F7CF
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 13:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234214AbjA1MY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 07:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S234248AbjA1M33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 07:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjA1MY6 (ORCPT
+        with ESMTP id S230074AbjA1M32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 07:24:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C241CACB
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 04:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674908649;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=03GFZKsTOOOpaDJp/S3NzI8t/p2gCtQxJMJc4T/9yBg=;
-        b=MEDAkj/d07bAHG5tGDSh9Xj6srnUq5YDXKbtDenX1P13k9nQRXDiPflVeOJQSFee5rTVD6
-        dPkgE53TX8aC5aBS3l3Y/GPIyc0iCAIp2acxDOwzT6MpKjinI1OdUmHo3Z+rR7AKzRQ0TV
-        FDWlzuLNgKeorX/Xr83t5bOtf9TreF4=
-Received: from mail-ua1-f71.google.com (mail-ua1-f71.google.com
- [209.85.222.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-404-2E3GrnyEP2i-PYIB-25DEw-1; Sat, 28 Jan 2023 07:24:08 -0500
-X-MC-Unique: 2E3GrnyEP2i-PYIB-25DEw-1
-Received: by mail-ua1-f71.google.com with SMTP id c30-20020ab04861000000b00419afefbe3eso2826625uad.4
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 04:24:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=03GFZKsTOOOpaDJp/S3NzI8t/p2gCtQxJMJc4T/9yBg=;
-        b=dGptodqo8InUQzgK8cnyoCu0phJAhRAAjWJzGkr1sqyJBUxxwViy3T8pt+uRTa4ZgS
-         9pPqMczK/uaj8vZ4s2SdxJr/hcRsAEr6F7JtI7/mYOePR1KHBIkjiKJV9o0pXOQimE/5
-         jwW7DJbRlTUZ/KzVsNuHRrOt8AxSgiReCjYyul+HBViUxq98ZucjhdH1/MDN3aczLN87
-         otWMURlymgT+vEeQhyXuW1Hie3cvt3w1MJiTMwzofzCkNIc2ntjRWABTQtCEpZgBkKlN
-         IOw8MIaWrtUo9HSkx54wRcMrpt6tb0ef5Kj84VOtTc5EijbfQ8XECRjsa4y/fbfCGT0v
-         BArw==
-X-Gm-Message-State: AFqh2kpRea4rG9aBlnTrYtSmKmcK5z33DBxjdaf5Pmo5PUGk+rjVdAN7
-        p3cLDmOg4o8Pg8U1104xP2qkvdEQhWgmeCEHZvyBBHGbeo5i5Nnjv4jVvH/UqrCXScaiYtwjUJ6
-        nOPBSwJkj9QJbGbBpkEMZz0y4XK3wLXRT1AHiyeqO
-X-Received: by 2002:a67:ea04:0:b0:3d3:ec78:1d72 with SMTP id g4-20020a67ea04000000b003d3ec781d72mr6956103vso.13.1674908647625;
-        Sat, 28 Jan 2023 04:24:07 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXujUr3nmTvR4IYft+VhWLaB9CaLr0rUquJiWtbPKQVgUOJtr2ccTZPeu3VmmCd7OwP4b9ukbqxY7/EVlW27Z14=
-X-Received: by 2002:a67:ea04:0:b0:3d3:ec78:1d72 with SMTP id
- g4-20020a67ea04000000b003d3ec781d72mr6956096vso.13.1674908647381; Sat, 28 Jan
- 2023 04:24:07 -0800 (PST)
+        Sat, 28 Jan 2023 07:29:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFCC23C51;
+        Sat, 28 Jan 2023 04:29:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 649F4B808D5;
+        Sat, 28 Jan 2023 12:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDB7CC433D2;
+        Sat, 28 Jan 2023 12:29:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674908964;
+        bh=/MjwOIZ7AHnVIx/U++rLxc4ZtiAEs3nBEd9N/z5OlZo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZapXZYkH7h69AzmJO6Agn0+62d6uKHR9tNmiQkqwgBjB2xMeULggvJlKHOi3VTn+v
+         FItOU3ig9pK+/+kbheDsuKN50Lqc4WcQBzQ8O0estDGQGU3qYuLPAgnMrrsxiDYYOE
+         3MIOZBgqm7nu7E5Drs37IiaMxkQ1P1+JWV/lwAmbKWs6PHFV9X89AeIL7iu78KRP9k
+         gmsNCNR6AuNSNBBy/bimjvdjApzEdGdvHS1Wwzyyuj9tLNvUGtm4hJqlxkAqBg5bJx
+         oOBvcqKMqdrmaXT59MbBKeyb3jfzy8hP8LY55nPfzCwpUCjkbE+/QHjyb0AdtTXZ5C
+         SByxacYI4W+Uw==
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Arnd Bergmann <arnd@arndb.de>, Tony Luck <tony.luck@intel.com>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-ia64@vger.kernel.org
+Subject: [RFC PATCH] MAINTAINERS: Mark Itanium/IA64 as 'dead'
+Date:   Sat, 28 Jan 2023 13:29:04 +0100
+Message-Id: <20230128122904.1345120-1-ardb@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230128113532.94651-1-sven@svenpeter.dev>
-In-Reply-To: <20230128113532.94651-1-sven@svenpeter.dev>
-From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Sat, 28 Jan 2023 12:23:51 +0000
-Message-ID: <CAOgh=Fw5FXPKde9PtTRRVeJ9eos8wqt72F_TLe_2XjWpKmCZ-A@mail.gmail.com>
-Subject: Re: [PATCH] iommu/dart: Fix apple_dart_device_group for PCI groups
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Hector Martin <marcan@marcan.st>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Robin Murphy <robin.murphy@arm.com>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2633; i=ardb@kernel.org; h=from:subject; bh=/MjwOIZ7AHnVIx/U++rLxc4ZtiAEs3nBEd9N/z5OlZo=; b=owEB7QES/pANAwAKAcNPIjmS2Y8kAcsmYgBj1RUQXu7GDRm716q0YhFxKPrZ1FjCoRphxk4HkO4J 38PCh4aJAbMEAAEKAB0WIQT72WJ8QGnJQhU3VynDTyI5ktmPJAUCY9UVEAAKCRDDTyI5ktmPJJSzC/ 9QSkCE13/MHnhFgdRJVuL/ZWL0Z71yylWHYWUX1yPPt3ZofLsZvP4L6swmbZBSLBoHL+D7FcQLaZAy FFGaYTcxDKMfUXqNGGGhnM8ocd2awGUB9xyeaLCPcQfxarrgZUTE3ceFlxaMqUSUGqREkekOvZqhki q8OYeFJRMsypPY7zOvJX8XiWgh7TMsINGMxDS71ymm6zxp4iuHdR5azYM/YsLqmWO/bgV2HnQJcGlJ /On7lkZ/xCBLO1OLpIhKRsUT3zO5GkRzZamM8A1CnTY8AIUnDwNtXBEDgjQeJf2+3ABiuvTiy/S0OQ 3FpA/kUM27uZiSy194U4hyVQ92tpY0wl1ZajR5uAL7Hy6my9IUXmzfrr7hISqygQxJ9RA7LBpMG+iO tyfacpPNb3P+415H5LaF1vLD5OOJWcv7D8RkEazbhXqlSXgVi3DdvO2Yoj+bpg4z4aIXgC3SoLUeVT Gaat18DplDCHoVS5Li6bRnNWATmA3tVVd+3G5nSBsIBik=
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 28 Jan 2023 at 11:43, Sven Peter <sven@svenpeter.dev> wrote:
->
-> pci_device_group() can return an already existing IOMMU group if the PCI
-> device's pagetables have to be shared with another one due to bus
-> toplogy, isolation features and/or DMA alias quirks.
-> apple_dart_device_group() however assumes that the group has just been
-> created and overwrites its iommudata which will eventually lead to
-> apple_dart_release_group leaving stale entries in sid2group.
-> Fix that by merging the iommudata if the returned group already exists.
->
-> Fixes: f0b636804c7c ("iommu/dart: Clear sid2group entry when a group is freed")
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
+Create a new status 'dead' which conveys that a subsystem is
+unmaintained and scheduled for removal, and developers are free to
+behave as if it's already gone. Also, automated build tests should
+ignore such subsystems, or at least notify only those who are known to
+have an interest in the subsystem in particular.
 
-Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+Given that Itanium/IA64 has no maintainer, is no longer supported in
+QEMU (for boot testing under emulation) and does not seem to have a user
+base beyond a couple of machines used by distros to churn out packages,
+let's mark it as dead. This shall mean that any treewide changes (such
+as changes to the EFI subsystem, which I maintain) can be made even if
+they might cause build or boot time regressions on IA64 machines. Also,
+mark the port as scheduled for removal after the next LTS release.
 
-Is mise le meas/Regards,
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Jessica Clarke <jrtc27@jrtc27.com>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-ia64@vger.kernel.org
+Link: https://lore.kernel.org/all/CAMj1kXEqbMEcrKYzz2-huLPMnotPoxFY8adyH=Xb4Ex8o98x-w@mail.gmail.com/
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+---
+ MAINTAINERS | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Eric Curtin
-
->  drivers/iommu/apple-dart.c | 51 ++++++++++++++++++++++++++++++++------
->  1 file changed, 44 insertions(+), 7 deletions(-)
->
-> This won't apply cleanly to iommu/fixes as it's based on the t8110 DART
-> changes since the USB4/Thunderbolt DART itself also depends on those.
-> That's not a big deal though since it's not possible to run into this
-> bug without complex PCI bus topologies which can only be created using
-> USB4/Thunderbolt on these SoCs and there's no support for that upstream
-> yet.
->
-> diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-> index a1304ba3639b..02f7a1740b14 100644
-> --- a/drivers/iommu/apple-dart.c
-> +++ b/drivers/iommu/apple-dart.c
-> @@ -840,6 +840,29 @@ static void apple_dart_release_group(void *iommu_data)
->         mutex_unlock(&apple_dart_groups_lock);
->  }
->
-> +static int apple_dart_merge_master_cfg(struct apple_dart_master_cfg *dst,
-> +                                      struct apple_dart_master_cfg *src)
-> +{
-> +       /*
-> +        * We know that this function is only called for groups returned from
-> +        * pci_device_group and that all Apple Silicon platforms never spread
-> +        * PCIe devices from the same bus across multiple DARTs such that we can
-> +        * just assume that both src and dst only have the same single DART.
-> +        */
-> +       if (src->stream_maps[1].dart)
-> +               return -EINVAL;
-> +       if (dst->stream_maps[1].dart)
-> +               return -EINVAL;
-> +       if (src->stream_maps[0].dart != dst->stream_maps[0].dart)
-> +               return -EINVAL;
-> +
-> +       bitmap_or(dst->stream_maps[0].sidmap,
-> +                 dst->stream_maps[0].sidmap,
-> +                 src->stream_maps[0].sidmap,
-> +                 dst->stream_maps[0].dart->num_streams);
-> +       return 0;
-> +}
-> +
->  static struct iommu_group *apple_dart_device_group(struct device *dev)
->  {
->         int i, sid;
-> @@ -881,14 +904,28 @@ static struct iommu_group *apple_dart_device_group(struct device *dev)
->         if (!group)
->                 goto out;
->
-> -       group_master_cfg = kmemdup(cfg, sizeof(*group_master_cfg), GFP_KERNEL);
-> -       if (!group_master_cfg) {
-> -               iommu_group_put(group);
-> -               goto out;
-> -       }
-> +       group_master_cfg = iommu_group_get_iommudata(group);
-> +       if (group_master_cfg) {
-> +               int ret;
->
-> -       iommu_group_set_iommudata(group, group_master_cfg,
-> -               apple_dart_release_group);
-> +               ret = apple_dart_merge_master_cfg(group_master_cfg, cfg);
-> +               if (ret) {
-> +                       dev_err(dev, "Failed to merge DART IOMMU grups.\n");
-> +                       iommu_group_put(group);
-> +                       res = ERR_PTR(ret);
-> +                       goto out;
-> +               }
-> +       } else {
-> +               group_master_cfg = kmemdup(cfg, sizeof(*group_master_cfg),
-> +                                          GFP_KERNEL);
-> +               if (!group_master_cfg) {
-> +                       iommu_group_put(group);
-> +                       goto out;
-> +               }
-> +
-> +               iommu_group_set_iommudata(group, group_master_cfg,
-> +                       apple_dart_release_group);
-> +       }
->
->         for_each_stream_map(i, cfg, stream_map)
->                 for_each_set_bit(sid, stream_map->sidmap, stream_map->dart->num_streams)
-> --
-> 2.25.1
->
->
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5b74014994f5c1cc..5481967c2112e8ce 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -94,6 +94,14 @@ Descriptions of section entries and preferred order
+ 	   Obsolete:	Old code. Something tagged obsolete generally means
+ 			it has been replaced by a better system and you
+ 			should be using that.
++	   Dead:	Code has no maintainer and no significant user base,
++			and is scheduled for removal. Developers are free to
++			ignore it when it comes to testing bug fixes or other
++			code changes, and automated build test systems must not
++			report any detected issues, except possibly to mailing
++			lists or other recipients that have opted in
++			specifically to receiving reports about the state of
++			this code.
+ 	W: *Web-page* with status/info
+ 	Q: *Patchwork* web based patch tracking system site
+ 	B: URI for where to file *bugs*. A web-page with detailed bug
+@@ -9833,7 +9841,7 @@ F:	include/linux/i3c/
+ 
+ IA64 (Itanium) PLATFORM
+ L:	linux-ia64@vger.kernel.org
+-S:	Orphan
++S:	Dead # to be removed after the 2023 LTS release
+ F:	Documentation/ia64/
+ F:	arch/ia64/
+ 
+-- 
+2.39.0
 
