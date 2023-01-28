@@ -2,145 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52EB67F9B2
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 17:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B1867F9B5
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 17:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234701AbjA1Qxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 11:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
+        id S232964AbjA1Q5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 11:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234669AbjA1Qxt (ORCPT
+        with ESMTP id S230110AbjA1Q5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 11:53:49 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E0C2B294
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 08:53:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674924826; x=1706460826;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vRkPCVJxpUWRe9aoG6jdkY5CqBFWolpjIN4PiNocKuI=;
-  b=ZCI660BeJDhIduHTHVCPtCkgpjrbCPbd42IaC++aag8UmX1z37PPueVW
-   WBs1SzOzakNsRuNBhb0VCC3x3ckW6f6juEe7VTWwuQ8RfczqGlFm0Cp+O
-   yNkHzwqfS9mSghyXeX+gwn/GRp/zsUtoRF9O9htN7BHA6s7Ol0eKwtZHI
-   mXIrrqgnXmBcRmRWZpTb9OsZUYz8KeV0MQvrnycf+C5kEgnaB0cjcEWdf
-   enW6g48uQ3cn2HkI4ZDqD7S1elqRX3m1zVv+62oeljy87YgoFLs0rGXka
-   EEL0ze+XPz/gQub5XRPvkG8caZq8B/vB1/MnRrAe0VPHbdJs3w6PdbAE3
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="413530225"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="413530225"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 08:53:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="787540585"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="787540585"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Jan 2023 08:53:44 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pLoSV-0000vV-1L;
-        Sat, 28 Jan 2023 16:53:43 +0000
-Date:   Sun, 29 Jan 2023 00:53:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [tip:x86/tdx 3/7] vmlinux.o: warning: objtool: __tdx_hypercall+0x7f:
- return with modified stack frame
-Message-ID: <202301290027.sxK9YqsA-lkp@intel.com>
+        Sat, 28 Jan 2023 11:57:20 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856182A178
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 08:57:18 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id s3so7349182edd.4
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 08:57:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tt8Ha/RSXw0RfPBUqnD7ihG/77QJ3kclrfnxQeGKaOg=;
+        b=vdySnnQpnG7PamHqJRpJHTk2/+pkWDwtlaaTwo/4ftut1SPbh2wsoeOBfyqSe97XJr
+         mBy/7KQLHn305eIbrv15wtIC3jt677R6UlSH0zZLLGg/AOXKk5sofUt21qCLjX8Xqvpz
+         ZRdX45XYwjwfNRYgk0ChwEm0M4J3VJXcUuOjg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tt8Ha/RSXw0RfPBUqnD7ihG/77QJ3kclrfnxQeGKaOg=;
+        b=SIa0pLMV1h/Zh0kXGZRwv7So8OOkh3BXJPXJK78PjHjlh4tV5mWXih9vqzCg5CODn3
+         47RoOuxW6O7yLCT+uhYMDkbpUG+lXqII08zb82uF1L17mACz/xHruRrpy8uw8JT0kSMS
+         pWfWYROrIJTEn2nCutPqDpw0gEKth9ij1QLeqAWzlEph/Hp3qpoKBNLNB3fyRMHZVaoR
+         wCEPZLsNpAqsNAsOzuiGwUbHkym7/Ebx5VdNuEB3yohm1sxe7QMDpPgg7q/qLEI3k5Il
+         a/FZD+999G6N6j2hkuI3yoEauPSxwzQtI1L6sBnMb9kMqc8B+TlBY/WUMPdX4bAitICC
+         C8qw==
+X-Gm-Message-State: AO0yUKXJx7a9asaYmWuEQ7KwPj891WcMWbCTMYHWW2PLn2RuZ23of/wh
+        +0bNivR/zR01g243mQCzw2BATMaE8zUgRAAy4mpgCQ==
+X-Google-Smtp-Source: AK7set8gwJjmXGZ7qEK5w/UZ8ko/Bw99HYHzRiyxR2URnKVNJoJLwhG2Y0TJ+hLyQwxjUH1ZmX3ZHnlhwaLOabgBZQ8=
+X-Received: by 2002:a05:6402:552:b0:4a0:8fde:99b4 with SMTP id
+ i18-20020a056402055200b004a08fde99b4mr3865536edx.32.1674925037155; Sat, 28
+ Jan 2023 08:57:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230128-list-entry-null-check-tls-v1-1-525bbfe6f0d0@diag.uniroma1.it>
+ <Y9VP6Hw7jH0VelUX@corigine.com>
+In-Reply-To: <Y9VP6Hw7jH0VelUX@corigine.com>
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Date:   Sat, 28 Jan 2023 17:57:06 +0100
+Message-ID: <CAEih1qX-XG=-OxMcNyWm9NuYG+_=oFHkTPD3s-Q7EPKPAS3+zw@mail.gmail.com>
+Subject: Re: [PATCH net-next] net/tls: tls_is_tx_ready() checked list_entry
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vakul Garg <vakul.garg@nxp.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kirill,
+On Sat, 28 Jan 2023 at 17:40, Simon Horman <simon.horman@corigine.com> wrote:
+>
+> Hi Pietro,
+>
+> I agree this is correct.
+>
+> However, given that the code has been around for a while,
+> I feel it's relevant to ask if tx_list can ever be NULL.
+> If not, perhaps it's better to remove the error path entirely.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Hi Simon,
+Thank you for your fast reply.
+The point is exactly that tx_list will never be NULL, as the list head will
+always be present.
+So the error, as is, will never be detected, resulting in type confusion.
+We found this with static analysis, so we have no way to say for sure that
+the list can never be empty on edge cases.
+As this is a type confusion, the errors are often sneaky and go undetected.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/tdx
-head:   8de62af018cc9262649d7688f7eb1409b2d8f594
-commit: c30c4b2555ba93b845559a036293fcaf7ffd2b82 [3/7] x86/tdx: Refactor __tdx_hypercall() to allow pass down more arguments
-config: x86_64-randconfig-r035-20230123 (https://download.01.org/0day-ci/archive/20230129/202301290027.sxK9YqsA-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=c30c4b2555ba93b845559a036293fcaf7ffd2b82
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip x86/tdx
-        git checkout c30c4b2555ba93b845559a036293fcaf7ffd2b82
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+As an example, the following bug we previously reported resulted in a type
+confusion on net code that went undetected for more than 20 years.
+Link: https://lore.kernel.org/all/9fcd182f1099f86c6661f3717f63712ddd1c676c.1674496737.git.marcelo.leitner@gmail.com/
+In that case, we were able to create a PoC to demonstrate the issue where we
+leveraged the type confusion to bypass KASLR.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+In the end, this is the maintainer's call, but I would keep the check and
+correctly issue a list_first_entry_or_null() so that the check will work
+as intended as the added overhead is just a pointer comparison which
+would likely justify the cost of a more solid code.
+Otherwise, I can also submit a patch that entirely removes the check.
+Let me know what you prefer.
 
-All warnings (new ones prefixed by >>):
-
->> vmlinux.o: warning: objtool: __tdx_hypercall+0x7f: return with modified stack frame
-   vmlinux.o: warning: objtool: vmw_port_hb_in+0x2b2: stack state mismatch: cfa1=5+16 cfa2=4+8
-   vmlinux.o: warning: objtool: vmw_port_hb_out+0x2c6: stack state mismatch: cfa1=5+16 cfa2=4+8
-
-
-objdump-func vmlinux.o __tdx_hypercall:
-0000 0000000000005ae0 <__tdx_hypercall>:
-0000     5ae0:	f3 0f 1e fa          	endbr64
-0004     5ae4:	55                   	push   %rbp
-0005     5ae5:	48 89 e5             	mov    %rsp,%rbp
-0008     5ae8:	41 57                	push   %r15
-000a     5aea:	41 56                	push   %r14
-000c     5aec:	41 55                	push   %r13
-000e     5aee:	41 54                	push   %r12
-0010     5af0:	55                   	push   %rbp
-0011     5af1:	48 89 f8             	mov    %rdi,%rax
-0014     5af4:	48 89 f5             	mov    %rsi,%rbp
-0017     5af7:	4c 8b 50 10          	mov    0x10(%rax),%r10
-001b     5afb:	4c 8b 58 18          	mov    0x18(%rax),%r11
-001f     5aff:	4c 8b 60 20          	mov    0x20(%rax),%r12
-0023     5b03:	4c 8b 68 28          	mov    0x28(%rax),%r13
-0027     5b07:	4c 8b 70 30          	mov    0x30(%rax),%r14
-002b     5b0b:	4c 8b 78 38          	mov    0x38(%rax),%r15
-002f     5b0f:	50                   	push   %rax
-0030     5b10:	31 c0                	xor    %eax,%eax
-0032     5b12:	b9 00 fc 00 00       	mov    $0xfc00,%ecx
-0037     5b17:	48 f7 c5 02 00 00 00 	test   $0x2,%rbp
-003e     5b1e:	74 01                	je     5b21 <__tdx_hypercall+0x41>
-0040     5b20:	fb                   	sti
-0041     5b21:	66 0f 01 cc          	tdcall
-0045     5b25:	48 85 c0             	test   %rax,%rax
-0048     5b28:	75 36                	jne    5b60 <__tdx_hypercall+0x80>
-004a     5b2a:	58                   	pop    %rax
-004b     5b2b:	48 f7 c5 01 00 00 00 	test   $0x1,%rbp
-0052     5b32:	74 18                	je     5b4c <__tdx_hypercall+0x6c>
-0054     5b34:	4c 89 50 10          	mov    %r10,0x10(%rax)
-0058     5b38:	4c 89 58 18          	mov    %r11,0x18(%rax)
-005c     5b3c:	4c 89 60 20          	mov    %r12,0x20(%rax)
-0060     5b40:	4c 89 68 28          	mov    %r13,0x28(%rax)
-0064     5b44:	4c 89 70 30          	mov    %r14,0x30(%rax)
-0068     5b48:	4c 89 78 38          	mov    %r15,0x38(%rax)
-006c     5b4c:	4c 89 d0             	mov    %r10,%rax
-006f     5b4f:	45 31 d2             	xor    %r10d,%r10d
-0072     5b52:	45 31 db             	xor    %r11d,%r11d
-0075     5b55:	5d                   	pop    %rbp
-0076     5b56:	41 5c                	pop    %r12
-0078     5b58:	41 5d                	pop    %r13
-007a     5b5a:	41 5e                	pop    %r14
-007c     5b5c:	41 5f                	pop    %r15
-007e     5b5e:	5d                   	pop    %rbp
-007f     5b5f:	c3                   	ret
-0080     5b60:	e8 00 00 00 00       	call   5b65 <__tdx_hypercall+0x85>	5b61: R_X86_64_PLT32	__tdx_hypercall_failed-0x4
-0085     5b65:	eb f9                	jmp    5b60 <__tdx_hypercall+0x80>
-0087     5b67:	66 0f 1f 84 00 00 00 00 00 	nopw   0x0(%rax,%rax,1)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+Pietro
