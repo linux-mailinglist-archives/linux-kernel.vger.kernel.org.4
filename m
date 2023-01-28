@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA40867FA80
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CBC67FA85
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbjA1Tis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 14:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S231888AbjA1ToJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 14:44:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjA1Tio (ORCPT
+        with ESMTP id S230143AbjA1ToH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 14:38:44 -0500
+        Sat, 28 Jan 2023 14:44:07 -0500
 Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7535C23C70;
-        Sat, 28 Jan 2023 11:38:42 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id mg12so21907283ejc.5;
-        Sat, 28 Jan 2023 11:38:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AD3AD
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 11:44:05 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id kt14so21977401ejc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 11:44:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WyA4c37awf6FUfhGcOco5QeZhWEaTt+jLXuHAzBLLqI=;
-        b=bM+z29DpFQQ4ihX2O9Y0Lqm0kdgUonTGz3jD9ujj1ZvLHhr04tjq4bmd5uA1eFbSN4
-         xFrzAzoZzx3X6HNCOHJg4DoPC7FF3REorfDIVLmg1+db0XZPJm6zwaO0gAMHazWn42M3
-         c0hSUtkTs9Pkq5NktLUHYff7orO/ghSGE178GT62jAquf7rZ5VtHkjpWblyWP4SqMraS
-         ckkOPtDPEmALHlNBN1FfOjSOHGhRi71gaYw3XoQ4VqBUc9bbo+wGdwHqksLPX/mzLAe0
-         cRbqM0paHGEEgEaI3TG4mO/kVaV1rANFKsHYGW+bX4hk1shpOSBpd/jBQZOLlzT1XCJd
-         /JwQ==
+        d=linux-foundation.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kDr/fu6cZzh/kjW/9yOTtMVpnZToyjsJMLDkL1Bx/po=;
+        b=hU+h1UYNyEmeQX2qUOJs7BSO2eV1R8a9DwLO26nhK2BhO3O2vdOQC4FI8PR4xB8Kcc
+         QUu9F8wC6zQ5LLH+WdkCqf/Oe10YqkQMOzHCU2CnEoiBHEZkxIMI8+nS0nDRHjt1I0Ty
+         jL1AZu0DY0cHkJdXM4cidVviVH/AifhRoY5Lo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WyA4c37awf6FUfhGcOco5QeZhWEaTt+jLXuHAzBLLqI=;
-        b=nFA3TXKT12VJufATUHNdgXnVlO0QZXiM3xxcU17EFKVrEXV3iYWbLyZ3bA0HjYL5z/
-         zDdNuEP0btoRGuaK4/FSjvLBpm//srDHcYmi815EM2ircsi4hJNopgilm61qjW0gEXFG
-         gU9e6tsI+jz8qq/zhGzaAl1LQ4lh+6PTHEECWfZRmJ/yYKej+ysAZar7uGbxv/w4yncR
-         RcHsEM0XfDaqbe3c+JRbDQlEWbNq0C97zVJK7L0mMDNmRxwdg/DsvoBeNfTlyLGrERoR
-         DjlAtN6sY9e9OkHzPNtyo8Kxyhh90E6H/jnKsy82T4+CBJN8u0Xw3u0yz3qBGZ2grgdq
-         pwrg==
-X-Gm-Message-State: AFqh2koL4bxpV5EMU8QRsEWQ56C/nT9r7ihlMLAJ2l0xtqyj7YNRgWGK
-        koYXdKyF9es23L0IhguDe0/HLOF29UIq/XyFEjE=
-X-Google-Smtp-Source: AMrXdXsYLotcrhMN0rZxq9THR4dxNGnQoJZwpVUcMUxlIBXqMhcP9wXoZWTOEhCdjKrUBWT3zv6eIQ2RdFpqT8aRmAE=
-X-Received: by 2002:a17:906:3b4a:b0:86d:30f9:2e3d with SMTP id
- h10-20020a1709063b4a00b0086d30f92e3dmr6002375ejf.299.1674934720953; Sat, 28
- Jan 2023 11:38:40 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kDr/fu6cZzh/kjW/9yOTtMVpnZToyjsJMLDkL1Bx/po=;
+        b=phoNF8zxcR0akgQzGhadcY2ACJwbrqgqrdp+KMDMjCVrvx2mjZ58GxFNKh5So5rtEq
+         A5epFp1vNZpzIFTnbuTIMBMRJTFMZ4RDaZxLKlXnYPEwhrwGUjhmbhMSb2H5z8ChuCjs
+         BptzrT2u3fPhMlwaFcLfKdCQWbdtz/0klzGx9aUFuRB+o/4RY9RWCbxVHaKKy4tZ2PCt
+         e7H7nVC7ek8wPBEXHWCFBH4Vo9Nvg1Mlw2anN/+MKdPiHM4axob2dpdy6QnJ82Gl8wfV
+         to2KeMxCtOHWL7FfbZLiyszT8qOK/82ZJ7FlwYgHNCgsL6pDULB/qDJZTDfcs22gXXAK
+         c/MQ==
+X-Gm-Message-State: AO0yUKWA+YxW6SWvjLd6hNFqMpahw2kfSDqHvlA7x+Oi3T//0a21l2Uk
+        Hmdm0Wixce9qMVbJgf/eH5wmjy5oKdaAnF52dyU=
+X-Google-Smtp-Source: AK7set/dQ8lylGRrdZc7p/0gvrxFau3TH5pFgMqt5bSKHKpLWzUitgZsZWMCgJe6muMS3ZJ9mLAWuw==
+X-Received: by 2002:a17:906:d1d0:b0:878:6df7:ce74 with SMTP id bs16-20020a170906d1d000b008786df7ce74mr10100559ejb.23.1674935043946;
+        Sat, 28 Jan 2023 11:44:03 -0800 (PST)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id op27-20020a170906bcfb00b0084bfd56fb3bsm4224496ejb.162.2023.01.28.11.44.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 Jan 2023 11:44:03 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id hw16so21836683ejc.10
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 11:44:03 -0800 (PST)
+X-Received: by 2002:a17:906:add6:b0:878:51a6:ff35 with SMTP id
+ lb22-20020a170906add600b0087851a6ff35mr2801326ejb.43.1674935042905; Sat, 28
+ Jan 2023 11:44:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20230127064005.1558-1-rdunlap@infradead.org> <20230127064005.1558-5-rdunlap@infradead.org>
-In-Reply-To: <20230127064005.1558-5-rdunlap@infradead.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Sat, 28 Jan 2023 11:38:29 -0800
-Message-ID: <CAADnVQK58PHXuVOXgu1r306RZKRvEGgQwm3cLW0ak4fFNB4W5w@mail.gmail.com>
-Subject: Re: [PATCH 04/35] Documentation: bpf: correct spelling
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <CAHk-=wiDdw8tRzzx=ZBzUftC1TOiOO+kxv0s8HS342BC-jzkLQ@mail.gmail.com>
+ <90eb90da-2679-cac0-979d-6ba0cc8ccbb8@kernel.dk> <20230105174210.jbjoqelllcrd57q6@pali>
+ <58d3649f-3c8c-8b12-1930-f06f59837ad5@kernel.dk> <CAHk-=wiKUWm3VoYHK-oKixc9nF5Qdwp598MPSoh=jdxKAU1bOw@mail.gmail.com>
+ <1933bddd-42d7-d92b-974f-f26c46c01547@kernel.dk> <CAHk-=wjJ=wD5D80hkWNCjJqS+djckAL+nXhXaHaiFzMAMve3rA@mail.gmail.com>
+ <182bc0ee-51e3-b8c4-59f7-dcf702865a95@kernel.dk> <20230106165809.vkz7lr7gi3xce22e@pali>
+ <fd143218-d8ba-e6c5-9225-b8e2aee09979@kernel.dk> <20230128193458.ukl35ev4mwbjmu6b@pali>
+In-Reply-To: <20230128193458.ukl35ev4mwbjmu6b@pali>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 28 Jan 2023 11:43:46 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whfor49J0YTYi6zauiJ_MWwF-XwhSty+HvD4CzxFQ_ZGA@mail.gmail.com>
+Message-ID: <CAHk-=whfor49J0YTYi6zauiJ_MWwF-XwhSty+HvD4CzxFQ_ZGA@mail.gmail.com>
+Subject: Re: pktcdvd
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,37 +83,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 10:40 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+On Sat, Jan 28, 2023 at 11:35 AM Pali Roh=C3=A1r <pali@kernel.org> wrote:
 >
-> Correct spelling problems for Documentation/bpf/ as reported
-> by codespell.
+> Hello! Sorry for a longer delay. Now I have started testing it with
+> Linux 6.2.0-rc5. Adding mapping works fine. Reading also works. Mounting
+> filesystem also works, reading mounted fs also. But after writing some
+> data to fs and calling sync cause kernel oops. Below is the dmesg log.
+> "sync" freezes and never finish.
 >
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: bpf@vger.kernel.org
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> ---
->  Documentation/bpf/libbpf/libbpf_naming_convention.rst |    6 +++---
->  Documentation/bpf/map_xskmap.rst                      |    2 +-
->  Documentation/bpf/ringbuf.rst                         |    4 ++--
->  Documentation/bpf/verifier.rst                        |    2 +-
->  4 files changed, 7 insertions(+), 7 deletions(-)
->
-> diff -- a/Documentation/bpf/libbpf/libbpf_naming_convention.rst b/Documentation/bpf/libbpf/libbpf_naming_convention.rst
-> --- a/Documentation/bpf/libbpf/libbpf_naming_convention.rst
-> +++ b/Documentation/bpf/libbpf/libbpf_naming_convention.rst
-> @@ -83,8 +83,8 @@ This prevents from accidentally exportin
->  to be a part of ABI what, in turn, improves both libbpf developer- and
->  user-experiences.
->
-> -ABI versionning
-> ----------------
-> +ABI versioning
-> +--------------
+> [ 1284.701497] pktcdvd: pktcdvd0: writer mapped to sr0
+> [ 1321.432589] pktcdvd: pktcdvd0: Fixed packets, 32 blocks, Mode-2 disc
+> [ 1321.437543] pktcdvd: pktcdvd0: maximum media speed: 10
+> [ 1321.437546] pktcdvd: pktcdvd0: write speed 10x
+> [ 1327.098955] pktcdvd: pktcdvd0: 590528kB available on disc
+> [ 1329.737263] UDF-fs: INFO Mounting volume 'LinuxUDF', timestamp 2023/01=
+/28 19:16 (103c)
+> [ 1435.627449] ------------[ cut here ]------------
+> [ 1435.627466] kernel BUG at drivers/block/pktcdvd.c:2434!
 
-The patch looks fine, but please submit it independently
-targeting bpf-next with [PATCH bpf-next] subj.
-We want to avoid conflicts.
+Well, this is very much an example of one of the BUG_ON() cases I
+absolutely hate - not only did it cause the traceback (which can be
+interesting), it also effectively killed the machine in the process.
+
+So that BUG_ON() most definitely shouldn't be a BUG_ON().
+
+Turning it into a WARN_ON() (possibly even of the "ONCE" variety)
+together with then finishing the IO with a bio_io_error() would have
+been a better option for debugging.
+
+Of course, the real fix is to fix whatever causes it, and I don't know
+what that is.
+
+So I'm just piping up to once more highlight my hatred of using
+BUG_ON() for "this shouldn't happen" debug code. It's basically never
+the right thing to do unless you are in core code that would kill the
+machine anyway.
+
+                      Linus
