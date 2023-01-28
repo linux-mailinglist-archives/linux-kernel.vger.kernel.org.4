@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0D467F778
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAC867F77A
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbjA1LLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 06:11:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
+        id S234445AbjA1LMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 06:12:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbjA1LLo (ORCPT
+        with ESMTP id S234360AbjA1LLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 06:11:44 -0500
+        Sat, 28 Jan 2023 06:11:52 -0500
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13567518DD;
-        Sat, 28 Jan 2023 03:11:41 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 769B73200437;
-        Sat, 28 Jan 2023 06:11:39 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FF46DFE8;
+        Sat, 28 Jan 2023 03:11:44 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 501583200437;
+        Sat, 28 Jan 2023 06:11:43 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sat, 28 Jan 2023 06:11:40 -0500
+  by compute5.internal (MEProxy); Sat, 28 Jan 2023 06:11:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
          h=cc:cc:content-transfer-encoding:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1674904299; x=
-        1674990699; bh=95cFYESovP/5VNc+cPvOHG0EQFnShh8vh/vZRQA6QEE=; b=d
-        zeyfbiWH4qMpOpayK7ptqs/ng+h+UgBQdxg/M4/Mz7jQPHAh/1PCYaBYJIM3sFXS
-        8nlSvqzTb+0krb/EMFEDzd7lw0nQPwC3T+/xbt4EPVmb1cU8FThiW99FA/h/6nOW
-        nPbgsE0YeWFmP05XvIP4BCGnHg0e9slquaog6aKjpJlvYPAshVFKj7DMqQAA7gQW
-        JrybH740/n8ns0hpT/SWhxVOI1R2PCpREIs40xJao2DKG2zTGrXc/vNVwZtpBsXE
-        2b+bCnnOyKwAjzNLsA4ljovkKS8KQ+Ku+Ay6pHYxe/jL5COFdgKG5VYh2aU1+yy3
-        coBtuvkoUGsPauhpxnJVg==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1674904302; x=
+        1674990702; bh=493UH9whhEk1w0ep2M9HRG0EP8+U1OlA4AfdHG/OFhw=; b=d
+        e1jlgU34CGxuCvyj8cZMBK6/bWoiFIZZ14RcjZHMjYqEeQhToEkBt90vb4EG/Fzv
+        ptuZ1dki+TmLwHkSUoHsw/FQCSC6jrAX9gtJYcucp/E7FKWkWXAJzF7bxBbC9PBf
+        ZbeWNtztp4wUs0FvUdASrT+bk2cN1Ftkf0lK9rgdiGj2/6ljdFsXfTuKFgh2T1lp
+        3MzKs3vpVbXcuCzTKOj9Qv3W8h6Ly2u/zzWsJxF3zaPcJ0EhNtcsnUMZDigSMDaN
+        Yl9dC/aSurjv2YkLsul5saJgHY43Oejy9rL7z/3WqMQXou/vOhmDLiIqNEjx6q/a
+        hn9I43GvOxJ7j3OqSLagA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1674904299; x=1674990699; bh=95cFYESovP/5V
-        Nc+cPvOHG0EQFnShh8vh/vZRQA6QEE=; b=ROaUUwA60NdlI0CcuJvUlvx9txZuX
-        hlp6qf5PB7wiihk5tUJVba2gOwg8WcyArMzhnlL8+2B1oHYaOaDbqDbST8gPB87t
-        mwmIskktVbBlrOnzr5wfCUD//megIbNXEsQYbQRvQxwcd+yz4WmGxAnPxKDb4tU4
-        e5D28B+Ni0fwjAmh0rUC/B8O9XxUFYUJWlaDgzhnM4UHfPL0hwbzoq9Do6aw9oQW
-        rASYPbPnyvRtg/8TYN4f6SBGDtaC90ueRt02HZaDX6UsjNn4l/7/co2s24BWKY7y
-        i3J1AxOp6sjcxdigYbd6izvIyuMIgPFVY63S8qG1zVIBmrBFgL9Djsswg==
-X-ME-Sender: <xms:6gLVY0fQ0TX0c2JLmEM9JsJCANiFealWk5-gXnci3F7Ni-PqkTwDIg>
-    <xme:6gLVY2OU30agzVDJas9p1nSPLGef50iqnCVDAchVygMFFcAQa7ZFv24oBw5cVBTsm
-    ZniBM95JATNl_tUlYI>
-X-ME-Received: <xmr:6gLVY1h4J6l7a_aNCnoXW0buB30q75JO_ytKyWyMnLh_YSJwzIy-5Qwf0Kiyi0eKqILxtkrMKML-2mypytU1PgeVXxPLy1djAWWSlDnTINhUAoRvvnUmNTNPLphiZQ>
+        :x-sasl-enc; s=fm3; t=1674904302; x=1674990702; bh=493UH9whhEk1w
+        0ep2M9HRG0EP8+U1OlA4AfdHG/OFhw=; b=PiC/NiSwFoLtaE5G9J5ld6e2XJUJc
+        15KN4gg4UVQFlPLMuT1t7H0mzQXqsehV8LNDs+cfarFaZBfPwgl2ZfE5uyS+IKUG
+        w5Xj+QbmPDj5d/aby83veig5W0liEQ15XRFOI76cpcQsPv3VDuevHTVcwZbbsQJg
+        knsaiOTyyk7zmCokE591nRt84XTYNhtmfc+9EmYqwx4ilwTgOAE30/unrQd6IOyZ
+        cH8E8u6PSa1EqImcI4ROrNHxk3daX0GksTtT75G0BzufUlaQfA8yAoQydiY2Enef
+        Y9R+AFqB+Cv5GYRQ0tkiBUzTQyXREMPA4Sh6NI8pTVFbUrbr5CsEFrhfQ==
+X-ME-Sender: <xms:7gLVY4nvck79p42jxXJL_nV3K0FoHJxIPO-J3dux_3rQk5uR8fsPjQ>
+    <xme:7gLVY30vZ5J-P2v2s5GGRHNxtFSEAxSxXrQzlw8VGZigVL7WW5xu5rTzKTn2uZ1-H
+    9IajvmSHc-msO_r6eg>
+X-ME-Received: <xmr:7gLVY2reNS9WhSXBKUeCCslFd4iu8DTVYbR9axTZxtPRivPobJv4Yxu4py82ZNP_8qXfWDQkshUQYfi1DsPp-RTBadWUZG8jYdr6kngpBIwHQeQzL9_pONsplnnzXQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvkedgvdegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhvvghn
     ucfrvghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtth
     gvrhhnpeejieehheekgedvjefhveekjefguddtfefhteehtdeiffelkeeiuedufeelkeej
-    geenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvh
+    geenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvh
     gvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:6gLVY5-58AG28G1-1QCn1C1jeVdyPkgTYkWvR6wk9tffJKUJ2RYKzw>
-    <xmx:6gLVYwunG1f5hjHD0V-q8MkWEI7XkleuHPqZhfzLdPD2KAQQyTeL9Q>
-    <xmx:6gLVYwGe5Pfp9IG0ZilZGVcpXg8mhrLnbOMa6ZfwVtqiADA6vdAcWw>
-    <xmx:6wLVYwEzUvHsTmTrKjAOLnHRuvfB7ySvWnA6qtknCEaXwf6dm2mJaA>
+X-ME-Proxy: <xmx:7gLVY0lbXrrVF7HgW2kTl-OeedJJzagd7BRCKrjPrhx0_mvzqCVJhg>
+    <xmx:7gLVY204wNFjpfMcZBILTvxh1bZsgbXQv9G5LHhvgo5K1TIQca3iig>
+    <xmx:7gLVY7uQ7AxsshVmj8mfveE0p_G8aCAVOahDv8Dxin77r9PY3STdjw>
+    <xmx:7gLVYztIhBTfWIEwZv-re8MnBN1pgNsmTNkRPDh6krWi6sNFNvPfhw>
 Feedback-ID: i51094778:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 28 Jan 2023 06:11:37 -0500 (EST)
+ 28 Jan 2023 06:11:40 -0500 (EST)
 From:   Sven Peter <sven@svenpeter.dev>
 To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
@@ -72,9 +72,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
         iommu@lists.linux.dev, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] iommu: dart: Write to all DART_T8020_STREAM_SELECT
-Date:   Sat, 28 Jan 2023 12:11:13 +0100
-Message-Id: <20230128111114.4049-4-sven@svenpeter.dev>
+Subject: [PATCH 4/4] iommu: dart: Add support for M1 USB4 PCIe DART
+Date:   Sat, 28 Jan 2023 12:11:14 +0100
+Message-Id: <20230128111114.4049-5-sven@svenpeter.dev>
 X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 In-Reply-To: <20230128111114.4049-1-sven@svenpeter.dev>
 References: <20230128111114.4049-1-sven@svenpeter.dev>
@@ -89,36 +89,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We're about to add support for a DART variant that use more than 16
-streams and requires writing to two separate stream select registers
-when issuing TLB flushes.
+This variant of the regular t8103 DART is used for the two
+USB4/Thunderbolt PCIe controllers. It supports 64 instead of 16 streams
+which requires a slightly different MMIO layout. We also disallow bypass
+support since these DARTs will only ever be used for externally facing
+devices on the USB4 ports.
 
 Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
- drivers/iommu/apple-dart.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/iommu/apple-dart.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
 diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-index 7d8b2b90cdb6..7579c97a9062 100644
+index 7579c97a9062..a1304ba3639b 100644
 --- a/drivers/iommu/apple-dart.c
 +++ b/drivers/iommu/apple-dart.c
-@@ -372,12 +372,14 @@ apple_dart_t8020_hw_stream_command(struct apple_dart_stream_map *stream_map,
- 			     u32 command)
- {
- 	unsigned long flags;
--	int ret;
-+	int ret, i;
- 	u32 command_reg;
+@@ -81,6 +81,7 @@
+ #define DART_T8020_TCR_BYPASS_DAPF      BIT(12)
  
- 	spin_lock_irqsave(&stream_map->dart->lock, flags);
+ #define DART_T8020_TTBR       0x200
++#define DART_T8020_USB4_TTBR  0x400
+ #define DART_T8020_TTBR_VALID BIT(31)
+ #define DART_T8020_TTBR_ADDR_FIELD_SHIFT 0
+ #define DART_T8020_TTBR_SHIFT 12
+@@ -1184,6 +1185,35 @@ static const struct apple_dart_hw apple_dart_hw_t8103 = {
+ 	.ttbr_shift = DART_T8020_TTBR_SHIFT,
+ 	.ttbr_count = 4,
+ };
++
++static const struct apple_dart_hw apple_dart_hw_t8103_usb4 = {
++	.type = DART_T8020,
++	.irq_handler = apple_dart_t8020_irq,
++	.invalidate_tlb = apple_dart_t8020_hw_invalidate_tlb,
++	.oas = 36,
++	.fmt = APPLE_DART,
++	.max_sid_count = 64,
++
++	.enable_streams = DART_T8020_STREAMS_ENABLE,
++	.lock = DART_T8020_CONFIG,
++	.lock_bit = DART_T8020_CONFIG_LOCK,
++
++	.error = DART_T8020_ERROR,
++
++	.tcr = DART_T8020_TCR,
++	.tcr_enabled = DART_T8020_TCR_TRANSLATE_ENABLE,
++	.tcr_disabled = 0,
++	.tcr_bypass = 0,
++
++	.ttbr = DART_T8020_USB4_TTBR,
++	.ttbr_valid = DART_T8020_TTBR_VALID,
++	.ttbr_addr_field_shift = DART_T8020_TTBR_ADDR_FIELD_SHIFT,
++	.ttbr_shift = DART_T8020_TTBR_SHIFT,
++	.ttbr_count = 4,
++
++	.disable_bypass = true,
++};
++
+ static const struct apple_dart_hw apple_dart_hw_t6000 = {
+ 	.type = DART_T6000,
+ 	.irq_handler = apple_dart_t8020_irq,
+@@ -1276,6 +1306,7 @@ DEFINE_SIMPLE_DEV_PM_OPS(apple_dart_pm_ops, apple_dart_suspend, apple_dart_resum
  
--	writel(stream_map->sidmap[0], stream_map->dart->regs + DART_T8020_STREAM_SELECT);
-+	for (i = 0; i < BITS_TO_U32(stream_map->dart->num_streams); i++)
-+		writel(stream_map->sidmap[i],
-+		       stream_map->dart->regs + DART_T8020_STREAM_SELECT + 4 * i);
- 	writel(command, stream_map->dart->regs + DART_T8020_STREAM_COMMAND);
- 
- 	ret = readl_poll_timeout_atomic(
+ static const struct of_device_id apple_dart_of_match[] = {
+ 	{ .compatible = "apple,t8103-dart", .data = &apple_dart_hw_t8103 },
++	{ .compatible = "apple,t8103-dart-usb4", .data = &apple_dart_hw_t8103_usb4 },
+ 	{ .compatible = "apple,t8110-dart", .data = &apple_dart_hw_t8110 },
+ 	{ .compatible = "apple,t6000-dart", .data = &apple_dart_hw_t6000 },
+ 	{},
 -- 
 2.25.1
 
