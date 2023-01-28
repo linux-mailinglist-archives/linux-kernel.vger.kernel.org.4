@@ -2,338 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A44967F441
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 04:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1EF67F445
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 04:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbjA1DNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 22:13:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
+        id S232174AbjA1DPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 22:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbjA1DNj (ORCPT
+        with ESMTP id S230063AbjA1DPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 22:13:39 -0500
-Received: from out28-73.mail.aliyun.com (out28-73.mail.aliyun.com [115.124.28.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0DB820DE;
-        Fri, 27 Jan 2023 19:13:35 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436697|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0094743-0.252771-0.737755;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.R2VLvg1_1674875610;
-Received: from sun-VirtualBox..(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.R2VLvg1_1674875610)
-          by smtp.aliyun-inc.com;
-          Sat, 28 Jan 2023 11:13:31 +0800
-From:   Frank Sae <Frank.Sae@motor-comm.com>
-To:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     xiaogang.fan@motor-comm.com, fei.zhang@motor-comm.com,
-        hua.sun@motor-comm.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Frank <Frank.Sae@motor-comm.com>
-Subject: [PATCH net-next v2 5/5] net: phy: Add driver for Motorcomm yt8531 gigabit ethernet phy
-Date:   Sat, 28 Jan 2023 11:13:14 +0800
-Message-Id: <20230128031314.19752-6-Frank.Sae@motor-comm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230128031314.19752-1-Frank.Sae@motor-comm.com>
-References: <20230128031314.19752-1-Frank.Sae@motor-comm.com>
+        Fri, 27 Jan 2023 22:15:11 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2D58B7BD;
+        Fri, 27 Jan 2023 19:14:30 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so6478974pjl.0;
+        Fri, 27 Jan 2023 19:14:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8u8BLsAC7MJfW/eOLyTdr8KOt7Z/0K6Jjodb+6UVQ/A=;
+        b=XtIqWw+07w5XbTt07BtNRBl4gmsunl3w00OhRpcZQnYnSlbB+k3Z6wRvPZ9BRIbnNP
+         G4Millumt7OWvjiPpHBTyB183m3QiP6jNQCTbILBrD47SATj41fdPtuHGtkB0I9+jCdm
+         yOXxblmrZHQDTgldSeJfT92PJKJQfipgMHjPHXHK+jZHLDL7jtAtl4+0pn6s5egUKx5j
+         EO0j9zGBTOVk9eAurKO6H5usKL7oENkspgjyj09aLhnwMUtRobPGC1oK3xIxeaDRTPPV
+         QuFDGBHXwIuJajLJAu60Kgnz6ROWaUU1EftQt9sGbURGnHTgZPd0sHqiXDHOhsgUaTTb
+         S8qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8u8BLsAC7MJfW/eOLyTdr8KOt7Z/0K6Jjodb+6UVQ/A=;
+        b=oqIWZp4HpIyM9xJ73aV5Kb0sAyszk+4jOAz3REz+opDFHdICT3reb3ow6iVi/7ybBy
+         iJuDbEVxaCfLYRa9/AmjPNv/Ppjmt+VIsqzseJrOg1E4APXvQQBhd1YwGH+nhv3Yz5xB
+         L7FBdHBC6gKANvJR9DzgyUUuVQL4CW2sl9y41J+WILArvPS7frZ4oYLd+vonmQO1nRyN
+         n7/qfh2+/y5OShbrKnEMa3iu0upm2+hAYTJuqnAT6cDjOhpt1a39y1nv8RrQo7ocX6Zv
+         h5MZ/Xt9UeHFP/gR6VxiGZTrQ7EhoZFOJkz19wy6DThm4pn9rzJuPWxmVO02kiYsuD21
+         m4Tw==
+X-Gm-Message-State: AO0yUKUZK6m+kM/ZfV/sANODmabAFx3j78xxdscRrk1mgbDVZvQxTaBF
+        mOXVt+l3wwKA8xZafYQUOOY=
+X-Google-Smtp-Source: AK7set8udeHMPFfFdXDSq1UbXc0PGw6iacAtrFFlHgvlvyB2jYevrH82Oqik6UFSx5oqjIdoCOygyQ==
+X-Received: by 2002:a17:903:484:b0:196:2295:8cde with SMTP id jj4-20020a170903048400b0019622958cdemr11634770plb.56.1674875662356;
+        Fri, 27 Jan 2023 19:14:22 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-16.three.co.id. [180.214.232.16])
+        by smtp.gmail.com with ESMTPSA id j3-20020a170902690300b001948af092d0sm3550238plk.152.2023.01.27.19.14.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 19:14:21 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 3F3AB1055A0; Sat, 28 Jan 2023 10:14:19 +0700 (WIB)
+Date:   Sat, 28 Jan 2023 10:14:19 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>, corbet@lwn.net
+Cc:     sshefali021@gmail.com, kstewart@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] docs: add workload-tracing document to admin-guide
+Message-ID: <Y9STCwt2FnYf4/X4@debian.me>
+References: <20230127234616.55137-1-skhan@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2GGYwLuvcBLp9AwQ"
+Content-Disposition: inline
+In-Reply-To: <20230127234616.55137-1-skhan@linuxfoundation.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Add a driver for the motorcomm yt8531 gigabit ethernet phy. We have
- verified the driver on AM335x platform with yt8531 board. On the
- board, yt8531 gigabit ethernet phy works in utp mode, RGMII
- interface, supports 1000M/100M/10M speeds, and wol(magic package).
 
-Signed-off-by: Frank Sae <Frank.Sae@motor-comm.com>
----
- drivers/net/phy/Kconfig     |   2 +-
- drivers/net/phy/motorcomm.c | 204 +++++++++++++++++++++++++++++++++++-
- 2 files changed, 203 insertions(+), 3 deletions(-)
+--2GGYwLuvcBLp9AwQ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index f5df2edc94a5..dc2f7d0b0cd8 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -257,7 +257,7 @@ config MOTORCOMM_PHY
- 	tristate "Motorcomm PHYs"
- 	help
- 	  Enables support for Motorcomm network PHYs.
--	  Currently supports the YT8511, YT8521, YT8531S Gigabit Ethernet PHYs.
-+	  Currently supports the YT8511, YT8521, YT8531, YT8531S Gigabit Ethernet PHYs.
- 
- config NATIONAL_PHY
- 	tristate "National Semiconductor PHYs"
-diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
-index 9559fc52814f..f1fc912738e0 100644
---- a/drivers/net/phy/motorcomm.c
-+++ b/drivers/net/phy/motorcomm.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * Motorcomm 8511/8521/8531S PHY driver.
-+ * Motorcomm 8511/8521/8531/8531S PHY driver.
-  *
-  * Author: Peter Geis <pgwipeout@gmail.com>
-  * Author: Frank <Frank.Sae@motor-comm.com>
-@@ -14,6 +14,7 @@
- 
- #define PHY_ID_YT8511		0x0000010a
- #define PHY_ID_YT8521		0x0000011A
-+#define PHY_ID_YT8531		0x4f51e91b
- #define PHY_ID_YT8531S		0x4F51E91A
- 
- /* YT8521/YT8531S Register Overview
-@@ -517,6 +518,68 @@ static int ytphy_set_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol)
- 	return phy_restore_page(phydev, old_page, ret);
- }
- 
-+static int yt8531_set_wol(struct phy_device *phydev,
-+			  struct ethtool_wolinfo *wol)
-+{
-+	struct net_device *p_attached_dev;
-+	const u16 mac_addr_reg[] = {
-+		YTPHY_WOL_MACADDR2_REG,
-+		YTPHY_WOL_MACADDR1_REG,
-+		YTPHY_WOL_MACADDR0_REG,
-+	};
-+	const u8 *mac_addr;
-+	u16 mask, val;
-+	int ret;
-+	u8 i;
-+
-+	if (wol->wolopts & WAKE_MAGIC) {
-+		p_attached_dev = phydev->attached_dev;
-+		if (!p_attached_dev)
-+			return -ENODEV;
-+
-+		mac_addr = (const u8 *)p_attached_dev->dev_addr;
-+		if (!is_valid_ether_addr(mac_addr))
-+			return -EINVAL;
-+
-+		/* Store the device address for the magic packet */
-+		for (i = 0; i < 3; i++) {
-+			ret = ytphy_write_ext_with_lock(phydev, mac_addr_reg[i],
-+							((mac_addr[i * 2] << 8)) |
-+							(mac_addr[i * 2 + 1]));
-+			if (ret < 0)
-+				return ret;
-+		}
-+
-+		/* Enable WOL feature */
-+		mask = YTPHY_WCR_PULSE_WIDTH_MASK | YTPHY_WCR_INTR_SEL;
-+		val = YTPHY_WCR_ENABLE | YTPHY_WCR_INTR_SEL;
-+		val |= YTPHY_WCR_TYPE_PULSE | YTPHY_WCR_PULSE_WIDTH_672MS;
-+		ret = ytphy_modify_ext_with_lock(phydev, YTPHY_WOL_CONFIG_REG,
-+						 mask, val);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* Enable WOL interrupt */
-+		ret = phy_modify(phydev, YTPHY_INTERRUPT_ENABLE_REG, 0,
-+				 YTPHY_IER_WOL);
-+		if (ret < 0)
-+			return ret;
-+	} else {
-+		/* Disable WOL feature */
-+		mask = YTPHY_WCR_ENABLE | YTPHY_WCR_INTR_SEL;
-+		ret = ytphy_modify_ext_with_lock(phydev, YTPHY_WOL_CONFIG_REG,
-+						 mask, 0);
-+
-+		/* Disable WOL interrupt */
-+		ret = phy_modify(phydev, YTPHY_INTERRUPT_ENABLE_REG,
-+				 YTPHY_IER_WOL, 0);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int yt8511_read_page(struct phy_device *phydev)
- {
- 	return __phy_read(phydev, YT8511_PAGE_SELECT);
-@@ -893,6 +956,43 @@ static int yt8521_probe(struct phy_device *phydev)
- 					  val);
- }
- 
-+static int yt8531_probe(struct phy_device *phydev)
-+{
-+	struct device_node *node = phydev->mdio.dev.of_node;
-+	u16 mask, val;
-+	u32 freq;
-+
-+	if (of_property_read_u32(node, "motorcomm,clk-out-frequency-hz", &freq))
-+		freq = YTPHY_DTS_OUTPUT_CLK_DIS;
-+
-+	switch (freq) {
-+	case YTPHY_DTS_OUTPUT_CLK_DIS:
-+		mask = YT8531_SCR_SYNCE_ENABLE;
-+		val = 0;
-+		break;
-+	case YTPHY_DTS_OUTPUT_CLK_25M:
-+		mask = YT8531_SCR_SYNCE_ENABLE | YT8531_SCR_CLK_SRC_MASK |
-+		       YT8531_SCR_CLK_FRE_SEL_125M;
-+		val = YT8531_SCR_SYNCE_ENABLE |
-+		      FIELD_PREP(YT8531_SCR_CLK_SRC_MASK,
-+				 YT8531_SCR_CLK_SRC_REF_25M);
-+		break;
-+	case YTPHY_DTS_OUTPUT_CLK_125M:
-+		mask = YT8531_SCR_SYNCE_ENABLE | YT8531_SCR_CLK_SRC_MASK |
-+		       YT8531_SCR_CLK_FRE_SEL_125M;
-+		val = YT8531_SCR_SYNCE_ENABLE | YT8531_SCR_CLK_FRE_SEL_125M |
-+		      FIELD_PREP(YT8531_SCR_CLK_SRC_MASK,
-+				 YT8531_SCR_CLK_SRC_PLL_125M);
-+		break;
-+	default:
-+		phydev_warn(phydev, "Freq err:%u\n", freq);
-+		return -EINVAL;
-+	}
-+
-+	return ytphy_modify_ext_with_lock(phydev, YTPHY_SYNCE_CFG_REG, mask,
-+					  val);
-+}
-+
- /**
-  * ytphy_utp_read_lpa() - read LPA then setup lp_advertising for utp
-  * @phydev: a pointer to a &struct phy_device
-@@ -1389,6 +1489,94 @@ static int yt8521_config_init(struct phy_device *phydev)
- 	return phy_restore_page(phydev, old_page, ret);
- }
- 
-+static int yt8531_config_init(struct phy_device *phydev)
-+{
-+	struct device_node *node = phydev->mdio.dev.of_node;
-+	int ret;
-+
-+	ret = ytphy_rgmii_clk_delay_config_with_lock(phydev);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (of_property_read_bool(node, "motorcomm,auto-sleep-disabled")) {
-+		/* disable auto sleep */
-+		ret = ytphy_modify_ext_with_lock(phydev,
-+						 YT8521_EXTREG_SLEEP_CONTROL1_REG,
-+						 YT8521_ESC1R_SLEEP_SW, 0);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	if (of_property_read_bool(node, "motorcomm,keep-pll-enabled")) {
-+		/* enable RXC clock when no wire plug */
-+		ret = ytphy_modify_ext_with_lock(phydev,
-+						 YT8521_CLOCK_GATING_REG,
-+						 YT8521_CGR_RX_CLK_EN, 0);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * yt8531_link_change_notify() - Adjust the tx clock direction according to
-+ * the current speed and dts config.
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * NOTE: This function is only used to adapt to VF2 with JH7110 SoC. Please
-+ * keep "motorcomm,tx-clk-adj-enabled" not exist in dts when the soc is not
-+ * JH7110.
-+ */
-+static void yt8531_link_change_notify(struct phy_device *phydev)
-+{
-+	struct device_node *node = phydev->mdio.dev.of_node;
-+	bool tx_clk_adj_enabled = false;
-+	bool tx_clk_1000_inverted;
-+	bool tx_clk_100_inverted;
-+	bool tx_clk_10_inverted;
-+	u16 val = 0;
-+	int ret;
-+
-+	if (of_property_read_bool(node, "motorcomm,tx-clk-adj-enabled"))
-+		tx_clk_adj_enabled = true;
-+
-+	if (!tx_clk_adj_enabled)
-+		return;
-+
-+	if (of_property_read_bool(node, "motorcomm,tx-clk-10-inverted"))
-+		tx_clk_10_inverted = true;
-+	if (of_property_read_bool(node, "motorcomm,tx-clk-100-inverted"))
-+		tx_clk_100_inverted = true;
-+	if (of_property_read_bool(node, "motorcomm,tx-clk-1000-inverted"))
-+		tx_clk_1000_inverted = true;
-+
-+	if (phydev->speed < 0)
-+		return;
-+
-+	switch (phydev->speed) {
-+	case SPEED_1000:
-+		if (tx_clk_1000_inverted)
-+			val = YT8521_RC1R_TX_CLK_SEL_INVERTED;
-+		break;
-+	case SPEED_100:
-+		if (tx_clk_100_inverted)
-+			val = YT8521_RC1R_TX_CLK_SEL_INVERTED;
-+		break;
-+	case SPEED_10:
-+		if (tx_clk_10_inverted)
-+			val = YT8521_RC1R_TX_CLK_SEL_INVERTED;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	ret = ytphy_modify_ext_with_lock(phydev, YT8521_RGMII_CONFIG1_REG,
-+					 YT8521_RC1R_TX_CLK_SEL_INVERTED, val);
-+	if (ret < 0)
-+		phydev_warn(phydev, "Modify TX_CLK_SEL err:%d\n", ret);
-+}
-+
- /**
-  * yt8521_prepare_fiber_features() -  A small helper function that setup
-  * fiber's features.
-@@ -1971,6 +2159,17 @@ static struct phy_driver motorcomm_phy_drvs[] = {
- 		.suspend	= yt8521_suspend,
- 		.resume		= yt8521_resume,
- 	},
-+	{
-+		PHY_ID_MATCH_EXACT(PHY_ID_YT8531),
-+		.name		= "YT8531 Gigabit Ethernet",
-+		.probe		= yt8531_probe,
-+		.config_init	= yt8531_config_init,
-+		.suspend	= genphy_suspend,
-+		.resume		= genphy_resume,
-+		.get_wol	= ytphy_get_wol,
-+		.set_wol	= yt8531_set_wol,
-+		.link_change_notify = yt8531_link_change_notify,
-+	},
- 	{
- 		PHY_ID_MATCH_EXACT(PHY_ID_YT8531S),
- 		.name		= "YT8531S Gigabit Ethernet",
-@@ -1992,7 +2191,7 @@ static struct phy_driver motorcomm_phy_drvs[] = {
- 
- module_phy_driver(motorcomm_phy_drvs);
- 
--MODULE_DESCRIPTION("Motorcomm 8511/8521/8531S PHY driver");
-+MODULE_DESCRIPTION("Motorcomm 8511/8521/8531/8531S PHY driver");
- MODULE_AUTHOR("Peter Geis");
- MODULE_AUTHOR("Frank");
- MODULE_LICENSE("GPL");
-@@ -2000,6 +2199,7 @@ MODULE_LICENSE("GPL");
- static const struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8511) },
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8521) },
-+	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8531) },
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8531S) },
- 	{ /* sentinal */ }
- };
--- 
-2.34.1
+On Fri, Jan 27, 2023 at 04:46:16PM -0700, Shuah Khan wrote:
+> +strace tool can be used to trace system calls made by a process and sign=
+als
+> +it receives. a process to the perf, stress-ng, paxtest workloads. System
 
+"... to trace system calls made by a process (which can be perf, stress-ng,
+paxtest workloads, or neither)."
+
+> +Before we can get started we will have to get our system ready. We assume
+
+"Before we can get started the system must be prepared first."
+
+> +Browsing kernel sources ::
+
+"To browse kernel sources, you will need:"
+
+> +Workload overview
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +We used strace to trace perf bench, stress-ng and paxtest workloads to
+
+"In this section, we use strace to trace ..."
+
+> +show how to analyze a workload and identify Linux subsystems used by
+> +these workloads. We hope this process can be applied to trace workload(s=
+).
+> +We will go over the workloads first.
+
+"This process can also be applied to trace other workloads."
+
+> +
+> +perf bench (all) workload:
+> +--------------------------
+> +
+> <snipped>
+> +
+> +Stress-ng netdev stressor workload:
+> +-----------------------------------
+> +
+> <snipped>
+> +
+> +paxtest kiddie workload:
+> +------------------------
+> +
+> <snipped>
+
+Drop trailing colon from these subsection texts.
+
+> +We used the =E2=80=9C-c=E2=80=9D option to gather fine grained informati=
+on.
+
+```
+The basic usage is strace <command>. To run verbose tracing, specify -v
+to strace. To generate the report, specify -c option.
+```
+
+> +Now let=E2=80=99s look at `cscope <https://cscope.sourceforge.net/>`_, a=
+ command
+> +line tool for browsing C, C++ or Java code-bases. We can use it to find
+> +all the references to a symbol, global definitions, functions called by a
+> +function, functions calling a function, text strings, regular expression
+> +patterns, files including a file.
+> +
+> +We can use cscope to find which system call belongs to which subsystem.
+> +This way we can find the kernel subsystems used by a process when it is
+> +executed. To use it navigate to the source code directory. Here we are
+> +analyzing the kernel source tree.
+
+I guess "you" is better fit for the wording above?
+
+> +We used perf stat and perf bench options. For a detailed information on =
+the
+> +perf tool, run perf -h.
+
+"In this section, we highlight stat and bench options. For help on other
+options, see perf -h."
+
+> +**perf bench all** command runs the following benchmarks: ::
+
+Either don't markup that command or inline it (``perf bench all``).
+Also, use bullet list for benchmarking list below.
+
+> +
+> +  sched/messaging
+> +  sched/pipe
+> +  syscall/basic
+> +  mem/memcpy
+> +  mem/memset
+> +
+
+> +The netdev stressor starts N workers that exercise various netdevice ioc=
+tl
+> +commands across all the available network devices. The following ioctls =
+are
+> +exercised: ::
+> +
+> +  SIOCGIFCONF, SIOCGIFINDEX, SIOCGIFNAME, SIOCGIFFLAGS
+> +  SIOCGIFADDR, SIOCGIFNETMASK, SIOCGIFMETRIC, SIOCGIFMTU
+> +  SIOCGIFHWADDR, SIOCGIFMAP, SIOCGIFTXQLEN
+
+Again, use bullet list instead.
+
+> +
+> +The following command runs the stressor: ::
+> +
+> +  stress-ng --netdev 1 -t 60 --metrics command.
+
+Simply end the sentence with double colon to make the code block above.
+
+> +
+> +We can use the perf record command to record the events and information
+> +associated with a process. This command records the profiling data in the
+> +perf.data file in the same directory.
+> +
+> +Using the following commands you can record the events associated with t=
+he
+> +netdev stressor, view the generated report perf.data and annotate the to
+> +see the statistics of each instruction of the program. ::
+
+"... view the generated report and statistics::"
+
+> +
+> +  perf record stress-ng --netdev 1 -t 60 --metrics command.
+> +  perf report
+> +  perf annotate
+> +
+> +What is paxtest and how do we use it?
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +paxtest is a program that tests buffer overflows in the kernel. It tests
+> +kernel enforcements over memory usage. Generally, execution in some memo=
+ry
+> +segments makes buffer overflows possible. It runs a set of programs that
+> +attempt to subvert memory usage. It is used as a regression test suite f=
+or
+> +PaX, and will be useful to test other memory protection patches for the
+> +kernel.
+> +
+> +paxtest provides kiddie and blackhat modes. paxtest kiddie mode runs in
+> +normal mode, whereas blackhat mode tries to get around the protection of
+> +the kernel testing for vulnerabilities. We focus on the kiddie mode here
+> +and combine "paxtest kiddie" run with "perf record" to collect CPU stack
+> +traces for the paxtest kiddie run to see which function is calling other
+> +functions in the performance profile. Then the "dwarf" (DWARF's CFI - Ca=
+ll
+> +Frame Information) mode can be used to unwind the stack. The resulting
+> +report can be viewed in call-graph format as follows: ::
+> +
+
+"... The resulting reported can be viewed in dwarf call-graph format by::"
+
+> +  perf record --call-graph dwarf paxtest kiddie
+> +  perf report --stdio
+> +
+> +Tracing workloads
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Now that we understand the workloads, let's start tracing them.
+
+What are the workloads? I don't see any definition here.
+
+> +
+> +Tracing perf bench all workload
+> +-------------------------------
+> +
+> +Run the following command to trace perf bench all workload: ::
+> +
+> + strace -c perf bench all
+> +
+> +**System Calls made by the workload:**
+
+What about third level heading (with tilde underline)?
+
+> +
+> +The following table shows you the system calls, number of times the syst=
+em
+> +call was invoked, and the Linux subsystem they fall under.
+
+"Below table is the list of syscalls, with number of times each is invoked,
+and the corresponding subsystem:"
+
+> +**System Calls made by the workload:**
+> +
+> +The following table shows you the system calls, number of times the syst=
+em
+> +call was invoked, and the Linux subsystem they fall under.
+
+Same here.
+
+> +**System Calls made by the workload:**
+> +
+> +The following table shows you the system calls, number of times the syst=
+em
+> +call was invoked, and the Linux subsystem they fall under.
+
+Again, same here.
+
+But I guess the syscall tables are from the example workload (YMMV)?
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--2GGYwLuvcBLp9AwQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY9STBwAKCRD2uYlJVVFO
+o6B8AP4mAhhKYriVYwPkOMh5/IteqZY9IaNF466YzL6rAzlFlwD/UU6/B3UycHpi
+yJHCpeWI1ZTkyyE+niAJeyocQfQgTQY=
+=+7Hg
+-----END PGP SIGNATURE-----
+
+--2GGYwLuvcBLp9AwQ--
