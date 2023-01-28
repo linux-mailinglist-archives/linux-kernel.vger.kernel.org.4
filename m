@@ -2,68 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C7367F358
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4976667F35C
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbjA1AyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 19:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
+        id S233524AbjA1Ayd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 19:54:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjA1AyC (ORCPT
+        with ESMTP id S232254AbjA1Ayb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:54:02 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443DC7C716
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:54:01 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id p24so6597359plw.11
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:54:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aGNQjbpF5iVZwBpwuIDtp51as1jRAvk6dpQFHMl4cAQ=;
-        b=WlSAgM5xsZcQ1tyz8q/WmXqA6zvbDEh0sM/ucn78Be6UwwKTfaboOjFXbzPw4dXEYn
-         HpKEilhklAMjOFyWVBdRUpO9gOAymZDBbUUsKZjgdMTI+/GYEjLefoY5PqXFum9+F2Ee
-         P6JJ7iRXQS1C1K9qqsj113/yDQo3KheUT1vHs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aGNQjbpF5iVZwBpwuIDtp51as1jRAvk6dpQFHMl4cAQ=;
-        b=qGebQ8zIT0NuYxI1RqJoYBOsTw2BWIS36rofIDcYIbaTdvl1+LKG+sr37Hxp5EZKVA
-         Ps07nejNuhNf7vOb/CqUVtTrA53rfX4fsnWesbV42bJPfCIai+FIywABNmaDRmP6WeU2
-         +iEhtj1t+VW1EedG+VVTjA3HwnF8HHE/013SEd2k35JYoiWSJjSkYvPdRlvTnT8NEUl7
-         epvrrw+i9/lJsA7wOgS7bRm2rdEww1oawI/wg45Fwd6rzHVIFrgbzY1XyVWtN7R0sO5u
-         e4zT1EepJf/bubOjNmmnoXfcgo1IHQObrpoDaK7Z9Tz3zB91SLmpe5VfEb6L33IsrN/c
-         0l2A==
-X-Gm-Message-State: AFqh2ko/jPpdCGYt9Q/RxRKAGm4z3iUnn+ga4LhXsD+zZU1QkJW+eO56
-        rLcbU9jQia/cvpp1DyyG5g1Q4w==
-X-Google-Smtp-Source: AMrXdXvbIIADGSuS6oZFtxBvipPOM8DYtn4VKqkHM9KzfFrpV1Bs628tYwr+8p0JfOHRnzW+ApPqYw==
-X-Received: by 2002:a17:902:720a:b0:193:25b6:71bc with SMTP id ba10-20020a170902720a00b0019325b671bcmr45467594plb.25.1674867240807;
-        Fri, 27 Jan 2023 16:54:00 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x10-20020a170902ec8a00b0019488090884sm621plg.273.2023.01.27.16.54.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 16:54:00 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] regulator: s5m8767: Bounds check id indexing into arrays
-Date:   Fri, 27 Jan 2023 16:53:58 -0800
-Message-Id: <20230128005358.never.313-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 27 Jan 2023 19:54:31 -0500
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF2C83249
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:54:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1674867267; x=1706403267;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=8HroFzcMUn53K8eqs6JLXQhk7cTtRl6khnafxvlvf58=;
+  b=VxYkU4vDXDPIoItV0LdNzvoa2RgLFSThBs35YFVjrSgJQAvNuoA0cDFw
+   XZnAKKBMz3i9jU1LMWfCxwzWfgGCEK8Nv4WkdVUvLvgqH0YfJw5zl2zH8
+   9KXXWR9CvJddHEZmIoFtRGsTjewbWAhnfMYDX4UDlqVe1qyUemBuKHaKe
+   kLxd1al4bTvP7uMczZnSRq+2NM97HtKFaJHlgR3m1LV9DQ2fGVFn1Klka
+   5WPcExIcQjTGZiONFAq9tgJozuvAVeLI+/N4W0ePTfBTrN+xGD++VY5GA
+   o3hAC+NZm1mOA8x/78R5De2XOYf5CYuOXdrdYRNKpXo3iquZu3g70XXoQ
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,252,1669046400"; 
+   d="scan'208";a="221742368"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2023 08:54:18 +0800
+IronPort-SDR: SzAuRUY+N5jP+/bWOuKt77ks9oSnKGvq41YcmIrnyMwqndrMKVPiR6r7A/IHJF5+Ua9ACYzrkQ
+ dAlc0YIs3Ojw080IYmtnrU54WQybx9rjCekdf3BeLrOxcu95RUl2HwWdNRToSslBHywgDYmvTv
+ dFkj0jtB36uVP8YuaIEfbojJ+Z6avh2U7g8rh33ZmgCZxwf5GcFbyOKr+VQEQNzmjTVAI4D4zl
+ KCtxXnPfBdml0E5ZFs9mh/JEIErjbn51UNbDu40gayFu5siUZ5EAJXNN65i5E9+KqKz4MmUfqV
+ YSU=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jan 2023 16:06:03 -0800
+IronPort-SDR: g6HF8uerOO+VA4r76dsXCbQ6+tCUdJcRUKZfXBZVUbbaSs8GDJNY2asUAykUh8EmOBtDd+n9cw
+ dqE63uciZAyB0TGu8r9AaMd9E2Lwyr8b0o/2OUY5VAOe/nbY+4fKph9SIJ00zyGgaou7claz0n
+ i0A9YthDZ1O+ZKyNJ/0F3M7KS808laSmj49j36cprsZiG9gEr4pIAK4zybXZVH25s8KP+40ecF
+ UE6rWugM4XsFY+w2jG7j0SjMNTKdCXIwcsJjFKF84Hfzz+xeeIbaT1YHnHL/gHlhVWfsc5+ufK
+ JlE=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jan 2023 16:54:19 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P3bYj62SZz1Rwtm
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:54:17 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1674867256; x=1677459257; bh=8HroFzcMUn53K8eqs6JLXQhk7cTtRl6khna
+        fxvlvf58=; b=ShftbYmd37Un2N6WXeDLuDn368rIZ7rg0bPyrhOhRV4L+OujvBZ
+        9t8qHFpVJ9RP9zP8FBgxqvyARvggZHlQecr5g6REKIL7iS/I5mp/zcILc1CJIDnK
+        eNA5e0cb5clxhH30P9AwwNnBnpmc4eCQx23IrsUCGiFiYbpjuCzCe4nihmz/r/pb
+        a40GgA7aEk2TxXGdKxBIf7R5q8nNV1GLcsTNR48eKphEVQZb3leRSAv96TRrs2Xi
+        HvHLkNGrYeNxQEiJKcsmUXydBaOCiqhmUKI8Wog2rqzVCKrwuTaN1On12FtbYbv5
+        aQqi/qfXflV+L3rvEVEDNsMiNU0bzwX0V8Q==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id gduomxj5whIG for <linux-kernel@vger.kernel.org>;
+        Fri, 27 Jan 2023 16:54:16 -0800 (PST)
+Received: from [10.225.163.66] (unknown [10.225.163.66])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P3bYd1nCCz1RvLy;
+        Fri, 27 Jan 2023 16:54:12 -0800 (PST)
+Message-ID: <75aa04c9-e173-6a2d-6b38-d0e16f3800aa@opensource.wdc.com>
+Date:   Sat, 28 Jan 2023 09:54:11 +0900
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1619; h=from:subject:message-id; bh=z69EuUx8ff+TuAWIFlth8OkbW4QJXglaM+pgN7cDLw0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj1HImuw1FGUELvtteAxEQidLJKG04IF5hSb5Qx4Ay LaU2d9OJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY9RyJgAKCRCJcvTf3G3AJs2nD/ 4u4NMgmpO2HlCvIeDLNVJpWWfqUxY1WDcLogyO9762ngiPL/2ao/rW8nhJnk4Izl8fUaCoqb8Rkf2p OMtvKw9ZvA2MkOJ4MzBO6d+vUImZRxPoA3/9sAGvChoIRE6rBWy19t0vJuGCSCvLOwGHP8rVcGfTrK a9sr/i/XFf6nFnZ6q1sOI0K89pZdQRolhyEgj5yfe3CJeq0J+LdC4EMG1w2ZWwkh04yFhKskD6TeZC xry/ENgw+KUQ2pDBDZXvqnYs8SwSkWg98jXma+uEUPnrOnDHpQhwicM1+gCdGkjLjkATrfINyIR6SG zjy0vu/tpXQYYN81rckBk1vMAF5dvyGS1dBcF/M7DpxWthKAT0CKn+M+6woakLbUGo9LN8rpILmI1p fyxAC7cw7VJOHOp3qQop6seagaPgBqzxGxbddIYVE1tcXPD9GItInTHRfkODfkgVCuZ9EDS3c4l9gy CYkohJTCKdk5jxkl1X7E3zoLqhpUAU8Bt3tCxxABVIiCbF7z2K+/QmTFkKAa0hpJe+uzGFKBB6D4m5 maiLs9ta/6r7faKNStoa4hBESavTniRiektCBgnVIg8iitKOcwCJmTaft41xZtS5PgIs1gHO2/E4S0 RBvELB5+oxnqI87ypfrYzKjD/+kp2SuAXB1SjSl/vi35f8ftLDZnDXNyuOZg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 2/3] dt-bindings: reference MC peripheral properties in
+ relevant devices
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Marek Vasut <marex@denx.de>, Lubomir Rintel <lkundrak@v3.sk>,
+        - <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org>
+ <20230127093217.60818-3-krzysztof.kozlowski@linaro.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230127093217.60818-3-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,45 +115,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The compiler has no way to know if "id" is within the array bounds of
-the regulators array. Add a check for this and a build-time check that
-the regulators and reg_voltage_map arrays are sized the same. Seen with
-GCC 13:
+On 1/27/23 18:32, Krzysztof Kozlowski wrote:
+> Several devices can be attached to memory controllers (or memory-mapped
+> buses), thus they can come with additional controller-specific
+> properties, e.g. devices wired under Intel IXP4XX bus: cfi-flash,
+> intel,ixp4xx-compact-flash, NS8250 serial and MAX6369 watchdog.
+> 
+> Referencing Memory Controller or IXP4XX bus peripheral properties fixes
+> few dtbs_check warnings like:
+> 
+>   intel-ixp42x-gateworks-gw2348.dtb: ide@1,0: Unevaluated properties are not allowed
+>     ('intel,ixp4xx-eb-ahb-split-transfers', 'intel,ixp4xx-eb-byte-access', ... ' were unexpected)
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-../drivers/regulator/s5m8767.c: In function 's5m8767_pmic_probe':
-../drivers/regulator/s5m8767.c:936:35: warning: array subscript [0, 36] is outside array bounds of 'struct regulator_desc[37]' [-Warray-bounds=]
-  936 |                         regulators[id].vsel_reg =
-      |                         ~~~~~~~~~~^~~~
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-samsung-soc@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/regulator/s5m8767.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/regulator/s5m8767.c b/drivers/regulator/s5m8767.c
-index 35269f998210..754c6fcc6e64 100644
---- a/drivers/regulator/s5m8767.c
-+++ b/drivers/regulator/s5m8767.c
-@@ -923,10 +923,14 @@ static int s5m8767_pmic_probe(struct platform_device *pdev)
- 
- 	for (i = 0; i < pdata->num_regulators; i++) {
- 		const struct sec_voltage_desc *desc;
--		int id = pdata->regulators[i].id;
-+		unsigned int id = pdata->regulators[i].id;
- 		int enable_reg, enable_val;
- 		struct regulator_dev *rdev;
- 
-+		BUILD_BUG_ON(ARRAY_SIZE(regulators) != ARRAY_SIZE(reg_voltage_map));
-+		if (WARN_ON_ONCE(id >= ARRAY_SIZE(regulators)))
-+			continue;
-+
- 		desc = reg_voltage_map[id];
- 		if (desc) {
- 			regulators[id].n_voltages =
 -- 
-2.34.1
+Damien Le Moal
+Western Digital Research
 
