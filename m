@@ -2,195 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C906567F73C
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 11:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E672C67F73F
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 11:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbjA1KpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 05:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
+        id S232159AbjA1Kr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 05:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbjA1KpT (ORCPT
+        with ESMTP id S229530AbjA1Kr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 05:45:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60B331E35;
-        Sat, 28 Jan 2023 02:45:18 -0800 (PST)
+        Sat, 28 Jan 2023 05:47:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940D73250C
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 02:47:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D12E60BA3;
-        Sat, 28 Jan 2023 10:45:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C12CC433EF;
-        Sat, 28 Jan 2023 10:45:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674902717;
-        bh=0AGK9C0cUXdptKna52kz+xJz3MRgne+mO2Ch25p5OaE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m+bHPwP5GbwPOqOELMOgzIrxZz6ev87RmOgo7T0Q0yP4eKrXQ5aXSSZTiagtxblk9
-         xhMyEMLdctAkxZTf60Ica81WOeWd0D13Jt5vNojuXiAyp/QisiRadrRlYEuhC4NFWU
-         8meBAXtQm2nTj0cin/u5xV2187jETigDJIbjGVfE=
-Date:   Sat, 28 Jan 2023 11:45:13 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zhong Jinghua <zhongjinghua@huawei.com>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com, hare@suse.de,
-        bvanassche@acm.org, emilne@redhat.com,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        yi.zhang@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH-next v2 2/2] scsi: fix iscsi rescan fails to create block
- device
-Message-ID: <Y9T8uQYEaGUZwpHO@kroah.com>
-References: <20230128094146.205858-1-zhongjinghua@huawei.com>
- <20230128094146.205858-3-zhongjinghua@huawei.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C3A760B39
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 10:47:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D908C4339C;
+        Sat, 28 Jan 2023 10:47:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674902845;
+        bh=j+QQ4frfhd7/U0TPowl8ebCAvIfb0w0dfp7JE+JYjRo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pAa7xA40quWdCu7YlXGQKkTzBURq1QW0vhAUs/6YcBnHM+AJWNCHV4lV160Xss6QJ
+         pUmlNCefuRulFCCFHP4u7YuPTDtkcNLtgmMk3puAiEKkf0KFF3gKc5SNbiE+5rSYGL
+         9Rp8ME61GjMNvjRY0FlkrzjdkCEI54mX2zykaI/qXH+iILeaWHUx0aoU/rEIHYNZaA
+         5l8XFnS6qAWdOEv73K4WT4h6CBCw9zVwMRU/MXa2WxrMiEu1owjhVMGxDQFbYDq+o5
+         43PwpJm87q+APDi13U+PW0Bnj/4ViJIDUoowf3fdXi+OWUyNym9S7E7RyOeEzMrHOR
+         lpAK1koaWjClg==
+Message-ID: <1bd219f7-4990-f0dc-fe07-b434726161e2@kernel.org>
+Date:   Sat, 28 Jan 2023 18:47:22 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230128094146.205858-3-zhongjinghua@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] f2fs: introduce sanity_check_blocks()
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230112142213.22784-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230112142213.22784-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 05:41:46PM +0800, Zhong Jinghua wrote:
-> When the three iscsi operations delete, logout, and rescan are concurrent
-> at the same time, there is a probability of failure to add disk through
-> device_add_disk(). The concurrent process is as follows:
+On 2023/1/12 22:22, Yangtao Li wrote:
+> There are very similar codes in release_compress_blocks() and
+> reserve_compress_blocks() which is used for data blocks check.
 > 
-> T0: scan host // echo 1 > /sys/devices/platform/host1/scsi_host/host1/scan
-> T1: delete target // echo 1 > /sys/devices/platform/host1/session1/target1:0:0/1:0:0:1/delete
-> T2: logout // iscsiadm -m node --login
-> T3: T2 scsi_queue_work
-> T4: T0 bus_probe_device
+> This patch introduces a new helper sanity_check_blocks()
+> to include those common codes, and used it instead for cleanup.
+
+How about reusing f2fs_sanity_check_cluster()? Something like:
+
+bool f2fs_sanity_check_cluster()
+
+	if (compressed_cluster)
+		f2fs_sanity_check_compressed_cluster()
+	else
+		f2fs_sanity_check_normal_cluster()
+
 > 
-> T0                          T1                     T2                     T3
-> scsi_scan_target
->  mutex_lock(&shost->scan_mutex);
->   __scsi_scan_target
->    scsi_report_lun_scan
->     scsi_add_lun
->      scsi_sysfs_add_sdev
->       device_add
->        kobject_add
->        //create session1/target1:0:0/1:0:0:1/
->        ...
->        bus_probe_device
->        // Create block asynchronously
->  mutex_unlock(&shost->scan_mutex);
->                        sdev_store_delete
->                         scsi_remove_device
->                          device_remove_file
->                           mutex_lock(scan_mutex)
->                            __scsi_remove_device
->                             res = scsi_device_set_state(sdev, SDEV_CANCEL)
->                                              iscsi_if_recv_msg
->                                               scsi_queue_work
->                                                                  __iscsi_unbind_session
->                                                                  session->target_id = ISCSI_MAX_TARGET
->                                                                    __scsi_remove_target
->                                                                    sdev->sdev_state == SDEV_CANCEL
->                                                                    continue;
->                                                                    // end, No delete kobject 1:0:0:1
->                                              iscsi_if_recv_msg
->                                               transport->destroy_session(session)
->                                                __iscsi_destroy_session
->                                                iscsi_session_teardown
->                                                 iscsi_remove_session
->                                                  __iscsi_unbind_session
->                                                   iscsi_session_event
->                                                  device_del
->                                                  // delete session
-> T4:
-> // create the block, its parent is 1:0:0:1
-> // If kobject 1:0:0:1 does not exist, it won't go down
-> __device_attach_async_helper
->  device_lock
->  ...
->  __device_attach_driver
->   driver_probe_device
->    really_probe
->     sd_probe
->      device_add_disk
->       register_disk
->        device_add
->       // error
-> 
-> The block is created after the seesion is deleted.
-> When T2 deletes the session, it will mark block'parent 1:0:01 as unusable:
-> T2
-> device_del
->  kobject_del
->   sysfs_remove_dir
->    __kernfs_remove
->    // Mark the children under the session as unusable
->     while ((pos = kernfs_next_descendant_post(pos, kn)))
-> 		if (kernfs_active(pos))
-> 			atomic_add(KN_DEACTIVATED_BIAS, &pos->active);
-> 
-> Then, create the block:
-> T4
-> device_add
->  kobject_add
->   kobject_add_varg
->    kobject_add_internal
->     create_dir
->      sysfs_create_dir_ns
->       kernfs_create_dir_ns
->        kernfs_add_one
->         if ((parent->flags & KERNFS_ACTIVATED) && !kernfs_active(parent))
-> 		goto out_unlock;
-> 		// return error
-> 
-> This error will cause a warning:
-> kobject_add_internal failed for block (error: -2 parent: 1:0:0:1).
-> In the lower version (such as 5.10), there is no corresponding error handling, continuing
-> to go down will trigger a kernel panic, so cc stable.
-> 
-> Therefore, creating the block should not be done after deleting the session.
-> More practically, we should ensure that the target under the session is deleted first,
-> and then the session is deleted. In this way, there are two possibilities:
-> 
-> 1) if the process(T1) of deleting the target execute first, it will grab the device_lock(),
-> and the process(T4) of creating the block will wait for the deletion to complete.
-> Then, block's parent 1:0:0:1 has been deleted, it won't go down.
-> 
-> 2) if the process(T4) of creating block execute first, it will grab the device_lock(),
-> and the process(T1) of deleting the target will wait for the creation block to complete.
-> Then, the process(T2) of deleting the session should need wait for the deletion to complete.
-> 
-> Fix it by removing the judgment of state equal to SDEV_CANCEL in
-> __scsi_remove_target() to ensure the order of deletion. Then, it will wait for
-> T1's mutex_lock(scan_mutex) and device_del() in __scsi_remove_device() will wait for
-> T4's device_lock(dev).
-> But we found that such a fix would cause the previous problem:
-> commit 81b6c9998979 ("scsi: core: check for device state in __scsi_remove_target()").
-> So we use get_device_unless_zero() instead of get_devcie() to fix the previous problem.
-> 
-> Fixes: 81b6c9998979 ("scsi: core: check for device state in __scsi_remove_target()")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
->  drivers/scsi/scsi_sysfs.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>   fs/f2fs/file.c | 36 ++++++++++++++++++++----------------
+>   1 file changed, 20 insertions(+), 16 deletions(-)
 > 
-> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-> index cac7c902cf70..a22109cdb8ef 100644
-> --- a/drivers/scsi/scsi_sysfs.c
-> +++ b/drivers/scsi/scsi_sysfs.c
-> @@ -1535,9 +1535,7 @@ static void __scsi_remove_target(struct scsi_target *starget)
->  		if (sdev->channel != starget->channel ||
->  		    sdev->id != starget->id)
->  			continue;
-> -		if (sdev->sdev_state == SDEV_DEL ||
-> -		    sdev->sdev_state == SDEV_CANCEL ||
-> -		    !get_device(&sdev->sdev_gendev))
-> +		if (!get_device_unless_zero(&sdev->sdev_gendev))
-
-If sdev_gendev is 0 here, the object is gone and you are working with
-memory that is already freed so something is _VERY_ wrong.
-
-This isn't ok, sorry.
-
-greg k-h
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index f5c1b7814954..0d539155379c 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -3369,11 +3369,9 @@ static int f2fs_get_compress_blocks(struct file *filp, unsigned long arg)
+>   	return put_user(blocks, (u64 __user *)arg);
+>   }
+>   
+> -static int release_compress_blocks(struct dnode_of_data *dn, pgoff_t count)
+> +static int sanity_check_blocks(struct dnode_of_data *dn, pgoff_t count)
+>   {
+>   	struct f2fs_sb_info *sbi = F2FS_I_SB(dn->inode);
+> -	unsigned int released_blocks = 0;
+> -	int cluster_size = F2FS_I(dn->inode)->i_cluster_size;
+>   	block_t blkaddr;
+>   	int i;
+>   
+> @@ -3390,6 +3388,21 @@ static int release_compress_blocks(struct dnode_of_data *dn, pgoff_t count)
+>   		}
+>   	}
+>   
+> +	return 0;
+> +}
+> +
+> +static int release_compress_blocks(struct dnode_of_data *dn, pgoff_t count)
+> +{
+> +	struct f2fs_sb_info *sbi = F2FS_I_SB(dn->inode);
+> +	unsigned int released_blocks = 0;
+> +	int cluster_size = F2FS_I(dn->inode)->i_cluster_size;
+> +	block_t blkaddr;
+> +	int i, rc;
+> +
+> +	rc = sanity_check_blocks(dn, count);
+> +	if (rc)
+> +		return rc;
+> +
+>   	while (count) {
+>   		int compr_blocks = 0;
+>   
+> @@ -3539,20 +3552,11 @@ static int reserve_compress_blocks(struct dnode_of_data *dn, pgoff_t count)
+>   	unsigned int reserved_blocks = 0;
+>   	int cluster_size = F2FS_I(dn->inode)->i_cluster_size;
+>   	block_t blkaddr;
+> -	int i;
+> +	int i, rc;
+>   
+> -	for (i = 0; i < count; i++) {
+> -		blkaddr = data_blkaddr(dn->inode, dn->node_page,
+> -						dn->ofs_in_node + i);
+> -
+> -		if (!__is_valid_data_blkaddr(blkaddr))
+> -			continue;
+> -		if (unlikely(!f2fs_is_valid_blkaddr(sbi, blkaddr,
+> -					DATA_GENERIC_ENHANCE))) {
+> -			f2fs_handle_error(sbi, ERROR_INVALID_BLKADDR);
+> -			return -EFSCORRUPTED;
+> -		}
+> -	}
+> +	rc = sanity_check_blocks(dn, count);
+> +	if (rc)
+> +		return rc;
+>   
+>   	while (count) {
+>   		int compr_blocks = 0;
