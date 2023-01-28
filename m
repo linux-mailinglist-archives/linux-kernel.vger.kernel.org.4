@@ -2,80 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FEC67F5ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 09:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E597867F5F5
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 09:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbjA1INJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 03:13:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
+        id S233810AbjA1INO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 03:13:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjA1ING (ORCPT
+        with ESMTP id S233724AbjA1INK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 03:13:06 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0592886A
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 00:13:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674893585; x=1706429585;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uax4L7qvxMAgmGQzQYdiiNaZPSv/p+L14aW9R/QRqz4=;
-  b=OnHyMAjhIzYjuU0q8ekdlSWjWfoo+bqRV3MPIXXbVvXBglIGIPpOpMT2
-   yIIdkNhmPY68o0cJXB9P2jXT5Nwy8hLIJh6bKWZKnJ87iuGRBLx51rDw0
-   DunU1xQWH0exIEbnNVn1943TVPzjfVJgaNVkJgtoV+D8hQLqK9Jy0zqYM
-   GpVqANdsWyvscf8nEif7Nn50UEzzaaOV/vC6EW3SxcxbjaiEYNnf/ofZ8
-   NteHmeY6bEZhXQsGUlCpPzYz80nc9NVRq6fcEsGgULYnR97XGn8LRzxFs
-   nsmq0gX0fSkU6w5xvgit8hy71JmtbXL9sGFLK8qeC2VhdpT8TlmSc4ZiS
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="413495521"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="413495521"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 00:13:05 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="992338744"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="992338744"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.186.212]) ([10.252.186.212])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 00:12:55 -0800
-Message-ID: <e5e68be8-7f64-c19c-ab0d-13e6f2fcbf33@linux.intel.com>
-Date:   Sat, 28 Jan 2023 16:12:45 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, hch@lst.de, jgg@nvidia.com
-Subject: Re: [PATCH v2 4/8] iommu: Factor out some helpers
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
-        will@kernel.org
-References: <cover.1674753627.git.robin.murphy@arm.com>
- <959a1e8d598c0a82f94123e017cafb273784f848.1674753627.git.robin.murphy@arm.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <959a1e8d598c0a82f94123e017cafb273784f848.1674753627.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 28 Jan 2023 03:13:10 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F0B12F0B;
+        Sat, 28 Jan 2023 00:13:09 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4P3nJ41fhzz6FK2S;
+        Sat, 28 Jan 2023 16:13:08 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.97.17])
+        by mse-fl1.zte.com.cn with SMTP id 30S8D0DP013896;
+        Sat, 28 Jan 2023 16:13:00 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Sat, 28 Jan 2023 16:13:03 +0800 (CST)
+Date:   Sat, 28 Jan 2023 16:13:03 +0800 (CST)
+X-Zmail-TransId: 2af963d4d90f732b41b0
+X-Mailer: Zmail v1.0
+Message-ID: <202301281613032191431@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <dmitry.torokhov@gmail.com>
+Cc:     <ldewangan@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <linux-input@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBJbnB1dDogdGVncmEta2JjIC0gVXNlwqBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 30S8D0DP013896
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63D4D914.000 by FangMail milter!
+X-FangMail-Envelope: 1674893588/4P3nJ41fhzz6FK2S/63D4D914.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63D4D914.000/4P3nJ41fhzz6FK2S
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/27 2:26, Robin Murphy wrote:
-> The pattern for picking the first device out of the group list is
-> repeated a few times now, so it's clearly worth factoring out to hide
-> the group_device detail from places that don't need to know. Similarly,
-> the safety check for dev_iommu_ops() at public interfaces starts looking
-> a bit repetitive, and might not be completely obvious at first glance,
-> so let's factor that out for clarity as well, in preparation for more
-> uses of both.
-> 
-> Signed-off-by: Robin Murphy<robin.murphy@arm.com>
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Best regards,
-baolu
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/input/keyboard/tegra-kbc.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/input/keyboard/tegra-kbc.c b/drivers/input/keyboard/tegra-kbc.c
+index 1eba06bcf27a..da4019cf0c83 100644
+--- a/drivers/input/keyboard/tegra-kbc.c
++++ b/drivers/input/keyboard/tegra-kbc.c
+@@ -598,7 +598,6 @@ MODULE_DEVICE_TABLE(of, tegra_kbc_of_match);
+ static int tegra_kbc_probe(struct platform_device *pdev)
+ {
+ 	struct tegra_kbc *kbc;
+-	struct resource *res;
+ 	int err;
+ 	int num_rows = 0;
+ 	unsigned int debounce_cnt;
+@@ -642,8 +641,7 @@ static int tegra_kbc_probe(struct platform_device *pdev)
+
+ 	timer_setup(&kbc->timer, tegra_kbc_keypress_timer, 0);
+
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	kbc->mmio = devm_ioremap_resource(&pdev->dev, res);
++	kbc->mmio = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+ 	if (IS_ERR(kbc->mmio))
+ 		return PTR_ERR(kbc->mmio);
+
+-- 
+2.25.1
