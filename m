@@ -2,224 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD62F67F7DD
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 13:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F85167F7E3
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 13:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjA1Mzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 07:55:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S233631AbjA1M7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 07:59:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjA1Mzh (ORCPT
+        with ESMTP id S231263AbjA1M7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 07:55:37 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2046E23DBE
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 04:55:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674910533; x=1706446533;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yCSmWskfWwstmtUECi0Ec3AU/KX75cj9BgYJcLcePps=;
-  b=a+WJ1O8qDthNzhR0ixAjJtBnwtDgptQBOx/KSrncwcEsL/ItzzKWGAA3
-   KbkF191n32+D3R/jRkgCUVEMLAw1V50rRzLDxEZ4ABCbyUkbTF3tEUkRX
-   D6wT9+gew3WGKWO6F72rxDkaS7UH/ty7vh7g1nNHnxZNRjHuVLA8e/ZIl
-   2veNZ7ynD+tnlt7TUW3SftPjwOh2OE2ewQesT2WT+le3GaESshXg4C5IX
-   iN7VneABof7xWWAjeaNWq0gYhndalCBSlKGo73GgArEDJB1uLllw0T37e
-   hQ6SeVpGAeOtv6EcqkQT+tHFvG3CuJMSD1pkKLyOaJNozZIiVzpo3j+fZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="328574898"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="328574898"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 04:55:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="992375551"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="992375551"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jan 2023 04:55:29 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pLkjw-0000eq-2T;
-        Sat, 28 Jan 2023 12:55:28 +0000
-Date:   Sat, 28 Jan 2023 20:55:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
-        will@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org, hch@lst.de,
-        jgg@nvidia.com, baolu.lu@linux.intel.com,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 7/8] iommu: Retire bus ops
-Message-ID: <202301282015.hjj2YFYy-lkp@intel.com>
-References: <198e82a6b1a28605409c395da4ec1a67b0e1587b.1674753627.git.robin.murphy@arm.com>
+        Sat, 28 Jan 2023 07:59:02 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E93241E5
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 04:58:58 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id hw16so20272073ejc.10
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 04:58:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uuROj3nyp7dV3iUSTum+d5PMx4QdIcb7izQQJDYftSI=;
+        b=Y5p2WTisAeifCG8baObGN6r1dVANpjO/mIRa21zkmSiDA8qQH7zbFhb82+MR79bHbA
+         mUHOTvHoKK6mnTCXN3BpelI/UYoB0RIS8s42fv62X1Ob45HaCjFx31sDV7z+XL3S8oIT
+         QgtoVO4lBOt86t7bsHEmB96Aa19A83qQ8tGXw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uuROj3nyp7dV3iUSTum+d5PMx4QdIcb7izQQJDYftSI=;
+        b=ScFD/UZc8OZFx3m6uP+3j1NwtyvL3KpVDA5DeoPgE/gHGeR9Rbwk58XWps+IckX8Pj
+         NqyyiLu9sH8UOONoqZgnFAyJ2EWZItitfiPlWoyu1fmA8H1Xok1RvpIR7RB506d76Wnb
+         nyMi6js3A9dtY4fl6MXYhiafq4gxolwlFhkCBf68vjpqfx2rdZH09Jhr91m6WY7j5JwL
+         71lQdV07u1rbejO7PsNVTRYm6YV08TIylpQ+wlj9B3+j5XHxBTH4jGZONDwNqp8z03Ap
+         Wx1lrj2Wu7T2dT6YRJ635DHVikAXX6Gnj07v/0uzKhlGgNqS9AJc8lS+V4HTpzsEIcz0
+         6Qag==
+X-Gm-Message-State: AO0yUKWjqBWOFfO3yYPifVsLb/znIgcUy8OcUWbhBdOa7qVuz0COPj6Q
+        SEAw0p7kXCYTpp6HsllrhEheOg==
+X-Google-Smtp-Source: AK7set8V49ATRxWsDpSNlAwGdqeIi+XmJsbTndGlwz/dbBHyC3DwaoCXy4hBkhEk1UwTNsPPUwzhpg==
+X-Received: by 2002:a17:907:a42a:b0:84d:4be4:aa2b with SMTP id sg42-20020a170907a42a00b0084d4be4aa2bmr3122116ejc.68.1674910737282;
+        Sat, 28 Jan 2023 04:58:57 -0800 (PST)
+Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id f25-20020a170906139900b0087b3d555d2esm2730051ejc.33.2023.01.28.04.58.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Jan 2023 04:58:56 -0800 (PST)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 next 1/2] wifi: nl80211: emit CMD_START_AP on multicast group when an AP is started
+Date:   Sat, 28 Jan 2023 13:58:43 +0100
+Message-Id: <20230128125844.2407135-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <198e82a6b1a28605409c395da4ec1a67b0e1587b.1674753627.git.robin.murphy@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-I love your patch! Yet something to improve:
+Userspace processes such as network daemons may wish to be informed when
+any AP interface is brought up on the system, for example to initiate a
+(re)configuration of IP settings or to start a DHCP server.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on linus/master v6.2-rc5]
-[cannot apply to joro-iommu/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Currently nl80211 does not broadcast any such event on its multicast
+groups, leaving userspace only two options:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Robin-Murphy/iommu-Decouple-iommu_present-from-bus-ops/20230128-141510
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/198e82a6b1a28605409c395da4ec1a67b0e1587b.1674753627.git.robin.murphy%40arm.com
-patch subject: [PATCH v2 7/8] iommu: Retire bus ops
-config: s390-randconfig-r012-20230123 (https://download.01.org/0day-ci/archive/20230128/202301282015.hjj2YFYy-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/399f4b37d8065bffafeec12de1344a7ff6098e64
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Robin-Murphy/iommu-Decouple-iommu_present-from-bus-ops/20230128-141510
-        git checkout 399f4b37d8065bffafeec12de1344a7ff6098e64
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/iommu/
+1. the process must be the one that actually issued the
+   NL80211_CMD_START_AP request, so that it can react on the response to
+   that request;
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+2. the process must react to RTM_NEWLINK events indicating a change in
+   carrier state, and may query for further information about the AP and
+   react accordingly.
 
-All errors (new ones prefixed by >>):
+Option (1) is robust, but it does not cover all scenarios. It is easy to
+imagine a situation where this is not the case (e.g. hostapd +
+systemd-networkd).
 
-   In file included from drivers/iommu/iommufd/selftest.c:7:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/iommu/iommufd/selftest.c:7:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/iommu/iommufd/selftest.c:7:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/iommu/iommufd/selftest.c:276:39: error: field designator 'iommu_ops' does not refer to any field in type 'struct bus_type'
-           static struct bus_type mock_bus = { .iommu_ops = &mock_ops };
-                                                ^
-   12 warnings and 1 error generated.
+Option (2) is not robust, because RTM_NEWLINK events may be silently
+discarded by the linkwatch logic (cf. linkwatch_fire_event()).
+Concretely, consider a scenario in which the carrier state flip-flops in
+the following way:
 
+ ^ carrier state (high/low = carrier/no carrier)
+ |
+ |        _______      _______ ...
+ |       |       |    |
+ | ______| "foo" |____| "bar"             (SSID in "quotes")
+ |
+ +-------A-------B----C---------> time
 
-vim +276 drivers/iommu/iommufd/selftest.c
+If the time interval between (A) and (C) is less than 1 second, then
+linkwatch may emit only a single RTM_NEWLINK event indicating carrier
+gain.
 
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  271  
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  272  /* Create an hw_pagetable with the mock domain so we can test the domain ops */
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  273  static int iommufd_test_mock_domain(struct iommufd_ucmd *ucmd,
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  274  				    struct iommu_test_cmd *cmd)
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  275  {
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29 @276  	static struct bus_type mock_bus = { .iommu_ops = &mock_ops };
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  277  	struct iommufd_hw_pagetable *hwpt;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  278  	struct selftest_obj *sobj;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  279  	struct iommufd_ioas *ioas;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  280  	int rc;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  281  
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  282  	ioas = iommufd_get_ioas(ucmd, cmd->id);
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  283  	if (IS_ERR(ioas))
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  284  		return PTR_ERR(ioas);
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  285  
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  286  	sobj = iommufd_object_alloc(ucmd->ictx, sobj, IOMMUFD_OBJ_SELFTEST);
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  287  	if (IS_ERR(sobj)) {
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  288  		rc = PTR_ERR(sobj);
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  289  		goto out_ioas;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  290  	}
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  291  	sobj->idev.ictx = ucmd->ictx;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  292  	sobj->type = TYPE_IDEV;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  293  	sobj->idev.mock_dev.bus = &mock_bus;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  294  
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  295  	hwpt = iommufd_device_selftest_attach(ucmd->ictx, ioas,
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  296  					      &sobj->idev.mock_dev);
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  297  	if (IS_ERR(hwpt)) {
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  298  		rc = PTR_ERR(hwpt);
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  299  		goto out_sobj;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  300  	}
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  301  	sobj->idev.hwpt = hwpt;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  302  
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  303  	/* Userspace must destroy both of these IDs to destroy the object */
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  304  	cmd->mock_domain.out_hwpt_id = hwpt->obj.id;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  305  	cmd->mock_domain.out_device_id = sobj->obj.id;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  306  	iommufd_object_finalize(ucmd->ictx, &sobj->obj);
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  307  	iommufd_put_object(&ioas->obj);
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  308  	return iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  309  
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  310  out_sobj:
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  311  	iommufd_object_abort(ucmd->ictx, &sobj->obj);
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  312  out_ioas:
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  313  	iommufd_put_object(&ioas->obj);
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  314  	return rc;
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  315  }
-f4b20bb34c83dc Jason Gunthorpe 2022-11-29  316  
+This is problematic because it is possible that the network
+configuration that should be applied is a function of the AP's
+properties such as SSID (cf. SSID= in systemd.network(5)). As
+illustrated in the above diagram, it may be that the AP with SSID "bar"
+ends up being configured as though it had SSID "foo".
 
+Address the above issue by having nl80211 emit an NL80211_CMD_START_AP
+message on the MLME nl80211 multicast group. This allows for arbitrary
+processes to be reliably informed.
+
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+v1 -> v2: add MLO link ID to the event per Johannes' comments
+---
+ net/wireless/nl80211.c | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index 64cf6110ce9d..7370ddf84fd3 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -5770,6 +5770,42 @@ static bool nl80211_valid_auth_type(struct cfg80211_registered_device *rdev,
+ 	}
+ }
+ 
++static void nl80211_send_ap_started(struct wireless_dev *wdev,
++				    unsigned int link_id)
++{
++	struct wiphy *wiphy = wdev->wiphy;
++	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wiphy);
++	struct sk_buff *msg;
++	void *hdr;
++
++	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
++	if (!msg)
++		return;
++
++	hdr = nl80211hdr_put(msg, 0, 0, 0, NL80211_CMD_START_AP);
++	if (!hdr)
++		goto out;
++
++	if (nla_put_u32(msg, NL80211_ATTR_WIPHY, rdev->wiphy_idx) ||
++	    nla_put_u32(msg, NL80211_ATTR_IFINDEX, wdev->netdev->ifindex) ||
++	    nla_put_u64_64bit(msg, NL80211_ATTR_WDEV, wdev_id(wdev),
++			      NL80211_ATTR_PAD) ||
++	    (wdev->u.ap.ssid_len &&
++	     nla_put(msg, NL80211_ATTR_SSID, wdev->u.ap.ssid_len,
++		     wdev->u.ap.ssid)) ||
++	    (wdev->valid_links &&
++	     nla_put_u8(msg, NL80211_ATTR_MLO_LINK_ID, link_id)))
++		goto out;
++
++	genlmsg_end(msg, hdr);
++
++	genlmsg_multicast_netns(&nl80211_fam, wiphy_net(wiphy), msg, 0,
++				NL80211_MCGRP_MLME, GFP_KERNEL);
++	return;
++out:
++	nlmsg_free(msg);
++}
++
+ static int nl80211_start_ap(struct sk_buff *skb, struct genl_info *info)
+ {
+ 	struct cfg80211_registered_device *rdev = info->user_ptr[0];
+@@ -6050,6 +6086,8 @@ static int nl80211_start_ap(struct sk_buff *skb, struct genl_info *info)
+ 
+ 		if (info->attrs[NL80211_ATTR_SOCKET_OWNER])
+ 			wdev->conn_owner_nlportid = info->snd_portid;
++
++		nl80211_send_ap_started(wdev, link_id);
+ 	}
+ out_unlock:
+ 	wdev_unlock(wdev);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.0
+
