@@ -2,114 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B385D67F714
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 11:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7699767F710
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 11:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjA1KWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 05:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
+        id S233998AbjA1KVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 05:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbjA1KWK (ORCPT
+        with ESMTP id S230263AbjA1KVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 05:22:10 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FB4C169;
-        Sat, 28 Jan 2023 02:22:08 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id kt14so19814650ejc.3;
-        Sat, 28 Jan 2023 02:22:08 -0800 (PST)
+        Sat, 28 Jan 2023 05:21:48 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE16CA250
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 02:21:46 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id d14so7040387wrr.9
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 02:21:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4CRR4r0MZ+tPXqof/6V6RPxQYuUvZaCxsFPAFM4cyeo=;
-        b=qDdMJ2Jx3MmTPNxx8QI39ZBnCWXIyEPILLUB3UeSEwAms+RjYhmHcq0wgIXnoHHJ+z
-         paQFhlN3XNS/0pTJ5oHv7kwm4jGyKjHAp/7YVSwxOznudzxxcCLfPeRXPeA6fSwVBWrR
-         bCdIVGMNP44E2q9+CwMP2wWL4HC8f8jb1xxis1NQIngrtjMXubVhts0in2lfk2PZKmer
-         y66eJTk7vDwTcV5jpruk9he+Q6/g64Zh6uLPaWk/Ow5hgU1Vv5B9tIfvN2wfGPYbEke4
-         tjPbX5QNuDwM/lWjCwkwGNk+QqpikNAJblBYyy1kRCh4BAkiVQsObJ7urjrMk6kyBlYI
-         PQfw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KyK61PIIynqyzfMBCuw7rB8JAyotjQ6xTZX0sXTvwv4=;
+        b=aKI/K7Rv941xqFlZ19JayXGiBsYMAlSpyJe9VmKmlpQNAInd1AjU1VlLuYYmCym/b5
+         n7FEjWHH1hzLXKNB4BGFKA950L3HNQco+O0B7TmUI8zQSOmeXc8895k41hLsrQU34krD
+         khQt2o05MdDWqYHgeanECTDWS1akJMh0GPMFDAix8uf09zGnk1YFW4+UcQcLGWil3B95
+         nC9Piu/KtnLRVm5fPvqTXf+64WaBSiQHc56ti19SrN2IPRE5h+gPuYi/ELXRU5+LVIPx
+         yCP87txSIyvuPME3WExIWG/TkRzoVAhMc0ZsGCbDp1NVuQp/ErSKcOZjFvIuWdN0lqXE
+         hqUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4CRR4r0MZ+tPXqof/6V6RPxQYuUvZaCxsFPAFM4cyeo=;
-        b=d85V/broB3ms7l15jenhL0E4o0EK2ahu3mhfwbUWl6ciU1zObsTRfssBQ7xi+CyCzn
-         fJqhHOaACETc1jVp/2yn5L4AkpnBv0iJuYmyThcj4qttgCWkmMDK1ex5VxGuNfXJJH/C
-         zpknoDUOzLABfPnSvB9LYgltvybWxgqSZxepji7k80TXl1s4Sb/Ht349nZhO1Vuio+Ds
-         oeD8AZjPDsIeYg+RhZQTDvecXnWK5/e4nmOOdxOED4DuHUkxm4j7DhF4wri+cpihmk11
-         kDBct5Py3mo2DqNzpdKsz308hLkfvW7WgprcYYIaEMLXWLk9YIfbdABgrxX4VSvT65IQ
-         EhcQ==
-X-Gm-Message-State: AO0yUKV7B/Z3CECF5v57IgdHZIuQ6mS5z/hPE2vPbSfNF0l/99EWdzRM
-        47GFdmaQ0EF40RBPUzVKZ+TKLLu2ZIA=
-X-Google-Smtp-Source: AK7set/PdIk85tcctr/HUuUiEqAamXktWGt/O9i2DDGe5hvM9VsLdbgM8/LYcolzYkoLhTkCg+Re1g==
-X-Received: by 2002:a17:906:28d2:b0:87d:f29:3a14 with SMTP id p18-20020a17090628d200b0087d0f293a14mr3810549ejd.68.1674901326510;
-        Sat, 28 Jan 2023 02:22:06 -0800 (PST)
-Received: from caracal.museclub.art (p200300cf9f0a9b009a6833f6d97b7651.dip0.t-ipconnect.de. [2003:cf:9f0a:9b00:9a68:33f6:d97b:7651])
-        by smtp.googlemail.com with ESMTPSA id lj8-20020a170906f9c800b007c14ae38a80sm31456ejb.122.2023.01.28.02.22.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 02:22:05 -0800 (PST)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Eric Nguyen <linux@drogman.ch>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add zenith ii extreme alpha
-Date:   Sat, 28 Jan 2023 11:21:34 +0100
-Message-Id: <20230128102135.5199-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KyK61PIIynqyzfMBCuw7rB8JAyotjQ6xTZX0sXTvwv4=;
+        b=LOJvcItwOShwrOuYx4vy4brksB9mSH3tO4N3Qs3M15bKAWmgVyx+Z9hnT0LfQTX3zE
+         1oIE7B5Lz/7GRelzo9On3YVgAh1G7JozjzhBNjBiNUq64+pA670lOl+NGGZo2JKx4gVk
+         VaEM8o8p8zmsouQSlEjlJQf8R3pYXpPWkmEOuEvVrBARH+R3OJrvjRzl6EYJFsP6oS/j
+         xA2l94Ebnj8Ig2A0aT0aOssFfoYtJhXTuzJtBU0wIyKvLj6/bRIaXccZWRmhdMPfxq3n
+         SR5GlKMX1saoMVtLpRq50idEobEOw37/hwjsa2L+eXiirraXj6nayukkDYlArbpJuiU7
+         Hw+A==
+X-Gm-Message-State: AO0yUKWNn5V8s9b204+/NyJjiAjGrlcpLqvbfzfxu/xARWqtaTrG6M9E
+        mIhyv2J/DsS4CegwrF69QfGlqw==
+X-Google-Smtp-Source: AK7set//WJfcsdQmnDUXUYzjIqHvzDXemfS6nhNxgE7JDvSqI2eYOResaLvFmYGXsKvGS1vDDCYfKQ==
+X-Received: by 2002:a05:6000:1814:b0:2bf:c851:bf8c with SMTP id m20-20020a056000181400b002bfc851bf8cmr8363720wrh.48.1674901305408;
+        Sat, 28 Jan 2023 02:21:45 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id p17-20020a056000019100b002bddaea7a0bsm6148579wrx.57.2023.01.28.02.21.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 Jan 2023 02:21:45 -0800 (PST)
+Message-ID: <3ecfbb0a-6c24-6d72-f9f7-5c9dc4a080b4@linaro.org>
+Date:   Sat, 28 Jan 2023 11:21:43 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/2] dt-bindings: remoteproc: qcom: Add sm6115 pas yaml
+ file
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     mani@kernel.org, mathieu.poirier@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+References: <20230128053504.2099620-1-bhupesh.sharma@linaro.org>
+ <20230128053504.2099620-2-bhupesh.sharma@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230128053504.2099620-2-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Nguyen <linux@drogman.ch>
+On 28/01/2023 06:35, Bhupesh Sharma wrote:
+> This documents the aDSP, cDSP and MPSS DSPs present
+> on the SM6115 SoC.
 
-The ROG ZENITH II EXTREME ALPHA provides the same set of sensors as the
-no-ALPHA version. Tested with the hardware [1].
+This should be patch #1 - before you start using compatibles.
 
-[1] https://github.com/zeule/asus-ec-sensors/issues/31
+Subject: drop second/last, redundant "yaml file". The "dt-bindings"
+prefix is already stating that these are bindings and their expected format.
 
-Signed-off-by: Eric Nguyen <linux@drogman.ch>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- Documentation/hwmon/asus_ec_sensors.rst | 1 +
- drivers/hwmon/asus-ec-sensors.c         | 2 ++
- 2 files changed, 3 insertions(+)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 02f4ad314a1e..a4039f2f9ca4 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -23,6 +23,7 @@ Supported boards:
-  * ROG STRIX X570-I GAMING
-  * ROG STRIX Z690-A GAMING WIFI D4
-  * ROG ZENITH II EXTREME
-+ * ROG ZENITH II EXTREME ALPHA
- 
- Authors:
-     - Eugene Shalygin <eugene.shalygin@gmail.com>
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index a901e4e33d81..bd7beefde586 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -466,6 +466,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_strix_z690_a_gaming_wifi_d4),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
- 					&board_info_zenith_ii_extreme),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME ALPHA",
-+					&board_info_zenith_ii_extreme),
- 	{},
- };
- 
--- 
-2.39.1
+
+Best regards,
+Krzysztof
 
