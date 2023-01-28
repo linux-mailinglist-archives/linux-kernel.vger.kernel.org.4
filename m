@@ -2,97 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E6F67FA76
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BECF67FA78
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbjA1TcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 14:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
+        id S234341AbjA1Tdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 14:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjA1TcQ (ORCPT
+        with ESMTP id S233379AbjA1Tdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 14:32:16 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CA225285
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 11:32:14 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id s3so7554627edd.4
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 11:32:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cC5LWwkS5oHHU3J7uBpKKLwM/6KMxzZpM0d2JkhtNMI=;
-        b=C49QyXZ2n2/zYAQxrfKH9Pncw2x8nq6dVONERsstLdU63OGnldPXCyROd6Lkf8r79g
-         jjvi6xIq/05bsRfkW3D9+S8V1z/IR6O5+qdO4BbSWfDpz3OWQoko8/qQZNfUbntdy6N3
-         ZrYi2TjEjmdT7zkICJ7e/xdbFD6stZs6J1gHU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cC5LWwkS5oHHU3J7uBpKKLwM/6KMxzZpM0d2JkhtNMI=;
-        b=4ODOdz8qa5ODNBrXkLIo7jtqu1GiLHqG836ZCj8+KOjVKTCYrDPwDVEiDlyfSQ2war
-         YYoRcrKPALCygAdpFnhQ5+al/t/b1Li/nMNNAJ7jG1qdz9dRixmDK6SQikTz4CGQezJ3
-         l2te5TG7GhF8faObtRy9e3WQF356RsaFnmCwrygcdi16A5F0OpXfHSzi/62LuBamzJuZ
-         jB/JGsgxZjhZ+kXc3UXhVjej8t/uKN0F/wvsOWRFk6g5ZNiGlRzP/eiUaCrK7MetbJrJ
-         32ZeifWXJ6iJQ+1ZgS5X6d5zv5cFV3qqLF9pwoT9kcostMKK0DhfCPHlzVoCJCfyLgc7
-         adLQ==
-X-Gm-Message-State: AO0yUKUGuVTTBiIqQmIq2zaLy/7W/gDQzC6cxAekOoSsGkN3p1yVmLCq
-        Ex29abwKmTiLivdSY/OdHxdZMfPICKU4HLiOPl0=
-X-Google-Smtp-Source: AK7set+TXIltfKGkitQarngwqrkjqN27z+oikwLhGz6ilz9DjoZ98a6VGxNqsBMf720HvVbAbyIwVg==
-X-Received: by 2002:a05:6402:361:b0:4a0:e2d0:efd8 with SMTP id s1-20020a056402036100b004a0e2d0efd8mr9351781edw.14.1674934332479;
-        Sat, 28 Jan 2023 11:32:12 -0800 (PST)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id k6-20020aa7d8c6000000b00487fc51c532sm4343221eds.33.2023.01.28.11.32.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 28 Jan 2023 11:32:11 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id g11so7501435eda.12
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 11:32:11 -0800 (PST)
-X-Received: by 2002:a05:6402:5514:b0:49c:48ad:3d17 with SMTP id
- fi20-20020a056402551400b0049c48ad3d17mr7885089edb.17.1674934331251; Sat, 28
- Jan 2023 11:32:11 -0800 (PST)
-MIME-Version: 1.0
-References: <1522976022.11185.53.camel@perches.com> <CA+55aFw=EQyJv52LjUje8ExMeX99u=8zzPsQAFv2MZ_N4V=Kog@mail.gmail.com>
- <3de4cbc2198105bcbc09ee355cd69a8b8756b89c.camel@perches.com>
- <CAHk-=wgSH8Dqfp2XVTeBrtAxf+2ZN_4pMjYOHwUt9i4NOGTkBg@mail.gmail.com> <9be6b6d57745452b66c4e96c40ead74cb1eabdb9.camel@perches.com>
-In-Reply-To: <9be6b6d57745452b66c4e96c40ead74cb1eabdb9.camel@perches.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 28 Jan 2023 11:31:54 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjSWXYCPywfPj6TBE+Nsum71DsUqiv7furmA+ryFTPjVA@mail.gmail.com>
-Message-ID: <CAHk-=wjSWXYCPywfPj6TBE+Nsum71DsUqiv7furmA+ryFTPjVA@mail.gmail.com>
-Subject: Re: git source files with rw permissions
-To:     Joe Perches <joe@perches.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Sat, 28 Jan 2023 14:33:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4907724C8F;
+        Sat, 28 Jan 2023 11:33:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDD5EB80B98;
+        Sat, 28 Jan 2023 19:33:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 92961C433D2;
+        Sat, 28 Jan 2023 19:33:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674934424;
+        bh=7z7ocdSC3ZX3zW89zHx/1RISjAakExFDobQt2nk4zfY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=lW3XkAKxvGWxCC/4vtjBoxcTlhAfMgn9tUo/7zuLFq323MZeYOi4PAX8mPwxTeN8n
+         0WR2iDkBBCOtZnaikVkktT++nCeo47ZGxYSqKT22zyp6Sr3jFzXmHepMRmhtrhO1OV
+         H/Wi9X7dLJ7jysG/IOTwAGUffFZoBANEQMZq31BgboAOSVEYyA1rjkxC8IKEw7ewQq
+         Oj6NGCbB+qrQbwtR7SGyrjjjdRM0YhGnFC3Vzd1t8a0KxZQU3xysB6FekvM5iLPeFg
+         pQcBw/z1u6sxFNEhZm7gkvyyDueVfutEVxhn2wVGGvmeo+rkNIiH2wz0NqcmbfjHiA
+         v4K89DyMBfpKw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7C944C39564;
+        Sat, 28 Jan 2023 19:33:44 +0000 (UTC)
+Subject: Re: [GIT PULL] ksmbd server fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5mtnrm6nSsziYEZs=qyC2n28Vk3=KS1fNbqeWXP+4gu0vw@mail.gmail.com>
+References: <CAH2r5mtnrm6nSsziYEZs=qyC2n28Vk3=KS1fNbqeWXP+4gu0vw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5mtnrm6nSsziYEZs=qyC2n28Vk3=KS1fNbqeWXP+4gu0vw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/6.2-rc5-ksmbd-server-fixes
+X-PR-Tracked-Commit-Id: a34dc4a9b9e2fb3a45c179a60bb0b26539c96189
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2543fdbd5cd3bb7d72a6c810b431ba17778a607d
+Message-Id: <167493442450.9400.9759845576566406842.pr-tracker-bot@kernel.org>
+Date:   Sat, 28 Jan 2023 19:33:44 +0000
+To:     Steve French <smfrench@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 8:06 PM Joe Perches <joe@perches.com> wrote:
->
-> fyi: there's one more straggler:
+The pull request you sent on Fri, 27 Jan 2023 19:45:23 -0600:
 
-And I think there's one more.
+> git://git.samba.org/ksmbd.git tags/6.2-rc5-ksmbd-server-fixes
 
-Here's another one-liner shell script for finding suspicious files:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2543fdbd5cd3bb7d72a6c810b431ba17778a607d
 
-    git ls-files -s |
-        grep '^100755' | cut -f2 |
-        xargs grep -L '^#!'
+Thank you!
 
-and I don't think 'scripts/atomic/atomics.tbl' should be in that set.
-
-At least that file has a reasonable explanation for why it's
-executable - over-eager "mark all these scripts executable" without
-noticing that one of the files in question was just the input file to
-another script.
-
-            Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
