@@ -2,148 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EE167F3B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 02:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FC867F393
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 02:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbjA1B3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 20:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
+        id S232260AbjA1BMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 20:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjA1B3F (ORCPT
+        with ESMTP id S232455AbjA1BMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 20:29:05 -0500
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 Jan 2023 17:29:04 PST
-Received: from evilolive.daedalian.us (evilolive.daedalian.us [96.126.118.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2409B7F694
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 17:29:04 -0800 (PST)
-Received: by evilolive.daedalian.us (Postfix, from userid 111)
-        id 62587120D9; Fri, 27 Jan 2023 17:13:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=daedalian.us;
-        s=default; t=1674868394;
-        bh=m80g/qcKyF6Y8HG7sLJ+YFMv8oIIC64vqUP0h+rSuYc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RuIDzcGSC3xhxkGbOjKfChdLByh9wYSAX00p+oq+IRvp0Gpju8ZNWadwVK4yMmDYP
-         8TVw1Efbl+orqy9eHox3jN+qfCiaonplOXxwhbxWE/63etr07JH8lfYGPxtF3473OS
-         lfYkqh2obi5WN1cCKmXoh2YMLnbXypnFkQKS6KKpeLzMe6pSGoZU05ryIOXhY1ECkE
-         qgvY3c/gz64w5oOARD3QAIvUyod22RYVrRloGQD9UUKli1aidYN98NUajuilW6EQn6
-         hqNfQK4fm/QS+bN0eWqewKzTYWaFC8CPgq59F3JYhgS4T6JmvyGgdkYOm3Z46sy7Wr
-         LA0D8r3yHZuug==
+        Fri, 27 Jan 2023 20:12:51 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C8D1BC0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 17:12:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674868366; x=1706404366;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=l0bm41exO7gHjsY9lzGNtvoSM5WTwpvq/qqfwvMA+kc=;
+  b=jyYU5JoQyXZ0aatHs3j6kn9Qw4mQtT+VSCA0AlKB2H/3RiWz74zxEAlo
+   8q6ELVjkODwWEh1bvBSduPtGMXK2Umk+2yVXLNaW6B5w1UCVtt8UQxO4i
+   x7pKgc3giBsKqMDXdUj3IE0UjnzG0TgY5UdhRih76iMYc3zXAwEyoeD/t
+   lomHgObashI/SQkIqDIWErzC/Jpmulj2PGfj1WH8LsuInyRdV2uH4Gwtp
+   iIu96JI/lD46iSzyv+G66yW17OKqbq8gQF42dPCHtXmFd/jPtcb/Ovfai
+   P0VHxNO/pMpPdbWgJIp4m1H5ll8OxfjwM+KSfMDFqklydLymvfnPhP/uV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="354546154"
+X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
+   d="scan'208";a="354546154"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 17:12:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="665445987"
+X-IronPort-AV: E=Sophos;i="5.97,252,1669104000"; 
+   d="scan'208";a="665445987"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Jan 2023 17:12:43 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pLZlq-0000Ab-17;
+        Sat, 28 Jan 2023 01:12:42 +0000
+Date:   Sat, 28 Jan 2023 09:12:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/fpu] BUILD SUCCESS
+ cb3ea4b7671b7cfbac3ee609976b790aebd0bbda
+Message-ID: <63d4766e.1TsIAARmjBjW8eWC%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
-Received: from localhost.localdomain (static-47-181-121-78.lsan.ca.frontiernet.net [47.181.121.78])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by evilolive.daedalian.us (Postfix) with ESMTPSA id 4D6E812084;
-        Fri, 27 Jan 2023 17:13:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=daedalian.us;
-        s=default; t=1674868388;
-        bh=m80g/qcKyF6Y8HG7sLJ+YFMv8oIIC64vqUP0h+rSuYc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LWdhKwSL1TP2BNDpHoX8FR54V51X2xLvhQuQZ1s7cpGSIMUQqPvKvKq+U5f0/npoP
-         8bbbsE/nl+1flnwe29uTdqd2Na6IgRCBPNturH8x8ckRStUYWDkc6CBECd4F1u/QAC
-         2pVQeaN5t8EweUJIlMAz2QvNPPijF2gwjGm4PxEWXAyWAcRr0muYlj6ISbe/i3PHZI
-         ICYHVKTJSu5/C4+8RsC0/eL7aS+XiJJEWPj1Ro+ZMgN0tq4IXzZfkTpR7xH2DHdDzG
-         VGcL8BiuMEkWqddjEPEhY/Q/LCMvCpqTnTOMGpcydjh1CSPdOmTrCSl4BgN2CWeS6Y
-         YNICl+IGu3erg==
-From:   John Hickey <jjh@daedalian.us>
-To:     anthony.l.nguyen@intel.com
-Cc:     John Hickey <jjh@daedalian.us>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH] ixgbe: Panic during XDP_TX with > 64 CPUs
-Date:   Fri, 27 Jan 2023 17:12:12 -0800
-Message-Id: <20230128011213.150171-1-jjh@daedalian.us>
-X-Mailer: git-send-email 2.37.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 'ixgbe: let the xdpdrv work with more than 64 cpus'
-(4fe815850bdc8d4cc94e06fe1de069424a895826), support was added to allow
-XDP programs to run on systems with more than 64 CPUs by locking the
-XDP TX rings and indexing them using cpu % 64 (IXGBE_MAX_XDP_QS).
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/fpu
+branch HEAD: cb3ea4b7671b7cfbac3ee609976b790aebd0bbda  x86/fpu: Don't set TIF_NEED_FPU_LOAD for PF_IO_WORKER threads
 
-Upon trying this out patch via the Intel 5.18.6 out of tree driver
-on a system with more than 64 cores, the kernel paniced with an
-array-index-out-of-bounds at the return in ixgbe_determine_xdp_ring in
-ixgbe.h, which means ixgbe_determine_xdp_q_idx was just returning the
-cpu instead of cpu % IXGBE_MAX_XDP_QS.
+elapsed time: 3693m
 
-I think this is how it happens:
+configs tested: 31
+configs skipped: 42
 
-Upon loading the first XDP program on a system with more than 64 CPUs,
-ixgbe_xdp_locking_key is incremented in ixgbe_xdp_setup.  However,
-immediately after this, the rings are reconfigured by ixgbe_setup_tc.
-ixgbe_setup_tc calls ixgbe_clear_interrupt_scheme which calls
-ixgbe_free_q_vectors which calls ixgbe_free_q_vector in a loop.
-ixgbe_free_q_vector decrements ixgbe_xdp_locking_key once per call if
-it is non-zero.  Commenting out the decrement in ixgbe_free_q_vector
-stopped my system from panicing.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I suspect to make the original patch work, I would need to load an XDP
-program and then replace it in order to get ixgbe_xdp_locking_key back
-above 0 since ixgbe_setup_tc is only called when transitioning between
-XDP and non-XDP ring configurations, while ixgbe_xdp_locking_key is
-incremented every time ixgbe_xdp_setup is called.
+gcc tested configs:
+x86_64                            allnoconfig
+i386                                defconfig
+x86_64                              defconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+i386                 randconfig-a004-20230123
+i386                 randconfig-a003-20230123
+x86_64               randconfig-a002-20230123
+x86_64               randconfig-a001-20230123
+i386                 randconfig-a002-20230123
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+i386                 randconfig-a001-20230123
+x86_64               randconfig-a006-20230123
+i386                 randconfig-a005-20230123
+i386                 randconfig-a006-20230123
+i386                             allyesconfig
+x86_64               randconfig-a004-20230123
+x86_64               randconfig-a003-20230123
 
-Also, ixgbe_setup_tc can be called via ethtool --set-channels, so this
-becomes another path to decrement ixgbe_xdp_locking_key to 0 on systems
-with greater than 64 CPUs.
+clang tested configs:
+x86_64                          rhel-8.3-rust
+x86_64               randconfig-a013-20230123
+x86_64               randconfig-a011-20230123
+x86_64               randconfig-a012-20230123
+x86_64               randconfig-a016-20230123
+i386                 randconfig-a011-20230123
+x86_64               randconfig-a015-20230123
+x86_64               randconfig-a014-20230123
 
-For this patch, I have changed static_branch_inc to static_branch_enable
-in ixgbe_setup_xdp.  We aren't counting references and I don't see any
-reason to turn it off, since all the locking appears to be in the XDP_TX
-path, which isn't run if a XDP program isn't loaded.
-
-Signed-off-by: John Hickey <jjh@daedalian.us>
----
- drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c  | 3 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 2 +-
- 2 files changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
-index f8156fe4b1dc..0ee943db3dc9 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
-@@ -1035,9 +1035,6 @@ static void ixgbe_free_q_vector(struct ixgbe_adapter *adapter, int v_idx)
- 	adapter->q_vector[v_idx] = NULL;
- 	__netif_napi_del(&q_vector->napi);
- 
--	if (static_key_enabled(&ixgbe_xdp_locking_key))
--		static_branch_dec(&ixgbe_xdp_locking_key);
--
- 	/*
- 	 * after a call to __netif_napi_del() napi may still be used and
- 	 * ixgbe_get_stats64() might access the rings on this vector,
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index ab8370c413f3..cd2fb72c67be 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -10283,7 +10283,7 @@ static int ixgbe_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
- 	if (nr_cpu_ids > IXGBE_MAX_XDP_QS * 2)
- 		return -ENOMEM;
- 	else if (nr_cpu_ids > IXGBE_MAX_XDP_QS)
--		static_branch_inc(&ixgbe_xdp_locking_key);
-+		static_branch_enable(&ixgbe_xdp_locking_key);
- 
- 	old_prog = xchg(&adapter->xdp_prog, prog);
- 	need_reset = (!!prog != !!old_prog);
 -- 
-2.37.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
