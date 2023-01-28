@@ -2,92 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5DA67F433
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 04:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 838CE67F435
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 04:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbjA1DKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 22:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
+        id S232828AbjA1DLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 22:11:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjA1DKQ (ORCPT
+        with ESMTP id S229619AbjA1DLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 22:10:16 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15017E6B6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 19:10:15 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pLbbX-0006aV-1K;
-        Sat, 28 Jan 2023 04:10:11 +0100
-Date:   Sat, 28 Jan 2023 03:10:01 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Colin Foster <colin.foster@in-advantage.com>
-Subject: [PATCH] regmap: apply reg_base and reg_downshift for single register
- ops
-Message-ID: <5355a99496d764a7918f0eaf801fab7c9a3f5a98.1674875341.git.daniel@makrotopia.org>
+        Fri, 27 Jan 2023 22:11:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C83C7E6F1;
+        Fri, 27 Jan 2023 19:11:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD49361D7C;
+        Sat, 28 Jan 2023 03:11:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAADBC433D2;
+        Sat, 28 Jan 2023 03:11:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674875507;
+        bh=XPaMcUNFzQtuzwo6CK8GiZUG4h20tNH9I9lk8x2KzFM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QG3VCHBlSfGhLGgZuhtNYKVq0bCXEY9+S+ordZOyfTL6rdDY64iDbVBnSroHV0mgy
+         SB4zYXYLqeQzVWEWGawo2yVSzeuAx1c4X7gjWXx5XCrsol7HRPOrt5NuqSTadxeIbf
+         2bjibS7c9FkPb9CzzAk8Dps0MTkCsENRcVaw6CwTSTg0/pEt/DfsiMjSZW/ySvK3pv
+         0tCNCgOzOlXfnRhzMuDpVLDmUJa00BIwZPwWvFd5dCoZLPI04uo8uRv3oKJuEt5L+E
+         YdZNJ5ZoBRBDTqDuuy1GA7POL/Zobg5Hs+i900EE7/j5Kc/lKNNkehQSNs2N3locDR
+         QwNGYeNTRhevA==
+Message-ID: <b2112f3d-e0a5-0562-9ea1-a158c75ef3b3@kernel.org>
+Date:   Sat, 28 Jan 2023 11:11:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: retry to update the inode page given
+ EIO
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org
+References: <20230105233908.1030651-1-jaegeuk@kernel.org>
+ <Y74O+5SklijYqMU1@google.com>
+ <77b18266-69c4-c7f0-0eab-d2069a7b21d5@kernel.org>
+ <Y78E9NpDxtvr2/Hs@google.com>
+ <bb9a9d1a-0d4c-b27e-e724-f99d5b8b4283@kernel.org>
+ <Y8CfUMsas4ZqVL0R@google.com>
+Content-Language: en-US
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Y8CfUMsas4ZqVL0R@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-reg_base and reg_downshift currently don't have any effect if used with
-simple single register operations.
+On 2023/1/13 8:01, Jaegeuk Kim wrote:
+> On 01/12, Chao Yu wrote:
+>> On 2023/1/12 2:50, Jaegeuk Kim wrote:
+>>> On 01/11, Chao Yu wrote:
+>>>> On 2023/1/11 9:20, Jaegeuk Kim wrote:
+>>>>> In f2fs_update_inode_page, f2fs_get_node_page handles EIO along with
+>>>>> f2fs_handle_page_eio that stops checkpoint, if the disk couldn't be recovered.
+>>>>> As a result, we don't need to stop checkpoint right away given single EIO.
+>>>>
+>>>> f2fs_handle_page_eio() only covers the case that EIO occurs on the same
+>>>> page, should we cover the case EIO occurs on different pages?
+>>>
+>>> Which case are you looking at?
+>>
+>> - __get_node_page(PageA)		- __get_node_page(PageB)
+>>   - f2fs_handle_page_eio
+>>    - sbi->page_eio_ofs[type] = PageA->index
+>> 					 - f2fs_handle_page_eio
+>> 					  - sbi->page_eio_ofs[type] = PageB->index
+>>
+>> In such race case, it may has low probability to set CP_ERROR_FLAG as we expect?
+> 
+> Do you see that case in products?
 
-Fix that by taking them into account also for _reg_read, _reg_write and
-_reg_update_bits (they may still be missing also in other place, eg.
-page selection code).
+Not yet.
 
-Fixes: 0074f3f2b1e43d ("regmap: allow a defined reg_base to be added to every address")
-Fixes: 86fc59ef818beb ("regmap: add configurable downshift for addresses")
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/base/regmap/regmap.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+> I'm trying to avoid setting CP_ERROR_FLAG here.
 
-diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-index d12d669157f24..7b8386ec21b8c 100644
---- a/drivers/base/regmap/regmap.c
-+++ b/drivers/base/regmap/regmap.c
-@@ -1986,6 +1986,8 @@ int _regmap_write(struct regmap *map, unsigned int reg,
- 		}
- 	}
- 
-+	reg += map->reg_base;
-+	reg >>= map->format.reg_downshift;
- 	ret = map->reg_write(context, reg, val);
- 	if (ret == 0) {
- 		if (regmap_should_log(map))
-@@ -2879,6 +2881,8 @@ static int _regmap_read(struct regmap *map, unsigned int reg,
- 	if (!regmap_readable(map, reg))
- 		return -EIO;
- 
-+	reg += map->reg_base;
-+	reg >>= map->format.reg_downshift;
- 	ret = map->reg_read(context, reg, val);
- 	if (ret == 0) {
- 		if (regmap_should_log(map))
-@@ -3231,6 +3235,8 @@ static int _regmap_update_bits(struct regmap *map, unsigned int reg,
- 		*change = false;
- 
- 	if (regmap_volatile(map, reg) && map->reg_update_bits) {
-+		reg += map->reg_base;
-+		reg >>= map->format.reg_downshift;
- 		ret = map->reg_update_bits(map->bus_context, reg, mask, val);
- 		if (ret == 0 && change)
- 			*change = true;
+Copied, how about using the same logic for node page as meta page, like
+we did in f2fs_get_meta_page_retry()?
 
-base-commit: e2f86c02fdc96ca29ced53221a3cbf50aa6f8b49
--- 
-2.39.1
+Thanks,
 
+> 
+>>
+>> Thanks,
+>>
+>>>
+>>>>
+>>>> Thanks,
+>>>>
+>>>>>
+>>>>> Cc: stable@vger.kernel.org
+>>>>> Signed-off-by: Randall Huang <huangrandall@google.com>
+>>>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>>>> ---
+>>>>>
+>>>>>     Change log from v1:
+>>>>>      - fix a bug
+>>>>>
+>>>>>     fs/f2fs/inode.c | 2 +-
+>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+>>>>> index ff6cf66ed46b..2ed7a621fdf1 100644
+>>>>> --- a/fs/f2fs/inode.c
+>>>>> +++ b/fs/f2fs/inode.c
+>>>>> @@ -719,7 +719,7 @@ void f2fs_update_inode_page(struct inode *inode)
+>>>>>     	if (IS_ERR(node_page)) {
+>>>>>     		int err = PTR_ERR(node_page);
+>>>>> -		if (err == -ENOMEM) {
+>>>>> +		if (err == -ENOMEM || (err == -EIO && !f2fs_cp_error(sbi))) {
+>>>>>     			cond_resched();
+>>>>>     			goto retry;
+>>>>>     		} else if (err != -ENOENT) {
