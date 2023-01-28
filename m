@@ -2,245 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED90A67FA2F
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 19:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F4367FA36
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 19:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234413AbjA1SYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 13:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
+        id S234705AbjA1S1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 13:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbjA1SYn (ORCPT
+        with ESMTP id S231797AbjA1S05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 13:24:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58942413A;
-        Sat, 28 Jan 2023 10:24:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5170260C08;
-        Sat, 28 Jan 2023 18:24:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE82C433EF;
-        Sat, 28 Jan 2023 18:24:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674930280;
-        bh=1fUdWzpdL53d1nH5WnaJcGpl4s7/EKQzVIEh3Bj6hkg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=hG7V7Z/gfU+BTYO4fg7fJtMDzjOmVGt2QaXy/QSi8Avc54HUSP+uSI3sdauoOB2Bl
-         dBF4ssIlNNPbP8UZAbJ5yrA8q7Rm2DWGgClSM7GH1qp3vN1t29fpoHdvAE9t8e49AP
-         R6g8Rq7i8gJeRI7Zh8gZXfwFKPp1OeKoFOIdJZDaHVYaP/FsiguYn6JN8qpwVAFb2y
-         xi7iAv2RQWVAomMrQ8WaGlJGBb/yTv/LV7EiDgqm/qBnNPqw9ntnZf6osq1QGrhzAc
-         y1G0sZVswGiZiJTa3Qeo/AB+ZctoPJ+1c+s1JRSlFSAfQauKDYZTBWzGikC30KnZW+
-         6rJByMNnMRdlA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4BC1F5C089F; Sat, 28 Jan 2023 10:24:40 -0800 (PST)
-Date:   Sat, 28 Jan 2023 10:24:40 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v4] srcu: Clarify comments on memory barrier "E"
-Message-ID: <20230128182440.GA2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230128035902.1758726-1-joel@joelfernandes.org>
+        Sat, 28 Jan 2023 13:26:57 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CC52413A;
+        Sat, 28 Jan 2023 10:26:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674930413; x=1706466413;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=H34/gJbDq4+JIR5uFeM8higdX76HQfP4/UQEFCIjdP4=;
+  b=N3QAIGlNc76i/nuP0Gh09hxnIXYur85dPMeD8ZvkPpObGUR11HemxYwZ
+   Ob1U+n7CWI3+2mUwuOFXXFxeQUh3f6sF3Kt+jCresmPOv2jeBPuglvJFS
+   As4wKlpccRsUzWot2NBZhlAvVK7p/V51cJBYr9TpGaqCcsDbkvqe11A87
+   1sAQk8uFVESmTPQt0VCM7nP8hj5vLeyWtwqiCvj0gWm/X7KFeQ0V4gMyd
+   Yib0j1WkG6cMBZ5j7mdGMhiDeAGGNFWvwP+ZIeIB1k+ffEMB56QsSBTyM
+   zLcmhxTJYFxO/skGVHptoYtdIc7sKxBC6v+BzEtnTjq2ZbI+iHrOaxK0U
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="306969667"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="306969667"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 10:26:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="992421344"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="992421344"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jan 2023 10:26:46 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pLpuX-0000z9-2G;
+        Sat, 28 Jan 2023 18:26:45 +0000
+Date:   Sun, 29 Jan 2023 02:26:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nipun Gupta <nipun.gupta@amd.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, eric.auger@redhat.com,
+        alex.williamson@redhat.com, cohuck@redhat.com,
+        song.bao.hua@hisilicon.com, mchehab+huawei@kernel.org,
+        maz@kernel.org, f.fainelli@gmail.com, jeffrey.l.hugo@gmail.com,
+        saravanak@google.com, Michael.Srba@seznam.cz, mani@kernel.org,
+        yishaih@nvidia.com, jgg@ziepe.ca, jgg@nvidia.com,
+        robin.murphy@arm.com, will@kernel.org, joro@8bytes.org,
+        masahiroy@kernel.org, ndesaulniers@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        okaya@kernel.org, harpreet.anand@amd.com, nikhil.agarwal@amd.com
+Subject: Re: [PATCH v6 5/7] cdx: add cdx controller
+Message-ID: <202301290233.80xUAwYL-lkp@intel.com>
+References: <20230126104630.15493-6-nipun.gupta@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230128035902.1758726-1-joel@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230126104630.15493-6-nipun.gupta@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 03:59:01AM +0000, Joel Fernandes (Google) wrote:
-> During a flip, we have a full memory barrier before srcu_idx is incremented.
-> 
-> The idea is we intend to order the first phase scan's read of lock
-> counters with the flipping of the index.
-> 
-> However, such ordering is already enforced because of the
-> control-dependency between the 2 scans. We would be flipping the index
-> only if lock and unlock counts matched.
-> 
-> But such match will not happen if there was a pending reader before the flip
-> in the first place (observation courtesy Mathieu Desnoyers).
-> 
-> The litmus test below shows this:
-> (test courtesy Frederic Weisbecker, Changes for ctrldep by Boqun/me):
+Hi Nipun,
 
-Much better, thank you!
+I love your patch! Yet something to improve:
 
-I of course did the usual wordsmithing, as shown below.  Does this
-version capture your intent and understanding?
+[auto build test ERROR on next-20230127]
+[cannot apply to masahiroy-kbuild/for-next masahiroy-kbuild/fixes robh/for-next joro-iommu/next linus/master v6.2-rc5 v6.2-rc4 v6.2-rc3 v6.2-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-							Thanx, Paul
+url:    https://github.com/intel-lab-lkp/linux/commits/Nipun-Gupta/cdx-add-the-cdx-bus-driver/20230128-161622
+patch link:    https://lore.kernel.org/r/20230126104630.15493-6-nipun.gupta%40amd.com
+patch subject: [PATCH v6 5/7] cdx: add cdx controller
+config: powerpc-buildonly-randconfig-r004-20230129 (https://download.01.org/0day-ci/archive/20230129/202301290233.80xUAwYL-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/f412d73800370b8e51d1be454e651d3c4ff796a8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nipun-Gupta/cdx-add-the-cdx-bus-driver/20230128-161622
+        git checkout f412d73800370b8e51d1be454e651d3c4ff796a8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/cdx/controller/
 
-------------------------------------------------------------------------
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-commit 963f34624beb2af1ec08527e637d16ab6a1dacbd
-Author: Joel Fernandes (Google) <joel@joelfernandes.org>
-Date:   Sat Jan 28 03:59:01 2023 +0000
+All errors (new ones prefixed by >>):
 
-    srcu: Clarify comments on memory barrier "E"
-    
-    There is an smp_mb() named "E" in srcu_flip() immediately before the
-    increment (flip) of the srcu_struct structure's ->srcu_idx.
-    
-    The purpose of E is to order the preceding scan's read of lock counters
-    against the flipping of the ->srcu_idx, in order to prevent new readers
-    from continuing to use the old ->srcu_idx value, which might needlessly
-    extend the grace period.
-    
-    However, this ordering is already enforced because of the control
-    dependency between the preceding scan and the ->srcu_idx flip.
-    This control dependency exists because atomic_long_read() is used
-    to scan the counts, because WRITE_ONCE() is used to flip ->srcu_idx,
-    and because ->srcu_idx is not flipped until the ->srcu_lock_count[] and
-    ->srcu_unlock_count[] counts match.  And such a match cannot happen when
-    there is an in-flight reader that started before the flip (observation
-    courtesy Mathieu Desnoyers).
-    
-    The litmus test below (courtesy of Frederic Weisbecker, with changes
-    for ctrldep by Boqun and Joel) shows this:
-    
-    C srcu
-    (*
-     * bad condition: P0's first scan (SCAN1) saw P1's idx=0 LOCK count inc, though P1 saw flip.
-     *
-     * So basically, the ->po ordering on both P0 and P1 is enforced via ->ppo
-     * (control deps) on both sides, and both P0 and P1 are interconnected by ->rf
-     * relations. Combining the ->ppo with ->rf, a cycle is impossible.
-     *)
-    
-    {}
-    
-    // updater
-    P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
-    {
-            int lock1;
-            int unlock1;
-            int lock0;
-            int unlock0;
-    
-            // SCAN1
-            unlock1 = READ_ONCE(*UNLOCK1);
-            smp_mb(); // A
-            lock1 = READ_ONCE(*LOCK1);
-    
-            // FLIP
-            if (lock1 == unlock1) {   // Control dep
-                    smp_mb(); // E    // Remove E and still passes.
-                    WRITE_ONCE(*IDX, 1);
-                    smp_mb(); // D
-    
-                    // SCAN2
-                    unlock0 = READ_ONCE(*UNLOCK0);
-                    smp_mb(); // A
-                    lock0 = READ_ONCE(*LOCK0);
-            }
-    }
-    
-    // reader
-    P1(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
-    {
-            int tmp;
-            int idx1;
-            int idx2;
-    
-            // 1st reader
-            idx1 = READ_ONCE(*IDX);
-            if (idx1 == 0) {         // Control dep
-                    tmp = READ_ONCE(*LOCK0);
-                    WRITE_ONCE(*LOCK0, tmp + 1);
-                    smp_mb(); /* B and C */
-                    tmp = READ_ONCE(*UNLOCK0);
-                    WRITE_ONCE(*UNLOCK0, tmp + 1);
-            } else {
-                    tmp = READ_ONCE(*LOCK1);
-                    WRITE_ONCE(*LOCK1, tmp + 1);
-                    smp_mb(); /* B and C */
-                    tmp = READ_ONCE(*UNLOCK1);
-                    WRITE_ONCE(*UNLOCK1, tmp + 1);
-            }
-    }
-    
-    exists (0:lock1=1 /\ 1:idx1=1)
-    
-    More complicated litmus tests with multiple SRCU readers also show that
-    memory barrier E is not needed.
-    
-    This commit therefore clarifies the comment on memory barrier E.
-    
-    Why not also remove that redundant smp_mb()?
-    
-    Because control dependencies are quite fragile due to their not being
-    recognized by most compilers and tools.  Control dependencies therefore
-    exact an ongoing maintenance burden, and such a burden cannot be justified
-    in this slowpath.  Therefore, that smp_mb() stays until such time as
-    its overhead becomes a measurable problem in a real workload running on
-    a real production system, or until such time as compilers start paying
-    attention to this sort of control dependency.
-    
-    Co-developed-by: Frederic Weisbecker <frederic@kernel.org>
-    Co-developed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-    Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-    Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>> drivers/cdx/controller/cdx_controller.c:102:13: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           cdx_mcdi = kzalloc(sizeof(*cdx_mcdi), GFP_KERNEL);
+                      ^
+>> drivers/cdx/controller/cdx_controller.c:102:11: error: incompatible integer to pointer conversion assigning to 'struct cdx_mcdi *' from 'int' [-Wint-conversion]
+           cdx_mcdi = kzalloc(sizeof(*cdx_mcdi), GFP_KERNEL);
+                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/cdx/controller/cdx_controller.c:115:6: error: incompatible integer to pointer conversion assigning to 'struct cdx_controller *' from 'int' [-Wint-conversion]
+           cdx = kzalloc(sizeof(*cdx), GFP_KERNEL);
+               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/cdx/controller/cdx_controller.c:131:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           kfree(cdx_mcdi);
+           ^
+   drivers/cdx/controller/cdx_controller.c:141:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           kfree(cdx);
+           ^
+   5 errors generated.
+--
+>> drivers/cdx/controller/mcdi.c:272:2: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           CDX_POPULATE_DWORD_7(hdr[0],
+           ^
+   drivers/cdx/controller/bitfield.h:72:30: note: expanded from macro 'CDX_POPULATE_DWORD_7'
+   #define CDX_POPULATE_DWORD_7 CDX_POPULATE_DWORD
+                                ^
+   drivers/cdx/controller/bitfield.h:69:32: note: expanded from macro 'CDX_POPULATE_DWORD'
+           (dword).cdx_u32 = cpu_to_le32(CDX_INSERT_FIELDS(__VA_ARGS__))
+                                         ^
+   drivers/cdx/controller/bitfield.h:60:3: note: expanded from macro 'CDX_INSERT_FIELDS'
+           (CDX_INSERT_FIELD(field1, (value1)) |           \
+            ^
+   drivers/cdx/controller/bitfield.h:46:3: note: expanded from macro 'CDX_INSERT_FIELD'
+           (FIELD_PREP(GENMASK(CDX_HIGH_BIT(field),                \
+            ^
+>> drivers/cdx/controller/mcdi.c:635:12: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           respseq = CDX_DWORD_FIELD(outbuf[0], MCDI_HEADER_SEQ);
+                     ^
+   drivers/cdx/controller/bitfield.h:38:3: note: expanded from macro 'CDX_DWORD_FIELD'
+           (FIELD_GET(GENMASK(CDX_HIGH_BIT(field), CDX_LOW_BIT(field)),    \
+            ^
+   drivers/cdx/controller/mcdi.c:692:12: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           respcmd = CDX_DWORD_FIELD(outbuf[0], MCDI_HEADER_CODE);
+                     ^
+   drivers/cdx/controller/bitfield.h:38:3: note: expanded from macro 'CDX_DWORD_FIELD'
+           (FIELD_GET(GENMASK(CDX_HIGH_BIT(field), CDX_LOW_BIT(field)),    \
+            ^
+   3 errors generated.
+--
+>> drivers/cdx/controller/mcdi_functions.c:25:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return MCDI_DWORD(outbuf, CDX_BUS_ENUM_BUSES_OUT_BUS_COUNT);
+                  ^
+   drivers/cdx/controller/mcdi.h:223:2: note: expanded from macro 'MCDI_DWORD'
+           CDX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), CDX_DWORD)
+           ^
+   drivers/cdx/controller/bitfield.h:38:3: note: expanded from macro 'CDX_DWORD_FIELD'
+           (FIELD_GET(GENMASK(CDX_HIGH_BIT(field), CDX_LOW_BIT(field)),    \
+            ^
+>> drivers/cdx/controller/mcdi_functions.c:35:2: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           MCDI_SET_DWORD(inbuf, CDX_BUS_ENUM_DEVICES_IN_BUS, bus_num);
+           ^
+   drivers/cdx/controller/mcdi.h:221:2: note: expanded from macro 'MCDI_SET_DWORD'
+           CDX_POPULATE_DWORD_1(*_MCDI_DWORD(_buf, _field), CDX_DWORD, _value)
+           ^
+   drivers/cdx/controller/bitfield.h:84:2: note: expanded from macro 'CDX_POPULATE_DWORD_1'
+           CDX_POPULATE_DWORD_2(dword, CDX_DWORD, 0, __VA_ARGS__)
+           ^
+   drivers/cdx/controller/bitfield.h:82:2: note: expanded from macro 'CDX_POPULATE_DWORD_2'
+           CDX_POPULATE_DWORD_3(dword, CDX_DWORD, 0, __VA_ARGS__)
+           ^
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/cdx/controller/bitfield.h:69:32: note: expanded from macro 'CDX_POPULATE_DWORD'
+           (dword).cdx_u32 = cpu_to_le32(CDX_INSERT_FIELDS(__VA_ARGS__))
+                                         ^
+   drivers/cdx/controller/bitfield.h:60:3: note: expanded from macro 'CDX_INSERT_FIELDS'
+           (CDX_INSERT_FIELD(field1, (value1)) |           \
+            ^
+   drivers/cdx/controller/bitfield.h:46:3: note: expanded from macro 'CDX_INSERT_FIELD'
+           (FIELD_PREP(GENMASK(CDX_HIGH_BIT(field),                \
+            ^
+   drivers/cdx/controller/mcdi_functions.c:45:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return MCDI_DWORD(outbuf, CDX_BUS_ENUM_DEVICES_OUT_DEVICE_COUNT);
+                  ^
+   drivers/cdx/controller/mcdi.h:223:2: note: expanded from macro 'MCDI_DWORD'
+           CDX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), CDX_DWORD)
+           ^
+   drivers/cdx/controller/bitfield.h:38:3: note: expanded from macro 'CDX_DWORD_FIELD'
+           (FIELD_GET(GENMASK(CDX_HIGH_BIT(field), CDX_LOW_BIT(field)),    \
+            ^
+   drivers/cdx/controller/mcdi_functions.c:59:2: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           MCDI_SET_DWORD(inbuf, CDX_BUS_GET_DEVICE_CONFIG_IN_BUS, bus_num);
+           ^
+   drivers/cdx/controller/mcdi.h:221:2: note: expanded from macro 'MCDI_SET_DWORD'
+           CDX_POPULATE_DWORD_1(*_MCDI_DWORD(_buf, _field), CDX_DWORD, _value)
+           ^
+   drivers/cdx/controller/bitfield.h:84:2: note: expanded from macro 'CDX_POPULATE_DWORD_1'
+           CDX_POPULATE_DWORD_2(dword, CDX_DWORD, 0, __VA_ARGS__)
+           ^
+   drivers/cdx/controller/bitfield.h:82:2: note: expanded from macro 'CDX_POPULATE_DWORD_2'
+           CDX_POPULATE_DWORD_3(dword, CDX_DWORD, 0, __VA_ARGS__)
+           ^
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/cdx/controller/bitfield.h:69:32: note: expanded from macro 'CDX_POPULATE_DWORD'
+           (dword).cdx_u32 = cpu_to_le32(CDX_INSERT_FIELDS(__VA_ARGS__))
+                                         ^
+   drivers/cdx/controller/bitfield.h:60:3: note: expanded from macro 'CDX_INSERT_FIELDS'
+           (CDX_INSERT_FIELD(field1, (value1)) |           \
+            ^
+   drivers/cdx/controller/bitfield.h:46:3: note: expanded from macro 'CDX_INSERT_FIELD'
+           (FIELD_PREP(GENMASK(CDX_HIGH_BIT(field),                \
+            ^
+   drivers/cdx/controller/mcdi_functions.c:73:11: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           req_id = MCDI_DWORD(outbuf, CDX_BUS_GET_DEVICE_CONFIG_OUT_REQUESTER_ID);
+                    ^
+   drivers/cdx/controller/mcdi.h:223:2: note: expanded from macro 'MCDI_DWORD'
+           CDX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), CDX_DWORD)
+           ^
+   drivers/cdx/controller/bitfield.h:38:3: note: expanded from macro 'CDX_DWORD_FIELD'
+           (FIELD_GET(GENMASK(CDX_HIGH_BIT(field), CDX_LOW_BIT(field)),    \
+            ^
+   5 errors generated.
 
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index c541b82646b63..cd46fe063e50f 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -1085,16 +1085,36 @@ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
- static void srcu_flip(struct srcu_struct *ssp)
- {
- 	/*
--	 * Ensure that if this updater saw a given reader's increment
--	 * from __srcu_read_lock(), that reader was using an old value
--	 * of ->srcu_idx.  Also ensure that if a given reader sees the
--	 * new value of ->srcu_idx, this updater's earlier scans cannot
--	 * have seen that reader's increments (which is OK, because this
--	 * grace period need not wait on that reader).
-+	 * Because the flip of ->srcu_idx is executed only if the
-+	 * preceding call to srcu_readers_active_idx_check() found that
-+	 * the ->srcu_unlock_count[] and ->srcu_lock_count[] sums matched
-+	 * and because that summing uses atomic_long_read(), there is
-+	 * ordering due to a control dependency between that summing and
-+	 * the WRITE_ONCE() in this call to srcu_flip().  This ordering
-+	 * ensures that if this updater saw a given reader's increment from
-+	 * __srcu_read_lock(), that reader was using a value of ->srcu_idx
-+	 * from before the previous call to srcu_flip(), which should be
-+	 * quite rare.  This ordering thus helps forward progress because
-+	 * the grace period could otherwise be delayed by additional
-+	 * calls to __srcu_read_lock() using that old (soon to be new)
-+	 * value of ->srcu_idx.
-+	 *
-+	 * This sum-equality check and ordering also ensures that if
-+	 * a given call to __srcu_read_lock() uses the new value of
-+	 * ->srcu_idx, this updater's earlier scans cannot have seen
-+	 * that reader's increments, which is all to the good, because
-+	 * this grace period need not wait on that reader.  After all,
-+	 * if those earlier scans had seen that reader, there would have
-+	 * been a sum mismatch and this code would not be reached.
-+	 *
-+	 * This means that the following smp_mb() is redundant, but
-+	 * it stays until either (1) Compilers learn about this sort of
-+	 * control dependency or (2) Some production workload running on
-+	 * a production system is unduly delayed by this slowpath smp_mb().
- 	 */
- 	smp_mb(); /* E */  /* Pairs with B and C. */
- 
--	WRITE_ONCE(ssp->srcu_idx, ssp->srcu_idx + 1);
-+	WRITE_ONCE(ssp->srcu_idx, ssp->srcu_idx + 1); // Flip the counter.
- 
- 	/*
- 	 * Ensure that if the updater misses an __srcu_read_unlock()
+
+vim +/kzalloc +102 drivers/cdx/controller/cdx_controller.c
+
+    95	
+    96	static int xlnx_cdx_probe(struct platform_device *pdev)
+    97	{
+    98		struct cdx_controller *cdx;
+    99		struct cdx_mcdi *cdx_mcdi;
+   100		int ret;
+   101	
+ > 102		cdx_mcdi = kzalloc(sizeof(*cdx_mcdi), GFP_KERNEL);
+   103		if (!cdx_mcdi)
+   104			return -ENOMEM;
+   105	
+   106		/* Store the MCDI ops */
+   107		cdx_mcdi->mcdi_ops = &mcdi_ops;
+   108		/* MCDI FW: Initialize the FW path */
+   109		ret = cdx_mcdi_init(cdx_mcdi);
+   110		if (ret) {
+   111			dev_err_probe(&pdev->dev, ret, "MCDI Initialization failed\n");
+   112			goto mcdi_init_fail;
+   113		}
+   114	
+ > 115		cdx = kzalloc(sizeof(*cdx), GFP_KERNEL);
+   116		if (!cdx) {
+   117			ret = -ENOMEM;
+   118			goto cdx_alloc_fail;
+   119		}
+   120		platform_set_drvdata(pdev, cdx);
+   121	
+   122		cdx->dev = &pdev->dev;
+   123		cdx->priv = cdx_mcdi;
+   124		cdx->ops = &cdx_ops;
+   125	
+   126		return 0;
+   127	
+   128	cdx_alloc_fail:
+   129		cdx_mcdi_finish(cdx_mcdi);
+   130	mcdi_init_fail:
+ > 131		kfree(cdx_mcdi);
+   132	
+   133		return ret;
+   134	}
+   135	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
