@@ -2,144 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E672C67F73F
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 11:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47AB67F741
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 11:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbjA1Kr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 05:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
+        id S233903AbjA1KsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 05:48:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjA1Kr1 (ORCPT
+        with ESMTP id S233099AbjA1KsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 05:47:27 -0500
+        Sat, 28 Jan 2023 05:48:09 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940D73250C
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 02:47:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249182CFEA
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 02:48:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C3A760B39
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 10:47:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D908C4339C;
-        Sat, 28 Jan 2023 10:47:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B394D60B39
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 10:48:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6586C4339B;
+        Sat, 28 Jan 2023 10:48:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674902845;
-        bh=j+QQ4frfhd7/U0TPowl8ebCAvIfb0w0dfp7JE+JYjRo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pAa7xA40quWdCu7YlXGQKkTzBURq1QW0vhAUs/6YcBnHM+AJWNCHV4lV160Xss6QJ
-         pUmlNCefuRulFCCFHP4u7YuPTDtkcNLtgmMk3puAiEKkf0KFF3gKc5SNbiE+5rSYGL
-         9Rp8ME61GjMNvjRY0FlkrzjdkCEI54mX2zykaI/qXH+iILeaWHUx0aoU/rEIHYNZaA
-         5l8XFnS6qAWdOEv73K4WT4h6CBCw9zVwMRU/MXa2WxrMiEu1owjhVMGxDQFbYDq+o5
-         43PwpJm87q+APDi13U+PW0Bnj/4ViJIDUoowf3fdXi+OWUyNym9S7E7RyOeEzMrHOR
-         lpAK1koaWjClg==
-Message-ID: <1bd219f7-4990-f0dc-fe07-b434726161e2@kernel.org>
-Date:   Sat, 28 Jan 2023 18:47:22 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] f2fs: introduce sanity_check_blocks()
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        s=k20201202; t=1674902888;
+        bh=X9g24zwHYHzuWSbHrdtBTwJcaKn7C4eDSMB8zCgqzYM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=cInG9ZbXv3rWjk3KrXGYMnTes/ngAQ77H7cyCUrvd6emb68vGG5wTcZ7JOEYH4CqH
+         IjMHAaagJMdhPY6JkQzzkwH7nFpMgghkKpn0rONHJvoVXFTeQeZJFlXLoHNHzWkYmL
+         sfkzNZWMq1B0VMiGyOU2nVRvlIto/j2USJFYOUSk7e6rdG1DEeZH+gydhzcv3SlrdI
+         Kc4JmEFIVmf+NP/Jvt3lTJo9xJ9w2oJ+sG3zFfwZ1u8BjVmIroTWJxsCPEOJkrXBUa
+         BmaPUxjUpgDAL2CT4JdtkbJ4kQ7nbcKy0l1E+qWl1ooPVElnj3+WerZl/h7HLfZOGH
+         JUwqpuptPWjjw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Astrid Rost <astrid.rost@axis.com>
+Cc:     kernel@axis.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-References: <20230112142213.22784-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230112142213.22784-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20230123135913.2720991-1-astrid.rost@axis.com>
+References: <20230123135913.2720991-1-astrid.rost@axis.com>
+Subject: Re: [PATCH v3 0/3] ASoC: simple-card-utils: create jack inputs for
+ aux_devs
+Message-Id: <167490288646.2145828.6069622969761502857.b4-ty@kernel.org>
+Date:   Sat, 28 Jan 2023 10:48:06 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/12 22:22, Yangtao Li wrote:
-> There are very similar codes in release_compress_blocks() and
-> reserve_compress_blocks() which is used for data blocks check.
+On Mon, 23 Jan 2023 14:59:10 +0100, Astrid Rost wrote:
+> Add a generic way to create jack inputs for auxiliary jack detection
+> drivers (e.g. via i2c, spi), which are not part of any real codec.
+> The simple-card can be used as combining card driver to add the jacks,
+> no new one is required.
 > 
-> This patch introduces a new helper sanity_check_blocks()
-> to include those common codes, and used it instead for cleanup.
-
-How about reusing f2fs_sanity_check_cluster()? Something like:
-
-bool f2fs_sanity_check_cluster()
-
-	if (compressed_cluster)
-		f2fs_sanity_check_compressed_cluster()
-	else
-		f2fs_sanity_check_normal_cluster()
-
+> Create a jack (for input-events) for jack devices in the auxiliary
+> device list (aux_devs). A device which returns a valid value on
+> get_jack_type counts as jack device; set_jack is required
+> to add the jack to the device.
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->   fs/f2fs/file.c | 36 ++++++++++++++++++++----------------
->   1 file changed, 20 insertions(+), 16 deletions(-)
-> 
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index f5c1b7814954..0d539155379c 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -3369,11 +3369,9 @@ static int f2fs_get_compress_blocks(struct file *filp, unsigned long arg)
->   	return put_user(blocks, (u64 __user *)arg);
->   }
->   
-> -static int release_compress_blocks(struct dnode_of_data *dn, pgoff_t count)
-> +static int sanity_check_blocks(struct dnode_of_data *dn, pgoff_t count)
->   {
->   	struct f2fs_sb_info *sbi = F2FS_I_SB(dn->inode);
-> -	unsigned int released_blocks = 0;
-> -	int cluster_size = F2FS_I(dn->inode)->i_cluster_size;
->   	block_t blkaddr;
->   	int i;
->   
-> @@ -3390,6 +3388,21 @@ static int release_compress_blocks(struct dnode_of_data *dn, pgoff_t count)
->   		}
->   	}
->   
-> +	return 0;
-> +}
-> +
-> +static int release_compress_blocks(struct dnode_of_data *dn, pgoff_t count)
-> +{
-> +	struct f2fs_sb_info *sbi = F2FS_I_SB(dn->inode);
-> +	unsigned int released_blocks = 0;
-> +	int cluster_size = F2FS_I(dn->inode)->i_cluster_size;
-> +	block_t blkaddr;
-> +	int i, rc;
-> +
-> +	rc = sanity_check_blocks(dn, count);
-> +	if (rc)
-> +		return rc;
-> +
->   	while (count) {
->   		int compr_blocks = 0;
->   
-> @@ -3539,20 +3552,11 @@ static int reserve_compress_blocks(struct dnode_of_data *dn, pgoff_t count)
->   	unsigned int reserved_blocks = 0;
->   	int cluster_size = F2FS_I(dn->inode)->i_cluster_size;
->   	block_t blkaddr;
-> -	int i;
-> +	int i, rc;
->   
-> -	for (i = 0; i < count; i++) {
-> -		blkaddr = data_blkaddr(dn->inode, dn->node_page,
-> -						dn->ofs_in_node + i);
-> -
-> -		if (!__is_valid_data_blkaddr(blkaddr))
-> -			continue;
-> -		if (unlikely(!f2fs_is_valid_blkaddr(sbi, blkaddr,
-> -					DATA_GENERIC_ENHANCE))) {
-> -			f2fs_handle_error(sbi, ERROR_INVALID_BLKADDR);
-> -			return -EFSCORRUPTED;
-> -		}
-> -	}
-> +	rc = sanity_check_blocks(dn, count);
-> +	if (rc)
-> +		return rc;
->   
->   	while (count) {
->   		int compr_blocks = 0;
+> [...]
+
+Applied to
+
+   broonie/sound.git for-next
+
+Thanks!
+
+[1/3] ASoC: soc-component: add get_jack_type
+      commit: df55122ba0955951a85ef3ffb19f0dcb0ad3ffbb
+[2/3] ASoC: simple-card-utils: create jack inputs for aux_devs
+      commit: 9b271207ac83db362fac757d367923bde57dce86
+[3/3] ASoC: ts3a227e: add set_jack and get_jack_type
+      commit: 087b9dda8658052a33031ef82a8d8ef77a7c94ea
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
