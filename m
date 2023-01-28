@@ -2,98 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8808267F2CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F3667F2D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:14:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbjA1AM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 19:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S229437AbjA1AOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 19:14:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbjA1AMY (ORCPT
+        with ESMTP id S229464AbjA1AOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:12:24 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E13A24E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:12:23 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id v23so6584362plo.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:12:23 -0800 (PST)
+        Fri, 27 Jan 2023 19:14:31 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762717B415
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:14:30 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id s76-20020a632c4f000000b0049ceb0f185eso2770791pgs.7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:14:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QfSzQb0mn3RsZbwmCdOsGY9lWarr0Do0dd+IyLOh3eQ=;
-        b=YsKia6MOuy//+Z37k2hY2xgGXTbLVtiw3/nid7Qq8fybenqEUubul9iFBJObRGElFg
-         azPE0ymJFwv0eb/aQ0s/Y0lA9ofMSuIZv3581HFUBRC0vwuo8tRKP5/3ElQkTcAD5rHh
-         5afwIZth902Z2uOukLw0m/2Vsjgi0g8aBB1j0=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iwlcdlJJgNxaN7KocVWCGFnG+kPyVohvYqXCxDe6XuM=;
+        b=mAL/PvUSfxHJU7ATYhzNLnuzW9F2kvWTQEwpOIpDfhAtTqnD/Pf4LqrF1myJH6GbBy
+         eusgGt0Ee3nfpYFyW192VjAIVORMH3fs8qyByuFvzuNOfXnEtSib4PPJwhx+HZG97I7H
+         cDZWggsyLo6Mo7kYzLT9W3/nWwppkUzs+TJGyCD/codVSyeZSKidETC/2gT97QYHj8sp
+         MFLgn+miHvKc/XlYJjx9jLWR5TZ0WN9HitIfRptRCn7bTSi5yQ04SZObOBn+/S4Jp0BX
+         ZJ0Q/36NLzBcIwmcaR0fdKg4//N6w+zVi8xeasf0322d03ieBSz74NTJoD+rbuCFZhTq
+         /gjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QfSzQb0mn3RsZbwmCdOsGY9lWarr0Do0dd+IyLOh3eQ=;
-        b=yIu2daGyUgGhmgAzBvZka7C6C3GQcQHNfg5U0agJ94+/kQuxoXKnOsUDkxGwNSeAES
-         lD6rd2XyhTeQQFhhK7v3CmdS/myNFYd2pXfM2vRp+ZG2OaIzjNqGIXE6cvuO1mNyVR66
-         p78zdM+6Z9BqeVbgLzbf3L9i8ft/Ddr9UpzNPbL5g9rLwrn0lZLTo8lMHWELYP2qyN70
-         iscqwrU5UxEGJZfAsHmCfsX0SkcsPbl6eKS5LVMZgG+KRPwHPS0DWLXYy+yxd5AYpEbQ
-         Vuad+zByPo38irZvmLNfCocA5A6c5osR1r36X3gswK4VoqtZCRUf6xI4C3CDL99yzIS1
-         9Bxg==
-X-Gm-Message-State: AFqh2kp4Xo5kzEXQafQHO7l/j3TlZ001G4VzVI119GPk03ZXOyetg6Rp
-        vvGxSKab5p5ZmKakWz/eahfYvQ==
-X-Google-Smtp-Source: AMrXdXutL9tt03XB19XKLEssq4U1X4SNds46C2Sf+vO2QepCIinzcIrLmOLgUqNF+kyyyUggQZ4+Gg==
-X-Received: by 2002:a17:902:a40f:b0:194:5ff8:a3b0 with SMTP id p15-20020a170902a40f00b001945ff8a3b0mr37807189plq.7.1674864743313;
-        Fri, 27 Jan 2023 16:12:23 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j14-20020a170902da8e00b001928c9d772bsm3386016plx.206.2023.01.27.16.12.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 16:12:22 -0800 (PST)
-Date:   Fri, 27 Jan 2023 16:12:21 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] scripts/dtc: Replace 0-length arrays with flexible arrays
-Message-ID: <202301271609.15F0E5EB15@keescook>
-References: <20230127224101.never.746-kees@kernel.org>
- <CAL_JsqKVp57NtR11JV-eXktMU9_dQ+8sF8YSPe7KyazrvJB-eQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKVp57NtR11JV-eXktMU9_dQ+8sF8YSPe7KyazrvJB-eQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iwlcdlJJgNxaN7KocVWCGFnG+kPyVohvYqXCxDe6XuM=;
+        b=KuqUYS/jHCu1jyb17EGAZmJ6G0xGkc7tvNHr4Q6JSEVsIuGccW2p2WZzwkvFvCmWme
+         URLHn3gvzl9juX+bxfQF89yRl4IMZsTesrP+hCeALlQGYePFBOe5zaktF1fTIZXxP1T8
+         n+RI/hNX/ZRX+Z0BS1kOOqvs3bPi1iYkeLtMAWveiG7EnKOQ3tMlLouiiKDfAAbIcQ+5
+         6cpnUWGR7QQQfhyHwfnukMfoSDbzMo6XUCe/S2Bu68E0QgQ7Lv8AmFYmyYucvxKzlDmf
+         2DBEmhRJJMPpaoG6NF1D73sQ+D/VUTkuk9Sbqtqm4UkzNdosR6RXRyHgWJO2YjSFnei2
+         OsQw==
+X-Gm-Message-State: AO0yUKXIvBXAqmzhDpaOavRchHZijRCtHZo2ATpK2tP7oOdo8JQxtOgs
+        Uuu86BOsseHUz0sK5QFFZkwh64/OoXw=
+X-Google-Smtp-Source: AK7set/Son7/82cuGTzehMpialLra+Qlm9kv4QQ9rdurmaMqqFqZ63fIiMIjFT3QWkGpkmoJAsMbmJfsZ1U=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1990:b0:593:909f:ed45 with SMTP id
+ d16-20020a056a00199000b00593909fed45mr181136pfl.0.1674864869971; Fri, 27 Jan
+ 2023 16:14:29 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Sat, 28 Jan 2023 00:14:27 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230128001427.2548858-1-seanjc@google.com>
+Subject: [PATCH] KVM: x86/pmu: Disallow legacy LBRs if architectural LBRs are available
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        Like Xu <like.xu.linux@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 05:44:13PM -0600, Rob Herring wrote:
-> On Fri, Jan 27, 2023 at 4:41 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > Replace the 0-length array with a C99 flexible array. Seen with GCC 13
-> > under -fstrict-flex-arrays:
-> >
-> > In file included from ../lib/fdt_ro.c:2:
-> > ../lib/../scripts/dtc/libfdt/fdt_ro.c: In function 'fdt_get_name':
-> > ../lib/../scripts/dtc/libfdt/fdt_ro.c:319:24: warning: 'strrchr' reading 1 or more bytes from a region of size 0 [-Wstringop-overread]
-> >   319 |                 leaf = strrchr(nameptr, '/');
-> >       |                        ^~~~~~~~~~~~~~~~~~~~~
-> >
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Frank Rowand <frowand.list@gmail.com>
-> > Cc: devicetree@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  scripts/dtc/libfdt/fdt.h | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> Changes to dtc/libfdt go to upstream dtc first and then we sync them back.
+Disallow enabling LBR support if the CPU supports architectural LBRs.
+Traditional LBR support is absent on CPU models that have architectural
+LBRs, and KVM doesn't yet support arch LBRs, i.e. KVM will pass through
+non-existent MSRs if userspace enables LBRs for the guest.
 
-Ah-ha, I've found it: https://github.com/dgibson/dtc
+Cc: stable@vger.kernel.org
+Cc: Yang Weijiang <weijiang.yang@intel.com>
+Cc: Like Xu <like.xu.linux@gmail.com>
+Reported-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
 
-Thanks!
+Am I missing something that would prevent this scenario?
 
+ arch/x86/kvm/vmx/vmx.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 8f0f67c75f35..77ee6b4a5ec4 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7761,9 +7761,11 @@ static u64 vmx_get_perf_capabilities(void)
+ 	if (boot_cpu_has(X86_FEATURE_PDCM))
+ 		rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
+ 
+-	x86_perf_get_lbr(&lbr);
+-	if (lbr.nr)
+-		perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
++	if (!cpu_feature_enabled(X86_FEATURE_ARCH_LBR)) {
++		x86_perf_get_lbr(&lbr);
++		if (lbr.nr)
++			perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
++	}
+ 
+ 	if (vmx_pebs_supported()) {
+ 		perf_cap |= host_perf_cap & PERF_CAP_PEBS_MASK;
+
+base-commit: 2de154f541fc5b9f2aed3fe06e218130718ce320
 -- 
-Kees Cook
+2.39.1.456.gfc5497dd1b-goog
+
