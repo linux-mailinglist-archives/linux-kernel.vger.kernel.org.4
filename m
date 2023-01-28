@@ -2,149 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E2D67FA46
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 19:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F74267FA4B
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 19:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjA1SzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 13:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S230156AbjA1S55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 13:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjA1SzC (ORCPT
+        with ESMTP id S229790AbjA1S5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 13:55:02 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCE816301;
-        Sat, 28 Jan 2023 10:55:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 35557CE009E;
-        Sat, 28 Jan 2023 18:54:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5355AC433EF;
-        Sat, 28 Jan 2023 18:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674932096;
-        bh=b3LC7GzJbKCQgoSIJh2AUXE2SY/l0rvrW75DR/3uPMQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C5Se+sjU2iJ1IBGxkJQSZfWkUmGEQHJJciDry/WOxVI2jP+O9XwMTS2mYVpstaXFt
-         uTPduMZ46mj9Fonxm3rwvjctPwaGxWGGKIMGM1YkwLcqRVQa/C1/rFgB8I4FTmQM+s
-         963+jkwhe77UKjqPOMU/JiriyNe4tDkMxp9fCtmfovMgwgId79LSkcbvPdUxzOpgO7
-         YGPHEleqhN4eIaE9WFuvlgZ9hStjGREK3jjiuNm1NEh3kX8UqtrAbxmxj2BzNqt3nU
-         fHjMOYIpjyENkhMN3mfi5RXwwLCVpfcX9laWQ/68zjHqS81+my3XIjKSIJn2Qh7zps
-         ZQfiYYurRE+4A==
-From:   SeongJae Park <sj@kernel.org>
-To:     Hui Su <suhui_kernel@163.com>
-Cc:     sj@kernel.org, corbet@lwn.net, alexs@kernel.org,
-        siyanteng@loongson.cn, rppt@kernel.org, bobwxc@email.cn,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Doc/damon: fix the data path error
-Date:   Sat, 28 Jan 2023 18:54:53 +0000
-Message-Id: <20230128185453.131270-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <Y9Tm1FiKBPKA2Tcx@localhost.localdomain>
-References: 
+        Sat, 28 Jan 2023 13:57:54 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7441AE042;
+        Sat, 28 Jan 2023 10:57:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674932273; x=1706468273;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RjSzj603NNwrtXbFuo4/idkfWRdGyQzkcIKtdJ9tF2w=;
+  b=JW64m28Qvvi9vVvnEjOmAv3qF5bEbLb4gSkM+yOuhKAqicodJtRcHq3v
+   yV4ZpahFwF1xsgxip6XS0wITA8tlcagu5oozfC0cq+W6Sj9wWZcHK0RMN
+   HCm0aIIeb+jlJqsxwCZ2Fr5sMh1ntqNurKWJJptBJ/vGLYTX8UPSjD30V
+   fRLAVKVLu19Pl5b//UJBwjRV/i7KJ1zmbDd2yyEu7HPw6+3ziT6LszvOz
+   2yFWM0fLkvQM8hNTDmCFior32WufD2j3lGPxpen17C3AP8OnnaB07zjHA
+   wPXFal2gKV85SXH/f2d5Y8vPim+1/Pk7sQJEmxWiUvWDrW0i7I7Xwb4jQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="325015337"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="325015337"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 10:57:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="771960926"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="771960926"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 28 Jan 2023 10:57:47 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pLqOZ-00010C-00;
+        Sat, 28 Jan 2023 18:57:47 +0000
+Date:   Sun, 29 Jan 2023 02:57:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jonathan Cormier <jcormier@criticallink.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Jyri Sarha <jsarha@ti.com>
+Cc:     oe-kbuild-all@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Williamson <michael.williamson@criticallink.com>,
+        Bob Duke <bduke@criticallink.com>,
+        Jonathan Cormier <jcormier@criticallink.com>
+Subject: Re: [PATCH 4/4] DRM: BRIDGE: TFP410: If connected, use I2C for
+ polled HPD status.
+Message-ID: <202301290252.zgcWeegX-lkp@intel.com>
+References: <20230125-tfp410_i2c-v1-4-66a4d4e390b7@criticallink.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125-tfp410_i2c-v1-4-66a4d4e390b7@criticallink.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hui,
+Hi Jonathan,
 
-On Sat, 28 Jan 2023 17:11:48 +0800 Hui Su <suhui_kernel@163.com> wrote:
+Thank you for the patch! Perhaps something to improve:
 
-> %s/modules/module/
-> 
-> Signed-off-by: Hui Su <suhui_kernel@163.com>
+[auto build test WARNING on 93f875a8526a291005e7f38478079526c843cbec]
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cormier/dt-bindings-display-bridge-tfp410-Add-tfp410-i2c-example/20230128-183627
+base:   93f875a8526a291005e7f38478079526c843cbec
+patch link:    https://lore.kernel.org/r/20230125-tfp410_i2c-v1-4-66a4d4e390b7%40criticallink.com
+patch subject: [PATCH 4/4] DRM: BRIDGE: TFP410: If connected, use I2C for polled HPD status.
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230129/202301290252.zgcWeegX-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/c4659fa4c02b62087c095ca99978e5eac8b490de
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jonathan-Cormier/dt-bindings-display-bridge-tfp410-Add-tfp410-i2c-example/20230128-183627
+        git checkout c4659fa4c02b62087c095ca99978e5eac8b490de
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
 
-> ---
->  Documentation/admin-guide/mm/damon/lru_sort.rst               | 4 ++--
->  Documentation/admin-guide/mm/damon/reclaim.rst                | 4 ++--
->  .../translations/zh_CN/admin-guide/mm/damon/reclaim.rst       | 4 ++--
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-I realized DAMON documentation is also translated for Chinese today!  Thank you
-for letting me know this, and also thanks to the translators!
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/bridge/ti-tfp410.c: In function 'tfp410_connector_detect':
+>> drivers/gpu/drm/bridge/ti-tfp410.c:111:13: warning: unused variable 'val' [-Wunused-variable]
+     111 |         u32 val;
+         |             ^~~
 
 
-Thanks,
-SJ
+vim +/val +111 drivers/gpu/drm/bridge/ti-tfp410.c
 
->  3 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/mm/damon/lru_sort.rst b/Documentation/admin-guide/mm/damon/lru_sort.rst
-> index c09cace80651..7b0775d281b4 100644
-> --- a/Documentation/admin-guide/mm/damon/lru_sort.rst
-> +++ b/Documentation/admin-guide/mm/damon/lru_sort.rst
-> @@ -54,7 +54,7 @@ that is built with ``CONFIG_DAMON_LRU_SORT=y``.
->  To let sysadmins enable or disable it and tune for the given system,
->  DAMON_LRU_SORT utilizes module parameters.  That is, you can put
->  ``damon_lru_sort.<parameter>=<value>`` on the kernel boot command line or write
-> -proper values to ``/sys/modules/damon_lru_sort/parameters/<parameter>`` files.
-> +proper values to ``/sys/module/damon_lru_sort/parameters/<parameter>`` files.
->  
->  Below are the description of each parameter.
->  
-> @@ -283,7 +283,7 @@ doesn't make progress and therefore the free memory rate becomes lower than
->  20%, it asks DAMON_LRU_SORT to do nothing again, so that we can fall back to
->  the LRU-list based page granularity reclamation. ::
->  
-> -    # cd /sys/modules/damon_lru_sort/parameters
-> +    # cd /sys/module/damon_lru_sort/parameters
->      # echo 500 > hot_thres_access_freq
->      # echo 120000000 > cold_min_age
->      # echo 10 > quota_ms
-> diff --git a/Documentation/admin-guide/mm/damon/reclaim.rst b/Documentation/admin-guide/mm/damon/reclaim.rst
-> index 4f1479a11e63..d2ccd9c21b9a 100644
-> --- a/Documentation/admin-guide/mm/damon/reclaim.rst
-> +++ b/Documentation/admin-guide/mm/damon/reclaim.rst
-> @@ -46,7 +46,7 @@ that is built with ``CONFIG_DAMON_RECLAIM=y``.
->  To let sysadmins enable or disable it and tune for the given system,
->  DAMON_RECLAIM utilizes module parameters.  That is, you can put
->  ``damon_reclaim.<parameter>=<value>`` on the kernel boot command line or write
-> -proper values to ``/sys/modules/damon_reclaim/parameters/<parameter>`` files.
-> +proper values to ``/sys/module/damon_reclaim/parameters/<parameter>`` files.
->  
->  Below are the description of each parameter.
->  
-> @@ -251,7 +251,7 @@ therefore the free memory rate becomes lower than 20%, it asks DAMON_RECLAIM to
->  do nothing again, so that we can fall back to the LRU-list based page
->  granularity reclamation. ::
->  
-> -    # cd /sys/modules/damon_reclaim/parameters
-> +    # cd /sys/module/damon_reclaim/parameters
->      # echo 30000000 > min_age
->      # echo $((1 * 1024 * 1024 * 1024)) > quota_sz
->      # echo 1000 > quota_reset_interval_ms
-> diff --git a/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst b/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
-> index c976f3e33ffd..d15a2f20bb11 100644
-> --- a/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
-> +++ b/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
-> @@ -45,7 +45,7 @@ DAMON_RECLAIM找到在特定时间内没有被访问的内存区域并分页。
->  
->  为了让系统管理员启用或禁用它，并为给定的系统进行调整，DAMON_RECLAIM利用了模块参数。也就
->  是说，你可以把 ``damon_reclaim.<parameter>=<value>`` 放在内核启动命令行上，或者把
-> -适当的值写入 ``/sys/modules/damon_reclaim/parameters/<parameter>`` 文件。
-> +适当的值写入 ``/sys/module/damon_reclaim/parameters/<parameter>`` 文件。
->  
->  注意，除 ``启用`` 外的参数值只在DAMON_RECLAIM启动时应用。因此，如果你想在运行时应用新
->  的参数值，而DAMON_RECLAIM已经被启用，你应该通过 ``启用`` 的参数文件禁用和重新启用它。
-> @@ -218,7 +218,7 @@ nr_quota_exceeds
->  就开始真正的工作。如果DAMON_RECLAIM没有取得进展，因此空闲内存率低于20%，它会要求
->  DAMON_RECLAIM再次什么都不做，这样我们就可以退回到基于LRU列表的页面粒度回收了::
->  
-> -    # cd /sys/modules/damon_reclaim/parameters
-> +    # cd /sys/module/damon_reclaim/parameters
->      # echo 30000000 > min_age
->      # echo $((1 * 1024 * 1024 * 1024)) > quota_sz
->      # echo 1000 > quota_reset_interval_ms
-> -- 
-> 2.34.1
+   106	
+   107	static enum drm_connector_status
+   108	tfp410_connector_detect(struct drm_connector *connector, bool force)
+   109	{
+   110		struct tfp410 *dvi = drm_connector_to_tfp410(connector);
+ > 111		u32 val;
+   112		unsigned int ret;
+   113	
+   114		if (dvi->i2c) {
+   115			ret = regmap_test_bits(dvi->regmap, TFP410_REG_CTL_2_MODE, TFP410_BIT_HTPLG);
+   116			if (ret < 0)
+   117				dev_err(dvi->dev, "%s failed to read HTPLG bit : %d\n", __func__, ret);
+   118			else
+   119				return ret ? connector_status_connected : connector_status_disconnected;
+   120		}
+   121	
+   122		return drm_bridge_detect(dvi->next_bridge);
+   123	}
+   124	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
