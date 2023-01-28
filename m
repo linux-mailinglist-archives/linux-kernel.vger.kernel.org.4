@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B22B67F7C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 13:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F39E567F7CA
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 13:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234150AbjA1MLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 07:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
+        id S234165AbjA1MVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 07:21:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjA1MLJ (ORCPT
+        with ESMTP id S230175AbjA1MVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 07:11:09 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FBF15C84
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 04:11:05 -0800 (PST)
+        Sat, 28 Jan 2023 07:21:06 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0624AA7E
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 04:21:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674907865; x=1706443865;
+  t=1674908464; x=1706444464;
   h=message-id:date:mime-version:cc:subject:to:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=dspaCVJ8KT211kM1MllVTsePB3smslSwogobefeUDHY=;
-  b=fbiX3giEv6+1+otLfbJzlmwAlNabCWxXZStrbcMs67ltqbUQiSc2ZMcV
-   Fm6Tmu9nfgLccTP6QMHuqBfiUC5V1HxubCSAU3EKKgAUlMez//yGpxWGj
-   GdGXSiEdrs9VatkKBZB2l+Rm6bEGKgDZK999PbopJAQwM7blsklY63Yu8
-   o87v2IJsGGLR0PPhIpNULueEL6f06GLiecmRvNKsInZSTDVTrvqZGIpaF
-   IIFfq77YpJbQAbh8topp9XGy57UnxBV1PznUWLPdcfyDGOMQZtzSMxcnx
-   qdUEHApSDigMnyt0XES4cjwLD8016kiEJ5n8BNeWxmZWPdtj7aXiCdGSg
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="307628208"
+  bh=545uUNLVZHuh4dJ0G9r5IOooTCtyOWZJdZduhma6+3M=;
+  b=gEhmiUHJfbTYdq8wwwofxpNsSnSVK/nctLXl+j9yQGTdJvV8K8RxRCwU
+   BizQuoACWHHHiG0Z75/waZka8BGzFkWWEUqh3/gChRwBL0tkvDBx2DOwx
+   +j8mhZA/uBVnPfh3Yp44B7Yr5B6grdicOjHthXmnE6Be5CN1tgvmaisS4
+   0N5djHYIafjyd4bYOBHVUhWoL/0aL3dovjMDucgKPBEm3BGR2rRLQmVVa
+   W/qap/GnFwuFAZBkUuFFhnzszd1lKWK8i28Gf0rtKw4ilA6WtFNOhLJLD
+   fclPFPQqm4DANwVorw2sSal1YVNlkN9U3wf+wNHu07mEqpdnjw+SiLNfF
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="413507739"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="307628208"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 04:11:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="771896680"
+   d="scan'208";a="413507739"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 04:21:03 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="837460075"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="771896680"
+   d="scan'208";a="837460075"
 Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.186.212]) ([10.252.186.212])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 04:11:01 -0800
-Message-ID: <0c08daf4-ad2f-9047-db52-c87d4e8b07b6@linux.intel.com>
-Date:   Sat, 28 Jan 2023 20:10:58 +0800
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 04:21:00 -0800
+Message-ID: <66867d21-3412-9050-5e8d-2071c6896f54@linux.intel.com>
+Date:   Sat, 28 Jan 2023 20:20:56 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
 Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, hch@lst.de, jgg@nvidia.com,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 7/8] iommu: Retire bus ops
+        linux-kernel@vger.kernel.org, hch@lst.de, jgg@nvidia.com
+Subject: Re: [PATCH v2 3/8] iommu: Add lockdep annotations for group list
+ iterators
 Content-Language: en-US
 To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
         will@kernel.org
 References: <cover.1674753627.git.robin.murphy@arm.com>
- <198e82a6b1a28605409c395da4ec1a67b0e1587b.1674753627.git.robin.murphy@arm.com>
+ <57cba0cf89556d586e554a9c64cbd28205d67c5c.1674753627.git.robin.murphy@arm.com>
 From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <198e82a6b1a28605409c395da4ec1a67b0e1587b.1674753627.git.robin.murphy@arm.com>
+In-Reply-To: <57cba0cf89556d586e554a9c64cbd28205d67c5c.1674753627.git.robin.murphy@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -67,23 +66,139 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 2023/1/27 2:26, Robin Murphy wrote:
-> With the rest of the API internals converted, it's time to finally
-> tackle probe_device and how we bootstrap the per-device ops association
-> to begin with. This ends up being disappointingly straightforward, since
-> fwspec users are already doing it in order to find their of_xlate
-> callback, and it works out that we can easily do the equivalent for
-> other drivers too. Then shuffle the remaining awareness of iommu_ops
-> into the couple of core headers that still need it, and breathe a sigh
-> of relief.
+> Before we add any more common helpers for iterating or otherwise
+> accessing the group device list, let's start the good habit of
+> annotating their locking expectations for robustness.
 > 
-> Ding dong the bus ops are gone!
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
 > 
-> CC: Rafael J. Wysocki<rafael.j.wysocki@intel.com>
-> CC: Christoph Hellwig<hch@lst.de>
-> Acked-by: Greg Kroah-Hartman<gregkh@linuxfoundation.org>
-> Signed-off-by: Robin Murphy<robin.murphy@arm.com>
+> v2: New. Note that I've left the group_pasid helpers, since they're
+>      pretty much right next to where the relevant locking happens, and
+>      highly unlikely to be reused from anywhere else anyway.
+> 
+>   drivers/iommu/iommu.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index d48e5499e0fa..77f076030995 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -20,6 +20,7 @@
+>   #include <linux/iommu.h>
+>   #include <linux/idr.h>
+>   #include <linux/err.h>
+> +#include <linux/lockdep.h>
+>   #include <linux/pci.h>
+>   #include <linux/pci-ats.h>
+>   #include <linux/bitops.h>
+> @@ -1100,6 +1101,7 @@ static int iommu_group_device_count(struct iommu_group *group)
+>   	struct group_device *entry;
+>   	int ret = 0;
+>   
+> +	lockdep_assert_held(&group->mutex);
+>   	list_for_each_entry(entry, &group->devices, list)
+>   		ret++;
+>   
+> @@ -1112,6 +1114,7 @@ static int __iommu_group_for_each_dev(struct iommu_group *group, void *data,
+>   	struct group_device *device;
+>   	int ret = 0;
+>   
+> +	lockdep_assert_held(&group->mutex);
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+When I tested this patch on an Intel platform, I found that the
+bus_iommu_probe() path iterates the group device list but does not hold
+the lock.
+
+1831 static void __iommu_group_dma_finalize(struct iommu_group *group)
+1832 {
+1833         __iommu_group_for_each_dev(group, group->default_domain,
+1834                                    iommu_group_do_probe_finalize);
+1835 }
+
+bus_iommu_probe:
+
+1873                 /* Try to allocate default domain */
+1874                 probe_alloc_default_domain(group);
+1875
+1876                 if (!group->default_domain) {
+1877                         mutex_unlock(&group->mutex);
+1878                         continue;
+1879                 }
+1880
+1881                 iommu_group_create_direct_mappings(group);
+1882
+1883                 ret = __iommu_group_dma_first_attach(group);
+1884
+1885                 mutex_unlock(&group->mutex);
+1886
+1887                 if (ret)
+1888                         break;
+1889
+1890                 __iommu_group_dma_finalize(group);
+
+The lockdep_assert_held() caused below kernel trace:
+
+[   70.022590] ------------[ cut here ]------------
+[   70.027967] WARNING: CPU: 1 PID: 1 at drivers/iommu/iommu.c:1135 
+__iommu_group_for_each_dev+0x72/0x80
+[   70.038672] Modules linked in:
+[   70.042264] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G        W 
+  6.2.0-rc5+ #421
+[   70.063860] RIP: 0010:__iommu_group_for_each_dev+0x72/0x80
+[   70.070267] Code: 5c 41 5d c3 cc cc cc cc 5b 31 c0 5d 41 5c 41 5d c3 
+cc cc cc cc 48 8d bf 10 01 00 00 be ff ff ff ff e8 92 7b 8f 00 85 c0 75 
+ac <0f> 0b eb a8 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90
+[   70.091981] RSP: 0000:ffffad104006fd30 EFLAGS: 00010246
+[   70.098058] RAX: 0000000000000000 RBX: ffff9f490bb95600 RCX: 
+0000000000000001
+[   70.106378] RDX: 0000000000000001 RSI: ffff9f490bb95710 RDI: 
+ffff9f4900b10d88
+[   70.114674] RBP: ffff9f490bb95600 R08: ffffcd26844fde80 R09: 
+ffffcd26844fde40
+[   70.122970] R10: 0000000000000000 R11: 0000000000000000 R12: 
+ffff9f490bb95ed0
+[   70.131265] R13: ffffffff8aadd520 R14: ffffffff8aade3a0 R15: 
+0000000000000000
+[   70.139561] FS:  0000000000000000(0000) GS:ffff9f583ff00000(0000) 
+knlGS:0000000000000000
+[   70.148969] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   70.155667] CR2: 0000000000000000 CR3: 0000000cc2012001 CR4: 
+0000000000370ee0
+[   70.163963] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
+0000000000000000
+[   70.172282] DR3: 0000000000000000 DR6: 00000000ffff07f0 DR7: 
+0000000000000400
+[   70.180559] Call Trace:
+[   70.183469]  <TASK>
+[   70.185972]  bus_iommu_probe+0xee/0x1e0
+[   70.190496]  iommu_device_register+0xaf/0x100
+[   70.195580]  intel_iommu_init+0x3e9/0x6f2
+[   70.200271]  ? __pfx_pci_iommu_init+0x10/0x10
+[   70.205381]  ? __pfx_ignore_unknown_bootoption+0x10/0x10
+[   70.211564]  pci_iommu_init+0x12/0x3a
+[   70.215870]  do_one_initcall+0x65/0x330
+[   70.220376]  ? __pfx_ignore_unknown_bootoption+0x10/0x10
+[   70.226577]  ? rcu_read_lock_sched_held+0x5a/0x80
+[   70.232076]  kernel_init_freeable+0x287/0x2f0
+[   70.237914]  ? __pfx_kernel_init+0x10/0x10
+[   70.241979]  kernel_init+0x1a/0x130
+[   70.246075]  ret_from_fork+0x29/0x50
+[   70.251014]  </TASK>
+[   70.252867] irq event stamp: 16350051
+[   70.257167] hardirqs last  enabled at (16350061): 
+[<ffffffff8a1c3ed2>] __up_console_sem+0x52/0x60
+[   70.267468] hardirqs last disabled at (16350070): 
+[<ffffffff8a1c3eb7>] __up_console_sem+0x37/0x60
+[   70.277768] softirqs last  enabled at (16350006): 
+[<ffffffff8b3edd03>] __do_softirq+0x283/0x451
+[   70.287859] softirqs last disabled at (16350001): 
+[<ffffffff8a132c6a>] irq_exit_rcu+0xaa/0xc0
+[   70.297777] ---[ end trace 0000000000000000 ]---
+
+>   	list_for_each_entry(device, &group->devices, list) {
+>   		ret = fn(device->dev, data);
+>   		if (ret)
 
 Best regards,
 baolu
