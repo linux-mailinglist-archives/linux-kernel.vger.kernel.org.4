@@ -2,92 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A7667F8D9
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 15:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC5C67F8DC
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 15:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbjA1Ox2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 09:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
+        id S234238AbjA1OyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 09:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjA1Ox0 (ORCPT
+        with ESMTP id S234236AbjA1Ox7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 09:53:26 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223BE23C70
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 06:53:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=MQ3QZ2n9H8qxeqethQACSEWQ81zQlJU6T89IcrWBRi4=; b=MvXPIVQyoGomFxpO4BbciyJ8Kv
-        IevWctnAom+sXDHAMjQ7LIHcogKDIqqxLXqUoftPGn7XtDWY5mhmvF8Zdh8FQrKMYV9R0Ff2xhcvp
-        Dba9VzmybpdWjH48Svax0eShzNY+9xKuladTUIuGs3CREBmGERRasDPPPyOg3iJ7N9Y4G2WNXNhsE
-        WR2VVYKTNK1Xk4dNkT3C6mNpsf9M11d/n2Ifx/1xDRx8nDvpK+3x9zFZvTfIbTCEM8mOxLQlFUKJo
-        LC8rE9lPP+qDpmPmny9FvX5uxsw3SYTmXPONCGNbbaL4lu1vGbLDaH+USY+gjEx/Nwt2TqxVxsnAZ
-        fF2gDl0Q==;
-Received: from [187.56.70.205] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1pLmZR-0037p3-RC; Sat, 28 Jan 2023 15:52:46 +0100
-Message-ID: <aab8c21c-45c4-c931-31f8-ba175bbe6a5a@igalia.com>
-Date:   Sat, 28 Jan 2023 11:52:39 -0300
+        Sat, 28 Jan 2023 09:53:59 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DD028D0A;
+        Sat, 28 Jan 2023 06:53:51 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-15f97c478a8so10027475fac.13;
+        Sat, 28 Jan 2023 06:53:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I35hMBLj+gQ46cnP7/cbmgYIA1WQF5HE8dkz5wshcwo=;
+        b=aViHCU4/SDR+d2zxmIrWnJiH485QWTk31JQ8L8wJb9l4iQdeLKhvPkqJx4sUI/OPvZ
+         LjMqkYka2pdZ6YZamseVlpsql9jVb24iZGA2ixi4sUp9P/YtXLp1yi0EcCSM1U6ofqE1
+         J/6GCVJ4YRaGnJNknMbqTMXbN1mq6fRK4uPnDVvJ478845K3j0MmV+JnCvDU4sa+wGUr
+         8iaAW1s8KkcberbNAATvJ3WZxkAoiS+hj1zvds8/H9eigiDX+uqBGWURwa3CWUM7lBzw
+         MD8e6b1mHIwxdVvC2+L6UYPgM2u+5KLe7Hk+X4JK5ORAGAw0e/uKq+IgEb7cLzS6TXXm
+         0YUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I35hMBLj+gQ46cnP7/cbmgYIA1WQF5HE8dkz5wshcwo=;
+        b=LTr5xvcfe1LFT0ArUM+pc28sz6xQ1KKrlVyZfOnqSNIddPCjsQobLfJZ+LZs2uAipG
+         CIfv2hGfXKYEijI43gqYwCtSXcR6oocY8VcL/8MoVAsJtbza4X24IN7H+wFlVNp6tXOu
+         PYE0ajUa8NzOsUK//Y+pvvex4Hb+ZKDjUMIUyHeNtaedn/d02QG5fzfGIcT+KOtIySd4
+         zwN/sf/UPlABSeNvtBa8VHVMmEii+9C2KPxEGzM/KUalrbI2wMhsBmcKT4EKjHz1fJkE
+         cUao+O8cEKBBbLPodiY/LIkgjFEazZKpE1ilv1Evn/gW8FIreBkiErsyKMft4w+3VK5k
+         w+rw==
+X-Gm-Message-State: AO0yUKXZ44C8lRJuaVSjv1MeFltduBNHCKUd0ZnG7e0JoPSvpsxdsbFD
+        7qceWdzA1KVwr+/ZBaJ2iag=
+X-Google-Smtp-Source: AK7set+xfBIz1d2NTd7lwk9N1z5NPmcO/eSykkaoeZZksBjhnkYIstgkLJZKgQUENp7nfpMEQgqDoQ==
+X-Received: by 2002:a05:6870:ac20:b0:163:9f85:cb4c with SMTP id kw32-20020a056870ac2000b001639f85cb4cmr152173oab.16.1674917631205;
+        Sat, 28 Jan 2023 06:53:51 -0800 (PST)
+Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id de3-20020a05687075c300b001446a45bb49sm3121201oab.23.2023.01.28.06.53.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Jan 2023 06:53:50 -0800 (PST)
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+To:     wedsonaf@gmail.com
+Cc:     alex.gaynor@gmail.com, bjorn3_gh@protonmail.com,
+        boqun.feng@gmail.com, gary@garyguo.net,
+        linux-kernel@vger.kernel.org, ojeda@kernel.org,
+        rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH 2/5] rust: types: introduce `ForeignOwnable`
+Date:   Sat, 28 Jan 2023 11:53:45 -0300
+Message-Id: <20230128145345.1770912-1-yakoyoku@gmail.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230119174036.64046-2-wedsonaf@gmail.com>
+References: <20230119174036.64046-2-wedsonaf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 0/4] x86/crash: Fix double NMI shootdown bug
-To:     Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, stable@vger.kernel
-References: <20221130233650.1404148-1-seanjc@google.com>
- <167424175801.2640527.5679926568908656054.b4-ty@google.com>
-Content-Language: en-US
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <167424175801.2640527.5679926568908656054.b4-ty@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 21:05, Sean Christopherson wrote:
-> On Wed, 30 Nov 2022 23:36:46 +0000, Sean Christopherson wrote:
->> Fix a double NMI shootdown bug found and debugged by Guilherme, who did all
->> the hard work.  NMI shootdown is a one-time thing; the handler leaves NMIs
->> blocked and enters halt.  At best, a second (or third...) shootdown is an
->> expensive nop, at worst it can hang the kernel and prevent kexec'ing into
->> a new kernel, e.g. prior to the hardening of register_nmi_handler(), a
->> double shootdown resulted in a double list_add(), which is fatal when running
->> with CONFIG_BUG_ON_DATA_CORRUPTION=y.
->>
->> [...]
-> 
-> Applied to kvm-x86 misc, thanks!
-> 
-> [1/4] x86/crash: Disable virt in core NMI crash handler to avoid double shootdown
->       https://github.com/kvm-x86/linux/commit/26044aff37a5
-> [2/4] x86/virt: Force GIF=1 prior to disabling SVM (for reboot flows)
->       https://github.com/kvm-x86/linux/commit/6a3236580b0b
-> [3/4] x86/reboot: Disable virtualization in an emergency if SVM is supported
->       https://github.com/kvm-x86/linux/commit/d81f952aa657
-> [4/4] x86/reboot: Disable SVM, not just VMX, when stopping CPUs
->       https://github.com/kvm-x86/linux/commit/a2b07fa7b933
-> 
-> --
-> https://github.com/kvm-x86/linux/tree/next
-> https://github.com/kvm-x86/linux/tree/fixes
-
-
-Thanks a bunch Sean!
+On Thu, Jan 19, 2023 at 02:40:33PM -0300, Wedson Almeida Filho wrote:=0D
+> It was originally called `PointerWrapper`. It is used to convert=0D
+> a Rust object to a pointer representation (void *) that can be=0D
+> stored on the C side, used, and eventually returned to Rust.=0D
+> =0D
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>=0D
+> ---=0D
+>  rust/kernel/lib.rs   |  1 +=0D
+>  rust/kernel/types.rs | 54 ++++++++++++++++++++++++++++++++++++++++++++=0D
+>  2 files changed, 55 insertions(+)=0D
+> =0D
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs=0D
+> index e0b0e953907d..223564f9f0cc 100644=0D
+> --- a/rust/kernel/lib.rs=0D
+> +++ b/rust/kernel/lib.rs=0D
+> @@ -16,6 +16,7 @@=0D
+>  #![feature(coerce_unsized)]=0D
+>  #![feature(core_ffi_c)]=0D
+>  #![feature(dispatch_from_dyn)]=0D
+> +#![feature(generic_associated_types)]=0D
+>  #![feature(receiver_trait)]=0D
+>  #![feature(unsize)]=0D
+>  =0D
+> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs=0D
+> index f0ad4472292d..5475f6163002 100644=0D
+> --- a/rust/kernel/types.rs=0D
+> +++ b/rust/kernel/types.rs=0D
+> @@ -9,6 +9,60 @@ use core::{=0D
+>      ops::{Deref, DerefMut},=0D
+>  };=0D
+>  =0D
+> +/// Used to transfer ownership to and from foreign (non-Rust) languages.=
+=0D
+> +///=0D
+> +/// Ownership is transferred from Rust to a foreign language by calling =
+[`Self::into_foreign`] and=0D
+> +/// later may be transferred back to Rust by calling [`Self::from_foreig=
+n`].=0D
+> +///=0D
+> +/// This trait is meant to be used in cases when Rust objects are stored=
+ in C objects and=0D
+> +/// eventually "freed" back to Rust.=0D
+> +pub trait ForeignOwnable {=0D
+> +    /// Type of values borrowed between calls to [`ForeignOwnable::into_=
+foreign`] and=0D
+> +    /// [`ForeignOwnable::from_foreign`].=0D
+> +    type Borrowed<'a>;=0D
+=0D
+Is it there a possibility that this could make use of borrowing features=0D
+like AsRef/Borrowed/Deref?=0D
+=0D
+> +=0D
+> +    /// Converts a Rust-owned object to a foreign-owned one.=0D
+> +    ///=0D
+> +    /// The foreign representation is a pointer to void.=0D
+> +    fn into_foreign(self) -> *const core::ffi::c_void;=0D
+> +=0D
+> +    /// Borrows a foreign-owned object.=0D
+> +    ///=0D
+> +    /// # Safety=0D
+> +    ///=0D
+> +    /// `ptr` must have been returned by a previous call to [`ForeignOwn=
+able::into_foreign`] for=0D
+> +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn'=
+t been called yet.=0D
+> +    /// Additionally, all instances (if any) of values returned by [`For=
+eignOwnable::borrow_mut`]=0D
+> +    /// for this object must have been dropped.=0D
+> +    unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> Self::Borrowe=
+d<'a>;=0D
+> +=0D
+> +    /// Mutably borrows a foreign-owned object.=0D
+> +    ///=0D
+> +    /// # Safety=0D
+> +    ///=0D
+> +    /// `ptr` must have been returned by a previous call to [`ForeignOwn=
+able::into_foreign`] for=0D
+> +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn'=
+t been called yet.=0D
+> +    /// Additionally, all instances (if any) of values returned by [`For=
+eignOwnable::borrow`] and=0D
+> +    /// [`ForeignOwnable::borrow_mut`] for this object must have been dr=
+opped.=0D
+> +    unsafe fn borrow_mut<T: ForeignOwnable>(ptr: *const core::ffi::c_voi=
+d) -> ScopeGuard<T, fn(T)> {=0D
+> +        // SAFETY: The safety requirements ensure that `ptr` came from a=
+ previous call to=0D
+> +        // `into_foreign`.=0D
+> +        ScopeGuard::new_with_data(unsafe { T::from_foreign(ptr) }, |d| {=
+=0D
+> +            d.into_foreign();=0D
+> +        })=0D
+> +    }=0D
+=0D
+Could these three methods have a borrowing equivalent? When I was=0D
+working on some features for the USB module I've stumbled upon the case=0D
+of having to encode a pointer (with a pivot) and I cannot do it without=0D
+taking ownership of the pointer.=0D
+=0D
+> +=0D
+> +    /// Converts a foreign-owned object back to a Rust-owned one.=0D
+> +    ///=0D
+> +    /// # Safety=0D
+> +    ///=0D
+> +    /// `ptr` must have been returned by a previous call to [`ForeignOwn=
+able::into_foreign`] for=0D
+> +    /// which a previous matching [`ForeignOwnable::from_foreign`] hasn'=
+t been called yet.=0D
+> +    /// Additionally, all instances (if any) of values returned by [`For=
+eignOwnable::borrow`] and=0D
+> +    /// [`ForeignOwnable::borrow_mut`] for this object must have been dr=
+opped.=0D
+> +    unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self;=0D
+> +}=0D
+> +=0D
+>  /// Runs a cleanup function/closure when dropped.=0D
+>  ///=0D
+>  /// The [`ScopeGuard::dismiss`] function prevents the cleanup function f=
+rom running.=0D
+> -- =0D
+> 2.34.1=0D
+=0D
+Aside from these comments I observe that there's a possibility to make=0D
+ForeignOwnable a const trait and have non const implementors. Otherwise=0D
+if these things are out of scope, no problem whatsoever and this has my=0D
+OK.=0D
+=0D
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>=0D
