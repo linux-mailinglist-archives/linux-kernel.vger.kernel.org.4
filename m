@@ -2,86 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E6667F8CC
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 15:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F81267F8C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 15:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbjA1Opi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 09:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
+        id S230103AbjA1OpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 09:45:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjA1Opf (ORCPT
+        with ESMTP id S231181AbjA1Oo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 09:45:35 -0500
-X-Greylist: delayed 326 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 28 Jan 2023 06:45:27 PST
-Received: from 7of9.schinagl.nl (7of9.connected.by.freedominter.net [185.238.129.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF90F561A9;
-        Sat, 28 Jan 2023 06:45:27 -0800 (PST)
-Received: from [10.2.12.71] (unknown [10.2.12.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by 7of9.schinagl.nl (Postfix) with ESMTPSA id F1DD918A3771;
-        Sat, 28 Jan 2023 15:39:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
-        t=1674916800; bh=BDzOy+7xZC21egrV0bu8pSE2qu/8H6OBqAFnjEutPLA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=IIUf3OSUnv8P5T+k6YpAYOaqAAW84vuiTKEEOXioviO5uCMF+sq/CP/2bumTrFhHn
-         AhKw8A462/d/MlxoUOx2wN5VMPL9TcaXpSQK07dI45iAikAGAT3Ro7+ocf1pV1DhUZ
-         b2sDnV6uXiDX4aoSmI1Gx7eR2ch4cwjUi8P3uuFQ=
-Message-ID: <46724036-fabf-7bae-41f8-1e95c5f1db5c@schinagl.nl>
-Date:   Sat, 28 Jan 2023 15:39:59 +0100
+        Sat, 28 Jan 2023 09:44:56 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631222886B
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 06:44:52 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id k4so15300583eje.1
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 06:44:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cxgcNH+i6l64zcOgAcO50nbqnktfB8T2iDT3aKt9XNo=;
+        b=oQ2dc3IhUAgPPTyUTM1XB5B3fQjGZ5A17Sm2jd1NpD4Tt+/wuDl5gazJt1pxTa8OMp
+         eyucpzUntHS5jUjinFCl/FDnAk7eoHBJDP5hfVEHybDdihYRg7y7mzpgscjdr14zmZlG
+         x4yZzM7DNvRX7bikgs3hF8gPbXwHykQoO0cxfXh26VFtx963vI0mhArDCQB855eAqNNV
+         GoAxj1TOSbuAKbIQLeuFShcaSj3UklZ8jQXI8Ip9GKjaGoWKIL2MoRruQnvwIYTQT9Qh
+         EumwqHrmvsscL+/pEyf0F5l+PBH6PYpDh6TMPd9MlvD06zzoqQp/1cFd6Y2gQCVEaRbY
+         E7PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cxgcNH+i6l64zcOgAcO50nbqnktfB8T2iDT3aKt9XNo=;
+        b=25hhKECTxBCDOSYwwymjAINCCaKCPTIxktSO/IBiW0x7Z87a/NpKyC2sKAfq64cX2t
+         XJxeC0k4lLMOKAZQ63DskfPRP/E25pGP9Zdl3thmfXSKEYSLsUntLZP5CRh35/eizhK1
+         EgK1tYALp8bsoJLo30jQItCv8Eg6FJvdteEjlvpbh66KGOLCvha68KLKaAC6nM8WIY+/
+         UK8f2pisXZvYghIU/HKMdGj0TldWfQ1er11zr1pvXtyM7PvJ0WRamrOCTCEfM26WzUKT
+         eBFLuggTRbfPHaSRqZ6+yVAZEgXifHnmmZVRZNbss9LjIqlibBq98gzHKxNQ/c+CTBgS
+         Bb4w==
+X-Gm-Message-State: AO0yUKVOMH6QrExiTJOhjZYyxRnirH2NfAnQiJfLEY3cGtxpZO8pYWH2
+        P+nuZJ5h9ccv3+1Xl1fCX7TLOepOAjDD8jA6iW8A7+zBEuilrA==
+X-Google-Smtp-Source: AK7set8+4g33VhKHLNUQ/cQTpvdJvVcDfW5CesrwOD5jPXBburR4nRtEWk++r1qaqnYKZl5Mnorrb2FeRxmQhuCXneQ=
+X-Received: by 2002:a17:906:840e:b0:884:8380:20db with SMTP id
+ n14-20020a170906840e00b00884838020dbmr186235ejx.301.1674917090800; Sat, 28
+ Jan 2023 06:44:50 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] mips: Realtek RTL: select NO_EXCEPT_FILL
-Content-Language: nl
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sander Vanheule <sander@svanheule.net>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230115121922.6359-1-sander@svanheule.net>
- <20230127162755.GB6090@alpha.franken.de>
-From:   Olliver Schinagl <oliver@schinagl.nl>
-In-Reply-To: <20230127162755.GB6090@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127182558.2416400-1-atishp@rivosinc.com> <20230127182558.2416400-2-atishp@rivosinc.com>
+In-Reply-To: <20230127182558.2416400-2-atishp@rivosinc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Sat, 28 Jan 2023 20:14:38 +0530
+Message-ID: <CAAhSdy3U0sgZG6gT3i6vOaupmycHBwALmr_0DHVjuRR7U0Tr6w@mail.gmail.com>
+Subject: Re: [PATCH v3 01/14] perf: RISC-V: Define helper functions expose hpm
+ counter width and count
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Thomas,
-
-On 27-01-2023 17:27, Thomas Bogendoerfer wrote:
-> On Sun, Jan 15, 2023 at 01:19:22PM +0100, Sander Vanheule wrote:
->> Olliver has suggested to make this change, in order to reduce the delta
->> with a fully generic MIPS kernel.
->> <snip>
-> applied to mips-next.
+On Fri, Jan 27, 2023 at 11:56 PM Atish Patra <atishp@rivosinc.com> wrote:
 >
-> Thomas.
+> KVM module needs to know how many hardware counters and the counter
+> width that the platform supports. Otherwise, it will not be able to show
+> optimal value of virtual counters to the guest. The virtual hardware
+> counters also need to have the same width as the logical hardware
+> counters for simplicity. However, there shouldn't be mapping between
+> virtual hardware counters and logical hardware counters. As we don't
+> support hetergeneous harts or counters with different width as of now,
+> the implementation relies on the counter width of the first available
+> programmable counter.
 >
-Thanks Thomas, may I take this moment to poke you about a nother issue I 
-don't quite understand how to resolve/figure out.
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
 
+Looks good to me.
 
-I made the realtek target work with the GENERIC_MIPS_KERNEL, but only if 
-I disable SWAP_IO_SPACE[0].
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-While I could act all smart and ask what this is for, I better ask, why 
-is this concidered 'generic'. The comment in mangle-port [1] mentions 
-'sane hardware'. I don't know what is considered sane here, as the 
-number of targets following generic mips seem to be around 5.
+Regards,
+Anup
 
-So any pointers (other then doing SWAP_IO_SPACE if !REALTEK_SOC, which I 
-have now) would be appreciated
-
-
-[0]: https://elixir.bootlin.com/linux/latest/source/arch/mips/Kconfig#L157
-
-[1]: 
-https://elixir.bootlin.com/linux/latest/source/arch/mips/include/asm/mach-generic/mangle-port.h#L17
-
-
+> ---
+>  drivers/perf/riscv_pmu_sbi.c   | 37 ++++++++++++++++++++++++++++++++--
+>  include/linux/perf/riscv_pmu.h |  3 +++
+>  2 files changed, 38 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+> index f6507ef..6b53adc 100644
+> --- a/drivers/perf/riscv_pmu_sbi.c
+> +++ b/drivers/perf/riscv_pmu_sbi.c
+> @@ -44,7 +44,7 @@ static const struct attribute_group *riscv_pmu_attr_groups[] = {
+>  };
+>
+>  /*
+> - * RISC-V doesn't have hetergenous harts yet. This need to be part of
+> + * RISC-V doesn't have heterogeneous harts yet. This need to be part of
+>   * per_cpu in case of harts with different pmu counters
+>   */
+>  static union sbi_pmu_ctr_info *pmu_ctr_list;
+> @@ -52,6 +52,9 @@ static bool riscv_pmu_use_irq;
+>  static unsigned int riscv_pmu_irq_num;
+>  static unsigned int riscv_pmu_irq;
+>
+> +/* Cache the available counters in a bitmask */
+> +static unsigned long cmask;
+> +
+>  struct sbi_pmu_event_data {
+>         union {
+>                 union {
+> @@ -267,6 +270,37 @@ static bool pmu_sbi_ctr_is_fw(int cidx)
+>         return (info->type == SBI_PMU_CTR_TYPE_FW) ? true : false;
+>  }
+>
+> +/*
+> + * Returns the counter width of a programmable counter and number of hardware
+> + * counters. As we don't support heterogeneous CPUs yet, it is okay to just
+> + * return the counter width of the first programmable counter.
+> + */
+> +int riscv_pmu_get_hpm_info(u32 *hw_ctr_width, u32 *num_hw_ctr)
+> +{
+> +       int i;
+> +       union sbi_pmu_ctr_info *info;
+> +       u32 hpm_width = 0, hpm_count = 0;
+> +
+> +       if (!cmask)
+> +               return -EINVAL;
+> +
+> +       for_each_set_bit(i, &cmask, RISCV_MAX_COUNTERS) {
+> +               info = &pmu_ctr_list[i];
+> +               if (!info)
+> +                       continue;
+> +               if (!hpm_width && info->csr != CSR_CYCLE && info->csr != CSR_INSTRET)
+> +                       hpm_width = info->width;
+> +               if (info->type == SBI_PMU_CTR_TYPE_HW)
+> +                       hpm_count++;
+> +       }
+> +
+> +       *hw_ctr_width = hpm_width;
+> +       *num_hw_ctr = hpm_count;
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(riscv_pmu_get_hpm_info);
+> +
+>  static int pmu_sbi_ctr_get_idx(struct perf_event *event)
+>  {
+>         struct hw_perf_event *hwc = &event->hw;
+> @@ -812,7 +846,6 @@ static void riscv_pmu_destroy(struct riscv_pmu *pmu)
+>  static int pmu_sbi_device_probe(struct platform_device *pdev)
+>  {
+>         struct riscv_pmu *pmu = NULL;
+> -       unsigned long cmask = 0;
+>         int ret = -ENODEV;
+>         int num_counters;
+>
+> diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
+> index e17e86a..a1c3f77 100644
+> --- a/include/linux/perf/riscv_pmu.h
+> +++ b/include/linux/perf/riscv_pmu.h
+> @@ -73,6 +73,9 @@ void riscv_pmu_legacy_skip_init(void);
+>  static inline void riscv_pmu_legacy_skip_init(void) {};
+>  #endif
+>  struct riscv_pmu *riscv_pmu_alloc(void);
+> +#ifdef CONFIG_RISCV_PMU_SBI
+> +int riscv_pmu_get_hpm_info(u32 *hw_ctr_width, u32 *num_hw_ctr);
+> +#endif
+>
+>  #endif /* CONFIG_RISCV_PMU */
+>
+> --
+> 2.25.1
+>
