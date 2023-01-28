@@ -2,116 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B2C67F8D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 15:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A7667F8D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 15:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjA1Owt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 09:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
+        id S234009AbjA1Ox2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 09:53:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbjA1Owq (ORCPT
+        with ESMTP id S230104AbjA1Ox0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 09:52:46 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572E6172B
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 06:52:45 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id g11so7129651eda.12
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 06:52:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ijLxm1lKEfZs0IZlgOOAhHSKYX5QLiE4GGhNuEVcGng=;
-        b=frQzbI8stra8ftvJmg/B4t7HWCvM9FnezzFATdbngE0HpGmiaL/TjPJIoSbNZ9A4VT
-         TmqVpwwgbl9nEk931XnNjrIWQzD1UcenOwzz7GqmOsjVO7BYYbBpkzFJDhcxKpiEcTCX
-         uzi6RWK9H2QU/hsKU3ApOaN/zDfb2Lmd4qhQ3vml3oB7T8z+VRPoQ2XASr0au1Tc8krm
-         w/KeidcDztQFgvdZPPr37O235osye7NaYMTydT7lZdmtqzkxHCll2ApdWqQt9MGreTMW
-         vXqptBUC9RS0RSP6flDXsebDs2Zk+3yAUrJhs3OYKD7CWrVsMAGNeuQ4LUaQCZyYZ+kN
-         hU7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ijLxm1lKEfZs0IZlgOOAhHSKYX5QLiE4GGhNuEVcGng=;
-        b=zyZtwGvsedfCggNuEloXLeS1ou2ULCrEaj73Jg7HzG9mOEZc01dezYkTfj39/dWPTm
-         j66gwsUMV+877s7hcMiCDvOkGprgqfXmOyhsMAJbu87O76mUyk3SjBudXto/VUI0GAt8
-         VTN2ZJ6o3rg7xz2bU8WiAZYjwMHZyeEBDn6UtvRTnEjXgy9p/Lwmkq6JxAzncCCP1He1
-         +lcY1a5fD6PsYo37PER6rKPKwBzcv8sufpQHKyUkP+PBX7zIYpCMrODJLKQ5UQ0Ei50e
-         55akSkg/5fWAUq9a6KyRyqUk1pr21iqgtKbVKs7vVKHcp9Sn7EqPrqeApg7xbE3hMxiT
-         xYbg==
-X-Gm-Message-State: AFqh2koV7VYTsyS4pbW3Yyl/mz2UlufCnUAlgfJi3RcGv7vbdSMaZ90n
-        qnOivcZcbM2Fn0/ExMqWH0zJoHgVPoHaApqXFvVaHA==
-X-Google-Smtp-Source: AMrXdXse7F8M1Kedc0Z1csa7K5rxc5NJv1iWBhk3K9TBNTVIFbV/IBRgCuYscAaDKH70PcJaPWPHOuAgkp3YkwYEPNY=
-X-Received: by 2002:a05:6402:1008:b0:499:f0f:f788 with SMTP id
- c8-20020a056402100800b004990f0ff788mr7501420edu.25.1674917563804; Sat, 28 Jan
- 2023 06:52:43 -0800 (PST)
+        Sat, 28 Jan 2023 09:53:26 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223BE23C70
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 06:53:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=MQ3QZ2n9H8qxeqethQACSEWQ81zQlJU6T89IcrWBRi4=; b=MvXPIVQyoGomFxpO4BbciyJ8Kv
+        IevWctnAom+sXDHAMjQ7LIHcogKDIqqxLXqUoftPGn7XtDWY5mhmvF8Zdh8FQrKMYV9R0Ff2xhcvp
+        Dba9VzmybpdWjH48Svax0eShzNY+9xKuladTUIuGs3CREBmGERRasDPPPyOg3iJ7N9Y4G2WNXNhsE
+        WR2VVYKTNK1Xk4dNkT3C6mNpsf9M11d/n2Ifx/1xDRx8nDvpK+3x9zFZvTfIbTCEM8mOxLQlFUKJo
+        LC8rE9lPP+qDpmPmny9FvX5uxsw3SYTmXPONCGNbbaL4lu1vGbLDaH+USY+gjEx/Nwt2TqxVxsnAZ
+        fF2gDl0Q==;
+Received: from [187.56.70.205] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1pLmZR-0037p3-RC; Sat, 28 Jan 2023 15:52:46 +0100
+Message-ID: <aab8c21c-45c4-c931-31f8-ba175bbe6a5a@igalia.com>
+Date:   Sat, 28 Jan 2023 11:52:39 -0300
 MIME-Version: 1.0
-References: <20230127182558.2416400-1-atishp@rivosinc.com> <20230127182558.2416400-6-atishp@rivosinc.com>
-In-Reply-To: <20230127182558.2416400-6-atishp@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Sat, 28 Jan 2023 20:22:31 +0530
-Message-ID: <CAAhSdy1XKbb47OOQshy5NZjVZrS_eJUFeEWmDgJ2MigSKpVpzQ@mail.gmail.com>
-Subject: Re: [PATCH v3 05/14] RISC-V: KVM: Return correct code for hsm stop function
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 0/4] x86/crash: Fix double NMI shootdown bug
+To:     Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, stable@vger.kernel
+References: <20221130233650.1404148-1-seanjc@google.com>
+ <167424175801.2640527.5679926568908656054.b4-ty@google.com>
+Content-Language: en-US
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <167424175801.2640527.5679926568908656054.b4-ty@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:56 PM Atish Patra <atishp@rivosinc.com> wrote:
->
-> According to the SBI specification, the stop function can only
-> return error code SBI_ERR_FAILED. However, currently it returns
-> -EINVAL which will be mapped SBI_ERR_INVALID_PARAM.
->
-> Return an linux error code that maps to SBI_ERR_FAILED i.e doesn't map
-> to any other SBI error code. While EACCES is not the best error code
-> to describe the situation, it is close enough and will be replaced
-> with SBI error codes directly anyways.
->
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-
-Looks good to me.
-
-Reviewed-by: Anup Patel <anup@brainfault.org>
-
-Regards,
-Anup
-
-> ---
->  arch/riscv/kvm/vcpu_sbi_hsm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/kvm/vcpu_sbi_hsm.c b/arch/riscv/kvm/vcpu_sbi_hsm.c
-> index 2e915ca..619ac0f 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_hsm.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_hsm.c
-> @@ -42,7 +42,7 @@ static int kvm_sbi_hsm_vcpu_start(struct kvm_vcpu *vcpu)
->  static int kvm_sbi_hsm_vcpu_stop(struct kvm_vcpu *vcpu)
->  {
->         if (vcpu->arch.power_off)
-> -               return -EINVAL;
-> +               return -EACCES;
->
->         kvm_riscv_vcpu_power_off(vcpu);
->
+On 27/01/2023 21:05, Sean Christopherson wrote:
+> On Wed, 30 Nov 2022 23:36:46 +0000, Sean Christopherson wrote:
+>> Fix a double NMI shootdown bug found and debugged by Guilherme, who did all
+>> the hard work.  NMI shootdown is a one-time thing; the handler leaves NMIs
+>> blocked and enters halt.  At best, a second (or third...) shootdown is an
+>> expensive nop, at worst it can hang the kernel and prevent kexec'ing into
+>> a new kernel, e.g. prior to the hardening of register_nmi_handler(), a
+>> double shootdown resulted in a double list_add(), which is fatal when running
+>> with CONFIG_BUG_ON_DATA_CORRUPTION=y.
+>>
+>> [...]
+> 
+> Applied to kvm-x86 misc, thanks!
+> 
+> [1/4] x86/crash: Disable virt in core NMI crash handler to avoid double shootdown
+>       https://github.com/kvm-x86/linux/commit/26044aff37a5
+> [2/4] x86/virt: Force GIF=1 prior to disabling SVM (for reboot flows)
+>       https://github.com/kvm-x86/linux/commit/6a3236580b0b
+> [3/4] x86/reboot: Disable virtualization in an emergency if SVM is supported
+>       https://github.com/kvm-x86/linux/commit/d81f952aa657
+> [4/4] x86/reboot: Disable SVM, not just VMX, when stopping CPUs
+>       https://github.com/kvm-x86/linux/commit/a2b07fa7b933
+> 
 > --
-> 2.25.1
->
+> https://github.com/kvm-x86/linux/tree/next
+> https://github.com/kvm-x86/linux/tree/fixes
+
+
+Thanks a bunch Sean!
