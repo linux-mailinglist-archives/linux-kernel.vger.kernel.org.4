@@ -2,116 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9F567F697
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 10:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C7A67F69A
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 10:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbjA1JHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 04:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
+        id S231548AbjA1JM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 04:12:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjA1JHH (ORCPT
+        with ESMTP id S229464AbjA1JMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 04:07:07 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993BF3A5BF;
-        Sat, 28 Jan 2023 01:07:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1674896816; bh=R22iGH266oHN3h6bLIRI3IU02Lca0t2HNgSH9AFK7xY=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=FgY8dCfmlku124IWKVZMOXPGlAfK5Gg2fanHRW1d0Zyw9S45K948vxgwdgsoGrubT
-         9FDJ5u0uLXNgRZta+ZNQpt/ZgWjcjeNvPSTWT7el8zEvjyn4l8Gj4ZZpK43LgVBqHg
-         yalrUzxZh7FDM3rjZCNuCOUhuA6KMBAcYzxbOwlw=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sat, 28 Jan 2023 10:06:56 +0100 (CET)
-X-EA-Auth: SRWUIv6AJgtVE3RQZ67P7FCAUdgrw6wjpl4y1/hi8InCGVwzvJxW8XIpkgCCOobOVDEFmyiIvbqlnftv0WTXBY7q16AYgkjN
-Date:   Sat, 28 Jan 2023 14:36:52 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] scsi: qla2xxx: Use min/max helpers for comparison and
- assignment
-Message-ID: <Y9TlrA2k85LecxaO@ubun2204.myguest.virtualbox.org>
+        Sat, 28 Jan 2023 04:12:25 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5EB81CAFC;
+        Sat, 28 Jan 2023 01:12:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+        Content-Type; bh=+vDrkP2F8VPkWsCf/ZbZMm5gtlkYDS7DkNhsTVZw5f0=;
+        b=OgPWOZLE249HCw312oGXeYyjXFbXtal64QKrQrJL/odJtT0genuQaYD1AaZG/4
+        pxf10s77OzZHpyBTXSGNnCjvEAKj1TFnaD6eYcD+DDK/XJUwBKelBK0eXBUgxuTc
+        tN1Od3Iba6VES1iJc7fyAgqrYZo00fqqZ1lmvDwfFLb5c=
+Received: from localhost (unknown [49.235.41.28])
+        by zwqz-smtp-mta-g0-0 (Coremail) with SMTP id _____wCXxR7U5tRj9TjLBw--.29123S2;
+        Sat, 28 Jan 2023 17:11:48 +0800 (CST)
+Date:   Sat, 28 Jan 2023 17:11:48 +0800
+From:   Hui Su <suhui_kernel@163.com>
+To:     sj@kernel.org, corbet@lwn.net, alexs@kernel.org,
+        siyanteng@loongson.cn, rppt@kernel.org, bobwxc@email.cn,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Doc/damon: fix the data path error
+Message-ID: <Y9Tm1FiKBPKA2Tcx@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wCXxR7U5tRj9TjLBw--.29123S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCFW3CF17ZrWrAF13Xr4DXFb_yoWrCryUpF
+        93tryIq3yxJF9Igws7AanrWF15AayIkFWYqFWfW3Z7ZFs0qa4vyF13Kr1Yk3WkZryrGa15
+        Zan3GryUuFy7A3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UEZXrUUUUU=
+X-Originating-IP: [49.235.41.28]
+X-CM-SenderInfo: 5vxk3xhbnh20lho6il2tof0z/xtbCfhAFbWDcMzXLngAAsp
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify code by using min and max helper macro for logical evaluation
-and value assignment.
-Proposed change is identified using minmax.cocci semantic patch script.
+%s/modules/module/
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
+Signed-off-by: Hui Su <suhui_kernel@163.com>
 ---
- drivers/scsi/qla2xxx/qla_dbg.c  | 4 ++--
- drivers/scsi/qla2xxx/qla_init.c | 8 ++------
- drivers/scsi/qla2xxx/qla_sup.c  | 2 +-
- 3 files changed, 5 insertions(+), 9 deletions(-)
+ Documentation/admin-guide/mm/damon/lru_sort.rst               | 4 ++--
+ Documentation/admin-guide/mm/damon/reclaim.rst                | 4 ++--
+ .../translations/zh_CN/admin-guide/mm/damon/reclaim.rst       | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_dbg.c b/drivers/scsi/qla2xxx/qla_dbg.c
-index d7e8454304ce..02440c595753 100644
---- a/drivers/scsi/qla2xxx/qla_dbg.c
-+++ b/drivers/scsi/qla2xxx/qla_dbg.c
-@@ -686,9 +686,9 @@ qla25xx_copy_mq(struct qla_hw_data *ha, void *ptr, __be32 **last_chain)
- 	mq->type = htonl(DUMP_CHAIN_MQ);
- 	mq->chain_size = htonl(sizeof(struct qla2xxx_mq_chain));
+diff --git a/Documentation/admin-guide/mm/damon/lru_sort.rst b/Documentation/admin-guide/mm/damon/lru_sort.rst
+index c09cace80651..7b0775d281b4 100644
+--- a/Documentation/admin-guide/mm/damon/lru_sort.rst
++++ b/Documentation/admin-guide/mm/damon/lru_sort.rst
+@@ -54,7 +54,7 @@ that is built with ``CONFIG_DAMON_LRU_SORT=y``.
+ To let sysadmins enable or disable it and tune for the given system,
+ DAMON_LRU_SORT utilizes module parameters.  That is, you can put
+ ``damon_lru_sort.<parameter>=<value>`` on the kernel boot command line or write
+-proper values to ``/sys/modules/damon_lru_sort/parameters/<parameter>`` files.
++proper values to ``/sys/module/damon_lru_sort/parameters/<parameter>`` files.
  
--	que_cnt = ha->max_req_queues > ha->max_rsp_queues ?
--		ha->max_req_queues : ha->max_rsp_queues;
-+	que_cnt = max(ha->max_req_queues, ha->max_rsp_queues);
- 	mq->count = htonl(que_cnt);
-+
- 	for (cnt = 0; cnt < que_cnt; cnt++) {
- 		reg = ISP_QUE_REG(ha, cnt);
- 		que_idx = cnt * 4;
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 8d9ecabb1aac..1250f575fb1e 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -3734,12 +3734,8 @@ qla2x00_alloc_outstanding_cmds(struct qla_hw_data *ha, struct req_que *req)
+ Below are the description of each parameter.
  
- 	if (!IS_FWI2_CAPABLE(ha))
- 		req->num_outstanding_cmds = DEFAULT_OUTSTANDING_COMMANDS;
--	else {
--		if (ha->cur_fw_xcb_count <= ha->cur_fw_iocb_count)
--			req->num_outstanding_cmds = ha->cur_fw_xcb_count;
--		else
--			req->num_outstanding_cmds = ha->cur_fw_iocb_count;
--	}
-+	else
-+		req->num_outstanding_cmds = min(ha->cur_fw_xcb_count, ha->cur_fw_iocb_count);
+@@ -283,7 +283,7 @@ doesn't make progress and therefore the free memory rate becomes lower than
+ 20%, it asks DAMON_LRU_SORT to do nothing again, so that we can fall back to
+ the LRU-list based page granularity reclamation. ::
  
- 	req->outstanding_cmds = kcalloc(req->num_outstanding_cmds,
- 					sizeof(srb_t *),
-diff --git a/drivers/scsi/qla2xxx/qla_sup.c b/drivers/scsi/qla2xxx/qla_sup.c
-index c092a6b1ced4..e26f9835c124 100644
---- a/drivers/scsi/qla2xxx/qla_sup.c
-+++ b/drivers/scsi/qla2xxx/qla_sup.c
-@@ -3625,7 +3625,7 @@ qla24xx_read_fcp_prio_cfg(scsi_qla_host_t *vha)
- 	max_len = FCP_PRIO_CFG_SIZE - FCP_PRIO_CFG_HDR_SIZE;
+-    # cd /sys/modules/damon_lru_sort/parameters
++    # cd /sys/module/damon_lru_sort/parameters
+     # echo 500 > hot_thres_access_freq
+     # echo 120000000 > cold_min_age
+     # echo 10 > quota_ms
+diff --git a/Documentation/admin-guide/mm/damon/reclaim.rst b/Documentation/admin-guide/mm/damon/reclaim.rst
+index 4f1479a11e63..d2ccd9c21b9a 100644
+--- a/Documentation/admin-guide/mm/damon/reclaim.rst
++++ b/Documentation/admin-guide/mm/damon/reclaim.rst
+@@ -46,7 +46,7 @@ that is built with ``CONFIG_DAMON_RECLAIM=y``.
+ To let sysadmins enable or disable it and tune for the given system,
+ DAMON_RECLAIM utilizes module parameters.  That is, you can put
+ ``damon_reclaim.<parameter>=<value>`` on the kernel boot command line or write
+-proper values to ``/sys/modules/damon_reclaim/parameters/<parameter>`` files.
++proper values to ``/sys/module/damon_reclaim/parameters/<parameter>`` files.
  
- 	ha->isp_ops->read_optrom(vha, &ha->fcp_prio_cfg->entry[0],
--			fcp_prio_addr << 2, (len < max_len ? len : max_len));
-+				 fcp_prio_addr << 2, min(len, max_len));
+ Below are the description of each parameter.
  
- 	/* revalidate the entire FCP priority config data, including entries */
- 	if (!qla24xx_fcp_prio_cfg_valid(vha, ha->fcp_prio_cfg, 1))
+@@ -251,7 +251,7 @@ therefore the free memory rate becomes lower than 20%, it asks DAMON_RECLAIM to
+ do nothing again, so that we can fall back to the LRU-list based page
+ granularity reclamation. ::
+ 
+-    # cd /sys/modules/damon_reclaim/parameters
++    # cd /sys/module/damon_reclaim/parameters
+     # echo 30000000 > min_age
+     # echo $((1 * 1024 * 1024 * 1024)) > quota_sz
+     # echo 1000 > quota_reset_interval_ms
+diff --git a/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst b/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
+index c976f3e33ffd..d15a2f20bb11 100644
+--- a/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
++++ b/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
+@@ -45,7 +45,7 @@ DAMON_RECLAIM找到在特定时间内没有被访问的内存区域并分页。
+ 
+ 为了让系统管理员启用或禁用它，并为给定的系统进行调整，DAMON_RECLAIM利用了模块参数。也就
+ 是说，你可以把 ``damon_reclaim.<parameter>=<value>`` 放在内核启动命令行上，或者把
+-适当的值写入 ``/sys/modules/damon_reclaim/parameters/<parameter>`` 文件。
++适当的值写入 ``/sys/module/damon_reclaim/parameters/<parameter>`` 文件。
+ 
+ 注意，除 ``启用`` 外的参数值只在DAMON_RECLAIM启动时应用。因此，如果你想在运行时应用新
+ 的参数值，而DAMON_RECLAIM已经被启用，你应该通过 ``启用`` 的参数文件禁用和重新启用它。
+@@ -218,7 +218,7 @@ nr_quota_exceeds
+ 就开始真正的工作。如果DAMON_RECLAIM没有取得进展，因此空闲内存率低于20%，它会要求
+ DAMON_RECLAIM再次什么都不做，这样我们就可以退回到基于LRU列表的页面粒度回收了::
+ 
+-    # cd /sys/modules/damon_reclaim/parameters
++    # cd /sys/module/damon_reclaim/parameters
+     # echo 30000000 > min_age
+     # echo $((1 * 1024 * 1024 * 1024)) > quota_sz
+     # echo 1000 > quota_reset_interval_ms
 -- 
 2.34.1
-
-
 
